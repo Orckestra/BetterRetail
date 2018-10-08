@@ -1,0 +1,19 @@
+<div xmlns:v="http://rdf.data-vocabulary.org/#" class="clearfix">
+    <a class="pull-left  island" href="javascript: history.back();"><span class="fa  fa-arrow-circle-left"></span> {{localize 'General' 'B_Back'}}</a>
+    <span class="hidden-xs">&#160;| {{localize 'General' 'L_Breadcrumb'}}</span>
+
+    <ol class="breadcrumb  hidden-xs">
+        {{#each Items}}
+        {{#if_exists Url}}
+        <li typeof="v:Breadcrumb">
+            <a class="cta" href="{{Url}}" rel="v:url" property="v:title">{{DisplayName}}</a>
+        </li>
+        {{else}}
+        <li>
+            <span>{{DisplayName}}</span>
+        </li>
+        {{/if_exists}}
+        {{/each}}
+        <li class="active">{{ActivePageName}}</li>
+    </ol>
+</div>

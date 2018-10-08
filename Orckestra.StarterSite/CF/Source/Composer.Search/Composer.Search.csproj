@@ -1,0 +1,187 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{CE6AD95E-0EBB-4E38-BF0B-27A67915FA68}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Orckestra.Composer.Search</RootNamespace>
+    <AssemblyName>Orckestra.Composer.Search</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Orckestra.Overture.Interfaces, Version=3.20.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OrckestraCommerce.Interfaces.3.20.0\lib\portable-net4+sl5+netcore45+wp8\Orckestra.Overture.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="Orckestra.Overture.RestClient, Version=3.20.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OrckestraCommerce.Client.3.20.0\lib\net452\Orckestra.Overture.RestClient.dll</HintPath>
+    </Reference>
+    <Reference Include="Orckestra.Overture.ServiceModel, Version=3.20.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OrckestraCommerce.ServiceModel.3.20.0\lib\net461\Orckestra.Overture.ServiceModel.dll</HintPath>
+    </Reference>
+    <Reference Include="Orckestra.Overture.ServiceModel.Requests, Version=3.20.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OrckestraCommerce.ServiceModel.Requests.3.20.0\lib\net461\Orckestra.Overture.ServiceModel.Requests.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Client, Version=4.0.0.0, Culture=neutral, PublicKeyToken=e06fbc6124f57c43, processorArchitecture=MSIL">
+      <HintPath>..\packages\ServiceStack.Client.Signed.4.5.4\lib\net45\ServiceStack.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Interfaces, Version=4.0.0.0, Culture=neutral, PublicKeyToken=e06fbc6124f57c43, processorArchitecture=MSIL">
+      <HintPath>..\packages\ServiceStack.Interfaces.4.5.4\lib\portable-wp80+sl5+net45+win8+wpa81+monotouch+monoandroid+xamarin.ios10\ServiceStack.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Text, Version=4.0.0.0, Culture=neutral, PublicKeyToken=e06fbc6124f57c43, processorArchitecture=MSIL">
+      <HintPath>..\packages\ServiceStack.Text.Signed.4.5.4\lib\net45\ServiceStack.Text.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\Solution Items\SharedAssemblyInfo.cs">
+      <Link>Properties\SharedAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="CategoriesConfiguration.cs" />
+    <Compile Include="Context\BrowseCategoryRequestContext.cs" />
+    <Compile Include="Context\IBrowseCategoryRequestContext.cs" />
+    <Compile Include="FacetSetting.cs" />
+    <Compile Include="Facets\PromotedFacetValue.cs" />
+    <Compile Include="Facets\PromotedFacetValueSetting.cs" />
+    <Compile Include="Facets\FacetValue.cs" />
+    <Compile Include="Facets\FacetType.cs" />
+    <Compile Include="Facets\SelectedFacet.cs" />
+    <Compile Include="Factory\FacetFactory.cs" />
+    <Compile Include="Factory\FacetPredicateFactory.cs" />
+    <Compile Include="Factory\ISelectedFacetFactory.cs" />
+    <Compile Include="Factory\IFacetFactory.cs" />
+    <Compile Include="Factory\IFacetPredicateFactory.cs" />
+    <Compile Include="Factory\SelectedFacetFactory.cs" />
+    <Compile Include="Helpers\SearchSortByResolver.cs" />
+    <Compile Include="Context\ISearchRequestContext.cs" />
+    <Compile Include="Helpers\SearchType.cs" />
+    <Compile Include="Parameters\CategorySearchCriteria.cs" />
+    <Compile Include="Parameters\GetCategoryBrowsingViewModelParam.cs" />
+    <Compile Include="Parameters\GetPageHeaderParam.cs" />
+    <Compile Include="Parameters\CreateSearchPaginationParam.cs" />
+    <Compile Include="Parameters\GetSearchBreadcrumbParam.cs" />
+    <Compile Include="Providers\Facet\BaseFacetProvider.cs" />
+    <Compile Include="Providers\BaseSearchUrlProvider.cs" />
+    <Compile Include="Providers\FacetLocalizationProvider.cs" />
+    <Compile Include="Providers\Facet\FacetProviderRegistry.cs" />
+    <Compile Include="Providers\FacetPredicate\FacetPredicateProviderRegistry.cs" />
+    <Compile Include="Providers\IPriceProvider.cs" />
+    <Compile Include="Providers\IFacetLocalizationProvider.cs" />
+    <Compile Include="Providers\Facet\IFacetProvider.cs" />
+    <Compile Include="Providers\FacetPredicate\IFacetPredicateProvider.cs" />
+    <Compile Include="Providers\Facet\IFacetProviderRegistry.cs" />
+    <Compile Include="Providers\FacetPredicate\IFacetPredicateProviderRegistry.cs" />
+    <Compile Include="Providers\FacetPredicate\MultiSelectFacetPredicateProvider.cs" />
+    <Compile Include="Providers\Facet\MultiSelectFacetProvider.cs" />
+    <Compile Include="Providers\FacetPredicate\RangeFacetPredicateProvider.cs" />
+    <Compile Include="Providers\Facet\RangeFacetProvider.cs" />
+    <Compile Include="Providers\FromPriceProvider.cs" />
+    <Compile Include="Providers\SearchUrlProvider.cs" />
+    <Compile Include="Parameters\CreateProductSearchResultsViewModelParam.cs" />
+    <Compile Include="Providers\FacetPredicate\SingleSelectFacetPredicateProvider.cs" />
+    <Compile Include="Providers\Facet\SingleSelectFacetProvider.cs" />
+    <Compile Include="Providers\SelectedFacet\SelectedFacetProviderRegistry.cs" />
+    <Compile Include="Providers\SelectedFacet\ISelectedFacetProvider.cs" />
+    <Compile Include="Providers\SelectedFacet\ISelectedFacetProviderRegistry.cs" />
+    <Compile Include="Providers\SelectedFacet\MultiSelectSelectedFacetProvider.cs" />
+    <Compile Include="Providers\SelectedFacet\RangeSelectedFacetProvider.cs" />
+    <Compile Include="Providers\SelectedFacet\SingleSelectSelectedFacetProvider.cs" />
+    <Compile Include="Repositories\IProductRequestFactory.cs" />
+    <Compile Include="Repositories\ISearchRepository.cs" />
+    <Compile Include="Repositories\ProductRequestFactory.cs" />
+    <Compile Include="Parameters\RemoveSelectedFacetsFromFacetsParam.cs" />
+    <Compile Include="SearchConfiguration.cs" />
+    <Compile Include="Context\SearchRequestContext.cs" />
+    <Compile Include="Helpers\SearchSortBy.cs" />
+    <Compile Include="Services\BaseSearchViewService.cs" />
+    <Compile Include="Services\BrowsingByCategoryParam.cs" />
+    <Compile Include="Services\BrowsingSearchParam.cs" />
+    <Compile Include="Services\CategoryBrowsingViewService.cs" />
+    <Compile Include="Services\GetChildCategoryParam.cs" />
+    <Compile Include="Services\ICategoryBrowsingViewService.cs" />
+    <Compile Include="Services\ISearchBreadcrumbViewService.cs" />
+    <Compile Include="Services\ISearchParameter.cs" />
+    <Compile Include="Services\ISearchViewService.cs" />
+    <Compile Include="SearchPlugin.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\SearchRepository.cs" />
+    <Compile Include="Services\SearchBreadcrumbViewService.cs" />
+    <Compile Include="ViewModels\ProductPriceSearchViewModel.cs" />
+    <Compile Include="ViewModels\SearchBoxViewModel.cs" />
+    <Compile Include="ViewModels\SearchViewModel.cs" />
+    <Compile Include="ViewModels\InventoryItemIdentifierViewModel.cs" />
+    <Compile Include="ViewModels\InventoryItemStatusViewModel.cs" />
+    <Compile Include="Services\SearchParam.cs" />
+    <Compile Include="ViewModels\CategoryBrowsingViewModel.cs" />
+    <Compile Include="ViewModels\ChildCategoryViewModel.cs" />
+    <Compile Include="ViewModels\SearchPageViewModel.cs" />
+    <Compile Include="Services\SearchViewService.cs" />
+    <Compile Include="Facets\Facet.cs" />
+    <Compile Include="ViewModels\ProductSearchResultsViewModel.cs" />
+    <Compile Include="ViewModels\ProductSearchViewModel.cs" />
+    <Compile Include="ViewModels\SearchPaginationViewModel.cs" />
+    <Compile Include="ViewModels\SelectedSortBy.cs" />
+    <Compile Include="ViewModels\SortBy.cs" />
+    <Compile Include="ViewModels\Suggestion.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Composer\Composer.csproj">
+      <Project>{d00bd58b-93fe-4f3d-bbc8-6f7873ca6830}</Project>
+      <Name>Composer</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Extensions\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,51 @@
+<div data-oc-controller="Product.FacetSearch" data-corrected-search-term="{{CorrectedSearchTerms}}">
+    <form name="searchFacets">
+    {{#if PromotedFacetValues}}
+        {{>PromotedFacetValues}}
+    {{/if}}
+    {{#each Facets}}
+        {{#if IsDisplayed}}
+        <div class="panel  panel-default" data-facetfieldname="{{FieldName}}" data-facettype="{{FacetType}}"
+            {{#if_eq FacetType "Range"}}
+            data-min="{{StartValue}}" data-max="{{EndValue}}" data-step="{{GapSize}}" data-max-label="{{Localize 'List-Search' 'L_RangeAll'}}"
+            {{/if_eq}}>
+            <div class="panel-body" data-qa="search-refiner">
+                <h2 class="h4">{{Title}}</h2>
+                {{#if_eq FacetType 'Range'}}
+                    {{>SearchRangeFacet}}
+                {{else}}
+                    <ul class="list-unstyled">
+                        {{#if_eq FacetType 'MultiSelect'}}
+                            {{#each FacetValues}}
+                                {{>MultiSelectFacet}}
+                            {{/each}}
+                        {{else}}
+                            {{#each FacetValues}}
+                                {{>SingleFacet}}
+                            {{/each}}
+                        {{/if_eq}}
+                    </ul>
+                    {{#if OnDemandFacetValues}}
+                        <ul class="list-unstyled  collapse  onDemandFacets-{{@index}} ">
+                            {{#if_eq FacetType 'MultiSelect'}}
+                                {{#each OnDemandFacetValues}}
+                                    {{>MultiSelectFacet}}
+                                {{/each}}
+                            {{else}}
+                                {{#each OnDemandFacetValues}}
+                                    {{>SingleFacet}}
+                                {{/each}}
+                            {{/if_eq}}
+                        </ul>
+                        <button class="btn  btn-link" data-toggle="collapse" data-target=".onDemandFacets-{{@index}} "
+                            data-label-showmore="{{localize 'List-Search' 'B_ShowMore'}}" data-label-showless="{{localize 'List-Search' 'B_ShowLess'}}"
+                            data-oc-click="toggleFacetList">{{localize 'List-Search' 'B_ShowMore'}}</button>
+                    {{/if}}
+
+                {{/if_eq}}
+            </div>
+        </div>
+         {{/if}}
+    {{/each}}
+    </form>
+</div>

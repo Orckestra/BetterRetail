@@ -1,0 +1,16 @@
+.checkout-order-summary.affix {
+    position: static;
+
+    @media (min-width: $screen-md-min) {
+        top: 20px;
+        position: fixed;
+        // (4 columns * container width) - gutters
+        // this allows us to keep an affixed (fixed) element aligned with content/current layout.
+        width: ($container-md * (4 / $grid-columns)) - $grid-gutter-width;
+    }
+    @media (min-width: $screen-lg-min) {
+        // (4 columns * container width) - gutters
+        // this allows us to keep an affixed (fixed) element aligned with content/current layout.
+        width: ($container-lg * (4 / $grid-columns)) - $grid-gutter-width;
+    }
+}

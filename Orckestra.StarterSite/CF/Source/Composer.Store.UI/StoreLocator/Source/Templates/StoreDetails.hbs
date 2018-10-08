@@ -1,0 +1,23 @@
+<div  data-oc-controller="Store.Details" class="store-details" data-context="{{JsonContext}}">
+<h1>{{LocalizedDisplayName}}</h1> 
+<div class="row">
+    <div class="col-xs-12">
+        <div id="map" class="map"></div>
+         <div class="store-info  panel  panel-default">
+            <div class="panel-body"> 
+                {{#with Address}}
+                    {{> StoreAddress}}
+                {{/with}}
+                <hr/>
+                    <a  href="{{GoogleDirectionsLink}}" target="_blank" class="cta  ctaGoogleDir">{{localize 'Store' 'H_Itinerary'}}</a>
+                <hr />
+                {{> StoreOpenHours}}
+                {{> StoreOpenHourExceptions}}
+            </div>
+        </div>
+    </div>
+</div>
+{{#with StructuredData}}
+    {{> StoreGoogleStructuredDataTags}}
+{{/with}}
+</div>

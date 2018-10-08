@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <param name="environment_suffix" value="dev"/>
+  
+  <param name="cms-cd-hostname" value="{project-name}-cd-dev.develop.orckestra.cloud"/>
+  <param name="cms-cm-hostname" value="{project-name}-cm-dev.develop.orckestra.cloud"/>
+  
+  <param name="cms-c1-custom-packages" value="Orckestra.Search.KeywordRedirect,Orckestra.Search.LuceneNET,Composite.Tools.PackageCreator" />
+
+ 
+  <param name="composer_apppool_username" value="NA"/>
+  <param name="composer_apppool_password" value="NA"/>
+  <param name="composer_apppool_identitytype" value="ApplicationPoolIdentity"/>
+	
+  <param name="composer_services_agent_username" value="OrckestraServicesAgent"/>
+  <param name="composer_services_agent_password" value="P@ssw0rd"/>
+
+  <param name="composer_import_agent_username" value="OrckestraImportAgent"/>
+  <param name="composer_import_agent_password" value="P@ssw0rd"/>
+
+  <param name="solr-username" value="NT AUTHORITY\NetworkService" />
+  <param name="solr-Password" value="NA" />
+
+  <param name="machineKey-validationKey" value="***REMOVED***" />
+  <param name="machineKey-decryptionKey" value="***REMOVED***" />
+
+</parameters>

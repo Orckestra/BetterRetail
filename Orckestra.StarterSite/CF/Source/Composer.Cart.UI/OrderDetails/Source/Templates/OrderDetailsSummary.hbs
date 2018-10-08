@@ -1,0 +1,106 @@
+ <div data-templateid="OrderDetailsSummary">
+     <div class="panel  panel-default">
+        <div class="panel-heading">
+            <h2 class="h4">{{localize 'MyAccount' 'T_PaymentMethod' }}</h2>
+        </div>
+        {{>OrderDetailsPayments}}
+        
+       <div class="panel-body">
+            <div class="row">
+                <hr class="compact-order-splitter" />
+                <div class="hidden-xs  col-sm-6 col-md-6">
+                    
+                </div>
+                <div class="col-xs-12  col-sm-6 col-md-6">
+                    {{#if OrderSummary.Rewards}}
+                    <div class="row">
+                        <div class="text-center">
+                            <span class="promotion">
+                            {{#each OrderSummary.Rewards}}
+                            <em>{{Description}}</em><br/>
+                            {{/each}}
+                            </span>
+                        </div>
+                    </div>
+                    {{/if}}                    
+
+                    <div class="row">
+                        <div class="col-xs-6  col-sm-7"><p>{{localize 'ShoppingCart' 'L_Subtotal'}}</p></div>
+                        <div class="col-xs-6  col-sm-5  text-right"><p data-qa="order-summary-subtotal">{{OrderSummary.SubTotal}}</p></div>
+                    </div>
+
+                    {{#each OrderSummary.ShipmentAdditionalFeeSummaryList}}
+                        {{#if Taxable}}
+                        <div class="row">
+                            <div class="col-xs-6  col-sm-7"><p>{{GroupName}}</p></div>
+                            <div class="col-xs-6  col-sm-5  text-right"><p data-qa="checkout-order-summary-shipment-taxable-additionalfees">{{TotalAmount}}</p></div>
+                        </div>
+                        {{/if}}
+                    {{/each}}
+
+                    {{#each OrderSummary.AdditionalFeeSummaryList}}
+                        {{#if Taxable}}
+                        <div class="row">
+                            <div class="col-xs-6  col-sm-7"><p>{{GroupName}}</p></div>
+                            <div class="col-xs-6  col-sm-5  text-right"><p data-qa="checkout-order-summary-lineitem-taxable-additionalfees">{{TotalAmount}}</p></div>
+                        </div>
+                        {{/if}}
+                    {{/each}}
+
+                    {{#each OrderSummary.Shippings}}
+                        {{#if Taxable}}
+                        <div class="row">
+                            <div class="col-xs-6  col-sm-7"><p>{{DisplayName}}</p></div>
+                            <div class="col-xs-6  col-sm-5  text-right"><p data-qa="checkout-order-summary-lineitem-nontaxable-additionalfees">{{Cost}}</p></div>
+                        </div>
+                        {{/if}}
+                    {{/each}}
+
+                    {{#each OrderSummary.Taxes}}
+                        {{> Tax}}
+                    {{/each}}
+
+                    {{#each OrderSummary.ShipmentAdditionalFeeSummaryList}}
+                        {{#unless Taxable}}
+                        <div class="row">
+                            <div class="col-xs-6  col-sm-7"><p>{{GroupName}}</p></div>
+                            <div class="col-xs-6  col-sm-5  text-right"><p data-qa="checkout-order-summary-shipment-nontaxable-additionalfees">{{TotalAmount}}</p></div>
+                        </div>
+                        {{/unless}}
+                    {{/each}}
+
+                    {{#each OrderSummary.AdditionalFeeSummaryList}}
+                        {{#unless Taxable}}
+                        <div class="row">
+                            <div class="col-xs-6  col-sm-7"><p>{{GroupName}}</p></div>
+                            <div class="col-xs-6  col-sm-5  text-right"><p data-qa="checkout-order-summary-lineitem-nontaxable-additionalfees">{{TotalAmount}}</p></div>
+                        </div>
+                        {{/unless}}
+                    {{/each}}
+
+                    {{#each OrderSummary.Shippings}}
+                        {{#unless Taxable}}
+                        <div class="row">
+                            <div class="col-xs-6  col-sm-7"><p>{{DisplayName}}</p></div>
+                            <div class="col-xs-6  col-sm-5  text-right"><p data-qa="checkout-order-summary-lineitem-nontaxable-additionalfees">{{Cost}}</p></div>
+                        </div>
+                        {{/unless}}
+                    {{/each}}
+
+                    <div class="row">
+                        <div class="col-xs-6  col-sm-7"><p><span class="h4">{{localize 'ShoppingCart' 'L_Total'}}</span></p></div>
+                        <div class="col-xs-6  col-sm-5  text-right"><p><span class="h4" data-qa="order-summary-total">{{OrderSummary.Total}}</span></p></div>
+                    </div>
+
+                    {{#if OrderSummary.SavingsTotal}}
+                    <div class="row">
+                        <hr class="compact-order-splitter" />
+                        <div class="col-xs-6  col-sm-7  text-success"><p>{{localize 'MyAccount' 'L_Savings'}}</p></div>
+                        <div class="col-xs-6  col-sm-5  text-right  text-success"><p data-qa="order-summary-discount">{{OrderSummary.SavingsTotal}}</p></div>
+                    </div>
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

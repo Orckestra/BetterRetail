@@ -1,0 +1,125 @@
+<?xml version="1.0" standalone="yes"?>
+<mi:PackageInstaller xmlns:mi="http://www.composite.net/ns/management/packageinstaller/1.0">
+  <mi:PackageRequirements minimumCompositeVersion="6.0.0.0" maximumCompositeVersion="9.9999.9999.9999" />
+  <mi:PackageInformation name="Composer.C1.Core" groupName="Composer" version="1.0.0" author="Orckestra" website="http://composer-c1-cm-dev.orckestra.local/" readMoreUrl="http://composer-c1-cm-dev.orckestra.local/" id="08b33fbe-64a4-4b60-961b-36d7f7a8aa97" canBeUninstalled="true" systemLocking="hard" flushOnCompletion="true">
+    <TechnicalDetails>Composer.C1.Core</TechnicalDetails>
+    <Description>Composer.C1.Core</Description>
+  </mi:PackageInformation>
+  <mi:PackageFragmentInstallerBinaries>
+    <mi:Add path="~\Bin\Orckestra.Composer.CompositeC1.dll" />
+    <mi:Add path="~\Bin\Orckestra.Composer.CompositeC1.DataTypes.dll" />
+  </mi:PackageFragmentInstallerBinaries>
+
+  <mi:PackageFragmentInstallers>
+
+    <!-- It's important to run DynamicDataTypePackageFragmentInstaller before FilePackageFragmentInstaller, otherwise there will be a conflict of dataTypeId. -->
+    <!-- It's also important to run DynamicDataTypePackageFragmentInstaller before DataPackageFragmentInstaller, because the Data must have its data type defined beforehand. -->
+    <mi:Add installerType="Composite.Core.PackageSystem.PackageFragmentInstallers.DynamicDataTypePackageFragmentInstaller, Composite" uninstallerType="Composite.Core.PackageSystem.PackageFragmentInstallers.DynamicDataTypePackageFragmentUninstaller, Composite">
+      <Types>
+        <Type providerName="GeneratedDataTypesElementProvider" dataTypeDescriptor="&lt;DataTypeDescriptor dataTypeId=&quot;edfe60c8-5405-4313-b138-18549454319a&quot; name=&quot;Language&quot; namespace=&quot;Orckestra.Composer.CompositeC1.DataTypes&quot; title=&quot;Language&quot; hasCustomPhysicalSortOrder=&quot;false&quot; isCodeGenerated=&quot;false&quot; cachable=&quot;false&quot; labelFieldName=&quot;DisplayName&quot; typeManagerTypeName=&quot;Orckestra.Composer.CompositeC1.DataTypes.Language,Orckestra.Composer.CompositeC1&quot;&gt;&#xD;&#xA;  &lt;DataAssociations /&gt;&#xD;&#xA;  &lt;DataScopes&gt;&#xD;&#xA;    &lt;DataScopeIdentifier name=&quot;public&quot; /&gt;&#xD;&#xA;    &lt;DataScopeIdentifier name=&quot;administrated&quot; /&gt;&#xD;&#xA;  &lt;/DataScopes&gt;&#xD;&#xA;  &lt;KeyPropertyNames&gt;&#xD;&#xA;    &lt;KeyPropertyName name=&quot;Id&quot; /&gt;&#xD;&#xA;  &lt;/KeyPropertyNames&gt;&#xD;&#xA;  &lt;SuperInterfaces&gt;&#xD;&#xA;    &lt;SuperInterface type=&quot;Composite.Data.ProcessControlled.IPublishControlled,Composite&quot; /&gt;&#xD;&#xA;    &lt;SuperInterface type=&quot;Composite.Data.ProcessControlled.IProcessControlled,Composite&quot; /&gt;&#xD;&#xA;  &lt;/SuperInterfaces&gt;&#xD;&#xA;  &lt;Fields&gt;&#xD;&#xA;    &lt;DataFieldDescriptor id=&quot;d81a3c38-7a98-4c69-90d7-8a54bb473590&quot; name=&quot;Id&quot; isNullable=&quot;false&quot; position=&quot;-1&quot; groupByPriority=&quot;0&quot; inherited=&quot;false&quot; instanceType=&quot;System.Guid, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089&quot; storeType=&quot;PhysicalStoreType='Guid'&quot; isReadOnly=&quot;false&quot; newInstanceDefaultFieldValue=&quot;&amp;lt;f:function name=&amp;quot;Composite.Utils.Guid.NewGuid&amp;quot; xmlns:f=&amp;quot;http://www.composite.net/ns/function/1.0&amp;quot; /&amp;gt;&quot;&gt;&#xD;&#xA;      &lt;FormRenderingProfile /&gt;&#xD;&#xA;      &lt;ValidationFunctionMarkups /&gt;&#xD;&#xA;    &lt;/DataFieldDescriptor&gt;&#xD;&#xA;    &lt;DataFieldDescriptor id=&quot;4ee59c3b-43fe-4fa0-a1ca-0d5d72e5a386&quot; name=&quot;Code&quot; isNullable=&quot;false&quot; position=&quot;0&quot; groupByPriority=&quot;0&quot; inherited=&quot;false&quot; instanceType=&quot;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089&quot; storeType=&quot;PhysicalStoreType='String'Length='16'&quot; isReadOnly=&quot;false&quot; defaultValue=&quot;ValueType='String'Value=''&quot;&gt;&#xD;&#xA;      &lt;FormRenderingProfile /&gt;&#xD;&#xA;      &lt;ValidationFunctionMarkups /&gt;&#xD;&#xA;    &lt;/DataFieldDescriptor&gt;&#xD;&#xA;    &lt;DataFieldDescriptor id=&quot;36596aa9-c4ee-460a-a289-b866884413d6&quot; name=&quot;IsActive&quot; isNullable=&quot;false&quot; position=&quot;1&quot; groupByPriority=&quot;0&quot; inherited=&quot;false&quot; instanceType=&quot;System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089&quot; storeType=&quot;PhysicalStoreType='Boolean'&quot; isReadOnly=&quot;false&quot; defaultValue=&quot;ValueType='Boolean'Value='False'&quot;&gt;&#xD;&#xA;      &lt;FormRenderingProfile label=&quot;Is Active&quot; /&gt;&#xD;&#xA;      &lt;ValidationFunctionMarkups /&gt;&#xD;&#xA;    &lt;/DataFieldDescriptor&gt;&#xD;&#xA;    &lt;DataFieldDescriptor id=&quot;9a2e8b4f-ada6-483f-adf2-c25c2f4f0a40&quot; name=&quot;DisplayName&quot; isNullable=&quot;false&quot; position=&quot;2&quot; groupByPriority=&quot;0&quot; inherited=&quot;false&quot; instanceType=&quot;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089&quot; storeType=&quot;PhysicalStoreType='String'Length='128'&quot; isReadOnly=&quot;false&quot; defaultValue=&quot;ValueType='String'Value=''&quot;&gt;&#xD;&#xA;      &lt;FormRenderingProfile label=&quot;Display Name&quot; /&gt;&#xD;&#xA;      &lt;ValidationFunctionMarkups /&gt;&#xD;&#xA;    &lt;/DataFieldDescriptor&gt;&#xD;&#xA;    &lt;DataFieldDescriptor id=&quot;9a2e8b4f-ada6-483f-adf2-c25c2f4f0a41&quot; name=&quot;ShortDisplayName&quot; isNullable=&quot;false&quot; position=&quot;3&quot; groupByPriority=&quot;0&quot; inherited=&quot;false&quot; instanceType=&quot;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089&quot; storeType=&quot;PhysicalStoreType='String'Length='32'&quot; isReadOnly=&quot;false&quot; defaultValue=&quot;ValueType='String'Value=''&quot;&gt;&#xD;&#xA;      &lt;FormRenderingProfile label=&quot;Short Display Name&quot; /&gt;&#xD;&#xA;      &lt;ValidationFunctionMarkups /&gt;&#xD;&#xA;    &lt;/DataFieldDescriptor&gt;&#xD;&#xA;    &lt;DataFieldDescriptor id=&quot;fab1cf0c-66b0-11dc-a47e-cf6356d89593&quot; name=&quot;PublicationStatus&quot; isNullable=&quot;false&quot; position=&quot;50&quot; groupByPriority=&quot;0&quot; inherited=&quot;true&quot; instanceType=&quot;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089&quot; storeType=&quot;PhysicalStoreType='String'Length='64'&quot; isReadOnly=&quot;false&quot; defaultValue=&quot;ValueType='String'Value=''&quot;&gt;&#xD;&#xA;      &lt;FormRenderingProfile /&gt;&#xD;&#xA;      &lt;ValidationFunctionMarkups /&gt;&#xD;&#xA;    &lt;/DataFieldDescriptor&gt;&#xD;&#xA;  &lt;/Fields&gt;&#xD;&#xA;&lt;/DataTypeDescriptor&gt;" />
+      </Types>
+    </mi:Add>
+    <mi:Add installerType="Composite.Core.PackageSystem.PackageFragmentInstallers.DllPackageFragmentInstaller, Composite" uninstallerType="Composite.Core.PackageSystem.PackageFragmentInstallers.DllPackageFragmentUninstaller, Composite">
+      <Files>
+        <File sourceFilename="~\Bin\Autofac.dll" targetFilename="~\Bin\Autofac.dll" allowOverwrite="true" addAssemblyBinding="true"/>
+        <File sourceFilename="~\Bin\Autofac.Integration.Mvc.dll" targetFilename="~\Bin\Autofac.Integration.Mvc.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Autofac.Integration.WebApi.dll" targetFilename="~\Bin\Autofac.Integration.WebApi.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Fasterflect.dll" targetFilename="~\Bin\Fasterflect.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Handlebars.dll" targetFilename="~\Bin\Handlebars.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Hangfire.AspNet.dll" targetFilename="~\Bin\Hangfire.AspNet.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Hangfire.Autofac.dll" targetFilename="~\Bin\Hangfire.Autofac.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Hangfire.CompositeC1.dll" targetFilename="~\Bin\Hangfire.CompositeC1.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Hangfire.Core.dll" targetFilename="~\Bin\Hangfire.Core.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Orckestra.Caching.dll" targetFilename="~\Bin\Orckestra.Caching.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Orckestra.AsyncExtensions.dll" targetFilename="~\Bin\Orckestra.AsyncExtensions.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Orckestra.Overture.Interfaces.dll" targetFilename="~\Bin\Orckestra.Overture.Interfaces.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Orckestra.Overture.RestClient.dll" targetFilename="~\Bin\Orckestra.Overture.RestClient.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Orckestra.Overture.ServiceModel.dll" targetFilename="~\Bin\Orckestra.Overture.ServiceModel.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Orckestra.Overture.ServiceModel.Requests.dll" targetFilename="~\Bin\Orckestra.Overture.ServiceModel.Requests.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Orckestra.Overture.Providers.MonerisPayment.ServiceModel.dll" targetFilename="~\Bin\Orckestra.Overture.Providers.MonerisPayment.ServiceModel.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Owin.dll" targetFilename="~\Bin\Owin.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\ServiceStack.Client.dll" targetFilename="~\Bin\ServiceStack.Client.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\ServiceStack.Interfaces.dll" targetFilename="~\Bin\ServiceStack.Interfaces.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\ServiceStack.Text.dll" targetFilename="~\Bin\ServiceStack.Text.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\System.Net.Http.Formatting.dll" targetFilename="~\Bin\System.Net.Http.Formatting.dll" allowOverwrite="true" addAssemblyBinding="true"/>
+        <File sourceFilename="~\Bin\System.Web.Http.dll" targetFilename="~\Bin\System.Web.Http.dll" allowOverwrite="true" addAssemblyBinding="true"/>
+        <File sourceFilename="~\Bin\System.Web.Http.WebHost.dll" targetFilename="~\Bin\System.Web.Http.WebHost.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\System.Web.Helpers.dll" targetFilename="~\Bin\System.Web.Helpers.dll" allowOverwrite="true" addAssemblyBinding="true"/>
+        <File sourceFilename="~\Bin\Microsoft.Practices.EnterpriseLibrary.SemanticLogging.dll" targetFilename="~\Bin\Microsoft.Practices.EnterpriseLibrary.SemanticLogging.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Orckestra.Composer.dll" targetFilename="~\Bin\Orckestra.Composer.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Orckestra.Composer.Cart.dll" targetFilename="~\Bin\Orckestra.Composer.Cart.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Orckestra.Composer.GoogleAnalytics.dll" targetFilename="~\Bin\Orckestra.Composer.GoogleAnalytics.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Orckestra.Composer.MyAccount.dll" targetFilename="~\Bin\Orckestra.Composer.MyAccount.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Orckestra.Composer.Product.dll" targetFilename="~\Bin\Orckestra.Composer.Product.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Orckestra.Composer.Search.dll" targetFilename="~\Bin\Orckestra.Composer.Search.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Orckestra.Composer.SearchQuery.dll" targetFilename="~\Bin\Orckestra.Composer.SearchQuery.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Orckestra.Composer.Sitemap.dll" targetFilename="~\Bin\Orckestra.Composer.Sitemap.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Orckestra.Composer.Store.dll" targetFilename="~\Bin\Orckestra.Composer.Store.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Orckestra.Composer.CompositeC1.Mvc.dll" targetFilename="~\Bin\Orckestra.Composer.CompositeC1.Mvc.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Orckestra.Composer.CompositeC1.dll" targetFilename="~\Bin\Orckestra.Composer.CompositeC1.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Orckestra.Composer.CompositeC1.Azure.dll" targetFilename="~\Bin\Orckestra.Composer.CompositeC1.Azure.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Orckestra.Composer.CompositeC1.DataTypes.dll" targetFilename="~\Bin\Orckestra.Composer.CompositeC1.DataTypes.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Orckestra.ExperienceManagement.DataTypes.dll" targetFilename="~\Bin\Orckestra.ExperienceManagement.DataTypes.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Newtonsoft.Json.dll" targetFilename="~\Bin\Newtonsoft.Json.dll" allowOverwrite="true" addAssemblyBinding="true"/>
+      </Files>
+    </mi:Add>
+
+    <mi:Add installerType="Composite.Core.PackageSystem.PackageFragmentInstallers.FilePackageFragmentInstaller, Composite" uninstallerType="Composite.Core.PackageSystem.PackageFragmentInstallers.FilePackageFragmentUninstaller, Composite">
+      <Files>
+        <File sourceFilename="~\Composite/content/sitemap/SitemapManagement.aspx" targetFilename="~\Composite/content/sitemap/SitemapManagement.aspx" allowOverwrite="true" />
+        <File sourceFilename="~\robots.txt" targetFilename="~\robots.txt" allowOverwrite="true" />
+        <File sourceFilename="~\robots.prd.txt" targetFilename="~\robots.prd.txt" allowOverwrite="true" />
+        <File sourceFilename="~\Global.asax" targetFilename="~\Global.asax" allowOverwrite="true" />
+        <File sourceFilename="~\error.html" targetFilename="~\error.html" allowOverwrite="true" />
+      </Files>
+      <Directories>
+        <Directory sourceDirectory="~\UI.Package\" targetDirectory="~\UI.Package\" allowOverwrite="true" deleteTargetDirectory="false" />
+        <!--Directory sourceDirectory="~\Bin\" targetDirectory="~\Bin\" allowOverwrite="true" deleteTargetDirectory="false" /-->
+        <Directory sourceDirectory="~\App_Config\" targetDirectory="~\App_Config\" allowOverwrite="true" deleteTargetDirectory="false" />
+        <Directory sourceDirectory="~\App_Data\" targetDirectory="~\App_Data\" allowOverwrite="true" deleteTargetDirectory="false" />
+        <Directory sourceDirectory="~\Views\" targetDirectory="~\Views\" allowOverwrite="true" deleteTargetDirectory="false" />
+      </Directories>
+    </mi:Add>
+    <mi:Add installerType="Composite.Core.PackageSystem.PackageFragmentInstallers.DataPackageFragmentInstaller, Composite" uninstallerType="Composite.Core.PackageSystem.PackageFragmentInstallers.DataPackageFragmentUninstaller, Composite">
+      <Types>
+        <Type type="Composite.Data.Types.IMediaFileData,Composite">
+          <Data dataScopeIdentifier="public" dataFilename="~\Datas\Composite.Data.Types.IMediaFileDatas_public.xml" />
+        </Type>
+        <Type type="Composite.Data.Types.IMediaFolderData,Composite">
+          <Data dataScopeIdentifier="public" dataFilename="~\Datas\Composite.Data.Types.IMediaFolderDatas_public.xml" />
+        </Type>
+        <Type type="Composite.Data.Types.IPageType,Composite">
+          <Data dataScopeIdentifier="public" dataFilename="~\Datas\Composite.Data.Types.IPageTypes_public.xml" />
+        </Type>
+        <Type type="Composite.Data.Types.IPageMetaDataDefinition,Composite">
+          <Data dataScopeIdentifier="public" dataFilename="~\Datas\Composite.Data.Types.IPageMetaDataDefinitions_public.xml" />
+        </Type>
+        <Type type="Composite.Data.Types.IPageTypeDefaultPageContent,Composite">
+          <Data dataScopeIdentifier="public" dataFilename="~\Datas\Composite.Data.Types.IPageTypeDefaultPageContents_public.xml" />
+        </Type>
+        <Type type="Composite.Data.Types.IPageTypeMetaDataTypeLink,Composite">
+          <Data dataScopeIdentifier="public" dataFilename="~\Datas\Composite.Data.Types.IPageTypeMetaDataTypeLinks_public.xml" />
+        </Type>
+        <Type type="Composite.Data.Types.IPageTypePageTemplateRestriction,Composite">
+          <Data dataScopeIdentifier="public" dataFilename="~\Datas\Composite.Data.Types.IPageTypePageTemplateRestrictions_public.xml" />
+        </Type>
+        <Type isDynamicAdded="true" type="Orckestra.Composer.CompositeC1.DataTypes.Language,Orckestra.Composer.CompositeC1">
+          <Data dataScopeIdentifier="administrated" dataFilename="~\Datas\Orckestra.Composer.CompositeC1.DataTypes.Languages_administrated.xml" />
+          <Data dataScopeIdentifier="public" dataFilename="~\Datas\Orckestra.Composer.CompositeC1.DataTypes.Languages_public.xml" />
+        </Type>
+        <Type type="Composite.Data.Types.IDataItemTreeAttachmentPoint,Composite">
+          <Data dataScopeIdentifier="public" dataFilename="~\Datas\Composite.Data.Types.IPageTypeTreeLink_public.xml" />
+        </Type>
+      </Types>
+    </mi:Add>
+    <mi:Add installerType="Orckestra.Composer.CompositeC1.Installers.ComposerFragmentInstaller, Orckestra.Composer.CompositeC1" uninstallerType="Orckestra.Composer.CompositeC1.Installers.ComposerFragmentUninstaller, Orckestra.Composer.CompositeC1" />
+    <mi:Add installerType="Composite.Core.PackageSystem.PackageFragmentInstallers.FileXslTransformationPackageFragmentInstaller, Composite" uninstallerType="Composite.Core.PackageSystem.PackageFragmentInstallers.FileXslTransformationPackageFragmentUninstaller, Composite">
+      <XslFiles>
+        <XslFile pathXml="~\Web.config" installXsl="~\Web.config.xsl" />
+      </XslFiles>
+    </mi:Add>
+
+  </mi:PackageFragmentInstallers>
+</mi:PackageInstaller>
+
+

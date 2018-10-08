@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<title>Error Page</title>
+	<meta charset="utf-8" />
+</head>
+<body>
+<!--IMPORTANT! To track error in Google Analytics, replace 'GTM-XXXXXX' below on that page with your Google Traking ID -->
+<script>
+    dataLayer = [];
+    dataLayer.push({
+        'event': 'event',
+        'gaEventCategory': '500 Errors',
+        'gaEventAction': document.URL,
+        'gaEventLabel': document.referrer
+    });
+</script>
+
+<!-- Google Tag Manager -->
+<noscript>
+	<iframe data-name="GTM-iframe-attribute" src="//www.googletagmanager.com/ns.html?id=GTM-XXXXXX" height="0" width="0" style="display: none; visibility: hidden"></iframe>
+</noscript>
+<script>
+    //<![CDATA[
+    function trackAnalytics(w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({
+            'gtm.start':
+                new Date().getTime(),
+            event: 'gtm.js'
+        });
+        var f = d.getElementsByTagName(s)[0],
+            j = d.createElement(s),
+            dl = l != 'dataLayer' ? '&l=' + l : '';
+        j.async = true;
+        j.src = '//www.googletagmanager.com/gtm.js?id=' + i + dl;
+        f.parentNode.insertBefore(j, f);
+    };
+    //]]>
+</script>
+
+	<script data-name="GTM-script-attribute">
+	    trackAnalytics(window, document, 'script', 'dataLayer', 'GTM-XXXXXX');
+	</script>
+<!-- End Google Tag Manager -->
+
+<div style="margin: 200px auto; width: 500px">
+	<h1>Looks like something went wrong!</h1>
+	<p>If the problem persists feel free to contact us.</p>
+</div>
+</body>
+</html>

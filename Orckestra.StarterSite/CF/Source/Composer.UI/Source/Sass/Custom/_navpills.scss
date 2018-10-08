@@ -1,0 +1,26 @@
+//
+// Navpills
+// --------------------------------------------------
+
+
+.nav-pills {
+  list-style: none;
+
+  > li {
+    display: inline-block;
+
+    + li:before {
+      content: "#{$navpills-separator} "; // the space here is a nbsp, not as unicode escape because of issue with libsass.
+      padding: 0 5px;
+    }
+  }
+
+  > li > a {
+      display: inline-block;
+      max-width: 125px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      vertical-align: top;
+  }
+}

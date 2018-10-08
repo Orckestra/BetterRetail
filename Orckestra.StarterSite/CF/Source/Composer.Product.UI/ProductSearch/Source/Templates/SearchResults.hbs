@@ -1,0 +1,46 @@
+<div class="search-results" data-oc-controller="Product.SearchResults" data-context="{{JsonContext}}">
+    {{#if ProductSearchResults.TotalCount}}
+    {{#if_gt ProductSearchResults.TotalCount 0 }}
+        <!--Devrait mettre ça dans le facet.hbs-->
+        <div class="row  island  btn-group-responsive">
+            <div class="col-xs-6  visible-xs-block  visible-sm-block">
+                <button type="button" class="btn  btn-default" data-toggle="collapse"  data-target="#facets" aria-expanded="false">{{localize 'List-Search' 'B_Refine'}}&#160;
+                    <span class="fa  fa-angle-down"></span>
+                </button>
+            </div>
+            {{#with ProductSearchResults}}
+            <div class="col-xs-6  col-md-5">
+                 {{> SearchSortBy}}
+            </div>
+            <div class="col-md-6  col-md-7  hidden-xs  hidden-sm">
+                <div class="pull-right">
+                    {{> PaginationDropDown}}
+                </div>
+            </div>
+            {{/with}}
+            <div class="col-xs-12  col-sm-6  visible-xs-block  visible-sm-block">
+                {{> SearchFacetsDropdown}}
+            </div>
+        </div>
+
+        <!-- Search results -->
+        {{#with ProductSearchResults}}
+        <div class="row">
+            {{#each SearchResults}}
+            <div class="col-xs-6  col-sm-4  col-lg-3"  data-qa="search-results">
+                {{> SearchProductResult}}
+            </div>
+            {{/each}}
+            <div class="col-xs-12">
+                  {{> Pager}}
+            </div>
+        </div>
+        {{/with}}
+
+        <!--Product quick view-->
+        <div>
+            {{> ProductQuickViewDataBlade}}
+        </div>
+    {{/if_gt}}
+    {{/if}}
+</div>

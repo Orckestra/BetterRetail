@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<components xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform" xdt:Transform="Replace">
+
+  <component name="cms-cm">
+    <pipelines>
+      <pipeline name="Full-Install-NoDB" >
+        <pipelineRef name="Full-Install" />
+      </pipeline>
+      <pipeline name="Full-Install">
+        <pipelineRef name="Uninstall" />
+        <pipelineRef name="Install" />
+        <pipelineRef name="Publish" />
+      </pipeline>
+
+      <pipeline name="Full-Install-NoContent">
+        <pipelineRef name="Uninstall" />
+        <pipelineRef name="Install" />
+        <pipelineRef name="Publish-NoContent" />
+      </pipeline>
+      <pipeline name="Install">
+        <script path="Scripts\core\Install-IISUrlRewrite" />
+        <script path="Scripts\generic\Install-CmsWebSite.ps1" parameters="-configuration cm" />
+      </pipeline>
+      <pipeline name="Uninstall">
+        <script path="Scripts\generic\Uninstall-CmsWebSite.ps1" parameters="-configuration cm" />
+      </pipeline>
+	   <pipeline name="Publish">
+        <script path="Scripts\generic\Publish-CmsWebSite.ps1" parameters="-configuration cm" />
+		<script path="Scripts\generic\Install-ReffApp.ps1" parameters="-configuration cm" />
+		<script path="Scripts\generic\Install-CustomC1packages.ps1" parameters="-configuration cm" />			
+		<!--TODO: check why site doesn't work with that - script path="Scripts\generic\Enable-AppPoolAlwaysRunning.ps1" parameters="-configuration cm" /-->
+        <pipelineRef name="Tests" />
+      </pipeline>
+
+      <pipeline name="Publish-NoContent">
+        <script path="Scripts\generic\Publish-CmsWebSite.ps1" parameters="-configuration cm -NoContent" />		
+        <pipelineRef name="Tests" />
+      </pipeline>
+      <pipeline name="Tests">
+        <!-- <script path="Scripts\generic\Invoke-Smoketests.ps1" /> -->
+      </pipeline>
+    </pipelines>
+  </component>
+
+  <component name="cms-cd">
+    <pipelines>
+      <pipeline name="Full-Install-NoDB" >
+        <pipelineRef name="Full-Install" />
+      </pipeline>
+      <pipeline name="Full-Install">
+        <pipelineRef name="Uninstall" />
+        <pipelineRef name="Install" />
+        <pipelineRef name="Publish" />
+      </pipeline>
+
+      <pipeline name="Full-Install-NoContent">
+        <pipelineRef name="Uninstall" />
+        <pipelineRef name="Install" />
+        <pipelineRef name="Publish-NoContent" />
+      </pipeline>
+      <pipeline name="Install">
+        <script path="Scripts\core\Install-IISUrlRewrite" />
+        <script path="Scripts\generic\Install-CmsWebSite.ps1" parameters="-configuration cd" />
+      </pipeline>
+      <pipeline name="Uninstall">
+        <script path="Scripts\generic\Uninstall-CmsWebSite.ps1" parameters="-configuration cd" />
+      </pipeline>
+      <pipeline name="Publish">
+        <script path="Scripts\generic\Publish-CmsWebSite.ps1" parameters="-configuration cd" />
+		<script path="Scripts\generic\Install-ReffApp.ps1" parameters="-configuration cd" />	
+		<!--script path="Scripts\generic\Enable-AppPoolAlwaysRunning.ps1" parameters="-configuration cd" /-->
+        <pipelineRef name="Tests" />
+      </pipeline>
+
+      <pipeline name="Publish-NoContent">
+        <script path="Scripts\generic\Publish-CmsWebSite.ps1" parameters="-configuration cd -NoContent" />		
+        <pipelineRef name="Tests" />
+      </pipeline>	  
+      <pipeline name="Tests">
+       <!--  <script path="Scripts\generic\Invoke-Smoketests.ps1" /> -->
+      </pipeline>
+    </pipelines>
+  </component>
+
+</components>

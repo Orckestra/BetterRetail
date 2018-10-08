@@ -1,0 +1,18 @@
+﻿{{#if IsMultiLanguage}}
+<li class="dropdown" data-oc-controller="General.LanguageSwitch">
+    <a href="{{CurrentLanguage.Url}}" data-qa="language-selector" data-toggle="dropdown">{{CurrentLanguage.ShortDisplayName}}</a>
+    <ul class="dropdown-menu">
+    {{#each Entries}}
+        {{#if IsCurrent}}
+        <li class="active">
+            <a data-oc-click="onLanguageSwitch" href="{{Url}}" data-qa="language-value-{{@index}}">{{DisplayName}}</a>
+        </li>
+        {{else}}
+        <li>
+            <a data-oc-click="onLanguageSwitch" href="{{Url}}" data-qa="language-value-{{@index}}">{{DisplayName}}</a>
+        </li>
+        {{/if}}
+    {{/each}}
+    </ul>
+</li>
+{{/if}}

@@ -1,0 +1,162 @@
+/**
+ * Cart item quantity: [-] Qty [+]
+ * To set the width to prevent jumping of buttons
+ */
+.cart-quantity {
+    margin: 0;
+    width: 40px;
+    display: inline-block;
+    text-align: center;
+}
+
+/**
+ * Fake cell for cart item detail.
+ */
+.cart-cell {
+    float: left;
+    box-sizing: border-box;
+    padding-left: $grid-gutter-width / 2;
+    padding-right: $grid-gutter-width / 2;
+}
+
+/**
+ * Flush cell
+ */
+.cart-cell-flush {
+    padding-left: 0;
+    padding-right: 0;
+}
+.cart-row {
+    @include clearfix();
+
+    &.is-loading {
+        opacity: 0.7
+    }
+}
+.cart-item + .cart-item {
+    border-top: solid 1px $gray-lighter;
+    margin-top: $grid-gutter-width;
+    padding-top: $grid-gutter-width;
+}
+
+.cart-caption {
+    display: table-caption;
+    padding-top: $line-height-computed;
+    padding-bottom: $line-height-computed;
+}
+
+.cart-cell-group {
+    display: table-row-group;
+}
+
+/**
+ *  Different values width for layouting
+ */
+.cart-row {
+    .cart-image { width: 30%; }
+    /**
+     *  All the attributes shown beside the image
+     */
+    .cart-attributes {
+        float: left;
+        width: 70%;
+    }
+
+    /**
+     * Cart attributes
+     */
+    @media (max-width: $screen-xs-max) {
+        .xs-full {
+            .cart-desc,
+            .cart-price,
+            .cart-qty,
+            .cart-subtotal { width: 100%; }
+        }
+    }
+    .cart-desc,
+    .cart-price,
+    .cart-qty,
+    .cart-subtotal { width: 75%; }
+
+    .cart-delete { width: 25%; }
+
+}
+
+
+@media (max-width: $screen-xs-max) {
+    .cart-row {
+        .cart-desc {
+            padding-bottom: $padding-base-vertical;
+        }
+    }
+}
+
+@media (min-width: $screen-sm-min) {
+    /**
+     * Fake table display in > small
+     */
+    .cart-row {
+        display: table;
+        table-layout: fixed;
+
+        .cart-image     { width: 11%; }
+
+        // these are in a sub cell so they must add up to 100%
+        .cart-desc      { width: 28%; }
+        .cart-delete    { width: 10%; }
+        .cart-price     { width: 16%; }
+        .cart-qty       { width: 30%; }
+        .cart-subtotal  { width: 16%; }
+
+        .cart-attributes {
+            width: 100%;
+            display: table;
+            float: none;
+            vertical-align: middle;
+        }
+    }
+    .cart-cell {
+        float: none;
+        display: table-cell;
+        vertical-align: middle;
+    }
+    .cart-cell-flush {
+        display: table-cell;
+        vertical-align: middle;
+        width: 89%;
+    }
+
+    /**
+     *  Header is a bit tricky, a lot of magic value based on alignement of inner value.
+     */
+    .cart-header-title {
+        width: 45%;
+        float: left;
+    }
+    .cart-header-labels {
+        margin-top: 6px;
+        width: 55%;
+        float: left;
+    }
+
+    .cart-header-price,
+    .cart-header-qty,
+    .cart-header-subtotal {
+        padding-left: $grid-gutter-width / 2;
+        padding-right: $grid-gutter-width / 2;
+    }
+
+    .cart-header-price {
+        width: 25.7%;
+    }
+    .cart-header-qty {
+        width: 47.8%;
+    }
+    .cart-header-subtotal {
+        width: 26.5%;
+    }
+}
+
+.cart-subtotal-price {
+    font-size: 16px;
+}

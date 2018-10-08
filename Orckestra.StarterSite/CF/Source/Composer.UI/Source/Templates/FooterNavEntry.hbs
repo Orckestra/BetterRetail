@@ -1,0 +1,36 @@
+<div data-templateid="FooterNavList">
+  <ul class="nav-footer-entry list-unstyled collapse-mobile">
+    <li> 
+      <h4 role="tab" id="{{@index}}">   
+
+         {{#if HasChildren}}            
+            <a class="collapsed hidden-sm hidden-md hidden-lg hidden-xl" role="button" data-toggle="collapse" data-parent="#accordion" href="#footer-collapse-{{@index}}" aria-expanded="false" aria-controls="footer-collapse-{{@index}}" style="{{CssClass}}">
+                        {{DisplayName}}                    
+                    <span class="pull-right fa fa-chevron-down collapsed-icon"></span>
+                    <span class="pull-right fa fa-chevron-up expanded-icon"></span>                      
+             </a>     
+ 
+             {{#if Url}}
+                <a href="{{Url}}"  target="{{UrlTarget}}" role="button" class="hidden-xs" style="{{CssClass}}" aria-haspopup="true">{{DisplayName}}</a>
+             {{else}}
+                <a href="{{Url}}"  target="{{UrlTarget}}" role="button" class="footer-nolink hidden-xs" style="{{CssClass}}" aria-haspopup="true">{{DisplayName}}</a>
+             {{/if}}      
+
+         {{else}}
+             <a data-qa="footer-section" href="{{Url}}"  target="{{UrlTarget}}" style="{{CssClass}}">{{DisplayName}}</a>              
+         {{/if}} 
+
+      </h4> 
+      <ul class="nav nav-text nav-stacked nav-footer-list collapse" id="footer-collapse-{{@index}}" role="tabpanel" aria-expanded="false">
+          {{#each Children}}              
+              <li>
+                  <a data-qa="footer-link" href="{{Url}}" target="{{UrlTarget}}"  style="{{CssClass}}">{{DisplayName}}</a>
+              </li>               
+          {{/each}}            
+      </ul>
+    </li>
+  </ul>
+</div>
+ 
+
+         

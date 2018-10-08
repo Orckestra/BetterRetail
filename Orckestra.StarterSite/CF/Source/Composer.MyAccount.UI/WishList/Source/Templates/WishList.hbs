@@ -1,0 +1,18 @@
+<div data-templateid="WishList" class="panel  panel-default">
+    <div class="panel-heading  clearfix">
+        <h3 class="h3  pull-left">{{localize 'MyAccount' 'T_WishList'}}</h3>
+        <div class="pull-right  wishlist-count  lead">{{> WishListQuantity}}&#160;{{localize 'MyAccount' 'T_WishListCount'}}</div>
+    </div>
+
+    <div class="panel-body">
+      {{> ShareWishList}}
+      
+      {{#if_eq TotalQuantity 0}}
+	        {{{EmptyContent}}}
+	   {{else}}
+	       {{>WishListSummary}}
+	   {{/if_eq}}
+        
+   </div>
+   
+</div>

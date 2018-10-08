@@ -1,0 +1,14 @@
+<div data-templateid="CurrentOrders">
+    {{#if IsLoading}}
+        {{>Loading}}
+    {{else}}
+        {{#if Orders}}
+            {{#each Orders }}
+                {{> CompactOrderDetail}}
+            {{/each}}
+        {{else}}
+            <span class="text-muted">{{localize 'MyAccount' 'L_CurrentOrdersEmpty'}}</span>
+        {{/if}}
+    {{/if}}
+</div>
+

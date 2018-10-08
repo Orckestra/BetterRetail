@@ -1,0 +1,226 @@
+.main-nav {
+    // reset positions
+    .nav, .collapse, .dropup, .dropdown {
+        position: static;
+    }
+    // propagate menu position under container for fw navbars
+    .container {
+        position: relative;
+        padding: 0;
+    }
+    // by default aligns menu to left
+    .dropdown-menu {
+        left: auto;
+    }
+    // Content with padding
+    &-content {
+        padding: 20px 30px;
+
+        ul p {
+            border-bottom: 1px solid $gray-light;
+            padding-bottom: $grid-gutter-width/2;
+        }
+    }
+
+    // Fullwidth menu
+    .dropdown.main-nav-fw .dropdown-menu {
+        left: 0;
+        right: 0;
+    }
+    .dropdown > a {
+        
+    }
+
+    &-toggle {
+        border: none;
+        float: left; 
+        margin-right: 0;
+        padding: 4px 10px;
+    }
+
+    // Mobile version
+    @media (max-width: $screen-xs-max) {
+        margin: -$grid-gutter-width 0 0;
+        
+        //the mobile menu will follow the sticky navbar
+        position: fixed;
+        top: 62px; //computed height of the navbar 
+        z-index: 100;
+        left: 0;
+        width: 100%;
+        
+        //main nav over the content and not pushing the content
+        .main-nav-menu {
+            position: absolute;
+            width: 100%;
+            background: #fff;
+            z-index: 100;
+            margin: 0;
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+
+        ul,
+        &-content,
+        &-content ul p,
+        .row,
+        li {
+            margin: 0;
+            padding: 0;
+
+            &.open > a {
+                background: #fff;
+            }
+        }
+ 
+        &-content {
+            margin-left: -$grid-gutter-width/2;
+            margin-right: -$grid-gutter-width/2;
+
+              ul p {
+                border-bottom: 1px solid #fff;
+              }
+
+            li {
+                a, span {
+                    background-color: $gray-lighter;
+                    display: block;
+                    padding: $grid-gutter-width/4 $grid-gutter-width*2;
+                }
+                a:hover,
+                a:focus {
+                    background-color: $gray-light;
+                    border-color: $link-color;
+                }
+
+                p a,
+                p span {
+                    padding: $grid-gutter-width/2 $grid-gutter-width;
+                }
+            }
+        }
+
+        .dropdown > a {
+            border-bottom: 1px solid $gray-lighter;
+            padding-right: $grid-gutter-width*3;
+        }
+
+        .fa {
+            margin-top: -7px;
+            position: absolute;
+            right: $grid-gutter-width;
+            top: 50%;
+        }
+
+        .fa-chevron-down {
+            display: block;
+        }
+        .fa-chevron-up {
+            display: none;
+        }
+
+        .open {
+            .fa-chevron-down {
+                display: none;
+            }
+            .fa-chevron-up {
+                display: block;
+            }
+        }
+    }
+
+    // Top line
+    hr {
+        margin-bottom: 0;
+    }
+
+    // Tablet & desktop
+    @media (min-width: $screen-sm-min) {
+        position: absolute;
+        bottom: -22px;
+        width: 100%;
+
+        .dropdown > a:hover,
+        .dropdown > a:focus,
+        .open > a {
+            background-color: #fff;
+
+            &::after {
+                background-color: $link-color;
+                bottom: 0;
+                content: '';
+                height: 4px;
+                left: 0;
+                position: absolute;
+                width: 100%;
+            }
+        }
+
+        .fa {
+            display: none;
+        }
+    }
+
+    // Desktop
+    @media (min-width: $screen-md-min) {
+        position: absolute;
+        bottom: -22px;
+
+        // expand dropdown on hover
+        .dropdown:hover .dropdown-menu {
+        display: block;
+        }
+    }
+}
+
+.masthead {
+    position:relative;
+
+    &-with-mega-menu {
+        @media (min-width: $screen-sm-min) {
+            padding-bottom: 57px;
+        }
+        @media (min-width: $screen-md-min) {
+            padding-bottom: 61px;
+        }
+    }
+}
+
+ul.main-nav-sticky {
+    display: none;
+    overflow: hidden;
+    white-space: nowrap;
+
+    li {
+        float: left;
+
+        a {
+            background-color: transparent;
+            color: #fff;
+            float: left;
+            position: relative;
+
+            &:hover,
+            &:focus {
+                background-color: transparent;
+
+                &::after {
+                    background-color: #fff;
+                    bottom: 0;
+                    content: '';
+                    height: 4px;
+                    left: 0;
+                    position: absolute;
+                    width: 100%;
+                }
+            }
+        }
+    }
+    @media (min-width: $screen-sm-min) {
+        .affix & {
+            display: block;
+            float: left;
+        }
+    }
+}

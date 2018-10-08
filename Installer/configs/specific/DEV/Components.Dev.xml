@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<components xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
+
+  <component name="cms-cm">
+    <pipelines>
+      <pipeline name="Publish" xdt:Locator="Match(name)">
+        <pipelineRef name="Tests" xdt:Transform="Remove"/>
+      </pipeline>
+    </pipelines>
+  </component>
+
+  <component name="cms-cd">
+    <pipelines>
+      <pipeline name="Publish" xdt:Locator="Match(name)">
+        <pipelineRef name="Tests" xdt:Transform="Remove"/>
+      </pipeline>
+    </pipelines>
+  </component>
+ 
+
+</components>

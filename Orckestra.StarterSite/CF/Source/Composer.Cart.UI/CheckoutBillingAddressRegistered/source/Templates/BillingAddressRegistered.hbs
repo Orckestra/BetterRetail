@@ -1,0 +1,61 @@
+<div data-templateid="BillingAddressRegistered">
+    {{#if_eq IsAuthenticated true}}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h2 class="h3">{{localize 'CheckoutProcess' 'T_BillingAddress'}}</h2>
+            </div>
+            <div class="panel-body">
+                {{#if_eq GettingCart true}}
+                    {{>Loading}}
+                {{/if_eq}}
+                {{#if_eq GettingCart false}}
+                    <form id="BillingAddressRegistered" data-oc-submit="preventFormSubmit" method="post" autocomplete="on"
+                        data-parsley-excluded="input:disabled">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label for="UseShippingAddress">{{localize 'CheckoutProcess' 'F_BillingSameShipping'}}</label>
+
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label data-qa="checkout-use-shipping-address-yes" class="select-block  {{#if_eq Payment.BillingAddress.UseShippingAddress true}} active {{/if_eq}}">
+                                                <span class="input-addon">
+                                                    <input class="input" data-oc-click="changeUseShippingAddress"
+                                                    data-parsley-class-handler-selector=".panel-body" data-parsley-errors-container="#billing-errors"
+                                                    type="radio" name="UseShippingAddress" value="true"
+                                                    {{#if_eq Payment.BillingAddress.UseShippingAddress true}} checked="checked" {{/if_eq}} />
+                                                </span>
+                                                <span class="content">{{localize 'CheckoutProcess' 'F_BillingYes'}}</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label data-qa="checkout-use-shipping-address-no" class="select-block  {{#if_neq Payment.BillingAddress.UseShippingAddress true}} active {{/if_neq}}">
+                                                <span class="input-addon">
+                                                        <input class="input" data-oc-click="changeUseShippingAddress"
+                                                        data-parsley-class-handler-selector=".panel-body" data-parsley-errors-container="#billing-errors"
+                                                        type="radio" name="UseShippingAddress" value="false"
+                                                        {{#if_neq Payment.BillingAddress.UseShippingAddress true}} checked="checked" {{/if_neq}} />
+                                                </span>
+                                                <span class="content">{{localize 'CheckoutProcess' 'F_BillingNo'}}</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="billing-errors"></div>
+                            </div>
+                        </div>
+                        <div id="BillingAddressContent" class="{{#if_eq Payment.BillingAddress.UseShippingAddress true}}hide{{/if_eq}}">
+                            {{#if_localized 'CheckoutProcess' 'T_BillingAddressSpecify'}}
+                                <h3>{{localize 'CheckoutProcess' 'T_BillingAddressSpecify'}}</h3>
+                            {{/if_localized}}
+                            {{> BillingRegisteredAddresses}}
+                        </div>
+                    </form>
+                {{/if_eq}}
+            </div>
+        </div>
+    {{/if_eq}}
+</div>

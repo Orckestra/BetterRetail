@@ -1,0 +1,17 @@
+<div data-templateid="ShippingAddressRegistered">
+    {{#if_eq IsAuthenticated true}}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h2 class="h3">{{localize 'CheckoutProcess' 'T_ShippingAddress'}}</h2>
+            </div>
+            <div class="panel-body">
+                {{#if_eq GettingCart true}}
+                    {{>Loading}}
+                {{/if_eq}}
+                {{#if_eq GettingCart false}}
+                    {{> RegisteredAddresses}}
+                {{/if_eq}}
+            </div>
+        </div>
+    {{/if_eq}}
+</div>

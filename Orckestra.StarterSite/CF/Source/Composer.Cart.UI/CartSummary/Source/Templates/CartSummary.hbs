@@ -1,0 +1,50 @@
+{{#if_neq InvalidLineItemCount 0}}
+<div class="panel panel-default">
+    <div class="panel-heading  clearfix">
+        <div class="cart-header-title  pull-left">
+            <h2 class="h3">{{localize 'ShoppingCart' 'T_UnavailableItems'}}</h2>
+        </div>
+    </div>
+    <div class="panel-body">
+
+        <div class="panel  panel-danger">
+            <div class="panel-body">
+                <div class="multiline-message  text-danger">
+                    <span class="fa  fa-exclamation-triangle  multiline-message-icon"></span>
+                    <span>{{InvalidLineItemCount}} {{localize 'ShoppingCart' 'L_NoMoreAvailable'}}</span>
+                </div>
+            </div>
+        </div>
+
+       {{#each LineItemDetailViewModels}}
+            {{#unless IsValid}}
+                  {{>LineItemDetail}}
+            {{/unless}}
+	   {{/each}}
+    </div>
+</div>
+{{/if_neq}}
+
+{{#if_neq InvalidLineItemCount LineItemCount}}
+<div class="panel panel-default">
+    <div class="panel-heading  clearfix">
+        <div class="cart-header-title  pull-left">
+            <h2 class="h3">{{localize 'ShoppingCart' 'T_ShoppingCart'}}</h2>
+        </div>
+        <div class="cart-header-labels  pull-left">
+            <div class="cart-header-price  text-right  pull-left  hidden-xs">{{localize 'MyAccount' 'L_UnitPrice'}}</div>
+
+            <div class="cart-header-qty  text-center  pull-left  hidden-xs">{{localize 'MyAccount' 'L_Quantity'}}</div>
+
+            <div class="cart-header-subtotal  text-right  pull-left  hidden-xs">{{localize 'MyAccount' 'L_Subtotal'}}</div>
+        </div>
+    </div>
+    <div class="panel-body">
+        {{#each LineItemDetailViewModels}}
+    	    {{#if IsValid}}
+                  {{>LineItemDetail}}
+            {{/if}}
+    	{{/each}}
+    </div>
+</div>
+{{/if_neq}}

@@ -1,0 +1,18 @@
+<div class="wishlist-share" data-templateid="ShareWishList">
+    <p>{{localize 'MyAccount' 'L_ShareWishListText'}}</p>
+    <div class="form-horizontal  {{#if_eq TotalQuantity 0}}inactive{{/if_eq}}">
+        <div class="form-group">
+            <div class="col-xs-12  col-sm-6  col-md-9">
+                <input id="txtShareUrl" type="text" class="form-control" placeholder="{{localize 'MyAccount' 'P_ShareWishListCopyLink'}}" value="{{ShareUrl}}" />
+            </div>
+            <div class="col-xs-12  col-sm-6  col-md-3">
+
+                <br class="visible-xs-block" />
+
+                <button type="submit"
+                        data-oc-click="copyShareUrl"
+                        class="btn btn-primary">{{localize 'MyAccount' 'B_ShareWishListCopyLink'}}</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,39 @@
+<div data-templateid="Coupons">
+	{{#with Coupons}}
+        {{#if Messages}}
+            {{#each Messages}}
+                <div class="alert  alert-{{Level}}  alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span class="fa  fa-times"></span>
+                    </button>
+
+                    <div class="multiline-message">
+                        {{#if_eq Level 'danger'}}
+                            <span class="fa  fa-exclamation-triangle  multiline-message-icon"></span>
+                        {{/if_eq}}
+                        {{#if_eq Level 'warning'}}
+                            <span class="fa  fa-info-circle  multiline-message-icon"></span>
+                        {{/if_eq}}
+                        {{#if_eq Level 'success'}}
+                            <span class="fa  fa-check-circle  multiline-message-icon"></span>
+                        {{/if_eq}}
+
+                        {{Message}}
+                    </div>
+                </div>
+            {{/each}}
+        {{/if}}
+
+        {{#if ApplicableCoupons}}
+            <hr />
+            {{#each ApplicableCoupons}}
+                {{>Coupon}}
+            {{/each}}
+        {{else}}
+            <div class="multiline-message">
+                <span class="fa  fa-comment-o  fa-lg  multiline-message-icon"></span>&#32;
+                <span>{{localize 'ShoppingCart' 'F_PromoCodeIndication'}}</span>
+            </div>
+        {{/if}}
+    {{/with}}
+</div>

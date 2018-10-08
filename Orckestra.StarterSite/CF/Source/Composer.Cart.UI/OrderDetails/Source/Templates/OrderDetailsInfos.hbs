@@ -1,0 +1,34 @@
+ <div data-templateid="OrderDetailsInfos">
+     <div class="panel  panel-default">
+        <div class="panel-heading">
+            <h2 class="h3">{{localize 'MyAccount' 'T_OrderDetails' }}</h2>
+        </div>
+        <div class="panel-body">
+            <div class="compact-order">
+                <div class="row compact-order-header">
+                    <div class="col-xs-12 col-sm-8">
+                        <div class="compact-order-date">
+                            <strong class="h4">{{localizeFormat 'MyAccount' 'L_OrderedOn' OrderInfos.OrderDate}}</strong>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4">
+                    </div>
+                </div>
+
+                <div class="row compact-order-body">
+                    <div class="col-xs-12  col-sm-8">
+                        <p>
+                            {{localizeFormat 'MyAccount' 'L_OrderNumber' OrderInfos.OrderNumber}}
+                            <br />
+                            <!-- put if to each css class -->
+                            <strong class="text-warning">{{ OrderInfos.OrderStatus }}</strong>
+                        </p>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 text-sm-right">
+                        <p class="">{{localize 'MyAccount' 'L_Total'}}&nbsp;<strong class="h4">{{OrderInfos.PricePaid}}</strong>&nbsp;<strong class="h4">{{OrderInfos.BillingCurrency}}</strong></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

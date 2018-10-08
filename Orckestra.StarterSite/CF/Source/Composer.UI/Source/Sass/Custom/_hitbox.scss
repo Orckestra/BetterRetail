@@ -1,0 +1,18 @@
+.hitbox {
+    display: block;
+    background: $body-bg;
+    border: dashed 2px $gray-light;
+    border-radius: $border-radius-base;
+    font-weight: bold;
+    padding: $padding-large-vertical $padding-large-horizontal;
+    text-align: center;
+    text-decoration: underline;
+    transition: all .3s ease;
+
+    &:hover,
+    &:focus {
+        border-color: $brand-info;
+        color: $brand-info;
+        text-decoration: none;
+    }
+}

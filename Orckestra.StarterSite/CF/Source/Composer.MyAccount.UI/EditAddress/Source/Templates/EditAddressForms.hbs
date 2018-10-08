@@ -1,0 +1,209 @@
+
+<form id="EditAddressForm" {{#if IsUpdating}}data-oc-submit="updateAddress" data-address-id="{{Id}}"{{else}}data-oc-submit="createAddress"{{/if}}>
+    <div class="panel  panel-default">
+        <div class="panel-heading">
+            <h2 class="h3">
+                {{#if AddressName}}
+                    {{localize 'MyAccount' 'T_EditAddress'}}
+                {{else}}
+                    {{localize 'MyAccount' 'T_AddAddress'}}
+                {{/if}}
+            </h2>
+        </div>
+        <div class="panel-body">
+            {{>FormErrorMessages}}
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="AddressName">{{localize 'Forms' 'F_AddressName'}} *</label>
+                        <input name="AddressName" id="AddressName" data-qa="editaddress-name"
+                            {{#if_localized 'Forms' 'F_AddressNameIndication'}}
+                                {{>HelpBubbleOpen}}{{localize 'Forms' 'F_AddressNameIndication'}}{{>HelpBubbleClose}}
+                            {{/if_localized}}
+                                type="text"
+                                class="form-control"
+                                placeholder="{{localize 'Forms' 'F_AddressNameWaterMark'}}"
+                                value="{{AddressName}}"
+                                required="true" {{#if_localized 'Forms' 'F_AddressNameRequiredError'}}data-parsley-required-message="{{localize 'Forms' 'F_AddressNameRequiredError'}}"{{/if_localized}}
+                                data-parsley-length="[2, 36]" {{#if_localized 'Forms' 'F_AddressNameLengthError'}}data-parsley-length-message="{{localize 'Forms' 'F_AddressNameLengthError'}}"{{/if_localized}}
+                                data-parsley-pattern="/^[a-zA-Z0-9\u00E0-\u00FC\.\-\s\']+$/i" {{#if_localized 'Forms' 'F_AddressNamePatternError'}}data-parsley-pattern-message="{{localize 'Forms' 'F_AddressNamePatternError'}}"{{/if_localized}}
+                                />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="FirstName">{{localize 'Forms' 'F_FirstName'}} *</label>
+                        <input name="FirstName" id="FirstName" data-qa="editaddress-firstname"
+                            {{#if_localized 'Forms' 'F_FirstNameIndication'}}
+                                {{>HelpBubbleOpen}}{{localize 'Forms' 'F_FirstNameIndication'}}{{>HelpBubbleClose}}
+                            {{/if_localized}}
+                                type="text"
+                                class="form-control"
+                                placeholder="{{localize 'Forms' 'F_FirstNameWaterMark'}}"
+                                value="{{FirstName}}"
+                                required="true" {{#if_localized 'Forms' 'F_FirstNameRequiredError'}}data-parsley-required-message="{{localize 'Forms' 'F_FirstNameRequiredError'}}"{{/if_localized}}
+                                data-parsley-length="[2, 36]" {{#if_localized 'Forms' 'F_FirstNameLengthError'}}data-parsley-length-message="{{localize 'Forms' 'F_FirstNameLengthError'}}"{{/if_localized}}
+                                data-parsley-pattern="/^[a-zA-Z\u00E0-\u00FC\.\-\s\']+$/i" {{#if_localized 'Forms' 'F_FirstNamePatternError'}}data-parsley-pattern-message="{{localize 'Forms' 'F_FirstNamePatternError'}}"{{/if_localized}}
+                                />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="LastName">{{localize 'Forms' 'F_LastName'}} *</label>
+                        <input name="LastName" id="LastName" data-qa="editaddress-lastname"
+                            {{#if_localized 'Forms' 'F_LastNameIndication'}}
+                                {{>HelpBubbleOpen}}{{localize 'Forms' 'F_LastNameIndication'}}{{>HelpBubbleClose}}
+                            {{/if_localized}}
+                                type="text"
+                                class="form-control"
+                                placeholder="{{localize 'Forms' 'F_LastNameWaterMark'}}"
+                                value="{{LastName}}"
+                                required="true" {{#if_localized 'Forms' 'F_LastNameRequiredError'}}data-parsley-required-message="{{localize 'Forms' 'F_LastNameRequiredError'}}"{{/if_localized}}
+                                data-parsley-length="[2, 36]" {{#if_localized 'Forms' 'F_LastNameLengthError'}}data-parsley-length-message="{{localize 'Forms' 'F_LastNameLengthError'}}"{{/if_localized}}
+                                data-parsley-pattern="/^[a-zA-Z\u00E0-\u00FC\.\-\s\']+$/i" {{#if_localized 'Forms' 'F_LastNamePatternError'}}data-parsley-pattern-message="{{localize 'Forms' 'F_LastNamePatternError'}}"{{/if_localized}}
+                                />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="Line1">{{localize 'Forms' 'F_Address'}} *</label>
+                        <input name="Line1" id="Line1" data-qa="editaddress-address"
+                            {{#if_localized 'Forms' 'F_AddressIndication'}}
+                                {{>HelpBubbleOpen}}{{localize 'Forms' 'F_AddressIndication'}}{{>HelpBubbleClose}}
+                            {{/if_localized}}
+                                type="text"
+                                class="form-control"
+                                placeholder="{{localize 'Forms' 'F_AddressWaterMark'}}"
+                                value="{{Line1}}"
+                                required="true" {{#if_localized 'Forms' 'F_AddressRequiredError'}}data-parsley-required-message="{{localize 'Forms' 'F_AddressRequiredError'}}"{{/if_localized}}
+                                data-parsley-length="[5, 36]" {{#if_localized 'Forms' 'F_AddressLengthError'}}data-parsley-length-message="{{localize 'Forms' 'F_AddressLengthError'}}"{{/if_localized}}
+                                data-parsley-pattern="/^[a-zA-Z0-9\u00E0-\u00FC\.\-\s\'\,]+$/i" {{#if_localized 'Forms' 'F_AddressPatternError'}}data-parsley-pattern-message="{{localize 'Forms' 'F_AddressPatternError'}}"{{/if_localized}}
+                                />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="Line2">{{localize 'Forms' 'F_ComplementaryAddress'}}</label>
+                        <input name="Line2" id="Line2" data-qa="editaddress-complementary-address"
+                            {{#if_localized 'Forms' 'F_ComplementaryAddressIndication'}}
+                                {{>HelpBubbleOpen}}{{localize 'Forms' 'F_ComplementaryAddressIndication'}}{{>HelpBubbleClose}}
+                            {{/if_localized}}
+                                type="text"
+                                class="form-control"
+                                placeholder="{{localize 'Forms' 'F_ComplementaryAddressWaterMark'}}"
+                                value="{{Line2}}"
+                                data-parsley-length="[0, 36]" {{#if_localized 'Forms' 'F_ComplementaryAddressLengthError'}}data-parsley-length-message="{{localize 'Forms' 'F_ComplementaryAddressLengthError'}}"{{/if_localized}}
+                                data-parsley-pattern="/^[a-zA-Z0-9\u00E0-\u00FC\.\-\s\'\,]+$/i" {{#if_localized 'Forms' 'F_ComplementaryAddressPatternError'}}data-parsley-pattern-message="{{localize 'Forms' 'F_ComplementaryAddressPatternError'}}"{{/if_localized}}
+                                />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="City">{{localize 'Forms' 'F_City'}} *</label>
+                        <input name="City" id="City" data-qa="editaddress-city"
+                            {{#if_localized 'Forms' 'F_CityIndication'}}
+                                {{>HelpBubbleOpen}}{{localize 'Forms' 'F_CityIndication'}}{{>HelpBubbleClose}}
+                            {{/if_localized}}
+                                type="text"
+                                class="form-control"
+                                placeholder="{{localize 'Forms' 'F_CityWaterMark'}}"
+                                value="{{City}}"
+                                required="true" {{#if_localized 'Forms' 'F_CityRequiredError'}}data-parsley-required-message="{{localize 'Forms' 'F_CityRequiredError'}}"{{/if_localized}}
+                                data-parsley-length="[3, 36]" {{#if_localized 'Forms' 'F_CityLengthError'}}data-parsley-length-message="{{localize 'Forms' 'F_CityLengthError'}}"{{/if_localized}}
+                                data-parsley-pattern="/^[a-zA-Z\u00E0-\u00FC\.\-\s\']+$/i" {{#if_localized 'Forms' 'F_CityPatternError'}}data-parsley-pattern-message="{{localize 'Forms' 'F_CityPatternError'}}"{{/if_localized}}
+                                />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <input type="hidden" name="CountryCode" value="{{CountryCode}}" />
+                                <label for="RegionCode">{{localize 'Forms' 'F_Province'}} *</label>
+                                <span class="loading-indicator-regions  fa  fa-spin  fa-fw  fa-circle-o-notch  hidden"></span>
+                                {{> AddressRegionPicker }}
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="PostalCode">{{localize 'Forms' 'F_PostalCode'}} *</label>
+                                <input name="PostalCode" id="PostalCode" data-qa="editaddress-postalcode"
+                                    data-oc-change="adjustPostalCode" data-parsley-group="shipping-based-on"
+                            {{#if_localized 'Forms' 'F_PostalCodeIndication'}}
+                                {{>HelpBubbleOpen}}{{localize 'Forms' 'F_PostalCodeIndication'}}{{>HelpBubbleClose}}
+                            {{/if_localized}}
+                                type="text"
+                                class="form-control"
+                                placeholder="{{localize 'Forms' 'F_PostalCodeWaterMark'}}"
+                                value="{{PostalCode}}"
+                                required="true" {{#if_localized 'Forms' 'F_PostalCodeRequiredError'}}data-parsley-required-message="{{localize 'Forms' 'F_PostalCodeRequiredError'}}"{{/if_localized}}
+                                data-parsley-length="[6, 7]" {{#if_localized 'Forms' 'F_PostalCodeLengthError'}}data-parsley-length-message="{{localize 'Forms' 'F_PostalCodeLengthError'}}"{{/if_localized}}
+                                data-parsley-pattern="{{PostalCodeRegex}}" {{#if_localized 'Forms' 'F_PostalCodePatternError'}}data-parsley-pattern-message="{{localize 'Forms' 'F_PostalCodePatternError'}}"{{/if_localized}}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="PhoneNumber">{{localize 'Forms' 'F_PhoneNumber'}} *</label>
+                        <input name="PhoneNumber" id="PhoneNumber" data-qa="editaddress-phone"
+                            {{#if_localized 'Forms' 'F_PhoneNumberIndication'}}
+                                {{>HelpBubbleOpen}}{{localize 'Forms' 'F_PhoneNumberIndication'}}{{>HelpBubbleClose}}
+                            {{/if_localized}}
+                                type="tel"
+                                class="form-control"
+                                placeholder="{{localize 'Forms' 'F_PhoneNumberWaterMark'}}"
+                                value="{{PhoneNumber}}"
+                                required="true" {{#if_localized 'Forms' 'F_PhoneNumberRequiredError'}}data-parsley-required-message="{{localize 'Forms' 'F_PhoneNumberRequiredError'}}"{{/if_localized}}
+                                data-parsley-length="[7, 36]" {{#if_localized 'Forms' 'F_PhoneNumberLengthError'}}data-parsley-length-message="{{localize 'Forms' 'F_PhoneNumberLengthError'}}"{{/if_localized}}
+                                data-parsley-pattern="{{PhoneRegex}}" {{#if_localized 'Forms' 'F_PhoneNumberPatternError'}}data-parsley-pattern-message="{{localize 'Forms' 'F_PhoneNumberPatternError'}}"{{/if_localized}}
+                                />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="checkbox">
+                        <label>
+                            <input name="IsPreferredShipping" id="IsPreferredShipping" data-qa="editaddress-ispreferredshipping" type="checkbox" {{#if IsPreferredShipping}}checked="true"{{/if}} />
+                            {{localize 'Forms' 'F_IsPreferredShipping'}}
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="form-group pull-right">
+                <button type="button" onclick="window.history.back();" class="btn btn-default" data-qa="editaddress-cancel">
+                    {{localize 'General' 'B_Cancel'}}
+                </button>
+
+                <button type="submit" class="btn btn-primary" data-qa="editaddress-submit" >
+                    {{#if IsUpdating}}{{localize 'MyAccount' 'B_SaveAddress'}}{{else}}{{localize 'MyAccount' 'B_SaveNewAddress'}}{{/if}}
+                    <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  hidden"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
+

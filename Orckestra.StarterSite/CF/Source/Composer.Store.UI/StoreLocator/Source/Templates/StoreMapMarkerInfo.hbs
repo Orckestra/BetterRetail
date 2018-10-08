@@ -1,0 +1,11 @@
+<div class="store-marker-info">
+    <h5 class="title">{{LocalizedDisplayName}}</h5>
+    {{#with Address}}
+      {{> StoreAddress}}
+    {{/with}}
+    {{> StoresListSchedule}}
+    <div class="clearfix btns">
+        <a href="{{GoogleDirectionsLink}}" target="_blank" class="btn  btn-sm  btn-default">{{localize 'Store' 'H_ItineraryShort'}} <i class="fa  fa-location-arrow"></i></a>&#160;&#160;
+        <a href="{{Url}}" class="btn  btn-sm  btn-default">{{localize 'Store' 'H_Details'}} <i class="fa  fa-angle-double-right"></i></a>
+    </div>
+</div>

@@ -1,0 +1,62 @@
+<form name="login" data-oc-submit="login" method="post" autocomplete="on" action="#">
+    {{>ReturningCustomerFormsServerValidations }}
+
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label for="username">{{localize 'Forms' 'F_Email'}}</label>
+                <input data-qa="login-email" class="form-control" id="username" name="Username"
+                    type="email"
+                    placeholder="{{localize 'Forms' 'F_EmailWaterMark'}}"
+                    {{#if_localized 'Forms' 'F_EmailSignInIndication'}}
+                        {{>HelpBubbleOpen}}{{localize 'Forms' 'F_EmailSignInIndication'}}{{>HelpBubbleClose}}
+                    {{/if_localized}}
+                    required="true" {{#if_localized 'Forms' 'F_EmailRequiredError'}}data-parsley-required-message="{{localize 'Forms' 'F_EmailRequiredError'}}"{{/if_localized}}
+                    />
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label for="password">{{localize 'Forms' 'F_Password'}}</label>
+                <input  data-qa="login-password" class="form-control" id="password" name="Password" autocomplete="off"
+                type="password"
+                {{#if_localized 'Forms' 'F_PasswordIndication'}}
+                    {{>HelpBubbleOpen}}{{localize 'Forms' 'F_PasswordIndication'}}{{>HelpBubbleClose}}
+                {{/if_localized}}
+                required="true" {{#if_localized 'Forms' 'F_PasswordRequiredError'}}data-parsley-required-message="{{localize 'Forms' 'F_PasswordRequiredError'}}"{{/if_localized}}
+                />
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="form-group">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" name="IsRememberMe"/>
+                        {{localize 'Forms' 'F_RememberMe'}}<br/>
+                        <span class="text-muted">{{localize 'Forms' 'F_RememberMeDescription'}}</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="form-group  text-right">
+                <button data-qa="login-submit" type="submit" class="btn  btn-primary  btn-lg  btn-block">{{localize 'CheckoutProcess' 'T_SignInCheckout'}}
+                    <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  hidden"></span>
+                </button>
+            </div>
+        </div>
+
+        <div class="col-xs-12">
+            <a href="{{ForgotPasswordUrl}}">{{localize 'MyAccount' 'H_ForgotPassword'}}</a>
+        </div>
+    </div>
+</form>

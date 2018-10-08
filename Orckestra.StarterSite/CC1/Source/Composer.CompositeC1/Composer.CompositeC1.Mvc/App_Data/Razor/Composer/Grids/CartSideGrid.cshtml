@@ -1,0 +1,29 @@
+﻿@inherits RazorFunction
+
+@functions {
+    public override string FunctionDescription
+    {
+        get  { return "Represents a grid typically used on the side of a cart page."; }
+    }
+
+    [FunctionParameter(Label = "First part")]
+    public XhtmlDocument FirstPart { get; set; }
+	
+	[FunctionParameter(Label = "Second part")]
+    public XhtmlDocument SecondPart { get; set; }
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+    <head>
+    </head>
+    <body>
+        <div class="row">
+			<div class="col-sm-6  col-sm-push-6  col-md-push-0  col-md-12">
+				@Markup(FirstPart)
+			</div>
+			<div class="col-sm-6  col-sm-pull-6  col-md-pull-0  col-md-12">
+				@Markup(SecondPart)
+			</div>
+		</div>
+    </body>
+</html>

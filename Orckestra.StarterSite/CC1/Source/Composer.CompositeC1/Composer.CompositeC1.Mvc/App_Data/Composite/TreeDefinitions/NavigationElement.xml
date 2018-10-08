@@ -1,0 +1,236 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ElementStructure xmlns="http://www.composite.net/ns/management/trees/treemarkup/1.0" xmlns:f="http://www.composite.net/ns/function/1.0">
+
+  <!--<ElementStructure.AutoAttachments>
+    <NamedParent Name="Content" Position="Bottom" />
+  </ElementStructure.AutoAttachments>-->
+
+  <ElementStructure.AllowedAttachments ApplicationName="Navigation">
+    <DataType Type="Composite.Data.Types.IPage" />
+    
+  </ElementStructure.AllowedAttachments>
+
+  <ElementRoot>
+
+    <Children>
+
+      <Element Label="Navigation" Id="NavElem" Icon="pagetype-pagetype-rootfolder" OpenedIcon="pagetype-pagetype-rootfolder-open">
+        <Actions>
+        </Actions>
+
+        <Children>
+          
+          <Element Label="Header" Id="Header" Icon="pagetype-pagetype-rootfolder" OpenedIcon="pagetype-pagetype-rootfolder-open">
+            <Actions>
+              <AddDataAction Type="Orckestra.Composer.CompositeC1.DataTypes.Navigation.MainMenu" Label="Add Main Menu Item"/>
+            </Actions>
+            <Children>
+              <DataElements Type="Orckestra.Composer.CompositeC1.DataTypes.Navigation.MainMenu" Icon="pagetype-pagetype">
+                <Actions>
+                  <AddDataAction Type="Orckestra.Composer.CompositeC1.DataTypes.Navigation.MainMenu" Label="Add Main Menu Item"/>
+                  <EditDataAction/>
+                  <DeleteDataAction/>
+                </Actions>
+                <Filters>
+                  <FieldFilter FieldName="ParentId" Operator="equal" FieldValue=""/>
+                </Filters>
+                <OrderBy>
+                  <Field FieldName="Order"/>
+                </OrderBy>
+
+                <Children>
+                  <DataElements Type="Orckestra.Composer.CompositeC1.DataTypes.Navigation.MainMenu" Icon="pagetype-pagetype">
+                    <Actions>
+                      <AddDataAction Type="Orckestra.Composer.CompositeC1.DataTypes.Navigation.MainMenu" Label="Add Main Menu Item"/>
+                      <EditDataAction/>
+                      <DeleteDataAction/>
+                    </Actions>
+                    <Filters>
+                      <ParentIdFilter ParentType="Orckestra.Composer.CompositeC1.DataTypes.Navigation.MainMenu" ReferenceFieldName="ParentId"/>
+                    </Filters>
+                    <OrderBy>
+                      <Field FieldName="Order"/>
+                    </OrderBy>
+
+                    <Children>
+                      <DataElements Type="Orckestra.Composer.CompositeC1.DataTypes.Navigation.MainMenu" Icon="pagetype-pagetype">
+                        <Actions>
+                          <AddDataAction Type="Orckestra.Composer.CompositeC1.DataTypes.Navigation.MainMenu" Label="Add Main Menu Item"/>
+                          <EditDataAction/>
+                          <DeleteDataAction/>
+                        </Actions>
+                        <Filters>
+                          <ParentIdFilter ParentType="Orckestra.Composer.CompositeC1.DataTypes.Navigation.MainMenu" ReferenceFieldName="ParentId"/>
+                        </Filters>
+                        <OrderBy>
+                          <Field FieldName="Order"/>
+                        </OrderBy>
+
+                        <Children>
+                          <DataElements Type="Orckestra.Composer.CompositeC1.DataTypes.Navigation.MainMenu" Icon="pagetype-pagetype">
+                            <Actions>
+                              <AddDataAction Type="Orckestra.Composer.CompositeC1.DataTypes.Navigation.MainMenu" Label="Add Main Menu Item"/>
+                              <EditDataAction/>
+                              <DeleteDataAction/>
+                            </Actions>
+                            <Filters>
+                              <ParentIdFilter ParentType="Orckestra.Composer.CompositeC1.DataTypes.Navigation.MainMenu" ReferenceFieldName="ParentId"/>
+                            </Filters>
+                            <OrderBy>
+                              <Field FieldName="Order"/>
+                            </OrderBy>
+
+                            <Children>
+                              <DataElements Type="Orckestra.Composer.CompositeC1.DataTypes.Navigation.MainMenu" Icon="pagetype-pagetype">
+                                <Actions>
+                                  <EditDataAction/>
+                                  <DeleteDataAction/>
+                                </Actions>
+                                <Filters>
+                                  <ParentIdFilter ParentType="Orckestra.Composer.CompositeC1.DataTypes.Navigation.MainMenu" ReferenceFieldName="ParentId"/>
+                                </Filters>
+                                <OrderBy>
+                                  <Field FieldName="Order"/>
+                                </OrderBy>
+
+                                </DataElements>
+                            </Children>
+
+                          </DataElements>
+                        </Children>
+
+                      </DataElements>
+                    </Children>
+
+                  </DataElements>
+                </Children>
+              </DataElements>
+             <Element Label="Images" Id="ImageNavigation" Icon="pagetype-pagetype-rootfolder" OpenedIcon="pagetype-pagetype-rootfolder-open">
+              <Actions>
+                <AddDataAction Type="Orckestra.Composer.CompositeC1.DataTypes.Navigation.NavigationImage" Label="Add Navigation Image"/>
+              </Actions>
+              <Children>
+                  <DataElements Type="Orckestra.Composer.CompositeC1.DataTypes.Navigation.NavigationImage" Icon="pagetype-pagetype">
+              <Actions>
+                  <EditDataAction/>
+                  <DeleteDataAction/>
+              </Actions>
+              <Filters>
+                
+              </Filters>
+              <OrderBy>
+          
+              </OrderBy>
+                </DataElements>
+                </Children>
+              </Element>
+            </Children>
+          </Element>
+          
+            
+          <Element Label="Sticky Header" Id="StickyHeader" Icon="pagetype-pagetype-rootfolder" OpenedIcon="pagetype-pagetype-rootfolder-open">
+            <Actions>
+              <AddDataAction Type="Orckestra.Composer.CompositeC1.DataTypes.Navigation.StickyHeader" Label="Add Sticky Header" />
+            </Actions>
+            <Children>
+              <DataElements Type="Orckestra.Composer.CompositeC1.DataTypes.Navigation.StickyHeader" Icon="pagetype-pagetype">
+                <Actions>
+                  <EditDataAction/>
+                  <DeleteDataAction/>
+                </Actions>
+                <Filters>
+                 
+                </Filters>
+                <OrderBy>
+                  <Field FieldName="Order"/>
+                </OrderBy>
+              </DataElements>
+            </Children>
+          </Element>
+
+          <Element Label="Header Optional Links" Id="HeaderOptionLink" Icon="pagetype-pagetype-rootfolder" OpenedIcon="pagetype-pagetype-rootfolder-open">
+            <Actions>
+              <AddDataAction Type="Orckestra.Composer.CompositeC1.DataTypes.Navigation.HeaderOptionalLink" Label="Add Header Optional Link"/>
+            </Actions>
+            <Children>
+              <DataElements Type="Orckestra.Composer.CompositeC1.DataTypes.Navigation.HeaderOptionalLink" Icon="pagetype-pagetype">
+                <Actions>
+                  <EditDataAction/>
+                  <DeleteDataAction/>
+                </Actions>
+                <Filters>
+                </Filters>
+                <OrderBy>
+                  <Field FieldName="Order"/>
+                </OrderBy>
+              </DataElements>
+            </Children>
+          </Element>
+
+
+
+
+          <Element Label="Footer" Id="Footer" Icon="pagetype-pagetype-rootfolder" OpenedIcon="pagetype-pagetype-rootfolder-open">
+              <Actions>
+              <AddDataAction Type="Orckestra.Composer.CompositeC1.DataTypes.Navigation.Footer" Label="Add Footer Item"/>
+            </Actions>
+            <Children>
+              <DataElements Type="Orckestra.Composer.CompositeC1.DataTypes.Navigation.Footer" Icon="pagetype-pagetype">
+                <Actions>
+                  <AddDataAction Type="Orckestra.Composer.CompositeC1.DataTypes.Navigation.Footer" Label="Add Footer Item"/>
+                  <EditDataAction/>
+                  <DeleteDataAction/>
+                </Actions>
+                <Filters>
+                  <FieldFilter FieldName="ParentId" Operator="equal" FieldValue=""/>
+                </Filters>
+                <OrderBy>
+                  <Field FieldName="Order"/>
+                </OrderBy>
+
+                <Children>
+                  <DataElements Type="Orckestra.Composer.CompositeC1.DataTypes.Navigation.Footer" Icon="pagetype-pagetype">
+                    <Actions>
+                      <EditDataAction/>
+                      <DeleteDataAction/>
+                    </Actions>
+                    <Filters>
+                      <ParentIdFilter ParentType="Orckestra.Composer.CompositeC1.DataTypes.Navigation.Footer" ReferenceFieldName="ParentId"/>
+                    </Filters>
+                    <OrderBy>
+                      <Field FieldName="Order"/>
+                    </OrderBy>
+
+                 
+                  </DataElements>
+                </Children>
+              </DataElements>
+            </Children>
+          </Element>
+        
+      
+          <Element Label="Footer Optional Links" Id="FooterOptionLink" Icon="pagetype-pagetype-rootfolder" OpenedIcon="pagetype-pagetype-rootfolder-open">
+            <Actions>
+              <AddDataAction Type="Orckestra.Composer.CompositeC1.DataTypes.Navigation.FooterOptionalLink" Label="Add Footer Optional Link"/>
+            </Actions>
+            <Children>
+              <DataElements Type="Orckestra.Composer.CompositeC1.DataTypes.Navigation.FooterOptionalLink" Icon="pagetype-pagetype">
+                <Actions>
+                  <EditDataAction/>
+                  <DeleteDataAction/>
+                </Actions>
+                <Filters>
+                </Filters>
+                <OrderBy>
+                  <Field FieldName="Order"/>
+                </OrderBy>
+              </DataElements>
+            </Children>
+          </Element>
+        
+      
+        </Children>
+      </Element>
+    </Children>
+  </ElementRoot>
+</ElementStructure>

@@ -1,0 +1,48 @@
+ <div class="row store-directory" data-oc-controller="Store.Directory">
+    <div class="col-xs-12">
+        <form action="{{StoreLocatorPageUrl}}" method="POST" class="store-locator-search  form-horizontal">
+        <div class="form-group">
+            <div class="col-xs-12  col-sm-6  col-md-4">
+               <input id="storeDirectorySearchInput"
+                  name="storeDirectorySearchInput"
+		          class="form-control" type="text"
+		          placeholder="{{localize 'Store' 'I_Placeholder'}}" />
+                  <i class="fa  fa-search  text-muted"></i>
+            </div>
+            <div class="col-xs-12  col-sm-6  col-md-4">
+                  <span class="label-or">- {{localize 'Store' 'L_OrUseMyLocation'}} -</span>
+                  <button class="btn  btn-primary  geolocate-btn">
+                    <i class="fa  fa-crosshairs"></i>
+                     {{localize 'Store' 'B_UseMyLocation'}}
+                  </button>
+             </div>
+         </div>
+	   </form>
+    </div>
+    {{#each Groups}}
+        <div class="col-xs-12">
+            <h3 class="group-title">{{DisplayName}}</h3>
+             <hr class="group-separator"/>
+             <div class="group-anchors">
+                {{#each Anchors}}
+                    <a href="{{Url}}{{Key}}" class="anchor-item">{{DisplayName}}</a>
+                {{/each}}
+            </div>
+        </div>
+        {{#each SubGroups}}
+            <div class="col-xs-12">
+               <span id="{{Key}}" class="anchor-offset"></span>
+               <h4 class="group-title">{{DisplayName}}</h4>
+               <hr class="group-separator"/>
+            </div>
+            <div class="group-items">
+                {{#each SubGroups}}
+                    {{#each Items}}
+                     {{> StoreDirectoryListItem}}
+                     {{/each}}
+                {{/each}}
+             </div>
+        {{/each}}         
+    {{/each}}
+    {{>Pager}}
+ </div>

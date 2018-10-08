@@ -1,0 +1,13 @@
+.promotion {
+    display: inline-block;
+    border-top: solid 1px $brand-info;
+    border-bottom: solid 1px $brand-info;
+    color: $brand-info;
+    padding-top: $line-height-computed / 2;
+    padding-bottom: $line-height-computed / 2;
+    margin-bottom: $line-height-computed;
+}
+
+.promotion-block {
+    display: block;
+}

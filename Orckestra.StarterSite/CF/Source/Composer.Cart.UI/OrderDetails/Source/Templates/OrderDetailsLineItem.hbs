@@ -1,0 +1,83 @@
+<div class="cart-item">
+    {{#if Rewards}}
+        <div class="text-center">
+            <span class="promotion">
+            {{#each Rewards}}
+            <em>{{Description}}</em><br/>
+            {{/each}}
+            </span>
+        </div>
+    {{/if}}
+
+    <div class="row display-table">
+        <div class="display-table-cell col-xs-4 col-sm-2 text-center">
+            <a href="{{ProductUrl}}">
+                <img src="{{ImageUrl}}" class="img-fluid" alt="Thumbnail" onerror="this.onerror=null; this.src='{{FallbackImageUrl}}'" />
+            </a>
+        </div>
+        <div class="display-table-cell col-xs-8 col-sm-10">
+            <div class="display-table  xs-full">
+                <div class="display-table-cell col-sm-4 small">
+                    <p></p>
+                    <div data-qa="cart-product-brand">{{ProductSummary.Brand}}</div>
+                    <p>
+                        <span data-qa="cart-product-name"><strong>{{ProductSummary.DisplayName}}</strong></span>
+                        {{#if VariantId}}
+                        <br />
+                        {{#each KeyVariantAttributesList}}
+                            {{#if_neq @index 0}}|{{/if_neq}}
+                            {{Value}}
+                        {{/each}}
+                        {{/if}}
+                    </p>
+                    <!-- <p class="hidden-xs"><a href="#" class="btn btn-primary">Buy it again</a></p> -->
+                </div>
+
+                <div class="display-table-cell col-sm-2 text-sm-right  hidden-xs">
+                    <div class="text-align-button  small">
+                        {{#if IsOnSale}}
+                            <del data-qa="cart-product-price">{{DefaultListPrice}}</del><br />
+                            <strong class="text-danger" data-qa="cart-product-sales-price">{{ListPrice}}</strong>
+                        {{else}}
+                            <strong data-qa="cart-product-price">{{DefaultListPrice}}</strong>
+                        {{/if}}
+                    </div>
+                </div>
+
+                <div class="display-table-cell col-sm-2 text-sm-center  small">
+                    <div class="row">
+                        <div class="col-sm-6 hidden-xs"><span class="text-muted">X</span></div>
+                        <div class="col-sm-6">
+                            <strong>
+                                <span class="visible-xs-inline">{{localize 'CheckoutProcess' 'L_QuantityMobile'}}</span>
+                                <span data-qa="checkout-product-quantity">{{Quantity}}</span>
+                            </strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="display-table-cell col-sm-4 text-sm-right">
+                    <div class="text-align-button">
+                        {{#if IsPriceDiscounted}}
+                            <del data-qa="cart-product-subtotal-price">{{TotalWithoutDiscount}}</del><br />
+                            <strong data-qa="cart-product-subtotal-sales" class="text-danger">{{Total}}</strong>
+                        {{else}}
+                            <strong data-qa="cart-product-subtotal-price">{{Total}}</strong>
+                        {{/if}}
+                        {{#if SavingsTotal}}
+                        <br />
+                        <span class="text-success">{{localize 'ShoppingCart' 'L_LineItemSavings'}}&nbsp;</span>
+                        <span class="text-success" data-qa="lineItem-savingstotal">{{SavingsTotal}}</span>
+                        {{/if}}
+                        {{>AdditionalFees}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 
+        <div class="col-xs-12 visible-xs push-top">
+            <a href="#" class="btn btn-primary btn-block">Buy it again</a>
+        </div>
+        -->
+    </div>
+</div> 

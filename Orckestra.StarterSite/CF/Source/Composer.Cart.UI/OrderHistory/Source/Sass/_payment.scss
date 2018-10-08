@@ -1,0 +1,10 @@
+.payment {
+	&:not(:last-child) {
+		border-bottom: 1px solid $gray-lighter;
+		padding-bottom: 20px;
+	}
+
+	&:not(:first-child) {
+		padding-top: 20px;
+	}
+}

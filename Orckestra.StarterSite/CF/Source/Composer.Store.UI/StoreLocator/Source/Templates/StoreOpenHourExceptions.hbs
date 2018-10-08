@@ -1,0 +1,27 @@
+{{#with Schedule}}
+{{#if OpeningHourExceptions}} 
+<hr />
+<h3>{{localize 'Store' 'T_OpenHourExceptions'}}</h3>
+{{#each OpeningHourExceptions}}
+    <div class="row  store-open-hour-exc">
+         <div class="col-xs-6  col-md-7">
+             {{#if_eq StartDate EndDate}}
+                {{StartDate}}
+             {{/if_eq}}
+             {{#if_neq StartDate EndDate}}
+                {{StartDate}} - {{EndDate}}
+             {{/if_neq}}
+             </div>
+         <div class="col-xs-6  col-md-5">
+             {{#if IsClosed}} 
+                {{localize 'Store' 'L_OpenHours_Closed'}}
+                {{else}}
+                    {{#with OpeningTime}}
+                        <small>{{BeginTime}} - {{EndTime}}</small>
+                    {{/with}} 
+             {{/if}} 
+         </div>
+    </div>
+{{/each}}
+{{/if}}
+{{/with}}

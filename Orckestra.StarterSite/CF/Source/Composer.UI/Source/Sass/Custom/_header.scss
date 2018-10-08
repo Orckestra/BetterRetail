@@ -1,0 +1,131 @@
+.logo {
+    margin-top: 10px;
+    margin-bottom: $padding-large-vertical;
+    display: block;
+
+    @media (min-width: $screen-md-min) {
+        margin-bottom: 10px;
+        display: inline-block;
+    }
+
+    img {
+        width: 100%;
+        max-width: 269px;
+    }
+} 
+ 
+.masthead {
+
+    &-with-mega-menu {
+        border-bottom: 1px solid $gray-light;
+        margin-bottom: $grid-gutter-width;
+        padding-bottom: $grid-gutter-width;
+    }
+
+    .search-box  .navbar-form {
+        padding-right: 0;
+        margin-right: 0;
+        margin-bottom: 0;
+        padding-bottom: 0;
+    }
+    .header {
+        height: 62px; // height + 10px for spacing event when content is affixed
+
+        .navbar {
+            min-height: 42px;
+        }
+        .navbar.affix {
+            width: 100%;
+            z-index: $zindex-navbar-fixed;
+            animation-name: drop;
+            animation-fill-mode: forwards;
+            animation-duration: .5s;
+            animation-iteration-count: 1;
+
+        }
+        .navbar-right {
+            float: right;
+            margin-right: -$navbar-padding-horizontal;
+        }
+        .navbar-nav > li {
+            float: left;
+            border-right: solid 1px $gray-darker;
+        }
+        .navbar-nav > li:first-child {
+            border-left: solid 1px $gray-darker;
+        }  
+        .navbar-nav > li > a {
+            padding-top: 10px;  
+            padding-bottom: 10px;
+        }
+
+        // override bootstrap defaults that put the dropdown in stacked mode
+        // when in a mobile and in a navbar.
+        @media (max-width: $screen-sm-max) {
+            .navbar-nav {
+                margin-top: 0;
+                margin-bottom: 0;
+
+                // Copied from Bootstrap and modified a bit
+                // Dropdowns get custom display when collapsed
+                .open .dropdown-menu {
+                    position: absolute;
+                    float: left;
+                    width: auto;
+                    margin: 0; // override default ul
+                    background-color: $dropdown-bg;
+                    border: 1px solid $dropdown-fallback-border; // IE8 fallback
+                    border: 1px solid $dropdown-border;
+                    @include box-shadow(0 6px 12px rgba(0, 0, 0, .175));
+
+                    > li > a, .dropdown-header {
+                        padding: 3px 20px;
+                        color: $dropdown-link-color;
+                    }
+
+                    > .active > a {
+                        color: $dropdown-link-active-color;
+                        text-decoration: none;
+                        outline: 0;
+                        background-color: $dropdown-link-active-bg;
+                    }
+                    > .active > a:hover,
+                    > .active > a:focus {
+                        background-color: darken($brand-info, 5%)
+                    }
+                }
+            }
+        }
+    }
+
+    @media (min-width: $screen-sm-min) {
+        // override collapse on >= md
+        .search-box .collapse {
+            display: block;
+            overflow: visible;
+            height: auto !important;
+        }
+    }
+
+    @media (min-width: $screen-sm-min) and (max-width: $screen-md-max) {
+        .search-box .navbar-form {
+            margin-top: 0;
+            padding-top: 0;
+        }
+    }
+
+    @media (max-width: $screen-sm-max) {
+        .search-box {
+            margin-top: 10px;
+        }
+    }
+}
+
+@keyframes drop {
+    0% {
+        top: -42px;
+    }
+    100% {
+        top: 0;
+    }
+}

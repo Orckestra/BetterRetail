@@ -1,0 +1,53 @@
+
+@mixin tile-gradient-right($top) {
+    content: '';
+    position: absolute;
+    top: $top;
+    right: 0;
+    width: 10%;
+    height: $line-height-computed;
+    @include gradient-horizontal(rgba(255,255,255,0), $body-bg, 0%, 100%);
+    pointer-events: none;
+}
+
+.product-tile {
+    $lines-of-text: 3;
+
+    .product-tile-text {
+        border-top: solid 1px lighten($gray-light, 7%);
+        // 3 lines of text + half a line of spacing
+        height: floor($line-height-computed) * $lines-of-text + floor($line-height-computed / 2) - 1;
+        padding-top: 3px;
+        position: relative;
+        overflow: hidden;
+
+        // gradient on first line and last line
+        &:before {
+            @include tile-gradient-right(0);
+        }
+
+        &:after {
+            @include tile-gradient-right($line-height-computed * ($lines-of-text - 1));
+        }
+    }
+
+    .product-tile-brand {
+        white-space: nowrap;
+    }
+
+    .product-tile-price {
+        height: ceil($font-size-h4 * $line-height-base);
+    }
+
+    .product-tile-special-price {
+        height: ceil($line-height-computed);
+    }
+
+    .product-tile-media {
+        // http://alistapart.com/article/creating-intrinsic-ratios-for-video
+        display: block;
+        height: 0;
+        padding-bottom: $product-image-ratio * 100%;
+        position: relative;
+    }
+}

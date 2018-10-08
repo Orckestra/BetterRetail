@@ -1,0 +1,14 @@
+<div class="panel panel-default" data-templateid="CheckoutSignInAsGuest">
+    <div class="panel-heading">
+        <h2 class="h3">{{localize 'CheckoutProcess' 'T_LogInCheckout'}}</h2>
+    </div>
+    <div class="panel-body">
+        <p>{{localize 'CheckoutProcess' 'L_LogInCheckout'}}</p>
+        <div class="form-group">
+            <a data-qa="checkout-as-guest" onclick="(function() { Orckestra.Composer.AnalyticsPlugin.setCheckoutOrigin('Guest Checkout'); return true; })()" href="{{CheckoutUrlTarget}}" class="btn  btn-success  btn-lg  btn-block">{{localize 'CheckoutProcess' 'B_GuestCheckout'}}</a>
+        </div>
+        <div class="text-center">
+            <a data-qa="checkout-create-account" href="{{RegisterUrl}}">{{localize 'MyAccount' 'B_CreateAccount'}}</a>
+        </div>
+    </div>
+</div>

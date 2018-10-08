@@ -1,0 +1,24 @@
+<div data-templateid="AddressList" class="panel  panel-default">
+    <div class="panel-heading">
+        <h2 class="h3">{{localize 'MyAccount' 'T_MyAddresses'}}</h2>
+    </div>
+
+    <div class="panel-body">
+        {{#each Addresses}}
+            {{#if IsPreferredShipping}}
+                {{>AddressListItem}}
+            {{/if}}
+        {{/each}}
+
+        <div class="form-group">
+            <a href="{{AddAddressUrl}}" class="hitbox" title="{{localize 'MyAccount' 'B_AddNewAddress'}}">{{localize 'MyAccount' 'B_AddNewAddress'}}</a>
+        </div>
+
+        {{#each Addresses}}
+            {{#unless IsPreferredShipping}}
+                {{>AddressListItem}}
+            {{/unless}}
+        {{/each}}
+    </div>
+</div>
+{{> AddressConfirmationModal}}

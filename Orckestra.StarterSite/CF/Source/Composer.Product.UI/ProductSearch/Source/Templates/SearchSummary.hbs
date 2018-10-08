@@ -1,0 +1,31 @@
+<div class="island" data-oc-controller="Product.SearchSummary" data-context="{{JsonContext}}">
+    {{#if ProductSearchResults.TotalCount}}
+        {{#if_gt ProductSearchResults.TotalCount 0 }}
+            <!--CorrectedSearchTerms-->
+            {{#if ProductSearchResults.CorrectedSearchTerms}}
+                <h2>{{#escape}}{{localizeFormat 'List-Search' 'YourSearch' Keywords}}{{/escape}}</h2>
+                <h1>{{#escape}}{{localizeFormat 'List-Search' 'SearchResult' ProductSearchResults.CorrectedSearchTerms}}{{/escape}}</h1>
+                <p>{{localizeFormat 'List-Search' 'ProductMatches' ProductSearchResults.TotalCount}}</p>
+            {{else}}
+                <!--Normal search-->
+                <h1><strong data-qa="search-result-count">{{ProductSearchResults.TotalCount}}</strong> {{localize 'List-Search' 'L_SearchResults'}} {{localize 'General' 'L_QuoteOpen'}}<strong>{{Keywords}}</strong>{{localize 'General' 'L_QuoteClose'}}</h1>
+            {{/if}}
+        {{/if_gt}}
+    {{else}}
+        <h2>{{localize 'List-Search' 'L_NoResultsFor'}} {{localize 'General' 'L_QuoteOpen'}}<strong>{{Keywords}}</strong>{{localize 'General' 'L_QuoteClose'}}</h2>
+    {{/if}}
+
+    <!--Suggestions-->
+    {{#if ProductSearchResults.Suggestions}}
+    <p>
+        <span>{{localize 'List-Search' 'L_DidYouMean'}}</span>
+        {{#each ProductSearchResults.Suggestions}}
+            {{#if @last}}
+            <span>{{localize 'General' 'L_QuoteOpen'}}<strong><a href="{{Url}}">{{Title}}</a></strong>{{localize 'General' 'L_QuoteClose'}}</span>
+            {{else}}
+            <span>{{localize 'General' 'L_QuoteOpen'}}<strong><a href="{{Url}}">{{Title}}</a></strong>{{localize 'General' 'L_QuoteClose'}},</span>
+            {{/if}}
+        {{/each}}
+    </p>
+    {{/if}}
+</div>

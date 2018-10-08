@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/01/nuspec.xsd" xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
+  <files>
+    <file src="..\Composer.CompositeC1.Mvc\bin\Orckestra.Composer.CompositeC1.pdb" target="lib/net452" xdt:Transform="Insert" />
+    <file src="..\Composer.CompositeC1.Mvc\bin\Orckestra.Composer.CompositeC1.*.pdb" target="lib/net452" exclude="..\Composer.CompositeC1.Mvc\bin\Orckestra.Composer.CompositeC1.Mvc.pdb" xdt:Transform="Insert" />
+
+    <file src="..\Composer.CompositeC1\**\*.cs" target="src\Composer.CompositeC1\" xdt:Transform="Insert" />
+    <file src="..\Composer.CompositeC1.*\**\*.cs" target="src" exclude="..\Composer.CompositeC1.Mvc\**\*.cs;..\Composer.CompositeC1.Tests\**\*.cs;..\Composer.CompositeC1.*.Tests\**\*.cs;..\Composer.CompositeC1.IntegrationTests\**\*.cs" xdt:Transform="Insert" />
+  </files>
+</package>
+
+

@@ -1,0 +1,15 @@
+<div data-templateid="PaymentMethodPicker" id="PaymentMethodPicker">
+    <label for="PaymentOption">{{localize 'Forms' 'F_PaymentOption'}}</label>
+
+    {{#each UponReceptionPaymentMethodViewModels}}
+        {{>SimplePaymentMethodButton}}
+    {{/each}}
+
+    {{#if CreditCardPaymentMethod}}    
+        
+            {{>CreditCardPaymentMethodButton}} 
+    {{/if}}
+
+    <div id="payment-method-errors"></div>
+</div>
+{{> PaymentConfirmationModal}}

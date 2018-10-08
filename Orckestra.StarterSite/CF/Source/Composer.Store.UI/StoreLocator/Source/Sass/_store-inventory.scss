@@ -1,0 +1,25 @@
+.store-inventory-search {
+    margin: 20px 0;
+}
+
+.store-inventory {
+ 
+    .store-tile {
+        max-width: 500px;
+    }
+    
+    .inventory-status {
+        padding: 0 0 0 5px;
+        
+        &.status-InStock, &.status-1 {
+            color: $brand-success;
+        }
+        
+        &.status-Unspecified, &.status-0, 
+        &.status-OutOfStock, &.status-2, 
+        &.status-PreOrder, &.status-3,
+        &.status-BackOrder, &.status-4 {
+            color: $brand-danger;
+        }
+    }
+}

@@ -1,0 +1,48 @@
+<div data-templateid="OrderDetailsPayments">
+     <div class="panel-body">
+         {{#each Payments}}
+         {{#if PaymentMethodName}}
+         <div class="row payment">
+             <div class="col-xs-12  col-sm-6  col-md-6">
+                <div class="col-xs-4  col-sm-4  col-md-4">
+                    {{#if CreditCardNumber}}
+                        <img src="/UI.Package/Images/creditcards/{{PaymentMethodName}}.png" alt="{{PaymentMethodName}}" class="img-responsive" />
+                    {{else}}
+                        <img src="/UI.Package/Images/payments/cash.png" alt="Cash" class="img-responsive" />
+                        <!-- <img src="img/giftcard.png" alt="Gift Card" class="img-responsive"> -->
+                    {{/if}}
+                </div>
+                <div class="col-xs-8  col-sm-8  col-md-8">
+                    <p>
+                        <h2 class="h4">{{localize 'MyAccount' 'L_PaymentMethod'}}</h2>
+                        {{#if CreditCardNumber}}
+                            {{localize 'MyAccount' 'L_CreditCardNumber' }} {{CreditCardNumber}}
+                            <br />{{localize 'MyAccount' 'L_CreditCardExpires' }} {{ExpiryDate}}
+                        {{else}}
+                            {{PaymentMethodName}}
+                        {{/if}}
+                    </p>
+                </div>
+             </div>
+            <div class="col-xs-12  col-sm-6  col-md-6">
+                <h2 class="h4">{{localize 'MyAccount' 'T_BillingAddress'}}</h2>
+                <span data-qa="order-shipping-address-line1">{{BillingAddress.Line1}}</span><br />
+                {{#if BillingAddress.Line2}}
+                    <span data-qa="order-shipping-address-line2">{{BillingAddress.Line2}}</span><br />
+                {{/if}}
+                <span data-qa="order-shipping-address-city">{{BillingAddress.City}}</span>,
+                <span data-qa="order-shipping-address-region">{{BillingAddress.RegionName}}</span>,
+                <span data-qa="order-shipping-address-postalcode">{{BillingAddress.PostalCode}}</span><br />
+                <span data-qa="order-shipping-address-phone">{{BillingAddress.PhoneNumber}}</span>
+            </div>
+        </div>
+        {{else}}
+        <div class="row payment">
+            <div class="col-md-12 text-center">
+                <p>{{localize 'General' 'P_PaymentLoadErrorMessage' }}</p>
+            </div>
+        </div>
+        {{/if}}
+        {{/each}}
+    </div>
+</div>

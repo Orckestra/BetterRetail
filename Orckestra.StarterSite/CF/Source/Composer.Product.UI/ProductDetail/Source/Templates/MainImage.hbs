@@ -1,0 +1,10 @@
+{{#if SelectedImage}}
+    <div class="product-details-media">
+        <img property="image" class="img-fluid" src="{{SelectedImage.ImageUrl}}" alt="{{DisplayName}}"  onerror="this.onerror=null; this.src='{{FallbackImageUrl}}'"/>
+        {{#if IsProductZoomEnabled}}
+            <a href="" class="product-details-zoom-trigger js-zoom hidden-xs">
+                <i class="fa fa-search"></i>
+            </a>
+        {{/if}}
+    </div>
+{{/if}}

@@ -1,0 +1,97 @@
+<div data-templateid="MonerisCanadaPaymentProvider" data-payment-provider="{{ActivePaymentViewModel.ProviderName}}">
+
+    {{#if_gt SavedCreditCards.length 0}}
+        <div id="moneris-saved-credit-cards" class="moneris-panel">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h4>{{localize 'CheckoutProcess' 'T_SelectCreditCart'}}</h4>        
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-sm-12">
+                    {{>SavedCreditCartPaymentMethod}}
+                </div>
+            </div>
+            {{#unless IsCreditCardSelected}}
+            <div class="row">
+                <div class="col-sm-12 text-center">
+                    <button class="btn btn-primary" 
+                            type="button"
+                            data-oc-click="payWithCreditCard">
+                        {{localize 'CheckoutProcess' 'B_AddCreditCard'}}
+                    </button>
+                </div>
+            </div>
+            {{/unless}}
+        </div>
+    {{/if_gt}}
+    {{#if_eq ActivePaymentViewModel.ProviderType "MonerisCanadaPaymentProvider"}}
+    
+    {{#unless IsSavedCreditCardSelected}}
+
+        <div id="moneris-credit-card-form" class="moneris-panel">
+
+            <div class="row">
+                <div class="col-sm-8">                
+                    <h4>{{localize 'CheckoutProcess' 'T_EnterPaymentInfomation'}}</h4>                
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <img class="img-responsive" src="{{ActivePaymentViewModel.CreditCardTrustImage.Url}}" alt="{{ActivePaymentViewModel.CreditCardTrustImage.Alt}}" />
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="cardholder">{{localize 'CheckoutProcess' 'L_CardHolderName'}}</label>
+                        <input name="cardholder" id="cardholder" data-parsley-length="[5, 73]" required="true" data-parsley-pattern="/^[a-zA-Z\u00E0-\u00FC\.\-\s\']+$/i" type="text" class="form-control" placeholder="ex: Franklin Pollux" />
+                    </div>
+
+                    <div class="moneris">
+                        <div class="labels" aria-hidden="true" role="presentation">
+                            <label class="moneris-label  moneris-card">{{localize 'CheckoutProcess' 'L_CardNumber'}}</label>
+                            <label class="moneris-label  moneris-expiration">{{localize 'CheckoutProcess' 'L_ExpirationDateForm'}}</label>
+                            <label class="moneris-label  moneris-ccv">{{localize 'CheckoutProcess' 'L_VerificationNumber'}}</label>
+                        </div>
+
+                        <iframe class="iframe" id="monerisFrame"
+                            src="{{ActivePaymentViewModel.CapturePaymentUrl}}&amp;css_body=background:none;overflow:hidden;&amp;css_textbox_pan=width:100%;max-width:200px;margin-top:25px;&amp;css_textbox_exp=width:70px;margin-top:40px;&amp;css_textbox_cvd=width:70px;margin-top:40px;&amp;css_textbox=background-color:%23fff;background-image:none;border-color:%23c4c4c4;border-radius:3px;border-style:solid;border-width:1px;box-sizing:border-box;color:%23232323;display:block;font-family:Arial,Helvetica,sans-serif;font-size:16px;height:34px;line-height:1.43;margin-bottom:15px;padding-bottom:6px;padding-left:12px;padding-right:12px;padding-top:6px;width:100%;"
+                            frame=""
+                            tabindex="0"
+                            border="0"
+                            scrolling="no"
+                            style="border: none; width: 100%; height: 222px; overflow: hidden;">
+                        </iframe>
+
+                        {{#if ActivePaymentViewModel.CanSavePaymentMethod}}
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <div class="checkbox">
+                                        <label for="createPaymentProfile">
+                                            <input name="createPaymentProfile" id="createPaymentProfile" type="checkbox" />
+                                            {{localize 'CheckoutProcess' 'F_SaveCreditCard' }}
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        {{/if}}
+
+                        <ul class="parsley-errors-list">
+                            <li id="monerisError945" class="hide parsley-required">{{localize 'Moneris' 'L_MonerisError_945' }}</li>
+                            <li id="monerisError944" class="hide parsley-required">{{localize 'Moneris' 'L_MonerisError_944' }}</li>
+                            <li id="monerisError943" class="hide parsley-required">{{localize 'Moneris' 'L_MonerisError_943' }}</li>
+                            <li id="monerisErrorGeneral" class="hide parsley-required">{{localize 'Moneris' 'L_MonerisError_General' }}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {{/unless}}
+        {{/if_eq}}
+
+</div>

@@ -1,0 +1,39 @@
+ <div data-templateid="OrderDetailsLineItems">
+     <div class="well-slim hidden-xs">
+        <div class="row display-table">
+            <div class="display-table-cell col-xs-2  text-center">
+                {{localize 'MyAccount' 'L_OrderLineItemProductsTitle'}}
+            </div>
+            <div class="display-table-cell col-xs-10">
+                <div class="display-table  xs-full">
+                    <div class="display-table-cell col-xs-4 small">
+
+                    </div>
+
+                    <div class="display-table-cell col-xs-2 text-sm-right  hidden-xs">
+                        <div class="text-align-button  small">
+                            {{localize 'MyAccount' 'L_UnitPrice'}}
+                        </div>
+                    </div>
+
+                    <div class="display-table-cell col-xs-2 text-sm-center  small">
+                        <div class="row">
+                            {{localize 'MyAccount' 'L_Quantity'}}
+                        </div>
+                    </div>
+
+                    <div class="display-table-cell col-xs-4 text-sm-right">
+                        <div class="text-align-button  small">
+                            {{localize 'MyAccount' 'L_Subtotal'}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel-body">        
+        {{#each LineItems}}
+            {{>OrderDetailsLineItem}}
+        {{/each}}
+    </div>
+</div>

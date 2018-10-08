@@ -1,0 +1,131 @@
+/* Functional styling;
+ * These styles are required for noUiSlider to function.
+ * You don't need to change these rules to apply your design.
+ */
+.noUi-target,
+.noUi-target * {
+-webkit-touch-callout: none;
+-webkit-user-select: none;
+-ms-touch-action: none;
+-ms-user-select: none;
+-moz-user-select: none;
+-moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.noUi-target {
+    position: relative;
+    direction: ltr;
+    margin-top: 18px + 10px;
+}
+.noUi-base {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    z-index: 1; /* Fix 401 */
+}
+.noUi-origin {
+    position: absolute;
+    right: 0;
+    top: 0;
+    left: 0;
+    bottom: 0;
+}
+.noUi-handle {
+    position: relative;
+    z-index: 1;
+}
+.noUi-stacking .noUi-handle {
+/* This class is applied to the lower origin when
+   its values is > 50%. */
+    z-index: 10;
+}
+.noUi-state-tap .noUi-origin {
+-webkit-transition: left 0.3s, top 0.3s;
+    transition: left 0.3s, top 0.3s;
+}
+.noUi-state-drag * {
+    cursor: inherit !important;
+}
+
+/* Painting and performance;
+ * Browsers can paint handles in their own layer.
+ */
+.noUi-base {
+    -webkit-transform: translate3d(0,0,0);
+    transform: translate3d(0,0,0);
+}
+
+/* Slider size and handle placement;
+ */
+.noUi-horizontal {
+    height: 10px;
+}
+.noUi-horizontal .noUi-handle {
+    width: 34px;
+    height: 28px;
+    left: -17px;
+    top: -18px;
+}
+.noUi-vertical {
+    width: 18px;
+}
+.noUi-vertical .noUi-handle {
+    width: 28px;
+    height: 34px;
+    left: -6px;
+    top: -17px;
+}
+
+/* Styling;
+ */
+.noUi-background {
+    background: #FAFAFA;
+    box-shadow: inset 0 1px 1px #f0f0f0;
+}
+.noUi-connect {
+    background: $brand-primary;
+    box-shadow: inset 0 0 3px rgba(51,51,51,0.45);
+    transition: background 450ms;
+}
+.noUi-origin {
+    border-radius: 2px;
+}
+.noUi-target {
+    border-radius: $border-radius-small;
+    border: 1px solid $gray-lighter;
+    box-shadow: inset 0 1px 1px #F0F0F0, 0 3px 6px -5px #BBB;
+}
+.noUi-target.noUi-connect {
+    box-shadow: inset 0 0 3px rgba(51,51,51,0.45), 0 3px 6px -5px #BBB;
+}
+
+/* Handles and cursors;
+ */
+.noUi-dragable {
+    cursor: w-resize;
+}
+.noUi-vertical .noUi-dragable {
+    cursor: n-resize;
+}
+.noUi-handle {
+    @extend .fa;
+    @extend .fa-map-marker;
+    @extend .fa-2x;
+    text-align: center;
+    cursor: default;
+    color: $gray-base;
+}
+.noUi-active {
+    color: lighten($gray-base, 10%);
+}
+
+/* Disabled state;
+ */
+[disabled].noUi-connect,
+[disabled] .noUi-connect {
+    background: #B8B8B8;
+}
+[disabled].noUi-origin,
+[disabled] .noUi-handle {
+    cursor: not-allowed;
+}

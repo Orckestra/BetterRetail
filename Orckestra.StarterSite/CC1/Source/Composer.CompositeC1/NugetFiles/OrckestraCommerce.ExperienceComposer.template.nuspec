@@ -1,0 +1,24 @@
+﻿<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <version>To be replaced</version>
+    <authors>Orckestra Inc.</authors>
+    <owners>Orckestra Inc.</owners>
+    <licenseUrl>http://nuget.orckestra.com/license</licenseUrl>
+    <projectUrl>http://nuget.orckestra.com/docs/client</projectUrl>
+    <iconUrl>http://nuget.orckestra.com/overture.ico</iconUrl>
+    <id>OrckestraCommerce.ExperienceComposer</id>
+    <title>OrckestraCommerce.ExperienceComposer</title>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <summary>TODO</summary>
+    <description>TODO</description>
+    <releaseNotes>Orckestra Commerce 2016 release.</releaseNotes>
+    <copyright>Copyright Orckestra Inc. 2016</copyright>
+  </metadata>
+  <files>
+    <file src="..\CmpPackages\ExperienceComposer\artifacts\**\*.*" target="_pkg\artifacts" />
+    <file src="..\CmpPackages\ExperienceComposer\scripts\**\*.*" target="_pkg\scripts" />
+    <file src="..\CmpPackages\ExperienceComposer\parameters*.xml" target="_pkg" />
+    <file src="..\CmpPackages\ExperienceComposer\manifest.json" target="_pkg" />
+  </files>
+</package>

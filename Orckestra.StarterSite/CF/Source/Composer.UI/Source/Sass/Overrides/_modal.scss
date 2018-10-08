@@ -1,0 +1,52 @@
+.modal-content {
+    border-radius: 0;
+}
+
+@media (min-width: $screen-sm-min) {
+    .modal-dialog {
+        margin-top: 110px;
+    }
+}
+
+/* .modal-fullscreen */
+
+.modal-fullscreen {
+    background: #ffffff;
+    padding-right: 0 !important;
+
+    .modal-header .close {
+        margin-top: 0;
+        right: 5px;
+        top: 5px;
+    }
+}
+.modal-fullscreen .modal-content {
+    border: 0;
+    box-shadow: none;
+    height:100%;
+}
+
+/* .modal-fullscreen size: we use Bootstrap media query breakpoints */
+
+.modal-fullscreen .modal-dialog {
+    height: 100%;
+    margin: 0;
+    margin-right: auto;
+    margin-left: auto;
+    width: 100%;
+}
+@media (min-width: $screen-sm-min) {
+    .modal-fullscreen .modal-dialog {
+        width: 750px;
+    }
+}
+@media (min-width: $screen-md-min) {
+    .modal-fullscreen .modal-dialog {
+        width: 970px;
+    }
+}
+@media (min-width: $screen-lg-min) {
+    .modal-fullscreen .modal-dialog {
+        width: 1170px;
+    }
+}

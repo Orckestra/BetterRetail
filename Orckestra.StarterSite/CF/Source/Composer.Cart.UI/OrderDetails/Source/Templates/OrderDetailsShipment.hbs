@@ -1,0 +1,42 @@
+<div data-templateid="OrderDetailsShipment">
+    <div class="panel  panel-light">
+        <div class="panel-heading">
+            <h2 class="h4">{{localize 'MyAccount' 'L_Shipping'}} {{Index}}</h2>            
+            <span class="text-success">
+                {{#if_eq ShipmentStatusName "Fulfilled"}}
+                    {{localize 'MyAccount' 'L_OrderDelivered'}} {{ShipmentStatusDate}}
+                {{else}}
+                    {{#if_eq ShipmentStatusName "Canceled"}}
+                        {{localize 'MyAccount' 'L_OrderCancel'}} {{ShipmentStatusDate}}
+                    {{else}}
+                        {{localize 'MyAccount' 'L_OrderInProgress'}}
+                    {{/if_eq}}
+                {{/if_eq}}                
+            </span>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-xs-12  col-sm-8  col-md-9">
+                    <h2 class="h4">{{localize 'MyAccount' 'L_OrderShipping'}}</h2>
+                    {{#if ShippingAddress.FirstName}}
+                        <span data-qa="order-shipping-address-firstname">{{ShippingAddress.FirstName}}</span>&#160;<span data-qa="order-shipping-address-lastname">{{ShippingAddress.LastName}}</span>
+                        <br />
+                    {{/if}}
+                    <span data-qa="order-shipping-address-line1">{{ShippingAddress.Line1}}</span><br />
+                    {{#if ShippingAddress.Line2}}
+                        <span data-qa="order-shipping-address-line2">{{ShippingAddress.Line2}}</span><br />
+                    {{/if}}
+                    <span data-qa="order-shipping-address-city">{{ShippingAddress.City}}</span>,
+                    <span data-qa="order-shipping-address-region">{{ShippingAddress.RegionName}}</span>,
+                    <span data-qa="order-shipping-address-postalcode">{{ShippingAddress.PostalCode}}</span><br />
+                    <span data-qa="order-shipping-address-phone">{{ShippingAddress.PhoneNumber}}</span>
+                </div>
+                <div class="col-xs-12  col-sm-4  col-md-3 text-sm-right">
+                    <h2 class="h4">{{ShippingMethod.DisplayName}}</h2>
+                    <p>{{ShippingMethod.Cost}}</p>
+                </div>
+            </div>
+        </div>
+        {{>OrderDetailsLineItems}}
+    </div>
+</div>

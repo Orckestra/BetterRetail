@@ -1,0 +1,6 @@
+{{!-- Only render the Guest Billing Address section if IsAuthenticated is false --}}
+{{#unless IsAuthenticated}}
+    <div data-oc-controller="Checkout.BillingAddress" data-context="{{JsonContext}}">
+    	{{> BillingAddress}}
+    </div>
+{{/unless}}

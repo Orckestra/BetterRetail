@@ -1,0 +1,10 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:pal="http://www.composite.net/ns/components/1.0"
+          pal:title="Dynamic Product Highlight"
+                pal:description=""
+                pal:icon="query">
+        <head>
+        </head>
+        <body>
+                <f:function name="Composer.Queries.ProductSet.Top" xmlns:f="http://www.composite.net/ns/function/1.0" />
+        </body>
+</html>

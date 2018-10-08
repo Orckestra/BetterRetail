@@ -1,0 +1,43 @@
+<div class="minicart-line-item" data-templateid="MinicartLineItem" data-qa="minicart-result" data-lineitem-id="{{ProductId}}-{{VariantId}}">
+    <div class="row">
+        <div class="col-sm-4">
+            <a class="minicart-line-item-media" href="{{ProductUrl}}">
+                <img class="img-fluid" src="{{ImageUrl}}" alt="{{ProductSummary.DisplayName}}"
+                    onerror="this.onerror=null; this.src='{{FallbackImageUrl}}'">
+            </a>
+        </div>
+        <div class="col-sm-8">
+            <div class="minicart-line-item-text">
+                {{#if ProductSummary.Brand}}
+                    <strong class="text-uppercase  product-tile-brand" data-qa="minicart-product-brand" title="{{ProductSummary.Brand}}">{{ProductSummary.Brand}}</strong>
+                    <br/>
+                {{/if}}
+                <a data-qa="minicart-product-title" href="{{ProductUrl}}" title="{{ProductSummary.DisplayName}}">{{ProductSummary.DisplayName}}</a>
+            </div>
+            <div class="minicart-line-item-variants">
+                {{#each KeyVariantAttributesList}}
+                    <span>{{Value}}<br/></span>
+                {{/each}}
+               {{#if IsValid}}
+                    <span>{{localize 'MiniCart' 'L_Quantity'}} {{Quantity}}</span>
+                {{else}}
+                    <div class="row push-top" />
+                        <div class="col-sm-12 col-xs-12 text-left">
+                            <span class="fa  fa-exclamation-triangle"></span>
+                            <strong class="text-danger">{{#escape}}{{localizeFormat 'MiniCart' 'L_ProductOutOfStock' Quantity}}{{/escape}}</strong>
+                        </div>
+                    </div>
+                {{/if}}
+            </div>
+            {{#if IsValid}}
+                <div class="minicart-line-item-price">
+                    {{#if IsOnSale }}
+                        <span class="h4  text-danger" data-qa="search-product-price">{{Total}}</span>
+                    {{else}}
+                        <span class="h4" data-qa="search-product-price">{{Total}}</span>
+                    {{/if}}
+                </div>
+             {{/if}}
+        </div>
+    </div>
+</div>

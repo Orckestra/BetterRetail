@@ -1,0 +1,24 @@
+.savings {
+	padding: 10px;
+	background: $brand-success;
+	display: inline-block;
+	position: relative;
+	color: #fff;
+	&:before {
+	    display: block;
+	    content: "";
+	    position: absolute;
+	    top: 0;
+	    right: 0;
+	    width: 0;
+	    height: 0;
+	    border-bottom-left-radius: 2px;
+	    border-width: 5px;
+	    border-style: solid;
+	    border-color: #FFF #FFF rgba(255,255,255,.35) rgba(255,255,255,.35);
+	}
+
+	&:after {
+	    
+	}
+}

@@ -1,0 +1,72 @@
+﻿@inherits RazorFunction
+@using Orckestra.Composer.Providers.Localization
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Header of the page."; }
+    }
+
+	[FunctionParameter(Label = "LanguageSwitch Component")]
+    public XhtmlDocument LanguageSwitch { get; set; }
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+    <head>
+    </head>
+    <body>
+        <header class="masthead masthead-with-mega-menu">
+            <div class="header">
+                <nav data-spy="affix" data-offset-top="180" class="navbar navbar-inverse text-center">
+                    <div class="container">
+                        <ul class="nav navbar-nav  pull-xs-left  pull-sm-left">
+                            <li>
+                                <button type="button" data-toggle="collapse" data-target="#main-nav-collapse" class="main-nav-toggle navbar-toggle pull-xs-left  pull-sm-left" aria-expanded="false">
+                                    <span class="icon-bar"></span>
+                                    <span class="icon-bar"></span>
+                                    <span class="icon-bar"></span>
+                                </button>
+                            </li>
+                            @Markup(LanguageSwitch)
+                        </ul>
+
+                        <f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.Header.StickyLinks" />
+
+                        <ul class="nav navbar-nav navbar-right">
+							<li><f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.Store.LocatorInHeader" /></li>
+		                    <f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.Membership.SignInHeader"/>
+							<li><f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.WishList.WishListInHeader" /></li>
+		                    <li class="affix-show-block"><a href="#" title="@LocalizationHelper.Localize("General", "Search", System.Threading.Thread.CurrentThread.CurrentCulture)" data-focus-element="#search-input"><span class="fa  fa-search"></span></a></li>
+		                    <li>
+                                <f:function name="Composite.Web.Html.Template.PageTemplateFeature" xmlns:f="http://www.composite.net/ns/function/1.0">
+                                    <f:param name="FeatureName" value="Minicart" />
+                                </f:function>
+                            </li>
+	                    </ul>
+                    </div>
+                </nav>
+            </div>
+
+            <div data-templateid="mainNavigation">
+                <f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.Header.MainMenu" />
+            </div>
+
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-10  col-xs-push-1  col-md-push-0  col-md-6  col-lg-5  text-xs-center  text-md-left">
+                        <f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.Header.HomeLogo" />
+                    </div>
+                    <div class="col-xs-12  col-md-4  col-md-offset-2  col-lg-4  col-lg-offset-3">
+                        <div class="row hidden-xs">
+                            <f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.Header.OptionalLinks" />
+                        </div>
+                        <div class="row">
+                            <f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.SearchBox"/>
+                        </div>
+                    </div>
+                </div>
+            </div>            
+
+        </header>
+    </body>
+</html>

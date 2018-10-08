@@ -1,0 +1,47 @@
+<div data-templateid="CompleteCheckoutOrderSummary">
+    <div class="panel  panel-default">
+        <div class="panel-heading">
+            <h2 class="h3">{{localize 'ShoppingCart' 'T_OrderSummary'}}</h2>
+        </div>
+
+        <div class="panel-body">
+            {{#if GettingCart}}
+                {{> Loading}}
+            {{else}}
+               {{> CheckoutOrderSummaryDetails}}
+
+                <div class="row">
+                    <div class="col-xs-12">
+                        <hr>
+
+                        <p class="text-center">{{localize 'CheckoutProcess' 'L_SubmitOrderIndication'}}</p>
+
+
+                        {{#if InvalidLineItemCount}}
+                            <div class="form-group">
+                        {{/if}}
+
+                        <button class="btn  btn-success  btn-lg  btn-block {{#if InvalidLineItemCount}}disabled{{/if}}" data-oc-click="nextStep" {{#if InvalidLineItemCount}}disabled="disabled"{{/if}}
+                             data-nextstepurl="{{OrderSummary.CheckoutCompleteUrlTarget}}">
+                            {{localize 'CheckoutProcess' 'B_SubmitOrder'}}
+                            <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  hidden"></span>
+                        </button>
+
+                        {{#if InvalidLineItemCount}}
+                            </div>
+                        {{/if}}
+
+                        {{#if InvalidLineItemCount}}
+                            <span class="text-danger">
+                                {{localize 'CheckoutProcess' 'L_InvalidCart'}}
+                                <a href="{{OrderSummary.EditCartUrlTarget}}">
+                                    {{localize 'CheckoutProcess' 'H_CheckCart'}}
+                                </a>
+                            </span>
+                        {{/if}}
+                    </div>
+                </div>
+            {{/if}}
+        </div>
+    </div>
+</div>

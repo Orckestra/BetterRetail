@@ -1,0 +1,8 @@
+<div class="row">
+    {{#each Items}}
+        <div class="col-xs-12  col-sm-6  col-md-4">
+            {{#if @index}}<hr class="visible-xs-block" />{{/if}}
+            {{> WishListSummaryTile}}
+        </div>
+    {{/each}}
+</div>

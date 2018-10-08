@@ -1,0 +1,87 @@
+.carousel {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+
+     .slick-arrow {
+        font-size: 0;
+        line-height: 0;
+        position: absolute;
+        top: 50%;
+        display: block;
+        padding: 0;
+        cursor: pointer;
+        color: transparent;
+        border: none;
+        outline: none;
+        transform: translateY(-50%);
+        background: transparent;
+        z-index: 2;
+
+        @media(max-width: $screen-xs-max) {
+            display: none !important; //override the inline style genereted by the plugin
+        }
+
+        &:before {
+            @extend .fa;
+            font-size: 20px;
+            background: rgba($gray, 0.5);
+            border-radius: 50%;
+            width:35px;
+            height:35px;
+            line-height: 35px;
+            color: #fff;
+        }
+
+        &:hover:before {
+            background: rgba($gray, 0.7);
+        }
+
+       &.slick-prev {
+             left: 10px;
+
+             &:before {
+                content:'\f053';
+                margin-right: 5px;
+             }
+         }
+
+        &.slick-next {
+             right: 10px;
+
+             &:before {
+                content:'\f054';
+                margin-left: 5px;
+             }
+         }
+     }
+
+     .slick-dots {
+         @extend .clearfix;
+         list-style-type: none;
+         padding-left: 0;
+         text-align: center;
+         margin-bottom: 0px;
+
+         li {
+            display: inline-block;
+            margin-top: 20px;
+
+            button {
+                border-radius: 50%;
+                background: white;
+                border: 1px solid $gray-light;
+                font-size: 0;
+                width: 5px;
+                height: 14px;
+                float: left;
+                margin: 0 8px;
+            }
+
+            &.slick-active button {
+                background: $brand-primary;
+            }
+        }
+     }
+
+}

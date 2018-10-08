@@ -1,0 +1,210 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="L_AddToCartFailed" xml:space="preserve">
+    <value>Une erreur est survenue pendant l'ajout du produit au panier. Veuillez réessayer.</value>
+  </data>
+  <data name="L_ChangePasswordFailed" xml:space="preserve">
+    <value>Une erreur est survenue, veuillez valider votre mot de passe.</value>
+  </data>
+  <data name="L_CheckoutNextStepFailed" xml:space="preserve">
+    <value>Impossible de procéder à l'étape suivant de la caisse. Veuillez vérifier vos données, puis réessayer.</value>
+  </data>
+  <data name="L_CheckoutRenderFailed" xml:space="preserve">
+    <value>Une erreur est survenue pendant le chargement de la caisse. Veuillez &lt;a href="javascript:window.location.reload();"&gt;recharger la page&lt;/a&gt;.</value>
+  </data>
+  <data name="L_CompleteCheckoutFailed" xml:space="preserve">
+    <value>Impossible de compléter votre commande. Veuillez vérifier vos informations de paiement et d'addresse, puis réessayer.</value>
+  </data>
+  <data name="L_CustomerMembershipDoesNotExist" xml:space="preserve">
+    <value>Le courriel précisé n'est pas valide.</value>
+  </data>
+  <data name="L_EmailAlreadyExists" xml:space="preserve">
+    <value>Ce courriel est déjà associé à un compte.</value>
+  </data>
+  <data name="L_ErrorWithTicket" xml:space="preserve">
+    <value>Impossible de traiter votre demande. Veuillez demander un nouveau lien pour le mot de passe oublié et essayez à nouveau .</value>
+  </data>
+  <data name="L_InvalidCharsInSearchBox" xml:space="preserve">
+    <value>Votre terme de recherche contient des caractères qui ne sont pas autorisés.</value>
+  </data>
+  <data name="L_InvalidPassword" xml:space="preserve">
+    <value>Le mot de passe précisé n'est pas valide.</value>
+  </data>
+  <data name="L_InvalidPhoneFormat" xml:space="preserve">
+    <value>Le numéro de téléphone spécifié est invalide.</value>
+  </data>
+  <data name="L_InvalidZipPostalCodeFormat" xml:space="preserve">
+    <value>Le code postal spécifié est invalide.</value>
+  </data>
+  <data name="L_LineItemDeleteFailed" xml:space="preserve">
+    <value>Une erreur est survenue pendant le retrait de cet article au panier. Veuillez réessayer.</value>
+  </data>
+  <data name="L_LineItemUpdateFailed" xml:space="preserve">
+    <value>Une erreur est survenue pendant la mise-à-jour de votre panier. Veuillez réessayer.</value>
+  </data>
+  <data name="L_LoadCartFailed" xml:space="preserve">
+    <value>Une erreur est survenue pendant le chargement du panier. Veuillez &lt;a href="javascript:window.location.reload();"&gt;recharger la page&lt;/a&gt;.</value>
+  </data>
+  <data name="L_NameAlreadyUsed" xml:space="preserve">
+    <value>Le nom pour identifier cette adresse est déjà utilisé.</value>
+  </data>
+  <data name="L_NoLocalizedErrorMessage" xml:space="preserve">
+    <value>Une erreur est survenue, veuillez réessayer plus tard.</value>
+  </data>
+  <data name="L_PasswordDoesNotMatch" xml:space="preserve">
+    <value>Les mots de passe précisés ne sont pas identiques.</value>
+  </data>
+  <data name="L_PasswordQuestionNoSet" xml:space="preserve">
+    <value>Une question doit être précisée.</value>
+  </data>
+  <data name="L_PaymentMethodChangeFailed" xml:space="preserve">
+    <value>Une erreur est survenue lors du changement de méthode de paiement. Veuillez réessayer.</value>
+  </data>
+  <data name="L_PostalCodeUpdateFailed" xml:space="preserve">
+    <value>Une erreur est survenue pendant la mise-à-jour de votre panier. Veuillez réessayer.</value>
+  </data>
+  <data name="L_ProceedToCheckoutFailed" xml:space="preserve">
+    <value>Impossible de procéder vers la caisse. Veuillez réessayer.</value>
+  </data>
+  <data name="L_QuickViewLoadFailed" xml:space="preserve">
+    <value>Une erreur est survenue pendant le chargement du produit. Veuillez réessayer.</value>
+  </data>
+  <data name="L_RelatedProductLoadFailed" xml:space="preserve">
+    <value>Une erreur est survenue pendant le chargement des produits reliés. Veuillez &lt;a href="javascript:window.location.reload();"&gt;recharger la page&lt;/a&gt;.</value>
+  </data>
+  <data name="L_ResetPasswordFailed" xml:space="preserve">
+    <value>Une erreur s'est produite lors du traitement de votre demande de réinitialisation de mot de passe.</value>
+  </data>
+  <data name="L_SearchResultsLoadFailed" xml:space="preserve">
+    <value>Une erreur est survenue pendant le chargement des produits suggéré. Veuillez &lt;a href="javascript:window.location.reload();"&gt;recharger la page&lt;/a&gt;.</value>
+  </data>
+  <data name="L_SelectedVariantChangeFailed" xml:space="preserve">
+    <value>Une erreur est survenue pendant le chargement du produit. Veuillez réessayer.</value>
+  </data>
+  <data name="L_SendResetPasswordInstructionsFailed" xml:space="preserve">
+    <value>Une erreur s'est produite lors de l'envoi des instructions de réinitialisation de votre mot de passe.</value>
+  </data>
+  <data name="L_ShippingMethodUpdateFailed" xml:space="preserve">
+    <value>Une erreur est survenue pendant la mise-à-jour de votre panier. Veuillez réessayer.</value>
+  </data>
+  <data name="L_UserNameAlreadyUsed" xml:space="preserve">
+    <value>Ce compte existe déjà. Avez-vous oublié votre mot de passe?</value>
+  </data>
+</root>

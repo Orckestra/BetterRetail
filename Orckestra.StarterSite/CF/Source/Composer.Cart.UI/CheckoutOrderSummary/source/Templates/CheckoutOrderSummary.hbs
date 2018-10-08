@@ -1,0 +1,58 @@
+<div  data-templateid="CheckoutOrderSummary">
+    {{#if LoadCheckoutOrderSummary }}
+        <div class="panel panel-default">
+            {{#if GettingCart}}
+                <div class="panel-heading">
+                    <h2 class="h3" data-qa="order-summary-title">{{localize 'ShoppingCart' 'T_OrderSummary'}}</h2>
+                </div>
+                
+                <div class="panel-body">
+                    {{>Loading}}
+                </div>
+            {{else}}
+                <div class="panel-heading">
+                    <h2 class="h3" data-qa="order-summary-title">{{localize 'ShoppingCart' 'T_OrderSummary'}}</h2>
+                </div>
+                
+                <div class="panel-body">
+                    <div>
+                        <span data-qa="checkout-order-summary-number-of-products">{{TotalQuantity}} {{localize 'CheckoutProcess' 'L_Products'}}</span>
+                        (<a href="{{OrderSummary.EditCartUrlTarget}}" data-qa="checkout-order-summary-edit-order">{{localize 'CheckoutProcess' 'B_EditShoppingCart'}}</a>)
+                    </div>
+
+                    <hr class="bleed" />
+
+                    {{>CheckoutOrderSummaryDetails}}
+
+                    <div class="row">
+                        <div class="col-xs-12">
+                            {{#if InvalidLineItemCount}}
+                                <div class="form-group">
+                            {{/if}}
+
+                            <button class="btn  btn-success  btn-lg  btn-block" data-qa="checkout-order-summary-next-step"
+                            {{#if InvalidLineItemCount}}disabled="disabled"{{/if}} data-oc-click="nextStep" data-nextstepurl="{{OrderSummary.NextStepUrl}}">
+                                {{localize 'CheckoutProcess' 'B_NextStep'}}
+                            <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  hidden"></span>
+                            </button>
+
+                            {{#if InvalidLineItemCount}}
+                                </div>
+                            {{/if}}
+
+                            {{#if InvalidLineItemCount}}
+                                <span class="text-danger">
+                                    {{localize 'CheckoutProcess' 'L_InvalidCart'}}
+                                    
+                                    <a href="{{OrderSummary.EditCartUrlTarget}}">
+                                        {{localize 'CheckoutProcess' 'H_CheckCart'}}
+                                    </a>
+                                </span>
+                            {{/if}}
+                        </div>
+                    </div>
+                </div>
+            {{/if}}
+        </div>
+    {{/if}}
+</div>

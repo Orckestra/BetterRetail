@@ -1,0 +1,42 @@
+.notification-modal {
+    height: 100%;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 9999;
+
+    .notification-modal-overlay {
+        background: rgba(0,0,0,0.5);
+        height: 100%;
+        left:0;
+        position: absolute;
+        top:0;
+        width: 100%;
+        z-index:1;
+    }
+
+    .notification-modal-dialog {
+        background: rgba(0,0,0, 0.5);
+        margin: 0 auto;
+        position: relative;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 300px;
+        z-index: 2;
+    }
+
+    .notification-modal-content {
+        position: relative;
+        padding: 20px;
+        text-align: center;
+    }
+
+    // .notification-modal-header {
+       
+    // }
+
+    .notification-modal-body {
+        color: #fff;
+    }
+}

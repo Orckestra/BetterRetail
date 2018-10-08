@@ -1,0 +1,11 @@
+<div data-templateid="CartContent">
+	{{#if IsLoading}}
+		{{>Loading}}
+	{{else}}
+	    {{#if IsCartEmpty}}
+	        {{>EmptyCart}}
+	    {{else}}
+	        {{>CartSummary}}
+	    {{/if}}
+    {{/if}}
+</div>

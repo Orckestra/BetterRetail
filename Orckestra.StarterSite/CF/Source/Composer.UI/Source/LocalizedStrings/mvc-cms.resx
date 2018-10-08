@@ -1,0 +1,547 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CartUrl" xml:space="preserve">
+    <value>cart</value>
+  </data>
+  <data name="CheckoutSignInUrl" xml:space="preserve">
+    <value>checkout</value>
+  </data>
+  <data name="CheckoutStepOneUrl" xml:space="preserve">
+    <value>checkout/address-information</value>
+  </data>
+  <data name="CheckoutStepTwoUrl" xml:space="preserve">
+    <value>checkout/shipping-method</value>
+  </data>
+  <data name="CheckoutStepThreeUrl" xml:space="preserve">
+    <value>checkout/order-review</value>
+  </data>
+  <data name="CompleteCheckoutUrl" xml:space="preserve">
+    <value>checkout/order-confirmation</value>
+  </data>
+  <data name="SearchInUrl" xml:space="preserve">
+    <value>search</value>
+  </data>
+  <data name="Breadcrumb_ChangePassword" xml:space="preserve">
+    <value>Change Password</value>
+  </data>
+  <data name="Breadcrumb_CheckoutSignIn" xml:space="preserve">
+    <value>Checkout Sign In</value>
+  </data>
+  <data name="Breadcrumb_CreateAccount" xml:space="preserve">
+    <value>Account Creation</value>
+  </data>
+  <data name="Breadcrumb_ForgotPassword" xml:space="preserve">
+    <value>Forgot Password</value>
+  </data>
+  <data name="Breadcrumb_Home" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="Breadcrumb_Login" xml:space="preserve">
+    <value>Log In</value>
+  </data>
+  <data name="Breadcrumb_MyAccount" xml:space="preserve">
+    <value>My Account</value>
+  </data>
+  <data name="Breadcrumb_NewPassword" xml:space="preserve">
+    <value>New Password</value>
+  </data>
+  <data name="Breadcrumb_TermsAndConditions" xml:space="preserve">
+    <value>Terms And Conditions</value>
+  </data>
+  <data name="Breadcrumb_Cart" xml:space="preserve">
+    <value>Cart</value>
+  </data>
+  <data name="CheckoutStepOneUrlDisplayName" xml:space="preserve">
+    <value>Delivery address</value>
+  </data>
+  <data name="CheckoutStepTwoUrlDisplayName" xml:space="preserve">
+    <value>Shipping Method</value>
+  </data>
+  <data name="CheckoutStepThreeUrlDisplayName" xml:space="preserve">
+    <value>Review and Payment</value>
+  </data>
+  <data name="PaymentTrustIconAlt" xml:space="preserve">
+    <value>Credit cards Trust Icon</value>
+  </data>
+  <data name="PageTitle_Home" xml:space="preserve">
+    <value>Composer - Pure MVC | Better Retail</value>
+  </data>
+  <data name="PageTitle_Cart" xml:space="preserve">
+    <value>Cart | Better Retail</value>
+  </data>
+  <data name="PageTitle_Search" xml:space="preserve">
+    <value>Search results for “{0}” | Better Retail</value>
+  </data>
+  <data name="Breadcrumb_MyAddresses" xml:space="preserve">
+    <value>My Adresses</value>
+  </data>
+  <data name="Breadcrumb_OrderHistory" xml:space="preserve">
+    <value>Order History</value>
+  </data>
+  <data name="GuestOrderDetailsUrl" xml:space="preserve">
+    <value>order-details</value>
+  </data>
+  <data name="Breadcrumb_GuestOrderDetails" xml:space="preserve">
+    <value>Order details</value>
+  </data>
+  <data name="Breadcrumb_OrderStatus" xml:space="preserve">
+    <value>Order status</value>
+  </data>
+  <data name="Breadcrumb_OrderDetails" xml:space="preserve">
+    <value>Order details</value>
+  </data>
+  <data name="MyAccount_IndexUrl" xml:space="preserve">
+    <value>my-account</value>
+  </data>
+  <data name="MyAccount_TermsAndConditionUrl" xml:space="preserve">
+    <value>terms-and-conditions</value>
+  </data>
+  <data name="MyAccount_CreateAccountUrl" xml:space="preserve">
+    <value>create-account</value>
+  </data>
+  <data name="MyAccount_LoginUrl" xml:space="preserve">
+    <value>login</value>
+  </data>
+  <data name="MyAccount_ForgotPasswordUrl" xml:space="preserve">
+    <value>forgot-password</value>
+  </data>
+  <data name="MyAccount_NewPasswordUrl" xml:space="preserve">
+    <value>reset-password</value>
+  </data>
+  <data name="MyAccount_ChangePasswordUrl" xml:space="preserve">
+    <value>my-account/change-password</value>
+  </data>
+  <data name="MyAccount_AddressesUrl" xml:space="preserve">
+    <value>my-account/addresses</value>
+  </data>
+  <data name="MyAccount_AddAddressUrl" xml:space="preserve">
+    <value>my-account/addresses/add</value>
+  </data>
+  <data name="MyAccount_EditAddressUrl" xml:space="preserve">
+    <value>my-account/addresses/edit</value>
+  </data>
+  <data name="MyAccount_MyWallet" xml:space="preserve">
+    <value>my-account/my-wallet</value>
+  </data>
+  <data name="Order_OrderHistoryUrl" xml:space="preserve">
+    <value>my-account/order-history</value>
+  </data>
+  <data name="Order_OrderDetailsUrl" xml:space="preserve">
+    <value>my-account/order</value>
+  </data>
+  <data name="Order_FindMyOrderUrl" xml:space="preserve">
+    <value>order-status</value>
+  </data>
+  <data name="Order_GuestOrderDetailsUrl" xml:space="preserve">
+    <value>order-status/order-details</value>
+  </data>
+  <data name="Checkout_AddAddressUrl" xml:space="preserve">
+    <value>checkout/addresses/add</value>
+  </data>
+  <data name="Checkout_EditAddressUrl" xml:space="preserve">
+    <value>checkout/addresses/edit</value>
+  </data>
+  <data name="HomepageUrl" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="Breadcrumb_StoreLocator" xml:space="preserve">
+    <value>Store Locator</value>
+  </data>
+  <data name="StoresDirectory_Url" xml:space="preserve">
+    <value>stores/directory</value>
+  </data>
+  <data name="Stores_Url" xml:space="preserve">
+    <value>stores</value>
+  </data>
+  <data name="Breadcrumb_StoresDirectory" xml:space="preserve">
+    <value>Stores Directory</value>
+  </data>
+  <data name="L_MenuCategory_1" xml:space="preserve">
+    <value>Main Category 1</value>
+  </data>
+  <data name="L_MenuHeader_1.1" xml:space="preserve">
+    <value>Section 1.1</value>
+  </data>
+  <data name="L_MenuItem_1.1.1" xml:space="preserve">
+    <value>Link 1.1.1</value>
+  </data>
+  <data name="L_MenuItem_1.1.2" xml:space="preserve">
+    <value>Link 1.1.2</value>
+  </data>
+  <data name="L_MenuItem_1.1.3" xml:space="preserve">
+    <value>Link 1.1.3</value>
+  </data>
+  <data name="L_MenuItem_1.1.4" xml:space="preserve">
+    <value>Link 1.1.4</value>
+  </data>
+  <data name="L_MenuItem_1.1.5" xml:space="preserve">
+    <value>Link 1.1.5</value>
+  </data>
+  <data name="L_MenuHeader_1.2" xml:space="preserve">
+    <value>Section 1.2</value>
+  </data>
+  <data name="L_MenuItem_1.2.1" xml:space="preserve">
+    <value>Link 1.2.1</value>
+  </data>
+  <data name="L_MenuItem_1.2.2" xml:space="preserve">
+    <value>Link 1.2.2</value>
+  </data>
+  <data name="L_MenuItem_1.2.3" xml:space="preserve">
+    <value>Link 1.2.3</value>
+  </data>
+  <data name="L_MenuItem_1.2.4" xml:space="preserve">
+    <value>Link 1.2.4</value>
+  </data>
+  <data name="L_MenuItem_1.2.5" xml:space="preserve">
+    <value>Link 1.2.5</value>
+  </data>
+  <data name="L_MenuHeader_1.3" xml:space="preserve">
+    <value>Section 1.3</value>
+  </data>
+  <data name="L_MenuItem_1.3.1" xml:space="preserve">
+    <value>Link 1.3.1</value>
+  </data>
+  <data name="L_MenuItem_1.3.2" xml:space="preserve">
+    <value>Link 1.3.2</value>
+  </data>
+  <data name="L_MenuItem_1.3.3" xml:space="preserve">
+    <value>Link 1.3.3</value>
+  </data>
+  <data name="L_MenuItem_1.3.4" xml:space="preserve">
+    <value>Link 1.3.4</value>
+  </data>
+  <data name="L_MenuItem_1.3.5" xml:space="preserve">
+    <value>Link 1.3.5</value>
+  </data>
+  <data name="L_MenuCategory_2" xml:space="preserve">
+    <value>Main Category 2</value>
+  </data>
+  <data name="L_MenuHeader_2.1" xml:space="preserve">
+    <value>Section 2.1</value>
+  </data>
+  <data name="L_MenuItem_2.1.1" xml:space="preserve">
+    <value>Link 2.1.1</value>
+  </data>
+  <data name="L_MenuItem_2.1.2" xml:space="preserve">
+    <value>Link 2.1.2</value>
+  </data>
+  <data name="L_MenuItem_2.1.3" xml:space="preserve">
+    <value>Link 2.1.3</value>
+  </data>
+  <data name="L_MenuItem_2.1.4" xml:space="preserve">
+    <value>Link 2.1.4</value>
+  </data>
+  <data name="L_MenuItem_2.1.5" xml:space="preserve">
+    <value>Link 2.1.5</value>
+  </data>
+  <data name="L_MenuHeader_2.2" xml:space="preserve">
+    <value>Section 2.2</value>
+  </data>
+  <data name="L_MenuItem_2.2.1" xml:space="preserve">
+    <value>Link 2.2.1</value>
+  </data>
+  <data name="L_MenuItem_2.2.2" xml:space="preserve">
+    <value>Link 2.2.2</value>
+  </data>
+  <data name="L_MenuItem_2.2.3" xml:space="preserve">
+    <value>Link 2.2.3</value>
+  </data>
+  <data name="L_MenuItem_2.2.4" xml:space="preserve">
+    <value>Link 2.2.4</value>
+  </data>
+  <data name="L_MenuItem_2.2.5" xml:space="preserve">
+    <value>Link 2.2.5</value>
+  </data>
+  <data name="L_MenuHeader_2.3" xml:space="preserve">
+    <value>Section 2.3</value>
+  </data>
+  <data name="L_MenuItem_2.3.1" xml:space="preserve">
+    <value>Link 2.3.1</value>
+  </data>
+  <data name="L_MenuItem_2.3.2" xml:space="preserve">
+    <value>Link 2.3.2</value>
+  </data>
+  <data name="L_MenuItem_2.3.3" xml:space="preserve">
+    <value>Link 2.3.3</value>
+  </data>
+  <data name="L_MenuItem_2.3.4" xml:space="preserve">
+    <value>Link 2.3.4</value>
+  </data>
+  <data name="L_MenuItem_2.3.5" xml:space="preserve">
+    <value>Link 2.3.5</value>
+  </data>
+  <data name="L_MenuCategory_3" xml:space="preserve">
+    <value>Main Category 3</value>
+  </data>
+  <data name="L_MenuHeader_3.1" xml:space="preserve">
+    <value>Section 3.1</value>
+  </data>
+  <data name="L_MenuItem_3.1.1" xml:space="preserve">
+    <value>Link 3.1.1</value>
+  </data>
+  <data name="L_MenuItem_3.1.2" xml:space="preserve">
+    <value>Link 3.1.2</value>
+  </data>
+  <data name="L_MenuItem_3.1.3" xml:space="preserve">
+    <value>Link 3.1.3</value>
+  </data>
+  <data name="L_MenuItem_3.1.4" xml:space="preserve">
+    <value>Link 3.1.4</value>
+  </data>
+  <data name="L_MenuItem_3.1.5" xml:space="preserve">
+    <value>Link 3.1.5</value>
+  </data>
+  <data name="L_MenuHeader_3.2" xml:space="preserve">
+    <value>Section 3.2</value>
+  </data>
+  <data name="L_MenuItem_3.2.1" xml:space="preserve">
+    <value>Link 3.2.1</value>
+  </data>
+  <data name="L_MenuItem_3.2.2" xml:space="preserve">
+    <value>Link 3.2.2</value>
+  </data>
+  <data name="L_MenuItem_3.2.3" xml:space="preserve">
+    <value>Link 3.2.3</value>
+  </data>
+  <data name="L_MenuItem_3.2.4" xml:space="preserve">
+    <value>Link 3.2.4</value>
+  </data>
+  <data name="L_MenuItem_3.2.5" xml:space="preserve">
+    <value>Link 3.2.5</value>
+  </data>
+  <data name="L_MenuHeader_3.3" xml:space="preserve">
+    <value>Section 3.3</value>
+  </data>
+  <data name="L_MenuItem_3.3.1" xml:space="preserve">
+    <value>Link 3.3.1</value>
+  </data>
+  <data name="L_MenuItem_3.3.2" xml:space="preserve">
+    <value>Link 3.3.2</value>
+  </data>
+  <data name="L_MenuItem_3.3.3" xml:space="preserve">
+    <value>Link 3.3.3</value>
+  </data>
+  <data name="L_MenuItem_3.3.4" xml:space="preserve">
+    <value>Link 3.3.4</value>
+  </data>
+  <data name="L_MenuItem_3.3.5" xml:space="preserve">
+    <value>Link 3.3.5</value>
+  </data>
+  <data name="L_MenuCategory_4" xml:space="preserve">
+    <value>Main Category 4</value>
+  </data>
+  <data name="L_StickyHeaderLink_1" xml:space="preserve">
+    <value>Main Category 1</value>
+  </data>
+  <data name="L_StickyHeaderLink_2" xml:space="preserve">
+    <value>Main Category 2</value>
+  </data>
+  <data name="L_StickyHeaderLink_3" xml:space="preserve">
+    <value>Main Category 3</value>
+  </data>
+   <data name="L_Footer_1" xml:space="preserve">
+    <value>Section 1</value>
+  </data>
+  <data name="L_Footer_1.1" xml:space="preserve">
+    <value>Section 1.1</value>
+  </data> 
+  <data name="L_Footer_1.2" xml:space="preserve">
+    <value>Section 1.2</value>
+  </data>  
+  <data name="L_Footer_1.3" xml:space="preserve">
+    <value>Section 1.3</value>
+  </data> 
+  <data name="L_Footer_2" xml:space="preserve">
+    <value>Section 2</value>
+  </data>
+  <data name="L_Footer_2.1" xml:space="preserve">
+    <value>Section 2.1</value>
+  </data> 
+  <data name="L_Footer_2.2" xml:space="preserve">
+    <value>Section 2.2</value>
+  </data> 
+  <data name="L_Footer_2.3" xml:space="preserve">
+    <value>Section 2.3</value>
+  </data> 
+  <data name="L_Footer_3" xml:space="preserve">
+    <value>Section 3</value>
+  </data>
+  <data name="L_Footer_3.1" xml:space="preserve">
+    <value>Section 3.1</value>
+  </data>  
+  <data name="L_Footer_3.2" xml:space="preserve">
+    <value>Section 3.2</value>
+  </data> 
+  <data name="L_Footer_3.3" xml:space="preserve">
+    <value>Section 3.3</value>
+  </data>
+  <data name="L_Footer_4" xml:space="preserve">
+    <value>Section 4</value>
+  </data>
+  <data name="Breadcrumb_WishList" xml:space="preserve">
+    <value>Wish List</value>
+  </data>
+  <data name="PageTitle_WishList" xml:space="preserve">
+    <value>Wish List</value>
+  </data>
+  <data name="MyAccount_MyWishListUrl" xml:space="preserve">
+    <value>my-account/wishlist</value>
+  </data>
+  <data name="Breadcrumb_SharedWishList" xml:space="preserve">
+    <value>Public Wish List</value>
+  </data>
+  <data name="SharedWishListUrl" xml:space="preserve">
+    <value>sharedwishlist</value>
+  </data>
+  <data name="MyAccount_B_SharedWishList_StartAddTo" xml:space="preserve">
+    <value>Find great Ideas now</value>
+  </data>
+  <data name="MyAccount_B_StartAddToWishList" xml:space="preserve">
+    <value>Build your Wish List</value>
+  </data>
+  <data name="MyAccount_L_SharedWishList_StartAddTo" xml:space="preserve">
+    <value>Your friend’s Wish List is empty.
+Don't worry, you can still find great products to offer!</value>
+  </data>
+  <data name="MyAccount_L_StartAddToWishList" xml:space="preserve">
+    <value>To keep track of your favorite items, click the heart icon and share them with your friends.</value>
+  </data>
+  <data name="MyAccount_L_WishListNoItems" xml:space="preserve">
+    <value>There are no items in your Wish List</value>
+  </data>
+  <data name="MyAccount_T_SharedWishList_StartAddTo" xml:space="preserve">
+    <value>Continue looking for inspiration!</value>
+  </data>
+  <data name="MyAccount_T_StartAddToWishList" xml:space="preserve">
+    <value>Add items to your Wish List</value>
+  </data>
+  <data name="404Page_Content" xml:space="preserve">
+    <value>&lt;p&gt;The page you're looking for is not available for one of the following reasons:&lt;/p&gt;
+		&lt;ul&gt;
+			&lt;li&gt;The link to this page may be incorrect or out-of-date.&lt;/li&gt;
+			&lt;li&gt;You may have bookmarked a page that has been moved.&lt;/li&gt;
+			&lt;li&gt;A product you are looking for may no longer exist.&lt;/li&gt;
+		&lt;/ul&gt;
+		&lt;p&gt;Please continue shopping from our homepage or use our search. You can also contact us for help.&lt;/p&gt;</value>
+  </data>
+  <data name="404Page_Heading" xml:space="preserve">
+    <value>We're sorry...</value>
+  </data>
+</root>

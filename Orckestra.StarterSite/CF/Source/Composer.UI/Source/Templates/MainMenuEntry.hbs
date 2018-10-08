@@ -1,0 +1,70 @@
+<li class="dropdown main-nav-fw {{#if_eq MenuType 'Optional'}}visible-xs-block{{/if_eq}}">
+
+    {{#if HasChildren}}
+
+        <a href="{{Url}}" data-qa="main-menu-category" role="button" class="dropdown-toggle hidden-xs hidden-sm" style="{{CssClass}}" aria-haspopup="true">{{DisplayName}}
+            <span class="fa fa-chevron-down" aria-hidden="true"></span>
+            <span class="fa fa-chevron-up" aria-hidden="true"></span>
+        </a> 
+ 
+        <a href="{{Url}}" data-qa="main-menu-category" role="button" data-toggle="dropdown"  class="dropdown-toggle hidden-md hidden-lg hidden-xl" style="{{CssClass}}" aria-haspopup="true" aria-expanded="false">{{DisplayName}}
+            <span class="fa fa-chevron-down" aria-hidden="true"></span>
+            <span class="fa fa-chevron-up" aria-hidden="true"></span>
+        </a>
+ 
+        <ul class="dropdown-menu">
+            <li>  
+                <!-- Content container to add padding -->
+                <div class="main-nav-content">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="row">
+                                {{#each Children}}
+                                    <ul class="col-sm-3 list-unstyled">
+                                        <li>
+                                            <p><strong><a data-qa="main-menu-section" href="{{Url}}" target="{{UrlTarget}}" style="{{CssClass}}" >{{DisplayName}}</a></strong></p>
+                                        </li>
+                                        <li>
+                                        <span class="menu-image hidden-xs hidden-sm">
+                                            {{#if Image.ImageSource}}
+                                                    {{#if Image.ImageUrl}}
+                                                            <a href="{{Image.ImageUrl}}" target="{{Image.ImageUrlTarget}}"><img src="{{Image.ImageSource}}" class="img-responsive img-menu" /></a>
+                                                    {{else}}                                            
+                                                            <img src="{{Image.ImageSource}}" class="img-responsive img-menu" />
+                                                    {{/if}}      
+                                            {{/if}}    
+                                        </span>
+                                        </li>
+                                        {{#each Children}}
+                                            <li><a data-qa="main-menu-link" href="{{Url}}" target="{{UrlTarget}}" class="hidden-xs" style="{{CssClass}}" >{{DisplayName}}</a></li>
+                                        {{/each}}
+                                    </ul>
+                                {{/each}}
+                            </div>
+                        </div>
+                        <div class="col-md-4">    
+                            <span class="menu-image hidden-xs">
+                                {{#if Image.ImageSource}}
+                                        {{#if Image.ImageUrl}}
+                                                <a href="{{Image.ImageUrl}}" target="{{Image.ImageUrlTarget}}"><img src="{{Image.ImageSource}}" class="img-responsive"/></a>
+                                        {{else}}                                        
+                                                <img src="{{Image.ImageSource}}" class="img-responsive" />
+                                        {{/if}}
+                                                <span class="caption">
+                                                    <span> {{Image.ImageLabel}} </span>
+                                                </span>
+                                        {{/if}}
+                            </span>                      
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+
+    {{else}}
+
+        <a href="{{Url}}" data-qa="main-menu-category-link" target="{{UrlTarget}}" style="{{CssClass}}" >{{DisplayName}}</a>
+
+    {{/if}}
+</li>
+

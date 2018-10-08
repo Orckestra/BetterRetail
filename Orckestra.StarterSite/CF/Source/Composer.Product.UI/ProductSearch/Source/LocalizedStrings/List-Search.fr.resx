@@ -1,0 +1,279 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AssociatedCategory" xml:space="preserve">
+    <value>Categories reliées</value>
+  </data>
+  <data name="AssociatedSearch" xml:space="preserve">
+    <value>Recherches associées</value>
+  </data>
+  <data name="B_Apply" xml:space="preserve">
+    <value>Appliquer</value>
+  </data>
+  <data name="B_ClearAll" xml:space="preserve">
+    <value>Tout effacer</value>
+  </data>
+  <data name="B_Close" xml:space="preserve">
+    <value>Fermer</value>
+  </data>
+  <data name="B_MobileRefiners" xml:space="preserve">
+    <value>Rafiiner</value>
+  </data>
+  <data name="B_MobileSorting" xml:space="preserve">
+    <value>Trier par</value>
+  </data>
+  <data name="B_Next" xml:space="preserve">
+    <value>Suivant</value>
+  </data>
+  <data name="B_Previous" xml:space="preserve">
+    <value>Précédent</value>
+  </data>
+  <data name="B_Refine" xml:space="preserve">
+    <value>Raffiner</value>
+  </data>
+  <data name="B_Search" xml:space="preserve">
+    <value>Rechercher</value>
+  </data>
+  <data name="B_ShowLess" xml:space="preserve">
+    <value>Voir moins</value>
+  </data>
+  <data name="B_ShowMore" xml:space="preserve">
+    <value>Voir plus</value>
+  </data>
+  <data name="F_Featured_Option" xml:space="preserve">
+    <value>En Vedette</value>
+  </data>
+  <data name="F_NameAZ_Option" xml:space="preserve">
+    <value>Nom : A à Z</value>
+  </data>
+  <data name="F_NameZA_Option" xml:space="preserve">
+    <value>Nom : Z à A</value>
+  </data>
+  <data name="F_PriceHighLow_Option" xml:space="preserve">
+    <value>Prix : Descendant</value>
+  </data>
+  <data name="F_PriceLowHigh_Option" xml:space="preserve">
+    <value>Prix : Ascendant</value>
+  </data>
+  <data name="F_Relevance_Option" xml:space="preserve">
+    <value>Pertinence</value>
+  </data>
+  <data name="F_SearchWaterMark" xml:space="preserve">
+    <value>Rechercher...</value>
+  </data>
+  <data name="H_ViewProductDetails" xml:space="preserve">
+    <value>Voir les détails du produit</value>
+  </data>
+  <data name="L_AllProduct_URL" xml:space="preserve">
+    <value>Articles</value>
+  </data>
+  <data name="L_Brand" xml:space="preserve">
+    <value>Marque</value>
+  </data>
+  <data name="L_Categories" xml:space="preserve">
+    <value>Catégories</value>
+  </data>
+  <data name="L_CategoryResults" xml:space="preserve">
+    <value>produits sous</value>
+  </data>
+  <data name="L_DidYouMean" xml:space="preserve">
+    <value>Voulez-vous dire </value>
+  </data>
+  <data name="L_NoResultsFor" xml:space="preserve">
+    <value>Aucun résultat pour</value>
+  </data>
+  <data name="L_NoResultsForCategory" xml:space="preserve">
+    <value>Aucun produit pour</value>
+  </data>
+  <data name="L_PageInDropDown" xml:space="preserve">
+    <value>page</value>
+  </data>
+  <data name="L_PageOfTotalItems" xml:space="preserve">
+    <value>de {0}</value>
+  </data>
+  <data name="L_PriceFrom" xml:space="preserve">
+    <value>à partir de</value>
+  </data>
+  <data name="L_Products" xml:space="preserve">
+    <value>Articles</value>
+  </data>
+  <data name="L_RangeAll" xml:space="preserve">
+    <value>Tous</value>
+  </data>
+  <data name="L_RefinerCategories" xml:space="preserve">
+    <value>Catégories</value>
+  </data>
+  <data name="L_SearchResults" xml:space="preserve">
+    <value>résultats pour</value>
+  </data>
+  <data name="L_SearchResultsForBreadcrumb" xml:space="preserve">
+    <value>Résultats de recherche pour</value>
+  </data>
+  <data name="L_Selection" xml:space="preserve">
+    <value>Votre sélection</value>
+  </data>
+  <data name="L_Sorting" xml:space="preserve">
+    <value>Trier par :</value>
+  </data>
+  <data name="L_TopResultsFor" xml:space="preserve">
+    <value>Les meilleurs résultats pour</value>
+  </data>
+  <data name="L_ViewAllResults" xml:space="preserve">
+    <value>Rechercher tous les résultats</value>
+  </data>
+  <data name="NoResultsTitle" xml:space="preserve">
+    <value>Aucun résultat trouvé</value>
+  </data>
+  <data name="Page" xml:space="preserve">
+    <value>Page :</value>
+  </data>
+  <data name="PageOn" xml:space="preserve">
+    <value>sur</value>
+  </data>
+  <data name="ProductDescription" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="ProductMatches" xml:space="preserve">
+    <value>{0} produits trouvés</value>
+  </data>
+  <data name="ProductMoreDescription" xml:space="preserve">
+    <value>En savoir plus sur ce produit</value>
+  </data>
+  <data name="ProductRelated" xml:space="preserve">
+    <value>Produits complémentaires</value>
+  </data>
+  <data name="ProductSearchTitle" xml:space="preserve">
+    <value>Résultats de recherche de produit pour :</value>
+  </data>
+  <data name="ProductSizeChart" xml:space="preserve">
+    <value>Tableau des tailles</value>
+  </data>
+  <data name="ProductSKU" xml:space="preserve">
+    <value>SKU</value>
+  </data>
+  <data name="ProductSpecifications" xml:space="preserve">
+    <value>Spécifications</value>
+  </data>
+  <data name="SearchResult" xml:space="preserve">
+    <value>Résultats de recherche pour « {0} »</value>
+  </data>
+  <data name="YourSearch" xml:space="preserve">
+    <value>Votre recherche « {0} » a trouvé 0 résultats.</value>
+  </data>
+</root>

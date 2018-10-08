@@ -1,0 +1,16 @@
+ <div data-templateid="OrderDetailsComment">
+    <div class="panel  panel-default">
+        <div class="panel-heading">
+            <h2 class="h3">{{localize 'MyAccount' 'T_Comments' }}</h2>
+        </div>
+        <div class="panel-body">
+            {{#if Shipments.[0].Comments}}
+                {{#each Shipments.[0].Comments}}
+        	       <p>{{this}}</p>
+        	    {{/each}}
+            {{else}}
+                <span class="text-muted">{{localize 'MyAccount' 'L_OrderNoComments' }}</span>
+            {{/if}}
+        </div>
+    </div>
+</div>

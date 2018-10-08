@@ -1,0 +1,42 @@
+.dropdown-header {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.dropdown-menu {
+    .divider {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+}
+
+.dropdown-menu > .active > a:hover,
+.dropdown-menu > .active > a:focus {
+    background-color: darken($brand-info, 5%)
+}
+
+@media (max-width: $screen-xs-max) {
+    .dropdown-menu-xs-right {
+        left: auto;
+        right: 0;
+    }
+}
+@media (min-width: $screen-sm-min) and (max-width: $screen-sm-max) {
+    .dropdown-menu-sm-right {
+        left: auto;
+        right: 0;
+    }
+}
+@media (min-width: $screen-md-min) and (max-width: $screen-md-max) {
+    .dropdown-menu-md-right {
+        left: auto;
+        right: 0;
+    }
+}
+@media (min-width: $screen-lg-min) {
+    .dropdown-menu-lg-right {
+        left: auto;
+        right: 0;
+    }
+}
+

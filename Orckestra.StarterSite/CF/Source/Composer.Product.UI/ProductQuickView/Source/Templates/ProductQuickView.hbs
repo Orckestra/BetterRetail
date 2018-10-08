@@ -1,0 +1,44 @@
+<div data-templateid="ProductQuickView" data-qa="quickview">
+    <div productid="{{Id}}" >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body  clearfix">
+                    <button type="button" class="close" data-dismiss="modal" title="{{localize 'General' 'B_Close'}}"><span class="fa fa-times-circle"></span></button>
+
+                    <div class="row">
+                        <div class="col-sm-6  hidden-xs">
+                            {{> MainImageContent}}
+                        </div>
+
+                        <div class="col-sm-6">
+                            <p>
+                                {{#if Brand}}
+                                    <strong>{{Brand}}</strong>
+                                    <br/>
+                                {{/if}}
+                                {{DisplayName}}
+                            </p>
+
+                            {{> ProductQuickViewKvaItems}}
+
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    {{> ProductQuantity}}
+                                </div>
+                            </div>
+
+                            <div class="island" property="offers" typeof="Offer">
+                                {{> PriceDiscount}}
+                            </div>
+                            <div class="island">
+                                {{> AddToCartQuickView}}
+                                {{> AddToWishList}}
+                            </div>
+                            <a data-oc-click="closeModal" id="ProductDetailUrl" data-qa="search-quickview-view-product" href="{{ProductDetailUrl}}" class="small">{{localize 'List-Search' 'H_ViewProductDetails'}}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

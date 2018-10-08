@@ -1,0 +1,79 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using Orckestra.Composer.Providers;
+using Orckestra.Composer.Providers.Localization;
+using Orckestra.Composer.Search.Parameters;
+using Orckestra.Composer.ViewModels.Breadcrumb;
+
+namespace Orckestra.Composer.Search.Services
+{
+    public class SearchBreadcrumbViewService : ISearchBreadcrumbViewService
+    {
+        protected ILocalizationProvider LocalizationProvider { get; private set; }
+
+        public SearchBreadcrumbViewService(ILocalizationProvider localizationProvider)
+        {
+            if (localizationProvider == null) { throw new ArgumentNullException("localizationProvider"); }
+
+            LocalizationProvider = localizationProvider;
+        }
+
+        public BreadcrumbViewModel CreateBreadcrumbViewModel(GetSearchBreadcrumbParam param)
+        {
+            if (param == null) { throw new ArgumentNullException("param"); }
+            if (param.CultureInfo == null) { throw new ArgumentException("param.CultureInfo is required"); }
+
+            var vm = new BreadcrumbViewModel
+            {
+                Items = new List<BreadcrumbItemViewModel>
+                {
+                    GenerateHomeItem(param.HomeUrl, param.CultureInfo)
+                },
+                ActivePageName = GenerateActivePageName(param.Keywords, param.CultureInfo)
+            };
+
+            return vm;
+        }
+
+        private BreadcrumbItemViewModel GenerateHomeItem(string homeUrl, CultureInfo cultureInfo)
+        {
+            return new BreadcrumbItemViewModel
+            {
+                DisplayName = LocalizationProvider.GetLocalizedString(new GetLocalizedParam()
+                {
+                    Category    = "General",
+                    Key         = "L_Home",
+                    CultureInfo = cultureInfo
+                }),
+                Url = homeUrl
+            };
+        }
+
+        private string GenerateActivePageName(string keywords, CultureInfo cultureInfo)
+        {
+            var leftPart = LocalizationProvider.GetLocalizedString(new GetLocalizedParam
+            {
+                Category    = "List-Search",
+                Key         = "L_SearchResultsForBreadcrumb",
+                CultureInfo = cultureInfo
+            });
+
+            var quoteOpen = LocalizationProvider.GetLocalizedString(new GetLocalizedParam
+            {
+                Category    = "General",
+                Key         = "L_QuoteOpen",
+                CultureInfo = cultureInfo
+            });
+
+            var quoteClose = LocalizationProvider.GetLocalizedString(new GetLocalizedParam
+            {
+                Category    = "General",
+                Key         = "L_QuoteClose",
+                CultureInfo = cultureInfo
+            });
+
+            return string.Format("{0} {1}{2}{3}", leftPart, quoteOpen, keywords ?? string.Empty, quoteClose);
+        }
+    }
+}

@@ -1,0 +1,39 @@
+﻿<div data-oc-controller="Product.ProductDetail" data-productid="{{Id}}" data-context="{{JsonContext}}" vocab="http://schema.org/" typeof="Product">
+
+    <div class="row">
+        {{> ProductImages}}
+
+        <div class="col-sm-6">
+            <div class="island">
+                <h1 property="name" data-qa="product-title">{{DisplayName}}</h1>
+
+                <span class="hidden" property="sku">{{Sku}}</span>
+
+                {{#if Brand}}
+                    <div class="h6" property="brand" data-qa="product-brand">{{Brand}}</div>
+                {{/if}}
+            </div>
+
+            {{> KvaItems}}
+
+            <div class="row">
+                <div class="col-xs-6  col-sm-5  col-md-4  col-lg-3">
+                    {{> ProductQuantity}}
+                </div>
+            </div>
+
+            <div class="island" property="offers" typeof="Offer">
+                {{> PriceDiscount}}
+            </div>
+
+            {{> AddToCartProductDetail}}
+            {{> AddToWishList}}
+        </div>
+    </div>
+
+</div>
+<div class="panel panel-default">
+	<div class="panel-body text-center">{{>StoreInventoryLink}}</div>
+</div>
+
+{{> ProductZoom}}

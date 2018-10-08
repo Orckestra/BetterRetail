@@ -1,0 +1,19 @@
+<div data-templateid="RelatedProducts">
+    {{#if Products}}
+        <div class="col-md-10 col-md-offset-1" style="{{BackgroundStyle}}">
+            <hr />
+            <h2>{{HeadingComponentText}}</h2>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="carousel">
+                        <div class="row js-slick-carousel" data-slick='{"slidesToShow": 4, "slidesToScroll": 4, "mobileCarousel": true}' >
+                            {{#each Products}}
+                                {{> RelatedProduct}}
+                            {{/each}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {{/if}}
+</div>

@@ -1,0 +1,50 @@
+.compact-order {
+    $order-padding: 20px;
+    padding-top: $order-padding;
+    padding-bottom: $order-padding;
+
+    @media (max-width: $screen-xs-max) {
+        border: solid 1px $gray-lighter;
+        border-radius: $border-radius-small;
+        padding: $order-padding;
+        margin-bottom: $order-padding;
+    }
+    @media (min-width: $screen-sm-min) {
+        &:first-child {
+            
+        }
+        border: solid 1px $gray-light;
+        padding: 20px;
+        margin: 20px 0;
+    }
+    &-date {
+        margin-bottom: 20px;
+    }
+    &-total {
+        text-align: center;
+
+        @media (min-width: $screen-sm-min) {
+            text-align: right;
+        }
+    }
+    &-status {
+        @media (min-width: $screen-sm-min) {
+            padding-top: $order-padding;
+            padding-bottom: $order-padding;
+        }
+        text-align: center;
+    }
+    &-splitter {
+        margin-top: 15px;
+        margin-top: 15px;
+    }
+
+    &-header {
+        border-bottom: 1px solid $gray-lighter;
+    }
+
+    &-body {
+        padding-top: 20px;
+    }
+}
+

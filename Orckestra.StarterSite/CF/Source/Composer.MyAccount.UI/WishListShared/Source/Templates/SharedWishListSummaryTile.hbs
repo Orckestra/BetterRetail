@@ -1,0 +1,41 @@
+<div class="wishlist-tile  island-xl">
+                           
+    <a class="wishlist-tile-media" href="{{ProductUrl}}">
+        <img class="img-fluid" src="{{ImageUrl}}" alt="{{ProductSummary.DisplayName}}" onerror="this.onerror=null; this.src='{{FallbackImageUrl}}'" />
+    </a>
+
+    <div class="wishlist-tile-text">
+        {{#if ProductSummary.Brand}}
+        <strong class="text-uppercase  product-tile-brand" title="{{ProductSummary.Brand}}">{{ProductSummary.Brand}}</strong>
+        <br/>
+        {{/if}}
+        <a  href="{{ProductUrl}}" title="{{ProductSummary.DisplayName}}" data-productId="{{ProductId}}">{{ProductSummary.DisplayName}}</a>
+    </div>
+    
+    <div class="wishlist-tile-variants">
+        {{#if VariantId}}
+            {{#each KeyVariantAttributesList}}
+                {{#if_neq @index 0}}|{{/if_neq}}
+                {{Value}}
+             {{/each}}
+        {{/if}}
+   </div>
+   
+   {{#if IsOnSale}}
+        <div class="wishlist-tile-special-price">
+            <del>{{DefaultListPrice}}</del>
+        </div>
+        <div class="wishlist-tile-price">
+               <span class="h4  text-danger">{{ListPrice}}</span>
+        </div>
+    {{else}}
+        <div class="wishlist-tile-special-price">
+                <!--only used for proper spacing-->
+         </div>
+         <div class="wishlist-tile-price">
+                <span class="h4">{{DefaultListPrice}}</span>
+        </div>
+    {{/if}}
+    
+    {{> AddToCartWishList}}
+</div>

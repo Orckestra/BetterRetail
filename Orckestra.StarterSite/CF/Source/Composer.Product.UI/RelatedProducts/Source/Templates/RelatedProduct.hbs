@@ -1,0 +1,36 @@
+<div class="col-xs-6  col-sm-4  {{#if_eq @index 3}}hidden-sm{{/if_eq}}  col-md-3">
+    <div class="product-tile" data-has-variants="{{HasVariants}}" data-product-id="{{ProductId}}" data-product-variant-id="{{VariantId}}" data-price="{{Price}}">
+        <a class="product-tile-media" href="{{Url}}" data-productId="{{ProductId}}" data-index='{{@index}}' data-oc-click='relatedProductsClick'>
+            <img class="img-fluid" src="{{ImageUrl}}" alt="" onerror="this.onerror=null; this.src='{{FallbackImageUrl}}'" />
+        </a>
+
+        <div class="product-tile-text">
+            {{#if Brand}}
+                <strong class="text-uppercase  product-tile-brand" data-qa="search-product-brand">{{Brand}}</strong>
+                <br/>
+            {{/if}}
+            <a data-qa="search-product-title" href="{{Url}}" data-productId="{{ProductId}}" data-index='{{@index}}' data-oc-click='relatedProductsClick'>
+                {{DisplayName}}
+            </a>
+        </div>
+        {{#if DisplayPrices}}
+            <div class="product-tile-special-price">
+                {{#if IsOnSale}}
+                    <del>{{DisplayPrice}}</del>
+                {{/if}}
+            </div>
+
+            <div class="product-tile-price">
+                {{#if IsOnSale }}
+                    <span class="h4  text-danger" data-qa="search-product-price">{{DisplaySpecialPrice}}</span>
+                {{else}}
+                    <span class="h4" data-qa="search-product-price">{{DisplayPrice}}</span>
+                {{/if}}
+            </div>
+        {{/if}}
+
+        {{#if DisplayAddToCart}}
+            {{> AddToCartSearch}}
+        {{/if}}
+    </div>
+</div>

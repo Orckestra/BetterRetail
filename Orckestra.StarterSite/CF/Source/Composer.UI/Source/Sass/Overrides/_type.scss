@@ -1,0 +1,39 @@
+
+
+h1, h3, h4,
+.h1, .h3, .h4 {
+    font-weight: bold;
+}
+
+h1, .h1,
+h2, .h2,
+h3, .h3 {
+    margin-bottom: $line-height-computed;
+}
+
+@media (max-width: $screen-xs-max) {
+    h1, .h1 { font-size: $font-size-h1-xs; }
+    h2, .h2 { font-size: $font-size-h2-xs; }
+    h3, .h3 { font-size: $font-size-h3-xs; }
+    h4, .h4 { font-size: $font-size-h4-xs; }
+    h5, .h5 { font-size: $font-size-h5-xs; }
+    h6, .h6 { font-size: $font-size-h6-xs; }
+}
+
+blockquote {
+    font-weight: bold;
+
+    footer,
+    small,
+    .small {
+        font-weight: normal;
+        font-size: 12px;
+    }
+}
+
+
+.list-unstyled {
+    li {
+        margin-bottom: $padding-base-vertical;
+    }
+}

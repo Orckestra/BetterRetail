@@ -1,0 +1,20 @@
+<div data-templateid="CreateAccountFormsServerValidations">
+{{#if_neq Status ''}}
+    <div class="panel  panel-danger">
+        <div class="panel-body">
+            <div class="multiline-message  text-danger">
+                <span class="fa  fa-times-circle-o  fa-lg  multiline-message-icon"></span>&#32;
+                {{#if_eq Status 'DuplicateUserName'}}
+                    <span>{{localize 'MyAccount' 'L_RegisterErrorDuplicateUserName'}}</span>
+                {{else}}{{#if_eq Status 'DuplicateEmail'}}
+                    <span>{{localize 'MyAccount' 'L_RegisterErrorDuplicateEmail'}}</span>
+                {{else}}{{#if_eq Status 'AjaxFailed'}}
+                    <span>{{localize 'General' 'L_ErrorAjaxFailed'}}</span>
+                {{else}}
+                    <span>{{localize 'MyAccount' 'L_RegisterError'}}</span>
+                {{/if_eq}}{{/if_eq}}{{/if_eq}}
+            </div>
+        </div>
+    </div>
+{{/if_neq}}
+</div>

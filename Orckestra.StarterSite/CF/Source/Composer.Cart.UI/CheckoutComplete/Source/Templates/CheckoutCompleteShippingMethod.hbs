@@ -1,0 +1,30 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <div class="row">
+            <div class="col-xs-10">
+        <h2 class="h3" data-qa="checkout-header-shipping-method">{{localize 'CheckoutProcess' 'T_ShippingMethod'}}</h2>
+    </div>
+            <div class="col-xs-2">
+                <a href="{{OrderSummary.CheckoutStepUrls.[2]}}" class="pull-right" title="{{localize 'CheckoutProcess' 'B_Edit'}}"><span class="fa  fa-pencil  fa-lg"></span></a>
+            </div>
+        </div>
+    </div>
+    <div class="panel-body">
+        {{#if GettingCart}}
+            {{>Loading}}
+        {{else}}
+            <p>
+                <span data-qa="checkout-shipping-method-name">{{ShippingMethod.DisplayName}}</span>&#160;
+                {{ShippingMethod.ExpectedDaysBeforeDelivery}}&#160;
+                <span data-qa="checkout-shipping-address-days-before-number">{{localize 'CheckoutProcess' 'L_DeliveryDaysNumber'}}</span>
+            </p>
+
+            {{#if_localized 'CheckoutProcess' 'F_ShippingSelectionIndication'}}
+            <div class="multiline-message" data-qa="checkout-shipping-method-indicator">
+                <span class="fa  fa-comment-o  fa-lg  multiline-message-icon"></span>
+                {{localize 'CheckoutProcess' 'F_ShippingSelectionIndication'}}
+            </div>
+            {{/if_localized}}
+        {{/if}}
+    </div>
+</div>

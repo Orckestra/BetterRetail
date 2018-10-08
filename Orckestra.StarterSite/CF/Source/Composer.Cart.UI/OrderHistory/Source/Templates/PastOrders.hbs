@@ -1,0 +1,13 @@
+<div data-templateid="PastOrders">
+    {{#if IsLoading}}
+        {{>Loading}}
+    {{else}}
+        {{#if Orders}}
+            {{#each Orders }}
+                {{> CompactOrderDetail }}
+            {{/each}}
+        {{else}}
+            <span class="text-muted">{{localize 'MyAccount' 'L_PastOrdersEmpty'}}</span>
+        {{/if}}
+    {{/if}}
+</div>

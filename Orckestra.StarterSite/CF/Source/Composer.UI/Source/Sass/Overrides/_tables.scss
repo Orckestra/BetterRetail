@@ -1,0 +1,24 @@
+/**
+ * striped tables have darker borders
+ */
+.table-striped {
+  // Cells
+  > thead,
+  > tbody,
+  > tfoot {
+    > tr {
+      > th,
+      > td {
+        border-top-color: $gray-base;
+      }
+    }
+  }
+  // Bottom align for column headings
+  > thead > tr > th {
+    border-bottom-color: $gray-base;
+  }
+  // Account for multiple tbody instances
+  > tbody + tbody {
+    border-top-color: $gray-base;
+  }
+}

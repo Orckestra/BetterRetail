@@ -1,0 +1,21 @@
+<div class="store-tile panel  panel-default">
+   <div class="store-tile-img">
+       <a href="{{Url}}" data-oc-click="rememberPosition"><img alt="map" src="{{GoogleStaticMapUrl}}&amp;size=380x120" class="img-responsive" data-store-index="{{@index}}"/></a>
+        <div class="static-map-pin">{{SearchIndex}}</div>
+   </div>
+   <div class="panel-body">
+        <div class="store-tile-body-top  clearfix">
+            {{#if DestinationToSearchPoint}}
+                <span>{{DestinationToSearchPoint}} km</span>
+            {{/if}}
+            <a href="{{GoogleDirectionsLink}}" class="pull-right  cta  ctaGoogleDir" target="_blank">{{localize 'Store' 'H_Itinerary'}}</a>
+        </div>
+        <h5 class="title"><a href="{{Url}}" data-oc-click="rememberPosition" title="{{LocalizedDisplayName}}">{{LocalizedDisplayName}}</a></h5>
+        {{#with Address}}
+        {{> StoreAddress}}
+        {{/with}}
+   </div>
+   <div class="clearfix  store-tile-bottom">
+       {{> StoresListSchedule}}
+   </div>
+</div>

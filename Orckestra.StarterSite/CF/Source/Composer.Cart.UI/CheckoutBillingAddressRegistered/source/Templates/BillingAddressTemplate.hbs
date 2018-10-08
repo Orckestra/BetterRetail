@@ -1,0 +1,55 @@
+<div data-templateid="BillingAddressTemplate">
+    <input type="radio"
+           class="hide"
+           name="BillingAddressId"
+           data-parsley-class-handler-selector="form"
+           data-parsley-errors-container="#billing-address-errors"
+           required="required" />
+    <div>
+        <a href="{{AddAddressUrl}}" class="hitbox" title="{{localize 'MyAccount' 'B_AddNewAddress'}}">{{localize 'MyAccount' 'B_AddNewAddress'}}</a>
+    </div>
+    {{#if_neq Addresses.length 0}}<br/>{{/if_neq}}
+    {{#each Addresses}}
+        <div class="form-group" data-address-id="{{Id}}">
+            <label for="billingaddress-{{@key}}" data-lineitemid="{{Id}}" class="select-block  {{#if_eq Id ../SelectedBillingAddressId}} active {{/if_eq}}">
+                <span class="input-addon">
+                    <input id="billingaddress-{{@key}}"
+                        data-parsley-class-handler-selector="form"
+                        data-parsley-errors-container="#billing-address-errors"
+                        data-parent=".addresses"
+                        class="input"
+                        type="radio"
+                        name="BillingAddressId"
+                        value="{{Id}}"
+                        required="required"
+                        data-oc-change="changeBillingAddress"
+                        {{#if_eq Id ../SelectedBillingAddressId}} checked="checked"{{/if_eq}} />
+                </span>
+                <span class="content  clearfix">
+                    <!-- Address name -->
+                    <strong class="pull-sm-right  pull-md-right  pull-lg-right">{{AddressName}}</strong>
+                    <br class="visible-xs-inline" />
+                    {{FirstName}} {{LastName}}<br/>
+                    {{Line1}}<br/>
+                    {{#if Line2}} {{Line2}}<br/> {{/if}}
+                    {{PostalCode}} - {{City}}, {{RegionCode}}<br/>
+                    {{PhoneNumber}}
+
+                    <span class="block  pull-right">
+                        <a class="btn  btn-link" data-qa="checkout-address-edit" href="{{UpdateAddressUrl}}" title="{{localize 'MyAccount' 'B_EditAddress'}}">
+                            <span class="fa  fa-pencil  fa-lg"></span>
+                        </a>
+
+                        <button type="button" class="btn  btn-link" data-qa="address-delete" data-oc-click="deleteAddressConfirm" title="{{localize 'MyAccount' 'B_DeleteAddress'}}">
+                            <span class="fa  fa-trash-o  fa-lg"></span>
+                        </button>
+                    </span>
+                </span>
+            </label>
+        </div>
+    {{/each}}
+
+    {{> AddressConfirmationModal}}
+
+    <div id="billing-address-errors"></div>
+</div>

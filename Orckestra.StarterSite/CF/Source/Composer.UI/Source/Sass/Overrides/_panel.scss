@@ -1,0 +1,42 @@
+// Optional heading
+.panel-default {
+    .panel-heading {
+        background: $gray-base;
+        color: #fff;
+
+        a {
+            color: #fff;
+        }
+    }
+}
+.panel-heading {
+    h1, h2, h3, h4, h5, h6,
+    .h1, .h2, .h3, .h4, .h5, .h6 {
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+}
+.panel-body > :first-child {
+    margin-top: 0;
+}
+
+.panel-saving {
+  padding: $panel-body-padding;
+  background-color: $panel-bg;
+  border: 1px solid $state-success-border;
+  border-radius: $panel-border-radius;
+  @include box-shadow(0 1px 1px rgba(0,0,0,.05));
+}
+
+.panel-light {
+    .panel-heading {
+        background: $gray-lighter;
+        color: $text-color;
+        border-bottom: 1px solid $gray-light;
+        a {
+            
+        }
+    }
+
+    border-color: $gray-light;
+}

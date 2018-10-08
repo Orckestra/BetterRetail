@@ -1,0 +1,32 @@
+<h3>{{localize 'Store' 'T_OpenHours'}}</h3>
+{{#with Schedule}}
+{{#each OpeningHours}}
+    <div class="row  store-open-hour {{#if IsDayToday}}is-today  {{#if ../../IsOpenNow}}bg-success{{else}}bg-danger{{/if}}{{/if}}">
+        <div class="col-xs-3  col-md-4">{{LocalizedDay}}</div>
+        <div class="col-xs-6  col-md-6">
+            {{#if IsClosed}}
+                <small class="store-open-hour">{{localize 'Store' 'L_OpenHours_Closed'}}</small>
+            {{else}}
+                {{#if IsOpenedAllDay}} 
+                    <small>{{localize 'Store' 'L_OpenHours_OpenAllDay'}}</small>
+                {{else}}
+                  {{#each OpeningTimes}}
+                    <div class="open-times">{{BeginTime}} - {{EndTime}}</div>
+                  {{/each}}
+                 {{/if}}
+            {{/if}}
+        </div>
+        {{#if IsDayToday}}
+           <div class="col-xs-3 col-md-2">
+                <div class="schedule-status  text-uppercase">
+                 {{#if ../../IsOpenNow}}
+                     {{localize 'Store' 'L_StoreOpen'}}
+                 {{else}}
+                    {{localize 'Store' 'L_StoreClosed'}}
+                 {{/if}}
+                 </div>
+           </div>
+        {{/if}} 
+    </div>
+{{/each}}
+{{/with}}

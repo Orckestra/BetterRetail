@@ -1,0 +1,44 @@
+<div data-templateid="CompatOrderDetail" class="compact-order">
+    <div class="row">
+        <div class="col-xs-12  col-sm-4  col-md-3">
+            <div class="compact-order-status">
+                {{localize 'MyAccount' 'L_Status' }}
+                <br class="hidden-xs" />
+                <strong class="h4">{{ OrderInfos.OrderStatus }}</strong>
+            </div>
+
+            <hr class="compact-order-splitter  visible-xs-block">
+        </div>
+
+        <div class="col-xs-12  col-sm-8  col-md-9">
+            <div class="row">
+                <div class="col-sm-8">
+                    <div class="compact-order-date">
+                        <strong class="h4">{{localizeFormat 'MyAccount' 'L_OrderedOn' OrderInfos.OrderDate}}</strong>
+                    </div>
+
+                    <p>
+                        {{localizeFormat 'MyAccount' 'L_OrderNumber' OrderInfos.OrderNumber}}
+                        {{#if ShipmentSummaries.[0].ScheduledShipDate}}
+                        <br />
+                        {{localizeFormat 'MyAccount' 'L_ScheduledShipping' ShipmentSummaries.[0].ScheduledShipDate}}
+                        {{/if}}
+                    </p>
+                </div>
+                <div class="col-sm-4">
+                    <p class="compact-order-total"><strong class="h4">{{OrderInfos.PricePaid}}</strong></p>
+                </div>
+                <div class="col-sm-12">
+                    <div class="row">
+                        <div class="col-xs-6  small">
+                            {{#if ShipmentSummaries.[0].TrackingInfo.Url }}
+                                <a href="{{ShipmentSummaries.[0].TrackingInfo.Url}}">{{ localize 'MyAccount' 'H_OrderTracking' }}</a>
+                            {{/if}}
+                        </div>
+                        <div class="col-xs-6  text-right  small"><a href="{{Url}}" class="cta">{{ localize 'MyAccount' 'H_OrderDetail' }}</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

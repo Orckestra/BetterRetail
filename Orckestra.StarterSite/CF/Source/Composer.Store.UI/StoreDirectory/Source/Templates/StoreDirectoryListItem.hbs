@@ -1,0 +1,19 @@
+ <div class="row group-item">
+    <div class="hidden-xs col-sm-4 col-lg-3">
+        {{#with Address}}
+            <h5 class="title">{{City}}</h5>
+         {{/with}}
+     </div>
+    <div class="col-xs-12 col-sm-4 col-lg-3">
+    <h6><strong>{{LocalizedDisplayName}}</strong></h6>
+    {{#with Address}}
+        {{> StoreAddress}}
+    {{/with}}
+    <div>
+        <a href="{{GoogleDirectionsLink}}" class="ctaGoogleDir" target="_blank"><small>{{localize 'Store' 'H_Itinerary'}}</small></a>
+    </div>
+    </div>
+    <div class="col-xs-12 col-sm-4 col-lg-4">
+        <a href="{{Url}}" class="btn btn-default pull-xs-right" title="{{LocalizedDisplayName}}">{{localize 'Store' 'B_ViewStore'}}</a>
+    </div>    
+ </div>

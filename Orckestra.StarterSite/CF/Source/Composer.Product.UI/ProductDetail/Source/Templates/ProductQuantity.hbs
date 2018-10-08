@@ -1,0 +1,52 @@
+{{#if Quantity}}
+<div data-templateid='ProductQuantity'>
+    {{#with Quantity}}
+    <div class="form-group">
+        <div class="input-group">
+            <span class="input-group-btn">
+                <button class="btn  btn-default"
+                        {{#if_eq ../Disabled false}}
+                            {{#if_eq Value Min}}
+                                disabled="disabled"
+                            {{else}}
+                                data-oc-click="decrementQuantity"
+                            {{/if_eq}}
+                        {{else}}
+                            disabled="disabled"
+                        {{/if_eq}}
+                        data-qa="product-quantity-decrease">
+                    <span class="fa  fa-minus"></span>
+                </button>
+            </span>
+
+            <input class="form-control  text-center"
+                   name="product-quantity"
+                   type="text"
+                   data-qa="product-quantity"
+                   data-quantity="{{Value}}"
+                   data-quantity-min="{{Min}}"
+                   data-quantity-max="{{Max}}"
+                   data-oc-change="changeQuantity"
+                   value="{{Value}}"
+                   {{#if ../Disabled}} disabled="disabled" {{/if}} />
+
+            <span class="input-group-btn">
+                <button class="btn  btn-default"
+                        {{#if_eq ../Disabled false}}
+                            {{#if_eq Value Max}}
+                                disabled="disabled"
+                            {{else}}
+                                data-oc-click="incrementQuantity"
+                            {{/if_eq}}
+                        {{else}}
+                            disabled="disabled"
+                        {{/if_eq}}
+                        data-qa="product-quantity-increase">
+                    <span class="fa  fa-plus"></span>
+                </button>
+            </span>
+        </div>
+    </div>
+    {{/with}}
+</div>
+{{/if}}

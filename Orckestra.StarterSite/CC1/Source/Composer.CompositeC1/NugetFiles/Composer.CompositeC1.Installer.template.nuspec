@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/01/nuspec.xsd">
+  <metadata minClientVersion="2.8">
+    <id>Composer.CompositeC1.Installer</id>
+    <version>To be replaced</version>
+    <title>Composer.CompositeC1.Installer</title>
+    <authors>Orckestra Inc.</authors>
+    <owners>Orckestra Inc.</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Installer - Composer for Composite C1</description>
+    <summary>Installer - Composer for Composite C1</summary>
+    <copyright>Orckestra Inc. 2016</copyright>
+    <dependencies>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="..\..\..\Installer\**\*.*" target="installer\" exclude="..\..\..\Installer\_deployments\**\*.*;..\..\..\Installer\.gitignore;..\..\..\Installer\packages\specific\Cms-CD-DEV-Repack.zip" />
+    <file src="..\Composer.CompositeC1.Mvc\**\*.*" target="src" exclude="..\Composer.CompositeC1.Mvc\bin\**\*.*;..\Composer.CompositeC1.Mvc\obj\**\*.*;..\Composer.CompositeC1.Mvc\UI.Package\**\*.*" />
+  </files>
+</package>
+
+

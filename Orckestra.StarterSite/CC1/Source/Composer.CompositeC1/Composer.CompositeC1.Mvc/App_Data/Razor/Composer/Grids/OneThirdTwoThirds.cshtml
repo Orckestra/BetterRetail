@@ -1,0 +1,29 @@
+﻿@inherits RazorFunction
+
+@functions {
+    public override string FunctionDescription
+    {
+        get  { return "Represents a one third / two thirds grid."; }
+    }
+
+    [FunctionParameter(Label = "Left part")]
+    public XhtmlDocument LeftPart { get; set; }
+	
+	[FunctionParameter(Label = "Right part")]
+    public XhtmlDocument RightPart { get; set; }
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+    <head>
+    </head>
+    <body>
+        <div class="row">
+			<div class="col-md-4">
+				@Markup(LeftPart)
+			</div>
+			<div class="col-md-8">
+				@Markup(RightPart)
+			</div>
+		</div>
+    </body>
+</html>

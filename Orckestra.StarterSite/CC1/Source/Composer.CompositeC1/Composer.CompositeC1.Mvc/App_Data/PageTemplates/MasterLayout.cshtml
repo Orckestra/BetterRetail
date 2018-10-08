@@ -1,0 +1,60 @@
+﻿@using System.Globalization
+@using System.Web.WebPages.Html
+
+
+@inherits Composite.AspNet.Razor.CompositeC1WebPage
+@{
+    string websiteTitle = HomePageNode.Title;
+}
+<!DOCTYPE html>
+<html lang="@CultureInfo.CurrentCulture.Name" xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:lang="http://www.composite.net/ns/localization/1.0" xmlns:asp="http://www.composite.net/ns/asp.net/controls">
+<head>
+    @PageTemplateFeature("Descriptive HTML head elements")    
+
+    @if (!string.IsNullOrEmpty(CurrentPageNode.Description))
+    {
+        <meta name="description" content="@CurrentPageNode.Description" />
+    }
+    <f:function name="Composite.Web.Html.Template.CommonMetaTags"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="/UI.Package/Css/composer.css"/>
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/UI.Package/Images/favicons/apple-touch-icon-57x57.png" />
+    <link rel="apple-touch-icon" sizes="60x60" href="/UI.Package/Images/favicons/apple-touch-icon-60x60.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="/UI.Package/Images/favicons/apple-touch-icon-72x72.png" />
+    <link rel="apple-touch-icon" sizes="76x76" href="/UI.Package/Images/favicons/apple-touch-icon-76x76.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="/UI.Package/Images/favicons/apple-touch-icon-114x114.png" />
+    <link rel="apple-touch-icon" sizes="120x120" href="/UI.Package/Images/favicons/apple-touch-icon-120x120.png" />
+    <link rel="apple-touch-icon" sizes="144x144" href="/UI.Package/Images/favicons/apple-touch-icon-144x144.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="/UI.Package/Images/favicons/apple-touch-icon-152x152.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/UI.Package/Images/favicons/apple-touch-icon-180x180.png" />
+    <link rel="icon" type="image/png" href="/UI.Package/Images/favicons/favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="/UI.Package/Images/favicons/android-chrome-192x192.png" sizes="192x192" />
+    <link rel="icon" type="image/png" href="/UI.Package/Images/favicons/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/png" href="/UI.Package/Images/favicons/favicon-16x16.png" sizes="16x16" />
+    <meta name="msapplication-TileColor" content="#000000" />
+    <meta name="msapplication-TileImage" content="/UI.Package/Images/favicons/mstile-144x144.png" />
+    <meta name="theme-color" content="#ffffff" />
+
+    <script src="/UI.Package/JavaScript/respond.js"></script>
+    <script src="/UI.Package/JavaScript/html5shiv.js"></script>
+    <script src="/UI.Package/JavaScript/modernizr.js"></script>
+</head>
+<body>
+    <f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.Header.RenderAnalytics" />
+    @RenderBody()
+    <script src="/UI.Package/JavaScript/jquery-1.11.2.min.js"></script>
+    <script src="/UI.Package/JavaScript/bootstrap.min.js"></script>
+    <script src="/UI.Package/JavaScript/lodash.min.js"></script>
+    <script src="/UI.Package/JavaScript/handlebars.runtime.min.js"></script>
+    <script src="/UI.Package/JavaScript/q-1.2.0.js"></script>
+    <script src="/UI.Package/JavaScript/nouislider.js"></script>
+    <script src="/UI.Package/JavaScript/parsley.min.js"></script>
+    <script src="/UI.Package/JavaScript/slick.js"></script>
+    <script src="/UI.Package/JavaScript/jquery.serialize-object.min.js"></script>
+	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places,geometry"></script>
+	<script type="text/javascript" src="/UI.Package/JavaScript/google.maps.utility.library.v3.markerwithlabel_packed.js"></script>
+    <script src="/UI.Package/JavaScript/orckestra.composer.js"></script>
+    <script src="/UI.Package/JavaScript/composer-templates.min.js"></script>
+</body>
+</html>

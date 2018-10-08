@@ -1,0 +1,27 @@
+<div class="clearfix" data-templateid="OrderHistoryPagination">
+{{#if Pages}}
+    {{#if_gt Pages.length 1 }}
+        <ul class="pull-right  pagination">
+            {{#if PreviousPage.PageNumber }}
+                <li><a data-qa="order-pagination-previous" href="#" data-page="{{PreviousPage.PageNumber}}" data-oc-click="getOrders">{{PreviousPage.DisplayName}}</a></li>
+            {{else }}
+                <li class="disabled"><span>{{PreviousPage.DisplayName}}</span></li>
+            {{/if}}
+
+            {{#each Pages}}
+                {{#if IsCurrentPage}}
+                    <li class="active"><a>{{DisplayName}}</a></li>
+                {{else}}
+                    <li><a href="#" data-page="{{PageNumber}}" data-oc-click="getOrders">{{DisplayName}}</a></li>
+                {{/if}}
+            {{/each}}
+
+            {{#if NextPage.PageNumber }}
+                <li><a data-qa="order-pagination-next" href="#" data-page="{{NextPage.PageNumber}}" data-oc-click="getOrders">{{NextPage.DisplayName}}</a></li>
+            {{else }}
+                <li class="disabled"><span>{{NextPage.DisplayName}}</span></li>
+            {{/if}}
+        </ul>
+    {{/if_gt}}
+{{/if}}
+</div>

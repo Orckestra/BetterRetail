@@ -1,0 +1,64 @@
+<div data-templateid="FindMyOrder">
+    <div class="panel  panel-default">
+        <div class="panel-heading">
+            <h2 class="h3">{{localize 'General' 'T_FindYourOrder' }}</h2>
+        </div>
+
+        <div class="panel-body">
+           {{#if OrderNotFound}}
+                <div class="panel  panel-danger">
+                    <div class="panel-body">
+                        <div class="multiline-message  text-danger">
+                            <span class="fa  fa-times-circle-o  fa-lg  multiline-message-icon"></span>&#32;
+                            <span>{{localize 'General' 'L_OrderNotFound'}}</span>
+                        </div>
+                    </div>
+                </div>
+           {{/if}}
+
+
+            <p>{{localize 'General' 'L_FindMyOrderText'}}</p>
+            <p>{{localize 'General' 'L_FindMyOrderLoginText'}}</p>
+
+
+            <form name="findmyorder" method="post" autocomplete="on" data-oc-submit="onFindMyOrder">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="OrderNumber">{{localize 'Forms' 'F_OrderNumber'}}</label>
+                            <input name="OrderNumber" id="OrderNumber" data-qa="findmyorder-ordernumber" required="true"
+                                {{#if_localized 'Forms' 'F_OrderNumberIndication'}}
+                                    {{>HelpBubbleOpen}}{{localize 'Forms' 'F_OrderNumberIndication'}}{{>HelpBubbleClose}}
+                                {{/if_localized}}
+                                type="text" class="form-control" placeholder="{{localize 'Forms' 'F_OrderNumberWaterMark'}}" value="{{OrderNumber}}" />
+                        </div>
+                    </div>
+                 </div>
+
+                 <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="Email">{{localize 'Forms' 'F_Email'}}</label>
+                            <input name="Email" id="Email" data-qa="findmyorder-email" required="true"
+                                {{#if_localized 'Forms' 'F_OrderEmailIndication'}}
+                                    {{>HelpBubbleOpen}}{{localize 'Forms' 'F_OrderEmailIndication'}}{{>HelpBubbleClose}}
+                                {{/if_localized}}
+                                type="email" class="form-control" placeholder="{{localize 'Forms' 'F_EmailWaterMark'}}" value="{{Email}}" />
+                        </div>
+                    </div>
+                 </div>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group  text-right">
+                            <button data-qa="findmyorder-submit" type="submit" class="btn  btn-primary  btn-lg  btn-block">{{localize 'General' 'B_FindMyOrder'}}
+                                <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  hidden"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>

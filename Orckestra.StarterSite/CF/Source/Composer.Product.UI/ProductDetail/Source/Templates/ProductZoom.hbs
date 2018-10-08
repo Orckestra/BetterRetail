@@ -1,0 +1,32 @@
+﻿<div data-oc-controller="Product.ProductZoom" data-productid="{{Id}}"  vocab="http://schema.org/" typeof="Product">
+
+    <div class="modal fade modal-fullscreen product-details-zoom" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">{{DisplayName}}</h4>
+                </div>
+                <div class="modal-body tall">
+                    <div class="row">
+                        <div class="col-sm-9 col-sm-push-3">
+                            <img property="image" class="img-zoom js-zoom-image" alt="{{DisplayName}}" data-fallback-image-url="{{FallbackImageUrl}}"/>
+                        </div>
+                        <div class="col-sm-3 col-sm-pull-9">
+                            {{#if Images}}
+                                {{#each Images}}
+                                    <a href="#" style="display: none;" class="thumbnail js-zoom-thumbnail" data-index="{{@index}}" data-image="{{ProductZoomImageUrl}}">
+                                        <img src="{{ThumbnailUrl}}" alt="" onload="if (this.complete) { this.parentNode.style.display = 'inline-block' }"/>
+                                    </a>
+                                {{/each}}
+                            {{/if}}
+                        </div>
+                    </div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+</div>
+
+

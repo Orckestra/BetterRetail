@@ -1,0 +1,173 @@
+<div data-templateid="OrderSummary">
+    {{#unless IsLoading}}
+        {{#unless IsCartEmpty}}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h2 class="h3" data-qa="order-summary-title">{{localize 'ShoppingCart' 'T_OrderSummary'}}</h2>
+            </div>
+            <div class="panel-body">
+                {{#if Rewards}}
+                <div class="text-center">
+                    <span class="promotion">
+                    {{#each Rewards}}
+                    <em>{{Description}}</em><br/>
+                    {{/each}}
+                    </span>
+                </div>
+                {{/if}}
+
+                <div class="row">
+                    <div class="col-xs-6  col-sm-7"><p>{{localize 'ShoppingCart' 'L_Subtotal'}}</p></div>
+                    <div class="col-xs-6  col-sm-5  text-right"><p data-qa="order-summary-subtotal">{{OrderSummary.SubTotal}}</p></div>
+                </div>
+
+                {{#each OrderSummary.ShipmentAdditionalFeeSummaryList}}
+                    {{#if Taxable}}
+                    <div class="row">
+                        <div class="col-xs-6  col-sm-7"><p>{{GroupName}}</p></div>
+                        <div class="col-xs-6  col-sm-5  text-right"><p>{{TotalAmount}}</p></div>
+                    </div>
+                    {{/if}}
+                {{/each}}
+
+                {{#each OrderSummary.AdditionalFeeSummaryList}}
+                    {{#if Taxable}}
+                    <div class="row">
+                        <div class="col-xs-6  col-sm-7"><p>{{GroupName}}</p></div>
+                        <div class="col-xs-6  col-sm-5  text-right"><p>{{TotalAmount}}</p></div>
+                    </div>
+                    {{/if}}
+                {{/each}}
+
+                {{#if OrderSummary.IsShippingEstimatedOrSelected}}
+                    {{#if OrderSummary.IsShippingTaxable}}
+                    <div class="row">
+                        <div class="col-xs-6  col-sm-7">
+                            <p>
+                              <a data-qa="order-summary-estimate-shipping" data-oc-click="openModal">{{#escape}}{{localizeFormat 'ShoppingCart' 'L_ShippingBasedOn' ShippingAddress.PostalCode}}{{/escape}}</a>
+                            </p>
+                        </div>
+                        <div class="col-xs-6  col-sm-5  text-right"><p data-qa="order-summary-shipping-fee">{{OrderSummary.Shipping}}</p></div>
+                    </div>
+                    {{/if}}
+                {{/if}}
+
+                {{#each OrderSummary.Taxes}}
+                    {{> Tax}}
+                {{/each}}
+
+                {{#each OrderSummary.ShipmentAdditionalFeeSummaryList}}
+                    {{#unless Taxable}}
+                    <div class="row">
+                        <div class="col-xs-6  col-sm-7"><p>{{GroupName}}</p></div>
+                        <div class="col-xs-6  col-sm-5  text-right"><p>{{TotalAmount}}</p></div>
+                    </div>
+                    {{/unless}}
+                {{/each}}
+
+                {{#each OrderSummary.AdditionalFeeSummaryList}}
+                    {{#unless Taxable}}
+                    <div class="row">
+                        <div class="col-xs-6  col-sm-7"><p>{{GroupName}}</p></div>
+                        <div class="col-xs-6  col-sm-5  text-right"><p>{{TotalAmount}}</p></div>
+                    </div>
+                    {{/unless}}
+                {{/each}}
+
+                {{#if OrderSummary.IsShippingEstimatedOrSelected}}
+                    {{#unless OrderSummary.IsShippingTaxable}}
+                    <div class="row">
+                        <div class="col-xs-6  col-sm-7">
+                            <p>
+                              <a data-qa="order-summary-estimate-shipping" data-oc-click="openModal">{{#escape}}{{localizeFormat 'ShoppingCart' 'L_ShippingBasedOn' ShippingAddress.PostalCode}}{{/escape}}</a>
+                            </p>
+                        </div>
+                        <div class="col-xs-6  col-sm-5  text-right"><p data-qa="order-summary-shipping-fee">{{OrderSummary.Shipping}}</p></div>
+                    </div>
+                    {{/unless}}
+                {{else}}
+                    <div class="row">
+                        <div class="col-xs-6  col-sm-7"><p>{{localize 'ShoppingCart' 'H_ShippingTaxes'}}</p></div>
+                        <div class="col-xs-6  col-sm-5  text-right">
+                            <a data-oc-click="openModal">{{localize 'ShoppingCart' 'B_ShippingTaxesEstimation'}}</a>
+                        </div>
+                    </div>
+                {{/if}}
+
+                <div class="row">
+                    <div class="col-xs-6  col-sm-7"><p><span class="h4">{{localize 'ShoppingCart' 'L_Total'}}</span></p></div>
+                    <div class="col-xs-6  col-sm-5  text-right"><p><span class="h4" data-qa="order-summary-total">{{OrderSummary.Total}}</span></p></div>
+                </div>
+
+                {{#if OrderSummary.SavingsTotal}}
+                <div class="row panel-body">
+                    <div class="panel-saving col-xs-12  text-center  text-success"><span data-qa="order-summary-discount">{{localize 'MyAccount' 'L_Savings'}}&nbsp;{{OrderSummary.SavingsTotal}}</span></div>
+                </div>
+                {{/if}}
+
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="additional-info">
+                            <div class="multiline-message">
+                                <span class="fa  fa-comment-o  fa-lg  multiline-message-icon"></span> 
+                                <p>{{localize 'ShoppingCart' 'L_AdditionalFeesGenericMessage'}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-12">
+                        {{#if InvalidLineItemCount}}
+                        <div class="form-group">
+                        {{/if}}
+
+                          <button data-qa="order-summary-checkout" data-oc-click="proceedToCheckout" data-nextstepurl="{{OrderSummary.CheckoutUrlTarget}}" class="btn  btn-success  btn-lg  btn-block">{{localize 'ShoppingCart' 'B_Checkout'}}</button>
+
+                          {{#if InvalidLineItemCount}}
+                        </div>
+                        {{/if}}
+
+                        {{#if InvalidLineItemCount}}
+                            <span class="text-danger">{{localize 'ShoppingCart' 'L_RemoveUnavailableItems'}}</span>
+                        {{/if}}
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Estimate Shipping Modal -->
+            <div id="postalCodeModal" class="modal  fade" role="dialog">
+                <div class="modal-dialog  modal-sm">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span class="fa fa-times-circle"></span></button>
+
+                            <form name="estimateShipping"  data-regex="{{ShippingAddress.PostalCodeRegexPattern}}" data-oc-submit="estimateShipping" method="post" autocomplete="on">
+                                <div class="form-group">
+                                    <label for="postalCode">{{localize 'ShoppingCart' 'F_PostalCode'}}</label>
+                                    <input type="text" class="form-control" id="postalCode" name="postalCode" placeholder="{{localize 'ShoppingCart' 'F_PostalCodeWatermark'}}" />
+                                </div>
+
+                                <div class="form-group">
+                                    <button type="submit" class="btn  btn-default">
+                                        {{localize 'ShoppingCart' 'B_ShippingTaxesEstimation'}}
+                                    </button>
+                                </div>
+                            </form>
+
+                            {{> EstimateShippingValidationForm}}
+
+                            <div class="multiline-message">
+                                <span class="fa  fa-info-circle  multiline-message-icon"></span>
+                                <div>{{localize 'ShoppingCart' 'F_PostalCodeIndication'}}</div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{/unless}}
+    {{/unless}}
+</div>

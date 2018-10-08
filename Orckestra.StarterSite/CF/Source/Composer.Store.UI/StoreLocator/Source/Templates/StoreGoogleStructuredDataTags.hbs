@@ -1,0 +1,39 @@
+<div data-templateid="StoreGoogleStructuredDataTags">
+	<script type="application/ld+json">
+	{
+        "@context" : "http://schema.org",
+        "@type" : "Store",
+        "@id" : "{{Url}}",
+        "name" : "{{Name}}",
+        "telephone" : "{{Telephone}}",
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "{{StreetAddress}}",
+            "addressLocality": "{{AddressLocality}}",
+            "addressRegion": "{{AddressRegion}}",
+            "postalCode": "{{PostalCode}}",
+            "addressCountry": "{{AddressCountry}}"
+		},
+		{{#if Latitude}} {{#if Longitude}}
+		"geo": {
+		      "@type": "GeoCoordinates",
+		      "latitude": {{formatValue Latitude '0:0.00000' 'false'}},
+		      "longitude": {{formatValue Longitude '0:0.00000' 'false'}}
+		},
+		{{/if}}{{/if}}
+        "openingHoursSpecification": [
+             {{#each OpeningHoursSpecifications}}
+             {
+                "@type": "OpeningHoursSpecification",
+                {{#if DayOfWeeks}}"dayOfWeek": [{{#each DayOfWeeks}}"{{this}}"{{#unless @last}},{{/unless}}{{/each}}],{{/if}}
+                {{#if ValidFrom}}"validFrom": "{{ValidFrom}}",{{/if}}
+                {{#if ValidThrough}}"validThrough": "{{ValidThrough}}",{{/if}}
+                "opens": "{{Opens}}",
+                "closes": "{{Closes}}"
+             }{{#unless @last}},{{/unless}}
+             {{/each}}
+            ],
+         "url" : "{{Url}}"
+	}
+	</script>
+</div>

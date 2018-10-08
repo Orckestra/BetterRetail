@@ -1,0 +1,17 @@
+<div data-templateid="AddToCartNotificationModal">
+    <div class="notification-modal">
+        <div class="notification-modal-overlay" data-oc-click="onClose"></div>
+        <div class="notification-modal-dialog">
+            <div class="notification-modal-content">
+                <div class="notification-modal-body">
+                    <p>{{localize 'MiniCart' 'L_ItemAddedToCart'}}</p>
+                </div>
+                <div class="notification-modal-footer">
+                    <a href="{{OrderSummary.EditCartUrlTarget}}" class="btn btn-success btn-block">{{localize 'MiniCart' 'L_ViewCart'}}</a>
+                    <button type="button" class="btn btn-default btn-block" data-oc-click="onClose">{{localize 'MiniCart' 'B_ContinueShopping'}}</button>
+                </div>
+            </div> 
+        </div>
+    </div> 
+</div>
+ 

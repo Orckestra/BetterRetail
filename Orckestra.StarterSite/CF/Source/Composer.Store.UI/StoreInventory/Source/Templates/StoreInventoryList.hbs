@@ -1,0 +1,29 @@
+<div data-templateid="StoreInventoryList">
+{{#if IsLoading}}
+    {{>Loading}}
+{{else}}
+{{#if Stores}}
+    {{#each Stores}}
+        <div class="col-md-6">
+            {{> StoreInventoryTile}}
+        </div>
+    {{/each}}
+{{else}}
+    <p class="lead  text-center">{{localize 'Store' 'L_InventoryUnavailable'}}</p> 
+{{/if}}
+{{#if NextPage}}
+{{#with NextPage}}
+   <div class="col-xs-12 stores-list-paging">
+        <a data-qa="next-page"
+           data-page="{{Page}}"
+           data-oc-click="nextPage"
+           class="btn  btn-default">
+           {{localize 'Store' 'B_ShowMore'}}
+           <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  hidden"></span>
+        </a>
+   </div>
+{{/with}}
+ {{/if}}
+{{/if}}
+</div>
+

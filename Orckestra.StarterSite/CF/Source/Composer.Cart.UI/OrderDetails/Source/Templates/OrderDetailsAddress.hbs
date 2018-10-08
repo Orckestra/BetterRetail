@@ -1,0 +1,52 @@
+ <div data-templateid="OrderDetailsAddress">
+     <div class="panel  panel-default">
+        <div class="panel-heading">
+            <h2 class="h3">{{localize 'MyAccount' 'T_Addresses' }}</h2>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-sm-6">
+                    <h2 class="h4">{{localize 'CheckoutProcess' 'T_ShippingAddress' }}</h2>
+
+                    <h3>{{ShippingAddress.AddressName}}</h3>
+
+                    <strong class="h4">
+                        <span data-qa="order-shipping-address-firstname">{{ShippingAddress.FirstName}}</span>&#160;<span data-qa="order-shipping-address-lastname">{{ShippingAddress.LastName}}</span>
+                    </strong>
+                    <br />
+                    <span data-qa="order-shipping-address-line1">{{ShippingAddress.Line1}}</span><br />
+                    {{#if ShippingAddress.Line2}}
+                        <span data-qa="order-shipping-address-line2">{{ShippingAddress.Line2}}</span><br />
+                    {{/if}}
+                    <span data-qa="order-shipping-address-city">{{ShippingAddress.City}}</span>,
+                    <span data-qa="order-shipping-address-region">{{ShippingAddress.RegionName}}</span>,
+                    <span data-qa="order-shipping-address-postalcode">{{ShippingAddress.PostalCode}}</span><br />
+                    <span data-qa="order-shipping-address-phone">{{ShippingAddress.PhoneNumber}}</span>
+                </div>
+                <div class="col-sm-12  visible-xs-block">
+                    <hr />
+                </div>
+                <div class="col-sm-6">
+                    {{#if BillingAddress}}
+                    <h2 class="h4">{{localize 'CheckoutProcess' 'T_BillingAddress' }}</h2>
+
+                    <h3>{{BillingAddress.AddressName}}</h3>
+
+                    <strong class="h4">                        
+                        <span data-qa="order-billing-address-firstname">{{BillingAddress.FirstName}}</span>&#160;<span data-qa="order-billing-address-lastname">{{BillingAddress.LastName}}</span>
+                    </strong>
+                    <br />
+                    <span data-qa="order-billing-address-line1">{{BillingAddress.Line1}}</span><br />
+                    {{#if BillingAddress.Line2}}
+                        <span data-qa="order-billing-address-line2">{{BillingAddress.Line2}}</span><br />
+                    {{/if}}
+                    <span data-qa="order-billing-address-city">{{BillingAddress.City}}</span>,
+                    <span data-qa="order-billing-address-region">{{BillingAddress.RegionName}}</span>,
+                    <span data-qa="order-billing-address-postalcode">{{BillingAddress.PostalCode}}</span><br />
+                    <span data-qa="order-billing-address-phone">{{BillingAddress.PhoneNumber}}</span>
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

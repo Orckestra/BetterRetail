@@ -1,0 +1,18 @@
+<span data-templateid="PriceDiscount">
+    <span class="loading-indicator-pricediscount  fa  fa-spin  fa-fw  fa-circle-o-notch  hidden"></span>
+    
+    {{#if Currency}}
+    <meta property="priceCurrency" content="{{Currency.IsoCode}}" />
+    {{/if}}
+    
+    {{#if DefaultListPrice}}
+        {{#if IsPriceDiscounted}}
+            <del>{{DefaultListPrice}}</del><br/>
+            <span property="price" data-qa="product-price" class="h3  text-danger">{{ListPrice}}</span>
+        {{else}}
+            <span property="price" data-qa="product-price" class="h3">{{DefaultListPrice}}</span>
+        {{/if}}
+    {{else}}
+        <span property="price" data-qa="product-price" class="h3 invisible">0</span>
+    {{/if}}
+</span>

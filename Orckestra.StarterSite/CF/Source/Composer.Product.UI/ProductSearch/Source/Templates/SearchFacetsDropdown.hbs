@@ -1,0 +1,6 @@
+<div id="facets" class="collapse">
+    <button type="button" class="btn  btn-default  btn-block" data-toggle="collapse"  data-target="#facets" aria-expanded="false">{{localize 'List-Search' 'B_Close'}}</button>
+	{{#with SelectedFacets}} {{> SelectedSearchFacets}} {{/with}}
+	{{> ChildCategories}}
+	{{#with ProductSearchResults}} {{> SearchFacets}} {{/with}}
+</div>

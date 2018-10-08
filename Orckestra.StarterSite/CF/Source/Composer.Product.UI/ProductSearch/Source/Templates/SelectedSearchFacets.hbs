@@ -1,0 +1,30 @@
+<div data-oc-controller="Product.SelectedSearchFacets">
+{{#if SelectedFacets.Facets }}
+    <div id="selectedFacets" class="panel  panel-default">
+        <div class="panel-body">
+            <h2 class="h4">{{localize 'List-Search' 'L_Selection'}}</h2>
+            {{#if SelectedFacets.IsAllRemovable }}
+                <p class="clearfix"><a class="pull-right  small" data-qa="search-refiners-clear-all" href="#" {{#if ../../LandingPageUrls}}data-landingpageurl="{{../../LandingPageUrls.[0]}}"{{/if}} data-oc-click="clearSelectedFacets">{{localize 'List-Search' 'B_ClearAll'}}</a></p>
+            {{/if}}
+            <ul class="list-unstyled">
+                {{#each SelectedFacets.Facets}}
+                    <li>
+                        <div class="row">
+                            <div class="col-xs-10">
+                                {{DisplayName}}
+                            </div>
+                            <div class="col-xs-2">
+                                {{#if IsRemovable}}
+                                    <a href="#" class="pull-right" data-qa="search-refiner-remove" data-facetfieldname="{{FieldName}}" data-facettype="{{FacetType}}" data-facetvalue="{{Value}}" {{#if ../../../LandingPageUrls}}data-facetlandingpageurl="{{lookup ../../../LandingPageUrls @index}}"{{/if}} title="{{DisplayName}}" data-oc-click="removeSelectedFacet"><span class="fa  fa-times  fa-lg"></span></a>
+                                {{else}}
+                                    <span class="pull-right  fa  fa-times  fa-lg  text-muted"></span>
+                                {{/if}}
+                            </div>
+                        </div>
+                    </li>
+                {{/each}}
+            </ul>
+        </div>
+    </div>
+{{/if}}
+</div>

@@ -1,0 +1,64 @@
+﻿@inherits RazorFunction
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Display Search Query"; }
+    }
+
+    [FunctionParameter(Label = "Query Name", Help = "Query Name", WidgetMarkup = @"<f:widgetfunction xmlns:f='http://www.composite.net/ns/function/1.0' name='Composite.Widgets.String.Selector'>
+                <f:param name='Options'>
+                         <f:function name='Composer.SearchQuery.Functions.GetSearchQueryList'>
+                             <f:param name='type' value='Merchandising' />
+                        </f:function>
+                </f:param>
+        </f:widgetfunction>")]
+    public string QueryName { get; set; }
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<head>
+</head>
+<body>
+    <f:function name="Composer.Grids.FullGrid" xmlns:f="http://www.composite.net/ns/function/1.0">
+        <f:param name="Full">
+            <html>
+            <head>
+            </head>
+            <body>
+                <f:function name="Composer.Grids.SearchGrid">
+                    <f:param name="LeftPart">
+                        <html>
+                        <head>
+                        </head>
+                        <body>
+                            <f:function name="Composer.Queries.Merchandising.SelectedFacets">
+                                <f:param name="QueryName" value="@QueryName" />
+                            </f:function>
+                            <f:function name="Composer.Queries.Merchandising.ChildCategories">
+                                <f:param name="QueryName" value="@QueryName" />
+                            </f:function>
+                            <f:function name="Composer.Queries.Merchandising.Facets">
+                                <f:param name="QueryName" value="@QueryName" />
+                            </f:function>
+                        </body>
+                    </html>
+                </f:param>
+                <f:param name="RightPart">
+                    <html>
+                    <head>
+                    </head>
+                    <body>
+                        <f:function name="Composer.Queries.Merchandising.Results">
+                            <f:param name="QueryName" value="@QueryName" />
+                        </f:function>
+                    </body>
+                </html>
+            </f:param>
+        </f:function>
+    </body>
+</html>
+</f:param>
+</f:function>
+</body>
+</html>

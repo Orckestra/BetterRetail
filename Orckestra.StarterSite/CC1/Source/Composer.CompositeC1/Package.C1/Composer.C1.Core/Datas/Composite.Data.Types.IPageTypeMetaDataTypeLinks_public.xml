@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Data>
+  <Add Id="6d1c9037-a7ea-4fb1-a526-edd50cd29a3a" PageTypeId="8132f659-418b-4c39-b450-9c8c53a86bd4" DataTypeId="864704b8-2ff5-40e4-a332-c1875b358eb8" Name="ComposerCategoryLandingPage" />
+  <Add Id="969ab578-7b3c-43d3-925d-cf7a75ef9e63" PageTypeId="ab50b336-ee78-4c53-9fb6-022407c0d3ef" DataTypeId="864704b8-2ff5-40e4-a332-c1875b358eb8" Name="ComposerCategoryPage" />
+  <Add Id="f79d52b6-2b44-42c2-9c3e-e8d8cd5509ad" PageTypeId="593bc135-033e-4c76-ba03-04dbc31405f4" DataTypeId="554f7290-fca4-4390-a4cb-044cd0096149" Name="CheckoutStepInfoPage" />
+</Data>

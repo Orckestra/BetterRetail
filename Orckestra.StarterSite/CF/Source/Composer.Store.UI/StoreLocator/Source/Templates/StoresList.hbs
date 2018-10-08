@@ -1,0 +1,22 @@
+<div data-templateid="StoresList">
+{{#each Stores}}
+    <div class="col-xs-12  col-sm-6  col-md-4  stores-list-item" data-store-number="{{Number}}">
+        {{> StoreTile}}
+    </div>
+{{/each}}
+{{#if NextPage}}
+{{#with NextPage}}
+    <div class="stores-list-paging">
+        <a id="nextPageBtn"
+           data-qa="next-page"
+           data-page="{{Page}}"
+           data-oc-click="nextPage"
+           class="btn  btn-primary  btn-lg"> 
+           {{localize 'Store' 'B_ShowMore'}}
+            <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  hidden"></span>
+        </a>
+   </div>
+{{/with}}
+{{/if}}
+</div>
+

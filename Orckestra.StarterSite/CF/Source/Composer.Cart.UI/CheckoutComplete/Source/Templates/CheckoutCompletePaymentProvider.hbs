@@ -1,0 +1,22 @@
+<div data-templateid="CheckoutCompletePaymentProvider">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2 class="h3" data-qa="checkout-header-payment-method">{{localize 'MyAccount' 'T_PaymentMethod'}}</h2>
+        </div>
+        <div class="panel-body">
+            {{#if GettingCart}}
+                {{>Loading}}
+            {{else}}
+                {{#if Payment.BillingAddress.UseShippingAddress}}
+                    <span data-qa="checkout-shipping-address-firstname">{{ShippingAddress.FirstName}}</span>
+                    <span data-qa="checkout-shipping-address-lastname">{{ShippingAddress.LastName}}</span><br />
+                {{else}}
+                    <span data-qa="checkout-billing-address-firstname">{{Payment.BillingAddress.FirstName}}</span>
+                    <span data-qa="checkout-billing-address-lastname">{{Payment.BillingAddress.LastName}}</span><br />
+                {{/if}}
+
+                <span data-qa="checkout-payment-method-name">{{localize 'CheckoutProcess' 'L_Type'}} {{Payment.PaymentMethod.DisplayName}}</span>
+            {{/if}}
+        </div>
+    </div>
+</div>

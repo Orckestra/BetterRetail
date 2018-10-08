@@ -1,0 +1,36 @@
+.store-directory {
+    margin-bottom: 20px;
+    
+    .group-title{
+        margin-bottom: 5px;
+    }
+    
+    .group-separator {
+        margin-top: 0;
+    }
+    
+    .group-items {
+        margin-bottom: 40px;
+    }
+    
+    .group-item {
+        margin: 10px 0 20px 0;
+        
+        .store-address {
+            margin-bottom: 10px;
+        }
+    }
+    
+    .group-anchors {
+        margin-bottom: 30px;
+        -webkit-columns: 4 280px;
+        -moz-columns: 4 280px;
+        columns: 4 280px;
+            
+        .anchor-item {
+            display: block;
+            color: $gray;            
+        }
+    }
+}
+

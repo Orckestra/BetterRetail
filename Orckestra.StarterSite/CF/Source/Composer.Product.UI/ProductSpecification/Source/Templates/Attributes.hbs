@@ -1,0 +1,16 @@
+<div data-templateid="Attributes">
+    {{#if IsLoading}}
+        {{>Loading}}
+    {{else}}
+        <table class="table table-striped">
+            {{#each Groups}}
+            {{#each Attributes}}
+            <tr>
+                <th>{{Title}}</th>
+                <td>{{Value}}</td>
+            </tr>
+            {{/each}}
+            {{/each}}
+        </table>
+    {{/if}}
+</div>

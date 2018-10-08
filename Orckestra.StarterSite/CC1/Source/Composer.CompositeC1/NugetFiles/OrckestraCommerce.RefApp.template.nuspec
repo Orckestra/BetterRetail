@@ -1,0 +1,24 @@
+﻿<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <version>To be replaced</version>
+    <authors>Orckestra Inc.</authors>
+    <owners>Orckestra Inc.</owners>
+    <licenseUrl>http://nuget.orckestra.com/license</licenseUrl>
+    <projectUrl>http://nuget.orckestra.com/docs/client</projectUrl>
+    <iconUrl>http://nuget.orckestra.com/overture.ico</iconUrl>
+    <id>OrckestraCommerce.RefApp</id>
+    <title>OrckestraCommerce.RefApp</title>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <summary>TODO</summary>
+    <description>TODO</description>
+    <releaseNotes>Orckestra Commerce 2016 release.</releaseNotes>
+    <copyright>Copyright Orckestra Inc. 2016</copyright>
+  </metadata>
+  <files>
+    <file src="..\CmpPackages\RefApp\artifacts\**\*.*" target="_pkg\artifacts" />
+    <file src="..\CmpPackages\RefApp\scripts\**\*.*" target="_pkg\scripts" />
+    <file src="..\CmpPackages\RefApp\parameters*.xml" target="_pkg" />
+    <file src="..\CmpPackages\RefApp\manifest.json" target="_pkg" />
+  </files>
+</package>

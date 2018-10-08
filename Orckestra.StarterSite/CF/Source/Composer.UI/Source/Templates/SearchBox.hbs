@@ -1,0 +1,22 @@
+<div class="search-box" data-oc-controller="General.SearchBox">
+    <form method="GET" action="{{ActionTarget}}">
+        <div class="form-group">
+            <div class="input-group">
+                <input id="search-input" data-qa="search-input" class="form-control" type="search" name="keywords" 
+                    placeholder="{{localize 'List-Search' 'F_SearchWaterMark'}}" value="{{Keywords}}"
+                    required="required"
+                    data-parsley-required-message=""
+                    data-parsley-antixss="true"
+                    {{#if_localized 'Errors' 'L_InvalidCharsInSearchBox'}}data-parsley-antixss-message="{{localize 'Errors' 'L_InvalidCharsInSearchBox'}}"{{/if_localized}}
+                    data-parsley-class-handler-selector="form"
+                    data-parsley-errors-container="#search-errors" />
+                <span class="input-group-btn">
+                    <button data-qa="search-button" class="btn  btn-default" title="{{localize 'List-Search' 'B_Search'}}" type="submit"><span class="fa  fa-search"></span></button>
+                </span>
+            </div>
+            
+            <div id="search-errors">
+            </div>
+        </div>
+    </form>
+</div>

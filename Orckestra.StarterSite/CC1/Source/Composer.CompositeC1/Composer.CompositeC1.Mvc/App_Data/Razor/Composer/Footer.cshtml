@@ -1,0 +1,47 @@
+﻿@inherits Composite.AspNet.Razor.RazorFunction
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Footer of the page."; }
+    }
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<head>
+</head>
+<body>
+    <footer>
+        <div data-templateid="Footer">
+            <div class="footer">
+                <div class="well">
+                    <f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.Footer.SocialLinks" />
+                    @*<div class="container">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="follow-us pull-left">
+                                    <h4>Follow Us:</h4>
+                                </div>
+                                <f:function name="Composite.Web.Html.Template.PageTemplateFeature" xmlns:f="http://www.composite.net/ns/function/1.0">
+                                    <f:param name="FeatureName" value="Social links" />
+                                </f:function>
+                            </div>
+                        </div>
+                    </div>*@
+                </div>
+                <div class="container">
+                    <f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.Footer.MainFooter" />
+                    <div class="row">
+                        <f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.Footer.OptionalLinks" />
+                        <div class="col-xs-12 col-md-4 col-md-pull-8">
+                            <p class="text-copy small">
+                                <f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.Footer.Copyright" />
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

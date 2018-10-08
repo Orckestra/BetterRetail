@@ -1,0 +1,31 @@
+<div data-templateid="PaymentMethodItem" class="payment-method-line-item">
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label class="select-block {{#if IsSelected}}active{{/if}}" data-qa="checkout-payment-method-{{@index}}">
+                    <span class="input-addon">
+                        <input type="radio"
+                               name="PaymentMethod"
+                               data-parsley-class-handler-selector=".row"
+                               data-parsley-errors-container="#payment-method-errors"
+                               required="required"
+                               value="{{Id}}"
+                               {{#if IsSelected}}checked="checked"{{/if}}
+                               class="input"
+                               data-payment-id="{{Id}}"
+                               data-payment-provider="{{PaymentProviderName}}"
+                               data-payment-type="{{PaymentType}}"
+                               data-oc-change="changePaymentMethod"
+                               data-oc-click="changePaymentMethod">
+                    </span>
+
+                    <span class="content">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                {{DisplayName}}
+                            </div>
+                        </div>
+                    </span>
+                </label>
+            </div>
+        </div>
+</div>

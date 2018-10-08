@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/01/nuspec.xsd">
+  <metadata minClientVersion="2.8">
+    <id>Composer.CompositeC1</id>
+    <version>To be replaced</version>
+    <title>Composer.CompositeC1</title>
+    <authors>Orckestra Inc.</authors>
+    <owners>Orckestra Inc.</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Composer for Composite C1</description>
+    <summary>Composer for Composite C1</summary>
+    <copyright>Orckestra Inc. 2015</copyright>
+    <dependencies>
+      <dependency id="Composer" version="To be replaced" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="..\Composer.CompositeC1.Mvc\bin\Orckestra.Composer.CompositeC1.dll" target="lib/net452" />
+    <file src="..\Composer.CompositeC1.Mvc\bin\Orckestra.Composer.CompositeC1.*.dll" target="lib/net452" exclude="..\Composer.CompositeC1.Mvc\bin\Orckestra.Composer.CompositeC1.Mvc.dll" />
+    <file src="..\Composer.CompositeC1.Mvc\bin\Composite.dll" target="lib/net452" />
+    <file src="..\Composer.CompositeC1.Mvc\bin\Composite.AspNet.MvcFunctions.dll" target="lib/net452" />
+    <file src="..\..\..\Installer\packages\generic\CompositeC1\C1.Packages\001 - Composite.AspNet.MvcFunctions.zip" target="packaging\" />
+    <file src="..\..\..\Installer\packages\generic\CompositeC1\C1.Packages\002 - Composite.Tools.DataStoreMigrator.zip" target="packaging\" />
+    <file src="..\..\..\Installer\packages\generic\CompositeC1\C1.Packages\002 - Composite.Tools.PackageCreator.zip" target="packaging\" />
+    <file src="..\..\..\Installer\packages\generic\CompositeC1\C1.Packages\100 - Composer.C1.Core.zip" target="packaging\" />
+    <file src="..\..\..\Installer\packages\generic\CompositeC1\C1.Packages\200 - Composer.C1.Content.EN_CA.zip" target="packaging\" />
+    <file src="..\..\..\Installer\packages\generic\CompositeC1\C1.Packages\201 - Composer.C1.Content.FR_CA.zip" target="packaging\" />
+    <file src="..\Composer.CompositeC1.Mvc\StartupHandler.cs" target="src" />
+  </files>
+</package>
+
+

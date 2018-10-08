@@ -1,0 +1,21 @@
+{{#with Pagination}}
+<ul class="pull-right pagination">
+    {{#if PreviousPage.Url }}
+        <li><a data-qa="search-pagination-previous" href="{{PreviousPage.Url}}">{{PreviousPage.DisplayName}}</a></li>
+    {{else }}
+        <li class="disabled"><span>{{PreviousPage.DisplayName}}</span></li>
+    {{/if}}
+    {{#each Pages}}
+        {{#if IsCurrentPage}}
+            <li class="active"><a>{{DisplayName}}</a></li>
+        {{else}}
+            <li><a href="{{Url}}">{{DisplayName}}</a></li>
+        {{/if}}
+    {{/each}}
+    {{#if NextPage.Url }}
+        <li><a data-qa="search-pagination-next" href="{{NextPage.Url}}">{{NextPage.DisplayName}}</a></li>
+    {{else }}
+        <li class="disabled"><span>{{NextPage.DisplayName}}</span></li>
+    {{/if}}
+</ul>
+{{/with}}

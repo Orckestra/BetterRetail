@@ -1,0 +1,6 @@
+﻿@inherits RazorFunction
+
+@{
+    HttpContext.Current.Response.TrySkipIisCustomErrors = true;
+    HttpContext.Current.Response.StatusCode = 404;
+}

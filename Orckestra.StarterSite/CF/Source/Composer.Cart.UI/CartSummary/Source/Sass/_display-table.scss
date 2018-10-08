@@ -1,0 +1,17 @@
+.display-table {
+	@media screen and (min-width: $screen-sm-min) {
+		display: table;
+		table-layout: fixed;
+		width: 100%;
+	}
+	
+
+	&-cell {
+		@media screen and (min-width: $screen-sm-min) {
+			display: table-cell;
+			vertical-align: middle;
+			float: none;
+		}
+		
+	}
+}

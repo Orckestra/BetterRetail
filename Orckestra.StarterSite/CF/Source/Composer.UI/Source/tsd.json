@@ -1,0 +1,36 @@
+{
+  "version": "v4",
+  "repo": "borisyankov/DefinitelyTyped",
+  "ref": "master",
+  "path": "typings",
+  "bundle": "typings/tsd.d.ts",
+  "installed": {
+    "jasmine/jasmine.d.ts": {
+      "commit": "7c05f43b86a2b5fb30cd1f67cab942f25294205b"
+    },
+    "lodash/lodash.d.ts": {
+      "commit": "7c05f43b86a2b5fb30cd1f67cab942f25294205b"
+    },
+    "jquery/jquery.d.ts": {
+      "commit": "7c05f43b86a2b5fb30cd1f67cab942f25294205b"
+    },
+    "requirejs/require.d.ts": {
+      "commit": "0d331bf6cd724cb79768137290028fae1926f5f3"
+    },
+    "q/Q.d.ts": {
+      "commit": "6b19a967eff47c4d6eaf56c573ea4b8f0fc9c487"
+    },
+    "handlebars/handlebars.d.ts": {
+      "commit": "2d4c4679bc2b509f27435a4f9da5e2de11258571"
+    },
+    "chance/chance.d.ts": {
+      "commit": "3b0f362204ea965952dafdb682a5274d527ef9d0"
+    },
+    "nouislider/nouislider.d.ts": {
+      "commit": "0a51ae619b1729429892d1d0d25ec4476f88cad2"
+    },
+    "wnumb/wnumb.d.ts": {
+      "commit": "0a51ae619b1729429892d1d0d25ec4476f88cad2"
+    }
+  }
+}

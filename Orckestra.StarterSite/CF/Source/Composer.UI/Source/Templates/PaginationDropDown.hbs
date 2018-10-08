@@ -1,0 +1,39 @@
+{{#with Pagination}}
+<div class="pagination-dropdown  form-inline">
+    <div class="form-group">
+        <ul class="pager">
+            <li class="previous  {{#unless PreviousPage.Url}}disabled{{/unless}}">
+                 {{#if PreviousPage.Url}}
+                    <a title="{{PreviousPage.DisplayName}}"  href="{{PreviousPage.Url}}"><i class="fa  fa-arrow-circle-left"></i>&#160;{{PreviousPage.DisplayName}}</a>
+                 {{else}}
+                    <span data-qa="search-pagination-previous">
+                        <i class="fa  fa-arrow-circle-left"></i>&#160;{{PreviousPage.DisplayName}}
+                    </span>
+                 {{/if}}
+                &#160;
+            </li>
+        </ul>
+    </div>
+    <div class="form-group">
+       <select class="form-control" data-oc-change="pagerPageChanged">
+            {{#each Pages}}
+                 <option {{#if IsCurrentPage}}selected="selected"{{/if}} value="{{UrlPath}}">{{localize 'List-Search' 'L_PageInDropDown'}}&#160;{{DisplayName}}</option>
+             {{/each}}
+       </select> 
+       &#160;{{localizeFormat 'List-Search' 'L_PageOfTotalItems' TotalNumberOfPages}}&#160;
+    </div>
+    <div class="form-group">
+        <ul class="pager">
+            <li class="next  {{#unless NextPage.Url}}disabled{{/unless}}">
+                {{#if NextPage.Url}}
+                    <a title="{{NextPage.DisplayName}}"  href="{{NextPage.Url}}">{{NextPage.DisplayName}}&#160;<i class="fa  fa-arrow-circle-right"></i></a>
+                 {{else}}
+                    <span data-qa="search-pagination-next">
+                        {{NextPage.DisplayName}}&#160;<i class="fa  fa-arrow-circle-right"></i>
+                    </span>
+                 {{/if}}
+            </li>
+         </ul>
+    </div>
+</div>
+{{/with}}

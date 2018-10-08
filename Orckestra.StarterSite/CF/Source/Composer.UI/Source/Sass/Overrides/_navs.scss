@@ -1,0 +1,56 @@
+.nav .open > a,
+.nav .open > a:hover,
+.nav .open > a:focus {
+    background-color: $gray-lighter;
+    border-color: $gray-light;
+}
+
+.nav-pills {
+	list-style: none;
+	> li {
+	    float: left;
+	    + li {
+			margin-left: 2px;
+	    }
+	}
+}
+
+.nav.nav-pills {
+	list-style: none;
+	> li {
+	    float: left;
+	    &:first-child:not(:last-child) {
+	    	> a {
+	    		border-bottom-right-radius: 0;
+	    		border-top-right-radius: 0;
+	    	}
+	    }
+	    &:not(:first-child):not(:last-child) {
+	    	> a {
+	    		border-radius: 0;
+	    	}
+	    }
+		&:last-child:not(:first-child) {
+			> a {
+				border-bottom-left-radius: 0;
+				border-top-left-radius: 0;
+			}
+		}
+	    > a {
+			border-radius: 3px;
+			border: 1px solid $gray-light;
+	    }
+	    + li {
+			margin-left: 0px;
+	    }
+	    &.active {
+	    	a {
+	    		&, &:hover, &:focus {
+	    			color: #fff;
+	    			background-color: $brand-primary;
+	    			border: 1px solid darken($brand-primary, 10%);
+	    		}
+	    	}
+	    }
+	}
+}

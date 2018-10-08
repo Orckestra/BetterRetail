@@ -1,0 +1,16 @@
+{{#with Schedule}}
+<div class="store-schedule  clearfix  {{#if IsOpenNow}}bg-success{{else}}bg-danger{{/if}}">
+    {{#each TodayOpeningTimes}}
+      <div class="openhours-today  pull-left">
+         {{BeginTime}} - {{EndTime}}
+      </div>
+     {{/each}}
+     <div class="schedule-status  text-uppercase  pull-right">
+        {{#if IsOpenNow}}
+           {{localize 'Store' 'L_StoreOpen'}}
+        {{else}}
+           {{localize 'Store' 'L_StoreClosed'}}
+        {{/if}}
+     </div>
+</div>
+{{/with}}

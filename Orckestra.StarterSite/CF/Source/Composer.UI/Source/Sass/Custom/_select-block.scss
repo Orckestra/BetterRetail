@@ -1,0 +1,75 @@
+/**
+ * todo change the name
+ * something like selectable panel or whatevs
+ */
+.select-block {
+    position: relative;
+    display: block;
+    border: solid 1px $input-border;
+    border-radius: $border-radius-base;
+    cursor: pointer;
+    font-weight: inherit;
+    transition: border-color .15s ease-out, background .15s ease-out;
+
+    .input-addon {
+        background: $gray-lighter;
+        position: absolute;
+        top: -1px; bottom: -1px;
+        left: -1px;
+        width: 41px;
+        border: solid 1px $input-border;
+        border-radius: $border-radius-base;
+        transition: border-color .15s ease-out, background .15s ease-out;
+
+    }
+    // non, mettre une classe
+    .input {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        margin: 0;
+    }
+    .content {
+        display: block;
+        padding-left: 41px + $grid-gutter-width;
+        padding-right: $padding-base-horizontal;
+        padding-top: $padding-base-vertical;
+        padding-bottom: $padding-base-vertical;
+        transition: border-color .15s ease-out;
+    }
+    .block {
+        display: block;
+    }
+}
+
+.select-block.active {
+    border-color: $brand-info;
+
+    .input-addon {
+        background-color: $brand-info;
+        border-color: $brand-info;
+    }
+    .content {
+        color: $brand-info;
+    }
+}
+
+.select-block.parsley-error,
+.parsley-error .select-block {
+    border-color: $brand-danger;
+
+    .input-addon {
+        background-color: $brand-danger;
+        border-color: $brand-danger;
+    }
+    .content {
+        color: $brand-danger;
+    }
+}
+
+.select-block.disabled {
+    color: $gray;
+    background-color: $gray-lighter;
+    cursor: $cursor-disabled;
+}

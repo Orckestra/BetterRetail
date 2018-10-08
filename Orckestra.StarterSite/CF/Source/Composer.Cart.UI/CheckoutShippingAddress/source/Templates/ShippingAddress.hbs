@@ -1,0 +1,19 @@
+<div data-templateid="ShippingAddress">
+    {{#if_eq IsAuthenticated false}}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h2 class="h3" data-qa="shipping-address-title">{{localize 'CheckoutProcess' 'T_ShippingAddress'}}</h2>
+            </div>
+            <div class="panel-body">
+                {{#if_eq GettingCart true}}
+                    {{>Loading}}
+                {{/if_eq}}
+                {{#if_eq GettingCart false}}
+                    <form id="ShippingAddress" data-oc-submit="preventFormSubmit" method="post" autocomplete="on">
+                        {{>Address ShippingAddress}}
+                    </form>
+                {{/if_eq}}
+            </div>
+        </div>
+    {{/if_eq}}
+</div>

@@ -1,0 +1,32 @@
+<ul class="pager">
+    {{#if Pagination }}
+    {{#with Pagination}}
+        {{#if PreviousPage }}
+        <li class="previous  {{#unless PreviousPage.Url }} disabled {{/unless}}">
+            {{#if PreviousPage.Url }}
+            <a data-qa="search-pagination-previous" href="{{PreviousPage.Url}}">
+                <span class="fa  fa-arrow-circle-left"></span> {{PreviousPage.DisplayName}}
+            </a>
+            {{else}}
+            <span data-qa="search-pagination-previous">
+                <span class="fa  fa-arrow-circle-left"></span> {{PreviousPage.DisplayName}}
+            </span>
+            {{/if}}
+        </li>
+        {{/if}}
+        {{#if NextPage }}
+        <li class="next  {{#unless NextPage.Url }} disabled {{/unless}}">
+            {{#if NextPage.Url }}
+            <a data-qa="search-pagination-next" href="{{NextPage.Url}}">
+                {{NextPage.DisplayName}} <span class="fa  fa-arrow-circle-right"></span>
+            </a>
+            {{else}}
+            <span data-qa="search-pagination-next">
+                {{NextPage.DisplayName}} <span class="fa  fa-arrow-circle-right"></span>
+            </span>
+            {{/if}}
+        </li>
+        {{/if}}
+    {{/with}}
+    {{/if}}
+</ul>

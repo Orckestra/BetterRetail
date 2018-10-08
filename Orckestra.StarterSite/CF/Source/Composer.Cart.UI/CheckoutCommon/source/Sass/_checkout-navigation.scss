@@ -1,0 +1,96 @@
+.checkout-navigation {
+    @extend %island-lg;
+
+    ul {
+        display: table;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        font-weight: bold;
+    }
+    li {
+        display: table-cell;
+        text-align: center;
+        font-size: 16px;
+        min-width: 36px;
+
+        .name {
+            display: none;
+        }
+
+        .checkout-navigation-step {
+            color: $gray-light;
+            border-color: $gray-light;
+            border: solid 1px;
+            border-left: 0;
+            display: block;
+            padding-bottom: $padding-large-vertical;
+            padding-top: $padding-large-vertical;
+        }
+
+        a.checkout-navigation-step:hover,
+        a.checkout-navigation-step:focus {
+            border-color: darken($brand-info, 10);
+            color: darken($brand-info, 10);
+            outline: 0;
+            text-decoration: none;
+        }
+    }
+
+    .active {
+        .name {
+            display: inline;
+        }
+        .checkout-navigation-step {
+            background: $brand-info;
+            border-color: $brand-info;
+            color: #fff;
+        }
+        a:hover,
+        a:focus {
+            color: #fff;
+        }
+    }
+
+    .past .checkout-navigation-step {
+        background: #fff;
+        border-color: $brand-info;
+        color: $brand-info;
+    }
+
+    li:first-child .checkout-navigation-step {
+        border-left: solid 1px;
+    }
+
+
+    @media (min-width: $screen-md-min) {
+        ul {
+            table-layout: fixed;
+        }
+        li {
+            font-size: 24px;
+        }
+
+        .checkout-navigation-step {
+            border-radius: 2px;
+        }
+    }
+
+    @media (min-width: $screen-sm-min) {
+        margin-left: -$grid-gutter-width / 2;
+        margin-right: -$grid-gutter-width / 2;
+
+        li {
+            font-size: 18px;
+
+            .checkout-navigation-step {
+                border: solid 1px;
+                margin-left: $grid-gutter-width / 2;
+                margin-right: $grid-gutter-width / 2;
+            }
+        }
+        li .name {
+            display: inline;
+        }
+    }
+}

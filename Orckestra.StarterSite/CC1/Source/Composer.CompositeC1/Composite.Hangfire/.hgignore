@@ -1,0 +1,10 @@
+.*/*.suo
+.*/*.user
+.*/*.bak
+.*/*.orig
+.*/*bin/./*
+.*/*obj/./*
+
+_ReSharper*/*
+
+packages/*

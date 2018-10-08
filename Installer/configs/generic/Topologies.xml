@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topologies>
+	<topology name="Standalone">
+		<server alias="StandaloneServer">			
+			<!--component name="oa" /-->
+			<component name="cms-cm" />
+			<component name="cms-cd" />
+			<!--
+			<component name="solr-cm" />
+			<component name="solr-cd" /> 
+			-->
+		</server>
+	</topology>  
+
+	<topology name="Standard">
+		<server alias="AppServer">
+			<!--component name="oa" /-->
+			<component name="cms-cm" />
+			<component name="cms-cd" />
+			<!--
+			<component name="solr-cm" />
+			<component name="solr-cd" /> 
+			-->
+		</server>
+	</topology>
+
+  <topology name="Standard-LB">
+    <server alias="AppServer1">
+	  <!--component name="oa" /-->
+      <component name="cms-cm" />
+      <component name="cms-cd" />
+      <!--
+			<component name="solr-cm" />
+			<component name="solr-cd" /> 
+			-->
+    </server>
+    <server alias="AppServer2">
+	  <!--component name="oa" /-->
+      <component name="cms-cd" />
+      <!--
+			<component name="solr-cm" />
+			<component name="solr-cd" /> 
+			-->
+    </server>
+  </topology>  
+  
+  <topology name="Basic">
+    <server alias="AppServer">
+	   <!--component name="oa" /-->
+      <component name="cms-cm" />
+      <component name="cms-cd" />
+      <!--
+			<component name="solr-cm" />
+			<component name="solr-cd" /> 
+			-->
+    </server>
+    <server alias="DeliveryServer">
+	<!--component name="oa" /-->
+      <component name="cms-cd" />
+    </server>
+  </topology>
+
+  <topology name="LoadTest-Azure">
+		<server alias="AuthoringServer">
+			<component name="oa" />
+			<component name="cms-cm" />
+    </server>
+		<server alias="DeliveryServer1">
+			<component name="oa" />
+			<component name="cms-cd" />
+		</server>
+		<server alias="DeliveryServer2">
+			<component name="oa" />
+			<component name="cms-cd" />
+		</server>
+		<server alias="MainSearchServer">
+			<!--
+			<component name="solr-cm" />
+			-->
+		</server>
+		<server alias="SlaveSearchServer1">
+			<!--
+			<component name="solr-cd" />
+			-->
+		</server>
+		<server alias="SlaveSearchServer2">
+			<!--
+			<component name="solr-cd" />
+			-->
+		</server>
+	</topology>
+	
+	<topology name="PerformanceAllAzureVMs">
+		<server alias="AuthoringServer">
+			<component name="oa" />
+			<component name="cms-cm" />
+		</server>
+		<server alias="DeliveryServer1">
+			<component name="oa" />
+			<component name="cms-cd" />
+		</server>
+		<server alias="DeliveryServer2">
+			<component name="oa" />
+			<component name="cms-cd" />
+		</server>
+		<server alias="MainSearchServer">
+			<!--
+			<component name="solr-cm" />
+			-->
+		</server>
+		<server alias="SlaveSearchServer1">
+			<!--
+			<component name="solr-cd" />
+			-->
+		</server>
+		<server alias="SlaveSearchServer2">
+			<!--
+			<component name="solr-cd" />
+			-->
+		</server>
+	</topology>
+
+</topologies>

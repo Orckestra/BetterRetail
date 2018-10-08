@@ -1,0 +1,463 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="B_AddNewAddress" xml:space="preserve">
+    <value>Add a new address</value>
+  </data>
+  <data name="B_AddNewCreditCard" xml:space="preserve">
+    <value>Add a new credit card</value>
+  </data>
+  <data name="B_ChangePassword" xml:space="preserve">
+    <value>Change password</value>
+  </data>
+  <data name="B_CreateAccount" xml:space="preserve">
+    <value>Create an account</value>
+  </data>
+  <data name="B_DeleteAddress" xml:space="preserve">
+    <value>Remove this address</value>
+  </data>
+  <data name="B_EditAddress" xml:space="preserve">
+    <value>Edit this address</value>
+  </data>
+  <data name="B_ForgotPassword" xml:space="preserve">
+    <value>Reset my password</value>
+  </data>
+  <data name="B_NewCustomer" xml:space="preserve">
+    <value>Register</value>
+  </data>
+  <data name="B_NewPassword" xml:space="preserve">
+    <value>Save my new password</value>
+  </data>
+  <data name="B_SaveAddress" xml:space="preserve">
+    <value>Save my changes</value>
+  </data>
+  <data name="B_SaveNewAddress" xml:space="preserve">
+    <value>Save my new address</value>
+  </data>
+  <data name="B_SetDefaultAddress" xml:space="preserve">
+    <value>Set as default address</value>
+  </data>
+  <data name="B_SetDefaultCreditCard" xml:space="preserve">
+    <value>Save as default credit card</value>
+  </data>
+  <data name="B_SharedWishList_StartAddTo" xml:space="preserve">
+    <value>Find great Ideas now</value>
+  </data>
+  <data name="B_ShareWishListCopyLink" xml:space="preserve">
+    <value>Copy Link</value>
+  </data>
+  <data name="B_Update" xml:space="preserve">
+    <value>Update my Wish List</value>
+  </data>
+  <data name="B_UpdateAccount" xml:space="preserve">
+    <value>Save my changes</value>
+  </data>
+  <data name="H_AddToWishList" xml:space="preserve">
+    <value>Add to Wish List</value>
+  </data>
+  <data name="H_ForgotPassword" xml:space="preserve">
+    <value>Forgot your password?</value>
+  </data>
+  <data name="H_Logout" xml:space="preserve">
+    <value>logout</value>
+  </data>
+  <data name="H_OrderDetail" xml:space="preserve">
+    <value>See details</value>
+  </data>
+  <data name="H_OrderTracking" xml:space="preserve">
+    <value>Track your order</value>
+  </data>
+  <data name="H_PrintOrder" xml:space="preserve">
+    <value>Print order</value>
+  </data>
+  <data name="H_RemoveFromTheWishList" xml:space="preserve">
+    <value>Remove from Wish List</value>
+  </data>
+  <data name="H_WishListInHeaderTitle" xml:space="preserve">
+    <value>Wishlist</value>
+  </data>
+  <data name="L_CancelOrderInformation" xml:space="preserve">
+    <value>You will receive an email at this address: {emailaddress} with a summary of your cancellation</value>
+  </data>
+  <data name="L_CancelOrderNumber" xml:space="preserve">
+    <value>We  received your cancellation request for the following order: {ordernumber}</value>
+  </data>
+  <data name="L_ChangePasswordError" xml:space="preserve">
+    <value>An error occured. Please check your information and try again.</value>
+  </data>
+  <data name="L_ChangePasswordErrorInvalidPassword" xml:space="preserve">
+    <value>The specified Password is invalid.</value>
+  </data>
+  <data name="L_ChangePasswordSuccess" xml:space="preserve">
+    <value>Your password has been changed successfully!</value>
+  </data>
+  <data name="L_ConfirmDeleteAddress" xml:space="preserve">
+    <value>Are you sure you want to delete this address?</value>
+  </data>
+  <data name="L_ConfirmDeleteCreditCard" xml:space="preserve">
+    <value>Are you sure you want to delete this credit card</value>
+  </data>
+  <data name="L_CreditCardExpires" xml:space="preserve">
+    <value>Expires on </value>
+  </data>
+  <data name="L_CreditCardNumber" xml:space="preserve">
+    <value>Card number:</value>
+  </data>
+  <data name="L_CreditCardType" xml:space="preserve">
+    <value>Type:</value>
+  </data>
+  <data name="L_CurrentOrdersEmpty" xml:space="preserve">
+    <value>This is where your current orders will be displayed.</value>
+  </data>
+  <data name="L_Description" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="L_EditAddressError" xml:space="preserve">
+    <value>An error occured. Please check your information and try again.</value>
+  </data>
+  <data name="L_EditAddressErrorInvalidAddressName" xml:space="preserve">
+    <value>The specified Addresse Name is already use for another address.</value>
+  </data>
+  <data name="L_EditAddressErrorInvalidZipPostalCodeFormat" xml:space="preserve">
+    <value>The specified Zip/PostalCode for the address does not fit the validation pattern.</value>
+  </data>
+  <data name="L_ForgotPasswordError" xml:space="preserve">
+    <value>An error occured. Please check your information and try again.</value>
+  </data>
+  <data name="L_ForgotPasswordErrorInvalidEmail" xml:space="preserve">
+    <value>Unknown email address.</value>
+  </data>
+  <data name="L_IsDefaultAddress" xml:space="preserve">
+    <value>(default address)</value>
+  </data>
+  <data name="L_MyAccount" xml:space="preserve">
+    <value>My account</value>
+  </data>
+  <data name="L_NewCustomer" xml:space="preserve">
+    <value>Get started now. It's fast and easy!</value>
+  </data>
+  <data name="L_NewPassword" xml:space="preserve">
+    <value>You have made a request to reset your password. Please enter a new password here:</value>
+  </data>
+  <data name="L_NewPasswordErrorInvalidTicket" xml:space="preserve">
+    <value>Unable to process your request. &lt;a href="{0}"&gt;Please request a new forgot password link&lt;/a&gt; and try again.</value>
+  </data>
+  <data name="L_Order" xml:space="preserve">
+    <value>Order</value>
+  </data>
+  <data name="L_OrderCancel" xml:space="preserve">
+    <value>&lt;span class="text-danger"&gt;&lt;span class="fa fa-times-circle"&gt;&lt;/span&gt; Cancelled &lt;/span&gt; on</value>
+  </data>
+  <data name="L_OrderDelivered" xml:space="preserve">
+    <value>&lt;span class="text-success"&gt;&lt;span class="fa fa-check-circle"&gt;&lt;/span&gt; Delivered &lt;/span&gt; on</value>
+  </data>
+  <data name="L_OrderedOn" xml:space="preserve">
+    <value>Placed on {0}</value>
+  </data>
+  <data name="L_OrderInProgress" xml:space="preserve">
+    <value>&lt;span class="text-warning"&gt;&lt;span class="fa fa-clock-o"&gt;&lt;/span&gt; In Progress &lt;/span&gt;</value>
+  </data>
+  <data name="L_OrderLineItemProductsTitle" xml:space="preserve">
+    <value>Products</value>
+  </data>
+  <data name="L_OrderNoComments" xml:space="preserve">
+    <value>There are currently no comments on your order.</value>
+  </data>
+  <data name="L_OrderNumber" xml:space="preserve">
+    <value>Order Number {0}</value>
+  </data>
+  <data name="L_OrderShipping" xml:space="preserve">
+    <value>Ships to:</value>
+  </data>
+  <data name="L_PastOrdersEmpty" xml:space="preserve">
+    <value>This is where your past orders will be displayed.</value>
+  </data>
+  <data name="L_PaymentAmount" xml:space="preserve">
+    <value>Amount</value>
+  </data>
+  <data name="L_PaymentMethod" xml:space="preserve">
+    <value>Payment Method</value>
+  </data>
+  <data name="L_Price" xml:space="preserve">
+    <value>Price</value>
+  </data>
+  <data name="L_Quantity" xml:space="preserve">
+    <value>Quantity</value>
+  </data>
+  <data name="L_RegisterError" xml:space="preserve">
+    <value>An error occured while registering. Please check your information and try again.</value>
+  </data>
+  <data name="L_RegisterErrorDuplicateEmail" xml:space="preserve">
+    <value>The specified email already exists in the system.</value>
+  </data>
+  <data name="L_RegisterErrorDuplicateUserName" xml:space="preserve">
+    <value>This user account already exist, did you forgot your password?</value>
+  </data>
+  <data name="L_RegisterErrorRequiresApproval" xml:space="preserve">
+    <value>Your account was created and must now be approved by an administrator.</value>
+  </data>
+  <data name="L_ResetPassword" xml:space="preserve">
+    <value>We have received your password reset request.</value>
+  </data>
+  <data name="L_ResetPasswordEmailSentBegin" xml:space="preserve">
+    <value>You will receive an email at the address </value>
+  </data>
+  <data name="L_ResetPasswordEmailSentEnd" xml:space="preserve">
+    <value> to reset your password</value>
+  </data>
+  <data name="L_Savings" xml:space="preserve">
+    <value>Savings</value>
+  </data>
+  <data name="L_ScheduledShipping" xml:space="preserve">
+    <value>Scheduled shipping on {0}</value>
+  </data>
+  <data name="L_SharedWishList_StartAddTo" xml:space="preserve">
+    <value>Your friend’s Wish List is empty.
+Don't worry, you can still find great products to offer!</value>
+  </data>
+  <data name="L_ShareWishListText" xml:space="preserve">
+    <value>Share your wish list with your family or friends (public access)</value>
+  </data>
+  <data name="L_Shipping" xml:space="preserve">
+    <value>Shipping</value>
+  </data>
+  <data name="L_SignIn" xml:space="preserve">
+    <value>Sign in</value>
+  </data>
+  <data name="L_SignInError" xml:space="preserve">
+    <value>An error occured while logging in, please check your username or password.</value>
+  </data>
+  <data name="L_SignInErrorRequiresApproval" xml:space="preserve">
+    <value>Your account must be approved by an administrator.</value>
+  </data>
+  <data name="L_Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="L_Subtotal" xml:space="preserve">
+    <value>Subtotal</value>
+  </data>
+  <data name="L_TabInStore" xml:space="preserve">
+    <value>In Store</value>
+  </data>
+  <data name="L_TabOnline" xml:space="preserve">
+    <value>Online</value>
+  </data>
+  <data name="L_Total" xml:space="preserve">
+    <value>Total</value>
+  </data>
+  <data name="L_UnitPrice" xml:space="preserve">
+    <value>Unit price</value>
+  </data>
+  <data name="L_UpdateAccountSuccess" xml:space="preserve">
+    <value>Your changes has been saved!</value>
+  </data>
+  <data name="P_ShareWishListCopyLink" xml:space="preserve">
+    <value>The URL is created when you add items to your Wish List.</value>
+  </data>
+  <data name="T_AddAddress" xml:space="preserve">
+    <value>Add an address</value>
+  </data>
+  <data name="T_Addresses" xml:space="preserve">
+    <value>Address</value>
+  </data>
+  <data name="T_BillingAddress" xml:space="preserve">
+    <value>Billing Address:</value>
+  </data>
+  <data name="T_CancelOrder" xml:space="preserve">
+    <value>Cancel Order</value>
+  </data>
+  <data name="T_CartDetails" xml:space="preserve">
+    <value>Shopping Cart Details</value>
+  </data>
+  <data name="T_ChangePassword" xml:space="preserve">
+    <value>Change password</value>
+  </data>
+  <data name="T_Comments" xml:space="preserve">
+    <value>Comments on this order</value>
+  </data>
+  <data name="T_CurrentOrders" xml:space="preserve">
+    <value>My Current Orders</value>
+  </data>
+  <data name="T_EditAddress" xml:space="preserve">
+    <value>Edit an address</value>
+  </data>
+  <data name="T_ForgotPassword" xml:space="preserve">
+    <value>Account information</value>
+  </data>
+  <data name="T_GreetingAccountHeader" xml:space="preserve">
+    <value>Hello {0} {1}</value>
+  </data>
+  <data name="T_MyAddresses" xml:space="preserve">
+    <value>My Addresses</value>
+  </data>
+  <data name="T_MyCreditCard" xml:space="preserve">
+    <value>My credit cards</value>
+  </data>
+  <data name="T_MyInformation" xml:space="preserve">
+    <value>My information</value>
+  </data>
+  <data name="T_MyOrders" xml:space="preserve">
+    <value>My Orders</value>
+  </data>
+  <data name="T_MyRecurringOrders" xml:space="preserve">
+    <value>My Recurring Orders</value>
+  </data>
+  <data name="T_NewCustomer" xml:space="preserve">
+    <value>New customer?</value>
+  </data>
+  <data name="T_OrderDetails" xml:space="preserve">
+    <value>Order Details</value>
+  </data>
+  <data name="T_OrderSummary" xml:space="preserve">
+    <value>Order Summary</value>
+  </data>
+  <data name="T_OrderTotal" xml:space="preserve">
+    <value>Order Summary</value>
+  </data>
+  <data name="T_PastOrders" xml:space="preserve">
+    <value>My Past Orders</value>
+  </data>
+  <data name="T_PaymentMethod" xml:space="preserve">
+    <value>Payment</value>
+  </data>
+  <data name="T_ReturningCustomer" xml:space="preserve">
+    <value>Returning customer?</value>
+  </data>
+  <data name="T_SharedWishList" xml:space="preserve">
+    <value>Wish List</value>
+  </data>
+  <data name="T_SharedWishList_StartAddTo" xml:space="preserve">
+    <value>Continue looking for inspiration!</value>
+  </data>
+  <data name="T_SharedWishListAccountHeader" xml:space="preserve">
+    <value>{0} {1}'s Public Wish List</value>
+  </data>
+  <data name="T_ShippingMethod" xml:space="preserve">
+    <value>Shipping Method</value>
+  </data>
+  <data name="T_SignIn" xml:space="preserve">
+    <value>Sign in for faster checkout</value>
+  </data>
+  <data name="T_WishList" xml:space="preserve">
+    <value>My Wish List</value>
+  </data>
+  <data name="T_WishListCount" xml:space="preserve">
+    <value>product(s)</value>
+  </data>
+</root>

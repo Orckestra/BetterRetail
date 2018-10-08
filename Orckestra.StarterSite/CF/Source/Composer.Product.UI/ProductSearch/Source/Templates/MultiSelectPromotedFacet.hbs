@@ -1,0 +1,14 @@
+{{#if Quantity}}
+    <li>
+        <div class="checkbox" data-facetfieldname="{{FieldName}}" data-facettype="{{FacetType}}">
+            <label>
+                {{#if IsSelected}}
+                <input type="checkbox" name="{{FieldName}}[]" value="{{Value}}" data-oc-click="multiFacetChanged" checked="checked" />
+                {{else}}
+                <input type="checkbox" name="{{FieldName}}[]" value="{{Value}}" data-oc-click="multiFacetChanged" />
+                {{/if}}
+                {{Title}}&#160;({{Quantity}})
+            </label>
+        </div>
+    </li>
+{{/if}}

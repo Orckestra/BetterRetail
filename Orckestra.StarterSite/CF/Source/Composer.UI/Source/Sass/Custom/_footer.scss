@@ -1,0 +1,225 @@
+.footer-nolink {
+  color:black;
+  cursor:default;
+}
+.footer {
+  position: relative;
+  z-index: 1;
+  margin-top: 40px;
+
+  .well {
+    padding: 9px 19px;
+
+    @media(max-width: $screen-xs-max) {
+      padding-left: 0;
+    }
+  }
+ 
+  > .container {
+    @media (max-width: $screen-xs-max) {
+      width: 100%;
+    }
+  }
+  .well {
+    margin-bottom: 0;
+    border: 0;
+  }
+  .text-copy {
+    margin-top: 10px;
+    text-align: center;
+    @media (min-width: $screen-sm) {
+      margin-top: 0;
+      text-align: left;
+    }
+    @media (min-width: $screen-sm-min) {
+      margin-left: (-$grid-gutter-width/2);
+    }
+  }
+  .nav-footer-entry {
+    padding-left: 0;
+    margin: 0 -10px;
+    > li {
+      margin-bottom: 0;
+      h4 {
+        margin: 0;
+        > a {
+          border-bottom: 1px solid $gray-lighter;
+          border-top: 1px solid $gray-lighter;
+          display: block;
+          padding: 20px 10px;
+
+          .collapsed-icon {
+            display: none;
+          }
+          .expanded-icon {
+            display: block;
+          }
+          &.collapsed {
+            .collapsed-icon {
+              display: block;
+            }
+            .expanded-icon {
+              display: none;
+            }
+          }
+          @media (min-width: $screen-sm) {
+            border: 0;
+
+      
+
+            .collapsed-icon,
+            .expanded-icon {
+              display: none !important;
+            }
+          }
+        }
+      }
+    }
+    @media (min-width: $screen-sm) {
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: $screen-sm-max) {
+      .col-mobile-flush {
+        padding: 0;
+      }
+    }
+  }
+  .nav {
+
+    @media(max-width: $screen-xs-max) {
+      li {
+        margin: 0;
+
+        + li {
+          border-top: 1px solid #fff;
+        }
+      }
+    }
+
+    a {
+      font-size: 13px;
+
+      &:hover,
+      &:focus {
+        text-decoration: underline;
+      }
+    }
+    &.nav-legal {
+      display: table;
+      width: 100%;
+      > li {
+        display: table-cell;
+        text-align: center;
+        &:first-child {
+          border-right: 0;
+        }
+      }
+      a {
+        border: 1px solid $gray-lighter;
+        color: $gray-darker;
+        font-size: 12px;
+        padding: 10px;
+
+        span {
+          text-decoration: underline;
+        }
+
+        &:hover span {
+          text-decoration: none;
+        }
+      }
+      @media (min-width: $screen-sm-min) {
+        display: block;
+        text-align: right;
+        width: auto;
+        > li {
+          display: inline-block;
+          text-align: left;
+
+          a:before {
+            color: $gray-darker;
+            content: "|";
+            margin: 0 10px 0 8px;
+            text-decoration: none;
+          }
+
+          &:first-child {
+            a:before {
+              content: "";
+              margin: 0;
+            }
+          }
+        }
+        a {
+          border: 0;
+          padding: 0;
+          &:hover {
+            background: transparent;
+          }
+        }
+        }
+      }
+    }
+  }
+
+  .nav-footer-list {
+    background-color: $gray-lighter;
+    margin: 0;
+    > li {
+      &:last-child {}
+      > a {}
+    }
+    /* Small devices (tablets, 768px and up) */
+    @media (min-width: $screen-sm-min) {
+      background-color: transparent;
+      padding-left: 10px;
+      > li {
+        margin-top: 2px;
+        > a {
+          padding: 0;
+          &:hover {
+            background: transparent;
+          }
+        }
+      }
+    }
+    .follow-us {
+      margin-top: 8px;
+    }
+    .follow-us h4 {
+      margin: 0;
+    }
+  }
+  .nav-social {
+    margin-top: 5px;
+    margin-left: 10px;
+    li {
+      a {}
+    }
+  }
+  @media(min-width: $screen-sm) {
+    .collapse-mobile {
+      .collapse {
+        display: block;
+        height: auto!important;
+      }
+      .nav-footer-list.collapsing {
+        display: block;
+        height: auto !important;
+      }
+    }
+  }
+  .panel-mobile-social {
+    margin-bottom: 10px;
+    .nav-footer.nav-social {
+      float: right;
+    }
+    @media (min-width: $screen-sm) {
+      float: right;
+      margin-bottom: 0;
+      .nav-footer.nav-social {
+        float: none;
+      }
+    }
+  }

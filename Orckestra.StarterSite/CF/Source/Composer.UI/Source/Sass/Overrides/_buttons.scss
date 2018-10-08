@@ -1,0 +1,12 @@
+.btn {
+    &.disabled,
+    &[disabled],
+    fieldset[disabled] & {
+       @include opacity(.5);
+    }
+    white-space: normal;
+}
+
+.btn-inactive {
+    @include button-variant($gray-light, $btn-default-bg, $btn-default-border);
+}

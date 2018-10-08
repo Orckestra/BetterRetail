@@ -1,0 +1,202 @@
+<form id="CreateAccount" data-oc-submit="createAccount">
+    <div class="panel  panel-default">
+        <div class="panel-heading">
+            <h2 class="h3">{{localize 'MyAccount' 'T_MyInformation'}}</h2>
+        </div>
+
+        <div class="panel-body">
+
+            {{>FormErrorMessages}}
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="FirstName">{{localize 'Forms' 'F_FirstName'}}</label>
+                        <input type="text" 
+                                id="FirstName" 
+                                name="FirstName" 
+                                class="form-control"
+                                value=""
+                                required="true" 
+                                placeholder="{{localize 'Forms' 'F_FirstNameWaterMark'}}"
+                                data-qa="register-firstname"
+                                {{#if_localized 'Forms' 'F_FirstNameRequiredError'}}data-parsley-required-message="{{localize 'Forms' 'F_FirstNameRequiredError'}}"{{/if_localized}}
+                                data-parsley-length="[2, 36]" 
+                                data-parsley-pattern="/^[a-zA-Z\u00E0-\u00FC\.\-\s\']+$/i" 
+                                {{#if_localized 'Forms' 'F_FirstNameIndication'}}
+                                    {{>HelpBubbleOpen}}{{localize 'Forms' 'F_FirstNameIndication'}}{{>HelpBubbleClose}}
+                                {{/if_localized}}                                
+                                {{#if_localized 'Forms' 'F_FirstNameLengthError'}}
+                                    data-parsley-length-message="{{localize 'Forms' 'F_FirstNameLengthError'}}"
+                                {{/if_localized}}
+                                {{#if_localized 'Forms' 'F_FirstNamePatternError'}}
+                                    data-parsley-pattern-message="{{localize 'Forms' 'F_FirstNamePatternError'}}"
+                                {{/if_localized}}
+                                />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="LastName">{{localize 'Forms' 'F_LastName'}}</label>
+                        <input type="text" 
+                                id="LastName" 
+                                name="LastName" 
+                                class="form-control"
+                                value=""
+                                required="true" 
+                                placeholder="{{localize 'Forms' 'F_LastNameWaterMark'}}"
+                                data-qa="register-lastname"
+                                {{#if_localized 'Forms' 'F_LastNameIndication'}}
+                                    {{>HelpBubbleOpen}}{{localize 'Forms' 'F_LastNameIndication'}}{{>HelpBubbleClose}}
+                                {{/if_localized}}
+                                {{#if_localized 'Forms' 'F_LastNameRequiredError'}}data-parsley-required-message="{{localize 'Forms' 'F_LastNameRequiredError'}}"{{/if_localized}}                      
+                                data-parsley-length="[2, 36]" 
+                                {{#if_localized 'Forms' 'F_LastNameLengthError'}}data-parsley-length-message="{{localize 'Forms' 'F_LastNameLengthError'}}"{{/if_localized}}
+                                data-parsley-pattern="/^[a-zA-Z\u00E0-\u00FC\.\-\s\']+$/i" 
+                                {{#if_localized 'Forms' 'F_LastNamePatternError'}}data-parsley-pattern-message="{{localize 'Forms' 'F_LastNamePatternError'}}"{{/if_localized}}
+                                />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="Email">{{localize 'Forms' 'F_Email'}}</label>
+                        <input type="email"
+                                id="Email" 
+                                name="Email" 
+                                value=""
+                                class="form-control"
+                                placeholder="{{localize 'Forms' 'F_EmailWaterMark'}}"
+                                data-qa="register-email"
+                                {{#if_localized 'Forms' 'F_EmailIndication'}}
+                                    {{>HelpBubbleOpen}}{{localize 'Forms' 'F_EmailIndication'}}{{>HelpBubbleClose}}
+                                {{/if_localized}}                                
+                                required="true" 
+                                {{#if_localized 'Forms' 'F_EmailRequiredError'}}data-parsley-required-message="{{localize 'Forms' 'F_EmailRequiredError'}}"{{/if_localized}}
+                                data-parsley-length="[2, 36]" 
+                                data-parsley-type="email" 
+                                {{#if_localized 'Forms' 'F_EmailLengthError'}}data-parsley-length-message="{{localize 'Forms' 'F_EmailLengthError'}}"{{/if_localized}}
+                                {{#if_localized 'Forms' 'F_EmailPatternError'}}data-parsley-type-message="{{localize 'Forms' 'F_EmailPatternError'}}"{{/if_localized}}
+                                />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="ConfirmationEmail">{{localize 'Forms' 'F_ConfirmationEmail'}}</label>
+                        <input type="email" 
+                                id="ConfirmationEmail" 
+                                name="ConfirmationEmail" 
+                                class="form-control"
+                                value=""
+                                required="true" 
+                                placeholder="{{localize 'Forms' 'F_ConfirmationEmailWaterMark'}}"
+                                data-qa="register-email-confirm"
+                                data-parsley-equalto="#Email" 
+                                {{#if_localized 'Forms' 'F_ConfirmationEmailRequiredError'}}
+                                    data-parsley-required-message="{{localize 'Forms' 'F_ConfirmationEmailRequiredError'}}"
+                                {{/if_localized}}
+                                {{#if_localized 'Forms' 'F_ConfirmationEmailIndication'}}
+                                    {{>HelpBubbleOpen}}{{localize 'Forms' 'F_ConfirmationEmailIndication'}}{{>HelpBubbleClose}}
+                                {{/if_localized}}                                
+                                {{#if_localized 'Forms' 'F_ConfirmationEmailEqualToError'}}
+                                    data-parsley-equalto-message="{{localize 'Forms' 'F_ConfirmationEmailEqualToError'}}"
+                                {{/if_localized}}
+                                />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="Password">{{localize 'Forms' 'F_Password'}}</label>
+                        <input type="password"
+                                id="Password" 
+                                name="Password" 
+                                class="form-control"
+                                value=""
+                                required="true" 
+                                data-qa="register-password"
+                                {{#if_localized 'Forms' 'F_PasswordIndication'}}
+                                    {{>HelpBubbleOpen}}{{localize 'Forms' 'F_PasswordIndication'}}{{>HelpBubbleClose}}
+                                {{/if_localized}}
+                                data-parsley-length="[{{MinRequiredPasswordLength}},256]" 
+                                data-parsley-pattern="{{PasswordRegexPattern}}" 
+                                {{#if_localized 'Forms' 'F_PasswordLengthError'}}
+                                    data-parsley-length-message="{{localize 'Forms' 'F_PasswordLengthError'}}"
+                                {{/if_localized}}
+                                {{#if_localized 'Forms' 'F_PasswordPatternError'}}
+                                    data-parsley-pattern-message="{{localizeFormat 'Forms' 'F_PasswordPatternError' MinRequiredNonAlphanumericCharacters}}"
+                                {{/if_localized}}
+                                {{#if_localized 'Forms' 'F_PasswordRequiredError'}}
+                                    data-parsley-required-message="{{localize 'Forms' 'F_PasswordRequiredError'}}"
+                                {{/if_localized}}
+                                />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="ConfirmationPassword">{{localize 'Forms' 'F_ConfirmationPassword'}}</label>
+                        <input type="password" 
+                                id="ConfirmationPassword" 
+                                name="ConfirmationPassword" 
+                                class="form-control"
+                                value=""
+                                required="true" 
+                                data-qa="register-password-confirm"
+                                data-parsley-equalto="#Password" 
+                                {{#if_localized 'Forms' 'F_ConfirmationPasswordIndication'}}
+                                    {{>HelpBubbleOpen}}{{localize 'Forms' 'F_ConfirmationPasswordIndication'}}{{>HelpBubbleClose}}
+                                {{/if_localized}}                                
+                                {{#if_localized 'Forms' 'F_ConfirmationPasswordRequiredError'}}
+                                    data-parsley-required-message="{{localize 'Forms' 'F_ConfirmationPasswordRequiredError'}}"
+                                {{/if_localized}}
+                                {{#if_localized 'Forms' 'F_ConfirmationPasswordEqualToError'}}
+                                    data-parsley-equalto-message="{{localize 'Forms' 'F_ConfirmationPasswordEqualToError'}}"
+                                {{/if_localized}}
+                                />
+                    </div>
+                </div>
+            </div>
+
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" 
+                            id="TermsAndConditions" 
+                            name="TermsAndConditions" 
+                            value=""
+                            required="true"
+                            data-qa="register-tos"                        
+                            {{#if_localized 'Forms' 'F_TermsAndConditionsRequiredError'}}
+                                data-parsley-required-message="{{localize 'Forms' 'F_TermsAndConditionsRequiredError'}}"
+                            {{/if_localized}}
+                            />
+
+                    {{localizeFormat 'Forms' 'F_TermsAndConditions' TermsAndConditionsUrl}}
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="form-group  pull-right">
+                <button type="submit" class="btn  btn-primary" data-qa="register-submit">
+                    {{localize 'MyAccount' 'B_CreateAccount'}}
+                    <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  hidden"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</form>

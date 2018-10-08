@@ -1,0 +1,28 @@
+<div data-templateid="MyAccountMenu">
+    <div class="panel  panel-default  hidden-xs  hidden-sm">
+        <div class="panel-body">
+            <h2 class="h4">{{localize 'MyAccount' 'L_MyAccount'}}</h2>
+            <nav>
+                <ul class="list-unstyled">
+                    {{#each MenuItems}}
+                        <li><a href="{{Url}}">{{#if IsActive}}<strong>{{/if}}{{Name}}{{#if IsActive}}</strong>{{/if}}</a></li>
+                    {{/each}}
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <div class="form-group  hidden-md  hidden-lg">
+        <div class="dropdown">
+            <button class="btn  btn-default  dropdown-toggle" type="button" id="dropdownMyAccount" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                {{localize 'MyAccount' 'L_MyAccount'}}
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMyAccount">
+                {{#each MenuItems}}
+                    <li><a href="{{Url}}">{{#if IsActive}}<strong>{{/if}}{{Name}}{{#if IsActive}}</strong>{{/if}}</a></li>
+                {{/each}}
+            </ul>
+        </div>
+    </div>
+</div>

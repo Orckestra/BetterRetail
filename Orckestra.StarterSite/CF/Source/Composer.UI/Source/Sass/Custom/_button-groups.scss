@@ -1,0 +1,21 @@
+@media (max-width: $screen-sm-max) {
+    .btn-group-responsive {
+        margin-bottom: -10px;
+
+        .btn {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        > .pull-left,
+        > .pull-right {
+            float: none !important;
+        }
+    }
+}
+
+.text-align-button {
+    line-height: $line-height-base;
+    padding-top: $padding-base-vertical + 1; // 1 is border size
+    padding-bottom: $padding-base-vertical + 1; // 1 is border size
+}

@@ -1,0 +1,149 @@
+<div data-templateid="Address">
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label for="FirstName">{{localize 'Forms' 'F_FirstName'}} *</label>
+                <input type="text"
+                        id="FirstName" 
+                        name="FirstName"                         
+                        class="form-control" 
+                        required="true" 
+                        placeholder="{{localize 'Forms' 'F_FirstNameWaterMark'}}" 
+                        data-qa="checkout-firstname"
+                        data-parsley-length="[2, 36]" 
+                        data-parsley-pattern="/^[a-zA-Z\u00E0-\u00FC\.\-\s\']+$/i"
+                        {{#if_localized 'Forms' 'F_FirstNameIndication'}}
+                            {{>HelpBubbleOpen}}{{localize 'Forms' 'F_FirstNameIndication'}}{{>HelpBubbleClose}}
+                        {{/if_localized}}
+                        {{#if_eq UseShippingAddress true}}{{else}}value="{{FirstName}}"{{/if_eq}} />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label for="LastName">{{localize 'Forms' 'F_LastName'}} *</label>
+                <input type="text"
+                        id="LastName" 
+                        name="LastName" 
+                        class="form-control" 
+                        required="true" 
+                        placeholder="{{localize 'Forms' 'F_LastNameWaterMark'}}" 
+                        data-qa="checkout-lastname"
+                        data-parsley-length="[2, 36]" 
+                        data-parsley-pattern="/^[a-zA-Z\u00E0-\u00FC\.\-\s\']+$/i"
+                        {{#if_localized 'Forms' 'F_LastNameIndication'}}
+                            {{>HelpBubbleOpen}}{{localize 'Forms' 'F_LastNameIndication'}}{{>HelpBubbleClose}}
+                        {{/if_localized}}
+                        {{#if_eq UseShippingAddress true}}{{else}}value="{{LastName}}"{{/if_eq}} />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label for="Line1">{{localize 'Forms' 'F_Address'}} *</label>
+                <input type="text" 
+                        id="Line1" 
+                        name="Line1" 
+                        class="form-control" 
+                        required="true"
+                        placeholder="{{localize 'Forms' 'F_AddressWaterMark'}}" 
+                        data-qa="checkout-shipping-address"
+                        data-parsley-length="[5, 36]" 
+                        {{#if_localized 'Forms' 'F_AddressIndication'}}
+                            {{>HelpBubbleOpen}}{{localize 'Forms' 'F_AddressIndication'}}{{>HelpBubbleClose}}
+                        {{/if_localized}}
+                        {{#if_eq UseShippingAddress true}}{{else}}value="{{Line1}}"{{/if_eq}} />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label for="Line2">{{localize 'Forms' 'F_ComplementaryAddress'}}</label>
+                <input type="text" 
+                        id="Line2" 
+                        name="Line2" 
+                        class="form-control" 
+                        placeholder="{{localize 'Forms' 'F_ComplementaryAddressWaterMark'}}" 
+                        data-qa="checkout-shipping-complementary-address"
+                        data-parsley-length="[0, 36]"
+                        {{#if_localized 'Forms' 'F_ComplementaryAddressIndication'}}
+                            {{>HelpBubbleOpen}}{{localize 'Forms' 'F_ComplementaryAddressIndication'}}{{>HelpBubbleClose}}
+                        {{/if_localized}}
+                        {{#if_eq UseShippingAddress true}}{{else}}value="{{Line2}}"{{/if_eq}} />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label for="City">{{localize 'Forms' 'F_City'}} *</label>
+                <input type="text"
+                        id="City" 
+                        name="City" 
+                        class="form-control" 
+                        placeholder="{{localize 'Forms' 'F_CityWaterMark'}}" 
+                        data-qa="checkout-shipping-city"
+                        data-parsley-length="[3, 36]" required="true"
+                        {{#if_localized 'Forms' 'F_CityIndication'}}
+                            {{>HelpBubbleOpen}}{{localize 'Forms' 'F_CityIndication'}}{{>HelpBubbleClose}}
+                        {{/if_localized}}
+                        {{#if_eq UseShippingAddress true}}{{else}}value="{{City}}"{{/if_eq}} />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <input type="hidden" name="CountryCode" value="{{CountryCode}}" />
+                        <label for="RegionCode">{{localize 'Forms' 'F_Province'}} *</label>
+                        {{> AddressRegionPicker }}
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="PostalCode">{{localize 'Forms' 'F_PostalCode'}} *</label>
+                        <input type="text"
+                                id="PostalCode" 
+                                name="PostalCode" 
+                                class="form-control" 
+                                required="true" 
+                                placeholder="{{localize 'Forms' 'F_PostalCodeWaterMark'}}" 
+                                data-qa="checkout-shipping-postalcode"
+                                data-oc-change="changePostalCode"
+                                data-parsley-pattern="{{PostalCodeRegexPattern}}" 
+                                data-parsley-group="shipping-based-on"
+							    data-parsley-length="[6, 7]" 
+                                {{#if_localized 'Forms' 'F_PostalCodeIndication'}}
+                                    {{>HelpBubbleOpen}}{{localize 'Forms' 'F_PostalCodeIndication'}}{{>HelpBubbleClose}}
+                                {{/if_localized}}
+                                {{#if_eq UseShippingAddress true}}{{else}}value="{{PostalCode}}"{{/if_eq}} />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label for="PhoneNumber">{{localize 'Forms' 'F_PhoneNumber'}} *</label>                    
+                <input type="tel" 
+                        id="PhoneNumber" 
+                        name="PhoneNumber" 
+                        class="form-control" 
+                        required="true" data-parsley-pattern="{{PhoneRegex}}"
+                        placeholder="{{localize 'Forms' 'F_PhoneNumberWaterMark'}}" 
+                        data-qa="checkout-shipping-phone"
+                        data-parsley-length="[7, 36]" 
+                        {{#if_localized 'Forms' 'F_PhoneNumberIndication'}}
+                            {{>HelpBubbleOpen}}{{localize 'Forms' 'F_PhoneNumberIndication'}}{{>HelpBubbleClose}}
+                        {{/if_localized}}
+                        {{#if_eq UseShippingAddress true}}{{else}}value="{{PhoneNumber}}"{{/if_eq}} /> 
+            </div>
+        </div>
+    </div>
+ </div>

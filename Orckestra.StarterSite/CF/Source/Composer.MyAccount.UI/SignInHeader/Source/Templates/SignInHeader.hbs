@@ -1,0 +1,18 @@
+<a data-templateid="SignInHeader"
+   {{#if IsLoggedIn}}
+   {{#if IsOnMyAccount}} class="logged-in" {{/if}}
+   data-qa="login-my-account" href="{{Url}}" title="{{localize 'MyAccount' 'L_MyAccount'}}"
+   {{else}}
+   data-qa="login-sign-in" href="{{Url}}" title="{{localize 'MyAccount' 'L_SignIn'}}"
+   {{/if}}
+>
+    <span class="fa  fa-user  fa-lg  affix-show-inline-block"></span>&#160;
+    {{#unless IsLoading }}
+        {{#if IsLoggedIn}}
+            <span class="hidden-xs  hidden-sm  affix-hidden">{{localize 'MyAccount' 'L_MyAccount'}}</span>
+        {{else}}
+            <span class="hidden-xs  hidden-sm  affix-hidden">{{localize 'MyAccount' 'L_SignIn'}}</span>
+        {{/if}}
+    {{/unless}}
+</a>
+

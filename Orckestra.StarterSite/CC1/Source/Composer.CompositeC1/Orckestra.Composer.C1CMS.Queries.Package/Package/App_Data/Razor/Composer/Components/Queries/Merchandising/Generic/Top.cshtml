@@ -1,0 +1,37 @@
+﻿@inherits RazorFunction
+
+@functions {
+    public override string FunctionDescription
+    {
+        get  { return ""; }
+    }
+
+    [FunctionParameter(Label = "Query Name", Help = "Query Name", WidgetMarkup = @"<f:widgetfunction xmlns:f='http://www.composite.net/ns/function/1.0' name='Composite.Widgets.String.Selector'>
+    <f:param name='Options'>
+         <f:function name='Composer.SearchQuery.Functions.GetSearchQueryList'>
+                <f:param name='type' value='Merchandising' />
+        </f:function>
+    </f:param>
+</f:widgetfunction>")]
+    public string QueryName { get; set; }
+
+    [FunctionParameter(Label = "Number", Help = "", DefaultValue = "3")]
+    public string Number { get; set; }
+
+    [FunctionParameter(Label = "Page", Help = "", WidgetMarkup = @"<f:widgetfunction xmlns:f='http://www.composite.net/ns/function/1.0' name='Composite.Widgets.DataReference.OptionalPageSelector' />", DefaultValue=null)]
+    public Guid? Page { get; set; }
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<head>
+</head>
+<body>
+    <f:function name="Composer.Queries.Merchandising.Top" xmlns:f="http://www.composite.net/ns/function/1.0">
+        <f:param name="QueryName" value="@QueryName" />
+        <f:param name="Number" value="@Number" />
+    </f:function>
+    @if (Page != null) {
+    <p><a href="~/page(@Page)">Read more</a></p>
+    }
+</body>
+</html>

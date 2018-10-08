@@ -1,0 +1,13 @@
+using System.Threading.Tasks;
+using Orckestra.Composer.Store.Parameters;
+using Orckestra.Composer.Store.ViewModels;
+using Orckestra.Composer.ViewModels;
+
+namespace Orckestra.Composer.Store.Services
+{
+    public interface IStoreViewService
+    {
+        Task<StoreViewModel> GetStoreViewModelAsync(GetStoreParam viewModelParam);
+        Task<PageHeaderViewModel> GetPageHeaderViewModelAsync(GetStorePageHeaderViewModelParam param);
+    }
+}

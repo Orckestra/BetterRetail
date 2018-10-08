@@ -1,0 +1,113 @@
+<div class="cart-item">
+    {{#if IsValid}}
+        {{#if Rewards}}
+            <div class="text-center">
+                <span class="promotion">
+                {{#each Rewards}}
+                <em>{{Description}}</em><br/>
+                {{/each}}
+                </span>
+            </div>
+        {{/if}}
+    {{/if}}
+
+    <div class="cart-row">
+        <div class="cart-cell  cart-image  text-center">
+            <a href="{{ProductUrl}}">
+                <img src="{{ImageUrl}}" class="img-fluid" alt="Thumbnail" onerror="this.onerror=null; this.src='{{FallbackImageUrl}}'" />
+            </a>
+        </div>
+        <div class="cart-cell-flush">
+            <div class="cart-attributes">
+                <div class="cart-cell  cart-desc  small">
+                    <a href="{{ProductUrl}}">
+                        <div data-qa="cart-product-brand"><strong>{{ProductSummary.Brand}}</strong></div>
+                        <span data-qa="cart-product-name">{{ProductSummary.DisplayName}}</span>
+
+                        {{#if VariantId}}
+                        <br />
+                        {{#each KeyVariantAttributesList}}
+                            {{#if_neq @index 0}}|{{/if_neq}}
+                            {{Value}}
+                        {{/each}}
+                        {{/if}}
+                    </a>
+                </div>
+
+                <div class="cart-cell  cart-delete  text-xs-right  text-md-center">
+                    <button type="button"
+                            class="btn  btn-default  btn-sm"
+                            data-lineitemid="{{Id}}"
+                            data-oc-click="deleteLineItem"
+                            data-qa="cart-product-delete"
+                            data-productid="{{ProductId}}"
+                            ><span class="fa  fa-times"></span></button>
+                </div>
+
+                <div class="cart-cell  cart-price  text-sm-right  hidden-xs">
+                    <div class="text-align-button  small">
+                        {{#if IsOnSale}}
+                        <del data-qa="cart-product-price">{{DefaultListPrice}}</del><br />
+                        <strong class="text-danger" data-qa="cart-product-sales-price">{{ListPrice}}</strong>
+                        {{else}}
+                        <strong data-qa="cart-product-price">{{DefaultListPrice}}</strong>
+                        {{/if}}
+                    </div>
+                </div>
+
+                <div class="cart-cell  cart-qty  text-sm-center">
+                    {{#if IsValid}}
+                    {{#if_eq Quantity 1}}
+                        <button data-qa="cart-product-decrease" 
+                            class="btn  btn-default  btn-sm" 
+                            disabled="disabled" 
+                            data-lineitemid="{{Id}}" 
+                            data-action="Decrement" 
+                            data-quantity="{{Quantity}}"><span class="fa  fa-minus"></span></button>
+                    {{else}}
+                        <button data-qa="cart-product-decrease" 
+                            class="btn  btn-default  btn-sm" 
+                            data-lineitemid="{{Id}}" 
+                            data-action="Decrement" 
+                            data-quantity="{{Quantity}}" 
+                            data-productid="{{ProductId}}" 
+                            data-recurringorderfrequencyname="{{RecurringOrderFrequencyName}}" 
+                            data-recurringorderprogramname="{{RecurringOrderProgramName}}" 
+                            data-oc-click="updateLineItem"><span class="fa  fa-minus"></span></button>
+                    {{/if_eq}}
+                    {{/if}}
+                    <span class="small  cart-quantity" data-qa="lineItem-quantity">{{Quantity}}</span>
+
+                    {{#if IsValid}}
+                        <button data-qa="cart-product-increase" 
+                            class="btn  btn-default  btn-sm" 
+                            data-lineitemid="{{Id}}" 
+                            data-action="Increment" 
+                            data-quantity="{{Quantity}}" 
+                            data-productid="{{ProductId}}" 
+                            data-recurringorderfrequencyname="{{RecurringOrderFrequencyName}}" 
+                            data-recurringorderprogramname="{{RecurringOrderProgramName}}" 
+                            data-oc-click="updateLineItem"><span class="fa  fa-plus"></span></button>
+                    {{/if}}
+                </div>
+
+                <div class="cart-cell  cart-subtotal  text-sm-right">
+                    <div class="text-align-button small">
+                        {{#if IsPriceDiscounted}}
+                        <del data-qa="cart-product-subtotal-price">{{TotalWithoutDiscount}}</del><br />
+                        <strong class="cart-subtotal-price" data-qa="cart-product-subtotal-sales" class="text-danger">{{Total}}</strong>
+                        {{else}}
+                        <strong class="cart-subtotal-price" data-qa="cart-product-subtotal-price">{{Total}}</strong>
+                        {{/if}}
+                        {{#if SavingsTotal}}
+                        <br />
+                        <span class="text-success">{{localize 'ShoppingCart' 'L_LineItemSavings'}}&nbsp;</span>
+                        <span class="text-success" data-qa="lineItem-savingstotal">{{SavingsTotal}}</span>
+                        {{/if}}
+                        {{>AdditionalFees}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> 
+</div> 

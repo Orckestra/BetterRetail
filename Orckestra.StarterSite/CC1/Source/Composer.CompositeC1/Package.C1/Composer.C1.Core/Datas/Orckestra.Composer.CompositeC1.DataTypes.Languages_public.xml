@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Data>
+  <Add Id="677d6360-8233-479a-8045-5f5918b78540" Code="en-CA" IsActive="True" DisplayName="English" ShortDisplayName="EN" PublicationStatus="published" />
+  <Add Id="a7f11853-2172-412c-bdad-e47ce1611416" Code="fr-CA" IsActive="True" DisplayName="Français" ShortDisplayName="FR" PublicationStatus="published" />
+</Data>

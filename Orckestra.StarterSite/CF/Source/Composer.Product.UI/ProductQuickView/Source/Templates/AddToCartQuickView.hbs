@@ -1,0 +1,28 @@
+<span data-templateid="AddToCartQuickView">
+    {{#if IsUnavailable}}
+            <button data-qa="search-quickview-buy-now"
+                    class="btn  btn-primary  text-uppercase"
+                    disabled="disabled">
+                {{localize 'General' 'B_AddToCartProductDetailUnavailable'}}
+            </button>
+    {{else}}
+        {{#if_eq IsAvailableToSell undefined}}
+            <!--Don't display the AddToCart Button the inventory is loading-->
+        {{else}}
+            {{#if IsAvailableToSell}}
+                    <button data-qa="search-quickview-buy-now"
+                            class="btn  btn-primary  text-uppercase"
+                            data-oc-click="addLineItem">
+                        {{localize "General" "B_AddToCartProductDetail"}}
+                        <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  hidden"></span>
+                    </button>
+            {{else}}
+                    <button data-qa="search-quickview-buy-now"
+                            class="btn  btn-primary  text-uppercase"
+                            disabled="disabled">
+                        {{localize 'General' 'B_AddToCartProductListOOS'}}
+                    </button>
+            {{/if}}
+        {{/if_eq}}
+    {{/if}}
+</span>

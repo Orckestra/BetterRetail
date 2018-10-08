@@ -1,0 +1,114 @@
+<form id="UpdateAccount" data-oc-submit="updateAccount" data-oc-change="enableSubmitButton">
+    <div class="panel  panel-default">
+        <div class="panel-heading">
+            <h2 class="h3">{{localize 'MyAccount' 'T_MyInformation'}}</h2>
+        </div>
+
+        <div class="panel-body">
+            {{>UpdateAccountSuccessful}}
+            {{>FormErrorMessages}}
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="FirstName">{{localize 'Forms' 'F_FirstName'}}</label>
+                        <input name="FirstName" id="FirstName" data-qa="updateaccount-firstname"
+                            {{#if_localized 'Forms' 'F_FirstNameIndication'}}
+                                {{>HelpBubbleOpen}}{{localize 'Forms' 'F_FirstNameIndication'}}{{>HelpBubbleClose}}
+                            {{/if_localized}}
+                                type="text"
+                                class="form-control"
+                                placeholder="{{localize 'Forms' 'F_FirstNameWaterMark'}}"
+                                value="{{FirstName}}"
+                                required="true" {{#if_localized 'Forms' 'F_FirstNameRequiredError'}}data-parsley-required-message="{{localize 'Forms' 'F_FirstNameRequiredError'}}"{{/if_localized}}
+                                data-parsley-length="[2, 36]" {{#if_localized 'Forms' 'F_FirstNameLengthError'}}data-parsley-length-message="{{localize 'Forms' 'F_FirstNameLengthError'}}"{{/if_localized}}
+                                data-parsley-pattern="/^[a-zA-Z\u00E0-\u00FC\.\-\s\']+$/i" {{#if_localized 'Forms' 'F_FirstNamePatternError'}}data-parsley-pattern-message="{{localize 'Forms' 'F_FirstNamePatternError'}}"{{/if_localized}}
+                                />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="LastName">{{localize 'Forms' 'F_LastName'}}</label>
+                        <input name="LastName" id="LastName" data-qa="updateaccount-lastname"
+                            {{#if_localized 'Forms' 'F_LastNameIndication'}}
+                                {{>HelpBubbleOpen}}{{localize 'Forms' 'F_LastNameIndication'}}{{>HelpBubbleClose}}
+                            {{/if_localized}}
+                                type="text"
+                                class="form-control"
+                                placeholder="{{localize 'Forms' 'F_LastNameWaterMark'}}"
+                                value="{{LastName}}"
+                                required="true" {{#if_localized 'Forms' 'F_LastNameRequiredError'}}data-parsley-required-message="{{localize 'Forms' 'F_LastNameRequiredError'}}"{{/if_localized}}
+                                data-parsley-length="[2, 36]" {{#if_localized 'Forms' 'F_LastNameLengthError'}}data-parsley-length-message="{{localize 'Forms' 'F_LastNameLengthError'}}"{{/if_localized}}
+                                data-parsley-pattern="/^[a-zA-Z\u00E0-\u00FC\.\-\s\']+$/i" {{#if_localized 'Forms' 'F_LastNamePatternError'}}data-parsley-pattern-message="{{localize 'Forms' 'F_LastNamePatternError'}}"{{/if_localized}}
+                                />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="Email">{{localize 'Forms' 'F_Email'}}</label>
+                        <input name="Email" id="Email" data-qa="updateaccount-email"
+                            {{#if_localized 'Forms' 'F_EmailIndication'}}
+                                {{>HelpBubbleOpen}}{{localize 'Forms' 'F_EmailIndication'}}{{>HelpBubbleClose}}
+                            {{/if_localized}}
+                                type="email"
+                                class="form-control"
+                                placeholder="{{localize 'Forms' 'F_EmailWaterMark'}}"
+                                value="{{Email}}"
+                                required="true" {{#if_localized 'Forms' 'F_EmailRequiredError'}}data-parsley-required-message="{{localize 'Forms' 'F_EmailRequiredError'}}"{{/if_localized}}
+                                data-parsley-length="[2, 36]" {{#if_localized 'Forms' 'F_EmailLengthError'}}data-parsley-length-message="{{localize 'Forms' 'F_EmailLengthError'}}"{{/if_localized}}
+                                data-parsley-type="email" {{#if_localized 'Forms' 'F_EmailPatternError'}}data-parsley-type-message="{{localize 'Forms' 'F_EmailPatternError'}}"{{/if_localized}}
+                                />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="PreferredLanguage">{{localize 'Forms' 'F_PreferredLanguage'}}</label>
+                        <select name="PreferredLanguage" id="PreferredLanguage" data-qa="updateaccount-preferredlanguage"
+                            {{#if_localized 'Forms' 'F_PreferredLanguageIndication'}}
+                                {{>HelpBubbleOpen}}{{localize 'Forms' 'F_PreferredLanguageIndication'}}{{>HelpBubbleClose}}
+                            {{/if_localized}}
+                            class="form-control" value='{{PreferredLanguage}}' required="true">
+
+                                {{#each Languages}}
+                                    {{#if IsSelected}}
+                                        <option data-qa="updateaccount-preferredlanguage-{{@index}}" value="{{IsoCode}}" selected="selected">{{DisplayName}}</option>
+                                    {{else}}
+                                        <option data-qa="updateaccount-preferredlanguage-{{@index}}" value="{{IsoCode}}" >{{DisplayName}}</option>
+                                    {{/if}}
+                                {{/each}}
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <a class="cta" href="{{ChangePasswordUrl}}" title="{{localize 'MyAccount' 'B_ChangePassword'}}">
+                        {{localize 'MyAccount' 'B_ChangePassword'}}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="form-group  pull-right">
+                <button type="submit" class="btn  btn-default" id="UpdateAccountSubmit" data-qa="updateaccount-submit" disabled="disabled">
+                    {{localize 'MyAccount' 'B_UpdateAccount'}}
+                    <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  hidden"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+</form>

@@ -1,0 +1,17 @@
+<div class="main-nav">
+    <hr class="hidden-xs" />
+    <div class="container">
+        <div id="main-nav-collapse" class="navbar-collapse collapse main-nav-menu" aria-expanded="false">
+            <nav class="navbar">
+                <div class="container">
+                    <div class="navbar-collapse collapse"></div>
+                    <ul class="nav navbar-nav">
+                        {{#each Entries}}
+                            {{>MainMenuEntry}}
+                        {{/each}}
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </div>
+</div>

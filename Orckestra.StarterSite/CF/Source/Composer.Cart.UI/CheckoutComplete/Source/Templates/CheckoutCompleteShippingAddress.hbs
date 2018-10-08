@@ -1,0 +1,28 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <div class="row">
+            <div class="col-xs-10">
+                <h2 class="h3" data-qa="checkout-header-shipping-address">{{localize 'CheckoutProcess' 'T_ShippingAddress'}}</h2>
+            </div>
+            <div class="col-xs-2">
+                <a href="{{OrderSummary.CheckoutStepUrls.[1]}}" class="pull-right" title="{{localize 'CheckoutProcess' 'B_Edit'}}"><span class="fa  fa-pencil  fa-lg"></span></a>
+            </div>
+        </div>
+    </div>
+    <div class="panel-body">
+        {{#if GettingCart}}
+            {{>Loading}}
+        {{else}}
+            <span data-qa="checkout-shipping-address-firstname">{{ShippingAddress.FirstName}}</span>
+            <span data-qa="checkout-shipping-address-lastname">{{ShippingAddress.LastName}}</span><br />
+            <span data-qa="checkout-shipping-address-line1">{{ShippingAddress.Line1}}</span><br />
+            {{#if ShippingAddress.Line2}}
+                <span data-qa="checkout-shipping-address-line2">{{ShippingAddress.Line2}}</span><br />
+            {{/if}}
+            <span data-qa="checkout-shipping-address-city">{{ShippingAddress.City}}</span>,
+            <span data-qa="checkout-shipping-address-region">{{ShippingAddress.RegionName}}</span>,
+            <span data-qa="checkout-shipping-address-postalcode">{{ShippingAddress.PostalCode}}</span><br />
+            <span data-qa="checkout-shipping-address-phone">{{ShippingAddress.PhoneNumber}}</span>
+        {{/if}}
+    </div>
+</div>
