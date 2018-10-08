@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Orckestra.Composer.CompositeC1.Cache;
-using Orckestra.Composer.CompositeC1.DataTypes;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.ViewModels.LanguageSwitch;
 
@@ -20,7 +18,7 @@ namespace Orckestra.Composer.CompositeC1.Services
             CultureService = cultureService;
         }
 
-        public LanguageSwitchViewModel GetViewModel(Func<CultureInfo, string> urlBuilder, CultureInfo currentCulture)
+        public virtual LanguageSwitchViewModel GetViewModel(Func<CultureInfo, string> urlBuilder, CultureInfo currentCulture)
         {
             if (urlBuilder == null) { throw new ArgumentNullException("urlBuilder"); }
             if (currentCulture == null) { throw new ArgumentNullException("currentCulture"); }
@@ -37,7 +35,7 @@ namespace Orckestra.Composer.CompositeC1.Services
             return languageSwitchViewModel;
         }
 
-        private static void BuildMultiLanguageViewModel(
+        private void BuildMultiLanguageViewModel(
             LanguageSwitchViewModel languageSwitchViewModel, 
             IEnumerable<CultureInfo> supportedCultures,
             Func<CultureInfo, string> urlBuilder, 
@@ -51,7 +49,7 @@ namespace Orckestra.Composer.CompositeC1.Services
             languageSwitchViewModel.IsMultiLanguage = languageSwitchViewModel.Entries.Count > 1;
         }
 
-        private static List<LanguageSwitchEntryViewModel> CreateAlternativeEntries(
+        private List<LanguageSwitchEntryViewModel> CreateAlternativeEntries(
             IEnumerable<CultureInfo> supportedCultures, 
             Func<CultureInfo, string> urlBuilder, 
             CultureInfo currentCulture)
@@ -62,7 +60,7 @@ namespace Orckestra.Composer.CompositeC1.Services
             return entries;
         }
 
-        private static LanguageSwitchEntryViewModel CreateEntry(
+        private LanguageSwitchEntryViewModel CreateEntry(
             Func<CultureInfo, string> urlBuilder, 
             CultureInfo entryCulture, 
             CultureInfo currentCulture)
@@ -80,23 +78,11 @@ namespace Orckestra.Composer.CompositeC1.Services
             return entry;
         }
 
-        private static void SetEntryDisplayNames(LanguageSwitchEntryViewModel entry, CultureInfo entryCulture)
+        public virtual void SetEntryDisplayNames(LanguageSwitchEntryViewModel entry, CultureInfo entryCulture)
         {
-            var language = GetLanguage(entryCulture.Name);
-
-            entry.DisplayName = language.DisplayName;
-            entry.ShortDisplayName = language.ShortDisplayName;
+            entry.DisplayName = (entryCulture.CultureTypes & CultureTypes.SpecificCultures) != 0 ? entryCulture.Parent.DisplayName : entryCulture.DisplayName;
+            entry.ShortDisplayName = entryCulture.TwoLetterISOLanguageName;
         }
 
-        /// <summary>
-        /// This is how to use the cache to get dynamic data
-        /// </summary>
-        private static readonly QueryCache<Language, string> Languages = 
-            new QueryCache<Language, string>("languageCache", l => l.Code, 100);
-
-        private static Language GetLanguage(string languageCode)
-        {
-            return Languages[languageCode];
-        }
     }
 }

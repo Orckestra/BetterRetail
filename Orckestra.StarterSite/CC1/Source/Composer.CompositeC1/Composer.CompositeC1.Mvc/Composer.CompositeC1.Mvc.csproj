@@ -309,6 +309,7 @@
     <Content Include="App_Data\PageTemplateFeatures\Minicart.html" />
     <Content Include="App_Data\PageTemplateFeatures\Social links.html" />
     <Content Include="browserconfig.xml" />
+    <Content Include="Deployment\InstallCulture.aspx" />
     <Content Include="Deployment\InstallPackages.aspx" />
     <Content Include="Composite\content\forms\Administrative\EditPage.xml" />
     <Content Include="Composite\content\sitemap\SitemapManagement.aspx" />

@@ -1,6 +1,6 @@
 ﻿{{#if IsMultiLanguage}}
 <li class="dropdown" data-oc-controller="General.LanguageSwitch">
-    <a href="{{CurrentLanguage.Url}}" data-qa="language-selector" data-toggle="dropdown">{{CurrentLanguage.ShortDisplayName}}</a>
+    <a href="{{CurrentLanguage.Url}}" data-qa="language-selector" class="text-uppercase" data-toggle="dropdown">{{CurrentLanguage.ShortDisplayName}}</a>
     <ul class="dropdown-menu">
     {{#each Entries}}
         {{#if IsCurrent}}

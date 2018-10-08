@@ -38,7 +38,8 @@ $cmsHostPhysicalPath	= Get-Settings -environment $Environment -key "cms-$($Confi
 $cmsUrl				    = Get-Settings -environment $Environment -key "cms-$($Configuration)-url"
 $cmsDeploymentToken 	= Get-Settings -environment $Environment -key "cms-deployment-token"
 $cmsC1version 			= Get-Settings -environment $Environment -key "cms-c1-version"
-$cmsC1Culture 			= Get-Settings -environment $Environment -key "cms-c1-init-culture"
+$cmsC1Culture 			= Get-Settings -environment $Environment -key "cms-c1-default-culture"
+$cmsC1CAllultures			= Get-Settings -environment $Environment -key "cms-c1-all-cultures"
 $cmsC1ConsoleLogin		= Get-Settings -environment $Environment -key "cms-c1-conslole-login"
 $cmsC1ConsolePassword	= Get-Settings -environment $Environment -key "cms-c1-console-password"
 #=======================================
@@ -78,6 +79,17 @@ function DownloadC1CMS() {
 	$AllProtocols = [System.Net.SecurityProtocolType]'Ssl3,Tls,Tls11,Tls12'
 	[System.Net.ServicePointManager]::SecurityProtocol = $AllProtocols
 	(Invoke-WebRequest -Uri $url -OutFile $output -TimeoutSec $(60*15)).StatusDescription
+}
+
+function InstallC1CMSCultures() {
+	$cmsCultures = Get-Settings -environment $Environment -key "cms-c1-all-cultures"
+	Write-Log ACTION "Install  C1 CMS cultures: $cmsCultures"
+	$cultureNames = $cmsCultures.Split(",");
+	$cultureNames | ForEach-Object {
+		$name = $_
+		$response = Invoke-GetWebRequest -uri "$cmsUrl/Deployment/InstallCulture.aspx?culture=$name"
+		Write-Log $response
+	}
 }
 
 try {
@@ -129,6 +141,13 @@ try {
  		$setupResult = $proxy.SetUp($selection,$cmsC1ConsoleLogin,"admin@test.com",$cmsC1ConsolePassword,$cmsC1Culture,$cmsC1Culture,"false")
  		Write-Host "Setup result:"   $setupResult
 		
+		$cmsDeploymentPages = Get-Settings -environment $Environment -key "cms-deployment-pages"
+		Write-Log ACTION "Deploying (MSDeploy) '$cmsHostName' Deployment pages..."
+		$customizationPackage = Join-Path $genericC1CMSPackagesFolder "$cmsDeploymentPages"
+		Invoke-MSDeployPackageToContent -PackageFile "$customizationPackage" -ContentPath $cmsHostPhysicalPath\Website -DoNotDeleteExtraFiles
+		
+		InstallC1CMSCultures
+		
 		DownloadC1Package -packagename "Composite.AspNet.MvcFunctions" -outputRoot $genericC1CMSPackagesFolder -c1version $cmsC1version
 		
 		Write-Log ACTION "Create AutoInstallPackages folder and install required Composite.AspNet.MvcFunctions.zip"
@@ -160,6 +179,16 @@ try {
 		Complete-RobocopyExecution $lastexitcode
 	} else {
 		Write-Log WARNING "Deploying specific '$cmsHostName' config files skipped ('$cmsHostPackagePath' folder not found)..."
+	}
+	
+	#Removing the Deployment folder.
+	if(Test-Path -Path $cmsHostPhysicalPath\Website\Deployment) {
+		try {
+			Remove-Item $cmsHostPhysicalPath\Website\Deployment -Recurse -Force
+		}
+		catch {
+			Write-Log WARNING "Error while removing the Deployment folder. This may leave the website vulnerable."
+		}
 	}
 
  

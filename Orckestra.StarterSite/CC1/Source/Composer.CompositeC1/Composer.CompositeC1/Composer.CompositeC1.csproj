@@ -327,7 +327,6 @@
     <Compile Include="Hangfire\HangfireLogProvider.cs" />
     <Compile Include="Installers\ComposerFragmentUninstaller.cs" />
     <Compile Include="Installers\ComposerFragmentInstaller.cs" />
-    <Compile Include="DataTypes\Language.cs" />
     <Compile Include="Mappers\INavigationMapper.cs" />
     <Compile Include="Mappers\GoogleAnalyticsNavigationUrlProvider.cs" />
     <Compile Include="Media\ImageInfo.cs" />
@@ -389,6 +388,9 @@
       <Project>{e84bf038-fc5e-4841-8c5a-918fe8eaff8f}</Project>
       <Name>Composer.CompositeC1.DataTypes</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="DataTypes\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

@@ -2,7 +2,6 @@
 using System.Globalization;
 using System.Linq;
 using Composite.Data;
-using Orckestra.Composer.CompositeC1.DataTypes;
 using Orckestra.Composer.Services;
 
 namespace Orckestra.Composer.CompositeC1.Services
@@ -27,11 +26,7 @@ namespace Orckestra.Composer.CompositeC1.Services
             _defaultCulture = new Lazy<CultureInfo>(() => DataLocalizationFacade.DefaultLocalizationCulture);
             _allSupportedCultures = new Lazy<CultureInfo[]>(() =>
             {
-                using (var connection = new DataConnection())
-                {
-                    var activeLanguages = connection.Get<Language>().Where(l => l.IsActive);
-                    return activeLanguages.Select(al => new CultureInfo(al.Code)).ToArray();
-                }
+                return DataLocalizationFacade.ActiveLocalizationCultures.ToArray();
             });
         }
 

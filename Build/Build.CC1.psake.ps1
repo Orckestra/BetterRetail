@@ -51,9 +51,9 @@ Task CC1_BuildAndPackage -depends   CC1_Copy-UiPackageFromNuget,
                                     CC1_Compile-ContentEN,
                                     CC1_Compile-ContentFR,
                                     CC1_UnitTestBackend,
-                                    #CC1_Copy-DeploymentFolder,
                                     CC1_Copy-ChangesetIfExists,
-                                    CC1_Copy-Packages
+                                    CC1_Copy-Packages,
+									CC1_Copy-DeploymentFolder
                                             
 Task CC1_PublishArtifacts {
     UploadArtifact -ArtifactName "CC1Installer" -ContainerFolder "CC1Installer" `
@@ -182,7 +182,7 @@ Task CC1_Copy-UiPackageFromNuget {
 }
 
 Task CC1_Copy-DeploymentFolder {
-    $PackagedWebSite = Join-Path $Build.CC1.InstallerMVC "DeploymentFolder.zip"
+    $PackagedWebSite = Join-Path $Build.Installer "Packages\generic\C1CMS\DeploymentFolder.zip"
     
     Robocopy (Join-Path $Build.CC1.WebProjectPath 'Deployment') (Join-Path $Build.CC1.FileSystemPublishedWebSite 'Deployment') *.* /E /NJH /NDL /NS /NC /NP | Write-Verbose
 	Complete-RobocopyExecution($LASTEXITCODE)

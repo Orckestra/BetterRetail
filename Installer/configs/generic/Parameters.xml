@@ -14,15 +14,12 @@
 	<param name="cms-apppool-password" value="{composer_apppool_password}" />
 	<!-- make sure that version exists here https://github.com/Orckestra/C1-CMS-Foundation/releases/download/v$(cms-c1-version)/C1.CMS.$(cms-c1-version).zip -->
 	<param name="cms-c1-version" value="6.5" />
-	<param name="cms-c1-init-culture" value="en-CA" />
+	<param name="cms-c1-default-culture" value="en-CA" />
+	<param name="cms-c1-all-cultures" value="en-CA,fr-CA" />
 	<param name="cms-c1-conslole-login" value="admin" />
 	<param name="cms-c1-console-password" value="123456" />
 	<param name="cms-c1-custom-packages" value="Orckestra.Search.KeywordRedirect,Orckestra.Search.LuceneNET" />
 	
-	<!--  RefApp settings  -->
-	<param name="refapp-content-cultures" value="en-CA,fr-CA" /> <!-- define the list of cultures, needed to install RefApp content packages -->
-
-
 	<!-- SSL -->
 	<param name="SSL_CertificateName" value="{ssl-certificate-name}" />
 	<param name="SSL_CertificatePath" value="{ssl-certificate-path}" />

@@ -29,7 +29,7 @@ namespace Orckestra.Composer.CompositeC1.Installers
                 LoggingService.LogInformation("ComposerExperience", string.Format("Access to the Sitemap Perspective granted for group {0}.", userGroup.Name));
             }
 
-            FixLanguageUrlMapping();
+            FixDefaultLanguageUrlMapping();
 
             yield break;
         }
@@ -39,10 +39,10 @@ namespace Orckestra.Composer.CompositeC1.Installers
             yield break;
         }
 
-        public void FixLanguageUrlMapping() {
+        public void FixDefaultLanguageUrlMapping() {
             using(var conn = new DataConnection())
             {
-                var language = conn.Get<ISystemActiveLocale>().FirstOrDefault();
+                var language = conn.Get<ISystemActiveLocale>().FirstOrDefault(l => l.IsDefault);
                 if(string.IsNullOrEmpty(language.UrlMappingName))
                 {
                     language.UrlMappingName = language.CultureName;

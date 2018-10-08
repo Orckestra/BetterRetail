@@ -48,7 +48,6 @@ namespace Orckestra.Composer.CompositeC1.Mvc
 
             log.Info("Application Starting");
 
-            DynamicTypeManager.EnsureCreateStore(typeof(Language));
             DynamicTypeManager.EnsureCreateStore(typeof(ComposerPage));
             DynamicTypeManager.EnsureCreateStore(typeof(CategoryPage));
             DynamicTypeManager.EnsureCreateStore(typeof(ComposerImage));

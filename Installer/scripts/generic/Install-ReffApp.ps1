@@ -34,7 +34,7 @@ $cmsHostName			= Get-Settings -environment $Environment -key "cms-$($Configurati
 $cmsHostPhysicalPath	= Get-Settings -environment $Environment -key "cms-$($Configuration)-IISSitePhysicalPath"
 $cmsUrl				    = Get-Settings -environment $Environment -key "cms-$($Configuration)-url"
 $cmsDeploymentToken 	= Get-Settings -environment $Environment -key "cms-deployment-token"
-$refappContentCultures 	= Get-Settings -environment $Environment -key "refapp-content-cultures"
+$refappContentCultures 	= Get-Settings -environment $Environment -key "cms-c1-all-cultures"
 #=======================================
 
 Write-Log "Installation of Reference Application Starter Site..."
@@ -139,9 +139,7 @@ function Install-ContentPackages() {
 		} else {
 			Write-Log ACTION "Content package does not exist - $($source) "
 		}
-		
-		
-		#Robocopy $genericRefAppPackagesFolder $packagesAutoInstallFolder "Composer.C1.Content.$name.zip" MIR /NJH /NDL /NFL /NS /NC /NP /NJS
+
 	}
 	
 	RestartingIIS 
