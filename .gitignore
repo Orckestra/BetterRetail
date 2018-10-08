@@ -221,7 +221,7 @@ ModelManifest.xml
 **/Package.C1/Composer.C1.Core\App_Data
 **/Package.C1/Composer.C1.Core\Web.config
 /Orckestra.StarterSite/CF/Source/packages
-/Orckestra.StarterSite/CF/Source/NugetFiles
+
 /Orckestra.StarterSite/CF/CC1/Source/Composer.CompositeC1/packages
 Orckestra.StarterSite/CF/Test/Nightwatch.js/reports/
 Orckestra.StarterSite/CF/Test/Nightwatch.js/nightwatch_report/
