@@ -27,7 +27,7 @@
 * Go to *./Installer/configs/specific/DEV* folder
 * Create you own file *Parameters.Dev.xml*  and specify deploy parameters. See example below
 
-`<?xml version="1.0" encoding="utf-8"?>
+```<?xml version="1.0" encoding="utf-8"?>
 <parameters>
   <param name="environment_suffix" value="dev"/>
   
@@ -45,7 +45,7 @@
   <param name="ocsAuthToken" value="ENTER_VALUE_HERE"/>
 	
   <param name="gtm-containerid" value="ENTER_VALUE_HERE"/>
-</parameters>`
+</parameters>```
 
 #### Deploy 
 * Go to ./Installer folder
