@@ -6,16 +6,7 @@
     <Description>NT</Description>
   </mi:PackageInformation>
   <mi:PackageFragmentInstallerBinaries />
-  <mi:Add
-installerType="Composite.Core.PackageSystem.PackageFragmentInstallers.LocalePackageFragmentInstaller, Composite"
-uninstallerType="Composite.Core.PackageSystem.PackageFragmentInstallers.LocalePackageFragmentUninstaller, Composite">
-    <Locales>
-      <Locale
-          name="fr-CA"
-          urlMappingName="fr-CA"
-          default="false" />
-    </Locales>
-  </mi:Add>
+
   <mi:PackageFragmentInstallers>
     <mi:Add installerType="Composite.Core.PackageSystem.PackageFragmentInstallers.DataPackageFragmentInstaller, Composite" uninstallerType="Composite.Core.PackageSystem.PackageFragmentInstallers.DataPackageFragmentUninstaller, Composite">
       <Types>
