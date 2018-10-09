@@ -7,7 +7,6 @@
     <sectionGroup name="composer" type="System.Configuration.ConfigurationSectionGroup, System.Configuration">
       <section name="settings" type="Orckestra.Composer.Configuration.ComposerConfigurationSection, Orckestra.Composer" />
       <section name="caching" type="Orckestra.Overture.Components.Caching.CacheConfiguration, Orckestra.Caching" />
-      <section name="composerOutputCaching" type="Orckestra.Composer.CompositeC1.OutputCache.Configuration.ComposerOutputCacheSettings, Orckestra.Composer.CompositeC1" />
     </sectionGroup>
   </xsl:variable>
 
@@ -15,7 +14,6 @@
   <composer>
     <settings configSource="App_Config\Composer.config" />
     <caching configSource="App_Config\Caching.config" />
-    <composerOutputCaching configSource="App_Config\OutputCache.config" />
   </composer>
   </xsl:variable>
 

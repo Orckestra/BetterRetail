@@ -22,9 +22,36 @@
 * Go to *./Build folder*
 * Run PS as Administrator `.\Build.ps1 -t all` to build Reference Application projects
 
+#### Deploy Parameters
+* Configure specific deploy parameters for your DEV enviroment
+* Go to *./Installer/configs/specific/DEV* folder
+* Create you own file *Parameters.Dev.xml*  and specify deploy parameters. See example below
+
+`
+<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <param name="environment_suffix" value="dev"/>
+  
+  <param name="cms-c1-custom-packages" value="Orckestra.Search.KeywordRedirect,Orckestra.Search.LuceneNET,Composite.Tools.PackageCreator" />
+ 
+  <param name="composer_apppool_username" value="NA"/>
+  <param name="composer_apppool_password" value="NA"/>
+  <param name="composer_apppool_identitytype" value="ApplicationPoolIdentity"/>
+  
+  <param name="machineKey-validationKey" value="***REMOVED***" />
+  <param name="machineKey-decryptionKey" value="***REMOVED***" />
+  
+  <param name="ocs-cm-hostName" value="ENTER_VALUE_HEREd"/>
+  <param name="ocs-cd-hostName" value="ENTER_VALUE_HERE"/>
+  <param name="ocsAuthToken" value="ENTER_VALUE_HERE"/>
+	
+  <param name="gtm-containerid" value="ENTER_VALUE_HERE"/>
+</parameters>
+`
+
 #### Deploy 
 * Go to ./Installer folder
-* Run PS as Administrator `.\Invoke-EnvironmentDeployment.ps1 dev full-install` to deploy Reference Application starter site
+* Run PS as Administrator `.\Invoke-EnvironmentDeployment.ps1 dev full-install` to deploy Reference Application Starter Site
 
 
 #### Deploy notes

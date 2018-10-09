@@ -12,7 +12,8 @@
 	<param name="cms-apppool-identity-type" value="{composer_apppool_identitytype}" />
 	<param name="cms-apppool-username" value="{composer_apppool_username}" />
 	<param name="cms-apppool-password" value="{composer_apppool_password}" />
-	<!-- make sure that version exists here https://github.com/Orckestra/C1-CMS-Foundation/releases/download/v$(cms-c1-version)/C1.CMS.$(cms-c1-version).zip -->
+	
+	<!-- Make sure that version exists here https://github.com/Orckestra/C1-CMS-Foundation/releases/download/v$(cms-c1-version)/C1.CMS.$(cms-c1-version).zip -->
 	<param name="cms-c1-version" value="6.5" />
 	<param name="cms-c1-default-culture" value="en-CA" />
 	<param name="cms-c1-all-cultures" value="en-CA,fr-CA" />
@@ -33,6 +34,6 @@
   <param name="ocs-cm-hostName" value="{ocs-cm-alias}.{host-name-suffix}"/>  
   <param name="ocs-cd-alias" value="{project-name}{alias-separator}{alias-separator}{content_delivery_token}{alias-separator}{environment_suffix}"/>
   <param name="ocs-cd-hostName" value="{ocs-cd-alias}.{host-name-suffix}"/>
-  <param name="ocsAuthToken" value="EnterValueHere"/>
+  <param name="ocsAuthToken" value="ENTER_VALUE_HERE"/>
 
 </parameters>

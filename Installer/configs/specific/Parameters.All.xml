@@ -7,10 +7,10 @@
 
 	<param name="host-name-suffix" value="{project-name}.orckestra.local"/>
 	
+	<param name="cms-cd-hostname" value="{project-name}-cd-{environment_suffix}.develop.orckestra.cloud"/>
+	<param name="cms-cm-hostname" value="{project-name}-cm-{environment_suffix}.develop.orckestra.cloud"/>
+	
 	<param name="cms-deployment-pages" value="DeploymentFolder.Zip" />
-
-	<param name="cms_databases_server" value="localhost"/>
-	<param name="cms_databases_prefix" value="{project-name}-{environment_suffix}"/>
 
 	<param name="cms-cm-url" value="https://{cms-cm-hostname}" />
 	<param name="cms-cm-IISSiteName" value="{cms-cm-hostname}" />
@@ -29,8 +29,8 @@
 	
 	<param name="ocs-cm-hostName" value="ENTER_VALUE_HERE"/>
 	<param name="ocs-cd-hostName" value="ENTER_VALUE_HERE"/>
-  
-	<param name="ocsAuthToken" value="ENTER_VALUE_HERE"/>
+  	<param name="ocsAuthToken" value="ENTER_VALUE_HERE"/>
+	
 	<param name="gtm-containerid" value="ENTER_VALUE_HERE"/>
 </parameters>
 
