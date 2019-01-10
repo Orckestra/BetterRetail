@@ -1,6 +1,6 @@
 <div data-templateid="ShippingAddressRegistered">
     {{#if_eq IsAuthenticated true}}
-        <div class="panel panel-default">
+        <section class="panel panel-default" aria-label="{{localize 'CheckoutProcess' 'T_ShippingAddress'}}">
             <div class="panel-heading">
                 <h2 class="h3">{{localize 'CheckoutProcess' 'T_ShippingAddress'}}</h2>
             </div>
@@ -12,6 +12,6 @@
                     {{> RegisteredAddresses}}
                 {{/if_eq}}
             </div>
-        </div>
+        </section>
     {{/if_eq}}
 </div>

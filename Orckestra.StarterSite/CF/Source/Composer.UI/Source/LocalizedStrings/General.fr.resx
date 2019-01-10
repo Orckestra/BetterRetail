@@ -156,6 +156,9 @@
   <data name="B_PrintOrder" xml:space="preserve">
     <value>Imprimer la facture</value>
   </data>
+  <data name="B_Remove" xml:space="preserve">
+    <value>Supprimer</value>
+  </data>
   <data name="B_ReOrder" xml:space="preserve">
     <value>Ajouter cette commande à mon panier</value>
   </data>
@@ -167,6 +170,9 @@
   </data>
   <data name="L_Breadcrumb" xml:space="preserve">
     <value>Vous êtes dans :</value>
+  </data>
+  <data name="L_Breadcrumb_A11y" xml:space="preserve">
+    <value>Fil d'Ariane</value>
   </data>
   <data name="L_Copyright" xml:space="preserve">
     <value>©{0}. Better Retail inc. Tout droits réservés.</value>
@@ -189,6 +195,12 @@
   <data name="L_FollowUs" xml:space="preserve">
     <value>Suivez nous :</value>
   </data>
+  <data name="L_GoToNextPage" xml:space="preserve">
+    <value>Aller à la page suivante</value>
+  </data>
+  <data name="L_GoToPreviousPage" xml:space="preserve">
+    <value>Aller à la page précédente</value>
+  </data>
   <data name="L_Home" xml:space="preserve">
     <value>Accueil</value>
   </data>
@@ -206,6 +218,9 @@
   </data>
   <data name="L_QuoteOpen" xml:space="preserve">
     <value>« </value>
+  </data>
+  <data name="L_ToPreviousPage" xml:space="preserve">
+    <value>à la page précédente</value>
   </data>
   <data name="Login" xml:space="preserve">
     <value>Connexion</value>

@@ -6,14 +6,16 @@
            data-id="{{Id}}"
            title="{{localize 'MyAccount' 'H_RemoveFromTheWishList'}}"
            class="add-to-wishlist  active">
-            <i class="fa  fa-2x  fa-heart"></i>
+            <i class="fa  fa-2x  fa-heart" aria-hidden="true"></i>
+            <span class="sr-only">{{localize 'MyAccount' 'H_RemoveFromTheWishList'}}</span>
         </a>
     {{else}}
         <a data-qa="product-add-to-wishlist" 
            data-oc-click="addLineItemToWishList"
            title="{{localize 'MyAccount' 'H_AddToWishList'}}"
            class="add-to-wishlist">
-            <i class="fa  fa-2x  fa-heart-o"></i>
+            <i class="fa  fa-2x  fa-heart-o" aria-hidden="true"></i>
+            <span class="sr-only">{{localize 'MyAccount' 'H_AddToWishList'}}</span>
         </a>
     {{/if}}
 {{/if}}

@@ -117,37 +117,40 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="L_EmptyMiniCart" xml:space="preserve">
-    <value>Your cart is empty.</value>
-  </data>
-  <data name="B_Login" xml:space="preserve">
-    <value>Sign In</value>
-  </data>
   <data name="B_Checkout" xml:space="preserve">
     <value>Secure Checkout</value>
-  </data>
-  <data name="B_StartShopping" xml:space="preserve">
-    <value>Start Shopping</value>
   </data>
   <data name="B_ContinueShopping" xml:space="preserve">
     <value>Continue Shopping</value>
   </data>
+  <data name="B_Login" xml:space="preserve">
+    <value>Sign In</value>
+  </data>
+  <data name="B_StartShopping" xml:space="preserve">
+    <value>Start Shopping</value>
+  </data>
+  <data name="H_MinicartTitle" xml:space="preserve">
+    <value>Cart</value>
+  </data>
+  <data name="L_EmptyMiniCart" xml:space="preserve">
+    <value>Your cart is empty.</value>
+  </data>
   <data name="L_Items" xml:space="preserve">
     <value>item(s)</value>
-  </data>
-  <data name="L_ViewCart" xml:space="preserve">
-    <value>View Cart</value>
-  </data>  
-  <data name="L_Subtotal" xml:space="preserve">
-    <value>Subtotal</value>
-  </data>
-  <data name="L_Quantity" xml:space="preserve">
-    <value>Quantity</value>
   </data>
   <data name="L_ItemAddedToCart" xml:space="preserve">
     <value>Successfully added to cart</value>
   </data>
-  <data name="H_MinicartTitle" xml:space="preserve">
-    <value>Cart</value>
+  <data name="L_Quantity" xml:space="preserve">
+    <value>Quantity</value>
+  </data>
+  <data name="L_Subtotal" xml:space="preserve">
+    <value>Subtotal</value>
+  </data>
+  <data name="L_ViewCart" xml:space="preserve">
+    <value>View Cart</value>
+  </data>
+  <data name="L_YourCartContains" xml:space="preserve">
+    <value>Your cart contains</value>
   </data>
 </root>

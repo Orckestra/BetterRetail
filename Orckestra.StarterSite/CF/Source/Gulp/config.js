@@ -21,11 +21,13 @@
                     '../../3rdParty.ForTests/**/*.js',
                     '../../3rdParty/jquery-1.11.2.min.js',
                     '../../3rdParty/bootstrap.min.js',
+                    '../../3rdParty/bootstrap-accessibility.js',
                     '../../3rdParty/lodash.min.js',
                     '../../3rdParty/parsley.min.js',
                     '../../3rdParty/handlebars.helpers.js',
 					'../../3rdParty/q-1.2.0.js',
 					'../../3rdParty/jquery.serialize-object.js',
+                    '../../3rdParty/accessibleMegaMenu.js',
                     '../../UI.Package/JavaScript/orckestra.composer.js',
                     path.join('../../', mainConfiguration.testsOutputFolder, '/**/*.js')
                 ],

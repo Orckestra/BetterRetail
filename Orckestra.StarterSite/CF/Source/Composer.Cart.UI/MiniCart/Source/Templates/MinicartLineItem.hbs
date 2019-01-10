@@ -9,10 +9,10 @@
         <div class="col-sm-8">
             <div class="minicart-line-item-text">
                 {{#if ProductSummary.Brand}}
-                    <strong class="text-uppercase  product-tile-brand" data-qa="minicart-product-brand" title="{{ProductSummary.Brand}}">{{ProductSummary.Brand}}</strong>
+                    <strong class="text-uppercase  product-tile-brand" data-qa="minicart-product-brand">{{ProductSummary.Brand}}</strong>
                     <br/>
                 {{/if}}
-                <a data-qa="minicart-product-title" href="{{ProductUrl}}" title="{{ProductSummary.DisplayName}}">{{ProductSummary.DisplayName}}</a>
+                <a data-qa="minicart-product-title" href="{{ProductUrl}}">{{ProductSummary.DisplayName}}</a>
             </div>
             <div class="minicart-line-item-variants">
                 {{#each KeyVariantAttributesList}}
@@ -23,7 +23,7 @@
                 {{else}}
                     <div class="row push-top" />
                         <div class="col-sm-12 col-xs-12 text-left">
-                            <span class="fa  fa-exclamation-triangle"></span>
+                            <span class="fa  fa-exclamation-triangle" aria-hidden="true"></span>
                             <strong class="text-danger">{{#escape}}{{localizeFormat 'MiniCart' 'L_ProductOutOfStock' Quantity}}{{/escape}}</strong>
                         </div>
                     </div>

@@ -3,16 +3,17 @@
         <form action="{{StoreLocatorPageUrl}}" method="POST" class="store-locator-search  form-horizontal">
         <div class="form-group">
             <div class="col-xs-12  col-sm-6  col-md-4">
+                <label for="storeDirectorySearchInput" class="sr-only">{{localize 'Store' 'L_FindStore'}}</label>
                <input id="storeDirectorySearchInput"
                   name="storeDirectorySearchInput"
 		          class="form-control" type="text"
 		          placeholder="{{localize 'Store' 'I_Placeholder'}}" />
-                  <i class="fa  fa-search  text-muted"></i>
+                  <i class="fa  fa-search  text-muted" aria-hidden="true"></i>
             </div>
             <div class="col-xs-12  col-sm-6  col-md-4">
                   <span class="label-or">- {{localize 'Store' 'L_OrUseMyLocation'}} -</span>
                   <button class="btn  btn-primary  geolocate-btn">
-                    <i class="fa  fa-crosshairs"></i>
+                    <i class="fa  fa-crosshairs" aria-hidden="true"></i>
                      {{localize 'Store' 'B_UseMyLocation'}}
                   </button>
              </div>

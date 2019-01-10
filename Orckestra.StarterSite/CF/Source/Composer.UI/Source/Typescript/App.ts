@@ -73,7 +73,9 @@
                 'StickyAffix',
                 'SlickCarousel',
                 'FocusElement',
-                'GoogleAnalytics'
+                'GoogleAnalytics',
+                'AccessibleMegaMenu',
+                'ParsleyAccessibility'
             ],
 
             controllers: [

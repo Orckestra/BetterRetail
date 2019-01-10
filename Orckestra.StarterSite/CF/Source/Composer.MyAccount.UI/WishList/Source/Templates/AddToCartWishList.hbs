@@ -11,14 +11,14 @@
                 data-category="{{ProductSummary.CategoryId}}"                
                 data-oc-click="addToCart">
             {{localize "General" "B_AddToCartProductList"}}
-            <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  hidden"></span>
+            <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  hidden" aria-hidden="true"></span>
         </button>
         {{else}}
         <button data-qa="wishlist-product-add-to-cart"
                 class="btn  btn-primary  text-uppercase"
                 disabled="disabled">
             {{localize "General" "B_AddToCartProductListOOS"}}
-            <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  hidden"></span>
+            <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  hidden" aria-hidden="true"></span>
         </button>
     {{/if}}
 </span>

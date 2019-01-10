@@ -153,6 +153,9 @@
   <data name="I_Placeholder" xml:space="preserve">
     <value>code postal, ville ou adresse</value>
   </data>
+  <data name="L_FindStore" xml:space="preserve">
+    <value>Trouvez un magasin à proximité</value>
+  </data>
   <data name="L_InventoryAvailable" xml:space="preserve">
     <value>Disponible</value>
   </data>

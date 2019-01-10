@@ -133,7 +133,7 @@
                             <div class="form-group">
                                 <input type="hidden" name="CountryCode" value="{{CountryCode}}" />
                                 <label for="RegionCode">{{localize 'Forms' 'F_Province'}} *</label>
-                                <span class="loading-indicator-regions  fa  fa-spin  fa-fw  fa-circle-o-notch  hidden"></span>
+                                <span class="loading-indicator-regions  fa  fa-spin  fa-fw  fa-circle-o-notch  hidden" aria-hidden="true"></span>
                                 {{> AddressRegionPicker }}
                             </div>
                         </div>
@@ -182,7 +182,7 @@
                 <div class="col-sm-6">
                     <div class="checkbox">
                         <label>
-                            <input name="IsPreferredShipping" id="IsPreferredShipping" data-qa="editaddress-ispreferredshipping" type="checkbox" {{#if IsPreferredShipping}}checked="true"{{/if}} />
+                            <input name="IsPreferredShipping" id="IsPreferredShipping" data-qa="editaddress-ispreferredshipping" type="checkbox" {{#if IsPreferredShipping}}checked="checked"{{/if}} />
                             {{localize 'Forms' 'F_IsPreferredShipping'}}
                         </label>
                     </div>
@@ -200,7 +200,7 @@
 
                 <button type="submit" class="btn btn-primary" data-qa="editaddress-submit" >
                     {{#if IsUpdating}}{{localize 'MyAccount' 'B_SaveAddress'}}{{else}}{{localize 'MyAccount' 'B_SaveNewAddress'}}{{/if}}
-                    <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  hidden"></span>
+                    <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  hidden" aria-hidden="true"></span>
                 </button>
             </div>
         </div>

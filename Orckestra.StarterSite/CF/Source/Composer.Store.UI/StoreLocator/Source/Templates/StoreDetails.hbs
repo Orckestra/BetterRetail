@@ -2,14 +2,14 @@
 <h1>{{LocalizedDisplayName}}</h1> 
 <div class="row">
     <div class="col-xs-12">
-        <div id="map" class="map"></div>
+        <div id="map" class="map" aria-hidden="true"></div>
          <div class="store-info  panel  panel-default">
             <div class="panel-body"> 
                 {{#with Address}}
                     {{> StoreAddress}}
                 {{/with}}
                 <hr/>
-                    <a  href="{{GoogleDirectionsLink}}" target="_blank" class="cta  ctaGoogleDir">{{localize 'Store' 'H_Itinerary'}}</a>
+                    <a  href="{{GoogleDirectionsLink}}" target="_blank" class="cta  ctaGoogleDir">{{localize 'Store' 'H_Itinerary'}} <i class="fa fa-external-link" aria-hidden="true"></i></a>
                 <hr />
                 {{> StoreOpenHours}}
                 {{> StoreOpenHourExceptions}}

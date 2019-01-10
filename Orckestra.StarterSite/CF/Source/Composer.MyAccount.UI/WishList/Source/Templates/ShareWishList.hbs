@@ -3,6 +3,7 @@
     <div class="form-horizontal  {{#if_eq TotalQuantity 0}}inactive{{/if_eq}}">
         <div class="form-group">
             <div class="col-xs-12  col-sm-6  col-md-9">
+                <label for="txtShareUrl" class="sr-only">{{localize 'MyAccount' 'L_WishlistSharedUrl'}}</label>
                 <input id="txtShareUrl" type="text" class="form-control" placeholder="{{localize 'MyAccount' 'P_ShareWishListCopyLink'}}" value="{{ShareUrl}}" />
             </div>
             <div class="col-xs-12  col-sm-6  col-md-3">

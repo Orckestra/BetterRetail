@@ -16,16 +16,16 @@ module Orckestra.Composer {
         }
 
         protected handleGeneralError(errors: IErrorCollection, source: string) {
-            var errorCodes: string[] = <string[]>_.map(errors.Errors, 'ErrorCode').sort();
-            var lastErrorCodes = this.lastErrorCodes ? this.lastErrorCodes : [];
-            var isMatch = _.isEqual(errorCodes, lastErrorCodes);
+            let errorCodes: string[] = <string[]>_.map(errors.Errors, 'ErrorCode').sort();
+            let lastErrorCodes = this.lastErrorCodes ? this.lastErrorCodes : [];
+            let isMatch = _.isEqual(errorCodes, lastErrorCodes);
 
             if (!isMatch) {
                 this.lastErrorCodes = errorCodes;
                 this.render('FormErrorMessages', errors);
             }
 
-            //TODO: Force a scroll?
+            $('#formErrors .text-danger:first').focus();
         }
     }
 }

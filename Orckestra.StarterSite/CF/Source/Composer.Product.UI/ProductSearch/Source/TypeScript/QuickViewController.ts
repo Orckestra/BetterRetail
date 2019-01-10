@@ -11,6 +11,24 @@ module Orckestra.Composer {
         public initialize() {
             this.setConcernWithContext();
             super.initialize();
+
+            this.accessibility();
+        }
+
+        protected accessibility() {
+            $('#addToCartModal').on('shown.bs.modal', () => {
+                $('#addToCartModal').find('select:first').focus();
+            }).on('hidden.bs.modal', () => {
+                $('[data-product-variant-id="' + this.context.viewModel.displayedVariantId + '"]').find('button').focus();
+            });
+
+            this.eventHub.subscribe('productSearchPricesChanged', e => {
+                let modal$ = $('#addToCartModal');
+
+                if (modal$.hasClass('in')) {
+                    modal$.find('select:first').focus();
+                }
+            });
         }
 
         protected setConcernWithContext(): void {

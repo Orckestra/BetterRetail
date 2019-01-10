@@ -1,6 +1,6 @@
 .main-nav {
     // reset positions
-    .nav, .collapse, .dropup, .dropdown {
+    .nav, .collapse, .dropup, .dropdown-container {
         position: static;
     }
     // propagate menu position under container for fw navbars
@@ -23,12 +23,9 @@
     }
 
     // Fullwidth menu
-    .dropdown.main-nav-fw .dropdown-menu {
+    .dropdown-container.main-nav-fw .dropdown-menu {
         left: 0;
         right: 0;
-    }
-    .dropdown > a {
-        
     }
 
     &-toggle {
@@ -101,7 +98,7 @@
             }
         }
 
-        .dropdown > a {
+        .dropdown-container > a {
             border-bottom: 1px solid $gray-lighter;
             padding-right: $grid-gutter-width*3;
         }
@@ -130,6 +127,23 @@
         }
     }
 
+    @media (max-width: $screen-sm-max) {
+        .main-nav-menu {
+            overflow: hidden;
+        }
+
+        // expand dropdown on hover
+        .dropdown-menu.open {
+            display: block;
+            position: static;
+            float: none;
+            width: auto;
+            margin-top: 0;
+            box-shadow: none;
+            border: 0;
+        }
+    }
+
     // Top line
     hr {
         margin-bottom: 0;
@@ -141,8 +155,8 @@
         bottom: -22px;
         width: 100%;
 
-        .dropdown > a:hover,
-        .dropdown > a:focus,
+        .dropdown-container > a:hover,
+        .dropdown-container > a:focus,
         .open > a {
             background-color: #fff;
 
@@ -168,7 +182,7 @@
         bottom: -22px;
 
         // expand dropdown on hover
-        .dropdown:hover .dropdown-menu {
+        .dropdown-menu.open {
         display: block;
         }
     }

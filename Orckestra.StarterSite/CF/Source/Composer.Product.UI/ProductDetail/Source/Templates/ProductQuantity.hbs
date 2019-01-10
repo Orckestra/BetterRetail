@@ -3,7 +3,8 @@
     {{#with Quantity}}
     <div class="form-group">
         <div class="input-group">
-            <span class="input-group-btn">
+            <label for="product-quantity" class="sr-only">{{localize 'MyAccount' 'L_Quantity'}}</label>
+            <span class="input-group-btn" aria-hidden="true">
                 <button class="btn  btn-default"
                         {{#if_eq ../Disabled false}}
                             {{#if_eq Value Min}}
@@ -14,12 +15,14 @@
                         {{else}}
                             disabled="disabled"
                         {{/if_eq}}
-                        data-qa="product-quantity-decrease">
+                        data-qa="product-quantity-decrease" tabindex="-1">
                     <span class="fa  fa-minus"></span>
+                    <span class="sr-only">{{localize 'ProductPage' 'B_Decrement'}}</span>
                 </button>
             </span>
 
             <input class="form-control  text-center"
+                   id="product-quantity"
                    name="product-quantity"
                    type="text"
                    data-qa="product-quantity"
@@ -30,7 +33,7 @@
                    value="{{Value}}"
                    {{#if ../Disabled}} disabled="disabled" {{/if}} />
 
-            <span class="input-group-btn">
+            <span class="input-group-btn" aria-hidden="true">
                 <button class="btn  btn-default"
                         {{#if_eq ../Disabled false}}
                             {{#if_eq Value Max}}
@@ -41,8 +44,9 @@
                         {{else}}
                             disabled="disabled"
                         {{/if_eq}}
-                        data-qa="product-quantity-increase">
-                    <span class="fa  fa-plus"></span>
+                        data-qa="product-quantity-increase" tabindex="-1">
+                    <span class="fa  fa-plus" aria-hidden="true"></span>
+                    <span class="sr-only">{{localize 'ProductPage' 'B_Increment'}}</span>
                 </button>
             </span>
         </div>

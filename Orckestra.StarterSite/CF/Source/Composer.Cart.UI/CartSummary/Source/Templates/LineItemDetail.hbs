@@ -13,7 +13,7 @@
 
     <div class="cart-row">
         <div class="cart-cell  cart-image  text-center">
-            <a href="{{ProductUrl}}">
+            <a href="{{ProductUrl}}" aria-hidden="true" tabindex="-1">
                 <img src="{{ImageUrl}}" class="img-fluid" alt="Thumbnail" onerror="this.onerror=null; this.src='{{FallbackImageUrl}}'" />
             </a>
         </div>
@@ -31,6 +31,8 @@
                             {{Value}}
                         {{/each}}
                         {{/if}}
+
+                        <span class="sr-only">{{#if IsOnSale}}{{ListPrice}}{{else}}{{DefaultListPrice}}{{/if}}</span>
                     </a>
                 </div>
 
@@ -41,7 +43,10 @@
                             data-oc-click="deleteLineItem"
                             data-qa="cart-product-delete"
                             data-productid="{{ProductId}}"
-                            ><span class="fa  fa-times"></span></button>
+                            >
+                        <span class="fa  fa-times" aria-hidden="true"></span>
+                        <span class="sr-only">{{localizeFormat 'ShoppingCart' 'B_RemoveXFromCart' ProductSummary.DisplayName}}</span>
+                    </button>
                 </div>
 
                 <div class="cart-cell  cart-price  text-sm-right  hidden-xs">
@@ -58,36 +63,40 @@
                 <div class="cart-cell  cart-qty  text-sm-center">
                     {{#if IsValid}}
                     {{#if_eq Quantity 1}}
-                        <button data-qa="cart-product-decrease" 
-                            class="btn  btn-default  btn-sm" 
-                            disabled="disabled" 
-                            data-lineitemid="{{Id}}" 
-                            data-action="Decrement" 
-                            data-quantity="{{Quantity}}"><span class="fa  fa-minus"></span></button>
+                        <button data-qa="cart-product-decrease"
+                                class="btn  btn-default  btn-sm"
+                                disabled="disabled"
+                                data-lineitemid="{{Id}}"
+                                data-action="Decrement"
+                                data-quantity="{{Quantity}}">
+                            <span class="fa  fa-minus" aria-hidden="true"></span>
+                            <span class="sr-only">{{localizeFormat 'ShoppingCart' 'B_DecrementX' ProductSummary.DisplayName}}</span>
+                        </button>
                     {{else}}
-                        <button data-qa="cart-product-decrease" 
-                            class="btn  btn-default  btn-sm" 
-                            data-lineitemid="{{Id}}" 
-                            data-action="Decrement" 
-                            data-quantity="{{Quantity}}" 
-                            data-productid="{{ProductId}}" 
-                            data-recurringorderfrequencyname="{{RecurringOrderFrequencyName}}" 
-                            data-recurringorderprogramname="{{RecurringOrderProgramName}}" 
-                            data-oc-click="updateLineItem"><span class="fa  fa-minus"></span></button>
+                        <button data-qa="cart-product-decrease"
+                                class="btn  btn-default  btn-sm"
+                                data-lineitemid="{{Id}}"
+                                data-action="Decrement"
+                                data-quantity="{{Quantity}}"
+                                data-productid="{{ProductId}}"
+                                data-oc-click="updateLineItem">
+                            <span class="fa  fa-minus" aria-hidden="true"></span>
+                            <span class="sr-only">{{localizeFormat 'ShoppingCart' 'B_DecrementX' ProductSummary.DisplayName}}</span>
+                        </button>
                     {{/if_eq}}
                     {{/if}}
                     <span class="small  cart-quantity" data-qa="lineItem-quantity">{{Quantity}}</span>
 
                     {{#if IsValid}}
-                        <button data-qa="cart-product-increase" 
-                            class="btn  btn-default  btn-sm" 
-                            data-lineitemid="{{Id}}" 
-                            data-action="Increment" 
-                            data-quantity="{{Quantity}}" 
-                            data-productid="{{ProductId}}" 
-                            data-recurringorderfrequencyname="{{RecurringOrderFrequencyName}}" 
-                            data-recurringorderprogramname="{{RecurringOrderProgramName}}" 
-                            data-oc-click="updateLineItem"><span class="fa  fa-plus"></span></button>
+                     <button data-qa="cart-product-increase"
+                             class="btn  btn-default  btn-sm"
+                             data-lineitemid="{{Id}}"
+                             data-action="Increment"
+                             data-quantity="{{Quantity}}"
+                             data-oc-click="updateLineItem">
+                         <span class="fa  fa-plus" aria-hidden="true"></span>
+                         <span class="sr-only">{{localizeFormat 'ShoppingCart' 'B_IncrementX' ProductSummary.DisplayName}}</span>
+                     </button>
                     {{/if}}
                 </div>
 

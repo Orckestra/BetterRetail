@@ -1,6 +1,6 @@
 <div  data-templateid="CheckoutOrderSummary">
     {{#if LoadCheckoutOrderSummary }}
-        <div class="panel panel-default">
+        <section class="panel panel-default" aria-label="{{localize 'ShoppingCart' 'T_OrderSummary'}}">
             {{#if GettingCart}}
                 <div class="panel-heading">
                     <h2 class="h3" data-qa="order-summary-title">{{localize 'ShoppingCart' 'T_OrderSummary'}}</h2>
@@ -33,7 +33,7 @@
                             <button class="btn  btn-success  btn-lg  btn-block" data-qa="checkout-order-summary-next-step"
                             {{#if InvalidLineItemCount}}disabled="disabled"{{/if}} data-oc-click="nextStep" data-nextstepurl="{{OrderSummary.NextStepUrl}}">
                                 {{localize 'CheckoutProcess' 'B_NextStep'}}
-                            <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  hidden"></span>
+                            <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  hidden" aria-hidden="true"></span>
                             </button>
 
                             {{#if InvalidLineItemCount}}
@@ -53,6 +53,6 @@
                     </div>
                 </div>
             {{/if}}
-        </div>
+        </section>
     {{/if}}
 </div>

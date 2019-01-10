@@ -1,11 +1,11 @@
 ﻿{{#if IsMultiLanguage}}
-<li class="dropdown" data-oc-controller="General.LanguageSwitch">
-    <a href="{{CurrentLanguage.Url}}" data-qa="language-selector" class="text-uppercase" data-toggle="dropdown">{{CurrentLanguage.ShortDisplayName}}</a>
+<li class="dropdown" data-oc-controller="General.LanguageSwitch" role="region" aria-label="Language selector">
+    <a href="{{CurrentLanguage.Url}}" data-qa="language-selector" data-toggle="dropdown"><span aria-hidden="true">{{CurrentLanguage.ShortDisplayName}}</span><span class="sr-only">{{CurrentLanguage.DisplayName}}</span></a>
     <ul class="dropdown-menu">
     {{#each Entries}}
         {{#if IsCurrent}}
         <li class="active">
-            <a data-oc-click="onLanguageSwitch" href="{{Url}}" data-qa="language-value-{{@index}}">{{DisplayName}}</a>
+            <a data-oc-click="onLanguageSwitch" href="{{Url}}" data-qa="language-value-{{@index}}" aria-selected="true">{{DisplayName}}</a>
         </li>
         {{else}}
         <li>

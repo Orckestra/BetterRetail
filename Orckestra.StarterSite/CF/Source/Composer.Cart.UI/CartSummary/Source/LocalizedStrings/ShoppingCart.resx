@@ -123,6 +123,15 @@
   <data name="B_Checkout" xml:space="preserve">
     <value>Checkout</value>
   </data>
+  <data name="B_DecrementX" xml:space="preserve">
+    <value>Decrement quantity of {0} by 1</value>
+  </data>
+  <data name="B_IncrementX" xml:space="preserve">
+    <value>Increment quantity of {0} by 1</value>
+  </data>
+  <data name="B_RemoveXFromCart" xml:space="preserve">
+    <value>Remove {0} from cart</value>
+  </data>
   <data name="B_ShippingTaxesEstimation" xml:space="preserve">
     <value>Estimate</value>
   </data>

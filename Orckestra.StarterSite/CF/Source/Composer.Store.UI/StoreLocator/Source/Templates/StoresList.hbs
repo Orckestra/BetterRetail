@@ -7,14 +7,14 @@
 {{#if NextPage}}
 {{#with NextPage}}
     <div class="stores-list-paging">
-        <a id="nextPageBtn"
+        <button id="nextPageBtn"
            data-qa="next-page"
            data-page="{{Page}}"
            data-oc-click="nextPage"
            class="btn  btn-primary  btn-lg"> 
            {{localize 'Store' 'B_ShowMore'}}
-            <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  hidden"></span>
-        </a>
+            <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  hidden" aria-hidden="true"></span>
+        </button>
    </div>
 {{/with}}
 {{/if}}

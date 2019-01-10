@@ -156,6 +156,9 @@
   <data name="B_PrintOrder" xml:space="preserve">
     <value>Print Invoice</value>
   </data>
+  <data name="B_Remove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
   <data name="B_ReOrder" xml:space="preserve">
     <value>Add this order to my cart</value>
   </data>
@@ -167,6 +170,9 @@
   </data>
   <data name="L_Breadcrumb" xml:space="preserve">
     <value>You are in:</value>
+  </data>
+  <data name="L_Breadcrumb_A11y" xml:space="preserve">
+    <value>Breadcrumb</value>
   </data>
   <data name="L_Copyright" xml:space="preserve">
     <value>©{0}. Better Retail inc. All rights reserved.</value>
@@ -189,6 +195,12 @@
   <data name="L_FollowUs" xml:space="preserve">
     <value>Follow us :</value>
   </data>
+  <data name="L_GoToNextPage" xml:space="preserve">
+    <value>Go to next page</value>
+  </data>
+  <data name="L_GoToPreviousPage" xml:space="preserve">
+    <value>Go to previous page</value>
+  </data>
   <data name="L_Home" xml:space="preserve">
     <value>Home</value>
   </data>
@@ -206,6 +218,9 @@
   </data>
   <data name="L_QuoteOpen" xml:space="preserve">
     <value>“</value>
+  </data>
+  <data name="L_ToPreviousPage" xml:space="preserve">
+    <value>to previous page</value>
   </data>
   <data name="Login" xml:space="preserve">
     <value>Log in</value>

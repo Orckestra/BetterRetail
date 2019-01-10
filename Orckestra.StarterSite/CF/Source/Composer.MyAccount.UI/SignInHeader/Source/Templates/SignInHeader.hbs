@@ -6,7 +6,7 @@
    data-qa="login-sign-in" href="{{Url}}" title="{{localize 'MyAccount' 'L_SignIn'}}"
    {{/if}}
 >
-    <span class="fa  fa-user  fa-lg  affix-show-inline-block"></span>&#160;
+    <span class="fa  fa-user  fa-lg  affix-show-inline-block" aria-hidden="true"></span>&#160;
     {{#unless IsLoading }}
         {{#if IsLoggedIn}}
             <span class="hidden-xs  hidden-sm  affix-hidden">{{localize 'MyAccount' 'L_MyAccount'}}</span>
@@ -14,5 +14,12 @@
             <span class="hidden-xs  hidden-sm  affix-hidden">{{localize 'MyAccount' 'L_SignIn'}}</span>
         {{/if}}
     {{/unless}}
+    {{#if IsLoading}}
+        {{#if IsLoggedIn}}
+            <span class="sr-only">{{localize 'MyAccount' 'L_MyAccount'}}</span>
+        {{else}}
+            <span class="sr-only">{{localize 'MyAccount' 'L_SignIn'}}</span>
+        {{/if}}
+    {{/if}}
 </a>
 

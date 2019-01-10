@@ -1,1 +1,7 @@
-<span class="navbar-count" data-templateid="MinicartQuantity" data-qa="minicart-count">{{TotalQuantity}}</span>
+<span class="navbar-count" data-templateid="MinicartQuantity" data-qa="minicart-count">
+    {{#if TotalQuantity}}
+        <span>
+            <span class="sr-only">{{localize 'MiniCart' 'L_YourCartContains'}} </span>{{TotalQuantity}}<span class="sr-only"> {{localize 'MiniCart' 'L_Items'}}</span>
+        </span>
+    {{/if}}
+</span>

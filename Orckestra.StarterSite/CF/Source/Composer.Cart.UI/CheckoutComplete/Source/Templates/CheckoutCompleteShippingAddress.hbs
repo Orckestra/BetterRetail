@@ -5,7 +5,10 @@
                 <h2 class="h3" data-qa="checkout-header-shipping-address">{{localize 'CheckoutProcess' 'T_ShippingAddress'}}</h2>
             </div>
             <div class="col-xs-2">
-                <a href="{{OrderSummary.CheckoutStepUrls.[1]}}" class="pull-right" title="{{localize 'CheckoutProcess' 'B_Edit'}}"><span class="fa  fa-pencil  fa-lg"></span></a>
+                <a href="{{OrderSummary.CheckoutStepUrls.[1]}}" class="pull-right" title="{{localize 'CheckoutProcess' 'B_Edit'}}">
+                    <span class="fa  fa-pencil  fa-lg" aria-hidden="true"></span>
+                    <span class="sr-only">{{localize 'CheckoutProcess' 'B_Edit'}} {{localize 'CheckoutProcess' 'T_ShippingAddress'}}</span>
+                </a>
             </div>
         </div>
     </div>

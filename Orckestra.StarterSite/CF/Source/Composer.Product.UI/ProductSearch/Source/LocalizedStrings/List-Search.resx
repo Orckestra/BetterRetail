@@ -147,6 +147,9 @@
   <data name="B_Refine" xml:space="preserve">
     <value>Refine</value>
   </data>
+  <data name="B_Remove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
   <data name="B_Search" xml:space="preserve">
     <value>Search</value>
   </data>
@@ -192,8 +195,17 @@
   <data name="L_CategoryResults" xml:space="preserve">
     <value>products in</value>
   </data>
+  <data name="L_CurrentPage" xml:space="preserve">
+    <value>Current page</value>
+  </data>
   <data name="L_DidYouMean" xml:space="preserve">
     <value>Did you mean </value>
+  </data>
+  <data name="L_GoToNextPage" xml:space="preserve">
+    <value>Go to next page</value>
+  </data>
+  <data name="L_GoToPreviousPage" xml:space="preserve">
+    <value>Go to previous page</value>
   </data>
   <data name="L_NoResultsFor" xml:space="preserve">
     <value>No results were found for</value>
@@ -210,6 +222,9 @@
   <data name="L_PriceFrom" xml:space="preserve">
     <value>from</value>
   </data>
+  <data name="L_ProductQuickviewLabel" xml:space="preserve">
+    <value>Format selection for</value>
+  </data>
   <data name="L_Products" xml:space="preserve">
     <value>Products</value>
   </data>
@@ -218,6 +233,9 @@
   </data>
   <data name="L_RefinerCategories" xml:space="preserve">
     <value>Categories</value>
+  </data>
+  <data name="L_Refiners" xml:space="preserve">
+    <value>Filters</value>
   </data>
   <data name="L_SearchResults" xml:space="preserve">
     <value>search results for</value>

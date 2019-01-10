@@ -35,7 +35,7 @@
                                 <a href="{{ShipmentSummaries.[0].TrackingInfo.Url}}">{{ localize 'MyAccount' 'H_OrderTracking' }}</a>
                             {{/if}}
                         </div>
-                        <div class="col-xs-6  text-right  small"><a href="{{Url}}" class="cta">{{ localize 'MyAccount' 'H_OrderDetail' }}</a></div>
+                        <div class="col-xs-6  text-right  small"><a href="{{Url}}" class="cta">{{ localize 'MyAccount' 'H_OrderDetail' }}<span class="sr-only"> - {{localizeFormat 'MyAccount' 'L_OrderNumber' OrderInfos.OrderNumber}}</span></a></div>
                     </div>
                 </div>
             </div>

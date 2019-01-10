@@ -1,19 +1,24 @@
 <div xmlns:v="http://rdf.data-vocabulary.org/#" class="clearfix">
-    <a class="pull-left  island" href="javascript: history.back();"><span class="fa  fa-arrow-circle-left"></span> {{localize 'General' 'B_Back'}}</a>
+    <a class="pull-left  island" href="javascript: history.back();">
+        <span class="fa  fa-arrow-circle-left" aria-hidden="true"></span> {{localize 'General' 'B_Back'}}
+        <span class="sr-only"> {{localize 'General' 'L_ToPreviousPage'}}</span>
+    </a>
     <span class="hidden-xs">&#160;| {{localize 'General' 'L_Breadcrumb'}}</span>
 
-    <ol class="breadcrumb  hidden-xs">
-        {{#each Items}}
-        {{#if_exists Url}}
-        <li typeof="v:Breadcrumb">
-            <a class="cta" href="{{Url}}" rel="v:url" property="v:title">{{DisplayName}}</a>
-        </li>
-        {{else}}
-        <li>
-            <span>{{DisplayName}}</span>
-        </li>
-        {{/if_exists}}
-        {{/each}}
-        <li class="active">{{ActivePageName}}</li>
-    </ol>
+    <nav aria-label="{{localize 'General' 'L_Breadcrumb_A11y'}}" style="display:inline;">
+        <ol class="breadcrumb  hidden-xs">
+            {{#each Items}}
+            {{#if_exists Url}}
+            <li typeof="v:Breadcrumb">
+                <a class="cta" href="{{Url}}" rel="v:url" property="v:title">{{DisplayName}}</a>
+            </li>
+            {{else}}
+            <li>
+                <span>{{DisplayName}}</span>
+            </li>
+            {{/if_exists}}
+            {{/each}}
+            <li class="active">{{ActivePageName}}</li>
+        </ol>
+    </nav>
 </div>

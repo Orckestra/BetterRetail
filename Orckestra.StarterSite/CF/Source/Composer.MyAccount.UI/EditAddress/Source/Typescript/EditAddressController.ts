@@ -55,7 +55,7 @@ module Orckestra.Composer {
          */
         private rebuildRegionSelector(regions: any) {
 
-            var selectedRegion: string = this.context.container.find('[data-templateid="AddressRegionPicker"]').val();
+            var selectedRegion: string = this.context.container.find('[data-templateid="AddressRegionPicker"]').attr('data-value');
             this.render('AddressRegionPicker', { Regions: regions, SelectedRegion : selectedRegion});
         }
 

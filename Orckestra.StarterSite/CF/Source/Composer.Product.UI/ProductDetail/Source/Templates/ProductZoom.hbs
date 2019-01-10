@@ -1,4 +1,4 @@
-﻿<div data-oc-controller="Product.ProductZoom" data-productid="{{Id}}"  vocab="http://schema.org/" typeof="Product">
+﻿<div data-oc-controller="Product.ProductZoom" data-productid="{{Id}}" data-context="{{JsonContext}}" vocab="http://schema.org/" typeof="Product">
 
     <div class="modal fade modal-fullscreen product-details-zoom" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
@@ -16,7 +16,9 @@
                             {{#if Images}}
                                 {{#each Images}}
                                     <a href="#" style="display: none;" class="thumbnail js-zoom-thumbnail" data-index="{{@index}}" data-image="{{ProductZoomImageUrl}}">
-                                        <img src="{{ThumbnailUrl}}" alt="" onload="if (this.complete) { this.parentNode.style.display = 'inline-block' }"/>
+                                        <img src="{{ThumbnailUrl}}"
+                                             alt="{{localize 'ProductPage' 'L_ThumbnailOfImage'}} {{@index}}"
+                                             onload="if (this.complete) { this.parentNode.style.display = 'inline-block' }"/>
                                     </a>
                                 {{/each}}
                             {{/if}}

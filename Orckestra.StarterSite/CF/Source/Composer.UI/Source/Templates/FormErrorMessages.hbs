@@ -1,16 +1,16 @@
 <div data-templateid="FormErrorMessages">
     {{#if Errors}}
-    <div class="panel  panel-danger">
-        <div class="panel-body">
+    <div class="panel  panel-danger" role="alert">
+        <div id="formErrors" class="panel-body">
             {{#each Errors}}
                 {{#if LocalizedErrorMessage}}
-                    <div class="multiline-message  text-danger">
-                        <span class="fa  fa-times-circle-o  fa-lg  multiline-message-icon"></span>&#32;
+                    <div class="multiline-message  text-danger" tabindex="0">
+                        <span class="fa  fa-times-circle-o  fa-lg  multiline-message-icon" aria-hidden="true"></span>&#32;
                         <span>{{{LocalizedErrorMessage}}}</span>
                     </div>
                 {{else}}
-                    <div class="multiline-message  text-danger">
-                        <span class="fa  fa-times-circle-o  fa-lg  multiline-message-icon"></span>&#32;
+                    <div class="multiline-message  text-danger" tabindex="0">
+                        <span class="fa  fa-times-circle-o  fa-lg  multiline-message-icon" aria-hidden="true"></span>&#32;
                         <span>{{localize 'Errors' 'L_NoLocalizedErrorMessage'}}</span>&#32;
                         <span class="text-warning">[{{ErrorCode}}]</span>
                     </div>

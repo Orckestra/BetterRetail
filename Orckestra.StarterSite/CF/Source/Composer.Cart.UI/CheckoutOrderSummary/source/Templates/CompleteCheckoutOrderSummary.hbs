@@ -24,7 +24,7 @@
                         <button class="btn  btn-success  btn-lg  btn-block {{#if InvalidLineItemCount}}disabled{{/if}}" data-oc-click="nextStep" {{#if InvalidLineItemCount}}disabled="disabled"{{/if}}
                              data-nextstepurl="{{OrderSummary.CheckoutCompleteUrlTarget}}">
                             {{localize 'CheckoutProcess' 'B_SubmitOrder'}}
-                            <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  hidden"></span>
+                            <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  hidden" aria-hidden="true"></span>
                         </button>
 
                         {{#if InvalidLineItemCount}}

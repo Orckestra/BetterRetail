@@ -5,9 +5,10 @@
             <nav>
                 <ul class="list-unstyled">
                     {{#each MenuItems}}
-                        <li><a href="{{Url}}">{{#if IsActive}}<strong>{{/if}}{{Name}}{{#if IsActive}}</strong>{{/if}}</a></li>
+                        <li><a href="{{Url}}"{{#if IsActive}} aria-describedby="current"{{/if}}>{{#if IsActive}}<strong>{{/if}}{{Name}}{{#if IsActive}}</strong>{{/if}}</a></li>
                     {{/each}}
                 </ul>
+                <span id="current" class="sr-only">{{localize 'MyAccount' 'L_CurrentPage'}}</span>
             </nav>
         </div>
     </div>

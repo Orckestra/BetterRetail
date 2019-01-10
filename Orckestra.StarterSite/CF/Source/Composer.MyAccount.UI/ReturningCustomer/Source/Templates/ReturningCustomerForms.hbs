@@ -1,4 +1,5 @@
-<form name="login" data-oc-submit="login" method="post" autocomplete="on" action="#">
+<div role="group" aria-label="{{localize 'Forms' 'F_LoginForm'}}">
+    <form name="login" data-oc-submit="login" method="post" autocomplete="on" action="#">
     {{>ReturningCustomerFormsServerValidations }}
 
     <div class="row">
@@ -11,7 +12,8 @@
                     {{#if_localized 'Forms' 'F_EmailSignInIndication'}}
                         {{>HelpBubbleOpen}}{{localize 'Forms' 'F_EmailSignInIndication'}}{{>HelpBubbleClose}}
                     {{/if_localized}}
-                    required="true" {{#if_localized 'Forms' 'F_EmailRequiredError'}}data-parsley-required-message="{{localize 'Forms' 'F_EmailRequiredError'}}"{{/if_localized}}
+                        required="required"
+                        {{#if_localized 'Forms' 'F_EmailRequiredError'}}data-parsley-required-message="{{localize 'Forms' 'F_EmailRequiredError'}}"{{/if_localized}}
                     />
             </div>
         </div>
@@ -26,7 +28,8 @@
                 {{#if_localized 'Forms' 'F_PasswordIndication'}}
                     {{>HelpBubbleOpen}}{{localize 'Forms' 'F_PasswordIndication'}}{{>HelpBubbleClose}}
                 {{/if_localized}}
-                required="true" {{#if_localized 'Forms' 'F_PasswordRequiredError'}}data-parsley-required-message="{{localize 'Forms' 'F_PasswordRequiredError'}}"{{/if_localized}}
+                    required="required"
+                    {{#if_localized 'Forms' 'F_PasswordRequiredError'}}data-parsley-required-message="{{localize 'Forms' 'F_PasswordRequiredError'}}"{{/if_localized}}
                 />
             </div>
         </div>
@@ -50,7 +53,7 @@
         <div class="col-sm-6">
             <div class="form-group  text-right">
                 <button data-qa="login-submit" type="submit" class="btn  btn-primary  btn-lg  btn-block">{{localize 'CheckoutProcess' 'T_SignInCheckout'}}
-                    <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  hidden"></span>
+                        <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  hidden" aria-hidden="true"></span>
                 </button>
             </div>
         </div>
@@ -59,4 +62,5 @@
             <a href="{{ForgotPasswordUrl}}">{{localize 'MyAccount' 'H_ForgotPassword'}}</a>
         </div>
     </div>
-</form>
+    </form>
+</div>

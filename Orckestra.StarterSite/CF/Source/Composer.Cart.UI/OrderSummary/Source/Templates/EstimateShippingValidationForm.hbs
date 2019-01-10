@@ -2,7 +2,7 @@
   {{#if PostalCodeMalformed}}
     <div class="alert  alert-danger">
       <div class="multiline-message">
-        <span class="fa  fa-exclamation-triangle  multiline-message-icon"></span>
+        <span class="fa  fa-exclamation-triangle  multiline-message-icon" aria-hidden="true"></span>
         <span>{{localize 'ShoppingCart' 'F_PostalCodeErrorBegin'}}</span>
         <span>{{PostalCode}}</span>
         <span>{{localize 'ShoppingCart' 'F_PostalCodeErrorEnd'}}</span>
@@ -11,7 +11,7 @@
   {{else if PostalCodeEmpty}}
     <div class="alert  alert-danger">
       <div class="multiline-message">
-        <span class="fa  fa-exclamation-triangle  multiline-message-icon"></span>
+        <span class="fa  fa-exclamation-triangle  multiline-message-icon" aria-hidden="true"></span>
         <span>{{localize 'ShoppingCart' 'F_EmptyPostalCodeError'}}</span>
       </div>
     </div>

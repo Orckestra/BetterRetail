@@ -9,11 +9,12 @@
             {{#if GettingCart}}
                 {{>Loading}}
             {{else}}
-                <p>{{localize 'CheckoutProcess' 'F_ShippingSelection'}}</p>
                 <div class="row">
                     <div class="col-sm-6">
                         <form id="ShippingMethod" data-oc-submit="preventFormSubmit" method="post" autocomplete="on">
                             <input type="hidden" id="ShippingProviderId" name="ShippingProviderId" value="{{Methods.SelectedShippingProviderId}}" />
+                            <fieldset>
+                                <legend>{{localize 'CheckoutProcess' 'F_ShippingSelection'}}</legend>
                             {{#each Methods.ShippingMethods }}
                                 <div class="form-group">
                                     <label class="select-block {{#if_eq Name ../SelectedMethod}} active {{/if_eq}}" data-qa="checkout-shipping-method-{{@index}}" data-parent=".panel-body">
@@ -29,12 +30,12 @@
                                     </label>
                                 </div>
                             {{/each}}
-
+                            </fieldset>
                             <div id="method-errors"></div>
                             
                             {{#if_localized 'CheckoutProcess' 'F_ShippingSelectionIndication'}}
                                 <div class="multiline-message">
-                                    <span class="fa  fa-comment-o  fa-lg  multiline-message-icon"></span>
+                                    <span class="fa  fa-comment-o  fa-lg  multiline-message-icon" aria-hidden="true"></span>
                                     {{localize 'CheckoutProcess' 'F_ShippingSelectionIndication'}}
                                 </div>
                             {{/if_localized}}

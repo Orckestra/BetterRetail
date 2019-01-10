@@ -369,6 +369,9 @@
   <data name="F_LessThanOrEqual" xml:space="preserve">
     <value>This value should be lower than or equal to %s.</value>
   </data>
+  <data name="F_LoginForm" xml:space="preserve">
+    <value>Login form</value>
+  </data>
   <data name="F_MaximumLength" xml:space="preserve">
     <value>This value is too long. It should have %s characters or fewer.</value>
   </data>
@@ -514,9 +517,15 @@
     <value>This value should not be blank.</value>
   </data>
   <data name="F_TermsAndConditions" xml:space="preserve">
-    <value>I have read and I accept the &lt;a href="{0}"&gt;terms and conditions&lt;/a&gt;.</value>
+    <value>I have read and I accept the &lt;a href="{0}"&gt;terms and conditions &lt;span class="fa fa-external-link"&gt;&lt;span class="sr-only"&gt;New window&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;.</value>
   </data>
   <data name="F_TermsAndConditionsRequiredError" xml:space="preserve">
     <value />
+  </data>
+  <data name="O_ChooseLanguage" xml:space="preserve">
+    <value>Please choose a language</value>
+  </data>
+  <data name="O_ChooseProvince" xml:space="preserve">
+    <value>Please choose a province</value>
   </data>
 </root>

@@ -153,6 +153,9 @@
   <data name="I_Placeholder" xml:space="preserve">
     <value>zip code, city or address</value>
   </data>
+  <data name="L_FindStore" xml:space="preserve">
+    <value>Find a store near</value>
+  </data>
   <data name="L_InventoryAvailable" xml:space="preserve">
     <value>Available</value>
   </data>

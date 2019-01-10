@@ -1,4 +1,4 @@
-<div data-oc-controller="Product.FacetSearch" data-corrected-search-term="{{CorrectedSearchTerms}}">
+<div data-oc-controller="Product.FacetSearch" data-corrected-search-term="{{CorrectedSearchTerms}}" role="region" aria-label="{{Localize 'List-Search' 'L_Refiners'}}">
     <form name="searchFacets">
     {{#if PromotedFacetValues}}
         {{>PromotedFacetValues}}
@@ -10,7 +10,8 @@
             data-min="{{StartValue}}" data-max="{{EndValue}}" data-step="{{GapSize}}" data-max-label="{{Localize 'List-Search' 'L_RangeAll'}}"
             {{/if_eq}}>
             <div class="panel-body" data-qa="search-refiner">
-                <h2 class="h4">{{Title}}</h2>
+                <fieldset>
+                    <legend class="h4">{{Title}}</legend>
                 {{#if_eq FacetType 'Range'}}
                     {{>SearchRangeFacet}}
                 {{else}}
@@ -43,6 +44,7 @@
                     {{/if}}
 
                 {{/if_eq}}
+                </fieldset>
             </div>
         </div>
          {{/if}}

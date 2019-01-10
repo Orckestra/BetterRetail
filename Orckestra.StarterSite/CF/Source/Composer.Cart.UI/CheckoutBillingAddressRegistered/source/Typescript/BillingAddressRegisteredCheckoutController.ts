@@ -12,7 +12,7 @@ module Orckestra.Composer {
     export class BillingAddressRegisteredCheckoutController extends Orckestra.Composer.BaseCheckoutController {
 
         protected debounceChangeBillingMethod: Function = _.debounce(this.changeBillingAddressImpl, 500, { 'leading': true });
-        protected modalElementSelector: string = '#confirmationModal';
+        protected modalElementSelector: string = '#billingConfirmationModal';
         private uiModal: UIModal;
 
         protected customerService: ICustomerService = new CustomerService(new CustomerRepository());

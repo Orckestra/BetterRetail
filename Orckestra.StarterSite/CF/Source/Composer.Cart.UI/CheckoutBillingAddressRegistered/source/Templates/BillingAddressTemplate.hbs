@@ -6,7 +6,7 @@
            data-parsley-errors-container="#billing-address-errors"
            required="required" />
     <div>
-        <a href="{{AddAddressUrl}}" class="hitbox" title="{{localize 'MyAccount' 'B_AddNewAddress'}}">{{localize 'MyAccount' 'B_AddNewAddress'}}</a>
+        <a href="{{AddAddressUrl}}" class="hitbox">{{localize 'MyAccount' 'B_AddNewAddress'}}</a>
     </div>
     {{#if_neq Addresses.length 0}}<br/>{{/if_neq}}
     {{#each Addresses}}
@@ -37,11 +37,13 @@
 
                     <span class="block  pull-right">
                         <a class="btn  btn-link" data-qa="checkout-address-edit" href="{{UpdateAddressUrl}}" title="{{localize 'MyAccount' 'B_EditAddress'}}">
-                            <span class="fa  fa-pencil  fa-lg"></span>
+                            <span class="fa  fa-pencil  fa-lg" aria-hidden="true"></span>
+                            <span class="sr-only">{{localize 'MyAccount' 'B_EditAddress'}}</span>
                         </a>
 
                         <button type="button" class="btn  btn-link" data-qa="address-delete" data-oc-click="deleteAddressConfirm" title="{{localize 'MyAccount' 'B_DeleteAddress'}}">
-                            <span class="fa  fa-trash-o  fa-lg"></span>
+                            <span class="fa  fa-trash-o  fa-lg" aria-hidden="true"></span>
+                            <span class="sr-only">{{localize 'MyAccount' 'B_DeleteAddress'}}</span>
                         </button>
                     </span>
                 </span>
@@ -49,7 +51,7 @@
         </div>
     {{/each}}
 
-    {{> AddressConfirmationModal}}
+    {{> BillingAddressConfirmationModal}}
 
     <div id="billing-address-errors"></div>
 </div>

@@ -1,15 +1,15 @@
 ﻿<div class="product-tile  island-xl" data-has-variants="{{HasVariants}}" data-product-id="{{ProductId}}" data-product-variant-id="{{VariantId}}" data-qa="search-result" data-primary-category="{{PrimaryParentCategoryId}}">
 
-    <a class="product-tile-media" href="{{Url}}" data-productId="{{ProductId}}" data-index='{{@index}}' data-oc-click='searchProductClick'>
+    <a class="product-tile-media" href="{{Url}}" data-productId="{{ProductId}}" data-index='{{@index}}' data-oc-click='searchProductClick' aria-hidden="true" tabindex="-1">
         <img class="img-fluid" src="{{ImageUrl}}" alt="{{FullDisplayName}}" onerror="this.onerror=null; this.src='{{FallbackImageUrl}}'" />
     </a>
 
     <div class="product-tile-text">
         {{#if Brand}}
-        <strong class="text-uppercase  product-tile-brand" data-qa="search-product-brand" title="{{Brand}}">{{Brand}}</strong>
+        <strong class="text-uppercase  product-tile-brand" data-qa="search-product-brand">{{Brand}}</strong>
         <br/>
         {{/if}}
-        <a data-qa="search-product-title" href="{{Url}}" title="{{FullDisplayName}}" data-productId="{{ProductId}}" data-index='{{@index}}' data-oc-click='searchProductClick'>{{DisplayName}}</a>
+        <a data-qa="search-product-title" href="{{Url}}" data-productId="{{ProductId}}" data-index='{{@index}}' data-oc-click='searchProductClick'>{{DisplayName}}</a>
     </div>
 
     {{#with Pricing}}

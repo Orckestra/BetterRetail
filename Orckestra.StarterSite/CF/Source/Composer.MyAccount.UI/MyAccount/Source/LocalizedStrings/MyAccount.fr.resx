@@ -225,6 +225,9 @@
   <data name="L_CurrentOrdersEmpty" xml:space="preserve">
     <value>C'est ici que s'afficheront vos futures commandes.</value>
   </data>
+  <data name="L_CurrentPage" xml:space="preserve">
+    <value>Page courante</value>
+  </data>
   <data name="L_Description" xml:space="preserve">
     <value>Description</value>
   </data>
@@ -245,6 +248,9 @@
   </data>
   <data name="L_IsDefaultAddress" xml:space="preserve">
     <value>(adresse préférée)</value>
+  </data>
+  <data name="L_Items" xml:space="preserve">
+    <value>item(s)</value>
   </data>
   <data name="L_MyAccount" xml:space="preserve">
     <value>Mon compte</value>
@@ -366,6 +372,12 @@ Pas de soucis, vous pouvez trouver d'excellentes suggestions de produits à offr
   </data>
   <data name="L_UpdateAccountSuccess" xml:space="preserve">
     <value>Vos changements ont été sauvegardé!</value>
+  </data>
+  <data name="L_WishlistSharedUrl" xml:space="preserve">
+    <value>Lien pour partager votre liste de souhaits</value>
+  </data>
+  <data name="L_YourWishlistContains" xml:space="preserve">
+    <value>Votre liste de souhaits contient</value>
   </data>
   <data name="P_ShareWishListCopyLink" xml:space="preserve">
     <value>L'URL est créé quand des articles sont ajoutés à la liste de souhaits.</value>

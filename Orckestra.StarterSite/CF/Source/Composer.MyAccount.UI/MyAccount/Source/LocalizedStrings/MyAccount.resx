@@ -225,6 +225,9 @@
   <data name="L_CurrentOrdersEmpty" xml:space="preserve">
     <value>This is where your current orders will be displayed.</value>
   </data>
+  <data name="L_CurrentPage" xml:space="preserve">
+    <value>Current page</value>
+  </data>
   <data name="L_Description" xml:space="preserve">
     <value>Description</value>
   </data>
@@ -245,6 +248,9 @@
   </data>
   <data name="L_IsDefaultAddress" xml:space="preserve">
     <value>(default address)</value>
+  </data>
+  <data name="L_Items" xml:space="preserve">
+    <value>item(s)</value>
   </data>
   <data name="L_MyAccount" xml:space="preserve">
     <value>My account</value>
@@ -366,6 +372,12 @@ Don't worry, you can still find great products to offer!</value>
   </data>
   <data name="L_UpdateAccountSuccess" xml:space="preserve">
     <value>Your changes has been saved!</value>
+  </data>
+  <data name="L_WishlistSharedUrl" xml:space="preserve">
+    <value>Url to share your wishlist</value>
+  </data>
+  <data name="L_YourWishlistContains" xml:space="preserve">
+    <value>Your wishlist contains</value>
   </data>
   <data name="P_ShareWishListCopyLink" xml:space="preserve">
     <value>The URL is created when you add items to your Wish List.</value>

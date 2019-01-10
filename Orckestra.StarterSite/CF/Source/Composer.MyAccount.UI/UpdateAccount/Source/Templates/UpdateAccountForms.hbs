@@ -92,7 +92,7 @@
 
             <div class="row">
                 <div class="col-sm-6">
-                    <a class="cta" href="{{ChangePasswordUrl}}" title="{{localize 'MyAccount' 'B_ChangePassword'}}">
+                    <a class="cta" href="{{ChangePasswordUrl}}">
                         {{localize 'MyAccount' 'B_ChangePassword'}}
                     </a>
                 </div>
@@ -105,7 +105,7 @@
             <div class="form-group  pull-right">
                 <button type="submit" class="btn  btn-default" id="UpdateAccountSubmit" data-qa="updateaccount-submit" disabled="disabled">
                     {{localize 'MyAccount' 'B_UpdateAccount'}}
-                    <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  hidden"></span>
+                    <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  hidden" aria-hidden="true"></span>
                 </button>
             </div>
         </div>

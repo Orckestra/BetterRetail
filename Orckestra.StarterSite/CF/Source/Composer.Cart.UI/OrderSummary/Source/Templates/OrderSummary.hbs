@@ -10,7 +10,7 @@
                 <div class="text-center">
                     <span class="promotion">
                     {{#each Rewards}}
-                    <em>{{Description}}</em><br/>
+                        <em>{{Description}}</em><br />
                     {{/each}}
                     </span>
                 </div>
@@ -109,7 +109,7 @@
                     <div class="col-xs-12">
                         <div class="additional-info">
                             <div class="multiline-message">
-                                <span class="fa  fa-comment-o  fa-lg  multiline-message-icon"></span> 
+                                <span class="fa  fa-comment-o  fa-lg  multiline-message-icon" aria-hidden="true"></span> 
                                 <p>{{localize 'ShoppingCart' 'L_AdditionalFeesGenericMessage'}}</p>
                             </div>
                         </div>
@@ -141,7 +141,7 @@
                 <div class="modal-dialog  modal-sm">
                     <div class="modal-content">
                         <div class="modal-body">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span class="fa fa-times-circle"></span></button>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span class="fa fa-times-circle"aria-hidden="true"></span></button>
 
                             <form name="estimateShipping"  data-regex="{{ShippingAddress.PostalCodeRegexPattern}}" data-oc-submit="estimateShipping" method="post" autocomplete="on">
                                 <div class="form-group">
@@ -159,7 +159,7 @@
                             {{> EstimateShippingValidationForm}}
 
                             <div class="multiline-message">
-                                <span class="fa  fa-info-circle  multiline-message-icon"></span>
+                                <span class="fa  fa-info-circle  multiline-message-icon" aria-hidden="true"></span>
                                 <div>{{localize 'ShoppingCart' 'F_PostalCodeIndication'}}</div>
                             </div>
 
