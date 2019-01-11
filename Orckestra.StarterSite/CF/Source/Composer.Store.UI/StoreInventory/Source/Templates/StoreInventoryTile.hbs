@@ -11,7 +11,9 @@
             <a href="{{GoogleDirectionsLink}}" class="pull-right  cta  ctaGoogleDir" target="_blank">{{localize 'Store' 'H_Itinerary'}}</a>
         </div>
         <div class="clearfix">
+            {{#if LocalizedDisplayName}}
             <h5 class="title  pull-left"><a href="{{Url}}" title="{{LocalizedDisplayName}}">{{LocalizedDisplayName}}</a></h5>
+            {{/if}}
             {{#with InventoryStatus}}
             <h5 class="inventory-status  pull-right  status-{{Status}}">
                 {{#if_eq Status 0}} 

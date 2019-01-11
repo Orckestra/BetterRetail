@@ -1,7 +1,9 @@
-<div class="row" id="accordion" role="tablist" aria-multiselectable="false">
+{{#if Entries}}
+<div class="row">
     {{#each Entries}}
         <div class="col-sm-2">
             {{> FooterNavEntry}}
         </div>
     {{/each}}
 </div>
+{{/if}}
