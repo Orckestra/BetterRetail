@@ -1,11 +1,11 @@
-(function() {
+(function () {
     'use strict';
 
-    module.exports = function() {
+    module.exports = function () {
         var mainConfiguration = require('./common/config'),
             _ = require('lodash'),
             path = require('path'),
-            config = {};
+            config;
 
         config = _.merge(mainConfiguration, {
 
@@ -25,8 +25,8 @@
                     '../../3rdParty/lodash.min.js',
                     '../../3rdParty/parsley.min.js',
                     '../../3rdParty/handlebars.helpers.js',
-					'../../3rdParty/q-1.2.0.js',
-					'../../3rdParty/jquery.serialize-object.js',
+                    '../../3rdParty/q-1.2.0.js',
+                    '../../3rdParty/jquery.serialize-object.js',
                     '../../3rdParty/accessibleMegaMenu.js',
                     '../../UI.Package/JavaScript/orckestra.composer.js',
                     path.join('../../', mainConfiguration.testsOutputFolder, '/**/*.js')
@@ -43,17 +43,18 @@
                 documentationName: 'Orckestra Composer',
                 outputFolder: './UI.Package/Documentation',
                 moduleType: 'commonjs',
-                includeDeclarations: true
+                includeDeclarations: true,
+                ignoreCompilerErrors: true
             },
 
             watch: {
                 delays: {
-                    composerAssemblies: 1000,
-                },
+                    composerAssemblies: 1000
+                }
             },
 
-            composerAssemblies: ['./Packaging/bin/Debug/*.dll', '!./Packaging/bin/Debug/Packaging.dll'],            
-            c1MvcProject: '../../CC1/Source/Composer.CompositeC1/Composer.CompositeC1.Mvc',
+            composerAssemblies: ['./Packaging/bin/Debug/*.dll', '!./Packaging/bin/Debug/Packaging.dll'],
+            c1MvcProject: '../../CC1/Source/Composer.CompositeC1/Composer.CompositeC1.Mvc'
         });
 
         return config;

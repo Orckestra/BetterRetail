@@ -20,7 +20,7 @@ module Orckestra.Composer {
                 };
 
             return order;
-        };
+        }
 
         function CreateOrderResultSample() {
             let order = {
@@ -34,14 +34,14 @@ module Orckestra.Composer {
             };
 
             return order;
-        };
+        }
 
         function CreateExpectedAnalyticsCoupon(data: any) {
 
-            var coupons: IAnalyticsCoupon[] = [];
+            let coupons: IAnalyticsCoupon[] = [];
 
             _.each(data.Coupons, (coupon: any) => {
-                var analyticsCoupon: IAnalyticsCoupon = {
+                let analyticsCoupon: IAnalyticsCoupon = {
                     code: coupon.CouponCode,
                     discountAmount: coupon.Amount,
                     currencyCode: coupon.BillingCurrency,
@@ -52,10 +52,10 @@ module Orckestra.Composer {
             });
 
             return coupons;
-        };
+        }
 
         function CreateExpectedAnalyticsOrder(data: any) {
-            var analyticsOrder : IAnalyticsOrder = {
+            let analyticsOrder : IAnalyticsOrder = {
                 id: data.OrderNumber,
                 affiliation: data.Affiliation,
                 revenue: data.Revenu,
@@ -66,20 +66,20 @@ module Orckestra.Composer {
                 };
 
             return analyticsOrder;
-        };
+        }
 
         function CreateExpectedAnalyticsTransaction(data: any, checkoutOrigin: string) {
-            var analyticsTransaction : IAnalyticsTransaction = {
+            let analyticsTransaction : IAnalyticsTransaction = {
                 checkoutOrigin: checkoutOrigin,
                 shippingType: data.ShippingOptions
             };
 
             return analyticsTransaction;
-        };
+        }
 
         describe('WHEN order is created', () => {
 
-            var checkoutOrigin = 'checkoutOrigin';
+            let checkoutOrigin = 'checkoutOrigin';
             Orckestra.Composer.AnalyticsPlugin.setCheckoutOrigin(checkoutOrigin);
 
             let analytics : GoogleAnalyticsPlugin;
@@ -93,9 +93,9 @@ module Orckestra.Composer {
 
             describe('WITH coupon code used', () => {
 
-                var order = CreateOrderWithCouponResultSample();
+                let order = CreateOrderWithCouponResultSample();
 
-                var expectedAnalyticsCoupon = CreateExpectedAnalyticsCoupon(order);
+                let expectedAnalyticsCoupon = CreateExpectedAnalyticsCoupon(order);
 
                 it('SHOULD fire the purchase trigger', () => {
                     // arrange
@@ -113,10 +113,10 @@ module Orckestra.Composer {
 
             describe('WITH pickup shipping option selected', () => {
 
-                var order = CreateOrderResultSample();
+                let order = CreateOrderResultSample();
 
-                var expectedAnalyticsOrder = CreateExpectedAnalyticsOrder(order);
-                var expectedAnalyticsTransaction = CreateExpectedAnalyticsTransaction(order, checkoutOrigin);
+                let expectedAnalyticsOrder = CreateExpectedAnalyticsOrder(order);
+                let expectedAnalyticsTransaction = CreateExpectedAnalyticsTransaction(order, checkoutOrigin);
 
                 it('SHOULD fire the purchase trigger', () => {
                     // arrange
@@ -133,11 +133,11 @@ module Orckestra.Composer {
 
             describe('WITH checkout origin specified', () => {
 
-                var order = CreateOrderResultSample();
-                var checkoutOrigin = 'checkoutOrigin';
+                let order = CreateOrderResultSample();
+                let checkoutOrigin = 'checkoutOrigin';
 
-                var expectedAnalyticsOrder = CreateExpectedAnalyticsOrder(order);
-                var expectedAnalyticsTransaction = CreateExpectedAnalyticsTransaction(order, checkoutOrigin);
+                let expectedAnalyticsOrder = CreateExpectedAnalyticsOrder(order);
+                let expectedAnalyticsTransaction = CreateExpectedAnalyticsTransaction(order, checkoutOrigin);
 
                 it('SHOULD fire the purchase trigger', () => {
                     // arrange

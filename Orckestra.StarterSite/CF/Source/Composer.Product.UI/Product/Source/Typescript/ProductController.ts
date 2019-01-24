@@ -108,7 +108,9 @@ module Orckestra.Composer {
             this.render('AddToWishList', { Loaded: false });
 
             if (this.isProductWithVariants() && this.isSelectedVariantUnavailable()) {
-                return;
+                return Q.fcall(function () {
+                    return;
+                });
             }
 
             return this._wishListService.getLineItem(vm.productId, vm.selectedVariantId)
@@ -122,13 +124,15 @@ module Orckestra.Composer {
         }
 
         protected renderUnavailableAddToCart(): Q.Promise<void> {
-
-            return;
+            return Q.fcall(function () {
+                return;
+            });
         }
 
         protected renderAvailableAddToCart(): Q.Promise<void> {
-
-            return;
+            return Q.fcall(function () {
+                return;
+            });
         }
 
         public decrementQuantity(actionContext: IControllerActionContext) {
@@ -265,8 +269,9 @@ module Orckestra.Composer {
         }
 
         protected completeAddLineItem(quantityAdded: any): Q.Promise<void> {
-
-            return;
+            return Q.fcall(function () {
+                return;
+            });
         }
 
         public selectImage(actionContext: IControllerActionContext) {

@@ -19,7 +19,7 @@ module Orckestra.Composer {
     function loadPlugins(plugins: string[], window: Window, document: HTMLDocument) {
         if (!_.isEmpty(plugins)) {
             plugins.forEach((rawPluginName) => {
-                var pluginName = `${rawPluginName}Plugin`,
+                let pluginName = `${rawPluginName}Plugin`,
                     plugin: IPlugin;
 
                 if (Orckestra.Composer.hasOwnProperty(pluginName) && _.isFunction(Orckestra.Composer[pluginName])) {
@@ -47,7 +47,7 @@ module Orckestra.Composer {
     }
 
     export var bootstrap = (window: Window, document: HTMLDocument, composerConfiguration: IComposerConfiguration) => {
-        var controllerRegistry: Orckestra.Composer.ControllerRegistry = new Orckestra.Composer.ControllerRegistry(),
+        let controllerRegistry: Orckestra.Composer.ControllerRegistry = new Orckestra.Composer.ControllerRegistry(),
             controller: Orckestra.Composer.IController,
             eventHub: Orckestra.Composer.IEventHub = Orckestra.Composer.EventHub.instance(),
             cacheProvider: ICacheProvider = CacheProvider.instance(),
@@ -58,10 +58,10 @@ module Orckestra.Composer {
         (<any>Handlebars).partials = (<any>Orckestra.Composer).Templates;
         (<any>Handlebars).localizationProvider = localizationProvider;
 
-        localizationProvider.initialize(composerContext).fail(function() {
+        localizationProvider.initialize(composerContext).fail(function () {
             console.log('Failed to initialize the localization provider');
         }).then(() => {
-            var blades = $('[data-oc-controller]'),
+            let blades = $('[data-oc-controller]'),
                 controllers: IController[] = [];
 
             loadPlugins(composerConfiguration.plugins, window, document);
@@ -69,7 +69,7 @@ module Orckestra.Composer {
 
             // Need a better query selector as this one is shit
             blades.each((index: number, item: HTMLElement) => {
-                var bladeName: string = item.getAttribute('data-oc-controller'),
+                let bladeName: string = item.getAttribute('data-oc-controller'),
                     context: Orckestra.Composer.IControllerContext;
 
                 if (controllerRegistry.isRegistered(bladeName)) {
@@ -103,7 +103,7 @@ module Orckestra.Composer {
              * it was created to workaround a bug with IE8 that had memory leaks
              * when a circular reference was made with a dom element (ie event + update of the dom element)
              * see : http://com.hemiola.com/2009/11/23/memory-leaks-in-ie8/
-             * and : http://stackoverflow.com/questions/3083196/in-internet-explorer-why-does-memory-leak-stay-even-when-navigating-away-from 
+             * and : http://stackoverflow.com/questions/3083196/in-internet-explorer-why-does-memory-leak-stay-even-when-navigating-away-from
              */
             $(window).on('beforeunload', () => {
                 controllers.forEach(controller => controller.dispose());

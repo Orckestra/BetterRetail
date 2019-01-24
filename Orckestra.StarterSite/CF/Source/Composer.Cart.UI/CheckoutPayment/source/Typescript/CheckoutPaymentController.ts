@@ -129,6 +129,10 @@ module Orckestra.Composer {
                             defaultPaymentMethod.Id,
                             defaultPaymentMethod.PaymentProviderName,
                             defaultPaymentMethod.PaymentType);
+                        } else {
+                            return Q.fcall(function () {
+                                return;
+                            });
                         }
                     }
                 })

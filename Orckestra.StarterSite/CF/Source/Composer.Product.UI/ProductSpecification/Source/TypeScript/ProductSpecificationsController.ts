@@ -22,7 +22,7 @@ module Orckestra.Composer {
 
         private renderData(variantId: string): void {
 
-            var handle: number = setTimeout(() => this.render('Attributes', { IsLoading: true }), 300);
+            let handle: number = window.setTimeout(() => this.render('Attributes', { IsLoading: true }), 300);
 
             this.getProductSpecifications(variantId)
                 .done(result => {
@@ -37,7 +37,7 @@ module Orckestra.Composer {
 
         private getProductSpecifications(variantId: string): Q.Promise<any> {
 
-            var productId: string = this.context.viewModel.productId;
+            let productId: string = this.context.viewModel.productId;
             return this.service.getProductSpecifications(productId, variantId);
         }
 

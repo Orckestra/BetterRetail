@@ -3,7 +3,7 @@
 /// <reference path='../../../../../Composer.UI/Source/TypeScript/Mvc/Controller.ts' />
 /// <reference path='../../../../../Composer.UI/Source/TypeScript/Mvc/IControllerActionContext.ts' />
 /// <reference path='../../../../../Composer.UI/Source/TypeScript/Mvc/IControllerContext.ts' />
-///<reference path='../../../../../Composer.UI/Source/TypeScript/Mvc/IControllerActionContext.ts' />
+/// <reference path='../../../../../Composer.UI/Source/TypeScript/Mvc/IControllerActionContext.ts' />
 /// <reference path='../../../../../Composer.UI/Source/TypeScript/Events/IEventHub.ts' />
 /// <reference path='../../../../../Composer.UI/Source/TypeScript/System/IDisposable.ts' />
 
@@ -70,13 +70,13 @@ module Orckestra.Composer {
         }
 
         private initializeSlider(facetData) {
-            var sliderElement = this.context.find('.range').get(0);
-            var defaultRange = [this.minValue, this.maxValue];
-            var startRange = defaultRange;
-            var selectedRange;
-            var lowerRangeContext: JQuery  = this.context.find('.js-lowerValue');
-            var upperRangeContext: JQuery = this.context.find('.js-higherValue');
-            var parentPanel$ = $(sliderElement).closest('.panel');
+            let sliderElement = this.context.find('.range').get(0),
+                defaultRange = [this.minValue, this.maxValue],
+                startRange = defaultRange,
+                selectedRange,
+                lowerRangeContext: JQuery = this.context.find('.js-lowerValue'),
+                upperRangeContext: JQuery = this.context.find('.js-higherValue'),
+                parentPanel$ = $(sliderElement).closest('.panel');
 
             // TODO handle array or not array
             if (facetData) {
@@ -119,7 +119,7 @@ module Orckestra.Composer {
                     that.waitForHandles(selector, callback);
                 }, 100);
             }
-        };
+        }
 
         private setSliderHandle(slider, i, value) {
             let r = [null, null];
@@ -231,7 +231,7 @@ module Orckestra.Composer {
         }
 
         private createSlider(startRange, sliderElement): noUiSlider.noUiSlider {
-           noUiSlider.create(sliderElement, {
+            noUiSlider.create(sliderElement, {
                 start: startRange,
                 connect: true,
                 margin: this.step,
@@ -254,7 +254,7 @@ module Orckestra.Composer {
         }
 
         public getValues() {
-            var values = <any[]>this.sliderInstance.get();
+            let values = <any[]>this.sliderInstance.get();
 
             if (values[1] === this.maxLabel) {
                 values[1] = undefined;

@@ -10,12 +10,13 @@ module Orckestra.Composer {
             }
         }
 
-        private getOrigin(window: Window) : string {
-            var origin: string;
+        private getOrigin(window: Window): string {
+            let origin: string;
 
-            if (!window.location['origin']) {
+            //origin is a READ ONLY attribute
+            /*if (!window.location['origin']) {
                 window.location['origin'] = window.location.protocol + '//' + window.location.host;
-            }
+            }*/
 
             origin = window.location['origin'];
             return origin;

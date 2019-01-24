@@ -1,11 +1,11 @@
-/// <reference path='../../../../Composer.UI/Source/Typings/tsd.d.ts' />
-/// <reference path='../../../../Composer.UI\Source\Typescript\Events\EventHub.ts' />
-/// <reference path='./IAnalyticsPlugin.ts' />
-/// <reference path='./IAnalyticsOrder.ts' />
-/// <reference path='./IAnalyticsTransaction.ts' />
-/// <reference path='./IAnalyticsSearchFilters.ts' />
-/// <reference path='../../../../Composer.UI/Source/TypeScript/Plugins/IPlugin.ts' />
-/// <reference path='../../../../Composer.MyAccount.UI/Common/Source/Typescript/MyAccountEvents.ts' />
+///<reference path='../../../../Composer.UI/Source/Typings/tsd.d.ts' />
+///<reference path='../../../../Composer.UI\Source\Typescript\Events\EventHub.ts' />
+///<reference path='./IAnalyticsPlugin.ts' />
+///<reference path='./IAnalyticsOrder.ts' />
+///<reference path='./IAnalyticsTransaction.ts' />
+///<reference path='./IAnalyticsSearchFilters.ts' />
+///<reference path='../../../../Composer.UI/Source/TypeScript/Plugins/IPlugin.ts' />
+///<reference path='../../../../Composer.MyAccount.UI/Common/Source/Typescript/MyAccountEvents.ts' />
 
 module Orckestra.Composer {
     export class AnalyticsPlugin implements IAnalyticsPlugin, IPlugin {
@@ -168,7 +168,7 @@ module Orckestra.Composer {
                 if (facetKey.indexOf('category') !== -1) {
                     facetKey = 'category';
                 }
-            };
+            }
 
             let searchFilters: IAnalyticsSearchFilters = {
                 facetKey: facetKey,
@@ -493,8 +493,7 @@ module Orckestra.Composer {
                 position: position
             };
 
-            var products: IAnalyticsProduct[] = [product];
-            this.productClick(products, data.ListName);
+            this.productClick(product, data.ListName);
         }
 
         /**

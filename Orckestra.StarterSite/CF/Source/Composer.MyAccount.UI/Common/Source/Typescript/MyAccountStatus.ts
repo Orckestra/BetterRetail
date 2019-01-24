@@ -19,5 +19,5 @@ module Orckestra.Composer {
         UserRejected,
         RequiresApproval,
         AjaxFailed
-    };
+    }
 }

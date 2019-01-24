@@ -13,7 +13,7 @@ module Orckestra.Composer {
             super.initialize();
         }
 
-         public changeUseShippingAddress() {
+        public changeUseShippingAddress() {
 
             this.setBillingAddressFormVisibility();
             this.setBillingAddressFormValidation();
@@ -26,7 +26,7 @@ module Orckestra.Composer {
                     this.renderAuthenticated(checkoutContext);
                 } else {
                     this.renderUnauthenticated(checkoutContext);
-                };
+                }
             });
         }
 
@@ -42,7 +42,7 @@ module Orckestra.Composer {
             this.render(this.viewModelName, checkoutContext.cartViewModel);
             this.render('AddressRegionPicker', {
                 Regions: checkoutContext.regionsViewModel,
-                SelectedRegion : this.getRegionCode(checkoutContext.cartViewModel)
+                SelectedRegion: this.getRegionCode(checkoutContext.cartViewModel)
             });
             this.eventHub.publish(`${this.viewModelName}Rendered`, checkoutContext.cartViewModel);
         }
@@ -74,13 +74,13 @@ module Orckestra.Composer {
 
         private onRendered() {
 
-            var useShippingAddress: Boolean = this.useShippingAddress();
+            let useShippingAddress: Boolean = this.useShippingAddress();
             this.eventHub.subscribe('postalCodeChanged', e => this.onPostalCodeChanged(useShippingAddress, e.data));
 
             this.formInstances = this.registerFormsForValidation(this.getVisibleForms());
         }
 
-        private useShippingAddress() : Boolean {
+        private useShippingAddress(): Boolean {
 
             return $(this.context.container).find('input[name=UseShippingAddress]:checked').val() === 'true';
         }
@@ -91,18 +91,18 @@ module Orckestra.Composer {
                 return;
             }
 
-            var postalCode: string = cart.ShippingAddress.PostalCode;
+            let postalCode: string = cart.ShippingAddress.PostalCode;
             this.checkoutService.updatePostalCode(postalCode).done();
         }
 
         private getVisibleForms(): JQuery {
-            var visibleForms = $('form', this.context.container).not('form:has(.hide)');
+            let visibleForms = $('form', this.context.container).not('form:has(.hide)');
             return visibleForms;
         }
 
         private setBillingAddressFormVisibility() {
 
-            var useShippingAddress: Boolean = this.useShippingAddress();
+            let useShippingAddress: Boolean = this.useShippingAddress();
             if (useShippingAddress) {
                 $('#BillingAddressContent').addClass('hide');
             } else {
@@ -112,8 +112,8 @@ module Orckestra.Composer {
 
         private setBillingAddressFormValidation() {
 
-            var useShippingAddress: Boolean = this.useShippingAddress();
-            var isValidationEnabled: Boolean = this.isBillingAddressFormValidationEnabled();
+            let useShippingAddress: Boolean = this.useShippingAddress(),
+                isValidationEnabled: Boolean = this.isBillingAddressFormValidationEnabled();
 
             if (useShippingAddress) {
                 if (isValidationEnabled) {
@@ -126,27 +126,27 @@ module Orckestra.Composer {
             }
         }
 
-        private isBillingAddressFormValidationEnabled() : Boolean {
+        private isBillingAddressFormValidationEnabled(): Boolean {
 
-            return _.some(this.formInstances, (formInstance : any) => {
+            return _.some(this.formInstances, (formInstance: any) => {
                 return this.isBillingAddressFormInstance(formInstance);
             });
         }
 
         private disableBillingAddressFormValidation() {
 
-            var formInstance = _.find(this.formInstances, (formInstance : any) => {
+            let formInstance = _.find(this.formInstances, (formInstance: any) => {
                 return this.isBillingAddressFormInstance(formInstance);
             });
 
             formInstance.destroy();
 
-            _.remove(this.formInstances, (formInstance : any) => {
+            _.remove(this.formInstances, (formInstance: any) => {
                 return this.isBillingAddressFormInstance(formInstance);
             });
         }
 
-        private isBillingAddressFormInstance(formInstance : any) : boolean {
+        private isBillingAddressFormInstance(formInstance: any): boolean {
 
             return formInstance.$element.is('form#BillingAddress');
         }

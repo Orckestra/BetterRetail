@@ -177,12 +177,15 @@ var path = require('path');
 
                 defaultTypescriptSettings: {
                     declarationFiles: true,
-                    noExternalResolve: false,
+                    allowUnusedLabels: false,
+                    noResolve: false,
                     noImplicitAny: false,
+                    noImplicitReturns: true,
                     noLib: false,
                     removeComments: false,
-                    target: ecmascriptTarget,
-                    sortOutput: true
+                    target: ecmascriptTarget
+                    // Exclude definition types from node_modules/@types for TypeScript 2+
+                    //types: []
                 }
             };
 

@@ -13,7 +13,7 @@ module Orckestra.Composer {
     //TODO refactor modal : create a generic modal service
     export class AddressListController extends Orckestra.Composer.MyAccountController {
 
-        private deleteModalElementSelector: string= '#confirmationModal';
+        private deleteModalElementSelector: string = '#confirmationModal';
         private uiModal: UIModal;
 
         protected customerService: ICustomerService = new CustomerService(new CustomerRepository());
@@ -34,20 +34,20 @@ module Orckestra.Composer {
 
         private onAddressDeleted(e: IEventInformation) {
 
-            var result = e.data;
-            var $container = result.$container;
+            let result = e.data,
+                $container = result.$container;
+
             $container.remove();
         }
 
         /**
-        * Requires the element in action context to have a data-address-id.
-        */
+         * Requires the element in action context to have a data-address-id.
+         */
         public setDefaultAddress(actionContext: IControllerActionContext): void {
 
-            var $addressListItem: JQuery = $(actionContext.elementContext).closest('[data-address-id]');
-            var addressId = $addressListItem.data('address-id');
-
-            var busy = this.asyncBusy({ elementContext: actionContext.elementContext, containerContext: $addressListItem });
+            let $addressListItem: JQuery = $(actionContext.elementContext).closest('[data-address-id]'),
+                addressId = $addressListItem.data('address-id'),
+                busy = this.asyncBusy({elementContext: actionContext.elementContext, containerContext: $addressListItem});
 
             this.customerService.setDefaultAddress(addressId.toString(), '')
                 .then(result => location.reload(), reason => console.error(reason))
@@ -56,14 +56,13 @@ module Orckestra.Composer {
         }
 
         /**
-        * Requires the element in action context to have a data-address-id.
-        */
+         * Requires the element in action context to have a data-address-id.
+         */
         public deleteAddress(event: JQueryEventObject): void {
-            let element = $(event.target);
-            var $addressListItem: JQuery = element.closest('[data-address-id]');
-            var addressId = $addressListItem.data('address-id');
-
-            var busy = this.asyncBusy({ elementContext: element, containerContext: $addressListItem });
+            let element = $(event.target),
+                $addressListItem: JQuery = element.closest('[data-address-id]'),
+                addressId = $addressListItem.data('address-id'),
+                busy = this.asyncBusy({elementContext: element, containerContext: $addressListItem});
 
             this.customerService.deleteAddress(addressId, '')
                 .then(result => this.onDeleteAddressFulfilled(result, $addressListItem), reason => console.error(reason))
@@ -73,16 +72,16 @@ module Orckestra.Composer {
 
         private onDeleteAddressFulfilled(result: any, $addressListItem: JQuery): void {
 
-            var data = {
+            let data = {
                 result: result,
                 $container: $addressListItem
             };
 
-            this.eventHub.publish(MyAccountEvents[MyAccountEvents.AddressDeleted], { data: data });
+            this.eventHub.publish(MyAccountEvents[MyAccountEvents.AddressDeleted], {data: data});
         }
 
         public deleteAddressConfirm(actionContext: IControllerActionContext) {
-             this.uiModal.openModal(actionContext.event);
+            this.uiModal.openModal(actionContext.event);
         }
     }
 }

@@ -9,8 +9,8 @@ module Orckestra.Composer {
              * else will put it in the bottom.
              */
             function popoverPlacement(popover, triggeringElement) {
-                var triggeringElementWidth = $(triggeringElement).outerWidth();
-                var placement = 'bottom';
+                let triggeringElementWidth = $(triggeringElement).outerWidth(),
+                    placement = 'bottom';
 
                 // we will consider that if the trrigering element can't be doubled
                 // we won't have enough space to display the popover on the right
@@ -29,7 +29,7 @@ module Orckestra.Composer {
                 placement: popoverPlacement,
                 selector: '[data-toggle=popover]',
                 trigger: 'focus',
-                content: function() {
+                content: function () {
                     return $('#popover-content').html();
                 }
             });
@@ -38,10 +38,10 @@ module Orckestra.Composer {
              * Needs the select block of a same group to have data-parent defined
              * OR that they be in the same form.
              */
-            $('body').on('change', '.select-block', function(){
-                var input = $(this).find('.input');
-                var type = input.attr('type');
-                var name = input.attr('name');
+            $('body').on('change', '.select-block', function () {
+                let input = $(this).find('.input'),
+                    type = input.attr('type'),
+                    name = input.attr('name');
 
                 // if checkbox check current state of prop
                 if (type === 'checkbox') {
@@ -53,8 +53,8 @@ module Orckestra.Composer {
                 }
 
                 if (type === 'radio') {
-                    var parentSelector = $(this).data('parent');
-                    var parentElement;
+                    let parentSelector = $(this).data('parent'),
+                        parentElement;
 
                     if (parentSelector) {
                         parentElement = input.closest(parentSelector);

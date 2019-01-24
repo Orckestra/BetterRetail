@@ -1,4 +1,4 @@
-(function() {
+(function () {
     'use strict';
 
     var gulp = require('gulp'),
@@ -14,18 +14,19 @@
      * other modifications.
      */
     function syncItem(watchItem) {
-            return gulp.src(watchItem.srcGlob, {
-                    read: false
-                })
-                //.pipe($.using({ prefix: 'Sync`ed', path: 'path', color: 'gray' }))
-                .pipe($.plumber())
-                .pipe(gulp.dest(watchItem.dst));
-        }
-        /**
-         * Watch all 'watches' and copy directly source file to destination without any
-         * other modifications.
-         */
-    gulp.task('syncToProjects', function() {
+        return gulp.src(watchItem.srcGlob, {
+            read: false
+        })
+        //.pipe($.using({ prefix: 'Sync`ed', path: 'path', color: 'gray' }))
+            .pipe($.plumber())
+            .pipe(gulp.dest(watchItem.dst));
+    }
+
+    /**
+     * Watch all 'watches' and copy directly source file to destination without any
+     * other modifications.
+     */
+    gulp.task('syncToProjects', function () {
 
         //helpers.log('sync-projects: Loading...');
 
@@ -55,12 +56,12 @@
         var sources = gulp.src(src);
 
         var merged = merge();
-        config.tokens.forEach(function(token) {
+        config.tokens.forEach(function (token) {
             var name = 'Composer.{{TOKEN}}.UI';
             name = name.replace('{{TOKEN}}', token);
             merged.add(
                 sources
-                .pipe(gulp.dest(path.resolve('../', name, 'Framework')))
+                    .pipe(gulp.dest(path.resolve('../', name, 'Framework')))
             );
         });
 

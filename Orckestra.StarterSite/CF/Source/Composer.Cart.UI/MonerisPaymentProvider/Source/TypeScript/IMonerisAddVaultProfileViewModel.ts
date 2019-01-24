@@ -17,7 +17,7 @@ module Orckestra.Composer {
          */
         ErrorMessage: string;
 
-        /** 
+        /**
          * Active Payment ViewModel.
          */
         ActivePaymentViewModel: IActivePaymentViewModel;

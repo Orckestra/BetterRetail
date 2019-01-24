@@ -1,8 +1,8 @@
-/// <reference path='../../../../Composer.UI/Source/Typings/tsd.d.ts' />
-/// <reference path='../../../../Composer.UI/Source/Typescript/Mvc/ComposerClient.ts' />
-/// <reference path='../../../../Composer.UI/Source/Typescript/Events/EventHub.ts' />
-/// <reference path='./AnalyticsPlugin.ts' />
-/// <reference path='./IAnalyticsProduct.ts' />
+///<reference path='../../../../Composer.UI/Source/Typings/tsd.d.ts' />
+///<reference path='../../../../Composer.UI/Source/Typescript/Mvc/ComposerClient.ts' />
+///<reference path='../../../../Composer.UI/Source/Typescript/Events/EventHub.ts' />
+///<reference path='./AnalyticsPlugin.ts' />
+///<reference path='./IAnalyticsProduct.ts' />
 
 declare var dataLayer: any;
 declare var ga: any;
@@ -76,7 +76,7 @@ module Orckestra.Composer {
             });
         }
 
-        public productClick(products: IAnalyticsProduct[], listName: string) {
+        public productClick(products: IAnalyticsProduct, listName: string) {
             dataLayer.push({
                 event: 'productClick',
                 ecommerce: {
@@ -109,7 +109,7 @@ module Orckestra.Composer {
                 event: 'addToCart',
                 ecommerce: {
                     add: {
-                        actionField: { list: listName },
+                        actionField: {list: listName},
                         products: [product]
                     }
                 }
@@ -143,7 +143,7 @@ module Orckestra.Composer {
                 event: 'removeFromCart',
                 ecommerce: {
                     remove: {
-                        actionField: { list: listName },
+                        actionField: {list: listName},
                         products: [product]
                     }
                 }

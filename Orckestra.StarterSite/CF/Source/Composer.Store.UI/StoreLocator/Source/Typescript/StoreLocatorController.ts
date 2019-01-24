@@ -136,7 +136,7 @@ module Orckestra.Composer {
             this._searchBoxJQ.on('keypress', (e) => {
                 var key = e.which || e.keyCode;
                 if (key === 13) {
-                    this._enterPressedTimer = setTimeout(() => {
+                    this._enterPressedTimer = window.setTimeout(() => {
                         if (this._searchPoint) {
                             this.setSearchLocationInMap(this._searchPoint);
                         }
@@ -178,7 +178,7 @@ module Orckestra.Composer {
 
         protected onMapBoundsUpdated(data?: any, isSearch?: boolean): void {
             clearTimeout(this._timer);
-            this._timer = setTimeout(() => {
+            this._timer = window.setTimeout(() => {
                 this.updateMarkers(data, isSearch);
             }, 750);
         }

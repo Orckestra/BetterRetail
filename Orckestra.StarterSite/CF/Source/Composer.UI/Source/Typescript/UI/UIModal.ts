@@ -20,12 +20,12 @@ module Orckestra.Composer {
             this.registerDomEvents();
         }
 
-        private registerDomEvents() : void {
-            $(this.window.document).on('click', '.modal--confirm',  this.confirmModal.bind(this));
+        private registerDomEvents(): void {
+            $(this.window.document).on('click', '.modal--confirm', this.confirmModal.bind(this));
             $(this.window.document).on('click', '.modal--cancel', this.cancelModal.bind(this));
         }
 
-        private unregisterDomEvents() : void {
+        private unregisterDomEvents(): void {
             $(this.window.document).off('click', '.modal--confirm', this.confirmModal);
             $(this.window.document).off('click', '.modal--cancel', this.cancelModal);
         }
@@ -59,7 +59,7 @@ module Orckestra.Composer {
                 .done(null, (error) => {
                     console.log(error);
                 });
-        };
+        }
 
         public confirmModal() {
             this.confirmDeferred.resolve(true);

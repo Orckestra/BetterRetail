@@ -36,10 +36,10 @@ module Orckestra.Composer {
             };
 
             return searchResult;
-        };
+        }
 
         function CreateExpectedAnalyticsProducts(searchResult: any, price: number) {
-            var analyticsProducts : IAnalyticsProduct[] = [ {
+            let analyticsProducts : IAnalyticsProduct[] = [ {
                 id: searchResult.ProductSearchResults[0].ProductId,
                 name: searchResult.ProductSearchResults[0].DisplayName,
                 price: price,
@@ -51,7 +51,7 @@ module Orckestra.Composer {
             ];
 
             return analyticsProducts;
-        };
+        }
 
         describe('WHEN NO Search Results are returned', () => {
 
@@ -93,7 +93,7 @@ module Orckestra.Composer {
 
             describe('WITH product with regular price', () => {
 
-                var regularPricing = {
+                let regularPricing = {
                     DisplayPrice : '$165.00',
                     DisplaySpecialPrice : null,
                     HasPriceRange : false,
@@ -104,9 +104,9 @@ module Orckestra.Composer {
                     JsonContext : '{}'
                 };
 
-                var searchResult = CreateSearchResultSample(regularPricing);
+                let searchResult = CreateSearchResultSample(regularPricing);
 
-                var expectedAnalyticsProducts = CreateExpectedAnalyticsProducts(searchResult, regularPricing.ListPrice);
+                let expectedAnalyticsProducts = CreateExpectedAnalyticsProducts(searchResult, regularPricing.ListPrice);
 
                 it('SHOULD fire the productimpressions trigger', () => {
                     // arrange
@@ -122,7 +122,7 @@ module Orckestra.Composer {
 
             describe('WITH product with discount price', () => {
 
-                var discountPricing = {
+                let discountPricing = {
                     DisplayPrice : '$165.00',
                     DisplaySpecialPrice : '$70.00',
                     HasPriceRange : false,
@@ -133,9 +133,9 @@ module Orckestra.Composer {
                     JsonContext : '{}'
                 };
 
-                var searchResult = CreateSearchResultSample(discountPricing);
+                let searchResult = CreateSearchResultSample(discountPricing);
 
-                var expectedAnalyticsProducts = CreateExpectedAnalyticsProducts(searchResult, discountPricing.Price);
+                let expectedAnalyticsProducts = CreateExpectedAnalyticsProducts(searchResult, discountPricing.Price);
 
                 it('SHOULD fire the productimpressions trigger', () => {
                     // arrange

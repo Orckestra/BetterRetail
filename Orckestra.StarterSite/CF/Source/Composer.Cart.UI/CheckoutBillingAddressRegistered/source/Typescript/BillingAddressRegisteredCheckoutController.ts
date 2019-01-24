@@ -35,11 +35,13 @@ module Orckestra.Composer {
 
         public renderData(checkoutContext: ICheckoutContext): Q.Promise<void> {
 
-            if (checkoutContext.authenticationViewModel.IsAuthenticated) {
-                return this.renderAuthenticated(checkoutContext);
-            } else {
-                this.renderUnauthenticated(checkoutContext);
-            }
+            return Q.fcall(() => {
+                if (checkoutContext.authenticationViewModel.IsAuthenticated) {
+                    this.renderAuthenticated(checkoutContext);
+                } else {
+                    this.renderUnauthenticated(checkoutContext);
+                }
+            });
         }
 
         protected renderUnauthenticated(checkoutContext: ICheckoutContext) {

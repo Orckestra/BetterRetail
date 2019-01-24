@@ -40,7 +40,7 @@ module Orckestra.Composer {
 
         private displayMiniCart(e: IEventInformation): void {
             let miniCartContainer = $(this.context.container);
-            let notificationTime =  parseInt(miniCartContainer.data('notificationTime'), 10);
+            let notificationTime = parseInt(miniCartContainer.data('notificationTime'), 10);
             let scrollToLineItemKey = e.data.ProductId + '-' + (e.data.VariantId || '');
 
             if (notificationTime > 0) {
@@ -51,7 +51,7 @@ module Orckestra.Composer {
                     scrollTop: $('[data-lineitem-id="' + scrollToLineItemKey + '"]', miniCartContainer).position().top
                 }, 1000);
 
-                setTimeout(function(){
+                setTimeout(function () {
                     miniCartContainer.removeClass('displayMiniCart');
                 }, notificationTime);
             }
@@ -60,7 +60,7 @@ module Orckestra.Composer {
         private onCloseMiniCart(e: IEventInformation): void {
             let miniCartContainer = $(this.context.container);
             miniCartContainer.addClass('hidden');
-            setTimeout(function(){
+            setTimeout(function () {
                 miniCartContainer.removeClass('hidden');
             }, 500);
         }
@@ -71,7 +71,7 @@ module Orckestra.Composer {
         }
 
         protected initializeMiniCartSummary(): void {
-            var busy = this.asyncBusy({containerContext: this.context.container });
+            let busy = this.asyncBusy({containerContext: this.context.container});
             this.cartService.getCart().done(cart => {
                 if (!_.isEmpty(cart)) {
                     this.renderMiniCart(cart);

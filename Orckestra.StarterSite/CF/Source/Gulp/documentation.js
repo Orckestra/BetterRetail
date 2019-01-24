@@ -1,32 +1,31 @@
-﻿(function() {
+﻿(function () {
     'use strict';
 
     var gulp = require("gulp"),
-        $ = require('gulp-load-plugins')(),
-        runSequence = require('run-sequence'),
-        helpers = require('./common/helpers'),        
+        typedoc = require('gulp-typedoc/index'),
+        helpers = require('./common/helpers'),
         config = require('./config');
 
     /*
      * Cleans the documentation folder.
      */
-    gulp.task('documentation-clean', function() {
-
-        helpers.clean(config.documentationSettings.outputFolder);
+    gulp.task('documentation-clean', function () {
+        return helpers.clean(config.documentationSettings.outputFolder);
     });
 
     /*
      * Builds the client-side documentation.
      */
-    gulp.task('documentation-build', function() {
-
-        return gulp.src(config.typescriptFilesGlob)
-            .pipe($.typedoc({
+    gulp.task('documentation-build', function () {
+        return gulp
+            .src(config.typescriptFilesGlob)
+            .pipe(typedoc({
                 module: config.documentationSettings.moduleType,
                 out: config.documentationSettings.outputFolder,
                 name: config.documentationSettings.documentationName,
                 target: config.ecmascriptTarget,
-                includeDeclarations: config.documentationSettings.includeDeclarations
+                includeDeclarations: config.documentationSettings.includeDeclarations,
+                ignoreCompilerErrors: config.documentationSettings.ignoreCompilerErrors
             }))
             .pipe(gulp.dest(config.documentationSettings.outputFolder));
     });
@@ -34,11 +33,8 @@
     /*
      * Cleans and packages the client-side documentation.
      */
-    gulp.task('documentation', function(callback) {
-        runSequence(
-            'documentation-clean',
-            'documentation-build',
-            callback
-        );
-    });
+    gulp.task('documentation', gulp.series(
+        'documentation-clean',
+        'documentation-build'
+    ));
 })();

@@ -2,21 +2,22 @@
 /// <reference path='./StorageType.ts' />
 
 module Orckestra.Composer {
-    var localStoragePolyFill: any;
-    var sessionStoragePolyFill: any;
+    let localStoragePolyFill: any,
+        sessionStoragePolyFill: any;
+
     export class StoragePolyfill {
 
-        static create(windowHandle: Window, storageType : StorageType): Storage {
-            var lastStorage: any,
+        static create(windowHandle: Window, storageType: StorageType): Storage {
+            let lastStorage: any,
                 lastStorageKey: string,
                 storagePolyFill: any;
 
-                if (storageType === void 0) {
-                    throw {
-                            name: 'StoragePolyfillException',
-                            message: `A storage type must be specified in the storage polyfill create method.`
-                        };
-                }
+            if (storageType === void 0) {
+                throw {
+                    name: 'StoragePolyfillException',
+                    message: `A storage type must be specified in the storage polyfill create method.`
+                };
+            }
 
             switch (storageType) {
                 case StorageType.localStorage:
@@ -41,8 +42,8 @@ module Orckestra.Composer {
 
             function getStorageApi() {
                 return {
-                    clear: function(): void {
-                        var key: string;
+                    clear: function (): void {
+                        let key: string;
 
                         Object.keys(storagePolyFill).forEach((key: string) => {
                             if (storagePolyFill.hasOwnProperty(key)) {
@@ -53,20 +54,20 @@ module Orckestra.Composer {
                         persist(storagePolyFill);
                     },
 
-                    getItem: function(key: string): any {
+                    getItem: function (key: string): any {
                         key = getStorageKey(key);
                         return storagePolyFill[key] || null;
                     },
 
-                    key: function(index: number): string {
-                        var keys: string[] = null;
+                    key: function (index: number): string {
+                        let keys: string[] = null;
 
                         keys = Object.keys(storagePolyFill).filter((value: string, indexToMatch: number) => indexToMatch === index);
 
                         return keys.length > 0 ? keys[0] : null;
                     },
 
-                    removeItem: function(key: string): void {
+                    removeItem: function (key: string): void {
                         key = getStorageKey(key);
                         if (key in storagePolyFill && storagePolyFill.hasOwnProperty(key)) {
                             delete storagePolyFill[key];
@@ -80,7 +81,7 @@ module Orckestra.Composer {
                         persist(storagePolyFill);
                     },
 
-                    dispose: function() {
+                    dispose: function () {
                         persist(storagePolyFill);
                     }
                 };
@@ -107,6 +108,6 @@ module Orckestra.Composer {
                     return sessionStoragePolyFill;
             }
         }
-    };
+    }
 }
 

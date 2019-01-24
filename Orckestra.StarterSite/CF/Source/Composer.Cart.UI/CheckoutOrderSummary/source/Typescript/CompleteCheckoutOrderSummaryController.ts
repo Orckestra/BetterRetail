@@ -28,7 +28,7 @@ module Orckestra.Composer {
         */
         public nextStep(actionContext: IControllerActionContext) {
 
-            var busy: UIBusyHandle = this.asyncBusy();
+            let busy: UIBusyHandle = this.asyncBusy();
 
             this.checkoutService.completeCheckout()
                 .then((result: ICompleteCheckoutResult) => {
@@ -46,7 +46,7 @@ module Orckestra.Composer {
                 })
                 .then((result: ICompleteCheckoutResult) => {
 
-                    var orderConfirmationviewModel = {
+                    let orderConfirmationviewModel = {
                         OrderNumber: result.OrderNumber,
                         CustomerEmail: result.CustomerEmail
                     };
@@ -67,11 +67,11 @@ module Orckestra.Composer {
 
             super.registerSubscriptions();
 
-            var handle: number;
+            let handle: number;
 
             this.eventHub.subscribe('cartUpdating', () => {
                 clearTimeout(handle);
-                handle = setTimeout(() => this.renderLoading(), 300);
+                handle = window.setTimeout(() => this.renderLoading(), 300);
             });
 
             this.eventHub.subscribe('cartUpdatingFailed', () => {

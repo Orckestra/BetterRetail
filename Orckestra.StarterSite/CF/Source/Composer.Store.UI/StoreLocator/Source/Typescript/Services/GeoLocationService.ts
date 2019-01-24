@@ -25,18 +25,20 @@ module Orckestra.Composer {
         }
 
         public getCurrentLocation(): Q.Promise<google.maps.LatLng> {
-            var deferred = Q.defer<google.maps.LatLng>();
+            let deferred = Q.defer<google.maps.LatLng>();
             this._browserGeolocation.getCurrentPosition((pos) => {
                 this._currenctLocation = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
                 deferred.resolve(this._currenctLocation);
-            }, () => { deferred.reject('problems to get current location'); });
+            }, () => {
+                deferred.reject('problems to get current location');
+            });
             return deferred.promise;
         }
 
         public getAddtressByLocation(location: google.maps.LatLng): Q.Promise<string> {
-            var deferred = Q.defer<string>();
+            let deferred = Q.defer<string>();
 
-            this._geocoder.geocode({ location: location },
+            this._geocoder.geocode({location: location},
                 function (results, status) {
                     if (status === google.maps.GeocoderStatus.OK) {
                         deferred.resolve(results[0].formatted_address);
@@ -50,12 +52,12 @@ module Orckestra.Composer {
         }
 
         public getLocationByAddress(address: string): Q.Promise<google.maps.LatLng> {
-            var deferred = Q.defer<google.maps.LatLng>();
+            let deferred = Q.defer<google.maps.LatLng>();
 
-            this._geocoder.geocode({ address: address },
+            this._geocoder.geocode({address: address},
                 (results, status) => {
                     if (status === google.maps.GeocoderStatus.OK) {
-                        var location = results[0].geometry.location;
+                        let location = results[0].geometry.location;
                         deferred.resolve(location);
                     } else {
                         deferred.resolve(null);
@@ -67,17 +69,19 @@ module Orckestra.Composer {
             return deferred.promise;
         }
 
-        /// By default render with default value for ViewModel.GoogleDirectionsLink (direction with Empty Start Point), 
+        /// By default render with default value for ViewModel.GoogleDirectionsLink (direction with Empty Start Point),
         /// and when User Accept his Current Location, just in async task update HREF attributes and attach current location coordinates.
         /// We do not update the ViewModel before rendering, as we need to wait for User Input
         public updateDirectionLinksWithLatLngSourceAddress(container: JQuery, sourceLocation: google.maps.LatLng) {
 
-            if (!sourceLocation) { return; }
+            if (!sourceLocation) {
+                return;
+            }
 
-            var ctaDirs = container.find('.ctaGoogleDir');
+            let ctaDirs = container.find('.ctaGoogleDir');
 
             ctaDirs.each((ind, ctaDir) => {
-                var href = $(ctaDir).attr('href');
+                let href = $(ctaDir).attr('href');
                 if (href.indexOf('saddr') === -1) {
                     $(ctaDir).attr('href', this.getDirectionLatLngSourceAddress(href, sourceLocation));
                 }

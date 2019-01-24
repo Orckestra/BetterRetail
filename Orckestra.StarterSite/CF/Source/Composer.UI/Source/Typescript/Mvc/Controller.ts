@@ -5,8 +5,8 @@
 /// <reference path='./IControllerContext.ts' />
 /// <reference path='./IRegisterActionOptions.ts' />
 /// <reference path='./IControllerActionContext.ts' />
-///<reference path='../Templating/IComposerTemplates.ts' />
-///<reference path='../Templating/IComposerTemplates.ts' />
+/// <reference path='../Templating/IComposerTemplates.ts' />
+/// <reference path='../Templating/IComposerTemplates.ts' />
 /// <reference path='../JQueryPlugins/IParsleyJqueryPlugin.ts' />
 /// <reference path='../Validation/IParsley.ts' />
 /// <reference path='../UI/UIBusyParam.ts' />
@@ -18,12 +18,12 @@ module Orckestra.Composer {
     'use strict';
 
     /**
-    * Provides methods that respond to client-side requests.
-    */
+     * Provides methods that respond to client-side requests.
+     */
     export class Controller implements IController {
         private _composerEventPostfix = '.composer';
         private _defaultEventsToMonitor: string[] =
-        ['click', 'mouseover', 'mouseout', 'contextmenu', 'submit', 'focus', 'blur', 'change']; // 'dblclick'
+            ['click', 'mouseover', 'mouseout', 'contextmenu', 'submit', 'focus', 'blur', 'change']; // 'dblclick'
         private _unregister: {
             (): void;
         };
@@ -33,10 +33,9 @@ module Orckestra.Composer {
         protected eventsToMonitor: string[];
 
         constructor(protected context: IControllerContext,
-            protected eventHub: IEventHub,
-            protected composerContext: IComposerContext,
-            protected composerConfiguration: IComposerConfiguration
-        ) {
+                    protected eventHub: IEventHub,
+                    protected composerContext: IComposerContext,
+                    protected composerConfiguration: IComposerConfiguration) {
 
             if (_.isEmpty(context)) {
                 throw new Error('context is required');
@@ -52,7 +51,7 @@ module Orckestra.Composer {
         }
 
         public static registerAction(classToRegisterActionOn: any, registerActionOptions: IRegisterActionOptions) {
-            var classPrototype = classToRegisterActionOn.prototype;
+            let classPrototype = classToRegisterActionOn.prototype;
 
             if (!Controller.prototype.isPrototypeOf(classPrototype)) {
                 throw new Error(
@@ -96,9 +95,8 @@ without specifying overwrite = true in the registerActionOptions.`);
                 msDelay: 0
             }, options);
 
-            var loadingIndicatorContext = options.elementContext.find(options.loadingIndicatorSelector);
-            var handle = new UIBusyHandle(loadingIndicatorContext, options.containerContext, options.msDelay);
-            return handle;
+            let loadingIndicatorContext = options.elementContext.find(options.loadingIndicatorSelector);
+            return new UIBusyHandle(loadingIndicatorContext, options.containerContext, options.msDelay);
         }
 
         /*
@@ -110,20 +108,20 @@ without specifying overwrite = true in the registerActionOptions.`);
         }
 
         protected render(templateId: string, viewModel: any, parentSelector?: string) {
-            var container = this.context.container;
+            let container = this.context.container;
 
             if (!_.isEmpty(parentSelector)) {
                 container = this.context.container.find(parentSelector);
             }
 
-            var elements = container.find(`[data-templateid="${templateId}"]`);
+            let elements = container.find(`[data-templateid="${templateId}"]`);
 
             if (_.isEmpty(elements)) {
                 console.warn(`Could not find the template '${templateId}' inside its container.`, container);
             }
 
             elements.each((index: Number, item: HTMLElement) => {
-                var renderedTemplate = this.getRenderedTemplateContents(templateId, viewModel);
+                let renderedTemplate = this.getRenderedTemplateContents(templateId, viewModel);
 
                 if (renderedTemplate !== null) {
                     item.outerHTML = renderedTemplate;
@@ -132,7 +130,7 @@ without specifying overwrite = true in the registerActionOptions.`);
         }
 
         protected getRenderedTemplateContents(templateId: string, viewModel: any): string {
-            var template = (<any>Orckestra.Composer).Templates[templateId];
+            let template = (<any>Orckestra.Composer).Templates[templateId];
 
             if (!_.isFunction(template)) {
                 console.error(`Template '${templateId}' not found in compiled templates.`);
@@ -144,32 +142,32 @@ without specifying overwrite = true in the registerActionOptions.`);
             } catch (error) {
                 // catch handlebars rendering errors mostly
                 console.error(`${error.name}: ${error.message} in template '${templateId}'.`, viewModel);
+                return null;
             }
         }
 
-        protected registerFormsForValidation(context: JQuery, customOptions: any = {}): Orckestra.Composer.IParsley[] {
-            var formValidators: Orckestra.Composer.IParsley[] = [];
+        protected registerFormsForValidation(context: JQuery, customOptions: any = {}): IParsley[] {
+            let formValidators: IParsley[] = [];
 
-            var options = {
+            let options = {
                 trigger: 'focusout change',
                 focus: 'first',
                 errorTemplate: '<li></li>',
-                classHandler: function(fieldInstance) {
-                    var handleSelector = fieldInstance.$element.data('parsleyClassHandlerSelector');
+                classHandler: function (fieldInstance) {
+                    let handleSelector = fieldInstance.$element.data('parsleyClassHandlerSelector');
 
                     // returning undefined will make parsley use the default classHandler
                     if (_.isEmpty(handleSelector)) {
                         return undefined;
                     }
-                    var classHandler = fieldInstance.$element.closest(handleSelector);
-                    return classHandler;
+                    return fieldInstance.$element.closest(handleSelector);
                 }
             };
 
             _.assign(options, customOptions);
 
             context.each((index, element) => {
-                formValidators.push((<Orckestra.Composer.IParsley>(<Orckestra.Composer.IParsleyJqueryPlugin>$(element)).parsley(options)));
+                formValidators.push((<IParsley>(<IParsleyJqueryPlugin>$(element)).parsley(options)));
             });
 
             if (customOptions.serverValidationContainer) {
@@ -188,17 +186,19 @@ without specifying overwrite = true in the registerActionOptions.`);
          * @param formValidators all the parlsey forms to manage
          * @param serverValidationContainer the jQuery selector to find messages to empty
          */
-        private hideServerValidationMessageOnClientValidation(formValidators: Orckestra.Composer.IParsley[], serverValidationContainer: any) {
-            _.each(formValidators, function(parsley: any) {
-                parsley.subscribe('parsley:field:validate', function() {
+        private hideServerValidationMessageOnClientValidation(formValidators: IParsley[], serverValidationContainer: any) {
+            _.each(formValidators, function (parsley: any) {
+                parsley.subscribe('parsley:field:validate', function () {
                     parsley.$element.find(serverValidationContainer).empty();
-                    _.defer(function() { parsley.unsubscribe('parsley:field:validate'); });
+                    _.defer(function () {
+                        parsley.unsubscribe('parsley:field:validate');
+                    });
                 });
             });
         }
 
         private registerDomEvents() {
-            var parseAction = this.parseAction.bind(this);
+            let parseAction = this.parseAction.bind(this);
 
             this._unregister = () => {
                 this.context.container.off(this._composerEventPostfix, parseAction);
@@ -220,7 +220,7 @@ without specifying overwrite = true in the registerActionOptions.`);
         }
 
         private applyControllerAction(context: JQuery, e: JQueryEventObject) {
-            var controllerActions: string[],
+            let controllerActions: string[],
                 eventAttribute: string = `oc-${e.type}`,
                 rawActions: string = context.data(eventAttribute);
 
@@ -238,7 +238,7 @@ without specifying overwrite = true in the registerActionOptions.`);
 
         private applyControllerActions(context: JQuery, e: JQueryEventObject, controllerActions: string[]) {
             controllerActions.forEach((controllerAction) => {
-                var controllerActionContext: Orckestra.Composer.IControllerActionContext;
+                let controllerActionContext: IControllerActionContext;
 
                 if (_.isFunction(this[controllerAction])) {
 

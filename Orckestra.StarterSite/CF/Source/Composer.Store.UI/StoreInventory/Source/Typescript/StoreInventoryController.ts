@@ -29,8 +29,8 @@ module Orckestra.Composer {
 
 
         public initialize() {
-            var getDefaultsTasks: Q.Promise<any>[] = [];
-            var getDefaultAddressTask: Q.Promise<any>;
+            let getDefaultsTasks: Q.Promise<any>[] = [],
+                getDefaultAddressTask: Q.Promise<any>;
 
             super.initialize();
             this.registerSubscriptions();
@@ -71,7 +71,7 @@ module Orckestra.Composer {
             this._searchBoxJQ = this.context.container.find('input[name="storeInventorySearchInput"]');
             this._searchBox = new google.maps.places.SearchBox(<HTMLInputElement>this._searchBoxJQ[0]);
             this._searchBox.addListener('places_changed', () => {
-                var places = this._searchBox.getPlaces();
+                let places = this._searchBox.getPlaces();
                 if (places && places.length && places[0].geometry) {
                     this.eventHub.publish('inventorySearchPointChanged', { data: places[0].geometry.location });
                 }
@@ -106,7 +106,7 @@ module Orckestra.Composer {
         }
 
         protected getStoresInventory(): Q.Promise<any> {
-            var debounceHandle;
+            let debounceHandle;
 
             if (this._selectedSku) {
                 debounceHandle = _.debounce(() => this.render('StoreInventoryList', { IsLoading: true }), 300);
@@ -118,19 +118,23 @@ module Orckestra.Composer {
                         this.setGoogleDirectionLinks();
                     })
                     .fail(reason => console.log(reason));
+            } else {
+                return Q.fcall(function () {
+                    return;
+                });
             }
         }
 
         protected nextPage(actionContext: IControllerActionContext) {
 
             actionContext.event.preventDefault();
-            var page: number = <any>actionContext.elementContext.data('page');
-            var busy = this.asyncBusy({ elementContext: actionContext.elementContext });
+            let page: number = <any>actionContext.elementContext.data('page'),
+                busy = this.asyncBusy({ elementContext: actionContext.elementContext });
 
             this._service.getStoresInventory(this.getStoresInventoryParam(page))
                 .then(result => {
-                    var target = actionContext.elementContext[0].parentElement;
-                    var targetHtml = this.getRenderedTemplateContents('StoreInventoryList', result);
+                    let target = actionContext.elementContext[0].parentElement,
+                        targetHtml = this.getRenderedTemplateContents('StoreInventoryList', result);
                     busy.done();
                     $(target).replaceWith(targetHtml).stop().fadeIn();
 
@@ -149,7 +153,7 @@ module Orckestra.Composer {
         }
 
         protected getStoresInventoryParam(page: number = 1) {
-            var param = new GetStoresInventoryParam();
+            let param = new GetStoresInventoryParam();
             param.Sku = this._selectedSku;
             param.SearchPoint = this._searchPoint;
             param.Page = page;
@@ -169,11 +173,15 @@ module Orckestra.Composer {
                     if (this._isAuthenticated) {
                         return this._service.getDefaultAddress()
                             .then(defaultAddr => {
-                                var formattedAddress
+                                let formattedAddress
                                     = `${defaultAddr.City}, ${defaultAddr.RegionCode} ${defaultAddr.PostalCode}, ${defaultAddr.CountryCode}`;
                                 this._searchBoxJQ.val(formattedAddress);
                                 return this._geoService.getLocationByAddress(formattedAddress);
                             });
+                    } else {
+                        return Q.fcall(function () {
+                            return null;
+                        });
                     }
                 })
                 .then(locationByAddress => {

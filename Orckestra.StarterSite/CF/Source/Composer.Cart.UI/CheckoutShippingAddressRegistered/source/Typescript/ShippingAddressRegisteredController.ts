@@ -55,6 +55,10 @@ module Orckestra.Composer {
             } else {
                 this.unregisterController();
                 this.render(this.viewModelName, checkoutContext.authenticationViewModel);
+
+                return Q.fcall(function () {
+                    return;
+                });
             }
         }
 
