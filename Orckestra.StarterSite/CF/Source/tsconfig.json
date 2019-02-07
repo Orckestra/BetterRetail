@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "allowUnusedLabels": false,
+    "noResolve": false,
+    "noImplicitAny": false,
+    "noImplicitReturns": true,
+    "noLib": false,
+    "removeComments": false,
+    "target": "ES5",
+    "outFile": "./UI.Package/Javascript/orckestra.composer.js",
+    "sourceMap": true,
+    "inlineSources": true,
+    "reorderFiles": true
+  },
+  "files": [
+    "./Composer.UI/Source/Typescript/App.ts"
+  ]
+}

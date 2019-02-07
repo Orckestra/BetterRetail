@@ -2,11 +2,12 @@
     'use strict';
 
     var gulp = require('gulp'),
-        $ = require('gulp-load-plugins')(),
+        colors = require('ansi-colors'),
+        config = require('./config.js'),
+        helpers = require('./common/helpers.js'),
         merge = require('merge-stream'),
         path = require('path'),
-        helpers = require('./common/helpers.js'),
-        config = require('./config.js');
+        plumber = require('gulp-plumber');
 
 
     /**
@@ -17,8 +18,7 @@
         return gulp.src(watchItem.srcGlob, {
             read: false
         })
-        //.pipe($.using({ prefix: 'Sync`ed', path: 'path', color: 'gray' }))
-            .pipe($.plumber())
+            .pipe(plumber())
             .pipe(gulp.dest(watchItem.dst));
     }
 
@@ -32,13 +32,13 @@
 
         // Check if needed vars are declared
         if (typeof config.tokens === 'undefined') {
-            helpers.log($.util.colors.yellow('"tokens" variable is undefined, skipping sync-project wire-up!'));
-            helpers.log($.util.colors.yellow('sync-project: Aborted!'));
+            helpers.log(colors.yellow('"tokens" variable is undefined, skipping sync-project wire-up!'));
+            helpers.log(colors.yellow('sync-project: Aborted!'));
             return;
         }
         if (typeof config.watchesTemplate === 'undefined') {
-            helpers.log($.util.colors.yellow('"watchesTemplate" variable is undefined, skipping sync-project wire-up!'));
-            helpers.log($.util.colors.yellow('sync-project: Aborted!'));
+            helpers.log(colors.yellow('"watchesTemplate" variable is undefined, skipping sync-project wire-up!'));
+            helpers.log(colors.yellow('sync-project: Aborted!'));
             return;
         }
 
@@ -59,6 +59,9 @@
         config.tokens.forEach(function (token) {
             var name = 'Composer.{{TOKEN}}.UI';
             name = name.replace('{{TOKEN}}', token);
+
+            helpers.log('../' + name + 'Framework');
+
             merged.add(
                 sources
                     .pipe(gulp.dest(path.resolve('../', name, 'Framework')))

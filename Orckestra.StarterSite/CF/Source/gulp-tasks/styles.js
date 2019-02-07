@@ -2,13 +2,13 @@
     'use strict';
 
     var gulp = require('gulp'),
-        $ = require('gulp-load-plugins')(),
         config = require('../config.js'),
+        fs = require('fs'),
         helpers = require('./helpers.js'),
         path = require('path'),
-        fs = require('fs'),
-        merge = require('merge-stream'),
-        del = require('del');
+        plumber = require('gulp-plumber'),
+        sass = require('gulp-sass'),
+        sassGlob = require('gulp-sass-glob');
 
 
     /**
@@ -31,8 +31,8 @@
      */
     gulp.task('styles-compile', ['styles-bladeset-import'], function() {
         var compiledSass = gulp.src(path.join(config.paths.temp, '**/*.scss'))
-            .pipe($.plumber())
-            .pipe($.sass());
+            .pipe(plumber())
+            .pipe(sass());
 
         return compiledSass
             .pipe(gulp.dest(path.join(config.paths.source, config.paths.css)));
@@ -45,8 +45,8 @@
     gulp.task('styles-bladeset-import', ['styles-blades-to-temp'], function() {
 
         return gulp.src(path.join(config.paths.temp, '**/*.scss'))
-            .pipe($.plumber())
-            .pipe($.sassGlobImport())
+            .pipe(plumber())
+            .pipe(sassGlob())
             .pipe(gulp.dest(config.paths.temp));
     });
 

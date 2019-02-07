@@ -5,15 +5,16 @@ var gulp = require('gulp'),
     del = require('del'),
     fs = require('fs-sync'),
     commonTasksFolder = './gulp-tasks',
-    commonTasksFolderToCopyTo = './Gulp/common';
+    commonTasksFolderToCopyTo = './Gulp/common',
+    colors = require('ansi-colors');
 
 /**
  * Clean and populate the common gulp tasks
  */
-console.log($.util.colors.green('Syncing tasks from "' + commonTasksFolder + '"'));
+console.log(colors.green('Syncing tasks from "' + commonTasksFolder + '"'));
 del.sync(commonTasksFolderToCopyTo);
 fs.copy(commonTasksFolder, commonTasksFolderToCopyTo, {force: true});
-console.log($.util.colors.green('Done!'));
+console.log(colors.green('Done!'));
 
 /**
  * Require gulp tasks (the order is important)

@@ -1,16 +1,15 @@
-(function() {
+(function () {
     'use strict';
 
     var gulp = require('gulp'),
-        $ = require('gulp-load-plugins')(),
         config = require('../config'),
         helpers = require('./helpers'),
         argv = require('yargs').argv,
         path = require('path'),
-        runSequence = require('run-sequence').use(gulp),
         bladeTemplateConfiguration,
+        log = require('fancy-log'),
 
-        getBladeTemplateConfiguration = function(bladeName) {
+        getBladeTemplateConfiguration = function (bladeName) {
 
             var bladeFolder;
 
@@ -34,14 +33,14 @@
         };
 
     if (argv.blade === void 0) {
-        $.util.log('Loading Handlebars template tasks aborted as no --blade parameter was specified. This is not an error. It just means you ' +
+        log('Loading Handlebars template tasks aborted as no --blade parameter was specified. This is not an error. It just means you ' +
             'will not have access to template tasks. To have access to template tasks run the task like this: gulp templates --blade SomeBladeName');
         return;
     }
 
     bladeTemplateConfiguration = getBladeTemplateConfiguration(argv.blade);
 
-    gulp.task('templates-clean', function(callback) {
+    gulp.task('templates-clean', function (callback) {
 
         return helpers.clean(bladeTemplateConfiguration.temporaryFolder, callback);
     });
@@ -56,13 +55,9 @@
     });
 
 
-    gulp.task('templates', function(callback) {
-
-        return runSequence(
-            'templates-clean',
-            'templates-compile-for-client-side',
-            'templates-clean',
-            callback
-        );
-    });
+    gulp.task('templates', gulp.series(
+        'templates-clean',
+        'templates-compile-for-client-side',
+        'templates-clean'
+    ));
 })();

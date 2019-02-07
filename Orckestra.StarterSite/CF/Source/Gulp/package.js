@@ -2,17 +2,21 @@
     'use strict';
 
     var gulp = require('gulp'),
-        $ = require('gulp-load-plugins')(),
-        //merge = require('merge-stream'),
-        path = require('path'),
+        argv = require('yargs').argv,
+        autoprefixer = require('gulp-autoprefixer'),
+        colors = require('ansi-colors'),
+        config = require('./config'),
+        filter = require('gulp-filter'),
         fs = require('fs'),
         fsSync = require('fs-sync'),
-        //handlebars = require('handlebars'),
-        //glob = require('glob'),
+        gulpif = require('gulp-if'),
         helpers = require('./common/helpers'),
-        config = require('./config'),
+        path = require('path'),
+        rename = require('gulp-rename'),
+        sass = require('gulp-sass'),
+        sassGlob = require('gulp-sass-glob'),
         through = require('through2'),
-        argv = require('yargs').argv;
+        using = require('gulp-using');
 
     // TODO: paths are hardcoded here, need to find a solution for global config
     var dest = 'UI.Package/';
@@ -135,7 +139,7 @@
             helpers.log('Assemblies will be copied from ' + config.composerAssemblies + ' to ' + destinationFolder);
 
             return gulp.src(config.composerAssemblies)
-                .pipe($.if(argv.verbose, $.using()))
+                .pipe(gulpif(argv.verbose, using()))
                 .pipe(gulp.dest(destinationFolder));
         }
 
@@ -144,10 +148,10 @@
 
     gulp.task('package-sass', function () {
         return gulp.src(dest + 'Sass/' + 'composer.scss')
-            .pipe($.if(argv.verbose, $.using()))
-            .pipe($.sassGlob())
-            .pipe($.sass())
-            .pipe($.autoprefixer({
+            .pipe(gulpif(argv.verbose, using()))
+            .pipe(sassGlob())
+            .pipe(sass())
+            .pipe(autoprefixer({
                 browsers: [
                     'last 3 versions',
                     'Explorer >= 8',
@@ -158,27 +162,6 @@
             }))
             .pipe(gulp.dest(dest + '/css'));
     });
-
-
-    gulp.task('package-scripts', function (callback) {
-        var bladeSourceDir = './*.UI/*/Source',
-            bladeSetSourceDir = './*.UI/Source';
-        var paths = [path.join(bladeSourceDir, 'Typescript/**/*.ts'), path.join(bladeSetSourceDir, 'Typescript/**/*.ts')];
-        var typeScriptProject = $.typescript.createProject(config.defaultTypescriptSettings);
-
-        return helpers.bundleTypescript({
-            typescriptFilesGlob: paths,
-            scriptBundleName: config.jsBundleName,
-            dtsBundleName: config.dtsBundleName,
-            scriptOutputFolder: config.javascriptFolder,
-            dtsOutputFolder: config.dtsOutputFolder,
-            typeScriptProject: typeScriptProject,
-            typingsReference: config.typingsReferenceForBundledDts,
-            generateSourceMaps: true,
-            debug: config.debug
-        });
-    });
-
 
     /**
      * TODO: exclusion array in config
@@ -194,49 +177,37 @@
     ];
 
     gulp.task('package-blades-sass', function () {
-        var filter = $.filter(filters);
-
         return gulp.src('./*.UI/*/Source/Sass/*')
-            .pipe($.if(argv.verbose, $.using()))
+            .pipe(gulpif(argv.verbose, using()))
             .pipe(through.obj(changePath))
-            .pipe($.if(argv.verbose, $.using()))
+            .pipe(gulpif(argv.verbose, using()))
             .pipe(gulp.dest(dest));
     });
 
     gulp.task('package-framework', function () {
-        var src = 'Composer.UI/Source/**/*';
-
-        var filter = $.filter(filters);
+        var src = 'Composer.UI/Source/**/*',
+            f = filter(filters);
 
         return gulp.src(src)
-            .pipe(filter)
+            .pipe(f)
             .pipe(gulp.dest(dest));
     });
 
-    /*
-     * Runs the unit tests, if any in the test runner.
-     */
-    gulp.task('package-run-unit-tests',
-        gulp.series('unitTests-prepare', function (callback) {
-            helpers.startUnitTests(config.karma.singleRun, callback);
-        })
-    );
-
     gulp.task('package-templates-merge-all-templates-to-one-folder', function () {
-        helpers.log('Copy all handlebars templates to ' + $.util.colors.yellow(config.paths.rawTemplates));
+        helpers.log('Copy all handlebars templates to ' + colors.yellow(config.paths.rawTemplates));
         return gulp.src(['./*.UI/*/Source/Templates/**/*.hbs', './*.UI/Source/Templates/**/*.hbs'])
-            .pipe($.if(argv.verbose, $.using()))
-            .pipe($.rename({
+            .pipe(gulpif(argv.verbose, using()))
+            .pipe(rename({
                 dirname: ''
             }))
             .pipe(gulp.dest(config.paths.rawTemplates));
     });
 
     gulp.task('package-templates-merge-all-resx-to-one-folder', function () {
-        helpers.log('Copy all resx files to ' + $.util.colors.yellow(config.paths.rawResourcesFolder));
+        helpers.log('Copy all resx files to ' + colors.yellow(config.paths.rawResourcesFolder));
         return gulp.src(['./*.UI/*/Source/LocalizedStrings/**/*.resx', './*.UI/Source/LocalizedStrings/**/*.resx'])
-            .pipe($.if(argv.verbose, $.using()))
-            .pipe($.rename({
+            .pipe(gulpif(argv.verbose, using()))
+            .pipe(rename({
                 dirname: ''
             }))
             .pipe(gulp.dest(config.paths.rawResourcesFolder));
@@ -251,7 +222,7 @@
         var builtTemplatesFolder = path.join(__dirname, '../', config.paths.rawTemplates),
             uiPackageTemplatesFolder = path.join(__dirname, '../UI.Package/', config.paths.templates);
 
-        helpers.log('Copy handlebars templates from ' + $.util.colors.yellow(builtTemplatesFolder) + ' to ' + $.util.colors.yellow(uiPackageTemplatesFolder));
+        helpers.log('Copy handlebars templates from ' + colors.yellow(builtTemplatesFolder) + ' to ' + colors.yellow(uiPackageTemplatesFolder));
         return gulp.src([builtTemplatesFolder + '/*.hbs'])
             .pipe(gulp.dest(uiPackageTemplatesFolder));
     });
@@ -260,7 +231,7 @@
         var builtResourcesFolder = path.join(__dirname, '../', config.paths.rawResourcesFolder),
             uiPackageLocalizedStringsFolder = path.join(__dirname, '../UI.Package/', config.paths.localizedStrings);
 
-        helpers.log('Copy resx files from ' + $.util.colors.yellow(builtResourcesFolder) + ' to ' + $.util.colors.yellow(uiPackageLocalizedStringsFolder));
+        helpers.log('Copy resx files from ' + colors.yellow(builtResourcesFolder) + ' to ' + colors.yellow(uiPackageLocalizedStringsFolder));
         return gulp.src([builtResourcesFolder + '/**/*.resx'])
             .pipe(gulp.dest(uiPackageLocalizedStringsFolder));
     });
@@ -285,7 +256,7 @@
                 'package-templates-copy-localized-strings-to-ui-package'
             )(callback);
         } else {
-            $.util.log('There are no templates to deploy.');
+            helpers.log('There are no templates to deploy.');
             callback();
         }
     });
@@ -296,10 +267,6 @@
         'package-blades-sass',
         'package-sass'
     ));
-
-    /*gulp.task('watch-styles', function () {
-        gulp.watch('Composer.UI/Source/Sass/!**!/!*', gulp.series('package-styles'))
-    });*/
 
     gulp.task('package-templates', gulp.series(
         'package-templates-clean',
@@ -312,9 +279,9 @@
     gulp.task('package', gulp.series(
         'package-clean',
         'package-framework',
-        'package-scripts',
+        'scripts',
         'package-copy-thirdparty',
-        //'package-run-unit-tests',
+        //'unitTests',
         'package-templates',
         'package-blades-sass',
         'package-sass'

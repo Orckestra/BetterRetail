@@ -1,4 +1,5 @@
 ///<reference path='../Typings/tsd.d.ts' />
+///<reference path='./_index.ts' />
 ///<reference path='./Bootstrap.ts' />
 ///<reference path='./JQueryPlugins/IPopOverJqueryPlugin.ts' />
 ///<reference path='./IComposerConfiguration.ts' />
@@ -17,6 +18,7 @@
 ///<reference path='../../../Composer.Cart.UI/MiniCart/Source/TypeScript/MiniCartSummaryController.ts' />
 ///<reference path='../../../Composer.Cart.UI/Coupons/Source/Typescript/CouponController.ts' />
 ///<reference path='../../../Composer.Product.UI/ProductDetail/Source/TypeScript/ProductDetailController.ts' />
+///<reference path='../../../Composer.Product.UI/ProductDetail/Source/Typescript/ProductZoomController.ts' />
 ///<reference path='../../../Composer.Product.UI/RelatedProducts/Source/TypeScript/RelatedProductsController.ts' />
 ///<reference path='../../../Composer.Product.UI/ProductSpecification/Source/TypeScript/ProductSpecificationsController.ts' />
 ///<reference path='../../../Composer.Cart.UI/OrderSummary/Source/TypeScript/OrderSummaryController.ts' />

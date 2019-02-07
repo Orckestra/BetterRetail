@@ -2,9 +2,9 @@
     'use strict';
 
     var gulp = require('gulp'),
-        $ = require('gulp-load-plugins')(),
+        batch = require('gulp-batch'),
         config = require('./config'),
-        plumber = require('gulp-plumber'),
+
         baseGlobDirectory = './*.UI/**/';
 
     gulp.task('watch:styles', function () {
@@ -19,11 +19,11 @@
 
     gulp.task('watch:scripts', function () {
         var watched = [baseGlobDirectory + 'Typescript/*.ts', baseGlobDirectory + 'Typescript/**/*.ts'];
-        gulp.watch(watched, gulp.series('package-clean', 'package-scripts', 'package-copy-mvc'));
+        gulp.watch(watched, gulp.series('package-clean', 'scripts', 'package-copy-mvc'));
     });
 
     gulp.task('watch:assemblies', function () {
-        gulp.watch(config.composerAssemblies, $.batch(
+        gulp.watch(config.composerAssemblies, batch(
 
             {timeout: config.watch.delays.composerAssemblies},
             gulp.series('package-clean', 'package-copy-dll'))

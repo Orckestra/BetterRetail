@@ -1,4 +1,5 @@
 ///<reference path='../../../Product/Source/Typescript/ProductController.ts' />
+///<reference path='ProductZoomController.ts' />
 
 module Orckestra.Composer {
     export class ProductDetailController extends Orckestra.Composer.ProductController {

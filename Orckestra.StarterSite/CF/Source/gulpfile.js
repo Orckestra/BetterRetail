@@ -1,19 +1,20 @@
 'use strict';
 
 var gulp = require('gulp'),
-    $ = require('gulp-load-plugins')(),
+    colors = require('ansi-colors'),
     del = require('del'),
     fs = require('fs-sync'),
+    taskListing = require('gulp-task-listing'),
     commonTasksFolder = './gulp-tasks',
     commonTasksFolderToCopyTo = './Gulp/common';
 
 /**
  * Clean and populate the common gulp tasks
  */
-console.log($.util.colors.green('Syncing tasks from "' + commonTasksFolder + '"'));
+console.log(colors.green('Syncing tasks from "' + commonTasksFolder + '"'));
 del.sync(commonTasksFolderToCopyTo);
 fs.copy(commonTasksFolder, commonTasksFolderToCopyTo, {force: true});
-console.log($.util.colors.green('Done!'));
+console.log(colors.green('Done!'));
 
 /**
  * Require gulp tasks (the order is important)
@@ -29,4 +30,4 @@ require('./Gulp/watch');
 /**
  * Default task, just list tasks
  */
-gulp.task('default', $.taskListing);
+gulp.task('default', taskListing);
