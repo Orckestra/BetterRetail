@@ -147,7 +147,7 @@ module Orckestra.Composer {
 
             var index: number = <any>actionContext.elementContext.data('index');
             var productId: string = actionContext.elementContext.data('productid').toString();
-            var product: any = _.find(this.products, {ProductId : productId});
+            var product: any = _.find(this.products, {ProductId : productId as any});
 
             this.eventHub.publish('productClick', { data : {
                 Product : product,

@@ -238,7 +238,7 @@ module Orckestra.Composer {
             let validationPromise = this.collectValidationPromises(),
                 promise = validationPromise.then((results: Array<boolean>) => {
                     console.log('Aggregrating all validation results');
-                    let hasFailedValidation = _.any(results, r => !r);
+                    let hasFailedValidation = _.some(results, r => !r);
 
                     if (hasFailedValidation) {
                         throw new Error('There were validation errors.');

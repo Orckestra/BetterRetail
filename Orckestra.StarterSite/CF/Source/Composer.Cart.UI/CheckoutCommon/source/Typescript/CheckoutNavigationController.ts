@@ -18,7 +18,7 @@ module Orckestra.Composer {
 
             this.checkoutService = CheckoutService.getInstance();
 
-            this.currentStep = _.findWhere(this.context.viewModel.Steps, { IsActive: true });
+            this.currentStep = _.find(this.context.viewModel.Steps, { IsActive: true });
 
             this.renderData();
         }

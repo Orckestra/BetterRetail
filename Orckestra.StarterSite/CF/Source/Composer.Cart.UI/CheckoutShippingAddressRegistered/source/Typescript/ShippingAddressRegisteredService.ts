@@ -47,7 +47,7 @@ module Orckestra.Composer {
                 return false;
             }
 
-            return _.any(addressList.Addresses, (address: AddressDto) => address.Id === cart.ShippingAddress.AddressBookId);
+            return _.some(addressList.Addresses, (address: AddressDto) => address.Id === cart.ShippingAddress.AddressBookId);
         }
 
         private getPreferredShippingAddressId(addressList: any) : string {

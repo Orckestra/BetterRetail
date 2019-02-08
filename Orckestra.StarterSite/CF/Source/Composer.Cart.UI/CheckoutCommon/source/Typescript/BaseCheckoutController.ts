@@ -71,7 +71,7 @@ module Orckestra.Composer {
 
         protected isValidForUpdate(): boolean {
 
-            var isValidForUpdate = _.all(this.formInstances, formInstance => formInstance.validate(undefined, true));
+            var isValidForUpdate = _.every(this.formInstances, formInstance => formInstance.validate(undefined, true));
 
             return isValidForUpdate;
         }
