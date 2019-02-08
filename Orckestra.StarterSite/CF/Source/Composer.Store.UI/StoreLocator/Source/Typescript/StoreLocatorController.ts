@@ -38,7 +38,7 @@ module Orckestra.Composer {
 
         public initialize(options: IStoreLocatorInitializationOptions = {
             mapId: 'map',
-            coordinates: { Lat: -33.8688, Lng: 151.2195 },
+            coordinates: {Lat: -33.8688, Lng: 151.2195},
             showNearestStoreInfo: true
         }) {
             super.initialize();
@@ -52,7 +52,7 @@ module Orckestra.Composer {
             }, reason => this._getCurrentLocation.resolve(null));
 
             // first check if address is posted from other page.
-            var postedAddress = this._searchBoxJQ.val();
+            let postedAddress = this._searchBoxJQ.val();
 
             if (!postedAddress) {
                 // then check history state
@@ -68,7 +68,7 @@ module Orckestra.Composer {
 
             this._storeLocatorService.getMapConfiguration()
                 .then(configuration => {
-                    var mapOptions = this.getMapOptions();
+                    let mapOptions = this.getMapOptions();
                     if (configuration.ZoomLevel) {
                         this._storeLocatorOptions.zoomLevel = configuration.ZoomLevel;
                     }
@@ -93,7 +93,7 @@ module Orckestra.Composer {
                     }
 
                     if (postedAddress) {
-                        return this._geoService.getLocationByAddress(postedAddress);
+                        return this._geoService.getLocationByAddress(postedAddress as string);
                     } else {
                         return this.getCurrentLocation();
                     }
@@ -101,7 +101,7 @@ module Orckestra.Composer {
                 })
                 .then(currentLocation => {
                     if (currentLocation) {
-                        this.eventHub.publish('searchPointChanged', { data: currentLocation });
+                        this.eventHub.publish('searchPointChanged', {data: currentLocation});
                     }
                 })
                 .fail(reason => this.handlePromiseFail('StoreLocator Initialize', reason));
@@ -125,16 +125,16 @@ module Orckestra.Composer {
         private searchBoxOnPlacesChanged() {
             this._searchBox.addListener('places_changed', () => {
                 clearTimeout(this._enterPressedTimer);
-                var places = this._searchBox.getPlaces();
+                let places = this._searchBox.getPlaces();
                 if (places && places.length && places[0].geometry) {
-                    this.eventHub.publish('searchPointChanged', { data: places[0].geometry.location });
+                    this.eventHub.publish('searchPointChanged', {data: places[0].geometry.location});
                 }
             });
         }
 
         private searchBoxOnEnterPressed() {
             this._searchBoxJQ.on('keypress', (e) => {
-                var key = e.which || e.keyCode;
+                let key = e.which || e.keyCode;
                 if (key === 13) {
                     this._enterPressedTimer = window.setTimeout(() => {
                         if (this._searchPoint) {
@@ -146,31 +146,31 @@ module Orckestra.Composer {
         }
 
         protected getMapOptions(): IMapOptions {
-            var mapCenter = new google.maps.LatLng(this._storeLocatorOptions.coordinates.Lat, this._storeLocatorOptions.coordinates.Lng);
-            var mapOptions: IMapOptions = {
-                mapCanvas: this.context.container.find(`#${this._storeLocatorOptions.mapId}`)[0],
-                infoWindowMaxWidth: 450,
-                options: {
-                    center: this._historyState ? this._historyState.point : mapCenter,
-                    zoom: this._historyState ? this._historyState.zoom : 1,
-                    mapTypeId: google.maps.MapTypeId.ROADMAP,
-                    panControl: false,
-                    keyboardShortcuts: true,
-                    scaleControl: false,
-                    scrollwheel: false,
-                    zoomControl: true,
-                    streetViewControl: false,
-                    overviewMapControl: true,
-                    overviewMapControlOptions: { opened: false }
-                }
-            };
+            let mapCenter = new google.maps.LatLng(this._storeLocatorOptions.coordinates.Lat, this._storeLocatorOptions.coordinates.Lng),
+                mapOptions: IMapOptions = {
+                    mapCanvas: this.context.container.find(`#${this._storeLocatorOptions.mapId}`)[0],
+                    infoWindowMaxWidth: 450,
+                    options: {
+                        center: this._historyState ? this._historyState.point : mapCenter,
+                        zoom: this._historyState ? this._historyState.zoom : 1,
+                        mapTypeId: google.maps.MapTypeId.ROADMAP,
+                        panControl: false,
+                        keyboardShortcuts: true,
+                        scaleControl: false,
+                        scrollwheel: false,
+                        zoomControl: true,
+                        streetViewControl: false,
+                        overviewMapControl: true,
+                        overviewMapControlOptions: {opened: false}
+                    }
+                };
 
             return mapOptions;
         }
 
         private searchBoxSetBounds(bounds: any) {
-            var southWest = new google.maps.LatLng(bounds.SouthWest.Lat, bounds.SouthWest.Lng);
-            var northEast = new google.maps.LatLng(bounds.NorthEast.Lat, bounds.NorthEast.Lng);
+            let southWest = new google.maps.LatLng(bounds.SouthWest.Lat, bounds.SouthWest.Lng),
+                northEast = new google.maps.LatLng(bounds.NorthEast.Lat, bounds.NorthEast.Lng);
             bounds = new google.maps.LatLngBounds(southWest, northEast);
 
             this._searchBox.setBounds(bounds);
@@ -192,7 +192,7 @@ module Orckestra.Composer {
                             if (location) {
                                 store.GoogleDirectionsLink = this._geoService.getDirectionLatLngSourceAddress(store.GoogleDirectionsLink, location);
                             }
-                            var content = this.getRenderedTemplateContents('StoreMapMarkerInfo', store);
+                            let content = this.getRenderedTemplateContents('StoreMapMarkerInfo', store);
                             this._mapService.openInformationWindow(content, marker.value);
                         });
 
@@ -209,10 +209,10 @@ module Orckestra.Composer {
         }
 
         protected updateMarkers(data?: any, isSearch: boolean = false) {
-            var mapBounds = this._mapService.getBounds(this._storeLocatorOptions.markerPadding);
-            var zoomLevel = this._mapService.getZoom();
-            var searchPoint = this._searchPoint;
-            var pageSize = this._isRestoreListPaging ? this._historyState.page * this.context.viewModel.pageSize : this.context.viewModel.pageSize;
+            let mapBounds = this._mapService.getBounds(this._storeLocatorOptions.markerPadding),
+                zoomLevel = this._mapService.getZoom(),
+                searchPoint = this._searchPoint,
+                pageSize = this._isRestoreListPaging ? this._historyState.page * this.context.viewModel.pageSize : this.context.viewModel.pageSize;
 
 
             this._storeLocatorService.getMarkers(mapBounds.getSouthWest(), mapBounds.getNorthEast(), zoomLevel, searchPoint, isSearch, pageSize)
@@ -236,7 +236,7 @@ module Orckestra.Composer {
 
 
                         if (this._storeLocatorOptions.showNearestStoreInfo && result.Stores) {
-                            var firstStore = result.Stores[0];
+                            let firstStore = result.Stores[0];
                             if (firstStore && firstStore.SearchIndex === 1) {
                                 this.setNearestStoreInfo(firstStore.DestinationToSearchPoint);
                             }
@@ -257,7 +257,7 @@ module Orckestra.Composer {
         }
 
         private createSearchPoitMarker() {
-            var title = this._searchBoxJQ.val();
+            let title = this._searchBoxJQ.val() as string;
             if (this._searchPointMarker == null) {
                 this._searchPointMarker = this._mapService.createMarkerOnMap(this._searchPoint, title);
             } else {
@@ -272,7 +272,7 @@ module Orckestra.Composer {
 
             this._geoService.geolocate()
                 .then(currentLocation => {
-                    this.eventHub.publish('searchPointChanged', { data: currentLocation });
+                    this.eventHub.publish('searchPointChanged', {data: currentLocation});
 
                     return this._geoService.getAddtressByLocation(currentLocation);
                 })
@@ -285,7 +285,7 @@ module Orckestra.Composer {
 
         // Next Page Action
         public nextPage(actionContext: IControllerActionContext) {
-            var page: number = <any>actionContext.elementContext.data('page');
+            let page: number = <any>actionContext.elementContext.data('page');
 
             this.getStoresForPage(page, this.context.viewModel.pageSize, actionContext.elementContext);
             actionContext.event.preventDefault();
@@ -293,27 +293,27 @@ module Orckestra.Composer {
 
         // Remember element position in history
         public rememberPosition(actionContext: IControllerActionContext) {
-            var position = $(document).scrollTop();
+            let position = $(document).scrollTop();
             this.historyPushState(null, null, null, null, position);
         }
 
 
-
         protected setNearestStoreInfo(info: string) {
-            var nearestInfoPanel = $('#store-locator-nearest');
+            let nearestInfoPanel = $('#store-locator-nearest'),
+                nearestInfo = $('#nearestInfo');
 
-            if (!$('#nearestInfo').length) {
+            if (!nearestInfo.length) {
                 nearestInfoPanel.html(nearestInfoPanel.html().replace('{0}', '<strong id=\'nearestInfo\'></strong>'));
             }
 
-            $('#nearestInfo').html(info);
+            nearestInfo.html(info);
             nearestInfoPanel.removeClass('hide');
         }
 
         protected getStoresForPage(page: number, pageSize?: number, element?: any) {
-            var mapBounds = this._mapService.getBounds(this._storeLocatorOptions.markerPadding);
-            var searchPoint = this._searchPoint;
-            var busy = this.asyncBusy({ elementContext: element });
+            let mapBounds = this._mapService.getBounds(this._storeLocatorOptions.markerPadding),
+                searchPoint = this._searchPoint,
+                busy = this.asyncBusy({elementContext: element});
 
             this._storeLocatorService.getStores(mapBounds.getSouthWest(), mapBounds.getNorthEast(), searchPoint,
                 page, pageSize)
@@ -327,13 +327,13 @@ module Orckestra.Composer {
 
         protected renderStoresList(stores: any, target: HTMLElement): void {
 
-            var listHtml = this.getRenderedTemplateContents('StoresList', stores);
+            let listHtml = this.getRenderedTemplateContents('StoresList', stores);
 
             if (target == null) {
-                var $list = $('#storesList').html('').stop().fadeOut();
+                let $list = $('#storesList').html('').stop().fadeOut();
                 $list.html(listHtml).stop().fadeIn();
             } else {
-                var position = $(target).offset().top + $(document).scrollTop();
+                let position = $(target).offset().top + $(document).scrollTop();
                 $(target).replaceWith(listHtml).stop().fadeIn();
                 $('html, body').animate({
                     scrollTop: position
@@ -374,7 +374,7 @@ module Orckestra.Composer {
             }
 
             if (this._historyState.point) {
-                var obj = {
+                let obj = {
                     'p_lat': this._historyState.point.lat(),
                     'p_lng': this._historyState.point.lng(),
                     'page': this._historyState.page,

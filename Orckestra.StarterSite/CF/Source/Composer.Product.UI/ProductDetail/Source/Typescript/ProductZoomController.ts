@@ -10,8 +10,7 @@ module Orckestra.Composer {
         }
 
         protected openZoom(event: JQueryEventObject) {
-            let context$: JQuery = $(event.target),
-                index: number = parseInt($('.js-thumbnail.active').attr('data-index'), 10);
+            let index: number = parseInt($('.js-thumbnail.active').attr('data-index'), 10);
 
             $('.js-zoom-thumbnail').eq(index).click();
             event.preventDefault();
@@ -19,7 +18,7 @@ module Orckestra.Composer {
         }
 
         protected changeZoomedImage(event: JQueryEventObject) {
-            let context$: JQuery = $(event.target),
+            let context$ = $(event.target),
                 largeImage: HTMLImageElement = <HTMLImageElement>document.querySelector('.js-zoom-image'),
                 selector: string = event.target.tagName, // Clicked HTML element
                 $largeImage: JQuery = $(largeImage);
@@ -35,7 +34,7 @@ module Orckestra.Composer {
         }
 
         protected errorZoomedImage(event: JQueryEventObject) {
-            var $element = $(event.target),
+            let $element = $(event.target),
                 fallbackImageUrl = $element.attr('data-fallback-image-url');
 
             $element.attr('src', fallbackImageUrl);

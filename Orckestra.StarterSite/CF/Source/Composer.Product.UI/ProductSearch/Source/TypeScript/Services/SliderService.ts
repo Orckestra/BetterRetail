@@ -99,8 +99,8 @@ module Orckestra.Composer {
 
             lowerRangeContext.on('keyup', event => this.dirtied());
             upperRangeContext.on('keyup', event => this.dirtied());
-            lowerRangeContext.on('blur', event => this.sliderInstance.set([$(event.target).val(), null]));
-            upperRangeContext.on('blur', event => this.sliderInstance.set([null, $(event.target).val()]));
+            lowerRangeContext.on('blur', event => this.sliderInstance.set([parseInt($(event.target).val() as string, 10), null]));
+            upperRangeContext.on('blur', event => this.sliderInstance.set([null, parseInt($(event.target).val() as string, 10)]));
 
             this.waitForHandles('.noUi-handle', () => {
                 $(sliderElement).find('.noUi-handle').each((i, ele) => {
@@ -237,8 +237,8 @@ module Orckestra.Composer {
                 margin: this.step,
                 step: this.step,
                 range: {
-                    'min': this.minValue,
-                    'max': this.maxValue
+                    'min': parseInt(this.minValue, 10),
+                    'max': parseInt(this.maxValue, 10)
                 },
                 format: {
                     to: value => this.formatTo(value),

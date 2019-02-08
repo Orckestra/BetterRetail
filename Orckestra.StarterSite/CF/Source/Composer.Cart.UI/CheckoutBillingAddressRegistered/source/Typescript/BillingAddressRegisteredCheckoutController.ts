@@ -11,7 +11,7 @@ module Orckestra.Composer {
 
     export class BillingAddressRegisteredCheckoutController extends Orckestra.Composer.BaseCheckoutController {
 
-        protected debounceChangeBillingMethod: Function = _.debounce(this.changeBillingAddressImpl, 500, { 'leading': true });
+        protected debounceChangeBillingMethod: Function = _.debounce(this.changeBillingAddressImpl, 500, {'leading': true});
         protected modalElementSelector: string = '#billingConfirmationModal';
         private uiModal: UIModal;
 
@@ -50,25 +50,25 @@ module Orckestra.Composer {
             this.render(this.viewModelName, checkoutContext.authenticationViewModel);
         }
 
-        protected renderAuthenticated(checkoutContext: ICheckoutContext) : Q.Promise<any> {
+        protected renderAuthenticated(checkoutContext: ICheckoutContext): Q.Promise<any> {
 
-        this.registerSubscriptions();
-        this.render(this.viewModelName, {IsAuthenticated: true});
+            this.registerSubscriptions();
+            this.render(this.viewModelName, {IsAuthenticated: true});
 
-        return this.billingAddressRegisteredCheckoutService.getBillingAddresses(checkoutContext.cartViewModel)
-            .then((billingAdressesVm) => {
-                this.render(this.viewModelName, checkoutContext.cartViewModel);
-                this.render('BillingRegisteredAddresses', billingAdressesVm);
-            })
-            .fail(reason => this.handleError(reason))
-            .fin(() => this.eventHub.publish(`${this.viewModelName}Rendered`, checkoutContext.cartViewModel));
+            return this.billingAddressRegisteredCheckoutService.getBillingAddresses(checkoutContext.cartViewModel)
+                .then((billingAdressesVm) => {
+                    this.render(this.viewModelName, checkoutContext.cartViewModel);
+                    this.render('BillingRegisteredAddresses', billingAdressesVm);
+                })
+                .fail(reason => this.handleError(reason))
+                .fin(() => this.eventHub.publish(`${this.viewModelName}Rendered`, checkoutContext.cartViewModel));
         }
 
         protected onRendered(e: IEventInformation) {
 
             this.formInstances = this.registerFormsForValidation($('#RegisteredBillingAddress', this.context.container));
 
-            var selectedBillingAddressId: string = $(this.context.container).find('input[name=BillingAddressId]:checked').val();
+            let selectedBillingAddressId: string = $(this.context.container).find('input[name=BillingAddressId]:checked').val() as string;
 
             if (!selectedBillingAddressId) {
                 return;
@@ -85,7 +85,7 @@ module Orckestra.Composer {
 
         protected setSelectedBillingAddress() {
 
-            var selectedBillingAddressId: string = $(this.context.container).find('input[name=BillingAddressId]:checked').val();
+            let selectedBillingAddressId: string = $(this.context.container).find('input[name=BillingAddressId]:checked').val() as string;
 
             if (!selectedBillingAddressId) {
                 return;
@@ -121,38 +121,40 @@ module Orckestra.Composer {
          */
         protected deleteAddress(event: JQueryEventObject): Q.Promise<void> {
 
-            let element = $(event.target);
-            var $addressListItem = element.closest('[data-address-id]');
-            var addressId = $addressListItem.data('address-id');
-
-            var busy = this.asyncBusy({elementContext: element, containerContext: $addressListItem });
+            let element = $(event.target),
+                $addressListItem = element.closest('[data-address-id]'),
+                addressId = $addressListItem.data('address-id'),
+                busy = this.asyncBusy({
+                    elementContext: element as JQuery<HTMLElement>,
+                    containerContext: $addressListItem as JQuery<HTMLElement>
+                });
 
             return this.customerService.deleteAddress(addressId, '')
                 .then(result => {
-                    this.eventHub.publish(MyAccountEvents[MyAccountEvents.AddressDeleted], { data: addressId });
+                    this.eventHub.publish(MyAccountEvents[MyAccountEvents.AddressDeleted], {data: addressId});
                 })
                 .fail(() => this.renderFailedForm(MyAccountStatus[MyAccountStatus.AjaxFailed]))
                 .fin(() => busy.done());
         }
 
-         public deleteAddressConfirm(actionContext: IControllerActionContext) {
-             this.uiModal.openModal(actionContext.event);
+        public deleteAddressConfirm(actionContext: IControllerActionContext) {
+            this.uiModal.openModal(actionContext.event);
         }
 
         private onAddressDeleted(e: IEventInformation) {
-            var addressId = e.data;
-            var $addressListItem = $(this.context.container).find('[data-address-id=' + addressId + ']');
+            let addressId = e.data,
+                $addressListItem = $(this.context.container).find('[data-address-id=' + addressId + ']');
 
             $addressListItem.remove();
         }
 
-        private useShippingAddress() : Boolean {
-            var useShippingAddress = $(this.context.container).find('input[name=UseShippingAddress]:checked').val() === 'true';
+        private useShippingAddress(): Boolean {
+            let useShippingAddress = $(this.context.container).find('input[name=UseShippingAddress]:checked').val() === 'true';
             return useShippingAddress;
         }
 
         private getVisibleForms(): JQuery {
-            var visibleForms = $('form', this.context.container).not('form:has(.hide)');
+            let visibleForms = $('form', this.context.container).not('form:has(.hide)');
             return visibleForms;
         }
 
@@ -165,7 +167,7 @@ module Orckestra.Composer {
 
         private setBillingAddressFormVisibility() {
 
-            var useShippingAddress: Boolean = this.useShippingAddress();
+            let useShippingAddress: Boolean = this.useShippingAddress();
             if (useShippingAddress) {
                 $('#BillingAddressContent').addClass('hide');
             } else {
@@ -175,8 +177,8 @@ module Orckestra.Composer {
 
         private setBillingAddressFormValidation() {
 
-            var useShippingAddress: Boolean = this.useShippingAddress();
-            var isValidationEnabled: Boolean = this.isBillingAddressFormValidationEnabled();
+            let useShippingAddress: Boolean = this.useShippingAddress(),
+                isValidationEnabled: Boolean = this.isBillingAddressFormValidationEnabled();
 
             if (useShippingAddress) {
                 if (isValidationEnabled) {
@@ -189,28 +191,28 @@ module Orckestra.Composer {
             }
         }
 
-        private isBillingAddressFormValidationEnabled() : Boolean {
+        private isBillingAddressFormValidationEnabled(): Boolean {
 
-            return _.some(this.formInstances, (formInstance : any) => {
+            return _.some(this.formInstances, (formInstance: any) => {
                 return this.isBillingAddressFormInstance(formInstance);
             });
         }
 
         private disableBillingAddressFormValidation() {
 
-            var formInstance = _.find(this.formInstances, (formInstance : any) => {
+            let formInstance = _.find(this.formInstances, (formInstance: any) => {
                 return this.isBillingAddressFormInstance(formInstance);
             });
 
             formInstance.destroy();
 
-            _.remove(this.formInstances, (formInstance : any) => {
+            _.remove(this.formInstances, (formInstance: any) => {
                 return this.isBillingAddressFormInstance(formInstance);
             });
         }
 
-        private isBillingAddressFormInstance(formInstance : any) : boolean {
-            var isBillingAddressFormInstance = formInstance.$element.is('form#BillingAddressRegistered');
+        private isBillingAddressFormInstance(formInstance: any): boolean {
+            let isBillingAddressFormInstance = formInstance.$element.is('form#BillingAddressRegistered');
             return isBillingAddressFormInstance;
         }
 
@@ -223,7 +225,7 @@ module Orckestra.Composer {
             //TODO
         }
 
-        protected handleError(reason : any) {
+        protected handleError(reason: any) {
 
             this.eventHub.publish('cartUpdatingFailed', null);
 

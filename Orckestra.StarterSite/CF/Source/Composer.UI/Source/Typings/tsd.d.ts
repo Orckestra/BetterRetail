@@ -1,5 +1,5 @@
 /// <reference path="bootstrap/bootstrap.d.ts" />
-/// <reference path="jquery/jquery.d.ts" />
+/// <reference path="jquery/index.d.ts" />
 /// <reference path="jasmine/jasmine.d.ts" />
 /// <reference path="lodash/index.d.ts" />
 /// <reference path="q/Q.d.ts" />

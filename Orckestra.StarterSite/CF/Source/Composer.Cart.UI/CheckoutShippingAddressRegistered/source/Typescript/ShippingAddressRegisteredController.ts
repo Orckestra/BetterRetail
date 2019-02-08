@@ -14,7 +14,7 @@ module Orckestra.Composer {
 
         private uiModal: UIModal;
 
-        protected debounceChangeShippingMethod: Function = _.debounce(this.changeShippingAddressImpl, 500, { 'leading': true });
+        protected debounceChangeShippingMethod: Function = _.debounce(this.changeShippingAddressImpl, 500, {'leading': true});
 
         protected deleteModalElementSelector: string;
 
@@ -66,7 +66,7 @@ module Orckestra.Composer {
 
             this.formInstances = this.registerFormsForValidation($('#RegisteredShippingAddress', this.context.container));
 
-            var selectedShippingAddressId: string = $(this.context.container).find('input[name=ShippingAddressId]:checked').val();
+            let selectedShippingAddressId: string = $(this.context.container).find('input[name=ShippingAddressId]:checked').val() as string;
 
             if (!selectedShippingAddressId) {
                 return;
@@ -82,8 +82,8 @@ module Orckestra.Composer {
 
         private onAddressDeleted(e: IEventInformation) {
 
-            var addressId = e.data;
-            var $addressListItem = $(this.context.container).find('[data-address-id=' + addressId + ']');
+            let addressId = e.data,
+                $addressListItem = $(this.context.container).find('[data-address-id=' + addressId + ']');
 
             $addressListItem.remove();
         }
@@ -104,7 +104,7 @@ module Orckestra.Composer {
                         throw new Error('The updated cart contains errors');
                     }
 
-                    this.eventHub.publish('cartUpdated', { data: result.Cart });
+                    this.eventHub.publish('cartUpdated', {data: result.Cart});
 
                 }, reason => this.handleError(reason));
         }
@@ -115,25 +115,27 @@ module Orckestra.Composer {
 
         private deleteAddress(event: JQueryEventObject): Q.Promise<void> {
 
-            let element = $(event.target);
-            var $addressListItem = element.closest('[data-address-id]');
-            var addressId = $addressListItem.data('address-id');
-
-            var busy = this.asyncBusy({elementContext: element, containerContext: $addressListItem });
+            let element = $(event.target),
+                $addressListItem = element.closest('[data-address-id]'),
+                addressId = $addressListItem.data('address-id'),
+                busy = this.asyncBusy({
+                    elementContext: element as JQuery<HTMLElement>,
+                    containerContext: $addressListItem as JQuery<HTMLElement>
+                });
 
             return this.customerService.deleteAddress(addressId, '')
-                       .then(result => {
-                           this.eventHub.publish(MyAccountEvents[MyAccountEvents.AddressDeleted], { data: addressId });
-                       })
-                       .fail(() => this.renderFailedForm(MyAccountStatus[MyAccountStatus.AjaxFailed]))
-                       .fin(() => busy.done());
+                .then(result => {
+                    this.eventHub.publish(MyAccountEvents[MyAccountEvents.AddressDeleted], {data: addressId});
+                })
+                .fail(() => this.renderFailedForm(MyAccountStatus[MyAccountStatus.AjaxFailed]))
+                .fin(() => busy.done());
         }
 
         private renderFailedForm(status: string) {
             //TODO
         }
 
-        private handleError(reason : any) {
+        private handleError(reason: any) {
 
             this.eventHub.publish('cartUpdatingFailed', null);
 

@@ -21,7 +21,7 @@ module Orckestra.Composer {
             super.initialize();
             this.registerSubscriptions();
 
-            var busy = this.asyncBusy({ msDelay: 300, loadingIndicatorSelector: '.loading-indicator-regions' });
+            let busy = this.asyncBusy({msDelay: 300, loadingIndicatorSelector: '.loading-indicator-regions'});
 
             ComposerClient.get('/api/address/regions')
                 .then(regions => this.rebuildRegionSelector(regions))
@@ -37,7 +37,7 @@ module Orckestra.Composer {
 
         private onAddressCreatedOrUpdated(e: IEventInformation) {
 
-            var result = e.data;
+            let result = e.data;
 
             if (result.ReturnUrl) {
                 window.location.replace(decodeURIComponent(result.ReturnUrl));
@@ -55,13 +55,12 @@ module Orckestra.Composer {
          */
         private rebuildRegionSelector(regions: any) {
 
-            var selectedRegion: string = this.context.container.find('[data-templateid="AddressRegionPicker"]').attr('data-value');
-            this.render('AddressRegionPicker', { Regions: regions, SelectedRegion : selectedRegion});
+            let selectedRegion: string = this.context.container.find('[data-templateid="AddressRegionPicker"]').attr('data-value');
+            this.render('AddressRegionPicker', {Regions: regions, SelectedRegion: selectedRegion});
         }
 
         public adjustPostalCode(actionContext: IControllerActionContext): void {
-
-            actionContext.elementContext.val(actionContext.elementContext.val().toUpperCase());
+            actionContext.elementContext.val((<string>actionContext.elementContext.val()).toUpperCase());
             _.every(this._formInstances, formInstance => formInstance.validate('shipping-based-on', true));
         }
 
@@ -69,15 +68,14 @@ module Orckestra.Composer {
 
             actionContext.event.preventDefault();
 
-            var formData: any = this.getFormData(actionContext);
-            var returnUrlQueryString: string = 'ReturnUrl=';
-            var returnUrl: string = '';
+            let formData: any = this.getFormData(actionContext),
+                returnUrlQueryString: string = 'ReturnUrl=',
+                returnUrl: string = '',
+                busy = this.asyncBusy({elementContext: actionContext.elementContext});
 
             if (window.location.href.indexOf(returnUrlQueryString) > -1) {
                 returnUrl = urlHelper.getURLParameter(location.search, 'ReturnUrl');
             }
-
-            var busy = this.asyncBusy({elementContext: actionContext.elementContext});
 
             this.customerService.createAddress(formData, returnUrl)
                 .then(result => this.onCreateAddressFulfilled(result), reason => this.renderFormErrorMessages(reason))
@@ -87,23 +85,22 @@ module Orckestra.Composer {
 
         private onCreateAddressFulfilled(result: any): void {
 
-            this.eventHub.publish(MyAccountEvents[MyAccountEvents.AddressCreated], { data: result });
+            this.eventHub.publish(MyAccountEvents[MyAccountEvents.AddressCreated], {data: result});
         }
 
         public updateAddress(actionContext: IControllerActionContext): void {
 
             actionContext.event.preventDefault();
 
-            var formData: any = this.getFormData(actionContext);
-            var addressId: string = this.context.container.find('[data-address-id]').data('address-id').toString();
-            var returnUrlQueryString: string = 'ReturnUrl=';
-            var returnUrl: string = '';
+            let formData: any = this.getFormData(actionContext),
+                addressId: string = this.context.container.find('[data-address-id]').data('address-id').toString(),
+                returnUrlQueryString: string = 'ReturnUrl=',
+                returnUrl: string = '',
+                busy = this.asyncBusy({elementContext: actionContext.elementContext});
 
             if (window.location.href.indexOf(returnUrlQueryString) > -1) {
                 returnUrl = urlHelper.getURLParameter(location.search, 'ReturnUrl');
             }
-
-            var busy = this.asyncBusy({elementContext: actionContext.elementContext});
 
             this.customerService.updateAddress(formData, addressId, returnUrl)
                 .then(result => this.onUpdateAddressFulfilled(result), reason => this.renderFormErrorMessages(reason))
@@ -113,7 +110,7 @@ module Orckestra.Composer {
 
         private onUpdateAddressFulfilled(result: any): void {
 
-            this.eventHub.publish(MyAccountEvents[MyAccountEvents.AddressUpdated], { data: result });
+            this.eventHub.publish(MyAccountEvents[MyAccountEvents.AddressUpdated], {data: result});
         }
     }
 }

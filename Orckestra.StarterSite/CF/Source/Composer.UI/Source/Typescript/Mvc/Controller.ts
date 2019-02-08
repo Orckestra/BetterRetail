@@ -216,7 +216,7 @@ without specifying overwrite = true in the registerActionOptions.`);
         }
 
         private parseAction(e: JQueryEventObject) {
-            this.applyControllerAction($(e.target), e);
+            this.applyControllerAction($(e.target) as JQuery<HTMLElement>, e);
         }
 
         private applyControllerAction(context: JQuery, e: JQueryEventObject) {

@@ -60,12 +60,15 @@ module Orckestra.Composer {
          */
         public deleteAddress(event: JQueryEventObject): void {
             let element = $(event.target),
-                $addressListItem: JQuery = element.closest('[data-address-id]'),
+                $addressListItem = element.closest('[data-address-id]'),
                 addressId = $addressListItem.data('address-id'),
-                busy = this.asyncBusy({elementContext: element, containerContext: $addressListItem});
+                busy = this.asyncBusy({
+                    elementContext: element as JQuery<HTMLElement>,
+                    containerContext: $addressListItem as JQuery<HTMLElement>
+                });
 
             this.customerService.deleteAddress(addressId, '')
-                .then(result => this.onDeleteAddressFulfilled(result, $addressListItem), reason => console.error(reason))
+                .then(result => this.onDeleteAddressFulfilled(result, $addressListItem as JQuery<HTMLElement>), reason => console.error(reason))
                 .fin(() => busy.done())
                 .done();
         }

@@ -63,8 +63,8 @@ module Orckestra.Composer {
 
         protected renderData(): Q.Promise<void[]> {
 
-            var quantity = this.getCurrentQuantity();
-            var renderTasks: Array<Q.Promise<any>> = [];
+            let quantity = this.getCurrentQuantity(),
+                renderTasks: Array<Q.Promise<any>> = [];
 
             if (this.isProductWithVariants() && this.isSelectedVariantUnavailable()) {
 
@@ -93,19 +93,19 @@ module Orckestra.Composer {
 
         protected renderUnavailableQuantity(quantity: any): Q.Promise<void> {
 
-            return Q.fcall(() => this.render('ProductQuantity', { Quantity: quantity, Disabled: true }));
+            return Q.fcall(() => this.render('ProductQuantity', {Quantity: quantity, Disabled: true}));
         }
 
         protected renderAvailableQuantity(quantity: any): Q.Promise<void> {
 
             return this.inventoryService
                 .isAvailableToSell(this.context.viewModel.Sku)
-                .then(result => this.render('ProductQuantity', { Quantity: quantity, Disabled: !result }));
+                .then(result => this.render('ProductQuantity', {Quantity: quantity, Disabled: !result}));
         }
 
         protected renderAddToWishList(): Q.Promise<void> {
-            var vm = this.context.viewModel;
-            this.render('AddToWishList', { Loaded: false });
+            let vm = this.context.viewModel;
+            this.render('AddToWishList', {Loaded: false});
 
             if (this.isProductWithVariants() && this.isSelectedVariantUnavailable()) {
                 return Q.fcall(function () {
@@ -116,9 +116,9 @@ module Orckestra.Composer {
             return this._wishListService.getLineItem(vm.productId, vm.selectedVariantId)
                 .then(result => {
                     if (result) {
-                        this.render('AddToWishList', { Loaded: true, IsInWishList: true, Id: result.Id });
+                        this.render('AddToWishList', {Loaded: true, IsInWishList: true, Id: result.Id});
                     } else {
-                        this.render('AddToWishList', { Loaded: true, IsInWishList: false });
+                        this.render('AddToWishList', {Loaded: true, IsInWishList: false});
                     }
                 });
         }
@@ -136,7 +136,7 @@ module Orckestra.Composer {
         }
 
         public decrementQuantity(actionContext: IControllerActionContext) {
-            var quantity = this.getCurrentQuantity();
+            let quantity = this.getCurrentQuantity();
             quantity.Value--;
 
             actionContext.event.preventDefault();
@@ -144,7 +144,7 @@ module Orckestra.Composer {
         }
 
         public incrementQuantity(actionContext: IControllerActionContext) {
-            var quantity = this.getCurrentQuantity();
+            let quantity = this.getCurrentQuantity();
             quantity.Value++;
 
             actionContext.event.preventDefault();
@@ -152,8 +152,8 @@ module Orckestra.Composer {
         }
 
         public changeQuantity(actionContext: IControllerActionContext) {
-            var quantity = this.getCurrentQuantity();
-            var newValue: number = parseInt(actionContext.elementContext.val(), 10);
+            let quantity = this.getCurrentQuantity(),
+                newValue: number = parseInt(actionContext.elementContext.val() as string, 10);
 
             if (isFinite(newValue)) {
                 quantity.Value = Math.max(Math.min(newValue, quantity.Max), quantity.Min); // constraint newvalue to max and min.
@@ -166,20 +166,20 @@ module Orckestra.Composer {
 
             this._membershipService.isAuthenticated().then(result => {
                 if (result.IsAuthenticated) {
-                    var vm = this.context.viewModel;
-                    var busy = this.asyncBusy({ elementContext: actionContext.elementContext });
-                    var analyticData = {
-                        DisplayName: vm.DisplayName,
-                        ListPrice: vm.ListPrice
-                    };
+                    let vm = this.context.viewModel,
+                        busy = this.asyncBusy({elementContext: actionContext.elementContext}),
+                        analyticData = {
+                            DisplayName: vm.DisplayName,
+                            ListPrice: vm.ListPrice
+                        };
 
                     this.eventHub.publish('wishListLineItemAdding', {
                         data: analyticData
                     });
 
                     this._wishListService.addLineItem(vm.productId, vm.selectedVariantId).then(data => {
-                        var lineItem = data.Items.filter(it => it.ProductId === vm.productId && it.VariantId === vm.selectedVariantId)[0];
-                        this.render('AddToWishList', { Loaded: true, IsInWishList: true, Id: lineItem.Id });
+                        let lineItem = data.Items.filter(it => it.ProductId === vm.productId && it.VariantId === vm.selectedVariantId)[0];
+                        this.render('AddToWishList', {Loaded: true, IsInWishList: true, Id: lineItem.Id});
                     }).fin(() => busy.done());
 
                 } else {
@@ -193,10 +193,10 @@ module Orckestra.Composer {
 
             this._membershipService.isAuthenticated().then(result => {
                 if (result.IsAuthenticated) {
-                    var id = actionContext.elementContext.data('id');
-                    var busy = this.asyncBusy({ elementContext: actionContext.elementContext });
+                    let id = actionContext.elementContext.data('id'),
+                        busy = this.asyncBusy({elementContext: actionContext.elementContext});
                     this._wishListService.removeLineItem(id).then(data => {
-                        this.render('AddToWishList', { Loaded: true, IsInWishList: false });
+                        this.render('AddToWishList', {Loaded: true, IsInWishList: false});
                     }).fin(() => busy.done());
                 } else {
                     this.redirectToSignInBeforeAddToWishList();
@@ -213,15 +213,15 @@ module Orckestra.Composer {
         }
 
         public addLineItem(actionContext: IControllerActionContext) {
-            var busy = this.asyncBusy({ elementContext: actionContext.elementContext });
-            var quantity = this.getCurrentQuantity();
-            var vm = this.context.viewModel;
-            var variant: any = _.find(vm.allVariants, (v: any) => v.Id === vm.selectedVariantId);
+            let busy = this.asyncBusy({elementContext: actionContext.elementContext}),
+                quantity = this.getCurrentQuantity(),
+                vm = this.context.viewModel,
+                variant: any = _.find(vm.allVariants, (v: any) => v.Id === vm.selectedVariantId),
+                data: any = this.getProductDataForAnalytics(vm);
 
-            var data: any = this.getProductDataForAnalytics(vm);
             data.Quantity = quantity.Value ? quantity.Value : 1;
             if (variant) {
-                var variantData: any = this.getVariantDataForAnalytics(variant);
+                let variantData: any = this.getVariantDataForAnalytics(variant);
 
                 _.extend(data, variantData);
             }
@@ -255,7 +255,7 @@ module Orckestra.Composer {
         }
 
         protected getCurrentQuantity() {
-            var element: JQuery = $(this.context.container).find('[name="product-quantity"]');
+            let element: JQuery = $(this.context.container).find('[name="product-quantity"]');
 
             return {
                 Min: parseInt(element.data('quantityMin'), 10),
@@ -278,18 +278,17 @@ module Orckestra.Composer {
 
             actionContext.event.preventDefault();
 
-            var clickedImageIndex: any = actionContext.elementContext.data('index');
+            let clickedImageIndex: any = actionContext.elementContext.data('index');
             this.productService.selectImage(clickedImageIndex, this.concern);
         }
 
         public selectKva(actionContext: IControllerActionContext) {
 
-            var selectionsToAdd = {};
-            var propertyName: any = actionContext.elementContext.parents('[data-propertyname]').data('propertyname');
-            var propertyDataType: any = actionContext.elementContext.parents('[data-propertydatatype]').data('propertydatatype');
-
-            var formatter = new Orckestra.Composer.ProductFormatter();
-            var value = formatter.convertToStronglyTyped(actionContext.elementContext.val(), propertyDataType);
+            let selectionsToAdd = {},
+                propertyName: any = actionContext.elementContext.parents('[data-propertyname]').data('propertyname'),
+                propertyDataType: any = actionContext.elementContext.parents('[data-propertydatatype]').data('propertydatatype'),
+                formatter = new Orckestra.Composer.ProductFormatter(),
+                value = formatter.convertToStronglyTyped(actionContext.elementContext.val() as string, propertyDataType);
 
             selectionsToAdd[propertyName] = value;
 
@@ -302,16 +301,15 @@ module Orckestra.Composer {
         }
 
         protected getProductDataForAnalytics(vm: any): any {
-            var productId: string = (vm.productId) ? vm.productId : vm.ProductId;
-
-            var data = {
-                List: this.getListNameForAnalytics(),
-                ProductId: productId,
-                DisplayName: vm.DisplayName,
-                ListPrice: vm.ListPrice,
-                Brand: vm.Brand,
-                CategoryId: vm.CategoryId
-            };
+            let productId: string = (vm.productId) ? vm.productId : vm.ProductId,
+                data = {
+                    List: this.getListNameForAnalytics(),
+                    ProductId: productId,
+                    DisplayName: vm.DisplayName,
+                    ListPrice: vm.ListPrice,
+                    Brand: vm.Brand,
+                    CategoryId: vm.CategoryId
+                };
 
             return data;
         }
@@ -321,24 +319,23 @@ module Orckestra.Composer {
         }
 
         protected getVariantDataForAnalytics(variant: any): any {
-            var variantName: string = this.buildVariantName(variant.Kvas);
-
-            var data: any = {
-                Variant: variantName,
-                Name: variant.DisplayName ? variant.DisplayName : undefined,
-                ListPrice: variant.ListPrice
-            };
+            let variantName: string = this.buildVariantName(variant.Kvas),
+                data: any = {
+                    Variant: variantName,
+                    Name: variant.DisplayName ? variant.DisplayName : undefined,
+                    ListPrice: variant.ListPrice
+                };
 
             return data;
         }
 
         protected buildVariantName(kvas: any): string {
-            var keys: string[] = Object.keys(kvas).sort();
-            var nameParts: string[] = [];
+            let keys: string[] = Object.keys(kvas).sort(),
+                nameParts: string[] = [];
 
-            for (var i: number = 0; i < keys.length; i++) {
-                var key: string = keys[i];
-                var value: any = kvas[key];
+            for (let i: number = 0; i < keys.length; i++) {
+                let key: string = keys[i],
+                    value: any = kvas[key];
 
                 nameParts.push(value);
             }

@@ -72,25 +72,28 @@ module Orckestra.Composer {
 
         public changePaymentMethodInternal(activeMethodId: string, paymentProviderName: string, paymentType?: string) {
             this.viewModel.IsProviderLoading = true;
-            this._busyHandler = super.asyncBusy({ elementContext: $(document), containerContext: $(document) });
+            this._busyHandler = super.asyncBusy({
+                elementContext: $(document) as any,
+                containerContext: $(document) as any
+            });
 
-            this.debounceChangePaymentMethod({ activeMethodId, paymentProviderName, paymentType });
+            this.debounceChangePaymentMethod({activeMethodId, paymentProviderName, paymentType});
         }
 
-        public changePaymentMethod(actionContext : IControllerActionContext) {
-            var activeMethodId : string = actionContext.elementContext.data('payment-id');
-            var paymentProviderName: string = actionContext.elementContext.data('payment-provider');
-            var paymentType: string = actionContext.elementContext.data('payment-type');
+        public changePaymentMethod(actionContext: IControllerActionContext) {
+            let activeMethodId: string = actionContext.elementContext.data('payment-id'),
+                paymentProviderName: string = actionContext.elementContext.data('payment-provider'),
+                paymentType: string = actionContext.elementContext.data('payment-type');
 
             this.changePaymentMethodInternal(activeMethodId, paymentProviderName, paymentType);
         }
 
         protected executeChangePaymentMethod(args: { activeMethodId: string, paymentProviderName: string, paymentType: string }) {
-            let { activeMethodId, paymentProviderName, paymentType } = args;
+            let {activeMethodId, paymentProviderName, paymentType} = args;
 
             this.setPaymentMethod(this.viewModel.PaymentId, activeMethodId, paymentProviderName, paymentType)
                 .then(_ => this.checkoutService.getCart())
-                .then(cart => this.eventHub.publish('cartUpdated', { data: cart }))
+                .then(cart => this.eventHub.publish('cartUpdated', {data: cart}))
                 .fin(() => {
                     this.viewModel.IsProviderLoading = false;
                     this.releaseBusyHandler();
@@ -126,9 +129,9 @@ module Orckestra.Composer {
                             // we found a defaultPaymentMethod (either the default or the only one)
                             // there is always going to be at least one (default provider + saved payment methods)
                             return this.setPaymentMethod(vm.PaymentId,
-                            defaultPaymentMethod.Id,
-                            defaultPaymentMethod.PaymentProviderName,
-                            defaultPaymentMethod.PaymentType);
+                                defaultPaymentMethod.Id,
+                                defaultPaymentMethod.PaymentProviderName,
+                                defaultPaymentMethod.PaymentType);
                         } else {
                             return Q.fcall(function () {
                                 return;
@@ -146,7 +149,7 @@ module Orckestra.Composer {
                 });
         }
 
-        public getValidationPromise() : Q.Promise<boolean> {
+        public getValidationPromise(): Q.Promise<boolean> {
             if (!this.activePaymentProvider || !this.viewModel.ActivePaymentViewModel) {
                 return Q(false);
             }
@@ -156,7 +159,7 @@ module Orckestra.Composer {
             }
 
             return this.activePaymentProvider
-                       .validatePayment(this.viewModel.ActivePaymentViewModel);
+                .validatePayment(this.viewModel.ActivePaymentViewModel);
         }
 
         public getUpdateModelPromise(): Q.Promise<any> {
@@ -196,11 +199,10 @@ module Orckestra.Composer {
             this.render(this.viewModelName, this.viewModel);
         }
 
-        protected setPaymentMethod(
-            paymentId: string,
-            activeMethodId: string,
-            paymentProviderName: string,
-            paymentType: string): Q.Promise<any> {
+        protected setPaymentMethod(paymentId: string,
+                                   activeMethodId: string,
+                                   paymentProviderName: string,
+                                   paymentType: string): Q.Promise<any> {
             return this.paymentService.setPaymentMethod({
                 PaymentId: paymentId,
                 PaymentProviderName: paymentProviderName,
@@ -208,18 +210,18 @@ module Orckestra.Composer {
                 PaymentType: paymentType,
                 Providers: _.map(this.paymentProviders, p => p.providerName)
             })
-            .then((paymentViewModel: IPaymentViewModel) => {
-                this.activePaymentProvider = this.findPaymentProviderByType(paymentViewModel.ActivePaymentViewModel.ProviderType);
+                .then((paymentViewModel: IPaymentViewModel) => {
+                    this.activePaymentProvider = this.findPaymentProviderByType(paymentViewModel.ActivePaymentViewModel.ProviderType);
 
-                this.viewModel = paymentViewModel;
+                    this.viewModel = paymentViewModel;
 
-                ErrorHandler.instance().removeErrors();
+                    ErrorHandler.instance().removeErrors();
 
-                return paymentViewModel;
-            })
-            .fail(reason => {
-                this.onChangePaymentMethodFailed(reason);
-            });
+                    return paymentViewModel;
+                })
+                .fail(reason => {
+                    this.onChangePaymentMethodFailed(reason);
+                });
         }
 
         protected onChangePaymentMethodFailed(reason: any) {
@@ -232,8 +234,8 @@ module Orckestra.Composer {
             ErrorHandler.instance().outputErrorFromCode('PaymentMethodChangeFailed');
         }
 
-        protected findPaymentProviderByType(providerType: string) : BaseCheckoutPaymentProvider {
-            var provider : BaseCheckoutPaymentProvider = _.find(this.paymentProviders, provider => {
+        protected findPaymentProviderByType(providerType: string): BaseCheckoutPaymentProvider {
+            let provider: BaseCheckoutPaymentProvider = _.find(this.paymentProviders, provider => {
                 return provider.providerType === providerType;
             });
 
@@ -244,16 +246,16 @@ module Orckestra.Composer {
             return provider;
         }
 
-        protected getPaymentProviders() : Array<BaseCheckoutPaymentProvider> {
+        protected getPaymentProviders(): Array<BaseCheckoutPaymentProvider> {
             if (_.isEmpty(this.context.viewModel.PaymentProviders)) {
                 console.error('No payment provider was found in the Context.');
             }
 
-            var factory = new CheckoutPaymentProviderFactory(this._window, this.eventHub);
-            var providers : Array<BaseCheckoutPaymentProvider> = [];
+            let factory = new CheckoutPaymentProviderFactory(this._window, this.eventHub),
+                providers: Array<BaseCheckoutPaymentProvider> = [];
 
             _.each(this.context.viewModel.PaymentProviders, (vm: any) => {
-                var provider = factory.getInstance(vm.ProviderType, vm.ProviderName);
+                let provider = factory.getInstance(vm.ProviderType, vm.ProviderName);
                 providers.push(provider);
             });
 

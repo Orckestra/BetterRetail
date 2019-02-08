@@ -23,15 +23,15 @@ module Orckestra.Composer {
             this.currentPage = this.getCurrentPage();
 
             this.eventHub.publish('searchResultRendered', {
-                data: {
-                    ProductSearchResults: this.context.viewModel.SearchResults,
-                    Keywords: this.context.viewModel.Keywords,
-                    TotalCount: this.context.viewModel.TotalCount,
-                    ListName: this.context.viewModel.ListName,
-                    PageNumber: this.currentPage.DisplayName,
-                    MaxItemsPerPage: this.context.viewModel.MaxItemsPerPage
+                    data: {
+                        ProductSearchResults: this.context.viewModel.SearchResults,
+                        Keywords: this.context.viewModel.Keywords,
+                        TotalCount: this.context.viewModel.TotalCount,
+                        ListName: this.context.viewModel.ListName,
+                        PageNumber: this.currentPage.DisplayName,
+                        MaxItemsPerPage: this.context.viewModel.MaxItemsPerPage
+                    }
                 }
-            }
             );
         }
 
@@ -42,24 +42,19 @@ module Orckestra.Composer {
 
         public addToCart(actionContext: IControllerActionContext) {
 
-            var productContext: JQuery = $(actionContext.elementContext).closest('[data-product-id]');
-
-            var hasVariants: string = <any>productContext.data('hasVariants');
-
-            //Do not use .data since it may parse the id as a number.
-            var productId: string = productContext.attr('data-product-id');
-            var variantId: string = productContext.attr('data-product-variant-id');
-
-            var product = _.find(this.context.viewModel.SearchResults, function (product: any) {
-                if (_.isEmpty(variantId)) {
-                    return product.ProductId === productId;
-                } else {
-                    return product.ProductId === productId && product.VariantId === variantId;
-                }
-            });
-            var price: number = product.Pricing.IsOnSale ? product.Pricing.Price : product.Pricing.ListPrice;
-
-            var busy = this.asyncBusy({ elementContext: actionContext.elementContext, containerContext: productContext });
+            let productContext: JQuery = $(actionContext.elementContext).closest('[data-product-id]'),
+                hasVariants: string = <any>productContext.data('hasVariants'),
+                productId: string = productContext.attr('data-product-id'), //Do not use .data since it may parse the id as a number.
+                variantId: string = productContext.attr('data-product-variant-id'),
+                product = _.find(this.context.viewModel.SearchResults, function (product: any) {
+                    if (_.isEmpty(variantId)) {
+                        return product.ProductId === productId;
+                    } else {
+                        return product.ProductId === productId && product.VariantId === variantId;
+                    }
+                }),
+                price: number = product.Pricing.IsOnSale ? product.Pricing.Price : product.Pricing.ListPrice,
+                busy = this.asyncBusy({elementContext: actionContext.elementContext, containerContext: productContext});
 
             if (hasVariants === 'True') {
 
@@ -71,8 +66,8 @@ module Orckestra.Composer {
                     .fin(() => busy.done());
 
             } else {
-                var productData: any = this.getProductDataForAnalytics(productId, price);
-                this.eventHub.publish('lineItemAdding', { data: productData });
+                let productData: any = this.getProductDataForAnalytics(productId, price);
+                this.eventHub.publish('lineItemAdding', {data: productData});
 
                 this.cartService.addLineItem(productId, '' + price)
                     .then((data: any) => {
@@ -90,9 +85,9 @@ module Orckestra.Composer {
         }
 
         public searchProductClick(actionContext: IControllerActionContext) {
-            var index: number = <any>actionContext.elementContext.data('index');
-            var productId: string = actionContext.elementContext.data('productid').toString();
-            var product: any = _.find(this.context.viewModel.SearchResults, { ProductId: productId });
+            let index: number = <any>actionContext.elementContext.data('index'),
+                productId: string = actionContext.elementContext.data('productid').toString(),
+                product: any = _.find(this.context.viewModel.SearchResults, {ProductId: productId});
 
             this.eventHub.publish('productClick', {
                 data: {
@@ -106,18 +101,18 @@ module Orckestra.Composer {
         }
 
         public pagerPageChanged(actionContext: IControllerActionContext) {
-            this.context.window.location.href = actionContext.elementContext.val();
+            this.context.window.location.href = actionContext.elementContext.val() as string;
         }
 
         protected getProductDataForAnalytics(productId: string, price: any): any {
-            var results = this.context.viewModel.SearchResults;
-            var vm = _.find(results, (r: any) => r.ProductId === productId);
+            let results = this.context.viewModel.SearchResults,
+                vm = _.find(results, (r: any) => r.ProductId === productId);
 
             if (!vm) {
                 throw new Error(`Could not find a product with the ID '${productId}'.`);
             }
 
-            var data = {
+            let data = {
                 List: this.context.viewModel.ListName,
                 ProductId: vm.ProductId,
                 DisplayName: vm.DisplayName,

@@ -2,6 +2,7 @@
 // Project: http://kenwheeler.github.io/slick/
 // Definitions by: John Gouigouix <https://github.com/orchestra-ts/DefinitelyTyped/>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
+// TypeScript Version: 2.3
 
 /// <reference path="../jquery/jquery.d.ts"/>
 
@@ -45,9 +46,10 @@ interface JQuerySlickOptions {
 
     /**
      * Change where the navigation arrows are attached (Selector, htmlString, Array, Element, jQuery object)
+     * `false` will prevent arrows from being created/appended
      * Default: $(element)
      */
-    appendArrows?: Element | Element[] | JQuery | string;
+    appendArrows?: Element | Element[] | JQuery | string | boolean;
 
     /**
      * Change where the navigation dots are attached (Selector, htmlString, Array, Element, jQuery object)

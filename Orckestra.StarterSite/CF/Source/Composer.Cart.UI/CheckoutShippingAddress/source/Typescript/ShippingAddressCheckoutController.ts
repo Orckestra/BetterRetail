@@ -27,7 +27,7 @@ module Orckestra.Composer {
                     this.render(this.viewModelName, checkoutContext.cartViewModel);
                     this.render('AddressRegionPicker', {
                         Regions: checkoutContext.regionsViewModel,
-                        SelectedRegion : this.getRegionCode(checkoutContext.cartViewModel)
+                        SelectedRegion: this.getRegionCode(checkoutContext.cartViewModel)
                     });
 
                     this.eventHub.publish(`${this.viewModelName}Rendered`, checkoutContext.cartViewModel);
@@ -46,15 +46,14 @@ module Orckestra.Composer {
 
         public changePostalCode(actionContext: IControllerActionContext) {
 
-            var context: JQuery = actionContext.elementContext;
-            context.val(context.val().toUpperCase());
+            let context: JQuery = actionContext.elementContext;
+            context.val((<string>context.val()).toUpperCase());
 
             if (!this.isValidForUpdate()) {
                 return;
             }
 
-            var postalCode: string = context.val();
-            this.shippingAddressCheckoutService.setCheapestShippingMethodUsing(postalCode).done();
+            this.shippingAddressCheckoutService.setCheapestShippingMethodUsing(context.val() as string).done();
         }
     }
 }
