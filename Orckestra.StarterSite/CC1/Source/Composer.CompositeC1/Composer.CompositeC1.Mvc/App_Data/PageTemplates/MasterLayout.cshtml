@@ -9,15 +9,17 @@
 <!DOCTYPE html>
 <html lang="@CultureInfo.CurrentCulture.Name" xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:lang="http://www.composite.net/ns/localization/1.0" xmlns:asp="http://www.composite.net/ns/asp.net/controls">
 <head>
-    @PageTemplateFeature("Descriptive HTML head elements")    
+    <f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.Header.RenderAnalyticsHeader" />
+
+    @PageTemplateFeature("Descriptive HTML head elements")
 
     @if (!string.IsNullOrEmpty(CurrentPageNode.Description))
     {
         <meta name="description" content="@CurrentPageNode.Description" />
     }
-    <f:function name="Composite.Web.Html.Template.CommonMetaTags"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <link rel="stylesheet" href="/UI.Package/Css/composer.css"/>
+    <f:function name="Composite.Web.Html.Template.CommonMetaTags" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/UI.Package/Css/composer.css" />
 
     <link rel="apple-touch-icon" sizes="57x57" href="/UI.Package/Images/favicons/apple-touch-icon-57x57.png" />
     <link rel="apple-touch-icon" sizes="60x60" href="/UI.Package/Images/favicons/apple-touch-icon-60x60.png" />
@@ -41,7 +43,7 @@
     <script src="/UI.Package/JavaScript/modernizr.js"></script>
 </head>
 <body>
-    <f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.Header.RenderAnalytics" />
+    <f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.Header.RenderAnalyticsBody" />
     @RenderBody()
     <script src="/UI.Package/JavaScript/jquery-1.11.2.min.js"></script>
     <script src="/UI.Package/JavaScript/bootstrap.min.js"></script>
