@@ -186,6 +186,7 @@
     <Compile Include="Configuration\InventoryConfigurationElement.cs" />
     <Compile Include="Configuration\GoogleMapsConfigurationElement.cs" />
     <Compile Include="Configuration\ProductSitemapConfiguration.cs" />
+    <Compile Include="Configuration\RecurringOrdersConfigurationElement.cs" />
     <Compile Include="Configuration\SitemapConfiguration.cs" />
     <Compile Include="Country\CountryRepository.cs" />
     <Compile Include="Country\CountryService.cs" />
