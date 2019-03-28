@@ -50,7 +50,9 @@
                 },
             },
 
-            composerAssemblies: ['./Packaging/bin/Debug/*.dll', '!./Packaging/bin/Debug/Packaging.dll'],            
+            composerAssemblies: ['./Packaging/bin/Debug/*.dll', '!./Packaging/bin/Debug/Packaging.dll'],
+			composerc1Assemplies: [''],
+			deployedWebsitePath: 'C:/orckestra/composer-c1-cm-dev.develop.orckestra.cloud/WebSite',	
             c1MvcProject: '../../CC1/Source/Composer.CompositeC1/Composer.CompositeC1.Mvc',
         });
 
