@@ -102,7 +102,10 @@ Task All          -depends AddBuildTags,
                            CC1,
                            PublishGlobalArtifacts
 						   
-					  
+Task Dev      -depends AddBuildTags,
+						   CFDev,
+                           CC1Dev,
+                           PublishGlobalArtifacts				  
 						   
 		   
 

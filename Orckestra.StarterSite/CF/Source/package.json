@@ -43,7 +43,7 @@
     "gulp-replace": "0.5.4",
     "gulp-rev": "7.0.0",
     "gulp-run": "1.6.12",
-    "gulp-sass": "2.2.0",
+    "gulp-sass": "^3.0.0",
     "gulp-sass-glob-import": "0.1.0",
     "gulp-shell": "0.5.2",
     "gulp-size": "2.1.0",

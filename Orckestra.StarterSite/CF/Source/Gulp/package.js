@@ -134,7 +134,7 @@
 
     gulp.task('package-copy-dll', function() {
         function copyAssembliesTo(projectLocation) {
-        // Open packages.config file in sitecore mvc
+        /* Open packages.config file in sitecore mvc
             var composerPackagesConfigPath = path.join(projectLocation, 'packages.config');
         var composerPackagesConfigContent = fsSync.read(composerPackagesConfigPath);
 
@@ -143,10 +143,10 @@
         if (match.length < 2) {
             throw new Error('Cannot find Composer version in ' + composerPackagesConfigPath);
         }
-        var version = match[1];
+        var version = match[1];*/
 
         // Copy assemblies to package destination
-            var destinationFolder = path.join(projectLocation, '../', 'packages/Composer.' + version, 'lib/net452');
+            var destinationFolder = path.join(projectLocation, 'bin/');
 
         if (config.debug) {
             helpers.log('Assemblies will be copied to ' + destinationFolder);
@@ -157,7 +157,7 @@
             .pipe(gulp.dest(destinationFolder));
         }
         
-        copyAssembliesTo(config.c1MvcProject);
+        copyAssembliesTo(config.deployedWebsitePath);
     });
 
     gulp.task('package-sass-imports', function () {

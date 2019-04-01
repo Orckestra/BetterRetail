@@ -1,6 +1,9 @@
 Task CF -depends CF_RestoreNugetPackages,
                  CF_BuildAndPackage,
                  CF_PackageNuget
+				 
+Task CFDev -depends CF_CompileBackend,
+					CF_PackageNuget
 
 Task CF_RestoreNugetPackages {
     Get-AllSolutions -RootFolder $Build.CF.RootPath -ErrorAction SilentlyContinue | Invoke-NugetRestore | Write-Verbose
