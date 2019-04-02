@@ -2,6 +2,10 @@ Task CC1 -depends CC1_RestoreNugetPackages,
                   CC1_BuildAndPackage
                   #CC1_PackageNuget,
                   #CC1_PublishArtifacts
+				  
+Task CC1Dev -depends CC1_RestoreNugetPackages,
+					 CC1_Copy-UiPackageFromNuget,
+                     CC1_Compile-Solution
 
 function CC1_InitializeVariables {
 
