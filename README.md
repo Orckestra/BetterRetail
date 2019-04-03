@@ -30,8 +30,6 @@
 ```<?xml version="1.0" encoding="utf-8"?>
 <parameters>
   <param name="environment_suffix" value="dev"/>
-  
-  <param name="cms-c1-custom-packages" value="Orckestra.Search.KeywordRedirect,Orckestra.Search.LuceneNET,Composite.Tools.PackageCreator" />
  
   <param name="composer_apppool_username" value="NA"/>
   <param name="composer_apppool_password" value="NA"/>
