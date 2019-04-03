@@ -149,8 +149,8 @@ function Copy-ChangesetIfExists {
 
 ####################################################################################################################
 # Execution flow
-#Build-Frontend
+Build-Frontend
 #Restore-Nuget
-#Build-Backend
-#Copy-ChangesetIfExists
+Build-Backend
+Copy-ChangesetIfExists
 MSDeploy-ContentToPackage
