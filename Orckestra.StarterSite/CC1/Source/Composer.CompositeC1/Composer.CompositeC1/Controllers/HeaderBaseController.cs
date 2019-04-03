@@ -96,28 +96,6 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             return View("OptionalLinks", optionalLinksViewModel);
         }
 
-        /// <summary>
-        /// Renders the Header portion of Analytics
-        /// </summary>
-        /// <returns></returns>
-        public virtual ActionResult RenderAnalyticsHeader()
-        {
-            var googleAnalyticsViewModel = AnalyticsViewService.GetAnalyticsViewModel();
-            googleAnalyticsViewModel.ViewName += "Header";
-            return View(googleAnalyticsViewModel.ViewName, googleAnalyticsViewModel);
-        }
-
-        /// <summary>
-        /// Renders the Body portion of Analytics
-        /// </summary>
-        /// <returns></returns>
-        public virtual ActionResult RenderAnalyticsBody()
-        {
-            var googleAnalyticsViewModel = AnalyticsViewService.GetAnalyticsViewModel();
-            googleAnalyticsViewModel.ViewName += "Body";
-            return View(googleAnalyticsViewModel.ViewName, googleAnalyticsViewModel);
-        }
-
         private string BuildUrl(CultureInfo culture)
         {
             var pageId = SitemapNavigator.CurrentPageId;
