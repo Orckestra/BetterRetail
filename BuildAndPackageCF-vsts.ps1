@@ -9,7 +9,7 @@ param(
 ####################################################################################################################
 # Variables
 $MsBuildExe = "C:\Program Files (x86)\MSBuild\14.0\Bin\msbuild.exe"
-$MsDeployExe = "C:\Program Files (x86)\IIS\Microsoft Web Deploy v3\msdeploy.exe"
+$MsDeployExe = "C:\Program Files\IIS\Microsoft Web Deploy V3\msdeploy.exe"
 
 $solutionFolder = [string](Resolve-Path ".")
 $SolutionPath = $solutionFolder+"\Composer.sln"
