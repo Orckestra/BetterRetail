@@ -10,6 +10,8 @@ param(
 # Variables
 $MsBuildExe = "C:\Program Files (x86)\MSBuild\14.0\Bin\msbuild.exe"
 $MsDeployExe = "C:\Program Files\IIS\Microsoft Web Deploy V3\msdeploy.exe"
+$AppCmdRegKey = "HKLM:\SOFTWARE\Microsoft\InetStp"
+$MsDeployInstallPathRegKey = "HKLM:\SOFTWARE\Microsoft\IIS Extensions\MSDeploy"
 
 $solutionFolder = [string](Resolve-Path ".")
 $SolutionPath = $solutionFolder+"\Composer.sln"
@@ -99,11 +101,36 @@ function Build-Backend {
 	robocopy $solutionFolder\UI.Package "$solutionFolder\Composer.Mvc.Sample\UI.Package" /MIR /NS /NC /NFL /NDL /NP /NJH
 }
 
+function Get-MsDeployLocation
+{
+    param(
+    [Parameter(Mandatory=$true)]
+    [string]$regKeyPath
+    )
+
+    $msDeployNotFoundError = "Cannot find MsDeploy.exe location. Verify MsDeploy.exe is installed on $env:ComputeName and try operation again."
+    
+    if( -not (Test-Path -Path $regKeyPath))
+    {
+        throw $msDeployNotFoundError 
+    }
+        
+    $path = (Get-ChildItem -Path $regKeyPath | Select -Last 1).GetValue("InstallPath")
+
+    if( -not (Test-Path -Path $path))
+    {
+        throw $msDeployNotFoundError 
+    }
+
+    return (Join-Path $path msDeploy.exe)
+}
+
 function MSDeploy-ContentToPackage {
 	"publish: $FileSystemPublishedWebSite"
 	"package: $PackagedWebSite"
-
-	$tmp = $("`"{0}`" -verb:sync -source:contentpath=`"{1}`" -dest:package=`"{2}`"" -f $MsDeployExe, $FileSystemPublishedWebSite, $PackagedWebSite )
+	
+	$msDeployExePath = Get-MsDeployLocation -regKeyPath $MsDeployInstallPathRegKey
+	$tmp = $("`"{0}`" -verb:sync -source:contentpath=`"{1}`" -dest:package=`"{2}`"" -f $msDeployExePath, $FileSystemPublishedWebSite, $PackagedWebSite )
 	if($WindowsVersion -eq 10)
 	{cmd.exe /C $tmp}
 	if($WindowsVersion -ne 10)
