@@ -12,16 +12,14 @@ namespace Orckestra.Composer.CompositeC1.Mvc.Controllers
             IComposerContext composerContext, 
             ILanguageSwitchService languageSwitchService, 
             IHomeViewService homeViewService, 
-            IBreadcrumbViewService breadcrumbViewService,
-            IAnalyticsViewService analyticsViewService) 
+            IBreadcrumbViewService breadcrumbViewService) 
 
             : base(
             pageService, 
             composerContext, 
             languageSwitchService, 
             homeViewService, 
-            breadcrumbViewService, 
-            analyticsViewService)
+            breadcrumbViewService)
         {
         }
     }
