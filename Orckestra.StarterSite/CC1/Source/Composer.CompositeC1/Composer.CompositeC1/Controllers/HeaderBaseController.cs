@@ -96,13 +96,6 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             return View("OptionalLinks", optionalLinksViewModel);
         }
 
-        public virtual ActionResult RenderAnalytics()
-        {
-            var googleAnalyticsViewModel = AnalyticsViewService.GetAnalyticsViewModel();
-
-            return View(googleAnalyticsViewModel.ViewName, googleAnalyticsViewModel);
-        }
-
         private string BuildUrl(CultureInfo culture)
         {
             var pageId = SitemapNavigator.CurrentPageId;
