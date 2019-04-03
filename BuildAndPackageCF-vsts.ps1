@@ -132,7 +132,7 @@ function MSDeploy-ContentToPackage {
 	$msDeployExePath = Get-MsDeployLocation -regKeyPath $MsDeployInstallPathRegKey
 	$tmp = "-verb:sync -source:contentpath=`"{0}`" -dest:package=`"{1}`"" -f $FileSystemPublishedWebSite, $PackagedWebSite
 	
-	& $msDeployExePath $tmp 
+	write-output & $msDeployExePath $tmp 
 
 }
 
