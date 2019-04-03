@@ -130,11 +130,9 @@ function MSDeploy-ContentToPackage {
 	"package: $PackagedWebSite"
 	
 	$msDeployExePath = Get-MsDeployLocation -regKeyPath $MsDeployInstallPathRegKey
-	$tmp = $("`"{0}`" -verb:sync -source:contentpath=`"{1}`" -dest:package=`"{2}`"" -f $msDeployExePath, $FileSystemPublishedWebSite, $PackagedWebSite )
-	if($WindowsVersion -eq 10)
-	{cmd.exe /C $tmp}
-	if($WindowsVersion -ne 10)
-	{cmd.exe /C "`"$tmp`""}
+	$tmp = $(" -verb:sync -source:contentpath=`"{0}`" -dest:package=`"{1}`"" -f $FileSystemPublishedWebSite, $PackagedWebSite )
+	
+	& $msDeployExePath $tmp 
 
 }
 
