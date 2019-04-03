@@ -91,6 +91,8 @@ function Build-Backend {
 		$SolutionPath,
 		"/p:DeployOnBuild=true;PublishProfile=Package;Configuration=Release"
 	)
+
+	Write-Output Solution:$SolutionPath
 	& $MsBuildExe $args
 
 	if($LASTEXITCODE -ne 0) {
@@ -130,9 +132,9 @@ function MSDeploy-ContentToPackage {
 	"package: $PackagedWebSite"
 	
 	$msDeployExePath = Get-MsDeployLocation -regKeyPath $MsDeployInstallPathRegKey
-	$tmp = "-verb:sync -source:contentpath=`"{0}`" -dest:package=`"{1}`"" -f $FileSystemPublishedWebSite, $PackagedWebSite
+	$tmp = @("-verb:sync", "-source:contentpath='$FileSystemPublishedWebSite'" , "-dest:package='$PackagedWebSite'")
 	
-	write-output & $msDeployExePath $tmp 
+	& $msDeployExePath $tmp 
 
 }
 
