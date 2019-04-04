@@ -48,7 +48,16 @@
     <f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.Analytics.GTMAnalytics">
         <f:param name="Section" value="body" />
     </f:function>
+
+    @if (System.Configuration.ConfigurationManager.AppSettings["InsertCacheInfoInPageSource"] == "true")
+    {
+        <!-- Cache: server @Environment.MachineName stamped at @DateTime.Now (@DateTime.Now.GetHashCode()) -
+            @(Composite.C1Console.Security.UserValidationFacade.IsLoggedIn() ? "YOU ARE LOGGED IN - CACHING ALWAYS DISABLED" : "Anonymous - caching as live website settings")
+        -->
+    }
+
     @RenderBody()
+
     <script src="/UI.Package/JavaScript/jquery-1.11.2.min.js"></script>
     <script src="/UI.Package/JavaScript/bootstrap.min.js"></script>
     <script src="/UI.Package/JavaScript/lodash.min.js"></script>
