@@ -143,10 +143,6 @@
       <HintPath>..\packages\Composer.4.6.0-Build\lib\net452\Orckestra.Composer.Cart.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Orckestra.Composer.GoogleAnalytics, Version=4.6.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Composer.4.6.0-Build\lib\net452\Orckestra.Composer.GoogleAnalytics.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Orckestra.Composer.MyAccount, Version=4.6.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Composer.4.6.0-Build\lib\net452\Orckestra.Composer.MyAccount.dll</HintPath>
       <Private>True</Private>
