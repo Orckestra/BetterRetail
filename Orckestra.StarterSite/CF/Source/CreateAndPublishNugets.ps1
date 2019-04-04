@@ -103,11 +103,7 @@ function Invoke-NugetPackage($NugetExeLocation, $NuspecFile, $NuVersion) {
 
 function Invoke-NugetPush($NugetExeLocation, $NugetFeedUrl, $NugetPackageFile) {
 
-	$args = @("push", "`"$NugetPackageFile`"", "-Source `"$NugetFeedUrl`"")
-	& "$NugetExeLocation\NuGet.exe" @args
-
-return
-	$args = @("push", "`"$NugetPackageFile`"", "-Source `"$NugetFeedUrl`"")
+	$args = @("push $NugetPackageFile", "-Source $NugetFeedUrl")
 	& "$NugetExeLocation\NuGet.exe" @args
 }
 
