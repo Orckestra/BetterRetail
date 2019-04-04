@@ -1,6 +1,5 @@
 ﻿using Orckestra.Composer.CompositeC1.Controllers;
 using Orckestra.Composer.CompositeC1.Services;
-using Orckestra.Composer.GoogleAnalytics.Services;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Services.Breadcrumb;
 
