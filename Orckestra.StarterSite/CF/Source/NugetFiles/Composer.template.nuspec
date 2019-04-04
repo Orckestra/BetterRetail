@@ -16,7 +16,7 @@
 			<dependency id="Autofac.WebApi2" version="3.4.0" />
 			<dependency id="fasterflect" version="2.1.3" />
 			<dependency id="Handlebars.Net" version="1.3.3" />
-			<dependency id="Microsoft.AspNet.Mvc" version="5.2.3" />
+			<dependency id="Microsoft.AspNet.Mvc" version="5.2.7" />
 			<dependency id="Microsoft.AspNet.WebApi" version="5.2.3" />
 			<dependency id="Microsoft.AspNet.WebApi.Core" version="5.2.3" />
 			<dependency id="Microsoft.Net.Http" version="2.2.29" />
@@ -39,7 +39,6 @@
     <file src="tools\Install.ps1" target="tools\Install.ps1" />
     <file src="..\UI.Package\**\*" target="UI.Package\" />
     <file src="..\Composer\bin\Release\Orckestra.Composer.dll" target="lib\net452" />
-	<file src="..\Composer.Analytics\bin\Release\Orckestra.Composer.GoogleAnalytics.dll" target="lib\net452" />
 	<file src="..\Composer.Cart\bin\Release\Orckestra.Composer.Cart.dll" target="lib\net452" />
 	<file src="..\Composer.MyAccount\bin\Release\Orckestra.Composer.MyAccount.dll" target="lib\net452" />
 	<file src="..\Composer.Product\bin\Release\Orckestra.Composer.Product.dll" target="lib\net452" />

@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using Composite.Data;
 using Orckestra.Composer.CompositeC1.Services;
-using Orckestra.Composer.GoogleAnalytics.Services;
 using Orckestra.Composer.MyAccount.ViewModels;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Services.Breadcrumb;
@@ -23,29 +22,26 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         protected ILanguageSwitchService LanguageSwitchService { get; private set; }
         protected IHomeViewService HomeViewService { get; private set; }
         protected IBreadcrumbViewService BreadcrumbViewService { get; private set; }
-        protected IAnalyticsViewService AnalyticsViewService { get; private set; }
 
         protected HeaderBaseController(
             IPageService pageService,
             IComposerContext composerContext, 
             ILanguageSwitchService languageSwitchService,
             IHomeViewService homeViewService,
-            IBreadcrumbViewService breadcrumbViewService,
-            IAnalyticsViewService analyticsViewService)
+            IBreadcrumbViewService breadcrumbViewService
+            )
         {
             if (pageService == null) { throw new ArgumentNullException("pageService"); }
             if (composerContext == null) { throw new ArgumentNullException("composerContext"); }
             if (languageSwitchService == null) { throw new ArgumentNullException("languageSwitchService"); }
             if (homeViewService == null) { throw new ArgumentNullException("homeViewService"); }
             if (breadcrumbViewService == null) { throw new ArgumentNullException("breadcrumbViewService"); }
-            if (analyticsViewService == null) { throw new ArgumentNullException("analyticsViewService"); }
 
             PageService = pageService;
             ComposerContext = composerContext;
             LanguageSwitchService = languageSwitchService;
             HomeViewService = homeViewService;
             BreadcrumbViewService = breadcrumbViewService;
-            AnalyticsViewService = analyticsViewService;
         }
 
         public virtual ActionResult HomeLogo()
@@ -94,13 +90,6 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             var optionalLinksViewModel = HomeViewService.GetOptionalLinksViewModel(ComposerContext.CultureInfo).Result;
 
             return View("OptionalLinks", optionalLinksViewModel);
-        }
-
-        public virtual ActionResult RenderAnalytics()
-        {
-            var googleAnalyticsViewModel = AnalyticsViewService.GetAnalyticsViewModel();
-
-            return View(googleAnalyticsViewModel.ViewName, googleAnalyticsViewModel);
         }
 
         private string BuildUrl(CultureInfo culture)

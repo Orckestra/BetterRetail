@@ -44,10 +44,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Composer.Analytics\Composer.GoogleAnalytics.csproj">
-      <Project>{95c37de2-aba2-41f4-b998-90c01588615c}</Project>
-      <Name>Composer.GoogleAnalytics</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Composer.Cart\Composer.Cart.csproj">
       <Project>{08f6fcb8-6065-4d31-b7df-67fe67ee67e5}</Project>
       <Name>Composer.Cart</Name>

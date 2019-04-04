@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.489
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Composer.Cart", "Composer.Cart\Composer.Cart.csproj", "{08F6FCB8-6065-4D31-B7DF-67FE67EE67E5}"
 EndProject
@@ -56,10 +56,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "X - Packaging", "X - Packaging", "{FD6D739C-246C-4EB0-9FD9-5D7418FE64FE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Composer.MyAccount.Tests", "Composer.MyAccount.Tests\Composer.MyAccount.Tests.csproj", "{1E290AA1-36ED-484E-B3E7-ADDCB3DC9D1A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Composer.GoogleAnalytics", "Composer.Analytics\Composer.GoogleAnalytics.csproj", "{95C37DE2-ABA2-41F4-B998-90C01588615C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Composer.GoogleAnalytics.Tests", "Composer.Analytics.Tests\Composer.GoogleAnalytics.Tests.csproj", "{F5092AE4-DF83-42B2-8586-4DDF17B809B7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Composer.LoadTest", "Composer.LoadTest\Composer.LoadTest.csproj", "{3AFCC15C-B3E7-4F44-9D67-44018FDFDABE}"
 EndProject
@@ -133,14 +129,6 @@ Global
 		{1E290AA1-36ED-484E-B3E7-ADDCB3DC9D1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1E290AA1-36ED-484E-B3E7-ADDCB3DC9D1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1E290AA1-36ED-484E-B3E7-ADDCB3DC9D1A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{95C37DE2-ABA2-41F4-B998-90C01588615C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{95C37DE2-ABA2-41F4-B998-90C01588615C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{95C37DE2-ABA2-41F4-B998-90C01588615C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{95C37DE2-ABA2-41F4-B998-90C01588615C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F5092AE4-DF83-42B2-8586-4DDF17B809B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F5092AE4-DF83-42B2-8586-4DDF17B809B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F5092AE4-DF83-42B2-8586-4DDF17B809B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F5092AE4-DF83-42B2-8586-4DDF17B809B7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3AFCC15C-B3E7-4F44-9D67-44018FDFDABE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3AFCC15C-B3E7-4F44-9D67-44018FDFDABE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3AFCC15C-B3E7-4F44-9D67-44018FDFDABE}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -188,8 +176,6 @@ Global
 		{D965ED93-6B66-44CF-8B0E-D6339529FC03} = {94D567F8-CE20-41FD-AD25-3EF1A73372AC}
 		{1F28E387-E22C-4A3A-9584-8859B825B7B7} = {FD6D739C-246C-4EB0-9FD9-5D7418FE64FE}
 		{1E290AA1-36ED-484E-B3E7-ADDCB3DC9D1A} = {94D567F8-CE20-41FD-AD25-3EF1A73372AC}
-		{95C37DE2-ABA2-41F4-B998-90C01588615C} = {94D567F8-CE20-41FD-AD25-3EF1A73372AC}
-		{F5092AE4-DF83-42B2-8586-4DDF17B809B7} = {94D567F8-CE20-41FD-AD25-3EF1A73372AC}
 		{3AFCC15C-B3E7-4F44-9D67-44018FDFDABE} = {602EAADD-212D-4D0A-A005-885F2E2212FC}
 		{7501DDC4-8A28-4DF3-ADC6-5132D043E738} = {602EAADD-212D-4D0A-A005-885F2E2212FC}
 		{1407AF7B-A1FE-4B52-906B-7503B6DB0F2B} = {94D567F8-CE20-41FD-AD25-3EF1A73372AC}
@@ -200,5 +186,6 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.TransientFaultHandling.6.0.1304.0\lib\portable-net45+win+wp8;packages\EnterpriseLibrary.TransientFaultHandling.Data.6.0.1304.1\lib\NET45
+		SolutionGuid = {127E1900-E2DE-4563-935F-0553755D0E5C}
 	EndGlobalSection
 EndGlobal

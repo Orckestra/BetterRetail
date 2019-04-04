@@ -76,7 +76,6 @@ namespace Orckestra.Composer.CompositeC1.Mvc
         {
             functions.AutoDiscoverFunctions(typeof(StartupHandler).Assembly);
 
-            functions.RegisterAction<HeaderController>("RenderAnalytics", "Composer.Header.RenderAnalytics");
             functions.RegisterAction<HeaderController>("GeneralErrors", "Composer.Header.GeneralErrors");
             functions.RegisterAction<HeaderController>("LanguageSwitch", "Composer.Header.LanguageSwitch");
             functions.RegisterAction<HeaderController>("Breadcrumb", "Composer.General.Breadcrumb");

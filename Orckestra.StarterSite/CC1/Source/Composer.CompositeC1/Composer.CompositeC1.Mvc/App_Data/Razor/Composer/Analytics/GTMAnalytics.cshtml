@@ -1,0 +1,46 @@
+﻿@inherits RazorFunction
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Renders the GTM section for Google Analytics tracking"; }
+    }
+
+    [FunctionParameter(Label = "Section", Help = "The section of the page (header/body) that needs to be rendered")]
+    public string Section { get; set; }
+}
+
+@{
+    string ContainerId = System.Configuration.ConfigurationManager.AppSettings["Composer.GTMContainerId"];
+}
+
+@if (!string.IsNullOrWhiteSpace(ContainerId))
+{
+    if (string.Equals(Section, "header", StringComparison.OrdinalIgnoreCase))
+    {
+        <script>
+            (function(w, d, s, l, i) {
+            if(w.navigator.userAgent.indexOf('PhantomJS') != -1) return;
+            w[l] = w[l] || [];
+            w[l].push({
+                'gtm.start': new Date().getTime(),
+                event: 'gtm.js'
+            });
+            var f = d.getElementsByTagName(s)[0];
+            var j = d.createElement(s);
+            var dl = (l != 'dataLayer') ? '&amp;l=' + l : '';
+
+            j.async = true;
+            j.src = '//www.googletagmanager.com/gtm.js?id=' + i + dl;
+            f.parentNode.insertBefore(j, f);
+            })(window, document, 'script', 'dataLayer', '@ContainerId');
+        </script>
+    }
+    else if (string.Equals(Section, "body", StringComparison.OrdinalIgnoreCase))
+    {
+        <noscript>
+            <iframe src="//www.googletagmanager.com/ns.html?id=@ContainerId"
+                    height="0" width="0" style="display:none;visibility:hidden"></iframe>
+        </noscript>
+    }   
+}
