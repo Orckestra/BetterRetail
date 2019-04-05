@@ -100,5 +100,14 @@ namespace Orckestra.Composer.Product.ViewModels
         /// todo
         /// </summary>
         public ProductQuantityViewModel Quantity { get; set; }
+
+        /// <summary>
+        /// Is eligible if RecurringOrderProgramName is not null or empty and if recurring orders flag is enabled
+        /// </summary>
+        public bool IsRecurringOrderEligible { get; set; }
+        /// <summary>
+        /// Name of the recurring order program associated to the product
+        /// </summary>
+        public string RecurringOrderProgramName { get; set; }
     }
 }

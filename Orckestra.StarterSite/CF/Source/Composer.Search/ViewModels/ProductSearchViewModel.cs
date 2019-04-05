@@ -82,5 +82,10 @@ namespace Orckestra.Composer.Search.ViewModels
         /// </summary>
         [MapTo("PrimaryParentCategoryId")]
         public string CategoryId { get; set; }
+
+        /// <summary>
+        /// If the product has a program and the flag is enabled
+        /// </summary>
+        public bool? IsEligibleForRecurring { get; set; }
     }
 }

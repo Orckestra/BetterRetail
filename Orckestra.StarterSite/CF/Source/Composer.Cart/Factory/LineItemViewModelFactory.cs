@@ -11,6 +11,10 @@ using Orckestra.Composer.Providers.Dam;
 using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel.Orders;
 using Orckestra.Composer.Providers.Localization;
+using Orckestra.Composer.Cart.Repositories.Order;
+using System.Threading.Tasks;
+using Orckestra.Composer.Services;
+using Orckestra.Composer.Cart.Helper;
 
 namespace Orckestra.Composer.Cart.Factory
 {
@@ -21,24 +25,31 @@ namespace Orckestra.Composer.Cart.Factory
         protected IProductUrlProvider ProductUrlProvider { get; private set; }
         protected IRewardViewModelFactory RewardViewModelFactory { get; private set; }
         protected ILineItemValidationProvider LineItemValidationProvider { get; private set; }
+        protected IRecurringOrdersRepository RecurringOrderRepository { get; private set; }
+        protected IComposerContext ComposerContext { get; private set; }
 
         public LineItemViewModelFactory(IViewModelMapper viewModelMapper,
             ILocalizationProvider localizationProvider,
             IProductUrlProvider productUrlProvider,
             IRewardViewModelFactory rewardViewModelFactory,
-            ILineItemValidationProvider lineItemValidationProvider)
+            ILineItemValidationProvider lineItemValidationProvider,
+            IRecurringOrdersRepository recurringOrderRepository,
+            IComposerContext composerContext)
         {
             if (localizationProvider == null) { throw new ArgumentNullException("localizationProvider"); }
             if (viewModelMapper == null) { throw new ArgumentNullException("viewModelMapper"); }
             if (productUrlProvider == null) { throw new ArgumentNullException("productUrlProvider"); }
             if (rewardViewModelFactory == null) { throw new ArgumentNullException("rewardViewModelFactory"); }
             if (lineItemValidationProvider == null) { throw new ArgumentNullException("lineItemValidationProvider"); }
+            if (recurringOrderRepository == null) { throw new ArgumentNullException("recurringOrderRepository"); }
 
             ViewModelMapper = viewModelMapper;
             LocalizationProvider = localizationProvider;
             ProductUrlProvider = productUrlProvider;
             RewardViewModelFactory = rewardViewModelFactory;
             LineItemValidationProvider = lineItemValidationProvider;
+            RecurringOrderRepository = recurringOrderRepository;
+            ComposerContext = composerContext;
         }
 
         /// <summary>
@@ -122,7 +133,43 @@ namespace Orckestra.Composer.Cart.Factory
 
             vm.AdditionalFees = MapLineItemAdditionalFeeViewModel(lineItem, param.CultureInfo).ToList();
 
+            //Because the whole class is not async, we call a .Result here
+            vm.RecurringOrderFrequencyDisplayName = GetRecurringOrderFrequencyDisplayName(lineItem, param.CultureInfo).Result;
+            
             return vm;
+        }
+
+        public async virtual Task<string> GetRecurringOrderFrequencyDisplayName(LineItem lineItem, CultureInfo cultureInfo)
+        {
+            if (lineItem == null) { return string.Empty; }
+
+            var scope = ComposerContext.Scope;
+            var recurringProgramName = lineItem.RecurringOrderProgramName;
+
+            if(string.IsNullOrEmpty(recurringProgramName)) { return string.Empty; }
+
+            var program = await RecurringOrderRepository.GetRecurringOrderProgram(scope, recurringProgramName).ConfigureAwaitWithCulture(false);
+
+            if (RecurringOrderCartHelper.IsRecurringOrderLineItemValid(lineItem))
+            {               
+                if (program != null)
+                {
+                    var frequency = program.Frequencies.FirstOrDefault(f => string.Equals(f.RecurringOrderFrequencyName, lineItem.RecurringOrderFrequencyName, StringComparison.OrdinalIgnoreCase));
+
+                    if (frequency != null)
+                    {
+                        var localization = frequency.Localizations.FirstOrDefault(l => string.Equals(l.CultureIso, cultureInfo.Name, StringComparison.OrdinalIgnoreCase));
+
+                        if (localization != null)
+                            return localization.DisplayName;
+                        else
+                            return frequency.RecurringOrderFrequencyName;
+                    }
+                }
+            }
+
+            return string.Empty;
+
         }
 
         /// <summary>

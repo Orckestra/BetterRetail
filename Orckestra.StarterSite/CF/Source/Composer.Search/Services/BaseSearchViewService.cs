@@ -260,6 +260,9 @@ namespace Orckestra.Composer.Search.Services
             MapProductSearchViewModelImage(productSearchVm, imgDictionary);
             productSearchVm.IsAvailableToSell = await GetProductSearchViewModelAvailableForSell(productSearchVm, productDocument).ConfigureAwait(false);
             productSearchVm.Pricing = await PriceProvider.GetPriceAsync(productSearchVm.HasVariants, productDocument).ConfigureAwait(false);
+            productSearchVm.IsEligibleForRecurring = productDocument.PropertyBag.IsEligibleForRecurring();
+          
+            productSearchVm.Context["IsEligibleForRecurring "] = productSearchVm.IsEligibleForRecurring;
 
             return productSearchVm;
         }

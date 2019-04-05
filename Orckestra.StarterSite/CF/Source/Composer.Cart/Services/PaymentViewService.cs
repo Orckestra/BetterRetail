@@ -8,6 +8,7 @@ using Orckestra.Composer.Cart.Factory;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Providers.Payment;
 using Orckestra.Composer.Cart.Repositories;
+using Orckestra.Composer.Cart.Requests;
 using Orckestra.Composer.Cart.ViewModels;
 using Orckestra.Composer.Enums;
 using Orckestra.Composer.Parameters;
@@ -30,15 +31,18 @@ namespace Orckestra.Composer.Cart.Services
         protected ILookupService LookupService { get; private set; }
         protected IViewModelMapper ViewModelMapper { get; private set; }
         protected IPaymentProviderFactory PaymentProviderFactory { get; private set; }
+        protected IRecurringOrderTemplatesViewService RecurringOrderTemplatesViewService { get; private set; }
 
         public PaymentViewService(IPaymentRepository paymentRepository, ICartViewModelFactory cartViewModelFactory, ICartRepository cartRepository,
-         ILookupService lookupService, IViewModelMapper viewModelMapper, IPaymentProviderFactory paymentProviderFactory)
+         ILookupService lookupService, IViewModelMapper viewModelMapper, IPaymentProviderFactory paymentProviderFactory, 
+         IRecurringOrderTemplatesViewService recurringOrderTemplatesViewService)
         {
             if (paymentRepository == null) { throw new ArgumentNullException("paymentRepository"); }
             if (cartViewModelFactory == null) { throw new ArgumentNullException("cartViewModelFactory"); }
             if (lookupService == null) { throw new ArgumentNullException("lookupService"); }
             if (viewModelMapper == null) { throw new ArgumentNullException("viewModelMapper"); }
             if (paymentProviderFactory == null) { throw new ArgumentNullException("paymentProviderFactory"); }
+            if (recurringOrderTemplatesViewService == null) { throw new ArgumentNullException("recurringOrderTemplatesViewService"); }
 
             PaymentRepository = paymentRepository;
             CartViewModelFactory = cartViewModelFactory;
@@ -46,6 +50,7 @@ namespace Orckestra.Composer.Cart.Services
             LookupService = lookupService;
             ViewModelMapper = viewModelMapper;
             PaymentProviderFactory = paymentProviderFactory;
+            RecurringOrderTemplatesViewService = recurringOrderTemplatesViewService;
         }
 
 
@@ -96,7 +101,7 @@ namespace Orckestra.Composer.Cart.Services
                 CustomerId = param.CustomerId,
                 CultureInfo = param.CultureInfo,
                 Scope = param.Scope
-            }).ConfigureAwait(false);            
+            }).ConfigureAwait(false);
 
             var vm = await MapCheckoutPaymentViewModel(cart, paymentMethods, param.CultureInfo, param.IsAuthenticated);
             return vm;
@@ -107,11 +112,14 @@ namespace Orckestra.Composer.Cart.Services
             var paymentMethods = await PaymentRepository.GetPaymentMethodsAsync(param).ConfigureAwait(false);
             if (paymentMethods == null) { return null; }
 
-            var vm = await MapPaymentMethodsViewModel(paymentMethods, param.CultureInfo).ConfigureAwait(false);
+            var vm = await MapPaymentMethodsViewModel(paymentMethods, param.CultureInfo, param.CustomerId, param.Scope).ConfigureAwait(false);
             return vm;
         }
 
-        protected virtual async Task<List<IPaymentMethodViewModel>> MapPaymentMethodsViewModel(IEnumerable<PaymentMethod> paymentMethods, CultureInfo cultureInfo)
+        protected virtual async Task<List<IPaymentMethodViewModel>> MapPaymentMethodsViewModel(IEnumerable<PaymentMethod> paymentMethods, 
+            CultureInfo cultureInfo, 
+            Guid customerId,
+            string scope)
         {
             var paymentMethodViewModels = new List<IPaymentMethodViewModel>();
 
@@ -129,12 +137,37 @@ namespace Orckestra.Composer.Cart.Services
                 {
                     var paymentProvider = ObtainPaymentProvider(methodViewModel.PaymentProviderName);
                     methodViewModel.PaymentProviderType = paymentProvider?.ProviderType;
+                    
+                    await IsSavedCardUsedInRecurringOrders(methodViewModel, cultureInfo, customerId, scope).ConfigureAwaitWithCulture(false);
+
                     paymentMethodViewModels.Add(methodViewModel);
                 }
             }
 
             return paymentMethodViewModels.ToList();
 
+        }
+
+        protected virtual async Task<IPaymentMethodViewModel> IsSavedCardUsedInRecurringOrders(IPaymentMethodViewModel methodViewModel,
+            CultureInfo cultureInfo,
+            Guid customerId,
+            string scope)
+        {
+            if (methodViewModel is SavedCreditCardPaymentMethodViewModel)
+            {
+                SavedCreditCardPaymentMethodViewModel vm = methodViewModel as SavedCreditCardPaymentMethodViewModel;
+
+                vm.IsUsedInRecurringOrders = await RecurringOrderTemplatesViewService.GetIsPaymentMethodUsedInRecurringOrders(new GetIsPaymentMethodUsedInRecurringOrdersRequest()
+                {
+                    CultureInfo = cultureInfo,
+                    CustomerId = customerId,
+                    PaymentMethodId = methodViewModel.Id.ToString(),
+                    ScopeId = scope
+                }).ConfigureAwaitWithCulture(false);
+
+                return vm;
+            }
+            return methodViewModel;
         }
 
         protected virtual async Task<CheckoutPaymentViewModel> MapCheckoutPaymentViewModel(Overture.ServiceModel.Orders.Cart cart, List<IPaymentMethodViewModel> paymentMethodViewModels, CultureInfo cultureInfo, bool isAuthenticated)

@@ -150,6 +150,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Composer.Cart\Composer.Cart.csproj">
+      <Project>{08f6fcb8-6065-4d31-b7df-67fe67ee67e5}</Project>
+      <Name>Composer.Cart</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Composer.Product\Composer.Product.csproj">
       <Project>{1f767098-1fbf-4cb9-8637-6529e1cc0b24}</Project>
       <Name>Composer.Product</Name>

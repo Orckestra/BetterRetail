@@ -73,5 +73,7 @@
         public static string StoreSchedule = "StoreSchedule";
 
         public static string StoreInventoryItems = "StoreInventoryItems";
+
+        public static string RecurringOrderPrograms = "RecurringOrderPrograms";
     }
 }

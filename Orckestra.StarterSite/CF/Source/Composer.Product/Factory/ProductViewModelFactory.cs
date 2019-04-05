@@ -4,14 +4,17 @@ using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Orckestra.Composer.Cart.Repositories.Order;
 using Orckestra.Composer.Enums;
 using Orckestra.Composer.Parameters;
+using Orckestra.Composer.Product.Factory.Order;
 using Orckestra.Composer.Product.Parameters;
 using Orckestra.Composer.Product.Repositories;
 using Orckestra.Composer.Product.Services;
 using Orckestra.Composer.Product.ViewModels;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Dam;
+using Orckestra.Composer.Search.Helpers;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Services.Lookup;
 using Orckestra.Composer.Utils;
@@ -30,6 +33,8 @@ namespace Orckestra.Composer.Product.Factory
         protected ILookupService LookupService { get; }
         protected IProductUrlProvider ProductUrlProvider { get; }
         protected IScopeViewService ScopeViewService { get; }
+        protected IRecurringOrdersRepository RecurringOrdersRepository { get; }
+        protected IRecurringOrderProgramViewModelFactory RecurringOrderProgramViewModelFactory { get; }        
 
         public ProductViewModelFactory(
             IViewModelMapper viewModelMapper,
@@ -38,7 +43,9 @@ namespace Orckestra.Composer.Product.Factory
             ILocalizationProvider localizationProvider,
             ILookupService lookupService,
             IProductUrlProvider productUrlProvider,
-            IScopeViewService scopeViewService)
+            IScopeViewService scopeViewService,
+            IRecurringOrdersRepository recurringOrdersRepository,
+            IRecurringOrderProgramViewModelFactory recurringOrderProgramViewModelFactory)
         {
             if (viewModelMapper == null) { throw new ArgumentNullException(nameof(viewModelMapper)); }
             if (productRepository == null) { throw new ArgumentNullException(nameof(productRepository)); }
@@ -47,6 +54,8 @@ namespace Orckestra.Composer.Product.Factory
             if (lookupService == null) { throw new ArgumentNullException(nameof(lookupService)); }
             if (productUrlProvider == null) { throw new ArgumentNullException(nameof(productUrlProvider)); }
             if (scopeViewService == null) { throw new ArgumentNullException(nameof(scopeViewService)); }
+            if (recurringOrdersRepository == null) { throw new ArgumentNullException(nameof(recurringOrdersRepository)); }
+            if (recurringOrderProgramViewModelFactory == null) { throw new ArgumentNullException(nameof(recurringOrderProgramViewModelFactory)); }
 
             ViewModelMapper = viewModelMapper;
             ProductRepository = productRepository;
@@ -55,6 +64,8 @@ namespace Orckestra.Composer.Product.Factory
             LookupService = lookupService;
             ProductUrlProvider = productUrlProvider;
             ScopeViewService = scopeViewService;
+            RecurringOrdersRepository = recurringOrdersRepository;
+            RecurringOrderProgramViewModelFactory = recurringOrderProgramViewModelFactory;
         }
 
         public virtual async Task<ProductViewModel> GetProductViewModel(GetProductParam param)
@@ -99,7 +110,48 @@ namespace Orckestra.Composer.Product.Factory
                 Currency = currency
             });
 
+            productViewModel = await SetViewModelRecurringOrdersRelatedProperties(param, productViewModel, product).ConfigureAwaitWithCulture(false);
+
             return productViewModel;
+        }
+
+        private async Task<ProductViewModel> SetViewModelRecurringOrdersRelatedProperties(GetProductParam param, ProductViewModel vm, Overture.ServiceModel.Products.Product product)
+        {
+            if (param == null) throw new ArgumentNullException(nameof(param));
+            if (vm == null) throw new ArgumentNullException(nameof(vm));
+
+            var recurringOrdersEnabled = ConfigurationUtil.GetRecurringOrdersConfigEnabled();
+
+            var recurringOrderProgramName = product.PropertyBag.GetValueOrDefault<string>(Constants.ProductAttributes.RecurringOrderProgramName);
+
+            if (string.IsNullOrWhiteSpace(recurringOrderProgramName))
+            {
+                return vm;
+            }
+
+            vm.RecurringOrderProgramName = recurringOrderProgramName;
+            vm.Context["RecurringOrderProgramName"] = recurringOrderProgramName;
+
+            var program = await RecurringOrdersRepository.GetRecurringOrderProgram(param.Scope, recurringOrderProgramName).ConfigureAwaitWithCulture(false);
+
+            if (program == null)
+            {
+                return vm;
+            }
+
+           
+            vm.IsRecurringOrderEligible = recurringOrdersEnabled;
+            vm.Context["IsRecurringOrderEligible"] = recurringOrdersEnabled;
+
+            if (recurringOrdersEnabled)
+            {
+                var recurringOrderProgramViewModel = RecurringOrderProgramViewModelFactory.CreateRecurringOrderProgramViewModel(program, param.CultureInfo);
+
+                vm.RecurringOrderFrequencies = recurringOrderProgramViewModel.Frequencies;
+                vm.Context["RecurringOrderFrequencies"] = recurringOrderProgramViewModel.Frequencies;
+            }
+
+            return vm;
         }
 
         protected virtual ProductViewModel CreateViewModel(CreateProductDetailViewModelParam param)

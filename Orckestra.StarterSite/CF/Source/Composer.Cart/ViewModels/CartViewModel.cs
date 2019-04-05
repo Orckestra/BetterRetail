@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Orckestra.Composer.Cart.Helper;
 using Orckestra.Composer.ViewModels;
 
 namespace Orckestra.Composer.Cart.ViewModels
@@ -54,7 +55,7 @@ namespace Orckestra.Composer.Cart.ViewModels
         /// Valid coupons applied to the cart.
         /// </summary>
         public CouponsViewModel Coupons { get; set; }
-        
+
         /// <summary>
         /// The address of the client of the first shipment.
         /// </summary>
@@ -99,6 +100,16 @@ namespace Orckestra.Composer.Cart.ViewModels
         /// Determines whether or not the full cart view model will load client-side or not.
         /// </summary>
         public bool IsLoading { get; set; }
+
+        /// <summary>
+        /// Indicates if the cart contains recurring lineitems
+        /// </summary>
+        public bool HasRecurringLineitems {
+            get
+            {
+                return RecurringOrderCartHelper.IsCartContainsRecurringOrderItems(LineItemDetailViewModels);
+            }
+        }
 
         public CartViewModel()
         {

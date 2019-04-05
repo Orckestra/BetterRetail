@@ -10,7 +10,9 @@ using Orckestra.Composer.Product.ViewModels;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Dam;
 using Orckestra.Composer.Providers.Localization;
+using Orckestra.Composer.Search.Helpers;
 using Orckestra.Composer.Search.Repositories;
+using Orckestra.Composer.Utils;
 using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel.Products;
 
@@ -226,6 +228,12 @@ namespace Orckestra.Composer.Product.Services
             {
                 vm.DisplaySpecialPrice = _localizationProvider.FormatPrice((decimal)vm.Price, cultureInfo);
             }
+
+            var recurringOrdersEnabled = ConfigurationUtil.GetRecurringOrdersConfigEnabled();
+            var recurringOrderProgramName = productVariant.Product.PropertyBag.GetValueOrDefault<string>(Constants.ProductAttributes.RecurringOrderProgramName);
+
+            vm.RecurringOrderProgramName = recurringOrderProgramName;
+            vm.IsRecurringOrderEligible = recurringOrdersEnabled && !string.IsNullOrWhiteSpace(recurringOrderProgramName);
 
             return vm;
         }

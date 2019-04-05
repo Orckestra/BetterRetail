@@ -5,7 +5,9 @@ using FluentAssertions;
 using Moq;
 using Moq.AutoMock;
 using NUnit.Framework;
+using Orckestra.Composer.Cart.Repositories.Order;
 using Orckestra.Composer.Product.Factory;
+using Orckestra.Composer.Product.Factory.Order;
 using Orckestra.Composer.Product.Repositories;
 using Orckestra.Composer.Product.Tests.Factories;
 using Orckestra.Composer.Product.ViewModels;
@@ -53,12 +55,14 @@ namespace Orckestra.Composer.Product.Tests.Services
         private class ProductViewModelFactoryProxy : ProductViewModelFactory
         {
             public ProductViewModelFactoryProxy(IViewModelMapper viewModelMapper,
-            IProductRepository productRepository,
-            IDamProvider damProvider,
-            ILocalizationProvider localizationProvider,
-            ILookupService lookupService,
-            IProductUrlProvider productUrlProvider,
-            IScopeViewService scopeViewService)
+                IProductRepository productRepository,
+                IDamProvider damProvider,
+                ILocalizationProvider localizationProvider,
+                ILookupService lookupService,
+                IProductUrlProvider productUrlProvider,
+                IScopeViewService scopeViewService,
+                IRecurringOrdersRepository recurringOrdersRepository,
+                IRecurringOrderProgramViewModelFactory recurringOrderProgramViewModelFactory)
             
                 : base(
                 viewModelMapper, 
@@ -67,7 +71,9 @@ namespace Orckestra.Composer.Product.Tests.Services
                 localizationProvider, 
                 lookupService, 
                 productUrlProvider,
-                scopeViewService)
+                scopeViewService,
+                recurringOrdersRepository,
+                recurringOrderProgramViewModelFactory)
             {
             }
 

@@ -99,7 +99,15 @@ namespace Orckestra.Composer.Cart.Api
 
                 var checkoutStepInfo = checkoutStepInfos[stepNumber];
 
-                cartViewModel.OrderSummary.CheckoutRedirectAction.RedirectUrl = checkoutStepInfo.Url;
+                //If the cart contains recurring items and user is not authenticated, redirect to sign in
+                if (cartViewModel.HasRecurringLineitems && !ComposerContext.IsAuthenticated)
+                {
+                    cartViewModel.OrderSummary.CheckoutRedirectAction.RedirectUrl = checkoutUrlTarget;
+                }
+                else
+                {
+                    cartViewModel.OrderSummary.CheckoutRedirectAction.RedirectUrl = checkoutStepInfo.Url;
+                }
                 cartViewModel.OrderSummary.CheckoutStepUrls = checkoutStepInfos.Values.Select(x => x.Url).ToList();
                 cartViewModel.OrderSummary.CheckoutUrlTarget = checkoutUrlTarget;
             }

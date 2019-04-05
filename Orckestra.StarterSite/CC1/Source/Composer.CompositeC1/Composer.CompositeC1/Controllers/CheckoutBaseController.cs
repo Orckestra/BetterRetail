@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Web.Mvc;
 using Composite.Data;
+using Orckestra.Composer.Cart;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Services;
 using Orckestra.Composer.Cart.ViewModels;
@@ -12,6 +13,7 @@ using Orckestra.Composer.Providers;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Services.Breadcrumb;
 using Orckestra.Composer.Utils;
+using Orckestra.Overture;
 
 namespace Orckestra.Composer.CompositeC1.Controllers
 {
@@ -27,6 +29,9 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         protected ICheckoutNavigationViewService CheckoutNavigationViewService { get; private set; }
         protected IPaymentViewService PaymentViewService { get; private set; }
         protected IMyAccountUrlProvider MyAccountUrlProvider { get; private set; }
+        protected ICartService CartService { get; private set; }
+       // protected IOvertureClient OvertureClient { get; private set; }
+        
 
         protected CheckoutBaseController(
             IPageService pageService,
@@ -37,7 +42,9 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             ICartUrlProvider urlProvider,
             ICheckoutNavigationViewService checkoutNavigationViewService,
             IPaymentViewService paymentViewService,
-            IMyAccountUrlProvider myAccountUrlProvider)
+            IMyAccountUrlProvider myAccountUrlProvider,
+            ICartService cartService
+            )
         {
             if (pageService == null) { throw new ArgumentNullException("pageService"); }
             if (composerContext == null) { throw new ArgumentNullException("composerContext"); }
@@ -48,6 +55,8 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             if (checkoutNavigationViewService == null) { throw new ArgumentNullException("checkoutNavigationViewService"); }
             if (paymentViewService == null) { throw new ArgumentNullException("paymentViewService"); }
             if (myAccountUrlProvider == null) { throw new ArgumentNullException("myAccountUrlProvider"); }
+            if (cartService == null) { throw new ArgumentNullException("cartService"); }
+            //if (OvertureClient == null) { throw new ArgumentNullException("OvertureClient"); }
 
             PageService = pageService;
             ComposerContext = composerContext;
@@ -58,6 +67,9 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             CheckoutNavigationViewService = checkoutNavigationViewService;
             PaymentViewService = paymentViewService;
             MyAccountUrlProvider = myAccountUrlProvider;
+            CartService = cartService;
+            //OvertureClient = overtureClient;
+            //OvertureClient = overtureClient;
         }
 
         public virtual ActionResult GuestCustomerInfo()
@@ -143,12 +155,24 @@ namespace Orckestra.Composer.CompositeC1.Controllers
                 ReturnUrl = stepOneUrl,
             });
 
+            var cart = CartService.GetCartViewModelAsync(new GetCartParam()
+            {
+                BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
+                CartName = CartConfiguration.ShoppingCartName,
+                CultureInfo = ComposerContext.CultureInfo,
+                CustomerId = ComposerContext.CustomerId,
+                ExecuteWorkflow = true,
+                Scope = ComposerContext.Scope                
+            }).Result;
+
+            var hasRecurringItems = cart.HasRecurringLineitems;
+
             var checkoutSignInAsGuestViewModel = new CheckoutSignInAsGuestViewModel
             {
                 CheckoutUrlTarget = stepOneUrl,
-                RegisterUrl = registerUrl
+                RegisterUrl = registerUrl,
+                IsCartContainsRecurringLineitems = hasRecurringItems
             };
-
 
             return View("CheckoutSignInAsGuest", checkoutSignInAsGuestViewModel);
         }

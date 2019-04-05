@@ -220,8 +220,11 @@
     <Compile Include="Repositories\ScopeRepository.cs" />
     <Compile Include="Services\IScopeViewService.cs" />
     <Compile Include="Services\ScopeViewService.cs" />
+    <Compile Include="Utils\ConfigurationUtil.cs" />
+    <Compile Include="Utils\Constants.cs" />
     <Compile Include="Utils\Guard.cs" />
     <Compile Include="Utils\MvcFilterRedirectUtil.cs" />
+    <Compile Include="Utils\PropertyBagHelper.cs" />
     <Compile Include="ViewEngine\HandleBarsHelpers\FormatValueHelper.cs" />
     <Compile Include="ViewEngine\HandleBarsHelpers\LookupHelper.cs" />
     <Compile Include="ViewModels\CurrencyViewModel.cs" />

@@ -46,7 +46,9 @@
     <Compile Include="Extensions\ProductPropertyDefinitionExtensions.cs" />
     <Compile Include="Extensions\ProductPropertyDefinitionGroupExtensions.cs" />
     <Compile Include="Factory\IProductViewModelFactory.cs" />
+    <Compile Include="Factory\IRecurringOrderProgramViewModelFactory.cs" />
     <Compile Include="Factory\ProductViewModelFactory.cs" />
+    <Compile Include="Factory\RecurringOrderProgramViewModelFactory.cs" />
     <Compile Include="GetProductPropertiesByCategoryNameParam.cs" />
     <Compile Include="Parameters\CreateCategoryViewModelParam.cs" />
     <Compile Include="Parameters\CreateRelatedProductViewModelParam.cs" />
@@ -94,6 +96,8 @@
     <Compile Include="ViewModels\ProductQuantityViewModel.cs" />
     <Compile Include="ViewModels\ProductIdentifier.cs" />
     <Compile Include="ViewModels\ProductWithVariant.cs" />
+    <Compile Include="ViewModels\RecurringOrderProgramFrequencyViewModel.cs" />
+    <Compile Include="ViewModels\RecurringOrderProgramViewModel.cs" />
     <Compile Include="ViewModels\RelatedProductsViewModel.cs" />
     <Compile Include="ViewModels\RelatedProductViewModel.cs" />
     <Compile Include="Services\RelatedProductViewService.cs" />
@@ -116,7 +120,9 @@
     <Compile Include="ViewModels\VariantPriceViewModel.cs" />
     <Compile Include="ViewModels\VariantViewModel.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config">
@@ -125,6 +131,10 @@
     <None Include="Properties\PublishProfiles\Package.pubxml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Composer.Cart\Composer.Cart.csproj">
+      <Project>{08f6fcb8-6065-4d31-b7df-67fe67ee67e5}</Project>
+      <Name>Composer.Cart</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Composer.Search\Composer.Search.csproj">
       <Project>{CE6AD95E-0EBB-4E38-BF0B-27A67915FA68}</Project>
       <Name>Composer.Search</Name>
@@ -175,6 +185,12 @@
     </Reference>
     <Reference Include="Orckestra.Overture.ServiceModel.Requests, Version=3.20.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\OrckestraCommerce.ServiceModel.Requests.3.20.0\lib\net461\Orckestra.Overture.ServiceModel.Requests.dll</HintPath>
+    </Reference>
+    <Reference Include="OrckestraCommerce.RecurringOrders.ServiceModel, Version=3.20.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OrckestraCommerce.RecurringOrders.ServiceModel.3.20.0\lib\portable-net4+sl5+netcore45+wp8\OrckestraCommerce.RecurringOrders.ServiceModel.dll</HintPath>
+    </Reference>
+    <Reference Include="OrckestraCommerce.RecurringOrders.ServiceModel.Requests, Version=3.20.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OrckestraCommerce.RecurringOrders.ServiceModel.Requests.3.20.0\lib\portable-net4+sl5+netcore45+wp8\OrckestraCommerce.RecurringOrders.ServiceModel.Requests.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack.Client, Version=4.0.0.0, Culture=neutral, PublicKeyToken=e06fbc6124f57c43, processorArchitecture=MSIL">
       <HintPath>..\packages\ServiceStack.Client.Signed.4.5.4\lib\net45\ServiceStack.Client.dll</HintPath>
