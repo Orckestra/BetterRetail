@@ -158,9 +158,6 @@
     <Reference Include="Orckestra.Composer.Cart">
       <HintPath>..\packages\Composer.4.6.0-Build\lib\net452\Orckestra.Composer.Cart.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Composer.GoogleAnalytics">
-      <HintPath>..\packages\Composer.4.6.0-Build\lib\net452\Orckestra.Composer.GoogleAnalytics.dll</HintPath>
-    </Reference>
     <Reference Include="Orckestra.Composer.MyAccount">
       <HintPath>..\packages\Composer.4.6.0-Build\lib\net452\Orckestra.Composer.MyAccount.dll</HintPath>
     </Reference>

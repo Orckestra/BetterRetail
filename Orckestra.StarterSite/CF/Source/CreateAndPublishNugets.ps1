@@ -103,16 +103,8 @@ function Invoke-NugetPackage($NugetExeLocation, $NuspecFile, $NuVersion) {
 
 function Invoke-NugetPush($NugetExeLocation, $NugetFeedUrl, $NugetPackageFile) {
 
-	$tmp = $("`"{0}\Nuget.exe`" push {1} -Source {2}" -f $NugetExeLocation, $NugetPackageFile, $NugetFeedUrl )
-	$tmp
-	$WindowsVersion = [System.Environment]::OSVersion.Version.Major
-	if($WindowsVersion -eq 10)
-	{cmd.exe /C $tmp}
-	if($WindowsVersion -ne 10)
-	{cmd.exe /C "`"$tmp`""}
-
-return
-	$args = @("push", "`"$NugetPackageFile`"", "-Source `"$NugetFeedUrl`"")
+    mkdir -Force $NugetFeedUrl
+    $args = @("push", "$NugetPackageFile", "-Source", "$NugetFeedUrl")
 	& "$NugetExeLocation\NuGet.exe" @args
 }
 
