@@ -34,19 +34,22 @@ namespace Orckestra.Composer.Cart.Services
         //private readonly IRecurringOrderInactifProductViewModelFactory _recurringOrderInactifProductViewModelFactory;
 
         public RecurringOrderTemplatesViewService(IRecurringOrdersRepository recurringOrdersRepository, IViewModelMapper viewModelMapper,
-            IOvertureClient overtureClient, ILineItemService lineItemService, ILookupService lookupService)
+            IOvertureClient overtureClient, ILineItemService lineItemService, ILookupService lookupService,
+            IRecurringOrderTemplateViewModelFactory recurringOrderTemplateViewModelFactory)
         {
             if (recurringOrdersRepository == null) { throw new ArgumentNullException(nameof(recurringOrdersRepository)); }
             if (viewModelMapper == null) { throw new ArgumentNullException(nameof(viewModelMapper)); }
             if (overtureClient == null) { throw new ArgumentNullException(nameof(overtureClient)); }
             if (lineItemService == null) { throw new ArgumentNullException(nameof(lineItemService)); }
             if (lookupService == null) { throw new ArgumentNullException(nameof(lookupService)); }
+            if (recurringOrderTemplateViewModelFactory == null) { throw new ArgumentNullException(nameof(recurringOrderTemplateViewModelFactory)); }
 
             RecurringOrderRepository = recurringOrdersRepository;
             ViewModelMapper = viewModelMapper;
             OvertureClient = overtureClient;
             LineItemService = lineItemService;
             LookupService = lookupService;
+            RecurringOrderTemplateViewModelFactory = recurringOrderTemplateViewModelFactory;
         }
         public async Task<bool> GetIsPaymentMethodUsedInRecurringOrders(GetIsPaymentMethodUsedInRecurringOrdersRequest request)
         {

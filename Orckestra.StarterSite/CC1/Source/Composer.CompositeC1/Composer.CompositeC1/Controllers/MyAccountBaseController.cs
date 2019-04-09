@@ -32,6 +32,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         protected IMyAccountViewService MyAccountViewService { get; private set; }
         protected IOrderHistoryViewService OrderHistoryViewService { get; private set; }
         protected IWishListViewService WishListViewService { get; private set; }
+        protected IRecurringOrderTemplatesViewService RecurringOrderTemplatesViewService { get; private set; }
 
         protected MyAccountBaseController(
             ICustomerViewService customerViewService,
@@ -42,7 +43,8 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             IOrderUrlProvider orderUrlProvider,
             IMyAccountViewService myAccountViewService,
             IOrderHistoryViewService orderHistoryViewService,
-            IWishListViewService wishListViewService)
+            IWishListViewService wishListViewService,
+            IRecurringOrderTemplatesViewService recurringOrderTemplatesViewService)
         {
             if (customerViewService == null) throw new ArgumentNullException("customerViewService");
             if (customerAddressViewService == null) throw new ArgumentNullException("customerAddressViewService");
@@ -53,6 +55,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             if (myAccountViewService == null) throw new ArgumentNullException("myAccountViewService");
             if (orderHistoryViewService == null) throw new ArgumentNullException("orderHistoryViewService");
             if (wishListViewService == null) throw new ArgumentNullException("wishListViewService");
+            if (recurringOrderTemplatesViewService == null) throw new ArgumentNullException("recurringOrderTemplatesViewService");
 
             CustomerViewService = customerViewService;
             CustomerAddressViewService = customerAddressViewService;
@@ -63,6 +66,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             MyAccountViewService = myAccountViewService;
             OrderHistoryViewService = orderHistoryViewService;
             WishListViewService = wishListViewService;
+            RecurringOrderTemplatesViewService = recurringOrderTemplatesViewService;
         }
 
         [AuthorizeAndRedirect]
@@ -225,8 +229,19 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         [AuthorizeAndRedirect]
         public virtual ActionResult RecurringSchedule(XhtmlDocument emptyRecurringScheduleContent)
         {
-           //TODO
-            return View("RecurringScheduleContainer", new { TotalQuantity = 0, EmptyContent = emptyRecurringScheduleContent.Body });            
+            var vm = RecurringOrderTemplatesViewService.GetRecurringOrderTemplatesAsync(
+                ComposerContext.Scope,
+                ComposerContext.CustomerId,
+                ComposerContext.CultureInfo,
+                RequestUtils.GetBaseUrl(Request).ToString()
+                ).Result;
+
+            if (vm != null && vm.RecurringOrderTemplateViewModelList.Count == 0 && emptyRecurringScheduleContent != null)
+            {
+                return View("RecurringScheduleContainer", new { TotalQuantity = 0, EmptyContent = emptyRecurringScheduleContent.Body });
+            }
+
+            return View("RecurringScheduleContainer", vm);            
         }
 
         protected virtual OrderHistoryViewModel GetOrderHistoryViewModel()

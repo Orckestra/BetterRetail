@@ -35,6 +35,7 @@ namespace Orckestra.Composer
             host.Register<ScopeRepository, IScopeRepository>();
             host.Register<ScopeViewService, IScopeViewService>();
             host.Register<InventoryRepository, IInventoryRepository>();
+            host.Register<RecurringOrdersRepository, IRecurringOrdersRepository>();
 
             host.MetadataRegistry.LoadViewModelMetadataInAssemblyOf(GetType().Assembly);
 
