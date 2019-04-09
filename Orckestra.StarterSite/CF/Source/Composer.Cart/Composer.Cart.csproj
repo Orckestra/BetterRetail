@@ -54,6 +54,8 @@
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\PaymentExtensions.cs" />
     <Compile Include="Factory\CartViewModelFactory.cs" />
+    <Compile Include="Factory\IRecurringOrderTemplateViewModelFactory.cs" />
+    <Compile Include="Factory\RecurringOrderTemplateViewModelFactory.cs" />
     <Compile Include="Factory\RewardEqualityComparer.cs" />
     <Compile Include="Factory\RewardViewModelFactory.cs" />
     <Compile Include="Factory\ICartViewModelFactory.cs" />
@@ -73,11 +75,14 @@
     <Compile Include="Factory\PaymentProviderFactory.cs" />
     <Compile Include="Factory\TaxViewModelFactory.cs" />
     <Compile Include="Factory\UpdateCartParamFactory.cs" />
+    <Compile Include="Helper\ProductHelper.cs" />
     <Compile Include="Helper\RecurringOrderCartHelper.cs" />
+    <Compile Include="Helper\RecurringOrderTemplateHelper.cs" />
     <Compile Include="OrderHistoryConfiguration.cs" />
     <Compile Include="Parameters\AddCreditCardParam.cs" />
     <Compile Include="Parameters\CreateListOfLineItemDetailViewModelParam.cs" />
     <Compile Include="Parameters\CreateLineItemDetailViewModelParam.cs" />
+    <Compile Include="Parameters\CreateRecurringOrderTemplatesViewModelParam.cs" />
     <Compile Include="Parameters\CreateWishListViewModelParam.cs" />
     <Compile Include="Parameters\GetKeyVariantAttributesParam.cs" />
     <Compile Include="Parameters\Order\GetOrderChangesParam.cs" />
@@ -85,8 +90,6 @@
     <Compile Include="Parameters\WishList\GetShareWishListUrlParam.cs" />
     <Compile Include="Parameters\WishList\GetWishListUrlParam.cs" />
     <Compile Include="Providers\WishList\IWishListUrlProvider.cs" />
-    <Compile Include="Repositories\Order\IRecurringOrdersRepository.cs" />
-    <Compile Include="Repositories\Order\RecurringOrdersRepository.cs" />
     <Compile Include="Requests\GetIsPaymentMethodUsedInRecurringOrdersRequest.cs" />
     <Compile Include="Requests\GetLineItemRequest.cs" />
     <Compile Include="Parameters\AddPaymentParam.cs" />
@@ -229,6 +232,10 @@
     <Compile Include="ViewModels\MinicartViewModel.cs" />
     <Compile Include="ViewModels\MonerisAddVaultProfileViewModel.cs" />
     <Compile Include="ViewModels\OrderSummaryViewModel.cs" />
+    <Compile Include="ViewModels\RecurringOrderShippingMethodViewModel.cs" />
+    <Compile Include="ViewModels\RecurringOrderTemplateLineItemViewModel.cs" />
+    <Compile Include="ViewModels\RecurringOrderTemplatesViewModel.cs" />
+    <Compile Include="ViewModels\RecurringOrderTemplateViewModel.cs" />
     <Compile Include="ViewModels\RemovePaymentMethodViewModel.cs" />
     <Compile Include="ViewModels\Order\OrderChangeViewModel.cs" />
     <Compile Include="ViewModels\RewardViewModel.cs" />
@@ -264,6 +271,10 @@
     <Compile Include="ViewModels\WishListViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Composer.Product\Composer.Product.csproj">
+      <Project>{1f767098-1fbf-4cb9-8637-6529e1cc0b24}</Project>
+      <Name>Composer.Product</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Composer\Composer.csproj">
       <Project>{d00bd58b-93fe-4f3d-bbc8-6f7873ca6830}</Project>
       <Name>Composer</Name>

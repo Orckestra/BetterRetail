@@ -9,7 +9,7 @@ using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel.RecurringOrders;
 using Orckestra.Overture.ServiceModel.Requests.RecurringOrders;
 
-namespace Orckestra.Composer.Cart.Repositories.Order
+namespace Orckestra.Composer.Repositories
 {
     public class RecurringOrdersRepository : IRecurringOrdersRepository
     {

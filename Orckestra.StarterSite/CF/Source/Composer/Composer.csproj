@@ -94,6 +94,12 @@
     <Reference Include="Orckestra.Overture.ServiceModel.Requests, Version=3.20.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\OrckestraCommerce.ServiceModel.Requests.3.20.0\lib\net461\Orckestra.Overture.ServiceModel.Requests.dll</HintPath>
     </Reference>
+    <Reference Include="OrckestraCommerce.RecurringOrders.ServiceModel, Version=3.20.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OrckestraCommerce.RecurringOrders.ServiceModel.3.20.0\lib\portable-net4+sl5+netcore45+wp8\OrckestraCommerce.RecurringOrders.ServiceModel.dll</HintPath>
+    </Reference>
+    <Reference Include="OrckestraCommerce.RecurringOrders.ServiceModel.Requests, Version=3.20.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OrckestraCommerce.RecurringOrders.ServiceModel.Requests.3.20.0\lib\portable-net4+sl5+netcore45+wp8\OrckestraCommerce.RecurringOrders.ServiceModel.Requests.dll</HintPath>
+    </Reference>
     <Reference Include="ServiceStack.Client, Version=4.0.0.0, Culture=neutral, PublicKeyToken=e06fbc6124f57c43, processorArchitecture=MSIL">
       <HintPath>..\packages\ServiceStack.Client.Signed.4.5.4\lib\net45\ServiceStack.Client.dll</HintPath>
     </Reference>
@@ -208,15 +214,19 @@
     <Compile Include="Parameters\BuildSearchUrlParam.cs" />
     <Compile Include="Parameters\FindInventoryItemStatusParam.cs" />
     <Compile Include="Parameters\GetFooterParam.cs" />
+    <Compile Include="Parameters\GetRecurringScheduleUrlParam.cs" />
     <Compile Include="Parameters\GetStickyLinksParam.cs" />
     <Compile Include="Parameters\GetHomeMainMenuParam.cs" />
     <Compile Include="Parameters\GetInventoryItemsBySkuParam.cs" />
     <Compile Include="Parameters\GetScopeCurrencyParam.cs" />
     <Compile Include="Parameters\GetScopeParam.cs" />
     <Compile Include="Providers\IPageNotFoundUrlProvider.cs" />
+    <Compile Include="Providers\IRecurringScheduleUrlProvider.cs" />
     <Compile Include="Repositories\IInventoryRepository.cs" />
     <Compile Include="Repositories\InventoryRepository.cs" />
+    <Compile Include="Repositories\IRecurringOrdersRepository.cs" />
     <Compile Include="Repositories\IScopeRepository.cs" />
+    <Compile Include="Repositories\RecurringOrdersRepository.cs" />
     <Compile Include="Repositories\ScopeRepository.cs" />
     <Compile Include="Services\IScopeViewService.cs" />
     <Compile Include="Services\ScopeViewService.cs" />
@@ -224,6 +234,7 @@
     <Compile Include="Utils\Constants.cs" />
     <Compile Include="Utils\Guard.cs" />
     <Compile Include="Utils\MvcFilterRedirectUtil.cs" />
+    <Compile Include="Utils\ProductHelper.cs" />
     <Compile Include="Utils\PropertyBagHelper.cs" />
     <Compile Include="ViewEngine\HandleBarsHelpers\FormatValueHelper.cs" />
     <Compile Include="ViewEngine\HandleBarsHelpers\LookupHelper.cs" />

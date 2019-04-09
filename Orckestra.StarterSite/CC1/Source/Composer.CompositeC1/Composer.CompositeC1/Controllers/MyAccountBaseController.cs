@@ -222,6 +222,13 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             return View("WishListContainer", vm);
         }
 
+        [AuthorizeAndRedirect]
+        public virtual ActionResult RecurringSchedule(XhtmlDocument emptyRecurringScheduleContent)
+        {
+           //TODO
+            return View("RecurringScheduleContainer", new { TotalQuantity = 0, EmptyContent = emptyRecurringScheduleContent.Body });            
+        }
+
         protected virtual OrderHistoryViewModel GetOrderHistoryViewModel()
         {
             return new OrderHistoryViewModel

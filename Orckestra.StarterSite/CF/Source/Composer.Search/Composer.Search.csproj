@@ -89,7 +89,7 @@
     <Compile Include="Factory\IFacetFactory.cs" />
     <Compile Include="Factory\IFacetPredicateFactory.cs" />
     <Compile Include="Factory\SelectedFacetFactory.cs" />
-    <Compile Include="Helpers\ProductHelper.cs" />
+    <Compile Include="Helpers\ProductExtension.cs" />
     <Compile Include="Helpers\SearchSortByResolver.cs" />
     <Compile Include="Context\ISearchRequestContext.cs" />
     <Compile Include="Helpers\SearchType.cs" />

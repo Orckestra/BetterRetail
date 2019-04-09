@@ -131,10 +131,6 @@
     <None Include="Properties\PublishProfiles\Package.pubxml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Composer.Cart\Composer.Cart.csproj">
-      <Project>{08f6fcb8-6065-4d31-b7df-67fe67ee67e5}</Project>
-      <Name>Composer.Cart</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Composer.Search\Composer.Search.csproj">
       <Project>{CE6AD95E-0EBB-4E38-BF0B-27A67915FA68}</Project>
       <Name>Composer.Search</Name>
