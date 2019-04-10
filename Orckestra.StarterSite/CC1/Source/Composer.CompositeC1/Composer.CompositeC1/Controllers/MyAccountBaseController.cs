@@ -229,12 +229,12 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         [AuthorizeAndRedirect]
         public virtual ActionResult RecurringSchedule(XhtmlDocument emptyRecurringScheduleContent)
         {
-            var vm = RecurringOrderTemplatesViewService.GetRecurringOrderTemplatesAsync(
-                ComposerContext.Scope,
-                ComposerContext.CustomerId,
-                ComposerContext.CultureInfo,
-                RequestUtils.GetBaseUrl(Request).ToString()
-                ).Result;
+            var vm = RecurringOrderTemplatesViewService.GetRecurringOrderTemplatesAsync(new GetRecurringOrderTemplatesParam {
+                Scope = ComposerContext.Scope,
+                CustomerId = ComposerContext.CustomerId,
+                CultureInfo = ComposerContext.CultureInfo,
+                BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
+                }).Result;
 
             if (vm != null && vm.RecurringOrderTemplateViewModelList.Count == 0 && emptyRecurringScheduleContent != null)
             {

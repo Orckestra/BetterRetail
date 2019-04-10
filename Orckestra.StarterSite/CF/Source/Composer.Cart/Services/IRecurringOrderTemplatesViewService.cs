@@ -1,4 +1,5 @@
-﻿using Orckestra.Composer.Cart.Requests;
+﻿using Orckestra.Composer.Cart.Parameters;
+using Orckestra.Composer.Cart.Requests;
 using Orckestra.Composer.Cart.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace Orckestra.Composer.Cart.Services
     {
         Task<bool> GetIsPaymentMethodUsedInRecurringOrders(GetIsPaymentMethodUsedInRecurringOrdersRequest request);
 
-        Task<RecurringOrderTemplatesViewModel> GetRecurringOrderTemplatesAsync(string scope, Guid customerId, CultureInfo culture, string baseUrl);
+        Task<RecurringOrderTemplatesViewModel> GetRecurringOrderTemplatesAsync(GetRecurringOrderTemplatesParam param);
         //Task<RecurringOrderTemplatesViewModel> UpdateRecurringOrderTemplateLineItemQuantity(UpdateRecurringOrderTemplateLineItemQuantityRequest param);
        /* 
         Task<RecurringOrderProgramViewModel> GetRecurringOrderProgramAsync(GetRecurringOrderFrequenciesRequest param);

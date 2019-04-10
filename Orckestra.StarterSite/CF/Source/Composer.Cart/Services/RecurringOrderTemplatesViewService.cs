@@ -77,27 +77,26 @@ namespace Orckestra.Composer.Cart.Services
             return false;
         }
 
-        public async Task<RecurringOrderTemplatesViewModel> GetRecurringOrderTemplatesAsync(string scope, Guid customerId, CultureInfo culture, string baseUrl)
+        public async Task<RecurringOrderTemplatesViewModel> GetRecurringOrderTemplatesAsync(GetRecurringOrderTemplatesParam param)
         {
             if (!ConfigurationUtil.GetRecurringOrdersConfigEnabled())
                 return new RecurringOrderTemplatesViewModel();
 
-            if (scope == null) { throw new ArgumentNullException(nameof(scope)); }
-            if (customerId == null) { throw new ArgumentNullException(nameof(customerId)); }
-            if (culture == null) { throw new ArgumentNullException(nameof(culture)); }
-
-            var listOfRecurringOrderLineItems = await RecurringOrderRepository.GetRecurringOrderTemplates(scope, customerId).ConfigureAwait(false);
-
-
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param.CultureInfo)), nameof(param)); }
+            if (param.Scope == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param.Scope)), nameof(param)); }
+            if (param.CustomerId == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param.CustomerId)), nameof(param)); }
+            
+            var listOfRecurringOrderLineItems = await RecurringOrderRepository.GetRecurringOrderTemplates(param.Scope, param.CustomerId).ConfigureAwait(false);
+            
             var vm = await CreateTemplatesViewModelAsync(new CreateRecurringOrderTemplatesViewModelParam
             {
                 ListOfRecurringOrderLineItems = listOfRecurringOrderLineItems,
-                CultureInfo = culture,
-                BaseUrl = baseUrl,
-                CustomerId = customerId,
-                ScopeId = scope
+                CultureInfo = param.CultureInfo,
+                BaseUrl = param.BaseUrl,
+                CustomerId = param.CustomerId,
+                ScopeId = param.Scope
             }).ConfigureAwaitWithCulture(false);
-
 
             return vm;
         }

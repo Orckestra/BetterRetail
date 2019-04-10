@@ -60,7 +60,8 @@ namespace Orckestra.Composer.Cart.Factory
         protected IProductUrlProvider ProductUrlProvider { get; private set; }
         protected IProductPriceViewService ProductPriceViewService { get; private set; }
         protected IOvertureClient OvertureClient { get; private set; }
-
+        protected ICartViewModelFactory CartViewModelFactory { get; private set; }
+        
         public RecurringOrderTemplateViewModelFactory(
             IOvertureClient overtureClient,
             ILocalizationProvider localizationProvider,
@@ -71,7 +72,8 @@ namespace Orckestra.Composer.Cart.Factory
             IAddressRepository addressRepository,
             IProductViewModelFactory productViewModelFactory,
             IProductUrlProvider productUrlProvider,
-            IProductPriceViewService productPriceViewService)
+            IProductPriceViewService productPriceViewService,
+            ICartViewModelFactory cartViewModelFactory)
         {
             if (overtureClient == null) { throw new ArgumentNullException(nameof(overtureClient)); }
             if (localizationProvider == null) { throw new ArgumentNullException(nameof(localizationProvider)); }
@@ -82,6 +84,7 @@ namespace Orckestra.Composer.Cart.Factory
             if (productViewModelFactory == null) { throw new ArgumentNullException(nameof(productViewModelFactory)); }
             if (productUrlProvider == null) { throw new ArgumentNullException(nameof(productUrlProvider)); }
             if (productPriceViewService == null) { throw new ArgumentNullException(nameof(productPriceViewService)); }
+            if (cartViewModelFactory == null) { throw new ArgumentNullException(nameof(cartViewModelFactory)); }
 
             LocalizationProvider = localizationProvider;
             ViewModelMapper = viewModelMapper;
@@ -93,6 +96,7 @@ namespace Orckestra.Composer.Cart.Factory
             ProductUrlProvider = productUrlProvider;
             ProductPriceViewService = productPriceViewService;
             OvertureClient = overtureClient;
+            CartViewModelFactory = cartViewModelFactory;
         }
 
         public async Task<RecurringOrderTemplatesViewModel> CreateRecurringOrderTemplatesViewModel(CreateRecurringOrderTemplatesViewModelParam param)
@@ -105,7 +109,13 @@ namespace Orckestra.Composer.Cart.Factory
 
             var vm = new RecurringOrderTemplatesViewModel();
 
-            await CreateTemplateGroupedShippingAddress(param.ListOfRecurringOrderLineItems, vm, param.CultureInfo, param.ProductImageInfo, param.BaseUrl, param.CustomerId, param.ScopeId).ConfigureAwaitWithCulture(false);
+            vm.RecurringOrderTemplateViewModelList = await CreateTemplateGroupedShippingAddress(new CreateTemplateGroupedShippingAddressParam { 
+                ListOfRecurringOrderLineItems = param.ListOfRecurringOrderLineItems,
+                CultureInfo = param.CultureInfo,
+                ProductImageInfo = param.ProductImageInfo,
+                BaseUrl = param.BaseUrl,
+                CustomerId = param.CustomerId,
+                ScopeId = param.ScopeId}).ConfigureAwaitWithCulture(false);
 
 
             foreach (var template in vm.RecurringOrderTemplateViewModelList)
@@ -116,43 +126,43 @@ namespace Orckestra.Composer.Cart.Factory
             return vm;
         }
 
-
-        /// <summary>
-        /// Quick Access lookup for images
-        /// Group by Product then by VariantId
-        /// </summary>
-        /// <returns></returns>
-        protected virtual IDictionary<Tuple<string, string>, ProductMainImage> BuildImageDictionaryFor(IList<ProductMainImage> images)
+        public async Task<List<RecurringOrderTemplateViewModel>> CreateTemplateGroupedShippingAddress(CreateTemplateGroupedShippingAddressParam param)
         {
-            return images == null
-                ? new Dictionary<Tuple<string, string>, ProductMainImage>()
-                : images.GroupBy(image => Tuple.Create(image.ProductId, image.VariantId))
-                .ToDictionary(img => img.Key, img => img.FirstOrDefault());
-        }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (param.ListOfRecurringOrderLineItems == null) { throw new ArgumentNullException(nameof(param.ListOfRecurringOrderLineItems)); }
+            if (param.CultureInfo == null) { throw new ArgumentNullException(nameof(param.CultureInfo)); }
+            if (param.ProductImageInfo == null) { throw new ArgumentNullException(nameof(param.ProductImageInfo)); }
+            if (param.ProductImageInfo.ImageUrls == null) { throw new ArgumentNullException(nameof(param.ProductImageInfo.ImageUrls)); }
+            if (param.ScopeId == null) { throw new ArgumentNullException(nameof(param.ScopeId)); }
 
-        private async Task CreateTemplateGroupedShippingAddress(ListOfRecurringOrderLineItems list, RecurringOrderTemplatesViewModel vm, CultureInfo culture, ProductImageInfo imageInfo, string baseUrl, Guid customerId, string scopeId)
-        {
+            var groups = param.ListOfRecurringOrderLineItems.RecurringOrderLineItems.GroupBy(grp => grp.ShippingAddressId);
 
-            var groups = list.RecurringOrderLineItems.GroupBy(grp => grp.ShippingAddressId);
+            var imgDictionary = LineItemHelper.BuildImageDictionaryFor(param.ProductImageInfo.ImageUrls);
 
-            var imgDictionary = BuildImageDictionaryFor(imageInfo.ImageUrls);
-
-            var customer = await GetCustomer(customerId, scopeId).ConfigureAwaitWithCulture(false);
+            var itemList = new List<RecurringOrderTemplateViewModel>();
 
             foreach (var group in groups)
             {
                 var templateViewModel = new RecurringOrderTemplateViewModel();
 
-                templateViewModel.ShippingAddress = await MapShippingAddress(group.Key, culture).ConfigureAwaitWithCulture(false);
+                templateViewModel.ShippingAddress = await MapShippingAddress(group.Key, param.CultureInfo).ConfigureAwaitWithCulture(false);
 
-                var tasks = group.Select(g => MapToTemplateLineItemViewModel(g, culture, imgDictionary, baseUrl, customer));
+                var tasks = group.Select(g => MapToTemplateLineItemViewModel(new MapToTemplateLineItemViewModelParam
+                {
+                    RecurringOrderlineItem =  g,
+                    CultureInfo = param.CultureInfo,
+                    ImageDictionnary =  imgDictionary,
+                    BaseUrl = param.BaseUrl
+                }));
                 var templateLineItems = await Task.WhenAll(tasks).ConfigureAwaitWithCulture(false);
 
                 //Filter null to not have an error when rendering the page
                 templateViewModel.RecurringOrderTemplateLineItemViewModels.AddRange(templateLineItems.Where(t => t != null).ToList());
-
-                vm.RecurringOrderTemplateViewModelList.Add(templateViewModel);
+                
+                itemList.Add(templateViewModel);
             }
+
+            return itemList;
         }
 
         private async Task<Customer> GetCustomer(Guid customerId, string scopeId)
@@ -168,11 +178,18 @@ namespace Orckestra.Composer.Cart.Factory
             return customer;
         }
 
-       
 
-        private async Task<RecurringOrderTemplateLineItemViewModel> MapToTemplateLineItemViewModel(RecurringOrderLineItem lineItem, CultureInfo culture, IDictionary<Tuple<string, string>, ProductMainImage> imgDictionary, string baseUrl, Customer customer)
+
+        public async Task<RecurringOrderTemplateLineItemViewModel> MapToTemplateLineItemViewModel(MapToTemplateLineItemViewModelParam param)
         {
-            var vm = ViewModelMapper.MapTo<RecurringOrderTemplateLineItemViewModel>(lineItem, culture);
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (param.RecurringOrderlineItem == null) { throw new ArgumentNullException(nameof(param.RecurringOrderlineItem)); }
+            if (param.CultureInfo == null) { throw new ArgumentNullException(nameof(param.CultureInfo)); }
+            if (param.BaseUrl == null) { throw new ArgumentNullException(nameof(param.BaseUrl)); }
+            
+            var recrurringLineItem = param.RecurringOrderlineItem;
+
+            var vm = ViewModelMapper.MapTo<RecurringOrderTemplateLineItemViewModel>(recrurringLineItem, param.CultureInfo);
 
             if (vm.IsValid == null)
             {
@@ -180,17 +197,17 @@ namespace Orckestra.Composer.Cart.Factory
             }
 
             ProductMainImage mainImage;
-            if (imgDictionary.TryGetValue(Tuple.Create(lineItem.ProductId, lineItem.VariantId), out mainImage))
+            if (param.ImageDictionnary.TryGetValue(Tuple.Create(recrurringLineItem.ProductId, recrurringLineItem.VariantId), out mainImage))
             {
                 vm.ImageUrl = mainImage.ImageUrl;
                 vm.FallbackImageUrl = mainImage.FallbackImageUrl;
             }
 
-            var getProductRequest = new Orckestra.Overture.ServiceModel.Requests.Products.GetProductRequest
+            var getProductRequest = new Overture.ServiceModel.Requests.Products.GetProductRequest
             {
-                ProductId = lineItem.ProductId,
-                ScopeId = lineItem.ScopeId,
-                CultureName = culture.Name,
+                ProductId = recrurringLineItem.ProductId,
+                ScopeId = recrurringLineItem.ScopeId,
+                CultureName = param.CultureInfo.Name,
                 IncludePriceLists = true,
                 IncludeRelationships = false,
                 IncludeVariants = true
@@ -198,46 +215,46 @@ namespace Orckestra.Composer.Cart.Factory
             var getProductResponse = OvertureClient.Send(getProductRequest);
 
             if (getProductResponse == null ||
-                (getProductResponse != null && lineItem.VariantId != string.Empty
-                && lineItem.VariantId != null && getProductResponse.Variants.SingleOrDefault(v => v.Id == lineItem.VariantId) == null))
+                (getProductResponse != null && recrurringLineItem.VariantId != string.Empty
+                && recrurringLineItem.VariantId != null && 
+                getProductResponse.Variants.SingleOrDefault(v => v.Id == recrurringLineItem.VariantId) == null))
             {
                 var deleteRecurringLineItem = new DeleteRecurringOrderLineItemsRequest
                 {
-                    CustomerId = lineItem.CustomerId,
+                    CustomerId = recrurringLineItem.CustomerId,
                     RecurringOrderLineItemIds = new List<Guid> {
-                        lineItem.RecurringOrderLineItemId,
+                        recrurringLineItem.RecurringOrderLineItemId,
                     },
-                    ScopeId = lineItem.ScopeId
+                    ScopeId = recrurringLineItem.ScopeId
                 };
                 OvertureClient.Send(deleteRecurringLineItem);
 
                 return await Task.FromResult<RecurringOrderTemplateLineItemViewModel>(null).ConfigureAwaitWithCulture(false);
             }
 
-            var variant = getProductResponse.Variants.SingleOrDefault(v => v.Id == lineItem.VariantId);
+            var variant = getProductResponse.Variants.SingleOrDefault(v => v.Id == recrurringLineItem.VariantId);
 
             vm.FormattedNextOccurence = vm.NextOccurence == DateTime.MinValue
                     ? string.Empty
-                    : string.Format(culture, "{0:D}", vm.NextOccurence);
+                    : string.Format(param.CultureInfo, "{0:D}", vm.NextOccurence);
 
-            vm.Id = lineItem.RecurringOrderLineItemId;
+            vm.Id = recrurringLineItem.RecurringOrderLineItemId;
             vm.ProductSummary = new CartProductSummaryViewModel();
-            vm.ProductSummary.DisplayName = Composer.Utils.ProductHelper.GetProductOrVariantDisplayName(getProductResponse, variant, culture);
-
-
+            vm.ProductSummary.DisplayName = Composer.Utils.ProductHelper.GetProductOrVariantDisplayName(getProductResponse, variant, param.CultureInfo);
+            
             var productsPricesVm = await ProductPriceViewService.CalculatePricesAsync(new GetProductsPriceParam()
             {
-                CultureInfo = culture,
-                Scope = lineItem.ScopeId,
-                ProductIds = new List<string>() { lineItem.ProductId }
+                CultureInfo = param.CultureInfo,
+                Scope = recrurringLineItem.ScopeId,
+                ProductIds = new List<string>() { recrurringLineItem.ProductId }
             }).ConfigureAwaitWithCulture(false);
 
-            vm.DefaultListPrice = GetProductOrVariantListPrice(getProductResponse, variant, culture);
+            vm.DefaultListPrice = GetProductOrVariantListPrice(getProductResponse, variant, param.CultureInfo);
             vm.ListPrice = vm.DefaultListPrice;
-            var productPriceVm = productsPricesVm.ProductPrices.SingleOrDefault(p => p.ProductId == lineItem.ProductId);
+            var productPriceVm = productsPricesVm.ProductPrices.SingleOrDefault(p => p.ProductId == recrurringLineItem.ProductId);
             if (productPriceVm != null)
             {
-                var variantPriceVm = productPriceVm.VariantPrices.SingleOrDefault(v => v.VariantId == lineItem.VariantId);
+                var variantPriceVm = productPriceVm.VariantPrices.SingleOrDefault(v => v.VariantId == recrurringLineItem.VariantId);
                 if (variantPriceVm != null)
                 {
                     vm.ListPrice = variantPriceVm.ListPrice;
@@ -246,28 +263,29 @@ namespace Orckestra.Composer.Cart.Factory
             }
 
             decimal price;
-            var conv = decimal.TryParse(vm.ListPrice, NumberStyles.Currency, culture.NumberFormat, out price);
+            var conv = decimal.TryParse(vm.ListPrice, NumberStyles.Currency, param.CultureInfo.NumberFormat, out price);
             if (conv)
             {
-                vm.TotalWithoutDiscount = LocalizationProvider.FormatPrice((decimal)vm.Quantity * price, culture);
+                vm.TotalWithoutDiscount = LocalizationProvider.FormatPrice((decimal)vm.Quantity * price, param.CultureInfo);
 
-                vm.Total = LocalizationProvider.FormatPrice((decimal)vm.Quantity * price, culture);
+                vm.Total = LocalizationProvider.FormatPrice((decimal)vm.Quantity * price, param.CultureInfo);
             }
 
             vm.ProductSummary.Brand = getProductResponse.Brand;
-            //var list = await GetKeyVariantAttributes(getProductResponse, variant, culture, OvertureClient).ConfigureAwaitWithCulture(false);
-            //if (list != null && list.Count > 0)
-            //{
-            //    vm.KeyVariantAttributesList = list.ToList();
-            //}
+            //TODO
+            var list = await Helper.ProductHelper.GetKeyVariantAttributes(getProductResponse, variant, param.CultureInfo, OvertureClient).ConfigureAwaitWithCulture(false);
+            if (list != null && list.Count > 0)
+            {
+                vm.KeyVariantAttributesList = list.ToList();
+            }
 
-            vm.ShippingMethodName = lineItem.FulfillmentMethodName;
+            vm.ShippingMethodName = recrurringLineItem.FulfillmentMethodName;
 
             vm.ProductUrl = ProductUrlProvider.GetProductUrl(new GetProductUrlParam
             {
-                CultureInfo = culture,
-                VariantId = lineItem.VariantId,
-                ProductId = lineItem.ProductId,
+                CultureInfo = param.CultureInfo,
+                VariantId = recrurringLineItem.VariantId,
+                ProductId = recrurringLineItem.ProductId,
                 ProductName = vm.ProductSummary.DisplayName
             });
 
@@ -290,33 +308,8 @@ namespace Orckestra.Composer.Cart.Factory
         {
             var address = await AddressRepository.GetAddressByIdAsync(shippingAddressId).ConfigureAwaitWithCulture(false);
 
-            return GetAddressViewModel(address, culture);
-        }
-
-        /// <summary>
-        /// Map the address of the client
-        /// </summary>
-        public virtual AddressViewModel GetAddressViewModel(Address address, CultureInfo cultureInfo)
-        {
-            if (address == null)
-            {
-                return new AddressViewModel();
-            }
-
-            var addressViewModel = ViewModelMapper.MapTo<AddressViewModel>(address, cultureInfo);
-
-            var regionName = CountryService.RetrieveRegionDisplayNameAsync(new RetrieveRegionDisplayNameParam
-            {
-                CultureInfo = cultureInfo,
-                IsoCode = ComposerContext.CountryCode,
-                RegionCode = address.RegionCode
-            }).Result;
-
-            addressViewModel.RegionName = regionName;
-            addressViewModel.PhoneNumber = LocalizationProvider.FormatPhoneNumber(address.PhoneNumber, cultureInfo);
-
-            return addressViewModel;
-        }
+            return CartViewModelFactory.GetAddressViewModel(address, culture);
+        }     
 
         public async virtual Task MapRecurringOrderLineitemFrequencyName(RecurringOrderTemplateViewModel template, CultureInfo culture)
         {
@@ -369,60 +362,6 @@ namespace Orckestra.Composer.Cart.Factory
             var shippingMethodViewModel = ViewModelMapper.MapTo<RecurringOrderShippingMethodViewModel>(fulfillmentMethodInfo, cultureInfo);
 
             return shippingMethodViewModel;
-        }
-
-        public static  List<KeyVariantAttributes> GetKeyVariantAttributes(Orckestra.Overture.ServiceModel.Products.Product product, Variant variant, CultureInfo culture, IOvertureClient client)
-        {
-            if (variant == null)
-                return null;
-
-            var request = new GetProductDefinitionRequest()
-            {
-                CultureName = culture.Name,
-                Name = product.DefinitionName,
-            };
-
-            var productDef = client.Send(request);
-
-            //var lookups = await GetLookups(productDef, client).ConfigureAwaitWithCulture(false);
-
-            //if (variant.PropertyBag == null) return null;
-
-            //var keyVariantAttributes = productDef.VariantProperties.Where(x => x.IsKeyVariant)
-            //                                            .OrderBy(x => x.KeyVariantOrder)
-            //                                            .ToList();
-
-            //if (!keyVariantAttributes.Any()) return null;
-
-            var list = new List<KeyVariantAttributes>();
-
-            //foreach (var keyVariantAttribute in keyVariantAttributes)
-            //{
-            //    object kvaValue;
-            //    if (keyVariantAttribute.DataType.Equals(PropertyDataType.Lookup))
-            //    {
-            //        var lookup =
-            //            lookups.SingleOrDefault(l => l.LookupName == keyVariantAttribute.LookupDefinition.LookupName);
-            //        kvaValue = GetLocalizedKvaDisplayValueFromLookup(lookup, culture.Name, variant, keyVariantAttribute);
-            //    }
-            //    else
-            //    {
-            //        kvaValue = GetLocalizedKvaDisplayValueFromValue(culture.Name, variant, keyVariantAttribute);
-            //    }
-
-            //    if (kvaValue != null)
-            //    {
-            //        //var displayValue = kvaValue.Value;
-            //        list.Add(new KeyVariantAttributes()
-            //        {
-            //            Key = keyVariantAttribute.PropertyName,
-            //            Value = "TODO"//,LineItemHelper.GetVariantValue(kvaValue.ToString(), keyVariantAttribute.PropertyName),
-            //            OriginalValue = variant.PropertyBag[keyVariantAttribute.PropertyName].ToString()
-            //        });
-            //    }
-            //}
-
-            return list;
         }
     }
 }

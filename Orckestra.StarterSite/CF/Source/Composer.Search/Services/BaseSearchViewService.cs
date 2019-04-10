@@ -17,6 +17,7 @@ using Orckestra.Composer.Search.Providers;
 using Orckestra.Composer.Search.Repositories;
 using Orckestra.Composer.Search.ViewModels;
 using Orckestra.Composer.Services;
+using Orckestra.Composer.Utils;
 using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel;
 using Orckestra.Overture.ServiceModel.Products.Inventory;
@@ -130,26 +131,6 @@ namespace Orckestra.Composer.Search.Services
                     .ToList();
         }
 
-        /// <summary>
-        ///     Quick Access lookup for images
-        ///     Group by Product then by VariantId
-        /// </summary>
-        /// <returns></returns>
-        private static IDictionary<Tuple<string, string>, ProductMainImage> BuildImageDictionaryFor(
-            IEnumerable<ProductMainImage> images)
-        {
-            if (images == null)
-            {
-                return new Dictionary<Tuple<string, string>, ProductMainImage>();
-            }
-
-            //Creating groups to avoid duplicates in the dictionnary.
-            var img = images.GroupBy(i => Tuple.Create(i.ProductId, i.VariantId));
-            var dict = img.ToDictionary(i => i.Key, i => i.First());
-
-            return dict;
-        }
-
         private SearchPaginationViewModel BuildPaginationForSearchResults(
             ProductSearchResult searchResult,
             TParam searchParam, int maxPages)
@@ -213,7 +194,7 @@ namespace Orckestra.Composer.Search.Services
                 }
             }
 
-            var imgDictionary = BuildImageDictionaryFor(param.ImageUrls);
+            var imgDictionary = LineItemHelper.BuildImageDictionaryFor(param.ImageUrls);
 
 
             // Populate search results

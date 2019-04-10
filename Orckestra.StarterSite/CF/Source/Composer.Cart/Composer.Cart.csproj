@@ -83,8 +83,11 @@
     <Compile Include="Parameters\CreateListOfLineItemDetailViewModelParam.cs" />
     <Compile Include="Parameters\CreateLineItemDetailViewModelParam.cs" />
     <Compile Include="Parameters\CreateRecurringOrderTemplatesViewModelParam.cs" />
+    <Compile Include="Parameters\CreateTemplateGroupedShippingAddressParam.cs" />
     <Compile Include="Parameters\CreateWishListViewModelParam.cs" />
     <Compile Include="Parameters\GetKeyVariantAttributesParam.cs" />
+    <Compile Include="Parameters\GetRecurringOrderTemplatesParam.cs" />
+    <Compile Include="Parameters\MapToTemplateLineItemViewModelParam.cs" />
     <Compile Include="Parameters\Order\GetOrderChangesParam.cs" />
     <Compile Include="Parameters\ValidatePaymentMethodsParam.cs" />
     <Compile Include="Parameters\WishList\GetShareWishListUrlParam.cs" />

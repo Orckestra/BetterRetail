@@ -2,6 +2,7 @@
 using Orckestra.Composer.Cart.ViewModels;
 using Orckestra.Overture.ServiceModel;
 using Orckestra.Overture.ServiceModel.Orders;
+using Orckestra.Overture.ServiceModel.Requests.RecurringOrders;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -21,12 +22,18 @@ namespace Orckestra.Composer.Cart.Factory
         Task<RecurringOrderTemplatesViewModel> CreateRecurringOrderTemplatesViewModel(CreateRecurringOrderTemplatesViewModelParam param);
 
         /// <summary>
-        /// Map the address of the client
+        /// Group the recurring item template by shipping address
         /// </summary>
-        /// <param name="address"></param>
-        /// <param name="cultureInfo"></param>
         /// <returns></returns>
-        AddressViewModel GetAddressViewModel(Address address, CultureInfo cultureInfo);
+        Task<List<RecurringOrderTemplateViewModel>> CreateTemplateGroupedShippingAddress(CreateTemplateGroupedShippingAddressParam param);
+
+        /// <summary>
+        /// Map the LineItem to the RecurringOrderLineItem
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        Task<RecurringOrderTemplateLineItemViewModel> MapToTemplateLineItemViewModel(MapToTemplateLineItemViewModelParam param);
+
 
         /// <summary>
         /// Gets a ShippingMethodViewModel from an Overture FulfillmentMethodInfo object.
