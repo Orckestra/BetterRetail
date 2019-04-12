@@ -24,12 +24,7 @@ namespace Orckestra.Composer.Cart
 
         public static string WishListWorkflowToExecute { get; set; } = "DefaultCartWishlistWorkflow";
 
-        public static bool WishListExecuteWorkflow { get; set; } = true;
-
-        /// <summary>
-        ///     Get/Set the ImageSize for dislaying thumbnails
-        /// </summary>
-        public static string ThumbnailImageSize { get; set; } = "M";
+        public static bool WishListExecuteWorkflow { get; set; } = true;        
 
         /// <summary>
         /// Type registry for the Payment Providers.

@@ -15,6 +15,7 @@ using Orckestra.Composer.Product.Repositories;
 using Orckestra.Composer.Product.Services;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Localization;
+using Orckestra.Composer.Repositories;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Services.Lookup;
 using Orckestra.Overture.ServiceModel;

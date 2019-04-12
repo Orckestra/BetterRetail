@@ -10,6 +10,7 @@ using Orckestra.Composer.Product.ViewModels;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Dam;
 using Orckestra.Composer.Providers.Localization;
+using Orckestra.Composer.Repositories;
 using Orckestra.Composer.Search.Helpers;
 using Orckestra.Composer.Search.Repositories;
 using Orckestra.Composer.Utils;

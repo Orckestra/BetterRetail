@@ -12,6 +12,8 @@ using Orckestra.Composer.Enums;
 using Orckestra.Composer.Extensions;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
+using Orckestra.Composer.Providers.Dam;
+using Orckestra.Composer.Services;
 using Orckestra.Composer.Services.Lookup;
 using Orckestra.Composer.Utils;
 using Orckestra.Overture.ServiceModel;
@@ -34,6 +36,8 @@ namespace Orckestra.Composer.Cart.Services
         protected IFixCartService FixCartService { get; private set; }
         protected ICountryService CountryService { get; private set; }
         protected IRegionCodeProvider RegionCodeProvider { get; private set; }
+        protected IImageService ImageService { get; private set; }
+
 
         /// <summary>
         /// CartService constructor
@@ -47,6 +51,7 @@ namespace Orckestra.Composer.Cart.Services
         /// <param name="fixCartService">The <see cref="IFixCartService"/>.</param>
         /// <param name="countryService">The <see cref="ICountryService"/></param>
         /// <param name="regionCodeProvider">The <see cref="IRegionCodeProvider"/></param>
+        /// <param name="imageService">The <see cref="IImageService"/></param>
         public CartService(
             ICartRepository cartRepository, 
             IDamProvider damProvider, 
@@ -56,7 +61,8 @@ namespace Orckestra.Composer.Cart.Services
             ILineItemService lineItemService,
             IFixCartService fixCartService,
             ICountryService countryService,
-            IRegionCodeProvider regionCodeProvider)
+            IRegionCodeProvider regionCodeProvider,
+            IImageService imageService)
         {
             if (cartRepository == null) { throw new ArgumentNullException("cartRepository"); }
             if (damProvider == null) { throw new ArgumentNullException("damProvider"); }
@@ -67,6 +73,7 @@ namespace Orckestra.Composer.Cart.Services
             if (fixCartService == null) { throw new ArgumentNullException("fixCartService"); }
             if (countryService == null) { throw new ArgumentNullException("fixCartService"); }
             if (regionCodeProvider == null) { throw new ArgumentNullException("regionCodeProvider"); }
+            if (imageService == null) { throw new ArgumentNullException("imageService"); }
 
             CartRepository = cartRepository;
             CartViewModelFactory = cartViewModelFactory;
@@ -76,6 +83,7 @@ namespace Orckestra.Composer.Cart.Services
             FixCartService = fixCartService;
             CountryService = countryService;
             RegionCodeProvider = regionCodeProvider;
+            ImageService = imageService;
         }
 
         /// <summary>
@@ -288,7 +296,7 @@ namespace Orckestra.Composer.Cart.Services
 
             param.ProductImageInfo = new ProductImageInfo
             {
-                ImageUrls = await LineItemService.GetImageUrlsAsync(param.Cart.GetLineItems()).ConfigureAwait(false),
+                ImageUrls = await ImageService.GetImageUrlsAsync(param.Cart.GetLineItems()).ConfigureAwait(false),
             };
 
             var methodDisplayNames = await LookupService.GetLookupDisplayNamesAsync(new GetLookupDisplayNamesParam

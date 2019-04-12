@@ -6,8 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Configuration;
-using Orckestra.Composer.Cart.ViewModels;
 using Orckestra.Composer.Utils;
+using Orckestra.Composer.Cart.ViewModels;
 
 namespace Orckestra.Composer.Cart.Helper
 {
@@ -71,15 +71,5 @@ namespace Orckestra.Composer.Cart.Helper
 
             return false;
         }
-
-        public static Guid ConvertStringToGuid(string str)
-        {
-            if (String.IsNullOrWhiteSpace(str))
-            {
-                throw new ArgumentException("Guid value cannot be null, empty or whitespaces");
-            }
-            return Guid.Parse(str);
-        }
-
     }
 }

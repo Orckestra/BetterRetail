@@ -15,6 +15,7 @@ using Orckestra.Overture.ServiceModel;
 using Orckestra.Overture.ServiceModel.Marketing;
 using Orckestra.Overture.ServiceModel.Orders;
 using Orckestra.Composer.Cart.ViewModels.Order;
+using Orckestra.Composer.Providers.Dam;
 
 namespace Orckestra.Composer.Cart.Factory
 {

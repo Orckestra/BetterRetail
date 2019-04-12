@@ -4,6 +4,7 @@ using Orckestra.Composer.Product.Repositories;
 using Orckestra.Composer.Product.Services;
 using Orckestra.Composer.Product.ViewModels;
 using Orckestra.Composer.Providers;
+using Orckestra.Composer.Repositories;
 using Orckestra.Composer.ViewModels;
 
 namespace Orckestra.Composer.Product.Tests.Services

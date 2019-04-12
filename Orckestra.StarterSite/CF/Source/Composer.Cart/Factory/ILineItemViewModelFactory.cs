@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.ViewModels;
+using Orckestra.Composer.ViewModels;
 
 namespace Orckestra.Composer.Cart.Factory
 {

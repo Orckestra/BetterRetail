@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Orckestra.Composer.Cart.Providers.LineItemValidation;
+using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Dam;
 using Orckestra.Overture.ServiceModel.Orders;
@@ -24,29 +25,6 @@ namespace Orckestra.Composer.Cart.Services
             LineItemValidationProvider = lineItemValidationProvider;
         }
 
-        public virtual Task<List<ProductMainImage>> GetImageUrlsAsync(IEnumerable<LineItem> lineItems)
-        {
-            var getImageParam = new GetProductMainImagesParam
-            {
-                ImageSize = CartConfiguration.ThumbnailImageSize,
-                ProductImageRequests = lineItems
-                    .Select(li => new ProductImageRequest
-                    {
-                        ProductId = li.ProductId,
-                        Variant = new VariantKey
-                        {
-                            Id = li.VariantId,
-                            KeyVariantAttributeValues = li.KvaValues
-
-                        },
-                        PropertyBag = li.PropertyBag,
-                        ProductDefinitionName = li.ProductDefinitionName
-                    })
-                    .ToList()
-            };
-            return DamProvider.GetProductMainImagesAsync(getImageParam);
-        }
-
         public List<LineItem> GetInvalidLineItems(ProcessedCart cart)
         {
             if (cart == null) { throw new ArgumentNullException("cart"); }
@@ -57,23 +35,6 @@ namespace Orckestra.Composer.Cart.Services
             return invalidLineItems;
         }
 
-        public virtual Task<List<ProductMainImage>> GetImageUrlsAsync(ListOfRecurringOrderLineItems list)
-        {
-            var getImageParam = new GetProductMainImagesParam
-            {
-                ImageSize = CartConfiguration.ThumbnailImageSize,
-                ProductImageRequests = list.RecurringOrderLineItems
-                    .Select(li => new ProductImageRequest
-                    {
-                        ProductId = li.ProductId,
-                        Variant = new VariantKey
-                        {
-                            Id = li.VariantId,
-                        },
-                    })
-                    .ToList()
-            };
-            return DamProvider.GetProductMainImagesAsync(getImageParam);
-        }
+      
     }
 }

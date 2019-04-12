@@ -9,6 +9,7 @@ using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Product.Services;
 using Orckestra.Composer.Product.Tests.Mock;
 using Orckestra.Composer.Repositories;
+using Orckestra.Composer.Services;
 using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel.Products.Inventory;
 

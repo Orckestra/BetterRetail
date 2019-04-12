@@ -1,5 +1,4 @@
 ﻿using Orckestra.Composer.Product.Factory;
-using Orckestra.Composer.Product.Factory.Order;
 using Orckestra.Composer.Product.Providers;
 using Orckestra.Composer.Product.Repositories;
 using Orckestra.Composer.Product.Services;
@@ -13,8 +12,6 @@ namespace Orckestra.Composer.Product
         public void Register(IComposerHost host)
         {
             host.Register<ProductViewService, IProductViewService>();
-            host.Register<ProductPriceViewService, IProductPriceViewService>();
-            host.Register<ProductRepository, IProductRepository>();
             host.Register<RelationshipRepository, IRelationshipRepository>();
             host.Register<CategoryViewService, ICategoryViewService>();
             host.Register<ConventionBasedDamProvider, IDamProvider>();
@@ -24,7 +21,6 @@ namespace Orckestra.Composer.Product
             host.Register<RelatedProductViewService, IRelatedProductViewService>();
             host.Register<InventoryViewService, IInventoryViewService>();
             host.Register<ConfigurationInventoryLocationProvider, IInventoryLocationProvider>();
-            host.Register<RecurringOrderProgramViewModelFactory, IRecurringOrderProgramViewModelFactory>();
 
             host.MetadataRegistry.LoadViewModelMetadataInAssemblyOf(typeof(ProductPlugin).Assembly);
 

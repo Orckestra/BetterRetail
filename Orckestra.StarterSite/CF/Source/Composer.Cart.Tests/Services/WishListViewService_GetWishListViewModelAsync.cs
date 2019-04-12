@@ -193,10 +193,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
         private Mock<ILineItemService> CreateLineItemService()
         {
             Mock<ILineItemService> service = new Mock<ILineItemService>();
-
-            service.Setup(s=> s.GetImageUrlsAsync(It.IsAny<IEnumerable<LineItem>>())).
-                ReturnsAsync(new List<ProductMainImage>()).Verifiable();
-
+            
             return service;
         }
 

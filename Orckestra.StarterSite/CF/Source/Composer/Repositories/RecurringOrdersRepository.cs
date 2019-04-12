@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Orckestra.Composer.Configuration;
+using Orckestra.Composer.Parameters;
 using Orckestra.Overture;
 using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel.RecurringOrders;
@@ -51,6 +52,32 @@ namespace Orckestra.Composer.Repositories
             };
 
             return CacheProvider.GetOrAddAsync(cacheKey, () => OvertureClient.SendAsync(request));
+        }
+
+        public async Task<ListOfRecurringOrderLineItems> UpdateRecurringOrderTemplateLineItemQuantity(UpdateRecurringOrderTemplateLineItemQuantityParam param)
+        {
+            var lineitems = await GetRecurringOrderTemplates(param.ScopeId, param.CustomerId).ConfigureAwaitWithCulture(false);
+
+            //var lineitem = GetRecurringOrderLineItemFromTemplates(lineitems, param.RecurringLineItemId);
+
+            //if (lineitem != null)
+            //{
+            //    lineitem.Quantity = param.Quantity;
+
+            //    var request = new AddOrUpdateRecurringOrderLineItemsRequest()
+            //    {
+            //        CustomerId = param.CustomerId,
+            //        ScopeId = param.ScopeId,
+            //        LineItems = lineitems.RecurringOrderLineItems,
+            //        MustApplyUpdatesToRecurringCart = false
+            //    };
+
+
+
+            //    return await _client.SendAsync(request).ConfigureAwaitWithCulture(false);
+            //}
+
+            return new ListOfRecurringOrderLineItems();
         }
 
         protected CacheKey BuildRecurringOrderProgramCacheKey(string scope, string recurringOrderProgramName)

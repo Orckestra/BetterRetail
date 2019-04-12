@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Orckestra.Composer.Cart.Helper;
+using Orckestra.Composer.Helper;
 using Orckestra.Composer.ViewModels;
 
 namespace Orckestra.Composer.Cart.ViewModels

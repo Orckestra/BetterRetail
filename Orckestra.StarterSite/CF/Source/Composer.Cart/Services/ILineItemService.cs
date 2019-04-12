@@ -8,10 +8,6 @@ namespace Orckestra.Composer.Cart.Services
 {
     public interface ILineItemService
     {
-        Task<List<ProductMainImage>> GetImageUrlsAsync(IEnumerable<LineItem> lineItems);
-
         List<LineItem> GetInvalidLineItems(ProcessedCart cart);
-
-        Task<List<ProductMainImage>> GetImageUrlsAsync(ListOfRecurringOrderLineItems list);
     }
 }

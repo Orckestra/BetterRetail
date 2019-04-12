@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using System.Web.Routing;
 using Orckestra.Composer.Country;
+using Orckestra.Composer.Factory;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.RegionCode;
 using Orckestra.Composer.Repositories;
@@ -35,7 +36,13 @@ namespace Orckestra.Composer
             host.Register<ScopeRepository, IScopeRepository>();
             host.Register<ScopeViewService, IScopeViewService>();
             host.Register<InventoryRepository, IInventoryRepository>();
+            host.Register<ImageService, IImageService>();            
             host.Register<RecurringOrdersRepository, IRecurringOrdersRepository>();
+            host.Register<RecurringOrderTemplatesViewService, IRecurringOrderTemplatesViewService>();
+            host.Register<RecurringOrderTemplateViewModelFactory, IRecurringOrderTemplateViewModelFactory>();
+            host.Register<RecurringOrderProgramViewModelFactory, IRecurringOrderProgramViewModelFactory>();
+            host.Register<ProductPriceViewService, IProductPriceViewService>();
+            host.Register<ProductRepository, IProductRepository>();
 
             host.MetadataRegistry.LoadViewModelMetadataInAssemblyOf(GetType().Assembly);
 
