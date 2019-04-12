@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Orckestra.Composer.Parameters;
@@ -28,7 +29,21 @@ namespace Orckestra.Composer.Repositories
         /// </summary>
         /// <param name="param"></param>
         /// <returns></returns>
-        Task<ListOfRecurringOrderLineItems> UpdateRecurringOrderTemplateLineItemQuantity(UpdateRecurringOrderTemplateLineItemQuantityParam param);
+        Task<ListOfRecurringOrderLineItems> UpdateRecurringOrderTemplateLineItemQuantityAsync(UpdateRecurringOrderTemplateLineItemQuantityParam param);
+
+        /// <summary>
+        /// Removes a recurringOrder template LineItem
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        Task<HttpWebResponse> RemoveRecurringOrderTemplateLineItem(RemoveRecurringOrderTemplateLineItemParam param);
+
+        /// <summary>
+        /// Update a recurring order lineItem
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        Task<ListOfRecurringOrderLineItems> UpdateRecurringOrderTemplateLineItemAsync(UpdateRecurringOrderTemplateLineItemParam param);
 
     }
 }

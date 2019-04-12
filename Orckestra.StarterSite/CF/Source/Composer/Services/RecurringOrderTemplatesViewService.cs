@@ -127,7 +127,7 @@ namespace Orckestra.Composer.Services
             return vm;
         }
 
-        public async Task<RecurringOrderTemplatesViewModel> UpdateRecurringOrderTemplateLineItemQuantity(UpdateRecurringOrderTemplateLineItemQuantityParam param)
+        public async Task<RecurringOrderTemplatesViewModel> UpdateRecurringOrderTemplateLineItemQuantityAsync(UpdateRecurringOrderTemplateLineItemQuantityParam param)
         {
             if (!ConfigurationUtil.GetRecurringOrdersConfigEnabled())
                 return new RecurringOrderTemplatesViewModel();
@@ -158,7 +158,7 @@ namespace Orckestra.Composer.Services
             //    var result = await _cartRepository.UpdateRecurringOrderCartLineItemQuantityIfDifferent(updateCartIfDifferentRequest).ConfigureAwaitWithCulture(false);
             //}
 
-            var listOfRecurringOrderLineItems = await RecurringOrderRepository.UpdateRecurringOrderTemplateLineItemQuantity(param).ConfigureAwaitWithCulture(false);
+            var listOfRecurringOrderLineItems = await RecurringOrderRepository.UpdateRecurringOrderTemplateLineItemQuantityAsync(param).ConfigureAwaitWithCulture(false);
 
             return await CreateTemplatesViewModelAsync(new CreateRecurringOrderTemplatesViewModelParam
             {
@@ -169,6 +169,41 @@ namespace Orckestra.Composer.Services
                 CustomerId = param.CustomerId,
             }).ConfigureAwaitWithCulture(false);
         }
+
+        public async Task<RecurringOrderTemplatesViewModel> RemoveRecurringOrderTemplateLineItemAsync(RemoveRecurringOrderTemplateLineItemParam param)
+        {
+            if (!ConfigurationUtil.GetRecurringOrdersConfigEnabled())
+                return new RecurringOrderTemplatesViewModel();
+
+            if (param == null) throw new ArgumentNullException(nameof(param), ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param)));
+
+            var response = await RecurringOrderRepository.RemoveRecurringOrderTemplateLineItem(param).ConfigureAwaitWithCulture(false);
+
+            return await GetRecurringOrderTemplatesAsync( new GetRecurringOrderTemplatesParam{
+                Scope = param.ScopeId,
+                CustomerId = param.CustomerId,
+                CultureInfo =  param.Culture,
+                BaseUrl = param.BaseUrl }).ConfigureAwaitWithCulture(false);
+        }
+        public async Task<RecurringOrderTemplatesViewModel> UpdateRecurringOrderTemplateLineItemAsync(UpdateRecurringOrderTemplateLineItemParam param)
+        {
+            if (!ConfigurationUtil.GetRecurringOrdersConfigEnabled())
+                return new RecurringOrderTemplatesViewModel();
+
+            if (param == null) throw new ArgumentNullException(nameof(param), ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param)));
+
+            var listOfRecurringOrderLineItems = await RecurringOrderRepository.UpdateRecurringOrderTemplateLineItemAsync(param).ConfigureAwaitWithCulture(false);
+
+            return await CreateTemplatesViewModelAsync(new CreateRecurringOrderTemplatesViewModelParam
+            {
+                ListOfRecurringOrderLineItems = listOfRecurringOrderLineItems,
+                CultureInfo = param.CultureInfo,
+                BaseUrl = param.BaseUrl,
+                ScopeId = param.ScopeId,
+                CustomerId = param.CustomerId,
+            }).ConfigureAwaitWithCulture(false);
+        }
+
 
         /*
         public async Task<RecurringOrderProgramViewModel> GetRecurringOrderProgramAsync(GetRecurringOrderFrequenciesRequest request)
@@ -207,36 +242,7 @@ namespace Orckestra.Composer.Services
             };
         }
 
-        public async Task<RecurringOrderTemplatesViewModel> UpdateRecurringOrderTemplateLineItem(UpdateRecurringOrderTemplateLineItemRequest request)
-        {
-            if (!ExtendedComposerConfiguration.RecurringOrders.Enabled)
-                return new RecurringOrderTemplatesViewModel();
-
-            if (request == null) throw new ArgumentNullException(nameof(request), ArgumentNullMessageFormatter.FormatErrorMessage(nameof(request)));
-
-            var listOfRecurringOrderLineItems = await _recurringOrderRepository.UpdateRecurringOrderTemplateLineItem(request).ConfigureAwaitWithCulture(false);
-
-            return await CreateTemplatesViewModelAsync(new CreateRecurringOrderTemplatesViewModelParam
-            {
-                ListOfRecurringOrderLineItems = listOfRecurringOrderLineItems,
-                CultureInfo = request.CultureInfo,
-                BaseUrl = request.BaseUrl,
-                ScopeId = request.ScopeId,
-                CustomerId = request.CustomerId,
-            }).ConfigureAwaitWithCulture(false);
-        }
-
-        public async Task<RecurringOrderTemplatesViewModel> RemoveRecurringOrderTemplateLineItem(RemoveRecurringOrderTemplateLineItemRequest request)
-        {
-            if (!ExtendedComposerConfiguration.RecurringOrders.Enabled)
-                return new RecurringOrderTemplatesViewModel();
-
-            if (request == null) throw new ArgumentNullException(nameof(request), ArgumentNullMessageFormatter.FormatErrorMessage(nameof(request)));
-
-            var response = await _recurringOrderRepository.RemoveRecurringOrderTemplateLineItem(request).ConfigureAwaitWithCulture(false);
-
-            return await GetRecurringOrderTemplatesAsync(request.ScopeId, request.CustomerId, request.Culture, request.BaseUrl).ConfigureAwaitWithCulture(false);
-        }
+      
 
         public async Task<RecurringOrderTemplatesViewModel> RemoveRecurringOrderTemplatesLineItems(RemoveRecurringOrderTemplateLineItemsRequest request)
         {

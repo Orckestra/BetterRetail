@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Orckestra.Composer.Configuration;
@@ -54,7 +55,7 @@ namespace Orckestra.Composer.Repositories
             return CacheProvider.GetOrAddAsync(cacheKey, () => OvertureClient.SendAsync(request));
         }
 
-        public async Task<ListOfRecurringOrderLineItems> UpdateRecurringOrderTemplateLineItemQuantity(UpdateRecurringOrderTemplateLineItemQuantityParam param)
+        public async Task<ListOfRecurringOrderLineItems> UpdateRecurringOrderTemplateLineItemQuantityAsync(UpdateRecurringOrderTemplateLineItemQuantityParam param)
         {
             var lineitems = await GetRecurringOrderTemplates(param.ScopeId, param.CustomerId).ConfigureAwaitWithCulture(false);
 
@@ -77,6 +78,51 @@ namespace Orckestra.Composer.Repositories
 
             return new ListOfRecurringOrderLineItems();
         }
+        public Task<HttpWebResponse> RemoveRecurringOrderTemplateLineItem(RemoveRecurringOrderTemplateLineItemParam param)
+        {
+            if (param == null) throw new ArgumentNullException(nameof(param));
+
+            var request = new DeleteRecurringOrderLineItemsRequest()
+            {
+                CustomerId = param.CustomerId,
+                ScopeId = param.ScopeId,
+                RecurringOrderLineItemIds = new List<Guid>() { param.LineItemId.ToGuid() }
+            };
+
+            return OvertureClient.SendAsync(request);
+        }
+
+        public async Task<ListOfRecurringOrderLineItems> UpdateRecurringOrderTemplateLineItemAsync(UpdateRecurringOrderTemplateLineItemParam param)
+        {
+            var lineitems = await GetRecurringOrderTemplates(param.ScopeId, param.CustomerId).ConfigureAwaitWithCulture(false);
+
+            var lineitem = GetRecurringOrderLineItemFromTemplates(lineitems, param.LineItemId);
+
+            if (lineitem != null)
+            {
+                lineitem.RecurringOrderFrequencyName = param.RecurringOrderFrequencyName;
+                lineitem.NextOccurence = param.NextOccurence;
+                lineitem.ShippingAddressId = param.ShippingAddressId.ToGuid();
+                lineitem.BillingAddressId = param.BillingAddressId.ToGuid();
+                lineitem.PaymentMethodId = param.PaymentMethodId.ToGuid();
+
+                lineitem.ShippingProviderId = param.ShippingProviderId.ToGuid();
+                lineitem.FulfillmentMethodName = param.ShippingMethodName;
+
+                var request = new AddOrUpdateRecurringOrderLineItemsRequest()
+                {
+                    CustomerId = param.CustomerId,
+                    MustApplyUpdatesToRecurringCart = true,
+                    ScopeId = param.ScopeId,
+                    LineItems = lineitems.RecurringOrderLineItems
+                };
+
+                return await OvertureClient.SendAsync(request).ConfigureAwaitWithCulture(false);
+            }
+
+            return new ListOfRecurringOrderLineItems();
+        }
+
 
         protected CacheKey BuildRecurringOrderProgramCacheKey(string scope, string recurringOrderProgramName)
         {

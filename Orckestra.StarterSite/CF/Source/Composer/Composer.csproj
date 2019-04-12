@@ -235,6 +235,8 @@
     <Compile Include="Parameters\GetScopeCurrencyParam.cs" />
     <Compile Include="Parameters\GetScopeParam.cs" />
     <Compile Include="Parameters\MapToTemplateLineItemViewModelParam.cs" />
+    <Compile Include="Parameters\RemoveRecurringOrderTemplateLineItemParam.cs" />
+    <Compile Include="Parameters\UpdateRecurringOrderTemplateLineItemParam.cs" />
     <Compile Include="Parameters\UpdateRecurringOrderTemplateLineItemQuantityParam.cs" />
     <Compile Include="Providers\Dam\ProductImageInfo.cs" />
     <Compile Include="Providers\IPageNotFoundUrlProvider.cs" />
@@ -249,6 +251,7 @@
     <Compile Include="Repositories\ScopeRepository.cs" />
     <Compile Include="Request\GetIsPaymentMethodUsedInRecurringOrdersRequest.cs" />
     <Compile Include="Request\UpdateRecurringOrderLineItemQuantityRequest.cs" />
+    <Compile Include="Request\UpdateRecurringOrderTemplateLineItemRequest.cs" />
     <Compile Include="Services\IImageService.cs" />
     <Compile Include="Services\ImageService.cs" />
     <Compile Include="Services\IProductPriceViewService.cs" />
