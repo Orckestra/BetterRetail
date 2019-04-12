@@ -10,6 +10,9 @@ namespace Orckestra.Composer.Parameters
     public  class UpdateRecurringOrderTemplateLineItemQuantityParam
     {
         public string RecurringLineItemId { get; set; }
+        /// <summary>
+        /// New quantity
+        /// </summary>
         public double Quantity { get; set; }
 
         public string ScopeId { get; set; }

@@ -58,24 +58,22 @@ namespace Orckestra.Composer.Repositories
         {
             var lineitems = await GetRecurringOrderTemplates(param.ScopeId, param.CustomerId).ConfigureAwaitWithCulture(false);
 
-            //var lineitem = GetRecurringOrderLineItemFromTemplates(lineitems, param.RecurringLineItemId);
+            var lineitem = GetRecurringOrderLineItemFromTemplates(lineitems, param.RecurringLineItemId);
 
-            //if (lineitem != null)
-            //{
-            //    lineitem.Quantity = param.Quantity;
+            if (lineitem != null)
+            {
+                lineitem.Quantity = param.Quantity;
 
-            //    var request = new AddOrUpdateRecurringOrderLineItemsRequest()
-            //    {
-            //        CustomerId = param.CustomerId,
-            //        ScopeId = param.ScopeId,
-            //        LineItems = lineitems.RecurringOrderLineItems,
-            //        MustApplyUpdatesToRecurringCart = false
-            //    };
+                var request = new AddOrUpdateRecurringOrderLineItemsRequest()
+                {
+                    CustomerId = param.CustomerId,
+                    ScopeId = param.ScopeId,
+                    LineItems = lineitems.RecurringOrderLineItems,
+                    MustApplyUpdatesToRecurringCart = false
+                };
 
-
-
-            //    return await _client.SendAsync(request).ConfigureAwaitWithCulture(false);
-            //}
+                return await OvertureClient.SendAsync(request).ConfigureAwaitWithCulture(false);
+            }
 
             return new ListOfRecurringOrderLineItems();
         }
@@ -91,5 +89,11 @@ namespace Orckestra.Composer.Repositories
             return key;
         }
 
+        private RecurringOrderLineItem GetRecurringOrderLineItemFromTemplates(ListOfRecurringOrderLineItems lineitems, string recurringLineItemIdString)
+        {
+            var recurringLineItemId = recurringLineItemIdString.ToGuid();
+
+            return lineitems.RecurringOrderLineItems?.SingleOrDefault(r => r.RecurringOrderLineItemId == recurringLineItemId);
+        }
     }
 }

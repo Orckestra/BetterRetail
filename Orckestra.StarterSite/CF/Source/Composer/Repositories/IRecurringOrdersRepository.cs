@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Orckestra.Composer.Parameters;
 using Orckestra.Overture.ServiceModel.RecurringOrders;
 using Orckestra.Overture.ServiceModel.Requests.RecurringOrders;
 
@@ -21,6 +22,13 @@ namespace Orckestra.Composer.Repositories
         /// </summary>
         /// <returns></returns>
         Task<RecurringOrderProgram> GetRecurringOrderProgram(string scope, string recurringOrderProgramName);
+
+        /// <summary>
+        /// Update the quantity or a recurringOrderLineItem
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        Task<ListOfRecurringOrderLineItems> UpdateRecurringOrderTemplateLineItemQuantity(UpdateRecurringOrderTemplateLineItemQuantityParam param);
 
     }
 }

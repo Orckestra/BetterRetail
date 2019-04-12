@@ -126,48 +126,49 @@ namespace Orckestra.Composer.Services
 
             return vm;
         }
-        
-        //public async Task<RecurringOrderTemplateViewModel> UpdateRecurringOrderTemplateLineItemQuantity(UpdateRecurringOrderTemplateLineItemQuantityParam param)
-        //{
-        //    if (!ConfigurationUtil.GetRecurringOrdersConfigEnabled())
-        //        return new RecurringOrderTemplateViewModel();
 
-        //    if (param == null) throw new ArgumentNullException(nameof(param), ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param)));
+        public async Task<RecurringOrderTemplatesViewModel> UpdateRecurringOrderTemplateLineItemQuantity(UpdateRecurringOrderTemplateLineItemQuantityParam param)
+        {
+            if (!ConfigurationUtil.GetRecurringOrdersConfigEnabled())
+                return new RecurringOrderTemplatesViewModel();
 
+            if (param == null) throw new ArgumentNullException(nameof(param), ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param)));
 
-        //    ////Update the cart if quantity is the same from the original template value
-        //    ////TODO: see to optimize calls to Services
-        //    //var originalLineItems = await RecurringOrderRepository.GetRecurringOrderTemplates(request.ScopeId, request.CustomerId).ConfigureAwait(false);
-        //    //var originalLineitem = originalLineItems.RecurringOrderLineItems.SingleOrDefault(r => r.RecurringOrderLineItemId == RecurringOrderCartHelper.ConvertStringToGuid(request.RecurringLineItemId));
-        //    //if (originalLineitem != null)
-        //    //{
+            //To be determined if we update the carts
 
-        //    //    var updateCartIfDifferentRequest = new UpdateRecurringOrderCartLineItemQuantityIfDifferentParam()
-        //    //    {
-        //    //        BaseUrl = request.BaseUrl,
-        //    //        CustomerId = request.CustomerId,
-        //    //        CultureInfo = request.CultureInfo,
-        //    //        ScopeId = request.ScopeId,
-        //    //        TemplateNewQuantity = request.Quantity,
-        //    //        TemplateOriginalQuantity = originalLineitem.Quantity,
-        //    //        TemplateProductId = originalLineitem.ProductId,
-        //    //        TemplateVariantId = originalLineitem.VariantId
+            ////Update the cart if quantity is the same from the original template value
+            ////TODO: see to optimize calls to Services
+            //var originalLineItems = await RecurringOrderRepository.GetRecurringOrderTemplates(request.ScopeId, request.CustomerId).ConfigureAwait(false);
+            //var originalLineitem = originalLineItems.RecurringOrderLineItems.SingleOrDefault(r => r.RecurringOrderLineItemId == RecurringOrderCartHelper.ConvertStringToGuid(request.RecurringLineItemId));
+            //if (originalLineitem != null)
+            //{
 
-        //    //    };
-        //    //    var result = await _cartRepository.UpdateRecurringOrderCartLineItemQuantityIfDifferent(updateCartIfDifferentRequest).ConfigureAwaitWithCulture(false);
-        //    //}
+            //    var updateCartIfDifferentRequest = new UpdateRecurringOrderCartLineItemQuantityIfDifferentParam()
+            //    {
+            //        BaseUrl = request.BaseUrl,
+            //        CustomerId = request.CustomerId,
+            //        CultureInfo = request.CultureInfo,
+            //        ScopeId = request.ScopeId,
+            //        TemplateNewQuantity = request.Quantity,
+            //        TemplateOriginalQuantity = originalLineitem.Quantity,
+            //        TemplateProductId = originalLineitem.ProductId,
+            //        TemplateVariantId = originalLineitem.VariantId
 
-        //    //var listOfRecurringOrderLineItems = await RecurringOrderRepository.UpdateRecurringOrderTemplateLineItemQuantity(request).ConfigureAwaitWithCulture(false);
+            //    };
+            //    var result = await _cartRepository.UpdateRecurringOrderCartLineItemQuantityIfDifferent(updateCartIfDifferentRequest).ConfigureAwaitWithCulture(false);
+            //}
 
-        //    //return await CreateTemplatesViewModelAsync(new CreateRecurringOrderTemplatesViewModelParam
-        //    //{
-        //    //    ListOfRecurringOrderLineItems = listOfRecurringOrderLineItems,
-        //    //    CultureInfo = request.CultureInfo,
-        //    //    BaseUrl = request.BaseUrl,
-        //    //    ScopeId = request.ScopeId,
-        //    //    CustomerId = request.CustomerId,
-        //    //}).ConfigureAwaitWithCulture(false);
-        //}
+            var listOfRecurringOrderLineItems = await RecurringOrderRepository.UpdateRecurringOrderTemplateLineItemQuantity(param).ConfigureAwaitWithCulture(false);
+
+            return await CreateTemplatesViewModelAsync(new CreateRecurringOrderTemplatesViewModelParam
+            {
+                ListOfRecurringOrderLineItems = listOfRecurringOrderLineItems,
+                CultureInfo = param.CultureInfo,
+                BaseUrl = param.BaseUrl,
+                ScopeId = param.ScopeId,
+                CustomerId = param.CustomerId,
+            }).ConfigureAwaitWithCulture(false);
+        }
 
         /*
         public async Task<RecurringOrderProgramViewModel> GetRecurringOrderProgramAsync(GetRecurringOrderFrequenciesRequest request)
@@ -309,6 +310,6 @@ namespace Orckestra.Composer.Services
         }
         */
 
-        
+
     }
 }

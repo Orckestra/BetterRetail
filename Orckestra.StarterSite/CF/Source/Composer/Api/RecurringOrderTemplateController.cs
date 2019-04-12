@@ -44,26 +44,26 @@ namespace Orckestra.Composer.Api
             return Ok(vm);
         }
 
-        //[HttpPut]
-        //[Route("lineitemquantity")]
-        //public virtual async Task<IHttpActionResult> UpdateRecurringOrderTemplateLineItemQuantity(UpdateRecurringOrderLineItemQuantityRequest request)
-        //{
-        //    if (request == null) { return BadRequest("Missing Request Body"); }
-        //    if (!ModelState.IsValid) { return BadRequest(ModelState); }
+        [HttpPut]
+        [Route("lineitemquantity")]
+        public virtual async Task<IHttpActionResult> UpdateRecurringOrderTemplateLineItemQuantity(UpdateRecurringOrderLineItemQuantityRequest request)
+        {
+            if (request == null) { return BadRequest("Missing Request Body"); }
+            if (!ModelState.IsValid) { return BadRequest(ModelState); }
 
-        //    var param = new UpdateRecurringOrderTemplateLineItemQuantityParam
-        //    {
-        //        RecurringLineItemId = request.RecurringLineItemId,
-        //        Quantity = request.Quantity,
-        //        ScopeId = ComposerContext.Scope,
-        //        CustomerId = ComposerContext.CustomerId,
-        //        CultureInfo = ComposerContext.CultureInfo,
-        //        BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
-        //    };
+            var param = new UpdateRecurringOrderTemplateLineItemQuantityParam
+            {
+                RecurringLineItemId = request.RecurringLineItemId,
+                Quantity = request.Quantity,
+                ScopeId = ComposerContext.Scope,
+                CustomerId = ComposerContext.CustomerId,
+                CultureInfo = ComposerContext.CultureInfo,
+                BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
+            };
 
-        //    var results = await RecurringOrderTemplatesViewService.UpdateRecurringOrderTemplateLineItemQuantity(param).ConfigureAwait(false);
+            var results = await RecurringOrderTemplatesViewService.UpdateRecurringOrderTemplateLineItemQuantity(param).ConfigureAwait(false);
 
-        //    return Ok(results);
-        //}
+            return Ok(results);
+        }
     }
 }
