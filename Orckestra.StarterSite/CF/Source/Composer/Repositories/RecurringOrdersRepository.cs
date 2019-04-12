@@ -91,6 +91,19 @@ namespace Orckestra.Composer.Repositories
 
             return OvertureClient.SendAsync(request);
         }
+        public Task<HttpWebResponse> RemoveRecurringOrderTemplateLineItems(RemoveRecurringOrderTemplateLineItemsParam param)
+        {
+            if (param == null) throw new ArgumentNullException(nameof(param));
+
+            var request = new DeleteRecurringOrderLineItemsRequest()
+            {
+                CustomerId = param.CustomerId,
+                ScopeId = param.ScopeId,
+                RecurringOrderLineItemIds = param.LineItemsIds.Select(l => l.ToGuid()).ToList()
+            };
+
+            return OvertureClient.SendAsync(request);
+        }
 
         public async Task<ListOfRecurringOrderLineItems> UpdateRecurringOrderTemplateLineItemAsync(UpdateRecurringOrderTemplateLineItemParam param)
         {

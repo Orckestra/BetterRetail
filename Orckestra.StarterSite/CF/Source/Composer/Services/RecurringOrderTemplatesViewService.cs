@@ -185,6 +185,27 @@ namespace Orckestra.Composer.Services
                 CultureInfo =  param.Culture,
                 BaseUrl = param.BaseUrl }).ConfigureAwaitWithCulture(false);
         }
+
+        public async Task<RecurringOrderTemplatesViewModel> RemoveRecurringOrderTemplatesLineItemsAsync(RemoveRecurringOrderTemplateLineItemsParam param)
+        {
+            if (!ConfigurationUtil.GetRecurringOrdersConfigEnabled())
+                return new RecurringOrderTemplatesViewModel();
+
+            if (param == null) throw new ArgumentNullException(nameof(param), ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param)));
+
+            var response = await RecurringOrderRepository.RemoveRecurringOrderTemplateLineItems(param).ConfigureAwaitWithCulture(false);
+
+            return await GetRecurringOrderTemplatesAsync(new GetRecurringOrderTemplatesParam
+            {
+                Scope = param.ScopeId,
+                CustomerId = param.CustomerId,
+                CultureInfo = param.Culture,
+                BaseUrl = param.BaseUrl
+            }).ConfigureAwaitWithCulture(false);
+        }
+
+
+
         public async Task<RecurringOrderTemplatesViewModel> UpdateRecurringOrderTemplateLineItemAsync(UpdateRecurringOrderTemplateLineItemParam param)
         {
             if (!ConfigurationUtil.GetRecurringOrdersConfigEnabled())
@@ -244,19 +265,6 @@ namespace Orckestra.Composer.Services
 
       
 
-        public async Task<RecurringOrderTemplatesViewModel> RemoveRecurringOrderTemplatesLineItems(RemoveRecurringOrderTemplateLineItemsRequest request)
-        {
-            if (!ExtendedComposerConfiguration.RecurringOrders.Enabled)
-                return new RecurringOrderTemplatesViewModel();
-
-            if (request == null) throw new ArgumentNullException(nameof(request), ArgumentNullMessageFormatter.FormatErrorMessage(nameof(request)));
-
-            var response = await _recurringOrderRepository.RemoveRecurringOrderTemplateLineItems(request).ConfigureAwaitWithCulture(false);
-
-            return await GetRecurringOrderTemplatesAsync(request.ScopeId, request.CustomerId, request.Culture, request.BaseUrl).ConfigureAwaitWithCulture(false);
-        }
-
-       
         public async Task<RecurringOrderShippingMethodsViewModel> GetRecurringOrderShippingMethods(string scopeId, CultureInfo culture)
         {
             var fulfillmentMethods = await _recurringOrderRepository.GetFulfillmentMethods(scopeId).ConfigureAwaitWithCulture(false);

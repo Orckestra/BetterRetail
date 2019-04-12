@@ -87,6 +87,25 @@ namespace Orckestra.Composer.Api
             return Ok(results);
         }
 
+        [HttpDelete]
+        [Route("lineitems/byIds")]
+        public virtual async Task<IHttpActionResult> RemoveRecurringLineItems(RemoveRecurringOrderTemplateLineItemsRequest request)
+        {
+            if (request.LineItemsIds.Count == 0) { return BadRequest("Invalid lineItemsIds"); }
+            if (!ModelState.IsValid) { return BadRequest(ModelState); }
+
+            var results = await RecurringOrderTemplatesViewService.RemoveRecurringOrderTemplatesLineItemsAsync(new RemoveRecurringOrderTemplateLineItemsParam()
+            {
+                Culture = ComposerContext.CultureInfo,
+                ScopeId = ComposerContext.Scope,
+                LineItemsIds = request.LineItemsIds,
+                CustomerId = ComposerContext.CustomerId,
+                BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
+            });
+
+            return Ok(results);
+        }
+
         [HttpPut]
         [Route("lineItem")]
         public virtual async Task<IHttpActionResult> UpdateRecurringOrderTemplateLineItem(UpdateRecurringOrderTemplateLineItemRequest request)

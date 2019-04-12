@@ -39,6 +39,14 @@ namespace Orckestra.Composer.Repositories
         Task<HttpWebResponse> RemoveRecurringOrderTemplateLineItem(RemoveRecurringOrderTemplateLineItemParam param);
 
         /// <summary>
+        /// Removes recurringOrder template LineItems by ids
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        Task<HttpWebResponse> RemoveRecurringOrderTemplateLineItems(RemoveRecurringOrderTemplateLineItemsParam param);
+
+
+        /// <summary>
         /// Update a recurring order lineItem
         /// </summary>
         /// <param name="param"></param>
