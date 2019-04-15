@@ -261,9 +261,7 @@ namespace Orckestra.Composer.Services
             {
                 Programs = programs.Select(p => _recurringOrderProgramViewModelFactory.CreateRecurringOrderProgramViewModel(p, culture)).ToList()
             };
-        }
-
-      
+        }      
 
         public async Task<RecurringOrderShippingMethodsViewModel> GetRecurringOrderShippingMethods(string scopeId, CultureInfo culture)
         {
@@ -287,41 +285,7 @@ namespace Orckestra.Composer.Services
 
             return new RecurringOrderShippingMethodsViewModel();
         }
-
-        public async Task<bool> ClearCustomerInactifItems(ClearCustomerInactifItemsRequest request)
-        {
-            await CustomerHelper.ClearAllInactifProduct(request.CustomerId, request.ScopeId, _overtureClient).ConfigureAwaitWithCulture(false);
-            return await Task.FromResult(true).ConfigureAwaitWithCulture(false);
-        }
-
-        public async Task<RecurringOrderInactifProductsViewModel> GetInactifProducts(Guid customerId, string scope, CultureInfo cultureInfo)
-        {
-            var customerRequest = new GetCustomerRequest
-            {
-                CustomerId = customerId,
-                ScopeId = scope
-            };
-
-            var customer = await _overtureClient.SendAsync(customerRequest).ConfigureAwaitWithCulture(false);
-
-            var listInactif = CustomerHelper.GetCustomerInactifList(customer);
-
-            if (listInactif.Count == 0)
-                return new RecurringOrderInactifProductsViewModel();
-            else
-            {
-                var vm = await _recurringOrderInactifProductViewModelFactory.CreateRecurringOrderInactifProductsViewModel(new CreateRecurringOrderInactifProductsViewModelParam
-                {
-                    ListInactifLineItem = listInactif,
-                    CultureInfo = cultureInfo,
-                    ScopeId = scope,
-                    CustomerId = customerId,
-
-                }).ConfigureAwaitWithCulture(false);
-
-                return vm;
-            }
-        }
+              
         */
 
 
