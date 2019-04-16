@@ -44,8 +44,7 @@ namespace Orckestra.Composer.Repositories
         /// <param name="param"></param>
         /// <returns></returns>
         Task<HttpWebResponse> RemoveRecurringOrderTemplateLineItems(RemoveRecurringOrderTemplateLineItemsParam param);
-
-
+        
         /// <summary>
         /// Update a recurring order lineItem
         /// </summary>
@@ -53,5 +52,11 @@ namespace Orckestra.Composer.Repositories
         /// <returns></returns>
         Task<ListOfRecurringOrderLineItems> UpdateRecurringOrderTemplateLineItemAsync(UpdateRecurringOrderTemplateLineItemParam param);
 
+        /// <summary>
+        /// Get a recurring order line item template
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        Task<RecurringOrderLineItem> GetRecurringOrderTemplateDetails(GetRecurringOrderTemplateDetailParam param);
     }
 }

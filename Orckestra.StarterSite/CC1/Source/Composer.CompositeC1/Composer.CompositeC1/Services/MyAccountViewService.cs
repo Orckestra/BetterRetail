@@ -99,7 +99,7 @@ namespace Orckestra.Composer.CompositeC1.Services
             {
                 Name = myRecurringSchedulePage.MenuTitle,
                 Url = myRecurringScheduleUrl,
-                IsActive = currentPageId == PagesConfiguration.RecurringSchedulePageId
+                IsActive = currentPageId == PagesConfiguration.RecurringSchedulePageId || currentPageId == PagesConfiguration.RecurringScheduleDetailsPageId
             };
 
             menu.MenuItems.AddRange(new List<MenuItemViewModel> { myAccountMenuItem, myWishListMenuItem, myAdressesMenuItem, myOrderHistoryMenuItem});

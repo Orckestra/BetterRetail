@@ -18,6 +18,11 @@ namespace Orckestra.Composer.Cart
         public static string ShoppingCartName { get; set; } = "Default";
 
         /// <summary>
+        ///     Get/Set the RecurringOrder CartName to use for storing a RecurringOrder Cart in Overture
+        /// </summary>
+        public static string RecurringOrderCartName { get; set; } = "RecurringOrderCart";        
+
+        /// <summary>
         ///     Get/Set the Wishlist CartName to use for storing a Wishlist Cart in Overture
         /// </summary>
         public static string WishlistCartName { get; set; } = "Wishlist";

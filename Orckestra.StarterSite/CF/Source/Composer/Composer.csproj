@@ -221,13 +221,17 @@
     <Compile Include="Parameters\BuildSearchUrlParam.cs" />
     <Compile Include="Parameters\CreateProductPriceViewModelParam.cs" />
     <Compile Include="Parameters\CreateRecurringOrderTemplatesViewModelParam.cs" />
+    <Compile Include="Parameters\CreateRecurringOrderTemplateDetailsViewModelParam.cs" />
     <Compile Include="Parameters\CreateTemplateGroupedShippingAddressParam.cs" />
     <Compile Include="Parameters\FindInventoryItemStatusParam.cs" />
     <Compile Include="Parameters\GetFooterParam.cs" />
     <Compile Include="Parameters\GetProductDefinitionParam.cs" />
     <Compile Include="Parameters\GetProductParam.cs" />
     <Compile Include="Parameters\GetProductsPriceParam.cs" />
+    <Compile Include="Parameters\GetRecurringOrderTemplateDetailParam.cs" />
     <Compile Include="Parameters\GetRecurringOrderTemplatesParam.cs" />
+    <Compile Include="Parameters\GetRecurringScheduleDetailsBaseUrlParam.cs" />
+    <Compile Include="Parameters\GetRecurringScheduleDetailsUrlParam.cs" />
     <Compile Include="Parameters\GetRecurringScheduleUrlParam.cs" />
     <Compile Include="Parameters\GetStickyLinksParam.cs" />
     <Compile Include="Parameters\GetHomeMainMenuParam.cs" />
@@ -250,7 +254,7 @@
     <Compile Include="Repositories\IScopeRepository.cs" />
     <Compile Include="Repositories\RecurringOrdersRepository.cs" />
     <Compile Include="Repositories\ScopeRepository.cs" />
-    <Compile Include="Request\GetIsPaymentMethodUsedInRecurringOrdersRequest.cs" />
+    <Compile Include="Parameters\GetIsPaymentMethodUsedInRecurringOrdersParam.cs" />
     <Compile Include="Request\RemoveRecurringOrderTemplateLineItemsRequest.cs" />
     <Compile Include="Request\UpdateRecurringOrderLineItemQuantityRequest.cs" />
     <Compile Include="Request\UpdateRecurringOrderTemplateLineItemRequest.cs" />

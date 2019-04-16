@@ -142,5 +142,10 @@ namespace Orckestra.Composer.ViewModels
         /// Gets or sets the recurring order template shipping method name
         /// </summary>
         public string ShippingMethodName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the url to edit the recurring order line item details
+        /// </summary>
+        public string EditUrl { get; set; }
     }
 }

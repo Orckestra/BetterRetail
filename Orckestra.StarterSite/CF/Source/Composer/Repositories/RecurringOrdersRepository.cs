@@ -136,6 +136,20 @@ namespace Orckestra.Composer.Repositories
             return new ListOfRecurringOrderLineItems();
         }
 
+        public Task<RecurringOrderLineItem> GetRecurringOrderTemplateDetails(GetRecurringOrderTemplateDetailParam param)
+        {
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (param.Scope == null) { throw new ArgumentNullException(nameof(param.Scope)); }
+            if (param.RecurringOrderLineItemId == null) { throw new ArgumentNullException(nameof(param.RecurringOrderLineItemId)); }
+
+            var getRecurringOrderLineItemsForCustomerRequest = new GetRecurringOrderLineItemRequest()
+            {
+                RecurringOrderLineItemId = param.RecurringOrderLineItemId,
+                ScopeId = param.Scope
+            };
+
+            return OvertureClient.SendAsync(getRecurringOrderLineItemsForCustomerRequest);
+        }
 
         protected CacheKey BuildRecurringOrderProgramCacheKey(string scope, string recurringOrderProgramName)
         {

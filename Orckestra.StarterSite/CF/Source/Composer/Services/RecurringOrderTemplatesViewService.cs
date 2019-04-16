@@ -3,6 +3,7 @@ using Orckestra.Composer.Enums;
 using Orckestra.Composer.Factory;
 using Orckestra.Composer.Helper;
 using Orckestra.Composer.Parameters;
+using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Dam;
 using Orckestra.Composer.Repositories;
 using Orckestra.Composer.Requests;
@@ -79,7 +80,7 @@ namespace Orckestra.Composer.Services
             return false;
         }
 
-        public async Task<RecurringOrderTemplatesViewModel> GetRecurringOrderTemplatesAsync(GetRecurringOrderTemplatesParam param)
+        public async Task<RecurringOrderTemplatesViewModel> GetRecurringOrderTemplatesViewModelAsync(GetRecurringOrderTemplatesParam param)
         {
             if (!ConfigurationUtil.GetRecurringOrdersConfigEnabled())
                 return new RecurringOrderTemplatesViewModel();
@@ -90,14 +91,14 @@ namespace Orckestra.Composer.Services
             if (param.CustomerId == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param.CustomerId)), nameof(param)); }
 
             var listOfRecurringOrderLineItems = await RecurringOrderRepository.GetRecurringOrderTemplates(param.Scope, param.CustomerId).ConfigureAwait(false);
-
+                 
             var vm = await CreateTemplatesViewModelAsync(new CreateRecurringOrderTemplatesViewModelParam
             {
                 ListOfRecurringOrderLineItems = listOfRecurringOrderLineItems,
                 CultureInfo = param.CultureInfo,
                 BaseUrl = param.BaseUrl,
                 CustomerId = param.CustomerId,
-                ScopeId = param.Scope
+                ScopeId = param.Scope,
             }).ConfigureAwaitWithCulture(false);
 
             return vm;
@@ -179,7 +180,7 @@ namespace Orckestra.Composer.Services
 
             var response = await RecurringOrderRepository.RemoveRecurringOrderTemplateLineItem(param).ConfigureAwaitWithCulture(false);
 
-            return await GetRecurringOrderTemplatesAsync( new GetRecurringOrderTemplatesParam{
+            return await GetRecurringOrderTemplatesViewModelAsync( new GetRecurringOrderTemplatesParam{
                 Scope = param.ScopeId,
                 CustomerId = param.CustomerId,
                 CultureInfo =  param.Culture,
@@ -195,7 +196,7 @@ namespace Orckestra.Composer.Services
 
             var response = await RecurringOrderRepository.RemoveRecurringOrderTemplateLineItems(param).ConfigureAwaitWithCulture(false);
 
-            return await GetRecurringOrderTemplatesAsync(new GetRecurringOrderTemplatesParam
+            return await GetRecurringOrderTemplatesViewModelAsync(new GetRecurringOrderTemplatesParam
             {
                 Scope = param.ScopeId,
                 CustomerId = param.CustomerId,
@@ -223,6 +224,62 @@ namespace Orckestra.Composer.Services
                 ScopeId = param.ScopeId,
                 CustomerId = param.CustomerId,
             }).ConfigureAwaitWithCulture(false);
+        }
+
+        public async Task<RecurringOrderTemplateViewModel> GetRecurringOrderTemplateDetailViewModelAsync(GetRecurringOrderTemplateDetailParam param)
+        {
+            if (!ConfigurationUtil.GetRecurringOrdersConfigEnabled())
+                return new RecurringOrderTemplateViewModel();
+
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (param.CustomerId == null) { throw new ArgumentException(nameof(param.CustomerId)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(nameof(param.CultureInfo)); }
+            if (param.RecurringOrderLineItemId == null) { throw new ArgumentException(nameof(param.RecurringOrderLineItemId)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(nameof(param.Scope)); }
+            if (string.IsNullOrWhiteSpace(param.BaseUrl)) { throw new ArgumentException(nameof(param.BaseUrl)); }
+
+            var template = await RecurringOrderRepository.GetRecurringOrderTemplateDetails(param).ConfigureAwait(false);
+
+            //Check if template is one of the current customer.
+            if (template == null || template.CustomerId != param.CustomerId)
+            {
+                return null;
+            }
+
+            var vm = await CreateTemplateDetailsViewModelAsync(new CreateRecurringOrderTemplateDetailsViewModelParam
+            {
+                RecurringOrderLineItem = template,
+                CultureInfo = param.CultureInfo,
+                BaseUrl = param.BaseUrl,
+                CustomerId = param.CustomerId,
+                ScopeId = param.Scope
+            }).ConfigureAwaitWithCulture(false);
+
+            return vm;
+        }
+
+        protected virtual async Task<RecurringOrderTemplateViewModel> CreateTemplateDetailsViewModelAsync(CreateRecurringOrderTemplateDetailsViewModelParam param)
+        {
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (param.RecurringOrderLineItem == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param.RecurringOrderLineItem)), nameof(param)); }
+
+            param.ProductImageInfo = new ProductImageInfo
+            {
+                ImageUrls = await ImageService.GetImageUrlsAsync(param.RecurringOrderLineItem).ConfigureAwait(false)
+            };
+
+            var methodDisplayNames = await LookupService.GetLookupDisplayNamesAsync(new GetLookupDisplayNamesParam
+            {
+                CultureInfo = param.CultureInfo,
+                LookupType = LookupType.Order,
+                LookupName = "PaymentMethodType",
+            }).ConfigureAwait(false);
+
+            param.PaymentMethodDisplayNames = methodDisplayNames;
+
+            var vm = await RecurringOrderTemplateViewModelFactory.CreateRecurringOrderTemplateDetailsViewModel(param).ConfigureAwaitWithCulture(false);
+
+            return vm;
         }
 
 

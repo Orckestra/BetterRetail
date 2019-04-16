@@ -4,7 +4,8 @@ using System.Collections.Generic;
 namespace Orckestra.Composer.ViewModels
 {
     /// <summary>
-    /// Recurring Order Template viewmodel
+    /// Recurring Order Template viewmodel.
+    /// Represents a grouping of recurringOrderLineItem ViewModel
     /// </summary>
     public class RecurringOrderTemplateViewModel : BaseViewModel
     {

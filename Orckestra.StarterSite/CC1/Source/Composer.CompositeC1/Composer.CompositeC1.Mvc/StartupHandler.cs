@@ -205,6 +205,7 @@ namespace Orckestra.Composer.CompositeC1.Mvc
                 .AddParameter("emptyWishListContent", typeof(XhtmlDocument), true, label: "Empty Wish List Content", helpText: "That content will be shown when Wish List is Empty");
             functions.RegisterAction<MyAccountController>("RecurringSchedule", "Composer.MyAccount.RecurringSchedule")
                 .AddParameter("emptyRecurringScheduleContent", typeof(XhtmlDocument), true, label: "Empty Recurring Schedule Content", helpText: "That content will be shown when Recurring Schedule is Empty");
+            functions.RegisterAction<MyAccountController>("RecurringScheduleDetails", "Composer.MyAccount.RecurringScheduleDetails");
 
             functions.RegisterAction<WishListController>("WishListInHeader", "Composer.WishList.WishListInHeader");
             functions.RegisterAction<WishListController>("SharedWishList", "Composer.WishList.Shared")

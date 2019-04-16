@@ -2,6 +2,7 @@
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Dam;
 using Orckestra.Overture.ServiceModel.Orders;
+using Orckestra.Overture.ServiceModel.RecurringOrders;
 using Orckestra.Overture.ServiceModel.Requests.RecurringOrders;
 using System;
 using System.Collections.Generic;
@@ -63,5 +64,24 @@ namespace Orckestra.Composer.Services
             };
             return DamProvider.GetProductMainImagesAsync(getImageParam);
         }
+
+        public virtual Task<List<ProductMainImage>> GetImageUrlsAsync(RecurringOrderLineItem lineitem)
+        {
+            var getImageParam = new GetProductMainImagesParam
+            {
+                ImageSize = ImageConfiguration.CartThumbnailImageSize,
+                ProductImageRequests = new List<ProductImageRequest> {
+                    new ProductImageRequest
+                    {
+                        ProductId = lineitem.ProductId,
+                        Variant = new VariantKey
+                        {
+                            Id = lineitem.VariantId,
+                        },
+                    }}.ToList()
+            };
+            return DamProvider.GetProductMainImagesAsync(getImageParam);
+        }
+
     }
 }

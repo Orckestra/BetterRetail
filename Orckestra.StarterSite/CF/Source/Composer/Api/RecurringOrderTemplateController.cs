@@ -35,7 +35,7 @@ namespace Orckestra.Composer.Api
         [Route("getrecurringordertemplates")]
         public virtual async Task<IHttpActionResult> GetRecurringOrderTemplates()
         {
-            var vm = await RecurringOrderTemplatesViewService.GetRecurringOrderTemplatesAsync(new GetRecurringOrderTemplatesParam {
+            var vm = await RecurringOrderTemplatesViewService.GetRecurringOrderTemplatesViewModelAsync(new GetRecurringOrderTemplatesParam {
                 Scope = ComposerContext.Scope,
                 CustomerId = ComposerContext.CustomerId,
                 CultureInfo = ComposerContext.CultureInfo,

@@ -8,9 +8,23 @@ namespace Orckestra.Composer.Providers
     public interface IRecurringScheduleUrlProvider
     {
         /// <summary>
-        /// Url to the My Account page
+        /// Url to the Recurring Schedule Page
         /// </summary>
         /// <returns>localized url</returns>
-        string GetRecurringScheduleUrl(GetRecurringScheduleUrlParam param);        
+        string GetRecurringScheduleUrl(GetRecurringScheduleUrlParam param);
+
+        /// <summary>
+        /// Base Url to the Recurring Schedule Details Page
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        string GetRecurringScheduleDetailsBaseUrl(GetRecurringScheduleDetailsBaseUrlParam param);
+
+        /// <summary>
+        /// Url to the Recurring Schedule Details Page
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        string GetRecurringScheduleDetailsUrl(GetRecurringScheduleDetailsUrlParam param);
     }
 }

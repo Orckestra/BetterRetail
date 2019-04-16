@@ -22,6 +22,13 @@ namespace Orckestra.Composer.Factory
         Task<RecurringOrderTemplatesViewModel> CreateRecurringOrderTemplatesViewModel(CreateRecurringOrderTemplatesViewModelParam param);
 
         /// <summary>
+        /// Creates a <see cref="RecurringOrderTemplateViewModel" /> based on a <see cref="Template"/> object.
+        /// </summary>
+        /// <param name="param">Parameters used to create the ViewModel. May not be null.</param>
+        /// <returns></returns>
+        Task<RecurringOrderTemplateViewModel> CreateRecurringOrderTemplateDetailsViewModel(CreateRecurringOrderTemplateDetailsViewModelParam param);
+
+        /// <summary>
         /// Group the recurring item template by shipping address
         /// </summary>
         /// <returns></returns>

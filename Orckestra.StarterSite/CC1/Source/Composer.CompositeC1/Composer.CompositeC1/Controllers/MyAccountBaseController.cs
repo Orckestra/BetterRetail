@@ -229,7 +229,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         [AuthorizeAndRedirect]
         public virtual ActionResult RecurringSchedule(XhtmlDocument emptyRecurringScheduleContent)
         {
-            var vm = RecurringOrderTemplatesViewService.GetRecurringOrderTemplatesAsync(new GetRecurringOrderTemplatesParam {
+            var vm = RecurringOrderTemplatesViewService.GetRecurringOrderTemplatesViewModelAsync(new GetRecurringOrderTemplatesParam {
                 Scope = ComposerContext.Scope,
                 CustomerId = ComposerContext.CustomerId,
                 CultureInfo = ComposerContext.CultureInfo,
@@ -242,6 +242,33 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             }
 
             return View("RecurringScheduleContainer", vm);            
+        }
+
+        [AuthorizeAndRedirect]
+        public virtual ActionResult RecurringScheduleDetails(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+            }
+
+            Guid guid;
+            Guid.TryParse(id, out guid);
+
+            var vm = RecurringOrderTemplatesViewService.GetRecurringOrderTemplateDetailViewModelAsync(new GetRecurringOrderTemplateDetailParam
+            {
+                RecurringOrderLineItemId = guid,
+                CustomerId = ComposerContext.CustomerId,
+                Scope = ComposerContext.Scope,
+                CultureInfo = ComposerContext.CultureInfo,
+                BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
+            }).Result;
+
+            if (vm == null)
+            {
+                return new HttpUnauthorizedResult();
+            }
+            return View("RecurringScheduleDetailsContainer", vm);
         }
 
         protected virtual OrderHistoryViewModel GetOrderHistoryViewModel()

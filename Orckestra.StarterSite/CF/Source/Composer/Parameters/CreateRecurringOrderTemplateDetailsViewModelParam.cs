@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace Orckestra.Composer.Parameters
 {
-    public class MapToTemplateLineItemViewModelParam
+    public class CreateRecurringOrderTemplateDetailsViewModelParam
     {
         /// <summary>
-        /// RecurringOrderlineItem to Map
+        /// Cart to map.
         /// </summary>
-        public RecurringOrderLineItem RecurringOrderlineItem { get; set; }
+        public RecurringOrderLineItem RecurringOrderLineItem { get; set; }
 
         /// <summary>
         /// Culture Info for the ViewModel.
@@ -22,18 +22,21 @@ namespace Orckestra.Composer.Parameters
         public CultureInfo CultureInfo { get; set; }
 
         /// <summary>
-        /// Image dictionnary for the lineitem
+        /// Product Image information
         /// </summary>
-        public IDictionary<Tuple<string, string>, ProductMainImage> ImageDictionnary { get; set; }
+        public ProductImageInfo ProductImageInfo { get; set; }
 
         /// <summary>
         /// The Request Base Url
         /// </summary>
-        public string BaseUrl { get; set; }     
-        
+        public string BaseUrl { get; set; }
+
         /// <summary>
-        /// The recurring schedule details base url
+        /// The Payment Methods display name.
         /// </summary>
-        public string RecurringScheduleUrl { get; set; }
+        public Dictionary<string, string> PaymentMethodDisplayNames { get; set; }
+
+        public Guid CustomerId { get; set; }
+        public string ScopeId { get; set; }
     }
 }
