@@ -5,6 +5,8 @@ using System.Web.Http;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Services;
 using Orckestra.Composer.Cart.ViewModels;
+using Orckestra.Composer.Parameters;
+using Orckestra.Composer.Providers;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.WebAPIFilters;
 
@@ -17,16 +19,20 @@ namespace Orckestra.Composer.Cart.Api
         protected IComposerContext ComposerContext { get; private set; }
         protected IPaymentViewService PaymentViewService { get; private set; }
         protected IImageViewService ImageService { get; private set; }
+        protected IRecurringScheduleUrlProvider RecurringScheduleUrlProvider { get; private set; }
 
-        public PaymentController(IComposerContext composerContext, IPaymentViewService paymentViewService, IImageViewService imageService)
+        public PaymentController(IComposerContext composerContext, IPaymentViewService paymentViewService, IImageViewService imageService,
+            IRecurringScheduleUrlProvider recurringScheduleUrlProvider)
         {
             if (composerContext == null) { throw new ArgumentNullException("composerContext"); }
             if (imageService == null) { throw new ArgumentNullException("imageService"); }
             if (paymentViewService == null) { throw new ArgumentNullException(nameof(paymentViewService)); }
+            if (recurringScheduleUrlProvider == null) { throw new ArgumentNullException("recurringScheduleUrlProvider"); }
 
             ComposerContext = composerContext;
             PaymentViewService = paymentViewService;
             ImageService = imageService;
+            RecurringScheduleUrlProvider = recurringScheduleUrlProvider;
         }
 
         /// <summary>
@@ -123,6 +129,40 @@ namespace Orckestra.Composer.Cart.Api
             vm.ActivePaymentViewModel.CreditCardTrustImage = trustImageVm;
 
             return Ok(vm);
+        }
+
+        [HttpPost]
+        [ActionName("recurringorderstemplatespaymentmethods")]
+        public virtual async Task<IHttpActionResult> GetRecurringOrderTemplatesPaymentMethodsAsync(string id)
+        {
+            var recurringOrderScheduleUrl = RecurringScheduleUrlProvider.GetRecurringScheduleDetailsUrl(new GetRecurringScheduleDetailsUrlParam
+            {
+                CultureInfo = ComposerContext.CultureInfo,
+                RecurringScheduleId = id
+            });
+
+            //TODO : MyWalletPRovider when ready
+
+            //var addAddressUrl = MyWalletPRovider.GetAddWAlletUrl(new GetMyAccountUrlParam { CultureInfo = ComposerContext.CultureInfo, ReturnUrl = recurringOrderScheduleUrl });
+            //var editAddressBaseUrl = MyWalletPRovider.GetUpdateWAlletBaseUrl(new GetMyAccountUrlParam { CultureInfo = ComposerContext.CultureInfo });
+
+            var param = new GetPaymentProvidersParam
+            {
+                CultureInfo = ComposerContext.CultureInfo
+            };
+            var providers = await PaymentViewService.GetPaymentProvidersAsync(param).ConfigureAwait(false);
+
+            var results = await PaymentViewService.GetCustomerPaymentMethodListViewModelAsync(new GetCustomerPaymentMethodListViewModelParam
+            {
+                CustomerId = ComposerContext.CustomerId,
+                ScopeId = ComposerContext.Scope,
+                CultureInfo = ComposerContext.CultureInfo,
+                ProviderNames = providers.Select(p => p.ProviderName).ToList(),
+                //walletUrls
+            }).ConfigureAwait(false);
+
+            return Ok(results);
+
         }
     }
 }

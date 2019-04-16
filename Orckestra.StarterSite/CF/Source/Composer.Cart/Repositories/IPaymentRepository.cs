@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Overture.ServiceModel.Customers;
@@ -63,5 +64,12 @@ namespace Orckestra.Composer.Cart.Repositories
         /// <param name="param"></param>
         /// <returns></returns>
         Task<List<PaymentProfile>> GetCustomerPaymentProfiles(GetCustomerPaymentProfilesParam param);
+
+
+        /// <summary>
+        /// Get a list of payment method for a cystomer and provider 
+        /// </summary>
+        /// <returns></returns>
+        Task<List<PaymentMethod>> GetCustomerPaymentMethodForProviderAsync(GetCustomerPaymentMethodsForProviderParam param);
     }
 }

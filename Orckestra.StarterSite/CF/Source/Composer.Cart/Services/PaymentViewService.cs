@@ -11,6 +11,7 @@ using Orckestra.Composer.Cart.Repositories;
 using Orckestra.Composer.Cart.Requests;
 using Orckestra.Composer.Cart.ViewModels;
 using Orckestra.Composer.Enums;
+using Orckestra.Composer.Factory;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Requests;
 using Orckestra.Composer.Services;
@@ -488,6 +489,26 @@ namespace Orckestra.Composer.Cart.Services
         protected IPaymentProvider ObtainPaymentProvider(string paymentProviderName)
         {
             return PaymentProviderFactory.ResolveProvider(paymentProviderName);
+        }
+        public async Task<CustomerPaymentMethodListViewModel> GetCustomerPaymentMethodListViewModelAsync(GetCustomerPaymentMethodListViewModelParam param)
+        {
+            if (param == null) throw new ArgumentNullException(nameof(param), ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param)));
+
+            var tasks = param.ProviderNames.Select(pName => PaymentRepository.GetCustomerPaymentMethodForProviderAsync(new GetCustomerPaymentMethodsForProviderParam
+            {
+                CustomerId = param.CustomerId,
+                ScopeId = param.ScopeId,
+                ProviderName = pName
+            }));
+
+            var paymentMethods = await Task.WhenAll(tasks).ConfigureAwaitWithCulture(false);
+            var list = paymentMethods.SelectMany(t => t);
+
+            return new CustomerPaymentMethodListViewModel
+            {
+                PaymentMethods = list.Select(s => CartViewModelFactory.MapSavedCreditCard(s, param.CultureInfo)).ToList(),
+                //AddWalletUrl
+            };
         }
     }
 }

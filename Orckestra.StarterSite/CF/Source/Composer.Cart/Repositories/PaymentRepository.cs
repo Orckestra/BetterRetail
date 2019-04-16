@@ -250,6 +250,23 @@ namespace Orckestra.Composer.Cart.Repositories
             });
         }
 
+        public Task<List<PaymentMethod>> GetCustomerPaymentMethodForProviderAsync(GetCustomerPaymentMethodsForProviderParam param)
+        {
+            if (param == null) { throw new ArgumentNullException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param))); }
+            if (param.CustomerId == Guid.Empty) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param.CustomerId))); }
+            if (string.IsNullOrWhiteSpace(param.ScopeId)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param.ScopeId))); }
+            if (string.IsNullOrWhiteSpace(param.ProviderName)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param.ProviderName))); }
+
+            var getCustomerPaymentMethodsRequest = new GetCustomerPaymentMethodsRequest
+            {
+                CustomerId = param.CustomerId,
+                PaymentProviderName = param.ProviderName,
+                ScopeId = param.ScopeId
+            };
+
+            return OvertureClient.SendAsync(getCustomerPaymentMethodsRequest);
+        }
+
         /// <summary>
         /// Builds a cache key for a cart operation.
         /// </summary>

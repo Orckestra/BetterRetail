@@ -43,5 +43,11 @@ namespace Orckestra.Composer.Cart.Services
         /// </summary>
         /// <param name="param"></param>
         Task RemovePaymentMethodAsync(RemovePaymentMethodParam param);
+
+        /// <summary>
+        /// Returns the Saved Credit card for a customer and providers
+        /// To be used in recurring orders menu
+        /// </summary>
+        Task<CustomerPaymentMethodListViewModel> GetCustomerPaymentMethodListViewModelAsync(GetCustomerPaymentMethodListViewModelParam param);
     }
 }

@@ -79,6 +79,8 @@
     <Compile Include="Parameters\CreateListOfLineItemDetailViewModelParam.cs" />
     <Compile Include="Parameters\CreateLineItemDetailViewModelParam.cs" />
     <Compile Include="Parameters\CreateWishListViewModelParam.cs" />
+    <Compile Include="Parameters\GetCustomerPaymentMethodListViewModelParam.cs" />
+    <Compile Include="Parameters\GetCustomerPaymentMethodsForProviderParam.cs" />
     <Compile Include="Parameters\GetKeyVariantAttributesParam.cs" />
     <Compile Include="Parameters\Order\GetOrderChangesParam.cs" />
     <Compile Include="Parameters\ValidatePaymentMethodsParam.cs" />
@@ -211,6 +213,7 @@
     <Compile Include="ViewModels\CompleteCheckoutViewModel.cs" />
     <Compile Include="ViewModels\CouponsViewModel.cs" />
     <Compile Include="ViewModels\CouponViewModel.cs" />
+    <Compile Include="ViewModels\CustomerPaymentMethodListViewModel.cs" />
     <Compile Include="ViewModels\CustomerSummaryViewModel.cs" />
     <Compile Include="ViewModels\GetGuestOrderViewModel.cs" />
     <Compile Include="ViewModels\GetPaymentMethodsViewModel.cs" />
