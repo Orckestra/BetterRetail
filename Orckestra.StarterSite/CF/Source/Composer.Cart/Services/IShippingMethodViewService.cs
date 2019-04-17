@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.ViewModels;
+using Orckestra.Composer.ViewModels;
 
 namespace Orckestra.Composer.Cart.Services
 {
@@ -29,5 +30,12 @@ namespace Orckestra.Composer.Cart.Services
         /// <param name="param"></param>
         /// <returns></returns>
         Task<ShippingMethodViewModel> EstimateShippingAsync(EstimateShippingParam param);
+
+        /// <summary>
+        /// Get the Shipping methods available in the scope.
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns>The ShippingMethodsViewModel</returns>
+        Task<RecurringOrdersTemplatesShippingMethodsViewModel> GetShippingMethodsScopeAsync(GetShippingMethodsScopeParam param);
     }
 }

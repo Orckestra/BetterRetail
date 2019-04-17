@@ -75,5 +75,10 @@
         public static string StoreInventoryItems = "StoreInventoryItems";
 
         public static string RecurringOrderPrograms = "RecurringOrderPrograms";
+
+        /// <summary>
+        /// Cache used for the list of fulfillementMEthods for a scope
+        /// </summary>
+        public static string FulfillmentMethodsByScope = "FulfillmentMethodsByScope";
     }
 }

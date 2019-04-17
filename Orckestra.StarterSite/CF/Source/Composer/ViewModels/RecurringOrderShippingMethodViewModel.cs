@@ -23,11 +23,5 @@ namespace Orckestra.Composer.ViewModels
         /// The Shipping Provider unique Identifier.
         /// </summary>
         public string ShippingProviderId { get; set; }
-
-        /// <summary>
-        /// Is the shipping method part of the ship to store 
-        /// </summary>
-        public bool IsShipToStore { get; set; }
     }
 }
-

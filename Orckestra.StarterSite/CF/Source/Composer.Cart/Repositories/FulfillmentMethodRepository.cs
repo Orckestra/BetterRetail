@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Orckestra.Composer.Cart.Parameters;
+using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Utils;
 using Orckestra.Overture;
 using Orckestra.Overture.Caching;
@@ -48,6 +49,23 @@ namespace Orckestra.Composer.Cart.Repositories
             };
 
             return OvertureClient.SendAsync(request);
+        }
+
+        public virtual Task<GetFulfillmentMethodsResponse> GetFulfillmentMethods(string scopeId)
+        {            
+            if (string.IsNullOrWhiteSpace(scopeId)) { throw new ArgumentNullException("scopeId", "scopeId is required"); }
+
+            var cacheKey = GetCacheKeyForFulfillmentMethodsByScope(scopeId);
+
+            var request = new GetAvailableFulfillmentMethodsByScopeRequest { ScopeId = scopeId };
+
+            return CacheProvider.GetOrAddAsync(cacheKey, () => OvertureClient.SendAsync(request));
+        }
+        private static CacheKey GetCacheKeyForFulfillmentMethodsByScope(string scopeId)
+        {
+            var cacheKey = new CacheKey(CacheConfigurationCategoryNames.FulfillmentMethodsByScope, scopeId);
+
+            return cacheKey;
         }
     }
 }

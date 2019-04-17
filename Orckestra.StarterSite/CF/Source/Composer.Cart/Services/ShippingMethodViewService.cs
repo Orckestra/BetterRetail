@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,8 +9,10 @@ using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Repositories;
 using Orckestra.Composer.Cart.ViewModels;
 using Orckestra.Composer.Country;
+using Orckestra.Composer.Factory;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Utils;
+using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel.Orders;
 
 namespace Orckestra.Composer.Cart.Services
@@ -23,22 +26,26 @@ namespace Orckestra.Composer.Cart.Services
         protected ICartViewModelFactory CartViewModelFactory { get; private set; }
         protected ICartRepository CartRepository { get; private set; }
         protected ICartService CartService { get; private set; }
+        protected IRecurringOrderTemplateViewModelFactory RecurringOrderTemplateViewModelFactory { get; private set; }
 
         public ShippingMethodViewService(
             IFulfillmentMethodRepository fulfillmentMethodRepository, 
             ICartViewModelFactory cartViewModelFactory,
             ICartRepository cartRepository, 
-            ICartService cartService)
+            ICartService cartService,
+            IRecurringOrderTemplateViewModelFactory recurringOrderTemplateViewModelFactory)
         {
             if (fulfillmentMethodRepository == null) { throw new ArgumentNullException("fulfillmentMethodRepository"); }
             if (cartViewModelFactory == null) { throw new ArgumentNullException("cartViewModelFactory"); }
             if (cartRepository == null) { throw new ArgumentNullException("cartRepository"); }
             if (cartService == null) { throw new ArgumentNullException("cartService"); }
+            if (recurringOrderTemplateViewModelFactory == null) { throw new ArgumentNullException("recurringOrderTemplateViewModelFactory"); }
 
             FulfillmentMethodRepository = fulfillmentMethodRepository;
             CartViewModelFactory = cartViewModelFactory;
             CartRepository = cartRepository;
             CartService = cartService;
+            RecurringOrderTemplateViewModelFactory = recurringOrderTemplateViewModelFactory;
         }
 
         /// <summary>
@@ -174,6 +181,33 @@ namespace Orckestra.Composer.Cart.Services
             }
 
             return shipment;
+        }
+
+        /// <summary>
+        /// Get the Shipping methods available in the scope.
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns>The ShippingMethodsViewModel</returns>
+        public async virtual Task<RecurringOrdersTemplatesShippingMethodsViewModel> GetShippingMethodsScopeAsync(GetShippingMethodsScopeParam param)
+        {
+            if (param == null) { throw new ArgumentNullException("param", "param is required"); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException("param.Scope is required", "param"); }
+            if (param.CultureInfo == null) { throw new ArgumentException("param.CultureInfo is required", "param"); }
+
+            var fulfillmentMethods = await FulfillmentMethodRepository.GetFulfillmentMethods(param.Scope).ConfigureAwaitWithCulture(false);
+
+            if (fulfillmentMethods == null)
+            {
+                return null;
+            }
+
+            var shippingMethodViewModels = fulfillmentMethods.FulfillmentMethods
+                .Select(sm => RecurringOrderTemplateViewModelFactory.GetShippingMethodViewModel(sm, param.CultureInfo)).ToList();
+
+            return new RecurringOrdersTemplatesShippingMethodsViewModel
+            {
+                ShippingMethods = shippingMethodViewModels
+            };
         }
     }
 }

@@ -82,6 +82,7 @@
     <Compile Include="Parameters\GetCustomerPaymentMethodListViewModelParam.cs" />
     <Compile Include="Parameters\GetCustomerPaymentMethodsForProviderParam.cs" />
     <Compile Include="Parameters\GetKeyVariantAttributesParam.cs" />
+    <Compile Include="Parameters\GetShippingMethodsScopeParam.cs" />
     <Compile Include="Parameters\Order\GetOrderChangesParam.cs" />
     <Compile Include="Parameters\ValidatePaymentMethodsParam.cs" />
     <Compile Include="Parameters\WishList\GetShareWishListUrlParam.cs" />
