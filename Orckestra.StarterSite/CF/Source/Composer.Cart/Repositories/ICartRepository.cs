@@ -103,5 +103,12 @@ namespace Orckestra.Composer.Cart.Repositories
         /// <param name="param"></param>
         /// <returns>The order</returns>
         Task<Overture.ServiceModel.Orders.Order> CompleteCheckoutAsync(CompleteCheckoutParam param);
+
+        /// <summary>
+        /// Get the recurrign carts of a customer
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        Task<List<ProcessedCart>> GetRecurringCarts(GetRecurringOrderCartsViewModelParam param);
     }
 }

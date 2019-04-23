@@ -109,5 +109,10 @@ namespace Orckestra.Composer.Cart.Tests.Mock
         {
             throw new NotImplementedException();
         }
+
+        public Task<List<ProcessedCart>> GetRecurringCarts(GetRecurringOrderCartsViewModelParam param)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

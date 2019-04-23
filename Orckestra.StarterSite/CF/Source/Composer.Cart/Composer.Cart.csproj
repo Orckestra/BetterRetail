@@ -41,6 +41,7 @@
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Api\AddressController.cs" />
+    <Compile Include="Api\RecurringCartController.cs" />
     <Compile Include="Api\WishListController.cs" />
     <Compile Include="Api\CartController.cs" />
     <Compile Include="Api\OrderController.cs" />
@@ -54,6 +55,8 @@
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\PaymentExtensions.cs" />
     <Compile Include="Factory\CartViewModelFactory.cs" />
+    <Compile Include="Factory\IRecurringOrderCartViewModelFactory.cs" />
+    <Compile Include="Factory\RecurringOrderCartViewModelFactory.cs" />
     <Compile Include="Factory\RewardEqualityComparer.cs" />
     <Compile Include="Factory\RewardViewModelFactory.cs" />
     <Compile Include="Factory\ICartViewModelFactory.cs" />
@@ -78,13 +81,18 @@
     <Compile Include="Parameters\AddCreditCardParam.cs" />
     <Compile Include="Parameters\CreateListOfLineItemDetailViewModelParam.cs" />
     <Compile Include="Parameters\CreateLineItemDetailViewModelParam.cs" />
+    <Compile Include="Parameters\CreateLightRecurringOrderCartViewModelParam.cs" />
     <Compile Include="Parameters\CreateWishListViewModelParam.cs" />
     <Compile Include="Parameters\GetCustomerPaymentMethodListViewModelParam.cs" />
     <Compile Include="Parameters\GetCustomerPaymentMethodsForProviderParam.cs" />
     <Compile Include="Parameters\GetKeyVariantAttributesParam.cs" />
+    <Compile Include="Parameters\GetLightRecurringOrderCartListViewModelParam.cs" />
+    <Compile Include="Parameters\GetRecurringOrderCartsViewModelParam.cs" />
+    <Compile Include="Parameters\GetRecurringOrderCartViewModelParam.cs" />
     <Compile Include="Parameters\GetShippingMethodsScopeParam.cs" />
     <Compile Include="Parameters\Order\GetOrderChangesParam.cs" />
     <Compile Include="Parameters\ValidatePaymentMethodsParam.cs" />
+    <Compile Include="Parameters\CreateRecurringOrderCartViewModelParam.cs" />
     <Compile Include="Parameters\WishList\GetShareWishListUrlParam.cs" />
     <Compile Include="Parameters\WishList\GetWishListUrlParam.cs" />
     <Compile Include="Providers\WishList\IWishListUrlProvider.cs" />
@@ -175,6 +183,7 @@
     <Compile Include="Services\CouponViewService.cs" />
     <Compile Include="Services\FixCartService.cs" />
     <Compile Include="Services\ILineItemService.cs" />
+    <Compile Include="Services\IRecurringOrderCartsViewService.cs" />
     <Compile Include="Services\IWishListViewService.cs" />
     <Compile Include="Services\ICheckoutBreadcrumbViewService.cs" />
     <Compile Include="Services\ICheckoutNavigationViewService.cs" />
@@ -185,6 +194,7 @@
     <Compile Include="Services\IVaultProfileViewService.cs" />
     <Compile Include="Services\Order\OrderHistoryViewService.cs" />
     <Compile Include="Services\PaymentViewService.cs" />
+    <Compile Include="Services\RecurringOrderCartsViewService.cs" />
     <Compile Include="Services\ShippingMethodViewService.cs" />
     <Compile Include="Services\ICartService.cs" />
     <Compile Include="Services\ICheckoutService.cs" />
@@ -220,12 +230,17 @@
     <Compile Include="ViewModels\GetPaymentMethodsViewModel.cs" />
     <Compile Include="ViewModels\AdditionalFeeViewModel.cs" />
     <Compile Include="ViewModels\GuestOrderDetailsViewModel.cs" />
+    <Compile Include="ViewModels\IRecurringOrderCartViewModel.cs" />
     <Compile Include="ViewModels\IPaymentMethodViewModel.cs" />
+    <Compile Include="ViewModels\LightLineItemDetailViewModel.cs" />
+    <Compile Include="ViewModels\LightRecurringOrderCartsViewModel.cs" />
+    <Compile Include="ViewModels\LightRecurringOrderCartViewModel.cs" />
     <Compile Include="ViewModels\LineItemDetailViewModel.cs" />
     <Compile Include="ViewModels\LineItemIdsViewModel.cs" />
     <Compile Include="ViewModels\MinicartViewModel.cs" />
     <Compile Include="ViewModels\MonerisAddVaultProfileViewModel.cs" />
     <Compile Include="ViewModels\OrderSummaryViewModel.cs" />
+    <Compile Include="ViewModels\RecurringOrderCartsViewModel.cs" />
     <Compile Include="ViewModels\RemovePaymentMethodViewModel.cs" />
     <Compile Include="ViewModels\Order\OrderChangeViewModel.cs" />
     <Compile Include="ViewModels\RewardViewModel.cs" />

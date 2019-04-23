@@ -447,5 +447,44 @@ namespace Orckestra.Composer.Cart.Repositories
 
             return OvertureClient.SendAsync(request);
         }
+
+        public virtual async Task<List<ProcessedCart>> GetRecurringCarts(GetRecurringOrderCartsViewModelParam param)
+        {
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.BaseUrl)) { throw new ArgumentException(nameof(param.BaseUrl)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(nameof(param.CultureInfo)); }
+            if (param.CustomerId == Guid.Empty) { throw new ArgumentException(nameof(param.CustomerId)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(nameof(param.Scope)); }
+
+            var request = new GetCartsByCustomerIdRequest()
+            {
+                CustomerId = param.CustomerId,
+                ScopeId = param.Scope,
+                CultureName = param.CultureInfo.Name,
+                CartType = CartConfiguration.RecurringOrderCartType
+            };
+
+            var cartSummaries = await OvertureClient.SendAsync(request).ConfigureAwaitWithCulture(false);
+
+            var resultTasks = cartSummaries.Select(cart =>
+            {
+                var getCartParam = (new GetCartParam
+                {
+                    Scope = param.Scope,
+                    CultureInfo = param.CultureInfo,
+                    CustomerId = param.CustomerId,
+                    CartName = cart.Name,
+                    BaseUrl = param.BaseUrl,
+                    ExecuteWorkflow = true
+                });
+                return GetCartAsync(getCartParam);
+            });
+
+            var carts = await Task.WhenAll(resultTasks).ConfigureAwaitWithCulture(false);
+
+            carts.Where(i => i != null);
+
+            return carts.ToList();
+        }
     }
 }
