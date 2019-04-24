@@ -181,6 +181,9 @@ module Orckestra.Composer {
         }
 
         public changeRecurringMode(actionContext: IControllerActionContext) {
+            let container$ = actionContext.elementContext.closest('.js-recurringModes');
+            container$.find('.js-recurringModeRow.selected').removeClass('selected');
+            actionContext.elementContext.closest('.js-recurringModeRow').addClass('selected');
             $('.modeSelection').collapse('toggle');
             this.recurringMode = actionContext.elementContext.val();
         }
