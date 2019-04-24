@@ -8,6 +8,7 @@ using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Parameters.Order;
 using Orckestra.Composer.Cart.Services;
 using Orckestra.Composer.Cart.Services.Order;
+using Orckestra.Composer.Cart.ViewModels;
 using Orckestra.Composer.Cart.ViewModels.Order;
 using Orckestra.Composer.MvcFilters;
 using Orckestra.Composer.MyAccount.Parameters;
@@ -33,6 +34,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         protected IOrderHistoryViewService OrderHistoryViewService { get; private set; }
         protected IWishListViewService WishListViewService { get; private set; }
         protected IRecurringOrderTemplatesViewService RecurringOrderTemplatesViewService { get; private set; }
+        protected IRecurringOrderCartsViewService RecurringOrderCartsViewService { get; private set; }
 
         protected MyAccountBaseController(
             ICustomerViewService customerViewService,
@@ -44,7 +46,8 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             IMyAccountViewService myAccountViewService,
             IOrderHistoryViewService orderHistoryViewService,
             IWishListViewService wishListViewService,
-            IRecurringOrderTemplatesViewService recurringOrderTemplatesViewService)
+            IRecurringOrderTemplatesViewService recurringOrderTemplatesViewService,
+            IRecurringOrderCartsViewService recurringOrderCartsViewService)
         {
             if (customerViewService == null) throw new ArgumentNullException("customerViewService");
             if (customerAddressViewService == null) throw new ArgumentNullException("customerAddressViewService");
@@ -56,6 +59,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             if (orderHistoryViewService == null) throw new ArgumentNullException("orderHistoryViewService");
             if (wishListViewService == null) throw new ArgumentNullException("wishListViewService");
             if (recurringOrderTemplatesViewService == null) throw new ArgumentNullException("recurringOrderTemplatesViewService");
+            if (recurringOrderCartsViewService == null) throw new ArgumentNullException("recurringOrderCartsViewService");
 
             CustomerViewService = customerViewService;
             CustomerAddressViewService = customerAddressViewService;
@@ -67,6 +71,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             OrderHistoryViewService = orderHistoryViewService;
             WishListViewService = wishListViewService;
             RecurringOrderTemplatesViewService = recurringOrderTemplatesViewService;
+            RecurringOrderCartsViewService = recurringOrderCartsViewService;
         }
 
         [AuthorizeAndRedirect]
@@ -271,6 +276,51 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             return View("RecurringScheduleDetailsContainer", vm);
         }
 
+        [AuthorizeAndRedirect]
+        public virtual ActionResult UpcomingOrders()
+        {
+            //var vm = RecurringOrderCartsViewService.GetLightRecurringOrderCartListViewModelAsync(new GetLightRecurringOrderCartListViewModelParam
+            //{
+            //    CustomerId = ComposerContext.CustomerId,
+            //    Scope = ComposerContext.Scope,
+            //    CultureInfo = ComposerContext.CultureInfo,
+            //    BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
+            //}).Result;
+
+            //if (vm == null)
+            //{
+            //    return new HttpUnauthorizedResult();
+            //}
+            //return View("RecurringCartsContainer", vm);
+
+            return View("RecurringCartsContainer", GetUpcomingOrdersViewModel());
+
+        }
+
+        [AuthorizeAndRedirect]
+        public virtual ActionResult RecurringCartDetails(string cartName)
+        {
+            if (string.IsNullOrEmpty(cartName))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+            }            
+
+            var vm = RecurringOrderCartsViewService.GetRecurringOrderCartViewModelAsync(new GetRecurringOrderCartViewModelParam
+            {
+                CartName = cartName,
+                CustomerId = ComposerContext.CustomerId,
+                Scope = ComposerContext.Scope,
+                CultureInfo = ComposerContext.CultureInfo,
+                BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
+            }).Result;
+
+            if (vm == null)
+            {
+                return new HttpUnauthorizedResult();
+            }
+            return View("RecurringCartDetailsContainer", vm);
+        }        
+
         protected virtual OrderHistoryViewModel GetOrderHistoryViewModel()
         {
             return new OrderHistoryViewModel
@@ -283,6 +333,14 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         protected virtual ActionResult UnexpectedAddressForCustomer()
         {
             return new HttpUnauthorizedResult();
+        }
+
+        protected virtual LightRecurringOrderCartsViewModel GetUpcomingOrdersViewModel()
+        {
+            return new LightRecurringOrderCartsViewModel
+            {
+                IsLoading = true
+            };
         }
     }
 }

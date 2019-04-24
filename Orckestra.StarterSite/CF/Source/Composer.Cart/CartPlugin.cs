@@ -55,6 +55,9 @@ namespace Orckestra.Composer.Cart
             host.Register<WishListViewService, IWishListViewService>();
             host.Register<WishListRepository, IWishListRepository>();
 
+            host.Register<RecurringOrderCartViewModelFactory, IRecurringOrderCartViewModelFactory>();
+            host.Register<RecurringOrderCartsViewService, IRecurringOrderCartsViewService>();
+
             host.MetadataRegistry.LoadViewModelMetadataInAssemblyOf(typeof(CartPlugin).Assembly);
 
             host.RegisterApiControllers(typeof(CartPlugin).Assembly);

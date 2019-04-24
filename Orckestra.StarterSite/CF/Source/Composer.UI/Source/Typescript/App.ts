@@ -58,6 +58,8 @@
 ///<reference path='../../../Composer.Store.UI/StoreInventory/Source/TypeScript/StoreInventoryController.ts' />
 ///<reference path='../../../Composer.MyAccount.UI/RecurringSchedule/Source/TypeScript/MyRecurringScheduleController.ts' />
 ///<reference path='../../../Composer.MyAccount.UI/RecurringSchedule/Source/TypeScript/MyRecurringScheduleDetailsController.ts' />
+///<reference path='../../../Composer.MyAccount.UI/RecurringCart/Source/TypeScript/MyRecurringCartsController.ts' />
+///<reference path='../../../Composer.MyAccount.UI/RecurringCart/Source/TypeScript/MyRecurringCartDetailsController.ts' />
 
 (() => {
     'use strict';
@@ -130,6 +132,8 @@
                 { name: 'MyAccount.WishListInHeader', controller: Orckestra.Composer.WishListInHeaderController },
                 { name: 'MyAccount.MyRecurringSchedule', controller: Orckestra.Composer.MyRecurringScheduleController },
                 { name: 'MyAccount.MyRecurringScheduleDetails', controller: Orckestra.Composer.MyRecurringScheduleDetailsController },
+                { name: 'MyAccount.MyRecurringCarts', controller: Orckestra.Composer.MyRecurringCartsController },
+                { name: 'MyAccount.MyRecurringCartDetails', controller: Orckestra.Composer.MyRecurringCartDetailsController },
 
                 { name: 'Orders.CurrentOrders', controller: Orckestra.Composer.CurrentOrdersController },
                 { name: 'Orders.PastOrders', controller: Orckestra.Composer.PastOrdersController },

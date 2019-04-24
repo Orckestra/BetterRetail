@@ -228,9 +228,11 @@
     <Compile Include="Parameters\GetProductDefinitionParam.cs" />
     <Compile Include="Parameters\GetProductParam.cs" />
     <Compile Include="Parameters\GetProductsPriceParam.cs" />
+    <Compile Include="Parameters\GetRecurringCartsUrlParam.cs" />
     <Compile Include="Parameters\GetRecurringOrderTemplateDetailParam.cs" />
     <Compile Include="Parameters\GetRecurringOrderTemplatesParam.cs" />
     <Compile Include="Parameters\GetRecurringScheduleDetailsBaseUrlParam.cs" />
+    <Compile Include="Parameters\GetRecurringCartDetailsUrlParam.cs" />
     <Compile Include="Parameters\GetRecurringScheduleDetailsUrlParam.cs" />
     <Compile Include="Parameters\GetRecurringScheduleUrlParam.cs" />
     <Compile Include="Parameters\GetStickyLinksParam.cs" />
@@ -246,6 +248,7 @@
     <Compile Include="Providers\Dam\ProductImageInfo.cs" />
     <Compile Include="Providers\IPageNotFoundUrlProvider.cs" />
     <Compile Include="Providers\IProductRepository.cs" />
+    <Compile Include="Providers\IRecurringCartUrlProvider.cs" />
     <Compile Include="Providers\IRecurringScheduleUrlProvider.cs" />
     <Compile Include="Providers\ProductRepository.cs" />
     <Compile Include="Repositories\IInventoryRepository.cs" />

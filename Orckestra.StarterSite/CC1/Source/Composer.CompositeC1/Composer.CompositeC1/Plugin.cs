@@ -38,8 +38,9 @@ namespace Orckestra.Composer.CompositeC1
             host.Register<CategoryBrowsingUrlProvider, ICategoryBrowsingUrlProvider>();
             host.Register<CartUrlProvider, ICartUrlProvider>();
             host.Register<MyAccountUrlProvider, IMyAccountUrlProvider>();
-            host.Register<WishListUrlProvider, IWishListUrlProvider>();
+            host.Register<WishListUrlProvider, IWishListUrlProvider>();            
             host.Register<RecurringScheduleUrlProvider, IRecurringScheduleUrlProvider>();
+            host.Register<RecurringCartUrlProvider, IRecurringCartUrlProvider>();
             host.Register<CategoryPageService, ICategoryBrowsingService>();
             host.Register<ImageViewService, IImageViewService>();
             host.Register<MediaService, IMediaService>();
