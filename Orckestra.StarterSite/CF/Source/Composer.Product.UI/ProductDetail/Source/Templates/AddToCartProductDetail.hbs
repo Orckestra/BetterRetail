@@ -10,11 +10,14 @@
             <!--Don't display the AddToCart Button the inventory is loading-->
         {{else}}
             {{#if IsAvailableToSell}}
-                <button class="btn btn-primary btn-lg text-uppercase"
+                <button id="addToCartButton"
+                        class="btn btn-primary btn-lg text-uppercase"
                         data-qa="product-add-to-cart"
-                        data-oc-click="addLineItem">
-                    {{localize "General" "B_AddToCartProductDetail"}}
-                    <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  hidden"></span>
+                        data-oc-click="addToCartButtonClick">
+                    <span id="addToCartMsg">
+                        {{localize "General" "B_AddToCartProductDetail"}}
+                    </span>
+                    <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch hidden"></span>
                 </button>
             {{else}}
                 <button class="btn btn-primary btn-lg text-uppercase"
