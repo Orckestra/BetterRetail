@@ -11,15 +11,15 @@ namespace Orckestra.Composer.Factory
 {
     public class RecurringOrderProgramViewModelFactory : IRecurringOrderProgramViewModelFactory
     {
-        private readonly IViewModelMapper _viewModelMapper;
-        private readonly ILocalizationProvider _localizationProvider;
+        protected IViewModelMapper ViewModelMapper { get; private set; }
+        protected ILocalizationProvider LocalizationProvider { get; private set; }
 
         public RecurringOrderProgramViewModelFactory(
             IViewModelMapper viewModelMapper,
             ILocalizationProvider localizationProvider)
         {
-            _viewModelMapper = viewModelMapper;
-            _localizationProvider = localizationProvider;
+            ViewModelMapper = viewModelMapper;
+            LocalizationProvider = localizationProvider;
         }
 
         public RecurringOrderProgramViewModel CreateRecurringOrderProgramViewModel(RecurringOrderProgram program, CultureInfo culture)
@@ -27,7 +27,7 @@ namespace Orckestra.Composer.Factory
             if (program == null) { throw new ArgumentNullException(nameof(program)); }
             if (culture == null) { throw new ArgumentNullException(nameof(culture)); }
 
-            var vm = _viewModelMapper.MapTo<RecurringOrderProgramViewModel>(program, culture);
+            var vm = ViewModelMapper.MapTo<RecurringOrderProgramViewModel>(program, culture);
 
             if (vm == null) { return null; }
 

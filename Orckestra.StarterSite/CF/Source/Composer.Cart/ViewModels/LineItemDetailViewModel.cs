@@ -127,6 +127,11 @@ namespace Orckestra.Composer.Cart.ViewModels
         /// </summary>
         public string RecurringOrderFrequencyDisplayName { get; set; }
 
+        /// <summary>
+        /// Available frequencies associated to the RecurringOrderProgramName
+        /// </summary>
+        public List<RecurringOrderProgramFrequencyViewModel> RecurringOrderProgramFrequencies { get; set; }
+
 
         public LineItemDetailViewModel()
         {

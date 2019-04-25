@@ -18,6 +18,8 @@ using Orckestra.Composer.Cart.Helper;
 using Orckestra.Composer.Repositories;
 using Orckestra.Composer.Utils;
 using Orckestra.Composer.Helper;
+using Orckestra.Composer.Factory;
+using Orckestra.Overture.ServiceModel.RecurringOrders;
 
 namespace Orckestra.Composer.Cart.Factory
 {
@@ -30,6 +32,7 @@ namespace Orckestra.Composer.Cart.Factory
         protected ILineItemValidationProvider LineItemValidationProvider { get; private set; }
         protected IRecurringOrdersRepository RecurringOrderRepository { get; private set; }
         protected IComposerContext ComposerContext { get; private set; }
+        protected IRecurringOrderProgramViewModelFactory RecurringOrderProgramViewModelFactory { get; private set; }
 
         public LineItemViewModelFactory(IViewModelMapper viewModelMapper,
             ILocalizationProvider localizationProvider,
@@ -37,7 +40,8 @@ namespace Orckestra.Composer.Cart.Factory
             IRewardViewModelFactory rewardViewModelFactory,
             ILineItemValidationProvider lineItemValidationProvider,
             IRecurringOrdersRepository recurringOrderRepository,
-            IComposerContext composerContext)
+            IComposerContext composerContext,
+            IRecurringOrderProgramViewModelFactory recurringOrderProgramViewModelFactory)
         {
             if (localizationProvider == null) { throw new ArgumentNullException("localizationProvider"); }
             if (viewModelMapper == null) { throw new ArgumentNullException("viewModelMapper"); }
@@ -45,6 +49,8 @@ namespace Orckestra.Composer.Cart.Factory
             if (rewardViewModelFactory == null) { throw new ArgumentNullException("rewardViewModelFactory"); }
             if (lineItemValidationProvider == null) { throw new ArgumentNullException("lineItemValidationProvider"); }
             if (recurringOrderRepository == null) { throw new ArgumentNullException("recurringOrderRepository"); }
+            if (composerContext == null) { throw new ArgumentNullException("composerContext"); }
+            if (recurringOrderProgramViewModelFactory == null) { throw new ArgumentNullException("recurringOrderProgramViewModelFactory"); }
 
             ViewModelMapper = viewModelMapper;
             LocalizationProvider = localizationProvider;
@@ -53,6 +59,7 @@ namespace Orckestra.Composer.Cart.Factory
             LineItemValidationProvider = lineItemValidationProvider;
             RecurringOrderRepository = recurringOrderRepository;
             ComposerContext = composerContext;
+            RecurringOrderProgramViewModelFactory = recurringOrderProgramViewModelFactory;
         }
 
         /// <summary>
@@ -137,24 +144,34 @@ namespace Orckestra.Composer.Cart.Factory
             vm.AdditionalFees = MapLineItemAdditionalFeeViewModel(lineItem, param.CultureInfo).ToList();
 
             //Because the whole class is not async, we call a .Result here
-            vm.RecurringOrderFrequencyDisplayName = GetRecurringOrderFrequencyDisplayName(lineItem, param.CultureInfo).Result;
+            var map = MapRecurringOrderFrequencies(vm ,lineItem, param.CultureInfo).Result;
             
             return vm;
         }
 
-        public async virtual Task<string> GetRecurringOrderFrequencyDisplayName(LineItem lineItem, CultureInfo cultureInfo)
+        public async virtual Task<bool> MapRecurringOrderFrequencies(LineItemDetailViewModel vm, LineItem lineItem, CultureInfo cultureInfo)
         {
-            if (lineItem == null) { return string.Empty; }
+            if (lineItem == null) { return false; }
 
             var scope = ComposerContext.Scope;
             var recurringProgramName = lineItem.RecurringOrderProgramName;
 
-            if(string.IsNullOrEmpty(recurringProgramName)) { return string.Empty; }
+            if(string.IsNullOrEmpty(recurringProgramName)) { return false; }
 
             var program = await RecurringOrderRepository.GetRecurringOrderProgram(scope, recurringProgramName).ConfigureAwaitWithCulture(false);
 
+            vm.RecurringOrderFrequencyDisplayName = GetRecurringOrderFrequencyDisplayName(program, lineItem, cultureInfo);
+
+            var programViewModel = RecurringOrderProgramViewModelFactory.CreateRecurringOrderProgramViewModel(program, cultureInfo);
+            vm.RecurringOrderProgramFrequencies = programViewModel?.Frequencies;
+
+            return true;
+        }
+
+        private string GetRecurringOrderFrequencyDisplayName(RecurringOrderProgram program, LineItem lineItem, CultureInfo cultureInfo)
+        {
             if (RecurringOrderCartHelper.IsRecurringOrderLineItemValid(lineItem))
-            {               
+            {
                 if (program != null)
                 {
                     var frequency = program.Frequencies.FirstOrDefault(f => string.Equals(f.RecurringOrderFrequencyName, lineItem.RecurringOrderFrequencyName, StringComparison.OrdinalIgnoreCase));
@@ -170,10 +187,10 @@ namespace Orckestra.Composer.Cart.Factory
                     }
                 }
             }
-
             return string.Empty;
-
         }
+        
+
 
         /// <summary>
         /// Gets the KeyVariant attributes from a line item.

@@ -30,9 +30,6 @@ namespace Orckestra.Composer.Services
         protected IRecurringOrderTemplateViewModelFactory RecurringOrderTemplateViewModelFactory { get; private set; }
         protected ILookupService LookupService { get; private set; }
         protected IImageService ImageService { get; private set; }
-        //protected IRecurringOrderProgramViewModelFactory _recurringOrderProgramViewModelFactory { get; private set; }
-        //private readonly IExtendedCartRepository _cartRepository;
-        //private readonly IRecurringOrderInactifProductViewModelFactory _recurringOrderInactifProductViewModelFactory;
 
         public RecurringOrderTemplatesViewService(IRecurringOrdersRepository recurringOrdersRepository, 
             IViewModelMapper viewModelMapper,
