@@ -49,5 +49,12 @@ namespace Orckestra.Composer.Cart.Services
         /// To be used in recurring orders menu
         /// </summary>
         Task<CustomerPaymentMethodListViewModel> GetCustomerPaymentMethodListViewModelAsync(GetCustomerPaymentMethodListViewModelParam param);
+
+        /// <summary>
+        /// Updates the payment method for a recurring cart 
+        /// </summary>
+        /// <param name="updatePaymentMethodParam"></param>
+        /// <returns></returns>
+        Task<IRecurringOrderCartViewModel>UpdateRecurringOrderCartPaymentMethodAsync(UpdatePaymentMethodParam param, string baseUrl);
     }
 }

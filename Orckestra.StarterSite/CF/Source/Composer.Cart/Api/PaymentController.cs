@@ -162,7 +162,6 @@ namespace Orckestra.Composer.Cart.Api
             }).ConfigureAwait(false);
 
             return Ok(results);
-
         }
     }
 }

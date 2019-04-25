@@ -35,10 +35,11 @@ namespace Orckestra.Composer.Cart.Services
         protected IViewModelMapper ViewModelMapper { get; private set; }
         protected IPaymentProviderFactory PaymentProviderFactory { get; private set; }
         protected IRecurringOrderTemplatesViewService RecurringOrderTemplatesViewService { get; private set; }
+        protected IRecurringOrderCartsViewService RecurringOrderCartsViewService { get; private set; }        
 
         public PaymentViewService(IPaymentRepository paymentRepository, ICartViewModelFactory cartViewModelFactory, ICartRepository cartRepository,
          ILookupService lookupService, IViewModelMapper viewModelMapper, IPaymentProviderFactory paymentProviderFactory, 
-         IRecurringOrderTemplatesViewService recurringOrderTemplatesViewService)
+         IRecurringOrderTemplatesViewService recurringOrderTemplatesViewService, IRecurringOrderCartsViewService recurringOrderCartsViewService)
         {
             if (paymentRepository == null) { throw new ArgumentNullException("paymentRepository"); }
             if (cartViewModelFactory == null) { throw new ArgumentNullException("cartViewModelFactory"); }
@@ -46,6 +47,7 @@ namespace Orckestra.Composer.Cart.Services
             if (viewModelMapper == null) { throw new ArgumentNullException("viewModelMapper"); }
             if (paymentProviderFactory == null) { throw new ArgumentNullException("paymentProviderFactory"); }
             if (recurringOrderTemplatesViewService == null) { throw new ArgumentNullException("recurringOrderTemplatesViewService"); }
+            if (recurringOrderCartsViewService == null) { throw new ArgumentNullException("recurringOrderCartsViewService"); }
 
             PaymentRepository = paymentRepository;
             CartViewModelFactory = cartViewModelFactory;
@@ -54,6 +56,7 @@ namespace Orckestra.Composer.Cart.Services
             ViewModelMapper = viewModelMapper;
             PaymentProviderFactory = paymentProviderFactory;
             RecurringOrderTemplatesViewService = recurringOrderTemplatesViewService;
+            RecurringOrderCartsViewService = recurringOrderCartsViewService;
         }
 
 
@@ -509,6 +512,61 @@ namespace Orckestra.Composer.Cart.Services
                 PaymentMethods = list.Select(s => CartViewModelFactory.MapSavedCreditCard(s, param.CultureInfo)).ToList(),
                 //AddWalletUrl
             };
+        }
+
+        public async Task<IRecurringOrderCartViewModel> UpdateRecurringOrderCartPaymentMethodAsync(UpdatePaymentMethodParam param, string baseUrl)
+        {
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("CartName"), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.PaymentProviderName)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("PaymentProviderName"), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("Scope"), nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("CultureInfo"), nameof(param)); }
+            if (param.CustomerId == default(Guid)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("CustomerId"), nameof(param)); }
+            if (param.PaymentId == default(Guid)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("PaymentId"), nameof(param)); }
+            if (param.PaymentMethodId == default(Guid)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("PaymentMethodId"), nameof(param)); }
+
+            var payments = await GetCartPaymentsAsync(param).ConfigureAwait(false);
+            var activePayment = payments.GetPayment(param.PaymentId);
+
+            if (activePayment.ShouldInvokePrePaymentSwitch())
+            {
+                activePayment = await PreparePaymentSwitch(param, activePayment).ConfigureAwait(false);
+                param.PaymentId = activePayment.Id;
+            }
+
+            var validatePaymentMethodParam = new ValidatePaymentMethodParam()
+            {
+                CartName = param.CartName,
+                CultureInfo = param.CultureInfo,
+                CustomerId = param.CustomerId,
+                IsAuthenticated = param.IsAuthenticated,
+                ProviderName = param.PaymentProviderName,
+                Scope = param.Scope,
+                PaymentMethodId = param.PaymentMethodId
+            };
+
+            var isPaymentMethodValid = await ValidatePaymentMethod(validatePaymentMethodParam).ConfigureAwait(false);
+
+            if (!isPaymentMethodValid)
+            {
+                throw new Exception($"Payment method for provider name /'{param.PaymentProviderName}/' not valid. Credit card has probably expired.");
+            }
+
+            Overture.ServiceModel.Orders.Cart cart = await PaymentRepository.UpdatePaymentMethodAsync(param).ConfigureAwait(false);
+
+            var initParam = BuildInitializePaymentParam(cart, param);
+            var paymentProvider = ObtainPaymentProvider(param.PaymentProviderName);
+            cart = await paymentProvider.InitializePaymentAsync(cart, initParam).ConfigureAwait(false);
+
+            var vm = await RecurringOrderCartsViewService.CreateCartViewModelAsync(new CreateRecurringOrderCartViewModelParam
+            {
+                Cart = cart,
+                CultureInfo = param.CultureInfo,
+                IncludeInvalidCouponsMessages = false,
+                BaseUrl = baseUrl
+            });
+
+            return vm;
         }
     }
 }

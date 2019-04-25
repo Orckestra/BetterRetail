@@ -27,25 +27,29 @@ namespace Orckestra.Composer.Cart.Services
         protected ICartRepository CartRepository { get; private set; }
         protected ICartService CartService { get; private set; }
         protected IRecurringOrderTemplateViewModelFactory RecurringOrderTemplateViewModelFactory { get; private set; }
+        protected IRecurringOrderCartsViewService RecurringOrderCartsViewService { get; private set; }
 
         public ShippingMethodViewService(
-            IFulfillmentMethodRepository fulfillmentMethodRepository, 
+            IFulfillmentMethodRepository fulfillmentMethodRepository,
             ICartViewModelFactory cartViewModelFactory,
-            ICartRepository cartRepository, 
+            ICartRepository cartRepository,
             ICartService cartService,
-            IRecurringOrderTemplateViewModelFactory recurringOrderTemplateViewModelFactory)
+            IRecurringOrderTemplateViewModelFactory recurringOrderTemplateViewModelFactory,
+            IRecurringOrderCartsViewService recurringOrderCartsViewService)
         {
             if (fulfillmentMethodRepository == null) { throw new ArgumentNullException("fulfillmentMethodRepository"); }
             if (cartViewModelFactory == null) { throw new ArgumentNullException("cartViewModelFactory"); }
             if (cartRepository == null) { throw new ArgumentNullException("cartRepository"); }
             if (cartService == null) { throw new ArgumentNullException("cartService"); }
             if (recurringOrderTemplateViewModelFactory == null) { throw new ArgumentNullException("recurringOrderTemplateViewModelFactory"); }
+            if (recurringOrderCartsViewService == null) { throw new ArgumentNullException("recurringOrderCartsViewService"); }
 
             FulfillmentMethodRepository = fulfillmentMethodRepository;
             CartViewModelFactory = cartViewModelFactory;
             CartRepository = cartRepository;
             CartService = cartService;
             RecurringOrderTemplateViewModelFactory = recurringOrderTemplateViewModelFactory;
+            RecurringOrderCartsViewService = recurringOrderCartsViewService;
         }
 
         /// <summary>
@@ -208,6 +212,69 @@ namespace Orckestra.Composer.Cart.Services
             {
                 ShippingMethods = shippingMethodViewModels
             };
+        }
+
+        public async Task<IRecurringOrderCartViewModel> UpdateRecurringOrderCartShippingMethodAsync(UpdateRecurringOrderCartShippingMethodParam param)
+        {
+            if (!ConfigurationUtil.GetRecurringOrdersConfigEnabled())
+                return GetEmptyRecurringOrderCartViewModel();
+
+            if (param == null) throw new ArgumentNullException(nameof(param), ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param)));
+
+            var cart = await CartRepository.GetCartAsync(new GetCartParam
+            {
+                BaseUrl = param.BaseUrl,
+                Scope = param.Scope,
+                CultureInfo = param.CultureInfo,
+                CustomerId = param.CustomerId,
+                CartName = param.CartName
+
+            }).ConfigureAwait(false);
+
+            if (cart.Shipments == null || !cart.Shipments.Any())
+            {
+                throw new InvalidOperationException("No shipment was found in the cart.");
+            }
+
+            var shipment = cart.Shipments.First();
+
+            var fulfillmentMethods = await FulfillmentMethodRepository.GetCalculatedFulfillmentMethods(new GetShippingMethodsParam
+            {
+                CartName = param.CartName,
+                CultureInfo = param.CultureInfo,
+                CustomerId = param.CustomerId,
+                Scope = param.Scope,
+                ShipmentId = shipment.Id
+            });
+
+            if (fulfillmentMethods == null)
+                throw new InvalidOperationException($"No fulfillmentMethods was found for the cart name ({param.CartName}).");
+
+            var fulfillmentMethod = fulfillmentMethods.SingleOrDefault(f => f.ShippingProviderId == param.ShippingProviderId.ToGuid() &&
+                    string.Equals(f.Name, param.ShippingMethodName, StringComparison.InvariantCultureIgnoreCase));
+
+            if(fulfillmentMethod == null)
+                throw new InvalidOperationException($"The fulfillmentMethod ({param.ShippingProviderId}) was not found.");
+
+            shipment.FulfillmentMethod = fulfillmentMethod;
+
+            var updatedCart = await CartRepository.UpdateCartAsync(UpdateCartParamFactory.Build(cart)).ConfigureAwait(false);
+
+            var vm = await RecurringOrderCartsViewService.CreateCartViewModelAsync(new CreateRecurringOrderCartViewModelParam
+            {
+                Cart = updatedCart,
+                CultureInfo = new CultureInfo(updatedCart.CultureName),
+                IncludeInvalidCouponsMessages = false,
+                BaseUrl = param.BaseUrl,
+            }).ConfigureAwait(false);
+
+            return vm;
+        }
+
+        private IRecurringOrderCartViewModel GetEmptyRecurringOrderCartViewModel()
+        {
+            var emptyVm = new CartViewModel();
+            return emptyVm.AsExtensionModel<IRecurringOrderCartViewModel>();
         }
     }
 }

@@ -91,6 +91,12 @@
     <Compile Include="Parameters\GetRecurringOrderCartViewModelParam.cs" />
     <Compile Include="Parameters\GetShippingMethodsScopeParam.cs" />
     <Compile Include="Parameters\Order\GetOrderChangesParam.cs" />
+    <Compile Include="Parameters\RescheduleRecurringCartParam.cs" />
+    <Compile Include="Parameters\UpdateRecurringCartLineItemParam.cs" />
+    <Compile Include="Parameters\UpdateRecurringOrderCartBillingAddressParam.cs" />
+    <Compile Include="Parameters\UpdateRecurringOrderCartNextProcessingDateParam.cs" />
+    <Compile Include="Parameters\UpdateRecurringOrderCartShippingAddressParam.cs" />
+    <Compile Include="Parameters\UpdateRecurringOrderCartShippingMethodParam.cs" />
     <Compile Include="Parameters\ValidatePaymentMethodsParam.cs" />
     <Compile Include="Parameters\CreateRecurringOrderCartViewModelParam.cs" />
     <Compile Include="Parameters\WishList\GetShareWishListUrlParam.cs" />
@@ -176,6 +182,11 @@
     <Compile Include="Requests\RemoveLineItemViewModel.cs" />
     <Compile Include="Requests\UpdateCartRequest.cs" />
     <Compile Include="Requests\UpdateLineItemViewModel.cs" />
+    <Compile Include="Requests\UpdateRecurringCartNextProcessingDateRequest.cs" />
+    <Compile Include="Requests\UpdateRecurringOrderCartBillingAddressRequest.cs" />
+    <Compile Include="Requests\UpdateRecurringOrderCartPaymentMethodRequest.cs" />
+    <Compile Include="Requests\UpdateRecurringOrderCartShippingAddressRequest.cs" />
+    <Compile Include="Requests\UpdateRecurringTemplatePaymentMethodRequest.cs" />
     <Compile Include="Services\CartService.cs" />
     <Compile Include="Services\CheckoutBreadcrumbViewService.cs" />
     <Compile Include="Services\CheckoutNavigationViewService.cs" />

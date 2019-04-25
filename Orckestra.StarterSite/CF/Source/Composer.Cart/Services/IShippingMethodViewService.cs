@@ -37,5 +37,12 @@ namespace Orckestra.Composer.Cart.Services
         /// <param name="param"></param>
         /// <returns>The ShippingMethodsViewModel</returns>
         Task<RecurringOrdersTemplatesShippingMethodsViewModel> GetShippingMethodsScopeAsync(GetShippingMethodsScopeParam param);
+
+        /// <summary>
+        /// Update a recurring cart to a specific shipping method
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        Task<IRecurringOrderCartViewModel> UpdateRecurringOrderCartShippingMethodAsync(UpdateRecurringOrderCartShippingMethodParam param);
     }
 }

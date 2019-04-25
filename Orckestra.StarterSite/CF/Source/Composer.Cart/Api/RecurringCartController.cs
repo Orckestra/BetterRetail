@@ -13,6 +13,7 @@ using Orckestra.Composer.Providers;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Utils;
 using Orckestra.Composer.WebAPIFilters;
+using Orckestra.Overture.ServiceModel.Orders;
 
 namespace Orckestra.Composer.Cart.Api
 {
@@ -24,22 +25,26 @@ namespace Orckestra.Composer.Cart.Api
         protected IComposerContext ComposerContext { get; }
         protected IPaymentViewService PaymentViewService { get; }
         protected IRecurringOrderTemplatesViewService RecurringOrderTemplatesService { get; }
+        protected IShippingMethodViewService ShippingMethodViewService { get; }
 
         public RecurringCartController(
             IRecurringOrderCartsViewService recurringOrderCarstService,
             IComposerContext composerContext,
             IPaymentViewService paymentViewService,
-            IRecurringOrderTemplatesViewService recurringOrderTemplatesService)
+            IRecurringOrderTemplatesViewService recurringOrderTemplatesService,
+            IShippingMethodViewService shippingMethodViewService)
         {
             if (recurringOrderCarstService == null) throw new ArgumentNullException(nameof(recurringOrderCarstService), ArgumentNullMessageFormatter.FormatErrorMessage(nameof(recurringOrderCarstService)));
             if (composerContext == null) throw new ArgumentNullException(nameof(composerContext), ArgumentNullMessageFormatter.FormatErrorMessage(nameof(composerContext)));
             if (paymentViewService == null) throw new ArgumentNullException(nameof(paymentViewService), ArgumentNullMessageFormatter.FormatErrorMessage(nameof(paymentViewService)));
             if (recurringOrderTemplatesService == null) throw new ArgumentNullException(nameof(recurringOrderTemplatesService), ArgumentNullMessageFormatter.FormatErrorMessage(nameof(recurringOrderTemplatesService)));
+            if (shippingMethodViewService == null) throw new ArgumentNullException(nameof(shippingMethodViewService), ArgumentNullMessageFormatter.FormatErrorMessage(nameof(shippingMethodViewService)));
 
             RecurringOrderCartsService = recurringOrderCarstService;
             ComposerContext = composerContext;
             PaymentViewService = paymentViewService;
             RecurringOrderTemplatesService = recurringOrderTemplatesService;
+            ShippingMethodViewService = shippingMethodViewService;
         }
 
         [HttpGet]
@@ -83,6 +88,101 @@ namespace Orckestra.Composer.Cart.Api
             });
 
             return Ok(viewModel);
+        }
+
+        [HttpPut]
+        [Route("{cartName}/shipping-address")]
+        public virtual async Task<IHttpActionResult> UpdateRecurringOrderCartShippingAddress([FromUri]string cartName, [FromBody]UpdateRecurringOrderCartShippingAddressRequest request)
+        {
+            if (request == null) { return BadRequest("Missing Request Body"); }
+            if (request.ShippingAddressId == null) { return BadRequest("Missing Request Body"); }
+            if (!ModelState.IsValid) { return BadRequest(ModelState); }
+
+            var param = new UpdateRecurringOrderCartShippingAddressParam()
+            {
+                CultureInfo = ComposerContext.CultureInfo,
+                ScopeId = ComposerContext.Scope,
+                CartName = cartName,
+                CustomerId = ComposerContext.CustomerId,
+                ShippingAddressId = request.ShippingAddressId.ToGuid(),
+                BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
+                UseSameForShippingAndBilling = request.UseSameForShippingAndBilling
+            };
+
+            var results = await RecurringOrderCartsService.UpdateRecurringOrderCartShippingAddressAsync(param).ConfigureAwait(false);
+
+            return Ok(results);
+        }
+
+        [HttpPut]
+        [Route("{cartName}/billing-address")]
+        public virtual async Task<IHttpActionResult> UpdateRecurringOrderCartBillingAddress([FromUri]string cartName, [FromBody]UpdateRecurringOrderCartBillingAddressRequest request)
+        {
+            if (request == null) { return BadRequest("Missing Request Body"); }
+            if (request.BillingAddressId == null) { return BadRequest("Missing Request Body"); }
+            if (!ModelState.IsValid) { return BadRequest(ModelState); }
+
+            var param = new UpdateRecurringOrderCartBillingAddressParam()
+            {
+                CultureInfo = ComposerContext.CultureInfo,
+                ScopeId = ComposerContext.Scope,
+                CartName = cartName,
+                CustomerId = ComposerContext.CustomerId,
+                BillingAddressId = request.BillingAddressId.ToGuid(),
+                BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
+                UseSameForShippingAndBilling = request.UseSameForShippingAndBilling
+            };
+
+            var results = await RecurringOrderCartsService.UpdateRecurringOrderCartBillingAddressAsync(param).ConfigureAwait(false);
+
+            return Ok(results);
+        }
+
+        [HttpPut]
+        [Route("{cartName}/paymentmethod")]
+        public virtual async Task<IHttpActionResult> UpdateRecurringTemplatePaymentMethod([FromUri]string cartName, [FromBody]UpdateRecurringTemplatePaymentMethodRequest request)
+        {
+            if (request == null) { return BadRequest("Missing Request Body"); }
+            if (request.ShippingProviderId == null) { return BadRequest("Missing Request Body"); }
+            if (request.ShippingMethodName == null) { return BadRequest("Missing Request Body"); }
+            if (!ModelState.IsValid) { return BadRequest(ModelState); }
+            
+
+            var results = await ShippingMethodViewService.UpdateRecurringOrderCartShippingMethodAsync(new UpdateRecurringOrderCartShippingMethodParam()
+            {
+                CartName = cartName,
+                CultureInfo = ComposerContext.CultureInfo,
+                CustomerId = ComposerContext.CustomerId,
+                Scope = ComposerContext.Scope,
+                BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
+                ShippingMethodName = request.ShippingMethodName,
+                ShippingProviderId = request.ShippingProviderId
+            });
+
+            return Ok(results);
+        }
+
+
+
+        [HttpPut]
+        [Route("{cartName}/reschedule")]
+        public async Task<IHttpActionResult> UpdateRecurringCartNextOccurence([FromBody]UpdateRecurringCartNextOccurenceRequest request)
+        {
+            if (request == null) { return BadRequest("Missing Request Body"); }
+            if (!ModelState.IsValid) { return BadRequest(ModelState); }
+
+            var vm = await RecurringOrderCartsService.UpdateRecurringOrderCartNextOccurenceAsync(new UpdateRecurringOrderCartNextOccurenceParam()
+            {
+                CultureInfo = ComposerContext.CultureInfo,
+                Scope = ComposerContext.Scope,
+                CartName = request.CartName,
+                NextOccurence = request.NextOccurence,
+                CustomerId = ComposerContext.CustomerId,
+                BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
+
+            }).ConfigureAwait(false);
+
+            return Ok(vm);
         }
     }
 }
