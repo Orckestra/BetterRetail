@@ -1,0 +1,147 @@
+///<reference path='../../../../../Composer.UI/Source/Typings/tsd.d.ts' />
+///<reference path='../../../../../Composer.UI/Source/Typescript/Events/IEventHub.ts' />
+///<reference path='./IRecurringOrderService' />
+
+module Orckestra.Composer {
+    'use strict';
+
+    export class RecurringOrderService implements IRecurringOrderService {
+        private repository: IRecurringOrderRepository;
+        private eventHub: Orckestra.Composer.IEventHub;
+
+
+        public constructor(repository: IRecurringOrderRepository, eventHub: Orckestra.Composer.IEventHub) {
+            if (!eventHub) {
+                throw new Error('Error: eventHub is required');
+            }
+            this.repository = repository;
+            this.eventHub = eventHub;
+        }
+
+        public updateLineItemsDate(updateLineItemsParam: IRecurringOrderLineItemsUpdateDateParam): Q.Promise<any> {
+            return this.repository.updateLineItemsDate(updateLineItemsParam);
+        }
+
+        public deleteLineItem(deleteLineItemParam: IRecurringOrderLineItemDeleteParam): Q.Promise<any> {
+            return this.repository.deleteLineItem(deleteLineItemParam);
+        }
+
+        public deleteLineItems(deleteLineItemsParam: IRecurringOrderLineItemsDeleteParam): Q.Promise<any> {
+            return this.repository.deleteLineItems(deleteLineItemsParam);
+        }
+
+        public getCustomerAddresses(): Q.Promise<any> {
+            return this.repository.getCustomerAddresses();
+        }
+
+        public getCustomerPaymentMethods(): Q.Promise<any> {
+            return this.repository.getCustomerPaymentMethods();
+        }
+
+        //todo
+        public updateCartShippingAddress(updateTemplateAddressParam: IRecurringOrderUpdateTemplateAddressParam): Q.Promise<any> {
+            return this.repository.updateCartShippingAddress(updateTemplateAddressParam);
+        }
+
+        public updateCartBillingAddress(updateTemplateAddressParam: IRecurringOrderUpdateTemplateAddressParam): Q.Promise<any> {
+            return this.repository.updateCartBillingAddress(updateTemplateAddressParam);
+        }
+
+
+        public updateTemplatePaymentMethod(updateTemplatePaymentMethodParam: IRecurringOrderUpdateTemplatePaymentMethodParam): Q.Promise<any> {
+            return this.repository.updateTemplatePaymentMethod(updateTemplatePaymentMethodParam);
+        }
+
+        public updateLineItemQuantity(updateLineItemQuantityParam: IRecurringOrderUpdateLineItemQuantityParam): Q.Promise<any> {
+            return this.repository.updateLineItemQuantity(updateLineItemQuantityParam);
+        }
+
+        public getRecurringOrderCartsByUser() {
+            return this.repository.getRecurringOrderCartsByUser();
+        }
+
+        public getRecurringOrderTemplatesByUser() {
+            return this.repository.getRecurringOrderTemplatesByUser();
+        }
+
+        public updateTemplateLineItemQuantity(updateLineItemQuantityParam: IRecurringOrderTemplateUpdateLineItemQuantityParam): Q.Promise<any> {
+            return this.repository.updateTemplateLineItemQuantity(updateLineItemQuantityParam);
+        }
+
+        public getRecurringOrderProgramsByUser(): Q.Promise<any> {
+            return this.repository.getRecurringOrderProgramsByUser();
+        }
+
+        public getRecurringOrderProgramsByNames(programsByNamesParam: IRecurringOrderProgramsByNamesParam): Q.Promise<any> {
+            return this.repository.getRecurringOrderProgramsByNames(programsByNamesParam);
+        }
+
+        public updateTemplateLineItem(templateLineItemUpdateParam: IRecurringOrderTemplateLineItemUpdateParam): Q.Promise<any> {
+            return this.repository.updateTemplateLineItem(templateLineItemUpdateParam);
+        }
+
+        public deleteTemplateLineItem(deleteTemplateLineItemParam: IRecurringOrderTemplateLineItemDeleteParam): Q.Promise<any> {
+            return this.repository.deleteTemplateLineItem(deleteTemplateLineItemParam);
+        }
+
+        public deleteTemplateLineItems(deleteTemplateLineItemsParam: IRecurringOrderTemplateLineItemsDeleteParam): Q.Promise<any> {
+            return this.repository.deleteTemplateLineItems(deleteTemplateLineItemsParam);
+        }
+
+        public getCartContainsRecurrence(): Q.Promise<any> {
+            return this.repository.getCartContainsRecurrence();
+        }
+
+        public getCanRemovePaymentMethod(paymentMethodId: string): Q.Promise<any> {
+            return this.repository.getCanRemovePaymentMethod(paymentMethodId);
+        }
+
+        public getRecurringOrderCartSummaries(): Q.Promise<any> {
+            return this.repository.getRecurringOrderCartSummaries();
+        }
+
+        public addRecurringOrderCartLineItem(addLineItemQuantityParam: IAddRecurringOrderCartLineItemParam): Q.Promise<any> {
+            return this.repository.addRecurringOrderCartLineItem(addLineItemQuantityParam);
+        }
+
+        public getAnonymousCartSignInUrl(): Q.Promise<any> {
+            return this.repository.getAnonymousCartSignInUrl();
+        }
+
+        public updateCartShippingMethod(updateCartShippingMethodParam: IRecurringOrderCartUpdateShippingMethodParam): Q.Promise<any> {
+            return this.repository.updateCartShippingMethod(updateCartShippingMethodParam);
+        }
+
+        public getCartShippingMethods(getCartShippingMethodsParam: IRecurringOrderGetCartShippingMethods): Q.Promise<any> {
+            return this.repository.getCartShippingMethods(getCartShippingMethodsParam);
+        }
+
+        public getOrderTemplateShippingMethods(): Q.Promise<any> {
+            return this.repository.getOrderTemplateShippingMethods();
+        }
+
+        public getInactifProductsFromCustomer(): Q.Promise<any> {
+            return this.repository.getInactifProductsFromCustomer();
+        }
+
+        public clearCustomerInactifItems(): Q.Promise<any> {
+            return this.repository.clearCustomerInactifItems();
+        }
+
+
+        private _mapLineItemToRequest(lineItem: any): any {
+            return {
+                CategoryId: lineItem.ProductSummary.CategoryId,
+                ProductInfo: {
+                    ProductId: lineItem.ProductId,
+                    Sku: lineItem.Sku,
+                    VariantId: lineItem.VariantId
+                }
+            };
+        }
+
+        private _mapRecurringLineItemToRequest(lineItem: any): any {
+            return lineItem.SelectedRecurringOrderFrequencyId;
+        }
+    }
+}

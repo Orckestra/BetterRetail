@@ -12,9 +12,9 @@
             {{#if IsAvailableToSell}}
                 <button class="btn btn-primary btn-lg text-uppercase"
                         data-qa="product-add-to-cart"
-                        data-oc-click="addLineItem">
-                    {{localize "General" "B_AddToCartProductDetail"}}
-                    <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  hidden"></span>
+                        data-oc-click="addToCartButtonClick">
+                        {{localize "General" "B_AddToCartProductDetail"}}
+                    <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch hidden"></span>
                 </button>
             {{else}}
                 <button class="btn btn-primary btn-lg text-uppercase"

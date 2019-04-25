@@ -141,6 +141,27 @@
   <data name="L_ProductSpecifications" xml:space="preserve">
     <value>Specifications</value>
   </data>
+  <data name="L_RecurringDeliveryFrequency" xml:space="preserve">
+    <value>Shipping frequency</value>
+  </data>
+  <data name="L_RecurringPitch" xml:space="preserve">
+    <value>Transform into recurring order and &lt;span class="text-danger"&gt;save {0} off&lt;/span&gt;</value>
+  </data>
+  <data name="L_RecurringBubblePitch" xml:space="preserve">
+    <value>Select your preferred delivery frequency for this product.</value>
+  </data>
+  <data name="L_RecurringBubblePitchTitle" xml:space="preserve">
+    <value>Item recurrence</value>
+  </data>
+  <data name="L_RecurringSaveRate" xml:space="preserve">
+    <value>5%</value>
+  </data>
+  <data name="L_RecurringFrequencyOnce" xml:space="preserve">
+    <value>One-time shipping</value>
+  </data>
+  <data name="L_RecurringIconTooltip" xml:space="preserve">
+    <value>Item eligible to a Boomerang recurring order</value>
+  </data>
   <data name="L_StoreInventory" xml:space="preserve">
     <value>Inventory</value>
   </data>

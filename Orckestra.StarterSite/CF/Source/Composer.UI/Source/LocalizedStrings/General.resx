@@ -207,6 +207,9 @@
   <data name="L_QuoteOpen" xml:space="preserve">
     <value>“</value>
   </data>
+  <data name="L_RecurringProduct" xml:space="preserve">
+    <value>Product eligible to recurring order</value>
+  </data>
   <data name="Login" xml:space="preserve">
     <value>Log in</value>
   </data>
