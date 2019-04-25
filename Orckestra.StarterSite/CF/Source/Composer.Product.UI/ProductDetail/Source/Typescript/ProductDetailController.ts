@@ -6,7 +6,6 @@ module Orckestra.Composer {
 
         protected _concern: string = 'productDetail';
 
-        private availableFrequencies = [];
         private selectedRecurringOrderFrequencyName: string;
         private recurringMode: string = 'single';
 
