@@ -16,8 +16,11 @@ namespace Orckestra.Composer.CompositeC1.Mvc
         {
             // Hangfire host and sitemap recurring job
             LogProvider.SetCurrentLogProvider(C1LogProvider.Instance);
-            HangfireHost.Current.Init(new SitemapAutofacModule());
-            HangfireHost.Current.RegisterRecurringJobIfScheduleIsDefined();
+            if (HangfireHost.IsEnabled)
+            {
+                HangfireHost.Current.Init(new SitemapAutofacModule());
+                HangfireHost.Current.RegisterRecurringJobIfScheduleIsDefined();
+            }
         }
     }
 }

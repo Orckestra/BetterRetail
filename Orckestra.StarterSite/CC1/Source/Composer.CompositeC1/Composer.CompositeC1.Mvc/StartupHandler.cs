@@ -66,10 +66,17 @@ namespace Orckestra.Composer.CompositeC1.Mvc
             RegisterFunctionRoutes(functions);
 
             log.Info("Application Started");
-            
-            // Hangfire host and sitemap recurring job
-            HangfireHost.Current.Init(new SitemapAutofacModule());
-            HangfireHost.Current.RegisterRecurringJobIfScheduleIsDefined();
+
+            if (HangfireHost.IsEnabled)
+            {
+                // Hangfire host and sitemap recurring job
+                HangfireHost.Current.Init(new SitemapAutofacModule());
+                HangfireHost.Current.RegisterRecurringJobIfScheduleIsDefined();
+            }
+            else
+            {
+                log.Info("Hangfire automatic start explicitly disabled via app setting - hangfire will not run.");
+            }
         }
 
         private static void RegisterFunctions(FunctionCollection functions)
