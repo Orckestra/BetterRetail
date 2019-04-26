@@ -51,6 +51,7 @@ namespace Orckestra.Composer.CompositeC1
             host.Register<MyAccountViewService, IMyAccountViewService>();
             host.Register<PageNotFoundUrlProvider, IPageNotFoundUrlProvider>();
             host.Register<AntiCookieTamperingExcluder, IAntiCookieTamperingExcluder>();
+            host.Register<C1PerformanceDataCollector, IPerformanceDataCollector>();
         }
     }
 }

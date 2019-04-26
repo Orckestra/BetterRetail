@@ -200,6 +200,7 @@
     <Compile Include="ComposerOvertureClient.cs" />
     <Compile Include="HttpModules\AntiCookieTamperingModule.cs" />
     <Compile Include="HttpModules\IAntiCookieTamperingExcluder.cs" />
+    <Compile Include="IPerformanceDataCollector.cs" />
     <Compile Include="Kernel\ComposerDependencyResolver.cs" />
     <Compile Include="MvcFilters\MustBeAnonymousAttribute.cs" />
     <Compile Include="OutputCacheOptions.cs" />

@@ -287,6 +287,7 @@
     <Compile Include="AntiCookieTamperingExcluder.cs" />
     <Compile Include="AuthorizeAndRedirectAttribute.cs" />
     <Compile Include="C1HttpApplication.cs" />
+    <Compile Include="C1PerformanceDataCollector.cs" />
     <Compile Include="Cache\CacheExclusion.cs" />
     <Compile Include="Cache\CacheConfiguration.cs" />
     <Compile Include="Cache\CategoryPageExclusion.cs" />

@@ -13,16 +13,13 @@ namespace Orckestra.Composer.Exceptions
         /// <summary>
         /// Gets the list of errors describing why Composer failed.
         /// </summary>
-        public List<ErrorViewModel> Errors { get; private set; }
+        public List<ErrorViewModel> Errors { get; }
 
         public ComposerException(string errorCode)
         {
             if (string.IsNullOrWhiteSpace(errorCode))
             {
-                var errorMessage = "The error code cannot be null or whitespace";
-                var argumentNullException = new ArgumentException(errorMessage);
-
-                throw argumentNullException;
+                throw new ArgumentException("The error code cannot be null or whitespace", nameof(errorCode));
             }
 
             Errors = new List<ErrorViewModel>
@@ -36,26 +33,14 @@ namespace Orckestra.Composer.Exceptions
 
         public ComposerException(ErrorViewModel error)
         {
-            if (error == null)
-            {
-                var errorMessage = "error";
-                var argumentNullException = new ArgumentNullException(errorMessage);
-
-                throw argumentNullException;
-            }
+            if (error == null) throw new ArgumentNullException(nameof(error));
 
             Errors = new List<ErrorViewModel> { error };
         }
 
         public ComposerException(List<ErrorViewModel> errors)
         {
-            if (errors == null)
-            {
-                var errorMessage = "errors";
-                var argumentNullException = new ArgumentNullException(errorMessage);
-
-                throw argumentNullException;
-            }
+            if (errors == null) throw new ArgumentNullException(nameof(errors));
 
             Errors = errors;
         }
@@ -71,7 +56,7 @@ namespace Orckestra.Composer.Exceptions
             }
         }
 
-        public override string Message 
+        public override string Message
         {
             get
             {
@@ -80,20 +65,14 @@ namespace Orckestra.Composer.Exceptions
                     return "No errors";
                 }
 
-                return string.Join(Environment.NewLine, 
+                return string.Join(Environment.NewLine,
                     Errors.Select(e => $"Error code '{e.ErrorCode ?? "<undefined>"}': {e.ErrorMessage}"));
             }
         }
-        
+
         internal static ComposerException Create(ValidationError source)
         {
-            if (source == null)
-            {
-                var errorMessage = "source";
-                var argumentNullException = new ArgumentNullException(errorMessage);
-
-                throw argumentNullException;
-            }
+            if (source == null) throw new ArgumentNullException(nameof(source));
 
             var errors = source.Violations.Select(violation => new ErrorViewModel
             {
@@ -111,20 +90,12 @@ namespace Orckestra.Composer.Exceptions
                 });
             }
 
-            var exception = new ComposerException(errors);
-
-            return exception;
+            return new ComposerException(errors);
         }
 
         internal static ComposerException Create(WebServiceException source)
         {
-            if (source == null)
-            {
-                var errorMessage = "source";
-                var argumentNullException = new ArgumentNullException(errorMessage);
-
-                throw argumentNullException;
-            }
+            if (source == null) throw new ArgumentNullException(nameof(source));
 
             var errors = source.GetFieldErrors().Select(error => new ErrorViewModel
             {
@@ -142,20 +113,12 @@ namespace Orckestra.Composer.Exceptions
                 });
             }
 
-            var exception = new ComposerException(errors);
-
-            return exception;
+            return new ComposerException(errors);
         }
 
         internal static ComposerException Create(WebException source)
         {
-            if (source == null)
-            {
-                var errorMessage = "source";
-                var argumentNullException = new ArgumentNullException(errorMessage);
-
-                throw argumentNullException;
-            }
+            if (source == null) throw new ArgumentNullException(nameof(source));
 
             var errors = new List<ErrorViewModel>
             {
@@ -166,9 +129,7 @@ namespace Orckestra.Composer.Exceptions
                 }
             };
 
-            var exception = new ComposerException(errors);
-
-            return exception;
+            return new ComposerException(errors);
         }
     }
 }
