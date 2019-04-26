@@ -2,9 +2,10 @@
 using System.Net;
 using System.Security.Principal;
 using System.Web;
-using System.Web.Mvc;
 using System.Web.Security;
 using Orckestra.Composer.Services.Cookie;
+using Orckestra.Composer.Services;
+using System.Web.Mvc;
 
 namespace Orckestra.Composer.HttpModules
 {
@@ -28,7 +29,7 @@ namespace Orckestra.Composer.HttpModules
             var shouldHandle = ShouldHandleRequest(httpContext);
             if (!shouldHandle) { return; }
 
-            var cookieHandler = new ComposerCookieAccessor(httpContext.Request, httpContext.Response);
+            var cookieHandler = GetCookieHandler(httpContext);
             var isAuth = IsAuthenticated(httpContext);
             var isGuest = IsGuest(cookieHandler);
 
@@ -64,7 +65,7 @@ namespace Orckestra.Composer.HttpModules
 
         private void RemoveComposerCookie(HttpContextBase httpContext)
         {
-            var composerCookieHandler = new ComposerCookieAccessor(httpContext.Request, httpContext.Response);
+            var composerCookieHandler = GetCookieHandler(httpContext);
             composerCookieHandler.Clear();
         }
 
@@ -90,7 +91,7 @@ namespace Orckestra.Composer.HttpModules
             return isAuth;
         }
 
-        private bool IsGuest(ComposerCookieAccessor cookieAccessor)
+        private bool IsGuest(ICookieAccessor<ComposerCookieDto> cookieAccessor)
         {
             var dto = cookieAccessor.Read();
 
@@ -109,6 +110,11 @@ namespace Orckestra.Composer.HttpModules
 
         public void Dispose()
         {
+        }
+
+        protected virtual ICookieAccessor<ComposerCookieDto> GetCookieHandler(HttpContextBase httpContext)
+        {
+            return new ComposerCookieAccessor(httpContext.Request, httpContext.Response);
         }
     }
 }

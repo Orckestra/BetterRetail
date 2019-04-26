@@ -108,8 +108,9 @@
 
   <xsl:template match="configuration/system.webServer/modules/add[@name='UrlRoutingModule']" xml:space="preserve">
         <add name="UrlRewriteModule" type="Orckestra.Composer.CompositeC1.UrlRewriteModule, Orckestra.Composer.CompositeC1" />
-        <xsl:copy><xsl:apply-templates select="@* | node()"/></xsl:copy>
-        <remove name="WebDAVModule" />
+       <add name="AntiCookieTamperingModule" type="Orckestra.Composer.HttpModules.AntiCookieTamperingModule, Orckestra.Composer" />    
+       <xsl:copy><xsl:apply-templates select="@* | node()"/></xsl:copy>
+       <remove name="WebDAVModule" />
 </xsl:template>
 
   <xsl:template match="configuration/system.webServer/handlers">
