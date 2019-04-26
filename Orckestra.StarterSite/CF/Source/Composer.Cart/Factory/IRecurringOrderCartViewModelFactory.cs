@@ -15,7 +15,7 @@ namespace Orckestra.Composer.Cart.Factory
         /// </summary>
         /// <param name="param">Parameters used to create the ViewModel. May not be null.</param>
         /// <returns></returns>
-        IRecurringOrderCartViewModel CreateRecurringOrderCartViewModel(CreateRecurringOrderCartViewModelParam param);
+        CartViewModel CreateRecurringOrderCartViewModel(CreateRecurringOrderCartViewModelParam param);
 
         /// <summary>
         /// Creates a <see cref="LightRecurringOrderCartViewModel" /> based on a <see cref="Cart"/> object.

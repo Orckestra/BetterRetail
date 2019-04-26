@@ -55,6 +55,6 @@ namespace Orckestra.Composer.Cart.Services
         /// </summary>
         /// <param name="updatePaymentMethodParam"></param>
         /// <returns></returns>
-        Task<IRecurringOrderCartViewModel>UpdateRecurringOrderCartPaymentMethodAsync(UpdatePaymentMethodParam param, string baseUrl);
+        Task<CartViewModel>UpdateRecurringOrderCartPaymentMethodAsync(UpdatePaymentMethodParam param, string baseUrl);
     }
 }

@@ -214,7 +214,7 @@ namespace Orckestra.Composer.Cart.Services
             };
         }
 
-        public async Task<IRecurringOrderCartViewModel> UpdateRecurringOrderCartShippingMethodAsync(UpdateRecurringOrderCartShippingMethodParam param)
+        public async Task<CartViewModel> UpdateRecurringOrderCartShippingMethodAsync(UpdateRecurringOrderCartShippingMethodParam param)
         {
             if (!ConfigurationUtil.GetRecurringOrdersConfigEnabled())
                 return GetEmptyRecurringOrderCartViewModel();
@@ -271,10 +271,9 @@ namespace Orckestra.Composer.Cart.Services
             return vm;
         }
 
-        private IRecurringOrderCartViewModel GetEmptyRecurringOrderCartViewModel()
+        private CartViewModel GetEmptyRecurringOrderCartViewModel()
         {
-            var emptyVm = new CartViewModel();
-            return emptyVm.AsExtensionModel<IRecurringOrderCartViewModel>();
+            return  new CartViewModel();
         }
     }
 }

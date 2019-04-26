@@ -43,6 +43,6 @@ namespace Orckestra.Composer.Cart.Services
         /// </summary>
         /// <param name="param"></param>
         /// <returns></returns>
-        Task<IRecurringOrderCartViewModel> UpdateRecurringOrderCartShippingMethodAsync(UpdateRecurringOrderCartShippingMethodParam param);
+        Task<CartViewModel> UpdateRecurringOrderCartShippingMethodAsync(UpdateRecurringOrderCartShippingMethodParam param);
     }
 }

@@ -77,6 +77,7 @@
     <Compile Include="Factory\TaxViewModelFactory.cs" />
     <Compile Include="Factory\UpdateCartParamFactory.cs" />
     <Compile Include="Helper\RecurringOrderCartHelper.cs" />
+    <Compile Include="Helper\RecurringOrderCartViewModelNextOcurrenceComparer.cs" />
     <Compile Include="OrderHistoryConfiguration.cs" />
     <Compile Include="Parameters\AddCreditCardParam.cs" />
     <Compile Include="Parameters\CreateListOfLineItemDetailViewModelParam.cs" />
@@ -251,6 +252,7 @@
     <Compile Include="ViewModels\MinicartViewModel.cs" />
     <Compile Include="ViewModels\MonerisAddVaultProfileViewModel.cs" />
     <Compile Include="ViewModels\OrderSummaryViewModel.cs" />
+    <Compile Include="ViewModels\RecurringOrderCartsRescheduleResultViewModel.cs" />
     <Compile Include="ViewModels\RecurringOrderCartsViewModel.cs" />
     <Compile Include="ViewModels\RemovePaymentMethodViewModel.cs" />
     <Compile Include="ViewModels\Order\OrderChangeViewModel.cs" />
