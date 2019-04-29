@@ -1,0 +1,20 @@
+.recurring-modes {
+  margin-top: 10px;
+  padding-bottom: 10px;
+
+  .radio-row {
+    border: 1px solid $gray-light;
+    border-radius: 3px;
+    margin-bottom: $grid-gutter-width / 2;
+    padding: 0 15px 0 35px;
+
+    &.selected {
+      background-color: $gray-lighter;
+      border-color: $gray-darker;
+    }
+  }
+
+  .recurring-frequencies {
+    margin-left: 20px;
+  }
+}

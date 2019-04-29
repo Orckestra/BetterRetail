@@ -3,6 +3,9 @@
 ///<reference path='../../../../Composer.UI/Source/TypeScript/Mvc/IControllerActionContext.ts' />
 ///<reference path='../../../../Composer.UI/Source/TypeScript/Repositories/CartRepository.ts' />
 ///<reference path='../../../../Composer.UI/Source/TypeScript/ErrorHandling/ErrorHandler.ts' />
+///<reference path='../../../../Composer.UI/Source/TypeScript/Events/EventScheduler.ts' />
+///<reference path='../../../RecurringOrder/source/TypeScript/Services/RecurringOrderService.ts' />
+///<reference path='../../../RecurringOrder/source/TypeScript/Repositories/RecurringOrderRepository.ts' />
 ///<reference path='CartService.ts' />
 
 module Orckestra.Composer {
@@ -23,7 +26,6 @@ module Orckestra.Composer {
         }
 
         private registerSubscriptions() {
-
             this.eventHub.subscribe('cartUpdated', e => this.onCartUpdated(e.data));
         }
 
@@ -230,6 +232,83 @@ module Orckestra.Composer {
             }
 
             return nameParts.join(' ');
+        }
+
+        /**
+         * Grab the requested frequency change information from the form then update the lineitem
+         * @param {Orckestra.Composer.IControllerActionContext} actionContext
+         */
+        public updateLineItemRecurringFrequency(actionContext: IControllerActionContext): void {
+            let applyButton$: JQuery = actionContext.elementContext,
+                recurringModesContainer$: JQuery = applyButton$.closest('.js-recurringModes'), //
+                selectedRecurringMode: string = (recurringModesContainer$.find('input[name^="recurringMode"]:checked').val()).toUpperCase(),
+                selectedFrequency: string = (recurringModesContainer$.find('select').val()),
+                optionValue: string;
+
+            if (applyButton$) {
+                if (selectedRecurringMode === 'SINGLE') {
+                    optionValue = '';
+                } else {
+                    optionValue = selectedFrequency;
+                }
+
+                applyButton$.attr('data-recurringorderfrequencyname', optionValue);
+                this.updateLineItem(actionContext);
+            }
+        }
+
+        /**
+         * Reset the lineitem frequency to its previous state (without re-rendering)
+         * @param {Orckestra.Composer.IControllerActionContext} actionContext
+         */
+        public resetLineItemRecurringFrequency(actionContext: IControllerActionContext): void {
+            let cancelButton$: JQuery = actionContext.elementContext,
+                recurringModesContainer$: JQuery = cancelButton$.closest('.js-recurringModes'),
+                recurringModeRadioGroup$: JQuery = recurringModesContainer$.find('input[name^="recurringMode"]'),
+                selectedRecurringModeRadio$: JQuery = recurringModeRadioGroup$.filter((index, node) => {
+                    return $(node).prop('checked');
+                }),
+                frequencySelect$: JQuery = recurringModesContainer$.find('select'),
+                previouslySelectedFrequency: string = cancelButton$.attr('data-recurringorderfrequencyname');
+
+            frequencySelect$.val(previouslySelectedFrequency).trigger('change');
+
+            if (previouslySelectedFrequency === '' && selectedRecurringModeRadio$.val() !== 'single') {
+                let singleRadio$: JQuery = recurringModeRadioGroup$.filter((index, node) => {
+                    return (<HTMLInputElement>node).value === 'single';
+                });
+                recurringModeRadioGroup$.val(['single']);
+                singleRadio$.trigger('change');
+            } else if (previouslySelectedFrequency !== '' && selectedRecurringModeRadio$.val() !== 'recurring') {
+                let recurringRadio$: JQuery = recurringModeRadioGroup$.filter((index, node) => {
+                    return (<HTMLInputElement>node).value === 'recurring';
+                });
+                recurringModeRadioGroup$.val(['recurring']);
+                recurringRadio$.trigger('change');
+            }
+
+            recurringModesContainer$.closest('.js-cartRecurring').find('.js-cartRecurringCta').show();
+        }
+
+        /**
+         * Update UI of recurring modes radio buttons when switching between single and recurring
+         * @param {Orckestra.Composer.IControllerActionContext} actionContext
+         */
+        public changeRecurringMode(actionContext: IControllerActionContext) {
+            let clickedRadioButton$: JQuery = actionContext.elementContext,
+                recurringModesContainer$: JQuery = clickedRadioButton$.closest('.js-recurringModes');
+
+            recurringModesContainer$.find('.js-recurringModeRow.selected').removeClass('selected');
+            clickedRadioButton$.closest('.js-recurringModeRow').addClass('selected');
+            recurringModesContainer$.find('.modeSelection').collapse('toggle');
+        }
+
+        /**
+         * Toggle the visibility of the recurring modes selector
+         * @param {Orckestra.Composer.IControllerActionContext} actionContext
+         */
+        public expandRecurringModes(actionContext: IControllerActionContext) {
+            actionContext.elementContext.closest('.js-cartRecurringCta').hide();
         }
     }
 }

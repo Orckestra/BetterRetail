@@ -25,6 +25,7 @@ module Orckestra.Composer {
         deleteTemplateLineItem(deleteTemplateLineItemParam: IRecurringOrderTemplateLineItemDeleteParam): Q.Promise<any>;
         deleteTemplateLineItems(deleteTemplateLineItemsParam: IRecurringOrderTemplateLineItemsDeleteParam): Q.Promise<any>;
         getCartContainsRecurrence(): Q.Promise<any>;
+        getRecurrenceConfigIsActive(): Q.Promise<any>;
         getCanRemovePaymentMethod(paymentMethodId: string): Q.Promise<any>;
         getRecurringOrderCartSummaries(): Q.Promise<any>;
         addRecurringOrderCartLineItem(addRecurringOrderCartLineItemParam: IAddRecurringOrderCartLineItemParam): Q.Promise<any>;

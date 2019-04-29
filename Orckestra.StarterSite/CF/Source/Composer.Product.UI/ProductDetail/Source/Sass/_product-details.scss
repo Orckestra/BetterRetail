@@ -77,21 +77,3 @@
     width: 100%;
   }
 }
-
-#recurringModes {
-  .radio-row {
-    border: 1px solid $gray-light;
-    border-radius: 3px;
-    margin-bottom: $grid-gutter-width;
-    padding: 0 15px 0 35px;
-
-    &.selected {
-      background-color: $gray-lighter;
-      border-color: $gray-darker;
-    }
-  }
-
-  .recurring-frequencies {
-    margin-left: 20px;
-  }
-}

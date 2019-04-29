@@ -92,6 +92,10 @@ module Orckestra.Composer {
             return this.repository.getCartContainsRecurrence();
         }
 
+        public getRecurrenceConfigIsActive(): Q.Promise<any> {
+            return this.repository.getRecurrenceConfigIsActive();
+        }
+
         public getCanRemovePaymentMethod(paymentMethodId: string): Q.Promise<any> {
             return this.repository.getCanRemovePaymentMethod(paymentMethodId);
         }

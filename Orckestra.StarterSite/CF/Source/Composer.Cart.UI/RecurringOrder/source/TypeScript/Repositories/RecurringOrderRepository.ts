@@ -252,6 +252,10 @@ module Orckestra.Composer {
             return ComposerClient.get(`/api/recurringordercart/get-cart-contains-recurrence`);
         }
 
+        public getRecurrenceConfigIsActive(): Q.Promise<any> {
+            return ComposerClient.get(`/api/recurringordercart/get-recurrence-config-is-active`);
+        }
+
         public getCanRemovePaymentMethod(paymentMethodId): Q.Promise<any> {
 
             const datas = {
