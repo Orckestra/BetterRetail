@@ -76,14 +76,15 @@ namespace Orckestra.Composer.Cart.Services
                 BaseUrl = param.BaseUrl,
             }));
             var viewModels = await Task.WhenAll(tasks).ConfigureAwait(false);
-
+            
+            var comparer = new RecurringOrderCartViewModelNextOcurrenceComparer();
             return new RecurringOrderCartsViewModel
-            {
-                RecurringOrderCartViewModelList = viewModels.OrderBy(v => v.NextOccurence).ToList(),
+            {               
+                RecurringOrderCartViewModelList = viewModels.OrderBy(v => v, comparer).ToList(),
             };            
         }
 
-        public async Task<IRecurringOrderCartViewModel> CreateCartViewModelAsync(CreateRecurringOrderCartViewModelParam param)
+        public async Task<CartViewModel> CreateCartViewModelAsync(CreateRecurringOrderCartViewModelParam param)
         {
             var lineItems = param.Cart.GetLineItems();
 
@@ -154,7 +155,7 @@ namespace Orckestra.Composer.Cart.Services
             return vm;
         }
          
-        public async Task<IRecurringOrderCartViewModel> GetRecurringOrderCartViewModelAsync(GetRecurringOrderCartViewModelParam param)
+        public async Task<CartViewModel> GetRecurringOrderCartViewModelAsync(GetRecurringOrderCartViewModelParam param)
         {
             var emptyVm = GetEmptyRecurringOrderCartViewModel();
 
@@ -184,7 +185,7 @@ namespace Orckestra.Composer.Cart.Services
             return vm;
         }
 
-        public async Task<IRecurringOrderCartViewModel> UpdateRecurringOrderCartShippingAddressAsync(UpdateRecurringOrderCartShippingAddressParam param)
+        public async Task<CartViewModel> UpdateRecurringOrderCartShippingAddressAsync(UpdateRecurringOrderCartShippingAddressParam param)
         {
             if (!ConfigurationUtil.GetRecurringOrdersConfigEnabled())
                 return GetEmptyRecurringOrderCartViewModel();
@@ -230,13 +231,12 @@ namespace Orckestra.Composer.Cart.Services
             return vm;
         }
                  
-        private IRecurringOrderCartViewModel GetEmptyRecurringOrderCartViewModel()
+        private CartViewModel GetEmptyRecurringOrderCartViewModel()
         {
-            var emptyVm = new CartViewModel();
-            return emptyVm.AsExtensionModel<IRecurringOrderCartViewModel>();
+           return new CartViewModel();             
         }
 
-        public async Task<IRecurringOrderCartViewModel> UpdateRecurringOrderCartBillingAddressAsync(UpdateRecurringOrderCartBillingAddressParam param)
+        public async Task<CartViewModel> UpdateRecurringOrderCartBillingAddressAsync(UpdateRecurringOrderCartBillingAddressParam param)
         {
             if (!ConfigurationUtil.GetRecurringOrdersConfigEnabled())
                 return GetEmptyRecurringOrderCartViewModel();
@@ -282,10 +282,10 @@ namespace Orckestra.Composer.Cart.Services
             return vm;
         }
 
-        public async Task<RecurringOrderCartsViewModel> UpdateRecurringOrderCartNextOccurenceAsync(UpdateRecurringOrderCartNextOccurenceParam param)
+        public async Task<RecurringOrderCartsRescheduleResultViewModel> UpdateRecurringOrderCartNextOccurenceAsync(UpdateRecurringOrderCartNextOccurenceParam param)
         {
             if (!ConfigurationUtil.GetRecurringOrdersConfigEnabled())
-                return new RecurringOrderCartsViewModel();
+                return new RecurringOrderCartsRescheduleResultViewModel();
 
             if (param == null) throw new ArgumentNullException(nameof(param), ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param)));
 
@@ -346,13 +346,20 @@ namespace Orckestra.Composer.Cart.Services
                 CartName = param.CartName
             }).ConfigureAwait(false);
             
-            return await GetRecurringOrderCartListViewModelAsync(new GetRecurringOrderCartsViewModelParam
+            var carts = await GetRecurringOrderCartListViewModelAsync(new GetRecurringOrderCartsViewModelParam
             {
                 BaseUrl = param.BaseUrl,
                 Scope = param.Scope,
                 CustomerId = param.CustomerId,
                 CultureInfo =param.CultureInfo
             }).ConfigureAwaitWithCulture(false);
+
+            var vm = new RecurringOrderCartsRescheduleResultViewModel();
+            vm.RecurringOrderCartsViewModel = carts;
+
+            //vm.RescheduledCartHasMerged = carts.RecurringOrderCartViewModelList.Select(rc => rc.)
+
+            return vm;
         }
     }
 }

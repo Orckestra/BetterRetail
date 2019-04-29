@@ -40,7 +40,7 @@ namespace Orckestra.Composer.Cart.Factory
             RecurringCartUrlProvider = recurringCartUrlProvider;
         }
 
-        public IRecurringOrderCartViewModel CreateRecurringOrderCartViewModel(CreateRecurringOrderCartViewModelParam param)
+        public CartViewModel CreateRecurringOrderCartViewModel(CreateRecurringOrderCartViewModelParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
             if (param.CultureInfo == null) { throw new ArgumentNullException(nameof(param.CultureInfo)); }
@@ -63,7 +63,7 @@ namespace Orckestra.Composer.Cart.Factory
             FillNextOcurrence(roCartVm, param.Cart, param.CultureInfo);
             MapRecurringOrderLineitemFrequencyName(vm, param.CultureInfo, param.RecurringOrderPrograms);
 
-            return roCartVm;
+            return vm;
         }
 
         private void FillNextOcurrence(IRecurringOrderCartViewModel vm, Overture.ServiceModel.Orders.Cart cart, CultureInfo cultureInfo)

@@ -18,8 +18,8 @@ namespace Orckestra.Composer.Cart.ViewModels
         public bool IsLoading { get; set; }
         public RecurringOrderCartsViewModel()
         {
-            RecurringOrderCartViewModelList = new List<IRecurringOrderCartViewModel>();
+            RecurringOrderCartViewModelList = new List<CartViewModel>();
         }
-        public List<IRecurringOrderCartViewModel> RecurringOrderCartViewModelList { get; set; }
+        public List<CartViewModel> RecurringOrderCartViewModelList { get; set; }
     }
 }
