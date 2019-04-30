@@ -1,0 +1,49 @@
+<div data-templateid="RecurringCartDetailsPayment">
+    <div class="panel  panel-default">
+        <div class="panel-heading">
+            <h2 class="h3">{{localize 'MyAccount' 'T_PaymentMethod' }}</h2>
+        </div>
+        <div class="panel-body">
+            {{#if Payment}}
+            <div class="row payment">
+                <div class="col-xs-12">
+                    {{#with Payment.PaymentMethod}}
+                    <div class="col-xs-3  col-sm-3  col-md-3">
+                        {{#if CardMask}}
+                            <img src="/UI.Package/Images/creditcards/{{CardType}}.png" alt="{{CardType}}" class="img-responsive" />
+                        {{else}}
+                            <img src="/UI.Package/Images/payments/cash.png" alt="Cash" class="img-responsive" />
+                            <!-- <img src="img/giftcard.png" alt="Gift Card" class="img-responsive"> -->
+                        {{/if}}
+                    </div>
+                    <div class="col-xs-9  col-sm-9  col-md-9">
+                        <p>
+                            <h2 class="h4">{{localize 'MyAccount' 'L_PaymentMethod'}}</h2>
+                            {{#if CardMask}}
+                                {{localize 'MyAccount' 'L_CreditCardNumber' }} {{CardMask}}
+                                <br />{{localize 'MyAccount' 'L_CreditCardExpires' }} {{ExpiryDate}}
+                            {{else}}
+                                {{PaymentType}}
+                            {{/if}}
+                        </p>
+                    </div>
+                    {{#if IsExpired}}
+                        <div class="row">
+                            <div class="col-sm-12 error-item strong">
+                                {{localize 'CheckoutProcess' 'F_SaveCreditCardForced_Expired' }}
+                            </div>
+                        </div>
+                    {{/if}}
+                    {{/with}}
+                </div>
+            </div>
+            {{else}}
+            <div class="row payment">
+                <div class="col-md-12 text-center">
+                    <p>{{localize 'General' 'P_PaymentLoadErrorMessage' }}</p>
+                </div>
+            </div>
+            {{/if}}
+        </div>
+    </div>
+</div>

@@ -165,7 +165,8 @@ namespace Orckestra.Composer.Cart.Services
             if(string.Equals(param.CartName, CartConfiguration.ShoppingCartName, StringComparison.OrdinalIgnoreCase))
                 return emptyVm;
 
-            var cart = await CartRepository.GetCartAsync(new GetCartParam {
+            var cart = await CartRepository.GetCartAsync(new GetCartParam
+            {
                 CartName = param.CartName,
                 BaseUrl = param.BaseUrl,
                 CultureInfo = param.CultureInfo,

@@ -1,0 +1,15 @@
+{{#if RecurringOrderProgramName}}
+    <div class="cart-recurring js-cartRecurring">
+        <div class="cart-recurring-cta js-cartRecurringCta">
+            <img src="/UI.Package/Images/recurring.png" alt="{{localize 'General' 'L_RecurringProduct'}}" title="{{localize 'General' 'L_RecurringProduct'}}" />
+            {{#if RecurringOrderFrequencyName}}
+                &nbsp;{{RecurringOrderFrequencyDisplayName}}
+            {{else}}
+                &nbsp;{{localize 'ProductPage' 'L_RecurringFrequencyOnce'}}
+            {{/if}}
+            <button class="btn btn-link" type="button" data-toggle="collapse"  aria-expanded="false" >
+                {{localize 'ShoppingCart' 'L_RecurringChangeFrequency'}} <i class="fa fa-external-link-square fa-lg"></i>
+            </button>
+        </div>        
+    </div>
+{{/if}}

@@ -460,4 +460,10 @@ Don't worry, you can still find great products to offer!</value>
   <data name="T_WishListCount" xml:space="preserve">
     <value>product(s)</value>
   </data>
+  <data name="H_RecurringCartDetails" xml:space="preserve">
+    <value>See Details</value>
+  </data>
+  <data name="L_EstimatedTotal" xml:space="preserve">
+    <value>Estimated total</value>
+  </data>
 </root>

@@ -18,5 +18,10 @@ namespace Orckestra.Composer.Cart.ViewModels
         ///  Date formatted used to identify the cart date
         /// </summary>
         string FormatedNextOccurence { get; set; }
+
+        /// <summary>
+        /// Link to recurring schedule page to change the templates
+        /// </summary>
+        string RecurringScheduleUrl { get; set; }
     }
 }

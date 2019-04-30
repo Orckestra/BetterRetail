@@ -22,22 +22,26 @@ namespace Orckestra.Composer.Cart.Factory
         protected IViewModelMapper ViewModelMapper { get; private set; }
         protected IComposerContext ComposerContext { get; private set; }
         protected IRecurringCartUrlProvider RecurringCartUrlProvider { get; private set; }
+        protected IRecurringScheduleUrlProvider RecurringScheduleUrlProvider { get; private set; }
 
         public RecurringOrderCartViewModelFactory(
             ICartViewModelFactory cartViewModelFactory,
             IViewModelMapper viewModelMapper,
             IComposerContext composerContext,
-            IRecurringCartUrlProvider recurringCartUrlProvider)
+            IRecurringCartUrlProvider recurringCartUrlProvider,
+            IRecurringScheduleUrlProvider recurringScheduleUrlProvider)
         {
             if (cartViewModelFactory == null) { throw new ArgumentNullException(nameof(cartViewModelFactory)); }
             if (viewModelMapper == null) { throw new ArgumentNullException(nameof(viewModelMapper)); }
             if (composerContext == null) { throw new ArgumentNullException(nameof(composerContext)); }
             if (recurringCartUrlProvider == null) { throw new ArgumentNullException(nameof(recurringCartUrlProvider)); }
+            if (recurringScheduleUrlProvider == null) { throw new ArgumentNullException(nameof(recurringScheduleUrlProvider)); }
 
             CartViewModelFactory = cartViewModelFactory;
             ViewModelMapper = viewModelMapper;
             ComposerContext = composerContext;
             RecurringCartUrlProvider = recurringCartUrlProvider;
+            RecurringScheduleUrlProvider = recurringScheduleUrlProvider;
         }
 
         public CartViewModel CreateRecurringOrderCartViewModel(CreateRecurringOrderCartViewModelParam param)
@@ -62,8 +66,19 @@ namespace Orckestra.Composer.Cart.Factory
 
             FillNextOcurrence(roCartVm, param.Cart, param.CultureInfo);
             MapRecurringOrderLineitemFrequencyName(vm, param.CultureInfo, param.RecurringOrderPrograms);
+            FillRecurringScheduleUrl(roCartVm, param.CultureInfo);
 
             return vm;
+        }
+
+        private void FillRecurringScheduleUrl(IRecurringOrderCartViewModel roCartVm, CultureInfo cultureInfo)
+        {
+            var url = RecurringScheduleUrlProvider.GetRecurringScheduleUrl(new GetRecurringScheduleUrlParam
+            {
+                CultureInfo = cultureInfo
+            });
+
+            roCartVm.RecurringScheduleUrl = url;
         }
 
         private void FillNextOcurrence(IRecurringOrderCartViewModel vm, Overture.ServiceModel.Orders.Cart cart, CultureInfo cultureInfo)
@@ -163,7 +178,7 @@ namespace Orckestra.Composer.Cart.Factory
             return RecurringCartUrlProvider.GetRecurringCartDetailsUrl(new GetRecurringCartDetailsUrlParam
             {
                 CultureInfo = cultureInfo,
-                ReturnUrl = recurringCartsPageUrl,
+               // ReturnUrl = recurringCartsPageUrl,
                 RecurringCartName = cartName
             });
         }

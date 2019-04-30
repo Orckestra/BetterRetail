@@ -117,121 +117,25 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="B_AddToCartProductDetail" xml:space="preserve">
-    <value>Add to cart</value>
+  <data name="T_UpcomingOrders" xml:space="preserve">
+    <value>My Upcoming Orders</value>
   </data>
-  <data name="B_AddToCartProductDetailDiscontinued" xml:space="preserve">
-    <value>Discontinued</value>
+  <data name="L_StatusPendingPreparation" xml:space="preserve">
+    <value>Pending Preparation</value>
   </data>
-  <data name="B_AddToCartProductDetailOOS" xml:space="preserve">
-    <value>Out of stock</value>
+  <data name="L_UpcomingDate" xml:space="preserve">
+    <value>Coming up on {0}</value>
   </data>
-  <data name="B_AddToCartProductDetailUnavailable" xml:space="preserve">
-    <value>Unavailable</value>
+  <data name="T_RecurringCartDetails" xml:space="preserve">
+    <value>Recurring Order Summary</value>
   </data>
-  <data name="B_AddToCartProductList" xml:space="preserve">
-    <value>Buy now</value>
-  </data>
-  <data name="B_AddToCartProductListOOS" xml:space="preserve">
-    <value>Out of stock</value>
-  </data>
-  <data name="B_Back" xml:space="preserve">
-    <value>Back</value>
-  </data>
-  <data name="B_Cancel" xml:space="preserve">
-    <value>Cancel</value>
-  </data>
-  <data name="B_CancelOrder" xml:space="preserve">
-    <value>Cancel Order</value>
-  </data>
-  <data name="B_Close" xml:space="preserve">
-    <value>Close</value>
-  </data>
-  <data name="B_Delete" xml:space="preserve">
-    <value>Delete</value>
-  </data>
-  <data name="B_FindMyOrder" xml:space="preserve">
-    <value>Find my order</value>
-  </data>
-  <data name="B_PrintOrder" xml:space="preserve">
-    <value>Print Invoice</value>
-  </data>
-  <data name="B_ReOrder" xml:space="preserve">
-    <value>Add this order to my cart</value>
-  </data>
-  <data name="English (Canada)" xml:space="preserve">
-    <value>English (Canada)</value>
-  </data>
-  <data name="French (Canada)" xml:space="preserve">
-    <value>French (Canada)</value>
-  </data>
-  <data name="L_Breadcrumb" xml:space="preserve">
-    <value>You are in:</value>
-  </data>
-  <data name="L_Copyright" xml:space="preserve">
-    <value>©{0}. Better Retail inc. All rights reserved.</value>
-  </data>
-  <data name="L_ErrorAjaxFailed" xml:space="preserve">
-    <value>An error occured, please try again later</value>
-  </data>
-  <data name="L_ErrorUnauthorized" xml:space="preserve">
-    <value>Your session has expired. Please login again.</value>
-  </data>
-  <data name="L_FindAStore" xml:space="preserve">
-    <value>Find a store</value>
-  </data>
-  <data name="L_FindMyOrderLoginText" xml:space="preserve">
-    <value>If you have an account, you may login to view your entire order history with more complete details.</value>
-  </data>
-  <data name="L_FindMyOrderText" xml:space="preserve">
-    <value>To see the status of a recent order, enter your order number and the email address used when placing your order.</value>
-  </data>
-  <data name="L_FollowUs" xml:space="preserve">
-    <value>Follow us :</value>
-  </data>
-  <data name="L_Home" xml:space="preserve">
-    <value>Home</value>
-  </data>
-  <data name="L_Loading" xml:space="preserve">
-    <value>Loading</value>
-  </data>
-  <data name="L_Of" xml:space="preserve">
-    <value>of</value>
-  </data>
-  <data name="L_OrderNotFound" xml:space="preserve">
-    <value>We can't find your order in the system. Make sure to use the same email address and order number as specified in your order confirmation email.</value>
-  </data>
-  <data name="L_QuoteClose" xml:space="preserve">
-    <value>”</value>
-  </data>
-  <data name="L_QuoteOpen" xml:space="preserve">
-    <value>“</value>
-  </data>
-  <data name="L_RecurringProduct" xml:space="preserve">
-    <value>Product eligible to recurring order</value>
-  </data>
-  <data name="Login" xml:space="preserve">
-    <value>Log in</value>
-  </data>
-  <data name="OpeningHourFormat" xml:space="preserve">
-    <value>{0:h\:mm}</value>
-  </data>
-  <data name="P_PaymentLoadErrorMessage" xml:space="preserve">
-    <value>The payment information is not available please contact customer service.</value>
-  </data>
-  <data name="PercentageFormat" xml:space="preserve">
-    <value>{0:P2}</value>
-  </data>
-  <data name="PriceFormat" xml:space="preserve">
-    <value>{0:C}</value>
-  </data>
-  <data name="ShortDateFormat" xml:space="preserve">
-    <value>{0:MMMM dd, yyyy}</value>
-  </data>
-  <data name="T_FindYourOrder" xml:space="preserve">
-    <value>Find your order</value>
+  <data name="L_RecurringOrderCartsEmpty" xml:space="preserve">
+    <value>This is where your upcoming orders will be displayed.</value>
+  </data>   
+  <data name="L_RecurringOrderCartsFrequencyChangeMessage" xml:space="preserve">
+    <value>Selecting a new recurring schedule for your items will change the composition of your upcoming orders. To make such changes visit the &lt;a href="{0}"&gt;Recurring Schedule&lt;/a&gt; section.</value>
+  </data>   
+  <data name="T_RecurringCartDetailsLineItems" xml:space="preserve">
+    <value>Shopping Cart Details</value>
   </data>  
-  <data name="P_ShippingMethodLoadErrorMessage" xml:space="preserve">
-    <value>The shipping method information is not available.</value>
-  </data>
 </root>

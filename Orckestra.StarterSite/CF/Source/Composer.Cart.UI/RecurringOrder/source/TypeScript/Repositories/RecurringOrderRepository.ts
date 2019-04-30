@@ -49,7 +49,7 @@ module Orckestra.Composer {
         }
 
         public getRecurringOrderCartsByUser() {
-            return ComposerClient.get(`/api/recurringordercart/get-recurring-order-carts-by-user`);
+            return ComposerClient.get(`/api/recurringcart/upcoming-orders`);
         }
 
         public getRecurringOrderTemplatesByUser() {

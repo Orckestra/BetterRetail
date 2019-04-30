@@ -1,9 +1,13 @@
-<div data-templateid="MyRecurringCarts" class="panel  panel-default">
-    <div class="panel-body">
+<div data-templateid="MyRecurringCarts" >
     {{#if IsLoading}}
-       todo {{>Loading}}
+        {{>Loading}}
     {{else}}
-      todo 
-    {{/if}}      
-   </div>   
+        {{#if RecurringOrderCarts}}
+            {{#each RecurringOrderCarts }}
+                {{> LightRecurringOrderCartDetail}}
+            {{/each}}
+        {{else}}
+            <span class="text-muted">{{localize 'RecurringCart' 'L_RecurringOrderCartsEmpty'}}</span>
+        {{/if}}
+    {{/if}} 
 </div>

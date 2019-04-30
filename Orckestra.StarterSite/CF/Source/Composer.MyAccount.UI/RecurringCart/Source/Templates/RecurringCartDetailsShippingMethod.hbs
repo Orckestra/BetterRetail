@@ -1,0 +1,24 @@
+<div data-templateid="RecurringCartDetailsShippingMethod">
+    <div class="panel  panel-default">
+        <div class="panel-heading">
+            <h2 class="h3">{{localize 'MyAccount' 'T_ShippingMethod' }}</h2>
+        </div>
+        <div class="panel-body">
+            {{#if ShippingMethod}}
+            <div class="row">
+                <div class="col-xs-12">
+                    <b>{{ShippingMethod.DisplayName}}</b>
+                    <br />
+                    {{ShippingMethod.Cost}}
+                </div>
+            </div>
+            {{else}}
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <p>{{localize 'General' 'P_ShippingMethodLoadErrorMessage' }}</p>
+                </div>
+            </div>
+            {{/if}}
+        </div>
+    </div>
+</div>

@@ -1,5 +1,11 @@
-<div data-templateid="MyRecurringCartDetails" class="panel  panel-default">
-    <div class="panel-body">
-	       todo  
-   </div>   
+<div data-templateid="MyRecurringCartDetails" >
+    {{>RecurringCartDetailsSummary}}
+    {{>RecurringCartDetailsShippingMethod}}  
+    {{>RecurringCartDetailsAddress}}      
+    {{>RecurringCartDetailsPayment}}
+    <div class="multiline-message">
+        <span class="fa  fa-comment-o  fa-lg  multiline-message-icon"></span>
+        {{localizeFormat 'RecurringCart' 'L_RecurringOrderCartsFrequencyChangeMessage' RecurringScheduleUrl}}  
+    </div>
+    {{>RecurringCartDetailsLineItems}}
 </div>

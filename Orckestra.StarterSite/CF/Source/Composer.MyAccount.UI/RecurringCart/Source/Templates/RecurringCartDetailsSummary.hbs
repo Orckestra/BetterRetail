@@ -1,0 +1,32 @@
+ <div data-templateid="RecurringCartDetailsSummary">
+     <div class="panel  panel-default">
+        <div class="panel-heading">
+            <h2 class="h3">{{localize 'RecurringCart' 'T_RecurringCartDetails' }}</h2>
+        </div>
+        <div class="panel-body">
+            <div class="compact-order">
+                <div class="row compact-order-header">
+                    <div class="col-xs-12 col-sm-8">
+                        <div class="compact-order-date">
+                            <strong class="h4">{{localizeFormat 'RecurringCart' 'L_UpcomingDate' FormatedNextOccurence}}</strong>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4">
+                    </div>
+                </div>
+
+                <div class="row compact-order-body">
+                    <div class="col-xs-12  col-sm-8">
+                        <p>
+                            <!-- put if to each css class -->
+                            <strong class="text-warning">{{localize 'RecurringCart' 'L_StatusPendingPreparation' }}</strong>
+                        </p>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 text-sm-right">
+                        <p class="">{{localize 'MyAccount' 'L_EstimatedTotal'}}&nbsp;<strong class="h4">{{OrderSummary.Total}}</strong>&nbsp;<strong class="h4">{{Total}}</strong></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

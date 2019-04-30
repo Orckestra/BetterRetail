@@ -298,16 +298,16 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         }
 
         [AuthorizeAndRedirect]
-        public virtual ActionResult RecurringCartDetails(string cartName)
+        public virtual ActionResult RecurringCartDetails(string name)
         {
-            if (string.IsNullOrEmpty(cartName))
+            if (string.IsNullOrEmpty(name))
             {
                 return new HttpStatusCodeResult(HttpStatusCode.NotFound);
-            }            
+            }
 
             var vm = RecurringOrderCartsViewService.GetRecurringOrderCartViewModelAsync(new GetRecurringOrderCartViewModelParam
             {
-                CartName = cartName,
+                CartName = name,
                 CustomerId = ComposerContext.CustomerId,
                 Scope = ComposerContext.Scope,
                 CultureInfo = ComposerContext.CultureInfo,

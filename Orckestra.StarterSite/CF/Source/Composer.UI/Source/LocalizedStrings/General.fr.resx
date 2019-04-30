@@ -230,5 +230,8 @@
   </data>
   <data name="T_FindYourOrder" xml:space="preserve">
     <value>Trouver votre commande</value>
+  </data> 
+  <data name="P_ShippingMethodLoadErrorMessage" xml:space="preserve">
+    <value>L'information sur la méthode de livraison n'est pas disponible</value>
   </data>
 </root>

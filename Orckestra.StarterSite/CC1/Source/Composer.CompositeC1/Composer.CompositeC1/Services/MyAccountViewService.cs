@@ -94,7 +94,7 @@ namespace Orckestra.Composer.CompositeC1.Services
                 Url = myOrderHistoryUrl,
                 IsActive = currentPageId == PagesConfiguration.OrderHistoryPageId ||
                             currentPageId ==  PagesConfiguration.OrderDetailsPageId ||
-                            currentPageId == PagesConfiguration.RecurringScheduleDetailsPageId
+                            currentPageId == PagesConfiguration.RecurringCartDetailsPageId
             };
 
             var myRecurringScheduleMenuItem = new MenuItemViewModel
