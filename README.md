@@ -1,5 +1,7 @@
 # Orckestra Reference Application Starter Site
 
+[![Build Status](https://orckestra001.visualstudio.com/OrckestraCommerce/_apis/build/status/Product%20extension%20-%20RefApp?branchName=master)](https://orckestra001.visualstudio.com/OrckestraCommerce/_build/latest?definitionId=68&branchName=master)
+
 ### Domains
 **DEV** - http://composer-c1-cm-dev.develop.orckestra.cloud
 
