@@ -137,5 +137,8 @@
   </data>   
   <data name="T_RecurringCartDetailsLineItems" xml:space="preserve">
     <value>Shopping Cart Details</value>
-  </data>  
+  </data> 
+  <data name="T_RecurringCartDetailsOrderSummary" xml:space="preserve">
+    <value>Order summary</value>
+  </data> 
 </root>
