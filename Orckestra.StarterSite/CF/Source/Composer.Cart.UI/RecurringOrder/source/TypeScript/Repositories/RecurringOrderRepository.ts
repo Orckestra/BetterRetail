@@ -7,7 +7,7 @@ module Orckestra.Composer {
 
     export class RecurringOrderRepository implements IRecurringOrderRepository {
         public updateLineItemsDate(updateLineItemsParam: IRecurringOrderLineItemsUpdateDateParam): Q.Promise<any> {
-            return ComposerClient.put(`/api/recurringordercart/lineitems/nextrundate`, updateLineItemsParam);
+            return ComposerClient.put(`/api/recurringcart/reschedule`, updateLineItemsParam);
         }
 
         public deleteLineItem(deleteLineItemParam: IRecurringOrderLineItemDeleteParam): Q.Promise<any> {
@@ -299,7 +299,7 @@ module Orckestra.Composer {
                 throw new Error('cartName is required');
             }
 
-            return ComposerClient.put(`/api/recurringordercart/${updateCartShippingMethodParam.cartName}/shipping-method`,
+            return ComposerClient.put(`/api/recurringcart/shippingmethod`,
                 updateCartShippingMethodParam);
         }
 
@@ -308,11 +308,11 @@ module Orckestra.Composer {
         }
 
         public getCartShippingMethods(getCartShippingMethodsParam: IRecurringOrderGetCartShippingMethods): Q.Promise<any> {
-            if (!getCartShippingMethodsParam.cartName) {
-                throw new Error('cartName is required');
+            if (!getCartShippingMethodsParam.CartName) {
+                throw new Error('CartName is required');
             }
 
-            return ComposerClient.post(`/api/recurringordercart/${getCartShippingMethodsParam.cartName}/shippingmethods`,
+            return ComposerClient.post(`/api/cart/shippingmethodsbycartname`,
                 getCartShippingMethodsParam);
         }
 

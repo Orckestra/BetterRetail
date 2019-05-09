@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace Orckestra.Composer.Cart.Requests
 {
-    public class UpdateRecurringTemplatePaymentMethodRequest
+    public class UpdateRecurringCartShippingMethodRequest
     {
         public string ShippingProviderId { get; set; }
         public string ShippingMethodName { get; set; }
+        public string CartName { get; set; }
     }
 }

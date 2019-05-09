@@ -187,7 +187,7 @@
     <Compile Include="Requests\UpdateRecurringOrderCartBillingAddressRequest.cs" />
     <Compile Include="Requests\UpdateRecurringOrderCartPaymentMethodRequest.cs" />
     <Compile Include="Requests\UpdateRecurringOrderCartShippingAddressRequest.cs" />
-    <Compile Include="Requests\UpdateRecurringTemplatePaymentMethodRequest.cs" />
+    <Compile Include="Requests\UpdateRecurringCartShippingMethodRequest.cs" />
     <Compile Include="Services\CartService.cs" />
     <Compile Include="Services\CheckoutBreadcrumbViewService.cs" />
     <Compile Include="Services\CheckoutNavigationViewService.cs" />
@@ -241,6 +241,7 @@
     <Compile Include="ViewModels\GetGuestOrderViewModel.cs" />
     <Compile Include="ViewModels\GetPaymentMethodsViewModel.cs" />
     <Compile Include="ViewModels\AdditionalFeeViewModel.cs" />
+    <Compile Include="ViewModels\GetShippingMethodsByCartNameViewModel.cs" />
     <Compile Include="ViewModels\GuestOrderDetailsViewModel.cs" />
     <Compile Include="ViewModels\IRecurringOrderCartViewModel.cs" />
     <Compile Include="ViewModels\IPaymentMethodViewModel.cs" />

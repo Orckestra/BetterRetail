@@ -196,6 +196,25 @@ namespace Orckestra.Composer.Cart.Api
             return Ok(shippingMethodsViewModel);
         }
 
+        /// <summary>
+        /// Get the shipping methods available for a specific cart name
+        /// </summary>
+        /// <returns>A Json representation of the Shipping methods</returns>
+        [HttpPost]
+        [ActionName("shippingmethodsbycartname")]
+        public async Task<IHttpActionResult> GetShippingMethodsByCartName(GetShippingMethodsByCartNameViewModel request)
+        {
+            var shippingMethodsViewModel = await ShippingMethodService.GetShippingMethodsAsync(new GetShippingMethodsParam
+            {
+                Scope = ComposerContext.Scope,
+                CultureInfo = ComposerContext.CultureInfo,
+                CustomerId = ComposerContext.CustomerId,
+                CartName = request.CartName
+            });
+
+            return Ok(shippingMethodsViewModel);
+        }
+
         [HttpPut]
         [ActionName("setdefaultpaymentmethod")]
         public async Task<IHttpActionResult> SetCustomerDefaultPaymentMethod(SetCustomerDefaultPaymentMethodViewModel request)

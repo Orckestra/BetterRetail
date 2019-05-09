@@ -15,13 +15,23 @@ namespace Orckestra.Composer.Cart.ViewModels
         DateTime NextOccurence { get; set; }
 
         /// <summary>
-        ///  Date formatted used to identify the cart date
+        ///  NextOccurence formatted for visual string display
         /// </summary>
         string FormatedNextOccurence { get; set; }
+
+        /// <summary>
+        ///  NextOccurence formatted in YYYY-MM-DD
+        /// </summary>
+        string NextOccurenceValue { get; set; }
 
         /// <summary>
         /// Link to recurring schedule page to change the templates
         /// </summary>
         string RecurringScheduleUrl { get; set; }
+
+        /// <summary>
+        /// Cart name
+        /// </summary>
+        string Name { get; set; }
     }
 }

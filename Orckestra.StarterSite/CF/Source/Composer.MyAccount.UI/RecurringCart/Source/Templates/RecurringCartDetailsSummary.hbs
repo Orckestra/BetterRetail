@@ -1,7 +1,24 @@
- <div data-templateid="RecurringCartDetailsSummary">
-     <div class="panel  panel-default">
+<div data-templateid="RecurringCartDetailsSummary">
+    <div class="panel  panel-default">
+
+        {{#unless EditMode}}
         <div class="panel-heading">
-            <h2 class="h3">{{localize 'RecurringCart' 'T_RecurringCartDetails' }}</h2>
+            <div class="row">
+                <div class="col-xs-10">
+                    <h2 class="h3">{{localize 'RecurringCart' 'T_RecurringCartDetails' }}</h2>
+                </div>
+                <div class="col-xs-2">
+                    <button class="btn btn-link pull-right" type="button" 
+                        data-next-occurence="{{NextOccurence}}"
+                        data-formated-next-occurence="{{FormatedNextOccurence}}"
+                        data-next-occurence-value="{{NextOccurenceValue}}"   
+                        data-total="{{OrderSummary.Total}}"
+                        data-oc-click="toggleEditNextOccurence" 
+                        title="{{localize 'CheckoutProcess' 'B_Edit'}}">
+                        <span class="fa  fa-pencil  fa-lg"></span>
+                    </button>
+                </div>
+            </div>
         </div>
         <div class="panel-body">
             <div class="compact-order">
@@ -20,13 +37,72 @@
                         <p>
                             <!-- put if to each css class -->
                             <strong class="text-warning">{{localize 'RecurringCart' 'L_StatusPendingPreparation' }}</strong>
+                            <br />
+                            <img src="/UI.Package/Images/recurring.png" alt="{{localize 'General' 'L_RecurringProduct'}}" title="{{localize 'General' 'L_RecurringProduct'}}" />
                         </p>
                     </div>
                     <div class="col-xs-12 col-sm-4 text-sm-right">
-                        <p class="">{{localize 'MyAccount' 'L_EstimatedTotal'}}&nbsp;<strong class="h4">{{OrderSummary.Total}}</strong>&nbsp;<strong class="h4">{{Total}}</strong></p>
+                        <p class="">{{localize 'MyAccount' 'L_EstimatedTotal'}}&nbsp;<strong class="h4">{{OrderSummary.Total}}</strong></p>
                     </div>
                 </div>
             </div>
         </div>
+        {{else}}
+        <div class="panel-heading">
+           <div class="row">
+                <div class="col-xs-10">
+                    <h2 class="h3">{{localize 'RecurringCart' 'T_RecurringCartDetails' }}</h2>
+                </div>
+                <div class="col-xs-2">
+                    <button class="btn btn-link pull-right invisible" type="button"  
+                    title="{{localize 'CheckoutProcess' 'B_Edit'}}">
+                        <span class="fa  fa-pencil  fa-lg"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+         <div class="panel-body form-group">
+            <div class="row compact-order-header">
+                <div class="col-xs-12 col-sm-8">
+                    <div class="compact-order-date">
+                        <strong class="h4">
+                            <label for="NextOcurrence" >{{localize 'RecurringCart' 'L_NextOccurence'}}</label>
+                        </strong>
+                        <br />
+                        <input type="date" id="NextOcurrence" value="{{NextOccurenceValue}}"></input>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                </div>
+            </div>
+
+            <div class="row compact-order-body">
+                <div class="col-xs-12  col-sm-8">
+                    <p>
+                        <!-- put if to each css class -->
+                        <strong class="text-warning">{{localize 'RecurringCart' 'L_StatusPendingPreparation' }}</strong>
+                        <br />
+                        <img src="/UI.Package/Images/recurring.png" alt="{{localize 'General' 'L_RecurringProduct'}}" title="{{localize 'General' 'L_RecurringProduct'}}" />
+                    </p>
+                </div>
+                <div class="col-xs-12 col-sm-4 text-sm-right">
+                    <p class="">{{localize 'MyAccount' 'L_EstimatedTotal'}}&nbsp;<strong class="h4">{{OrderSummary.Total}}</p>
+                </div>
+                <div class="col-xs-12 text-center">
+                    <button class="btn btn-secondary" type="button" 
+                        data-next-occurence="{{NextOccurence}}"
+                        data-formated-next-occurence="{{FormatedNextOccurence}}"
+                        data-next-occurence-value="{{NextOccurenceValue}}"                        
+                        data-total="{{OrderSummary.Total}}"
+                        data-oc-click="toggleEditNextOccurence">Cancel</button>
+                    <button class="btn btn-primary"
+                        data-oc-click="saveEditNextOccurence">Apply
+                    </button>
+                </div>
+            </div>
+
+            
+        </div>
+        {{/unless}}
     </div>
 </div>

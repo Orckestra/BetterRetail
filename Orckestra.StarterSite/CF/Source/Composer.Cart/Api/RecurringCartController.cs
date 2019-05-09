@@ -48,7 +48,7 @@ namespace Orckestra.Composer.Cart.Api
         }
 
         [HttpGet]
-        [Route("getrecurringordercarts")]
+        [ActionName("getrecurringordercarts")]
         public virtual async Task<IHttpActionResult> GeRecurringOrderCartsByUser()
         {
             //This call manages products/variants that have been deleted in templates.
@@ -91,7 +91,7 @@ namespace Orckestra.Composer.Cart.Api
         }
 
         [HttpPut]
-        [Route("{cartName}/shipping-address")]
+        [ActionName("{cartName}/shipping-address")]
         public virtual async Task<IHttpActionResult> UpdateRecurringOrderCartShippingAddress([FromUri]string cartName, [FromBody]UpdateRecurringOrderCartShippingAddressRequest request)
         {
             if (request == null) { return BadRequest("Missing Request Body"); }
@@ -115,7 +115,7 @@ namespace Orckestra.Composer.Cart.Api
         }
 
         [HttpPut]
-        [Route("{cartName}/billing-address")]
+        [ActionName("{cartName}/billing-address")]
         public virtual async Task<IHttpActionResult> UpdateRecurringOrderCartBillingAddress([FromUri]string cartName, [FromBody]UpdateRecurringOrderCartBillingAddressRequest request)
         {
             if (request == null) { return BadRequest("Missing Request Body"); }
@@ -139,8 +139,8 @@ namespace Orckestra.Composer.Cart.Api
         }
 
         [HttpPut]
-        [Route("{cartName}/paymentmethod")]
-        public virtual async Task<IHttpActionResult> UpdateRecurringTemplatePaymentMethod([FromUri]string cartName, [FromBody]UpdateRecurringTemplatePaymentMethodRequest request)
+        [ActionName("shippingmethod")]
+        public virtual async Task<IHttpActionResult> UpdateRecurringCartShippingMethod([FromBody]UpdateRecurringCartShippingMethodRequest request)
         {
             if (request == null) { return BadRequest("Missing Request Body"); }
             if (request.ShippingProviderId == null) { return BadRequest("Missing Request Body"); }
@@ -150,7 +150,7 @@ namespace Orckestra.Composer.Cart.Api
 
             var results = await ShippingMethodViewService.UpdateRecurringOrderCartShippingMethodAsync(new UpdateRecurringOrderCartShippingMethodParam()
             {
-                CartName = cartName,
+                CartName = request.CartName,
                 CultureInfo = ComposerContext.CultureInfo,
                 CustomerId = ComposerContext.CustomerId,
                 Scope = ComposerContext.Scope,
@@ -165,7 +165,7 @@ namespace Orckestra.Composer.Cart.Api
 
 
         [HttpPut]
-        [Route("{cartName}/reschedule")]
+        [ActionName("reschedule")]
         public async Task<IHttpActionResult> UpdateRecurringCartNextOccurence([FromBody]UpdateRecurringCartNextOccurenceRequest request)
         {
             if (request == null) { return BadRequest("Missing Request Body"); }

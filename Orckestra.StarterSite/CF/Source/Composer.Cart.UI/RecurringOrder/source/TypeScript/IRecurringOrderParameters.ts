@@ -20,7 +20,7 @@ module Orckestra.Composer {
     }
 
     export interface IRecurringOrderGetCartShippingMethods {
-        cartName: string;
+        CartName: string;
     }
 
     export interface IRecurringOrderLineItemDeleteParam {
@@ -39,8 +39,7 @@ module Orckestra.Composer {
 
     export interface IRecurringOrderLineItemsUpdateDateParam {
         CartName: string;
-        LineItems: IRecurringOrderLineItems[];
-        NextRunDate: Date;
+        NextOccurence: string;
     }
 
     export interface IRecurringOrderProgramsByNamesParam {

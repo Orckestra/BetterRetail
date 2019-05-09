@@ -141,4 +141,7 @@
   <data name="T_RecurringCartDetailsOrderSummary" xml:space="preserve">
     <value>Order summary</value>
   </data> 
+  <data name="L_NextOccurence" xml:space="preserve">
+    <value>Next processing date</value>
+  </data>   
 </root>

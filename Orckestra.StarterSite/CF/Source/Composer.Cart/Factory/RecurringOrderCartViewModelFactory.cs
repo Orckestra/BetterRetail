@@ -68,6 +68,10 @@ namespace Orckestra.Composer.Cart.Factory
             MapRecurringOrderLineitemFrequencyName(vm, param.CultureInfo, param.RecurringOrderPrograms);
             FillRecurringScheduleUrl(roCartVm, param.CultureInfo);
 
+            roCartVm.Name = param.Cart.Name;
+
+            vm.Context["Name"] = roCartVm.Name;           
+
             return vm;
         }
 
@@ -85,6 +89,14 @@ namespace Orckestra.Composer.Cart.Factory
         {
             vm.NextOccurence = GetNextOccurenceDate(cart.Shipments.First());
             vm.FormatedNextOccurence = GetFormattedNextOccurenceDate(vm.NextOccurence, cultureInfo);
+            vm.NextOccurenceValue = GetNextOccurenceDateValue(vm.NextOccurence, cultureInfo);
+        }
+
+        private string GetNextOccurenceDateValue(DateTime nextOccurence, CultureInfo cultureInfo)
+        {
+            return nextOccurence == DateTime.MinValue
+                                ? string.Empty
+                                : nextOccurence.ToString("yyyy/MM/dd");
         }
 
         private void FillNextOcurrence(LightRecurringOrderCartViewModel vm, Overture.ServiceModel.Orders.Cart cart, CultureInfo cultureInfo)

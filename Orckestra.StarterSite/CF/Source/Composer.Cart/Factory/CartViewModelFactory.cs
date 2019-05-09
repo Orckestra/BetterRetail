@@ -473,6 +473,9 @@ namespace Orckestra.Composer.Cart.Factory
             var totalDays = (int)Math.Ceiling((fulfillmentMethod.ExpectedDeliveryDate.Value - DateTime.UtcNow).TotalDays);
             shippingMethodViewModel.ExpectedDaysBeforeDelivery = totalDays.ToString();
 
+            shippingMethodViewModel.IsShipToStoreType = fulfillmentMethod.FulfillmentMethodType == FulfillmentMethodType.ShipToStore;
+            shippingMethodViewModel.FulfillmentMethodTypeString = fulfillmentMethod.FulfillmentMethodType.ToString();
+
             return shippingMethodViewModel;
         }
 
