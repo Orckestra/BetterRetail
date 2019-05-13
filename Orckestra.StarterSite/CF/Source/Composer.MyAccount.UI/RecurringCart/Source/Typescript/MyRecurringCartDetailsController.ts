@@ -4,28 +4,64 @@
 ///<reference path='./RecurringCartDetailsController.ts' />
 ///<reference path='../../../../Composer.Cart.UI/RecurringOrder/source/TypeScript/Services/RecurringOrderService.ts' />
 ///<reference path='../../../../Composer.Cart.UI/RecurringOrder/source/TypeScript/Repositories/RecurringOrderRepository.ts' />
+///<reference path='../../../../Composer.Cart.UI/CheckoutShippingAddressRegistered/source/TypeScript/ShippingAddressRegisteredService.ts' />
+///<reference path='../../../../Composer.Cart.UI/CheckoutBillingAddressRegistered/source/TypeScript/BillingAddressRegisteredCheckoutService.ts' />
+///<reference path='./RecurringCartAddressRegisteredService.ts' />
 
 
 module Orckestra.Composer {
 
     enum EditSection {
         NextOccurence = 0,
-        ShippingMethod = 1
+        ShippingMethod = 1,
+        Address = 2
     };
 
     export class MyRecurringCartDetailsController extends Orckestra.Composer.RecurringCartDetailsController {
         private recurringOrderService: IRecurringOrderService = new RecurringOrderService(new RecurringOrderRepository(), this.eventHub);
         private editNextOcurrence = false;
         private editShippingMethod = false;
+        private editAddress = false;
         private originalShippingMethodType = '';
         private hasShippingMethodTypeChanged = false ;
+        private viewModelName = '';
+        private viewModel;
+
+        protected customerService: ICustomerService = new CustomerService(new CustomerRepository());
+        // protected shippingAddressRegisteredService: ShippingAddressRegisteredService =
+        //     new ShippingAddressRegisteredService(this.customerService);
+        // protected billingAddressRegisteredService: BillingAddressRegisteredCheckoutService =
+        //     new BillingAddressRegisteredCheckoutService(this.customerService);
+        protected recurringCartAddressRegisteredService: RecurringCartAddressRegisteredService =
+            new RecurringCartAddressRegisteredService(this.customerService);
 
         public initialize() {
 
             super.initialize();
 
+            this.viewModelName = 'MyRecurringCartDetails';
+
             console.log(this.context.viewModel);
             //this.originalShippingMethodType = this.context.viewModel.ShippingMethodFulfillmentMethodType;
+
+            //TODO : render page after get cart
+            this.getRecurringCart();
+        }
+
+        public getRecurringCart() {
+
+            var data = {
+                cartName: this.context.viewModel.Name
+            };
+
+            this.recurringOrderService.getRecurringCart(data)
+                .then(result => {
+                    console.log(result);
+                    this.viewModel = result;
+                })
+                .fail((reason) => {
+                    console.error(reason);
+                });
         }
 
         public toggleEditNextOccurence(actionContext: IControllerActionContext) {
@@ -63,9 +99,7 @@ module Orckestra.Composer {
             let isValid = this.nextOcurrenceIsValid(newDate);
 
             if (isValid) {
-
                 let cartName = this.context.viewModel.Name;
-
                 let data: IRecurringOrderLineItemsUpdateDateParam = {
                     CartName: cartName,
                     NextOccurence: newDate
@@ -259,7 +293,114 @@ module Orckestra.Composer {
         }
 
         private reRenderCartPage(vm) {
-            this.render('MyRecurringCartDetails', vm);
+            this.render(this.viewModelName, vm);
+        }
+
+        public toggleEditAddress (actionContext: IControllerActionContext) {
+            var context: JQuery = actionContext.elementContext;
+
+            this.editAddress = !this.editAddress;
+
+            if (this.editAddress) {
+                this.closeOtherEditSections(actionContext, EditSection.Address);
+
+                this.recurringCartAddressRegisteredService.getRecurringCartAddresses(this.viewModel)
+                    .then((addressesVm) => {
+
+                        console.log(addressesVm);
+                        addressesVm.EditMode = this.editAddress;
+                        addressesVm.Payment = {
+                            BillingAddress: {
+                                UseShippingAddress: this.viewModel.Payment.BillingAddress.UseShippingAddress
+                            }
+                        };
+
+                        this.render('RecurringCartDetailsAddress', addressesVm);
+                    });
+                    //.fail(reason => this.handleError(reason))
+                    //fin(() => this.eventHub.publish(`${this.viewModelName}Rendered`, checkoutContext.cartViewModel));
+            } else {
+                this.render('RecurringCartDetailsAddress', this.viewModel);
+            }
+        }
+
+        public changeShippingAddress(actionContext: IControllerActionContext) {
+            //maybe dont need
+        }
+
+        public saveEditAddress (actionContext: IControllerActionContext) {
+            //If shipping method type has changed, save address and shipping method
+
+            var context: JQuery = actionContext.elementContext;
+
+            let shippingAddressId = $(this.context.container).find('input[name=ShippingAddressId]:checked').val();
+            let billingAddressId = $(this.context.container).find('input[name=BillingAddressId]:checked').val();
+            let useSameForShippingAndBilling = $(this.context.container).find('input[name=UseShippingAddress]:checked').val();
+
+
+            //let element = $('#ShippingMethod').find('input[name=ShippingMethod]:checked');
+            //let shippingMethodName = element.val();
+
+            //var busy = this.asyncBusy({ elementContext: actionContext.elementContext });
+
+            let cartName = this.context.viewModel.Name;
+
+            let data: IRecurringOrderUpdateTemplateAddressParam = {
+                shippingAddressId: shippingAddressId,
+                billingAddressId: null,
+                cartName: cartName,
+                useSameForShippingAndBilling: useSameForShippingAndBilling
+            };
+
+            if (useSameForShippingAndBilling) {
+                data.billingAddressId = billingAddressId;
+            }
+
+            this.recurringOrderService.updateCartShippingAddress(data)
+                .then(result => {
+
+                    console.log(result);
+
+                    this.viewModel = result;
+
+                    this.reRenderCartPage(result);
+                })
+                .fail((reason) => {
+                    console.error(reason);
+                });
+                //.fin(() => busy.done());
+        }
+
+        private useShippingAddress() : Boolean {
+            var useShippingAddress = $(this.context.container).find('input[name=UseShippingAddress]:checked').val() === 'true';
+            return useShippingAddress;
+        }
+
+
+        public changeUseShippingAddress() {
+
+            this.setBillingAddressFormVisibility();
+            this.setSelectedBillingAddress();
+            //TODO: form validation?
+        }
+
+        private setBillingAddressFormVisibility() {
+
+            var useShippingAddress: Boolean = this.useShippingAddress();
+            if (useShippingAddress) {
+                $('#BillingAddressContent').addClass('hide');
+            } else {
+                $('#BillingAddressContent').removeClass('hide');
+            }
+        }
+
+        protected setSelectedBillingAddress() {
+
+            var selectedBillingAddressId: string = $(this.context.container).find('input[name=BillingAddressId]:checked').val();
+
+            if (!selectedBillingAddressId) {
+                return;
+            }
         }
     }
 }

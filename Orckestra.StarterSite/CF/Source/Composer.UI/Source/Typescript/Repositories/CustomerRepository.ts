@@ -26,6 +26,17 @@ module Orckestra.Composer {
         }
 
         /**
+         * Get the customer addresses for a recurring cart page.
+         */
+        public getRecurringCartAddresses(cartName: string): Q.Promise<any> {
+
+            var data = {
+                CartName: cartName
+            };
+            return ComposerClient.put('/api/customer/recurringcartaddresses', data);
+        }
+
+        /**
         * Create a new customer address
         * @param
         */

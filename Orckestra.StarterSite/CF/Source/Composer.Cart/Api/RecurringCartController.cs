@@ -91,8 +91,8 @@ namespace Orckestra.Composer.Cart.Api
         }
 
         [HttpPut]
-        [ActionName("{cartName}/shipping-address")]
-        public virtual async Task<IHttpActionResult> UpdateRecurringOrderCartShippingAddress([FromUri]string cartName, [FromBody]UpdateRecurringOrderCartShippingAddressRequest request)
+        [ActionName("address")]
+        public virtual async Task<IHttpActionResult> UpdateRecurringOrderCartAddress([FromBody]UpdateRecurringOrderCartAddressRequest request)
         {
             if (request == null) { return BadRequest("Missing Request Body"); }
             if (request.ShippingAddressId == null) { return BadRequest("Missing Request Body"); }
@@ -102,7 +102,7 @@ namespace Orckestra.Composer.Cart.Api
             {
                 CultureInfo = ComposerContext.CultureInfo,
                 ScopeId = ComposerContext.Scope,
-                CartName = cartName,
+                CartName = request.cartName,
                 CustomerId = ComposerContext.CustomerId,
                 ShippingAddressId = request.ShippingAddressId.ToGuid(),
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
@@ -181,6 +181,25 @@ namespace Orckestra.Composer.Cart.Api
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
 
             }).ConfigureAwait(false);
+
+            return Ok(vm);
+        }
+
+        [HttpPost]
+        [ActionName("getrecurringcart")]
+        public async Task<IHttpActionResult> GetRecurringCart([FromBody]GetRecurringCartRequest request)
+        {
+            if (request == null) { return BadRequest("Missing Request Body"); }
+            if (!ModelState.IsValid) { return BadRequest(ModelState); }
+
+            var vm = await RecurringOrderCartsService.GetRecurringOrderCartViewModelAsync(new GetRecurringOrderCartViewModelParam
+            {
+                CartName = request.Name,
+                CustomerId = ComposerContext.CustomerId,
+                Scope = ComposerContext.Scope,
+                CultureInfo = ComposerContext.CultureInfo,
+                BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
+            }).ConfigureAwait(false); ;
 
             return Ok(vm);
         }

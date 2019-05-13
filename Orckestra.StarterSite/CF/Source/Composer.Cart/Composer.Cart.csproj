@@ -180,13 +180,14 @@
     <Compile Include="Requests\CompleteCheckoutRequest.cs" />
     <Compile Include="Requests\CouponRequest.cs" />
     <Compile Include="Requests\AddLineItemViewModel.cs" />
+    <Compile Include="Requests\GetRecurringCartRequest.cs" />
     <Compile Include="Requests\RemoveLineItemViewModel.cs" />
     <Compile Include="Requests\UpdateCartRequest.cs" />
     <Compile Include="Requests\UpdateLineItemViewModel.cs" />
     <Compile Include="Requests\UpdateRecurringCartNextProcessingDateRequest.cs" />
     <Compile Include="Requests\UpdateRecurringOrderCartBillingAddressRequest.cs" />
     <Compile Include="Requests\UpdateRecurringOrderCartPaymentMethodRequest.cs" />
-    <Compile Include="Requests\UpdateRecurringOrderCartShippingAddressRequest.cs" />
+    <Compile Include="Requests\UpdateRecurringOrderCartAddressRequest.cs" />
     <Compile Include="Requests\UpdateRecurringCartShippingMethodRequest.cs" />
     <Compile Include="Services\CartService.cs" />
     <Compile Include="Services\CheckoutBreadcrumbViewService.cs" />

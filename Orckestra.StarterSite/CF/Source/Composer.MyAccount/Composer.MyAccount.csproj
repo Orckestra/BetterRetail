@@ -85,6 +85,7 @@
     <Compile Include="Requests\EditAccountRequest.cs" />
     <Compile Include="Requests\EditAddressRequest.cs" />
     <Compile Include="Requests\ForgotPasswordRequest.cs" />
+    <Compile Include="Requests\GetRecurringCartAddressRequest.cs" />
     <Compile Include="Requests\LogoutRequest.cs" />
     <Compile Include="Requests\RegisterRequest.cs" />
     <Compile Include="Requests\LoginViewModel.cs" />

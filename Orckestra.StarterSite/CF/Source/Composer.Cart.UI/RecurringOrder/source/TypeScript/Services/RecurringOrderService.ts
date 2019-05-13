@@ -38,9 +38,8 @@ module Orckestra.Composer {
             return this.repository.getCustomerPaymentMethods();
         }
 
-        //todo
-        public updateCartShippingAddress(updateTemplateAddressParam: IRecurringOrderUpdateTemplateAddressParam): Q.Promise<any> {
-            return this.repository.updateCartShippingAddress(updateTemplateAddressParam);
+        public updateCartShippingAddress(updateCartAddressParam: IRecurringOrderUpdateCartAddressParam): Q.Promise<any> {
+            return this.repository.updateCartShippingAddress(updateCartAddressParam);
         }
 
         public updateCartBillingAddress(updateTemplateAddressParam: IRecurringOrderUpdateTemplateAddressParam): Q.Promise<any> {
@@ -130,6 +129,10 @@ module Orckestra.Composer {
 
         public clearCustomerInactifItems(): Q.Promise<any> {
             return this.repository.clearCustomerInactifItems();
+        }
+
+        public getRecurringCart(getRecurringCartParam: IRecurringOrderCartParam): Q.Promise<any> {
+            return this.repository.getRecurringCart(getRecurringCartParam);
         }
 
 

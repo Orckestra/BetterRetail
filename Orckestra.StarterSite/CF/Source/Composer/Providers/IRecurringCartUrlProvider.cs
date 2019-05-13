@@ -20,5 +20,19 @@ namespace Orckestra.Composer.Providers
         /// <param name="param"></param>
         /// <returns></returns>
         string GetRecurringCartDetailsUrl(GetRecurringCartDetailsUrlParam param);
+
+        /// <summary>
+        /// Url to add a new address
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        string GetRecurringCartAddAddressUrl(GetRecurringCartsUrlParam param);
+
+        /// <summary>
+        /// Url to edit an address
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        string GetRecurringCarUpdateAddressBaseUrl(GetRecurringCartsUrlParam param);
     }
 }

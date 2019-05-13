@@ -88,4 +88,15 @@ module Orckestra.Composer {
         cartName: string;
         providerName: string;
     }
+
+    export interface IRecurringOrderCartParam {
+        cartName: string;
+    }
+
+    export interface IRecurringOrderUpdateCartAddressParam {
+        shippingAddressId: string;
+        billingAddressId: string;
+        cartName: string;
+        useSameForShippingAndBilling: boolean;
+    }
 }

@@ -12,7 +12,7 @@ module Orckestra.Composer {
         deleteLineItems(deleteLineItemsParam: IRecurringOrderLineItemsDeleteParam): Q.Promise<any>;
         getCustomerAddresses(): Q.Promise<any>;
         getCustomerPaymentMethods(): Q.Promise<any>;
-        updateCartShippingAddress(updateTemplateAddressParam: IRecurringOrderUpdateTemplateAddressParam): Q.Promise<any>;
+        updateCartShippingAddress(updateCartAddressParam: IRecurringOrderUpdateCartAddressParam): Q.Promise<any>;
         updateCartBillingAddress(updateTemplateAddressParam: IRecurringOrderUpdateTemplateAddressParam): Q.Promise<any>;
         updateTemplatePaymentMethod(updateTemplatePaymentMethodParam: IRecurringOrderUpdateTemplatePaymentMethodParam): Q.Promise<any>;
         updateLineItemQuantity(updateLineItemQuantityParam: IRecurringOrderUpdateLineItemQuantityParam): Q.Promise<any>;
@@ -35,5 +35,6 @@ module Orckestra.Composer {
         getOrderTemplateShippingMethods(): Q.Promise<any>;
         getInactifProductsFromCustomer(): Q.Promise<any>;
         clearCustomerInactifItems(): Q.Promise<any>;
+        getRecurringCart(getRecurringCartParam: IRecurringOrderCartParam): Q.Promise<any>;
     }
 }

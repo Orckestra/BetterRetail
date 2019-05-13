@@ -47,6 +47,23 @@ module Orckestra.Composer {
         }
 
         /**
+         * Get the customer addresses for a recurring cart page.
+         */
+        public getRecurringCartAddresses(cartName: string): Q.Promise<any> {
+
+            if (_.isUndefined(this.memoizeGetAdresses)) {
+               this.memoizeGetAdresses = _.memoize(arg => this.getRecurringCartAddressesImpl(cartName));
+           }
+
+           return this.memoizeGetAdresses();
+        }
+
+       private getRecurringCartAddressesImpl(cartName: string): Q.Promise<any> {
+
+        return this.customerRepository.getRecurringCartAddresses(cartName);
+        }
+
+        /**
         * Create a new customer address
         * @param
         */

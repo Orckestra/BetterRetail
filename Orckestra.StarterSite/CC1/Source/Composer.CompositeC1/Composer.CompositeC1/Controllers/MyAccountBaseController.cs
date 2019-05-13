@@ -300,6 +300,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         [AuthorizeAndRedirect]
         public virtual ActionResult RecurringCartDetails(string name)
         {
+            //TODO: Loading screen instead
             if (string.IsNullOrEmpty(name))
             {
                 return new HttpStatusCodeResult(HttpStatusCode.NotFound);

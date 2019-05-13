@@ -7,10 +7,12 @@ using System.Threading.Tasks;
 
 namespace Orckestra.Composer.Cart.Requests
 {
-    public class UpdateRecurringOrderCartShippingAddressRequest
+    public class UpdateRecurringOrderCartAddressRequest
     {
         public string ShippingAddressId { get; set; }
+        public string BillingAddressId { get; set; }
         public bool UseSameForShippingAndBilling { get; set; }
+        public string cartName { get; set; }
 
     }
 }

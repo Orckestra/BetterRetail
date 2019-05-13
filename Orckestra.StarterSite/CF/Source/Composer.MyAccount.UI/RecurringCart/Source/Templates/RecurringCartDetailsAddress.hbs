@@ -1,7 +1,19 @@
 <div data-templateid="RecurringCartDetailsAddress">
     <div class="panel  panel-default">
+        {{#unless EditMode}}
         <div class="panel-heading">
-            <h2 class="h3">{{localize 'CheckoutProcess' 'T_ShippingAddress' }}</h2>
+            <div class="row">
+                <div class="col-xs-10">
+                    <h2 class="h3">{{localize 'CheckoutProcess' 'T_ShippingAddress' }}</h2>
+                </div>
+                <div class="col-xs-2">
+                    <button class="btn btn-link pull-right" type="button" 
+                    data-oc-click="toggleEditAddress" 
+                    title="{{localize 'CheckoutProcess' 'B_Edit'}}">
+                        <span class="fa  fa-pencil  fa-lg"></span>
+                    </button>
+                </div>
+            </div>
         </div>
         <div class="panel-body">
             <div class="row">
@@ -39,5 +51,33 @@
                 </div>
             </div>
         </div>
+        {{else}}
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-xs-10">
+                    <h2 class="h3">{{localize 'CheckoutProcess' 'T_Address' }}</h2>
+                </div>
+                <div class="col-xs-2">
+                    <button class="btn btn-link pull-right invisible" type="button" 
+                    title="{{localize 'CheckoutProcess' 'B_Edit'}}">
+                        <span class="fa  fa-pencil  fa-lg"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body">            
+            {{> RecurringCartShippingAddressRegistered}}
+            <br />
+            {{> RecurringCartBillingAddressRegistered}}           
+                    
+            <div class="col-xs-12 text-center">
+                <button class="btn btn-secondary" type="button" 
+                    data-oc-click="toggleEditAddress">Cancel</button>
+                <button class="btn btn-primary"
+                    data-oc-click="saveEditAddress">Apply
+                </button>
+            </div>
+        </div>
+        {{/unless}}
     </div>
 </div>

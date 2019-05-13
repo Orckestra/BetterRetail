@@ -56,9 +56,9 @@ module Orckestra.Composer {
             return ComposerClient.get(`/api/recurringordertemplate/get-recurring-order-templates-by-user`);
         }
 
-        public updateCartShippingAddress(updateTemplateAddressParam: IRecurringOrderUpdateTemplateAddressParam): Q.Promise<any> {
+        public updateCartShippingAddress(updateCartAddressParam: IRecurringOrderUpdateTemplateAddressParam): Q.Promise<any> {
 
-            const {billingAddressId, shippingAddressId, cartName, useSameForShippingAndBilling} = updateTemplateAddressParam;
+            const {billingAddressId, shippingAddressId, cartName, useSameForShippingAndBilling} = updateCartAddressParam;
             if (!billingAddressId && !shippingAddressId) {
                 throw new Error('billingAddressId or shippingAddressId is required');
             }
@@ -73,7 +73,7 @@ module Orckestra.Composer {
                 UseSameForShippingAndBilling: useSameForShippingAndBilling
             };
 
-            return ComposerClient.put(`/api/recurringordercart/${cartName}/shipping-address`, data);
+            return ComposerClient.put(`/api/recurringcart/address`, data);
         }
 
         public updateCartBillingAddress(updateTemplateAddressParam: IRecurringOrderUpdateTemplateAddressParam): Q.Promise<any> {
@@ -326,6 +326,19 @@ module Orckestra.Composer {
 
         public clearCustomerInactifItems(): Q.Promise<any> {
             return ComposerClient.get(`/api/recurringordertemplate/clear-customer-inactif-items`);
+        }
+
+        public getRecurringCart(getRecurringCartParam: IRecurringOrderCartParam): Q.Promise<any> {
+            const {cartName} = getRecurringCartParam;
+            if (!cartName) {
+                throw new Error('cartName is required');
+            }
+
+            const data = {
+                Name: cartName,
+            };
+
+            return ComposerClient.post(`/api/recurringcart/getrecurringcart`, data);
         }
     }
 }
