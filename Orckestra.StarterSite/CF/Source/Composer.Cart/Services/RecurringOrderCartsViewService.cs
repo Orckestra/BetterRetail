@@ -362,5 +362,28 @@ namespace Orckestra.Composer.Cart.Services
 
             return vm;
         }
+
+        public async Task<CartViewModel> RemoveLineItemAsync(RemoveRecurringCartLineItemParam param)
+        {
+            if (!ConfigurationUtil.GetRecurringOrdersConfigEnabled())
+                return GetEmptyRecurringOrderCartViewModel();
+
+            if (param == null) throw new ArgumentNullException(nameof(param), ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param)));
+            if (string.IsNullOrWhiteSpace(param.Scope)) throw new ArgumentNullException(nameof(param.Scope), ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param.Scope)));
+            if (param.CultureInfo == null) throw new ArgumentNullException(nameof(param.CultureInfo), ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param.CultureInfo)));
+            if (param.LineItemId == Guid.Empty) throw new ArgumentNullException(nameof(param.LineItemId), ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param.LineItemId)));
+            if (param.CustomerId == Guid.Empty) throw new ArgumentNullException(nameof(param.CustomerId), ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param.CustomerId)));
+
+            await CartRepository.RemoveRecurringCartLineItemAsync(param).ConfigureAwait(false);
+            
+            return await GetRecurringOrderCartViewModelAsync(new GetRecurringOrderCartViewModelParam
+            {
+                CartName = param.CartName,
+                CultureInfo = param.CultureInfo,
+                BaseUrl = param.BaseUrl,
+                CustomerId = param.CustomerId,
+                Scope = param.Scope
+            }).ConfigureAwaitWithCulture(false);
+        }
     }
 }

@@ -17,5 +17,6 @@ namespace Orckestra.Composer.Cart.Services
         Task<CartViewModel> UpdateRecurringOrderCartBillingAddressAsync(UpdateRecurringOrderCartBillingAddressParam param);
         Task<CartViewModel> CreateCartViewModelAsync(CreateRecurringOrderCartViewModelParam param);
         Task<RecurringOrderCartsRescheduleResultViewModel> UpdateRecurringOrderCartNextOccurenceAsync(UpdateRecurringOrderCartNextOccurenceParam param);
+        Task<CartViewModel> RemoveLineItemAsync(RemoveRecurringCartLineItemParam removeRecurringCartLineItemParam);
     }
 }

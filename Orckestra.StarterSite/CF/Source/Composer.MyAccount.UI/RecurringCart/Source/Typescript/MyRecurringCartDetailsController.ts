@@ -506,5 +506,38 @@ module Orckestra.Composer {
 
             return quantity;
         }
+
+        public deleteLineItem(actionContext: IControllerActionContext) {
+            var context: JQuery = actionContext.elementContext;
+            var lineItemId: string = <any>context.data('lineitemid');
+            var productId: string = context.attr('data-productid');
+
+            context.closest('.cart-row').addClass('is-loading');
+            var cartName = this.viewModel.Name;
+
+            const deleteLineItemParam: IRecurringOrderLineItemDeleteParam = {
+                lineItemId: lineItemId,
+                cartName: cartName
+            };
+
+            var busy = this.asyncBusy({ elementContext: actionContext.elementContext });
+
+            this.recurringOrderService.deleteLineItem(deleteLineItemParam)
+                .then(result => {
+                    this.reRenderCartPage(result);
+
+                    //TODO: Manage if last item?
+                    //Deleting the last recurring item will reschedule the cartName to the line item next occurence
+                })
+                .fail((reason: any) => this.onLineItemDeleteFailed(context, reason))
+                .fin(() => busy.done());
+        }
+
+        protected onLineItemDeleteFailed(context: JQuery, reason: any): void {
+            console.error('Error while deleting line item.', reason);
+            context.closest('.cart-row').removeClass('is-loading');
+
+            //ErrorHandler.instance().outputErrorFromCode('LineItemDeleteFailed');
+        }
     }
 }

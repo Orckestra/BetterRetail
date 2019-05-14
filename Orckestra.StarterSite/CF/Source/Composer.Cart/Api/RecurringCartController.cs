@@ -117,31 +117,7 @@ namespace Orckestra.Composer.Cart.Api
 
             return Ok(results);
         }
-
-        [HttpPut]
-        [ActionName("{cartName}/billing-address")]
-        public virtual async Task<IHttpActionResult> UpdateRecurringOrderCartBillingAddress([FromUri]string cartName, [FromBody]UpdateRecurringOrderCartBillingAddressRequest request)
-        {
-            if (request == null) { return BadRequest("Missing Request Body"); }
-            if (request.BillingAddressId == null) { return BadRequest("Missing Request Body"); }
-            if (!ModelState.IsValid) { return BadRequest(ModelState); }
-
-            var param = new UpdateRecurringOrderCartBillingAddressParam()
-            {
-                CultureInfo = ComposerContext.CultureInfo,
-                ScopeId = ComposerContext.Scope,
-                CartName = cartName,
-                CustomerId = ComposerContext.CustomerId,
-                BillingAddressId = request.BillingAddressId.ToGuid(),
-                BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
-                UseSameForShippingAndBilling = request.UseSameForShippingAndBilling
-            };
-
-            var results = await RecurringOrderCartsService.UpdateRecurringOrderCartBillingAddressAsync(param).ConfigureAwait(false);
-
-            return Ok(results);
-        }
-
+        
         [HttpPut]
         [ActionName("shippingmethod")]
         public virtual async Task<IHttpActionResult> UpdateRecurringCartShippingMethod([FromBody]UpdateRecurringCartShippingMethodRequest request)
@@ -165,8 +141,6 @@ namespace Orckestra.Composer.Cart.Api
 
             return Ok(results);
         }
-
-
 
         [HttpPut]
         [ActionName("reschedule")]
@@ -236,5 +210,29 @@ namespace Orckestra.Composer.Cart.Api
             return Ok(vm);
         }
 
+        /// <summary>
+        /// Remove line item to the cart.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns>A Json representation of the updated cart state</returns>
+        [HttpDelete]
+        [ActionName("lineitem")]
+        public virtual async Task<IHttpActionResult> RemoveLineItem(RemoveRecurringCartLineItemViewModel request)
+        {
+            if (request == null) { return BadRequest("Missing Request Body"); }
+            if (!ModelState.IsValid) { return BadRequest(ModelState); }
+
+            var vm = await RecurringOrderCartsService.RemoveLineItemAsync(new RemoveRecurringCartLineItemParam
+            {
+                Scope = ComposerContext.Scope,
+                CultureInfo = ComposerContext.CultureInfo,
+                CustomerId = ComposerContext.CustomerId,
+                LineItemId = new Guid(request.LineItemId),
+                CartName = request.CartName,
+                BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
+            }).ConfigureAwaitWithCulture(false);
+
+            return Ok(vm);
+        }
     }
 }

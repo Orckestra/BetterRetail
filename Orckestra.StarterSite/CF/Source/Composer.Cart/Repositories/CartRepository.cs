@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Configuration;
@@ -498,6 +499,19 @@ namespace Orckestra.Composer.Cart.Repositories
                 NextOccurence = param.NextOccurence,
                 ScopeId = param.Scope,
                 CartName = param.CartName
+            };
+
+            return await OvertureClient.SendAsync(request).ConfigureAwaitWithCulture(false);
+        }
+        public async Task<HttpWebResponse> RemoveRecurringCartLineItemAsync(RemoveRecurringCartLineItemParam param)
+        {
+            if (param == null) throw new ArgumentNullException(nameof(param));
+
+            var request = new DeleteRecurringCartLineItemsRequest()
+            {
+                CustomerId = param.CustomerId,
+                ScopeId = param.Scope,
+                LineItemIds = new List<Guid>() { param.LineItemId }
             };
 
             return await OvertureClient.SendAsync(request).ConfigureAwaitWithCulture(false);

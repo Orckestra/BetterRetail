@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using FizzWare.NBuilder.Generators;
 using Orckestra.Composer.Cart.Parameters;
@@ -117,6 +118,11 @@ namespace Orckestra.Composer.Cart.Tests.Mock
         }
 
         public Task<ListOfRecurringOrderLineItems> RescheduleRecurringCartAsync(RescheduleRecurringCartParam param)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<HttpWebResponse> RemoveRecurringCartLineItemAsync(RemoveRecurringCartLineItemParam param)
         {
             throw new NotImplementedException();
         }

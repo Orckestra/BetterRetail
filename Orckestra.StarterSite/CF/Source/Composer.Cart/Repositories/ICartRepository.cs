@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Overture.ServiceModel.Orders;
@@ -118,5 +119,12 @@ namespace Orckestra.Composer.Cart.Repositories
         /// <param name="param"></param>
         /// <returns></returns>
         Task<ListOfRecurringOrderLineItems> RescheduleRecurringCartAsync(RescheduleRecurringCartParam param);
+        
+        /// <summary>
+        /// Remove a line item from a recurring cart
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        Task<HttpWebResponse> RemoveRecurringCartLineItemAsync(RemoveRecurringCartLineItemParam param);
     }
 }

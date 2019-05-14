@@ -18,7 +18,13 @@ module Orckestra.Composer {
             if (!cartName) {
                 throw new Error('cartName is required');
             }
-            return ComposerClient.remove(`/api/recurringordercart/${cartName}/lineitem/${lineItemId}`, undefined);
+
+            var data = {
+                CartName: cartName,
+                LineItemId: lineItemId
+            };
+
+            return ComposerClient.remove(`/api/recurringcart/lineitem/`, data);
         }
 
         public deleteLineItems(deleteLineItemsParam: IRecurringOrderLineItemsDeleteParam): Q.Promise<any> {
