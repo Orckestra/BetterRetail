@@ -74,6 +74,8 @@ module Orckestra.Composer {
         lineItemId: string;
         quantity: number;
         cartName: string;
+        recurringProgramName: string;
+        recurringFrequencyName: string;
     }
 
     export interface IRecurringOrderUpdateTemplateAddressParam {

@@ -26,25 +26,29 @@ namespace Orckestra.Composer.Cart.Api
         protected IPaymentViewService PaymentViewService { get; }
         protected IRecurringOrderTemplatesViewService RecurringOrderTemplatesService { get; }
         protected IShippingMethodViewService ShippingMethodViewService { get; }
+        protected ICartService CartService { get; }
 
         public RecurringCartController(
             IRecurringOrderCartsViewService recurringOrderCarstService,
             IComposerContext composerContext,
             IPaymentViewService paymentViewService,
             IRecurringOrderTemplatesViewService recurringOrderTemplatesService,
-            IShippingMethodViewService shippingMethodViewService)
+            IShippingMethodViewService shippingMethodViewService,
+            ICartService cartService)
         {
             if (recurringOrderCarstService == null) throw new ArgumentNullException(nameof(recurringOrderCarstService), ArgumentNullMessageFormatter.FormatErrorMessage(nameof(recurringOrderCarstService)));
             if (composerContext == null) throw new ArgumentNullException(nameof(composerContext), ArgumentNullMessageFormatter.FormatErrorMessage(nameof(composerContext)));
             if (paymentViewService == null) throw new ArgumentNullException(nameof(paymentViewService), ArgumentNullMessageFormatter.FormatErrorMessage(nameof(paymentViewService)));
             if (recurringOrderTemplatesService == null) throw new ArgumentNullException(nameof(recurringOrderTemplatesService), ArgumentNullMessageFormatter.FormatErrorMessage(nameof(recurringOrderTemplatesService)));
             if (shippingMethodViewService == null) throw new ArgumentNullException(nameof(shippingMethodViewService), ArgumentNullMessageFormatter.FormatErrorMessage(nameof(shippingMethodViewService)));
+            if (cartService == null) throw new ArgumentNullException(nameof(shippingMethodViewService), ArgumentNullMessageFormatter.FormatErrorMessage(nameof(cartService)));
 
             RecurringOrderCartsService = recurringOrderCarstService;
             ComposerContext = composerContext;
             PaymentViewService = paymentViewService;
             RecurringOrderTemplatesService = recurringOrderTemplatesService;
             ShippingMethodViewService = shippingMethodViewService;
+            CartService = cartService;
         }
 
         [HttpGet]
@@ -203,5 +207,34 @@ namespace Orckestra.Composer.Cart.Api
 
             return Ok(vm);
         }
+
+        /// <summary>
+        /// Update the line item in the recurring cart.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPut]
+        [ActionName("lineitem")]
+        public virtual async Task<IHttpActionResult> UpdateLineItem(UpdateRecurringCartLineItemViewModel request)
+        {
+            if (request == null) { return BadRequest("Missing Request Body"); }
+            if (!ModelState.IsValid) { return BadRequest(ModelState); }
+            
+            var vm = await CartService.UpdateLineItemAsync(new UpdateLineItemParam
+            {
+                ScopeId = ComposerContext.Scope,
+                CultureInfo = ComposerContext.CultureInfo,
+                CustomerId = ComposerContext.CustomerId,
+                LineItemId = new Guid(request.LineItemId),
+                CartName = request.CartName,
+                Quantity = request.Quantity.GetValueOrDefault(),
+                BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
+                RecurringOrderFrequencyName = request.RecurringOrderFrequencyName,
+                RecurringOrderProgramName = request.RecurringOrderProgramName
+            });
+
+            return Ok(vm);
+        }
+
     }
 }

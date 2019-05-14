@@ -121,7 +121,7 @@ module Orckestra.Composer {
 
         public updateLineItemQuantity(updateLineItemQuantityParam: IRecurringOrderUpdateLineItemQuantityParam): Q.Promise<any> {
 
-            const {lineItemId, quantity, cartName} = updateLineItemQuantityParam;
+            const {lineItemId, quantity, cartName, recurringProgramName, recurringFrequencyName} = updateLineItemQuantityParam;
 
             if (!lineItemId) {
                 throw new Error('lineItemId is required');
@@ -129,13 +129,19 @@ module Orckestra.Composer {
             if (!quantity) {
                 throw new Error('quantity is required');
             }
+            if (!cartName) {
+                throw new Error('cartName is required');
+            }
 
             const data = {
                 LineItemId: lineItemId,
-                Quantity: quantity
+                Quantity: quantity,
+                CartName: cartName,
+                RecurringOrderProgramName: recurringProgramName,
+                RecurringOrderFrequencyName : recurringFrequencyName
             };
 
-            return ComposerClient.put(`/api/recurringordercart/${cartName}/lineitem/`, data);
+            return ComposerClient.put(`/api/recurringcart/lineitem/`, data);
         }
 
         public updateTemplateLineItemQuantity(updateLineItemQuantityParam: IRecurringOrderTemplateUpdateLineItemQuantityParam): Q.Promise<any> {

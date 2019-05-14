@@ -63,7 +63,8 @@
                             disabled="disabled" 
                             data-lineitemid="{{Id}}" 
                             data-action="Decrement" 
-                            data-quantity="{{Quantity}}"><span class="fa  fa-minus"></span></button>
+                            data-quantity="{{Quantity}}"><span class="fa  fa-minus"></span>
+                            <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  hidden"></span></button>
                     {{else}}
                         <button data-qa="cart-product-decrease" 
                             class="btn  btn-default  btn-sm" 
@@ -73,7 +74,8 @@
                             data-productid="{{ProductId}}" 
                             data-recurringorderfrequencyname="{{RecurringOrderFrequencyName}}" 
                             data-recurringorderprogramname="{{RecurringOrderProgramName}}" 
-                            data-oc-click="updateLineItem"><span class="fa  fa-minus"></span></button>
+                            data-oc-click="updateLineItem"><span class="fa  fa-minus"></span>
+                            <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  hidden"></span></button>
                     {{/if_eq}}
                     {{/if}}
                     <span class="small  cart-quantity" data-qa="lineItem-quantity">{{Quantity}}</span>
@@ -87,7 +89,8 @@
                             data-productid="{{ProductId}}" 
                             data-recurringorderfrequencyname="{{RecurringOrderFrequencyName}}" 
                             data-recurringorderprogramname="{{RecurringOrderProgramName}}" 
-                            data-oc-click="updateLineItem"><span class="fa  fa-plus"></span></button>
+                            data-oc-click="updateLineItem"><span class="fa  fa-plus"></span>
+                            <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  hidden"></span></button>
                     {{/if}}
                 </div>
 

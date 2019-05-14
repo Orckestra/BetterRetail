@@ -4,8 +4,6 @@
 ///<reference path='./RecurringCartDetailsController.ts' />
 ///<reference path='../../../../Composer.Cart.UI/RecurringOrder/source/TypeScript/Services/RecurringOrderService.ts' />
 ///<reference path='../../../../Composer.Cart.UI/RecurringOrder/source/TypeScript/Repositories/RecurringOrderRepository.ts' />
-///<reference path='../../../../Composer.Cart.UI/CheckoutShippingAddressRegistered/source/TypeScript/ShippingAddressRegisteredService.ts' />
-///<reference path='../../../../Composer.Cart.UI/CheckoutBillingAddressRegistered/source/TypeScript/BillingAddressRegisteredCheckoutService.ts' />
 ///<reference path='./RecurringCartAddressRegisteredService.ts' />
 
 
@@ -14,7 +12,8 @@ module Orckestra.Composer {
     enum EditSection {
         NextOccurence = 0,
         ShippingMethod = 1,
-        Address = 2
+        Address = 2,
+        Payment = 3
     };
 
     export class MyRecurringCartDetailsController extends Orckestra.Composer.RecurringCartDetailsController {
@@ -22,16 +21,17 @@ module Orckestra.Composer {
         private editNextOcurrence = false;
         private editShippingMethod = false;
         private editAddress = false;
+        private editPayment = false;
         private originalShippingMethodType = '';
         private hasShippingMethodTypeChanged = false ;
         private viewModelName = '';
         private viewModel;
+        private updateQtyTimer;
+        private updateWaitTime = 300;
+
+        private debounceUpdateLineItem: (args: any) => void;
 
         protected customerService: ICustomerService = new CustomerService(new CustomerRepository());
-        // protected shippingAddressRegisteredService: ShippingAddressRegisteredService =
-        //     new ShippingAddressRegisteredService(this.customerService);
-        // protected billingAddressRegisteredService: BillingAddressRegisteredCheckoutService =
-        //     new BillingAddressRegisteredCheckoutService(this.customerService);
         protected recurringCartAddressRegisteredService: RecurringCartAddressRegisteredService =
             new RecurringCartAddressRegisteredService(this.customerService);
 
@@ -42,7 +42,6 @@ module Orckestra.Composer {
             this.viewModelName = 'MyRecurringCartDetails';
 
             console.log(this.context.viewModel);
-            //this.originalShippingMethodType = this.context.viewModel.ShippingMethodFulfillmentMethodType;
 
             //TODO : render page after get cart
             this.getRecurringCart();
@@ -277,11 +276,6 @@ module Orckestra.Composer {
 
                 this.recurringOrderService.updateCartShippingMethod(data)
                     .then(result => {
-                        //$("#changeShippingMethodModal").modal('hide');
-                        //result.Index = index;
-                        //this.customRender("RecurringOrderDetailsLineItemsGroup" + index, "RecurringOrderDetailsLineItemsGroup", result);
-                        //This is to reinitialize the popover       
-                        //this.initializePopOver();
 
                         this.reRenderCartPage(result);
                     })
@@ -293,6 +287,7 @@ module Orckestra.Composer {
         }
 
         private reRenderCartPage(vm) {
+            this.viewModel = vm;
             this.render(this.viewModelName, vm);
         }
 
@@ -336,13 +331,6 @@ module Orckestra.Composer {
             let shippingAddressId = $(this.context.container).find('input[name=ShippingAddressId]:checked').val();
             let billingAddressId = $(this.context.container).find('input[name=BillingAddressId]:checked').val();
             let useSameForShippingAndBilling = $(this.context.container).find('input[name=UseShippingAddress]:checked').val();
-
-
-            //let element = $('#ShippingMethod').find('input[name=ShippingMethod]:checked');
-            //let shippingMethodName = element.val();
-
-            //var busy = this.asyncBusy({ elementContext: actionContext.elementContext });
-
             let cartName = this.context.viewModel.Name;
 
             let data: IRecurringOrderUpdateTemplateAddressParam = {
@@ -401,6 +389,122 @@ module Orckestra.Composer {
             if (!selectedBillingAddressId) {
                 return;
             }
+        }
+
+        public toggleEditPayment (actionContext: IControllerActionContext) {
+            var context: JQuery = actionContext.elementContext;
+
+            this.editPayment = !this.editPayment;
+
+            if (this.editPayment) {
+                this.closeOtherEditSections(actionContext, EditSection.Payment);
+
+                //TODO
+
+                this.render('RecurringCartDetailsPayment', this.viewModel);
+            } else {
+                this.render('RecurringCartDetailsPayment', this.viewModel);
+            }
+        }
+
+        public updateLineItem(actionContext: IControllerActionContext): void {
+
+            if (!this.debounceUpdateLineItem) {
+                this.debounceUpdateLineItem =
+                    _.debounce((args) =>
+                        this.applyUpdateLineItemQuantity(args), this.updateWaitTime);
+            }
+
+            let context: JQuery = actionContext.elementContext;
+            let cartQuantityElement = actionContext.elementContext
+                .parents('.cart-item')
+                .find('.cart-quantity');
+
+            let incrementButtonElement = actionContext.elementContext
+                .parents('.cart-item')
+                .find('.increment-quantity');
+
+            let decrementButtonElement = actionContext.elementContext
+                .parents('.cart-item')
+                .find('.decrement-quantity');
+
+            const action: string = <any>context.data('action');
+            const currentQuantity: number = parseInt(cartQuantityElement.text(), 10);
+
+            let frequencyName = context.data('recurringorderfrequencyname');
+            let programName = context.data('recurringorderprogramname');
+
+            const updatedQuantity = this.updateQuantity(action, currentQuantity);
+            var quantity: number = parseInt(<any>context.data('quantity'), 10);
+
+            updatedQuantity === 1 ? decrementButtonElement.attr('disabled', 'disabled') : decrementButtonElement.removeAttr('disabled');
+            //updatedQuantity === 99 ? incrementButtonElement.attr('disabled', 'disabled') : incrementButtonElement.removeAttr('disabled');
+
+            cartQuantityElement.text(updatedQuantity);
+            let cartName = this.context.viewModel.Name;
+
+            var args: any = {
+                actionContext: actionContext,
+                context: context,
+                cartQuantityElement: cartQuantityElement,
+                cartName: cartName,
+                frequencyName: frequencyName,
+                programName: programName
+            };
+
+            if (quantity !== updatedQuantity) {
+                //use only debouced function when incrementing/decrementing quantity
+                this.debounceUpdateLineItem(args);
+            }
+        }
+
+        private applyUpdateLineItemQuantity(args: any) {
+
+            var busy = this.asyncBusy({ elementContext: args.actionContext.elementContext });
+            let actionElementSpan =  args.context.find('span.fa').not('.loading-indicator');
+
+            const updateLineItemQuantityParam: IRecurringOrderUpdateLineItemQuantityParam = {
+                lineItemId:  args.context.data('lineitemid'),
+                quantity: Number( args.cartQuantityElement.text()),
+                cartName:  args.cartName,
+                recurringProgramName:  args.programName,
+                recurringFrequencyName:  args.frequencyName
+            };
+            args.cartQuantityElement.parents('.cart-item').addClass('is-loading');
+            actionElementSpan.hide();
+            this.recurringOrderService.updateLineItemQuantity(updateLineItemQuantityParam)
+                .then(result => {
+                    args.cartQuantityElement.parents('.cart-item').removeClass('is-loading');
+                    actionElementSpan.show();
+
+                    this.reRenderCartPage(result);
+
+                    //This is to reinitialize the popover       
+                    //this.initializePopOver();
+                })
+                .fail((reason: any) => console.error('Error while updating line item quantity.', reason))
+                .fin(() => busy.done());
+        }
+
+        public updateQuantity(action: string, quantity: number): number {
+            if (!action) {
+                return quantity;
+            }
+
+            switch (action.toUpperCase()) {
+                case 'INCREMENT':
+                    quantity++;
+                    break;
+
+                case 'DECREMENT':
+                    quantity--;
+                    if (quantity < 1) {
+                        quantity = 1;
+                    }
+                    break;
+            }
+
+            return quantity;
         }
     }
 }
