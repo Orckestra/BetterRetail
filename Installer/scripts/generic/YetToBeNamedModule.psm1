@@ -38,15 +38,15 @@ function DownloadC1Package($packagename, $c1version, $outputRoot) {
 	$output = $outputRoot + "/" + $packagename + ".zip"
 
 	if (Test-Path $output) {
-		Write-Log ACTION "Skip Downloading package  $packagename - it exists" 
-	} else {
-		Write-Log ACTION "Downloading package $packagename ..." 
-		$url = "https://package.composite.net/Download.ashx?package=$packagename&c1version=$c1version"
+		Remove-Item $output -recurse -force
+	} 
+	Write-Log ACTION "Downloading package $packagename ..." 
+	$url = "https://package.composite.net/Download.ashx?package=$packagename&c1version=$c1version"
 	
-		try { Invoke-WebRequest -Uri $url -OutFile $output } catch { 
-			Write-Host ERROR "Error downloading $packagename"
-		}
+	try { Invoke-WebRequest -Uri $url -OutFile $output } catch { 
+		Write-Host ERROR "Error downloading $packagename"
 	}
+	
 
 }
 
