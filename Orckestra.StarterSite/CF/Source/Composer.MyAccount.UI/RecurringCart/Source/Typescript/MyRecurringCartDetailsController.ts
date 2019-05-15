@@ -41,7 +41,7 @@ module Orckestra.Composer {
 
             this.viewModelName = 'MyRecurringCartDetails';
 
-            console.log(this.context.viewModel);
+            //console.log(this.context.viewModel);
 
             //TODO : render page after get cart
             this.getRecurringCart();
@@ -49,14 +49,24 @@ module Orckestra.Composer {
 
         public getRecurringCart() {
 
+            var nameUrlQueryString: string = 'name=';
+            var cartName: string = '';
+
+            if (window.location.href.indexOf(nameUrlQueryString) > -1) {
+                cartName = window.location.href.substring(window.location.href.indexOf(nameUrlQueryString)
+                    + nameUrlQueryString.length);
+            }
+
             var data = {
-                cartName: this.context.viewModel.Name
+                cartName: cartName
             };
 
             this.recurringOrderService.getRecurringCart(data)
                 .then(result => {
                     console.log(result);
                     this.viewModel = result;
+
+                    this.reRenderCartPage(result);
                 })
                 .fail((reason) => {
                     console.error(reason);
@@ -64,7 +74,8 @@ module Orckestra.Composer {
         }
 
         public toggleEditNextOccurence(actionContext: IControllerActionContext) {
-            var context: JQuery = actionContext.elementContext;
+            //var context: JQuery = actionContext.elementContext;
+            var context: JQuery = $('#btntoggleEditNextOccurence');
 
             this.editNextOcurrence = !this.editNextOcurrence;
 
@@ -98,11 +109,13 @@ module Orckestra.Composer {
             let isValid = this.nextOcurrenceIsValid(newDate);
 
             if (isValid) {
-                let cartName = this.context.viewModel.Name;
+                let cartName = this.viewModel.Name;
                 let data: IRecurringOrderLineItemsUpdateDateParam = {
                     CartName: cartName,
                     NextOccurence: newDate
                 };
+
+                var busyHandle = this.asyncBusy();
 
                 this.recurringOrderService.updateLineItemsDate(data)
                     .then((viewModel) => {
@@ -113,15 +126,25 @@ module Orckestra.Composer {
                             //Redirect to my orders
                             //TODO
                         } else if (!_.isEmpty(viewModel)) {
-                            //Render TODO
-                            //this.render('MyRecurringCarts', viewModel);
-                        }
 
-                        //busyHandle.done();
+                            let currentCart;
+                            viewModel.RecurringOrderCartsViewModel.RecurringOrderCartViewModelList.forEach(cart => {
+                                if (cart.Name === this.viewModel.Name) {
+                                    currentCart = cart;
+                                }
+                            });
+
+                            if (currentCart) {
+                                this.viewModel = currentCart;
+                                console.log(currentCart);
+                                this.reRenderCartPage(currentCart);
+                            }
+                        }
+                        busyHandle.done();
                     })
                     .fail((reason) => {
                         console.error(reason);
-                    //  busyHandle.done();
+                        busyHandle.done();
                     });
             } else {
                 console.log('Error: invalid date');
@@ -144,7 +167,8 @@ module Orckestra.Composer {
         }
 
         public toggleEditShippingMethod (actionContext: IControllerActionContext) {
-            var context: JQuery = actionContext.elementContext;
+            //var context: JQuery = actionContext.elementContext;
+            var context: JQuery = $('#btntoggleEditShippingMethod');
 
             this.editShippingMethod = !this.editShippingMethod;
 
@@ -153,13 +177,13 @@ module Orckestra.Composer {
             let shippingMethodName = context.data('selected-shipping-method-name');
             let shippingMethodFulfillmentType = context.data('selected-shipping-method-fulfillment-type');
 
-            //TODO
+            //TODO : manage changing type
             this.originalShippingMethodType = shippingMethodFulfillmentType;
 
             if (this.editShippingMethod) {
                 this.closeOtherEditSections(actionContext, EditSection.ShippingMethod);
 
-                this.getShippingMethods(this.context.viewModel.Name)
+                this.getShippingMethods(this.viewModel.Name)
                     .then(shippingMethods => {
 
                         if (!shippingMethods) {
@@ -214,6 +238,12 @@ module Orckestra.Composer {
             if (this.editShippingMethod && type !== EditSection.ShippingMethod) {
                 this.toggleEditShippingMethod(actionContext);
             }
+            if (this.editAddress && type !== EditSection.Address) {
+                this.toggleEditAddress(actionContext);
+            }
+            if (this.editPayment && type !== EditSection.Payment) {
+                this.toggleEditPayment(actionContext);
+            }
         }
 
         public getShippingMethods(cartName) : Q.Promise<any> {
@@ -266,7 +296,7 @@ module Orckestra.Composer {
 
                 //var busy = this.asyncBusy({ elementContext: actionContext.elementContext });
 
-                let cartName = this.context.viewModel.Name;
+                let cartName = this.viewModel.Name;
 
                 let data: IRecurringOrderCartUpdateShippingMethodParam = {
                     shippingProviderId: shippingProviderId,
@@ -331,7 +361,7 @@ module Orckestra.Composer {
             let shippingAddressId = $(this.context.container).find('input[name=ShippingAddressId]:checked').val();
             let billingAddressId = $(this.context.container).find('input[name=BillingAddressId]:checked').val();
             let useSameForShippingAndBilling = $(this.context.container).find('input[name=UseShippingAddress]:checked').val();
-            let cartName = this.context.viewModel.Name;
+            let cartName = this.viewModel.Name;
 
             let data: IRecurringOrderUpdateTemplateAddressParam = {
                 shippingAddressId: shippingAddressId,
@@ -441,7 +471,7 @@ module Orckestra.Composer {
             //updatedQuantity === 99 ? incrementButtonElement.attr('disabled', 'disabled') : incrementButtonElement.removeAttr('disabled');
 
             cartQuantityElement.text(updatedQuantity);
-            let cartName = this.context.viewModel.Name;
+            let cartName = this.viewModel.Name;
 
             var args: any = {
                 actionContext: actionContext,

@@ -8,7 +8,7 @@
                     <h2 class="h3">{{localize 'RecurringCart' 'T_RecurringCartDetails' }}</h2>
                 </div>
                 <div class="col-xs-2">
-                    <button class="btn btn-link pull-right" type="button" 
+                    <button class="btn btn-link pull-right" type="button" id="btntoggleEditNextOccurence"
                         data-next-occurence="{{NextOccurence}}"
                         data-formated-next-occurence="{{FormatedNextOccurence}}"
                         data-next-occurence-value="{{NextOccurenceValue}}"   
@@ -89,10 +89,10 @@
                     <p class="">{{localize 'MyAccount' 'L_EstimatedTotal'}}&nbsp;<strong class="h4">{{OrderSummary.Total}}</p>
                 </div>
                 <div class="col-xs-12 text-center">
-                    <button class="btn btn-secondary" type="button" 
+                    <button class="btn btn-secondary" type="button" id="btntoggleEditNextOccurence"
                         data-next-occurence="{{NextOccurence}}"
                         data-formated-next-occurence="{{FormatedNextOccurence}}"
-                        data-next-occurence-value="{{NextOccurenceValue}}"                        
+                        data-next-occurence-value="{{NextOccurenceValue}}"     
                         data-total="{{OrderSummary.Total}}"
                         data-oc-click="toggleEditNextOccurence">Cancel</button>
                     <button class="btn btn-primary"

@@ -300,25 +300,31 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         [AuthorizeAndRedirect]
         public virtual ActionResult RecurringCartDetails(string name)
         {
-            //TODO: Loading screen instead
-            if (string.IsNullOrEmpty(name))
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
-            }
+            ////TODO: Loading screen instead
+            //if (string.IsNullOrEmpty(name))
+            //{
+            //    return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+            //}
 
-            var vm = RecurringOrderCartsViewService.GetRecurringOrderCartViewModelAsync(new GetRecurringOrderCartViewModelParam
-            {
-                CartName = name,
-                CustomerId = ComposerContext.CustomerId,
-                Scope = ComposerContext.Scope,
-                CultureInfo = ComposerContext.CultureInfo,
-                BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
-            }).Result;
+            //var vm = RecurringOrderCartsViewService.GetRecurringOrderCartViewModelAsync(new GetRecurringOrderCartViewModelParam
+            //{
+            //    CartName = name,
+            //    CustomerId = ComposerContext.CustomerId,
+            //    Scope = ComposerContext.Scope,
+            //    CultureInfo = ComposerContext.CultureInfo,
+            //    BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
+            //}).Result;
 
-            if (vm == null)
+            //if (vm == null)
+            //{
+            //    return new HttpUnauthorizedResult();
+            //}
+
+            var vm = new CartViewModel
             {
-                return new HttpUnauthorizedResult();
-            }
+                IsLoading = true
+            };
+
             return View("RecurringCartDetailsContainer", vm);
         }        
 

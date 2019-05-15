@@ -31,6 +31,7 @@ namespace Orckestra.Composer.Cart.Services
         protected IRecurringOrdersRepository RecurringOrdersRepository { get; private set; }
         protected IComposerContext ComposerContext { get; private set; }
         protected IAddressRepository AddressRepository { get; private set; }
+        protected ICouponViewService CouponViewService { get; private set; }
 
         public RecurringOrderCartsViewService(
             ICartRepository cartRepository,
@@ -40,7 +41,8 @@ namespace Orckestra.Composer.Cart.Services
             ILookupService lookupService,
             IRecurringOrdersRepository recurringOrdersRepository,
             IComposerContext composerContext,
-            IAddressRepository addressRepository)
+            IAddressRepository addressRepository,
+            ICouponViewService couponViewService)
         {
             if (cartRepository == null) { throw new ArgumentNullException(nameof(cartRepository)); }
             if (overtureClient == null) { throw new ArgumentNullException(nameof(overtureClient)); }
@@ -50,6 +52,7 @@ namespace Orckestra.Composer.Cart.Services
             if (recurringOrdersRepository == null) { throw new ArgumentNullException(nameof(recurringOrdersRepository)); }
             if (composerContext == null) { throw new ArgumentNullException(nameof(composerContext)); }
             if (addressRepository == null) { throw new ArgumentNullException(nameof(addressRepository)); }
+            if (couponViewService == null) { throw new ArgumentNullException(nameof(couponViewService)); }
 
             OvertureClient = overtureClient;
             CartRepository = cartRepository;
@@ -59,6 +62,7 @@ namespace Orckestra.Composer.Cart.Services
             RecurringOrdersRepository = recurringOrdersRepository;
             ComposerContext = composerContext;
             AddressRepository = addressRepository;
+            CouponViewService = couponViewService;
         }
 
         public async Task<RecurringOrderCartsViewModel> GetRecurringOrderCartListViewModelAsync(GetRecurringOrderCartsViewModelParam param)
@@ -384,6 +388,44 @@ namespace Orckestra.Composer.Cart.Services
                 CustomerId = param.CustomerId,
                 Scope = param.Scope
             }).ConfigureAwaitWithCulture(false);
+        }
+
+        public async Task<CartViewModel> UpdateLineItemAsync(UpdateLineItemParam param)
+        {
+            if (!ConfigurationUtil.GetRecurringOrdersConfigEnabled())
+                return GetEmptyRecurringOrderCartViewModel();
+
+            if (param == null) { throw new ArgumentNullException("param", "param is required"); }
+            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException("param.CartName is required", "param"); }
+            if (string.IsNullOrWhiteSpace(param.ScopeId)) { throw new ArgumentException("param.ScopeId is required", "param"); }
+            if (param.CultureInfo == null) { throw new ArgumentException("param.CultureInfo is required", "param"); }
+            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException("param.CartName is required", "param"); }
+            if (param.LineItemId == Guid.Empty) { throw new ArgumentException("param.LineItemId is required", "param"); }
+            if (param.CustomerId == Guid.Empty) { throw new ArgumentException("param.CustomerId is required", "param"); }
+            if (param.Quantity < 1) { throw new ArgumentException("param.Quantity must be greater than 0", "param"); }
+            if (string.IsNullOrWhiteSpace(param.BaseUrl)) { throw new ArgumentException("param.BaseUrl is required", "param"); }
+
+            var cart = await CartRepository.UpdateLineItemAsync(param).ConfigureAwait(false);
+
+            await CartRepository.RemoveCouponsAsync(new RemoveCouponsParam
+            {
+                CartName = param.CartName,
+                CouponCodes = CouponViewService.GetInvalidCouponsCode(cart.Coupons).ToList(),
+                CustomerId = param.CustomerId,
+                Scope = param.ScopeId
+            }).ConfigureAwait(false);
+
+            var vmParam = new CreateRecurringOrderCartViewModelParam
+            {
+                Cart = cart,
+                CultureInfo = param.CultureInfo,
+                IncludeInvalidCouponsMessages = true,
+                BaseUrl = param.BaseUrl
+            };
+
+            var viewModel = await CreateCartViewModelAsync(vmParam).ConfigureAwait(false);
+
+            return viewModel;
         }
     }
 }

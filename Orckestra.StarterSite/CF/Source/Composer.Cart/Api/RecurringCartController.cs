@@ -194,7 +194,7 @@ namespace Orckestra.Composer.Cart.Api
             if (request == null) { return BadRequest("Missing Request Body"); }
             if (!ModelState.IsValid) { return BadRequest(ModelState); }
             
-            var vm = await CartService.UpdateLineItemAsync(new UpdateLineItemParam
+            var vm = await RecurringOrderCartsService.UpdateLineItemAsync(new UpdateLineItemParam
             {
                 ScopeId = ComposerContext.Scope,
                 CultureInfo = ComposerContext.CultureInfo,
