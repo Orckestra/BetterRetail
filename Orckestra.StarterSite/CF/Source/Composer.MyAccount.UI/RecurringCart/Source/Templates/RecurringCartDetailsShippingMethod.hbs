@@ -12,6 +12,8 @@
                     data-shipping-method-cost="{{ShippingMethod.Cost}}"                    
                     data-selected-shipping-method-name="{{ShippingMethod.Name}}"
                     data-selected-shipping-method-fulfillment-type="{{ShippingMethod.FulfillmentMethodTypeString}}"
+                    data-original-selected-shipping-method-name="{{ShippingMethod.Name}}"
+                    data-original-selected-shipping-method-fulfillment-type="{{ShippingMethod.FulfillmentMethodTypeString}}"
                     data-oc-click="toggleEditShippingMethod" 
                     title="{{localize 'CheckoutProcess' 'B_Edit'}}">
                         <span class="fa  fa-pencil  fa-lg"></span>
@@ -65,7 +67,11 @@
                                         <input {{#if_eq Name ../SelectedMethod}} checked="checked" {{/if_eq}} data-parsley-class-handler-selector=".panel-body" data-parsley-errors-container="#method-errors" 
                                         class="input" data-oc-change="methodSelected" type="radio" name="ShippingMethod" value="{{Name}}" 
                                         data-is-ship-to-store-type="{{IsShipToStoreType}}" data-fulfillment-method-type="{{FulfillmentMethodTypeString}}" 
-                                        data-shipping-provider-id="{{ShippingProviderId}}" required="true" />
+                                        data-shipping-provider-id="{{ShippingProviderId}}" required="true"                     
+                                        data-shipping-method-display-name="{{DisplayName}}"
+                                        data-shipping-method-cost="{{Cost}}"                    
+                                        data-selected-shipping-method-name="{{Name}}"
+                                        data-selected-shipping-method-fulfillment-type="{{FulfillmentMethodTypeString}}"/>
                                     </span>
                                     <span class="content">
                                         {{DisplayName}} - {{Cost}}
@@ -94,9 +100,9 @@
                     data-shipping-method-cost="{{ShippingMethod.Cost}}"                    
                     data-selected-shipping-method-name="{{ShippingMethod.Name}}"
                     data-selected-shipping-method-fulfillment-type="{{ShippingMethod.FulfillmentMethodTypeString}}"
-                    data-oc-click="toggleEditShippingMethod">Cancel</button>
+                    data-oc-click="toggleEditShippingMethod">{{localize 'General' 'B_Cancel'}}</button>
                 <button class="btn btn-primary"
-                    data-oc-click="saveEditShippingMethod">Apply
+                    data-oc-click="saveEditShippingMethod">{{localize 'MyAccount' 'B_SaveChanges'}}
                 </button>
             </div>
             {{else}}

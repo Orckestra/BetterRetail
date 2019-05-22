@@ -469,4 +469,16 @@ Pas de soucis, vous pouvez trouver d'excellentes suggestions de produits à offr
   <data name="T_Addresses" xml:space="preserve">
     <value>Adresses</value>
   </data>
+  <data name="B_AddNewPayment" xml:space="preserve">
+    <value>Ajouter une nouvelle carte de crédit</value>
+  </data>
+  <data name="B_EditPayment" xml:space="preserve">
+    <value>Modifier les informations de la carte</value>
+  </data>
+  <data name="B_DeletePayment" xml:space="preserve">
+    <value>Effacer la carte</value>
+  </data>  
+  <data name="B_SaveChanges" xml:space="preserve">
+    <value>Sauvegarder les changements</value>
+  </data>
 </root>

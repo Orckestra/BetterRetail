@@ -352,5 +352,40 @@ module Orckestra.Composer {
 
             return ComposerClient.post(`/api/recurringcart/getrecurringcart`, data);
         }
+
+        public getCartPaymentMethods(getCartPaymentMethodsParam: IRecurringOrderGetCartPaymentMethods): Q.Promise<any> {
+            const {cartName} = getCartPaymentMethodsParam;
+            if (!cartName) {
+                throw new Error('cartName is required');
+            }
+
+            const data = {
+                CartName: cartName,
+            };
+
+            return ComposerClient.post(`/api/payment/recurringcartspaymentmethods`, data);
+        }
+
+
+        public updateCartPaymentMethod(updateCartPaymentMethodParam: IRecurringOrderCartUpdatePaymentMethodParam): Q.Promise<any> {
+            if (!updateCartPaymentMethodParam.paymentId) {
+                throw new Error('paymentId is required');
+            }
+            if (!updateCartPaymentMethodParam.paymentProviderName) {
+                throw new Error('paymentProviderName is required');
+            }
+            if (!updateCartPaymentMethodParam.cartName) {
+                throw new Error('cartName is required');
+            }
+            if (!updateCartPaymentMethodParam.paymentMethodId) {
+                throw new Error('paymentMethodId is required');
+            }
+            if (!updateCartPaymentMethodParam.paymentType) {
+                throw new Error('paymentType is required');
+            }
+
+            return ComposerClient.put(`/api/recurringcart/paymentmethod`,
+                updateCartPaymentMethodParam);
+        }
     }
 }

@@ -101,4 +101,16 @@ module Orckestra.Composer {
         cartName: string;
         useSameForShippingAndBilling: boolean;
     }
+
+    export interface IRecurringOrderGetCartPaymentMethods {
+        cartName: string;
+    }
+
+    export interface IRecurringOrderCartUpdatePaymentMethodParam {
+        cartName: string;
+        paymentId: string;
+        paymentProviderName: string;
+        paymentType: string;
+        paymentMethodId: string;
+    }
 }

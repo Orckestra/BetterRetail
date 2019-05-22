@@ -3,9 +3,14 @@
 ///<reference path='../../../../Composer.UI/Source/TypeScript/Mvc/IControllerActionContext.ts' />
 ///<reference path='./RecurringCartDetailsController.ts' />
 ///<reference path='../../../../Composer.Cart.UI/RecurringOrder/source/TypeScript/Services/RecurringOrderService.ts' />
+///<reference path='../../../../Composer.Cart.UI/RecurringOrder/source/TypeScript/Services/IRecurringOrderService.ts' />
 ///<reference path='../../../../Composer.Cart.UI/RecurringOrder/source/TypeScript/Repositories/RecurringOrderRepository.ts' />
 ///<reference path='./RecurringCartAddressRegisteredService.ts' />
-
+///<reference path='../../../../Composer.Store.UI/Store/source/TypeScript/IStoreService.ts' />
+///<reference path='../../../../Composer.Store.UI/Store/source/TypeScript/StoreService.ts' />
+///<reference path='../../../../Composer.UI/Source/TypeScript/ErrorHandling/ErrorHandler.ts' />
+///<reference path='../../../../Composer.UI/Source/Typescript/UI/UIModal.ts' />
+///<reference path='../../../../Composer.Cart.UI/MonerisPaymentProvider/source/TypeScript/MonerisPaymentService.ts' />
 
 module Orckestra.Composer {
 
@@ -16,18 +21,36 @@ module Orckestra.Composer {
         Payment = 3
     };
 
+    //From Composer
+    enum ShippingMethodType {
+        Unspecified = 0,
+        PickUp = 1,
+        Delivery = 2,
+        Shipping = 3,
+        ShipToStore = 4
+    }
+
     export class MyRecurringCartDetailsController extends Orckestra.Composer.RecurringCartDetailsController {
         private recurringOrderService: IRecurringOrderService = new RecurringOrderService(new RecurringOrderRepository(), this.eventHub);
+        private storeService: IStoreService = new StoreService();
+        private paymentService: MonerisPaymentService = new MonerisPaymentService();
+
         private editNextOcurrence = false;
         private editShippingMethod = false;
         private editAddress = false;
         private editPayment = false;
         private originalShippingMethodType = '';
-        private hasShippingMethodTypeChanged = false ;
+        private hasShippingMethodTypeChanged = false;
+        private newShippingMethodType = undefined;
         private viewModelName = '';
         private viewModel;
-        private updateQtyTimer;
         private updateWaitTime = 300;
+        protected modalElementSelector: string = '#confirmationModal';
+        private uiModal: UIModal;
+        protected modalElementSelectorSavedCreditCard: string = '#recurringCartPaymentConfirmationModal';
+        private uiModalSavedCreditCard: UIModal;
+        private busyHandler: UIBusyHandle;
+
 
         private debounceUpdateLineItem: (args: any) => void;
 
@@ -43,8 +66,9 @@ module Orckestra.Composer {
 
             //console.log(this.context.viewModel);
 
-            //TODO : render page after get cart
             this.getRecurringCart();
+            this.uiModal = new UIModal(window, this.modalElementSelector, this.deleteAddress, this);
+            this.uiModalSavedCreditCard = new UIModal(window, this.modalElementSelectorSavedCreditCard, this.deleteCard, this);
         }
 
         public getRecurringCart() {
@@ -74,7 +98,6 @@ module Orckestra.Composer {
         }
 
         public toggleEditNextOccurence(actionContext: IControllerActionContext) {
-            //var context: JQuery = actionContext.elementContext;
             var context: JQuery = $('#btntoggleEditNextOccurence');
 
             this.editNextOcurrence = !this.editNextOcurrence;
@@ -167,7 +190,6 @@ module Orckestra.Composer {
         }
 
         public toggleEditShippingMethod (actionContext: IControllerActionContext) {
-            //var context: JQuery = actionContext.elementContext;
             var context: JQuery = $('#btntoggleEditShippingMethod');
 
             this.editShippingMethod = !this.editShippingMethod;
@@ -176,9 +198,12 @@ module Orckestra.Composer {
             let shippingMethodCost = context.data('shipping-method-cost');
             let shippingMethodName = context.data('selected-shipping-method-name');
             let shippingMethodFulfillmentType = context.data('selected-shipping-method-fulfillment-type');
+            let originalShippingMethodName = context.data('original-selected-shipping-method-name');
+            let originalShippingMethodFulfillmentType = context.data('original-selected-shipping-method-fulfillment-type');
 
             //TODO : manage changing type
-            this.originalShippingMethodType = shippingMethodFulfillmentType;
+            //
+            this.originalShippingMethodType = originalShippingMethodFulfillmentType;
 
             if (this.editShippingMethod) {
                 this.closeOtherEditSections(actionContext, EditSection.ShippingMethod);
@@ -217,15 +242,34 @@ module Orckestra.Composer {
                         this.render('RecurringCartDetailsShippingMethod', vm);
                     });
             } else {
-                var vm = {
-                    EditMode: this.editShippingMethod,
-                    ShippingMethod: {
-                        DisplayName: shippingMethodDisplayName,
-                        Cost: shippingMethodCost,
-                        Name: shippingMethodName,
-                        FulfillmentMethodTypeString: shippingMethodFulfillmentType
-                    }
-                };
+                if (this.hasShippingMethodTypeChanged) {
+
+                    shippingMethodDisplayName = context.data('shipping-method-display-name-tmp');
+                    shippingMethodCost = context.data('shipping-method-cost-tmp');
+                    shippingMethodName = context.data('selected-shipping-method-name-tmp');
+                    shippingMethodFulfillmentType = context.data('selected-shipping-method-fulfillment-type-tmp');
+
+                    var vm = {
+                        EditMode: this.editShippingMethod,
+                        ShippingMethod: {
+                            DisplayName: shippingMethodDisplayName,
+                            Cost: shippingMethodCost,
+                            Name: shippingMethodName,
+                            FulfillmentMethodTypeString: shippingMethodFulfillmentType
+                        }
+                    };
+
+                } else {
+                    var vm = {
+                        EditMode: this.editShippingMethod,
+                        ShippingMethod: {
+                            DisplayName: shippingMethodDisplayName,
+                            Cost: shippingMethodCost,
+                            Name: shippingMethodName,
+                            FulfillmentMethodTypeString: shippingMethodFulfillmentType
+                        }
+                    };
+                }
                 this.render('RecurringCartDetailsShippingMethod', vm);
             }
         }
@@ -257,7 +301,7 @@ module Orckestra.Composer {
         }
 
         public saveEditShippingMethod(actionContext: IControllerActionContext) {
-            var context: JQuery = actionContext.elementContext;
+            //var context: JQuery = actionContext.elementContext;
 
             //var newType = context.data('fulfillment-method-type');
             let element = $('#ShippingMethod').find('input[name=ShippingMethod]:checked')[0];
@@ -265,7 +309,7 @@ module Orckestra.Composer {
             var newType = element.dataset['fulfillmentMethodType'];
 
 
-            this.manageSaveShippingMethod(newType);
+            this.manageSaveShippingMethod(newType, actionContext);
         }
 
         public methodSelected(actionContext: IControllerActionContext) {
@@ -273,7 +317,7 @@ module Orckestra.Composer {
              $('#ShippingProviderId').val(shippingProviderId.toString());
         }
 
-        private manageSaveShippingMethod(newType) {
+        private manageSaveShippingMethod(newType, actionContext) {
             //When shipping method is changed from ship to store and ship to home, address must correspond to 
             //store adress/home address.
             //When the type change, we wait to save shipping method and open adresse section. Then, when saving valid address,
@@ -284,17 +328,40 @@ module Orckestra.Composer {
 
             this.hasShippingMethodTypeChanged = this.originalShippingMethodType !== newType;
 
+            let shippingProviderId = $('#ShippingProviderId').val();
+
+            let element = $('#ShippingMethod').find('input[name=ShippingMethod]:checked');
+            let shippingMethodName = element.val();
+            let shippingMethodCost = element.data('shipping-method-cost');
+            let shippingMethodDisplayName = element.data('shipping-method-display-name');
+            let shippingMethodFulfillmentType = element.data('selected-shipping-method-fulfillment-type');
+
             if (this.hasShippingMethodTypeChanged) {
-//TODO
+
+                var btnEditShippingMethod: JQuery = $('#btntoggleEditShippingMethod');
+                btnEditShippingMethod.data('shipping-method-display-name-tmp', shippingMethodDisplayName);
+                btnEditShippingMethod.data('shipping-method-cost-tmp', shippingMethodCost);
+                btnEditShippingMethod.data('selected-shipping-method-name-tmp', shippingMethodName);
+                btnEditShippingMethod.data('selected-shipping-method-fulfillment-type-tmp', shippingMethodFulfillmentType);
+
+                if (newType === ShippingMethodType.Shipping) {
+                    //TODO
+                    //Toggle addresses with Get customer Addresses
+
+                    this.newShippingMethodType = ShippingMethodType.Shipping;
+
+                } else if (newType === 'ShipToStore') {
+                    //TODO
+                    //Toggle addresses with Get store Addresses
+
+                    this.newShippingMethodType = ShippingMethodType.ShipToStore;
+
+                }
+                this.toggleEditAddress(actionContext);
             } else {
                 //Do the save
 
-                let shippingProviderId = $('#ShippingProviderId').val();
-
-                let element = $('#ShippingMethod').find('input[name=ShippingMethod]:checked');
-                let shippingMethodName = element.val();
-
-                //var busy = this.asyncBusy({ elementContext: actionContext.elementContext });
+                var busy = this.asyncBusy({ elementContext: actionContext.elementContext });
 
                 let cartName = this.viewModel.Name;
 
@@ -311,52 +378,56 @@ module Orckestra.Composer {
                     })
                     .fail((reason) => {
                         console.error(reason);
-                    });
-                    //.fin(() => busy.done());
+                    })
+                    .fin(() => busy.done());
             }
         }
 
-        private reRenderCartPage(vm) {
+        public reRenderCartPage(vm) {
             this.viewModel = vm;
             this.render(this.viewModelName, vm);
         }
 
         public toggleEditAddress (actionContext: IControllerActionContext) {
-            var context: JQuery = actionContext.elementContext;
 
             this.editAddress = !this.editAddress;
 
             if (this.editAddress) {
                 this.closeOtherEditSections(actionContext, EditSection.Address);
 
-                this.recurringCartAddressRegisteredService.getRecurringCartAddresses(this.viewModel)
-                    .then((addressesVm) => {
+                if (!this.newShippingMethodType || (this.newShippingMethodType === ShippingMethodType.Shipping)) {
+                    this.recurringCartAddressRegisteredService.getRecurringCartAddresses(this.viewModel)
+                        .then((addressesVm) => {
+                            addressesVm.EditMode = this.editAddress;
+                            addressesVm.Payment = {
+                                BillingAddress: {
+                                    UseShippingAddress: this.viewModel.Payment.BillingAddress.UseShippingAddress
+                                }
+                            };
 
-                        console.log(addressesVm);
-                        addressesVm.EditMode = this.editAddress;
-                        addressesVm.Payment = {
-                            BillingAddress: {
-                                UseShippingAddress: this.viewModel.Payment.BillingAddress.UseShippingAddress
-                            }
-                        };
+                            this.render('RecurringCartDetailsAddress', addressesVm);
+                        });
+                } else {
+                    this.storeService.getStores()
+                        .then((storesVm) => {
+                            console.log(storesVm);
+                            //TODO: Open adresse with list of stores
+                        });
+                }
 
-                        this.render('RecurringCartDetailsAddress', addressesVm);
-                    });
-                    //.fail(reason => this.handleError(reason))
-                    //fin(() => this.eventHub.publish(`${this.viewModelName}Rendered`, checkoutContext.cartViewModel));
             } else {
                 this.render('RecurringCartDetailsAddress', this.viewModel);
-            }
-        }
 
-        public changeShippingAddress(actionContext: IControllerActionContext) {
-            //maybe dont need
+                if (this.hasShippingMethodTypeChanged) {
+                    this.hasShippingMethodTypeChanged = false;
+                    this.newShippingMethodType = '';
+                    this.render('RecurringCartDetailsShippingMethod', this.viewModel);
+                }
+            }
         }
 
         public saveEditAddress (actionContext: IControllerActionContext) {
             //If shipping method type has changed, save address and shipping method
-
-            var context: JQuery = actionContext.elementContext;
 
             let shippingAddressId = $(this.context.container).find('input[name=ShippingAddressId]:checked').val();
             let billingAddressId = $(this.context.container).find('input[name=BillingAddressId]:checked').val();
@@ -374,10 +445,16 @@ module Orckestra.Composer {
                 data.billingAddressId = billingAddressId;
             }
 
+            var busy = this.asyncBusy({ elementContext: actionContext.elementContext });
+
             this.recurringOrderService.updateCartShippingAddress(data)
                 .then(result => {
 
                     console.log(result);
+
+                    if (this.hasShippingMethodTypeChanged) {
+                        this.hasShippingMethodTypeChanged = false;
+                    }
 
                     this.viewModel = result;
 
@@ -385,8 +462,8 @@ module Orckestra.Composer {
                 })
                 .fail((reason) => {
                     console.error(reason);
-                });
-                //.fin(() => busy.done());
+                })
+                .fin(() => busy.done());
         }
 
         private useShippingAddress() : Boolean {
@@ -422,19 +499,30 @@ module Orckestra.Composer {
         }
 
         public toggleEditPayment (actionContext: IControllerActionContext) {
-            var context: JQuery = actionContext.elementContext;
 
             this.editPayment = !this.editPayment;
+
+            let busy = this.asyncBusy({elementContext: actionContext.elementContext});
+            this.render('RecurringCartDetailsPayment', { IsLoading: true });
 
             if (this.editPayment) {
                 this.closeOtherEditSections(actionContext, EditSection.Payment);
 
-                //TODO
+                let data: IRecurringOrderGetCartPaymentMethods = {
+                    cartName: this.viewModel.Name
+                };
+                this.recurringOrderService.getCartPaymentMethods(data)
+                    .then(result => {
 
-                this.render('RecurringCartDetailsPayment', this.viewModel);
+                        result.EditMode = this.editPayment;
+                        this.render('RecurringCartDetailsPayment', result);
+                    });
+
             } else {
                 this.render('RecurringCartDetailsPayment', this.viewModel);
             }
+
+            busy.done();
         }
 
         public updateLineItem(actionContext: IControllerActionContext): void {
@@ -483,7 +571,7 @@ module Orckestra.Composer {
             };
 
             if (quantity !== updatedQuantity) {
-                //use only debouced function when incrementing/decrementing quantity
+                //use only debounced function when incrementing/decrementing quantity
                 this.debounceUpdateLineItem(args);
             }
         }
@@ -508,9 +596,6 @@ module Orckestra.Composer {
                     actionElementSpan.show();
 
                     this.reRenderCartPage(result);
-
-                    //This is to reinitialize the popover       
-                    //this.initializePopOver();
                 })
                 .fail((reason: any) => console.error('Error while updating line item quantity.', reason))
                 .fin(() => busy.done());
@@ -567,7 +652,95 @@ module Orckestra.Composer {
             console.error('Error while deleting line item.', reason);
             context.closest('.cart-row').removeClass('is-loading');
 
-            //ErrorHandler.instance().outputErrorFromCode('LineItemDeleteFailed');
+            ErrorHandler.instance().outputErrorFromCode('LineItemDeleteFailed');
+        }
+
+        public deleteAddressConfirm(actionContext: IControllerActionContext) {
+            this.uiModal.openModal(actionContext.event);
+        }
+
+          /**
+         * Requires the element in action context to have a data-address-id.
+         */
+        protected deleteAddress(event: JQueryEventObject): Q.Promise<void> {
+
+            let element = $(event.target);
+            var $addressListItem = element.closest('[data-address-id]');
+            var addressId = $addressListItem.data('address-id');
+
+            var busy = this.asyncBusy({elementContext: element, containerContext: $addressListItem });
+
+            return this.customerService.deleteAddress(addressId, '')
+                .then(result => {
+                    //this.eventHub.publish(MyAccountEvents[MyAccountEvents.AddressDeleted], { data: addressId });
+                    this.reRenderCartPage(this.viewModel);
+                })
+                //.fail(() => this.renderFailedForm(MyAccountStatus[MyAccountStatus.AjaxFailed]))
+                .fin(() => busy.done());
+        }
+
+        public saveEditPayment(actionContext: IControllerActionContext) {
+            var busy = this.asyncBusy({ elementContext: actionContext.elementContext });
+
+            let paymentMethodId = $(this.context.container).find('input[name=PaymentMethod]:checked').val();
+            let cartName = this.viewModel.Name;
+            let paymentProviderName = $(this.context.container).find('input[name=PaymentMethod]:checked').data('payment-provider');
+            let paymentId = $(this.context.container).find('input[name=PaymentId]:checked').data('payment-id');
+            let paymentType = $(this.context.container).find('input[name=PaymentMethod]:checked').data('payment-type');
+
+            let data: IRecurringOrderCartUpdatePaymentMethodParam = {
+                paymentMethodId: paymentMethodId,
+                paymentProviderName: paymentProviderName,
+                cartName: cartName,
+                paymentId: paymentId,
+                paymentType: paymentType
+            };
+
+            this.recurringOrderService.updateCartPaymentMethod(data)
+                .then(result => {
+
+                    console.log(result);
+
+                    this.viewModel = result;
+                    this.reRenderCartPage(result);
+                })
+                .fail((reason) => {
+                    console.error(reason);
+                })
+                .fin(() => busy.done());
+        }
+
+        public deletePaymentConfirm(actionContext: IControllerActionContext) {
+            this.uiModalSavedCreditCard.openModal(actionContext.event);
+        }
+
+        protected deleteCard(event: JQueryEventObject): Q.Promise<void> {
+
+            let element = $(event.target);
+            var $cardListItem = element.closest('[data-payment-id]');
+            var paymentMethodId = $cardListItem.data('payment-id');
+            var paymentProviderName = $cardListItem.data('payment-provider');
+            var cartName = this.viewModel.Name;
+
+            this.busyHandler = this.asyncBusy({elementContext: element, containerContext: $cardListItem });
+
+            return this.paymentService
+                .removeRecurringCartPaymentMethod(paymentMethodId, paymentProviderName, cartName)
+                .then(() => {
+                    //this._eventHub.publish('paymentMethodsUpdated', null)
+                    this.reRenderCartPage(this.viewModel);
+                })
+                .fail(reason => ErrorHandler.instance().outputError(reason))
+                .fin(() => {
+                    this.releaseBusyHandler();
+                });
+        }
+
+        protected releaseBusyHandler(): void {
+            if (this.busyHandler) {
+                this.busyHandler.done();
+                this.busyHandler = null;
+            }
         }
     }
 }

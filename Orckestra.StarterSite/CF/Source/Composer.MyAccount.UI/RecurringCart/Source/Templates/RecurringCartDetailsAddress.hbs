@@ -4,7 +4,7 @@
         <div class="panel-heading">
             <div class="row">
                 <div class="col-xs-10">
-                    <h2 class="h3">{{localize 'CheckoutProcess' 'T_ShippingAddress' }}</h2>
+                    <h2 class="h3">{{localize 'MyAccount' 'T_Addresses' }}</h2>
                 </div>
                 <div class="col-xs-2">
                     <button class="btn btn-link pull-right" type="button" 
@@ -72,12 +72,13 @@
                     
             <div class="col-xs-12 text-center">
                 <button class="btn btn-secondary" type="button" 
-                    data-oc-click="toggleEditAddress">Cancel</button>
+                    data-oc-click="toggleEditAddress">{{localize 'General' 'B_Cancel'}}</button>
                 <button class="btn btn-primary"
-                    data-oc-click="saveEditAddress">Apply
+                    data-oc-click="saveEditAddress">{{localize 'MyAccount' 'B_SaveChanges'}}
                 </button>
             </div>
         </div>
         {{/unless}}
-    </div>
+    </div>    
+    {{> AddressConfirmationModal}}
 </div>

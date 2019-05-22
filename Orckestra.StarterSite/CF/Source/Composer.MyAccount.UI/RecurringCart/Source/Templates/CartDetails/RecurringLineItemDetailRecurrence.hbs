@@ -6,10 +6,10 @@
                 &nbsp;{{RecurringOrderFrequencyDisplayName}}
             {{else}}
                 &nbsp;{{localize 'ProductPage' 'L_RecurringFrequencyOnce'}}
-            {{/if}}
-            <button class="btn btn-link" type="button" data-toggle="collapse"  aria-expanded="false" >
+            {{/if}}            
+            <a class="btn btn-link" href="{{RecurringScheduleUrl}}" >
                 {{localize 'ShoppingCart' 'L_RecurringChangeFrequency'}} <i class="fa fa-external-link-square fa-lg"></i>
-            </button>
+            </a>
         </div>        
     </div>
 {{/if}}

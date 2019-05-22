@@ -39,7 +39,9 @@ namespace Orckestra.Composer.Cart.Services
 
         public PaymentViewService(IPaymentRepository paymentRepository, ICartViewModelFactory cartViewModelFactory, ICartRepository cartRepository,
          ILookupService lookupService, IViewModelMapper viewModelMapper, IPaymentProviderFactory paymentProviderFactory, 
-         IRecurringOrderTemplatesViewService recurringOrderTemplatesViewService, IRecurringOrderCartsViewService recurringOrderCartsViewService)
+         IRecurringOrderTemplatesViewService recurringOrderTemplatesViewService, 
+         IRecurringOrderCartsViewService recurringOrderCartsViewService
+         )
         {
             if (paymentRepository == null) { throw new ArgumentNullException("paymentRepository"); }
             if (cartViewModelFactory == null) { throw new ArgumentNullException("cartViewModelFactory"); }
@@ -525,8 +527,14 @@ namespace Orckestra.Composer.Cart.Services
             if (param.PaymentId == default(Guid)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("PaymentId"), nameof(param)); }
             if (param.PaymentMethodId == default(Guid)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("PaymentMethodId"), nameof(param)); }
 
-            var payments = await GetCartPaymentsAsync(param).ConfigureAwait(false);
-            var activePayment = payments.GetPayment(param.PaymentId);
+            var activePayment = await PaymentRepository.GetPaymentAsync(new GetPaymentParam {
+                CartName = param.CartName,
+                CultureInfo = param.CultureInfo,
+                CustomerId = param.CustomerId,
+                Scope = param.Scope,
+                PaymentId = param.PaymentId
+            }).ConfigureAwait(false);
+            if (activePayment == null) { return null; }
 
             if (activePayment.ShouldInvokePrePaymentSwitch())
             {

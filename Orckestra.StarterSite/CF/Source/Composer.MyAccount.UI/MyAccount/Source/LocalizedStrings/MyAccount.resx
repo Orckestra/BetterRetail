@@ -469,4 +469,16 @@ Don't worry, you can still find great products to offer!</value>
   <data name="T_Addresses" xml:space="preserve">
     <value>Addresses</value>
   </data>
+  <data name="B_AddNewPayment" xml:space="preserve">
+    <value>Add a new credit card</value>
+  </data>
+  <data name="B_EditPayment" xml:space="preserve">
+    <value>Edit payment</value>
+  </data>
+  <data name="B_DeletePayment" xml:space="preserve">
+    <value>Delete payment</value>
+  </data>
+  <data name="B_SaveChanges" xml:space="preserve">
+    <value>Save changes</value>
+  </data>
 </root>

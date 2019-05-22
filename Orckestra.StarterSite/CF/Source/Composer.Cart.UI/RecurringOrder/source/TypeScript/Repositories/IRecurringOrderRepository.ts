@@ -34,5 +34,7 @@ module Orckestra.Composer {
         getInactifProductsFromCustomer(): Q.Promise<any>;
         clearCustomerInactifItems(): Q.Promise<any>;
         getRecurringCart(getRecurringCartParam: IRecurringOrderCartParam): Q.Promise<any>;
+        getCartPaymentMethods(getCartPaymentMethodsParam: IRecurringOrderGetCartPaymentMethods): Q.Promise<any>;
+        updateCartPaymentMethod(updateCartPaymentMethodParam: IRecurringOrderCartUpdatePaymentMethodParam): Q.Promise<any>;
     }
 }

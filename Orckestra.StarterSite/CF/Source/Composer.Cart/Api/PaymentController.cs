@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Orckestra.Composer.Cart.Parameters;
+using Orckestra.Composer.Cart.Requests;
 using Orckestra.Composer.Cart.Services;
 using Orckestra.Composer.Cart.ViewModels;
 using Orckestra.Composer.Parameters;
@@ -20,19 +21,22 @@ namespace Orckestra.Composer.Cart.Api
         protected IPaymentViewService PaymentViewService { get; private set; }
         protected IImageViewService ImageService { get; private set; }
         protected IRecurringScheduleUrlProvider RecurringScheduleUrlProvider { get; private set; }
+        protected IRecurringCartUrlProvider RecurringCartUrlProvider { get; private set; }
 
         public PaymentController(IComposerContext composerContext, IPaymentViewService paymentViewService, IImageViewService imageService,
-            IRecurringScheduleUrlProvider recurringScheduleUrlProvider)
+            IRecurringScheduleUrlProvider recurringScheduleUrlProvider, IRecurringCartUrlProvider recurringCartUrlProvider)
         {
             if (composerContext == null) { throw new ArgumentNullException("composerContext"); }
             if (imageService == null) { throw new ArgumentNullException("imageService"); }
             if (paymentViewService == null) { throw new ArgumentNullException(nameof(paymentViewService)); }
             if (recurringScheduleUrlProvider == null) { throw new ArgumentNullException("recurringScheduleUrlProvider"); }
+            if (recurringCartUrlProvider == null) { throw new ArgumentNullException("recurringCartUrlProvider"); }
 
             ComposerContext = composerContext;
             PaymentViewService = paymentViewService;
             ImageService = imageService;
             RecurringScheduleUrlProvider = recurringScheduleUrlProvider;
+            RecurringCartUrlProvider = recurringCartUrlProvider;
         }
 
         /// <summary>
@@ -103,6 +107,24 @@ namespace Orckestra.Composer.Cart.Api
             return Ok("OK");
         }
 
+        [HttpDelete]
+        [ActionName("recurringcartremovemethod")]
+        public virtual async Task<IHttpActionResult> RecurringCartRemovePaymentMethod(RecurringCartRemovePaymentMethodViewModel request)
+        {
+            await PaymentViewService.RemovePaymentMethodAsync(new RemovePaymentMethodParam
+            {
+                PaymentMethodId = request.PaymentMethodId,
+                CustomerId = ComposerContext.CustomerId,
+                PaymentProviderName = request.PaymentProviderName,
+                ScopeId = ComposerContext.Scope,
+                CartName = request.CartName
+            }).ConfigureAwait(false);
+
+            // Need to return at least a string otherwise jQuery ajax client 
+            // will fail since it's expected valid json and void is not valid
+            return Ok("OK");
+        }
+
         [HttpPut]
         [ActionName("paymentMethod")]
         [ValidateModelState]
@@ -129,7 +151,7 @@ namespace Orckestra.Composer.Cart.Api
             vm.ActivePaymentViewModel.CreditCardTrustImage = trustImageVm;
 
             return Ok(vm);
-        }
+        }       
 
         [HttpPost]
         [ActionName("recurringorderstemplatespaymentmethods")]
@@ -160,6 +182,42 @@ namespace Orckestra.Composer.Cart.Api
                 ProviderNames = providers.Select(p => p.ProviderName).ToList(),
                 //walletUrls
             }).ConfigureAwait(false);
+
+            return Ok(results);
+        }
+
+        [HttpPost]
+        [ActionName("recurringcartspaymentmethods")]
+        public virtual async Task<IHttpActionResult> GetRecurringCartsPaymentMethodsAsync(GetRecurringCartsPaymentMethodsRequest request)
+        {
+            var recurringCartUrl = RecurringCartUrlProvider.GetRecurringCartDetailsUrl(new GetRecurringCartDetailsUrlParam
+            {
+                CultureInfo = ComposerContext.CultureInfo,
+                RecurringCartName = request.CartName
+            });
+
+            //TODO : MyWalletPRovider when ready
+
+            //var addAddressUrl = MyWalletPRovider.GetAddWAlletUrl(new GetMyAccountUrlParam { CultureInfo = ComposerContext.CultureInfo, ReturnUrl = recurringOrderScheduleUrl });
+            //var editAddressBaseUrl = MyWalletPRovider.GetUpdateWAlletBaseUrl(new GetMyAccountUrlParam { CultureInfo = ComposerContext.CultureInfo });
+
+            //Will need to change Viewmodel returned
+
+            var param = new GetPaymentProvidersParam
+            {
+                CultureInfo = ComposerContext.CultureInfo
+            };
+            var providers = await PaymentViewService.GetPaymentProvidersAsync(param).ConfigureAwait(false);
+
+            var results = await PaymentViewService.GetPaymentMethodsAsync(new GetPaymentMethodsParam
+            {
+                Scope = ComposerContext.Scope,
+                CultureInfo = ComposerContext.CultureInfo,
+                ProviderNames = providers.Select(p => p.ProviderName).ToList(),
+                CartName = request.CartName,
+                CustomerId = ComposerContext.CustomerId,
+                IsAuthenticated = ComposerContext.IsAuthenticated
+            });
 
             return Ok(results);
         }

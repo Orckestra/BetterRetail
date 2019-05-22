@@ -88,6 +88,7 @@
     <Compile Include="Parameters\GetCustomerPaymentMethodsForProviderParam.cs" />
     <Compile Include="Parameters\GetKeyVariantAttributesParam.cs" />
     <Compile Include="Parameters\GetLightRecurringOrderCartListViewModelParam.cs" />
+    <Compile Include="Parameters\GetPaymentParam.cs" />
     <Compile Include="Parameters\GetRecurringOrderCartsViewModelParam.cs" />
     <Compile Include="Parameters\GetRecurringOrderCartViewModelParam.cs" />
     <Compile Include="Parameters\GetShippingMethodsScopeParam.cs" />
@@ -182,12 +183,14 @@
     <Compile Include="Requests\CouponRequest.cs" />
     <Compile Include="Requests\AddLineItemViewModel.cs" />
     <Compile Include="Requests\GetRecurringCartRequest.cs" />
+    <Compile Include="Requests\GetRecurringCartsPaymentMethodsRequest.cs" />
     <Compile Include="Requests\RemoveLineItemViewModel.cs" />
     <Compile Include="Requests\RemoveRecurringCartLineItemViewModel.cs" />
     <Compile Include="Requests\UpdateCartRequest.cs" />
     <Compile Include="Requests\UpdateLineItemViewModel.cs" />
     <Compile Include="Requests\UpdateRecurringCartLineItemViewModel.cs" />
     <Compile Include="Requests\UpdateRecurringCartNextProcessingDateRequest.cs" />
+    <Compile Include="Requests\UpdateRecurringCartPaymentMethodRequest.cs" />
     <Compile Include="Requests\UpdateRecurringOrderCartBillingAddressRequest.cs" />
     <Compile Include="Requests\UpdateRecurringOrderCartPaymentMethodRequest.cs" />
     <Compile Include="Requests\UpdateRecurringOrderCartAddressRequest.cs" />
@@ -257,6 +260,7 @@
     <Compile Include="ViewModels\MinicartViewModel.cs" />
     <Compile Include="ViewModels\MonerisAddVaultProfileViewModel.cs" />
     <Compile Include="ViewModels\OrderSummaryViewModel.cs" />
+    <Compile Include="ViewModels\RecurringCartRemovePaymentMethodViewModel.cs" />
     <Compile Include="ViewModels\RecurringOrderCartsRescheduleResultViewModel.cs" />
     <Compile Include="ViewModels\RecurringOrderCartsViewModel.cs" />
     <Compile Include="ViewModels\RemovePaymentMethodViewModel.cs" />

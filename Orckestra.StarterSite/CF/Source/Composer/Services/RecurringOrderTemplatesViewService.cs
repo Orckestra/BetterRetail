@@ -53,7 +53,7 @@ namespace Orckestra.Composer.Services
         }
         public async Task<bool> GetIsPaymentMethodUsedInRecurringOrders(GetIsPaymentMethodUsedInRecurringOrdersRequest request)
         {
-            if (ConfigurationUtil.GetRecurringOrdersConfigEnabled())
+            if (!ConfigurationUtil.GetRecurringOrdersConfigEnabled())
                 return false;
 
             if (request.ScopeId == null) { throw new ArgumentNullException(nameof(request.ScopeId)); }

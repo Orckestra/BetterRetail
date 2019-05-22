@@ -143,6 +143,35 @@ namespace Orckestra.Composer.Cart.Api
         }
 
         [HttpPut]
+        [ActionName("paymentmethod")]
+        public virtual async Task<IHttpActionResult> UpdateRecurringCartPaymentMethod([FromBody]UpdateRecurringCartPaymentMethodRequest request)
+        {
+            if(request == null) { return BadRequest("Request cannot be null."); }
+
+            var param = new GetPaymentProvidersParam
+            {
+                CultureInfo = ComposerContext.CultureInfo
+            };
+            var providers = await PaymentViewService.GetPaymentProvidersAsync(param).ConfigureAwait(false);
+      
+            var vm = await PaymentViewService.UpdateRecurringOrderCartPaymentMethodAsync(new UpdatePaymentMethodParam
+            {
+                CartName = request.CartName,
+                CultureInfo = ComposerContext.CultureInfo,
+                CustomerId = ComposerContext.CustomerId,
+                PaymentId = request.PaymentId.GetValueOrDefault(),
+                Scope = ComposerContext.Scope,
+                PaymentMethodId = request.PaymentMethodId.GetValueOrDefault(),
+                PaymentProviderName = request.PaymentProviderName,
+                PaymentType = request.PaymentType,
+                ProviderNames = providers.Select(p => p.ProviderName).ToList(),
+                IsAuthenticated = ComposerContext.IsAuthenticated
+            }, RequestUtils.GetBaseUrl(Request).ToString()).ConfigureAwait(false);
+
+            return Ok(vm);
+        }
+
+        [HttpPut]
         [ActionName("reschedule")]
         public async Task<IHttpActionResult> UpdateRecurringCartNextOccurence([FromBody]UpdateRecurringCartNextOccurenceRequest request)
         {

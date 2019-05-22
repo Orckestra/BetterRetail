@@ -71,5 +71,11 @@ namespace Orckestra.Composer.Cart.Repositories
         /// </summary>
         /// <returns></returns>
         Task<List<PaymentMethod>> GetCustomerPaymentMethodForProviderAsync(GetCustomerPaymentMethodsForProviderParam param);
+
+        /// <summary>
+        /// Get a specific payment by Id
+        /// </summary>
+        /// <returns></returns>
+        Task<Payment> GetPaymentAsync(GetPaymentParam param);
     }
 }

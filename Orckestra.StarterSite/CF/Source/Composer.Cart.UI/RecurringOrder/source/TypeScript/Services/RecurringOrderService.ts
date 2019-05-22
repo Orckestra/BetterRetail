@@ -135,6 +135,13 @@ module Orckestra.Composer {
             return this.repository.getRecurringCart(getRecurringCartParam);
         }
 
+        public getCartPaymentMethods(getCartPaymentMethodsParam: IRecurringOrderGetCartPaymentMethods): Q.Promise<any> {
+            return this.repository.getCartPaymentMethods(getCartPaymentMethodsParam);
+        }
+
+        public updateCartPaymentMethod(updateCartPaymentMethodParam: IRecurringOrderCartUpdatePaymentMethodParam): Q.Promise<any> {
+            return this.repository.updateCartPaymentMethod(updateCartPaymentMethodParam);
+        }
 
         private _mapLineItemToRequest(lineItem: any): any {
             return {
