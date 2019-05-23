@@ -1,0 +1,10 @@
+<div data-templateid="RecurringOrderTemplates">
+    {{!-- {{>RecurringOrderTemplatesInfos}} --}}
+    <div>
+        {{#if IsLoading}} 
+           {{>Loading}} 
+        {{else}}
+           {{>RecurringOrderTemplatesLineItems}}
+        {{/if}} 
+   </div>
+</div>

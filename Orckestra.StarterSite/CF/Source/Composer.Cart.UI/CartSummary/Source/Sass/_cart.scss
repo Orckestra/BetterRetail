@@ -8,6 +8,12 @@
   display: inline-block;
   text-align: center;
 }
+.cart-quantity-template {
+  margin: 0;
+  width: 25px;
+  display: inline-block;
+  text-align: center;
+}
 
 /**
  * Fake cell for cart item detail.
@@ -191,5 +197,20 @@
 
   @media (min-width: $screen-sm-min) {
     padding-left: 11%;
+  }
+}
+
+.button-like-link {
+  background:none!important;
+  border:none; 
+  padding:0!important;
+  text-decoration:underline;
+  cursor:pointer;
+ &:disabled{
+     cursor: not-allowed;
+     pointer-events: none;
+     opacity: 0.5;
+     filter: alpha(opacity=50);
+     box-shadow: none;
   }
 }
