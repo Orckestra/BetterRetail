@@ -244,7 +244,11 @@ module Orckestra.Composer {
             if (!lineItemId) {
                 throw new Error('lineItemId is required');
             }
-            return ComposerClient.remove(`/api/recurringordertemplate/lineitem/${lineItemId}`, undefined);
+
+            const data = {
+                LineItemId: lineItemId
+            };
+            return ComposerClient.remove(`/api/recurringordertemplate/lineitem/`, data);
         }
 
         public deleteTemplateLineItems(deleteTemplateLineItemsParam: IRecurringOrderTemplateLineItemsDeleteParam): Q.Promise<any> {

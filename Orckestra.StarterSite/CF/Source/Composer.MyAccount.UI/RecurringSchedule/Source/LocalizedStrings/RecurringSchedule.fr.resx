@@ -132,4 +132,10 @@
   <data name="L_PriceInfoMessage" xml:space="preserve">
     <value>*Le prix affiché est le prix en date d’aujourd’hui. Prenez note que le jour où votre commande sera traitée et facturée, le prix pourrait différer du prix actuel.</value>
   </data>
+  <data name="T_RecurringSchedule" xml:space="preserve">
+    <value>Mon horaire de récurrence</value>
+  </data>
+  <data name="L_ConfirmDelete" xml:space="preserve">
+    <value>Voulez-vous vraiment supprimer cette article récurrent?</value>
+  </data> 
 </root>

@@ -258,6 +258,7 @@
     <Compile Include="Repositories\RecurringOrdersRepository.cs" />
     <Compile Include="Repositories\ScopeRepository.cs" />
     <Compile Include="Parameters\GetIsPaymentMethodUsedInRecurringOrdersParam.cs" />
+    <Compile Include="Request\RemoveRecurringOrderTemplateLineItemRequest.cs" />
     <Compile Include="Request\RemoveRecurringOrderTemplateLineItemsRequest.cs" />
     <Compile Include="Request\UpdateRecurringOrderLineItemQuantityRequest.cs" />
     <Compile Include="Request\UpdateRecurringOrderTemplateLineItemRequest.cs" />

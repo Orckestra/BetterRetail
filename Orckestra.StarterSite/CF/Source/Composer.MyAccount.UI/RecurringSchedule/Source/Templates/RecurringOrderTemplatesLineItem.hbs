@@ -66,8 +66,7 @@
                                     <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  hidden"></span>
                                 </button>
                                 <br />
-                                <button class="cta button-like-link" role="button" data-oc-click="deleteLineItem" data-toggle="modal"
-                                        data-target="#recurringOrderTemplatesRemoveConfirm">
+                                <button class="cta button-like-link" role="button" data-oc-click="deleteLineItemConfirm" data-qa="lineitem-delete" >
                                     {{localize 'RecurringSchedule' 'L_RemoveLineitem'}}
                                 </button>
                             </strong>
@@ -89,9 +88,7 @@
                         {{/if}}
                     </div>
                     <div class="recurring-edit-buttons line-item-actions">
-                        <button class="cta button-like-link" role="button" data-oc-click="openChangeTemplateLineitem" data-toggle="modal" data-target="#recurringOrderTemplatesModifyLineItem"
-                            data-formatted-next-occurence="{{FormattedNextOccurence}}" data-next-occurence="{{NextOccurence}}"
-                            data-program-name="{{RecurringOrderProgramName}}" data-frequency-name="{{RecurringOrderFrequencyName}}">{{localize 'RecurringSchedule' 'L_EditDetails'}}</button>
+                        <a class="cta" href="{{EditUrl}}" title="{{localize 'RecurringSchedule' 'L_EditDetails'}}">{{localize 'RecurringSchedule' 'L_EditDetails'}}</a>
                     </div>
                 </div>
             </div>

@@ -132,4 +132,10 @@
   <data name="L_PriceInfoMessage" xml:space="preserve">
     <value>*The price indicated reflects the current price, as per today's date. Please note that this price is subject to change at any time, without notice.</value>
   </data>
+  <data name="T_RecurringSchedule" xml:space="preserve">
+    <value>My Recurring Schedule</value>
+  </data>
+  <data name="L_ConfirmDelete" xml:space="preserve">
+    <value>Are you sure you want to delete this recurring item?</value>
+  </data>  
 </root>

@@ -32,7 +32,7 @@ namespace Orckestra.Composer.Api
         }
 
         [HttpGet]
-        [Route("getrecurringordertemplates")]
+        [ActionName("getrecurringordertemplates")]
         public virtual async Task<IHttpActionResult> GetRecurringOrderTemplates()
         {
             var vm = await RecurringOrderTemplatesViewService.GetRecurringOrderTemplatesViewModelAsync(new GetRecurringOrderTemplatesParam {
@@ -46,7 +46,7 @@ namespace Orckestra.Composer.Api
         }
 
         [HttpPut]
-        [Route("lineitemquantity")]
+        [ActionName("lineitemquantity")]
         public virtual async Task<IHttpActionResult> UpdateRecurringOrderTemplateLineItemQuantity(UpdateRecurringOrderLineItemQuantityRequest request)
         {
             if (request == null) { return BadRequest("Missing Request Body"); }
@@ -69,17 +69,17 @@ namespace Orckestra.Composer.Api
 
 
         [HttpDelete]
-        [Route("lineitem/{lineItemId}")]
-        public virtual async Task<IHttpActionResult> RemoveRecurringLineItem([FromUri]string lineItemId)
+        [ActionName("lineitem")]
+        public virtual async Task<IHttpActionResult> RemoveRecurringLineItem([FromBody]RemoveRecurringOrderTemplateLineItemRequest request)
         {
-            if (string.IsNullOrWhiteSpace(lineItemId)) { return BadRequest("Invalid lineItemId"); }
+            if (string.IsNullOrWhiteSpace(request.LineItemId)) { return BadRequest("Invalid lineItemId"); }
             if (!ModelState.IsValid) { return BadRequest(ModelState); }
 
             var results = await RecurringOrderTemplatesViewService.RemoveRecurringOrderTemplateLineItemAsync(new RemoveRecurringOrderTemplateLineItemParam()
             {
                 Culture = ComposerContext.CultureInfo,
                 ScopeId = ComposerContext.Scope,
-                LineItemId = lineItemId,
+                LineItemId = request.LineItemId,
                 CustomerId = ComposerContext.CustomerId,
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
             }).ConfigureAwait(false);
@@ -88,7 +88,7 @@ namespace Orckestra.Composer.Api
         }
 
         [HttpDelete]
-        [Route("lineitems/byIds")]
+        [ActionName("lineitems/byIds")]
         public virtual async Task<IHttpActionResult> RemoveRecurringLineItems(RemoveRecurringOrderTemplateLineItemsRequest request)
         {
             if (request.LineItemsIds.Count == 0) { return BadRequest("Invalid lineItemsIds"); }
@@ -107,7 +107,7 @@ namespace Orckestra.Composer.Api
         }
 
         [HttpPut]
-        [Route("lineItem")]
+        [ActionName("lineItem")]
         public virtual async Task<IHttpActionResult> UpdateRecurringOrderTemplateLineItem(UpdateRecurringOrderTemplateLineItemRequest request)
         {
             if (request == null) { return BadRequest("Missing Request Body"); }
