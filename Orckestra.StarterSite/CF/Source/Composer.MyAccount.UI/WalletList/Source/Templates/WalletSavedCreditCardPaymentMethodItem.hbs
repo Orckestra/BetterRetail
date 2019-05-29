@@ -2,18 +2,7 @@
     <div class="row">
         <div class="col-sm-12">
             <div class="form-group">
-                <label class="select-block {{#if IsSelected}}active{{/if}}" data-qa="checkout-payment-method-{{@index}}">
-                    <span class="input-addon">
-                        <input type="radio"
-                                name="PaymentMethod"
-                                data-parsley-class-handler-selector=".row"
-                                data-parsley-errors-container="#payment-method-errors"
-                                required="required"                              
-                                {{#if IsSelected}}checked="checked"{{/if}}
-                                class="input saved-credit-card-payment-method"
-                                {{#unless IsValid}}disabled="true"{{/unless}} />
-                    </span>
-
+                <label class="select-block {{#if IsSelected}}active{{/if}}" data-qa="checkout-payment-method-{{@index}}">                   
                     <span class="content">
                         <div class="row">
                             <div class="col-sm-3 text-center">
