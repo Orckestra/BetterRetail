@@ -38,6 +38,12 @@ namespace Orckestra.Composer.CompositeC1
 
         public static Guid CheckoutUpdateAddressPageId { get; set; } = new Guid("4b6dcc4b-a1c0-4ed6-8ad4-fee97bb707a7");
 
+        public static Guid WalletListPageId { get; set; } = new Guid("0084ad8c-bab5-443e-ba49-2f659f764789");
+
+        public static Guid AddWalletPageId { get; set; } = new Guid("e27c37f5-3ee2-4f16-a1d6-a41dbb331949");
+
+        public static Guid UpdateWalletPageId { get; set; } = new Guid("2864abe3-5b62-4910-a3c2-9ea5c5186d47");
+
         public static Guid OrderHistoryPageId { get; set; } = new Guid("add1bd26-ce89-4cc1-896c-ab5bbadf1c74");
 
         public static Guid OrderDetailsPageId { get; set; } = new Guid("c4cc1194-0948-4f93-8a2e-519d78b66255");

@@ -1,0 +1,85 @@
+<div data-templateid="PaymentMethodItem" class="payment-method-line-item" data-qa="payment-provider-{{PaymentProviderName}}">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label class="select-block {{#if IsSelected}}active{{/if}}" data-qa="checkout-payment-method-{{@index}}">
+                    <span class="input-addon">
+                        <input type="radio"
+                                name="PaymentMethod"
+                                data-parsley-class-handler-selector=".row"
+                                data-parsley-errors-container="#payment-method-errors"
+                                required="required"                              
+                                {{#if IsSelected}}checked="checked"{{/if}}
+                                class="input saved-credit-card-payment-method"
+                                {{#unless IsValid}}disabled="true"{{/unless}} />
+                    </span>
+
+                    <span class="content">
+                        <div class="row">
+                            <div class="col-sm-3 text-center">
+                                <img src="/UI.Package/Images/creditcards/{{CardType}}.png" alt="{{CardType}}" />
+                            </div>
+
+                            <div class="col-sm-9" style="margin-top: 5px;">
+                                
+                                <div class="row">
+                                    <div class="col-sm-12" data-qa="card-holder-name">
+                                        {{CardHolderName}}
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-12" data-qa="card-number">
+                                        {{localize 'CheckoutProcess' 'L_CardNumber' }} {{CardMask}}
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-12 {{#if IsExpired}}strong{{/if}}" data-qa="card-expiration">
+                                        {{localize 'CheckoutProcess' 'L_ExpirationDate' }} {{ExpiryDate}}
+                                    </div>
+                                </div>
+
+                                {{#if IsExpired}}
+                                <div class="row">
+                                    <div class="col-sm-12 error-item strong">
+                                        {{localize 'CheckoutProcess' 'F_SaveCreditCardForced_Expired' }}
+                                    </div>
+                                </div>
+                                {{/if}}
+                            </div>
+                        </div>
+                    </span>
+                </label>
+
+                <button type="button"
+                        style="position: absolute; top: 28px; right: 80px;"
+                        class="btn  btn-default  btn-sm">
+                    {{localize 'MyAccount' 'B_EditCreditCard' }}
+                </button>
+
+                <button type="button"
+                        style="position: absolute; top: 28px; right: 20px;"
+                        class="btn  btn-default  btn-sm">
+                    {{localize 'MyAccount' 'B_DeleteCreditCard' }}
+                </button>
+
+                {{#if Default}}
+                    <p style="position: absolute; top: 60px; right: 50px; font-weight: bold;">
+                        {{localize 'MyAccount' 'L_DefaultCreditCard'}}
+                    </p>
+                {{else}} 
+                    <button type="button"
+                            style="position: absolute; top: 60px; right: 25px;"
+                            class="btn  btn-default  btn-sm"
+                            data-oc-click="setDefaultCreditCard"
+                            data-paymentmethod-id="{{Id}}"
+                            data-paymentmethod-provider="{{PaymentProviderName}}">
+                        {{localize 'MyAccount' 'B_SetDefaultCreditCard'}}
+                    </button>                   
+                {{/if}}
+            </div>
+        </div>
+    </div>
+</div>
+

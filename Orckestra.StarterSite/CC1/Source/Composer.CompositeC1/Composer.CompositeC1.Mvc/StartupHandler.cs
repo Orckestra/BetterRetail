@@ -204,6 +204,9 @@ namespace Orckestra.Composer.CompositeC1.Mvc
             functions.RegisterAction<MyAccountController>("AddressList", "Composer.MyAccount.AddressList");
             functions.RegisterAction<MyAccountController>("CreateAddress", "Composer.MyAccount.CreateAddress");
             functions.RegisterAction<MyAccountController>("EditAddress", "Composer.MyAccount.UpdateAddress").IncludePathInfo();
+            functions.RegisterAction<MyAccountController>("WalletList", "Composer.MyAccount.WalletList");
+            functions.RegisterAction<MyAccountController>("CreateWallet", "Composer.MyAccount.CreateWallet");
+            functions.RegisterAction<MyAccountController>("EditWallet", "Composer.MyAccount.EditWallet");
             functions.RegisterAction<MyAccountController>("MyAccountMenu", "Composer.MyAccount.MyAccountMenu");
             functions.RegisterAction<MyAccountController>("CurrentOrders", "Composer.MyAccount.CurrentOrders");
             functions.RegisterAction<MyAccountController>("PastOrders", "Composer.MyAccount.PastOrders");

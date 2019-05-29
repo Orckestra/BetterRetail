@@ -6,10 +6,6 @@ module Orckestra.Composer {
 
     export class MyAccountController extends Orckestra.Composer.Controller {
 
-        public initialize() {
-            super.initialize();
-        }
-
         protected getFormData(actionContext: IControllerActionContext): any {
 
             return (<ISerializeObjectJqueryPlugin>actionContext.elementContext).serializeObject();

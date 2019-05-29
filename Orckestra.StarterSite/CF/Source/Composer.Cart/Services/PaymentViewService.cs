@@ -134,7 +134,6 @@ namespace Orckestra.Composer.Cart.Services
             }
 
             return paymentMethodViewModels.ToList();
-
         }
 
         protected virtual async Task<CheckoutPaymentViewModel> MapCheckoutPaymentViewModel(Overture.ServiceModel.Orders.Cart cart, List<IPaymentMethodViewModel> paymentMethodViewModels, CultureInfo cultureInfo, bool isAuthenticated)

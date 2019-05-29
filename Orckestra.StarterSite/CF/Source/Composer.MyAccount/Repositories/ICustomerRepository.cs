@@ -1,6 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Orckestra.Composer.MyAccount.Parameters;
+using Orckestra.Composer.MyAccount.ViewModels;
 using Orckestra.Overture.ServiceModel.Customers;
+using Orckestra.Overture.ServiceModel.Orders;
 
 namespace Orckestra.Composer.MyAccount.Repositories
 {
@@ -69,5 +72,12 @@ namespace Orckestra.Composer.MyAccount.Repositories
         /// The updated Customer.
         /// </returns>
         Task<Customer> UpdateUserAsync(UpdateUserParam param);
+
+        /// <summary>
+        /// Get the Payment methods available for a customer.
+        /// </summary>
+        /// <param name="param">GetPaymentMethodsParam</param>
+        /// <returns>A List of PaymentMethod</returns>
+        Task<List<PaymentMethod>> GetCustomerPaymentMethodsAsync(GetCustomerPaymentMethodsParam param);
     }
 }

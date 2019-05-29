@@ -39,6 +39,7 @@
 ///<reference path='../../../Composer.MyAccount.UI/WishList/Source/TypeScript/MyWishListController.ts' />
 ///<reference path='../../../Composer.MyAccount.UI/WishListShared/Source/TypeScript/SharedWishListController.ts' />
 ///<reference path='../../../Composer.MyAccount.UI/WishList/Source/TypeScript/WishListInHeaderController.ts' />
+///<reference path='../../../Composer.MyAccount.UI/WalletList/Source/TypeScript/WalletController.ts' />
 ///<reference path='../../../Composer.Cart.UI/CheckoutShippingAddressRegistered/Source/TypeScript/ShippingAddressRegisteredController.ts' />
 ///<reference path='../../../Composer.Cart.UI/CheckoutOrderSummary/Source/TypeScript/CheckoutOrderSummaryController.ts' />
 ///<reference path='../../../Composer.Cart.UI/CheckoutOrderSummary/Source/TypeScript/CompleteCheckoutOrderSummaryController.ts' />
@@ -116,6 +117,7 @@
                 { name: 'MyAccount.ChangePassword', controller: Orckestra.Composer.ChangePasswordController },
                 { name: 'MyAccount.CreateAccount', controller: Orckestra.Composer.CreateAccountController },
                 { name: 'MyAccount.EditAddress', controller: Orckestra.Composer.EditAddressController },
+                { name: 'MyAccount.Wallet', controller: Orckestra.Composer.WalletController },
                 { name: 'MyAccount.ForgotPassword', controller: Orckestra.Composer.ForgotPasswordController },
                 { name: 'MyAccount.AccountHeader', controller: Orckestra.Composer.AccountHeaderController },
                 { name: 'MyAccount.UpdateAccount', controller: Orckestra.Composer.UpdateAccountController },

@@ -67,5 +67,23 @@ namespace Orckestra.Composer.Providers
         /// <returns>localized url</returns>
         string GetUpdateAddressBaseUrl(GetMyAccountUrlParam param);
 
+        /// <summary>
+        /// Url to the My Wallet url page
+        /// </summary>
+        /// <returns>localized url</returns>
+        string GetWalletListUrl(GetMyAccountUrlParam param);
+
+        /// <summary>
+        /// Url to the Add new wallet url page
+        /// </summary>
+        /// <returns>localized url</returns>
+        //string GetAddWalletUrl(GetMyAccountUrlParam param);
+
+        /// <summary>
+        /// Base Url to the Update wallet page
+        /// </summary>
+        /// <returns>localized url</returns>
+        //string GetUpdateWalletUrl(GetMyAccountUrlParam param);
+
     }
 }

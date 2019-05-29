@@ -117,11 +117,23 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="B_Cancel" xml:space="preserve">
+    <value>CANCEL</value>
+  </data>
+  <data name="B_SaveChanges" xml:space="preserve">
+    <value>SAVE MY CHANGES</value>
+  </data>
   <data name="B_AddNewAddress" xml:space="preserve">
     <value>Add a new address</value>
   </data>
   <data name="B_AddNewCreditCard" xml:space="preserve">
     <value>Add a new credit card</value>
+  </data>L_DefaultCreditCard
+  <data name="B_EditCreditCard" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="B_DeleteCreditCard" xml:space="preserve">
+    <value>Delete</value>
   </data>
   <data name="B_ChangePassword" xml:space="preserve">
     <value>Change password</value>
@@ -154,7 +166,7 @@
     <value>Set as default address</value>
   </data>
   <data name="B_SetDefaultCreditCard" xml:space="preserve">
-    <value>Save as default credit card</value>
+    <value>MAKE DEFAULT</value>
   </data>
   <data name="B_SharedWishList_StartAddTo" xml:space="preserve">
     <value>Find great Ideas now</value>
@@ -221,6 +233,9 @@
   </data>
   <data name="L_CreditCardType" xml:space="preserve">
     <value>Type:</value>
+  </data>
+  <data name="L_DefaultCreditCard" xml:space="preserve">
+    <value>(Default)</value>
   </data>
   <data name="L_CurrentOrdersEmpty" xml:space="preserve">
     <value>This is where your current orders will be displayed.</value>
@@ -375,6 +390,9 @@ Don't worry, you can still find great products to offer!</value>
   </data>
   <data name="T_Addresses" xml:space="preserve">
     <value>Address</value>
+  </data>
+  <data name="T_Wallet" xml:space="preserve">
+    <value>My Wallet</value>
   </data>
   <data name="T_BillingAddress" xml:space="preserve">
     <value>Billing Address:</value>

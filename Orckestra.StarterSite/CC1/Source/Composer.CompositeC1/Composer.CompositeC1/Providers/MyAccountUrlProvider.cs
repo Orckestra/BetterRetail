@@ -131,5 +131,37 @@ namespace Orckestra.Composer.CompositeC1.Providers
             var url = PageService.GetPageUrl(PagesConfiguration.UpdateAddressPageId, param.CultureInfo);
             return UrlProviderHelper.BuildUrlWithParams(url, param.ReturnUrl);
         }
+
+        /// <summary>
+        /// Url to the My Wallet url page
+        /// </summary>
+        /// <returns>localized url</returns>
+        public string GetWalletListUrl(GetMyAccountUrlParam param)
+        {
+            if (param == null) { throw new ArgumentNullException("param"); }
+
+            var url = PageService.GetPageUrl(PagesConfiguration.WalletListPageId, param.CultureInfo);
+            return UrlProviderHelper.BuildUrlWithParams(url, param.ReturnUrl);
+        }
+
+        /// <summary>
+        /// Url to the Add new wallet url page
+        /// </summary>
+        /// <returns>localized url</returns>
+        /*public string GetAddWalletUrl(GetMyAccountUrlParam param)
+        {
+            if (param == null) { throw new ArgumentNullException("param"); }
+
+            var url = PageService.GetPageUrl(PagesConfiguration.AddWalletPageId, param.CultureInfo);
+            return UrlProviderHelper.BuildUrlWithParams(url, param.ReturnUrl);
+        }*/
+
+        /*public string GetUpdateWalletUrl(GetMyAccountUrlParam param)
+        {
+            if (param == null) { throw new ArgumentNullException("param"); }
+
+            var url = PageService.GetPageUrl(PagesConfiguration.UpdateWalletPageId, param.CultureInfo);
+            return UrlProviderHelper.BuildUrlWithParams(url, param.ReturnUrl);
+        }*/
     }
 }

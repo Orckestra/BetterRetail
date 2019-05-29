@@ -42,6 +42,8 @@
 
         public static string PaymentMethod = "PaymentMethod";
 
+        public static string CustomerPaymentMethod = "CustomerPaymentMethod";
+
         public static string CategoryUrls = "CategoryUrls";
 
         /// <summary>

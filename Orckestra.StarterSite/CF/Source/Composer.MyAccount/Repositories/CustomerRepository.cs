@@ -1,12 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Exceptions;
+using Orckestra.Composer.Logging;
 using Orckestra.Composer.MyAccount.Parameters;
-using Orckestra.Composer.Providers;
+using Orckestra.Composer.Utils;
 using Orckestra.Overture;
 using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel.Customers;
+using Orckestra.Overture.ServiceModel.Orders;
 using Orckestra.Overture.ServiceModel.Requests.Customers;
 using Orckestra.Overture.ServiceModel.Requests.Customers.Membership;
 
@@ -18,6 +22,7 @@ namespace Orckestra.Composer.MyAccount.Repositories
     /// </summary>
     public class CustomerRepository : ICustomerRepository
     {
+        private static ILog Log = LogProvider.GetCurrentClassLogger();
         protected IOvertureClient OvertureClient { get; private set; }
         protected ICacheProvider CacheProvider { get; private set; }
 
@@ -219,6 +224,67 @@ namespace Orckestra.Composer.MyAccount.Repositories
             }
 
             throw new ComposerException(errorCode: "ChangePasswordFailed");
+        }
+
+        /// <summary>
+        /// Get the Payment methods available for a customer.
+        /// </summary>
+        /// <param name="param">GetPaymentMethodsParam</param>
+        /// <returns>A List of PaymentMethod</returns>
+        public virtual async Task<List<PaymentMethod>> GetCustomerPaymentMethodsAsync(GetCustomerPaymentMethodsParam param)
+        {
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (param.CustomerId == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("CustomerId"), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("Scope"), nameof(param)); }
+            if (param.ProviderNames == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("ProviderNames"), nameof(param)); }
+
+            if (!param.ProviderNames.Any())
+            {
+                return new List<PaymentMethod>();
+            }
+         
+            var tasks = param.ProviderNames.Select(pName => GetPaymentMethodForProviderAsync(param, pName)).ToArray();
+
+            try
+            {              
+                await Task.WhenAll(tasks).ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {             
+                Log.Warn($"GetCustomerPaymentMethodsRequest failed. {e.ToString()}");               
+            }
+
+            tasks = tasks.Where(t => !t.IsFaulted).ToArray();
+            var method = tasks.SelectMany(t => t.Result).ToList();
+
+            return method;
+        }
+
+        protected virtual Task<List<PaymentMethod>> GetPaymentMethodForProviderAsync(GetCustomerPaymentMethodsParam param,
+            string providerName)
+        {
+            var cacheKey = BuildCustomerPaymentMethodCacheKey(param.Scope, param.CustomerId, providerName);
+
+            var request = new GetCustomerPaymentMethodsRequest
+            {
+                ScopeId = param.Scope,
+                PaymentProviderName = providerName,
+                CustomerId = param.CustomerId
+            };
+
+            return CacheProvider.GetOrAddAsync(cacheKey, () => OvertureClient.SendAsync(request));               
+        }
+
+        protected CacheKey BuildCustomerPaymentMethodCacheKey(string scope, Guid customerId, string providerName)
+        {
+            var cacheKey = new CacheKey(CacheConfigurationCategoryNames.CustomerPaymentMethod)
+            {
+                Scope = scope,
+            };
+            cacheKey.AppendKeyParts(providerName);
+            cacheKey.AppendKeyParts(customerId);
+
+            return cacheKey;
         }
     }
 }

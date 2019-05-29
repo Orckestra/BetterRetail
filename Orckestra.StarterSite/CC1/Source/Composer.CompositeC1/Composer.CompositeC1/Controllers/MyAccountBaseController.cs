@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using Composite.Core.Xml;
@@ -25,6 +26,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
     {
         protected ICustomerViewService CustomerViewService { get; private set; }
         protected ICustomerAddressViewService CustomerAddressViewService { get; private set; }
+        protected IPaymentViewService PaymentViewService { get; private set; }
         protected IComposerContext ComposerContext { get; private set; }
         protected IAddressRepository AddressRepository { get; private set; }
         protected IMyAccountUrlProvider MyAccountUrlProvider { get; private set; }
@@ -36,6 +38,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         protected MyAccountBaseController(
             ICustomerViewService customerViewService,
             ICustomerAddressViewService customerAddressViewService,
+            IPaymentViewService paymentViewService,
             IComposerContext composerContext,
             IAddressRepository addressRepository,
             IMyAccountUrlProvider myAccountUrlProvider,
@@ -46,6 +49,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         {
             if (customerViewService == null) throw new ArgumentNullException("customerViewService");
             if (customerAddressViewService == null) throw new ArgumentNullException("customerAddressViewService");
+            if (paymentViewService == null) throw new ArgumentNullException("paymentViewService");
             if (composerContext == null) throw new ArgumentNullException("composerContext");
             if (addressRepository == null) throw new ArgumentNullException("addressRepository");
             if (myAccountUrlProvider == null) throw new ArgumentNullException("myAccountUrlProvider");
@@ -56,6 +60,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
 
             CustomerViewService = customerViewService;
             CustomerAddressViewService = customerAddressViewService;
+            PaymentViewService = paymentViewService;
             ComposerContext = composerContext;
             AddressRepository = addressRepository;
             MyAccountUrlProvider = myAccountUrlProvider;
@@ -161,6 +166,71 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             }
 
             return View("EditAddressBlade", vm);
+        }
+
+        [AuthorizeAndRedirect]
+        [OutputCache(Duration = 0, NoStore = true)]
+        public virtual ActionResult WalletList()
+        {
+            var addWalletUrl = MyAccountUrlProvider.GetWalletListUrl(new GetMyAccountUrlParam { CultureInfo = ComposerContext.CultureInfo });
+            var editWalletBaseUrl = MyAccountUrlProvider.GetUpdateAddressBaseUrl(new GetMyAccountUrlParam { CultureInfo = ComposerContext.CultureInfo });
+            
+            var param = new GetPaymentProvidersParam
+            {
+                CultureInfo = ComposerContext.CultureInfo
+            };
+            var providers = PaymentViewService.GetPaymentProvidersAsync(param).Result;
+            
+            var viewModel = CustomerViewService.GetCustomerPaymentMethodsAsync(new GetCustomerPaymentMethodsParam
+            {
+                Scope = ComposerContext.Scope,
+                CultureInfo = ComposerContext.CultureInfo,
+                ProviderNames = providers.Select(p => p.ProviderName).ToList(),
+                CustomerId = ComposerContext.CustomerId,
+            }).Result;
+
+            return View("WalletContainer", viewModel);
+        }
+
+        [AuthorizeAndRedirect]
+        public virtual ActionResult CreateWallet()
+        {
+            /*var viewModel = CustomerAddressViewService.GetCreateAddressViewModelAsync(new GetCreateAddressViewModelAsyncParam
+            {
+                CustomerId = ComposerContext.CustomerId,
+                CultureInfo = ComposerContext.CultureInfo,
+                Scope = ComposerContext.Scope,
+                CountryCode = ComposerContext.CountryCode
+            }).Result;
+
+            return View("EditAddressBlade", viewModel);*/
+
+            return null;
+        }
+
+        [AuthorizeAndRedirect]
+        public virtual ActionResult EditWallet(Guid? addressId)
+        {
+            /*if (!addressId.HasValue)
+            {
+                return UnexpectedAddressForCustomer();
+            }
+
+            var vm = CustomerAddressViewService.GetEditAddressViewModelAsync(new GetEditAddressViewModelAsyncParam
+            {
+                AddressId = addressId.Value,
+                CustomerId = ComposerContext.CustomerId,
+                CultureInfo = ComposerContext.CultureInfo,
+                Scope = ComposerContext.Scope,
+            }).Result;
+            if (vm == null)
+            {
+                return UnexpectedAddressForCustomer();
+            }
+
+            return View("EditAddressBlade", vm);*/
+
+            return null;
         }
 
         [AuthorizeAndRedirect]

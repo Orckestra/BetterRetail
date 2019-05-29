@@ -41,6 +41,7 @@ namespace Orckestra.Composer.CompositeC1.Services
         {
             var myAccountUrl = MyAccountUrlProvider.GetMyAccountUrl(new GetMyAccountUrlParam { CultureInfo = ComposerContext.CultureInfo });
             var addressListUrl = MyAccountUrlProvider.GetAddressListUrl(new GetMyAccountUrlParam { CultureInfo = ComposerContext.CultureInfo });
+            var walletListUrl = MyAccountUrlProvider.GetWalletListUrl(new GetMyAccountUrlParam { CultureInfo = ComposerContext.CultureInfo });
             var myOrderHistoryUrl = OrderUrlProvider.GetOrderHistoryUrl(new GetOrderUrlParameter { CultureInfo = ComposerContext.CultureInfo });
             var myWishListUrl = WishListUrlProvider.GetWishListUrl(new GetWishListUrlParam {CultureInfo = ComposerContext.CultureInfo});
 
@@ -50,6 +51,7 @@ namespace Orckestra.Composer.CompositeC1.Services
 
             var myAccountPage = PageService.GetPage(PagesConfiguration.MyAccountPageId, ComposerContext.CultureInfo);
             var myAddressPage = PageService.GetPage(PagesConfiguration.AddressListPageId, ComposerContext.CultureInfo);
+            var myWalletPage = PageService.GetPage(PagesConfiguration.WalletListPageId, ComposerContext.CultureInfo);
             var myOrderHistoryPage = PageService.GetPage(PagesConfiguration.OrderHistoryPageId, ComposerContext.CultureInfo);
             var myWishListage = PageService.GetPage(PagesConfiguration.MyWishListPageId, ComposerContext.CultureInfo);
 
@@ -70,7 +72,16 @@ namespace Orckestra.Composer.CompositeC1.Services
                            currentPageId == PagesConfiguration.UpdateAddressPageId
             };
 
-             var myWishListMenuItem = new MenuItemViewModel
+            var myWalletMenuItem = new MenuItemViewModel
+            {
+                Name = myWalletPage.MenuTitle,
+                Url = walletListUrl,
+                IsActive = currentPageId == PagesConfiguration.WalletListPageId ||
+                           currentPageId == PagesConfiguration.AddWalletPageId ||
+                           currentPageId == PagesConfiguration.UpdateWalletPageId
+            };
+
+            var myWishListMenuItem = new MenuItemViewModel
              {
                  Name = myWishListage.MenuTitle,
                  Url = myWishListUrl,
@@ -84,7 +95,7 @@ namespace Orckestra.Composer.CompositeC1.Services
                 IsActive = currentPageId == PagesConfiguration.OrderHistoryPageId || currentPageId ==  PagesConfiguration.OrderDetailsPageId
             };
 
-            menu.MenuItems.AddRange(new List<MenuItemViewModel> { myAccountMenuItem, myWishListMenuItem, myAdressesMenuItem, myOrderHistoryMenuItem });
+            menu.MenuItems.AddRange(new List<MenuItemViewModel> { myAccountMenuItem, myWishListMenuItem, myAdressesMenuItem, myWalletMenuItem, myOrderHistoryMenuItem });
 
             return menu;
         }

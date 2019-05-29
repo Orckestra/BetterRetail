@@ -1,0 +1,33 @@
+<div data-oc-controller="MyAccount.Wallet" data-context="{{JsonContext}}">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2 class="h3">{{localize 'MyAccount' 'T_Wallet'}}</h2>
+        </div>
+        <div class="panel-body"> 
+            {{>WalletSavedCreditCartPaymentMethod}}
+
+            <div class="row">
+                <div class="col-sm-12 text-center">
+                    <button class="btn btn-primary" 
+                        type="button">
+                        {{localize 'MyAccount' 'B_AddNewCreditCard'}}
+                    </button>
+                </div>
+            </div>      
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 text-right">
+            <button class="btn btn-primary" 
+                type="button">
+                {{localize 'MyAccount' 'B_Cancel'}}
+            </button>
+
+            <button class="btn btn-primary" 
+                type="button">
+                {{localize 'MyAccount' 'B_SaveChanges'}}
+            </button>
+        </div>
+    </div>      
+</div>
