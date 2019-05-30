@@ -120,6 +120,12 @@
   <data name="B_ApplyPromoCode" xml:space="preserve">
     <value>Apply</value>
   </data>
+  <data name="B_ApplyRecurrenceChanges" xml:space="preserve">
+    <value>Apply</value>
+  </data>
+  <data name="B_CancelRecurrenceChanges" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
   <data name="B_Checkout" xml:space="preserve">
     <value>Checkout</value>
   </data>

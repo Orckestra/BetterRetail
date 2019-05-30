@@ -29,6 +29,8 @@
                     </p>
                 </div>
 
+                <div class="cart-cell  cart-delete  text-xs-right  text-md-center"></div>
+
                 <div class="cart-cell  cart-price  text-sm-right  hidden-xs">
                     <div class="text-align-button  small">
                         {{#if IsOnSale}}
@@ -41,15 +43,10 @@
                 </div>
 
                 <div class="cart-cell  cart-qty  text-sm-center  small">
-                    <div class="row">
-                        <div class="col-sm-6  hidden-xs"><span class="text-muted">X</span></div>
-                        <div class="col-sm-6">
-                            <strong>
-                                <span class="visible-xs-inline">{{localize 'CheckoutProcess' 'L_QuantityMobile'}}</span>
-                                <span data-qa="checkout-product-quantity">{{Quantity}}</span>
-                            </strong>
-                        </div>
-                    </div>
+                    <strong>
+                        <span class="visible-xs-inline">{{localize 'CheckoutProcess' 'L_QuantityMobile'}}</span>
+                        <span data-qa="checkout-product-quantity">{{Quantity}}</span>
+                    </strong>
                 </div>
 
                 <div class="cart-cell  cart-subtotal  text-sm-right">
@@ -71,4 +68,16 @@
             </div>
         </div>
     </div>
+    {{#if RecurringOrderProgramName}}
+        <div class="cart-recurring">
+            <div class="cart-recurring-cta js-cartRecurringCta">
+                <img src="/UI.Package/Images/recurring.png" alt="{{localize 'General' 'L_RecurringProduct'}}" title="{{localize 'General' 'L_RecurringProduct'}}" />
+                {{#if RecurringOrderFrequencyName}}
+                    &nbsp;{{RecurringOrderFrequencyDisplayName}}
+                {{else}}
+                    &nbsp;{{localize 'ProductPage' 'L_RecurringFrequencyOnce'}}
+                {{/if}}
+            </div>
+        </div>
+    {{/if}}
 </div>

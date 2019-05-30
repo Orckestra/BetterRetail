@@ -36,7 +36,7 @@
 }
 
 .cart-item + .cart-item {
-  border-top: solid 1px $gray-lighter;
+  border-top: solid 2px $gray;
   margin-top: $grid-gutter-width;
   padding-top: $grid-gutter-width;
 }
@@ -186,7 +186,7 @@
   border-top: 1px solid $gray-lighter;
   margin-top: 10px;
   padding-left: 30%;
-  padding-top: 10px;
+  padding-top: 20px;
   position: relative;
 
   @media (min-width: $screen-sm-min) {

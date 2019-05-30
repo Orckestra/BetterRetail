@@ -56,14 +56,14 @@
             <button class="btn btn-secondary" type="button" data-toggle="collapse" data-target="#recurringModes{{@index}}"
                     aria-expanded="false" aria-controls="recurringModes{{@index}}"
                     data-oc-click="resetLineItemRecurringFrequency"
-                    data-recurringorderfrequencyname="{{RecurringOrderFrequencyName}}">Cancel</button>
+                    data-recurringorderfrequencyname="{{RecurringOrderFrequencyName}}">{{localize 'ShoppingCart' 'B_CancelRecurrenceChanges'}}</button>
             <button class="btn btn-primary"
                     data-oc-click="updateLineItemRecurringFrequency"
                     data-lineitemid="{{Id}}"
                     data-productid="{{ProductId}}"
                     data-quantity="{{Quantity}}"
                     data-recurringorderfrequencyname="{{RecurringOrderFrequencyName}}"
-                    data-recurringorderprogramname="{{RecurringOrderProgramName}}">Apply
+                    data-recurringorderprogramname="{{RecurringOrderProgramName}}">{{localize 'ShoppingCart' 'B_ApplyRecurrenceChanges'}}
             </button>
         </div>
     </div>
