@@ -72,12 +72,5 @@ namespace Orckestra.Composer.MyAccount.Repositories
         /// The updated Customer.
         /// </returns>
         Task<Customer> UpdateUserAsync(UpdateUserParam param);
-
-        /// <summary>
-        /// Get the Payment methods available for a customer.
-        /// </summary>
-        /// <param name="param">GetPaymentMethodsParam</param>
-        /// <returns>A List of PaymentMethod</returns>
-        Task<List<PaymentMethod>> GetCustomerPaymentMethodsAsync(GetCustomerPaymentMethodsParam param);
     }
 }

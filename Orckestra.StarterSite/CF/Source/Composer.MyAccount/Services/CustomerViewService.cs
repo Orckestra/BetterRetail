@@ -4,19 +4,15 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Orckestra.Composer.Enums;
-using Orckestra.Composer.MyAccount.Factory;
 using Orckestra.Composer.MyAccount.Parameters;
 using Orckestra.Composer.MyAccount.Repositories;
 using Orckestra.Composer.MyAccount.ViewModels;
-using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Localization;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Services.Lookup;
-using Orckestra.Composer.Utils;
 using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel.Customers;
-using Orckestra.Overture.ServiceModel.Orders;
 
 namespace Orckestra.Composer.MyAccount.Services
 {
@@ -31,29 +27,26 @@ namespace Orckestra.Composer.MyAccount.Services
         protected ICultureService CultureService { get; private set; }
         protected ILookupService LookupService { get; private set; }
         protected ILocalizationProvider LocalizationProvider { get; private set; }
-        protected ICustomerViewModelFactory CustomerViewModelFactory { get; private set; }
 
         public CustomerViewService(
             IViewModelMapper viewModelMapper,
             ICustomerRepository customerRepository,
             ICultureService cultureService,
             ILookupService lookupService,
-            ILocalizationProvider localizationProvider,
-            ICustomerViewModelFactory customerViewModelFactory)
+            ILocalizationProvider localizationProvider
+        )
         {
             if (viewModelMapper == null) { throw new ArgumentNullException("viewModelMapper"); }
             if (customerRepository == null) { throw new ArgumentNullException("customerRepository"); }
             if (cultureService == null) { throw new ArgumentNullException("cultureService"); }
             if (lookupService == null) { throw new ArgumentNullException("lookupService"); }
             if (localizationProvider == null) { throw new ArgumentNullException("localizationProvider"); }
-            if (customerViewModelFactory == null) { throw new ArgumentNullException("customerViewModelFactory"); }
-
+           
             ViewModelMapper = viewModelMapper;
             CustomerRepository = customerRepository;
             CultureService = cultureService;
             LookupService = lookupService;
             LocalizationProvider = localizationProvider;
-            CustomerViewModelFactory = customerViewModelFactory;
         }
 
         /// <summary>
@@ -232,58 +225,6 @@ namespace Orckestra.Composer.MyAccount.Services
                 default:
                     return AccountStatusEnum.Unspecified;
             }
-        }
-        public virtual async Task<CustomerPaymentViewModel> GetCustomerPaymentMethodsAsync(GetCustomerPaymentMethodsParam param)
-        {
-            if (param == null) { throw new ArgumentNullException("param"); }           
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("Scope"), "param"); }
-            if (param.ProviderNames == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("ProviderName"), "param"); }
-
-            var paymentMethods = await GetAllPaymentMethodsAsync(param).ConfigureAwait(false);
-            
-            var vm = MapCustomerPaymentViewModel(paymentMethods, param.CultureInfo);
-            return vm;
-        }
-
-        protected virtual async Task<List<ICustomerPaymentMethodViewModel>> GetAllPaymentMethodsAsync(GetCustomerPaymentMethodsParam param)
-        {
-            var paymentMethods = await CustomerRepository.GetCustomerPaymentMethodsAsync(param).ConfigureAwait(false);
-            if (paymentMethods == null) { return null; }
-
-            var vm = await MapPaymentMethodsViewModel(paymentMethods, param.CultureInfo).ConfigureAwait(false);
-            return vm;
-        }
-
-        protected virtual async Task<List<ICustomerPaymentMethodViewModel>> MapPaymentMethodsViewModel(IEnumerable<PaymentMethod> paymentMethods, CultureInfo cultureInfo)
-        {
-            var paymentMethodViewModels = new List<ICustomerPaymentMethodViewModel>();
-
-            foreach (var method in paymentMethods.Where(x => x.Enabled))
-            {
-                var methodDisplayNames = await LookupService.GetLookupDisplayNamesAsync(new GetLookupDisplayNamesParam
-                {
-                    CultureInfo = cultureInfo,
-                    LookupType = LookupType.Order,
-                    LookupName = "PaymentMethodType",
-                }).ConfigureAwait(false);
-
-                var methodViewModel = CustomerViewModelFactory.GetPaymentMethodViewModel(method, methodDisplayNames, cultureInfo);
-                if (methodViewModel != null)
-                {
-                    paymentMethodViewModels.Add(methodViewModel);
-                }
-            }
-
-            return paymentMethodViewModels.ToList();
-        }
-
-        protected virtual CustomerPaymentViewModel MapCustomerPaymentViewModel(List<ICustomerPaymentMethodViewModel> customerMethodViewModels, CultureInfo cultureInfo)
-        {        
-            var vm = new CustomerPaymentViewModel();
-            vm.PaymentMethods = customerMethodViewModels;
-            vm.IsLoading = true;
-
-            return vm;
         }
     }
 }

@@ -41,8 +41,6 @@
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Api\CustomerController.cs" />
-    <Compile Include="Factory\CustomerViewModelFactory.cs" />
-    <Compile Include="Factory\ICustomerViewModelFactory.cs" />
     <Compile Include="Parameters\ChangePasswordParam.cs" />
     <Compile Include="Parameters\AddressAndStatus.cs" />
     <Compile Include="Parameters\CreateAddressParam.cs" />
@@ -57,7 +55,6 @@
     <Compile Include="Parameters\GetAddressListItemViewModelParam.cs" />
     <Compile Include="Parameters\GetAddressesForCustomerParam.cs" />
     <Compile Include="Parameters\GetAddressListViewModelParam.cs" />
-    <Compile Include="Parameters\GetCustomerPaymentMethodsParam.cs" />
     <Compile Include="Parameters\GetResetPasswordByTicketViewModelParam.cs" />
     <Compile Include="Parameters\GetSignInHeaderParam.cs" />
     <Compile Include="Parameters\GetUpdateAccountViewModelParam.cs" />
@@ -108,14 +105,10 @@
     <Compile Include="ViewModels\AccountHeaderViewModel.cs" />
     <Compile Include="ViewModels\AddressListViewModel.cs" />
     <Compile Include="ViewModels\AddressListItemViewModel.cs" />
-    <Compile Include="ViewModels\CustomerPaymentViewModel.cs" />
     <Compile Include="ViewModels\DeleteAddressStatusViewModel.cs" />
     <Compile Include="ViewModels\EditAddressViewModel.cs" />
-    <Compile Include="ViewModels\CustomerPaymentMethodViewModel.cs" />
-    <Compile Include="ViewModels\ICustomerPaymentMethodViewModel.cs" />
     <Compile Include="ViewModels\IsAuthenticatedViewModel.cs" />
     <Compile Include="ViewModels\PreferredLanguageViewModel.cs" />
-    <Compile Include="ViewModels\CustomerSavedCreditCardPaymentMethodViewModel.cs" />
     <Compile Include="ViewModels\SetDefaultAddressStatusViewModel.cs" />
     <Compile Include="ViewModels\UpdateAccountViewModel.cs" />
     <Compile Include="ViewModels\CreateAccountViewModel.cs" />

@@ -12,6 +12,7 @@ namespace Orckestra.Composer.CompositeC1.Mvc.Controllers
     {
         public MyAccountController(
             ICustomerViewService customerViewService,
+            ICustomerPaymentMethodViewService customerPaymentMethodViewService,
             ICustomerAddressViewService customerAddressViewService,
             IPaymentViewService paymentViewService,
             IComposerContext composerContext,
@@ -22,6 +23,7 @@ namespace Orckestra.Composer.CompositeC1.Mvc.Controllers
             IOrderHistoryViewService orderHistoryViewService,
             IWishListViewService wishListViewService) : base(
                 customerViewService,
+                customerPaymentMethodViewService,
                 customerAddressViewService,
                 paymentViewService,
                 composerContext, addressRepository,

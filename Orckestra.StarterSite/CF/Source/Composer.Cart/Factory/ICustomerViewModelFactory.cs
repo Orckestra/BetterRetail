@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
-using Orckestra.Composer.MyAccount.ViewModels;
+using Orckestra.Composer.Cart.ViewModels;
 using Orckestra.Overture.ServiceModel.Orders;
 
-namespace Orckestra.Composer.MyAccount.Factory
+namespace Orckestra.Composer.Cart.Factory
 {
     public interface ICustomerViewModelFactory
     {      

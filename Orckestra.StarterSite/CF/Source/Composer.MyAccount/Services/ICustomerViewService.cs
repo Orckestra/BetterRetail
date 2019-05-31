@@ -38,7 +38,5 @@ namespace Orckestra.Composer.MyAccount.Services
         /// <param name="param">Builder params <see cref="UpdateAccountParam"/></param>
         /// <returns></returns>
         Task<UpdateAccountViewModel> UpdateAccountAsync(UpdateAccountParam param);
-
-        Task<CustomerPaymentViewModel> GetCustomerPaymentMethodsAsync(GetCustomerPaymentMethodsParam param);
     }
 }

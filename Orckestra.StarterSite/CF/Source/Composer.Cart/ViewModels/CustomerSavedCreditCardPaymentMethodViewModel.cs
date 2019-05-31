@@ -1,7 +1,7 @@
 ﻿using System;
 using Orckestra.Composer.ViewModels;
 
-namespace Orckestra.Composer.MyAccount.ViewModels
+namespace Orckestra.Composer.Cart.ViewModels
 {
     public sealed class CustomerSavedCreditCardPaymentMethodViewModel : BaseViewModel, ICustomerPaymentMethodViewModel
     {

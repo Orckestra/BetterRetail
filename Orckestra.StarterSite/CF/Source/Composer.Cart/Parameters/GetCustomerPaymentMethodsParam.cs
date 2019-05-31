@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 
-namespace Orckestra.Composer.MyAccount.Parameters
+namespace Orckestra.Composer.Cart.Parameters
 {
     public class GetCustomerPaymentMethodsParam
     {

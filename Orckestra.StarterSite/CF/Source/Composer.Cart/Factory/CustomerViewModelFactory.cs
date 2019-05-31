@@ -1,4 +1,4 @@
-﻿using Orckestra.Composer.MyAccount.ViewModels;
+﻿using Orckestra.Composer.Cart.ViewModels;
 using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel.Orders;
 using System;
@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 
-namespace Orckestra.Composer.MyAccount.Factory
+namespace Orckestra.Composer.Cart.Factory
 {
     public class CustomerViewModelFactory : ICustomerViewModelFactory
     {
@@ -18,7 +18,6 @@ namespace Orckestra.Composer.MyAccount.Factory
 
             ViewModelMapper = viewModelMapper;
         }
-
 
         /// <summary>
         /// Gets a PaymentMethodViewModel from an Overture PaymentMethod object.

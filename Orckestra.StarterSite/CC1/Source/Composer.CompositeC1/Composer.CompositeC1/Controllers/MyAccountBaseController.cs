@@ -25,6 +25,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
     public abstract class MyAccountBaseController : Controller
     {
         protected ICustomerViewService CustomerViewService { get; private set; }
+        protected ICustomerPaymentMethodViewService CustomerPaymentMethodViewService { get; private set; }
         protected ICustomerAddressViewService CustomerAddressViewService { get; private set; }
         protected IPaymentViewService PaymentViewService { get; private set; }
         protected IComposerContext ComposerContext { get; private set; }
@@ -37,6 +38,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
 
         protected MyAccountBaseController(
             ICustomerViewService customerViewService,
+            ICustomerPaymentMethodViewService customerPaymentMethodViewService,
             ICustomerAddressViewService customerAddressViewService,
             IPaymentViewService paymentViewService,
             IComposerContext composerContext,
@@ -48,6 +50,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             IWishListViewService wishListViewService)
         {
             if (customerViewService == null) throw new ArgumentNullException("customerViewService");
+            if (customerPaymentMethodViewService == null) throw new ArgumentNullException("customerPaymentMethodViewService");
             if (customerAddressViewService == null) throw new ArgumentNullException("customerAddressViewService");
             if (paymentViewService == null) throw new ArgumentNullException("paymentViewService");
             if (composerContext == null) throw new ArgumentNullException("composerContext");
@@ -59,6 +62,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             if (wishListViewService == null) throw new ArgumentNullException("wishListViewService");
 
             CustomerViewService = customerViewService;
+            CustomerPaymentMethodViewService = customerPaymentMethodViewService;
             CustomerAddressViewService = customerAddressViewService;
             PaymentViewService = paymentViewService;
             ComposerContext = composerContext;
@@ -171,17 +175,14 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         [AuthorizeAndRedirect]
         [OutputCache(Duration = 0, NoStore = true)]
         public virtual ActionResult WalletList()
-        {
-            var addWalletUrl = MyAccountUrlProvider.GetWalletListUrl(new GetMyAccountUrlParam { CultureInfo = ComposerContext.CultureInfo });
-            var editWalletBaseUrl = MyAccountUrlProvider.GetUpdateAddressBaseUrl(new GetMyAccountUrlParam { CultureInfo = ComposerContext.CultureInfo });
-            
+        {           
             var param = new GetPaymentProvidersParam
             {
                 CultureInfo = ComposerContext.CultureInfo
             };
             var providers = PaymentViewService.GetPaymentProvidersAsync(param).Result;
             
-            var viewModel = CustomerViewService.GetCustomerPaymentMethodsAsync(new GetCustomerPaymentMethodsParam
+            var viewModel = CustomerPaymentMethodViewService.GetCustomerPaymentMethodsAsync(new GetCustomerPaymentMethodsParam
             {
                 Scope = ComposerContext.Scope,
                 CultureInfo = ComposerContext.CultureInfo,
@@ -191,48 +192,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
 
             return View("WalletContainer", viewModel);
         }
-
-        [AuthorizeAndRedirect]
-        public virtual ActionResult CreateWallet()
-        {
-            /*var viewModel = CustomerAddressViewService.GetCreateAddressViewModelAsync(new GetCreateAddressViewModelAsyncParam
-            {
-                CustomerId = ComposerContext.CustomerId,
-                CultureInfo = ComposerContext.CultureInfo,
-                Scope = ComposerContext.Scope,
-                CountryCode = ComposerContext.CountryCode
-            }).Result;
-
-            return View("EditAddressBlade", viewModel);*/
-
-            return null;
-        }
-
-        [AuthorizeAndRedirect]
-        public virtual ActionResult EditWallet(Guid? addressId)
-        {
-            /*if (!addressId.HasValue)
-            {
-                return UnexpectedAddressForCustomer();
-            }
-
-            var vm = CustomerAddressViewService.GetEditAddressViewModelAsync(new GetEditAddressViewModelAsyncParam
-            {
-                AddressId = addressId.Value,
-                CustomerId = ComposerContext.CustomerId,
-                CultureInfo = ComposerContext.CultureInfo,
-                Scope = ComposerContext.Scope,
-            }).Result;
-            if (vm == null)
-            {
-                return UnexpectedAddressForCustomer();
-            }
-
-            return View("EditAddressBlade", vm);*/
-
-            return null;
-        }
-
+        
         [AuthorizeAndRedirect]
         public virtual ActionResult CurrentOrders()
         {

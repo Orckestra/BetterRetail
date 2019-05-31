@@ -76,9 +76,7 @@ namespace Orckestra.Composer.CompositeC1.Services
             {
                 Name = myWalletPage.MenuTitle,
                 Url = walletListUrl,
-                IsActive = currentPageId == PagesConfiguration.WalletListPageId ||
-                           currentPageId == PagesConfiguration.AddWalletPageId ||
-                           currentPageId == PagesConfiguration.UpdateWalletPageId
+                IsActive = currentPageId == PagesConfiguration.WalletListPageId
             };
 
             var myWishListMenuItem = new MenuItemViewModel

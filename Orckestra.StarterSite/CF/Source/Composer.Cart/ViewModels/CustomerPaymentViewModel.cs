@@ -4,7 +4,7 @@ using Orckestra.Composer.ViewModels;
 using System.Linq;
 using Orckestra.Overture.ServiceModel.Orders;
 
-namespace Orckestra.Composer.MyAccount.ViewModels
+namespace Orckestra.Composer.Cart.ViewModels
 {
     public sealed class CustomerPaymentViewModel : BaseViewModel
     {

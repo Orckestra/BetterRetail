@@ -1,5 +1,4 @@
-﻿using Orckestra.Composer.MyAccount.Factory;
-using Orckestra.Composer.MyAccount.Repositories;
+﻿using Orckestra.Composer.MyAccount.Repositories;
 using Orckestra.Composer.MyAccount.Services;
 
 namespace Orckestra.Composer.MyAccount
@@ -11,13 +10,12 @@ namespace Orckestra.Composer.MyAccount
             host.Register<MembershipViewService, IMembershipViewService>();
 
             host.Register<CustomerRepository, ICustomerRepository>();
+
             host.Register<CustomerAddressRepository, ICustomerAddressRepository>();
 
             host.Register<CustomerAddressViewService, ICustomerAddressViewService>();
 
             host.Register<CustomerViewService, ICustomerViewService>();
-
-            host.Register<CustomerViewModelFactory, ICustomerViewModelFactory>();
 
             host.MetadataRegistry.LoadViewModelMetadataInAssemblyOf(typeof(MyAccountPlugin).Assembly);
 
