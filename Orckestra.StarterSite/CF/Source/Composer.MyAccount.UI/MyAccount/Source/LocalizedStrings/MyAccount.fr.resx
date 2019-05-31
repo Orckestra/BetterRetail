@@ -325,7 +325,7 @@
     <value>Rabais</value>
   </data>
   <data name="L_ScheduledShipping" xml:space="preserve">
-    <value>Expédition prévu le {0}</value>
+    <value>Expédition prévue le {0}</value>
   </data>
   <data name="L_SharedWishList_StartAddTo" xml:space="preserve">
     <value>La liste de souhaits de votre ami est vide.
