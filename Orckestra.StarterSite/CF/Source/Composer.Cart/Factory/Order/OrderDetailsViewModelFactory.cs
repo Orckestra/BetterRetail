@@ -117,6 +117,7 @@ namespace Orckestra.Composer.Cart.Factory.Order
             var orderInfos = ViewModelMapper.MapTo<OrderDetailInfoViewModel>(param.Order, param.CultureInfo);
 
             orderInfos.OrderStatus = param.OrderStatuses[param.Order.OrderStatus];
+            orderInfos.OrderStatusRaw = param.Order.OrderStatus;
             orderInfos.BillingCurrency = param.Order.Cart.BillingCurrency;
             orderInfos.PricePaid = LocalizationProvider.FormatPrice((decimal)param.Order.Cart.Total, param.CultureInfo);
 

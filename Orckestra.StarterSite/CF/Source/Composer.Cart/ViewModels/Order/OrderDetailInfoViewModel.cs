@@ -16,6 +16,14 @@ namespace Orckestra.Composer.Cart.ViewModels.Order
         /// Gets or sets the order status.
         /// </summary>
         /// <value>
+        /// The "raw" order status key, untranslated.
+        /// </value>
+        public string OrderStatusRaw { get; set; }
+
+        /// <summary>
+        /// Gets or sets the order status.
+        /// </summary>
+        /// <value>
         /// The order status.
         /// </value>
         public string OrderStatus { get; set; }

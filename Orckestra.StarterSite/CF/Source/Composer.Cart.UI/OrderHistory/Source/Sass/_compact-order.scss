@@ -28,7 +28,11 @@
     }
   }
   &-status {
+    display: inline-block;
     font-weight: bold;
+    &::first-letter {
+      text-transform: uppercase;
+    }
   }
   &-splitter {
     margin-top: 15px;
