@@ -18,6 +18,7 @@ using Orckestra.Composer.Providers;
 using Orckestra.Composer.Repositories;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Utils;
+using Orckestra.Composer.ViewModels;
 
 namespace Orckestra.Composer.CompositeC1.Controllers
 {
@@ -252,28 +253,29 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         [AuthorizeAndRedirect]
         public virtual ActionResult RecurringScheduleDetails(string id)
         {
-            if (string.IsNullOrEmpty(id))
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
-            }
+            //if (string.IsNullOrEmpty(id))
+            //{
+            //    return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+            //}
 
-            Guid guid;
-            Guid.TryParse(id, out guid);
+            //Guid guid;
+            //Guid.TryParse(id, out guid);
 
-            var vm = RecurringOrderTemplatesViewService.GetRecurringOrderTemplateDetailViewModelAsync(new GetRecurringOrderTemplateDetailParam
-            {
-                RecurringOrderLineItemId = guid,
-                CustomerId = ComposerContext.CustomerId,
-                Scope = ComposerContext.Scope,
-                CultureInfo = ComposerContext.CultureInfo,
-                BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
-            }).Result;
+            //var vm = RecurringOrderTemplatesViewService.GetRecurringOrderTemplateDetailViewModelAsync(new GetRecurringOrderTemplateDetailParam
+            //{
+            //    RecurringOrderLineItemId = guid,
+            //    CustomerId = ComposerContext.CustomerId,
+            //    Scope = ComposerContext.Scope,
+            //    CultureInfo = ComposerContext.CultureInfo,
+            //    BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
+            //}).Result;
 
-            if (vm == null)
-            {
-                return new HttpUnauthorizedResult();
-            }
-            return View("RecurringScheduleDetailsContainer", vm);
+            //if (vm == null)
+            //{
+            //    return new HttpUnauthorizedResult();
+            //}
+            //return View("RecurringScheduleDetailsContainer", vm);
+            return View("RecurringScheduleDetailsContainer", GetEmptyTemplateViewModel());
         }
 
         [AuthorizeAndRedirect]
@@ -310,6 +312,13 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         protected virtual LightRecurringOrderCartsViewModel GetUpcomingOrdersViewModel()
         {
             return new LightRecurringOrderCartsViewModel
+            {
+                IsLoading = true
+            };
+        }
+        protected virtual RecurringOrderTemplatesViewModel GetEmptyTemplateViewModel()
+        {
+            return new RecurringOrderTemplatesViewModel
             {
                 IsLoading = true
             };

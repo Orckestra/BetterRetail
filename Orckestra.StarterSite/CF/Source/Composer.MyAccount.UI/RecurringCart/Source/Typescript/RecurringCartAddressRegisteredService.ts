@@ -34,6 +34,22 @@ module Orckestra.Composer {
                 });
         }
 
+        public getRecurringTemplateAddresses(id: any): Q.Promise<any> {
+
+            if (!id) {
+                throw new Error('The recurring schedule id is required');
+            }
+
+            return this.customerService.getRecurringTemplateAddresses(id)
+                .then(addresses => {
+                    addresses.AddressesLoaded = true;
+                    //addresses.SelectedBillingAddressId = this.getSelectedBillingAddressId(cart, addresses);
+                    //addresses.SelectedShippingAddressId = this.getSelectedShippingAddressId(cart, addresses);
+
+                    return addresses;
+                });
+        }
+
         public getSelectedBillingAddressId(cart: any, addressList: any) : string {
 
             if (this.isBillingAddressFromCartValid(cart, addressList)) {

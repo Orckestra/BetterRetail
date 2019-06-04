@@ -58,9 +58,25 @@ module Orckestra.Composer {
            return this.memoizeGetAdresses();
         }
 
-       private getRecurringCartAddressesImpl(cartName: string): Q.Promise<any> {
+        private getRecurringCartAddressesImpl(cartName: string): Q.Promise<any> {
+            return this.customerRepository.getRecurringCartAddresses(cartName);
+        }
 
-        return this.customerRepository.getRecurringCartAddresses(cartName);
+        /**
+         * Get the customer addresses for a recurring cart page.
+         */
+        public getRecurringTemplateAddresses(id: string): Q.Promise<any> {
+
+            if (_.isUndefined(this.memoizeGetAdresses)) {
+               this.memoizeGetAdresses = _.memoize(arg => this.getRecurringTemplateAddressesImpl(id));
+           }
+
+           return this.memoizeGetAdresses();
+        }
+
+        private getRecurringTemplateAddressesImpl(id: string): Q.Promise<any> {
+
+            return this.customerRepository.getRecurringCartAddresses(id);
         }
 
         /**

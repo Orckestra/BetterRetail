@@ -20,6 +20,11 @@ module Orckestra.Composer {
         getRecurringCartAddresses(cartName: string): Q.Promise<any>;
 
         /**
+         * Get the customer addresses for a recurring template page.
+         */
+        getRecurringTemplateAddresses(id: string): Q.Promise<any>;
+
+        /**
         * Create a new customer address
         * @param
         */

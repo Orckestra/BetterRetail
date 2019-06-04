@@ -143,6 +143,10 @@ module Orckestra.Composer {
             return this.repository.updateCartPaymentMethod(updateCartPaymentMethodParam);
         }
 
+        public getRecurringTemplateDetail(recurringOrderTemplateId: string): Q.Promise<any> {
+            return this.repository.getRecurringTemplateDetail(recurringOrderTemplateId);
+        }
+
         private _mapLineItemToRequest(lineItem: any): any {
             return {
                 CategoryId: lineItem.ProductSummary.CategoryId,

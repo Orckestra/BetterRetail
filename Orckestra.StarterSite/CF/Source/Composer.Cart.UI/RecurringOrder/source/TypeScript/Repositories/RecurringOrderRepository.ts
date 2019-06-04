@@ -59,7 +59,7 @@ module Orckestra.Composer {
         }
 
         public getRecurringOrderTemplatesByUser() {
-            return ComposerClient.get(`/api/recurringordertemplate/get-recurring-order-templates-by-user`);
+            return ComposerClient.get(`/api/recurringordertemplate/getrecurringordertemplates`);
         }
 
         public updateCartShippingAddress(updateCartAddressParam: IRecurringOrderUpdateTemplateAddressParam): Q.Promise<any> {
@@ -391,5 +391,18 @@ module Orckestra.Composer {
             return ComposerClient.put(`/api/recurringcart/paymentmethod`,
                 updateCartPaymentMethodParam);
         }
+
+        public getRecurringTemplateDetail(recurringOrderTemplateId: string): Q.Promise<any> {
+            if (!recurringOrderTemplateId) {
+                throw new Error('recurringOrderTemplateId is required');
+            }
+
+            const data = {
+                RecurringOrderTemplateId: recurringOrderTemplateId,
+            };
+
+            return ComposerClient.post(`/api/recurringordertemplate/getrecurringordertemplatedetails`, data);
+        }
+
     }
 }

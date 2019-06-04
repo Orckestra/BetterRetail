@@ -38,5 +38,6 @@ module Orckestra.Composer {
         getRecurringCart(getRecurringCartParam: IRecurringOrderCartParam): Q.Promise<any>;
         getCartPaymentMethods(getCartPaymentMethodsParam: IRecurringOrderGetCartPaymentMethods): Q.Promise<any>;
         updateCartPaymentMethod(updateCartPaymentMethodParam: IRecurringOrderCartUpdatePaymentMethodParam): Q.Promise<any>;
+        getRecurringTemplateDetail(recurringOrderTemplateId: string): Q.Promise<any>;
     }
 }

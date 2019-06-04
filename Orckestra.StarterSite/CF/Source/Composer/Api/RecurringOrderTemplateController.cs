@@ -131,5 +131,28 @@ namespace Orckestra.Composer.Api
 
             return Ok(results);
         }
+
+        [HttpPost]
+        [ActionName("getrecurringordertemplatedetails")]
+        public virtual async Task<IHttpActionResult> GetRecurringOrderTemplateDetails(GetRecurringOrderTemplateDetailsRequest request)
+        {
+            if(request == null) { return BadRequest("Missing Request Body"); }
+            if (string.IsNullOrEmpty(request.RecurringOrderTemplateId)) { return BadRequest("Missing Request Body"); }
+            if (!ModelState.IsValid) { return BadRequest(ModelState); }
+
+            Guid guid;
+            Guid.TryParse(request.RecurringOrderTemplateId, out guid);
+
+            var vm = await RecurringOrderTemplatesViewService.GetRecurringOrderTemplateDetailViewModelAsync(new GetRecurringOrderTemplateDetailParam
+            {
+                RecurringOrderLineItemId = guid,
+                Scope = ComposerContext.Scope,
+                CustomerId = ComposerContext.CustomerId,
+                CultureInfo = ComposerContext.CultureInfo,
+                BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
+            }).ConfigureAwait(false);
+
+            return Ok(vm);
+        }
     }
 }
