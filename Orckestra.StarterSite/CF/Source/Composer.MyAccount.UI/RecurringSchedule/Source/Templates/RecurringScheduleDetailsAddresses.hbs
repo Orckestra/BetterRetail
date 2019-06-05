@@ -2,6 +2,23 @@
     {{#if IsLoading}}
         {{>Loading}}
     {{else}}
-        todo
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-xs-10">
+                    <h2 class="h3">{{localize 'MyAccount' 'T_Addresses' }}</h2>
+                </div>
+                <div class="col-xs-2">
+                    <button class="btn btn-link pull-right invisible" type="button" 
+                    title="{{localize 'CheckoutProcess' 'B_Edit'}}">
+                        <span class="fa  fa-pencil  fa-lg"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body">            
+            {{> RecurringCartShippingAddressRegistered}}
+            <br />
+            {{> RecurringScheduleBillingAddressRegistered}}   
+        </div>
     {{/if}}   
 </div>

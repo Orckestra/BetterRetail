@@ -13,6 +13,7 @@ module Orckestra.Composer {
 
         private viewModelName = '';
         private id = '';
+        private viewModel;
 
         protected customerService: ICustomerService = new CustomerService(new CustomerRepository());
         protected recurringCartAddressRegisteredService: RecurringCartAddressRegisteredService =
@@ -39,11 +40,11 @@ module Orckestra.Composer {
             this.recurringOrderService.getRecurringTemplateDetail(id)
                 .then(result => {
                     console.log(result);
-                    //this.viewModel = result;
+                    this.viewModel = result;
 
                     this.id = id;
-                    this.getAvailableEditList();
                     this.reRenderPage(result);
+                    this.getAvailableEditList();
                 })
                 .fail((reason) => {
                     console.error(reason);
@@ -77,6 +78,11 @@ module Orckestra.Composer {
                         //    UseShippingAddress: this.viewModel.Payment.BillingAddress.UseShippingAddress
                         //}
                     //};
+
+                    addressesVm.SelectedBillingAddressId = this.viewModel.RecurringOrderTemplateLineItemViewModels[0].BillingAddressId;
+                    addressesVm.SelectedShippingAddressId = this.viewModel.RecurringOrderTemplateLineItemViewModels[0].ShippingAddressId;
+
+                    addressesVm.UseShippingAddress = addressesVm.SelectedBillingAddressId === addressesVm.SelectedShippingAddressId;
 
                     console.log(addressesVm);
                     this.renderAddresses(addressesVm);
