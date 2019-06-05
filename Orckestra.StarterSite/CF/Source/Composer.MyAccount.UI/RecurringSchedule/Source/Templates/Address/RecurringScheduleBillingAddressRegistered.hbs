@@ -9,12 +9,12 @@
                 <div class="row">
                     <div class="col-xs-6">
                         <div class="form-group">
-                            <label data-qa="checkout-use-shipping-address-yes" class="select-block  {{#if_eq Payment.BillingAddress.UseShippingAddress true}} active {{/if_eq}}">
+                            <label data-qa="checkout-use-shipping-address-yes" class="select-block  {{#if_eq UseShippingAddress true}} active {{/if_eq}}">
                                 <span class="input-addon">
                                     <input class="input" data-oc-click="changeUseShippingAddress"
                                     data-parsley-class-handler-selector=".panel-body" data-parsley-errors-container="#billing-errors"
                                     type="radio" name="UseShippingAddress" value="true"
-                                    {{#if_eq Payment.BillingAddress.UseShippingAddress true}} checked="checked" {{/if_eq}} />
+                                    {{#if_eq UseShippingAddress true}} checked="checked" {{/if_eq}} />
                                 </span>
                                 <span class="content">{{localize 'CheckoutProcess' 'F_BillingYes'}}</span>
                             </label>
@@ -22,12 +22,12 @@
                     </div>
                     <div class="col-xs-6">
                         <div class="form-group">
-                            <label data-qa="checkout-use-shipping-address-no" class="select-block  {{#if_neq Payment.BillingAddress.UseShippingAddress true}} active {{/if_neq}}">
+                            <label data-qa="checkout-use-shipping-address-no" class="select-block  {{#if_neq UseShippingAddress true}} active {{/if_neq}}">
                                 <span class="input-addon">
                                         <input class="input" data-oc-click="changeUseShippingAddress"
                                         data-parsley-class-handler-selector=".panel-body" data-parsley-errors-container="#billing-errors"
                                         type="radio" name="UseShippingAddress" value="false"
-                                        {{#if_neq Payment.BillingAddress.UseShippingAddress true}} checked="checked" {{/if_neq}} />
+                                        {{#if_neq UseShippingAddress true}} checked="checked" {{/if_neq}} />
                                 </span>
                                 <span class="content">{{localize 'CheckoutProcess' 'F_BillingNo'}}</span>
                             </label>
@@ -38,11 +38,11 @@
                 <div id="billing-errors"></div>
             </div>
         </div>
-        <div id="BillingAddressContent" class="{{#if_eq Payment.BillingAddress.UseShippingAddress true}}hide{{/if_eq}}">
+        <div id="BillingAddressContent" class="{{#if_eq UseShippingAddress true}}hide{{/if_eq}}">
             {{!-- {{#if_localized 'CheckoutProcess' 'T_BillingAddressSpecify'}}
                 <h3>{{localize 'CheckoutProcess' 'T_BillingAddressSpecify'}}</h3>
             {{/if_localized}} --}}
-            {{> BillingRegisteredAddresses}}
+            {{> RecurringScheduleBillingRegisteredAddresses}}
         </div>
     </form>
 </div>
