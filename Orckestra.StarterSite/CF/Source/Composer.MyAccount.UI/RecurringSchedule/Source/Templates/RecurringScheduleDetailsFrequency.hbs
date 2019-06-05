@@ -2,6 +2,80 @@
     {{#if IsLoading}}
         {{>Loading}}
     {{else}}
-        todo
+        <div class="panel-heading">
+           <div class="row">
+                <div class="col-xs-10">
+                    <h2 class="h3">{{localize 'RecurringSchedule' 'T_RecurringScheduleDetailsFrequency' }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body">
+            {{#if Rewards}}
+            <div class="text-center">
+                <span class="promotion">
+                    {{#each Rewards}}
+                    <em>{{Description}}</em>
+                    <br /> {{/each}}
+                </span>
+            </div>
+            {{/if}}
+            <div class="display-table">
+                <div class="display-table-cell col-xs-4 col-sm-2 text-center">
+                    <a href="{{ProductUrl}}" class="hidden-xs">
+                        <img src="{{ImageUrl}}" class="img-fluid" alt="Thumbnail" onerror="this.onerror=null; this.src='{{FallbackImageUrl}}'" />
+                    </a>
+                    <div class="display-table-cell small visible-xs-block text-left">
+                        <div data-qa="cart-product-brand">{{ProductSummary.Brand}}</div>
+                        <p>
+                            <a href="{{ProductUrl}}" data-qa="cart-product-name">
+                                <strong>{{ProductSummary.DisplayName}}</strong>
+                            </a>
+                            {{#if VariantId}}
+                            <br /> {{#each KeyVariantAttributesList}} {{#if_neq @index 0}}|{{/if_neq}} {{Value}} {{/each}} {{/if}}
+                        </p>
+                    </div>
+                </div>
+                <div class="display-table-cell col-xs-8 col-sm-10">
+                    <div class="display-table">
+                        <div class="display-table-cell col-xs-4 col-sm-3 small hidden-xs">
+                            <div data-qa="cart-product-brand">{{ProductSummary.Brand}}</div>
+                            <p>
+                                <a href="{{ProductUrl}}" data-qa="cart-product-name">
+                                    <strong>{{ProductSummary.DisplayName}}</strong>
+                                </a>
+                                {{#if VariantId}}
+                                <br /> {{#each KeyVariantAttributesList}} {{#if_neq @index 0}}|{{/if_neq}} {{Value}} {{/each}} {{/if}}
+                            </p>
+                        </div>
+                        <div class="display-table-cell col-sm-2 text-sm-right  hidden-xs">
+                            <div class="text-align-button  small">
+                                {{#if IsOnSale}}
+                                <del data-qa="cart-product-price">{{DefaultListPrice}}</del>
+                                <br />
+                                <strong class="text-danger" data-qa="cart-product-sales-price">{{ListPrice}}</strong>
+                                {{else}}
+                                <strong data-qa="cart-product-price">{{DefaultListPrice}}</strong>
+                                {{/if}}
+                                &nbsp;&nbsp;x
+                            </div>
+                        </div>
+                        <div class="display-table-cell col-xs-4 col-sm-2 text-sm-center  small">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <strong>
+                                        <span class="cart-quantity-template" data-lineitemid="{{Id}}" data-initial-qty="{{Quantity}}" data-qa="checkout-product-quantity">{{Quantity}}</span>                                    
+                                    </strong>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="display-table-cell col-xs-4 col-sm-2 xs-small text-sm-right">
+                            <div class="text-align-button">
+                                <strong class="cart-subtotal-price" data-qa="cart-product-subtotal">{{Total}}<sup>*</sup></strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     {{/if}}   
 </div>

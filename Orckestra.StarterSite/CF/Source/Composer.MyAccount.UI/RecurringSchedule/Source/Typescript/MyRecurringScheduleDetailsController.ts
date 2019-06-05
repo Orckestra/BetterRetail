@@ -46,7 +46,7 @@ module Orckestra.Composer {
                     this.viewModel = result;
 
                     this.id = id;
-                    this.reRenderPage(result);
+                    this.reRenderPage(result.RecurringOrderTemplateLineItemViewModels[0]);
                 })
                 .fail((reason) => {
                     console.error(reason);
@@ -75,13 +75,6 @@ module Orckestra.Composer {
         public getAddresses() {
             this.recurringCartAddressRegisteredService.getRecurringTemplateAddresses(this.id)
                 .then((addressesVm) => {
-                    //addressesVm.EditMode = this.editAddress;
-                    //addressesVm.Payment = {
-                      //  BillingAddress: {
-                        //    UseShippingAddress: this.viewModel.Payment.BillingAddress.UseShippingAddress
-                        //}
-                    //};
-
                     addressesVm.SelectedBillingAddressId = this.viewModel.RecurringOrderTemplateLineItemViewModels[0].BillingAddressId;
                     addressesVm.SelectedShippingAddressId = this.viewModel.RecurringOrderTemplateLineItemViewModels[0].ShippingAddressId;
 

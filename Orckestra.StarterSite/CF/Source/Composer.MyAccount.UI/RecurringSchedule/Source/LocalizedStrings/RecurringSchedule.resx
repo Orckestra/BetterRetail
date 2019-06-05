@@ -138,4 +138,10 @@
   <data name="L_ConfirmDelete" xml:space="preserve">
     <value>Are you sure you want to delete this recurring item?</value>
   </data>  
+  <data name="T_RecurringScheduleDetailsNextOccurence" xml:space="preserve">
+    <value>Next Processing Date</value>
+  </data>  
+  <data name="T_RecurringScheduleDetailsFrequency" xml:space="preserve">
+    <value>Recurring Frequency</value>
+  </data>    
 </root>

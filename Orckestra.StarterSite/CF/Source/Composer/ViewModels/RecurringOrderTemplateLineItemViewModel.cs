@@ -119,6 +119,11 @@ namespace Orckestra.Composer.ViewModels
         public string FormattedNextOccurence { get; set; }
 
         /// <summary>
+        ///  NextOccurence formatted in YYYY-MM-DD
+        /// </summary>
+        public string NextOccurenceValue { get; set; }
+
+        /// <summary>
         /// Gets or sets the recurring order template shipping address id
         /// </summary>
         public Guid ShippingAddressId { get; set; }
