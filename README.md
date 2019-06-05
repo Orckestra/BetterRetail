@@ -57,3 +57,7 @@
  * The additional C1 CMS packages, which can be installed on website can be configured in parameters file *~\Installer\configs\generic\Parameters.xml*, parameter name `<param name="cms-c1-custom-packages" value="Orckestra.Search.KeywordRedirect,Orckestra.Search.LuceneNET" />`
  * All C1 CMS packages are downloaded from C1 CMS packages server
 
+#### Deploy local changes 
+* Go to .\Orckestra.StarterSite\cf\Source
+* Build local dll with VisualStudio
+* Run PS as Administrator 'gulp devPackage' to deploy composer Dlls and front end files
