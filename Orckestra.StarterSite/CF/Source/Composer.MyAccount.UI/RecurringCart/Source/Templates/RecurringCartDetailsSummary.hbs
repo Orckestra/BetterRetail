@@ -22,28 +22,14 @@
         </div>
         <div class="panel-body">
             <div class="compact-order">
-                <div class="row compact-order-header">
-                    <div class="col-xs-12 col-sm-8">
-                        <div class="compact-order-date">
-                            <strong class="h4">{{localizeFormat 'RecurringCart' 'L_UpcomingDate' FormatedNextOccurence}}</strong>
-                        </div>
+                <div><strong>{{localizeFormat 'RecurringCart' 'L_UpcomingDate' FormatedNextOccurence}}</strong></div>
+                <hr />
+                <div class="row">
+                    <div class="col-xs-8">
+                        <span class="compact-order-status text-gray">{{localize 'RecurringCart' 'L_StatusPendingPreparation' }}</span><br/>
+                        <img src="/UI.Package/Images/recurring.png" alt="{{localize 'General' 'L_RecurringProduct'}}" title="{{localize 'General' 'L_RecurringProduct'}}" />
                     </div>
-                    <div class="col-xs-12 col-sm-4">
-                    </div>
-                </div>
-
-                <div class="row compact-order-body">
-                    <div class="col-xs-12  col-sm-8">
-                        <p>
-                            <!-- put if to each css class -->
-                            <strong class="text-warning">{{localize 'RecurringCart' 'L_StatusPendingPreparation' }}</strong>
-                            <br />
-                            <img src="/UI.Package/Images/recurring.png" alt="{{localize 'General' 'L_RecurringProduct'}}" title="{{localize 'General' 'L_RecurringProduct'}}" />
-                        </p>
-                    </div>
-                    <div class="col-xs-12 col-sm-4 text-sm-right">
-                        <p class="">{{localize 'MyAccount' 'L_EstimatedTotal'}}&nbsp;<strong class="h4">{{OrderSummary.Total}}</strong></p>
-                    </div>
+                    <div class="col-xs-4 text-right">{{localize 'MyAccount' 'L_EstimatedTotal'}}: <strong class="h4">{{OrderSummary.Total}}</strong></div>
                 </div>
             </div>
         </div>
@@ -63,13 +49,11 @@
         </div>
          <div class="panel-body form-group">
             <div class="row compact-order-header">
-                <div class="col-xs-12 col-sm-8">
+                <div class="col-sm-6">
                     <div class="compact-order-date">
-                        <strong class="h4">
-                            <label for="NextOcurrence" >{{localize 'RecurringCart' 'L_NextOccurence'}}</label>
-                        </strong>
+                        <strong><label for="NextOcurrence" >{{localize 'RecurringCart' 'L_NextOccurence'}}</label></strong>
                         <br />
-                        <input type="date" id="NextOcurrence" value="{{NextOccurenceValue}}"></input>
+                        <input class="form-control" type="date" id="NextOcurrence" value="{{NextOccurenceValue}}"></input>
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-4">
@@ -80,7 +64,7 @@
                 <div class="col-xs-12  col-sm-8">
                     <p>
                         <!-- put if to each css class -->
-                        <strong class="text-warning">{{localize 'RecurringCart' 'L_StatusPendingPreparation' }}</strong>
+                        <strong class="text-gray">{{localize 'RecurringCart' 'L_StatusPendingPreparation' }}</strong>
                         <br />
                         <img src="/UI.Package/Images/recurring.png" alt="{{localize 'General' 'L_RecurringProduct'}}" title="{{localize 'General' 'L_RecurringProduct'}}" />
                     </p>

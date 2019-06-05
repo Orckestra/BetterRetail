@@ -1,36 +1,14 @@
 <div data-templateid="LightRecurringOrderCartDetail" class="compact-order">
     <div class="row">
-        <div class="col-xs-12  col-sm-4  col-md-3">
-            <div class="compact-order-status">
-                {{localize 'MyAccount' 'L_Status' }}
-                <br class="hidden-xs" />
-                <strong class="h4">{{localize 'RecurringCart' 'L_StatusPendingPreparation' }}</strong>
-            </div>
-
-            <hr class="compact-order-splitter  visible-xs-block">
+        <div class="col-xs-8"><strong>{{localizeFormat 'RecurringCart' 'L_UpcomingDate' FormatedNextOccurence}}</strong></div>
+        <div class="col-xs-4 text-right"><a href="{{CartDetailUrl}}" class="cta">{{ localize 'MyAccount' 'H_RecurringCartDetails' }}</a></div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-xs-8">
+            <span class="compact-order-status text-gray">{{localize 'RecurringCart' 'L_StatusPendingPreparation' }}</span><br/>
+            <img src="/UI.Package/Images/recurring.png" alt="{{localize 'General' 'L_RecurringProduct'}}" title="{{localize 'General' 'L_RecurringProduct'}}" />
         </div>
-
-        <div class="col-xs-12  col-sm-8  col-md-9">
-            <div class="row">
-                <div class="col-sm-8">
-                    <div class="compact-order-date">
-                        <strong class="h4">{{localizeFormat 'RecurringCart' 'L_UpcomingDate' FormatedNextOccurence}}</strong>
-                    </div>
-
-                    <p>
-                        <img src="/UI.Package/Images/recurring.png" alt="{{localize 'General' 'L_RecurringProduct'}}" title="{{localize 'General' 'L_RecurringProduct'}}" />
-                    </p>
-                </div>
-                <div class="col-sm-4">
-                    <p class="compact-order-total"><strong class="h4">{{Total}}</strong></p>
-                </div>
-                <div class="col-sm-12">
-                    <div class="row">                        
-                        <div class="col-xs-6  small"></div>
-                        <div class="col-xs-6  text-right  small"><a href="{{CartDetailUrl}}" class="cta">{{ localize 'MyAccount' 'H_RecurringCartDetails' }}</a></div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <div class="col-xs-4 text-right">Total: <strong class="h4">{{Total}}</strong></div>
     </div>
 </div>

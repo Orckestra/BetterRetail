@@ -236,6 +236,7 @@ namespace Orckestra.Composer.Cart.Factory.Order
             var orderInfo = ViewModelMapper.MapTo<OrderDetailInfoViewModel>(rawOrder, param.CultureInfo);
 
             orderInfo.OrderStatus = param.OrderStatuses[rawOrder.OrderStatus];
+            orderInfo.OrderStatusRaw = rawOrder.OrderStatus;
 
             var orderDetailUrl = UrlFormatter.AppendQueryString(param.OrderDetailBaseUrl, new NameValueCollection
                 {
