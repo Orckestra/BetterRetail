@@ -55,7 +55,7 @@ module Orckestra.Composer {
 
         public getAvailableEditList() {
             this.getAddresses();
-            this.getShippingMethods();
+            this.getShippingMethodsList();
             this.getPaymentMethods();
         }
 
@@ -66,7 +66,7 @@ module Orckestra.Composer {
         }
 
         public renderShippingMethods(vm) {
-            this.render('', vm);
+            this.render('RecurringScheduleDetailsShippingMethods', vm);
         }
         public renderAddresses(vm) {
             this.render('RecurringScheduleDetailsAddresses', vm);
@@ -91,9 +91,46 @@ module Orckestra.Composer {
                     this.renderAddresses(addressesVm);
                 });
         }
-        public getShippingMethods() {
-            //TODO
+        public getShippingMethodsList() {
+
+            let shippingMethodName = this.viewModel.RecurringOrderTemplateLineItemViewModels[0].ShippingMethodName;
+            this.getShippingMethods()
+                .then(shippingMethods => {
+
+                    if (!shippingMethods) {
+                        throw new Error('No viewModel received');
+                    }
+
+                    if (_.isEmpty(shippingMethods.ShippingMethods)) {
+                        throw new Error('No shipping method was found.');
+                    }
+
+                    let selectedShippingMethodName = shippingMethodName;
+                    shippingMethods.ShippingMethods.forEach(shippingMethod => {
+
+                        if (shippingMethod.Name === selectedShippingMethodName) {
+                            shippingMethods.SelectedShippingProviderId = shippingMethod.ShippingProviderId;
+                        }
+                    });
+
+                    var vm = {
+                        ShippingMethods: shippingMethods,
+                        SelectedMethod: selectedShippingMethodName
+                    };
+
+                    console.log(vm);
+
+                    this.renderShippingMethods(vm);
+                });
         }
+
+        public getShippingMethods() : Q.Promise<any> {
+            return this.recurringOrderService.getOrderTemplateShippingMethods()
+                    .fail((reason) => {
+                        console.error('Error while retrieving shipping methods', reason);
+                    });
+        }
+
         public getPaymentMethods() {
             //TODO
         }

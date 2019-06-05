@@ -333,7 +333,7 @@ module Orckestra.Composer {
         }
 
         public getOrderTemplateShippingMethods(): Q.Promise<any> {
-            return ComposerClient.get(`/api/recurringordertemplate/shippingmethods`);
+            return ComposerClient.get(`/api/cart/shippingmethodsscope`);
         }
 
         public getInactifProductsFromCustomer(): Q.Promise<any> {
