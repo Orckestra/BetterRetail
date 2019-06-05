@@ -113,12 +113,12 @@ try {
 	}
 
 	Write-Log ACTION "Extract 'C1 CMS' build version $cmsC1version ..."
-	
+	Write-Log $cmsHostPhysicalPath
 	
 	$tempUnzipPath = $genericPackagesFolder + "\temp"
 	& $7zExe x $c1Package "-o$tempUnzipPath" -y
 	robocopy $tempUnzipPath\Website $cmsHostPhysicalPath\WebSite /E /NJH /NDL /NS /NC /NP
-	Remove-Item $tempUnzipPath -recurse -force
+	#Remove-Item $tempUnzipPath -recurse -force
 
 
 	Write-Log ACTION "Starting the Website..."

@@ -43,7 +43,6 @@
         <File sourceFilename="~\Bin\Microsoft.Practices.EnterpriseLibrary.SemanticLogging.dll" targetFilename="~\Bin\Microsoft.Practices.EnterpriseLibrary.SemanticLogging.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Orckestra.Composer.dll" targetFilename="~\Bin\Orckestra.Composer.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Orckestra.Composer.Cart.dll" targetFilename="~\Bin\Orckestra.Composer.Cart.dll" allowOverwrite="true" />
-        <File sourceFilename="~\Bin\Orckestra.Composer.GoogleAnalytics.dll" targetFilename="~\Bin\Orckestra.Composer.GoogleAnalytics.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Orckestra.Composer.MyAccount.dll" targetFilename="~\Bin\Orckestra.Composer.MyAccount.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Orckestra.Composer.Product.dll" targetFilename="~\Bin\Orckestra.Composer.Product.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Orckestra.Composer.Search.dll" targetFilename="~\Bin\Orckestra.Composer.Search.dll" allowOverwrite="true" />

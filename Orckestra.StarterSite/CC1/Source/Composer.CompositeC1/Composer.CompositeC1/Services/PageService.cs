@@ -12,16 +12,16 @@ namespace Orckestra.Composer.CompositeC1.Services
     public class PageService : IPageService
     {
         /// <summary>
-        /// Returns localized URL
+        /// Returns a page in the given locale.
         /// </summary>
         /// <param name="pageId"></param>
         /// <param name="cultureInfo"></param>
         /// <returns></returns>
         public IPage GetPage(Guid pageId, CultureInfo cultureInfo = null)
         {
-            using (DataConnection connection = new DataConnection(cultureInfo))
+            using (new DataConnection(cultureInfo))
             {
-                return connection.Get<IPage>().FirstOrDefault(p => p.Id == pageId);
+                return PageManager.GetPageById(pageId);
             }
         }
 

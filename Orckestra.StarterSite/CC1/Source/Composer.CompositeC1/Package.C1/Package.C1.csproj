@@ -110,6 +110,7 @@
     <Content Include="Composer.C1.Core\install.xml">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Composer.C1.Core\Web.config.xsl" />
     <Content Include="Composer.Content.xml" />
     <Content Include="Composer.Core.xml" />
   </ItemGroup>

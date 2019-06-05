@@ -14,7 +14,6 @@ namespace Orckestra.Composer
         public static void Start()
         {
             DynamicModuleUtility.RegisterModule(typeof(RequestBranderModule));
-            DynamicModuleUtility.RegisterModule(typeof(AntiCookieTamperingModule));
         }
     }
 }

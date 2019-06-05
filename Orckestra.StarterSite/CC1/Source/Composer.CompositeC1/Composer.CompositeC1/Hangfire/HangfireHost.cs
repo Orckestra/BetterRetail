@@ -1,25 +1,29 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
+using System.Web.Hosting;
 using Autofac;
+using Autofac.Core;
 using Hangfire;
 using Hangfire.CompositeC1;
-using Orckestra.Composer.CompositeC1.Sitemap;
-using Orckestra.Composer.Providers;
-using Orckestra.Composer.Sitemap;
-using Orckestra.Composer.Sitemap.Config;
-using Orckestra.Composer.Sitemap.Product;
-using Orckestra.Overture;
-using System.Web.Hosting;
-using Orckestra.Composer.Product.Providers;
-using Autofac.Core;
-using System.Diagnostics;
 
 namespace Orckestra.Composer.CompositeC1.Hangfire
 {
     public class HangfireHost : IDisposable, IRegisteredObject
     {
         public static HangfireHost Current { get; set; } = new HangfireHost();
+
+        public static bool IsEnabled
+        {
+            get
+            {
+                // Switch to disable hangfire, for example per environment 
+                // Use App Setting in web.config like <add key="hangfire:AutomaticAppStartup" value="false" />
+                var autoStartConfig = (ConfigurationManager.AppSettings["hangfire:AutomaticAppStartup"] ?? "true");
+
+                return (autoStartConfig.ToLower() != "false");
+            }
+        }
 
         public IContainer Container { get; protected set; }
 

@@ -127,6 +127,17 @@ namespace Composer.LoadTest.Cookie
             _httpResponse.Cookies.Set(cookie);
         }
 
+        public void Clear()
+        {
+            var cookie = new HttpCookie(_cookieName, "")
+            {
+                HttpOnly = true,
+                Expires = DateTime.UtcNow.AddDays(-30)
+            };
+
+            _httpResponse.Cookies.Set(cookie);
+        }
+
         #region V1
         private string ProtectV1(TestCookieDto dto)
         {
