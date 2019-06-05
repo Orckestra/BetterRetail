@@ -14,6 +14,8 @@ module Orckestra.Composer {
         private viewModelName = '';
         private id = '';
         private viewModel;
+        protected modalElementSelector: string = '#confirmationModal';
+        private uiModal: UIModal;
 
         protected customerService: ICustomerService = new CustomerService(new CustomerRepository());
         protected recurringCartAddressRegisteredService: RecurringCartAddressRegisteredService =
@@ -25,6 +27,7 @@ module Orckestra.Composer {
             this.viewModelName = 'MyRecurringScheduleDetails';
 
             this.getRecurringTemplateDetail();
+            this.uiModal = new UIModal(window, this.modalElementSelector, this.deleteAddress, this);
         }
 
         public getRecurringTemplateDetail() {
@@ -44,7 +47,6 @@ module Orckestra.Composer {
 
                     this.id = id;
                     this.reRenderPage(result);
-                    this.getAvailableEditList();
                 })
                 .fail((reason) => {
                     console.error(reason);
@@ -60,6 +62,7 @@ module Orckestra.Composer {
         public reRenderPage(vm) {
             //this.viewModel = vm;
             this.render(this.viewModelName, vm);
+            this.getAvailableEditList();
         }
 
         public renderShippingMethods(vm) {
@@ -93,6 +96,60 @@ module Orckestra.Composer {
         }
         public getPaymentMethods() {
             //TODO
+        }
+
+        private useShippingAddress() : Boolean {
+            var useShippingAddress = $(this.context.container).find('input[name=UseShippingAddress]:checked').val() === 'true';
+            return useShippingAddress;
+        }
+
+
+        public changeUseShippingAddress() {
+
+            this.setBillingAddressFormVisibility();
+            this.setSelectedBillingAddress();
+            //TODO: form validation?
+        }
+
+        private setBillingAddressFormVisibility() {
+
+            var useShippingAddress: Boolean = this.useShippingAddress();
+            if (useShippingAddress) {
+                $('#BillingAddressContent').addClass('hide');
+            } else {
+                $('#BillingAddressContent').removeClass('hide');
+            }
+        }
+
+        protected setSelectedBillingAddress() {
+
+            var selectedBillingAddressId: string = $(this.context.container).find('input[name=BillingAddressId]:checked').val();
+
+            if (!selectedBillingAddressId) {
+                return;
+            }
+        }
+
+        public deleteAddressConfirm(actionContext: IControllerActionContext) {
+            this.uiModal.openModal(actionContext.event);
+        }
+
+          /**
+         * Requires the element in action context to have a data-address-id.
+         */
+        protected deleteAddress(event: JQueryEventObject): Q.Promise<void> {
+
+            let element = $(event.target);
+            var $addressListItem = element.closest('[data-address-id]');
+            var addressId = $addressListItem.data('address-id');
+
+            var busy = this.asyncBusy({elementContext: element, containerContext: $addressListItem });
+
+            return this.customerService.deleteAddress(addressId, '')
+                .then(result => {
+                    this.reRenderPage(this.viewModel);
+                })
+                .fin(() => busy.done());
         }
     }
 }

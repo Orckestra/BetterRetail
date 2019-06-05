@@ -110,7 +110,7 @@ namespace Orckestra.Composer.MyAccount.Api
             return Ok(viewModel);
         }
 
-        [HttpPut]
+        [HttpPost]
         [ActionName("recurringcartaddresses")]
         public virtual async Task<IHttpActionResult> GetRecurringCartAddressAsync([FromBody]GetRecurringCartAddressRequest request)
         {
@@ -242,12 +242,12 @@ namespace Orckestra.Composer.MyAccount.Api
 
         [HttpPost]
         [ActionName("recurringorderstemplatesaddresses")]
-        public virtual async Task<IHttpActionResult> GetRecurringOrderTemplatesAddressesAsync(string id)
+        public virtual async Task<IHttpActionResult> GetRecurringOrderTemplatesAddressesAsync([FromBody]GetRecurringTemplateAddressRequest request)
         {
             var recurringOrderScheduleUrl = RecurringScheduleUrlProvider.GetRecurringScheduleDetailsUrl(new GetRecurringScheduleDetailsUrlParam
             {
                 CultureInfo = ComposerContext.CultureInfo,
-                RecurringScheduleId = id
+                RecurringScheduleId = request.Id
             });
 
             var addAddressUrl = MyAccountUrlProvider.GetAddAddressUrl(new GetMyAccountUrlParam { CultureInfo = ComposerContext.CultureInfo, ReturnUrl = recurringOrderScheduleUrl });

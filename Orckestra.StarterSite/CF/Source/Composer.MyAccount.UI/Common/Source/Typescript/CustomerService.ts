@@ -76,7 +76,7 @@ module Orckestra.Composer {
 
         private getRecurringTemplateAddressesImpl(id: string): Q.Promise<any> {
 
-            return this.customerRepository.getRecurringCartAddresses(id);
+            return this.customerRepository.getRecurringTemplateAddresses(id);
         }
 
         /**

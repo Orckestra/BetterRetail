@@ -33,7 +33,7 @@ module Orckestra.Composer {
             var data = {
                 CartName: cartName
             };
-            return ComposerClient.put('/api/customer/recurringcartaddresses', data);
+            return ComposerClient.post('/api/customer/recurringcartaddresses', data);
         }
 
         /**
@@ -44,7 +44,7 @@ module Orckestra.Composer {
             var data = {
                 id: id
             };
-            return ComposerClient.put('/api/customer/recurringorderstemplatesaddresses', data);
+            return ComposerClient.post('/api/customer/recurringorderstemplatesaddresses', data);
         }
 
         /**
