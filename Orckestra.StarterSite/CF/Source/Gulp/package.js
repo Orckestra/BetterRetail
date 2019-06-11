@@ -133,20 +133,8 @@
     });
 
     gulp.task('package-copy-dll', function() {
-        function copyAssembliesTo(projectLocation) {
-        /* Open packages.config file in sitecore mvc
-            var composerPackagesConfigPath = path.join(projectLocation, 'packages.config');
-        var composerPackagesConfigContent = fsSync.read(composerPackagesConfigPath);
-
-        // Extract version number for Composer
-        var match = composerPackagesConfigContent.match(/<package id="Composer" version="(.*?)" targetFramework=".*?" \/>/i);
-        if (match.length < 2) {
-            throw new Error('Cannot find Composer version in ' + composerPackagesConfigPath);
-        }
-        var version = match[1];*/
-
+        function copyAssembliesTo(destinationFolder) {
         // Copy assemblies to package destination
-            var destinationFolder = path.join(projectLocation, 'bin/');
 
         if (config.debug) {
             helpers.log('Assemblies will be copied to ' + destinationFolder);
@@ -156,8 +144,22 @@
             .pipe($.if(argv.verbose, $.using()))
             .pipe(gulp.dest(destinationFolder));
         }
+		
+		
+		// Open packages.config file
+        var composerPackagesConfigPath = path.join(config.composerCompositeC1, 'packages.config');
+        var composerPackagesConfigContent = fsSync.read(composerPackagesConfigPath);
+
+        // Extract version number for Composer
+        var match = composerPackagesConfigContent.match(/<package id="Composer" version="(.*?)" targetFramework=".*?" \/>/i);
+        if (match.length < 2) {
+            throw new Error('Cannot find Composer version in ' + composerPackagesConfigPath);
+        }
+        var version = match[1];
         
-        copyAssembliesTo(config.deployedWebsitePath);
+		copyAssembliesTo(path.join(config.composerCompositeC1, '../', 'packages/Composer.' + version, 'lib/net452'));
+		copyAssembliesTo(path.join(config.c1MvcProject, '../', 'packages/Composer.' + version, 'lib/net452'));
+        copyAssembliesTo(path.join(config.deployedWebsitePath, 'bin/'));
     });
 
     gulp.task('package-sass-imports', function () {
