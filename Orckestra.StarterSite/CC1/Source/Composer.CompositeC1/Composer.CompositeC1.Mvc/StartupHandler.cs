@@ -86,7 +86,6 @@ namespace Orckestra.Composer.CompositeC1.Mvc
             functions.RegisterAction<HeaderController>("GeneralErrors", "Composer.Header.GeneralErrors");
             functions.RegisterAction<HeaderController>("LanguageSwitch", "Composer.Header.LanguageSwitch");
             functions.RegisterAction<HeaderController>("Breadcrumb", "Composer.General.Breadcrumb");
-            functions.RegisterAction<HeaderController>("HomeLogo", "Composer.Header.HomeLogo");
             functions.RegisterAction<HeaderController>("MainMenu", "Composer.Header.MainMenu");
             functions.RegisterAction<HeaderController>("StickyLinks", "Composer.Header.StickyLinks");
             functions.RegisterAction<HeaderController>("OptionalLinks", "Composer.Header.OptionalLinks");
