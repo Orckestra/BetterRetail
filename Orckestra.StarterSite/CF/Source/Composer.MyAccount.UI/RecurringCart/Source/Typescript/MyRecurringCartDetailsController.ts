@@ -150,18 +150,20 @@ module Orckestra.Composer {
                             //TODO
                         } else if (!_.isEmpty(viewModel)) {
 
-                            let currentCart;
-                            viewModel.RecurringOrderCartsViewModel.RecurringOrderCartViewModelList.forEach(cart => {
-                                if (cart.Name === this.viewModel.Name) {
-                                    currentCart = cart;
-                                }
-                            });
+                            //TODO refresh cart cache
+                            // let currentCart;
+                            // viewModel.RecurringOrderCartsViewModel.RecurringOrderCartViewModelList.forEach(cart => {
+                            //     if (cart.Name === this.viewModel.Name) {
+                            //         currentCart = cart;
+                            //     }
+                            // });
 
-                            if (currentCart) {
-                                this.viewModel = currentCart;
-                                console.log(currentCart);
-                                this.reRenderCartPage(currentCart);
-                            }
+                            // if (currentCart) {
+                            //     this.viewModel = currentCart;
+                            //     console.log(currentCart);
+                            //     this.reRenderCartPage(currentCart);
+                            // }
+                            this.getRecurringCart();
                         }
                         busyHandle.done();
                     })
@@ -301,9 +303,6 @@ module Orckestra.Composer {
         }
 
         public saveEditShippingMethod(actionContext: IControllerActionContext) {
-            //var context: JQuery = actionContext.elementContext;
-
-            //var newType = context.data('fulfillment-method-type');
             let element = $('#ShippingMethod').find('input[name=ShippingMethod]:checked')[0];
 
             var newType = element.dataset['fulfillmentMethodType'];

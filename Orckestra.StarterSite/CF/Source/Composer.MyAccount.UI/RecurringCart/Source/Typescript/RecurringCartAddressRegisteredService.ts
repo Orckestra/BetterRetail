@@ -43,8 +43,6 @@ module Orckestra.Composer {
             return this.customerService.getRecurringTemplateAddresses(id)
                 .then(addresses => {
                     addresses.AddressesLoaded = true;
-                    //addresses.SelectedBillingAddressId = this.getSelectedBillingAddressId(cart, addresses);
-                    //addresses.SelectedShippingAddressId = this.getSelectedShippingAddressId(cart, addresses);
 
                     return addresses;
                 });

@@ -114,7 +114,13 @@ namespace Orckestra.Composer.Repositories
             if (lineitem != null)
             {
                 lineitem.RecurringOrderFrequencyName = param.RecurringOrderFrequencyName;
-                lineitem.NextOccurence = param.NextOccurence;
+
+                var newDate = param.NextOccurence;
+                var nextOccurenceWithTime = lineitem.NextOccurence;
+                newDate = new DateTime(param.NextOccurence.Year, param.NextOccurence.Month, param.NextOccurence.Day,
+                                        nextOccurenceWithTime.Hour, nextOccurenceWithTime.Minute, nextOccurenceWithTime.Second, DateTimeKind.Utc);
+                
+                lineitem.NextOccurence = newDate;
                 lineitem.ShippingAddressId = param.ShippingAddressId.ToGuid();
                 lineitem.BillingAddressId = param.BillingAddressId.ToGuid();
                 lineitem.PaymentMethodId = param.PaymentMethodId.ToGuid();

@@ -5,21 +5,17 @@
 ///<reference path='../../../../Composer.Cart.UI/RecurringOrder/source/TypeScript/Services/RecurringOrderService.ts' />
 ///<reference path='../../../../Composer.Cart.UI/RecurringOrder/source/TypeScript/Services/IRecurringOrderService.ts' />
 ///<reference path='../../../../Composer.Cart.UI/RecurringOrder/source/TypeScript/Repositories/RecurringOrderRepository.ts' />
-///<reference path='../../../../Composer.Cart.UI/MonerisPaymentProvider/source/TypeScript/MonerisPaymentService.ts' />
 
 module Orckestra.Composer {
 
     export class MyRecurringScheduleDetailsController extends Orckestra.Composer.RecurringScheduleDetailsController {
         private recurringOrderService: IRecurringOrderService = new RecurringOrderService(new RecurringOrderRepository(), this.eventHub);
-        private paymentService: MonerisPaymentService = new MonerisPaymentService();
 
         private viewModelName = '';
         private id = '';
         private viewModel;
         protected modalElementSelector: string = '#confirmationModal';
         private uiModal: UIModal;
-        protected modalElementSelectorSavedCreditCard: string = '#recurringCartPaymentConfirmationModal';
-        private uiModalSavedCreditCard: UIModal;
         private busyHandler: UIBusyHandle;
         private window: Window;
 
@@ -35,7 +31,6 @@ module Orckestra.Composer {
 
             this.getRecurringTemplateDetail();
             this.uiModal = new UIModal(window, this.modalElementSelector, this.deleteAddress, this);
-            this.uiModalSavedCreditCard = new UIModal(window, this.modalElementSelectorSavedCreditCard, this.deleteCard, this);
         }
 
         public getRecurringTemplateDetail() {
@@ -211,32 +206,6 @@ module Orckestra.Composer {
                     this.reRenderPage(this.viewModel);
                 })
                 .fin(() => busy.done());
-        }
-
-        public deletePaymentConfirm(actionContext: IControllerActionContext) {
-            this.uiModalSavedCreditCard.openModal(actionContext.event);
-        }
-
-        protected deleteCard(event: JQueryEventObject): Q.Promise<void> {
-
-            let element = $(event.target);
-            var $cardListItem = element.closest('[data-payment-id]');
-            var paymentMethodId = $cardListItem.data('payment-id');
-            var paymentProviderName = $cardListItem.data('payment-provider');
-            var cartName = this.viewModel.Name;
-
-            this.busyHandler = this.asyncBusy({elementContext: element, containerContext: $cardListItem });
-
-            return this.paymentService
-                .removeRecurringCartPaymentMethod(paymentMethodId, paymentProviderName, cartName)
-                .then(() => {
-                    //this._eventHub.publish('paymentMethodsUpdated', null)
-                    this.reRenderPage(this.viewModel);
-                })
-                .fail(reason => ErrorHandler.instance().outputError(reason))
-                .fin(() => {
-                    this.releaseBusyHandler();
-                });
         }
 
         protected releaseBusyHandler(): void {
