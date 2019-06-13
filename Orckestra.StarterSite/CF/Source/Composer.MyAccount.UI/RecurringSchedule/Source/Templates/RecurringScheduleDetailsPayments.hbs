@@ -2,6 +2,30 @@
     {{#if IsLoading}}
         {{>Loading}}
     {{else}}
-        todo
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-xs-10">
+                    <h2 class="h3">{{localize 'MyAccount' 'T_PaymentMethod' }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body">            
+            {{#if_gt SavedCreditCards.length 0}}
+                <div id="moneris-saved-credit-cards" class="moneris-panel">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <h4>{{localize 'CheckoutProcess' 'T_SelectCreditCart'}}</h4>        
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-sm-12">
+                            {{>RecurringScheduleSavedCreditCartPaymentMethod}}
+                        </div>
+                    </div>
+                </div>
+            {{/if_gt}}
+        </div>            
+        {{> RecurringCartPaymentConfirmationModal}}
     {{/if}}   
 </div>

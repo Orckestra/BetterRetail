@@ -54,6 +54,9 @@ namespace Orckestra.Composer.Factory
         protected IProductPriceViewService ProductPriceViewService { get; private set; }
         protected IOvertureClient OvertureClient { get; private set; }
         protected IRecurringScheduleUrlProvider RecurringScheduleUrlProvider { get; private set; }
+        protected IRecurringOrderProgramViewModelFactory RecurringOrderProgramViewModelFactory { get; private set; }
+        protected IRecurringOrdersRepository RecurringOrderRepository { get; private set; }
+
 
         public RecurringOrderTemplateViewModelFactory(
             IOvertureClient overtureClient,
@@ -65,7 +68,9 @@ namespace Orckestra.Composer.Factory
             IAddressRepository addressRepository,
             IProductUrlProvider productUrlProvider,
             IProductPriceViewService productPriceViewService,
-            IRecurringScheduleUrlProvider recurringScheduleUrlProvider)
+            IRecurringScheduleUrlProvider recurringScheduleUrlProvider,
+            IRecurringOrderProgramViewModelFactory recurringOrderProgramViewModelFactory,
+            IRecurringOrdersRepository recurringOrderRepository)
         {
             if (overtureClient == null) { throw new ArgumentNullException(nameof(overtureClient)); }
             if (localizationProvider == null) { throw new ArgumentNullException(nameof(localizationProvider)); }
@@ -76,6 +81,8 @@ namespace Orckestra.Composer.Factory
             if (productUrlProvider == null) { throw new ArgumentNullException(nameof(productUrlProvider)); }
             if (productPriceViewService == null) { throw new ArgumentNullException(nameof(productPriceViewService)); }
             if (recurringScheduleUrlProvider == null) { throw new ArgumentNullException(nameof(recurringScheduleUrlProvider)); }
+            if (recurringOrderProgramViewModelFactory == null) { throw new ArgumentNullException(nameof(recurringOrderProgramViewModelFactory)); }
+            if (recurringOrderRepository == null) { throw new ArgumentNullException(nameof(recurringOrderRepository)); }
 
             LocalizationProvider = localizationProvider;
             ViewModelMapper = viewModelMapper;
@@ -87,6 +94,8 @@ namespace Orckestra.Composer.Factory
             ProductPriceViewService = productPriceViewService;
             OvertureClient = overtureClient;
             RecurringScheduleUrlProvider = recurringScheduleUrlProvider;
+            RecurringOrderProgramViewModelFactory = recurringOrderProgramViewModelFactory;
+            RecurringOrderRepository = recurringOrderRepository;
         }
 
         public async Task<RecurringOrderTemplatesViewModel> CreateRecurringOrderTemplatesViewModel(CreateRecurringOrderTemplatesViewModelParam param)
@@ -336,6 +345,11 @@ namespace Orckestra.Composer.Factory
             });
             
             vm.EditUrl = recurringScheduleEditUrl;
+            vm.ScheduleUrl = param.RecurringScheduleUrl;
+
+            var program = await RecurringOrderRepository.GetRecurringOrderProgram(recrurringLineItem.ScopeId, recrurringLineItem.RecurringOrderProgramName).ConfigureAwaitWithCulture(false);
+            var programViewModel = RecurringOrderProgramViewModelFactory.CreateRecurringOrderProgramViewModel(program, param.CultureInfo);
+            vm.RecurringOrderProgramFrequencies = programViewModel?.Frequencies;
 
             return vm;
         }
@@ -422,6 +436,8 @@ namespace Orckestra.Composer.Factory
                                     lineitem.RecurringOrderFrequencyDisplayName = frequency.RecurringOrderFrequencyName;
                             }
                         }
+                        var programViewModel = RecurringOrderProgramViewModelFactory.CreateRecurringOrderProgramViewModel(program, culture);
+                        lineitem.RecurringOrderProgramFrequencies = programViewModel?.Frequencies;
                     }
                 }
             }

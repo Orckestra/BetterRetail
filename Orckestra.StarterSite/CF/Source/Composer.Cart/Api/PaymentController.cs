@@ -155,12 +155,12 @@ namespace Orckestra.Composer.Cart.Api
 
         [HttpPost]
         [ActionName("recurringorderstemplatespaymentmethods")]
-        public virtual async Task<IHttpActionResult> GetRecurringOrderTemplatesPaymentMethodsAsync(string id)
+        public virtual async Task<IHttpActionResult> GetRecurringOrderTemplatesPaymentMethodsAsync(GetRecurringOrderTemplatesPaymentMethodsRequest request)
         {
             var recurringOrderScheduleUrl = RecurringScheduleUrlProvider.GetRecurringScheduleDetailsUrl(new GetRecurringScheduleDetailsUrlParam
             {
                 CultureInfo = ComposerContext.CultureInfo,
-                RecurringScheduleId = id
+                RecurringScheduleId = request.Id
             });
 
             //TODO : MyWalletPRovider when ready

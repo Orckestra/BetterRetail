@@ -109,6 +109,11 @@ namespace Orckestra.Composer.ViewModels
         public string RecurringOrderFrequencyDisplayName { get; set; }
 
         /// <summary>
+        /// Available frequencies associated to the RecurringOrderProgramName
+        /// </summary>
+        public List<RecurringOrderProgramFrequencyViewModel> RecurringOrderProgramFrequencies { get; set; }
+
+        /// <summary>
         /// Gets or sets the next occurrence of the reccuring template lineitem
         /// </summary>
         public DateTime NextOccurence { get; set; }
@@ -152,5 +157,10 @@ namespace Orckestra.Composer.ViewModels
         /// Gets or sets the url to edit the recurring order line item details
         /// </summary>
         public string EditUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets the url to Recurring Schedule page
+        /// </summary>
+        public string ScheduleUrl { get; set; }
     }
 }

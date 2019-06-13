@@ -19,7 +19,7 @@ using Orckestra.Composer.Services.Lookup;
 using Orckestra.Composer.Utils;
 using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel.Orders;
-using ServiceStack;
+using Orckestra.Composer.Logging;
 
 namespace Orckestra.Composer.Cart.Services
 {
@@ -35,7 +35,8 @@ namespace Orckestra.Composer.Cart.Services
         protected IViewModelMapper ViewModelMapper { get; private set; }
         protected IPaymentProviderFactory PaymentProviderFactory { get; private set; }
         protected IRecurringOrderTemplatesViewService RecurringOrderTemplatesViewService { get; private set; }
-        protected IRecurringOrderCartsViewService RecurringOrderCartsViewService { get; private set; }        
+        protected IRecurringOrderCartsViewService RecurringOrderCartsViewService { get; private set; }
+        private static ILog Log = LogProvider.GetCurrentClassLogger();
 
         public PaymentViewService(IPaymentRepository paymentRepository, ICartViewModelFactory cartViewModelFactory, ICartRepository cartRepository,
          ILookupService lookupService, IViewModelMapper viewModelMapper, IPaymentProviderFactory paymentProviderFactory, 
@@ -504,14 +505,29 @@ namespace Orckestra.Composer.Cart.Services
                 CustomerId = param.CustomerId,
                 ScopeId = param.ScopeId,
                 ProviderName = pName
-            }));
+            })).ToArray();
 
-            var paymentMethods = await Task.WhenAll(tasks).ConfigureAwaitWithCulture(false);
-            var list = paymentMethods.SelectMany(t => t);
+            try
+            {
+                await Task.WhenAll(tasks).ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                Log.Warn($"GetCustomerPaymentMethodsRequest failed. {e.ToString()}");
+            }
+
+            tasks = tasks.Where(t => !t.IsFaulted).ToArray();
+            var paymentMethods = tasks.SelectMany(t => t.Result).ToList();
+
+            var savedCreditCardVm = paymentMethods.Select(s => CartViewModelFactory.MapSavedCreditCard(s, param.CultureInfo)).ToList();
+            foreach (var vm in savedCreditCardVm)
+            {
+                await IsSavedCardUsedInRecurringOrders(vm, param.CultureInfo, param.CustomerId, param.ScopeId).ConfigureAwaitWithCulture(false);
+            }
 
             return new CustomerPaymentMethodListViewModel
             {
-                PaymentMethods = list.Select(s => CartViewModelFactory.MapSavedCreditCard(s, param.CultureInfo)).ToList(),
+                SavedCreditCards = savedCreditCardVm
                 //AddWalletUrl
             };
         }

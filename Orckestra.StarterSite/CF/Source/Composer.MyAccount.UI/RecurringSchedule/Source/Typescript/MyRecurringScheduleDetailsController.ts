@@ -5,17 +5,23 @@
 ///<reference path='../../../../Composer.Cart.UI/RecurringOrder/source/TypeScript/Services/RecurringOrderService.ts' />
 ///<reference path='../../../../Composer.Cart.UI/RecurringOrder/source/TypeScript/Services/IRecurringOrderService.ts' />
 ///<reference path='../../../../Composer.Cart.UI/RecurringOrder/source/TypeScript/Repositories/RecurringOrderRepository.ts' />
+///<reference path='../../../../Composer.Cart.UI/MonerisPaymentProvider/source/TypeScript/MonerisPaymentService.ts' />
 
 module Orckestra.Composer {
 
     export class MyRecurringScheduleDetailsController extends Orckestra.Composer.RecurringScheduleDetailsController {
         private recurringOrderService: IRecurringOrderService = new RecurringOrderService(new RecurringOrderRepository(), this.eventHub);
+        private paymentService: MonerisPaymentService = new MonerisPaymentService();
 
         private viewModelName = '';
         private id = '';
         private viewModel;
         protected modalElementSelector: string = '#confirmationModal';
         private uiModal: UIModal;
+        protected modalElementSelectorSavedCreditCard: string = '#recurringCartPaymentConfirmationModal';
+        private uiModalSavedCreditCard: UIModal;
+        private busyHandler: UIBusyHandle;
+        private window: Window;
 
         protected customerService: ICustomerService = new CustomerService(new CustomerRepository());
         protected recurringCartAddressRegisteredService: RecurringCartAddressRegisteredService =
@@ -25,9 +31,11 @@ module Orckestra.Composer {
 
             super.initialize();
             this.viewModelName = 'MyRecurringScheduleDetails';
+            this.window = window;
 
             this.getRecurringTemplateDetail();
             this.uiModal = new UIModal(window, this.modalElementSelector, this.deleteAddress, this);
+            this.uiModalSavedCreditCard = new UIModal(window, this.modalElementSelectorSavedCreditCard, this.deleteCard, this);
         }
 
         public getRecurringTemplateDetail() {
@@ -44,7 +52,6 @@ module Orckestra.Composer {
                 .then(result => {
                     console.log(result);
                     this.viewModel = result;
-
                     this.id = id;
                     this.reRenderPage(result.RecurringOrderTemplateLineItemViewModels[0]);
                 })
@@ -70,6 +77,9 @@ module Orckestra.Composer {
         }
         public renderAddresses(vm) {
             this.render('RecurringScheduleDetailsAddresses', vm);
+        }
+        public renderPayment(vm) {
+            this.render('RecurringScheduleDetailsPayments', vm);
         }
 
         public getAddresses() {
@@ -125,7 +135,28 @@ module Orckestra.Composer {
         }
 
         public getPaymentMethods() {
-            //TODO
+
+            let busy = this.asyncBusy();
+            this.renderPayment({ IsLoading: true });
+
+            let data: IRecurringOrderGetTemplatePaymentMethods = {
+                id: this.id
+            };
+            this.recurringOrderService.getTemplatePaymentMethods(data)
+                .then(result => {
+
+                    let selected = this.viewModel.RecurringOrderTemplateLineItemViewModels[0].PaymentMethodId;
+                    result.SavedCreditCards.forEach(payment => {
+                        payment.IsSelected = payment.Id === selected;
+                    });
+
+                    console.log(result);
+
+                    this.renderPayment(result);
+                });
+
+
+            busy.done();
         }
 
         private useShippingAddress() : Boolean {
@@ -180,6 +211,140 @@ module Orckestra.Composer {
                     this.reRenderPage(this.viewModel);
                 })
                 .fin(() => busy.done());
+        }
+
+        public deletePaymentConfirm(actionContext: IControllerActionContext) {
+            this.uiModalSavedCreditCard.openModal(actionContext.event);
+        }
+
+        protected deleteCard(event: JQueryEventObject): Q.Promise<void> {
+
+            let element = $(event.target);
+            var $cardListItem = element.closest('[data-payment-id]');
+            var paymentMethodId = $cardListItem.data('payment-id');
+            var paymentProviderName = $cardListItem.data('payment-provider');
+            var cartName = this.viewModel.Name;
+
+            this.busyHandler = this.asyncBusy({elementContext: element, containerContext: $cardListItem });
+
+            return this.paymentService
+                .removeRecurringCartPaymentMethod(paymentMethodId, paymentProviderName, cartName)
+                .then(() => {
+                    //this._eventHub.publish('paymentMethodsUpdated', null)
+                    this.reRenderPage(this.viewModel);
+                })
+                .fail(reason => ErrorHandler.instance().outputError(reason))
+                .fin(() => {
+                    this.releaseBusyHandler();
+                });
+        }
+
+        protected releaseBusyHandler(): void {
+            if (this.busyHandler) {
+                this.busyHandler.done();
+                this.busyHandler = null;
+            }
+        }
+
+        public saveRecurringOrderTemplate(actionContext: IControllerActionContext): Q.Promise<void> {
+
+            let lineItemId = this.id;
+            let paymentMethodId;
+            let shippingAddressId;
+            let billingAddressId;
+            let nextOccurence;
+            let frequencyName;
+            let shippingProviderId;
+            let shippingMethodName;
+            let isAllValid = true;
+
+            paymentMethodId = $(this.context.container).find('input[name=PaymentMethod]:checked').val();
+            shippingAddressId = $(this.context.container).find('input[name=ShippingAddressId]:checked').val();
+            billingAddressId = $(this.context.container).find('input[name=BillingAddressId]:checked').val();
+
+            if (this.useShippingAddress()) {
+                billingAddressId = shippingAddressId;
+            }
+
+            let element = <HTMLInputElement>$('#NextOcurrence')[0];
+            let newDate = element.value;
+            let isValid = this.nextOcurrenceIsValid(newDate);
+
+            if (isValid) {
+                nextOccurence = newDate;
+            } else {
+                isAllValid = false;
+                console.error('Error: invalid date');
+            }
+
+            let frequency: any = $('#modifyFrequency').find(':selected')[0];
+            frequencyName = frequency.value;
+            if (frequencyName === '' || frequencyName === undefined) {
+                isAllValid = false;
+                console.error('Error: invalid frequency');
+            }
+
+            shippingProviderId = $('#ShippingProviderId').val();
+            let elementShipping = $('#ShippingMethod').find('input[name=ShippingMethod]:checked');
+            shippingMethodName = elementShipping.val();
+
+            if (isAllValid) {
+
+                this.busyHandler = this.asyncBusy({ elementContext: actionContext.elementContext });
+                let updateTemplateLineItemParam: IRecurringOrderTemplateLineItemUpdateParam = {
+
+                    nextOccurence: nextOccurence,
+                    lineItemId: lineItemId,
+                    billingAddressId: billingAddressId,
+                    shippingAddressId: shippingAddressId,
+                    paymentMethodId: paymentMethodId,
+                    frequencyName: frequencyName,
+                    shippingProviderId: shippingProviderId,
+                    shippingMethodName: shippingMethodName
+                };
+
+                this.recurringOrderService.updateTemplateLineItem(updateTemplateLineItemParam)
+                    .then(result => {
+
+                        var templateLineItems = _.map(result.RecurringOrderTemplateViewModelList, (x: any) => {
+                        return x.RecurringOrderTemplateLineItemViewModels;
+                        });
+
+                        var templateLineItemsList = _.reduce(templateLineItems,  function(a, b){ return a.concat(b); }, []);
+                        var item = templateLineItemsList.filter(u => u.Id === this.id);
+
+                        var vm = {
+                            RecurringOrderTemplateLineItemViewModels: item
+                        };
+
+                        this.viewModel = vm;
+                        this.reRenderPage(item[0]);
+                    }).fin(() => this.releaseBusyHandler());
+            }
+            return null;
+        }
+
+        public nextOcurrenceIsValid(value) {
+            let newDate = this.convertDateToUTC(new Date(value));
+            let today = this.convertDateToUTC(new Date(new Date().setHours(0, 0, 0, 0)));
+
+            if (newDate > today) {
+                return true;
+            }
+            return false;
+        }
+
+        private convertDateToUTC(date) {
+            return new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(),
+            date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
+        }
+
+        public cancelRecurringOrderTemplate(actionContext: IControllerActionContext) {
+
+            let element = actionContext.elementContext[0];
+            let url = element.dataset['scheduleurl'];
+
+            this.window.location.href = url;
         }
     }
 }

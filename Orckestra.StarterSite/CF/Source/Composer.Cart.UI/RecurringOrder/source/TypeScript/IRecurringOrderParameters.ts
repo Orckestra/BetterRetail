@@ -113,4 +113,8 @@ module Orckestra.Composer {
         paymentType: string;
         paymentMethodId: string;
     }
+
+    export interface IRecurringOrderGetTemplatePaymentMethods {
+        id: string;
+    }
 }

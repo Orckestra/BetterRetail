@@ -11,9 +11,9 @@ namespace Orckestra.Composer.Cart.ViewModels
     {
         public CustomerPaymentMethodListViewModel()
         {
-            PaymentMethods = new List<SavedCreditCardPaymentMethodViewModel>();
+            SavedCreditCards = new List<SavedCreditCardPaymentMethodViewModel>();
         }
-        public List<SavedCreditCardPaymentMethodViewModel> PaymentMethods { get; set; }
+        public List<SavedCreditCardPaymentMethodViewModel> SavedCreditCards { get; set; }
 
         /// <summary>
         /// Url to add a credit card to the customer's wallet profile

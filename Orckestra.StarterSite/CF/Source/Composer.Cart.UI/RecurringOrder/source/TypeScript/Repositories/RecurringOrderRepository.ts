@@ -404,5 +404,17 @@ module Orckestra.Composer {
             return ComposerClient.post(`/api/recurringordertemplate/getrecurringordertemplatedetails`, data);
         }
 
+        public getTemplatePaymentMethods(getTemplatePaymentMethodsParam: IRecurringOrderGetTemplatePaymentMethods): Q.Promise<any> {
+            const {id} = getTemplatePaymentMethodsParam;
+            if (!id) {
+                throw new Error('id is required');
+            }
+
+            const data = {
+                Id: id,
+            };
+
+            return ComposerClient.post(`/api/payment/recurringorderstemplatespaymentmethods`, data);
+        }
     }
 }

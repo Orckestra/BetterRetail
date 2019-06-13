@@ -1,4 +1,4 @@
-<div data-templateid="MyRecurringScheduleDetails" class="panel  panel-default">
+<div data-templateid="MyRecurringScheduleDetails" class="">
     {{#if IsLoading}}
         {{>Loading}}
     {{else}}
@@ -6,6 +6,7 @@
         {{>RecurringScheduleDetailsNextOccurence}}  
         {{>RecurringScheduleDetailsShippingMethods}}      
         {{>RecurringScheduleDetailsAddresses}}
-        {{>RecurringScheduleDetailsPayments}}
+        {{>RecurringScheduleDetailsPayments}}        
+        {{>RecurringScheduleDetailsActions}}
     {{/if}}   
 </div>

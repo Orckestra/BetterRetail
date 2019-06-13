@@ -147,6 +147,10 @@ module Orckestra.Composer {
             return this.repository.getRecurringTemplateDetail(recurringOrderTemplateId);
         }
 
+        public getTemplatePaymentMethods(getTemplatePaymentMethodsParam: IRecurringOrderGetTemplatePaymentMethods): Q.Promise<any> {
+            return this.repository.getTemplatePaymentMethods(getTemplatePaymentMethodsParam);
+        }
+
         private _mapLineItemToRequest(lineItem: any): any {
             return {
                 CategoryId: lineItem.ProductSummary.CategoryId,
