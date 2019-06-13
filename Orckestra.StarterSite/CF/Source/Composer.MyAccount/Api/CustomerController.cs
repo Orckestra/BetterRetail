@@ -122,8 +122,8 @@ namespace Orckestra.Composer.MyAccount.Api
                 RecurringCartName = request.CartName
             });
 
-            var addAddressUrl = RecurringCartUrlProvider.GetRecurringCartAddAddressUrl(new GetRecurringCartsUrlParam { CultureInfo = ComposerContext.CultureInfo, ReturnUrl = cartsUrl });
-            var editAddressBaseUrl = RecurringCartUrlProvider.GetRecurringCarUpdateAddressBaseUrl(new GetRecurringCartsUrlParam { CultureInfo = ComposerContext.CultureInfo, ReturnUrl = cartsUrl });
+            var addAddressUrl = MyAccountUrlProvider.GetAddAddressUrl(new GetMyAccountUrlParam { CultureInfo = ComposerContext.CultureInfo, ReturnUrl = cartsUrl });
+            var editAddressBaseUrl = MyAccountUrlProvider.GetUpdateAddressBaseUrl(new GetMyAccountUrlParam { CultureInfo = ComposerContext.CultureInfo, ReturnUrl = cartsUrl });
 
             var viewModel = await CustomerAddressViewService.GetAddressListViewModelAsync(new GetAddressListViewModelParam
             {
@@ -251,7 +251,7 @@ namespace Orckestra.Composer.MyAccount.Api
             });
 
             var addAddressUrl = MyAccountUrlProvider.GetAddAddressUrl(new GetMyAccountUrlParam { CultureInfo = ComposerContext.CultureInfo, ReturnUrl = recurringOrderScheduleUrl });
-            var editAddressBaseUrl = MyAccountUrlProvider.GetUpdateAddressBaseUrl(new GetMyAccountUrlParam { CultureInfo = ComposerContext.CultureInfo });
+            var editAddressBaseUrl = MyAccountUrlProvider.GetUpdateAddressBaseUrl(new GetMyAccountUrlParam { CultureInfo = ComposerContext.CultureInfo, ReturnUrl = recurringOrderScheduleUrl });
             
             var viewModel = await CustomerAddressViewService.GetAddressListViewModelAsync(new GetAddressListViewModelParam
             {

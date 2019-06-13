@@ -42,22 +42,5 @@ namespace Orckestra.Composer.CompositeC1.Providers
                     {"name", param.RecurringCartName }
                 });
         }
-
-        public string GetRecurringCartAddAddressUrl(GetRecurringCartsUrlParam param)
-        {
-            if (param == null) { throw new ArgumentNullException("param"); }
-
-            var url = PageService.GetPageUrl(PagesConfiguration.AddAddressPageId, param.CultureInfo);
-            return UrlProviderHelper.BuildUrlWithParams(url, param.ReturnUrl);
-        }
-
-        public string GetRecurringCarUpdateAddressBaseUrl(GetRecurringCartsUrlParam param)
-        {
-            if (param == null) { throw new ArgumentNullException("param"); }
-
-            var url = PageService.GetPageUrl(PagesConfiguration.UpdateAddressPageId, param.CultureInfo);
-            return UrlProviderHelper.BuildUrlWithParams(url, param.ReturnUrl);
-        }
-
     }
 }

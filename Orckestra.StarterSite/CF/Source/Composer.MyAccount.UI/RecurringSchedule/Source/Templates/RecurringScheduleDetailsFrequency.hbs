@@ -63,14 +63,16 @@
                             <div class="row">
                                 <div class="col-sm-12">
                                     <strong>
-                                        <span class="cart-quantity-template" data-lineitemid="{{Id}}" data-initial-qty="{{Quantity}}" data-qa="checkout-product-quantity">{{Quantity}}</span>                                    
+                                        <span class="cart-quantity-template" data-lineitemid="{{Id}}" data-initial-qty="{{Quantity}}" data-qa="checkout-product-quantity">{{Quantity}}</span>
                                     </strong>
                                 </div>
                             </div>
                         </div>
                         <div class="display-table-cell col-xs-4 col-sm-2 xs-small text-sm-right">
                             <div class="text-align-button">
-                                <strong class="cart-subtotal-price" data-qa="cart-product-subtotal">{{Total}}<sup>*</sup></strong>
+                                <strong class="cart-subtotal-price" data-qa="cart-product-subtotal">{{Total}}
+                                    {{!-- <sup>*</sup> --}}
+                                </strong>
                             </div>
                         </div>
                     </div>
@@ -92,10 +94,10 @@
                                     {{/each}}
                                 </select>
                             </div>
-                        {{/if}} 
-                    </div>        
+                        {{/if}}
+                    </div>
                 </div>
             {{/if}}
         </div>
-    {{/if}}   
+    {{/if}}
 </div>

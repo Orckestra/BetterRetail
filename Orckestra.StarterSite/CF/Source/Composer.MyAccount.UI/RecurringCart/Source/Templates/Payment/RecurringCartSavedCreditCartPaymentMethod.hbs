@@ -7,10 +7,6 @@
             data-parsley-errors-container="#payment-errors"
             data-payment-id={{PaymentId}}
             required="required" />
-    <div>
-        <a href="{{AddPaymentUrl}}" data-qa="checkout-create-payment-link" class="hitbox" title="{{localize 'MyAccount' 'B_AddNewPayment'}}">{{localize 'MyAccount' 'B_AddNewPayment'}}</a>
-    </div>
-
     {{#if_neq SavedCreditCards.length 0}}<br/>{{/if_neq}}
 
     {{#each SavedCreditCards}}
