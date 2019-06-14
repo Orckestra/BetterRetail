@@ -87,8 +87,10 @@
                         <span class="recurring-text">{{RecurringOrderFrequencyDisplayName}}</span>
                         {{/if}}
                     </div>
-                    <div class="recurring-edit-buttons line-item-actions">
-                        <a class="cta" href="{{EditUrl}}" title="{{localize 'RecurringSchedule' 'L_EditDetails'}}">{{localize 'RecurringSchedule' 'L_EditDetails'}}</a>
+                    <div class="recurring-edit-buttons line-item-actions">                        
+                        <button class="cta button-like-link" role="button" data-oc-click="" data-qa="lineitem-edit" >
+                            <a class="cta" href="{{EditUrl}}" title="{{localize 'RecurringSchedule' 'L_EditDetails'}}">{{localize 'RecurringSchedule' 'L_EditDetails'}}</a>
+                        </button>
                     </div>
                 </div>
             </div>
