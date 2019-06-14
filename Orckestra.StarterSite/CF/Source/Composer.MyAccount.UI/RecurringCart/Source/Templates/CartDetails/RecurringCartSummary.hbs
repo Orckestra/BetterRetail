@@ -16,11 +16,7 @@
             </div>
         </div>
 
-       {{#each LineItemDetailViewModels}}
-            {{#unless IsValid}}
-                  {{>RecurringLineItemDetail}}
-            {{/unless}}
-	   {{/each}}
+        {{>RecurringLineItemDetail}}
     </div>
 </div>
 {{/if_neq}}
@@ -40,11 +36,7 @@
         </div>
     </div>
     <div class="panel-body">
-        {{#each LineItemDetailViewModels}}
-    	    {{#if IsValid}}
-                  {{>RecurringLineItemDetail}}
-            {{/if}}
-    	{{/each}}
+        {{>RecurringLineItemDetail}}
     </div>
 </div>
 {{/if_neq}}
