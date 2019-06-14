@@ -49,17 +49,19 @@ namespace Orckestra.Composer.MyAccount.Repositories
         /// and is part of the ForgotPassword process
         /// </summary>
         /// <param name="username">The unique login Name of the customer to reset</param>
+        /// <param name="scopeId">The scope id</param>
         /// <param name="newPassword">The new password to set</param>
         /// <param name="passwordAnswer">The answer to the password question</param>
-        Task ResetPasswordAsync(string username, string newPassword, string passwordAnswer);
+        Task ResetPasswordAsync(string username, string scopeId, string newPassword, string passwordAnswer);
 
         /// <summary>
         /// Sets the new password for a customer.
         /// </summary>
         /// <param name="username">The unique login Name of the customer to update</param>
+        /// <param name="scopeId">The scope id</param>
         /// <param name="oldPassword">The current login password of the customer to update</param>
         /// <param name="newPassword">The new password to set</param>
-        Task ChangePasswordAsync(string username, string oldPassword, string newPassword);
+        Task ChangePasswordAsync(string username, string scopeId, string oldPassword, string newPassword);
 
         /// <summary>
         /// Update User infos
