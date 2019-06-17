@@ -73,6 +73,7 @@ module Orckestra.Composer {
 
         private applyUpdateLineItemQuantity(args: any) {
 
+            var context: JQuery = args.actionContext.elementContext;
             this.busyHandler = this.asyncBusy({ elementContext: args.actionContext.elementContext });
             let actionElementSpan = args.context.find('span.fa').not('.loading-indicator');
 
@@ -90,7 +91,14 @@ module Orckestra.Composer {
 
                     //render only section?
                     this.reRenderPage(result);
-                }).fin(() => this.releaseBusyHandler());
+                })
+                .fail((reason: any) => this.onLineItemQuantityFailed(context, reason))
+                .fin(() => this.releaseBusyHandler());
+        }
+
+        protected onLineItemQuantityFailed(context: JQuery, reason: any): void {
+            console.error('Error while updating line item quantity.', reason);
+            ErrorHandler.instance().outputErrorFromCode('LineItemQuantityFailed');
         }
 
         public updateQuantity(action: string, quantity: number): number {

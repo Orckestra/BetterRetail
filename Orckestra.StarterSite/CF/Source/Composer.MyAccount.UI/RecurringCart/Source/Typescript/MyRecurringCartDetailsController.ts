@@ -47,8 +47,6 @@ module Orckestra.Composer {
         private updateWaitTime = 300;
         protected modalElementSelector: string = '#confirmationModal';
         private uiModal: UIModal;
-        protected modalElementSelectorSavedCreditCard: string = '#recurringCartPaymentConfirmationModal';
-        private uiModalSavedCreditCard: UIModal;
         private busyHandler: UIBusyHandle;
 
 
@@ -68,7 +66,6 @@ module Orckestra.Composer {
 
             this.getRecurringCart();
             this.uiModal = new UIModal(window, this.modalElementSelector, this.deleteAddress, this);
-            this.uiModalSavedCreditCard = new UIModal(window, this.modalElementSelectorSavedCreditCard, this.deleteCard, this);
         }
 
         public getRecurringCart() {
@@ -172,7 +169,8 @@ module Orckestra.Composer {
                         busyHandle.done();
                     });
             } else {
-                console.log('Error: invalid date');
+                console.error('Error: Invalid date while saving cart');
+                ErrorHandler.instance().outputErrorFromCode('InvalidDateSelected');
             }
         }
 
@@ -376,7 +374,7 @@ module Orckestra.Composer {
                         this.reRenderCartPage(result);
                     })
                     .fail((reason) => {
-                        console.error(reason);
+                        console.error('Error: Error while saving shipping method', reason);
                     })
                     .fin(() => busy.done());
             }
@@ -460,7 +458,7 @@ module Orckestra.Composer {
                     this.reRenderCartPage(result);
                 })
                 .fail((reason) => {
-                    console.error(reason);
+                    console.error('Error: Error while saving addresses', reason);
                 })
                 .fin(() => busy.done());
         }
@@ -577,6 +575,7 @@ module Orckestra.Composer {
 
         private applyUpdateLineItemQuantity(args: any) {
 
+            var context: JQuery = args.actionContext.elementContext;
             var busy = this.asyncBusy({ elementContext: args.actionContext.elementContext });
             let actionElementSpan =  args.context.find('span.fa').not('.loading-indicator');
 
@@ -596,8 +595,13 @@ module Orckestra.Composer {
 
                     this.reRenderCartPage(result);
                 })
-                .fail((reason: any) => console.error('Error while updating line item quantity.', reason))
+                .fail((reason: any) => this.onLineItemQuantityFailed(context, reason))
                 .fin(() => busy.done());
+        }
+
+        protected onLineItemQuantityFailed(context: JQuery, reason: any): void {
+            console.error('Error while updating line item quantity.', reason);
+            ErrorHandler.instance().outputErrorFromCode('LineItemQuantityFailed');
         }
 
         public updateQuantity(action: string, quantity: number): number {
@@ -704,35 +708,9 @@ module Orckestra.Composer {
                     this.reRenderCartPage(result);
                 })
                 .fail((reason) => {
-                    console.error(reason);
+                    console.error('Error: Error while saving payment', reason);
                 })
                 .fin(() => busy.done());
-        }
-
-        public deletePaymentConfirm(actionContext: IControllerActionContext) {
-            this.uiModalSavedCreditCard.openModal(actionContext.event);
-        }
-
-        protected deleteCard(event: JQueryEventObject): Q.Promise<void> {
-
-            let element = $(event.target);
-            var $cardListItem = element.closest('[data-payment-id]');
-            var paymentMethodId = $cardListItem.data('payment-id');
-            var paymentProviderName = $cardListItem.data('payment-provider');
-            var cartName = this.viewModel.Name;
-
-            this.busyHandler = this.asyncBusy({elementContext: element, containerContext: $cardListItem });
-
-            return this.paymentService
-                .removeRecurringCartPaymentMethod(paymentMethodId, paymentProviderName, cartName)
-                .then(() => {
-                    //this._eventHub.publish('paymentMethodsUpdated', null)
-                    this.reRenderCartPage(this.viewModel);
-                })
-                .fail(reason => ErrorHandler.instance().outputError(reason))
-                .fin(() => {
-                    this.releaseBusyHandler();
-                });
         }
 
         protected releaseBusyHandler(): void {

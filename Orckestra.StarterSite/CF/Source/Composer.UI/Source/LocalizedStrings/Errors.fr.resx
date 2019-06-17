@@ -144,6 +144,12 @@
   <data name="L_InvalidCharsInSearchBox" xml:space="preserve">
     <value>Votre terme de recherche contient des caractères qui ne sont pas autorisés.</value>
   </data>
+  <data name="L_InvalidDateSelected" xml:space="preserve">
+    <value>La prochaine date de traitement est invalide.</value>
+  </data>
+  <data name="L_InvalidFrequencySelected" xml:space="preserve">
+    <value>La fréquence sélectionné est invalide.</value>
+  </data>
   <data name="L_InvalidPassword" xml:space="preserve">
     <value>Le mot de passe précisé n'est pas valide.</value>
   </data>
@@ -157,6 +163,9 @@
     <value>Une erreur est survenue pendant le retrait de cet article au panier. Veuillez réessayer.</value>
   </data>
   <data name="L_LineItemUpdateFailed" xml:space="preserve">
+    <value>Une erreur est survenue pendant la mise-à-jour de votre panier. Veuillez réessayer.</value>
+  </data>
+  <data name="L_LineItemQuantityFailed" xml:space="preserve">
     <value>Une erreur est survenue pendant la mise-à-jour de votre panier. Veuillez réessayer.</value>
   </data>
   <data name="L_LoadCartFailed" xml:space="preserve">

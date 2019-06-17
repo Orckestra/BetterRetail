@@ -243,14 +243,16 @@ module Orckestra.Composer {
                 nextOccurence = newDate;
             } else {
                 isAllValid = false;
-                console.error('Error: invalid date');
+                console.error('Error: Invalid date while saving template');
+                ErrorHandler.instance().outputErrorFromCode('InvalidDateSelected');
             }
 
             let frequency: any = $('#modifyFrequency').find(':selected')[0];
             frequencyName = frequency.value;
             if (frequencyName === '' || frequencyName === undefined) {
                 isAllValid = false;
-                console.error('Error: invalid frequency');
+                console.error('Error: Invalid frequency while saving template');
+                ErrorHandler.instance().outputErrorFromCode('InvalidFrequencySelected');
             }
 
             shippingProviderId = $('#ShippingProviderId').val();

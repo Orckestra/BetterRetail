@@ -144,6 +144,12 @@
   <data name="L_InvalidCharsInSearchBox" xml:space="preserve">
     <value>Your search terms contain unauthorized characters.</value>
   </data>
+  <data name="L_InvalidDateSelected" xml:space="preserve">
+    <value>The next occurence date has an invalid value.</value>
+  </data>
+  <data name="L_InvalidFrequencySelected" xml:space="preserve">
+    <value>The frequency has an invalid value.</value>
+  </data>
   <data name="L_InvalidPassword" xml:space="preserve">
     <value>The specified Password is invalid.</value>
   </data>
@@ -157,6 +163,9 @@
     <value>An error occurred while we attempted to remove the item from the cart. Please try again.</value>
   </data>
   <data name="L_LineItemUpdateFailed" xml:space="preserve">
+    <value>An error occurred while updating your cart. Please try again.</value>
+  </data>
+  <data name="L_LineItemQuantityFailed" xml:space="preserve">
     <value>An error occurred while updating your cart. Please try again.</value>
   </data>
   <data name="L_LoadCartFailed" xml:space="preserve">
