@@ -132,29 +132,7 @@ namespace Orckestra.Composer.Services
 
             if (param == null) throw new ArgumentNullException(nameof(param), ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param)));
 
-            //To be determined if we update the carts
-
-            ////Update the cart if quantity is the same from the original template value
-            ////TODO: see to optimize calls to Services
-            //var originalLineItems = await RecurringOrderRepository.GetRecurringOrderTemplates(request.ScopeId, request.CustomerId).ConfigureAwait(false);
-            //var originalLineitem = originalLineItems.RecurringOrderLineItems.SingleOrDefault(r => r.RecurringOrderLineItemId == RecurringOrderCartHelper.ConvertStringToGuid(request.RecurringLineItemId));
-            //if (originalLineitem != null)
-            //{
-
-            //    var updateCartIfDifferentRequest = new UpdateRecurringOrderCartLineItemQuantityIfDifferentParam()
-            //    {
-            //        BaseUrl = request.BaseUrl,
-            //        CustomerId = request.CustomerId,
-            //        CultureInfo = request.CultureInfo,
-            //        ScopeId = request.ScopeId,
-            //        TemplateNewQuantity = request.Quantity,
-            //        TemplateOriginalQuantity = originalLineitem.Quantity,
-            //        TemplateProductId = originalLineitem.ProductId,
-            //        TemplateVariantId = originalLineitem.VariantId
-
-            //    };
-            //    var result = await _cartRepository.UpdateRecurringOrderCartLineItemQuantityIfDifferent(updateCartIfDifferentRequest).ConfigureAwaitWithCulture(false);
-            //}
+            //TODO: To be determined if we update the carts
 
             var listOfRecurringOrderLineItems = await RecurringOrderRepository.UpdateRecurringOrderTemplateLineItemQuantityAsync(param).ConfigureAwaitWithCulture(false);
 
