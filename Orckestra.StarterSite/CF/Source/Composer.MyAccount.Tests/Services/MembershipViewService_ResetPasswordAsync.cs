@@ -56,6 +56,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
                 .Setup(r => r.ResetPasswordAsync(
                     It.Is<string>(username => username == expectedCustomer.Username),
                     It.IsAny<string>(),
+                    It.IsAny<string>(),
                     It.IsAny<string>()))
                 .Returns(Task.FromResult(false));
 
@@ -232,6 +233,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             _container.GetMock<ICustomerRepository>()
                 .Setup(r => r.ResetPasswordAsync(
                     It.IsAny<string>(),
+                     It.IsAny<string>(),
                     It.IsAny<string>(),
                     It.Is<string>(pa => pa == passwordAnswer)))
                 .Returns(Task.FromResult(false));
