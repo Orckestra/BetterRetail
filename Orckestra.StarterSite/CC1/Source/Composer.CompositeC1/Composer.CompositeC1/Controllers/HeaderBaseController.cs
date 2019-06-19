@@ -44,16 +44,6 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             BreadcrumbViewService = breadcrumbViewService;
         }
 
-        public virtual ActionResult HomeLogo()
-        {
-            var cultureInfo = ComposerContext.CultureInfo;
-            var urlHelper = new UrlHelper(Request.RequestContext);
-
-            var homeLogoViewModel = HomeViewService.GetHomeLogoViewModel(urlHelper, cultureInfo).Result;
-
-            return View("HomeLogo", homeLogoViewModel);
-        }
-
         public virtual ActionResult MainMenu()
         {
             var param = new GetHomeMainMenuParam

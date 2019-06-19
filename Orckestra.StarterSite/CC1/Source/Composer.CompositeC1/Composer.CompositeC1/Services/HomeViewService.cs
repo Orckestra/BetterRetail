@@ -38,21 +38,6 @@ namespace Orckestra.Composer.CompositeC1.Services
             HomeNavigationMapper = homeNavigationMapper;
         }
 
-        public virtual Task<HomeLogoViewModel> GetHomeLogoViewModel(UrlHelper urlHelper, CultureInfo culture)
-        {
-            var homePage = PageService.GetPage(PagesConfiguration.HomePageId);
-            var homePageUrl = PageUrls.BuildUrl(homePage);
-
-            var homeViewModel = new HomeLogoViewModel
-            {
-                HomeTitle = homePage.MenuTitle,
-                HomeLogoUrl = "/UI.Package/Images/better-retail.png",  //TODO read Logo from CMS when available
-                HomeUrl = homePageUrl
-            };
-
-            return Task.FromResult(homeViewModel);
-        }
-
         public virtual Task<HomeMainMenuViewModel> GetHomeMainMenuViewModel(GetHomeMainMenuParam param)
         {
             using (DataConnection data = new DataConnection(param.CultureInfo))
