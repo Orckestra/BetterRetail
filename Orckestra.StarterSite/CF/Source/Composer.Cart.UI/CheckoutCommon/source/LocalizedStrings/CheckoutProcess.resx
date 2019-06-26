@@ -219,6 +219,9 @@
   <data name="L_LogInCheckout" xml:space="preserve">
     <value>You can place an order without registering. You can register and create an account after checkout.</value>
   </data>
+  <data name="L_LogInCheckoutWithRecurring" xml:space="preserve">
+    <value>You cannot place a recurring order without registering. Please log in or create an account to enjoy this service.</value>
+  </data>
   <data name="L_NextStepIndication" xml:space="preserve">
     <value>Your credit card will not be charged until you submit your order.</value>
   </data>

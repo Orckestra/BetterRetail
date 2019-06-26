@@ -3,7 +3,11 @@
         <h2 class="h3">{{localize 'CheckoutProcess' 'T_LogInCheckout'}}</h2>
     </div>
     <div class="panel-body">
-        <p>{{localize 'CheckoutProcess' 'L_LogInCheckout'}}</p>
+        {{#if IsCartContainsRecurringLineitems}}           
+            <p>{{localize 'CheckoutProcess' 'L_LogInCheckoutWithRecurring'}}</p>
+        {{else}}
+            <p>{{localize 'CheckoutProcess' 'L_LogInCheckout'}}</p>
+        {{/if}}
 
         {{#if IsCartContainsRecurringLineitems}}           
         <div class="form-group">
