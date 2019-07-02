@@ -38,6 +38,7 @@ $cmsHostPhysicalPath	= Get-Settings -environment $Environment -key "cms-$($Confi
 $cmsUrl				    = Get-Settings -environment $Environment -key "cms-$($Configuration)-url"
 $cmsDeploymentToken 	= Get-Settings -environment $Environment -key "cms-deployment-token"
 $cmsC1version 			= Get-Settings -environment $Environment -key "cms-c1-version"
+$cmsC1zipUrl 			= Get-Settings -environment $Environment -key "cms-c1-zip-url"
 $cmsC1Culture 			= Get-Settings -environment $Environment -key "cms-c1-default-culture"
 $cmsC1CAllultures			= Get-Settings -environment $Environment -key "cms-c1-all-cultures"
 $cmsC1ConsoleLogin		= Get-Settings -environment $Environment -key "cms-c1-conslole-login"
@@ -71,14 +72,20 @@ add-type @"
 }
 
 function DownloadC1CMS() {
-	$url = "https://github.com/Orckestra/C1-CMS-Foundation/releases/download/v$cmsC1version/C1.CMS.$cmsC1version.zip"
+	$url = $cmsC1zipUrl
 	$destinationPath = $genericPackagesFolder + "\C1CMS"
 	md $destinationPath  -ErrorAction SilentlyContinue
 	$output = $destinationPath + "\C1.CMS.$cmsC1version.zip"
 	Write-Host "Download from " $url  + " and save to " + $output
 	$AllProtocols = [System.Net.SecurityProtocolType]'Ssl3,Tls,Tls11,Tls12'
 	[System.Net.ServicePointManager]::SecurityProtocol = $AllProtocols
-	(Invoke-WebRequest -Uri $url -OutFile $output -TimeoutSec $(60*15)).StatusDescription
+	if($url.StartsWith("http")) {
+	  (Invoke-WebRequest -Uri $url -OutFile $output -TimeoutSec $(60*15)).StatusDescription
+	} else {
+		Copy-Item -Path $url -Destination $output -Force
+	}
+	
+	
 }
 
 function InstallC1CMSCultures() {
