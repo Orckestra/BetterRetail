@@ -20,9 +20,9 @@ namespace Orckestra.Composer.Product.Services
     /// </summary>
     public class ProductSpecificationsViewService : IProductSpecificationsViewService
     {
-        private readonly IComposerContext _context;
-        private readonly IProductRepository _productRepository;
-        private readonly ProductFormatter _productFormatter;
+        protected readonly IComposerContext _context;
+        protected readonly IProductRepository _productRepository;
+        protected readonly ProductFormatter _productFormatter;
 
         public ProductSpecificationsViewService(IComposerContext context,
                                                 IProductRepository productRepository, 
@@ -73,7 +73,7 @@ namespace Orckestra.Composer.Product.Services
             return vm;
         }
 
-        private async Task<List<SpecificationsGroupViewModel>> GetSpecificationsGroupsAsync(GetProductSpecificationsParam param)
+        protected virtual async Task<List<SpecificationsGroupViewModel>> GetSpecificationsGroupsAsync(GetProductSpecificationsParam param)
         {
             var productDefinition = await GetProductDefinitionAsync(param).ConfigureAwait(false);
 
@@ -93,7 +93,7 @@ namespace Orckestra.Composer.Product.Services
             return specificationGroups.Where(group => @group.Attributes.Any()).ToList();
         }
 
-        private async Task<ProductDefinition> GetProductDefinitionAsync(GetProductSpecificationsParam param)
+        protected virtual async Task<ProductDefinition> GetProductDefinitionAsync(GetProductSpecificationsParam param)
         {
             var product = await GetProductAsync(param).ConfigureAwait(false);
 
@@ -110,12 +110,12 @@ namespace Orckestra.Composer.Product.Services
             }).ConfigureAwait(false);
         }
 
-        private string GetLocalizedTitle(ProductPropertyDefinitionGroup group)
+        protected string GetLocalizedTitle(ProductPropertyDefinitionGroup group)
         {
             return group.DisplayName.GetLocalizedValue(_context.CultureInfo.Name);
         }
 
-        private async Task<List<SpecificationsAttributeViewModel>> GetSpecificationsAttributesAsync(ProductPropertyDefinitionGroup group, GetProductSpecificationsParam param)
+        protected virtual async Task<List<SpecificationsAttributeViewModel>> GetSpecificationsAttributesAsync(ProductPropertyDefinitionGroup group, GetProductSpecificationsParam param)
         {
             var tasks = group.Properties
                              .Where(property => property.IsIncluded())
@@ -131,12 +131,12 @@ namespace Orckestra.Composer.Product.Services
             return specificationAttributes.Where(attribute => !string.IsNullOrWhiteSpace(attribute.Value)).ToList();
         }
 
-        private string GetLocalizedTitle(ProductPropertyDefinition property)
+        protected string GetLocalizedTitle(ProductPropertyDefinition property)
         {
             return property.DisplayName.GetLocalizedValue(_context.CultureInfo.Name);
         }
 
-        private async Task<string> GetSpecificationsAttributeValueAsync(ProductPropertyDefinition property, GetProductSpecificationsParam param)
+        protected virtual async Task<string> GetSpecificationsAttributeValueAsync(ProductPropertyDefinition property, GetProductSpecificationsParam param)
         {
             if (await IsVariantAttributeAvailableAsync(property, param).ConfigureAwait(false))
             {
@@ -151,19 +151,19 @@ namespace Orckestra.Composer.Product.Services
             return string.Empty;
         }
 
-        private async Task<bool> IsVariantAttributeAvailableAsync(ProductPropertyDefinition property, GetProductSpecificationsParam param)
+        protected virtual async Task<bool> IsVariantAttributeAvailableAsync(ProductPropertyDefinition property, GetProductSpecificationsParam param)
         {
             Variant variant = await GetVariantAsync(param).ConfigureAwait(false);
             return variant != null && variant.PropertyBag != null && variant.PropertyBag.ContainsKey(property.PropertyName);
         }
 
-        private async Task<string> GetVariantAttributeValueAsync(ProductPropertyDefinition property, GetProductSpecificationsParam param)
+        protected virtual async Task<string> GetVariantAttributeValueAsync(ProductPropertyDefinition property, GetProductSpecificationsParam param)
         {
             Variant variant = await GetVariantAsync(param).ConfigureAwait(false);
             return _productFormatter.FormatValue(property, variant.PropertyBag[property.PropertyName], _context.CultureInfo);
         }
 
-        private async Task<bool> IsProductAttributeAvailableAsync(ProductPropertyDefinition property, GetProductSpecificationsParam param)
+        protected virtual async Task<bool> IsProductAttributeAvailableAsync(ProductPropertyDefinition property, GetProductSpecificationsParam param)
         {
             var product = await GetProductAsync(param).ConfigureAwait(false);
             if (product == null)
@@ -173,7 +173,7 @@ namespace Orckestra.Composer.Product.Services
             return product.PropertyBag != null && product.PropertyBag.ContainsKey(property.PropertyName);
         }
 
-        private async Task<string> GetProductAttributeValueAsync(ProductPropertyDefinition property, GetProductSpecificationsParam param)
+        protected virtual async Task<string> GetProductAttributeValueAsync(ProductPropertyDefinition property, GetProductSpecificationsParam param)
         {
             var product = await GetProductAsync(param).ConfigureAwait(false);
             if (product == null)
@@ -184,7 +184,7 @@ namespace Orckestra.Composer.Product.Services
             return _productFormatter.FormatValue(property, value, _context.CultureInfo);
         }
 
-        private async Task<Variant> GetVariantAsync(GetProductSpecificationsParam param)
+        protected virtual async Task<Variant> GetVariantAsync(GetProductSpecificationsParam param)
         {
             var product = await GetProductAsync(param).ConfigureAwait(false);
             if (product == null)
@@ -194,7 +194,7 @@ namespace Orckestra.Composer.Product.Services
             return product.Variants.FirstOrDefault(v => v.Id == param.VariantId);
         }
 
-        private async Task<Overture.ServiceModel.Products.Product> GetProductAsync(GetProductSpecificationsParam param) // it is ok to call this method multiple times within one request because the product is cached
+        protected virtual async Task<Overture.ServiceModel.Products.Product> GetProductAsync(GetProductSpecificationsParam param) // it is ok to call this method multiple times within one request because the product is cached
         {
             return await _productRepository.GetProductAsync(new GetProductParam
             {

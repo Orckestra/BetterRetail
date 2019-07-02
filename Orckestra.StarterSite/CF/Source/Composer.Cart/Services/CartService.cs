@@ -352,7 +352,7 @@ namespace Orckestra.Composer.Cart.Services
             return viewModel;
         }
 
-        public async Task<CartViewModel> UpdateShippingAddressPostalCodeAsync(UpdateShippingAddressPostalCodeParam param)
+        public virtual async Task<CartViewModel> UpdateShippingAddressPostalCodeAsync(UpdateShippingAddressPostalCodeParam param)
         {
             if (param == null) { throw new ArgumentNullException("param"); }
 
@@ -417,7 +417,7 @@ namespace Orckestra.Composer.Cart.Services
             shipment.Address.RegionCode = GetRegionCodeBasedOnPostalCode(param.PostalCode, param.CountryCode);
         }
 
-        public async Task<CartViewModel> UpdateBillingAddressPostalCodeAsync(UpdateBillingAddressPostalCodeParam param)
+        public virtual async Task<CartViewModel> UpdateBillingAddressPostalCodeAsync(UpdateBillingAddressPostalCodeParam param)
         {
             if (param == null) { throw new ArgumentNullException("param"); }
 
@@ -464,7 +464,7 @@ namespace Orckestra.Composer.Cart.Services
             }).ConfigureAwait(false);
         }
 
-        public async Task<IPaymentMethodViewModel> SetDefaultCustomerPaymentMethod(SetDefaultCustomerPaymentMethodParam param)
+        public virtual async Task<IPaymentMethodViewModel> SetDefaultCustomerPaymentMethod(SetDefaultCustomerPaymentMethodParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param), ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param))); }
             if (param.CustomerId == Guid.Empty) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param.CustomerId)), nameof(param.CustomerId)); }
@@ -476,7 +476,7 @@ namespace Orckestra.Composer.Cart.Services
             return await MapPaymentMethodToViewModel(paymentMethod, param.Culture);
         }
 
-        protected async Task<IPaymentMethodViewModel> MapPaymentMethodToViewModel(PaymentMethod paymentMethod, CultureInfo culture)
+        protected virtual async Task<IPaymentMethodViewModel> MapPaymentMethodToViewModel(PaymentMethod paymentMethod, CultureInfo culture)
         {
             var methodDisplayNames = await LookupService.GetLookupDisplayNamesAsync(new GetLookupDisplayNamesParam
             {

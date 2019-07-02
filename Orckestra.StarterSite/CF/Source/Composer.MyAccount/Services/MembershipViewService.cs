@@ -508,7 +508,7 @@ namespace Orckestra.Composer.MyAccount.Services
         /// Create a javascript ready regex to help on client side validation of password
         /// </summary>
         /// <returns></returns>
-        private Regex CreatePasswordRegexPattern()
+        protected virtual Regex CreatePasswordRegexPattern()
         {
             return new Regex(@"(.*(?:[\!\@\#\$\%\^\&\*\(\)_\-\+\=\[\{\]\}\;\:\>\|\.\/\?]).*){" + MembershipProvider.MinRequiredNonAlphanumericCharacters + "}");            
         }
