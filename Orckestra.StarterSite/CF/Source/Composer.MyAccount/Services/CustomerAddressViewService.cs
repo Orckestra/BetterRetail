@@ -328,7 +328,7 @@ namespace Orckestra.Composer.MyAccount.Services
         /// <returns>
         /// The status representing a possible cause of errors.
         /// </returns>
-        public async Task<SetDefaultAddressStatusViewModel> SetDefaultAddressAsync(SetDefaultAddressParam param)
+        public virtual async Task<SetDefaultAddressStatusViewModel> SetDefaultAddressAsync(SetDefaultAddressParam param)
         {
             if (param == null) { throw new ArgumentNullException("param"); }
             if (param.CustomerId == Guid.Empty) { throw new ArgumentException("param.CustomerId"); }

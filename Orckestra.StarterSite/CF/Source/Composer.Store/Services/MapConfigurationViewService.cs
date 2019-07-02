@@ -17,7 +17,7 @@ namespace Orckestra.Composer.Store.Services
             StoreRepository = storeRepository;
         }
 
-        public async Task<MapConfigurationViewModel> GetMapConfigurationViewModelAsync(
+        public virtual async Task<MapConfigurationViewModel> GetMapConfigurationViewModelAsync(
             GetMapConfigurationViewModelParam param)
         {
 
@@ -33,7 +33,7 @@ namespace Orckestra.Composer.Store.Services
             return vm;
         }
 
-        private static Bounds GetStoresBounds(IList<Overture.ServiceModel.Customers.Stores.Store> stores)
+        protected static Bounds GetStoresBounds(IList<Overture.ServiceModel.Customers.Stores.Store> stores)
         {
             var mapBounds = new Bounds();
 

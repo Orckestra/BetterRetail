@@ -20,7 +20,7 @@ namespace Orckestra.Composer.CompositeC1.Services
             MediaService = mediaService;
         }
 
-        public ImageViewModel GetCheckoutTrustImageViewModel(CultureInfo cultureInfo)
+        public virtual ImageViewModel GetCheckoutTrustImageViewModel(CultureInfo cultureInfo)
         {
             if (cultureInfo == null) { throw new ArgumentNullException("cultureInfo"); }
 

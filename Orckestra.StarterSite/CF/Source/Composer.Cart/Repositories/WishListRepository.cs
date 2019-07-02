@@ -103,7 +103,7 @@ namespace Orckestra.Composer.Cart.Repositories
         /// <summary>
         /// Builds the cache key for a WishList.
         /// </summary>
-        protected CacheKey BuildWishListCacheKey(string scope, Guid customerId, string cartName)
+        protected virtual CacheKey BuildWishListCacheKey(string scope, Guid customerId, string cartName)
         {
             var key = new CacheKey(CacheConfigurationCategoryNames.Cart)
             {

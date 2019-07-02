@@ -46,7 +46,7 @@ namespace Orckestra.Composer.Cart.Services
             return DamProvider.GetProductMainImagesAsync(getImageParam);
         }
 
-        public List<LineItem> GetInvalidLineItems(ProcessedCart cart)
+        public virtual List<LineItem> GetInvalidLineItems(ProcessedCart cart)
         {
             if (cart == null) { throw new ArgumentNullException("cart"); }
 

@@ -120,7 +120,7 @@ namespace Orckestra.Composer.Store.Services
             return model;
         }
 
-        private StoreInventoryStatusViewModel GetInventoryStatusViewModel(bool isInventoryEnabled, InventoryItemStatusDetails inventory, Dictionary<string, string> statusDisplayNames)
+        protected virtual StoreInventoryStatusViewModel GetInventoryStatusViewModel(bool isInventoryEnabled, InventoryItemStatusDetails inventory, Dictionary<string, string> statusDisplayNames)
         {
             return new StoreInventoryStatusViewModel
             {
@@ -184,7 +184,7 @@ namespace Orckestra.Composer.Store.Services
             }
         }
 
-        private async Task<bool> IsInventoryEnabledAsync(GetStoreInventoryViewModelParam param)
+        protected virtual async Task<bool> IsInventoryEnabledAsync(GetStoreInventoryViewModelParam param)
         {
             var productSettingsViewModel =
                 await ProductSettingsViewService.GetProductSettings(param.Scope, param.CultureInfo);
@@ -192,7 +192,7 @@ namespace Orckestra.Composer.Store.Services
             return productSettingsViewModel.IsInventoryEnabled;
         }
 
-        private static void ValidateParam(GetStoreInventoryViewModelParam viewModelParam)
+        protected static void ValidateParam(GetStoreInventoryViewModelParam viewModelParam)
         {
             if (viewModelParam == null) { throw new ArgumentNullException("param"); }
             if (string.IsNullOrWhiteSpace(viewModelParam.Scope)) { throw new ArgumentNullException("scope"); }

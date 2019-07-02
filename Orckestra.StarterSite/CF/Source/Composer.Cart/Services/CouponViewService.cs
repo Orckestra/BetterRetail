@@ -37,7 +37,7 @@ namespace Orckestra.Composer.Cart.Services
         /// </summary>
         /// <param name="coupons"></param>
         /// <returns></returns>
-        public IEnumerable<string> GetInvalidCouponsCode(IEnumerable<Coupon> coupons)
+        public virtual IEnumerable<string> GetInvalidCouponsCode(IEnumerable<Coupon> coupons)
         {
             if(coupons == null) { return Enumerable.Empty<string>(); }
 
@@ -78,7 +78,7 @@ namespace Orckestra.Composer.Cart.Services
             return viewModel;
         }
 
-        private void AddSuccessMessageIfRequired(CouponParam param, CartViewModel viewModel, CultureInfo cultureInfo)
+        protected virtual void AddSuccessMessageIfRequired(CouponParam param, CartViewModel viewModel, CultureInfo cultureInfo)
         {
             if (viewModel.Coupons.ApplicableCoupons.Any(
                 c => string.Equals(c.CouponCode, param.CouponCode, StringComparison.InvariantCultureIgnoreCase)))
@@ -103,7 +103,7 @@ namespace Orckestra.Composer.Cart.Services
         /// </summary>
         /// <param name="param"></param>
         /// <returns>The lightweight CartViewModel</returns>
-        public async Task<CartViewModel> RemoveCouponAsync(CouponParam param)
+        public virtual async Task<CartViewModel> RemoveCouponAsync(CouponParam param)
         {
             if (param == null) { throw new ArgumentNullException("param"); }
 

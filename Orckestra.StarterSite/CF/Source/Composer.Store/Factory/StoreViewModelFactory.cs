@@ -358,13 +358,13 @@ namespace Orckestra.Composer.Store.Factory
 
         #endregion
 
-        private bool IsTimeInIntervals(TimeSpan time, IEnumerable<ScheduleInterval> intervals)
+        protected bool IsTimeInIntervals(TimeSpan time, IEnumerable<ScheduleInterval> intervals)
         {
             return
                 intervals.Select(interval => time >= interval.BeginingTime && time < interval.EndingTime)
                     .FirstOrDefault();
         }
-        private int GetTotalPages(int total, int pageSize)
+        protected int GetTotalPages(int total, int pageSize)
         {
             return (int)Math.Ceiling((double)total / pageSize);
         }
