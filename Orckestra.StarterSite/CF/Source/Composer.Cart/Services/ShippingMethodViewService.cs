@@ -152,7 +152,7 @@ namespace Orckestra.Composer.Cart.Services
             return vm;
         }
 
-        protected async Task<List<FulfillmentMethod>> GetShippingMethodsForShippingEstimationAsync(EstimateShippingParam param)
+        protected virtual async Task<List<FulfillmentMethod>> GetShippingMethodsForShippingEstimationAsync(EstimateShippingParam param)
         {
             var shippingMethods = await GetFulfillmentMethods(new GetShippingMethodsParam
             {

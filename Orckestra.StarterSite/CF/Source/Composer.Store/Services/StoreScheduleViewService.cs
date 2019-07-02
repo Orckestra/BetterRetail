@@ -53,7 +53,7 @@ namespace Orckestra.Composer.Store.Services
         }
 
 
-        private bool IsTimeInIntervals(TimeSpan time, IEnumerable<ScheduleInterval> intervals)
+        protected virtual bool IsTimeInIntervals(TimeSpan time, IEnumerable<ScheduleInterval> intervals)
         {
             return intervals.Select(interval => time >= interval.BeginingTime && time < interval.EndingTime).FirstOrDefault();
         }

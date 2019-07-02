@@ -12,8 +12,8 @@ namespace Orckestra.Composer.Product.Repositories
 {
     public class RelationshipRepository : IRelationshipRepository
     {
-        private readonly IOvertureClient _overtureClient;
-        private readonly IProductRequestFactory _productRequestFactory;
+        protected readonly IOvertureClient _overtureClient;
+        protected readonly IProductRequestFactory _productRequestFactory;
 
         public RelationshipRepository(IOvertureClient overtureClient, IProductRequestFactory productRequestFactory)
         {

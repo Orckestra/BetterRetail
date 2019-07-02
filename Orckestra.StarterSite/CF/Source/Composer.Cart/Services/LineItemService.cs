@@ -25,7 +25,7 @@ namespace Orckestra.Composer.Cart.Services
             LineItemValidationProvider = lineItemValidationProvider;
         }
 
-        public List<LineItem> GetInvalidLineItems(ProcessedCart cart)
+        public virtual List<LineItem> GetInvalidLineItems(ProcessedCart cart)
         {
             if (cart == null) { throw new ArgumentNullException("cart"); }
 

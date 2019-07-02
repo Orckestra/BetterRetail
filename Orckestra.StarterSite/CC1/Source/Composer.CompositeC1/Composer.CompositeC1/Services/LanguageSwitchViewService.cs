@@ -35,7 +35,7 @@ namespace Orckestra.Composer.CompositeC1.Services
             return languageSwitchViewModel;
         }
 
-        private void BuildMultiLanguageViewModel(
+        protected virtual void BuildMultiLanguageViewModel(
             LanguageSwitchViewModel languageSwitchViewModel, 
             IEnumerable<CultureInfo> supportedCultures,
             Func<CultureInfo, string> urlBuilder, 
@@ -49,7 +49,7 @@ namespace Orckestra.Composer.CompositeC1.Services
             languageSwitchViewModel.IsMultiLanguage = languageSwitchViewModel.Entries.Count > 1;
         }
 
-        private List<LanguageSwitchEntryViewModel> CreateAlternativeEntries(
+        protected virtual List<LanguageSwitchEntryViewModel> CreateAlternativeEntries(
             IEnumerable<CultureInfo> supportedCultures, 
             Func<CultureInfo, string> urlBuilder, 
             CultureInfo currentCulture)
@@ -60,7 +60,7 @@ namespace Orckestra.Composer.CompositeC1.Services
             return entries;
         }
 
-        private LanguageSwitchEntryViewModel CreateEntry(
+        protected virtual LanguageSwitchEntryViewModel CreateEntry(
             Func<CultureInfo, string> urlBuilder, 
             CultureInfo entryCulture, 
             CultureInfo currentCulture)

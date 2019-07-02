@@ -58,6 +58,11 @@
  * The C1 CMS version configured in parameters file *~\Installer\configs\generic\Parameters.xml*, parameter name `<param name="cms-c1-version" value="6.5" />` 
  * The additional C1 CMS packages, which can be installed on website can be configured in parameters file *~\Installer\configs\generic\Parameters.xml*, parameter name `<param name="cms-c1-custom-packages" value="Orckestra.Search.KeywordRedirect,Orckestra.Search.LuceneNET" />`
  * All C1 CMS packages are downloaded from C1 CMS packages server
+ 
+ #### Build Frontend
+ To build Frontend Sass, Typescript and copy to the deployed website use next gulp command in folder *~\ReferenceApplication\Orckestra.StarterSite\CF\Source*
+ `gulp devPackage`
+ This gulp task also will copy DLLs of Composer and Composer.C1 projects.
 
 #### Deploy local changes 
 * Go to .\Orckestra.StarterSite\cf\Source

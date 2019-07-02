@@ -14,7 +14,8 @@
 	<param name="cms-apppool-password" value="{composer_apppool_password}" />
 	
 	<!-- Make sure that version exists here https://github.com/Orckestra/C1-CMS-Foundation/releases/download/v$(cms-c1-version)/C1.CMS.$(cms-c1-version).zip -->
-	<param name="cms-c1-version" value="6.5" />
+	<param name="cms-c1-version" value="6.7" />
+	<param name="cms-c1-zip-url" value="\\***REMOVED***\TrunkBuild\TrunkBuildDrops\C1Release_6.7.7115.5440_TrunkBuild_20190625.1_dev\Website_6.7.7115.5440_TrunkBuild_20190625.1_dev.zip" />
 	<param name="cms-c1-default-culture" value="en-CA" />
 	<param name="cms-c1-all-cultures" value="en-CA,fr-CA" />
 	<param name="cms-c1-conslole-login" value="admin" />

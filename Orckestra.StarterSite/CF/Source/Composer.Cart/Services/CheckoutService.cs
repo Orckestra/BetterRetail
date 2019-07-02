@@ -112,7 +112,7 @@ namespace Orckestra.Composer.Cart.Services
             RegisterCartUpdateOperation<ShippingMethodViewModel>("ShippingMethod", UpdateShippingMethod, 4);
         }
 
-        public async Task<CompleteCheckoutViewModel> CompleteCheckoutAsync(CompleteCheckoutParam param)
+        public virtual async Task<CompleteCheckoutViewModel> CompleteCheckoutAsync(CompleteCheckoutParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param), "param"); }
             if (param.CultureInfo == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("CultureInfo"), nameof(param)); }
@@ -193,7 +193,7 @@ namespace Orckestra.Composer.Cart.Services
         /// Update a Cart during the checkout process.
         /// </summary>
         /// <param name="param">UpdateCheckoutCartParam</param>
-        public async Task<UpdateCartResultViewModel> UpdateCheckoutCartAsync(UpdateCheckoutCartParam param)
+        public virtual async Task<UpdateCartResultViewModel> UpdateCheckoutCartAsync(UpdateCheckoutCartParam param)
         {
             if (param == null) { throw new ArgumentNullException("param"); }
             if (param.GetCartParam == null) { throw new ArgumentException("param"); }
@@ -294,7 +294,7 @@ namespace Orckestra.Composer.Cart.Services
         /// <param name="operationName">The key of the ViewModel to update</param>
         /// <param name="updateAction">The action to apply on a Cart from a ViewModel</param>
         /// <param name="order">Order in which the operation must be performed.</param>
-        public void RegisterCartUpdateOperation<TViewModel>(string operationName, Func<Overture.ServiceModel.Orders.Cart, TViewModel, Task> updateAction, int? order)
+        public virtual void RegisterCartUpdateOperation<TViewModel>(string operationName, Func<Overture.ServiceModel.Orders.Cart, TViewModel, Task> updateAction, int? order)
         {
             if (string.IsNullOrEmpty(operationName)) { throw new ArgumentNullException("operationName"); }
             if (updateAction == null) { throw new ArgumentNullException("updateAction"); }
@@ -303,7 +303,7 @@ namespace Orckestra.Composer.Cart.Services
             _updateOperations[operationName] = order == null ? new UpdateOperation(operation) : new UpdateOperation(order.Value, operation);
         }
 
-        private TViewModel ParseJson<TViewModel>(object viewModel)
+        protected TViewModel ParseJson<TViewModel>(object viewModel)
         {
             var jsonValue = viewModel as string;
             if (jsonValue == null)
@@ -425,7 +425,7 @@ namespace Orckestra.Composer.Cart.Services
             shipment.FulfillmentMethod = await GetFulfillmentMethodAsync(cart, shippingMethodViewModel);
         }
 
-        private async Task<FulfillmentMethod> GetFulfillmentMethodAsync(Overture.ServiceModel.Orders.Cart cart, ShippingMethodViewModel shippingMethodViewModel)
+        protected virtual async Task<FulfillmentMethod> GetFulfillmentMethodAsync(Overture.ServiceModel.Orders.Cart cart, ShippingMethodViewModel shippingMethodViewModel)
         {
             var param = new GetShippingMethodsParam
             {

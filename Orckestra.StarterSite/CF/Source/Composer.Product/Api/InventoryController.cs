@@ -101,14 +101,14 @@ namespace Orckestra.Composer.Product.Api
                    select inventoryItemAvailabilityViewModel.Identifier.Sku;
         }
 
-        private async Task<bool> IsInventoryEnabled()
+        protected virtual async Task<bool> IsInventoryEnabled()
         {
             var productSettingsViewModel = await ProductSettingsViewService.GetProductSettings(ComposerContext.Scope, ComposerContext.CultureInfo);
 
             return productSettingsViewModel.IsInventoryEnabled;
         }
 
-        private static List<InventoryStatusEnum> GetAvailableInventoryStatuses()
+        protected static List<InventoryStatusEnum> GetAvailableInventoryStatuses()
         {
             return ComposerConfiguration.AvailableStatusForSell;
         }

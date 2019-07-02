@@ -132,7 +132,7 @@ namespace Orckestra.Composer.Cart.Repositories
         /// </summary>
         /// <param name="param">Parameters used to initialized the Payment.</param>
         /// <returns>The updated processed cart.</returns>
-        public Task<Overture.ServiceModel.Orders.Cart> InitializePaymentAsync(InitializePaymentParam param)
+        public virtual Task<Overture.ServiceModel.Orders.Cart> InitializePaymentAsync(InitializePaymentParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
             if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("CartName"), nameof(param)); }
@@ -162,7 +162,7 @@ namespace Orckestra.Composer.Cart.Repositories
         /// </summary>
         /// <param name="param">Parameters used to void the payment.</param>
         /// <returns>The updated cart.</returns>
-        public Task<Overture.ServiceModel.Orders.Cart> VoidPaymentAsync(VoidOrRemovePaymentParam param)
+        public virtual Task<Overture.ServiceModel.Orders.Cart> VoidPaymentAsync(VoidOrRemovePaymentParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
             if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("CartName"), nameof(param)); }
@@ -190,7 +190,7 @@ namespace Orckestra.Composer.Cart.Repositories
         /// </summary>
         /// <param name="param">Parameters used to remove the payment.</param>
         /// <returns>The updated cart.</returns>
-        public Task<ProcessedCart> RemovePaymentAsync(VoidOrRemovePaymentParam param)
+        public virtual Task<ProcessedCart> RemovePaymentAsync(VoidOrRemovePaymentParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
             if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("CartName"), nameof(param)); }
@@ -217,7 +217,7 @@ namespace Orckestra.Composer.Cart.Repositories
         /// Remove a payment method from a user profile
         /// </summary>
         /// <param name="param">Parameters used to remove the payment method.</param>
-        public async Task RemovePaymentMethodAsync(RemovePaymentMethodParam param)
+        public virtual async Task RemovePaymentMethodAsync(RemovePaymentMethodParam param)
         {
             if (param == null) throw new ArgumentNullException(nameof(param), "param is required");
             if (param.PaymentMethodId == Guid.Empty) throw new ArgumentException("param.PaymentMethodId is required", nameof(param.PaymentMethodId));
@@ -237,7 +237,7 @@ namespace Orckestra.Composer.Cart.Repositories
             }).ConfigureAwait(false);
         }
 
-        public Task<List<PaymentProfile>> GetCustomerPaymentProfiles(GetCustomerPaymentProfilesParam param)
+        public virtual Task<List<PaymentProfile>> GetCustomerPaymentProfiles(GetCustomerPaymentProfilesParam param)
         {
             if (param == null) { throw new ArgumentNullException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param))); }
             if (param.CustomerId == Guid.Empty) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param.CustomerId))); }
@@ -293,7 +293,7 @@ namespace Orckestra.Composer.Cart.Repositories
         /// <param name="cartName">Name of the cart.</param>
         /// <param name="customerId">ID of the customer to which belongs the cart.</param>
         /// <returns></returns>
-        protected CacheKey BuildCartCacheKey(string scope, string cartName, Guid customerId)
+        protected virtual CacheKey BuildCartCacheKey(string scope, string cartName, Guid customerId)
         {
             var cacheKey = new CacheKey(CacheConfigurationCategoryNames.Cart)
             {
@@ -326,7 +326,7 @@ namespace Orckestra.Composer.Cart.Repositories
         /// <param name="customerId"></param>
         /// <param name="cartName"></param>
         /// <returns></returns>
-        protected CacheKey BuildCartPaymentCacheKey(string scope, Guid customerId, string cartName)
+        protected virtual CacheKey BuildCartPaymentCacheKey(string scope, Guid customerId, string cartName)
         {
             var key = new CacheKey(CacheConfigurationCategoryNames.CartPayment)
             {

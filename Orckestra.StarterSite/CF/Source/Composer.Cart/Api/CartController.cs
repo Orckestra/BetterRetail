@@ -56,24 +56,9 @@ namespace Orckestra.Composer.Cart.Api
         /// <returns>A Json representation of cart state</returns>
         [HttpGet]
         [ActionName("getcart")]
-        public async Task<IHttpActionResult> GetCart()
+        public virtual async Task<IHttpActionResult> GetCart()
         {
-            var getCartUrlParam = new GetCartUrlParam
-            {
-                CultureInfo = ComposerContext.CultureInfo,                
-            };
-
-            var checkoutStepInfos = CartUrlProvider.GetCheckoutStepPageInfos(getCartUrlParam);
-            var returnUrl = ComposerContext.IsAuthenticated ? null : checkoutStepInfos[1].Url;
-
-            var checkoutSignInUrl = CartUrlProvider.GetCheckoutSignInUrl(new GetCartUrlParam
-            {                
-                CultureInfo = ComposerContext.CultureInfo,
-                ReturnUrl = returnUrl,
-            });
-
-            var checkoutUrlTarget = ComposerContext.IsAuthenticated ? checkoutStepInfos[1].Url : checkoutSignInUrl;
-
+            
             var homepageUrl = GetHomepageUrl();            
 
             var cartViewModel = await CartService.GetCartViewModelAsync(new GetCartParam
@@ -90,6 +75,11 @@ namespace Orckestra.Composer.Cart.Api
 
             if (cartViewModel.OrderSummary != null)
             {
+                var checkoutUrlTarget = GetCheckoutUrl();
+                var checkoutStepInfos = CartUrlProvider.GetCheckoutStepPageInfos(new GetCartUrlParam
+                {
+                    CultureInfo = ComposerContext.CultureInfo,
+                });
                 //Build redirect url in case of the customer try to access an unauthorized step.
                 var stepNumber = cartViewModel.OrderSummary.CheckoutRedirectAction.LastCheckoutStep;
                 if (!checkoutStepInfos.ContainsKey(stepNumber))
@@ -122,7 +112,7 @@ namespace Orckestra.Composer.Cart.Api
         [HttpPost]
         [ActionName("updatecart")]
         [ValidateModelState]
-        public async Task<IHttpActionResult> UpdateCart(UpdateCartRequest updateCartRequest)
+        public virtual async Task<IHttpActionResult> UpdateCart(UpdateCartRequest updateCartRequest)
         {
             if (updateCartRequest == null) { return BadRequest("updateCartRequest is required"); }
             if (!ModelState.IsValid) { return BadRequest(ModelState); }
@@ -183,7 +173,7 @@ namespace Orckestra.Composer.Cart.Api
         /// <returns>A Json representation of the Shipping methods</returns>
         [HttpGet]
         [ActionName("shippingmethods")]
-        public async Task<IHttpActionResult> GetShippingMethods()
+        public virtual async Task<IHttpActionResult> GetShippingMethods()
         {
             var shippingMethodsViewModel = await ShippingMethodService.GetShippingMethodsAsync(new GetShippingMethodsParam
             {
@@ -217,7 +207,7 @@ namespace Orckestra.Composer.Cart.Api
 
         [HttpPut]
         [ActionName("setdefaultpaymentmethod")]
-        public async Task<IHttpActionResult> SetCustomerDefaultPaymentMethod(SetCustomerDefaultPaymentMethodViewModel request)
+        public virtual async Task<IHttpActionResult> SetCustomerDefaultPaymentMethod(SetCustomerDefaultPaymentMethodViewModel request)
         {
             var paymentMethod = await CartService.SetDefaultCustomerPaymentMethod(new SetDefaultCustomerPaymentMethodParam
             {
@@ -535,7 +525,7 @@ namespace Orckestra.Composer.Cart.Api
             return checkoutUrlTarget;
         }
 
-        private static void SetCheckoutUrl(CartViewModel cartViewModel, string checkoutUrl)
+        protected virtual void SetCheckoutUrl(CartViewModel cartViewModel, string checkoutUrl)
         {
             if (cartViewModel.OrderSummary != null)
             {
@@ -543,7 +533,7 @@ namespace Orckestra.Composer.Cart.Api
             }
         }
 
-        private string GetHomepageUrl()
+        protected virtual string GetHomepageUrl()
         {
             var homepageUrl = CartUrlProvider.GetHomepageUrl(new GetCartUrlParam
             {                
@@ -553,15 +543,15 @@ namespace Orckestra.Composer.Cart.Api
             return homepageUrl;
         }
 
-        private static void SetHomepageUrl(CartViewModel cartViewModel, string homepageUrl)
+        protected virtual void SetHomepageUrl(CartViewModel cartViewModel, string homepageUrl)
         {
             if (cartViewModel != null)
             {
                 cartViewModel.HomepageUrl = homepageUrl;
             }
         }
-		
-		private void SetEditCartUrl(CartViewModel cartViewModel)
+
+        protected void SetEditCartUrl(CartViewModel cartViewModel)
         {
             if (cartViewModel.OrderSummary != null)
             {

@@ -25,7 +25,7 @@ namespace Orckestra.Composer.Search.Factory
         /// <summary>
         /// Creates a new list of <see cref="SelectedFacet"/> based on a <param name="filter"></param> object.
         /// </summary>
-         public IEnumerable<SelectedFacet> CreateSelectedFacet(SearchFilter filter, CultureInfo cultureInfo)
+         public virtual IEnumerable<SelectedFacet> CreateSelectedFacet(SearchFilter filter, CultureInfo cultureInfo)
         {
             if (filter == null) { throw new ArgumentNullException("filter"); }
             if (string.IsNullOrWhiteSpace(filter.Name)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("Name"), "filter"); }

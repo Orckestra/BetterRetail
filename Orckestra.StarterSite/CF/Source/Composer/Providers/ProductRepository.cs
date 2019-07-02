@@ -18,8 +18,8 @@ namespace Orckestra.Composer.Repositories
     /// </summary>
     public class ProductRepository : IProductRepository
     {
-        private readonly IOvertureClient _overtureClient;
-        private readonly ICacheProvider _cacheProvider;
+        protected readonly IOvertureClient _overtureClient;
+        protected readonly ICacheProvider _cacheProvider;
 
         public ProductRepository(IOvertureClient overtureClient, ICacheProvider cacheProvider)
         {

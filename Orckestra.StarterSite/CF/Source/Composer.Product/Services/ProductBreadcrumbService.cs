@@ -36,7 +36,7 @@ namespace Orckestra.Composer.Product.Services
         /// </summary>
         /// <param name="parameters">Parameters to generate the ViewModel.</param>
         /// <returns></returns>
-        public async Task<BreadcrumbViewModel> CreateBreadcrumbAsync(GetProductBreadcrumbParam parameters)
+        public virtual async Task<BreadcrumbViewModel> CreateBreadcrumbAsync(GetProductBreadcrumbParam parameters)
         {
             AssertParameters(parameters);
 
@@ -46,7 +46,7 @@ namespace Orckestra.Composer.Product.Services
             return vm;
         }
 
-        private void AssertParameters(GetProductBreadcrumbParam parameters)
+        protected virtual void AssertParameters(GetProductBreadcrumbParam parameters)
         {
             if (parameters == null) { throw new ArgumentNullException("parameters"); }
             if (string.IsNullOrWhiteSpace(parameters.ProductName)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("productName"), "parameters"); }
@@ -58,7 +58,7 @@ namespace Orckestra.Composer.Product.Services
             }
         }
 
-        private Task<CategoryViewModel[]> GetCategoryViewModelsAsync(string categoryId, string scope, CultureInfo cultureInfo)
+        protected virtual Task<CategoryViewModel[]> GetCategoryViewModelsAsync(string categoryId, string scope, CultureInfo cultureInfo)
         {
             if (!string.IsNullOrEmpty(categoryId))
             {
@@ -75,7 +75,7 @@ namespace Orckestra.Composer.Product.Services
             return Task.FromResult(new CategoryViewModel[0]);
         }
 
-        private BreadcrumbViewModel CreateBreadcrumbViewModel(GetProductBreadcrumbParam parameters, IEnumerable<CategoryViewModel> categoriesPath)
+        protected virtual BreadcrumbViewModel CreateBreadcrumbViewModel(GetProductBreadcrumbParam parameters, IEnumerable<CategoryViewModel> categoriesPath)
         {
             var breadcrumbViewModel = new BreadcrumbViewModel
             {
@@ -92,7 +92,7 @@ namespace Orckestra.Composer.Product.Services
             return breadcrumbViewModel;
         }
 
-        private CategoryViewModel[] GetCategoriesWithoutRoot(IEnumerable<CategoryViewModel> categories)
+        protected virtual CategoryViewModel[] GetCategoriesWithoutRoot(IEnumerable<CategoryViewModel> categories)
         {
             if (categories == null) { return null; }
 
@@ -100,7 +100,7 @@ namespace Orckestra.Composer.Product.Services
             return categories.TakeWhile((vm, i) => i < nbCategories - 1).ToArray();
         }
 
-        private void CreateBreadcrumbItemsForCategories(Stack<BreadcrumbItemViewModel> stack, CategoryViewModel[] categories, CultureInfo cultureInfo, string baseUrl)
+        protected virtual void CreateBreadcrumbItemsForCategories(Stack<BreadcrumbItemViewModel> stack, CategoryViewModel[] categories, CultureInfo cultureInfo, string baseUrl)
         {
             if (categories == null) { return; }
 
@@ -118,13 +118,13 @@ namespace Orckestra.Composer.Product.Services
             }
         }
 
-        private void CreateRootBreadcrumbItem(Stack<BreadcrumbItemViewModel> stack, string homeUrl, CultureInfo cultureInfo)
+        protected virtual void CreateRootBreadcrumbItem(Stack<BreadcrumbItemViewModel> stack, string homeUrl, CultureInfo cultureInfo)
         {
             var item = CreateBreadcrumbItem(LocalizeString("General", "L_Home", cultureInfo), homeUrl);
             stack.Push(item);
         }
 
-        private BreadcrumbItemViewModel CreateBreadcrumbItem(string displayName, string url)
+        protected virtual BreadcrumbItemViewModel CreateBreadcrumbItem(string displayName, string url)
         {
             return new BreadcrumbItemViewModel
             {
@@ -133,7 +133,7 @@ namespace Orckestra.Composer.Product.Services
             };
         }
 
-        private void UnrollStackIntoViewModel(Stack<BreadcrumbItemViewModel> stack, BreadcrumbViewModel breadcrumbViewModel)
+        protected virtual void UnrollStackIntoViewModel(Stack<BreadcrumbItemViewModel> stack, BreadcrumbViewModel breadcrumbViewModel)
         {
             while (stack.Count > 0)
             {
@@ -142,7 +142,7 @@ namespace Orckestra.Composer.Product.Services
             }
         }
 
-        private string LocalizeString(string category, string key, CultureInfo cultureInfo)
+        protected virtual string LocalizeString(string category, string key, CultureInfo cultureInfo)
         {
             return LocalizationProvider.GetLocalizedString(new GetLocalizedParam
             {

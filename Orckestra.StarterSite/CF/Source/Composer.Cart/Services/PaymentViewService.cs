@@ -68,7 +68,7 @@ namespace Orckestra.Composer.Cart.Services
         /// </summary>
         /// <param name="param">Parameters used to retrieve the payment providers.</param>
         /// <returns></returns>
-        public Task<IEnumerable<PaymentProviderViewModel>> GetPaymentProvidersAsync(GetPaymentProvidersParam param)
+        public virtual Task<IEnumerable<PaymentProviderViewModel>> GetPaymentProvidersAsync(GetPaymentProvidersParam param)
         {
             if (param == null) { throw new ArgumentNullException("param"); }
             if (param.CultureInfo == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("CultureInfo"), "param"); }
@@ -321,7 +321,7 @@ namespace Orckestra.Composer.Cart.Services
             return activePaymentVm;
         }
 
-        protected async Task<bool> ValidatePaymentMethod(ValidatePaymentMethodParam param)
+        protected virtual async Task<bool> ValidatePaymentMethod(ValidatePaymentMethodParam param)
         {
             Guard.NotNullOrWhiteSpace(param.CartName, nameof(param.CartName));
             Guard.NotNullOrWhiteSpace(param.Scope, nameof(param.Scope));
@@ -353,7 +353,7 @@ namespace Orckestra.Composer.Cart.Services
                 .IsValid;
         }
 
-        public async Task<ActivePaymentViewModel> GetActivePayment(GetActivePaymentParam param)
+        public virtual async Task<ActivePaymentViewModel> GetActivePayment(GetActivePaymentParam param)
         {
             if (param == null) throw new ArgumentNullException(nameof(param), ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param)));
             if (param.CustomerId == Guid.Empty) throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param.CustomerId)), nameof(param.CustomerId));
@@ -382,7 +382,7 @@ namespace Orckestra.Composer.Cart.Services
             });
         }
 
-        public Task RemovePaymentMethodAsync(RemovePaymentMethodParam param)
+        public virtual Task RemovePaymentMethodAsync(RemovePaymentMethodParam param)
         {
             if (param == null) throw new ArgumentNullException(nameof(param), "param is required");
             if (param.PaymentMethodId == Guid.Empty) throw new ArgumentException("param.PaymentMethodId is required", nameof(param.PaymentMethodId));
@@ -391,7 +391,7 @@ namespace Orckestra.Composer.Cart.Services
         }
 
 
-        private async Task<Payment> PreparePaymentSwitch(UpdatePaymentMethodParam param, Payment activePayment)
+        protected virtual async Task<Payment> PreparePaymentSwitch(UpdatePaymentMethodParam param, Payment activePayment)
         {
             //TODO: Remove for now, but we should void (Bug with Moneris when payment is PendingVerification).
             await PaymentRepository.RemovePaymentAsync(new VoidOrRemovePaymentParam
@@ -416,7 +416,7 @@ namespace Orckestra.Composer.Cart.Services
             return newPayment;
         }
 
-        private Task<List<Payment>> GetCartPaymentsAsync(UpdatePaymentMethodParam param)
+        protected virtual Task<List<Payment>> GetCartPaymentsAsync(UpdatePaymentMethodParam param)
         {
             return PaymentRepository.GetCartPaymentsAsync(new GetCartPaymentsParam
             {
@@ -492,7 +492,7 @@ namespace Orckestra.Composer.Cart.Services
             return cart.Payments == null ? null : cart.Payments.FirstOrDefault(p => !p.IsVoided());
         }
 
-        protected IPaymentProvider ObtainPaymentProvider(string paymentProviderName)
+        protected virtual IPaymentProvider ObtainPaymentProvider(string paymentProviderName)
         {
             return PaymentProviderFactory.ResolveProvider(paymentProviderName);
         }

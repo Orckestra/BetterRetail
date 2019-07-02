@@ -19,7 +19,7 @@ namespace Orckestra.Composer.Search.Services
             LocalizationProvider = localizationProvider;
         }
 
-        public BreadcrumbViewModel CreateBreadcrumbViewModel(GetSearchBreadcrumbParam param)
+        public virtual BreadcrumbViewModel CreateBreadcrumbViewModel(GetSearchBreadcrumbParam param)
         {
             if (param == null) { throw new ArgumentNullException("param"); }
             if (param.CultureInfo == null) { throw new ArgumentException("param.CultureInfo is required"); }
@@ -36,7 +36,7 @@ namespace Orckestra.Composer.Search.Services
             return vm;
         }
 
-        private BreadcrumbItemViewModel GenerateHomeItem(string homeUrl, CultureInfo cultureInfo)
+        protected virtual BreadcrumbItemViewModel GenerateHomeItem(string homeUrl, CultureInfo cultureInfo)
         {
             return new BreadcrumbItemViewModel
             {
@@ -50,7 +50,7 @@ namespace Orckestra.Composer.Search.Services
             };
         }
 
-        private string GenerateActivePageName(string keywords, CultureInfo cultureInfo)
+        protected virtual string GenerateActivePageName(string keywords, CultureInfo cultureInfo)
         {
             var leftPart = LocalizationProvider.GetLocalizedString(new GetLocalizedParam
             {

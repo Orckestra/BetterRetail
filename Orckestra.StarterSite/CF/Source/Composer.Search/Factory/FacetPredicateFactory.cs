@@ -12,7 +12,7 @@ namespace Orckestra.Composer.Search.Factory
 {
     public class FacetPredicateFactory : ProviderFactory<IFacetPredicateProvider>, IFacetPredicateFactory
     {
-        private IFacetPredicateProviderRegistry FacetPredicateProviderRegistry { get; set; }
+        protected IFacetPredicateProviderRegistry FacetPredicateProviderRegistry { get; set; }
 
         public FacetPredicateFactory(IDependencyResolver dependencyResolver, IFacetPredicateProviderRegistry facetPredicateProviderRegistry)
             : base(dependencyResolver)
@@ -24,7 +24,7 @@ namespace Orckestra.Composer.Search.Factory
         /// <summary>
         /// Creates a new instance of <see cref="FacetPredicate"/> based on a <param name="filter"></param> object.
         /// </summary>
-        public FacetPredicate CreateFacetPredicate(SearchFilter filter)
+        public virtual FacetPredicate CreateFacetPredicate(SearchFilter filter)
         {
             if (filter == null) { throw new ArgumentNullException("filter"); }
             if (string.IsNullOrWhiteSpace(filter.Name)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("Name"), "filter"); }

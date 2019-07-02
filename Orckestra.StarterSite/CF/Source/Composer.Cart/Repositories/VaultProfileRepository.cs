@@ -95,7 +95,7 @@ namespace Orckestra.Composer.Cart.Repositories
             return await OvertureClient.SendAsync(request);
         }
 
-        protected CacheKey BuildPaymentMethodCacheKey(string scope, string cartName, Guid customerId, string providerName)
+        protected virtual CacheKey BuildPaymentMethodCacheKey(string scope, string cartName, Guid customerId, string providerName)
         {
             var cacheKey = new CacheKey(CacheConfigurationCategoryNames.PaymentMethod)
             {

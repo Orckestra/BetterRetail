@@ -12,10 +12,10 @@ module Orckestra.Composer {
 
     export class FullCartController extends Orckestra.Composer.Controller {
         protected source: string = 'Checkout';
-        private debounceUpdateLineItem: (args: any) => void;
+        protected debounceUpdateLineItem: (args: any) => void;
 
-        private loaded: boolean = false;
-        private cartService: CartService = new CartService(new CartRepository(), this.eventHub);
+        protected loaded: boolean = false;
+        protected cartService: CartService = new CartService(new CartRepository(), this.eventHub);
 
         public initialize() {
 
@@ -25,7 +25,8 @@ module Orckestra.Composer {
             this.loadCart();
         }
 
-        private registerSubscriptions() {
+        protected registerSubscriptions() {
+
             this.eventHub.subscribe('cartUpdated', e => this.onCartUpdated(e.data));
         }
 
@@ -34,7 +35,7 @@ module Orckestra.Composer {
             ErrorHandler.instance().removeErrors();
         }
 
-        private loadCart() {
+        protected loadCart() {
 
             this.cartService.getFreshCart()
                 .then(cart => {

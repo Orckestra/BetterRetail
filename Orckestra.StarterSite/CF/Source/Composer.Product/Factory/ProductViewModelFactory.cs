@@ -562,7 +562,7 @@ namespace Orckestra.Composer.Product.Factory
             return EnableKvasInStock(kvaParam, kvas); 
         }
 
-        private List<KeyVariantAttributeItem> EnableKvasInStock(GenerateKvaItemsParam kvaParam, List<KeyVariantAttributeItem> kvas)
+        protected virtual List<KeyVariantAttributeItem> EnableKvasInStock(GenerateKvaItemsParam kvaParam, List<KeyVariantAttributeItem> kvas)
         {            
             //Enable available kvas
             foreach (var kva in kvaParam.SelectedKvas)
@@ -591,7 +591,7 @@ namespace Orckestra.Composer.Product.Factory
         /// <param name="product"></param>
         /// <param name="variants"></param>
         /// <returns></returns>
-        private async Task<List<AllProductImages>> GetProductImages(
+        protected virtual async Task<List<AllProductImages>> GetProductImages(
             Overture.ServiceModel.Products.Product product,
             IList<Variant> variants)
         {
@@ -640,7 +640,7 @@ namespace Orckestra.Composer.Product.Factory
             return productDetailImageViewModels;
         }
 
-        private static IEnumerable<ProductDetailImageViewModel> SetFirstImageSelected(
+        protected static IEnumerable<ProductDetailImageViewModel> SetFirstImageSelected(
           IEnumerable<ProductDetailImageViewModel> imageViewModels)
         {
             // convert the IEnumerable to an array so that changes to the .First() element are persisted

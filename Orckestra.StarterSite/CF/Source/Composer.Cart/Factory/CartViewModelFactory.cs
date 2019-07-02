@@ -72,7 +72,7 @@ namespace Orckestra.Composer.Cart.Factory
             RewardViewModelFactory = rewardViewModelFactory;
         }
 
-        public CartViewModel CreateCartViewModel(CreateCartViewModelParam param)
+        public virtual CartViewModel CreateCartViewModel(CreateCartViewModelParam param)
         {
             if (param == null) { throw new ArgumentNullException("param"); }
             if (param.CultureInfo == null) { throw new ArgumentNullException("CultureInfo"); }
@@ -194,7 +194,7 @@ namespace Orckestra.Composer.Cart.Factory
             return additionalFeeSummaryList;
         }
 
-        private string GetShippingPrice(decimal cost, CultureInfo cultureInfo)
+        protected virtual string GetShippingPrice(decimal cost, CultureInfo cultureInfo)
         {
             var price = cost == 0
                 ? GetFreeShippingPriceLabel(cultureInfo)
@@ -402,7 +402,7 @@ namespace Orckestra.Composer.Cart.Factory
             viewModel.ShipmentAdditionalFeeSummaryList = GetShipmentAdditionalFeeSummary(shipmentAdditionalFees, cultureInfo);
         }
 
-        private IEnumerable<ShipmentAdditionalFeeViewModel> GetShipmentAdditionalFees(IEnumerable<ShipmentAdditionalFee> additionalFees, CultureInfo cultureInfo)
+        protected virtual IEnumerable<ShipmentAdditionalFeeViewModel> GetShipmentAdditionalFees(IEnumerable<ShipmentAdditionalFee> additionalFees, CultureInfo cultureInfo)
         {
             return additionalFees.Select(shipmentAdditionalFee => ViewModelMapper.MapTo<ShipmentAdditionalFeeViewModel>(shipmentAdditionalFee, cultureInfo));
         }
@@ -631,7 +631,7 @@ namespace Orckestra.Composer.Cart.Factory
             return price;
         }
 
-        private string GetFreeShippingPriceLabel(CultureInfo cultureInfo)
+        protected virtual string GetFreeShippingPriceLabel(CultureInfo cultureInfo)
         {
             return LocalizationProvider.GetLocalizedString(new GetLocalizedParam
             {
@@ -682,7 +682,7 @@ namespace Orckestra.Composer.Cart.Factory
         /// </summary>
         /// <param name="orderShipment"></param>
         /// <returns></returns>
-        private List<Reward> GetAllRewards(List<Shipment> orderShipment)
+        protected List<Reward> GetAllRewards(List<Shipment> orderShipment)
         {
             var allRewards = new List<Reward>();
             if (orderShipment.Any())
@@ -790,7 +790,7 @@ namespace Orckestra.Composer.Cart.Factory
             };
         }
 
-        private static PaymentViewModel BuildEmptyPaymentViewModel()
+        protected static PaymentViewModel BuildEmptyPaymentViewModel()
         {
             return new PaymentViewModel
             {

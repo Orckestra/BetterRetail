@@ -90,7 +90,7 @@ namespace Orckestra.Composer.Search.Services
             ScopeViewService = scopeViewService;
         }
 
-        private IList<Facet> BuildFacets(SearchCriteria criteria, ProductSearchResult searchResult)
+        protected virtual IList<Facet> BuildFacets(SearchCriteria criteria, ProductSearchResult searchResult)
         {
             if (searchResult.Facets == null) { return new List<Facet>(); }
 
@@ -108,7 +108,7 @@ namespace Orckestra.Composer.Search.Services
             return facetList;
         }
 
-        private IList<PromotedFacetValue> BuildPromotedFacetValues(IEnumerable<Facet> facets)
+        protected virtual IList<PromotedFacetValue> BuildPromotedFacetValues(IEnumerable<Facet> facets)
         {
             return
                 facets.SelectMany(facet =>
@@ -260,7 +260,7 @@ namespace Orckestra.Composer.Search.Services
                 : extractedValues[2];
         }
 
-        private async Task<bool> GetProductSearchViewModelAvailableForSell(
+        protected virtual async Task<bool> GetProductSearchViewModelAvailableForSell(
             ProductSearchViewModel productSearchViewModel,
             ProductDocument productDocument)
         {
@@ -303,7 +303,7 @@ namespace Orckestra.Composer.Search.Services
             };
         }
 
-        private static InventoryStatusEnum GetInventoryItemStatus(InventoryStatus inventoryStatus)
+        protected static InventoryStatusEnum GetInventoryItemStatus(InventoryStatus inventoryStatus)
         {
             switch (inventoryStatus)
             {
@@ -433,7 +433,7 @@ namespace Orckestra.Composer.Search.Services
             return previousPage;
         }
 
-        private static bool HasVariants(ProductDocument resultItem)
+        protected static bool HasVariants(ProductDocument resultItem)
         {
             if (resultItem == null)
             {
