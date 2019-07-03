@@ -204,7 +204,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="OrckestraCommerce.RecurringOrders.ServiceModel, Version=3.22.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OrckestraCommerce.RecurringOrders.ServiceModel.3.22.0-beta0001lib\portable-net4+sl5+netcore45+wp8\OrckestraCommerce.RecurringOrders.ServiceModel.dll</HintPath>
+      <HintPath>..\packages\OrckestraCommerce.RecurringOrders.ServiceModel.3.22.0-beta0001\lib\portable-net4+sl5+netcore45+wp8\OrckestraCommerce.RecurringOrders.ServiceModel.dll</HintPath>
     </Reference>
     <Reference Include="OrckestraCommerce.RecurringOrders.ServiceModel.Requests, Version=3.22.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\OrckestraCommerce.RecurringOrders.ServiceModel.Requests.3.22.0-beta0001\lib\portable-net4+sl5+netcore45+wp8\OrckestraCommerce.RecurringOrders.ServiceModel.Requests.dll</HintPath>
