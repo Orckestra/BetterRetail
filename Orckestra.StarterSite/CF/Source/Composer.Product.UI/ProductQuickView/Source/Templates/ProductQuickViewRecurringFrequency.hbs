@@ -3,22 +3,22 @@
         <div class="recurring-modes form-group js-recurringModes">
             <div class="radio-row selected js-recurringModeRow">
                 <div class="radio">
-                    <input id="UseSingle" {{#if_eq recurringMode "single"}}checked="checked"{{/if_eq}} type="radio" data-target=".modeSelection"
+                    <input id="UseSingleQV" {{#if_eq recurringMode "single"}}checked="checked"{{/if_eq}} type="radio" data-target=".modeSelection"
                            name="recurringMode"
                            value="single"
                            data-oc-change="changeRecurringMode"  />
-                    <label for="UseSingle">{{localize 'ProductPage' 'L_RecurringFrequencyOnce'}}</label>
+                    <label for="UseSingleQV">{{localize 'ProductPage' 'L_RecurringFrequencyOnce'}}</label>
                 </div>
             </div>
             <div class="radio-row js-recurringModeRow">
                 <div class="radio">
-                    <input  id="UseRecurring" {{#if_eq recurringMode "recurring"}}checked="checked"{{/if_eq}}
+                    <input  id="UseRecurringQV" {{#if_eq recurringMode "recurring"}}checked="checked"{{/if_eq}}
                             type="radio"
                             data-target=".modeSelection"
                             name="recurringMode"
                             value="recurring"
                             data-oc-change="changeRecurringMode"  />
-                    <label for="UseRecurring">
+                    <label for="UseRecurringQV">
                         <img src="/UI.Package/Images/recurring.png" alt="{{localize 'General' 'L_RecurringProduct'}}" title="{{localize 'General' 'L_RecurringProduct'}}" /> {{localizeFormat 'ProductPage' 'L_RecurringPitch' (localize 'ProductPage' 'L_RecurringSaveRate') }}
                         <button class="btn-link" role="button" data-trigger="click" data-toggle="popover" data-placement="top" title=""
                                 data-content="{{{recurringBubblePitch}}}" data-html="true" data-original-title="{{localize 'ProductPage' 'L_RecurringBubblePitchTitle'}}">
