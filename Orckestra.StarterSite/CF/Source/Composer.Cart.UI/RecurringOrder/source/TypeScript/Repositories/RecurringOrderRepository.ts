@@ -320,7 +320,7 @@ module Orckestra.Composer {
         }
 
         public getAnonymousCartSignInUrl(): Q.Promise<any> {
-            return ComposerClient.get(`/api/recurringordercart/get-anonymous-cart-sign-in-url`);
+            return ComposerClient.get(`/api/recurringcart/getanonymouscartsigninurl`);
         }
 
         public getCartShippingMethods(getCartShippingMethodsParam: IRecurringOrderGetCartShippingMethods): Q.Promise<any> {

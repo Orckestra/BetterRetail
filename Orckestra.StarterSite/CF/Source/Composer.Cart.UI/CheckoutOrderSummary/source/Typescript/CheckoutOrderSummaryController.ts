@@ -1,10 +1,15 @@
 ///<reference path='../../../../Composer.UI/Source/Typings/tsd.d.ts' />
 ///<reference path='../../../CheckoutCommon/source/Typescript/BaseCheckoutController.ts' />
+///<reference path='../../../../Composer.Cart.UI/RecurringOrder/source/TypeScript/Services/RecurringOrderService.ts' />
+///<reference path='../../../../Composer.Cart.UI/RecurringOrder/source/TypeScript/Services/IRecurringOrderService.ts' />
+///<reference path='../../../../Composer.Cart.UI/RecurringOrder/source/TypeScript/Repositories/RecurringOrderRepository.ts' />
 
 module Orckestra.Composer {
     'use strict';
 
     export class CheckoutOrderSummaryController extends Orckestra.Composer.BaseCheckoutController {
+
+        private recurringOrderService: IRecurringOrderService = new RecurringOrderService(new RecurringOrderRepository(), this.eventHub);
 
         public initialize() {
 
@@ -44,6 +49,8 @@ module Orckestra.Composer {
         }
 
         public renderData(checkoutContext: ICheckoutContext): Q.Promise<void> {
+
+            this.handleRecurringOrderCheckoutSecurity(checkoutContext);
 
             return Q.fcall(() => {
                 checkoutContext.cartViewModel.LoadCheckoutOrderSummary = true;
@@ -93,6 +100,24 @@ module Orckestra.Composer {
                     console.error('Error on checkout submit.', reason);
                     ErrorHandler.instance().outputErrorFromCode('CheckoutNextStepFailed');
                     busy.done();
+                });
+        }
+
+        /**
+         * If user has recurring items and is not logged in, redirect to checkout login.
+         */
+        public handleRecurringOrderCheckoutSecurity(checkoutContext: ICheckoutContext): any {
+
+            var isAuthenticated = checkoutContext.authenticationViewModel.IsAuthenticated;
+            var containsRecurring = checkoutContext.cartViewModel.HasRecurringLineitems;
+
+            var anonymousCartSignInUrlPromise = this.recurringOrderService.getAnonymousCartSignInUrl();
+
+            Q.all([anonymousCartSignInUrlPromise])
+                .spread((anonymousCartSignInUrl) => {
+                    if (containsRecurring && !isAuthenticated) {
+                        window.location.href = anonymousCartSignInUrl;
+                    }
                 });
         }
     }

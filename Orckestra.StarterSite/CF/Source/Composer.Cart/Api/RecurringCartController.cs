@@ -27,6 +27,7 @@ namespace Orckestra.Composer.Cart.Api
         protected IRecurringOrderTemplatesViewService RecurringOrderTemplatesService { get; }
         protected IShippingMethodViewService ShippingMethodViewService { get; }
         protected ICartService CartService { get; }
+        protected ICartUrlProvider CartUrlProvider { get; }
 
         public RecurringCartController(
             IRecurringOrderCartsViewService recurringOrderCarstService,
@@ -34,7 +35,8 @@ namespace Orckestra.Composer.Cart.Api
             IPaymentViewService paymentViewService,
             IRecurringOrderTemplatesViewService recurringOrderTemplatesService,
             IShippingMethodViewService shippingMethodViewService,
-            ICartService cartService)
+            ICartService cartService,
+            ICartUrlProvider cartUrlProvider)
         {
             if (recurringOrderCarstService == null) throw new ArgumentNullException(nameof(recurringOrderCarstService), ArgumentNullMessageFormatter.FormatErrorMessage(nameof(recurringOrderCarstService)));
             if (composerContext == null) throw new ArgumentNullException(nameof(composerContext), ArgumentNullMessageFormatter.FormatErrorMessage(nameof(composerContext)));
@@ -42,6 +44,7 @@ namespace Orckestra.Composer.Cart.Api
             if (recurringOrderTemplatesService == null) throw new ArgumentNullException(nameof(recurringOrderTemplatesService), ArgumentNullMessageFormatter.FormatErrorMessage(nameof(recurringOrderTemplatesService)));
             if (shippingMethodViewService == null) throw new ArgumentNullException(nameof(shippingMethodViewService), ArgumentNullMessageFormatter.FormatErrorMessage(nameof(shippingMethodViewService)));
             if (cartService == null) throw new ArgumentNullException(nameof(shippingMethodViewService), ArgumentNullMessageFormatter.FormatErrorMessage(nameof(cartService)));
+            if (cartUrlProvider == null) throw new ArgumentNullException(nameof(cartUrlProvider), ArgumentNullMessageFormatter.FormatErrorMessage(nameof(cartUrlProvider)));
 
             RecurringOrderCartsService = recurringOrderCarstService;
             ComposerContext = composerContext;
@@ -49,6 +52,7 @@ namespace Orckestra.Composer.Cart.Api
             RecurringOrderTemplatesService = recurringOrderTemplatesService;
             ShippingMethodViewService = shippingMethodViewService;
             CartService = cartService;
+            CartUrlProvider = cartUrlProvider;
         }
 
         [HttpGet]
@@ -262,6 +266,19 @@ namespace Orckestra.Composer.Cart.Api
             }).ConfigureAwaitWithCulture(false);
 
             return Ok(vm);
+        }
+
+        [HttpGet]
+        [ActionName("getanonymouscartsigninurl")]
+        public virtual IHttpActionResult GetAnonymousCartSignInUrl()
+        {
+            var url = CartUrlProvider.GetCheckoutSignInUrl(new GetCartUrlParam
+            {
+                CultureInfo = ComposerContext.CultureInfo,
+                ReturnUrl = CartUrlProvider.GetCheckoutStepUrl(new GetCheckoutStepUrlParam() { CultureInfo = ComposerContext.CultureInfo, StepNumber = 1 })
+            });
+
+            return Ok(url);
         }
     }
 }
