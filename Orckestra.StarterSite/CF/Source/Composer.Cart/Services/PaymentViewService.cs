@@ -20,6 +20,7 @@ using Orckestra.Composer.Utils;
 using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel.Orders;
 using Orckestra.Composer.Logging;
+using Orckestra.Composer.Cart.Helper;
 
 namespace Orckestra.Composer.Cart.Services
 {
@@ -111,6 +112,18 @@ namespace Orckestra.Composer.Cart.Services
                 CultureInfo = param.CultureInfo,
                 Scope = param.Scope
             }).ConfigureAwait(false);
+
+            var hasRecurring = false;
+            if (ConfigurationUtil.GetRecurringOrdersConfigEnabled())
+            {
+                hasRecurring = RecurringOrderCartHelper.IsCartContainsRecurringOrderItems(cart);
+            }
+
+            if (hasRecurring)
+            {
+                var supported = CartConfiguration.SupportedRecurringOrderPaymentMethodTypes;
+                paymentMethods = paymentMethods.Where(p => supported.Where(s => s.ToString() == p.PaymentType).Count() > 0).ToList();
+            }
 
             var vm = await MapCheckoutPaymentViewModel(cart, paymentMethods, param.CultureInfo, param.IsAuthenticated);
             return vm;

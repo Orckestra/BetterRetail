@@ -24,7 +24,7 @@ namespace Orckestra.Composer.Cart.Helper
         {
             return _recurringOrdersConfigEnabled;
         }
-        public static bool IsCartContainsRecurringOrderItems(ProcessedCart cart)
+        public static bool IsCartContainsRecurringOrderItems(Overture.ServiceModel.Orders.Cart cart)
         {
             if (!_recurringOrdersConfigEnabled)
                 return false;
