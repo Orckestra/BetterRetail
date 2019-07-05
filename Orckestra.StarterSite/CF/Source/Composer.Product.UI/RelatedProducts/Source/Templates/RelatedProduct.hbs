@@ -5,13 +5,22 @@
         </a>
 
         <div class="product-tile-text">
-            {{#if Brand}}
-                <strong class="text-uppercase  product-tile-brand" data-qa="search-product-brand">{{Brand}}</strong>
-                <br/>
-            {{/if}}
-            <a data-qa="search-product-title" href="{{Url}}" data-productId="{{ProductId}}" data-index='{{@index}}' data-oc-click='relatedProductsClick'>
-                {{DisplayName}}
-            </a>
+            <div class="row">
+                <div class="col-xs-10">
+                    {{#if Brand}}
+                        <strong class="text-uppercase  product-tile-brand" data-qa="search-product-brand" title="{{Brand}}">{{Brand}}</strong>
+                        <br/>
+                    {{/if}}
+                    <a data-qa="search-product-title" href="{{Url}}" data-productId="{{ProductId}}" data-index='{{@index}}' data-oc-click='relatedProductsClick'>
+                        {{DisplayName}}
+                    </a>
+                </div>
+                {{#if IsRecurringOrderEligible}}
+                    <div class="col-xs-2 product-tile-recurring">
+                        <img src="/UI.Package/Images/recurring.png" alt="{{localize 'General' 'L_RecurringProduct'}}" title="{{localize 'General' 'L_RecurringProduct'}}" />
+                    </div>
+                {{/if}}
+            </div>
         </div>
         {{#if DisplayPrices}}
             <div class="product-tile-special-price">
