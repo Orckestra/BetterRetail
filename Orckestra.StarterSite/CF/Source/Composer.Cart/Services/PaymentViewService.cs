@@ -495,6 +495,9 @@ namespace Orckestra.Composer.Cart.Services
             // for Moneris currently (when the user is authenticated) 
             vm.CanSavePaymentMethod = vm.ProviderType == MonerisCanadaPaymentProvider.MonerisProviderTypeName && param.IsAuthenticated;
 
+            // Recurring orders must have a saved credit card to work.
+            vm.MustSavePaymentMethod = vm.CanSavePaymentMethod && RecurringOrderCartHelper.IsCartContainsRecurringOrderItems(param.Cart);
+
             param.PaymentProvider.AugmentViewModel(vm, payment);
 
             return vm;

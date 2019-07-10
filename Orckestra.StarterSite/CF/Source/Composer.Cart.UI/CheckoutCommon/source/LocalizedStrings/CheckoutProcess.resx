@@ -163,7 +163,7 @@
     <value>Expired cart</value>
   </data>
   <data name="F_SaveCreditCardForced_Explain" xml:space="preserve">
-    <value>some inspiring explanation when the card will be saved with a recurring order</value>
+    <value>You need a saved credit card to have recurring orders.</value>
   </data>
   <data name="F_SaveCreditCardForced_ExplainTitle" xml:space="preserve">
     <value>Title: Saved Credit Card</value>

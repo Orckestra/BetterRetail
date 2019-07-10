@@ -163,7 +163,7 @@
     <value>Carte expirée</value>
   </data>
   <data name="F_SaveCreditCardForced_Explain" xml:space="preserve">
-    <value>Explication inspirante sur pourquoi la carte sera sauvegardée avec uen commande récurrence</value>
+    <value>Vous devez avoir une carte de crédit sauvegardé pour avoir des commandes récurrentes.</value>
   </data>
   <data name="F_SaveCreditCardForced_ExplainTitle" xml:space="preserve">
     <value>Titre: Carte Sauvegardée</value>
