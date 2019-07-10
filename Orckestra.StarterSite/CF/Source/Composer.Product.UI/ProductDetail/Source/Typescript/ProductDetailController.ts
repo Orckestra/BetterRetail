@@ -189,11 +189,7 @@ module Orckestra.Composer {
 
         public addToCartButtonClick(actionContext: IControllerActionContext) {
             let frequencyName = this.recurringMode === 'single' ? null : this.selectedRecurringOrderFrequencyName;
-            if (frequencyName === null) {
-                this.addLineItem(actionContext);
-            } else {
-                this.addLineItem(actionContext, frequencyName, this.context.viewModel.RecurringOrderProgramName);
-            }
+            this.addLineItem(actionContext, frequencyName, this.context.viewModel.RecurringOrderProgramName);
         }
     }
 }
