@@ -340,7 +340,6 @@ namespace Orckestra.Composer.Factory
             var recurringScheduleEditUrl = RecurringScheduleUrlProvider.GetRecurringScheduleDetailsUrl(new GetRecurringScheduleDetailsUrlParam
             {
                 CultureInfo = param.CultureInfo,
-                ReturnUrl = param.RecurringScheduleUrl,
                 RecurringScheduleId = vm.Id.ToString()
             });
             
