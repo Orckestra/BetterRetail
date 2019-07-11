@@ -481,7 +481,6 @@
     <Compile Include="ViewModels\RecurringOrderShippingMethodViewModel.cs" />
     <Compile Include="ViewModels\RecurringOrdersTemplatesShippingMethodsViewModel.cs" />
     <Compile Include="ViewModels\RecurringOrderTemplateAddressViewModel.cs" />
-    <Compile Include="ViewModels\RecurringOrderTemplateDetailsEditViewModel.cs" />
     <Compile Include="ViewModels\RecurringOrderTemplateLineItemViewModel.cs" />
     <Compile Include="ViewModels\RecurringOrderTemplatesViewModel.cs" />
     <Compile Include="ViewModels\RecurringOrderTemplateViewModel.cs" />
