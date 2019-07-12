@@ -10,21 +10,7 @@
     <mi:Add path="~\Bin\Orckestra.Composer.CompositeC1.DataTypes.dll" />
   </mi:PackageFragmentInstallerBinaries>
 
-  <mi:PackageFragmentInstallers>
-    <mi:Add
-        installerType="Composite.Core.PackageSystem.PackageFragmentInstallers.LocalePackageFragmentInstaller, Composite"
-        uninstallerType="Composite.Core.PackageSystem.PackageFragmentInstallers.LocalePackageFragmentUninstaller, Composite">
-      <Locales>
-        <Locale
-            name="en-CA"
-            urlMappingName="en-CA"
-            default="true" />
-        <Locale
-            name="fr-CA"
-            urlMappingName="fr-CA"
-            default="false" />
-      </Locales>
-    </mi:Add>
+  <mi:PackageFragmentInstallers>    
     <mi:Add installerType="Composite.Core.PackageSystem.PackageFragmentInstallers.DllPackageFragmentInstaller, Composite" uninstallerType="Composite.Core.PackageSystem.PackageFragmentInstallers.DllPackageFragmentUninstaller, Composite">
       <Files>
         <File sourceFilename="~\Bin\Autofac.dll" targetFilename="~\Bin\Autofac.dll" allowOverwrite="true" addAssemblyBinding="true"/>
