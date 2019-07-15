@@ -76,6 +76,7 @@ module Orckestra.Composer {
             var productId: string = productContext.attr('data-product-id');
             var variantId: string = productContext.attr('data-product-variant-id');
             var price: string = productContext.data('price');
+            var recurringProgramName: string = productContext.data('recurringorderprogramname');
 
             var busy = this.asyncBusy({ elementContext: actionContext.elementContext, containerContext: productContext });
             var promise: Q.Promise<any>;
@@ -83,7 +84,7 @@ module Orckestra.Composer {
             if (hasVariants) {
                 promise = this.addVariantProductToCart(productId, variantId, price);
             } else {
-                promise = this.addNonVariantProductToCart(productId, price);
+                promise = this.addNonVariantProductToCart(productId, price, recurringProgramName);
             }
 
             promise.fin(() => busy.done());
@@ -102,7 +103,7 @@ module Orckestra.Composer {
         /**
          * Occurs when adding a product to the cart that has no variant.
          */
-        protected addNonVariantProductToCart(productId: string, price: string): Q.Promise<any> {
+        protected addNonVariantProductToCart(productId: string, price: string, recurringProgramName: string): Q.Promise<any> {
             var vm = this.getProductViewModel(productId);
             if (vm) {
                 var quantity = this.getCurrentQuantity();
@@ -115,7 +116,7 @@ module Orckestra.Composer {
                 });
             }
 
-            var promise = this.cartService.addLineItem(productId, price)
+            var promise = this.cartService.addLineItem(productId, price, null, 1, null, recurringProgramName)
                 .then((vm: any) => this.onAddLineItemSuccess(vm),
                     (reason: any) => this.onAddLineItemFailed(reason));
 

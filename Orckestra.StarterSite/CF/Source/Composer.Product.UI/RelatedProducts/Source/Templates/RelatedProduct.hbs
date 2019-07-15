@@ -1,6 +1,6 @@
 <div class="col-xs-6  col-sm-4  {{#if_eq @index 3}}hidden-sm{{/if_eq}}  col-md-3">
-    <div class="product-tile" data-has-variants="{{HasVariants}}" data-product-id="{{ProductId}}" data-product-variant-id="{{VariantId}}" data-price="{{Price}}">
-        <a class="product-tile-media" href="{{Url}}" data-productId="{{ProductId}}" data-index='{{@index}}' data-oc-click='relatedProductsClick'>
+    <div class="product-tile" data-has-variants="{{HasVariants}}" data-product-id="{{ProductId}}" data-product-variant-id="{{VariantId}}" data-price="{{Price}}" data-recurringorderprogramname='{{RecurringOrderProgramName}}'>
+        <a class="product-tile-media" href="{{Url}}" data-productId="{{ProductId}}" data-index='{{@index}}' data-recurringorderprogramname='{{RecurringOrderProgramName}}' data-oc-click='relatedProductsClick'>
             <img class="img-fluid" src="{{ImageUrl}}" alt="" onerror="this.onerror=null; this.src='{{FallbackImageUrl}}'" />
         </a>
 
