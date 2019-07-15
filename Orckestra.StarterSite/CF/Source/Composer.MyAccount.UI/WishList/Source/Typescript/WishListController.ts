@@ -28,6 +28,7 @@ module Orckestra.Composer {
             var variant: string = <any>context.data('variant');
             var name: string = <any>context.data('name');
             var category: string = <any>context.data('category');
+            var recurringProgramName: string = <any>context.data('recurringprogramname');
 
             this.eventHub.publish('wishListLineItemAddingToCart', {
                 data: this.getProductDataForAnalytics(productId, variant, name, price, brand, category)
@@ -35,7 +36,7 @@ module Orckestra.Composer {
 
             container.addClass('is-loading');
 
-            this._cartService.addLineItem(productId, price, variantId, 1)
+            this._cartService.addLineItem(productId, price, variantId, 1, null, recurringProgramName)
                 .fin(() => container.removeClass('is-loading'));
 
         }

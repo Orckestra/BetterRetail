@@ -1,19 +1,20 @@
 <span data-templateid="AddToCartWishList">
     {{#if IsValid}}
-            <button class="btn  btn-primary  text-uppercase"
-                data-qa="wishlist-product-add-to-cart"
-                data-productid="{{ProductId}}"
-                data-variantid="{{VariantId}}"
-                data-price="{{#if IsOnSale}}{{ListPrice}}{{else}}{{DefaultListPrice}}{{/if}}"
-                data-brand="{{ProductSummary.Brand}}"
-                data-name="{{ProductSummary.DisplayName}}"
-                data-variant="{{#each KeyVariantAttributesList}}{{Value}} {{/each}}"
-                data-category="{{ProductSummary.CategoryId}}"                
-                data-oc-click="addToCart">
+        <button class="btn  btn-primary  text-uppercase"
+            data-qa="wishlist-product-add-to-cart"
+            data-productid="{{ProductId}}"
+            data-variantid="{{VariantId}}"
+            data-price="{{#if IsOnSale}}{{ListPrice}}{{else}}{{DefaultListPrice}}{{/if}}"
+            data-brand="{{ProductSummary.Brand}}"
+            data-name="{{ProductSummary.DisplayName}}"
+            data-variant="{{#each KeyVariantAttributesList}}{{Value}} {{/each}}"
+            data-category="{{ProductSummary.CategoryId}}"                
+            data-recurringprogramname="{{RecurringOrderProgramName}}"                
+            data-oc-click="addToCart">
             {{localize "General" "B_AddToCartProductList"}}
             <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  hidden"></span>
         </button>
-        {{else}}
+    {{else}}
         <button data-qa="wishlist-product-add-to-cart"
                 class="btn  btn-primary  text-uppercase"
                 disabled="disabled">

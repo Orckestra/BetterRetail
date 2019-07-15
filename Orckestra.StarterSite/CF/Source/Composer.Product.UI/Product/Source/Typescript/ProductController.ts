@@ -173,7 +173,7 @@ module Orckestra.Composer {
                         data: analyticData
                     });
 
-                    this._wishListService.addLineItem(vm.productId, vm.selectedVariantId).then(data => {
+                    this._wishListService.addLineItem(vm.productId, vm.selectedVariantId, 1, null, vm.RecurringOrderProgramName).then(data => {
                         var lineItem = data.Items.filter(it => it.ProductId === vm.productId && it.VariantId === vm.selectedVariantId)[0];
                         this.render('AddToWishList', { Loaded: true, IsInWishList: true, Id: lineItem.Id });
                     }).fin(() => busy.done());

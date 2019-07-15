@@ -96,7 +96,9 @@ namespace Orckestra.Composer.Cart.Repositories
                 CustomerId = param.CustomerId,
                 ProductId = param.ProductId,
                 Quantity = param.Quantity,
-                VariantId = param.VariantId
+                VariantId = param.VariantId,
+                RecurringOrderFrequencyName = param.RecurringOrderFrequencyName,
+                RecurringOrderProgramName = param.RecurringOrderProgramName
             };
         }
 
