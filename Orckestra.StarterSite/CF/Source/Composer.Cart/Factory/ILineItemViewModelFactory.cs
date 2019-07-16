@@ -16,5 +16,10 @@ namespace Orckestra.Composer.Cart.Factory
         /// Gets the KeyVariant attributes from a line item.
         /// </summary>
         IEnumerable<KeyVariantAttributes> GetKeyVariantAttributes(GetKeyVariantAttributesParam param);
+
+        /// <summary>
+        /// Gets a list of LineItemDetailViewModel from a list of overture LineItem objects.
+        /// </summary>
+        IEnumerable<LightLineItemDetailViewModel> CreateLightViewModel(CreateLightListOfLineItemDetailViewModelParam param);
     }
 }

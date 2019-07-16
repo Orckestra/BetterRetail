@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Orckestra.Composer.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Orckestra.Composer.Cart.ViewModels
 {
-    public class LightLineItemDetailViewModel
+    public class LightLineItemDetailViewModel : BaseViewModel
     {
         public Guid Id { get; set; }
 

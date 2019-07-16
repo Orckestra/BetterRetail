@@ -55,6 +55,7 @@
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\PaymentExtensions.cs" />
     <Compile Include="Factory\CartViewModelFactory.cs" />
+    <Compile Include="Parameters\CreateLightListOfLineItemDetailViewModelParam.cs" />
     <Compile Include="Factory\IRecurringOrderCartViewModelFactory.cs" />
     <Compile Include="Factory\RecurringOrderCartViewModelFactory.cs" />
     <Compile Include="Factory\RewardEqualityComparer.cs" />

@@ -144,4 +144,7 @@
   <data name="L_NextOccurence" xml:space="preserve">
     <value>Next processing date</value>
   </data>   
+  <data name="L_Total" xml:space="preserve">
+    <value>Total:</value>
+  </data> 
 </root>

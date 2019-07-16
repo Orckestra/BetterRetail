@@ -167,7 +167,7 @@ namespace Orckestra.Composer.Cart.Factory
 
             return true;
         }
-
+        
         private string GetRecurringOrderFrequencyDisplayName(RecurringOrderProgram program, LineItem lineItem, CultureInfo cultureInfo)
         {
             if (RecurringOrderCartHelper.IsRecurringOrderLineItemValid(lineItem))
@@ -235,6 +235,65 @@ namespace Orckestra.Composer.Cart.Factory
 
                 yield return additionalFeeViewModel;
             }
+        }
+
+        public IEnumerable<LightLineItemDetailViewModel> CreateLightViewModel(CreateLightListOfLineItemDetailViewModelParam param)
+        {
+            if (param.LineItems == null)
+            {
+                yield break;
+            }
+
+            var imgDictionary = LineItemHelper.BuildImageDictionaryFor(param.ImageInfo.ImageUrls);
+
+            var processedCart = param.Cart as ProcessedCart;
+            var preMapAction = processedCart == null
+                ? new Action<LineItem>(li => { })
+                : li => LineItemValidationProvider.ValidateLineItem(processedCart, li);
+
+            foreach (var lineItem in param.LineItems)
+            {
+                var vm = GetLightLineItemDetailViewModel(new CreateLineItemDetailViewModelParam
+                {
+                    PreMapAction = preMapAction,
+                    LineItem = lineItem,
+                    CultureInfo = param.CultureInfo,
+                    ImageDictionary = imgDictionary,
+                    BaseUrl = param.BaseUrl
+                });
+
+                yield return vm;
+            }
+        }
+
+        protected virtual LightLineItemDetailViewModel GetLightLineItemDetailViewModel(CreateLineItemDetailViewModelParam param)
+        {
+            param.PreMapAction.Invoke(param.LineItem);
+            var lineItem = param.LineItem;
+
+            var vm = ViewModelMapper.MapTo<LightLineItemDetailViewModel>(lineItem, param.CultureInfo);
+
+            if (vm.IsValid == null)
+            {
+                vm.IsValid = true;
+            }
+                        
+            ProductMainImage mainImage;
+            if (param.ImageDictionary.TryGetValue(Tuple.Create(lineItem.ProductId, lineItem.VariantId), out mainImage))
+            {
+                vm.ImageUrl = mainImage.ImageUrl;
+                vm.FallbackImageUrl = mainImage.FallbackImageUrl;
+            }
+
+            vm.ProductUrl = ProductUrlProvider.GetProductUrl(new GetProductUrlParam
+            {
+                CultureInfo = param.CultureInfo,
+                VariantId = lineItem.VariantId,
+                ProductId = lineItem.ProductId,
+                ProductName = lineItem.ProductSummary.DisplayName
+            });
+            
+            return vm;
         }
     }
 }

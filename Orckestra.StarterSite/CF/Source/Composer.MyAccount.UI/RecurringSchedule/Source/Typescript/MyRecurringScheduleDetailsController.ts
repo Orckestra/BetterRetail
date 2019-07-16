@@ -5,6 +5,7 @@
 ///<reference path='../../../../Composer.Cart.UI/RecurringOrder/source/TypeScript/Services/RecurringOrderService.ts' />
 ///<reference path='../../../../Composer.Cart.UI/RecurringOrder/source/TypeScript/Services/IRecurringOrderService.ts' />
 ///<reference path='../../../../Composer.Cart.UI/RecurringOrder/source/TypeScript/Repositories/RecurringOrderRepository.ts' />
+///<reference path='../../../../Composer.UI/Source/TypeScript/ErrorHandling/ErrorHandler.ts' />
 
 module Orckestra.Composer {
 
@@ -290,7 +291,12 @@ module Orckestra.Composer {
 
                         this.viewModel = vm;
                         this.reRenderPage(item[0]);
-                    }).fin(() => this.releaseBusyHandler());
+                    })
+                    .fail((reason) => {
+                        console.error(reason);
+                        ErrorHandler.instance().outputErrorFromCode('UpdateTemplateError');
+                    })
+                    .fin(() => this.releaseBusyHandler());
             }
             return null;
         }

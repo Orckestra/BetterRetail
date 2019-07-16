@@ -27,3 +27,20 @@
 .recurring-price {
   white-space: nowrap;
 }
+
+.small-thumbnail {
+  float: none;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 5px;
+  &.item {
+    width: 50px;
+  }
+  > .img-small-thumbnail {
+    border: 1px solid $gray-light;
+  }
+}
+
+.container-fluid.recurring-container-thumbnail {
+  margin-top: 5px;
+}

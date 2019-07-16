@@ -25,9 +25,14 @@ namespace Orckestra.Composer.Services
 
         public virtual Task<List<ProductMainImage>> GetImageUrlsAsync(IEnumerable<LineItem> lineItems)
         {
+            return GetImageUrlsAsync(lineItems, ImageConfiguration.CartThumbnailImageSize);
+        }
+
+        public virtual Task<List<ProductMainImage>> GetImageUrlsAsync(IEnumerable<LineItem> lineItems, string imageSize)
+        {
             var getImageParam = new GetProductMainImagesParam
             {
-                ImageSize = ImageConfiguration.CartThumbnailImageSize,
+                ImageSize = imageSize,
                 ProductImageRequests = lineItems
                     .Select(li => new ProductImageRequest
                     {

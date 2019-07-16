@@ -8,6 +8,7 @@ using Orckestra.Composer.Cart.Helper;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Repositories;
 using Orckestra.Composer.Cart.ViewModels;
+using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Enums;
 using Orckestra.Composer.Helper;
 using Orckestra.Composer.Parameters;
@@ -151,7 +152,7 @@ namespace Orckestra.Composer.Cart.Services
 
             param.ProductImageInfo = new ProductImageInfo
             {
-                ImageUrls = await ImageService.GetImageUrlsAsync(lineItems).ConfigureAwait(false),
+                ImageUrls = await ImageService.GetImageUrlsAsync(lineItems, ImageConfiguration.RecurringCartSummaryThumbnailImageSize).ConfigureAwait(false),
             };
 
             var vm = RecurringOrderCartViewModelFactory.CreateLightRecurringOrderCartViewModel(param);

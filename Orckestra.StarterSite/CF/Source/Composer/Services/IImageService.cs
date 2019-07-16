@@ -13,7 +13,7 @@ namespace Orckestra.Composer.Services
     public interface IImageService
     {
         Task<List<ProductMainImage>> GetImageUrlsAsync(IEnumerable<LineItem> lineItems);
-
+        Task<List<ProductMainImage>> GetImageUrlsAsync(IEnumerable<LineItem> lineItems, string imageSize);
         Task<List<ProductMainImage>> GetImageUrlsAsync(ListOfRecurringOrderLineItems list);
         Task<List<ProductMainImage>> GetImageUrlsAsync(RecurringOrderLineItem lineitem);
     }

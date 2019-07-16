@@ -23,25 +23,30 @@ namespace Orckestra.Composer.Cart.Factory
         protected IComposerContext ComposerContext { get; private set; }
         protected IRecurringCartUrlProvider RecurringCartUrlProvider { get; private set; }
         protected IRecurringScheduleUrlProvider RecurringScheduleUrlProvider { get; private set; }
+        protected ILineItemViewModelFactory LineItemViewModelFactory { get; private set; }
+
 
         public RecurringOrderCartViewModelFactory(
             ICartViewModelFactory cartViewModelFactory,
             IViewModelMapper viewModelMapper,
             IComposerContext composerContext,
             IRecurringCartUrlProvider recurringCartUrlProvider,
-            IRecurringScheduleUrlProvider recurringScheduleUrlProvider)
+            IRecurringScheduleUrlProvider recurringScheduleUrlProvider,
+            ILineItemViewModelFactory lineItemViewModelFactory)
         {
             if (cartViewModelFactory == null) { throw new ArgumentNullException(nameof(cartViewModelFactory)); }
             if (viewModelMapper == null) { throw new ArgumentNullException(nameof(viewModelMapper)); }
             if (composerContext == null) { throw new ArgumentNullException(nameof(composerContext)); }
             if (recurringCartUrlProvider == null) { throw new ArgumentNullException(nameof(recurringCartUrlProvider)); }
             if (recurringScheduleUrlProvider == null) { throw new ArgumentNullException(nameof(recurringScheduleUrlProvider)); }
+            if (lineItemViewModelFactory == null) { throw new ArgumentNullException(nameof(lineItemViewModelFactory)); }
 
             CartViewModelFactory = cartViewModelFactory;
             ViewModelMapper = viewModelMapper;
             ComposerContext = composerContext;
             RecurringCartUrlProvider = recurringCartUrlProvider;
             RecurringScheduleUrlProvider = recurringScheduleUrlProvider;
+            LineItemViewModelFactory = lineItemViewModelFactory;
         }
 
         public CartViewModel CreateRecurringOrderCartViewModel(CreateRecurringOrderCartViewModelParam param)
@@ -154,17 +159,16 @@ namespace Orckestra.Composer.Cart.Factory
             if (string.IsNullOrWhiteSpace(param.BaseUrl)) { throw new ArgumentException(nameof(param.BaseUrl)); }
             
             var vm = ViewModelMapper.MapTo<LightRecurringOrderCartViewModel>(param.Cart, param.CultureInfo);
-
-            //TODO 
-            //vm.LineItemDetailViewModels = LineItemViewModelFactory.CreateLightViewModel(new CreateLightListOfLineItemDetailViewModelParam
-            //{
-            //    Cart = param.Cart,
-            //    LineItems = param.Cart.GetLineItems(),
-            //    CultureInfo = param.CultureInfo,
-            //    ImageInfo = param.ProductImageInfo,
-            //    BaseUrl = param.BaseUrl
-            //}).ToList();
             
+            vm.LineItemDetailViewModels = LineItemViewModelFactory.CreateLightViewModel(new CreateLightListOfLineItemDetailViewModelParam
+            {
+                Cart = param.Cart,
+                LineItems = param.Cart.GetLineItems(),
+                CultureInfo = param.CultureInfo,
+                ImageInfo = param.ProductImageInfo,
+                BaseUrl = param.BaseUrl
+            }).ToList();
+
             FillNextOcurrence(vm, param.Cart, param.CultureInfo);
             vm.CartDetailUrl = GetRecurringCartDetailUrl(param.CultureInfo, param.Cart.Name);
 
