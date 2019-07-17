@@ -383,6 +383,7 @@ module Orckestra.Composer {
         }
 
         public reRenderCartPage(vm) {
+            ErrorHandler.instance().removeErrors();
             this.viewModel = vm;
             this.render(this.viewModelName, vm);
         }
