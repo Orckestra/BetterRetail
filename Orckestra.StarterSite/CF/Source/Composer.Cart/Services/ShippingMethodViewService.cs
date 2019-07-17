@@ -81,6 +81,36 @@ namespace Orckestra.Composer.Cart.Services
             };
         }
 
+        /// <summary>
+        /// Get the Shipping methods available for a shipment. Calls the GetCart to get the shipment Id.
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns>The ShippingMethodsViewModel</returns>
+        public async virtual Task<ShippingMethodsViewModel> GetRecurringCartShippingMethodsAsync(GetShippingMethodsParam param)
+        {
+            if (param == null) { throw new ArgumentNullException("param", "param is required"); }
+            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException("param.CartName is required", "param"); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException("param.Scope is required", "param"); }
+            if (param.CustomerId == Guid.Empty) { throw new ArgumentException("param.CustomerId is required", "param"); }
+            if (param.CultureInfo == null) { throw new ArgumentException("param.CultureInfo is required", "param"); }
+
+            var cart = await CartRepository.GetCartAsync(new GetCartParam
+            {
+                BaseUrl = string.Empty,
+                CartName = param.CartName,
+                CultureInfo = param.CultureInfo,
+                CustomerId = param.CustomerId,
+                Scope = param.Scope
+            }).ConfigureAwait(false);
+
+            if (cart.Shipments.Any())
+            {
+                param.ShipmentId = cart.Shipments.First().Id;
+            }
+
+            return await GetShippingMethodsAsync(param).ConfigureAwaitWithCulture(false);
+        }
+
         protected virtual Task<List<FulfillmentMethod>> GetFulfillmentMethods(GetShippingMethodsParam param)
         {
             return FulfillmentMethodRepository.GetCalculatedFulfillmentMethods(param);

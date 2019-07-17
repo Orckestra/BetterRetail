@@ -18,6 +18,13 @@ namespace Orckestra.Composer.Cart.Services
         Task<ShippingMethodsViewModel> GetShippingMethodsAsync(GetShippingMethodsParam param);
 
         /// <summary>
+        /// Get the Shipping methods available for a shipment. Calls the GetCart to get the shipment Id.
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        Task<ShippingMethodsViewModel> GetRecurringCartShippingMethodsAsync(GetShippingMethodsParam param);
+            
+        /// <summary>
         /// Set the cheapest shipping method in the cart.
         /// </summary>
         /// <param name="param"></param>

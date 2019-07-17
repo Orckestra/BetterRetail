@@ -322,8 +322,9 @@ module Orckestra.Composer {
             //When cancel in one of the two steps, revert to original values.
             //If saving shipping method and the method type doesn't change, save immediatly.
 
-
-            this.hasShippingMethodTypeChanged = this.originalShippingMethodType !== newType;
+            //TODO: This fulfillment type management is ON HOLD. Directly save shipping method.
+            //this.hasShippingMethodTypeChanged = this.originalShippingMethodType !== newType;
+            this.hasShippingMethodTypeChanged = false;
 
             let shippingProviderId = $('#ShippingProviderId').val();
 
@@ -375,6 +376,7 @@ module Orckestra.Composer {
                     })
                     .fail((reason) => {
                         console.error('Error: Error while saving shipping method', reason);
+                        ErrorHandler.instance().outputErrorFromCode('RecurringCartShippingMethodUpdateFailed');
                     })
                     .fin(() => busy.done());
             }

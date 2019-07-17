@@ -194,7 +194,7 @@ namespace Orckestra.Composer.Cart.Api
         [ActionName("shippingmethodsbycartname")]
         public async Task<IHttpActionResult> GetShippingMethodsByCartName(GetShippingMethodsByCartNameViewModel request)
         {
-            var shippingMethodsViewModel = await ShippingMethodService.GetShippingMethodsAsync(new GetShippingMethodsParam
+            var shippingMethodsViewModel = await ShippingMethodService.GetRecurringCartShippingMethodsAsync(new GetShippingMethodsParam
             {
                 Scope = ComposerContext.Scope,
                 CultureInfo = ComposerContext.CultureInfo,

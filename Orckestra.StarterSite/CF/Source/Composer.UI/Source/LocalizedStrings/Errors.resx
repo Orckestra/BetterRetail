@@ -195,6 +195,9 @@
   <data name="L_QuickViewLoadFailed" xml:space="preserve">
     <value>An error occurred while loading the product. Please try again.</value>
   </data>
+  <data name="L_RecurringCartShippingMethodUpdateFailed" xml:space="preserve">
+    <value>An error occurred while updating your shipping method. Please try again.</value>
+  </data>
   <data name="L_RelatedProductLoadFailed" xml:space="preserve">
     <value>An error occurred while loading related products. Please &lt;a href="javascript:window.location.reload();"&gt; reload the page&lt;/a&gt;.</value>
   </data>

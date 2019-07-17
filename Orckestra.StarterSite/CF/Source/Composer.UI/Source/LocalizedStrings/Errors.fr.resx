@@ -194,6 +194,9 @@
   </data>
   <data name="L_QuickViewLoadFailed" xml:space="preserve">
     <value>Une erreur est survenue pendant le chargement du produit. Veuillez réessayer.</value>
+  </data>  
+  <data name="L_RecurringCartShippingMethodUpdateFailed" xml:space="preserve">
+    <value>Une erreur est survenue pendant la mise-à-jour de votre m/thode de livraison. Veuillez réessayer.</value>
   </data>
   <data name="L_RelatedProductLoadFailed" xml:space="preserve">
     <value>Une erreur est survenue pendant le chargement des produits reliés. Veuillez &lt;a href="javascript:window.location.reload();"&gt;recharger la page&lt;/a&gt;.</value>
