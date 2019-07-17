@@ -13,6 +13,7 @@ namespace Orckestra.Composer.Cart.Parameters
         public CultureInfo CultureInfo { get; set; }
         public string CartName { get; set; }
         public Guid ShippingAddressId { get; set; }
+        public Guid BillingAddressId { get; set; }
         public Guid CustomerId { get; set; }
         public string BaseUrl { get; set; }
         public bool UseSameForShippingAndBilling { get; set; }

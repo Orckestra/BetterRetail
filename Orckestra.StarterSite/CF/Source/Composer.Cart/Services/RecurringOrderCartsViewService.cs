@@ -216,12 +216,21 @@ namespace Orckestra.Composer.Cart.Services
 
             shipment.Address = newAddress;
 
+            var payment = cart.Payments.First();
+            if (payment == null)
+                throw new InvalidOperationException("No payment");
+
             if (param.UseSameForShippingAndBilling)
             {
-                var payment = cart.Payments.First();
-                if (payment == null)
-                    throw new InvalidOperationException("No payment");
                 payment.BillingAddress = newAddress;
+            }
+            else
+            {
+                var newbillingAddress = await AddressRepository.GetAddressByIdAsync(param.BillingAddressId).ConfigureAwaitWithCulture(false);
+                if(newbillingAddress == null)
+                    throw new InvalidOperationException("Address not found");                
+              
+                payment.BillingAddress = newbillingAddress;
             }
 
             var updatedCart = await CartRepository.UpdateCartAsync(UpdateCartParamFactory.Build(cart)).ConfigureAwaitWithCulture(false);
