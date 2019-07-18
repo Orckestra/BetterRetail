@@ -49,6 +49,7 @@ namespace Orckestra.Composer.Product.Services
             var vm = new PageHeaderViewModel
             {
                 PageTitle = GetPageTitle(product),
+                MetaDescription = GetProductDescription(product),
                 CanonicalUrl = GetCanonicalUrl(param, product)
             };
 
@@ -58,6 +59,11 @@ namespace Orckestra.Composer.Product.Services
         protected virtual string GetPageTitle(ProductViewModel product)
         {
             return product.DisplayName;
+        }
+
+        protected virtual string GetProductDescription(ProductViewModel product)
+        {
+            return product.Description;
         }
 
         protected virtual string GetCanonicalUrl(GetPageHeaderParam param, ProductViewModel product)

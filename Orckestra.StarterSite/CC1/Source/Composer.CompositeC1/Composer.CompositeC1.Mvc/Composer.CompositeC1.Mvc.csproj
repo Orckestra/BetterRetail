@@ -352,6 +352,8 @@
     </Content>
     <Content Include="Views\Footer\FollowUs.cshtml" />
     <Content Include="Views\web.config" />
+    <Content Include="Views\Product\ProductSEO.cshtml" />
+    <Content Include="Views\Shared\PageHeader.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Solution Items\SharedAssemblyInfo.cs">

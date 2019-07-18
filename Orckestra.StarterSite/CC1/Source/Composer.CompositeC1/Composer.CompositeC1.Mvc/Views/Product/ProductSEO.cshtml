@@ -1,0 +1,28 @@
+﻿@using System.Web;
+@model Orckestra.Composer.Product.ViewModels.ProductViewModel
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<head>
+    <meta name="description" content="@Model.Description" />
+    <script type="application/ld+json">
+        {
+        "@@context": "http://schema.org",
+        "@@type": "Product",
+        "description": "@Model.Description",
+        "name": "@Model.DisplayName",
+        "sku": "@Model.Sku",
+        "brand": "@Model.Brand",
+        "image": "@Model.SelectedImage.ImageUrl",
+        "url": "@(string.Format("{0}{1}", HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority), Model.ProductDetailUrl))",
+        "identifier" : "@Model.ProductId",
+        "offers": {
+        "@@type": "Offer",
+        "price": "@Model.Price.Value.ToString("n2")",
+        "priceCurrency": "@Model.Currency.IsoCode"
+        }
+        }
+    </script>
+</head>
+<body>
+</body>
+</html>
