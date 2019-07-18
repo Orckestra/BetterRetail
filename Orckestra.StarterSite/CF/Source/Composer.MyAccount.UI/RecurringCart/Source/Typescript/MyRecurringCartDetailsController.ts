@@ -11,6 +11,7 @@
 ///<reference path='../../../../Composer.UI/Source/TypeScript/ErrorHandling/ErrorHandler.ts' />
 ///<reference path='../../../../Composer.UI/Source/Typescript/UI/UIModal.ts' />
 ///<reference path='../../../../Composer.Cart.UI/MonerisPaymentProvider/source/TypeScript/MonerisPaymentService.ts' />
+///<reference path='../../../../Composer.MyAccount.UI/Common/Source/Typescript/MyAccountEvents.ts' />
 
 module Orckestra.Composer {
 
@@ -66,6 +67,11 @@ module Orckestra.Composer {
 
             this.getRecurringCart();
             this.uiModal = new UIModal(window, this.modalElementSelector, this.deleteAddress, this);
+            this.registerSubscriptions();
+        }
+
+        protected registerSubscriptions() {
+            this.eventHub.subscribe(MyAccountEvents[MyAccountEvents.AddressDeleted], e => this.onAddressDeleted(e));
         }
 
         public getRecurringCart() {
@@ -434,6 +440,11 @@ module Orckestra.Composer {
             let useSameForShippingAndBilling = $(this.context.container).find('input[name=UseShippingAddress]:checked').val();
             let cartName = this.viewModel.Name;
 
+            if (_.isUndefined(shippingAddressId)) {
+                console.error('Error: Missing shipping address');
+                return;
+            }
+
             let data: IRecurringOrderUpdateTemplateAddressParam = {
                 shippingAddressId: shippingAddressId,
                 billingAddressId: null,
@@ -441,8 +452,15 @@ module Orckestra.Composer {
                 useSameForShippingAndBilling: useSameForShippingAndBilling
             };
 
-            if (useSameForShippingAndBilling) {
+            let useSameBool : boolean = Boolean(JSON.parse(useSameForShippingAndBilling));
+
+            if (!useSameBool) {
                 data.billingAddressId = billingAddressId;
+            }
+
+            if (!useSameBool && _.isUndefined(billingAddressId)) {
+                console.error('Error: Missing billing address');
+                return;
             }
 
             var busy = this.asyncBusy({ elementContext: actionContext.elementContext });
@@ -678,11 +696,18 @@ module Orckestra.Composer {
 
             return this.customerService.deleteAddress(addressId, '')
                 .then(result => {
-                    //this.eventHub.publish(MyAccountEvents[MyAccountEvents.AddressDeleted], { data: addressId });
-                    this.reRenderCartPage(this.viewModel);
+                    this.eventHub.publish(MyAccountEvents[MyAccountEvents.AddressDeleted], { data: addressId });
+                    //this.reRenderCartPage(this.viewModel);
                 })
-                //.fail(() => this.renderFailedForm(MyAccountStatus[MyAccountStatus.AjaxFailed]))
                 .fin(() => busy.done());
+        }
+
+        private onAddressDeleted(e: IEventInformation) {
+
+            var addressId = e.data;
+            var $addressListItem = $(this.context.container).find('[data-address-id=' + addressId + ']');
+
+            $addressListItem.remove();
         }
 
         public saveEditPayment(actionContext: IControllerActionContext) {

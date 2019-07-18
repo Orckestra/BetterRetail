@@ -114,9 +114,13 @@ namespace Orckestra.Composer.Cart.Api
                 CustomerId = ComposerContext.CustomerId,
                 ShippingAddressId = request.ShippingAddressId.ToGuid(),
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
-                UseSameForShippingAndBilling = request.UseSameForShippingAndBilling,
-                BillingAddressId = request.BillingAddressId.ToGuid()
+                UseSameForShippingAndBilling = request.UseSameForShippingAndBilling
             };
+
+            if (!string.IsNullOrEmpty(request.BillingAddressId))
+            {
+                param.BillingAddressId = request.BillingAddressId.ToGuid();
+            }
 
             var results = await RecurringOrderCartsService.UpdateRecurringOrderCartShippingAddressAsync(param).ConfigureAwait(false);
 

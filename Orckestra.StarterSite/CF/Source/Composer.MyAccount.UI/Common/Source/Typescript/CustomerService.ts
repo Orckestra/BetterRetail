@@ -102,7 +102,7 @@ module Orckestra.Composer {
         * @param
         */
         public deleteAddress(addressId: JQuery, returnUrl: string): Q.Promise<any> {
-
+            this.memoizeGetAdresses = undefined;
             return this.customerRepository.deleteAddress(addressId, returnUrl);
         }
 
