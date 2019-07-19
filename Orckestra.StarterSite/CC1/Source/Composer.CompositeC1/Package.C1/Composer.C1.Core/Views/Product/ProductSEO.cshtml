@@ -1,4 +1,5 @@
 ﻿@using System.Web;
+@using System.Globalization;
 @model Orckestra.Composer.Product.ViewModels.ProductViewModel
 
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
@@ -12,12 +13,12 @@
         "name": "@Model.DisplayName",
         "sku": "@Model.Sku",
         "brand": "@Model.Brand",
-        "image": "@Model.SelectedImage.ImageUrl",
+        "image": "@Model.SelectedImage?.ImageUrl",
         "url": "@(string.Format("{0}{1}", HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority), Model.ProductDetailUrl))",
         "identifier" : "@Model.ProductId",
         "offers": {
         "@@type": "Offer",
-        "price": "@Model.Price.Value.ToString("n2")",
+        "price": "@Model.Price.Value.ToString("n2", CultureInfo.InvariantCulture)",
         "priceCurrency": "@Model.Currency.IsoCode"
         }
         }

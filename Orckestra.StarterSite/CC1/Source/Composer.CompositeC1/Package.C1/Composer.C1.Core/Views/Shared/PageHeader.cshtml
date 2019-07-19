@@ -1,9 +1,17 @@
-﻿@model Orckestra.Composer.ViewModels.PageHeaderViewModel
+﻿@using Composite.Data
+@model Orckestra.Composer.ViewModels.PageHeaderViewModel
+@{ 
+    PageNode homePage;
+    using(var con = new DataConnection())
+    {
+        homePage = con.SitemapNavigator.CurrentHomePageNode;
+    }
+}
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
 <head>
     @if (!string.IsNullOrWhiteSpace(Model.PageTitle))
     {
-        <title>@Model.PageTitle | Better Retail</title>
+        <title>@Model.PageTitle | @homePage.Title </title>
     }
     @if (!string.IsNullOrWhiteSpace(Model.MetaKeywords))
     {
