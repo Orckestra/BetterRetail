@@ -128,6 +128,8 @@ Task CC1_Compile-CorePackage {
 	Complete-RobocopyExecution($LASTEXITCODE)
 	Robocopy (Join-Path $Build.CC1.WebProjectPath 'UI.Package') $corePackagePath\UI.Package /E /NJH /NDL /NS /NC /NP | Write-Verbose
 	Complete-RobocopyExecution($LASTEXITCODE)
+	Robocopy (Join-Path $Build.CC1.WebProjectPath 'Views') $corePackagePath\Views /E /NJH /NDL /NS /NC /NP | Write-Verbose
+	Complete-RobocopyExecution($LASTEXITCODE)
 	
 	Complete-RobocopyExecution($LASTEXITCODE)
 	
