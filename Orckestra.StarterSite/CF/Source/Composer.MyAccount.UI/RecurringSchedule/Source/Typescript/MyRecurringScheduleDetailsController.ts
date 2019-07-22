@@ -6,6 +6,7 @@
 ///<reference path='../../../../Composer.Cart.UI/RecurringOrder/source/TypeScript/Services/IRecurringOrderService.ts' />
 ///<reference path='../../../../Composer.Cart.UI/RecurringOrder/source/TypeScript/Repositories/RecurringOrderRepository.ts' />
 ///<reference path='../../../../Composer.UI/Source/TypeScript/ErrorHandling/ErrorHandler.ts' />
+///<reference path='../../../../Composer.MyAccount.UI/Common/Source/Typescript/DatepickerService.ts' />
 
 module Orckestra.Composer {
 
@@ -66,6 +67,7 @@ module Orckestra.Composer {
             //this.viewModel = vm;
             this.render(this.viewModelName, vm);
             this.getAvailableEditList();
+            DatepickerService.renderDatepicker('.datepicker');
         }
 
         public renderShippingMethods(vm) {

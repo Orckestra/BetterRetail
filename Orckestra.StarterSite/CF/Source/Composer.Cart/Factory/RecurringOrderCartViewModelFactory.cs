@@ -101,7 +101,7 @@ namespace Orckestra.Composer.Cart.Factory
         {
             return nextOccurence == DateTime.MinValue
                                 ? string.Empty
-                                : nextOccurence.ToString("yyyy/MM/dd");
+                                : nextOccurence.ToString("yyyy/MM/dd", CultureInfo.InvariantCulture);
         }
 
         private void FillNextOcurrence(LightRecurringOrderCartViewModel vm, Overture.ServiceModel.Orders.Cart cart, CultureInfo cultureInfo)

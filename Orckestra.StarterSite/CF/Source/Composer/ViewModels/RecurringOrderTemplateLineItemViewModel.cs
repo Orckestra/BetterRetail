@@ -124,7 +124,7 @@ namespace Orckestra.Composer.ViewModels
         public string FormattedNextOccurence { get; set; }
 
         /// <summary>
-        ///  NextOccurence formatted in YYYY-MM-DD
+        ///  NextOccurence formatted in YYYY/MM/DD
         /// </summary>
         public string NextOccurenceValue { get; set; }
 

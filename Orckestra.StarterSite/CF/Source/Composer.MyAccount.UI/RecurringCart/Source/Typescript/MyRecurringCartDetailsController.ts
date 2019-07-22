@@ -12,6 +12,7 @@
 ///<reference path='../../../../Composer.UI/Source/Typescript/UI/UIModal.ts' />
 ///<reference path='../../../../Composer.Cart.UI/MonerisPaymentProvider/source/TypeScript/MonerisPaymentService.ts' />
 ///<reference path='../../../../Composer.MyAccount.UI/Common/Source/Typescript/MyAccountEvents.ts' />
+///<reference path='../../../../Composer.MyAccount.UI/Common/Source/Typescript/DatepickerService.ts' />
 
 module Orckestra.Composer {
 
@@ -123,8 +124,9 @@ module Orckestra.Composer {
                     Total: total
                 }
             };
-
             this.render('RecurringCartDetailsSummary', vm);
+
+            DatepickerService.renderDatepicker('.datepicker');
         }
 
         public saveEditNextOccurence(actionContext: IControllerActionContext) {
@@ -181,7 +183,7 @@ module Orckestra.Composer {
         }
 
         public nextOcurrenceIsValid(value) {
-            let newDate = this.convertDateToUTC(new Date(value));
+            let newDate = this.convertDateToUTC(new Date(Date.parse(value)));
             let today = this.convertDateToUTC(new Date(new Date().setHours(0, 0, 0, 0)));
 
             if (newDate > today) {

@@ -20,7 +20,7 @@ namespace Orckestra.Composer.Cart.ViewModels
         string FormatedNextOccurence { get; set; }
 
         /// <summary>
-        ///  NextOccurence formatted in YYYY-MM-DD
+        ///  NextOccurence formatted in YYYY/MM/DD
         /// </summary>
         string NextOccurenceValue { get; set; }
 

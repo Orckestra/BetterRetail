@@ -284,7 +284,7 @@ namespace Orckestra.Composer.Factory
                     : string.Format(param.CultureInfo, "{0:D}", vm.NextOccurence);
             vm.NextOccurenceValue = vm.NextOccurence == DateTime.MinValue
                     ? string.Empty
-                    : vm.NextOccurence.ToString("yyyy/MM/dd");
+                    : vm.NextOccurence.ToString("yyyy/MM/dd", CultureInfo.InvariantCulture);
 
             vm.Id = recrurringLineItem.RecurringOrderLineItemId;
             vm.ProductSummary = new RecurringProductSummaryViewModel();
