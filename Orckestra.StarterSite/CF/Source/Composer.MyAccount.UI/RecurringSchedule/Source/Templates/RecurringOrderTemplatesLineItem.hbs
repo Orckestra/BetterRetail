@@ -88,8 +88,12 @@
                         {{/if}}
                     </div>
                     <div class="recurring-edit-buttons line-item-actions">                        
-                        <button class="cta button-like-link" role="button" data-oc-click="" data-qa="lineitem-edit" >
-                            <a class="cta" href="{{EditUrl}}" title="{{localize 'RecurringSchedule' 'L_EditDetails'}}">{{localize 'RecurringSchedule' 'L_EditDetails'}}</a>
+                        <button class="cta button-like-link" role="button" 
+                            data-oc-click="editDetailsClick" 
+                            data-qa="lineitem-edit" 
+                            data-href="{{EditUrl}}" 
+                            title="{{localize 'RecurringSchedule' 'L_EditDetails'}}">
+                           {{localize 'RecurringSchedule' 'L_EditDetails'}}
                         </button>
                     </div>
                 </div>

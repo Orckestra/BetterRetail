@@ -18,6 +18,7 @@ module Orckestra.Composer {
         private viewModelName = '';
         private uiModalConfirmRemove: UIModal;
         protected modalElementSelectorRemove: string = '#recurringOrderTemplateRemoveConfirmationModal';
+        private window: Window;
 
         public initialize() {
 
@@ -25,6 +26,7 @@ module Orckestra.Composer {
 
             this.viewModelName = 'MyRecurringSchedule';
             this.uiModalConfirmRemove = new UIModal(window, this.modalElementSelectorRemove, this.deleteLineItem, this);
+            this.window = window;
         }
 
         public updateLineItemQuantity(actionContext: Orckestra.Composer.IControllerActionContext): void {
@@ -155,6 +157,13 @@ module Orckestra.Composer {
                     $('#recurringOrderTemplatesRemoveConfirm').modal('hide');
                     this.reRenderPage(result);
                 }).fin(() => this.releaseBusyHandler());
+        }
+
+        public editDetailsClick(actionContext: IControllerActionContext) {
+            let element = actionContext.elementContext[0];
+            let url = element.dataset['href'];
+
+            this.window.location.href = url;
         }
     }
 }
