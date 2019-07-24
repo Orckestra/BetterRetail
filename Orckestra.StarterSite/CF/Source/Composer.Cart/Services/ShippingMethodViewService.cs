@@ -102,12 +102,7 @@ namespace Orckestra.Composer.Cart.Services
                 CustomerId = param.CustomerId,
                 Scope = param.Scope
             }).ConfigureAwait(false);
-
-            if (cart.Shipments.Any())
-            {
-                param.ShipmentId = cart.Shipments.First().Id;
-            }
-
+            
             return await GetShippingMethodsAsync(param).ConfigureAwaitWithCulture(false);
         }
 
@@ -273,8 +268,7 @@ namespace Orckestra.Composer.Cart.Services
                 CartName = param.CartName,
                 CultureInfo = param.CultureInfo,
                 CustomerId = param.CustomerId,
-                Scope = param.Scope,
-                ShipmentId = shipment.Id
+                Scope = param.Scope
             });
 
             if (fulfillmentMethods == null)
