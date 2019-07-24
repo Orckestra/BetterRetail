@@ -83,7 +83,8 @@
                     </div>
                 </div>
             </div>
-            <div class="panel-body">            
+            <div class="panel-body">    
+                {{>FormErrorMessages}}           
                 {{#if_gt SavedCreditCards.length 0}}
                     <div id="moneris-saved-credit-cards" class="moneris-panel">
                         <div class="row">

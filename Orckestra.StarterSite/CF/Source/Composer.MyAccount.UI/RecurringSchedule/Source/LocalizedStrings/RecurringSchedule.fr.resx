@@ -138,6 +138,9 @@
   <data name="L_ConfirmDelete" xml:space="preserve">
     <value>Voulez-vous vraiment supprimer cette article récurrent?</value>
   </data>  
+  <data name="L_UpdateRecurringScheduleSuccess" xml:space="preserve">
+    <value>Vos changements ont été sauvegardé!</value>
+  </data>
   <data name="T_RecurringScheduleDetailsNextOccurence" xml:space="preserve">
     <value>Prochaine date de traitement</value>
   </data> 

@@ -47,7 +47,7 @@ module Orckestra.Composer {
 
             this.recurringOrderService.getRecurringTemplateDetail(id)
                 .then(result => {
-                    console.log(result);
+                    //console.log(result);
                     this.viewModel = result;
                     this.id = id;
                     this.reRenderPage(result.RecurringOrderTemplateLineItemViewModels[0]);
@@ -65,6 +65,7 @@ module Orckestra.Composer {
 
         public reRenderPage(vm) {
             //this.viewModel = vm;
+            ErrorHandler.instance().removeErrors();
             this.render(this.viewModelName, vm);
             this.getAvailableEditList();
             DatepickerService.renderDatepicker('.datepicker');
@@ -88,7 +89,7 @@ module Orckestra.Composer {
 
                     addressesVm.UseShippingAddress = addressesVm.SelectedBillingAddressId === addressesVm.SelectedShippingAddressId;
 
-                    console.log(addressesVm);
+                    //console.log(addressesVm);
                     this.renderAddresses(addressesVm);
                 });
         }
@@ -230,6 +231,9 @@ module Orckestra.Composer {
             let shippingMethodName;
             let isAllValid = true;
 
+            //If save successful is still showing
+            $('[data-templateid="RecurringScheduleDetailsUpdateSuccessful"]').hide();
+
             paymentMethodId = $(this.context.container).find('input[name=PaymentMethod]:checked').val();
             shippingAddressId = $(this.context.container).find('input[name=ShippingAddressId]:checked').val();
             billingAddressId = $(this.context.container).find('input[name=BillingAddressId]:checked').val();
@@ -262,6 +266,22 @@ module Orckestra.Composer {
             let elementShipping = $('#ShippingMethod').find('input[name=ShippingMethod]:checked');
             shippingMethodName = elementShipping.val();
 
+            if (_.isUndefined(paymentMethodId)) {
+                isAllValid = false;
+                console.error('Error: Missing payment method');
+                ErrorHandler.instance().outputErrorFromCode('RecurringSchedulePaymentMissing');
+            }
+            if (!this.useShippingAddress() && _.isUndefined(shippingAddressId)) {
+                isAllValid = false;
+                console.error('Error: Missing payment method');
+                ErrorHandler.instance().outputErrorFromCode('RecurringScheduleShippingAddressMissing');
+            }
+            if (_.isUndefined(billingAddressId)) {
+                isAllValid = false;
+                console.error('Error: Missing payment method');
+                ErrorHandler.instance().outputErrorFromCode('RecurringScheduleBillingAddressMissing');
+            }
+
             if (isAllValid) {
 
                 this.busyHandler = this.asyncBusy({ elementContext: actionContext.elementContext });
@@ -292,11 +312,12 @@ module Orckestra.Composer {
                         };
 
                         this.viewModel = vm;
+                        item[0].UpdateStatus = 'Success';
                         this.reRenderPage(item[0]);
                     })
                     .fail((reason) => {
                         console.error(reason);
-                        ErrorHandler.instance().outputErrorFromCode('UpdateTemplateError');
+                        ErrorHandler.instance().outputErrorFromCode('RecurringScheduleUpdateFailed');
                     })
                     .fin(() => this.releaseBusyHandler());
             }

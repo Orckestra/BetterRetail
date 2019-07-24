@@ -8,7 +8,6 @@
 ///<reference path='./RecurringCartAddressRegisteredService.ts' />
 ///<reference path='../../../../Composer.Store.UI/Store/source/TypeScript/IStoreService.ts' />
 ///<reference path='../../../../Composer.Store.UI/Store/source/TypeScript/StoreService.ts' />
-///<reference path='../../../../Composer.UI/Source/TypeScript/ErrorHandling/ErrorHandler.ts' />
 ///<reference path='../../../../Composer.UI/Source/Typescript/UI/UIModal.ts' />
 ///<reference path='../../../../Composer.Cart.UI/MonerisPaymentProvider/source/TypeScript/MonerisPaymentService.ts' />
 ///<reference path='../../../../Composer.MyAccount.UI/Common/Source/Typescript/MyAccountEvents.ts' />
@@ -51,7 +50,6 @@ module Orckestra.Composer {
         private uiModal: UIModal;
         private busyHandler: UIBusyHandle;
 
-
         private debounceUpdateLineItem: (args: any) => void;
 
         protected customerService: ICustomerService = new CustomerService(new CustomerRepository());
@@ -91,7 +89,7 @@ module Orckestra.Composer {
 
             this.recurringOrderService.getRecurringCart(data)
                 .then(result => {
-                    console.log(result);
+                    //console.log(result);
                     this.viewModel = result;
 
                     this.reRenderCartPage(result);
@@ -178,7 +176,7 @@ module Orckestra.Composer {
                     });
             } else {
                 console.error('Error: Invalid date while saving cart');
-                ErrorHandler.instance().outputErrorFromCode('InvalidDateSelected');
+                this.showError('InvalidDateSelected', `[data-templateid="RecurringCartDetailsSummary"]`);
             }
         }
 
@@ -366,9 +364,6 @@ module Orckestra.Composer {
                 this.toggleEditAddress(actionContext);
             } else {
                 //Do the save
-
-                var busy = this.asyncBusy({ elementContext: actionContext.elementContext });
-
                 let cartName = this.viewModel.Name;
 
                 let data: IRecurringOrderCartUpdateShippingMethodParam = {
@@ -377,6 +372,13 @@ module Orckestra.Composer {
                     cartName: cartName
                 };
 
+                if (_.isUndefined(shippingProviderId) || _.isUndefined(shippingMethodName)) {
+                    console.error('Error: Missing shipping method');
+                    this.showError('RecurringCartShippingMethodMissing', `[data-templateid="RecurringCartDetailsShippingMethod"]`);
+                    return;
+                }
+
+                var busy = this.asyncBusy({ elementContext: actionContext.elementContext });
                 this.recurringOrderService.updateCartShippingMethod(data)
                     .then(result => {
 
@@ -384,14 +386,13 @@ module Orckestra.Composer {
                     })
                     .fail((reason) => {
                         console.error('Error: Error while saving shipping method', reason);
-                        ErrorHandler.instance().outputErrorFromCode('RecurringCartShippingMethodUpdateFailed');
+                        this.showError('RecurringCartShippingMethodUpdateFailed', `[data-templateid="RecurringCartDetailsShippingMethod"]`);
                     })
                     .fin(() => busy.done());
             }
         }
 
         public reRenderCartPage(vm) {
-            ErrorHandler.instance().removeErrors();
             this.viewModel = vm;
             this.render(this.viewModelName, vm);
         }
@@ -418,7 +419,7 @@ module Orckestra.Composer {
                 } else {
                     this.storeService.getStores()
                         .then((storesVm) => {
-                            console.log(storesVm);
+                            //console.log(storesVm);
                             //TODO: Open adresse with list of stores
                         });
                 }
@@ -444,6 +445,7 @@ module Orckestra.Composer {
 
             if (_.isUndefined(shippingAddressId)) {
                 console.error('Error: Missing shipping address');
+                this.showError('RecurringCartShippingAddressMissing', `[data-templateid="RecurringCartDetailsAddress"]`);
                 return;
             }
 
@@ -462,6 +464,7 @@ module Orckestra.Composer {
 
             if (!useSameBool && _.isUndefined(billingAddressId)) {
                 console.error('Error: Missing billing address');
+                this.showError('RecurringCartBillingAddressMissing', `[data-templateid="RecurringCartDetailsAddress"]`);
                 return;
             }
 
@@ -470,7 +473,7 @@ module Orckestra.Composer {
             this.recurringOrderService.updateCartShippingAddress(data)
                 .then(result => {
 
-                    console.log(result);
+                    //console.log(result);
 
                     if (this.hasShippingMethodTypeChanged) {
                         this.hasShippingMethodTypeChanged = false;
@@ -482,6 +485,7 @@ module Orckestra.Composer {
                 })
                 .fail((reason) => {
                     console.error('Error: Error while saving addresses', reason);
+                    this.showError('RecurringCartAddressesUpdateFailed', `[data-templateid="RecurringCartDetailsAddress"]`);
                 })
                 .fin(() => busy.done());
         }
@@ -624,7 +628,7 @@ module Orckestra.Composer {
 
         protected onLineItemQuantityFailed(context: JQuery, reason: any): void {
             console.error('Error while updating line item quantity.', reason);
-            ErrorHandler.instance().outputErrorFromCode('LineItemQuantityFailed');
+            this.showError('LineItemQuantityFailed', `[data-templateid="RecurringCartContent"]`);
         }
 
         public updateQuantity(action: string, quantity: number): number {
@@ -678,7 +682,7 @@ module Orckestra.Composer {
             console.error('Error while deleting line item.', reason);
             context.closest('.cart-row').removeClass('is-loading');
 
-            ErrorHandler.instance().outputErrorFromCode('LineItemDeleteFailed');
+            this.showError('LineItemDeleteFailed', `[data-templateid="RecurringCartContent"]`);
         }
 
         public deleteAddressConfirm(actionContext: IControllerActionContext) {
@@ -713,8 +717,6 @@ module Orckestra.Composer {
         }
 
         public saveEditPayment(actionContext: IControllerActionContext) {
-            var busy = this.asyncBusy({ elementContext: actionContext.elementContext });
-
             let paymentMethodId = $(this.context.container).find('input[name=PaymentMethod]:checked').val();
             let cartName = this.viewModel.Name;
             let paymentProviderName = $(this.context.container).find('input[name=PaymentMethod]:checked').data('payment-provider');
@@ -729,16 +731,25 @@ module Orckestra.Composer {
                 paymentType: paymentType
             };
 
+            if (_.isUndefined(paymentId)) {
+                console.error('Error: Missing payment method');
+                this.showError('RecurringCartPaymentMissing', `[data-templateid="RecurringCartDetailsPayment"]`);
+                return;
+            }
+
+            var busy = this.asyncBusy({ elementContext: actionContext.elementContext });
             this.recurringOrderService.updateCartPaymentMethod(data)
                 .then(result => {
 
-                    console.log(result);
+                    //console.log(result);
 
                     this.viewModel = result;
                     this.reRenderCartPage(result);
                 })
                 .fail((reason) => {
                     console.error('Error: Error while saving payment', reason);
+                    this.showError('RecurringCartPaymentUpdateFailed', `[data-templateid="RecurringCartDetailsPayment"]`);
+
                 })
                 .fin(() => busy.done());
         }
@@ -748,6 +759,36 @@ module Orckestra.Composer {
                 this.busyHandler.done();
                 this.busyHandler = null;
             }
+        }
+
+        private showError(errorCode: string, parentSelector: string) {
+            var localization: string = LocalizationProvider.instance().getLocalizedString('Errors', `L_${errorCode}`);
+
+            var error: IError = {
+                ErrorCode: errorCode,
+                LocalizedErrorMessage: localization
+            };
+
+            var errorCollection = {
+                Errors: []
+            };
+
+            if (error) {
+                errorCollection.Errors.push(error);
+            }
+
+            this.render('FormErrorMessages', errorCollection, parentSelector);
+
+            //Scroll to the error message if there's one
+            if (errorCollection && errorCollection.Errors && errorCollection.Errors.length > 0) {
+                this.scrollToElement( $('[data-templateid="FormErrorMessages"]:has(div)'));
+            }
+        }
+
+        public scrollToElement(element: JQuery, offsetDiff: number = 100) {
+            $('html, body').animate({
+                scrollTop: $(element).offset().top - offsetDiff
+            }, 10);
         }
     }
 }
