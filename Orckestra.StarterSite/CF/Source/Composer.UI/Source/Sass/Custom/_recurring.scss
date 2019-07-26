@@ -26,6 +26,15 @@
 
 .recurring-price {
   white-space: nowrap;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.recurring-price-x {
+  padding-top: 10px;
+  padding-bottom: 10px;    
+  display: inline-block;
+  padding-left: 15px;
 }
 
 .small-thumbnail {

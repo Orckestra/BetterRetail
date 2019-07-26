@@ -120,7 +120,7 @@ module Orckestra.Composer {
                         SelectedMethod: selectedShippingMethodName
                     };
 
-                    console.log(vm);
+                    //console.log(vm);
 
                     this.renderShippingMethods(vm);
                 });
@@ -149,7 +149,7 @@ module Orckestra.Composer {
                         payment.IsSelected = payment.Id === selected;
                     });
 
-                    console.log(result);
+                    //console.log(result);
 
                     this.renderPayment(result);
                 });

@@ -296,19 +296,24 @@ namespace Orckestra.Composer.Factory
                 Scope = recrurringLineItem.ScopeId,
                 ProductIds = new List<string>() { recrurringLineItem.ProductId }
             }).ConfigureAwaitWithCulture(false);
-
-            vm.DefaultListPrice = GetProductOrVariantListPrice(getProductResponse, variant, param.CultureInfo);
-            vm.ListPrice = vm.DefaultListPrice;
+            
             var productPriceVm = productsPricesVm.ProductPrices.SingleOrDefault(p => p.ProductId == recrurringLineItem.ProductId);
             if (productPriceVm != null)
             {
                 var variantPriceVm = productPriceVm.VariantPrices.SingleOrDefault(v => v.VariantId == recrurringLineItem.VariantId);
                 if (variantPriceVm != null)
                 {
+                    vm.DefaultListPrice = variantPriceVm.DefaultListPrice;
                     vm.ListPrice = variantPriceVm.ListPrice;
-                    vm.IsOnSale = string.CompareOrdinal(variantPriceVm.ListPrice, vm.ListPrice) != 0;
+                }
+                else
+                {
+                    vm.DefaultListPrice = productPriceVm.DefaultListPrice;
+                    vm.ListPrice = productPriceVm.ListPrice;
                 }
             }
+            vm.IsOnSale = string.CompareOrdinal(vm.DefaultListPrice, vm.ListPrice) != 0;
+
 
             decimal price;
             var conv = decimal.TryParse(vm.ListPrice, NumberStyles.Currency, param.CultureInfo.NumberFormat, out price);
