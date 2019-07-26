@@ -90,6 +90,7 @@
     <Compile Include="Parameters\GetKeyVariantAttributesParam.cs" />
     <Compile Include="Parameters\GetLightRecurringOrderCartListViewModelParam.cs" />
     <Compile Include="Parameters\GetPaymentParam.cs" />
+    <Compile Include="Parameters\GetRecurringOrderCartsViewModelFromCartsParam.cs" />
     <Compile Include="Parameters\GetRecurringOrderCartsViewModelParam.cs" />
     <Compile Include="Parameters\GetRecurringOrderCartViewModelParam.cs" />
     <Compile Include="Parameters\GetShippingMethodsScopeParam.cs" />

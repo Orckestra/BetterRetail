@@ -49,6 +49,7 @@ module Orckestra.Composer {
         protected modalElementSelector: string = '#confirmationModal';
         private uiModal: UIModal;
         private busyHandler: UIBusyHandle;
+        private window: Window;
 
         private debounceUpdateLineItem: (args: any) => void;
 
@@ -67,6 +68,7 @@ module Orckestra.Composer {
             this.getRecurringCart();
             this.uiModal = new UIModal(window, this.modalElementSelector, this.deleteAddress, this);
             this.registerSubscriptions();
+            this.window = window;
         }
 
         protected registerSubscriptions() {
@@ -150,7 +152,10 @@ module Orckestra.Composer {
 
                         if (hasMerged) {
                             //Redirect to my orders
-                            //TODO
+                            let url = viewModel.RecurringCartsUrl;
+                            if (!_.isUndefined(url) && url.length > 0) {
+                                this.window.location.href = url;
+                            }
                         } else if (!_.isEmpty(viewModel)) {
 
                             //TODO refresh cart cache

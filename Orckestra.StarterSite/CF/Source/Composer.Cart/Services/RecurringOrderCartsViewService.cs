@@ -12,6 +12,7 @@ using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Enums;
 using Orckestra.Composer.Helper;
 using Orckestra.Composer.Parameters;
+using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Dam;
 using Orckestra.Composer.Repositories;
 using Orckestra.Composer.Services;
@@ -33,6 +34,8 @@ namespace Orckestra.Composer.Cart.Services
         protected IComposerContext ComposerContext { get; private set; }
         protected IAddressRepository AddressRepository { get; private set; }
         protected ICouponViewService CouponViewService { get; private set; }
+        protected IRecurringCartUrlProvider RecurringCartUrlProvider { get; private set; }
+
 
         public RecurringOrderCartsViewService(
             ICartRepository cartRepository,
@@ -43,7 +46,8 @@ namespace Orckestra.Composer.Cart.Services
             IRecurringOrdersRepository recurringOrdersRepository,
             IComposerContext composerContext,
             IAddressRepository addressRepository,
-            ICouponViewService couponViewService)
+            ICouponViewService couponViewService,
+            IRecurringCartUrlProvider recurringCartUrlProvider)
         {
             if (cartRepository == null) { throw new ArgumentNullException(nameof(cartRepository)); }
             if (overtureClient == null) { throw new ArgumentNullException(nameof(overtureClient)); }
@@ -54,6 +58,7 @@ namespace Orckestra.Composer.Cart.Services
             if (composerContext == null) { throw new ArgumentNullException(nameof(composerContext)); }
             if (addressRepository == null) { throw new ArgumentNullException(nameof(addressRepository)); }
             if (couponViewService == null) { throw new ArgumentNullException(nameof(couponViewService)); }
+            if (recurringCartUrlProvider == null) { throw new ArgumentNullException(nameof(recurringCartUrlProvider)); }
 
             OvertureClient = overtureClient;
             CartRepository = cartRepository;
@@ -64,6 +69,7 @@ namespace Orckestra.Composer.Cart.Services
             ComposerContext = composerContext;
             AddressRepository = addressRepository;
             CouponViewService = couponViewService;
+            RecurringCartUrlProvider = recurringCartUrlProvider;
         }
 
         public async Task<RecurringOrderCartsViewModel> GetRecurringOrderCartListViewModelAsync(GetRecurringOrderCartsViewModelParam param)
@@ -73,6 +79,21 @@ namespace Orckestra.Composer.Cart.Services
 
             var carts = await CartRepository.GetRecurringCartsAsync(param).ConfigureAwait(false);
 
+            return await GetRecurringOrderCartListViewModelFromCartsAsync(new GetRecurringOrderCartsViewModelFromCartsParam
+            {
+                Carts = carts,
+                BaseUrl = param.BaseUrl,
+                CultureInfo = param.CultureInfo
+            }).ConfigureAwaitWithCulture(false);
+        }
+
+        public async Task<RecurringOrderCartsViewModel> GetRecurringOrderCartListViewModelFromCartsAsync(GetRecurringOrderCartsViewModelFromCartsParam param)
+        {
+            if (!ConfigurationUtil.GetRecurringOrdersConfigEnabled())
+                return new RecurringOrderCartsViewModel();
+
+            var carts = param.Carts;
+
             var tasks = carts.Select(pc => CreateCartViewModelAsync(new CreateRecurringOrderCartViewModelParam
             {
                 Cart = pc,
@@ -81,12 +102,12 @@ namespace Orckestra.Composer.Cart.Services
                 BaseUrl = param.BaseUrl,
             }));
             var viewModels = await Task.WhenAll(tasks).ConfigureAwait(false);
-            
+
             var comparer = new RecurringOrderCartViewModelNextOcurrenceComparer();
             return new RecurringOrderCartsViewModel
-            {               
+            {
                 RecurringOrderCartViewModelList = viewModels.OrderBy(v => v, comparer).ToList(),
-            };            
+            };
         }
 
         public async Task<CartViewModel> CreateCartViewModelAsync(CreateRecurringOrderCartViewModelParam param)
@@ -313,6 +334,8 @@ namespace Orckestra.Composer.Cart.Services
                 ExecuteWorkflow = false
             }).ConfigureAwaitWithCulture(false);
 
+            var originalCartName = param.CartName;
+
             //get customer recurring lineitems
             var listOfRecurringLineItems = await RecurringOrdersRepository.GetRecurringOrderTemplates(param.Scope, param.CustomerId).ConfigureAwaitWithCulture(false);
 
@@ -361,18 +384,33 @@ namespace Orckestra.Composer.Cart.Services
                 CartName = param.CartName
             }).ConfigureAwait(false);
             
-            var carts = await GetRecurringOrderCartListViewModelAsync(new GetRecurringOrderCartsViewModelParam
+            var vm = new RecurringOrderCartsRescheduleResultViewModel();
+
+            var carts = await CartRepository.GetRecurringCartsAsync(new GetRecurringOrderCartsViewModelParam
             {
                 BaseUrl = param.BaseUrl,
                 Scope = param.Scope,
                 CustomerId = param.CustomerId,
-                CultureInfo =param.CultureInfo
-            }).ConfigureAwaitWithCulture(false);
+                CultureInfo = param.CultureInfo
+            }).ConfigureAwait(false);            
 
-            var vm = new RecurringOrderCartsRescheduleResultViewModel();
-            vm.RecurringOrderCartsViewModel = carts;
+            vm.RescheduledCartHasMerged = !carts.Any(rc => string.Compare(rc.Name, originalCartName, StringComparison.OrdinalIgnoreCase) == 0);
 
-            //vm.RescheduledCartHasMerged = carts.RecurringOrderCartViewModelList.Select(rc => rc.)
+            var cartsVm = await GetRecurringOrderCartListViewModelFromCartsAsync(new GetRecurringOrderCartsViewModelFromCartsParam
+            {
+                Carts = carts,
+                BaseUrl = param.BaseUrl,
+                CultureInfo = param.CultureInfo
+            });
+
+            vm.RecurringOrderCartsViewModel = cartsVm;
+
+            var url = RecurringCartUrlProvider.GetRecurringCartsUrl(new GetRecurringCartsUrlParam
+            {
+                CultureInfo = param.CultureInfo
+            });
+
+            vm.RecurringCartsUrl = url;
 
             return vm;
         }
