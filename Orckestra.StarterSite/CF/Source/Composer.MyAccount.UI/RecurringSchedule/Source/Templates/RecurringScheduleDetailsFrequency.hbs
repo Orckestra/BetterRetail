@@ -87,7 +87,7 @@
                             <div class="col-xs-8 col-md-7 form-group">
                                 <img src="/UI.Package/Images/recurring.png" alt="{{localize 'General' 'L_RecurringProduct'}}" title="{{localize 'General' 'L_RecurringProduct'}}" />
                                 <select class="recurring-orders-frequency-selection btn btn-refiner template-details-frequency" id="modifyFrequency">
-                                    <option value="" {{#unless RecurringOrderFrequencyName}}selected="selected"{{/unless}}>{{localize 'ShoppingCart' 'L_RecurringChooseFrequency'}}</option>
+                                    {{!-- <option value="" {{#unless RecurringOrderFrequencyName}}selected="selected"{{/unless}}>{{localize 'ShoppingCart' 'L_RecurringChooseFrequency'}}</option> --}}
                                     {{#each RecurringOrderProgramFrequencies}}
                                         <option value="{{RecurringOrderFrequencyName}}"
                                                 {{#if_eq RecurringOrderFrequencyName ../RecurringOrderFrequencyName}}selected="selected"{{/if_eq}}>

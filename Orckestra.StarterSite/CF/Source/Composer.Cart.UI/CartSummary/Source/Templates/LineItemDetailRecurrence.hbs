@@ -41,7 +41,7 @@
                     <div class="row">
                         <div class="col-xs-8   col-md-7 form-group">
                             <select class="recurring-orders-frequency-selection btn btn-refiner">
-                                <option value="" {{#unless RecurringOrderFrequencyName}}selected="selected"{{/unless}}>{{localize 'ShoppingCart' 'L_RecurringChooseFrequency'}}</option>
+                                {{!-- <option value="" {{#unless RecurringOrderFrequencyName}}selected="selected"{{/unless}}>{{localize 'ShoppingCart' 'L_RecurringChooseFrequency'}}</option> --}}
                                 {{#each RecurringOrderProgramFrequencies}}
                                     <option value="{{RecurringOrderFrequencyName}}"
                                             {{#if_eq RecurringOrderFrequencyName ../RecurringOrderFrequencyName}}selected="selected"{{/if_eq}}>
