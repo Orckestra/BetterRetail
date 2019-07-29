@@ -453,7 +453,6 @@ namespace Orckestra.Composer.Cart.Repositories
         public virtual async Task<List<ProcessedCart>> GetRecurringCartsAsync(GetRecurringOrderCartsViewModelParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
-            if (string.IsNullOrWhiteSpace(param.BaseUrl)) { throw new ArgumentException(nameof(param.BaseUrl)); }
             if (param.CultureInfo == null) { throw new ArgumentException(nameof(param.CultureInfo)); }
             if (param.CustomerId == Guid.Empty) { throw new ArgumentException(nameof(param.CustomerId)); }
             if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(nameof(param.Scope)); }

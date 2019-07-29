@@ -98,6 +98,7 @@
     <Compile Include="Parameters\RemoveRecurringCartLineItemParam.cs" />
     <Compile Include="Parameters\RescheduleRecurringCartParam.cs" />
     <Compile Include="Parameters\UpdateRecurringCartLineItemParam.cs" />
+    <Compile Include="Parameters\UpdateRecurringOrderCartAddressesParam.cs" />
     <Compile Include="Parameters\UpdateRecurringOrderCartBillingAddressParam.cs" />
     <Compile Include="Parameters\UpdateRecurringOrderCartNextProcessingDateParam.cs" />
     <Compile Include="Parameters\UpdateRecurringOrderCartShippingAddressParam.cs" />

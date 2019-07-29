@@ -19,6 +19,7 @@ using Orckestra.Composer.Services;
 using Orckestra.Composer.Services.Lookup;
 using Orckestra.Composer.Utils;
 using Orckestra.Overture;
+using Orckestra.Overture.ServiceModel.Orders;
 using Orckestra.Overture.ServiceModel.RecurringOrders;
 
 namespace Orckestra.Composer.Cart.Services
@@ -180,7 +181,7 @@ namespace Orckestra.Composer.Cart.Services
 
             return vm;
         }
-         
+
         public async Task<CartViewModel> GetRecurringOrderCartViewModelAsync(GetRecurringOrderCartViewModelParam param)
         {
             var emptyVm = GetEmptyRecurringOrderCartViewModel();
@@ -188,7 +189,7 @@ namespace Orckestra.Composer.Cart.Services
             if (!ConfigurationUtil.GetRecurringOrdersConfigEnabled())
                 return emptyVm;
 
-            if(string.Equals(param.CartName, CartConfiguration.ShoppingCartName, StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(param.CartName, CartConfiguration.ShoppingCartName, StringComparison.OrdinalIgnoreCase))
                 return emptyVm;
 
             var cart = await CartRepository.GetCartAsync(new GetCartParam
@@ -231,11 +232,7 @@ namespace Orckestra.Composer.Cart.Services
 
             var shipment = cart.Shipments.First();
             var newAddress = await AddressRepository.GetAddressByIdAsync(param.ShippingAddressId).ConfigureAwaitWithCulture(false);
-
-            if(newAddress == null)
-                throw new InvalidOperationException("Address not found");
-
-            shipment.Address = newAddress;
+            shipment.Address = newAddress ?? throw new InvalidOperationException("Address not found");
 
             var payment = cart.Payments.First();
             if (payment == null)
@@ -245,13 +242,11 @@ namespace Orckestra.Composer.Cart.Services
             {
                 payment.BillingAddress = newAddress;
             }
-            else
+            else if (param.BillingAddressId != Guid.Empty)
             {
                 var newbillingAddress = await AddressRepository.GetAddressByIdAsync(param.BillingAddressId).ConfigureAwaitWithCulture(false);
-                if(newbillingAddress == null)
-                    throw new InvalidOperationException("Address not found");                
-              
-                payment.BillingAddress = newbillingAddress;
+                payment.BillingAddress = newbillingAddress ?? throw new InvalidOperationException("Address not found");
+                payment.BillingAddressId = newbillingAddress.Id; 
             }
 
             var updatedCart = await CartRepository.UpdateCartAsync(UpdateCartParamFactory.Build(cart)).ConfigureAwaitWithCulture(false);
@@ -266,10 +261,10 @@ namespace Orckestra.Composer.Cart.Services
 
             return vm;
         }
-                 
+
         private CartViewModel GetEmptyRecurringOrderCartViewModel()
         {
-           return new CartViewModel();             
+            return new CartViewModel();
         }
 
         public async Task<CartViewModel> UpdateRecurringOrderCartBillingAddressAsync(UpdateRecurringOrderCartBillingAddressParam param)
@@ -294,11 +289,8 @@ namespace Orckestra.Composer.Cart.Services
             var payment = cart.Payments.First();
             if (payment == null)
                 throw new InvalidOperationException("No payment");
-
-            if(newAddress != null)
-                throw new InvalidOperationException("Address not found");
-
-            payment.BillingAddress = newAddress;
+            payment.BillingAddress = newAddress ?? throw new InvalidOperationException("Address not found");
+            payment.BillingAddressId = newAddress.Id;
 
             if (param.UseSameForShippingAndBilling)
             {
@@ -374,7 +366,7 @@ namespace Orckestra.Composer.Cart.Services
 
                 newDate = new DateTime(param.NextOccurence.Year, param.NextOccurence.Month, param.NextOccurence.Day,
                                         nextOccurenceWithTime.Hour, nextOccurenceWithTime.Minute, nextOccurenceWithTime.Second, DateTimeKind.Utc);
-            }                       
+            }
 
             var listOfRecurringOrderLineItemsUpdated = await CartRepository.RescheduleRecurringCartAsync(new RescheduleRecurringCartParam()
             {
@@ -383,7 +375,7 @@ namespace Orckestra.Composer.Cart.Services
                 Scope = param.Scope,
                 CartName = param.CartName
             }).ConfigureAwait(false);
-            
+
             var vm = new RecurringOrderCartsRescheduleResultViewModel();
 
             var carts = await CartRepository.GetRecurringCartsAsync(new GetRecurringOrderCartsViewModelParam
@@ -392,7 +384,7 @@ namespace Orckestra.Composer.Cart.Services
                 Scope = param.Scope,
                 CustomerId = param.CustomerId,
                 CultureInfo = param.CultureInfo
-            }).ConfigureAwait(false);            
+            }).ConfigureAwait(false);
 
             vm.RescheduledCartHasMerged = !carts.Any(rc => string.Compare(rc.Name, originalCartName, StringComparison.OrdinalIgnoreCase) == 0);
 
@@ -427,7 +419,7 @@ namespace Orckestra.Composer.Cart.Services
             if (param.CustomerId == Guid.Empty) throw new ArgumentNullException(nameof(param.CustomerId), ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param.CustomerId)));
 
             await CartRepository.RemoveRecurringCartLineItemAsync(param).ConfigureAwait(false);
-            
+
             return await GetRecurringOrderCartViewModelAsync(new GetRecurringOrderCartViewModelParam
             {
                 CartName = param.CartName,
@@ -474,6 +466,75 @@ namespace Orckestra.Composer.Cart.Services
             var viewModel = await CreateCartViewModelAsync(vmParam).ConfigureAwait(false);
 
             return viewModel;
+        }
+
+        public async Task<bool> UpdateRecurringOrderCartsAddressesAsync(UpdateRecurringOrderCartsAddressesParam param)
+        {
+            if (!ConfigurationUtil.GetRecurringOrdersConfigEnabled())
+                return false;
+
+            var roCarts = await CartRepository.GetRecurringCartsAsync(new GetRecurringOrderCartsViewModelParam {
+                BaseUrl = param.BaseUrl,
+                CultureInfo = param.CultureInfo,
+                CustomerId = param.CustomerId,
+                Scope = param.ScopeId
+            }).ConfigureAwait(false);
+
+            var tasks = new List<Task>();
+            var addressId = param.AddressId;
+
+            foreach (var roc in roCarts)
+            {
+                var updateShippingAddress = false;
+                var updateBillingAddress = false;
+
+                var shipment = roc.Shipments?.FirstOrDefault();
+                if (shipment != null)
+                {
+                    if (shipment.Address.Id == addressId)
+                    {
+                        updateShippingAddress = true;
+                    }
+                    var payment = roc.Payments?.FirstOrDefault();
+                    if (payment != null)
+                    {
+                        if (payment.BillingAddress.Id == addressId)
+                        {
+                            updateBillingAddress = true;
+                        }
+                    }
+                }
+
+                if (updateShippingAddress)
+                {
+                    tasks.Add(UpdateRecurringOrderCartShippingAddressAsync(new UpdateRecurringOrderCartShippingAddressParam()
+                    {
+                        BaseUrl = param.BaseUrl,
+                        CartName = roc.Name,
+                        CultureInfo = param.CultureInfo,
+                        CustomerId = param.CustomerId,
+                        ScopeId = param.ScopeId,
+                        ShippingAddressId = addressId,
+                        UseSameForShippingAndBilling = updateBillingAddress
+                    }));
+                }
+                else if (updateBillingAddress)
+                {
+                    tasks.Add(UpdateRecurringOrderCartBillingAddressAsync(new UpdateRecurringOrderCartBillingAddressParam()
+                    {
+                        BaseUrl = param.BaseUrl,
+                        CartName = roc.Name,
+                        CultureInfo = param.CultureInfo,
+                        CustomerId = param.CustomerId,
+                        ScopeId = param.ScopeId,
+                        BillingAddressId = addressId,
+                        UseSameForShippingAndBilling = false
+                    }));
+                }
+            }
+
+            await Task.WhenAll(tasks).ConfigureAwaitWithCulture(false);
+            return true;
         }
     }
 }

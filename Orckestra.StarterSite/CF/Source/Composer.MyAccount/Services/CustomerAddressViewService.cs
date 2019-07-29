@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Orckestra.Composer.Cart.Services;
 using Orckestra.Composer.Country;
 using Orckestra.Composer.MyAccount.Parameters;
 using Orckestra.Composer.MyAccount.Repositories;
@@ -31,6 +32,7 @@ namespace Orckestra.Composer.MyAccount.Services
         protected IMyAccountUrlProvider MyAccountUrlProvider { get; private set; }
         protected IComposerContext ComposerContext { get; private set; }
         protected ICountryService CountryService { get; private set; }
+        protected IRecurringOrderCartsViewService RecurringOrderCartsViewService { get; private set; }
 
         public CustomerAddressViewService(
             IViewModelMapper viewModelMapper,
@@ -39,7 +41,8 @@ namespace Orckestra.Composer.MyAccount.Services
             IAddressRepository addressRepository,
             IMyAccountUrlProvider myAccountUrlProvider,
             ICountryService countryService,
-            IComposerContext composerContext)
+            IComposerContext composerContext,
+            IRecurringOrderCartsViewService recurringOrderCartsViewService)
         {
             if (viewModelMapper == null) { throw new ArgumentNullException("viewModelMapper"); }
             if (customerRepository == null) { throw new ArgumentNullException("customerRepository"); }
@@ -48,6 +51,7 @@ namespace Orckestra.Composer.MyAccount.Services
             if (myAccountUrlProvider == null) { throw new ArgumentNullException("myAccountUrlProvider"); }
             if (countryService == null) { throw new ArgumentNullException("countryService"); }
             if (composerContext == null) { throw new ArgumentNullException("composerContext"); }
+            if (recurringOrderCartsViewService == null) { throw new ArgumentNullException("recurringOrderCartsViewService"); }
 
             ViewModelMapper = viewModelMapper;
             CustomerRepository = customerRepository;
@@ -56,6 +60,7 @@ namespace Orckestra.Composer.MyAccount.Services
             MyAccountUrlProvider = myAccountUrlProvider;
             CountryService = countryService;
             ComposerContext = composerContext;
+            RecurringOrderCartsViewService = recurringOrderCartsViewService;
         }
 
         /// <summary>
@@ -142,6 +147,16 @@ namespace Orckestra.Composer.MyAccount.Services
 
                 }).ConfigureAwait(false);
             }
+
+            //Update recurring carts with this address Id
+            await RecurringOrderCartsViewService.UpdateRecurringOrderCartsAddressesAsync(new Cart.Parameters.UpdateRecurringOrderCartsAddressesParam
+            {
+                BaseUrl = "",
+                CultureInfo = editAddressParam.CultureInfo,
+                CustomerId = editAddressParam.CustomerId,
+                ScopeId = editAddressParam.Scope,
+                AddressId = updatedAddress.Id,
+            }).ConfigureAwait(false);
 
             return await GetEditAddressViewModel(new GetEditAddressViewModelParam
             {

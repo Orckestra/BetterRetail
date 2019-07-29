@@ -125,6 +125,10 @@
     <Compile Include="ViewModels\SignInHeaderViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Composer.Cart\Composer.Cart.csproj">
+      <Project>{08f6fcb8-6065-4d31-b7df-67fe67ee67e5}</Project>
+      <Name>Composer.Cart</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Composer\Composer.csproj">
       <Project>{d00bd58b-93fe-4f3d-bbc8-6f7873ca6830}</Project>
       <Name>Composer</Name>
