@@ -124,9 +124,11 @@
                         &nbsp;{{localize 'ProductPage' 'L_RecurringFrequencyOnce'}}
                     {{/if}}
                     {{#if IsValid}}
-                        <a class="btn btn-link" href="{{../../../RecurringScheduleUrl}}" >
-                            {{localize 'ShoppingCart' 'L_RecurringChangeFrequency'}} <i class="fa fa-external-link-square fa-lg"></i>
-                        </a>
+                        {{#if ../RecurringScheduleDetailUrl}}
+                            <a class="btn btn-link" href="{{../RecurringScheduleDetailUrl}}" >
+                                {{localize 'ShoppingCart' 'L_RecurringChangeFrequency'}} <i class="fa fa-external-link-square fa-lg"></i>
+                            </a>
+                        {{/if}}
                     {{/if}}
                 </div>
             </div>

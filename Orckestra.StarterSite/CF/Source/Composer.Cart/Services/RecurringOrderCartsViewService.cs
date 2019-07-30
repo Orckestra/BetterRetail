@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,6 +22,7 @@ using Orckestra.Composer.Utils;
 using Orckestra.Overture;
 using Orckestra.Overture.ServiceModel.Orders;
 using Orckestra.Overture.ServiceModel.RecurringOrders;
+using Orckestra.Overture.ServiceModel.Requests.RecurringOrders;
 
 namespace Orckestra.Composer.Cart.Services
 {
@@ -36,7 +38,7 @@ namespace Orckestra.Composer.Cart.Services
         protected IAddressRepository AddressRepository { get; private set; }
         protected ICouponViewService CouponViewService { get; private set; }
         protected IRecurringCartUrlProvider RecurringCartUrlProvider { get; private set; }
-
+        protected IRecurringScheduleUrlProvider RecurringScheduleUrlProvider { get; private set; }
 
         public RecurringOrderCartsViewService(
             ICartRepository cartRepository,
@@ -48,7 +50,8 @@ namespace Orckestra.Composer.Cart.Services
             IComposerContext composerContext,
             IAddressRepository addressRepository,
             ICouponViewService couponViewService,
-            IRecurringCartUrlProvider recurringCartUrlProvider)
+            IRecurringCartUrlProvider recurringCartUrlProvider,
+            IRecurringScheduleUrlProvider recurringScheduleUrlProvider)
         {
             if (cartRepository == null) { throw new ArgumentNullException(nameof(cartRepository)); }
             if (overtureClient == null) { throw new ArgumentNullException(nameof(overtureClient)); }
@@ -60,6 +63,7 @@ namespace Orckestra.Composer.Cart.Services
             if (addressRepository == null) { throw new ArgumentNullException(nameof(addressRepository)); }
             if (couponViewService == null) { throw new ArgumentNullException(nameof(couponViewService)); }
             if (recurringCartUrlProvider == null) { throw new ArgumentNullException(nameof(recurringCartUrlProvider)); }
+            if (recurringScheduleUrlProvider == null) { throw new ArgumentNullException(nameof(recurringScheduleUrlProvider)); }
 
             OvertureClient = overtureClient;
             CartRepository = cartRepository;
@@ -71,6 +75,7 @@ namespace Orckestra.Composer.Cart.Services
             AddressRepository = addressRepository;
             CouponViewService = couponViewService;
             RecurringCartUrlProvider = recurringCartUrlProvider;
+            RecurringScheduleUrlProvider = recurringScheduleUrlProvider;
         }
 
         public async Task<RecurringOrderCartsViewModel> GetRecurringOrderCartListViewModelAsync(GetRecurringOrderCartsViewModelParam param)
@@ -139,7 +144,43 @@ namespace Orckestra.Composer.Cart.Services
 
             var vm = RecurringOrderCartViewModelFactory.CreateRecurringOrderCartViewModel(param);
 
+            await ExtendLineItems(vm, ComposerContext.Scope, ComposerContext.CustomerId, ComposerContext.CultureInfo).ConfigureAwaitWithCulture(false);
+
             return vm;
+        }
+
+        private async Task<bool> ExtendLineItems(CartViewModel vm, string scope, Guid customerId, CultureInfo culture)
+        {
+            var recurringOrderLineItems = await RecurringOrdersRepository.GetRecurringOrderTemplates(scope, customerId).ConfigureAwaitWithCulture(false);
+
+            foreach(var lineItem in vm.LineItemDetailViewModels)
+            {
+                var roLineItemVm = lineItem.AsExtensionModel<IRecurringOrderLineItemViewModel>();
+
+                roLineItemVm.RecurringScheduleDetailUrl = FindUrl(recurringOrderLineItems, lineItem, culture);
+            }
+
+            return true;
+        }
+
+        private string FindUrl(ListOfRecurringOrderLineItems recurringOrderLineItems, LineItemDetailViewModel lineItem, CultureInfo culture)
+        {
+            //TODO: Change if a customer can have more than one template of the same product/variant
+            var recurringLineItem = recurringOrderLineItems.RecurringOrderLineItems.SingleOrDefault(r => string.Compare(r.ProductId, lineItem.ProductId, StringComparison.OrdinalIgnoreCase) == 0
+                && string.Compare(r.VariantId, lineItem.VariantId, StringComparison.OrdinalIgnoreCase) == 0);
+
+            if (recurringLineItem == null)
+                return string.Empty;
+
+            var id = recurringLineItem.RecurringOrderLineItemId;
+
+            var url = RecurringScheduleUrlProvider.GetRecurringScheduleDetailsUrl(new GetRecurringScheduleDetailsUrlParam()
+            {
+                CultureInfo = culture,
+                RecurringScheduleId = id.ToString()
+            });
+
+            return url;
         }
 
         public async Task<LightRecurringOrderCartsViewModel> GetLightRecurringOrderCartListViewModelAsync(GetLightRecurringOrderCartListViewModelParam param)

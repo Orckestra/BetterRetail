@@ -256,6 +256,7 @@
     <Compile Include="ViewModels\GuestOrderDetailsViewModel.cs" />
     <Compile Include="ViewModels\IRecurringOrderCartViewModel.cs" />
     <Compile Include="ViewModels\IPaymentMethodViewModel.cs" />
+    <Compile Include="ViewModels\IRecurringOrderLineItemViewModel.cs" />
     <Compile Include="ViewModels\LightLineItemDetailViewModel.cs" />
     <Compile Include="ViewModels\LightRecurringOrderCartsViewModel.cs" />
     <Compile Include="ViewModels\LightRecurringOrderCartViewModel.cs" />

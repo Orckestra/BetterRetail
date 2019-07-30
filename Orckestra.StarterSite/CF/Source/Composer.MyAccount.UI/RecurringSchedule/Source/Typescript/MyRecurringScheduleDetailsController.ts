@@ -338,13 +338,5 @@ module Orckestra.Composer {
             return new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(),
             date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
         }
-
-        public cancelRecurringOrderTemplate(actionContext: IControllerActionContext) {
-
-            let element = actionContext.elementContext[0];
-            let url = element.dataset['scheduleurl'];
-
-            this.window.location.href = url;
-        }
     }
 }
