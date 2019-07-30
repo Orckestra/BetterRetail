@@ -91,6 +91,11 @@
   .cart-subtotal {
     width: 75%;
   }
+  .recurring-schedule {
+    .cart-frequency {
+      width: 75%;
+    }
+  }
 
   .cart-delete {
     width: 25%;
@@ -135,6 +140,44 @@
       width: 16%;
     }
 
+    .recurring-schedule {
+       // these are in a sub cell so they must add up to 100%
+      .cart-desc {
+        width: 25%;
+      }
+      .cart-price {
+        width: 15%;
+      }
+      .cart-qty {
+        width: 27%;
+      }
+      .cart-subtotal {
+        width: 15%;
+      }      
+      .cart-frequency {
+        width: 18%;
+      }
+    }
+
+    .recurring-schedule-details {
+      // these are in a sub cell so they must add up to 100%
+     .cart-desc {
+       width: 32%;
+     }
+     .cart-price {
+       width: 16%;
+     }
+     .cart-price-multiplier {
+       width: 12%;
+     }
+     .cart-qty {
+       width: 20%;
+     }
+     .cart-subtotal {
+       width: 20%;
+     }     
+   }
+
     .cart-attributes {
       width: 100%;
       display: table;
@@ -159,11 +202,17 @@
   .cart-header-title {
     width: 45%;
     float: left;
+    &.recurring-schedule {      
+      width: 35%;
+    }
   }
   .cart-header-labels {
     margin-top: 6px;
     width: 55%;
     float: left;
+    &.recurring-schedule {      
+      width: 65%;
+    }
   }
 
   .cart-header-price,
@@ -181,6 +230,23 @@
   }
   .cart-header-subtotal {
     width: 26.5%;
+  }
+
+  //recurring schedule page
+  .recurring-schedule {
+    .cart-header-price {
+      width: 20%;
+    }
+    .cart-header-qty {
+      width: 35%;
+    }
+    .cart-header-subtotal {
+      width: 19%;
+    }
+    .cart-header-frequency {   
+      width: 26%;
+    }
+  
   }
 }
 
