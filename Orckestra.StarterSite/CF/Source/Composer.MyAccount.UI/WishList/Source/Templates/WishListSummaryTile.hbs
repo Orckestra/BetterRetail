@@ -11,7 +11,7 @@
         <div class="col-xs-6 col-sm-12">
             <div class="wishlist-tile-text">
                 <div class="row">
-                    <div class="col-xs-10">
+                    <div class="col-xs-9 col-sm-10">
                         {{#if ProductSummary.Brand}}
                             <strong class="text-uppercase  product-tile-brand" data-qa="wishlist-product-brand" title="{{ProductSummary.Brand}}">{{ProductSummary.Brand}}</strong>
                             <br/>
@@ -19,7 +19,7 @@
                         <a data-qa="wishlist-product-title" href="{{ProductUrl}}" title="{{ProductSummary.DisplayName}}" data-productId="{{ProductId}}">{{ProductSummary.DisplayName}}</a>
                     </div>
                     {{#if RecurringOrderProgramName}}
-                        <div class="col-xs-2 product-tile-recurring">
+                        <div class="col-xs-3 col-sm-2 product-tile-recurring">
                             <img src="/UI.Package/Images/recurring.png" alt="{{localize 'General' 'L_RecurringProduct'}}" title="{{localize 'General' 'L_RecurringProduct'}}" />
                         </div>
                     {{/if}}

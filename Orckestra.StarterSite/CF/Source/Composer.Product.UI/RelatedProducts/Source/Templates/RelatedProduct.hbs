@@ -6,7 +6,7 @@
 
         <div class="product-tile-text">
             <div class="row">
-                <div class="col-xs-10">
+                <div class="col-xs-9 col-sm-10">
                     {{#if Brand}}
                         <strong class="text-uppercase  product-tile-brand" data-qa="search-product-brand" title="{{Brand}}">{{Brand}}</strong>
                         <br/>
@@ -16,7 +16,7 @@
                     </a>
                 </div>
                 {{#if IsRecurringOrderEligible}}
-                    <div class="col-xs-2 product-tile-recurring">
+                    <div class="col-xs-3 col-sm-2 product-tile-recurring">
                         <img src="/UI.Package/Images/recurring.png" alt="{{localize 'General' 'L_RecurringProduct'}}" title="{{localize 'General' 'L_RecurringProduct'}}" />
                     </div>
                 {{/if}}
