@@ -205,6 +205,9 @@
     &.recurring-schedule {      
       width: 35%;
     }
+    &.recurring-schedule-details {      
+      width: 40%;
+    }
   }
   .cart-header-labels {
     margin-top: 6px;
@@ -212,6 +215,9 @@
     float: left;
     &.recurring-schedule {      
       width: 65%;
+    }
+    &.recurring-schedule-details {      
+      width: 60%;
     }
   }
 
@@ -245,8 +251,19 @@
     }
     .cart-header-frequency {   
       width: 26%;
+    }  
+  }
+  //recurring schedule details page
+  .recurring-schedule-details {
+    .cart-header-price {
+      width: 25%;
     }
-  
+    .cart-header-qty {
+      width: 54%;
+    }
+    .cart-header-subtotal {
+      width: 21%;
+    } 
   }
 }
 
