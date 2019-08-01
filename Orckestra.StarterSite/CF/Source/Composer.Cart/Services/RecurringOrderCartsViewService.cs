@@ -273,7 +273,9 @@ namespace Orckestra.Composer.Cart.Services
 
             var shipment = cart.Shipments.First();
             var newAddress = await AddressRepository.GetAddressByIdAsync(param.ShippingAddressId).ConfigureAwaitWithCulture(false);
-            shipment.Address = newAddress ?? throw new InvalidOperationException("Address not found");
+            if (newAddress == null)
+                throw new InvalidOperationException("Address not found");
+            shipment.Address = newAddress;
 
             var payment = cart.Payments.First();
             if (payment == null)
@@ -286,7 +288,9 @@ namespace Orckestra.Composer.Cart.Services
             else if (param.BillingAddressId != Guid.Empty)
             {
                 var newbillingAddress = await AddressRepository.GetAddressByIdAsync(param.BillingAddressId).ConfigureAwaitWithCulture(false);
-                payment.BillingAddress = newbillingAddress ?? throw new InvalidOperationException("Address not found");
+                if (newbillingAddress == null)
+                    throw new InvalidOperationException("Address not found");
+                payment.BillingAddress = newbillingAddress;
                 payment.BillingAddressId = newbillingAddress.Id; 
             }
 
@@ -330,7 +334,9 @@ namespace Orckestra.Composer.Cart.Services
             var payment = cart.Payments.First();
             if (payment == null)
                 throw new InvalidOperationException("No payment");
-            payment.BillingAddress = newAddress ?? throw new InvalidOperationException("Address not found");
+            if (newAddress == null)
+                throw new InvalidOperationException("Address not found");
+            payment.BillingAddress = newAddress;
             payment.BillingAddressId = newAddress.Id;
 
             if (param.UseSameForShippingAndBilling)
