@@ -13,14 +13,17 @@
         "name": "@Model.DisplayName",
         "sku": "@Model.Sku",
         "brand": "@Model.Brand",
-        "image": "@Model.SelectedImage?.ImageUrl",
+        @if (Model.SelectedImage != null)
+        {
+            @: "image": "@Model.SelectedImage.ImageUrl",
+        }
         "url": "@(string.Format("{0}{1}", HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority), Model.ProductDetailUrl))",
         "identifier" : "@Model.ProductId",
         "offers": {
-        "@@type": "Offer",
-        "price": "@Model.Price.Value.ToString("n2", CultureInfo.InvariantCulture)",
-        "priceCurrency": "@Model.Currency.IsoCode"
-        }
+            "@@type": "Offer",
+            "price": "@Model.Price.Value.ToString("n2", CultureInfo.InvariantCulture)",
+            "priceCurrency": "@Model.Currency.IsoCode"
+            }
         }
     </script>
 </head>

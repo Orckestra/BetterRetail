@@ -6,6 +6,7 @@
 
         public string ShortDisplayName { get; set; }
         public string DisplayName { get; set; }
+        public string CultureName { get; set; }
 
         public bool IsCurrent { get; set; }
     }

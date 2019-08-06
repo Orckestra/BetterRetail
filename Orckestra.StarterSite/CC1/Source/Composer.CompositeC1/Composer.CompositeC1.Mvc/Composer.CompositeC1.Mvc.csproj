@@ -354,6 +354,7 @@
     <Content Include="Views\web.config" />
     <Content Include="Views\Product\ProductSEO.cshtml" />
     <Content Include="Views\Shared\PageHeader.cshtml" />
+    <Content Include="Views\Shared\LanguageSwitch.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Solution Items\SharedAssemblyInfo.cs">
