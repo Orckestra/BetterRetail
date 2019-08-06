@@ -1,7 +1,7 @@
 <div data-templateid="ProductRecurringFrequency">
     {{#if isAvailableForRecurring}}
         <div class="recurring-modes form-group js-recurringModes">
-            <div class="radio-row selected js-recurringModeRow">
+            <div class="radio-row {{#if_eq recurringMode "single"}}selected{{/if_eq}} js-recurringModeRow">
                 <div class="radio">
                     <input id="UseSingle" {{#if_eq recurringMode "single"}}checked="checked"{{/if_eq}} type="radio" data-target=".modeSelection"
                            name="recurringMode"
@@ -10,7 +10,7 @@
                     <label for="UseSingle">{{localize 'ProductPage' 'L_RecurringFrequencyOnce'}}</label>
                 </div>
             </div>
-            <div class="radio-row js-recurringModeRow">
+            <div class="radio-row {{#if_eq recurringMode "recurring"}}selected{{/if_eq}} js-recurringModeRow">
                 <div class="radio">
                     <input  id="UseRecurring" {{#if_eq recurringMode "recurring"}}checked="checked"{{/if_eq}}
                             type="radio"
