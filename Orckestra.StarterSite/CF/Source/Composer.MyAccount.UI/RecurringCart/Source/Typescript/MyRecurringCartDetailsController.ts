@@ -301,6 +301,13 @@ module Orckestra.Composer {
             }
         }
 
+        private resetEditToggleFlags() {
+            this.editNextOcurrence = false;
+            this.editShippingMethod = false;
+            this.editAddress = false;
+            this.editPayment = false;
+        }
+
         public getShippingMethods(cartName) : Q.Promise<any> {
             let param: IRecurringOrderGetCartShippingMethods = {
                 CartName: cartName
@@ -398,6 +405,7 @@ module Orckestra.Composer {
         }
 
         public reRenderCartPage(vm) {
+            this.resetEditToggleFlags();
             this.viewModel = vm;
             this.render(this.viewModelName, vm);
         }
