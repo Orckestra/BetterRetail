@@ -151,7 +151,7 @@ namespace Orckestra.Composer.MyAccount.Services
             //Update recurring carts with this address Id
             await RecurringOrderCartsViewService.UpdateRecurringOrderCartsAddressesAsync(new Cart.Parameters.UpdateRecurringOrderCartsAddressesParam
             {
-                BaseUrl = "",
+                BaseUrl = "Empty", //Dont need but can't allow empty
                 CultureInfo = editAddressParam.CultureInfo,
                 CustomerId = editAddressParam.CustomerId,
                 ScopeId = editAddressParam.Scope,
