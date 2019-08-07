@@ -7,6 +7,7 @@
 ///<reference path='../../../../Composer.Cart.UI/RecurringOrder/source/TypeScript/Repositories/RecurringOrderRepository.ts' />
 ///<reference path='../../../../Composer.UI/Source/TypeScript/ErrorHandling/ErrorHandler.ts' />
 ///<reference path='../../../../Composer.MyAccount.UI/Common/Source/Typescript/DatepickerService.ts' />
+///<reference path='../../../../Composer.UI/Source/TypeScript/Utils/Utils.ts' />
 
 module Orckestra.Composer {
 
@@ -67,9 +68,13 @@ module Orckestra.Composer {
             //this.viewModel = vm;
             ErrorHandler.instance().removeErrors();
             this.render(this.viewModelName, vm);
+
+            //Scroll to success message if visible
+            Utils.scrollToElement( $('[data-templateid="RecurringScheduleDetailsUpdateSuccessful"]:has(div)'));
             this.getAvailableEditList();
             DatepickerService.renderDatepicker('.datepicker');
         }
+
 
         public renderShippingMethods(vm) {
             this.render('RecurringScheduleDetailsShippingMethods', vm);

@@ -12,6 +12,7 @@
 ///<reference path='../../../../Composer.Cart.UI/MonerisPaymentProvider/source/TypeScript/MonerisPaymentService.ts' />
 ///<reference path='../../../../Composer.MyAccount.UI/Common/Source/Typescript/MyAccountEvents.ts' />
 ///<reference path='../../../../Composer.MyAccount.UI/Common/Source/Typescript/DatepickerService.ts' />
+///<reference path='../../../../Composer.UI/Source/TypeScript/Utils/Utils.ts' />
 
 module Orckestra.Composer {
 
@@ -794,14 +795,8 @@ module Orckestra.Composer {
 
             //Scroll to the error message if there's one
             if (errorCollection && errorCollection.Errors && errorCollection.Errors.length > 0) {
-                this.scrollToElement( $('[data-templateid="FormErrorMessages"]:has(div)'));
+                Utils.scrollToElement( $('[data-templateid="FormErrorMessages"]:has(div)'));
             }
-        }
-
-        public scrollToElement(element: JQuery, offsetDiff: number = 100) {
-            $('html, body').animate({
-                scrollTop: $(element).offset().top - offsetDiff
-            }, 10);
         }
     }
 }
