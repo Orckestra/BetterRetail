@@ -7,9 +7,9 @@ using Orckestra.Overture;
 
 namespace Orckestra.Composer.Cart.Factory.Order
 {
-    public sealed class ShippingTrackingProviderFactory : ProviderFactory<IShippingTrackingProvider>, IShippingTrackingProviderFactory
+    public class ShippingTrackingProviderFactory : ProviderFactory<IShippingTrackingProvider>, IShippingTrackingProviderFactory
     {
-        private IShippingTrackingProviderRegistry ShippingTrackingProviderRegistry { get; set; }
+        protected IShippingTrackingProviderRegistry ShippingTrackingProviderRegistry { get; set; }
 
         public ShippingTrackingProviderFactory(IDependencyResolver dependencyResolver,
             IShippingTrackingProviderRegistry shippingTrackingProviderRegistry) 
@@ -38,7 +38,7 @@ namespace Orckestra.Composer.Cart.Factory.Order
             return instance;
         }
 
-        public IEnumerable<IShippingTrackingProvider> ResolveAllProviders()
+        public virtual IEnumerable<IShippingTrackingProvider> ResolveAllProviders()
         {
             var providers = ShippingTrackingProviderRegistry.GetAllRegisteredProviderTypes();
 

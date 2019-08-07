@@ -14,7 +14,7 @@ namespace Orckestra.Composer.Search.Factory
 {
     public class FacetFactory : ProviderFactory<IFacetProvider>, IFacetFactory
     {
-        private IFacetProviderRegistry FacetProviderRegistry { get; set; }
+        protected IFacetProviderRegistry FacetProviderRegistry { get; set; }
 
         public FacetFactory(IDependencyResolver dependencyResolver, IFacetProviderRegistry facetProviderRegistry)
             : base(dependencyResolver)

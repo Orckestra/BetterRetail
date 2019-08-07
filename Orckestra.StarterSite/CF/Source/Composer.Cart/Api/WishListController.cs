@@ -40,7 +40,7 @@ namespace Orckestra.Composer.Cart.Api
         /// <returns>A Json representation of wishlist</returns>
         [HttpGet]
         [ActionName("getwishlist")]
-        public async Task<IHttpActionResult> GetWishList()
+        public virtual async Task<IHttpActionResult> GetWishList()
         {
             var viewModel = await WishListViewService.GetWishListViewModelAsync(new GetCartParam
             {
@@ -62,7 +62,7 @@ namespace Orckestra.Composer.Cart.Api
         /// <returns>A LightWeight Json representation of wishlist( total items count, prodcut/variant ids</returns>
         [HttpGet]
         [ActionName("getwishlistsummary")]
-        public async Task<IHttpActionResult> GetWishListLight()
+        public virtual async Task<IHttpActionResult> GetWishListLight()
         {
             var viewModel = await WishListViewService.GetWishListSummaryViewModelAsync(new GetCartParam
             {

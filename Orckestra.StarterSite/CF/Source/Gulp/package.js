@@ -17,7 +17,7 @@
 
     // TODO: paths are hardcoded here, need to find a solution for global config
     var dest = 'UI.Package/';
-
+	
     var changePath = function (file, env, callback) {
         // filter out directories
         // we don't need to copy and operate on empty directories
@@ -123,30 +123,27 @@
     });
 
      gulp.task('package-copy-mvc', function() {
-        helpers.log('Copying ' + dest);
-        var c1Site = path.join('C:/orckestra/composer-c1-cm-dev.develop.orckestra.cloud/WebSite', dest),
-            c1MvcProject = path.join('../../CC1/Source/Composer.CompositeC1/Composer.CompositeC1.Mvc', dest);
+		 
+		var mvcSources = ['App_Data/Razor/', 'App_Data/PageTemplates/'];
+		mvcSources.forEach(function(destItem) {
+			helpers.log('Copying ' + destItem);
+			var c1Site = path.join('C:/orckestra/composer-c1-cm-dev.develop.orckestra.cloud/WebSite', destItem);
+			return gulp.src(path.join('../../CC1/Source/Composer.CompositeC1/Composer.CompositeC1.Mvc/', destItem, '**/*'))
+				.pipe(gulp.dest(c1Site))
+		});
+		
+		helpers.log('Copying ' + dest);
+		var c1Site = path.join('C:/orckestra/composer-c1-cm-dev.develop.orckestra.cloud/WebSite', dest),
+			c1MvcProject = path.join('../../CC1/Source/Composer.CompositeC1/Composer.CompositeC1.Mvc', dest);
 
-        return gulp.src(path.join(dest, '**/*'))
-            .pipe(gulp.dest(c1Site))
-            .pipe(gulp.dest(c1MvcProject));
+		return gulp.src(path.join(dest, '**/*'))
+				.pipe(gulp.dest(c1Site))
+				.pipe(gulp.dest(c1MvcProject));
     });
 
     gulp.task('package-copy-dll', function() {
-        function copyAssembliesTo(projectLocation) {
-        /* Open packages.config file in sitecore mvc
-            var composerPackagesConfigPath = path.join(projectLocation, 'packages.config');
-        var composerPackagesConfigContent = fsSync.read(composerPackagesConfigPath);
-
-        // Extract version number for Composer
-        var match = composerPackagesConfigContent.match(/<package id="Composer" version="(.*?)" targetFramework=".*?" \/>/i);
-        if (match.length < 2) {
-            throw new Error('Cannot find Composer version in ' + composerPackagesConfigPath);
-        }
-        var version = match[1];*/
-
+        function copyAssembliesTo(destinationFolder) {
         // Copy assemblies to package destination
-            var destinationFolder = path.join(projectLocation, 'bin/');
 
         if (config.debug) {
             helpers.log('Assemblies will be copied to ' + destinationFolder);
@@ -156,8 +153,22 @@
             .pipe($.if(argv.verbose, $.using()))
             .pipe(gulp.dest(destinationFolder));
         }
+		
+		
+		// Open packages.config file
+        var composerPackagesConfigPath = path.join(config.composerCompositeC1, 'packages.config');
+        var composerPackagesConfigContent = fsSync.read(composerPackagesConfigPath);
+
+        // Extract version number for Composer
+        var match = composerPackagesConfigContent.match(/<package id="Composer" version="(.*?)" targetFramework=".*?" \/>/i);
+        if (match.length < 2) {
+            throw new Error('Cannot find Composer version in ' + composerPackagesConfigPath);
+        }
+        var version = match[1];
         
-        copyAssembliesTo(config.deployedWebsitePath);
+		copyAssembliesTo(path.join(config.composerCompositeC1, '../', 'packages/Composer.' + version, 'lib/net452'));
+		copyAssembliesTo(path.join(config.c1MvcProject, '../', 'packages/Composer.' + version, 'lib/net452'));
+        copyAssembliesTo(path.join(config.deployedWebsitePath, 'bin/'));
     });
 
     gulp.task('package-sass-imports', function () {

@@ -12,8 +12,8 @@ namespace Orckestra.Composer.Product.Services
 {
     public class CategoryViewService : ICategoryViewService
     {
-        private readonly IViewModelMapper _viewModelMapper;
-        private readonly ICategoryRepository _categoryRepository;
+        protected readonly IViewModelMapper _viewModelMapper;
+        protected readonly ICategoryRepository _categoryRepository;
 
         public CategoryViewService(IViewModelMapper viewModelMapper, ICategoryRepository categoryRepository)
         {
@@ -37,7 +37,7 @@ namespace Orckestra.Composer.Product.Services
         /// <param name="param">The parameter.</param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentNullException">param</exception>
-        public async Task<CategoryViewModel[]> GetCategoriesPathAsync(GetCategoriesPathParam param)
+        public virtual async Task<CategoryViewModel[]> GetCategoriesPathAsync(GetCategoriesPathParam param)
         {
             if (param == null) { throw new ArgumentNullException("param"); }
 
@@ -53,7 +53,7 @@ namespace Orckestra.Composer.Product.Services
             return categoriesPathViewModel.ToArray();
         }
 
-        protected CategoryViewModel CreateCategoryViewModel(CreateCategoryViewModelParam param)
+        protected virtual CategoryViewModel CreateCategoryViewModel(CreateCategoryViewModelParam param)
         {
             if (param == null) { throw new ArgumentNullException("param"); }
             if (param.Category == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("Category"), "param"); }

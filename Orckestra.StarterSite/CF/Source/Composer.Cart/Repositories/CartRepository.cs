@@ -189,7 +189,7 @@ namespace Orckestra.Composer.Cart.Repositories
             return await OvertureClient.SendAsync(request).ConfigureAwait(false);
         }
 
-        private IReturn<ProcessedCart> BuildAddPaymentRequest(AddPaymentParam param)
+        protected IReturn<ProcessedCart> BuildAddPaymentRequest(AddPaymentParam param)
         {
             return new AddPaymentRequest
             {
@@ -234,7 +234,7 @@ namespace Orckestra.Composer.Cart.Repositories
         /// </summary>
         /// <param name="param"></param>
         /// <returns></returns>
-        public Task<ProcessedCart> RemoveLineItemsAsync(RemoveLineItemsParam param)
+        public virtual Task<ProcessedCart> RemoveLineItemsAsync(RemoveLineItemsParam param)
         {
             if (param == null) { throw new ArgumentNullException("param"); }
             if (String.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("Scope"), "param"); }
@@ -391,7 +391,7 @@ namespace Orckestra.Composer.Cart.Repositories
         /// <param name="customerId"></param>
         /// <param name="cartName"></param>
         /// <returns></returns>
-        protected CacheKey BuildCartCacheKey(string scope, Guid customerId, string cartName)
+        protected virtual CacheKey BuildCartCacheKey(string scope, Guid customerId, string cartName)
         {
             var key = new CacheKey(CacheConfigurationCategoryNames.Cart)
             {

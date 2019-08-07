@@ -233,7 +233,8 @@ namespace Orckestra.Composer.Providers.Membership
 
                 var updateRequest = new UpdateCustomerRequest(customer)
                 {
-                    PasswordQuestion = newPasswordQuestion
+                    PasswordQuestion = newPasswordQuestion,
+                    ScopeId = _scopeProvider.DefaultScope
                 };
 
                 var updatedCustomer = _client.Send(updateRequest);
@@ -699,7 +700,8 @@ namespace Orckestra.Composer.Providers.Membership
 
                 var updateRequest = new UpdateCustomerRequest(customer)
                 {
-                    AccountStatus = newStatus
+                    AccountStatus = newStatus,
+                    ScopeId = _scopeProvider.DefaultScope
                 };
 
                 var updatedCustomer = _client.Send(updateRequest);
@@ -721,7 +723,8 @@ namespace Orckestra.Composer.Providers.Membership
             var request = new ValidateUserRequest
             {
                 UserName = domainUsername,
-                Password = password
+                Password = password,
+                ScopeId = _scopeProvider.DefaultScope
             };
 
             try
@@ -745,7 +748,8 @@ namespace Orckestra.Composer.Providers.Membership
             var request = new LoginRequest
             {
                 UserName = domainUsername,
-                Password = password
+                Password = password,
+                ScopeId = _scopeProvider.DefaultScope
             };
 
             try

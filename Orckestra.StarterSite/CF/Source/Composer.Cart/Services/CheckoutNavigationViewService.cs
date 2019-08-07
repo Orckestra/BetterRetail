@@ -13,7 +13,7 @@ namespace Orckestra.Composer.Cart.Services
         /// </summary>
         /// <param name="param">param</param>
         /// <returns>The CheckoutNavigationViewModel</returns>
-        public CheckoutNavigationViewModel GetCheckoutNavigationViewModel(GetCheckoutNavigationParam param)
+        public virtual CheckoutNavigationViewModel GetCheckoutNavigationViewModel(GetCheckoutNavigationParam param)
         {
             if (param == null) { throw new ArgumentNullException("param"); }
             if (param.StepUrls == null) { throw new ArgumentException("param.StepUrls is required"); }

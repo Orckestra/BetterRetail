@@ -18,7 +18,7 @@ namespace Orckestra.Composer.Services
             ViewModelMapper = viewModelMapper;
         }
 
-        public async Task<CurrencyViewModel> GetScopeCurrencyAsync(GetScopeCurrencyParam param)
+        public virtual async Task<CurrencyViewModel> GetScopeCurrencyAsync(GetScopeCurrencyParam param)
         {
             if(param == null) { throw new ArgumentNullException(nameof(param)); }
             if(string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException("Scope is a required field", nameof(param.Scope)); }

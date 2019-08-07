@@ -30,7 +30,7 @@ namespace Orckestra.Composer.Cart.Services
             PaymentProviderFactory = paymentProviderFactory;
         }
 
-        public async Task<MonerisAddVaultProfileViewModel> AddCreditCardAsync(AddCreditCardParam addCreditCardParam)
+        public virtual async Task<MonerisAddVaultProfileViewModel> AddCreditCardAsync(AddCreditCardParam addCreditCardParam)
         {
             var model = await VaultProfileRepository.AddCreditCardAsync(addCreditCardParam).ConfigureAwait(false);
             var vm = MapModelToViewModel(model, addCreditCardParam.CultureInfo);

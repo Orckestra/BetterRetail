@@ -17,7 +17,7 @@ namespace Orckestra.Composer.CompositeC1.Services
         /// <param name="pageId"></param>
         /// <param name="cultureInfo"></param>
         /// <returns></returns>
-        public IPage GetPage(Guid pageId, CultureInfo cultureInfo = null)
+        public virtual IPage GetPage(Guid pageId, CultureInfo cultureInfo = null)
         {
             using (new DataConnection(cultureInfo))
             {
@@ -25,7 +25,7 @@ namespace Orckestra.Composer.CompositeC1.Services
             }
         }
 
-        public Guid GetParentPageId(IPage page)
+        public virtual Guid GetParentPageId(IPage page)
         {
             return page.GetParentId();
         }
@@ -36,7 +36,7 @@ namespace Orckestra.Composer.CompositeC1.Services
         /// <param name="pageId"></param>
         /// <param name="cultureInfo"></param>
         /// <returns></returns>
-        public string GetRendererPageUrl(Guid pageId, CultureInfo cultureInfo = null)
+        public virtual string GetRendererPageUrl(Guid pageId, CultureInfo cultureInfo = null)
         {
             if (cultureInfo == null)
             {
@@ -48,7 +48,7 @@ namespace Orckestra.Composer.CompositeC1.Services
             return PageUrls.BuildUrl(pageUrlData, UrlKind.Renderer);
         }
 
-        public string GetPageUrl(Guid pageId, CultureInfo cultureInfo = null)
+        public virtual string GetPageUrl(Guid pageId, CultureInfo cultureInfo = null)
         {
             var page = GetPage(pageId, cultureInfo);
             if (page == null)
@@ -60,13 +60,13 @@ namespace Orckestra.Composer.CompositeC1.Services
             
         }
 
-        public string GetPageUrl(IPage page)
+        public virtual string GetPageUrl(IPage page)
         {
             var url = PageUrls.BuildUrl(page);
             return url;
         }
 
-        public List<CheckoutStepInfoPage> GetCheckoutStepPages(CultureInfo cultureInfo = null)
+        public virtual List<CheckoutStepInfoPage> GetCheckoutStepPages(CultureInfo cultureInfo = null)
         {
             using (DataConnection connection = new DataConnection(cultureInfo))
             {
@@ -74,7 +74,7 @@ namespace Orckestra.Composer.CompositeC1.Services
             }
         }
 
-        public CheckoutStepInfoPage GetCheckoutStepPage(Guid pageId, CultureInfo cultureInfo = null)
+        public virtual CheckoutStepInfoPage GetCheckoutStepPage(Guid pageId, CultureInfo cultureInfo = null)
         {
             using (DataConnection connection = new DataConnection(cultureInfo))
             {

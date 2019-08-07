@@ -19,7 +19,7 @@ namespace Orckestra.Composer.Search.Repositories
         /// <param name="scopeId">The scope identifier.</param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentException">scope id cannot be null or empty;scopeId</exception>
-        public SearchAvailableProductsRequest CreateProductRequest(string scopeId)
+        public virtual SearchAvailableProductsRequest CreateProductRequest(string scopeId)
         {
             if (string.IsNullOrWhiteSpace(scopeId)) { throw new ArgumentException("scope id cannot be null or empty", "scopeId"); }
 
@@ -38,7 +38,7 @@ namespace Orckestra.Composer.Search.Repositories
         /// <returns></returns>
         /// <exception cref="System.ArgumentException">criteria cannot be null;criteria</exception>
         /// <exception cref="System.ArgumentException">criteria.Scope cannot be null or empty;criteria.Scope</exception>
-        public SearchAvailableProductsBaseRequest CreateProductRequest(SearchCriteria criteria)
+        public virtual SearchAvailableProductsBaseRequest CreateProductRequest(SearchCriteria criteria)
         {
             if (criteria == null) { throw new ArgumentException("criteria cannot be null", "criteria"); }
             if (string.IsNullOrWhiteSpace(criteria.Scope)) { throw new ArgumentException("scope cannot be null or empty", "criteria.Scope"); }
@@ -55,7 +55,7 @@ namespace Orckestra.Composer.Search.Repositories
             return CreateProductRequest(criteria.Scope);
         }
 
-        protected Query CreateQuery(string scopeId)
+        protected virtual Query CreateQuery(string scopeId)
         {
             if (string.IsNullOrWhiteSpace(scopeId)) { throw new ArgumentException("scope id cannot be null or empty", "scopeId"); }
 

@@ -17,7 +17,7 @@ namespace Orckestra.Composer.CompositeC1.Services
             _pageService = pageService;
         }
 
-        public BreadcrumbViewModel CreateBreadcrumbViewModel(GetBreadcrumbParam param)
+        public virtual BreadcrumbViewModel CreateBreadcrumbViewModel(GetBreadcrumbParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
 
@@ -38,7 +38,7 @@ namespace Orckestra.Composer.CompositeC1.Services
             return breadcrumbViewModel;
         }
 
-        private List<BreadcrumbItemViewModel> CreateBreadcrumbItems(GetBreadcrumbParam param, IPage page)
+        protected virtual List<BreadcrumbItemViewModel> CreateBreadcrumbItems(GetBreadcrumbParam param, IPage page)
         {
             var breadcrumbStack = new Stack<BreadcrumbItemViewModel>();
             var parentPageId = _pageService.GetParentPageId(page);
@@ -57,7 +57,7 @@ namespace Orckestra.Composer.CompositeC1.Services
             return items;
         }
 
-        private BreadcrumbItemViewModel CreateParentPageItem(IPage parentPage)
+        protected virtual BreadcrumbItemViewModel CreateParentPageItem(IPage parentPage)
         {
             var itemVM = new BreadcrumbItemViewModel
             {
@@ -73,7 +73,7 @@ namespace Orckestra.Composer.CompositeC1.Services
         }
 
 
-        private IEnumerable<BreadcrumbItemViewModel> UnrollStack(Stack<BreadcrumbItemViewModel> breadcrumbStack)
+        protected virtual IEnumerable<BreadcrumbItemViewModel> UnrollStack(Stack<BreadcrumbItemViewModel> breadcrumbStack)
         {
             while (breadcrumbStack.Count > 0)
             {

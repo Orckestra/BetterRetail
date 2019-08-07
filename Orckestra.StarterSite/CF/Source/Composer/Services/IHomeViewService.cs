@@ -1,7 +1,6 @@
 ﻿
 using System.Globalization;
 using System.Threading.Tasks;
-using System.Web.Mvc;
 using Orckestra.Composer.ViewModels.Home;
 using Orckestra.Composer.ViewModels.MenuNavigation;
 using Orckestra.Composer.Parameters;
@@ -10,14 +9,6 @@ namespace Orckestra.Composer.Services
 {
     public interface IHomeViewService
     {
-        /// <summary>
-        /// Get the view model for rendering the Home Logo
-        /// </summary>
-        /// <param name="urlHelper">Mvc UrlHelper bound to the current requestContext</param>
-        /// <param name="culture">culture for the logo, urls and alt texts</param>
-        /// <returns>ViewModel ready to render</returns>
-        Task<HomeLogoViewModel> GetHomeLogoViewModel(UrlHelper urlHelper, CultureInfo culture);
-
         /// <summary>
         /// Get the view model for rendering the main menu
         /// </summary>

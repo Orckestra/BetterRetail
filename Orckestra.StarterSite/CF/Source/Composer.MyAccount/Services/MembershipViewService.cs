@@ -338,6 +338,7 @@ namespace Orckestra.Composer.MyAccount.Services
 
             await CustomerRepository.ResetPasswordAsync(
                 customer.Username,
+                resetPasswordParam.Scope,
                 resetPasswordParam.NewPassword,
                 resetPasswordParam.PasswordAnswer).ConfigureAwait(false);
 
@@ -440,6 +441,7 @@ namespace Orckestra.Composer.MyAccount.Services
 
             await CustomerRepository.ChangePasswordAsync(
                 customer.Username,
+                changePasswordParam.Scope,
                 changePasswordParam.OldPassword,
                 changePasswordParam.NewPassword
             );
@@ -506,7 +508,7 @@ namespace Orckestra.Composer.MyAccount.Services
         /// Create a javascript ready regex to help on client side validation of password
         /// </summary>
         /// <returns></returns>
-        private Regex CreatePasswordRegexPattern()
+        protected virtual Regex CreatePasswordRegexPattern()
         {
             return new Regex(@"(.*(?:[\!\@\#\$\%\^\&\*\(\)_\-\+\=\[\{\]\}\;\:\>\|\.\/\?]).*){" + MembershipProvider.MinRequiredNonAlphanumericCharacters + "}");            
         }
