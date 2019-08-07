@@ -322,9 +322,13 @@ module Orckestra.Composer {
         public saveEditShippingMethod(actionContext: IControllerActionContext) {
             let element = $('#ShippingMethod').find('input[name=ShippingMethod]:checked')[0];
 
+            if (_.isUndefined(element)) {
+                console.error('Error: Missing shipping method');
+                this.showError('RecurringCartShippingMethodMissing', `[data-templateid="RecurringCartDetailsShippingMethod"]`);
+                return;
+            }
+
             var newType = element.dataset['fulfillmentMethodType'];
-
-
             this.manageSaveShippingMethod(newType, actionContext);
         }
 
