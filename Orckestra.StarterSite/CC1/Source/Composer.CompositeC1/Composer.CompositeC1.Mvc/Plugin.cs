@@ -25,8 +25,8 @@ namespace Orckestra.Composer.CompositeC1.Mvc
 
         private void RegisterPaymentProviders()
         {
-            CartConfiguration.PaymentProviderRegistry.RegisterProvider<OnSitePOSPaymentProvider>("WebStoreOnSitePOS");
-            CartConfiguration.PaymentProviderRegistry.RegisterProvider<MonerisCanadaPaymentProvider>("MonerisCanadaPaymentProvider");
+            CartConfiguration.PaymentProviderRegistry.RegisterProvider<OnSitePOSPaymentProvider>("Onsite payment");
+            CartConfiguration.PaymentProviderRegistry.RegisterProvider<MonerisCanadaPaymentProvider>("Moneris");
         }
     }
 }
