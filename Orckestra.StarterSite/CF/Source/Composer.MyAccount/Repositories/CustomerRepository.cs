@@ -172,7 +172,7 @@ namespace Orckestra.Composer.MyAccount.Repositories
         /// <getCustomerByIdParam name="username">The unique login Name of the customer to reset</getCustomerByIdParam>
         /// <getCustomerByIdParam name="newPassword">The new password to set</getCustomerByIdParam>
         /// <getCustomerByIdParam name="passwordAnswer">The answer to the password question</getCustomerByIdParam>
-        public virtual async Task ResetPasswordAsync(string username, string scopeId, string newPassword, string passwordAnswer)
+        public virtual async Task ResetPasswordAsync(string username, string newPassword, string passwordAnswer)
         {
             if (string.IsNullOrWhiteSpace(username)) { throw new ArgumentException("username"); }
             if (string.IsNullOrWhiteSpace(newPassword)) { throw new ArgumentException("newPassword"); }
@@ -181,8 +181,7 @@ namespace Orckestra.Composer.MyAccount.Repositories
             {
                 Username = username,
                 Password = newPassword,
-                PasswordAnswer = passwordAnswer,
-                ScopeId = scopeId
+                PasswordAnswer = passwordAnswer
             };
 
             var response = await OvertureClient.SendAsync(request).ConfigureAwait(false);
@@ -200,19 +199,17 @@ namespace Orckestra.Composer.MyAccount.Repositories
         /// <getCustomerByIdParam name="username">The unique login Name of the customer to update</getCustomerByIdParam>
         /// <getCustomerByIdParam name="oldPassword">The current login password of the customer to update</getCustomerByIdParam>
         /// <getCustomerByIdParam name="newPassword">The new password to set</getCustomerByIdParam>
-        public virtual async Task ChangePasswordAsync(string username, string scopeId, string oldPassword, string newPassword)
+        public virtual async Task ChangePasswordAsync(string username, string oldPassword, string newPassword)
         {
-            if (string.IsNullOrWhiteSpace(username)) { throw new ArgumentException(nameof(username)); }
-            if (string.IsNullOrWhiteSpace(oldPassword)) { throw new ArgumentException(nameof(oldPassword)); }
-            if (string.IsNullOrWhiteSpace(newPassword)) { throw new ArgumentException(nameof(newPassword)); }
-            if (string.IsNullOrWhiteSpace(scopeId)) { throw new ArgumentException(nameof(scopeId)); }
+            if (string.IsNullOrWhiteSpace(username)) { throw new ArgumentException("username"); }
+            if (string.IsNullOrWhiteSpace(oldPassword)) { throw new ArgumentException("oldPassword"); }
+            if (string.IsNullOrWhiteSpace(newPassword)) { throw new ArgumentException("newPassword"); }
 
             var request = new ChangePasswordRequest
             {
                 UserName = username,
                 OldPassword = oldPassword,
-                NewPassword = newPassword,
-                ScopeId = scopeId
+                NewPassword = newPassword
             };
 
             var response = await OvertureClient.SendAsync(request).ConfigureAwait(false);

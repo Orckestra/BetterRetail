@@ -338,7 +338,6 @@ namespace Orckestra.Composer.MyAccount.Services
 
             await CustomerRepository.ResetPasswordAsync(
                 customer.Username,
-                resetPasswordParam.Scope,
                 resetPasswordParam.NewPassword,
                 resetPasswordParam.PasswordAnswer).ConfigureAwait(false);
 
@@ -441,7 +440,6 @@ namespace Orckestra.Composer.MyAccount.Services
 
             await CustomerRepository.ChangePasswordAsync(
                 customer.Username,
-                changePasswordParam.Scope,
                 changePasswordParam.OldPassword,
                 changePasswordParam.NewPassword
             );

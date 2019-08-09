@@ -233,8 +233,7 @@ namespace Orckestra.Composer.Providers.Membership
 
                 var updateRequest = new UpdateCustomerRequest(customer)
                 {
-                    PasswordQuestion = newPasswordQuestion,
-                    ScopeId = _scopeProvider.DefaultScope
+                    PasswordQuestion = newPasswordQuestion
                 };
 
                 var updatedCustomer = _client.Send(updateRequest);
@@ -378,7 +377,7 @@ namespace Orckestra.Composer.Providers.Membership
         {
             string domainUsername;
 
-            return TryGetDomainUser(username, out domainUsername) && 
+            return TryGetDomainUser(username, out domainUsername) &&
                    InternalLoginUser(username, password);
         }
 
@@ -454,8 +453,8 @@ namespace Orckestra.Composer.Providers.Membership
             {
                 var result = _client.Send(request);
 
-                return result.TotalCount == 0 
-                    ? null 
+                return result.TotalCount == 0
+                    ? null
                     : result.Results.First().Username;
             }
             catch (WebException ex)
@@ -700,8 +699,7 @@ namespace Orckestra.Composer.Providers.Membership
 
                 var updateRequest = new UpdateCustomerRequest(customer)
                 {
-                    AccountStatus = newStatus,
-                    ScopeId = _scopeProvider.DefaultScope
+                    AccountStatus = newStatus
                 };
 
                 var updatedCustomer = _client.Send(updateRequest);
@@ -723,8 +721,7 @@ namespace Orckestra.Composer.Providers.Membership
             var request = new ValidateUserRequest
             {
                 UserName = domainUsername,
-                Password = password,
-                ScopeId = _scopeProvider.DefaultScope
+                Password = password
             };
 
             try
@@ -748,8 +745,7 @@ namespace Orckestra.Composer.Providers.Membership
             var request = new LoginRequest
             {
                 UserName = domainUsername,
-                Password = password,
-                ScopeId = _scopeProvider.DefaultScope
+                Password = password
             };
 
             try

@@ -44,7 +44,6 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             _container.GetMock<ICustomerRepository>()
                       .Setup(r => r.ChangePasswordAsync(
                           It.Is<string>(username => username == expectedCustomer.Username),
-                          It.IsAny<string>(),
                           It.Is<string>(oldPassword => oldPassword == expectedOldPassword),
                           It.IsAny<string>()))
                       .Returns(Task.FromResult(false));
