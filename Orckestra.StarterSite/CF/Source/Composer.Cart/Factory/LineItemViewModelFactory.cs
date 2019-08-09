@@ -108,23 +108,23 @@ namespace Orckestra.Composer.Cart.Factory
 
             vm.Rewards = RewardViewModelFactory.CreateViewModel(lineItem.Rewards, param.CultureInfo, RewardLevel.LineItem).ToList();
             vm.IsOnSale = lineItem.CurrentPrice.HasValue && lineItem.DefaultPrice.HasValue
-                          && (int) (lineItem.CurrentPrice.Value*100) < (int) (lineItem.DefaultPrice.Value*100);
+                          && (int)(lineItem.CurrentPrice.Value * 100) < (int)(lineItem.DefaultPrice.Value * 100);
             vm.IsPriceDiscounted = lineItem.DiscountAmount.GetValueOrDefault(0) > 0;
 
             decimal lineItemsSavingSale = Math.Abs(decimal.Multiply(
                 decimal.Subtract(
-                    lineItem.CurrentPrice.GetValueOrDefault(0), 
-                    lineItem.DefaultPrice.GetValueOrDefault(0)), 
+                    lineItem.CurrentPrice.GetValueOrDefault(0),
+                    lineItem.DefaultPrice.GetValueOrDefault(0)),
                 Convert.ToDecimal(lineItem.Quantity)));
 
             decimal lineItemsSavingTotal = decimal.Add(lineItem.DiscountAmount.GetValueOrDefault(0), lineItemsSavingSale);
-            
+
             vm.SavingsTotal = lineItemsSavingTotal.Equals(0) ? string.Empty : LocalizationProvider.FormatPrice(lineItemsSavingTotal, param.CultureInfo);
 
             vm.KeyVariantAttributesList = GetKeyVariantAttributes(new GetKeyVariantAttributesParam {
                 KvaValues = lineItem.KvaValues,
                 KvaDisplayValues = lineItem.KvaDisplayValues
-                }).ToList();
+            }).ToList();
 
             ProductMainImage mainImage;
             if (param.ImageDictionary.TryGetValue(Tuple.Create(lineItem.ProductId, lineItem.VariantId), out mainImage))
@@ -135,7 +135,7 @@ namespace Orckestra.Composer.Cart.Factory
 
             vm.ProductUrl = ProductUrlProvider.GetProductUrl(new GetProductUrlParam
             {
-                CultureInfo = param.CultureInfo,                
+                CultureInfo = param.CultureInfo,
                 VariantId = lineItem.VariantId,
                 ProductId = lineItem.ProductId,
                 ProductName = lineItem.ProductSummary.DisplayName
@@ -144,8 +144,8 @@ namespace Orckestra.Composer.Cart.Factory
             vm.AdditionalFees = MapLineItemAdditionalFeeViewModel(lineItem, param.CultureInfo).ToList();
 
             //Because the whole class is not async, we call a .Result here
-            var map = MapRecurringOrderFrequencies(vm ,lineItem, param.CultureInfo).Result;
-            
+            var map = MapRecurringOrderFrequencies(vm, lineItem, param.CultureInfo).Result;
+
             return vm;
         }
 
@@ -156,7 +156,7 @@ namespace Orckestra.Composer.Cart.Factory
             var scope = ComposerContext.Scope;
             var recurringProgramName = lineItem.RecurringOrderProgramName;
 
-            if(string.IsNullOrEmpty(recurringProgramName)) { return false; }
+            if (string.IsNullOrEmpty(recurringProgramName) || !ConfigurationUtil.GetRecurringOrdersConfigEnabled()) { return false; }
 
             var program = await RecurringOrderRepository.GetRecurringOrderProgram(scope, recurringProgramName).ConfigureAwaitWithCulture(false);
 

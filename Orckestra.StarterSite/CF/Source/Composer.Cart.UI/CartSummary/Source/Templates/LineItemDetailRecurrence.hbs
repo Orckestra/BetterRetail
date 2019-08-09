@@ -1,4 +1,6 @@
 {{#if RecurringOrderProgramName}}
+{{#if RecurringOrderProgramFrequencies}}
+{{#if RecurringOrderProgramFrequencies.length}}
     <div class="cart-recurring js-cartRecurring">
         <div class="cart-recurring-cta js-cartRecurringCta">
             <img src="/UI.Package/Images/recurring.png" alt="{{localize 'General' 'L_RecurringProduct'}}" title="{{localize 'General' 'L_RecurringProduct'}}" />
@@ -67,4 +69,6 @@
             </button>
         </div>
     </div>
+{{/if}}
+{{/if}}
 {{/if}}
