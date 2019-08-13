@@ -130,7 +130,7 @@
     <value>Modifier</value>
   </data>
 	<data name="L_PriceInfoMessage" xml:space="preserve">
-    <value>*Le prix affiché est le prix en date d’aujourd’hui. Veuillez noter que le jour où votre commande sera traitée et facturée, le prix peut être modifié à tout moment, sans préavis.</value>
+    <value>*Le prix affiché est le prix en date d'aujourd'hui. Veuillez noter que le jour où votre commande sera traitée et facturée, le prix peut être modifié à tout moment, sans préavis.</value>
   </data>
 	<data name="T_RecurringSchedule" xml:space="preserve">
     <value>Mon horaire de récurrence</value>

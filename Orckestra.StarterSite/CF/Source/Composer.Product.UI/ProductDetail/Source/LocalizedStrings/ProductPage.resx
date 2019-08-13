@@ -160,7 +160,7 @@
     <value>One-time shipping</value>
   </data>
   <data name="L_RecurringIconTooltip" xml:space="preserve">
-    <value>Item eligible to a Boomerang recurring order</value>
+    <value>Item eligible to a recurring order</value>
   </data>
   <data name="L_StoreInventory" xml:space="preserve">
     <value>Inventory</value>

@@ -220,7 +220,7 @@
     <value>Vous pouvez créer une commande sans vous inscrire. Vous pourrez vous inscrire après avoir passer à la caisse.</value>
   </data>
   <data name="L_LogInCheckoutWithRecurring" xml:space="preserve">
-    <value>Vous ne pouvez pas créer une commande récurrente si vous n'êtes pas enregistré(e). Veuillez s'il vous plaît vous connecter ou créer un compte pour profiter de ce service.</value>
+    <value>Vous ne pouvez pas créer une commande récurrente si vous n'êtes pas enregistré(e). Veuillez vous connecter ou créer un compte pour profiter de ce service.</value>
   </data>
   <data name="L_NextStepIndication" xml:space="preserve">
     <value>Votre carte de crédit sera débitée une fois la commande soumise</value>

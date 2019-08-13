@@ -470,7 +470,7 @@ Pas de soucis, vous pouvez trouver d'excellentes suggestions de produits à offr
     <value>Adresses</value>
   </data>
   <data name="B_AddNewPayment" xml:space="preserve">
-    <value>Ajouter une nouvelle carte de crédit</value>
+    <value>Ajouter une carte de crédit</value>
   </data>
   <data name="B_EditPayment" xml:space="preserve">
     <value>Modifier les informations de la carte</value>
