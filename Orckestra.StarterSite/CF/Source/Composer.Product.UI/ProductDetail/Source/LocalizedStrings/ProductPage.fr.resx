@@ -142,7 +142,7 @@
     <value>Spécifications</value>
   </data>
   <data name="L_RecurringDeliveryFrequency" xml:space="preserve">
-    <value>Fréquence de livraison</value>
+    <value>Fréquence d’expédition</value>
   </data>
   <data name="L_RecurringPitch" xml:space="preserve">
     <value>Transformer en commande récurrente et &lt;span class="text-danger"&gt;recevez {0} de rabais&lt;/span&gt;</value>
@@ -160,7 +160,7 @@
     <value>Une fois seulement</value>
   </data>
   <data name="L_RecurringIconTooltip" xml:space="preserve">
-    <value>Article admissible à une commande récurrente Boomerang</value>
+    <value>Article admissible à une commande récurrente</value>
   </data>
   <data name="L_StoreInventory" xml:space="preserve">
     <value>Inventaire</value>

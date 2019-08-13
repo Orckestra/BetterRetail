@@ -470,7 +470,7 @@ Don't worry, you can still find great products to offer!</value>
     <value>Addresses</value>
   </data>
   <data name="B_AddNewPayment" xml:space="preserve">
-    <value>Add a new credit card</value>
+    <value>Add a credit card</value>
   </data>
   <data name="B_EditPayment" xml:space="preserve">
     <value>Edit payment</value>

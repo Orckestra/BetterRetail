@@ -226,7 +226,7 @@
     <value>Change frequency</value>
   </data>
   <data name="L_RecurringChooseFrequency" xml:space="preserve">
-    <value>Please choose a frequency...</value>
+    <value>Choose a frequency...</value>
   </data>
   <data name="L_RecurringOrderPromo" xml:space="preserve">
     <value>Get 5% off</value>
