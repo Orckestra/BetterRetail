@@ -154,7 +154,7 @@
     <value>Yes</value>
   </data>
   <data name="F_SaveCreditCard" xml:space="preserve">
-    <value>Remember this credit card</value>
+    <value>Check this box to save this card and use it for future recurring orders.</value>
   </data>
   <data name="F_SaveCreditCardForced" xml:space="preserve">
     <value>This card will be saved</value>
@@ -163,7 +163,7 @@
     <value>Expired cart</value>
   </data>
   <data name="F_SaveCreditCardForced_Explain" xml:space="preserve">
-    <value>You need a saved credit card to subscribe to recurring orders.</value>
+    <value>You must save this card to use it for recurring orders.</value>
   </data>
   <data name="F_SaveCreditCardForced_ExplainTitle" xml:space="preserve">
     <value>Title: Saved Credit Card</value>
