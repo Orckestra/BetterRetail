@@ -6,9 +6,8 @@ module Orckestra.Composer {
     'use strict';
 
     export class RecurringOrderService implements IRecurringOrderService {
-        private repository: IRecurringOrderRepository;
-        private eventHub: Orckestra.Composer.IEventHub;
-
+        protected repository: IRecurringOrderRepository;
+        protected eventHub: Orckestra.Composer.IEventHub;
 
         public constructor(repository: IRecurringOrderRepository, eventHub: Orckestra.Composer.IEventHub) {
             if (!eventHub) {
