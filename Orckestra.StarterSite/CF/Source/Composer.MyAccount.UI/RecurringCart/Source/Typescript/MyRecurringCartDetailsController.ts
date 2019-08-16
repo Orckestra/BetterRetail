@@ -34,8 +34,8 @@ module Orckestra.Composer {
 
     export class MyRecurringCartDetailsController extends Orckestra.Composer.RecurringCartDetailsController {
         protected recurringOrderService: IRecurringOrderService = new RecurringOrderService(new RecurringOrderRepository(), this.eventHub);
-        private storeService: IStoreService = new StoreService();
-        private paymentService: MonerisPaymentService = new MonerisPaymentService();
+        protected storeService: IStoreService = new StoreService();
+        protected paymentService: MonerisPaymentService = new MonerisPaymentService();
 
         private editNextOcurrence = false;
         private editShippingMethod = false;

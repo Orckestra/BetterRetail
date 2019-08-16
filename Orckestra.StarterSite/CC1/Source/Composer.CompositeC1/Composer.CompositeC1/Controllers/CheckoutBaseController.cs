@@ -29,9 +29,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         protected ICheckoutNavigationViewService CheckoutNavigationViewService { get; private set; }
         protected IPaymentViewService PaymentViewService { get; private set; }
         protected IMyAccountUrlProvider MyAccountUrlProvider { get; private set; }
-        protected ICartService CartService { get; private set; }
-       // protected IOvertureClient OvertureClient { get; private set; }
-        
+        protected ICartService CartService { get; private set; }        
 
         protected CheckoutBaseController(
             IPageService pageService,
@@ -56,7 +54,6 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             if (paymentViewService == null) { throw new ArgumentNullException("paymentViewService"); }
             if (myAccountUrlProvider == null) { throw new ArgumentNullException("myAccountUrlProvider"); }
             if (cartService == null) { throw new ArgumentNullException("cartService"); }
-            //if (OvertureClient == null) { throw new ArgumentNullException("OvertureClient"); }
 
             PageService = pageService;
             ComposerContext = composerContext;
@@ -68,8 +65,6 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             PaymentViewService = paymentViewService;
             MyAccountUrlProvider = myAccountUrlProvider;
             CartService = cartService;
-            //OvertureClient = overtureClient;
-            //OvertureClient = overtureClient;
         }
 
         public virtual ActionResult GuestCustomerInfo()

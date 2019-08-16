@@ -159,7 +159,7 @@ namespace Orckestra.Composer.Store.Services
             return template;
         }
 
-        public async Task<List<StoreViewModel>> GetStoresForInStorePickupViewModelAsync(GetStoresForInStorePickupViewModelParam param)
+        public virtual async Task<List<StoreViewModel>> GetStoresForInStorePickupViewModelAsync(GetStoresForInStorePickupViewModelParam param)
         {
             var getStoresParam = new GetStoresParam
             {
