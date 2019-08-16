@@ -26,7 +26,7 @@ namespace Orckestra.Composer.Repositories
             OvertureClient = overtureClient;
             CacheProvider = cacheProvider;
         }
-        public Task<ListOfRecurringOrderLineItems> GetRecurringOrderTemplates(string scope, Guid customerId)
+        public virtual Task<ListOfRecurringOrderLineItems> GetRecurringOrderTemplates(string scope, Guid customerId)
         {
             if (scope == null) { throw new ArgumentNullException(nameof(scope)); }
             if (customerId == null) { throw new ArgumentNullException(nameof(customerId)); }
@@ -40,7 +40,7 @@ namespace Orckestra.Composer.Repositories
             return OvertureClient.SendAsync(getRecurringOrderLineItemsForCustomerRequest);
         }
 
-        public Task<RecurringOrderProgram> GetRecurringOrderProgram(string scope, string recurringOrderProgramName)
+        public virtual Task<RecurringOrderProgram> GetRecurringOrderProgram(string scope, string recurringOrderProgramName)
         {
             if (scope == null) { throw new ArgumentNullException(nameof(scope)); }
             if (recurringOrderProgramName == null) { throw new ArgumentNullException(nameof(recurringOrderProgramName)); }
@@ -55,7 +55,7 @@ namespace Orckestra.Composer.Repositories
             return CacheProvider.GetOrAddAsync(cacheKey, () => OvertureClient.SendAsync(request));
         }
 
-        public async Task<ListOfRecurringOrderLineItems> UpdateRecurringOrderTemplateLineItemQuantityAsync(UpdateRecurringOrderTemplateLineItemQuantityParam param)
+        public virtual async Task<ListOfRecurringOrderLineItems> UpdateRecurringOrderTemplateLineItemQuantityAsync(UpdateRecurringOrderTemplateLineItemQuantityParam param)
         {
             var lineitems = await GetRecurringOrderTemplates(param.ScopeId, param.CustomerId).ConfigureAwaitWithCulture(false);
 
@@ -78,7 +78,7 @@ namespace Orckestra.Composer.Repositories
 
             return new ListOfRecurringOrderLineItems();
         }
-        public Task<HttpWebResponse> RemoveRecurringOrderTemplateLineItem(RemoveRecurringOrderTemplateLineItemParam param)
+        public virtual Task<HttpWebResponse> RemoveRecurringOrderTemplateLineItem(RemoveRecurringOrderTemplateLineItemParam param)
         {
             if (param == null) throw new ArgumentNullException(nameof(param));
 
@@ -91,7 +91,7 @@ namespace Orckestra.Composer.Repositories
 
             return OvertureClient.SendAsync(request);
         }
-        public Task<HttpWebResponse> RemoveRecurringOrderTemplateLineItems(RemoveRecurringOrderTemplateLineItemsParam param)
+        public virtual Task<HttpWebResponse> RemoveRecurringOrderTemplateLineItems(RemoveRecurringOrderTemplateLineItemsParam param)
         {
             if (param == null) throw new ArgumentNullException(nameof(param));
 
@@ -105,7 +105,7 @@ namespace Orckestra.Composer.Repositories
             return OvertureClient.SendAsync(request);
         }
 
-        public async Task<ListOfRecurringOrderLineItems> UpdateRecurringOrderTemplateLineItemAsync(UpdateRecurringOrderTemplateLineItemParam param)
+        public virtual async Task<ListOfRecurringOrderLineItems> UpdateRecurringOrderTemplateLineItemAsync(UpdateRecurringOrderTemplateLineItemParam param)
         {
             var lineitems = await GetRecurringOrderTemplates(param.ScopeId, param.CustomerId).ConfigureAwaitWithCulture(false);
 
@@ -142,7 +142,7 @@ namespace Orckestra.Composer.Repositories
             return new ListOfRecurringOrderLineItems();
         }
 
-        public Task<RecurringOrderLineItem> GetRecurringOrderTemplateDetails(GetRecurringOrderTemplateDetailParam param)
+        public virtual Task<RecurringOrderLineItem> GetRecurringOrderTemplateDetails(GetRecurringOrderTemplateDetailParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
             if (param.Scope == null) { throw new ArgumentNullException(nameof(param.Scope)); }
@@ -157,7 +157,7 @@ namespace Orckestra.Composer.Repositories
             return OvertureClient.SendAsync(getRecurringOrderLineItemsForCustomerRequest);
         }
 
-        protected CacheKey BuildRecurringOrderProgramCacheKey(string scope, string recurringOrderProgramName)
+        protected virtual CacheKey BuildRecurringOrderProgramCacheKey(string scope, string recurringOrderProgramName)
         {
             var key = new CacheKey(CacheConfigurationCategoryNames.RecurringOrderPrograms)
             {
@@ -168,7 +168,7 @@ namespace Orckestra.Composer.Repositories
             return key;
         }
 
-        private RecurringOrderLineItem GetRecurringOrderLineItemFromTemplates(ListOfRecurringOrderLineItems lineitems, string recurringLineItemIdString)
+        protected virtual RecurringOrderLineItem GetRecurringOrderLineItemFromTemplates(ListOfRecurringOrderLineItems lineitems, string recurringLineItemIdString)
         {
             var recurringLineItemId = recurringLineItemIdString.ToGuid();
 

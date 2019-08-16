@@ -98,7 +98,7 @@ namespace Orckestra.Composer.Factory
             RecurringOrderRepository = recurringOrderRepository;
         }
 
-        public async Task<RecurringOrderTemplatesViewModel> CreateRecurringOrderTemplatesViewModel(CreateRecurringOrderTemplatesViewModelParam param)
+        public virtual async Task<RecurringOrderTemplatesViewModel> CreateRecurringOrderTemplatesViewModel(CreateRecurringOrderTemplatesViewModelParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
             if (param.CultureInfo == null) { throw new ArgumentNullException(nameof(param.CultureInfo)); }
@@ -125,7 +125,7 @@ namespace Orckestra.Composer.Factory
             return vm;
         }
 
-        public async Task<RecurringOrderTemplateViewModel> CreateRecurringOrderTemplateDetailsViewModel(CreateRecurringOrderTemplateDetailsViewModelParam param)
+        public virtual async Task<RecurringOrderTemplateViewModel> CreateRecurringOrderTemplateDetailsViewModel(CreateRecurringOrderTemplateDetailsViewModelParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
             if (param.CultureInfo == null) { throw new ArgumentNullException(nameof(param.CultureInfo)); }
@@ -163,7 +163,7 @@ namespace Orckestra.Composer.Factory
         }
 
 
-        public async Task<List<RecurringOrderTemplateViewModel>> CreateTemplateGroupedShippingAddress(CreateTemplateGroupedShippingAddressParam param)
+        public virtual async Task<List<RecurringOrderTemplateViewModel>> CreateTemplateGroupedShippingAddress(CreateTemplateGroupedShippingAddressParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
             if (param.ListOfRecurringOrderLineItems == null) { throw new ArgumentNullException(nameof(param.ListOfRecurringOrderLineItems)); }
@@ -209,7 +209,7 @@ namespace Orckestra.Composer.Factory
             return itemList;
         }
 
-        private async Task<Customer> GetCustomer(Guid customerId, string scopeId)
+        protected virtual async Task<Customer> GetCustomer(Guid customerId, string scopeId)
         {
             var getCustomerRequest = new GetCustomerRequest
             {
@@ -224,7 +224,7 @@ namespace Orckestra.Composer.Factory
 
 
 
-        public async Task<RecurringOrderTemplateLineItemViewModel> MapToTemplateLineItemViewModel(MapToTemplateLineItemViewModelParam param)
+        public virtual async Task<RecurringOrderTemplateLineItemViewModel> MapToTemplateLineItemViewModel(MapToTemplateLineItemViewModelParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
             if (param.RecurringOrderlineItem == null) { throw new ArgumentNullException(nameof(param.RecurringOrderlineItem)); }
@@ -358,7 +358,7 @@ namespace Orckestra.Composer.Factory
             return vm;
         }
 
-        private string GetProductOrVariantListPrice(Orckestra.Overture.ServiceModel.Products.Product product, Variant variant, CultureInfo culture)
+        protected virtual string GetProductOrVariantListPrice(Orckestra.Overture.ServiceModel.Products.Product product, Variant variant, CultureInfo culture)
         {
             if (variant != null)
             {
@@ -370,7 +370,7 @@ namespace Orckestra.Composer.Factory
             }
         }
 
-        private async Task<RecurringOrderTemplateAddressViewModel> MapShippingAddress(Guid shippingAddressId, CultureInfo culture)
+        protected virtual async Task<RecurringOrderTemplateAddressViewModel> MapShippingAddress(Guid shippingAddressId, CultureInfo culture)
         {
             var address = await AddressRepository.GetAddressByIdAsync(shippingAddressId).ConfigureAwaitWithCulture(false);
 

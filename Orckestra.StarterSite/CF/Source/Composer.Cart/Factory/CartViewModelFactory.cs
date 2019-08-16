@@ -527,7 +527,7 @@ namespace Orckestra.Composer.Cart.Factory
             return paymentMethodViewModel;
         }
 
-        public SavedCreditCardPaymentMethodViewModel MapSavedCreditCard(PaymentMethod payment, CultureInfo cultureInfo)
+        public virtual SavedCreditCardPaymentMethodViewModel MapSavedCreditCard(PaymentMethod payment, CultureInfo cultureInfo)
         {            
             var savedCreditCard = ViewModelMapper.MapTo<SavedCreditCardPaymentMethodViewModel>(payment, cultureInfo);
 

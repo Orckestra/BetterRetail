@@ -250,7 +250,7 @@ namespace Orckestra.Composer.Cart.Repositories
             });
         }
 
-        public Task<List<PaymentMethod>> GetCustomerPaymentMethodForProviderAsync(GetCustomerPaymentMethodsForProviderParam param)
+        public virtual Task<List<PaymentMethod>> GetCustomerPaymentMethodForProviderAsync(GetCustomerPaymentMethodsForProviderParam param)
         {
             if (param == null) { throw new ArgumentNullException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param))); }
             if (param.CustomerId == Guid.Empty) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param.CustomerId))); }
@@ -266,7 +266,7 @@ namespace Orckestra.Composer.Cart.Repositories
 
             return OvertureClient.SendAsync(getCustomerPaymentMethodsRequest);
         }
-        public Task<Payment> GetPaymentAsync(GetPaymentParam param)
+        public virtual Task<Payment> GetPaymentAsync(GetPaymentParam param)
         {
             if (param == null) { throw new ArgumentNullException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param))); }
             if (param.CustomerId == Guid.Empty) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param.CustomerId))); }
@@ -306,7 +306,7 @@ namespace Orckestra.Composer.Cart.Repositories
             return cacheKey;
         }
 
-        protected CacheKey BuildPaymentMethodCacheKey(string scope, string cartName, Guid customerId, string providerName)
+        protected virtual CacheKey BuildPaymentMethodCacheKey(string scope, string cartName, Guid customerId, string providerName)
         {            
             var cacheKey = new CacheKey(CacheConfigurationCategoryNames.PaymentMethod)
             {

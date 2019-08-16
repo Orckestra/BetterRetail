@@ -51,7 +51,7 @@ namespace Orckestra.Composer.Services
             RecurringOrderTemplateViewModelFactory = recurringOrderTemplateViewModelFactory;
             ImageService = imageService;
         }
-        public async Task<bool> GetIsPaymentMethodUsedInRecurringOrders(GetIsPaymentMethodUsedInRecurringOrdersRequest request)
+        public virtual async Task<bool> GetIsPaymentMethodUsedInRecurringOrders(GetIsPaymentMethodUsedInRecurringOrdersRequest request)
         {
             if (!ConfigurationUtil.GetRecurringOrdersConfigEnabled())
                 return false;
@@ -77,7 +77,7 @@ namespace Orckestra.Composer.Services
             return false;
         }
 
-        public async Task<RecurringOrderTemplatesViewModel> GetRecurringOrderTemplatesViewModelAsync(GetRecurringOrderTemplatesParam param)
+        public virtual async Task<RecurringOrderTemplatesViewModel> GetRecurringOrderTemplatesViewModelAsync(GetRecurringOrderTemplatesParam param)
         {
             if (!ConfigurationUtil.GetRecurringOrdersConfigEnabled())
                 return new RecurringOrderTemplatesViewModel();
@@ -125,7 +125,7 @@ namespace Orckestra.Composer.Services
             return vm;
         }
 
-        public async Task<RecurringOrderTemplatesViewModel> UpdateRecurringOrderTemplateLineItemQuantityAsync(UpdateRecurringOrderTemplateLineItemQuantityParam param)
+        public virtual async Task<RecurringOrderTemplatesViewModel> UpdateRecurringOrderTemplateLineItemQuantityAsync(UpdateRecurringOrderTemplateLineItemQuantityParam param)
         {
             if (!ConfigurationUtil.GetRecurringOrdersConfigEnabled())
                 return new RecurringOrderTemplatesViewModel();
@@ -146,7 +146,7 @@ namespace Orckestra.Composer.Services
             }).ConfigureAwaitWithCulture(false);
         }
 
-        public async Task<RecurringOrderTemplatesViewModel> RemoveRecurringOrderTemplateLineItemAsync(RemoveRecurringOrderTemplateLineItemParam param)
+        public virtual async Task<RecurringOrderTemplatesViewModel> RemoveRecurringOrderTemplateLineItemAsync(RemoveRecurringOrderTemplateLineItemParam param)
         {
             if (!ConfigurationUtil.GetRecurringOrdersConfigEnabled())
                 return new RecurringOrderTemplatesViewModel();
@@ -162,7 +162,7 @@ namespace Orckestra.Composer.Services
                 BaseUrl = param.BaseUrl }).ConfigureAwaitWithCulture(false);
         }
 
-        public async Task<RecurringOrderTemplatesViewModel> RemoveRecurringOrderTemplatesLineItemsAsync(RemoveRecurringOrderTemplateLineItemsParam param)
+        public virtual async Task<RecurringOrderTemplatesViewModel> RemoveRecurringOrderTemplatesLineItemsAsync(RemoveRecurringOrderTemplateLineItemsParam param)
         {
             if (!ConfigurationUtil.GetRecurringOrdersConfigEnabled())
                 return new RecurringOrderTemplatesViewModel();
@@ -180,9 +180,7 @@ namespace Orckestra.Composer.Services
             }).ConfigureAwaitWithCulture(false);
         }
 
-
-
-        public async Task<RecurringOrderTemplatesViewModel> UpdateRecurringOrderTemplateLineItemAsync(UpdateRecurringOrderTemplateLineItemParam param)
+        public virtual async Task<RecurringOrderTemplatesViewModel> UpdateRecurringOrderTemplateLineItemAsync(UpdateRecurringOrderTemplateLineItemParam param)
         {
             if (!ConfigurationUtil.GetRecurringOrdersConfigEnabled())
                 return new RecurringOrderTemplatesViewModel();
@@ -201,7 +199,7 @@ namespace Orckestra.Composer.Services
             }).ConfigureAwaitWithCulture(false);
         }
 
-        public async Task<RecurringOrderTemplateViewModel> GetRecurringOrderTemplateDetailViewModelAsync(GetRecurringOrderTemplateDetailParam param)
+        public virtual async Task<RecurringOrderTemplateViewModel> GetRecurringOrderTemplateDetailViewModelAsync(GetRecurringOrderTemplateDetailParam param)
         {
             if (!ConfigurationUtil.GetRecurringOrdersConfigEnabled())
                 return new RecurringOrderTemplateViewModel();

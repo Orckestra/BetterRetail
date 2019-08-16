@@ -10,7 +10,7 @@
 module Orckestra.Composer {
 
     export class MyRecurringScheduleController extends Orckestra.Composer.RecurringScheduleController {
-        private recurringOrderService: IRecurringOrderService = new RecurringOrderService(new RecurringOrderRepository(), this.eventHub);
+        protected recurringOrderService: IRecurringOrderService = new RecurringOrderService(new RecurringOrderRepository(), this.eventHub);
 
         private debounceUpdateLineItem: (args: any) => void;
         private updateWaitTime = 300;

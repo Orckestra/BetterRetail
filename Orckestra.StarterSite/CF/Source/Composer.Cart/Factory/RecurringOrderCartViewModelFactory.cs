@@ -49,7 +49,7 @@ namespace Orckestra.Composer.Cart.Factory
             LineItemViewModelFactory = lineItemViewModelFactory;
         }
 
-        public CartViewModel CreateRecurringOrderCartViewModel(CreateRecurringOrderCartViewModelParam param)
+        public virtual CartViewModel CreateRecurringOrderCartViewModel(CreateRecurringOrderCartViewModelParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
             if (param.CultureInfo == null) { throw new ArgumentNullException(nameof(param.CultureInfo)); }
@@ -80,7 +80,7 @@ namespace Orckestra.Composer.Cart.Factory
             return vm;
         }
 
-        private void FillRecurringScheduleUrl(IRecurringOrderCartViewModel roCartVm, CultureInfo cultureInfo)
+        protected virtual void FillRecurringScheduleUrl(IRecurringOrderCartViewModel roCartVm, CultureInfo cultureInfo)
         {
             var url = RecurringScheduleUrlProvider.GetRecurringScheduleUrl(new GetRecurringScheduleUrlParam
             {
@@ -90,39 +90,39 @@ namespace Orckestra.Composer.Cart.Factory
             roCartVm.RecurringScheduleUrl = url;
         }
 
-        private void FillNextOcurrence(IRecurringOrderCartViewModel vm, Overture.ServiceModel.Orders.Cart cart, CultureInfo cultureInfo)
+        protected virtual void FillNextOcurrence(IRecurringOrderCartViewModel vm, Overture.ServiceModel.Orders.Cart cart, CultureInfo cultureInfo)
         {
             vm.NextOccurence = GetNextOccurenceDate(cart.Shipments.First());
             vm.FormatedNextOccurence = GetFormattedNextOccurenceDate(vm.NextOccurence, cultureInfo);
             vm.NextOccurenceValue = GetNextOccurenceDateValue(vm.NextOccurence, cultureInfo);
         }
 
-        private string GetNextOccurenceDateValue(DateTime nextOccurence, CultureInfo cultureInfo)
+        protected virtual string GetNextOccurenceDateValue(DateTime nextOccurence, CultureInfo cultureInfo)
         {
             return nextOccurence == DateTime.MinValue
                                 ? string.Empty
                                 : nextOccurence.ToString("yyyy/MM/dd", CultureInfo.InvariantCulture);
         }
 
-        private void FillNextOcurrence(LightRecurringOrderCartViewModel vm, Overture.ServiceModel.Orders.Cart cart, CultureInfo cultureInfo)
+        protected virtual void FillNextOcurrence(LightRecurringOrderCartViewModel vm, Overture.ServiceModel.Orders.Cart cart, CultureInfo cultureInfo)
         {
             vm.NextOccurence = GetNextOccurenceDate(cart.Shipments.First());
             vm.FormatedNextOccurence = GetFormattedNextOccurenceDate(vm.NextOccurence, cultureInfo);
         }
 
-        private static DateTime GetNextOccurenceDate(Shipment shipment)
+        protected static DateTime GetNextOccurenceDate(Shipment shipment)
         {
             return shipment.FulfillmentScheduledTimeBeginDate ?? DateTime.MinValue;
         }
 
-        private static string GetFormattedNextOccurenceDate(DateTime date, CultureInfo culture)
+        protected static string GetFormattedNextOccurenceDate(DateTime date, CultureInfo culture)
         {
             return date == DateTime.MinValue
                     ? string.Empty
                     : string.Format(culture, "{0:D}", date);
         }
 
-        private void MapRecurringOrderLineitemFrequencyName(CartViewModel recurringOrderCartViewModel, CultureInfo culture, List<RecurringOrderProgram> recurringOrderPrograms)
+        protected virtual void MapRecurringOrderLineitemFrequencyName(CartViewModel recurringOrderCartViewModel, CultureInfo culture, List<RecurringOrderProgram> recurringOrderPrograms)
         {
             if (recurringOrderCartViewModel.LineItemDetailViewModels == null) { return; }
 
@@ -150,7 +150,7 @@ namespace Orckestra.Composer.Cart.Factory
             }
         }
 
-        public LightRecurringOrderCartViewModel CreateLightRecurringOrderCartViewModel(CreateLightRecurringOrderCartViewModelParam param)
+        public virtual LightRecurringOrderCartViewModel CreateLightRecurringOrderCartViewModel(CreateLightRecurringOrderCartViewModelParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
             if (param.CultureInfo == null) { throw new ArgumentNullException(nameof(param.CultureInfo)); }
@@ -184,7 +184,7 @@ namespace Orckestra.Composer.Cart.Factory
             
         }
 
-        private string GetRecurringCartDetailUrl(CultureInfo cultureInfo, string cartName)
+        protected virtual string GetRecurringCartDetailUrl(CultureInfo cultureInfo, string cartName)
         {
             string recurringCartsPageUrl = RecurringCartUrlProvider.GetRecurringCartsUrl(new GetRecurringCartsUrlParam
             {

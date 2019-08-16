@@ -488,7 +488,7 @@ namespace Orckestra.Composer.Cart.Repositories
             return carts.ToList();
         }
 
-        public async Task<ListOfRecurringOrderLineItems> RescheduleRecurringCartAsync(RescheduleRecurringCartParam param)
+        public virtual async Task<ListOfRecurringOrderLineItems> RescheduleRecurringCartAsync(RescheduleRecurringCartParam param)
         {
             if (param == null) throw new ArgumentNullException(nameof(param));
 
@@ -502,7 +502,7 @@ namespace Orckestra.Composer.Cart.Repositories
 
             return await OvertureClient.SendAsync(request).ConfigureAwaitWithCulture(false);
         }
-        public async Task<HttpWebResponse> RemoveRecurringCartLineItemAsync(RemoveRecurringCartLineItemParam param)
+        public virtual async Task<HttpWebResponse> RemoveRecurringCartLineItemAsync(RemoveRecurringCartLineItemParam param)
         {
             if (param == null) throw new ArgumentNullException(nameof(param));
 

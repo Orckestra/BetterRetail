@@ -167,8 +167,8 @@ namespace Orckestra.Composer.Cart.Factory
 
             return true;
         }
-        
-        private string GetRecurringOrderFrequencyDisplayName(RecurringOrderProgram program, LineItem lineItem, CultureInfo cultureInfo)
+
+        protected virtual string GetRecurringOrderFrequencyDisplayName(RecurringOrderProgram program, LineItem lineItem, CultureInfo cultureInfo)
         {
             if (RecurringOrderCartHelper.IsRecurringOrderLineItemValid(lineItem))
             {
@@ -237,7 +237,7 @@ namespace Orckestra.Composer.Cart.Factory
             }
         }
 
-        public IEnumerable<LightLineItemDetailViewModel> CreateLightViewModel(CreateLightListOfLineItemDetailViewModelParam param)
+        public virtual IEnumerable<LightLineItemDetailViewModel> CreateLightViewModel(CreateLightListOfLineItemDetailViewModelParam param)
         {
             if (param.LineItems == null)
             {
