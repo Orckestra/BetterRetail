@@ -22,7 +22,7 @@ namespace Orckestra.Composer.Factory
             LocalizationProvider = localizationProvider;
         }
 
-        public RecurringOrderProgramViewModel CreateRecurringOrderProgramViewModel(RecurringOrderProgram program, CultureInfo culture)
+        public virtual RecurringOrderProgramViewModel CreateRecurringOrderProgramViewModel(RecurringOrderProgram program, CultureInfo culture)
         {
             if (program == null) { throw new ArgumentNullException(nameof(program)); }
             if (culture == null) { throw new ArgumentNullException(nameof(culture)); }

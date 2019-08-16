@@ -114,7 +114,7 @@ namespace Orckestra.Composer.Product.Factory
             return productViewModel;
         }
 
-        private async Task<ProductViewModel> SetViewModelRecurringOrdersRelatedProperties(GetProductParam param, ProductViewModel vm, Overture.ServiceModel.Products.Product product)
+        protected virtual async Task<ProductViewModel> SetViewModelRecurringOrdersRelatedProperties(GetProductParam param, ProductViewModel vm, Overture.ServiceModel.Products.Product product)
         {
             if (param == null) throw new ArgumentNullException(nameof(param));
             if (vm == null) throw new ArgumentNullException(nameof(vm));

@@ -239,7 +239,7 @@ namespace Orckestra.Composer.Cart.Services
             };
         }
 
-        public async Task<CartViewModel> UpdateRecurringOrderCartShippingMethodAsync(UpdateRecurringOrderCartShippingMethodParam param)
+        public virtual async Task<CartViewModel> UpdateRecurringOrderCartShippingMethodAsync(UpdateRecurringOrderCartShippingMethodParam param)
         {
             if (!ConfigurationUtil.GetRecurringOrdersConfigEnabled())
                 return GetEmptyRecurringOrderCartViewModel();
@@ -295,7 +295,7 @@ namespace Orckestra.Composer.Cart.Services
             return vm;
         }
 
-        private CartViewModel GetEmptyRecurringOrderCartViewModel()
+        protected virtual CartViewModel GetEmptyRecurringOrderCartViewModel()
         {
             return  new CartViewModel();
         }

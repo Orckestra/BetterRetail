@@ -12,7 +12,7 @@
 module Orckestra.Composer {
 
     export class MyRecurringScheduleDetailsController extends Orckestra.Composer.RecurringScheduleDetailsController {
-        private recurringOrderService: IRecurringOrderService = new RecurringOrderService(new RecurringOrderRepository(), this.eventHub);
+        protected recurringOrderService: IRecurringOrderService = new RecurringOrderService(new RecurringOrderRepository(), this.eventHub);
 
         private viewModelName = '';
         private id = '';

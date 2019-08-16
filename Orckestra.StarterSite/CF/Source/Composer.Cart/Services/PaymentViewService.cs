@@ -512,7 +512,7 @@ namespace Orckestra.Composer.Cart.Services
         {
             return PaymentProviderFactory.ResolveProvider(paymentProviderName);
         }
-        public async Task<CustomerPaymentMethodListViewModel> GetCustomerPaymentMethodListViewModelAsync(GetCustomerPaymentMethodListViewModelParam param)
+        public virtual async Task<CustomerPaymentMethodListViewModel> GetCustomerPaymentMethodListViewModelAsync(GetCustomerPaymentMethodListViewModelParam param)
         {
             if (param == null) throw new ArgumentNullException(nameof(param), ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param)));
 
@@ -548,7 +548,7 @@ namespace Orckestra.Composer.Cart.Services
             };
         }
 
-        public async Task<CartViewModel> UpdateRecurringOrderCartPaymentMethodAsync(UpdatePaymentMethodParam param, string baseUrl)
+        public virtual async Task<CartViewModel> UpdateRecurringOrderCartPaymentMethodAsync(UpdatePaymentMethodParam param, string baseUrl)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
             if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("CartName"), nameof(param)); }
