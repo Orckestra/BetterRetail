@@ -29,7 +29,6 @@ namespace Orckestra.Composer.MyAccount.Tests.Repositories
         {
             //Arrange
             var expectedUsername = GetRandom.Email();
-            var expectedScope = GetRandom.String(32);
             var expectedOldPassword = GetRandom.String(32);
             var expectedNewPassword = GetRandom.String(32);
             var customerRepository = _container.CreateInstance<CustomerRepository>();
@@ -46,10 +45,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Repositories
 
             //Act and Assert
             Assert.DoesNotThrow(async () =>
-                await customerRepository.ChangePasswordAsync(expectedUsername,
-                expectedScope,
-                expectedOldPassword, 
-                expectedNewPassword));
+                await customerRepository.ChangePasswordAsync(expectedUsername, expectedOldPassword, expectedNewPassword));
         }
 
         [Test]
@@ -57,7 +53,6 @@ namespace Orckestra.Composer.MyAccount.Tests.Repositories
         {
             //Arrange
             var expectedUsername = GetRandom.Email();
-            var expectedScope = GetRandom.String(32);
             var expectedOldPassword = GetRandom.String(32);
             var expectedNewPassword = GetRandom.String(32);
             var customerRepository = _container.CreateInstance<CustomerRepository>();
@@ -74,10 +69,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Repositories
 
             //Act and Assert
             Assert.Throws<ComposerException>(async () =>
-                await customerRepository.ChangePasswordAsync(expectedUsername,
-                expectedScope,
-                expectedOldPassword, 
-                expectedNewPassword));
+                await customerRepository.ChangePasswordAsync(expectedUsername, expectedOldPassword, expectedNewPassword));
         }
         
         [Test]
@@ -92,7 +84,6 @@ namespace Orckestra.Composer.MyAccount.Tests.Repositories
             //Act
             var ex = Assert.Throws<ArgumentException>(async () => await customerRepository.ChangePasswordAsync(
                 username,
-                GetRandom.String(32),
                 GetRandom.String(32),
                 GetRandom.String(32)
             ));
@@ -113,7 +104,6 @@ namespace Orckestra.Composer.MyAccount.Tests.Repositories
             //Act
             var ex = Assert.Throws<ArgumentException>(async () => await customerRepository.ChangePasswordAsync(
                 GetRandom.Email(),
-                GetRandom.String(32),
                 oldPassword,
                 GetRandom.String(32)
             ));
@@ -133,7 +123,6 @@ namespace Orckestra.Composer.MyAccount.Tests.Repositories
 
             //Act
             var ex = Assert.Throws<ArgumentException>(async () => await customerRepository.ChangePasswordAsync(
-                GetRandom.String(32),
                 GetRandom.Email(),
                 GetRandom.String(32),
                 newPassword
