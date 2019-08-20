@@ -10,7 +10,7 @@ module Orckestra.Composer {
         * Display the datepicker with specified options
         * @param elementId Html element Id of the datepicker input.
         * @param date The earliest date that may be selected; all earlier dates will be disabled. Optional.
-        * @param language Language of the datepicker labels. Optional. default en-CA
+        * @param language Language of the datepicker labels. Optional. default data-datepicker-language attribute
         */
         public static renderDatepicker(elementId : string, minDate?: Date, language?: string) {
 
@@ -21,9 +21,8 @@ module Orckestra.Composer {
 
             //By default, only french(fr) and english(en-CA) are supported.
             //To add more locales: https://github.com/uxsolutions/bootstrap-datepicker/tree/master/js/locales
-            let culture = document.getElementsByTagName('html')[0].getAttribute('lang');
             if (language === undefined) {
-                language = culture === 'fr-CA' ? 'fr' : 'en-CA';
+                language = document.getElementsByTagName('html')[0].getAttribute('data-datepicker-language');
             }
 
             var options = { year: 'numeric', month: '2-digit', day: '2-digit', timezone: 'UTC' };
