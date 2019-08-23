@@ -71,7 +71,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Repositories
             Assert.Throws<ComposerException>(async () =>
                 await customerRepository.ChangePasswordAsync(expectedUsername, expectedOldPassword, expectedNewPassword));
         }
-        
+
         [Test]
         [TestCase(null)]
         [TestCase("")]

@@ -1,0 +1,16 @@
+<div data-templateid="MyRecurringCartDetails" >
+    {{#if IsLoading}}
+        {{>Loading}}
+    {{else}}
+        {{>RecurringCartDetailsSummary}}
+        {{>RecurringCartDetailsShippingMethod}}  
+        {{>RecurringCartDetailsAddress}}      
+        {{>RecurringCartDetailsPayment}}
+        <div class="multiline-message">
+            <span class="fa  fa-comment-o  fa-lg  multiline-message-icon"></span>
+            {{localizeFormat 'RecurringCart' 'L_RecurringOrderCartsFrequencyChangeMessage' RecurringScheduleUrl}}  
+        </div>
+        {{>RecurringCartDetailsLineItems}}
+        {{>RecurringCartDetailsOrderSummary}}
+    {{/if}}
+</div>

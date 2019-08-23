@@ -13,6 +13,8 @@ using Orckestra.Composer.ViewModels;
 using Orckestra.Composer.Utils;
 using System.Web;
 using Orckestra.Composer.Logging;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Orckestra.Composer.Store.Services
 {
@@ -155,6 +157,33 @@ namespace Orckestra.Composer.Store.Services
                 return string.Format(template, store.LocalizedDisplayName);
             }
             return template;
+        }
+
+        public virtual async Task<List<StoreViewModel>> GetStoresForInStorePickupViewModelAsync(GetStoresForInStorePickupViewModelParam param)
+        {
+            var getStoresParam = new GetStoresParam
+            {
+                BaseUrl = param.BaseUrl,
+                CultureInfo = param.CultureInfo,
+                Scope = param.Scope
+            };
+
+            var stores = await StoreRepository.GetStoresAsync(getStoresParam).ConfigureAwaitWithCulture(false);
+            if (stores.Results != null)
+            {
+                var vm = stores.Results
+                                .Where(s => s.IsActive && s.FulfillmentLocation != null && s.FulfillmentLocation.IsPickUpLocation)
+                                .Select(s => StoreViewModelFactory.CreateStoreViewModel(new CreateStoreViewModelParam
+                                {
+                                    BaseUrl = param.BaseUrl,
+                                    CultureInfo = param.CultureInfo,
+                                    Store = s
+                                })).ToList();
+
+                return vm;
+            }
+
+            return new List<StoreViewModel>();
         }
     }
 }

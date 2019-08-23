@@ -49,6 +49,7 @@ module Orckestra.Composer {
             //Do not use .data since it may parse the id as a number.
             var productId: string = productContext.attr('data-product-id');
             var variantId: string = productContext.attr('data-product-variant-id');
+            var recurringOrderProgramName: string = productContext.attr('data-recurring-order-program-name');
 
             var product = _.find(this.context.viewModel.SearchResults, function (product: any) {
                 if (_.isEmpty(variantId)) {
@@ -74,7 +75,7 @@ module Orckestra.Composer {
                 var productData: any = this.getProductDataForAnalytics(productId, price);
                 this.eventHub.publish('lineItemAdding', { data: productData });
 
-                this.cartService.addLineItem(productId, '' + price)
+                this.cartService.addLineItem(productId, '' + price, null, 1, null, recurringOrderProgramName)
                     .then((data: any) => {
                         ErrorHandler.instance().removeErrors();
                         return data;

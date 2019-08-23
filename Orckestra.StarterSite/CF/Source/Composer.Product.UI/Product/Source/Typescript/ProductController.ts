@@ -173,7 +173,7 @@ module Orckestra.Composer {
                         data: analyticData
                     });
 
-                    this._wishListService.addLineItem(vm.productId, vm.selectedVariantId).then(data => {
+                    this._wishListService.addLineItem(vm.productId, vm.selectedVariantId, 1, null, vm.RecurringOrderProgramName).then(data => {
                         var lineItem = data.Items.filter(it => it.ProductId === vm.productId && it.VariantId === vm.selectedVariantId)[0];
                         this.render('AddToWishList', { Loaded: true, IsInWishList: true, Id: lineItem.Id });
                     }).fin(() => busy.done());
@@ -208,16 +208,18 @@ module Orckestra.Composer {
             });
         }
 
-        public addLineItem(actionContext: IControllerActionContext) {
-            var busy = this.asyncBusy({ elementContext: actionContext.elementContext });
-            var quantity = this.getCurrentQuantity();
-            var vm = this.context.viewModel;
-            var variant: any = _.find(vm.allVariants, (v: any) => v.Id === vm.selectedVariantId);
+        public addLineItem(actionContext: IControllerActionContext,
+                           recurringOrderFrequencyName?: string,
+                           recurringOrderProgramName?: string) {
+            let busy = this.asyncBusy({elementContext: actionContext.elementContext}),
+                quantity = this.getCurrentQuantity(),
+                vm = this.context.viewModel,
+                variant: any = _.find(vm.allVariants, (v: any) => v.Id === vm.selectedVariantId),
+                data: any = this.getProductDataForAnalytics(vm);
 
-            var data: any = this.getProductDataForAnalytics(vm);
             data.Quantity = quantity.Value ? quantity.Value : 1;
             if (variant) {
-                var variantData: any = this.getVariantDataForAnalytics(variant);
+                let variantData: any = this.getVariantDataForAnalytics(variant);
 
                 _.extend(data, variantData);
             }
@@ -227,7 +229,8 @@ module Orckestra.Composer {
                     data: data
                 });
 
-            this.addLineItemImpl(vm.productId, vm.ListPrice, vm.selectedVariantId, quantity)
+            this.addLineItemImpl(vm.productId, vm.ListPrice, vm.selectedVariantId, quantity,
+                recurringOrderFrequencyName, recurringOrderProgramName)
                 .then((data: any) => {
                     this.onAddLineItemSuccess(data);
                     actionContext.elementContext.focus();
@@ -260,8 +263,9 @@ module Orckestra.Composer {
             };
         }
 
-        private addLineItemImpl(productId: string, price: string, variantId: string, quantity: any): Q.Promise<any> {
-            return this.cartService.addLineItem(productId, price, variantId, quantity.Value);
+        protected addLineItemImpl(productId: string, price: string, variantId: string, quantity: any,
+                                            recurringOrderFrequencyName?: string, recurringOrderProgramName?: string): Q.Promise<any> {
+            return this.cartService.addLineItem(productId, price, variantId, quantity.Value, recurringOrderFrequencyName, recurringOrderProgramName);
         }
 
         protected completeAddLineItem(quantityAdded: any): Q.Promise<void> {

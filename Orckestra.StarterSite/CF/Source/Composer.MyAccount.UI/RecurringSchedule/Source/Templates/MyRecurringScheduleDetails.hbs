@@ -1,0 +1,14 @@
+{{>GeneralErrorContainer}}
+<div data-templateid="MyRecurringScheduleDetails">
+    {{#if IsLoading}}
+        {{>Loading}}
+    {{else}}
+        {{>RecurringScheduleDetailsUpdateSuccessful}}
+        {{>RecurringScheduleDetailsFrequency}}
+        {{>RecurringScheduleDetailsNextOccurence}}  
+        {{>RecurringScheduleDetailsShippingMethods}}      
+        {{>RecurringScheduleDetailsAddresses}}
+        {{>RecurringScheduleDetailsPayments}}        
+        {{>RecurringScheduleDetailsActions}}
+    {{/if}}   
+</div>

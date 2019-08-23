@@ -29,5 +29,15 @@ module Orckestra.Composer {
                                             PaymentProviderName: paymentProviderName
                                         });
         }
+
+        public removeRecurringCartPaymentMethod(paymentMethodId: string, paymentProviderName: string, cartName: string): Q.Promise<void> {
+            return <Q.Promise<void>>
+                ComposerClient.remove('/api/payment/recurringcartremovemethod',
+                                        {
+                                            PaymentMethodId: paymentMethodId,
+                                            PaymentProviderName: paymentProviderName,
+                                            CartName: cartName
+                                        });
+        }
     }
 }

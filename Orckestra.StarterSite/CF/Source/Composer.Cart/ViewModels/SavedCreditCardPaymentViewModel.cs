@@ -75,5 +75,10 @@ namespace Orckestra.Composer.Cart.ViewModels
         /// Indicate whether the card is valid or not.
         /// </summary>
         public bool IsValid => !IsExpired;
+
+        /// <summary>
+        /// Indicate whether this card is used in a recurring orders.
+        /// </summary>
+        public bool IsUsedInRecurringOrders { get; set; }
     }
 }

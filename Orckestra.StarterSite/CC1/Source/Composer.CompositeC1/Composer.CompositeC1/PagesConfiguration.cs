@@ -61,5 +61,15 @@ namespace Orckestra.Composer.CompositeC1
         public static Guid SharedWishListPageId { get; set; } = new Guid("d52af03f-d5c9-4d8d-aa5c-917982ea112c");
 
         public static Guid PageNotFoundPageId { get; set; } = new Guid("7f2d9118-b941-46ea-862d-808d4bd0052a");
+
+        public static Guid RecurringSchedulePageId { get; set; } = new Guid("40bb0d5a-34da-4339-bfa4-9041c8c8674d");
+        public static Guid RecurringScheduleDetailsPageId { get; set; } = new Guid("d0d574cd-3ae9-41d4-b398-3af6191fddf1");
+        
+        /// <summary>
+        /// Same page as the order history
+        /// </summary>
+        public static Guid RecurringCartsPageId { get; set; } = OrderHistoryPageId;
+
+        public static Guid RecurringCartDetailsPageId { get; set; } = new Guid("e71ff02c-241b-4ce4-8dc6-bbc66fcda954");
     }
 }

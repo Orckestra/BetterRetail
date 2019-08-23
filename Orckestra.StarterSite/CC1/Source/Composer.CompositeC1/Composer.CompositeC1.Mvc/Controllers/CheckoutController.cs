@@ -9,7 +9,27 @@ namespace Orckestra.Composer.CompositeC1.Mvc.Controllers
 {
     public class CheckoutController : CheckoutBaseController
     {
-        public CheckoutController(IPageService pageService, IComposerContext composerContext, ICheckoutBreadcrumbViewService confirmationBreadcrumbViewService, IBreadcrumbViewService breadcrumbViewService, ILanguageSwitchService languageSwitchService, ICartUrlProvider urlProvider, ICheckoutNavigationViewService checkoutNavigationViewService, IPaymentViewService paymentViewService, IMyAccountUrlProvider myAccountUrlProvider) : base(pageService, composerContext, confirmationBreadcrumbViewService, breadcrumbViewService, languageSwitchService, urlProvider, checkoutNavigationViewService, paymentViewService, myAccountUrlProvider)
+        public CheckoutController(
+            IPageService pageService, 
+            IComposerContext composerContext, 
+            ICheckoutBreadcrumbViewService confirmationBreadcrumbViewService, 
+            IBreadcrumbViewService breadcrumbViewService, 
+            ILanguageSwitchService languageSwitchService, 
+            ICartUrlProvider urlProvider, 
+            ICheckoutNavigationViewService checkoutNavigationViewService, 
+            IPaymentViewService paymentViewService, 
+            IMyAccountUrlProvider myAccountUrlProvider, 
+            ICartService cartService) : 
+            base(pageService, 
+                composerContext, 
+                confirmationBreadcrumbViewService, 
+                breadcrumbViewService, 
+                languageSwitchService, 
+                urlProvider, 
+                checkoutNavigationViewService, 
+                paymentViewService,
+                myAccountUrlProvider,
+                cartService)
         {
         }
     }

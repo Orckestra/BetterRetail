@@ -2,7 +2,10 @@
 
 module Orckestra.Composer {
     export interface IWishListService {
-        addLineItem(productId: string, variantId?: string): Q.Promise<any>;
+        addLineItem(productId: string, variantId?: string,
+            quantity?: number,
+            recurringOrderFrequencyName?: string,
+            recurringOrderProgramName?: string): Q.Promise<any>;
 
         removeLineItem(lineItemId: string): Q.Promise<any>;
 

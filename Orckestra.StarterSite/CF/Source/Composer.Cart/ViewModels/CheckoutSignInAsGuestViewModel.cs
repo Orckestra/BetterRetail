@@ -13,5 +13,10 @@ namespace Orckestra.Composer.Cart.ViewModels
         /// The Register Page Url.
         /// </summary>
         public string RegisterUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets if the cart contains recurring line items.
+        /// </summary>
+        public bool IsCartContainsRecurringLineitems { get; set; }
     }
 }

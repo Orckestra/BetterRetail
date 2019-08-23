@@ -377,7 +377,7 @@ namespace Orckestra.Composer.Providers.Membership
         {
             string domainUsername;
 
-            return TryGetDomainUser(username, out domainUsername) && 
+            return TryGetDomainUser(username, out domainUsername) &&
                    InternalLoginUser(username, password);
         }
 
@@ -453,8 +453,8 @@ namespace Orckestra.Composer.Providers.Membership
             {
                 var result = _client.Send(request);
 
-                return result.TotalCount == 0 
-                    ? null 
+                return result.TotalCount == 0
+                    ? null
                     : result.Results.First().Username;
             }
             catch (WebException ex)

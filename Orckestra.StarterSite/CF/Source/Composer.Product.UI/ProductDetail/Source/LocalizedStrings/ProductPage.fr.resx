@@ -141,6 +141,27 @@
   <data name="L_ProductSpecifications" xml:space="preserve">
     <value>Spécifications</value>
   </data>
+  <data name="L_RecurringDeliveryFrequency" xml:space="preserve">
+    <value>Fréquence d’expédition</value>
+  </data>
+  <data name="L_RecurringPitch" xml:space="preserve">
+    <value>Transformer en commande récurrente et &lt;span class="text-danger"&gt;recevez {0} de rabais&lt;/span&gt;</value>
+  </data>
+  <data name="L_RecurringBubblePitch" xml:space="preserve">
+    <value>Sélectionnez la fréquence à laquelle vous désirez que ce produit soit livré chez vous.</value>
+  </data>
+  <data name="L_RecurringBubblePitchTitle" xml:space="preserve">
+    <value>Récurrence de l'article</value>
+  </data>
+  <data name="L_RecurringSaveRate" xml:space="preserve">
+    <value>5%</value>
+  </data>
+  <data name="L_RecurringFrequencyOnce" xml:space="preserve">
+    <value>Une fois seulement</value>
+  </data>
+  <data name="L_RecurringIconTooltip" xml:space="preserve">
+    <value>Article admissible à une commande récurrente</value>
+  </data>
   <data name="L_StoreInventory" xml:space="preserve">
     <value>Inventaire</value>
   </data>

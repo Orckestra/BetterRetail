@@ -122,6 +122,7 @@
     <Compile Include="..\Solution Items\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Api\StoreController.cs" />
     <Compile Include="Api\StoreInventoryController.cs" />
     <Compile Include="GoogleMapsConfiguration.cs" />
     <Compile Include="Parameters\CreateStoreViewModelParam.cs" />
@@ -134,6 +135,7 @@
     <Compile Include="Parameters\GetStorePageViewModelParam.cs" />
     <Compile Include="Parameters\GetStoreScheduleParam.cs" />
     <Compile Include="Parameters\GetStoreParam.cs" />
+    <Compile Include="Parameters\GetStoresForInStorePickupViewModelParam.cs" />
     <Compile Include="Providers\IGeoCoordinate.cs" />
     <Compile Include="Providers\IMapClustererProvider.cs" />
     <Compile Include="Providers\MapClustererProvider.cs" />
@@ -201,7 +203,9 @@
   <ItemGroup />
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Composer\Composer.csproj">

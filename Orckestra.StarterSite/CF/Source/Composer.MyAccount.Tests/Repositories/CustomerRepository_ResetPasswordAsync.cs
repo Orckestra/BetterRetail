@@ -45,7 +45,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Repositories
                 });
 
             //Act and Assert
-            Assert.DoesNotThrow(async () => 
+            Assert.DoesNotThrow(async () =>
                 await customerRepository.ResetPasswordAsync(expectedUsername, expectedPassword, expectedPasswordAnswer));
         }
 
