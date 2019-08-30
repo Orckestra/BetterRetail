@@ -1,17 +1,16 @@
+using Orckestra.Composer.Utils;
+using Orckestra.ExperienceManagement.Configuration.Settings;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using Orckestra.Composer.Configuration;
-using Orckestra.Composer.Utils;
 
 namespace Orckestra.Composer.Providers.Dam
 {
     public class ConventionBasedDamProvider : IDamProvider
     {
-        private readonly CdnDamProviderConfigurationElement _damProviderConfigurationSection;
+        private readonly ICdnDamProviderSettings _cdnDamProviderSettings;
 
         private const string ProductIdFieldName = "{productId}";
         private const string VariantIdFieldName = "{variantId}";
@@ -19,43 +18,29 @@ namespace Orckestra.Composer.Providers.Dam
         private const string SequenceNumberFieldName = "{sequenceNumber}";
         private const int MainImageSequenceNumber = 0;
 
-        public ConventionBasedDamProvider()
+        public ConventionBasedDamProvider(ICdnDamProviderSettings cdnDamProviderSettings)
         {
-            var configurationSection = ConfigurationManager.GetSection(ComposerConfigurationSection.ConfigurationName) as ComposerConfigurationSection;
-            const string missingConfigurationSectionMessage =
-                "Missing configuration section for {0}. Please make sure the configuration section has been properly defined within the configuration file.";
-
-            if (configurationSection == null)
-            {
-                throw new ConfigurationErrorsException(string.Format(missingConfigurationSectionMessage, ComposerConfigurationSection.ConfigurationName));
-            }
-
-            if (configurationSection.CdnDamProvider == null)
-            {
-                throw new ConfigurationErrorsException(string.Format(missingConfigurationSectionMessage, CdnDamProviderConfigurationElement.ConfigurationName));
-            }
-
-            _damProviderConfigurationSection = configurationSection.CdnDamProvider;
+            _cdnDamProviderSettings = cdnDamProviderSettings;
         }
 
         protected string ServerUrl
         {
-            get { return _damProviderConfigurationSection.ServerUrl; }
+            get { return _cdnDamProviderSettings.ServerUrl; }
         }
 
         protected virtual string ImageFolderName
         {
-            get { return _damProviderConfigurationSection.ImageFolderName; }
+            get { return _cdnDamProviderSettings.ImageFolderName; }
         }
 
         protected virtual string FallbackImageUrl
         {
-            get { return _damProviderConfigurationSection.FallbackImage; }
+            get { return _cdnDamProviderSettings.FallbackImage; }
         }
 
         protected virtual bool IsProductZoomImageEnabled
         {
-            get { return _damProviderConfigurationSection.SupportXLImages; }
+            get { return _cdnDamProviderSettings.SupportXLImages; }
         }
 
         public Task<List<ProductMainImage>> GetProductMainImagesAsync(GetProductMainImagesParam param)
@@ -154,7 +139,7 @@ namespace Orckestra.Composer.Providers.Dam
             if (!string.IsNullOrEmpty(variantId))
             {
                 // Resolve the image path for a variant.
-                imagePath = _damProviderConfigurationSection.VariantImageFilePathPattern
+                imagePath = _cdnDamProviderSettings.VariantImageFilePathPattern
                                                       .Replace(ProductIdFieldName, productId)
                                                       .Replace(VariantIdFieldName, variantId)
                                                       .Replace(SequenceNumberFieldName, sequenceNumber.ToString(CultureInfo.InvariantCulture))
@@ -164,7 +149,7 @@ namespace Orckestra.Composer.Providers.Dam
             else
             {
                 // Resolve the image path for a product.
-                imagePath = _damProviderConfigurationSection.ProductImageFilePathPattern
+                imagePath = _cdnDamProviderSettings.ProductImageFilePathPattern
                                                       .Replace(ProductIdFieldName, productId)
                                                       .Replace(SequenceNumberFieldName, sequenceNumber.ToString(CultureInfo.InvariantCulture))
                                                       .Replace(ImageSizeFieldName, imageSize);

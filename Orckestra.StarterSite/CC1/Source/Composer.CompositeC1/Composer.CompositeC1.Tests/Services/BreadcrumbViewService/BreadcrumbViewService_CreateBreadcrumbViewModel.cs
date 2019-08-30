@@ -170,14 +170,6 @@ namespace Orckestra.Composer.CompositeC1.Tests.Services.BreadcrumbViewService
                 },
                 new PageMock
                 {
-                    Id = FolderPageLevel1Id,
-                    MenuTitle = FolderPageLevel1Name,
-                    Url = GetRandom.WwwUrl(),
-                    PageTypeId = PagesConfiguration.FolderId,
-                    ParentPageId = HomePageId
-                },
-                new PageMock
-                {
                     Id = PageLevel1Id,
                     MenuTitle = PageLevel1Name,
                     Url = GetRandom.WwwUrl(),

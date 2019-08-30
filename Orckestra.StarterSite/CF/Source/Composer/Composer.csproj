@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Orckestra.Composer</RootNamespace>
     <AssemblyName>Orckestra.Composer</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
     <SccLocalPath>SAK</SccLocalPath>
@@ -80,6 +80,9 @@
     <Reference Include="Orckestra.Caching, Version=3.22.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\OrckestraCommerce.Common.3.22.0-beta0001\lib\net461\Orckestra.Caching.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="Orckestra.ExperienceManagement.Configuration, Version=3.22.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Orckestra.ExperienceManagement.Configuration.3.22.0\lib\net471\Orckestra.ExperienceManagement.Configuration.dll</HintPath>
     </Reference>
     <Reference Include="Orckestra.Logging, Version=3.22.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\OrckestraCommerce.Common.3.22.0-beta0001\lib\net461\Orckestra.Logging.dll</HintPath>
@@ -177,14 +180,9 @@
     <Compile Include="App_Packages\LibLog.4.2\LibLog.cs" />
     <Compile Include="ComposerConfiguration.cs" />
     <Compile Include="Configuration\CacheConfigurationCategoryNames.cs" />
-    <Compile Include="Configuration\CdnDamProviderConfigurationElement.cs" />
     <Compile Include="Configuration\ComposerConfigurationSection.cs" />
-    <Compile Include="Configuration\ComposerCookieAccesserConfigurationElement.cs" />
     <Compile Include="Configuration\ContentSitemapConfiguration.cs" />
-    <Compile Include="Configuration\CulturesConfigurationElement.cs" />
-    <Compile Include="Configuration\DefaultScopeConfigurationElement.cs" />
     <Compile Include="Configuration\DisplayConfiguration.cs" />
-    <Compile Include="Configuration\InventoryConfigurationElement.cs" />
     <Compile Include="Configuration\GoogleMapsConfigurationElement.cs" />
     <Compile Include="Configuration\ProductSitemapConfiguration.cs" />
     <Compile Include="Configuration\SitemapConfiguration.cs" />
@@ -250,7 +248,6 @@
     <Compile Include="IComposerHost.cs" />
     <Compile Include="IComposerPlugin.cs" />
     <Compile Include="ComposerHost.cs" />
-    <Compile Include="Configuration\OvertureConfigurationElement.cs" />
     <Compile Include="Kernel\AutofacDependencyContainer.cs" />
     <Compile Include="Kernel\AutofacDependancyResolver.cs" />
     <Compile Include="MvcFilters\ValidateLanguageAttribute.cs" />

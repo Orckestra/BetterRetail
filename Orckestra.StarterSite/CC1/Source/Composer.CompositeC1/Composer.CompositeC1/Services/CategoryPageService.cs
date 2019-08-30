@@ -17,7 +17,7 @@ using Orckestra.Composer.Search;
 using Orckestra.Composer.Utils;
 using Orckestra.Overture.ServiceModel.Products;
 using Orckestra.Composer.Services;
-using ExperienceManagement.DataTypes;
+using Orckestra.ExperienceManagement.Configuration.DataTypes;
 
 namespace Orckestra.Composer.CompositeC1.Services
 {

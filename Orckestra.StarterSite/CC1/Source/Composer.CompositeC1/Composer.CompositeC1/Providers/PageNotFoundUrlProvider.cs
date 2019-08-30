@@ -7,6 +7,7 @@ using Composite.Data;
 using Orckestra.Composer.CompositeC1.Services;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.CompositeC1.Utils;
+using Orckestra.ExperienceManagement.Configuration;
 
 namespace Orckestra.Composer.CompositeC1.Providers
 {
@@ -38,7 +39,7 @@ namespace Orckestra.Composer.CompositeC1.Providers
             {
                 return null;
             }
-            var url = PageService.GetPageUrl(PagesConfiguration.PageNotFoundPageId, culture);
+            var url = PageService.GetPageUrl(SiteConfiguration.GetPagesConfiguration().PageNotFoundPageId, culture);
             var urlBuilder = new UrlBuilder(url) {[ErrorPathQuerystringName] = HttpUtility.UrlEncode(requestedPath) };
 
             return urlBuilder.ToString();

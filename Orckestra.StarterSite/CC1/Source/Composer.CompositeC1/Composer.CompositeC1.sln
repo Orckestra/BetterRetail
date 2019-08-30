@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Composer.CompositeC1", "Composer.CompositeC1\Composer.CompositeC1.csproj", "{3E42C35E-B19C-4ABE-80F8-FD268D44E11F}"
 EndProject
@@ -35,8 +35,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4 - IntegrationTests", "4 - IntegrationTests", "{81336705-3791-4596-8C97-9B1F22EA109C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "X - Packaging", "X - Packaging", "{4E711E19-E09A-42A1-9E6B-0C644DE2ED7B}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Composer.CompositeC1.Azure", "Composer.CompositeC1.Azure\Composer.CompositeC1.Azure.csproj", "{DD8AE2F0-AD7D-4696-93F2-57C11904B499}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Composer.CompositeC1.DataTypes", "Composer.CompositeC1.DataTypes\Composer.CompositeC1.DataTypes.csproj", "{E84BF038-FC5E-4841-8C5A-918FE8EAFF8F}"
 EndProject
@@ -78,10 +76,6 @@ Global
 		{B087B0F6-C5DC-4290-B3DA-F39684D6337E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B087B0F6-C5DC-4290-B3DA-F39684D6337E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B087B0F6-C5DC-4290-B3DA-F39684D6337E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DD8AE2F0-AD7D-4696-93F2-57C11904B499}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DD8AE2F0-AD7D-4696-93F2-57C11904B499}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DD8AE2F0-AD7D-4696-93F2-57C11904B499}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DD8AE2F0-AD7D-4696-93F2-57C11904B499}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E84BF038-FC5E-4841-8C5A-918FE8EAFF8F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E84BF038-FC5E-4841-8C5A-918FE8EAFF8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E84BF038-FC5E-4841-8C5A-918FE8EAFF8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -105,7 +99,6 @@ Global
 		{ECA297FA-1674-4071-9FD1-5E4AE159CE0C} = {81336705-3791-4596-8C97-9B1F22EA109C}
 		{EA8CAB27-7AF8-4913-B7A4-4703A0E6B4B7} = {4E711E19-E09A-42A1-9E6B-0C644DE2ED7B}
 		{B087B0F6-C5DC-4290-B3DA-F39684D6337E} = {331CBB1A-6003-4019-9A72-C4860127EC2D}
-		{DD8AE2F0-AD7D-4696-93F2-57C11904B499} = {8D2C6219-D2AA-43D0-80C4-1A05F108C088}
 		{E84BF038-FC5E-4841-8C5A-918FE8EAFF8F} = {8D2C6219-D2AA-43D0-80C4-1A05F108C088}
 		{8CA84E04-B406-45A9-ADCF-549A142B3405} = {8C3A4F1C-2D89-41E1-AA07-E8E58FA26FE4}
 		{8F9AD96B-47B6-4BBD-AD4E-0155B49D2BFD} = {8CA84E04-B406-45A9-ADCF-549A142B3405}
@@ -113,5 +106,6 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.TransientFaultHandling.6.0.1304.0\lib\portable-net45+win+wp8;packages\EnterpriseLibrary.TransientFaultHandling.Data.6.0.1304.1\lib\NET45;ng.6.0.1304.0\lib\portable-net45+win+wp8;ng.Data.6.0.1304.1\lib\NET45;packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45
+		SolutionGuid = {BB26D913-4B22-43FC-BFD3-F3DAADE197E6}
 	EndGlobalSection
 EndGlobal

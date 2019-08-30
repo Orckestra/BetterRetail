@@ -15,6 +15,7 @@ using Orckestra.Composer.Product.ViewModels;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Utils;
+using Orckestra.ExperienceManagement.Configuration;
 
 namespace Orckestra.Composer.CompositeC1.Controllers
 {
@@ -28,6 +29,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         protected ILanguageSwitchService LanguageSwitchService { get; private set; }
         protected IProductUrlProvider ProductUrlProvider { get; private set; }
         protected IRelatedProductViewService RelatedProductViewService { get; private set; }
+        protected PagesConfiguration PagesConfiguration { get; private set; }
 
         protected virtual string PreviewModeProductId { get;} = "3834593";
 
@@ -58,6 +60,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             LanguageSwitchService = languageSwitchService;
             ProductUrlProvider = productUrlProvider;
             RelatedProductViewService = relatedProductViewService;
+            PagesConfiguration = SiteConfiguration.GetPagesConfiguration();
         }
 
         public virtual ActionResult ProductSummary(string id, string variantId)

@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Logging;
 using Orckestra.Composer.Utils;
+using Orckestra.ExperienceManagement.Configuration;
 
 namespace Orckestra.Composer.Services.Cookie
 {
@@ -64,17 +65,10 @@ namespace Orckestra.Composer.Services.Cookie
             _httpRequest  = httpRequest;
             _httpResponse = httpResponse;
 
-            //Configurations
-            //It's ok to omit this config, we simply fallback to the default values
-            ComposerConfigurationSection conf = ConfigurationManager.GetSection(ComposerConfigurationSection.ConfigurationName) as ComposerConfigurationSection;
-            ComposerConfigurationSection        confComposer = conf ?? new ComposerConfigurationSection();
-            ComposerCookieAccesserConfigurationElement  confCookie   = confComposer.ComposerCookieAccesser ?? new ComposerCookieAccesserConfigurationElement();
-            //
-
-            _cookieName       = confCookie.Name;
-            _requireSsl       = confCookie.RequireSsl;
-            _timeoutInMinutes = confCookie.Timeout;
-            _cookieDomain     = confCookie.Domain;
+            _cookieName       = SiteConfiguration.CookieAccesserSettings.Name;
+            _requireSsl       = SiteConfiguration.CookieAccesserSettings.RequireSsl;
+            _timeoutInMinutes = SiteConfiguration.CookieAccesserSettings.TimeoutInMinutes;
+            _cookieDomain     = SiteConfiguration.CookieAccesserSettings.Domain;
 
             _jsonSettings = new JsonSerializerSettings
             {

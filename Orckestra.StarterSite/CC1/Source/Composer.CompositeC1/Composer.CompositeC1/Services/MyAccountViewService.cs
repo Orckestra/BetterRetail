@@ -6,6 +6,7 @@ using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.ViewModels.MyAccount;
+using Orckestra.ExperienceManagement.Configuration;
 
 namespace Orckestra.Composer.CompositeC1.Services
 {
@@ -45,43 +46,44 @@ namespace Orckestra.Composer.CompositeC1.Services
             var myWishListUrl = WishListUrlProvider.GetWishListUrl(new GetWishListUrlParam {CultureInfo = ComposerContext.CultureInfo});
 
             var currentPageId = new Guid(currentUrl);
+            var pagesConfiguration = SiteConfiguration.GetPagesConfiguration();
 
             var menu = new MenuViewModel { MenuItems = new List<MenuItemViewModel>() };
 
-            var myAccountPage = PageService.GetPage(PagesConfiguration.MyAccountPageId, ComposerContext.CultureInfo);
-            var myAddressPage = PageService.GetPage(PagesConfiguration.AddressListPageId, ComposerContext.CultureInfo);
-            var myOrderHistoryPage = PageService.GetPage(PagesConfiguration.OrderHistoryPageId, ComposerContext.CultureInfo);
-            var myWishListage = PageService.GetPage(PagesConfiguration.MyWishListPageId, ComposerContext.CultureInfo);
+            var myAccountPage = PageService.GetPage(pagesConfiguration.MyAccountPageId, ComposerContext.CultureInfo);
+            var myAddressPage = PageService.GetPage(pagesConfiguration.AddressListPageId, ComposerContext.CultureInfo);
+            var myOrderHistoryPage = PageService.GetPage(pagesConfiguration.OrderHistoryPageId, ComposerContext.CultureInfo);
+            var myWishListage = PageService.GetPage(pagesConfiguration.MyWishListPageId, ComposerContext.CultureInfo);
 
             var myAccountMenuItem = new MenuItemViewModel
             {
                 Name = myAccountPage.MenuTitle,
                 Url = myAccountUrl,
-                IsActive = currentPageId == PagesConfiguration.MyAccountPageId ||
-                           currentPageId == PagesConfiguration.ChangePasswordPageId
+                IsActive = currentPageId == pagesConfiguration.MyAccountPageId ||
+                           currentPageId == pagesConfiguration.ChangePasswordPageId
             };
 
             var myAdressesMenuItem = new MenuItemViewModel
             {
                 Name = myAddressPage.MenuTitle,
                 Url = addressListUrl,
-                IsActive = currentPageId == PagesConfiguration.AddressListPageId ||
-                           currentPageId == PagesConfiguration.AddAddressPageId ||
-                           currentPageId == PagesConfiguration.UpdateAddressPageId
+                IsActive = currentPageId == pagesConfiguration.AddressListPageId ||
+                           currentPageId == pagesConfiguration.AddAddressPageId ||
+                           currentPageId == pagesConfiguration.UpdateAddressPageId
             };
 
              var myWishListMenuItem = new MenuItemViewModel
              {
                  Name = myWishListage.MenuTitle,
                  Url = myWishListUrl,
-                 IsActive = currentPageId == PagesConfiguration.MyWishListPageId
+                 IsActive = currentPageId == pagesConfiguration.MyWishListPageId
              };
 
             var myOrderHistoryMenuItem = new MenuItemViewModel
             {
                 Name = myOrderHistoryPage.MenuTitle,
                 Url = myOrderHistoryUrl,
-                IsActive = currentPageId == PagesConfiguration.OrderHistoryPageId || currentPageId ==  PagesConfiguration.OrderDetailsPageId
+                IsActive = currentPageId == pagesConfiguration.OrderHistoryPageId || currentPageId == pagesConfiguration.OrderDetailsPageId
             };
 
             menu.MenuItems.AddRange(new List<MenuItemViewModel> { myAccountMenuItem, myWishListMenuItem, myAdressesMenuItem, myOrderHistoryMenuItem });

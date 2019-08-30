@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Orckestra.Composer.Tests</RootNamespace>
     <AssemblyName>Orckestra.Composer.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <SccProjectName>SAK</SccProjectName>
@@ -122,6 +122,9 @@
     <Reference Include="Orckestra.Caching, Version=3.22.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\OrckestraCommerce.Common.3.22.0-beta0001\lib\net461\Orckestra.Caching.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="Orckestra.ExperienceManagement.Configuration, Version=3.22.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Orckestra.ExperienceManagement.Configuration.3.22.0\lib\net471\Orckestra.ExperienceManagement.Configuration.dll</HintPath>
     </Reference>
     <Reference Include="Orckestra.Logging, Version=3.22.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\OrckestraCommerce.Common.3.22.0-beta0001\lib\net461\Orckestra.Logging.dll</HintPath>

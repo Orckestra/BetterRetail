@@ -1,25 +1,24 @@
-﻿using System;
+﻿using Composite.Core.Logging;
+using Orckestra.Composer.CompositeC1.Services;
+using Orckestra.Composer.Utils;
+using Orckestra.ExperienceManagement.Configuration;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
-using Composite.Core.Logging;
-using Composite.Core.Routing.Pages;
-using Composite.Core.WebClient.Renderings.Page;
-using Orckestra.Composer.CompositeC1.Services;
-using Orckestra.Composer.Utils;
 
 namespace Orckestra.Composer.CompositeC1
 {
-    public class
-        UrlRewriteModule: IHttpModule
+    public class UrlRewriteModule : IHttpModule
     {
         private const string ProductUrlPathIndicatorRegex = "^p-.*";
         private const string StoreUrlPathIndicatorRegex = "^s-.*";
 
         private readonly IPageService _pageService;
+        private PagesConfiguration PagesConfiguration;
 
         public UrlRewriteModule()
         {
@@ -53,7 +52,7 @@ namespace Orckestra.Composer.CompositeC1
                  * that the culture is always passed as the first parameters in URL.
                  * This assumption is based on the ProductUrlProvider and StoreUrlProvider classes, which are responsbile for building these URLs.
                  * */
-
+                PagesConfiguration = SiteConfiguration.GetPagesConfiguration();
                 int pathPatternIndex = -1;
                 if ((pathPatternIndex = GetUrlPathIndexForSpecificPagePattern(urlPathSegments, ProductUrlPathIndicatorRegex)) > -1)
                 {

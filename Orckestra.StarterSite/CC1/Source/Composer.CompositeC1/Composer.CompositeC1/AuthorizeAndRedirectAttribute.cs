@@ -1,7 +1,7 @@
-﻿using System.Web.Mvc;
-using Composite.Core.Routing.Pages;
+﻿using Composite.Core.Routing.Pages;
 using Orckestra.Composer.CompositeC1.Services;
-using Orckestra.Composer.Services;
+using Orckestra.ExperienceManagement.Configuration;
+using System.Web.Mvc;
 
 namespace Orckestra.Composer.CompositeC1
 {
@@ -10,16 +10,17 @@ namespace Orckestra.Composer.CompositeC1
         protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)
         {
             var pageService = new PageService();
+            var loginPageId = SiteConfiguration.GetPagesConfiguration().LoginPageId;
             string loginUrl = string.Empty;
 
             if (C1PageRoute.PageUrlData != null)
             {
                 var culture = C1PageRoute.PageUrlData.LocalizationScope;
-                loginUrl = pageService.GetPageUrl(PagesConfiguration.LoginPageId, culture);
+                loginUrl = pageService.GetPageUrl(loginPageId, culture);
             }
             else
             {
-                loginUrl = pageService.GetPageUrl(PagesConfiguration.LoginPageId);
+                loginUrl = pageService.GetPageUrl(loginPageId);
             }
             filterContext.Result = new RedirectResult(loginUrl);
 

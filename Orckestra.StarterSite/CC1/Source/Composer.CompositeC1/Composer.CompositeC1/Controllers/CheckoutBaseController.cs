@@ -12,6 +12,7 @@ using Orckestra.Composer.Providers;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Services.Breadcrumb;
 using Orckestra.Composer.Utils;
+using Orckestra.ExperienceManagement.Configuration;
 
 namespace Orckestra.Composer.CompositeC1.Controllers
 {
@@ -27,6 +28,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         protected ICheckoutNavigationViewService CheckoutNavigationViewService { get; private set; }
         protected IPaymentViewService PaymentViewService { get; private set; }
         protected IMyAccountUrlProvider MyAccountUrlProvider { get; private set; }
+        protected PagesConfiguration PagesConfiguration { get; private set; }
 
         protected CheckoutBaseController(
             IPageService pageService,
@@ -58,6 +60,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             CheckoutNavigationViewService = checkoutNavigationViewService;
             PaymentViewService = paymentViewService;
             MyAccountUrlProvider = myAccountUrlProvider;
+            PagesConfiguration = SiteConfiguration.GetPagesConfiguration();
         }
 
         public virtual ActionResult GuestCustomerInfo()

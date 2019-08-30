@@ -1,6 +1,7 @@
 ﻿using Orckestra.Composer.Configuration;
 using Orckestra.Composer.SearchQuery.Parameters;
 using Orckestra.Composer.SearchQuery.Repositories;
+using Orckestra.ExperienceManagement.Configuration;
 using Orckestra.Overture.ServiceModel.SearchQueries;
 using System;
 using System.Collections.Generic;
@@ -25,7 +26,7 @@ namespace Orckestra.Composer.C1CMS.Queries
 
             var queries = searchQueryRepository.GetSearchQueriesAsync(new GetSearchQueriesParam()
             {
-                Scope = composerConfigurationSection.DefaultScope.ScopeName,
+                Scope = SiteConfiguration.GetScopeId(),
                 QueryType = queryType
             }).Result;
 

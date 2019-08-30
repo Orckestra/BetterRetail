@@ -13,6 +13,7 @@ using Orckestra.Composer.Search.ViewModels;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Utils;
 using System.Linq;
+using Orckestra.ExperienceManagement.Configuration;
 
 namespace Orckestra.Composer.CompositeC1.Controllers
 {
@@ -28,6 +29,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         protected ISearchBreadcrumbViewService SearchBreadcrumbViewService { get; private set; }
         protected IInventoryLocationProvider InventoryLocationProvider { get; private set; }
         protected ISearchUrlProvider SearchUrlProvider { get; private set; }
+        protected PagesConfiguration PagesConfiguration;
 
         protected SearchBaseController(
             IComposerContext composerContext,
@@ -56,6 +58,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             SearchBreadcrumbViewService = searchBreadcrumbViewService;
             InventoryLocationProvider = inventoryLocationProvider;
             SearchUrlProvider = searchUrlProvider;
+            PagesConfiguration = SiteConfiguration.GetPagesConfiguration();
         }
 
         public virtual ActionResult SearchBox(string keywords)

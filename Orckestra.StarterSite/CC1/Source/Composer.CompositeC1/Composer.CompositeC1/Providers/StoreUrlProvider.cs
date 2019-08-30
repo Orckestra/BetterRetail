@@ -8,6 +8,7 @@ using Orckestra.Composer.Providers;
 using Orckestra.Composer.Store.Parameters;
 using Orckestra.Composer.Store.Providers;
 using Orckestra.Composer.Utils;
+using Orckestra.ExperienceManagement.Configuration;
 
 namespace Orckestra.Composer.CompositeC1.Providers
 {
@@ -17,6 +18,7 @@ namespace Orckestra.Composer.CompositeC1.Providers
         protected const string ResourceCategory = "Store";
         protected ILocalizationProvider LocalizationProvider { get; private set; }
         protected IPageService PageService { get; private set; }
+        protected PagesConfiguration PagesConfiguration;
 
         public StoreUrlProvider(ILocalizationProvider localizationProvider, IPageService pageService)
         {
@@ -25,6 +27,7 @@ namespace Orckestra.Composer.CompositeC1.Providers
 
             LocalizationProvider = localizationProvider;
             PageService = pageService;
+            PagesConfiguration = SiteConfiguration.GetPagesConfiguration();
         }
 
         public void RegisterRoutes(RouteCollection routeCollection)

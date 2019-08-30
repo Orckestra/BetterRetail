@@ -2,6 +2,7 @@
 using FluentAssertions;
 using NUnit.Framework;
 using Orckestra.Composer.Providers.Dam;
+using Orckestra.ExperienceManagement.Configuration.Settings;
 
 namespace Orckestra.Composer.Tests.Providers.Dam
 {
@@ -15,7 +16,7 @@ namespace Orckestra.Composer.Tests.Providers.Dam
 
 
             // Act
-            Action action = () => new ConventionBasedDamProvider();
+            Action action = () => new ConventionBasedDamProvider(new CdnDamProviderSettings());
 
             // Assert
             action.ShouldNotThrow();

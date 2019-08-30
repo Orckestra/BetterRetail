@@ -7,6 +7,7 @@ using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Checkout;
+using Orckestra.ExperienceManagement.Configuration;
 using Orckestra.Overture.Caching;
 
 namespace Orckestra.Composer.CompositeC1.Providers
@@ -16,6 +17,8 @@ namespace Orckestra.Composer.CompositeC1.Providers
         protected IPageService PageService { get; private set; }
         protected ICacheProvider CacheProvider { get; private set; }
 
+        protected PagesConfiguration PagesConfiguration { get; private set; }
+
         public CartUrlProvider(IPageService pageService, ICacheProvider cacheProvider)
         {
             if (pageService == null) { throw new ArgumentNullException("pageService"); }
@@ -23,6 +26,7 @@ namespace Orckestra.Composer.CompositeC1.Providers
 
             PageService = pageService;
             CacheProvider = cacheProvider;
+            PagesConfiguration = SiteConfiguration.GetPagesConfiguration();
         }
 
         public string GetCartUrl(GetCartUrlParam parameters)

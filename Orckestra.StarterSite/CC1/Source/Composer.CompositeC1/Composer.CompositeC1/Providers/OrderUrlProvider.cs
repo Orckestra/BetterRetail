@@ -3,18 +3,21 @@ using System.Globalization;
 using Orckestra.Composer.CompositeC1.Services;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
+using Orckestra.ExperienceManagement.Configuration;
 
 namespace Orckestra.Composer.CompositeC1.Providers
 {
     public class OrderUrlProvider : IOrderUrlProvider
     {
         protected IPageService PageService { get; private set; }
+        protected PagesConfiguration PagesConfiguration { get; private set; }
 
         public OrderUrlProvider(IPageService pageService)
         {
             if (pageService == null) { throw new ArgumentNullException("pageService"); }
 
             PageService = pageService;
+            PagesConfiguration = SiteConfiguration.GetPagesConfiguration();
         }
 
         public string GetOrderDetailsBaseUrl(CultureInfo cultureInfo)

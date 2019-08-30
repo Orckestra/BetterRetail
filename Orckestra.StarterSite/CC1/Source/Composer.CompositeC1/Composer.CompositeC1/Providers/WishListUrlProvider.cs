@@ -1,24 +1,25 @@
-﻿using System;
-using Composite.Core;
+﻿using Composite.Core;
 using Composite.Core.Threading;
 using Orckestra.Composer.Cart.Parameters.WishList;
 using Orckestra.Composer.Cart.Providers.WishList;
 using Orckestra.Composer.Cart.Utils;
-using Orckestra.Composer.CompositeC1;
 using Orckestra.Composer.CompositeC1.Services;
-using Orckestra.Composer.Utils;
+using Orckestra.ExperienceManagement.Configuration;
+using System;
 
 namespace Orckestra.Composer.Mvc.Sample.Providers.UrlProvider
 {
     public class WishListUrlProvider : IWishListUrlProvider
     {
         protected IPageService PageService { get; private set; }
+        protected PagesConfiguration PagesConfiguration { get; private set; }
 
         public WishListUrlProvider(IPageService pageService)
         {
             if (pageService == null) { throw new ArgumentNullException("pageService"); }
 
             PageService = pageService;
+            PagesConfiguration = SiteConfiguration.GetPagesConfiguration();
         }
 
         /// <summary>

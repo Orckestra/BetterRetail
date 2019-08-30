@@ -12,6 +12,8 @@ using System.Configuration;
 using System.Linq;
 using Orckestra.Composer.Configuration;
 using Orckestra.Overture.RestClient;
+using Orckestra.ExperienceManagement.Configuration;
+using System.Net.Cache;
 
 namespace Orckestra.Composer
 {
@@ -198,27 +200,16 @@ namespace Orckestra.Composer
             return new ComposerOvertureClient(new OvertureClient(config));
         }
 
-        private static OvertureConfigurationElement GetOvertureConfigurationFromComposerConfiguration()
-        {
-            var configSection = ConfigurationManager.GetSection(ComposerConfigurationSection.ConfigurationName) as ComposerConfigurationSection;
-
-            if (configSection != null)
-            {
-                return configSection.OvertureConfiguration;
-            }
-
-            throw new Exception("Unable to create an instance of the OvertureClient from the configuration.");
-        }
 
         private static OvertureClientConfig GetClientConfig()
         {
-            var config = GetOvertureConfigurationFromComposerConfiguration();
+            var config = SiteConfiguration.OvertureSettings;
             var clientConfig = new OvertureClientConfig
             {
                 AuthToken = config.AuthToken,
-                Format = config.Format,
+                Format = ClientFormat.Json,
                 ServerBaseUrl = config.Url,
-                CacheLevel = config.CacheLevel
+                CacheLevel = HttpRequestCacheLevel.Default
             };
 
             return clientConfig;
