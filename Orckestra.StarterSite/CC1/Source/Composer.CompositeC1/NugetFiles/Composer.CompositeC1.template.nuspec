@@ -15,16 +15,16 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="..\Composer.CompositeC1.Mvc\bin\Orckestra.Composer.CompositeC1.dll" target="lib/net452" />
-    <file src="..\Composer.CompositeC1.Mvc\bin\Orckestra.Composer.CompositeC1.*.dll" target="lib/net452" exclude="..\Composer.CompositeC1.Mvc\bin\Orckestra.Composer.CompositeC1.Mvc.dll" />
-    <file src="..\Composer.CompositeC1.Mvc\bin\Composite.dll" target="lib/net452" />
-    <file src="..\Composer.CompositeC1.Mvc\bin\Composite.AspNet.MvcFunctions.dll" target="lib/net452" />
-    <file src="..\..\..\Installer\packages\generic\CompositeC1\C1.Packages\001 - Composite.AspNet.MvcFunctions.zip" target="packaging\" />
-    <file src="..\..\..\Installer\packages\generic\CompositeC1\C1.Packages\002 - Composite.Tools.DataStoreMigrator.zip" target="packaging\" />
-    <file src="..\..\..\Installer\packages\generic\CompositeC1\C1.Packages\002 - Composite.Tools.PackageCreator.zip" target="packaging\" />
-    <file src="..\..\..\Installer\packages\generic\CompositeC1\C1.Packages\100 - Composer.C1.Core.zip" target="packaging\" />
-    <file src="..\..\..\Installer\packages\generic\CompositeC1\C1.Packages\200 - Composer.C1.Content.EN_CA.zip" target="packaging\" />
-    <file src="..\..\..\Installer\packages\generic\CompositeC1\C1.Packages\201 - Composer.C1.Content.FR_CA.zip" target="packaging\" />
+    <file src="..\Composer.CompositeC1.Mvc\bin\Orckestra.Composer.CompositeC1.dll" target="lib/net461" />
+    <file src="..\Composer.CompositeC1.Mvc\bin\Orckestra.Composer.CompositeC1.*.dll" target="lib/net461" exclude="..\Composer.CompositeC1.Mvc\bin\Orckestra.Composer.CompositeC1.Mvc.dll" />
+    <file src="..\Composer.CompositeC1.Mvc\bin\Composite.dll" target="lib/net461" />
+    <file src="..\Composer.CompositeC1.Mvc\bin\Composite.AspNet.MvcFunctions.dll" target="lib/net461" />
+    <file src="..\..\..\..\..\Installer\packages\generic\C1CMS\Composite.AspNet.MvcFunctions.zip" target="packaging\" />
+    <!--file src="..\..\..\..\Installer\\packages\generic\C1CMS\Composite.Tools.DataStore\Migrator.zip" target="packaging\" /-->
+    <file src="..\..\..\..\..\Installer\packages\generic\C1CMS\Composite.Tools.PackageCreator.zip" target="packaging\" />
+    <file src="..\..\..\..\..\Installer\packages\generic\C1CMS\RefApp\Composer.C1.Core.zip" target="packaging\" />
+    <file src="..\..\..\..\..\Installer\packages\generic\C1CMS\RefApp\Composer.C1.Content.EN-CA.zip" target="packaging\" />
+    <file src="..\..\..\..\..\Installer\packages\generic\C1CMS\RefApp\Composer.C1.Content.FR-CA.zip" target="packaging\" />
     <file src="..\Composer.CompositeC1.Mvc\StartupHandler.cs" target="src" />
   </files>
 </package>
