@@ -347,6 +347,9 @@
     </Content>
     <Content Include="Views\Footer\FollowUs.cshtml" />
     <Content Include="Views\web.config" />
+    <Content Include="Views\Product\ProductSEO.cshtml" />
+    <Content Include="Views\Shared\PageHeader.cshtml" />
+    <Content Include="Views\Shared\LanguageSwitch.cshtml" />
     <Content Include="web.config" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>

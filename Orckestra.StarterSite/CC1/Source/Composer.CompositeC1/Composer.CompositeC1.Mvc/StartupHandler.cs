@@ -112,6 +112,7 @@ namespace Orckestra.Composer.CompositeC1.Mvc
             functions.RegisterAction<BrowsingCategoriesController>("SelectedSearchFacets", "Composer.BrowsingCategories.SelectedFacets");
             functions.RegisterAction<BrowsingCategoriesController>("ChildCategories", "Composer.BrowsingCategories.ChildCategories");
 
+            functions.RegisterAction<ProductController>("ProductSEO", "Composer.Product.SEO");
             functions.RegisterAction<ProductController>("PageHeader", "Composer.Product.PageHeader");
             functions.RegisterAction<ProductController>("LanguageSwitch", "Composer.Product.LanguageSwitch");
             functions.RegisterAction<ProductController>("ProductSummary", "Composer.Product.Summary");

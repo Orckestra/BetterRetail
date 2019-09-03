@@ -73,6 +73,11 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             return GetProductDetail(id, variantId);
         }
 
+        public virtual ActionResult ProductSEO(string id, string variantId)
+        {
+            return GetProductDetail(id, variantId);
+        }
+
         public virtual ActionResult LanguageSwitch(string id)
         {
             if (string.IsNullOrWhiteSpace(id))

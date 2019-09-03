@@ -1,0 +1,35 @@
+﻿@using Composite.Data
+@model Orckestra.Composer.ViewModels.PageHeaderViewModel
+@{ 
+    PageNode homePage;
+    using(var con = new DataConnection())
+    {
+        homePage = con.SitemapNavigator.CurrentHomePageNode;
+    }
+}
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<head>
+    @if (!string.IsNullOrWhiteSpace(Model.PageTitle))
+    {
+        <title>@Model.PageTitle | @homePage.Title </title>
+    }
+    @if (!string.IsNullOrWhiteSpace(Model.MetaKeywords))
+    {
+        <meta name="keywords" content="@Model.MetaKeywords" />
+    }
+    @if (!string.IsNullOrWhiteSpace(Model.MetaDescription))
+    {
+        <meta name="description" content="@Model.MetaDescription" />
+    }
+    @if (Model.NoIndex)
+    {
+        <meta name="robots" content="noindex" />
+    }
+    @if (!string.IsNullOrWhiteSpace(Model.CanonicalUrl))
+    {
+        <link rel="canonical" href="@Model.CanonicalUrl" />
+    }
+</head>
+<body>
+</body>
+</html>
