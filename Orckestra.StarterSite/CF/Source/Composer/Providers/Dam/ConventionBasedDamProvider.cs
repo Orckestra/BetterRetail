@@ -1,4 +1,5 @@
 using Orckestra.Composer.Utils;
+using Orckestra.ExperienceManagement.Configuration;
 using Orckestra.ExperienceManagement.Configuration.Settings;
 using System;
 using System.Collections.Generic;
@@ -18,9 +19,9 @@ namespace Orckestra.Composer.Providers.Dam
         private const string SequenceNumberFieldName = "{sequenceNumber}";
         private const int MainImageSequenceNumber = 0;
 
-        public ConventionBasedDamProvider(ICdnDamProviderSettings cdnDamProviderSettings)
+        public ConventionBasedDamProvider()
         {
-            _cdnDamProviderSettings = cdnDamProviderSettings;
+            _cdnDamProviderSettings = SiteConfiguration.CdnDamProviderSettings;
         }
 
         protected string ServerUrl

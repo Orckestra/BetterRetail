@@ -18,7 +18,7 @@ using System.Web;
 using System.Web.Hosting;
 using System.Web.Mvc;
 using Composite.Data;
-using ExperienceManagement.DataTypes;
+using Orckestra.ExperienceManagement.Configuration.DataTypes;
 
 namespace Orckestra.Composer.CompositeC1.Mvc
 {
