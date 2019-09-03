@@ -4,7 +4,7 @@
 		<server alias="StandaloneServer">			
 			<!--component name="oa" /-->
 			<component name="cms-cm" />
-			<component name="cms-cd" />
+			<!--component name="cms-cd" /-->
 			<!--
 			<component name="solr-cm" />
 			<component name="solr-cd" /> 
@@ -16,7 +16,7 @@
 		<server alias="AppServer">
 			<!--component name="oa" /-->
 			<component name="cms-cm" />
-			<component name="cms-cd" />
+			<!--component name="cms-cd" /-->
 			<!--
 			<component name="solr-cm" />
 			<component name="solr-cd" /> 
@@ -28,7 +28,7 @@
     <server alias="AppServer1">
 	  <!--component name="oa" /-->
       <component name="cms-cm" />
-      <component name="cms-cd" />
+      <!--component name="cms-cd" /-->
       <!--
 			<component name="solr-cm" />
 			<component name="solr-cd" /> 

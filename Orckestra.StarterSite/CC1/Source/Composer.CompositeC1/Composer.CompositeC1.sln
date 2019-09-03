@@ -48,6 +48,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.C1CMS.Qu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.C1CMS.Queries.Package", "Orckestra.Composer.C1CMS.Queries.Package\Orckestra.Composer.C1CMS.Queries.Package.csproj", "{112B646F-5193-45CC-A9EF-D632D853CFB1}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SEO", "SEO", "{0B18646D-2848-4CED-84C5-3C8EB9ACFE9E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.SEO.Organization.Package", "Orckestra.Composer.SEO.Organization\Orckestra.Composer.SEO.Organization.Package.csproj", "{199BF438-4F90-4C1C-941A-AF6B69A53396}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.SEO.Organization.Content", "Orckestra.Composer.SEO.Content\Orckestra.Composer.SEO.Organization.Content.csproj", "{A8B2D94C-8C2E-4AC5-875A-6E3540B56ADD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -94,6 +100,14 @@ Global
 		{112B646F-5193-45CC-A9EF-D632D853CFB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{112B646F-5193-45CC-A9EF-D632D853CFB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{112B646F-5193-45CC-A9EF-D632D853CFB1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{199BF438-4F90-4C1C-941A-AF6B69A53396}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{199BF438-4F90-4C1C-941A-AF6B69A53396}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{199BF438-4F90-4C1C-941A-AF6B69A53396}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{199BF438-4F90-4C1C-941A-AF6B69A53396}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8B2D94C-8C2E-4AC5-875A-6E3540B56ADD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8B2D94C-8C2E-4AC5-875A-6E3540B56ADD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8B2D94C-8C2E-4AC5-875A-6E3540B56ADD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8B2D94C-8C2E-4AC5-875A-6E3540B56ADD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -110,6 +124,9 @@ Global
 		{8CA84E04-B406-45A9-ADCF-549A142B3405} = {8C3A4F1C-2D89-41E1-AA07-E8E58FA26FE4}
 		{8F9AD96B-47B6-4BBD-AD4E-0155B49D2BFD} = {8CA84E04-B406-45A9-ADCF-549A142B3405}
 		{112B646F-5193-45CC-A9EF-D632D853CFB1} = {8CA84E04-B406-45A9-ADCF-549A142B3405}
+		{0B18646D-2848-4CED-84C5-3C8EB9ACFE9E} = {8C3A4F1C-2D89-41E1-AA07-E8E58FA26FE4}
+		{199BF438-4F90-4C1C-941A-AF6B69A53396} = {0B18646D-2848-4CED-84C5-3C8EB9ACFE9E}
+		{A8B2D94C-8C2E-4AC5-875A-6E3540B56ADD} = {0B18646D-2848-4CED-84C5-3C8EB9ACFE9E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.TransientFaultHandling.6.0.1304.0\lib\portable-net45+win+wp8;packages\EnterpriseLibrary.TransientFaultHandling.Data.6.0.1304.1\lib\NET45;ng.6.0.1304.0\lib\portable-net45+win+wp8;ng.Data.6.0.1304.1\lib\NET45;packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45

@@ -99,11 +99,19 @@ function Install-Packages()
 		
 	Write-Log  "Copying Other ReffApp Features...."
 	Robocopy $genericRefAppPackagesFolder $dstFolder "Orckestra.Composer.C1CMS.Queries.zip" /MIR /NJH /NDL /NFL /NS /NC /NP /NJS
+	Robocopy $genericRefAppPackagesFolder $dstFolder "Orckestra.Composer.SEO.Organization.zip" /MIR /NJH /NDL /NFL /NS /NC /NP /NJS
 	
 	RestartingIIS 
 	AccessHomePage 
 	
+	Write-Log  "Install Page Contents...."
 	Install-ContentPackages
+	
+	Write-Log  "Install Features Default Contents...."
+	Robocopy $genericRefAppPackagesFolder $dstFolder "Orckestra.Composer.SEO.Organization.Content.zip" /MIR /NJH /NDL /NFL /NS /NC /NP /NJS
+	RestartingIIS 
+	AccessHomePage 
+	
 			
 	Write-Log ACTION "Repackaging site as CD deployment package..."
 	iisreset /stop

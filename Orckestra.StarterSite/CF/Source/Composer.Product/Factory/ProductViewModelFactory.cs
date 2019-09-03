@@ -146,6 +146,8 @@ namespace Orckestra.Composer.Product.Factory
                 displayName = param.Product.DisplayName.GetLocalizedValue(param.CultureInfo.Name);
             }
 
+            productDetailViewModel.Price = param.Product.ListPrice;
+
             productDetailViewModel.ProductDetailUrl = ProductUrlProvider.GetProductUrl(new GetProductUrlParam
             {                
                 CultureInfo = param.CultureInfo,

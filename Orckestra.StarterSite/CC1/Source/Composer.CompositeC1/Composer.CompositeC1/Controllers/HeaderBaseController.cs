@@ -85,7 +85,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         private string BuildUrl(CultureInfo culture)
         {
             var pageId = SitemapNavigator.CurrentPageId;
-            var pageUrl = PageService.GetRendererPageUrl(pageId, culture);
+            var pageUrl = PageService.GetPageUrl(pageId, culture);
 
             if(pageUrl == null) { return null; }
 

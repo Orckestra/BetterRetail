@@ -128,6 +128,8 @@ Task CC1_Compile-CorePackage {
 	Complete-RobocopyExecution($LASTEXITCODE)
 	Robocopy (Join-Path $Build.CC1.WebProjectPath 'UI.Package') $corePackagePath\UI.Package /E /NJH /NDL /NS /NC /NP | Write-Verbose
 	Complete-RobocopyExecution($LASTEXITCODE)
+	Robocopy (Join-Path $Build.CC1.WebProjectPath 'Views') $corePackagePath\Views /E /NJH /NDL /NS /NC /NP | Write-Verbose
+	Complete-RobocopyExecution($LASTEXITCODE)
 	
 	Complete-RobocopyExecution($LASTEXITCODE)
 	
@@ -202,6 +204,14 @@ Task CC1_Copy-Packages{
 	
 	write-host "Copying Orckestra.Composer.C1CMS.Queries package file"
 	$sourse = Join-Path $Build.CC1.SourcePath 'Orckestra.Composer.C1CMS.Queries.Package\Release\Orckestra.Composer.C1CMS.Queries.zip'
+	copy $sourse $destinationPath
+	
+	write-host "Copying Orckestra.Composer.SEO.Organization package file"
+	$sourse = Join-Path $Build.CC1.SourcePath 'Orckestra.Composer.SEO.Organization\Release\Orckestra.Composer.SEO.Organization.zip'
+	copy $sourse $destinationPath
+	
+	write-host "Copying OOrckestra.Composer.SEO.Content Content package file"
+	$sourse = Join-Path $Build.CC1.SourcePath 'Orckestra.Composer.SEO.Content\Release\Orckestra.Composer.SEO.Organization.Content.zip'
 	copy $sourse $destinationPath
 	
 	write-host "Done"

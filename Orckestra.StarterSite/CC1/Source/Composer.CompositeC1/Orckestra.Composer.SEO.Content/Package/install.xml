@@ -1,0 +1,31 @@
+<?xml version="1.0" standalone="yes"?>
+<mi:PackageInstaller xmlns:mi="http://www.composite.net/ns/management/packageinstaller/1.0">
+	<mi:PackageRequirements minimumCompositeVersion="6.0.0.0" maximumCompositeVersion="9.9999.9999.9999" />
+	<mi:PackageInformation name="Orckestra.Composer.SEO.Organization.Content" groupName="Orckestra.Composer.SEO" version="1.0.0" author="Orckestra A/S" website="https://c1.orckestra.com/" readMoreUrl="-" id="93141e5a-bdfe-459f-a4b6-f2652a1fe4c4" canBeUninstalled="true" systemLocking="hard" flushOnCompletion="true" allowOverwrite="false">
+		<TechnicalDetails>-</TechnicalDetails>
+		<Description>-</Description>
+	</mi:PackageInformation>
+	<mi:PackageFragmentInstallerBinaries />
+	<mi:PackageFragmentInstallers>
+
+		<mi:Add installerType="Composite.Core.PackageSystem.PackageFragmentInstallers.DataPackageFragmentInstaller, Composite" uninstallerType="Composite.Core.PackageSystem.PackageFragmentInstallers.DataPackageFragmentUninstaller, Composite">
+      <Types>
+        <Type type="Composite.Data.Types.IPageMetaDataDefinition,Composite">
+          <Data dataScopeIdentifier="public" dataFilename="~\Datas\Composite.Data.Types.IPageMetaDataDefinitions_public.xml" />
+        </Type>
+        <Type  type="Orckestra.Composer.SEO.Organization">
+          <Data dataScopeIdentifier="administrated" locale="?" dataFilename="~\Datas\Orckestra.Composer.SEO.Organizations_administrated.xml" />
+        </Type>
+        <Type allowOverwrite="true" type="Composite.Data.Types.IPagePlaceholderContent,Composite">
+          <Data dataScopeIdentifier="administrated" locale="?" dataFilename="~\Datas\Composite.Data.Types.IPagePlaceholderContents_administrated.xml" />
+        </Type>
+        <Type allowOverwrite="true" type="Composite.Data.Types.IPagePlaceholderContent,Composite">
+          <Data dataScopeIdentifier="public" locale="?" dataFilename="~\Datas\Composite.Data.Types.IPagePlaceholderContents_public.xml" />
+        </Type>
+        <Type type="Orckestra.Composer.SEO.Organization">
+          <Data dataScopeIdentifier="public" locale="?" dataFilename="~\Datas\Orckestra.Composer.SEO.Organizations_public.xml" />
+        </Type>
+      </Types>
+		</mi:Add>
+	</mi:PackageFragmentInstallers>
+</mi:PackageInstaller>
