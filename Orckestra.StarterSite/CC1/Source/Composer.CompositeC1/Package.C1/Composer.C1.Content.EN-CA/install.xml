@@ -58,6 +58,13 @@
           <Data dataScopeIdentifier="public" locale="?" dataFilename="~\Datas\Composite.Data.Types.Navigation.NavigationElements.Footer_public.xml" />
           <Data dataScopeIdentifier="administrated" locale="?" dataFilename="~\Datas\Composite.Data.Types.Navigation.NavigationElements.Footer_public.xml" />
         </Type>
+
+        <Type type="Orckestra.ExperienceManagement.Configuration.DataTypes.ISiteConfiguration,Orckestra.ExperienceManagement.Configuration">
+          <Data dataScopeIdentifier="administrated" locale="?" dataFilename="~\Datas\Orckestra.ExperienceManagement.Configuration.DataTypes.ISiteConfigurations_administrated.xml" />
+        </Type>
+        <Type type="Orckestra.ExperienceManagement.Configuration.DataTypes.ISiteConfiguration,Orckestra.ExperienceManagement.Configuration">
+          <Data dataScopeIdentifier="public" locale="?" dataFilename="~\Datas\Orckestra.ExperienceManagement.Configuration.DataTypes.ISiteConfigurations_public.xml" />
+        </Type>
       </Types>
     </mi:Add>
   </mi:PackageFragmentInstallers>

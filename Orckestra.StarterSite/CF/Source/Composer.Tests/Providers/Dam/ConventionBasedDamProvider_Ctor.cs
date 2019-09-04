@@ -16,7 +16,7 @@ namespace Orckestra.Composer.Tests.Providers.Dam
 
 
             // Act
-            Action action = () => new ConventionBasedDamProvider(new CdnDamProviderSettings());
+            Action action = () => new ConventionBasedDamProvider();
 
             // Assert
             action.ShouldNotThrow();

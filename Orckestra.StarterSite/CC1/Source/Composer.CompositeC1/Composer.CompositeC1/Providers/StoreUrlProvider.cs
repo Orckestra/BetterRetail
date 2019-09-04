@@ -58,6 +58,10 @@ namespace Orckestra.Composer.CompositeC1.Providers
             using (ThreadDataManager.EnsureInitialize())
             {
                 var url = PageService.GetPageUrl(PagesConfiguration.StoreListPageId, parameters.CultureInfo);
+                if(string.IsNullOrEmpty(url)) {
+                    Log.LogError("StoreUrlProvider", "StoreList PageId is not configured");
+                    return string.Empty;
+                }
                 var urlBuilder = new UrlBuilder(url);
                 return urlBuilder.ToString();
             }

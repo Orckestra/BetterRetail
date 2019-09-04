@@ -1,4 +1,5 @@
 ﻿using Composite.Core.Logging;
+using Composite.Core.Routing;
 using Orckestra.Composer.CompositeC1.Services;
 using Orckestra.Composer.Utils;
 using Orckestra.ExperienceManagement.Configuration;
@@ -36,7 +37,6 @@ namespace Orckestra.Composer.CompositeC1
             var url = context.Request.Url;
 
             var urlPathSegments = url.Segments.Skip(1).Select(s => s.TrimEnd('/')).ToList(); //always skip the first segment, since it's always the first dash
-
             var newUrl = string.Empty;
 
             try
@@ -52,12 +52,14 @@ namespace Orckestra.Composer.CompositeC1
                  * that the culture is always passed as the first parameters in URL.
                  * This assumption is based on the ProductUrlProvider and StoreUrlProvider classes, which are responsbile for building these URLs.
                  * */
-                PagesConfiguration = SiteConfiguration.GetPagesConfiguration();
+                
                 int pathPatternIndex = -1;
                 if ((pathPatternIndex = GetUrlPathIndexForSpecificPagePattern(urlPathSegments, ProductUrlPathIndicatorRegex)) > -1)
                 {
-                    CultureInfo urlCulture = GetCultureFromUrlPath(urlPathSegments);
-                    var productPageUrl = _pageService.GetPageUrl(PagesConfiguration.ProductPageId, urlCulture);
+                    var pageUrlData = GetPageUrldata(url);
+                    PagesConfiguration = SiteConfiguration.GetPagesConfiguration(pageUrlData.LocalizationScope, pageUrlData.PageId);
+
+                     var productPageUrl = _pageService.GetPageUrl(PagesConfiguration.ProductPageId, pageUrlData.LocalizationScope);
 
                     string productId = urlPathSegments.ElementAtOrDefault(pathPatternIndex + 1); //product Id is always in the path after the product path indicator
                     string variantId = urlPathSegments.ElementAtOrDefault(pathPatternIndex + 2); //variant Id is always in the path after the product id
@@ -70,8 +72,10 @@ namespace Orckestra.Composer.CompositeC1
                 }
                 else if ((pathPatternIndex = GetUrlPathIndexForSpecificPagePattern(urlPathSegments, StoreUrlPathIndicatorRegex)) > -1)
                 {
-                    CultureInfo urlCulture = GetCultureFromUrlPath(urlPathSegments);
-                    var storePageUrl = _pageService.GetPageUrl(PagesConfiguration.StorePageId, urlCulture);
+                    var pageUrlData = GetPageUrldata(url);
+                    PagesConfiguration = SiteConfiguration.GetPagesConfiguration(pageUrlData.LocalizationScope, pageUrlData.PageId);
+
+                    var storePageUrl = _pageService.GetPageUrl(PagesConfiguration.StorePageId, pageUrlData.LocalizationScope);
 
                     string storeNumber = urlPathSegments.ElementAtOrDefault(pathPatternIndex + 1);
 
@@ -92,6 +96,19 @@ namespace Orckestra.Composer.CompositeC1
 
             if (!string.IsNullOrEmpty(newUrl))
                 context.RewritePath(newUrl);
+        }
+
+        private static PageUrlData GetPageUrldata(Uri url)
+        {
+            PageUrlData pageUrlData = null;
+            var urlStr = url.ToString();
+            while (pageUrlData == null && urlStr.LastIndexOf('/') > 0)
+            {
+                urlStr = urlStr.Substring(0, urlStr.LastIndexOf('/'));
+                pageUrlData = PageUrls.ParseUrl(urlStr.ToString());
+            }
+
+            return pageUrlData;
         }
 
         /// <summary>

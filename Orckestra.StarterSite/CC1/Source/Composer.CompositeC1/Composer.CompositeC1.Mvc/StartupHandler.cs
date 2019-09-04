@@ -19,6 +19,9 @@ using System.Web.Hosting;
 using System.Web.Mvc;
 using Composite.Data;
 using Orckestra.ExperienceManagement.Configuration.DataTypes;
+using Microsoft.Extensions.DependencyInjection;
+using Orckestra.Composer.Services;
+using Autofac.Integration.Mvc;
 
 namespace Orckestra.Composer.CompositeC1.Mvc
 {
@@ -246,6 +249,13 @@ namespace Orckestra.Composer.CompositeC1.Mvc
         private static void SetUpSearchConfiguration()
         {
             SearchConfiguration.ShowAllPages = true;
+        }
+
+        public static void ConfigureServices(IServiceCollection collection)
+        {
+            collection.AddScoped(
+                p => (IComposerContext)AutofacDependencyResolver.Current.GetService(typeof(IComposerContext)));
+          
         }
     }
 }

@@ -7,6 +7,7 @@ using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Checkout;
+using Orckestra.Composer.Services;
 using Orckestra.ExperienceManagement.Configuration;
 using Orckestra.Overture.Caching;
 
@@ -16,17 +17,17 @@ namespace Orckestra.Composer.CompositeC1.Providers
     {
         protected IPageService PageService { get; private set; }
         protected ICacheProvider CacheProvider { get; private set; }
+        protected IComposerContext ComposerContext { get; private set; }
 
-        protected PagesConfiguration PagesConfiguration { get; private set; }
-
-        public CartUrlProvider(IPageService pageService, ICacheProvider cacheProvider)
+        public CartUrlProvider(IPageService pageService, ICacheProvider cacheProvider, IComposerContext composerContext)
         {
             if (pageService == null) { throw new ArgumentNullException("pageService"); }
             if (cacheProvider == null) { throw new ArgumentNullException("cacheProvider"); }
 
             PageService = pageService;
             CacheProvider = cacheProvider;
-            PagesConfiguration = SiteConfiguration.GetPagesConfiguration();
+            ComposerContext = composerContext;
+          
         }
 
         public string GetCartUrl(GetCartUrlParam parameters)
@@ -34,7 +35,8 @@ namespace Orckestra.Composer.CompositeC1.Providers
             if (parameters == null) { throw new ArgumentNullException("parameters"); }
             if (parameters.CultureInfo == null) { throw new ArgumentException("parameters.CultureInfo is required", "parameters"); }
 
-            return PageService.GetPageUrl(PagesConfiguration.CartPageId, parameters.CultureInfo);
+            var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(parameters.CultureInfo, ComposerContext.WebsiteId);
+            return PageService.GetPageUrl(pagesConfiguration.CartPageId, parameters.CultureInfo);
         }
 
         public string GetCheckoutSignInUrl(GetCartUrlParam parameters)
@@ -42,7 +44,8 @@ namespace Orckestra.Composer.CompositeC1.Providers
             if (parameters == null) { throw new ArgumentNullException("parameters"); }
             if (parameters.CultureInfo == null) { throw new ArgumentException("parameters.CultureInfo is required", "parameters"); }
 
-            var signInPath = PageService.GetPageUrl(PagesConfiguration.CheckoutSignInPageId, parameters.CultureInfo);
+            var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(parameters.CultureInfo, ComposerContext.WebsiteId);
+            var signInPath = PageService.GetPageUrl(pagesConfiguration.CheckoutSignInPageId, parameters.CultureInfo);
 
             if (string.IsNullOrWhiteSpace(parameters.ReturnUrl))
             {
@@ -115,7 +118,8 @@ namespace Orckestra.Composer.CompositeC1.Providers
         {
             if (param == null) { throw new ArgumentNullException("param"); }
 
-            var url = PageService.GetPageUrl(PagesConfiguration.CheckoutAddAddressPageId, param.CultureInfo);
+            var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(param.CultureInfo, ComposerContext.WebsiteId);
+            var url = PageService.GetPageUrl(pagesConfiguration.CheckoutAddAddressPageId, param.CultureInfo);
             return UrlProviderHelper.BuildUrlWithParams(url, param.ReturnUrl);
         }
 
@@ -123,7 +127,8 @@ namespace Orckestra.Composer.CompositeC1.Providers
         {
             if (param == null) { throw new ArgumentNullException("param"); }
 
-            var url = PageService.GetPageUrl(PagesConfiguration.CheckoutUpdateAddressPageId, param.CultureInfo);
+            var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(param.CultureInfo, ComposerContext.WebsiteId);
+            var url = PageService.GetPageUrl(pagesConfiguration.CheckoutUpdateAddressPageId, param.CultureInfo);
             return UrlProviderHelper.BuildUrlWithParams(url, param.ReturnUrl);
         }
 
@@ -131,7 +136,11 @@ namespace Orckestra.Composer.CompositeC1.Providers
         {
             if (param == null) { throw new ArgumentNullException("param"); }
 
-            var url = PageService.GetPageUrl(PagesConfiguration.HomePageId, param.CultureInfo);
+             var url = PageService.GetPageUrl(ComposerContext.WebsiteId, param.CultureInfo);
+            ///TODO - fix this
+            if (string.IsNullOrWhiteSpace(url))
+                return url;
+
             return UrlProviderHelper.BuildUrlWithParams(url, param.ReturnUrl);
         }
     }

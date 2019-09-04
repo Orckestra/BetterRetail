@@ -104,6 +104,30 @@ namespace Orckestra.Composer.Services
         }
         private string _scope = null;
 
+        public virtual Guid WebsiteId
+        {
+            get
+            {
+                if (_websiteId == Guid.Empty)
+                {
+                    ComposerCookieDto dto = _cookieAccessor.Read();
+                    _websiteId = dto.WebsiteId;
+                }
+
+                return _websiteId;
+            }
+            set
+            {
+                _websiteId = value;
+
+                ComposerCookieDto dto = _cookieAccessor.Read();
+                dto.WebsiteId = _websiteId;
+                _cookieAccessor.Write(dto);
+            }
+        }
+        private Guid _websiteId  = Guid.Empty;
+
+
         /// <summary>
         /// Get the currently connected CustomerID
         /// this info is found in the PayloadCookie

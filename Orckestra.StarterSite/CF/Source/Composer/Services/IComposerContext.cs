@@ -7,6 +7,7 @@ namespace Orckestra.Composer.Services
     {
         CultureInfo CultureInfo { get; set; }
         string Scope { get; set; }
+        Guid WebsiteId { get; set; }
         Guid CustomerId { get; set; }
         bool IsGuest { get; set; }
         string CountryCode { get; }
