@@ -114,7 +114,9 @@
     <Content Include="Composer.C1.Core\Datas\Composite.Data.Types.IPageTypeTreeLink_public.xml" />
     <Content Include="Composer.C1.Core\Datas\Composite.Data.Types.ISystemActiveLocale_public.xml" />
     <Content Include="Composer.C1.Core\Datas\Orckestra.ExperienceManagement.Configuration.DataTypes.ISiteConfigurations_administrated.xml" />
-    <Content Include="Composer.C1.Core\Datas\Orckestra.ExperienceManagement.Configuration.DataTypes.ISiteConfigurations_public.xml" />
+    <Content Include="Composer.C1.Core\Datas\Orckestra.ExperienceManagement.Configuration.DataTypes.ISiteConfigurations_public.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Composer.C1.Core\install.xml">
       <SubType>Designer</SubType>
     </Content>

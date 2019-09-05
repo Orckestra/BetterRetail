@@ -70,18 +70,6 @@ namespace Orckestra.Composer.CompositeC1.Services
             return url;
         }
 
-        public virtual Guid GetCurrentHomePageId() {
-            PageUrlData pageUrlData = null;
-            var url = System.Web.HttpContext.Current.Request.Url.ToString();
-            while (pageUrlData == null && url.LastIndexOf('/') > 0)
-            {
-                url = url.Substring(0, url.LastIndexOf('/'));
-                pageUrlData = PageUrls.ParseUrl(url.ToString());
-            }
-
-            return pageUrlData.PageId;
-        }
-
         public virtual List<CheckoutStepInfoPage> GetCheckoutStepPages(CultureInfo cultureInfo = null)
         {
             using (DataConnection connection = new DataConnection(cultureInfo))

@@ -8,7 +8,6 @@ namespace Orckestra.Composer.CompositeC1.Services
 {
     public interface IPageService
     {
-        Guid GetCurrentHomePageId();
         IPage GetPage(Guid pageId, CultureInfo cultureInfo = null);
 
         Guid GetParentPageId(IPage page);
