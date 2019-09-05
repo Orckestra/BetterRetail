@@ -72,6 +72,9 @@
     </mi:Add>
     <mi:Add installerType="Composite.Core.PackageSystem.PackageFragmentInstallers.DataPackageFragmentInstaller, Composite" uninstallerType="Composite.Core.PackageSystem.PackageFragmentInstallers.DataPackageFragmentUninstaller, Composite">
       <Types>
+        <Type type="Composite.Data.Types.ICompositionContainer,Composite">
+          <Data dataScopeIdentifier="public" dataFilename="~\Datas\Composite.Data.Types.ICompositionContainers_public.xml" />
+        </Type>
         <Type type="Composite.Data.Types.IMediaFileData,Composite">
           <Data dataScopeIdentifier="public" dataFilename="~\Datas\Composite.Data.Types.IMediaFileDatas_public.xml" />
         </Type>
@@ -96,9 +99,7 @@
         <Type type="Composite.Data.Types.IDataItemTreeAttachmentPoint,Composite">
           <Data dataScopeIdentifier="public" dataFilename="~\Datas\Composite.Data.Types.IPageTypeTreeLink_public.xml" />
         </Type>
-        <Type type="Composite.Data.Types.ICompositionContainer,Composite">
-          <Data dataScopeIdentifier="public" dataFilename="~\Datas\Composite.Data.Types.ICompositionContainers_public.xml" />
-        </Type>
+
       </Types>
     </mi:Add>
     <mi:Add installerType="Orckestra.Composer.CompositeC1.Installers.ComposerFragmentInstaller, Orckestra.Composer.CompositeC1" uninstallerType="Orckestra.Composer.CompositeC1.Installers.ComposerFragmentUninstaller, Orckestra.Composer.CompositeC1" />
