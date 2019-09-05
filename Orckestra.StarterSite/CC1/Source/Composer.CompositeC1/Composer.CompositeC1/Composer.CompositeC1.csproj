@@ -318,7 +318,6 @@
     <Compile Include="Media\ImageInfo.cs" />
     <Compile Include="Pages\CategoryPages.cs" />
     <Compile Include="Pages\CheckoutStepInfoPage.cs" />
-    <Compile Include="Pages\ComposerImage.cs" />
     <Compile Include="Pages\ComposerPage.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

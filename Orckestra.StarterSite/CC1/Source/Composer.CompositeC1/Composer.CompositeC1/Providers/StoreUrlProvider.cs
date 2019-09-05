@@ -5,6 +5,7 @@ using Composite.Core;
 using Composite.Core.Threading;
 using Orckestra.Composer.CompositeC1.Services;
 using Orckestra.Composer.Providers;
+using Orckestra.Composer.Services;
 using Orckestra.Composer.Store.Parameters;
 using Orckestra.Composer.Store.Providers;
 using Orckestra.Composer.Utils;
@@ -18,16 +19,16 @@ namespace Orckestra.Composer.CompositeC1.Providers
         protected const string ResourceCategory = "Store";
         protected ILocalizationProvider LocalizationProvider { get; private set; }
         protected IPageService PageService { get; private set; }
-        protected PagesConfiguration PagesConfiguration;
+        protected IComposerContext ComposerContext { get; private set; }
 
-        public StoreUrlProvider(ILocalizationProvider localizationProvider, IPageService pageService)
+        public StoreUrlProvider(ILocalizationProvider localizationProvider, IPageService pageService, IComposerContext composerContext)
         {
             if (localizationProvider == null) { throw new ArgumentNullException("localizationProvider"); }
             if (pageService == null) { throw new ArgumentNullException("pageService"); }
 
             LocalizationProvider = localizationProvider;
             PageService = pageService;
-            PagesConfiguration = SiteConfiguration.GetPagesConfiguration();
+            ComposerContext = composerContext;
         }
 
         public void RegisterRoutes(RouteCollection routeCollection)
@@ -35,14 +36,15 @@ namespace Orckestra.Composer.CompositeC1.Providers
             //
         }
 
-        public string GetStoreUrl(GetStoreUrlParam parameters)
+        public virtual string GetStoreUrl(GetStoreUrlParam parameters)
         {
             Assert(parameters);
             // Because of ConfigureAwait(false), we lost context here.
             // Therefore we need to re-initialize C1 context because getting the Url.
             using (ThreadDataManager.EnsureInitialize())
             {
-                var baseUrl = PageService.GetPageUrl(PagesConfiguration.StoreListPageId, parameters.CultureInfo);
+                var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(parameters.CultureInfo, ComposerContext.WebsiteId);
+                var baseUrl = PageService.GetPageUrl(pagesConfiguration.StoreListPageId, parameters.CultureInfo);
                 var url = string.Format(UrlTemplate, baseUrl, UrlFormatter.Format(parameters.StoreName), parameters.StoreNumber);
                 var uri = new Uri(
                     new Uri(parameters.BaseUrl, UriKind.Absolute),
@@ -53,11 +55,12 @@ namespace Orckestra.Composer.CompositeC1.Providers
             }
         }
 
-        public string GetStoreLocatorUrl(GetStoreLocatorUrlParam parameters)
+        public virtual string GetStoreLocatorUrl(GetStoreLocatorUrlParam parameters)
         {
             using (ThreadDataManager.EnsureInitialize())
             {
-                var url = PageService.GetPageUrl(PagesConfiguration.StoreListPageId, parameters.CultureInfo);
+                var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(parameters.CultureInfo, ComposerContext.WebsiteId);
+                var url = PageService.GetPageUrl(pagesConfiguration.StoreListPageId, parameters.CultureInfo);
                 if(string.IsNullOrEmpty(url)) {
                     Log.LogError("StoreUrlProvider", "StoreList PageId is not configured");
                     return string.Empty;
@@ -67,11 +70,12 @@ namespace Orckestra.Composer.CompositeC1.Providers
             }
         }
 
-        public string GetStoresDirectoryUrl(GetStoresDirectoryUrlParam parameters)
+        public virtual string GetStoresDirectoryUrl(GetStoresDirectoryUrlParam parameters)
         {
             using (ThreadDataManager.EnsureInitialize())
             {
-                var url = PageService.GetPageUrl(PagesConfiguration.StoreDirectoryPageId, parameters.CultureInfo);
+                var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(parameters.CultureInfo, ComposerContext.WebsiteId);
+                var url = PageService.GetPageUrl(pagesConfiguration.StoreDirectoryPageId, parameters.CultureInfo);
                 var urlBuilder = new UrlBuilder(url);
                 var queryString = new NameValueCollection();
                 if (parameters.Page != 1)

@@ -12,7 +12,8 @@ namespace Orckestra.Composer.CompositeC1
 
         public CustomPageNotFoundRouteHandler()
         {
-            PageNotFoundUrlProvider = ComposerHost.Current.Resolve<IPageNotFoundUrlProvider>();
+
+             PageNotFoundUrlProvider = ComposerHost.Current.Resolve<IPageNotFoundUrlProvider>();
         }
 
         public IHttpHandler GetHttpHandler(RequestContext requestContext)

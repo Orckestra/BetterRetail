@@ -49,9 +49,7 @@
         <File sourceFilename="~\Bin\Orckestra.Composer.Store.dll" targetFilename="~\Bin\Orckestra.Composer.Store.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Orckestra.Composer.CompositeC1.Mvc.dll" targetFilename="~\Bin\Orckestra.Composer.CompositeC1.Mvc.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Orckestra.Composer.CompositeC1.dll" targetFilename="~\Bin\Orckestra.Composer.CompositeC1.dll" allowOverwrite="true" />
-        <File sourceFilename="~\Bin\Orckestra.Composer.CompositeC1.Azure.dll" targetFilename="~\Bin\Orckestra.Composer.CompositeC1.Azure.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Orckestra.Composer.CompositeC1.DataTypes.dll" targetFilename="~\Bin\Orckestra.Composer.CompositeC1.DataTypes.dll" allowOverwrite="true" />
-        <File sourceFilename="~\Bin\Orckestra.ExperienceManagement.DataTypes.dll" targetFilename="~\Bin\Orckestra.ExperienceManagement.DataTypes.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Newtonsoft.Json.dll" targetFilename="~\Bin\Newtonsoft.Json.dll" allowOverwrite="true" addAssemblyBinding="true"/>
       </Files>
     </mi:Add>

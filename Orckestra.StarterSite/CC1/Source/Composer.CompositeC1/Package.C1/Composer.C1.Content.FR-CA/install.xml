@@ -16,9 +16,7 @@
         <Type type="Composite.Data.Types.IPage,Composite">
           <Data dataScopeIdentifier="public" locale="fr-CA" dataFilename="~\Datas\Composite.Data.Types.IPages_public.xml" />
         </Type>
-        <Type type="Orckestra.Composer.CompositeC1.Pages.ComposerImage,Orckestra.Composer.CompositeC1">
-          <Data dataScopeIdentifier="public" locale="fr-CA" dataFilename="~\Datas\Orckestra.Composer.CompositeC1.Pages.ComposerImages_public.xml" />
-        </Type>
+
         <Type type="Composite.Data.Types.IPagePlaceholderContent,Composite">
           <Data dataScopeIdentifier="administrated" locale="fr-CA" dataFilename="~\Datas\Composite.Data.Types.IPagePlaceholderContents_administrated.xml" />
         </Type>
