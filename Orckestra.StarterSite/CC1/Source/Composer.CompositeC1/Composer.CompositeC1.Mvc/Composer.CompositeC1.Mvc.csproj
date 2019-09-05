@@ -339,6 +339,7 @@
     <Content Include="App_Data\Razor\Composer\Footer.cshtml" />
     <Content Include="App_Data\Razor\Composer\Social\IconLinks.cshtml" />
     <Content Include="App_Data\Razor\Composer\Analytics\GTMAnalytics.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Layout\Cookies.cshtml" />
     <None Include="Properties\PublishProfiles\Website - CD.pubxml" />
     <None Include="Properties\PublishProfiles\Website.pubxml" />
     <Content Include="ViewModelAsExtensionModelTemplate.tt">
