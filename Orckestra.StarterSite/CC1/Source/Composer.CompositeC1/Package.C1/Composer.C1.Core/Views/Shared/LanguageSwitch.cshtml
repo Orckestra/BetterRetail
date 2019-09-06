@@ -1,0 +1,47 @@
+﻿@model Orckestra.Composer.ViewModels.LanguageSwitch.LanguageSwitchViewModel
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<head>
+    @* SEO Alternate Hreflang Tags *@
+    @if (Model.IsMultiLanguage)
+    {
+        foreach (var item in Model.Entries)
+        {
+            if (!item.IsCurrent)
+            {
+                <link rel="alternate" hreflang="@item.CultureName.ToLower()" href="@(string.Format("{0}{1}", HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority), item.Url))" />
+            }
+        }
+    }
+</head>
+<body>
+    @if (Model.IsMultiLanguage)
+    {
+        <ul class="nav navbar-nav  pull-xs-left  pull-sm-left">
+            <li class="dropdown" data-oc-controller="General.LanguageSwitch" role="region" aria-label="Language selector">
+                <a href="@Model.CurrentLanguage.Url"
+                   data-qa="language-selector"
+                   class="text-uppercase" data-toggle="dropdown">@Model.CurrentLanguage.ShortDisplayName
+                        <span class="sr-only">@Model.CurrentLanguage.DisplayName</span>
+                </a>
+                <ul class="dropdown-menu">
+                    @{
+                        var index = 0;
+                        foreach (var item in Model.Entries)
+                        {
+                            <li class="@(item.IsCurrent ? "active" : null)">
+                                <a data-oc-click="onLanguageSwitch"
+                                   href="@item.Url"
+                                   data-qa="language-value-@index"
+                                   aria-selected="@(item.IsCurrent ? "true" : null)">@item.DisplayName</a>
+                            </li>
+                            index++;
+                        }
+                    }
+
+                </ul>
+            </li>
+        </ul>
+    }
+</body>
+</html>

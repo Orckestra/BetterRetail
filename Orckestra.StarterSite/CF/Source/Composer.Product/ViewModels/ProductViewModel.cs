@@ -31,6 +31,8 @@ namespace Orckestra.Composer.Product.ViewModels
         [Formatting("General", "PriceFormat")]
         public string ListPrice { get; set; }
 
+        public decimal? Price { get; set; }
+
         public string DefinitionName { get; set; }
 
         public string ProductDetailUrl { get; set; }

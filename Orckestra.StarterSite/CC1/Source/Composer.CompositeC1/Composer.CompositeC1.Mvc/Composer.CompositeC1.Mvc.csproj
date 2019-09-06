@@ -358,6 +358,9 @@
     </Content>
     <Content Include="Views\Footer\FollowUs.cshtml" />
     <Content Include="Views\web.config" />
+    <Content Include="Views\Product\ProductSEO.cshtml" />
+    <Content Include="Views\Shared\PageHeader.cshtml" />
+    <Content Include="Views\Shared\LanguageSwitch.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Solution Items\SharedAssemblyInfo.cs">
@@ -411,10 +414,7 @@
       <Name>Composer.CompositeC1</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Views\ProductSet\" />
-    <Folder Include="Views\SearchQuery\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
