@@ -128,7 +128,8 @@ namespace Orckestra.Composer.Cart.Services
             {
                 WishList = wishList,
                 CultureInfo = param.CultureInfo,
-                BaseUrl = param.BaseUrl
+                BaseUrl = param.BaseUrl,
+                WebsiteId = param.WebsiteId
             });
         }
 
@@ -159,7 +160,8 @@ namespace Orckestra.Composer.Cart.Services
             var getUrlParam = new GetWishListUrlParam
             {
                 BaseUrl = param.BaseUrl,
-                CultureInfo = param.CultureInfo
+                CultureInfo = param.CultureInfo,
+                WebsiteId = param.WebsiteId
             };
             viewModel.SignInUrl = WishListUrlProvider.GetSignInUrl(getUrlParam);
             viewModel.ShareUrl = viewModel.TotalQuantity == 0 ? string.Empty: WishListUrlProvider.GetShareUrl(new GetShareWishListUrlParam
@@ -167,7 +169,8 @@ namespace Orckestra.Composer.Cart.Services
                 BaseUrl = param.BaseUrl,
                 CultureInfo = param.CultureInfo,
                 CustomerId = param.WishList.CustomerId,
-                Scope = param.WishList.ScopeId
+                Scope = param.WishList.ScopeId,
+                WebsiteId = param.WebsiteId
             });
 
             return viewModel;

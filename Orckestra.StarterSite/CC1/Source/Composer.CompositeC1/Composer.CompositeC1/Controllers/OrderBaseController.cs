@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Specialized;
 using System.Web.Mvc;
+using Composite.Data;
 using Orckestra.Composer.Cart.Parameters.Order;
 using Orckestra.Composer.Cart.Services.Order;
 using Orckestra.Composer.Cart.Utils;
@@ -45,7 +46,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         {
             var orderToken = string.IsNullOrWhiteSpace(token) ? null : GuestOrderTokenizer.DecypherOrderToken(token);
 
-            var findMyOrderUrl = OrderUrlProvider.GetFindMyOrderUrl(ComposerContext.CultureInfo);
+            var findMyOrderUrl = OrderUrlProvider.GetFindMyOrderUrl(ComposerContext.CultureInfo, SitemapNavigator.CurrentHomePageId);
 
             OrderDetailViewModel orderDetailViewModel = null;
 

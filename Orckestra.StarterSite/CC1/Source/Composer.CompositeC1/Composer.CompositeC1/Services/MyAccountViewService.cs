@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Composite.Data;
 using Orckestra.Composer.Cart.Parameters.WishList;
 using Orckestra.Composer.Cart.Providers.WishList;
 using Orckestra.Composer.Parameters;
@@ -40,8 +41,13 @@ namespace Orckestra.Composer.CompositeC1.Services
 
         public virtual MenuViewModel CreateMenu(string currentUrl)
         {
-            var myAccountUrl = MyAccountUrlProvider.GetMyAccountUrl(new GetMyAccountUrlParam { CultureInfo = ComposerContext.CultureInfo });
-            var addressListUrl = MyAccountUrlProvider.GetAddressListUrl(new GetMyAccountUrlParam { CultureInfo = ComposerContext.CultureInfo });
+            var urlParam = new BaseUrlParameter
+            {
+                CultureInfo = ComposerContext.CultureInfo,
+                WebsiteId = SitemapNavigator.CurrentHomePageId
+            };
+            var myAccountUrl = MyAccountUrlProvider.GetMyAccountUrl(urlParam);
+            var addressListUrl = MyAccountUrlProvider.GetAddressListUrl(urlParam);
             var myOrderHistoryUrl = OrderUrlProvider.GetOrderHistoryUrl(new GetOrderUrlParameter { CultureInfo = ComposerContext.CultureInfo });
             var myWishListUrl = WishListUrlProvider.GetWishListUrl(new GetWishListUrlParam {CultureInfo = ComposerContext.CultureInfo});
 

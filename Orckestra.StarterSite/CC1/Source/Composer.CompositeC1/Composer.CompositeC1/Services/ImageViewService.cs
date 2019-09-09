@@ -19,11 +19,12 @@ namespace Orckestra.Composer.CompositeC1.Services
             ComposerContext = composerContext;
         }
 
-        public virtual ImageViewModel GetCheckoutTrustImageViewModel(CultureInfo cultureInfo)
+        public virtual ImageViewModel GetCheckoutTrustImageViewModel(CultureInfo cultureInfo, Guid websiteId)
         {
             if (cultureInfo == null) { throw new ArgumentNullException("cultureInfo"); }
+            if (websiteId == null) { throw new ArgumentNullException("websiteId"); }
 
-            var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(cultureInfo, ComposerContext.WebsiteId);
+            var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(cultureInfo, websiteId);
             var imageInfo = MediaService.GetImageInfo(pagesConfiguration.CreditCardsTrustIconId, cultureInfo);
 
             return new ImageViewModel

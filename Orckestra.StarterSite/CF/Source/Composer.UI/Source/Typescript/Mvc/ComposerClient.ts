@@ -40,7 +40,8 @@ module Orckestra.Composer {
                 method: method,
                 url: url,
                 headers: {
-                    'Accept-Language': this.getPageCulture()
+                    'Accept-Language': this.getPageCulture(),
+                    'WebsiteId': this.getWebsiteId()
                 }
             };
 
@@ -55,6 +56,16 @@ module Orckestra.Composer {
             }
 
             return culture;
+        }
+
+        private static getWebsiteId(): string {
+
+            var websiteId: string = $('html').data('website');
+            if (!websiteId) {
+                throw new Error('No websiteId was found on the <html> element. Please make sure it is included.');
+            }
+
+            return websiteId;
         }
 
         private static onRequestRejected(reason: any): void {

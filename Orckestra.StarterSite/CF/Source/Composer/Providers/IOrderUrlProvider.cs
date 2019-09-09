@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using Orckestra.Composer.Parameters;
 
 namespace Orckestra.Composer.Providers
@@ -11,7 +12,7 @@ namespace Orckestra.Composer.Providers
         /// <param name="cultureInfo">The culture info</param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentNullException">param</exception>
-        string GetOrderDetailsBaseUrl(CultureInfo cultureInfo);
+        string GetOrderDetailsBaseUrl(CultureInfo cultureInfo, Guid websiteId);
 
         /// <summary>
         /// Get the order history URL
@@ -26,7 +27,7 @@ namespace Orckestra.Composer.Providers
         /// <param name="cultureInfo">The culture info</param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentNullException">param</exception>
-        string GetGuestOrderDetailsUrl(CultureInfo cultureInfo);
+        string GetGuestOrderDetailsUrl(CultureInfo cultureInfo, Guid websiteId);
 
         /// <summary>
         /// Gets the find my order URL.
@@ -34,6 +35,6 @@ namespace Orckestra.Composer.Providers
         /// <param name="cultureInfo">The culture info</param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentNullException">param</exception>
-        string GetFindMyOrderUrl(CultureInfo cultureInfo);
+        string GetFindMyOrderUrl(CultureInfo cultureInfo, Guid websiteId);
     }
 }

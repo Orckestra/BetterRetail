@@ -1,7 +1,5 @@
-﻿using System;
-using System.Threading.Tasks;
-using System.Web.Mvc;
-using Composite.Core.Xml;
+﻿using Composite.Core.Xml;
+using Composite.Data;
 using Orckestra.Composer.Cart;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Parameters.WishList;
@@ -16,6 +14,8 @@ using Orckestra.Composer.Providers;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Services.Breadcrumb;
 using Orckestra.Composer.Utils;
+using System;
+using System.Web.Mvc;
 
 namespace Orckestra.Composer.CompositeC1.Controllers
 {
@@ -59,7 +59,8 @@ namespace Orckestra.Composer.CompositeC1.Controllers
                 Url = WishListUrlProvider.GetWishListUrl(new GetWishListUrlParam
                 {
                     CultureInfo = ComposerContext.CultureInfo,
-                    BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
+                    BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
+                    WebsiteId = SitemapNavigator.CurrentHomePageId
                 })
             };
 

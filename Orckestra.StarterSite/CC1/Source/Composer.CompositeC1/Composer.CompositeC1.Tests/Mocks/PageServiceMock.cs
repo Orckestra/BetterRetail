@@ -46,12 +46,17 @@ namespace Orckestra.Composer.CompositeC1.Tests.Mocks
             return pageMock?.Url;
         }
 
-        public List<CheckoutStepInfoPage> GetCheckoutStepPages(CultureInfo cultureInfo = null)
+        public List<string> GetCheckoutStepPages(Guid homepageId, CultureInfo cultureInfo = null)
         {
             throw new NotImplementedException();
         }
 
-        public CheckoutStepInfoPage GetCheckoutStepPage(Guid pageId, CultureInfo cultureInfo = null)
+        public List<string> GetCheckoutNavigationPages(Guid homepageId, CultureInfo cultureInfo = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int GetCheckoutStepPageNumber(Guid currentHomePageId, Guid pageId, CultureInfo cultureInfo = null)
         {
             throw new NotImplementedException();
         }

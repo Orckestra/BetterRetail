@@ -10,6 +10,7 @@ using Orckestra.Composer.Providers;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Utils;
 using Orckestra.Composer.WebAPIFilters;
+using Orckestra.ExperienceManagement.Configuration;
 
 namespace Orckestra.Composer.Cart.Api
 {
@@ -48,7 +49,8 @@ namespace Orckestra.Composer.Cart.Api
                 CustomerId = ComposerContext.CustomerId,
                 Scope = ComposerContext.Scope,
                 Page = param.Page,
-                OrderTense = OrderTense.CurrentOrders
+                OrderTense = OrderTense.CurrentOrders,
+                WebsiteId = SiteConfiguration.GetWebsiteId()
             }
             );
 
@@ -82,7 +84,7 @@ namespace Orckestra.Composer.Cart.Api
         {
             if (request == null) { return BadRequest("No request body found."); }
 
-            var orderDetailUrl = OrderUrlProvider.GetGuestOrderDetailsUrl(ComposerContext.CultureInfo);
+            var orderDetailUrl = OrderUrlProvider.GetGuestOrderDetailsUrl(ComposerContext.CultureInfo, RequestUtils.GetWebsiteID());
 
             var orderDetailViewModel = await OrderHistoryViewService.GetOrderDetailViewModelForGuestAsync(new GetOrderForGuestParam
             {

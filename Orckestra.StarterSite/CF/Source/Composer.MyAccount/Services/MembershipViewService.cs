@@ -74,7 +74,7 @@ namespace Orckestra.Composer.MyAccount.Services
             if (string.IsNullOrWhiteSpace(createUserParam.Email)) { throw new ArgumentException("createUserParam.Email"); }
             if (string.IsNullOrWhiteSpace(createUserParam.Scope)) { throw new ArgumentException("createUserParam.Scope"); }
 
-            var termsAndConditionsUrl = MyAccountUrlProvider.GetTermsAndConditionsUrl(new GetMyAccountUrlParam { CultureInfo = createUserParam.CultureInfo });
+            var termsAndConditionsUrl = MyAccountUrlProvider.GetTermsAndConditionsUrl(new BaseUrlParameter { CultureInfo = createUserParam.CultureInfo });
 
             var customer = await CustomerRepository.CreateUserAsync(new CreateUserParam
             {
@@ -146,9 +146,9 @@ namespace Orckestra.Composer.MyAccount.Services
                 Status = MyAccountStatus.Failed
             };
 
-            var createAccountUrl = MyAccountUrlProvider.GetCreateAccountUrl(new GetMyAccountUrlParam { CultureInfo = loginParam.CultureInfo, ReturnUrl = loginParam.ReturnUrl });
-            var forgotPasswordUrl = MyAccountUrlProvider.GetForgotPasswordUrl(new GetMyAccountUrlParam { CultureInfo = loginParam.CultureInfo, ReturnUrl = loginParam.ReturnUrl });
-            var loginUrl = MyAccountUrlProvider.GetLoginUrl(new GetMyAccountUrlParam { CultureInfo = loginParam.CultureInfo, ReturnUrl = loginParam.ReturnUrl });
+            var createAccountUrl = MyAccountUrlProvider.GetCreateAccountUrl(new BaseUrlParameter { CultureInfo = loginParam.CultureInfo, ReturnUrl = loginParam.ReturnUrl });
+            var forgotPasswordUrl = MyAccountUrlProvider.GetForgotPasswordUrl(new BaseUrlParameter { CultureInfo = loginParam.CultureInfo, ReturnUrl = loginParam.ReturnUrl });
+            var loginUrl = MyAccountUrlProvider.GetLoginUrl(new BaseUrlParameter { CultureInfo = loginParam.CultureInfo, ReturnUrl = loginParam.ReturnUrl });
             var userName = GenerateUserName(loginParam.Username);
 
             var loginResponse = Membership.LoginUser(userName, loginParam.Password);
@@ -228,14 +228,16 @@ namespace Orckestra.Composer.MyAccount.Services
         /// </returns>
         public virtual async Task<SignInHeaderViewModel> GetSignInHeaderModel(GetSignInHeaderParam param)
         {
-            var myAccountUrl = MyAccountUrlProvider.GetMyAccountUrl(new GetMyAccountUrlParam
+            var myAccountUrl = MyAccountUrlProvider.GetMyAccountUrl(new BaseUrlParameter
             {
-                CultureInfo = param.CultureInfo
+                CultureInfo = param.CultureInfo,
+                WebsiteId = param.WebsiteId
             });
 
-            var loginUrl = MyAccountUrlProvider.GetLoginUrl(new GetMyAccountUrlParam
+            var loginUrl = MyAccountUrlProvider.GetLoginUrl(new BaseUrlParameter
             {
-                CultureInfo = param.CultureInfo
+                CultureInfo = param.CultureInfo,
+                WebsiteId = param.WebsiteId
             });
 
             var customer = await CustomerRepository.GetCustomerByIdAsync(new GetCustomerByIdParam
@@ -332,7 +334,8 @@ namespace Orckestra.Composer.MyAccount.Services
                 throw new ArgumentException("resetPasswordParam.PasswordAnswer");
             }
 
-            var forgotPasswordUrl = MyAccountUrlProvider.GetForgotPasswordUrl(new GetMyAccountUrlParam { CultureInfo = resetPasswordParam.CultureInfo });
+            var forgotPasswordUrl = MyAccountUrlProvider.GetForgotPasswordUrl(
+                new BaseUrlParameter { CultureInfo = resetPasswordParam.CultureInfo, WebsiteId = resetPasswordParam.WebsiteId });
 
             var customer = await CustomerRepository.GetCustomerByTicketAsync(resetPasswordParam.Ticket).ConfigureAwait(false);
 
@@ -390,7 +393,7 @@ namespace Orckestra.Composer.MyAccount.Services
             if (param == null) { throw new ArgumentNullException("param"); }
             if (param.CultureInfo == null) { throw new ArgumentException("param.CultureInfo"); }
 
-            var forgotPasswordUrl = MyAccountUrlProvider.GetForgotPasswordUrl(new GetMyAccountUrlParam { CultureInfo = param.CultureInfo });
+            var forgotPasswordUrl = MyAccountUrlProvider.GetForgotPasswordUrl(new BaseUrlParameter { CultureInfo = param.CultureInfo });
 
             var customer = await GetCustomerByTicketAsync(new GetCustomerByTicketParam
             {

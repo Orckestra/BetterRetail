@@ -5,6 +5,7 @@ using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Services;
 using Orckestra.Composer.Extensions;
 using Orckestra.Composer.Services;
+using Orckestra.Composer.Utils;
 using Orckestra.Composer.WebAPIFilters;
 
 namespace Orckestra.Composer.Cart.Api
@@ -50,7 +51,7 @@ namespace Orckestra.Composer.Cart.Api
                 PaymentProviderName = request.PaymentProviderName
             };
 
-            var creditCartTrustImage = ImageViewService.GetCheckoutTrustImageViewModel(ComposerContext.CultureInfo);
+            var creditCartTrustImage = ImageViewService.GetCheckoutTrustImageViewModel(ComposerContext.CultureInfo, RequestUtils.GetWebsiteID());
             var viewModel = await VaultProfileViewService.AddCreditCardAsync(addCreditCardParam);
 
             if (viewModel != null && viewModel.ActivePayment != null)

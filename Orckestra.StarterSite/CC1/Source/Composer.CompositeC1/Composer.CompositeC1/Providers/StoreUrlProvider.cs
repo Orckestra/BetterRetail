@@ -43,7 +43,7 @@ namespace Orckestra.Composer.CompositeC1.Providers
             // Therefore we need to re-initialize C1 context because getting the Url.
             using (ThreadDataManager.EnsureInitialize())
             {
-                var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(parameters.CultureInfo, ComposerContext.WebsiteId);
+                var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(parameters.CultureInfo, parameters.WebsiteId);
                 var baseUrl = PageService.GetPageUrl(pagesConfiguration.StoreListPageId, parameters.CultureInfo);
                 var url = string.Format(UrlTemplate, baseUrl, UrlFormatter.Format(parameters.StoreName), parameters.StoreNumber);
                 var uri = new Uri(
@@ -59,7 +59,7 @@ namespace Orckestra.Composer.CompositeC1.Providers
         {
             using (ThreadDataManager.EnsureInitialize())
             {
-                var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(parameters.CultureInfo, ComposerContext.WebsiteId);
+                var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(parameters.CultureInfo, parameters.WebsiteId);
                 var url = PageService.GetPageUrl(pagesConfiguration.StoreListPageId, parameters.CultureInfo);
                 if(string.IsNullOrEmpty(url)) {
                     Log.LogError("StoreUrlProvider", "StoreList PageId is not configured");
@@ -74,7 +74,7 @@ namespace Orckestra.Composer.CompositeC1.Providers
         {
             using (ThreadDataManager.EnsureInitialize())
             {
-                var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(parameters.CultureInfo, ComposerContext.WebsiteId);
+                var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(parameters.CultureInfo, parameters.WebsiteId);
                 var url = PageService.GetPageUrl(pagesConfiguration.StoreDirectoryPageId, parameters.CultureInfo);
                 var urlBuilder = new UrlBuilder(url);
                 var queryString = new NameValueCollection();

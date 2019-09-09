@@ -58,12 +58,12 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
 
             _container.Use(customerRepository);
 
-            var expectedLoginUrl = _container.Get<IMyAccountUrlProvider>().GetLoginUrl(new GetMyAccountUrlParam
+            var expectedLoginUrl = _container.Get<IMyAccountUrlProvider>().GetLoginUrl(new BaseUrlParameter
             {
                 CultureInfo = cultureInfo
             });
 
-            var expectedMyAccountUrl = _container.Get<IMyAccountUrlProvider>().GetMyAccountUrl(new GetMyAccountUrlParam
+            var expectedMyAccountUrl = _container.Get<IMyAccountUrlProvider>().GetMyAccountUrl(new BaseUrlParameter
             {
                 CultureInfo = cultureInfo
             });
@@ -107,12 +107,12 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             var isAuthenticated = GetRandom.Boolean();
             var cultureInfo = TestingExtensions.GetRandomCulture();
 
-            var expectedLoginUrl = _container.Get<IMyAccountUrlProvider>().GetLoginUrl(new GetMyAccountUrlParam
+            var expectedLoginUrl = _container.Get<IMyAccountUrlProvider>().GetLoginUrl(new BaseUrlParameter
             {
                 CultureInfo = cultureInfo
             });
             
-            var expectedMyAccountUrl = _container.Get<IMyAccountUrlProvider>().GetMyAccountUrl(new GetMyAccountUrlParam
+            var expectedMyAccountUrl = _container.Get<IMyAccountUrlProvider>().GetMyAccountUrl(new BaseUrlParameter
             {
                 CultureInfo = cultureInfo
             });

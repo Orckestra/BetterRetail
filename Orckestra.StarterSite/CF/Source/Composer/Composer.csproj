@@ -213,6 +213,7 @@
     <Compile Include="Parameters\BuildSearchUrlParam.cs" />
     <Compile Include="Parameters\FindInventoryItemStatusParam.cs" />
     <Compile Include="Parameters\GetFooterParam.cs" />
+    <Compile Include="Parameters\BaseUrlParameter.cs" />
     <Compile Include="Parameters\GetStickyLinksParam.cs" />
     <Compile Include="Parameters\GetHomeMainMenuParam.cs" />
     <Compile Include="Parameters\GetInventoryItemsBySkuParam.cs" />
@@ -255,8 +256,6 @@
     <Compile Include="Parameters\GetCheckoutStepUrlParam.cs" />
     <Compile Include="Parameters\GetFulfillmentLocationParam.cs" />
     <Compile Include="Parameters\GetFulfillmentLocationsByScopeParam.cs" />
-    <Compile Include="Parameters\GetMyAccountUrlParam.cs" />
-    <Compile Include="Parameters\GetCartUrlParam.cs" />
     <Compile Include="Parameters\GetLookupDisplayNamesParam.cs" />
     <Compile Include="Parameters\GetOrderUrlParameter.cs" />
     <Compile Include="PreApplicationStartCode.cs" />

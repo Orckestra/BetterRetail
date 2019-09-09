@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 using Orckestra.Composer.MyAccount.Parameters;
 using Orckestra.Composer.MyAccount.Requests;
@@ -58,9 +60,10 @@ namespace Orckestra.Composer.MyAccount.Api
                 LastName = request.LastName,
                 CultureInfo = ComposerContext.CultureInfo,
             };
-
-            var addressListUrl = MyAccountUrlProvider.GetAddressListUrl(new GetMyAccountUrlParam { CultureInfo = param.CultureInfo });
-            var changePasswordUrl = MyAccountUrlProvider.GetChangePasswordUrl(new GetMyAccountUrlParam { CultureInfo = param.CultureInfo });
+      
+            var urlParam = new BaseUrlParameter { CultureInfo = param.CultureInfo, WebsiteId = RequestUtils.GetWebsiteID() };
+            var addressListUrl = MyAccountUrlProvider.GetAddressListUrl(urlParam);
+            var changePasswordUrl = MyAccountUrlProvider.GetChangePasswordUrl(urlParam);
 
             var viewModel = await CustomerViewService.UpdateAccountAsync(param);
 
@@ -75,6 +78,7 @@ namespace Orckestra.Composer.MyAccount.Api
             return Ok(viewModel);
         }
 
+
         [HttpGet]
         [ActionName("addresses")]
         //TODO: Change the method name for GetAdressListAsync or something similar because it confuse people
@@ -86,8 +90,15 @@ namespace Orckestra.Composer.MyAccount.Api
                 StepNumber = 1,                
             });
 
-            var addAddressUrl = CartUrlProvider.GetCheckoutAddAddressUrl(new GetCartUrlParam { CultureInfo = ComposerContext.CultureInfo, ReturnUrl = checkoutAddressStepUrl });
-            var editAddressBaseUrl = CartUrlProvider.GetCheckoutUpdateAddressBaseUrl(new GetCartUrlParam { CultureInfo = ComposerContext.CultureInfo, ReturnUrl = checkoutAddressStepUrl });
+
+            var urlParam = new BaseUrlParameter {
+                CultureInfo = ComposerContext.CultureInfo,
+                WebsiteId = RequestUtils.GetWebsiteID(),
+                ReturnUrl = checkoutAddressStepUrl
+            };
+            var addressListUrl = MyAccountUrlProvider.GetAddressListUrl(urlParam);
+            var addAddressUrl = CartUrlProvider.GetCheckoutAddAddressUrl(urlParam);
+            var editAddressBaseUrl = CartUrlProvider.GetCheckoutUpdateAddressBaseUrl(urlParam);
 
             var viewModel = await CustomerAddressViewService.GetAddressListViewModelAsync(new GetAddressListViewModelParam
             {
@@ -109,7 +120,10 @@ namespace Orckestra.Composer.MyAccount.Api
             var returnUrl = request.ReturnUrl;
             if (string.IsNullOrWhiteSpace(returnUrl) || !UrlFormatter.IsReturnUrlValid(RequestUtils.GetBaseUrl(Request).ToString(), returnUrl))
             {
-                returnUrl = MyAccountUrlProvider.GetAddressListUrl(new GetMyAccountUrlParam { CultureInfo = ComposerContext.CultureInfo });
+                returnUrl = MyAccountUrlProvider.GetAddressListUrl(new BaseUrlParameter {
+                    CultureInfo = ComposerContext.CultureInfo,
+                    WebsiteId = RequestUtils.GetWebsiteID()
+                });
             }
 
             var viewModel = await CustomerAddressViewService.CreateAddressAsync(new CreateAddressParam
@@ -132,7 +146,7 @@ namespace Orckestra.Composer.MyAccount.Api
 
             if (string.IsNullOrWhiteSpace(returnUrl) || !UrlFormatter.IsReturnUrlValid(RequestUtils.GetBaseUrl(Request).ToString(), returnUrl))
             {
-                returnUrl = MyAccountUrlProvider.GetAddressListUrl(new GetMyAccountUrlParam { CultureInfo = ComposerContext.CultureInfo });
+                returnUrl = MyAccountUrlProvider.GetAddressListUrl(new BaseUrlParameter { CultureInfo = ComposerContext.CultureInfo, WebsiteId = RequestUtils.GetWebsiteID() });
             }
 
             var viewModel = await CustomerAddressViewService.UpdateAddressAsync(new EditAddressParam

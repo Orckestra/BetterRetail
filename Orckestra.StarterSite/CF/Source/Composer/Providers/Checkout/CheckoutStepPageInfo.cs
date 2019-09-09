@@ -1,4 +1,6 @@
-﻿namespace Orckestra.Composer.Providers.Checkout
+﻿using System;
+
+namespace Orckestra.Composer.Providers.Checkout
 {
     public class CheckoutStepPageInfo
     {
@@ -16,5 +18,7 @@
         /// Indicate if the step should be displayed in the header.
         /// </summary>
         public bool IsDisplayedInHeader { get; set; }
+
+        public Guid PageId { get; set; }
     }
 }

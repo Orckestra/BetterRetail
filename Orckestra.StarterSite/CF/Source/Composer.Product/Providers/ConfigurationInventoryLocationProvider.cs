@@ -6,6 +6,7 @@ using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Product.Repositories;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Repositories;
+using Orckestra.ExperienceManagement.Configuration;
 using Orckestra.Overture.ServiceModel.Orders;
 
 namespace Orckestra.Composer.Product.Providers
@@ -32,7 +33,7 @@ namespace Orckestra.Composer.Product.Providers
         /// <returns></returns>
         public virtual Task<string> GetDefaultInventoryLocationIdAsync()
         {
-            return Task.FromResult(ComposerConfiguration.DefaultInventoryLocationId);
+            return Task.FromResult(SiteConfiguration.GetInventoryAndFulfillmentLocationId());
         }
 
         /// <summary>
@@ -41,7 +42,7 @@ namespace Orckestra.Composer.Product.Providers
         /// <returns></returns>
         public virtual Task<List<string>> GetInventoryLocationIdsForSearchAsync()
         {
-            return Task.FromResult(new List<string> { ComposerConfiguration.DefaultInventoryLocationId });
+            return Task.FromResult(new List<string> { SiteConfiguration.GetInventoryAndFulfillmentLocationId() });
         }
 
         public virtual string SetDefaultInventoryLocationId(string inventoryLocationId)

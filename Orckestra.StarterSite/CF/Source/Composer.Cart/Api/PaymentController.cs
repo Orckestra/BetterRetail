@@ -6,6 +6,7 @@ using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Services;
 using Orckestra.Composer.Cart.ViewModels;
 using Orckestra.Composer.Services;
+using Orckestra.Composer.Utils;
 using Orckestra.Composer.WebAPIFilters;
 
 namespace Orckestra.Composer.Cart.Api
@@ -40,7 +41,7 @@ namespace Orckestra.Composer.Cart.Api
         {
             if (request == null) { return BadRequest("Request cannot be null."); }
 
-            var trustImageVm = ImageService.GetCheckoutTrustImageViewModel(ComposerContext.CultureInfo);
+            var trustImageVm = ImageService.GetCheckoutTrustImageViewModel(ComposerContext.CultureInfo, RequestUtils.GetWebsiteID());
 
             var vm = await PaymentViewService.GetPaymentMethodsAsync(new GetPaymentMethodsParam
             {
@@ -74,7 +75,7 @@ namespace Orckestra.Composer.Cart.Api
             });
 
             if(vm != null)
-                vm.CreditCardTrustImage = ImageService.GetCheckoutTrustImageViewModel(ComposerContext.CultureInfo);
+                vm.CreditCardTrustImage = ImageService.GetCheckoutTrustImageViewModel(ComposerContext.CultureInfo, RequestUtils.GetWebsiteID());
 
             return Ok(vm);
         }
@@ -104,7 +105,7 @@ namespace Orckestra.Composer.Cart.Api
         {
             if (request == null) { return BadRequest("Request cannot be null."); }
 
-            var trustImageVm = ImageService.GetCheckoutTrustImageViewModel(ComposerContext.CultureInfo);
+            var trustImageVm = ImageService.GetCheckoutTrustImageViewModel(ComposerContext.CultureInfo, RequestUtils.GetWebsiteID());
 
             var vm = await PaymentViewService.UpdatePaymentMethodAsync(new UpdatePaymentMethodParam
             {

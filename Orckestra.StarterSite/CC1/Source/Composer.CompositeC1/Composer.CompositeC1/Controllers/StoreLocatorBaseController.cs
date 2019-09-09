@@ -12,6 +12,7 @@ using Orckestra.Composer.Store.Parameters;
 using Orckestra.Composer.Utils;
 using Orckestra.Composer.Store;
 using Orckestra.Composer.Store.ViewModels;
+using Orckestra.ExperienceManagement.Configuration;
 
 namespace Orckestra.Composer.CompositeC1.Controllers
 {
@@ -77,7 +78,8 @@ namespace Orckestra.Composer.CompositeC1.Controllers
                 CultureInfo = ComposerContext.CultureInfo,
                 BaseUrl = baseUrl,
                 PageNumber = page,
-                PageSize = StoreConfiguration.DirectoryListMaxItemsPerPage
+                PageSize = StoreConfiguration.DirectoryListMaxItemsPerPage,
+                WebsiteId = SitemapNavigator.CurrentHomePageId
             }).Result;
 
             if (model == null)
@@ -143,7 +145,8 @@ namespace Orckestra.Composer.CompositeC1.Controllers
                 Url = StoreUrlProvider.GetStoreLocatorUrl(new GetStoreLocatorUrlParam
                 {
                     BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
-                    CultureInfo = ComposerContext.CultureInfo
+                    CultureInfo = ComposerContext.CultureInfo,
+                    WebsiteId = SiteConfiguration.GetWebsiteId()
                 })
             };
             return View("StoreLocatorInHeader", model);
@@ -165,7 +168,8 @@ namespace Orckestra.Composer.CompositeC1.Controllers
                 Scope = ComposerContext.Scope,
                 CultureInfo = ComposerContext.CultureInfo,
                 StoreNumber = storeNumber,
-                BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
+                BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
+                
             }).Result;
 
             if (model == null)
@@ -238,7 +242,8 @@ namespace Orckestra.Composer.CompositeC1.Controllers
                 StoreNumber = storeNumber,
                 CultureInfo = cultureInfo,
                 BaseUrl = baseUrl,
-                StoreName = storeName
+                StoreName = storeName,
+                WebsiteId = SitemapNavigator.CurrentHomePageId
             });
 
             return storeUrl;

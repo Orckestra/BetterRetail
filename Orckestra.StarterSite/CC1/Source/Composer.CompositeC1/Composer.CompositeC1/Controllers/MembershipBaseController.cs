@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web.Mvc;
+using Composite.Data;
 using Orckestra.Composer.MvcFilters;
 using Orckestra.Composer.MyAccount.Parameters;
 using Orckestra.Composer.MyAccount.Services;
@@ -37,22 +38,25 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         {
             var returnUrl = GetReturnUrlToPreserve();
 
-            var loginUrl = MyAccountUrlProvider.GetLoginUrl(new GetMyAccountUrlParam
+            var loginUrl = MyAccountUrlProvider.GetLoginUrl(new BaseUrlParameter
             {
                 CultureInfo = ComposerContext.CultureInfo,
-                ReturnUrl = returnUrl
+                ReturnUrl = returnUrl,
+                WebsiteId = SitemapNavigator.CurrentHomePageId
             });
 
-            var createAccountUrl = MyAccountUrlProvider.GetCreateAccountUrl(new GetMyAccountUrlParam
+            var createAccountUrl = MyAccountUrlProvider.GetCreateAccountUrl(new BaseUrlParameter
             {
                 CultureInfo = ComposerContext.CultureInfo,
-                ReturnUrl = returnUrl
+                ReturnUrl = returnUrl,
+                WebsiteId = SitemapNavigator.CurrentHomePageId
             });
 
-            var forgotPasswordUrl = MyAccountUrlProvider.GetForgotPasswordUrl(new GetMyAccountUrlParam
+            var forgotPasswordUrl = MyAccountUrlProvider.GetForgotPasswordUrl(new BaseUrlParameter
             {
                 CultureInfo = ComposerContext.CultureInfo,
-                ReturnUrl = returnUrl
+                ReturnUrl = returnUrl,
+                WebsiteId = SitemapNavigator.CurrentHomePageId
             });
 
             var loginViewModel = MembershipViewService.GetLoginViewModel(new GetLoginViewModelParam
@@ -73,22 +77,25 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         {
             var returnUrl = GetReturnUrlToPreserve();
 
-            var loginUrl = MyAccountUrlProvider.GetLoginUrl(new GetMyAccountUrlParam
+            var loginUrl = MyAccountUrlProvider.GetLoginUrl(new BaseUrlParameter
             {
                 CultureInfo = ComposerContext.CultureInfo,
-                ReturnUrl = returnUrl
+                ReturnUrl = returnUrl,
+                WebsiteId = SitemapNavigator.CurrentHomePageId
             });
 
-            var createAccountUrl = MyAccountUrlProvider.GetCreateAccountUrl(new GetMyAccountUrlParam
+            var createAccountUrl = MyAccountUrlProvider.GetCreateAccountUrl(new BaseUrlParameter
             {
                 CultureInfo = ComposerContext.CultureInfo,
-                ReturnUrl = returnUrl
+                ReturnUrl = returnUrl,
+                WebsiteId = SitemapNavigator.CurrentHomePageId
             });
 
-            var forgotPasswordUrl = MyAccountUrlProvider.GetForgotPasswordUrl(new GetMyAccountUrlParam
+            var forgotPasswordUrl = MyAccountUrlProvider.GetForgotPasswordUrl(new BaseUrlParameter
             {
                 CultureInfo = ComposerContext.CultureInfo,
-                ReturnUrl = returnUrl
+                ReturnUrl = returnUrl,
+                WebsiteId = SitemapNavigator.CurrentHomePageId
             });
 
             var loginViewModel = MembershipViewService.GetLoginViewModel(new GetLoginViewModelParam
@@ -107,9 +114,10 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         [MustBeAnonymous(MustBeAnonymousAttribute.MyAccountDestination)]
         public virtual ActionResult CreateAccountBlade()
         {
-            var termsAndConditionsUrl = MyAccountUrlProvider.GetTermsAndConditionsUrl(new GetMyAccountUrlParam
+            var termsAndConditionsUrl = MyAccountUrlProvider.GetTermsAndConditionsUrl(new BaseUrlParameter
             {
-                CultureInfo = ComposerContext.CultureInfo
+                CultureInfo = ComposerContext.CultureInfo,
+                WebsiteId = SitemapNavigator.CurrentHomePageId
             });
 
             var createAccountViewModel =

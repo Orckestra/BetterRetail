@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.Linq;
 using System.Net.Http;
 using System.Web;
 
@@ -59,6 +60,12 @@ namespace Orckestra.Composer.Utils
             return new Uri(
                 builder.Uri,
                 new Uri(applicationPath, UriKind.Relative));
+        }
+
+        public static Guid GetWebsiteID()
+        {
+            var id = HttpContext.Current.Request.Headers.GetValues("WebsiteId").FirstOrDefault();
+            return Guid.Parse(id);
         }
     }
 }

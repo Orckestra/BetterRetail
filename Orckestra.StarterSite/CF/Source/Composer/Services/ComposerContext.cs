@@ -75,22 +75,8 @@ namespace Orckestra.Composer.Services
         {
             get
             {
-                if (_scope == null)
-                {
-                    //First attempt, lazy load from cookie
-                    ComposerCookieDto dto = _cookieAccessor.Read();
-                    _scope = dto.Scope;
-                }
-
-                if (_scope == null)
-                {
-                    //Second attempt, if it's not in the cookie, it's most likely the default scope
-                    _scope = _scopeProvider.DefaultScope;
-
-                    //No need to store this value
-                }
-
-                return _scope;
+                //TODO
+                return SiteConfiguration.GetScopeId(CultureInfo);
             }
             set
             {
@@ -103,30 +89,6 @@ namespace Orckestra.Composer.Services
             }
         }
         private string _scope = null;
-
-        public virtual Guid WebsiteId
-        {
-            get
-            {
-                if (_websiteId == Guid.Empty)
-                {
-                    ComposerCookieDto dto = _cookieAccessor.Read();
-                    _websiteId = dto.WebsiteId;
-                }
-
-                return _websiteId;
-            }
-            set
-            {
-                _websiteId = value;
-
-                ComposerCookieDto dto = _cookieAccessor.Read();
-                dto.WebsiteId = _websiteId;
-                _cookieAccessor.Write(dto);
-            }
-        }
-        private Guid _websiteId  = Guid.Empty;
-
 
         /// <summary>
         /// Get the currently connected CustomerID

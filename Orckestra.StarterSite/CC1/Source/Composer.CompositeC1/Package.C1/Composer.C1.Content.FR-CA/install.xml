@@ -23,12 +23,7 @@
         <Type type="Composite.Data.Types.IPagePlaceholderContent,Composite">
           <Data dataScopeIdentifier="public" locale="fr-CA" dataFilename="~\Datas\Composite.Data.Types.IPagePlaceholderContents_public.xml" />
         </Type>
-        <Type type="Orckestra.Composer.CompositeC1.Pages.CheckoutStepInfoPage,Orckestra.Composer.CompositeC1">
-          <Data dataScopeIdentifier="administrated" locale="fr-CA" dataFilename="~\Datas\Orckestra.Composer.CompositeC1.Pages.CheckoutStepInfoPages_administrated.xml" />
-        </Type>
-        <Type type="Orckestra.Composer.CompositeC1.Pages.CheckoutStepInfoPage,Orckestra.Composer.CompositeC1">
-          <Data dataScopeIdentifier="public" locale="fr-CA" dataFilename="~\Datas\Orckestra.Composer.CompositeC1.Pages.CheckoutStepInfoPages_public.xml" />
-        </Type>
+
         <Type type="Orckestra.Composer.CompositeC1.DataTypes.UrlTarget,Orckestra.Composer.CompositeC1.DataTypes">
           <Data dataScopeIdentifier="public" locale="fr-CA" dataFilename="~\Datas\Composite.Data.Types.TargetUrlElements_public.xml" />
           <Data dataScopeIdentifier="administrated" locale="fr-CA" dataFilename="~\Datas\Composite.Data.Types.TargetUrlElements_public.xml" />

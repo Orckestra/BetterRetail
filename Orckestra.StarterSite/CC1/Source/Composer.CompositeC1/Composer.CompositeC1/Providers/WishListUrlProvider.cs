@@ -39,7 +39,12 @@ namespace Orckestra.Composer.Mvc.Sample.Providers.UrlProvider
                     throw new ArgumentException("parameters.CultureInfo is required", "parameters");
                 }
 
-                var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(parameters.CultureInfo, ComposerContext.WebsiteId);
+                if (parameters.WebsiteId == null)
+                {
+                    throw new ArgumentException("parameters.WebsiteId is required", "parameters");
+                }
+
+                var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(parameters.CultureInfo, parameters.WebsiteId);
                 return PageService.GetPageUrl(pagesConfiguration.MyWishListPageId, parameters.CultureInfo);
             }
         }
@@ -60,7 +65,7 @@ namespace Orckestra.Composer.Mvc.Sample.Providers.UrlProvider
                     throw new ArgumentException("parameters.CultureInfo is required", "parameters");
                 }
 
-                var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(parameters.CultureInfo, ComposerContext.WebsiteId);
+                var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(parameters.CultureInfo, parameters.WebsiteId);
                 var signInPath = PageService.GetPageUrl(pagesConfiguration.LoginPageId, parameters.CultureInfo);
 
                 if (string.IsNullOrWhiteSpace(parameters.ReturnUrl))
@@ -85,7 +90,7 @@ namespace Orckestra.Composer.Mvc.Sample.Providers.UrlProvider
                     Scope = parameters.Scope
                 });
 
-                var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(parameters.CultureInfo, ComposerContext.WebsiteId);
+                var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(parameters.CultureInfo, parameters.WebsiteId);
                 var shareWishListPageUrl = PageService.GetPageUrl(pagesConfiguration.SharedWishListPageId,
                     parameters.CultureInfo);
                 var url = $"{shareWishListPageUrl}?id={token}";

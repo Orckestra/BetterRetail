@@ -18,7 +18,6 @@ namespace Orckestra.Composer.Services.Cookie
 
         public string Scope { get; set; }
 
-        public Guid WebsiteId { get; set; }
         public string EncryptedCustomerId { get; set; }
         public bool? IsGuest { get; set; }
 

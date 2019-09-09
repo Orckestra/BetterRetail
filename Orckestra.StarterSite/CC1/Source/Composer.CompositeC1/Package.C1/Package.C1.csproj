@@ -68,12 +68,9 @@
     <Content Include="Composer.C1.Content.EN-CA\Datas\Composite.Data.Types.TargetUrlElements_public.xml" />
     <Content Include="Composer.C1.Content.EN-CA\Datas\Composite.Data.Types.Navigation.NavigationElements.Header_public.xml" />
     <Content Include="Composer.C1.Content.EN-CA\Datas\Composite.Data.Types.Navigation.HeaderOptionalLink_public.xml" />
-    <Content Include="Composer.C1.Content.EN-CA\Datas\Orckestra.Composer.CompositeC1.Pages.CheckoutStepInfoPages_administrated.xml" />
-    <Content Include="Composer.C1.Content.EN-CA\Datas\Orckestra.Composer.CompositeC1.Pages.CheckoutStepInfoPages_public.xml" />
     <Content Include="Composer.C1.Content.EN-CA\install.xml">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Composer.C1.Content.EN-CA\Datas\Orckestra.ExperienceManagement.Configuration.DataTypes.ISiteConfigurations_administrated.xml" />
     <Content Include="Composer.C1.Content.EN-CA\Datas\Orckestra.ExperienceManagement.Configuration.DataTypes.ISiteConfigurations_public.xml" />
     <Content Include="Composer.C1.Content.FR-CA\Datas\Composite.Data.Types.CssStyleElements_public.xml" />
     <Content Include="Composer.C1.Content.FR-CA\Datas\Composite.Data.Types.IPagePlaceholderContents_administrated.xml" />
@@ -87,8 +84,6 @@
     </Content>
     <Content Include="Composer.C1.Content.FR-CA\Datas\Composite.Data.Types.Navigation.NavigationElements.StickyHeader_public.xml" />
     <Content Include="Composer.C1.Content.FR-CA\Datas\Composite.Data.Types.TargetUrlElements_public.xml" />
-    <Content Include="Composer.C1.Content.FR-CA\Datas\Orckestra.Composer.CompositeC1.Pages.CheckoutStepInfoPages_administrated.xml" />
-    <Content Include="Composer.C1.Content.FR-CA\Datas\Orckestra.Composer.CompositeC1.Pages.CheckoutStepInfoPages_public.xml" />
     <Content Include="Composer.C1.Content.FR-CA\Datas\Orckestra.ExperienceManagement.Configuration.DataTypes.ISiteConfigurations_administrated.xml" />
     <Content Include="Composer.C1.Content.FR-CA\Datas\Orckestra.ExperienceManagement.Configuration.DataTypes.ISiteConfigurations_public.xml" />
     <Content Include="Composer.C1.Content.FR-CA\install.xml">

@@ -90,8 +90,13 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         [AuthorizeAndRedirect]
         public virtual ActionResult UpdateAccount()
         {
-            var changePasswordUrl = MyAccountUrlProvider.GetChangePasswordUrl(new GetMyAccountUrlParam { CultureInfo = ComposerContext.CultureInfo });
-            var addressListUrl = MyAccountUrlProvider.GetAddressListUrl(new GetMyAccountUrlParam { CultureInfo = ComposerContext.CultureInfo });
+            var urlParam = new BaseUrlParameter
+            {
+                CultureInfo = ComposerContext.CultureInfo,
+                WebsiteId = SitemapNavigator.CurrentHomePageId
+            };
+            var changePasswordUrl = MyAccountUrlProvider.GetChangePasswordUrl(urlParam);
+            var addressListUrl = MyAccountUrlProvider.GetAddressListUrl(urlParam);
 
             var viewModel = CustomerViewService.GetUpdateAccountViewModelAsync(new GetUpdateAccountViewModelParam
             {
@@ -110,8 +115,13 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         [OutputCache(Duration = 0, NoStore = true)]
         public virtual ActionResult AddressList()
         {
-            var addAddressUrl = MyAccountUrlProvider.GetAddAddressUrl(new GetMyAccountUrlParam { CultureInfo = ComposerContext.CultureInfo });
-            var editAddressBaseUrl = MyAccountUrlProvider.GetUpdateAddressBaseUrl(new GetMyAccountUrlParam { CultureInfo = ComposerContext.CultureInfo });
+            var urlParam = new BaseUrlParameter
+            {
+                CultureInfo = ComposerContext.CultureInfo,
+                WebsiteId = SitemapNavigator.CurrentHomePageId
+            };
+            var addAddressUrl = MyAccountUrlProvider.GetAddAddressUrl(urlParam);
+            var editAddressBaseUrl = MyAccountUrlProvider.GetUpdateAddressBaseUrl(urlParam);
 
             var viewModel = CustomerAddressViewService.GetAddressListViewModelAsync(new GetAddressListViewModelParam
             {

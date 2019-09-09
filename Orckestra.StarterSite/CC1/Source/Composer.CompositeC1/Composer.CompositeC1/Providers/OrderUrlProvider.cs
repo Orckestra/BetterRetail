@@ -3,6 +3,7 @@ using System.Globalization;
 using Orckestra.Composer.CompositeC1.Services;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
+using Orckestra.Composer.Services;
 using Orckestra.ExperienceManagement.Configuration;
 
 namespace Orckestra.Composer.CompositeC1.Providers
@@ -10,21 +11,23 @@ namespace Orckestra.Composer.CompositeC1.Providers
     public class OrderUrlProvider : IOrderUrlProvider
     {
         protected IPageService PageService { get; private set; }
-        protected PagesConfiguration PagesConfiguration { get; private set; }
+        protected IComposerContext ComposerContext { get; private set; }
 
-        public OrderUrlProvider(IPageService pageService)
+        public OrderUrlProvider(IPageService pageService, IComposerContext composerContext)
         {
             if (pageService == null) { throw new ArgumentNullException("pageService"); }
 
             PageService = pageService;
-            PagesConfiguration = SiteConfiguration.GetPagesConfiguration();
+            ComposerContext = composerContext;
         }
 
-        public string GetOrderDetailsBaseUrl(CultureInfo cultureInfo)
+        public string GetOrderDetailsBaseUrl(CultureInfo cultureInfo, Guid websiteId)
         {
             if (cultureInfo == null) { throw new ArgumentNullException("cultureInfo"); }
+            if (websiteId == null) { throw new ArgumentNullException(nameof(websiteId)); }
 
-            var url = PageService.GetPageUrl(PagesConfiguration.OrderDetailsPageId, cultureInfo);
+            var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(cultureInfo, websiteId);
+            var url = PageService.GetPageUrl(pagesConfiguration.OrderDetailsPageId, cultureInfo);
             return UrlProviderHelper.BuildUrlWithParams(url, null);
         }
 
@@ -32,23 +35,28 @@ namespace Orckestra.Composer.CompositeC1.Providers
         {
             if (param == null) { throw new ArgumentNullException("param"); }
 
-            var url = PageService.GetPageUrl(PagesConfiguration.OrderHistoryPageId, param.CultureInfo);
+            var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(param.CultureInfo, param.WebsiteId);
+            var url = PageService.GetPageUrl(pagesConfiguration.OrderHistoryPageId, param.CultureInfo);
             return UrlProviderHelper.BuildUrlWithParams(url, null);
         }
 
-        public string GetGuestOrderDetailsUrl(CultureInfo cultureInfo)
+        public string GetGuestOrderDetailsUrl(CultureInfo cultureInfo, Guid websiteId)
         {
             if (cultureInfo == null) { throw new ArgumentNullException("cultureInfo"); }
+            if (websiteId == null) { throw new ArgumentNullException(nameof(websiteId)); }
 
-            var url = PageService.GetPageUrl(PagesConfiguration.GuestOrderDetailsPageId, cultureInfo);
+            var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(cultureInfo, websiteId);
+            var url = PageService.GetPageUrl(pagesConfiguration.GuestOrderDetailsPageId, cultureInfo);
             return UrlProviderHelper.BuildUrlWithParams(url, null);
         }
 
-        public string GetFindMyOrderUrl(CultureInfo cultureInfo)
+        public string GetFindMyOrderUrl(CultureInfo cultureInfo, Guid websiteId)
         {
             if (cultureInfo == null) { throw new ArgumentNullException("cultureInfo"); }
+            if (websiteId == null) { throw new ArgumentNullException(nameof(websiteId)); }
 
-            var url = PageService.GetPageUrl(PagesConfiguration.FindMyOrderPageId, cultureInfo);
+            var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(cultureInfo, websiteId);
+            var url = PageService.GetPageUrl(pagesConfiguration.FindMyOrderPageId, cultureInfo);
             return UrlProviderHelper.BuildUrlWithParams(url, null);
         }
     }

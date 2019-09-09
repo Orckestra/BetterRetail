@@ -1,3 +1,4 @@
+using System;
 using System.Globalization;
 
 namespace Orckestra.Composer.MyAccount.Parameters
@@ -25,6 +26,8 @@ namespace Orckestra.Composer.MyAccount.Parameters
         /// The scope responsible for this request, to which the Customer must belong
         /// </summary>
         public string Scope { get; set; }
+
+        public Guid WebsiteId { get; set; }
 
         /// <summary>
         /// (Mandatory)

@@ -58,7 +58,8 @@ namespace Orckestra.Composer.Cart.Api
         [ActionName("getcart")]
         public virtual async Task<IHttpActionResult> GetCart()
         {
-            
+
+            var websiteId = RequestUtils.GetWebsiteID();
             var homepageUrl = GetHomepageUrl();            
 
             var cartViewModel = await CartService.GetCartViewModelAsync(new GetCartParam
@@ -76,9 +77,10 @@ namespace Orckestra.Composer.Cart.Api
             if (cartViewModel.OrderSummary != null)
             {
                 var checkoutUrlTarget = GetCheckoutUrl();
-                var checkoutStepInfos = CartUrlProvider.GetCheckoutStepPageInfos(new GetCartUrlParam
+                var checkoutStepInfos = CartUrlProvider.GetCheckoutStepPageInfos(new BaseUrlParameter
                 {
                     CultureInfo = ComposerContext.CultureInfo,
+                    WebsiteId = websiteId
                 });
                 //Build redirect url in case of the customer try to access an unauthorized step.
                 var stepNumber = cartViewModel.OrderSummary.CheckoutRedirectAction.LastCheckoutStep;
@@ -109,9 +111,10 @@ namespace Orckestra.Composer.Cart.Api
             if (updateCartRequest == null) { return BadRequest("updateCartRequest is required"); }
             if (!ModelState.IsValid) { return BadRequest(ModelState); }
 
-            var getCartUrlParam = new GetCartUrlParam
+            var getCartUrlParam = new BaseUrlParameter
             {
-                CultureInfo = ComposerContext.CultureInfo,                
+                CultureInfo = ComposerContext.CultureInfo,   
+                WebsiteId = RequestUtils.GetWebsiteID()
             };
 
             var checkoutStepInfos = CartUrlProvider.GetCheckoutStepPageInfos(getCartUrlParam);
@@ -480,17 +483,19 @@ namespace Orckestra.Composer.Cart.Api
 
         protected virtual string GetCheckoutUrl()
         {
-            var getCartUrlParam = new GetCartUrlParam
+            var getCartUrlParam = new BaseUrlParameter
             {
-                CultureInfo = ComposerContext.CultureInfo,                
+                CultureInfo = ComposerContext.CultureInfo, 
+                WebsiteId = RequestUtils.GetWebsiteID()
             };
 
             var checkoutStepInfos = CartUrlProvider.GetCheckoutStepPageInfos(getCartUrlParam);
 
-            var checkoutSignInUrl = CartUrlProvider.GetCheckoutSignInUrl(new GetCartUrlParam
+            var checkoutSignInUrl = CartUrlProvider.GetCheckoutSignInUrl(new BaseUrlParameter
             {                
                 CultureInfo = ComposerContext.CultureInfo,
-                ReturnUrl = ComposerContext.IsAuthenticated ? null : checkoutStepInfos[1].Url
+                ReturnUrl = ComposerContext.IsAuthenticated ? null : checkoutStepInfos[1].Url,
+                WebsiteId = RequestUtils.GetWebsiteID()
             });
 
             var checkoutUrlTarget = ComposerContext.IsAuthenticated ? checkoutStepInfos[1].Url : checkoutSignInUrl;
@@ -508,9 +513,10 @@ namespace Orckestra.Composer.Cart.Api
 
         protected virtual string GetHomepageUrl()
         {
-            var homepageUrl = CartUrlProvider.GetHomepageUrl(new GetCartUrlParam
+            var homepageUrl = CartUrlProvider.GetHomepageUrl(new BaseUrlParameter
             {                
-                CultureInfo = ComposerContext.CultureInfo
+                CultureInfo = ComposerContext.CultureInfo,
+                WebsiteId = RequestUtils.GetWebsiteID()
             });
 
             return homepageUrl;
@@ -528,9 +534,10 @@ namespace Orckestra.Composer.Cart.Api
         {
             if (cartViewModel.OrderSummary != null)
             {
-                var getCartUrlParam = new GetCartUrlParam
+                var getCartUrlParam = new BaseUrlParameter
                 {
-                    CultureInfo = ComposerContext.CultureInfo,                    
+                    CultureInfo = ComposerContext.CultureInfo,  
+                    WebsiteId = RequestUtils.GetWebsiteID()
                 };
 
                 var cartUrl = CartUrlProvider.GetCartUrl(getCartUrlParam);

@@ -1,9 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Configuration;
-using System.Web;
-using Orckestra.Composer.Configuration;
-using Orckestra.Composer.Enums;
+﻿using Orckestra.Composer.Enums;
 using Orckestra.ExperienceManagement.Configuration;
+using System.Collections.Generic;
+using System.Web;
 
 namespace Orckestra.Composer
 {
@@ -12,7 +10,7 @@ namespace Orckestra.Composer
         static ComposerConfiguration()
         {
             CountryCode = SiteConfiguration.OvertureSettings.CountryCode;
-            DefaultInventoryLocationId = SiteConfiguration.OvertureSettings.DefaultInventoryAndFulfillmentLocationId;
+            DefaultInventoryLocationId = SiteConfiguration.GetInventoryAndFulfillmentLocationId();
             ValidateCsrfTokenForWebApi = false;
 
             LocalizationCacheOptions = new OutputCacheOptions

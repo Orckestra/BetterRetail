@@ -1,8 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Data>
-  <Add CurrentStep="3" IsDisplayedInHeader="True" SourceCultureName="fr-CA" FieldName="CheckoutStepInfoPage" Id="2de6130f-f830-40f0-851a-cba5a39d73c5" PageId="571e734c-57a8-4d99-9c05-754bc1f31f2a" PublicationStatus="published" />
-  <Add CurrentStep="4" IsDisplayedInHeader="False" SourceCultureName="fr-CA" FieldName="CheckoutStepInfoPage" Id="6e840c21-bd38-4cf1-873e-00543807e132" PageId="6cb21c3a-d72f-4ef8-9ee7-a6046ba646b5" PublicationStatus="published" />
-  <Add CurrentStep="2" IsDisplayedInHeader="True" SourceCultureName="fr-CA" FieldName="CheckoutStepInfoPage" Id="8fef73ff-a22c-4529-b184-156ac4aafaff" PageId="e90e0d35-de67-4e8a-a03e-52529cdb437f" PublicationStatus="published" />
-  <Add CurrentStep="1" IsDisplayedInHeader="True" SourceCultureName="fr-CA" FieldName="CheckoutStepInfoPage" Id="a6ab2d83-91e3-42d2-a281-88dc75758a53" PageId="ec6d3c9c-6d05-4b0f-addd-4ee1ef86b69f" PublicationStatus="published" />
-  <Add CurrentStep="0" IsDisplayedInHeader="False" SourceCultureName="fr-CA" FieldName="CheckoutStepInfoPage" Id="d6da7cf4-f5c9-4da4-a0fb-204d3f9bec0a" PageId="c558dc03-a8cd-4793-9d15-11bca1474592" PublicationStatus="published" />
-</Data>

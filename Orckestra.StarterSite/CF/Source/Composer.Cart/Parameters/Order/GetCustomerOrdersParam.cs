@@ -20,6 +20,7 @@ namespace Orckestra.Composer.Cart.Parameters.Order
         /// The culture information.
         /// </value>
         public CultureInfo CultureInfo { get; set; }
+        public Guid WebsiteId { get; set; }
 
         /// <summary>
         /// Gets or sets the scope.

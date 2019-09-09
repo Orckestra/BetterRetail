@@ -137,13 +137,15 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             var stepOneUrl = UrlProvider.GetCheckoutStepUrl(new GetCheckoutStepUrlParam
             {                
                 CultureInfo = ComposerContext.CultureInfo,
-                StepNumber = 1
+                StepNumber = 1,
+                WebsiteId = SitemapNavigator.CurrentHomePageId
             });
 
-            var registerUrl = MyAccountUrlProvider.GetCreateAccountUrl(new GetMyAccountUrlParam
+            var registerUrl = MyAccountUrlProvider.GetCreateAccountUrl(new BaseUrlParameter
             {
                 CultureInfo = ComposerContext.CultureInfo,
                 ReturnUrl = stepOneUrl,
+                WebsiteId = SitemapNavigator.CurrentHomePageId
             });
 
             var checkoutSignInAsGuestViewModel = new CheckoutSignInAsGuestViewModel
@@ -159,9 +161,10 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         [MustBeAnonymous(MustBeAnonymousAttribute.CartDestination)]
         public virtual ActionResult CheckoutSignInAsCustomer()
         {
-            var forgotPasswordUrl = MyAccountUrlProvider.GetForgotPasswordUrl(new GetMyAccountUrlParam
+            var forgotPasswordUrl = MyAccountUrlProvider.GetForgotPasswordUrl(new BaseUrlParameter
             {
-                CultureInfo = ComposerContext.CultureInfo
+                CultureInfo = ComposerContext.CultureInfo,
+                WebsiteId = SitemapNavigator.CurrentHomePageId
             });
 
             var vm = new CheckoutSignInAsReturningViewModel
@@ -186,9 +189,10 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         {
             var cartViewModel = BuildCartViewModel();
             
-            cartViewModel.Context.Add("RedirectUrl", UrlProvider.GetCartUrl(new GetCartUrlParam
+            cartViewModel.Context.Add("RedirectUrl", UrlProvider.GetCartUrl(new BaseUrlParameter
             {                
-                CultureInfo = ComposerContext.CultureInfo
+                CultureInfo = ComposerContext.CultureInfo,
+                WebsiteId = SitemapNavigator.CurrentHomePageId
             }));
 
             return View("CheckoutOrderConfirmationContainer", BuildCartViewModel());
@@ -211,12 +215,13 @@ namespace Orckestra.Composer.CompositeC1.Controllers
 
         public virtual ActionResult CheckoutNavigation()
         {
-            var navigationPageInfos = UrlProvider.GetCheckoutStepPageInfos(new GetCartUrlParam
+            var navigationPageInfos = UrlProvider.GetCheckoutStepPageInfos(new BaseUrlParameter
             {
-                CultureInfo = ComposerContext.CultureInfo
+                CultureInfo = ComposerContext.CultureInfo,
+                WebsiteId = SitemapNavigator.CurrentHomePageId
             });
 
-            var currentStep = PageService.GetCheckoutStepPage(SitemapNavigator.CurrentPageId).CurrentStep;
+            var currentStep = PageService.GetCheckoutStepPageNumber(SitemapNavigator.CurrentHomePageId, SitemapNavigator.CurrentPageId, ComposerContext.CultureInfo);
 
             var checkoutNavigationViewModel = CheckoutNavigationViewService.GetCheckoutNavigationViewModel(new GetCheckoutNavigationParam
             {
@@ -235,7 +240,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
                 IsAuthenticated = ComposerContext.IsAuthenticated
             };
 
-            var currentStep = PageService.GetCheckoutStepPage(SitemapNavigator.CurrentPageId).CurrentStep;
+            var currentStep = PageService.GetCheckoutStepPageNumber(SitemapNavigator.CurrentHomePageId, SitemapNavigator.CurrentPageId, ComposerContext.CultureInfo);
 
             cartViewModel.Context.Add("CurrentStep", currentStep);
 

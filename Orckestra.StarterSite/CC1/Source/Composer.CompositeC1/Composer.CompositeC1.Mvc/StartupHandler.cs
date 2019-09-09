@@ -53,7 +53,6 @@ namespace Orckestra.Composer.CompositeC1.Mvc
 
             DynamicTypeManager.EnsureCreateStore(typeof(ComposerPage));
             DynamicTypeManager.EnsureCreateStore(typeof(CategoryPage));
-            DynamicTypeManager.EnsureCreateStore(typeof(CheckoutStepInfoPage));
             DynamicTypeManager.EnsureCreateStore(typeof(UrlTarget));
             DynamicTypeManager.EnsureCreateStore(typeof(CssStyle));
             DynamicTypeManager.EnsureCreateStore(typeof(MainMenu));

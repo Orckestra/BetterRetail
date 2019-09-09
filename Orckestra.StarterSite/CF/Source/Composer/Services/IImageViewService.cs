@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using Orckestra.Composer.ViewModels;
 
 namespace Orckestra.Composer.Services
@@ -10,6 +11,6 @@ namespace Orckestra.Composer.Services
         /// </summary>
         /// <param name="cultureInfo"></param>
         /// <returns>The ImageViewModel</returns>
-        ImageViewModel GetCheckoutTrustImageViewModel(CultureInfo cultureInfo);
+        ImageViewModel GetCheckoutTrustImageViewModel(CultureInfo cultureInfo, Guid websiteId);
     }
 }
