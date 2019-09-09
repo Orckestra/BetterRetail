@@ -76,7 +76,7 @@ namespace Orckestra.Composer.Services
             get
             {
                 //TODO
-                return SiteConfiguration.GetScopeId(CultureInfo);
+                return SiteConfiguration.GetScopeId();
             }
             set
             {
