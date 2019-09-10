@@ -74,38 +74,38 @@
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Orckestra.AsyncExtensions, Version=3.22.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OrckestraCommerce.AsyncExtensions.3.22.0-beta0001\lib\net461\Orckestra.AsyncExtensions.dll</HintPath>
+      <HintPath>..\packages\OrckestraCommerce.AsyncExtensions.3.22.0\lib\net461\Orckestra.AsyncExtensions.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Orckestra.Caching, Version=3.22.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OrckestraCommerce.Common.3.22.0-beta0001\lib\net461\Orckestra.Caching.dll</HintPath>
+      <HintPath>..\packages\OrckestraCommerce.Common.3.22.0\lib\net461\Orckestra.Caching.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Orckestra.Logging, Version=3.22.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OrckestraCommerce.Common.3.22.0-beta0001\lib\net461\Orckestra.Logging.dll</HintPath>
+      <HintPath>..\packages\OrckestraCommerce.Common.3.22.0\lib\net461\Orckestra.Logging.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Orckestra.Overture.Interfaces, Version=3.22.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OrckestraCommerce.Interfaces.3.22.0-beta0001\lib\portable-net4+sl5+netcore45+wp8\Orckestra.Overture.Interfaces.dll</HintPath>
+      <HintPath>..\packages\OrckestraCommerce.Interfaces.3.22.0\lib\portable-net4+sl5+netcore45+wp8\Orckestra.Overture.Interfaces.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Orckestra.Overture.RestClient, Version=3.22.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OrckestraCommerce.Client.3.22.0-beta0001\lib\net452\Orckestra.Overture.RestClient.dll</HintPath>
+      <HintPath>..\packages\OrckestraCommerce.Client.3.22.0\lib\net452\Orckestra.Overture.RestClient.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Orckestra.Overture.ServiceModel, Version=3.22.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OrckestraCommerce.ServiceModel.3.22.0-beta0001\lib\net461\Orckestra.Overture.ServiceModel.dll</HintPath>
+      <HintPath>..\packages\OrckestraCommerce.ServiceModel.3.22.0\lib\net461\Orckestra.Overture.ServiceModel.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Orckestra.Overture.ServiceModel.Requests, Version=3.22.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OrckestraCommerce.ServiceModel.Requests.3.22.0-beta0001\lib\net461\Orckestra.Overture.ServiceModel.Requests.dll</HintPath>
+      <HintPath>..\packages\OrckestraCommerce.ServiceModel.Requests.3.22.0\lib\net461\Orckestra.Overture.ServiceModel.Requests.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="OrckestraCommerce.RecurringOrders.ServiceModel, Version=3.22.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OrckestraCommerce.RecurringOrders.ServiceModel.3.22.0-beta0001\lib\portable-net4+sl5+netcore45+wp8\OrckestraCommerce.RecurringOrders.ServiceModel.dll</HintPath>
+      <HintPath>..\packages\OrckestraCommerce.RecurringOrders.ServiceModel.3.22.0\lib\portable-net4+sl5+netcore45+wp8\OrckestraCommerce.RecurringOrders.ServiceModel.dll</HintPath>
     </Reference>
     <Reference Include="OrckestraCommerce.RecurringOrders.ServiceModel.Requests, Version=3.22.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OrckestraCommerce.RecurringOrders.ServiceModel.Requests.3.22.0-beta0001\lib\portable-net4+sl5+netcore45+wp8\OrckestraCommerce.RecurringOrders.ServiceModel.Requests.dll</HintPath>
+      <HintPath>..\packages\OrckestraCommerce.RecurringOrders.ServiceModel.Requests.3.22.0\lib\portable-net4+sl5+netcore45+wp8\OrckestraCommerce.RecurringOrders.ServiceModel.Requests.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack.Client, Version=4.0.0.0, Culture=neutral, PublicKeyToken=e06fbc6124f57c43, processorArchitecture=MSIL">
       <HintPath>..\packages\ServiceStack.Client.Signed.4.5.4\lib\net45\ServiceStack.Client.dll</HintPath>
