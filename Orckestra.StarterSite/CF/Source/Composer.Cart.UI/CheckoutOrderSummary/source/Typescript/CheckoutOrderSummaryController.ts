@@ -9,7 +9,7 @@ module Orckestra.Composer {
 
     export class CheckoutOrderSummaryController extends Orckestra.Composer.BaseCheckoutController {
 
-        private recurringOrderService: IRecurringOrderService = new RecurringOrderService(new RecurringOrderRepository(), this.eventHub);
+        protected recurringOrderService: IRecurringOrderService = new RecurringOrderService(new RecurringOrderRepository(), this.eventHub);
 
         public initialize() {
 

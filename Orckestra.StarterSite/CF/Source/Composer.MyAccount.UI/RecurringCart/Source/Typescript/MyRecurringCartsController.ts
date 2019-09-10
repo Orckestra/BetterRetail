@@ -16,7 +16,7 @@ module Orckestra.Composer {
             this.getUpcomingOrders();
         }
 
-        private getUpcomingOrders() {
+        public getUpcomingOrders() {
             var busyHandle = this.asyncBusy();
 
             this.recurringOrderService.getRecurringOrderCartsByUser()
