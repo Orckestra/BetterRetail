@@ -1,26 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Orckestra.Composer.Providers;
+﻿using Orckestra.Composer.Providers;
+using Orckestra.Composer.Services;
 using Orckestra.ExperienceManagement.Configuration;
+using System;
 
 namespace Orckestra.Composer.CompositeC1.Providers
 {
     public class ScopeProvider : IScopeProvider
     {
         private readonly Lazy<string> _lazyDefaultScope;
+        public IWebsiteContext WebsiteContext;
 
-        public ScopeProvider()
+        public ScopeProvider(IWebsiteContext websiteContext)
         {
             _lazyDefaultScope = new Lazy<string>(GetDefaultScopeFromConfiguration, true);
+            WebsiteContext = websiteContext;
         }
 
         private string GetDefaultScopeFromConfiguration()
         {
-
-            return SiteConfiguration.GetScopeId();
+            return SiteConfiguration.GetScopeId(WebsiteContext.WebsiteId);
         }
 
         public string DefaultScope

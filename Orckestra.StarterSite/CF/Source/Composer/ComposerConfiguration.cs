@@ -10,7 +10,6 @@ namespace Orckestra.Composer
         static ComposerConfiguration()
         {
             CountryCode = SiteConfiguration.OvertureSettings.CountryCode;
-            DefaultInventoryLocationId = SiteConfiguration.GetInventoryAndFulfillmentLocationId();
             ValidateCsrfTokenForWebApi = false;
 
             LocalizationCacheOptions = new OutputCacheOptions
@@ -36,11 +35,6 @@ namespace Orckestra.Composer
         };
 
         public static string CountryCode { get; set; }
-
-        /// <summary>
-        /// The default inventory location Id
-        /// </summary>
-        public static string DefaultInventoryLocationId { get; set; }
 
         public static bool ValidateCsrfTokenForWebApi { get; set; }
 

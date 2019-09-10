@@ -25,7 +25,7 @@ namespace Orckestra.Composer.Product.Tests.Providers
         {
             Container = new AutoMocker();
 
-            ComposerConfiguration.DefaultInventoryLocationId = GetRandom.String(6);
+            var defaultInventoryLocationId = GetRandom.String(6);
             ValidLocationId = GetRandom.Guid();
 
             var repoMock = Container.GetMock<IFulfillmentLocationsRepository>();
@@ -37,7 +37,7 @@ namespace Orckestra.Composer.Product.Tests.Providers
                     {
                         Id = GetRandom.Guid(),
                         IsActive = false,
-                        InventoryLocationId = ComposerConfiguration.DefaultInventoryLocationId
+                        InventoryLocationId = defaultInventoryLocationId
                     },
                     new FulfillmentLocation
                     {
@@ -49,7 +49,7 @@ namespace Orckestra.Composer.Product.Tests.Providers
                     {
                         Id = ValidLocationId,
                         IsActive = true,
-                        InventoryLocationId = ComposerConfiguration.DefaultInventoryLocationId
+                        InventoryLocationId = defaultInventoryLocationId
                     }
                 });
         }
@@ -95,7 +95,7 @@ namespace Orckestra.Composer.Product.Tests.Providers
         public void WHEN_Locations_do_not_contain_default_id_THROWS_ArgumentException()
         {
             //Arrange
-            ComposerConfiguration.DefaultInventoryLocationId = GetRandom.String(6); //Changing the ID between generation of list and execution of SUT.
+            var defaultInventoryLocationId = GetRandom.String(6); //Changing the ID between generation of list and execution of SUT.
             var p = new GetFulfillmentLocationParam
             {
                 Scope = GetRandom.String(7)
@@ -110,7 +110,7 @@ namespace Orckestra.Composer.Product.Tests.Providers
             exception.Should().NotBeNull();
             exception.ParamName.ShouldBeEquivalentTo("param");
             exception.Message.Should().ContainEquivalentOf(p.Scope);
-            exception.Message.Should().ContainEquivalentOf(ComposerConfiguration.DefaultInventoryLocationId);
+            exception.Message.Should().ContainEquivalentOf(defaultInventoryLocationId);
         }
 
     }

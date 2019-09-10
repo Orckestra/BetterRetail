@@ -1,13 +1,13 @@
-﻿using System;
+﻿using Orckestra.Composer.Parameters;
+using Orckestra.Composer.Providers;
+using Orckestra.Composer.Repositories;
+using Orckestra.Composer.Services;
+using Orckestra.ExperienceManagement.Configuration;
+using Orckestra.Overture.ServiceModel.Orders;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Orckestra.Composer.Parameters;
-using Orckestra.Composer.Product.Repositories;
-using Orckestra.Composer.Providers;
-using Orckestra.Composer.Repositories;
-using Orckestra.ExperienceManagement.Configuration;
-using Orckestra.Overture.ServiceModel.Orders;
 
 namespace Orckestra.Composer.Product.Providers
 {
@@ -15,16 +15,20 @@ namespace Orckestra.Composer.Product.Providers
     {
         public IFulfillmentLocationsRepository FulfillmentLocationsRepository { get; set; }
         public IInventoryRepository InventoryRepository { get; set; }
+        public IWebsiteContext WebsiteContext { get; set; }
 
         public ConfigurationInventoryLocationProvider(
             IFulfillmentLocationsRepository fulfillmentLocationsRepository, 
-            IInventoryRepository inventoryRepository)
+            IInventoryRepository inventoryRepository,
+            IWebsiteContext websiteContext)
         {
             if (fulfillmentLocationsRepository == null) { throw new ArgumentNullException("fulfillmentLocationsRepository"); }
             if (inventoryRepository == null) { throw new ArgumentNullException("inventoryRepository"); }
+            if (websiteContext == null) { throw new ArgumentNullException(nameof(websiteContext)); }
 
             FulfillmentLocationsRepository = fulfillmentLocationsRepository;
             InventoryRepository = inventoryRepository;
+            WebsiteContext = websiteContext;
         }
 
         /// <summary>
@@ -33,7 +37,7 @@ namespace Orckestra.Composer.Product.Providers
         /// <returns></returns>
         public virtual Task<string> GetDefaultInventoryLocationIdAsync()
         {
-            return Task.FromResult(SiteConfiguration.GetInventoryAndFulfillmentLocationId());
+            return Task.FromResult(SiteConfiguration.GetInventoryAndFulfillmentLocationId(WebsiteContext.WebsiteId));
         }
 
         /// <summary>
@@ -42,7 +46,7 @@ namespace Orckestra.Composer.Product.Providers
         /// <returns></returns>
         public virtual Task<List<string>> GetInventoryLocationIdsForSearchAsync()
         {
-            return Task.FromResult(new List<string> { SiteConfiguration.GetInventoryAndFulfillmentLocationId() });
+            return Task.FromResult(new List<string> { SiteConfiguration.GetInventoryAndFulfillmentLocationId(WebsiteContext.WebsiteId) });
         }
 
         public virtual string SetDefaultInventoryLocationId(string inventoryLocationId)
