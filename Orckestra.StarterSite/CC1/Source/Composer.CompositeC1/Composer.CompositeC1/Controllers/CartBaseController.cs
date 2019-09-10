@@ -79,8 +79,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
                 IsLoading = true,
                 HomepageUrl = CartUrlProvider.GetHomepageUrl(new BaseUrlParameter
                 {                    
-                    CultureInfo = ComposerContext.CultureInfo,
-                    WebsiteId = SitemapNavigator.CurrentHomePageId
+                    CultureInfo = ComposerContext.CultureInfo
                 })
             };
 
@@ -95,8 +94,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
                 Url = CartUrlProvider.GetCartUrl(new BaseUrlParameter
                 {                    
                     CultureInfo = ComposerContext.CultureInfo,
-                    WebsiteId = SitemapNavigator.CurrentHomePageId
-                })
+                 })
             };
 
             return View(minicartViewModel);

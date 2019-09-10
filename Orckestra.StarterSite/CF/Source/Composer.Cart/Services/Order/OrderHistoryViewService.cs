@@ -64,7 +64,7 @@ namespace Orckestra.Composer.Cart.Services.Order
             if (param.CustomerId == null) { throw new ArgumentException("param.CustomerId"); }
             if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException("param.Scope"); }
 
-            var orderDetailBaseUrl = OrderUrlProvider.GetOrderDetailsBaseUrl(param.CultureInfo, param.WebsiteId);
+            var orderDetailBaseUrl = OrderUrlProvider.GetOrderDetailsBaseUrl(param.CultureInfo);
 
             var orderStatuses = await LookupService.GetLookupDisplayNamesAsync(new GetLookupDisplayNamesParam
             {

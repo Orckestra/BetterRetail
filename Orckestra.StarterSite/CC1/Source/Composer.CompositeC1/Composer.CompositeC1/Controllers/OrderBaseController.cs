@@ -46,7 +46,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         {
             var orderToken = string.IsNullOrWhiteSpace(token) ? null : GuestOrderTokenizer.DecypherOrderToken(token);
 
-            var findMyOrderUrl = OrderUrlProvider.GetFindMyOrderUrl(ComposerContext.CultureInfo, SitemapNavigator.CurrentHomePageId);
+            var findMyOrderUrl = OrderUrlProvider.GetFindMyOrderUrl(ComposerContext.CultureInfo);
 
             OrderDetailViewModel orderDetailViewModel = null;
 

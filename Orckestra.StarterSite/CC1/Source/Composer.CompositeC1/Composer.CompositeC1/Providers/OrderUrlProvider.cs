@@ -11,22 +11,21 @@ namespace Orckestra.Composer.CompositeC1.Providers
     public class OrderUrlProvider : IOrderUrlProvider
     {
         protected IPageService PageService { get; private set; }
-        protected IComposerContext ComposerContext { get; private set; }
+        protected IWebsiteContext WebsiteContext { get; private set; }
 
-        public OrderUrlProvider(IPageService pageService, IComposerContext composerContext)
+        public OrderUrlProvider(IPageService pageService, IWebsiteContext wbsiteContext)
         {
             if (pageService == null) { throw new ArgumentNullException("pageService"); }
 
             PageService = pageService;
-            ComposerContext = composerContext;
+            WebsiteContext = wbsiteContext;
         }
 
-        public string GetOrderDetailsBaseUrl(CultureInfo cultureInfo, Guid websiteId)
+        public string GetOrderDetailsBaseUrl(CultureInfo cultureInfo)
         {
             if (cultureInfo == null) { throw new ArgumentNullException("cultureInfo"); }
-            if (websiteId == null) { throw new ArgumentNullException(nameof(websiteId)); }
-
-            var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(cultureInfo, websiteId);
+ 
+            var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(cultureInfo, WebsiteContext.WebsiteId);
             var url = PageService.GetPageUrl(pagesConfiguration.OrderDetailsPageId, cultureInfo);
             return UrlProviderHelper.BuildUrlWithParams(url, null);
         }
@@ -35,27 +34,25 @@ namespace Orckestra.Composer.CompositeC1.Providers
         {
             if (param == null) { throw new ArgumentNullException("param"); }
 
-            var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(param.CultureInfo, param.WebsiteId);
+            var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(param.CultureInfo, WebsiteContext.WebsiteId);
             var url = PageService.GetPageUrl(pagesConfiguration.OrderHistoryPageId, param.CultureInfo);
             return UrlProviderHelper.BuildUrlWithParams(url, null);
         }
 
-        public string GetGuestOrderDetailsUrl(CultureInfo cultureInfo, Guid websiteId)
+        public string GetGuestOrderDetailsUrl(CultureInfo cultureInfo)
         {
             if (cultureInfo == null) { throw new ArgumentNullException("cultureInfo"); }
-            if (websiteId == null) { throw new ArgumentNullException(nameof(websiteId)); }
 
-            var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(cultureInfo, websiteId);
+            var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(cultureInfo, WebsiteContext.WebsiteId);
             var url = PageService.GetPageUrl(pagesConfiguration.GuestOrderDetailsPageId, cultureInfo);
             return UrlProviderHelper.BuildUrlWithParams(url, null);
         }
 
-        public string GetFindMyOrderUrl(CultureInfo cultureInfo, Guid websiteId)
+        public string GetFindMyOrderUrl(CultureInfo cultureInfo)
         {
             if (cultureInfo == null) { throw new ArgumentNullException("cultureInfo"); }
-            if (websiteId == null) { throw new ArgumentNullException(nameof(websiteId)); }
 
-            var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(cultureInfo, websiteId);
+            var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(cultureInfo, WebsiteContext.WebsiteId);
             var url = PageService.GetPageUrl(pagesConfiguration.FindMyOrderPageId, cultureInfo);
             return UrlProviderHelper.BuildUrlWithParams(url, null);
         }

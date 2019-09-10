@@ -41,7 +41,7 @@ namespace Orckestra.Composer.Cart.Api
         {
             if (request == null) { return BadRequest("Request cannot be null."); }
 
-            var trustImageVm = ImageService.GetCheckoutTrustImageViewModel(ComposerContext.CultureInfo, RequestUtils.GetWebsiteID());
+            var trustImageVm = ImageService.GetCheckoutTrustImageViewModel(ComposerContext.CultureInfo);
 
             var vm = await PaymentViewService.GetPaymentMethodsAsync(new GetPaymentMethodsParam
             {
@@ -75,7 +75,7 @@ namespace Orckestra.Composer.Cart.Api
             });
 
             if(vm != null)
-                vm.CreditCardTrustImage = ImageService.GetCheckoutTrustImageViewModel(ComposerContext.CultureInfo, RequestUtils.GetWebsiteID());
+                vm.CreditCardTrustImage = ImageService.GetCheckoutTrustImageViewModel(ComposerContext.CultureInfo);
 
             return Ok(vm);
         }
@@ -105,7 +105,7 @@ namespace Orckestra.Composer.Cart.Api
         {
             if (request == null) { return BadRequest("Request cannot be null."); }
 
-            var trustImageVm = ImageService.GetCheckoutTrustImageViewModel(ComposerContext.CultureInfo, RequestUtils.GetWebsiteID());
+            var trustImageVm = ImageService.GetCheckoutTrustImageViewModel(ComposerContext.CultureInfo);
 
             var vm = await PaymentViewService.UpdatePaymentMethodAsync(new UpdatePaymentMethodParam
             {

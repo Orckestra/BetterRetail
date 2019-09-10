@@ -41,22 +41,19 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             var loginUrl = MyAccountUrlProvider.GetLoginUrl(new BaseUrlParameter
             {
                 CultureInfo = ComposerContext.CultureInfo,
-                ReturnUrl = returnUrl,
-                WebsiteId = SitemapNavigator.CurrentHomePageId
+                ReturnUrl = returnUrl
             });
 
             var createAccountUrl = MyAccountUrlProvider.GetCreateAccountUrl(new BaseUrlParameter
             {
                 CultureInfo = ComposerContext.CultureInfo,
-                ReturnUrl = returnUrl,
-                WebsiteId = SitemapNavigator.CurrentHomePageId
+                ReturnUrl = returnUrl
             });
 
             var forgotPasswordUrl = MyAccountUrlProvider.GetForgotPasswordUrl(new BaseUrlParameter
             {
                 CultureInfo = ComposerContext.CultureInfo,
-                ReturnUrl = returnUrl,
-                WebsiteId = SitemapNavigator.CurrentHomePageId
+                ReturnUrl = returnUrl
             });
 
             var loginViewModel = MembershipViewService.GetLoginViewModel(new GetLoginViewModelParam
@@ -80,22 +77,19 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             var loginUrl = MyAccountUrlProvider.GetLoginUrl(new BaseUrlParameter
             {
                 CultureInfo = ComposerContext.CultureInfo,
-                ReturnUrl = returnUrl,
-                WebsiteId = SitemapNavigator.CurrentHomePageId
+                ReturnUrl = returnUrl
             });
 
             var createAccountUrl = MyAccountUrlProvider.GetCreateAccountUrl(new BaseUrlParameter
             {
                 CultureInfo = ComposerContext.CultureInfo,
-                ReturnUrl = returnUrl,
-                WebsiteId = SitemapNavigator.CurrentHomePageId
+                ReturnUrl = returnUrl
             });
 
             var forgotPasswordUrl = MyAccountUrlProvider.GetForgotPasswordUrl(new BaseUrlParameter
             {
                 CultureInfo = ComposerContext.CultureInfo,
-                ReturnUrl = returnUrl,
-                WebsiteId = SitemapNavigator.CurrentHomePageId
+                ReturnUrl = returnUrl
             });
 
             var loginViewModel = MembershipViewService.GetLoginViewModel(new GetLoginViewModelParam
@@ -116,8 +110,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         {
             var termsAndConditionsUrl = MyAccountUrlProvider.GetTermsAndConditionsUrl(new BaseUrlParameter
             {
-                CultureInfo = ComposerContext.CultureInfo,
-                WebsiteId = SitemapNavigator.CurrentHomePageId
+                CultureInfo = ComposerContext.CultureInfo
             });
 
             var createAccountViewModel =

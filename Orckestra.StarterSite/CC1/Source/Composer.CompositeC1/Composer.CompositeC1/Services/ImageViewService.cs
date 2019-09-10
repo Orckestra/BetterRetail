@@ -9,22 +9,21 @@ namespace Orckestra.Composer.CompositeC1.Services
     public class ImageViewService : IImageViewService
     {
         protected IMediaService MediaService { get; private set; }
-        protected IComposerContext ComposerContext { get; private set; }
+        protected IWebsiteContext WebsiteContext { get; private set; }
 
-        public ImageViewService(IMediaService mediaService, IComposerContext composerContext)
+        public ImageViewService(IMediaService mediaService, IWebsiteContext websiteContext)
         {
             if (mediaService == null) { throw new ArgumentNullException("mediaService"); }
 
             MediaService = mediaService;
-            ComposerContext = composerContext;
+            WebsiteContext = websiteContext;
         }
 
-        public virtual ImageViewModel GetCheckoutTrustImageViewModel(CultureInfo cultureInfo, Guid websiteId)
+        public virtual ImageViewModel GetCheckoutTrustImageViewModel(CultureInfo cultureInfo)
         {
             if (cultureInfo == null) { throw new ArgumentNullException("cultureInfo"); }
-            if (websiteId == null) { throw new ArgumentNullException("websiteId"); }
 
-            var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(cultureInfo, websiteId);
+            var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(cultureInfo, WebsiteContext.WebsiteId);
             var imageInfo = MediaService.GetImageInfo(pagesConfiguration.CreditCardsTrustIconId, cultureInfo);
 
             return new ImageViewModel

@@ -230,14 +230,12 @@ namespace Orckestra.Composer.MyAccount.Services
         {
             var myAccountUrl = MyAccountUrlProvider.GetMyAccountUrl(new BaseUrlParameter
             {
-                CultureInfo = param.CultureInfo,
-                WebsiteId = param.WebsiteId
+                CultureInfo = param.CultureInfo
             });
 
             var loginUrl = MyAccountUrlProvider.GetLoginUrl(new BaseUrlParameter
             {
-                CultureInfo = param.CultureInfo,
-                WebsiteId = param.WebsiteId
+                CultureInfo = param.CultureInfo
             });
 
             var customer = await CustomerRepository.GetCustomerByIdAsync(new GetCustomerByIdParam
@@ -335,7 +333,7 @@ namespace Orckestra.Composer.MyAccount.Services
             }
 
             var forgotPasswordUrl = MyAccountUrlProvider.GetForgotPasswordUrl(
-                new BaseUrlParameter { CultureInfo = resetPasswordParam.CultureInfo, WebsiteId = resetPasswordParam.WebsiteId });
+                new BaseUrlParameter { CultureInfo = resetPasswordParam.CultureInfo });
 
             var customer = await CustomerRepository.GetCustomerByTicketAsync(resetPasswordParam.Ticket).ConfigureAwait(false);
 

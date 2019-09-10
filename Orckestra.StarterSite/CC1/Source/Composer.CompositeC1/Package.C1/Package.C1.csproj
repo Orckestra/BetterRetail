@@ -68,6 +68,7 @@
     <Content Include="Composer.C1.Content.EN-CA\Datas\Composite.Data.Types.TargetUrlElements_public.xml" />
     <Content Include="Composer.C1.Content.EN-CA\Datas\Composite.Data.Types.Navigation.NavigationElements.Header_public.xml" />
     <Content Include="Composer.C1.Content.EN-CA\Datas\Composite.Data.Types.Navigation.HeaderOptionalLink_public.xml" />
+    <Content Include="Composer.C1.Content.EN-CA\Datas\Orckestra.ExperienceManagement.Configuration.DataTypes.ISiteConfigurations_administrated.xml" />
     <Content Include="Composer.C1.Content.EN-CA\install.xml">
       <SubType>Designer</SubType>
     </Content>

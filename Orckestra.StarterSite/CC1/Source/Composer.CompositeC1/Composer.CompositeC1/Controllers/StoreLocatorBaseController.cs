@@ -145,8 +145,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
                 Url = StoreUrlProvider.GetStoreLocatorUrl(new GetStoreLocatorUrlParam
                 {
                     BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
-                    CultureInfo = ComposerContext.CultureInfo,
-                    WebsiteId = SiteConfiguration.GetWebsiteId()
+                    CultureInfo = ComposerContext.CultureInfo
                 })
             };
             return View("StoreLocatorInHeader", model);

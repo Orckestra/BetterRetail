@@ -13,14 +13,14 @@ namespace Orckestra.Composer.Mvc.Sample.Providers.UrlProvider
     public class WishListUrlProvider : IWishListUrlProvider
     {
         protected IPageService PageService { get; private set; }
-        protected IComposerContext ComposerContext { get; private set; }
+        protected IWebsiteContext WebsiteContext { get; private set; }
 
-        public WishListUrlProvider(IPageService pageService, IComposerContext composerContext)
+        public WishListUrlProvider(IPageService pageService, IWebsiteContext websiteContext)
         {
             if (pageService == null) { throw new ArgumentNullException("pageService"); }
 
             PageService = pageService;
-            ComposerContext = composerContext;
+            WebsiteContext = websiteContext;
         }
 
         /// <summary>
@@ -39,12 +39,8 @@ namespace Orckestra.Composer.Mvc.Sample.Providers.UrlProvider
                     throw new ArgumentException("parameters.CultureInfo is required", "parameters");
                 }
 
-                if (parameters.WebsiteId == null)
-                {
-                    throw new ArgumentException("parameters.WebsiteId is required", "parameters");
-                }
 
-                var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(parameters.CultureInfo, parameters.WebsiteId);
+                var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(parameters.CultureInfo, WebsiteContext.WebsiteId);
                 return PageService.GetPageUrl(pagesConfiguration.MyWishListPageId, parameters.CultureInfo);
             }
         }
@@ -65,7 +61,7 @@ namespace Orckestra.Composer.Mvc.Sample.Providers.UrlProvider
                     throw new ArgumentException("parameters.CultureInfo is required", "parameters");
                 }
 
-                var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(parameters.CultureInfo, parameters.WebsiteId);
+                var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(parameters.CultureInfo, WebsiteContext.WebsiteId);
                 var signInPath = PageService.GetPageUrl(pagesConfiguration.LoginPageId, parameters.CultureInfo);
 
                 if (string.IsNullOrWhiteSpace(parameters.ReturnUrl))
@@ -90,7 +86,7 @@ namespace Orckestra.Composer.Mvc.Sample.Providers.UrlProvider
                     Scope = parameters.Scope
                 });
 
-                var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(parameters.CultureInfo, parameters.WebsiteId);
+                var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(parameters.CultureInfo, WebsiteContext.WebsiteId);
                 var shareWishListPageUrl = PageService.GetPageUrl(pagesConfiguration.SharedWishListPageId,
                     parameters.CultureInfo);
                 var url = $"{shareWishListPageUrl}?id={token}";

@@ -47,8 +47,7 @@ namespace Orckestra.Composer.Store.Services
             {
                 BaseUrl = viewModelParam.BaseUrl,
                 CultureInfo = viewModelParam.CultureInfo,
-                Page = 1,
-                WebsiteId = viewModelParam.WebsiteId
+                Page = 1
             });
 
             var overtureStores = await StoreRepository.GetStoresAsync(new GetStoresParam

@@ -56,7 +56,7 @@ namespace Orckestra.Composer.Cart.Tests.Services.Order
                 .Returns(new OrderHistoryViewModel());
 
             _container.GetMock<IOrderUrlProvider>()
-               .Setup(r => r.GetOrderDetailsBaseUrl(It.IsAny<CultureInfo>(), It.IsAny<Guid>()))
+               .Setup(r => r.GetOrderDetailsBaseUrl(It.IsAny<CultureInfo>()))
                .Returns(GetRandom.String(32));
 
             //Act

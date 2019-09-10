@@ -339,7 +339,6 @@
     <Content Include="App_Data\Razor\Composer\Footer.cshtml" />
     <Content Include="App_Data\Razor\Composer\Social\IconLinks.cshtml" />
     <Content Include="App_Data\Razor\Composer\Analytics\GTMAnalytics.cshtml" />
-    <Content Include="App_Data\Razor\Composer\Layout\Cookies.cshtml" />
     <Content Include="App_Data\Media\40d9ba8b-4afe-45b6-b161-6b619973a4c1" />
     <None Include="Properties\PublishProfiles\Website - CD.pubxml" />
     <None Include="Properties\PublishProfiles\Website.pubxml" />

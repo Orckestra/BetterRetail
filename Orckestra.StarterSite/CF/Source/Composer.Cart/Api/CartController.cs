@@ -59,7 +59,6 @@ namespace Orckestra.Composer.Cart.Api
         public virtual async Task<IHttpActionResult> GetCart()
         {
 
-            var websiteId = RequestUtils.GetWebsiteID();
             var homepageUrl = GetHomepageUrl();            
 
             var cartViewModel = await CartService.GetCartViewModelAsync(new GetCartParam
@@ -79,8 +78,7 @@ namespace Orckestra.Composer.Cart.Api
                 var checkoutUrlTarget = GetCheckoutUrl();
                 var checkoutStepInfos = CartUrlProvider.GetCheckoutStepPageInfos(new BaseUrlParameter
                 {
-                    CultureInfo = ComposerContext.CultureInfo,
-                    WebsiteId = websiteId
+                    CultureInfo = ComposerContext.CultureInfo
                 });
                 //Build redirect url in case of the customer try to access an unauthorized step.
                 var stepNumber = cartViewModel.OrderSummary.CheckoutRedirectAction.LastCheckoutStep;
@@ -113,8 +111,7 @@ namespace Orckestra.Composer.Cart.Api
 
             var getCartUrlParam = new BaseUrlParameter
             {
-                CultureInfo = ComposerContext.CultureInfo,   
-                WebsiteId = RequestUtils.GetWebsiteID()
+                CultureInfo = ComposerContext.CultureInfo
             };
 
             var checkoutStepInfos = CartUrlProvider.GetCheckoutStepPageInfos(getCartUrlParam);
@@ -485,8 +482,7 @@ namespace Orckestra.Composer.Cart.Api
         {
             var getCartUrlParam = new BaseUrlParameter
             {
-                CultureInfo = ComposerContext.CultureInfo, 
-                WebsiteId = RequestUtils.GetWebsiteID()
+                CultureInfo = ComposerContext.CultureInfo
             };
 
             var checkoutStepInfos = CartUrlProvider.GetCheckoutStepPageInfos(getCartUrlParam);
@@ -494,8 +490,7 @@ namespace Orckestra.Composer.Cart.Api
             var checkoutSignInUrl = CartUrlProvider.GetCheckoutSignInUrl(new BaseUrlParameter
             {                
                 CultureInfo = ComposerContext.CultureInfo,
-                ReturnUrl = ComposerContext.IsAuthenticated ? null : checkoutStepInfos[1].Url,
-                WebsiteId = RequestUtils.GetWebsiteID()
+                ReturnUrl = ComposerContext.IsAuthenticated ? null : checkoutStepInfos[1].Url
             });
 
             var checkoutUrlTarget = ComposerContext.IsAuthenticated ? checkoutStepInfos[1].Url : checkoutSignInUrl;
@@ -515,8 +510,7 @@ namespace Orckestra.Composer.Cart.Api
         {
             var homepageUrl = CartUrlProvider.GetHomepageUrl(new BaseUrlParameter
             {                
-                CultureInfo = ComposerContext.CultureInfo,
-                WebsiteId = RequestUtils.GetWebsiteID()
+                CultureInfo = ComposerContext.CultureInfo
             });
 
             return homepageUrl;
@@ -536,8 +530,7 @@ namespace Orckestra.Composer.Cart.Api
             {
                 var getCartUrlParam = new BaseUrlParameter
                 {
-                    CultureInfo = ComposerContext.CultureInfo,  
-                    WebsiteId = RequestUtils.GetWebsiteID()
+                    CultureInfo = ComposerContext.CultureInfo
                 };
 
                 var cartUrl = CartUrlProvider.GetCartUrl(getCartUrlParam);

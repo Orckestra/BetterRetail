@@ -13,8 +13,6 @@ namespace Orckestra.Composer.Parameters
         /// </value>
         public CultureInfo CultureInfo { get; set; }
 
-        public Guid WebsiteId { get; set; }
-
         public string ReturnUrl { get; set; }
 
     }

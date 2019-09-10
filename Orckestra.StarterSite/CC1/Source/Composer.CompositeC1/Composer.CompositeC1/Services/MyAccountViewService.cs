@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using Composite.Data;
-using Orckestra.Composer.Cart.Parameters.WishList;
+﻿using Orckestra.Composer.Cart.Parameters.WishList;
 using Orckestra.Composer.Cart.Providers.WishList;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.ViewModels.MyAccount;
 using Orckestra.ExperienceManagement.Configuration;
+using System;
+using System.Collections.Generic;
 
 namespace Orckestra.Composer.CompositeC1.Services
 {
@@ -43,8 +42,7 @@ namespace Orckestra.Composer.CompositeC1.Services
         {
             var urlParam = new BaseUrlParameter
             {
-                CultureInfo = ComposerContext.CultureInfo,
-                WebsiteId = SitemapNavigator.CurrentHomePageId
+                CultureInfo = ComposerContext.CultureInfo
             };
             var myAccountUrl = MyAccountUrlProvider.GetMyAccountUrl(urlParam);
             var addressListUrl = MyAccountUrlProvider.GetAddressListUrl(urlParam);

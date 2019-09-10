@@ -92,8 +92,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         {
             var urlParam = new BaseUrlParameter
             {
-                CultureInfo = ComposerContext.CultureInfo,
-                WebsiteId = SitemapNavigator.CurrentHomePageId
+                CultureInfo = ComposerContext.CultureInfo
             };
             var changePasswordUrl = MyAccountUrlProvider.GetChangePasswordUrl(urlParam);
             var addressListUrl = MyAccountUrlProvider.GetAddressListUrl(urlParam);
@@ -117,8 +116,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         {
             var urlParam = new BaseUrlParameter
             {
-                CultureInfo = ComposerContext.CultureInfo,
-                WebsiteId = SitemapNavigator.CurrentHomePageId
+                CultureInfo = ComposerContext.CultureInfo
             };
             var addAddressUrl = MyAccountUrlProvider.GetAddAddressUrl(urlParam);
             var editAddressBaseUrl = MyAccountUrlProvider.GetUpdateAddressBaseUrl(urlParam);

@@ -84,7 +84,7 @@ namespace Orckestra.Composer.Cart.Api
         {
             if (request == null) { return BadRequest("No request body found."); }
 
-            var orderDetailUrl = OrderUrlProvider.GetGuestOrderDetailsUrl(ComposerContext.CultureInfo, RequestUtils.GetWebsiteID());
+            var orderDetailUrl = OrderUrlProvider.GetGuestOrderDetailsUrl(ComposerContext.CultureInfo);
 
             var orderDetailViewModel = await OrderHistoryViewService.GetOrderDetailViewModelForGuestAsync(new GetOrderForGuestParam
             {

@@ -11,6 +11,6 @@ namespace Orckestra.Composer.Services
         /// </summary>
         /// <param name="cultureInfo"></param>
         /// <returns>The ImageViewModel</returns>
-        ImageViewModel GetCheckoutTrustImageViewModel(CultureInfo cultureInfo, Guid websiteId);
+        ImageViewModel GetCheckoutTrustImageViewModel(CultureInfo cultureInfo);
     }
 }

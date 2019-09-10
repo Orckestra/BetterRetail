@@ -27,6 +27,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         protected ILocalizationProvider LocalizationProvider { get; private set; }
         protected IWishListUrlProvider WishListUrlProvider { get; private set; }
         protected IWishListViewService WishLisViewService { get; private set; }
+        protected IWebsiteContext WebsiteContext { get; private set; }
 
         protected WishListBaseController(
            IComposerContext composerContext,
@@ -34,7 +35,8 @@ namespace Orckestra.Composer.CompositeC1.Controllers
            IBreadcrumbViewService breadcrumbViewService,
            ILocalizationProvider localizationProvider,
            IWishListUrlProvider wishListUrlProvider,
-           IWishListViewService wishListViewService
+           IWishListViewService wishListViewService,
+           IWebsiteContext websiteContext
             )
         {
             if (composerContext == null) { throw new ArgumentNullException(nameof(composerContext)); }
@@ -59,8 +61,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
                 Url = WishListUrlProvider.GetWishListUrl(new GetWishListUrlParam
                 {
                     CultureInfo = ComposerContext.CultureInfo,
-                    BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
-                    WebsiteId = SitemapNavigator.CurrentHomePageId
+                    BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
                 })
             };
 

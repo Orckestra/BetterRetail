@@ -61,11 +61,5 @@ namespace Orckestra.Composer.Utils
                 builder.Uri,
                 new Uri(applicationPath, UriKind.Relative));
         }
-
-        public static Guid GetWebsiteID()
-        {
-            var id = HttpContext.Current.Request.Headers.GetValues("WebsiteId").FirstOrDefault();
-            return Guid.Parse(id);
-        }
     }
 }

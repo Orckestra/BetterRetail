@@ -160,8 +160,7 @@ namespace Orckestra.Composer.Cart.Services
             var getUrlParam = new GetWishListUrlParam
             {
                 BaseUrl = param.BaseUrl,
-                CultureInfo = param.CultureInfo,
-                WebsiteId = param.WebsiteId
+                CultureInfo = param.CultureInfo
             };
             viewModel.SignInUrl = WishListUrlProvider.GetSignInUrl(getUrlParam);
             viewModel.ShareUrl = viewModel.TotalQuantity == 0 ? string.Empty: WishListUrlProvider.GetShareUrl(new GetShareWishListUrlParam

@@ -75,8 +75,7 @@ namespace Orckestra.Composer.MyAccount.Api
             {
                 returnUrl = MyAccountUrlProvider.GetMyAccountUrl(new BaseUrlParameter
                 {
-                    CultureInfo = ComposerContext.CultureInfo,
-                    WebsiteId = RequestUtils.GetWebsiteID()
+                    CultureInfo = ComposerContext.CultureInfo
                 });
             }
 
@@ -148,8 +147,7 @@ namespace Orckestra.Composer.MyAccount.Api
             {
                 response.ReturnUrl = MyAccountUrlProvider.GetLoginUrl(new BaseUrlParameter
                 {
-                    CultureInfo = ComposerContext.CultureInfo,
-                    WebsiteId = RequestUtils.GetWebsiteID()
+                    CultureInfo = ComposerContext.CultureInfo
                 });
             }
 
@@ -190,8 +188,7 @@ namespace Orckestra.Composer.MyAccount.Api
             {
                 returnUrl = MyAccountUrlProvider.GetMyAccountUrl(new BaseUrlParameter
                 {
-                    CultureInfo = ComposerContext.CultureInfo,
-                    WebsiteId = RequestUtils.GetWebsiteID()
+                    CultureInfo = ComposerContext.CultureInfo
                 });
             }
 
@@ -280,14 +277,12 @@ namespace Orckestra.Composer.MyAccount.Api
             if (resetPasswordRequest == null) { return BadRequest("No body found in the request"); }
 
             var returnUrl = resetPasswordRequest.ReturnUrl;
-            var websiteId = RequestUtils.GetWebsiteID();
 
             if (string.IsNullOrWhiteSpace(returnUrl) || !UrlFormatter.IsReturnUrlValid(RequestUtils.GetBaseUrl(Request).ToString(), returnUrl))
             {
                 returnUrl = MyAccountUrlProvider.GetLoginUrl(new BaseUrlParameter
                 {
-                    CultureInfo = ComposerContext.CultureInfo,
-                    WebsiteId = websiteId
+                    CultureInfo = ComposerContext.CultureInfo
                 });
             }
 
@@ -299,7 +294,6 @@ namespace Orckestra.Composer.MyAccount.Api
                 NewPassword = resetPasswordRequest.NewPassword,
                 Scope = ComposerContext.Scope,
                 CultureInfo = ComposerContext.CultureInfo,
-                WebsiteId = websiteId,
                 ReturnUrl = returnUrl
             });
 
@@ -343,7 +337,6 @@ namespace Orckestra.Composer.MyAccount.Api
                 CustomerId = ComposerContext.CustomerId,
                 CultureInfo = ComposerContext.CultureInfo,
                 Scope = ComposerContext.Scope,
-                WebsiteId = RequestUtils.GetWebsiteID(),
                 IsAuthenticated = ComposerContext.IsAuthenticated,
                 EncryptedCustomerId = ComposerContext.GetEncryptedCustomerId()
             };

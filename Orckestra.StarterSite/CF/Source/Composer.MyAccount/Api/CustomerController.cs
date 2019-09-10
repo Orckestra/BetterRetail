@@ -61,7 +61,7 @@ namespace Orckestra.Composer.MyAccount.Api
                 CultureInfo = ComposerContext.CultureInfo,
             };
       
-            var urlParam = new BaseUrlParameter { CultureInfo = param.CultureInfo, WebsiteId = RequestUtils.GetWebsiteID() };
+            var urlParam = new BaseUrlParameter { CultureInfo = param.CultureInfo };
             var addressListUrl = MyAccountUrlProvider.GetAddressListUrl(urlParam);
             var changePasswordUrl = MyAccountUrlProvider.GetChangePasswordUrl(urlParam);
 
@@ -93,7 +93,6 @@ namespace Orckestra.Composer.MyAccount.Api
 
             var urlParam = new BaseUrlParameter {
                 CultureInfo = ComposerContext.CultureInfo,
-                WebsiteId = RequestUtils.GetWebsiteID(),
                 ReturnUrl = checkoutAddressStepUrl
             };
             var addressListUrl = MyAccountUrlProvider.GetAddressListUrl(urlParam);
@@ -121,8 +120,7 @@ namespace Orckestra.Composer.MyAccount.Api
             if (string.IsNullOrWhiteSpace(returnUrl) || !UrlFormatter.IsReturnUrlValid(RequestUtils.GetBaseUrl(Request).ToString(), returnUrl))
             {
                 returnUrl = MyAccountUrlProvider.GetAddressListUrl(new BaseUrlParameter {
-                    CultureInfo = ComposerContext.CultureInfo,
-                    WebsiteId = RequestUtils.GetWebsiteID()
+                    CultureInfo = ComposerContext.CultureInfo
                 });
             }
 
@@ -146,7 +144,7 @@ namespace Orckestra.Composer.MyAccount.Api
 
             if (string.IsNullOrWhiteSpace(returnUrl) || !UrlFormatter.IsReturnUrlValid(RequestUtils.GetBaseUrl(Request).ToString(), returnUrl))
             {
-                returnUrl = MyAccountUrlProvider.GetAddressListUrl(new BaseUrlParameter { CultureInfo = ComposerContext.CultureInfo, WebsiteId = RequestUtils.GetWebsiteID() });
+                returnUrl = MyAccountUrlProvider.GetAddressListUrl(new BaseUrlParameter { CultureInfo = ComposerContext.CultureInfo });
             }
 
             var viewModel = await CustomerAddressViewService.UpdateAddressAsync(new EditAddressParam

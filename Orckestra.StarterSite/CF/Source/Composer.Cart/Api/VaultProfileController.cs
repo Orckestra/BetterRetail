@@ -51,7 +51,7 @@ namespace Orckestra.Composer.Cart.Api
                 PaymentProviderName = request.PaymentProviderName
             };
 
-            var creditCartTrustImage = ImageViewService.GetCheckoutTrustImageViewModel(ComposerContext.CultureInfo, RequestUtils.GetWebsiteID());
+            var creditCartTrustImage = ImageViewService.GetCheckoutTrustImageViewModel(ComposerContext.CultureInfo);
             var viewModel = await VaultProfileViewService.AddCreditCardAsync(addCreditCardParam);
 
             if (viewModel != null && viewModel.ActivePayment != null)
