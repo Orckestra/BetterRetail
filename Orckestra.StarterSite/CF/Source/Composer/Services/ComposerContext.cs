@@ -75,17 +75,19 @@ namespace Orckestra.Composer.Services
         {
             get
             {
-                //TODO
-                return SiteConfiguration.GetScopeId();
+                if (_scope == null)
+                {
+                    //Second attempt, if it's not in the cookie, it's most likely the default scope
+                    _scope = _scopeProvider.DefaultScope;
+
+                    //No need to store this value
+                }
+
+                return _scope;
             }
             set
             {
                 _scope = value;
-
-                //Store it in cookie for later
-                ComposerCookieDto dto = _cookieAccessor.Read();
-                dto.Scope = _scope;
-                _cookieAccessor.Write(dto);
             }
         }
         private string _scope = null;

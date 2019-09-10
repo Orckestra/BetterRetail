@@ -34,6 +34,7 @@ namespace Orckestra.Composer.Services.Cookie
         //Dependencies
         private readonly HttpRequestBase  _httpRequest;
         private readonly HttpResponseBase _httpResponse;
+        private readonly IWebsiteContext _websiteContext;
 
         //Configurations
         private readonly string           _cookieName;
@@ -56,7 +57,7 @@ namespace Orckestra.Composer.Services.Cookie
 
         private static readonly EncryptionUtility EncryptionUtility = new EncryptionUtility();
 
-        public ComposerCookieAccessor(HttpRequestBase httpRequest, HttpResponseBase httpResponse)
+        public ComposerCookieAccessor(HttpRequestBase httpRequest, HttpResponseBase httpResponse, IWebsiteContext websiteContext = null)
         {
             //Dependencies
             if (httpRequest  == null) { throw new ArgumentNullException("httpRequest"); }
@@ -64,6 +65,7 @@ namespace Orckestra.Composer.Services.Cookie
 
             _httpRequest  = httpRequest;
             _httpResponse = httpResponse;
+            _websiteContext = websiteContext;
 
             _cookieName       = SiteConfiguration.CookieAccesserSettings.Name;
             _requireSsl       = SiteConfiguration.CookieAccesserSettings.RequireSsl;

@@ -332,7 +332,6 @@
     <Compile Include="Providers\WishListUrlProvider.cs" />
     <Compile Include="Services\BreadcrumbViewService.cs" />
     <Compile Include="Mappers\NavigationMapper.cs" />
-    <Compile Include="Services\IWebsiteContext.cs" />
     <Compile Include="Services\WebsiteContext.cs" />
     <Compile Include="Sitemap\C1ContentSitemapEntryProvider.cs" />
     <Compile Include="Sitemap\C1ContentSitemapNamer.cs" />

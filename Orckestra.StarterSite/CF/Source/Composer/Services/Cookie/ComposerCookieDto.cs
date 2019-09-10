@@ -16,6 +16,7 @@ namespace Orckestra.Composer.Services.Cookie
         {
         }
 
+        [Obsolete("We do not save scope in the cookie for multi scope sites.")]
         public string Scope { get; set; }
 
         public string EncryptedCustomerId { get; set; }

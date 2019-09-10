@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Orckestra.Composer.CompositeC1.Services
+namespace Orckestra.Composer.Services
 {
-    interface IWebsiteContext
+    public interface IWebsiteContext
     {
-        Guid WebsiteId { get;}
+        Guid WebsiteId { get; }
     }
 }
