@@ -18,16 +18,16 @@ namespace Orckestra.Composer.CompositeC1.Providers
     {
         protected IPageService PageService { get; private set; }
         protected ICacheProvider CacheProvider { get; private set; }
-        protected IComposerContext ComposerContext { get; private set; }
+        protected IWebsiteContext WebsiteContext { get; private set; }
 
-        public CartUrlProvider(IPageService pageService, ICacheProvider cacheProvider, IComposerContext composerContext)
+        public CartUrlProvider(IPageService pageService, ICacheProvider cacheProvider, IWebsiteContext websiteContext)
         {
             if (pageService == null) { throw new ArgumentNullException("pageService"); }
             if (cacheProvider == null) { throw new ArgumentNullException("cacheProvider"); }
 
             PageService = pageService;
             CacheProvider = cacheProvider;
-            ComposerContext = composerContext;
+            WebsiteContext = websiteContext;
           
         }
 
@@ -36,7 +36,9 @@ namespace Orckestra.Composer.CompositeC1.Providers
             if (parameters == null) { throw new ArgumentNullException("parameters"); }
             if (parameters.CultureInfo == null) { throw new ArgumentException("parameters.CultureInfo is required", "parameters"); }
 
-            var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(parameters.CultureInfo, parameters.WebsiteId);
+
+            //return PageService.GetPageUrl(PagesConfiguration.CartPageId, parameters.CultureInfo);
+            var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(parameters.CultureInfo, WebsiteContext.WebsiteId);
             return PageService.GetPageUrl(pagesConfiguration.CartPageId, parameters.CultureInfo);
         }
 

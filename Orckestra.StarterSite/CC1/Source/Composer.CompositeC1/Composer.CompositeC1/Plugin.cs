@@ -27,6 +27,9 @@ namespace Orckestra.Composer.CompositeC1
 
         private void RegisterDependencies(IComposerHost host)
         {
+
+            host.Register<WebsiteContext, IWebsiteContext>(ComponentLifestyle.PerRequest);
+            host.Register<Providers.ScopeProvider, IScopeProvider>(ComponentLifestyle.PerRequest);
             host.Register<PageService, IPageService>();
             host.Register<CultureService, ICultureService>(ComponentLifestyle.Singleton);
             host.Register<HomeViewService, IHomeViewService>();
