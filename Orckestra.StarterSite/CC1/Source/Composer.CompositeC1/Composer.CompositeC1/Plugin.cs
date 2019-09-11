@@ -13,6 +13,8 @@ using Orckestra.Composer.Store.Providers;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Services.Breadcrumb;
 using Orckestra.Overture;
+using Orckestra.Composer.CompositeC1.Settings;
+using Orckestra.Composer.Configuration;
 
 namespace Orckestra.Composer.CompositeC1
 {
@@ -28,6 +30,7 @@ namespace Orckestra.Composer.CompositeC1
         private void RegisterDependencies(IComposerHost host)
         {
 
+            host.Register<GoogleSettings, IGoogleSettings>(ComponentLifestyle.PerRequest);
             host.Register<WebsiteContext, IWebsiteContext>(ComponentLifestyle.PerRequest);
             host.Register<Providers.ScopeProvider, IScopeProvider>(ComponentLifestyle.PerRequest);
             host.Register<PageService, IPageService>();

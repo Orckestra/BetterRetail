@@ -1,9 +1,16 @@
-﻿using System.Web;
+﻿using Orckestra.Composer.Configuration;
+using System.Web;
 
-namespace Orckestra.Composer.Store.Utils
+namespace Orckestra.Composer.Store.Providers
 {
-    public static class GoogleMapsUrls
+    public class GoogleMapsUrlProvider: IGoogleMapsUrlProvider
     {
+
+        public IGoogleSettings GoogleMapsSettings;
+        public GoogleMapsUrlProvider(IGoogleSettings googleMapsSettings)
+        {
+            GoogleMapsSettings = googleMapsSettings;
+        }
 
         public static string DirectionWithSetStartingPointUrlTemplate => "https://maps.google.com?saddr={0}&daddr={1}";
         public static string DirectionWithEmptyStartPointUrlTemplate => "https://maps.google.com?daddr={0}";
@@ -22,12 +29,12 @@ namespace Orckestra.Composer.Store.Utils
                 HttpUtility.UrlEncode(string.Join(" ", toAddressParams)));
         }
 
-        public static string GetStaticMapImgUrl(string[] addressParams, string mapType = "roadmap")
+        public string GetStaticMapImgUrl(string[] addressParams, string mapType = "roadmap")
         {
             var result = string.Format(StaticMapImgUrlTemplate, HttpUtility.UrlEncode(string.Join(",", addressParams)), mapType);
-            if (!string.IsNullOrWhiteSpace(GoogleMapsConfiguration.ApiKey))
+            if (!string.IsNullOrWhiteSpace(GoogleMapsSettings.MapsApiKey))
             {
-                result = result + "&key=" + GoogleMapsConfiguration.ApiKey;
+                result = result + "&key=" + GoogleMapsSettings.MapsApiKey;
             }
             return result;
         }

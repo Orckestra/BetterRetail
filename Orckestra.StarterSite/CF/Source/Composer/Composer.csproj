@@ -183,7 +183,7 @@
     <Compile Include="Configuration\ComposerConfigurationSection.cs" />
     <Compile Include="Configuration\ContentSitemapConfiguration.cs" />
     <Compile Include="Configuration\DisplayConfiguration.cs" />
-    <Compile Include="Configuration\GoogleMapsConfigurationElement.cs" />
+    <Compile Include="Configuration\IGoogleSettings.cs" />
     <Compile Include="Configuration\ProductSitemapConfiguration.cs" />
     <Compile Include="Configuration\SitemapConfiguration.cs" />
     <Compile Include="Country\CountryRepository.cs" />

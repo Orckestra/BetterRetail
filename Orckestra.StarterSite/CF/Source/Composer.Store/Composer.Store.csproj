@@ -131,7 +131,6 @@
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Api\StoreInventoryController.cs" />
-    <Compile Include="GoogleMapsConfiguration.cs" />
     <Compile Include="Parameters\CreateStoreViewModelParam.cs" />
     <Compile Include="Parameters\GetAllStoresParam.cs" />
     <Compile Include="Parameters\GetEmptyStoreLocatorViewModelParam.cs" />
@@ -152,6 +151,7 @@
     <Compile Include="Services\IStoreInventoryViewService.cs" />
     <Compile Include="Services\MapConfigurationViewService.cs" />
     <Compile Include="Services\StoreInventoryViewService.cs" />
+    <Compile Include="Providers\IGoogleMapsUrlProvider.cs" />
     <Compile Include="ViewModels\StoreClusterViewModel.cs" />
     <Compile Include="ViewModels\StoreDirectoryAnchorViewModel.cs" />
     <Compile Include="ViewModels\StoreDirectoryGroupViewModel.cs" />
@@ -189,7 +189,7 @@
     <Compile Include="Services\StoreLocatorViewService.cs" />
     <Compile Include="Services\StoreViewService.cs" />
     <Compile Include="Utils\GeoCodeCalculator.cs" />
-    <Compile Include="Utils\GoogleMapsUrls.cs" />
+    <Compile Include="Providers\GoogleMapsUrlProvider.cs" />
     <Compile Include="ViewModels\DailyScheduleExceptionViewModel.cs" />
     <Compile Include="ViewModels\DailyScheduleViewModel.cs" />
     <Compile Include="ViewModels\ScheduleIntervalViewModel.cs" />

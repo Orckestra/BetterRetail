@@ -17,11 +17,5 @@ namespace Orckestra.Composer.Configuration
 
 
 
-        [ConfigurationProperty(GoogleMapsConfigurationElement.ConfigurationName, IsRequired = false)]
-        public GoogleMapsConfigurationElement GoogleMapsConfiguration
-        {
-            get { return (GoogleMapsConfigurationElement)this[GoogleMapsConfigurationElement.ConfigurationName]; }
-            set { this[GoogleMapsConfigurationElement.ConfigurationName] = value; }
-        }
     }
 }

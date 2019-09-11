@@ -97,6 +97,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GoogleSettings.cs" />
     <Compile Include="Navigation\Footer.cs" />
     <Compile Include="Navigation\FooterOptionalLinks.cs" />
     <Compile Include="Navigation\StickyHeader.cs" />

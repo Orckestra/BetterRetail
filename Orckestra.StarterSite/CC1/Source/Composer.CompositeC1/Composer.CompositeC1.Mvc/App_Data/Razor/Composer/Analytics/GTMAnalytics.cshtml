@@ -1,5 +1,5 @@
 ﻿@inherits RazorFunction
-
+@using Orckestra.Composer.Configuration
 @functions {
     public override string FunctionDescription
     {
@@ -8,10 +8,12 @@
 
     [FunctionParameter(Label = "Section", Help = "The section of the page (header/body) that needs to be rendered")]
     public string Section { get; set; }
+
+    public IGoogleSettings GoogleSettings { get; set; }
 }
 
 @{
-    string ContainerId = System.Configuration.ConfigurationManager.AppSettings["Composer.GTMContainerId"];
+    string ContainerId = GoogleSettings.GTMContainerId;
 }
 
 @if (!string.IsNullOrWhiteSpace(ContainerId))

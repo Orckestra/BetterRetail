@@ -67,7 +67,7 @@ namespace Orckestra.Composer.Services.Cookie
             _httpResponse = httpResponse;
             _websiteContext = websiteContext;
 
-            _cookieName       = SiteConfiguration.CookieAccesserSettings.Name + "_" + _websiteContext.WebsiteId;
+            _cookieName = SiteConfiguration.CookieAccesserSettings.Name; // + "_" + _websiteContext.WebsiteId;
             _requireSsl       = SiteConfiguration.CookieAccesserSettings.RequireSsl;
             _timeoutInMinutes = SiteConfiguration.CookieAccesserSettings.TimeoutInMinutes;
             _cookieDomain     = SiteConfiguration.CookieAccesserSettings.Domain;

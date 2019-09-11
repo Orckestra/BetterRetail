@@ -77,10 +77,7 @@ namespace Orckestra.Composer.Services
             {
                 if (_scope == null)
                 {
-                    //Second attempt, if it's not in the cookie, it's most likely the default scope
                     _scope = _scopeProvider.DefaultScope;
-
-                    //No need to store this value
                 }
 
                 return _scope;

@@ -9,7 +9,7 @@ namespace Orckestra.Composer
     {
         static ComposerConfiguration()
         {
-            CountryCode = SiteConfiguration.OvertureSettings.CountryCode;
+            CountryCode = "CA"; //SiteConfiguration.OvertureSettings.CountryCode;
             ValidateCsrfTokenForWebApi = false;
 
             LocalizationCacheOptions = new OutputCacheOptions

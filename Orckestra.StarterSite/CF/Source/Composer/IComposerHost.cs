@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using Orckestra.Composer.ViewEngine;
 using Orckestra.Composer.ViewModels;
@@ -8,7 +9,10 @@ namespace Orckestra.Composer
 {
     public interface IComposerHost : IDependencyContainer
     {
+        List<Type> RegisteredInterfaces { get; }
         void Init();
+
+        void LoadPlugins();
 
         IViewModelMetadataRegistry MetadataRegistry { get; }
 

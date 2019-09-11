@@ -57,6 +57,12 @@
         <Type type="Orckestra.ExperienceManagement.Configuration.DataTypes.ISiteConfiguration,Orckestra.ExperienceManagement.Configuration">
           <Data dataScopeIdentifier="public" locale="?" dataFilename="~\Datas\Orckestra.ExperienceManagement.Configuration.DataTypes.ISiteConfigurations_public.xml" />
         </Type>
+        <Type type="Orckestra.Composer.CompositeC1.DataTypes.GoogleSettings,Orckestra.Composer.CompositeC1.DataTypes">
+          <Data dataScopeIdentifier="administrated" locale="?" dataFilename="~\Datas\Orckestra.Composer.CompositeC1.DataTypes.GoogleSettingss_administrated.xml" />
+        </Type>
+        <Type type="Orckestra.Composer.CompositeC1.DataTypes.GoogleSettings,Orckestra.Composer.CompositeC1.DataTypes">
+          <Data dataScopeIdentifier="public" locale="?" dataFilename="~\Datas\Orckestra.Composer.CompositeC1.DataTypes.GoogleSettingss_public.xml" />
+        </Type>
       </Types>
     </mi:Add>
   </mi:PackageFragmentInstallers>

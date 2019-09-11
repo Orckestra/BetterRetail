@@ -26,8 +26,6 @@
 
   <add key="Composer.DefaultScope" value="Canada" />
   <add key="CC1.DeploymentToken" value="***REMOVED***" />
-  <xsl:comment> Analytics </xsl:comment>
-  <add key="Composer.GTMContainerId" value="GTM-5Z9T69" />
 
   <xsl:comment> OWIN </xsl:comment>
   <add key="owin:AutomaticAppStartup" value="false" />
