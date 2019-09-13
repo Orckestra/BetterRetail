@@ -107,41 +107,36 @@
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Orckestra.AsyncExtensions, Version=3.22.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OrckestraCommerce.AsyncExtensions.3.22.0\lib\net461\Orckestra.AsyncExtensions.dll</HintPath>
+    </Reference>
     <Reference Include="Orckestra.Caching, Version=3.22.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\OrckestraCommerce.Common.3.22.0\lib\net461\Orckestra.Caching.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Orckestra.Composer, Version=4.6.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Composer.4.6.0-Build\lib\net452\Orckestra.Composer.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="Orckestra.Composer, Version=3.22.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Composer.3.22.0-Build\lib\net461\Orckestra.Composer.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Composer.Cart, Version=4.6.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Composer.4.6.0-Build\lib\net452\Orckestra.Composer.Cart.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="Orckestra.Composer.Cart, Version=3.22.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Composer.3.22.0-Build\lib\net461\Orckestra.Composer.Cart.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Composer.MyAccount, Version=4.6.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Composer.4.6.0-Build\lib\net452\Orckestra.Composer.MyAccount.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="Orckestra.Composer.MyAccount, Version=3.22.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Composer.3.22.0-Build\lib\net461\Orckestra.Composer.MyAccount.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Composer.Product, Version=4.6.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Composer.4.6.0-Build\lib\net452\Orckestra.Composer.Product.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="Orckestra.Composer.Product, Version=3.22.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Composer.3.22.0-Build\lib\net461\Orckestra.Composer.Product.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Composer.Search, Version=4.6.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Composer.4.6.0-Build\lib\net452\Orckestra.Composer.Search.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="Orckestra.Composer.Search, Version=3.22.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Composer.3.22.0-Build\lib\net461\Orckestra.Composer.Search.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Composer.SearchQuery">
-      <HintPath>..\packages\Composer.4.6.0-Build\lib\net452\Orckestra.Composer.SearchQuery.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="Orckestra.Composer.SearchQuery, Version=3.22.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Composer.3.22.0-Build\lib\net461\Orckestra.Composer.SearchQuery.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Composer.Sitemap, Version=4.6.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Composer.4.6.0-Build\lib\net452\Orckestra.Composer.Sitemap.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="Orckestra.Composer.Sitemap, Version=3.22.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Composer.3.22.0-Build\lib\net461\Orckestra.Composer.Sitemap.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Composer.Store, Version=4.6.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Composer.4.6.0-Build\lib\net452\Orckestra.Composer.Store.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="Orckestra.Composer.Store, Version=3.22.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Composer.3.22.0-Build\lib\net461\Orckestra.Composer.Store.dll</HintPath>
     </Reference>
     <Reference Include="Orckestra.Logging, Version=3.22.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\OrckestraCommerce.Common.3.22.0\lib\net461\Orckestra.Logging.dll</HintPath>
@@ -195,6 +190,15 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Net.Http.WebRequest" />
+    <Reference Include="System.Reactive.Core, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rx-Core.2.2.5\lib\net45\System.Reactive.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Interfaces, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rx-Interfaces.2.2.5\lib\net45\System.Reactive.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Linq, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rx-Linq.2.2.5\lib\net45\System.Reactive.Linq.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.Helpers.dll</HintPath>
