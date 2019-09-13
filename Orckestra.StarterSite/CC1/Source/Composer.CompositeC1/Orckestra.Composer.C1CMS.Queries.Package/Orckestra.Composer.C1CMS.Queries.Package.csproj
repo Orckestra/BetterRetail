@@ -23,6 +23,7 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <TargetFrameworkProfile />
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -65,6 +66,7 @@
     <Content Include="Package\App_Data\Razor\Composer\Queries\ProductSet\Grid.cshtml" />
     <Content Include="Package\UI.Package\Templates\SearchQueryTopResults.hbs" />
     <Content Include="packages.config" />
+    <Content Include="Package\App_Data\Razor\Composer\DatePicker\DatePicker.Includes.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -78,7 +80,9 @@
     <Content Include="Package\App_Data\Components\Product Sets\Grid.xml" />
     <Content Include="Package\App_Data\Components\Product Sets\Top.xml" />
     <Content Include="Package\Datas\Composite.Data.Types.IMethodBasedFunctionInfos_public.xml" />
-    <Content Include="Package\install.xml" />
+    <Content Include="Package\install.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>

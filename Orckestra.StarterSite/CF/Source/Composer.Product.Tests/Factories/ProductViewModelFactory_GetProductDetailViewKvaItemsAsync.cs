@@ -7,6 +7,9 @@ using FluentAssertions;
 using Moq;
 using Moq.AutoMock;
 using NUnit.Framework;
+using Orckestra.Composer.Cart.Repositories.Order;
+using Orckestra.Composer.Factory;
+using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Product.Factory;
 using Orckestra.Composer.Product.Parameters;
 using Orckestra.Composer.Product.Repositories;
@@ -15,6 +18,7 @@ using Orckestra.Composer.Product.Tests.Services;
 using Orckestra.Composer.Product.ViewModels;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Dam;
+using Orckestra.Composer.Repositories;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Services.Lookup;
 using Orckestra.Composer.ViewModels;
@@ -194,7 +198,9 @@ namespace Orckestra.Composer.Product.Tests.Factories
                 ILocalizationProvider localizationProvider, 
                 ILookupService lookupService, 
                 IProductUrlProvider productUrlProvider,
-                IScopeViewService scopeViewService) 
+                IScopeViewService scopeViewService,
+                IRecurringOrdersRepository recurringOrdersRepository,
+                IRecurringOrderProgramViewModelFactory recurringOrderProgramViewModelFactory) 
                 
                 : base(
                 viewModelMapper, 
@@ -203,7 +209,9 @@ namespace Orckestra.Composer.Product.Tests.Factories
                 localizationProvider, 
                 lookupService, 
                 productUrlProvider,
-                scopeViewService)
+                scopeViewService,
+                recurringOrdersRepository,
+                recurringOrderProgramViewModelFactory)
             {
             }
 

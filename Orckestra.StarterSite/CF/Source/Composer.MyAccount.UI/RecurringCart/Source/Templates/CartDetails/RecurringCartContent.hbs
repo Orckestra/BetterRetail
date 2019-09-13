@@ -1,0 +1,11 @@
+<div data-templateid="RecurringCartContent">
+	{{#if IsLoading}}
+		{{>Loading}}
+	{{else}}
+	    {{#if IsCartEmpty}}
+	        {{>EmptyRecurringCart}}
+	    {{else}}
+	        {{>RecurringCartSummary}}
+	    {{/if}}
+    {{/if}}
+</div>

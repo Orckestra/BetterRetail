@@ -1,0 +1,26 @@
+<div data-templateid="RecurringScheduleDetailsNextOccurence" class="panel  panel-default">
+    {{#if IsLoading}}
+        {{>Loading}}
+    {{else}}
+        <div class="panel-heading">
+           <div class="row">
+                <div class="col-xs-10">
+                    <h2 class="h3">{{localize 'RecurringSchedule' 'T_RecurringScheduleDetailsNextOccurence' }}</h2>
+                </div>
+            </div>
+        </div>
+         <div class="panel-body form-group">
+            <div class="row compact-order-header">
+                <div class="col-sm-6">
+                    <div class="compact-order-date">
+                        <strong><label for="NextOcurrence" >{{localize 'RecurringCart' 'L_NextOccurence'}}</label></strong>
+                        <br />
+                        <input class="form-control datepicker" id="NextOcurrence" value="{{NextOccurenceValue}}" />
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                </div>
+            </div>            
+        </div>
+    {{/if}}   
+</div>

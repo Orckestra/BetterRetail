@@ -64,3 +64,7 @@
  `gulp devPackage`
  This gulp task also will copy DLLs of Composer and Composer.C1 projects.
 
+#### Deploy local changes 
+* Go to .\Orckestra.StarterSite\cf\Source
+* Build local dll with VisualStudio
+* Run PS as Administrator 'gulp devPackage' to deploy composer Dlls and front end files

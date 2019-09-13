@@ -73,7 +73,8 @@
                                 <div class="col-sm-12">
                                     <div class="checkbox">
                                         <label for="createPaymentProfile">
-                                            <input name="createPaymentProfile" id="createPaymentProfile" type="checkbox" />
+                                            <input name="createPaymentProfile" id="createPaymentProfile" type="checkbox" 
+                                            {{#if ActivePaymentViewModel.MustSavePaymentMethod}} required data-parsley-error-message="{{localize 'CheckoutProcess' 'F_SaveCreditCardForced_Explain'}}"{{/if}} />
                                             {{localize 'CheckoutProcess' 'F_SaveCreditCard' }}
                                         </label>
                                     </div>

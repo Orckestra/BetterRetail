@@ -8,7 +8,9 @@ using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Repositories;
 using Orckestra.Composer.Cart.ViewModels;
 using Orckestra.Composer.Providers;
+using Orckestra.Composer.Providers.Dam;
 using Orckestra.Composer.Providers.Localization;
+using Orckestra.Composer.Services;
 using Orckestra.Composer.Utils;
 using Orckestra.Overture.ServiceModel.Marketing;
 
@@ -19,17 +21,17 @@ namespace Orckestra.Composer.Cart.Services
         protected ICartRepository CartRepository { get; private set; }
         protected ICartViewModelFactory CartViewModelFactory { get; private set; }
         protected ILocalizationProvider LocalizationProvider { get; private set; }
-        protected ILineItemService LineItemService { get; private set; }
+        protected IImageService ImageService { get; private set; }
 
         public CouponViewService(ICartRepository cartRepository, 
             ICartViewModelFactory cartViewModelFactory, 
             ILocalizationProvider localizationProvider,
-            ILineItemService lineItemService)
+            IImageService imageService)
         {
             CartRepository = cartRepository;
             CartViewModelFactory = cartViewModelFactory;
             LocalizationProvider = localizationProvider;
-            LineItemService = lineItemService;
+            ImageService = imageService;
         }
 
         /// <summary>
@@ -149,7 +151,7 @@ namespace Orckestra.Composer.Cart.Services
 
             param.ProductImageInfo = new ProductImageInfo
             {
-                ImageUrls = await LineItemService.GetImageUrlsAsync(param.Cart.GetLineItems()).ConfigureAwait(false)
+                ImageUrls = await ImageService.GetImageUrlsAsync(param.Cart.GetLineItems()).ConfigureAwait(false)
             };
 
             var vm = CartViewModelFactory.CreateCartViewModel(param);

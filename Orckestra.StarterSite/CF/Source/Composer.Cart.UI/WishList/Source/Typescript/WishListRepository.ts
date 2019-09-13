@@ -21,7 +21,9 @@ module Orckestra.Composer {
            return ComposerClient.get('/api/wishlist/getwishlistsummary');
         }
 
-        public addLineItem(productId: string, variantId: string, quantity: number): Q.Promise<void> {
+        public addLineItem(productId: string, variantId: string, quantity: number,
+            recurringOrderFrequencyName?: string,
+            recurringOrderProgramName?: string): Q.Promise<void> {
 
             if (!productId) {
                 throw new Error('The product id is required');
@@ -34,7 +36,9 @@ module Orckestra.Composer {
             var data = {
                 ProductId: productId,
                 VariantId: variantId,
-                Quantity: quantity
+                Quantity: quantity,
+                RecurringOrderFrequencyName: recurringOrderFrequencyName,
+                RecurringOrderProgramName: recurringOrderProgramName
             };
 
             return ComposerClient.post('/api/wishlist/lineitem', data);

@@ -10,6 +10,8 @@ using Orckestra.Composer.Cart.ViewModels.Order;
 using Orckestra.Composer.Enums;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
+using Orckestra.Composer.Providers.Dam;
+using Orckestra.Composer.Services;
 using Orckestra.Composer.Services.Lookup;
 using Orckestra.Overture.ServiceModel.Orders;
 
@@ -22,7 +24,7 @@ namespace Orckestra.Composer.Cart.Services.Order
         protected virtual ILookupService LookupService { get; private set; }
         protected virtual IOrderRepository OrderRepository { get; private set; }
         protected virtual IOrderDetailsViewModelFactory OrderDetailsViewModelFactory { get; private set; }
-        protected virtual ILineItemService LineItemService { get; private set; }
+        protected virtual IImageService ImageService { get; private set; }
         protected virtual IShippingTrackingProviderFactory ShippingTrackingProviderFactory { get; private set; }
 
         public OrderHistoryViewService(IOrderHistoryViewModelFactory orderHistoryViewModelFactory,
@@ -30,7 +32,7 @@ namespace Orckestra.Composer.Cart.Services.Order
             IOrderUrlProvider orderUrlProvider,
             ILookupService lookupService,
             IOrderDetailsViewModelFactory orderDetailsViewModelFactory,
-            ILineItemService lineItemService,
+            IImageService imageService,
             IShippingTrackingProviderFactory shippingTrackingProviderFactory)
         {
             if (orderHistoryViewModelFactory == null) { throw new ArgumentNullException("orderHistoryViewModelFactory"); }
@@ -39,7 +41,7 @@ namespace Orckestra.Composer.Cart.Services.Order
             if (orderRepository == null) { throw new ArgumentNullException("orderRepository"); }
             if (orderUrlProvider == null) { throw new ArgumentNullException("orderUrlProvider"); }
             if (orderDetailsViewModelFactory == null) { throw new ArgumentNullException("orderDetailsViewModelFactory"); }
-            if (lineItemService == null) { throw new ArgumentNullException("lineItemService"); }
+            if (imageService == null) { throw new ArgumentNullException("imageService"); }
             if (shippingTrackingProviderFactory == null) { throw new ArgumentNullException("shippingTrackingProviderFactory"); }
 
             OrderHistoryViewModelFactory = orderHistoryViewModelFactory;
@@ -48,7 +50,7 @@ namespace Orckestra.Composer.Cart.Services.Order
             OrderRepository = orderRepository;
             OrderUrlProvider = orderUrlProvider;
             OrderDetailsViewModelFactory = orderDetailsViewModelFactory;
-            LineItemService = lineItemService;
+            ImageService = imageService;
             ShippingTrackingProviderFactory = shippingTrackingProviderFactory;
         }
 
@@ -200,7 +202,7 @@ namespace Orckestra.Composer.Cart.Services.Order
 
             var productImageInfo = new ProductImageInfo
             {
-                ImageUrls = await LineItemService.GetImageUrlsAsync(order.Cart.GetLineItems()).ConfigureAwait(false)
+                ImageUrls = await ImageService.GetImageUrlsAsync(order.Cart.GetLineItems()).ConfigureAwait(false)
             };
 
             var viewModel = OrderDetailsViewModelFactory.CreateViewModel(new CreateOrderDetailViewModelParam

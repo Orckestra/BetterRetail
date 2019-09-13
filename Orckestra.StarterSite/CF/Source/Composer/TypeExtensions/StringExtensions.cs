@@ -17,5 +17,14 @@ namespace System
 
             return isMatch;
         }
+
+        public static Guid ToGuid(this string str)
+        {
+            if (String.IsNullOrWhiteSpace(str))
+            {
+                throw new ArgumentException("Guid value cannot be null, empty or whitespaces");
+            }
+            return Guid.Parse(str);
+        }
     }
 }

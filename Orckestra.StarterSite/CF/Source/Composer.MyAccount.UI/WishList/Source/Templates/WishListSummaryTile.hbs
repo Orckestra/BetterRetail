@@ -10,10 +10,20 @@
         </div>
         <div class="col-xs-6 col-sm-12">
             <div class="wishlist-tile-text">
-                {{#if ProductSummary.Brand}}
-                <strong class="text-uppercase  product-tile-brand" title="{{ProductSummary.Brand}}">{{ProductSummary.Brand}}</strong>
-                <br/> {{/if}}
-                <a href="{{ProductUrl}}" title="{{ProductSummary.DisplayName}}">{{ProductSummary.DisplayName}}</a>
+                <div class="row">
+                    <div class="col-xs-9 col-sm-10">
+                        {{#if ProductSummary.Brand}}
+                            <strong class="text-uppercase  product-tile-brand" data-qa="wishlist-product-brand" title="{{ProductSummary.Brand}}">{{ProductSummary.Brand}}</strong>
+                            <br/>
+                        {{/if}}
+                        <a data-qa="wishlist-product-title" href="{{ProductUrl}}" title="{{ProductSummary.DisplayName}}" data-productId="{{ProductId}}">{{ProductSummary.DisplayName}}</a>
+                    </div>
+                    {{#if RecurringOrderProgramName}}
+                        <div class="col-xs-3 col-sm-2 product-tile-recurring">
+                            <img src="/UI.Package/Images/recurring.png" alt="{{localize 'General' 'L_RecurringProduct'}}" title="{{localize 'General' 'L_RecurringProduct'}}" />
+                        </div>
+                    {{/if}}
+                </div>
             </div>
             <div class="wishlist-tile-variants">
                 {{#if VariantId}} {{#each KeyVariantAttributesList}} {{#if_neq @index 0}}|{{/if_neq}} {{Value}} {{/each}} {{/if}}

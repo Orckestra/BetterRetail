@@ -130,11 +130,11 @@
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Orckestra.AsyncExtensions, Version=3.22.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OrckestraCommerce.AsyncExtensions.3.22.0-beta0001\lib\net461\Orckestra.AsyncExtensions.dll</HintPath>
+      <HintPath>..\packages\OrckestraCommerce.AsyncExtensions.3.22.0\lib\net461\Orckestra.AsyncExtensions.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Orckestra.Caching, Version=3.22.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OrckestraCommerce.Common.3.22.0-beta0001\lib\net461\Orckestra.Caching.dll</HintPath>
+      <HintPath>..\packages\OrckestraCommerce.Common.3.22.0\lib\net461\Orckestra.Caching.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Orckestra.Composer, Version=4.6.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -173,23 +173,23 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Orckestra.Logging, Version=3.22.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OrckestraCommerce.Common.3.22.0-beta0001\lib\net461\Orckestra.Logging.dll</HintPath>
+      <HintPath>..\packages\OrckestraCommerce.Common.3.22.0\lib\net461\Orckestra.Logging.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Orckestra.Overture.Interfaces, Version=3.22.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OrckestraCommerce.Interfaces.3.22.0-beta0001\lib\portable-net4+sl5+netcore45+wp8\Orckestra.Overture.Interfaces.dll</HintPath>
+      <HintPath>..\packages\OrckestraCommerce.Interfaces.3.22.0\lib\portable-net4+sl5+netcore45+wp8\Orckestra.Overture.Interfaces.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Orckestra.Overture.RestClient, Version=3.22.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OrckestraCommerce.Client.3.22.0-beta0001\lib\net452\Orckestra.Overture.RestClient.dll</HintPath>
+      <HintPath>..\packages\OrckestraCommerce.Client.3.22.0\lib\net452\Orckestra.Overture.RestClient.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Orckestra.Overture.ServiceModel, Version=3.22.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OrckestraCommerce.ServiceModel.3.22.0-beta0001\lib\net461\Orckestra.Overture.ServiceModel.dll</HintPath>
+      <HintPath>..\packages\OrckestraCommerce.ServiceModel.3.22.0\lib\net461\Orckestra.Overture.ServiceModel.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Orckestra.Overture.ServiceModel.Requests, Version=3.22.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OrckestraCommerce.ServiceModel.Requests.3.22.0-beta0001\lib\net461\Orckestra.Overture.ServiceModel.Requests.dll</HintPath>
+      <HintPath>..\packages\OrckestraCommerce.ServiceModel.Requests.3.22.0\lib\net461\Orckestra.Overture.ServiceModel.Requests.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
@@ -287,6 +287,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\..\..\CF\Source\Composer\Utils\ConfigurationUtil.cs">
+      <Link>Utils\ConfigurationUtil.cs</Link>
+    </Compile>
     <Compile Include="..\Solution Items\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
@@ -339,6 +342,8 @@
     <Compile Include="Providers\MyAccountUrlProvider.cs" />
     <Compile Include="Providers\OrderUrlProvider.cs" />
     <Compile Include="Providers\PageNotFoundUrlProvider.cs" />
+    <Compile Include="Providers\RecurringCartUrlProvider.cs" />
+    <Compile Include="Providers\RecurringScheduleUrlProvider.cs" />
     <Compile Include="Providers\StoreUrlProvider.cs" />
     <Compile Include="Providers\UrlProviderHelper.cs" />
     <Compile Include="RequestInterceptorHttpModule.cs" />

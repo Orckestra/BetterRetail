@@ -120,6 +120,12 @@
   <data name="B_ApplyPromoCode" xml:space="preserve">
     <value>Apply</value>
   </data>
+  <data name="B_ApplyRecurrenceChanges" xml:space="preserve">
+    <value>Apply</value>
+  </data>
+  <data name="B_CancelRecurrenceChanges" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
   <data name="B_Checkout" xml:space="preserve">
     <value>Checkout</value>
   </data>
@@ -215,6 +221,12 @@
   </data>
   <data name="L_ProductTotal" xml:space="preserve">
     <value>Product Total</value>
+  </data>
+  <data name="L_RecurringChangeFrequency" xml:space="preserve">
+    <value>Change frequency</value>
+  </data>
+  <data name="L_RecurringChooseFrequency" xml:space="preserve">
+    <value>Choose a frequency...</value>
   </data>
   <data name="L_RecurringOrderPromo" xml:space="preserve">
     <value>Get 5% off</value>

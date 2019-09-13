@@ -52,9 +52,7 @@ namespace Orckestra.Composer.Cart.Tests.Services.Order
               .Setup(r => r.GetOrderDetailsBaseUrl(It.IsAny<CultureInfo>()))
                .Returns(GetRandom.String(32));
 
-            _container.GetMock<ILineItemService>()
-             .Setup(r => r.GetImageUrlsAsync(It.IsAny<List<LineItem>>()))
-             .ReturnsAsync(null);
+            _container.GetMock<ILineItemService>();
         }
 
         [Test]

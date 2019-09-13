@@ -82,5 +82,7 @@ namespace Orckestra.Composer.Cart.Factory
         /// <param name="cultureInfo"></param>
         /// <returns></returns>
         List<AdditionalFeeSummaryViewModel> GetAdditionalFeesSummary(IEnumerable<LineItemDetailViewModel> lineItemDetailViewModels, CultureInfo cultureInfo);
+
+        SavedCreditCardPaymentMethodViewModel MapSavedCreditCard(PaymentMethod payment, CultureInfo cultureInfo);
     }
 }

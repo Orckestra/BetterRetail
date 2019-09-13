@@ -207,6 +207,9 @@
   <data name="L_QuoteOpen" xml:space="preserve">
     <value>« </value>
   </data>
+  <data name="L_RecurringProduct" xml:space="preserve">
+    <value>Produit admissible à une commande récurrente</value>
+  </data>
   <data name="Login" xml:space="preserve">
     <value>Connexion</value>
   </data>
@@ -227,5 +230,8 @@
   </data>
   <data name="T_FindYourOrder" xml:space="preserve">
     <value>Trouver votre commande</value>
+  </data> 
+  <data name="P_ShippingMethodLoadErrorMessage" xml:space="preserve">
+    <value>L'information sur la méthode de livraison n'est pas disponible</value>
   </data>
 </root>

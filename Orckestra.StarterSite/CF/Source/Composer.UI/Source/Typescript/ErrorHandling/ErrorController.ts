@@ -25,7 +25,16 @@ module Orckestra.Composer {
                 this.render('FormErrorMessages', errors);
             }
 
-            //TODO: Force a scroll?
+            //Scroll to the error message if there's one
+            if (errors && errors.Errors && errors.Errors.length > 0) {
+                this.scrollToElement($('[data-templateid="FormErrorMessages"]'));
+            }
+        }
+
+        protected scrollToElement(element: JQuery, offsetDiff: number = 100) {
+            $('html, body').animate({
+                scrollTop: $(element).offset().top - offsetDiff
+            }, 10);
         }
     }
 }

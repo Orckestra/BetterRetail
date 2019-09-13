@@ -1,0 +1,13 @@
+<div data-templateid="MyRecurringCarts" >
+    {{#if IsLoading}}
+        {{>Loading}}
+    {{else}}
+        {{#if RecurringOrderCarts}}
+            {{#each RecurringOrderCarts }}
+                {{> LightRecurringOrderCartDetail}}
+            {{/each}}
+        {{else}}
+            <span class="text-muted">{{localize 'RecurringCart' 'L_RecurringOrderCartsEmpty'}}</span>
+        {{/if}}
+    {{/if}} 
+</div>

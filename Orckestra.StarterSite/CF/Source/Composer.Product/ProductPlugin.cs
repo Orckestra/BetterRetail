@@ -12,8 +12,6 @@ namespace Orckestra.Composer.Product
         public void Register(IComposerHost host)
         {
             host.Register<ProductViewService, IProductViewService>();
-            host.Register<ProductPriceViewService, IProductPriceViewService>();
-            host.Register<ProductRepository, IProductRepository>();
             host.Register<RelationshipRepository, IRelationshipRepository>();
             host.Register<CategoryViewService, ICategoryViewService>();
             host.Register<ConventionBasedDamProvider, IDamProvider>();

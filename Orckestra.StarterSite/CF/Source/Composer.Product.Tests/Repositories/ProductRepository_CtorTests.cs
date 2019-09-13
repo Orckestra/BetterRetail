@@ -4,6 +4,7 @@ using FluentAssertions;
 using Moq.AutoMock;
 using NUnit.Framework;
 using Orckestra.Composer.Product.Repositories;
+using Orckestra.Composer.Repositories;
 using Orckestra.Overture;
 
 namespace Orckestra.Composer.Product.Tests.Repositories
