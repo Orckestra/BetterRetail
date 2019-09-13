@@ -16,7 +16,7 @@
 
 module Orckestra.Composer {
 
-    enum EditSection {
+    export enum EditSection {
         NextOccurence = 0,
         ShippingMethod = 1,
         Address = 2,
@@ -24,7 +24,7 @@ module Orckestra.Composer {
     };
 
     //From Composer
-    enum ShippingMethodType {
+    export enum ShippingMethodType {
         Unspecified = 0,
         PickUp = 1,
         Delivery = 2,
@@ -37,22 +37,22 @@ module Orckestra.Composer {
         protected storeService: IStoreService = new StoreService();
         protected paymentService: MonerisPaymentService = new MonerisPaymentService();
 
-        private editNextOcurrence = false;
-        private editShippingMethod = false;
-        private editAddress = false;
-        private editPayment = false;
-        private originalShippingMethodType = '';
-        private hasShippingMethodTypeChanged = false;
-        private newShippingMethodType = undefined;
-        private viewModelName = '';
-        private viewModel;
-        private updateWaitTime = 300;
+        protected editNextOcurrence = false;
+        protected editShippingMethod = false;
+        protected editAddress = false;
+        protected editPayment = false;
+        protected originalShippingMethodType = '';
+        protected hasShippingMethodTypeChanged = false;
+        protected newShippingMethodType = undefined;
+        protected viewModelName = '';
+        protected viewModel;
+        protected updateWaitTime = 300;
         protected modalElementSelector: string = '#confirmationModal';
-        private uiModal: UIModal;
-        private busyHandler: UIBusyHandle;
-        private window: Window;
+        protected uiModal: UIModal;
+        protected busyHandler: UIBusyHandle;
+        protected window: Window;
 
-        private debounceUpdateLineItem: (args: any) => void;
+        protected debounceUpdateLineItem: (args: any) => void;
 
         protected customerService: ICustomerService = new CustomerService(new CustomerRepository());
         protected recurringCartAddressRegisteredService: RecurringCartAddressRegisteredService =
@@ -196,7 +196,7 @@ module Orckestra.Composer {
             return false;
         }
 
-        private convertDateToUTC(date) {
+        public convertDateToUTC(date) {
             return new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(),
             date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
         }
@@ -286,7 +286,7 @@ module Orckestra.Composer {
             }
         }
 
-        private closeOtherEditSections(actionContext: IControllerActionContext, type: EditSection) {
+        public closeOtherEditSections(actionContext: IControllerActionContext, type: EditSection) {
 
             if (this.editNextOcurrence && type !== EditSection.NextOccurence) {
                 this.toggleEditNextOccurence(actionContext);
@@ -302,7 +302,7 @@ module Orckestra.Composer {
             }
         }
 
-        private resetEditToggleFlags() {
+        public resetEditToggleFlags() {
             this.editNextOcurrence = false;
             this.editShippingMethod = false;
             this.editAddress = false;
@@ -337,7 +337,7 @@ module Orckestra.Composer {
              $('#ShippingProviderId').val(shippingProviderId.toString());
         }
 
-        private manageSaveShippingMethod(newType, actionContext) {
+        public manageSaveShippingMethod(newType, actionContext) {
             //When shipping method is changed from ship to store and ship to home, address must correspond to 
             //store adress/home address.
             //When the type change, we wait to save shipping method and open adresse section. Then, when saving valid address,
@@ -508,7 +508,7 @@ module Orckestra.Composer {
                 .fin(() => busy.done());
         }
 
-        private useShippingAddress() : Boolean {
+        public useShippingAddress() : Boolean {
             var useShippingAddress = $(this.context.container).find('input[name=UseShippingAddress]:checked').val() === 'true';
             return useShippingAddress;
         }
@@ -521,7 +521,7 @@ module Orckestra.Composer {
             //TODO: form validation?
         }
 
-        private setBillingAddressFormVisibility() {
+        public setBillingAddressFormVisibility() {
 
             var useShippingAddress: Boolean = this.useShippingAddress();
             if (useShippingAddress) {
@@ -618,7 +618,7 @@ module Orckestra.Composer {
             }
         }
 
-        private applyUpdateLineItemQuantity(args: any) {
+        public applyUpdateLineItemQuantity(args: any) {
 
             var context: JQuery = args.actionContext.elementContext;
             var busy = this.asyncBusy({ elementContext: args.actionContext.elementContext });
@@ -726,7 +726,7 @@ module Orckestra.Composer {
                 .fin(() => busy.done());
         }
 
-        private onAddressDeleted(e: IEventInformation) {
+        public onAddressDeleted(e: IEventInformation) {
 
             var addressId = e.data;
             var $addressListItem = $(this.context.container).find('[data-address-id=' + addressId + ']');
@@ -779,7 +779,7 @@ module Orckestra.Composer {
             }
         }
 
-        private showError(errorCode: string, parentSelector: string) {
+        public showError(errorCode: string, parentSelector: string) {
             var localization: string = LocalizationProvider.instance().getLocalizedString('Errors', `L_${errorCode}`);
 
             var error: IError = {

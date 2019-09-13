@@ -57,7 +57,7 @@ module Orckestra.Composer {
             return this.getPreferredBillingAddressId(addressList);
         }
 
-        private isBillingAddressFromCartValid(cart: any, addressList: any) : boolean {
+        public isBillingAddressFromCartValid(cart: any, addressList: any) : boolean {
 
             if (cart.Payment === undefined) {
                 return false;
@@ -70,7 +70,7 @@ module Orckestra.Composer {
             return _.any(addressList.Addresses, (address: AddressDto) => address.Id === cart.Payment.BillingAddress.Id);
         }
 
-        private getPreferredBillingAddressId(addressList: any) : string {
+        public getPreferredBillingAddressId(addressList: any) : string {
 
             var preferredBillingAddress = _.find(addressList.Addresses, (address: AddressDto) => address.IsPreferredBilling);
 
@@ -86,7 +86,7 @@ module Orckestra.Composer {
             return this.getPreferredShippingAddressId(addressList);
         }
 
-        private isShippingAddressFromCartValid(cart: any, addressList: any) : boolean {
+        public isShippingAddressFromCartValid(cart: any, addressList: any) : boolean {
 
             if (cart.ShippingAddress === undefined) {
                 return false;
@@ -95,7 +95,7 @@ module Orckestra.Composer {
             return _.any(addressList.Addresses, (address: AddressDto) => address.Id === cart.ShippingAddress.Id);
         }
 
-        private getPreferredShippingAddressId(addressList: any) : string {
+        public getPreferredShippingAddressId(addressList: any) : string {
 
             var preferredShippingAddress = _.find(addressList.Addresses, (address: AddressDto) => address.IsPreferredShipping);
 

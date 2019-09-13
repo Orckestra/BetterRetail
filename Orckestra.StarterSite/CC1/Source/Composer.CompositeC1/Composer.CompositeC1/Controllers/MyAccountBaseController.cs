@@ -259,6 +259,9 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         [AuthorizeAndRedirect]
         public virtual ActionResult UpcomingOrders()
         {
+            if (!ConfigurationUtil.GetRecurringOrdersConfigEnabled())
+                return new EmptyResult();
+
             return View("RecurringCartsContainer", GetUpcomingOrdersViewModel());
         }
 

@@ -12,13 +12,13 @@ module Orckestra.Composer {
     export class MyRecurringScheduleController extends Orckestra.Composer.RecurringScheduleController {
         protected recurringOrderService: IRecurringOrderService = new RecurringOrderService(new RecurringOrderRepository(), this.eventHub);
 
-        private debounceUpdateLineItem: (args: any) => void;
-        private updateWaitTime = 300;
-        private busyHandler: UIBusyHandle;
-        private viewModelName = '';
-        private uiModalConfirmRemove: UIModal;
+        protected debounceUpdateLineItem: (args: any) => void;
+        protected updateWaitTime = 300;
+        protected busyHandler: UIBusyHandle;
+        protected viewModelName = '';
+        protected uiModalConfirmRemove: UIModal;
         protected modalElementSelectorRemove: string = '#recurringOrderTemplateRemoveConfirmationModal';
-        private window: Window;
+        protected window: Window;
 
         public initialize() {
 
@@ -73,7 +73,7 @@ module Orckestra.Composer {
             }
         }
 
-        private applyUpdateLineItemQuantity(args: any) {
+        public applyUpdateLineItemQuantity(args: any) {
 
             var context: JQuery = args.actionContext.elementContext;
             this.busyHandler = this.asyncBusy({ elementContext: args.actionContext.elementContext });

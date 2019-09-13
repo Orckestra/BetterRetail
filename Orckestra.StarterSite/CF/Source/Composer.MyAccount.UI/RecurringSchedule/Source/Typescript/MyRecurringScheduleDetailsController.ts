@@ -14,13 +14,13 @@ module Orckestra.Composer {
     export class MyRecurringScheduleDetailsController extends Orckestra.Composer.RecurringScheduleDetailsController {
         protected recurringOrderService: IRecurringOrderService = new RecurringOrderService(new RecurringOrderRepository(), this.eventHub);
 
-        private viewModelName = '';
-        private id = '';
-        private viewModel;
+        protected viewModelName = '';
+        protected id = '';
+        protected viewModel;
         protected modalElementSelector: string = '#confirmationModal';
-        private uiModal: UIModal;
-        private busyHandler: UIBusyHandle;
-        private window: Window;
+        protected uiModal: UIModal;
+        protected busyHandler: UIBusyHandle;
+        protected window: Window;
 
         protected customerService: ICustomerService = new CustomerService(new CustomerRepository());
         protected recurringCartAddressRegisteredService: RecurringCartAddressRegisteredService =
@@ -163,7 +163,7 @@ module Orckestra.Composer {
             busy.done();
         }
 
-        private useShippingAddress() : Boolean {
+        public useShippingAddress() : Boolean {
             var useShippingAddress = $(this.context.container).find('input[name=UseShippingAddress]:checked').val() === 'true';
             return useShippingAddress;
         }
@@ -176,7 +176,7 @@ module Orckestra.Composer {
             //TODO: form validation?
         }
 
-        private setBillingAddressFormVisibility() {
+        public setBillingAddressFormVisibility() {
 
             var useShippingAddress: Boolean = this.useShippingAddress();
             if (useShippingAddress) {
@@ -339,7 +339,7 @@ module Orckestra.Composer {
             return false;
         }
 
-        private convertDateToUTC(date) {
+        public convertDateToUTC(date) {
             return new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(),
             date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
         }
