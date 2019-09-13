@@ -239,7 +239,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
                 Line1 = GetRandom.String(32),
                 Line2 = GetRandom.String(32),
                 RegionCode = GetRandom.String(32),
-                CountryCode = ComposerConfiguration.CountryCode,
+                CountryCode = GetRandom.String(32),
                 PhoneNumber = GetRandom.String(32),
                 PostalCode = GetRandom.String(6)
             };
@@ -372,7 +372,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
                 Line1 = GetRandom.String(32),
                 Line2 = GetRandom.String(32),
                 RegionCode = GetRandom.String(32),
-                CountryCode = ComposerConfiguration.CountryCode,
+                CountryCode = GetRandom.String(32),
                 PhoneNumber = GetRandom.String(32),
             };
 
@@ -411,7 +411,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
                 Line1 = GetRandom.String(32),
                 Line2 = GetRandom.String(32),
                 RegionCode = GetRandom.String(32),
-                CountryCode = ComposerConfiguration.CountryCode,
+                CountryCode = GetRandom.String(32),
                 PhoneNumber = GetRandom.String(32)
             };
 

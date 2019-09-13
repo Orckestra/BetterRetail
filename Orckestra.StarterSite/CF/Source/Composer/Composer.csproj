@@ -220,6 +220,7 @@
     <Compile Include="Parameters\GetScopeCurrencyParam.cs" />
     <Compile Include="Parameters\GetScopeParam.cs" />
     <Compile Include="Providers\IPageNotFoundUrlProvider.cs" />
+    <Compile Include="Providers\ICountryCodeProvider.cs" />
     <Compile Include="Repositories\IInventoryRepository.cs" />
     <Compile Include="Repositories\InventoryRepository.cs" />
     <Compile Include="Repositories\IScopeRepository.cs" />
@@ -329,7 +330,6 @@
     <Compile Include="Providers\Membership\OvertureMembershipProvider.cs" />
     <Compile Include="Providers\RegionCode\RegionCodeProvider.cs" />
     <Compile Include="Providers\RegionCode\RegionPostalCode.cs" />
-    <Compile Include="Providers\ScopeProvider.cs" />
     <Compile Include="Repositories\CategoryRepository.cs" />
     <Compile Include="Repositories\CustomerLookupRepository.cs" />
     <Compile Include="Parameters\GetCategoriesParam.cs" />

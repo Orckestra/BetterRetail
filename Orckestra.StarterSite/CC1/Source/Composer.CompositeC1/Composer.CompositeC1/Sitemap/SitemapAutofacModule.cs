@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Orckestra.Composer.CompositeC1.Providers;
 using Orckestra.Composer.CompositeC1.Services;
 using Orckestra.Composer.Product.Providers;
 using Orckestra.Composer.Providers;
@@ -7,11 +8,6 @@ using Orckestra.Composer.Sitemap;
 using Orckestra.Composer.Sitemap.Config;
 using Orckestra.Composer.Sitemap.Product;
 using Orckestra.Overture;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.Hosting;
 
 namespace Orckestra.Composer.CompositeC1.Sitemap

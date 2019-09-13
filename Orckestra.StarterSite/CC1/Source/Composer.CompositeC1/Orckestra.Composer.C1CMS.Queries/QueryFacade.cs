@@ -26,7 +26,7 @@ namespace Orckestra.Composer.C1CMS.Queries
 
             var queries = searchQueryRepository.GetSearchQueriesAsync(new GetSearchQueriesParam()
             {
-                Scope = SiteConfiguration.GetScopeId(),
+                Scope = "BetterRetailCanada", // TODO: SiteConfiguration.GetScopeId(),
                 QueryType = queryType
             }).Result;
 

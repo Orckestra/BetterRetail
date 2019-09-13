@@ -15,19 +15,23 @@ namespace Orckestra.Composer.Services
 	{
 		private readonly ICookieAccessor<ComposerCookieDto> _cookieAccessor;
 		private readonly IScopeProvider _scopeProvider;
-		private readonly HttpContextBase _httpContextBase;
+        private readonly ICountryCodeProvider _countryCodeProvider;
+        private readonly HttpContextBase _httpContextBase;
 		private readonly EncryptionUtility _encryptionUtility = new EncryptionUtility();
 
 		public ComposerContext(
 			ICookieAccessor<ComposerCookieDto> cookieAccessor, 
 			IScopeProvider scopeProvider,
-			HttpContextBase httpContextBase)
+			HttpContextBase httpContextBase,
+            ICountryCodeProvider countryCodeProvider)
 		{
 			_cookieAccessor = cookieAccessor;
 			_scopeProvider = scopeProvider;
 			_httpContextBase = httpContextBase;
+            _countryCodeProvider = countryCodeProvider;
 
-			SetAuthenticated();
+
+            SetAuthenticated();
 		}
 
 		/// <summary>
@@ -35,7 +39,7 @@ namespace Orckestra.Composer.Services
 		/// </summary>
 		public string CountryCode
 		{
-			get { return SiteConfiguration.OvertureSettings.CountryCode; }
+			get { return _countryCodeProvider.CountryCode; }
 		}
 
 		/// <summary>
