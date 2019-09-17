@@ -23,6 +23,7 @@ namespace Orckestra.Composer.CompositeC1.Sitemap
             {                
                 var hangfireContainer = hangfireHost.Container;
                 var scopeProvider = hangfireContainer.Resolve<IScopeProvider>();
+                var websiteContext = hangfireContainer.Resolve<IWebsiteContext>();
                 var cultureService = hangfireContainer.Resolve<ICultureService>();
                 var sitemapGenerator = hangfireContainer.Resolve<ISitemapGenerator>();
                 

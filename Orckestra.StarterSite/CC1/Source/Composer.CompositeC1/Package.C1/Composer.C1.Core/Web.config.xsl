@@ -29,6 +29,8 @@
 
   <xsl:comment> OWIN </xsl:comment>
   <add key="owin:AutomaticAppStartup" value="false" />
+   <xsl:comment> Hangfire </xsl:comment>
+  <add key="hangfire:AutomaticAppStartup" value="false" />
 </appSettings>
 </xsl:variable>
 
