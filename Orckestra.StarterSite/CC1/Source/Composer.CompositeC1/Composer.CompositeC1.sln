@@ -123,6 +123,6 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.TransientFaultHandling.6.0.1304.0\lib\portable-net45+win+wp8;packages\EnterpriseLibrary.TransientFaultHandling.Data.6.0.1304.1\lib\NET45;ng.6.0.1304.0\lib\portable-net45+win+wp8;ng.Data.6.0.1304.1\lib\NET45;packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45
-		SolutionGuid = {BB26D913-4B22-43FC-BFD3-F3DAADE197E6}
+		SolutionGuid = {B483BAF0-FC77-4BA7-8B43-DC593B90A3EE}
 	EndGlobalSection
 EndGlobal
