@@ -46,6 +46,11 @@ namespace Orckestra.Composer.Cart.ViewModels
         public bool CanSavePaymentMethod { get; set; }
 
         /// <summary>
+        /// Indicate wether the payment method must be saved
+        /// </summary>
+        public bool MustSavePaymentMethod { get; set; }
+
+        /// <summary>
         /// The Image Infos of the Payment trust icon.
         /// </summary>
         public ImageViewModel CreditCardTrustImage { get; set; }

@@ -250,6 +250,42 @@ namespace Orckestra.Composer.Cart.Repositories
             });
         }
 
+        public virtual Task<List<PaymentMethod>> GetCustomerPaymentMethodForProviderAsync(GetCustomerPaymentMethodsForProviderParam param)
+        {
+            if (param == null) { throw new ArgumentNullException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param))); }
+            if (param.CustomerId == Guid.Empty) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param.CustomerId))); }
+            if (string.IsNullOrWhiteSpace(param.ScopeId)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param.ScopeId))); }
+            if (string.IsNullOrWhiteSpace(param.ProviderName)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param.ProviderName))); }
+
+            var getCustomerPaymentMethodsRequest = new GetCustomerPaymentMethodsRequest
+            {
+                CustomerId = param.CustomerId,
+                PaymentProviderName = param.ProviderName,
+                ScopeId = param.ScopeId
+            };
+
+            return OvertureClient.SendAsync(getCustomerPaymentMethodsRequest);
+        }
+        public virtual Task<Payment> GetPaymentAsync(GetPaymentParam param)
+        {
+            if (param == null) { throw new ArgumentNullException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param))); }
+            if (param.CustomerId == Guid.Empty) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param.CustomerId))); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param.Scope))); }
+            if (param.CultureInfo == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param.CultureInfo))); }
+            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param.CartName))); }
+
+            var getPaymentRequest = new GetPaymentRequest
+            {
+                CustomerId = param.CustomerId,
+                CartName = param.CartName,
+                ScopeId = param.Scope,
+                CultureName = param.CultureInfo.Name,
+                Id = param.PaymentId
+            };
+
+            return OvertureClient.SendAsync(getPaymentRequest);
+        }
+
         /// <summary>
         /// Builds a cache key for a cart operation.
         /// </summary>
@@ -270,7 +306,7 @@ namespace Orckestra.Composer.Cart.Repositories
             return cacheKey;
         }
 
-        protected CacheKey BuildPaymentMethodCacheKey(string scope, string cartName, Guid customerId, string providerName)
+        protected virtual CacheKey BuildPaymentMethodCacheKey(string scope, string cartName, Guid customerId, string providerName)
         {            
             var cacheKey = new CacheKey(CacheConfigurationCategoryNames.PaymentMethod)
             {
@@ -300,5 +336,6 @@ namespace Orckestra.Composer.Cart.Repositories
             key.AppendKeyParts(customerId, cartName);
             return key;
         }
+
     }
 }

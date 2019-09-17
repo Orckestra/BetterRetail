@@ -460,4 +460,25 @@ Don't worry, you can still find great products to offer!</value>
   <data name="T_WishListCount" xml:space="preserve">
     <value>product(s)</value>
   </data>
+  <data name="H_RecurringCartDetails" xml:space="preserve">
+    <value>See Details</value>
+  </data>
+  <data name="L_EstimatedTotal" xml:space="preserve">
+    <value>Estimated total</value>
+  </data>
+  <data name="T_Addresses" xml:space="preserve">
+    <value>Addresses</value>
+  </data>
+  <data name="B_AddNewPayment" xml:space="preserve">
+    <value>Add a credit card</value>
+  </data>
+  <data name="B_EditPayment" xml:space="preserve">
+    <value>Edit payment</value>
+  </data>
+  <data name="B_DeletePayment" xml:space="preserve">
+    <value>Delete payment</value>
+  </data>
+  <data name="B_SaveChanges" xml:space="preserve">
+    <value>Save changes</value>
+  </data>
 </root>

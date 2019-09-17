@@ -8,6 +8,8 @@ using Orckestra.Composer.Cart.Parameters.WishList;
 using Orckestra.Composer.Cart.Providers.WishList;
 using Orckestra.Composer.Cart.Repositories;
 using Orckestra.Composer.Cart.ViewModels;
+using Orckestra.Composer.Providers.Dam;
+using Orckestra.Composer.Services;
 
 namespace Orckestra.Composer.Cart.Services
 {
@@ -15,29 +17,29 @@ namespace Orckestra.Composer.Cart.Services
     {
         protected IWishListRepository WishListRepository { get; private set; }
         protected ILineItemViewModelFactory LineItemViewModelFactory { get; private set; }
-        protected ILineItemService LineItemService { get; private set; }
         protected IWishListUrlProvider WishListUrlProvider { get; private set; }
 
         protected IFixCartService FixCartService { get; private set; }
+        protected IImageService ImageService { get; private set; }
 
         public WishListViewService(
             IWishListRepository wishListRepository,
             ILineItemViewModelFactory lineItemViewModelFactory,
-            ILineItemService lineItemService,
             IWishListUrlProvider wishListUrlProvider,
-            IFixCartService fixCartService)
+            IFixCartService fixCartService,
+            IImageService imageService)
         {
             if (wishListRepository == null) { throw new ArgumentNullException("wishListRepository"); }
             if (lineItemViewModelFactory == null) { throw new ArgumentNullException("lineItemViewModelFactory"); }
-            if (lineItemService == null) { throw new ArgumentNullException("lineItemService"); }
             if (wishListUrlProvider == null) { throw new ArgumentNullException("wishListUrlProvider"); }
             if (fixCartService == null) { throw new ArgumentNullException("fixCartService"); }
+            if (imageService == null) { throw new ArgumentNullException("imageService"); }
 
             WishListRepository = wishListRepository;
             LineItemViewModelFactory = lineItemViewModelFactory;
-            LineItemService = lineItemService;
             WishListUrlProvider = wishListUrlProvider;
             FixCartService = fixCartService;
+            ImageService = imageService;
         }
 
         public virtual async Task<WishListSummaryViewModel> AddLineItemAsync(AddLineItemParam param)
@@ -142,7 +144,7 @@ namespace Orckestra.Composer.Cart.Services
             {
                 var imageInfo = new ProductImageInfo
                 {
-                    ImageUrls = await LineItemService.GetImageUrlsAsync(lineItems).ConfigureAwait(false),
+                    ImageUrls = await ImageService.GetImageUrlsAsync(lineItems).ConfigureAwait(false),
                 };
 
                 viewModel.Items = LineItemViewModelFactory.CreateViewModel(new CreateListOfLineItemDetailViewModelParam {

@@ -47,6 +47,39 @@ module Orckestra.Composer {
         }
 
         /**
+         * Get the customer addresses for a recurring cart page.
+         */
+        public getRecurringCartAddresses(cartName: string): Q.Promise<any> {
+
+            if (_.isUndefined(this.memoizeGetAdresses)) {
+               this.memoizeGetAdresses = _.memoize(arg => this.getRecurringCartAddressesImpl(cartName));
+           }
+
+           return this.memoizeGetAdresses();
+        }
+
+        private getRecurringCartAddressesImpl(cartName: string): Q.Promise<any> {
+            return this.customerRepository.getRecurringCartAddresses(cartName);
+        }
+
+        /**
+         * Get the customer addresses for a recurring cart page.
+         */
+        public getRecurringTemplateAddresses(id: string): Q.Promise<any> {
+
+            if (_.isUndefined(this.memoizeGetAdresses)) {
+               this.memoizeGetAdresses = _.memoize(arg => this.getRecurringTemplateAddressesImpl(id));
+           }
+
+           return this.memoizeGetAdresses();
+        }
+
+        private getRecurringTemplateAddressesImpl(id: string): Q.Promise<any> {
+
+            return this.customerRepository.getRecurringTemplateAddresses(id);
+        }
+
+        /**
         * Create a new customer address
         * @param
         */
@@ -69,7 +102,7 @@ module Orckestra.Composer {
         * @param
         */
         public deleteAddress(addressId: JQuery, returnUrl: string): Q.Promise<any> {
-
+            this.memoizeGetAdresses = undefined;
             return this.customerRepository.deleteAddress(addressId, returnUrl);
         }
 

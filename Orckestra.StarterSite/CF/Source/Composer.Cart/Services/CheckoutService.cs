@@ -14,7 +14,9 @@ using Orckestra.Composer.Enums;
 using Orckestra.Composer.Exceptions;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
+using Orckestra.Composer.Providers.Dam;
 using Orckestra.Composer.Repositories;
+using Orckestra.Composer.Services;
 using Orckestra.Composer.Services.Lookup;
 using Orckestra.Composer.Utils;
 using Orckestra.Composer.ViewModels;
@@ -39,7 +41,7 @@ namespace Orckestra.Composer.Cart.Services
         protected ILookupService LookupService { get; private set; }
         protected IAddressRepository AddressRepository { get; private set; }
         protected IShippingMethodViewService ShippingMethodViewService { get; private set; }
-        protected ILineItemService LineItemService { get; private set; }
+        protected IImageService ImageService{ get; private set; }
         protected IFulfillmentMethodRepository FulfillmentMethodRepository { get; private set; }
         protected IViewModelMapper ViewModelMapper { get; private set; }
         protected ILineItemViewModelFactory LineItemViewModelFactory { get; private set; }
@@ -55,7 +57,7 @@ namespace Orckestra.Composer.Cart.Services
         /// <param name="lookupService"></param>
         /// <param name="addressRepository"></param>
         /// <param name="shippingMethodViewService"></param>
-        /// <param name="lineItemService"></param>
+        /// <param name="imageService"></param>
         /// <param name="fulfillmentMethodRepository"></param>
         /// <param name="viewModelMapper"></param>
         /// <param name="lineItemViewModelFactory"></param>
@@ -68,7 +70,7 @@ namespace Orckestra.Composer.Cart.Services
             ILookupService lookupService,
             IAddressRepository addressRepository,
             IShippingMethodViewService shippingMethodViewService,
-            ILineItemService lineItemService,
+            IImageService imageService,
             IFulfillmentMethodRepository fulfillmentMethodRepository,
             IViewModelMapper viewModelMapper,
             ILineItemViewModelFactory lineItemViewModelFactory,
@@ -81,7 +83,7 @@ namespace Orckestra.Composer.Cart.Services
             if (lookupService == null) { throw new ArgumentNullException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(LookupService))); }
             if (addressRepository == null) { throw new ArgumentNullException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(addressRepository))); }
             if (shippingMethodViewService == null) { throw new ArgumentNullException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(shippingMethodViewService))); }
-            if (lineItemService == null) { throw new ArgumentNullException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(lineItemService))); }
+            if (imageService == null) { throw new ArgumentNullException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(imageService))); }
             if (fulfillmentMethodRepository == null) { throw new ArgumentNullException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(fulfillmentMethodRepository))); }
             if (viewModelMapper == null) { throw new ArgumentNullException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(viewModelMapper))); }
             if (lineItemViewModelFactory == null) { throw new ArgumentNullException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(lineItemViewModelFactory)));}
@@ -94,7 +96,7 @@ namespace Orckestra.Composer.Cart.Services
             LookupService = lookupService;
             AddressRepository = addressRepository;
             ShippingMethodViewService = shippingMethodViewService;
-            LineItemService = lineItemService;
+            ImageService = imageService;
             FulfillmentMethodRepository = fulfillmentMethodRepository;
             ViewModelMapper = viewModelMapper;
             LineItemViewModelFactory = lineItemViewModelFactory;
@@ -270,7 +272,7 @@ namespace Orckestra.Composer.Cart.Services
 
             param.ProductImageInfo = new ProductImageInfo
             {
-                ImageUrls = await LineItemService.GetImageUrlsAsync(param.Cart.GetLineItems()).ConfigureAwait(false)
+                ImageUrls = await ImageService.GetImageUrlsAsync(param.Cart.GetLineItems()).ConfigureAwait(false)
             };
 
             var methodDisplayNames = await LookupService.GetLookupDisplayNamesAsync(new GetLookupDisplayNamesParam

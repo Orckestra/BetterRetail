@@ -10,8 +10,7 @@
     <mi:Add path="~\Bin\Orckestra.Composer.CompositeC1.DataTypes.dll" />
   </mi:PackageFragmentInstallerBinaries>
 
-  <mi:PackageFragmentInstallers>
-
+  <mi:PackageFragmentInstallers>    
     <mi:Add installerType="Composite.Core.PackageSystem.PackageFragmentInstallers.DllPackageFragmentInstaller, Composite" uninstallerType="Composite.Core.PackageSystem.PackageFragmentInstallers.DllPackageFragmentUninstaller, Composite">
       <Files>
         <File sourceFilename="~\Bin\Autofac.dll" targetFilename="~\Bin\Autofac.dll" allowOverwrite="true" addAssemblyBinding="true"/>
@@ -30,6 +29,8 @@
         <File sourceFilename="~\Bin\Orckestra.Overture.ServiceModel.dll" targetFilename="~\Bin\Orckestra.Overture.ServiceModel.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Orckestra.Overture.ServiceModel.Requests.dll" targetFilename="~\Bin\Orckestra.Overture.ServiceModel.Requests.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Orckestra.Overture.Providers.MonerisPayment.ServiceModel.dll" targetFilename="~\Bin\Orckestra.Overture.Providers.MonerisPayment.ServiceModel.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\OrckestraCommerce.RecurringOrders.ServiceModel.dll" targetFilename="~\Bin\OrckestraCommerce.RecurringOrders.ServiceModel.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\OrckestraCommerce.RecurringOrders.ServiceModel.Requests.dll" targetFilename="~\Bin\OrckestraCommerce.RecurringOrders.ServiceModel.Requests.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Owin.dll" targetFilename="~\Bin\Owin.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\ServiceStack.Client.dll" targetFilename="~\Bin\ServiceStack.Client.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\ServiceStack.Interfaces.dll" targetFilename="~\Bin\ServiceStack.Interfaces.dll" allowOverwrite="true" />

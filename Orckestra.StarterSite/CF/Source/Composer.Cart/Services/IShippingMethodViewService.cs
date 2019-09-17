@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.ViewModels;
+using Orckestra.Composer.ViewModels;
 
 namespace Orckestra.Composer.Cart.Services
 {
@@ -17,6 +18,13 @@ namespace Orckestra.Composer.Cart.Services
         Task<ShippingMethodsViewModel> GetShippingMethodsAsync(GetShippingMethodsParam param);
 
         /// <summary>
+        /// Get the Shipping methods available for a shipment. Calls the GetCart to get the shipment Id.
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        Task<ShippingMethodsViewModel> GetRecurringCartShippingMethodsAsync(GetShippingMethodsParam param);
+            
+        /// <summary>
         /// Set the cheapest shipping method in the cart.
         /// </summary>
         /// <param name="param"></param>
@@ -29,5 +37,19 @@ namespace Orckestra.Composer.Cart.Services
         /// <param name="param"></param>
         /// <returns></returns>
         Task<ShippingMethodViewModel> EstimateShippingAsync(EstimateShippingParam param);
+
+        /// <summary>
+        /// Get the Shipping methods available in the scope.
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns>The ShippingMethodsViewModel</returns>
+        Task<RecurringOrdersTemplatesShippingMethodsViewModel> GetShippingMethodsScopeAsync(GetShippingMethodsScopeParam param);
+
+        /// <summary>
+        /// Update a recurring cart to a specific shipping method
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        Task<CartViewModel> UpdateRecurringOrderCartShippingMethodAsync(UpdateRecurringOrderCartShippingMethodParam param);
     }
 }

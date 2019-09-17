@@ -57,8 +57,6 @@ namespace Orckestra.Composer.Cart.Tests.Services
         private Mock<ILineItemService> CreatepaymentProviderFactoryMock()
         {
             var paymentProviderFactoryMock = _container.GetMock<ILineItemService>();
-            paymentProviderFactoryMock.Setup(s => s.GetImageUrlsAsync(It.IsAny<IEnumerable<LineItem>>()))
-                .ReturnsAsync(new List<ProductMainImage>());
             return paymentProviderFactoryMock;
         }
 

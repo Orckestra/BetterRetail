@@ -25,25 +25,33 @@ namespace Orckestra.Composer.MyAccount.Api
         protected ICustomerViewService CustomerViewService { get; private set; }
         protected ICustomerAddressViewService CustomerAddressViewService { get; private set; }
         protected ICartUrlProvider CartUrlProvider { get; private set; }
+        protected IRecurringScheduleUrlProvider RecurringScheduleUrlProvider { get; private set; }
+        protected IRecurringCartUrlProvider RecurringCartUrlProvider { get; private set; }
 
         public CustomerController(
             IComposerContext composerContext,
             IMyAccountUrlProvider myAccountUrlProvider,
             ICustomerViewService customerViewService,
             ICustomerAddressViewService customerAddressViewService,
-            ICartUrlProvider cartUrlProvider)
+            ICartUrlProvider cartUrlProvider,
+            IRecurringScheduleUrlProvider recurringScheduleUrlProvider,
+            IRecurringCartUrlProvider recurringCartUrlProvider)
         {
             if (composerContext == null) { throw new ArgumentNullException("composerContext"); }
             if (myAccountUrlProvider == null) { throw new ArgumentNullException("myAccountUrlProvider"); }
             if (customerViewService == null) { throw new ArgumentNullException("customerViewService"); }
             if (customerAddressViewService == null) { throw new ArgumentNullException("customerAddressViewService"); }
             if (cartUrlProvider == null) { throw new ArgumentNullException("cartUrlProvider"); }
+            if (recurringScheduleUrlProvider == null) { throw new ArgumentNullException("recurringScheduleUrlProvider"); }
+            if (recurringCartUrlProvider == null) { throw new ArgumentNullException("recurringCartUrlProvider"); }
 
             ComposerContext = composerContext;
             MyAccountUrlProvider = myAccountUrlProvider;
             CustomerViewService = customerViewService;
             CustomerAddressViewService = customerAddressViewService;
             CartUrlProvider = cartUrlProvider;
+            RecurringScheduleUrlProvider = recurringScheduleUrlProvider;
+            RecurringCartUrlProvider = recurringCartUrlProvider;
         }
 
         [HttpPost]
@@ -98,6 +106,34 @@ namespace Orckestra.Composer.MyAccount.Api
             var addressListUrl = MyAccountUrlProvider.GetAddressListUrl(urlParam);
             var addAddressUrl = CartUrlProvider.GetCheckoutAddAddressUrl(urlParam);
             var editAddressBaseUrl = CartUrlProvider.GetCheckoutUpdateAddressBaseUrl(urlParam);
+
+            var viewModel = await CustomerAddressViewService.GetAddressListViewModelAsync(new GetAddressListViewModelParam
+            {
+                CustomerId = ComposerContext.CustomerId,
+                CultureInfo = ComposerContext.CultureInfo,
+                Scope = ComposerContext.Scope,
+                AddAddressUrl = addAddressUrl,
+                EditAddressBaseUrl = editAddressBaseUrl,
+                CountryCode = ComposerContext.CountryCode
+            });
+
+            return Ok(viewModel);
+        }
+
+        [HttpPost]
+        [ActionName("recurringcartaddresses")]
+        public virtual async Task<IHttpActionResult> GetRecurringCartAddressAsync([FromBody]GetRecurringCartAddressRequest request)
+        {
+            if (request == null) { return BadRequest("Missing Request Body"); }
+            if (!ModelState.IsValid) { return BadRequest(ModelState); }
+
+            var cartsUrl= RecurringCartUrlProvider.GetRecurringCartDetailsUrl(new GetRecurringCartDetailsUrlParam {
+                CultureInfo = ComposerContext.CultureInfo,
+                RecurringCartName = request.CartName
+            });
+
+            var addAddressUrl = MyAccountUrlProvider.GetAddAddressUrl(new BaseUrlParameter { CultureInfo = ComposerContext.CultureInfo, ReturnUrl = cartsUrl });
+            var editAddressBaseUrl = MyAccountUrlProvider.GetUpdateAddressBaseUrl(new BaseUrlParameter { CultureInfo = ComposerContext.CultureInfo, ReturnUrl = cartsUrl });
 
             var viewModel = await CustomerAddressViewService.GetAddressListViewModelAsync(new GetAddressListViewModelParam
             {
@@ -211,6 +247,32 @@ namespace Orckestra.Composer.MyAccount.Api
             {
                 CustomerId = ComposerContext.CustomerId,
                 Scope = ComposerContext.Scope,
+            });
+
+            return Ok(viewModel);
+        }
+
+        [HttpPost]
+        [ActionName("recurringorderstemplatesaddresses")]
+        public virtual async Task<IHttpActionResult> GetRecurringOrderTemplatesAddressesAsync([FromBody]GetRecurringTemplateAddressRequest request)
+        {
+            var recurringOrderScheduleUrl = RecurringScheduleUrlProvider.GetRecurringScheduleDetailsUrl(new GetRecurringScheduleDetailsUrlParam
+            {
+                CultureInfo = ComposerContext.CultureInfo,
+                RecurringScheduleId = request.Id
+            });
+
+            var addAddressUrl = MyAccountUrlProvider.GetAddAddressUrl(new BaseUrlParameter { CultureInfo = ComposerContext.CultureInfo, ReturnUrl = recurringOrderScheduleUrl });
+            var editAddressBaseUrl = MyAccountUrlProvider.GetUpdateAddressBaseUrl(new BaseUrlParameter { CultureInfo = ComposerContext.CultureInfo, ReturnUrl = recurringOrderScheduleUrl });
+            
+            var viewModel = await CustomerAddressViewService.GetAddressListViewModelAsync(new GetAddressListViewModelParam
+            {
+                CustomerId = ComposerContext.CustomerId,
+                CultureInfo = ComposerContext.CultureInfo,
+                Scope = ComposerContext.Scope,
+                AddAddressUrl = addAddressUrl,
+                EditAddressBaseUrl = editAddressBaseUrl,
+                CountryCode = ComposerContext.CountryCode
             });
 
             return Ok(viewModel);

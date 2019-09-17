@@ -15,6 +15,7 @@ using Orckestra.Overture.ServiceModel;
 using Orckestra.Overture.ServiceModel.Marketing;
 using Orckestra.Overture.ServiceModel.Orders;
 using Orckestra.Composer.Cart.ViewModels.Order;
+using Orckestra.Composer.Providers.Dam;
 
 namespace Orckestra.Composer.Cart.Factory
 {
@@ -472,6 +473,9 @@ namespace Orckestra.Composer.Cart.Factory
             var totalDays = (int)Math.Ceiling((fulfillmentMethod.ExpectedDeliveryDate.Value - DateTime.UtcNow).TotalDays);
             shippingMethodViewModel.ExpectedDaysBeforeDelivery = totalDays.ToString();
 
+            shippingMethodViewModel.IsShipToStoreType = fulfillmentMethod.FulfillmentMethodType == FulfillmentMethodType.ShipToStore;
+            shippingMethodViewModel.FulfillmentMethodTypeString = fulfillmentMethod.FulfillmentMethodType.ToString();
+
             return shippingMethodViewModel;
         }
 
@@ -523,7 +527,7 @@ namespace Orckestra.Composer.Cart.Factory
             return paymentMethodViewModel;
         }
 
-        protected SavedCreditCardPaymentMethodViewModel MapSavedCreditCard(PaymentMethod payment, CultureInfo cultureInfo)
+        public virtual SavedCreditCardPaymentMethodViewModel MapSavedCreditCard(PaymentMethod payment, CultureInfo cultureInfo)
         {            
             var savedCreditCard = ViewModelMapper.MapTo<SavedCreditCardPaymentMethodViewModel>(payment, cultureInfo);
 

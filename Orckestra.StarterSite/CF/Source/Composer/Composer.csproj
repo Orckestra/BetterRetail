@@ -74,35 +74,41 @@
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Orckestra.AsyncExtensions, Version=3.22.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OrckestraCommerce.AsyncExtensions.3.22.0-beta0001\lib\net461\Orckestra.AsyncExtensions.dll</HintPath>
+      <HintPath>..\packages\OrckestraCommerce.AsyncExtensions.3.22.0\lib\net461\Orckestra.AsyncExtensions.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Orckestra.Caching, Version=3.22.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OrckestraCommerce.Common.3.22.0-beta0001\lib\net461\Orckestra.Caching.dll</HintPath>
+      <HintPath>..\packages\OrckestraCommerce.Common.3.22.0\lib\net461\Orckestra.Caching.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Orckestra.ExperienceManagement.Configuration, Version=3.22.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Orckestra.ExperienceManagement.Configuration.3.22.0\lib\net471\Orckestra.ExperienceManagement.Configuration.dll</HintPath>
+    <Reference Include="Orckestra.ExperienceManagement.Configuration, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Orckestra.ExperienceManagement.Configuration.4.0.0\lib\net471\Orckestra.ExperienceManagement.Configuration.dll</HintPath>
     </Reference>
     <Reference Include="Orckestra.Logging, Version=3.22.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OrckestraCommerce.Common.3.22.0-beta0001\lib\net461\Orckestra.Logging.dll</HintPath>
+      <HintPath>..\packages\OrckestraCommerce.Common.3.22.0\lib\net461\Orckestra.Logging.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Orckestra.Overture.Interfaces, Version=3.22.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OrckestraCommerce.Interfaces.3.22.0-beta0001\lib\portable-net4+sl5+netcore45+wp8\Orckestra.Overture.Interfaces.dll</HintPath>
+      <HintPath>..\packages\OrckestraCommerce.Interfaces.3.22.0\lib\portable-net4+sl5+netcore45+wp8\Orckestra.Overture.Interfaces.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Orckestra.Overture.RestClient, Version=3.22.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OrckestraCommerce.Client.3.22.0-beta0001\lib\net452\Orckestra.Overture.RestClient.dll</HintPath>
+      <HintPath>..\packages\OrckestraCommerce.Client.3.22.0\lib\net452\Orckestra.Overture.RestClient.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Orckestra.Overture.ServiceModel, Version=3.22.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OrckestraCommerce.ServiceModel.3.22.0-beta0001\lib\net461\Orckestra.Overture.ServiceModel.dll</HintPath>
+      <HintPath>..\packages\OrckestraCommerce.ServiceModel.3.22.0\lib\net461\Orckestra.Overture.ServiceModel.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Orckestra.Overture.ServiceModel.Requests, Version=3.22.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OrckestraCommerce.ServiceModel.Requests.3.22.0-beta0001\lib\net461\Orckestra.Overture.ServiceModel.Requests.dll</HintPath>
+      <HintPath>..\packages\OrckestraCommerce.ServiceModel.Requests.3.22.0\lib\net461\Orckestra.Overture.ServiceModel.Requests.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="OrckestraCommerce.RecurringOrders.ServiceModel, Version=3.22.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OrckestraCommerce.RecurringOrders.ServiceModel.3.22.0\lib\portable-net4+sl5+netcore45+wp8\OrckestraCommerce.RecurringOrders.ServiceModel.dll</HintPath>
+    </Reference>
+    <Reference Include="OrckestraCommerce.RecurringOrders.ServiceModel.Requests, Version=3.22.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OrckestraCommerce.RecurringOrders.ServiceModel.Requests.3.22.0\lib\portable-net4+sl5+netcore45+wp8\OrckestraCommerce.RecurringOrders.ServiceModel.Requests.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack.Client, Version=4.0.0.0, Culture=neutral, PublicKeyToken=e06fbc6124f57c43, processorArchitecture=MSIL">
       <HintPath>..\packages\ServiceStack.Client.Signed.4.5.4\lib\net45\ServiceStack.Client.dll</HintPath>
@@ -118,6 +124,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net" />
@@ -177,6 +184,7 @@
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Api\LocalizationController.cs" />
+    <Compile Include="Api\RecurringOrderTemplateController.cs" />
     <Compile Include="App_Packages\LibLog.4.2\LibLog.cs" />
     <Compile Include="ComposerConfiguration.cs" />
     <Compile Include="Configuration\CacheConfigurationCategoryNames.cs" />
@@ -184,7 +192,9 @@
     <Compile Include="Configuration\ContentSitemapConfiguration.cs" />
     <Compile Include="Configuration\DisplayConfiguration.cs" />
     <Compile Include="Configuration\IGoogleSettings.cs" />
+    <Compile Include="Configuration\ImageConfiguration.cs" />
     <Compile Include="Configuration\ProductSitemapConfiguration.cs" />
+    <Compile Include="Configuration\RecurringOrdersConfigurationElement.cs" />
     <Compile Include="Configuration\SitemapConfiguration.cs" />
     <Compile Include="Country\CountryRepository.cs" />
     <Compile Include="Country\CountryService.cs" />
@@ -203,6 +213,10 @@
     <Compile Include="ExceptionFilters\BaseExceptionFilter.cs" />
     <Compile Include="ExceptionFilters\ComposerExceptionFilter.cs" />
     <Compile Include="ComposerOvertureClient.cs" />
+    <Compile Include="Factory\IRecurringOrderProgramViewModelFactory.cs" />
+    <Compile Include="Factory\IRecurringOrderTemplateViewModelFactory.cs" />
+    <Compile Include="Factory\RecurringOrderProgramViewModelFactory.cs" />
+    <Compile Include="Factory\RecurringOrderTemplateViewModelFactory.cs" />
     <Compile Include="HttpModules\AntiCookieTamperingModule.cs" />
     <Compile Include="HttpModules\IAntiCookieTamperingExcluder.cs" />
     <Compile Include="IPerformanceDataCollector.cs" />
@@ -210,26 +224,70 @@
     <Compile Include="MvcFilters\MustBeAnonymousAttribute.cs" />
     <Compile Include="OutputCacheOptions.cs" />
     <Compile Include="OutputCache\NullCacheProvider.cs" />
+    <Compile Include="Parameters\BaseUrlParameter.cs" />
     <Compile Include="Parameters\BuildSearchUrlParam.cs" />
+    <Compile Include="Parameters\CreateProductPriceViewModelParam.cs" />
+    <Compile Include="Parameters\CreateRecurringOrderTemplatesViewModelParam.cs" />
+    <Compile Include="Parameters\CreateRecurringOrderTemplateDetailsViewModelParam.cs" />
+    <Compile Include="Parameters\CreateTemplateGroupedShippingAddressParam.cs" />
     <Compile Include="Parameters\FindInventoryItemStatusParam.cs" />
     <Compile Include="Parameters\GetFooterParam.cs" />
-    <Compile Include="Parameters\BaseUrlParameter.cs" />
+    <Compile Include="Parameters\GetProductDefinitionParam.cs" />
+    <Compile Include="Parameters\GetProductParam.cs" />
+    <Compile Include="Parameters\GetProductsPriceParam.cs" />
+    <Compile Include="Parameters\GetRecurringCartsUrlParam.cs" />
+    <Compile Include="Parameters\GetRecurringOrderTemplateDetailParam.cs" />
+    <Compile Include="Parameters\GetRecurringOrderTemplatesParam.cs" />
+    <Compile Include="Parameters\GetRecurringScheduleDetailsBaseUrlParam.cs" />
+    <Compile Include="Parameters\GetRecurringCartDetailsUrlParam.cs" />
+    <Compile Include="Parameters\GetRecurringScheduleDetailsUrlParam.cs" />
+    <Compile Include="Parameters\GetRecurringScheduleUrlParam.cs" />
     <Compile Include="Parameters\GetStickyLinksParam.cs" />
     <Compile Include="Parameters\GetHomeMainMenuParam.cs" />
     <Compile Include="Parameters\GetInventoryItemsBySkuParam.cs" />
     <Compile Include="Parameters\GetScopeCurrencyParam.cs" />
     <Compile Include="Parameters\GetScopeParam.cs" />
+    <Compile Include="Parameters\MapToTemplateLineItemViewModelParam.cs" />
+    <Compile Include="Parameters\RemoveRecurringOrderTemplateLineItemParam.cs" />
+    <Compile Include="Parameters\RemoveRecurringOrderTemplateLineItemsParam.cs" />
+    <Compile Include="Parameters\UpdateRecurringOrderTemplateLineItemParam.cs" />
+    <Compile Include="Parameters\UpdateRecurringOrderTemplateLineItemQuantityParam.cs" />
+    <Compile Include="Providers\Dam\ProductImageInfo.cs" />
     <Compile Include="Providers\IPageNotFoundUrlProvider.cs" />
     <Compile Include="Providers\ICountryCodeProvider.cs" />
+    <Compile Include="Repositories\IProductRepository.cs" />
+    <Compile Include="Providers\IRecurringCartUrlProvider.cs" />
+    <Compile Include="Providers\IRecurringScheduleUrlProvider.cs" />
+    <Compile Include="Repositories\ProductRepository.cs" />
     <Compile Include="Repositories\IInventoryRepository.cs" />
     <Compile Include="Repositories\InventoryRepository.cs" />
+    <Compile Include="Repositories\IRecurringOrdersRepository.cs" />
     <Compile Include="Repositories\IScopeRepository.cs" />
+    <Compile Include="Repositories\RecurringOrdersRepository.cs" />
     <Compile Include="Repositories\ScopeRepository.cs" />
+    <Compile Include="Parameters\GetIsPaymentMethodUsedInRecurringOrdersParam.cs" />
+    <Compile Include="Request\GetRecurringOrderTemplateDetailsRequest.cs" />
+    <Compile Include="Request\RemoveRecurringOrderTemplateLineItemRequest.cs" />
+    <Compile Include="Request\RemoveRecurringOrderTemplateLineItemsRequest.cs" />
+    <Compile Include="Request\UpdateRecurringOrderLineItemQuantityRequest.cs" />
+    <Compile Include="Request\UpdateRecurringOrderTemplateLineItemRequest.cs" />
+    <Compile Include="Services\IImageService.cs" />
+    <Compile Include="Services\ImageService.cs" />
+    <Compile Include="Services\IProductPriceViewService.cs" />
+    <Compile Include="Services\IRecurringOrderTemplatesViewService.cs" />
     <Compile Include="Services\IScopeViewService.cs" />
     <Compile Include="Services\IWebsiteContext.cs" />
+    <Compile Include="Services\ProductPriceViewService.cs" />
+    <Compile Include="Services\RecurringOrderTemplatesViewService.cs" />
     <Compile Include="Services\ScopeViewService.cs" />
+    <Compile Include="Utils\ConfigurationUtil.cs" />
+    <Compile Include="Utils\Constants.cs" />
     <Compile Include="Utils\Guard.cs" />
+    <Compile Include="Utils\LineItemHelper.cs" />
     <Compile Include="Utils\MvcFilterRedirectUtil.cs" />
+    <Compile Include="Utils\ProductHelper.cs" />
+    <Compile Include="Utils\PropertyBagHelper.cs" />
+    <Compile Include="Utils\RecurringOrderTemplateHelper.cs" />
     <Compile Include="ViewEngine\HandleBarsHelpers\FormatValueHelper.cs" />
     <Compile Include="ViewEngine\HandleBarsHelpers\LookupHelper.cs" />
     <Compile Include="ViewModels\CurrencyViewModel.cs" />
@@ -297,10 +355,12 @@
     <Compile Include="ViewModels\IBaseViewModel.cs" />
     <Compile Include="ViewModels\IExtensionOf.cs" />
     <Compile Include="ViewModels\ImageViewModel.cs" />
+    <Compile Include="ViewModels\KeyVariantAttributes.cs" />
     <Compile Include="ViewModels\MenuNavigation\OptionalLinkEntryViewModel.cs" />
     <Compile Include="ViewModels\MenuNavigation\OptionalLinkViewModel.cs" />
     <Compile Include="ViewModels\MyAccount\MenuViewModel.cs" />
     <Compile Include="ViewModels\MyAccount\MenuItemViewModel.cs" />
+    <Compile Include="ViewModels\ProductPriceViewModel.cs" />
     <Compile Include="ViewModels\ProductSettingsViewModel.cs" />
     <Compile Include="Services\Breadcrumb\GetBreadcrumbParam.cs" />
     <Compile Include="Parameters\GetCategoriesPathParam.cs" />
@@ -411,8 +471,19 @@
     <Compile Include="ViewModels\LookupAttribute.cs" />
     <Compile Include="ViewModels\MapToAttribute.cs" />
     <Compile Include="ViewModels\PageHeaderViewModel.cs" />
+    <Compile Include="ViewModels\ProductsPricesViewModel.cs" />
     <Compile Include="ViewModels\PropertyMetadataBase.cs" />
+    <Compile Include="ViewModels\RecurringOrderProgramFrequencyViewModel.cs" />
+    <Compile Include="ViewModels\RecurringOrderProgramViewModel.cs" />
+    <Compile Include="ViewModels\RecurringOrderShippingMethodViewModel.cs" />
+    <Compile Include="ViewModels\RecurringOrdersTemplatesShippingMethodsViewModel.cs" />
+    <Compile Include="ViewModels\RecurringOrderTemplateAddressViewModel.cs" />
+    <Compile Include="ViewModels\RecurringOrderTemplateLineItemViewModel.cs" />
+    <Compile Include="ViewModels\RecurringOrderTemplatesViewModel.cs" />
+    <Compile Include="ViewModels\RecurringOrderTemplateViewModel.cs" />
+    <Compile Include="ViewModels\RecurringProductSummaryViewModel.cs" />
     <Compile Include="ViewModels\ResxViewModelPropertyFormatter.cs" />
+    <Compile Include="ViewModels\VariantPriceViewModel.cs" />
     <Compile Include="ViewModels\ViewModelMetadataRegistry.cs" />
     <Compile Include="ViewModels\MetadataIgnoreAttribute.cs" />
     <Compile Include="ViewModels\ViewModelMapper.cs" />

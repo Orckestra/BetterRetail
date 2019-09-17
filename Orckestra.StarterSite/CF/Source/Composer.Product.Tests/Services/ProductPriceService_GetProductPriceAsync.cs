@@ -7,12 +7,15 @@ using FluentAssertions;
 using Moq;
 using Moq.AutoMock;
 using NUnit.Framework;
+using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Product.Parameters;
 using Orckestra.Composer.Product.Repositories;
 using Orckestra.Composer.Product.Services;
 using Orckestra.Composer.Product.Tests.Mock;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Localization;
+using Orckestra.Composer.Repositories;
+using Orckestra.Composer.Services;
 using Orckestra.Overture.ServiceModel.Products;
 
 namespace Orckestra.Composer.Product.Tests.Services

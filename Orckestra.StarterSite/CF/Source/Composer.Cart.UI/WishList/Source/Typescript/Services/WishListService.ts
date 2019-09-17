@@ -79,7 +79,9 @@ module Orckestra.Composer {
 
         }
 
-        public addLineItem(productId: string, variantId?: string, quantity: number = 1): Q.Promise<any> {
+        public addLineItem(productId: string, variantId?: string, quantity: number = 1,
+            recurringOrderFrequencyName?: string,
+            recurringOrderProgramName?: string): Q.Promise<any> {
 
             var data = {
                 ProductId: productId,
@@ -89,7 +91,7 @@ module Orckestra.Composer {
 
             this.eventHub.publish('wishListUpdating', { data: data });
 
-            return this.wishListRepository.addLineItem(productId, variantId, quantity)
+            return this.wishListRepository.addLineItem(productId, variantId, quantity, recurringOrderFrequencyName, recurringOrderProgramName)
                 .then(wishList => this.setWishListToCache(wishList))
                 .then(wishList => {
                     this.eventHub.publish('wishListUpdated', { data: wishList });

@@ -89,7 +89,15 @@ namespace Orckestra.Composer.Cart.Api
 
                 var checkoutStepInfo = checkoutStepInfos[stepNumber];
 
-                cartViewModel.OrderSummary.CheckoutRedirectAction.RedirectUrl = checkoutStepInfo.Url;
+                //If the cart contains recurring items and user is not authenticated, redirect to sign in
+                if (cartViewModel.HasRecurringLineitems && !ComposerContext.IsAuthenticated)
+                {
+                    cartViewModel.OrderSummary.CheckoutRedirectAction.RedirectUrl = checkoutUrlTarget;
+                }
+                else
+                {
+                    cartViewModel.OrderSummary.CheckoutRedirectAction.RedirectUrl = checkoutStepInfo.Url;
+                }
                 cartViewModel.OrderSummary.CheckoutStepUrls = checkoutStepInfos.Values.Select(x => x.Url).ToList();
                 cartViewModel.OrderSummary.CheckoutUrlTarget = checkoutUrlTarget;
             }
@@ -173,6 +181,25 @@ namespace Orckestra.Composer.Cart.Api
                 CultureInfo = ComposerContext.CultureInfo,
                 CustomerId = ComposerContext.CustomerId,
                 CartName = CartConfiguration.ShoppingCartName
+            });
+
+            return Ok(shippingMethodsViewModel);
+        }
+
+        /// <summary>
+        /// Get the shipping methods available for a specific cart name
+        /// </summary>
+        /// <returns>A Json representation of the Shipping methods</returns>
+        [HttpPost]
+        [ActionName("shippingmethodsbycartname")]
+        public async Task<IHttpActionResult> GetShippingMethodsByCartName(GetShippingMethodsByCartNameViewModel request)
+        {
+            var shippingMethodsViewModel = await ShippingMethodService.GetRecurringCartShippingMethodsAsync(new GetShippingMethodsParam
+            {
+                Scope = ComposerContext.Scope,
+                CultureInfo = ComposerContext.CultureInfo,
+                CustomerId = ComposerContext.CustomerId,
+                CartName = request.CartName
             });
 
             return Ok(shippingMethodsViewModel);
@@ -564,6 +591,23 @@ namespace Orckestra.Composer.Cart.Api
             checkoutViewModel.NextStepUrl = nextStepUrl;
 
             return Ok(checkoutViewModel);
+        }
+
+        /// <summary>
+        /// Get the shipping methods available for the scope 
+        /// </summary>
+        /// <returns>A Json representation of the Shipping methods</returns>
+        [HttpGet]
+        [ActionName("shippingmethodsscope")]
+        public async Task<IHttpActionResult> GetShippingMethodsScope()
+        {
+            var shippingMethodsViewModel = await ShippingMethodService.GetShippingMethodsScopeAsync(new GetShippingMethodsScopeParam
+            {
+                Scope = ComposerContext.Scope,
+                CultureInfo = ComposerContext.CultureInfo
+            }).ConfigureAwait(false);
+            
+            return Ok(shippingMethodsViewModel);
         }
     }
 }
