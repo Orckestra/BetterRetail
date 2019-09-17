@@ -69,20 +69,20 @@ namespace Orckestra.Composer.Repositories
             productCacheKey.AppendKeyParts(param.ProductId);
 
             var result = await _cacheProvider.GetOrAddAsync(productCacheKey, () =>
+            {
+                var request = new GetProductRequest
                 {
-                    var request = new GetProductRequest
-                    {
-                        //get all cultures to avoid reloading product page to retrieve new product details
-                        CultureName = string.Empty,
-                        IncludePriceLists = true,
-                        IncludeRelationships = true,
-                        IncludeVariants = true,
-                        ProductId = param.ProductId,
-                        ScopeId = param.Scope
-                    };
+                    //get all cultures to avoid reloading product page to retrieve new product details
+                    CultureName = string.Empty,
+                    IncludePriceLists = true,
+                    IncludeRelationships = true,
+                    IncludeVariants = true,
+                    ProductId = param.ProductId,
+                    ScopeId = param.Scope
+                };
 
-                    return _overtureClient.SendAsync(request);
-                }).ConfigureAwait(false);
+                return _overtureClient.SendAsync(request);
+            }).ConfigureAwait(false);
 
             if (result != null && (param.ReturnInactive || (result.Active.HasValue && result.Active.Value)))
             {
