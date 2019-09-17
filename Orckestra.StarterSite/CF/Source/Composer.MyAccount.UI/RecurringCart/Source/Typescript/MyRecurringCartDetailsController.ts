@@ -206,6 +206,9 @@ module Orckestra.Composer {
 
             this.editShippingMethod = !this.editShippingMethod;
 
+            let busy = this.asyncBusy({elementContext: actionContext.elementContext});
+            this.render('RecurringCartDetailsShippingMethod', { IsLoading: true });
+
             let shippingMethodDisplayName = context.data('shipping-method-display-name');
             let shippingMethodCost = context.data('shipping-method-cost');
             let shippingMethodName = context.data('selected-shipping-method-name');
@@ -252,6 +255,7 @@ module Orckestra.Composer {
                         };
 
                         this.render('RecurringCartDetailsShippingMethod', vm);
+                        busy.done();
                     });
             } else {
                 if (this.hasShippingMethodTypeChanged) {
@@ -283,6 +287,7 @@ module Orckestra.Composer {
                     };
                 }
                 this.render('RecurringCartDetailsShippingMethod', vm);
+                busy.done();
             }
         }
 
@@ -419,6 +424,9 @@ module Orckestra.Composer {
 
             this.editAddress = !this.editAddress;
 
+            let busy = this.asyncBusy({elementContext: actionContext.elementContext});
+            this.render('RecurringCartDetailsAddress', { IsLoading: true });
+
             if (this.editAddress) {
                 this.closeOtherEditSections(actionContext, EditSection.Address);
 
@@ -433,13 +441,15 @@ module Orckestra.Composer {
                             };
 
                             this.render('RecurringCartDetailsAddress', addressesVm);
-                        });
+                        })
+                        .fin(() => busy.done());
                 } else {
                     this.storeService.getStores()
                         .then((storesVm) => {
                             //console.log(storesVm);
                             //TODO: Open adresse with list of stores
-                        });
+                        })
+                        .fin(() => busy.done());
                 }
 
             } else {
@@ -450,6 +460,7 @@ module Orckestra.Composer {
                     this.newShippingMethodType = '';
                     this.render('RecurringCartDetailsShippingMethod', this.viewModel);
                 }
+                busy.done();
             }
         }
 
@@ -558,13 +569,14 @@ module Orckestra.Composer {
 
                         result.EditMode = this.editPayment;
                         this.render('RecurringCartDetailsPayment', result);
-                    });
+                    })
+                    .fin(() => busy.done());
 
             } else {
                 this.render('RecurringCartDetailsPayment', this.viewModel);
+                busy.done();
             }
 
-            busy.done();
         }
 
         public updateLineItem(actionContext: IControllerActionContext): void {
