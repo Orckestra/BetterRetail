@@ -33,6 +33,7 @@ namespace Orckestra.Composer.CompositeC1
             host.Register<GoogleSettings, IGoogleSettings>(ComponentLifestyle.PerRequest);
             host.Register<WebsiteContext, IWebsiteContext>(ComponentLifestyle.PerRequest);
             host.Register<Providers.ScopeProvider, IScopeProvider>(ComponentLifestyle.PerRequest);
+            host.Register<Providers.ProductUrlProvider, IProductUrlProvider>(ComponentLifestyle.PerRequest);
             host.Register<Providers.CountryCodeProvider, ICountryCodeProvider>(ComponentLifestyle.PerRequest);
             host.Register<PageService, IPageService>();
             host.Register<CultureService, ICultureService>(ComponentLifestyle.Singleton);
@@ -40,7 +41,7 @@ namespace Orckestra.Composer.CompositeC1
             host.Register<GoogleAnalyticsNavigationUrlProvider>();
             host.Register<NavigationMapper, INavigationMapper>();
 
-            host.Register<ProductUrlProvider, IProductUrlProvider>();
+           
             host.Register<SearchUrlProvider, ISearchUrlProvider>();
             host.Register<CategoryBrowsingUrlProvider, ICategoryBrowsingUrlProvider>();
             host.Register<CartUrlProvider, ICartUrlProvider>();

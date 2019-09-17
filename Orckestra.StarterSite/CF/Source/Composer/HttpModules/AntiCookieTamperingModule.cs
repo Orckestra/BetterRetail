@@ -114,7 +114,7 @@ namespace Orckestra.Composer.HttpModules
 
         protected virtual ICookieAccessor<ComposerCookieDto> GetCookieHandler(HttpContextBase httpContext)
         {
-            return new ComposerCookieAccessor(httpContext.Request, httpContext.Response, null);
+            return new ComposerCookieAccessor(httpContext.Request, httpContext.Response);
         }
     }
 }

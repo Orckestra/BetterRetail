@@ -322,6 +322,7 @@
     <Compile Include="Providers\OrderUrlProvider.cs" />
     <Compile Include="Providers\PageNotFoundUrlProvider.cs" />
     <Compile Include="Providers\CountryCodeProvider.cs" />
+    <Compile Include="Providers\ProductUrlProvider.cs" />
     <Compile Include="Providers\ScopeProvider.cs" />
     <Compile Include="Providers\RecurringCartUrlProvider.cs" />
     <Compile Include="Providers\RecurringScheduleUrlProvider.cs" />

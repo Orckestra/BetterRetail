@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Linq;
 using System.Web;
+using Autofac.Integration.Mvc;
 using Newtonsoft.Json;
 using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Logging;
@@ -57,7 +58,7 @@ namespace Orckestra.Composer.Services.Cookie
 
         private static readonly EncryptionUtility EncryptionUtility = new EncryptionUtility();
 
-        public ComposerCookieAccessor(HttpRequestBase httpRequest, HttpResponseBase httpResponse, IWebsiteContext websiteContext = null)
+        public ComposerCookieAccessor(HttpRequestBase httpRequest, HttpResponseBase httpResponse)
         {
             //Dependencies
             if (httpRequest  == null) { throw new ArgumentNullException("httpRequest"); }
@@ -65,9 +66,11 @@ namespace Orckestra.Composer.Services.Cookie
 
             _httpRequest  = httpRequest;
             _httpResponse = httpResponse;
-            _websiteContext = websiteContext;
 
-            _cookieName = SiteConfiguration.CookieAccesserSettings.Name; // + "_" + _websiteContext.WebsiteId;
+            _websiteContext =
+                (IWebsiteContext) AutofacDependencyResolver.Current.GetService(typeof(IWebsiteContext));
+
+            _cookieName = SiteConfiguration.CookieAccesserSettings.Name + "_" + _websiteContext.WebsiteId;
             _requireSsl       = SiteConfiguration.CookieAccesserSettings.RequireSsl;
             _timeoutInMinutes = SiteConfiguration.CookieAccesserSettings.TimeoutInMinutes;
             _cookieDomain     = SiteConfiguration.CookieAccesserSettings.Domain;
