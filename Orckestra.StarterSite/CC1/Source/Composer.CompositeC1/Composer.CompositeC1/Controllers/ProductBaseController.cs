@@ -29,7 +29,6 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         protected ILanguageSwitchService LanguageSwitchService { get; private set; }
         protected IProductUrlProvider ProductUrlProvider { get; private set; }
         protected IRelatedProductViewService RelatedProductViewService { get; private set; }
-        protected PagesConfiguration PagesConfiguration { get; private set; }
 
         protected virtual string PreviewModeProductId { get;} = "3834593";
 
@@ -60,7 +59,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             LanguageSwitchService = languageSwitchService;
             ProductUrlProvider = productUrlProvider;
             RelatedProductViewService = relatedProductViewService;
-            PagesConfiguration = SiteConfiguration.GetPagesConfiguration();
+            
         }
 
         public virtual ActionResult ProductSummary(string id, string variantId)
@@ -141,11 +140,11 @@ namespace Orckestra.Composer.CompositeC1.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.NotFound);
             }
 
-            var parameters = new GetProductBreadcrumbParam
+           var parameters = new GetProductBreadcrumbParam
             {
                 CategoryId = productViewModel.CategoryId,
                 CultureInfo = ComposerContext.CultureInfo,
-                HomeUrl = PageService.GetRendererPageUrl(PagesConfiguration.HomePageId, ComposerContext.CultureInfo),
+                HomeUrl = PageService.GetRendererPageUrl(SitemapNavigator.CurrentHomePageId, ComposerContext.CultureInfo),
                 ProductName = productViewModel.DisplayName,
                 Scope = ComposerContext.Scope,
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
