@@ -140,74 +140,66 @@
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.AsyncExtensions, Version=3.22.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OrckestraCommerce.AsyncExtensions.3.22.0\lib\net461\Orckestra.AsyncExtensions.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Orckestra.AsyncExtensions, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OrckestraCommerce.AsyncExtensions.4.0.0-beta0001\lib\net461\Orckestra.AsyncExtensions.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Caching, Version=3.22.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OrckestraCommerce.Common.3.22.0\lib\net461\Orckestra.Caching.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Orckestra.Caching, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OrckestraCommerce.Common.4.0.0-beta0001\lib\net461\Orckestra.Caching.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Composer">
-      <HintPath>..\packages\Composer.4.6.0-Build\lib\net452\Orckestra.Composer.dll</HintPath>
+    <Reference Include="Orckestra.Composer, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Composer.4.0.0-Build\lib\net461\Orckestra.Composer.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Composer.Cart">
-      <HintPath>..\packages\Composer.4.6.0-Build\lib\net452\Orckestra.Composer.Cart.dll</HintPath>
+    <Reference Include="Orckestra.Composer.Cart, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Composer.4.0.0-Build\lib\net461\Orckestra.Composer.Cart.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Composer.MyAccount">
-      <HintPath>..\packages\Composer.4.6.0-Build\lib\net452\Orckestra.Composer.MyAccount.dll</HintPath>
+    <Reference Include="Orckestra.Composer.MyAccount, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Composer.4.0.0-Build\lib\net461\Orckestra.Composer.MyAccount.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Composer.Product">
-      <HintPath>..\packages\Composer.4.6.0-Build\lib\net452\Orckestra.Composer.Product.dll</HintPath>
+    <Reference Include="Orckestra.Composer.Product, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Composer.4.0.0-Build\lib\net461\Orckestra.Composer.Product.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Composer.Search">
-      <HintPath>..\packages\Composer.4.6.0-Build\lib\net452\Orckestra.Composer.Search.dll</HintPath>
+    <Reference Include="Orckestra.Composer.Search, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Composer.4.0.0-Build\lib\net461\Orckestra.Composer.Search.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Composer.SearchQuery">
-      <HintPath>..\packages\Composer.4.6.0-Build\lib\net452\Orckestra.Composer.SearchQuery.dll</HintPath>
+    <Reference Include="Orckestra.Composer.SearchQuery, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Composer.4.0.0-Build\lib\net461\Orckestra.Composer.SearchQuery.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Composer.Sitemap">
-      <HintPath>..\packages\Composer.4.6.0-Build\lib\net452\Orckestra.Composer.Sitemap.dll</HintPath>
+    <Reference Include="Orckestra.Composer.Sitemap, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Composer.4.0.0-Build\lib\net461\Orckestra.Composer.Sitemap.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Composer.Store">
-      <HintPath>..\packages\Composer.4.6.0-Build\lib\net452\Orckestra.Composer.Store.dll</HintPath>
+    <Reference Include="Orckestra.Composer.Store, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Composer.4.0.0-Build\lib\net461\Orckestra.Composer.Store.dll</HintPath>
     </Reference>
     <Reference Include="Orckestra.ExperienceManagement.DataTypes, Version=3.20.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Orckestra.ExperienceManagment.DataTypes.1.0.1\lib\Orckestra.ExperienceManagement.DataTypes.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Orckestra.Logging, Version=3.22.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OrckestraCommerce.Common.3.22.0\lib\net461\Orckestra.Logging.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Orckestra.Logging, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OrckestraCommerce.Common.4.0.0-beta0001\lib\net461\Orckestra.Logging.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Overture.Interfaces, Version=3.22.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OrckestraCommerce.Interfaces.3.22.0\lib\portable-net4+sl5+netcore45+wp8\Orckestra.Overture.Interfaces.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Orckestra.Overture.Interfaces, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OrckestraCommerce.Interfaces.4.0.0-beta0001\lib\portable-net4+sl5+netcore45+wp8\Orckestra.Overture.Interfaces.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Overture.Providers.MonerisPayment.ServiceModel, Version=3.22.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OrckestraCommerce.ServiceModel.Moneris.3.22.0\lib\net45\Orckestra.Overture.Providers.MonerisPayment.ServiceModel.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Orckestra.Overture.Providers.MonerisPayment.ServiceModel, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OrckestraCommerce.ServiceModel.Moneris.4.0.0-beta0001\lib\net45\Orckestra.Overture.Providers.MonerisPayment.ServiceModel.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Overture.RestClient, Version=3.22.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OrckestraCommerce.Client.3.22.0\lib\net452\Orckestra.Overture.RestClient.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Orckestra.Overture.RestClient, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OrckestraCommerce.Client.4.0.0-beta0001\lib\net452\Orckestra.Overture.RestClient.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Overture.ServiceModel, Version=3.22.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OrckestraCommerce.ServiceModel.3.22.0\lib\net461\Orckestra.Overture.ServiceModel.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Orckestra.Overture.ServiceModel, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OrckestraCommerce.ServiceModel.4.0.0-beta0001\lib\net461\Orckestra.Overture.ServiceModel.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Overture.ServiceModel.Requests, Version=3.22.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OrckestraCommerce.ServiceModel.Requests.3.22.0\lib\net461\Orckestra.Overture.ServiceModel.Requests.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Orckestra.Overture.ServiceModel.Requests, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OrckestraCommerce.ServiceModel.Requests.4.0.0-beta0001\lib\net461\Orckestra.Overture.ServiceModel.Requests.dll</HintPath>
     </Reference>
-    <Reference Include="OrckestraCommerce.RecurringOrders.ServiceModel, Version=3.22.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OrckestraCommerce.RecurringOrders.ServiceModel.3.22.0\lib\portable-net4+sl5+netcore45+wp8\OrckestraCommerce.RecurringOrders.ServiceModel.dll</HintPath>
+    <Reference Include="OrckestraCommerce.RecurringOrders.ServiceModel, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OrckestraCommerce.RecurringOrders.ServiceModel.4.0.0-beta0001\lib\portable-net4+sl5+netcore45+wp8\OrckestraCommerce.RecurringOrders.ServiceModel.dll</HintPath>
     </Reference>
-    <Reference Include="OrckestraCommerce.RecurringOrders.ServiceModel.Requests, Version=3.22.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OrckestraCommerce.RecurringOrders.ServiceModel.Requests.3.22.0\lib\portable-net4+sl5+netcore45+wp8\OrckestraCommerce.RecurringOrders.ServiceModel.Requests.dll</HintPath>
+    <Reference Include="OrckestraCommerce.RecurringOrders.ServiceModel.Requests, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OrckestraCommerce.RecurringOrders.ServiceModel.Requests.4.0.0-beta0001\lib\portable-net4+sl5+netcore45+wp8\OrckestraCommerce.RecurringOrders.ServiceModel.Requests.dll</HintPath>
     </Reference>
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
@@ -401,10 +393,6 @@
     <Compile Include="ViewModels\IProductSearchResultsViewModelMetadata.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Composer.CompositeC1.Azure\Composer.CompositeC1.Azure.csproj">
-      <Project>{dd8ae2f0-ad7d-4696-93f2-57c11904b499}</Project>
-      <Name>Composer.CompositeC1.Azure</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Composer.CompositeC1.DataTypes\Composer.CompositeC1.DataTypes.csproj">
       <Project>{e84bf038-fc5e-4841-8c5a-918fe8eaff8f}</Project>
       <Name>Composer.CompositeC1.DataTypes</Name>

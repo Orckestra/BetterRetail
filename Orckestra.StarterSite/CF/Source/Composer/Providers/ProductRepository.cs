@@ -70,7 +70,7 @@ namespace Orckestra.Composer.Repositories
 
             var result = await _cacheProvider.GetOrAddAsync(productCacheKey, () =>
                 {
-                    var request = new GetProductRequest
+                    var request = new GetProductV2Request
                     {
                         //get all cultures to avoid reloading product page to retrieve new product details
                         CultureName = string.Empty,
