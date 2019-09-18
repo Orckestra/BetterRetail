@@ -98,6 +98,7 @@ Task CC1_Compile-Solution {
     Invoke-Msbuild -Project (Join-Path $Build.CC1.SourcePath "Composer.CompositeC1.sln") `
         -Configuration $Configuration `
         -LogsDirectory $Build.CentralLogsFolder `
+	-VisualStudioVersion '15.0' ` 
         -MsbuildVerbosity $MsbuildVerbosity
 }
 
