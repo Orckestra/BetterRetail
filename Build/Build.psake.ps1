@@ -59,6 +59,7 @@ properties {
                                     # are / are not executed. 
                                     #
                                     # Can be 'Dev','Rolling','Release'
+	$VisualStudioVersion	 = '2017'
     $IsRunningOnBuildMachine = $false
     $MsbuildVerbosity        = 'normal' # Can be: q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic]
     $NugetVerbosity          = 'quiet'   # Can be: normal, quiet, detailed
@@ -185,7 +186,7 @@ FormatTaskName {
 # also used the 32 bits version of msbuild, we also use the 32 bits version
 # of msbuild.
 #
-Framework "4.6.1x86"
+Framework "4.7.1x86"
 
 #---------------------------------------------------------------------------------------
 #---------------------------------------------------------------------------------------

@@ -29,6 +29,8 @@ function CC1_InitializeVariables {
     $Build.CC1.ContentPackageNumber = 200
 	
 	$Build.CC1.NugetPackagesRepository = Join-Path $Build.CC1.SourcePath "packages"
+	
+	$Build.VisualStudioVersion = "2017"
 }
 
 Task CC1_RestoreNugetPackages {    
