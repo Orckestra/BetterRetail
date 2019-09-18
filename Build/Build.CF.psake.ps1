@@ -1,3 +1,5 @@
+$VisualStudioVersion                      = '2017'
+
 Task CF -depends CF_RestoreNugetPackages,
                  CF_BuildAndPackage,
                  CF_PackageNuget
@@ -97,7 +99,7 @@ Task CF_CompileBackend {
     Invoke-Msbuild -Project (Join-Path $Build.CF.SourcePath "Composer.sln") `
 	 -Configuration $Configuration `
 	 -LogsDirectory $Build.CentralLogsFolder `
-	 -VisualStudioVersion '15.0' `
+	 -VisualStudioVersion $VisualStudioVersion `
 	 -MsbuildVerbosity $MsbuildVerbosity
  }
 

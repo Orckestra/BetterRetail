@@ -1,3 +1,5 @@
+$VisualStudioVersion                      = '2017'
+
 Task CC1 -depends CC1_RestoreNugetPackages,
                   CC1_BuildAndPackage
                   #CC1_PackageNuget,
@@ -98,7 +100,7 @@ Task CC1_Compile-Solution {
     Invoke-Msbuild -Project (Join-Path $Build.CC1.SourcePath "Composer.CompositeC1.sln") `
         -Configuration $Configuration `
         -LogsDirectory $Build.CentralLogsFolder `
-	-VisualStudioVersion '15.0' ` 
+        -VisualStudioVersion $VisualStudioVersion `
         -MsbuildVerbosity $MsbuildVerbosity
 }
 
