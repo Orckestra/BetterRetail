@@ -97,7 +97,8 @@ Task CF_CompileBackend {
     Invoke-Msbuild -Project (Join-Path $Build.CF.SourcePath "Composer.sln") `
 	 -Configuration $Configuration `
 	 -LogsDirectory $Build.CentralLogsFolder `
-     -MsbuildVerbosity $MsbuildVerbosity
+	 -VisualStudioVersion '15.0' `
+	 -MsbuildVerbosity $MsbuildVerbosity
  }
 
 Task CF_UnitTestBackend {
