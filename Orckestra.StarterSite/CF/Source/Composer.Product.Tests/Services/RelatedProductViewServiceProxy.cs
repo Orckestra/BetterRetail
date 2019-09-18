@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Product.Parameters;
 using Orckestra.Composer.Product.Repositories;
 using Orckestra.Composer.Product.Services;
@@ -11,7 +12,13 @@ namespace Orckestra.Composer.Product.Tests.Services
 {
     class RelatedProductViewServiceProxy : RelatedProductViewService
     {
-        public RelatedProductViewServiceProxy(IProductRepository productRepository, IRelationshipRepository relationshipRepository, IDamProvider damProvider, IProductUrlProvider productUrlProvider, IViewModelMapper viewModelMapper, ILocalizationProvider localizationProvider, IInventoryLocationProvider inventoryLocationProvider) : base(productRepository, relationshipRepository, damProvider, productUrlProvider, viewModelMapper, localizationProvider, inventoryLocationProvider)
+        public RelatedProductViewServiceProxy(IProductRepository productRepository, 
+            IRelationshipRepository relationshipRepository, 
+            IDamProvider damProvider, IProductUrlProvider 
+            productUrlProvider, IViewModelMapper viewModelMapper,
+            ILocalizationProvider localizationProvider, 
+            IInventoryLocationProvider inventoryLocationProvider,
+            IRecurringOrdersSettings recurringOrdersSettings) : base(productRepository, relationshipRepository, damProvider, productUrlProvider, viewModelMapper, localizationProvider, inventoryLocationProvider, recurringOrdersSettings)
         {
         }
 

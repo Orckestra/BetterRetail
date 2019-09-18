@@ -20,6 +20,7 @@ using Orckestra.Composer.Utils;
 using Orckestra.Composer.Helper;
 using Orckestra.Composer.Factory;
 using Orckestra.Overture.ServiceModel.RecurringOrders;
+using Orckestra.Composer.Configuration;
 
 namespace Orckestra.Composer.Cart.Factory
 {
@@ -33,6 +34,7 @@ namespace Orckestra.Composer.Cart.Factory
         protected IRecurringOrdersRepository RecurringOrderRepository { get; private set; }
         protected IComposerContext ComposerContext { get; private set; }
         protected IRecurringOrderProgramViewModelFactory RecurringOrderProgramViewModelFactory { get; private set; }
+        protected IRecurringOrdersSettings RecurringOrdersSettings { get; private set; }
 
         public LineItemViewModelFactory(IViewModelMapper viewModelMapper,
             ILocalizationProvider localizationProvider,
@@ -41,7 +43,8 @@ namespace Orckestra.Composer.Cart.Factory
             ILineItemValidationProvider lineItemValidationProvider,
             IRecurringOrdersRepository recurringOrderRepository,
             IComposerContext composerContext,
-            IRecurringOrderProgramViewModelFactory recurringOrderProgramViewModelFactory)
+            IRecurringOrderProgramViewModelFactory recurringOrderProgramViewModelFactory,
+            IRecurringOrdersSettings recurringOrdersSettings)
         {
             if (localizationProvider == null) { throw new ArgumentNullException("localizationProvider"); }
             if (viewModelMapper == null) { throw new ArgumentNullException("viewModelMapper"); }
@@ -60,6 +63,7 @@ namespace Orckestra.Composer.Cart.Factory
             RecurringOrderRepository = recurringOrderRepository;
             ComposerContext = composerContext;
             RecurringOrderProgramViewModelFactory = recurringOrderProgramViewModelFactory;
+            RecurringOrdersSettings = recurringOrdersSettings;
         }
 
         /// <summary>
@@ -156,7 +160,7 @@ namespace Orckestra.Composer.Cart.Factory
             var scope = ComposerContext.Scope;
             var recurringProgramName = lineItem.RecurringOrderProgramName;
 
-            if (string.IsNullOrEmpty(recurringProgramName) || !ConfigurationUtil.GetRecurringOrdersConfigEnabled()) { return false; }
+            if (string.IsNullOrEmpty(recurringProgramName) || !RecurringOrdersSettings.Enabled) { return false; }
 
             var program = await RecurringOrderRepository.GetRecurringOrderProgram(scope, recurringProgramName).ConfigureAwaitWithCulture(false);
 

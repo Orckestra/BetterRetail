@@ -6,6 +6,7 @@ using Moq;
 using Moq.AutoMock;
 using NUnit.Framework;
 using Orckestra.Composer.Cart.Repositories.Order;
+using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Factory;
 using Orckestra.Composer.Product.Factory;
 using Orckestra.Composer.Product.Repositories;
@@ -63,7 +64,8 @@ namespace Orckestra.Composer.Product.Tests.Services
                 IProductUrlProvider productUrlProvider,
                 IScopeViewService scopeViewService,
                 IRecurringOrdersRepository recurringOrdersRepository,
-                IRecurringOrderProgramViewModelFactory recurringOrderProgramViewModelFactory)
+                IRecurringOrderProgramViewModelFactory recurringOrderProgramViewModelFactory,
+                IRecurringOrdersSettings recurringOrdersSettings)
             
                 : base(
                 viewModelMapper, 
@@ -74,7 +76,8 @@ namespace Orckestra.Composer.Product.Tests.Services
                 productUrlProvider,
                 scopeViewService,
                 recurringOrdersRepository,
-                recurringOrderProgramViewModelFactory)
+                recurringOrderProgramViewModelFactory,
+                recurringOrdersSettings)
             {
             }
 

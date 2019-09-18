@@ -8,6 +8,7 @@ using Orckestra.Composer.Cart.Factory;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Repositories;
 using Orckestra.Composer.Cart.ViewModels;
+using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Country;
 using Orckestra.Composer.Factory;
 using Orckestra.Composer.Providers;
@@ -28,6 +29,7 @@ namespace Orckestra.Composer.Cart.Services
         protected ICartService CartService { get; private set; }
         protected IRecurringOrderTemplateViewModelFactory RecurringOrderTemplateViewModelFactory { get; private set; }
         protected IRecurringOrderCartsViewService RecurringOrderCartsViewService { get; private set; }
+        protected IRecurringOrdersSettings RecurringOrdersSettings { get; private set; }
 
         public ShippingMethodViewService(
             IFulfillmentMethodRepository fulfillmentMethodRepository,
@@ -35,7 +37,8 @@ namespace Orckestra.Composer.Cart.Services
             ICartRepository cartRepository,
             ICartService cartService,
             IRecurringOrderTemplateViewModelFactory recurringOrderTemplateViewModelFactory,
-            IRecurringOrderCartsViewService recurringOrderCartsViewService)
+            IRecurringOrderCartsViewService recurringOrderCartsViewService,
+            IRecurringOrdersSettings recurringOrdersSettings)
         {
             if (fulfillmentMethodRepository == null) { throw new ArgumentNullException("fulfillmentMethodRepository"); }
             if (cartViewModelFactory == null) { throw new ArgumentNullException("cartViewModelFactory"); }
@@ -50,6 +53,7 @@ namespace Orckestra.Composer.Cart.Services
             CartService = cartService;
             RecurringOrderTemplateViewModelFactory = recurringOrderTemplateViewModelFactory;
             RecurringOrderCartsViewService = recurringOrderCartsViewService;
+            RecurringOrdersSettings = recurringOrdersSettings;
         }
 
         /// <summary>
@@ -241,7 +245,7 @@ namespace Orckestra.Composer.Cart.Services
 
         public virtual async Task<CartViewModel> UpdateRecurringOrderCartShippingMethodAsync(UpdateRecurringOrderCartShippingMethodParam param)
         {
-            if (!ConfigurationUtil.GetRecurringOrdersConfigEnabled())
+            if (!RecurringOrdersSettings.Enabled)
                 return GetEmptyRecurringOrderCartViewModel();
 
             if (param == null) throw new ArgumentNullException(nameof(param), ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param)));

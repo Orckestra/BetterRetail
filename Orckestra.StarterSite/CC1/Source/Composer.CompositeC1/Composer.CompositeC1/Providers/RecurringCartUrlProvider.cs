@@ -1,9 +1,8 @@
 ﻿using Orckestra.Composer.CompositeC1.Services;
+using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
-using Orckestra.Composer.Services;
 using Orckestra.Composer.Utils;
-using Orckestra.ExperienceManagement.Configuration;
 using System;
 using System.Collections.Specialized;
 
@@ -12,22 +11,23 @@ namespace Orckestra.Composer.CompositeC1.Providers
     public class RecurringCartUrlProvider : IRecurringCartUrlProvider
     {
         protected IPageService PageService { get; private set; }
-        protected IWebsiteContext WebsiteContext { get; private set; }
+    
+        protected IRecurringOrdersSettings RecurringOrdersSettings { get; private set; }
 
-        public RecurringCartUrlProvider(IPageService pageService, IWebsiteContext websiteContext)
+        public RecurringCartUrlProvider(IPageService pageService, IRecurringOrdersSettings recurringOrdersSettings)
         {
             if (pageService == null) { throw new ArgumentNullException("pageService"); }
 
             PageService = pageService;
-            WebsiteContext = websiteContext;
+       
+            RecurringOrdersSettings = recurringOrdersSettings;
 
         }
         public string GetRecurringCartsUrl(GetRecurringCartsUrlParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
 
-            var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(param.CultureInfo, WebsiteContext.WebsiteId);
-            var url = PageService.GetPageUrl(pagesConfiguration.RecurringCartsPageId, param.CultureInfo);
+            var url = PageService.GetPageUrl(RecurringOrdersSettings.RecurringCartsPageId, param.CultureInfo);
             return UrlProviderHelper.BuildUrlWithParams(url, param.ReturnUrl);
         }
 
@@ -36,8 +36,7 @@ namespace Orckestra.Composer.CompositeC1.Providers
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
             if (param.RecurringCartName == null) { throw new ArgumentNullException(nameof(param.RecurringCartName)); }
 
-            var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(param.CultureInfo, WebsiteContext.WebsiteId);
-            var url = PageService.GetPageUrl(pagesConfiguration.RecurringCartDetailsPageId, param.CultureInfo);
+            var url = PageService.GetPageUrl(RecurringOrdersSettings.RecurringCartDetailsPageId, param.CultureInfo);
             var UrlWithReturn = UrlProviderHelper.BuildUrlWithParams(url, param.ReturnUrl);
 
             return UrlFormatter.AppendQueryString(UrlWithReturn, new NameValueCollection

@@ -8,6 +8,7 @@ using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Requests;
 using Orckestra.Composer.Cart.Services;
 using Orckestra.Composer.Cart.ViewModels;
+using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Services;
@@ -26,6 +27,7 @@ namespace Orckestra.Composer.Cart.Api
         protected ICheckoutService CheckoutService { get; private set; }
         protected IShippingMethodViewService ShippingMethodService { get; private set; }
         protected ICartUrlProvider CartUrlProvider { get; private set; }
+        protected IRecurringOrdersSettings RecurringOrdersSettings { get; private set; }
 
         public CartController(
             ICartService cartService,
@@ -33,7 +35,8 @@ namespace Orckestra.Composer.Cart.Api
             IComposerContext composerContext,
             ICouponViewService couponViewService,
             IShippingMethodViewService shippingMethodService,
-            ICartUrlProvider cartUrlProvider)
+            ICartUrlProvider cartUrlProvider,
+            IRecurringOrdersSettings recurringOrdersSettings)
         {
             if (cartService == null) { throw new ArgumentNullException("cartService"); }
             if (composerContext == null) { throw new ArgumentNullException("composerContext"); }
@@ -48,6 +51,7 @@ namespace Orckestra.Composer.Cart.Api
             CheckoutService = checkoutService;
             ShippingMethodService = shippingMethodService;
             CartUrlProvider = cartUrlProvider;
+            RecurringOrdersSettings = recurringOrdersSettings;
         }
 
         /// <summary>
@@ -90,7 +94,7 @@ namespace Orckestra.Composer.Cart.Api
                 var checkoutStepInfo = checkoutStepInfos[stepNumber];
 
                 //If the cart contains recurring items and user is not authenticated, redirect to sign in
-                if (cartViewModel.HasRecurringLineitems && !ComposerContext.IsAuthenticated)
+                if (RecurringOrdersSettings.Enabled && cartViewModel.HasRecurringLineitems && !ComposerContext.IsAuthenticated)
                 {
                     cartViewModel.OrderSummary.CheckoutRedirectAction.RedirectUrl = checkoutUrlTarget;
                 }

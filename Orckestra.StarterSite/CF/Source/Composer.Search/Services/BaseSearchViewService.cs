@@ -48,6 +48,7 @@ namespace Orckestra.Composer.Search.Services
         protected IComposerContext ComposerContext { get; }
         protected IProductSettingsViewService ProductSettings { get; }
         protected IScopeViewService ScopeViewService { get; }
+        protected IRecurringOrdersSettings RecurringOrdersSettings { get; private set; }
 
         protected BaseSearchViewService(
             ISearchRepository searchRepository,
@@ -61,7 +62,8 @@ namespace Orckestra.Composer.Search.Services
             IPriceProvider priceProvider,
             IComposerContext composerContext,
             IProductSettingsViewService productSettings,
-            IScopeViewService scopeViewService)
+            IScopeViewService scopeViewService,
+            IRecurringOrdersSettings recurringOrdersSettings)
         {
             if (searchRepository == null) { throw new ArgumentNullException(nameof(searchRepository)); }
             if (viewModelMapper == null) { throw new ArgumentNullException(nameof(viewModelMapper)); }
@@ -88,6 +90,7 @@ namespace Orckestra.Composer.Search.Services
             ComposerContext = composerContext;
             ProductSettings = productSettings;
             ScopeViewService = scopeViewService;
+            RecurringOrdersSettings = recurringOrdersSettings;
         }
 
         protected virtual IList<Facet> BuildFacets(SearchCriteria criteria, ProductSearchResult searchResult)
@@ -241,7 +244,7 @@ namespace Orckestra.Composer.Search.Services
             MapProductSearchViewModelImage(productSearchVm, imgDictionary);
             productSearchVm.IsAvailableToSell = await GetProductSearchViewModelAvailableForSell(productSearchVm, productDocument).ConfigureAwait(false);
             productSearchVm.Pricing = await PriceProvider.GetPriceAsync(productSearchVm.HasVariants, productDocument).ConfigureAwait(false);
-            productSearchVm.IsEligibleForRecurring = productDocument.PropertyBag.IsEligibleForRecurring();
+            productSearchVm.IsEligibleForRecurring = RecurringOrdersSettings.Enabled && productDocument.PropertyBag.IsEligibleForRecurring();
           
             productSearchVm.Context["IsEligibleForRecurring "] = productSearchVm.IsEligibleForRecurring;
 

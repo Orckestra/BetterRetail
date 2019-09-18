@@ -21,6 +21,7 @@ using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel.Orders;
 using Orckestra.Composer.Logging;
 using Orckestra.Composer.Cart.Helper;
+using Orckestra.Composer.Configuration;
 
 namespace Orckestra.Composer.Cart.Services
 {
@@ -38,11 +39,13 @@ namespace Orckestra.Composer.Cart.Services
         protected IRecurringOrderTemplatesViewService RecurringOrderTemplatesViewService { get; private set; }
         protected IRecurringOrderCartsViewService RecurringOrderCartsViewService { get; private set; }
         private static ILog Log = LogProvider.GetCurrentClassLogger();
+        protected IRecurringOrdersSettings RecurringOrdersSettings { get; private set; }
 
         public PaymentViewService(IPaymentRepository paymentRepository, ICartViewModelFactory cartViewModelFactory, ICartRepository cartRepository,
          ILookupService lookupService, IViewModelMapper viewModelMapper, IPaymentProviderFactory paymentProviderFactory, 
          IRecurringOrderTemplatesViewService recurringOrderTemplatesViewService, 
-         IRecurringOrderCartsViewService recurringOrderCartsViewService
+         IRecurringOrderCartsViewService recurringOrderCartsViewService,
+         IRecurringOrdersSettings recurringOrdersSettings
          )
         {
             if (paymentRepository == null) { throw new ArgumentNullException("paymentRepository"); }
@@ -61,6 +64,7 @@ namespace Orckestra.Composer.Cart.Services
             PaymentProviderFactory = paymentProviderFactory;
             RecurringOrderTemplatesViewService = recurringOrderTemplatesViewService;
             RecurringOrderCartsViewService = recurringOrderCartsViewService;
+            RecurringOrdersSettings = recurringOrdersSettings;
         }
 
 
@@ -114,7 +118,7 @@ namespace Orckestra.Composer.Cart.Services
             }).ConfigureAwait(false);
 
             var hasRecurring = false;
-            if (ConfigurationUtil.GetRecurringOrdersConfigEnabled())
+            if (RecurringOrdersSettings.Enabled)
             {
                 hasRecurring = RecurringOrderCartHelper.IsCartContainsRecurringOrderItems(cart);
             }
@@ -496,7 +500,7 @@ namespace Orckestra.Composer.Cart.Services
             vm.CanSavePaymentMethod = vm.ProviderType == MonerisCanadaPaymentProvider.MonerisProviderTypeName && param.IsAuthenticated;
 
             // Recurring orders must have a saved credit card to work.
-            vm.MustSavePaymentMethod = vm.CanSavePaymentMethod && RecurringOrderCartHelper.IsCartContainsRecurringOrderItems(param.Cart);
+            vm.MustSavePaymentMethod = vm.CanSavePaymentMethod && RecurringOrdersSettings.Enabled && RecurringOrderCartHelper.IsCartContainsRecurringOrderItems(param.Cart);
 
             param.PaymentProvider.AugmentViewModel(vm, payment);
 

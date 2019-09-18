@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using Orckestra.Composer.Cart.Parameters.WishList;
+﻿using Orckestra.Composer.Cart.Parameters.WishList;
 using Orckestra.Composer.Cart.Providers.WishList;
+using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Services;
-using Orckestra.Composer.Utils;
 using Orckestra.Composer.ViewModels.MyAccount;
 using Orckestra.ExperienceManagement.Configuration;
+using System;
+using System.Collections.Generic;
 
 namespace Orckestra.Composer.CompositeC1.Services
 {
@@ -20,6 +20,8 @@ namespace Orckestra.Composer.CompositeC1.Services
         protected IRecurringScheduleUrlProvider RecurringScheduleUrlProvider { get; private set; }
         protected IPageService PageService { get; private set; }
         protected IWebsiteContext WebsiteContext { get; private set; }
+        protected IRecurringOrdersSettings RecurringOrdersSettings { get; private set; }
+
 
         public MyAccountViewService(
             IComposerContext composerContext,
@@ -28,7 +30,8 @@ namespace Orckestra.Composer.CompositeC1.Services
             IWishListUrlProvider wishListUrlProvider,
             IRecurringScheduleUrlProvider recurringScheduleUrlProvider,
             IPageService pageService,
-            IWebsiteContext websiteContext)
+            IWebsiteContext websiteContext,
+            IRecurringOrdersSettings recurringOrdersSettings)
         {
             if (composerContext == null) throw new ArgumentNullException("composerContext");
             if (myAccountUrlProvider == null) throw new ArgumentNullException("myAccountUrlProvider");
@@ -44,6 +47,7 @@ namespace Orckestra.Composer.CompositeC1.Services
             PageService = pageService;
             RecurringScheduleUrlProvider = recurringScheduleUrlProvider;
             WebsiteContext = websiteContext;
+            RecurringOrdersSettings = recurringOrdersSettings;
         }
 
         public virtual MenuViewModel CreateMenu(string currentUrl)
@@ -53,7 +57,7 @@ namespace Orckestra.Composer.CompositeC1.Services
                 CultureInfo = ComposerContext.CultureInfo
             };
 
-            bool recurringOrderConfigEnabled = ConfigurationUtil.GetRecurringOrdersConfigEnabled();
+            bool recurringOrderConfigEnabled = RecurringOrdersSettings.Enabled;
             var myAccountUrl = MyAccountUrlProvider.GetMyAccountUrl(urlParam);
             var addressListUrl = MyAccountUrlProvider.GetAddressListUrl(urlParam);
             var myOrderHistoryUrl = OrderUrlProvider.GetOrderHistoryUrl(new GetOrderUrlParameter { CultureInfo = ComposerContext.CultureInfo });
@@ -68,7 +72,7 @@ namespace Orckestra.Composer.CompositeC1.Services
             var myAddressPage = PageService.GetPage(pageConfiguration.AddressListPageId, ComposerContext.CultureInfo);
             var myOrderHistoryPage = PageService.GetPage(pageConfiguration.OrderHistoryPageId, ComposerContext.CultureInfo);
             var myWishListage = PageService.GetPage(pageConfiguration.MyWishListPageId, ComposerContext.CultureInfo);
-            var myRecurringSchedulePage = PageService.GetPage(pageConfiguration.RecurringSchedulePageId, ComposerContext.CultureInfo);
+            var myRecurringSchedulePage = PageService.GetPage(RecurringOrdersSettings.RecurringSchedulePageId, ComposerContext.CultureInfo);
 
             var myAccountMenuItem = new MenuItemViewModel
             {
@@ -100,14 +104,14 @@ namespace Orckestra.Composer.CompositeC1.Services
                 Url = myOrderHistoryUrl,
                 IsActive = currentPageId == pageConfiguration.OrderHistoryPageId ||
                             currentPageId == pageConfiguration.OrderDetailsPageId ||
-                            currentPageId == pageConfiguration.RecurringCartDetailsPageId
+                            currentPageId == RecurringOrdersSettings.RecurringCartDetailsPageId
             };
 
             var myRecurringScheduleMenuItem = new MenuItemViewModel
             {
                 Name = myRecurringSchedulePage.MenuTitle,
                 Url = myRecurringScheduleUrl,
-                IsActive = currentPageId == pageConfiguration.RecurringSchedulePageId || currentPageId == pageConfiguration.RecurringScheduleDetailsPageId
+                IsActive = currentPageId == RecurringOrdersSettings.RecurringSchedulePageId || currentPageId == RecurringOrdersSettings.RecurringScheduleDetailsPageId
             };
 
             menu.MenuItems.AddRange(new List<MenuItemViewModel> { myAccountMenuItem, myWishListMenuItem, myAdressesMenuItem, myOrderHistoryMenuItem});

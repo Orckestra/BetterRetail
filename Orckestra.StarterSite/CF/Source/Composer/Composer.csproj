@@ -85,7 +85,6 @@
     <Reference Include="Orckestra.ExperienceManagement.Configuration, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Orckestra.ExperienceManagement.Configuration.4.0.0\lib\net471\Orckestra.ExperienceManagement.Configuration.dll</HintPath>
     </Reference>
-
     <Reference Include="Orckestra.Logging, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\OrckestraCommerce.Common.4.0.0-beta0001\lib\net461\Orckestra.Logging.dll</HintPath>
       <Private>True</Private>
@@ -195,10 +194,10 @@
     <Compile Include="Configuration\ComposerConfigurationSection.cs" />
     <Compile Include="Configuration\ContentSitemapConfiguration.cs" />
     <Compile Include="Configuration\DisplayConfiguration.cs" />
+    <Compile Include="Configuration\IRecurringOrdersSettings.cs" />
     <Compile Include="Configuration\IGoogleSettings.cs" />
     <Compile Include="Configuration\ImageConfiguration.cs" />
     <Compile Include="Configuration\ProductSitemapConfiguration.cs" />
-    <Compile Include="Configuration\RecurringOrdersConfigurationElement.cs" />
     <Compile Include="Configuration\SitemapConfiguration.cs" />
     <Compile Include="Country\CountryRepository.cs" />
     <Compile Include="Country\CountryService.cs" />
@@ -284,7 +283,6 @@
     <Compile Include="Services\ProductPriceViewService.cs" />
     <Compile Include="Services\RecurringOrderTemplatesViewService.cs" />
     <Compile Include="Services\ScopeViewService.cs" />
-    <Compile Include="Utils\ConfigurationUtil.cs" />
     <Compile Include="Utils\Constants.cs" />
     <Compile Include="Utils\Guard.cs" />
     <Compile Include="Utils\LineItemHelper.cs" />

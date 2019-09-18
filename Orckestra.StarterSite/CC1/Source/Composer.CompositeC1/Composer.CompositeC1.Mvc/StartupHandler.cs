@@ -52,6 +52,7 @@ namespace Orckestra.Composer.CompositeC1.Mvc
 
             log.Info("Application Starting");
 
+            DynamicTypeManager.EnsureCreateStore(typeof(RecurringOrdersSettings));
             DynamicTypeManager.EnsureCreateStore(typeof(GoogleSettings));
             DynamicTypeManager.EnsureCreateStore(typeof(ComposerPage));
             DynamicTypeManager.EnsureCreateStore(typeof(CategoryPage));

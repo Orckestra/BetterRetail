@@ -39,6 +39,7 @@ namespace Orckestra.Composer.Cart.Services
         protected ICouponViewService CouponViewService { get; private set; }
         protected IRecurringCartUrlProvider RecurringCartUrlProvider { get; private set; }
         protected IRecurringScheduleUrlProvider RecurringScheduleUrlProvider { get; private set; }
+        protected IRecurringOrdersSettings RecurringOrdersSettings { get; private set; }
 
         public RecurringOrderCartsViewService(
             ICartRepository cartRepository,
@@ -51,7 +52,8 @@ namespace Orckestra.Composer.Cart.Services
             IAddressRepository addressRepository,
             ICouponViewService couponViewService,
             IRecurringCartUrlProvider recurringCartUrlProvider,
-            IRecurringScheduleUrlProvider recurringScheduleUrlProvider)
+            IRecurringScheduleUrlProvider recurringScheduleUrlProvider,
+            IRecurringOrdersSettings recurringOrdersSettings)
         {
             if (cartRepository == null) { throw new ArgumentNullException(nameof(cartRepository)); }
             if (overtureClient == null) { throw new ArgumentNullException(nameof(overtureClient)); }
@@ -76,11 +78,12 @@ namespace Orckestra.Composer.Cart.Services
             CouponViewService = couponViewService;
             RecurringCartUrlProvider = recurringCartUrlProvider;
             RecurringScheduleUrlProvider = recurringScheduleUrlProvider;
+            RecurringOrdersSettings = recurringOrdersSettings;
         }
 
         public virtual async Task<RecurringOrderCartsViewModel> GetRecurringOrderCartListViewModelAsync(GetRecurringOrderCartsViewModelParam param)
         {
-            if (!ConfigurationUtil.GetRecurringOrdersConfigEnabled())
+            if (!RecurringOrdersSettings.Enabled)
                 return new RecurringOrderCartsViewModel();
 
             var carts = await CartRepository.GetRecurringCartsAsync(param).ConfigureAwait(false);
@@ -95,7 +98,7 @@ namespace Orckestra.Composer.Cart.Services
 
         public virtual async Task<RecurringOrderCartsViewModel> GetRecurringOrderCartListViewModelFromCartsAsync(GetRecurringOrderCartsViewModelFromCartsParam param)
         {
-            if (!ConfigurationUtil.GetRecurringOrdersConfigEnabled())
+            if (!RecurringOrdersSettings.Enabled)
                 return new RecurringOrderCartsViewModel();
 
             var carts = param.Carts;
@@ -185,7 +188,7 @@ namespace Orckestra.Composer.Cart.Services
 
         public virtual async Task<LightRecurringOrderCartsViewModel> GetLightRecurringOrderCartListViewModelAsync(GetLightRecurringOrderCartListViewModelParam param)
         {
-            if (!ConfigurationUtil.GetRecurringOrdersConfigEnabled())
+            if (!RecurringOrdersSettings.Enabled)
                 return new LightRecurringOrderCartsViewModel();
 
             var carts = await CartRepository.GetRecurringCartsAsync(new GetRecurringOrderCartsViewModelParam {
@@ -227,7 +230,7 @@ namespace Orckestra.Composer.Cart.Services
         {
             var emptyVm = GetEmptyRecurringOrderCartViewModel();
 
-            if (!ConfigurationUtil.GetRecurringOrdersConfigEnabled())
+            if (!RecurringOrdersSettings.Enabled)
                 return emptyVm;
 
             if (string.Equals(param.CartName, CartConfiguration.ShoppingCartName, StringComparison.OrdinalIgnoreCase))
@@ -256,7 +259,7 @@ namespace Orckestra.Composer.Cart.Services
 
         public virtual async Task<CartViewModel> UpdateRecurringOrderCartShippingAddressAsync(UpdateRecurringOrderCartShippingAddressParam param)
         {
-            if (!ConfigurationUtil.GetRecurringOrdersConfigEnabled())
+            if (!RecurringOrdersSettings.Enabled)
                 return GetEmptyRecurringOrderCartViewModel();
 
             if (param == null) throw new ArgumentNullException(nameof(param), ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param)));
@@ -314,7 +317,7 @@ namespace Orckestra.Composer.Cart.Services
 
         public virtual async Task<CartViewModel> UpdateRecurringOrderCartBillingAddressAsync(UpdateRecurringOrderCartBillingAddressParam param)
         {
-            if (!ConfigurationUtil.GetRecurringOrdersConfigEnabled())
+            if (!RecurringOrdersSettings.Enabled)
                 return GetEmptyRecurringOrderCartViewModel();
 
             if (param == null) throw new ArgumentNullException(nameof(param), ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param)));
@@ -359,7 +362,7 @@ namespace Orckestra.Composer.Cart.Services
 
         public virtual async Task<RecurringOrderCartsRescheduleResultViewModel> UpdateRecurringOrderCartNextOccurenceAsync(UpdateRecurringOrderCartNextOccurenceParam param)
         {
-            if (!ConfigurationUtil.GetRecurringOrdersConfigEnabled())
+            if (!RecurringOrdersSettings.Enabled)
                 return new RecurringOrderCartsRescheduleResultViewModel();
 
             if (param == null) throw new ArgumentNullException(nameof(param), ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param)));
@@ -456,7 +459,7 @@ namespace Orckestra.Composer.Cart.Services
 
         public virtual async Task<CartViewModel> RemoveLineItemAsync(RemoveRecurringCartLineItemParam param)
         {
-            if (!ConfigurationUtil.GetRecurringOrdersConfigEnabled())
+            if (!RecurringOrdersSettings.Enabled)
                 return GetEmptyRecurringOrderCartViewModel();
 
             if (param == null) throw new ArgumentNullException(nameof(param), ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param)));
@@ -479,7 +482,7 @@ namespace Orckestra.Composer.Cart.Services
 
         public virtual async Task<CartViewModel> UpdateLineItemAsync(UpdateLineItemParam param)
         {
-            if (!ConfigurationUtil.GetRecurringOrdersConfigEnabled())
+            if (!RecurringOrdersSettings.Enabled)
                 return GetEmptyRecurringOrderCartViewModel();
 
             if (param == null) { throw new ArgumentNullException("param", "param is required"); }
@@ -517,7 +520,7 @@ namespace Orckestra.Composer.Cart.Services
 
         public virtual async Task<bool> UpdateRecurringOrderCartsAddressesAsync(UpdateRecurringOrderCartsAddressesParam param)
         {
-            if (!ConfigurationUtil.GetRecurringOrdersConfigEnabled())
+            if (!RecurringOrdersSettings.Enabled)
                 return false;
 
             var roCarts = await CartRepository.GetRecurringCartsAsync(new GetRecurringOrderCartsViewModelParam {

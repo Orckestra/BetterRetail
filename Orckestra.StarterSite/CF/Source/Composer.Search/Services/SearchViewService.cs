@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Localization;
@@ -28,7 +29,8 @@ namespace Orckestra.Composer.Search.Services
             IPriceProvider priceProvider,
             IComposerContext composerContext,
             IProductSettingsViewService productSettings,
-            IScopeViewService scopeViewService)
+            IScopeViewService scopeViewService,
+            IRecurringOrdersSettings recurringOrdersSettings)
 
             : base(
             searchRepository,
@@ -42,7 +44,8 @@ namespace Orckestra.Composer.Search.Services
             priceProvider,
             composerContext,
             productSettings,
-            scopeViewService)
+            scopeViewService,
+            recurringOrdersSettings)
         {
         }
 

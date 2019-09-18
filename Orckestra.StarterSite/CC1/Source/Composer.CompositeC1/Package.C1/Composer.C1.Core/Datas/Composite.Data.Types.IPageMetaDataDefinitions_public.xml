@@ -4,5 +4,5 @@
   <Add Id="3e23489b-0890-4683-a415-c3ad8b8b5368" DefiningItemId="8132f659-418b-4c39-b450-9c8c53a86bd4" Name="ComposerCategoryLandingPage" Label="Composer Category Landing Page" MetaDataContainerId="eb210a75-be25-401f-b0d4-b3787bce36fa" MetaDataTypeId="864704b8-2ff5-40e4-a332-c1875b358eb8" StartLevel="0" Levels="100000" />
   <Add Id="9dd8f330-4bb3-4a0e-96db-79d332f3dd4e" DefiningItemId="ab50b336-ee78-4c53-9fb6-022407c0d3ef" Name="ComposerCategoryPage" Label="Composer Category Page" MetaDataContainerId="eb210a75-be25-401f-b0d4-b3787bce36fa" MetaDataTypeId="864704b8-2ff5-40e4-a332-c1875b358eb8" StartLevel="0" Levels="100000" />
   <Add Id="caa71065-6816-4171-9467-9e902b2b64f7" DefiningItemId="f3dbd28d-365f-4d3e-91c3-7b730b39b294" Name="Google Settings" Label="Google Settings" MetaDataContainerId="12210a75-be25-401f-b0d4-b3787bce36fa" MetaDataTypeId="591d5a4b-053e-4d43-91a1-5a0b4d96a85d" StartLevel="0" Levels="0" />
-
+  <Add Id="3c3d067f-3f18-4696-8230-3b902a67d699" DefiningItemId="f3dbd28d-365f-4d3e-91c3-7b730b39b294" Name="Recurring Orders Settings" Label="Recurring Orders Settings" MetaDataContainerId="12210a75-be25-401f-b0d4-b3787bce36fa" MetaDataTypeId="991d5a0b-053e-4d43-91a1-5a0b4d96a85d" StartLevel="0" Levels="0" />
 </Data>
