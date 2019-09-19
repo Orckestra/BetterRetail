@@ -44,9 +44,7 @@ namespace Orckestra.Composer.CompositeC1.Services
 
         public virtual MenuViewModel CreateMenu(string currentUrl)
         {
-#pragma warning disable CS0436 // Type conflicts with imported type
             bool recurringOrderConfigEnabled = ConfigurationUtil.GetRecurringOrdersConfigEnabled();
-#pragma warning restore CS0436 // Type conflicts with imported type
 
             var myAccountUrl = MyAccountUrlProvider.GetMyAccountUrl(new GetMyAccountUrlParam { CultureInfo = ComposerContext.CultureInfo });
             var addressListUrl = MyAccountUrlProvider.GetAddressListUrl(new GetMyAccountUrlParam { CultureInfo = ComposerContext.CultureInfo });

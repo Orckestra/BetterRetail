@@ -273,9 +273,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\..\CF\Source\Composer\Utils\ConfigurationUtil.cs">
-      <Link>Utils\ConfigurationUtil.cs</Link>
-    </Compile>
     <Compile Include="..\Solution Items\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
