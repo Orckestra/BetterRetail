@@ -59,7 +59,7 @@ properties {
                                     # are / are not executed. 
                                     #
                                     # Can be 'Dev','Rolling','Release'
-	$VisualStudioVersion	 = '2017'
+	$VisualStudioVersion	 = '2019'
     $IsRunningOnBuildMachine = $false
     $MsbuildVerbosity        = 'normal' # Can be: q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic]
     $NugetVerbosity          = 'quiet'   # Can be: normal, quiet, detailed

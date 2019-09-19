@@ -1,4 +1,4 @@
-$VisualStudioVersion                      = '2017'
+$VisualStudioVersion                      = '2019'
 
 Task CF -depends CF_RestoreNugetPackages,
                  CF_BuildAndPackage,
@@ -59,7 +59,7 @@ Task CF_CompileFrontend {
 
 		Exec {
 			$ErrorActionPreference = 'Continue'
-			npm install --msvs_version=2015 *> $npmLogsPath
+			npm install --msvs_version=2019 *> $npmLogsPath
 			$LASTEXITCODE = 0
 		}
 		

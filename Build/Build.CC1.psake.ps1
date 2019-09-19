@@ -1,4 +1,4 @@
-$VisualStudioVersion                      = '2017'
+$VisualStudioVersion                      = '2019'
 
 Task CC1 -depends CC1_RestoreNugetPackages,
                   CC1_BuildAndPackage
@@ -30,7 +30,7 @@ function CC1_InitializeVariables {
 	
 	$Build.CC1.NugetPackagesRepository = Join-Path $Build.CC1.SourcePath "packages"
 	
-	$Build.VisualStudioVersion = "2017"
+	$Build.VisualStudioVersion = "2019"
 }
 
 Task CC1_RestoreNugetPackages {    
