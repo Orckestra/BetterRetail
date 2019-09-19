@@ -50,7 +50,7 @@ Task CC1_RestoreNugetPackages {
 		}
 		
 
-    Get-AllSolutions -RootFolder $Build.CC1.RootPath -ErrorAction SilentlyContinue | Invoke-NugetRestore | Write-Verbose
+    Get-AllSolutions -RootFolder $Build.CC1.RootPath -ErrorAction SilentlyContinue | Invoke-NugetRestore -VisualStudioVersion $VisualStudioVersion | Write-Verbose
 }
 
 Task CC1_BuildAndPackage -depends   CC1_Copy-UiPackageFromNuget,

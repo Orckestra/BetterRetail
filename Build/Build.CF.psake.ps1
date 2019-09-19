@@ -8,7 +8,7 @@ Task CFDev -depends CF_CompileBackend,
 					CF_PackageNuget
 
 Task CF_RestoreNugetPackages {
-    Get-AllSolutions -RootFolder $Build.CF.RootPath -ErrorAction SilentlyContinue | Invoke-NugetRestore | Write-Verbose
+    Get-AllSolutions -RootFolder $Build.CF.RootPath -ErrorAction SilentlyContinue | Invoke-NugetRestore -VisualStudioVersion $VisualStudioVersion | Write-Verbose
 }
 
 Task CF_BuildAndPackage -depends CF_CompileFrontend,
