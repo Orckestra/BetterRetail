@@ -8,7 +8,7 @@ param(
 
 ####################################################################################################################
 # Variables
-$MsBuildExe = "C:\Program Files (x86)\MSBuild\15.0\Bin\msbuild.exe"
+$MsBuildExe = "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\bin\msbuild.exe"
 $MsDeployExe = "C:\Program Files\IIS\Microsoft Web Deploy V3\msdeploy.exe"
 $AppCmdRegKey = "HKLM:\SOFTWARE\Microsoft\InetStp"
 $MsDeployInstallPathRegKey = "HKLM:\SOFTWARE\Microsoft\IIS Extensions\MSDeploy"

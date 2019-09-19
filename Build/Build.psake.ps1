@@ -207,7 +207,7 @@ function Global_InitializeVariables {
 
     # Since we know that we want 'msbuild 15' but psake only provides a function to set the 'framework',
     # we validate that 'framework 4.6.1' is equivalent to 'msbuild 15'.
-    $Build.MsBuildExe = "C:\Program Files (x86)\MSBuild\15.0\Bin\msbuild.exe"
+    $Build.MsBuildExe = "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\bin\msbuild.exe"
     $Build.MsDeployExe = "C:\Program Files (x86)\IIS\Microsoft Web Deploy v3\msdeploy.exe"
 	$Build.ZIPExe = Join-Path $Build.WorkspaceRoot 'lib\7-Zip\7z.exe'
 	$Build.NUnitExe = Get-ChildItem "$NugetPackagesRepository\NUnit.Runners.*" -Include "nunit-console.exe" -Recurse -Force | Select-Object -First 1
