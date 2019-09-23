@@ -96,6 +96,8 @@ Task CF_UnitTestsFrontend {
 }
 
 Task CF_CompileBackend {
+	Write-Host 'CF_CompileBackend Task, VS version:'
+	Write-Host $VisualStudioVersion
     Invoke-Msbuild -Project (Join-Path $Build.CF.SourcePath "Composer.sln") `
 	 -Configuration $Configuration `
 	 -LogsDirectory $Build.CentralLogsFolder `
