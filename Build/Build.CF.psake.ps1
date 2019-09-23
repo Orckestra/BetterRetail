@@ -51,8 +51,8 @@ Task CF_CompileFrontend {
 
 		write-verbose "Install local node deps..."
 		
-		write-verbose "npm prune..."
-		npm prune
+		# write-verbose "npm prune..."
+		# npm prune
 		write-verbose "npm install..."
 		
 		$npmLogsPath = (Join-Path $Build.CentralLogsFolder 'CF_npmLogs.txt')
