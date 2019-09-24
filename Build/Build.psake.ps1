@@ -59,6 +59,7 @@ properties {
                                     # are / are not executed. 
                                     #
                                     # Can be 'Dev','Rolling','Release'
+	$VisualStudioVersion	 = '2019'
     $IsRunningOnBuildMachine = $false
     $MsbuildVerbosity        = 'normal' # Can be: q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic]
     $NugetVerbosity          = 'quiet'   # Can be: normal, quiet, detailed
@@ -185,7 +186,7 @@ FormatTaskName {
 # also used the 32 bits version of msbuild, we also use the 32 bits version
 # of msbuild.
 #
-Framework "4.6.1x86"
+Framework "4.7.1x86"
 
 #---------------------------------------------------------------------------------------
 #---------------------------------------------------------------------------------------
@@ -204,15 +205,14 @@ function Global_InitializeVariables {
     $Build.NugetExe       = Join-Path $Build.WorkspaceRoot 'Lib\nuget\nuget.exe'
     $Build.ctt = Join-Path $Build.WorkspaceRoot 'lib\ctt\ctt.exe'
 
-    # Since we know that we want 'msbuild 14' but psake only provides a function to set the 'framework',
-    # we validate that 'framework 4.6.1' is equivalent to 'msbuild 14'.
-    $Build.MsBuildExe = "C:\Program Files (x86)\MSBuild\14.0\Bin\msbuild.exe"
+    # Since we know that we want 'msbuild 15' but psake only provides a function to set the 'framework',
+    # we validate that 'framework 4.6.1' is equivalent to 'msbuild 15'.
     $Build.MsDeployExe = "C:\Program Files (x86)\IIS\Microsoft Web Deploy v3\msdeploy.exe"
 	$Build.ZIPExe = Join-Path $Build.WorkspaceRoot 'lib\7-Zip\7z.exe'
 	$Build.NUnitExe = Get-ChildItem "$NugetPackagesRepository\NUnit.Runners.*" -Include "nunit-console.exe" -Recurse -Force | Select-Object -First 1
 
     $Build.msbuildVersion = [System.Version](Exec {MsBuild /version /nologo})
-    #Assert (($Build.msbuildVersion.Major -eq 14) -and ($Build.msbuildVersion.Minor -eq 0)) -failureMessage "Unexpected msbuild version: $msbuildVersion"
+    #Assert (($Build.msbuildVersion.Major -eq 15) -and ($Build.msbuildVersion.Minor -eq 0)) -failureMessage "Unexpected msbuild version: $msbuildVersion"
 
     $Build.ArtifactsStagingDirectory = "$($Build.WorkspaceRoot)\Artifacts"
 

@@ -104,7 +104,7 @@ namespace Orckestra.Composer.Product.Services
 
         protected virtual IEnumerable<ProductIdentifier> ExtractRelatedProductIdentifiers(Overture.ServiceModel.Products.Product product, string[] merchandiseTypes, int maxItems)
         {
-            if (product == null) { return Enumerable.Empty<ProductIdentifier>(); }
+            if (product == null || product.Relationships == null) { return Enumerable.Empty<ProductIdentifier>(); }
 
             var relatedProducts = product.Relationships
                 .Where(r => r.RelationshipType == RelationshipType.Product || 
