@@ -1,3 +1,5 @@
+$VisualStudioVersion                      = '2019'
+
 Task CC1 -depends CC1_RestoreNugetPackages,
                   CC1_BuildAndPackage
                   #CC1_PackageNuget,
@@ -27,6 +29,8 @@ function CC1_InitializeVariables {
     $Build.CC1.ContentPackageNumber = 200
 	
 	$Build.CC1.NugetPackagesRepository = Join-Path $Build.CC1.SourcePath "packages"
+	
+	$Build.VisualStudioVersion = "2019"
 }
 
 Task CC1_RestoreNugetPackages {    
@@ -46,7 +50,7 @@ Task CC1_RestoreNugetPackages {
 		}
 		
 
-    Get-AllSolutions -RootFolder $Build.CC1.RootPath -ErrorAction SilentlyContinue | Invoke-NugetRestore | Write-Verbose
+    Get-AllSolutions -RootFolder $Build.CC1.RootPath -ErrorAction SilentlyContinue | Invoke-NugetRestore -VisualStudioVersion $VisualStudioVersion | Write-Verbose
 }
 
 Task CC1_BuildAndPackage -depends   CC1_Copy-UiPackageFromNuget,
@@ -98,6 +102,7 @@ Task CC1_Compile-Solution {
     Invoke-Msbuild -Project (Join-Path $Build.CC1.SourcePath "Composer.CompositeC1.sln") `
         -Configuration $Configuration `
         -LogsDirectory $Build.CentralLogsFolder `
+        -VisualStudioVersion $VisualStudioVersion `
         -MsbuildVerbosity $MsbuildVerbosity
 }
 
