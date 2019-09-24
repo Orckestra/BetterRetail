@@ -199,6 +199,7 @@ param(
 	$FullFilePathNUnitExe = "C:\Program Files (x86)\NUnit 2.6.4\bin\nunit-console.exe"
 )
 	try{
+        Write-Verbose "Invoke-NUnit"
 		Push-Location
 		if($null -ne $Workspace){
 			cd $Workspace
@@ -208,6 +209,8 @@ param(
 			$globbedFiles = Get-ChildItem "$FilePathPatternTestDlls" -recurse -ErrorAction SilentlyContinue -ErrorVariable WontUseIt | ? {-not ((Split-Path $_.FullName) -ilike "*\obj\*")} | %{$_.FullName}
 			$FilePathTestDlls = $globbedFiles
 		}
+
+        Write-Host $FilePathTestDlls
 
 		foreach($dll in $FilePathTestDlls){
 			if(-not (Test-Path -path "$dll" -ErrorAction SilentlyContinue)){
@@ -219,7 +222,8 @@ param(
 		}
 
 		if($null -ne $FilePathTestDlls) {
-			$args = [string[]]( $FilePathTestDlls + $FilePathXmlReport)
+            $args = [string[]]( $FilePathTestDlls + $FilePathXmlReport)
+            Write-Verbose "Executing: $($FullFilePathNUnitExe) $($args)" 
 			& "$FullFilePathNUnitExe" @args
 		}else{
 			Write-Warning "No dlls found, skipped unit tests"
