@@ -206,7 +206,7 @@ namespace Orckestra.Composer.Tests.Providers.Membership
         }
 
         [Test]
-        [Ignore]
+        [Ignore("Found the test with this attribute, filling in required reason.")]
         //todo: fix this one
         public void CreateUser_returns_null_and_status_when_duplicate_name()
         {
@@ -235,7 +235,7 @@ namespace Orckestra.Composer.Tests.Providers.Membership
         }
 
         [Test]
-        [Ignore]
+        [Ignore("Found the test with this attribute, filling in required reason.")]
         //todo: fix this one
         public void CreateUser_returns_null_and_status_when_password_not_met_condition()
         {
@@ -250,7 +250,7 @@ namespace Orckestra.Composer.Tests.Providers.Membership
         }
 
         [Test]
-        [Ignore]
+        [Ignore("Found the test with this attribute, filling in required reason.")]
         //todo: fix this one
         public void CreateUser_returns_user_and_success_status()
         {
@@ -276,7 +276,7 @@ namespace Orckestra.Composer.Tests.Providers.Membership
         }
 
         [Test]
-        [Ignore]
+        [Ignore("Found the test with this attribute, filling in required reason.")]
         //todo: fix this one
         public void CreateUser_should_rethrow_overture_exception()
         {

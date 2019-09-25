@@ -353,7 +353,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
             processedCart.Cart.ShippingMethod.ShippingProviderId.ShouldBeEquivalentTo(updatedShippingMethod.ShippingProviderId);
         }
 
-        [Ignore]
+        [Ignore("Found the test with this attribute, filling in required reason.")]
         [Test]
         public async Task WHEN_Passing_Valid_Parameters_SHOULD_Update_BillingAddress()
         {
@@ -396,7 +396,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
             processedCart.Cart.Payment.BillingAddress.PhoneNumber.ShouldBeEquivalentTo(updatedBillingAddress.PhoneNumber);
         }
 
-        [Ignore]
+        [Ignore("Found the test with this attribute, filling in required reason.")]
         [Test]
         public async Task WHEN_Passing_Valid_Parameters_SHOULD_Update_BillingAddress_With_ShippingAddress()
         {
