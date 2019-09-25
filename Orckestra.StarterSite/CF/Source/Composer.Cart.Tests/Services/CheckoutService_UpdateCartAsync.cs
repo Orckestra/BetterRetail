@@ -24,6 +24,7 @@ using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Dam;
 using Orckestra.Composer.Repositories;
+using Orckestra.Composer.Services;
 using Orckestra.Composer.Services.Lookup;
 using Orckestra.Composer.ViewModels;
 using Orckestra.ForTests;
@@ -585,10 +586,14 @@ namespace Orckestra.Composer.Cart.Tests.Services
         private CheckoutService CreateCheckoutService(ProcessedCart cart)
         {
             var mockedLookupService = new Mock<ILookupService>();
+            var mockedImageService = new Mock<IImageService>();
 
             mockedLookupService.Setup(a => a.GetLookupDisplayNamesAsync(It.IsAny<GetLookupDisplayNamesParam>())).ReturnsAsync(
                 new Dictionary<string, string> { { "Cash", "TestDisplayName" } });
 
+            mockedImageService.Setup(a => a.GetImageUrlsAsync(It.IsAny<IEnumerable<LineItem>>())).ReturnsAsync(new List<ProductMainImage>());
+
+            _container.Use(mockedImageService);
             _container.Use(mockedLookupService);
 
             var mockedDamProvider = new Mock<IDamProvider>();

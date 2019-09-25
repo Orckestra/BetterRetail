@@ -189,10 +189,10 @@
     <Compile Include="Requests\GetRecurringCartsPaymentMethodsRequest.cs" />
     <Compile Include="Requests\GetRecurringOrderTemplatesPaymentMethodsRequest.cs" />
     <Compile Include="Requests\RemoveLineItemViewModel.cs" />
-    <Compile Include="Requests\RemoveRecurringCartLineItemViewModel.cs" />
+    <Compile Include="Requests\RemoveRecurringCartLineItemRequest.cs" />
     <Compile Include="Requests\UpdateCartRequest.cs" />
     <Compile Include="Requests\UpdateLineItemViewModel.cs" />
-    <Compile Include="Requests\UpdateRecurringCartLineItemViewModel.cs" />
+    <Compile Include="Requests\UpdateRecurringCartLineItemRequest.cs" />
     <Compile Include="Requests\UpdateRecurringCartNextProcessingDateRequest.cs" />
     <Compile Include="Requests\UpdateRecurringCartPaymentMethodRequest.cs" />
     <Compile Include="Requests\UpdateRecurringOrderCartBillingAddressRequest.cs" />

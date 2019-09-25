@@ -57,7 +57,7 @@ namespace Orckestra.Composer.Tests.IntegrationTests
         }
 
         [Test]
-        public void WHEN_class_is_ViewModel_SHOULD_be_sealed_and_extend_BaseViewModel()
+        public void WHEN_class_is_ViewModel_SHOULD_extend_BaseViewModel()
         {
             var assembliesToTest = LoadComposerAssemblies();
             var invalidVmCount = 0;

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Orckestra.Composer.ViewModels
 {
-    public class RecurringOrdersTemplatesShippingMethodsViewModel
+    public class RecurringOrdersTemplatesShippingMethodsViewModel: BaseViewModel
     {
         public IList<RecurringOrderShippingMethodViewModel> ShippingMethods { get; set; } = new List<RecurringOrderShippingMethodViewModel>();
     }
