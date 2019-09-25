@@ -149,16 +149,17 @@ namespace Orckestra.Composer.Tests.Localization
 
         [Test]
         [Ignore("The latest versions of API return neutral localizatin strings when the culture is not supported")]
-        [ExpectedException(typeof(CultureNotFoundException))]
         public void WHEN_culture_is_not_supported_SHOULD_throw_culture_not_supported_exception()
         {
-            var value = _localizationProvider.GetLocalizedString(
-                new GetLocalizedParam
-                {
-                    Category    = "ResxLocalizationTest",
-                    Key         = "PageTitle",
-                    CultureInfo = CultureInfo.GetCultureInfo("mx-MX")
-                }
+            Assert.Throws<CultureNotFoundException>(() => 
+                _localizationProvider.GetLocalizedString(
+                    new GetLocalizedParam
+                    {
+                        Category    = "ResxLocalizationTest",
+                        Key         = "PageTitle",
+                        CultureInfo = CultureInfo.GetCultureInfo("mx-MX")
+                    }
+                )
             );
         }
 
