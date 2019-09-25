@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Globalization;
 using System.Net.Http;
-using System.Threading.Tasks;
 using System.Web.Mvc;
 using Composite.Data;
 using Orckestra.Composer.CompositeC1.Services;
-using Orckestra.Composer.MyAccount.ViewModels;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Services.Breadcrumb;
 using Orckestra.Composer.Utils;
 using Orckestra.Composer.ViewModels;
-using Orckestra.Composer.Parameters;
 using Orckestra.Composer.CompositeC1.Utils;
 
 namespace Orckestra.Composer.CompositeC1.Controllers
@@ -44,42 +41,11 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             BreadcrumbViewService = breadcrumbViewService;
         }
 
-        public virtual ActionResult MainMenu()
-        {
-            var param = new GetHomeMainMenuParam
-            {
-                CultureInfo = ComposerContext.CultureInfo,
-            };
-
-            var mainMenuViewModel = HomeViewService.GetHomeMainMenuViewModel(param).Result;
-
-            return View("MainMenu", mainMenuViewModel);
-        }
-
-        public virtual ActionResult StickyLinks()
-        {
-            var param = new GetStickyLinksParam
-            {
-                CultureInfo = ComposerContext.CultureInfo,
-            };
-
-            var viewModel = HomeViewService.GetStickyLinksViewModel(param).Result;
-
-            return View("StickyLinks", viewModel);
-        }
-
         public virtual ActionResult LanguageSwitch()
         {
             var languageSwitchViewModel = LanguageSwitchService.GetViewModel(BuildUrl, ComposerContext.CultureInfo);
             
             return View("LanguageSwitch", languageSwitchViewModel);
-        }
-
-        public virtual ActionResult OptionalLinks()
-        {
-            var optionalLinksViewModel = HomeViewService.GetOptionalLinksViewModel(ComposerContext.CultureInfo).Result;
-
-            return View("OptionalLinks", optionalLinksViewModel);
         }
 
         private string BuildUrl(CultureInfo culture)
