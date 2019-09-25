@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Web;
 
 namespace Orckestra.Composer.C1CMS.Queries
 {
@@ -17,20 +18,30 @@ namespace Orckestra.Composer.C1CMS.Queries
             SearchQueryType queryType;
             Enum.TryParse(type, out queryType);
 
-            var searchQueryRepository = ComposerHost.Current.Resolve<ISearchQueryRepository>();
-            var composerConfigurationSection = ConfigurationManager.GetSection(ComposerConfigurationSection.ConfigurationName) as ComposerConfigurationSection;
-            if (composerConfigurationSection == null)
+            try
             {
-                throw new InvalidOperationException();
+                var searchQueryRepository = ComposerHost.Current.Resolve<ISearchQueryRepository>();
+
+                var pageIdString = HttpContext.Current.Request["pageId"];
+                Guid pageId;
+                if (Guid.TryParse(pageIdString, out pageId))
+                {
+                    var scope = SiteConfiguration.GetScopeIdByPageId(pageId);
+                    var queries = searchQueryRepository.GetSearchQueriesAsync(new GetSearchQueriesParam()
+                    {
+                        Scope = scope,
+                        QueryType = queryType
+                    }).Result;
+
+                    return queries.SearchQueries.Select(d => d.Name).ToList();
+                }
+            }
+            catch
+            {
+                // ignored
             }
 
-            var queries = searchQueryRepository.GetSearchQueriesAsync(new GetSearchQueriesParam()
-            {
-                Scope = "BetterRetailCanada", // TODO: SiteConfiguration.GetScopeId(),
-                QueryType = queryType
-            }).Result;
-
-            return queries.SearchQueries.Select(d => d.Name).ToList();
+            return new List<string>();
         }
     }
 }
