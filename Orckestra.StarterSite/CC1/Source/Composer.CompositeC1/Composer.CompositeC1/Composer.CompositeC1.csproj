@@ -300,6 +300,7 @@
     <Compile Include="EmptyHttpHandler.cs" />
     <Compile Include="Controllers\WishListBaseController.cs" />
     <Compile Include="Extensions\ControllerExtension.cs" />
+    <Compile Include="Mappers\FacetsMapper.cs" />
     <Compile Include="Hangfire\HangfireHost.cs" />
     <Compile Include="Hangfire\HangfireLogger.cs" />
     <Compile Include="Hangfire\HangfireLogProvider.cs" />
