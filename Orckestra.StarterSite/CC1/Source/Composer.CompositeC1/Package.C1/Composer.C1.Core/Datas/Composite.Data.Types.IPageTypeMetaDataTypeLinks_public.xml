@@ -2,5 +2,7 @@
 <Data>
   <Add Id="6d1c9037-a7ea-4fb1-a526-edd50cd29a3a" PageTypeId="8132f659-418b-4c39-b450-9c8c53a86bd4" DataTypeId="864704b8-2ff5-40e4-a332-c1875b358eb8" Name="ComposerCategoryLandingPage" />
   <Add Id="969ab578-7b3c-43d3-925d-cf7a75ef9e63" PageTypeId="ab50b336-ee78-4c53-9fb6-022407c0d3ef" DataTypeId="864704b8-2ff5-40e4-a332-c1875b358eb8" Name="ComposerCategoryPage" />
-
+  <Add Id="1b2a72f0-271d-4753-8634-d4e804ea6418" PageTypeId="478dba78-4a1a-42c3-bb3e-7edc4da5b855" DataTypeId="991d5a0b-053e-4d43-91a1-5a0b4d96a85d" Name="RecuuringOrdersSettings" />
+  <Add Id="38c3ac5e-4e5f-461a-aab2-74120e7c6f1b" PageTypeId="478dba78-4a1a-42c3-bb3e-7edc4da5b855" DataTypeId="164704b8-2ff5-40e4-a332-c1875b358eb1" Name="SIteConfiguration" />
+  <Add Id="ae0f9f01-03b3-4efa-b637-b2ee599a4193" PageTypeId="478dba78-4a1a-42c3-bb3e-7edc4da5b855" DataTypeId="591d5a4b-053e-4d43-91a1-5a0b4d96a85d" Name="GoogleSettings" />
 </Data>
