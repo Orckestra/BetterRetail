@@ -64,7 +64,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             var customerViewService = _container.CreateInstance<CustomerViewService>();
 
             //Act
-            var ex = Assert.Throws<ArgumentNullException>(async () => await customerViewService.GetAccountHeaderViewModelAsync(null));
+            var ex = Assert.ThrowsAsync<ArgumentNullException>(() => customerViewService.GetAccountHeaderViewModelAsync(null));
 
             //Assert
             ex.Message.Should().ContainEquivalentOf("param");
@@ -84,7 +84,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             };
 
             //Act
-            var ex = Assert.Throws<ArgumentException>(async () => await customerViewService.GetAccountHeaderViewModelAsync(param));
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => customerViewService.GetAccountHeaderViewModelAsync(param));
 
             //Assert
             ex.Message.Should().ContainEquivalentOf("CultureInfo");
@@ -106,7 +106,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             };
 
             //Act
-            var ex = Assert.Throws<ArgumentException>(async () => await customerViewService.GetAccountHeaderViewModelAsync(param));
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => customerViewService.GetAccountHeaderViewModelAsync(param));
 
             //Assert
             ex.Message.Should().ContainEquivalentOf("scope");
@@ -124,7 +124,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             };
 
             //Act
-            var ex = Assert.Throws<ArgumentException>(async () => await customerViewService.GetAccountHeaderViewModelAsync(param));
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => customerViewService.GetAccountHeaderViewModelAsync(param));
 
             //Assert
             ex.Message.Should().ContainEquivalentOf("Customer");

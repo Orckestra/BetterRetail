@@ -54,7 +54,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
             var cut = _container.CreateInstance<ShippingMethodViewService>();
 
             //Act and Assert
-            Assert.Throws<ArgumentNullException>(async () => await cut.SetCheapestShippingMethodAsync(null));
+            Assert.ThrowsAsync<ArgumentNullException>(() => cut.SetCheapestShippingMethodAsync(null));
         }
 
         [Test]

@@ -49,7 +49,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
         public void WHEN_param_is_null_SHOULD_throw_ArgumentNullException()
         {
             //Act
-            var exception = Assert.Throws<ArgumentNullException>(async () => await _sut.GetCartPaymentsAsync(null));
+            var exception = Assert.ThrowsAsync<ArgumentNullException>(() => _sut.GetCartPaymentsAsync(null));
 
             //Assert
             exception.Should().NotBeNull();
@@ -73,7 +73,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             };
 
             //Act
-            var exception = Assert.Throws<ArgumentException>(async () => await _sut.GetCartPaymentsAsync(param));
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => _sut.GetCartPaymentsAsync(param));
 
             //Assert
             exception.Should().NotBeNull();
@@ -98,7 +98,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             };
             
             //Act
-            var exception = Assert.Throws<ArgumentException>(async () => await _sut.GetCartPaymentsAsync(param));
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => _sut.GetCartPaymentsAsync(param));
 
             //Assert
             exception.Should().NotBeNull();
@@ -119,7 +119,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             };
 
             //Act
-            var exception = Assert.Throws<ArgumentException>(async () => await _sut.GetCartPaymentsAsync(param));
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => _sut.GetCartPaymentsAsync(param));
 
             //Assert
             exception.Should().NotBeNull();
@@ -139,7 +139,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
                 Scope = GetRandom.String(12)
             };
             //Act
-            var exception = Assert.Throws<ArgumentException>(async () => await _sut.GetCartPaymentsAsync(param));
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => _sut.GetCartPaymentsAsync(param));
 
             //Assert
             exception.Should().NotBeNull();

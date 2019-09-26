@@ -78,18 +78,14 @@ namespace Orckestra.Composer.Repositories
                         IncludeRelationships = true,
                         IncludeVariants = true,
                         ProductId = param.ProductId,
-                        ScopeId = param.Scope
+                        ScopeId = param.Scope,
+
                     };
 
                     return _overtureClient.SendAsync(request);
                 }).ConfigureAwait(false);
 
-            if (result != null && (param.ReturnInactive || (result.Active.HasValue && result.Active.Value)))
-            {
-                return result;
-            }
-
-            return null;
+            return param.ReturnInactive || (result != null && result.Active.HasValue && result.Active.Value) ? result : null;
         }
 
         public virtual async Task<ProductDefinition> GetProductDefinitionAsync(GetProductDefinitionParam param)

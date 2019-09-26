@@ -96,7 +96,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             var customerViewService = _container.CreateInstance<CustomerViewService>();
 
             //Act
-            var ex = Assert.Throws<ArgumentNullException>(async () => await customerViewService.UpdateAccountAsync(null));
+            var ex = Assert.ThrowsAsync<ArgumentNullException>(() => customerViewService.UpdateAccountAsync(null));
 
             //Assert
             ex.Message.Should().ContainEquivalentOf("param");
@@ -121,7 +121,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
              };
 
             //Act
-            var ex = Assert.Throws<ArgumentException>(async () => await customerViewService.UpdateAccountAsync(param));
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => customerViewService.UpdateAccountAsync(param));
 
             //Assert
             ex.Message.Should().ContainEquivalentOf("CultureInfo");
@@ -148,7 +148,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             };
 
             //Act
-            var ex = Assert.Throws<ArgumentException>(async () => await customerViewService.UpdateAccountAsync(param));
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => customerViewService.UpdateAccountAsync(param));
 
             //Assert
             ex.Message.Should().ContainEquivalentOf("Scope");
@@ -172,7 +172,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             };
 
             //Act
-            var ex = Assert.Throws<ArgumentException>(async () => await customerViewService.UpdateAccountAsync(param));
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => customerViewService.UpdateAccountAsync(param));
 
             //Assert
             ex.Message.Should().ContainEquivalentOf("Customer");
@@ -199,7 +199,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             };
 
             //Act
-            var ex = Assert.Throws<ArgumentException>(async () => await customerViewService.UpdateAccountAsync(param));
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => customerViewService.UpdateAccountAsync(param));
 
             //Assert
             ex.Message.Should().ContainEquivalentOf("LastName");
@@ -226,7 +226,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             };
 
             //Act
-            var ex = Assert.Throws<ArgumentException>(async () => await customerViewService.UpdateAccountAsync(param));
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => customerViewService.UpdateAccountAsync(param));
 
             //Assert
             ex.Message.Should().ContainEquivalentOf("Email");
@@ -253,7 +253,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             };
 
             //Act
-            var ex = Assert.Throws<ArgumentException>(async () => await customerViewService.UpdateAccountAsync(param));
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => customerViewService.UpdateAccountAsync(param));
 
             //Assert
             ex.Message.Should().ContainEquivalentOf("FirstName");
@@ -279,7 +279,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             };
 
             //Act
-            var ex = Assert.Throws<ArgumentException>(async () => await customerViewService.UpdateAccountAsync(param));
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => customerViewService.UpdateAccountAsync(param));
 
             //Assert
             ex.Message.Should().ContainEquivalentOf("PreferredLanguage");

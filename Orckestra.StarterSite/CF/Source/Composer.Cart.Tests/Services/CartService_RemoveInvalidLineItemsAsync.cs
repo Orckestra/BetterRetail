@@ -38,7 +38,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
             var sut = Container.CreateInstance<CartService>();
 
             //Act
-            var exception = Assert.Throws<ArgumentNullException>(async () => await sut.RemoveInvalidLineItemsAsync(null));
+            var exception = Assert.ThrowsAsync<ArgumentNullException>(() => sut.RemoveInvalidLineItemsAsync(null));
 
             //Assert
             exception.Should().NotBeNull();
