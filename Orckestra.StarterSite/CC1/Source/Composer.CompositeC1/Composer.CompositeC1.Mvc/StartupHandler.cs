@@ -90,15 +90,10 @@ namespace Orckestra.Composer.CompositeC1.Mvc
             functions.RegisterAction<HeaderController>("GeneralErrors", "Composer.Header.GeneralErrors");
             functions.RegisterAction<HeaderController>("LanguageSwitch", "Composer.Header.LanguageSwitch");
             functions.RegisterAction<HeaderController>("Breadcrumb", "Composer.General.Breadcrumb");
-            functions.RegisterAction<HeaderController>("MainMenu", "Composer.Header.MainMenu");
-            functions.RegisterAction<HeaderController>("StickyLinks", "Composer.Header.StickyLinks");
-            functions.RegisterAction<HeaderController>("OptionalLinks", "Composer.Header.OptionalLinks");
             functions.RegisterAction<HeaderController>("PageHeader", "Composer.Header.PageHeader");
 
-            functions.RegisterAction<FooterController>("OptionalLinks", "Composer.Footer.OptionalLinks");
             functions.RegisterAction<FooterController>("SocialLinks", "Composer.Footer.SocialLinks");
             functions.RegisterAction<FooterController>("Copyright", "Composer.Footer.Copyright");
-            functions.RegisterAction<FooterController>("MainFooter", "Composer.Footer.MainFooter");
 
             functions.RegisterAction<SearchController>("PageHeader", "Composer.Search.PageHeader");
             functions.RegisterAction<SearchController>("SearchBox", "Composer.SearchBox");
