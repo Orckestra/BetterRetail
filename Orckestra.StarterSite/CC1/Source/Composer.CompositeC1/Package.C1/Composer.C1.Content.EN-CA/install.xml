@@ -38,6 +38,10 @@
           <Data dataScopeIdentifier="public" locale="?" dataFilename="~\Datas\Composite.Data.Types.Navigation.NavigationElements.Header_public.xml" />
           <Data dataScopeIdentifier="administrated" locale="?" dataFilename="~\Datas\Composite.Data.Types.Navigation.NavigationElements.Header_public.xml" />
         </Type>
+        <Type type="Orckestra.Composer.CompositeC1.DataTypes.Navigation.HeaderOptionalLink,Orckestra.Composer.CompositeC1.DataTypes">
+          <Data dataScopeIdentifier="public" locale="?" dataFilename="~\Datas\Composite.Data.Types.Navigation.HeaderOptionalLink_public.xml" />
+          <Data dataScopeIdentifier="administrated" locale="?" dataFilename="~\Datas\Composite.Data.Types.Navigation.HeaderOptionalLink_public.xml" />
+        </Type>
         <Type type="Orckestra.Composer.CompositeC1.DataTypes.Navigation.StickyHeader,Orckestra.Composer.CompositeC1.DataTypes">
           <Data dataScopeIdentifier="public" locale="?" dataFilename="~\Datas\Composite.Data.Types.Navigation.NavigationElements.StickyHeader_public.xml" />
           <Data dataScopeIdentifier="administrated" locale="?" dataFilename="~\Datas\Composite.Data.Types.Navigation.NavigationElements.StickyHeader_public.xml" />
