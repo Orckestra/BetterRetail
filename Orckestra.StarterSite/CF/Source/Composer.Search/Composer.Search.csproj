@@ -79,6 +79,7 @@
     <Compile Include="CategoriesConfiguration.cs" />
     <Compile Include="Context\BrowseCategoryRequestContext.cs" />
     <Compile Include="Context\IBrowseCategoryRequestContext.cs" />
+    <Compile Include="Context\IFacetConfigurationContext.cs" />
     <Compile Include="FacetSetting.cs" />
     <Compile Include="Facets\PromotedFacetValue.cs" />
     <Compile Include="Facets\PromotedFacetValueSetting.cs" />

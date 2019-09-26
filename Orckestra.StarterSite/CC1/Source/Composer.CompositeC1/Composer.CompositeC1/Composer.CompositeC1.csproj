@@ -329,6 +329,7 @@
     <Compile Include="Providers\WishListUrlProvider.cs" />
     <Compile Include="Services\BreadcrumbViewService.cs" />
     <Compile Include="Mappers\NavigationMapper.cs" />
+    <Compile Include="Services\FacetConfigurationContext.cs" />
     <Compile Include="Services\WebsiteContext.cs" />
     <Compile Include="Settings\RecurringOrdersSettings.cs" />
     <Compile Include="Settings\GoogleSettings.cs" />

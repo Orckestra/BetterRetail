@@ -1,6 +1,7 @@
 ﻿using System;
 using Orckestra.Composer.CompositeC1.Mappers;
 using Orckestra.Composer.Cart.Providers.WishList;
+using Orckestra.Composer.CompositeC1.DataTypes.Facets;
 using Orckestra.Composer.CompositeC1.Providers;
 using Orckestra.Composer.CompositeC1.Services;
 using Orckestra.Composer.HttpModules;
@@ -15,6 +16,7 @@ using Orckestra.Composer.Services.Breadcrumb;
 using Orckestra.Overture;
 using Orckestra.Composer.CompositeC1.Settings;
 using Orckestra.Composer.Configuration;
+using Orckestra.Composer.Search.Context;
 
 namespace Orckestra.Composer.CompositeC1
 {
@@ -35,6 +37,7 @@ namespace Orckestra.Composer.CompositeC1
             host.Register<Providers.ScopeProvider, IScopeProvider>(ComponentLifestyle.PerRequest);
             host.Register<Providers.ProductUrlProvider, IProductUrlProvider>(ComponentLifestyle.PerRequest);
             host.Register<Providers.CountryCodeProvider, ICountryCodeProvider>(ComponentLifestyle.PerRequest);
+            host.Register<FacetConfigurationContext, IFacetConfigurationContext>(ComponentLifestyle.PerRequest);
             host.Register<PageService, IPageService>();
             host.Register<CultureService, ICultureService>(ComponentLifestyle.Singleton);
             host.Register<HomeViewService, IHomeViewService>();

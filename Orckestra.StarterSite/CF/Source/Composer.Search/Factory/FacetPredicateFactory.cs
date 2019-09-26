@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Orckestra.Composer.Providers;
+using Orckestra.Composer.Search.Context;
 using Orckestra.Composer.Search.Providers;
 using Orckestra.Composer.Search.Providers.FacetPredicate;
 using Orckestra.Composer.Utils;
@@ -12,13 +13,15 @@ namespace Orckestra.Composer.Search.Factory
 {
     public class FacetPredicateFactory : ProviderFactory<IFacetPredicateProvider>, IFacetPredicateFactory
     {
-        protected IFacetPredicateProviderRegistry FacetPredicateProviderRegistry { get; set; }
+        protected IFacetPredicateProviderRegistry FacetPredicateProviderRegistry { get; }
+        protected IFacetConfigurationContext FacetConfigContext { get; }
 
-        public FacetPredicateFactory(IDependencyResolver dependencyResolver, IFacetPredicateProviderRegistry facetPredicateProviderRegistry)
+        public FacetPredicateFactory(IDependencyResolver dependencyResolver, IFacetPredicateProviderRegistry facetPredicateProviderRegistry, IFacetConfigurationContext facetConfigContext)
             : base(dependencyResolver)
         {
             if (facetPredicateProviderRegistry == null) { throw new ArgumentNullException("facetPredicateProviderRegistry"); }
             FacetPredicateProviderRegistry = facetPredicateProviderRegistry;
+            FacetConfigContext = facetConfigContext;
         }
 
         /// <summary>
@@ -29,7 +32,7 @@ namespace Orckestra.Composer.Search.Factory
             if (filter == null) { throw new ArgumentNullException("filter"); }
             if (string.IsNullOrWhiteSpace(filter.Name)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("Name"), "filter"); }
 
-            var setting = SearchConfiguration.FacetSettings
+            var setting = FacetConfigContext.GetFacetSettings()
                     .FirstOrDefault(s => s.FieldName.Equals(filter.Name, StringComparison.OrdinalIgnoreCase));
 
             if (setting == null)

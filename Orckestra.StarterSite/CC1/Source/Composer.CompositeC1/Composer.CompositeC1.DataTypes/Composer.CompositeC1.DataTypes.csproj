@@ -130,6 +130,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Facets\IFacetConfigurationMeta.cs" />
     <Compile Include="StartupHandler.cs" />
     <Compile Include="RecurringOrdersSettings.cs" />
     <Compile Include="GoogleSettings.cs" />

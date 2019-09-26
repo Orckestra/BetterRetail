@@ -8,15 +8,18 @@ using Orckestra.Overture.ServiceModel.Requests.SearchQueries;
 using Orckestra.Overture.ServiceModel.SearchQueries;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Orckestra.Composer.Search.Context;
 
 namespace Orckestra.Composer.SearchQuery.Repositories
 {
-    public class SearchQueryRepository: SearchRepository, ISearchQueryRepository
+    public class SearchQueryRepository : SearchRepository, ISearchQueryRepository
     {
 
         public SearchQueryRepository(IOvertureClient overtureClient,
             IProductRequestFactory productRequestFactory,
-            IFacetPredicateFactory facetPredicateFactory) : base(overtureClient, productRequestFactory, facetPredicateFactory)
+            IFacetPredicateFactory facetPredicateFactory,
+            IFacetConfigurationContext facetConfigContext) 
+            : base(overtureClient, productRequestFactory, facetPredicateFactory, facetConfigContext)
         {
         }
 

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Search.Facets;
@@ -15,39 +16,6 @@ namespace Orckestra.Composer.Search
         private static ProviderRegistry<ISelectedFacetProvider> _selectedFacetProviderRegistry = new SelectedFacetProviderRegistry();
         private static ProviderRegistry<IFacetPredicateProvider> _facetPredicateProviderRegistry = new FacetPredicateProviderRegistry();
         private static ProviderRegistry<IFacetProvider> _facetProviderRegistry = new FacetProviderRegistry();
-
-        /// <summary>
-        ///     Configuration of what Facets to display and how to display them.
-        /// </summary>
-        public static IList<FacetSetting> FacetSettings = new List<FacetSetting>
-        {
-            new FacetSetting("CategoryLevel1_Facet")
-            {
-                FacetType = FacetType.SingleSelect,
-                SortWeight = -1.0,
-                MaxCollapsedValueCount = 5
-            },
-            new FacetSetting("CategoryLevel2_Facet")
-            {
-                FacetType = FacetType.SingleSelect,
-                SortWeight = -1.1,
-                MaxCollapsedValueCount = 5,
-                DependsOn = new[]
-                {
-                    "CategoryLevel1_Facet"
-                }
-            },
-            new FacetSetting("CategoryLevel3_Facet")
-            {
-                FacetType = FacetType.SingleSelect,
-                SortWeight = -1.1,
-                MaxCollapsedValueCount = 5,
-                DependsOn = new[]
-                {
-                    "CategoryLevel2_Facet"
-                }
-            }
-        };
 
         /// <summary>
         ///     Localization Category to use when formatting the facet values
