@@ -21,19 +21,15 @@ namespace Orckestra.Composer.CompositeC1.DataTypes
     public interface GoogleSettings : IPageMetaData, ILocalizedControlled
     {
         [ImmutableFieldId("2b4bb15b-3989-481e-b268-264c61a8a8c3")]
-        [StoreFieldType(PhysicalStoreFieldType.String, 256)]
+        [StoreFieldType(PhysicalStoreFieldType.String, 256, IsNullable = true)]
         [FormRenderingProfile(Label = "GTM Container Id")]
         [FieldPosition(0)]
-        [StringSizeValidator(0, 256)]
-        [DefaultFieldStringValue("")]
         string GTMContainerId { get; set; }
 
         [ImmutableFieldId("3b5bb15b-3989-481e-b268-264c61a8a8c3")]
         [FormRenderingProfile(Label = "Google Maps API Key")]
-        [StoreFieldType(PhysicalStoreFieldType.String, 256)]
+        [StoreFieldType(PhysicalStoreFieldType.String, 256, IsNullable = true)]
         [FieldPosition(0)]
-        [StringSizeValidator(0, 256)]
-        [DefaultFieldStringValue("")]
         string MapsApiKey { get; set; }
 
         [ImmutableFieldId("2ecbc013-189b-426b-ba6a-4de637f6e89a")]

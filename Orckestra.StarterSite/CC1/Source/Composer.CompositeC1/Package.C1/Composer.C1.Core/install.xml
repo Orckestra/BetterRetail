@@ -98,9 +98,11 @@
           <Data dataScopeIdentifier="public" dataFilename="~\Datas\Composite.Data.Types.IPageTypePageTemplateRestrictions_public.xml" />
         </Type>
         <Type type="Composite.Data.Types.IDataItemTreeAttachmentPoint,Composite">
-          <Data dataScopeIdentifier="public" dataFilename="~\Datas\Composite.Data.Types.IPageTypeTreeLink_public.xml" />
+          <Data dataScopeIdentifier="public" dataFilename="~\Datas\Composite.Data.Types.IDataItemTreeAttachmentPoint_publi.xml" />
         </Type>
-
+        <Type type="Composite.Data.Types.IPageTypeTreeLink,Composite">
+          <Data dataScopeIdentifier="public" dataFilename="~\Datas\Composite.Data.Types.IPageTypeTreeLinks_public.xml" />
+        </Type>
       </Types>
     </mi:Add>
     <mi:Add installerType="Orckestra.Composer.CompositeC1.Installers.ComposerFragmentInstaller, Orckestra.Composer.CompositeC1" uninstallerType="Orckestra.Composer.CompositeC1.Installers.ComposerFragmentUninstaller, Orckestra.Composer.CompositeC1" />
