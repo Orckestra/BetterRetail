@@ -9,7 +9,8 @@
 }
 
 @{
-    var footerData = Data.Get<Footer>().Where(x => x.PageId == SitemapNavigator.CurrentHomePageId).ToList();
+    var currentPageId = SitemapNavigator.CurrentHomePageId;
+    var footerData = Data.Get<Footer>().Where(x => x.PageId == currentPageId).ToList();
     var footer = HomeNavigationMapper.MapFooterItems(footerData) as IEnumerable<FooterEntryViewModel>;
 }
 

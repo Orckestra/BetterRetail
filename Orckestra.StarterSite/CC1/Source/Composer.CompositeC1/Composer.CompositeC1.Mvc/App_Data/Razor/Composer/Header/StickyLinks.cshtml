@@ -8,7 +8,8 @@
 }
 
 @{
-    var stickyMenuData = Data.Get<StickyHeader>().Where(x => x.PageId == SitemapNavigator.CurrentHomePageId).ToList();
+    var currentPageId = SitemapNavigator.CurrentHomePageId;
+    var stickyMenuData = Data.Get<StickyHeader>().Where(x => x.PageId == currentPageId).ToList();
     var stickyMenu = HomeNavigationMapper.MapStickyMainMenuItems(stickyMenuData);
 }
 

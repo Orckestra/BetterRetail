@@ -9,7 +9,8 @@
 }
 
 @{
-    var optionalFooterData = Data.Get<FooterOptionalLink>().Where(x => x.PageId == SitemapNavigator.CurrentHomePageId).ToList();
+    var currentPageId = SitemapNavigator.CurrentHomePageId;
+    var optionalFooterData = Data.Get<FooterOptionalLink>().Where(x => x.PageId == currentPageId).ToList();
     var optionalFooter = HomeNavigationMapper.MapFooterOptionalLinksItems(optionalFooterData) as IEnumerable<OptionalLinkEntryViewModel>;
 }
 

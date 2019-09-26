@@ -9,7 +9,8 @@
 }
 
 @{
-    var optionalMenuData = Data.Get<HeaderOptionalLink>().Where(x => x.PageId == SitemapNavigator.CurrentHomePageId).ToList();
+    var currentPageId = SitemapNavigator.CurrentHomePageId;
+    var optionalMenuData = Data.Get<HeaderOptionalLink>().Where(x => x.PageId == currentPageId).ToList();
     var optionalMenu = HomeNavigationMapper.MapHeaderOptionalLinksItems(optionalMenuData) as IEnumerable<OptionalLinkEntryViewModel>;
 }
 
