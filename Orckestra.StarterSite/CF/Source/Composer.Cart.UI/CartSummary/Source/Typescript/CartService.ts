@@ -3,6 +3,7 @@
 ///<reference path='../../../../Composer.UI/Source/TypeScript/Cache/CacheError.ts' />
 ///<reference path='../../../../Composer.UI/Source/Typescript/Repositories/CartRepository.ts' />
 ///<reference path='../../../../Composer.UI/Source/Typescript/Events/EventHub.ts' />
+///<reference path='../../../../Composer.UI/Source/Typescript/Utils/Utils.ts' />
 ///<reference path='./ICartService.ts' />
 
 module Orckestra.Composer {
@@ -12,7 +13,7 @@ module Orckestra.Composer {
 
         protected static GettingFreshCart: Q.Promise<any>;
 
-        protected cacheKey: string = 'CartViewModel';
+        protected cacheKey: string;
         protected cachePolicy: ICachePolicy = { slidingExpiration: 300 }; // 5min
         protected cacheProvider: ICacheProvider;
         protected cartRepository: ICartRepository;
@@ -26,7 +27,7 @@ module Orckestra.Composer {
             if (!eventHub) {
                 throw new Error('Error: eventHub is required');
             }
-
+            this.cacheKey = `CartViewModel|${Utils.getWebsiteId()}`;
             this.cacheProvider = CacheProvider.instance();
             this.cartRepository = cartRepository;
             this.eventHub = eventHub;

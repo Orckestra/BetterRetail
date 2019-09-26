@@ -17,5 +17,12 @@ module Orckestra.Composer {
                 }, 10);
             }
         }
-    };
+
+        /**
+         * Get current website id
+         */
+        public static getWebsiteId () {
+            return $('html').data('website');
+        }
+    }
 }
