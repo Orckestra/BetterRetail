@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Collections.Generic;
 using FizzWare.NBuilder.Generators;
 using Moq;
@@ -28,7 +29,7 @@ namespace Orckestra.Composer.Tests.Repositories
         }
 
         [Test]
-        public async void WHEN_Passing_Valid_Parameters_RETURN_Empty_Result()
+        public async Task WHEN_Passing_Valid_Parameters_RETURN_Empty_Result()
         {
             var inventoryRepository = Container.CreateInstance<InventoryRepository>();
 
@@ -50,21 +51,21 @@ namespace Orckestra.Composer.Tests.Repositories
         public void WHEN_Passing_Null_Param_THROW_ArgumentException()
         {
             var inventoryRepository = Container.CreateInstance<InventoryRepository>();
-
-            Assert.Throws<ArgumentException>(
-               async () => await inventoryRepository.FindInventoryItemStatus(new FindInventoryItemStatusParam
-               {
-                   Scope = null,
-                   Date = GetRandom.DateTime(),
-                   Skus = new List<string>
+            var param = new FindInventoryItemStatusParam
+            {
+                Scope = null,
+                Date = GetRandom.DateTime(),
+                Skus = new List<string>
                 {
                     GetRandom.String(25)
                 }
-               }).ConfigureAwait(false));
+            };
+
+            Assert.ThrowsAsync<ArgumentException>(() => inventoryRepository.FindInventoryItemStatus(param));
         }
 
         [Test]
-        public async void WHEN_Passing_MinValue_Date_RETURN_Empty_Result()
+        public async Task WHEN_Passing_MinValue_Date_RETURN_Empty_Result()
         {
             var inventoryRepository = Container.CreateInstance<InventoryRepository>();
 
@@ -86,9 +87,7 @@ namespace Orckestra.Composer.Tests.Repositories
         public void WHEN_Passing_Null_ScopeId_THROW_ArgumentException()
         {
             var inventoryRepository = Container.CreateInstance<InventoryRepository>();
-
-            Assert.Throws<ArgumentException>(
-                async () => await inventoryRepository.FindInventoryItemStatus(new FindInventoryItemStatusParam
+            var param = new FindInventoryItemStatusParam
             {
                 Scope = null,
                 Date = GetRandom.DateTime(),
@@ -96,35 +95,37 @@ namespace Orckestra.Composer.Tests.Repositories
                 {
                     GetRandom.String(25)
                 }
-            }).ConfigureAwait(false));
+            };
+
+            Assert.ThrowsAsync<ArgumentException>(() => inventoryRepository.FindInventoryItemStatus(param));
         }
 
         [Test]
         public void WHEN_Passing_Null_Skus_THROW_ArgumentException()
         {
             var inventoryRepository = Container.CreateInstance<InventoryRepository>();
+            var param = new FindInventoryItemStatusParam
+            {
+                Scope = GetRandom.String(25),
+                Date = GetRandom.DateTime(),
+                Skus = null
+            };
 
-            Assert.Throws<ArgumentException>(
-                async () => await inventoryRepository.FindInventoryItemStatus(new FindInventoryItemStatusParam
-                {
-                    Scope = GetRandom.String(25),
-                    Date = GetRandom.DateTime(),
-                    Skus = null
-                }).ConfigureAwait(false));
+            Assert.ThrowsAsync<ArgumentException>(() => inventoryRepository.FindInventoryItemStatus(param));
         }
 
         [Test]
         public void WHEN_Passing_Empty_Skus_THROW_ArgumentException()
         {
             var inventoryRepository = Container.CreateInstance<InventoryRepository>();
+            var param = new FindInventoryItemStatusParam
+            {
+                Scope = GetRandom.String(25),
+                Date = GetRandom.DateTime(),
+                Skus = new List<string>()
+            };
 
-            Assert.Throws<ArgumentException>(
-                async () => await inventoryRepository.FindInventoryItemStatus(new FindInventoryItemStatusParam
-                {
-                    Scope = GetRandom.String(25),
-                    Date = GetRandom.DateTime(),
-                    Skus = new List<string>()
-                }).ConfigureAwait(false));
+            Assert.ThrowsAsync<ArgumentException>(() => inventoryRepository.FindInventoryItemStatus(param));
         }
     }
 }

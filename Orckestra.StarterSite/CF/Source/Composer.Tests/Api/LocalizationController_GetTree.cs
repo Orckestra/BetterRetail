@@ -62,7 +62,7 @@ namespace Orckestra.Composer.Tests.Api
         /// </summary>
         [Test]
         [Timeout(10000)]
-        public async void WHEN_SyncToAsync_SHOULD_Not_Deadlock()
+        public async Task WHEN_SyncToAsync_SHOULD_Not_Deadlock()
         {
             //Arrange
             LocalizationController controller = _container.CreateInstance<LocalizationController>();

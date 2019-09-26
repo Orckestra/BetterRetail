@@ -59,16 +59,14 @@ namespace Orckestra.Composer.Tests.Country
             _container.Use(ViewModelMapperFactory.Create());
             _container.Use(CountryRepositoryFactory.Create());
             var service = _container.CreateInstance<CountryService>();
+            var param = new RetrieveCountryParam
+            {
+                IsoCode = isoCode,
+                CultureInfo = TestingExtensions.GetRandomCulture()
+            };
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await service.RetrieveRegionsAsync(new RetrieveCountryParam
-                {
-                    IsoCode = isoCode,
-                    CultureInfo = TestingExtensions.GetRandomCulture()
-                });
-            });
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => service.RetrieveRegionsAsync(param));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");
@@ -82,14 +80,13 @@ namespace Orckestra.Composer.Tests.Country
             _container.Use(CountryRepositoryFactory.Create());
             var service = _container.CreateInstance<CountryService>();
 
-            // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
+            var param = new RetrieveCountryParam
             {
-                await service.RetrieveRegionsAsync(new RetrieveCountryParam
-                {
-                    IsoCode = GetRandom.String(32),
-                });
-            });
+                IsoCode = GetRandom.String(32),
+            };
+
+            // Act
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => service.RetrieveRegionsAsync(param));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");
