@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using FizzWare.NBuilder.Generators;
 using FluentAssertions;
@@ -6,6 +7,7 @@ using Moq;
 using Moq.AutoMock;
 using NUnit.Framework;
 using Orckestra.Composer.Parameters;
+using Orckestra.Composer.Search.Context;
 using Orckestra.Composer.Search.Facets;
 using Orckestra.Composer.Search.Factory;
 using Orckestra.Composer.Search.Providers.SelectedFacet;
@@ -22,6 +24,7 @@ namespace Orckestra.Composer.Search.Tests.Factory
         {
             _container = new AutoMocker();
             _container.Use((ISelectedFacetProviderRegistry)new SelectedFacetProviderRegistry());
+            SetupFacets();
         }
 
         private const string CultureName = "en-CA";
@@ -118,7 +121,7 @@ namespace Orckestra.Composer.Search.Tests.Factory
             var sut = _container.CreateInstance<SelectedFacetFactory>();
             var filter = MockSearchFilter();
             var cultureInfo = new CultureInfo(CultureName);
-            SearchConfiguration.FacetSettings.Add(new FacetSetting(filter.Name) { FacetType = facetType });
+            SetupFacets(new FacetSetting(filter.Name) {FacetType = facetType});
 
             //Act
             var result = sut.CreateSelectedFacet(filter, cultureInfo);
@@ -135,7 +138,7 @@ namespace Orckestra.Composer.Search.Tests.Factory
             var facetType = FacetType.Range;
             var filter = MockSearchFilter();
             var cultureInfo = new CultureInfo(CultureName);
-            SearchConfiguration.FacetSettings.Add(new FacetSetting(filter.Name) { FacetType = facetType });
+            SetupFacets(new FacetSetting(filter.Name) {FacetType = facetType});
 
             //Act
             var exception = Assert.Throws<InvalidOperationException>(() => sut.CreateSelectedFacet(filter, cultureInfo));
@@ -153,9 +156,8 @@ namespace Orckestra.Composer.Search.Tests.Factory
             var facetType = FacetType.Range;
             var filter = MockSearchFilter();
             var cultureInfo = new CultureInfo(CultureName);
-            SearchConfiguration.FacetSettings.Add(new FacetSetting(filter.Name) { FacetType = facetType });
-
             var sut = _container.CreateInstance<SelectedFacetFactory>();
+            SetupFacets(new FacetSetting(filter.Name) {FacetType = facetType});
 
             //Act
             var exception = Assert.Throws<ArgumentException>(() => sut.CreateSelectedFacet(filter, cultureInfo));
@@ -163,6 +165,13 @@ namespace Orckestra.Composer.Search.Tests.Factory
             //Assert
             exception.Should().NotBeNull();
             exception.ParamName.Should().BeEquivalentTo("name");
+        }
+
+        private void SetupFacets(params FacetSetting[] settings)
+        {
+            _container.GetMock<IFacetConfigurationContext>()
+                .Setup(x => x.GetFacetSettings())
+                .Returns(new List<FacetSetting>(settings));
         }
     }
 }

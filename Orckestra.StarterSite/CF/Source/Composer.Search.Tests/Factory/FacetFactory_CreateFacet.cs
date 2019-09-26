@@ -6,6 +6,7 @@ using FluentAssertions;
 using Moq;
 using Moq.AutoMock;
 using NUnit.Framework;
+using Orckestra.Composer.Search.Context;
 using Orckestra.Composer.Search.Factory;
 using Orckestra.Composer.Search.Providers.Facet;
 using Orckestra.Composer.Search.Tests.Mock;
@@ -23,8 +24,8 @@ namespace Orckestra.Composer.Search.Tests.Factory
         public void SetUp()
         {
             _container = new AutoMocker();
-
             _container.Use((IFacetProviderRegistry) new FacetProviderRegistry());
+            SetupFacets();
         }
 
         private const string CultureName = "en-CA";
@@ -121,7 +122,7 @@ namespace Orckestra.Composer.Search.Tests.Factory
             var facet = new Facet {FieldName = GetRandom.String(5)};
             var selectedFacets = new List<SearchFilter>();
             var cultureInfo = new CultureInfo(CultureName);
-            SearchConfiguration.FacetSettings.Add(new FacetSetting(facet.FieldName) {FacetType = facetType});
+            SetupFacets(new FacetSetting(facet.FieldName) {FacetType = facetType});
 
             //Act
             var result = sut.CreateFacet(facet, selectedFacets, cultureInfo);
@@ -139,7 +140,7 @@ namespace Orckestra.Composer.Search.Tests.Factory
             var facet = new Facet {FieldName = GetRandom.String(5)};
             var selectedFacets = new List<SearchFilter>();
             var cultureInfo = new CultureInfo(CultureName);
-            SearchConfiguration.FacetSettings.Add(new FacetSetting(facet.FieldName) {FacetType = facetType});
+            SetupFacets(new FacetSetting(facet.FieldName) {FacetType = facetType});
 
             //Act
             var exception =
@@ -159,7 +160,7 @@ namespace Orckestra.Composer.Search.Tests.Factory
             var facet = new Facet {FieldName = GetRandom.String(5)};
             var selectedFacets = new List<SearchFilter>();
             var cultureInfo = new CultureInfo(CultureName);
-            SearchConfiguration.FacetSettings.Add(new FacetSetting(facet.FieldName) {FacetType = facetType});
+            SetupFacets(new FacetSetting(facet.FieldName) {FacetType = facetType});
 
             var sut = _container.CreateInstance<FacetFactory>();
 
@@ -169,6 +170,13 @@ namespace Orckestra.Composer.Search.Tests.Factory
             //Assert
             exception.Should().NotBeNull();
             exception.ParamName.Should().BeEquivalentTo("name");
+        }
+
+        private void SetupFacets(params FacetSetting[] settings)
+        {
+            _container.GetMock<IFacetConfigurationContext>()
+                .Setup(x => x.GetFacetSettings())
+                .Returns(new List<FacetSetting>(settings));
         }
     }
 }

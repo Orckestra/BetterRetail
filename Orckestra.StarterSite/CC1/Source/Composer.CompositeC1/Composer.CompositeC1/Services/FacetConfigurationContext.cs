@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using Composite.Data;
@@ -22,15 +21,8 @@ namespace Orckestra.Composer.CompositeC1.Services
             _httpContext = httpContext;
         }
 
-        private static bool firstTime = true;
         public List<FacetSetting> GetFacetSettings()
         {
-            if (firstTime)
-            {
-                Debugger.Launch();
-                firstTime = false;
-            }
-
             return _facetSettings ?? (_facetSettings = LoadFacetSettings());
         }
 
@@ -113,7 +105,7 @@ namespace Orckestra.Composer.CompositeC1.Services
         private Guid GetPageId()
         {
             const string pageIdKey = "PageRenderer.IPage";
-            if (!_httpContext.Items.Contains(pageIdKey))
+            if (_httpContext == null || !_httpContext.Items.Contains(pageIdKey))
                 return Guid.Empty;
 
             var page = _httpContext.Items[pageIdKey] as IPage;

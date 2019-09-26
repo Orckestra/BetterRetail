@@ -28,21 +28,17 @@ namespace Orckestra.Composer.Search.Repositories
             IFacetPredicateFactory facetPredicateFactory,
             IFacetConfigurationContext facetConfigContext)
         {
-            if (productRequestFactory == null) { throw new ArgumentNullException("productRequestFactory"); }
-            if (facetPredicateFactory == null) { throw new ArgumentNullException("facetPredicateFactory"); }
-            if (overtureClient == null) { throw new ArgumentNullException("overtureClient"); }
-
-            OvertureClient = overtureClient;
-            ProductRequestFactory = productRequestFactory;
-            FacetPredicateFactory = facetPredicateFactory;
-            FacetConfigContext = facetConfigContext;
+            OvertureClient = overtureClient ?? throw new ArgumentNullException(nameof(overtureClient));
+            ProductRequestFactory = productRequestFactory ?? throw new ArgumentNullException(nameof(productRequestFactory));
+            FacetPredicateFactory = facetPredicateFactory ?? throw new ArgumentNullException(nameof(facetPredicateFactory));
+            FacetConfigContext = facetConfigContext ?? throw new ArgumentNullException(nameof(facetConfigContext));
         }
 
         public virtual async Task<ProductSearchResult> SearchProductAsync(SearchCriteria criteria)
         {
-            if (criteria == null) { throw new ArgumentNullException("criteria"); }
-            if (criteria.CultureInfo == null) { throw new ArgumentException("criteria.CultureInfo"); }
-            if (string.IsNullOrWhiteSpace(criteria.Scope)) { throw new ArgumentException("criteria.Scope"); }
+            if (criteria == null) { throw new ArgumentNullException(nameof(criteria)); }
+            if (criteria.CultureInfo == null) { throw new ArgumentException($"{nameof(criteria)}.{nameof(criteria.CultureInfo)}"); }
+            if (string.IsNullOrWhiteSpace(criteria.Scope)) { throw new ArgumentException($"{nameof(criteria)}.{nameof(criteria.Scope)}"); }
 
             var request = CreateSearchRequest(criteria);
 
