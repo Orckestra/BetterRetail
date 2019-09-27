@@ -10,6 +10,7 @@ using Orckestra.Composer.Cart.Tests.Mock;
 using Orckestra.ForTests;
 using Orckestra.Overture.ServiceModel.Marketing;
 using Orckestra.Overture.ServiceModel.Orders;
+using System.Threading.Tasks;
 
 namespace Orckestra.Composer.Cart.Tests.Services
 {
@@ -32,7 +33,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
         }
 
         [Test]
-        public async void WHEN_Passing_Valid_Parameters_SHOULD_Succeed()
+        public async Task WHEN_Passing_Valid_Parameters_SHOULD_Succeed()
         {
             var service = _container.CreateInstance<CartService>();
 
@@ -58,7 +59,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
         }
 
         [Test]
-        public async void WHEN_Dependencies_Return_NullValues_SHOULD_Succeed()
+        public async Task WHEN_Dependencies_Return_NullValues_SHOULD_Succeed()
         {
             var service = _container.CreateInstance<CartService>();
             _container.Use(CartRepositoryFactory.CreateWithNullValues());
@@ -88,26 +89,24 @@ namespace Orckestra.Composer.Cart.Tests.Services
         public void WHEN_CultureInfo_Is_Null_SHOULD_Throw_ArgumentException()
         {
             var service = _container.CreateInstance<CartService>();
+            var param = new UpdateCartViewModelParam
+            {
+                CultureInfo = null,
+                CustomerId = GetRandom.Guid(),
+                CartName = GetRandom.String(32),
+                BaseUrl = GetRandom.String(32),
+                Shipments = new List<Shipment>(),
+                BillingCurrency = GetRandom.String(32),
+                CartType = GetRandom.String(32),
+                Coupons = new List<Coupon>(),
+                Customer = new CustomerSummary(),
+                OrderLocation = new OrderLocationSummary(),
+                Scope = GetRandom.String(32),
+                Status = GetRandom.String(32)
+            };
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await service.UpdateCartAsync(new UpdateCartViewModelParam
-                {
-                    CultureInfo = null,
-                    CustomerId = GetRandom.Guid(),
-                    CartName = GetRandom.String(32),
-                    BaseUrl = GetRandom.String(32),
-                    Shipments = new List<Shipment>(),
-                    BillingCurrency = GetRandom.String(32),
-                    CartType = GetRandom.String(32),
-                    Coupons = new List<Coupon>(),
-                    Customer = new CustomerSummary(),
-                    OrderLocation = new OrderLocationSummary(),
-                    Scope = GetRandom.String(32),
-                    Status = GetRandom.String(32)
-                });
-            });
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => service.UpdateCartAsync(param));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");
@@ -118,26 +117,24 @@ namespace Orckestra.Composer.Cart.Tests.Services
         public void WHEN_CustomerId_Is_Empty_SHOULD_Throw_ArgumentException()
         {
             var service = _container.CreateInstance<CartService>();
+            var param = new UpdateCartViewModelParam
+            {
+                CultureInfo = TestingExtensions.GetRandomCulture(),
+                CustomerId = Guid.Empty,
+                CartName = GetRandom.String(32),
+                BaseUrl = GetRandom.String(32),
+                Shipments = new List<Shipment>(),
+                BillingCurrency = GetRandom.String(32),
+                CartType = GetRandom.String(32),
+                Coupons = new List<Coupon>(),
+                Customer = new CustomerSummary(),
+                OrderLocation = new OrderLocationSummary(),
+                Scope = GetRandom.String(32),
+                Status = GetRandom.String(32)
+            };
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await service.UpdateCartAsync(new UpdateCartViewModelParam
-                {
-                    CultureInfo = TestingExtensions.GetRandomCulture(),
-                    CustomerId = Guid.Empty,
-                    CartName = GetRandom.String(32),
-                    BaseUrl = GetRandom.String(32),
-                    Shipments = new List<Shipment>(),
-                    BillingCurrency = GetRandom.String(32),
-                    CartType = GetRandom.String(32),
-                    Coupons = new List<Coupon>(),
-                    Customer = new CustomerSummary(),
-                    OrderLocation = new OrderLocationSummary(),
-                    Scope = GetRandom.String(32),
-                    Status = GetRandom.String(32)
-                });
-            });
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => service.UpdateCartAsync(param));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");
@@ -151,26 +148,24 @@ namespace Orckestra.Composer.Cart.Tests.Services
         public void WHEN_CartName_Is_NullOrWhitespace_SHOULD_Throw_ArgumentException(string cartName)
         {
             var service = _container.CreateInstance<CartService>();
+            var param = new UpdateCartViewModelParam
+            {
+                CultureInfo = TestingExtensions.GetRandomCulture(),
+                CustomerId = GetRandom.Guid(),
+                CartName = cartName,
+                BaseUrl = GetRandom.String(32),
+                Shipments = new List<Shipment>(),
+                BillingCurrency = GetRandom.String(32),
+                CartType = GetRandom.String(32),
+                Coupons = new List<Coupon>(),
+                Customer = new CustomerSummary(),
+                OrderLocation = new OrderLocationSummary(),
+                Scope = GetRandom.String(32),
+                Status = GetRandom.String(32)
+            };
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await service.UpdateCartAsync(new UpdateCartViewModelParam
-                {
-                    CultureInfo = TestingExtensions.GetRandomCulture(),
-                    CustomerId = GetRandom.Guid(),
-                    CartName = cartName,
-                    BaseUrl = GetRandom.String(32),
-                    Shipments = new List<Shipment>(),
-                    BillingCurrency = GetRandom.String(32),
-                    CartType = GetRandom.String(32),
-                    Coupons = new List<Coupon>(),
-                    Customer = new CustomerSummary(),
-                    OrderLocation = new OrderLocationSummary(),
-                    Scope = GetRandom.String(32),
-                    Status = GetRandom.String(32)
-                });
-            });
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => service.UpdateCartAsync(param));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");
@@ -184,26 +179,24 @@ namespace Orckestra.Composer.Cart.Tests.Services
         public void WHEN_BaseUrl_Is_NullOrWhitespace_SHOULD_Throw_ArgumentException(string baseUrl)
         {
             var service = _container.CreateInstance<CartService>();
+            var param = new UpdateCartViewModelParam
+            {
+                CultureInfo = TestingExtensions.GetRandomCulture(),
+                CustomerId = GetRandom.Guid(),
+                CartName = GetRandom.String(32),
+                BaseUrl = baseUrl,
+                Shipments = new List<Shipment>(),
+                BillingCurrency = GetRandom.String(32),
+                CartType = GetRandom.String(32),
+                Coupons = new List<Coupon>(),
+                Customer = new CustomerSummary(),
+                OrderLocation = new OrderLocationSummary(),
+                Scope = GetRandom.String(32),
+                Status = GetRandom.String(32)
+            };
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await service.UpdateCartAsync(new UpdateCartViewModelParam
-                {
-                    CultureInfo = TestingExtensions.GetRandomCulture(),
-                    CustomerId = GetRandom.Guid(),
-                    CartName = GetRandom.String(32),
-                    BaseUrl = baseUrl,
-                    Shipments = new List<Shipment>(),
-                    BillingCurrency = GetRandom.String(32),
-                    CartType = GetRandom.String(32),
-                    Coupons = new List<Coupon>(),
-                    Customer = new CustomerSummary(),
-                    OrderLocation = new OrderLocationSummary(),
-                    Scope = GetRandom.String(32),
-                    Status = GetRandom.String(32)
-                });
-            });
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => service.UpdateCartAsync(param));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");
@@ -214,26 +207,24 @@ namespace Orckestra.Composer.Cart.Tests.Services
         public void WHEN_Shipment_Is_Null_SHOULD_Throw_ArgumentNullException()
         {
             var service = _container.CreateInstance<CartService>();
+            var param = new UpdateCartViewModelParam
+            {
+                CultureInfo = TestingExtensions.GetRandomCulture(),
+                CustomerId = Guid.Empty,
+                CartName = GetRandom.String(32),
+                BaseUrl = GetRandom.String(32),
+                Shipments = null,
+                BillingCurrency = GetRandom.String(32),
+                CartType = GetRandom.String(32),
+                Coupons = new List<Coupon>(),
+                Customer = new CustomerSummary(),
+                OrderLocation = new OrderLocationSummary(),
+                Scope = GetRandom.String(32),
+                Status = GetRandom.String(32)
+            };
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await service.UpdateCartAsync(new UpdateCartViewModelParam
-                {
-                    CultureInfo = TestingExtensions.GetRandomCulture(),
-                    CustomerId = Guid.Empty,
-                    CartName = GetRandom.String(32),
-                    BaseUrl = GetRandom.String(32),
-                    Shipments = null,
-                    BillingCurrency = GetRandom.String(32),
-                    CartType = GetRandom.String(32),
-                    Coupons = new List<Coupon>(),
-                    Customer = new CustomerSummary(),
-                    OrderLocation = new OrderLocationSummary(),
-                    Scope = GetRandom.String(32),
-                    Status = GetRandom.String(32)
-                });
-            });
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => service.UpdateCartAsync(param));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");
@@ -247,26 +238,24 @@ namespace Orckestra.Composer.Cart.Tests.Services
         public void WHEN_BillingCurrency_Is_NullOrWhitespace_SHOULD_Throw_ArgumentException(string billingCurrency)
         {
             var service = _container.CreateInstance<CartService>();
+            var param = new UpdateCartViewModelParam
+            {
+                CultureInfo = TestingExtensions.GetRandomCulture(),
+                CustomerId = GetRandom.Guid(),
+                CartName = GetRandom.String(32),
+                BaseUrl = GetRandom.String(32),
+                Shipments = new List<Shipment>(),
+                BillingCurrency = billingCurrency,
+                CartType = GetRandom.String(32),
+                Coupons = new List<Coupon>(),
+                Customer = new CustomerSummary(),
+                OrderLocation = new OrderLocationSummary(),
+                Scope = GetRandom.String(32),
+                Status = GetRandom.String(32)
+            };
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await service.UpdateCartAsync(new UpdateCartViewModelParam
-                {
-                    CultureInfo = TestingExtensions.GetRandomCulture(),
-                    CustomerId = GetRandom.Guid(),
-                    CartName = GetRandom.String(32),
-                    BaseUrl = GetRandom.String(32),
-                    Shipments = new List<Shipment>(),
-                    BillingCurrency = billingCurrency,
-                    CartType = GetRandom.String(32),
-                    Coupons = new List<Coupon>(),
-                    Customer = new CustomerSummary(),
-                    OrderLocation = new OrderLocationSummary(),
-                    Scope = GetRandom.String(32),
-                    Status = GetRandom.String(32)
-                });
-            });
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => service.UpdateCartAsync(param));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");
@@ -280,26 +269,24 @@ namespace Orckestra.Composer.Cart.Tests.Services
         public void WHEN_CartType_Is_NullOrWhitespace_SHOULD_Throw_ArgumentException(string cartType)
         {
             var service = _container.CreateInstance<CartService>();
+            var param = new UpdateCartViewModelParam
+            {
+                CultureInfo = TestingExtensions.GetRandomCulture(),
+                CustomerId = GetRandom.Guid(),
+                CartName = GetRandom.String(32),
+                BaseUrl = GetRandom.String(32),
+                Shipments = new List<Shipment>(),
+                BillingCurrency = GetRandom.String(32),
+                CartType = cartType,
+                Coupons = new List<Coupon>(),
+                Customer = new CustomerSummary(),
+                OrderLocation = new OrderLocationSummary(),
+                Scope = GetRandom.String(32),
+                Status = GetRandom.String(32)
+            };
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await service.UpdateCartAsync(new UpdateCartViewModelParam
-                {
-                    CultureInfo = TestingExtensions.GetRandomCulture(),
-                    CustomerId = GetRandom.Guid(),
-                    CartName = GetRandom.String(32),
-                    BaseUrl = GetRandom.String(32),
-                    Shipments = new List<Shipment>(),
-                    BillingCurrency = GetRandom.String(32),
-                    CartType = cartType,
-                    Coupons = new List<Coupon>(),
-                    Customer = new CustomerSummary(),
-                    OrderLocation = new OrderLocationSummary(),
-                    Scope = GetRandom.String(32),
-                    Status = GetRandom.String(32)
-                });
-            });
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => service.UpdateCartAsync(param));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");
@@ -310,26 +297,24 @@ namespace Orckestra.Composer.Cart.Tests.Services
         public void WHEN_Coupons_Is_Null_SHOULD_Throw_ArgumentException()
         {
             var service = _container.CreateInstance<CartService>();
+            var param = new UpdateCartViewModelParam
+            {
+                CultureInfo = TestingExtensions.GetRandomCulture(),
+                CustomerId = Guid.Empty,
+                CartName = GetRandom.String(32),
+                BaseUrl = GetRandom.String(32),
+                Shipments = new List<Shipment>(),
+                BillingCurrency = GetRandom.String(32),
+                CartType = GetRandom.String(32),
+                Coupons = null,
+                Customer = new CustomerSummary(),
+                OrderLocation = new OrderLocationSummary(),
+                Scope = GetRandom.String(32),
+                Status = GetRandom.String(32)
+            };
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await service.UpdateCartAsync(new UpdateCartViewModelParam
-                {
-                    CultureInfo = TestingExtensions.GetRandomCulture(),
-                    CustomerId = Guid.Empty,
-                    CartName = GetRandom.String(32),
-                    BaseUrl = GetRandom.String(32),
-                    Shipments = new List<Shipment>(),
-                    BillingCurrency = GetRandom.String(32),
-                    CartType = GetRandom.String(32),
-                    Coupons = null,
-                    Customer = new CustomerSummary(),
-                    OrderLocation = new OrderLocationSummary(),
-                    Scope = GetRandom.String(32),
-                    Status = GetRandom.String(32)
-                });
-            });
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => service.UpdateCartAsync(param));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");
@@ -343,26 +328,24 @@ namespace Orckestra.Composer.Cart.Tests.Services
         public void WHEN_Scope_Is_NullOrWhitespace_SHOULD_Throw_ArgumentException(string scope)
         {
             var service = _container.CreateInstance<CartService>();
+            var param = new UpdateCartViewModelParam
+            {
+                CultureInfo = TestingExtensions.GetRandomCulture(),
+                CustomerId = GetRandom.Guid(),
+                CartName = GetRandom.String(32),
+                BaseUrl = GetRandom.String(32),
+                Shipments = new List<Shipment>(),
+                BillingCurrency = GetRandom.String(32),
+                CartType = GetRandom.String(32),
+                Coupons = new List<Coupon>(),
+                Customer = new CustomerSummary(),
+                OrderLocation = new OrderLocationSummary(),
+                Scope = scope,
+                Status = GetRandom.String(32)
+            };
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await service.UpdateCartAsync(new UpdateCartViewModelParam
-                {
-                    CultureInfo = TestingExtensions.GetRandomCulture(),
-                    CustomerId = GetRandom.Guid(),
-                    CartName = GetRandom.String(32),
-                    BaseUrl = GetRandom.String(32),
-                    Shipments = new List<Shipment>(),
-                    BillingCurrency = GetRandom.String(32),
-                    CartType = GetRandom.String(32),
-                    Coupons = new List<Coupon>(),
-                    Customer = new CustomerSummary(),
-                    OrderLocation = new OrderLocationSummary(),
-                    Scope = scope,
-                    Status = GetRandom.String(32)
-                });
-            });
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => service.UpdateCartAsync(param));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");
@@ -376,26 +359,24 @@ namespace Orckestra.Composer.Cart.Tests.Services
         public void WHEN_Status_Is_NullOrWhitespace_SHOULD_Throw_ArgumentException(string status)
         {
             var service = _container.CreateInstance<CartService>();
+            var param = new UpdateCartViewModelParam
+            {
+                CultureInfo = TestingExtensions.GetRandomCulture(),
+                CustomerId = GetRandom.Guid(),
+                CartName = GetRandom.String(32),
+                BaseUrl = GetRandom.String(32),
+                Shipments = new List<Shipment>(),
+                BillingCurrency = GetRandom.String(32),
+                CartType = GetRandom.String(32),
+                Coupons = new List<Coupon>(),
+                Customer = new CustomerSummary(),
+                OrderLocation = new OrderLocationSummary(),
+                Scope = GetRandom.String(32),
+                Status = status
+            };
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await service.UpdateCartAsync(new UpdateCartViewModelParam
-                {
-                    CultureInfo = TestingExtensions.GetRandomCulture(),
-                    CustomerId = GetRandom.Guid(),
-                    CartName = GetRandom.String(32),
-                    BaseUrl = GetRandom.String(32),
-                    Shipments = new List<Shipment>(),
-                    BillingCurrency = GetRandom.String(32),
-                    CartType = GetRandom.String(32),
-                    Coupons = new List<Coupon>(),
-                    Customer = new CustomerSummary(),
-                    OrderLocation = new OrderLocationSummary(),
-                    Scope = GetRandom.String(32),
-                    Status = status
-                });
-            });
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => service.UpdateCartAsync(param));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");

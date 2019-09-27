@@ -74,7 +74,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
             var cut = _container.CreateInstance<ShippingMethodViewService>();
 
             //Act and Assert
-            Assert.Throws<InvalidDataException>(async () => await cut.SetCheapestShippingMethodAsync(new SetCheapestShippingMethodParam
+            Assert.ThrowsAsync<InvalidDataException>(() => cut.SetCheapestShippingMethodAsync(new SetCheapestShippingMethodParam
             {
                 Scope = GetRandom.String(32),
                 CultureInfo = new CultureInfo("en-US"),

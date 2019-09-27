@@ -36,22 +36,20 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             // Arrange
             _container.Use(OvertureClientFactory.Create());
             var repository = _container.CreateInstance<WishListRepository>();
+            var param = new AddLineItemParam
+            {
+                Scope = scope,
+                CultureInfo =
+                        string.IsNullOrWhiteSpace(cultureName) ? null : CultureInfo.GetCultureInfo(cultureName),
+                CustomerId = string.IsNullOrWhiteSpace(customerId) ? Guid.Empty : GetRandom.Guid(),
+                CartName = cartName,
+                ProductId = productId,
+                VariantId = GetRandom.String(10),
+                Quantity = quantity
+            };
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await repository.AddLineItemAsync(new AddLineItemParam
-                {
-                    Scope = scope,
-                    CultureInfo =
-                        string.IsNullOrWhiteSpace(cultureName) ? null : CultureInfo.GetCultureInfo(cultureName),
-                    CustomerId = string.IsNullOrWhiteSpace(customerId) ? Guid.Empty : GetRandom.Guid(),
-                    CartName = cartName,
-                    ProductId = productId,
-                    VariantId = GetRandom.String(10),
-                    Quantity = quantity
-                });
-            });
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => repository.AddLineItemAsync(param));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");
@@ -92,10 +90,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var repository = _container.CreateInstance<WishListRepository>();
 
             // Act
-            var exception = Assert.Throws<ArgumentNullException>(async () =>
-            {
-                await repository.AddLineItemAsync(null);
-            });
+            var exception = Assert.ThrowsAsync<ArgumentNullException>(() => repository.AddLineItemAsync(null));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");

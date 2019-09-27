@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Globalization;
 using FizzWare.NBuilder.Generators;
 using FluentAssertions;
@@ -23,7 +24,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
         }
 
         [Test]
-        public async void WHEN_Passing_Valid_Parameters_SHOULD_Succeed()
+        public async Task WHEN_Passing_Valid_Parameters_SHOULD_Succeed()
         {
             //Arrange
             _container.Use(OvertureClientFactory.Create());
@@ -56,19 +57,17 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             // Arrange
             _container.Use(OvertureClientFactory.Create());
             var repository = _container.CreateInstance<WishListRepository>();
+            var param = new RemoveLineItemParam
+            {
+                Scope = scope,
+                CultureInfo = string.IsNullOrWhiteSpace(cultureName) ? null : CultureInfo.GetCultureInfo(cultureName),
+                CustomerId = string.IsNullOrWhiteSpace(customerId) ? Guid.Empty : GetRandom.Guid(),
+                CartName = cartName,
+                LineItemId = string.IsNullOrWhiteSpace(lineItemId) ? Guid.Empty : GetRandom.Guid()
+            };
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await repository.RemoveLineItemAsync(new RemoveLineItemParam
-                {
-                    Scope = scope,
-                    CultureInfo = string.IsNullOrWhiteSpace(cultureName) ? null : CultureInfo.GetCultureInfo(cultureName),
-                    CustomerId = string.IsNullOrWhiteSpace(customerId) ? Guid.Empty : GetRandom.Guid(),
-                    CartName = cartName,
-                    LineItemId = string.IsNullOrWhiteSpace(lineItemId) ? Guid.Empty : GetRandom.Guid()
-                });
-            });
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => repository.RemoveLineItemAsync(param));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");
@@ -83,10 +82,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var cartRepository = _container.CreateInstance<WishListRepository>();
 
             // Act
-            var exception = Assert.Throws<ArgumentNullException>(async () =>
-            {
-                await cartRepository.RemoveLineItemAsync(null);
-            });
+            var exception = Assert.ThrowsAsync<ArgumentNullException>(() => cartRepository.RemoveLineItemAsync(null));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");

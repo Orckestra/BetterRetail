@@ -15,6 +15,7 @@ using Orckestra.Overture.ServiceModel.Requests.Search;
 using Orckestra.Overture.ServiceModel.Search;
 using FacetType = Orckestra.Composer.Search.Facets.FacetType;
 using SearchFilter = Orckestra.Composer.Parameters.SearchFilter;
+using System.Threading.Tasks;
 
 namespace Orckestra.Composer.Search.Tests.Repository
 {
@@ -75,7 +76,7 @@ namespace Orckestra.Composer.Search.Tests.Repository
         }
 
         [Test]
-        public async void WHEN_overture_returns_facets_in_search_results_SHOULD_remove_selected_facet_for_non_multiselect_facet_types_from_result()
+        public async Task WHEN_overture_returns_facets_in_search_results_SHOULD_remove_selected_facet_for_non_multiselect_facet_types_from_result()
         {
             // Arrange
             var param = new SearchCriteria()
@@ -102,7 +103,7 @@ namespace Orckestra.Composer.Search.Tests.Repository
         }
 
         [Test]
-        public async void WHEN_overture_returns_facets_in_search_results_SHOULD_keep_selected_facets_for_multiselect_facet_types_from_result()
+        public async Task WHEN_overture_returns_facets_in_search_results_SHOULD_keep_selected_facets_for_multiselect_facet_types_from_result()
         {
             // Arrange
             var param = new SearchCriteria()
@@ -129,7 +130,7 @@ namespace Orckestra.Composer.Search.Tests.Repository
         }
 
         [Test]
-        public async void WHEN_overture_returns_facets_in_search_results_SHOULD_keep_all_facet_values_if_there_are_no_selected_facets()
+        public async Task WHEN_overture_returns_facets_in_search_results_SHOULD_keep_all_facet_values_if_there_are_no_selected_facets()
         {
             // Arrange
             var param = new SearchCriteria()

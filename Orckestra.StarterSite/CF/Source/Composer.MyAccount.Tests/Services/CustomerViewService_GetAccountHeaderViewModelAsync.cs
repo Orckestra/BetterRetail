@@ -12,6 +12,7 @@ using Orckestra.Composer.MyAccount.Tests.Mock;
 using Orckestra.Composer.MyAccount.ViewModels;
 using Orckestra.ForTests;
 using Orckestra.ForTests.Mock;
+using System.Threading.Tasks;
 
 namespace Orckestra.Composer.MyAccount.Tests.Services
 {
@@ -29,7 +30,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
         }
 
         [Test]
-        public async void WHEN_passing_valid_arguments_SHOULD_create_viewmodel()
+        public async Task WHEN_passing_valid_arguments_SHOULD_create_viewmodel()
         {
             //Arrange
             var customer = MockCustomerFactory.CreateRandom();

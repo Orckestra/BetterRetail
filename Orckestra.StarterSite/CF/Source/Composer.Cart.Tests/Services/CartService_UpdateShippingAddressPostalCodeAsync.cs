@@ -69,7 +69,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
             var service = _container.CreateInstance<CartService>();
 
             // Act and Assert
-            Assert.Throws<InvalidOperationException>(async () => await service.UpdateShippingAddressPostalCodeAsync(new UpdateShippingAddressPostalCodeParam
+            Assert.ThrowsAsync<InvalidOperationException>(() => service.UpdateShippingAddressPostalCodeAsync(new UpdateShippingAddressPostalCodeParam
             {
                 CultureInfo = TestingExtensions.GetRandomCulture(),
                 CustomerId = Guid.NewGuid(),

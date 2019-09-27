@@ -120,10 +120,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
             var service = _container.CreateInstance<CheckoutService>();
 
             // Act and Assert
-            Assert.Throws<ArgumentNullException>(async () =>
-            {
-                await service.UpdateCheckoutCartAsync(null);
-            });
+            Assert.ThrowsAsync<ArgumentNullException>(() => service.UpdateCheckoutCartAsync(null));
         }
 
         [Test]
@@ -131,18 +128,16 @@ namespace Orckestra.Composer.Cart.Tests.Services
         {
             //Arrange
             var service = _container.CreateInstance<CheckoutService>();
+            var param = new UpdateCheckoutCartParam
+            {
+                GetCartParam = new GetCartParam(),
+                CurrentStep = GetRandom.Int(),
+                UpdateValues = null,
+                IsGuest = GetRandom.Boolean()
+            };
 
             // Act and Assert
-            Assert.Throws<ArgumentException>(async () =>
-            {
-                await service.UpdateCheckoutCartAsync(new UpdateCheckoutCartParam
-                {
-                    GetCartParam = new GetCartParam(),
-                    CurrentStep = GetRandom.Int(),
-                    UpdateValues = null,
-                    IsGuest = GetRandom.Boolean()
-                });
-            });
+            Assert.ThrowsAsync<ArgumentException>(() => service.UpdateCheckoutCartAsync(param));
         }
 
         [Test]
@@ -150,18 +145,16 @@ namespace Orckestra.Composer.Cart.Tests.Services
         {
             //Arrange
             var service = _container.CreateInstance<CheckoutService>();
+            var param = new UpdateCheckoutCartParam
+            {
+                GetCartParam = null,
+                CurrentStep = GetRandom.Int(),
+                UpdateValues = new Dictionary<string, string>(),
+                IsGuest = GetRandom.Boolean()
+            };
 
             // Act and Assert
-            Assert.Throws<ArgumentException>(async () =>
-            {
-                await service.UpdateCheckoutCartAsync(new UpdateCheckoutCartParam
-                {
-                    GetCartParam = null,
-                    CurrentStep = GetRandom.Int(),
-                    UpdateValues = new Dictionary<string, string>(),
-                    IsGuest = GetRandom.Boolean()
-                });
-            });
+            Assert.ThrowsAsync<ArgumentException>(() => service.UpdateCheckoutCartAsync(param));
         }
 
         [Test]

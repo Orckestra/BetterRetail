@@ -15,6 +15,7 @@ using Orckestra.Composer.Services;
 using Orckestra.ForTests;
 using Orckestra.ForTests.Mock;
 using Orckestra.Overture.ServiceModel.Customers;
+using System.Threading.Tasks;
 
 namespace Orckestra.Composer.MyAccount.Tests.Services
 {
@@ -32,7 +33,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
         }
 
         [Test]
-        public async void WHEN_passing_valid_arguments_SHOULD_create_viewmodel()
+        public async Task WHEN_passing_valid_arguments_SHOULD_create_viewmodel()
         {
             //Arrange
             var isAuthenticated = GetRandom.Boolean();
@@ -101,7 +102,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
         }
 
         [Test]
-        public async void WHEN_Customer_is_Null_SHOULD_create_view_model_with_empty_bag()
+        public async Task WHEN_Customer_is_Null_SHOULD_create_view_model_with_empty_bag()
         {
             //Arrange
             var isAuthenticated = GetRandom.Boolean();

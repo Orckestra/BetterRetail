@@ -30,7 +30,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
         }
 
         [Test]
-        public async void WHEN_valid_request_SHOULD_succeed()
+        public async Task WHEN_valid_request_SHOULD_succeed()
         {
             //Arrange
             var expectedCustomer = MockCustomerFactory.CreateRandom();
@@ -65,7 +65,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
         }
 
         [Test]
-        public async void WHEN_user_does_not_exists_SHOULD_fail()
+        public async Task WHEN_user_does_not_exists_SHOULD_fail()
         {
             //Arrange
             var expectedCustomerId = GetRandom.Guid();

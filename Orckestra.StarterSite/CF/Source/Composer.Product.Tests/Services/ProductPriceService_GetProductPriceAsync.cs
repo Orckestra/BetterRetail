@@ -125,10 +125,7 @@ namespace Orckestra.Composer.Product.Tests.Services
             var action = new Action(async () => await productService.CalculatePricesAsync(new GetProductsPriceParam()));
 
             // Act
-            var exception = Assert.Throws<ArgumentNullException>(async () =>
-            {
-                await productService.CalculatePricesAsync(null);
-            });
+            var exception = Assert.ThrowsAsync<ArgumentNullException>(() => productService.CalculatePricesAsync(null));
 
             //Assert
             exception.ParamName.Should().BeSameAs("getProductPriceParam");
@@ -141,20 +138,18 @@ namespace Orckestra.Composer.Product.Tests.Services
             //Arrange
             _container.Use(CreateProductRepositoryWithProductPriceNoVariant());
             var productService = _container.CreateInstance<ProductPriceViewService>();
-
-            // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
+            var param = new GetProductsPriceParam
             {
-                await productService.CalculatePricesAsync(new GetProductsPriceParam
-                {
-                    CultureInfo = CultureInfo.CreateSpecificCulture("en-US"),
-                    ProductIds = new List<string>
+                CultureInfo = CultureInfo.CreateSpecificCulture("en-US"),
+                ProductIds = new List<string>
                     {
                         GetRandom.String(32),
                         GetRandom.String(32)
                     }
-                });
-            });
+            };
+
+            // Act
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => productService.CalculatePricesAsync(param));
 
             //Assert
             exception.ParamName.Should().BeSameAs("getProductPriceParam");
@@ -166,20 +161,18 @@ namespace Orckestra.Composer.Product.Tests.Services
             //Arrange
             _container.Use(CreateProductRepositoryWithProductPriceNoVariant());
             var productService = _container.CreateInstance<ProductPriceViewService>();
-
-            // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
+            var param = new GetProductsPriceParam
             {
-                await productService.CalculatePricesAsync(new GetProductsPriceParam
-                {
-                    Scope = GetRandom.String(32),
-                    ProductIds = new List<string>
+                Scope = GetRandom.String(32),
+                ProductIds = new List<string>
                     {
                         GetRandom.String(32),
                         GetRandom.String(32)
                     }
-                });
-            });
+            };
+
+            // Act
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => productService.CalculatePricesAsync(param));
 
             //Assert
             exception.ParamName.Should().BeSameAs("getProductPriceParam");
