@@ -9,8 +9,12 @@ namespace Orckestra.Composer.CompositeC1.Mappers
 {
     public static class FacetsMapper
     {
-        public static FacetSetting ConvertToFacetSetting(IFacet facet, List<IFacet> dependsOn, List<IPromotedFacetValueSetting> promotedFacetValueSettings)
+        public static FacetSetting ConvertToFacetSetting(IFacet facet, List<IFacet> dependsOn = null, List<IPromotedFacetValueSetting> promotedFacetValueSettings = null)
         {
+            if (facet == null) throw new ArgumentNullException(nameof(facet));
+            if (dependsOn == null) dependsOn = new List<IFacet>();
+            if (promotedFacetValueSettings == null) promotedFacetValueSettings = new List<IPromotedFacetValueSetting>();
+
             var facetSetting = new FacetSetting(facet.FieldName)
             {
                 FacetType = GetFacetType(facet),

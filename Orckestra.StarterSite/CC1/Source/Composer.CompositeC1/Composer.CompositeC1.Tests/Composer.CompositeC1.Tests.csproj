@@ -257,12 +257,14 @@
     <Compile Include="..\Solution Items\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Mappers\FacetsMapper_ConvertToFacetSetting.cs" />
     <Compile Include="Mocks\MainMenuMock.cs" />
     <Compile Include="Mocks\PageServiceMock.cs" />
     <Compile Include="Mocks\PageMock.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\BreadcrumbViewService\BreadcrumbViewService_CreateBreadcrumbViewModel.cs" />
     <Compile Include="Services\FacetConfigurationContext\FacetConfigurationContext_GetFacetSettings.cs" />
+    <Compile Include="Services\FacetConfigurationContext\FacetTestsBase.cs" />
     <Compile Include="Utils\GoogleAnalyticsNavigationUrlHelper_BuildUrl.cs" />
     <Compile Include="Utils\UrlUtils_ParseUrlMappingName.cs" />
   </ItemGroup>

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using Composite.Data;
 using Composite.Data.Types;
 using FluentAssertions;
 using Moq;
@@ -15,7 +14,7 @@ using Orckestra.Composer.CompositeC1.Services.DataQuery;
 namespace Orckestra.Composer.CompositeC1.Tests.Services.FacetConfigurationContext
 {
     [TestFixture]
-    public class FacetConfigurationContext_GetFacetSettings
+    public class FacetConfigurationContext_GetFacetSettings : FacetTestsBase
     {
         private CompositeC1.Services.FacetConfigurationContext _target;
 
@@ -60,7 +59,7 @@ namespace Orckestra.Composer.CompositeC1.Tests.Services.FacetConfigurationContex
 
             _promotedFacets = new List<IPromotedFacetValueSetting>();
             _dataQueryMoq.Setup(q => q.Get<IPromotedFacetValueSetting>()).Returns(() => _promotedFacets.AsQueryable());
-            
+
             _facetsMeta = new List<IFacetConfigurationMeta>();
             _dataQueryMoq.Setup(q => q.Get<IFacetConfigurationMeta>()).Returns(() => _facetsMeta.AsQueryable());
 
@@ -142,164 +141,32 @@ namespace Orckestra.Composer.CompositeC1.Tests.Services.FacetConfigurationContex
             facetSettings[0].FieldName.Should().Be(expectedFacet.FieldName);
         }
 
-        #region Helpers
-
-        #region Facet
-        private FacetImpl CreateFacet(params FacetImpl[] facets)
+        protected override FacetImpl CreateFacet(params FacetImpl[] facets)
         {
-            var facet = new FacetImpl
-            {
-                Id = Guid.NewGuid(),
-                FieldName = RandomString(),
-                FacetType = "SingleSelect",
-                SortWeight = RandomDecimal(),
-                DependsOn = "",
-                IsDisplayed = true,
-                StartValue = "",
-                EndValue = "",
-                GapSize = "",
-                MaxCollapsedValueCount = 5,
-                MaxExpendedValueCount = null,
-            };
-            facet.DependsOnItems.AddRange(facets);
-            _facets.Add(facet);
-            return facet;
+            var result = base.CreateFacet(facets);
+            _facets.Add(result);
+            return result;
         }
 
-        private class FacetImpl : IFacet
+        protected override FacetConfigurationImpl CreateFacetConfig(params FacetImpl[] facets)
         {
-            public DataSourceId DataSourceId { get; }
-            public Guid Id { get; set; }
-            public string FieldName { get; set; }
-            public string FacetType { get; set; }
-            public decimal SortWeight { get; set; }
-            public int MaxCollapsedValueCount { get; set; }
-            public int? MaxExpendedValueCount { get; set; }
-
-            public string DependsOn
-            {
-                get { return string.Join(",", DependsOnItems.Select(x => x.Id)); }
-                set { }
-            }
-
-            public List<FacetImpl> DependsOnItems { get; } = new List<FacetImpl>();
-
-            public string StartValue { get; set; }
-            public string EndValue { get; set; }
-            public string GapSize { get; set; }
-            public bool IsDisplayed { get; set; }
-
-            public string PromotedValues
-            {
-                get { return string.Join(",", PromotedValuesItems.Select(x => x.Id)); }
-                set { }
-            }
-
-            public List<PromotedFacetValueSettingImpl> PromotedValuesItems { get; } = new List<PromotedFacetValueSettingImpl>();
-        }
-        #endregion
-
-        #region FacetConfig
-        private FacetConfigurationImpl CreateFacetConfig(params FacetImpl[] facets)
-        {
-            var config = new FacetConfigurationImpl
-            {
-                Id = Guid.NewGuid(),
-                IsDefault = RandomBool(),
-                Name = RandomString(),
-            };
-            config.FacetsItems.AddRange(facets);
-            _facetConfigs.Add(config);
-            return config;
+            var result = base.CreateFacetConfig(facets);
+            _facetConfigs.Add(result);
+            return result;
         }
 
-        private class FacetConfigurationImpl : IFacetConfiguration
+        protected override PromotedFacetValueSettingImpl CreatePromotedFacet()
         {
-            public DataSourceId DataSourceId { get; }
-            public Guid Id { get; set; }
-            public string Name { get; set; }
-
-            public string Facets
-            {
-                get { return string.Join(",", FacetsItems.Select(x => x.Id)); }
-                set { }
-            }
-
-            public List<FacetImpl> FacetsItems { get; } = new List<FacetImpl>();
-
-            public bool IsDefault { get; set; }
-        }
-        #endregion
-
-        #region PromotedFacet
-        private PromotedFacetValueSettingImpl CreatePromotedFacet()
-        {
-            var promoted = new PromotedFacetValueSettingImpl
-            {
-                Id = Guid.NewGuid(),
-                SortWeight = RandomDecimal(),
-                Title = RandomString(),
-            };
-
-            _promotedFacets.Add(promoted);
-            return promoted;
+            var result = base.CreatePromotedFacet();
+            _promotedFacets.Add(result);
+            return result;
         }
 
-        private class PromotedFacetValueSettingImpl : IPromotedFacetValueSetting
+        protected override FacetConfigurationMetaImpl CreateConfigMeta(Guid pageId, FacetConfigurationImpl configuration = null)
         {
-            public DataSourceId DataSourceId { get; }
-            public Guid Id { get; set; }
-            public string Title { get; set; }
-            public decimal SortWeight { get; set; }
+            var result = base.CreateConfigMeta(pageId, configuration);
+            _facetsMeta.Add(result);
+            return result;
         }
-        #endregion
-
-        #region Meta
-        private FacetConfigurationMetaImpl CreateConfigMeta(Guid pageId, FacetConfigurationImpl configuration = null)
-        {
-            var meta = new FacetConfigurationMetaImpl
-            {
-                Id = Guid.NewGuid(),
-                PageId = pageId,
-                Configuration = configuration?.Id,
-            };
-
-            _facetsMeta.Add(meta);
-            return meta;
-        }
-
-        public class FacetConfigurationMetaImpl : IFacetConfigurationMeta
-        {
-            public Guid PageId { get; set; }
-            public DataSourceId DataSourceId { get; }
-            public Guid Id { get; set; }
-
-            public string PublicationStatus { get; set; }
-            public Guid VersionId { get; set; }
-            public string FieldName { get; set; }
-            public Guid? Configuration { get; set; }
-        }
-        #endregion
-
-        #region Random
-        private readonly Random _random = new Random();
-
-        public string RandomString()
-        {
-            return Guid.NewGuid().ToString();
-        }
-
-        public bool RandomBool()
-        {
-            return _random.Next() % 2 == 1;
-        }
-
-        public decimal RandomDecimal()
-        {
-            return (decimal)((_random.NextDouble() - 0.5) * 10.0);
-        }
-        #endregion
-
-        #endregion
     };
 }
