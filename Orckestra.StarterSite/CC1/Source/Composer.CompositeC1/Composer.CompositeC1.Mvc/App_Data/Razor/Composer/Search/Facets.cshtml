@@ -1,0 +1,265 @@
+﻿@using System.Linq
+@using System.Threading
+@using Orckestra.Composer.CompositeC1.Controllers.Helpers
+@using Orckestra.Composer.Providers
+@using Orckestra.Composer.Providers.Localization
+@using Orckestra.Composer.Search.Context
+@using Orckestra.Composer.Search.Facets
+@using Orckestra.Composer.Search.Services
+@using Orckestra.Composer.Search.ViewModels
+@using Orckestra.Composer.Services
+@inherits Composite.AspNet.Razor.RazorFunction
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Facets search."; }
+    }
+
+    public ISearchRequestContext SearchRequestContext { get; set; }
+    public IComposerContext ComposerContext { get; set; }
+    public IInventoryLocationProvider InventoryLocationProvider { get; set; }
+    public ISearchUrlProvider UrlProvider { get; set; }
+    public ISearchViewService SearchViewService { get; set; }
+    public ILocalizationProvider LocalizationProvider { get; set; }
+
+    private string Localize(string category, string key)
+    {
+        var param = new GetLocalizedParam
+        {
+            CultureInfo = Thread.CurrentThread.CurrentCulture,
+            Category = category ?? string.Empty,
+            Key = key ?? string.Empty,
+        };
+
+        string resourceValue = LocalizationProvider.GetLocalizedString(param);
+        if (resourceValue == null) // Do not use !IsNullOrWhiteSpace, user might want to display empty string.
+        {
+            resourceValue = $"{category}.{key}";
+        }
+        return resourceValue;
+    }
+}
+
+@{
+    var keywords = Request.QueryString["keywords"];
+    ProductSearchResultsViewModel productSearchResults = null;
+
+    if (SearchControllerHelper.AreKeywordsValid(keywords))
+    {
+        if (Request.QueryString["page"] == null || !int.TryParse(Request.QueryString["page"], out int page))
+        {
+            page = 1;
+        }
+
+        var sortBy = Request.QueryString["sortBy"];
+        var sortDirection = Request.QueryString["sortDirection"] ?? "asc";
+
+        var criteria = SearchControllerHelper.GetSearchCriteria(Request, InventoryLocationProvider, ComposerContext, keywords, page, sortBy, sortDirection);
+        criteria.SelectedFacets.AddRange(UrlProvider.BuildSelectedFacets(Request.QueryString));
+
+        var searchViewModel = SearchViewService.GetSearchViewModelAsync(criteria).GetAwaiter().GetResult();
+
+        productSearchResults = searchViewModel.ProductSearchResults;
+    }
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<head>
+</head>
+<body>
+    <div data-oc-controller="Product.FacetSearch" data-corrected-search-term="@productSearchResults.CorrectedSearchTerms">
+
+        @if (productSearchResults?.TotalCount == 0)
+        {
+            <div data-oc-controller="Product.FacetSearch">
+                @*Empty search facets results*@
+            </div>
+        }
+        else
+        {
+            <form name="searchFacets">
+                @RenderPromotedFacetValues(productSearchResults.PromotedFacetValues)
+                @RenderFacets(productSearchResults.Facets)
+            </form>
+        }
+
+    </div>
+</body>
+</html>
+
+@helper RenderPromotedFacetValues(IList<PromotedFacetValue> promotedFacetValues)
+{
+    if (promotedFacetValues == null || !promotedFacetValues.Where(f => f.Quantity > 0).Any())
+    {
+        return;
+    }
+
+    <div class="panel  panel-default">
+        <div class="panel-body" data-qa="search-refiner">
+            <ul class="list-unstyled">
+                @foreach (var promotedFacetValue in promotedFacetValues.Where(f => f.Quantity > 0))
+                {
+                    if (promotedFacetValue.FacetType == FacetType.MultiSelect)
+                    {
+                        @RenderMultiSelectPromotedFacet(promotedFacetValue);
+                    }
+                    else
+                    {
+                        @RenderSinglePromotedFacet(promotedFacetValue);
+                    }
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+@helper RenderMultiSelectPromotedFacet(PromotedFacetValue promotedFacetValue)
+{
+    <li>
+        <div class="checkbox" data-facetfieldname="@promotedFacetValue.FieldName" data-facettype="@promotedFacetValue.FacetType">
+            <label>
+                @if (promotedFacetValue.IsSelected)
+                {
+                    <input type="checkbox" name="@(promotedFacetValue.FieldName)[]" value="@promotedFacetValue.Value" data-oc-click="multiFacetChanged" checked="checked" />
+                }
+                else
+                {
+                    <input type="checkbox" name="@(promotedFacetValue.FieldName)[]" value="@promotedFacetValue.Value" data-oc-click="multiFacetChanged" />
+                }
+                @promotedFacetValue.Title&#160;(@promotedFacetValue.Quantity)
+            </label>
+        </div>
+    </li>
+}
+
+@helper RenderSinglePromotedFacet(PromotedFacetValue promotedFacetValue)
+{
+    <li data-facetfieldname="@promotedFacetValue.FieldName" data-facettype="@promotedFacetValue.FacetType">
+        <a href="#" data-facetfieldname="@promotedFacetValue.FieldName" data-facetvalue="@promotedFacetValue.Value" title="@promotedFacetValue.Title" data-oc-click="singleFacetChanged">@promotedFacetValue.Title&#160;(@promotedFacetValue.Quantity)</a>
+    </li>
+}
+
+
+@helper RenderFacets(IList<Facet> facets)
+{
+    var displayedFacets = facets.Where(f => f.IsDisplayed).ToList();
+    for (int index = 0; index < facets.Count; index++)
+    {
+        var facet = displayedFacets[index];
+        <div class="panel  panel-default" data-facetfieldname="@facet.FieldName" data-facettype="@facet.FacetType"
+             @Html.Raw(facet.FacetType == FacetType.Range ? $"data-min=\"{facet.StartValue}\" data-max=\"{facet.EndValue}\" data-step=\"{facet.GapSize}\" data-max-label=\"{Localize("List-Search", "L_RangeAll")}\"" : "")>
+            <div class="panel-body" data-qa="search-refiner">
+                <h2 class="h4">@facet.Title</h2>
+                @if (facet.FacetType == FacetType.Range)
+                {
+                    @RenderRangeFacet(facet)
+                }
+                else
+                {
+                    <ul class="list-unstyled">
+                        @if (facet.FacetType == FacetType.MultiSelect)
+                        {
+                            foreach (var facetValue in facet.FacetValues)
+                            {
+                                @RenderMultiSelectFacet(facetValue, facet.FieldName);
+                            }
+
+                        }
+                        else
+                        {
+                            foreach (var facetValue in facet.FacetValues)
+                            {
+                                @RenderSingleFacet(facetValue, facet.FieldName);
+                            }
+                        }
+                    </ul>
+                    if (facet.OnDemandFacetValues?.Count > 0)
+                    {
+                        <ul class="list-unstyled  collapse  onDemandFacets-@(index) ">
+                            @if (facet.FacetType == FacetType.MultiSelect)
+                            {
+                                foreach (var facetValue in facet.OnDemandFacetValues)
+                                {
+                                    @RenderMultiSelectFacet(facetValue, facet.FieldName);
+                                }
+                            }
+                            else
+                            {
+                                foreach (var facetValue in facet.OnDemandFacetValues)
+                                {
+                                    @RenderSingleFacet(facetValue, facet.FieldName);
+                                }
+                            }
+                        </ul>
+                        <button class="btn  btn-link" data-toggle="collapse" data-target=".onDemandFacets-@(index) "
+                                data-label-showmore="@Localize("List-Search", "B_ShowMore")" data-label-showless="@Localize("List-Search", "B_ShowLess")"
+                                data-oc-click="toggleFacetList">
+                            @Localize("List-Search", "B_ShowMore")
+                        </button>
+
+                    }
+                }
+            </div>
+        </div>
+    }
+}
+
+@helper RenderRangeFacet(Facet facet)
+{
+    <div class="form-group">
+        <div class="range"></div>
+    </div>
+
+    <div class="form-group">
+        <div class="row">
+            <div class="col-xs-6">
+                <input class="form-control  js-lowerValue" type="text" />
+            </div>
+            <div class="col-xs-6">
+                <input class="form-control  js-higherValue" type="text" />
+            </div>
+        </div>
+    </div>
+
+    <button type="submit" data-oc-click="refineByRange" class="btn btn-default btn-block" disabled="disabled">@Localize("List-Search", "B_Apply")</button>
+}
+
+@helper RenderMultiSelectFacet(FacetValue facetValue, string fieldName)
+{
+    if (facetValue.Quantity == 0)
+    {
+        return;
+    }
+
+    <li>
+        <div class="checkbox">
+            <label>
+                @if (facetValue.IsSelected)
+                {
+                    <input type="checkbox" name="@(fieldName)[]" value="@facetValue.Value" data-oc-click="multiFacetChanged" checked="checked" />
+                }
+                else
+                {
+                    <input type="checkbox" name="@(fieldName)[]" value="@facetValue.Value" data-oc-click="multiFacetChanged" />
+                }
+                @facetValue.Title&#160;(@facetValue.Quantity)
+            </label>
+        </div>
+    </li>
+
+}
+
+@helper RenderSingleFacet(FacetValue facetValue, string fieldName)
+{
+    if (facetValue.Quantity == 0)
+    {
+        return;
+    }
+
+    <li>
+        <a href="#" data-facetfieldname="@fieldName" data-facetvalue="@facetValue.Value" title="@facetValue.Title" data-oc-click="singleFacetChanged">@facetValue.Title&#160;(@facetValue.Quantity)</a>
+    </li>
+}
+
+

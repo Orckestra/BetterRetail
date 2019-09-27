@@ -294,6 +294,7 @@
     <Compile Include="Controllers\OrderBaseController.cs" />
     <Compile Include="Controllers\ProductBaseController.cs" />
     <Compile Include="Controllers\SearchBaseController.cs" />
+    <Compile Include="Controllers\Helpers\SearchControllerHelper.cs" />
     <Compile Include="Controllers\StoreLocatorBaseController.cs" />
     <Compile Include="CustomPageNotFoundRoute.cs" />
     <Compile Include="CustomPageNotFoundRouteHandler.cs" />

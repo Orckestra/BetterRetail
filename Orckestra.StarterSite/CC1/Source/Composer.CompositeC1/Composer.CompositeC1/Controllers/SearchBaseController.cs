@@ -13,6 +13,7 @@ using Orckestra.Composer.Search.ViewModels;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Utils;
 using System.Linq;
+using Orckestra.Composer.CompositeC1.Controllers.Helpers;
 using Orckestra.ExperienceManagement.Configuration;
 
 namespace Orckestra.Composer.CompositeC1.Controllers
@@ -132,39 +133,13 @@ namespace Orckestra.Composer.CompositeC1.Controllers
 
         protected virtual bool AreKeywordsValid(string keywords)
         {
-            if (String.IsNullOrWhiteSpace(keywords))
-            {
-                return false;
-            }
-
-            var strippedKeywords = keywords.Trim();
-
-            if (SearchConfiguration.BlockStarSearchs)
-            {
-                strippedKeywords = strippedKeywords.Replace("*", "");
-            }
-
-            var isInvalid = String.IsNullOrWhiteSpace(strippedKeywords);
-            return !isInvalid;
+            return SearchControllerHelper.AreKeywordsValid(keywords);
         }
 
         protected virtual SearchViewModel GetSearchViewModel(string keywords, int page, string sortBy, string sortDirection)
         {
-            var criteria = new SearchCriteria
-            {
-                Keywords = keywords,
-                NumberOfItemsPerPage = SearchConfiguration.MaxItemsPerPage,
-                IncludeFacets = true,
-                StartingIndex = (page - 1) * SearchConfiguration.MaxItemsPerPage, // the starting index is zero-based
-                SortBy = sortBy,
-                SortDirection = sortDirection,
-                Page = page,
-                BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
-                CultureInfo = ComposerContext.CultureInfo,
-                Scope = ComposerContext.Scope,
-                InventoryLocationIds = GetInventoryLocationIds(),
-                AutoCorrect = SearchConfiguration.AutoCorrectSearchTerms
-            };
+            var criteria = SearchControllerHelper.GetSearchCriteria(Request, InventoryLocationProvider, ComposerContext, 
+                keywords, page, sortBy, sortDirection);
 
             criteria.SelectedFacets.AddRange(UrlProvider.BuildSelectedFacets(Request.QueryString));
 
