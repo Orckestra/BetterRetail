@@ -45,7 +45,6 @@
         <File sourceFilename="~\Bin\Orckestra.Composer.MyAccount.dll" targetFilename="~\Bin\Orckestra.Composer.MyAccount.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Orckestra.Composer.Product.dll" targetFilename="~\Bin\Orckestra.Composer.Product.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Orckestra.Composer.Search.dll" targetFilename="~\Bin\Orckestra.Composer.Search.dll" allowOverwrite="true" />
-        <File sourceFilename="~\Bin\Orckestra.Composer.SearchQuery.dll" targetFilename="~\Bin\Orckestra.Composer.SearchQuery.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Orckestra.Composer.Sitemap.dll" targetFilename="~\Bin\Orckestra.Composer.Sitemap.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Orckestra.Composer.Store.dll" targetFilename="~\Bin\Orckestra.Composer.Store.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Orckestra.Composer.CompositeC1.Mvc.dll" targetFilename="~\Bin\Orckestra.Composer.CompositeC1.Mvc.dll" allowOverwrite="true" />
