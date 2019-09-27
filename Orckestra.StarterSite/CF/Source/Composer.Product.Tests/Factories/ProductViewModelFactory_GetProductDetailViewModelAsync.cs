@@ -84,7 +84,7 @@ namespace Orckestra.Composer.Product.Tests.Factories
         }
 
         [Test]
-        public async void WHEN_Product_Has_Lookup_Values_SHOULD_Return_Lookup_Localized_Values()
+        public async Task WHEN_Product_Has_Lookup_Values_SHOULD_Return_Lookup_Localized_Values()
         {
             
             //Arrange

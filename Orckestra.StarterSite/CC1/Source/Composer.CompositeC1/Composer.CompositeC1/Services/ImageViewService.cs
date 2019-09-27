@@ -10,13 +10,15 @@ namespace Orckestra.Composer.CompositeC1.Services
     {
         protected IMediaService MediaService { get; private set; }
         protected IWebsiteContext WebsiteContext { get; private set; }
+        protected ISiteConfiguration SiteConfiguration { get; private set; }
 
-        public ImageViewService(IMediaService mediaService, IWebsiteContext websiteContext)
+        public ImageViewService(IMediaService mediaService, IWebsiteContext websiteContext, ISiteConfiguration siteConfiguration)
         {
             if (mediaService == null) { throw new ArgumentNullException("mediaService"); }
 
             MediaService = mediaService;
             WebsiteContext = websiteContext;
+            SiteConfiguration = siteConfiguration;
         }
 
         public virtual ImageViewModel GetCheckoutTrustImageViewModel(CultureInfo cultureInfo)

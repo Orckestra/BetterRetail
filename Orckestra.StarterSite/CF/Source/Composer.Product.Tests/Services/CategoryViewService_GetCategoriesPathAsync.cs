@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Threading.Tasks;
 using FizzWare.NBuilder.Generators;
 using FluentAssertions;
 using Moq;
@@ -36,8 +37,8 @@ namespace Orckestra.Composer.Product.Tests.Services
             var categoryService = _container.CreateInstance<CategoryViewService>();
 
             // Act & Assert
-            Assert.Throws<ArgumentNullException>(
-                async () => await categoryService.GetCategoriesPathAsync(null));
+            Assert.ThrowsAsync<ArgumentNullException>(
+                 () => categoryService.GetCategoriesPathAsync(null));
         }
 
         [Test]
@@ -47,12 +48,12 @@ namespace Orckestra.Composer.Product.Tests.Services
             var categoryService = _container.CreateInstance<CategoryViewService>();
 
             // Act & Assert
-            Assert.Throws<ArgumentNullException>(
-                async () => await categoryService.GetCategoriesPathAsync(new GetCategoriesPathParam { Scope = "Quebec", CultureInfo = null, CategoryId = "A" }));
+            Assert.ThrowsAsync<ArgumentNullException>(
+                () => categoryService.GetCategoriesPathAsync(new GetCategoriesPathParam { Scope = "Quebec", CultureInfo = null, CategoryId = "A" }));
         }
 
         [Test]
-        public async void WHEN_Parameters_Are_Valid_SHOULD_Return_Categories()
+        public async Task WHEN_Parameters_Are_Valid_SHOULD_Return_Categories()
         {
             // Arrange
             var repoMock = CreateCategoryRepositoryMock();

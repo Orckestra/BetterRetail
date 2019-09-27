@@ -1,10 +1,9 @@
-﻿using System;
+﻿using Composite.Data.Types;
+using Orckestra.Composer.CompositeC1.Services;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Composite.Data.Types;
-using Orckestra.Composer.CompositeC1.Pages;
-using Orckestra.Composer.CompositeC1.Services;
 
 namespace Orckestra.Composer.CompositeC1.Tests.Mocks
 {

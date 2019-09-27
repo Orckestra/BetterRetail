@@ -18,14 +18,18 @@ namespace Orckestra.Composer.CompositeC1.Providers
         const string ErrorPathQuerystringName = "errorpath";
 
         protected IPageService PageService { get; private set; }
+        protected ISiteConfiguration SiteConfiguration { get; private set; }
 
-        public PageNotFoundUrlProvider(IPageService pageService)        {
+        public PageNotFoundUrlProvider(IPageService pageService,
+            ISiteConfiguration siteConfiguration)
+        {
             if (pageService == null)
             {
                 throw new ArgumentNullException(nameof(pageService));
             }
 
             PageService = pageService;
+            SiteConfiguration = siteConfiguration;
         }
 
         public virtual string Get404PageUrl(string requestedPath)

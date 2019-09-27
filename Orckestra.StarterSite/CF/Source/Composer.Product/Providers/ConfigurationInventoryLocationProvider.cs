@@ -16,11 +16,13 @@ namespace Orckestra.Composer.Product.Providers
         public IFulfillmentLocationsRepository FulfillmentLocationsRepository { get; set; }
         public IInventoryRepository InventoryRepository { get; set; }
         public IWebsiteContext WebsiteContext { get; set; }
+        public ISiteConfiguration SiteConfiguration { get; set; }
 
         public ConfigurationInventoryLocationProvider(
             IFulfillmentLocationsRepository fulfillmentLocationsRepository, 
             IInventoryRepository inventoryRepository,
-            IWebsiteContext websiteContext)
+            IWebsiteContext websiteContext,
+            ISiteConfiguration siteConfiguration)
         {
             if (fulfillmentLocationsRepository == null) { throw new ArgumentNullException("fulfillmentLocationsRepository"); }
             if (inventoryRepository == null) { throw new ArgumentNullException("inventoryRepository"); }
@@ -29,6 +31,7 @@ namespace Orckestra.Composer.Product.Providers
             FulfillmentLocationsRepository = fulfillmentLocationsRepository;
             InventoryRepository = inventoryRepository;
             WebsiteContext = websiteContext;
+            SiteConfiguration = siteConfiguration;
         }
 
         /// <summary>

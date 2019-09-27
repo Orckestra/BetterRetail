@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Threading.Tasks;
 using FizzWare.NBuilder.Generators;
 using Moq;
 using NUnit.Framework;
@@ -19,7 +20,7 @@ namespace Orckestra.Composer.Product.Tests.Services
     public class InventoryViewServiceFindInventoryItemStatus
     {
         [Test]
-        public async void WHEN_Passing_Empty_Parameter_SHOULD_Return_Empty_ViewModel()
+        public async Task WHEN_Passing_Empty_Parameter_SHOULD_Return_Empty_ViewModel()
         {
             var inventoryRepository = new Mock<IInventoryRepository>();
             inventoryRepository.Setup(i => i.FindInventoryItemStatus(It.IsAny<FindInventoryItemStatusParam>()))
@@ -67,7 +68,7 @@ namespace Orckestra.Composer.Product.Tests.Services
         }
 
         [Test]
-        public async void WHEN_Passing_Valid_Parameter_SHOULD_Return_Valid_ViewModel()
+        public async Task WHEN_Passing_Valid_Parameter_SHOULD_Return_Valid_ViewModel()
         {
             var inventoryRepository = new Mock<IInventoryRepository>();
             inventoryRepository.Setup(i => i.FindInventoryItemStatus(It.IsAny<FindInventoryItemStatusParam>()))
@@ -123,8 +124,8 @@ namespace Orckestra.Composer.Product.Tests.Services
 
             var inventoryViewService = new InventoryViewService(inventoryRepository.Object, viewModelMapper.Object);
 
-            Assert.Throws<ArgumentNullException>(
-                async () => await inventoryViewService.FindInventoryItemStatus(new FindInventoryItemStatusParam
+            Assert.ThrowsAsync<ArgumentNullException>(
+                () => inventoryViewService.FindInventoryItemStatus(new FindInventoryItemStatusParam
             {
                 Scope = null,
                 CultureInfo = new CultureInfo("en-CA"),
@@ -133,7 +134,7 @@ namespace Orckestra.Composer.Product.Tests.Services
                 {
                     "SKU-BIDOU"
                 }
-            }).ConfigureAwait(false));
+            }));
         }
 
         [Test]
@@ -144,14 +145,14 @@ namespace Orckestra.Composer.Product.Tests.Services
 
             var inventoryViewService = new InventoryViewService(inventoryRepository.Object, viewModelMapper.Object);
 
-            Assert.Throws<ArgumentNullException>(
-                async () => await inventoryViewService.FindInventoryItemStatus(new FindInventoryItemStatusParam
+            Assert.ThrowsAsync<ArgumentNullException>(
+                () => inventoryViewService.FindInventoryItemStatus(new FindInventoryItemStatusParam
                 {
                     Scope = "Canada",
                     CultureInfo = new CultureInfo("en-CA"),
                     Date = new DateTime(2015, 8, 17),
                     Skus = null
-                }).ConfigureAwait(false));
+                }));
         }
 
         [Test]
@@ -162,14 +163,14 @@ namespace Orckestra.Composer.Product.Tests.Services
 
             var inventoryViewService = new InventoryViewService(inventoryRepository.Object, viewModelMapper.Object);
 
-            Assert.Throws<ArgumentException>(
-                async () => await inventoryViewService.FindInventoryItemStatus(new FindInventoryItemStatusParam
+            Assert.ThrowsAsync<ArgumentException>(
+                () => inventoryViewService.FindInventoryItemStatus(new FindInventoryItemStatusParam
                 {
                     Scope = "Canada",
                     CultureInfo = new CultureInfo("en-CA"),
                     Date = new DateTime(2015, 8, 17),
                     Skus = new List<string>()
-                }).ConfigureAwait(false));
+                }));
         }
 
         [Test]
@@ -180,8 +181,8 @@ namespace Orckestra.Composer.Product.Tests.Services
 
             var inventoryViewService = new InventoryViewService(inventoryRepository.Object, viewModelMapper.Object);
 
-            Assert.Throws<ArgumentException>(
-                async () => await inventoryViewService.FindInventoryItemStatus(new FindInventoryItemStatusParam
+            Assert.ThrowsAsync<ArgumentException>(
+                () => inventoryViewService.FindInventoryItemStatus(new FindInventoryItemStatusParam
                 {
                     Scope = "Canada",
                     CultureInfo = null,
@@ -190,7 +191,7 @@ namespace Orckestra.Composer.Product.Tests.Services
                     {
                         "SKU-BIDOU"
                     }
-                }).ConfigureAwait(false));
+                }));
         }
     }
 }
