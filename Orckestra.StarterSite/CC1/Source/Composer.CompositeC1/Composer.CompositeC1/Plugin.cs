@@ -4,6 +4,7 @@ using Orckestra.Composer.Cart.Providers.WishList;
 using Orckestra.Composer.CompositeC1.DataTypes.Facets;
 using Orckestra.Composer.CompositeC1.Providers;
 using Orckestra.Composer.CompositeC1.Services;
+using Orckestra.Composer.CompositeC1.Services.DataQuery;
 using Orckestra.Composer.HttpModules;
 using Orckestra.Composer.Mvc.Sample.Providers.UrlProvider;
 using Orckestra.Composer.Product.Providers;
@@ -65,6 +66,7 @@ namespace Orckestra.Composer.CompositeC1
             host.Register<PageNotFoundUrlProvider, IPageNotFoundUrlProvider>();
             host.Register<AntiCookieTamperingExcluder, IAntiCookieTamperingExcluder>();
             host.Register<C1PerformanceDataCollector, IPerformanceDataCollector>();
+            host.Register<DataQueryService, IDataQueryService>();
         }
     }
 }
