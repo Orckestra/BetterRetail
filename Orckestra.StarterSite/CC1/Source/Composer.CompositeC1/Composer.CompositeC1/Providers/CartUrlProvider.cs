@@ -19,8 +19,12 @@ namespace Orckestra.Composer.CompositeC1.Providers
         protected IPageService PageService { get; private set; }
         protected ICacheProvider CacheProvider { get; private set; }
         protected IWebsiteContext WebsiteContext { get; private set; }
+        protected ISiteConfiguration SiteConfiguration { get; private set; }
 
-        public CartUrlProvider(IPageService pageService, ICacheProvider cacheProvider, IWebsiteContext websiteContext)
+        public CartUrlProvider(IPageService pageService, 
+            ICacheProvider cacheProvider, 
+            IWebsiteContext websiteContext,
+            ISiteConfiguration siteConfiguration)
         {
             if (pageService == null) { throw new ArgumentNullException("pageService"); }
             if (cacheProvider == null) { throw new ArgumentNullException("cacheProvider"); }
@@ -28,6 +32,7 @@ namespace Orckestra.Composer.CompositeC1.Providers
             PageService = pageService;
             CacheProvider = cacheProvider;
             WebsiteContext = websiteContext;
+            SiteConfiguration = siteConfiguration;
           
         }
 

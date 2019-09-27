@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Composite.Core;
 using Composite.Core.Routing;
 using Composite.Data;
 using Composite.Data.Types;
@@ -12,6 +13,13 @@ namespace Orckestra.Composer.CompositeC1.Services
 {
     public class PageService : IPageService
     {
+
+        protected ISiteConfiguration SiteConfiguration { get; private set; }
+
+        public PageService()
+        {
+            
+        }
         /// <summary>
         /// Returns a page in the given locale.
         /// </summary>
@@ -73,7 +81,8 @@ namespace Orckestra.Composer.CompositeC1.Services
 
         public virtual List<string> GetCheckoutStepPages(Guid currentHomePageId, CultureInfo cultureInfo = null)
         {
-            var steps = SiteConfiguration.GetPagesConfiguration(cultureInfo, currentHomePageId).CheckoutSteps;
+            var siteConfiguration = ServiceLocator.GetService<ISiteConfiguration>();
+            var steps = siteConfiguration.GetPagesConfiguration(cultureInfo, currentHomePageId).CheckoutSteps;
             if (!string.IsNullOrWhiteSpace(steps))
             {
                 return steps.Split(new char[] { ',' }).ToList();
@@ -84,7 +93,8 @@ namespace Orckestra.Composer.CompositeC1.Services
 
         public virtual List<string> GetCheckoutNavigationPages(Guid currentHomePageId, CultureInfo cultureInfo = null)
         {
-            var nav = SiteConfiguration.GetPagesConfiguration(cultureInfo, currentHomePageId).CheckoutNavigation;
+            var siteConfiguration = ServiceLocator.GetService<ISiteConfiguration>();
+            var nav = siteConfiguration.GetPagesConfiguration(cultureInfo, currentHomePageId).CheckoutNavigation;
             if (!string.IsNullOrWhiteSpace(nav))
             {
                 return nav.Split(new char[] { ',' }).ToList();

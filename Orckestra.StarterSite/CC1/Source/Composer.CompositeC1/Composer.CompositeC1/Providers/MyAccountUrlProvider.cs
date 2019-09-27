@@ -11,13 +11,17 @@ namespace Orckestra.Composer.CompositeC1.Providers
     {
         protected IPageService PageService { get; private set; }
         protected IWebsiteContext WebsiteContext { get; private set; }
+        protected ISiteConfiguration SiteConfiguration { get; private set; }
 
-        public MyAccountUrlProvider(IPageService pageService, IWebsiteContext websiteContext)
+        public MyAccountUrlProvider(IPageService pageService,
+                IWebsiteContext websiteContext,
+                ISiteConfiguration siteConfiguration)
         {
             if (pageService == null) { throw new ArgumentNullException("pageService"); }
-            
+
             PageService = pageService;
             WebsiteContext = websiteContext;
+            SiteConfiguration = siteConfiguration;
         }
 
         /// <summary>

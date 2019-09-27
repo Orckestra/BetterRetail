@@ -36,12 +36,14 @@ namespace Orckestra.Composer.MyAccount.Api
         protected IMyAccountUrlProvider MyAccountUrlProvider { get; }
         protected IMembershipViewService MembershipViewService { get; }
         protected IComposerContext ComposerContext { get; }
+        protected ISiteConfiguration SiteConfiguration { get; }
         internal IFormsAuthenticationProxy FormsAuthentication { private get; set; }
 
         public MembershipController(
             IMyAccountUrlProvider myAccountUrlProvider,
             IMembershipViewService membershipViewService,
-            IComposerContext composerContext)
+            IComposerContext composerContext,
+            ISiteConfiguration siteConfiguration)
         {
             if (myAccountUrlProvider == null) { throw new ArgumentNullException(nameof(myAccountUrlProvider)); }
             if (membershipViewService == null) { throw new ArgumentNullException(nameof(membershipViewService)); }
@@ -50,6 +52,7 @@ namespace Orckestra.Composer.MyAccount.Api
             MyAccountUrlProvider = myAccountUrlProvider;
             MembershipViewService = membershipViewService;
             ComposerContext = composerContext;
+            SiteConfiguration = siteConfiguration;
 
             FormsAuthentication = new StaticFormsAuthenticationProxy();
 

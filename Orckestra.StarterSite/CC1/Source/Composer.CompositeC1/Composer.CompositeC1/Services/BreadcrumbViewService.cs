@@ -11,12 +11,15 @@ namespace Orckestra.Composer.CompositeC1.Services
     public class BreadcrumbViewService : IBreadcrumbViewService
     {
         protected IPageService _pageService;
+        protected ISiteConfiguration SiteConfiguration { get; private set; }
         protected PagesConfiguration PagesConfiguration { get; private set; }
 
-        public BreadcrumbViewService(IPageService pageService)
+
+        public BreadcrumbViewService(IPageService pageService, ISiteConfiguration siteConfiguration)
         {
             if (pageService == null) { throw new ArgumentNullException(nameof(pageService)); }
             _pageService = pageService;
+            SiteConfiguration = siteConfiguration;
             PagesConfiguration = SiteConfiguration.GetPagesConfiguration();
         }
 

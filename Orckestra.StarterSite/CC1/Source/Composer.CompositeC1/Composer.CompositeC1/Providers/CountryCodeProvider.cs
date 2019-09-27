@@ -9,11 +9,13 @@ namespace Orckestra.Composer.CompositeC1.Providers
     {
         private readonly Lazy<string> _lazyCountryCode;
         public IWebsiteContext WebsiteContext;
+        public ISiteConfiguration SiteConfiguration;
 
-        public CountryCodeProvider(IWebsiteContext websiteContext)
+        public CountryCodeProvider(IWebsiteContext websiteContext, ISiteConfiguration siteConfiguration)
         {
             _lazyCountryCode = new Lazy<string>(GetCountryCodeFromConfiguration, true);
             WebsiteContext = websiteContext;
+            SiteConfiguration = siteConfiguration;
         }
 
         private string GetCountryCodeFromConfiguration()

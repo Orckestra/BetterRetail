@@ -203,7 +203,7 @@ namespace Orckestra.Composer
 
         private static OvertureClientConfig GetClientConfig()
         {
-            var config = SiteConfiguration.OvertureSettings;
+            var config = OvertureConfiguration.Settings;
             var clientConfig = new OvertureClientConfig
             {
                 AuthToken = config.AuthToken,

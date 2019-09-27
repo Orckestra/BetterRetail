@@ -14,6 +14,7 @@ namespace Orckestra.Composer.CompositeC1.Providers
     public class ProductUrlProvider : IProductUrlProvider
     {
         protected IWebsiteContext WebsiteContext { get; private set; }
+        protected ISiteConfiguration SiteConfiguration { get; private set; }
         //{
         //    get { return ComposerHost.Current.Resolve<IWebsiteContext>(); }
         //}
@@ -22,10 +23,11 @@ namespace Orckestra.Composer.CompositeC1.Providers
         private const string UrlTemplate = "{0}/p-{1}/{2}";
         private const string UrlTemplateVariant = "{0}/p-{1}/{2}/{3}";
 
-        public ProductUrlProvider(IPageService pageService, IWebsiteContext websiteContext)
+        public ProductUrlProvider(IPageService pageService, IWebsiteContext websiteContext, ISiteConfiguration siteConfiguration)
         {
             PageService = pageService;//TODO: ?? throw new ArgumentNullException(nameof(pageService));
             WebsiteContext = websiteContext; //TODO: ?? throw new ArgumentNullException(nameof(websiteContext));
+            SiteConfiguration = siteConfiguration;
         }
 
         public virtual void RegisterRoutes(RouteCollection routeCollection)

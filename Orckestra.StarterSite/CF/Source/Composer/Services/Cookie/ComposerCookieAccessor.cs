@@ -1,13 +1,11 @@
-﻿using System;
-using System.Configuration;
-using System.Linq;
-using System.Web;
-using Autofac.Integration.Mvc;
+﻿using Autofac.Integration.Mvc;
 using Newtonsoft.Json;
-using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Logging;
 using Orckestra.Composer.Utils;
 using Orckestra.ExperienceManagement.Configuration;
+using System;
+using System.Linq;
+using System.Web;
 
 namespace Orckestra.Composer.Services.Cookie
 {
@@ -36,6 +34,7 @@ namespace Orckestra.Composer.Services.Cookie
         private readonly HttpRequestBase  _httpRequest;
         private readonly HttpResponseBase _httpResponse;
         private readonly IWebsiteContext _websiteContext;
+        private readonly ISiteConfiguration _siteConfiguration;
 
         //Configurations
         private readonly string           _cookieName;
@@ -69,11 +68,13 @@ namespace Orckestra.Composer.Services.Cookie
 
             _websiteContext =
                 (IWebsiteContext) AutofacDependencyResolver.Current.GetService(typeof(IWebsiteContext));
+            _siteConfiguration =
+               (ISiteConfiguration)AutofacDependencyResolver.Current.GetService(typeof(ISiteConfiguration));
 
-            _cookieName = SiteConfiguration.CookieAccesserSettings.Name + "_" + _websiteContext.WebsiteId;
-            _requireSsl       = SiteConfiguration.CookieAccesserSettings.RequireSsl;
-            _timeoutInMinutes = SiteConfiguration.CookieAccesserSettings.TimeoutInMinutes;
-            _cookieDomain     = SiteConfiguration.CookieAccesserSettings.Domain;
+            _cookieName = _siteConfiguration.CookieAccesserSettings.Name + "_" + _websiteContext.WebsiteId;
+            _requireSsl       = _siteConfiguration.CookieAccesserSettings.RequireSsl;
+            _timeoutInMinutes = _siteConfiguration.CookieAccesserSettings.TimeoutInMinutes;
+            _cookieDomain     = _siteConfiguration.CookieAccesserSettings.Domain;
 
             _jsonSettings = new JsonSerializerSettings
             {

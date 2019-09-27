@@ -19,10 +19,10 @@ namespace Orckestra.Composer.CompositeC1.Providers
         protected const string ResourceCategory = "Store";
         protected ILocalizationProvider LocalizationProvider { get; private set; }
         protected IPageService PageService { get; private set; }
-// protected IComposerContext ComposerContext { get; private set; }
         protected IWebsiteContext WebsiteContext { get; private set; }
+        protected ISiteConfiguration SiteConfiguration { get; private set; }
 
-        public StoreUrlProvider(ILocalizationProvider localizationProvider, IPageService pageService, IWebsiteContext wbsiteContext)
+        public StoreUrlProvider(ILocalizationProvider localizationProvider, IPageService pageService, IWebsiteContext wbsiteContext, ISiteConfiguration siteConfiguration)
         {
             if (localizationProvider == null) { throw new ArgumentNullException("localizationProvider"); }
             if (pageService == null) { throw new ArgumentNullException("pageService"); }
@@ -30,6 +30,7 @@ namespace Orckestra.Composer.CompositeC1.Providers
             LocalizationProvider = localizationProvider;
             PageService = pageService;
             WebsiteContext = wbsiteContext;
+            SiteConfiguration = siteConfiguration;
         }
 
         public void RegisterRoutes(RouteCollection routeCollection)
