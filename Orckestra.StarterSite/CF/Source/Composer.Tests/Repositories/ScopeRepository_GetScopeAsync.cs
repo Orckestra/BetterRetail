@@ -45,7 +45,7 @@ namespace Orckestra.Composer.Tests.Repositories
             var sut = _container.CreateInstance<ScopeRepository>();
 
             //Act & Assert
-            var ex = Assert.Throws<ArgumentNullException>(async () => await sut.GetScopeAsync(param));
+            var ex = Assert.ThrowsAsync<ArgumentNullException>(() => sut.GetScopeAsync(param));
 
             ex.ParamName.Should().NotBeNullOrWhiteSpace();
         }
@@ -65,7 +65,7 @@ namespace Orckestra.Composer.Tests.Repositories
             var sut = _container.CreateInstance<ScopeRepository>();
 
             //Act & Assert
-            var ex = Assert.Throws<ArgumentException>(async () => await sut.GetScopeAsync(param));
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => sut.GetScopeAsync(param));
 
             ex.ParamName.Should().Be(nameof(param.Scope));
             ex.Message.Should().NotBeNullOrWhiteSpace();
@@ -103,7 +103,7 @@ namespace Orckestra.Composer.Tests.Repositories
             var sut = _container.CreateInstance<ScopeRepository>();
 
             //Act & Assert
-            Assert.DoesNotThrow(async () => await sut.GetScopeAsync(param));
+            Assert.DoesNotThrowAsync(() => sut.GetScopeAsync(param));
         }
 
         [Test]

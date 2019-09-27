@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Globalization;
 using FizzWare.NBuilder.Generators;
 using Moq;
@@ -17,8 +18,7 @@ namespace Orckestra.Composer.Tests.Services
         {
             var productSettingsViewService = Container.CreateInstance<ProductSettingsViewService>();
 
-            Assert.Throws<ArgumentException>(async () =>
-                await productSettingsViewService.GetProductSettings(null, TestingExtensions.GetRandomCulture()));
+            Assert.ThrowsAsync<ArgumentException>(() => productSettingsViewService.GetProductSettings(null, TestingExtensions.GetRandomCulture()));
         }
 
         [Test]
@@ -26,12 +26,11 @@ namespace Orckestra.Composer.Tests.Services
         {
             var productSettingsViewService = Container.CreateInstance<ProductSettingsViewService>();
 
-            Assert.Throws<ArgumentNullException>(async () =>
-                await productSettingsViewService.GetProductSettings(GetRandom.String(32), null));
+            Assert.ThrowsAsync<ArgumentNullException>(() => productSettingsViewService.GetProductSettings(GetRandom.String(32), null));
         }
 
         [Test]
-        public async void When_Passing_Valid_Scope_Return_ProductSettingsViewModel()
+        public async Task When_Passing_Valid_Scope_Return_ProductSettingsViewModel()
         {
             var productSettingsViewService = Container.GetMock<IProductSettingsViewService>();
 

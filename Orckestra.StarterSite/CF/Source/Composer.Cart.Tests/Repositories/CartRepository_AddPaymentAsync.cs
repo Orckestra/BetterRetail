@@ -69,7 +69,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var sut = _container.CreateInstance<CartRepository>();
 
             //Act
-            var exception = Assert.Throws<ArgumentNullException>(async () => await sut.AddPaymentAsync(null));
+            var exception = Assert.ThrowsAsync<ArgumentNullException>(() => sut.AddPaymentAsync(null));
 
             //Assert
             exception.ParamName.Should().BeEquivalentTo("param");
@@ -92,7 +92,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             };
 
             //Act
-            var exception = Assert.Throws<ArgumentException>(async () => await sut.AddPaymentAsync(param));
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => sut.AddPaymentAsync(param));
 
             //Assert
             exception.ParamName.Should().BeEquivalentTo("param");
@@ -116,7 +116,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             };
 
             //Act
-            var exception = Assert.Throws<ArgumentException>(async () => await sut.AddPaymentAsync(param));
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => sut.AddPaymentAsync(param));
 
             //Assert
             exception.ParamName.Should().BeEquivalentTo("param");
@@ -138,7 +138,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             };
 
             //Act
-            var exception = Assert.Throws<ArgumentException>(async () => await sut.AddPaymentAsync(param));
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => sut.AddPaymentAsync(param));
 
             //Assert
             exception.ParamName.Should().BeEquivalentTo("param");
@@ -160,7 +160,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             };
 
             //Act
-            var exception = Assert.Throws<ArgumentException>(async () => await sut.AddPaymentAsync(param));
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => sut.AddPaymentAsync(param));
 
             //Assert
             exception.ParamName.Should().BeEquivalentTo("param");

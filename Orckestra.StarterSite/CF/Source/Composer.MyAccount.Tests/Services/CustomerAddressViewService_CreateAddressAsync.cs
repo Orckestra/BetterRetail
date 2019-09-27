@@ -67,7 +67,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             var customerAddressViewService = _container.CreateInstance<CustomerAddressViewService>();
 
             //Act
-            var ex = Assert.Throws<ArgumentNullException>(async () => await customerAddressViewService.CreateAddressAsync(null));
+            var ex = Assert.ThrowsAsync<ArgumentNullException>(() => customerAddressViewService.CreateAddressAsync(null));
 
             //Assert
             ex.Message.Should().ContainEquivalentOf("param");
@@ -89,7 +89,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             };
 
             //Act
-            var ex = Assert.Throws<ArgumentException>(async () => await customerAddressViewService.CreateAddressAsync(param));
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => customerAddressViewService.CreateAddressAsync(param));
 
             //Assert
             ex.Message.Should().ContainEquivalentOf("CultureInfo");
@@ -113,7 +113,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             };
 
             //Act
-            var ex = Assert.Throws<ArgumentException>(async () => await customerAddressViewService.CreateAddressAsync(param));
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => customerAddressViewService.CreateAddressAsync(param));
 
             //Assert
             ex.Message.Should().ContainEquivalentOf("scope");
@@ -133,7 +133,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             };
 
             //Act
-            var ex = Assert.Throws<ArgumentException>(async () => await customerAddressViewService.CreateAddressAsync(param));
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => customerAddressViewService.CreateAddressAsync(param));
 
             //Assert
             ex.Message.Should().ContainEquivalentOf("Customer");
@@ -153,7 +153,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             };
 
             //Act
-            var ex = Assert.Throws<ArgumentException>(async () => await customerAddressViewService.CreateAddressAsync(param));
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => customerAddressViewService.CreateAddressAsync(param));
 
             //Assert
             ex.Message.Should().ContainEquivalentOf("EditAddress");

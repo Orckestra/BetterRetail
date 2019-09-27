@@ -53,7 +53,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var sut = _container.CreateInstance<PaymentRepository>();
 
             //Act
-            var exception = Assert.Throws<ArgumentNullException>(async () => await sut.RemovePaymentAsync(null));
+            var exception = Assert.ThrowsAsync<ArgumentNullException>(() => sut.RemovePaymentAsync(null));
 
             //Assert
             exception.Should().NotBeNull();
@@ -80,7 +80,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var sut = _container.CreateInstance<PaymentRepository>();
 
             //Act
-            var exception = Assert.Throws<ArgumentException>(async () => await sut.RemovePaymentAsync(param));
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => sut.RemovePaymentAsync(param));
 
             //Assert
             exception.Should().NotBeNull();
@@ -108,7 +108,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var sut = _container.CreateInstance<PaymentRepository>();
 
             //Act
-            var exception = Assert.Throws<ArgumentException>(async () => await sut.RemovePaymentAsync(param));
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => sut.RemovePaymentAsync(param));
 
             //Assert
             exception.Should().NotBeNull();
@@ -132,7 +132,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var sut = _container.CreateInstance<PaymentRepository>();
 
             //Act
-            var exception = Assert.Throws<ArgumentException>(async () => await sut.RemovePaymentAsync(param));
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => sut.RemovePaymentAsync(param));
 
             //Assert
             exception.Should().NotBeNull();
@@ -156,7 +156,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var sut = _container.CreateInstance<PaymentRepository>();
 
             //Act
-            var exception = Assert.Throws<ArgumentException>(async () => await sut.RemovePaymentAsync(param));
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => sut.RemovePaymentAsync(param));
 
             //Assert
             exception.Should().NotBeNull();
@@ -180,7 +180,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var sut = _container.CreateInstance<PaymentRepository>();
 
             //Act
-            var exception = Assert.Throws<ArgumentException>(async () => await sut.RemovePaymentAsync(param));
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => sut.RemovePaymentAsync(param));
 
             //Assert
             exception.Should().NotBeNull();

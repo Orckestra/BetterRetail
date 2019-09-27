@@ -40,7 +40,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
             var sut = Container.CreateInstance<ShippingMethodViewService>();
 
             //Act
-            var exception = Assert.Throws<ArgumentNullException>(async () => await sut.EstimateShippingAsync(param));
+            var exception = Assert.ThrowsAsync<ArgumentNullException>(() => sut.EstimateShippingAsync(param));
 
             //Assert
             exception.ParamName.Should().BeEquivalentTo("param");
@@ -60,7 +60,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
             var sut = Container.CreateInstance<ShippingMethodViewService>();
 
             //Act
-            var exception = Assert.Throws<ArgumentException>(async () => await sut.EstimateShippingAsync(param));
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => sut.EstimateShippingAsync(param));
 
             //Assert
             exception.ParamName.Should().BeEquivalentTo("param");
@@ -81,7 +81,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
             var sut = Container.CreateInstance<ShippingMethodViewService>();
 
             //Act
-            var exception = Assert.Throws<ArgumentException>(async () => await sut.EstimateShippingAsync(param));
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => sut.EstimateShippingAsync(param));
 
             //Assert
             exception.ParamName.Should().BeEquivalentTo("param");

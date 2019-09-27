@@ -92,19 +92,18 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
         [TestCase(" \t\r\n")]
         public void WHEN_Scope_Is_NullOrWhitespace_SHOULD_Throw_ArgumentException(string scope)
         {
-            // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
+            var param = new GetCartParam
             {
-                await _repository.GetCartAsync(new GetCartParam
-                {
-                    Scope = scope,
-                    CultureInfo = TestingExtensions.GetRandomCulture(),
-                    CustomerId = GetRandom.Guid(),
-                    CartName = GetRandom.String(32),
-                    ExecuteWorkflow = GetRandom.Boolean(),
-                    WorkflowToExecute = GetRandom.String(32)
-                });
-            });
+                Scope = scope,
+                CultureInfo = TestingExtensions.GetRandomCulture(),
+                CustomerId = GetRandom.Guid(),
+                CartName = GetRandom.String(32),
+                ExecuteWorkflow = GetRandom.Boolean(),
+                WorkflowToExecute = GetRandom.String(32)
+            };
+
+            // Act
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => _repository.GetCartAsync(param));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");
@@ -114,19 +113,18 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
         [Test]
         public void WHEN_CultureInfo_Is_Null_SHOULD_Throw_ArgumentException()
         {
-            // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
+            var param = new GetCartParam
             {
-                await _repository.GetCartAsync(new GetCartParam
-                {
-                    Scope = GetRandom.String(32),
-                    CultureInfo = null,
-                    CustomerId = GetRandom.Guid(),
-                    CartName = GetRandom.String(32),
-                    ExecuteWorkflow = GetRandom.Boolean(),
-                    WorkflowToExecute = GetRandom.String(32)
-                });
-            });
+                Scope = GetRandom.String(32),
+                CultureInfo = null,
+                CustomerId = GetRandom.Guid(),
+                CartName = GetRandom.String(32),
+                ExecuteWorkflow = GetRandom.Boolean(),
+                WorkflowToExecute = GetRandom.String(32)
+            };
+
+            // Act
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => _repository.GetCartAsync(param));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");
@@ -136,19 +134,18 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
         [Test]
         public void WHEN_CustomerId_Is_Empty_SHOULD_Throw_ArgumentException()
         {
-            // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
+            var param = new GetCartParam
             {
-                await _repository.GetCartAsync(new GetCartParam
-                {
-                    Scope = GetRandom.String(32),
-                    CultureInfo = TestingExtensions.GetRandomCulture(),
-                    CustomerId = Guid.Empty,
-                    CartName = GetRandom.String(32),
-                    ExecuteWorkflow = GetRandom.Boolean(),
-                    WorkflowToExecute = GetRandom.String(32)
-                });
-            });
+                Scope = GetRandom.String(32),
+                CultureInfo = TestingExtensions.GetRandomCulture(),
+                CustomerId = Guid.Empty,
+                CartName = GetRandom.String(32),
+                ExecuteWorkflow = GetRandom.Boolean(),
+                WorkflowToExecute = GetRandom.String(32)
+            };
+
+            // Act
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => _repository.GetCartAsync(param));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");
@@ -161,19 +158,18 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
         [TestCase(" \t\r\n")]
         public void WHEN_CartName_Is_NullOrWhitespace_SHOULD_Throw_ArgumentException(string cartName)
         {
-            // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
+            var param = new GetCartParam
             {
-                await _repository.GetCartAsync(new GetCartParam
-                {
-                    Scope = GetRandom.String(32),
-                    CultureInfo = TestingExtensions.GetRandomCulture(),
-                    CustomerId = GetRandom.Guid(),
-                    CartName = cartName,
-                    ExecuteWorkflow = GetRandom.Boolean(),
-                    WorkflowToExecute = GetRandom.String(32)
-                });
-            });
+                Scope = GetRandom.String(32),
+                CultureInfo = TestingExtensions.GetRandomCulture(),
+                CustomerId = GetRandom.Guid(),
+                CartName = cartName,
+                ExecuteWorkflow = GetRandom.Boolean(),
+                WorkflowToExecute = GetRandom.String(32)
+            };
+
+            // Act
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => _repository.GetCartAsync(param));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");
@@ -220,10 +216,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
         public void WHEN_Passing_Null_Parameters_SHOULD_Throw_ArgumentNullException()
         {
             // Act
-            var exception = Assert.Throws<ArgumentNullException>(async () =>
-            {
-                await _repository.GetCartAsync(null);
-            });
+            var exception = Assert.ThrowsAsync<ArgumentNullException>(() => _repository.GetCartAsync(null));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");

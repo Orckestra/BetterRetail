@@ -132,7 +132,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Repositories
             var customerRepository = _container.CreateInstance<CustomerRepository>();
 
             //Act
-            var ex = Assert.Throws<ArgumentNullException>(async () => await customerRepository.GetCustomerByIdAsync(null));
+            var ex = Assert.ThrowsAsync<ArgumentNullException>(() => customerRepository.GetCustomerByIdAsync(null));
 
             //Assert
             ex.Message.Should().ContainEquivalentOf("getCustomerByIdParam");
@@ -146,7 +146,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Repositories
             var customerRepository = _container.CreateInstance<CustomerRepository>();
 
             //Act
-            var ex = Assert.Throws<ArgumentException>(async () => await customerRepository.GetCustomerByIdAsync(
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => customerRepository.GetCustomerByIdAsync(
                 new GetCustomerByIdParam
                 {
                     CultureInfo = cultureInfo,
@@ -167,7 +167,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Repositories
             var customerRepository = _container.CreateInstance<CustomerRepository>();
 
             //Act
-            var ex = Assert.Throws<ArgumentException>(async () => await customerRepository.GetCustomerByIdAsync(
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => customerRepository.GetCustomerByIdAsync(
                 new GetCustomerByIdParam
                 {
                     CultureInfo = TestingExtensions.GetRandomCulture(),
@@ -191,7 +191,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Repositories
             var customerRepository = _container.CreateInstance<CustomerRepository>();
 
             //Act
-            var ex = Assert.Throws<ArgumentException>(async () => await customerRepository.GetCustomerByIdAsync(
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => customerRepository.GetCustomerByIdAsync(
                 new GetCustomerByIdParam
                 {
                     CultureInfo = TestingExtensions.GetRandomCulture(),

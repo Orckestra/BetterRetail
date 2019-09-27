@@ -104,7 +104,7 @@ namespace Orckestra.Composer.Product.Tests.Providers
             var sut = Container.CreateInstance<ConfigurationInventoryLocationProvider>();
 
             //Act
-            var exception = Assert.Throws<ArgumentException>(async () => await sut.GetFulfillmentLocationAsync(p));
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => sut.GetFulfillmentLocationAsync(p));
 
             //Assert
             exception.Should().NotBeNull();

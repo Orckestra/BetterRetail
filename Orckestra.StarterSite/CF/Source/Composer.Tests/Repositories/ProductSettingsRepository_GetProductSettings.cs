@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using FizzWare.NBuilder.Generators;
 using Moq;
 using NUnit.Framework;
@@ -15,11 +16,11 @@ namespace Orckestra.Composer.Tests.Repositories
         {
             var productSettingsRepository = Container.CreateInstance<ProductSettingsRepository>();
 
-            Assert.Throws<ArgumentException>(async () => await productSettingsRepository.GetProductSettings(null));
+            Assert.ThrowsAsync<ArgumentException>(() => productSettingsRepository.GetProductSettings(null));
         }
 
         [Test]
-        public async void When_Passing_Valid_Scope_Return_ProductSettings()
+        public async Task When_Passing_Valid_Scope_Return_ProductSettings()
         {
             var productSettingsRepository = Container.GetMock<IProductSettingsRepository>();
 

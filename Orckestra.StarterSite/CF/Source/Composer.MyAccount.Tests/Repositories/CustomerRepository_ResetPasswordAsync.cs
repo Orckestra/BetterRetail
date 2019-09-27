@@ -82,7 +82,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Repositories
             var customerRepository = _container.CreateInstance<CustomerRepository>();
 
             //Act
-            var ex = Assert.Throws<ArgumentException>(async () => await customerRepository.ResetPasswordAsync(
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => customerRepository.ResetPasswordAsync(
                 username,
                 GetRandom.String(32),
                 GetRandom.String(32),
@@ -103,7 +103,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Repositories
             var customerRepository = _container.CreateInstance<CustomerRepository>();
 
             //Act
-            var ex = Assert.Throws<ArgumentException>(async () => await customerRepository.ResetPasswordAsync(
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => customerRepository.ResetPasswordAsync(
                 GetRandom.Email(),
                 GetRandom.String(70),
                 newPassword,
