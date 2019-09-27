@@ -77,10 +77,7 @@ namespace Orckestra.Composer.Product.Tests.Services
             var productSpecificationsViewService = _container.CreateInstance<ProductSpecificationsViewService>();
 
             // Assert
-            Assert.Throws<ArgumentNullException>(async () =>
-            {
-                await productSpecificationsViewService.GetProductSpecificationsViewModelAsync(null).ConfigureAwait(false);
-            });
+            Assert.ThrowsAsync<ArgumentNullException>(() => productSpecificationsViewService.GetProductSpecificationsViewModelAsync(null));
         }
 
         [Test]
@@ -90,14 +87,12 @@ namespace Orckestra.Composer.Product.Tests.Services
             var productSpecificationsViewService = _container.CreateInstance<ProductSpecificationsViewService>();
 
             // Assert
-            Assert.Throws<ArgumentException>(async () =>
-            {
-                await productSpecificationsViewService.GetProductSpecificationsViewModelAsync(new GetProductSpecificationsParam
+            Assert.ThrowsAsync<ArgumentException>(() => productSpecificationsViewService.GetProductSpecificationsViewModelAsync(
+                new GetProductSpecificationsParam
                 {
                     ProductId = null
-
-                }).ConfigureAwait(false);
-            });
+                }
+            ));
         }
 
         [Test]
@@ -107,14 +102,12 @@ namespace Orckestra.Composer.Product.Tests.Services
             var productSpecificationsViewService = _container.CreateInstance<ProductSpecificationsViewService>();
 
             // Assert
-            Assert.Throws<ArgumentException>(async () =>
-            {
-                await productSpecificationsViewService.GetProductSpecificationsViewModelAsync(new GetProductSpecificationsParam
+            Assert.ThrowsAsync<ArgumentException>(() => productSpecificationsViewService.GetProductSpecificationsViewModelAsync(
+                new GetProductSpecificationsParam
                 {
                     ProductId = string.Empty
-
-                }).ConfigureAwait(false);
-            });
+                }
+            ));
         }
 
         [Test]
@@ -133,15 +126,14 @@ namespace Orckestra.Composer.Product.Tests.Services
             var productSpecificationsViewService = _container.CreateInstance<ProductSpecificationsViewService>();
 
             // Assert
-            Assert.DoesNotThrow(async () =>
-            {
-                await productSpecificationsViewService.GetProductSpecificationsViewModelAsync(new GetProductSpecificationsParam
+            Assert.DoesNotThrowAsync(() => productSpecificationsViewService.GetProductSpecificationsViewModelAsync(
+                new GetProductSpecificationsParam
                 {
                     ProductId = ProductId,
                     VariantId = null
 
-                }).ConfigureAwait(false);
-            });
+                }
+            ));
         }
 
         [Test]
@@ -160,15 +152,13 @@ namespace Orckestra.Composer.Product.Tests.Services
             var productSpecificationsViewService = _container.CreateInstance<ProductSpecificationsViewService>();
 
             // Assert
-            Assert.DoesNotThrow(async () =>
-            {
-                await productSpecificationsViewService.GetProductSpecificationsViewModelAsync(new GetProductSpecificationsParam
+            Assert.DoesNotThrowAsync(() => productSpecificationsViewService.GetProductSpecificationsViewModelAsync(
+                new GetProductSpecificationsParam
                 {
                     ProductId = ProductId,
                     VariantId = string.Empty
-
-                }).ConfigureAwait(false);
-            });
+                }
+            ));
         }
 
         [Test]
@@ -180,14 +170,12 @@ namespace Orckestra.Composer.Product.Tests.Services
             var productSpecificationsViewService = _container.CreateInstance<ProductSpecificationsViewService>();
 
             // Assert
-            Assert.Throws<ProductSpecificationsNotFoundException>(async () =>
-            {
-                await productSpecificationsViewService.GetProductSpecificationsViewModelAsync(new GetProductSpecificationsParam
+            Assert.ThrowsAsync<ProductSpecificationsNotFoundException>(() => productSpecificationsViewService.GetProductSpecificationsViewModelAsync(
+                new GetProductSpecificationsParam
                 {
                     ProductId = "invalid"
-
-                }).ConfigureAwait(false);
-            });
+                }
+            ));
         }
 
         [Test]

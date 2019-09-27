@@ -69,9 +69,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
             _container.Use(CountryServiceMock.Create(CanadianPostalCodeRegex));
 
             var service = _container.CreateInstance<CartService>();
-
-            // Act and Assert
-            Assert.Throws<InvalidOperationException>(async () => await service.UpdateBillingAddressPostalCodeAsync(new UpdateBillingAddressPostalCodeParam
+            var param = new UpdateBillingAddressPostalCodeParam
             {
                 CultureInfo = TestingExtensions.GetRandomCulture(),
                 CustomerId = Guid.NewGuid(),
@@ -80,7 +78,10 @@ namespace Orckestra.Composer.Cart.Tests.Services
                 Scope = GetRandom.String(32),
                 PostalCode = "any",
                 CountryCode = GetRandom.String(1)
-            }));
+            };
+
+            // Act and Assert
+            Assert.ThrowsAsync<InvalidOperationException>(() => service.UpdateBillingAddressPostalCodeAsync(param));
         }
 
         [Test]

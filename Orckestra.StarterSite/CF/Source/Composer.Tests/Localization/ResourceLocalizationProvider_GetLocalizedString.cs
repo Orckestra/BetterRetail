@@ -325,7 +325,7 @@ namespace Orckestra.Composer.Tests.Localization
 
         [Test]
         [Timeout(10000)]
-        public async void WHEN_Using_AsyncToSync_SHOULD_Not_Deadlock()
+        public async Task WHEN_Using_AsyncToSync_SHOULD_Not_Deadlock()
         {
             //Start an async call in a nested context.. anything really that's the one that would endup beeing deadlocked
             await Task.Delay(1);

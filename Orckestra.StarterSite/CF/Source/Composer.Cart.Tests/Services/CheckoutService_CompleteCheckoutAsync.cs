@@ -81,7 +81,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
         }
 
         [Test]
-        public async void WHEN_Passing_Valid_Parameters_SHOULD_Succeed()
+        public async Task WHEN_Passing_Valid_Parameters_SHOULD_Succeed()
         {
             var service = _container.CreateInstance<CheckoutService>();
 
@@ -104,10 +104,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
             var service = _container.CreateInstance<CheckoutService>();
 
             // Act
-            var exception = Assert.Throws<ArgumentNullException>(async () =>
-            {
-                await service.CompleteCheckoutAsync(null);
-            });
+            var exception = Assert.ThrowsAsync<ArgumentNullException>(() => service.CompleteCheckoutAsync(null));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");
@@ -121,18 +118,16 @@ namespace Orckestra.Composer.Cart.Tests.Services
         public void WHEN_Scope_Is_NullOrWhitespace_SHOULD_Throw_ArgumentException(string scope)
         {
             var service = _container.CreateInstance<CheckoutService>();
+            var param = new CompleteCheckoutParam
+            {
+                Scope = scope,
+                CultureInfo = TestingExtensions.GetRandomCulture(),
+                CustomerId = GetRandom.Guid(),
+                CartName = GetRandom.String(32),
+            };
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await service.CompleteCheckoutAsync(new CompleteCheckoutParam
-                {
-                    Scope = scope,
-                    CultureInfo = TestingExtensions.GetRandomCulture(),
-                    CustomerId = GetRandom.Guid(),
-                    CartName = GetRandom.String(32),
-                });
-            });
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => service.CompleteCheckoutAsync(param));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");
@@ -143,18 +138,16 @@ namespace Orckestra.Composer.Cart.Tests.Services
         public void WHEN_CultureInfo_Is_Null_SHOULD_Throw_ArgumentException()
         {
             var service = _container.CreateInstance<CheckoutService>();
+            var param = new CompleteCheckoutParam
+            {
+                Scope = GetRandom.String(10),
+                CultureInfo = null,
+                CustomerId = GetRandom.Guid(),
+                CartName = GetRandom.String(32),
+            };
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await service.CompleteCheckoutAsync(new CompleteCheckoutParam
-                {
-                    Scope = GetRandom.String(10),
-                    CultureInfo = null,
-                    CustomerId = GetRandom.Guid(),
-                    CartName = GetRandom.String(32),
-                });
-            });
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => service.CompleteCheckoutAsync(param));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");
@@ -165,18 +158,16 @@ namespace Orckestra.Composer.Cart.Tests.Services
         public void WHEN_CustomerId_Is_GuidEmpty_SHOULD_Throw_ArgumentException()
         {
             var service = _container.CreateInstance<CheckoutService>();
+            var param = new CompleteCheckoutParam
+            {
+                Scope = GetRandom.String(10),
+                CultureInfo = TestingExtensions.GetRandomCulture(),
+                CustomerId = Guid.Empty,
+                CartName = GetRandom.String(32),
+            };
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await service.CompleteCheckoutAsync(new CompleteCheckoutParam
-                {
-                    Scope = GetRandom.String(10),
-                    CultureInfo = TestingExtensions.GetRandomCulture(),
-                    CustomerId = Guid.Empty,
-                    CartName = GetRandom.String(32),
-                });
-            });
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => service.CompleteCheckoutAsync(param));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");
@@ -190,18 +181,16 @@ namespace Orckestra.Composer.Cart.Tests.Services
         public void WHEN_CartName_Is_NullOrWhitespace_SHOULD_Throw_ArgumentException(string cartName)
         {
             var service = _container.CreateInstance<CheckoutService>();
+            var param = new CompleteCheckoutParam
+            {
+                Scope = GetRandom.String(10),
+                CultureInfo = TestingExtensions.GetRandomCulture(),
+                CustomerId = Guid.Empty,
+                CartName = cartName,
+            };
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await service.CompleteCheckoutAsync(new CompleteCheckoutParam
-                {
-                    Scope = GetRandom.String(10),
-                    CultureInfo = TestingExtensions.GetRandomCulture(),
-                    CustomerId = Guid.Empty,
-                    CartName = cartName,
-                });
-            });
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => service.CompleteCheckoutAsync(param));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");

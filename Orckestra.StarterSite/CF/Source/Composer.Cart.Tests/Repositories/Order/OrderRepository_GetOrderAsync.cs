@@ -8,6 +8,7 @@ using Orckestra.Composer.Cart.Parameters.Order;
 using Orckestra.Composer.Cart.Repositories.Order;
 using Orckestra.Overture;
 using Orckestra.Overture.ServiceModel.Requests.Orders;
+using System.Threading.Tasks;
 
 namespace Orckestra.Composer.Cart.Tests.Repositories.Order
 {
@@ -23,7 +24,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories.Order
         }
 
         [Test]
-        public async void WHEN_valid_request_SHOULD_succeed()
+        public async Task WHEN_valid_request_SHOULD_succeed()
         {
             //Arrange
             var order = new Overture.ServiceModel.Orders.Order

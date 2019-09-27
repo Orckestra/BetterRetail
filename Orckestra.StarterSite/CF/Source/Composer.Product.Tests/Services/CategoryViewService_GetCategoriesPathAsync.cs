@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Threading.Tasks;
 using FizzWare.NBuilder.Generators;
 using FluentAssertions;
 using Moq;
@@ -14,6 +13,7 @@ using Orckestra.Composer.Repositories;
 using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel;
 using Orckestra.Overture.ServiceModel.Products;
+using System.Threading.Tasks;
 
 namespace Orckestra.Composer.Product.Tests.Services
 {
@@ -37,8 +37,7 @@ namespace Orckestra.Composer.Product.Tests.Services
             var categoryService = _container.CreateInstance<CategoryViewService>();
 
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentNullException>(
-                 () => categoryService.GetCategoriesPathAsync(null));
+            Assert.ThrowsAsync<ArgumentNullException>(() => categoryService.GetCategoriesPathAsync(null));
         }
 
         [Test]
@@ -48,8 +47,7 @@ namespace Orckestra.Composer.Product.Tests.Services
             var categoryService = _container.CreateInstance<CategoryViewService>();
 
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentNullException>(
-                () => categoryService.GetCategoriesPathAsync(new GetCategoriesPathParam { Scope = "Quebec", CultureInfo = null, CategoryId = "A" }));
+            Assert.ThrowsAsync<ArgumentNullException>(() => categoryService.GetCategoriesPathAsync(new GetCategoriesPathParam { Scope = "Quebec", CultureInfo = null, CategoryId = "A" }));
         }
 
         [Test]

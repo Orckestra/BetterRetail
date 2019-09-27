@@ -101,18 +101,16 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             _container.Use(overtureClient);
 
             var repository = _container.CreateInstance<FulfillmentMethodRepository>();
+            var param = new GetShippingMethodsParam
+            {
+                CartName = null,
+                CultureInfo = TestingExtensions.GetRandomCulture(),
+                CustomerId = GetRandom.Guid(),
+                Scope = GetRandom.String(32),
+            };
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await repository.GetCalculatedFulfillmentMethods(new GetShippingMethodsParam
-                {
-                    CartName = null,
-                    CultureInfo = TestingExtensions.GetRandomCulture(),
-                    CustomerId = GetRandom.Guid(),
-                    Scope = GetRandom.String(32),
-                });
-            });
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => repository.GetCalculatedFulfillmentMethods(param));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");
@@ -134,18 +132,16 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             _container.Use(overtureClient);
 
             var repository = _container.CreateInstance<FulfillmentMethodRepository>();
+            var param = new GetShippingMethodsParam
+            {
+                CartName = GetRandom.String(32),
+                CultureInfo = null,
+                CustomerId = GetRandom.Guid(),
+                Scope = GetRandom.String(32),
+            };
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await repository.GetCalculatedFulfillmentMethods(new GetShippingMethodsParam
-                {
-                    CartName = GetRandom.String(32),
-                    CultureInfo = null,
-                    CustomerId = GetRandom.Guid(),
-                    Scope = GetRandom.String(32),
-                });
-            });
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => repository.GetCalculatedFulfillmentMethods(param));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");
@@ -167,18 +163,16 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             _container.Use(overtureClient);
 
             var repository = _container.CreateInstance<FulfillmentMethodRepository>();
+            var param = new GetShippingMethodsParam
+            {
+                CartName = GetRandom.String(32),
+                CultureInfo = TestingExtensions.GetRandomCulture(),
+                CustomerId = new Guid(),
+                Scope = GetRandom.String(32),
+            };
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await repository.GetCalculatedFulfillmentMethods(new GetShippingMethodsParam
-                {
-                    CartName = GetRandom.String(32),
-                    CultureInfo = TestingExtensions.GetRandomCulture(),
-                    CustomerId = new Guid(),
-                    Scope = GetRandom.String(32),
-                });
-            });
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => repository.GetCalculatedFulfillmentMethods(param));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");
@@ -200,18 +194,16 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             _container.Use(overtureClient);
 
             var repository = _container.CreateInstance<FulfillmentMethodRepository>();
+            var param = new GetShippingMethodsParam
+            {
+                CartName = GetRandom.String(32),
+                CultureInfo = TestingExtensions.GetRandomCulture(),
+                CustomerId = GetRandom.Guid(),
+                Scope = null,
+            };
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await repository.GetCalculatedFulfillmentMethods(new GetShippingMethodsParam
-                {
-                    CartName = GetRandom.String(32),
-                    CultureInfo = TestingExtensions.GetRandomCulture(),
-                    CustomerId = GetRandom.Guid(),
-                    Scope = null,
-                });
-            });
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => repository.GetCalculatedFulfillmentMethods(param));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");

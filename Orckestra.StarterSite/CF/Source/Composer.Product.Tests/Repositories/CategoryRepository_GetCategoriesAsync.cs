@@ -70,7 +70,7 @@ namespace Orckestra.Composer.Product.Tests.Repositories
         }
 
         [Test]
-        public async void WHEN_Passing_Valid_Parameters_SHOULD_Succeed()
+        public async Task WHEN_Passing_Valid_Parameters_SHOULD_Succeed()
         {
             // Arrange
             var overtureClientMock = OvertureClientFactory.CreateForGetCategoriesRequest();
@@ -97,10 +97,7 @@ namespace Orckestra.Composer.Product.Tests.Repositories
             var repository = _container.CreateInstance<CategoryRepository>();
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(async () =>
-            {
-                await repository.GetCategoriesAsync(new GetCategoriesParam { Scope = scope });
-            });
+            Assert.ThrowsAsync<ArgumentException>(() => repository.GetCategoriesAsync(new GetCategoriesParam { Scope = scope }));
         }
     }
 }

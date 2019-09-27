@@ -46,8 +46,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Repositories
                 });
 
             //Act and Assert
-            Assert.DoesNotThrow(async () => 
-                await customerRepository.ResetPasswordAsync(expectedUsername, expectedScope, expectedPassword, expectedPasswordAnswer));
+            Assert.DoesNotThrowAsync(() => customerRepository.ResetPasswordAsync(expectedUsername, expectedScope, expectedPassword, expectedPasswordAnswer));
         }
 
         [Test]
@@ -64,7 +63,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Repositories
                 });
 
             //Act
-            Assert.Throws<ComposerException>(async () => await customerRepository.ResetPasswordAsync(
+            Assert.ThrowsAsync<ComposerException>(() => customerRepository.ResetPasswordAsync(
                 GetRandom.Email(),
                 GetRandom.String(32),
                 GetRandom.String(32),
@@ -139,14 +138,13 @@ namespace Orckestra.Composer.MyAccount.Tests.Repositories
                 });
 
             //Act and Assert
-            Assert.DoesNotThrow(async () =>
-            {
-                await customerRepository.ResetPasswordAsync(
+            Assert.DoesNotThrowAsync(() =>
+                 customerRepository.ResetPasswordAsync(
                     expectedUsername,
                     expectedScopeId,
                     expectedPassword,
-                    passwordAnswer);
-            });
+                    passwordAnswer)
+            );
         }
     }
 }

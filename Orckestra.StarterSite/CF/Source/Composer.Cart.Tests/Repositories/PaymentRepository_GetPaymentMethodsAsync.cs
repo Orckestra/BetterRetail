@@ -98,10 +98,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var repository = _container.CreateInstance<PaymentRepository>();
 
             // Act and Assert
-            Assert.Throws<ArgumentNullException>(async () =>
-            {
-                await repository.GetPaymentMethodsAsync(null);
-            });
+            Assert.ThrowsAsync<ArgumentNullException>(() => repository.GetPaymentMethodsAsync(null));
         }
 
         
@@ -114,18 +111,16 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             MockFindCartPaymentMethodsRequest(paymentMethods);
 
             var repository = _container.CreateInstance<PaymentRepository>();
+            var param = new GetPaymentMethodsParam
+            {
+                CartName = null,
+                CultureInfo = TestingExtensions.GetRandomCulture(),
+                ProviderNames = new List<string> { GetRandom.String(7), GetRandom.String(7) },
+                Scope = GetRandom.String(32),
+            };
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await repository.GetPaymentMethodsAsync(new GetPaymentMethodsParam
-                {
-                    CartName = null,
-                    CultureInfo = TestingExtensions.GetRandomCulture(),
-                    ProviderNames = new List<string> { GetRandom.String(7), GetRandom.String(7) },
-                    Scope = GetRandom.String(32),
-                });
-            });
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => repository.GetPaymentMethodsAsync(param));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");
@@ -140,18 +135,16 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             MockFindCartPaymentMethodsRequest(paymentMethods);
 
             var repository = _container.CreateInstance<PaymentRepository>();
+            var param = new GetPaymentMethodsParam
+            {
+                CartName = GetRandom.String(32),
+                CultureInfo = TestingExtensions.GetRandomCulture(),
+                ProviderNames = null,
+                Scope = GetRandom.String(32),
+            };
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await repository.GetPaymentMethodsAsync(new GetPaymentMethodsParam
-                {
-                    CartName = GetRandom.String(32),
-                    CultureInfo = TestingExtensions.GetRandomCulture(),
-                    ProviderNames = null,
-                    Scope = GetRandom.String(32),
-                });
-            });
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => repository.GetPaymentMethodsAsync(param));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");
@@ -166,18 +159,16 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             MockFindCartPaymentMethodsRequest(paymentMethods);
 
             var repository = _container.CreateInstance<PaymentRepository>();
+            var param = new GetPaymentMethodsParam
+            {
+                CartName = GetRandom.String(32),
+                CultureInfo = TestingExtensions.GetRandomCulture(),
+                ProviderNames = new List<string> { GetRandom.String(7), GetRandom.String(7) },
+                Scope = null,
+            };
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await repository.GetPaymentMethodsAsync(new GetPaymentMethodsParam
-                {
-                    CartName = GetRandom.String(32),
-                    CultureInfo = TestingExtensions.GetRandomCulture(),
-                    ProviderNames = new List<string> { GetRandom.String(7), GetRandom.String(7) },
-                    Scope = null,
-                });
-            });
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => repository.GetPaymentMethodsAsync(param));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");

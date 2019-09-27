@@ -23,7 +23,7 @@ namespace Orckestra.Composer.Tests.Localization
         [TestCase("CategoryCustomOnly")]
         [TestCase("CategoryCultureOnly")]
         [TestCase("CategoryNeutralOnly")]
-        public async void WHEN_Passing_Any_Culture_SHOULD_Contain_All_Categories(string expectedCategory)
+        public async Task WHEN_Passing_Any_Culture_SHOULD_Contain_All_Categories(string expectedCategory)
         {
             //Arrange
             var localizationProvider = LocalizationProviderFactory.CreateFromTestAssets();
@@ -43,7 +43,7 @@ namespace Orckestra.Composer.Tests.Localization
         [TestCase("ResxLocalizationTest", "String1")]
         [TestCase("CategoryNeutralOnly",  "KeyNeutralOnly")]
         [TestCase("CategoryCustomOnly",   "KeyCustomOnly")]
-        public async void WHEN_Passing_Any_Culture_SHOULD_Contain_All_Keys_From_Neutral_Source(string expectedCategory, string expectedKey)
+        public async Task WHEN_Passing_Any_Culture_SHOULD_Contain_All_Keys_From_Neutral_Source(string expectedCategory, string expectedKey)
         {
             //Arrange
             var localizationProvider = LocalizationProviderFactory.CreateFromTestAssets();
@@ -85,7 +85,7 @@ namespace Orckestra.Composer.Tests.Localization
         [TestCase("fr-FR", "ResxLocalizationTest", "PageTitle", "Generic French Page Title")]
         [TestCase("es-MX", "ResxLocalizationTest", "PageTitle", "Neutral Page Title")]
         [TestCase("es-MX", "CategoryCustomOnly",   "KeyCustomOnly", "Some Cool Project with some Cool Localization, just to add some cool categories")]
-        public async void WHEN_Passing_A_Given_Culture_SHOULD_Contain_The_Most_Relevant_Value_For_Each_Keys(string cultureName, string category, string key, string expectedValue)
+        public async Task WHEN_Passing_A_Given_Culture_SHOULD_Contain_The_Most_Relevant_Value_For_Each_Keys(string cultureName, string category, string key, string expectedValue)
         {
             //Arrange
             var localizationProvider = LocalizationProviderFactory.CreateFromTestAssets();
@@ -119,7 +119,7 @@ namespace Orckestra.Composer.Tests.Localization
         }
 
         [Test]
-        public async void WHEN_Passing_Any_Culture_Resulting_LocalizationCategories_SHOULD_Not_Be_Null()
+        public async Task WHEN_Passing_Any_Culture_Resulting_LocalizationCategories_SHOULD_Not_Be_Null()
         {
             //Arrange
             var localizationProvider = LocalizationProviderFactory.CreateFromTestAssets();
@@ -133,7 +133,7 @@ namespace Orckestra.Composer.Tests.Localization
         }
 
         [Test]
-        public async void WHEN_Passing_Any_Culture_Resulting_TreeStructure_SHOULD_Not_Be_Null()
+        public async Task WHEN_Passing_Any_Culture_Resulting_TreeStructure_SHOULD_Not_Be_Null()
         {
             //Arrange
             var localizationProvider = LocalizationProviderFactory.CreateFromTestAssets();
@@ -153,7 +153,7 @@ namespace Orckestra.Composer.Tests.Localization
         }
 
         [Test]
-        public async void WHEN_Passing_Any_Culture_Resulting_TreeStructure_SHOULD_Be_Cached_ByCulture()
+        public async Task WHEN_Passing_Any_Culture_Resulting_TreeStructure_SHOULD_Be_Cached_ByCulture()
         {
             //Arrange
             CacheProviderFactory.CacheHistMonitor monitor = new CacheProviderFactory.CacheHistMonitor();

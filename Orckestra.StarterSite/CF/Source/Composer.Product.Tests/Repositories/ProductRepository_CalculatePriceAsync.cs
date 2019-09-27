@@ -35,10 +35,7 @@ namespace Orckestra.Composer.Product.Tests.Repositories
             var productRepository = container.CreateInstance<ProductRepository>();
 
             //Act & Assert
-            Assert.Throws<ArgumentNullException>(async () =>
-            {
-                await productRepository.CalculatePricesAsync(productIds, scope);
-            });
+            Assert.ThrowsAsync<ArgumentNullException>(() => productRepository.CalculatePricesAsync(productIds, scope));
         }
     }
 }

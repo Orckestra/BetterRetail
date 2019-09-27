@@ -27,7 +27,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
         }
 
         [Test]
-        public async void WHEN_valid_request_SHOULD_succeed()
+        public async Task WHEN_valid_request_SHOULD_succeed()
         {
             //Arrange
             var expectedEmail = GetRandom.Email();
@@ -50,7 +50,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
         }
 
         [Test]
-        public async void WHEN_bad_request_SHOULD_succeed()
+        public async Task WHEN_bad_request_SHOULD_succeed()
         {
             //Arrange
             var expectedEmail = GetRandom.Email();

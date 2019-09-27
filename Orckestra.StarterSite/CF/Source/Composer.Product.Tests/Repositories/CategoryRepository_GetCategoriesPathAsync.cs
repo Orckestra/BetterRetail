@@ -73,7 +73,7 @@ namespace Orckestra.Composer.Product.Tests.Repositories
         }
 
         [Test]
-        public async void WHEN_Passing_Valid_Parameters_SHOULD_Succeed()
+        public async Task WHEN_Passing_Valid_Parameters_SHOULD_Succeed()
         {
             // Act
             var result = await _repository.GetCategoriesPathAsync(new GetCategoriesPathParam { Scope = GetRandom.String(10), CultureInfo = _cultureInfo, CategoryId = "B" });
@@ -104,27 +104,22 @@ namespace Orckestra.Composer.Product.Tests.Repositories
             _repository = _container.CreateInstance<CategoryRepository>();
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(async () =>
-            {
-                await _repository.GetCategoriesPathAsync(new GetCategoriesPathParam { Scope = scope, CultureInfo = _cultureInfo, CategoryId = categoryId });
-            });
+            Assert.ThrowsAsync<ArgumentException>(() => _repository.GetCategoriesPathAsync(new GetCategoriesPathParam { Scope = scope, CultureInfo = _cultureInfo, CategoryId = categoryId }));
         }
 
         [Test]
         public void WHEN_CategoryId_Is_Invalid_SHOULD_Throw_ArgumentException()
         {
             _repository = _container.CreateInstance<CategoryRepository>();
+            var param = new GetCategoriesPathParam
+            {
+                Scope = GetRandom.String(10),
+                CultureInfo = _cultureInfo,
+                CategoryId = "Z"
+            };
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await _repository.GetCategoriesPathAsync(new GetCategoriesPathParam
-                {
-                    Scope = GetRandom.String(10),
-                    CultureInfo = _cultureInfo,
-                    CategoryId = "Z"
-                });
-            });
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => _repository.GetCategoriesPathAsync(param));
 
             // Assert
             exception.ParamName.Should().Be("categoryId");

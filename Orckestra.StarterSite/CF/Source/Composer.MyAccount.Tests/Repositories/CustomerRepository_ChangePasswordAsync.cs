@@ -45,8 +45,8 @@ namespace Orckestra.Composer.MyAccount.Tests.Repositories
                 });
 
             //Act and Assert
-            Assert.DoesNotThrow(async () =>
-                await customerRepository.ChangePasswordAsync(expectedUsername,
+            Assert.DoesNotThrowAsync(() =>
+                customerRepository.ChangePasswordAsync(expectedUsername,
                 expectedScope,
                 expectedOldPassword, 
                 expectedNewPassword));
@@ -73,8 +73,8 @@ namespace Orckestra.Composer.MyAccount.Tests.Repositories
                 });
 
             //Act and Assert
-            Assert.Throws<ComposerException>(async () =>
-                await customerRepository.ChangePasswordAsync(expectedUsername,
+            Assert.ThrowsAsync<ComposerException>(() => 
+                customerRepository.ChangePasswordAsync(expectedUsername,
                 expectedScope,
                 expectedOldPassword, 
                 expectedNewPassword));
