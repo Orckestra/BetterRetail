@@ -118,10 +118,7 @@ namespace Orckestra.Composer.Search.Tests.Service
             SearchViewService service = _container.CreateInstance<SearchViewService>();
 
             // Act & Assert
-            Assert.Throws<ArgumentNullException>(async () =>
-            {
-                await service.GetSearchViewModelAsync(null);
-            });
+            Assert.ThrowsAsync<ArgumentNullException>(() => service.GetSearchViewModelAsync(null));
         }
 
         [Test]
@@ -167,15 +164,14 @@ namespace Orckestra.Composer.Search.Tests.Service
             SearchViewService service = _container.CreateInstance<SearchViewService>();
 
             // Act & Assert
-            Assert.Throws<ArgumentNullException>(async () =>
-            {
-                await service.GetSearchViewModelAsync(new SearchCriteria
+            Assert.ThrowsAsync<ArgumentNullException>(() => service.GetSearchViewModelAsync(
+                new SearchCriteria
                 {
                     Keywords = "any",
                     CultureInfo = null,
                     Scope = "global"
-                });
-            });
+                }
+            ));
         }
 
         [Test]
@@ -185,15 +181,14 @@ namespace Orckestra.Composer.Search.Tests.Service
             SearchViewService service = _container.CreateInstance<SearchViewService>();
 
             // Act & Assert
-            Assert.Throws<ArgumentNullException>(async () =>
-            {
-                await service.GetSearchViewModelAsync(new SearchCriteria
+            Assert.ThrowsAsync<ArgumentNullException>(() => service.GetSearchViewModelAsync(
+                new SearchCriteria
                 {
                     Keywords = "any",
                     CultureInfo = new CultureInfo(CultureName),
                     Scope = null
-                });
-            });
+                }
+            ));
         }
 
         [Test]
@@ -203,15 +198,14 @@ namespace Orckestra.Composer.Search.Tests.Service
             SearchViewService service = _container.CreateInstance<SearchViewService>();
 
             // Act & Assert
-            Assert.Throws<ArgumentNullException>(async () =>
-            {
-                await service.GetSearchViewModelAsync(new SearchCriteria
+            Assert.ThrowsAsync<ArgumentNullException>(() => service.GetSearchViewModelAsync(
+                new SearchCriteria
                 {
                     Keywords = "any",
                     CultureInfo = new CultureInfo(CultureName),
                     Scope = string.Empty
-                });
-            });
+                }
+            ));
         }
 
         [Test]
