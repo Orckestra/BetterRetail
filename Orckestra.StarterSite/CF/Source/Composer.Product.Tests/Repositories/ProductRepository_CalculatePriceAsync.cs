@@ -21,13 +21,13 @@ namespace Orckestra.Composer.Product.Tests.Repositories
             _englishCultureInfo = CultureInfo.CreateSpecificCulture("en-US");
         }
 
-        private object[] GetProductParams()
+        private static object[] GetProductParams()
         {
             return new object[] { new object[] { ProductsList, null } };
         }
 
         [TestCase(null, "scope")]
-        [Test, TestCaseSource("GetProductParams")]
+        [Test, TestCaseSource(nameof(GetProductParams))]
         public void When_Any_Argument_Null_Or_Whitespace_SHOULD_Throw_Null_Argument_Exception(List<string> productIds, string scope )
         {
             //Arrange
