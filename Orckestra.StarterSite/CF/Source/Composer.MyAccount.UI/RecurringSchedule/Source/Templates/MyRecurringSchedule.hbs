@@ -1,9 +1,7 @@
-<div data-templateid="MyRecurringSchedule" class="panel  panel-default">
-    <div class="panel-body">
-        {{#if_eq TotalQuantity 0}}
-	        {{{EmptyContent}}}
-	   {{else}}
-			{{>RecurringOrderTemplates}}
-	   {{/if_eq}}        
-   </div>   
+<div data-templateid="MyRecurringSchedule" >
+	{{#if_eq TotalQuantity 0}}
+		<span class="text-muted">{{localize 'RecurringSchedule' 'L_RecurringOrderSchedulesEmpty'}}</span>
+	{{else}}
+		{{>RecurringOrderTemplates}}
+	{{/if_eq}}    
 </div>

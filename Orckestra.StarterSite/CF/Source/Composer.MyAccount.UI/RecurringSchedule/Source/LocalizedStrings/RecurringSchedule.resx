@@ -147,4 +147,7 @@
 	<data name="T_RecurringScheduleDetailsFrequency" xml:space="preserve">
     <value>Recurring Frequency</value>
   </data>
+	<data name="L_RecurringOrderSchedulesEmpty" xml:space="preserve">
+    <value>There are no items in your Recurring Schedule</value>
+  </data>  
 </root>
