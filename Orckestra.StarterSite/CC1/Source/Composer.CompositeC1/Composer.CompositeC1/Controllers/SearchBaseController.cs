@@ -15,6 +15,7 @@ using Orckestra.Composer.Utils;
 using System.Linq;
 using Orckestra.Composer.CompositeC1.Controllers.Helpers;
 using Orckestra.ExperienceManagement.Configuration;
+using Composite.Data;
 
 namespace Orckestra.Composer.CompositeC1.Controllers
 {
@@ -30,7 +31,8 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         protected ISearchBreadcrumbViewService SearchBreadcrumbViewService { get; private set; }
         protected IInventoryLocationProvider InventoryLocationProvider { get; private set; }
         protected ISearchUrlProvider SearchUrlProvider { get; private set; }
-        protected PagesConfiguration PagesConfiguration;
+        protected ISiteConfiguration SiteConfiguration { get; private set; }
+        protected PagesConfiguration PagesConfiguration { get; private set; }
 
         protected SearchBaseController(
             IComposerContext composerContext,
@@ -40,7 +42,8 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             ISearchUrlProvider urlProvider,
             ISearchBreadcrumbViewService searchBreadcrumbViewService,
             IInventoryLocationProvider inventoryLocationProvider,
-            ISearchUrlProvider searchUrlProvider)
+            ISearchUrlProvider searchUrlProvider,
+            ISiteConfiguration siteConfiguration)
         {
             if (composerContext == null) { throw new ArgumentNullException("composerContext"); }
             if (pageService == null) { throw new ArgumentNullException("pageService"); }
@@ -59,7 +62,8 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             SearchBreadcrumbViewService = searchBreadcrumbViewService;
             InventoryLocationProvider = inventoryLocationProvider;
             SearchUrlProvider = searchUrlProvider;
-            PagesConfiguration = SiteConfiguration.GetPagesConfiguration();
+            SiteConfiguration = siteConfiguration;
+            PagesConfiguration = siteConfiguration.GetPagesConfiguration();
         }
 
         public virtual ActionResult SearchBox(string keywords)
@@ -158,7 +162,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             var breadcrumbViewModel = SearchBreadcrumbViewService.CreateBreadcrumbViewModel(new GetSearchBreadcrumbParam
             {
                 CultureInfo = ComposerContext.CultureInfo,
-                HomeUrl = PageService.GetRendererPageUrl(PagesConfiguration.HomePageId, ComposerContext.CultureInfo),
+                HomeUrl = PageService.GetRendererPageUrl(SitemapNavigator.CurrentHomePageId, ComposerContext.CultureInfo),
                 Keywords = keywords
             });
 

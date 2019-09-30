@@ -2,6 +2,7 @@
 using Orckestra.Composer.Product.Providers;
 using Orckestra.Composer.Repositories;
 using Orckestra.Composer.Services;
+using Orckestra.ExperienceManagement.Configuration;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -15,12 +16,14 @@ namespace Composer.LoadTest
             IFulfillmentLocationsRepository fulfillmentLocationsRepository, 
             IInventoryRepository inventoryRepository,
             ICookieAccessor<TestCookieDto> testCookieAccessor,
-            IWebsiteContext websiteContext)
+            IWebsiteContext websiteContext,
+            ISiteConfiguration siteConfiguration)
             
             : base(
             fulfillmentLocationsRepository, 
             inventoryRepository,
-            websiteContext)
+            websiteContext,
+            siteConfiguration)
         {
             _testCookieAccessor = testCookieAccessor;
         }

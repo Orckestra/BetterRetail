@@ -18,6 +18,8 @@ using Orckestra.Overture;
 using Orckestra.Composer.CompositeC1.Settings;
 using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Search.Context;
+using Orckestra.ExperienceManagement.Configuration;
+using Orckestra.ExperienceManagement.Configuration.Settings;
 
 namespace Orckestra.Composer.CompositeC1
 {
@@ -67,6 +69,9 @@ namespace Orckestra.Composer.CompositeC1
             host.Register<AntiCookieTamperingExcluder, IAntiCookieTamperingExcluder>();
             host.Register<C1PerformanceDataCollector, IPerformanceDataCollector>();
             host.Register<DataQueryService, IDataQueryService>();
+            host.Register<SiteConfiguration, ISiteConfiguration>();
+            host.Register<CookieAccesserSettings, ICookieAccesserSettings>();
+            host.Register<CdnDamProviderSettings, ICdnDamProviderSettings>();
         }
     }
 }

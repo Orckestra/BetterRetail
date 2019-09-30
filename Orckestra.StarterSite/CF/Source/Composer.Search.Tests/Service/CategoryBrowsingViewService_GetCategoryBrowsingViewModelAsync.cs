@@ -169,10 +169,7 @@ namespace Orckestra.Composer.Search.Tests.Service
             CategoryBrowsingViewService service = _container.CreateInstance<CategoryBrowsingViewService>();
 
             // Act & Assert
-            Assert.Throws<ArgumentNullException>(async () =>
-            {
-                await service.GetCategoryBrowsingViewModelAsync(null);
-            });
+            Assert.ThrowsAsync<ArgumentNullException>(() => service.GetCategoryBrowsingViewModelAsync(null));
         }
 
         [Test]
@@ -182,13 +179,12 @@ namespace Orckestra.Composer.Search.Tests.Service
             CategoryBrowsingViewService service = _container.CreateInstance<CategoryBrowsingViewService>();
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(async () =>
-            {
-                await service.GetCategoryBrowsingViewModelAsync(new GetCategoryBrowsingViewModelParam
+            Assert.ThrowsAsync<ArgumentException>(() => service.GetCategoryBrowsingViewModelAsync(
+                new GetCategoryBrowsingViewModelParam
                 {
                     CategoryId = null
-                });
-            });
+                }
+            ));
         }
 
         [Test]
@@ -198,14 +194,13 @@ namespace Orckestra.Composer.Search.Tests.Service
             CategoryBrowsingViewService service = _container.CreateInstance<CategoryBrowsingViewService>();
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(async () =>
-            {
-                await service.GetCategoryBrowsingViewModelAsync(new GetCategoryBrowsingViewModelParam
+            Assert.ThrowsAsync<ArgumentException>(() => service.GetCategoryBrowsingViewModelAsync(
+                new GetCategoryBrowsingViewModelParam
                 {
                     CategoryId = GetRandom.String(1),
                     SelectedFacets = null
-                });
-            });
+                }
+            ));
         }
 
         [Test]
@@ -217,14 +212,13 @@ namespace Orckestra.Composer.Search.Tests.Service
             CategoryBrowsingViewService service = _container.CreateInstance<CategoryBrowsingViewService>();
 
             // Act & Assert
-            Assert.Throws<InvalidOperationException>(async () =>
-            {
-                await service.GetCategoryBrowsingViewModelAsync(new GetCategoryBrowsingViewModelParam
+            Assert.ThrowsAsync<InvalidOperationException>(() => service.GetCategoryBrowsingViewModelAsync(
+                new GetCategoryBrowsingViewModelParam
                 {
                     CategoryId = GetRandom.String(1),
                     SelectedFacets = new List<SearchFilter>()
-                });
-            });
+                }
+            ));
         }
 
         [Test]

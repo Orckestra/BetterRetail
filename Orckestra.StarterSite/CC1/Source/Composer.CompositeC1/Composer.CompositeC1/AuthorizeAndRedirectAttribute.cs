@@ -1,4 +1,5 @@
-﻿using Composite.Core.Routing.Pages;
+﻿using Composite.Core;
+using Composite.Core.Routing.Pages;
 using Orckestra.Composer.CompositeC1.Services;
 using Orckestra.ExperienceManagement.Configuration;
 using System.Web.Mvc;
@@ -9,8 +10,9 @@ namespace Orckestra.Composer.CompositeC1
     {
         protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)
         {
+            var siteConfiguration = ServiceLocator.GetService<ISiteConfiguration>();
             var pageService = new PageService();
-            var loginPageId = SiteConfiguration.GetPagesConfiguration().LoginPageId;
+            var loginPageId = siteConfiguration.GetPagesConfiguration().LoginPageId;
             string loginUrl = string.Empty;
 
             if (C1PageRoute.PageUrlData != null)

@@ -9,6 +9,7 @@ using NUnit.Framework;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Product.Providers;
 using Orckestra.Composer.Repositories;
+using Orckestra.ExperienceManagement.Configuration;
 using Orckestra.Overture.ServiceModel.Orders;
 
 namespace Orckestra.Composer.Product.Tests.Providers
@@ -19,6 +20,7 @@ namespace Orckestra.Composer.Product.Tests.Providers
         public Guid ValidLocationId { get; set; }
 
         public AutoMocker Container { get; set; }
+        protected Mock<ISiteConfiguration> SiteConfigurationMock;
 
         [SetUp]
         public void SetUp()
@@ -27,6 +29,10 @@ namespace Orckestra.Composer.Product.Tests.Providers
 
             var defaultInventoryLocationId = GetRandom.String(6);
             ValidLocationId = GetRandom.Guid();
+
+            SiteConfigurationMock = new Mock<ISiteConfiguration>();
+            SiteConfigurationMock.Setup(s => s.GetInventoryAndFulfillmentLocationId(It.IsAny<Guid>())).Returns(defaultInventoryLocationId);
+            Container.Use<ISiteConfiguration>(SiteConfigurationMock);
 
             var repoMock = Container.GetMock<IFulfillmentLocationsRepository>();
             repoMock.Setup(
@@ -96,6 +102,7 @@ namespace Orckestra.Composer.Product.Tests.Providers
         {
             //Arrange
             var defaultInventoryLocationId = GetRandom.String(6); //Changing the ID between generation of list and execution of SUT.
+            SiteConfigurationMock.Setup(s => s.GetInventoryAndFulfillmentLocationId(It.IsAny<Guid>())).Returns(defaultInventoryLocationId);
             var p = new GetFulfillmentLocationParam
             {
                 Scope = GetRandom.String(7)

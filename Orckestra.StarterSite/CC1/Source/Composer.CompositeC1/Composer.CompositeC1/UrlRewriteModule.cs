@@ -1,4 +1,5 @@
-﻿using Composite.Core.Logging;
+﻿using Composite.Core;
+using Composite.Core.Logging;
 using Composite.Core.Routing;
 using Composite.Data;
 using Orckestra.Composer.CompositeC1.Services;
@@ -36,7 +37,7 @@ namespace Orckestra.Composer.CompositeC1
         {
             var context = ((HttpApplication) sender).Context;
             var url = context.Request.Url;
-
+            var siteConfiguration = ServiceLocator.GetService<ISiteConfiguration>();
             var urlPathSegments = url.Segments.Skip(1).Select(s => s.TrimEnd('/')).ToList(); //always skip the first segment, since it's always the first dash
             var newUrl = string.Empty;
 
@@ -58,7 +59,7 @@ namespace Orckestra.Composer.CompositeC1
                 if ((pathPatternIndex = GetUrlPathIndexForSpecificPagePattern(urlPathSegments, ProductUrlPathIndicatorRegex)) > -1)
                 {
                     var pageUrlData = GetPageUrldata(url);
-                    PagesConfiguration = SiteConfiguration.GetPagesConfiguration(pageUrlData.LocalizationScope, pageUrlData.PageId);
+                    PagesConfiguration = siteConfiguration.GetPagesConfiguration(pageUrlData.LocalizationScope, pageUrlData.PageId);
 
                      var productPageUrl = _pageService.GetPageUrl(PagesConfiguration.ProductPageId, pageUrlData.LocalizationScope);
 
@@ -74,7 +75,7 @@ namespace Orckestra.Composer.CompositeC1
                 else if ((pathPatternIndex = GetUrlPathIndexForSpecificPagePattern(urlPathSegments, StoreUrlPathIndicatorRegex)) > -1)
                 {
                     var pageUrlData = GetPageUrldata(url);
-                    PagesConfiguration = SiteConfiguration.GetPagesConfiguration(pageUrlData.LocalizationScope, pageUrlData.PageId);
+                    PagesConfiguration = siteConfiguration.GetPagesConfiguration(pageUrlData.LocalizationScope, pageUrlData.PageId);
 
                     var storePageUrl = _pageService.GetPageUrl(PagesConfiguration.StorePageId, pageUrlData.LocalizationScope);
 

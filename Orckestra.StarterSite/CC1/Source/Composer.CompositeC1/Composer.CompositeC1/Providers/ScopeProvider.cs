@@ -9,11 +9,13 @@ namespace Orckestra.Composer.CompositeC1.Providers
     {
         private readonly Lazy<string> _lazyDefaultScope;
         public IWebsiteContext WebsiteContext;
+        public ISiteConfiguration SiteConfiguration;
 
-        public ScopeProvider(IWebsiteContext websiteContext)
+        public ScopeProvider(IWebsiteContext websiteContext, ISiteConfiguration siteConfiguration)
         {
             _lazyDefaultScope = new Lazy<string>(GetDefaultScopeFromConfiguration, true);
             WebsiteContext = websiteContext;
+            SiteConfiguration = siteConfiguration;
         }
 
         private string GetDefaultScopeFromConfiguration()

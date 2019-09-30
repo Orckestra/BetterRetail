@@ -108,10 +108,7 @@ namespace Orckestra.Composer.Tests.Localization
             var localizationProvider = LocalizationProviderFactory.CreateFromTestAssets();
 
             // Act
-            var exception = Assert.Throws<ArgumentNullException>(async () =>
-            {
-                LocalizationTree tree = await localizationProvider.GetLocalizationTreeAsync(null);
-            });
+            var exception = Assert.ThrowsAsync<ArgumentNullException>(() => localizationProvider.GetLocalizationTreeAsync(null));
 
             //Assert
             exception.ParamName.Should().BeSameAs("culture");

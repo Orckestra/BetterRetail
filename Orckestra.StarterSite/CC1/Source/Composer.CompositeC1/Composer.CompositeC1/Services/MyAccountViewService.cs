@@ -21,6 +21,7 @@ namespace Orckestra.Composer.CompositeC1.Services
         protected IPageService PageService { get; private set; }
         protected IWebsiteContext WebsiteContext { get; private set; }
         protected IRecurringOrdersSettings RecurringOrdersSettings { get; private set; }
+        protected ISiteConfiguration SiteConfiguration { get; private set; }
 
 
         public MyAccountViewService(
@@ -31,7 +32,8 @@ namespace Orckestra.Composer.CompositeC1.Services
             IRecurringScheduleUrlProvider recurringScheduleUrlProvider,
             IPageService pageService,
             IWebsiteContext websiteContext,
-            IRecurringOrdersSettings recurringOrdersSettings)
+            IRecurringOrdersSettings recurringOrdersSettings,
+            ISiteConfiguration siteConfiguration)
         {
             if (composerContext == null) throw new ArgumentNullException("composerContext");
             if (myAccountUrlProvider == null) throw new ArgumentNullException("myAccountUrlProvider");
@@ -48,6 +50,7 @@ namespace Orckestra.Composer.CompositeC1.Services
             RecurringScheduleUrlProvider = recurringScheduleUrlProvider;
             WebsiteContext = websiteContext;
             RecurringOrdersSettings = recurringOrdersSettings;
+            SiteConfiguration = siteConfiguration;
         }
 
         public virtual MenuViewModel CreateMenu(string currentUrl)

@@ -12,13 +12,15 @@ namespace Orckestra.Composer.CompositeC1.Providers
     {
         protected IPageService PageService { get; private set; }
         protected IWebsiteContext WebsiteContext { get; private set; }
+        protected ISiteConfiguration SiteConfiguration { get; private set; }
 
-        public OrderUrlProvider(IPageService pageService, IWebsiteContext wbsiteContext)
+        public OrderUrlProvider(IPageService pageService, IWebsiteContext wbsiteContext, ISiteConfiguration siteConfiguration)
         {
             if (pageService == null) { throw new ArgumentNullException("pageService"); }
 
             PageService = pageService;
             WebsiteContext = wbsiteContext;
+            SiteConfiguration = siteConfiguration;
         }
 
         public string GetOrderDetailsBaseUrl(CultureInfo cultureInfo)

@@ -33,10 +33,7 @@ namespace Orckestra.Composer.Search.Tests.Context
             var sut = _container.CreateInstance<BrowseCategoryRequestContext>();
 
             //Act
-            var exception = Assert.Throws<ArgumentNullException>(async () =>
-            {
-                await sut.GetCategoryAvailableProductsAsync(null);
-            });
+            var exception = Assert.ThrowsAsync<ArgumentNullException>(() => sut.GetCategoryAvailableProductsAsync(null));
 
             //Assert
             exception.ParamName.Should().ContainEquivalentOf("param");

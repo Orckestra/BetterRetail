@@ -1,4 +1,5 @@
-﻿using Orckestra.Composer.Configuration;
+﻿using Composite.Core;
+using Orckestra.Composer.Configuration;
 using Orckestra.Composer.SearchQuery.Parameters;
 using Orckestra.Composer.SearchQuery.Repositories;
 using Orckestra.ExperienceManagement.Configuration;
@@ -21,12 +22,12 @@ namespace Orckestra.Composer.C1CMS.Queries
             try
             {
                 var searchQueryRepository = ComposerHost.Current.Resolve<ISearchQueryRepository>();
-
+                var siteConfiguration = ServiceLocator.GetService<ISiteConfiguration>();
                 var pageIdString = HttpContext.Current.Request["pageId"];
                 Guid pageId;
                 if (Guid.TryParse(pageIdString, out pageId))
                 {
-                    var scope = SiteConfiguration.GetScopeIdByPageId(pageId);
+                    var scope = siteConfiguration.GetScopeIdByPageId(pageId);
                     var queries = searchQueryRepository.GetSearchQueriesAsync(new GetSearchQueriesParam()
                     {
                         Scope = scope,

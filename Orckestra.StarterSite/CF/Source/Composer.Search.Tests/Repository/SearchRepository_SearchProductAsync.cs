@@ -68,10 +68,7 @@ namespace Orckestra.Composer.Search.Tests.Repository
             // Arrange
 
             // Act & Assert
-            Assert.Throws<ArgumentNullException>(async () =>
-            {
-                await _sut.SearchProductAsync(null);
-            });
+            Assert.ThrowsAsync<ArgumentNullException>(() => _sut.SearchProductAsync(null));
         }
 
         [Test]
@@ -86,10 +83,7 @@ namespace Orckestra.Composer.Search.Tests.Repository
             };
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(async () =>
-            {
-                await _sut.SearchProductAsync(param);
-            });
+            Assert.ThrowsAsync<ArgumentException>(() => _sut.SearchProductAsync(param));
         }
 
 
@@ -108,10 +102,7 @@ namespace Orckestra.Composer.Search.Tests.Repository
             };
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(async () =>
-            {
-                await _sut.SearchProductAsync(param);
-            });
+            Assert.ThrowsAsync<ArgumentException>(() => _sut.SearchProductAsync(param));
         }
 
         [TestCase("           ")]
@@ -129,10 +120,7 @@ namespace Orckestra.Composer.Search.Tests.Repository
             };
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(async () =>
-            {
-                await _sut.SearchProductAsync(param);
-            });
+            Assert.ThrowsAsync<ArgumentException>(() => _sut.SearchProductAsync(param));
         }
 
         [Test]
