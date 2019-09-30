@@ -48,10 +48,10 @@
           <Data dataScopeIdentifier="public" locale="fr-CA" dataFilename="~\Datas\Composite.Data.Types.Navigation.NavigationElements.Footer_public.xml" />
           <Data dataScopeIdentifier="administrated" locale="fr-CA" dataFilename="~\Datas\Composite.Data.Types.Navigation.NavigationElements.Footer_public.xml" />
         </Type>
-         <Type type="Orckestra.ExperienceManagement.Configuration.DataTypes.ISiteConfiguration,Orckestra.ExperienceManagement.Configuration">
+         <Type type="Orckestra.ExperienceManagement.Configuration.DataTypes.ISiteConfigurationMeta,Orckestra.ExperienceManagement.Configuration">
           <Data dataScopeIdentifier="administrated" locale="fr-CA" dataFilename="~\Datas\Orckestra.ExperienceManagement.Configuration.DataTypes.ISiteConfigurations_administrated.xml" />
         </Type>
-        <Type type="Orckestra.ExperienceManagement.Configuration.DataTypes.ISiteConfiguration,Orckestra.ExperienceManagement.Configuration">
+        <Type type="Orckestra.ExperienceManagement.Configuration.DataTypes.ISiteConfigurationMeta,Orckestra.ExperienceManagement.Configuration">
           <Data dataScopeIdentifier="public" locale="fr-CA" dataFilename="~\Datas\Orckestra.ExperienceManagement.Configuration.DataTypes.ISiteConfigurations_public.xml" />
         </Type>
         <Type type="Orckestra.Composer.CompositeC1.DataTypes.RecurringOrdersSettings,Orckestra.Composer.CompositeC1.DataTypes">
