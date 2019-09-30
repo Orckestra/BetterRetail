@@ -33,14 +33,18 @@ namespace Orckestra.Composer.CompositeC1.DataTypes.Facets
         [FieldPosition(0)]
         [StringSizeValidator(0, 64)]
         [DefaultFieldStringValue("")]
+        [FormRenderingProfile(Label = "Title")]
         string Title { get; set; }
         
         [ImmutableFieldId("7f3ccc78-33d0-4567-a14f-715f3fdeb9a0")]
+        [FormRenderingProfile(Label = "Sort Weight")]
         [FunctionBasedNewInstanceDefaultFieldValue("<f:function xmlns:f=\"http://www.composite.net/ns/function/1.0\" name=\"Composite.Co" +
                                                    "nstant.Decimal\"><f:param name=\"Constant\" value=\"0\" /></f:function>")]
         [StoreFieldType(PhysicalStoreFieldType.Decimal, 28, 2)]
         [FieldPosition(1)]
         [DecimalPrecisionValidator(2)]
+        [DefaultFieldDecimalValue(0)]
+        [TreeOrdering(1, true)]
         decimal SortWeight { get; set; }
     }
 }

@@ -23,6 +23,7 @@ namespace Orckestra.Composer.CompositeC1.DataTypes.Facets
         [FieldPosition(0)]
         [ForeignKey("Orckestra.Composer.CompositeC1.DataTypes.Facets.IFacetConfiguration,Orckestra.Com" +
                     "poser.CompositeC1.DataTypes", AllowCascadeDeletes=true)]
+        [FormRenderingProfile(Label = "Configuration")]
         Nullable<Guid> Configuration { get; set; }
     }
 }

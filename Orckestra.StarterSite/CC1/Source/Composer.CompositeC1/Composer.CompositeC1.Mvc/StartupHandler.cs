@@ -88,7 +88,6 @@ namespace Orckestra.Composer.CompositeC1.Mvc
             functions.RegisterAction<SearchController>("PageHeader", "Composer.Search.PageHeader");
             functions.RegisterAction<SearchController>("SearchBox", "Composer.SearchBox");
             functions.RegisterAction<SearchController>("Index", "Composer.Search.Index");
-            functions.RegisterAction<SearchController>("SearchFacets", "Composer.Search.Facets");
             functions.RegisterAction<SearchController>("SearchSummary", "Composer.Search.Summary");
             functions.RegisterAction<SearchController>("Breadcrumb", "Composer.Search.Breadcrumb");
             functions.RegisterAction<SearchController>("LanguageSwitch", "Composer.Search.LanguageSwitch");

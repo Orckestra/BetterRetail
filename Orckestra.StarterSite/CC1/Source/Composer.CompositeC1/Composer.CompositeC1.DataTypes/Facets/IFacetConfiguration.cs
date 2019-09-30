@@ -33,10 +33,11 @@ namespace Orckestra.Composer.CompositeC1.DataTypes.Facets
         [FieldPosition(0)]
         [StringSizeValidator(0, 64)]
         [DefaultFieldStringValue("")]
+        [FormRenderingProfile(Label = "Name")]
         string Name { get; set; }
         
         [ImmutableFieldId("2261093d-ae92-41fd-a367-bea978a1f4f0")]
-        [FormRenderingProfile(WidgetFunctionMarkup = @"<f:widgetfunction xmlns:f=""http://www.composite.net/ns/function/1.0"" name=""Composite.Widgets.String.DataIdMultiSelector""><f:param name=""OptionsType"" value=""Orckestra.Composer.CompositeC1.DataTypes.Facets.IFacet"" /><f:param name=""CompactMode"" value=""True"" /></f:widgetfunction>")]
+        [FormRenderingProfile(Label = "Facets", WidgetFunctionMarkup = @"<f:widgetfunction xmlns:f=""http://www.composite.net/ns/function/1.0"" name=""Composite.Widgets.String.DataIdMultiSelector""><f:param name=""OptionsType"" value=""Orckestra.Composer.CompositeC1.DataTypes.Facets.IFacet"" /><f:param name=""CompactMode"" value=""True"" /></f:widgetfunction>")]
         [StoreFieldType(PhysicalStoreFieldType.LargeString)]
         [NotNullValidator]
         [FieldPosition(1)]
@@ -44,7 +45,7 @@ namespace Orckestra.Composer.CompositeC1.DataTypes.Facets
         string Facets { get; set; }
 
         [ImmutableFieldId("4ef0be77-ce76-4698-b069-7458ef289ec5")]
-        [FormRenderingProfile(Label = "Default", HelpText = "Determines if this Facet Category will be used as default")]
+        [FormRenderingProfile(Label = "Is Default", HelpText = "Determines if this Facet Category will be used as default")]
         [FunctionBasedNewInstanceDefaultFieldValue("<f:function xmlns:f=\"http://www.composite.net/ns/function/1.0\" name=\"Composite.Co" +
                                                    "nstant.Boolean\"><f:param name=\"Constant\" value=\"False\" /></f:function>")]
         [StoreFieldType(PhysicalStoreFieldType.Boolean)]

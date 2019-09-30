@@ -68,23 +68,22 @@
 <head>
 </head>
 <body>
-    <div data-oc-controller="Product.FacetSearch" data-corrected-search-term="@productSearchResults.CorrectedSearchTerms">
-
-        @if (productSearchResults?.TotalCount == 0)
-        {
-            <div data-oc-controller="Product.FacetSearch">
-                @*Empty search facets results*@
-            </div>
-        }
-        else
-        {
+    @if (productSearchResults?.TotalCount == 0)
+    {
+        <div data-oc-controller="Product.FacetSearch">
+            @*Empty search facets results*@
+        </div>
+    }
+    else
+    {
+        <div data-oc-controller="Product.FacetSearch" data-corrected-search-term="@productSearchResults.CorrectedSearchTerms">
             <form name="searchFacets">
                 @RenderPromotedFacetValues(productSearchResults.PromotedFacetValues)
                 @RenderFacets(productSearchResults.Facets)
             </form>
-        }
+        </div>
+    }
 
-    </div>
 </body>
 </html>
 
