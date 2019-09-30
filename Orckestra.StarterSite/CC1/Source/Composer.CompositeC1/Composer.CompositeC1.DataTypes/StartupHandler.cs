@@ -23,8 +23,8 @@ namespace Orckestra.Composer.CompositeC1.DataTypes
             var assembly = Assembly.GetExecutingAssembly();
 
             var dataInterface = typeof(IData);
-            var types = assembly.GetTypes()
-                .Where(t => t.GetInterfaces().Contains(dataInterface))
+            var types = assembly.GetExportedTypes()
+                .Where(dataInterface.IsAssignableFrom)
                 .ToList();
 
             foreach (var type in types)
