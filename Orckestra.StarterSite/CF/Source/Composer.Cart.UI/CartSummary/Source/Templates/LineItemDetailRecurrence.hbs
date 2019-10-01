@@ -33,16 +33,17 @@
                             data-oc-change="changeRecurringMode"  />
                     <label for="UseRecurring{{@index}}">
                         <img src="/UI.Package/Images/recurring.png" alt="{{localize 'General' 'L_RecurringProduct'}}" title="{{localize 'General' 'L_RecurringProduct'}}" /> {{localizeFormat 'ProductPage' 'L_RecurringPitch' (localize 'ProductPage' 'L_RecurringSaveRate') }}
-                        <button class="btn-link" role="button" data-trigger="click" data-toggle="popover" data-placement="top" title=""
-                                data-content="{{{localize 'ProductPage' 'L_RecurringBubblePitch'}}}" data-html="true" data-original-title="{{localize 'ProductPage' 'L_RecurringBubblePitchTitle'}}">
-                            <span class="fa fa-question-circle"></span>
-                        </button>
                     </label>
                 </div>
                 <div class="recurring-frequencies  collapse  modeSelection{{#if RecurringOrderFrequencyName}} in{{/if}}  ">
                     <div class="row">
-                        <div class="col-xs-8   col-md-7 form-group">
-                            <select class="recurring-orders-frequency-selection btn btn-refiner">
+                        <div class="col-xs-10 col-sm-9 col-md-7 form-group">
+                            <label for="recurringOrderFrequencyNameSelect{{@index}}">{{localize 'ProductPage' 'L_RecurringDeliveryFrequency'}}</label> 
+                            <button class="btn-link" role="button" data-trigger="click" data-toggle="popover" data-placement="top" title=""
+                                    data-content="{{{localize 'ProductPage' 'L_RecurringBubblePitch'}}}" data-html="true" data-original-title="{{localize 'ProductPage' 'L_RecurringBubblePitchTitle'}}">
+                                <span class="fa fa-question-circle"></span>
+                            </button>
+                            <select id="recurringOrderFrequencyNameSelect{{@index}}" class="recurring-orders-frequency-selection form-control">
                                 {{!-- <option value="" {{#unless RecurringOrderFrequencyName}}selected="selected"{{/unless}}>{{localize 'ShoppingCart' 'L_RecurringChooseFrequency'}}</option> --}}
                                 {{#each RecurringOrderProgramFrequencies}}
                                     <option value="{{RecurringOrderFrequencyName}}"

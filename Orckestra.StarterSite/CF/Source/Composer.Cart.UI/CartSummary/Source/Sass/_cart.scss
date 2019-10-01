@@ -274,10 +274,12 @@
 .cart-recurring {
   border-top: 1px solid $gray-lighter;
   margin-top: 10px;
-  padding-left: 30%;
   padding-top: 20px;
   position: relative;
 
+  @media (min-width: $screen-xs-min) {
+    padding-left: 30%;
+  }
   @media (min-width: $screen-sm-min) {
     padding-left: 11%;
   }
