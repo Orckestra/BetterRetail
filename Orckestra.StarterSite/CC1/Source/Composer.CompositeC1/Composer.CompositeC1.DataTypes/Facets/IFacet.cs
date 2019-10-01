@@ -55,7 +55,7 @@ namespace Orckestra.Composer.CompositeC1.DataTypes.Facets
         [FieldPosition(2)]
         [DecimalPrecisionValidator(2)]
         [DefaultFieldDecimalValue(0)]
-        [TreeOrdering(1, true)]
+        [TreeOrdering(1)]
         decimal SortWeight { get; set; }
 
         [ImmutableFieldId("aa23c18e-30ff-4433-9897-056a9405f8ad")]
