@@ -4,10 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using FizzWare.NBuilder.Generators;
 using FluentAssertions;
+using Moq;
 using Moq.AutoMock;
 using NUnit.Framework;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Dam;
+using Orckestra.ExperienceManagement.Configuration;
+using Orckestra.ExperienceManagement.Configuration.Settings;
 
 namespace Orckestra.Composer.Tests.Providers.Dam
 {
@@ -16,12 +19,25 @@ namespace Orckestra.Composer.Tests.Providers.Dam
     public class ConventionBasedDamProvider_GetProductMainImagesAsync
     {
         private AutoMocker _container;
+        private Mock<ISiteConfiguration> _siteConfigurationMock;
+        private Mock<ICdnDamProviderSettings> _cdmproviderMock;
         //
 
         [SetUp]
         public void SetUp()
         {
             _container = new AutoMocker();
+
+            _cdmproviderMock = new Mock<ICdnDamProviderSettings>();
+            _siteConfigurationMock = new Mock<ISiteConfiguration>();
+
+            _cdmproviderMock.Setup(c => c.ProductImageFilePathPattern).Returns("{productId}_{sequenceNumber}_{imageSize}.jpg");
+            _cdmproviderMock.Setup(c => c.VariantImageFilePathPattern).Returns("{productId}_{variantId}_{sequenceNumber}_{imageSize}.jpg");
+            _cdmproviderMock.Setup(c => c.SupportXLImages).Returns(true);
+
+            _siteConfigurationMock.Setup(s => s.CdnDamProviderSettings).Returns(_cdmproviderMock.Object);
+
+            _container.Use(_siteConfigurationMock);
         }
 
         [TearDown]
