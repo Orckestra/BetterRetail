@@ -45,7 +45,6 @@ namespace Orckestra.Composer.Tests.Services.Cookie
         
             // Act
             ComposerCookieDto dto = accessor.Read();
-            dto.Scope      = scope;
             dto.EncryptedCustomerId = new EncryptionUtility().Encrypt(customerId.ToString());
             dto.IsGuest    = isGuest;
             accessor.Write(dto);

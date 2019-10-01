@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Composer.LoadTest.Cookie;
+﻿using Composer.LoadTest.Cookie;
 using Orckestra.Composer.Product.Providers;
-using Orckestra.Composer.Product.Repositories;
 using Orckestra.Composer.Repositories;
 using Orckestra.Composer.Services;
+using Orckestra.ExperienceManagement.Configuration;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Composer.LoadTest
 {
@@ -16,11 +15,15 @@ namespace Composer.LoadTest
         public TestInventoryLocationProvider(
             IFulfillmentLocationsRepository fulfillmentLocationsRepository, 
             IInventoryRepository inventoryRepository,
-            ICookieAccessor<TestCookieDto> testCookieAccessor)
+            ICookieAccessor<TestCookieDto> testCookieAccessor,
+            IWebsiteContext websiteContext,
+            ISiteConfiguration siteConfiguration)
             
             : base(
             fulfillmentLocationsRepository, 
-            inventoryRepository)
+            inventoryRepository,
+            websiteContext,
+            siteConfiguration)
         {
             _testCookieAccessor = testCookieAccessor;
         }

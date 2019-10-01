@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Web.Mvc;
-using Composite.Data;
-using Composite.Data.Types;
+﻿using Composite.Data;
 using Orckestra.Composer.CompositeC1.Pages;
 using Orckestra.Composer.CompositeC1.Services;
 using Orckestra.Composer.Parameters;
@@ -17,7 +11,12 @@ using Orckestra.Composer.Search.Services;
 using Orckestra.Composer.Search.ViewModels;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Utils;
-using ExperienceManagement.DataTypes;
+using Orckestra.ExperienceManagement.Configuration.DataTypes;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Web.Mvc;
 
 namespace Orckestra.Composer.CompositeC1.Controllers
 {

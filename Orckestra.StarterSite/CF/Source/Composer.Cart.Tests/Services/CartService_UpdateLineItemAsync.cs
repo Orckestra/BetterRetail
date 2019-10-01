@@ -84,9 +84,8 @@ namespace Orckestra.Composer.Cart.Tests.Services
             var service = _container.CreateInstance<CartService>();
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await service.UpdateLineItemAsync(new UpdateLineItemParam
+            var exception = Assert.ThrowsAsync<ArgumentException>(() =>
+                service.UpdateLineItemAsync(new UpdateLineItemParam
                 {
                     ScopeId = scope,
                     CultureInfo = TestingExtensions.GetRandomCulture(),
@@ -97,8 +96,8 @@ namespace Orckestra.Composer.Cart.Tests.Services
                     GiftWrap = GetRandom.Boolean(),
                     Quantity = GetRandom.PositiveInt(),
                     BaseUrl = GetRandom.String(32)
-                });
-            });
+                })
+            );
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");
@@ -111,9 +110,8 @@ namespace Orckestra.Composer.Cart.Tests.Services
             var service = _container.CreateInstance<CartService>();
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await service.UpdateLineItemAsync(new UpdateLineItemParam
+            var exception = Assert.ThrowsAsync<ArgumentException>(() =>
+                service.UpdateLineItemAsync(new UpdateLineItemParam
                 {
                     ScopeId = GetRandom.String(32),
                     CultureInfo = null,
@@ -124,8 +122,8 @@ namespace Orckestra.Composer.Cart.Tests.Services
                     GiftWrap = GetRandom.Boolean(),
                     Quantity = GetRandom.PositiveInt(),
                     BaseUrl = GetRandom.String(32)
-                });
-            });
+                })
+            );
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");
@@ -138,9 +136,8 @@ namespace Orckestra.Composer.Cart.Tests.Services
             var service = _container.CreateInstance<CartService>();
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await service.UpdateLineItemAsync(new UpdateLineItemParam
+            var exception = Assert.ThrowsAsync<ArgumentException>(() =>
+                service.UpdateLineItemAsync(new UpdateLineItemParam
                 {
                     ScopeId = GetRandom.String(32),
                     CultureInfo = TestingExtensions.GetRandomCulture(),
@@ -151,8 +148,8 @@ namespace Orckestra.Composer.Cart.Tests.Services
                     GiftWrap = GetRandom.Boolean(),
                     Quantity = GetRandom.PositiveInt(),
                     BaseUrl = GetRandom.String(32)
-                });
-            });
+                })
+            );
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");
@@ -168,9 +165,8 @@ namespace Orckestra.Composer.Cart.Tests.Services
             var service = _container.CreateInstance<CartService>();
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await service.UpdateLineItemAsync(new UpdateLineItemParam
+            var exception = Assert.ThrowsAsync<ArgumentException>(() =>
+                service.UpdateLineItemAsync(new UpdateLineItemParam
                 {
                     ScopeId = GetRandom.String(32),
                     CultureInfo = TestingExtensions.GetRandomCulture(),
@@ -181,8 +177,8 @@ namespace Orckestra.Composer.Cart.Tests.Services
                     GiftWrap = GetRandom.Boolean(),
                     Quantity = GetRandom.PositiveInt(),
                     BaseUrl = GetRandom.String(32)
-                });
-            });
+                })
+            );
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");
@@ -195,9 +191,8 @@ namespace Orckestra.Composer.Cart.Tests.Services
             var service = _container.CreateInstance<CartService>();
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await service.UpdateLineItemAsync(new UpdateLineItemParam
+            var exception = Assert.ThrowsAsync<ArgumentException>(() =>
+                service.UpdateLineItemAsync(new UpdateLineItemParam
                 {
                     ScopeId = GetRandom.String(32),
                     CultureInfo = TestingExtensions.GetRandomCulture(),
@@ -208,8 +203,8 @@ namespace Orckestra.Composer.Cart.Tests.Services
                     GiftWrap = GetRandom.Boolean(),
                     Quantity = GetRandom.PositiveInt(),
                     BaseUrl = GetRandom.String(32)
-                });
-            });
+                })
+            );
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");
@@ -225,9 +220,8 @@ namespace Orckestra.Composer.Cart.Tests.Services
             var service = _container.CreateInstance<CartService>();
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await service.UpdateLineItemAsync(new UpdateLineItemParam
+            var exception = Assert.ThrowsAsync<ArgumentException>(() =>
+                service.UpdateLineItemAsync(new UpdateLineItemParam
                 {
                     ScopeId = GetRandom.String(32),
                     CultureInfo = TestingExtensions.GetRandomCulture(),
@@ -238,8 +232,8 @@ namespace Orckestra.Composer.Cart.Tests.Services
                     GiftWrap = GetRandom.Boolean(),
                     Quantity = quantity,
                     BaseUrl = GetRandom.String(32)
-                });
-            });
+                })
+            );
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");
@@ -252,10 +246,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
             var service = _container.CreateInstance<CartService>();
 
             // Act
-            var exception = Assert.Throws<ArgumentNullException>(async () =>
-            {
-                await service.UpdateLineItemAsync(null);
-            });
+            var exception = Assert.ThrowsAsync<ArgumentNullException>(() => service.UpdateLineItemAsync(null));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");

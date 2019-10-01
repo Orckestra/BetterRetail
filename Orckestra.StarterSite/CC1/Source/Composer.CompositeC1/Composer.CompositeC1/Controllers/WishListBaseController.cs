@@ -1,7 +1,5 @@
-﻿using System;
-using System.Threading.Tasks;
-using System.Web.Mvc;
-using Composite.Core.Xml;
+﻿using Composite.Core.Xml;
+using Composite.Data;
 using Orckestra.Composer.Cart;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Parameters.WishList;
@@ -16,6 +14,8 @@ using Orckestra.Composer.Providers;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Services.Breadcrumb;
 using Orckestra.Composer.Utils;
+using System;
+using System.Web.Mvc;
 
 namespace Orckestra.Composer.CompositeC1.Controllers
 {
@@ -27,6 +27,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         protected ILocalizationProvider LocalizationProvider { get; private set; }
         protected IWishListUrlProvider WishListUrlProvider { get; private set; }
         protected IWishListViewService WishLisViewService { get; private set; }
+        protected IWebsiteContext WebsiteContext { get; private set; }
 
         protected WishListBaseController(
            IComposerContext composerContext,
@@ -34,7 +35,8 @@ namespace Orckestra.Composer.CompositeC1.Controllers
            IBreadcrumbViewService breadcrumbViewService,
            ILocalizationProvider localizationProvider,
            IWishListUrlProvider wishListUrlProvider,
-           IWishListViewService wishListViewService
+           IWishListViewService wishListViewService,
+           IWebsiteContext websiteContext
             )
         {
             if (composerContext == null) { throw new ArgumentNullException(nameof(composerContext)); }

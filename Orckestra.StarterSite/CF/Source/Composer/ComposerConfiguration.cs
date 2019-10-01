@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Configuration;
+﻿using Orckestra.Composer.Enums;
+using Orckestra.ExperienceManagement.Configuration;
+using System.Collections.Generic;
 using System.Web;
-using Orckestra.Composer.Configuration;
-using Orckestra.Composer.Enums;
 
 namespace Orckestra.Composer
 {
@@ -10,12 +9,7 @@ namespace Orckestra.Composer
     {
         static ComposerConfiguration()
         {
-            var configSection =
-                ConfigurationManager.GetSection(ComposerConfigurationSection.ConfigurationName) as
-                    ComposerConfigurationSection;
 
-            CountryCode = "CA";
-            DefaultInventoryLocationId = configSection?.InventoryConfiguration?.DefaultInventoryAndFulfillmentLocationId;
             ValidateCsrfTokenForWebApi = false;
 
             LocalizationCacheOptions = new OutputCacheOptions
@@ -39,13 +33,6 @@ namespace Orckestra.Composer
         {
             InventoryStatusEnum.InStock
         };
-
-        public static string CountryCode { get; set; }
-
-        /// <summary>
-        /// The default inventory location Id
-        /// </summary>
-        public static string DefaultInventoryLocationId { get; set; }
 
         public static bool ValidateCsrfTokenForWebApi { get; set; }
 

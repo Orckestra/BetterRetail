@@ -110,14 +110,14 @@ namespace Orckestra.Composer.Cart.Factory
         {
             if (vm.ShippingAddress != null && string.IsNullOrWhiteSpace(vm.ShippingAddress.CountryCode))
             {
-                vm.ShippingAddress.CountryCode = ComposerConfiguration.CountryCode;
+                vm.ShippingAddress.CountryCode = ComposerContext.CountryCode;
             }
 
             if (vm.Payment != null &&
                 vm.Payment.BillingAddress != null &&
                 string.IsNullOrWhiteSpace(vm.Payment.BillingAddress.CountryCode))
             {
-                vm.Payment.BillingAddress.CountryCode = ComposerConfiguration.CountryCode;
+                vm.Payment.BillingAddress.CountryCode = ComposerContext.CountryCode;
             }
         }
 

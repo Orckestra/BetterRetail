@@ -112,7 +112,7 @@ Task CC1_UnitTestBackend {
 
 	$ErrorActionPreference = "Stop"
 
-	Invoke-NUnit -FilePathPatternTestDlls $TestDllPattern -FilePathXmlReport `"/xml=$XmlReportName`" -FullFilePathNUnitExe $Build.NUnitExe
+	Invoke-NUnit -FilePathPatternTestDlls $TestDllPattern -FilePathXmlReport `"/output:$XmlReportName`" -FullFilePathNUnitExe $Build.NUnitExe
 }
 
 Task CC1_Compile-CorePackage {    

@@ -1,4 +1,5 @@
-﻿using Orckestra.Composer.Parameters;
+﻿using Orckestra.Composer.Configuration;
+using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Dam;
 using Orckestra.Composer.Repositories;
@@ -55,7 +56,8 @@ namespace Orckestra.Composer.SearchQuery.Services
          ISearchQueryRepository searchQueryRepository,
          ISearchQueryUrlProvider searchQueryUrlProvider,
          IProductSettingsRepository productSettingsRepository,
-         Repositories.IInventoryRepository inventoryRepository
+         Repositories.IInventoryRepository inventoryRepository,
+         IRecurringOrdersSettings recurringOrdersSettings
          )
 
          : base(
@@ -70,7 +72,8 @@ namespace Orckestra.Composer.SearchQuery.Services
              priceProvider,
              composerContext,
              productSettings,
-             scopeViewService)
+             scopeViewService,
+             recurringOrdersSettings)
         {
             if (searchQueryRepository == null) { throw new ArgumentNullException("searchQueryRepository"); }
             if (searchQueryUrlProvider == null) { throw new ArgumentNullException("searchQuerySearchRepository"); }

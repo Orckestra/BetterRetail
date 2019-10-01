@@ -30,15 +30,10 @@ namespace Orckestra.Composer.Product.Api
             IInventoryLocationProvider inventoryLocationProvider,
             IProductSettingsViewService productSettingsViewService)
         {
-            if (composerContext == null) { throw new ArgumentNullException("composerContext"); }
-            if (inventoryViewService == null) { throw new ArgumentNullException("inventoryViewService"); }
-            if (inventoryLocationProvider == null) { throw new ArgumentNullException("inventoryLocationProvider"); }
-            if (productSettingsViewService == null) { throw new ArgumentNullException("productSettingsViewService"); }
-
-            ComposerContext = composerContext;
-            InventoryViewService = inventoryViewService;
-            InventoryLocationProvider = inventoryLocationProvider;
-            ProductSettingsViewService = productSettingsViewService;
+            ComposerContext = composerContext ?? throw new ArgumentNullException("composerContext");
+            InventoryViewService = inventoryViewService ?? throw new ArgumentNullException("inventoryViewService");
+            InventoryLocationProvider = inventoryLocationProvider ?? throw new ArgumentNullException("inventoryLocationProvider");
+            ProductSettingsViewService = productSettingsViewService ?? throw new ArgumentNullException("productSettingsViewService");
         }
 
         [ActionName("findInventoryItems")]

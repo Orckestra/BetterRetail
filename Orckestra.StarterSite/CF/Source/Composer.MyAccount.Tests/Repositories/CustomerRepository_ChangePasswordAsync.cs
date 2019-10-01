@@ -45,8 +45,8 @@ namespace Orckestra.Composer.MyAccount.Tests.Repositories
                 });
 
             //Act and Assert
-            Assert.DoesNotThrow(async () =>
-                await customerRepository.ChangePasswordAsync(expectedUsername,
+            Assert.DoesNotThrowAsync(() =>
+                customerRepository.ChangePasswordAsync(expectedUsername,
                 expectedScope,
                 expectedOldPassword, 
                 expectedNewPassword));
@@ -73,8 +73,8 @@ namespace Orckestra.Composer.MyAccount.Tests.Repositories
                 });
 
             //Act and Assert
-            Assert.Throws<ComposerException>(async () =>
-                await customerRepository.ChangePasswordAsync(expectedUsername,
+            Assert.ThrowsAsync<ComposerException>(() => 
+                customerRepository.ChangePasswordAsync(expectedUsername,
                 expectedScope,
                 expectedOldPassword, 
                 expectedNewPassword));
@@ -90,7 +90,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Repositories
             var customerRepository = _container.CreateInstance<CustomerRepository>();
 
             //Act
-            var ex = Assert.Throws<ArgumentException>(async () => await customerRepository.ChangePasswordAsync(
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => customerRepository.ChangePasswordAsync(
                 username,
                 GetRandom.String(32),
                 GetRandom.String(32),
@@ -111,7 +111,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Repositories
             var customerRepository = _container.CreateInstance<CustomerRepository>();
 
             //Act
-            var ex = Assert.Throws<ArgumentException>(async () => await customerRepository.ChangePasswordAsync(
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => customerRepository.ChangePasswordAsync(
                 GetRandom.Email(),
                 GetRandom.String(32),
                 oldPassword,
@@ -132,7 +132,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Repositories
             var customerRepository = _container.CreateInstance<CustomerRepository>();
 
             //Act
-            var ex = Assert.Throws<ArgumentException>(async () => await customerRepository.ChangePasswordAsync(
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => customerRepository.ChangePasswordAsync(
                 GetRandom.String(32),
                 GetRandom.Email(),
                 GetRandom.String(32),

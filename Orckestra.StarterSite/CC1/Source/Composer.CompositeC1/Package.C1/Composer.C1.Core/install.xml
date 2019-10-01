@@ -50,9 +50,8 @@
         <File sourceFilename="~\Bin\Orckestra.Composer.Store.dll" targetFilename="~\Bin\Orckestra.Composer.Store.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Orckestra.Composer.CompositeC1.Mvc.dll" targetFilename="~\Bin\Orckestra.Composer.CompositeC1.Mvc.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Orckestra.Composer.CompositeC1.dll" targetFilename="~\Bin\Orckestra.Composer.CompositeC1.dll" allowOverwrite="true" />
-
         <File sourceFilename="~\Bin\Orckestra.Composer.CompositeC1.DataTypes.dll" targetFilename="~\Bin\Orckestra.Composer.CompositeC1.DataTypes.dll" allowOverwrite="true" />
-        <File sourceFilename="~\Bin\Orckestra.ExperienceManagement.DataTypes.dll" targetFilename="~\Bin\Orckestra.ExperienceManagement.DataTypes.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Orckestra.ExperienceManagement.Configuration.dll" targetFilename="~\Bin\Orckestra.ExperienceManagement.Configuration.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Newtonsoft.Json.dll" targetFilename="~\Bin\Newtonsoft.Json.dll" allowOverwrite="true" addAssemblyBinding="true"/>
       </Files>
     </mi:Add>
@@ -75,6 +74,9 @@
     </mi:Add>
     <mi:Add installerType="Composite.Core.PackageSystem.PackageFragmentInstallers.DataPackageFragmentInstaller, Composite" uninstallerType="Composite.Core.PackageSystem.PackageFragmentInstallers.DataPackageFragmentUninstaller, Composite">
       <Types>
+        <Type type="Composite.Data.Types.ICompositionContainer,Composite">
+          <Data dataScopeIdentifier="public" dataFilename="~\Datas\Composite.Data.Types.ICompositionContainers_public.xml" />
+        </Type>
         <Type type="Composite.Data.Types.IMediaFileData,Composite">
           <Data dataScopeIdentifier="public" dataFilename="~\Datas\Composite.Data.Types.IMediaFileDatas_public.xml" />
         </Type>
@@ -97,7 +99,10 @@
           <Data dataScopeIdentifier="public" dataFilename="~\Datas\Composite.Data.Types.IPageTypePageTemplateRestrictions_public.xml" />
         </Type>
         <Type type="Composite.Data.Types.IDataItemTreeAttachmentPoint,Composite">
-          <Data dataScopeIdentifier="public" dataFilename="~\Datas\Composite.Data.Types.IPageTypeTreeLink_public.xml" />
+          <Data dataScopeIdentifier="public" dataFilename="~\Datas\Composite.Data.Types.IDataItemTreeAttachmentPoint_publi.xml" />
+        </Type>
+        <Type type="Composite.Data.Types.IPageTypeTreeLink,Composite">
+          <Data dataScopeIdentifier="public" dataFilename="~\Datas\Composite.Data.Types.IPageTypeTreeLinks_public.xml" />
         </Type>
       </Types>
     </mi:Add>

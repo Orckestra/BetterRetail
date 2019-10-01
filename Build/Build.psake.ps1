@@ -209,7 +209,9 @@ function Global_InitializeVariables {
     # we validate that 'framework 4.6.1' is equivalent to 'msbuild 15'.
     $Build.MsDeployExe = "C:\Program Files (x86)\IIS\Microsoft Web Deploy v3\msdeploy.exe"
 	$Build.ZIPExe = Join-Path $Build.WorkspaceRoot 'lib\7-Zip\7z.exe'
-	$Build.NUnitExe = Get-ChildItem "$NugetPackagesRepository\NUnit.Runners.*" -Include "nunit-console.exe" -Recurse -Force | Select-Object -First 1
+    $Build.NUnitExe = Get-ChildItem "$NugetPackagesRepository\NUnit.ConsoleRunner.*" -Include "nunit3-console.exe" -Recurse -Force | Select-Object -First 1
+    
+    Write-Verbose "NUnit found here: $($Build.NUnitExe)"
 
     $Build.msbuildVersion = [System.Version](Exec {MsBuild /version /nologo})
     #Assert (($Build.msbuildVersion.Major -eq 15) -and ($Build.msbuildVersion.Minor -eq 0)) -failureMessage "Unexpected msbuild version: $msbuildVersion"

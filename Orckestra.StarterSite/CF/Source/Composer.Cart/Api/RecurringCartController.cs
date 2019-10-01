@@ -227,7 +227,7 @@ namespace Orckestra.Composer.Cart.Api
         /// <returns></returns>
         [HttpPut]
         [ActionName("lineitem")]
-        public virtual async Task<IHttpActionResult> UpdateLineItem(UpdateRecurringCartLineItemViewModel request)
+        public virtual async Task<IHttpActionResult> UpdateLineItem(UpdateRecurringCartLineItemRequest request)
         {
             if (request == null) { return BadRequest("Missing Request Body"); }
             if (!ModelState.IsValid) { return BadRequest(ModelState); }
@@ -255,7 +255,7 @@ namespace Orckestra.Composer.Cart.Api
         /// <returns>A Json representation of the updated cart state</returns>
         [HttpDelete]
         [ActionName("lineitem")]
-        public virtual async Task<IHttpActionResult> RemoveLineItem(RemoveRecurringCartLineItemViewModel request)
+        public virtual async Task<IHttpActionResult> RemoveLineItem(RemoveRecurringCartLineItemRequest request)
         {
             if (request == null) { return BadRequest("Missing Request Body"); }
             if (!ModelState.IsValid) { return BadRequest(ModelState); }
@@ -277,7 +277,7 @@ namespace Orckestra.Composer.Cart.Api
         [ActionName("getanonymouscartsigninurl")]
         public virtual IHttpActionResult GetAnonymousCartSignInUrl()
         {
-            var url = CartUrlProvider.GetCheckoutSignInUrl(new GetCartUrlParam
+            var url = CartUrlProvider.GetCheckoutSignInUrl(new BaseUrlParameter
             {
                 CultureInfo = ComposerContext.CultureInfo,
                 ReturnUrl = CartUrlProvider.GetCheckoutStepUrl(new GetCheckoutStepUrlParam() { CultureInfo = ComposerContext.CultureInfo, StepNumber = 1 })

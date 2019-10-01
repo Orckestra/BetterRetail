@@ -110,24 +110,21 @@ namespace Orckestra.Composer.MyAccount.Tests.Repositories
         {
             //Arrange
             var customerRepository = _container.CreateInstance<CustomerRepository>();
-
+            var param = new CreateUserParam
+            {
+                Email = email,
+                FirstName = GetRandom.FirstName(),
+                LastName = GetRandom.LastName(),
+                Username = GetRandom.Email(),
+                Password = GetRandom.String(32),
+                PasswordQuestion = GetRandom.String(32),
+                PasswordAnswer = GetRandom.String(32),
+                CultureInfo = TestingExtensions.GetRandomCulture(),
+                Scope = GetRandom.String(32)
+            };
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await customerRepository.CreateUserAsync(new CreateUserParam
-                {
-                    Email = email,
-                    FirstName = GetRandom.FirstName(),
-                    LastName = GetRandom.LastName(),
-                    Username = GetRandom.Email(),
-                    Password = GetRandom.String(32),
-                    PasswordQuestion = GetRandom.String(32),
-                    PasswordAnswer = GetRandom.String(32),
-                    CultureInfo = TestingExtensions.GetRandomCulture(),
-                    Scope = GetRandom.String(32)
-                });
-            });
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => customerRepository.CreateUserAsync(param));
 
             //Assert
             exception.Message.Should().Contain("Email");
@@ -141,23 +138,21 @@ namespace Orckestra.Composer.MyAccount.Tests.Repositories
         {
             //Arrange
             var customerRepository = _container.CreateInstance<CustomerRepository>();
+            var param = new CreateUserParam
+            {
+                Email = GetRandom.Email(),
+                FirstName = firstName,
+                LastName = GetRandom.LastName(),
+                Username = GetRandom.Email(),
+                Password = GetRandom.String(32),
+                PasswordQuestion = GetRandom.String(32),
+                PasswordAnswer = GetRandom.String(32),
+                CultureInfo = TestingExtensions.GetRandomCulture(),
+                Scope = GetRandom.String(32)
+            };
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await customerRepository.CreateUserAsync(new CreateUserParam
-                {
-                    Email = GetRandom.Email(),
-                    FirstName = firstName,
-                    LastName = GetRandom.LastName(),
-                    Username = GetRandom.Email(),
-                    Password = GetRandom.String(32),
-                    PasswordQuestion = GetRandom.String(32),
-                    PasswordAnswer = GetRandom.String(32),
-                    CultureInfo = TestingExtensions.GetRandomCulture(),
-                    Scope = GetRandom.String(32)
-                });
-            });
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => customerRepository.CreateUserAsync(param));
 
             //Assert
             exception.Message.Should().Contain("FirstName");
@@ -171,23 +166,21 @@ namespace Orckestra.Composer.MyAccount.Tests.Repositories
         {
             //Arrange
             var customerRepository = _container.CreateInstance<CustomerRepository>();
+            var param = new CreateUserParam
+            {
+                Email = GetRandom.Email(),
+                FirstName = GetRandom.FirstName(),
+                LastName = lastName,
+                Username = GetRandom.Email(),
+                Password = GetRandom.String(32),
+                PasswordQuestion = GetRandom.String(32),
+                PasswordAnswer = GetRandom.String(32),
+                CultureInfo = TestingExtensions.GetRandomCulture(),
+                Scope = GetRandom.String(32)
+            };
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await customerRepository.CreateUserAsync(new CreateUserParam
-                {
-                    Email = GetRandom.Email(),
-                    FirstName = GetRandom.FirstName(),
-                    LastName = lastName,
-                    Username = GetRandom.Email(),
-                    Password = GetRandom.String(32),
-                    PasswordQuestion = GetRandom.String(32),
-                    PasswordAnswer = GetRandom.String(32),
-                    CultureInfo = TestingExtensions.GetRandomCulture(),
-                    Scope = GetRandom.String(32)
-                });
-            });
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => customerRepository.CreateUserAsync(param));
 
             //Assert
             exception.Message.Should().Contain("LastName");
@@ -241,23 +234,21 @@ namespace Orckestra.Composer.MyAccount.Tests.Repositories
         {
             //Arrange
             var customerRepository = _container.CreateInstance<CustomerRepository>();
+            var param = new CreateUserParam
+            {
+                Email = GetRandom.Email(),
+                FirstName = GetRandom.FirstName(),
+                LastName = GetRandom.LastName(),
+                Username = GetRandom.Email(),
+                Password = password,
+                PasswordQuestion = GetRandom.String(32),
+                PasswordAnswer = GetRandom.String(32),
+                CultureInfo = TestingExtensions.GetRandomCulture(),
+                Scope = GetRandom.String(32)
+            };
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await customerRepository.CreateUserAsync(new CreateUserParam
-                {
-                    Email = GetRandom.Email(),
-                    FirstName = GetRandom.FirstName(),
-                    LastName = GetRandom.LastName(),
-                    Username = GetRandom.Email(),
-                    Password = password,
-                    PasswordQuestion = GetRandom.String(32),
-                    PasswordAnswer = GetRandom.String(32),
-                    CultureInfo = TestingExtensions.GetRandomCulture(),
-                    Scope = GetRandom.String(32)
-                });
-            });
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => customerRepository.CreateUserAsync(param));
 
             //Assert
             exception.Message.Should().Contain("Password");
@@ -333,23 +324,21 @@ namespace Orckestra.Composer.MyAccount.Tests.Repositories
         {
             //Arrange
             var customerRepository = _container.CreateInstance<CustomerRepository>();
+            var param = new CreateUserParam
+            {
+                Email = GetRandom.Email(),
+                FirstName = GetRandom.FirstName(),
+                LastName = GetRandom.LastName(),
+                Username = GetRandom.Email(),
+                Password = GetRandom.String(32),
+                PasswordQuestion = GetRandom.String(32),
+                PasswordAnswer = GetRandom.String(32),
+                CultureInfo = cultureInfo,
+                Scope = GetRandom.String(32)
+            };
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await customerRepository.CreateUserAsync(new CreateUserParam
-                {
-                    Email = GetRandom.Email(),
-                    FirstName = GetRandom.FirstName(),
-                    LastName = GetRandom.LastName(),
-                    Username = GetRandom.Email(),
-                    Password = GetRandom.String(32),
-                    PasswordQuestion = GetRandom.String(32),
-                    PasswordAnswer = GetRandom.String(32),
-                    CultureInfo = cultureInfo,
-                    Scope = GetRandom.String(32)
-                });
-            });
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => customerRepository.CreateUserAsync(param));
 
             //Assert
             exception.Message.Should().Contain("CultureInfo");
@@ -363,23 +352,21 @@ namespace Orckestra.Composer.MyAccount.Tests.Repositories
         {
             //Arrange
             var customerRepository = _container.CreateInstance<CustomerRepository>();
+            var param = new CreateUserParam
+            {
+                Email = GetRandom.Email(),
+                FirstName = GetRandom.FirstName(),
+                LastName = GetRandom.LastName(),
+                Username = GetRandom.Email(),
+                Password = GetRandom.String(32),
+                PasswordQuestion = GetRandom.String(32),
+                PasswordAnswer = GetRandom.String(32),
+                CultureInfo = TestingExtensions.GetRandomCulture(),
+                Scope = scope
+            };
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await customerRepository.CreateUserAsync(new CreateUserParam
-                {
-                    Email = GetRandom.Email(),
-                    FirstName = GetRandom.FirstName(),
-                    LastName = GetRandom.LastName(),
-                    Username = GetRandom.Email(),
-                    Password = GetRandom.String(32),
-                    PasswordQuestion = GetRandom.String(32),
-                    PasswordAnswer = GetRandom.String(32),
-                    CultureInfo = TestingExtensions.GetRandomCulture(),
-                    Scope = scope
-                });
-            });
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => customerRepository.CreateUserAsync(param));
 
             //Assert
             exception.Message.Should().Contain("Scope");
@@ -392,10 +379,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Repositories
             var customerRepository = _container.CreateInstance<CustomerRepository>();
 
             // Act
-            var exception = Assert.Throws<ArgumentNullException>(async () =>
-            {
-                await customerRepository.CreateUserAsync(null);
-            });
+            var exception = Assert.ThrowsAsync<ArgumentNullException>(() => customerRepository.CreateUserAsync(null));
 
             //Assert
             exception.Message.Should().Contain("createUserParam");

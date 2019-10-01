@@ -33,7 +33,7 @@ namespace Orckestra.Composer.Tests.Services.Scope
             var sut = _container.CreateInstance<ScopeViewService>();
 
             //Act & Assert
-            var ex = Assert.Throws<ArgumentNullException>(async () => await sut.GetScopeCurrencyAsync(param));
+            var ex = Assert.ThrowsAsync<ArgumentNullException>(() => sut.GetScopeCurrencyAsync(param));
 
             ex.ParamName.Should().NotBeNullOrWhiteSpace();
         }
@@ -53,7 +53,7 @@ namespace Orckestra.Composer.Tests.Services.Scope
             var sut = _container.CreateInstance<ScopeViewService>();
 
             //Act & Assert
-            var ex = Assert.Throws<ArgumentException>(async () => await sut.GetScopeCurrencyAsync(param));
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => sut.GetScopeCurrencyAsync(param));
 
             ex.ParamName.Should().Be(nameof(param.Scope));
         }
@@ -70,7 +70,7 @@ namespace Orckestra.Composer.Tests.Services.Scope
             var sut = _container.CreateInstance<ScopeViewService>();
 
             //Act & Assert
-            var ex = Assert.Throws<ArgumentException>(async () => await sut.GetScopeCurrencyAsync(param));
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => sut.GetScopeCurrencyAsync(param));
 
             ex.ParamName.Should().Be(nameof(param.CultureInfo));
         }
@@ -117,7 +117,7 @@ namespace Orckestra.Composer.Tests.Services.Scope
             var sut = _container.CreateInstance<ScopeViewService>();
 
             //Act & Assert
-            Assert.DoesNotThrow(async () => await sut.GetScopeCurrencyAsync(param));
+            Assert.DoesNotThrowAsync(() => sut.GetScopeCurrencyAsync(param));
         }
 
         [Test]

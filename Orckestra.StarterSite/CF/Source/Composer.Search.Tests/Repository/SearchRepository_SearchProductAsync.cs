@@ -13,6 +13,7 @@ using Orckestra.Overture;
 using Orckestra.Overture.ServiceModel.Requests.Search;
 using Orckestra.Overture.ServiceModel.Search;
 using SearchFilter = Orckestra.Composer.Parameters.SearchFilter;
+using System.Threading.Tasks;
 
 namespace Orckestra.Composer.Search.Tests.Repository
 {
@@ -72,10 +73,7 @@ namespace Orckestra.Composer.Search.Tests.Repository
             // Arrange
 
             // Act & Assert
-            Assert.Throws<ArgumentNullException>(async () =>
-            {
-                await _sut.SearchProductAsync(null);
-            });
+            Assert.ThrowsAsync<ArgumentNullException>(() => _sut.SearchProductAsync(null));
         }
 
         [Test]
@@ -90,10 +88,7 @@ namespace Orckestra.Composer.Search.Tests.Repository
             };
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(async () =>
-            {
-                await _sut.SearchProductAsync(param);
-            });
+            Assert.ThrowsAsync<ArgumentException>(() => _sut.SearchProductAsync(param));
         }
 
 
@@ -112,10 +107,7 @@ namespace Orckestra.Composer.Search.Tests.Repository
             };
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(async () =>
-            {
-                await _sut.SearchProductAsync(param);
-            });
+            Assert.ThrowsAsync<ArgumentException>(() => _sut.SearchProductAsync(param));
         }
 
         [TestCase("           ")]
@@ -133,14 +125,11 @@ namespace Orckestra.Composer.Search.Tests.Repository
             };
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(async () =>
-            {
-                await _sut.SearchProductAsync(param);
-            });
+            Assert.ThrowsAsync<ArgumentException>(() => _sut.SearchProductAsync(param));
         }
 
         [Test]
-        public async void WHEN_culture_and_keywords_provided_SHOULD_issue_request_properly_configured()
+        public async Task WHEN_culture_and_keywords_provided_SHOULD_issue_request_properly_configured()
         {
             // Arrange
             var param = new SearchCriteria()
@@ -158,7 +147,7 @@ namespace Orckestra.Composer.Search.Tests.Repository
         }
 
         [Test]
-        public async void WHEN_overture_returns_unexpected_facet_SHOULD_remove_facet_from_result()
+        public async Task WHEN_overture_returns_unexpected_facet_SHOULD_remove_facet_from_result()
         {
             // Arrange
             var param = new SearchCriteria()
@@ -177,7 +166,7 @@ namespace Orckestra.Composer.Search.Tests.Repository
         }
 
         [Test]
-        public async void WHEN_request_SHOULD_have_dependency_in_facets()
+        public async Task WHEN_request_SHOULD_have_dependency_in_facets()
         {
             // Arrange
             var param = new SearchCriteria()
@@ -202,7 +191,7 @@ namespace Orckestra.Composer.Search.Tests.Repository
         }
 
         [Test]
-        public async void WHEN_request_has_singlevalue_selectedfacet_SHOULD_remove_facet_from_result()
+        public async Task WHEN_request_has_singlevalue_selectedfacet_SHOULD_remove_facet_from_result()
         {
             // Arrange
             var param = new SearchCriteria()

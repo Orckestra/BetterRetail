@@ -9,6 +9,7 @@ using NUnit.Framework;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Product.Providers;
 using Orckestra.Composer.Repositories;
+using Orckestra.ExperienceManagement.Configuration;
 using Orckestra.Overture.ServiceModel.Orders;
 
 namespace Orckestra.Composer.Product.Tests.Providers
@@ -19,14 +20,19 @@ namespace Orckestra.Composer.Product.Tests.Providers
         public Guid ValidLocationId { get; set; }
 
         public AutoMocker Container { get; set; }
+        protected Mock<ISiteConfiguration> SiteConfigurationMock;
 
         [SetUp]
         public void SetUp()
         {
             Container = new AutoMocker();
 
-            ComposerConfiguration.DefaultInventoryLocationId = GetRandom.String(6);
+            var defaultInventoryLocationId = GetRandom.String(6);
             ValidLocationId = GetRandom.Guid();
+
+            SiteConfigurationMock = new Mock<ISiteConfiguration>();
+            SiteConfigurationMock.Setup(s => s.GetInventoryAndFulfillmentLocationId(It.IsAny<Guid>())).Returns(defaultInventoryLocationId);
+            Container.Use<ISiteConfiguration>(SiteConfigurationMock);
 
             var repoMock = Container.GetMock<IFulfillmentLocationsRepository>();
             repoMock.Setup(
@@ -37,7 +43,7 @@ namespace Orckestra.Composer.Product.Tests.Providers
                     {
                         Id = GetRandom.Guid(),
                         IsActive = false,
-                        InventoryLocationId = ComposerConfiguration.DefaultInventoryLocationId
+                        InventoryLocationId = defaultInventoryLocationId
                     },
                     new FulfillmentLocation
                     {
@@ -49,7 +55,7 @@ namespace Orckestra.Composer.Product.Tests.Providers
                     {
                         Id = ValidLocationId,
                         IsActive = true,
-                        InventoryLocationId = ComposerConfiguration.DefaultInventoryLocationId
+                        InventoryLocationId = defaultInventoryLocationId
                     }
                 });
         }
@@ -95,7 +101,8 @@ namespace Orckestra.Composer.Product.Tests.Providers
         public void WHEN_Locations_do_not_contain_default_id_THROWS_ArgumentException()
         {
             //Arrange
-            ComposerConfiguration.DefaultInventoryLocationId = GetRandom.String(6); //Changing the ID between generation of list and execution of SUT.
+            var defaultInventoryLocationId = GetRandom.String(6); //Changing the ID between generation of list and execution of SUT.
+            SiteConfigurationMock.Setup(s => s.GetInventoryAndFulfillmentLocationId(It.IsAny<Guid>())).Returns(defaultInventoryLocationId);
             var p = new GetFulfillmentLocationParam
             {
                 Scope = GetRandom.String(7)
@@ -104,13 +111,13 @@ namespace Orckestra.Composer.Product.Tests.Providers
             var sut = Container.CreateInstance<ConfigurationInventoryLocationProvider>();
 
             //Act
-            var exception = Assert.Throws<ArgumentException>(async () => await sut.GetFulfillmentLocationAsync(p));
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => sut.GetFulfillmentLocationAsync(p));
 
             //Assert
             exception.Should().NotBeNull();
             exception.ParamName.ShouldBeEquivalentTo("param");
             exception.Message.Should().ContainEquivalentOf(p.Scope);
-            exception.Message.Should().ContainEquivalentOf(ComposerConfiguration.DefaultInventoryLocationId);
+            exception.Message.Should().ContainEquivalentOf(defaultInventoryLocationId);
         }
 
     }

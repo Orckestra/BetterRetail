@@ -219,7 +219,8 @@ param(
 		}
 
 		if($null -ne $FilePathTestDlls) {
-			$args = [string[]]( $FilePathTestDlls + $FilePathXmlReport)
+            $args = [string[]]( $FilePathTestDlls + $FilePathXmlReport + "/trace:Verbose" + "/framework=net-4.5")
+			Write-Verbose "Executing: $($FullFilePathNUnitExe) $($args)" 
 			& "$FullFilePathNUnitExe" @args
 		}else{
 			Write-Warning "No dlls found, skipped unit tests"

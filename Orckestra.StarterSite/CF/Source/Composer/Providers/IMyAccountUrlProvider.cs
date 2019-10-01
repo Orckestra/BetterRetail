@@ -11,61 +11,61 @@ namespace Orckestra.Composer.Providers
         /// Url to the My Account page
         /// </summary>
         /// <returns>localized url</returns>
-        string GetMyAccountUrl(GetMyAccountUrlParam param);
+        string GetMyAccountUrl(BaseUrlParameter param);
 
         /// <summary>
         /// Url to the Terms and conditions page
         /// </summary>
         /// <returns>localized url</returns>
-        string GetTermsAndConditionsUrl(GetMyAccountUrlParam param);
+        string GetTermsAndConditionsUrl(BaseUrlParameter param);
 
         /// <summary>
         /// Url to the Create Account page
         /// </summary>
         /// <returns>localized url</returns>
-        string GetCreateAccountUrl(GetMyAccountUrlParam param);
+        string GetCreateAccountUrl(BaseUrlParameter param);
 
         /// <summary>
         /// Url to the Login page
         /// </summary>
         /// <returns>localized url</returns>
-        string GetLoginUrl(GetMyAccountUrlParam param);
+        string GetLoginUrl(BaseUrlParameter param);
 
         /// <summary>
         /// Url to the Forgot password url page
         /// </summary>
         /// <returns>localized url</returns>
-        string GetForgotPasswordUrl(GetMyAccountUrlParam param);
+        string GetForgotPasswordUrl(BaseUrlParameter param);
 
         /// <summary>
         /// Url to the Reset password url page
         /// </summary>
         /// <returns>localized url</returns>
-        string GetNewPasswordUrl(GetMyAccountUrlParam param);
+        string GetNewPasswordUrl(BaseUrlParameter param);
 
         /// <summary>
         /// Url to the Change password url page
         /// </summary>
         /// <returns>localized url</returns>
-        string GetChangePasswordUrl(GetMyAccountUrlParam param);
+        string GetChangePasswordUrl(BaseUrlParameter param);
 
         /// <summary>
         /// Url to the My Addresses url page
         /// </summary>
         /// <returns>localized url</returns>
-        string GetAddressListUrl(GetMyAccountUrlParam param);
+        string GetAddressListUrl(BaseUrlParameter param);
 
         /// <summary>
         /// Url to the Add new address url page
         /// </summary>
         /// <returns>localized url</returns>
-        string GetAddAddressUrl(GetMyAccountUrlParam param);
+        string GetAddAddressUrl(BaseUrlParameter param);
 
         /// <summary>
         /// Base Url to the Update url page
         /// </summary>
         /// <returns>localized url</returns>
-        string GetUpdateAddressBaseUrl(GetMyAccountUrlParam param);
+        string GetUpdateAddressBaseUrl(BaseUrlParameter param);
 
     }
 }

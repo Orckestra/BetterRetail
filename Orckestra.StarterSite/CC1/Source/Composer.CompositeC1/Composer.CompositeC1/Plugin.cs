@@ -13,6 +13,10 @@ using Orckestra.Composer.Store.Providers;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Services.Breadcrumb;
 using Orckestra.Overture;
+using Orckestra.Composer.CompositeC1.Settings;
+using Orckestra.Composer.Configuration;
+using Orckestra.ExperienceManagement.Configuration;
+using Orckestra.ExperienceManagement.Configuration.Settings;
 
 namespace Orckestra.Composer.CompositeC1
 {
@@ -27,13 +31,19 @@ namespace Orckestra.Composer.CompositeC1
 
         private void RegisterDependencies(IComposerHost host)
         {
+            host.Register<RecurringOrdersSettings, IRecurringOrdersSettings>(ComponentLifestyle.PerRequest);
+            host.Register<GoogleSettings, IGoogleSettings>(ComponentLifestyle.PerRequest);
+            host.Register<WebsiteContext, IWebsiteContext>(ComponentLifestyle.PerRequest);
+            host.Register<Providers.ScopeProvider, IScopeProvider>(ComponentLifestyle.PerRequest);
+            host.Register<Providers.ProductUrlProvider, IProductUrlProvider>(ComponentLifestyle.PerRequest);
+            host.Register<Providers.CountryCodeProvider, ICountryCodeProvider>(ComponentLifestyle.PerRequest);
             host.Register<PageService, IPageService>();
             host.Register<CultureService, ICultureService>(ComponentLifestyle.Singleton);
             host.Register<HomeViewService, IHomeViewService>();
             host.Register<GoogleAnalyticsNavigationUrlProvider>();
             host.Register<NavigationMapper, INavigationMapper>();
 
-            host.Register<ProductUrlProvider, IProductUrlProvider>();
+           
             host.Register<SearchUrlProvider, ISearchUrlProvider>();
             host.Register<CategoryBrowsingUrlProvider, ICategoryBrowsingUrlProvider>();
             host.Register<CartUrlProvider, ICartUrlProvider>();
@@ -54,6 +64,9 @@ namespace Orckestra.Composer.CompositeC1
             host.Register<PageNotFoundUrlProvider, IPageNotFoundUrlProvider>();
             host.Register<AntiCookieTamperingExcluder, IAntiCookieTamperingExcluder>();
             host.Register<C1PerformanceDataCollector, IPerformanceDataCollector>();
+            host.Register<SiteConfiguration, ISiteConfiguration>();
+            host.Register<CookieAccesserSettings, ICookieAccesserSettings>();
+            host.Register<CdnDamProviderSettings, ICdnDamProviderSettings>();
         }
     }
 }

@@ -1,31 +1,33 @@
 ﻿using Orckestra.Composer.CompositeC1.Services;
+using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Utils;
 using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Orckestra.Composer.CompositeC1.Providers
 {
     public class RecurringCartUrlProvider : IRecurringCartUrlProvider
     {
         protected IPageService PageService { get; private set; }
+    
+        protected IRecurringOrdersSettings RecurringOrdersSettings { get; private set; }
 
-        public RecurringCartUrlProvider(IPageService pageService)
+        public RecurringCartUrlProvider(IPageService pageService, IRecurringOrdersSettings recurringOrdersSettings)
         {
             if (pageService == null) { throw new ArgumentNullException("pageService"); }
 
             PageService = pageService;
+       
+            RecurringOrdersSettings = recurringOrdersSettings;
+
         }
         public string GetRecurringCartsUrl(GetRecurringCartsUrlParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
 
-            var url = PageService.GetPageUrl(PagesConfiguration.RecurringCartsPageId, param.CultureInfo);
+            var url = PageService.GetPageUrl(RecurringOrdersSettings.RecurringCartsPageId, param.CultureInfo);
             return UrlProviderHelper.BuildUrlWithParams(url, param.ReturnUrl);
         }
 
@@ -34,7 +36,7 @@ namespace Orckestra.Composer.CompositeC1.Providers
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
             if (param.RecurringCartName == null) { throw new ArgumentNullException(nameof(param.RecurringCartName)); }
 
-            var url = PageService.GetPageUrl(PagesConfiguration.RecurringCartDetailsPageId, param.CultureInfo);
+            var url = PageService.GetPageUrl(RecurringOrdersSettings.RecurringCartDetailsPageId, param.CultureInfo);
             var UrlWithReturn = UrlProviderHelper.BuildUrlWithParams(url, param.ReturnUrl);
 
             return UrlFormatter.AppendQueryString(UrlWithReturn, new NameValueCollection

@@ -12,6 +12,7 @@ using Orckestra.Composer.MyAccount.Tests.Mock;
 using Orckestra.Composer.MyAccount.ViewModels;
 using Orckestra.ForTests;
 using Orckestra.ForTests.Mock;
+using System.Threading.Tasks;
 
 namespace Orckestra.Composer.MyAccount.Tests.Services
 {
@@ -29,7 +30,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
         }
 
         [Test]
-        public async void WHEN_passing_valid_arguments_SHOULD_create_viewmodel()
+        public async Task WHEN_passing_valid_arguments_SHOULD_create_viewmodel()
         {
             //Arrange
             var customer = MockCustomerFactory.CreateRandom();
@@ -64,7 +65,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             var customerViewService = _container.CreateInstance<CustomerViewService>();
 
             //Act
-            var ex = Assert.Throws<ArgumentNullException>(async () => await customerViewService.GetAccountHeaderViewModelAsync(null));
+            var ex = Assert.ThrowsAsync<ArgumentNullException>(() => customerViewService.GetAccountHeaderViewModelAsync(null));
 
             //Assert
             ex.Message.Should().ContainEquivalentOf("param");
@@ -84,7 +85,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             };
 
             //Act
-            var ex = Assert.Throws<ArgumentException>(async () => await customerViewService.GetAccountHeaderViewModelAsync(param));
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => customerViewService.GetAccountHeaderViewModelAsync(param));
 
             //Assert
             ex.Message.Should().ContainEquivalentOf("CultureInfo");
@@ -106,7 +107,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             };
 
             //Act
-            var ex = Assert.Throws<ArgumentException>(async () => await customerViewService.GetAccountHeaderViewModelAsync(param));
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => customerViewService.GetAccountHeaderViewModelAsync(param));
 
             //Assert
             ex.Message.Should().ContainEquivalentOf("scope");
@@ -124,7 +125,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             };
 
             //Act
-            var ex = Assert.Throws<ArgumentException>(async () => await customerViewService.GetAccountHeaderViewModelAsync(param));
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => customerViewService.GetAccountHeaderViewModelAsync(param));
 
             //Assert
             ex.Message.Should().ContainEquivalentOf("Customer");

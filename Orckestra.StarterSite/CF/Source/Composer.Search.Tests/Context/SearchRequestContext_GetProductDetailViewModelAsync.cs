@@ -9,6 +9,7 @@ using Orckestra.Composer.Search.Context;
 using Orckestra.Composer.Search.Services;
 using Orckestra.Composer.Search.ViewModels;
 using Orckestra.Composer.Services;
+using System.Threading.Tasks;
 
 namespace Orckestra.Composer.Search.Tests.Context
 {
@@ -20,7 +21,7 @@ namespace Orckestra.Composer.Search.Tests.Context
         private SearchViewModel _viewModel;
 
         [Test]
-        public async void WHEN_search_result_view_model_is_set_SHOULD_not_call_search_service()
+        public async Task WHEN_search_result_view_model_is_set_SHOULD_not_call_search_service()
         {
             //Arrange
             var container = new AutoMocker();

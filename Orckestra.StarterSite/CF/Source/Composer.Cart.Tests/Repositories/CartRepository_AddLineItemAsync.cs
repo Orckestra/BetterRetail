@@ -1,23 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.Threading.Tasks;
 using FizzWare.NBuilder.Generators;
 using FluentAssertions;
-using Moq;
 using Moq.AutoMock;
 using NUnit.Framework;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Repositories;
 using Orckestra.Composer.Cart.Tests.Mock;
-using Orckestra.Composer.Parameters;
-using Orckestra.Composer.Providers;
 using Orckestra.ForTests;
-using Orckestra.Overture;
 using Orckestra.Overture.ServiceModel.Orders;
-using Orckestra.Overture.ServiceModel.Requests.Orders.Shopping.LineItems;
-using Orckestra.Overture.ServiceModel.Requests.Orders.Shopping.Payments;
-using Orckestra.Overture.ServiceModel.Requests.Orders.Shopping.Shipments;
 
 namespace Orckestra.Composer.Cart.Tests.Repositories
 {
@@ -106,21 +97,19 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             // Arrange
             _container.Use(OvertureClientFactory.Create());
             var repository = _container.CreateInstance<CartRepository>();
+            var param = new AddLineItemParam
+            {
+                Scope = scope,
+                CultureInfo = TestingExtensions.GetRandomCulture(),
+                CustomerId = GetRandom.Guid(),
+                CartName = GetRandom.String(32),
+                ProductId = GetRandom.String(32),
+                VariantId = GetRandom.String(32),
+                Quantity = GetRandom.Int(1, 10)
+            };
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await repository.AddLineItemAsync(new AddLineItemParam
-                {
-                    Scope = scope,
-                    CultureInfo = TestingExtensions.GetRandomCulture(),
-                    CustomerId = GetRandom.Guid(),
-                    CartName = GetRandom.String(32),
-                    ProductId = GetRandom.String(32),
-                    VariantId = GetRandom.String(32),
-                    Quantity = GetRandom.Int(1, 10)
-                });
-            });
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => repository.AddLineItemAsync(param));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");
@@ -133,21 +122,19 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             // Arrange
             _container.Use(OvertureClientFactory.Create());
             var repository = _container.CreateInstance<CartRepository>();
+            var param = new AddLineItemParam
+            {
+                Scope = GetRandom.String(32),
+                CultureInfo = null,
+                CustomerId = GetRandom.Guid(),
+                CartName = GetRandom.String(32),
+                ProductId = GetRandom.String(32),
+                VariantId = GetRandom.String(32),
+                Quantity = GetRandom.Int(1, 100)
+            };
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await repository.AddLineItemAsync(new AddLineItemParam
-                {
-                    Scope = GetRandom.String(32),
-                    CultureInfo = null,
-                    CustomerId = GetRandom.Guid(),
-                    CartName = GetRandom.String(32),
-                    ProductId = GetRandom.String(32),
-                    VariantId = GetRandom.String(32),
-                    Quantity = GetRandom.Int(1, 100)
-                });
-            });
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => repository.AddLineItemAsync(param));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");
@@ -160,21 +147,19 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             // Arrange
             _container.Use(OvertureClientFactory.Create());
             var repository = _container.CreateInstance<CartRepository>();
+            var param = new AddLineItemParam
+            {
+                Scope = GetRandom.String(32),
+                CultureInfo = TestingExtensions.GetRandomCulture(),
+                CustomerId = Guid.Empty,
+                CartName = GetRandom.String(32),
+                ProductId = GetRandom.String(32),
+                VariantId = GetRandom.String(32),
+                Quantity = GetRandom.Int(1, 1000)
+            };
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await repository.AddLineItemAsync(new AddLineItemParam
-                {
-                    Scope = GetRandom.String(32),
-                    CultureInfo = TestingExtensions.GetRandomCulture(),
-                    CustomerId = Guid.Empty,
-                    CartName = GetRandom.String(32),
-                    ProductId = GetRandom.String(32),
-                    VariantId = GetRandom.String(32),
-                    Quantity = GetRandom.Int(1, 1000)
-                });
-            });
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => repository.AddLineItemAsync(param));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");
@@ -190,21 +175,19 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             // Arrange
             _container.Use(OvertureClientFactory.Create());
             var repository = _container.CreateInstance<CartRepository>();
+            var param = new AddLineItemParam
+            {
+                Scope = GetRandom.String(32),
+                CultureInfo = TestingExtensions.GetRandomCulture(),
+                CustomerId = GetRandom.Guid(),
+                CartName = cartName,
+                ProductId = GetRandom.String(32),
+                VariantId = GetRandom.String(32),
+                Quantity = GetRandom.Int(0, 1000)
+            };
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await repository.AddLineItemAsync(new AddLineItemParam
-                {
-                    Scope = GetRandom.String(32),
-                    CultureInfo = TestingExtensions.GetRandomCulture(),
-                    CustomerId = GetRandom.Guid(),
-                    CartName = cartName,
-                    ProductId = GetRandom.String(32),
-                    VariantId = GetRandom.String(32),
-                    Quantity = GetRandom.Int(0, 1000)
-                });
-            });
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => repository.AddLineItemAsync(param));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");
@@ -220,21 +203,19 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             // Arrange
             _container.Use(OvertureClientFactory.Create());
             var repository = _container.CreateInstance<CartRepository>();
+            var param = new AddLineItemParam
+            {
+                Scope = GetRandom.String(32),
+                CultureInfo = TestingExtensions.GetRandomCulture(),
+                CustomerId = GetRandom.Guid(),
+                CartName = GetRandom.String(32),
+                ProductId = productId,
+                VariantId = GetRandom.String(32),
+                Quantity = GetRandom.Int(0, 1000)
+            };
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await repository.AddLineItemAsync(new AddLineItemParam
-                {
-                    Scope = GetRandom.String(32),
-                    CultureInfo = TestingExtensions.GetRandomCulture(),
-                    CustomerId = GetRandom.Guid(),
-                    CartName = GetRandom.String(32),
-                    ProductId = productId,
-                    VariantId = GetRandom.String(32),
-                    Quantity = GetRandom.Int(0, 1000)
-                });
-            });
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => repository.AddLineItemAsync(param));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");
@@ -275,21 +256,19 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             // Arrange
             _container.Use(OvertureClientFactory.Create());
             var repository = _container.CreateInstance<CartRepository>();
+            var param = new AddLineItemParam
+            {
+                Scope = GetRandom.String(32),
+                CultureInfo = TestingExtensions.GetRandomCulture(),
+                CustomerId = GetRandom.Guid(),
+                CartName = GetRandom.String(32),
+                ProductId = GetRandom.String(32),
+                VariantId = GetRandom.String(32),
+                Quantity = quantity
+            };
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await repository.AddLineItemAsync(new AddLineItemParam
-                {
-                    Scope = GetRandom.String(32),
-                    CultureInfo = TestingExtensions.GetRandomCulture(),
-                    CustomerId = GetRandom.Guid(),
-                    CartName = GetRandom.String(32),
-                    ProductId = GetRandom.String(32),
-                    VariantId = GetRandom.String(32),
-                    Quantity = quantity
-                });
-            });
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => repository.AddLineItemAsync(param));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");
@@ -305,10 +284,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var repository = _container.CreateInstance<CartRepository>();
 
             // Act
-            var exception = Assert.Throws<ArgumentNullException>(async () =>
-            {
-                await repository.AddLineItemAsync(null);
-            });
+            var exception = Assert.ThrowsAsync<ArgumentNullException>(() => repository.AddLineItemAsync(null));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");

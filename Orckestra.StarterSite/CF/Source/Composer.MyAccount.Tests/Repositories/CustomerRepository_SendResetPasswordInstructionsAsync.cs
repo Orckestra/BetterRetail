@@ -51,7 +51,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Repositories
                 Scope = GetRandom.String(32)
             };
 
-            Assert.DoesNotThrow(async () => await customerRepository.SendResetPasswordInstructionsAsync(sendResetParam));
+            Assert.DoesNotThrowAsync(() => customerRepository.SendResetPasswordInstructionsAsync(sendResetParam));
         }
 
         [Test]
@@ -79,7 +79,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Repositories
                 Scope = GetRandom.String(32)
             };
 
-            Assert.Throws<ComposerException>(async () => await customerRepository.SendResetPasswordInstructionsAsync(sendResetParam));
+            Assert.ThrowsAsync<ComposerException>(() => customerRepository.SendResetPasswordInstructionsAsync(sendResetParam));
         }
 
         [Test]
@@ -98,10 +98,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Repositories
                 Scope = GetRandom.String(32)
             };
 
-            var ex =
-                Assert.Throws<ArgumentException>(
-                    async () => await customerRepository.SendResetPasswordInstructionsAsync(sendResetParam)
-                );
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => customerRepository.SendResetPasswordInstructionsAsync(sendResetParam));
 
             //Assert
             ex.Message.Should().ContainEquivalentOf("email");

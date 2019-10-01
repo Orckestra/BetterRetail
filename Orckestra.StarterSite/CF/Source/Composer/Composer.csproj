@@ -9,14 +9,13 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Orckestra.Composer</RootNamespace>
     <AssemblyName>Orckestra.Composer</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -81,6 +80,9 @@
     <Reference Include="Orckestra.Caching, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\OrckestraCommerce.Common.4.0.0-beta0001\lib\net461\Orckestra.Caching.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="Orckestra.ExperienceManagement.Configuration, Version=4.0.0.2, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Orckestra.ExperienceManagement.Configuration.4.0.0.2\lib\net471\Orckestra.ExperienceManagement.Configuration.dll</HintPath>
     </Reference>
     <Reference Include="Orckestra.Logging, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\OrckestraCommerce.Common.4.0.0-beta0001\lib\net461\Orckestra.Logging.dll</HintPath>
@@ -188,18 +190,13 @@
     <Compile Include="App_Packages\LibLog.4.2\LibLog.cs" />
     <Compile Include="ComposerConfiguration.cs" />
     <Compile Include="Configuration\CacheConfigurationCategoryNames.cs" />
-    <Compile Include="Configuration\CdnDamProviderConfigurationElement.cs" />
     <Compile Include="Configuration\ComposerConfigurationSection.cs" />
-    <Compile Include="Configuration\ComposerCookieAccesserConfigurationElement.cs" />
     <Compile Include="Configuration\ContentSitemapConfiguration.cs" />
-    <Compile Include="Configuration\CulturesConfigurationElement.cs" />
-    <Compile Include="Configuration\DefaultScopeConfigurationElement.cs" />
     <Compile Include="Configuration\DisplayConfiguration.cs" />
+    <Compile Include="Configuration\IRecurringOrdersSettings.cs" />
+    <Compile Include="Configuration\IGoogleSettings.cs" />
     <Compile Include="Configuration\ImageConfiguration.cs" />
-    <Compile Include="Configuration\InventoryConfigurationElement.cs" />
-    <Compile Include="Configuration\GoogleMapsConfigurationElement.cs" />
     <Compile Include="Configuration\ProductSitemapConfiguration.cs" />
-    <Compile Include="Configuration\RecurringOrdersConfigurationElement.cs" />
     <Compile Include="Configuration\SitemapConfiguration.cs" />
     <Compile Include="Country\CountryRepository.cs" />
     <Compile Include="Country\CountryService.cs" />
@@ -229,6 +226,7 @@
     <Compile Include="MvcFilters\MustBeAnonymousAttribute.cs" />
     <Compile Include="OutputCacheOptions.cs" />
     <Compile Include="OutputCache\NullCacheProvider.cs" />
+    <Compile Include="Parameters\BaseUrlParameter.cs" />
     <Compile Include="Parameters\BuildSearchUrlParam.cs" />
     <Compile Include="Parameters\CreateProductPriceViewModelParam.cs" />
     <Compile Include="Parameters\CreateRecurringOrderTemplatesViewModelParam.cs" />
@@ -258,10 +256,11 @@
     <Compile Include="Parameters\UpdateRecurringOrderTemplateLineItemQuantityParam.cs" />
     <Compile Include="Providers\Dam\ProductImageInfo.cs" />
     <Compile Include="Providers\IPageNotFoundUrlProvider.cs" />
-    <Compile Include="Providers\IProductRepository.cs" />
+    <Compile Include="Providers\ICountryCodeProvider.cs" />
+    <Compile Include="Repositories\IProductRepository.cs" />
     <Compile Include="Providers\IRecurringCartUrlProvider.cs" />
     <Compile Include="Providers\IRecurringScheduleUrlProvider.cs" />
-    <Compile Include="Providers\ProductRepository.cs" />
+    <Compile Include="Repositories\ProductRepository.cs" />
     <Compile Include="Repositories\IInventoryRepository.cs" />
     <Compile Include="Repositories\InventoryRepository.cs" />
     <Compile Include="Repositories\IRecurringOrdersRepository.cs" />
@@ -279,10 +278,10 @@
     <Compile Include="Services\IProductPriceViewService.cs" />
     <Compile Include="Services\IRecurringOrderTemplatesViewService.cs" />
     <Compile Include="Services\IScopeViewService.cs" />
+    <Compile Include="Services\IWebsiteContext.cs" />
     <Compile Include="Services\ProductPriceViewService.cs" />
     <Compile Include="Services\RecurringOrderTemplatesViewService.cs" />
     <Compile Include="Services\ScopeViewService.cs" />
-    <Compile Include="Utils\ConfigurationUtil.cs" />
     <Compile Include="Utils\Constants.cs" />
     <Compile Include="Utils\Guard.cs" />
     <Compile Include="Utils\LineItemHelper.cs" />
@@ -311,7 +310,6 @@
     <Compile Include="IComposerHost.cs" />
     <Compile Include="IComposerPlugin.cs" />
     <Compile Include="ComposerHost.cs" />
-    <Compile Include="Configuration\OvertureConfigurationElement.cs" />
     <Compile Include="Kernel\AutofacDependencyContainer.cs" />
     <Compile Include="Kernel\AutofacDependancyResolver.cs" />
     <Compile Include="MvcFilters\ValidateLanguageAttribute.cs" />
@@ -319,8 +317,6 @@
     <Compile Include="Parameters\GetCheckoutStepUrlParam.cs" />
     <Compile Include="Parameters\GetFulfillmentLocationParam.cs" />
     <Compile Include="Parameters\GetFulfillmentLocationsByScopeParam.cs" />
-    <Compile Include="Parameters\GetMyAccountUrlParam.cs" />
-    <Compile Include="Parameters\GetCartUrlParam.cs" />
     <Compile Include="Parameters\GetLookupDisplayNamesParam.cs" />
     <Compile Include="Parameters\GetOrderUrlParameter.cs" />
     <Compile Include="PreApplicationStartCode.cs" />
@@ -395,7 +391,6 @@
     <Compile Include="Providers\Membership\OvertureMembershipProvider.cs" />
     <Compile Include="Providers\RegionCode\RegionCodeProvider.cs" />
     <Compile Include="Providers\RegionCode\RegionPostalCode.cs" />
-    <Compile Include="Providers\ScopeProvider.cs" />
     <Compile Include="Repositories\CategoryRepository.cs" />
     <Compile Include="Repositories\CustomerLookupRepository.cs" />
     <Compile Include="Parameters\GetCategoriesParam.cs" />

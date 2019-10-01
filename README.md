@@ -51,7 +51,9 @@
 #### Deploy 
 * Go to ./Installer folder
 * Run PS as Administrator `.\Invoke-EnvironmentDeployment.ps1 dev full-install` to deploy Reference Application Starter Site
-
+* After rhe Deploy make sure that correct Overture Url and AuthToken are used in ~/App_Config/ExperienceManagement.config file. For Cosmos DB verison you can use next values:
+  <add key="Overture.Url" value="https://***REMOVED***/api" />
+  <add key="Overture.AuthToken" value="***REMOVED***" />
 
 #### Deploy notes
  * The Deploy creates website in IIS, downloads the specified C1 CMS version from GITHUB, initializes the **Bare Bone** starter site and installs **Reference Application** packages as AutoInstall packages.

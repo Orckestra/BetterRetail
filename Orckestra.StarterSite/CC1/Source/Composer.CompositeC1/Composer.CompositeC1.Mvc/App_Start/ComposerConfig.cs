@@ -13,7 +13,6 @@ namespace Orckestra.Composer.CompositeC1.Mvc
         public static void RegisterConfigurations()
         {
             //ComposerConfigurations
-            ComposerConfiguration.CountryCode = "CA";
             ComposerConfiguration.ResxLocalizationRepositoryConfiguration.LocalizationResxDirectory = @"~\UI.Package\LocalizedStrings\";
             ComposerConfiguration.HandlebarsViewEngineConfiguration.ViewLocationFormats = new List<string> {
                 "~/UI.Package/Templates/{1}/{0}.hbs",

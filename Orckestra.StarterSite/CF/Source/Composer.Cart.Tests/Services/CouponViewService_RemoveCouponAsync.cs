@@ -30,7 +30,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
             var sut = Container.CreateInstance<CouponViewService>();
 
             //Act
-            var ex = Assert.Throws<ArgumentNullException>(async () => await sut.RemoveCouponAsync(p));
+            var ex = Assert.ThrowsAsync<ArgumentNullException>(() => sut.RemoveCouponAsync(p));
 
             //Assert
             ex.ParamName.Should().BeEquivalentTo("param");

@@ -26,11 +26,11 @@
 
   <add key="Composer.DefaultScope" value="Canada" />
   <add key="CC1.DeploymentToken" value="***REMOVED***" />
-  <xsl:comment> Analytics </xsl:comment>
-  <add key="Composer.GTMContainerId" value="GTM-5Z9T69" />
 
   <xsl:comment> OWIN </xsl:comment>
   <add key="owin:AutomaticAppStartup" value="false" />
+   <xsl:comment> Hangfire </xsl:comment>
+  <add key="hangfire:AutomaticAppStartup" value="false" />
 </appSettings>
 </xsl:variable>
 
@@ -46,13 +46,17 @@
     <xsl:apply-templates select="@*" />
     <xsl:if test="count(configSections)=0">
   <configSections>
-<xsl:copy-of select="$ComposerSectionGroup"/>
+		<xsl:copy-of select="$ComposerSectionGroup"/>
+		<sectionGroup name="experienceManagement" type="System.Configuration.ConfigurationSectionGroup, System.Configuration">
+			<section name="settings" type="System.Configuration.NameValueFileSectionHandler" />
+		</sectionGroup>
   </configSections>
     <xsl:comment>Composer configuration</xsl:comment>
       <xsl:copy-of select="$ComposerSection"/>
       <xsl:copy-of select="$AppSettings"/>
     </xsl:if>
     <xsl:apply-templates select="node()" />
+
   </xsl:copy>
   </xsl:template>
 
@@ -61,6 +65,11 @@
       <xsl:apply-templates select="@*" />
         <xsl:copy-of select="$ComposerSectionGroup"/>
       <xsl:apply-templates select="node()" />
+	  <xsl:if test="count(sectionGroup[@name='experienceManagement'])=0">
+				<sectionGroup name="experienceManagement" type="System.Configuration.ConfigurationSectionGroup, System.Configuration">
+					<section name="settings" type="System.Configuration.NameValueFileSectionHandler" />
+				</sectionGroup>
+			</xsl:if>
    </xsl:copy>
     <xsl:comment>Composer configuration</xsl:comment>
     <xsl:copy-of select="$ComposerSection"/>

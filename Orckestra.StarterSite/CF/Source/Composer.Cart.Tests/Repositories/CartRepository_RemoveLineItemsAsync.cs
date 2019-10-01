@@ -35,7 +35,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var sut = Container.CreateInstance<CartRepository>();
 
             //Act
-            var exception = Assert.Throws<ArgumentNullException>(async () => await sut.RemoveLineItemsAsync(null));
+            var exception = Assert.ThrowsAsync<ArgumentNullException>(() => sut.RemoveLineItemsAsync(null));
 
             //Assert
             exception.ParamName.Should().NotBeNullOrWhiteSpace();
@@ -68,7 +68,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var sut = Container.CreateInstance<CartRepository>();
 
             //Act
-            var exception = Assert.Throws<ArgumentException>(async () => await sut.RemoveLineItemsAsync(p));
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => sut.RemoveLineItemsAsync(p));
 
             //Assert
             exception.ParamName.Should().NotBeNullOrWhiteSpace();
@@ -102,7 +102,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var sut = Container.CreateInstance<CartRepository>();
 
             //Act
-            var exception = Assert.Throws<ArgumentException>(async () => await sut.RemoveLineItemsAsync(p));
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => sut.RemoveLineItemsAsync(p));
 
             //Assert
             exception.ParamName.Should().NotBeNullOrWhiteSpace();
@@ -133,7 +133,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var sut = Container.CreateInstance<CartRepository>();
 
             //Act
-            var exception = Assert.Throws<ArgumentException>(async () => await sut.RemoveLineItemsAsync(p));
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => sut.RemoveLineItemsAsync(p));
 
             //Assert
             exception.ParamName.Should().NotBeNullOrWhiteSpace();
@@ -164,7 +164,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var sut = Container.CreateInstance<CartRepository>();
 
             //Act
-            var exception = Assert.Throws<ArgumentException>(async () => await sut.RemoveLineItemsAsync(p));
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => sut.RemoveLineItemsAsync(p));
 
             //Assert
             exception.ParamName.Should().NotBeNullOrWhiteSpace();
@@ -187,7 +187,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var sut = Container.CreateInstance<CartRepository>();
 
             //Act
-            var exception = Assert.Throws<ArgumentException>(async () => await sut.RemoveLineItemsAsync(p));
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => sut.RemoveLineItemsAsync(p));
 
             //Assert
             exception.ParamName.Should().NotBeNullOrWhiteSpace();
@@ -217,7 +217,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var sut = Container.CreateInstance<CartRepository>();
 
             //Act
-            var exception = Assert.Throws<ArgumentException>(async () => await sut.RemoveLineItemsAsync(p));
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => sut.RemoveLineItemsAsync(p));
 
             //Assert
             exception.ParamName.Should().NotBeNullOrWhiteSpace();
@@ -251,7 +251,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var sut = Container.CreateInstance<CartRepository>();
 
             //Act
-            var exception = Assert.Throws<ArgumentException>(async () => await sut.RemoveLineItemsAsync(p));
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => sut.RemoveLineItemsAsync(p));
 
             //Assert
             exception.ParamName.Should().NotBeNullOrWhiteSpace();

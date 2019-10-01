@@ -27,9 +27,9 @@
 	
 	<param name="cms-deployment-token" value="***REMOVED***" />
 	
-	<param name="ocs-cm-hostName" value="ENTER_VALUE_HERE"/>
-	<param name="ocs-cd-hostName" value="ENTER_VALUE_HERE"/>
-  	<param name="ocsAuthToken" value="ENTER_VALUE_HERE"/>
+	<param name="ocs-cm-hostName" value="***REMOVED***"/>
+	<param name="ocs-cd-hostName" value="***REMOVED***"/>
+  	<param name="ocsAuthToken" value="***REMOVED***"/>
 	
 	<param name="gtm-containerid" value="ENTER_VALUE_HERE"/>
 </parameters>

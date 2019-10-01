@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Product.Parameters;
 using Orckestra.Composer.Product.Repositories;
@@ -25,9 +26,10 @@ namespace Orckestra.Composer.Product.Services
             IProductUrlProvider productUrlProvider,
             IViewModelMapper viewModelMapper,
             ILocalizationProvider localizationProvider,
-            IInventoryLocationProvider inventoryLocationProvider)
+            IInventoryLocationProvider inventoryLocationProvider,
+            IRecurringOrdersSettings recurringOrdersSettings)
 
-            : base(productRepository, damProvider, productUrlProvider, viewModelMapper, localizationProvider, relationshipRepository, inventoryLocationProvider)
+            : base(productRepository, damProvider, productUrlProvider, viewModelMapper, localizationProvider, relationshipRepository, inventoryLocationProvider, recurringOrdersSettings)
         {          
         }
 

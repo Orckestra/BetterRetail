@@ -21,7 +21,8 @@ module Orckestra.Composer {
 
         private initializeSignInHeader() {
             var cultureInfo = $('html').attr('lang');
-            var param = { cultureInfo };
+            var websiteId = $('html').data('website');
+            var param = { cultureInfo, websiteId };
 
             this.signInHeaderService.getSignInHeader(param)
                 .then(signInHeader => this.render('SignInHeader', signInHeader));

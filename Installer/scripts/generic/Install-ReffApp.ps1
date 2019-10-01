@@ -159,8 +159,8 @@ function  TransformConfigFiles () {
 	Write-Log ACTION "Transforming Web.config..."
 	Invoke-ComponentConfigTransformation -ConfigFile "Web.config" -InstallPath $cmsHostPhysicalPath\Website -Environment $Environment -Component $Component
 
-	Write-Log ACTION "Transforming Composer.config..."
-	Invoke-ComponentConfigTransformation -ConfigFile "Composer.config" -InstallPath $cmsHostPhysicalPath\Website\App_Config -Environment $Environment -Component $Component
+	Write-Log ACTION "Transforming EM.config..."
+	Invoke-ComponentConfigTransformation -ConfigFile "ExperienceManagement.config" -InstallPath $cmsHostPhysicalPath\Website\App_Config -Environment $Environment -Component $Component
 
 	#Custom files Tranforms
 	Write-Log ACTION "Transforming error.html..."

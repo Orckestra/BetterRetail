@@ -2,29 +2,38 @@
 using Orckestra.Composer.CompositeC1.Services;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
+using Orckestra.Composer.Services;
+using Orckestra.ExperienceManagement.Configuration;
 
 namespace Orckestra.Composer.CompositeC1.Providers
 {
     public class MyAccountUrlProvider : IMyAccountUrlProvider
     {
         protected IPageService PageService { get; private set; }
+        protected IWebsiteContext WebsiteContext { get; private set; }
+        protected ISiteConfiguration SiteConfiguration { get; private set; }
 
-        public MyAccountUrlProvider(IPageService pageService)
+        public MyAccountUrlProvider(IPageService pageService,
+                IWebsiteContext websiteContext,
+                ISiteConfiguration siteConfiguration)
         {
             if (pageService == null) { throw new ArgumentNullException("pageService"); }
-            
+
             PageService = pageService;
+            WebsiteContext = websiteContext;
+            SiteConfiguration = siteConfiguration;
         }
 
         /// <summary>
         /// Url to the My Account page
         /// </summary>
         /// <returns>localized url</returns>
-        public virtual string GetMyAccountUrl(GetMyAccountUrlParam param)
+        public virtual string GetMyAccountUrl(BaseUrlParameter param)
         {
             if (param == null) { throw new ArgumentNullException("param"); }
 
-            var url = PageService.GetPageUrl(PagesConfiguration.MyAccountPageId, param.CultureInfo);
+            var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(param.CultureInfo, WebsiteContext.WebsiteId);
+            var url = PageService.GetPageUrl(pagesConfiguration.MyAccountPageId, param.CultureInfo);
             return UrlProviderHelper.BuildUrlWithParams(url, param.ReturnUrl);
         }
 
@@ -32,11 +41,12 @@ namespace Orckestra.Composer.CompositeC1.Providers
         /// Url to the Terms and conditions page
         /// </summary>
         /// <returns>localized url</returns>
-        public virtual string GetTermsAndConditionsUrl(GetMyAccountUrlParam param)
+        public virtual string GetTermsAndConditionsUrl(BaseUrlParameter param)
         {
             if (param == null) { throw new ArgumentNullException("param"); }
 
-            var url = PageService.GetPageUrl(PagesConfiguration.TermsAndConditionsPageId, param.CultureInfo);
+            var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(param.CultureInfo, WebsiteContext.WebsiteId);
+            var url = PageService.GetPageUrl(pagesConfiguration.TermsAndConditionsPageId, param.CultureInfo);
             return UrlProviderHelper.BuildUrlWithParams(url, param.ReturnUrl);
         }
 
@@ -44,11 +54,12 @@ namespace Orckestra.Composer.CompositeC1.Providers
         /// Url to the Create Account page
         /// </summary>
         /// <returns>localized url</returns>
-        public virtual string GetCreateAccountUrl(GetMyAccountUrlParam param)
+        public virtual string GetCreateAccountUrl(BaseUrlParameter param)
         {
             if (param == null) { throw new ArgumentNullException("param"); }
 
-            var url = PageService.GetPageUrl(PagesConfiguration.CreateAccountPageId, param.CultureInfo);
+            var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(param.CultureInfo, WebsiteContext.WebsiteId);
+            var url = PageService.GetPageUrl(pagesConfiguration.CreateAccountPageId, param.CultureInfo);
             return UrlProviderHelper.BuildUrlWithParams(url, param.ReturnUrl);
         }
 
@@ -56,11 +67,12 @@ namespace Orckestra.Composer.CompositeC1.Providers
         /// Url to the Login page
         /// </summary>
         /// <returns>localized url</returns>
-        public virtual string GetLoginUrl(GetMyAccountUrlParam param)
+        public virtual string GetLoginUrl(BaseUrlParameter param)
         {
             if (param == null) { throw new ArgumentNullException("param"); }
 
-            var url = PageService.GetPageUrl(PagesConfiguration.LoginPageId, param.CultureInfo);
+            var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(param.CultureInfo, WebsiteContext.WebsiteId);
+            var url = PageService.GetPageUrl(pagesConfiguration.LoginPageId, param.CultureInfo);
             return UrlProviderHelper.BuildUrlWithParams(url, param.ReturnUrl);
         }
 
@@ -68,11 +80,12 @@ namespace Orckestra.Composer.CompositeC1.Providers
         /// Url to the Forgot Password page
         /// </summary>
         /// <returns>localized url</returns>
-        public string GetForgotPasswordUrl(GetMyAccountUrlParam param)
+        public string GetForgotPasswordUrl(BaseUrlParameter param)
         {
             if (param == null) { throw new ArgumentNullException("param"); }
 
-            var url = PageService.GetPageUrl(PagesConfiguration.ForgotPasswordPageId, param.CultureInfo);
+            var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(param.CultureInfo, WebsiteContext.WebsiteId);
+            var url = PageService.GetPageUrl(pagesConfiguration.ForgotPasswordPageId, param.CultureInfo);
             return UrlProviderHelper.BuildUrlWithParams(url, param.ReturnUrl);
         }
 
@@ -80,11 +93,12 @@ namespace Orckestra.Composer.CompositeC1.Providers
         /// Url to the Reset Password page
         /// </summary>
         /// <returns>localized url</returns>
-        public string GetNewPasswordUrl(GetMyAccountUrlParam param)
+        public string GetNewPasswordUrl(BaseUrlParameter param)
         {
             if (param == null) { throw new ArgumentNullException("param"); }
 
-            var url = PageService.GetPageUrl(PagesConfiguration.ResetPasswordPageId, param.CultureInfo);
+            var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(param.CultureInfo, WebsiteContext.WebsiteId);
+            var url = PageService.GetPageUrl(pagesConfiguration.ResetPasswordPageId, param.CultureInfo);
             return UrlProviderHelper.BuildUrlWithParams(url, param.ReturnUrl);
         }
 
@@ -92,11 +106,12 @@ namespace Orckestra.Composer.CompositeC1.Providers
         /// Url to the Change Password page
         /// </summary>
         /// <returns>localized url</returns>
-        public string GetChangePasswordUrl(GetMyAccountUrlParam param)
+        public string GetChangePasswordUrl(BaseUrlParameter param)
         {
             if (param == null) { throw new ArgumentNullException("param"); }
 
-            var url = PageService.GetPageUrl(PagesConfiguration.ChangePasswordPageId, param.CultureInfo);
+            var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(param.CultureInfo, WebsiteContext.WebsiteId);
+            var url = PageService.GetPageUrl(pagesConfiguration.ChangePasswordPageId, param.CultureInfo);
             return UrlProviderHelper.BuildUrlWithParams(url, param.ReturnUrl);
         }
 
@@ -104,11 +119,12 @@ namespace Orckestra.Composer.CompositeC1.Providers
         /// Url to the My Addresses url page
         /// </summary>
         /// <returns>localized url</returns>
-        public string GetAddressListUrl(GetMyAccountUrlParam param)
+        public string GetAddressListUrl(BaseUrlParameter param)
         {
             if (param == null) { throw new ArgumentNullException("param"); }
 
-            var url = PageService.GetPageUrl(PagesConfiguration.AddressListPageId, param.CultureInfo);
+            var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(param.CultureInfo, WebsiteContext.WebsiteId);
+            var url = PageService.GetPageUrl(pagesConfiguration.AddressListPageId, param.CultureInfo);
             return UrlProviderHelper.BuildUrlWithParams(url, param.ReturnUrl);
         }
 
@@ -116,19 +132,21 @@ namespace Orckestra.Composer.CompositeC1.Providers
         /// Url to the Add new address url page
         /// </summary>
         /// <returns>localized url</returns>
-        public string GetAddAddressUrl(GetMyAccountUrlParam param)
+        public string GetAddAddressUrl(BaseUrlParameter param)
         {
             if (param == null) { throw new ArgumentNullException("param"); }
 
-            var url = PageService.GetPageUrl(PagesConfiguration.AddAddressPageId, param.CultureInfo);
+            var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(param.CultureInfo, WebsiteContext.WebsiteId);
+            var url = PageService.GetPageUrl(pagesConfiguration.AddAddressPageId, param.CultureInfo);
             return UrlProviderHelper.BuildUrlWithParams(url, param.ReturnUrl);
         }
 
-        public string GetUpdateAddressBaseUrl(GetMyAccountUrlParam param)
+        public string GetUpdateAddressBaseUrl(BaseUrlParameter param)
         {
             if (param == null) { throw new ArgumentNullException("param"); }
 
-            var url = PageService.GetPageUrl(PagesConfiguration.UpdateAddressPageId, param.CultureInfo);
+            var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(param.CultureInfo, WebsiteContext.WebsiteId);
+            var url = PageService.GetPageUrl(pagesConfiguration.UpdateAddressPageId, param.CultureInfo);
             return UrlProviderHelper.BuildUrlWithParams(url, param.ReturnUrl);
         }
     }

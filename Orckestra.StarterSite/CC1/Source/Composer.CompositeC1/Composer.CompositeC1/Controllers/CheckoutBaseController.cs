@@ -13,6 +13,7 @@ using Orckestra.Composer.Providers;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Services.Breadcrumb;
 using Orckestra.Composer.Utils;
+using Orckestra.ExperienceManagement.Configuration;
 using Orckestra.Overture;
 
 namespace Orckestra.Composer.CompositeC1.Controllers
@@ -29,6 +30,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         protected ICheckoutNavigationViewService CheckoutNavigationViewService { get; private set; }
         protected IPaymentViewService PaymentViewService { get; private set; }
         protected IMyAccountUrlProvider MyAccountUrlProvider { get; private set; }
+        protected IWebsiteContext WebsiteContext { get; private set; }
         protected ICartService CartService { get; private set; }        
 
         protected CheckoutBaseController(
@@ -41,7 +43,8 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             ICheckoutNavigationViewService checkoutNavigationViewService,
             IPaymentViewService paymentViewService,
             IMyAccountUrlProvider myAccountUrlProvider,
-            ICartService cartService
+            ICartService cartService,
+            IWebsiteContext websiteContext
             )
         {
             if (pageService == null) { throw new ArgumentNullException("pageService"); }
@@ -64,6 +67,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             CheckoutNavigationViewService = checkoutNavigationViewService;
             PaymentViewService = paymentViewService;
             MyAccountUrlProvider = myAccountUrlProvider;
+            WebsiteContext = websiteContext;
             CartService = cartService;
         }
 
@@ -120,7 +124,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             var breadcrumbViewModel = ConfirmationBreadcrumbViewService.CreateBreadcrumbViewModel(new GetCheckoutBreadcrumbParam
             {
                 CultureInfo = ComposerContext.CultureInfo,
-                HomeUrl = PageService.GetRendererPageUrl(PagesConfiguration.HomePageId, ComposerContext.CultureInfo),
+                HomeUrl = PageService.GetRendererPageUrl(WebsiteContext.WebsiteId, ComposerContext.CultureInfo),
             });
 
             return View("Breadcrumb", breadcrumbViewModel);
@@ -144,10 +148,10 @@ namespace Orckestra.Composer.CompositeC1.Controllers
                 StepNumber = 1
             });
 
-            var registerUrl = MyAccountUrlProvider.GetCreateAccountUrl(new GetMyAccountUrlParam
+            var registerUrl = MyAccountUrlProvider.GetCreateAccountUrl(new BaseUrlParameter
             {
                 CultureInfo = ComposerContext.CultureInfo,
-                ReturnUrl = stepOneUrl,
+                ReturnUrl = stepOneUrl
             });
 
             var cart = CartService.GetCartViewModelAsync(new GetCartParam()
@@ -175,7 +179,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         [MustBeAnonymous(MustBeAnonymousAttribute.CartDestination)]
         public virtual ActionResult CheckoutSignInAsCustomer()
         {
-            var forgotPasswordUrl = MyAccountUrlProvider.GetForgotPasswordUrl(new GetMyAccountUrlParam
+            var forgotPasswordUrl = MyAccountUrlProvider.GetForgotPasswordUrl(new BaseUrlParameter
             {
                 CultureInfo = ComposerContext.CultureInfo
             });
@@ -202,7 +206,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         {
             var cartViewModel = BuildCartViewModel();
             
-            cartViewModel.Context.Add("RedirectUrl", UrlProvider.GetCartUrl(new GetCartUrlParam
+            cartViewModel.Context.Add("RedirectUrl", UrlProvider.GetCartUrl(new BaseUrlParameter
             {                
                 CultureInfo = ComposerContext.CultureInfo
             }));
@@ -227,12 +231,12 @@ namespace Orckestra.Composer.CompositeC1.Controllers
 
         public virtual ActionResult CheckoutNavigation()
         {
-            var navigationPageInfos = UrlProvider.GetCheckoutStepPageInfos(new GetCartUrlParam
+            var navigationPageInfos = UrlProvider.GetCheckoutStepPageInfos(new BaseUrlParameter
             {
                 CultureInfo = ComposerContext.CultureInfo
             });
 
-            var currentStep = PageService.GetCheckoutStepPage(SitemapNavigator.CurrentPageId).CurrentStep;
+            var currentStep = PageService.GetCheckoutStepPageNumber(SitemapNavigator.CurrentHomePageId, SitemapNavigator.CurrentPageId, ComposerContext.CultureInfo);
 
             var checkoutNavigationViewModel = CheckoutNavigationViewService.GetCheckoutNavigationViewModel(new GetCheckoutNavigationParam
             {
@@ -251,7 +255,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
                 IsAuthenticated = ComposerContext.IsAuthenticated
             };
 
-            var currentStep = PageService.GetCheckoutStepPage(SitemapNavigator.CurrentPageId).CurrentStep;
+            var currentStep = PageService.GetCheckoutStepPageNumber(SitemapNavigator.CurrentHomePageId, SitemapNavigator.CurrentPageId, ComposerContext.CultureInfo);
 
             cartViewModel.Context.Add("CurrentStep", currentStep);
 

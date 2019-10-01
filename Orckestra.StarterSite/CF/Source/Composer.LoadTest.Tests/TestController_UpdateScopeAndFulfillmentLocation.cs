@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Net.Http;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Web.Http;
 using FluentAssertions;
 using Moq.AutoMock;
@@ -21,7 +22,7 @@ namespace Composer.LoadTest.Tests
         }
 
         [Test]
-        public async void Update_Scope_And_Inventory_Location_SHOULD_Succeed()
+        public async Task Update_Scope_And_Inventory_Location_SHOULD_Succeed()
         {
             var controller = _container.CreateInstance<TestController>();
             controller.Request = new HttpRequestMessage();

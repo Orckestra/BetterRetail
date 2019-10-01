@@ -1,8 +1,11 @@
-﻿using Composite.AspNet.MvcFunctions;
+﻿using Autofac.Integration.Mvc;
+using Composite.AspNet.MvcFunctions;
 using Composite.Core.Application;
 using Composite.Core.Xml;
+using Composite.Data;
 using Composite.Data.DynamicTypes;
 using Composite.Functions;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Orckestra.Composer.CompositeC1.DataTypes;
 using Orckestra.Composer.CompositeC1.DataTypes.Navigation;
@@ -13,18 +16,17 @@ using Orckestra.Composer.CompositeC1.Sitemap;
 using Orckestra.Composer.HttpModules;
 using Orckestra.Composer.Logging;
 using Orckestra.Composer.Search;
-using System;
-using System.Web;
-using System.Web.Hosting;
+using Orckestra.ExperienceManagement.Configuration.DataTypes;
+using System.Web.Http;
 using System.Web.Mvc;
-using Composite.Data;
-using ExperienceManagement.DataTypes;
+using System.Web.Routing;
 
 namespace Orckestra.Composer.CompositeC1.Mvc
 {
     [ApplicationStartup(AbortStartupOnException = true)]
     public static class StartupHandler
     {
+        private static IComposerHost _host;
         public static void Start()
         {
             DynamicModuleUtility.RegisterModule(typeof(SecurityModule));
@@ -33,25 +35,27 @@ namespace Orckestra.Composer.CompositeC1.Mvc
 
         public static void OnBeforeInitialize()
         {
-
+         
         }
 
         public static void OnInitialized()
         {
+            GlobalConfiguration.Configure(WebApiConfig.Register);
+            RouteConfig.RegisterRoutes(RouteTable.Routes);
             LogProvider.SetCurrentLogProvider(C1LogProvider.Instance);
 
             // Needed by C1, do not remove!
-            var host = new ComposerHost();
-            host.Init();
+          
+            _host.Init();
 
             var log = LogProvider.GetCurrentClassLogger();
 
             log.Info("Application Starting");
 
+            DynamicTypeManager.EnsureCreateStore(typeof(RecurringOrdersSettings));
+            DynamicTypeManager.EnsureCreateStore(typeof(GoogleSettings));
             DynamicTypeManager.EnsureCreateStore(typeof(ComposerPage));
             DynamicTypeManager.EnsureCreateStore(typeof(CategoryPage));
-            DynamicTypeManager.EnsureCreateStore(typeof(ComposerImage));
-            DynamicTypeManager.EnsureCreateStore(typeof(CheckoutStepInfoPage));
             DynamicTypeManager.EnsureCreateStore(typeof(UrlTarget));
             DynamicTypeManager.EnsureCreateStore(typeof(CssStyle));
             DynamicTypeManager.EnsureCreateStore(typeof(MainMenu));
@@ -86,15 +90,10 @@ namespace Orckestra.Composer.CompositeC1.Mvc
             functions.RegisterAction<HeaderController>("GeneralErrors", "Composer.Header.GeneralErrors");
             functions.RegisterAction<HeaderController>("LanguageSwitch", "Composer.Header.LanguageSwitch");
             functions.RegisterAction<HeaderController>("Breadcrumb", "Composer.General.Breadcrumb");
-            functions.RegisterAction<HeaderController>("MainMenu", "Composer.Header.MainMenu");
-            functions.RegisterAction<HeaderController>("StickyLinks", "Composer.Header.StickyLinks");
-            functions.RegisterAction<HeaderController>("OptionalLinks", "Composer.Header.OptionalLinks");
             functions.RegisterAction<HeaderController>("PageHeader", "Composer.Header.PageHeader");
 
-            functions.RegisterAction<FooterController>("OptionalLinks", "Composer.Footer.OptionalLinks");
             functions.RegisterAction<FooterController>("SocialLinks", "Composer.Footer.SocialLinks");
             functions.RegisterAction<FooterController>("Copyright", "Composer.Footer.Copyright");
-            functions.RegisterAction<FooterController>("MainFooter", "Composer.Footer.MainFooter");
 
             functions.RegisterAction<SearchController>("PageHeader", "Composer.Search.PageHeader");
             functions.RegisterAction<SearchController>("SearchBox", "Composer.SearchBox");
@@ -120,12 +119,12 @@ namespace Orckestra.Composer.CompositeC1.Mvc
             functions.RegisterAction<ProductController>("ProductSpecifications", "Composer.Product.Specifications");
             functions.RegisterAction<ProductController>("Breadcrumb", "Composer.Product.Breadcrumb");
             functions.RegisterAction<ProductController>("RelatedProducts", "Composer.Product.RelatedProducts", "Displays products/variants related to the product displayed on the current product/variant details page.  First products which are related via merchandising relationship will be displayed and if none are available then displays product in the same default category")
-                .AddParameter("merchandiseTypes", 
+                .AddParameter("merchandiseTypes",
                     typeof(string),
                     label: "Products Merchandise Relationship Types to include",
                     helpText: "Specify the Merchandise Types ")
                 .AddParameter(
-                    "headingText", 
+                    "headingText",
                     typeof(string),
                     defaultValueProvider: new ConstantValueProvider("You may also like"),
                     label: "Heading",
@@ -138,7 +137,7 @@ namespace Orckestra.Composer.CompositeC1.Mvc
                     helpText: "Specify if this block should display products in the same default category if no products are displayed based on specified relationship types.")
                 .AddParameter(
                     "maxItems",
-                    typeof(int), 
+                    typeof(int),
                     defaultValueProvider: new ConstantValueProvider(5),
                     label: "Number of maximum displayed products/variants",
                     helpText: "Specify the number of products/items displayed in this block. The maximum should be 15.")
@@ -252,5 +251,16 @@ namespace Orckestra.Composer.CompositeC1.Mvc
         {
             SearchConfiguration.ShowAllPages = true;
         }
+
+        public static void ConfigureServices(IServiceCollection collection)
+        {
+            _host = new ComposerHost();
+            _host.LoadPlugins();
+            foreach(var type in _host.RegisteredInterfaces)
+            {
+                collection.AddTransient(type, provider => AutofacDependencyResolver.Current.GetService(type));
+            }
+        }
+
     }
 }

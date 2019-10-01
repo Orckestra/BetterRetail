@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Enums;
 using Orckestra.Composer.Factory;
 using Orckestra.Composer.Parameters;
@@ -33,7 +34,8 @@ namespace Orckestra.Composer.Product.Factory
         protected IProductUrlProvider ProductUrlProvider { get; }
         protected IScopeViewService ScopeViewService { get; }
         protected IRecurringOrdersRepository RecurringOrdersRepository { get; }
-        protected IRecurringOrderProgramViewModelFactory RecurringOrderProgramViewModelFactory { get; }        
+        protected IRecurringOrderProgramViewModelFactory RecurringOrderProgramViewModelFactory { get; }
+        protected IRecurringOrdersSettings RecurringOrdersSettings { get; private set; }
 
         public ProductViewModelFactory(
             IViewModelMapper viewModelMapper,
@@ -44,7 +46,8 @@ namespace Orckestra.Composer.Product.Factory
             IProductUrlProvider productUrlProvider,
             IScopeViewService scopeViewService,
             IRecurringOrdersRepository recurringOrdersRepository,
-            IRecurringOrderProgramViewModelFactory recurringOrderProgramViewModelFactory)
+            IRecurringOrderProgramViewModelFactory recurringOrderProgramViewModelFactory,
+            IRecurringOrdersSettings recurringOrdersSettings)
         {
             if (viewModelMapper == null) { throw new ArgumentNullException(nameof(viewModelMapper)); }
             if (productRepository == null) { throw new ArgumentNullException(nameof(productRepository)); }
@@ -65,6 +68,7 @@ namespace Orckestra.Composer.Product.Factory
             ScopeViewService = scopeViewService;
             RecurringOrdersRepository = recurringOrdersRepository;
             RecurringOrderProgramViewModelFactory = recurringOrderProgramViewModelFactory;
+            RecurringOrdersSettings = recurringOrdersSettings;
         }
 
         public virtual async Task<ProductViewModel> GetProductViewModel(GetProductParam param)
@@ -119,7 +123,7 @@ namespace Orckestra.Composer.Product.Factory
             if (param == null) throw new ArgumentNullException(nameof(param));
             if (vm == null) throw new ArgumentNullException(nameof(vm));
 
-            var recurringOrdersEnabled = ConfigurationUtil.GetRecurringOrdersConfigEnabled();
+            var recurringOrdersEnabled = RecurringOrdersSettings.Enabled;
 
             var recurringOrderProgramName = product.PropertyBag.GetValueOrDefault<string>(Constants.ProductAttributes.RecurringOrderProgramName);
 

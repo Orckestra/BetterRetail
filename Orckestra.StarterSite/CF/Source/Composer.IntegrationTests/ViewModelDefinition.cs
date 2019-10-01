@@ -21,7 +21,7 @@ namespace Orckestra.Composer.Tests.IntegrationTests
 
         public bool IsValid()
         {
-            return IsSealed && InheritsBase;
+            return InheritsBase;
         }
 
         public override string ToString()

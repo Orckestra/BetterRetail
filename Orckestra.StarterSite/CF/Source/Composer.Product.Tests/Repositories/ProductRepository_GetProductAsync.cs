@@ -49,16 +49,13 @@ namespace Orckestra.Composer.Product.Tests.Repositories
         {
             //Arrange
             var productRepository = _container.CreateInstance<ProductRepository>();
-
+            var param = new GetProductParam { Scope = scope, CultureInfo = _englishCultureInfo, ProductId = productId };
             //Act & Assert
-            Assert.Throws<ArgumentException>(async () =>
-            {
-                await productRepository.GetProductAsync(new GetProductParam { Scope = scope, CultureInfo = _englishCultureInfo, ProductId = productId });
-            });
+            Assert.ThrowsAsync<ArgumentException>(() => productRepository.GetProductAsync(param));
         }
 
         [Test]
-        public async void WhenOkParameters_InvokesOvertureClientSendAsync()
+        public async Task WhenOkParameters_InvokesOvertureClientSendAsync()
         {
             //Arrange
             var overtureClientMock = new Mock<IOvertureClient>();
@@ -80,7 +77,7 @@ namespace Orckestra.Composer.Product.Tests.Repositories
         }
 
         [Test]
-        public async void WHEN_Ok_parameters_but_product_is_inactive_SHOULD_return_null()
+        public async Task WHEN_Ok_parameters_but_product_is_inactive_SHOULD_return_null()
         {
             //Arrange
             var overtureClientMock = new Mock<IOvertureClient>();

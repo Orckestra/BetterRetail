@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using Orckestra.Composer.Cart.Parameters.WishList;
+﻿using Orckestra.Composer.Cart.Parameters.WishList;
 using Orckestra.Composer.Cart.Providers.WishList;
+using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Services;
-using Orckestra.Composer.Utils;
 using Orckestra.Composer.ViewModels.MyAccount;
+using Orckestra.ExperienceManagement.Configuration;
+using System;
+using System.Collections.Generic;
 
 namespace Orckestra.Composer.CompositeC1.Services
 {
@@ -18,6 +19,10 @@ namespace Orckestra.Composer.CompositeC1.Services
         protected IWishListUrlProvider WishListUrlProvider { get; private set; }
         protected IRecurringScheduleUrlProvider RecurringScheduleUrlProvider { get; private set; }
         protected IPageService PageService { get; private set; }
+        protected IWebsiteContext WebsiteContext { get; private set; }
+        protected IRecurringOrdersSettings RecurringOrdersSettings { get; private set; }
+        protected ISiteConfiguration SiteConfiguration { get; private set; }
+
 
         public MyAccountViewService(
             IComposerContext composerContext,
@@ -25,7 +30,10 @@ namespace Orckestra.Composer.CompositeC1.Services
             IOrderUrlProvider orderUrlProvider,
             IWishListUrlProvider wishListUrlProvider,
             IRecurringScheduleUrlProvider recurringScheduleUrlProvider,
-            IPageService pageService)
+            IPageService pageService,
+            IWebsiteContext websiteContext,
+            IRecurringOrdersSettings recurringOrdersSettings,
+            ISiteConfiguration siteConfiguration)
         {
             if (composerContext == null) throw new ArgumentNullException("composerContext");
             if (myAccountUrlProvider == null) throw new ArgumentNullException("myAccountUrlProvider");
@@ -40,16 +48,21 @@ namespace Orckestra.Composer.CompositeC1.Services
             WishListUrlProvider = wishListUrlProvider;
             PageService = pageService;
             RecurringScheduleUrlProvider = recurringScheduleUrlProvider;
+            WebsiteContext = websiteContext;
+            RecurringOrdersSettings = recurringOrdersSettings;
+            SiteConfiguration = siteConfiguration;
         }
 
         public virtual MenuViewModel CreateMenu(string currentUrl)
         {
-#pragma warning disable CS0436 // Type conflicts with imported type
-            bool recurringOrderConfigEnabled = ConfigurationUtil.GetRecurringOrdersConfigEnabled();
-#pragma warning restore CS0436 // Type conflicts with imported type
+            var urlParam = new BaseUrlParameter
+            {
+                CultureInfo = ComposerContext.CultureInfo
+            };
 
-            var myAccountUrl = MyAccountUrlProvider.GetMyAccountUrl(new GetMyAccountUrlParam { CultureInfo = ComposerContext.CultureInfo });
-            var addressListUrl = MyAccountUrlProvider.GetAddressListUrl(new GetMyAccountUrlParam { CultureInfo = ComposerContext.CultureInfo });
+            bool recurringOrderConfigEnabled = RecurringOrdersSettings.Enabled;
+            var myAccountUrl = MyAccountUrlProvider.GetMyAccountUrl(urlParam);
+            var addressListUrl = MyAccountUrlProvider.GetAddressListUrl(urlParam);
             var myOrderHistoryUrl = OrderUrlProvider.GetOrderHistoryUrl(new GetOrderUrlParameter { CultureInfo = ComposerContext.CultureInfo });
             var myWishListUrl = WishListUrlProvider.GetWishListUrl(new GetWishListUrlParam {CultureInfo = ComposerContext.CultureInfo});
             var myRecurringScheduleUrl = RecurringScheduleUrlProvider.GetRecurringScheduleUrl(new GetRecurringScheduleUrlParam { CultureInfo = ComposerContext.CultureInfo });
@@ -57,51 +70,51 @@ namespace Orckestra.Composer.CompositeC1.Services
             var currentPageId = new Guid(currentUrl);
 
             var menu = new MenuViewModel { MenuItems = new List<MenuItemViewModel>() };
-
-            var myAccountPage = PageService.GetPage(PagesConfiguration.MyAccountPageId, ComposerContext.CultureInfo);
-            var myAddressPage = PageService.GetPage(PagesConfiguration.AddressListPageId, ComposerContext.CultureInfo);
-            var myOrderHistoryPage = PageService.GetPage(PagesConfiguration.OrderHistoryPageId, ComposerContext.CultureInfo);
-            var myWishListage = PageService.GetPage(PagesConfiguration.MyWishListPageId, ComposerContext.CultureInfo);
-            var myRecurringSchedulePage = PageService.GetPage(PagesConfiguration.RecurringSchedulePageId, ComposerContext.CultureInfo);
+            var pageConfiguration = SiteConfiguration.GetPagesConfiguration(ComposerContext.CultureInfo, WebsiteContext.WebsiteId);
+            var myAccountPage = PageService.GetPage(pageConfiguration.MyAccountPageId, ComposerContext.CultureInfo);
+            var myAddressPage = PageService.GetPage(pageConfiguration.AddressListPageId, ComposerContext.CultureInfo);
+            var myOrderHistoryPage = PageService.GetPage(pageConfiguration.OrderHistoryPageId, ComposerContext.CultureInfo);
+            var myWishListage = PageService.GetPage(pageConfiguration.MyWishListPageId, ComposerContext.CultureInfo);
+            var myRecurringSchedulePage = PageService.GetPage(RecurringOrdersSettings.RecurringSchedulePageId, ComposerContext.CultureInfo);
 
             var myAccountMenuItem = new MenuItemViewModel
             {
                 Name = myAccountPage.MenuTitle,
                 Url = myAccountUrl,
-                IsActive = currentPageId == PagesConfiguration.MyAccountPageId ||
-                           currentPageId == PagesConfiguration.ChangePasswordPageId
+                IsActive = currentPageId == pageConfiguration.MyAccountPageId ||
+                           currentPageId == pageConfiguration.ChangePasswordPageId
             };
 
             var myAdressesMenuItem = new MenuItemViewModel
             {
                 Name = myAddressPage.MenuTitle,
                 Url = addressListUrl,
-                IsActive = currentPageId == PagesConfiguration.AddressListPageId ||
-                           currentPageId == PagesConfiguration.AddAddressPageId ||
-                           currentPageId == PagesConfiguration.UpdateAddressPageId
+                IsActive = currentPageId == pageConfiguration.AddressListPageId ||
+                           currentPageId == pageConfiguration.AddAddressPageId ||
+                           currentPageId == pageConfiguration.UpdateAddressPageId
             };
 
              var myWishListMenuItem = new MenuItemViewModel
              {
                  Name = myWishListage.MenuTitle,
                  Url = myWishListUrl,
-                 IsActive = currentPageId == PagesConfiguration.MyWishListPageId
+                 IsActive = currentPageId == pageConfiguration.MyWishListPageId
              };
 
             var myOrderHistoryMenuItem = new MenuItemViewModel
             {
                 Name = myOrderHistoryPage.MenuTitle,
                 Url = myOrderHistoryUrl,
-                IsActive = currentPageId == PagesConfiguration.OrderHistoryPageId ||
-                            currentPageId ==  PagesConfiguration.OrderDetailsPageId ||
-                            currentPageId == PagesConfiguration.RecurringCartDetailsPageId
+                IsActive = currentPageId == pageConfiguration.OrderHistoryPageId ||
+                            currentPageId == pageConfiguration.OrderDetailsPageId ||
+                            currentPageId == RecurringOrdersSettings.RecurringCartDetailsPageId
             };
 
             var myRecurringScheduleMenuItem = new MenuItemViewModel
             {
                 Name = myRecurringSchedulePage.MenuTitle,
                 Url = myRecurringScheduleUrl,
-                IsActive = currentPageId == PagesConfiguration.RecurringSchedulePageId || currentPageId == PagesConfiguration.RecurringScheduleDetailsPageId
+                IsActive = currentPageId == RecurringOrdersSettings.RecurringSchedulePageId || currentPageId == RecurringOrdersSettings.RecurringScheduleDetailsPageId
             };
 
             menu.MenuItems.AddRange(new List<MenuItemViewModel> { myAccountMenuItem, myWishListMenuItem, myAdressesMenuItem, myOrderHistoryMenuItem});

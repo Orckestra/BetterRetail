@@ -48,7 +48,7 @@ module Orckestra.Composer {
 
         public buildSignedInCacheKey(param: any): string {
 
-            return this.cacheKey + '.' + param.cultureInfo + '.' + param.isAuthenticated + '.' + param.encryptedCustomerId;
+            return this.cacheKey + '.' + param.cultureInfo + '.' + param.isAuthenticated + '.' + param.encryptedCustomerId + '.' + param.websiteId;
         }
 
         public invalidateCache(): Q.Promise<void> {

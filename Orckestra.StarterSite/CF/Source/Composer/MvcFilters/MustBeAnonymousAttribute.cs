@@ -60,7 +60,7 @@ namespace Orckestra.Composer.MvcFilters
         {
             var urlProvider = ComposerHost.Current.Resolve<IMyAccountUrlProvider>();
 
-            var url = urlProvider.GetMyAccountUrl(new GetMyAccountUrlParam
+            var url = urlProvider.GetMyAccountUrl(new BaseUrlParameter
             {
                 CultureInfo = CultureInfo.CurrentCulture
             });
@@ -71,7 +71,7 @@ namespace Orckestra.Composer.MvcFilters
         {
             var urlProvider = ComposerHost.Current.Resolve<ICartUrlProvider>();
 
-            var url = urlProvider.GetCartUrl(new GetCartUrlParam
+            var url = urlProvider.GetCartUrl(new BaseUrlParameter
             {                
                 CultureInfo = CultureInfo.CurrentCulture
             });

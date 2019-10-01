@@ -30,7 +30,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
         }
 
         [Test]
-        public async void WHEN_valid_request_SHOULD_succeed()
+        public async Task WHEN_valid_request_SHOULD_succeed()
         {
             //Arrange
             var expectedCustomer = MockCustomerFactory.CreateRandom();
@@ -65,7 +65,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
         }
 
         [Test]
-        public async void WHEN_user_does_not_exists_SHOULD_fail()
+        public async Task WHEN_user_does_not_exists_SHOULD_fail()
         {
             //Arrange
             var expectedCustomerId = GetRandom.Guid();
@@ -96,7 +96,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             var membershipService = _container.CreateInstance<MembershipViewService>();
 
             //Act
-            var ex = Assert.Throws<ArgumentNullException>(async () => await membershipService.ChangePasswordAsync(null));
+            var ex = Assert.ThrowsAsync<ArgumentNullException>(() => membershipService.ChangePasswordAsync(null));
 
             //Assert
             ex.Message.Should().ContainEquivalentOf("param");
@@ -110,7 +110,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             var membershipService = _container.CreateInstance<MembershipViewService>();
 
             //Act
-            var ex = Assert.Throws<ArgumentException>(async () => await membershipService.ChangePasswordAsync(
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => membershipService.ChangePasswordAsync(
                 new ChangePasswordParam
                 {
                     CultureInfo = cultureInfo,
@@ -133,7 +133,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             var membershipService = _container.CreateInstance<MembershipViewService>();
 
             //Act
-            var ex = Assert.Throws<ArgumentException>(async () => await membershipService.ChangePasswordAsync(
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => membershipService.ChangePasswordAsync(
                 new ChangePasswordParam
                 {
                     CultureInfo = TestingExtensions.GetRandomCulture(),
@@ -158,7 +158,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             var membershipService = _container.CreateInstance<MembershipViewService>();
 
             //Act
-            var ex = Assert.Throws<ArgumentException>(async () => await membershipService.ChangePasswordAsync(
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => membershipService.ChangePasswordAsync(
                 new ChangePasswordParam
                 {
                     CultureInfo = TestingExtensions.GetRandomCulture(),
@@ -183,7 +183,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             var membershipService = _container.CreateInstance<MembershipViewService>();
 
             //Act
-            var ex = Assert.Throws<ArgumentException>(async () => await membershipService.ChangePasswordAsync(
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => membershipService.ChangePasswordAsync(
                 new ChangePasswordParam
                 {
                     CultureInfo = TestingExtensions.GetRandomCulture(),
@@ -208,7 +208,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             var membershipService = _container.CreateInstance<MembershipViewService>();
 
             //Act
-            var ex = Assert.Throws<ArgumentException>(async () => await membershipService.ChangePasswordAsync(
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => membershipService.ChangePasswordAsync(
                 new ChangePasswordParam
                 {
                     CultureInfo = TestingExtensions.GetRandomCulture(),

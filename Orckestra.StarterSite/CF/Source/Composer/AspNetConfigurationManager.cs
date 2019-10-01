@@ -37,8 +37,9 @@ namespace Orckestra.Composer
             DependencyResolver.SetResolver(new ComposerDependencyResolver(lifetimeScope, DependencyResolver.Current));
             ViewEngines.Engines.Add(viewEngine);
 
-            lifetimeScope.Resolve<ISearchUrlProvider>().RegisterRoutes(RouteTable.Routes);
-            lifetimeScope.Resolve<IProductUrlProvider>().RegisterRoutes(RouteTable.Routes);
+            //TODO: ISearchUrlProvider and IProductUrlProvider is PerRequest now
+            //lifetimeScope.Resolve<ISearchUrlProvider>().RegisterRoutes(RouteTable.Routes);
+            //lifetimeScope.Resolve<IProductUrlProvider>().RegisterRoutes(RouteTable.Routes);
         }
 
         private void RegisterWebApi(ILifetimeScope lifetimeScope, MediaTypeFormatter mediaTypeFormatter)

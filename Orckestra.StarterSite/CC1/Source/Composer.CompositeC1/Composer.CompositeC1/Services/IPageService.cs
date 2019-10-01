@@ -18,8 +18,8 @@ namespace Orckestra.Composer.CompositeC1.Services
 
         string GetPageUrl(IPage page);
 
-        List<CheckoutStepInfoPage> GetCheckoutStepPages(CultureInfo cultureInfo = null);
-
-        CheckoutStepInfoPage GetCheckoutStepPage(Guid pageId, CultureInfo cultureInfo = null);
+        List<string> GetCheckoutStepPages(Guid currentHomePageId, CultureInfo cultureInfo = null);
+        List<string> GetCheckoutNavigationPages(Guid currentHomePageId, CultureInfo cultureInfo = null);
+        int GetCheckoutStepPageNumber(Guid currentHomePageId, Guid pageId, CultureInfo cultureInfo = null);
     }
 }

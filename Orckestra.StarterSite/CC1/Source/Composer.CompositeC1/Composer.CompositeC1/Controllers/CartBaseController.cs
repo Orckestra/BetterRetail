@@ -1,14 +1,12 @@
-﻿using System;
-using System.Web.Mvc;
-using Composite.Data;
+﻿using Composite.Data;
 using Orckestra.Composer.Cart.ViewModels;
-using Orckestra.Composer.CompositeC1.Pages;
 using Orckestra.Composer.CompositeC1.Services;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Services.Breadcrumb;
-using Orckestra.Composer.Utils;
+using System;
+using System.Web.Mvc;
 using ActionResult = System.Web.Mvc.ActionResult;
 
 namespace Orckestra.Composer.CompositeC1.Controllers
@@ -51,13 +49,13 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         protected virtual void SetCurrentStepContext(CartViewModel cartViewModel)
         {
             var page = PageService.GetPage(SitemapNavigator.CurrentPageId);
-            var checkoutStepInfoPage =
-                page.GetMetaData("CheckoutStepInfoPage", typeof (CheckoutStepInfoPage)) as CheckoutStepInfoPage;
-            
-            if (checkoutStepInfoPage != null)
+            var checkoutSteps = PageService.GetCheckoutStepPages(SitemapNavigator.CurrentHomePageId, ComposerContext.CultureInfo);
+
+            if (checkoutSteps != null && checkoutSteps.Contains(SitemapNavigator.CurrentPageId.ToString()))
             {
-                cartViewModel.Context["CurrentStep"] = checkoutStepInfoPage.CurrentStep;
+                cartViewModel.Context["CurrentStep"] = checkoutSteps.FindIndex(a => a == SitemapNavigator.CurrentPageId.ToString());
             }
+
         }
 
         public virtual ActionResult OrderSummary()
@@ -79,7 +77,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             var cartViewModel = new CartViewModel
             {
                 IsLoading = true,
-                HomepageUrl = CartUrlProvider.GetHomepageUrl(new GetCartUrlParam
+                HomepageUrl = CartUrlProvider.GetHomepageUrl(new BaseUrlParameter
                 {                    
                     CultureInfo = ComposerContext.CultureInfo
                 })
@@ -93,10 +91,10 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             var minicartViewModel = new MinicartViewModel
             {
                 NotificationTimeInMilliseconds = notificationTimeInSeconds * 1000,
-                Url = CartUrlProvider.GetCartUrl(new GetCartUrlParam
+                Url = CartUrlProvider.GetCartUrl(new BaseUrlParameter
                 {                    
-                    CultureInfo = ComposerContext.CultureInfo
-                })
+                    CultureInfo = ComposerContext.CultureInfo,
+                 })
             };
 
             return View(minicartViewModel);

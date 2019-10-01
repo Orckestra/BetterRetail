@@ -24,6 +24,7 @@ namespace Orckestra.Composer
 {
     public sealed class ComposerHost : IComposerHost
     {
+        public List<Type> RegisteredInterfaces { get; } = new List<Type>();
         private const string ComposerDllRegex = "Orckestra\\.Composer(\\.(.+))?.dll$";
 
         public static ComposerHost Current { get; private set; }
@@ -99,6 +100,26 @@ namespace Orckestra.Composer
 
         public void Init()
         {
+            if(Current == null)
+            {
+                LoadPlugins();
+            }
+
+            var overtureClient = CreateOvertureClient();
+            Register(overtureClient);
+
+            _rootResolver = _dependencyContainer.Build();
+            ConfigureAsp();
+
+            
+            if (Initialized != null)
+            {
+                Initialized(this, EventArgs.Empty);
+            }
+        }
+
+        public void LoadPlugins()
+        {
             if (Current != null)
             {
                 throw new InvalidOperationException("One ComposerHost is already initialized.");
@@ -107,15 +128,7 @@ namespace Orckestra.Composer
             InitializeRegistry();
             DefaultRegistration();
             LoadAssemblies();
-
-            _rootResolver = _dependencyContainer.Build();
-            ConfigureAsp();
-
             Current = this;
-            if (Initialized != null)
-            {
-                Initialized(this, EventArgs.Empty);
-            }
         }
 
         // Internal setters used in unit tests
@@ -228,9 +241,6 @@ namespace Orckestra.Composer
 
         private void DefaultRegistration()
         {
-            var overtureClient = CreateOvertureClient();
-
-            Register(overtureClient);
             Register(MetadataRegistry);
             Register(_environment);
 
@@ -339,6 +349,7 @@ namespace Orckestra.Composer
         public void Register(Type implementationType, ComponentLifestyle lifestyle, params Type[] asType)
         {
             _dependencyContainer.Register(implementationType, lifestyle, asType);
+            RegisteredInterfaces.AddRange(asType);
         }
 
         public void Register<T>(ComponentLifestyle lifestyle)
@@ -368,6 +379,7 @@ namespace Orckestra.Composer
 
         public void Register(Type implementationType, Type asType, ComponentLifestyle lifestyle)
         {
+
             Register(implementationType, lifestyle, new[] { asType });
         }
 

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Store.Extentions;
 using Orckestra.Composer.Store.Models;
 using Orckestra.Composer.Store.Parameters;
@@ -12,9 +13,12 @@ namespace Orckestra.Composer.Store.Services
     public class MapConfigurationViewService : IMapConfigurationViewService
     {
         protected IStoreRepository StoreRepository { get; private set; }
-        public MapConfigurationViewService (IStoreRepository storeRepository)
+
+        protected IGoogleSettings GoogleMapsSettings { get; private set; }
+        public MapConfigurationViewService (IStoreRepository storeRepository, IGoogleSettings googleMapsSettings)
         {
             StoreRepository = storeRepository;
+            GoogleMapsSettings = googleMapsSettings;
         }
 
         public virtual async Task<MapConfigurationViewModel> GetMapConfigurationViewModelAsync(
@@ -22,8 +26,8 @@ namespace Orckestra.Composer.Store.Services
         {
 
             var vm = new MapConfigurationViewModel();
-            vm.ZoomLevel = GoogleMapsConfiguration.ZoomLevel;
-            vm.MarkerPadding = GoogleMapsConfiguration.MarkerPadding;
+            vm.ZoomLevel = GoogleMapsSettings.MapsZoomLevel;
+            vm.MarkerPadding = GoogleMapsSettings.MapsMarkerPadding;
 
             if (param.LoadStoresBounds)
             {

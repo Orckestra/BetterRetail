@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using FizzWare.NBuilder.Generators;
 using FluentAssertions;
@@ -16,6 +17,7 @@ using Orckestra.Composer.Providers;
 using Orckestra.Composer.Services.Lookup;
 using Orckestra.Overture.ServiceModel.Customers;
 using Orckestra.Overture.ServiceModel.Orders;
+using System.Threading.Tasks;
 
 namespace Orckestra.Composer.Cart.Tests.Services.Order
 {
@@ -56,7 +58,7 @@ namespace Orckestra.Composer.Cart.Tests.Services.Order
         }
 
         [Test]
-        public async void WHEN_valid_request_SHOULD_succeed()
+        public async Task WHEN_valid_request_SHOULD_succeed()
         {
             //Arrange
             var email = GetRandom.String(32);
@@ -94,7 +96,7 @@ namespace Orckestra.Composer.Cart.Tests.Services.Order
         }
 
         [Test]
-        public async void WHEN_order_is_not_customer_one_SHOULD_return_null()
+        public async Task WHEN_order_is_not_customer_one_SHOULD_return_null()
         {
             //Arrange
             var email = GetRandom.String(32);

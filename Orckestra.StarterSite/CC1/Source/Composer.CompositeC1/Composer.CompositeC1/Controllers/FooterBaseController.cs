@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.Mvc;
-using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Localization;
 using Orckestra.Composer.Services;
@@ -31,13 +26,6 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             LocalizationProvider = localizationProvider;
         }
 
-        public ActionResult OptionalLinks()
-        {
-            var optionalLinksViewModel = HomeViewService.GetFooterOptionalLinksViewModel(ComposerContext.CultureInfo).Result;
-
-            return View("FooterOptionalLinks", optionalLinksViewModel);
-        }
-
         public ActionResult SocialLinks()
         {
             var getLocalizedFollowUsParam = new GetLocalizedParam
@@ -56,18 +44,6 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             var copyrightValue = HomeViewService.GetCopyright(ComposerContext.CultureInfo).Result;
 
             return Content(copyrightValue);
-        }
-
-        public ActionResult MainFooter()
-        {
-            var param = new GetFooterParam()
-            {
-                CultureInfo = ComposerContext.CultureInfo,
-            };
-
-            var footerViewModel = HomeViewService.GetFooterViewModel(param).Result;
-
-            return View("FooterContainer", footerViewModel);
         }
     }
 }

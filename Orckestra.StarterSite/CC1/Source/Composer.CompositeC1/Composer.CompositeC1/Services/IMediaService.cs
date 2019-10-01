@@ -11,6 +11,6 @@ namespace Orckestra.Composer.CompositeC1.Services
 {
     public interface IMediaService
     {
-        ImageInfo GetImageInfo(Guid itemId, CultureInfo cultureInfo);
+        ImageInfo GetImageInfo(string itemId, CultureInfo cultureInfo);
     }
 }

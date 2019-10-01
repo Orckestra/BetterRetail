@@ -92,16 +92,14 @@ namespace Orckestra.Composer.Tests.Country
         {
             // Arrange
             _container.Use(OvertureClientFactory.Create());
+            var param = new RetrieveCountryParam
+            {
+                IsoCode = isoCode,
+                CultureInfo = TestingExtensions.GetRandomCulture()
+            };
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await _repository.RetrieveCountry(new RetrieveCountryParam
-                {
-                    IsoCode = isoCode,
-                    CultureInfo = TestingExtensions.GetRandomCulture()
-                });
-            });
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => _repository.RetrieveCountry(param));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");

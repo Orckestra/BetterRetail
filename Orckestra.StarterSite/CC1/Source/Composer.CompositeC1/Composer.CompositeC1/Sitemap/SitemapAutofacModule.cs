@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Orckestra.Composer.CompositeC1.Providers;
 using Orckestra.Composer.CompositeC1.Services;
 using Orckestra.Composer.Product.Providers;
 using Orckestra.Composer.Providers;
@@ -7,11 +8,6 @@ using Orckestra.Composer.Sitemap;
 using Orckestra.Composer.Sitemap.Config;
 using Orckestra.Composer.Sitemap.Product;
 using Orckestra.Overture;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.Hosting;
 
 namespace Orckestra.Composer.CompositeC1.Sitemap
@@ -30,7 +26,7 @@ namespace Orckestra.Composer.CompositeC1.Sitemap
         {
             // Register overture client + product url provider + scope provider + culture service
             builder.Register(container => ComposerOvertureClient.CreateFromConfig()).As<IOvertureClient>().SingleInstance();
-            builder.RegisterType<ProductUrlProvider>().As<IProductUrlProvider>().SingleInstance();
+            builder.RegisterType<Product.Providers.ProductUrlProvider>().As<IProductUrlProvider>().SingleInstance();
             builder.RegisterType<ScopeProvider>().As<IScopeProvider>().SingleInstance();
             builder.RegisterType<CultureService>().As<ICultureService>().SingleInstance();
 

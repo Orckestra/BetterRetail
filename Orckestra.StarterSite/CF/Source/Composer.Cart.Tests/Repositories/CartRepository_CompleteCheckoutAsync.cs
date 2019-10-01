@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Threading.Tasks;
 using FizzWare.NBuilder.Generators;
 using FluentAssertions;
 using Moq.AutoMock;
@@ -29,7 +30,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var sut = Container.CreateInstance<CartRepository>();
 
             //Act
-            var ex = Assert.Throws<ArgumentNullException>(async () => await sut.CompleteCheckoutAsync(p));
+            var ex = Assert.ThrowsAsync<ArgumentNullException>(() => sut.CompleteCheckoutAsync(p));
 
             //Assert
             ex.Message.Should().ContainEquivalentOf("param");
@@ -52,7 +53,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var sut = Container.CreateInstance<CartRepository>();
 
             //Act
-            var ex = Assert.Throws<ArgumentException>(async () => await sut.CompleteCheckoutAsync(p));
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => sut.CompleteCheckoutAsync(p));
 
             //Assert
             ex.ParamName.Should().ContainEquivalentOf("param");
@@ -74,7 +75,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var sut = Container.CreateInstance<CartRepository>();
 
             //Act
-            var ex = Assert.Throws<ArgumentException>(async () => await sut.CompleteCheckoutAsync(p));
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => sut.CompleteCheckoutAsync(p));
 
             //Assert
             ex.ParamName.Should().ContainEquivalentOf("param");
@@ -98,7 +99,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var sut = Container.CreateInstance<CartRepository>();
 
             //Act
-            var ex = Assert.Throws<ArgumentException>(async () => await sut.CompleteCheckoutAsync(p));
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => sut.CompleteCheckoutAsync(p));
 
             //Assert
             ex.ParamName.Should().ContainEquivalentOf("param");
@@ -120,7 +121,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var sut = Container.CreateInstance<CartRepository>();
 
             //Act
-            var ex = Assert.Throws<ArgumentException>(async () => await sut.CompleteCheckoutAsync(p));
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => sut.CompleteCheckoutAsync(p));
 
             //Assert
             ex.ParamName.Should().ContainEquivalentOf("param");
@@ -128,7 +129,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
         }
 
         [Test]
-        public async void WHEN_Passing_Valid_Parameters_SHOULD_Succeed()
+        public async Task WHEN_Passing_Valid_Parameters_SHOULD_Succeed()
         {
             //Arrange
             Container.Use(OvertureClientFactory.Create());
@@ -148,7 +149,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
         }
 
         [Test]
-        public async void WHEN_Dependencies_Return_Null_Values_SHOULD_Succeed()
+        public async Task WHEN_Dependencies_Return_Null_Values_SHOULD_Succeed()
         {
             //Arrange
             Container.Use(OvertureClientFactory.CreateWithNullValues());

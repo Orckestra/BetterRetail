@@ -9,6 +9,7 @@ namespace Orckestra.Composer.Store
     {
         public void Register(IComposerHost host)
         {
+            host.Register<GoogleMapsUrlProvider, IGoogleMapsUrlProvider>();
             host.Register<StoreViewService, IStoreViewService>();
             host.Register<StoreScheduleViewService, IStoreScheduleViewService>();
             host.Register<StoreLocatorViewService, IStoreLocatorViewService>();

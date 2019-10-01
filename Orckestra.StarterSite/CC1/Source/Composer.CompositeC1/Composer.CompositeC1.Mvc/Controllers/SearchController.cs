@@ -4,6 +4,7 @@ using Orckestra.Composer.Providers;
 using Orckestra.Composer.Search.Context;
 using Orckestra.Composer.Search.Services;
 using Orckestra.Composer.Services;
+using Orckestra.ExperienceManagement.Configuration;
 
 namespace Orckestra.Composer.CompositeC1.Mvc.Controllers
 {
@@ -17,7 +18,8 @@ namespace Orckestra.Composer.CompositeC1.Mvc.Controllers
             ISearchUrlProvider urlProvider, 
             ISearchBreadcrumbViewService searchBreadcrumbViewService,
             IInventoryLocationProvider inventoryLocationProvider,
-            ISearchUrlProvider searchUrlProvider) 
+            ISearchUrlProvider searchUrlProvider,
+            ISiteConfiguration siteConfiguration) 
             
             : base(
             composerContext, 
@@ -27,7 +29,8 @@ namespace Orckestra.Composer.CompositeC1.Mvc.Controllers
             urlProvider, 
             searchBreadcrumbViewService,
             inventoryLocationProvider,
-            searchUrlProvider)
+            searchUrlProvider,
+            siteConfiguration)
         {
         }
     }

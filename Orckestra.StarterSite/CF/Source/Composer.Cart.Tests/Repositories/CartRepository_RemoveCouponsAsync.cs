@@ -31,7 +31,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             RemoveCouponsParam p = null;
             var sut = Container.CreateInstance<CartRepository>();
 
-            var ex = Assert.Throws<ArgumentNullException>(async () => await sut.RemoveCouponsAsync(p));
+            var ex = Assert.ThrowsAsync<ArgumentNullException>(() => sut.RemoveCouponsAsync(p));
 
             ex.ParamName.Should().BeEquivalentTo("param");
         }
@@ -52,7 +52,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var sut = Container.CreateInstance<CartRepository>();
 
             //Act
-            var ex = Assert.Throws<ArgumentException>(async () => await sut.RemoveCouponsAsync(p));
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => sut.RemoveCouponsAsync(p));
 
             //Assert
             ex.ParamName.Should().BeEquivalentTo("param");
@@ -74,7 +74,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var sut = Container.CreateInstance<CartRepository>();
 
             //Act
-            var ex = Assert.Throws<ArgumentException>(async () => await sut.RemoveCouponsAsync(p));
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => sut.RemoveCouponsAsync(p));
 
             //Assert
             ex.ParamName.Should().BeEquivalentTo("param");
@@ -95,7 +95,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var sut = Container.CreateInstance<CartRepository>();
 
             //Act
-            var ex = Assert.Throws<ArgumentNullException>(async () => await sut.RemoveCouponsAsync(p));
+            var ex = Assert.ThrowsAsync<ArgumentNullException>(() => sut.RemoveCouponsAsync(p));
 
             //Assert
             ex.ParamName.Should().BeEquivalentTo("param");
@@ -116,7 +116,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var sut = Container.CreateInstance<CartRepository>();
 
             //Act
-            var ex = Assert.Throws<ArgumentException>(async () => await sut.RemoveCouponsAsync(p));
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => sut.RemoveCouponsAsync(p));
 
             //Assert
             ex.ParamName.Should().BeEquivalentTo("param");
@@ -141,7 +141,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var sut = Container.CreateInstance<CartRepository>();
 
             //Act
-            Assert.DoesNotThrow(async ()=> await sut.RemoveCouponsAsync(p));
+            Assert.DoesNotThrowAsync(() => sut.RemoveCouponsAsync(p));
 
             //Assert
             Container.Verify<IOvertureClient>();

@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 
 namespace Orckestra.Composer.Cart.Parameters
 {
@@ -10,6 +11,8 @@ namespace Orckestra.Composer.Cart.Parameters
         /// Culture Info for the ViewModel.
         /// </summary>
         public CultureInfo CultureInfo { get; set; }
+
+        public Guid WebsiteId { get; set; }
         /// <summary>
         /// The Request Base Url
         /// </summary>

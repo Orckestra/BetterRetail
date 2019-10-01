@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Orckestra.Composer.ViewModels
 {
-    public class RecurringProductSummaryViewModel
+    public class RecurringProductSummaryViewModel: BaseViewModel
     {
         /// <summary>
         /// The display name of the product

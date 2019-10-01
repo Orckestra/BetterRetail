@@ -13,21 +13,14 @@ namespace Orckestra.Composer.Cart.Helper
 {
     public static class RecurringOrderCartHelper
     {
-        private static bool _recurringOrdersConfigEnabled = false;
-
+  
         static RecurringOrderCartHelper()
         {
-            _recurringOrdersConfigEnabled = ConfigurationUtil.GetRecurringOrdersConfigEnabled();
+           
         }
 
-        public static bool IsRecurringOrdersEnabled()
-        {
-            return _recurringOrdersConfigEnabled;
-        }
         public static bool IsCartContainsRecurringOrderItems(Overture.ServiceModel.Orders.Cart cart)
         {
-            if (!_recurringOrdersConfigEnabled)
-                return false;
 
             if (cart != null)
             {
@@ -57,9 +50,7 @@ namespace Orckestra.Composer.Cart.Helper
 
         public static bool IsCartContainsRecurringOrderItems(List<LineItemDetailViewModel> lineitems)
         {
-            if (!_recurringOrdersConfigEnabled)
-                return false;
-
+ 
             if (lineitems != null)
             {
                 foreach (var lineitem in lineitems ?? Enumerable.Empty<LineItemDetailViewModel>())

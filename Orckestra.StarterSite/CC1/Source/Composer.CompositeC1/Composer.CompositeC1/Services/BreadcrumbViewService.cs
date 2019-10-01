@@ -4,17 +4,23 @@ using System.Linq;
 using Composite.Data.Types;
 using Orckestra.Composer.Services.Breadcrumb;
 using Orckestra.Composer.ViewModels.Breadcrumb;
+using Orckestra.ExperienceManagement.Configuration;
 
 namespace Orckestra.Composer.CompositeC1.Services
 {
     public class BreadcrumbViewService : IBreadcrumbViewService
     {
-        private readonly IPageService _pageService;
+        protected IPageService _pageService;
+        protected ISiteConfiguration SiteConfiguration { get; private set; }
+        protected PagesConfiguration PagesConfiguration { get; private set; }
 
-        public BreadcrumbViewService(IPageService pageService)
+
+        public BreadcrumbViewService(IPageService pageService, ISiteConfiguration siteConfiguration)
         {
             if (pageService == null) { throw new ArgumentNullException(nameof(pageService)); }
             _pageService = pageService;
+            SiteConfiguration = siteConfiguration;
+            PagesConfiguration = SiteConfiguration.GetPagesConfiguration();
         }
 
         public virtual BreadcrumbViewModel CreateBreadcrumbViewModel(GetBreadcrumbParam param)
