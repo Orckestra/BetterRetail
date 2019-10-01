@@ -68,7 +68,7 @@
 <head>
 </head>
 <body>
-    @if (productSearchResults?.TotalCount == 0)
+    @if (productSearchResults == null || productSearchResults.TotalCount == 0)
     {
         <div data-oc-controller="Product.FacetSearch">
             @*Empty search facets results*@
@@ -143,7 +143,7 @@
 @helper RenderFacets(IList<Facet> facets)
 {
     var displayedFacets = facets.Where(f => f.IsDisplayed).ToList();
-    for (int index = 0; index < facets.Count; index++)
+    for (int index = 0; index < displayedFacets.Count; index++)
     {
         var facet = displayedFacets[index];
         <div class="panel  panel-default" data-facetfieldname="@facet.FieldName" data-facettype="@facet.FacetType"
