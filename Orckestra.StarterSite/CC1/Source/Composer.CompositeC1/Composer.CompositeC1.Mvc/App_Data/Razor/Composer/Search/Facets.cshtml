@@ -20,7 +20,6 @@
     public IComposerContext ComposerContext { get; set; }
     public IInventoryLocationProvider InventoryLocationProvider { get; set; }
     public ISearchUrlProvider UrlProvider { get; set; }
-    public ISearchViewService SearchViewService { get; set; }
     public ILocalizationProvider LocalizationProvider { get; set; }
 
     private string Localize(string category, string key)
@@ -58,7 +57,7 @@
         var criteria = SearchControllerHelper.GetSearchCriteria(Request, InventoryLocationProvider, ComposerContext, keywords, page, sortBy, sortDirection);
         criteria.SelectedFacets.AddRange(UrlProvider.BuildSelectedFacets(Request.QueryString));
 
-        var searchViewModel = SearchViewService.GetSearchViewModelAsync(criteria).GetAwaiter().GetResult();
+        var searchViewModel = SearchRequestContext.GetSearchViewModelAsync(criteria).GetAwaiter().GetResult();
 
         productSearchResults = searchViewModel.ProductSearchResults;
     }
