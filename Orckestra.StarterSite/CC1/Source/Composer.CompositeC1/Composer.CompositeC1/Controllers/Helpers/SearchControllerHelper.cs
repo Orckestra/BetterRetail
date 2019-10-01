@@ -9,26 +9,6 @@ namespace Orckestra.Composer.CompositeC1.Controllers.Helpers
 {
     public static class SearchControllerHelper
     {
-        public static SearchCriteria GetSearchCriteria(HttpRequestBase request, IInventoryLocationProvider inventoryLocationProvider,  
-            IComposerContext composerContext, string keywords, int page, string sortBy, string sortDirection)
-        {
-            return new SearchCriteria
-            {
-                Keywords = keywords,
-                NumberOfItemsPerPage = SearchConfiguration.MaxItemsPerPage,
-                IncludeFacets = true,
-                StartingIndex = (page - 1) * SearchConfiguration.MaxItemsPerPage,
-                SortBy = sortBy,
-                SortDirection = sortDirection,
-                Page = page,
-                BaseUrl = RequestUtils.GetBaseUrl(request).ToString(),
-                CultureInfo = composerContext.CultureInfo,
-                Scope = composerContext.Scope,
-                InventoryLocationIds = inventoryLocationProvider.GetInventoryLocationIdsForSearchAsync().Result,
-                AutoCorrect = SearchConfiguration.AutoCorrectSearchTerms,
-            };
-        }
-
         public static bool AreKeywordsValid(string keywords)
         {
             if (string.IsNullOrWhiteSpace(keywords))
@@ -46,7 +26,6 @@ namespace Orckestra.Composer.CompositeC1.Controllers.Helpers
             var isInvalid = string.IsNullOrWhiteSpace(strippedKeywords);
             return !isInvalid;
         }
-
 
     };
 }

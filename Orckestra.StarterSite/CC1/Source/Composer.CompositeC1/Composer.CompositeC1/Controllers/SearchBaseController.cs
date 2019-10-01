@@ -27,9 +27,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         protected IPageService PageService { get; private set; }
         protected ISearchRequestContext SearchRequestContext { get; private set; }
         protected ILanguageSwitchService LanguageSwitchService { get; private set; }
-        protected ISearchUrlProvider UrlProvider { get; private set; }
         protected ISearchBreadcrumbViewService SearchBreadcrumbViewService { get; private set; }
-        protected IInventoryLocationProvider InventoryLocationProvider { get; private set; }
         protected ISearchUrlProvider SearchUrlProvider { get; private set; }
         protected ISiteConfiguration SiteConfiguration { get; private set; }
         protected PagesConfiguration PagesConfiguration { get; private set; }
@@ -39,9 +37,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             IPageService pageService,
             ISearchRequestContext searchRequestContext,
             ILanguageSwitchService languageSwitchService,
-            ISearchUrlProvider urlProvider,
             ISearchBreadcrumbViewService searchBreadcrumbViewService,
-            IInventoryLocationProvider inventoryLocationProvider,
             ISearchUrlProvider searchUrlProvider,
             ISiteConfiguration siteConfiguration)
         {
@@ -49,18 +45,14 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             if (pageService == null) { throw new ArgumentNullException("pageService"); }
             if (searchRequestContext == null) { throw new ArgumentNullException("searchRequestContext"); }
             if (languageSwitchService == null) { throw new ArgumentNullException("languageSwitchService"); }
-            if (urlProvider == null) { throw new ArgumentNullException("urlProvider"); }
             if (searchBreadcrumbViewService == null) { throw new ArgumentNullException("searchBreadcrumbViewService"); }
-            if (inventoryLocationProvider == null) { throw new ArgumentNullException("inventoryLocationProvider"); }
             if (searchUrlProvider == null) { throw new ArgumentNullException("searchUrlProvider"); }
 
             ComposerContext = composerContext;
             PageService = pageService;
             SearchRequestContext = searchRequestContext;
             LanguageSwitchService = languageSwitchService;
-            UrlProvider = urlProvider;
             SearchBreadcrumbViewService = searchBreadcrumbViewService;
-            InventoryLocationProvider = inventoryLocationProvider;
             SearchUrlProvider = searchUrlProvider;
             SiteConfiguration = siteConfiguration;
             PagesConfiguration = siteConfiguration.GetPagesConfiguration();
@@ -97,27 +89,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             return View("SearchResults", searchViewModel);
         }
 
-        public virtual ActionResult SelectedSearchFacets(string keywords, int page = 1, string sortBy = null, string sortDirection = DefaultSortDirection)
-        {
-            var searchViewModel = GetSearchViewModel(keywords, page, sortBy, sortDirection);
-            
-            return View("SelectedSearchFacets", searchViewModel);
-        }
-
-        public virtual ActionResult SearchFacets(string keywords, int page = 1, string sortBy = null, string sortDirection = DefaultSortDirection)
-        {
-            if (!AreKeywordsValid(keywords))
-            {
-                return View("SearchFacetsEmpty");
-            }
-
-            var searchViewModel = GetSearchViewModel(keywords, page, sortBy, sortDirection);
-
-            return searchViewModel.ProductSearchResults.TotalCount == 0
-                ? View("SearchFacetsEmpty")
-                : View("SearchFacets", searchViewModel.ProductSearchResults);
-        }
-
+ 
         public virtual ActionResult SearchSummary(string keywords, int page = 1, string sortBy = null, string sortDirection = DefaultSortDirection)
         {
             if (!AreKeywordsValid(keywords))
@@ -142,20 +114,17 @@ namespace Orckestra.Composer.CompositeC1.Controllers
 
         protected virtual SearchViewModel GetSearchViewModel(string keywords, int page, string sortBy, string sortDirection)
         {
-            var criteria = SearchControllerHelper.GetSearchCriteria(Request, InventoryLocationProvider, ComposerContext, 
-                keywords, page, sortBy, sortDirection);
+            var param = new GetSearchViewModelParam
+            {
+                Keywords = keywords,
+                Page = page,
+                SortBy = sortBy,
+                SortDirection = sortDirection,
+                Request = Request
+            };
 
-            criteria.SelectedFacets.AddRange(UrlProvider.BuildSelectedFacets(Request.QueryString));
-
-            return SearchRequestContext.GetSearchViewModelAsync(criteria).Result;
+            return SearchRequestContext.GetSearchViewModelAsync(param).Result;
         }
-
-        protected virtual List<string> GetInventoryLocationIds()
-        {
-            var ids = InventoryLocationProvider.GetInventoryLocationIdsForSearchAsync().Result;
-
-            return ids;
-        } 
 
         public virtual ActionResult Breadcrumb(string keywords)
         {
@@ -179,7 +148,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
 
         private string BuildUrl(CultureInfo cultureInfo, string keywords, int page, string sortBy, string sortDirection)
         {
-            var searchUrl = UrlProvider.BuildSearchUrl(new BuildSearchUrlParam
+            var searchUrl = SearchUrlProvider.BuildSearchUrl(new BuildSearchUrlParam
             {
                 SearchCriteria = new SearchCriteria
                 {

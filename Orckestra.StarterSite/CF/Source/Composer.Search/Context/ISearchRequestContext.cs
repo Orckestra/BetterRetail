@@ -11,5 +11,6 @@ namespace Orckestra.Composer.Search.Context
         Task<PageHeaderViewModel> GetPageHeaderViewModelAsync(GetPageHeaderParam param);
 
         Task<SearchViewModel> GetSearchViewModelAsync(SearchCriteria criteria);
+        Task<SearchViewModel> GetSearchViewModelAsync(GetSearchViewModelParam param);
     }
 }
