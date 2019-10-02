@@ -5,9 +5,8 @@
 @using Orckestra.Composer.Providers.Localization
 @using Orckestra.Composer.Search.Context
 @using Orckestra.Composer.Search.Facets
-@using Orckestra.Composer.Search.Services
 @using Orckestra.Composer.Search.ViewModels
-@using Orckestra.Composer.Services
+@using Orckestra.Composer.Search.Parameters
 @inherits Composite.AspNet.Razor.RazorFunction
 
 @functions {
@@ -17,9 +16,6 @@
     }
 
     public ISearchRequestContext SearchRequestContext { get; set; }
-    public IComposerContext ComposerContext { get; set; }
-    public IInventoryLocationProvider InventoryLocationProvider { get; set; }
-    public ISearchUrlProvider UrlProvider { get; set; }
     public ILocalizationProvider LocalizationProvider { get; set; }
 
     private string Localize(string category, string key)
@@ -51,13 +47,16 @@
             page = 1;
         }
 
-        var sortBy = Request.QueryString["sortBy"];
-        var sortDirection = Request.QueryString["sortDirection"] ?? "asc";
+        var param = new GetSearchViewModelParam
+        {
+            Keywords = keywords,
+            Page = page,
+            SortBy = Request.QueryString["sortBy"],
+            SortDirection = Request.QueryString["sortDirection"] ?? "asc",
+            Request = Request
+        };
 
-        var criteria = SearchControllerHelper.GetSearchCriteria(Request, InventoryLocationProvider, ComposerContext, keywords, page, sortBy, sortDirection);
-        criteria.SelectedFacets.AddRange(UrlProvider.BuildSelectedFacets(Request.QueryString));
-
-        var searchViewModel = SearchRequestContext.GetSearchViewModelAsync(criteria).GetAwaiter().GetResult();
+        var searchViewModel = SearchRequestContext.GetSearchViewModelAsync(param).GetAwaiter().GetResult();
 
         productSearchResults = searchViewModel.ProductSearchResults;
     }

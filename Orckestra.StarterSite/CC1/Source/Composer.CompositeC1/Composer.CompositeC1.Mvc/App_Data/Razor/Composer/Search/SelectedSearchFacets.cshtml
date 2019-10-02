@@ -1,0 +1,128 @@
+﻿
+@using System.Threading
+@using Orckestra.Composer.Providers
+@using Orckestra.Composer.Providers.Localization
+@using Orckestra.Composer.Search.Context
+@using Orckestra.Composer.Search.Facets
+@using Orckestra.Composer.Search.Parameters
+@inherits Composite.AspNet.Razor.RazorFunction
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Selected Facets"; }
+    }
+
+    public ISearchRequestContext SearchRequestContext { get; set; }
+    public ILocalizationProvider LocalizationProvider { get; set; }
+
+    private string Localize(string category, string key)
+    {
+        var param = new GetLocalizedParam
+        {
+            CultureInfo = Thread.CurrentThread.CurrentCulture,
+            Category = category ?? string.Empty,
+            Key = key ?? string.Empty,
+        };
+
+        string resourceValue = LocalizationProvider.GetLocalizedString(param);
+        if (resourceValue == null) // Do not use !IsNullOrWhiteSpace, user might want to display empty string.
+        {
+            resourceValue = $"{category}.{key}";
+        }
+        return resourceValue;
+    }
+}
+
+@{
+    var keywords = Request.QueryString["keywords"];
+    SelectedFacets selectedFacets = null;
+
+    if (Request.QueryString["page"] == null || !int.TryParse(Request.QueryString["page"], out int page))
+    {
+        page = 1;
+    }
+
+    var param = new GetSearchViewModelParam
+    {
+        Keywords = keywords,
+        Page = page,
+        SortBy = Request.QueryString["sortBy"],
+        SortDirection = Request.QueryString["sortDirection"] ?? "asc",
+        Request = Request
+    };
+
+    var searchViewModel = SearchRequestContext.GetSearchViewModelAsync(param).GetAwaiter().GetResult();
+
+    selectedFacets = searchViewModel.SelectedFacets;
+
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<head>
+</head>
+<body>
+    <div data-oc-controller="Product.SelectedSearchFacets">
+        @if (selectedFacets != null && selectedFacets.Facets != null && selectedFacets.Facets.Count > 0) {
+        <div id="selectedFacets" class="panel  panel-default">
+            <div class="panel-body">
+                <h2 class="h4">@Localize("List-Search", "L_Selection")</h2>
+                @if (selectedFacets.IsAllRemovable)
+                {
+                    <p class="clearfix">
+                        <a class="pull-right  small"
+                           data-qa="search-refiners-clear-all"
+                           href="#"
+                         @*  TODO: Investigate what is LandingPageUrls looks like this is for Category Pages
+                          {{#if ../../LandingPageUrls}}
+                           data-landingpageurl="{{../../LandingPageUrls.[0]}}"
+                           {{/if}}
+                         *@
+                           data-oc-click="clearSelectedFacets">
+                            @Localize("List-Search", "B_ClearAll")
+                        </a>
+                    </p>
+                }
+                <ul class="list-unstyled">
+                    @foreach (var facet in selectedFacets.Facets)
+                    {
+                        <li>
+                            <div class="row">
+                                <div class="col-xs-10">
+                                    @facet.DisplayName
+                                </div>
+                                <div class="col-xs-2">
+                                    @if (facet.IsRemovable)
+                                    {
+                                        <a href="#"
+                                           class="pull-right"
+                                           data-qa="search-refiner-remove"
+                                           data-facetfieldname="@facet.FieldName"
+                                           data-facettype="@facet.FacetType"
+                                           data-facetvalue="@facet.Value" 
+                                            @*  TODO: Investigate what is LandingPageUrls - looks like this is for Category Pages
+                                           {{#if ../../../LandingPageUrls}} 
+                                            data-facetlandingpageurl="{{lookup ../../../LandingPageUrls @index}}" 
+                                           {{/if}} *@
+                                           title="@facet.DisplayName" 
+                                           data-oc-click="removeSelectedFacet">
+                                            <span class="fa  fa-times  fa-lg"></span>
+                                        </a>
+
+                                    }
+                                    else
+                                    {
+                                        <span class="pull-right  fa  fa-times  fa-lg  text-muted"></span>
+                                    }
+                                </div>
+                            </div>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+        }
+    </div>
+</body>
+</html>
+

@@ -91,8 +91,7 @@ namespace Orckestra.Composer.CompositeC1.Mvc
             functions.RegisterAction<SearchController>("SearchSummary", "Composer.Search.Summary");
             functions.RegisterAction<SearchController>("Breadcrumb", "Composer.Search.Breadcrumb");
             functions.RegisterAction<SearchController>("LanguageSwitch", "Composer.Search.LanguageSwitch");
-            functions.RegisterAction<SearchController>("SelectedSearchFacets", "Composer.Search.SelectedSearchFacets");
-
+  
             functions.RegisterAction<BrowsingCategoriesController>("LanguageSwitch", "Composer.BrowsingCategories.LanguageSwitch");
             functions.RegisterAction<BrowsingCategoriesController>("Summary", "Composer.BrowsingCategories.Summary");
             functions.RegisterAction<BrowsingCategoriesController>("Index", "Composer.BrowsingCategories.Results");
