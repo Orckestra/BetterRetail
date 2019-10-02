@@ -267,9 +267,9 @@ module Orckestra.Composer {
                 ErrorHandler.instance().outputErrorFromCode('InvalidFrequencySelected');
             }
 
-            shippingProviderId = $('#ShippingProviderId').val();
             let elementShipping = $('#ShippingMethod').find('input[name=ShippingMethod]:checked');
             shippingMethodName = elementShipping.val();
+            shippingProviderId = elementShipping.data('shipping-provider-id');
 
             if (_.isUndefined(paymentMethodId)) {
                 isAllValid = false;
@@ -278,12 +278,17 @@ module Orckestra.Composer {
             }
             if (!this.useShippingAddress() && _.isUndefined(shippingAddressId)) {
                 isAllValid = false;
-                console.error('Error: Missing payment method');
+                console.error('Error: Missing shipping address');
                 ErrorHandler.instance().outputErrorFromCode('RecurringScheduleShippingAddressMissing');
             }
             if (_.isUndefined(billingAddressId)) {
                 isAllValid = false;
-                console.error('Error: Missing payment method');
+                console.error('Error: Missing billing address');
+                ErrorHandler.instance().outputErrorFromCode('RecurringScheduleBillingAddressMissing');
+            }
+            if (_.isUndefined(shippingProviderId) || _.isUndefined(shippingMethodName)) {
+                isAllValid = false;
+                console.error('Error: Missing shipping provider or shipping method name');
                 ErrorHandler.instance().outputErrorFromCode('RecurringScheduleBillingAddressMissing');
             }
 
