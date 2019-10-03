@@ -70,9 +70,9 @@ namespace Orckestra.Composer.CompositeC1
             host.Register<AntiCookieTamperingExcluder, IAntiCookieTamperingExcluder>();
             host.Register<C1PerformanceDataCollector, IPerformanceDataCollector>();
             host.Register<DataQueryService, IDataQueryService>();
-            host.Register<SiteConfiguration, ISiteConfiguration>();
-            host.Register<CookieAccesserSettings, ICookieAccesserSettings>();
-            host.Register<CdnDamProviderSettings, ICdnDamProviderSettings>();
+            host.Register<SiteConfiguration, ISiteConfiguration>(ComponentLifestyle.Singleton);
+            host.Register<CookieAccesserSettings, ICookieAccesserSettings>(ComponentLifestyle.Singleton);
+            host.Register<CdnDamProviderSettings, ICdnDamProviderSettings>(ComponentLifestyle.Singleton);
         }
     }
 }

@@ -46,7 +46,7 @@ namespace Orckestra.Composer.CompositeC1.Providers
             string productPath;
 
             var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(parameters.CultureInfo, WebsiteContext.WebsiteId);
-            var homeUrl = PageService.GetPageUrl(pagesConfiguration.HomePageId, parameters.CultureInfo);
+            var homeUrl = PageService.GetPageUrl(WebsiteContext.WebsiteId, parameters.CultureInfo);
 
             if (string.IsNullOrWhiteSpace(parameters.VariantId))
             {

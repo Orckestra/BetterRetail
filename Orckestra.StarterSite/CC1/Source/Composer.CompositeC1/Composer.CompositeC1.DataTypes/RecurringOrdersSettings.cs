@@ -40,13 +40,14 @@ namespace Orckestra.Composer.CompositeC1.DataTypes
         Nullable<Guid> RecurringCartDetailsPageId { get; set; }
 
         [ImmutableFieldId("224704b0-1ff5-40e4-a332-c1875b358eb3")]
-        [FormRenderingProfile(Label = "Recurring Cart Details Page")]
+        [FormRenderingProfile(Label = "Recurring Carts Page")]
         [StoreFieldType(PhysicalStoreFieldType.Guid, IsNullable = true)]
         [FieldPosition(1)]
         [ForeignKey("Composite.Data.Types.IPage,Composite", AllowCascadeDeletes = true)]
         Nullable<Guid> RecurringCartsPageId { get; set; }
 
         [ImmutableFieldId("a74604fd-6c8a-4994-90dd-0f8c433980e4")]
+        [FormRenderingProfile(Label = "Is Recurring Orders Enabled")]
         [FunctionBasedNewInstanceDefaultFieldValue("<f:function xmlns:f=\"http://www.composite.net/ns/function/1.0\" name=\"Composite.Co" +
     "nstant.Boolean\"><f:param name=\"Constant\" value=\"False\" /></f:function>")]
         [StoreFieldType(PhysicalStoreFieldType.Boolean)]
