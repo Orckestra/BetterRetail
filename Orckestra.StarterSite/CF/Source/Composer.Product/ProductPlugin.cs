@@ -4,6 +4,7 @@ using Orckestra.Composer.Product.Repositories;
 using Orckestra.Composer.Product.Services;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Dam;
+using Orckestra.Composer.Services;
 
 namespace Orckestra.Composer.Product
 {

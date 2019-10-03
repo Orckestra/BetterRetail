@@ -91,9 +91,7 @@
     <Compile Include="ViewModels\RelatedProductsViewModel.cs" />
     <Compile Include="ViewModels\RelatedProductViewModel.cs" />
     <Compile Include="Services\RelatedProductViewService.cs" />
-    <Compile Include="ViewModels\CategoryViewModel.cs" />
     <Compile Include="Services\CategoryViewService.cs" />
-    <Compile Include="Services\ICategoryViewService.cs" />
     <Compile Include="ProductPlugin.cs" />
     <Compile Include="Services\IProductViewService.cs" />
     <Compile Include="ViewModels\KeyVariantAttributeItemValue.cs" />

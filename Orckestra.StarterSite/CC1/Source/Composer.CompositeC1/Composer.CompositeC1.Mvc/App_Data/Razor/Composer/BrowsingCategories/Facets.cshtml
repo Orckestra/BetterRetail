@@ -8,12 +8,13 @@
         get { return "Facets search."; }
     }
 
-    public ISearchRequestContext SearchRequestContext { get; set; }
+    public IBrowseCategoryRequestContext BrowseCategoryRequestContext { get; set; }
+    public ICategoryMetaContext CategoryMetaContext { get; set; }
     public ILocalizationProvider LocalizationProvider { get; set; }
 }
 
 @{
-    var searchViewModel = Facets.Requests.ProductSearch.GetSearchViewModel(SearchRequestContext);
+    var searchViewModel = Facets.Requests.BrowseCategories.GetSearchViewModel(BrowseCategoryRequestContext, CategoryMetaContext);
     var productSearchResults = searchViewModel?.ProductSearchResults;
 }
 

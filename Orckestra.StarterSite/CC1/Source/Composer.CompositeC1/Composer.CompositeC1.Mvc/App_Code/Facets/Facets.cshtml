@@ -1,0 +1,205 @@
+﻿@using Orckestra.Composer.Providers
+@using Orckestra.Composer.Search.Facets
+@using Orckestra.Composer.Search.ViewModels
+
+@helper Render(ProductSearchResultsViewModel productSearchResults, ILocalizationProvider localizationProvider)
+{
+    <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+    <head>
+    </head>
+    <body>
+    @if (productSearchResults == null || productSearchResults.TotalCount == 0)
+    {
+        <div data-oc-controller="Product.FacetSearch">
+            @*Empty search facets results*@
+        </div>
+    }
+    else
+    {
+        <div data-oc-controller="Product.FacetSearch" data-corrected-search-term="@productSearchResults.CorrectedSearchTerms">
+            <form name="searchFacets">
+                @_RenderPromotedFacetValues(productSearchResults.PromotedFacetValues)
+                @_RenderFacets(productSearchResults.Facets, localizationProvider)
+            </form>
+        </div>
+    }
+
+    </body>
+    </html>
+}
+
+@helper _RenderPromotedFacetValues(IList<PromotedFacetValue> promotedFacetValues)
+{
+    if (promotedFacetValues == null || !promotedFacetValues.Where(f => f.Quantity > 0).Any())
+    {
+        return;
+    }
+
+    <div class="panel  panel-default">
+        <div class="panel-body" data-qa="search-refiner">
+            <ul class="list-unstyled">
+                @foreach (var promotedFacetValue in promotedFacetValues.Where(f => f.Quantity > 0))
+                {
+                    if (promotedFacetValue.FacetType == FacetType.MultiSelect)
+                    {
+                        @_RenderMultiSelectPromotedFacet(promotedFacetValue);
+                    }
+                    else
+                    {
+                        @_RenderSinglePromotedFacet(promotedFacetValue);
+                    }
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+@helper _RenderMultiSelectPromotedFacet(PromotedFacetValue promotedFacetValue)
+{
+    <li>
+        <div class="checkbox" data-facetfieldname="@promotedFacetValue.FieldName" data-facettype="@promotedFacetValue.FacetType">
+            <label>
+                @if (promotedFacetValue.IsSelected)
+                {
+                    <input type="checkbox" name="@(promotedFacetValue.FieldName)[]" value="@promotedFacetValue.Value" data-oc-click="multiFacetChanged" checked="checked" />
+                }
+                else
+                {
+                    <input type="checkbox" name="@(promotedFacetValue.FieldName)[]" value="@promotedFacetValue.Value" data-oc-click="multiFacetChanged" />
+                }
+                @promotedFacetValue.Title&#160;(@promotedFacetValue.Quantity)
+            </label>
+        </div>
+    </li>
+}
+
+@helper _RenderSinglePromotedFacet(PromotedFacetValue promotedFacetValue)
+{
+    <li data-facetfieldname="@promotedFacetValue.FieldName" data-facettype="@promotedFacetValue.FacetType">
+        <a href="#" data-facetfieldname="@promotedFacetValue.FieldName" data-facetvalue="@promotedFacetValue.Value" title="@promotedFacetValue.Title" data-oc-click="singleFacetChanged">@promotedFacetValue.Title&#160;(@promotedFacetValue.Quantity)</a>
+    </li>
+}
+
+
+@helper _RenderFacets(IList<Facet> facets, ILocalizationProvider localizationProvider)
+{
+    var displayedFacets = facets.Where(f => f.IsDisplayed).ToList();
+    for (int index = 0; index < displayedFacets.Count; index++)
+    {
+        var facet = displayedFacets[index];
+        <div class="panel  panel-default" data-facetfieldname="@facet.FieldName" data-facettype="@facet.FacetType"
+             @Html.Raw(facet.FacetType == FacetType.Range ? $"data-min=\"{facet.StartValue}\" data-max=\"{facet.EndValue}\" data-step=\"{facet.GapSize}\" data-max-label=\"{Localization.Localize("List-Search", "L_RangeAll", localizationProvider)}\"" : "")>
+            <div class="panel-body" data-qa="search-refiner">
+                <h2 class="h4">@facet.Title</h2>
+                @if (facet.FacetType == FacetType.Range)
+                {
+                    @_RenderRangeFacet(facet, localizationProvider)
+                }
+                else
+                {
+                    <ul class="list-unstyled">
+                        @if (facet.FacetType == FacetType.MultiSelect)
+                        {
+                            foreach (var facetValue in facet.FacetValues)
+                            {
+                                @_RenderMultiSelectFacet(facetValue, facet.FieldName);
+                            }
+
+                        }
+                        else
+                        {
+                            foreach (var facetValue in facet.FacetValues)
+                            {
+                                @_RenderSingleFacet(facetValue, facet.FieldName);
+                            }
+                        }
+                    </ul>
+                    if (facet.OnDemandFacetValues?.Count > 0)
+                    {
+                        <ul class="list-unstyled  collapse  onDemandFacets-@(index) ">
+                            @if (facet.FacetType == FacetType.MultiSelect)
+                            {
+                                foreach (var facetValue in facet.OnDemandFacetValues)
+                                {
+                                    @_RenderMultiSelectFacet(facetValue, facet.FieldName);
+                                }
+                            }
+                            else
+                            {
+                                foreach (var facetValue in facet.OnDemandFacetValues)
+                                {
+                                    @_RenderSingleFacet(facetValue, facet.FieldName);
+                                }
+                            }
+                        </ul>
+                        <button class="btn  btn-link" data-toggle="collapse" data-target=".onDemandFacets-@(index) "
+                                data-label-showmore="@Localization.Localize("List-Search", "B_ShowMore", localizationProvider)" data-label-showless="@Localization.Localize("List-Search", "B_ShowLess", localizationProvider)"
+                                data-oc-click="toggleFacetList">
+                            @Localization.Localize("List-Search", "B_ShowMore", localizationProvider)
+                        </button>
+
+                    }
+                }
+            </div>
+        </div>
+    }
+}
+
+@helper _RenderRangeFacet(Facet facet, ILocalizationProvider localizationProvider)
+{
+    <div class="form-group">
+        <div class="range"></div>
+    </div>
+
+    <div class="form-group">
+        <div class="row">
+            <div class="col-xs-6">
+                <input class="form-control  js-lowerValue" type="text" />
+            </div>
+            <div class="col-xs-6">
+                <input class="form-control  js-higherValue" type="text" />
+            </div>
+        </div>
+    </div>
+
+    <button type="submit" data-oc-click="refineByRange" class="btn btn-default btn-block" disabled="disabled">@Localization.Localize("List-Search", "B_Apply", localizationProvider)</button>
+}
+
+@helper _RenderMultiSelectFacet(FacetValue facetValue, string fieldName)
+{
+    if (facetValue.Quantity == 0)
+    {
+        return;
+    }
+
+    <li>
+        <div class="checkbox">
+            <label>
+                @if (facetValue.IsSelected)
+                {
+                    <input type="checkbox" name="@(fieldName)[]" value="@facetValue.Value" data-oc-click="multiFacetChanged" checked="checked" />
+                }
+                else
+                {
+                    <input type="checkbox" name="@(fieldName)[]" value="@facetValue.Value" data-oc-click="multiFacetChanged" />
+                }
+                @facetValue.Title&#160;(@facetValue.Quantity)
+            </label>
+        </div>
+    </li>
+
+}
+
+@helper _RenderSingleFacet(FacetValue facetValue, string fieldName)
+{
+    if (facetValue.Quantity == 0)
+    {
+        return;
+    }
+
+    <li>
+        <a href="#" data-facetfieldname="@fieldName" data-facetvalue="@facetValue.Value" title="@facetValue.Title" data-oc-click="singleFacetChanged">@facetValue.Title&#160;(@facetValue.Quantity)</a>
+    </li>
+}
+
+

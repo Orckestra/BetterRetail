@@ -113,6 +113,7 @@
     <Compile Include="CategoriesConfiguration.cs" />
     <Compile Include="Context\BrowseCategoryRequestContext.cs" />
     <Compile Include="Context\IBrowseCategoryRequestContext.cs" />
+    <Compile Include="Context\ICategoryMetaContext.cs" />
     <Compile Include="Context\IFacetConfigurationContext.cs" />
     <Compile Include="FacetSetting.cs" />
     <Compile Include="Facets\PromotedFacetValue.cs" />
@@ -131,6 +132,7 @@
     <Compile Include="Context\ISearchRequestContext.cs" />
     <Compile Include="Helpers\SearchType.cs" />
     <Compile Include="Parameters\CategorySearchCriteria.cs" />
+    <Compile Include="Parameters\GetBrowseCategoryParam.cs" />
     <Compile Include="Parameters\GetCategoryBrowsingViewModelParam.cs" />
     <Compile Include="Parameters\GetPageHeaderParam.cs" />
     <Compile Include="Parameters\CreateSearchPaginationParam.cs" />
@@ -166,11 +168,11 @@
     <Compile Include="Repositories\ISearchRepository.cs" />
     <Compile Include="Repositories\ProductRequestFactory.cs" />
     <Compile Include="Parameters\RemoveSelectedFacetsFromFacetsParam.cs" />
+    <Compile Include="RequestConstants\SearchRequestParams.cs" />
     <Compile Include="SearchConfiguration.cs" />
     <Compile Include="Context\SearchRequestContext.cs" />
     <Compile Include="Helpers\SearchSortBy.cs" />
     <Compile Include="Services\BaseSearchViewService.cs" />
-    <Compile Include="Services\BrowsingByCategoryParam.cs" />
     <Compile Include="Services\BrowsingSearchParam.cs" />
     <Compile Include="Services\CategoryBrowsingViewService.cs" />
     <Compile Include="Services\GetChildCategoryParam.cs" />

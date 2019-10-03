@@ -1,0 +1,36 @@
+﻿@using Orckestra.Composer.CompositeC1.Controllers.Helpers
+@using Orckestra.Composer.Search.Context
+@using Orckestra.Composer.Search.Parameters
+@using Orckestra.Composer.Search.RequestConstants
+@using Orckestra.Composer.Search.ViewModels
+@functions
+{
+    public static SearchViewModel GetSearchViewModel(ISearchRequestContext searchRequestContext)
+    {
+        var param = GetSearchViewModelParam();
+
+        if (!SearchControllerHelper.AreKeywordsValid(param.Keywords))
+            return null;
+
+        return searchRequestContext.GetSearchViewModelAsync(param).GetAwaiter().GetResult();
+    }
+
+    private static GetSearchViewModelParam GetSearchViewModelParam()
+    {
+        var keywords = Request.QueryString[SearchRequestParams.Keywords];
+        if (Request.QueryString[SearchRequestParams.Page] == null || !int.TryParse(Request.QueryString[SearchRequestParams.Page], out int page))
+        {
+            page = 1;
+        }
+
+        var param = new GetSearchViewModelParam
+        {
+            Keywords = keywords,
+            Page = page,
+            SortBy = Request.QueryString[SearchRequestParams.SortBy],
+            SortDirection = Request.QueryString[SearchRequestParams.SortDirection] ?? SearchRequestParams.DefaultSortDirection,
+            Request = Request
+        };
+        return param;
+    }
+}

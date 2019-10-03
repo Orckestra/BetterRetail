@@ -1,0 +1,68 @@
+﻿@using Orckestra.Composer.Providers
+
+@helper Render(Orckestra.Composer.Search.Facets.SelectedFacets selectedFacets, List<string> landingPageUrls, ILocalizationProvider localizationProvider)
+{
+    <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+    <head>
+    </head>
+    <body>
+        <div data-oc-controller="Product.SelectedSearchFacets">
+            @if (selectedFacets != null && selectedFacets.Facets != null && selectedFacets.Facets.Count > 0)
+            {
+                <div id="selectedFacets" class="panel  panel-default">
+                    <div class="panel-body">
+                        <h2 class="h4">@Localization.Localize("List-Search", "L_Selection", localizationProvider)</h2>
+                        @if (selectedFacets.IsAllRemovable)
+                        {
+                            <p class="clearfix">
+                                <a class="pull-right  small"
+                                   data-qa="search-refiners-clear-all"
+                                   href="#"
+                                   @Html.Raw(landingPageUrls?.FirstOrDefault() == null ? "" : $"data-landingpageurl=\"{landingPageUrls[0]}\"")
+                                   data-oc-click="clearSelectedFacets">
+                                    @Localization.Localize("List-Search", "B_ClearAll", localizationProvider)
+                                </a>
+                            </p>
+                        }
+                        <ul class="list-unstyled">
+                            @for (int index = 0; index < selectedFacets.Facets.Count; index++)
+                            {
+                                var facet = selectedFacets.Facets[index];
+                                <li>
+                                    <div class="row">
+                                        <div class="col-xs-10">
+                                            @facet.DisplayName
+                                        </div>
+                                        <div class="col-xs-2">
+                                            @if (facet.IsRemovable)
+                                            {
+                                                <a href="#"
+                                                   class="pull-right"
+                                                   data-qa="search-refiner-remove"
+                                                   data-facetfieldname="@facet.FieldName"
+                                                   data-facettype="@facet.FacetType"
+                                                   data-facetvalue="@facet.Value"
+                                                   @Html.Raw(landingPageUrls?.Count > index ? $"data-facetlandingpageurl=\"{landingPageUrls[index]}\"" : "")
+                                                   title="@facet.DisplayName"
+                                                   data-oc-click="removeSelectedFacet">
+                                                    <span class="fa  fa-times  fa-lg"></span>
+                                                </a>
+
+                                            }
+                                            else
+                                            {
+                                                <span class="pull-right  fa  fa-times  fa-lg  text-muted"></span>
+                                            }
+                                        </div>
+                                    </div>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            }
+        </div>
+    </body>
+</html>
+
+}

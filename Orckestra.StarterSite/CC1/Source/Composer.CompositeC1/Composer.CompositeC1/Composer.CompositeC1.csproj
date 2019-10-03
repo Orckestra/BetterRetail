@@ -330,6 +330,7 @@
     <Compile Include="Providers\WishListUrlProvider.cs" />
     <Compile Include="Services\BreadcrumbViewService.cs" />
     <Compile Include="Mappers\NavigationMapper.cs" />
+    <Compile Include="Services\CategoryMetaContext.cs" />
     <Compile Include="Services\DataQuery\DataQueryService.cs" />
     <Compile Include="Services\FacetConfigurationContext.cs" />
     <Compile Include="Services\DataQuery\IDataQueryService.cs" />

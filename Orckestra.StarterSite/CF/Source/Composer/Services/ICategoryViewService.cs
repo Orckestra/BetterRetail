@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 using Orckestra.Composer.Parameters;
-using Orckestra.Composer.Product.ViewModels;
+using Orckestra.Composer.ViewModels;
 
-namespace Orckestra.Composer.Product.Services
+namespace Orckestra.Composer.Services
 {
     public interface ICategoryViewService
     {

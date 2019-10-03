@@ -41,6 +41,7 @@ namespace Orckestra.Composer.CompositeC1
             host.Register<Providers.ProductUrlProvider, IProductUrlProvider>(ComponentLifestyle.PerRequest);
             host.Register<Providers.CountryCodeProvider, ICountryCodeProvider>(ComponentLifestyle.PerRequest);
             host.Register<FacetConfigurationContext, IFacetConfigurationContext>(ComponentLifestyle.PerRequest);
+            host.Register<CategoryMetaContext, ICategoryMetaContext>(ComponentLifestyle.PerRequest);
             host.Register<PageService, IPageService>();
             host.Register<CultureService, ICultureService>(ComponentLifestyle.Singleton);
             host.Register<HomeViewService, IHomeViewService>();

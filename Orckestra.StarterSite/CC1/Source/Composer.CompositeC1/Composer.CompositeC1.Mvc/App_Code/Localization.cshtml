@@ -1,0 +1,22 @@
+﻿@using System.Threading
+@using Orckestra.Composer.Providers
+@using Orckestra.Composer.Providers.Localization
+@functions
+{
+    public static string Localize(string category, string key, ILocalizationProvider localizationProvider)
+    {
+        var param = new GetLocalizedParam
+        {
+            CultureInfo = Thread.CurrentThread.CurrentCulture,
+            Category = category ?? string.Empty,
+            Key = key ?? string.Empty,
+        };
+
+        string resourceValue = localizationProvider.GetLocalizedString(param);
+        if (resourceValue == null) // Do not use !IsNullOrWhiteSpace, user might want to display empty string.
+        {
+            resourceValue = $"{category}.{key}";
+        }
+        return resourceValue;
+    }
+}

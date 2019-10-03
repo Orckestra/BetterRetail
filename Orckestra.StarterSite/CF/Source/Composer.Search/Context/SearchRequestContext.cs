@@ -42,21 +42,6 @@ namespace Orckestra.Composer.Search.Context
             return await SearchViewService.GetPageHeaderViewModelAsync(param).ConfigureAwait(false);
         }
 
-        public virtual async Task<SearchViewModel> GetSearchViewModelAsync(SearchCriteria criteria)
-        {
-            if (SearchViewModel != null)
-            {
-                return SearchViewModel;
-            }
-
-            criteria.Scope = ComposerContext.Scope;
-            criteria.CultureInfo = ComposerContext.CultureInfo;
-
-            SearchViewModel = await SearchViewService.GetSearchViewModelAsync(criteria).ConfigureAwait(false);
-
-            return SearchViewModel;
-        }
-
         public virtual async Task<SearchViewModel> GetSearchViewModelAsync(GetSearchViewModelParam param)
         {
             if (SearchViewModel != null)
@@ -64,14 +49,14 @@ namespace Orckestra.Composer.Search.Context
                 return SearchViewModel;
             }
 
-            var criteria = BuildSearchCreteria(param);
+            var criteria = BuildSearchCriteria(param);
 
             SearchViewModel = await SearchViewService.GetSearchViewModelAsync(criteria).ConfigureAwait(false);
 
             return SearchViewModel;
         }
 
-        protected virtual SearchCriteria BuildSearchCreteria(GetSearchViewModelParam param)
+        protected virtual SearchCriteria BuildSearchCriteria(GetSearchViewModelParam param)
         {
             var criteria = new SearchCriteria
             {

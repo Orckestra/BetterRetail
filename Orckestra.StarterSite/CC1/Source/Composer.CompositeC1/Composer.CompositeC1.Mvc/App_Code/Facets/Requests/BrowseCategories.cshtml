@@ -1,0 +1,34 @@
+﻿@using Orckestra.Composer.Search.Context
+@using Orckestra.Composer.Search.Parameters
+@using Orckestra.Composer.Search.RequestConstants
+@using Orckestra.Composer.Search.ViewModels
+@functions
+{
+    public static CategoryBrowsingViewModel GetSearchViewModel(IBrowseCategoryRequestContext browseCategoryRequestContext, ICategoryMetaContext categoryMetaContext)
+    {
+        var categoryId = categoryMetaContext.GetCategoryId();
+        if (string.IsNullOrWhiteSpace(categoryId))
+        {
+            return null;
+        }
+        var param = GetBrowseCategoryParam();
+        return browseCategoryRequestContext.GetCategoryAvailableProductsAsync(param).GetAwaiter().GetResult();
+    }
+
+    private static GetBrowseCategoryParam GetBrowseCategoryParam()
+    {
+        if (Request.QueryString[SearchRequestParams.Page] == null || !int.TryParse(Request.QueryString[SearchRequestParams.Page], out int page))
+        {
+            page = 1;
+        }
+
+        var param = new GetBrowseCategoryParam
+        {
+            Page = page,
+            SortBy = Request.QueryString[SearchRequestParams.SortBy],
+            SortDirection = Request.QueryString[SearchRequestParams.SortDirection] ?? SearchRequestParams.DefaultSortDirection,
+            Request = Request,
+        };
+        return param;
+    }
+}

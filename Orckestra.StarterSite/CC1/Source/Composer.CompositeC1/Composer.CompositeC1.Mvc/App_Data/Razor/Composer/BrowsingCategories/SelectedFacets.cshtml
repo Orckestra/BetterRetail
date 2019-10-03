@@ -1,0 +1,21 @@
+﻿@using Orckestra.Composer.Providers
+@using Orckestra.Composer.Search.Context
+@inherits Composite.AspNet.Razor.RazorFunction
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Selected Facets"; }
+    }
+
+    public IBrowseCategoryRequestContext BrowseCategoryRequestContext { get; set; }
+    public ICategoryMetaContext CategoryMetaContext { get; set; }
+    public ILocalizationProvider LocalizationProvider { get; set; }
+}
+
+@{
+    var searchViewModel = Facets.Requests.BrowseCategories.GetSearchViewModel(BrowseCategoryRequestContext, CategoryMetaContext);
+    var selectedFacets = searchViewModel?.SelectedFacets;
+}
+
+@Facets.SelectedFacets.Render(selectedFacets, searchViewModel?.LandingPageUrls, LocalizationProvider)
