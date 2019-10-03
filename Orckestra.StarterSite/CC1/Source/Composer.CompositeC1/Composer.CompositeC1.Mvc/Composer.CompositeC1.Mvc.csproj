@@ -165,7 +165,8 @@
       <HintPath>..\packages\Composer.3.21.0-Build\lib\net452\Orckestra.Composer.Search.dll</HintPath>
     </Reference>
     <Reference Include="Orckestra.Composer.SearchQuery, Version=3.21.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Composer.3.21.0-Build\lib\net452\Orckestra.Composer.SearchQuery.dll</HintPath>
+      <HintPath>..\..\..\..\CF\Source\Orckestra.Composer.SearchQuery\bin\Debug\Orckestra.Composer.SearchQuery.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Orckestra.Composer.Sitemap, Version=3.21.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Composer.3.21.0-Build\lib\net452\Orckestra.Composer.Sitemap.dll</HintPath>
