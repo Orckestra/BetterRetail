@@ -56,7 +56,11 @@
       <xsl:copy-of select="$AppSettings"/>
     </xsl:if>
     <xsl:apply-templates select="node()" />
-
+		<xsl:if test="count(experienceManagement)=0" xml:space="preserve">
+				<experienceManagement>
+					<settings configSource="App_Config\ExperienceManagement.config" />
+				</experienceManagement>
+			</xsl:if>
   </xsl:copy>
   </xsl:template>
 
@@ -64,17 +68,17 @@
     <xsl:copy>
       <xsl:apply-templates select="@*" />
         <xsl:copy-of select="$ComposerSectionGroup"/>
-      <xsl:apply-templates select="node()" />
-	  <xsl:if test="count(sectionGroup[@name='experienceManagement'])=0">
-				<sectionGroup name="experienceManagement" type="System.Configuration.ConfigurationSectionGroup, System.Configuration">
-					<section name="settings" type="System.Configuration.NameValueFileSectionHandler" />
-				</sectionGroup>
-			</xsl:if>
+        <xsl:apply-templates select="node()" />
+	      <xsl:if test="count(sectionGroup[@name='experienceManagement'])=0">
+				  <sectionGroup name="experienceManagement" type="System.Configuration.ConfigurationSectionGroup, System.Configuration">
+					  <section name="settings" type="System.Configuration.NameValueFileSectionHandler" />
+				  </sectionGroup>
+			  </xsl:if>
    </xsl:copy>
     <xsl:comment>Composer configuration</xsl:comment>
     <xsl:copy-of select="$ComposerSection"/>
     <xsl:copy-of select="$AppSettings"/>
- 
+
   </xsl:template>
 
   <xsl:template match="configuration/system.web" xml:space="preserve">
