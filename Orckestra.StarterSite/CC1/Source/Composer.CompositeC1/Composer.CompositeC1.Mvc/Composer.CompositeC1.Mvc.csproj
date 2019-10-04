@@ -150,28 +150,28 @@
       <HintPath>..\packages\OrckestraCommerce.Common.3.21.8\lib\net461\Orckestra.Caching.dll</HintPath>
     </Reference>
     <Reference Include="Orckestra.Composer, Version=3.21.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Composer.3.21.0-Build\lib\net452\Orckestra.Composer.dll</HintPath>
+      <HintPath>..\packages\Composer.3.21.0-Build\lib\net461\Orckestra.Composer.dll</HintPath>
     </Reference>
     <Reference Include="Orckestra.Composer.Cart, Version=3.21.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Composer.3.21.0-Build\lib\net452\Orckestra.Composer.Cart.dll</HintPath>
+      <HintPath>..\packages\Composer.3.21.0-Build\lib\net461\Orckestra.Composer.Cart.dll</HintPath>
     </Reference>
     <Reference Include="Orckestra.Composer.MyAccount, Version=3.21.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Composer.3.21.0-Build\lib\net452\Orckestra.Composer.MyAccount.dll</HintPath>
+      <HintPath>..\packages\Composer.3.21.0-Build\lib\net461\Orckestra.Composer.MyAccount.dll</HintPath>
     </Reference>
     <Reference Include="Orckestra.Composer.Product, Version=3.21.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Composer.3.21.0-Build\lib\net452\Orckestra.Composer.Product.dll</HintPath>
+      <HintPath>..\packages\Composer.3.21.0-Build\lib\net461\Orckestra.Composer.Product.dll</HintPath>
     </Reference>
     <Reference Include="Orckestra.Composer.Search, Version=3.21.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Composer.3.21.0-Build\lib\net452\Orckestra.Composer.Search.dll</HintPath>
+      <HintPath>..\packages\Composer.3.21.0-Build\lib\net461\Orckestra.Composer.Search.dll</HintPath>
     </Reference>
     <Reference Include="Orckestra.Composer.SearchQuery, Version=3.21.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Composer.3.21.0-Build\lib\net452\Orckestra.Composer.SearchQuery.dll</HintPath>
+      <HintPath>..\packages\Composer.3.21.0-Build\lib\net461\Orckestra.Composer.SearchQuery.dll</HintPath>
     </Reference>
     <Reference Include="Orckestra.Composer.Sitemap, Version=3.21.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Composer.3.21.0-Build\lib\net452\Orckestra.Composer.Sitemap.dll</HintPath>
+      <HintPath>..\packages\Composer.3.21.0-Build\lib\net461\Orckestra.Composer.Sitemap.dll</HintPath>
     </Reference>
     <Reference Include="Orckestra.Composer.Store, Version=3.21.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Composer.3.21.0-Build\lib\net452\Orckestra.Composer.Store.dll</HintPath>
+      <HintPath>..\packages\Composer.3.21.0-Build\lib\net461\Orckestra.Composer.Store.dll</HintPath>
     </Reference>
     <Reference Include="Orckestra.ExperienceManagement.DataTypes, Version=3.20.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Orckestra.ExperienceManagment.DataTypes.1.0.1\lib\Orckestra.ExperienceManagement.DataTypes.dll</HintPath>
