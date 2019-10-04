@@ -4,6 +4,7 @@ using Orckestra.Composer.Product.Repositories;
 using Orckestra.Composer.Product.Services;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Dam;
+using Orckestra.Composer.Repositories;
 
 namespace Orckestra.Composer.Product
 {
@@ -21,6 +22,8 @@ namespace Orckestra.Composer.Product
             host.Register<RelatedProductViewService, IRelatedProductViewService>();
             host.Register<InventoryViewService, IInventoryViewService>();
             host.Register<ConfigurationInventoryLocationProvider, IInventoryLocationProvider>();
+            host.Register<ProductMediaProvider, IDamProvider>();
+            host.Register<ProductMediaSettingsRepository, IProductMediaSettingsRepository>();
 
             host.MetadataRegistry.LoadViewModelMetadataInAssemblyOf(typeof(ProductPlugin).Assembly);
 

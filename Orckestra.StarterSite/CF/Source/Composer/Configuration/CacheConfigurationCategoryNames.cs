@@ -61,6 +61,11 @@
         /// </summary>
         public static string ProductSettings = "ProductSettings";
 
+        /// <summary>
+        /// Cache where the Product Media Settings will be stored
+        /// </summary>
+        public static string ProductMediaSettings = "ProductMediaSettings";
+
         public static string FulfillmentLocationsByScope = "FulfillmentLocationsByScope";
 
         /// <summary>

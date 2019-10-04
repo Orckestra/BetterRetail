@@ -79,6 +79,8 @@ namespace Orckestra.Composer.Repositories
                         IncludeVariants = true,
                         ProductId = param.ProductId,
                         ScopeId = param.Scope,
+                        IncludeMedia = true,
+                        IncludeImageUrl = true
 
                     };
 

@@ -11,6 +11,8 @@ using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Dam;
 using Orckestra.ExperienceManagement.Configuration;
 using Orckestra.ExperienceManagement.Configuration.Settings;
+using Orckestra.Overture.ServiceModel.Products;
+
 
 namespace Orckestra.Composer.Tests.Providers.Dam
 {
@@ -200,17 +202,17 @@ namespace Orckestra.Composer.Tests.Providers.Dam
                 ThumbnailImageSize = GetRandom.String(1),
                 ProductZoomImageSize = GetRandom.String(1),
                 ProductId = expectedProductId,
-                Variants = new List<VariantKey>()
+                Variants = new List<Variant>()
                 {
-                    new VariantKey
+                    new Variant
                     {
                         Id = variantId1,
                     },
-                    new VariantKey
+                    new Variant
                     {
                         Id = variantId2,
                     },
-                    new VariantKey
+                    new Variant
                     {
                         Id = variantId3,
                     }
