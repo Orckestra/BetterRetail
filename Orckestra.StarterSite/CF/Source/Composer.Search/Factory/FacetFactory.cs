@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
+using Orckestra.Composer.Search.Context;
 using Orckestra.Composer.Search.Facets;
 using Orckestra.Composer.Search.Providers;
 using Orckestra.Composer.Search.Providers.Facet;
@@ -14,13 +15,15 @@ namespace Orckestra.Composer.Search.Factory
 {
     public class FacetFactory : ProviderFactory<IFacetProvider>, IFacetFactory
     {
-        protected IFacetProviderRegistry FacetProviderRegistry { get; set; }
+        protected IFacetProviderRegistry FacetProviderRegistry { get; }
+        protected IFacetConfigurationContext FacetConfigContext { get; }
 
-        public FacetFactory(IDependencyResolver dependencyResolver, IFacetProviderRegistry facetProviderRegistry)
+        public FacetFactory(IDependencyResolver dependencyResolver, IFacetProviderRegistry facetProviderRegistry, IFacetConfigurationContext facetConfigContext)
             : base(dependencyResolver)
         {
             if (facetProviderRegistry == null) { throw new ArgumentNullException("facetProviderRegistry"); }
             FacetProviderRegistry = facetProviderRegistry;
+            FacetConfigContext = facetConfigContext;
         }
 
         /// <summary>
@@ -31,7 +34,7 @@ namespace Orckestra.Composer.Search.Factory
             if (facet == null) { throw new ArgumentNullException("facet"); }
             if (string.IsNullOrWhiteSpace(facet.FieldName)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("FieldName"), "facet"); }
 
-            var setting = SearchConfiguration.FacetSettings
+            var setting = FacetConfigContext.GetFacetSettings()
                     .FirstOrDefault(s => s.FieldName.Equals(facet.FieldName, StringComparison.OrdinalIgnoreCase));
 
             if (setting == null)

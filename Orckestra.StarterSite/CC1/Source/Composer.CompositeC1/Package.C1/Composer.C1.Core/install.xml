@@ -104,6 +104,15 @@
         <Type type="Composite.Data.Types.IPageTypeTreeLink,Composite">
           <Data dataScopeIdentifier="public" dataFilename="~\Datas\Composite.Data.Types.IPageTypeTreeLinks_public.xml" />
         </Type>
+		<Type type="Orckestra.Composer.CompositeC1.DataTypes.Facets.IFacet,Orckestra.Composer.CompositeC1.DataTypes">
+			<Data dataScopeIdentifier="public" dataFilename="~\Datas\Orckestra.Composer.CompositeC1.DataTypes.Facets.IFacets_public.xml" />
+		</Type>
+		<Type type="Orckestra.Composer.CompositeC1.DataTypes.Facets.IFacetConfiguration,Orckestra.Composer.CompositeC1.DataTypes">
+			<Data dataScopeIdentifier="public" dataFilename="~\Datas\Orckestra.Composer.CompositeC1.DataTypes.Facets.IFacetConfigurations_public.xml" />
+		</Type>
+		<Type type="Composite.Data.Types.IGeneratedTypeWhiteList,Composite">
+			<Data dataScopeIdentifier="administrated" dataFilename="~\Datas\Composite.Data.Types.IGeneratedTypeWhiteLists_administrated.xml" />
+		</Type>
       </Types>
     </mi:Add>
     <mi:Add installerType="Orckestra.Composer.CompositeC1.Installers.ComposerFragmentInstaller, Orckestra.Composer.CompositeC1" uninstallerType="Orckestra.Composer.CompositeC1.Installers.ComposerFragmentUninstaller, Orckestra.Composer.CompositeC1" />

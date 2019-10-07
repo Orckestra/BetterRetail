@@ -1,55 +1,84 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Orckestra.Composer.Parameters;
+using Orckestra.Composer.Providers;
 using Orckestra.Composer.Search.Parameters;
 using Orckestra.Composer.Search.Services;
 using Orckestra.Composer.Search.ViewModels;
 using Orckestra.Composer.Services;
+using Orckestra.Composer.Utils;
 
 namespace Orckestra.Composer.Search.Context
 {
     public class BrowseCategoryRequestContext : IBrowseCategoryRequestContext
     {
-        protected IComposerContext ComposerContext { get; private set; }
-        protected ICategoryBrowsingViewService CategoryBrowsingViewService { get; private set; }
+        protected IComposerContext ComposerContext { get; }
+        protected ICategoryBrowsingViewService CategoryBrowsingViewService { get; }
+        protected ISearchUrlProvider SearchUrlProvider { get; }
+        protected IInventoryLocationProvider InventoryLocationProvider { get; }
+        protected ICategoryViewService CategoryViewService { get; }
+        protected ICategoryMetaContext CategoryMetaContext { get; }
 
         protected CategoryBrowsingViewModel ViewModel { get; set; }
 
-        public BrowseCategoryRequestContext(IComposerContext composerContext, ICategoryBrowsingViewService categoryBrowsingViewService)
+        public BrowseCategoryRequestContext(IComposerContext composerContext, ICategoryBrowsingViewService categoryBrowsingViewService,
+            ISearchUrlProvider searchUrlProvider, IInventoryLocationProvider inventoryLocationProvider, ICategoryViewService categoryViewService,
+            ICategoryMetaContext categoryMetaContext)
         {
-            if (composerContext == null) { throw new ArgumentNullException("composerContext"); }
-            if (categoryBrowsingViewService == null) { throw new ArgumentNullException("categoryBrowsingViewService"); }
-
-            ComposerContext = composerContext;
-            CategoryBrowsingViewService = categoryBrowsingViewService;
+            ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
+            CategoryBrowsingViewService = categoryBrowsingViewService ?? throw new ArgumentNullException(nameof(categoryBrowsingViewService));
+            SearchUrlProvider = searchUrlProvider ?? throw new ArgumentNullException(nameof(searchUrlProvider));
+            InventoryLocationProvider = inventoryLocationProvider ?? throw new ArgumentNullException(nameof(inventoryLocationProvider));
+            CategoryViewService = categoryViewService ?? throw new ArgumentNullException(nameof(categoryViewService));
+            CategoryMetaContext = categoryMetaContext;
         }
 
-        public async Task<CategoryBrowsingViewModel> GetCategoryAvailableProductsAsync(BrowsingByCategoryParam param)
+        public async Task<CategoryBrowsingViewModel> GetCategoryAvailableProductsAsync(GetBrowseCategoryParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
 
             if (ViewModel != null)
             {
                 return ViewModel;
             }
 
-            param.Criteria.Scope = ComposerContext.Scope;
-            param.Criteria.CultureInfo = ComposerContext.CultureInfo;
-
             ViewModel = await CategoryBrowsingViewService.GetCategoryBrowsingViewModelAsync(new GetCategoryBrowsingViewModelParam
             {
                 CategoryId = param.CategoryId,
-                CategoryName = param.CategoryName,
-                BaseUrl = param.Criteria.BaseUrl,
-                IsAllProducts = param.IsAllProducts,
-                Page = param.Criteria.Page,
-                SortBy = param.Criteria.SortBy,
-                SortDirection = param.Criteria.SortDirection,
-                InventoryLocationIds = param.InventoryLocationIds,
-                SelectedFacets = param.Criteria.SelectedFacets,
-                CultureInfo = param.Criteria.CultureInfo
+                CategoryName = GetCategoryName(param.CategoryId),
+                BaseUrl = RequestUtils.GetBaseUrl(param.Request).ToString(),
+                IsAllProducts = CategoryMetaContext.GetIsAllProductPage(),
+                Page = param.Page,
+                SortBy = param.SortBy,
+                SortDirection = param.SortDirection,
+                InventoryLocationIds = InventoryLocationProvider.GetInventoryLocationIdsForSearchAsync().Result,
+                SelectedFacets = SearchUrlProvider.BuildSelectedFacets(param.Request.QueryString).ToList(),
+                CultureInfo = ComposerContext.CultureInfo,
             }).ConfigureAwait(false);
 
             return ViewModel;
+        }
+
+        private string GetCategoryName(string categoryId)
+        {
+            var categoryViewModels = CategoryViewService.GetCategoriesPathAsync(new GetCategoriesPathParam()
+            {
+                Scope = ComposerContext.Scope,
+                CultureInfo = ComposerContext.CultureInfo,
+                CategoryId = categoryId
+
+            }).Result;
+
+            if (categoryViewModels == null)
+            {
+                return string.Empty;
+            }
+
+            var category = categoryViewModels.FirstOrDefault(c => string.Equals(c.Id, categoryId, StringComparison.InvariantCultureIgnoreCase));
+
+            return category == null ? string.Empty : category.DisplayName;
         }
     }
 }

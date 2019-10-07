@@ -294,12 +294,14 @@
     <Compile Include="Controllers\OrderBaseController.cs" />
     <Compile Include="Controllers\ProductBaseController.cs" />
     <Compile Include="Controllers\SearchBaseController.cs" />
+    <Compile Include="Controllers\Helpers\SearchControllerHelper.cs" />
     <Compile Include="Controllers\StoreLocatorBaseController.cs" />
     <Compile Include="CustomPageNotFoundRoute.cs" />
     <Compile Include="CustomPageNotFoundRouteHandler.cs" />
     <Compile Include="EmptyHttpHandler.cs" />
     <Compile Include="Controllers\WishListBaseController.cs" />
     <Compile Include="Extensions\ControllerExtension.cs" />
+    <Compile Include="Mappers\FacetsMapper.cs" />
     <Compile Include="Hangfire\HangfireHost.cs" />
     <Compile Include="Hangfire\HangfireLogger.cs" />
     <Compile Include="Hangfire\HangfireLogProvider.cs" />
@@ -328,6 +330,12 @@
     <Compile Include="Providers\WishListUrlProvider.cs" />
     <Compile Include="Services\BreadcrumbViewService.cs" />
     <Compile Include="Mappers\NavigationMapper.cs" />
+    <Compile Include="Services\CategoryMetaContext.cs" />
+    <Compile Include="Services\DataQuery\DataQueryService.cs" />
+    <Compile Include="Services\Facet\FacetConfigurationCache.cs" />
+    <Compile Include="Services\Facet\FacetConfigurationContext.cs" />
+    <Compile Include="Services\DataQuery\IDataQueryService.cs" />
+    <Compile Include="Services\Facet\IFacetConfigurationCache.cs" />
     <Compile Include="Services\WebsiteContext.cs" />
     <Compile Include="Settings\RecurringOrdersSettings.cs" />
     <Compile Include="Settings\GoogleSettings.cs" />

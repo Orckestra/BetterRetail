@@ -7,6 +7,7 @@ using Moq;
 using Moq.AutoMock;
 using NUnit.Framework;
 using Orckestra.Composer.Parameters;
+using Orckestra.Composer.Search.Context;
 using Orckestra.Composer.Search.Factory;
 using Orckestra.Composer.Search.Repositories;
 using Orckestra.Overture;
@@ -25,8 +26,7 @@ namespace Orckestra.Composer.Search.Tests.Repository
         private IFacetPredicateFactory FacetPredicateFactory { get; set; }
         private ISearchRepository _sut;
         private Mock<IOvertureClient> OvertureClientMock { get; set; }
-
-        private IList<FacetSetting> _oldFacetGroupSettingsList;
+        private Mock<IFacetConfigurationContext> FacetConfigurationContext { get; set; }
 
 
         [SetUp]
@@ -35,36 +35,31 @@ namespace Orckestra.Composer.Search.Tests.Repository
             // Arrange
             ProductRequestFactory = new AutoMocker().CreateInstance<ProductRequestFactory>();
             FacetPredicateFactory = MockFacetPredicateFactory().Object;
+            FacetConfigurationContext = new Mock<IFacetConfigurationContext>();
+
 
             OvertureClientMock = MockOvertureClient();
-            _sut = new SearchRepository(OvertureClientMock.Object, ProductRequestFactory, FacetPredicateFactory);
+            _sut = new SearchRepository(OvertureClientMock.Object, ProductRequestFactory, FacetPredicateFactory, FacetConfigurationContext.Object);
 
-            // Keep a record of the original facet group settings list.
-            _oldFacetGroupSettingsList = SearchConfiguration.FacetSettings;
-            SearchConfiguration.FacetSettings = new[]
-            {
-                new FacetSetting("ExpectedName")
+            FacetConfigurationContext
+                .Setup(x => x.GetFacetSettings())
+                .Returns(new List<FacetSetting>
                 {
-                    SortWeight = 99.1,
-                    MaxCollapsedValueCount = 5,
-                    MaxExpendedValueCount = 90
-                },
-                new FacetSetting("WithDependencyName")
-                {
-                    SortWeight = -293.93,
-                    DependsOn = new[]
+                    new FacetSetting("ExpectedName")
                     {
-                        "ExpectedName"
+                        SortWeight = 99.1,
+                        MaxCollapsedValueCount = 5,
+                        MaxExpendedValueCount = 90
+                    },
+                    new FacetSetting("WithDependencyName")
+                    {
+                        SortWeight = -293.93,
+                        DependsOn = new[]
+                        {
+                            "ExpectedName"
+                        }
                     }
-                }
-            };
-        }
-
-        [TearDown]
-        public void TearDown()
-        {
-            // Restore the original facet group settings.
-            SearchConfiguration.FacetSettings = _oldFacetGroupSettingsList;
+                });
         }
 
         [Test]

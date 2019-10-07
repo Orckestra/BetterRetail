@@ -61,10 +61,44 @@
       <HintPath>..\packages\ServiceStack.Text.Signed.4.5.4\lib\net45\ServiceStack.Text.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.IO, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.4.3.0\lib\net462\System.IO.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Net" />
+    <Reference Include="System.Net.Http, Version=4.1.1.3, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Net.Http.4.3.4\lib\net46\System.Net.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.4.3.0\lib\net462\System.Runtime.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security.Cryptography.Algorithms, Version=4.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.Algorithms.4.3.0\lib\net463\System.Security.Cryptography.Algorithms.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Encoding, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.Encoding.4.3.0\lib\net46\System.Security.Cryptography.Encoding.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.Primitives.4.3.0\lib\net46\System.Security.Cryptography.Primitives.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.X509Certificates, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.X509Certificates.4.3.0\lib\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -79,6 +113,8 @@
     <Compile Include="CategoriesConfiguration.cs" />
     <Compile Include="Context\BrowseCategoryRequestContext.cs" />
     <Compile Include="Context\IBrowseCategoryRequestContext.cs" />
+    <Compile Include="Context\ICategoryMetaContext.cs" />
+    <Compile Include="Context\IFacetConfigurationContext.cs" />
     <Compile Include="FacetSetting.cs" />
     <Compile Include="Facets\PromotedFacetValue.cs" />
     <Compile Include="Facets\PromotedFacetValueSetting.cs" />
@@ -96,10 +132,12 @@
     <Compile Include="Context\ISearchRequestContext.cs" />
     <Compile Include="Helpers\SearchType.cs" />
     <Compile Include="Parameters\CategorySearchCriteria.cs" />
+    <Compile Include="Parameters\GetBrowseCategoryParam.cs" />
     <Compile Include="Parameters\GetCategoryBrowsingViewModelParam.cs" />
     <Compile Include="Parameters\GetPageHeaderParam.cs" />
     <Compile Include="Parameters\CreateSearchPaginationParam.cs" />
     <Compile Include="Parameters\GetSearchBreadcrumbParam.cs" />
+    <Compile Include="Parameters\GetSearchViewModelParam.cs" />
     <Compile Include="Providers\Facet\BaseFacetProvider.cs" />
     <Compile Include="Providers\BaseSearchUrlProvider.cs" />
     <Compile Include="Providers\FacetLocalizationProvider.cs" />
@@ -130,11 +168,11 @@
     <Compile Include="Repositories\ISearchRepository.cs" />
     <Compile Include="Repositories\ProductRequestFactory.cs" />
     <Compile Include="Parameters\RemoveSelectedFacetsFromFacetsParam.cs" />
+    <Compile Include="RequestConstants\SearchRequestParams.cs" />
     <Compile Include="SearchConfiguration.cs" />
     <Compile Include="Context\SearchRequestContext.cs" />
     <Compile Include="Helpers\SearchSortBy.cs" />
     <Compile Include="Services\BaseSearchViewService.cs" />
-    <Compile Include="Services\BrowsingByCategoryParam.cs" />
     <Compile Include="Services\BrowsingSearchParam.cs" />
     <Compile Include="Services\CategoryBrowsingViewService.cs" />
     <Compile Include="Services\GetChildCategoryParam.cs" />

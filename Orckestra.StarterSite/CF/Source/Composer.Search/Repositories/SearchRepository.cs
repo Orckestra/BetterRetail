@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Orckestra.Composer.Parameters;
+using Orckestra.Composer.Search.Context;
 using Orckestra.Composer.Search.Factory;
 using Orckestra.Composer.Search.Parameters;
 using Orckestra.Overture;
@@ -16,29 +17,28 @@ namespace Orckestra.Composer.Search.Repositories
 {
     public class SearchRepository : ISearchRepository
     {
-        protected IOvertureClient OvertureClient { get; private set; }
-        protected IProductRequestFactory ProductRequestFactory { get; private set; }
-        protected IFacetPredicateFactory FacetPredicateFactory { get; private set; }
+        protected IOvertureClient OvertureClient { get; }
+        protected IProductRequestFactory ProductRequestFactory { get; }
+        protected IFacetPredicateFactory FacetPredicateFactory { get; }
+        protected IFacetConfigurationContext FacetConfigContext { get; }
 
         public SearchRepository(
             IOvertureClient overtureClient,
             IProductRequestFactory productRequestFactory,
-            IFacetPredicateFactory facetPredicateFactory)
+            IFacetPredicateFactory facetPredicateFactory,
+            IFacetConfigurationContext facetConfigContext)
         {
-            if (productRequestFactory == null) { throw new ArgumentNullException("productRequestFactory"); }
-            if (facetPredicateFactory == null) { throw new ArgumentNullException("facetPredicateFactory"); }
-            if (overtureClient == null) { throw new ArgumentNullException("overtureClient"); }
-
-            OvertureClient = overtureClient;
-            ProductRequestFactory = productRequestFactory;
-            FacetPredicateFactory = facetPredicateFactory;
+            OvertureClient = overtureClient ?? throw new ArgumentNullException(nameof(overtureClient));
+            ProductRequestFactory = productRequestFactory ?? throw new ArgumentNullException(nameof(productRequestFactory));
+            FacetPredicateFactory = facetPredicateFactory ?? throw new ArgumentNullException(nameof(facetPredicateFactory));
+            FacetConfigContext = facetConfigContext ?? throw new ArgumentNullException(nameof(facetConfigContext));
         }
 
         public virtual async Task<ProductSearchResult> SearchProductAsync(SearchCriteria criteria)
         {
-            if (criteria == null) { throw new ArgumentNullException("criteria"); }
-            if (criteria.CultureInfo == null) { throw new ArgumentException("criteria.CultureInfo"); }
-            if (string.IsNullOrWhiteSpace(criteria.Scope)) { throw new ArgumentException("criteria.Scope"); }
+            if (criteria == null) { throw new ArgumentNullException(nameof(criteria)); }
+            if (criteria.CultureInfo == null) { throw new ArgumentException($"{nameof(criteria)}.{nameof(criteria.CultureInfo)}"); }
+            if (string.IsNullOrWhiteSpace(criteria.Scope)) { throw new ArgumentException($"{nameof(criteria)}.{nameof(criteria.Scope)}"); }
 
             var request = CreateSearchRequest(criteria);
 
@@ -55,7 +55,7 @@ namespace Orckestra.Composer.Search.Repositories
             {
                 Facets = results.Facets,
                 SelectedFacets = criteria.SelectedFacets,
-                FacetSettings = SearchConfiguration.FacetSettings
+                FacetSettings = FacetConfigContext.GetFacetSettings()
             };
 
             results.Facets = RemoveSelectedFacetsFromFacets(param);
@@ -142,7 +142,7 @@ namespace Orckestra.Composer.Search.Repositories
             if (criteria.IncludeFacets)
             {
                 facets
-                    .AddRange(SearchConfiguration.FacetSettings
+                    .AddRange(FacetConfigContext.GetFacetSettings()
                     .Where(settings => !settings.DependsOn.Any() ||
                                         settings.DependsOn.Intersect(requestedFieldNames).Any())
                     .Select(settings => settings.FieldName));

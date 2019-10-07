@@ -130,8 +130,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Facets\IFacetConfigurationMeta.cs" />
+    <Compile Include="StartupHandler.cs" />
     <Compile Include="RecurringOrdersSettings.cs" />
     <Compile Include="GoogleSettings.cs" />
+    <Compile Include="Facets\IFacet.cs" />
+    <Compile Include="Facets\IFacetConfiguration.cs" />
+    <Compile Include="Facets\IPromotedFacetValueSetting.cs" />
     <Compile Include="Navigation\Footer.cs" />
     <Compile Include="Navigation\FooterOptionalLinks.cs" />
     <Compile Include="Navigation\StickyHeader.cs" />
@@ -146,6 +151,7 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
   <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">

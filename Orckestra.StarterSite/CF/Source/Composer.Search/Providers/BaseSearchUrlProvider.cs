@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Web;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Search.Parameters;
+using Orckestra.Composer.Search.RequestConstants;
 
 namespace Orckestra.Composer.Search.Providers
 {
@@ -26,26 +27,26 @@ namespace Orckestra.Composer.Search.Providers
 
 		    if (!String.IsNullOrEmpty(param.CorrectedSearchTerms))
 		    {
-		        queryString.Add("keywords", param.CorrectedSearchTerms);
+		        queryString.Add(SearchRequestParams.Keywords, param.CorrectedSearchTerms);
 		    }
             else if (!string.IsNullOrEmpty(param.SearchCriteria.Keywords))
 			{
-                queryString.Add("keywords", param.SearchCriteria.Keywords);
+                queryString.Add(SearchRequestParams.Keywords, param.SearchCriteria.Keywords);
 			}
 
             if (!string.IsNullOrEmpty(param.SearchCriteria.SortBy))
 			{
-                queryString.Add("sortBy", param.SearchCriteria.SortBy);
+                queryString.Add(SearchRequestParams.SortBy, param.SearchCriteria.SortBy);
 			}
 
             if (!string.IsNullOrEmpty(param.SearchCriteria.SortDirection))
 			{
-                queryString.Add("sortDirection", param.SearchCriteria.SortDirection);
+                queryString.Add(SearchRequestParams.SortDirection, param.SearchCriteria.SortDirection);
 			}
 
             if (param.SearchCriteria.Page >= 1)
 			{
-                queryString.Add("page", param.SearchCriteria.Page.ToString(CultureInfo.InvariantCulture));
+                queryString.Add(SearchRequestParams.Page, param.SearchCriteria.Page.ToString(CultureInfo.InvariantCulture));
 			}
 
             if (param.SearchCriteria.SelectedFacets != null && param.SearchCriteria.SelectedFacets.Count > 0)

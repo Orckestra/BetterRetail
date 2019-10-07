@@ -4,7 +4,9 @@ using System.Globalization;
 using System.Linq;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
+using Orckestra.Composer.Search.Context;
 using Orckestra.Composer.Search.Facets;
+using Orckestra.Composer.Search.Providers.Facet;
 using Orckestra.Composer.Search.Providers.SelectedFacet;
 using Orckestra.Composer.Utils;
 using Orckestra.Overture;
@@ -13,13 +15,15 @@ namespace Orckestra.Composer.Search.Factory
 {
     public class SelectedFacetFactory : ProviderFactory<ISelectedFacetProvider>, ISelectedFacetFactory
     {
-         private ISelectedFacetProviderRegistry SelectedFacetProviderRegistry { get; set; }
+         private ISelectedFacetProviderRegistry SelectedFacetProviderRegistry { get; }
+         protected IFacetConfigurationContext FacetConfigContext { get; }
 
-         public SelectedFacetFactory(IDependencyResolver dependencyResolver, ISelectedFacetProviderRegistry selectedFacetProviderRegistry)
+         public SelectedFacetFactory(IDependencyResolver dependencyResolver, ISelectedFacetProviderRegistry selectedFacetProviderRegistry, IFacetConfigurationContext facetConfigContext)
             : base(dependencyResolver)
         {
             if (selectedFacetProviderRegistry == null) { throw new ArgumentNullException("selectedFacetProviderRegistry"); }
             SelectedFacetProviderRegistry = selectedFacetProviderRegistry;
+            FacetConfigContext = facetConfigContext;
         }
 
         /// <summary>
@@ -30,7 +34,7 @@ namespace Orckestra.Composer.Search.Factory
             if (filter == null) { throw new ArgumentNullException("filter"); }
             if (string.IsNullOrWhiteSpace(filter.Name)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("Name"), "filter"); }
 
-            var setting = SearchConfiguration.FacetSettings
+            var setting = FacetConfigContext.GetFacetSettings()
                 .FirstOrDefault(s => s.FieldName.Equals(filter.Name, StringComparison.OrdinalIgnoreCase));
 
             if (setting == null)
