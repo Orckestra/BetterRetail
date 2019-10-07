@@ -273,6 +273,7 @@
     <Compile Include="Request\RemoveRecurringOrderTemplateLineItemsRequest.cs" />
     <Compile Include="Request\UpdateRecurringOrderLineItemQuantityRequest.cs" />
     <Compile Include="Request\UpdateRecurringOrderTemplateLineItemRequest.cs" />
+    <Compile Include="Services\ICategoryViewService.cs" />
     <Compile Include="Services\IImageService.cs" />
     <Compile Include="Services\ImageService.cs" />
     <Compile Include="Services\IProductPriceViewService.cs" />
@@ -291,6 +292,7 @@
     <Compile Include="Utils\RecurringOrderTemplateHelper.cs" />
     <Compile Include="ViewEngine\HandleBarsHelpers\FormatValueHelper.cs" />
     <Compile Include="ViewEngine\HandleBarsHelpers\LookupHelper.cs" />
+    <Compile Include="ViewModels\CategoryViewModel.cs" />
     <Compile Include="ViewModels\CurrencyViewModel.cs" />
     <Compile Include="ViewModels\EnumLocalizationAttribute.cs" />
     <Compile Include="ViewModels\ErrorViewModel.cs" />

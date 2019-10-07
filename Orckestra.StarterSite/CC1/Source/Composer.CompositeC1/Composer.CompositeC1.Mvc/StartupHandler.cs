@@ -52,18 +52,8 @@ namespace Orckestra.Composer.CompositeC1.Mvc
 
             log.Info("Application Starting");
 
-            DynamicTypeManager.EnsureCreateStore(typeof(RecurringOrdersSettings));
-            DynamicTypeManager.EnsureCreateStore(typeof(GoogleSettings));
             DynamicTypeManager.EnsureCreateStore(typeof(ComposerPage));
             DynamicTypeManager.EnsureCreateStore(typeof(CategoryPage));
-            DynamicTypeManager.EnsureCreateStore(typeof(UrlTarget));
-            DynamicTypeManager.EnsureCreateStore(typeof(CssStyle));
-            DynamicTypeManager.EnsureCreateStore(typeof(MainMenu));
-            DynamicTypeManager.EnsureCreateStore(typeof(StickyHeader));
-            DynamicTypeManager.EnsureCreateStore(typeof(HeaderOptionalLink));
-            DynamicTypeManager.EnsureCreateStore(typeof(NavigationImage));
-            DynamicTypeManager.EnsureCreateStore(typeof(Footer));
-            DynamicTypeManager.EnsureCreateStore(typeof(FooterOptionalLink));
 
             var functions = MvcFunctionRegistry.NewFunctionCollection();
             RegisterFunctions(functions);
