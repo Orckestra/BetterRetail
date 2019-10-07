@@ -233,7 +233,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         }
 
         [AuthorizeAndRedirect]
-        public virtual ActionResult RecurringSchedule(XhtmlDocument emptyRecurringScheduleContent)
+        public virtual ActionResult RecurringSchedule()
         {
             var vm = RecurringOrderTemplatesViewService.GetRecurringOrderTemplatesViewModelAsync(new GetRecurringOrderTemplatesParam {
                 Scope = ComposerContext.Scope,
@@ -242,9 +242,9 @@ namespace Orckestra.Composer.CompositeC1.Controllers
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
                 }).Result;
 
-            if (vm != null && vm.RecurringOrderTemplateViewModelList.Count == 0 && emptyRecurringScheduleContent != null)
+            if (vm != null && vm.RecurringOrderTemplateViewModelList.Count == 0)
             {
-                return View("RecurringScheduleContainer", new { TotalQuantity = 0, EmptyContent = emptyRecurringScheduleContent.Body });
+                return View("RecurringScheduleContainer", new { TotalQuantity = 0 });
             }
 
             return View("RecurringScheduleContainer", vm);            
