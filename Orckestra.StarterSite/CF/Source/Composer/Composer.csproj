@@ -254,7 +254,6 @@
     <Compile Include="Parameters\RemoveRecurringOrderTemplateLineItemsParam.cs" />
     <Compile Include="Parameters\UpdateRecurringOrderTemplateLineItemParam.cs" />
     <Compile Include="Parameters\UpdateRecurringOrderTemplateLineItemQuantityParam.cs" />
-    <Compile Include="Providers\Dam\ProductMediaProvider.cs" />
     <Compile Include="Providers\Dam\ProductImageInfo.cs" />
     <Compile Include="Providers\IPageNotFoundUrlProvider.cs" />
     <Compile Include="Providers\ICountryCodeProvider.cs" />

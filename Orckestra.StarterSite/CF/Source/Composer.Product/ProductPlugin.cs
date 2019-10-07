@@ -22,7 +22,6 @@ namespace Orckestra.Composer.Product
             host.Register<RelatedProductViewService, IRelatedProductViewService>();
             host.Register<InventoryViewService, IInventoryViewService>();
             host.Register<ConfigurationInventoryLocationProvider, IInventoryLocationProvider>();
-            host.Register<ProductMediaProvider, IDamProvider>();
             host.Register<ProductMediaSettingsRepository, IProductMediaSettingsRepository>();
 
             host.MetadataRegistry.LoadViewModelMetadataInAssemblyOf(typeof(ProductPlugin).Assembly);

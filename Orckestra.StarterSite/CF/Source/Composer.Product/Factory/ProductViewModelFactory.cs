@@ -35,7 +35,6 @@ namespace Orckestra.Composer.Product.Factory
         protected IRecurringOrdersRepository RecurringOrdersRepository { get; }
         protected IRecurringOrderProgramViewModelFactory RecurringOrderProgramViewModelFactory { get; }
         protected IRecurringOrdersSettings RecurringOrdersSettings { get; private set; }
-        protected IDamProvider ProductMediaProvider { get; private set; }
 
         public ProductViewModelFactory(
             IViewModelMapper viewModelMapper,
@@ -47,8 +46,7 @@ namespace Orckestra.Composer.Product.Factory
             IScopeViewService scopeViewService,
             IRecurringOrdersRepository recurringOrdersRepository,
             IRecurringOrderProgramViewModelFactory recurringOrderProgramViewModelFactory,
-            IRecurringOrdersSettings recurringOrdersSettings,
-            IDamProvider productMediaProvider)
+            IRecurringOrdersSettings recurringOrdersSettings)
         {
             ViewModelMapper = viewModelMapper ?? throw new ArgumentNullException(nameof(viewModelMapper));
             ProductRepository = productRepository ?? throw new ArgumentNullException(nameof(productRepository));
@@ -60,7 +58,6 @@ namespace Orckestra.Composer.Product.Factory
             RecurringOrdersRepository = recurringOrdersRepository ?? throw new ArgumentNullException(nameof(recurringOrdersRepository));
             RecurringOrderProgramViewModelFactory = recurringOrderProgramViewModelFactory ?? throw new ArgumentNullException(nameof(recurringOrderProgramViewModelFactory));
             RecurringOrdersSettings = recurringOrdersSettings;
-            ProductMediaProvider = productMediaProvider ?? throw new ArgumentNullException(nameof(productMediaProvider));
         }
 
         public virtual async Task<ProductViewModel> GetProductViewModel(GetProductParam param)
@@ -606,14 +603,7 @@ namespace Orckestra.Composer.Product.Factory
                 VariantMediaSet = product.VariantMediaSet
             };
 
-            if (product.MediaSet != null)
-            {
-                return await ProductMediaProvider.GetAllProductImagesAsync(param).ConfigureAwait(false);
-            }
-            else
-            {
-                return await DamProvider.GetAllProductImagesAsync(param).ConfigureAwait(false);
-            }
+            return await DamProvider.GetAllProductImagesAsync(param).ConfigureAwait(false);
         }
 
         /// <summary>
