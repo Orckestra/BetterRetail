@@ -79,7 +79,7 @@ namespace Orckestra.Composer.Services
         private async Task<Dictionary<string, string>> GetImageUrlsBySkuAsync(IEnumerable<string> skuIds)
         {
             var mediaList = await Task.WhenAll(skuIds.Select( async sku => {
-                var mediaSet = await ProductRepository.GetProductMediaAsync(sku, ComposerContext.Scope, ComposerContext.CultureInfo.Name);
+                var mediaSet = await ProductRepository.GetProductMediaAsync(sku, ComposerContext.Scope, ComposerContext.CultureInfo.Name, "Image");
 
                 if (mediaSet.MediaSet.Count == 0) return null;
 

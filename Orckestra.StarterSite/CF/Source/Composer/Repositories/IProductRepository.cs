@@ -59,6 +59,6 @@ namespace Orckestra.Composer.Repositories
         /// </summary>
         /// <param name="sku">The product sku.</param>
         /// <returns></returns>
-        Task<MediaList> GetProductMediaAsync(string sku, string scope, string cultureName);
+        Task<MediaList> GetProductMediaAsync(string sku, string scope, string cultureName, string mediaType);
     }
 }

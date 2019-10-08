@@ -180,7 +180,7 @@ namespace Orckestra.Composer.Repositories
             return _overtureClient.SendAsync(request);
         }
 
-        public Task<MediaList> GetProductMediaAsync(string sku, string scope, string cultureName)
+        public Task<MediaList> GetProductMediaAsync(string sku, string scope, string cultureName, string mediaType)
         {
             if (sku == null) { throw new ArgumentNullException("sku"); }
             if (scope == null) { throw new ArgumentNullException("scope"); }
@@ -189,7 +189,8 @@ namespace Orckestra.Composer.Repositories
             {
                 Sku = sku,
                 ScopeId = scope,
-                CultureName = cultureName
+                CultureName = cultureName,
+                MediaType = mediaType
             };
 
             return _overtureClient.SendAsync(request);
