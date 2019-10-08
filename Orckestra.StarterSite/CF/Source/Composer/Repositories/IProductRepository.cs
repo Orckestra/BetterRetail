@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Orckestra.Composer.Parameters;
 using Orckestra.Overture.ServiceModel.Metadata;
 using Orckestra.Overture.ServiceModel.Products;
+using Orckestra.Overture.ServiceModel.Search;
 
 namespace Orckestra.Composer.Repositories
 {
@@ -45,5 +46,12 @@ namespace Orckestra.Composer.Repositories
         /// <param name="scope">The scope.</param>
         /// <returns></returns>
         Task<EffectivePriceEntryInfo> GetEffectivePrice(string productId, string scope);
+
+        /// <summary>
+        /// Search products by ids
+        /// </summary>
+        /// <param name="productIds">The product id.</param>
+        /// <returns></returns>
+        Task<SearchResult> SearchProductByIdsAsync(List<string> productIds, string scope, string cultureName);
     }
 }

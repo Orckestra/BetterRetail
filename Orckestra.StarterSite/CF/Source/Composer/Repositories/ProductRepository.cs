@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Parameters;
-using Orckestra.Composer.Providers;
 using Orckestra.Composer.Utils;
 using Orckestra.Overture;
 using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel.Metadata;
 using Orckestra.Overture.ServiceModel.Products;
 using Orckestra.Overture.ServiceModel.Requests.Products;
+using Orckestra.Overture.ServiceModel.Requests.Search;
+using Orckestra.Overture.ServiceModel.Search;
 
 namespace Orckestra.Composer.Repositories
 {
@@ -161,6 +162,22 @@ namespace Orckestra.Composer.Repositories
             };
 
             return _overtureClient.SendAsync(request);
+        }
+
+
+        public async Task<SearchResult> SearchProductByIdsAsync(List<string> productIds, string scope, string cultureName)
+        {
+            if (productIds == null) { throw new ArgumentNullException("productIds"); }
+            if (scope == null) {  throw new ArgumentNullException("scope"); }
+
+            var request = new SearchProductByIdsRequest
+            {
+                Ids = productIds,
+                ScopeId = scope,
+                CultureName = cultureName
+            };
+
+            return await _overtureClient.SendAsync(request).ConfigureAwait(false);
         }
     }
 }
