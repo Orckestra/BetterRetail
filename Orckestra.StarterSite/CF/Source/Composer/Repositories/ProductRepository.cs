@@ -165,7 +165,7 @@ namespace Orckestra.Composer.Repositories
         }
 
 
-        public async Task<SearchResult> SearchProductByIdsAsync(List<string> productIds, string scope, string cultureName)
+        public Task<SearchResult> SearchProductByIdsAsync(List<string> productIds, string scope, string cultureName)
         {
             if (productIds == null) { throw new ArgumentNullException("productIds"); }
             if (scope == null) {  throw new ArgumentNullException("scope"); }
@@ -177,7 +177,22 @@ namespace Orckestra.Composer.Repositories
                 CultureName = cultureName
             };
 
-            return await _overtureClient.SendAsync(request).ConfigureAwait(false);
+            return _overtureClient.SendAsync(request);
+        }
+
+        public Task<MediaList> GetProductMediaAsync(string sku, string scope, string cultureName)
+        {
+            if (sku == null) { throw new ArgumentNullException("sku"); }
+            if (scope == null) { throw new ArgumentNullException("scope"); }
+
+            var request = new GetMediaBySkuRequest
+            {
+                Sku = sku,
+                ScopeId = scope,
+                CultureName = cultureName
+            };
+
+            return _overtureClient.SendAsync(request);
         }
     }
 }
