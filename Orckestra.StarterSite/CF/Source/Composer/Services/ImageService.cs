@@ -79,14 +79,15 @@ namespace Orckestra.Composer.Services
         private async Task<Dictionary<string, string>> GetImageUrlsBySkuAsync(IEnumerable<string> skuIds)
         {
             var mediaList = await Task.WhenAll(skuIds.Select( async sku => {
-                var mediaSet = await ProductRepository.GetProductMediaAsync(sku, ComposerContext.Scope, ComposerContext.CultureInfo.Name, "Image");
+                var mediaSetResult = await ProductRepository.GetProductMediaAsync(sku, ComposerContext.Scope, ComposerContext.CultureInfo.Name, "Image");
+                var mediaSet = mediaSetResult.MediaSet.Where(x => x.IsCover??true).ToList();
 
-                if (mediaSet.MediaSet.Count == 0) return null;
+                if (mediaSet.Count == 0) return null;
 
                 return new
                 {
                     Sku = sku,
-                    ImageUrl = mediaSet.MediaSet.Last().Url
+                    ImageUrl = mediaSet.Last().Url
                 };
             }));
 
