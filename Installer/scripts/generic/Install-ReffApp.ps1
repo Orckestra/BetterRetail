@@ -100,6 +100,7 @@ function Install-Packages()
 	Write-Log  "Copying Other ReffApp Features...."
 	Robocopy $genericRefAppPackagesFolder $dstFolder "Orckestra.Composer.C1CMS.Queries.zip" /MIR /NJH /NDL /NFL /NS /NC /NP /NJS
 	Robocopy $genericRefAppPackagesFolder $dstFolder "Orckestra.Composer.SEO.Organization.zip" /MIR /NJH /NDL /NFL /NS /NC /NP /NJS
+	Robocopy $genericRefAppPackagesFolder $dstFolder "Orckestra.Composer.Languages.zip" /MIR /NJH /NDL /NFL /NS /NC /NP /NJS
 	
 	RestartingIIS 
 	AccessHomePage 

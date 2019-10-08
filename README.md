@@ -14,6 +14,7 @@
 `$git clone https://github.com/Orckestra/ReferenceApplication.git`
 
 #### Prerequesites
+* VS 2019
 * IIS with URL Rewrite Module
 * NPM version 5.4.2 or 5.6.0 (npm -v to see version) - Must install node.js version 6.14.4 or 8.11.3 (this versions was tested to complete the Build)
 * If you have npm installed, make sure that npm registry use default url *https://registry.npmjs.org/*
@@ -40,9 +41,11 @@
   <param name="machineKey-validationKey" value="***REMOVED***" />
   <param name="machineKey-decryptionKey" value="***REMOVED***" />
   
-  <param name="ocs-cm-hostName" value="ENTER_VALUE_HEREd"/>
-  <param name="ocs-cd-hostName" value="ENTER_VALUE_HERE"/>
-  <param name="ocsAuthToken" value="ENTER_VALUE_HERE"/>
+  <param name="cms-c1-custom-packages" value="Composite.Tools.PackageCreator,Composite.Tools.StaticDataTypeCreator,Orckestra.Search.KeywordRedirect,Orckestra.Search.LuceneNET" />
+  
+  <param name="ocs-cm-hostName" value="***REMOVED***" />
+  <param name="ocs-cd-hostName" value="***REMOVED***" />
+  <param name="ocsAuthToken" value="***REMOVED***"/>
 	
   <param name="gtm-containerid" value="ENTER_VALUE_HERE"/>
 </parameters>
