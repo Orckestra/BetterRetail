@@ -9,6 +9,7 @@ using Moq.AutoMock;
 using NUnit.Framework;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Dam;
+using Orckestra.Composer.Repositories;
 using Orckestra.ExperienceManagement.Configuration;
 using Orckestra.ExperienceManagement.Configuration.Settings;
 using Orckestra.Overture.ServiceModel.Products;
@@ -23,21 +24,33 @@ namespace Orckestra.Composer.Tests.Providers.Dam
         private AutoMocker _container;
         private Mock<ISiteConfiguration> _siteConfigurationMock;
         private Mock<ICdnDamProviderSettings> _cdmproviderMock;
+        private MediaSettings _mediaSettings;
+        private Mock<IProductMediaSettingsRepository> _productMediaSettingsRepositoryMock;
+         
 
         [SetUp]
         public void SetUp()
         {
-            _container = new AutoMocker();
             _cdmproviderMock = new Mock<ICdnDamProviderSettings>();
-            _siteConfigurationMock = new Mock<ISiteConfiguration>();
-           
             _cdmproviderMock.Setup(c => c.ProductImageFilePathPattern).Returns("{productId}_{sequenceNumber}_{imageSize}.jpg");
             _cdmproviderMock.Setup(c => c.VariantImageFilePathPattern).Returns("{productId}_{variantId}_{sequenceNumber}_{imageSize}.jpg");
             _cdmproviderMock.Setup(c => c.SupportXLImages).Returns(true);
-            
+
+            _siteConfigurationMock = new Mock<ISiteConfiguration>();
             _siteConfigurationMock.Setup(s => s.CdnDamProviderSettings).Returns(_cdmproviderMock.Object);
 
+            _mediaSettings = new MediaSettings()
+            {
+                MediaServerUrl = "https://occdev0localdeployment.blob.core.windows.net/s0011dv17-media/",
+                MediaFallbackImageName = "image_not_found.jpg"
+            };
+
+            _productMediaSettingsRepositoryMock = new Mock<IProductMediaSettingsRepository>();
+            _productMediaSettingsRepositoryMock.Setup(ms => ms.GetProductMediaSettings()).ReturnsAsync(_mediaSettings);
+
+            _container = new AutoMocker();
             _container.Use(_siteConfigurationMock);
+         
         }
 
         [TearDown]
@@ -53,10 +66,7 @@ namespace Orckestra.Composer.Tests.Providers.Dam
             IDamProvider damProvider = _container.CreateInstance<ConventionBasedDamProvider>();
 
             // Act & Assert
-            var exception = Assert.Throws<ArgumentNullException>(() =>
-            {
-                damProvider.GetAllProductImagesAsync(null);
-            });
+            var exception = Assert.ThrowsAsync<ArgumentNullException>(() => damProvider.GetAllProductImagesAsync(null));
 
             exception.Message.Should().Be("The method parameter is required.\r\nParameter name: param");
         }
@@ -71,16 +81,15 @@ namespace Orckestra.Composer.Tests.Providers.Dam
             IDamProvider damProvider = _container.CreateInstance<ConventionBasedDamProvider>();
 
             // Act & Assert
-            var exception = Assert.Throws<ArgumentException>(() =>
-            {
+            var exception = Assert.ThrowsAsync<ArgumentException>(() =>
                 damProvider.GetAllProductImagesAsync(new GetAllProductImagesParam()
                 {
                     ImageSize = imageSize,
                     ThumbnailImageSize = GetRandom.String(1),
                     ProductZoomImageSize = GetRandom.String(1),
                     ProductId = GetRandom.String(10)
-                });
-            });
+                })
+            );
 
             exception.Message.Should().Be("The image size is required.");
         }
@@ -95,16 +104,15 @@ namespace Orckestra.Composer.Tests.Providers.Dam
             IDamProvider damProvider = _container.CreateInstance<ConventionBasedDamProvider>();
 
             // Act & Assert
-            var exception = Assert.Throws<ArgumentException>(() =>
-            {
+            var exception = Assert.ThrowsAsync<ArgumentException>(() =>
                 damProvider.GetAllProductImagesAsync(new GetAllProductImagesParam()
                 {
                     ImageSize = GetRandom.String(1),
                     ThumbnailImageSize = thumbnailImageSize,
                     ProductZoomImageSize = GetRandom.String(1),
                     ProductId = GetRandom.String(10)
-                });
-            });
+                })
+            );
 
             exception.Message.Should().Be("The thumbnail image size is required.");
         }
@@ -119,16 +127,15 @@ namespace Orckestra.Composer.Tests.Providers.Dam
             IDamProvider damProvider = _container.CreateInstance<ConventionBasedDamProvider>();
 
             // Act & Assert
-            var exception = Assert.Throws<ArgumentException>(() =>
-            {
+            var exception = Assert.ThrowsAsync<ArgumentException>(() =>
                 damProvider.GetAllProductImagesAsync(new GetAllProductImagesParam()
                 {
                     ImageSize = GetRandom.String(1),
                     ThumbnailImageSize = GetRandom.String(1),
                     ProductZoomImageSize = productZoomImageSize,
                     ProductId = GetRandom.String(10)
-                });
-            });
+                })
+            );
 
             exception.Message.Should().Be("The product zoom image size is required.");
         }
@@ -143,16 +150,15 @@ namespace Orckestra.Composer.Tests.Providers.Dam
             IDamProvider damProvider = _container.CreateInstance<ConventionBasedDamProvider>();
 
             // Act & Assert
-            var exception = Assert.Throws<ArgumentException>(() =>
-            {
+            var exception = Assert.ThrowsAsync<ArgumentException>(() =>
                 damProvider.GetAllProductImagesAsync(new GetAllProductImagesParam()
                 {
                     ImageSize = GetRandom.String(1),
                     ThumbnailImageSize = GetRandom.String(1),
                     ProductZoomImageSize = GetRandom.String(1),
                     ProductId = productId
-                });
-            });
+                })
+            );
 
             exception.Message.Should().Be("The product id is required.");
         }
@@ -254,5 +260,64 @@ namespace Orckestra.Composer.Tests.Providers.Dam
             results.Where(result => result.ProductId == expectedProductId).Should().NotBeNullOrEmpty("Because the product must be found");
         }
 
+        [Test]
+        public async Task WHEN_Passing_Valid_Values_With_MediaSet_Within_Parameter_SHOULD_Succeed()
+        {
+            _container.Use(_productMediaSettingsRepositoryMock);
+
+            // Arrange
+            var expectedProductId = GetRandom.String(32);
+            IDamProvider damProvider = _container.CreateInstance<ConventionBasedDamProvider>();
+
+
+            var ImageSize = GetRandom.String(1);
+            var ThumbnailImageSize = GetRandom.String(1);
+            var ProductZoomImageSize = GetRandom.String(1);
+
+            // Act
+            var results = await damProvider.GetAllProductImagesAsync(new GetAllProductImagesParam()
+            {
+                ImageSize = ImageSize,
+                ThumbnailImageSize = ThumbnailImageSize,
+                ProductZoomImageSize = ProductZoomImageSize,
+                ProductId = expectedProductId,
+                Variants = null, 
+                MediaSet = new List<ProductMedia>()
+                {
+                    new ProductMedia()
+                    {
+                        Url = "~/" + GetRandom.String(32) + ".jpg",
+                        ResizedInstances = new ResizedMediaLink[]
+                        {
+                            new ResizedMediaLink ()
+                            {
+                                Size = ImageSize,
+                                Url = "~/" + GetRandom.String(32) + ".jpg",
+                            },
+                             new ResizedMediaLink ()
+                            {
+                                Size = ThumbnailImageSize,
+                                Url = "~/" + GetRandom.String(32) + ".jpg",
+                            },
+                              new ResizedMediaLink ()
+                            {
+                                Size = ProductZoomImageSize,
+                                Url = "~/" + GetRandom.String(32) + ".jpg",
+                            }
+                        }
+                    }
+                }
+            }).ConfigureAwait(false);
+
+            // Assert
+            results.Should().NotBeEmpty();
+            results.ForEach(x => x.VariantId.Should().BeNull("There should be no variants because it was not specified in the request."));
+            results.Where(result => string.IsNullOrWhiteSpace(result.ImageUrl)).Should().BeEmpty("Because all results should have a known default Image url");
+            results.Where(result => string.IsNullOrWhiteSpace(result.FallbackImageUrl)).Should().BeEmpty("Because all results should have a known fallback Image url");
+            results.Where(result => string.IsNullOrWhiteSpace(result.ThumbnailUrl)).Should().BeEmpty("Because all results should have a known thumbnail Image url");
+            results.Where(result => string.IsNullOrWhiteSpace(result.ProductZoomImageUrl)).Should().BeEmpty("Because all results should have a known Product Zoom Image url");
+            results.Where(result => result.ProductId != expectedProductId).Should().BeEmpty("Because all results should match the requested product id");
+            results.Where(result => result.ProductId == expectedProductId).Should().NotBeNullOrEmpty("Because the product must be found");
+        }
     }
 }

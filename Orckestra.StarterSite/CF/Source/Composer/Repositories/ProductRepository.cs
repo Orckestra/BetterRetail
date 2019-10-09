@@ -24,11 +24,8 @@ namespace Orckestra.Composer.Repositories
 
         public ProductRepository(IOvertureClient overtureClient, ICacheProvider cacheProvider)
         {
-            if (overtureClient == null) { throw new ArgumentNullException("overtureClient"); }
-            if (cacheProvider == null) { throw new ArgumentNullException("cacheProvider"); }
-
-            _overtureClient = overtureClient;
-            _cacheProvider = cacheProvider;
+            _overtureClient = overtureClient ?? throw new ArgumentNullException("overtureClient");
+            _cacheProvider = cacheProvider ?? throw new ArgumentNullException("cacheProvider");
         }
 
         /// <summary>
