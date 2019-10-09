@@ -219,6 +219,10 @@ Task CC1_Copy-Packages{
 	$sourse = Join-Path $Build.CC1.SourcePath 'Orckestra.Composer.SEO.Content\Release\Orckestra.Composer.SEO.Organization.Content.zip'
 	copy $sourse $destinationPath
 	
+	write-host "Copying Orckestra.Composer.Languages package file"
+	$sourse = Join-Path $Build.CC1.SourcePath 'Orckestra.Composer.Languages\Release\Orckestra.Composer.Languages.zip'
+	copy $sourse $destinationPath
+	
 	write-host "Done"
 }
 
