@@ -194,8 +194,8 @@ namespace Orckestra.Composer.Repositories
             {
                 Scope = scope,
             };
-            productMediaCacheKey.AppendKeyParts("sku", sku);
-            productMediaCacheKey.AppendKeyParts("mediaType", mediaType);
+            productMediaCacheKey.AppendKeyParts(nameof(sku), sku);
+            productMediaCacheKey.AppendKeyParts(nameof(mediaType), mediaType);
 
             return CacheProvider.GetOrAddAsync(productMediaCacheKey, () => OvertureClient.SendAsync(request));
         }

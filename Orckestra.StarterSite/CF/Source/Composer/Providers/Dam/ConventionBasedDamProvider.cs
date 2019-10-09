@@ -190,7 +190,6 @@ namespace Orckestra.Composer.Providers.Dam
             return string.Format("{0}/{1}/{2}", ServerUrl, ImageFolderName, imageFilename);
         }
 
-        //Get Media functions
         private AllProductImages CreateAllProductImages(ProductMedia productMedia, MediaSettings mediaSettings, GetAllProductImagesParam param, string variantId)
         {
             return new AllProductImages

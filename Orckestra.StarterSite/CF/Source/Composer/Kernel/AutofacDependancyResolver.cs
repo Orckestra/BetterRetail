@@ -10,12 +10,7 @@ namespace Orckestra.Composer.Kernel
 
         public AutofacDependancyResolver(ILifetimeScope container)
         {
-            if (container == null)
-            {
-                throw new ArgumentNullException("container");
-            }
-
-            _container = container;
+            _container = container ?? throw new ArgumentNullException("container");
         }
 
         public object Resolve(Type type)

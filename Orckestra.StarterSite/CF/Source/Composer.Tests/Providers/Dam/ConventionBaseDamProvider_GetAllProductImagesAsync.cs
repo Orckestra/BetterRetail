@@ -79,17 +79,16 @@ namespace Orckestra.Composer.Tests.Providers.Dam
         {
             // Arrange
             IDamProvider damProvider = _container.CreateInstance<ConventionBasedDamProvider>();
+            var param = new GetAllProductImagesParam()
+            {
+                ImageSize = imageSize,
+                ThumbnailImageSize = GetRandom.String(1),
+                ProductZoomImageSize = GetRandom.String(1),
+                ProductId = GetRandom.String(10)
+            };
 
             // Act & Assert
-            var exception = Assert.ThrowsAsync<ArgumentException>(() =>
-                damProvider.GetAllProductImagesAsync(new GetAllProductImagesParam()
-                {
-                    ImageSize = imageSize,
-                    ThumbnailImageSize = GetRandom.String(1),
-                    ProductZoomImageSize = GetRandom.String(1),
-                    ProductId = GetRandom.String(10)
-                })
-            );
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => damProvider.GetAllProductImagesAsync(param));
 
             exception.Message.Should().Be("The image size is required.");
         }
@@ -102,17 +101,16 @@ namespace Orckestra.Composer.Tests.Providers.Dam
         {
             // Arrange
             IDamProvider damProvider = _container.CreateInstance<ConventionBasedDamProvider>();
+            var param = new GetAllProductImagesParam()
+            {
+                ImageSize = GetRandom.String(1),
+                ThumbnailImageSize = thumbnailImageSize,
+                ProductZoomImageSize = GetRandom.String(1),
+                ProductId = GetRandom.String(10)
+            };
 
             // Act & Assert
-            var exception = Assert.ThrowsAsync<ArgumentException>(() =>
-                damProvider.GetAllProductImagesAsync(new GetAllProductImagesParam()
-                {
-                    ImageSize = GetRandom.String(1),
-                    ThumbnailImageSize = thumbnailImageSize,
-                    ProductZoomImageSize = GetRandom.String(1),
-                    ProductId = GetRandom.String(10)
-                })
-            );
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => damProvider.GetAllProductImagesAsync(param));
 
             exception.Message.Should().Be("The thumbnail image size is required.");
         }
@@ -125,17 +123,16 @@ namespace Orckestra.Composer.Tests.Providers.Dam
         {
             // Arrange
             IDamProvider damProvider = _container.CreateInstance<ConventionBasedDamProvider>();
+            var param = new GetAllProductImagesParam()
+            {
+                ImageSize = GetRandom.String(1),
+                ThumbnailImageSize = GetRandom.String(1),
+                ProductZoomImageSize = productZoomImageSize,
+                ProductId = GetRandom.String(10)
+            };
 
             // Act & Assert
-            var exception = Assert.ThrowsAsync<ArgumentException>(() =>
-                damProvider.GetAllProductImagesAsync(new GetAllProductImagesParam()
-                {
-                    ImageSize = GetRandom.String(1),
-                    ThumbnailImageSize = GetRandom.String(1),
-                    ProductZoomImageSize = productZoomImageSize,
-                    ProductId = GetRandom.String(10)
-                })
-            );
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => damProvider.GetAllProductImagesAsync(param));
 
             exception.Message.Should().Be("The product zoom image size is required.");
         }
@@ -148,17 +145,16 @@ namespace Orckestra.Composer.Tests.Providers.Dam
         {
             // Arrange
             IDamProvider damProvider = _container.CreateInstance<ConventionBasedDamProvider>();
+            var param = new GetAllProductImagesParam()
+            {
+                ImageSize = GetRandom.String(1),
+                ThumbnailImageSize = GetRandom.String(1),
+                ProductZoomImageSize = GetRandom.String(1),
+                ProductId = productId
+            };
 
             // Act & Assert
-            var exception = Assert.ThrowsAsync<ArgumentException>(() =>
-                damProvider.GetAllProductImagesAsync(new GetAllProductImagesParam()
-                {
-                    ImageSize = GetRandom.String(1),
-                    ThumbnailImageSize = GetRandom.String(1),
-                    ProductZoomImageSize = GetRandom.String(1),
-                    ProductId = productId
-                })
-            );
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => damProvider.GetAllProductImagesAsync(param));
 
             exception.Message.Should().Be("The product id is required.");
         }
@@ -169,16 +165,17 @@ namespace Orckestra.Composer.Tests.Providers.Dam
             // Arrange
             var expectedProductId = GetRandom.String(32);
             IDamProvider damProvider = _container.CreateInstance<ConventionBasedDamProvider>();
-
-            // Act
-            var results = await damProvider.GetAllProductImagesAsync(new GetAllProductImagesParam()
+            var param = new GetAllProductImagesParam()
             {
                 ImageSize = GetRandom.String(1),
                 ThumbnailImageSize = GetRandom.String(1),
                 ProductZoomImageSize = GetRandom.String(1),
                 ProductId = expectedProductId,
                 Variants = null
-            }).ConfigureAwait(false);
+            };
+
+            // Act
+            var results = await damProvider.GetAllProductImagesAsync(param).ConfigureAwait(false);
 
             // Assert
             results.Should().NotBeEmpty();
@@ -269,19 +266,16 @@ namespace Orckestra.Composer.Tests.Providers.Dam
             var expectedProductId = GetRandom.String(32);
             IDamProvider damProvider = _container.CreateInstance<ConventionBasedDamProvider>();
 
-
             var ImageSize = GetRandom.String(1);
             var ThumbnailImageSize = GetRandom.String(1);
             var ProductZoomImageSize = GetRandom.String(1);
-
-            // Act
-            var results = await damProvider.GetAllProductImagesAsync(new GetAllProductImagesParam()
+            var param = new GetAllProductImagesParam()
             {
                 ImageSize = ImageSize,
                 ThumbnailImageSize = ThumbnailImageSize,
                 ProductZoomImageSize = ProductZoomImageSize,
                 ProductId = expectedProductId,
-                Variants = null, 
+                Variants = null,
                 MediaSet = new List<ProductMedia>()
                 {
                     new ProductMedia()
@@ -307,7 +301,10 @@ namespace Orckestra.Composer.Tests.Providers.Dam
                         }
                     }
                 }
-            }).ConfigureAwait(false);
+            };
+
+            // Act
+            var results = await damProvider.GetAllProductImagesAsync(param).ConfigureAwait(false);
 
             // Assert
             results.Should().NotBeEmpty();

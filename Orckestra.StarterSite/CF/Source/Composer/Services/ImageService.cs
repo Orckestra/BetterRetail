@@ -38,7 +38,8 @@ namespace Orckestra.Composer.Services
             {
                 ImageSize = imageSize,
                 ProductImageRequests = lineItems
-                    .Select(li => {
+                    .Select(li =>
+                    {
                         if (ImageUrls.TryGetValue(li.Sku, out string imageUrl))
                         {
                             li.PropertyBag.Add("ImageUrl", imageUrl);
@@ -65,7 +66,8 @@ namespace Orckestra.Composer.Services
         {
             var productsData = await ProductRepository.SearchProductByIdsAsync(productIds.ToList(), ComposerContext.Scope, ComposerContext.CultureInfo.Name).ConfigureAwait(false);
 
-            return productsData.Documents.Select(document => {
+            return productsData.Documents.Select(document =>
+            {
                 var productId = document.PropertyBag["ProductId"].ToString();
                 var imageUrl = document.PropertyBag["ImageUrl"].ToString();
                 return new
@@ -78,9 +80,10 @@ namespace Orckestra.Composer.Services
 
         private async Task<Dictionary<string, string>> GetImageUrlsBySkuAsync(IEnumerable<string> skuIds)
         {
-            var mediaList = await Task.WhenAll(skuIds.Select( async sku => {
+            var mediaList = await Task.WhenAll(skuIds.Select(async sku =>
+            {
                 var mediaSetResult = await ProductRepository.GetProductMediaAsync(sku, ComposerContext.Scope, ComposerContext.CultureInfo.Name, "Image");
-                var mediaSet = mediaSetResult.MediaSet.Where(x => x.IsCover??true).ToList();
+                var mediaSet = mediaSetResult.MediaSet.Where(x => x.IsCover ?? true).ToList();
 
                 if (mediaSet.Count == 0) return null;
 
@@ -91,7 +94,7 @@ namespace Orckestra.Composer.Services
                 };
             }));
 
-            return mediaList.Where(x=>x!=null).ToDictionary(x => x.Sku, x => x.ImageUrl);
+            return mediaList.Where(x => x != null).ToDictionary(x => x.Sku, x => x.ImageUrl);
         }
 
         public virtual Task<List<ProductMainImage>> GetImageUrlsAsync(ListOfRecurringOrderLineItems list)
@@ -107,12 +110,13 @@ namespace Orckestra.Composer.Services
         private async Task<List<ProductMainImage>> GetImageUrlsAsync(List<RecurringOrderLineItem> lineItemList)
         {
             var ImageUrls = await GetImageUrlsBySkuAsync(lineItemList.Select(ln => ln.Sku)).ConfigureAwait(false);
-        
+
             var getImageParam = new GetProductMainImagesParam
             {
                 ImageSize = ImageConfiguration.CartThumbnailImageSize,
                 ProductImageRequests = lineItemList
-                  .Select(li => {
+                  .Select(li =>
+                  {
                       var PropertyBag = ImageUrls.TryGetValue(li.Sku, out string imageUrl) ? new Dictionary<string, object>() { { "ImageUrl", imageUrl } } : null;
 
                       return new ProductImageRequest
