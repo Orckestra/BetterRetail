@@ -19,13 +19,13 @@ namespace Orckestra.Composer.Repositories
     /// </summary>
     public class ProductRepository : IProductRepository
     {
-        protected readonly IOvertureClient _overtureClient;
-        protected readonly ICacheProvider _cacheProvider;
+        protected IOvertureClient OvertureClient { get; private set; }
+        protected ICacheProvider CacheProvider { get; private set; }
 
         public ProductRepository(IOvertureClient overtureClient, ICacheProvider cacheProvider)
         {
-            _overtureClient = overtureClient ?? throw new ArgumentNullException("overtureClient");
-            _cacheProvider = cacheProvider ?? throw new ArgumentNullException("cacheProvider");
+            OvertureClient = overtureClient ?? throw new ArgumentNullException("overtureClient");
+            CacheProvider = cacheProvider ?? throw new ArgumentNullException("cacheProvider");
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace Orckestra.Composer.Repositories
 
             productCacheKey.AppendKeyParts(param.ProductId);
 
-            var result = await _cacheProvider.GetOrAddAsync(productCacheKey, () =>
+            var result = await CacheProvider.GetOrAddAsync(productCacheKey, () =>
                 {
                     var request = new GetProductV2Request
                     {
@@ -82,7 +82,7 @@ namespace Orckestra.Composer.Repositories
 
                     };
 
-                    return _overtureClient.SendAsync(request);
+                    return OvertureClient.SendAsync(request);
                 }).ConfigureAwait(false);
 
             return param.ReturnInactive || (result != null && result.Active.HasValue && result.Active.Value) ? result : null;
@@ -98,7 +98,7 @@ namespace Orckestra.Composer.Repositories
             var productDefinitionCacheKey = new CacheKey(CacheConfigurationCategoryNames.ProductDefinition);
             productDefinitionCacheKey.AppendKeyParts(param.Name);
 
-            var result = await _cacheProvider.GetOrAddAsync(productDefinitionCacheKey, () =>
+            var result = await CacheProvider.GetOrAddAsync(productDefinitionCacheKey, () =>
             {
                 var request = new GetProductDefinitionRequest
                 {
@@ -106,7 +106,7 @@ namespace Orckestra.Composer.Repositories
                     CultureName = param.CultureInfo.Name
                 };
 
-                return _overtureClient.SendAsync(request);
+                return OvertureClient.SendAsync(request);
             }).ConfigureAwait(false);
 
             return result;
@@ -130,7 +130,7 @@ namespace Orckestra.Composer.Repositories
             {
                 throw new ArgumentNullException("scope");
             }
-
+         
             var request = new CalculatePricesofProductsRequest
             {
                 ProductIds = productIds,
@@ -138,7 +138,7 @@ namespace Orckestra.Composer.Repositories
                 IncludeVariants = true
             };
 
-            return _overtureClient.SendAsync(request);
+            return OvertureClient.SendAsync(request);
         }
 
         /// <summary>
@@ -158,7 +158,7 @@ namespace Orckestra.Composer.Repositories
                 ScopeId = scope,
             };
 
-            return _overtureClient.SendAsync(request);
+            return OvertureClient.SendAsync(request);
         }
 
 
@@ -174,7 +174,7 @@ namespace Orckestra.Composer.Repositories
                 CultureName = cultureName
             };
 
-            return _overtureClient.SendAsync(request);
+            return OvertureClient.SendAsync(request);
         }
 
         public Task<MediaList> GetProductMediaAsync(string sku, string scope, string cultureName, string mediaType)
@@ -190,7 +190,14 @@ namespace Orckestra.Composer.Repositories
                 MediaType = mediaType
             };
 
-            return _overtureClient.SendAsync(request);
+            var productMediaCacheKey = new CacheKey(CacheConfigurationCategoryNames.ProductMedia)
+            {
+                Scope = scope,
+            };
+            productMediaCacheKey.AppendKeyParts("sku", sku);
+            productMediaCacheKey.AppendKeyParts("mediaType", mediaType);
+
+            return CacheProvider.GetOrAddAsync(productMediaCacheKey, () => OvertureClient.SendAsync(request));
         }
     }
 }
