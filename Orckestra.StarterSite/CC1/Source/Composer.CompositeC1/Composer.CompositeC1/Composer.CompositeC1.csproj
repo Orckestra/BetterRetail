@@ -159,8 +159,8 @@
     <Reference Include="Orckestra.Composer.Store, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Composer.4.0.0-Build\lib\net461\Orckestra.Composer.Store.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.ExperienceManagement.Configuration, Version=4.0.0.2, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Orckestra.ExperienceManagement.Configuration.4.0.0.2\lib\net471\Orckestra.ExperienceManagement.Configuration.dll</HintPath>
+    <Reference Include="Orckestra.ExperienceManagement.Configuration, Version=4.0.0.3, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Orckestra.ExperienceManagement.Configuration.4.0.0.3\lib\net471\Orckestra.ExperienceManagement.Configuration.dll</HintPath>
     </Reference>
     <Reference Include="Orckestra.Logging, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\OrckestraCommerce.Common.4.0.0-beta0001\lib\net461\Orckestra.Logging.dll</HintPath>
