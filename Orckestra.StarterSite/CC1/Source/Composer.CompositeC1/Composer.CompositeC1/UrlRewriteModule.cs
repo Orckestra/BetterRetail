@@ -21,7 +21,6 @@ namespace Orckestra.Composer.CompositeC1
         private const string StoreUrlPathIndicatorRegex = "^s-.*";
 
         private readonly IPageService _pageService;
-        private PagesConfiguration PagesConfiguration;
 
         public UrlRewriteModule()
         {
@@ -59,9 +58,9 @@ namespace Orckestra.Composer.CompositeC1
                 if ((pathPatternIndex = GetUrlPathIndexForSpecificPagePattern(urlPathSegments, ProductUrlPathIndicatorRegex)) > -1)
                 {
                     var pageUrlData = GetPageUrldata(url);
-                    PagesConfiguration = siteConfiguration.GetPagesConfiguration(pageUrlData.LocalizationScope, pageUrlData.PageId);
-
-                     var productPageUrl = _pageService.GetPageUrl(PagesConfiguration.ProductPageId, pageUrlData.LocalizationScope);
+                    var websiteId = siteConfiguration.GetWebsiteByPageId(pageUrlData.PageId);
+                    var pagesConfiguration = siteConfiguration.GetPagesConfiguration(pageUrlData.LocalizationScope, websiteId);
+                    var productPageUrl = _pageService.GetPageUrl(pagesConfiguration.ProductPageId, pageUrlData.LocalizationScope);
 
                     string productId = urlPathSegments.ElementAtOrDefault(pathPatternIndex + 1); //product Id is always in the path after the product path indicator
                     string variantId = urlPathSegments.ElementAtOrDefault(pathPatternIndex + 2); //variant Id is always in the path after the product id
@@ -75,9 +74,9 @@ namespace Orckestra.Composer.CompositeC1
                 else if ((pathPatternIndex = GetUrlPathIndexForSpecificPagePattern(urlPathSegments, StoreUrlPathIndicatorRegex)) > -1)
                 {
                     var pageUrlData = GetPageUrldata(url);
-                    PagesConfiguration = siteConfiguration.GetPagesConfiguration(pageUrlData.LocalizationScope, pageUrlData.PageId);
-
-                    var storePageUrl = _pageService.GetPageUrl(PagesConfiguration.StorePageId, pageUrlData.LocalizationScope);
+                    var websiteId = siteConfiguration.GetWebsiteByPageId(pageUrlData.PageId);
+                    var pagesConfiguration = siteConfiguration.GetPagesConfiguration(pageUrlData.LocalizationScope, websiteId);
+                    var storePageUrl = _pageService.GetPageUrl(pagesConfiguration.StorePageId, pageUrlData.LocalizationScope);
 
                     string storeNumber = urlPathSegments.ElementAtOrDefault(pathPatternIndex + 1);
 
@@ -107,7 +106,7 @@ namespace Orckestra.Composer.CompositeC1
             while (pageUrlData == null && urlStr.LastIndexOf('/') > 0)
             {
                 urlStr = urlStr.Substring(0, urlStr.LastIndexOf('/'));
-                pageUrlData = PageUrls.ParseUrl(urlStr.ToString());
+                pageUrlData = PageUrls.ParseUrl(urlStr);
             }
 
             return pageUrlData;
