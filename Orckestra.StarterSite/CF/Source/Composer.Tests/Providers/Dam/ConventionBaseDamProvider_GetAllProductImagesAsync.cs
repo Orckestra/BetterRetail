@@ -380,5 +380,60 @@ namespace Orckestra.Composer.Tests.Providers.Dam
             results.Where(result => result.ProductId == expectedProductId).Should().NotBeNullOrEmpty("Because the product must be found");
             results.Where(result => results.Where(x => x.ImageUrl == result.ImageUrl).ToList().Count > 1).Should().BeEmpty("Because all results should have unique ImageUrl");
         }
+
+        [Test]
+        public async Task WHEN_Passing_Valid_Values_With_One_MediaSet_Variants_Within_Parameter_SHOULD_Succeed()
+        {
+            _container.Use(_productMediaSettingsRepositoryMock);
+
+            // Arrange
+            var expectedProductId = GetRandom.String(32);
+            IDamProvider damProvider = _container.CreateInstance<ConventionBasedDamProvider>();
+
+            var ImageSize = GetRandom.String(1);
+            var ThumbnailImageSize = GetRandom.String(1);
+            var ProductZoomImageSize = GetRandom.String(1);
+            var PropertyBag = new Overture.ServiceModel.PropertyBag()
+            {
+                { GetRandom.String(5), GetRandom.String(5) as object }
+            };
+
+            var param = new GetAllProductImagesParam()
+            {
+                ImageSize = ImageSize,
+                ThumbnailImageSize = ThumbnailImageSize,
+                ProductZoomImageSize = ProductZoomImageSize,
+                ProductId = expectedProductId,
+                Variants = new List<Variant>()
+                {
+                    new Variant
+                    {
+                        Id = GetRandom.String(5),
+                        PropertyBag = PropertyBag
+                    },
+                    new Variant
+                    {
+                        Id = GetRandom.String(5),
+                        MediaSet = new List<ProductMedia>()
+                        {
+                            GetProductMediaMock(new string[] { ImageSize, ThumbnailImageSize, ProductZoomImageSize }),
+                        }
+                    },
+                },
+            };
+
+            // Act
+            var results = await damProvider.GetAllProductImagesAsync(param).ConfigureAwait(false);
+
+            // Assert
+            results.Should().NotBeEmpty();
+            results.Where(result => string.IsNullOrWhiteSpace(result.ImageUrl)).Should().NotBeNullOrEmpty("Because results should have a unknown default Image url");
+            results.Where(result => string.IsNullOrWhiteSpace(result.FallbackImageUrl)).Should().BeEmpty("Because all results should have a known fallback Image url");
+            results.Where(result => string.IsNullOrWhiteSpace(result.ThumbnailUrl)).Should().NotBeNullOrEmpty("Because results should have a unknown thumbnail Image url");
+            results.Where(result => string.IsNullOrWhiteSpace(result.ProductZoomImageUrl)).Should().NotBeNullOrEmpty("Because results should have a unknown Product Zoom Image url");
+            results.Where(result => result.ProductId != expectedProductId).Should().BeEmpty("Because all results should match the requested product id");
+            results.Where(result => result.ProductId == expectedProductId).Should().NotBeNullOrEmpty("Because the product must be found");
+            results.Where(result => !string.IsNullOrWhiteSpace(result.ImageUrl)).Should().ContainSingle("Because results should have a one know default Image url");
+        }
     }
 }

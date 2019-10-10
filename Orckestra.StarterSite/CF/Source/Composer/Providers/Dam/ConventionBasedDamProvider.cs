@@ -113,12 +113,12 @@ namespace Orckestra.Composer.Providers.Dam
                 throw new ArgumentException("The product id is required.");
             }
 
-            if (param.MediaSet == null)
+            if ((param.MediaSet?.Count > 0) || (param.VariantMediaSet?.Count > 0) || (param.Variants?.Any(variant => variant.MediaSet?.Count > 0) ?? false))
             {
-                return GetAllProductLocalImages(param);
+                return await GetAllProductMediaImages(param).ConfigureAwait(false);
             }
 
-            return await GetAllProductMediaImages(param).ConfigureAwait(false); 
+            return GetAllProductLocalImages(param);
         }
 
         private List<AllProductImages> GetAllProductLocalImages(GetAllProductImagesParam param)
@@ -194,9 +194,9 @@ namespace Orckestra.Composer.Providers.Dam
         {
             return new AllProductImages
             {
-                ImageUrl = GetSizedImageUrl(productMedia, mediaSettings, param.ImageSize),
-                ThumbnailUrl = GetSizedImageUrl(productMedia, mediaSettings, param.ThumbnailImageSize),
-                ProductZoomImageUrl = GetSizedImageUrl(productMedia, mediaSettings, param.ProductZoomImageSize),
+                ImageUrl = productMedia != null ? GetSizedImageUrl(productMedia, mediaSettings, param.ImageSize) : "",
+                ThumbnailUrl = productMedia != null ? GetSizedImageUrl(productMedia, mediaSettings, param.ThumbnailImageSize) : "",
+                ProductZoomImageUrl = productMedia != null ? GetSizedImageUrl(productMedia, mediaSettings, param.ProductZoomImageSize) : "",
                 ProductId = param.ProductId,
                 VariantId = variantId,
                 SequenceNumber = 0,
@@ -224,20 +224,25 @@ namespace Orckestra.Composer.Providers.Dam
         {
             var _productMediaSettings = await ProductMediaSettingsRepository.GetProductMediaSettings().ConfigureAwait(false);
 
-            var result = param.MediaSet.Select(productMedia => CreateAllProductImages(productMedia, _productMediaSettings, param, null)).ToList();
+            var result = param.MediaSet?.Count > 0 ?
+                param.MediaSet.Select(productMedia => CreateAllProductImages(productMedia, _productMediaSettings, param, null)).ToList()
+                : new List<AllProductImages>() { CreateAllProductImages(null, _productMediaSettings, param, null) };
 
             if (param.Variants != null)
             {
                 foreach (Variant variant in param.Variants)
                 {
-                    var globalVariant = param.VariantMediaSet?.FirstOrDefault(mediaVariant => mediaVariant.AttributesToMatch.Any(atribute => variant.PropertyBag.Contains(atribute)));
+                    var globalVariantMediaSet = new List<ProductMedia>();
+                    param.VariantMediaSet?.ForEach(mediaVariant =>
+                    {
+                        if (mediaVariant.AttributesToMatch.Any(atribute => variant.PropertyBag.Contains(atribute)))
+                        {
+                            globalVariantMediaSet.AddRange(mediaVariant.Media);
+                        }
+                    });
 
-                    var localVariantMediaSet = variant.MediaSet != null && variant.MediaSet.Count > 0 ? variant.MediaSet : null;
-                    var globalVariantMediaSet = globalVariant != null && globalVariant.Media != null && globalVariant.Media.Length > 0 ? globalVariant.Media.ToList() : null;
-
-                    result.AddRange(
-                        (localVariantMediaSet ?? globalVariantMediaSet ?? param.MediaSet).Select(productMedia => CreateAllProductImages(productMedia, _productMediaSettings, param, variant.Id))
-                    );
+                    var mediaSet = variant.MediaSet?.Count > 0 ? variant.MediaSet : globalVariantMediaSet.Count > 0 ? globalVariantMediaSet : param.MediaSet?.Count > 0 ? param.MediaSet : new List<ProductMedia>() { null };
+                    result.AddRange(mediaSet.Select(productMedia => CreateAllProductImages(productMedia, _productMediaSettings, param, variant.Id)));
                 }
             }
             return result;
