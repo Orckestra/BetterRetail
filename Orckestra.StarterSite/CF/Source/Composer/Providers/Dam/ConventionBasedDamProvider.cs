@@ -13,7 +13,7 @@ namespace Orckestra.Composer.Providers.Dam
 {
     public class ConventionBasedDamProvider : IDamProvider
     {
-        private readonly ICdnDamProviderSettings _cdnDamProviderSettings;
+        protected ICdnDamProviderSettings CdnDamProviderSettings { get; private set; }
         protected IProductMediaSettingsRepository ProductMediaSettingsRepository { get; private set; }
 
         private const string ProductIdFieldName = "{productId}";
@@ -24,31 +24,31 @@ namespace Orckestra.Composer.Providers.Dam
 
         public ConventionBasedDamProvider(ISiteConfiguration siteConfiguration, IProductMediaSettingsRepository productMediaSettingsRepository)
         {
-            _cdnDamProviderSettings = siteConfiguration.CdnDamProviderSettings;
+            CdnDamProviderSettings = siteConfiguration.CdnDamProviderSettings;
             ProductMediaSettingsRepository = productMediaSettingsRepository;
         }
 
         protected string ServerUrl
         {
-            get { return _cdnDamProviderSettings.ServerUrl; }
+            get { return CdnDamProviderSettings.ServerUrl; }
         }
 
         protected virtual string ImageFolderName
         {
-            get { return _cdnDamProviderSettings.ImageFolderName; }
+            get { return CdnDamProviderSettings.ImageFolderName; }
         }
 
         protected virtual string FallbackImageUrl
         {
-            get { return _cdnDamProviderSettings.FallbackImage; }
+            get { return CdnDamProviderSettings.FallbackImage; }
         }
 
         protected virtual bool IsProductZoomImageEnabled
         {
-            get { return _cdnDamProviderSettings.SupportXLImages; }
+            get { return CdnDamProviderSettings.SupportXLImages; }
         }
 
-        public async Task<List<ProductMainImage>> GetProductMainImagesAsync(GetProductMainImagesParam param)
+        public virtual async Task<List<ProductMainImage>> GetProductMainImagesAsync(GetProductMainImagesParam param)
         {
             if (param == null)
             {
@@ -90,7 +90,7 @@ namespace Orckestra.Composer.Providers.Dam
             };
         }
 
-        public async Task<List<AllProductImages>> GetAllProductImagesAsync(GetAllProductImagesParam param)
+        public virtual async Task<List<AllProductImages>> GetAllProductImagesAsync(GetAllProductImagesParam param)
         {
             if (param == null)
             {
@@ -166,7 +166,7 @@ namespace Orckestra.Composer.Providers.Dam
             if (!string.IsNullOrEmpty(variantId))
             {
                 // Resolve the image path for a variant.
-                imagePath = _cdnDamProviderSettings.VariantImageFilePathPattern
+                imagePath = CdnDamProviderSettings.VariantImageFilePathPattern
                                                       .Replace(ProductIdFieldName, productId)
                                                       .Replace(VariantIdFieldName, variantId)
                                                       .Replace(SequenceNumberFieldName, sequenceNumber.ToString(CultureInfo.InvariantCulture))
@@ -176,7 +176,7 @@ namespace Orckestra.Composer.Providers.Dam
             else
             {
                 // Resolve the image path for a product.
-                imagePath = _cdnDamProviderSettings.ProductImageFilePathPattern
+                imagePath = CdnDamProviderSettings.ProductImageFilePathPattern
                                                       .Replace(ProductIdFieldName, productId)
                                                       .Replace(SequenceNumberFieldName, sequenceNumber.ToString(CultureInfo.InvariantCulture))
                                                       .Replace(ImageSizeFieldName, imageSize);

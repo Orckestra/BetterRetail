@@ -26,7 +26,7 @@ namespace Orckestra.Composer.Tests.Providers.Dam
         private Mock<ICdnDamProviderSettings> _cdmproviderMock;
         private MediaSettings _mediaSettings;
         private Mock<IProductMediaSettingsRepository> _productMediaSettingsRepositoryMock;
-         
+
 
         [SetUp]
         public void SetUp()
@@ -50,7 +50,7 @@ namespace Orckestra.Composer.Tests.Providers.Dam
 
             _container = new AutoMocker();
             _container.Use(_siteConfigurationMock);
-         
+
         }
 
         [TearDown]
@@ -227,7 +227,7 @@ namespace Orckestra.Composer.Tests.Providers.Dam
             int index = 0;
             results.ForEach(x =>
             {
-                
+
                 if (index % ConventionBasedDamProviderConfiguration.MaxThumbnailImages == 0)
                 {
                     x.VariantId.Should().BeNull("This is a main image for a product only.");
@@ -257,6 +257,21 @@ namespace Orckestra.Composer.Tests.Providers.Dam
             results.Where(result => result.ProductId == expectedProductId).Should().NotBeNullOrEmpty("Because the product must be found");
         }
 
+        private ProductMedia GetProductMediaMock(string[] sizeInstances)
+        {
+            var ResizedInstances = sizeInstances.Select(size => new ResizedMediaLink()
+            {
+                Size = size,
+                Url = "~/" + GetRandom.String(32) + ".jpg",
+            });
+
+            return new ProductMedia()
+            {
+                Url = "~/" + GetRandom.String(32) + ".jpg",
+                ResizedInstances = ResizedInstances.ToArray()
+            };
+        }
+
         [Test]
         public async Task WHEN_Passing_Valid_Values_With_MediaSet_Within_Parameter_SHOULD_Succeed()
         {
@@ -278,28 +293,7 @@ namespace Orckestra.Composer.Tests.Providers.Dam
                 Variants = null,
                 MediaSet = new List<ProductMedia>()
                 {
-                    new ProductMedia()
-                    {
-                        Url = "~/" + GetRandom.String(32) + ".jpg",
-                        ResizedInstances = new ResizedMediaLink[]
-                        {
-                            new ResizedMediaLink ()
-                            {
-                                Size = ImageSize,
-                                Url = "~/" + GetRandom.String(32) + ".jpg",
-                            },
-                             new ResizedMediaLink ()
-                            {
-                                Size = ThumbnailImageSize,
-                                Url = "~/" + GetRandom.String(32) + ".jpg",
-                            },
-                              new ResizedMediaLink ()
-                            {
-                                Size = ProductZoomImageSize,
-                                Url = "~/" + GetRandom.String(32) + ".jpg",
-                            }
-                        }
-                    }
+                    GetProductMediaMock(new string[] { ImageSize, ThumbnailImageSize, ProductZoomImageSize })
                 }
             };
 
@@ -315,6 +309,76 @@ namespace Orckestra.Composer.Tests.Providers.Dam
             results.Where(result => string.IsNullOrWhiteSpace(result.ProductZoomImageUrl)).Should().BeEmpty("Because all results should have a known Product Zoom Image url");
             results.Where(result => result.ProductId != expectedProductId).Should().BeEmpty("Because all results should match the requested product id");
             results.Where(result => result.ProductId == expectedProductId).Should().NotBeNullOrEmpty("Because the product must be found");
+        }
+
+        [Test]
+        public async Task WHEN_Passing_Valid_Values_With_MediaSet_Variants_Within_Parameter_SHOULD_Succeed()
+        {
+            _container.Use(_productMediaSettingsRepositoryMock);
+
+            // Arrange
+            var expectedProductId = GetRandom.String(32);
+            IDamProvider damProvider = _container.CreateInstance<ConventionBasedDamProvider>();
+
+            var ImageSize = GetRandom.String(1);
+            var ThumbnailImageSize = GetRandom.String(1);
+            var ProductZoomImageSize = GetRandom.String(1);
+            var PropertyBag = new Overture.ServiceModel.PropertyBag()
+            {
+                { GetRandom.String(5), GetRandom.String(5) as object }
+            };
+
+            var param = new GetAllProductImagesParam()
+            {
+                ImageSize = ImageSize,
+                ThumbnailImageSize = ThumbnailImageSize,
+                ProductZoomImageSize = ProductZoomImageSize,
+                ProductId = expectedProductId,
+                Variants = new List<Variant>()
+                {
+                    new Variant
+                    {
+                        Id = GetRandom.String(5),
+                        PropertyBag = PropertyBag
+                    },
+                    new Variant
+                    {
+                        Id = GetRandom.String(5),
+                        MediaSet = new List<ProductMedia>()
+                        {
+                            GetProductMediaMock(new string[] { ImageSize, ThumbnailImageSize, ProductZoomImageSize }),
+                        }
+                    },
+                },
+                MediaSet = new List<ProductMedia>()
+                {
+                    GetProductMediaMock(new string[] { ImageSize, ThumbnailImageSize, ProductZoomImageSize })
+                },
+                VariantMediaSet = new List<VariantMediaSet>()
+                {
+                    new VariantMediaSet()
+                    {
+                        Media = new ProductMedia[]
+                        {
+                             GetProductMediaMock(new string[] { ImageSize, ThumbnailImageSize, ProductZoomImageSize }),
+                        },
+                        AttributesToMatch = PropertyBag
+                    }
+                }
+            };
+
+            // Act
+            var results = await damProvider.GetAllProductImagesAsync(param).ConfigureAwait(false);
+
+            // Assert
+            results.Should().NotBeEmpty();
+            results.Where(result => string.IsNullOrWhiteSpace(result.ImageUrl)).Should().BeEmpty("Because all results should have a known default Image url");
+            results.Where(result => string.IsNullOrWhiteSpace(result.FallbackImageUrl)).Should().BeEmpty("Because all results should have a known fallback Image url");
+            results.Where(result => string.IsNullOrWhiteSpace(result.ThumbnailUrl)).Should().BeEmpty("Because all results should have a known thumbnail Image url");
+            results.Where(result => string.IsNullOrWhiteSpace(result.ProductZoomImageUrl)).Should().BeEmpty("Because all results should have a known Product Zoom Image url");
+            results.Where(result => result.ProductId != expectedProductId).Should().BeEmpty("Because all results should match the requested product id");
+            results.Where(result => result.ProductId == expectedProductId).Should().NotBeNullOrEmpty("Because the product must be found");
+            results.Where(result => results.Where(x => x.ImageUrl == result.ImageUrl).ToList().Count > 1).Should().BeEmpty("Because all results should have unique ImageUrl");
         }
     }
 }
