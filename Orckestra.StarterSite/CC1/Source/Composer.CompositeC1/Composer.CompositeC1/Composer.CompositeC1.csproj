@@ -135,29 +135,29 @@
     <Reference Include="Orckestra.Caching, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\OrckestraCommerce.Common.4.0.0-beta0001\lib\net461\Orckestra.Caching.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Composer, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Composer.4.0.0-Build\lib\net461\Orckestra.Composer.dll</HintPath>
+    <Reference Include="Orckestra.Composer, Version=4.8.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Composer.4.8.0-Build\lib\net461\Orckestra.Composer.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Composer.Cart, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Composer.4.0.0-Build\lib\net461\Orckestra.Composer.Cart.dll</HintPath>
+    <Reference Include="Orckestra.Composer.Cart, Version=4.8.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Composer.4.8.0-Build\lib\net461\Orckestra.Composer.Cart.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Composer.MyAccount, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Composer.4.0.0-Build\lib\net461\Orckestra.Composer.MyAccount.dll</HintPath>
+    <Reference Include="Orckestra.Composer.MyAccount, Version=4.8.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Composer.4.8.0-Build\lib\net461\Orckestra.Composer.MyAccount.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Composer.Product, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Composer.4.0.0-Build\lib\net461\Orckestra.Composer.Product.dll</HintPath>
+    <Reference Include="Orckestra.Composer.Product, Version=4.8.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Composer.4.8.0-Build\lib\net461\Orckestra.Composer.Product.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Composer.Search, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Composer.4.0.0-Build\lib\net461\Orckestra.Composer.Search.dll</HintPath>
+    <Reference Include="Orckestra.Composer.Search, Version=4.8.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Composer.4.8.0-Build\lib\net461\Orckestra.Composer.Search.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Composer.SearchQuery, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Composer.4.0.0-Build\lib\net461\Orckestra.Composer.SearchQuery.dll</HintPath>
+    <Reference Include="Orckestra.Composer.SearchQuery, Version=4.8.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Composer.4.8.0-Build\lib\net461\Orckestra.Composer.SearchQuery.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Composer.Sitemap, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Composer.4.0.0-Build\lib\net461\Orckestra.Composer.Sitemap.dll</HintPath>
+    <Reference Include="Orckestra.Composer.Sitemap, Version=4.8.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Composer.4.8.0-Build\lib\net461\Orckestra.Composer.Sitemap.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Composer.Store, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Composer.4.0.0-Build\lib\net461\Orckestra.Composer.Store.dll</HintPath>
+    <Reference Include="Orckestra.Composer.Store, Version=4.8.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Composer.4.8.0-Build\lib\net461\Orckestra.Composer.Store.dll</HintPath>
     </Reference>
     <Reference Include="Orckestra.ExperienceManagement.Configuration, Version=4.0.0.3, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Orckestra.ExperienceManagement.Configuration.4.0.0.3\lib\net471\Orckestra.ExperienceManagement.Configuration.dll</HintPath>
