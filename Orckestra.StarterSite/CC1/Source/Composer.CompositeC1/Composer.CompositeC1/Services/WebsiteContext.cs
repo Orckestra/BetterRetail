@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web;
 using Autofac.Integration.Mvc;
 using Composite.Core.Routing;
 using Composite.Data;
 using Orckestra.Composer.Services;
-using Orckestra.ExperienceManagement.Configuration;
-using Orckestra.Overture.ServiceModel.Requests.Orders;
+
+using Composite.Core.WebClient.Renderings.Page;
 
 namespace Orckestra.Composer.CompositeC1.Services
 {
@@ -57,7 +54,7 @@ namespace Orckestra.Composer.CompositeC1.Services
                     var pageUrlData = GetPageUrldata(HttpRequest.Url);
                     if (pageUrlData != null)
                     {
-                        _websiteId = pageUrlData.PageId;
+                        _websiteId = PageStructureInfo.GetAssociatedPageIds(pageUrlData.PageId, SitemapScope.AncestorsAndCurrent).LastOrDefault();
                     }
 
                 }
