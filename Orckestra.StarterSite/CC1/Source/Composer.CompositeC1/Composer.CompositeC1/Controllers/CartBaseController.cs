@@ -86,7 +86,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             return cartViewModel;
         }
 
-        public ActionResult Minicart(int notificationTimeInSeconds)
+        public virtual ActionResult Minicart(int notificationTimeInSeconds)
         {
             var minicartViewModel = new MinicartViewModel
             {

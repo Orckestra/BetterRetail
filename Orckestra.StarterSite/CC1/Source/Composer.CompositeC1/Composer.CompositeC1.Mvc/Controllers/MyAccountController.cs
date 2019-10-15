@@ -5,6 +5,7 @@ using Orckestra.Composer.MyAccount.Services;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Repositories;
 using Orckestra.Composer.Services;
+using Orckestra.Composer.Configuration;
 
 namespace Orckestra.Composer.CompositeC1.Mvc.Controllers
 {
@@ -21,7 +22,8 @@ namespace Orckestra.Composer.CompositeC1.Mvc.Controllers
             IOrderHistoryViewService orderHistoryViewService,
             IWishListViewService wishListViewService,
             IRecurringOrderTemplatesViewService recurringOrderTemplatesViewService,
-            IRecurringOrderCartsViewService recurringOrderCartsViewService) : base(
+            IRecurringOrderCartsViewService recurringOrderCartsViewService,
+            IRecurringOrdersSettings recurringOrdersSettings) : base(
                 customerViewService,
                 customerAddressViewService,
                 composerContext, addressRepository,
@@ -31,7 +33,8 @@ namespace Orckestra.Composer.CompositeC1.Mvc.Controllers
                 orderHistoryViewService,
                 wishListViewService,
                 recurringOrderTemplatesViewService,
-                recurringOrderCartsViewService)
+                recurringOrderCartsViewService,
+                recurringOrdersSettings)
         {
         }
     }

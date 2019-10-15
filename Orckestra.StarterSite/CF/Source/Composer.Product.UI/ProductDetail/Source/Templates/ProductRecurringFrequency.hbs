@@ -20,15 +20,16 @@
                             data-oc-change="changeRecurringMode"  />
                     <label for="UseRecurring">
                         <img src="/UI.Package/Images/recurring.png" alt="{{localize 'General' 'L_RecurringProduct'}}" title="{{localize 'General' 'L_RecurringProduct'}}" /> {{localizeFormat 'ProductPage' 'L_RecurringPitch' (localize 'ProductPage' 'L_RecurringSaveRate') }}
-                        <button class="btn-link" role="button" data-trigger="click" data-toggle="popover" data-placement="top" title=""
-                                data-content="{{{recurringBubblePitch}}}" data-html="true" data-original-title="{{localize 'ProductPage' 'L_RecurringBubblePitchTitle'}}">
-                            <span class="fa fa-question-circle"></span>
-                        </button>
                     </label>
                 </div>
                 <div class="recurring-frequencies  collapse  {{#if_eq recurringMode "recurring"}}in{{/if_eq}}  modeSelection">
                     <div class="row">
-                        <div class="col-xs-8   col-md-7 form-group">
+                        <div class="col-xs-10 col-sm-9 col-md-7 form-group">
+                            <label for="recurringOrderFrequencyNameSelect">{{localize 'ProductPage' 'L_RecurringDeliveryFrequency'}}</label> 
+                                <button class="btn-link" role="button" data-trigger="click" data-toggle="popover" data-placement="top" title=""
+                                    data-content="{{{recurringBubblePitch}}}" data-html="true" data-original-title="{{localize 'ProductPage' 'L_RecurringBubblePitchTitle'}}">
+                                <span class="fa fa-question-circle"></span>
+                            </button>
                             <select id="recurringOrderFrequencyNameSelect" class="recurring-orders-frequency-selection form-control" data-oc-change="onRecurringOrderFrequencySelectChanged">
                                 {{#each availableFrequencies}}
                                     <option

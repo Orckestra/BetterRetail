@@ -10,6 +10,7 @@ using Orckestra.Composer.Cart.Services;
 using Orckestra.Composer.Cart.Services.Order;
 using Orckestra.Composer.Cart.ViewModels;
 using Orckestra.Composer.Cart.ViewModels.Order;
+using Orckestra.Composer.Configuration;
 using Orckestra.Composer.MvcFilters;
 using Orckestra.Composer.MyAccount.Parameters;
 using Orckestra.Composer.MyAccount.Services;
@@ -36,6 +37,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         protected IWishListViewService WishListViewService { get; private set; }
         protected IRecurringOrderTemplatesViewService RecurringOrderTemplatesViewService { get; private set; }
         protected IRecurringOrderCartsViewService RecurringOrderCartsViewService { get; private set; }
+        protected IRecurringOrdersSettings RecurringOrdersSettings { get; private set; }
 
         protected MyAccountBaseController(
             ICustomerViewService customerViewService,
@@ -48,7 +50,8 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             IOrderHistoryViewService orderHistoryViewService,
             IWishListViewService wishListViewService,
             IRecurringOrderTemplatesViewService recurringOrderTemplatesViewService,
-            IRecurringOrderCartsViewService recurringOrderCartsViewService)
+            IRecurringOrderCartsViewService recurringOrderCartsViewService,
+            IRecurringOrdersSettings recurringOrdersSettings)
         {
             if (customerViewService == null) throw new ArgumentNullException("customerViewService");
             if (customerAddressViewService == null) throw new ArgumentNullException("customerAddressViewService");
@@ -61,6 +64,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             if (wishListViewService == null) throw new ArgumentNullException("wishListViewService");
             if (recurringOrderTemplatesViewService == null) throw new ArgumentNullException("recurringOrderTemplatesViewService");
             if (recurringOrderCartsViewService == null) throw new ArgumentNullException("recurringOrderCartsViewService");
+            if (recurringOrdersSettings == null) throw new ArgumentNullException("recurringOrderCartsViewService");
 
             CustomerViewService = customerViewService;
             CustomerAddressViewService = customerAddressViewService;
@@ -73,6 +77,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             WishListViewService = wishListViewService;
             RecurringOrderTemplatesViewService = recurringOrderTemplatesViewService;
             RecurringOrderCartsViewService = recurringOrderCartsViewService;
+            RecurringOrdersSettings = recurringOrdersSettings;
         }
 
         [AuthorizeAndRedirect]
@@ -241,7 +246,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         }
 
         [AuthorizeAndRedirect]
-        public virtual ActionResult RecurringSchedule(XhtmlDocument emptyRecurringScheduleContent)
+        public virtual ActionResult RecurringSchedule()
         {
             var vm = RecurringOrderTemplatesViewService.GetRecurringOrderTemplatesViewModelAsync(new GetRecurringOrderTemplatesParam {
                 Scope = ComposerContext.Scope,
@@ -250,9 +255,9 @@ namespace Orckestra.Composer.CompositeC1.Controllers
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
                 }).Result;
 
-            if (vm != null && vm.RecurringOrderTemplateViewModelList.Count == 0 && emptyRecurringScheduleContent != null)
+            if (vm != null && vm.RecurringOrderTemplateViewModelList.Count == 0)
             {
-                return View("RecurringScheduleContainer", new { TotalQuantity = 0, EmptyContent = emptyRecurringScheduleContent.Body });
+                return View("RecurringScheduleContainer", new { TotalQuantity = 0 });
             }
 
             return View("RecurringScheduleContainer", vm);            
@@ -267,6 +272,9 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         [AuthorizeAndRedirect]
         public virtual ActionResult UpcomingOrders()
         {
+			if (!RecurringOrdersSettings.Enabled)
+                return new EmptyResult();
+			
             return View("RecurringCartsContainer", GetUpcomingOrdersViewModel());
         }
 

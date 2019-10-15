@@ -4,9 +4,6 @@
         {{#if IsLoading}} 
            {{>Loading}} 
         {{else}}
-           <div class="panel-heading">
-                <h2 class="h2">{{localize 'RecurringSchedule' 'T_RecurringSchedule' }}</h2>
-           </div>
            {{>RecurringOrderTemplatesLineItems}}
 
            {{>RecurringOrderTemplateRemoveConfirmationModal}}           

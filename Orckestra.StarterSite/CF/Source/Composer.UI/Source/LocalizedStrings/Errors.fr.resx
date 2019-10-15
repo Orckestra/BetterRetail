@@ -225,6 +225,9 @@
   <data name="L_RecurringScheduleShippingAddressMissing" xml:space="preserve">
     <value>Une erreur est survenue pendant la mise à jour de votre horaire de récurrence. Identifiant d'adresse manquant.</value>
   </data>  
+  <data name="L_RecurringScheduleShippingProviderMissing" xml:space="preserve">
+    <value>Une erreur est survenue pendant la mise à jour de votre horaire de récurrence. Identifiant de livraison manquant.</value>
+  </data> 
   <data name="L_RecurringScheduleUpdateFailed" xml:space="preserve">
     <value>Une erreur est survenue pendant la mise à jour de votre horaire de récurrence. Veuillez réessayer.</value>
   </data>  
