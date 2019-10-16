@@ -12,6 +12,7 @@
 /// <reference path="googlemaps/google.maps.d.ts" />
 /// <reference path="googlemaps/google.maps.markerwithlabel.d.ts" />
 /// <reference path="bootstrap-datepicker/bootstrap-datepicker.d.ts" />
+/// <reference path="typeahead/typeahead.d.ts" />
 
 // Very barebones interface for jasmine.Ajax as there is currently no d.ts file on DefinitelyTyped.
 declare module jasmine {

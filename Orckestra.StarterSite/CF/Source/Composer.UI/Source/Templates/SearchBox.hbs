@@ -1,8 +1,8 @@
-<div class="search-box" data-oc-controller="General.SearchBox">
-    <form method="GET" action="{{ActionTarget}}">
+<div id="search-box" class="search-box" data-oc-controller="General.SearchBox">
+    <form method="GET" action="{{ActionTarget}}" id="frm-search-box">
         <div class="form-group">
             <div class="input-group">
-                <input id="search-input" data-qa="search-input" class="form-control" type="search" name="keywords" 
+                <input id="search-input" data-qa="search-input" class="form-control form-control-sm js-typeahead" type="search" name="keywords"
                     placeholder="{{localize 'List-Search' 'F_SearchWaterMark'}}" value="{{Keywords}}"
                     required="required"
                     data-parsley-required-message=""
@@ -14,7 +14,7 @@
                     <button data-qa="search-button" class="btn  btn-default" title="{{localize 'List-Search' 'B_Search'}}" type="submit"><span class="fa  fa-search"></span></button>
                 </span>
             </div>
-            
+
             <div id="search-errors">
             </div>
         </div>

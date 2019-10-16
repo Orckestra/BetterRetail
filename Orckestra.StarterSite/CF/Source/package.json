@@ -94,6 +94,7 @@
     "vinyl-transform": "1.0.0",
     "webdriver-manager": "9.0.0",
     "xml2js": "0.4.16",
-    "yargs": "4.6.0"
+    "yargs": "4.6.0",
+    "typeahead.js": "0.11.1"
   }
 }

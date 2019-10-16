@@ -120,4 +120,19 @@
   <data name="Custom_Explanation" xml:space="preserve">
     <value>You may fill this sheet with your custom localizations</value>
   </data>
+  <data name="L_Suggest_Brands" xml:space="preserve">
+    <value>Brands</value>
+  </data>
+  <data name="L_Suggest_Categories" xml:space="preserve">
+    <value>Categories</value>
+  </data>
+  <data name="L_Suggest_PossibleMatches" xml:space="preserve">
+    <value>Top Results</value>
+  </data>
+  <data name="L_Suggest_Suggestions" xml:space="preserve">
+    <value>Suggestions</value>
+  </data>
+  <data name="B_AddToCart" xml:space="preserve">
+    <value>Add to Cart</value>
+  </data>
 </root>
