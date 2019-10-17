@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -65,31 +65,18 @@ namespace Orckestra.Composer.Search.Services
             IScopeViewService scopeViewService,
             IRecurringOrdersSettings recurringOrdersSettings)
         {
-            if (searchRepository == null) { throw new ArgumentNullException(nameof(searchRepository)); }
-            if (viewModelMapper == null) { throw new ArgumentNullException(nameof(viewModelMapper)); }
-            if (damProvider == null) { throw new ArgumentNullException(nameof(damProvider)); }
-            if (localizationProvider == null) { throw new ArgumentNullException(nameof(localizationProvider)); }
-            if (productUrlProvider == null) { throw new ArgumentNullException(nameof(productUrlProvider)); }
-            if (searchUrlProvider == null) { throw new ArgumentNullException(nameof(searchUrlProvider)); }
-            if (facetFactory == null) { throw new ArgumentNullException(nameof(facetFactory)); }
-            if (selectedFacetFactory == null) { throw new ArgumentNullException(nameof(selectedFacetFactory)); }
-            if (priceProvider == null) { throw new ArgumentNullException(nameof(priceProvider)); }
-            if (composerContext == null) { throw new ArgumentNullException(nameof(composerContext)); }
-            if (productSettings == null) { throw new ArgumentNullException(nameof(productSettings)); }
-            if (scopeViewService == null) { throw new ArgumentNullException(nameof(scopeViewService)); }
-
-            SearchRepository = searchRepository;
-            ViewModelMapper = viewModelMapper;
-            DamProvider = damProvider;
-            LocalizationProvider = localizationProvider;
-            ProductUrlProvider = productUrlProvider;
-            SearchUrlProvider = searchUrlProvider;
-            FacetFactory = facetFactory;
-            SelectedFacetFactory = selectedFacetFactory;
-            PriceProvider = priceProvider;
-            ComposerContext = composerContext;
-            ProductSettings = productSettings;
-            ScopeViewService = scopeViewService;
+            SearchRepository = searchRepository ?? throw new ArgumentNullException(nameof(searchRepository));
+            ViewModelMapper = viewModelMapper ?? throw new ArgumentNullException(nameof(viewModelMapper));
+            DamProvider = damProvider ?? throw new ArgumentNullException(nameof(damProvider));
+            LocalizationProvider = localizationProvider ?? throw new ArgumentNullException(nameof(localizationProvider));
+            ProductUrlProvider = productUrlProvider ?? throw new ArgumentNullException(nameof(productUrlProvider));
+            SearchUrlProvider = searchUrlProvider ?? throw new ArgumentNullException(nameof(searchUrlProvider));
+            FacetFactory = facetFactory ?? throw new ArgumentNullException(nameof(facetFactory));
+            SelectedFacetFactory = selectedFacetFactory ?? throw new ArgumentNullException(nameof(selectedFacetFactory));
+            PriceProvider = priceProvider ?? throw new ArgumentNullException(nameof(priceProvider));
+            ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
+            ProductSettings = productSettings ?? throw new ArgumentNullException(nameof(productSettings));
+            ScopeViewService = scopeViewService ?? throw new ArgumentNullException(nameof(scopeViewService));
             RecurringOrdersSettings = recurringOrdersSettings;
         }
 

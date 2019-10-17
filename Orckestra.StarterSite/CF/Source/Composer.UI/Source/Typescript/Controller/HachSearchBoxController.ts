@@ -18,31 +18,12 @@ module Orckestra.Composer {
 
             this.searchService['_baseSearchUrl'] = $('#frm-search-box').attr('action');
 
-            var htmlContext = $('html'),
-                csrfToken = htmlContext.data('token'),
-                language = htmlContext.attr('lang');
-
-            function prepare(query, settings) {
-                settings.type = 'POST';
-                settings.contentType = 'application/json; charset=UTF-8';
-
-                settings.headers = {
-                    'Accept-Language': language,
-                    'X-Csrf-Token': csrfToken
-                };
-
-                var data = {'Query': query};
-                settings.data = JSON.stringify(data);
-
-                return settings;
-            }
-
             var products = new Bloodhound({
                 name: 'products',
                 limit: 8,
                 remote: {
                     url: '/api/search/autocomplete',
-                    prepare: prepare
+                    prepare: ComposerClient.prepareBloodhound
                 },
                 datumTokenizer: function (datum) {
                     return Bloodhound.tokenizers.whitespace((<any>datum).val);
@@ -57,7 +38,7 @@ module Orckestra.Composer {
                 limit: 5,
                 remote: {
                     url: '/api/search/suggestTerms',
-                    prepare: prepare
+                    prepare: ComposerClient.prepareBloodhound
                 },
                 datumTokenizer: function (datum) {
                     return Bloodhound.tokenizers.whitespace((<any>datum).val);
@@ -72,7 +53,7 @@ module Orckestra.Composer {
                 limit: 4,
                 remote: {
                     url: '/api/search/suggestCategories',
-                    prepare: prepare
+                    prepare: ComposerClient.prepareBloodhound
                 },
                 datumTokenizer: function (datum) {
                     return Bloodhound.tokenizers.whitespace((<any>datum).val);
@@ -87,7 +68,7 @@ module Orckestra.Composer {
                 limit: 3,
                 remote: {
                     url: '/api/search/suggestBrands',
-                    prepare: prepare
+                    prepare: ComposerClient.prepareBloodhound
                 },
                 datumTokenizer: function (datum) {
                     return Bloodhound.tokenizers.whitespace((<any>datum).val);
@@ -139,12 +120,15 @@ module Orckestra.Composer {
                     }
                 }
             ).on('typeahead:render', (evt, suggestions) => {
+
+                console.log(suggestions);
+                console.log(evt);
                 //cache the rendered suggestion at the render complet
                 this.renderedSuggestions = suggestions;
-
+/*
                 if (suggestions !== undefined) {
                     this.renderedSuggestions = suggestions;
-                }
+                }*/
 
                 if ($('.js-suggestion-empty').length === 4) {
                     $('.tt-menu').addClass('right-empty');
