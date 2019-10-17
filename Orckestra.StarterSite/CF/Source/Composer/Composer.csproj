@@ -260,11 +260,13 @@
     <Compile Include="Repositories\IProductRepository.cs" />
     <Compile Include="Providers\IRecurringCartUrlProvider.cs" />
     <Compile Include="Providers\IRecurringScheduleUrlProvider.cs" />
+    <Compile Include="Repositories\IProductMediaSettingsRepository.cs" />
     <Compile Include="Repositories\ProductRepository.cs" />
     <Compile Include="Repositories\IInventoryRepository.cs" />
     <Compile Include="Repositories\InventoryRepository.cs" />
     <Compile Include="Repositories\IRecurringOrdersRepository.cs" />
     <Compile Include="Repositories\IScopeRepository.cs" />
+    <Compile Include="Repositories\ProductMediaSettingsRepository.cs" />
     <Compile Include="Repositories\RecurringOrdersRepository.cs" />
     <Compile Include="Repositories\ScopeRepository.cs" />
     <Compile Include="Parameters\GetIsPaymentMethodUsedInRecurringOrdersParam.cs" />

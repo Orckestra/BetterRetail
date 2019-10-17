@@ -101,7 +101,7 @@ namespace Orckestra.Composer.Tests.Providers.Dam
                         ProductId = expectedProductId,
                         Variant = new VariantKey
                         {
-                            Id = GetRandom.String(32)
+                            Id = variantId
                         }
                     }
                 }.ToList(),
@@ -125,8 +125,7 @@ namespace Orckestra.Composer.Tests.Providers.Dam
             IDamProvider damProvider = _container.CreateInstance<ConventionBasedDamProvider>();
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() =>
-            {
+            Assert.ThrowsAsync<ArgumentException>(() =>
                 damProvider.GetProductMainImagesAsync(new GetProductMainImagesParam
                 {
                     ImageSize = GetRandom.String(1),
@@ -141,8 +140,8 @@ namespace Orckestra.Composer.Tests.Providers.Dam
                             }
                         }
                     }.ToList(),
-                });
-            });
+                })
+            );
         }
 
         [Test]
@@ -179,14 +178,13 @@ namespace Orckestra.Composer.Tests.Providers.Dam
             IDamProvider damProvider = _container.CreateInstance<ConventionBasedDamProvider>();
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() =>
-            {
+            Assert.ThrowsAsync<ArgumentException>(() =>
                 damProvider.GetProductMainImagesAsync(new GetProductMainImagesParam
                 {
                     ImageSize = GetRandom.String(1),
                     ProductImageRequests = null,
-                });
-            });
+                })
+            );
         }
 
         [Test]
@@ -199,8 +197,7 @@ namespace Orckestra.Composer.Tests.Providers.Dam
             IDamProvider damProvider = _container.CreateInstance<ConventionBasedDamProvider>();
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() =>
-            {
+            Assert.ThrowsAsync<ArgumentException>(() =>
                 damProvider.GetProductMainImagesAsync(new GetProductMainImagesParam
                 {
                     ImageSize = imageSize,
@@ -215,8 +212,8 @@ namespace Orckestra.Composer.Tests.Providers.Dam
                             }
                         }
                     }.ToList(),
-                });
-            });
+                })
+            );
         }
 
         [Test]
@@ -226,10 +223,7 @@ namespace Orckestra.Composer.Tests.Providers.Dam
             IDamProvider damProvider = _container.CreateInstance<ConventionBasedDamProvider>();
 
             // Act & Assert
-            Assert.Throws<ArgumentNullException>(() =>
-            {
-                damProvider.GetProductMainImagesAsync(null);
-            });
+            Assert.ThrowsAsync<ArgumentNullException>(() => damProvider.GetProductMainImagesAsync(null));
         }
     }
 }

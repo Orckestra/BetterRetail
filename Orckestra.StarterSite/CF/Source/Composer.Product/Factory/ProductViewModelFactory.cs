@@ -9,7 +9,6 @@ using Orckestra.Composer.Enums;
 using Orckestra.Composer.Factory;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Product.Parameters;
-using Orckestra.Composer.Product.Repositories;
 using Orckestra.Composer.Product.Services;
 using Orckestra.Composer.Product.ViewModels;
 using Orckestra.Composer.Providers;
@@ -49,25 +48,15 @@ namespace Orckestra.Composer.Product.Factory
             IRecurringOrderProgramViewModelFactory recurringOrderProgramViewModelFactory,
             IRecurringOrdersSettings recurringOrdersSettings)
         {
-            if (viewModelMapper == null) { throw new ArgumentNullException(nameof(viewModelMapper)); }
-            if (productRepository == null) { throw new ArgumentNullException(nameof(productRepository)); }
-            if (damProvider == null) { throw new ArgumentNullException(nameof(damProvider)); }
-            if (localizationProvider == null) { throw new ArgumentNullException(nameof(localizationProvider)); }
-            if (lookupService == null) { throw new ArgumentNullException(nameof(lookupService)); }
-            if (productUrlProvider == null) { throw new ArgumentNullException(nameof(productUrlProvider)); }
-            if (scopeViewService == null) { throw new ArgumentNullException(nameof(scopeViewService)); }
-            if (recurringOrdersRepository == null) { throw new ArgumentNullException(nameof(recurringOrdersRepository)); }
-            if (recurringOrderProgramViewModelFactory == null) { throw new ArgumentNullException(nameof(recurringOrderProgramViewModelFactory)); }
-
-            ViewModelMapper = viewModelMapper;
-            ProductRepository = productRepository;
-            DamProvider = damProvider;
-            LocalizationProvider = localizationProvider;
-            LookupService = lookupService;
-            ProductUrlProvider = productUrlProvider;
-            ScopeViewService = scopeViewService;
-            RecurringOrdersRepository = recurringOrdersRepository;
-            RecurringOrderProgramViewModelFactory = recurringOrderProgramViewModelFactory;
+            ViewModelMapper = viewModelMapper ?? throw new ArgumentNullException(nameof(viewModelMapper));
+            ProductRepository = productRepository ?? throw new ArgumentNullException(nameof(productRepository));
+            DamProvider = damProvider ?? throw new ArgumentNullException(nameof(damProvider));
+            LocalizationProvider = localizationProvider ?? throw new ArgumentNullException(nameof(localizationProvider));
+            LookupService = lookupService ?? throw new ArgumentNullException(nameof(lookupService));
+            ProductUrlProvider = productUrlProvider ?? throw new ArgumentNullException(nameof(productUrlProvider));
+            ScopeViewService = scopeViewService ?? throw new ArgumentNullException(nameof(scopeViewService));
+            RecurringOrdersRepository = recurringOrdersRepository ?? throw new ArgumentNullException(nameof(recurringOrdersRepository));
+            RecurringOrderProgramViewModelFactory = recurringOrderProgramViewModelFactory ?? throw new ArgumentNullException(nameof(recurringOrderProgramViewModelFactory));
             RecurringOrdersSettings = recurringOrdersSettings;
         }
 
@@ -601,7 +590,7 @@ namespace Orckestra.Composer.Product.Factory
             Overture.ServiceModel.Products.Product product,
             IList<Variant> variants)
         {
-            var productDetailImages = await DamProvider.GetAllProductImagesAsync(new GetAllProductImagesParam
+            var param = new GetAllProductImagesParam
             {
                 ImageSize = ProductConfiguration.ImageSize,
                 ThumbnailImageSize = ProductConfiguration.ThumbnailImageSize,
@@ -609,14 +598,12 @@ namespace Orckestra.Composer.Product.Factory
                 ProductId = product.Id,
                 PropertyBag = product.PropertyBag,
                 ProductDefinitionName = product.DefinitionName,
-                Variants = variants == null ? new List<VariantKey>() : variants.Select(variant => new VariantKey
-                {
-                    Id = variant.Id,
-                    KeyVariantAttributeValues = variant.PropertyBag
-                }).ToList()
-            }).ConfigureAwait(false);
+                Variants = variants == null ? new List<Variant>() : variants.ToList(),
+                MediaSet = product.MediaSet,
+                VariantMediaSet = product.VariantMediaSet
+            };
 
-            return productDetailImages;
+            return await DamProvider.GetAllProductImagesAsync(param).ConfigureAwait(false);
         }
 
         /// <summary>
