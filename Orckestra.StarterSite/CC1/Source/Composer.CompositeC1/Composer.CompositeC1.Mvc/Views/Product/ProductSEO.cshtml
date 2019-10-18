@@ -4,7 +4,7 @@
 
 @{
     var productUrl = string.Format("{0}{1}", HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority), Model.ProductDetailUrl);
-    var productPrice = Model.Price.Value.ToString("n2", CultureInfo.InvariantCulture);
+    var productPrice = Model.Price.HasValue ? Model.Price.Value.ToString("n2", CultureInfo.InvariantCulture) : null;
 }
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
 <head prefix="og: http://ogp.me/ns# 
