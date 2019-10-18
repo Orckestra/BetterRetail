@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using Composite.Data.Types;
 using Orckestra.Composer.CompositeC1.DataTypes.Facets;
 using Orckestra.Composer.CompositeC1.Mappers;
+using Orckestra.Composer.CompositeC1.Services.Cache;
 using Orckestra.Composer.CompositeC1.Services.DataQuery;
+using Orckestra.Composer.CompositeC1.Utils;
 using Orckestra.Composer.Search;
 using Orckestra.Composer.Search.Context;
 
@@ -13,35 +14,45 @@ namespace Orckestra.Composer.CompositeC1.Services.Facet
 {
     public class FacetConfigurationContext : IFacetConfigurationContext
     {
-        protected IFacetConfigurationCache Cache{ get; }
+        protected ICacheStore<Guid, List<FacetSetting>> Cache{ get; }
         protected HttpContextBase HttpContext { get; }
         protected IDataQueryService DataQueryService { get; }
         private List<FacetSetting> _facetSettings;
 
-        public FacetConfigurationContext(HttpContextBase httpContext, IDataQueryService dataQueryService, IFacetConfigurationCache facetCacheService)
+        public FacetConfigurationContext(HttpContextBase httpContext, IDataQueryService dataQueryService, ICacheService cacheService)
         {
-            Cache = facetCacheService;
             HttpContext = httpContext;
             DataQueryService = dataQueryService;
+            Cache = cacheService.GetStoreWithDependencies<Guid, List<FacetSetting>>("Facet Configuration", 
+                new CacheDependentEntry<IFacet>(), 
+                new CacheDependentEntry<IFacetConfiguration>(), 
+                new CacheDependentEntry<IFacetConfigurationMeta>(), 
+                new CacheDependentEntry<IPromotedFacetValueSetting>()
+            );
         }
 
         public virtual List<FacetSetting> GetFacetSettings()
         {
             if (_facetSettings == null)
             {
-                var pageId = GetPageId();
-                _facetSettings = Cache.GetOrAdd(pageId, _ => LoadFacetSettings(pageId));
+                var pageId = HttpContext.GetCurrentPageId();
+                _facetSettings = Cache.GetOrAdd(pageId.GetValueOrDefault(), _ => LoadFacetSettings(pageId));
             }
             
             return _facetSettings;
         }
 
 
-        protected virtual List<FacetSetting> LoadFacetSettings(Guid pageId)
+        protected virtual List<FacetSetting> LoadFacetSettings(Guid? pageId)
         {
             var result = new List<FacetSetting>();
 
-            var facetConfiguration = GetFacetConfigurationFromPage(pageId);
+            IFacetConfiguration facetConfiguration = null;
+
+            if (pageId.HasValue) // loading from current page
+            {
+                facetConfiguration = GetFacetConfigurationFromPage(pageId.Value);
+            }
 
             if (facetConfiguration == null) // if no config on page, using any config from db
             {
@@ -88,9 +99,6 @@ namespace Orckestra.Composer.CompositeC1.Services.Facet
 
         protected IFacetConfiguration GetFacetConfigurationFromPage(Guid pageId)
         {
-            if (pageId == Guid.Empty)
-                return null;
-
             var metaQuery = DataQueryService.Get<IFacetConfigurationMeta>();
             var configQuery = DataQueryService.Get<IFacetConfiguration>();
 
@@ -107,19 +115,6 @@ namespace Orckestra.Composer.CompositeC1.Services.Facet
             return DataQueryService.Get<IFacetConfiguration>()
                 .OrderByDescending(c => c.IsDefault)
                 .FirstOrDefault();
-        }
-
-        protected Guid GetPageId()
-        {
-            const string pageIdKey = "PageRenderer.IPage";
-            if (HttpContext == null || !HttpContext.Items.Contains(pageIdKey))
-                return Guid.Empty;
-
-            var page = HttpContext.Items[pageIdKey] as IPage;
-            if (page == null)
-                return Guid.Empty;
-
-            return page.Id;
         }
 
         private Dictionary<Guid, IFacet> LoadDependsOn(List<Guid> dependsOnIds, List<IFacet> existingFacets)

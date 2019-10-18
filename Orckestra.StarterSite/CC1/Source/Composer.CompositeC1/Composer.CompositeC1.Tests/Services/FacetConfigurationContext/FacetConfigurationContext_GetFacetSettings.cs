@@ -7,6 +7,7 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using Orckestra.Composer.CompositeC1.DataTypes.Facets;
+using Orckestra.Composer.CompositeC1.Services.Cache;
 using Orckestra.Composer.CompositeC1.Services.DataQuery;
 using Orckestra.Composer.CompositeC1.Services.Facet;
 using Orckestra.Composer.Search;
@@ -23,13 +24,13 @@ namespace Orckestra.Composer.CompositeC1.Tests.Services.FacetConfigurationContex
         // mocks
         private Mock<HttpContextBase> _httpContextMoq;
         private Mock<IDataQueryService> _dataQueryMoq;
+        private Mock<ICacheStore<Guid, List<FacetSetting>>> _cacheMoq;
 
         // storage
         private List<IFacet> _facets;
         private List<IFacetConfiguration> _facetConfigs;
         private List<IPromotedFacetValueSetting> _promotedFacets;
         private List<IFacetConfigurationMeta> _facetsMeta;
-        private Mock<IFacetConfigurationCache> _cacheMoq;
 
         private const string PageKey = "PageRenderer.IPage";
         private Guid _pageId;
@@ -52,10 +53,14 @@ namespace Orckestra.Composer.CompositeC1.Tests.Services.FacetConfigurationContex
                 });
 
             // cache
-            _cacheMoq = new Mock<IFacetConfigurationCache>();
+            var cacheServiceMoq = new Mock<ICacheService>();
+            _cacheMoq = new Mock<ICacheStore<Guid, List<FacetSetting>>>();
             _cacheMoq
                 .Setup(q => q.GetOrAdd(It.IsAny<Guid>(), It.IsAny<Func<Guid, List<FacetSetting>>>()))
                 .Returns<Guid, Func<Guid, List<FacetSetting>>>((key, factory) => factory(key));
+            cacheServiceMoq
+                .Setup(q => q.GetStoreWithDependencies<Guid, List<FacetSetting>>(It.IsAny<string>(), It.IsAny<CacheDependentEntry[]>()))
+                .Returns(_cacheMoq.Object);
 
             // storage
             _dataQueryMoq = new Mock<IDataQueryService>();
@@ -73,7 +78,7 @@ namespace Orckestra.Composer.CompositeC1.Tests.Services.FacetConfigurationContex
             _dataQueryMoq.Setup(q => q.Get<IFacetConfigurationMeta>()).Returns(() => _facetsMeta.AsQueryable());
 
             // test target
-            _target = new CompositeC1.Services.Facet.FacetConfigurationContext(_httpContextMoq.Object, _dataQueryMoq.Object, _cacheMoq.Object);
+            _target = new CompositeC1.Services.Facet.FacetConfigurationContext(_httpContextMoq.Object, _dataQueryMoq.Object, cacheServiceMoq.Object);
         }
 
         [Test]
