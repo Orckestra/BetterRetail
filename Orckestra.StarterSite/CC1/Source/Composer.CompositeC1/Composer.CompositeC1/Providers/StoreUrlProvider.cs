@@ -48,12 +48,8 @@ namespace Orckestra.Composer.CompositeC1.Providers
                 var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(parameters.CultureInfo, WebsiteContext.WebsiteId);
                 var baseUrl = PageService.GetPageUrl(pagesConfiguration.StoreListPageId, parameters.CultureInfo);
                 var url = string.Format(UrlTemplate, baseUrl, UrlFormatter.Format(parameters.StoreName), parameters.StoreNumber);
-                var uri = new Uri(
-                    new Uri(parameters.BaseUrl, UriKind.Absolute),
-                    new Uri(url, UriKind.Relative));
-
-                return uri.ToString();
-
+                var urlBuilder = new UrlBuilder(url);
+                return urlBuilder.ToString();
             }
         }
 
