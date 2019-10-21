@@ -17,74 +17,78 @@ namespace Orckestra.Composer.Search.Repositories
 
 		public Task<List<Facet>> GetCategoryProductCount(string scopeId, string cultureName)
 		{
-			return Task.FromResult(OvertureClient.Send(new AdvancedSearchRequest
-			{
-				CultureName = cultureName,
-				IndexName = "Products",
-				ScopeId = scopeId,
-				SearchTerms = "*",
-				IncludeFacets = true,
-				FacetHierarchyId = "CategoryAutoSuggest",
-				Query = new Query
-				{
-					MaximumItems = 0,
-					Filter = new FilterGroup
-					{
-						BinaryOperator = BinaryOperator.And,
-						Filters = new List<Filter>
-						{
-							new Filter
-							{
-								Member = "CatalogId",
-								Operator = Operator.Equals,
-								Value = scopeId
-							},
-							new Filter
-							{
-								Member = "Active",
-								Operator = Operator.Equals,
-								Value = true
-							}
-						}
-					}
-				}
-			}).Facets);
-		}
+            var request = new AdvancedSearchRequest
+            {
+                CultureName = cultureName,
+                IndexName = "Products",
+                ScopeId = scopeId,
+                SearchTerms = "*",
+                IncludeFacets = true,
+                FacetHierarchyId = "CategoryAutoSuggest",
+                Query = new Query
+                {
+                    MaximumItems = 0,
+                    Filter = new FilterGroup
+                    {
+                        BinaryOperator = BinaryOperator.And,
+                        Filters = new List<Filter>
+                        {
+                            new Filter
+                            {
+                                Member = "CatalogId",
+                                Operator = Operator.Equals,
+                                Value = scopeId
+                            },
+                            new Filter
+                            {
+                                Member = "Active",
+                                Operator = Operator.Equals,
+                                Value = true
+                            }
+                        }
+                    }
+                }
+            };
+
+            return Task.FromResult(OvertureClient.Send(request).Facets);
+        }
 
 		public Task<List<Facet>> GetBrandProductCount(string scopeId, string cultureName)
 		{
-			return Task.FromResult(OvertureClient.Send(new AdvancedSearchRequest
-			{
-				CultureName = cultureName,
-				IndexName = "Products",
-				ScopeId = scopeId,
-				SearchTerms = "*",
-				IncludeFacets = true,
-				FacetHierarchyId = "BrandAutoSuggest",
-				Query = new Query
-				{
-					MaximumItems = 0,
-					Filter = new FilterGroup
-					{
-						BinaryOperator = BinaryOperator.And,
-						Filters = new List<Filter>
-						{
-							new Filter
-							{
-								Member = "CatalogId",
-								Operator = Operator.Equals,
-								Value = scopeId
-							},
-							new Filter
-							{
-								Member = "Active",
-								Operator = Operator.Equals,
-								Value = true
-							}
-						}
-					}
-				}
-			}).Facets);
-		}
+            var request = new AdvancedSearchRequest
+            {
+                CultureName = cultureName,
+                IndexName = "Products",
+                ScopeId = scopeId,
+                SearchTerms = "*",
+                IncludeFacets = true,
+                FacetHierarchyId = "BrandAutoSuggest",
+                Query = new Query
+                {
+                    MaximumItems = 0,
+                    Filter = new FilterGroup
+                    {
+                        BinaryOperator = BinaryOperator.And,
+                        Filters = new List<Filter>
+                        {
+                            new Filter
+                            {
+                                Member = "CatalogId",
+                                Operator = Operator.Equals,
+                                Value = scopeId
+                            },
+                            new Filter
+                            {
+                                Member = "Active",
+                                Operator = Operator.Equals,
+                                Value = true
+                            }
+                        }
+                    }
+                }
+            };
+
+            return Task.FromResult(OvertureClient.Send(request).Facets);
+        }
 	}
 }

@@ -128,7 +128,7 @@ namespace Orckestra.Composer.Search.Api
                 if (success)
                 {
                     FacetValue categoryCount = categoryCounts
-                        .Where((facet) => parents.Count == int.Parse(CategoryFieldName.Match(facet.FieldName).Groups[1].Value) - 1)
+                        .Where((facet) => int.TryParse(CategoryFieldName.Match(facet.FieldName).Groups[1].Value, out int n) && parents.Count == n - 1)
                         .Single()
                         .Values
                         .Where((facetValue) => facetValue.Value == category.DisplayName[language]).SingleOrDefault();
@@ -153,15 +153,6 @@ namespace Orckestra.Composer.Search.Api
 
             CategorySuggestionsViewModel vm = new CategorySuggestionsViewModel();
             vm.Suggestions = finalSuggestions.Count > 0 ? finalSuggestions : null;
-
-            //PATCH to test Front-End
-            vm.Suggestions = new List<CategorySuggestionViewModel>
-            {
-                new CategorySuggestionViewModel{ DisplayName = "Meters", Quantity = 50},
-                new CategorySuggestionViewModel{ DisplayName = "Probes", Quantity = 25},
-                new CategorySuggestionViewModel{ DisplayName = "Connectors", Quantity = 15},
-            };
-            //END PATCH
 
             return Ok(vm);
         }
