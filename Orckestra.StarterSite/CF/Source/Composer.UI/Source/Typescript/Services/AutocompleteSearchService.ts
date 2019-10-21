@@ -1,7 +1,7 @@
 ///<reference path='../../Typings/tsd.d.ts' />
 
 module Orckestra.Composer {
-    export class HachSearchService extends SearchService {
+    export class AutocompleteSearchService extends SearchService {
         private categoryFacet = /^CategoryLevel(\d+)_Facet$/;
 
         public initialize(options: Orckestra.Composer.ISearchCriteriaOptions) {

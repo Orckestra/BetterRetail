@@ -1,16 +1,16 @@
 ///<reference path='../../Typings/tsd.d.ts' />
 ///<reference path='../App.ts' />
-///<reference path='../Services/HachSearchService.ts' />
+///<reference path='../Services/AutocompleteSearchService.ts' />
 
 module Orckestra.Composer {
-    export class HachSearchBoxController extends SearchBoxController {
+    export class AutocompleteSearchBoxController extends SearchBoxController {
 
         private renderedSuggestions;
-        private searchService: HachSearchService;
+        private searchService: AutocompleteSearchService;
 
         public initialize() {
             super.initialize();
-            this.searchService = new HachSearchService(EventHub.instance(), window);
+            this.searchService = new AutocompleteSearchService(EventHub.instance(), window);
             this.searchService.initialize({
                 correctedSearchTerm: '',
                 facetRegistry: {}
@@ -18,65 +18,18 @@ module Orckestra.Composer {
 
             this.searchService['_baseSearchUrl'] = $('#frm-search-box').attr('action');
 
-            var products = new Bloodhound({
-                name: 'products',
-                limit: 8,
-                remote: {
-                    url: '/api/search/autocomplete',
-                    prepare: ComposerClient.prepareBloodhound
-                },
-                datumTokenizer: function (datum) {
-                    return Bloodhound.tokenizers.whitespace((<any>datum).val);
-                },
-                queryTokenizer: Bloodhound.tokenizers.whitespace
-            });
-
+            let products = this.GetBloodhoundInstance('products', 8, '/api/search/autocomplete');
             products.initialize();
 
-            var searchTerms = new Bloodhound({
-                name: 'searchTerms',
-                limit: 5,
-                remote: {
-                    url: '/api/search/suggestTerms',
-                    prepare: ComposerClient.prepareBloodhound
-                },
-                datumTokenizer: function (datum) {
-                    return Bloodhound.tokenizers.whitespace((<any>datum).val);
-                },
-                queryTokenizer: Bloodhound.tokenizers.whitespace
-            });
-
+            let searchTerms = this.GetBloodhoundInstance('searchTerms', 5, '/api/search/suggestTerms');
             searchTerms.initialize();
 
-            var categories = new Bloodhound({
-                name: 'categories',
-                limit: 4,
-                remote: {
-                    url: '/api/search/suggestCategories',
-                    prepare: ComposerClient.prepareBloodhound
-                },
-                datumTokenizer: function (datum) {
-                    return Bloodhound.tokenizers.whitespace((<any>datum).val);
-                },
-                queryTokenizer: Bloodhound.tokenizers.whitespace
-            });
-
+            let categories = this.GetBloodhoundInstance('categories', 4, '/api/search/suggestCategories');
             categories.initialize();
 
-            var brands = new Bloodhound({
-                name: 'brands',
-                limit: 3,
-                remote: {
-                    url: '/api/search/suggestBrands',
-                    prepare: ComposerClient.prepareBloodhound
-                },
-                datumTokenizer: function (datum) {
-                    return Bloodhound.tokenizers.whitespace((<any>datum).val);
-                },
-                queryTokenizer: Bloodhound.tokenizers.whitespace
-            });
-
+            let brands = this.GetBloodhoundInstance('brands', 3, '/api/search/suggestBrands');
             brands.initialize();
+
             $('#search-box .js-typeahead').typeahead({
                     minLength: 3,
                     highlight: true,
@@ -120,15 +73,8 @@ module Orckestra.Composer {
                     }
                 }
             ).on('typeahead:render', (evt, suggestions) => {
-
-                console.log(suggestions);
-                console.log(evt);
-                //cache the rendered suggestion at the render complet
+                //cache the rendered suggestion at the render complete
                 this.renderedSuggestions = suggestions;
-/*
-                if (suggestions !== undefined) {
-                    this.renderedSuggestions = suggestions;
-                }*/
 
                 if ($('.js-suggestion-empty').length === 4) {
                     $('.tt-menu').addClass('right-empty');
@@ -146,47 +92,47 @@ module Orckestra.Composer {
             $('.tt-menu .tt-dataset:not(:first)').wrapAll('<div class="suggestion-right-col"></div>');
         }
 
-        private resultsNotFound(evt) {
-            var element: any = evt.currentTarget;
+        private GetBloodhoundInstance (name, limit, url): Bloodhound<any> {
+             return new Bloodhound({
+                name,
+                limit,
+                remote: {
+                    url,
+                    prepare: ComposerClient.prepareBloodhound
+                },
+                datumTokenizer: function (datum) {
+                    return Bloodhound.tokenizers.whitespace((<any>datum).val);
+                },
+                queryTokenizer: Bloodhound.tokenizers.whitespace
+            });
+        }
 
-            //I think this is just for google analytics
-            //EventHub.instance().publish('FGL.suggestionNoResultFound', {
-            //    data: {searchTerm: element.value}
-            //});
+        private resultsNotFound(evt) {
+            let element: any = evt.currentTarget;
         }
 
         public selectedProduct(actionContext: Orckestra.Composer.IControllerActionContext) {
-            var suggestionindex;
-            var selectedSuggestion: Object;
+            let suggestionIndex;
+            let selectedSuggestion: Object;
 
             //sort the object to retrieve the matching sku
             $.each(this.renderedSuggestions, function (index, obj) {
                 if (obj.Sku === actionContext.elementContext.data('sku').toString()) {
-                    suggestionindex = index;
+                    suggestionIndex = index;
                     selectedSuggestion = obj;
                 }
             });
-
-            //push the object list name and index of the clicked object
-            //I think this is just for google analytics
-            //EventHub.instance().publish('Hach.suggestionProductclick', {
-            //    data: {
-            //        Product: selectedSuggestion,
-            //        ListName: 'autosuggest product click',
-            //        Index: suggestionindex != null && suggestionindex !== undefined ? parseInt(suggestionindex) : null
-            //    }
-            //});
         }
 
         public selectedSearchTermsSuggestion(actionContext: Orckestra.Composer.IControllerActionContext) {
-            var suggestion = actionContext.elementContext.data('suggestion').toString();
+            let suggestion = actionContext.elementContext.data('suggestion').toString();
             $('#search-box #search-input').val(suggestion);
             $('#search-box form').submit();
         }
 
         public selectedCategorySuggestion(actionContext: Orckestra.Composer.IControllerActionContext) {
-            var suggestion = actionContext.elementContext.data('suggestion').toString();
-            var parents = actionContext.elementContext.data('parents').toString().split(',').filter((parent) => parent);
+            let suggestion = actionContext.elementContext.data('suggestion').toString();
+            let parents = actionContext.elementContext.data('parents').toString().split(',').filter((parent) => parent);
             EventHub.instance().publish('categorySuggestionClicked', {
                 data: {
                     suggestion,
@@ -196,7 +142,7 @@ module Orckestra.Composer {
         }
 
         public selectedBrandSuggestion(actionContext: Orckestra.Composer.IControllerActionContext) {
-            var suggestion = actionContext.elementContext.data('suggestion').toString();
+            let suggestion = actionContext.elementContext.data('suggestion').toString();
             EventHub.instance().publish('brandSuggestionClicked', {
                 data: {
                     suggestion

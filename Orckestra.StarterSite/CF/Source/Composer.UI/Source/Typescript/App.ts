@@ -85,7 +85,7 @@
                 { name: 'General.ErrorController', controller: Orckestra.Composer.ErrorController },
                 { name: 'General.SearchBox2', controller: Orckestra.Composer.SearchBoxController },
                 { name: 'General.LanguageSwitch', controller: Orckestra.Composer.LanguageSwitchController },
-                { name: 'General.SearchBox', controller: Orckestra.Composer.HachSearchBoxController },
+                { name: 'General.SearchBox', controller: Orckestra.Composer.AutocompleteSearchBoxController },
 
                 { name: 'Cart.FullCart', controller: Orckestra.Composer.FullCartController },
                 { name: 'Cart.OrderSummary', controller: Orckestra.Composer.OrderSummaryController },
