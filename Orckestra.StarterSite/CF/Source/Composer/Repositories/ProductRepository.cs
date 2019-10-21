@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Parameters;
-using Orckestra.Composer.Providers;
 using Orckestra.Composer.Utils;
 using Orckestra.Overture;
 using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel.Metadata;
 using Orckestra.Overture.ServiceModel.Products;
 using Orckestra.Overture.ServiceModel.Requests.Products;
+using Orckestra.Overture.ServiceModel.Requests.Search;
+using Orckestra.Overture.ServiceModel.Search;
 
 namespace Orckestra.Composer.Repositories
 {
@@ -18,16 +19,13 @@ namespace Orckestra.Composer.Repositories
     /// </summary>
     public class ProductRepository : IProductRepository
     {
-        protected readonly IOvertureClient _overtureClient;
-        protected readonly ICacheProvider _cacheProvider;
+        protected IOvertureClient OvertureClient { get; private set; }
+        protected ICacheProvider CacheProvider { get; private set; }
 
         public ProductRepository(IOvertureClient overtureClient, ICacheProvider cacheProvider)
         {
-            if (overtureClient == null) { throw new ArgumentNullException("overtureClient"); }
-            if (cacheProvider == null) { throw new ArgumentNullException("cacheProvider"); }
-
-            _overtureClient = overtureClient;
-            _cacheProvider = cacheProvider;
+            OvertureClient = overtureClient ?? throw new ArgumentNullException("overtureClient");
+            CacheProvider = cacheProvider ?? throw new ArgumentNullException("cacheProvider");
         }
 
         /// <summary>
@@ -68,7 +66,7 @@ namespace Orckestra.Composer.Repositories
 
             productCacheKey.AppendKeyParts(param.ProductId);
 
-            var result = await _cacheProvider.GetOrAddAsync(productCacheKey, () =>
+            var result = await CacheProvider.GetOrAddAsync(productCacheKey, () =>
                 {
                     var request = new GetProductV2Request
                     {
@@ -79,10 +77,12 @@ namespace Orckestra.Composer.Repositories
                         IncludeVariants = true,
                         ProductId = param.ProductId,
                         ScopeId = param.Scope,
+                        IncludeMedia = true,
+                        IncludeImageUrl = true
 
                     };
 
-                    return _overtureClient.SendAsync(request);
+                    return OvertureClient.SendAsync(request);
                 }).ConfigureAwait(false);
 
             return param.ReturnInactive || (result != null && result.Active.HasValue && result.Active.Value) ? result : null;
@@ -98,7 +98,7 @@ namespace Orckestra.Composer.Repositories
             var productDefinitionCacheKey = new CacheKey(CacheConfigurationCategoryNames.ProductDefinition);
             productDefinitionCacheKey.AppendKeyParts(param.Name);
 
-            var result = await _cacheProvider.GetOrAddAsync(productDefinitionCacheKey, () =>
+            var result = await CacheProvider.GetOrAddAsync(productDefinitionCacheKey, () =>
             {
                 var request = new GetProductDefinitionRequest
                 {
@@ -106,7 +106,7 @@ namespace Orckestra.Composer.Repositories
                     CultureName = param.CultureInfo.Name
                 };
 
-                return _overtureClient.SendAsync(request);
+                return OvertureClient.SendAsync(request);
             }).ConfigureAwait(false);
 
             return result;
@@ -130,7 +130,7 @@ namespace Orckestra.Composer.Repositories
             {
                 throw new ArgumentNullException("scope");
             }
-
+         
             var request = new CalculatePricesofProductsRequest
             {
                 ProductIds = productIds,
@@ -138,7 +138,7 @@ namespace Orckestra.Composer.Repositories
                 IncludeVariants = true
             };
 
-            return _overtureClient.SendAsync(request);
+            return OvertureClient.SendAsync(request);
         }
 
         /// <summary>
@@ -158,7 +158,46 @@ namespace Orckestra.Composer.Repositories
                 ScopeId = scope,
             };
 
-            return _overtureClient.SendAsync(request);
+            return OvertureClient.SendAsync(request);
+        }
+
+
+        public virtual Task<SearchResult> SearchProductByIdsAsync(List<string> productIds, string scope, string cultureName)
+        {
+            if (productIds == null) { throw new ArgumentNullException("productIds"); }
+            if (scope == null) {  throw new ArgumentNullException("scope"); }
+
+            var request = new SearchProductByIdsRequest
+            {
+                Ids = productIds,
+                ScopeId = scope,
+                CultureName = cultureName
+            };
+
+            return OvertureClient.SendAsync(request);
+        }
+
+        public virtual Task<MediaList> GetProductMediaAsync(string sku, string scope, string cultureName, string mediaType)
+        {
+            if (sku == null) { throw new ArgumentNullException("sku"); }
+            if (scope == null) { throw new ArgumentNullException("scope"); }
+
+            var request = new GetMediaBySkuRequest
+            {
+                Sku = sku,
+                ScopeId = scope,
+                CultureName = cultureName,
+                MediaType = mediaType
+            };
+
+            var productMediaCacheKey = new CacheKey(CacheConfigurationCategoryNames.ProductMedia)
+            {
+                Scope = scope,
+            };
+            productMediaCacheKey.AppendKeyParts(nameof(sku), sku);
+            productMediaCacheKey.AppendKeyParts(nameof(mediaType), mediaType);
+
+            return CacheProvider.GetOrAddAsync(productMediaCacheKey, () => OvertureClient.SendAsync(request));
         }
     }
 }

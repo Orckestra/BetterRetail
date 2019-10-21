@@ -1,5 +1,7 @@
-﻿using Orckestra.Composer.CompositeC1.Controllers;
+﻿using System;
+using Orckestra.Composer.CompositeC1.Controllers;
 using Orckestra.Composer.CompositeC1.Services;
+using Orckestra.Composer.CompositeC1.Services.PreviewMode;
 using Orckestra.Composer.Product.Services;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Services;
@@ -8,8 +10,6 @@ namespace Orckestra.Composer.CompositeC1.Mvc.Controllers
 {
     public class ProductController : ProductBaseController
     {
-        protected override string PreviewModeProductId => "3834593";
-
         public ProductController(
             IPageService pageService, 
             IComposerContext composerContext, 
@@ -18,7 +18,8 @@ namespace Orckestra.Composer.CompositeC1.Mvc.Controllers
             IProductBreadcrumbService productBreadcrumbService, 
             ILanguageSwitchService languageSwitchService, 
             IProductUrlProvider productUrlProvider, 
-            IRelatedProductViewService relatedProductViewService) 
+            IRelatedProductViewService relatedProductViewService,
+            Lazy<IPreviewModeService> previewModeService) 
             
             : base(
             pageService, 
@@ -28,7 +29,8 @@ namespace Orckestra.Composer.CompositeC1.Mvc.Controllers
             productBreadcrumbService, 
             languageSwitchService, 
             productUrlProvider, 
-            relatedProductViewService)
+            relatedProductViewService,
+            previewModeService)
         {
         }
     }

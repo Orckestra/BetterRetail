@@ -81,8 +81,8 @@
       <HintPath>..\packages\OrckestraCommerce.Common.4.0.0-beta0001\lib\net461\Orckestra.Caching.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Orckestra.ExperienceManagement.Configuration, Version=4.0.0.3, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Orckestra.ExperienceManagement.Configuration.4.0.0.3\lib\net471\Orckestra.ExperienceManagement.Configuration.dll</HintPath>
+    <Reference Include="Orckestra.ExperienceManagement.Configuration, Version=4.0.0.4, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Orckestra.ExperienceManagement.Configuration.4.0.0.4\lib\net471\Orckestra.ExperienceManagement.Configuration.dll</HintPath>
     </Reference>
     <Reference Include="Orckestra.Logging, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\OrckestraCommerce.Common.4.0.0-beta0001\lib\net461\Orckestra.Logging.dll</HintPath>
@@ -260,11 +260,13 @@
     <Compile Include="Repositories\IProductRepository.cs" />
     <Compile Include="Providers\IRecurringCartUrlProvider.cs" />
     <Compile Include="Providers\IRecurringScheduleUrlProvider.cs" />
+    <Compile Include="Repositories\IProductMediaSettingsRepository.cs" />
     <Compile Include="Repositories\ProductRepository.cs" />
     <Compile Include="Repositories\IInventoryRepository.cs" />
     <Compile Include="Repositories\InventoryRepository.cs" />
     <Compile Include="Repositories\IRecurringOrdersRepository.cs" />
     <Compile Include="Repositories\IScopeRepository.cs" />
+    <Compile Include="Repositories\ProductMediaSettingsRepository.cs" />
     <Compile Include="Repositories\RecurringOrdersRepository.cs" />
     <Compile Include="Repositories\ScopeRepository.cs" />
     <Compile Include="Parameters\GetIsPaymentMethodUsedInRecurringOrdersParam.cs" />

@@ -31,17 +31,11 @@ namespace Orckestra.Composer.Product.Api
             IProductSpecificationsViewService productSpecificationsViewService,
             IRelatedProductViewService relatedProductViewService)
         {
-            if (productPriceViewService == null) { throw new ArgumentNullException("productPriceViewService"); }
-            if (composerContext == null) { throw new ArgumentNullException("composerContext"); }
-            if (productViewService == null) { throw new ArgumentNullException("productViewService"); }
-            if (productSpecificationsViewService == null) { throw new ArgumentNullException("productSpecificationsViewService"); }
-            if (relatedProductViewService == null) { throw new ArgumentNullException("relatedProductViewService"); }
-
-            ProductPriceViewService = productPriceViewService;
-            ComposerContext = composerContext;
-            ProductViewService = productViewService;
-            ProductSpecificationsViewService = productSpecificationsViewService;
-            RelatedProductViewService = relatedProductViewService;
+            ProductPriceViewService = productPriceViewService ?? throw new ArgumentNullException("productPriceViewService");
+            ComposerContext = composerContext ?? throw new ArgumentNullException("composerContext");
+            ProductViewService = productViewService ?? throw new ArgumentNullException("productViewService");
+            ProductSpecificationsViewService = productSpecificationsViewService ?? throw new ArgumentNullException("productSpecificationsViewService");
+            RelatedProductViewService = relatedProductViewService ?? throw new ArgumentNullException("relatedProductViewService");
         }
 
         [ActionName("calculatePrices")]

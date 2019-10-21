@@ -159,8 +159,8 @@
     <Reference Include="Orckestra.Composer.Store, Version=4.8.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Composer.4.8.0-Build\lib\net461\Orckestra.Composer.Store.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.ExperienceManagement.Configuration, Version=4.0.0.3, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Orckestra.ExperienceManagement.Configuration.4.0.0.3\lib\net471\Orckestra.ExperienceManagement.Configuration.dll</HintPath>
+    <Reference Include="Orckestra.ExperienceManagement.Configuration, Version=4.0.0.4, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Orckestra.ExperienceManagement.Configuration.4.0.0.4\lib\net471\Orckestra.ExperienceManagement.Configuration.dll</HintPath>
     </Reference>
     <Reference Include="Orckestra.Logging, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\OrckestraCommerce.Common.4.0.0-beta0001\lib\net461\Orckestra.Logging.dll</HintPath>
@@ -330,12 +330,19 @@
     <Compile Include="Providers\WishListUrlProvider.cs" />
     <Compile Include="Services\BreadcrumbViewService.cs" />
     <Compile Include="Mappers\NavigationMapper.cs" />
+    <Compile Include="Services\Cache\CacheDependentEntry.cs" />
+    <Compile Include="Services\Cache\CacheDependentOperations.cs" />
+    <Compile Include="Services\Cache\DependentCacheStore.cs" />
     <Compile Include="Services\CategoryMetaContext.cs" />
     <Compile Include="Services\DataQuery\DataQueryService.cs" />
-    <Compile Include="Services\Facet\FacetConfigurationCache.cs" />
+    <Compile Include="Services\Cache\CacheStore.cs" />
+    <Compile Include="Services\Cache\CacheService.cs" />
     <Compile Include="Services\Facet\FacetConfigurationContext.cs" />
     <Compile Include="Services\DataQuery\IDataQueryService.cs" />
-    <Compile Include="Services\Facet\IFacetConfigurationCache.cs" />
+    <Compile Include="Services\Cache\ICacheService.cs" />
+    <Compile Include="Services\Cache\ICacheStore.cs" />
+    <Compile Include="Services\PreviewMode\PreviewModeService.cs" />
+    <Compile Include="Services\PreviewMode\IPreviewModeService.cs" />
     <Compile Include="Services\WebsiteContext.cs" />
     <Compile Include="Settings\RecurringOrdersSettings.cs" />
     <Compile Include="Settings\GoogleSettings.cs" />
@@ -361,6 +368,7 @@
     <Compile Include="Services\MyAccountViewService.cs" />
     <Compile Include="Services\PageService.cs" />
     <Compile Include="UrlRewriteModule.cs" />
+    <Compile Include="Utils\HttpContextHelper.cs" />
     <Compile Include="Utils\UrlUtils.cs" />
   </ItemGroup>
   <ItemGroup>

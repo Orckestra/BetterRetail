@@ -71,13 +71,13 @@ namespace Orckestra.Composer.Search.Services
             LocalizationProvider = localizationProvider ?? throw new ArgumentNullException(nameof(localizationProvider));
             ProductUrlProvider = productUrlProvider ?? throw new ArgumentNullException(nameof(productUrlProvider));
             SearchUrlProvider = searchUrlProvider ?? throw new ArgumentNullException(nameof(searchUrlProvider));
-            FacetFactory = facetFactory ?? throw new ArgumentNullException(nameof(facetFactory));
             SelectedFacetFactory = selectedFacetFactory ?? throw new ArgumentNullException(nameof(selectedFacetFactory));
+            FacetFactory = facetFactory ?? throw new ArgumentNullException(nameof(facetFactory));
             PriceProvider = priceProvider ?? throw new ArgumentNullException(nameof(priceProvider));
             ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
             ProductSettings = productSettings ?? throw new ArgumentNullException(nameof(productSettings));
             ScopeViewService = scopeViewService ?? throw new ArgumentNullException(nameof(scopeViewService));
-            RecurringOrdersSettings = recurringOrdersSettings;
+            RecurringOrdersSettings = recurringOrdersSettings ?? throw new ArgumentNullException(nameof(recurringOrdersSettings));
         }
 
         protected virtual IList<Facet> BuildFacets(SearchCriteria criteria, ProductSearchResult searchResult)
@@ -526,10 +526,23 @@ namespace Orckestra.Composer.Search.Services
 
             if (searchResult == null) { return null; }
 
-            var getImageParam = new GetProductMainImagesParam
+            var imageUrls = await DamProvider.GetProductMainImagesAsync(GetImagesParam(searchResult.Documents)).ConfigureAwait(false);
+           
+            var createSearchViewModelParam = new CreateProductSearchResultsViewModelParam<TParam>
+            {
+                SearchParam = cloneParam,
+                ImageUrls = imageUrls,
+                SearchResult = searchResult
+            };
+
+            return await CreateProductSearchResultsViewModelAsync(createSearchViewModelParam).ConfigureAwait(false);
+        }
+        private static GetProductMainImagesParam GetImagesParam(List<ProductDocument> documnets)
+        {
+            return new GetProductMainImagesParam
             {
                 ImageSize = SearchConfiguration.DefaultImageSize,
-                ProductImageRequests = searchResult.Documents
+                ProductImageRequests = documnets
                     .Select(document => new ProductImageRequest
                     {
                         ProductId = document.ProductId,
@@ -542,17 +555,6 @@ namespace Orckestra.Composer.Search.Services
                         PropertyBag = document.PropertyBag
                     }).ToList()
             };
-
-            var imageUrls = await DamProvider.GetProductMainImagesAsync(getImageParam).ConfigureAwait(false);
-
-            var createSearchViewModelParam = new CreateProductSearchResultsViewModelParam<TParam>
-            {
-                SearchParam = cloneParam,
-                ImageUrls = imageUrls,
-                SearchResult = searchResult
-            };
-
-            return await CreateProductSearchResultsViewModelAsync(createSearchViewModelParam).ConfigureAwait(false);
         }
 
         private static string TrimProductDisplayName(string displayName)

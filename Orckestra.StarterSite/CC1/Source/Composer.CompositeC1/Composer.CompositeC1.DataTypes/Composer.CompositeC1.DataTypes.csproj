@@ -131,6 +131,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Facets\IFacetConfigurationMeta.cs" />
+    <Compile Include="IPreviewModeMeta.cs" />
     <Compile Include="StartupHandler.cs" />
     <Compile Include="RecurringOrdersSettings.cs" />
     <Compile Include="GoogleSettings.cs" />

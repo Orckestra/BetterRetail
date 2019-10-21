@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Orckestra.Overture.ServiceModel.Products;
 
 namespace Orckestra.Composer.Providers.Dam
 {
@@ -7,7 +8,7 @@ namespace Orckestra.Composer.Providers.Dam
         public GetAllProductImagesParam()
         {
             PropertyBag = new Dictionary<string, object>();
-            Variants = new List<VariantKey>();
+            Variants = new List<Variant>();
         }
 
         /// <summary>
@@ -36,7 +37,7 @@ namespace Orckestra.Composer.Providers.Dam
         /// <summary>
         /// Variant Unique identification including the Id and the KVAs
         /// </summary>
-        public IList<VariantKey> Variants { get; set; }
+        public IList<Variant> Variants { get; set; }
 
         /// <summary>
         /// Bag of additionnal properties related to the Product
@@ -51,6 +52,16 @@ namespace Orckestra.Composer.Providers.Dam
         /// <value>
         /// The name of the product definition.
         /// </value>
-        public string ProductDefinitionName { get; set; }        
+        public string ProductDefinitionName { get; set; }
+
+        /// <summary>
+        /// The list of media of the Product
+        /// </summary>
+        public List<ProductMedia> MediaSet { get; set; }
+
+        /// <summary>
+        /// The list of variant media of the Product
+        /// </summary>
+        public List<VariantMediaSet> VariantMediaSet { get; set; }
     }
 }
