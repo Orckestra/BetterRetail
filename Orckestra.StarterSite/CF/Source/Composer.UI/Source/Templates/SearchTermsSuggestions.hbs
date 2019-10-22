@@ -1,16 +1,12 @@
-﻿{{#if this}}
-    <div class="panel panel-suggestion">
-        <div class="panel-heading">{{localize 'General' 'L_Suggest_Suggestions'}}</div>
-        <div class="panel-body">
-            <ul>
-                {{#each this}}
-                    <li>
-                        <a data-oc-click="selectedSearchTermsSuggestion" data-suggestion="{{DisplayName}}" role="link" tabindex="0">{{ DisplayName }}</a>
-                    </li>
-                {{/each}}
-            </ul>
-        </div>
+﻿<div class="panel panel-suggestion">
+    <div class="panel-heading">{{localize 'General' 'L_Suggest_Suggestions'}}</div>
+    <div class="panel-body">
+        <ul>
+            {{#each this}}
+                <li>
+                    <a data-oc-click="selectedSearchTermsSuggestion" data-suggestion="{{DisplayName}}" role="link" tabindex="0">{{ DisplayName }}</a>
+                </li>
+            {{/each}}
+        </ul>
     </div>
-{{else}}
-    <div class="js-suggestion-empty"></div>
-{{/if}}
+</div>

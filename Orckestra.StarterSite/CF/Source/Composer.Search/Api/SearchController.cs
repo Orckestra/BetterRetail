@@ -1,6 +1,5 @@
 ﻿using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
-using Orckestra.Composer.Search;
 using Orckestra.Composer.Search.Services;
 using Orckestra.Composer.Search.ViewModels;
 using Orckestra.Composer.Search.ViewModels.Metadata;
@@ -54,7 +53,7 @@ namespace Orckestra.Composer.Search.Api
      
         [ActionName("autocomplete")]
         [HttpPost]
-        public virtual async Task<IHttpActionResult> AutoComplete(AutoCompleteSearchViewModel request)
+        public virtual async Task<IHttpActionResult> AutoComplete(AutoCompleteSearchViewModel request, int limit = MAXIMUM_AUTOCOMPLETE_RESULT)
         {
             var originalSearchTerms = request.Query.Trim();
             var searchTerms = MultiWordSynonymHelper.ExceptionMapOutput(originalSearchTerms, ComposerContext.CultureInfo.Name); ;
@@ -62,7 +61,7 @@ namespace Orckestra.Composer.Search.Api
             var searchCriteria = new SearchCriteria
             {
                 Keywords = searchTerms,
-                NumberOfItemsPerPage = MAXIMUM_AUTOCOMPLETE_RESULT,
+                NumberOfItemsPerPage = limit,
                 IncludeFacets = false,
                 StartingIndex = 0,
                 SortBy = "score",
@@ -87,7 +86,7 @@ namespace Orckestra.Composer.Search.Api
             if (searchResultsViewModel != null && searchResultsViewModel.ProductSearchResults.SearchResults != null && searchResultsViewModel.ProductSearchResults.TotalCount > 0)
             {
                 vm.Products = new List<ProductSearchViewModel>();
-                vm.Products.AddRange(searchResultsViewModel.ProductSearchResults.SearchResults.Take(MAXIMUM_AUTOCOMPLETE_RESULT));
+                vm.Products.AddRange(searchResultsViewModel.ProductSearchResults.SearchResults.Take(limit));
                 vm.Products.ForEach(p => p.AsExtensionModel<IProductSearchViewModelMetadata>().SearchTerm = searchTerms);
             }
 
@@ -99,7 +98,7 @@ namespace Orckestra.Composer.Search.Api
 
         [ActionName("suggestCategories")]
         [HttpPost]
-        public virtual async Task<IHttpActionResult> SuggestCategories(AutoCompleteSearchViewModel request)
+        public virtual async Task<IHttpActionResult> SuggestCategories(AutoCompleteSearchViewModel request, int limit = MAXIMUM_CATEGORIES_SUGGESTIONS)
         {
 
             string language = ComposerContext.CultureInfo.Name;
@@ -148,7 +147,7 @@ namespace Orckestra.Composer.Search.Api
 
             List<CategorySuggestionViewModel> finalSuggestions = categorySuggestionList
                 .Where((suggestion) => suggestion.DisplayName.ToLower().Contains(searchTerm))
-                .Take(MAXIMUM_CATEGORIES_SUGGESTIONS)
+                .Take(limit)
                 .ToList();
 
             CategorySuggestionsViewModel vm = new CategorySuggestionsViewModel();
@@ -159,7 +158,7 @@ namespace Orckestra.Composer.Search.Api
       
         [ActionName("suggestBrands")]
         [HttpPost]
-        public virtual async Task<IHttpActionResult> SuggestBrands(AutoCompleteSearchViewModel request)
+        public virtual async Task<IHttpActionResult> SuggestBrands(AutoCompleteSearchViewModel request, int limit = MAXIMUM_BRAND_SUGGESTIONS)
         {
             string searchTerm = request.Query.Trim().ToLower();
 
@@ -175,11 +174,7 @@ namespace Orckestra.Composer.Search.Api
             });
 
             //TODO - Since locally we don't have a lot of brands, for now let's take them all
-            List<BrandSuggestionViewModel> brandSuggestions = brandList.Where((suggestion) => suggestion.DisplayName.ToLower().Contains(searchTerm)).Take(MAXIMUM_BRAND_SUGGESTIONS).ToList();
-
-            //PATCH for now because we don't have a lot of brands. If there are no brands then take them without filtering
-            brandSuggestions = brandSuggestions.Count == 0 ? brandList.Take(MAXIMUM_BRAND_SUGGESTIONS).ToList() : brandSuggestions;
-            //END-PATCH
+            List<BrandSuggestionViewModel> brandSuggestions = brandList.Where((suggestion) => suggestion.DisplayName.ToLower().Contains(searchTerm)).Take(limit).ToList();
 
             BrandSuggestionsViewModel vm = new BrandSuggestionsViewModel();
             vm.Suggestions = brandSuggestions.Count > 0 ? brandSuggestions : null;

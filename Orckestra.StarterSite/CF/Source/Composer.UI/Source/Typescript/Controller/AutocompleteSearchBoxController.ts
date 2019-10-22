@@ -18,17 +18,34 @@ module Orckestra.Composer {
 
             this.searchService['_baseSearchUrl'] = $('#frm-search-box').attr('action');
 
-            let products = this.GetBloodhoundInstance('products', 8, '/api/search/autocomplete');
+            let searchBox = $('#search-box');
+            let datasetList = [];
+            let rightSuggestionCount = 0;
+
+            let products = this.getBloodhoundInstance('products', searchBox.data('autocomplete-limit'), '/api/search/autocomplete');
             products.initialize();
+            datasetList.push(this.getDataSetInst('Products', products, 'SearchSuggestions', 'SearchSuggestionsEmpty'));
 
-            let searchTerms = this.GetBloodhoundInstance('searchTerms', 5, '/api/search/suggestTerms');
-            searchTerms.initialize();
+            if (searchBox.data('search-terms-enable') === 'True') {
+                let searchTerms = this.getBloodhoundInstance('searchTerms', searchBox.data('search-terms-limit'), '/api/search/suggestTerms');
+                searchTerms.initialize();
+                datasetList.push(this.getDataSetInst('SearchTerms', searchTerms, 'SearchTermsSuggestions', 'SearchTermsSuggestionsEmpty'));
+                rightSuggestionCount++;
+            }
 
-            let categories = this.GetBloodhoundInstance('categories', 4, '/api/search/suggestCategories');
-            categories.initialize();
+            if (searchBox.data('categories-enable') === 'True') {
+                let categories = this.getBloodhoundInstance('categories', searchBox.data('categories-limit'), '/api/search/suggestCategories');
+                categories.initialize();
+                datasetList.push(this.getDataSetInst('Categories', categories, 'CategorySuggestions', 'CategorySuggestionsEmpty'));
+                rightSuggestionCount++;
+            }
 
-            let brands = this.GetBloodhoundInstance('brands', 3, '/api/search/suggestBrands');
-            brands.initialize();
+            if (searchBox.data('brands-enable') === 'True') {
+                let brands = this.getBloodhoundInstance('brands', searchBox.data('brand-limit'), '/api/search/suggestBrands');
+                brands.initialize();
+                datasetList.push(this.getDataSetInst('Brands', brands, 'BrandSuggestions', 'BrandSuggestionsEmpty'));
+                rightSuggestionCount++;
+            }
 
             $('#search-box .js-typeahead').typeahead({
                     minLength: 3,
@@ -36,47 +53,12 @@ module Orckestra.Composer {
                     hint: true,
                     //async: true
                 },
-                {
-                    name: 'Products',
-                    display: 'DisplayName',
-                    source: products.ttAdapter(),
-                    templates: {
-                        notFound: (<any>Orckestra.Composer).Templates['SearchSuggestionsEmpty'],
-                        suggestion: (<any>Orckestra.Composer).Templates['SearchSuggestions']
-                    }
-                },
-                {
-                    name: 'SearchTerms',
-                    display: 'DisplayName',
-                    source: searchTerms.ttAdapter(),
-                    templates: {
-                        notFound: (<any>Orckestra.Composer).Templates['SearchTermsSuggestionsEmpty'],
-                        suggestion: (<any>Orckestra.Composer).Templates['SearchTermsSuggestions']
-                    }
-                },
-                {
-                    name: 'Categories',
-                    display: 'DisplayName',
-                    source: categories.ttAdapter(),
-                    templates: {
-                        notFound: (<any>Orckestra.Composer).Templates['CategorySuggestionsEmpty'],
-                        suggestion: (<any>Orckestra.Composer).Templates['CategorySuggestions']
-                    }
-                },
-                {
-                    name: 'Brands',
-                    display: 'DisplayName',
-                    source: brands.ttAdapter(),
-                    templates: {
-                        notFound: (<any>Orckestra.Composer).Templates['BrandSuggestionsEmpty'],
-                        suggestion: (<any>Orckestra.Composer).Templates['BrandSuggestions']
-                    }
-                }
+                ...datasetList
             ).on('typeahead:render', (evt, suggestions) => {
                 //cache the rendered suggestion at the render complete
                 this.renderedSuggestions = suggestions;
 
-                if ($('.js-suggestion-empty').length === 4) {
+                if ($('.js-suggestion-empty').length === rightSuggestionCount) {
                     $('.tt-menu').addClass('right-empty');
                 } else {
                     $('.tt-menu').removeClass('right-empty');
@@ -92,12 +74,12 @@ module Orckestra.Composer {
             $('.tt-menu .tt-dataset:not(:first)').wrapAll('<div class="suggestion-right-col"></div>');
         }
 
-        private GetBloodhoundInstance (name, limit, url): Bloodhound<any> {
+        private getBloodhoundInstance (name, limit, url): Bloodhound<any> {
              return new Bloodhound({
                 name,
                 limit,
                 remote: {
-                    url,
+                    url: `${url}?limit=${limit}`,
                     prepare: ComposerClient.prepareBloodhound
                 },
                 datumTokenizer: function (datum) {
@@ -105,6 +87,18 @@ module Orckestra.Composer {
                 },
                 queryTokenizer: Bloodhound.tokenizers.whitespace
             });
+        }
+
+        private getDataSetInst(name: string, bloodhound: Bloodhound<any>, template: string, templateEmpty: string): Twitter.Typeahead.Dataset<any> {
+            return {
+                name,
+                display: 'DisplayName',
+                source: bloodhound.ttAdapter(),
+                templates: {
+                    notFound: (<any>Orckestra.Composer).Templates[templateEmpty],
+                    suggestion: (<any>Orckestra.Composer).Templates[template]
+                }
+            };
         }
 
         private resultsNotFound(evt) {
