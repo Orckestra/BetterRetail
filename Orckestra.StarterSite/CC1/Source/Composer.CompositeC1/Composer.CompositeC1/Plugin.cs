@@ -39,6 +39,7 @@ namespace Orckestra.Composer.CompositeC1
             host.Register<RecurringOrdersSettings, IRecurringOrdersSettings>(ComponentLifestyle.PerRequest);
             host.Register<GoogleSettings, IGoogleSettings>(ComponentLifestyle.PerRequest);
             host.Register<WebsiteContext, IWebsiteContext>(ComponentLifestyle.PerRequest);
+            host.Register<AntiCookieTamperingExcluder, IAntiCookieTamperingExcluder>();
             host.Register<Providers.ScopeProvider, IScopeProvider>(ComponentLifestyle.PerRequest);
             host.Register<Providers.ProductUrlProvider, IProductUrlProvider>(ComponentLifestyle.PerRequest);
             host.Register<Providers.CountryCodeProvider, ICountryCodeProvider>(ComponentLifestyle.PerRequest);
@@ -69,7 +70,6 @@ namespace Orckestra.Composer.CompositeC1
             host.Register<SettingsFromConfigFileService, ISettingsService>();
             host.Register<MyAccountViewService, IMyAccountViewService>();
             host.Register<PageNotFoundUrlProvider, IPageNotFoundUrlProvider>();
-            host.Register<AntiCookieTamperingExcluder, IAntiCookieTamperingExcluder>();
             host.Register<C1PerformanceDataCollector, IPerformanceDataCollector>();
             host.Register<DataQueryService, IDataQueryService>();
             host.Register<SiteConfiguration, ISiteConfiguration>(ComponentLifestyle.Singleton);
