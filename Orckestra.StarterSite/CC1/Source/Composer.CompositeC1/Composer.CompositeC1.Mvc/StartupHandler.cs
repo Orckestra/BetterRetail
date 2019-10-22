@@ -8,7 +8,6 @@ using Composite.Functions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Orckestra.Composer.CompositeC1.DataTypes;
-using Orckestra.Composer.CompositeC1.DataTypes.Navigation;
 using Orckestra.Composer.CompositeC1.Hangfire;
 using Orckestra.Composer.CompositeC1.Mvc.Controllers;
 using Orckestra.Composer.CompositeC1.Pages;
@@ -86,7 +85,6 @@ namespace Orckestra.Composer.CompositeC1.Mvc
             functions.RegisterAction<FooterController>("Copyright", "Composer.Footer.Copyright");
 
             functions.RegisterAction<SearchController>("PageHeader", "Composer.Search.PageHeader");
-            functions.RegisterAction<SearchController>("SearchBox", "Composer.SearchBox");
             functions.RegisterAction<SearchController>("Index", "Composer.Search.Index");
             functions.RegisterAction<SearchController>("SearchFacets", "Composer.Search.Facets");
             functions.RegisterAction<SearchController>("SearchSummary", "Composer.Search.Summary");

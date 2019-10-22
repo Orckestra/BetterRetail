@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
 using System.Globalization;
 using System.Web.Mvc;
 using Orckestra.Composer.CompositeC1.Services;
@@ -16,7 +13,6 @@ using Orckestra.Composer.Services;
 using Orckestra.Composer.Utils;
 using System.Linq;
 using Orckestra.Composer.CompositeC1.Controllers.Helpers;
-using Orckestra.ExperienceManagement.Configuration;
 using Composite.Data;
 using Orckestra.Composer.Search.RequestConstants;
 
@@ -30,8 +26,6 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         protected ILanguageSwitchService LanguageSwitchService { get; private set; }
         protected ISearchBreadcrumbViewService SearchBreadcrumbViewService { get; private set; }
         protected ISearchUrlProvider SearchUrlProvider { get; private set; }
-        protected ISiteConfiguration SiteConfiguration { get; private set; }
-        protected PagesConfiguration PagesConfiguration { get; private set; }
 
         protected SearchBaseController(
             IComposerContext composerContext,
@@ -39,35 +33,14 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             ISearchRequestContext searchRequestContext,
             ILanguageSwitchService languageSwitchService,
             ISearchBreadcrumbViewService searchBreadcrumbViewService,
-            ISearchUrlProvider searchUrlProvider,
-            ISiteConfiguration siteConfiguration)
+            ISearchUrlProvider searchUrlProvider)
         {
-            if (composerContext == null) { throw new ArgumentNullException("composerContext"); }
-            if (pageService == null) { throw new ArgumentNullException("pageService"); }
-            if (searchRequestContext == null) { throw new ArgumentNullException("searchRequestContext"); }
-            if (languageSwitchService == null) { throw new ArgumentNullException("languageSwitchService"); }
-            if (searchBreadcrumbViewService == null) { throw new ArgumentNullException("searchBreadcrumbViewService"); }
-            if (searchUrlProvider == null) { throw new ArgumentNullException("searchUrlProvider"); }
-
-            ComposerContext = composerContext;
-            PageService = pageService;
-            SearchRequestContext = searchRequestContext;
-            LanguageSwitchService = languageSwitchService;
-            SearchBreadcrumbViewService = searchBreadcrumbViewService;
-            SearchUrlProvider = searchUrlProvider;
-            SiteConfiguration = siteConfiguration;
-            PagesConfiguration = siteConfiguration.GetPagesConfiguration();
-        }
-
-        public virtual ActionResult SearchBox(string keywords)
-        {
-            var searchBoxViewModel = new SearchBoxViewModel
-            {
-                Keywords = keywords ?? string.Empty,
-                ActionTarget = PageService.GetRendererPageUrl(PagesConfiguration.SearchPageId, ComposerContext.CultureInfo)
-            };
-
-            return View(searchBoxViewModel);
+            ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
+            PageService = pageService ?? throw new ArgumentNullException(nameof(pageService));
+            SearchRequestContext = searchRequestContext ?? throw new ArgumentNullException(nameof(searchRequestContext));
+            LanguageSwitchService = languageSwitchService ?? throw new ArgumentNullException(nameof(languageSwitchService));
+            SearchBreadcrumbViewService = searchBreadcrumbViewService ?? throw new ArgumentNullException(nameof(searchBreadcrumbViewService));
+            SearchUrlProvider = searchUrlProvider ?? throw new ArgumentNullException(nameof(searchUrlProvider));
         }
 
         public virtual ActionResult Index(

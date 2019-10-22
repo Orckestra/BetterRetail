@@ -4,7 +4,6 @@ using Orckestra.Composer.Providers;
 using Orckestra.Composer.Search.Context;
 using Orckestra.Composer.Search.Services;
 using Orckestra.Composer.Services;
-using Orckestra.ExperienceManagement.Configuration;
 
 namespace Orckestra.Composer.CompositeC1.Mvc.Controllers
 {
@@ -16,17 +15,14 @@ namespace Orckestra.Composer.CompositeC1.Mvc.Controllers
             ISearchRequestContext searchRequestContext, 
             ILanguageSwitchService languageSwitchService, 
             ISearchBreadcrumbViewService searchBreadcrumbViewService,
-            ISearchUrlProvider searchUrlProvider,
-            ISiteConfiguration siteConfiguration) 
-            
+            ISearchUrlProvider searchUrlProvider)
             : base(
             composerContext, 
             pageService, 
             searchRequestContext, 
             languageSwitchService, 
             searchBreadcrumbViewService,
-            searchUrlProvider,
-            siteConfiguration)
+            searchUrlProvider)
         {
         }
     }

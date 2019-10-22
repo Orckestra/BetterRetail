@@ -1,0 +1,53 @@
+@inherits RazorFunction
+@using Orckestra.Composer.CompositeC1.Services;
+@using Orckestra.Composer.Services;
+@using Orckestra.ExperienceManagement.Configuration;
+@using Orckestra.Composer.Providers.Localization
+
+
+@functions {
+    public IPageService PageService { get; set; }
+    public IComposerContext ComposerContext { get; set; }
+    public ISiteConfiguration SiteConfiguration { get; set; }
+
+    [FunctionParameter(Label = "Autocomplete", Help = "Enable autocomplete suggestions", DefaultValue = false)]
+    public bool Autocomplete { get; set; }
+}
+
+@{
+    var cultureInfo = ComposerContext.CultureInfo;
+    var searchPageId = SiteConfiguration.GetPagesConfiguration().SearchPageId;
+
+    var keywords = string.Empty;
+    var actionTarget = PageService.GetRendererPageUrl(searchPageId, cultureInfo);
+    var dataController = Autocomplete ? "General.AutocompleteSearchBox" : "General.SearchBox";
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<head>
+</head>
+<body>
+    <div id="search-box" class="search-box" data-oc-controller="@dataController">
+        <form method="GET" action="@actionTarget" id="frm-search-box">
+            <div class="form-group">
+                <div class="input-group">
+                    <input id="search-input" data-qa="search-input" class="form-control form-control-sm js-typeahead" type="search" name="keywords"
+                           placeholder="@LocalizationHelper.Localize("List-Search", "F_SearchWaterMark", cultureInfo)" value="@keywords"
+                           required="required"
+                           data-parsley-required-message=""
+                           data-parsley-antixss="true"
+                           data-parsley-antixss-message="@LocalizationHelper.Localize("Errors", "L_InvalidCharsInSearchBox", cultureInfo)"
+                           data-parsley-class-handler-selector="form"
+                           data-parsley-errors-container="#search-errors" />
+                    <span class="input-group-btn">
+                        <button data-qa="search-button" class="btn  btn-default" title="@LocalizationHelper.Localize("List-Search", "B_Search", cultureInfo)" type="submit"><span class="fa  fa-search"></span></button>
+                    </span>
+                </div>
+
+                <div id="search-errors">
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
