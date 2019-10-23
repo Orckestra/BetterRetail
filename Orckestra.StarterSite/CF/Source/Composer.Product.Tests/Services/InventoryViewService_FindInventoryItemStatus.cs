@@ -44,7 +44,7 @@ namespace Orckestra.Composer.Product.Tests.Services
                 }
                 });
 
-            var viewModelMapper = FakeViewModelMapper.CreateFake(typeof(ProductPriceViewService).Assembly);
+            var viewModelMapper = FakeViewModelMapper.CreateFake(typeof(InventoryViewService).Assembly);
 
             var inventoryViewService = new InventoryViewService(inventoryRepository.Object, viewModelMapper);
             var viewModel = await inventoryViewService.FindInventoryItemStatus(new FindInventoryItemStatusParam
@@ -92,7 +92,7 @@ namespace Orckestra.Composer.Product.Tests.Services
                 }
                 });
 
-            var viewModelMapper = FakeViewModelMapper.CreateFake(typeof(ProductPriceViewService).Assembly);
+            var viewModelMapper = FakeViewModelMapper.CreateFake(typeof(InventoryViewService).Assembly);
 
             var inventoryViewService = new InventoryViewService(inventoryRepository.Object, viewModelMapper);
             var viewModel = await inventoryViewService.FindInventoryItemStatus(new FindInventoryItemStatusParam
