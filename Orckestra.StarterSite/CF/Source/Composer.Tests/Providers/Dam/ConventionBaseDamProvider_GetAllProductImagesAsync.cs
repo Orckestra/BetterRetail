@@ -397,6 +397,10 @@ namespace Orckestra.Composer.Tests.Providers.Dam
             {
                 { GetRandom.String(5), GetRandom.String(5) as object }
             };
+            var productMedia = GetProductMediaMock(new string[] { ImageSize, ThumbnailImageSize, ProductZoomImageSize });
+            var variant1Id = GetRandom.String(5);
+            var variant2Id = GetRandom.String(5);
+            var imageUrl = productMedia.ResizedInstances.FirstOrDefault(instance => instance.Size == ImageSize).Url.Substring(1);
 
             var param = new GetAllProductImagesParam()
             {
@@ -408,15 +412,15 @@ namespace Orckestra.Composer.Tests.Providers.Dam
                 {
                     new Variant
                     {
-                        Id = GetRandom.String(5),
+                        Id = variant1Id,
                         PropertyBag = PropertyBag
                     },
                     new Variant
                     {
-                        Id = GetRandom.String(5),
+                        Id = variant2Id,
                         MediaSet = new List<ProductMedia>()
                         {
-                            GetProductMediaMock(new string[] { ImageSize, ThumbnailImageSize, ProductZoomImageSize }),
+                            productMedia,
                         }
                     },
                 },
@@ -433,7 +437,10 @@ namespace Orckestra.Composer.Tests.Providers.Dam
             results.Where(result => string.IsNullOrWhiteSpace(result.ProductZoomImageUrl)).Should().NotBeNullOrEmpty("Because results should have a unknown Product Zoom Image url");
             results.Where(result => result.ProductId != expectedProductId).Should().BeEmpty("Because all results should match the requested product id");
             results.Where(result => result.ProductId == expectedProductId).Should().NotBeNullOrEmpty("Because the product must be found");
-            results.Where(result => !string.IsNullOrWhiteSpace(result.ImageUrl)).Should().ContainSingle("Because results should have a one know default Image url");
+
+            results.FirstOrDefault(result => result.VariantId == null).ImageUrl.Should().Be("");
+            results.FirstOrDefault(result => result.VariantId == variant1Id).ImageUrl.Should().Be("");
+            results.FirstOrDefault(result => result.VariantId == variant2Id).ImageUrl.Contains(imageUrl).Should().Be(true);
         }
     }
 }
