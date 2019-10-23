@@ -7,6 +7,7 @@ module Orckestra.Composer {
 
         private renderedSuggestions;
         private searchService: AutocompleteSearchService;
+        private searchTerm: string;
 
         public initialize() {
             super.initialize();
@@ -65,6 +66,8 @@ module Orckestra.Composer {
                 }
 
             }).on('typeahead:asyncreceive', (evt) => {
+                this.searchTerm = (evt.currentTarget as HTMLInputElement).value;
+
                 if (this.renderedSuggestions === undefined) {
                     this.resultsNotFound(evt);
                 }
@@ -144,5 +147,9 @@ module Orckestra.Composer {
             });
         }
 
+        public showMoreResults() {
+            $('#search-box #search-input').val(this.searchTerm);
+            $('#frm-search-box').submit();
+        }
     }
 }

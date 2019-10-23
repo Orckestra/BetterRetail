@@ -39,7 +39,7 @@
     var cultureInfo = ComposerContext.CultureInfo;
     var searchPageId = SiteConfiguration.GetPagesConfiguration().SearchPageId;
 
-    var keywords = string.Empty;
+    var keywords =  Request.QueryString["keywords"] ?? string.Empty;
     var actionTarget = PageService.GetRendererPageUrl(searchPageId, cultureInfo);
     var dataController = Autocomplete ? "General.AutocompleteSearchBox" : "General.SearchBox";
 }
