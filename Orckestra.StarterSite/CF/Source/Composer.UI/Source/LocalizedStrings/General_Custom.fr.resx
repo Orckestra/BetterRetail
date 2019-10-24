@@ -121,13 +121,13 @@
     <value>Remplissez cette feuille avec vos localisations personalisées.</value>
   </data>
   <data name="L_Suggest_Brands" xml:space="preserve">
-    <value>Brands</value>
+    <value>Marques</value>
   </data>
   <data name="L_Suggest_Categories" xml:space="preserve">
-    <value>Categories</value>
+    <value>Les catégories</value>
   </data>
   <data name="L_Suggest_PossibleMatches" xml:space="preserve">
-    <value>Top Results</value>
+    <value>Top résultats</value>
   </data>
   <data name="L_Suggest_Suggestions" xml:space="preserve">
     <value>Suggestions</value>
