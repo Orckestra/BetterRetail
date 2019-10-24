@@ -22,24 +22,24 @@
     [FunctionParameter(Label = "SearchTerms", Help = "Enable search terms suggestions", DefaultValue = false)]
     public bool SearchTerms { get; set; }
 
-    [FunctionParameter(Label = "MaxAutocompleteResult", Help = "Maximum autocomplete result count", DefaultValue = 8)]
-    public int MaxAutocompleteResult { get; set; }
+    [FunctionParameter(Label = "MaxProductsAutocompleteCount", Help = "Maximum autocomplete result count", DefaultValue = 8)]
+    public int MaxProductsAutocompleteCount { get; set; }
 
-    [FunctionParameter(Label = "MaxSearchTermsResult", Help = "Maximum search terms suggestions count", DefaultValue = 5)]
-    public int MaxSearchTermsSuggestions { get; set; }
+    [FunctionParameter(Label = "MaxSearchTermsSuggestionsCount", Help = "Maximum search terms suggestions count", DefaultValue = 5)]
+    public int MaxSearchTermsSuggestionsCount { get; set; }
 
-    [FunctionParameter(Label = "MaxCategoriesResult", Help = "Maximum categories suggestions count", DefaultValue = 4)]
-    public int MaxCategoriesSuggestions { get; set; }
+    [FunctionParameter(Label = "MaxCategoriesSuggestionsCount", Help = "Maximum categories suggestions count", DefaultValue = 4)]
+    public int MaxCategoriesSuggestionsCount { get; set; }
 
-    [FunctionParameter(Label = "MaxBrandSuggestions", Help = "Maximum brand suggestions count", DefaultValue = 3)]
-    public int MaxBrandSuggestions { get; set; }
+    [FunctionParameter(Label = "MaxBrandSuggestionsCount", Help = "Maximum brand suggestions count", DefaultValue = 3)]
+    public int MaxBrandSuggestionsCount { get; set; }
 }
 
 @{
     var cultureInfo = ComposerContext.CultureInfo;
     var searchPageId = SiteConfiguration.GetPagesConfiguration().SearchPageId;
 
-    var keywords =  Request.QueryString["keywords"] ?? string.Empty;
+    var keywords = Request.QueryString["keywords"] ?? string.Empty;
     var actionTarget = PageService.GetRendererPageUrl(searchPageId, cultureInfo);
     var dataController = Autocomplete ? "General.AutocompleteSearchBox" : "General.SearchBox";
 }
@@ -48,14 +48,14 @@
 <head>
 </head>
 <body>
-    <div id="search-box" class="search-box" data-oc-controller="@dataController" 
+    <div id="search-box" class="search-box" data-oc-controller="@dataController"
          data-categories-enable="@Categories"
          data-brands-enable="@Brands"
          data-search-terms-enable="@SearchTerms"
-         data-autocomplete-limit="@MaxAutocompleteResult"
-         data-search-terms-limit="@MaxSearchTermsSuggestions"
-         data-categories-limit="@MaxCategoriesSuggestions"
-         data-brand-limit="@MaxBrandSuggestions">
+         data-autocomplete-limit="@MaxProductsAutocompleteCount"
+         data-search-terms-limit="@MaxSearchTermsSuggestionsCount"
+         data-categories-limit="@MaxCategoriesSuggestionsCount"
+         data-brand-limit="@MaxBrandSuggestionsCount">
         <form method="GET" action="@actionTarget" id="frm-search-box">
             <div class="form-group">
                 <div class="input-group">
