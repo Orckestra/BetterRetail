@@ -1,0 +1,25 @@
+<?xml version="1.0" standalone="yes"?>
+<mi:PackageInstaller xmlns:mi="http://www.composite.net/ns/management/packageinstaller/1.0">
+	<mi:PackageRequirements minimumCompositeVersion="5.0" maximumCompositeVersion="9.9999.9999.9999" />
+  <mi:PackageInformation name="Orckestra.Composer.Articles" groupName="Orckestra.Composer" version="1.0.0" author="Orckestra " website="https://orckestra.com/" readMoreUrl="https://orckestra.com/" id="1820b656-e993-4dfa-bfd8-e6dc000e3ca3" canBeUninstalled="true" systemLocking="hard" flushOnCompletion="true" allowOverwrite="false" reloadConsoleOnCompletion="true">
+    <TechnicalDetails>-</TechnicalDetails>
+    <Description>-</Description>
+  </mi:PackageInformation>
+	
+	<mi:PackageFragmentInstallers>
+	
+		<mi:Add installerType="Composite.Core.PackageSystem.PackageFragmentInstallers.FilePackageFragmentInstaller, Composite" uninstallerType="Composite.Core.PackageSystem.PackageFragmentInstallers.FilePackageFragmentUninstaller, Composite">
+			<Files>
+        <File sourceFilename="~\Bin\Orckestra.Composer.Articles.dll" targetFilename="~\Bin\Orckestra.Composer.Articles.dll" allowOverwrite="true" />
+
+
+      </Files>
+      <Directories>
+        <Directory sourceDirectory="~\App_Data\Razor\Composer\Articles\" targetDirectory="~\App_Data\Razor\Composer\Articles\" allowOverwrite="true" deleteTargetDirectory="false" />
+        <Directory sourceDirectory="~\App_Data\Composite\DynamicTypeForms\" targetDirectory="~\App_Data\Composite\DynamicTypeForms\" allowOverwrite="true" deleteTargetDirectory="false" />
+        <Directory sourceDirectory="~\App_Data\Composite\TreeDefinitions\" targetDirectory="~\App_Data\Composite\TreeDefinitions\" allowOverwrite="true" deleteTargetDirectory="false" />
+      </Directories>
+		</mi:Add>
+		
+	</mi:PackageFragmentInstallers>
+</mi:PackageInstaller>

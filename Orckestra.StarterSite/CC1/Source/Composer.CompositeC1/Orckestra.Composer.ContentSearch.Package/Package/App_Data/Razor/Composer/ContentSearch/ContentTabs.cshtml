@@ -1,0 +1,392 @@
+@inherits RazorFunction
+@using Orckestra.Composer.Search.Context;
+@using Orckestra.Search.WebsiteSearch;
+@using Composite.Core.Routing.Pages;
+@using Composite.Search
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Shortly describe this function here"; }
+    }
+
+    [FunctionParameter(Label = "${Orckestra.Search.WebsiteSearch,SearchResults.PageSize.Label}",
+        Help = "${Orckestra.Search.WebsiteSearch,SearchResults.PageSize.Help}", DefaultValue = 6)]
+    public int PageSize { get; set; }
+
+    [FunctionParameter(Label = "${Orckestra.Search.WebsiteSearch,SearchResults.CurrentSite.Label}",
+        Help = "${Orckestra.Search.WebsiteSearch,SearchResults.CurrentSite.Help}", DefaultValue = true)]
+    public bool CurrentSite { get; set; }
+
+    [FunctionParameter(Label = "${Orckestra.Search.WebsiteSearch,SearchResults.ShowHighlights.Label}",
+    Help = "${Orckestra.Search.WebsiteSearch,SearchResults.ShowHighlights.Help}",
+    DefaultValue = false)]
+    public bool ShowHighlights { get; set; }
+
+    public ISearchRequestContext ProductsSearchRequestContext { get; set; }
+
+
+    private int PageNumber
+    {
+        get
+        {
+            int page;
+            return int.TryParse(Request["page"], out page) && page >= 1 ? page : 1;
+        }
+    }
+
+    public class TabContentitem
+    {
+
+        public string UrlTitle { get; set; }
+        public string Title { get; set; }
+        public WebsiteSearchResult ContentResult { get; set; }
+        public int Total { get; set; }
+
+    }
+
+    string GetSearchResultPageUrl(int pageNumber)
+    {
+        var parts = new List<string> { "?page=" + pageNumber };
+
+        var qs = Request.QueryString;
+        parts.AddRange(qs.AllKeys.Where(key => key != "page")
+                         .Select(key => Server.UrlEncode(key) + "=" + Server.UrlEncode(qs[key])));
+
+        return string.Join("&", parts);
+    }
+
+    private string[] GetFacetSelection(string fieldName)
+    {
+        var prefix = GetFacetFieldCheckboxPrefix(fieldName);
+        return Request.QueryString.AllKeys
+            .Where(key => key.StartsWith(prefix))
+            .Select(key => key.Substring(prefix.Length))
+            .ToArray();
+    }
+
+    string GetFacetFieldCheckboxPrefix(string fieldName)
+    {
+        return "f_" + fieldName + "_";
+    }
+
+}
+
+@{
+    C1PageRoute.RegisterPathInfoUsage();
+
+    string pathInfo = C1PageRoute.GetPathInfo();
+    string currentTabPathInfo = pathInfo?.Split('/')[1];
+
+    var contentTabs = Data.Get<Orckestra.Composer.ContentSearch.DataTypes.IContentTab>().Where(c => !string.IsNullOrEmpty(c.DataTypes)).OrderBy(t => t.Order).ToList();
+    var contentTabSortOptions = Data.Get<Orckestra.Composer.ContentSearch.DataTypes.ISortOption>().OrderBy(t => t.Order).ToList();
+
+    var productTab = Data.Get<Orckestra.Composer.ContentSearch.DataTypes.IContentTab>().FirstOrDefault(t => t.IsProductTab);
+    var isProductTab = (productTab != null && currentTabPathInfo == null) || (productTab != null && productTab.UrlTitle == currentTabPathInfo);
+
+    if (currentTabPathInfo == null)
+    {
+        currentTabPathInfo = productTab != null ? productTab.UrlTitle : contentTabs.First()?.UrlTitle;
+    }
+
+    List<TabContentitem> tabs = new List<TabContentitem>();
+
+    var searchQuery = Request.QueryString["keywords"] ?? string.Empty;
+
+    var sortBy = Request["sortBy"];
+    var sortDirection = Request["sortDirection"];
+
+    var productsSortBy = isProductTab ? sortBy : null;
+    var productsSortDirection = isProductTab ? sortDirection : null;
+    var productPage = isProductTab ? PageNumber : 1;
+
+    var productsResults = ProductsSearchRequestContext.GetSearchViewModelAsync(new Orckestra.Composer.Search.Parameters.GetSearchViewModelParam
+    {
+        Keywords = searchQuery,
+        Page = productPage,
+        Request = Request,
+        SortBy = productsSortBy,
+        SortDirection = productsSortDirection
+    });
+
+    var total = productsResults.Result != null ? productsResults.Result.ProductSearchResults.TotalCount : 0;
+
+    if (!string.IsNullOrWhiteSpace(searchQuery) && searchQuery.Length > 1)
+    {
+        // Tokenize
+        searchQuery = searchQuery.Trim().ToLower();
+        string[] keywords = searchQuery.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+        var knowTypes = DataFacade.GetAllInterfaces().ToDictionary(t => t.FullName);
+
+        foreach (var tab in contentTabs)
+        {
+
+            var tabTypes = tab.DataTypes.Split(',').ToList();
+            Type[] dataTypes = tabTypes != null ? tabTypes.Select(name => knowTypes[name]).ToArray() : null;
+
+            var tabFacetsToQuery = !string.IsNullOrEmpty(tab.Facets) ? tab.Facets.Split(',') : Array.Empty<string>();
+
+            var facets = currentTabPathInfo == tab.UrlTitle ? tabFacetsToQuery.Select(fieldName => new WebsiteSearchQueryFacet
+            {
+                Name = fieldName,
+                Selections = GetFacetSelection(fieldName)
+            }).ToArray() : null;
+
+            var sortOptions = new List<SearchQuerySortOption>();
+            if ((currentTabPathInfo == tab.UrlTitle) && !string.IsNullOrEmpty(sortDirection) && !string.IsNullOrEmpty(sortBy))
+            {
+
+                var isReverted = sortDirection == "desc" ? true : false;
+                sortOptions.Add(new SearchQuerySortOption(sortBy, isReverted, SortTermsAs.String));
+            }
+
+            var page = currentTabPathInfo == tab.UrlTitle ? PageNumber - 1 : 0;
+
+
+            var selectedMediaFolders = tab.MediaFolders != null ? DataFacade.GetData<IMediaFileFolder>().Where(p => tab.MediaFolders.Contains(p.KeyPath))
+                .Select(i => i.GetDataEntityToken()).ToArray() : null;
+
+            var result = WebsiteSearchFacade.Search(new WebsiteSearchQuery
+            {
+                Culture = Data.CurrentLocale,
+                Keywords = keywords,
+                DataTypes = dataTypes,
+                CurrentSiteOnly = CurrentSite,
+                PageNumber = page,
+                Facets = facets,
+                PageSize = PageSize,
+                SortOptions = sortOptions,
+                FilterByAncestorEntityTokens = selectedMediaFolders
+            });
+
+            total += result.ResultsFound;
+
+            tabs.Add(new TabContentitem
+            {
+                Title = tab.Title,
+                UrlTitle = tab.UrlTitle,
+                ContentResult = result,
+                Total = (int)Math.Ceiling((decimal)result.ResultsFound / PageSize)
+            });
+        }
+    }
+
+    var currentTab = tabs.FirstOrDefault(t => t.UrlTitle == currentTabPathInfo);
+}
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<head>
+    <script type="text/javascript" defer="defer">
+        function SubmitContentSearchForm(sortBy, sortDirection) {
+
+            if (sortBy) {
+                document.getElementById("sortBy").value = sortBy;
+            }
+
+            if (sortDirection) {
+                document.getElementById("sortDirection").value = sortDirection;
+            }
+
+            document.getElementById('SearchForm').submit();
+        }
+    </script>
+</head>
+<body>
+    <h1>@total search results for "@searchQuery"</h1>
+    <div>
+
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+
+            @if (productTab != null)
+            {
+                <li role="presentation"
+                    class="@(isProductTab ? "active" : "")">
+                    <a href="@CurrentPageNode.Url/@productTab.UrlTitle?keywords=@searchQuery">@productTab.Title (@productsResults.Result.ProductSearchResults.TotalCount)</a>
+                </li>
+            }
+            @foreach (var tab in tabs)
+            {
+                var classValue = currentTabPathInfo == @tab.UrlTitle ? "active" : "";
+                <li role="presentation" class="@classValue">
+                    <a href="@CurrentPageNode.Url/@tab.UrlTitle?keywords=@searchQuery">
+                        @tab.Title (@tab.ContentResult.ResultsFound)
+                    </a>
+                </li>
+            }
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content" style="margin-top: 20px;">
+            @if (isProductTab)
+            {
+                <f:function name="Composer.Search.Summary" xmlns:f="http://www.composite.net/ns/function/1.0" />
+                <f:function name="Composer.Grids.SearchGrid" xmlns:f="http://www.composite.net/ns/function/1.0">
+                    <f:param name="LeftPart">
+                        <html>
+                        <head>
+                        </head>
+                        <body>
+                            <f:function name="Composer.Search.SelectedSearchFacets" />
+                            <f:function name="Composer.Search.Facets" />
+                        </body>
+                    </html>
+                </f:param>
+                <f:param name="RightPart">
+                    <html>
+                    <head>
+                    </head>
+                    <body>
+                        <f:function name="Composer.Search.Index" />
+                    </body>
+                </html>
+            </f:param>
+        </f:function>
+
+    }
+    else
+    {
+        if (currentTab != null && currentTab.ContentResult.ResultsFound > 0)
+        {
+            <form id="SearchForm" class="search-form form-inline" action="@CurrentPageNode.Url/@currentTab.UrlTitle" method="get" role="search">
+                <input id="keywords" type="hidden" value="@searchQuery" name="keywords" />
+                <div class="row">
+                    <div class="col-xs-12 col-md-2">
+                        @ShowFacets(currentTab.ContentResult)
+                    </div>
+                    <div class="col-xs-12 col-md-10">
+                        <div class="row">
+                            <div class="col-xs-12 col-md-4">
+                                @if (contentTabSortOptions.Any())
+                                {
+                                    var selectedSortOption = contentTabSortOptions.Find(o => o.FieldName == sortBy && (o.IsReverted && sortDirection == "desc" || !o.IsReverted && sortDirection == "asc"));
+
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-default">
+                                            @if (selectedSortOption != null)
+                                            {
+                                                <span>@selectedSortOption.Title</span>
+                                            }
+                                            else
+                                            {
+                                                <span>Sort by...</span>
+                                            }
+                                        </button>
+                                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <span class="caret"></span>
+                                        </button>
+                                        <input type="hidden" id="sortDirection" name="sortDirection" value="@sortDirection" />
+                                        <input type="hidden" id="sortBy" name="sortBy" value="@sortBy" />
+                                        <ul class="dropdown-menu">
+                                            @foreach (var option in contentTabSortOptions)
+                                            {
+                                                var sortByOption = option.FieldName;
+                                                var sortDirectionOption = option.IsReverted ? "desc" : "asc";
+                                                <li>
+                                                    <a onClick="SubmitContentSearchForm('@sortByOption','@sortDirectionOption')">
+                                                        @option.Title
+                                                    </a>
+                                                </li>
+                                            }
+
+                                        </ul>
+                                    </div>
+                                }
+                            </div>
+                            <div class="col-xs-12 col-md-8">
+
+                                @if (currentTab.Total > 1)
+                                {
+                                    <ul class="pagination pull-right">
+                                        @for (int i = 1; i <= currentTab.Total; i++)
+                                        {
+                                            if (i == PageNumber)
+                                            {
+                                                <li class="active"><span>@i</span></li>
+                                            }
+                                            else
+                                            {
+                                                <li><a href="@GetSearchResultPageUrl(i)">@i</a></li>
+                                            }
+                                        }
+                                    </ul>
+                                }
+
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            @foreach (var entry in currentTab.ContentResult.Entries)
+                            {
+                                var image = entry.FieldValues.Where(p => p.Key.Contains("Image")).Select(v => v.Value).FirstOrDefault();
+                                var desc = entry.FieldValues.ContainsKey("desc") ? entry.FieldValues["desc"] : null;
+                                <div class="col-sm-6 col-md-4">
+                                    <div class="thumbnail">
+                                        @if (image != null)
+                                        {
+                                            <img class="" src="~/media(@image.ToString())" alt="@currentTab.Title" />
+                                        }
+
+                                        <div class="caption">
+                                            <h3><a href="@entry.Url">@Html.Raw(@entry.Title)</a></h3>
+                                        </div>
+                                        @if (desc != null)
+                                        {
+                                            <p>@desc</p>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </form>
+        }
+    }
+        </div>
+    </div>
+</body>
+</html>
+
+
+@helper ShowFacets(WebsiteSearchResult result)
+{
+    var labels = WebsiteSearchFacade.GetFacetOptions().ToDictionary(t => t.Item1, t => t.Item2);
+    var index = 0;
+    <div class="facets">
+        @foreach (var facet in result.Facets)
+        {
+            index++;
+            if (facet.Hits.Count == 0)
+            {
+                continue;
+            }
+            <div class="panel panel-default">
+                <div class="panel-heading"><a href="#facet@(index)" data-toggle="collapse">@labels[facet.Name]</a></div>
+                <div id="facet@(index)" class="panel-collapse collapse in">
+                    <div class="list-group">
+                        @foreach (var hit in facet.Hits)
+                        {
+                            string key = GetFacetFieldCheckboxPrefix(facet.Name) + hit.Value;
+                            bool isChecked = Request.QueryString.AllKeys.Contains(key);
+
+                            <div class="list-group-item">
+                                <label for="@key">
+                                    <input type="checkbox" name="@key"
+                                           onchange="SubmitContentSearchForm()"
+                                           @if (isChecked) { <text> checked="checked" </text> } />
+                                </label>
+                                @hit.Label
+                                <span class="badge">@hit.HitCount</span>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+        }
+    </div>
+}
