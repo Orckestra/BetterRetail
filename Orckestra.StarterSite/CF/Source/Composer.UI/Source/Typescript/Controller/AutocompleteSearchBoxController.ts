@@ -86,7 +86,7 @@ module Orckestra.Composer {
                     prepare: ComposerClient.prepareBloodhound,
                     transform: (response) => {
                         const suggestions = response[collectionName];
-                        return suggestions ? { suggestions } : {};
+                        return Array.isArray(suggestions) && suggestions.length > 0 ? { suggestions } : {};
                     }
                 },
                 datumTokenizer: (datum) => Bloodhound.tokenizers.obj.whitespace((<any>datum).val),

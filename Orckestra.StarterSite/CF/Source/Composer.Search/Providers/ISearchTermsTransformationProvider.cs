@@ -2,6 +2,6 @@
 {
     public interface ISearchTermsTransformationProvider
     {
-        string ExceptionMapOutput(string keyword, string cultureInfoName);
+        string TransformSearchTerm(string keyword, string cultureInfoName);
     }
 }

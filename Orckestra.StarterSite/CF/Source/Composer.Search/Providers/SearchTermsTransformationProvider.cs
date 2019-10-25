@@ -4,7 +4,7 @@
 
     public class SearchTermsTransformationProvider : ISearchTermsTransformationProvider
     {
-        public virtual string ExceptionMapOutput(string keyword, string cultureInfoName)
+        public virtual string TransformSearchTerm(string keyword, string cultureInfoName)
         {
             return keyword;
         }

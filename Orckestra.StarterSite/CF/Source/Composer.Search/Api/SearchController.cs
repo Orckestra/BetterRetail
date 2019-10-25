@@ -56,7 +56,7 @@ namespace Orckestra.Composer.Search.Api
         public virtual async Task<IHttpActionResult> AutoComplete(AutoCompleteSearchViewModel request, int limit = MAXIMUM_AUTOCOMPLETE_RESULT)
         {
             var originalSearchTerms = request.Query.Trim();
-            var searchTerms = SearchTermsTransformationProvider.ExceptionMapOutput(originalSearchTerms, ComposerContext.CultureInfo.Name); ;
+            var searchTerms = SearchTermsTransformationProvider.TransformSearchTerm(originalSearchTerms, ComposerContext.CultureInfo.Name); ;
 
             var searchCriteria = new SearchCriteria
             {
@@ -98,7 +98,6 @@ namespace Orckestra.Composer.Search.Api
         [HttpPost]
         public virtual async Task<IHttpActionResult> SuggestCategories(AutoCompleteSearchViewModel request, int limit = MAXIMUM_CATEGORIES_SUGGESTIONS)
         {
-
             string language = ComposerContext.CultureInfo.Name;
             string searchTerm = request.Query.Trim().ToLower();
 
@@ -107,8 +106,10 @@ namespace Orckestra.Composer.Search.Api
 
             List<CategorySuggestionViewModel> categorySuggestionList = new List<CategorySuggestionViewModel>();
 
-            categories.ForEach((category) =>
+            foreach (var category in categories)
             {
+                if (!category.DisplayName.TryGetValue(language, out string displayName)) continue;
+
                 // Find the parents of the category
                 List<Category> parents = new List<Category>();
                 Category currentNode = category;
@@ -120,36 +121,33 @@ namespace Orckestra.Composer.Search.Api
                 }
                 parents.Reverse();
 
-                string displayName;
-                bool success = category.DisplayName.TryGetValue(language, out displayName);
-                if (success)
-                {
-                    FacetValue categoryCount = categoryCounts
+                FacetValue categoryCount = categoryCounts
                         .Where((facet) => int.TryParse(CategoryFieldName.Match(facet.FieldName).Groups[1].Value, out int n) && parents.Count == n - 1)
                         .Single()
                         .Values
                         .Where((facetValue) => facetValue.Value == category.DisplayName[language]).SingleOrDefault();
-                    if (categoryCount != null)
+                
+                if (categoryCount != null)
+                {
+                    categorySuggestionList.Add(new CategorySuggestionViewModel
                     {
-                        categorySuggestionList.Add(new CategorySuggestionViewModel
-                        {
-                            DisplayName = displayName,
-                            Parents = parents.Select((parent) => parent.DisplayName[language]).ToList(),
-                            Quantity = categoryCount.Count
-                        });
-                    }
+                        DisplayName = displayName,
+                        Parents = parents.Select((parent) => parent.DisplayName[language]).ToList(),
+                        Quantity = categoryCount.Count
+                    });
                 }
-            });
-
-            categorySuggestionList = categorySuggestionList.OrderByDescending((category) => category.Quantity).ToList();
+            };
 
             List<CategorySuggestionViewModel> finalSuggestions = categorySuggestionList
+                .OrderByDescending((category) => category.Quantity)
                 .Where((suggestion) => suggestion.DisplayName.ToLower().Contains(searchTerm))
                 .Take(limit)
                 .ToList();
 
-            CategorySuggestionsViewModel vm = new CategorySuggestionsViewModel();
-            vm.Suggestions = finalSuggestions.Count > 0 ? finalSuggestions : null;
+            CategorySuggestionsViewModel vm = new CategorySuggestionsViewModel
+            {
+                Suggestions = finalSuggestions
+            };
 
             return Ok(vm);
         }
@@ -160,23 +158,16 @@ namespace Orckestra.Composer.Search.Api
         {
             string searchTerm = request.Query.Trim().ToLower();
 
-            //Load the brands
-            List<BrandSuggestionViewModel> brandList = new List<BrandSuggestionViewModel>();
             List<Facet> facets = await SearchViewService.GetBrandProductCounts(ComposerContext.CultureInfo.Name).ConfigureAwait(false);
-            facets.Single().Values.ForEach((facetValue) =>
+            List<BrandSuggestionViewModel> brandList = facets.Single().Values.Select(facetValue => new BrandSuggestionViewModel
             {
-                brandList.Add(new BrandSuggestionViewModel
-                {
-                    DisplayName = facetValue.DisplayName
-                });
-            });
+                DisplayName = facetValue.DisplayName
+            }).ToList();
 
-            //TODO - Since locally we don't have a lot of brands, for now let's take them all
-            List<BrandSuggestionViewModel> brandSuggestions = brandList.Where((suggestion) => suggestion.DisplayName.ToLower().Contains(searchTerm)).Take(limit).ToList();
-
-            BrandSuggestionsViewModel vm = new BrandSuggestionsViewModel();
-            vm.Suggestions = brandSuggestions.Count > 0 ? brandSuggestions : null;
-
+            BrandSuggestionsViewModel vm = new BrandSuggestionsViewModel()
+            {
+                Suggestions = brandList.Where((suggestion) => suggestion.DisplayName.ToLower().Contains(searchTerm)).Take(limit).ToList()
+            };
             return Ok(vm);
         }
        
