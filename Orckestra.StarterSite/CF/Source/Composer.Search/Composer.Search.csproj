@@ -138,7 +138,8 @@
     <Compile Include="Factory\IFacetFactory.cs" />
     <Compile Include="Factory\IFacetPredicateFactory.cs" />
     <Compile Include="Factory\SelectedFacetFactory.cs" />
-    <Compile Include="Helpers\MultiWordSynonymHelper.cs" />
+    <Compile Include="Services\IMultiWordSynonymService.cs" />
+    <Compile Include="Services\MultiWordSynonymService.cs" />
     <Compile Include="Helpers\ProductExtension.cs" />
     <Compile Include="Helpers\SearchSortByResolver.cs" />
     <Compile Include="Context\ISearchRequestContext.cs" />
@@ -177,12 +178,10 @@
     <Compile Include="Providers\SelectedFacet\RangeSelectedFacetProvider.cs" />
     <Compile Include="Providers\SelectedFacet\SingleSelectSelectedFacetProvider.cs" />
     <Compile Include="Repositories\IProductRequestFactory.cs" />
-    <Compile Include="Repositories\ISearchCategoryRepository.cs" />
     <Compile Include="Repositories\ISearchManagementRepository.cs" />
     <Compile Include="Repositories\ISearchRepository.cs" />
     <Compile Include="Repositories\ProductRequestFactory.cs" />
     <Compile Include="Parameters\RemoveSelectedFacetsFromFacetsParam.cs" />
-    <Compile Include="Repositories\SearchCategoryRepository.cs" />
     <Compile Include="Repositories\SearchManagementRepository.cs" />
     <Compile Include="RequestConstants\SearchRequestParams.cs" />
     <Compile Include="SearchConfiguration.cs" />

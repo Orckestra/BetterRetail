@@ -4,7 +4,6 @@ using Orckestra.Composer.Search.Services;
 using Orckestra.Composer.Search.ViewModels;
 using Orckestra.Composer.Search.ViewModels.Metadata;
 using Orckestra.Composer.Search.Repositories;
-using Orckestra.Composer.Search.Helpers;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Utils;
 using Orckestra.Composer.ViewModels;
@@ -35,19 +34,22 @@ namespace Orckestra.Composer.Search.Api
         protected IInventoryLocationProvider InventoryLocationProvider { get; private set; }
         protected ISearchUrlProvider SearchUrlProvider { get; private set; }
         protected ISearchManagementRepository SearchManagementRepository { get; private set; }
+        protected IMultiWordSynonymService MultiWordSynonymService { get; private set; }
 
         public SearchController(
             IComposerContext composerContext, 
             ISearchViewService searchViewService, 
             IInventoryLocationProvider inventoryLocationProvider, 
             ISearchUrlProvider searchUrlProvider, 
-            ISearchManagementRepository searchManagementRepository)
+            ISearchManagementRepository searchManagementRepository,
+            IMultiWordSynonymService sultiWordSynonymService)
         {
             ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
-            SearchViewService = searchViewService ?? throw new ArgumentNullException(nameof(composerContext));
-            InventoryLocationProvider = inventoryLocationProvider ?? throw new ArgumentNullException(nameof(composerContext));
-            SearchUrlProvider = searchUrlProvider ?? throw new ArgumentNullException(nameof(composerContext));
-            SearchManagementRepository = searchManagementRepository ?? throw new ArgumentNullException(nameof(composerContext));
+            SearchViewService = searchViewService ?? throw new ArgumentNullException(nameof(searchViewService));
+            InventoryLocationProvider = inventoryLocationProvider ?? throw new ArgumentNullException(nameof(inventoryLocationProvider));
+            SearchUrlProvider = searchUrlProvider ?? throw new ArgumentNullException(nameof(searchUrlProvider));
+            SearchManagementRepository = searchManagementRepository ?? throw new ArgumentNullException(nameof(searchManagementRepository));
+            MultiWordSynonymService = sultiWordSynonymService ?? throw new ArgumentNullException(nameof(sultiWordSynonymService));
         }
 
      
@@ -56,7 +58,7 @@ namespace Orckestra.Composer.Search.Api
         public virtual async Task<IHttpActionResult> AutoComplete(AutoCompleteSearchViewModel request, int limit = MAXIMUM_AUTOCOMPLETE_RESULT)
         {
             var originalSearchTerms = request.Query.Trim();
-            var searchTerms = MultiWordSynonymHelper.ExceptionMapOutput(originalSearchTerms, ComposerContext.CultureInfo.Name); ;
+            var searchTerms = MultiWordSynonymService.ExceptionMapOutput(originalSearchTerms, ComposerContext.CultureInfo.Name); ;
 
             var searchCriteria = new SearchCriteria
             {
@@ -73,21 +75,19 @@ namespace Orckestra.Composer.Search.Api
                 InventoryLocationIds = await InventoryLocationProvider.GetInventoryLocationIdsForSearchAsync().ConfigureAwait(false),
             };
 
-            var vm = new AutoCompleteViewModel();
             var searchResultsViewModel = await SearchViewService.GetSearchViewModelAsync(searchCriteria).ConfigureAwait(false);
-
-            if (searchResultsViewModel != null && searchResultsViewModel.ProductSearchResults.SearchResults != null &&
-                searchResultsViewModel.ProductSearchResults.TotalCount == 0)
+            if (searchResultsViewModel.ProductSearchResults?.TotalCount == 0 && originalSearchTerms != searchTerms)
             {
                 searchCriteria.Keywords = originalSearchTerms;
                 searchResultsViewModel = await SearchViewService.GetSearchViewModelAsync(searchCriteria).ConfigureAwait(false);
             }
 
-            if (searchResultsViewModel != null && searchResultsViewModel.ProductSearchResults.SearchResults != null && searchResultsViewModel.ProductSearchResults.TotalCount > 0)
+            var vm = new AutoCompleteViewModel();
+            if (searchResultsViewModel.ProductSearchResults?.SearchResults?.Count > 0)
             {
-                vm.Products = new List<ProductSearchViewModel>();
-                vm.Products.AddRange(searchResultsViewModel.ProductSearchResults.SearchResults.Take(limit));
-                vm.Products.ForEach(p => p.AsExtensionModel<IProductSearchViewModelMetadata>().SearchTerm = searchTerms);
+                vm.Products = searchResultsViewModel.ProductSearchResults.SearchResults.Take(limit)
+                    .Select(p => { p.AsExtensionModel<IProductSearchViewModelMetadata>().SearchTerm = searchTerms; return p; })
+                    .ToList();
             }
 
             return Ok(vm);

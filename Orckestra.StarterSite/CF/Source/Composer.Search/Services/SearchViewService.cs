@@ -20,10 +20,10 @@ namespace Orckestra.Composer.Search.Services
 {
     public class SearchViewService : BaseSearchViewService<SearchParam>, ISearchViewService
     {
-        protected ISearchCategoryRepository CategoryRepository { get; }
+        protected ICategoryRepository CategoryRepository { get; }
 
         public SearchViewService(
-            ISearchCategoryRepository categoryRepository,
+            ICategoryRepository categoryRepository,
             ISearchRepository searchRepository,
             IViewModelMapper viewModelMapper,
             IDamProvider damProvider,

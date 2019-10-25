@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Utils;
 using Orckestra.Overture.ServiceModel.Products;
+using Orckestra.Overture.ServiceModel.Search;
 
 namespace Orckestra.Composer.Repositories
 {
@@ -33,5 +34,9 @@ namespace Orckestra.Composer.Repositories
         /// <param name="param"></param>
         /// <returns></returns>
         Task<Tree<Category, string>> GetCategoriesTreeAsync(GetCategoriesParam param);
+
+        Task<List<Facet>> GetCategoryProductCount(string scopeId, string cultureName);
+
+        Task<List<Facet>> GetBrandProductCount(string scopeId, string cultureName);
     }
 }

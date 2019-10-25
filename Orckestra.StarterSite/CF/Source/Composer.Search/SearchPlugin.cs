@@ -25,9 +25,9 @@ namespace Orckestra.Composer.Search
             host.Register<SearchBreadcrumbViewService, ISearchBreadcrumbViewService>();
             host.Register<FacetLocalizationProvider, IFacetLocalizationProvider>();
             host.Register<FromPriceProvider, IPriceProvider>();
-            host.Register<SearchCategoryRepository, ISearchCategoryRepository>();
             host.Register<SearchManagementRepository, ISearchManagementRepository>();
             host.Register<SearchUrlProvider, ISearchUrlProvider>();
+            host.Register<MultiWordSynonymService, IMultiWordSynonymService>();
 
             host.MetadataRegistry.LoadViewModelMetadataInAssemblyOf(typeof (SearchPlugin).Assembly);
 
