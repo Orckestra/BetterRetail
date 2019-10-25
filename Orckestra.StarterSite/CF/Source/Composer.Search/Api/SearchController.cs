@@ -4,6 +4,7 @@ using Orckestra.Composer.Search.Services;
 using Orckestra.Composer.Search.ViewModels;
 using Orckestra.Composer.Search.ViewModels.Metadata;
 using Orckestra.Composer.Search.Repositories;
+using Orckestra.Composer.Search.Providers;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Utils;
 using Orckestra.Composer.ViewModels;
@@ -32,24 +33,21 @@ namespace Orckestra.Composer.Search.Api
         protected IComposerContext ComposerContext { get; private set; }
         protected ISearchViewService SearchViewService { get; private set; }
         protected IInventoryLocationProvider InventoryLocationProvider { get; private set; }
-        protected ISearchUrlProvider SearchUrlProvider { get; private set; }
         protected ISearchManagementRepository SearchManagementRepository { get; private set; }
-        protected IMultiWordSynonymService MultiWordSynonymService { get; private set; }
+        protected ISearchTermsTransformationProvider SearchTermsTransformationProvider { get; private set; }
 
         public SearchController(
             IComposerContext composerContext, 
             ISearchViewService searchViewService, 
             IInventoryLocationProvider inventoryLocationProvider, 
-            ISearchUrlProvider searchUrlProvider, 
             ISearchManagementRepository searchManagementRepository,
-            IMultiWordSynonymService sultiWordSynonymService)
+            ISearchTermsTransformationProvider searchTermsTransformationProvider)
         {
             ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
             SearchViewService = searchViewService ?? throw new ArgumentNullException(nameof(searchViewService));
             InventoryLocationProvider = inventoryLocationProvider ?? throw new ArgumentNullException(nameof(inventoryLocationProvider));
-            SearchUrlProvider = searchUrlProvider ?? throw new ArgumentNullException(nameof(searchUrlProvider));
             SearchManagementRepository = searchManagementRepository ?? throw new ArgumentNullException(nameof(searchManagementRepository));
-            MultiWordSynonymService = sultiWordSynonymService ?? throw new ArgumentNullException(nameof(sultiWordSynonymService));
+            SearchTermsTransformationProvider = searchTermsTransformationProvider ?? throw new ArgumentNullException(nameof(searchTermsTransformationProvider));
         }
 
      
@@ -58,7 +56,7 @@ namespace Orckestra.Composer.Search.Api
         public virtual async Task<IHttpActionResult> AutoComplete(AutoCompleteSearchViewModel request, int limit = MAXIMUM_AUTOCOMPLETE_RESULT)
         {
             var originalSearchTerms = request.Query.Trim();
-            var searchTerms = MultiWordSynonymService.ExceptionMapOutput(originalSearchTerms, ComposerContext.CultureInfo.Name); ;
+            var searchTerms = SearchTermsTransformationProvider.ExceptionMapOutput(originalSearchTerms, ComposerContext.CultureInfo.Name); ;
 
             var searchCriteria = new SearchCriteria
             {
@@ -85,7 +83,7 @@ namespace Orckestra.Composer.Search.Api
             var vm = new AutoCompleteViewModel();
             if (searchResultsViewModel.ProductSearchResults?.SearchResults?.Count > 0)
             {
-                vm.Products = searchResultsViewModel.ProductSearchResults.SearchResults.Take(limit)
+                vm.Suggestions = searchResultsViewModel.ProductSearchResults.SearchResults.Take(limit)
                     .Select(p => { p.AsExtensionModel<IProductSearchViewModelMetadata>().SearchTerm = searchTerms; return p; })
                     .ToList();
             }

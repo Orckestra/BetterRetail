@@ -1,8 +1,8 @@
-﻿namespace Orckestra.Composer.Search.Services
+﻿namespace Orckestra.Composer.Search.Providers
 {
 	//A list of multi word exceptions that should have their spaces replaced with dashes("-")
 
-    public class MultiWordSynonymService : IMultiWordSynonymService
+    public class SearchTermsTransformationProvider : ISearchTermsTransformationProvider
     {
         public virtual string ExceptionMapOutput(string keyword, string cultureInfoName)
         {

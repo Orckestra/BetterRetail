@@ -77,17 +77,19 @@ module Orckestra.Composer {
             $('.tt-menu .tt-dataset:not(:first)').wrapAll('<div class="suggestion-right-col"></div>');
         }
 
-        private getBloodhoundInstance (name, limit, url): Bloodhound<any> {
-             return new Bloodhound({
+        private getBloodhoundInstance (name, limit, url, collectionName = 'Suggestions'): Bloodhound<any> {
+            return new Bloodhound({
                 name,
                 limit,
                 remote: {
                     url: `${url}?limit=${limit}`,
-                    prepare: ComposerClient.prepareBloodhound
+                    prepare: ComposerClient.prepareBloodhound,
+                    transform: (response) => {
+                        const suggestions = response[collectionName];
+                        return suggestions ? { suggestions } : {};
+                    }
                 },
-                datumTokenizer: function (datum) {
-                    return Bloodhound.tokenizers.whitespace((<any>datum).val);
-                },
+                datumTokenizer: (datum) => Bloodhound.tokenizers.obj.whitespace((<any>datum).val),
                 queryTokenizer: Bloodhound.tokenizers.whitespace
             });
         }

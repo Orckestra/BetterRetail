@@ -138,8 +138,8 @@
     <Compile Include="Factory\IFacetFactory.cs" />
     <Compile Include="Factory\IFacetPredicateFactory.cs" />
     <Compile Include="Factory\SelectedFacetFactory.cs" />
-    <Compile Include="Services\IMultiWordSynonymService.cs" />
-    <Compile Include="Services\MultiWordSynonymService.cs" />
+    <Compile Include="Providers\ISearchTermsTransformationProvider.cs" />
+    <Compile Include="Providers\SearchTermsTransformationProvider.cs" />
     <Compile Include="Helpers\ProductExtension.cs" />
     <Compile Include="Helpers\SearchSortByResolver.cs" />
     <Compile Include="Context\ISearchRequestContext.cs" />

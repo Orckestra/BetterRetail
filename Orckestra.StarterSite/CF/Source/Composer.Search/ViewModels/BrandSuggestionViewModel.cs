@@ -1,7 +1,9 @@
-﻿namespace Orckestra.Composer.Search.ViewModels
+﻿using Orckestra.Composer.ViewModels;
+
+namespace Orckestra.Composer.Search.ViewModels
 {
-	public class BrandSuggestionViewModel
-	{
+	public class BrandSuggestionViewModel : BaseViewModel
+    {
 		public string DisplayName { get; set; }
 	}
 }

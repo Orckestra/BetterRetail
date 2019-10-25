@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using Orckestra.Composer.ViewModels;
+using System.Collections.Generic;
 
 namespace Orckestra.Composer.Search.ViewModels
 {
-	public class AutoCompleteViewModel
-	{
-		public List<ProductSearchViewModel> Products { get; set; }
+	public class AutoCompleteViewModel: BaseViewModel
+    {
+		public List<ProductSearchViewModel> Suggestions { get; set; }
 	}
 }
