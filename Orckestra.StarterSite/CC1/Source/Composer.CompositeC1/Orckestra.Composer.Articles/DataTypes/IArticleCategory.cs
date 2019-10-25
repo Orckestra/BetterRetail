@@ -3,6 +3,7 @@ using Composite.Data;
 using Composite.Data.Hierarchy;
 using Composite.Data.Hierarchy.DataAncestorProviders;
 using Composite.Data.ProcessControlled;
+using Composite.Data.ProcessControlled.ProcessControllers.GenericPublishProcessController;
 using Composite.Data.Validation.Validators;
 using Microsoft.Practices.EnterpriseLibrary.Validation.Validators;
 using System;
@@ -20,6 +21,7 @@ namespace Orckestra.Composer.Articles.DataTypes
     [LabelPropertyName("Title")]
     [Caching(CachingType.Full)]
     [SearchableType]
+    [PublishProcessControllerType(typeof(GenericPublishProcessController))]
     public interface IArticleCategory : IData, IPublishControlled, ILocalizedControlled
     {
         [ImmutableFieldId("1a3703ad-fb2f-4660-8f6f-fddab1ae1cb5")]

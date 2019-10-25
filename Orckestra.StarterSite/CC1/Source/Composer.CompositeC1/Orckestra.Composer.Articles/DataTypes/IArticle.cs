@@ -23,6 +23,7 @@ namespace Orckestra.Composer.Articles.DataTypes
     [InternalUrl("articles")]
     [Caching(CachingType.Full)]
     [SearchableType]
+    [PublishProcessControllerType(typeof(GenericPublishProcessController))]
     public interface IArticle : IData, IPageDataFolder, IPageRelatedData, IPublishControlled, ILocalizedControlled
     {
         [ImmutableFieldId("35811703-36c6-43e3-9932-23defd5eb7aa")]
