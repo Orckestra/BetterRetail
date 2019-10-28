@@ -3,7 +3,6 @@ using Orckestra.Composer.Providers;
 using Orckestra.Composer.Search.Services;
 using Orckestra.Composer.Search.ViewModels;
 using Orckestra.Composer.Search.ViewModels.Metadata;
-using Orckestra.Composer.Search.Repositories;
 using Orckestra.Composer.Search.Providers;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Utils;
@@ -33,21 +32,21 @@ namespace Orckestra.Composer.Search.Api
         protected IComposerContext ComposerContext { get; private set; }
         protected ISearchViewService SearchViewService { get; private set; }
         protected IInventoryLocationProvider InventoryLocationProvider { get; private set; }
-        protected ISearchManagementRepository SearchManagementRepository { get; private set; }
         protected ISearchTermsTransformationProvider SearchTermsTransformationProvider { get; private set; }
+        protected IAutocompleteProvider AutocompleteProvider { get; private set; }
 
         public SearchController(
             IComposerContext composerContext, 
             ISearchViewService searchViewService, 
             IInventoryLocationProvider inventoryLocationProvider, 
-            ISearchManagementRepository searchManagementRepository,
-            ISearchTermsTransformationProvider searchTermsTransformationProvider)
+            ISearchTermsTransformationProvider searchTermsTransformationProvider,
+            IAutocompleteProvider autocompleteProvider)
         {
             ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
             SearchViewService = searchViewService ?? throw new ArgumentNullException(nameof(searchViewService));
             InventoryLocationProvider = inventoryLocationProvider ?? throw new ArgumentNullException(nameof(inventoryLocationProvider));
-            SearchManagementRepository = searchManagementRepository ?? throw new ArgumentNullException(nameof(searchManagementRepository));
             SearchTermsTransformationProvider = searchTermsTransformationProvider ?? throw new ArgumentNullException(nameof(searchTermsTransformationProvider));
+            AutocompleteProvider = autocompleteProvider ?? throw new ArgumentNullException(nameof(autocompleteProvider));
         }
 
      
@@ -173,23 +172,16 @@ namespace Orckestra.Composer.Search.Api
        
         [ActionName("suggestTerms")]
         [HttpPost]
-        public virtual async Task<IHttpActionResult> SuggestTerms(AutoCompleteSearchViewModel request)
+        public virtual async Task<IHttpActionResult> SuggestTerms(AutoCompleteSearchViewModel request, int limit = MAXIMUM_SEARCH_TERMS_SUGGESTIONS)
         {
             string searchTerm = request.Query.Trim().ToLower();
 
-            List<string> suggestedTerms = await SearchManagementRepository.GetSearchSuggestedTerms(ComposerContext.Scope, ComposerContext.CultureInfo, searchTerm).ConfigureAwait(false);
+            List<string> suggestedTerms = await AutocompleteProvider.GetSearchSuggestedTerms(ComposerContext.CultureInfo, searchTerm).ConfigureAwait(false);
 
-            SearchTermsSuggestionsViewModel vm = new SearchTermsSuggestionsViewModel();
-            if (suggestedTerms != null && suggestedTerms.Count > 0)
+            SearchTermsSuggestionsViewModel vm = new SearchTermsSuggestionsViewModel()
             {
-                List<SearchTermsSuggestionViewModel> sugg = new List<SearchTermsSuggestionViewModel>();
-                suggestedTerms.ForEach(term =>
-                {
-                    sugg.Add(new SearchTermsSuggestionViewModel { DisplayName = term });
-                });
-                vm.Suggestions = sugg;
-            }
-
+                Suggestions = suggestedTerms.Select(term => new SearchTermsSuggestionViewModel { DisplayName = term }).Take(limit).ToList()
+            };
             return Ok(vm);
         }
        

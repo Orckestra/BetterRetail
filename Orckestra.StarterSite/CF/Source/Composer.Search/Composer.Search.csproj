@@ -138,6 +138,7 @@
     <Compile Include="Factory\IFacetFactory.cs" />
     <Compile Include="Factory\IFacetPredicateFactory.cs" />
     <Compile Include="Factory\SelectedFacetFactory.cs" />
+    <Compile Include="Providers\IAutocompleteProvider.cs" />
     <Compile Include="Providers\ISearchTermsTransformationProvider.cs" />
     <Compile Include="Providers\SearchTermsTransformationProvider.cs" />
     <Compile Include="Helpers\ProductExtension.cs" />
@@ -178,11 +179,9 @@
     <Compile Include="Providers\SelectedFacet\RangeSelectedFacetProvider.cs" />
     <Compile Include="Providers\SelectedFacet\SingleSelectSelectedFacetProvider.cs" />
     <Compile Include="Repositories\IProductRequestFactory.cs" />
-    <Compile Include="Repositories\ISearchManagementRepository.cs" />
     <Compile Include="Repositories\ISearchRepository.cs" />
     <Compile Include="Repositories\ProductRequestFactory.cs" />
     <Compile Include="Parameters\RemoveSelectedFacetsFromFacetsParam.cs" />
-    <Compile Include="Repositories\SearchManagementRepository.cs" />
     <Compile Include="RequestConstants\SearchRequestParams.cs" />
     <Compile Include="SearchConfiguration.cs" />
     <Compile Include="Context\SearchRequestContext.cs" />
