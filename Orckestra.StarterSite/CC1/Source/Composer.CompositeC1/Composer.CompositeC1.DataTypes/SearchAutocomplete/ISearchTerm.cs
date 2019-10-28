@@ -9,7 +9,7 @@ using Composite.Data.Validation.Validators;
 using Microsoft.Practices.EnterpriseLibrary.Validation.Validators;
 using System;
 
-namespace Orckestra.Composer.CompositeC1.DataTypes.SearchAutocomplete
+namespace Orckestra.Composer.CompositeC1.DataTypes
 {
     [AutoUpdateble]
     [DataScope("public")]
@@ -21,7 +21,6 @@ namespace Orckestra.Composer.CompositeC1.DataTypes.SearchAutocomplete
     [Title("ISearchTerm")]
     [LabelPropertyName("Value")]
     [PublishProcessControllerType(typeof(GenericPublishProcessController))]
-    [SearchableType]
     public interface ISearchTerm : IData, IProcessControlled, IPublishControlled, ILocalizedControlled
     {
         [ImmutableFieldId("a57882f4-3c12-4504-a656-b9985f5b8cb4")]
@@ -29,9 +28,8 @@ namespace Orckestra.Composer.CompositeC1.DataTypes.SearchAutocomplete
             "/ns/function/1.0\" />")]
         [StoreFieldType(PhysicalStoreFieldType.Guid)]
         [FieldPosition(0)]
-        [RouteSegment(0)]
         Guid Id { get; set; }
-        
+
         [ImmutableFieldId("e0907c1b-51fe-4dd8-9925-7ff26b29c8d6")]
         [StoreFieldType(PhysicalStoreFieldType.String, 64)]
         [NotNullValidator]
@@ -39,13 +37,13 @@ namespace Orckestra.Composer.CompositeC1.DataTypes.SearchAutocomplete
         [StringSizeValidator(0, 64)]
         [DefaultFieldStringValue("")]
         string Value { get; set; }
-        
+
         [ImmutableFieldId("8794480d-a694-46dd-b78d-c86db6f19ead")]
         [StoreFieldType(PhysicalStoreFieldType.Guid)]
         [GuidNotEmpty]
         [FieldPosition(1)]
         [DefaultFieldGuidValue("00000000-0000-0000-0000-000000000000")]
-        [ForeignKey("Composite.Data.Types.IPage,Composite", AllowCascadeDeletes=true, NullReferenceValue="{00000000-0000-0000-0000-000000000000}")]
+        [ForeignKey("Composite.Data.Types.IPage,Composite", AllowCascadeDeletes = true, NullReferenceValue = "{00000000-0000-0000-0000-000000000000}")]
         [GroupByPriority(1)]
         Guid WebsiteId { get; set; }
     }

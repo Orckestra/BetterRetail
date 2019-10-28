@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Composite.Data;
-using Orckestra.Composer.CompositeC1.DataTypes.SearchAutocomplete;
+using Orckestra.Composer.CompositeC1.DataTypes;
 using Orckestra.Composer.Search.Providers;
 using Orckestra.Composer.Services;
 
