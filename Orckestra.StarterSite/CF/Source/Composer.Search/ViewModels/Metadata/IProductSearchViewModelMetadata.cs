@@ -4,7 +4,7 @@ namespace Orckestra.Composer.Search.ViewModels.Metadata
 {
     public interface IProductSearchViewModelMetadata : IExtensionOf<ProductSearchViewModel>
     {
-		string SearchTerm { get; set; }
+        string SearchTerm { get; set; }
 
-	}
+    }
 }

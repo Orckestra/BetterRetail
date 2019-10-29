@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 namespace Orckestra.Composer.Search.ViewModels
 {
-	public class AutoCompleteViewModel: BaseViewModel
+    public class AutoCompleteViewModel : BaseViewModel
     {
-		public List<ProductSearchViewModel> Suggestions { get; set; }
-	}
+        public List<ProductSearchViewModel> Suggestions { get; set; }
+    }
 }
