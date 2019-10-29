@@ -12,12 +12,18 @@ using Orckestra.Composer.Search.Repositories;
 using Orckestra.Composer.Search.ViewModels;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.ViewModels;
+using Orckestra.Composer.Repositories;
+using System.Collections.Generic;
+using Orckestra.Overture.ServiceModel.Products;
 
 namespace Orckestra.Composer.Search.Services
 {
     public class SearchViewService : BaseSearchViewService<SearchParam>, ISearchViewService
     {
+        protected ICategoryRepository CategoryRepository { get; }
+
         public SearchViewService(
+            ICategoryRepository categoryRepository,
             ISearchRepository searchRepository,
             IViewModelMapper viewModelMapper,
             IDamProvider damProvider,
@@ -31,7 +37,6 @@ namespace Orckestra.Composer.Search.Services
             IProductSettingsViewService productSettings,
             IScopeViewService scopeViewService,
             IRecurringOrdersSettings recurringOrdersSettings)
-
             : base(
             searchRepository,
             viewModelMapper,
@@ -47,6 +52,7 @@ namespace Orckestra.Composer.Search.Services
             scopeViewService,
             recurringOrdersSettings)
         {
+            CategoryRepository = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository));
         }
 
         public virtual Task<PageHeaderViewModel> GetPageHeaderViewModelAsync(GetPageHeaderParam param)
@@ -126,6 +132,24 @@ namespace Orckestra.Composer.Search.Services
             var facets = FlattenFilterList(criteria.SelectedFacets, criteria.CultureInfo);
 
             return Task.FromResult(facets);
+        }
+
+        public async Task<List<Category>> GetAllCategories()
+        {
+            return await CategoryRepository.GetCategoriesAsync(new GetCategoriesParam
+            {
+                Scope = ComposerContext.Scope
+            });
+        }
+
+        public async Task<List<Orckestra.Overture.ServiceModel.Search.Facet>> GetCategoryProductCounts(string cultureName)
+        {
+            return await CategoryRepository.GetCategoryProductCount(ComposerContext.Scope, cultureName);
+        }
+
+        public async Task<List<Orckestra.Overture.ServiceModel.Search.Facet>> GetBrandProductCounts(string cultureName)
+        {
+            return await CategoryRepository.GetBrandProductCount(ComposerContext.Scope, cultureName);
         }
     }
 }

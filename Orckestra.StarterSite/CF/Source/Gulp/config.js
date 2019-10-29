@@ -26,6 +26,7 @@
                     '../../3rdParty/handlebars.helpers.js',
 					'../../3rdParty/q-1.2.0.js',
 					'../../3rdParty/jquery.serialize-object.js',
+                    '../../3rdParty/typeahead.js',
                     '../../UI.Package/JavaScript/orckestra.composer.js',
                     path.join('../../', mainConfiguration.testsOutputFolder, '/**/*.js')
                 ],
@@ -52,7 +53,7 @@
 
             composerAssemblies: ['./Packaging/bin/Debug/*.dll', '!./Packaging/bin/Debug/Packaging.dll'],
 			composerc1Assemplies: [''],
-			deployedWebsitePath: 'C:/orckestra/composer-c1-cm-dev.develop.orckestra.cloud/WebSite',	
+			deployedWebsitePath: 'C:/orckestra/composer-c1-cm-dev.develop.orckestra.cloud/WebSite',
 			composerCompositeC1: '../../CC1/Source/Composer.CompositeC1/Composer.CompositeC1',
             c1MvcProject: '../../CC1/Source/Composer.CompositeC1/Composer.CompositeC1.Mvc',
         });

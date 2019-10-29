@@ -23,6 +23,7 @@
                     path.join(__dirname, '../../3rdParty/lodash.min.js'),
                     path.join(__dirname, '../../3rdParty/parsley.min.js'),
                     path.join(__dirname, '../../3rdParty/handlebars.helpers.js'),
+                    path.join(__dirname, '../../3rdParty/typeahead.js'),
                     '../../Source/JavaScript/orckestra.composer.js',
                     path.join(__dirname, '../', mainConfiguration.testsOutputFolder) + '/**/*.spec.js'
                 ],

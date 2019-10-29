@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Parameters;
-using Orckestra.Composer.Providers;
 using Orckestra.Composer.Utils;
 using Orckestra.Overture;
 using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel.Products;
+using Orckestra.Overture.ServiceModel.Queries;
 using Orckestra.Overture.ServiceModel.Requests.Products;
+using Orckestra.Overture.ServiceModel.Requests.Search;
+using Orckestra.Overture.ServiceModel.Search;
 
 namespace Orckestra.Composer.Repositories
 {
@@ -140,6 +142,54 @@ namespace Orckestra.Composer.Repositories
                     category.PrimaryParentCategoryId = parentCategory.Id;
                 }
             }
+        }
+
+        public virtual Task<List<Facet>> GetCategoryProductCount(string scopeId, string cultureName)
+        {
+            var request = getAdvancedSearchRequest(scopeId, cultureName, "CategoryAutoSuggest");
+            return Task.FromResult(OvertureClient.Send(request).Facets);
+        }
+
+        public virtual Task<List<Facet>> GetBrandProductCount(string scopeId, string cultureName)
+        {
+            var request = getAdvancedSearchRequest(scopeId, cultureName, "BrandAutoSuggest");
+            return Task.FromResult(OvertureClient.Send(request).Facets);
+        }
+
+        protected virtual AdvancedSearchRequest getAdvancedSearchRequest(string scopeId, string cultureName, string facetHierarchyId)
+        {
+            return new AdvancedSearchRequest
+            {
+                CultureName = cultureName,
+                IndexName = "Products",
+                ScopeId = scopeId,
+                SearchTerms = "*",
+                IncludeFacets = true,
+                FacetHierarchyId = facetHierarchyId,
+                Query = new Query
+                {
+                    MaximumItems = 0,
+                    Filter = new FilterGroup
+                    {
+                        BinaryOperator = BinaryOperator.And,
+                        Filters = new List<Filter>
+                        {
+                            new Filter
+                            {
+                                Member = "CatalogId",
+                                Operator = Operator.Equals,
+                                Value = scopeId
+                            },
+                            new Filter
+                            {
+                                Member = "Active",
+                                Operator = Operator.Equals,
+                                Value = true
+                            }
+                        }
+                    }
+                }
+            };
         }
     }
 }

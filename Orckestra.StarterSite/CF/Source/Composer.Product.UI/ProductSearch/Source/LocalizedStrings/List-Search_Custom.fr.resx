@@ -120,4 +120,10 @@
   <data name="Custom_Explanation" xml:space="preserve">
     <value>Remplissez cette feuille avec vos localisations personalisées.</value>
   </data>
+  <data name="NoResultAutoSuggest" xml:space="preserve">
+    <value>Aucun résultat trouvé</value>
+  </data>
+   <data name="ShowMoreResults" xml:space="preserve">
+      <value>Afficher plus de résultats ...</value>
+    </data>
 </root>

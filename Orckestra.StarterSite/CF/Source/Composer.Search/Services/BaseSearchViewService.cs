@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -71,8 +71,8 @@ namespace Orckestra.Composer.Search.Services
             LocalizationProvider = localizationProvider ?? throw new ArgumentNullException(nameof(localizationProvider));
             ProductUrlProvider = productUrlProvider ?? throw new ArgumentNullException(nameof(productUrlProvider));
             SearchUrlProvider = searchUrlProvider ?? throw new ArgumentNullException(nameof(searchUrlProvider));
-            FacetFactory = facetFactory ?? throw new ArgumentNullException(nameof(facetFactory));
             SelectedFacetFactory = selectedFacetFactory ?? throw new ArgumentNullException(nameof(selectedFacetFactory));
+            FacetFactory = facetFactory ?? throw new ArgumentNullException(nameof(facetFactory));
             PriceProvider = priceProvider ?? throw new ArgumentNullException(nameof(priceProvider));
             ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
             ProductSettings = productSettings ?? throw new ArgumentNullException(nameof(productSettings));

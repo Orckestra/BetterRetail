@@ -128,5 +128,20 @@ module Orckestra.Composer {
 
             return LocalizationProvider.instance().getLocalizedString('General', 'L_ErrorUnauthorized');
         }
+
+        public static prepareBloodhound(query, settings): any {
+            settings.type = 'POST';
+            settings.contentType = 'application/json; charset=UTF-8';
+
+            settings.headers = {
+                'Accept-Language': ComposerClient.getPageCulture(),
+                'WebsiteId': ComposerClient.getWebsiteId()
+            };
+
+            var data = {'Query': query};
+            settings.data = JSON.stringify(data);
+
+            return settings;
+        }
     }
 }

@@ -19,6 +19,7 @@
 ///<reference path='../../../Composer.Product.UI/ProductDetail/Source/TypeScript/ProductDetailController.ts' />
 ///<reference path='../../../Composer.Product.UI/RelatedProducts/Source/TypeScript/RelatedProductsController.ts' />
 ///<reference path='../../../Composer.Product.UI/ProductSpecification/Source/TypeScript/ProductSpecificationsController.ts' />
+///<reference path='../../../Composer.Product.UI/ProductDetail/Source/TypeScript/ProductZoomController.ts' />
 ///<reference path='../../../Composer.Cart.UI/OrderSummary/Source/TypeScript/OrderSummaryController.ts' />
 ///<reference path='../../../Composer.Cart.UI/CheckoutGuestCustomerInfo/Source/TypeScript/GuestCustomerInfoCheckoutController.ts' />
 ///<reference path='../../../Composer.Cart.UI/CheckoutShippingAddress/Source/TypeScript/ShippingAddressCheckoutController.ts' />
@@ -69,7 +70,7 @@
     // that will look like this.
 
     $(document).ready(() => {
-        var composerConfiguration: Orckestra.Composer.IComposerConfiguration = {
+        let composerConfiguration: Orckestra.Composer.IComposerConfiguration = {
             plugins: [
                 'AntiIFrameClickJacking',
                 'ComposerValidationLocalization',
@@ -84,6 +85,7 @@
                 { name: 'General.ErrorController', controller: Orckestra.Composer.ErrorController },
                 { name: 'General.SearchBox', controller: Orckestra.Composer.SearchBoxController },
                 { name: 'General.LanguageSwitch', controller: Orckestra.Composer.LanguageSwitchController },
+                { name: 'General.AutocompleteSearchBox', controller: Orckestra.Composer.AutocompleteSearchBoxController },
 
                 { name: 'Cart.FullCart', controller: Orckestra.Composer.FullCartController },
                 { name: 'Cart.OrderSummary', controller: Orckestra.Composer.OrderSummaryController },

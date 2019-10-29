@@ -120,4 +120,10 @@
   <data name="Custom_Explanation" xml:space="preserve">
     <value>You may fill this sheet with your custom localizations</value>
   </data>
+  <data name="NoResultAutoSuggest" xml:space="preserve">
+    <value>No results found</value>
+  </data>
+  <data name="ShowMoreResults" xml:space="preserve">
+    <value>Show more results...</value>
+  </data>
 </root>

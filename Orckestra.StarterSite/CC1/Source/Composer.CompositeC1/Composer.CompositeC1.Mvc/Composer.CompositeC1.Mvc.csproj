@@ -294,6 +294,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\Composite\DynamicTypeForms\Orckestra\Composer\CompositeC1\DataTypes\ISearchTerm.xml" />
     <Content Include="App_Data\Composite\TreeDefinitions\NavigationElement.xml">
       <SubType>Designer</SubType>
     </Content>
@@ -344,6 +345,7 @@
     <Content Include="App_Data\Razor\Composer\Header\MainMenu.cshtml" />
     <Content Include="App_Data\Razor\Composer\Header\OptionalLinks.cshtml" />
     <Content Include="App_Data\Razor\Composer\Header\StickyLinks.cshtml" />
+    <Content Include="App_Data\Razor\Composer\SearchBox.cshtml" />
     <None Include="Properties\PublishProfiles\Website - CD.pubxml" />
     <None Include="Properties\PublishProfiles\Website.pubxml" />
     <Content Include="ViewModelAsExtensionModelTemplate.tt">
