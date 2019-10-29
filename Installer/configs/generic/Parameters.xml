@@ -20,7 +20,7 @@
 	<param name="cms-c1-all-cultures" value="en-CA,fr-CA" />
 	<param name="cms-c1-conslole-login" value="admin" />
 	<param name="cms-c1-console-password" value="123456" />
-	<param name="cms-c1-custom-packages" value="Composite.Tools.PackageCreator,Orckestra.Search.KeywordRedirect,Orckestra.Search.LuceneNET,Composite.Tools.StaticDataTypeCreator" />
+	<param name="cms-c1-custom-packages" value="Composite.Tools.PackageCreator,Orckestra.Search.KeywordRedirect,Orckestra.Search.LuceneNET,Composite.Tools.StaticDataTypeCreator,Orckestra.Search.WebsiteSearch" />
 	
 	<!-- SSL -->
 	<param name="SSL_CertificateName" value="{ssl-certificate-name}" />

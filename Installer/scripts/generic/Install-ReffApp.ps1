@@ -101,6 +101,8 @@ function Install-Packages()
 	Robocopy $genericRefAppPackagesFolder $dstFolder "Orckestra.Composer.C1CMS.Queries.zip" /MIR /NJH /NDL /NFL /NS /NC /NP /NJS
 	Robocopy $genericRefAppPackagesFolder $dstFolder "Orckestra.Composer.SEO.Organization.zip" /MIR /NJH /NDL /NFL /NS /NC /NP /NJS
 	Robocopy $genericRefAppPackagesFolder $dstFolder "Orckestra.Composer.Languages.zip" /MIR /NJH /NDL /NFL /NS /NC /NP /NJS
+	Robocopy $genericRefAppPackagesFolder $dstFolder "Orckestra.Composer.Articles.zip" /MIR /NJH /NDL /NFL /NS /NC /NP /NJS
+	Robocopy $genericRefAppPackagesFolder $dstFolder "Orckestra.Composer.ContentSearch.zip" /MIR /NJH /NDL /NFL /NS /NC /NP /NJS
 	
 	RestartingIIS 
 	AccessHomePage 
