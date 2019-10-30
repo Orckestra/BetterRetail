@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Web.Mvc;
-using Composite.Data;
 using Orckestra.Composer.MvcFilters;
 using Orckestra.Composer.MyAccount.Parameters;
 using Orckestra.Composer.MyAccount.Services;
@@ -23,13 +22,9 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             IComposerContext composerContext,
             IMembershipViewService membershipViewService)
         {
-            if (myAccountUrlProvider == null) { throw new ArgumentNullException("myAccountUrlProvider"); }
-            if (composerContext == null) { throw new ArgumentNullException("composerContext"); }
-            if (membershipViewService == null) { throw new ArgumentNullException("membershipViewService"); }
-
-            MyAccountUrlProvider = myAccountUrlProvider;
-            ComposerContext = composerContext;
-            MembershipViewService = membershipViewService;
+            MyAccountUrlProvider = myAccountUrlProvider ?? throw new ArgumentNullException(nameof(myAccountUrlProvider));
+            ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
+            MembershipViewService = membershipViewService ?? throw new ArgumentNullException(nameof(membershipViewService));
         }
 
         [AllowAnonymous]

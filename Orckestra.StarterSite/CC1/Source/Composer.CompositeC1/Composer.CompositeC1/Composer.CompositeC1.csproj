@@ -310,6 +310,7 @@
     <Compile Include="Mappers\INavigationMapper.cs" />
     <Compile Include="Mappers\GoogleAnalyticsNavigationUrlProvider.cs" />
     <Compile Include="Media\ImageInfo.cs" />
+    <Compile Include="MustBeAnonymousAttribute.cs" />
     <Compile Include="Pages\CategoryPages.cs" />
     <Compile Include="Pages\ComposerPage.cs" />
     <Compile Include="Plugin.cs" />

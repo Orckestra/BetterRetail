@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Specialized;
 using System.Globalization;
-using System.Threading;
 using System.Web;
 using System.Web.Mvc;
+using Composite.Data;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Utils;
 
-namespace Orckestra.Composer.MvcFilters
+namespace Orckestra.Composer.CompositeC1
 {
     /// <summary>
     /// Method accessible only if user is not logged in. Otherwise redirect to destination specified in parameter.
@@ -80,7 +80,9 @@ namespace Orckestra.Composer.MvcFilters
 
         private static bool IsUserAuthenticated(HttpContextBase httpContext)
         {
-            return httpContext.User != null && httpContext.User.Identity.IsAuthenticated;
+            bool IsAuthenticated = httpContext.User?.Identity.IsAuthenticated ?? false;
+            bool IsCurrentWebSite = (httpContext.User?.Identity as System.Web.Security.FormsIdentity)?.Ticket.UserData == SitemapNavigator.CurrentHomePageId.ToString();
+            return IsAuthenticated && IsCurrentWebSite;
         }
     }
 }

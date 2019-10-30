@@ -223,7 +223,6 @@
     <Compile Include="HttpModules\IAntiCookieTamperingExcluder.cs" />
     <Compile Include="IPerformanceDataCollector.cs" />
     <Compile Include="Kernel\ComposerDependencyResolver.cs" />
-    <Compile Include="MvcFilters\MustBeAnonymousAttribute.cs" />
     <Compile Include="OutputCacheOptions.cs" />
     <Compile Include="OutputCache\NullCacheProvider.cs" />
     <Compile Include="Parameters\BaseUrlParameter.cs" />

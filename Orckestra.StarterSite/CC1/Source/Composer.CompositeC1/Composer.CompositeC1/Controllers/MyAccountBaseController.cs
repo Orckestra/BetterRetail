@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Net;
 using System.Web.Mvc;
 using Composite.Core.Xml;
@@ -36,7 +36,6 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         protected IOrderHistoryViewService OrderHistoryViewService { get; private set; }
         protected IWishListViewService WishListViewService { get; private set; }
         protected IRecurringOrderTemplatesViewService RecurringOrderTemplatesViewService { get; private set; }
-        protected IRecurringOrderCartsViewService RecurringOrderCartsViewService { get; private set; }
         protected IRecurringOrdersSettings RecurringOrdersSettings { get; private set; }
 
         protected MyAccountBaseController(
@@ -50,34 +49,19 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             IOrderHistoryViewService orderHistoryViewService,
             IWishListViewService wishListViewService,
             IRecurringOrderTemplatesViewService recurringOrderTemplatesViewService,
-            IRecurringOrderCartsViewService recurringOrderCartsViewService,
             IRecurringOrdersSettings recurringOrdersSettings)
         {
-            if (customerViewService == null) throw new ArgumentNullException("customerViewService");
-            if (customerAddressViewService == null) throw new ArgumentNullException("customerAddressViewService");
-            if (composerContext == null) throw new ArgumentNullException("composerContext");
-            if (addressRepository == null) throw new ArgumentNullException("addressRepository");
-            if (myAccountUrlProvider == null) throw new ArgumentNullException("myAccountUrlProvider");
-            if (orderUrlProvider == null) throw new ArgumentNullException("orderUrlProvider");
-            if (myAccountViewService == null) throw new ArgumentNullException("myAccountViewService");
-            if (orderHistoryViewService == null) throw new ArgumentNullException("orderHistoryViewService");
-            if (wishListViewService == null) throw new ArgumentNullException("wishListViewService");
-            if (recurringOrderTemplatesViewService == null) throw new ArgumentNullException("recurringOrderTemplatesViewService");
-            if (recurringOrderCartsViewService == null) throw new ArgumentNullException("recurringOrderCartsViewService");
-            if (recurringOrdersSettings == null) throw new ArgumentNullException("recurringOrderCartsViewService");
-
-            CustomerViewService = customerViewService;
-            CustomerAddressViewService = customerAddressViewService;
-            ComposerContext = composerContext;
-            AddressRepository = addressRepository;
-            MyAccountUrlProvider = myAccountUrlProvider;
-            OrderUrlProvider = orderUrlProvider;
-            MyAccountViewService = myAccountViewService;
-            OrderHistoryViewService = orderHistoryViewService;
-            WishListViewService = wishListViewService;
-            RecurringOrderTemplatesViewService = recurringOrderTemplatesViewService;
-            RecurringOrderCartsViewService = recurringOrderCartsViewService;
-            RecurringOrdersSettings = recurringOrdersSettings;
+            CustomerViewService = customerViewService ?? throw new ArgumentNullException(nameof(customerViewService));
+            CustomerAddressViewService = customerAddressViewService ?? throw new ArgumentNullException(nameof(customerAddressViewService));
+            ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
+            AddressRepository = addressRepository ?? throw new ArgumentNullException(nameof(addressRepository));
+            MyAccountUrlProvider = myAccountUrlProvider ?? throw new ArgumentNullException(nameof(myAccountUrlProvider));
+            OrderUrlProvider = orderUrlProvider ?? throw new ArgumentNullException(nameof(orderUrlProvider));
+            MyAccountViewService = myAccountViewService ?? throw new ArgumentNullException(nameof(myAccountViewService));
+            OrderHistoryViewService = orderHistoryViewService ?? throw new ArgumentNullException(nameof(orderHistoryViewService));
+            WishListViewService = wishListViewService ?? throw new ArgumentNullException(nameof(wishListViewService));
+            RecurringOrderTemplatesViewService = recurringOrderTemplatesViewService ?? throw new ArgumentNullException(nameof(recurringOrderTemplatesViewService));
+            RecurringOrdersSettings = recurringOrdersSettings ?? throw new ArgumentNullException(nameof(recurringOrdersSettings));
         }
 
         [AuthorizeAndRedirect]
@@ -112,13 +96,14 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             var changePasswordUrl = MyAccountUrlProvider.GetChangePasswordUrl(urlParam);
             var addressListUrl = MyAccountUrlProvider.GetAddressListUrl(urlParam);
 
-            var viewModel = CustomerViewService.GetUpdateAccountViewModelAsync(new GetUpdateAccountViewModelParam
+            var param = new GetUpdateAccountViewModelParam
             {
                 Scope = ComposerContext.Scope,
                 CultureInfo = ComposerContext.CultureInfo,
                 CustomerId = ComposerContext.CustomerId
-            }).Result;
+            };
 
+            var viewModel = CustomerViewService.GetUpdateAccountViewModelAsync(param).Result;
             viewModel.ChangePasswordUrl = changePasswordUrl;
             viewModel.AddressListUrl = addressListUrl;
 
