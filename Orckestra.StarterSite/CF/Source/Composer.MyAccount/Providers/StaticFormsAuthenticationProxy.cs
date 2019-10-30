@@ -1,3 +1,4 @@
+using System.Web;
 using System.Web.Security;
 
 namespace Orckestra.Composer.MyAccount.Providers
@@ -25,6 +26,33 @@ namespace Orckestra.Composer.MyAccount.Providers
         public string FormsCookieName
         {
             get { return FormsAuthentication.FormsCookieName; }
+        }
+
+        public HttpCookie GetAuthCookie(string userName, bool createPersistentCookie)
+        {
+            return FormsAuthentication.GetAuthCookie(userName, createPersistentCookie);
+        }
+
+        public FormsAuthenticationTicket Decrypt(string encryptedTicket)
+        {
+            return FormsAuthentication.Decrypt(encryptedTicket);
+        }
+
+        public HttpCookie GetAuthCookie(string userName, bool createPersistentCookie, string userData)
+        {
+            SetAuthCookie(userName, createPersistentCookie);
+            HttpCookie authCookie = GetAuthCookie(userName, createPersistentCookie);
+            FormsAuthenticationTicket ticket = Decrypt(authCookie.Value);
+            FormsAuthenticationTicket newTicket = new FormsAuthenticationTicket(
+                ticket.Version,
+                ticket.Name,
+                ticket.IssueDate,
+                ticket.Expiration,
+                ticket.IsPersistent,
+                userData
+            );
+            authCookie.Value = Encrypt(newTicket);
+            return authCookie;
         }
     }
 }
