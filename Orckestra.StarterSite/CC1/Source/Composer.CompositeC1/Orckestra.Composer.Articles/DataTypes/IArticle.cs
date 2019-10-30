@@ -73,7 +73,7 @@ namespace Orckestra.Composer.Articles.DataTypes
         [GuidNotEmpty]
         [FieldPosition(4)]
         [DefaultFieldGuidValue("00000000-0000-0000-0000-000000000000")]
-        [ForeignKey("Orckestra.Composer.Articles.DataTypes.IArticleCategory", AllowCascadeDeletes=true, NullReferenceValue="{00000000-0000-0000-0000-000000000000}")]
+        [ForeignKey(typeof(IArticleCategory), nameof(IArticleCategory.Id), AllowCascadeDeletes=true, NullReferenceValue="{00000000-0000-0000-0000-000000000000}")]
         [SearchableField(false, false, true)]
         Guid Category { get; set; }
         

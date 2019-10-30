@@ -1,19 +1,13 @@
 <?xml version="1.0" standalone="yes"?>
 <mi:PackageInstaller xmlns:mi="http://www.composite.net/ns/management/packageinstaller/1.0">
   <mi:PackageRequirements minimumCompositeVersion="5.0" maximumCompositeVersion="9.9999.9999.9999" />
-  <mi:PackageInformation name="Orckestra.Composer.Articles" groupName="Orckestra.Composer" version="1.0.1" author="Orckestra " website="https://orckestra.com/" readMoreUrl="https://orckestra.com/" id="1820b656-e993-4dfa-bfd8-e6dc000e3ca3" canBeUninstalled="true" systemLocking="hard" flushOnCompletion="true" allowOverwrite="false" reloadConsoleOnCompletion="true">
+  <mi:PackageInformation name="Orckestra.Composer.Articles" groupName="Orckestra.Composer" version="1.0.2" author="Orckestra " website="https://orckestra.com/" readMoreUrl="https://orckestra.com/" id="1820b656-e993-4dfa-bfd8-e6dc000e3ca3" canBeUninstalled="true" systemLocking="hard" flushOnCompletion="true" allowOverwrite="false" reloadConsoleOnCompletion="true">
     <TechnicalDetails>-</TechnicalDetails>
     <Description>-</Description>
   </mi:PackageInformation>
   <mi:PackageFragmentInstallerBinaries>
     <mi:Add path="~\Bin\Orckestra.Composer.Articles.dll" />
   </mi:PackageFragmentInstallerBinaries>
-  <mi:Add installerType="Composite.Core.PackageSystem.PackageFragmentInstallers.DataTypePackageFragmentInstaller, Composite" uninstallerType="Composite.Core.PackageSystem.PackageFragmentInstallers.DataTypePackageFragmentUninstaller, Composite">
-    <Types>
-      <Type name="Orckestra.Composer.Articles.DataTypes.IArticleCategory, Orckestra.Composer.Articles" />
-      <Type name="Orckestra.Composer.Articles.DataTypes.IArticle, Orckestra.Composer.Articles" />
-    </Types>
-  </mi:Add>
   <mi:PackageFragmentInstallers>
     <mi:Add installerType="Composite.Core.PackageSystem.PackageFragmentInstallers.FilePackageFragmentInstaller, Composite" uninstallerType="Composite.Core.PackageSystem.PackageFragmentInstallers.FilePackageFragmentUninstaller, Composite">
       <Files>

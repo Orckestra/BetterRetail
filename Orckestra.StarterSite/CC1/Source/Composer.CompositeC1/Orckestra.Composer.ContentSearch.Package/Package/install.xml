@@ -9,8 +9,7 @@
     <mi:Add path="~\Bin\Orckestra.Composer.ContentSearch.dll" />
   </mi:PackageFragmentInstallerBinaries>
 	<mi:PackageFragmentInstallers>
-	
-		<mi:Add installerType="Composite.Core.PackageSystem.PackageFragmentInstallers.FilePackageFragmentInstaller, Composite" uninstallerType="Composite.Core.PackageSystem.PackageFragmentInstallers.FilePackageFragmentUninstaller, Composite">
+    <mi:Add installerType="Composite.Core.PackageSystem.PackageFragmentInstallers.FilePackageFragmentInstaller, Composite" uninstallerType="Composite.Core.PackageSystem.PackageFragmentInstallers.FilePackageFragmentUninstaller, Composite">
 			<Files>
         <File sourceFilename="~\App_Data\Composite\TreeDefinitions\ContentSearch.xml" targetFilename="~\App_Data\Composite\TreeDefinitions\ContentSearch.xml" allowOverwrite="false" />
         <File sourceFilename="~\Bin\Orckestra.Composer.ContentSearch.dll" targetFilename="~\Bin\Orckestra.Composer.ContentSearch.dll" allowOverwrite="true" />
