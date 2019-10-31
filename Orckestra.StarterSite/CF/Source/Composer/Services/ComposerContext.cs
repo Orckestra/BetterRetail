@@ -1,11 +1,10 @@
-﻿using System;
+using System;
 using System.Globalization;
 using System.Threading;
 using System.Web;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Services.Cookie;
 using Orckestra.Composer.Utils;
-using Orckestra.ExperienceManagement.Configuration;
 
 namespace Orckestra.Composer.Services
 {
@@ -13,23 +12,26 @@ namespace Orckestra.Composer.Services
 	//TODO: Maybe refactor setter getter with side-effects to methods
 	public class ComposerContext : IComposerContext
 	{
-		private readonly ICookieAccessor<ComposerCookieDto> _cookieAccessor;
-		private readonly IScopeProvider _scopeProvider;
-        private readonly ICountryCodeProvider _countryCodeProvider;
-        private readonly HttpContextBase _httpContextBase;
-		private readonly EncryptionUtility _encryptionUtility = new EncryptionUtility();
+		private readonly ICookieAccessor<ComposerCookieDto> CookieAccessor;
+        protected IScopeProvider ScopeProvider { get; }
+        protected HttpContextBase HttpContextBase { get; }
+        protected ICountryCodeProvider CountryCodeProvider { get; }
+        protected IWebsiteContext WebsiteContext { get; }
+        protected EncryptionUtility EncryptionUtility { get; }
 
-		public ComposerContext(
+        public ComposerContext(
 			ICookieAccessor<ComposerCookieDto> cookieAccessor, 
 			IScopeProvider scopeProvider,
 			HttpContextBase httpContextBase,
-            ICountryCodeProvider countryCodeProvider)
+            ICountryCodeProvider countryCodeProvider,
+            IWebsiteContext websiteContext)
 		{
-			_cookieAccessor = cookieAccessor;
-			_scopeProvider = scopeProvider;
-			_httpContextBase = httpContextBase;
-            _countryCodeProvider = countryCodeProvider;
-
+			CookieAccessor = cookieAccessor ?? throw new ArgumentNullException(nameof(cookieAccessor));
+            ScopeProvider = scopeProvider ?? throw new ArgumentNullException(nameof(scopeProvider));
+            HttpContextBase = httpContextBase ?? throw new ArgumentNullException(nameof(httpContextBase));
+            CountryCodeProvider = countryCodeProvider ?? throw new ArgumentNullException(nameof(countryCodeProvider));
+            WebsiteContext = websiteContext ?? throw new ArgumentNullException(nameof(websiteContext));
+            EncryptionUtility = new EncryptionUtility();
 
             SetAuthenticated();
 		}
@@ -39,7 +41,7 @@ namespace Orckestra.Composer.Services
 		/// </summary>
 		public string CountryCode
 		{
-			get { return _countryCodeProvider.CountryCode; }
+			get { return CountryCodeProvider.CountryCode; }
 		}
 
 		/// <summary>
@@ -81,7 +83,7 @@ namespace Orckestra.Composer.Services
             {
                 if (_scope == null)
                 {
-                    _scope = _scopeProvider.DefaultScope;
+                    _scope = ScopeProvider.DefaultScope;
                 }
 
                 return _scope;
@@ -123,9 +125,9 @@ namespace Orckestra.Composer.Services
 				}
 
 				//Store it in cookie for later
-				ComposerCookieDto dto = _cookieAccessor.Read();
-				dto.EncryptedCustomerId = _encryptionUtility.Encrypt(_customerId.ToString());
-				_cookieAccessor.Write(dto);
+				ComposerCookieDto dto = CookieAccessor.Read();
+				dto.EncryptedCustomerId = EncryptionUtility.Encrypt(_customerId.ToString());
+				CookieAccessor.Write(dto);
 			}
 		}
 		private Guid? _customerId = null;
@@ -144,7 +146,7 @@ namespace Orckestra.Composer.Services
 				if (!_isGuest.HasValue)
 				{
 					//First attempt, lazy load from cookie
-					ComposerCookieDto dto = _cookieAccessor.Read();
+					ComposerCookieDto dto = CookieAccessor.Read();
 					_isGuest = dto.IsGuest;
 				}
 
@@ -163,9 +165,9 @@ namespace Orckestra.Composer.Services
 				_isGuest = value;
 
 				//Store it in cookie for later
-				ComposerCookieDto dto = _cookieAccessor.Read();
+				ComposerCookieDto dto = CookieAccessor.Read();
 				dto.IsGuest = _isGuest;
-				_cookieAccessor.Write(dto);
+				CookieAccessor.Write(dto);
 			}
 		}
 		private bool? _isGuest = null;
@@ -187,7 +189,7 @@ namespace Orckestra.Composer.Services
 		public virtual string GetEncryptedCustomerId()
 		{
 			InitializeCustomerId();
-			ComposerCookieDto dto = _cookieAccessor.Read();
+			ComposerCookieDto dto = CookieAccessor.Read();
 
 			return dto.EncryptedCustomerId;
 		}
@@ -200,11 +202,11 @@ namespace Orckestra.Composer.Services
 			if (!_customerId.HasValue)
 			{
 				//First attempt, lazy load from cookie
-				var dto = _cookieAccessor.Read();
+				var dto = CookieAccessor.Read();
 
 			    if (dto.EncryptedCustomerId != null)
 			    {
-			        _customerId = new Guid(_encryptionUtility.Decrypt(dto.EncryptedCustomerId));
+			        _customerId = new Guid(EncryptionUtility.Decrypt(dto.EncryptedCustomerId));
 			    }
 			    else
 			    {
@@ -213,16 +215,16 @@ namespace Orckestra.Composer.Services
 			        _isGuest = true;
 
 			        //Store it in cookie for later
-			        dto.EncryptedCustomerId = _encryptionUtility.Encrypt(_customerId.ToString());
+			        dto.EncryptedCustomerId = EncryptionUtility.Encrypt(_customerId.ToString());
 			        dto.IsGuest = _isGuest;
-			        _cookieAccessor.Write(dto);
+			        CookieAccessor.Write(dto);
 			    }
 			}
 		}
 
 		private void SetAuthenticated()
 		{
-			var composerContext = _cookieAccessor.Read();
+			var composerContext = CookieAccessor.Read();
 
 			if (composerContext.EncryptedCustomerId == null)
 			{
@@ -230,7 +232,12 @@ namespace Orckestra.Composer.Services
 			}
 			else
 			{
-				_isAuthenticatedLazy = new Lazy<bool>(() => _httpContextBase.User != null && _httpContextBase.User.Identity.IsAuthenticated);
+                _isAuthenticatedLazy = new Lazy<bool>(() => {
+                    var websiteId = (HttpContextBase.User?.Identity as System.Web.Security.FormsIdentity)?.Ticket?.UserData;
+                    bool isCurrentWebsite = websiteId == WebsiteContext.WebsiteId.ToString();
+                    bool IsAuthenticated = HttpContextBase.User?.Identity.IsAuthenticated ?? false;
+                    return isCurrentWebsite && IsAuthenticated;
+                });
 			}
 		}
 	}
