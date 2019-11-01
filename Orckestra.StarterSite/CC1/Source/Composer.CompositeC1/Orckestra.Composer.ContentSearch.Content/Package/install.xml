@@ -17,7 +17,7 @@
     </mi:Add>
     <mi:Add installerType="Composite.Core.PackageSystem.PackageFragmentInstallers.DataPackageFragmentInstaller, Composite" uninstallerType="Composite.Core.PackageSystem.PackageFragmentInstallers.DataPackageFragmentUninstaller, Composite">
       <Types>
-        <Type type="Orckestra.Composer.ContentSearch.DataTypes.ISortOption">
+        <Type type="Orckestra.Composer.ContentSearch.DataTypes.ISortOption,Orckestra.Composer.ContentSearch">
           <Data dataScopeIdentifier="public" locale="?" dataFilename="~\Datas\Orckestra.Composer.ContentSearch.DataTypes.ISortOptions_public.xml" />
         </Type>
         <Type type="Orckestra.Composer.ContentSearch.DataTypes.IContentTab,Orckestra.Composer.ContentSearch">
