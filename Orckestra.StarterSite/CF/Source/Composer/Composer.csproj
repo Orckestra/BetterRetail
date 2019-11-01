@@ -408,9 +408,9 @@
     <Compile Include="Providers\Dam\GetProductMainImagesParam.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\ComposerContext.cs" />
+    <Compile Include="Services\ComposerRequestContext.cs" />
     <Compile Include="Services\Breadcrumb\IBreadcrumbViewService.cs" />
-    <Compile Include="Services\IComposerContext.cs" />
+    <Compile Include="Services\IComposerRequestContext.cs" />
     <Compile Include="Providers\Dam\ImageFileInfo.cs" />
     <Compile Include="Services\ICookieAccessor.cs" />
     <Compile Include="Providers\Dam\ConventionBasedDamProvider.cs" />
