@@ -19,12 +19,12 @@ namespace Orckestra.Composer.Cart.Api
     [JQueryOnlyFilter]
     public class OrderController : ApiController
     {
-        protected IComposerContext ComposerContext { get; private set; }
+        protected IComposerRequestContext ComposerContext { get; private set; }
         protected IOrderHistoryViewService OrderHistoryViewService { get; private set; }
         protected IOrderUrlProvider OrderUrlProvider { get; private set; }
 
         public OrderController(
-            IComposerContext composerContext,
+            IComposerRequestContext composerContext,
             IOrderHistoryViewService orderHistoryViewService,
             IOrderUrlProvider orderUrlProvider)
         {

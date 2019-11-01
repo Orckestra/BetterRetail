@@ -20,13 +20,13 @@ namespace Orckestra.Composer.Product.Api
     {
         protected IRelatedProductViewService RelatedProductViewService { get; private set; }
         protected IProductPriceViewService ProductPriceViewService { get; private set; }
-        protected IComposerContext ComposerContext { get; private set; }
+        protected IComposerRequestContext ComposerContext { get; private set; }
         protected IProductViewService ProductViewService { get; private set; }
         protected IProductSpecificationsViewService ProductSpecificationsViewService { get; private set; }
 
         public ProductController(
             IProductPriceViewService productPriceViewService, 
-            IComposerContext composerContext,
+            IComposerRequestContext composerContext,
             IProductViewService productViewService,
             IProductSpecificationsViewService productSpecificationsViewService,
             IRelatedProductViewService relatedProductViewService)

@@ -6,9 +6,9 @@ namespace Orckestra.Composer.Tests.Mock
 {
     internal sealed class ComposerContextFactory
     {
-        public static Mock<IComposerContext> Create()
+        public static Mock<IComposerRequestContext> Create()
         {
-            Mock<IComposerContext> composerContext = new Mock<IComposerContext>(MockBehavior.Strict);
+            Mock<IComposerRequestContext> composerContext = new Mock<IComposerRequestContext>(MockBehavior.Strict);
 
             composerContext
                 .SetupGet(c => c.CultureInfo)

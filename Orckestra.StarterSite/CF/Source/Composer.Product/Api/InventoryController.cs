@@ -19,13 +19,13 @@ namespace Orckestra.Composer.Product.Api
     [JQueryOnlyFilter]
     public class InventoryController : ApiController
     {
-        protected IComposerContext ComposerContext { get; private set; }
+        protected IComposerRequestContext ComposerContext { get; private set; }
         protected IInventoryViewService InventoryViewService { get; private set; }
         protected IInventoryLocationProvider InventoryLocationProvider { get; set; }
         protected IProductSettingsViewService ProductSettingsViewService { get; set; }
 
         public InventoryController(
-            IComposerContext composerContext,
+            IComposerRequestContext composerContext,
             IInventoryViewService inventoryViewService,
             IInventoryLocationProvider inventoryLocationProvider,
             IProductSettingsViewService productSettingsViewService)

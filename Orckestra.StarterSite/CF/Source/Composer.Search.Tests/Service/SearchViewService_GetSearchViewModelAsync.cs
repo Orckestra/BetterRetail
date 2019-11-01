@@ -98,7 +98,7 @@ namespace Orckestra.Composer.Search.Tests.Service
 
         private void SetUpComposerContext()
         {
-            var mock = new Mock<IComposerContext>();
+            var mock = new Mock<IComposerRequestContext>();
             mock.Setup(context => context.CultureInfo).Returns(new CultureInfo(CultureName));
             mock.Setup(context => context.Scope).Returns("global");
 

@@ -21,7 +21,7 @@ namespace Orckestra.Composer
         {
             host.Register<ComposerCookieAccessor, ICookieAccessor<ComposerCookieDto>>(ComponentLifestyle.PerRequest);
 
-            host.Register<ComposerContext, IComposerContext>(ComponentLifestyle.PerRequest);
+            host.Register<ComposerRequestContext, IComposerRequestContext>(ComponentLifestyle.PerRequest);
             host.Register<RegionCodeProvider, IRegionCodeProvider>();
             //host.Register<ScopeProvider, IScopeProvider>();
             host.Register<CountryRepository, ICountryRepository>();

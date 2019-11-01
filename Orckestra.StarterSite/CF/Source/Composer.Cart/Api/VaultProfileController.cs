@@ -14,11 +14,11 @@ namespace Orckestra.Composer.Cart.Api
     [JQueryOnlyFilter]
     public class VaultProfileController : ApiController
     {
-        protected IComposerContext ComposerContext { get; private set; }
+        protected IComposerRequestContext ComposerContext { get; private set; }
         protected IVaultProfileViewService VaultProfileViewService { get; private set; }
         protected IImageViewService ImageViewService { get; private set; }
 
-        public VaultProfileController(IComposerContext composerContext, IVaultProfileViewService vaultProfileViewService,
+        public VaultProfileController(IComposerRequestContext composerContext, IVaultProfileViewService vaultProfileViewService,
             IImageViewService imageViewService)
         {
             if (composerContext == null) { throw new ArgumentNullException("composerContext"); }

@@ -69,7 +69,7 @@ namespace Orckestra.Composer.Search.Tests.Context
             passedParam.CultureInfo.Should().NotBeNull();
             passedParam.CultureInfo.Should().Be(cultureInfo);
 
-            _container.Verify<IComposerContext>();
+            _container.Verify<IComposerRequestContext>();
         }
 
         [Test]
@@ -138,7 +138,7 @@ namespace Orckestra.Composer.Search.Tests.Context
 
         private void ArrangeComposerContext(string scope, CultureInfo cultureInfo)
         {
-            var mock = _container.GetMock<IComposerContext>();
+            var mock = _container.GetMock<IComposerRequestContext>();
 
             mock.SetupGet(ci => ci.Scope).Returns(scope).Verifiable();
             mock.SetupGet(ci => ci.CultureInfo).Returns(cultureInfo).Verifiable();

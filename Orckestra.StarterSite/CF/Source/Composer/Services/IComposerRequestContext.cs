@@ -3,7 +3,7 @@ using System.Globalization;
 
 namespace Orckestra.Composer.Services
 {
-    public interface IComposerContext
+    public interface IComposerRequestContext
     {
         CultureInfo CultureInfo { get; set; }
         string Scope { get; }

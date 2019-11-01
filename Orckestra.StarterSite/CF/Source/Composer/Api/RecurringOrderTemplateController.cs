@@ -18,11 +18,11 @@ namespace Orckestra.Composer.Api
     public class RecurringOrderTemplateController : ApiController
     {
         protected IRecurringOrderTemplatesViewService RecurringOrderTemplatesViewService { get; private set; }
-        protected IComposerContext ComposerContext { get; private set; }
+        protected IComposerRequestContext ComposerContext { get; private set; }
 
         public RecurringOrderTemplateController(
             IRecurringOrderTemplatesViewService recurringOrderTemplatesViewService,
-            IComposerContext composerContext)
+            IComposerRequestContext composerContext)
         {
             if (recurringOrderTemplatesViewService == null) { throw new ArgumentNullException(nameof(recurringOrderTemplatesViewService)); }
             if (composerContext == null) { throw new ArgumentNullException(nameof(composerContext)); }

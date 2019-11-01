@@ -22,7 +22,7 @@ namespace Orckestra.Composer.Cart.Api
     public class RecurringCartController : ApiController    
     {
         protected IRecurringOrderCartsViewService RecurringOrderCartsService { get; }
-        protected IComposerContext ComposerContext { get; }
+        protected IComposerRequestContext ComposerContext { get; }
         protected IPaymentViewService PaymentViewService { get; }
         protected IRecurringOrderTemplatesViewService RecurringOrderTemplatesService { get; }
         protected IShippingMethodViewService ShippingMethodViewService { get; }
@@ -31,7 +31,7 @@ namespace Orckestra.Composer.Cart.Api
 
         public RecurringCartController(
             IRecurringOrderCartsViewService recurringOrderCarstService,
-            IComposerContext composerContext,
+            IComposerRequestContext composerContext,
             IPaymentViewService paymentViewService,
             IRecurringOrderTemplatesViewService recurringOrderTemplatesService,
             IShippingMethodViewService shippingMethodViewService,

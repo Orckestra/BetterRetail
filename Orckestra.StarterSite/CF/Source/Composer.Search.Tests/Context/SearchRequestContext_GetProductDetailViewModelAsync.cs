@@ -50,8 +50,8 @@ namespace Orckestra.Composer.Search.Tests.Context
             _viewModel = new SearchViewModel();
             {
             };
-            container.GetMock<IComposerContext>().Setup(m => m.CultureInfo).Returns(_cultureInfo);
-            container.GetMock<IComposerContext>().Setup(m => m.Scope).Returns(_scope);
+            container.GetMock<IComposerRequestContext>().Setup(m => m.CultureInfo).Returns(_cultureInfo);
+            container.GetMock<IComposerRequestContext>().Setup(m => m.Scope).Returns(_scope);
             container.GetMock<ISearchViewService>().Setup(m => m.GetSearchViewModelAsync(It.IsAny<SearchCriteria>())).ReturnsAsync(_viewModel);
             var mock = container.GetMock<ISearchViewService>();
 

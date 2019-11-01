@@ -25,7 +25,7 @@ namespace Orckestra.Composer.Search.Tests.Providers
         {
             _container = new AutoMocker();
 
-            var composerContext = new Mock<IComposerContext>();
+            var composerContext = new Mock<IComposerRequestContext>();
             composerContext.Setup(context => context.CultureInfo).Returns(_cultureInfo);
             composerContext.Setup(context => context.Scope).Returns(Scope);
             

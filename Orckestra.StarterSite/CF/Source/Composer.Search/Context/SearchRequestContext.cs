@@ -13,13 +13,13 @@ namespace Orckestra.Composer.Search.Context
 {
     public class SearchRequestContext : ISearchRequestContext
     {
-        protected IComposerContext ComposerContext { get; private set; }
+        protected IComposerRequestContext ComposerContext { get; private set; }
         protected ISearchViewService SearchViewService { get; private set; }
         protected SearchViewModel SearchViewModel { get; private set; }
         public IInventoryLocationProvider InventoryLocationProvider { get; set; }
         protected ISearchUrlProvider SearchUrlProvider { get; private set; }
 
-        public SearchRequestContext(IComposerContext composerContext, 
+        public SearchRequestContext(IComposerRequestContext composerContext, 
             ISearchViewService searchViewService, 
             IInventoryLocationProvider inventoryLocationProvider,
             ISearchUrlProvider searchUrlProvider)

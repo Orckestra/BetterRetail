@@ -18,10 +18,10 @@ namespace Orckestra.Composer.Store.Api
     public class StoreController : ApiController
     {
         protected IStoreViewService StoreViewService { get; private set; }
-        protected IComposerContext ComposerContext { get; private set; }
+        protected IComposerRequestContext ComposerContext { get; private set; }
 
         public StoreController(IStoreViewService storeViewService,
-            IComposerContext composerContext)
+            IComposerRequestContext composerContext)
         {
             StoreViewService = storeViewService;
             ComposerContext = composerContext;

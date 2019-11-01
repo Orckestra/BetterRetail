@@ -22,7 +22,7 @@ namespace Orckestra.Composer.Cart.Api
     public class CartController : ApiController
     {
         protected ICartService CartService { get; private set; }
-        protected IComposerContext ComposerContext { get; private set; }
+        protected IComposerRequestContext ComposerContext { get; private set; }
         protected ICouponViewService CouponViewService { get; private set; }
         protected ICheckoutService CheckoutService { get; private set; }
         protected IShippingMethodViewService ShippingMethodService { get; private set; }
@@ -32,7 +32,7 @@ namespace Orckestra.Composer.Cart.Api
         public CartController(
             ICartService cartService,
             ICheckoutService checkoutService,
-            IComposerContext composerContext,
+            IComposerRequestContext composerContext,
             ICouponViewService couponViewService,
             IShippingMethodViewService shippingMethodService,
             ICartUrlProvider cartUrlProvider,

@@ -22,11 +22,11 @@ namespace Orckestra.Composer.Product.Services
     /// </summary>
     public class ProductSpecificationsViewService : IProductSpecificationsViewService
     {
-        protected readonly IComposerContext _context;
+        protected readonly IComposerRequestContext _context;
         protected readonly IProductRepository _productRepository;
         protected readonly ProductFormatter _productFormatter;
 
-        public ProductSpecificationsViewService(IComposerContext context,
+        public ProductSpecificationsViewService(IComposerRequestContext context,
                                                 IProductRepository productRepository, 
                                                 ILocalizationProvider localizationProvider,
                                                 ILookupService lookupService)

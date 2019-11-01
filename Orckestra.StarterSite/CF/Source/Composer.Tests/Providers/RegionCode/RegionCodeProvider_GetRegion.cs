@@ -159,7 +159,7 @@ namespace Orckestra.Composer.Tests.Providers.RegionCode
         public void WHEN_Passing_Invalid_Parameters_Canada_Country_SHOULD_Throw_ArgumentException(string postalCode)
         {
             //Arrange
-            var composerContextMock = new Mock<IComposerContext>();
+            var composerContextMock = new Mock<IComposerRequestContext>();
 
             composerContextMock.Setup(c => c.CountryCode).Returns(CountryCodes.Canada);
 
@@ -179,7 +179,7 @@ namespace Orckestra.Composer.Tests.Providers.RegionCode
         public void WHEN_Passing_Invalid_Parameters_UnitedStates_Country_SHOULD_Throw_ArgumentException(string zipCode)
         {
             //Arrange
-            var composerContextMock = new Mock<IComposerContext>();
+            var composerContextMock = new Mock<IComposerRequestContext>();
 
             composerContextMock.Setup(c => c.CountryCode).Returns(CountryCodes.UnitedStates);
 

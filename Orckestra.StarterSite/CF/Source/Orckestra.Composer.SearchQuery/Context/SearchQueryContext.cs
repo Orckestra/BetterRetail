@@ -10,13 +10,13 @@ namespace Orckestra.Composer.SearchQuery.Context
 {
     public class SearchQueryContext : ISearchQueryContext
     {
-        protected IComposerContext ComposerContext { get; private set; }
+        protected IComposerRequestContext ComposerContext { get; private set; }
         protected ISearchQueryViewService SearchQueryViewService { get; private set; }
         protected ISearchViewService SearchViewService { get; private set; }
 
         protected SearchQueryViewModel ViewModel { get; set; }
 
-        public SearchQueryContext(IComposerContext composerContext, ISearchQueryViewService searchQueryViewService, ISearchViewService searchViewService)
+        public SearchQueryContext(IComposerRequestContext composerContext, ISearchQueryViewService searchQueryViewService, ISearchViewService searchViewService)
         {
             if (composerContext == null) { throw new ArgumentNullException("composerContext"); }
             if (searchQueryViewService == null) { throw new ArgumentNullException("searchQueryViewService"); }

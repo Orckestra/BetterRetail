@@ -20,7 +20,7 @@ namespace Orckestra.Composer.Cart.Factory
     {
         protected ICartViewModelFactory CartViewModelFactory { get; private set; }
         protected IViewModelMapper ViewModelMapper { get; private set; }
-        protected IComposerContext ComposerContext { get; private set; }
+        protected IComposerRequestContext ComposerContext { get; private set; }
         protected IRecurringCartUrlProvider RecurringCartUrlProvider { get; private set; }
         protected IRecurringScheduleUrlProvider RecurringScheduleUrlProvider { get; private set; }
         protected ILineItemViewModelFactory LineItemViewModelFactory { get; private set; }
@@ -29,7 +29,7 @@ namespace Orckestra.Composer.Cart.Factory
         public RecurringOrderCartViewModelFactory(
             ICartViewModelFactory cartViewModelFactory,
             IViewModelMapper viewModelMapper,
-            IComposerContext composerContext,
+            IComposerRequestContext composerContext,
             IRecurringCartUrlProvider recurringCartUrlProvider,
             IRecurringScheduleUrlProvider recurringScheduleUrlProvider,
             ILineItemViewModelFactory lineItemViewModelFactory)

@@ -39,7 +39,7 @@ namespace Orckestra.Composer.Cart.Factory
         protected IViewModelMapper ViewModelMapper { get; private set; }
         protected IFulfillmentMethodRepository FulfillmentMethodRepository { get; private set; }
         protected ICountryService CountryService { get; private set; }
-        protected IComposerContext ComposerContext { get; private set; }
+        protected IComposerRequestContext ComposerContext { get; private set; }
         protected ITaxViewModelFactory TaxViewModelFactory { get; private set; }
         protected ILineItemViewModelFactory LineItemViewModelFactory { get; private set; }
         protected IRewardViewModelFactory RewardViewModelFactory { get; private set; }
@@ -49,7 +49,7 @@ namespace Orckestra.Composer.Cart.Factory
             IViewModelMapper viewModelMapper,
             IFulfillmentMethodRepository fulfillmentMethodRepository,
             ICountryService countryService,
-            IComposerContext composerContext,
+            IComposerRequestContext composerContext,
             ITaxViewModelFactory taxViewModelFactory,
             ILineItemViewModelFactory lineItemViewModelFactory,
             IRewardViewModelFactory rewardViewModelFactory)

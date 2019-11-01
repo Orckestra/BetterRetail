@@ -16,9 +16,9 @@ namespace Orckestra.Composer.Search.Providers
         public static readonly string CurrentPricePriceListIdProperty = "CurrentPricePriceListId";
 
         //TODO: To be refactored. Composer Context should NEVER be referenced from here.
-        private IComposerContext ComposerContext { get; }
+        private IComposerRequestContext ComposerContext { get; }
 
-        public FromPriceProvider(IComposerContext composerContext)
+        public FromPriceProvider(IComposerRequestContext composerContext)
         {
             if (composerContext == null) { throw new ArgumentNullException(nameof(composerContext)); }
 

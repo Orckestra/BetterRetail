@@ -26,7 +26,7 @@ namespace Orckestra.Composer.Tests.ExceptionFilters
         [SetUp]
         public void SetUp()
         {
-            var contextStub = new Mock<IComposerContext>();
+            var contextStub = new Mock<IComposerRequestContext>();
             contextStub.SetupGet(mock => mock.CultureInfo).Returns(new CultureInfo("en-CA"));
 
             var localizationProviderStub = new Mock<ILocalizationProvider>();

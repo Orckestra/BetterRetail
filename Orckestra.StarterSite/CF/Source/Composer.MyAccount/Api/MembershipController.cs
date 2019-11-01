@@ -33,7 +33,7 @@ namespace Orckestra.Composer.MyAccount.Api
     {
         protected IMyAccountUrlProvider MyAccountUrlProvider { get; }
         protected IMembershipViewService MembershipViewService { get; }
-        protected IComposerContext ComposerContext { get; }
+        protected IComposerRequestContext ComposerContext { get; }
         protected ISiteConfiguration SiteConfiguration { get; }
         internal IFormsAuthenticationProxy FormsAuthentication { private get; set; }
         public IWebsiteContext WebsiteContext { get; set; }
@@ -41,7 +41,7 @@ namespace Orckestra.Composer.MyAccount.Api
         public MembershipController(
             IMyAccountUrlProvider myAccountUrlProvider,
             IMembershipViewService membershipViewService,
-            IComposerContext composerContext,
+            IComposerRequestContext composerContext,
             ISiteConfiguration siteConfiguration,
             IWebsiteContext websiteContext)
         {

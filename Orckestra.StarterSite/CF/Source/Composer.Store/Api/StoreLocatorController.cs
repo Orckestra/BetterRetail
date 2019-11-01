@@ -19,11 +19,11 @@ namespace Orckestra.Composer.Store.Api
         protected IStoreLocatorViewService StoreLocatorViewService { get; private set; }
         protected IStoreViewService StoreViewService { get; private set; }
         protected IMapConfigurationViewService MapConfigurationViewService { get; private set; }
-        protected IComposerContext ComposerContext { get; private set; }
+        protected IComposerRequestContext ComposerContext { get; private set; }
 
         public StoreLocatorController(IStoreLocatorViewService storesListViewService,
             IStoreViewService storeViewService,
-            IComposerContext composerContext,
+            IComposerRequestContext composerContext,
             IMapConfigurationViewService mapConfigurationViewService)
         {
             StoreLocatorViewService = storesListViewService;

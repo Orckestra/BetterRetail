@@ -30,7 +30,7 @@ namespace Orckestra.Composer.MyAccount.Services
         protected IAddressRepository AddressRepository { get; private set; }
         protected IViewModelMapper ViewModelMapper { get; private set; }
         protected IMyAccountUrlProvider MyAccountUrlProvider { get; private set; }
-        protected IComposerContext ComposerContext { get; private set; }
+        protected IComposerRequestContext ComposerContext { get; private set; }
         protected ICountryService CountryService { get; private set; }
         protected IRecurringOrderCartsViewService RecurringOrderCartsViewService { get; private set; }
 
@@ -41,7 +41,7 @@ namespace Orckestra.Composer.MyAccount.Services
             IAddressRepository addressRepository,
             IMyAccountUrlProvider myAccountUrlProvider,
             ICountryService countryService,
-            IComposerContext composerContext,
+            IComposerRequestContext composerContext,
             IRecurringOrderCartsViewService recurringOrderCartsViewService)
         {
             if (viewModelMapper == null) { throw new ArgumentNullException("viewModelMapper"); }

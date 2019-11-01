@@ -13,10 +13,10 @@ namespace Orckestra.Composer.ExceptionFilters
 {
     public abstract class BaseExceptionFilter : IAutofacExceptionFilter
     {
-        protected IComposerContext Context { get; private set; }
+        protected IComposerRequestContext Context { get; private set; }
         protected ILocalizationProvider LocalizationProvider { get; private set; }
 
-        protected BaseExceptionFilter(IComposerContext context, ILocalizationProvider localizationProvider)
+        protected BaseExceptionFilter(IComposerRequestContext context, ILocalizationProvider localizationProvider)
         {
             if (context == null)
             {

@@ -32,7 +32,7 @@ namespace Orckestra.Composer.Cart.Factory
         protected IRewardViewModelFactory RewardViewModelFactory { get; private set; }
         protected ILineItemValidationProvider LineItemValidationProvider { get; private set; }
         protected IRecurringOrdersRepository RecurringOrderRepository { get; private set; }
-        protected IComposerContext ComposerContext { get; private set; }
+        protected IComposerRequestContext ComposerContext { get; private set; }
         protected IRecurringOrderProgramViewModelFactory RecurringOrderProgramViewModelFactory { get; private set; }
         protected IRecurringOrdersSettings RecurringOrdersSettings { get; private set; }
 
@@ -42,7 +42,7 @@ namespace Orckestra.Composer.Cart.Factory
             IRewardViewModelFactory rewardViewModelFactory,
             ILineItemValidationProvider lineItemValidationProvider,
             IRecurringOrdersRepository recurringOrderRepository,
-            IComposerContext composerContext,
+            IComposerRequestContext composerContext,
             IRecurringOrderProgramViewModelFactory recurringOrderProgramViewModelFactory,
             IRecurringOrdersSettings recurringOrdersSettings)
         {

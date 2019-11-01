@@ -15,7 +15,7 @@ namespace Orckestra.Composer.ExceptionFilters
     /// </summary>
     public sealed class ComposerExceptionFilter : BaseExceptionFilter
     {
-        public ComposerExceptionFilter(IComposerContext context, ILocalizationProvider localizationProvider) : base(context, localizationProvider)
+        public ComposerExceptionFilter(IComposerRequestContext context, ILocalizationProvider localizationProvider) : base(context, localizationProvider)
         {
         }
 

@@ -10,11 +10,11 @@ namespace Composer.LoadTest
     public class TestController : ApiController
     {
         private readonly IInventoryLocationProvider _inventoryLocationProvider;
-        private readonly IComposerContext _composerContext;
+        private readonly IComposerRequestContext _composerContext;
 
         public TestController(
             IInventoryLocationProvider inventoryLocationProvider, 
-            IComposerContext composerContext)
+            IComposerRequestContext composerContext)
         {
             _inventoryLocationProvider = inventoryLocationProvider;
             _composerContext = composerContext;
