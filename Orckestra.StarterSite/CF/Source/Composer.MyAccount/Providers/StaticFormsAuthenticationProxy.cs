@@ -41,7 +41,6 @@ namespace Orckestra.Composer.MyAccount.Providers
 
         public void SetAuthCookie(string userName, bool createPersistentCookie, string userData)
         {
-            SetAuthCookie(userName, createPersistentCookie);
             HttpCookie authCookie = GetAuthCookie(userName, createPersistentCookie);
             FormsAuthenticationTicket ticket = Decrypt(authCookie.Value);
             FormsAuthenticationTicket newTicket = new FormsAuthenticationTicket(
