@@ -97,31 +97,16 @@ namespace Orckestra.Composer.MyAccount.Api
 
             if (loginRequest.IsRememberMe)
             {
-                var expireDate = DateTime.Now.AddMinutes(SiteConfiguration.CookieAccesserSettings.TimeoutInMinutes);
-                var ticket = new FormsAuthenticationTicket(
-                    1,
+                FormsAuthentication.SetAuthCookie(
                     loginViewModel.Username,
-                    DateTime.Now,
-                    expireDate,
+                    SiteConfiguration.CookieAccesserSettings.TimeoutInMinutes,
                     loginRequest.IsRememberMe,
-                    WebsiteContext.WebsiteId.ToString()
-                );
-             
-                var encrypted = FormsAuthentication.Encrypt(ticket);
-
-                var cookie = new HttpCookie(FormsAuthentication.FormsCookieName, encrypted)
-                {
-                    Expires = expireDate,
-                    HttpOnly = true,
-                    Secure = SiteConfiguration.CookieAccesserSettings.RequireSsl
-                };
-
-                HttpContext.Current.Response.Cookies.Add(cookie);
+                    WebsiteContext.WebsiteId.ToString(),
+                    SiteConfiguration.CookieAccesserSettings.RequireSsl);
             }
             else
             {
-                HttpCookie authCookie = FormsAuthentication.GetAuthCookie(loginViewModel.Username, true, WebsiteContext.WebsiteId.ToString());
-                HttpContext.Current.Response.Cookies.Add(authCookie);
+                FormsAuthentication.SetAuthCookie(loginViewModel.Username, true, WebsiteContext.WebsiteId.ToString());
             }
 
             return Ok(loginViewModel);
@@ -233,8 +218,7 @@ namespace Orckestra.Composer.MyAccount.Api
 
             ComposerContext.IsGuest = false;
             ComposerContext.CustomerId = createAccountViewModel.CustomerId;
-            HttpCookie authCookie = FormsAuthentication.GetAuthCookie(createAccountViewModel.Username, true, WebsiteContext.WebsiteId.ToString());
-            HttpContext.Current.Response.Cookies.Add(authCookie);
+            FormsAuthentication.SetAuthCookie(createAccountViewModel.Username, true, WebsiteContext.WebsiteId.ToString());
 
             return Ok(createAccountViewModel);
         }

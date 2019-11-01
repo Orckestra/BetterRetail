@@ -1,3 +1,4 @@
+using System;
 using System.Web;
 using System.Web.Security;
 
@@ -38,7 +39,7 @@ namespace Orckestra.Composer.MyAccount.Providers
             return FormsAuthentication.Decrypt(encryptedTicket);
         }
 
-        public HttpCookie GetAuthCookie(string userName, bool createPersistentCookie, string userData)
+        public void SetAuthCookie(string userName, bool createPersistentCookie, string userData)
         {
             SetAuthCookie(userName, createPersistentCookie);
             HttpCookie authCookie = GetAuthCookie(userName, createPersistentCookie);
@@ -52,7 +53,23 @@ namespace Orckestra.Composer.MyAccount.Providers
                 userData
             );
             authCookie.Value = Encrypt(newTicket);
-            return authCookie;
+            HttpContext.Current.Response.Cookies.Add(authCookie);
+        }
+
+        public void SetAuthCookie(string name, int timeoutInMinutes, bool isPersistent, string userData, bool requireSsl)
+        {
+            var expireDate = DateTime.Now.AddMinutes(timeoutInMinutes);
+            var ticket = new FormsAuthenticationTicket(1, name, DateTime.Now, expireDate, isPersistent, userData);
+
+            var encrypted = FormsAuthentication.Encrypt(ticket);
+            var cookie = new HttpCookie(FormsAuthentication.FormsCookieName, encrypted)
+            {
+                Expires = expireDate,
+                HttpOnly = true,
+                Secure = requireSsl
+            };
+
+            HttpContext.Current.Response.Cookies.Add(cookie);
         }
     }
 }

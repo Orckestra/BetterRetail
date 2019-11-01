@@ -10,13 +10,6 @@ namespace Orckestra.Composer.CompositeC1
 {
     public class AuthorizeAndRedirectAttribute : AuthorizeAttribute
     {
-        protected IPageService PageService { get; }
-
-        public AuthorizeAndRedirectAttribute() :base()
-        {
-            PageService = new PageService();
-        }
-
         protected override bool AuthorizeCore(HttpContextBase httpContext)
         {
             var websiteId = SitemapNavigator.CurrentHomePageId;
@@ -28,9 +21,10 @@ namespace Orckestra.Composer.CompositeC1
         protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)
         {
             var siteConfiguration = ServiceLocator.GetService<ISiteConfiguration>();
+            var pageService = ServiceLocator.GetService<IPageService>();
             var loginPageId = siteConfiguration.GetPagesConfiguration().LoginPageId;
             var culture = C1PageRoute.PageUrlData?.LocalizationScope;
-            string loginUrl = PageService.GetPageUrl(loginPageId, culture);
+            string loginUrl = pageService.GetPageUrl(loginPageId, culture);
 
             filterContext.Result = new RedirectResult(loginUrl);
         }
