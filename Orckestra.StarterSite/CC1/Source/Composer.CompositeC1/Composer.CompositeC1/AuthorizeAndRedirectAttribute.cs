@@ -10,7 +10,12 @@ namespace Orckestra.Composer.CompositeC1
 {
     public class AuthorizeAndRedirectAttribute : AuthorizeAttribute
     {
-        protected IPageService PageService { get; private set; }
+        protected IPageService PageService { get; }
+
+        public AuthorizeAndRedirectAttribute() :base()
+        {
+            PageService = new PageService();
+        }
 
         protected override bool AuthorizeCore(HttpContextBase httpContext)
         {
