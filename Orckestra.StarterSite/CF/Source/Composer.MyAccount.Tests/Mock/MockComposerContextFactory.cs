@@ -8,9 +8,9 @@ namespace Orckestra.Composer.MyAccount.Tests.Mock
 {
     internal static class MockComposerContextFactory
     {
-        public static Mock<IComposerRequestContext> Create(bool authenticated, bool guest)
+        public static Mock<IComposerContext> Create(bool authenticated, bool guest)
         {
-            var composerContext = new Mock<IComposerRequestContext>(MockBehavior.Strict);
+            var composerContext = new Mock<IComposerContext>(MockBehavior.Strict);
 
             composerContext.SetupProperty(p => p.CultureInfo)
                  .Object.CultureInfo = TestingExtensions.GetRandomCulture();

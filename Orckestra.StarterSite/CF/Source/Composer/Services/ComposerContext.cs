@@ -8,16 +8,18 @@ using Orckestra.Composer.Utils;
 
 namespace Orckestra.Composer.Services
 {
-    public class ComposerRequestContext : IComposerRequestContext
+    //TODO: Rename to ComposerRequestContext
+    //TODO: Maybe refactor setter getter with side-effects to methods
+    public class ComposerContext : IComposerContext
     {
-        protected ICookieAccessor<ComposerCookieDto> CookieAccessor { get; }
+        private readonly ICookieAccessor<ComposerCookieDto> CookieAccessor;
         protected IScopeProvider ScopeProvider { get; }
         protected HttpContextBase HttpContextBase { get; }
         protected ICountryCodeProvider CountryCodeProvider { get; }
         protected IWebsiteContext WebsiteContext { get; }
         protected EncryptionUtility EncryptionUtility { get; }
 
-        public ComposerRequestContext(
+        public ComposerContext(
             ICookieAccessor<ComposerCookieDto> cookieAccessor,
             IScopeProvider scopeProvider,
             HttpContextBase httpContextBase,

@@ -16,9 +16,9 @@ namespace Orckestra.Composer.Services
     {
         protected IDamProvider DamProvider { get; private set; }
         protected IProductRepository ProductRepository { get; }
-        protected IComposerRequestContext ComposerContext { get; private set; }
+        protected IComposerContext ComposerContext { get; private set; }
 
-        public ImageService(IDamProvider damProvider, IProductRepository productRepository, IComposerRequestContext composerContext)
+        public ImageService(IDamProvider damProvider, IProductRepository productRepository, IComposerContext composerContext)
         {
             DamProvider = damProvider ?? throw new ArgumentNullException(nameof(damProvider));
             ProductRepository = productRepository ?? throw new ArgumentNullException(nameof(productRepository));

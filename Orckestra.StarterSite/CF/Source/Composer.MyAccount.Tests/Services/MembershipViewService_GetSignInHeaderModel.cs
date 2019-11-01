@@ -41,7 +41,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             var lastName = GetRandom.String(32);
             var cultureInfo = TestingExtensions.GetRandomCulture();
 
-            var composerContext = new Mock<IComposerRequestContext>();
+            var composerContext = new Mock<IComposerContext>();
             composerContext
                 .SetupGet(c => c.IsAuthenticated)
                 .Returns(isAuthenticated);

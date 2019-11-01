@@ -24,7 +24,7 @@ namespace Orckestra.Composer.Product.Tests.Services
 
         private void SetupComposerContext()
         {
-            var composerContext = new Mock<IComposerRequestContext>();
+            var composerContext = new Mock<IComposerContext>();
             composerContext.Setup(context => context.CultureInfo).Returns(CultureInfo.GetCultureInfo("en-US"));
 
             _container.Use(composerContext);

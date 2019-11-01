@@ -47,7 +47,7 @@ namespace Orckestra.Composer.Factory
         protected ILocalizationProvider LocalizationProvider { get; private set; }
         protected IViewModelMapper ViewModelMapper { get; private set; }
         protected ICountryService CountryService { get; private set; }
-        protected IComposerRequestContext ComposerContext { get; private set; }
+        protected IComposerContext ComposerContext { get; private set; }
         protected IRecurringOrdersRepository RecurringOrdersRepository { get; private set; }
         protected IAddressRepository AddressRepository { get; private set; }
         protected IProductUrlProvider ProductUrlProvider { get; private set; }
@@ -63,7 +63,7 @@ namespace Orckestra.Composer.Factory
             ILocalizationProvider localizationProvider,
             IViewModelMapper viewModelMapper,
             ICountryService countryService,
-            IComposerRequestContext composerContext,
+            IComposerContext composerContext,
             IRecurringOrdersRepository recurringOrdersRepository,
             IAddressRepository addressRepository,
             IProductUrlProvider productUrlProvider,

@@ -16,7 +16,7 @@ namespace Orckestra.Composer.ExceptionFilters
     /// </summary>
     public sealed class AggregatedComposerExceptionFilter : BaseExceptionFilter
     {
-        public AggregatedComposerExceptionFilter(IComposerRequestContext context, ILocalizationProvider localizationProvider) : base(context, localizationProvider)
+        public AggregatedComposerExceptionFilter(IComposerContext context, ILocalizationProvider localizationProvider) : base(context, localizationProvider)
         {
         }
 

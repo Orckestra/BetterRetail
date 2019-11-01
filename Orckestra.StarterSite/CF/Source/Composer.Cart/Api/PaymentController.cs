@@ -18,13 +18,13 @@ namespace Orckestra.Composer.Cart.Api
     [JQueryOnlyFilter]
     public class PaymentController : ApiController
     {
-        protected IComposerRequestContext ComposerContext { get; private set; }
+        protected IComposerContext ComposerContext { get; private set; }
         protected IPaymentViewService PaymentViewService { get; private set; }
         protected IImageViewService ImageService { get; private set; }
         protected IRecurringScheduleUrlProvider RecurringScheduleUrlProvider { get; private set; }
         protected IRecurringCartUrlProvider RecurringCartUrlProvider { get; private set; }
 
-        public PaymentController(IComposerRequestContext composerContext, IPaymentViewService paymentViewService, IImageViewService imageService,
+        public PaymentController(IComposerContext composerContext, IPaymentViewService paymentViewService, IImageViewService imageService,
             IRecurringScheduleUrlProvider recurringScheduleUrlProvider, IRecurringCartUrlProvider recurringCartUrlProvider)
         {
             if (composerContext == null) { throw new ArgumentNullException("composerContext"); }

@@ -34,7 +34,7 @@ namespace Orckestra.Composer.Cart.Services
         protected IImageService ImageService { get; private set; }
         protected ILookupService LookupService { get; private set; }
         protected IRecurringOrdersRepository RecurringOrdersRepository { get; private set; }
-        protected IComposerRequestContext ComposerContext { get; private set; }
+        protected IComposerContext ComposerContext { get; private set; }
         protected IAddressRepository AddressRepository { get; private set; }
         protected ICouponViewService CouponViewService { get; private set; }
         protected IRecurringCartUrlProvider RecurringCartUrlProvider { get; private set; }
@@ -48,7 +48,7 @@ namespace Orckestra.Composer.Cart.Services
             IImageService imageService,
             ILookupService lookupService,
             IRecurringOrdersRepository recurringOrdersRepository,
-            IComposerRequestContext composerContext,
+            IComposerContext composerContext,
             IAddressRepository addressRepository,
             ICouponViewService couponViewService,
             IRecurringCartUrlProvider recurringCartUrlProvider,

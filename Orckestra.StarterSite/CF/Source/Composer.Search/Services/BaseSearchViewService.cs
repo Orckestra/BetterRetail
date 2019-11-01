@@ -45,7 +45,7 @@ namespace Orckestra.Composer.Search.Services
         protected ISelectedFacetFactory SelectedFacetFactory { get; }
         protected IViewModelMapper ViewModelMapper { get; }
         protected IPriceProvider PriceProvider { get; }
-        protected IComposerRequestContext ComposerContext { get; }
+        protected IComposerContext ComposerContext { get; }
         protected IProductSettingsViewService ProductSettings { get; }
         protected IScopeViewService ScopeViewService { get; }
         protected IRecurringOrdersSettings RecurringOrdersSettings { get; private set; }
@@ -60,7 +60,7 @@ namespace Orckestra.Composer.Search.Services
             IFacetFactory facetFactory,
             ISelectedFacetFactory selectedFacetFactory,
             IPriceProvider priceProvider,
-            IComposerRequestContext composerContext,
+            IComposerContext composerContext,
             IProductSettingsViewService productSettings,
             IScopeViewService scopeViewService,
             IRecurringOrdersSettings recurringOrdersSettings)

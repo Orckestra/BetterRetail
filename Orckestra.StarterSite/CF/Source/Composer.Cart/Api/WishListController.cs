@@ -22,11 +22,11 @@ namespace Orckestra.Composer.Cart.Api
     public class WishListController : ApiController
     {
         protected IWishListViewService WishListViewService { get; private set; }
-        protected IComposerRequestContext ComposerContext { get; private set; }
+        protected IComposerContext ComposerContext { get; private set; }
 
         public WishListController(
             IWishListViewService wishListViewService,
-            IComposerRequestContext composerContext)
+            IComposerContext composerContext)
         {
             if (wishListViewService == null) { throw new ArgumentNullException("wishListViewService"); }
             if (composerContext == null) { throw new ArgumentNullException("composerContext"); }

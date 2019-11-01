@@ -20,7 +20,7 @@ namespace Orckestra.Composer.MyAccount.Api
     [ValidateModelState]
     public class CustomerController : ApiController
     {
-        protected IComposerRequestContext ComposerContext { get; private set; }
+        protected IComposerContext ComposerContext { get; private set; }
         protected IMyAccountUrlProvider MyAccountUrlProvider { get; private set; }
         protected ICustomerViewService CustomerViewService { get; private set; }
         protected ICustomerAddressViewService CustomerAddressViewService { get; private set; }
@@ -29,7 +29,7 @@ namespace Orckestra.Composer.MyAccount.Api
         protected IRecurringCartUrlProvider RecurringCartUrlProvider { get; private set; }
 
         public CustomerController(
-            IComposerRequestContext composerContext,
+            IComposerContext composerContext,
             IMyAccountUrlProvider myAccountUrlProvider,
             ICustomerViewService customerViewService,
             ICustomerAddressViewService customerAddressViewService,

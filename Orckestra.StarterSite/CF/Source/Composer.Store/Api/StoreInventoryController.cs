@@ -16,10 +16,10 @@ namespace Orckestra.Composer.Store.Api
     public class StoreInventoryController : ApiController
     {
         protected IStoreInventoryViewService StoreInventoryViewService { get; private set; }
-        protected IComposerRequestContext ComposerContext { get; private set; }
+        protected IComposerContext ComposerContext { get; private set; }
 
         public StoreInventoryController(IStoreInventoryViewService storeInventoryViewService,
-            IComposerRequestContext composerContext)
+            IComposerContext composerContext)
         {
             StoreInventoryViewService = storeInventoryViewService;
             ComposerContext = composerContext;

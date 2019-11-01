@@ -42,7 +42,7 @@ namespace Orckestra.Composer.Search.Services
             IFacetFactory facetFactory,
             ISelectedFacetFactory selectedFacetFactory,
             IPriceProvider priceProvider,
-            IComposerRequestContext composerContext,
+            IComposerContext composerContext,
             IProductSettingsViewService productSettings,
             IScopeViewService scopeViewService,
             IRecurringOrdersSettings recurringOrdersSettings)

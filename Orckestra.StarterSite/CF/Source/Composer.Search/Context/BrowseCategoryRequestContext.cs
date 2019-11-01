@@ -14,7 +14,7 @@ namespace Orckestra.Composer.Search.Context
 {
     public class BrowseCategoryRequestContext : IBrowseCategoryRequestContext
     {
-        protected IComposerRequestContext ComposerContext { get; }
+        protected IComposerContext ComposerContext { get; }
         protected ICategoryBrowsingViewService CategoryBrowsingViewService { get; }
         protected ISearchUrlProvider SearchUrlProvider { get; }
         protected IInventoryLocationProvider InventoryLocationProvider { get; }
@@ -23,7 +23,7 @@ namespace Orckestra.Composer.Search.Context
 
         protected CategoryBrowsingViewModel ViewModel { get; set; }
 
-        public BrowseCategoryRequestContext(IComposerRequestContext composerContext, ICategoryBrowsingViewService categoryBrowsingViewService,
+        public BrowseCategoryRequestContext(IComposerContext composerContext, ICategoryBrowsingViewService categoryBrowsingViewService,
             ISearchUrlProvider searchUrlProvider, IInventoryLocationProvider inventoryLocationProvider, ICategoryViewService categoryViewService,
             ICategoryMetaContext categoryMetaContext)
         {

@@ -14,9 +14,9 @@ namespace Orckestra.Composer.Cart.Api
     public class AddressController : ApiController
     {
         protected ICountryService CountryService { get; private set; }
-        protected IComposerRequestContext ComposerContext { get; private set; }
+        protected IComposerContext ComposerContext { get; private set; }
 
-        public AddressController(ICountryService countryService, IComposerRequestContext composerContext)
+        public AddressController(ICountryService countryService, IComposerContext composerContext)
         {
             if (countryService == null) { throw new ArgumentNullException("countryService"); }
             if (composerContext == null) { throw new ArgumentNullException("composerContext"); }

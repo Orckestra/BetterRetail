@@ -16,10 +16,10 @@ namespace Orckestra.Composer.Api
     public class LocalizationController : Controller
     {
         private readonly ILocalizationProvider _localizationProvider;
-        private readonly IComposerRequestContext      _composerContext;
+        private readonly IComposerContext      _composerContext;
 
         public LocalizationController(ILocalizationProvider localizationProvider,
-                                      IComposerRequestContext      composerContext)
+                                      IComposerContext      composerContext)
         {
             if (localizationProvider == null) { throw new ArgumentException("localizationProvider"); }
             if (composerContext      == null) { throw new ArgumentException("composerContext"); }

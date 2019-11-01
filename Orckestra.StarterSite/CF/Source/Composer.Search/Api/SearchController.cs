@@ -29,14 +29,14 @@ namespace Orckestra.Composer.Search.Api
         private const int MAXIMUM_CATEGORIES_SUGGESTIONS = 4;
         private const int MAXIMUM_BRAND_SUGGESTIONS = 3;
 
-        protected IComposerRequestContext ComposerContext { get; private set; }
+        protected IComposerContext ComposerContext { get; private set; }
         protected ISearchViewService SearchViewService { get; private set; }
         protected IInventoryLocationProvider InventoryLocationProvider { get; private set; }
         protected ISearchTermsTransformationProvider SearchTermsTransformationProvider { get; private set; }
         protected IAutocompleteProvider AutocompleteProvider { get; private set; }
 
         public SearchController(
-            IComposerRequestContext composerContext, 
+            IComposerContext composerContext, 
             ISearchViewService searchViewService, 
             IInventoryLocationProvider inventoryLocationProvider, 
             ISearchTermsTransformationProvider searchTermsTransformationProvider,

@@ -49,7 +49,7 @@ namespace Orckestra.Composer.SearchQuery.Services
          IFacetFactory facetFactory,
          ISelectedFacetFactory selectedFacetFactory,
          IPriceProvider priceProvider,
-         IComposerRequestContext composerContext,
+         IComposerContext composerContext,
          IProductSettingsViewService productSettings,
          IScopeViewService scopeViewService,
          ISearchQueryRepository searchQueryRepository,
