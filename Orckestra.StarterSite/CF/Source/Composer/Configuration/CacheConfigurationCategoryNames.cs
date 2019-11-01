@@ -90,5 +90,7 @@
         /// Cache used for the list of fulfillementMEthods for a scope
         /// </summary>
         public static string FulfillmentMethodsByScope = "FulfillmentMethodsByScope";
+
+        public static string PaymentProviders = "PaymentProviders";
     }
 }

@@ -73,12 +73,30 @@ namespace Orckestra.Composer.Cart.Services
         /// </summary>
         /// <param name="param">Parameters used to retrieve the payment providers.</param>
         /// <returns></returns>
-        public virtual Task<IEnumerable<PaymentProviderViewModel>> GetPaymentProvidersAsync(GetPaymentProvidersParam param)
+        public virtual async Task<IEnumerable<PaymentProviderViewModel>> GetPaymentProvidersAsync(GetPaymentProvidersParam param)
         {
             if (param == null) { throw new ArgumentNullException("param"); }
-            if (param.CultureInfo == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("CultureInfo"), "param"); }
+            if (param.CultureInfo == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param.CultureInfo)), nameof(param)); }
+            if (param.Scope == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param.Scope)), nameof(param)); }
 
-            var providers = PaymentProviderFactory.ResolveAllProviders();
+            var localProviders = PaymentProviderFactory.ResolveAllProviders();
+            var availableProviders = await PaymentRepository.GetPaymentProviders(param.Scope).ConfigureAwait(false);
+
+            var providers = new List<IPaymentProvider>();
+            foreach (var provider in localProviders)
+            {
+                var isProviderAvailable = availableProviders
+                    .Where(p => p.ImplementationTypeName.Equals(provider.ProviderType, StringComparison.OrdinalIgnoreCase))
+                    .Where(p => p.SupportedCultureIds
+                                    .Split(',')
+                                    .Select(x => x.Trim())
+                                    .Any(c => c.Equals(param.CultureInfo.Name, StringComparison.OrdinalIgnoreCase)))
+                    .Any();
+
+                if (isProviderAvailable)
+                    providers.Add(provider);
+            }
+
             var viewModels = new List<PaymentProviderViewModel>();
 
             foreach (var paymentProvider in providers)
@@ -87,7 +105,7 @@ namespace Orckestra.Composer.Cart.Services
                 viewModels.Add(vm);
             }
 
-            return Task.FromResult(viewModels.AsEnumerable());
+            return viewModels;
         }
 
         protected virtual PaymentProviderViewModel MapPaymentProviderViewModel(IPaymentProvider paymentProvider, CultureInfo cultureInfo)

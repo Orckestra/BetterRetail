@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Overture.ServiceModel.Customers;
 using Orckestra.Overture.ServiceModel.Orders;
+using Orckestra.Overture.ServiceModel.Providers;
 
 namespace Orckestra.Composer.Cart.Repositories
 {
@@ -77,5 +78,11 @@ namespace Orckestra.Composer.Cart.Repositories
         /// </summary>
         /// <returns></returns>
         Task<Payment> GetPaymentAsync(GetPaymentParam param);
+
+        /// <summary>
+        /// Get a available payment providers by scope
+        /// </summary>
+        /// <returns></returns>
+        Task<IEnumerable<PaymentProviderInfo>> GetPaymentProviders(string scopeId);
     }
 }

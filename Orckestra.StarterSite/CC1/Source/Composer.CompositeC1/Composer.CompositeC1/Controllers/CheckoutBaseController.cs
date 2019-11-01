@@ -31,7 +31,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         protected IPaymentViewService PaymentViewService { get; private set; }
         protected IMyAccountUrlProvider MyAccountUrlProvider { get; private set; }
         protected IWebsiteContext WebsiteContext { get; private set; }
-        protected ICartService CartService { get; private set; }        
+        protected ICartService CartService { get; private set; }
 
         protected CheckoutBaseController(
             IPageService pageService,
@@ -100,6 +100,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
 
             var getPaymentProvidersParam = new GetPaymentProvidersParam
             {
+                Scope = ComposerContext.Scope,
                 CultureInfo = ComposerContext.CultureInfo
             };
 
@@ -143,7 +144,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         public virtual ActionResult CheckoutSignInAsGuest()
         {
             var stepOneUrl = UrlProvider.GetCheckoutStepUrl(new GetCheckoutStepUrlParam
-            {                
+            {
                 CultureInfo = ComposerContext.CultureInfo,
                 StepNumber = 1
             });
@@ -161,7 +162,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
                 CultureInfo = ComposerContext.CultureInfo,
                 CustomerId = ComposerContext.CustomerId,
                 ExecuteWorkflow = true,
-                Scope = ComposerContext.Scope                
+                Scope = ComposerContext.Scope
             }).Result;
 
             var hasRecurringItems = cart.HasRecurringLineitems;
@@ -205,9 +206,9 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         public virtual ActionResult CheckoutFinalStepOrderSummary()
         {
             var cartViewModel = BuildCartViewModel();
-            
+
             cartViewModel.Context.Add("RedirectUrl", UrlProvider.GetCartUrl(new BaseUrlParameter
-            {                
+            {
                 CultureInfo = ComposerContext.CultureInfo
             }));
 

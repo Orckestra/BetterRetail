@@ -159,6 +159,7 @@ namespace Orckestra.Composer.Cart.Api
 
             var param = new GetPaymentProvidersParam
             {
+                Scope = ComposerContext.Scope,
                 CultureInfo = ComposerContext.CultureInfo
             };
             var providers = await PaymentViewService.GetPaymentProvidersAsync(param).ConfigureAwait(false);

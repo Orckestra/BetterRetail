@@ -163,6 +163,7 @@
     <Compile Include="Providers\OverwriteCartMergeProvider_MergeCartAsync.cs" />
     <Compile Include="Providers\SurfacedErrorLineItemValidationProvider_IsLineItemValid.cs" />
     <Compile Include="Repositories\CartRepository_AddCouponAsync.cs" />
+    <Compile Include="Repositories\PaymentRepository_GetPaymentProviders.cs" />
     <Compile Include="Repositories\WishListRepository_GetWishListAsync.cs" />
     <Compile Include="Repositories\WishListRepository_RemoveLineItemAsync.cs" />
     <Compile Include="Repositories\WishListRepository_AddLineItemAsync.cs" />
@@ -206,6 +207,7 @@
     <Compile Include="Services\Order\OrderHistoryViewService_GetOrderDetailViewModelAsync.cs" />
     <Compile Include="Services\Order\OrderHistoryViewService_GetOrderDetailViewModelForGuestAsync.cs" />
     <Compile Include="Services\Order\OrderHistoryViewService_GetOrderHistoryViewModelAsync.cs" />
+    <Compile Include="Services\PaymentViewService_GetPaymentProviders.cs" />
     <Compile Include="Services\PaymentViewService_GetPaymentMethodsAsync.cs" />
     <Compile Include="Services\PaymentViewService_UpdatePaymentMethodAsync.cs" />
     <Compile Include="Services\ShippingMethodViewService_SetCheapestShippingMethodAsync.cs" />

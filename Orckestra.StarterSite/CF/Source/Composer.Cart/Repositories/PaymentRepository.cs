@@ -14,6 +14,8 @@ using Orckestra.Overture.ServiceModel.Orders;
 using Orckestra.Overture.ServiceModel.Requests.Customers;
 using Orckestra.Overture.ServiceModel.Requests.Orders.Shopping;
 using Orckestra.Overture.ServiceModel.Requests.Orders.Shopping.Payments;
+using Orckestra.Overture.ServiceModel.Requests.Providers;
+using Orckestra.Overture.ServiceModel.Providers;
 
 namespace Orckestra.Composer.Cart.Repositories
 {
@@ -287,6 +289,27 @@ namespace Orckestra.Composer.Cart.Repositories
         }
 
         /// <summary>
+        /// Obtains the available payment providers for scope.
+        /// </summary>
+        /// <param name="scopeId">Scope used to make the request.</param>
+        /// <returns>List of providers</returns>
+        public virtual async Task<IEnumerable<PaymentProviderInfo>> GetPaymentProviders(string scopeId)
+        {
+            if (scopeId == null) { throw new ArgumentNullException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(scopeId))); }
+
+            var cacheKey = BuildPaymentProvidersCacheKey(scopeId);
+
+            var request = new GetPaymentProvidersRequest()
+            {
+                ScopeId = scopeId,
+            };
+
+            var paymentProviderInfos = await CacheProvider.GetOrAddAsync(cacheKey, () => OvertureClient.SendAsync(request)).ConfigureAwait(false);
+            return paymentProviderInfos.PaymentProviders;
+        }
+
+
+        /// <summary>
         /// Builds a cache key for a cart operation.
         /// </summary>
         /// <param name="scope">Scope of the request.</param>
@@ -307,7 +330,7 @@ namespace Orckestra.Composer.Cart.Repositories
         }
 
         protected virtual CacheKey BuildPaymentMethodCacheKey(string scope, string cartName, Guid customerId, string providerName)
-        {            
+        {
             var cacheKey = new CacheKey(CacheConfigurationCategoryNames.PaymentMethod)
             {
                 Scope = scope,
@@ -335,6 +358,16 @@ namespace Orckestra.Composer.Cart.Repositories
 
             key.AppendKeyParts(customerId, cartName);
             return key;
+        }
+
+        protected virtual CacheKey BuildPaymentProvidersCacheKey(string scope)
+        {
+            var cacheKey = new CacheKey(CacheConfigurationCategoryNames.PaymentProviders)
+            {
+                Scope = scope,
+            };
+
+            return cacheKey;
         }
 
     }
