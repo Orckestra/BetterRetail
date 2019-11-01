@@ -15,6 +15,6 @@ namespace Orckestra.Composer.MyAccount.Providers
         HttpCookie GetAuthCookie(string userName, bool createPersistentCookie);
         FormsAuthenticationTicket Decrypt(string encryptedTicket);
         void SetAuthCookie(string userName, bool createPersistentCookie, string userData);
-        void SetAuthCookie(string name, int timeoutInMinutes, bool isPersistent, string userData, bool requireSsl);
+        void SetAuthCookie(string userName, int timeoutInMinutes, bool createPersistentCookie, string userData, bool requireSsl);
     }
 }

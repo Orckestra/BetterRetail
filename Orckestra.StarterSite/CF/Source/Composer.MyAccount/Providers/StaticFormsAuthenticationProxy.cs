@@ -55,10 +55,10 @@ namespace Orckestra.Composer.MyAccount.Providers
             HttpContext.Current.Response.Cookies.Add(authCookie);
         }
 
-        public void SetAuthCookie(string name, int timeoutInMinutes, bool isPersistent, string userData, bool requireSsl)
+        public void SetAuthCookie(string userName, int timeoutInMinutes, bool createPersistentCookie, string userData, bool requireSsl)
         {
             var expireDate = DateTime.Now.AddMinutes(timeoutInMinutes);
-            var ticket = new FormsAuthenticationTicket(1, name, DateTime.Now, expireDate, isPersistent, userData);
+            var ticket = new FormsAuthenticationTicket(1, userName, DateTime.Now, expireDate, createPersistentCookie, userData);
 
             var encrypted = FormsAuthentication.Encrypt(ticket);
             var cookie = new HttpCookie(FormsAuthentication.FormsCookieName, encrypted)
