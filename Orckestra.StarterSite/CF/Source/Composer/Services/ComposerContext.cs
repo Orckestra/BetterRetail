@@ -9,10 +9,9 @@ using Orckestra.Composer.Utils;
 namespace Orckestra.Composer.Services
 {
     //TODO: Rename to ComposerRequestContext
-    //TODO: Maybe refactor setter getter with side-effects to methods
     public class ComposerContext : IComposerContext
     {
-        private readonly ICookieAccessor<ComposerCookieDto> CookieAccessor;
+        protected ICookieAccessor<ComposerCookieDto> CookieAccessor { get; }
         protected IScopeProvider ScopeProvider { get; }
         protected HttpContextBase HttpContextBase { get; }
         protected ICountryCodeProvider CountryCodeProvider { get; }
