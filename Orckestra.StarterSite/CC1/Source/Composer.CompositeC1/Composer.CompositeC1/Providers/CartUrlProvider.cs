@@ -95,6 +95,8 @@ namespace Orckestra.Composer.CompositeC1.Providers
             {
                 CultureInfo = parameters.CultureInfo
             };
+            cacheKey.AppendKeyParts(WebsiteContext.WebsiteId.ToString());
+
             Dictionary<int, CheckoutStepPageInfo> stepUrls = CacheProvider.Get< Dictionary<int, CheckoutStepPageInfo>>(cacheKey);
 
             if (stepUrls != null)

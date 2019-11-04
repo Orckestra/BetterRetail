@@ -22,7 +22,6 @@ namespace Orckestra.Composer.CompositeC1.Mvc.Controllers
             IOrderHistoryViewService orderHistoryViewService,
             IWishListViewService wishListViewService,
             IRecurringOrderTemplatesViewService recurringOrderTemplatesViewService,
-            IRecurringOrderCartsViewService recurringOrderCartsViewService,
             IRecurringOrdersSettings recurringOrdersSettings) : base(
                 customerViewService,
                 customerAddressViewService,
@@ -33,7 +32,6 @@ namespace Orckestra.Composer.CompositeC1.Mvc.Controllers
                 orderHistoryViewService,
                 wishListViewService,
                 recurringOrderTemplatesViewService,
-                recurringOrderCartsViewService,
                 recurringOrdersSettings)
         {
         }

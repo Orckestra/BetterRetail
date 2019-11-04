@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Configuration;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using System.Web.Security;
-using Orckestra.Composer.Configuration;
 using Orckestra.Composer.MyAccount.Parameters;
 using Orckestra.Composer.MyAccount.Providers;
 using Orckestra.Composer.MyAccount.Requests;
@@ -38,24 +36,22 @@ namespace Orckestra.Composer.MyAccount.Api
         protected IComposerContext ComposerContext { get; }
         protected ISiteConfiguration SiteConfiguration { get; }
         internal IFormsAuthenticationProxy FormsAuthentication { private get; set; }
+        public IWebsiteContext WebsiteContext { get; set; }
 
         public MembershipController(
             IMyAccountUrlProvider myAccountUrlProvider,
             IMembershipViewService membershipViewService,
             IComposerContext composerContext,
-            ISiteConfiguration siteConfiguration)
+            ISiteConfiguration siteConfiguration,
+            IWebsiteContext websiteContext)
         {
-            if (myAccountUrlProvider == null) { throw new ArgumentNullException(nameof(myAccountUrlProvider)); }
-            if (membershipViewService == null) { throw new ArgumentNullException(nameof(membershipViewService)); }
-            if (composerContext == null) { throw new ArgumentNullException(nameof(composerContext)); }
-
-            MyAccountUrlProvider = myAccountUrlProvider;
-            MembershipViewService = membershipViewService;
-            ComposerContext = composerContext;
-            SiteConfiguration = siteConfiguration;
+            MyAccountUrlProvider = myAccountUrlProvider ?? throw new ArgumentNullException(nameof(myAccountUrlProvider));
+            MembershipViewService = membershipViewService ?? throw new ArgumentNullException(nameof(membershipViewService));
+            ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
+            SiteConfiguration = siteConfiguration ?? throw new ArgumentNullException(nameof(siteConfiguration)); ;
+            WebsiteContext = websiteContext ?? throw new ArgumentNullException(nameof(websiteContext));
 
             FormsAuthentication = new StaticFormsAuthenticationProxy();
-
         }
 
         /// <summary>
@@ -101,21 +97,16 @@ namespace Orckestra.Composer.MyAccount.Api
 
             if (loginRequest.IsRememberMe)
             {
-                var ticket = new FormsAuthenticationTicket(loginViewModel.Username, loginRequest.IsRememberMe, SiteConfiguration.CookieAccesserSettings.TimeoutInMinutes);
-                var encrypted = FormsAuthentication.Encrypt(ticket);
-
-                var cookie = new HttpCookie(FormsAuthentication.FormsCookieName, encrypted)
-                {
-                    Expires = DateTime.Now.AddMinutes(SiteConfiguration.CookieAccesserSettings.TimeoutInMinutes),
-                    HttpOnly = true,
-                    Secure = SiteConfiguration.CookieAccesserSettings.RequireSsl
-                };
-
-                HttpContext.Current.Response.Cookies.Add(cookie);
+                FormsAuthentication.SetAuthCookie(
+                    loginViewModel.Username,
+                    SiteConfiguration.CookieAccesserSettings.TimeoutInMinutes,
+                    loginRequest.IsRememberMe,
+                    WebsiteContext.WebsiteId.ToString(),
+                    SiteConfiguration.CookieAccesserSettings.RequireSsl);
             }
             else
             {
-                FormsAuthentication.SetAuthCookie(loginViewModel.Username, true);
+                FormsAuthentication.SetAuthCookie(loginViewModel.Username, true, WebsiteContext.WebsiteId.ToString());
             }
 
             return Ok(loginViewModel);
@@ -227,7 +218,7 @@ namespace Orckestra.Composer.MyAccount.Api
 
             ComposerContext.IsGuest = false;
             ComposerContext.CustomerId = createAccountViewModel.CustomerId;
-            FormsAuthentication.SetAuthCookie(createAccountViewModel.Username, true);
+            FormsAuthentication.SetAuthCookie(createAccountViewModel.Username, true, WebsiteContext.WebsiteId.ToString());
 
             return Ok(createAccountViewModel);
         }
