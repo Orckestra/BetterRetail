@@ -3,7 +3,7 @@ using Orckestra.Composer.ViewModels;
 
 namespace Orckestra.Composer.Search.ViewModels
 {
-    public sealed class ProductSearchViewModel : BaseViewModel
+    public class ProductSearchViewModel : BaseViewModel
     {
         /// <summary>
         /// Gets or sets the product identifier.
