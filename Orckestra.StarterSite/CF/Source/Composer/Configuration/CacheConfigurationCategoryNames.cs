@@ -1,4 +1,4 @@
-﻿namespace Orckestra.Composer.Configuration
+namespace Orckestra.Composer.Configuration
 {
     /// <summary>
     /// This class defines a list of constant names that will be used when getting/setting information in cache for different systems
@@ -61,15 +61,10 @@
         /// </summary>
         public static string ProductSettings = "ProductSettings";
 
-        /// <summary>
+         /// <summary>
         /// Cache where the Product Media Settings will be stored
         /// </summary>
         public static string ProductMediaSettings = "ProductMediaSettings";
-
-        /// <summary>
-        /// Cache where the Product Media will be stored
-        /// </summary>
-        public static string ProductMedia = "ProductMedia";
 
         public static string FulfillmentLocationsByScope = "FulfillmentLocationsByScope";
 

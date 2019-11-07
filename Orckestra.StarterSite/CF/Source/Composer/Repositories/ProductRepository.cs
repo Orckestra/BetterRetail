@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Parameters;
@@ -47,11 +48,6 @@ namespace Orckestra.Composer.Repositories
             if (string.IsNullOrWhiteSpace(param.Scope))
             {
                 throw new ArgumentException("param.Scope must not be null or whitespace.", "param");
-            }
-
-            if (param.CultureInfo == null)
-            {
-                throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("CultureInfo"), "param");
             }
 
             if (string.IsNullOrWhiteSpace(param.ProductId))
@@ -177,27 +173,38 @@ namespace Orckestra.Composer.Repositories
             return OvertureClient.SendAsync(request);
         }
 
-        public virtual Task<MediaList> GetProductMediaAsync(string sku, string scope, string cultureName, string mediaType)
+        public virtual async Task<string> GetImageUrlAsync(string productId, string variantId, string scope)
         {
-            if (sku == null) { throw new ArgumentNullException("sku"); }
-            if (scope == null) { throw new ArgumentNullException("scope"); }
+            if (productId == null) { throw new ArgumentNullException(nameof(productId)); }
 
-            var request = new GetMediaBySkuRequest
+            var product = await GetProductAsync(new GetProductParam
             {
-                Sku = sku,
-                ScopeId = scope,
-                CultureName = cultureName,
-                MediaType = mediaType
-            };
-
-            var productMediaCacheKey = new CacheKey(CacheConfigurationCategoryNames.ProductMedia)
-            {
+                ProductId = productId,
                 Scope = scope,
-            };
-            productMediaCacheKey.AppendKeyParts(nameof(sku), sku);
-            productMediaCacheKey.AppendKeyParts(nameof(mediaType), mediaType);
+            });
 
-            return CacheProvider.GetOrAddAsync(productMediaCacheKey, () => OvertureClient.SendAsync(request));
+            if (product == null)
+                return null;
+
+            var variant = product.Variants?.FirstOrDefault(v => v.Id == variantId);
+            var imageUrl = GetCoverImage(variant?.MediaSet);
+
+            if (string.IsNullOrEmpty(imageUrl))
+                imageUrl = GetCoverImage(product.MediaSet);
+
+            return imageUrl;
+        }
+
+        private string GetCoverImage(IEnumerable<ProductMedia> mediaSet)
+        {   
+            const string mediaTypeName = "Image";
+
+            return mediaSet?
+                .Where(m => m.MediaType == mediaTypeName)
+                .Where(m => m.IsCover == true)
+                .Where(m => m.IsRemoved != true)
+                .Select(m => m.Url)
+                .LastOrDefault();
         }
     }
 }

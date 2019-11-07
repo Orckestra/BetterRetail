@@ -55,10 +55,11 @@ namespace Orckestra.Composer.Repositories
         Task<SearchResult> SearchProductByIdsAsync(List<string> productIds, string scope, string cultureName);
 
         /// <summary>
-        /// Get product media by sku
+        /// Get image url for product
         /// </summary>
-        /// <param name="sku">The product sku.</param>
+        /// <param name="productId">The product Id.</param>
+        /// <param name="variantId">The product variant Id.</param>
         /// <returns></returns>
-        Task<MediaList> GetProductMediaAsync(string sku, string scope, string cultureName, string mediaType);
+        Task<string> GetImageUrlAsync(string productId, string variantId, string scope);
     }
 }

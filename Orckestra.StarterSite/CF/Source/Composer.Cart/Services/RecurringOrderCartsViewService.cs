@@ -218,7 +218,7 @@ namespace Orckestra.Composer.Cart.Services
 
             param.ProductImageInfo = new ProductImageInfo
             {
-                ImageUrls = await ImageService.GetImageUrlsAsync(lineItems, ImageConfiguration.RecurringCartSummaryThumbnailImageSize).ConfigureAwait(false),
+                ImageUrls = await ImageService.GetImageUrlsAsync(lineItems).ConfigureAwait(false),
             };
 
             var vm = RecurringOrderCartViewModelFactory.CreateLightRecurringOrderCartViewModel(param);

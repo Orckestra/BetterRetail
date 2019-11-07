@@ -1,4 +1,4 @@
-﻿using Orckestra.Composer.Configuration;
+using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Dam;
 using Orckestra.Overture.ServiceModel.Orders;
@@ -27,110 +27,64 @@ namespace Orckestra.Composer.Services
 
         public virtual Task<List<ProductMainImage>> GetImageUrlsAsync(IEnumerable<LineItem> lineItems)
         {
-            return GetImageUrlsAsync(lineItems, ImageConfiguration.CartThumbnailImageSize);
-        }
-
-        public virtual async Task<List<ProductMainImage>> GetImageUrlsAsync(IEnumerable<LineItem> lineItems, string imageSize)
-        {
-            var ImageUrls = await GetImageUrlsBySkuAsync(lineItems.Select(ln => ln.Sku)).ConfigureAwait(false);
-
-            var getImageParam = new GetProductMainImagesParam
-            {
-                ImageSize = imageSize,
-                ProductImageRequests = lineItems
-                    .Select(li =>
-                    {
-                        if (ImageUrls.TryGetValue(li.Sku, out string imageUrl))
-                        {
-                            li.PropertyBag.Add("ImageUrl", imageUrl);
-                        }
-
-                        return new ProductImageRequest
-                        {
-                            ProductId = li.ProductId,
-                            Variant = new VariantKey
-                            {
-                                Id = li.VariantId,
-                                KeyVariantAttributeValues = li.KvaValues
-
-                            },
-                            PropertyBag = li.PropertyBag,
-                            ProductDefinitionName = li.ProductDefinitionName
-                        };
-                    }).ToList()
-            };
-            return await DamProvider.GetProductMainImagesAsync(getImageParam).ConfigureAwait(false);
-        }
-
-        private async Task<Dictionary<string, string>> GetProductsImageUrls(IEnumerable<string> productIds)
-        {
-            var productsData = await ProductRepository.SearchProductByIdsAsync(productIds.ToList(), ComposerContext.Scope, ComposerContext.CultureInfo.Name).ConfigureAwait(false);
-
-            return productsData.Documents.Select(document =>
-            {
-                var productId = document.PropertyBag["ProductId"].ToString();
-                var imageUrl = document.PropertyBag["ImageUrl"].ToString();
-                return new
-                {
-                    ProductId = productId,
-                    ImageUrl = imageUrl
-                };
-            }).ToDictionary(x => x.ProductId, x => x.ImageUrl);
-        }
-
-        private async Task<Dictionary<string, string>> GetImageUrlsBySkuAsync(IEnumerable<string> skuIds)
-        {
-            var mediaList = await Task.WhenAll(skuIds.Select(async sku =>
-            {
-                var mediaSetResult = await ProductRepository.GetProductMediaAsync(sku, ComposerContext.Scope, ComposerContext.CultureInfo.Name, "Image");
-                var mediaSet = mediaSetResult.MediaSet.Where(x => x.IsCover ?? true).ToList();
-
-                if (mediaSet.Count == 0) return null;
-
-                return new
-                {
-                    Sku = sku,
-                    ImageUrl = mediaSet.Last().Url
-                };
-            }));
-
-            return mediaList.Where(x => x != null).ToDictionary(x => x.Sku, x => x.ImageUrl);
+            return GetImageUrlsAsync(lineItems.Select(lineItem => (lineItem.ProductId, lineItem.VariantId)).ToList());
         }
 
         public virtual Task<List<ProductMainImage>> GetImageUrlsAsync(ListOfRecurringOrderLineItems list)
         {
-            return GetImageUrlsAsync(list.RecurringOrderLineItems);
+            return GetImageUrlsAsync(list.RecurringOrderLineItems.Select(lineItem => (lineItem.ProductId, lineItem.VariantId)).ToList());
         }
 
-        public virtual Task<List<ProductMainImage>> GetImageUrlsAsync(RecurringOrderLineItem lineitem)
+        public virtual Task<List<ProductMainImage>> GetImageUrlsAsync(RecurringOrderLineItem lineItem)
         {
-            return GetImageUrlsAsync(new List<RecurringOrderLineItem> { lineitem });
+            return GetImageUrlsAsync(new[] { (lineItem.ProductId, lineItem.VariantId) });
         }
 
-        private async Task<List<ProductMainImage>> GetImageUrlsAsync(List<RecurringOrderLineItem> lineItemList)
+        private async Task<List<ProductMainImage>> GetImageUrlsAsync(ICollection<(string productId, string variantId)> products)
         {
-            var ImageUrls = await GetImageUrlsBySkuAsync(lineItemList.Select(ln => ln.Sku)).ConfigureAwait(false);
-
+            var imageUrls = await GetImageUrlsForProducts(products).ConfigureAwait(false);
             var getImageParam = new GetProductMainImagesParam
             {
                 ImageSize = ImageConfiguration.CartThumbnailImageSize,
-                ProductImageRequests = lineItemList
-                  .Select(li =>
-                  {
-                      var PropertyBag = ImageUrls.TryGetValue(li.Sku, out string imageUrl) ? new Dictionary<string, object>() { { "ImageUrl", imageUrl } } : null;
-
-                      return new ProductImageRequest
-                      {
-                          ProductId = li.ProductId,
-                          Variant = new VariantKey
-                          {
-                              Id = li.VariantId,
-                          },
-                          PropertyBag = PropertyBag
-                      };
-                  }).ToList()
+                ProductImageRequests = new List<ProductImageRequest>(products.Count),
             };
+
+            foreach (var product in products)
+            {
+                var productImageRequest = new ProductImageRequest
+                {
+                    ProductId = product.productId,
+                    Variant = new VariantKey {Id = product.variantId},
+                };
+                var imageUrl = imageUrls[product];
+                if (imageUrl != null)
+                {
+                    productImageRequest.PropertyBag = new Dictionary<string, object>
+                    {
+                        ["ImageUrl"] = imageUrl
+                    };
+                }
+
+                getImageParam.ProductImageRequests.Add(productImageRequest);
+            }
+
             return await DamProvider.GetProductMainImagesAsync(getImageParam).ConfigureAwait(false);
+        }
+
+        private async Task<Dictionary<(string productId, string variantId), string>> GetImageUrlsForProducts(
+            IEnumerable<(string productId, string variantId)> products)
+        {
+            var tasks = products
+                .Distinct()
+                .Select(async product =>
+                    new
+                    {
+                        key = product,
+                        image = await ProductRepository.GetImageUrlAsync(product.productId, product.variantId, ComposerContext.Scope)
+                    });
+
+            var imagesList = await Task.WhenAll(tasks);
+            return imagesList.ToDictionary(x => x.key, x => x.image);
         }
     }
 }
