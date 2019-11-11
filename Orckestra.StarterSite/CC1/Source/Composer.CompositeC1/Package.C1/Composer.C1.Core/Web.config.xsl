@@ -98,7 +98,7 @@
   <!-- Setting output cache duration to 15 minutes -->
   <xsl:template match="configuration/system.web/caching/outputCacheSettings/outputCacheProfiles/add[@name='C1Page']" xml:space="preserve">
           <xsl:comment> 15 minutes Output cache </xsl:comment>
-          <add name="C1Page" enabled="true" duration="900" varyByCustom="C1Page" varyByParam="*" location="Server" />
+          <add name="C1Page" enabled="true" duration="900" varyByCustom="C1Page" varyByParam="*" location="Any" />
 	</xsl:template>
 
   <xsl:template match="configuration/system.webServer">
