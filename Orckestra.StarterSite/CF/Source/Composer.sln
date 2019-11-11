@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.489
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29403.142
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Composer.Cart", "Composer.Cart\Composer.Cart.csproj", "{08F6FCB8-6065-4D31-B7DF-67FE67EE67E5}"
 EndProject
@@ -64,10 +64,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Composer.Store", "Composer.Store\Composer.Store.csproj", "{1407AF7B-A1FE-4B52-906B-7503B6DB0F2B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Composer.Store.Tests", "Composer.Store.Tests\Composer.Store.Tests.csproj", "{9BDB2A7F-8D0E-44EA-B270-547891C63A3E}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Composer.Sitemap", "Composer.Sitemap\Composer.Sitemap.csproj", "{8227ECD6-6D34-4F4D-BFBC-02BC52E7CE7A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Composer.Sitemap.Tests", "Composer.Sitemap.Tests\Composer.Sitemap.Tests.csproj", "{FDE26B94-980B-4155-A9A8-7CF6433C7658}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.SearchQuery", "Orckestra.Composer.SearchQuery\Orckestra.Composer.SearchQuery.csproj", "{6DEE1972-E64B-43F0-BBAF-04D0AA64DD60}"
 EndProject
@@ -145,14 +141,6 @@ Global
 		{9BDB2A7F-8D0E-44EA-B270-547891C63A3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9BDB2A7F-8D0E-44EA-B270-547891C63A3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9BDB2A7F-8D0E-44EA-B270-547891C63A3E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8227ECD6-6D34-4F4D-BFBC-02BC52E7CE7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8227ECD6-6D34-4F4D-BFBC-02BC52E7CE7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8227ECD6-6D34-4F4D-BFBC-02BC52E7CE7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8227ECD6-6D34-4F4D-BFBC-02BC52E7CE7A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FDE26B94-980B-4155-A9A8-7CF6433C7658}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FDE26B94-980B-4155-A9A8-7CF6433C7658}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FDE26B94-980B-4155-A9A8-7CF6433C7658}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FDE26B94-980B-4155-A9A8-7CF6433C7658}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6DEE1972-E64B-43F0-BBAF-04D0AA64DD60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6DEE1972-E64B-43F0-BBAF-04D0AA64DD60}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6DEE1972-E64B-43F0-BBAF-04D0AA64DD60}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -180,12 +168,10 @@ Global
 		{7501DDC4-8A28-4DF3-ADC6-5132D043E738} = {602EAADD-212D-4D0A-A005-885F2E2212FC}
 		{1407AF7B-A1FE-4B52-906B-7503B6DB0F2B} = {94D567F8-CE20-41FD-AD25-3EF1A73372AC}
 		{9BDB2A7F-8D0E-44EA-B270-547891C63A3E} = {94D567F8-CE20-41FD-AD25-3EF1A73372AC}
-		{8227ECD6-6D34-4F4D-BFBC-02BC52E7CE7A} = {94D567F8-CE20-41FD-AD25-3EF1A73372AC}
-		{FDE26B94-980B-4155-A9A8-7CF6433C7658} = {94D567F8-CE20-41FD-AD25-3EF1A73372AC}
 		{6DEE1972-E64B-43F0-BBAF-04D0AA64DD60} = {94D567F8-CE20-41FD-AD25-3EF1A73372AC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {127E1900-E2DE-4563-935F-0553755D0E5C}
 		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.TransientFaultHandling.6.0.1304.0\lib\portable-net45+win+wp8;packages\EnterpriseLibrary.TransientFaultHandling.Data.6.0.1304.1\lib\NET45
+		SolutionGuid = {127E1900-E2DE-4563-935F-0553755D0E5C}
 	EndGlobalSection
 EndGlobal

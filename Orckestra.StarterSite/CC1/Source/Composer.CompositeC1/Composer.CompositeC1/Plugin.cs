@@ -51,7 +51,6 @@ namespace Orckestra.Composer.CompositeC1
             host.Register<GoogleAnalyticsNavigationUrlProvider>();
             host.Register<NavigationMapper, INavigationMapper>();
 
-           
             host.Register<SearchUrlProvider, ISearchUrlProvider>();
             host.Register<CategoryBrowsingUrlProvider, ICategoryBrowsingUrlProvider>();
             host.Register<CartUrlProvider, ICartUrlProvider>();

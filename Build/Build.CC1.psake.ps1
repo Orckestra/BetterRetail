@@ -182,13 +182,15 @@ Task CC1_Compile-ContentFR {
 }
 
 Task CC1_Copy-UiPackageFromNuget {
+    Write-Host Join-Path $Build.CC1.NugetPackagesRepository "\Composer.*\"
     $composerNugetPackagePath = Join-Path $Build.CC1.NugetPackagesRepository "\Composer.*\"
     $srcFolder = (gci $composerNugetPackagePath).FullName
 
     Write-verbose "UI Package Location: $srcFolder"
-	
-	Robocopy (Join-Path $srcFolder 'UI.Package') (Join-Path $Build.CC1.WebProjectPath 'UI.Package') /E | Write-Verbose
-    
+    Write-Host "Robocopy" (Join-Path $srcFolder 'UI.Package') (Join-Path $Build.CC1.WebProjectPath 'UI.Package') /E
+
+    Robocopy (Join-Path $srcFolder 'UI.Package') (Join-Path $Build.CC1.WebProjectPath 'UI.Package') /E | Write-Verbose
+
     Complete-RobocopyExecution($LASTEXITCODE)
 }
 
@@ -233,6 +235,10 @@ Task CC1_Copy-Packages{
 	
 	write-host "Copying Orckestra.Composer.ContentSearch.Content file"
 	$sourse = Join-Path $Build.CC1.SourcePath 'Orckestra.Composer.ContentSearch.Content\Release\Orckestra.Composer.ContentSearch.Content.zip'
+	copy $sourse $destinationPath
+
+	write-host "Copying Orckestra.Composer.Sitemap file"
+	$sourse = Join-Path $Build.CC1.SourcePath 'Orckestra.Composer.Sitemap.Package\Release\Orckestra.Composer.Sitemap.zip'
 	copy $sourse $destinationPath
 	
 	write-host "Done"

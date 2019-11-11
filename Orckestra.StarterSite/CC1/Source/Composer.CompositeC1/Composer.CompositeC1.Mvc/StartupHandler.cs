@@ -11,7 +11,6 @@ using Orckestra.Composer.CompositeC1.DataTypes;
 using Orckestra.Composer.CompositeC1.Hangfire;
 using Orckestra.Composer.CompositeC1.Mvc.Controllers;
 using Orckestra.Composer.CompositeC1.Pages;
-using Orckestra.Composer.CompositeC1.Sitemap;
 using Orckestra.Composer.HttpModules;
 using Orckestra.Composer.Logging;
 using Orckestra.Composer.Search;
@@ -59,17 +58,6 @@ namespace Orckestra.Composer.CompositeC1.Mvc
             RegisterFunctionRoutes(functions);
 
             log.Info("Application Started");
-
-            if (HangfireHost.IsEnabled)
-            {
-                // Hangfire host and sitemap recurring job
-                HangfireHost.Current.Init(new SitemapAutofacModule());
-                HangfireHost.Current.RegisterRecurringJobIfScheduleIsDefined();
-            }
-            else
-            {
-                log.Info("Hangfire automatic start explicitly disabled via app setting - hangfire will not run.");
-            }
         }
 
         private static void RegisterFunctions(FunctionCollection functions)

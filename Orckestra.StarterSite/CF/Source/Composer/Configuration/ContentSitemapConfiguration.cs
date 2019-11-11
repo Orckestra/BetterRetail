@@ -19,6 +19,14 @@ namespace Orckestra.Composer.Configuration
             get { return (ContentSitemapPageIdsToExcludeCollection)this[PageIdsToExcludeKey]; }            
         }
 
+        const string TypesToExcludeKey = "typesToExclude";
+        [ConfigurationProperty(TypesToExcludeKey, IsRequired = false)]
+        [ConfigurationCollection(typeof(ContentSitemapPageIdsToExcludeCollection))]
+        public ContentSitemapTypesToExcludeCollection TypesToExclude
+        {
+            get { return (ContentSitemapTypesToExcludeCollection)this[TypesToExcludeKey]; }
+        }
+
     }
 
     // Based on the MSDN documentation
@@ -53,6 +61,38 @@ namespace Orckestra.Composer.Configuration
         {
             get { return (string)this[pageIdKey]; }
             set { this[pageIdKey] = value; }
+        }
+    }
+
+    public class ContentSitemapTypesToExcludeCollection : ConfigurationElementCollection
+    {
+        protected override ConfigurationElement CreateNewElement()
+        {
+            return new ContentSitemapTypeToExcludeElement();
+        }
+
+        protected override object GetElementKey(ConfigurationElement element)
+        {
+            return ((ContentSitemapTypeToExcludeElement)element).Name;
+        }
+
+        public override ConfigurationElementCollectionType CollectionType
+        {
+            get
+            {
+                return ConfigurationElementCollectionType.AddRemoveClearMap;
+            }
+        }
+    }
+
+    public class ContentSitemapTypeToExcludeElement : ConfigurationElement
+    {
+        const string typeKey = "name";
+        [ConfigurationProperty(typeKey, IsRequired = true, IsKey = true)]
+        public string Name
+        {
+            get { return (string)this[typeKey]; }
+            set { this[typeKey] = value; }
         }
     }
 }

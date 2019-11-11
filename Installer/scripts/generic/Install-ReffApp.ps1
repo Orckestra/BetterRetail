@@ -103,6 +103,7 @@ function Install-Packages()
 	Robocopy $genericRefAppPackagesFolder $dstFolder "Orckestra.Composer.Languages.zip" /MIR /NJH /NDL /NFL /NS /NC /NP /NJS
 	Robocopy $genericRefAppPackagesFolder $dstFolder "Orckestra.Composer.Articles.zip" /MIR /NJH /NDL /NFL /NS /NC /NP /NJS
 	Robocopy $genericRefAppPackagesFolder $dstFolder "Orckestra.Composer.ContentSearch.zip" /MIR /NJH /NDL /NFL /NS /NC /NP /NJS
+	Robocopy $genericRefAppPackagesFolder $dstFolder "Orckestra.Composer.Sitemap.zip" /MIR /NJH /NDL /NFL /NS /NC /NP /NJS
 	
 	RestartingIIS 
 	AccessHomePage 

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
-VisualStudioVersion = 16.0.29326.143
+VisualStudioVersion = 16.0.29403.142
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Composer.CompositeC1", "Composer.CompositeC1\Composer.CompositeC1.csproj", "{3E42C35E-B19C-4ABE-80F8-FD268D44E11F}"
 EndProject
@@ -58,6 +58,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.Articles
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.Articles.Package", "Orckestra.Composer.Articles.Package\Orckestra.Composer.Articles.Package.csproj", "{8E9E5849-176E-4B52-830E-6E466BACE126}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sitemap", "Sitemap", "{6560FA76-2CE0-46A2-8A95-DC8262014D6C}"
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Content", "Content", "{B87B2E7D-8765-4C62-8E1E-314B3890C532}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.Languages.Package", "Orckestra.Composer.Languages\Orckestra.Composer.Languages.Package.csproj", "{B391AB82-48AB-4F73-B141-80EE9DE7D381}"
@@ -69,6 +71,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.ContentSearch.Package", "Orckestra.Composer.ContentSearch.Package\Orckestra.Composer.ContentSearch.Package.csproj", "{5C56B24A-09C3-4884-B769-E3E8A042EE6A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.ContentSearch.Content", "Orckestra.Composer.ContentSearch.Content\Orckestra.Composer.ContentSearch.Content.csproj", "{0654D78B-DE8C-4EB7-B32B-34DD1AFE46BF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.Sitemap", "Orckestra.Composer.Sitemap\Orckestra.Composer.Sitemap.csproj", "{8227ECD6-6D34-4F4D-BFBC-02BC52E7CE7A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.Sitemap.Package", "Orckestra.Composer.Sitemap.Package\Orckestra.Composer.Sitemap.Package.csproj", "{0136D28A-88DF-4C96-94FD-C1D6B4D4AE18}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.Sitemap.Tests", "Orckestra.Composer.Sitemap.Tests\Orckestra.Composer.Sitemap.Tests.csproj", "{FDE26B94-980B-4155-A9A8-7CF6433C7658}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -144,6 +152,18 @@ Global
 		{0654D78B-DE8C-4EB7-B32B-34DD1AFE46BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0654D78B-DE8C-4EB7-B32B-34DD1AFE46BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0654D78B-DE8C-4EB7-B32B-34DD1AFE46BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8227ECD6-6D34-4F4D-BFBC-02BC52E7CE7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8227ECD6-6D34-4F4D-BFBC-02BC52E7CE7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8227ECD6-6D34-4F4D-BFBC-02BC52E7CE7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8227ECD6-6D34-4F4D-BFBC-02BC52E7CE7A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0136D28A-88DF-4C96-94FD-C1D6B4D4AE18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0136D28A-88DF-4C96-94FD-C1D6B4D4AE18}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0136D28A-88DF-4C96-94FD-C1D6B4D4AE18}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0136D28A-88DF-4C96-94FD-C1D6B4D4AE18}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FDE26B94-980B-4155-A9A8-7CF6433C7658}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDE26B94-980B-4155-A9A8-7CF6433C7658}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDE26B94-980B-4155-A9A8-7CF6433C7658}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDE26B94-980B-4155-A9A8-7CF6433C7658}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -165,15 +185,19 @@ Global
 		{7FB29D3F-ECF6-45D8-8F08-79FBDEA01216} = {8C3A4F1C-2D89-41E1-AA07-E8E58FA26FE4}
 		{9DFD94A1-FCCB-4B7B-8CCE-4D8F1D0E2B50} = {7FB29D3F-ECF6-45D8-8F08-79FBDEA01216}
 		{8E9E5849-176E-4B52-830E-6E466BACE126} = {7FB29D3F-ECF6-45D8-8F08-79FBDEA01216}
+		{6560FA76-2CE0-46A2-8A95-DC8262014D6C} = {8C3A4F1C-2D89-41E1-AA07-E8E58FA26FE4}
 		{B87B2E7D-8765-4C62-8E1E-314B3890C532} = {8C3A4F1C-2D89-41E1-AA07-E8E58FA26FE4}
 		{B391AB82-48AB-4F73-B141-80EE9DE7D381} = {B87B2E7D-8765-4C62-8E1E-314B3890C532}
 		{098A942E-9208-403B-B873-CDDCFE8FE6A8} = {8C3A4F1C-2D89-41E1-AA07-E8E58FA26FE4}
 		{460EACA2-1EDB-46BC-A508-F784E4A4DA97} = {098A942E-9208-403B-B873-CDDCFE8FE6A8}
 		{5C56B24A-09C3-4884-B769-E3E8A042EE6A} = {098A942E-9208-403B-B873-CDDCFE8FE6A8}
 		{0654D78B-DE8C-4EB7-B32B-34DD1AFE46BF} = {098A942E-9208-403B-B873-CDDCFE8FE6A8}
+		{8227ECD6-6D34-4F4D-BFBC-02BC52E7CE7A} = {6560FA76-2CE0-46A2-8A95-DC8262014D6C}
+		{0136D28A-88DF-4C96-94FD-C1D6B4D4AE18} = {6560FA76-2CE0-46A2-8A95-DC8262014D6C}
+		{FDE26B94-980B-4155-A9A8-7CF6433C7658} = {6560FA76-2CE0-46A2-8A95-DC8262014D6C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {B483BAF0-FC77-4BA7-8B43-DC593B90A3EE}
 		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.TransientFaultHandling.6.0.1304.0\lib\portable-net45+win+wp8;packages\EnterpriseLibrary.TransientFaultHandling.Data.6.0.1304.1\lib\NET45;ng.6.0.1304.0\lib\portable-net45+win+wp8;ng.Data.6.0.1304.1\lib\NET45;packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45
+		SolutionGuid = {B483BAF0-FC77-4BA7-8B43-DC593B90A3EE}
 	EndGlobalSection
 EndGlobal

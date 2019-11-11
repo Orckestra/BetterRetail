@@ -370,7 +370,6 @@
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="App_Start\ComposerConfig.cs" />
-    <Compile Include="App_Start\HangfireHostApplicationPreload.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="C1LogProvider.cs" />
