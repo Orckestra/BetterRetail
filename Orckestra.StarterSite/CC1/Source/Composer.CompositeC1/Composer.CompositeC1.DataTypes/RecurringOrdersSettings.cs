@@ -23,7 +23,6 @@ namespace Orckestra.Composer.CompositeC1.DataTypes
         [FormRenderingProfile(Label = "Recurring Schedule Page")]
         [StoreFieldType(PhysicalStoreFieldType.Guid, IsNullable = true)]
         [FieldPosition(1)]
-        [ForeignKey("Composite.Data.Types.IPage,Composite", AllowCascadeDeletes = true)]
         [LazyFunctionProviedProperty("<f:function xmlns:f=\"http://www.composite.net/ns/function/1.0\" name=\"Orckestra.ExperienceManagement.Configuration.Functions.SiteConfigurationPageValidatorContainer.PageValidator\" />")]
         Nullable<Guid> RecurringSchedulePageId { get; set; }
 
@@ -31,7 +30,6 @@ namespace Orckestra.Composer.CompositeC1.DataTypes
         [FormRenderingProfile(Label = "Recurring Schedule Details Page")]
         [StoreFieldType(PhysicalStoreFieldType.Guid, IsNullable = true)]
         [FieldPosition(1)]
-        [ForeignKey("Composite.Data.Types.IPage,Composite", AllowCascadeDeletes = true)]
         [LazyFunctionProviedProperty("<f:function xmlns:f=\"http://www.composite.net/ns/function/1.0\" name=\"Orckestra.ExperienceManagement.Configuration.Functions.SiteConfigurationPageValidatorContainer.PageValidator\" />")]
         Nullable<Guid> RecurringScheduleDetailsPageId { get; set; }
 
@@ -39,7 +37,6 @@ namespace Orckestra.Composer.CompositeC1.DataTypes
         [FormRenderingProfile(Label = "Recurring Cart Details Page")]
         [StoreFieldType(PhysicalStoreFieldType.Guid, IsNullable = true)]
         [FieldPosition(1)]
-        [ForeignKey("Composite.Data.Types.IPage,Composite", AllowCascadeDeletes = true)]
         [LazyFunctionProviedProperty("<f:function xmlns:f=\"http://www.composite.net/ns/function/1.0\" name=\"Orckestra.ExperienceManagement.Configuration.Functions.SiteConfigurationPageValidatorContainer.PageValidator\" />")]
         Nullable<Guid> RecurringCartDetailsPageId { get; set; }
 
@@ -47,7 +44,6 @@ namespace Orckestra.Composer.CompositeC1.DataTypes
         [FormRenderingProfile(Label = "Recurring Carts Page")]
         [StoreFieldType(PhysicalStoreFieldType.Guid, IsNullable = true)]
         [FieldPosition(1)]
-        [ForeignKey("Composite.Data.Types.IPage,Composite", AllowCascadeDeletes = true)]
         [LazyFunctionProviedProperty("<f:function xmlns:f=\"http://www.composite.net/ns/function/1.0\" name=\"Orckestra.ExperienceManagement.Configuration.Functions.SiteConfigurationPageValidatorContainer.PageValidator\" />")]
         Nullable<Guid> RecurringCartsPageId { get; set; }
 
