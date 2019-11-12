@@ -6,7 +6,7 @@ namespace Orckestra.Composer.MyAccount.Providers
     /// <summary>
     /// For Unit test purposes
     /// </summary>
-    internal interface IFormsAuthenticationProxy
+    public interface IFormsAuthenticationProxy
     {
         void SetAuthCookie(string userName, bool createPersistentCookie);
         void SignOut();

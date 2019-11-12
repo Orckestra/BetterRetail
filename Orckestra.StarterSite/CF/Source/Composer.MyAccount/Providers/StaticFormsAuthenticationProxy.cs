@@ -7,39 +7,39 @@ namespace Orckestra.Composer.MyAccount.Providers
     /// <summary>
     /// For unit test purposes
     /// </summary>
-    internal sealed class StaticFormsAuthenticationProxy : IFormsAuthenticationProxy
+    public class StaticFormsAuthenticationProxy : IFormsAuthenticationProxy
     {
-        public void SetAuthCookie(string userName, bool createPersistentCookie)
+        public virtual void SetAuthCookie(string userName, bool createPersistentCookie)
         {
             FormsAuthentication.SetAuthCookie(userName, createPersistentCookie);
         }
 
-        public void SignOut()
+        public virtual void SignOut()
         {
             FormsAuthentication.SignOut();
         }
 
-        public string Encrypt(FormsAuthenticationTicket ticket)
+        public virtual string Encrypt(FormsAuthenticationTicket ticket)
         {
             return FormsAuthentication.Encrypt(ticket);
         }
 
-        public string FormsCookieName
+        public virtual string FormsCookieName
         {
             get { return FormsAuthentication.FormsCookieName; }
         }
 
-        public HttpCookie GetAuthCookie(string userName, bool createPersistentCookie)
+        public virtual HttpCookie GetAuthCookie(string userName, bool createPersistentCookie)
         {
             return FormsAuthentication.GetAuthCookie(userName, createPersistentCookie);
         }
 
-        public FormsAuthenticationTicket Decrypt(string encryptedTicket)
+        public virtual FormsAuthenticationTicket Decrypt(string encryptedTicket)
         {
             return FormsAuthentication.Decrypt(encryptedTicket);
         }
 
-        public void SetAuthCookie(string userName, bool createPersistentCookie, string userData)
+        public virtual void SetAuthCookie(string userName, bool createPersistentCookie, string userData)
         {
             HttpCookie authCookie = GetAuthCookie(userName, createPersistentCookie);
             FormsAuthenticationTicket ticket = Decrypt(authCookie.Value);
@@ -55,7 +55,7 @@ namespace Orckestra.Composer.MyAccount.Providers
             HttpContext.Current.Response.Cookies.Add(authCookie);
         }
 
-        public void SetAuthCookie(string userName, int timeoutInMinutes, bool createPersistentCookie, string userData, bool requireSsl)
+        public virtual void SetAuthCookie(string userName, int timeoutInMinutes, bool createPersistentCookie, string userData, bool requireSsl)
         {
             var expireDate = DateTime.Now.AddMinutes(timeoutInMinutes);
             var ticket = new FormsAuthenticationTicket(1, userName, DateTime.Now, expireDate, createPersistentCookie, userData);

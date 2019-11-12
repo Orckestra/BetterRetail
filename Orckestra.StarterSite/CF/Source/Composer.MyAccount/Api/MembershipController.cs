@@ -31,12 +31,12 @@ namespace Orckestra.Composer.MyAccount.Api
     [JQueryOnlyFilter]
     public class MembershipController : ApiController
     {
-        protected IMyAccountUrlProvider MyAccountUrlProvider { get; }
-        protected IMembershipViewService MembershipViewService { get; }
-        protected IComposerContext ComposerContext { get; }
-        protected ISiteConfiguration SiteConfiguration { get; }
-        internal IFormsAuthenticationProxy FormsAuthentication { private get; set; }
-        public IWebsiteContext WebsiteContext { get; set; }
+        protected virtual IMyAccountUrlProvider MyAccountUrlProvider { get; }
+        protected virtual IMembershipViewService MembershipViewService { get; }
+        protected virtual IComposerContext ComposerContext { get; }
+        protected virtual ISiteConfiguration SiteConfiguration { get; }
+        protected virtual IFormsAuthenticationProxy FormsAuthentication { get; set; }
+        public virtual IWebsiteContext WebsiteContext { get; set; }
 
         public MembershipController(
             IMyAccountUrlProvider myAccountUrlProvider,
