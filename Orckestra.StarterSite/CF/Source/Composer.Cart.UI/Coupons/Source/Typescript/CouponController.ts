@@ -64,7 +64,7 @@ module Orckestra.Composer {
 
             var couponCode = actionContext.elementContext.data('couponcode');
 
-            if (_.isEmpty(couponCode)) {
+            if (!couponCode || 0 === couponCode.length) {
                 console.log('The coupon code may not be null');
                 return;
             }

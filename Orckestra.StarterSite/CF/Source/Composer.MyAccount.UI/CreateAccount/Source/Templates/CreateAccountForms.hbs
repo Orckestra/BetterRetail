@@ -126,7 +126,7 @@
                                 required="true" 
                                 data-qa="register-password"
                                 {{#if_localized 'Forms' 'F_PasswordIndication'}}
-                                    {{>HelpBubbleOpen}}{{localize 'Forms' 'F_PasswordIndication'}}{{>HelpBubbleClose}}
+                                    {{>HelpBubbleOpen}}{{localizeFormat 'Forms' 'F_PasswordIndication' MinRequiredPasswordLength}}{{>HelpBubbleClose}}
                                 {{/if_localized}}
                                 data-parsley-length="[{{MinRequiredPasswordLength}},256]" 
                                 data-parsley-pattern="{{PasswordRegexPattern}}" 

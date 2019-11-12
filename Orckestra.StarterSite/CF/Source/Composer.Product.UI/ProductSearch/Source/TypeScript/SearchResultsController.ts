@@ -22,13 +22,20 @@ module Orckestra.Composer {
 
             this.currentPage = this.getCurrentPage();
 
+            let pageDisplayName;
+            if (!this.currentPage || _.isUndefined(this.currentPage) || this.currentPage === null) {
+                pageDisplayName = '';
+            } else {
+                pageDisplayName = this.currentPage.DisplayName;
+            }
+
             this.eventHub.publish('searchResultRendered', {
                 data: {
                     ProductSearchResults: this.context.viewModel.SearchResults,
                     Keywords: this.context.viewModel.Keywords,
                     TotalCount: this.context.viewModel.TotalCount,
                     ListName: this.context.viewModel.ListName,
-                    PageNumber: this.currentPage.DisplayName,
+                    PageNumber: pageDisplayName,
                     MaxItemsPerPage: this.context.viewModel.MaxItemsPerPage
                 }
             }

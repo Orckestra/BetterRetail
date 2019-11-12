@@ -382,7 +382,7 @@
     <value />
   </data>
   <data name="F_NewPasswordIndication" xml:space="preserve">
-    <value />
+    <value>Your password must have a minimum of {0} characters including at least 1 special character.</value>
   </data>
   <data name="F_NewPasswordLengthError" xml:space="preserve">
     <value />
@@ -421,7 +421,7 @@
     <value />
   </data>
   <data name="F_PasswordIndication" xml:space="preserve">
-    <value />
+    <value>Your password must have a minimum of {0} characters including at least 1 special character.</value>
   </data>
   <data name="F_PasswordLengthError" xml:space="preserve">
     <value />

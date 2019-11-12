@@ -144,7 +144,7 @@
         .dropdown > a:hover,
         .dropdown > a:focus,
         .open > a {
-            background-color: #fff;
+            background-color: darken($masthead-bg, 15%);
 
             &::after {
                 background-color: $link-color;
