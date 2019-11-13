@@ -120,4 +120,7 @@
   <data name="Custom_Explanation" xml:space="preserve">
     <value>You may fill this sheet with your custom localizations</value>
   </data>
+  <data name="L_ProductOutOfStock" xml:space="preserve">
+    <value>{0} item(s) out of stock</value>
+  </data>
 </root>
