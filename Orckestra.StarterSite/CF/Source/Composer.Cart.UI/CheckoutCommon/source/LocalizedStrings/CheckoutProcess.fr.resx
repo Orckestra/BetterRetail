@@ -274,7 +274,7 @@
     <value>Invités &amp;amp; nouveaux clients</value>
   </data>
   <data name="T_ShippingAddress" xml:space="preserve">
-    <value>Adresse de la livraison</value>
+    <value>Adresse de livraison</value>
   </data>
   <data name="T_ShippingMethod" xml:space="preserve">
     <value>Méthode de livraison</value>
