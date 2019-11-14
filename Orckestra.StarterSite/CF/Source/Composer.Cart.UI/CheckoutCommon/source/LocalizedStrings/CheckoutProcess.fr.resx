@@ -291,4 +291,7 @@
   <data name="B_AddCreditCard" xml:space="preserve">
     <value>Utiliser une autre carte de crédit</value>
   </data>
+  <data name="L_ExpirationDateForm" xml:space="preserve">
+    <value>Date d'expiration (mmaa)</value>
+  </data>
 </root>

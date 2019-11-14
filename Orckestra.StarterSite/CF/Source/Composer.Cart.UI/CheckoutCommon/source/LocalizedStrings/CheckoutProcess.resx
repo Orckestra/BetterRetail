@@ -292,4 +292,7 @@ Enter your credit card information</value>
   <data name="B_AddCreditCard" xml:space="preserve">
     <value>Use another credit card</value>
   </data>
+  <data name="L_ExpirationDateForm" xml:space="preserve">
+    <value>Expiration Date (mmyy)</value>
+  </data>
 </root>
