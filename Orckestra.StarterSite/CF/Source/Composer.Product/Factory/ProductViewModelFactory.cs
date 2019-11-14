@@ -483,7 +483,7 @@ namespace Orckestra.Composer.Product.Factory
                                 ?? (g.Key ?? string.Empty).ToString(),
                         Value = g.Key,
                         Selected = false,
-                        Disabled = true,
+                        Disabled = false,
                         RelatedVariantIds = g.Select(o => o.Variant.Id).ToList()
                     })
                     .ToList();
@@ -546,15 +546,39 @@ namespace Orckestra.Composer.Product.Factory
                 //Stock
                 kvas.Add(new KeyVariantAttributeItem
                 {
-                    DisplayName =
-                        property.DisplayName.GetLocalizedValue(kvaParam.CultureInfo.Name) ?? property.PropertyName,
+                    DisplayName = property.DisplayName.GetLocalizedValue(kvaParam.CultureInfo.Name) ?? property.PropertyName,
                     PropertyName = property.PropertyName,
                     PropertyDataType = property.DataType.ToString("g"),
                     Values = items
                 });
             }
 
+            kvas = DisableMissingKvas(kvaParam, kvas);
+
             return EnableKvasInStock(kvaParam, kvas); 
+        }
+
+        private List<KeyVariantAttributeItem> DisableMissingKvas(GenerateKvaItemsParam kvaParam, List<KeyVariantAttributeItem> kvas)
+        {
+            foreach (var selectedKva in kvaParam.SelectedKvas)
+            {
+                var existingKvasOtherThanSelected = kvaParam.ProductVariants
+                    //All product variants that have the same KVA as our selected one
+                    .Where(productVariant => productVariant.Kvas[selectedKva.Key].Equals(selectedKva.Value))
+                    .SelectMany(productVariant => productVariant.Kvas) //Flatten our product variants to their KVA values
+                                                                       //Ignore the KVAs retrieved that are the same type as our selected one (i.e. if our selected is Color, ignore all Color KVAs and keep the other ones)
+                    .Where(productVariantKva => !productVariantKva.Key.Equals(selectedKva.Key))
+                    .ToList();
+                var allPossibleKvasOtherThanSelected = kvas
+                    .Where(kva => !kva.PropertyName.Equals(selectedKva.Key))
+                    .SelectMany(v => v.Values);
+                var notExistingKva = allPossibleKvasOtherThanSelected.Where(x => !existingKvasOtherThanSelected.Any(ekva => ekva.Value.Equals(x.Value)));
+                foreach (var kva in notExistingKva)
+                {
+                    kva.Disabled = true;
+                };
+            };
+            return kvas;
         }
 
         protected virtual List<KeyVariantAttributeItem> EnableKvasInStock(GenerateKvaItemsParam kvaParam, List<KeyVariantAttributeItem> kvas)

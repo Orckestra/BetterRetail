@@ -4,7 +4,7 @@
 module Orckestra.Composer {
     export class ProductDetailController extends Orckestra.Composer.ProductController {
 
-        protected _concern: string = 'productDetail';
+        protected concern: string = 'productDetail';
 
         private selectedRecurringOrderFrequencyName: string;
         private recurringMode: string = 'single';
@@ -13,7 +13,7 @@ module Orckestra.Composer {
 
             super.initialize();
 
-            this.productService.updateSelectedKvasWith(this.context.viewModel.selectedKvas, this._concern);
+            this.productService.updateSelectedKvasWith(this.context.viewModel.selectedKvas, this.concern);
 
             var priceDisplayBusy: UIBusyHandle = this.asyncBusy({
                 msDelay: 300,
