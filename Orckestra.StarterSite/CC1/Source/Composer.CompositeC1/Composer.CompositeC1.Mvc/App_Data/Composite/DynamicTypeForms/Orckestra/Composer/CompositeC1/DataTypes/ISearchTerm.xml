@@ -14,13 +14,13 @@
       <cms:read source="Value" />
     </cms:layout.label>
     <PlaceHolder>
-      <FieldGroup Label="ISearchTerm">
-        <TextBox Label="Value" Help="" SpellCheck="true">
+      <FieldGroup Label="Search Box Suggested Terms">
+        <TextBox Label="Suggested Term" Help="" SpellCheck="true">
           <TextBox.Text>
             <cms:bind source="Value" />
           </TextBox.Text>
         </TextBox>
-        <DoubleKeySelector Label="WebsiteId" Help="" Required="true">
+        <DoubleKeySelector Label="Website ID" Help="" Required="true">
           <DoubleKeySelector.FirstKey>
             <cms:bind source="WebsiteId" />
           </DoubleKeySelector.FirstKey>

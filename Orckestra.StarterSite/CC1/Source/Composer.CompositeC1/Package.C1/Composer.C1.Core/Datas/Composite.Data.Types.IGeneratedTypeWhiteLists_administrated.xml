@@ -3,4 +3,5 @@
   <Add TypeManagerTypeName="Orckestra.Composer.CompositeC1.DataTypes.Facets.IFacet,Orckestra.Composer.CompositeC1.DataTypes" />
   <Add TypeManagerTypeName="Orckestra.Composer.CompositeC1.DataTypes.Facets.IFacetConfiguration,Orckestra.Composer.CompositeC1.DataTypes" />
   <Add TypeManagerTypeName="Orckestra.Composer.CompositeC1.DataTypes.Facets.IPromotedFacetValueSetting,Orckestra.Composer.CompositeC1.DataTypes" />
+  <Add TypeManagerTypeName="Orckestra.Composer.CompositeC1.DataTypes.ISearchTerm,Orckestra.Composer.CompositeC1.DataTypes" />
 </Data>
