@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Threading.Tasks;
 using FizzWare.NBuilder.Generators;
 using FluentAssertions;
@@ -13,14 +12,10 @@ using Orckestra.Composer.Cart.Repositories;
 using Orckestra.Composer.Cart.Services;
 using Orckestra.Composer.Cart.Tests.Mock;
 using Orckestra.Composer.Cart.ViewModels;
-using Orckestra.Composer.Parameters;
-using Orckestra.Composer.Services.Lookup;
-using Orckestra.Composer.ViewModels;
-using Orckestra.Overture.ServiceModel;
-using Orckestra.Overture.ServiceModel.Orders;
 using Orckestra.Composer.Cart.Providers.Payment;
 using Orckestra.Overture.ServiceModel.Providers;
 using System;
+using Orckestra.Overture.Providers;
 
 namespace Orckestra.Composer.Cart.Tests.Services
 {
@@ -57,22 +52,8 @@ namespace Orckestra.Composer.Cart.Tests.Services
                 CultureInfo = CultureInfo.InvariantCulture,
             };
             var service = _container.CreateInstance<PaymentViewService>();
-            var paymentProvider = new FakePaymentProvider();
 
-            _paymentProviderMoq
-                .Setup(q => q.ResolveAllProviders())
-                .Returns(new List<IPaymentProvider> { paymentProvider });
-
-            _paymentRepoMoq
-                .Setup(q => q.GetPaymentProviders(It.IsAny<string>()))
-                .ReturnsAsync(new List<PaymentProviderInfo>
-                    {
-                        new PaymentProviderInfo
-                        {
-                            ImplementationTypeName = paymentProvider.ProviderType,
-                            SupportedCultureIds = param.CultureInfo.Name,
-                        }
-                    });
+            var (provider, paymentProviderInfo) = ConfigureDefaultProviders(param);
 
             // act
             var result = await service.GetPaymentProvidersAsync(param);
@@ -91,22 +72,8 @@ namespace Orckestra.Composer.Cart.Tests.Services
                 CultureInfo = CultureInfo.InvariantCulture,
             };
             var service = _container.CreateInstance<PaymentViewService>();
-            var paymentProvider = new FakePaymentProvider();
-
-            _paymentProviderMoq
-                .Setup(q => q.ResolveAllProviders())
-                .Returns(new List<IPaymentProvider> { paymentProvider });
-
-            _paymentRepoMoq
-                .Setup(q => q.GetPaymentProviders(It.IsAny<string>()))
-                .ReturnsAsync(new List<PaymentProviderInfo>
-                    {
-                        new PaymentProviderInfo
-                        {
-                            ImplementationTypeName = GetRandom.String(16),
-                            SupportedCultureIds = param.CultureInfo.Name,
-                        }
-                    });
+            var (provider, paymentProviderInfo) = ConfigureDefaultProviders(param);
+            provider.ImplementationTypeName = GetRandom.String(16);
 
             // act
             var result = await service.GetPaymentProvidersAsync(param);
@@ -114,6 +81,27 @@ namespace Orckestra.Composer.Cart.Tests.Services
             // assert
             result.Should().HaveCount(0);
         }
+
+        [Test]
+        public async Task WHEN_Provider_Not_Active_SHOULD_Filter_out_value()
+        {
+            // arrange
+            var param = new GetPaymentProvidersParam
+            {
+                Scope = GetRandom.String(32),
+                CultureInfo = CultureInfo.InvariantCulture,
+            };
+            var service = _container.CreateInstance<PaymentViewService>();
+            var (provider, paymentProviderInfo) = ConfigureDefaultProviders(param);
+            provider.IsActive = false;
+
+            // act
+            var result = await service.GetPaymentProvidersAsync(param);
+
+            // assert
+            result.Should().HaveCount(0);
+        }
+
 
         [Test]
         public async Task WHEN_Culture_not_supported_SHOULD_Filter_out_value()
@@ -125,22 +113,9 @@ namespace Orckestra.Composer.Cart.Tests.Services
                 CultureInfo = new CultureInfo("en-US"),
             };
             var service = _container.CreateInstance<PaymentViewService>();
-            var paymentProvider = new FakePaymentProvider();
 
-            _paymentProviderMoq
-                .Setup(q => q.ResolveAllProviders())
-                .Returns(new List<IPaymentProvider> { paymentProvider });
-
-            _paymentRepoMoq
-                .Setup(q => q.GetPaymentProviders(It.IsAny<string>()))
-                .ReturnsAsync(new List<PaymentProviderInfo>
-                    {
-                        new PaymentProviderInfo
-                        {
-                            ImplementationTypeName = paymentProvider.ProviderType,
-                            SupportedCultureIds = "ua-UK",
-                        }
-                    });
+            var (provider, paymentProviderInfo) = ConfigureDefaultProviders(param);
+            paymentProviderInfo.SupportedCultureIds = "ua-UK";
 
             // act
             var result = await service.GetPaymentProvidersAsync(param);
@@ -153,8 +128,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
         public void When_Passing_Empty_Param_SHOULD_throw_ArgumentNullException()
         {
             var service = _container.CreateInstance<PaymentViewService>();
-            _paymentProviderMoq.Setup(q => q.ResolveAllProviders()).Returns(new List<IPaymentProvider>());
-            _paymentRepoMoq.Setup(q => q.GetPaymentProviders(It.IsAny<string>())).ReturnsAsync(new List<PaymentProviderInfo>());
+            ConfigureEmptyProviders();
 
             // act & assert
             Assert.ThrowsAsync<ArgumentNullException>(() => service.GetPaymentProvidersAsync(null));
@@ -170,8 +144,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
                 CultureInfo = CultureInfo.InvariantCulture,
             };
             var service = _container.CreateInstance<PaymentViewService>();
-            _paymentProviderMoq.Setup(q => q.ResolveAllProviders()).Returns(new List<IPaymentProvider>());
-            _paymentRepoMoq.Setup(q => q.GetPaymentProviders(It.IsAny<string>())).ReturnsAsync(new List<PaymentProviderInfo>());
+            ConfigureEmptyProviders();
 
             // act & assert
             Assert.ThrowsAsync<ArgumentException>(() => service.GetPaymentProvidersAsync(param));
@@ -187,12 +160,57 @@ namespace Orckestra.Composer.Cart.Tests.Services
                 CultureInfo = null,
             };
             var service = _container.CreateInstance<PaymentViewService>();
-            _paymentProviderMoq.Setup(q => q.ResolveAllProviders()).Returns(new List<IPaymentProvider>());
-            _paymentRepoMoq.Setup(q => q.GetPaymentProviders(It.IsAny<string>())).ReturnsAsync(new List<PaymentProviderInfo>());
+            ConfigureEmptyProviders();
 
             // act & assert
             Assert.ThrowsAsync<ArgumentException>(() => service.GetPaymentProvidersAsync(param));
         }
 
+        private void ConfigureEmptyProviders()
+        {
+            _paymentProviderMoq.Setup(q => q.ResolveAllProviders()).Returns(new List<IPaymentProvider>());
+            _paymentRepoMoq.Setup(q => q.GetPaymentProviders(It.IsAny<string>())).ReturnsAsync(new List<PaymentProviderInfo>());
+        }
+
+        private (Provider provider, PaymentProviderInfo paymentProvider) ConfigureDefaultProviders(GetPaymentProvidersParam param)
+        {
+            var localPaymentProvider = new FakePaymentProvider();
+
+            _paymentProviderMoq
+                .Setup(q => q.ResolveAllProviders())
+                .Returns(new List<IPaymentProvider> {localPaymentProvider});
+
+            var id = Guid.NewGuid();
+
+            var provider = new Provider
+            {
+                Id = id,
+                ImplementationTypeName = localPaymentProvider.ProviderType,
+                IsActive = true,
+            };
+
+            var paymentProvider = new PaymentProviderInfo
+            {
+                Id = id,
+                SupportedCultureIds = param.CultureInfo.Name,
+            };
+
+            _paymentRepoMoq
+                .Setup(q => q.GetProviders(It.IsAny<string>(), ProviderType.Payment))
+                .ReturnsAsync(new List<Provider>
+                {
+                    provider
+                });
+
+
+            _paymentRepoMoq
+                .Setup(q => q.GetPaymentProviders(It.IsAny<string>()))
+                .ReturnsAsync(new List<PaymentProviderInfo>
+                {
+                    paymentProvider,
+                });
+
+            return (provider, paymentProvider);
+        }
     }
 }

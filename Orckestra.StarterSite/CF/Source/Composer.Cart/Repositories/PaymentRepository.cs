@@ -8,6 +8,7 @@ using Orckestra.Composer.Providers;
 using Orckestra.Composer.Utils;
 using Orckestra.Overture;
 using Orckestra.Overture.Caching;
+using Orckestra.Overture.Providers;
 using Orckestra.Overture.ServiceModel;
 using Orckestra.Overture.ServiceModel.Customers;
 using Orckestra.Overture.ServiceModel.Orders;
@@ -293,13 +294,13 @@ namespace Orckestra.Composer.Cart.Repositories
         /// </summary>
         /// <param name="scopeId">Scope used to make the request.</param>
         /// <returns>List of providers</returns>
-        public virtual async Task<IEnumerable<PaymentProviderInfo>> GetPaymentProviders(string scopeId)
+        public virtual async Task<IList<PaymentProviderInfo>> GetPaymentProviders(string scopeId)
         {
             if (scopeId == null) { throw new ArgumentNullException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(scopeId))); }
 
             var cacheKey = BuildPaymentProvidersCacheKey(scopeId);
 
-            var request = new GetPaymentProvidersRequest()
+            var request = new GetPaymentProvidersRequest
             {
                 ScopeId = scopeId,
             };
@@ -308,6 +309,28 @@ namespace Orckestra.Composer.Cart.Repositories
             return paymentProviderInfos.PaymentProviders;
         }
 
+
+        /// <summary>
+        /// Obtains the available providers by type for scope.
+        /// </summary>
+        /// <param name="scopeId">Scope used to make the request.</param>
+        /// <param name="providerType">Provider type.</param>
+        /// <returns>List of providers</returns>
+        public virtual async Task<IList<Provider>> GetProviders(string scopeId, ProviderType providerType)
+        {
+            if (scopeId == null) { throw new ArgumentNullException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(scopeId))); }
+
+            var cacheKey = BuildProvidersCacheKey(scopeId, providerType);
+
+            var request = new GetProvidersRequest
+            {
+                ScopeId = scopeId,
+                ProviderType = providerType,
+            };
+
+            var paymentProviderInfos = await CacheProvider.GetOrAddAsync(cacheKey, () => OvertureClient.SendAsync(request)).ConfigureAwait(false);
+            return paymentProviderInfos.Providers;
+        }
 
         /// <summary>
         /// Builds a cache key for a cart operation.
@@ -369,6 +392,18 @@ namespace Orckestra.Composer.Cart.Repositories
 
             return cacheKey;
         }
+
+        protected virtual CacheKey BuildProvidersCacheKey(string scope, ProviderType providerType)
+        {
+            var cacheKey = new CacheKey(CacheConfigurationCategoryNames.Providers)
+            {
+                Scope = scope,
+            };
+            cacheKey.AppendKeyParts(providerType);
+
+            return cacheKey;
+        }
+
 
     }
 }

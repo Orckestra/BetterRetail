@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Orckestra.Composer.Cart.Extensions;
 using Orckestra.Composer.Cart.Factory;
@@ -22,6 +23,7 @@ using Orckestra.Overture.ServiceModel.Orders;
 using Orckestra.Composer.Logging;
 using Orckestra.Composer.Cart.Helper;
 using Orckestra.Composer.Configuration;
+using Orckestra.Overture.Providers;
 
 namespace Orckestra.Composer.Cart.Services
 {
@@ -75,27 +77,12 @@ namespace Orckestra.Composer.Cart.Services
         /// <returns></returns>
         public virtual async Task<IEnumerable<PaymentProviderViewModel>> GetPaymentProvidersAsync(GetPaymentProvidersParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
             if (param.CultureInfo == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param.CultureInfo)), nameof(param)); }
             if (param.Scope == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param.Scope)), nameof(param)); }
 
-            var localProviders = PaymentProviderFactory.ResolveAllProviders();
-            var availableProviders = await PaymentRepository.GetPaymentProviders(param.Scope).ConfigureAwait(false);
-
-            var providers = new List<IPaymentProvider>();
-            foreach (var provider in localProviders)
-            {
-                var isProviderAvailable = availableProviders
-                    .Where(p => p.ImplementationTypeName.Equals(provider.ProviderType, StringComparison.OrdinalIgnoreCase))
-                    .Where(p => p.SupportedCultureIds
-                                    .Split(',')
-                                    .Select(x => x.Trim())
-                                    .Any(c => c.Equals(param.CultureInfo.Name, StringComparison.OrdinalIgnoreCase)))
-                    .Any();
-
-                if (isProviderAvailable)
-                    providers.Add(provider);
-            }
+            var providers = PaymentProviderFactory.ResolveAllProviders();
+            providers = await FilterAvailablePaymentProviders(param, providers).ConfigureAwait(false);
 
             var viewModels = new List<PaymentProviderViewModel>();
 
@@ -107,6 +94,43 @@ namespace Orckestra.Composer.Cart.Services
 
             return viewModels;
         }
+
+
+        protected virtual async Task<IEnumerable<IPaymentProvider>> FilterAvailablePaymentProviders(GetPaymentProvidersParam param, IEnumerable<IPaymentProvider> providers)
+        {
+            var availablePaymentProvidersTask = PaymentRepository.GetPaymentProviders(param.Scope).ConfigureAwait(false);
+            var availableProvidersTask = PaymentRepository.GetProviders(param.Scope, ProviderType.Payment).ConfigureAwait(false);
+            var availablePaymentProviders = await availablePaymentProvidersTask;
+            var availableProviders = await availableProvidersTask;
+
+            var result = new List<IPaymentProvider>();
+            foreach (var provider in providers)
+            {
+                var availableProvider = availableProviders
+                    .Where(p => p.ImplementationTypeName.Equals(provider.ProviderType, StringComparison.OrdinalIgnoreCase))
+                    .Where(p => p.IsActive)
+                    .FirstOrDefault();
+
+                if (availableProvider == null)
+                    continue;
+
+                var availablePaymentProvider = availablePaymentProviders
+                    .Where(p => p.Id == availableProvider.Id)
+                    .FirstOrDefault();
+
+                if (availablePaymentProvider == null)
+                    continue;
+
+                var supportedCultureIds = availablePaymentProvider.SupportedCultureIds.Split(',').Select(c => c.Trim());
+                if (!supportedCultureIds.Any(c => c.Equals(param.CultureInfo.Name, StringComparison.OrdinalIgnoreCase)))
+                    continue;
+
+                result.Add(provider);
+            }
+
+            return result;
+        }
+
 
         protected virtual PaymentProviderViewModel MapPaymentProviderViewModel(IPaymentProvider paymentProvider, CultureInfo cultureInfo)
         {
