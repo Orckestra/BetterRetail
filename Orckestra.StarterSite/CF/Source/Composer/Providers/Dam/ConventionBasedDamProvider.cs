@@ -199,7 +199,7 @@ namespace Orckestra.Composer.Providers.Dam
                 ProductZoomImageUrl = productMedia != null ? GetSizedImageUrl(productMedia, mediaSettings, param.ProductZoomImageSize) : "",
                 ProductId = param.ProductId,
                 VariantId = variantId,
-                SequenceNumber = 0,
+                SequenceNumber = productMedia.Position,
                 FallbackImageUrl = GetFallbackImageUrl(mediaSettings),
             };
         }
