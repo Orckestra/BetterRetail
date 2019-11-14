@@ -2,17 +2,14 @@
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Search.Services;
 using Orckestra.Composer.Search.ViewModels;
-using Orckestra.Composer.Search.ViewModels.Metadata;
 using Orckestra.Composer.Search.Providers;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Utils;
-using Orckestra.Composer.ViewModels;
 using Orckestra.Composer.WebAPIFilters;
 using Orckestra.Overture.ServiceModel.Products;
 using Orckestra.Overture.ServiceModel.Search;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -83,7 +80,7 @@ namespace Orckestra.Composer.Search.Api
             if (searchResultsViewModel.ProductSearchResults?.SearchResults?.Count > 0)
             {
                 vm.Suggestions = searchResultsViewModel.ProductSearchResults.SearchResults.Take(limit)
-                    .Select(p => { p.AsExtensionModel<IProductSearchViewModelMetadata>().SearchTerm = searchTerms; return p; })
+                    .Select(p => { p.SearchTerm = searchTerms; return p; })
                     .ToList();
             }
 
@@ -185,11 +182,5 @@ namespace Orckestra.Composer.Search.Api
             return Ok(vm);
         }
        
-    }
-
-    public class AutoCompleteSearchViewModel : BaseViewModel
-    {
-        [Required(AllowEmptyStrings = false)]
-        public string Query { get; set; }
     }
 }

@@ -92,5 +92,10 @@ namespace Orckestra.Composer.Search.ViewModels
         /// Gets or sets the recurring program name
         /// </summary>
         public string RecurringOrderProgramName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the search term
+        /// </summary>
+        public string SearchTerm { get; set; }
     }
 }
