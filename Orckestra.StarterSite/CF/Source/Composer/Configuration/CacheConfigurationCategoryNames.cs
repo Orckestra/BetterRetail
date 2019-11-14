@@ -87,5 +87,7 @@ namespace Orckestra.Composer.Configuration
         public static string FulfillmentMethodsByScope = "FulfillmentMethodsByScope";
 
         public static string PaymentProviders = "PaymentProviders";
+
+        public static string Providers = "Providers";
     }
 }

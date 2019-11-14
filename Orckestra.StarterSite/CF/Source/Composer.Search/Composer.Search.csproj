@@ -201,12 +201,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\SearchRepository.cs" />
     <Compile Include="Services\SearchBreadcrumbViewService.cs" />
+    <Compile Include="ViewModels\AutoCompleteSearchViewModel.cs" />
     <Compile Include="ViewModels\AutoCompleteViewModel.cs" />
     <Compile Include="ViewModels\BrandSuggestionsViewModel.cs" />
     <Compile Include="ViewModels\BrandSuggestionViewModel.cs" />
     <Compile Include="ViewModels\CategorySuggestionsViewModel.cs" />
     <Compile Include="ViewModels\CategorySuggestionViewModel.cs" />
-    <Compile Include="ViewModels\Metadata\IProductSearchViewModelMetadata.cs" />
     <Compile Include="ViewModels\ProductPriceSearchViewModel.cs" />
     <Compile Include="ViewModels\SearchBoxViewModel.cs" />
     <Compile Include="ViewModels\SearchTermsSuggestionsViewModel.cs" />

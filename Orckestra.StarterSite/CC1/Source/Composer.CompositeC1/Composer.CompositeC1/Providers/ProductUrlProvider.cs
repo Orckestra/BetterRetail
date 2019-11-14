@@ -20,8 +20,8 @@ namespace Orckestra.Composer.CompositeC1.Providers
         //}
         protected IPageService PageService { get; private set; }
 
-        private const string UrlTemplate = "{0}/p-{1}/{2}";
-        private const string UrlTemplateVariant = "{0}/p-{1}/{2}/{3}";
+        private const string UrlTemplate = "/{0}/p-{1}/{2}";
+        private const string UrlTemplateVariant = "/{0}/p-{1}/{2}/{3}";
 
         public ProductUrlProvider(IPageService pageService, IWebsiteContext websiteContext, ISiteConfiguration siteConfiguration)
         {
@@ -45,8 +45,7 @@ namespace Orckestra.Composer.CompositeC1.Providers
             var formattedProductName = UrlFormatter.FormatProductName(productName);
             string productPath;
 
-            var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(parameters.CultureInfo, WebsiteContext.WebsiteId);
-            var homeUrl = PageService.GetPageUrl(WebsiteContext.WebsiteId, parameters.CultureInfo);
+            var homeUrl = PageService.GetPageUrl(WebsiteContext.WebsiteId, parameters.CultureInfo)?.Trim('/');
 
             if (string.IsNullOrWhiteSpace(parameters.VariantId))
             {

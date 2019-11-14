@@ -18,7 +18,7 @@ namespace Orckestra.Composer.CompositeC1.DataTypes
     [ImmutableTypeId("52033fe8-5963-449c-bf31-bdc449cb0494")]
     [KeyTemplatedXhtmlRenderer(XhtmlRenderingType.Embedable, "<span>{label}</span>")]
     [KeyPropertyName("Id")]
-    [Title("ISearchTerm")]
+    [Title("Search Box Suggested Terms")]
     [LabelPropertyName("Value")]
     [PublishProcessControllerType(typeof(GenericPublishProcessController))]
     public interface ISearchTerm : IData, IProcessControlled, IPublishControlled, ILocalizedControlled
