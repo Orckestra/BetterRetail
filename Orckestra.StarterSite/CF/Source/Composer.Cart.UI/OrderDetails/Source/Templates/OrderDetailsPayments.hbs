@@ -26,14 +26,20 @@
              </div>
             <div class="col-xs-12  col-sm-6  col-md-6">
                 <h2 class="h4">{{localize 'MyAccount' 'T_BillingAddress'}}</h2>
-                <span data-qa="order-shipping-address-line1">{{BillingAddress.Line1}}</span><br />
-                {{#if BillingAddress.Line2}}
-                    <span data-qa="order-shipping-address-line2">{{BillingAddress.Line2}}</span><br />
-                {{/if}}
-                <span data-qa="order-shipping-address-city">{{BillingAddress.City}}</span>,
-                <span data-qa="order-shipping-address-region">{{BillingAddress.RegionName}}</span>,
-                <span data-qa="order-shipping-address-postalcode">{{BillingAddress.PostalCode}}</span><br />
-                <span data-qa="order-shipping-address-phone">{{BillingAddress.PhoneNumber}}</span>
+                {{#with BillingAddress}}
+                    {{#if FirstName}}
+                        <span data-qa="order-billing-address-fullname">{{FirstName}}{{#if LastName}}&nbsp;{{LastName}}{{/if}}</span>
+                        <br />
+                    {{/if}}
+                    <span data-qa="order-shipping-address-line1">{{Line1}}</span><br />
+                    {{#if Line2}}
+                        <span data-qa="order-shipping-address-line2">{{Line2}}</span><br />
+                    {{/if}}
+                    <span data-qa="order-shipping-address-city">{{City}}</span>,
+                    <span data-qa="order-shipping-address-region">{{RegionName}}</span>,
+                    <span data-qa="order-shipping-address-postalcode">{{PostalCode}}</span><br />
+                    <span data-qa="order-shipping-address-phone">{{PhoneNumber}}</span>
+                {{/with}}
             </div>
         </div>
         {{else}}
