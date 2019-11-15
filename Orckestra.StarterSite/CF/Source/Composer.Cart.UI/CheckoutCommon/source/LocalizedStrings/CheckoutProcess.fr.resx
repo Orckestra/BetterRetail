@@ -274,7 +274,7 @@
     <value>Invités &amp;amp; nouveaux clients</value>
   </data>
   <data name="T_ShippingAddress" xml:space="preserve">
-    <value>Adresse de la livraison</value>
+    <value>Adresse de livraison</value>
   </data>
   <data name="T_ShippingMethod" xml:space="preserve">
     <value>Méthode de livraison</value>
@@ -290,5 +290,8 @@
   </data>
   <data name="B_AddCreditCard" xml:space="preserve">
     <value>Utiliser une autre carte de crédit</value>
+  </data>
+  <data name="L_ExpirationDateForm" xml:space="preserve">
+    <value>Date d'expiration (mmaa)</value>
   </data>
 </root>

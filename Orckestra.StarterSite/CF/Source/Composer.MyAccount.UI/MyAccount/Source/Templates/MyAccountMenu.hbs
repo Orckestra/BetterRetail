@@ -15,7 +15,9 @@
     <div class="form-group  hidden-md  hidden-lg">
         <div class="dropdown">
             <button class="btn  btn-default  dropdown-toggle" type="button" id="dropdownMyAccount" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                {{localize 'MyAccount' 'L_MyAccount'}}
+                {{#each MenuItems}}
+                    {{#if IsActive}}{{Name}}{{/if}}
+                {{/each}}                
                 <span class="caret"></span>
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMyAccount">

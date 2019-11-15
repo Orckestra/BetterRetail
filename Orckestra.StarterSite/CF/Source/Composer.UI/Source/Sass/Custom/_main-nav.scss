@@ -3,6 +3,10 @@
     .nav, .collapse, .dropup, .dropdown {
         position: static;
     }
+    // main-nav dropdown to have a higher z-index than in the search sort
+    .dropdown-menu {
+        z-index: $zindex-dropdown + 5;
+    }
     // propagate menu position under container for fw navbars
     .container {
         position: relative;

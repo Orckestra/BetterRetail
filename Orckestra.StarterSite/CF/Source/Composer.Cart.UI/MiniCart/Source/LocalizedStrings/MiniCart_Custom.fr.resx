@@ -120,4 +120,7 @@
   <data name="Custom_Explanation" xml:space="preserve">
     <value>Remplissez cette feuille avec vos localisations personalisées.</value>
   </data>
+  <data name="L_ProductOutOfStock" xml:space="preserve">
+    <value>{0} article(s) en rupture de stock</value>
+  </data>
 </root>

@@ -50,7 +50,7 @@ module Orckestra.Composer {
                 return;
             }
 
-            var busy = this.asyncBusy({elementContext: actionContext.elementContext, msDelay: 300});
+            var busy = this.asyncBusy({elementContext: actionContext.elementContext});
 
             this.couponService.addCoupon(formData.couponCode)
                 .done(() => busy.done());
@@ -61,6 +61,9 @@ module Orckestra.Composer {
          * @param {IControllerActionContext} actionContext - Event context.
          */
         public removeCoupon(actionContext: IControllerActionContext) {
+            actionContext.event.preventDefault();
+
+            var busy = this.asyncBusy({elementContext: actionContext.elementContext});
 
             var couponCode = actionContext.elementContext.data('couponcode');
 
@@ -69,10 +72,9 @@ module Orckestra.Composer {
                 return;
             }
 
-            var busy = this.asyncBusy({elementContext: actionContext.elementContext});
-
             this.couponService.removeCoupon(couponCode.toString())
-                .done(() => busy.done());
+                .fin(() => busy.done())
+                .done();
         }
 
         /**

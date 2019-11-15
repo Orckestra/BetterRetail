@@ -130,10 +130,10 @@
     <value>Créer un compte</value>
   </data>
   <data name="B_DeleteAddress" xml:space="preserve">
-    <value>Supprimer cet adresse</value>
+    <value>Supprimer cette adresse</value>
   </data>
   <data name="B_EditAddress" xml:space="preserve">
-    <value>Modifier cet adresse</value>
+    <value>Modifier cette adresse</value>
   </data>
   <data name="B_ForgotPassword" xml:space="preserve">
     <value>Réinitialiser mon mot de passe</value>
