@@ -41,23 +41,14 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             IRelatedProductViewService relatedProductViewService,
             Lazy<IPreviewModeService> previewModeService)
         {
-            if (pageService == null) { throw new ArgumentNullException("pageService"); }
-            if (composerContext == null) { throw new ArgumentNullException("composerContext"); }
-            if (productService == null) { throw new ArgumentNullException("productService"); }
-            if (productSpecificationsViewService == null) { throw new ArgumentNullException("productSpecificationsViewService"); }
-            if (productBreadcrumbService == null) { throw new ArgumentNullException("productBreadcrumbService"); }
-            if (languageSwitchService == null) { throw new ArgumentNullException("languageSwitchService"); }
-            if (productUrlProvider == null) { throw new ArgumentNullException("productUrlProvider"); }
-            if (relatedProductViewService == null) { throw new ArgumentNullException("relatedProductViewService"); }
-
-            PageService = pageService;
-            ComposerContext = composerContext;
-            ProductService = productService;
-            ProductSpecificationsViewService = productSpecificationsViewService;
-            ProductBreadcrumbService = productBreadcrumbService;
-            LanguageSwitchService = languageSwitchService;
-            ProductUrlProvider = productUrlProvider;
-            RelatedProductViewService = relatedProductViewService;
+            PageService = pageService ?? throw new ArgumentNullException(nameof(pageService));
+            ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
+            ProductService = productService ?? throw new ArgumentNullException(nameof(productService));
+            ProductSpecificationsViewService = productSpecificationsViewService ?? throw new ArgumentNullException(nameof(productSpecificationsViewService));
+            ProductBreadcrumbService = productBreadcrumbService ?? throw new ArgumentNullException(nameof(productBreadcrumbService));
+            LanguageSwitchService = languageSwitchService ?? throw new ArgumentNullException(nameof(languageSwitchService));
+            ProductUrlProvider = productUrlProvider ?? throw new ArgumentNullException(nameof(productUrlProvider));
+            RelatedProductViewService = relatedProductViewService ?? throw new ArgumentNullException(nameof(relatedProductViewService));
             PreviewModeService = previewModeService ?? throw new ArgumentNullException(nameof(previewModeService));
         }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Web.Mvc;
 using Composite.Core.WebClient.Renderings.Page;
 
@@ -32,7 +33,7 @@ namespace Orckestra.Composer.CompositeC1.Extensions
             {
                 return methodToExecuteInPreviewMode();
             }
-            return new ViewResult();
+            return new HttpStatusCodeResult(HttpStatusCode.NotFound);
         }
     }
 }
