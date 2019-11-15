@@ -449,7 +449,7 @@ Pas de soucis, vous pouvez trouver d'excellentes suggestions de produits à offr
     <value>Liste de souhaits publique de {0} {1}</value>
   </data>
   <data name="T_ShippingMethod" xml:space="preserve">
-    <value>Méthode de livraison</value>
+    <value>Informations de livraison</value>
   </data>
   <data name="T_SignIn" xml:space="preserve">
     <value>Connectez-vous pour accélérer vos achats</value>
