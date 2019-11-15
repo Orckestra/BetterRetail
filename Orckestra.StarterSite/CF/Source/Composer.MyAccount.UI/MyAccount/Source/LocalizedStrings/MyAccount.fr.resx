@@ -481,4 +481,7 @@ Pas de soucis, vous pouvez trouver d'excellentes suggestions de produits à offr
   <data name="B_SaveChanges" xml:space="preserve">
     <value>Sauvegarder les changements</value>
   </data>
+  <data name="T_ShippingAddress" xml:space="preserve">
+    <value>Adresse de l'expédition:</value>
+  </data>
 </root>
