@@ -125,12 +125,43 @@ module Orckestra.Composer {
 
         public selectKva(actionContext: IControllerActionContext) {
 
+            let currentSelectedVariantId = this.context.viewModel.selectedVariantId;
+
             super.selectKva(actionContext);
 
             //IE8 check
             if (history) {
-                this.productService.replaceHistory();
+                this.replaceHistory(currentSelectedVariantId);
             }
+        }
+
+        private replaceHistory(previousSelectedVariantId: string) {
+            let variantId = this.context.viewModel.selectedVariantId;
+
+            //Variant selection is not valid use last valid
+            if (variantId === null) {
+                return;
+            }
+
+            let pathArray = window.location.pathname.split('/').filter(Boolean);
+            let prevVariantIdIndex = pathArray.lastIndexOf(previousSelectedVariantId); //Variant id should be at the foremost right
+            if (prevVariantIdIndex === -1) {
+                //We couldn't find the variant id in the path, which means the PDP was accessed without a variant in the URL.
+                //In that case, we add it right after the product id in the URL. If for some aweful reason the product id is not found,
+                //add the variant id at the end.
+                let productIdIndex = pathArray.indexOf(this.context.viewModel.productId);
+                pathArray.splice(productIdIndex === -1 ? pathArray.length : productIdIndex + 1, 0, variantId);
+            } else {
+                //Replace the old variant id with the new one
+                pathArray[prevVariantIdIndex] = variantId;
+            }
+
+            let builtPath = window.location.protocol
+            + '//'
+            + window.location.host
+            + this.productService.buildUrlPath(pathArray);
+
+            history.replaceState( {} , null, builtPath);
         }
 
         protected completeAddLineItem(quantityAdded: any): Q.Promise<void> {
