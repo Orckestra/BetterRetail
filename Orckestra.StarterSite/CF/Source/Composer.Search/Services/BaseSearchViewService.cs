@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -17,6 +17,7 @@ using Orckestra.Composer.Search.Providers;
 using Orckestra.Composer.Search.Repositories;
 using Orckestra.Composer.Search.ViewModels;
 using Orckestra.Composer.Services;
+using Orckestra.Composer.Utils;
 using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel;
 using Orckestra.Overture.ServiceModel.Products.Inventory;
@@ -47,6 +48,7 @@ namespace Orckestra.Composer.Search.Services
         protected IComposerContext ComposerContext { get; }
         protected IProductSettingsViewService ProductSettings { get; }
         protected IScopeViewService ScopeViewService { get; }
+        protected IRecurringOrdersSettings RecurringOrdersSettings { get; private set; }
 
         protected BaseSearchViewService(
             ISearchRepository searchRepository,
@@ -60,36 +62,25 @@ namespace Orckestra.Composer.Search.Services
             IPriceProvider priceProvider,
             IComposerContext composerContext,
             IProductSettingsViewService productSettings,
-            IScopeViewService scopeViewService)
+            IScopeViewService scopeViewService,
+            IRecurringOrdersSettings recurringOrdersSettings)
         {
-            if (searchRepository == null) { throw new ArgumentNullException(nameof(searchRepository)); }
-            if (viewModelMapper == null) { throw new ArgumentNullException(nameof(viewModelMapper)); }
-            if (damProvider == null) { throw new ArgumentNullException(nameof(damProvider)); }
-            if (localizationProvider == null) { throw new ArgumentNullException(nameof(localizationProvider)); }
-            if (productUrlProvider == null) { throw new ArgumentNullException(nameof(productUrlProvider)); }
-            if (searchUrlProvider == null) { throw new ArgumentNullException(nameof(searchUrlProvider)); }
-            if (facetFactory == null) { throw new ArgumentNullException(nameof(facetFactory)); }
-            if (selectedFacetFactory == null) { throw new ArgumentNullException(nameof(selectedFacetFactory)); }
-            if (priceProvider == null) { throw new ArgumentNullException(nameof(priceProvider)); }
-            if (composerContext == null) { throw new ArgumentNullException(nameof(composerContext)); }
-            if (productSettings == null) { throw new ArgumentNullException(nameof(productSettings)); }
-            if (scopeViewService == null) { throw new ArgumentNullException(nameof(scopeViewService)); }
-
-            SearchRepository = searchRepository;
-            ViewModelMapper = viewModelMapper;
-            DamProvider = damProvider;
-            LocalizationProvider = localizationProvider;
-            ProductUrlProvider = productUrlProvider;
-            SearchUrlProvider = searchUrlProvider;
-            FacetFactory = facetFactory;
-            SelectedFacetFactory = selectedFacetFactory;
-            PriceProvider = priceProvider;
-            ComposerContext = composerContext;
-            ProductSettings = productSettings;
-            ScopeViewService = scopeViewService;
+            SearchRepository = searchRepository ?? throw new ArgumentNullException(nameof(searchRepository));
+            ViewModelMapper = viewModelMapper ?? throw new ArgumentNullException(nameof(viewModelMapper));
+            DamProvider = damProvider ?? throw new ArgumentNullException(nameof(damProvider));
+            LocalizationProvider = localizationProvider ?? throw new ArgumentNullException(nameof(localizationProvider));
+            ProductUrlProvider = productUrlProvider ?? throw new ArgumentNullException(nameof(productUrlProvider));
+            SearchUrlProvider = searchUrlProvider ?? throw new ArgumentNullException(nameof(searchUrlProvider));
+            SelectedFacetFactory = selectedFacetFactory ?? throw new ArgumentNullException(nameof(selectedFacetFactory));
+            FacetFactory = facetFactory ?? throw new ArgumentNullException(nameof(facetFactory));
+            PriceProvider = priceProvider ?? throw new ArgumentNullException(nameof(priceProvider));
+            ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
+            ProductSettings = productSettings ?? throw new ArgumentNullException(nameof(productSettings));
+            ScopeViewService = scopeViewService ?? throw new ArgumentNullException(nameof(scopeViewService));
+            RecurringOrdersSettings = recurringOrdersSettings ?? throw new ArgumentNullException(nameof(recurringOrdersSettings));
         }
 
-        private IList<Facet> BuildFacets(SearchCriteria criteria, ProductSearchResult searchResult)
+        protected virtual IList<Facet> BuildFacets(SearchCriteria criteria, ProductSearchResult searchResult)
         {
             if (searchResult.Facets == null) { return new List<Facet>(); }
 
@@ -107,7 +98,7 @@ namespace Orckestra.Composer.Search.Services
             return facetList;
         }
 
-        private IList<PromotedFacetValue> BuildPromotedFacetValues(IEnumerable<Facet> facets)
+        protected virtual IList<PromotedFacetValue> BuildPromotedFacetValues(IEnumerable<Facet> facets)
         {
             return
                 facets.SelectMany(facet =>
@@ -128,26 +119,6 @@ namespace Orckestra.Composer.Search.Services
                     .OrderBy(facetValue => facetValue.PromotionWeight)
                     .Select(facetValue => facetValue.FacetValue)
                     .ToList();
-        }
-
-        /// <summary>
-        ///     Quick Access lookup for images
-        ///     Group by Product then by VariantId
-        /// </summary>
-        /// <returns></returns>
-        private static IDictionary<Tuple<string, string>, ProductMainImage> BuildImageDictionaryFor(
-            IEnumerable<ProductMainImage> images)
-        {
-            if (images == null)
-            {
-                return new Dictionary<Tuple<string, string>, ProductMainImage>();
-            }
-
-            //Creating groups to avoid duplicates in the dictionnary.
-            var img = images.GroupBy(i => Tuple.Create(i.ProductId, i.VariantId));
-            var dict = img.ToDictionary(i => i.Key, i => i.First());
-
-            return dict;
         }
 
         private SearchPaginationViewModel BuildPaginationForSearchResults(
@@ -213,7 +184,7 @@ namespace Orckestra.Composer.Search.Services
                 }
             }
 
-            var imgDictionary = BuildImageDictionaryFor(param.ImageUrls);
+            var imgDictionary = LineItemHelper.BuildImageDictionaryFor(param.ImageUrls);
 
 
             // Populate search results
@@ -260,6 +231,9 @@ namespace Orckestra.Composer.Search.Services
             MapProductSearchViewModelImage(productSearchVm, imgDictionary);
             productSearchVm.IsAvailableToSell = await GetProductSearchViewModelAvailableForSell(productSearchVm, productDocument).ConfigureAwait(false);
             productSearchVm.Pricing = await PriceProvider.GetPriceAsync(productSearchVm.HasVariants, productDocument).ConfigureAwait(false);
+            productSearchVm.IsEligibleForRecurring = RecurringOrdersSettings.Enabled && productDocument.PropertyBag.IsEligibleForRecurring();
+          
+            productSearchVm.Context["IsEligibleForRecurring "] = productSearchVm.IsEligibleForRecurring;
 
             return productSearchVm;
         }
@@ -276,7 +250,7 @@ namespace Orckestra.Composer.Search.Services
                 : extractedValues[2];
         }
 
-        private async Task<bool> GetProductSearchViewModelAvailableForSell(
+        protected virtual async Task<bool> GetProductSearchViewModelAvailableForSell(
             ProductSearchViewModel productSearchViewModel,
             ProductDocument productDocument)
         {
@@ -319,7 +293,7 @@ namespace Orckestra.Composer.Search.Services
             };
         }
 
-        private static InventoryStatusEnum GetInventoryItemStatus(InventoryStatus inventoryStatus)
+        protected static InventoryStatusEnum GetInventoryItemStatus(InventoryStatus inventoryStatus)
         {
             switch (inventoryStatus)
             {
@@ -449,7 +423,7 @@ namespace Orckestra.Composer.Search.Services
             return previousPage;
         }
 
-        private static bool HasVariants(ProductDocument resultItem)
+        protected static bool HasVariants(ProductDocument resultItem)
         {
             if (resultItem == null)
             {
@@ -552,10 +526,23 @@ namespace Orckestra.Composer.Search.Services
 
             if (searchResult == null) { return null; }
 
-            var getImageParam = new GetProductMainImagesParam
+            var imageUrls = await DamProvider.GetProductMainImagesAsync(GetImagesParam(searchResult.Documents)).ConfigureAwait(false);
+           
+            var createSearchViewModelParam = new CreateProductSearchResultsViewModelParam<TParam>
+            {
+                SearchParam = cloneParam,
+                ImageUrls = imageUrls,
+                SearchResult = searchResult
+            };
+
+            return await CreateProductSearchResultsViewModelAsync(createSearchViewModelParam).ConfigureAwait(false);
+        }
+        private static GetProductMainImagesParam GetImagesParam(List<ProductDocument> documnets)
+        {
+            return new GetProductMainImagesParam
             {
                 ImageSize = SearchConfiguration.DefaultImageSize,
-                ProductImageRequests = searchResult.Documents
+                ProductImageRequests = documnets
                     .Select(document => new ProductImageRequest
                     {
                         ProductId = document.ProductId,
@@ -568,17 +555,6 @@ namespace Orckestra.Composer.Search.Services
                         PropertyBag = document.PropertyBag
                     }).ToList()
             };
-
-            var imageUrls = await DamProvider.GetProductMainImagesAsync(getImageParam).ConfigureAwait(false);
-
-            var createSearchViewModelParam = new CreateProductSearchResultsViewModelParam<TParam>
-            {
-                SearchParam = cloneParam,
-                ImageUrls = imageUrls,
-                SearchResult = searchResult
-            };
-
-            return await CreateProductSearchResultsViewModelAsync(createSearchViewModelParam).ConfigureAwait(false);
         }
 
         private static string TrimProductDisplayName(string displayName)

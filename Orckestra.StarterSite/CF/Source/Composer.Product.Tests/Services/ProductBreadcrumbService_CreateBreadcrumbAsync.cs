@@ -12,6 +12,8 @@ using Orckestra.Composer.Product.Services;
 using Orckestra.Composer.Product.ViewModels;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Localization;
+using Orckestra.Composer.Services;
+using Orckestra.Composer.ViewModels;
 using Orckestra.Composer.ViewModels.Breadcrumb;
 
 namespace Orckestra.Composer.Product.Tests.Services
@@ -85,7 +87,7 @@ namespace Orckestra.Composer.Product.Tests.Services
         }
 
         [Test]
-        public async void WHEN_Parameters_Are_Valid_SHOULD_Return_ViewModel()
+        public async Task WHEN_Parameters_Are_Valid_SHOULD_Return_ViewModel()
         {
             //Arrange
             var categoryServiceMock = CreateCategoryServiceMock();
@@ -138,7 +140,7 @@ namespace Orckestra.Composer.Product.Tests.Services
         }
 
         [Test]
-        public async void WHEN_Product_Without_A_Category_SHOULD_Return_Minimal_Breadcrumb()
+        public async Task WHEN_Product_Without_A_Category_SHOULD_Return_Minimal_Breadcrumb()
         {
             // Arrange
             var service = _container.CreateInstance<ProductBreadcrumbService>();

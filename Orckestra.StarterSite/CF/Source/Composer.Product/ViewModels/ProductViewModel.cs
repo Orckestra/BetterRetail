@@ -31,6 +31,8 @@ namespace Orckestra.Composer.Product.ViewModels
         [Formatting("General", "PriceFormat")]
         public string ListPrice { get; set; }
 
+        public decimal? Price { get; set; }
+
         public string DefinitionName { get; set; }
 
         public string ProductDetailUrl { get; set; }
@@ -56,11 +58,25 @@ namespace Orckestra.Composer.Product.ViewModels
         [MapTo("DisplayName")]
         public Dictionary<string, string> LocalizedDisplayNames { get; set; }
 
+        /// <summary>
+        /// Is eligible if RecurringOrderProgramName is not null or empty and if recurring orders flag is enabled
+        /// </summary>
+        public bool IsRecurringOrderEligible { get; set; }
+        /// <summary>
+        /// Name of the recurring order program associated to the product
+        /// </summary>
+        public string RecurringOrderProgramName { get; set; }
+        /// <summary>
+        /// List of frequencies available based on the program
+        /// </summary>
+        public List<RecurringOrderProgramFrequencyViewModel> RecurringOrderFrequencies { get; set; }
+
         public ProductViewModel()
         {
             KeyVariantAttributeItems = new List<KeyVariantAttributeItem>();
             Images = new List<ProductDetailImageViewModel>();
             LocalizedDisplayNames = new Dictionary<string, string>();
+            RecurringOrderFrequencies = new List<RecurringOrderProgramFrequencyViewModel>();
         }
     }
 }

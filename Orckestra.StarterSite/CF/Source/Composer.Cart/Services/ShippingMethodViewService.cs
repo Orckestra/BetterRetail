@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,9 +8,12 @@ using Orckestra.Composer.Cart.Factory;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Repositories;
 using Orckestra.Composer.Cart.ViewModels;
+using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Country;
+using Orckestra.Composer.Factory;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Utils;
+using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel.Orders;
 
 namespace Orckestra.Composer.Cart.Services
@@ -23,22 +27,33 @@ namespace Orckestra.Composer.Cart.Services
         protected ICartViewModelFactory CartViewModelFactory { get; private set; }
         protected ICartRepository CartRepository { get; private set; }
         protected ICartService CartService { get; private set; }
+        protected IRecurringOrderTemplateViewModelFactory RecurringOrderTemplateViewModelFactory { get; private set; }
+        protected IRecurringOrderCartsViewService RecurringOrderCartsViewService { get; private set; }
+        protected IRecurringOrdersSettings RecurringOrdersSettings { get; private set; }
 
         public ShippingMethodViewService(
-            IFulfillmentMethodRepository fulfillmentMethodRepository, 
+            IFulfillmentMethodRepository fulfillmentMethodRepository,
             ICartViewModelFactory cartViewModelFactory,
-            ICartRepository cartRepository, 
-            ICartService cartService)
+            ICartRepository cartRepository,
+            ICartService cartService,
+            IRecurringOrderTemplateViewModelFactory recurringOrderTemplateViewModelFactory,
+            IRecurringOrderCartsViewService recurringOrderCartsViewService,
+            IRecurringOrdersSettings recurringOrdersSettings)
         {
             if (fulfillmentMethodRepository == null) { throw new ArgumentNullException("fulfillmentMethodRepository"); }
             if (cartViewModelFactory == null) { throw new ArgumentNullException("cartViewModelFactory"); }
             if (cartRepository == null) { throw new ArgumentNullException("cartRepository"); }
             if (cartService == null) { throw new ArgumentNullException("cartService"); }
+            if (recurringOrderTemplateViewModelFactory == null) { throw new ArgumentNullException("recurringOrderTemplateViewModelFactory"); }
+            if (recurringOrderCartsViewService == null) { throw new ArgumentNullException("recurringOrderCartsViewService"); }
 
             FulfillmentMethodRepository = fulfillmentMethodRepository;
             CartViewModelFactory = cartViewModelFactory;
             CartRepository = cartRepository;
             CartService = cartService;
+            RecurringOrderTemplateViewModelFactory = recurringOrderTemplateViewModelFactory;
+            RecurringOrderCartsViewService = recurringOrderCartsViewService;
+            RecurringOrdersSettings = recurringOrdersSettings;
         }
 
         /// <summary>
@@ -68,6 +83,31 @@ namespace Orckestra.Composer.Cart.Services
             {
                 ShippingMethods = shippingMethodViewModels
             };
+        }
+
+        /// <summary>
+        /// Get the Shipping methods available for a shipment. Calls the GetCart to get the shipment Id.
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns>The ShippingMethodsViewModel</returns>
+        public async virtual Task<ShippingMethodsViewModel> GetRecurringCartShippingMethodsAsync(GetShippingMethodsParam param)
+        {
+            if (param == null) { throw new ArgumentNullException("param", "param is required"); }
+            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException("param.CartName is required", "param"); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException("param.Scope is required", "param"); }
+            if (param.CustomerId == Guid.Empty) { throw new ArgumentException("param.CustomerId is required", "param"); }
+            if (param.CultureInfo == null) { throw new ArgumentException("param.CultureInfo is required", "param"); }
+
+            var cart = await CartRepository.GetCartAsync(new GetCartParam
+            {
+                BaseUrl = string.Empty,
+                CartName = param.CartName,
+                CultureInfo = param.CultureInfo,
+                CustomerId = param.CustomerId,
+                Scope = param.Scope
+            }).ConfigureAwait(false);
+            
+            return await GetShippingMethodsAsync(param).ConfigureAwaitWithCulture(false);
         }
 
         protected virtual Task<List<FulfillmentMethod>> GetFulfillmentMethods(GetShippingMethodsParam param)
@@ -141,7 +181,7 @@ namespace Orckestra.Composer.Cart.Services
             return vm;
         }
 
-        protected async Task<List<FulfillmentMethod>> GetShippingMethodsForShippingEstimationAsync(EstimateShippingParam param)
+        protected virtual async Task<List<FulfillmentMethod>> GetShippingMethodsForShippingEstimationAsync(EstimateShippingParam param)
         {
             var shippingMethods = await GetFulfillmentMethods(new GetShippingMethodsParam
             {
@@ -174,6 +214,94 @@ namespace Orckestra.Composer.Cart.Services
             }
 
             return shipment;
+        }
+
+        /// <summary>
+        /// Get the Shipping methods available in the scope.
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns>The ShippingMethodsViewModel</returns>
+        public async virtual Task<RecurringOrdersTemplatesShippingMethodsViewModel> GetShippingMethodsScopeAsync(GetShippingMethodsScopeParam param)
+        {
+            if (param == null) { throw new ArgumentNullException("param", "param is required"); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException("param.Scope is required", "param"); }
+            if (param.CultureInfo == null) { throw new ArgumentException("param.CultureInfo is required", "param"); }
+
+            var fulfillmentMethods = await FulfillmentMethodRepository.GetFulfillmentMethods(param.Scope).ConfigureAwaitWithCulture(false);
+
+            if (fulfillmentMethods == null)
+            {
+                return null;
+            }
+
+            var shippingMethodViewModels = fulfillmentMethods.FulfillmentMethods
+                .Select(sm => RecurringOrderTemplateViewModelFactory.GetShippingMethodViewModel(sm, param.CultureInfo)).ToList();
+
+            return new RecurringOrdersTemplatesShippingMethodsViewModel
+            {
+                ShippingMethods = shippingMethodViewModels
+            };
+        }
+
+        public virtual async Task<CartViewModel> UpdateRecurringOrderCartShippingMethodAsync(UpdateRecurringOrderCartShippingMethodParam param)
+        {
+            if (!RecurringOrdersSettings.Enabled)
+                return GetEmptyRecurringOrderCartViewModel();
+
+            if (param == null) throw new ArgumentNullException(nameof(param), ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param)));
+
+            var cart = await CartRepository.GetCartAsync(new GetCartParam
+            {
+                BaseUrl = param.BaseUrl,
+                Scope = param.Scope,
+                CultureInfo = param.CultureInfo,
+                CustomerId = param.CustomerId,
+                CartName = param.CartName
+
+            }).ConfigureAwait(false);
+
+            if (cart.Shipments == null || !cart.Shipments.Any())
+            {
+                throw new InvalidOperationException("No shipment was found in the cart.");
+            }
+
+            var shipment = cart.Shipments.First();
+
+            var fulfillmentMethods = await FulfillmentMethodRepository.GetCalculatedFulfillmentMethods(new GetShippingMethodsParam
+            {
+                CartName = param.CartName,
+                CultureInfo = param.CultureInfo,
+                CustomerId = param.CustomerId,
+                Scope = param.Scope
+            });
+
+            if (fulfillmentMethods == null)
+                throw new InvalidOperationException($"No fulfillmentMethods was found for the cart name ({param.CartName}).");
+
+            var fulfillmentMethod = fulfillmentMethods.SingleOrDefault(f => f.ShippingProviderId == param.ShippingProviderId.ToGuid() &&
+                    string.Equals(f.Name, param.ShippingMethodName, StringComparison.InvariantCultureIgnoreCase));
+
+            if(fulfillmentMethod == null)
+                throw new InvalidOperationException($"The fulfillmentMethod ({param.ShippingProviderId}) was not found.");
+
+            shipment.FulfillmentMethod = fulfillmentMethod;
+
+            var updatedCart = await CartRepository.UpdateCartAsync(UpdateCartParamFactory.Build(cart)).ConfigureAwait(false);
+
+            var vm = await RecurringOrderCartsViewService.CreateCartViewModelAsync(new CreateRecurringOrderCartViewModelParam
+            {
+                Cart = updatedCart,
+                CultureInfo = new CultureInfo(updatedCart.CultureName),
+                IncludeInvalidCouponsMessages = false,
+                BaseUrl = param.BaseUrl,
+            }).ConfigureAwait(false);
+
+            return vm;
+        }
+
+        protected virtual CartViewModel GetEmptyRecurringOrderCartViewModel()
+        {
+            return  new CartViewModel();
         }
     }
 }

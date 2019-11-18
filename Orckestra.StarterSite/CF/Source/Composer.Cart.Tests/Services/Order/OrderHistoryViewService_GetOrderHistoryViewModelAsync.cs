@@ -15,6 +15,7 @@ using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Services.Lookup;
 using Orckestra.Overture.ServiceModel.Orders;
+using System.Threading.Tasks;
 
 namespace Orckestra.Composer.Cart.Tests.Services.Order
 {
@@ -33,7 +34,7 @@ namespace Orckestra.Composer.Cart.Tests.Services.Order
         }
 
         [Test]
-        public async void WHEN_valid_request_SHOULD_succeed()
+        public async Task WHEN_valid_request_SHOULD_succeed()
         {
             //Arrange
             var orderStatuses = new Dictionary<string, string>();

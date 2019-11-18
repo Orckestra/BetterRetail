@@ -6,7 +6,7 @@
 module Orckestra.Composer {
     export class ProductSpecificationsController extends Orckestra.Composer.Controller {
 
-        private service: ProductSpecificationsService = new ProductSpecificationsService();
+        protected service: ProductSpecificationsService = new ProductSpecificationsService();
 
         public initialize() {
 

@@ -84,20 +84,18 @@ namespace Orckestra.Composer.Cart.Tests.Services
         public void WHEN_Scope_Is_NullOrWhitespace_SHOULD_Throw_ArgumentException(string scope)
         {
             var service = _container.CreateInstance<CartService>();
+            var param = new RemoveLineItemParam
+            {
+                Scope = scope,
+                CultureInfo = TestingExtensions.GetRandomCulture(),
+                CustomerId = GetRandom.Guid(),
+                CartName = GetRandom.String(32),
+                LineItemId = GetRandom.Guid(),
+                BaseUrl = GetRandom.String(32)
+            };
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await service.RemoveLineItemAsync(new RemoveLineItemParam
-                {
-                    Scope       = scope,
-                    CultureInfo = TestingExtensions.GetRandomCulture(),
-                    CustomerId  = GetRandom.Guid(),
-                    CartName    = GetRandom.String(32),
-                    LineItemId  = GetRandom.Guid(),
-                    BaseUrl = GetRandom.String(32)
-                });
-            });
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => service.RemoveLineItemAsync(param));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");
@@ -108,20 +106,18 @@ namespace Orckestra.Composer.Cart.Tests.Services
         public void WHEN_CultureInfo_Is_Null_SHOULD_Throw_ArgumentException()
         {
             var service = _container.CreateInstance<CartService>();
+            var param = new RemoveLineItemParam
+            {
+                Scope = GetRandom.String(32),
+                CultureInfo = null,
+                CustomerId = GetRandom.Guid(),
+                CartName = GetRandom.String(32),
+                LineItemId = GetRandom.Guid(),
+                BaseUrl = GetRandom.String(32)
+            };
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await service.RemoveLineItemAsync(new RemoveLineItemParam
-                {
-                    Scope       = GetRandom.String(32),
-                    CultureInfo = null,
-                    CustomerId  = GetRandom.Guid(),
-                    CartName    = GetRandom.String(32),
-                    LineItemId  = GetRandom.Guid(),
-                    BaseUrl = GetRandom.String(32)
-                });
-            });
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => service.RemoveLineItemAsync(param));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");
@@ -132,20 +128,18 @@ namespace Orckestra.Composer.Cart.Tests.Services
         public void WHEN_CustomerId_Is_Empty_SHOULD_Throw_ArgumentException()
         {
             var service = _container.CreateInstance<CartService>();
+            var param = new RemoveLineItemParam
+            {
+                Scope = GetRandom.String(32),
+                CultureInfo = TestingExtensions.GetRandomCulture(),
+                CustomerId = Guid.Empty,
+                CartName = GetRandom.String(32),
+                LineItemId = GetRandom.Guid(),
+                BaseUrl = GetRandom.String(32)
+            };
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await service.RemoveLineItemAsync(new RemoveLineItemParam
-                {
-                    Scope       = GetRandom.String(32),
-                    CultureInfo = TestingExtensions.GetRandomCulture(),
-                    CustomerId  = Guid.Empty,
-                    CartName    = GetRandom.String(32),
-                    LineItemId  = GetRandom.Guid(),
-                    BaseUrl = GetRandom.String(32)
-                });
-            });
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => service.RemoveLineItemAsync(param));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");
@@ -159,20 +153,18 @@ namespace Orckestra.Composer.Cart.Tests.Services
         public void WHEN_CartName_Is_NullOrWhitespace_SHOULD_Throw_ArgumentException(string cartName)
         {
             var service = _container.CreateInstance<CartService>();
+            var param = new RemoveLineItemParam
+            {
+                Scope = GetRandom.String(32),
+                CultureInfo = TestingExtensions.GetRandomCulture(),
+                CustomerId = GetRandom.Guid(),
+                CartName = cartName,
+                LineItemId = GetRandom.Guid(),
+                BaseUrl = GetRandom.String(32)
+            };
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await service.RemoveLineItemAsync(new RemoveLineItemParam
-                {
-                    Scope       = GetRandom.String(32),
-                    CultureInfo = TestingExtensions.GetRandomCulture(),
-                    CustomerId  = GetRandom.Guid(),
-                    CartName    = cartName,
-                    LineItemId  = GetRandom.Guid(),
-                    BaseUrl = GetRandom.String(32)
-                });
-            });
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => service.RemoveLineItemAsync(param));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");
@@ -183,20 +175,18 @@ namespace Orckestra.Composer.Cart.Tests.Services
         public void WHEN_Id_Is_Empty_SHOULD_Throw_ArgumentException()
         {
             var service = _container.CreateInstance<CartService>();
+            var param = new RemoveLineItemParam
+            {
+                Scope = GetRandom.String(32),
+                CultureInfo = TestingExtensions.GetRandomCulture(),
+                CustomerId = GetRandom.Guid(),
+                CartName = GetRandom.String(32),
+                LineItemId = Guid.Empty,
+                BaseUrl = GetRandom.String(32)
+            };
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await service.RemoveLineItemAsync(new RemoveLineItemParam
-                {
-                    Scope       = GetRandom.String(32),
-                    CultureInfo = TestingExtensions.GetRandomCulture(),
-                    CustomerId  = GetRandom.Guid(),
-                    CartName    = GetRandom.String(32),
-                    LineItemId  = Guid.Empty,
-                    BaseUrl = GetRandom.String(32)
-                });
-            });
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => service.RemoveLineItemAsync(param));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");
@@ -209,10 +199,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
             var service = _container.CreateInstance<CartService>();
 
             // Act
-            var exception = Assert.Throws<ArgumentNullException>(async () =>
-            {
-                await service.RemoveLineItemAsync(null);
-            });
+            var exception = Assert.ThrowsAsync<ArgumentNullException>(() => service.RemoveLineItemAsync(null));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");

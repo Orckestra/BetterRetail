@@ -1,4 +1,4 @@
-﻿namespace Orckestra.Composer.Configuration
+namespace Orckestra.Composer.Configuration
 {
     /// <summary>
     /// This class defines a list of constant names that will be used when getting/setting information in cache for different systems
@@ -61,6 +61,11 @@
         /// </summary>
         public static string ProductSettings = "ProductSettings";
 
+         /// <summary>
+        /// Cache where the Product Media Settings will be stored
+        /// </summary>
+        public static string ProductMediaSettings = "ProductMediaSettings";
+
         public static string FulfillmentLocationsByScope = "FulfillmentLocationsByScope";
 
         /// <summary>
@@ -73,5 +78,16 @@
         public static string StoreSchedule = "StoreSchedule";
 
         public static string StoreInventoryItems = "StoreInventoryItems";
+
+        public static string RecurringOrderPrograms = "RecurringOrderPrograms";
+
+        /// <summary>
+        /// Cache used for the list of fulfillementMEthods for a scope
+        /// </summary>
+        public static string FulfillmentMethodsByScope = "FulfillmentMethodsByScope";
+
+        public static string PaymentProviders = "PaymentProviders";
+
+        public static string Providers = "Providers";
     }
 }

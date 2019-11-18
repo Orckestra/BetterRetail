@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Orckestra.Composer.Search.Services;
+using Orckestra.Composer.Search.Parameters;
 using Orckestra.Composer.Search.ViewModels;
 
 namespace Orckestra.Composer.Search.Context
@@ -11,6 +11,6 @@ namespace Orckestra.Composer.Search.Context
         /// </summary>
         /// <param name="param"></param>
         /// <returns></returns>
-        Task<CategoryBrowsingViewModel> GetCategoryAvailableProductsAsync(BrowsingByCategoryParam param);
+        Task<CategoryBrowsingViewModel> GetCategoryAvailableProductsAsync(GetBrowseCategoryParam param);
     }
 }

@@ -24,6 +24,7 @@ using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Dam;
 using Orckestra.Composer.Repositories;
+using Orckestra.Composer.Services;
 using Orckestra.Composer.Services.Lookup;
 using Orckestra.Composer.ViewModels;
 using Orckestra.ForTests;
@@ -57,8 +58,6 @@ namespace Orckestra.Composer.Cart.Tests.Services
         private Mock<ILineItemService> CreatepaymentProviderFactoryMock()
         {
             var paymentProviderFactoryMock = _container.GetMock<ILineItemService>();
-            paymentProviderFactoryMock.Setup(s => s.GetImageUrlsAsync(It.IsAny<IEnumerable<LineItem>>()))
-                .ReturnsAsync(new List<ProductMainImage>());
             return paymentProviderFactoryMock;
         }
 
@@ -121,10 +120,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
             var service = _container.CreateInstance<CheckoutService>();
 
             // Act and Assert
-            Assert.Throws<ArgumentNullException>(async () =>
-            {
-                await service.UpdateCheckoutCartAsync(null);
-            });
+            Assert.ThrowsAsync<ArgumentNullException>(() => service.UpdateCheckoutCartAsync(null));
         }
 
         [Test]
@@ -132,18 +128,16 @@ namespace Orckestra.Composer.Cart.Tests.Services
         {
             //Arrange
             var service = _container.CreateInstance<CheckoutService>();
+            var param = new UpdateCheckoutCartParam
+            {
+                GetCartParam = new GetCartParam(),
+                CurrentStep = GetRandom.Int(),
+                UpdateValues = null,
+                IsGuest = GetRandom.Boolean()
+            };
 
             // Act and Assert
-            Assert.Throws<ArgumentException>(async () =>
-            {
-                await service.UpdateCheckoutCartAsync(new UpdateCheckoutCartParam
-                {
-                    GetCartParam = new GetCartParam(),
-                    CurrentStep = GetRandom.Int(),
-                    UpdateValues = null,
-                    IsGuest = GetRandom.Boolean()
-                });
-            });
+            Assert.ThrowsAsync<ArgumentException>(() => service.UpdateCheckoutCartAsync(param));
         }
 
         [Test]
@@ -151,18 +145,16 @@ namespace Orckestra.Composer.Cart.Tests.Services
         {
             //Arrange
             var service = _container.CreateInstance<CheckoutService>();
+            var param = new UpdateCheckoutCartParam
+            {
+                GetCartParam = null,
+                CurrentStep = GetRandom.Int(),
+                UpdateValues = new Dictionary<string, string>(),
+                IsGuest = GetRandom.Boolean()
+            };
 
             // Act and Assert
-            Assert.Throws<ArgumentException>(async () =>
-            {
-                await service.UpdateCheckoutCartAsync(new UpdateCheckoutCartParam
-                {
-                    GetCartParam = null,
-                    CurrentStep = GetRandom.Int(),
-                    UpdateValues = new Dictionary<string, string>(),
-                    IsGuest = GetRandom.Boolean()
-                });
-            });
+            Assert.ThrowsAsync<ArgumentException>(() => service.UpdateCheckoutCartAsync(param));
         }
 
         [Test]
@@ -239,7 +231,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
                 Line1 = GetRandom.String(32),
                 Line2 = GetRandom.String(32),
                 RegionCode = GetRandom.String(32),
-                CountryCode = ComposerConfiguration.CountryCode,
+                CountryCode = GetRandom.String(32),
                 PhoneNumber = GetRandom.String(32),
                 PostalCode = GetRandom.String(6)
             };
@@ -355,7 +347,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
             processedCart.Cart.ShippingMethod.ShippingProviderId.ShouldBeEquivalentTo(updatedShippingMethod.ShippingProviderId);
         }
 
-        [Ignore]
+        [Ignore("Found the test with this attribute, filling in required reason.")]
         [Test]
         public async Task WHEN_Passing_Valid_Parameters_SHOULD_Update_BillingAddress()
         {
@@ -372,7 +364,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
                 Line1 = GetRandom.String(32),
                 Line2 = GetRandom.String(32),
                 RegionCode = GetRandom.String(32),
-                CountryCode = ComposerConfiguration.CountryCode,
+                CountryCode = GetRandom.String(32),
                 PhoneNumber = GetRandom.String(32),
             };
 
@@ -398,7 +390,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
             processedCart.Cart.Payment.BillingAddress.PhoneNumber.ShouldBeEquivalentTo(updatedBillingAddress.PhoneNumber);
         }
 
-        [Ignore]
+        [Ignore("Found the test with this attribute, filling in required reason.")]
         [Test]
         public async Task WHEN_Passing_Valid_Parameters_SHOULD_Update_BillingAddress_With_ShippingAddress()
         {
@@ -411,7 +403,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
                 Line1 = GetRandom.String(32),
                 Line2 = GetRandom.String(32),
                 RegionCode = GetRandom.String(32),
-                CountryCode = ComposerConfiguration.CountryCode,
+                CountryCode = GetRandom.String(32),
                 PhoneNumber = GetRandom.String(32)
             };
 
@@ -587,10 +579,14 @@ namespace Orckestra.Composer.Cart.Tests.Services
         private CheckoutService CreateCheckoutService(ProcessedCart cart)
         {
             var mockedLookupService = new Mock<ILookupService>();
+            var mockedImageService = new Mock<IImageService>();
 
             mockedLookupService.Setup(a => a.GetLookupDisplayNamesAsync(It.IsAny<GetLookupDisplayNamesParam>())).ReturnsAsync(
                 new Dictionary<string, string> { { "Cash", "TestDisplayName" } });
 
+            mockedImageService.Setup(a => a.GetImageUrlsAsync(It.IsAny<IEnumerable<LineItem>>())).ReturnsAsync(new List<ProductMainImage>());
+
+            _container.Use(mockedImageService);
             _container.Use(mockedLookupService);
 
             var mockedDamProvider = new Mock<IDamProvider>();

@@ -15,8 +15,8 @@ namespace Orckestra.Composer.MyAccount.Tests.Mock
             composerContext.SetupProperty(p => p.CultureInfo)
                  .Object.CultureInfo = TestingExtensions.GetRandomCulture();
 
-            composerContext.SetupProperty(p => p.Scope)
-                .Object.Scope = GetRandom.String(32);
+            //composerContext.SetupProperty(p => p.Scope)
+             //   .Object.Scope = GetRandom.String(32);
 
             composerContext.SetupProperty(p => p.CustomerId)
                 .Object.CustomerId = guest ? GetRandom.Guid() : Guid.Empty;

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Orckestra.Composer.Services.Cookie
 {
@@ -15,7 +16,9 @@ namespace Orckestra.Composer.Services.Cookie
         {
         }
 
+        [Obsolete("We do not save scope in the cookie for multi scope sites.")]
         public string Scope { get; set; }
+
         public string EncryptedCustomerId { get; set; }
         public bool? IsGuest { get; set; }
 

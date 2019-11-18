@@ -12,6 +12,7 @@ using NUnit.Framework;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Repositories;
+using Orckestra.Composer.Search.Context;
 using Orckestra.Composer.Search.Facets;
 using Orckestra.Composer.Search.Factory;
 using Orckestra.Composer.Search.Parameters;
@@ -56,15 +57,14 @@ namespace Orckestra.Composer.Search.Tests.Service
         private void SetUpSelectedFacetFactory()
         {
             var mock = new Mock<ISelectedFacetFactory>();
-           mock.Setup(factory => factory.CreateSelectedFacet( It.IsAny<SearchFilter>(), It.IsAny<CultureInfo>()))
-                .Returns((SearchFilter searchFilter, CultureInfo cultureInfo) => new List<SelectedFacet> { new SelectedFacet{FieldName = searchFilter.Name} });
+            mock.Setup(factory => factory.CreateSelectedFacet(It.IsAny<SearchFilter>(), It.IsAny<CultureInfo>()))
+                 .Returns((SearchFilter searchFilter, CultureInfo cultureInfo) => new List<SelectedFacet> { new SelectedFacet { FieldName = searchFilter.Name } });
             _container.Use(mock);
         }
 
         private void SetUpFacetConfiguration()
         {
-            SearchConfiguration.FacetSettings = new List<FacetSetting>
-            {
+            SetupFacets(
                 new FacetSetting("CategoryLevel1_Facet")
                 {
                     FacetType = FacetType.SingleSelect,
@@ -90,8 +90,7 @@ namespace Orckestra.Composer.Search.Tests.Service
                     {
                         "CategoryLevel2_Facet"
                     }
-                },
-            };
+                });
         }
 
         private void SetUpSearchRepository()
@@ -142,9 +141,9 @@ namespace Orckestra.Composer.Search.Tests.Service
                 .Setup(m => m.BuildCategoryBrowsingUrl(It.IsNotNull<BuildCategoryBrowsingUrlParam>()))
                 .Returns((BuildCategoryBrowsingUrlParam p) => GetRandom.WwwUrl() + "/" + p.CategoryId);
 
-             _container.GetMock<ICategoryBrowsingUrlProvider>()
-                .Setup(m => m.BuildSearchQueryString(It.IsNotNull<BuildSearchUrlParam>()))
-                .Returns(new NameValueCollection());
+            _container.GetMock<ICategoryBrowsingUrlProvider>()
+               .Setup(m => m.BuildSearchQueryString(It.IsNotNull<BuildSearchUrlParam>()))
+               .Returns(new NameValueCollection());
         }
 
         private void SetUpComposerContext()
@@ -170,10 +169,7 @@ namespace Orckestra.Composer.Search.Tests.Service
             CategoryBrowsingViewService service = _container.CreateInstance<CategoryBrowsingViewService>();
 
             // Act & Assert
-            Assert.Throws<ArgumentNullException>(async () =>
-            {
-                await service.GetCategoryBrowsingViewModelAsync(null);
-            });
+            Assert.ThrowsAsync<ArgumentNullException>(() => service.GetCategoryBrowsingViewModelAsync(null));
         }
 
         [Test]
@@ -183,13 +179,12 @@ namespace Orckestra.Composer.Search.Tests.Service
             CategoryBrowsingViewService service = _container.CreateInstance<CategoryBrowsingViewService>();
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(async () =>
-            {
-                await service.GetCategoryBrowsingViewModelAsync(new GetCategoryBrowsingViewModelParam
+            Assert.ThrowsAsync<ArgumentException>(() => service.GetCategoryBrowsingViewModelAsync(
+                new GetCategoryBrowsingViewModelParam
                 {
                     CategoryId = null
-                });
-            });
+                }
+            ));
         }
 
         [Test]
@@ -199,14 +194,13 @@ namespace Orckestra.Composer.Search.Tests.Service
             CategoryBrowsingViewService service = _container.CreateInstance<CategoryBrowsingViewService>();
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(async () =>
-            {
-                await service.GetCategoryBrowsingViewModelAsync(new GetCategoryBrowsingViewModelParam
+            Assert.ThrowsAsync<ArgumentException>(() => service.GetCategoryBrowsingViewModelAsync(
+                new GetCategoryBrowsingViewModelParam
                 {
                     CategoryId = GetRandom.String(1),
                     SelectedFacets = null
-                });
-            });
+                }
+            ));
         }
 
         [Test]
@@ -218,14 +212,13 @@ namespace Orckestra.Composer.Search.Tests.Service
             CategoryBrowsingViewService service = _container.CreateInstance<CategoryBrowsingViewService>();
 
             // Act & Assert
-            Assert.Throws<InvalidOperationException>(async () =>
-            {
-                await service.GetCategoryBrowsingViewModelAsync(new GetCategoryBrowsingViewModelParam
+            Assert.ThrowsAsync<InvalidOperationException>(() => service.GetCategoryBrowsingViewModelAsync(
+                new GetCategoryBrowsingViewModelParam
                 {
                     CategoryId = GetRandom.String(1),
                     SelectedFacets = new List<SearchFilter>()
-                });
-            });
+                }
+            ));
         }
 
         [Test]
@@ -744,7 +737,7 @@ namespace Orckestra.Composer.Search.Tests.Service
             CategoryBrowsingViewService service = _container.CreateInstance<CategoryBrowsingViewService>();
 
             var facetName = GetRandom.String(5);
-            SearchConfiguration.FacetSettings.Add(new FacetSetting(facetName));
+            SetupFacets(new FacetSetting(facetName));
 
             // Act
             var expectedFacet = new SearchFilter
@@ -866,5 +859,13 @@ namespace Orckestra.Composer.Search.Tests.Service
 
             _container.Use(mock);
         }
+
+        private void SetupFacets(params FacetSetting[] settings)
+        {
+            _container.GetMock<IFacetConfigurationContext>()
+                .Setup(x => x.GetFacetSettings())
+                .Returns(new List<FacetSetting>(settings));
+        }
+
     }
 }

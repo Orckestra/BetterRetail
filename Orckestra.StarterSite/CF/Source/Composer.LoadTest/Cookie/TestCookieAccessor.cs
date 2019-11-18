@@ -84,7 +84,8 @@ namespace Composer.LoadTest.Cookie
             else
             {
                 //Fall back to an empty cookie (or set default values)
-                dto = new TestCookieDto { ScopeAndLocationId = ComposerConfiguration.DefaultInventoryLocationId };
+                var defaultInventoryLocationId = "310";
+                dto = new TestCookieDto { ScopeAndLocationId = defaultInventoryLocationId };
             }
 
             return dto;

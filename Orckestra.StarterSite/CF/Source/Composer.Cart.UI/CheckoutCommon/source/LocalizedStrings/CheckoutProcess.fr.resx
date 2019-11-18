@@ -154,7 +154,7 @@
     <value>Oui</value>
   </data>
   <data name="F_SaveCreditCard" xml:space="preserve">
-    <value>Sauvegarder cette carte</value>
+    <value>Cochez cette case pour sauvegarder cette carte de crédit et l'utiliser pour des commandes récurrentes futures.</value>
   </data>
   <data name="F_SaveCreditCardForced" xml:space="preserve">
     <value>Cette carte sera sauvegardée</value>
@@ -163,7 +163,7 @@
     <value>Carte expirée</value>
   </data>
   <data name="F_SaveCreditCardForced_Explain" xml:space="preserve">
-    <value>Explication inspirante sur pourquoi la carte sera sauvegardée avec uen commande récurrence</value>
+    <value>Vous devez sauvegarder cette carte pour l'utiliser dans des commandes récurrentes.</value>
   </data>
   <data name="F_SaveCreditCardForced_ExplainTitle" xml:space="preserve">
     <value>Titre: Carte Sauvegardée</value>
@@ -219,6 +219,9 @@
   <data name="L_LogInCheckout" xml:space="preserve">
     <value>Vous pouvez créer une commande sans vous inscrire. Vous pourrez vous inscrire après avoir passer à la caisse.</value>
   </data>
+  <data name="L_LogInCheckoutWithRecurring" xml:space="preserve">
+    <value>Vous ne pouvez pas créer une commande récurrente si vous n'êtes pas enregistré(e). Veuillez vous connecter ou créer un compte pour profiter de ce service.</value>
+  </data>
   <data name="L_NextStepIndication" xml:space="preserve">
     <value>Votre carte de crédit sera débitée une fois la commande soumise</value>
   </data>
@@ -271,7 +274,7 @@
     <value>Invités &amp;amp; nouveaux clients</value>
   </data>
   <data name="T_ShippingAddress" xml:space="preserve">
-    <value>Adresse de la livraison</value>
+    <value>Adresse de livraison</value>
   </data>
   <data name="T_ShippingMethod" xml:space="preserve">
     <value>Méthode de livraison</value>
@@ -287,5 +290,8 @@
   </data>
   <data name="B_AddCreditCard" xml:space="preserve">
     <value>Utiliser une autre carte de crédit</value>
+  </data>
+  <data name="L_ExpirationDateForm" xml:space="preserve">
+    <value>Date d'expiration (mmaa)</value>
   </data>
 </root>

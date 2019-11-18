@@ -8,6 +8,9 @@ module Orckestra.Composer {
 
         protected concern: string = 'productSearch';
 
+        private selectedRecurringOrderFrequencyName: string;
+        private recurringMode: string = 'single';
+
         public initialize() {
             this.setConcernWithContext();
             super.initialize();
@@ -130,7 +133,10 @@ module Orckestra.Composer {
 
             return this.inventoryService
                        .isAvailableToSell(this.context.viewModel.Sku)
-                       .then(result => this.render('AddToCartQuickView', { IsAvailableToSell: result }));
+                       .then(result => {
+                           this.render('AddToCartQuickView', { IsAvailableToSell: result });
+                           this.renderRecurringAddToCartProductDetailFrequency();
+                       });
         }
 
         protected completeAddLineItem(quantityAdded: any): Q.Promise<void> {
@@ -140,6 +146,55 @@ module Orckestra.Composer {
 
         protected getListNameForAnalytics(): string {
             return this.context.viewModel.source;
+        }
+
+        private renderRecurringAddToCartProductDetailFrequency() {
+            let loc = LocalizationProvider.instance(),
+                recurringBubblePitch = ((loc.getLocalizedString('ProductPage', 'L_RecurringBubblePitch'))),
+                availableFrequencies = this.context.viewModel.RecurringOrderFrequencies || [];
+
+            if (!this.selectedRecurringOrderFrequencyName && availableFrequencies.length > 0) {
+                this.selectedRecurringOrderFrequencyName = availableFrequencies[0].RecurringOrderFrequencyName;
+            }
+
+            this.inventoryService.isAvailableToSell(this.context.viewModel.Sku)
+                .then(result => {
+                    if (this.context.viewModel.IsRecurringOrderEligible && result) {
+                        this.render('ProductQuickViewRecurringFrequency', {
+                            recurringMode: this.recurringMode,
+                            isAvailableForRecurring: this.context.viewModel.IsRecurringOrderEligible,
+                            availableFrequencies: availableFrequencies.map(freq => ({
+                                recurringOrderFrequencyName: freq.RecurringOrderFrequencyName,
+                                displayName: freq.DisplayName
+                            })),
+                            selectedRecurringOrderFrequencyName: this.selectedRecurringOrderFrequencyName,
+                            recurringBubblePitch: recurringBubblePitch
+                        });
+                    }
+                });
+        }
+
+        public onRecurringOrderFrequencySelectChanged(actionContext: IControllerActionContext) {
+            let element = <any>actionContext.elementContext[0],
+                option = element.options[element.selectedIndex];
+
+            if (option) {
+                this.selectedRecurringOrderFrequencyName = option.value === '' ? null : option.value;
+            }
+        }
+
+        public changeRecurringMode(actionContext: IControllerActionContext) {
+            let container$ = actionContext.elementContext.closest('.js-recurringModes');
+            container$.find('.js-recurringModeRow.selected').removeClass('selected');
+            actionContext.elementContext.closest('.js-recurringModeRow').addClass('selected');
+            let modeElement = actionContext.elementContext.closest('.recurring-modes');
+            modeElement.find('.recurring-frequencies').collapse('toggle');
+            this.recurringMode = actionContext.elementContext.val();
+        }
+
+        public addToCartButtonClick(actionContext: IControllerActionContext) {
+            let frequencyName = this.recurringMode === 'single' ? null : this.selectedRecurringOrderFrequencyName;
+            this.addLineItem(actionContext, frequencyName, this.context.viewModel.RecurringOrderProgramName);
         }
     }
 }

@@ -26,11 +26,11 @@
 
   <add key="Composer.DefaultScope" value="Canada" />
   <add key="CC1.DeploymentToken" value="***REMOVED***" />
-  <xsl:comment> Analytics </xsl:comment>
-  <add key="Composer.GTMContainerId" value="GTM-5Z9T69" />
 
   <xsl:comment> OWIN </xsl:comment>
   <add key="owin:AutomaticAppStartup" value="false" />
+   <xsl:comment> Hangfire </xsl:comment>
+  <add key="hangfire:AutomaticAppStartup" value="false" />
 </appSettings>
 </xsl:variable>
 
@@ -46,13 +46,21 @@
     <xsl:apply-templates select="@*" />
     <xsl:if test="count(configSections)=0">
   <configSections>
-<xsl:copy-of select="$ComposerSectionGroup"/>
+		<xsl:copy-of select="$ComposerSectionGroup"/>
+		<sectionGroup name="experienceManagement" type="System.Configuration.ConfigurationSectionGroup, System.Configuration">
+			<section name="settings" type="System.Configuration.NameValueFileSectionHandler" />
+		</sectionGroup>
   </configSections>
     <xsl:comment>Composer configuration</xsl:comment>
       <xsl:copy-of select="$ComposerSection"/>
       <xsl:copy-of select="$AppSettings"/>
     </xsl:if>
     <xsl:apply-templates select="node()" />
+		<xsl:if test="count(experienceManagement)=0" xml:space="preserve">
+				<experienceManagement>
+					<settings configSource="App_Config\ExperienceManagement.config" />
+				</experienceManagement>
+			</xsl:if>
   </xsl:copy>
   </xsl:template>
 
@@ -60,12 +68,17 @@
     <xsl:copy>
       <xsl:apply-templates select="@*" />
         <xsl:copy-of select="$ComposerSectionGroup"/>
-      <xsl:apply-templates select="node()" />
+        <xsl:apply-templates select="node()" />
+	      <xsl:if test="count(sectionGroup[@name='experienceManagement'])=0">
+				  <sectionGroup name="experienceManagement" type="System.Configuration.ConfigurationSectionGroup, System.Configuration">
+					  <section name="settings" type="System.Configuration.NameValueFileSectionHandler" />
+				  </sectionGroup>
+			  </xsl:if>
    </xsl:copy>
     <xsl:comment>Composer configuration</xsl:comment>
     <xsl:copy-of select="$ComposerSection"/>
     <xsl:copy-of select="$AppSettings"/>
- 
+
   </xsl:template>
 
   <xsl:template match="configuration/system.web" xml:space="preserve">
@@ -85,7 +98,7 @@
   <!-- Setting output cache duration to 15 minutes -->
   <xsl:template match="configuration/system.web/caching/outputCacheSettings/outputCacheProfiles/add[@name='C1Page']" xml:space="preserve">
           <xsl:comment> 15 minutes Output cache </xsl:comment>
-          <add name="C1Page" enabled="true" duration="900" varyByCustom="C1Page" varyByParam="*" location="Server" />
+          <add name="C1Page" enabled="true" duration="900" varyByCustom="C1Page" varyByParam="*" location="Any" />
 	</xsl:template>
 
   <xsl:template match="configuration/system.webServer">

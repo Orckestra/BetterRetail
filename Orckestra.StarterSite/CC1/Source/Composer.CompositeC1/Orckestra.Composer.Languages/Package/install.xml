@@ -1,0 +1,21 @@
+<?xml version="1.0" standalone="yes"?>
+<mi:PackageInstaller xmlns:mi="http://www.composite.net/ns/management/packageinstaller/1.0">
+	<mi:PackageRequirements minimumCompositeVersion="5.0" maximumCompositeVersion="9.9999.9999.9999" />
+	<mi:PackageInformation name="Orckestra.Composer.Languages" groupName="Orckestra.Composer" version="1.0.0" author="Orckestra " website="https://orckestra.com/" readMoreUrl="https://orckestra.com/" id="1110b656-e993-4dfa-bfd8-e6dc000e3ca0" canBeUninstalled="true" systemLocking="hard" flushOnCompletion="true" allowOverwrite="false" reloadConsoleOnCompletion="true">
+		<TechnicalDetails>Install additional Languages</TechnicalDetails>
+		<Description>Install additional Languages</Description>
+	</mi:PackageInformation>
+	
+	<mi:PackageFragmentInstallers>
+    <mi:Add
+     installerType="Composite.Core.PackageSystem.PackageFragmentInstallers.LocalePackageFragmentInstaller, Composite"
+     uninstallerType="Composite.Core.PackageSystem.PackageFragmentInstallers.LocalePackageFragmentUninstaller, Composite">
+      <Locales>
+        <Locale
+            name="fr-CA"
+            urlMappingName="fr-CA"
+            default="false" />
+      </Locales>
+    </mi:Add>
+	</mi:PackageFragmentInstallers>
+</mi:PackageInstaller>

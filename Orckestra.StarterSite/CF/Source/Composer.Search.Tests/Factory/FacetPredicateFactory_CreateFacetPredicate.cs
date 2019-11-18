@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using FizzWare.NBuilder.Generators;
 using FluentAssertions;
 using Moq;
 using Moq.AutoMock;
 using NUnit.Framework;
 using Orckestra.Composer.Parameters;
+using Orckestra.Composer.Search.Context;
 using Orckestra.Composer.Search.Facets;
 using Orckestra.Composer.Search.Factory;
 using Orckestra.Composer.Search.Providers.FacetPredicate;
@@ -20,8 +22,8 @@ namespace Orckestra.Composer.Search.Tests.Factory
         public void SetUp()
         {
             _container = new AutoMocker();
-
             _container.Use((IFacetPredicateProviderRegistry) new FacetPredicateProviderRegistry());
+            SetupFacets();
         }
 
         private AutoMocker _container;
@@ -108,8 +110,7 @@ namespace Orckestra.Composer.Search.Tests.Factory
             mockResolver.Setup(dr => dr.Resolve(It.IsNotNull<Type>()))
                 .Returns(new FakeFacetPredicateProvider());
             var filter = MockSearchFilter();
-
-            SearchConfiguration.FacetSettings.Add(new FacetSetting(filter.Name) {FacetType = facetType});
+            SetupFacets(new FacetSetting(filter.Name) {FacetType = facetType});
 
             var sut = _container.CreateInstance<FacetPredicateFactory>();
 
@@ -126,7 +127,7 @@ namespace Orckestra.Composer.Search.Tests.Factory
             //Arrange
             var sut = _container.CreateInstance<FacetPredicateFactory>();
             var filter = MockSearchFilter();
-            SearchConfiguration.FacetSettings.Add(new FacetSetting(filter.Name) {FacetType = FacetType.Range});
+            SetupFacets(new FacetSetting(filter.Name) {FacetType = FacetType.Range});
 
             //Act
             var exception = Assert.Throws<InvalidOperationException>(() => sut.CreateFacetPredicate(filter));
@@ -142,7 +143,7 @@ namespace Orckestra.Composer.Search.Tests.Factory
             var registry = _container.Get<IFacetPredicateProviderRegistry>();
             registry.RegisterProvider<FakeFacetPredicateProvider>(GetRandom.String(15));
             var filter = MockSearchFilter();
-            SearchConfiguration.FacetSettings.Add(new FacetSetting(filter.Name) {FacetType = FacetType.Range});
+            SetupFacets(new FacetSetting(filter.Name) {FacetType = FacetType.Range});
 
             var sut = _container.CreateInstance<FacetPredicateFactory>();
 
@@ -152,6 +153,13 @@ namespace Orckestra.Composer.Search.Tests.Factory
             //Assert
             exception.Should().NotBeNull();
             exception.ParamName.Should().BeEquivalentTo("name");
+        }
+
+        private void SetupFacets(params FacetSetting[] settings)
+        {
+            _container.GetMock<IFacetConfigurationContext>()
+                .Setup(x => x.GetFacetSettings())
+                .Returns(new List<FacetSetting>(settings));
         }
     }
 }

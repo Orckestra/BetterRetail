@@ -3,6 +3,10 @@
     .nav, .collapse, .dropup, .dropdown {
         position: static;
     }
+    // main-nav dropdown to have a higher z-index than in the search sort
+    .dropdown-menu {
+        z-index: $zindex-dropdown + 5;
+    }
     // propagate menu position under container for fw navbars
     .container {
         position: relative;
@@ -34,7 +38,7 @@
     &-toggle {
         border: none;
         float: left; 
-        margin-right: 0;
+        margin-left: -10px;
         padding: 4px 10px;
     }
 
@@ -144,7 +148,7 @@
         .dropdown > a:hover,
         .dropdown > a:focus,
         .open > a {
-            background-color: #fff;
+            background-color: darken($masthead-bg, 15%);
 
             &::after {
                 background-color: $link-color;

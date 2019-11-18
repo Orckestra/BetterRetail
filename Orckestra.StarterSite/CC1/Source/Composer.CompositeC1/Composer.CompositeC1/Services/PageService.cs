@@ -2,22 +2,31 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Composite.Core;
 using Composite.Core.Routing;
 using Composite.Data;
 using Composite.Data.Types;
 using Orckestra.Composer.CompositeC1.Pages;
+using Orckestra.ExperienceManagement.Configuration;
 
 namespace Orckestra.Composer.CompositeC1.Services
 {
     public class PageService : IPageService
     {
+
+        protected ISiteConfiguration SiteConfiguration { get; private set; }
+
+        public PageService()
+        {
+            
+        }
         /// <summary>
         /// Returns a page in the given locale.
         /// </summary>
         /// <param name="pageId"></param>
         /// <param name="cultureInfo"></param>
         /// <returns></returns>
-        public IPage GetPage(Guid pageId, CultureInfo cultureInfo = null)
+        public virtual IPage GetPage(Guid pageId, CultureInfo cultureInfo = null)
         {
             using (new DataConnection(cultureInfo))
             {
@@ -25,7 +34,7 @@ namespace Orckestra.Composer.CompositeC1.Services
             }
         }
 
-        public Guid GetParentPageId(IPage page)
+        public virtual Guid GetParentPageId(IPage page)
         {
             return page.GetParentId();
         }
@@ -36,7 +45,7 @@ namespace Orckestra.Composer.CompositeC1.Services
         /// <param name="pageId"></param>
         /// <param name="cultureInfo"></param>
         /// <returns></returns>
-        public string GetRendererPageUrl(Guid pageId, CultureInfo cultureInfo = null)
+        public virtual string GetRendererPageUrl(Guid pageId, CultureInfo cultureInfo = null)
         {
             if (cultureInfo == null)
             {
@@ -48,8 +57,12 @@ namespace Orckestra.Composer.CompositeC1.Services
             return PageUrls.BuildUrl(pageUrlData, UrlKind.Renderer);
         }
 
-        public string GetPageUrl(Guid pageId, CultureInfo cultureInfo = null)
+        public virtual string GetPageUrl(Guid pageId, CultureInfo cultureInfo = null)
         {
+            if(pageId == Guid.Empty)
+            {
+                throw new ArgumentException(nameof(pageId));
+            }
             var page = GetPage(pageId, cultureInfo);
             if (page == null)
             {
@@ -60,26 +73,45 @@ namespace Orckestra.Composer.CompositeC1.Services
             
         }
 
-        public string GetPageUrl(IPage page)
+        public virtual string GetPageUrl(IPage page)
         {
             var url = PageUrls.BuildUrl(page);
             return url;
         }
 
-        public List<CheckoutStepInfoPage> GetCheckoutStepPages(CultureInfo cultureInfo = null)
+        public virtual List<string> GetCheckoutStepPages(Guid currentHomePageId, CultureInfo cultureInfo = null)
         {
-            using (DataConnection connection = new DataConnection(cultureInfo))
+            var siteConfiguration = ServiceLocator.GetService<ISiteConfiguration>();
+            var steps = siteConfiguration.GetPagesConfiguration(cultureInfo, currentHomePageId).CheckoutSteps;
+            if (!string.IsNullOrWhiteSpace(steps))
             {
-                return connection.Get<CheckoutStepInfoPage>().ToList();
+                return steps.Split(new char[] { ',' }).ToList();
             }
+
+            return null;
         }
 
-        public CheckoutStepInfoPage GetCheckoutStepPage(Guid pageId, CultureInfo cultureInfo = null)
+        public virtual List<string> GetCheckoutNavigationPages(Guid currentHomePageId, CultureInfo cultureInfo = null)
         {
-            using (DataConnection connection = new DataConnection(cultureInfo))
+            var siteConfiguration = ServiceLocator.GetService<ISiteConfiguration>();
+            var nav = siteConfiguration.GetPagesConfiguration(cultureInfo, currentHomePageId).CheckoutNavigation;
+            if (!string.IsNullOrWhiteSpace(nav))
             {
-                return connection.Get<CheckoutStepInfoPage>().FirstOrDefault(p => p.PageId == pageId);
+                return nav.Split(new char[] { ',' }).ToList();
             }
+
+            return null;
+        }
+
+        public virtual int GetCheckoutStepPageNumber(Guid currentHomePageId, Guid pageId, CultureInfo cultureInfo = null)
+        {
+            var steps = GetCheckoutStepPages(currentHomePageId, cultureInfo);
+            if (steps != null)
+            {
+                return steps.FindIndex(s => s == pageId.ToString());
+            }
+
+            return -1;
         }
     }
 }

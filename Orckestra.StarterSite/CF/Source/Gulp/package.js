@@ -17,7 +17,7 @@
 
     // TODO: paths are hardcoded here, need to find a solution for global config
     var dest = 'UI.Package/';
-
+	
     var changePath = function (file, env, callback) {
         // filter out directories
         // we don't need to copy and operate on empty directories
@@ -123,13 +123,22 @@
     });
 
      gulp.task('package-copy-mvc', function() {
-        helpers.log('Copying ' + dest);
-        var c1Site = path.join('C:/orckestra/composer-c1-cm-dev.develop.orckestra.cloud/WebSite', dest),
-            c1MvcProject = path.join('../../CC1/Source/Composer.CompositeC1/Composer.CompositeC1.Mvc', dest);
+		 
+		var mvcSources = ['App_Data/Razor/', 'App_Data/PageTemplates/'];
+		mvcSources.forEach(function(destItem) {
+			helpers.log('Copying ' + destItem);
+			var c1Site = path.join(config.deployedWebsitePath, destItem);
+			return gulp.src(path.join('../../CC1/Source/Composer.CompositeC1/Composer.CompositeC1.Mvc/', destItem, '**/*'))
+				.pipe(gulp.dest(c1Site))
+		});
+		
+		helpers.log('Copying ' + dest);
+		var c1Site = path.join(config.deployedWebsitePath, dest),
+			c1MvcProject = path.join('../../CC1/Source/Composer.CompositeC1/Composer.CompositeC1.Mvc', dest);
 
-        return gulp.src(path.join(dest, '**/*'))
-            .pipe(gulp.dest(c1Site))
-            .pipe(gulp.dest(c1MvcProject));
+		return gulp.src(path.join(dest, '**/*'))
+				.pipe(gulp.dest(c1Site))
+				.pipe(gulp.dest(c1MvcProject));
     });
 
     gulp.task('package-copy-dll', function() {

@@ -196,7 +196,7 @@
     <value />
   </data>
   <data name="F_ComplementaryAddressWaterMark" xml:space="preserve">
-    <value>ex : Batiment 42</value>
+    <value>ex : Bâtiment 42</value>
   </data>
   <data name="F_ConfirmationEmail" xml:space="preserve">
     <value>Confirmer votre adresse courriel</value>
@@ -382,7 +382,7 @@
     <value />
   </data>
   <data name="F_NewPasswordIndication" xml:space="preserve">
-    <value />
+    <value>Votre mot de passe doit avoir un minimum de {0} caractères dont au moins 1 caractère spécial.</value>
   </data>
   <data name="F_NewPasswordLengthError" xml:space="preserve">
     <value />
@@ -421,7 +421,7 @@
     <value />
   </data>
   <data name="F_PasswordIndication" xml:space="preserve">
-    <value />
+    <value>Votre mot de passe doit avoir un minimum de {0} caractères dont au moins 1 caractère spécial.</value>
   </data>
   <data name="F_PasswordLengthError" xml:space="preserve">
     <value />

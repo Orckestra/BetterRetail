@@ -29,6 +29,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Repositories
         {
             //Arrange
             var expectedUsername = GetRandom.Email();
+            var expectedScope = GetRandom.String(32);
             var expectedPassword = GetRandom.String(32);
             var expectedPasswordAnswer = GetRandom.String(70);
             var customerRepository = _container.CreateInstance<CustomerRepository>();
@@ -45,8 +46,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Repositories
                 });
 
             //Act and Assert
-            Assert.DoesNotThrow(async () => 
-                await customerRepository.ResetPasswordAsync(expectedUsername, expectedPassword, expectedPasswordAnswer));
+            Assert.DoesNotThrowAsync(() => customerRepository.ResetPasswordAsync(expectedUsername, expectedScope, expectedPassword, expectedPasswordAnswer));
         }
 
         [Test]
@@ -63,8 +63,9 @@ namespace Orckestra.Composer.MyAccount.Tests.Repositories
                 });
 
             //Act
-            Assert.Throws<ComposerException>(async () => await customerRepository.ResetPasswordAsync(
+            Assert.ThrowsAsync<ComposerException>(() => customerRepository.ResetPasswordAsync(
                 GetRandom.Email(),
+                GetRandom.String(32),
                 GetRandom.String(32),
                 GetRandom.String(70)
             ));
@@ -80,8 +81,9 @@ namespace Orckestra.Composer.MyAccount.Tests.Repositories
             var customerRepository = _container.CreateInstance<CustomerRepository>();
 
             //Act
-            var ex = Assert.Throws<ArgumentException>(async () => await customerRepository.ResetPasswordAsync(
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => customerRepository.ResetPasswordAsync(
                 username,
+                GetRandom.String(32),
                 GetRandom.String(32),
                 GetRandom.String(70)
             ));
@@ -100,8 +102,9 @@ namespace Orckestra.Composer.MyAccount.Tests.Repositories
             var customerRepository = _container.CreateInstance<CustomerRepository>();
 
             //Act
-            var ex = Assert.Throws<ArgumentException>(async () => await customerRepository.ResetPasswordAsync(
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => customerRepository.ResetPasswordAsync(
                 GetRandom.Email(),
+                GetRandom.String(70),
                 newPassword,
                 GetRandom.String(70)
             ));
@@ -118,12 +121,14 @@ namespace Orckestra.Composer.MyAccount.Tests.Repositories
         {
             //Arrange
             var expectedUsername = GetRandom.Email();
+            var expectedScopeId = GetRandom.String(32);
             var expectedPassword = GetRandom.String(32);
             var customerRepository = _container.CreateInstance<CustomerRepository>();
 
             _container.GetMock<IOvertureClient>()
                 .Setup(r => r.SendAsync(It.Is<ResetPasswordRequest>(
                     param => param.Username == expectedUsername &&
+                    param.ScopeId == expectedScopeId &&
                     param.Password == expectedPassword &&
                     param.PasswordAnswer == passwordAnswer &&
                     string.IsNullOrWhiteSpace(param.Email))))
@@ -133,13 +138,13 @@ namespace Orckestra.Composer.MyAccount.Tests.Repositories
                 });
 
             //Act and Assert
-            Assert.DoesNotThrow(async () =>
-            {
-                await customerRepository.ResetPasswordAsync(
+            Assert.DoesNotThrowAsync(() =>
+                 customerRepository.ResetPasswordAsync(
                     expectedUsername,
+                    expectedScopeId,
                     expectedPassword,
-                    passwordAnswer);
-            });
+                    passwordAnswer)
+            );
         }
     }
 }

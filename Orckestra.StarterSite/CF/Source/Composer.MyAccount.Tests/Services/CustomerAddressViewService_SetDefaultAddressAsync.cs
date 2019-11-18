@@ -111,7 +111,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             var customerAddressViewService = _container.CreateInstance<CustomerAddressViewService>();
 
             //Act
-            var ex = Assert.Throws<ArgumentNullException>(async () => await customerAddressViewService.SetDefaultAddressAsync(null));
+            var ex = Assert.ThrowsAsync<ArgumentNullException>(() => customerAddressViewService.SetDefaultAddressAsync(null));
 
             //Assert
             ex.Message.Should().ContainEquivalentOf("param");
@@ -133,7 +133,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             };
 
             //Act
-            var ex = Assert.Throws<ArgumentException>(async () => await customerAddressViewService.SetDefaultAddressAsync(param));
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => customerAddressViewService.SetDefaultAddressAsync(param));
 
             //Assert
             ex.Message.Should().ContainEquivalentOf("Scope");
@@ -151,7 +151,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             };
 
             //Act
-            var ex = Assert.Throws<ArgumentException>(async () => await customerAddressViewService.SetDefaultAddressAsync(param));
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => customerAddressViewService.SetDefaultAddressAsync(param));
 
             //Assert
             ex.Message.Should().ContainEquivalentOf("CustomerId");
@@ -169,7 +169,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             };
 
             //Act
-            var ex = Assert.Throws<ArgumentException>(async () => await customerAddressViewService.SetDefaultAddressAsync(param));
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => customerAddressViewService.SetDefaultAddressAsync(param));
 
             //Assert
             ex.Message.Should().ContainEquivalentOf("AddressId");

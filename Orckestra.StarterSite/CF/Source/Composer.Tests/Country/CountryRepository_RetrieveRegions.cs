@@ -56,12 +56,14 @@ namespace Orckestra.Composer.Tests.Country
         [Test]
         public async Task WHEN_Passing_Valid_Parameters_SHOULD_Succeed()
         {
-            // Act
-            var result = await _repository.RetrieveRegions(new RetrieveCountryParam
+            var param = new RetrieveCountryParam
             {
                 IsoCode = GetRandom.String(32),
                 CultureInfo = TestingExtensions.GetRandomCulture()
-            }).ConfigureAwait(false);
+            };
+
+            // Act
+            var result = await _repository.RetrieveRegions(param).ConfigureAwait(false);
 
             // Assert
             result.Should().NotBeNull();
@@ -73,15 +75,14 @@ namespace Orckestra.Composer.Tests.Country
         [TestCase(" \t\r\n")]
         public void WHEN_IsoCode_Is_NullOrWhitespace_SHOULD_Throw_ArgumentException(string isoCode)
         {
-            // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
+            var param = new RetrieveCountryParam
             {
-                await _repository.RetrieveRegions(new RetrieveCountryParam
-                {
-                    IsoCode = isoCode,
-                    CultureInfo = TestingExtensions.GetRandomCulture()
-                });
-            });
+                IsoCode = isoCode,
+                CultureInfo = TestingExtensions.GetRandomCulture()
+            };
+
+            // Act
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => _repository.RetrieveRegions(param));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");
@@ -91,14 +92,13 @@ namespace Orckestra.Composer.Tests.Country
         [Test]
         public void WHEN_CultureInfo_Is_Null_SHOULD_Throw_ArgumentException()
         {
-            // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
+            var param = new RetrieveCountryParam
             {
-                await _repository.RetrieveRegions(new RetrieveCountryParam
-                {
-                    IsoCode = GetRandom.String(32),
-                });
-            });
+                IsoCode = GetRandom.String(32),
+            };
+
+            // Act
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => _repository.RetrieveRegions(param));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");

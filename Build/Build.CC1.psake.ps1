@@ -1,3 +1,5 @@
+$VisualStudioVersion                      = '2019'
+
 Task CC1 -depends CC1_RestoreNugetPackages,
                   CC1_BuildAndPackage
                   #CC1_PackageNuget,
@@ -27,6 +29,8 @@ function CC1_InitializeVariables {
     $Build.CC1.ContentPackageNumber = 200
 	
 	$Build.CC1.NugetPackagesRepository = Join-Path $Build.CC1.SourcePath "packages"
+	
+	$Build.VisualStudioVersion = "2019"
 }
 
 Task CC1_RestoreNugetPackages {    
@@ -46,7 +50,7 @@ Task CC1_RestoreNugetPackages {
 		}
 		
 
-    Get-AllSolutions -RootFolder $Build.CC1.RootPath -ErrorAction SilentlyContinue | Invoke-NugetRestore | Write-Verbose
+    Get-AllSolutions -RootFolder $Build.CC1.RootPath -ErrorAction SilentlyContinue | Invoke-NugetRestore -VisualStudioVersion $VisualStudioVersion | Write-Verbose
 }
 
 Task CC1_BuildAndPackage -depends   CC1_Copy-UiPackageFromNuget,
@@ -98,6 +102,7 @@ Task CC1_Compile-Solution {
     Invoke-Msbuild -Project (Join-Path $Build.CC1.SourcePath "Composer.CompositeC1.sln") `
         -Configuration $Configuration `
         -LogsDirectory $Build.CentralLogsFolder `
+        -VisualStudioVersion $VisualStudioVersion `
         -MsbuildVerbosity $MsbuildVerbosity
 }
 
@@ -107,7 +112,7 @@ Task CC1_UnitTestBackend {
 
 	$ErrorActionPreference = "Stop"
 
-	Invoke-NUnit -FilePathPatternTestDlls $TestDllPattern -FilePathXmlReport `"/xml=$XmlReportName`" -FullFilePathNUnitExe $Build.NUnitExe
+	Invoke-NUnit -FilePathPatternTestDlls $TestDllPattern -FilePathXmlReport `"/output:$XmlReportName`" -FullFilePathNUnitExe $Build.NUnitExe
 }
 
 Task CC1_Compile-CorePackage {    
@@ -127,6 +132,8 @@ Task CC1_Compile-CorePackage {
 	Robocopy (Join-Path $Build.CC1.WebProjectPath 'Composite') $corePackagePath\Composite /E /NJH /NDL /NS /NC /NP | Write-Verbose
 	Complete-RobocopyExecution($LASTEXITCODE)
 	Robocopy (Join-Path $Build.CC1.WebProjectPath 'UI.Package') $corePackagePath\UI.Package /E /NJH /NDL /NS /NC /NP | Write-Verbose
+	Complete-RobocopyExecution($LASTEXITCODE)
+	Robocopy (Join-Path $Build.CC1.WebProjectPath 'Views') $corePackagePath\Views /E /NJH /NDL /NS /NC /NP | Write-Verbose
 	Complete-RobocopyExecution($LASTEXITCODE)
 	
 	Complete-RobocopyExecution($LASTEXITCODE)
@@ -175,13 +182,15 @@ Task CC1_Compile-ContentFR {
 }
 
 Task CC1_Copy-UiPackageFromNuget {
+    Write-Host Join-Path $Build.CC1.NugetPackagesRepository "\Composer.*\"
     $composerNugetPackagePath = Join-Path $Build.CC1.NugetPackagesRepository "\Composer.*\"
     $srcFolder = (gci $composerNugetPackagePath).FullName
 
     Write-verbose "UI Package Location: $srcFolder"
-	
-	Robocopy (Join-Path $srcFolder 'UI.Package') (Join-Path $Build.CC1.WebProjectPath 'UI.Package') /E | Write-Verbose
-    
+    Write-Host "Robocopy" (Join-Path $srcFolder 'UI.Package') (Join-Path $Build.CC1.WebProjectPath 'UI.Package') /E
+
+    Robocopy (Join-Path $srcFolder 'UI.Package') (Join-Path $Build.CC1.WebProjectPath 'UI.Package') /E | Write-Verbose
+
     Complete-RobocopyExecution($LASTEXITCODE)
 }
 
@@ -202,6 +211,34 @@ Task CC1_Copy-Packages{
 	
 	write-host "Copying Orckestra.Composer.C1CMS.Queries package file"
 	$sourse = Join-Path $Build.CC1.SourcePath 'Orckestra.Composer.C1CMS.Queries.Package\Release\Orckestra.Composer.C1CMS.Queries.zip'
+	copy $sourse $destinationPath
+	
+	write-host "Copying Orckestra.Composer.SEO.Organization package file"
+	$sourse = Join-Path $Build.CC1.SourcePath 'Orckestra.Composer.SEO.Organization\Release\Orckestra.Composer.SEO.Organization.zip'
+	copy $sourse $destinationPath
+	
+	write-host "Copying OOrckestra.Composer.SEO.Content Content package file"
+	$sourse = Join-Path $Build.CC1.SourcePath 'Orckestra.Composer.SEO.Content\Release\Orckestra.Composer.SEO.Organization.Content.zip'
+	copy $sourse $destinationPath
+	
+	write-host "Copying Orckestra.Composer.Languages package file"
+	$sourse = Join-Path $Build.CC1.SourcePath 'Orckestra.Composer.Languages\Release\Orckestra.Composer.Languages.zip'
+	copy $sourse $destinationPath
+	
+	write-host "Copying Orckestra.Composer.Articles file"
+	$sourse = Join-Path $Build.CC1.SourcePath 'Orckestra.Composer.Articles.Package\Release\Orckestra.Composer.Articles.zip'
+	copy $sourse $destinationPath
+	
+	write-host "Copying Orckestra.Composer.ContentSearch file"
+	$sourse = Join-Path $Build.CC1.SourcePath 'Orckestra.Composer.ContentSearch.Package\Release\Orckestra.Composer.ContentSearch.zip'
+	copy $sourse $destinationPath
+	
+	write-host "Copying Orckestra.Composer.ContentSearch.Content file"
+	$sourse = Join-Path $Build.CC1.SourcePath 'Orckestra.Composer.ContentSearch.Content\Release\Orckestra.Composer.ContentSearch.Content.zip'
+	copy $sourse $destinationPath
+
+	write-host "Copying Orckestra.Composer.Sitemap file"
+	$sourse = Join-Path $Build.CC1.SourcePath 'Orckestra.Composer.Sitemap.Package\Release\Orckestra.Composer.Sitemap.zip'
 	copy $sourse $destinationPath
 	
 	write-host "Done"

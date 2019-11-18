@@ -99,11 +99,23 @@ function Install-Packages()
 		
 	Write-Log  "Copying Other ReffApp Features...."
 	Robocopy $genericRefAppPackagesFolder $dstFolder "Orckestra.Composer.C1CMS.Queries.zip" /MIR /NJH /NDL /NFL /NS /NC /NP /NJS
+	Robocopy $genericRefAppPackagesFolder $dstFolder "Orckestra.Composer.SEO.Organization.zip" /MIR /NJH /NDL /NFL /NS /NC /NP /NJS
+	Robocopy $genericRefAppPackagesFolder $dstFolder "Orckestra.Composer.Languages.zip" /MIR /NJH /NDL /NFL /NS /NC /NP /NJS
+	Robocopy $genericRefAppPackagesFolder $dstFolder "Orckestra.Composer.Articles.zip" /MIR /NJH /NDL /NFL /NS /NC /NP /NJS
+	Robocopy $genericRefAppPackagesFolder $dstFolder "Orckestra.Composer.ContentSearch.zip" /MIR /NJH /NDL /NFL /NS /NC /NP /NJS
+	Robocopy $genericRefAppPackagesFolder $dstFolder "Orckestra.Composer.Sitemap.zip" /MIR /NJH /NDL /NFL /NS /NC /NP /NJS
 	
 	RestartingIIS 
 	AccessHomePage 
 	
+	Write-Log  "Install Page Contents...."
 	Install-ContentPackages
+	
+	Write-Log  "Install Features Default Contents...."
+	Robocopy $genericRefAppPackagesFolder $dstFolder "Orckestra.Composer.SEO.Organization.Content.zip" /MIR /NJH /NDL /NFL /NS /NC /NP /NJS
+	RestartingIIS 
+	AccessHomePage 
+	
 			
 	Write-Log ACTION "Repackaging site as CD deployment package..."
 	iisreset /stop
@@ -151,8 +163,8 @@ function  TransformConfigFiles () {
 	Write-Log ACTION "Transforming Web.config..."
 	Invoke-ComponentConfigTransformation -ConfigFile "Web.config" -InstallPath $cmsHostPhysicalPath\Website -Environment $Environment -Component $Component
 
-	Write-Log ACTION "Transforming Composer.config..."
-	Invoke-ComponentConfigTransformation -ConfigFile "Composer.config" -InstallPath $cmsHostPhysicalPath\Website\App_Config -Environment $Environment -Component $Component
+	Write-Log ACTION "Transforming EM.config..."
+	Invoke-ComponentConfigTransformation -ConfigFile "ExperienceManagement.config" -InstallPath $cmsHostPhysicalPath\Website\App_Config -Environment $Environment -Component $Component
 
 	#Custom files Tranforms
 	Write-Log ACTION "Transforming error.html..."

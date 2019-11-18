@@ -33,19 +33,17 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             // Arrange
             _container.Use(OvertureClientFactory.Create());
             var repository = _container.CreateInstance<WishListRepository>();
+            var param = new GetCartParam
+            {
+                Scope = scope,
+                CultureInfo =
+                        string.IsNullOrWhiteSpace(cultureName) ? null : CultureInfo.GetCultureInfo(cultureName),
+                CustomerId = string.IsNullOrWhiteSpace(customerId) ? Guid.Empty : GetRandom.Guid(),
+                CartName = cartName
+            };
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await repository.GetWishListAsync(new GetCartParam
-                {
-                    Scope = scope,
-                    CultureInfo =
-                        string.IsNullOrWhiteSpace(cultureName) ? null : CultureInfo.GetCultureInfo(cultureName),
-                    CustomerId = string.IsNullOrWhiteSpace(customerId) ? Guid.Empty : GetRandom.Guid(),
-                    CartName = cartName
-                });
-            });
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => repository.GetWishListAsync(param));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");
@@ -60,10 +58,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var repository = _container.CreateInstance<WishListRepository>();
 
             // Act
-            var exception = Assert.Throws<ArgumentNullException>(async () =>
-            {
-                await repository.GetWishListAsync(null);
-            });
+            var exception = Assert.ThrowsAsync<ArgumentNullException>(() => repository.GetWishListAsync(null));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");

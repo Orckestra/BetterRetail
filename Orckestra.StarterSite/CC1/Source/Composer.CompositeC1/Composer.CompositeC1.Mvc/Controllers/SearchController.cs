@@ -14,19 +14,14 @@ namespace Orckestra.Composer.CompositeC1.Mvc.Controllers
             IPageService pageService, 
             ISearchRequestContext searchRequestContext, 
             ILanguageSwitchService languageSwitchService, 
-            ISearchUrlProvider urlProvider, 
             ISearchBreadcrumbViewService searchBreadcrumbViewService,
-            IInventoryLocationProvider inventoryLocationProvider,
-            ISearchUrlProvider searchUrlProvider) 
-            
+            ISearchUrlProvider searchUrlProvider)
             : base(
             composerContext, 
             pageService, 
             searchRequestContext, 
             languageSwitchService, 
-            urlProvider, 
             searchBreadcrumbViewService,
-            inventoryLocationProvider,
             searchUrlProvider)
         {
         }

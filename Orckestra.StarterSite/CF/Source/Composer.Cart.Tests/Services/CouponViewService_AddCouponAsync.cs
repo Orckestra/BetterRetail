@@ -32,7 +32,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
         }
 
         [Test]
-        public async void WHEN_parameters_ok_SHOULD_call_repo_cleanup_invalid_coupons_and_add_msg()
+        public async Task WHEN_parameters_ok_SHOULD_call_repo_cleanup_invalid_coupons_and_add_msg()
         {
             //Arrange
             var p = new CouponParam()
@@ -59,7 +59,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
         }
 
         [Test]
-        public async void WHEN_CouponCode_is_expired_SHOULD_call_repo_and_cleanup_invalid_coupons()
+        public async Task WHEN_CouponCode_is_expired_SHOULD_call_repo_and_cleanup_invalid_coupons()
         {
             //Arrange
             var p = new CouponParam()

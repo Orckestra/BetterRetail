@@ -144,6 +144,12 @@
   <data name="L_InvalidCharsInSearchBox" xml:space="preserve">
     <value>Votre terme de recherche contient des caractères qui ne sont pas autorisés.</value>
   </data>
+  <data name="L_InvalidDateSelected" xml:space="preserve">
+    <value>La prochaine date de traitement n'est pas valide.</value>
+  </data>
+  <data name="L_InvalidFrequencySelected" xml:space="preserve">
+    <value>La fréquence sélectionné n'est pas valide.</value>
+  </data>
   <data name="L_InvalidPassword" xml:space="preserve">
     <value>Le mot de passe précisé n'est pas valide.</value>
   </data>
@@ -157,7 +163,10 @@
     <value>Une erreur est survenue pendant le retrait de cet article au panier. Veuillez réessayer.</value>
   </data>
   <data name="L_LineItemUpdateFailed" xml:space="preserve">
-    <value>Une erreur est survenue pendant la mise-à-jour de votre panier. Veuillez réessayer.</value>
+    <value>Une erreur est survenue pendant la mise à jour de votre panier. Veuillez réessayer.</value>
+  </data>
+  <data name="L_LineItemQuantityFailed" xml:space="preserve">
+    <value>Une erreur est survenue pendant la mise à jour de votre panier. Veuillez réessayer.</value>
   </data>
   <data name="L_LoadCartFailed" xml:space="preserve">
     <value>Une erreur est survenue pendant le chargement du panier. Veuillez &lt;a href="javascript:window.location.reload();"&gt;recharger la page&lt;/a&gt;.</value>
@@ -178,7 +187,7 @@
     <value>Une erreur est survenue lors du changement de méthode de paiement. Veuillez réessayer.</value>
   </data>
   <data name="L_PostalCodeUpdateFailed" xml:space="preserve">
-    <value>Une erreur est survenue pendant la mise-à-jour de votre panier. Veuillez réessayer.</value>
+    <value>Une erreur est survenue pendant la mise à jour de votre panier. Veuillez réessayer.</value>
   </data>
   <data name="L_ProceedToCheckoutFailed" xml:space="preserve">
     <value>Impossible de procéder vers la caisse. Veuillez réessayer.</value>
@@ -186,6 +195,42 @@
   <data name="L_QuickViewLoadFailed" xml:space="preserve">
     <value>Une erreur est survenue pendant le chargement du produit. Veuillez réessayer.</value>
   </data>
+  <data name="L_RecurringCartAddressesUpdateFailed" xml:space="preserve">
+    <value>Une erreur est survenue pendant la mise à jour de vos adresses. Veuillez réessayer.</value>
+  </data>
+  <data name="L_RecurringCartBillingAddressMissing" xml:space="preserve">
+    <value>Une erreur est survenue pendant la mise à jour de votre adresse de facturation. Identifiant d'adresse manquant.</value>
+  </data>
+  <data name="L_RecurringCartShippingAddressMissing" xml:space="preserve">
+    <value>Une erreur est survenue pendant la mise à jour de votre adresse de livraison. Identifiant d'adresse manquant.</value>
+  </data>  
+  <data name="L_RecurringCartShippingMethodMissing" xml:space="preserve">
+    <value>Une erreur est survenue pendant la mise à jour de votre méthode de livraison. Identifiant de méthode manquant.</value>
+  </data>  
+  <data name="L_RecurringCartShippingMethodUpdateFailed" xml:space="preserve">
+    <value>Une erreur est survenue pendant la mise à jour de votre méthode de livraison. Veuillez réessayer.</value>
+  </data>
+  <data name="L_RecurringCartPaymentMissing" xml:space="preserve">
+    <value>Une erreur est survenue pendant la mise à jour de votre méthode de paiement. Identifiant de paiement manquant.</value>
+  </data>
+  <data name="L_RecurringCartPaymentUpdateFailed" xml:space="preserve">
+    <value>Une erreur est survenue pendant la mise à jour de votre méthode de paiement. Veuillez réessayer.</value>
+  </data>
+  <data name="L_RecurringScheduleBillingAddressMissing" xml:space="preserve">
+    <value>Une erreur est survenue pendant la mise à jour de votre horaire de récurrence. Identifiant d'adresse manquant.</value>
+  </data>  
+  <data name="L_RecurringSchedulePaymentMissing" xml:space="preserve">
+    <value>Une erreur est survenue pendant la mise à jour de votre horaire de récurrence. Identifiant de paiement manquant.</value>
+  </data>  
+  <data name="L_RecurringScheduleShippingAddressMissing" xml:space="preserve">
+    <value>Une erreur est survenue pendant la mise à jour de votre horaire de récurrence. Identifiant d'adresse manquant.</value>
+  </data>  
+  <data name="L_RecurringScheduleShippingProviderMissing" xml:space="preserve">
+    <value>Une erreur est survenue pendant la mise à jour de votre horaire de récurrence. Identifiant de livraison manquant.</value>
+  </data> 
+  <data name="L_RecurringScheduleUpdateFailed" xml:space="preserve">
+    <value>Une erreur est survenue pendant la mise à jour de votre horaire de récurrence. Veuillez réessayer.</value>
+  </data>  
   <data name="L_RelatedProductLoadFailed" xml:space="preserve">
     <value>Une erreur est survenue pendant le chargement des produits reliés. Veuillez &lt;a href="javascript:window.location.reload();"&gt;recharger la page&lt;/a&gt;.</value>
   </data>
@@ -202,7 +247,7 @@
     <value>Une erreur s'est produite lors de l'envoi des instructions de réinitialisation de votre mot de passe.</value>
   </data>
   <data name="L_ShippingMethodUpdateFailed" xml:space="preserve">
-    <value>Une erreur est survenue pendant la mise-à-jour de votre panier. Veuillez réessayer.</value>
+    <value>Une erreur est survenue pendant la mise à jour de votre panier. Veuillez réessayer.</value>
   </data>
   <data name="L_UserNameAlreadyUsed" xml:space="preserve">
     <value>Ce compte existe déjà. Avez-vous oublié votre mot de passe?</value>

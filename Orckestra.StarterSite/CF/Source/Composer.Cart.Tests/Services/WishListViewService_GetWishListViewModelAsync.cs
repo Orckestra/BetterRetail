@@ -41,18 +41,16 @@ namespace Orckestra.Composer.Cart.Tests.Services
         {
             // Arrange
             var service = _container.CreateInstance<WishListViewService>();
+            var param = new GetCartParam
+            {
+                Scope = scope,
+                CultureInfo = string.IsNullOrWhiteSpace(cultureName) ? null : CultureInfo.GetCultureInfo(cultureName),
+                CustomerId = string.IsNullOrWhiteSpace(customerId) ? Guid.Empty : GetRandom.Guid(),
+                CartName = cartName
+            };
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await service.GetWishListViewModelAsync(new GetCartParam
-                {
-                    Scope = scope,
-                    CultureInfo = string.IsNullOrWhiteSpace(cultureName) ? null : CultureInfo.GetCultureInfo(cultureName),
-                    CustomerId = string.IsNullOrWhiteSpace(customerId) ? Guid.Empty : GetRandom.Guid(),
-                    CartName = cartName
-                });
-            });
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => service.GetWishListViewModelAsync(param));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");
@@ -66,10 +64,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
             var service = _container.CreateInstance<WishListViewService>();
 
             // Act
-            var exception = Assert.Throws<ArgumentNullException>(async () =>
-            {
-                await service.GetWishListViewModelAsync(null);
-            });
+            var exception = Assert.ThrowsAsync<ArgumentNullException>(() => service.GetWishListViewModelAsync(null));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");
@@ -193,10 +188,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
         private Mock<ILineItemService> CreateLineItemService()
         {
             Mock<ILineItemService> service = new Mock<ILineItemService>();
-
-            service.Setup(s=> s.GetImageUrlsAsync(It.IsAny<IEnumerable<LineItem>>())).
-                ReturnsAsync(new List<ProductMainImage>()).Verifiable();
-
+            
             return service;
         }
 

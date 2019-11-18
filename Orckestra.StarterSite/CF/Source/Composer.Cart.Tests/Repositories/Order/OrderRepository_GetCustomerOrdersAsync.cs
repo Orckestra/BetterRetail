@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Globalization;
 using FizzWare.NBuilder.Generators;
@@ -28,7 +29,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories.Order
         }
 
         [Test]
-        public async void WHEN_valid_request_SHOULD_succeed()
+        public async Task WHEN_valid_request_SHOULD_succeed()
         {
             //Arrange
             var findOrderRequest = new FindOrdersRequest();
@@ -60,7 +61,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories.Order
         }
 
         [Test]
-        public async void WHEN_result_is_null_SHOULD_return_null()
+        public async Task WHEN_result_is_null_SHOULD_return_null()
         {
             //Arrange
             var findOrderRequest = new FindOrdersRequest();
@@ -82,7 +83,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories.Order
         }
 
         [Test]
-        public async void WHEN_result_is_empty_SHOULD_return_null()
+        public async Task WHEN_result_is_empty_SHOULD_return_null()
         {
             //Arrange
             var findOrderRequest = new FindOrdersRequest();

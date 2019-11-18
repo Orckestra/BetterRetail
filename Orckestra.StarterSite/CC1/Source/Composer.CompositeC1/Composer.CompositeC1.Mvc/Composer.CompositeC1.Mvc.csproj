@@ -14,7 +14,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Orckestra.Composer.CompositeC1.Mvc</RootNamespace>
     <AssemblyName>Orckestra.Composer.CompositeC1.Mvc</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
@@ -59,16 +59,16 @@
       <HintPath>..\packages\Autofac.WebApi2.3.4.0\lib\net45\Autofac.Integration.WebApi.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Composite, Version=6.3.6599.29375, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\C1CMS.Assemblies.6.3.6599.29375\lib\net461\Composite.dll</HintPath>
+    <Reference Include="Composite, Version=6.6.6912.30810, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\C1CMS.Assemblies.6.6.6912.30810\lib\net471\Composite.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Composite.AspNet.MvcFunctions, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Dependencies\Composite\Composite.AspNet.MvcFunctions.dll</HintPath>
     </Reference>
-    <Reference Include="Composite.Workflows, Version=6.3.6599.29381, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\C1CMS.Assemblies.6.3.6599.29375\lib\net461\Composite.Workflows.dll</HintPath>
+    <Reference Include="Composite.Workflows, Version=6.6.6912.30813, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\C1CMS.Assemblies.6.6.6912.30810\lib\net471\Composite.Workflows.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Fasterflect, Version=2.1.3.0, Culture=neutral, PublicKeyToken=38d18473284c1ca7, processorArchitecture=MSIL">
@@ -93,11 +93,11 @@
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Extensions.DependencyInjection, Version=1.1.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\C1CMS.Assemblies.6.3.6599.29375\lib\net461\Microsoft.Extensions.DependencyInjection.dll</HintPath>
+      <HintPath>..\packages\C1CMS.Assemblies.6.6.6912.30810\lib\net471\Microsoft.Extensions.DependencyInjection.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=1.1.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\C1CMS.Assemblies.6.3.6599.29375\lib\net461\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+      <HintPath>..\packages\C1CMS.Assemblies.6.6.6912.30810\lib\net471\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.Owin, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -109,11 +109,11 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common, Version=3.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\C1CMS.Assemblies.6.3.6599.29375\lib\net461\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
+      <HintPath>..\packages\C1CMS.Assemblies.6.6.6912.30810\lib\net471\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.Logging, Version=3.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\C1CMS.Assemblies.6.3.6599.29375\lib\net461\Microsoft.Practices.EnterpriseLibrary.Logging.dll</HintPath>
+      <HintPath>..\packages\C1CMS.Assemblies.6.6.6912.30810\lib\net471\Microsoft.Practices.EnterpriseLibrary.Logging.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.SemanticLogging, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -129,71 +129,76 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.Validation, Version=3.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\C1CMS.Assemblies.6.3.6599.29375\lib\net461\Microsoft.Practices.EnterpriseLibrary.Validation.dll</HintPath>
+      <HintPath>..\packages\C1CMS.Assemblies.6.6.6912.30810\lib\net471\Microsoft.Practices.EnterpriseLibrary.Validation.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.Practices.ObjectBuilder, Version=1.0.51206.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\C1CMS.Assemblies.6.3.6599.29375\lib\net461\Microsoft.Practices.ObjectBuilder.dll</HintPath>
+      <HintPath>..\packages\C1CMS.Assemblies.6.6.6912.30810\lib\net471\Microsoft.Practices.ObjectBuilder.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.AsyncExtensions, Version=3.20.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OrckestraCommerce.AsyncExtensions.3.20.0\lib\net461\Orckestra.AsyncExtensions.dll</HintPath>
+    <Reference Include="Orckestra.AsyncExtensions, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OrckestraCommerce.AsyncExtensions.4.0.0\lib\net461\Orckestra.AsyncExtensions.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Caching, Version=3.20.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OrckestraCommerce.Common.3.20.0\lib\net461\Orckestra.Caching.dll</HintPath>
+    <Reference Include="Orckestra.Caching, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OrckestraCommerce.Common.4.0.0\lib\net461\Orckestra.Caching.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Composer">
-      <HintPath>..\packages\Composer.4.6.0-Build\lib\net452\Orckestra.Composer.dll</HintPath>
+    <Reference Include="Orckestra.Composer, Version=4.8.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Composer.4.8.0-Build\lib\net461\Orckestra.Composer.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Composer.Cart">
-      <HintPath>..\packages\Composer.4.6.0-Build\lib\net452\Orckestra.Composer.Cart.dll</HintPath>
+    <Reference Include="Orckestra.Composer.Cart, Version=4.8.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Composer.4.8.0-Build\lib\net461\Orckestra.Composer.Cart.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Composer.MyAccount">
-      <HintPath>..\packages\Composer.4.6.0-Build\lib\net452\Orckestra.Composer.MyAccount.dll</HintPath>
+    <Reference Include="Orckestra.Composer.MyAccount, Version=4.8.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Composer.4.8.0-Build\lib\net461\Orckestra.Composer.MyAccount.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Composer.Product">
-      <HintPath>..\packages\Composer.4.6.0-Build\lib\net452\Orckestra.Composer.Product.dll</HintPath>
+    <Reference Include="Orckestra.Composer.Product, Version=4.8.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Composer.4.8.0-Build\lib\net461\Orckestra.Composer.Product.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Composer.Search">
-      <HintPath>..\packages\Composer.4.6.0-Build\lib\net452\Orckestra.Composer.Search.dll</HintPath>
+    <Reference Include="Orckestra.Composer.Search, Version=4.8.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Composer.4.8.0-Build\lib\net461\Orckestra.Composer.Search.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Composer.SearchQuery">
-      <HintPath>..\packages\Composer.4.6.0-Build\lib\net452\Orckestra.Composer.SearchQuery.dll</HintPath>
+    <Reference Include="Orckestra.Composer.SearchQuery, Version=4.8.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Composer.4.8.0-Build\lib\net461\Orckestra.Composer.SearchQuery.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Composer.Sitemap">
-      <HintPath>..\packages\Composer.4.6.0-Build\lib\net452\Orckestra.Composer.Sitemap.dll</HintPath>
+    <Reference Include="Orckestra.Composer.Sitemap, Version=4.8.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Composer.4.8.0-Build\lib\net461\Orckestra.Composer.Sitemap.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Composer.Store">
-      <HintPath>..\packages\Composer.4.6.0-Build\lib\net452\Orckestra.Composer.Store.dll</HintPath>
+    <Reference Include="Orckestra.Composer.Store, Version=4.8.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Composer.4.8.0-Build\lib\net461\Orckestra.Composer.Store.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.ExperienceManagement.DataTypes, Version=3.20.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Orckestra.ExperienceManagment.DataTypes.1.0.1\lib\Orckestra.ExperienceManagement.DataTypes.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Orckestra.ExperienceManagement.Configuration, Version=4.8.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Orckestra.ExperienceManagement.Configuration.4.8.0\lib\net471\Orckestra.ExperienceManagement.Configuration.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Logging, Version=3.20.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OrckestraCommerce.Common.3.20.0\lib\net461\Orckestra.Logging.dll</HintPath>
+    <Reference Include="Orckestra.Logging, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OrckestraCommerce.Common.4.0.0\lib\net461\Orckestra.Logging.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Overture.Interfaces, Version=3.20.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OrckestraCommerce.Interfaces.3.20.0\lib\portable-net4+sl5+netcore45+wp8\Orckestra.Overture.Interfaces.dll</HintPath>
+    <Reference Include="Orckestra.Overture.Interfaces, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OrckestraCommerce.Interfaces.4.0.0\lib\portable-net4+sl5+netcore45+wp8\Orckestra.Overture.Interfaces.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Overture.Providers.MonerisPayment.ServiceModel, Version=3.20.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OrckestraCommerce.ServiceModel.Moneris.3.20.0\lib\net45\Orckestra.Overture.Providers.MonerisPayment.ServiceModel.dll</HintPath>
+    <Reference Include="Orckestra.Overture.Providers.MonerisPayment.ServiceModel, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OrckestraCommerce.ServiceModel.Moneris.4.0.0\lib\net45\Orckestra.Overture.Providers.MonerisPayment.ServiceModel.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Overture.RestClient, Version=3.20.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OrckestraCommerce.Client.3.20.0\lib\net452\Orckestra.Overture.RestClient.dll</HintPath>
+    <Reference Include="Orckestra.Overture.RestClient, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OrckestraCommerce.Client.4.0.0\lib\net452\Orckestra.Overture.RestClient.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Overture.ServiceModel, Version=3.20.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OrckestraCommerce.ServiceModel.3.20.0\lib\net461\Orckestra.Overture.ServiceModel.dll</HintPath>
+    <Reference Include="Orckestra.Overture.ServiceModel, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OrckestraCommerce.ServiceModel.4.0.0\lib\net461\Orckestra.Overture.ServiceModel.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Overture.ServiceModel.Requests, Version=3.20.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OrckestraCommerce.ServiceModel.Requests.3.20.0\lib\net461\Orckestra.Overture.ServiceModel.Requests.dll</HintPath>
+    <Reference Include="Orckestra.Overture.ServiceModel.Requests, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OrckestraCommerce.ServiceModel.Requests.4.0.0\lib\net461\Orckestra.Overture.ServiceModel.Requests.dll</HintPath>
+    </Reference>
+    <Reference Include="OrckestraCommerce.RecurringOrders.ServiceModel, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OrckestraCommerce.RecurringOrders.ServiceModel.4.0.0\lib\portable-net4+sl5+netcore45+wp8\OrckestraCommerce.RecurringOrders.ServiceModel.dll</HintPath>
+    </Reference>
+    <Reference Include="OrckestraCommerce.RecurringOrders.ServiceModel.Requests, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OrckestraCommerce.RecurringOrders.ServiceModel.Requests.4.0.0\lib\portable-net4+sl5+netcore45+wp8\OrckestraCommerce.RecurringOrders.ServiceModel.Requests.dll</HintPath>
     </Reference>
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
@@ -220,7 +225,10 @@
       <HintPath>..\packages\StackExchange.Redis.StrongName.1.0.488\lib\net45\StackExchange.Redis.StrongName.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http">
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Net.Http.Extensions, Version=2.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\net45\System.Net.Http.Extensions.dll</HintPath>
       <Private>True</Private>
@@ -250,8 +258,6 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.Helpers.dll</HintPath>
@@ -279,19 +285,17 @@
     <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
-    <Reference Include="TidyNet, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\C1CMS.Assemblies.6.3.6599.29375\lib\net461\TidyNet.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\Composite\DynamicTypeForms\Orckestra\Composer\CompositeC1\DataTypes\ISearchTerm.xml" />
+    <Content Include="App_Data\Composite\DynamicTypeForms\Orckestra\Composer\CompositeC1\DataTypes\RecurringOrdersSettings.xml" />
     <Content Include="App_Data\Composite\TreeDefinitions\NavigationElement.xml">
       <SubType>Designer</SubType>
     </Content>
@@ -336,6 +340,13 @@
     <Content Include="App_Data\Razor\Composer\Footer.cshtml" />
     <Content Include="App_Data\Razor\Composer\Social\IconLinks.cshtml" />
     <Content Include="App_Data\Razor\Composer\Analytics\GTMAnalytics.cshtml" />
+    <Content Include="App_Data\Media\40d9ba8b-4afe-45b6-b161-6b619973a4c1" />
+    <Content Include="App_Data\Razor\Composer\Footer\MainFooter.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Footer\OptionalLinks.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Header\MainMenu.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Header\OptionalLinks.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Header\StickyLinks.cshtml" />
+    <Content Include="App_Data\Razor\Composer\SearchBox.cshtml" />
     <None Include="Properties\PublishProfiles\Website - CD.pubxml" />
     <None Include="Properties\PublishProfiles\Website.pubxml" />
     <Content Include="ViewModelAsExtensionModelTemplate.tt">
@@ -344,13 +355,22 @@
     </Content>
     <Content Include="Views\Footer\FollowUs.cshtml" />
     <Content Include="Views\web.config" />
+    <Content Include="Views\Product\ProductSEO.cshtml" />
+    <Content Include="Views\Shared\PageHeader.cshtml" />
+    <Content Include="Views\Shared\LanguageSwitch.cshtml" />
+    <Content Include="web.config" />
+    <None Include="web.Debug.config">
+      <DependentUpon>web.config</DependentUpon>
+    </None>
+    <None Include="web.Release.config">
+      <DependentUpon>web.config</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Solution Items\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="App_Start\ComposerConfig.cs" />
-    <Compile Include="App_Start\HangfireHostApplicationPreload.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="C1LogProvider.cs" />
@@ -384,10 +404,6 @@
     <Compile Include="ViewModels\IProductSearchResultsViewModelMetadata.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Composer.CompositeC1.Azure\Composer.CompositeC1.Azure.csproj">
-      <Project>{dd8ae2f0-ad7d-4696-93f2-57c11904b499}</Project>
-      <Name>Composer.CompositeC1.Azure</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Composer.CompositeC1.DataTypes\Composer.CompositeC1.DataTypes.csproj">
       <Project>{e84bf038-fc5e-4841-8c5a-918fe8eaff8f}</Project>
       <Name>Composer.CompositeC1.DataTypes</Name>
@@ -414,7 +430,7 @@
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v14.0\WebApplications\Microsoft.WebApplication.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v16.0\WebApplications\Microsoft.WebApplication.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
   <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">

@@ -77,22 +77,20 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             // Arrange
             _container.Use(OvertureClientFactory.Create());
             var repository = _container.CreateInstance<CartRepository>();
+            var param = new UpdateLineItemParam
+            {
+                ScopeId = null,
+                CultureInfo = TestingExtensions.GetRandomCulture(),
+                CustomerId = GetRandom.Guid(),
+                CartName = GetRandom.String(32),
+                LineItemId = GetRandom.Guid(),
+                Quantity = GetRandom.PositiveInt(),
+                GiftMessage = GetRandom.String(32),
+                GiftWrap = GetRandom.Boolean(),
+            };
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await repository.UpdateLineItemAsync(new UpdateLineItemParam
-                {
-                    ScopeId = null,
-                    CultureInfo = TestingExtensions.GetRandomCulture(),
-                    CustomerId = GetRandom.Guid(),
-                    CartName = GetRandom.String(32),
-                    LineItemId = GetRandom.Guid(),
-                    Quantity = GetRandom.PositiveInt(),
-                    GiftMessage = GetRandom.String(32),
-                    GiftWrap = GetRandom.Boolean(),
-                });
-            });
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => repository.UpdateLineItemAsync(param));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");
@@ -105,22 +103,20 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             // Arrange
             _container.Use(OvertureClientFactory.Create());
             var repository = _container.CreateInstance<CartRepository>();
+            var param = new UpdateLineItemParam
+            {
+                ScopeId = GetRandom.String(32),
+                CultureInfo = null,
+                CustomerId = GetRandom.Guid(),
+                CartName = GetRandom.String(32),
+                LineItemId = GetRandom.Guid(),
+                Quantity = GetRandom.PositiveInt(),
+                GiftMessage = GetRandom.String(32),
+                GiftWrap = GetRandom.Boolean(),
+            };
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await repository.UpdateLineItemAsync(new UpdateLineItemParam
-                {
-                    ScopeId = GetRandom.String(32),
-                    CultureInfo = null,
-                    CustomerId = GetRandom.Guid(),
-                    CartName = GetRandom.String(32),
-                    LineItemId = GetRandom.Guid(),
-                    Quantity = GetRandom.PositiveInt(),
-                    GiftMessage = GetRandom.String(32),
-                    GiftWrap = GetRandom.Boolean(),
-                });
-            });
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => repository.UpdateLineItemAsync(param));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");
@@ -133,22 +129,20 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             // Arrange
             _container.Use(OvertureClientFactory.Create());
             var repository = _container.CreateInstance<CartRepository>();
+            var param = new UpdateLineItemParam
+            {
+                ScopeId = GetRandom.String(32),
+                CultureInfo = TestingExtensions.GetRandomCulture(),
+                CustomerId = Guid.Empty,
+                CartName = GetRandom.String(32),
+                LineItemId = GetRandom.Guid(),
+                Quantity = GetRandom.PositiveInt(),
+                GiftMessage = GetRandom.String(32),
+                GiftWrap = GetRandom.Boolean(),
+            };
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await repository.UpdateLineItemAsync(new UpdateLineItemParam
-                {
-                    ScopeId = GetRandom.String(32),
-                    CultureInfo = TestingExtensions.GetRandomCulture(),
-                    CustomerId = Guid.Empty,
-                    CartName = GetRandom.String(32),
-                    LineItemId = GetRandom.Guid(),
-                    Quantity = GetRandom.PositiveInt(),
-                    GiftMessage = GetRandom.String(32),
-                    GiftWrap = GetRandom.Boolean(),
-                });
-            });
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => repository.UpdateLineItemAsync(param));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");
@@ -164,22 +158,20 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             // Arrange
             _container.Use(OvertureClientFactory.Create());
             var repository = _container.CreateInstance<CartRepository>();
+            var param = new UpdateLineItemParam
+            {
+                ScopeId = GetRandom.String(32),
+                CultureInfo = TestingExtensions.GetRandomCulture(),
+                CustomerId = GetRandom.Guid(),
+                CartName = null,
+                LineItemId = GetRandom.Guid(),
+                Quantity = GetRandom.PositiveInt(),
+                GiftMessage = GetRandom.String(32),
+                GiftWrap = GetRandom.Boolean(),
+            };
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await repository.UpdateLineItemAsync(new UpdateLineItemParam
-                {
-                    ScopeId = GetRandom.String(32),
-                    CultureInfo = TestingExtensions.GetRandomCulture(),
-                    CustomerId = GetRandom.Guid(),
-                    CartName = null,
-                    LineItemId = GetRandom.Guid(),
-                    Quantity = GetRandom.PositiveInt(),
-                    GiftMessage = GetRandom.String(32),
-                    GiftWrap = GetRandom.Boolean(),
-                });
-            });
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => repository.UpdateLineItemAsync(param));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");
@@ -195,22 +187,20 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             // Arrange
             _container.Use(OvertureClientFactory.Create());
             var repository = _container.CreateInstance<CartRepository>();
+            var param = new UpdateLineItemParam
+            {
+                ScopeId = GetRandom.String(32),
+                CultureInfo = TestingExtensions.GetRandomCulture(),
+                CustomerId = GetRandom.Guid(),
+                CartName = GetRandom.String(32),
+                LineItemId = Guid.Empty,
+                Quantity = GetRandom.PositiveInt(),
+                GiftMessage = GetRandom.String(32),
+                GiftWrap = GetRandom.Boolean(),
+            };
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await repository.UpdateLineItemAsync(new UpdateLineItemParam
-                {
-                    ScopeId = GetRandom.String(32),
-                    CultureInfo = TestingExtensions.GetRandomCulture(),
-                    CustomerId = GetRandom.Guid(),
-                    CartName = GetRandom.String(32),
-                    LineItemId = Guid.Empty,
-                    Quantity = GetRandom.PositiveInt(),
-                    GiftMessage = GetRandom.String(32),
-                    GiftWrap = GetRandom.Boolean(),
-                });
-            });
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => repository.UpdateLineItemAsync(param));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");
@@ -226,22 +216,20 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             // Arrange
             _container.Use(OvertureClientFactory.Create());
             var repository = _container.CreateInstance<CartRepository>();
+            var param = new UpdateLineItemParam
+            {
+                ScopeId = GetRandom.String(32),
+                CultureInfo = TestingExtensions.GetRandomCulture(),
+                CustomerId = GetRandom.Guid(),
+                CartName = GetRandom.String(32),
+                LineItemId = GetRandom.Guid(),
+                Quantity = quantity,
+                GiftMessage = GetRandom.String(32),
+                GiftWrap = GetRandom.Boolean(),
+            };
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await repository.UpdateLineItemAsync(new UpdateLineItemParam
-                {
-                    ScopeId = GetRandom.String(32),
-                    CultureInfo = TestingExtensions.GetRandomCulture(),
-                    CustomerId = GetRandom.Guid(),
-                    CartName = GetRandom.String(32),
-                    LineItemId = GetRandom.Guid(),
-                    Quantity = quantity,
-                    GiftMessage = GetRandom.String(32),
-                    GiftWrap = GetRandom.Boolean(),
-                });
-            });
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => repository.UpdateLineItemAsync(param));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");
@@ -257,10 +245,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var repository = _container.CreateInstance<CartRepository>();
 
             // Act
-            var exception = Assert.Throws<ArgumentNullException>(async () =>
-            {
-                await repository.UpdateLineItemAsync(null);
-            });
+            var exception = Assert.ThrowsAsync<ArgumentNullException>(() => repository.UpdateLineItemAsync(null));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");

@@ -96,14 +96,16 @@ namespace Orckestra.Composer.Cart.Repositories
                 CustomerId = param.CustomerId,
                 ProductId = param.ProductId,
                 Quantity = param.Quantity,
-                VariantId = param.VariantId
+                VariantId = param.VariantId,
+                RecurringOrderFrequencyName = param.RecurringOrderFrequencyName,
+                RecurringOrderProgramName = param.RecurringOrderProgramName
             };
         }
 
         /// <summary>
         /// Builds the cache key for a WishList.
         /// </summary>
-        protected CacheKey BuildWishListCacheKey(string scope, Guid customerId, string cartName)
+        protected virtual CacheKey BuildWishListCacheKey(string scope, Guid customerId, string cartName)
         {
             var key = new CacheKey(CacheConfigurationCategoryNames.Cart)
             {

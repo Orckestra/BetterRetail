@@ -144,6 +144,12 @@
   <data name="L_InvalidCharsInSearchBox" xml:space="preserve">
     <value>Your search terms contain unauthorized characters.</value>
   </data>
+  <data name="L_InvalidDateSelected" xml:space="preserve">
+    <value>The next occurence date has an invalid value.</value>
+  </data>
+  <data name="L_InvalidFrequencySelected" xml:space="preserve">
+    <value>The frequency has an invalid value.</value>
+  </data>
   <data name="L_InvalidPassword" xml:space="preserve">
     <value>The specified Password is invalid.</value>
   </data>
@@ -158,6 +164,9 @@
   </data>
   <data name="L_LineItemUpdateFailed" xml:space="preserve">
     <value>An error occurred while updating your cart. Please try again.</value>
+  </data>
+  <data name="L_LineItemQuantityFailed" xml:space="preserve">
+    <value>An error occurred while updating your cart. Try again.</value>
   </data>
   <data name="L_LoadCartFailed" xml:space="preserve">
     <value>An error occurred while the cart was loading. Please &lt;a href="javascript:window.location.reload();"&gt; reload the page&lt;/a&gt;.</value>
@@ -186,6 +195,42 @@
   <data name="L_QuickViewLoadFailed" xml:space="preserve">
     <value>An error occurred while loading the product. Please try again.</value>
   </data>
+  <data name="L_RecurringCartAddressesUpdateFailed" xml:space="preserve">
+    <value>An error occurred while updating your addresses. Try again.</value>
+  </data>
+  <data name="L_RecurringCartBillingAddressMissing" xml:space="preserve">
+    <value>An error occurred while updating your billing address. Missing billing address Id.</value>
+  </data>
+  <data name="L_RecurringCartShippingAddressMissing" xml:space="preserve">
+    <value>An error occurred while updating your shipping address. Missing shipping address Id.</value>
+  </data>
+  <data name="L_RecurringCartShippingMethodMissing" xml:space="preserve">
+    <value>An error occurred while updating your shipping method. Missing shipping method Id.</value>
+  </data>  
+  <data name="L_RecurringCartShippingMethodUpdateFailed" xml:space="preserve">
+    <value>An error occurred while updating your shipping method. Try again.</value>
+  </data>
+  <data name="L_RecurringCartPaymentMissing" xml:space="preserve">
+    <value>An error occurred while updating your payment method. Missing payment Id.</value>
+  </data>
+  <data name="L_RecurringCartPaymentUpdateFailed" xml:space="preserve">
+    <value>An error occurred while updating your payment method. Try again.</value>
+  </data>  
+  <data name="L_RecurringScheduleBillingAddressMissing" xml:space="preserve">
+    <value>An error occurred while updating your recurring schedule. Missing billing address Id.</value>
+  </data>  
+  <data name="L_RecurringSchedulePaymentMissing" xml:space="preserve">
+    <value>An error occurred while updating your recurring schedule. Missing payment Id.</value>
+  </data>  
+  <data name="L_RecurringScheduleShippingAddressMissing" xml:space="preserve">
+    <value>An error occurred while updating your recurring schedule. Missing shipping address Id.</value>
+  </data>  
+   <data name="L_RecurringScheduleShippingProviderMissing" xml:space="preserve">
+    <value>An error occurred while updating your recurring schedule. Missing shipping provider Id.</value>
+  </data> 
+  <data name="L_RecurringScheduleUpdateFailed" xml:space="preserve">
+    <value>An error occurred while updating your recurring schedule. Try again.</value>
+  </data>  
   <data name="L_RelatedProductLoadFailed" xml:space="preserve">
     <value>An error occurred while loading related products. Please &lt;a href="javascript:window.location.reload();"&gt; reload the page&lt;/a&gt;.</value>
   </data>

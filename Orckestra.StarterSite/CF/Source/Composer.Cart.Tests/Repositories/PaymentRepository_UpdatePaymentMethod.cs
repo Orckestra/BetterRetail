@@ -64,7 +64,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var sut = _container.CreateInstance<PaymentRepository>();
 
             //Act
-            var exception = Assert.Throws<ArgumentNullException>(async () => await sut.UpdatePaymentMethodAsync(null));
+            var exception = Assert.ThrowsAsync<ArgumentNullException>(() => sut.UpdatePaymentMethodAsync(null));
 
             //Assert
             exception.ParamName.Should().BeEquivalentTo("param");
@@ -93,7 +93,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var sut = _container.CreateInstance<PaymentRepository>();
 
             //Act
-            var exception = Assert.Throws<ArgumentException>(async () => await sut.UpdatePaymentMethodAsync(param));
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => sut.UpdatePaymentMethodAsync(param));
 
             //Assert
             exception.ParamName.Should().BeEquivalentTo("param");
@@ -122,7 +122,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var sut = _container.CreateInstance<PaymentRepository>();
 
             //Act
-            var exception = Assert.Throws<ArgumentException>(async () => await sut.UpdatePaymentMethodAsync(param));
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => sut.UpdatePaymentMethodAsync(param));
 
             //Assert
             exception.ParamName.Should().BeEquivalentTo("param");
@@ -151,7 +151,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var sut = _container.CreateInstance<PaymentRepository>();
 
             //Act
-            var exception = Assert.Throws<ArgumentException>(async () => await sut.UpdatePaymentMethodAsync(param));
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => sut.UpdatePaymentMethodAsync(param));
 
             //Assert
             exception.ParamName.Should().BeEquivalentTo("param");
@@ -176,7 +176,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var sut = _container.CreateInstance<PaymentRepository>();
 
             //Act
-            var exception = Assert.Throws<ArgumentException>(async () => await sut.UpdatePaymentMethodAsync(param));
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => sut.UpdatePaymentMethodAsync(param));
 
             //Assert
             exception.ParamName.Should().BeEquivalentTo("param");
@@ -201,7 +201,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var sut = _container.CreateInstance<PaymentRepository>();
 
             //Act
-            var exception = Assert.Throws<ArgumentException>(async () => await sut.UpdatePaymentMethodAsync(param));
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => sut.UpdatePaymentMethodAsync(param));
 
             //Assert
             exception.ParamName.Should().BeEquivalentTo("param");
@@ -226,7 +226,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var sut = _container.CreateInstance<PaymentRepository>();
 
             //Act
-            var exception = Assert.Throws<ArgumentException>(async () => await sut.UpdatePaymentMethodAsync(param));
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => sut.UpdatePaymentMethodAsync(param));
 
             //Assert
             exception.ParamName.Should().BeEquivalentTo("param");
@@ -251,7 +251,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var sut = _container.CreateInstance<PaymentRepository>();
 
             //Act
-            var exception = Assert.Throws<ArgumentException>(async () => await sut.UpdatePaymentMethodAsync(param));
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => sut.UpdatePaymentMethodAsync(param));
 
             //Assert
             exception.ParamName.Should().BeEquivalentTo("param");

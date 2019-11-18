@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Repositories;
@@ -43,7 +44,8 @@ namespace Orckestra.Composer.Search.Services
             IPriceProvider priceProvider,
             IComposerContext composerContext,
             IProductSettingsViewService productSettings,
-            IScopeViewService scopeViewService)
+            IScopeViewService scopeViewService,
+            IRecurringOrdersSettings recurringOrdersSettings)
 
             : base(
             searchRepository,
@@ -57,7 +59,8 @@ namespace Orckestra.Composer.Search.Services
             priceProvider,
             composerContext,
             productSettings,
-            scopeViewService
+            scopeViewService,
+            recurringOrdersSettings
             )
         {
             if (categoryRepository == null) { throw new ArgumentNullException(nameof(categoryRepository)); }
@@ -67,7 +70,7 @@ namespace Orckestra.Composer.Search.Services
             CategoryBrowsingUrlProvider = categoryBrowsingUrlProvider;
         }
 
-        public async Task<CategoryBrowsingViewModel> GetCategoryBrowsingViewModelAsync(GetCategoryBrowsingViewModelParam param)
+        public virtual async Task<CategoryBrowsingViewModel> GetCategoryBrowsingViewModelAsync(GetCategoryBrowsingViewModelParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
             if (param.CategoryId == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("CategoryId")); }
@@ -139,7 +142,7 @@ namespace Orckestra.Composer.Search.Services
             return FlattenFilterList(allFacets, param.CultureInfo);
         }
 
-        private async Task<List<SearchFilter>> GetSelectedCategoriesAsync(GetCategoryBrowsingViewModelParam param)
+        protected virtual async Task<List<SearchFilter>> GetSelectedCategoriesAsync(GetCategoryBrowsingViewModelParam param)
         {
             List<Category> selectedCategories = await GetAncestorsAndSelfCategoriesAsync(param).ConfigureAwait(false);
 
@@ -157,7 +160,7 @@ namespace Orckestra.Composer.Search.Services
             return level == 0;
         }
 
-        private async Task<List<Category>> GetAncestorsAndSelfCategoriesAsync(GetCategoryBrowsingViewModelParam param)
+        protected virtual async Task<List<Category>> GetAncestorsAndSelfCategoriesAsync(GetCategoryBrowsingViewModelParam param)
         {
             TreeNode<Category> current = await GetCurrentCategoryNodeAsync(param).ConfigureAwait(false);
 
@@ -171,7 +174,7 @@ namespace Orckestra.Composer.Search.Services
             return categories;
         }
 
-        private async Task<TreeNode<Category>> GetCurrentCategoryNodeAsync(GetCategoryBrowsingViewModelParam param)
+        protected virtual async Task<TreeNode<Category>> GetCurrentCategoryNodeAsync(GetCategoryBrowsingViewModelParam param)
         {
             Tree<Category, string> tree = await CategoryRepository.GetCategoriesTreeAsync(new GetCategoriesParam
             {
@@ -230,12 +233,12 @@ namespace Orckestra.Composer.Search.Services
             return criteria;
         }
 
-        private List<Facet> GetFacetsWithoutCategoryFacets(IList<Facet> facets)
+        protected virtual List<Facet> GetFacetsWithoutCategoryFacets(IList<Facet> facets)
         {
             return facets.Where(facet => !IsCategoryFacet(facet)).ToList();
         }
 
-        private bool IsCategoryFacet(Facet facet)
+        protected virtual bool IsCategoryFacet(Facet facet)
         {
             return facet.FieldName != null && facet.FieldName.StartsWith("CategoryLevel");
         }
@@ -252,7 +255,7 @@ namespace Orckestra.Composer.Search.Services
             return childCategories;
         }
 
-        private async Task<List<TreeNode<Category>>> GetCategoryChildrenAsync(GetCategoryBrowsingViewModelParam param)
+        protected virtual async Task<List<TreeNode<Category>>> GetCategoryChildrenAsync(GetCategoryBrowsingViewModelParam param)
         {
             Tree<Category, string> tree = await CategoryRepository.GetCategoriesTreeAsync(new GetCategoriesParam
             {
@@ -262,7 +265,7 @@ namespace Orckestra.Composer.Search.Services
             return tree[param.CategoryId].Children;
         }
 
-        private ChildCategoryViewModel CreateChildCategoryViewModel(Category category, GetCategoryBrowsingViewModelParam param)
+        protected virtual ChildCategoryViewModel CreateChildCategoryViewModel(Category category, GetCategoryBrowsingViewModelParam param)
         {
             string title = category.DisplayName.GetLocalizedValue(ComposerContext.CultureInfo.Name);
             var url = GetCategoryUrl(category.Id, param);
@@ -270,7 +273,7 @@ namespace Orckestra.Composer.Search.Services
             return new ChildCategoryViewModel { Title = title, Url = url};
         }
 
-        private string GetCategoryUrl(string categoryId, GetCategoryBrowsingViewModelParam param, bool isAllProductsPage = false)
+        protected virtual string GetCategoryUrl(string categoryId, GetCategoryBrowsingViewModelParam param, bool isAllProductsPage = false)
         {
             string url = CategoryBrowsingUrlProvider.BuildCategoryBrowsingUrl(new BuildCategoryBrowsingUrlParam
             {
@@ -300,7 +303,7 @@ namespace Orckestra.Composer.Search.Services
 
         }
 
-        private static void RemoveAppendedCategoryFacet(BrowsingSearchParam cloneParam)
+        protected static void RemoveAppendedCategoryFacet(BrowsingSearchParam cloneParam)
         {
             foreach (var filter in cloneParam.CategoryFilters)
             {

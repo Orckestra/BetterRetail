@@ -8,7 +8,6 @@ param(
 
 ####################################################################################################################
 # Variables
-$MsBuildExe = "C:\Program Files (x86)\MSBuild\14.0\Bin\msbuild.exe"
 $MsDeployExe = "C:\Program Files\IIS\Microsoft Web Deploy V3\msdeploy.exe"
 $AppCmdRegKey = "HKLM:\SOFTWARE\Microsoft\InetStp"
 $MsDeployInstallPathRegKey = "HKLM:\SOFTWARE\Microsoft\IIS Extensions\MSDeploy"
@@ -49,7 +48,7 @@ function Build-Frontend{
 	write-output "npm prune"...
 	npm prune
 	write-output "npm install..."
-	npm install --msvs_version=2015 2>&1 > npm.output
+	npm install --msvs_version=2019 2>&1 > npm.output
 
 	write-output "Rebuilding node_modules cache (D:\INT-NODE_MODULES.7z)"
 	if(-not $SkipNodeModuleWipe -and (-not (Test-Path -Path 'D:\INT-NODE_MODULES.7z'))) {

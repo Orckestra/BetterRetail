@@ -1,7 +1,9 @@
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Overture.ServiceModel.Orders;
+using Orckestra.Overture.ServiceModel.Requests.RecurringOrders;
 
 namespace Orckestra.Composer.Cart.Repositories
 {
@@ -103,5 +105,26 @@ namespace Orckestra.Composer.Cart.Repositories
         /// <param name="param"></param>
         /// <returns>The order</returns>
         Task<Overture.ServiceModel.Orders.Order> CompleteCheckoutAsync(CompleteCheckoutParam param);
+
+        /// <summary>
+        /// Get the recurring carts of a customer
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        Task<List<ProcessedCart>> GetRecurringCartsAsync(GetRecurringOrderCartsViewModelParam param);
+
+        /// <summary>
+        /// Reschedule a recurring cart
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        Task<ListOfRecurringOrderLineItems> RescheduleRecurringCartAsync(RescheduleRecurringCartParam param);
+        
+        /// <summary>
+        /// Remove a line item from a recurring cart
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        Task<HttpWebResponse> RemoveRecurringCartLineItemAsync(RemoveRecurringCartLineItemParam param);
     }
 }

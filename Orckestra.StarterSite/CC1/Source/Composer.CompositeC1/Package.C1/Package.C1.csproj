@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Package.C1</RootNamespace>
     <AssemblyName>Package.C1</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
     <SccLocalPath>SAK</SccLocalPath>
@@ -67,12 +67,15 @@
     <Content Include="Composer.C1.Content.EN-CA\Datas\Composite.Data.Types.TargetUrlElements_public.xml" />
     <Content Include="Composer.C1.Content.EN-CA\Datas\Composite.Data.Types.Navigation.NavigationElements.Header_public.xml" />
     <Content Include="Composer.C1.Content.EN-CA\Datas\Composite.Data.Types.Navigation.HeaderOptionalLink_public.xml" />
-    <Content Include="Composer.C1.Content.EN-CA\Datas\Orckestra.Composer.CompositeC1.Pages.CheckoutStepInfoPages_administrated.xml" />
-    <Content Include="Composer.C1.Content.EN-CA\Datas\Orckestra.Composer.CompositeC1.Pages.CheckoutStepInfoPages_public.xml" />
-    <Content Include="Composer.C1.Content.EN-CA\Datas\Orckestra.Composer.CompositeC1.Pages.ComposerImages_public.xml" />
+    <Content Include="Composer.C1.Content.EN-CA\Datas\Orckestra.Composer.CompositeC1.DataTypes.GoogleSettingss_administrated.xml" />
+    <Content Include="Composer.C1.Content.EN-CA\Datas\Orckestra.Composer.CompositeC1.DataTypes.GoogleSettingss_public.xml" />
+    <Content Include="Composer.C1.Content.EN-CA\Datas\Orckestra.Composer.CompositeC1.DataTypes.RecurringOrdersSettingss_administrated.xml" />
+    <Content Include="Composer.C1.Content.EN-CA\Datas\Orckestra.Composer.CompositeC1.DataTypes.RecurringOrdersSettingss_public.xml" />
+    <Content Include="Composer.C1.Content.EN-CA\Datas\Orckestra.ExperienceManagement.Configuration.DataTypes.ISiteConfigurationMetas_administrated.xml" />
     <Content Include="Composer.C1.Content.EN-CA\install.xml">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Composer.C1.Content.EN-CA\Datas\Orckestra.ExperienceManagement.Configuration.DataTypes.ISiteConfigurationMetas_public.xml" />
     <Content Include="Composer.C1.Content.FR-CA\Datas\Composite.Data.Types.CssStyleElements_public.xml" />
     <Content Include="Composer.C1.Content.FR-CA\Datas\Composite.Data.Types.IPagePlaceholderContents_administrated.xml" />
     <Content Include="Composer.C1.Content.FR-CA\Datas\Composite.Data.Types.IPagePlaceholderContents_public.xml" />
@@ -85,12 +88,14 @@
     </Content>
     <Content Include="Composer.C1.Content.FR-CA\Datas\Composite.Data.Types.Navigation.NavigationElements.StickyHeader_public.xml" />
     <Content Include="Composer.C1.Content.FR-CA\Datas\Composite.Data.Types.TargetUrlElements_public.xml" />
-    <Content Include="Composer.C1.Content.FR-CA\Datas\Orckestra.Composer.CompositeC1.Pages.CheckoutStepInfoPages_administrated.xml" />
-    <Content Include="Composer.C1.Content.FR-CA\Datas\Orckestra.Composer.CompositeC1.Pages.CheckoutStepInfoPages_public.xml" />
-    <Content Include="Composer.C1.Content.FR-CA\Datas\Orckestra.Composer.CompositeC1.Pages.ComposerImages_public.xml" />
+    <Content Include="Composer.C1.Content.FR-CA\Datas\Orckestra.Composer.CompositeC1.DataTypes.RecurringOrdersSettingss_administrated.xml" />
+    <Content Include="Composer.C1.Content.FR-CA\Datas\Orckestra.Composer.CompositeC1.DataTypes.RecurringOrdersSettingss_public.xml" />
+    <Content Include="Composer.C1.Content.FR-CA\Datas\Orckestra.ExperienceManagement.Configuration.DataTypes.ISiteConfigurations_administrated.xml" />
+    <Content Include="Composer.C1.Content.FR-CA\Datas\Orckestra.ExperienceManagement.Configuration.DataTypes.ISiteConfigurations_public.xml" />
     <Content Include="Composer.C1.Content.FR-CA\install.xml">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Composer.C1.Core\Datas\Composite.Data.Types.ICompositionContainers_public.xml" />
     <Content Include="Composer.C1.Core\Datas\Composite.Data.Types.IMediaFileDatas_public.xml" />
     <Content Include="Composer.C1.Core\Datas\Composite.Data.Types.IMediaFolderDatas_public.xml" />
     <Content Include="Composer.C1.Core\Datas\Composite.Data.Types.IPageMetaDataDefinitions_public.xml" />
@@ -105,7 +110,8 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Composer.C1.Content.FR-CA\Datas\Composite.Data.Types.Navigation.NavigationElements.Header_public.xml" />
-    <Content Include="Composer.C1.Core\Datas\Composite.Data.Types.IPageTypeTreeLink_public.xml" />
+    <Content Include="Composer.C1.Core\Datas\Composite.Data.Types.IDataItemTreeAttachmentPoint_publi.xml" />
+    <Content Include="Composer.C1.Core\Datas\Composite.Data.Types.IPageTypeTreeLinks_public.xml" />
     <Content Include="Composer.C1.Core\Datas\Composite.Data.Types.ISystemActiveLocale_public.xml" />
     <Content Include="Composer.C1.Core\install.xml">
       <SubType>Designer</SubType>

@@ -41,7 +41,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
         }
 
         [Test]
-        public async void WHEN_valid_request_SHOULD_succeed()
+        public async Task WHEN_valid_request_SHOULD_succeed()
         {
             //Arrange
             var expectedTicket = GetRandom.String(1024);
@@ -55,6 +55,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             _container.GetMock<ICustomerRepository>()
                 .Setup(r => r.ResetPasswordAsync(
                     It.Is<string>(username => username == expectedCustomer.Username),
+                    It.IsAny<string>(),
                     It.IsAny<string>(),
                     It.IsAny<string>()))
                 .Returns(Task.FromResult(false));
@@ -82,7 +83,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             var membershipService = _container.CreateInstance<MembershipViewService>();
 
             //Act
-            var ex = Assert.Throws<ArgumentNullException>(async () => await membershipService.ResetPasswordAsync(null));
+            var ex = Assert.ThrowsAsync<ArgumentNullException>(() => membershipService.ResetPasswordAsync(null));
 
             //Assert
             ex.Message.Should().ContainEquivalentOf("param");
@@ -96,7 +97,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             var membershipService = _container.CreateInstance<MembershipViewService>();
 
             //Act
-            var ex = Assert.Throws<ArgumentException>(async () => await membershipService.ResetPasswordAsync(
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => membershipService.ResetPasswordAsync(
                 new ResetPasswordParam
                 {
                     CultureInfo = cultureInfo,
@@ -121,7 +122,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             var membershipService = _container.CreateInstance<MembershipViewService>();
 
             //Act
-            var ex = Assert.Throws<ArgumentException>(async () => await membershipService.ResetPasswordAsync(
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => membershipService.ResetPasswordAsync(
                 new ResetPasswordParam
                 {
                     CultureInfo = TestingExtensions.GetRandomCulture(),
@@ -146,7 +147,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             var membershipService = _container.CreateInstance<MembershipViewService>();
 
             //Act
-            var ex = Assert.Throws<ArgumentException>(async () => await membershipService.ResetPasswordAsync(
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => membershipService.ResetPasswordAsync(
                 new ResetPasswordParam
                 {
                     CultureInfo = TestingExtensions.GetRandomCulture(),
@@ -171,7 +172,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             var membershipService = _container.CreateInstance<MembershipViewService>();
 
             //Act
-            var ex = Assert.Throws<ArgumentException>(async () => await membershipService.ResetPasswordAsync(
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => membershipService.ResetPasswordAsync(
                 new ResetPasswordParam
                 {
                     CultureInfo = TestingExtensions.GetRandomCulture(),
@@ -196,7 +197,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             var membershipService = _container.CreateInstance<MembershipViewService>();
 
             //Act
-            var ex = Assert.Throws<ArgumentException>(async () => await membershipService.ResetPasswordAsync(
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => membershipService.ResetPasswordAsync(
                 new ResetPasswordParam
                 {
                     CultureInfo = TestingExtensions.GetRandomCulture(),
@@ -215,7 +216,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
         [TestCase(null)]
         [TestCase("")]
         [TestCase(" \t\r\n")]
-        public async void WHEN_Membership_Accept_Empty_PasswordAnsnwer_SHOULD_succeed(string passwordAnswer)
+        public async Task WHEN_Membership_Accept_Empty_PasswordAnsnwer_SHOULD_succeed(string passwordAnswer)
         {
             //Arrange
             var membershipService = _container.CreateInstance<MembershipViewService>();
@@ -232,6 +233,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             _container.GetMock<ICustomerRepository>()
                 .Setup(r => r.ResetPasswordAsync(
                     It.IsAny<string>(),
+                     It.IsAny<string>(),
                     It.IsAny<string>(),
                     It.Is<string>(pa => pa == passwordAnswer)))
                 .Returns(Task.FromResult(false));

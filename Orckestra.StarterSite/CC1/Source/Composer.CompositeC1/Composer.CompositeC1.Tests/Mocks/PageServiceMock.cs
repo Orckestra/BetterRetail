@@ -1,10 +1,9 @@
-﻿using System;
+﻿using Composite.Data.Types;
+using Orckestra.Composer.CompositeC1.Services;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Composite.Data.Types;
-using Orckestra.Composer.CompositeC1.Pages;
-using Orckestra.Composer.CompositeC1.Services;
 
 namespace Orckestra.Composer.CompositeC1.Tests.Mocks
 {
@@ -46,12 +45,17 @@ namespace Orckestra.Composer.CompositeC1.Tests.Mocks
             return pageMock?.Url;
         }
 
-        public List<CheckoutStepInfoPage> GetCheckoutStepPages(CultureInfo cultureInfo = null)
+        public List<string> GetCheckoutStepPages(Guid homepageId, CultureInfo cultureInfo = null)
         {
             throw new NotImplementedException();
         }
 
-        public CheckoutStepInfoPage GetCheckoutStepPage(Guid pageId, CultureInfo cultureInfo = null)
+        public List<string> GetCheckoutNavigationPages(Guid homepageId, CultureInfo cultureInfo = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int GetCheckoutStepPageNumber(Guid currentHomePageId, Guid pageId, CultureInfo cultureInfo = null)
         {
             throw new NotImplementedException();
         }

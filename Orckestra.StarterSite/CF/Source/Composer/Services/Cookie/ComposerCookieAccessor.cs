@@ -1,11 +1,11 @@
-﻿using System;
-using System.Configuration;
-using System.Linq;
-using System.Web;
+﻿using Autofac.Integration.Mvc;
 using Newtonsoft.Json;
-using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Logging;
 using Orckestra.Composer.Utils;
+using Orckestra.ExperienceManagement.Configuration;
+using System;
+using System.Linq;
+using System.Web;
 
 namespace Orckestra.Composer.Services.Cookie
 {
@@ -33,6 +33,8 @@ namespace Orckestra.Composer.Services.Cookie
         //Dependencies
         private readonly HttpRequestBase  _httpRequest;
         private readonly HttpResponseBase _httpResponse;
+        private readonly IWebsiteContext _websiteContext;
+        private readonly ISiteConfiguration _siteConfiguration;
 
         //Configurations
         private readonly string           _cookieName;
@@ -64,17 +66,15 @@ namespace Orckestra.Composer.Services.Cookie
             _httpRequest  = httpRequest;
             _httpResponse = httpResponse;
 
-            //Configurations
-            //It's ok to omit this config, we simply fallback to the default values
-            ComposerConfigurationSection conf = ConfigurationManager.GetSection(ComposerConfigurationSection.ConfigurationName) as ComposerConfigurationSection;
-            ComposerConfigurationSection        confComposer = conf ?? new ComposerConfigurationSection();
-            ComposerCookieAccesserConfigurationElement  confCookie   = confComposer.ComposerCookieAccesser ?? new ComposerCookieAccesserConfigurationElement();
-            //
+            _websiteContext =
+                (IWebsiteContext) AutofacDependencyResolver.Current.GetService(typeof(IWebsiteContext));
+            _siteConfiguration =
+               (ISiteConfiguration)AutofacDependencyResolver.Current.GetService(typeof(ISiteConfiguration));
 
-            _cookieName       = confCookie.Name;
-            _requireSsl       = confCookie.RequireSsl;
-            _timeoutInMinutes = confCookie.Timeout;
-            _cookieDomain     = confCookie.Domain;
+            _cookieName = _siteConfiguration.CookieAccesserSettings.Name + "_" + _websiteContext.WebsiteId;
+            _requireSsl       = _siteConfiguration.CookieAccesserSettings.RequireSsl;
+            _timeoutInMinutes = _siteConfiguration.CookieAccesserSettings.TimeoutInMinutes;
+            _cookieDomain     = _siteConfiguration.CookieAccesserSettings.Domain;
 
             _jsonSettings = new JsonSerializerSettings
             {

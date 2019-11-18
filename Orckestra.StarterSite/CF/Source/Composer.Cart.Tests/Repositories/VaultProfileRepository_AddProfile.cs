@@ -27,7 +27,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             AddCreditCardParam creditCardParam = null;
 
             //Act            
-            var ex = Assert.Throws<ArgumentNullException>(async () => await sut.AddCreditCardAsync(creditCardParam));
+            var ex = Assert.ThrowsAsync<ArgumentNullException>(() => sut.AddCreditCardAsync(creditCardParam));
 
             //Assert
             ex.Message.Should().ContainEquivalentOf("param");
@@ -51,7 +51,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var sut = Container.CreateInstance<VaultProfileRepository>();
 
             //Act
-            var ex = Assert.Throws<ArgumentException>(async () => await sut.AddCreditCardAsync(addCreditCardParam));
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => sut.AddCreditCardAsync(addCreditCardParam));
 
             //Assert
             ex.ParamName.Should().ContainEquivalentOf("param");
@@ -74,7 +74,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var sut = Container.CreateInstance<VaultProfileRepository>();
 
             //Act
-            var ex = Assert.Throws<ArgumentException>(async () => await sut.AddCreditCardAsync(addCreditCardParam));
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => sut.AddCreditCardAsync(addCreditCardParam));
 
             //Assert
             ex.ParamName.Should().ContainEquivalentOf("param");
@@ -96,7 +96,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var sut = Container.CreateInstance<VaultProfileRepository>();
 
             //Act
-            var ex = Assert.Throws<ArgumentException>(async () => await sut.AddCreditCardAsync(addCreditCardParam));
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => sut.AddCreditCardAsync(addCreditCardParam));
 
             //Assert
             ex.ParamName.Should().ContainEquivalentOf("param");
@@ -118,7 +118,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var sut = Container.CreateInstance<VaultProfileRepository>();
 
             //Act
-            var ex = Assert.Throws<ArgumentException>(async () => await sut.AddCreditCardAsync(addCreditCardParam));
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => sut.AddCreditCardAsync(addCreditCardParam));
 
             //Assert
             ex.ParamName.Should().ContainEquivalentOf("param");
@@ -141,7 +141,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var sut = Container.CreateInstance<VaultProfileRepository>();
 
             //Act
-            var ex = Assert.Throws<ArgumentException>(async () => await sut.AddCreditCardAsync(addCreditCardParam));
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => sut.AddCreditCardAsync(addCreditCardParam));
 
             //Assert
             ex.ParamName.Should().ContainEquivalentOf("param");
@@ -164,7 +164,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var sut = Container.CreateInstance<VaultProfileRepository>();
 
             //Act
-            var ex = Assert.Throws<ArgumentException>(async () => await sut.AddCreditCardAsync(addCreditCardParam));
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => sut.AddCreditCardAsync(addCreditCardParam));
 
             //Assert
             ex.ParamName.Should().ContainEquivalentOf("param");
@@ -186,7 +186,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var sut = Container.CreateInstance<VaultProfileRepository>();
 
             //Act
-            var ex = Assert.Throws<ArgumentException>(async () => await sut.AddCreditCardAsync(addCreditCardParam));
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => sut.AddCreditCardAsync(addCreditCardParam));
 
             //Assert
             ex.ParamName.Should().ContainEquivalentOf("param");

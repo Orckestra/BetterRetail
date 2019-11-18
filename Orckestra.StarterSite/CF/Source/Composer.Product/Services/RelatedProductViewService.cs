@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Orckestra.Composer.Configuration;
+using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Product.Parameters;
 using Orckestra.Composer.Product.Repositories;
 using Orckestra.Composer.Product.ViewModels;
 using Orckestra.Composer.Providers;
+using Orckestra.Composer.Repositories;
 using Orckestra.Composer.Search.Repositories;
 using Orckestra.Composer.Utils;
 using Orckestra.Composer.ViewModels;
@@ -23,9 +26,10 @@ namespace Orckestra.Composer.Product.Services
             IProductUrlProvider productUrlProvider,
             IViewModelMapper viewModelMapper,
             ILocalizationProvider localizationProvider,
-            IInventoryLocationProvider inventoryLocationProvider)
+            IInventoryLocationProvider inventoryLocationProvider,
+            IRecurringOrdersSettings recurringOrdersSettings)
 
-            : base(productRepository, damProvider, productUrlProvider, viewModelMapper, localizationProvider, relationshipRepository, inventoryLocationProvider)
+            : base(productRepository, damProvider, productUrlProvider, viewModelMapper, localizationProvider, relationshipRepository, inventoryLocationProvider, recurringOrdersSettings)
         {          
         }
 
@@ -100,7 +104,7 @@ namespace Orckestra.Composer.Product.Services
 
         protected virtual IEnumerable<ProductIdentifier> ExtractRelatedProductIdentifiers(Overture.ServiceModel.Products.Product product, string[] merchandiseTypes, int maxItems)
         {
-            if (product == null) { return Enumerable.Empty<ProductIdentifier>(); }
+            if (product == null || product.Relationships == null) { return Enumerable.Empty<ProductIdentifier>(); }
 
             var relatedProducts = product.Relationships
                 .Where(r => r.RelationshipType == RelationshipType.Product || 

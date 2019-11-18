@@ -54,7 +54,7 @@ namespace Orckestra.Composer.Tests.Repositories
             GetFulfillmentLocationsByScopeParam p = null;
 
             //Act
-            var exception = Assert.Throws<ArgumentNullException>(async () => await _sut.GetFulfillmentLocationsByScopeAsync(p));
+            var exception = Assert.ThrowsAsync<ArgumentNullException>(() => _sut.GetFulfillmentLocationsByScopeAsync(p));
 
             //Assert
             exception.Should().NotBeNull();
@@ -77,8 +77,7 @@ namespace Orckestra.Composer.Tests.Repositories
             };
 
             //Act
-            var exception =
-                Assert.Throws<ArgumentException>(async () => await _sut.GetFulfillmentLocationsByScopeAsync(p));
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => _sut.GetFulfillmentLocationsByScopeAsync(p));
 
             //Assert
             exception.Should().NotBeNull();

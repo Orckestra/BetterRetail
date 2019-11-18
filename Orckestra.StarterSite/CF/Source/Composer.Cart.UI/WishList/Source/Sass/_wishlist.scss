@@ -26,6 +26,10 @@
         text-align: center;
         color: #C40001;
         font-size: 20em;
+
+        @media (max-width: $screen-xs-max) {
+            font-size: 18em;
+        }
     }
     
     .lead {

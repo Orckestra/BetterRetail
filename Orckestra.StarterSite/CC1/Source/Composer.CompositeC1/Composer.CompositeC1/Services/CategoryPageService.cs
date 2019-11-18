@@ -17,7 +17,7 @@ using Orckestra.Composer.Search;
 using Orckestra.Composer.Utils;
 using Orckestra.Overture.ServiceModel.Products;
 using Orckestra.Composer.Services;
-using ExperienceManagement.DataTypes;
+using Orckestra.ExperienceManagement.Configuration.DataTypes;
 
 namespace Orckestra.Composer.CompositeC1.Services
 {
@@ -60,7 +60,7 @@ namespace Orckestra.Composer.CompositeC1.Services
 			EnsureCategoryPages(categories["Root"], categoryPageData);
 		}
 
-		private void EnsureCategoryPages(TreeNode<Category> rootCategory, CategoryPageData pageData)
+		protected virtual void EnsureCategoryPages(TreeNode<Category> rootCategory, CategoryPageData pageData)
 		{
 			foreach (var childCategory in rootCategory.Children)
 			{
@@ -70,7 +70,7 @@ namespace Orckestra.Composer.CompositeC1.Services
 			}
 		}
 
-		private void EnsureSubCategoryPages(TreeNode<Category> subCategory, CategoryPageData pageData)
+        protected virtual void EnsureSubCategoryPages(TreeNode<Category> subCategory, CategoryPageData pageData)
 		{
             var isLandingPage = subCategory.GetLevel() <= CategoriesConfiguration.LandingPageMaxLevel;
             var pageTypeId = isLandingPage ? CategoryPages.CategoryLandingPageTypeId : CategoryPages.CategoryPageTypeId;
@@ -163,7 +163,7 @@ namespace Orckestra.Composer.CompositeC1.Services
 			}
 		}
 
-		private void CreateCategoryAllProductsPage(TreeNode<Category> subCategory, CategoryPageData pageData)
+        protected virtual void CreateCategoryAllProductsPage(TreeNode<Category> subCategory, CategoryPageData pageData)
 		{
 			using (var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
 			{
@@ -238,7 +238,7 @@ namespace Orckestra.Composer.CompositeC1.Services
 			}
 		}
 
-		private static void AddCategoryPageInfo(TreeNode<Category> subCategory, DataConnection connection, IPage catPage, bool isLandingPage, bool isAllProductsPage)
+		protected static void AddCategoryPageInfo(TreeNode<Category> subCategory, DataConnection connection, IPage catPage, bool isLandingPage, bool isAllProductsPage)
 		{
 			var categoryPageInfo = connection.CreateNew<CategoryPage>();
 			categoryPageInfo.CategoryId = subCategory.Value.Id;
@@ -248,7 +248,7 @@ namespace Orckestra.Composer.CompositeC1.Services
 			catPage.AddNewMetaDataToExistingPage(metaDefName, typeof (CategoryPage), categoryPageInfo);
 		}
         
-		private bool IsDefaultLanguage(CultureInfo culture)
+		protected bool IsDefaultLanguage(CultureInfo culture)
 		{
 			return CultureService.GetDefaultCulture().Name == culture.Name;
 		}
@@ -290,19 +290,19 @@ namespace Orckestra.Composer.CompositeC1.Services
                 : CategoryPages.CategoryAllProductsPageTemplateId;
 		}
 
-		private bool CategoryExist(Category category, CategoryLocalizedPageData categoryPageData)
+        protected virtual bool CategoryExist(Category category, CategoryLocalizedPageData categoryPageData)
 		{
 			var catId = GenerateCategoryPageId(category.Id);
 			return categoryPageData.Pages.ContainsKey(catId);
 		}
 
-		private bool CategoryAllProductsExist(Category category, CategoryLocalizedPageData categoryPageData)
+        protected virtual bool CategoryAllProductsExist(Category category, CategoryLocalizedPageData categoryPageData)
 		{
 			var catId = GenerateCategoryAllProductsPageId(category.Id);
 			return categoryPageData.Pages.ContainsKey(catId);
 		}
 
-		private CategoryPageData GetCategoryPages()
+        protected virtual CategoryPageData GetCategoryPages()
 		{
 			var result = new CategoryPageData
 			{
@@ -326,7 +326,7 @@ namespace Orckestra.Composer.CompositeC1.Services
 		}
 
 
-        private static CategoryLocalizedPageData GetCategoryLocalizedPageData(CultureInfo culture)
+        protected static CategoryLocalizedPageData GetCategoryLocalizedPageData(CultureInfo culture)
         {
             using (var connection = new DataConnection(PublicationScope.Unpublished, culture))
             {
@@ -372,7 +372,7 @@ namespace Orckestra.Composer.CompositeC1.Services
 			}
 		}
 
-		private void DeleteChildrenCategories(IPage page)
+        protected virtual void DeleteChildrenCategories(IPage page)
 		{
 			var children = page.GetChildren().Where(p => p.PageTypeId == CategoryPages.CategoryPageTypeId || p.PageTypeId == CategoryPages.CategoryLandingPageTypeId).ToArray();
 			foreach (var child in children)
@@ -387,12 +387,12 @@ namespace Orckestra.Composer.CompositeC1.Services
 			ProcessControllerFacade.FullDelete(page);
 		}
 
-		private IEnumerable<CultureInfo> GetCultures()
+        protected virtual IEnumerable<CultureInfo> GetCultures()
 		{
             return CultureService.GetAllSupportedCultures();
 		}
 
-		private void RemoveAllFolderAndMetaDataDefinitions(IPage page)
+        protected virtual void RemoveAllFolderAndMetaDataDefinitions(IPage page)
 		{
 			foreach (Type folderType in page.GetDefinedFolderTypes())
 			{
@@ -405,7 +405,7 @@ namespace Orckestra.Composer.CompositeC1.Services
 			}
 		}
 
-		private bool ExistInOtherLocale(List<CultureInfo> cultures, IPage page)
+        protected virtual bool ExistInOtherLocale(List<CultureInfo> cultures, IPage page)
 		{
 			foreach (CultureInfo localeCultureInfo in cultures)
 			{
@@ -421,14 +421,14 @@ namespace Orckestra.Composer.CompositeC1.Services
 			return false;
 		}
 
-		private class CategoryLocalizedPageData
+        protected class CategoryLocalizedPageData
 		{
 			public CultureInfo Culture { get; set; }
 
 			public Dictionary<Guid, Guid> Pages { get; set; }
 		}
 
-		private class CategoryPageData
+		protected class CategoryPageData
 		{
 			public CategoryLocalizedPageData Default { get; set; }
 

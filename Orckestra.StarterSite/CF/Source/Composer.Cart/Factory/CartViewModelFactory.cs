@@ -15,6 +15,7 @@ using Orckestra.Overture.ServiceModel;
 using Orckestra.Overture.ServiceModel.Marketing;
 using Orckestra.Overture.ServiceModel.Orders;
 using Orckestra.Composer.Cart.ViewModels.Order;
+using Orckestra.Composer.Providers.Dam;
 
 namespace Orckestra.Composer.Cart.Factory
 {
@@ -71,7 +72,7 @@ namespace Orckestra.Composer.Cart.Factory
             RewardViewModelFactory = rewardViewModelFactory;
         }
 
-        public CartViewModel CreateCartViewModel(CreateCartViewModelParam param)
+        public virtual CartViewModel CreateCartViewModel(CreateCartViewModelParam param)
         {
             if (param == null) { throw new ArgumentNullException("param"); }
             if (param.CultureInfo == null) { throw new ArgumentNullException("CultureInfo"); }
@@ -109,14 +110,14 @@ namespace Orckestra.Composer.Cart.Factory
         {
             if (vm.ShippingAddress != null && string.IsNullOrWhiteSpace(vm.ShippingAddress.CountryCode))
             {
-                vm.ShippingAddress.CountryCode = ComposerConfiguration.CountryCode;
+                vm.ShippingAddress.CountryCode = ComposerContext.CountryCode;
             }
 
             if (vm.Payment != null &&
                 vm.Payment.BillingAddress != null &&
                 string.IsNullOrWhiteSpace(vm.Payment.BillingAddress.CountryCode))
             {
-                vm.Payment.BillingAddress.CountryCode = ComposerConfiguration.CountryCode;
+                vm.Payment.BillingAddress.CountryCode = ComposerContext.CountryCode;
             }
         }
 
@@ -193,7 +194,7 @@ namespace Orckestra.Composer.Cart.Factory
             return additionalFeeSummaryList;
         }
 
-        private string GetShippingPrice(decimal cost, CultureInfo cultureInfo)
+        protected virtual string GetShippingPrice(decimal cost, CultureInfo cultureInfo)
         {
             var price = cost == 0
                 ? GetFreeShippingPriceLabel(cultureInfo)
@@ -401,7 +402,7 @@ namespace Orckestra.Composer.Cart.Factory
             viewModel.ShipmentAdditionalFeeSummaryList = GetShipmentAdditionalFeeSummary(shipmentAdditionalFees, cultureInfo);
         }
 
-        private IEnumerable<ShipmentAdditionalFeeViewModel> GetShipmentAdditionalFees(IEnumerable<ShipmentAdditionalFee> additionalFees, CultureInfo cultureInfo)
+        protected virtual IEnumerable<ShipmentAdditionalFeeViewModel> GetShipmentAdditionalFees(IEnumerable<ShipmentAdditionalFee> additionalFees, CultureInfo cultureInfo)
         {
             return additionalFees.Select(shipmentAdditionalFee => ViewModelMapper.MapTo<ShipmentAdditionalFeeViewModel>(shipmentAdditionalFee, cultureInfo));
         }
@@ -472,6 +473,9 @@ namespace Orckestra.Composer.Cart.Factory
             var totalDays = (int)Math.Ceiling((fulfillmentMethod.ExpectedDeliveryDate.Value - DateTime.UtcNow).TotalDays);
             shippingMethodViewModel.ExpectedDaysBeforeDelivery = totalDays.ToString();
 
+            shippingMethodViewModel.IsShipToStoreType = fulfillmentMethod.FulfillmentMethodType == FulfillmentMethodType.ShipToStore;
+            shippingMethodViewModel.FulfillmentMethodTypeString = fulfillmentMethod.FulfillmentMethodType.ToString();
+
             return shippingMethodViewModel;
         }
 
@@ -523,7 +527,7 @@ namespace Orckestra.Composer.Cart.Factory
             return paymentMethodViewModel;
         }
 
-        protected SavedCreditCardPaymentMethodViewModel MapSavedCreditCard(PaymentMethod payment, CultureInfo cultureInfo)
+        public virtual SavedCreditCardPaymentMethodViewModel MapSavedCreditCard(PaymentMethod payment, CultureInfo cultureInfo)
         {            
             var savedCreditCard = ViewModelMapper.MapTo<SavedCreditCardPaymentMethodViewModel>(payment, cultureInfo);
 
@@ -627,7 +631,7 @@ namespace Orckestra.Composer.Cart.Factory
             return price;
         }
 
-        private string GetFreeShippingPriceLabel(CultureInfo cultureInfo)
+        protected virtual string GetFreeShippingPriceLabel(CultureInfo cultureInfo)
         {
             return LocalizationProvider.GetLocalizedString(new GetLocalizedParam
             {
@@ -678,7 +682,7 @@ namespace Orckestra.Composer.Cart.Factory
         /// </summary>
         /// <param name="orderShipment"></param>
         /// <returns></returns>
-        private List<Reward> GetAllRewards(List<Shipment> orderShipment)
+        protected List<Reward> GetAllRewards(List<Shipment> orderShipment)
         {
             var allRewards = new List<Reward>();
             if (orderShipment.Any())
@@ -786,7 +790,7 @@ namespace Orckestra.Composer.Cart.Factory
             };
         }
 
-        private static PaymentViewModel BuildEmptyPaymentViewModel()
+        protected static PaymentViewModel BuildEmptyPaymentViewModel()
         {
             return new PaymentViewModel
             {

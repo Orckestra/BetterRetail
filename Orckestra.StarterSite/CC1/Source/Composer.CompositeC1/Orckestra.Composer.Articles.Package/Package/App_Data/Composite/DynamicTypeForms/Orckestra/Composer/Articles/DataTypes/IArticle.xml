@@ -1,0 +1,89 @@
+﻿<cms:formdefinition xmlns:cms="http://www.composite.net/ns/management/bindingforms/1.0" xmlns="http://www.composite.net/ns/management/bindingforms/std.ui.controls.lib/1.0" xmlns:ff="http://www.composite.net/ns/management/bindingforms/std.function.lib/1.0" xmlns:f="http://www.composite.net/ns/function/1.0">
+  <cms:bindings>
+    <cms:binding name="Id" type="System.Guid" />
+    <cms:binding name="Title" type="System.String" />
+    <cms:binding name="UrlTitle" type="System.String" />
+    <cms:binding name="Summary" type="System.String" optional="true"/>
+    <cms:binding name="Image" type="System.String" optional="true" />
+    <cms:binding name="Category" type="System.Guid" />
+    <cms:binding name="Tags" type="System.String" />
+    <cms:binding name="Date" type="System.DateTime" />
+    <cms:binding name="Content" type="System.String" />
+    <cms:binding name="PublicationStatus" type="System.String" />
+    <cms:binding name="PageId" type="System.Guid" />
+    <cms:binding name="SourceCultureName" type="System.String" />
+    <cms:binding name="PublicationStatusOptions" type="System.Object" />
+    <cms:binding name="PublishDate" type="System.DateTime" optional="true" />
+    <cms:binding name="UnpublishDate" type="System.DateTime" optional="true" />
+  </cms:bindings>
+  <cms:layout>
+    <cms:layout.label>
+      <cms:read source="Title" />
+    </cms:layout.label>
+    <TabPanels>
+      <PlaceHolder Label="Settings">
+        <FieldGroup Label="Articles">
+          <TextBox Label="Title" Help="" SpellCheck="true">
+            <TextBox.Text>
+              <cms:bind source="Title" />
+            </TextBox.Text>
+          </TextBox>
+          <TextBox Label="UrlTitle" Help="" SpellCheck="true">
+            <TextBox.Text>
+              <cms:bind source="UrlTitle" />
+            </TextBox.Text>
+          </TextBox>
+          <TextBox Label="Summary" Help="" SpellCheck="true">
+            <TextBox.Text>
+              <cms:bind source="Summary" />
+            </TextBox.Text>
+          </TextBox>
+          <DataReferenceTreeSelector Label="Image" Help="" Handle="Composite.Management.ImageSelectorDialog" SearchToken="{&quot;$type&quot;:&quot;Composite.Plugins.Elements.ElementProviders.MediaFileProviderElementProvider.MediaFileSearchToken, Composite&quot;,&quot;MimeTypes&quot;:[&quot;image/gif&quot;,&quot;image/jpeg&quot;,&quot;image/png&quot;,&quot;image/bmp&quot;,&quot;image/svg+xml&quot;],&quot;Extensions&quot;:null,&quot;Folder&quot;:null,&quot;HideSubfolders&quot;:false,&quot;Keyword&quot;:null}" DataType="Composite.Data.Types.IImageFile,Composite" NullValueAllowed="true">
+            <DataReferenceTreeSelector.Selected>
+              <cms:bind source="Image" />
+            </DataReferenceTreeSelector.Selected>
+          </DataReferenceTreeSelector>
+          <KeySelector Label="Category" Help="" OptionsKeyField="Key" OptionsLabelField="Label" Required="true">
+            <KeySelector.Selected>
+              <cms:bind source="Category" />
+            </KeySelector.Selected>
+            <KeySelector.Options>
+              <ff:StaticMethodCall Type="&lt;t n=&quot;Composite.Plugins.Functions.WidgetFunctionProviders.StandardWidgetFunctionProvider.DataReference.DataReferenceSelectorWidgetFunction`1, Composite, Version=6.7.7115.5440, Culture=neutral, PublicKeyToken=null&quot;&gt;&#xD;&#xA;  &lt;t n=&quot;Orckestra.Composer.Articles.DataTypes.IArticleCategory,Orckestra.Composer.Articles&quot; /&gt;&#xD;&#xA;&lt;/t&gt;" Method="GetOptions" Parameters="Orckestra.Composer.Articles.DataTypes.IArticleCategory,Orckestra.Composer.Articles" />
+            </KeySelector.Options>
+          </KeySelector>
+          <TextBox Label="Tags" Help="" SpellCheck="true">
+            <TextBox.Text>
+              <cms:bind source="Tags" />
+            </TextBox.Text>
+          </TextBox>
+          <DateSelector Label="Date" Help="">
+            <DateSelector.Date>
+              <cms:bind source="Date" />
+            </DateSelector.Date>
+          </DateSelector>
+        </FieldGroup>
+        <FieldGroup Label="Publication settings">
+          <KeySelector OptionsKeyField="Key" OptionsLabelField="Value" Label="Status" Help="Send the data to another publication status.">
+            <KeySelector.Selected>
+              <cms:bind source="PublicationStatus" />
+            </KeySelector.Selected>
+            <KeySelector.Options>
+              <cms:read source="PublicationStatusOptions" />
+            </KeySelector.Options>
+          </KeySelector>
+          <DateTimeSelector Label="Publish date" Help="Specify at which date and time you want the data to be published automatically.">
+            <cms:bind source="PublishDate" />
+          </DateTimeSelector>
+          <DateTimeSelector Label="Unpublish date" Help="Specify at which date and time you want the data to be unpublished automatically.">
+            <cms:bind source="UnpublishDate" />
+          </DateTimeSelector>
+        </FieldGroup>
+      </PlaceHolder>
+      <XhtmlEditor Label="Article Content" Help="" ClassConfigurationName="common">
+        <XhtmlEditor.Xhtml>
+          <cms:bind source="Content" />
+        </XhtmlEditor.Xhtml>
+      </XhtmlEditor>
+    </TabPanels>
+  </cms:layout>
+</cms:formdefinition>

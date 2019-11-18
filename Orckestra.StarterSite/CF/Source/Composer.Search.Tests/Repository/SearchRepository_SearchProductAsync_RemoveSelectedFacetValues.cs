@@ -8,6 +8,7 @@ using Moq;
 using Moq.AutoMock;
 using NUnit.Framework;
 using Orckestra.Composer.Parameters;
+using Orckestra.Composer.Search.Context;
 using Orckestra.Composer.Search.Factory;
 using Orckestra.Composer.Search.Repositories;
 using Orckestra.Overture;
@@ -15,6 +16,7 @@ using Orckestra.Overture.ServiceModel.Requests.Search;
 using Orckestra.Overture.ServiceModel.Search;
 using FacetType = Orckestra.Composer.Search.Facets.FacetType;
 using SearchFilter = Orckestra.Composer.Parameters.SearchFilter;
+using System.Threading.Tasks;
 
 namespace Orckestra.Composer.Search.Tests.Repository
 {
@@ -26,8 +28,8 @@ namespace Orckestra.Composer.Search.Tests.Repository
         private IFacetPredicateFactory FacetPredicateFactory { get; set; }
         private ISearchRepository _sut;
         private Mock<IOvertureClient> OvertureClientMock { get; set; }
+        private Mock<IFacetConfigurationContext> FacetConfigurationContext { get; set; }
 
-        private IList<FacetSetting> _oldFacetGroupSettingsList;
         private const string SomeSingleFacetFieldName = "SomeSingleFacet";
         private const string SingleFacetValue1 = "SingleFacetValue1";
         private const string SingleFacetValue2 = "SingleFacetValue2";
@@ -43,39 +45,33 @@ namespace Orckestra.Composer.Search.Tests.Repository
             // Arrange
             ProductRequestFactory = new AutoMocker().CreateInstance<ProductRequestFactory>(); ;
             FacetPredicateFactory = MockFacetPredicateFactory().Object;
+            FacetConfigurationContext = new Mock<IFacetConfigurationContext>();
 
             OvertureClientMock = MockOvertureClient();
-            _sut = new SearchRepository(OvertureClientMock.Object, ProductRequestFactory, FacetPredicateFactory);
+            _sut = new SearchRepository(OvertureClientMock.Object, ProductRequestFactory, FacetPredicateFactory, FacetConfigurationContext.Object);
 
-            // Keep a record of the original facet group settings list.
-            _oldFacetGroupSettingsList = SearchConfiguration.FacetSettings;
-            SearchConfiguration.FacetSettings = new[]
-            {
-                new FacetSetting(SomeSingleFacetFieldName)
+            FacetConfigurationContext
+                .Setup(x => x.GetFacetSettings())
+                .Returns(new List<FacetSetting>
                 {
-                    FacetType              = Facets.FacetType.SingleSelect,
-                    SortWeight             = -1.0,
-                    MaxCollapsedValueCount = 5
-                },
-                new FacetSetting(SomeMultiFacetFieldName)
-                {
-                    FacetType              = FacetType.MultiSelect,
-                    SortWeight             = 0.0,
-                    MaxCollapsedValueCount = 5,
-                    MaxExpendedValueCount  = 20
-                },
-            };
-        }
-    
-        [TearDown]
-        public void TearDown()
-        {
-            // Restore the original facet group settings.
-            SearchConfiguration.FacetSettings = _oldFacetGroupSettingsList;
+                    new FacetSetting(SomeSingleFacetFieldName)
+                    {
+                        FacetType              = Facets.FacetType.SingleSelect,
+                        SortWeight             = -1.0,
+                        MaxCollapsedValueCount = 5
+                    },
+                    new FacetSetting(SomeMultiFacetFieldName)
+                    {
+                        FacetType              = FacetType.MultiSelect,
+                        SortWeight             = 0.0,
+                        MaxCollapsedValueCount = 5,
+                        MaxExpendedValueCount  = 20
+                    },
+                });
         }
 
         [Test]
-        public async void WHEN_overture_returns_facets_in_search_results_SHOULD_remove_selected_facet_for_non_multiselect_facet_types_from_result()
+        public async Task WHEN_overture_returns_facets_in_search_results_SHOULD_remove_selected_facet_for_non_multiselect_facet_types_from_result()
         {
             // Arrange
             var param = new SearchCriteria()
@@ -89,7 +85,7 @@ namespace Orckestra.Composer.Search.Tests.Repository
             param.SelectedFacets.Add(new SearchFilter()
             {
                 Name = SomeSingleFacetFieldName,
-                Value = SingleFacetValue1   
+                Value = SingleFacetValue1
             });
 
             // Act
@@ -102,7 +98,7 @@ namespace Orckestra.Composer.Search.Tests.Repository
         }
 
         [Test]
-        public async void WHEN_overture_returns_facets_in_search_results_SHOULD_keep_selected_facets_for_multiselect_facet_types_from_result()
+        public async Task WHEN_overture_returns_facets_in_search_results_SHOULD_keep_selected_facets_for_multiselect_facet_types_from_result()
         {
             // Arrange
             var param = new SearchCriteria()
@@ -129,7 +125,7 @@ namespace Orckestra.Composer.Search.Tests.Repository
         }
 
         [Test]
-        public async void WHEN_overture_returns_facets_in_search_results_SHOULD_keep_all_facet_values_if_there_are_no_selected_facets()
+        public async Task WHEN_overture_returns_facets_in_search_results_SHOULD_keep_all_facet_values_if_there_are_no_selected_facets()
         {
             // Arrange
             var param = new SearchCriteria()

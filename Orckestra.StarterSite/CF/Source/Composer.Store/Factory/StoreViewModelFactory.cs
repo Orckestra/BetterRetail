@@ -23,18 +23,22 @@ namespace Orckestra.Composer.Store.Factory
         protected IStoreScheduleProvider StoreScheduleProvider { get; private set; }
         protected ICountryService CountryService { get; private set; }
 
+        protected IGoogleMapsUrlProvider GoogleMaps { get; private set; }
+
         public StoreViewModelFactory(
             ILocalizationProvider localizationProvider,
             IStoreUrlProvider storeUrlProvider,
             IViewModelMapper viewModelMapper,
             IStoreScheduleProvider storeScheduleProvider,
-            ICountryService countryService)
+            ICountryService countryService,
+            IGoogleMapsUrlProvider googleMapsUrlProvider)
         {
             LocalizationProvider = localizationProvider;
             StoreUrlProvider = storeUrlProvider;
             ViewModelMapper = viewModelMapper;
             StoreScheduleProvider = storeScheduleProvider;
             CountryService = countryService;
+            GoogleMaps = googleMapsUrlProvider;
         }
 
         public virtual StoreViewModel CreateStoreViewModel(CreateStoreViewModelParam param)
@@ -328,13 +332,13 @@ namespace Orckestra.Composer.Store.Factory
                 addressViewModel.Line1, addressViewModel.City, addressViewModel.CountryName, addressViewModel.PostalCode
             };
 
-            return GoogleMapsUrls.GetDirectionWithEmptyStartPointLink(toPoint);
+            return GoogleMapsUrlProvider.GetDirectionWithEmptyStartPointLink(toPoint);
         }
         protected virtual string GetGoogleStaticMapUrl(StoreAddressViewModel addressViewModel)
         {
             if (addressViewModel == null) return null;
 
-           return GoogleMapsUrls.GetStaticMapImgUrl(GoogleMapAddressParams(addressViewModel), "roadmap");
+           return GoogleMaps.GetStaticMapImgUrl(GoogleMapAddressParams(addressViewModel), "roadmap");
 
         }
 
@@ -358,13 +362,13 @@ namespace Orckestra.Composer.Store.Factory
 
         #endregion
 
-        private bool IsTimeInIntervals(TimeSpan time, IEnumerable<ScheduleInterval> intervals)
+        protected bool IsTimeInIntervals(TimeSpan time, IEnumerable<ScheduleInterval> intervals)
         {
             return
                 intervals.Select(interval => time >= interval.BeginingTime && time < interval.EndingTime)
                     .FirstOrDefault();
         }
-        private int GetTotalPages(int total, int pageSize)
+        protected int GetTotalPages(int total, int pageSize)
         {
             return (int)Math.Ceiling((double)total / pageSize);
         }

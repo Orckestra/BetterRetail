@@ -21,6 +21,8 @@ $brand-info:            #0984b2;
 $brand-warning:         #f0ad4e;
 $brand-danger:          #bf1d3f;
 
+//** Background color for master header.
+$masthead-bg:           #fff !default;
 
 //== Scaffolding
 //
@@ -406,7 +408,7 @@ $navbar-inverse-brand-hover-color:          #fff;
 $navbar-inverse-brand-hover-bg:             transparent;
 
 // Inverted navbar toggle
-$navbar-inverse-toggle-hover-bg:            #333;
+$navbar-inverse-toggle-hover-bg:            darken($navbar-inverse-bg, 15%);
 $navbar-inverse-toggle-icon-bar-bg:         #fff;
 $navbar-inverse-toggle-border-color:        #333;
 
@@ -863,4 +865,11 @@ $dl-horizontal-offset:        $component-offset-horizontal;
 //** Horizontal line color.
 $hr-border:                   $gray-light;
 
+/**
+ * $spacing-utility
+ */
 
+$spacing-small: 5px;
+$spacing-base: 10px;
+$spacing-medium: 15px;
+$spacing-large: 20px;

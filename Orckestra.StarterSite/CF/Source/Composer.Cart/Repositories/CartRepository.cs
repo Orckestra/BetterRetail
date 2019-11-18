@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Configuration;
@@ -16,6 +17,7 @@ using Orckestra.Overture.ServiceModel.Requests.Orders.Shopping.Coupons;
 using Orckestra.Overture.ServiceModel.Requests.Orders.Shopping.LineItems;
 using Orckestra.Overture.ServiceModel.Requests.Orders.Shopping.Payments;
 using Orckestra.Overture.ServiceModel.Requests.Orders.Shopping.Shipments;
+using Orckestra.Overture.ServiceModel.Requests.RecurringOrders;
 using ServiceStack;
 
 namespace Orckestra.Composer.Cart.Repositories
@@ -189,7 +191,7 @@ namespace Orckestra.Composer.Cart.Repositories
             return await OvertureClient.SendAsync(request).ConfigureAwait(false);
         }
 
-        private IReturn<ProcessedCart> BuildAddPaymentRequest(AddPaymentParam param)
+        protected IReturn<ProcessedCart> BuildAddPaymentRequest(AddPaymentParam param)
         {
             return new AddPaymentRequest
             {
@@ -234,7 +236,7 @@ namespace Orckestra.Composer.Cart.Repositories
         /// </summary>
         /// <param name="param"></param>
         /// <returns></returns>
-        public Task<ProcessedCart> RemoveLineItemsAsync(RemoveLineItemsParam param)
+        public virtual Task<ProcessedCart> RemoveLineItemsAsync(RemoveLineItemsParam param)
         {
             if (param == null) { throw new ArgumentNullException("param"); }
             if (String.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("Scope"), "param"); }
@@ -391,7 +393,7 @@ namespace Orckestra.Composer.Cart.Repositories
         /// <param name="customerId"></param>
         /// <param name="cartName"></param>
         /// <returns></returns>
-        protected CacheKey BuildCartCacheKey(string scope, Guid customerId, string cartName)
+        protected virtual CacheKey BuildCartCacheKey(string scope, Guid customerId, string cartName)
         {
             var key = new CacheKey(CacheConfigurationCategoryNames.Cart)
             {
@@ -446,6 +448,72 @@ namespace Orckestra.Composer.Cart.Repositories
             };
 
             return OvertureClient.SendAsync(request);
+        }
+
+        public virtual async Task<List<ProcessedCart>> GetRecurringCartsAsync(GetRecurringOrderCartsViewModelParam param)
+        {
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(nameof(param.CultureInfo)); }
+            if (param.CustomerId == Guid.Empty) { throw new ArgumentException(nameof(param.CustomerId)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(nameof(param.Scope)); }
+
+            var request = new GetCartsByCustomerIdRequest()
+            {
+                CustomerId = param.CustomerId,
+                ScopeId = param.Scope,
+                CultureName = param.CultureInfo.Name,
+                CartType = CartConfiguration.RecurringOrderCartType
+            };
+
+            var cartSummaries = await OvertureClient.SendAsync(request).ConfigureAwaitWithCulture(false);
+
+            var resultTasks = cartSummaries.Select(cart =>
+            {
+                var getCartParam = (new GetCartParam
+                {
+                    Scope = param.Scope,
+                    CultureInfo = param.CultureInfo,
+                    CustomerId = param.CustomerId,
+                    CartName = cart.Name,
+                    BaseUrl = param.BaseUrl,
+                    ExecuteWorkflow = true
+                });
+                return GetCartAsync(getCartParam);
+            });
+
+            var carts = await Task.WhenAll(resultTasks).ConfigureAwaitWithCulture(false);
+
+            carts.Where(i => i != null);
+
+            return carts.ToList();
+        }
+
+        public virtual async Task<ListOfRecurringOrderLineItems> RescheduleRecurringCartAsync(RescheduleRecurringCartParam param)
+        {
+            if (param == null) throw new ArgumentNullException(nameof(param));
+
+            var request = new RescheduleRecurringCartRequest()
+            {
+                CustomerId = param.CustomerId,
+                NextOccurence = param.NextOccurence,
+                ScopeId = param.Scope,
+                CartName = param.CartName
+            };
+
+            return await OvertureClient.SendAsync(request).ConfigureAwaitWithCulture(false);
+        }
+        public virtual async Task<HttpWebResponse> RemoveRecurringCartLineItemAsync(RemoveRecurringCartLineItemParam param)
+        {
+            if (param == null) throw new ArgumentNullException(nameof(param));
+
+            var request = new DeleteRecurringCartLineItemsRequest()
+            {
+                CustomerId = param.CustomerId,
+                ScopeId = param.Scope,
+                LineItemIds = new List<Guid>() { param.LineItemId }
+            };
+
+            return await OvertureClient.SendAsync(request).ConfigureAwaitWithCulture(false);
         }
     }
 }

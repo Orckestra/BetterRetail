@@ -1,0 +1,161 @@
+@inherits RazorFunction
+@using System.Globalization;
+
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Shortly describe this function here"; }
+    }
+
+    [FunctionParameter(Label = "Articles count", Help = @"The number of article to display (5 by default).", DefaultValue = 5)]
+    public int ArticlesCount { get; set; }
+
+    [FunctionParameter]
+    public RoutedData<Orckestra.Composer.Articles.DataTypes.IArticle> article { get; set; }
+
+}
+
+@{
+    var articles = article.List.OrderBy(i => i.Date).ToList();
+
+    int pageCurrent;
+    int pageSize = ArticlesCount;
+    if (!int.TryParse(Request.QueryString["p"], out pageCurrent))
+    {
+        pageCurrent = 1;
+    }
+
+    int articlesCount = article.List.Count();
+
+    var pageCount = (articlesCount + pageSize - 1) / pageSize;
+    var articlesList = articles.Skip(pageSize * (pageCurrent - 1)).Take(pageSize);
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<head>
+</head>
+<body>
+
+    <div>
+        @if (article.IsItem)
+        {
+            <img class="img-thumbnail" src="/media(@article.Item.Image)" />
+            <h1>
+                @article.Item.Title
+            </h1>
+            <div>
+                @FormattedDate(@article.Item.Date)
+            </div>
+            <div>
+                @Html.Raw(@article.Item.Content)
+            </div>
+            <div>
+                @Tags(@article.Item.Tags)
+            </div>
+
+        }
+        else
+        {
+            <h1>List of articles: </h1>
+
+            if (pageCount > 1)
+            {
+
+                <ul class="pagination">
+                    @Paging(pageCount, pageCurrent)
+                </ul>
+
+            }
+
+            <div class="row">
+                @foreach (var item in articlesList)
+                {
+
+                    <div class="col-sm-6 col-md-4">
+                        <div class="thumbnail inline">
+                            <a href="@article.ItemUrl(item)">
+                                <img src="/media(@item.Image)" />
+                                <div class="caption">
+                                    <h3>@item.Title</h3>
+                                    <p>@FormattedDate(@item.Date)</p>
+                                    <p>@item.Summary</p>
+                                    <p>@Tags(@item.Tags)</p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+                }
+            </div>
+        }
+
+    </div>
+
+
+</body>
+</html>
+
+@helper Tags(string tags)
+{
+    List<string> articleTags = tags.Split(',').Where(t => !string.IsNullOrEmpty(t)).Select(t => t).ToList();
+
+    <small class="text-muted">
+        <span class="glyphicon glyphicon-tags"></span>
+        @foreach (var tag in articleTags)
+        {
+            <span>@tag</span>
+        }
+    </small>
+}
+
+@helper FormattedDate(DateTime date)
+{
+
+    var formattedDate = date.ToString("dd MMMM yyyy", CultureInfo.CurrentCulture);
+
+    <span class="text-muted">
+        <span class="glyphicon glyphicon-calendar"></span>
+        @formattedDate
+    </span>
+}
+
+@helper Paging(int pageCount, int pageCurrent)
+{
+    var groupsize = 10;
+    if (pageCurrent > groupsize)
+    {
+        <li><a href="~@article.ListUrl?p=1">&lt;&lt;</a></li>
+    }
+    if (pageCurrent > 1)
+    {
+        <li><a href="~@article.ListUrl?p=@(pageCurrent - 1)">&lt;</a></li>
+    }
+    var grouppage = (pageCurrent - 1) / groupsize;
+    for (int page = grouppage * groupsize + 1; page <= pageCount + 1 && page <= (grouppage + 1) * groupsize; page++)
+    {
+        if (page < pageCount + 1)
+        {
+            if (page == pageCurrent)
+            {
+                <li class="active">
+                    <span>
+                        @page
+                    </span>
+                </li>
+            }
+            else
+            {
+                <li><a href="~@article.ListUrl?p=@page">@page</a></li>
+            }
+        }
+    }
+    if (pageCurrent + 1 <= pageCount)
+    {
+        <li><a href="~@article.ListUrl?p=@(pageCurrent + 1)">&gt;</a></li>
+    }
+    if (grouppage < (pageCount - 1) / groupsize)
+    {
+        <li><a href="~@article.ListUrl?p=@pageCount">&gt;&gt;</a></li>
+    }
+}

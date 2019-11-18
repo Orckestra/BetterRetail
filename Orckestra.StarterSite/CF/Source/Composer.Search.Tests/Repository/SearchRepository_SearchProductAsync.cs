@@ -7,12 +7,14 @@ using Moq;
 using Moq.AutoMock;
 using NUnit.Framework;
 using Orckestra.Composer.Parameters;
+using Orckestra.Composer.Search.Context;
 using Orckestra.Composer.Search.Factory;
 using Orckestra.Composer.Search.Repositories;
 using Orckestra.Overture;
 using Orckestra.Overture.ServiceModel.Requests.Search;
 using Orckestra.Overture.ServiceModel.Search;
 using SearchFilter = Orckestra.Composer.Parameters.SearchFilter;
+using System.Threading.Tasks;
 
 namespace Orckestra.Composer.Search.Tests.Repository
 {
@@ -24,8 +26,7 @@ namespace Orckestra.Composer.Search.Tests.Repository
         private IFacetPredicateFactory FacetPredicateFactory { get; set; }
         private ISearchRepository _sut;
         private Mock<IOvertureClient> OvertureClientMock { get; set; }
-
-        private IList<FacetSetting> _oldFacetGroupSettingsList;
+        private Mock<IFacetConfigurationContext> FacetConfigurationContext { get; set; }
 
 
         [SetUp]
@@ -34,36 +35,31 @@ namespace Orckestra.Composer.Search.Tests.Repository
             // Arrange
             ProductRequestFactory = new AutoMocker().CreateInstance<ProductRequestFactory>();
             FacetPredicateFactory = MockFacetPredicateFactory().Object;
+            FacetConfigurationContext = new Mock<IFacetConfigurationContext>();
+
 
             OvertureClientMock = MockOvertureClient();
-            _sut = new SearchRepository(OvertureClientMock.Object, ProductRequestFactory, FacetPredicateFactory);
+            _sut = new SearchRepository(OvertureClientMock.Object, ProductRequestFactory, FacetPredicateFactory, FacetConfigurationContext.Object);
 
-            // Keep a record of the original facet group settings list.
-            _oldFacetGroupSettingsList = SearchConfiguration.FacetSettings;
-            SearchConfiguration.FacetSettings = new[]
-            {
-                new FacetSetting("ExpectedName")
+            FacetConfigurationContext
+                .Setup(x => x.GetFacetSettings())
+                .Returns(new List<FacetSetting>
                 {
-                    SortWeight = 99.1,
-                    MaxCollapsedValueCount = 5,
-                    MaxExpendedValueCount = 90
-                },
-                new FacetSetting("WithDependencyName")
-                {
-                    SortWeight = -293.93,
-                    DependsOn = new[]
+                    new FacetSetting("ExpectedName")
                     {
-                        "ExpectedName"
+                        SortWeight = 99.1,
+                        MaxCollapsedValueCount = 5,
+                        MaxExpendedValueCount = 90
+                    },
+                    new FacetSetting("WithDependencyName")
+                    {
+                        SortWeight = -293.93,
+                        DependsOn = new[]
+                        {
+                            "ExpectedName"
+                        }
                     }
-                }
-            };
-        }
-
-        [TearDown]
-        public void TearDown()
-        {
-            // Restore the original facet group settings.
-            SearchConfiguration.FacetSettings = _oldFacetGroupSettingsList;
+                });
         }
 
         [Test]
@@ -72,10 +68,7 @@ namespace Orckestra.Composer.Search.Tests.Repository
             // Arrange
 
             // Act & Assert
-            Assert.Throws<ArgumentNullException>(async () =>
-            {
-                await _sut.SearchProductAsync(null);
-            });
+            Assert.ThrowsAsync<ArgumentNullException>(() => _sut.SearchProductAsync(null));
         }
 
         [Test]
@@ -90,10 +83,7 @@ namespace Orckestra.Composer.Search.Tests.Repository
             };
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(async () =>
-            {
-                await _sut.SearchProductAsync(param);
-            });
+            Assert.ThrowsAsync<ArgumentException>(() => _sut.SearchProductAsync(param));
         }
 
 
@@ -112,10 +102,7 @@ namespace Orckestra.Composer.Search.Tests.Repository
             };
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(async () =>
-            {
-                await _sut.SearchProductAsync(param);
-            });
+            Assert.ThrowsAsync<ArgumentException>(() => _sut.SearchProductAsync(param));
         }
 
         [TestCase("           ")]
@@ -133,14 +120,11 @@ namespace Orckestra.Composer.Search.Tests.Repository
             };
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(async () =>
-            {
-                await _sut.SearchProductAsync(param);
-            });
+            Assert.ThrowsAsync<ArgumentException>(() => _sut.SearchProductAsync(param));
         }
 
         [Test]
-        public async void WHEN_culture_and_keywords_provided_SHOULD_issue_request_properly_configured()
+        public async Task WHEN_culture_and_keywords_provided_SHOULD_issue_request_properly_configured()
         {
             // Arrange
             var param = new SearchCriteria()
@@ -158,7 +142,7 @@ namespace Orckestra.Composer.Search.Tests.Repository
         }
 
         [Test]
-        public async void WHEN_overture_returns_unexpected_facet_SHOULD_remove_facet_from_result()
+        public async Task WHEN_overture_returns_unexpected_facet_SHOULD_remove_facet_from_result()
         {
             // Arrange
             var param = new SearchCriteria()
@@ -177,7 +161,7 @@ namespace Orckestra.Composer.Search.Tests.Repository
         }
 
         [Test]
-        public async void WHEN_request_SHOULD_have_dependency_in_facets()
+        public async Task WHEN_request_SHOULD_have_dependency_in_facets()
         {
             // Arrange
             var param = new SearchCriteria()
@@ -202,7 +186,7 @@ namespace Orckestra.Composer.Search.Tests.Repository
         }
 
         [Test]
-        public async void WHEN_request_has_singlevalue_selectedfacet_SHOULD_remove_facet_from_result()
+        public async Task WHEN_request_has_singlevalue_selectedfacet_SHOULD_remove_facet_from_result()
         {
             // Arrange
             var param = new SearchCriteria()

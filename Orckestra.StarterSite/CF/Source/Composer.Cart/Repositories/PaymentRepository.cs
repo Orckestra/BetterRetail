@@ -8,12 +8,15 @@ using Orckestra.Composer.Providers;
 using Orckestra.Composer.Utils;
 using Orckestra.Overture;
 using Orckestra.Overture.Caching;
+using Orckestra.Overture.Providers;
 using Orckestra.Overture.ServiceModel;
 using Orckestra.Overture.ServiceModel.Customers;
 using Orckestra.Overture.ServiceModel.Orders;
 using Orckestra.Overture.ServiceModel.Requests.Customers;
 using Orckestra.Overture.ServiceModel.Requests.Orders.Shopping;
 using Orckestra.Overture.ServiceModel.Requests.Orders.Shopping.Payments;
+using Orckestra.Overture.ServiceModel.Requests.Providers;
+using Orckestra.Overture.ServiceModel.Providers;
 
 namespace Orckestra.Composer.Cart.Repositories
 {
@@ -132,7 +135,7 @@ namespace Orckestra.Composer.Cart.Repositories
         /// </summary>
         /// <param name="param">Parameters used to initialized the Payment.</param>
         /// <returns>The updated processed cart.</returns>
-        public Task<Overture.ServiceModel.Orders.Cart> InitializePaymentAsync(InitializePaymentParam param)
+        public virtual Task<Overture.ServiceModel.Orders.Cart> InitializePaymentAsync(InitializePaymentParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
             if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("CartName"), nameof(param)); }
@@ -162,7 +165,7 @@ namespace Orckestra.Composer.Cart.Repositories
         /// </summary>
         /// <param name="param">Parameters used to void the payment.</param>
         /// <returns>The updated cart.</returns>
-        public Task<Overture.ServiceModel.Orders.Cart> VoidPaymentAsync(VoidOrRemovePaymentParam param)
+        public virtual Task<Overture.ServiceModel.Orders.Cart> VoidPaymentAsync(VoidOrRemovePaymentParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
             if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("CartName"), nameof(param)); }
@@ -190,7 +193,7 @@ namespace Orckestra.Composer.Cart.Repositories
         /// </summary>
         /// <param name="param">Parameters used to remove the payment.</param>
         /// <returns>The updated cart.</returns>
-        public Task<ProcessedCart> RemovePaymentAsync(VoidOrRemovePaymentParam param)
+        public virtual Task<ProcessedCart> RemovePaymentAsync(VoidOrRemovePaymentParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
             if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("CartName"), nameof(param)); }
@@ -217,7 +220,7 @@ namespace Orckestra.Composer.Cart.Repositories
         /// Remove a payment method from a user profile
         /// </summary>
         /// <param name="param">Parameters used to remove the payment method.</param>
-        public async Task RemovePaymentMethodAsync(RemovePaymentMethodParam param)
+        public virtual async Task RemovePaymentMethodAsync(RemovePaymentMethodParam param)
         {
             if (param == null) throw new ArgumentNullException(nameof(param), "param is required");
             if (param.PaymentMethodId == Guid.Empty) throw new ArgumentException("param.PaymentMethodId is required", nameof(param.PaymentMethodId));
@@ -237,7 +240,7 @@ namespace Orckestra.Composer.Cart.Repositories
             }).ConfigureAwait(false);
         }
 
-        public Task<List<PaymentProfile>> GetCustomerPaymentProfiles(GetCustomerPaymentProfilesParam param)
+        public virtual Task<List<PaymentProfile>> GetCustomerPaymentProfiles(GetCustomerPaymentProfilesParam param)
         {
             if (param == null) { throw new ArgumentNullException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param))); }
             if (param.CustomerId == Guid.Empty) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param.CustomerId))); }
@@ -250,6 +253,85 @@ namespace Orckestra.Composer.Cart.Repositories
             });
         }
 
+        public virtual Task<List<PaymentMethod>> GetCustomerPaymentMethodForProviderAsync(GetCustomerPaymentMethodsForProviderParam param)
+        {
+            if (param == null) { throw new ArgumentNullException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param))); }
+            if (param.CustomerId == Guid.Empty) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param.CustomerId))); }
+            if (string.IsNullOrWhiteSpace(param.ScopeId)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param.ScopeId))); }
+            if (string.IsNullOrWhiteSpace(param.ProviderName)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param.ProviderName))); }
+
+            var getCustomerPaymentMethodsRequest = new GetCustomerPaymentMethodsRequest
+            {
+                CustomerId = param.CustomerId,
+                PaymentProviderName = param.ProviderName,
+                ScopeId = param.ScopeId
+            };
+
+            return OvertureClient.SendAsync(getCustomerPaymentMethodsRequest);
+        }
+        public virtual Task<Payment> GetPaymentAsync(GetPaymentParam param)
+        {
+            if (param == null) { throw new ArgumentNullException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param))); }
+            if (param.CustomerId == Guid.Empty) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param.CustomerId))); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param.Scope))); }
+            if (param.CultureInfo == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param.CultureInfo))); }
+            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param.CartName))); }
+
+            var getPaymentRequest = new GetPaymentRequest
+            {
+                CustomerId = param.CustomerId,
+                CartName = param.CartName,
+                ScopeId = param.Scope,
+                CultureName = param.CultureInfo.Name,
+                Id = param.PaymentId
+            };
+
+            return OvertureClient.SendAsync(getPaymentRequest);
+        }
+
+        /// <summary>
+        /// Obtains the available payment providers for scope.
+        /// </summary>
+        /// <param name="scopeId">Scope used to make the request.</param>
+        /// <returns>List of providers</returns>
+        public virtual async Task<IList<PaymentProviderInfo>> GetPaymentProviders(string scopeId)
+        {
+            if (scopeId == null) { throw new ArgumentNullException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(scopeId))); }
+
+            var cacheKey = BuildPaymentProvidersCacheKey(scopeId);
+
+            var request = new GetPaymentProvidersRequest
+            {
+                ScopeId = scopeId,
+            };
+
+            var paymentProviderInfos = await CacheProvider.GetOrAddAsync(cacheKey, () => OvertureClient.SendAsync(request)).ConfigureAwait(false);
+            return paymentProviderInfos.PaymentProviders;
+        }
+
+
+        /// <summary>
+        /// Obtains the available providers by type for scope.
+        /// </summary>
+        /// <param name="scopeId">Scope used to make the request.</param>
+        /// <param name="providerType">Provider type.</param>
+        /// <returns>List of providers</returns>
+        public virtual async Task<IList<Provider>> GetProviders(string scopeId, ProviderType providerType)
+        {
+            if (scopeId == null) { throw new ArgumentNullException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(scopeId))); }
+
+            var cacheKey = BuildProvidersCacheKey(scopeId, providerType);
+
+            var request = new GetProvidersRequest
+            {
+                ScopeId = scopeId,
+                ProviderType = providerType,
+            };
+
+            var paymentProviderInfos = await CacheProvider.GetOrAddAsync(cacheKey, () => OvertureClient.SendAsync(request)).ConfigureAwait(false);
+            return paymentProviderInfos.Providers;
+        }
+
         /// <summary>
         /// Builds a cache key for a cart operation.
         /// </summary>
@@ -257,7 +339,7 @@ namespace Orckestra.Composer.Cart.Repositories
         /// <param name="cartName">Name of the cart.</param>
         /// <param name="customerId">ID of the customer to which belongs the cart.</param>
         /// <returns></returns>
-        protected CacheKey BuildCartCacheKey(string scope, string cartName, Guid customerId)
+        protected virtual CacheKey BuildCartCacheKey(string scope, string cartName, Guid customerId)
         {
             var cacheKey = new CacheKey(CacheConfigurationCategoryNames.Cart)
             {
@@ -270,8 +352,8 @@ namespace Orckestra.Composer.Cart.Repositories
             return cacheKey;
         }
 
-        protected CacheKey BuildPaymentMethodCacheKey(string scope, string cartName, Guid customerId, string providerName)
-        {            
+        protected virtual CacheKey BuildPaymentMethodCacheKey(string scope, string cartName, Guid customerId, string providerName)
+        {
             var cacheKey = new CacheKey(CacheConfigurationCategoryNames.PaymentMethod)
             {
                 Scope = scope,
@@ -290,7 +372,7 @@ namespace Orckestra.Composer.Cart.Repositories
         /// <param name="customerId"></param>
         /// <param name="cartName"></param>
         /// <returns></returns>
-        protected CacheKey BuildCartPaymentCacheKey(string scope, Guid customerId, string cartName)
+        protected virtual CacheKey BuildCartPaymentCacheKey(string scope, Guid customerId, string cartName)
         {
             var key = new CacheKey(CacheConfigurationCategoryNames.CartPayment)
             {
@@ -300,5 +382,28 @@ namespace Orckestra.Composer.Cart.Repositories
             key.AppendKeyParts(customerId, cartName);
             return key;
         }
+
+        protected virtual CacheKey BuildPaymentProvidersCacheKey(string scope)
+        {
+            var cacheKey = new CacheKey(CacheConfigurationCategoryNames.PaymentProviders)
+            {
+                Scope = scope,
+            };
+
+            return cacheKey;
+        }
+
+        protected virtual CacheKey BuildProvidersCacheKey(string scope, ProviderType providerType)
+        {
+            var cacheKey = new CacheKey(CacheConfigurationCategoryNames.Providers)
+            {
+                Scope = scope,
+            };
+            cacheKey.AppendKeyParts(providerType);
+
+            return cacheKey;
+        }
+
+
     }
 }

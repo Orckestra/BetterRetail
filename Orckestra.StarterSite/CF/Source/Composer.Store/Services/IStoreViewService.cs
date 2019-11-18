@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Orckestra.Composer.Store.Parameters;
 using Orckestra.Composer.Store.ViewModels;
@@ -9,5 +10,6 @@ namespace Orckestra.Composer.Store.Services
     {
         Task<StoreViewModel> GetStoreViewModelAsync(GetStoreParam viewModelParam);
         Task<PageHeaderViewModel> GetPageHeaderViewModelAsync(GetStorePageHeaderViewModelParam param);
+        Task<List<StoreViewModel>> GetStoresForInStorePickupViewModelAsync(GetStoresForInStorePickupViewModelParam param);
     }
 }

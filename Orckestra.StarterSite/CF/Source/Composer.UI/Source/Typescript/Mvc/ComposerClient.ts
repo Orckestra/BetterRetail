@@ -40,7 +40,8 @@ module Orckestra.Composer {
                 method: method,
                 url: url,
                 headers: {
-                    'Accept-Language': this.getPageCulture()
+                    'Accept-Language': this.getPageCulture(),
+                    'WebsiteId': this.getWebsiteId()
                 }
             };
 
@@ -55,6 +56,16 @@ module Orckestra.Composer {
             }
 
             return culture;
+        }
+
+        private static getWebsiteId(): string {
+
+            var websiteId: string = $('html').data('website');
+            if (!websiteId) {
+                throw new Error('No websiteId was found on the <html> element. Please make sure it is included.');
+            }
+
+            return websiteId;
         }
 
         private static onRequestRejected(reason: any): void {
@@ -116,6 +127,21 @@ module Orckestra.Composer {
         private static getUnauthorizedErrorMessage(): string {
 
             return LocalizationProvider.instance().getLocalizedString('General', 'L_ErrorUnauthorized');
+        }
+
+        public static prepareBloodhound(query, settings): any {
+            settings.type = 'POST';
+            settings.contentType = 'application/json; charset=UTF-8';
+
+            settings.headers = {
+                'Accept-Language': ComposerClient.getPageCulture(),
+                'WebsiteId': ComposerClient.getWebsiteId()
+            };
+
+            var data = {'Query': query};
+            settings.data = JSON.stringify(data);
+
+            return settings;
         }
     }
 }

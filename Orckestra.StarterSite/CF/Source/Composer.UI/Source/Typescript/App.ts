@@ -19,6 +19,7 @@
 ///<reference path='../../../Composer.Product.UI/ProductDetail/Source/TypeScript/ProductDetailController.ts' />
 ///<reference path='../../../Composer.Product.UI/RelatedProducts/Source/TypeScript/RelatedProductsController.ts' />
 ///<reference path='../../../Composer.Product.UI/ProductSpecification/Source/TypeScript/ProductSpecificationsController.ts' />
+///<reference path='../../../Composer.Product.UI/ProductDetail/Source/TypeScript/ProductZoomController.ts' />
 ///<reference path='../../../Composer.Cart.UI/OrderSummary/Source/TypeScript/OrderSummaryController.ts' />
 ///<reference path='../../../Composer.Cart.UI/CheckoutGuestCustomerInfo/Source/TypeScript/GuestCustomerInfoCheckoutController.ts' />
 ///<reference path='../../../Composer.Cart.UI/CheckoutShippingAddress/Source/TypeScript/ShippingAddressCheckoutController.ts' />
@@ -56,6 +57,10 @@
 ///<reference path='../../../Composer.Store.UI/StoreLocator/Source/TypeScript/StoreDetailsController.ts' />
 ///<reference path='../../../Composer.Store.UI/StoreDirectory/Source/TypeScript/StoresDirectoryController.ts' />
 ///<reference path='../../../Composer.Store.UI/StoreInventory/Source/TypeScript/StoreInventoryController.ts' />
+///<reference path='../../../Composer.MyAccount.UI/RecurringSchedule/Source/TypeScript/MyRecurringScheduleController.ts' />
+///<reference path='../../../Composer.MyAccount.UI/RecurringSchedule/Source/TypeScript/MyRecurringScheduleDetailsController.ts' />
+///<reference path='../../../Composer.MyAccount.UI/RecurringCart/Source/TypeScript/MyRecurringCartsController.ts' />
+///<reference path='../../../Composer.MyAccount.UI/RecurringCart/Source/TypeScript/MyRecurringCartDetailsController.ts' />
 
 (() => {
     'use strict';
@@ -65,7 +70,7 @@
     // that will look like this.
 
     $(document).ready(() => {
-        var composerConfiguration: Orckestra.Composer.IComposerConfiguration = {
+        let composerConfiguration: Orckestra.Composer.IComposerConfiguration = {
             plugins: [
                 'AntiIFrameClickJacking',
                 'ComposerValidationLocalization',
@@ -80,6 +85,7 @@
                 { name: 'General.ErrorController', controller: Orckestra.Composer.ErrorController },
                 { name: 'General.SearchBox', controller: Orckestra.Composer.SearchBoxController },
                 { name: 'General.LanguageSwitch', controller: Orckestra.Composer.LanguageSwitchController },
+                { name: 'General.AutocompleteSearchBox', controller: Orckestra.Composer.AutocompleteSearchBoxController },
 
                 { name: 'Cart.FullCart', controller: Orckestra.Composer.FullCartController },
                 { name: 'Cart.OrderSummary', controller: Orckestra.Composer.OrderSummaryController },
@@ -126,6 +132,10 @@
                 { name: 'MyAccount.MyWishList', controller: Orckestra.Composer.MyWishListController },
                 { name: 'MyAccount.SharedWishList', controller: Orckestra.Composer.SharedWishListController },
                 { name: 'MyAccount.WishListInHeader', controller: Orckestra.Composer.WishListInHeaderController },
+                { name: 'MyAccount.MyRecurringSchedule', controller: Orckestra.Composer.MyRecurringScheduleController },
+                { name: 'MyAccount.MyRecurringScheduleDetails', controller: Orckestra.Composer.MyRecurringScheduleDetailsController },
+                { name: 'MyAccount.MyRecurringCarts', controller: Orckestra.Composer.MyRecurringCartsController },
+                { name: 'MyAccount.MyRecurringCartDetails', controller: Orckestra.Composer.MyRecurringCartDetailsController },
 
                 { name: 'Orders.CurrentOrders', controller: Orckestra.Composer.CurrentOrdersController },
                 { name: 'Orders.PastOrders', controller: Orckestra.Composer.PastOrdersController },

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Globalization;
 using System.Web.Security;
 using FizzWare.NBuilder.Generators;
@@ -31,7 +32,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
         }
 
         [Test]
-        public async void WHEN_requesting_to_log_in_valid_user_response_SHOULD_be_success()
+        public async Task WHEN_requesting_to_log_in_valid_user_response_SHOULD_be_success()
         {
             //Arrange
             var expectedCustomer = MockCustomerFactory.CreateRandom();
@@ -77,7 +78,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
         }
 
         [Test]
-        public async void WHEN_requesting_to_log_in_valid_user_response_SHOULD_have_correct_user_id()
+        public async Task WHEN_requesting_to_log_in_valid_user_response_SHOULD_have_correct_user_id()
         {
             //Arrange
             var expectedCustomer = MockCustomerFactory.CreateRandom();
@@ -123,7 +124,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
         }
 
         [Test]
-        public async void WHEN_requesting_to_log_in_valid_user_response_but_customer_id_is_null_THEN_response_SHOULD_be_unsuccessfull()
+        public async Task WHEN_requesting_to_log_in_valid_user_response_but_customer_id_is_null_THEN_response_SHOULD_be_unsuccessfull()
         {
             //Arrange
             var sut = _container.CreateInstance<MembershipViewService>();
@@ -164,7 +165,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
         }
 
         [Test]
-        public async void WHEN_requesting_to_log_in_valid_user_response_but_user_is_null_THEN_response_SHOULD_be_unsuccessfull()
+        public async Task WHEN_requesting_to_log_in_valid_user_response_but_user_is_null_THEN_response_SHOULD_be_unsuccessfull()
         {
             //Arrange
             var sut = _container.CreateInstance<MembershipViewService>();
@@ -192,7 +193,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
         }
 
         [Test]
-        public async void WHEN_requesting_to_log_in_valid_user_response_but_status_is_Inactive_THEN_response_SHOULD_be_unsuccessfull()
+        public async Task WHEN_requesting_to_log_in_valid_user_response_but_status_is_Inactive_THEN_response_SHOULD_be_unsuccessfull()
         {
             //Arrange
             var expectedCustomer = MockCustomerFactory.CreateRandom();
@@ -238,7 +239,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
         }
 
         [Test]
-        public async void WHEN_requesting_to_log_in_valid_user_response_but_status_is_RequiresApproval_THEN_response_SHOULD_be_unsuccessfull()
+        public async Task WHEN_requesting_to_log_in_valid_user_response_but_status_is_RequiresApproval_THEN_response_SHOULD_be_unsuccessfull()
         {
             //Arrange
             var expectedCustomer = MockCustomerFactory.CreateRandom(AccountStatus.RequiresApproval);
@@ -284,7 +285,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
         }
 
         [Test]
-        public async void WHEN_requesting_to_log_in_invalid_user_response_SHOULD_be_false()
+        public async Task WHEN_requesting_to_log_in_invalid_user_response_SHOULD_be_false()
         {
             //Arrange
             var sut = _container.CreateInstance<MembershipViewService>();
@@ -315,10 +316,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             sut.Membership = _container.Get<IMembershipProxy>();
 
             // Act
-            var exception = Assert.Throws<ArgumentNullException>(async () =>
-            {
-                await sut.LoginAsync(null);
-            });
+            var exception = Assert.ThrowsAsync<ArgumentNullException>(() => sut.LoginAsync(null));
 
             //Assert
             exception.Message.Should().Contain("loginParam");
@@ -331,18 +329,16 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             //Arrange
             var sut = _container.CreateInstance<MembershipViewService>();
             sut.Membership = _container.Get<IMembershipProxy>();
+            var param = new LoginParam()
+            {
+                CultureInfo = cultureInfo,
+                Password = GetRandom.String(15),
+                Username = GetRandom.Email(),
+                Scope = GetRandom.String(32)
+            };
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await sut.LoginAsync(new LoginParam()
-                {
-                    CultureInfo = cultureInfo,
-                    Password = GetRandom.String(15),
-                    Username = GetRandom.Email(),
-                    Scope = GetRandom.String(32)
-                });
-            });
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => sut.LoginAsync(param));
 
             //Assert
             exception.Message.Should().Contain("CultureInfo");
@@ -357,18 +353,16 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             //Arrange
             var sut = _container.CreateInstance<MembershipViewService>();
             sut.Membership = _container.Get<IMembershipProxy>();
+            var param = new LoginParam()
+            {
+                CultureInfo = TestingExtensions.GetRandomCulture(),
+                Password = password,
+                Username = GetRandom.Email(),
+                Scope = GetRandom.String(32)
+            };
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await sut.LoginAsync(new LoginParam()
-                {
-                    CultureInfo = TestingExtensions.GetRandomCulture(),
-                    Password = password,
-                    Username = GetRandom.Email(),
-                    Scope = GetRandom.String(32)
-                });
-            });
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => sut.LoginAsync(param));
 
             //Assert
             exception.Message.Should().Contain("loginParam.Password");
@@ -383,18 +377,16 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             //Arrange
             var sut = _container.CreateInstance<MembershipViewService>();
             sut.Membership = _container.Get<IMembershipProxy>();
+            var param = new LoginParam()
+            {
+                CultureInfo = TestingExtensions.GetRandomCulture(),
+                Password = GetRandom.String(15),
+                Username = username,
+                Scope = GetRandom.String(32)
+            };
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await sut.LoginAsync(new LoginParam()
-                {
-                    CultureInfo = TestingExtensions.GetRandomCulture(),
-                    Password = GetRandom.String(15),
-                    Username = username,
-                    Scope = GetRandom.String(32)
-                });
-            });
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => sut.LoginAsync(param));
 
             //Assert
             exception.Message.Should().Contain("loginParam.Username");
@@ -409,18 +401,16 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             //Arrange
             var sut = _container.CreateInstance<MembershipViewService>();
             sut.Membership = _container.Get<IMembershipProxy>();
+            var param = new LoginParam()
+            {
+                CultureInfo = TestingExtensions.GetRandomCulture(),
+                Password = GetRandom.String(15),
+                Username = GetRandom.Email(),
+                Scope = scope
+            };
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await sut.LoginAsync(new LoginParam()
-                {
-                    CultureInfo = TestingExtensions.GetRandomCulture(),
-                    Password = GetRandom.String(15),
-                    Username = GetRandom.Email(),
-                    Scope = scope
-                });
-            });
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => sut.LoginAsync(param));
 
             //Assert
             exception.Message.Should().Contain("loginParam.Scope");

@@ -1,30 +1,30 @@
-﻿using Composite.AspNet.MvcFunctions;
+﻿using Autofac.Integration.Mvc;
+using Composite.AspNet.MvcFunctions;
 using Composite.Core.Application;
 using Composite.Core.Xml;
+using Composite.Data;
 using Composite.Data.DynamicTypes;
 using Composite.Functions;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Orckestra.Composer.CompositeC1.DataTypes;
-using Orckestra.Composer.CompositeC1.DataTypes.Navigation;
 using Orckestra.Composer.CompositeC1.Hangfire;
 using Orckestra.Composer.CompositeC1.Mvc.Controllers;
 using Orckestra.Composer.CompositeC1.Pages;
-using Orckestra.Composer.CompositeC1.Sitemap;
 using Orckestra.Composer.HttpModules;
 using Orckestra.Composer.Logging;
 using Orckestra.Composer.Search;
-using System;
-using System.Web;
-using System.Web.Hosting;
+using Orckestra.ExperienceManagement.Configuration.DataTypes;
+using System.Web.Http;
 using System.Web.Mvc;
-using Composite.Data;
-using ExperienceManagement.DataTypes;
+using System.Web.Routing;
 
 namespace Orckestra.Composer.CompositeC1.Mvc
 {
     [ApplicationStartup(AbortStartupOnException = true)]
     public static class StartupHandler
     {
+        private static IComposerHost _host;
         public static void Start()
         {
             DynamicModuleUtility.RegisterModule(typeof(SecurityModule));
@@ -33,16 +33,18 @@ namespace Orckestra.Composer.CompositeC1.Mvc
 
         public static void OnBeforeInitialize()
         {
-
+         
         }
 
         public static void OnInitialized()
         {
+            GlobalConfiguration.Configure(WebApiConfig.Register);
+            RouteConfig.RegisterRoutes(RouteTable.Routes);
             LogProvider.SetCurrentLogProvider(C1LogProvider.Instance);
 
             // Needed by C1, do not remove!
-            var host = new ComposerHost();
-            host.Init();
+          
+            _host.Init();
 
             var log = LogProvider.GetCurrentClassLogger();
 
@@ -50,33 +52,12 @@ namespace Orckestra.Composer.CompositeC1.Mvc
 
             DynamicTypeManager.EnsureCreateStore(typeof(ComposerPage));
             DynamicTypeManager.EnsureCreateStore(typeof(CategoryPage));
-            DynamicTypeManager.EnsureCreateStore(typeof(ComposerImage));
-            DynamicTypeManager.EnsureCreateStore(typeof(CheckoutStepInfoPage));
-            DynamicTypeManager.EnsureCreateStore(typeof(UrlTarget));
-            DynamicTypeManager.EnsureCreateStore(typeof(CssStyle));
-            DynamicTypeManager.EnsureCreateStore(typeof(MainMenu));
-            DynamicTypeManager.EnsureCreateStore(typeof(StickyHeader));
-            DynamicTypeManager.EnsureCreateStore(typeof(HeaderOptionalLink));
-            DynamicTypeManager.EnsureCreateStore(typeof(NavigationImage));
-            DynamicTypeManager.EnsureCreateStore(typeof(Footer));
-            DynamicTypeManager.EnsureCreateStore(typeof(FooterOptionalLink));
 
             var functions = MvcFunctionRegistry.NewFunctionCollection();
             RegisterFunctions(functions);
             RegisterFunctionRoutes(functions);
 
             log.Info("Application Started");
-
-            if (HangfireHost.IsEnabled)
-            {
-                // Hangfire host and sitemap recurring job
-                HangfireHost.Current.Init(new SitemapAutofacModule());
-                HangfireHost.Current.RegisterRecurringJobIfScheduleIsDefined();
-            }
-            else
-            {
-                log.Info("Hangfire automatic start explicitly disabled via app setting - hangfire will not run.");
-            }
         }
 
         private static void RegisterFunctions(FunctionCollection functions)
@@ -86,19 +67,12 @@ namespace Orckestra.Composer.CompositeC1.Mvc
             functions.RegisterAction<HeaderController>("GeneralErrors", "Composer.Header.GeneralErrors");
             functions.RegisterAction<HeaderController>("LanguageSwitch", "Composer.Header.LanguageSwitch");
             functions.RegisterAction<HeaderController>("Breadcrumb", "Composer.General.Breadcrumb");
-            functions.RegisterAction<HeaderController>("HomeLogo", "Composer.Header.HomeLogo");
-            functions.RegisterAction<HeaderController>("MainMenu", "Composer.Header.MainMenu");
-            functions.RegisterAction<HeaderController>("StickyLinks", "Composer.Header.StickyLinks");
-            functions.RegisterAction<HeaderController>("OptionalLinks", "Composer.Header.OptionalLinks");
             functions.RegisterAction<HeaderController>("PageHeader", "Composer.Header.PageHeader");
 
-            functions.RegisterAction<FooterController>("OptionalLinks", "Composer.Footer.OptionalLinks");
             functions.RegisterAction<FooterController>("SocialLinks", "Composer.Footer.SocialLinks");
             functions.RegisterAction<FooterController>("Copyright", "Composer.Footer.Copyright");
-            functions.RegisterAction<FooterController>("MainFooter", "Composer.Footer.MainFooter");
 
             functions.RegisterAction<SearchController>("PageHeader", "Composer.Search.PageHeader");
-            functions.RegisterAction<SearchController>("SearchBox", "Composer.SearchBox");
             functions.RegisterAction<SearchController>("Index", "Composer.Search.Index");
             functions.RegisterAction<SearchController>("SearchFacets", "Composer.Search.Facets");
             functions.RegisterAction<SearchController>("SearchSummary", "Composer.Search.Summary");
@@ -113,6 +87,7 @@ namespace Orckestra.Composer.CompositeC1.Mvc
             functions.RegisterAction<BrowsingCategoriesController>("SelectedSearchFacets", "Composer.BrowsingCategories.SelectedFacets");
             functions.RegisterAction<BrowsingCategoriesController>("ChildCategories", "Composer.BrowsingCategories.ChildCategories");
 
+            functions.RegisterAction<ProductController>("ProductSEO", "Composer.Product.SEO");
             functions.RegisterAction<ProductController>("PageHeader", "Composer.Product.PageHeader");
             functions.RegisterAction<ProductController>("LanguageSwitch", "Composer.Product.LanguageSwitch");
             functions.RegisterAction<ProductController>("ProductSummary", "Composer.Product.Summary");
@@ -120,12 +95,12 @@ namespace Orckestra.Composer.CompositeC1.Mvc
             functions.RegisterAction<ProductController>("ProductSpecifications", "Composer.Product.Specifications");
             functions.RegisterAction<ProductController>("Breadcrumb", "Composer.Product.Breadcrumb");
             functions.RegisterAction<ProductController>("RelatedProducts", "Composer.Product.RelatedProducts", "Displays products/variants related to the product displayed on the current product/variant details page.  First products which are related via merchandising relationship will be displayed and if none are available then displays product in the same default category")
-                .AddParameter("merchandiseTypes", 
+                .AddParameter("merchandiseTypes",
                     typeof(string),
                     label: "Products Merchandise Relationship Types to include",
                     helpText: "Specify the Merchandise Types ")
                 .AddParameter(
-                    "headingText", 
+                    "headingText",
                     typeof(string),
                     defaultValueProvider: new ConstantValueProvider("You may also like"),
                     label: "Heading",
@@ -138,7 +113,7 @@ namespace Orckestra.Composer.CompositeC1.Mvc
                     helpText: "Specify if this block should display products in the same default category if no products are displayed based on specified relationship types.")
                 .AddParameter(
                     "maxItems",
-                    typeof(int), 
+                    typeof(int),
                     defaultValueProvider: new ConstantValueProvider(5),
                     label: "Number of maximum displayed products/variants",
                     helpText: "Specify the number of products/items displayed in this block. The maximum should be 15.")
@@ -210,6 +185,10 @@ namespace Orckestra.Composer.CompositeC1.Mvc
             functions.RegisterAction<MyAccountController>("OrderDetails", "Composer.MyAccount.OrderDetails");
             functions.RegisterAction<MyAccountController>("WishList", "Composer.MyAccount.WishList")
                 .AddParameter("emptyWishListContent", typeof(XhtmlDocument), true, label: "Empty Wish List Content", helpText: "That content will be shown when Wish List is Empty");
+            functions.RegisterAction<MyAccountController>("RecurringSchedule", "Composer.MyAccount.RecurringSchedule");
+            functions.RegisterAction<MyAccountController>("RecurringScheduleDetails", "Composer.MyAccount.RecurringScheduleDetails");
+            functions.RegisterAction<MyAccountController>("UpcomingOrders", "Composer.MyAccount.UpcomingOrders");
+            functions.RegisterAction<MyAccountController>("RecurringCartDetails", "Composer.MyAccount.RecurringCartDetails");
 
             functions.RegisterAction<WishListController>("WishListInHeader", "Composer.WishList.WishListInHeader");
             functions.RegisterAction<WishListController>("SharedWishList", "Composer.WishList.Shared")
@@ -247,5 +226,16 @@ namespace Orckestra.Composer.CompositeC1.Mvc
         {
             SearchConfiguration.ShowAllPages = true;
         }
+
+        public static void ConfigureServices(IServiceCollection collection)
+        {
+            _host = new ComposerHost();
+            _host.LoadPlugins();
+            foreach(var type in _host.RegisteredInterfaces)
+            {
+                collection.AddTransient(type, provider => AutofacDependencyResolver.Current.GetService(type));
+            }
+        }
+
     }
 }

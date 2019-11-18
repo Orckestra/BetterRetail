@@ -38,14 +38,13 @@
     <file src="App_Readme/*" target="content\App_Readme\" />
     <file src="tools\Install.ps1" target="tools\Install.ps1" />
     <file src="..\UI.Package\**\*" target="UI.Package\" />
-    <file src="..\Composer\bin\Release\Orckestra.Composer.dll" target="lib\net452" />
-	<file src="..\Composer.Cart\bin\Release\Orckestra.Composer.Cart.dll" target="lib\net452" />
-	<file src="..\Composer.MyAccount\bin\Release\Orckestra.Composer.MyAccount.dll" target="lib\net452" />
-	<file src="..\Composer.Product\bin\Release\Orckestra.Composer.Product.dll" target="lib\net452" />
-	<file src="..\Composer.Search\bin\Release\Orckestra.Composer.Search.dll" target="lib\net452" />
-	<file src="..\Composer.Sitemap\bin\Release\Orckestra.Composer.Sitemap.dll" target="lib\net452" />
-	<file src="..\Composer.Store\bin\Release\Orckestra.Composer.Store.dll" target="lib\net452" />
-	<file src="..\Composer.Store\bin\Release\Orckestra.Composer.Store.dll" target="lib\net452" />
-	<file src="..\Orckestra.Composer.SearchQuery\bin\Release\Orckestra.Composer.SearchQuery.dll" target="lib\net452" />				
+    <file src="..\Composer\bin\Release\Orckestra.Composer.dll" target="lib\net461" />
+	<file src="..\Composer.Cart\bin\Release\Orckestra.Composer.Cart.dll" target="lib\net461" />
+	<file src="..\Composer.MyAccount\bin\Release\Orckestra.Composer.MyAccount.dll" target="lib\net461" />
+	<file src="..\Composer.Product\bin\Release\Orckestra.Composer.Product.dll" target="lib\net461" />
+	<file src="..\Composer.Search\bin\Release\Orckestra.Composer.Search.dll" target="lib\net461" />
+	<file src="..\Composer.Store\bin\Release\Orckestra.Composer.Store.dll" target="lib\net461" />
+	<file src="..\Composer.Store\bin\Release\Orckestra.Composer.Store.dll" target="lib\net461" />
+	<file src="..\Orckestra.Composer.SearchQuery\bin\Release\Orckestra.Composer.SearchQuery.dll" target="lib\net461" />				
   </files>
 </package>

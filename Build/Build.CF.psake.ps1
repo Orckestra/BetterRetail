@@ -1,3 +1,5 @@
+$VisualStudioVersion                      = '2019'
+
 Task CF -depends CF_RestoreNugetPackages,
                  CF_BuildAndPackage,
                  CF_PackageNuget
@@ -6,7 +8,7 @@ Task CFDev -depends CF_CompileBackend,
 					CF_PackageNuget
 
 Task CF_RestoreNugetPackages {
-    Get-AllSolutions -RootFolder $Build.CF.RootPath -ErrorAction SilentlyContinue | Invoke-NugetRestore | Write-Verbose
+    Get-AllSolutions -RootFolder $Build.CF.RootPath -ErrorAction SilentlyContinue | Invoke-NugetRestore -VisualStudioVersion $VisualStudioVersion | Write-Verbose
 }
 
 Task CF_BuildAndPackage -depends CF_CompileFrontend,
@@ -49,15 +51,15 @@ Task CF_CompileFrontend {
 
 		write-verbose "Install local node deps..."
 		
-		write-verbose "npm prune..."
-		npm prune
+		# write-verbose "npm prune..."
+		# npm prune
 		write-verbose "npm install..."
 		
 		$npmLogsPath = (Join-Path $Build.CentralLogsFolder 'CF_npmLogs.txt')
 
 		Exec {
 			$ErrorActionPreference = 'Continue'
-			npm install --msvs_version=2015 *> $npmLogsPath
+			npm install --msvs_version=2019 *> $npmLogsPath
 			$LASTEXITCODE = 0
 		}
 		
@@ -94,10 +96,13 @@ Task CF_UnitTestsFrontend {
 }
 
 Task CF_CompileBackend {
+	Write-Host 'CF_CompileBackend Task, VS version:'
+	Write-Host $VisualStudioVersion
     Invoke-Msbuild -Project (Join-Path $Build.CF.SourcePath "Composer.sln") `
 	 -Configuration $Configuration `
 	 -LogsDirectory $Build.CentralLogsFolder `
-     -MsbuildVerbosity $MsbuildVerbosity
+	 -VisualStudioVersion $VisualStudioVersion `
+	 -MsbuildVerbosity $MsbuildVerbosity
  }
 
 Task CF_UnitTestBackend {
@@ -106,7 +111,7 @@ Task CF_UnitTestBackend {
 
 	$ErrorActionPreference = "Stop"
 
-	Invoke-NUnit -FilePathPatternTestDlls $TestDllPattern -FilePathXmlReport `"/xml=$XmlReportName`" -FullFilePathNUnitExe $Build.NUnitExe
+	Invoke-NUnit -FilePathPatternTestDlls $TestDllPattern -FilePathXmlReport `"/output:$XmlReportName`" -FullFilePathNUnitExe $Build.NUnitExe
 }
 
 

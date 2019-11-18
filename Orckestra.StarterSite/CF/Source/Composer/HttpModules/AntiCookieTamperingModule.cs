@@ -6,6 +6,7 @@ using System.Web.Security;
 using Orckestra.Composer.Services.Cookie;
 using Orckestra.Composer.Services;
 using System.Web.Mvc;
+using Autofac.Integration.Mvc;
 
 namespace Orckestra.Composer.HttpModules
 {
@@ -53,7 +54,7 @@ namespace Orckestra.Composer.HttpModules
 
         private bool ShouldHandleRequest(HttpContextBase httpContext)
         {
-            var excluder = ComposerHost.Current.TryResolve<IAntiCookieTamperingExcluder>();
+            var excluder = (IAntiCookieTamperingExcluder)AutofacDependencyResolver.Current.GetService(typeof(IAntiCookieTamperingExcluder));
 
             if (excluder != null)
             {

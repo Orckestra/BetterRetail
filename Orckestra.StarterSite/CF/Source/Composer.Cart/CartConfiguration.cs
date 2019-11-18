@@ -1,6 +1,8 @@
 ﻿using Orckestra.Composer.Cart.Providers.Payment;
 using Orckestra.Composer.Cart.Providers.ShippingTracking;
 using Orckestra.Composer.Providers;
+using Orckestra.Overture.ServiceModel.Orders;
+using System.Collections.Generic;
 
 namespace Orckestra.Composer.Cart
 {
@@ -18,6 +20,11 @@ namespace Orckestra.Composer.Cart
         public static string ShoppingCartName { get; set; } = "Default";
 
         /// <summary>
+        ///     Get/Set the RecurringOrder CartName to use for storing a RecurringOrder Cart in Overture
+        /// </summary>
+        public static string RecurringOrderCartType { get; set; } = "RecurringOrderCart";
+
+        /// <summary>
         ///     Get/Set the Wishlist CartName to use for storing a Wishlist Cart in Overture
         /// </summary>
         public static string WishlistCartName { get; set; } = "Wishlist";
@@ -25,11 +32,6 @@ namespace Orckestra.Composer.Cart
         public static string WishListWorkflowToExecute { get; set; } = "DefaultCartWishlistWorkflow";
 
         public static bool WishListExecuteWorkflow { get; set; } = true;
-
-        /// <summary>
-        ///     Get/Set the ImageSize for dislaying thumbnails
-        /// </summary>
-        public static string ThumbnailImageSize { get; set; } = "M";
 
         /// <summary>
         /// Type registry for the Payment Providers.
@@ -45,5 +47,14 @@ namespace Orckestra.Composer.Cart
         ///     Get/Set the cart propertyBag key name for the last completed checkout step.
         /// </summary>
         public static string CartPropertyBagLastCheckoutStep { get; set; } = "LastCheckoutStep";
+
+        /// <summary>
+        ///     Get/Set the supported payment method types when doing a checkout with recurring order line items.
+        /// </summary>
+        public static IEnumerable<PaymentMethodType> SupportedRecurringOrderPaymentMethodTypes = new List<PaymentMethodType>
+        {
+            PaymentMethodType.CreditCard,
+            PaymentMethodType.SavedCreditCard
+        };
     }
 }

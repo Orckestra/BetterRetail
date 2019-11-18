@@ -73,18 +73,16 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             //Arrange
             _container.Use(OvertureClientFactory.Create());
             var cartRepository = _container.CreateInstance<CartRepository>();
+            var param = new GetCartsByCustomerIdParam
+            {
+                Scope = scope,
+                CultureInfo = TestingExtensions.GetRandomCulture(),
+                CustomerId = GetRandom.Guid(),
+                IncludeChildScopes = GetRandom.Boolean()
+            };
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await cartRepository.GetCartsByCustomerIdAsync(new GetCartsByCustomerIdParam
-                {
-                    Scope              = scope,
-                    CultureInfo        = TestingExtensions.GetRandomCulture(),
-                    CustomerId         = GetRandom.Guid(),
-                    IncludeChildScopes = GetRandom.Boolean()
-                });
-            });
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => cartRepository.GetCartsByCustomerIdAsync(param));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");
@@ -97,18 +95,16 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             //Arrange
             _container.Use(OvertureClientFactory.Create());
             var cartRepository = _container.CreateInstance<CartRepository>();
+            var param = new GetCartsByCustomerIdParam
+            {
+                Scope = GetRandom.String(32),
+                CultureInfo = null,
+                CustomerId = GetRandom.Guid(),
+                IncludeChildScopes = GetRandom.Boolean()
+            };
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await cartRepository.GetCartsByCustomerIdAsync(new GetCartsByCustomerIdParam
-                {
-                    Scope              = GetRandom.String(32),
-                    CultureInfo        = null,
-                    CustomerId         = GetRandom.Guid(),
-                    IncludeChildScopes = GetRandom.Boolean()
-                });
-            });
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => cartRepository.GetCartsByCustomerIdAsync(param));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");
@@ -121,18 +117,16 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             //Arrange
             _container.Use(OvertureClientFactory.Create());
             var cartRepository = _container.CreateInstance<CartRepository>();
+            var param = new GetCartsByCustomerIdParam
+            {
+                Scope = GetRandom.String(32),
+                CultureInfo = TestingExtensions.GetRandomCulture(),
+                CustomerId = Guid.Empty,
+                IncludeChildScopes = GetRandom.Boolean()
+            };
 
             // Act
-            var exception = Assert.Throws<ArgumentException>(async () =>
-            {
-                await cartRepository.GetCartsByCustomerIdAsync(new GetCartsByCustomerIdParam
-                {
-                    Scope              = GetRandom.String(32),
-                    CultureInfo        = TestingExtensions.GetRandomCulture(),
-                    CustomerId         = Guid.Empty,
-                    IncludeChildScopes = GetRandom.Boolean()
-                });
-            });
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => cartRepository.GetCartsByCustomerIdAsync(param));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");
@@ -147,10 +141,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var cartRepository = _container.CreateInstance<CartRepository>();
 
             // Act
-            var exception = Assert.Throws<ArgumentNullException>(async () =>
-            {
-                await cartRepository.GetCartsByCustomerIdAsync(null);
-            });
+            var exception = Assert.ThrowsAsync<ArgumentNullException>(() => cartRepository.GetCartsByCustomerIdAsync(null));
 
             //Assert
             exception.ParamName.Should().BeSameAs("param");

@@ -22,13 +22,20 @@ module Orckestra.Composer {
 
             this.currentPage = this.getCurrentPage();
 
+            let pageDisplayName;
+            if (!this.currentPage || _.isUndefined(this.currentPage) || this.currentPage === null) {
+                pageDisplayName = '';
+            } else {
+                pageDisplayName = this.currentPage.DisplayName;
+            }
+
             this.eventHub.publish('searchResultRendered', {
                 data: {
                     ProductSearchResults: this.context.viewModel.SearchResults,
                     Keywords: this.context.viewModel.Keywords,
                     TotalCount: this.context.viewModel.TotalCount,
                     ListName: this.context.viewModel.ListName,
-                    PageNumber: this.currentPage.DisplayName,
+                    PageNumber: pageDisplayName,
                     MaxItemsPerPage: this.context.viewModel.MaxItemsPerPage
                 }
             }
@@ -49,6 +56,7 @@ module Orckestra.Composer {
             //Do not use .data since it may parse the id as a number.
             var productId: string = productContext.attr('data-product-id');
             var variantId: string = productContext.attr('data-product-variant-id');
+            var recurringOrderProgramName: string = productContext.attr('data-recurring-order-program-name');
 
             var product = _.find(this.context.viewModel.SearchResults, function (product: any) {
                 if (_.isEmpty(variantId)) {
@@ -74,7 +82,7 @@ module Orckestra.Composer {
                 var productData: any = this.getProductDataForAnalytics(productId, price);
                 this.eventHub.publish('lineItemAdding', { data: productData });
 
-                this.cartService.addLineItem(productId, '' + price)
+                this.cartService.addLineItem(productId, '' + price, null, 1, null, recurringOrderProgramName)
                     .then((data: any) => {
                         ErrorHandler.instance().removeErrors();
                         return data;

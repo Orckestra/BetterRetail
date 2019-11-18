@@ -16,10 +16,6 @@ namespace Orckestra.Composer.CompositeC1.Mvc
             host.RegisterApiControllers(GetType().Assembly);
             host.RegisterExceptionFiltersForApiControllers(typeof(AggregatedComposerExceptionFilter), typeof(ComposerExceptionFilter));
             host.MetadataRegistry.LoadViewModelMetadataInAssemblyOf(GetType().Assembly);
-
-            GlobalConfiguration.Configure(WebApiConfig.Register);
-            RouteConfig.RegisterRoutes(RouteTable.Routes);
-
             RegisterPaymentProviders();
         }
 

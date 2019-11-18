@@ -28,7 +28,7 @@
                 <span data-qa="checkout-billing-address-firstname">{{Payment.BillingAddress.FirstName}}</span>
                 <span data-qa="checkout-billing-address-lastname">{{Payment.BillingAddress.LastName}}</span><br />
                 <span data-qa="checkout-billing-address-line1">{{Payment.BillingAddress.Line1}}</span><br />
-                {{#if ShippingAddress.Line2}}
+                {{#if Payment.BillingAddress.Line2}}
                     <span data-qa="checkout-billing-address-line2">{{Payment.BillingAddress.Line2}}</span><br />
                 {{/if}}
                 <span data-qa="checkout-billing-address-city">{{Payment.BillingAddress.City}}</span>,

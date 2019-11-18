@@ -1,17 +1,20 @@
+using Orckestra.Composer.Repositories;
+using Orckestra.Composer.Utils;
+using Orckestra.ExperienceManagement.Configuration;
+using Orckestra.ExperienceManagement.Configuration.Settings;
+using Orckestra.Overture.ServiceModel.Products;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using Orckestra.Composer.Configuration;
-using Orckestra.Composer.Utils;
 
 namespace Orckestra.Composer.Providers.Dam
 {
     public class ConventionBasedDamProvider : IDamProvider
     {
-        private readonly CdnDamProviderConfigurationElement _damProviderConfigurationSection;
+        protected ICdnDamProviderSettings CdnDamProviderSettings { get; private set; }
+        protected IProductMediaSettingsRepository ProductMediaSettingsRepository { get; private set; }
 
         private const string ProductIdFieldName = "{productId}";
         private const string VariantIdFieldName = "{variantId}";
@@ -19,46 +22,33 @@ namespace Orckestra.Composer.Providers.Dam
         private const string SequenceNumberFieldName = "{sequenceNumber}";
         private const int MainImageSequenceNumber = 0;
 
-        public ConventionBasedDamProvider()
+        public ConventionBasedDamProvider(ISiteConfiguration siteConfiguration, IProductMediaSettingsRepository productMediaSettingsRepository)
         {
-            var configurationSection = ConfigurationManager.GetSection(ComposerConfigurationSection.ConfigurationName) as ComposerConfigurationSection;
-            const string missingConfigurationSectionMessage =
-                "Missing configuration section for {0}. Please make sure the configuration section has been properly defined within the configuration file.";
-
-            if (configurationSection == null)
-            {
-                throw new ConfigurationErrorsException(string.Format(missingConfigurationSectionMessage, ComposerConfigurationSection.ConfigurationName));
-            }
-
-            if (configurationSection.CdnDamProvider == null)
-            {
-                throw new ConfigurationErrorsException(string.Format(missingConfigurationSectionMessage, CdnDamProviderConfigurationElement.ConfigurationName));
-            }
-
-            _damProviderConfigurationSection = configurationSection.CdnDamProvider;
+            CdnDamProviderSettings = siteConfiguration.CdnDamProviderSettings;
+            ProductMediaSettingsRepository = productMediaSettingsRepository;
         }
 
         protected string ServerUrl
         {
-            get { return _damProviderConfigurationSection.ServerUrl; }
+            get { return CdnDamProviderSettings.ServerUrl; }
         }
 
         protected virtual string ImageFolderName
         {
-            get { return _damProviderConfigurationSection.ImageFolderName; }
+            get { return CdnDamProviderSettings.ImageFolderName; }
         }
 
         protected virtual string FallbackImageUrl
         {
-            get { return _damProviderConfigurationSection.FallbackImage; }
+            get { return CdnDamProviderSettings.FallbackImage; }
         }
 
         protected virtual bool IsProductZoomImageEnabled
         {
-            get { return _damProviderConfigurationSection.SupportXLImages; }
+            get { return CdnDamProviderSettings.SupportXLImages; }
         }
 
-        public Task<List<ProductMainImage>> GetProductMainImagesAsync(GetProductMainImagesParam param)
+        public virtual async Task<List<ProductMainImage>> GetProductMainImagesAsync(GetProductMainImagesParam param)
         {
             if (param == null)
             {
@@ -77,18 +67,30 @@ namespace Orckestra.Composer.Providers.Dam
                 throw new ArgumentException("The product id must be specified for each ProductImageRequests object.");
             }
 
-            var result = param.ProductImageRequests.Select(request => new ProductMainImage
+            var _productMediaSettings = await ProductMediaSettingsRepository.GetProductMediaSettings().ConfigureAwait(false);
+
+            var result = param.ProductImageRequests.Select(request =>
             {
-                ImageUrl = GetImageUrl(param.ImageSize, request.ProductId, request.Variant.Id, MainImageSequenceNumber),
+                return request.PropertyBag.ContainsKey("ImageUrl")
+                ? GetProductMainMediaImage(request, _productMediaSettings)
+                : GetProductMainLocalImage(request, param.ImageSize);
+            }).ToList();
+
+            return result;
+        }
+
+        private ProductMainImage GetProductMainLocalImage(ProductImageRequest request, string imageSize)
+        {
+            return new ProductMainImage
+            {
+                ImageUrl = GetImageUrl(imageSize, request.ProductId, request.Variant.Id, MainImageSequenceNumber),
                 ProductId = request.ProductId,
                 VariantId = request.Variant.Id,
                 FallbackImageUrl = GetFallbackImageUrl()
-            }).ToList();
-
-            return Task.FromResult(result);
+            };
         }
 
-        public Task<List<AllProductImages>> GetAllProductImagesAsync(GetAllProductImagesParam param)
+        public virtual async Task<List<AllProductImages>> GetAllProductImagesAsync(GetAllProductImagesParam param)
         {
             if (param == null)
             {
@@ -111,6 +113,16 @@ namespace Orckestra.Composer.Providers.Dam
                 throw new ArgumentException("The product id is required.");
             }
 
+            if ((param.MediaSet?.Count > 0) || (param.VariantMediaSet?.Count > 0) || (param.Variants?.Any(variant => variant.MediaSet?.Count > 0) ?? false))
+            {
+                return await GetAllProductMediaImages(param).ConfigureAwait(false);
+            }
+
+            return GetAllProductLocalImages(param);
+        }
+
+        private List<AllProductImages> GetAllProductLocalImages(GetAllProductImagesParam param)
+        {
             var result = new List<AllProductImages>();
             for (var sequenceNumber = 0; sequenceNumber < ConventionBasedDamProviderConfiguration.MaxThumbnailImages; sequenceNumber++)
             {
@@ -124,11 +136,11 @@ namespace Orckestra.Composer.Providers.Dam
                 }
 
             }
-            return Task.FromResult(result);
+            return result;
         }
 
         private AllProductImages CreateAllProductImages(GetAllProductImagesParam param, string variantId, int sequenceNumber)
-        {            
+        {
             return new AllProductImages
             {
                 ImageUrl = GetImageUrl(param.ImageSize, param.ProductId, variantId, sequenceNumber),
@@ -154,7 +166,7 @@ namespace Orckestra.Composer.Providers.Dam
             if (!string.IsNullOrEmpty(variantId))
             {
                 // Resolve the image path for a variant.
-                imagePath = _damProviderConfigurationSection.VariantImageFilePathPattern
+                imagePath = CdnDamProviderSettings.VariantImageFilePathPattern
                                                       .Replace(ProductIdFieldName, productId)
                                                       .Replace(VariantIdFieldName, variantId)
                                                       .Replace(SequenceNumberFieldName, sequenceNumber.ToString(CultureInfo.InvariantCulture))
@@ -164,7 +176,7 @@ namespace Orckestra.Composer.Providers.Dam
             else
             {
                 // Resolve the image path for a product.
-                imagePath = _damProviderConfigurationSection.ProductImageFilePathPattern
+                imagePath = CdnDamProviderSettings.ProductImageFilePathPattern
                                                       .Replace(ProductIdFieldName, productId)
                                                       .Replace(SequenceNumberFieldName, sequenceNumber.ToString(CultureInfo.InvariantCulture))
                                                       .Replace(ImageSizeFieldName, imageSize);
@@ -176,6 +188,75 @@ namespace Orckestra.Composer.Providers.Dam
         private string GetFormattedImageUrl(string imageFilename)
         {
             return string.Format("{0}/{1}/{2}", ServerUrl, ImageFolderName, imageFilename);
+        }
+
+        private AllProductImages CreateAllProductImages(ProductMedia productMedia, MediaSettings mediaSettings, GetAllProductImagesParam param, string variantId)
+        {
+            return new AllProductImages
+            {
+                ImageUrl = productMedia != null ? GetSizedImageUrl(productMedia, mediaSettings, param.ImageSize) : "",
+                ThumbnailUrl = productMedia != null ? GetSizedImageUrl(productMedia, mediaSettings, param.ThumbnailImageSize) : "",
+                ProductZoomImageUrl = productMedia != null ? GetSizedImageUrl(productMedia, mediaSettings, param.ProductZoomImageSize) : "",
+                ProductId = param.ProductId,
+                VariantId = variantId,
+                SequenceNumber = productMedia.Position,
+                FallbackImageUrl = GetFallbackImageUrl(mediaSettings),
+            };
+        }
+
+        private string GetFallbackImageUrl(MediaSettings mediaSettings) => mediaSettings.MediaServerUrl + mediaSettings.MediaFallbackImageName;
+        private string GetImageUrl(string imagePath, MediaSettings mediaSettings) => imagePath.Replace("~/", mediaSettings.MediaServerUrl);
+
+        private string GetSizedImageUrl(ProductMedia productMedia, MediaSettings mediaSettings, string size)
+        {
+            if (productMedia.ResizedInstances != null && productMedia.ResizedInstances.Length > 0 && !string.IsNullOrEmpty(size))
+            {
+                var resizedImage = productMedia.ResizedInstances.FirstOrDefault(resizedImg => resizedImg.Size == size);
+
+                if (resizedImage != null)
+                    return GetImageUrl(resizedImage.Url, mediaSettings);
+            }
+
+            return GetImageUrl(productMedia.Url, mediaSettings);
+        }
+
+        private async Task<List<AllProductImages>> GetAllProductMediaImages(GetAllProductImagesParam param)
+        {
+            var _productMediaSettings = await ProductMediaSettingsRepository.GetProductMediaSettings().ConfigureAwait(false);
+
+            var result = param.MediaSet?.Count > 0 ?
+                param.MediaSet.Select(productMedia => CreateAllProductImages(productMedia, _productMediaSettings, param, null)).ToList()
+                : new List<AllProductImages>() { CreateAllProductImages(null, _productMediaSettings, param, null) };
+
+            if (param.Variants != null)
+            {
+                foreach (Variant variant in param.Variants)
+                {
+                    var globalVariantMediaSet = new List<ProductMedia>();
+                    param.VariantMediaSet?.ForEach(mediaVariant =>
+                    {
+                        if (mediaVariant.AttributesToMatch.Any(atribute => variant.PropertyBag.Contains(atribute)))
+                        {
+                            globalVariantMediaSet.AddRange(mediaVariant.Media);
+                        }
+                    });
+
+                    var mediaSet = variant.MediaSet?.Count > 0 ? variant.MediaSet : globalVariantMediaSet.Count > 0 ? globalVariantMediaSet : param.MediaSet?.Count > 0 ? param.MediaSet : new List<ProductMedia>() { null };
+                    result.AddRange(mediaSet.Select(productMedia => CreateAllProductImages(productMedia, _productMediaSettings, param, variant.Id)));
+                }
+            }
+            return result;
+        }
+
+        private ProductMainImage GetProductMainMediaImage(ProductImageRequest request, MediaSettings mediaSettings)
+        {
+            return new ProductMainImage
+            {
+                ImageUrl = GetImageUrl(request.PropertyBag["ImageUrl"].ToString(), mediaSettings),
+                ProductId = request.ProductId,
+                VariantId = request.Variant.Id,
+                FallbackImageUrl = GetFallbackImageUrl(mediaSettings)
+            };
         }
     }
 }

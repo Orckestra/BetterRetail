@@ -5,12 +5,14 @@ using FluentAssertions;
 using Moq;
 using Moq.AutoMock;
 using NUnit.Framework;
+using Orckestra.Composer.Configuration;
+using Orckestra.Composer.Factory;
 using Orckestra.Composer.Product.Factory;
-using Orckestra.Composer.Product.Repositories;
 using Orckestra.Composer.Product.Tests.Factories;
 using Orckestra.Composer.Product.ViewModels;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Dam;
+using Orckestra.Composer.Repositories;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Services.Lookup;
 using Orckestra.Composer.ViewModels;
@@ -53,12 +55,15 @@ namespace Orckestra.Composer.Product.Tests.Services
         private class ProductViewModelFactoryProxy : ProductViewModelFactory
         {
             public ProductViewModelFactoryProxy(IViewModelMapper viewModelMapper,
-            IProductRepository productRepository,
-            IDamProvider damProvider,
-            ILocalizationProvider localizationProvider,
-            ILookupService lookupService,
-            IProductUrlProvider productUrlProvider,
-            IScopeViewService scopeViewService)
+                IProductRepository productRepository,
+                IDamProvider damProvider,
+                ILocalizationProvider localizationProvider,
+                ILookupService lookupService,
+                IProductUrlProvider productUrlProvider,
+                IScopeViewService scopeViewService,
+                IRecurringOrdersRepository recurringOrdersRepository,
+                IRecurringOrderProgramViewModelFactory recurringOrderProgramViewModelFactory,
+                IRecurringOrdersSettings recurringOrdersSettings)
             
                 : base(
                 viewModelMapper, 
@@ -67,7 +72,10 @@ namespace Orckestra.Composer.Product.Tests.Services
                 localizationProvider, 
                 lookupService, 
                 productUrlProvider,
-                scopeViewService)
+                scopeViewService,
+                recurringOrdersRepository,
+                recurringOrderProgramViewModelFactory,
+                recurringOrdersSettings)
             {
             }
 

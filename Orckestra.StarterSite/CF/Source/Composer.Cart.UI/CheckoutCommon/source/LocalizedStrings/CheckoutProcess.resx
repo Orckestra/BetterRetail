@@ -154,7 +154,7 @@
     <value>Yes</value>
   </data>
   <data name="F_SaveCreditCard" xml:space="preserve">
-    <value>Remember this credit card</value>
+    <value>Check this box to save this card and use it for future recurring orders.</value>
   </data>
   <data name="F_SaveCreditCardForced" xml:space="preserve">
     <value>This card will be saved</value>
@@ -163,7 +163,7 @@
     <value>Expired cart</value>
   </data>
   <data name="F_SaveCreditCardForced_Explain" xml:space="preserve">
-    <value>some inspiring explanation when the card will be saved with a recurring order</value>
+    <value>You must save this card to use it for recurring orders.</value>
   </data>
   <data name="F_SaveCreditCardForced_ExplainTitle" xml:space="preserve">
     <value>Title: Saved Credit Card</value>
@@ -218,6 +218,9 @@
   </data>
   <data name="L_LogInCheckout" xml:space="preserve">
     <value>You can place an order without registering. You can register and create an account after checkout.</value>
+  </data>
+  <data name="L_LogInCheckoutWithRecurring" xml:space="preserve">
+    <value>You cannot place a recurring order without registering. Log in or create an account to take advantage of this service.</value>
   </data>
   <data name="L_NextStepIndication" xml:space="preserve">
     <value>Your credit card will not be charged until you submit your order.</value>
@@ -288,5 +291,8 @@ Enter your credit card information</value>
   </data>
   <data name="B_AddCreditCard" xml:space="preserve">
     <value>Use another credit card</value>
+  </data>
+  <data name="L_ExpirationDateForm" xml:space="preserve">
+    <value>Expiration Date (mmyy)</value>
   </data>
 </root>

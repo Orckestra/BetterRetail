@@ -12,6 +12,12 @@ namespace Orckestra.Composer.Cart.Parameters
         public string Scope { get; set; }
 
         /// <summary>
+        /// WebsiteId
+        /// Required
+        /// </summary>
+        public Guid WebsiteId { get; set; }
+
+        /// <summary>
         /// The Request Base Url
         /// </summary>
         public string BaseUrl { get; set; }

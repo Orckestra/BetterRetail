@@ -3,7 +3,7 @@ using Orckestra.Composer.ViewModels;
 
 namespace Orckestra.Composer.Search.ViewModels
 {
-    public sealed class ProductSearchViewModel : BaseViewModel
+    public class ProductSearchViewModel : BaseViewModel
     {
         /// <summary>
         /// Gets or sets the product identifier.
@@ -82,5 +82,20 @@ namespace Orckestra.Composer.Search.ViewModels
         /// </summary>
         [MapTo("PrimaryParentCategoryId")]
         public string CategoryId { get; set; }
+
+        /// <summary>
+        /// If the product has a program and the flag is enabled
+        /// </summary>
+        public bool? IsEligibleForRecurring { get; set; }
+
+        /// <summary>
+        /// Gets or sets the recurring program name
+        /// </summary>
+        public string RecurringOrderProgramName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the search term
+        /// </summary>
+        public string SearchTerm { get; set; }
     }
 }

@@ -4,6 +4,7 @@ using System.Globalization;
 using Moq.AutoMock;
 using NUnit.Framework;
 using Orckestra.Composer.Product.Repositories;
+using Orckestra.Composer.Repositories;
 
 namespace Orckestra.Composer.Product.Tests.Repositories
 {
@@ -20,13 +21,13 @@ namespace Orckestra.Composer.Product.Tests.Repositories
             _englishCultureInfo = CultureInfo.CreateSpecificCulture("en-US");
         }
 
-        private object[] GetProductParams()
+        private static object[] GetProductParams()
         {
             return new object[] { new object[] { ProductsList, null } };
         }
 
         [TestCase(null, "scope")]
-        [Test, TestCaseSource("GetProductParams")]
+        [Test, TestCaseSource(nameof(GetProductParams))]
         public void When_Any_Argument_Null_Or_Whitespace_SHOULD_Throw_Null_Argument_Exception(List<string> productIds, string scope )
         {
             //Arrange
@@ -34,10 +35,7 @@ namespace Orckestra.Composer.Product.Tests.Repositories
             var productRepository = container.CreateInstance<ProductRepository>();
 
             //Act & Assert
-            Assert.Throws<ArgumentNullException>(async () =>
-            {
-                await productRepository.CalculatePricesAsync(productIds, scope);
-            });
+            Assert.ThrowsAsync<ArgumentNullException>(() => productRepository.CalculatePricesAsync(productIds, scope));
         }
     }
 }

@@ -15,6 +15,7 @@
 } 
  
 .masthead {
+    background-color: $masthead-bg;
 
     &-with-mega-menu {
         border-bottom: 1px solid $gray-light;

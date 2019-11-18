@@ -9,8 +9,10 @@ using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Product.Services;
 using Orckestra.Composer.Product.Tests.Mock;
 using Orckestra.Composer.Repositories;
+using Orckestra.Composer.Services;
 using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel.Products.Inventory;
+using System.Threading.Tasks;
 
 namespace Orckestra.Composer.Product.Tests.Services
 {
@@ -18,7 +20,7 @@ namespace Orckestra.Composer.Product.Tests.Services
     public class InventoryViewServiceFindInventoryItemStatus
     {
         [Test]
-        public async void WHEN_Passing_Empty_Parameter_SHOULD_Return_Empty_ViewModel()
+        public async Task WHEN_Passing_Empty_Parameter_SHOULD_Return_Empty_ViewModel()
         {
             var inventoryRepository = new Mock<IInventoryRepository>();
             inventoryRepository.Setup(i => i.FindInventoryItemStatus(It.IsAny<FindInventoryItemStatusParam>()))
@@ -42,7 +44,7 @@ namespace Orckestra.Composer.Product.Tests.Services
                 }
                 });
 
-            var viewModelMapper = FakeViewModelMapper.CreateFake(typeof(ProductPriceViewService).Assembly);
+            var viewModelMapper = FakeViewModelMapper.CreateFake(typeof(InventoryViewService).Assembly);
 
             var inventoryViewService = new InventoryViewService(inventoryRepository.Object, viewModelMapper);
             var viewModel = await inventoryViewService.FindInventoryItemStatus(new FindInventoryItemStatusParam
@@ -66,7 +68,7 @@ namespace Orckestra.Composer.Product.Tests.Services
         }
 
         [Test]
-        public async void WHEN_Passing_Valid_Parameter_SHOULD_Return_Valid_ViewModel()
+        public async Task WHEN_Passing_Valid_Parameter_SHOULD_Return_Valid_ViewModel()
         {
             var inventoryRepository = new Mock<IInventoryRepository>();
             inventoryRepository.Setup(i => i.FindInventoryItemStatus(It.IsAny<FindInventoryItemStatusParam>()))
@@ -90,7 +92,7 @@ namespace Orckestra.Composer.Product.Tests.Services
                 }
                 });
 
-            var viewModelMapper = FakeViewModelMapper.CreateFake(typeof(ProductPriceViewService).Assembly);
+            var viewModelMapper = FakeViewModelMapper.CreateFake(typeof(InventoryViewService).Assembly);
 
             var inventoryViewService = new InventoryViewService(inventoryRepository.Object, viewModelMapper);
             var viewModel = await inventoryViewService.FindInventoryItemStatus(new FindInventoryItemStatusParam
@@ -121,9 +123,7 @@ namespace Orckestra.Composer.Product.Tests.Services
             var viewModelMapper = new Mock<IViewModelMapper>();
 
             var inventoryViewService = new InventoryViewService(inventoryRepository.Object, viewModelMapper.Object);
-
-            Assert.Throws<ArgumentNullException>(
-                async () => await inventoryViewService.FindInventoryItemStatus(new FindInventoryItemStatusParam
+            var param = new FindInventoryItemStatusParam
             {
                 Scope = null,
                 CultureInfo = new CultureInfo("en-CA"),
@@ -132,7 +132,9 @@ namespace Orckestra.Composer.Product.Tests.Services
                 {
                     "SKU-BIDOU"
                 }
-            }).ConfigureAwait(false));
+            };
+
+            Assert.ThrowsAsync<ArgumentNullException>(() => inventoryViewService.FindInventoryItemStatus(param));
         }
 
         [Test]
@@ -142,15 +144,15 @@ namespace Orckestra.Composer.Product.Tests.Services
             var viewModelMapper = new Mock<IViewModelMapper>();
 
             var inventoryViewService = new InventoryViewService(inventoryRepository.Object, viewModelMapper.Object);
+            var param = new FindInventoryItemStatusParam
+            {
+                Scope = "Canada",
+                CultureInfo = new CultureInfo("en-CA"),
+                Date = new DateTime(2015, 8, 17),
+                Skus = null
+            };
 
-            Assert.Throws<ArgumentNullException>(
-                async () => await inventoryViewService.FindInventoryItemStatus(new FindInventoryItemStatusParam
-                {
-                    Scope = "Canada",
-                    CultureInfo = new CultureInfo("en-CA"),
-                    Date = new DateTime(2015, 8, 17),
-                    Skus = null
-                }).ConfigureAwait(false));
+            Assert.ThrowsAsync<ArgumentNullException>(() => inventoryViewService.FindInventoryItemStatus(param));
         }
 
         [Test]
@@ -160,15 +162,15 @@ namespace Orckestra.Composer.Product.Tests.Services
             var viewModelMapper = new Mock<IViewModelMapper>();
 
             var inventoryViewService = new InventoryViewService(inventoryRepository.Object, viewModelMapper.Object);
+            var param = new FindInventoryItemStatusParam
+            {
+                Scope = "Canada",
+                CultureInfo = new CultureInfo("en-CA"),
+                Date = new DateTime(2015, 8, 17),
+                Skus = new List<string>()
+            };
 
-            Assert.Throws<ArgumentException>(
-                async () => await inventoryViewService.FindInventoryItemStatus(new FindInventoryItemStatusParam
-                {
-                    Scope = "Canada",
-                    CultureInfo = new CultureInfo("en-CA"),
-                    Date = new DateTime(2015, 8, 17),
-                    Skus = new List<string>()
-                }).ConfigureAwait(false));
+            Assert.ThrowsAsync<ArgumentException>(() => inventoryViewService.FindInventoryItemStatus(param));
         }
 
         [Test]
@@ -178,18 +180,18 @@ namespace Orckestra.Composer.Product.Tests.Services
             var viewModelMapper = new Mock<IViewModelMapper>();
 
             var inventoryViewService = new InventoryViewService(inventoryRepository.Object, viewModelMapper.Object);
-
-            Assert.Throws<ArgumentException>(
-                async () => await inventoryViewService.FindInventoryItemStatus(new FindInventoryItemStatusParam
-                {
-                    Scope = "Canada",
-                    CultureInfo = null,
-                    Date = new DateTime(2015, 8, 17),
-                    Skus = new List<string>
+            var param = new FindInventoryItemStatusParam
+            {
+                Scope = "Canada",
+                CultureInfo = null,
+                Date = new DateTime(2015, 8, 17),
+                Skus = new List<string>
                     {
                         "SKU-BIDOU"
                     }
-                }).ConfigureAwait(false));
+            };
+
+            Assert.ThrowsAsync<ArgumentException>(() => inventoryViewService.FindInventoryItemStatus(param));
         }
     }
 }

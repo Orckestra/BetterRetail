@@ -35,7 +35,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var sut = Container.CreateInstance<CartRepository>();
 
             //Act
-            var ex = Assert.Throws<ArgumentNullException>(async () => await sut.AddCouponAsync(p));
+            var ex = Assert.ThrowsAsync<ArgumentNullException>(() => sut.AddCouponAsync(p));
 
             //Assert
             ex.Message.Should().ContainEquivalentOf("param");
@@ -58,7 +58,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var sut = Container.CreateInstance<CartRepository>();
 
             //Act
-            var ex = Assert.Throws<ArgumentException>(async () => await sut.AddCouponAsync(p));
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => sut.AddCouponAsync(p));
 
             //Assert
             ex.ParamName.Should().ContainEquivalentOf("param");
@@ -79,7 +79,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var sut = Container.CreateInstance<CartRepository>();
 
             //Act
-            var ex = Assert.Throws<ArgumentException>(async () => await sut.AddCouponAsync(p));
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => sut.AddCouponAsync(p));
 
             //Assert
             ex.ParamName.Should().ContainEquivalentOf("param");
@@ -102,7 +102,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var sut = Container.CreateInstance<CartRepository>();
 
             //Act
-            var ex = Assert.Throws<ArgumentException>(async () => await sut.AddCouponAsync(p));
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => sut.AddCouponAsync(p));
 
             //Assert
             ex.ParamName.Should().ContainEquivalentOf("param");
@@ -123,7 +123,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var sut = Container.CreateInstance<CartRepository>();
 
             //Act
-            var ex = Assert.Throws<ArgumentNullException>(async () => await sut.AddCouponAsync(p));
+            var ex = Assert.ThrowsAsync<ArgumentNullException>(() => sut.AddCouponAsync(p));
 
             //Assert
             ex.ParamName.Should().ContainEquivalentOf("param");
@@ -146,14 +146,14 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var sut = Container.CreateInstance<CartRepository>();
 
             //Act
-            var ex = Assert.Throws<ArgumentException>(async () => await sut.AddCouponAsync(p));
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => sut.AddCouponAsync(p));
 
             //Assert
             ex.ParamName.Should().ContainEquivalentOf("param");
         }
 
         [Test]
-        public async void WHEN_parameters_ok_SHOULD_invoke_Client()
+        public async Task WHEN_parameters_ok_SHOULD_invoke_Client()
         {
             //Arrange
             var p = new CouponParam()

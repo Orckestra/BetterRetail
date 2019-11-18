@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using FizzWare.NBuilder.Generators;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Repositories;
 using Orckestra.Overture.ServiceModel.Orders;
+using Orckestra.Overture.ServiceModel.Requests.RecurringOrders;
 
 namespace Orckestra.Composer.Cart.Tests.Mock
 {
@@ -106,6 +108,21 @@ namespace Orckestra.Composer.Cart.Tests.Mock
         }
 
         public Task RemoveCouponsAsync(RemoveCouponsParam param)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<ProcessedCart>> GetRecurringCartsAsync(GetRecurringOrderCartsViewModelParam param)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ListOfRecurringOrderLineItems> RescheduleRecurringCartAsync(RescheduleRecurringCartParam param)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<HttpWebResponse> RemoveRecurringCartLineItemAsync(RemoveRecurringCartLineItemParam param)
         {
             throw new NotImplementedException();
         }

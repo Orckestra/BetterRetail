@@ -26,7 +26,7 @@ namespace Composer.LoadTest
         public IHttpActionResult UpdateScopeAndInventoryLocation(string scopeAndInventoryLocationId)
         {
             _inventoryLocationProvider.SetDefaultInventoryLocationId(scopeAndInventoryLocationId);
-            _composerContext.Scope = scopeAndInventoryLocationId;
+            //_composerContext.Scope = scopeAndInventoryLocationId;
 
             return Ok(scopeAndInventoryLocationId);
         }

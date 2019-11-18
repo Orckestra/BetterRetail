@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using Orckestra.Composer.ViewModels;
+using Orckestra.Overture.ServiceModel.Orders;
 
 namespace Orckestra.Composer.Cart.ViewModels
 {
@@ -39,5 +40,20 @@ namespace Orckestra.Composer.Cart.ViewModels
         /// </summary>
         [Required(AllowEmptyStrings = false)]
         public Guid ShippingProviderId { get; set; }
+        
+        /// <summary>
+        /// Gets or sets the Fulfillment method type it belongs to
+        /// </summary>
+        public FulfillmentMethodType FulfillmentMethodType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Fulfillment method string type it belongs to
+        /// </summary>
+        public string FulfillmentMethodTypeString { get; set; }
+
+        /// <summary>
+        /// Gets or sets the flag to indicate if the shipping method is a ship to store
+        /// </summary>
+        public bool IsShipToStoreType { get; set; }
     }
 }

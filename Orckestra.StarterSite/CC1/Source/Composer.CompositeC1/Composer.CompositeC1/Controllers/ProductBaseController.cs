@@ -3,11 +3,11 @@ using System.Globalization;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using Composite.Core.WebClient.Renderings.Page;
 using Composite.Data;
 using Orckestra.Composer.CompositeC1.DataTypes;
 using Orckestra.Composer.CompositeC1.Extensions;
 using Orckestra.Composer.CompositeC1.Services;
+using Orckestra.Composer.CompositeC1.Services.PreviewMode;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Product.Parameters;
 using Orckestra.Composer.Product.Services;
@@ -28,8 +28,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         protected ILanguageSwitchService LanguageSwitchService { get; private set; }
         protected IProductUrlProvider ProductUrlProvider { get; private set; }
         protected IRelatedProductViewService RelatedProductViewService { get; private set; }
-
-        protected virtual string PreviewModeProductId { get;} = "3834593";
+        protected Lazy<IPreviewModeService> PreviewModeService { get; }
 
         protected ProductBaseController(
             IPageService pageService,
@@ -39,25 +38,18 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             IProductBreadcrumbService productBreadcrumbService,
             ILanguageSwitchService languageSwitchService,
             IProductUrlProvider productUrlProvider,
-            IRelatedProductViewService relatedProductViewService)
+            IRelatedProductViewService relatedProductViewService,
+            Lazy<IPreviewModeService> previewModeService)
         {
-            if (pageService == null) { throw new ArgumentNullException("pageService"); }
-            if (composerContext == null) { throw new ArgumentNullException("composerContext"); }
-            if (productService == null) { throw new ArgumentNullException("productService"); }
-            if (productSpecificationsViewService == null) { throw new ArgumentNullException("productSpecificationsViewService"); }
-            if (productBreadcrumbService == null) { throw new ArgumentNullException("productBreadcrumbService"); }
-            if (languageSwitchService == null) { throw new ArgumentNullException("languageSwitchService"); }
-            if (productUrlProvider == null) { throw new ArgumentNullException("productUrlProvider"); }
-            if (relatedProductViewService == null) { throw new ArgumentNullException("relatedProductViewService"); }
-
-            PageService = pageService;
-            ComposerContext = composerContext;
-            ProductService = productService;
-            ProductSpecificationsViewService = productSpecificationsViewService;
-            ProductBreadcrumbService = productBreadcrumbService;
-            LanguageSwitchService = languageSwitchService;
-            ProductUrlProvider = productUrlProvider;
-            RelatedProductViewService = relatedProductViewService;
+            PageService = pageService ?? throw new ArgumentNullException(nameof(pageService));
+            ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
+            ProductService = productService ?? throw new ArgumentNullException(nameof(productService));
+            ProductSpecificationsViewService = productSpecificationsViewService ?? throw new ArgumentNullException(nameof(productSpecificationsViewService));
+            ProductBreadcrumbService = productBreadcrumbService ?? throw new ArgumentNullException(nameof(productBreadcrumbService));
+            LanguageSwitchService = languageSwitchService ?? throw new ArgumentNullException(nameof(languageSwitchService));
+            ProductUrlProvider = productUrlProvider ?? throw new ArgumentNullException(nameof(productUrlProvider));
+            RelatedProductViewService = relatedProductViewService ?? throw new ArgumentNullException(nameof(relatedProductViewService));
+            PreviewModeService = previewModeService ?? throw new ArgumentNullException(nameof(previewModeService));
         }
 
         public virtual ActionResult ProductSummary(string id, string variantId)
@@ -70,11 +62,16 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             return GetProductDetail(id, variantId);
         }
 
+        public virtual ActionResult ProductSEO(string id, string variantId)
+        {
+            return GetProductDetail(id, variantId);
+        }
+
         public virtual ActionResult LanguageSwitch(string id)
         {
             if (string.IsNullOrWhiteSpace(id))
             {
-                return this.HandlePreviewMode(() => LanguageSwitch(PreviewModeProductId));
+                return this.HandlePreviewMode(() => LanguageSwitch(PreviewModeService.Value.GetProductId()));
             }
 
             var productViewModel = ProductService.GetProductViewModelAsync(new GetProductParam
@@ -117,7 +114,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         {
             if (string.IsNullOrWhiteSpace(id))
             {
-                return this.HandlePreviewMode(() => Breadcrumb(PreviewModeProductId));
+                return this.HandlePreviewMode(() => Breadcrumb(PreviewModeService.Value.GetProductId()));
             }
 
             var productViewModel = ProductService.GetProductViewModelAsync(new GetProductParam
@@ -137,7 +134,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             {
                 CategoryId = productViewModel.CategoryId,
                 CultureInfo = ComposerContext.CultureInfo,
-                HomeUrl = PageService.GetRendererPageUrl(PagesConfiguration.HomePageId, ComposerContext.CultureInfo),
+                HomeUrl = PageService.GetRendererPageUrl(SitemapNavigator.CurrentHomePageId, ComposerContext.CultureInfo),
                 ProductName = productViewModel.DisplayName,
                 Scope = ComposerContext.Scope,
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
@@ -152,7 +149,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         {
             if (string.IsNullOrWhiteSpace(id))
             {
-                return this.HandlePreviewMode(() => PageHeader(PreviewModeProductId));
+                return this.HandlePreviewMode(() => PageHeader(PreviewModeService.Value.GetProductId()));
             }
 
             var vm = ProductService.GetPageHeaderViewModelAsync(new GetPageHeaderParam
@@ -176,7 +173,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         {
             if (string.IsNullOrWhiteSpace(id))
             {
-                return this.HandlePreviewMode(() => GetProductDetail(PreviewModeProductId, string.Empty));
+                return this.HandlePreviewMode(() => GetProductDetail(PreviewModeService.Value.GetProductId(), string.Empty));
             }
             var productViewModel = ProductService.GetProductViewModelAsync(new GetProductParam
             {
@@ -215,7 +212,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             if (string.IsNullOrEmpty(id))
             {
                 return this.HandlePreviewMode( () =>
-                            RelatedProducts(PreviewModeProductId, merchandiseTypes, headingText, maxItems,
+                            RelatedProducts(PreviewModeService.Value.GetProductId(), merchandiseTypes, headingText, maxItems,
                                 displaySameCategoryProducts, displayPrices, displayAddToCart));
             }
             

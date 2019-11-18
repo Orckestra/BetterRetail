@@ -1,44 +1,40 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Composite.Core.Routing;
 using Composite.Data;
 using Composite.Data.Types;
 using Orckestra.Composer.CompositeC1.Media;
 using Orckestra.Composer.CompositeC1.Pages;
-using Orckestra.Composer.ViewModels;
 
 namespace Orckestra.Composer.CompositeC1.Services
 {
     public class MediaService : IMediaService
     {
-        public ImageInfo GetImageInfo(Guid itemId, CultureInfo cultureInfo)
+        public virtual ImageInfo GetImageInfo(string itemId, CultureInfo cultureInfo)
         {
             if (cultureInfo == null) { throw new ArgumentNullException("cultureInfo"); }
-            if (itemId == Guid.Empty) { throw new ArgumentNullException("itemId"); }
+            if (string.IsNullOrEmpty(itemId)) { throw new ArgumentNullException("itemId"); }
 
             using (var connection = new DataConnection(cultureInfo))
             {
-                var page = connection.Get<ComposerImage>().FirstOrDefault(p => p.Id == itemId);
-                if (page == null)
+                var image = connection.Get<IImageFile>().FirstOrDefault(p => p.KeyPath == itemId);
+                if (image == null)
                 {
-                    throw new ArgumentException(string.Format("Item '{0}' does not exist or it is not a ComposerImage.", itemId));
+                    throw new ArgumentException(string.Format("Image file '{0}' does not exist", itemId));
                 }
 
                 return new ImageInfo
                 {
-                    Url = GetMediaUrl(page.Image),
-                    Alt = page.Alt
+                    Url = MediaUrls.BuildUrl(image),
+                    Alt = image.Title
                 };
             }
         }
 
-        public string GetMediaUrl(string mediaPath)
+        public virtual string GetMediaUrl(string mediaPath)
         {
             if (string.IsNullOrEmpty(mediaPath))
             {

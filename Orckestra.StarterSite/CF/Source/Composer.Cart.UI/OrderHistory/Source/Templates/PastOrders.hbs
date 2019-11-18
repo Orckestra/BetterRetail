@@ -4,7 +4,7 @@
     {{else}}
         {{#if Orders}}
             {{#each Orders }}
-                {{> CompactOrderDetail }}
+                {{> CompactOrderDetail PastOrder='true'}}
             {{/each}}
         {{else}}
             <span class="text-muted">{{localize 'MyAccount' 'L_PastOrdersEmpty'}}</span>

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Globalization;
 using System.Threading.Tasks;
+using System.Web;
 using FizzWare.NBuilder.Generators;
 using FluentAssertions;
 using Moq;
 using Moq.AutoMock;
 using NUnit.Framework;
-using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Search.Context;
 using Orckestra.Composer.Search.Parameters;
 using Orckestra.Composer.Search.Services;
@@ -19,11 +19,15 @@ namespace Orckestra.Composer.Search.Tests.Context
     public class BrowseCategoryRequestContextGetCategoryAvailableProductsAsync
     {
         private AutoMocker _container = new AutoMocker();
+        private Mock<HttpRequestBase> _requestMock;
 
         [SetUp]
         public void SetUp()
         {
             _container = new AutoMocker();
+            _requestMock = new Mock<HttpRequestBase>();
+            _requestMock.Setup(q => q.Url).Returns(new Uri("https://google.com"));
+            _requestMock.Setup(q => q.ApplicationPath).Returns(@"x:\");
         }
 
         [Test]
@@ -33,10 +37,7 @@ namespace Orckestra.Composer.Search.Tests.Context
             var sut = _container.CreateInstance<BrowseCategoryRequestContext>();
 
             //Act
-            var exception = Assert.Throws<ArgumentNullException>(async () =>
-            {
-                await sut.GetCategoryAvailableProductsAsync(null);
-            });
+            var exception = Assert.ThrowsAsync<ArgumentNullException>(() => sut.GetCategoryAvailableProductsAsync(null));
 
             //Assert
             exception.ParamName.Should().ContainEquivalentOf("param");
@@ -52,16 +53,21 @@ namespace Orckestra.Composer.Search.Tests.Context
             ArrangeComposerContext(scope, cultureInfo);
 
             var param = CreateEmptyParam();
+            GetCategoryBrowsingViewModelParam passedParam = null;
 
             var sut = _container.CreateInstance<BrowseCategoryRequestContext>();
+            var catBrowsingMock = _container.GetMock<ICategoryBrowsingViewService>();
+            catBrowsingMock
+                .Setup(q => q.GetCategoryBrowsingViewModelAsync(It.IsAny<GetCategoryBrowsingViewModelParam>()))
+                .Callback((GetCategoryBrowsingViewModelParam p) => passedParam = p)
+                .ReturnsAsync(new CategoryBrowsingViewModel());
 
             //Act
             await sut.GetCategoryAvailableProductsAsync(param);
 
             //Assert
-            param.Criteria.CultureInfo.Should().NotBeNull();
-            param.Criteria.Scope.Should().Be(scope);
-            param.Criteria.CultureInfo.Should().Be(cultureInfo);
+            passedParam.CultureInfo.Should().NotBeNull();
+            passedParam.CultureInfo.Should().Be(cultureInfo);
 
             _container.Verify<IComposerContext>();
         }
@@ -153,11 +159,11 @@ namespace Orckestra.Composer.Search.Tests.Context
             return mock;
         }
 
-        private BrowsingByCategoryParam CreateEmptyParam()
+        private GetBrowseCategoryParam CreateEmptyParam()
         {
-            return new BrowsingByCategoryParam
+            return new GetBrowseCategoryParam
             {
-                Criteria = new SearchCriteria()
+                Request = _requestMock.Object,
             };
         }
     }

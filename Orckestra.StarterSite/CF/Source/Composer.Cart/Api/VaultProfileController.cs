@@ -5,6 +5,7 @@ using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Services;
 using Orckestra.Composer.Extensions;
 using Orckestra.Composer.Services;
+using Orckestra.Composer.Utils;
 using Orckestra.Composer.WebAPIFilters;
 
 namespace Orckestra.Composer.Cart.Api
@@ -32,7 +33,7 @@ namespace Orckestra.Composer.Cart.Api
         [HttpPost]
         [ActionName("addprofile")]
         [ValidateModelState]
-        public async Task<IHttpActionResult> AddVaultProfile(AddVaultProfileViewModel request)
+        public virtual async Task<IHttpActionResult> AddVaultProfile(AddVaultProfileViewModel request)
         {
             if (request == null) { return BadRequest("Request body cannot be empty."); }
 

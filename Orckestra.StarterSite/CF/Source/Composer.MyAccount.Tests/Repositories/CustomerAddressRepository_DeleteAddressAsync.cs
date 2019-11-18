@@ -35,7 +35,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Repositories
                       .ReturnsTask();
             
             //Act and Assert
-            Assert.DoesNotThrow(async () => await customerRepository.DeleteAddressAsync(addressId));
+            Assert.DoesNotThrowAsync(() => customerRepository.DeleteAddressAsync(addressId));
         }
 
         [Test]

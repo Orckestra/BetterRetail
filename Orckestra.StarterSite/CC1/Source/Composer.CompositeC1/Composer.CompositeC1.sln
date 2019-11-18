@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29403.142
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Composer.CompositeC1", "Composer.CompositeC1\Composer.CompositeC1.csproj", "{3E42C35E-B19C-4ABE-80F8-FD268D44E11F}"
 EndProject
@@ -36,8 +36,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4 - IntegrationTests", "4 -
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "X - Packaging", "X - Packaging", "{4E711E19-E09A-42A1-9E6B-0C644DE2ED7B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Composer.CompositeC1.Azure", "Composer.CompositeC1.Azure\Composer.CompositeC1.Azure.csproj", "{DD8AE2F0-AD7D-4696-93F2-57C11904B499}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Composer.CompositeC1.DataTypes", "Composer.CompositeC1.DataTypes\Composer.CompositeC1.DataTypes.csproj", "{E84BF038-FC5E-4841-8C5A-918FE8EAFF8F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5 - C1 CMS Packages", "5 - C1 CMS Packages", "{8C3A4F1C-2D89-41E1-AA07-E8E58FA26FE4}"
@@ -47,6 +45,38 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.C1CMS.Queries", "Orckestra.Composer.C1CMS.Queries\Orckestra.Composer.C1CMS.Queries.csproj", "{8F9AD96B-47B6-4BBD-AD4E-0155B49D2BFD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.C1CMS.Queries.Package", "Orckestra.Composer.C1CMS.Queries.Package\Orckestra.Composer.C1CMS.Queries.Package.csproj", "{112B646F-5193-45CC-A9EF-D632D853CFB1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SEO", "SEO", "{0B18646D-2848-4CED-84C5-3C8EB9ACFE9E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.SEO.Organization.Package", "Orckestra.Composer.SEO.Organization\Orckestra.Composer.SEO.Organization.Package.csproj", "{199BF438-4F90-4C1C-941A-AF6B69A53396}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.SEO.Organization.Content", "Orckestra.Composer.SEO.Content\Orckestra.Composer.SEO.Organization.Content.csproj", "{A8B2D94C-8C2E-4AC5-875A-6E3540B56ADD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Articles", "Articles", "{7FB29D3F-ECF6-45D8-8F08-79FBDEA01216}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.Articles", "Orckestra.Composer.Articles\Orckestra.Composer.Articles.csproj", "{9DFD94A1-FCCB-4B7B-8CCE-4D8F1D0E2B50}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.Articles.Package", "Orckestra.Composer.Articles.Package\Orckestra.Composer.Articles.Package.csproj", "{8E9E5849-176E-4B52-830E-6E466BACE126}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sitemap", "Sitemap", "{6560FA76-2CE0-46A2-8A95-DC8262014D6C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Content", "Content", "{B87B2E7D-8765-4C62-8E1E-314B3890C532}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.Languages.Package", "Orckestra.Composer.Languages\Orckestra.Composer.Languages.Package.csproj", "{B391AB82-48AB-4F73-B141-80EE9DE7D381}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ContentSearch", "ContentSearch", "{098A942E-9208-403B-B873-CDDCFE8FE6A8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.ContentSearch", "Orckestra.Composer.ContentSearch\Orckestra.Composer.ContentSearch.csproj", "{460EACA2-1EDB-46BC-A508-F784E4A4DA97}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.ContentSearch.Package", "Orckestra.Composer.ContentSearch.Package\Orckestra.Composer.ContentSearch.Package.csproj", "{5C56B24A-09C3-4884-B769-E3E8A042EE6A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.ContentSearch.Content", "Orckestra.Composer.ContentSearch.Content\Orckestra.Composer.ContentSearch.Content.csproj", "{0654D78B-DE8C-4EB7-B32B-34DD1AFE46BF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.Sitemap", "Orckestra.Composer.Sitemap\Orckestra.Composer.Sitemap.csproj", "{8227ECD6-6D34-4F4D-BFBC-02BC52E7CE7A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.Sitemap.Package", "Orckestra.Composer.Sitemap.Package\Orckestra.Composer.Sitemap.Package.csproj", "{0136D28A-88DF-4C96-94FD-C1D6B4D4AE18}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.Sitemap.Tests", "Orckestra.Composer.Sitemap.Tests\Orckestra.Composer.Sitemap.Tests.csproj", "{FDE26B94-980B-4155-A9A8-7CF6433C7658}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -78,10 +108,6 @@ Global
 		{B087B0F6-C5DC-4290-B3DA-F39684D6337E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B087B0F6-C5DC-4290-B3DA-F39684D6337E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B087B0F6-C5DC-4290-B3DA-F39684D6337E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DD8AE2F0-AD7D-4696-93F2-57C11904B499}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DD8AE2F0-AD7D-4696-93F2-57C11904B499}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DD8AE2F0-AD7D-4696-93F2-57C11904B499}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DD8AE2F0-AD7D-4696-93F2-57C11904B499}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E84BF038-FC5E-4841-8C5A-918FE8EAFF8F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E84BF038-FC5E-4841-8C5A-918FE8EAFF8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E84BF038-FC5E-4841-8C5A-918FE8EAFF8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -94,6 +120,50 @@ Global
 		{112B646F-5193-45CC-A9EF-D632D853CFB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{112B646F-5193-45CC-A9EF-D632D853CFB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{112B646F-5193-45CC-A9EF-D632D853CFB1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{199BF438-4F90-4C1C-941A-AF6B69A53396}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{199BF438-4F90-4C1C-941A-AF6B69A53396}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{199BF438-4F90-4C1C-941A-AF6B69A53396}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{199BF438-4F90-4C1C-941A-AF6B69A53396}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8B2D94C-8C2E-4AC5-875A-6E3540B56ADD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8B2D94C-8C2E-4AC5-875A-6E3540B56ADD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8B2D94C-8C2E-4AC5-875A-6E3540B56ADD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8B2D94C-8C2E-4AC5-875A-6E3540B56ADD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9DFD94A1-FCCB-4B7B-8CCE-4D8F1D0E2B50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9DFD94A1-FCCB-4B7B-8CCE-4D8F1D0E2B50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9DFD94A1-FCCB-4B7B-8CCE-4D8F1D0E2B50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9DFD94A1-FCCB-4B7B-8CCE-4D8F1D0E2B50}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E9E5849-176E-4B52-830E-6E466BACE126}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E9E5849-176E-4B52-830E-6E466BACE126}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E9E5849-176E-4B52-830E-6E466BACE126}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E9E5849-176E-4B52-830E-6E466BACE126}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B391AB82-48AB-4F73-B141-80EE9DE7D381}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B391AB82-48AB-4F73-B141-80EE9DE7D381}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B391AB82-48AB-4F73-B141-80EE9DE7D381}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B391AB82-48AB-4F73-B141-80EE9DE7D381}.Release|Any CPU.Build.0 = Release|Any CPU
+		{460EACA2-1EDB-46BC-A508-F784E4A4DA97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{460EACA2-1EDB-46BC-A508-F784E4A4DA97}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{460EACA2-1EDB-46BC-A508-F784E4A4DA97}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{460EACA2-1EDB-46BC-A508-F784E4A4DA97}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C56B24A-09C3-4884-B769-E3E8A042EE6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C56B24A-09C3-4884-B769-E3E8A042EE6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C56B24A-09C3-4884-B769-E3E8A042EE6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C56B24A-09C3-4884-B769-E3E8A042EE6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0654D78B-DE8C-4EB7-B32B-34DD1AFE46BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0654D78B-DE8C-4EB7-B32B-34DD1AFE46BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0654D78B-DE8C-4EB7-B32B-34DD1AFE46BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0654D78B-DE8C-4EB7-B32B-34DD1AFE46BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8227ECD6-6D34-4F4D-BFBC-02BC52E7CE7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8227ECD6-6D34-4F4D-BFBC-02BC52E7CE7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8227ECD6-6D34-4F4D-BFBC-02BC52E7CE7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8227ECD6-6D34-4F4D-BFBC-02BC52E7CE7A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0136D28A-88DF-4C96-94FD-C1D6B4D4AE18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0136D28A-88DF-4C96-94FD-C1D6B4D4AE18}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0136D28A-88DF-4C96-94FD-C1D6B4D4AE18}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0136D28A-88DF-4C96-94FD-C1D6B4D4AE18}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FDE26B94-980B-4155-A9A8-7CF6433C7658}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDE26B94-980B-4155-A9A8-7CF6433C7658}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDE26B94-980B-4155-A9A8-7CF6433C7658}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDE26B94-980B-4155-A9A8-7CF6433C7658}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -105,13 +175,29 @@ Global
 		{ECA297FA-1674-4071-9FD1-5E4AE159CE0C} = {81336705-3791-4596-8C97-9B1F22EA109C}
 		{EA8CAB27-7AF8-4913-B7A4-4703A0E6B4B7} = {4E711E19-E09A-42A1-9E6B-0C644DE2ED7B}
 		{B087B0F6-C5DC-4290-B3DA-F39684D6337E} = {331CBB1A-6003-4019-9A72-C4860127EC2D}
-		{DD8AE2F0-AD7D-4696-93F2-57C11904B499} = {8D2C6219-D2AA-43D0-80C4-1A05F108C088}
 		{E84BF038-FC5E-4841-8C5A-918FE8EAFF8F} = {8D2C6219-D2AA-43D0-80C4-1A05F108C088}
 		{8CA84E04-B406-45A9-ADCF-549A142B3405} = {8C3A4F1C-2D89-41E1-AA07-E8E58FA26FE4}
 		{8F9AD96B-47B6-4BBD-AD4E-0155B49D2BFD} = {8CA84E04-B406-45A9-ADCF-549A142B3405}
 		{112B646F-5193-45CC-A9EF-D632D853CFB1} = {8CA84E04-B406-45A9-ADCF-549A142B3405}
+		{0B18646D-2848-4CED-84C5-3C8EB9ACFE9E} = {8C3A4F1C-2D89-41E1-AA07-E8E58FA26FE4}
+		{199BF438-4F90-4C1C-941A-AF6B69A53396} = {0B18646D-2848-4CED-84C5-3C8EB9ACFE9E}
+		{A8B2D94C-8C2E-4AC5-875A-6E3540B56ADD} = {0B18646D-2848-4CED-84C5-3C8EB9ACFE9E}
+		{7FB29D3F-ECF6-45D8-8F08-79FBDEA01216} = {8C3A4F1C-2D89-41E1-AA07-E8E58FA26FE4}
+		{9DFD94A1-FCCB-4B7B-8CCE-4D8F1D0E2B50} = {7FB29D3F-ECF6-45D8-8F08-79FBDEA01216}
+		{8E9E5849-176E-4B52-830E-6E466BACE126} = {7FB29D3F-ECF6-45D8-8F08-79FBDEA01216}
+		{6560FA76-2CE0-46A2-8A95-DC8262014D6C} = {8C3A4F1C-2D89-41E1-AA07-E8E58FA26FE4}
+		{B87B2E7D-8765-4C62-8E1E-314B3890C532} = {8C3A4F1C-2D89-41E1-AA07-E8E58FA26FE4}
+		{B391AB82-48AB-4F73-B141-80EE9DE7D381} = {B87B2E7D-8765-4C62-8E1E-314B3890C532}
+		{098A942E-9208-403B-B873-CDDCFE8FE6A8} = {8C3A4F1C-2D89-41E1-AA07-E8E58FA26FE4}
+		{460EACA2-1EDB-46BC-A508-F784E4A4DA97} = {098A942E-9208-403B-B873-CDDCFE8FE6A8}
+		{5C56B24A-09C3-4884-B769-E3E8A042EE6A} = {098A942E-9208-403B-B873-CDDCFE8FE6A8}
+		{0654D78B-DE8C-4EB7-B32B-34DD1AFE46BF} = {098A942E-9208-403B-B873-CDDCFE8FE6A8}
+		{8227ECD6-6D34-4F4D-BFBC-02BC52E7CE7A} = {6560FA76-2CE0-46A2-8A95-DC8262014D6C}
+		{0136D28A-88DF-4C96-94FD-C1D6B4D4AE18} = {6560FA76-2CE0-46A2-8A95-DC8262014D6C}
+		{FDE26B94-980B-4155-A9A8-7CF6433C7658} = {6560FA76-2CE0-46A2-8A95-DC8262014D6C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.TransientFaultHandling.6.0.1304.0\lib\portable-net45+win+wp8;packages\EnterpriseLibrary.TransientFaultHandling.Data.6.0.1304.1\lib\NET45;ng.6.0.1304.0\lib\portable-net45+win+wp8;ng.Data.6.0.1304.1\lib\NET45;packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45
+		SolutionGuid = {B483BAF0-FC77-4BA7-8B43-DC593B90A3EE}
 	EndGlobalSection
 EndGlobal

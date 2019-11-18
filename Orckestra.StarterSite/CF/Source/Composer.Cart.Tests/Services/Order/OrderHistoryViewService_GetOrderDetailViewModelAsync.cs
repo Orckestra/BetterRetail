@@ -17,6 +17,7 @@ using Orckestra.Composer.Providers;
 using Orckestra.Composer.Services.Lookup;
 using Orckestra.Overture.ServiceModel.Customers;
 using Orckestra.Overture.ServiceModel.Orders;
+using System.Threading.Tasks;
 
 namespace Orckestra.Composer.Cart.Tests.Services.Order
 {
@@ -53,13 +54,11 @@ namespace Orckestra.Composer.Cart.Tests.Services.Order
               .Setup(r => r.GetOrderDetailsBaseUrl(It.IsAny<CultureInfo>()))
                .Returns(GetRandom.String(32));
 
-            _container.GetMock<ILineItemService>()
-             .Setup(r => r.GetImageUrlsAsync(It.IsAny<List<LineItem>>()))
-             .ReturnsAsync(null);
+            _container.GetMock<ILineItemService>();
         }
 
         [Test]
-        public async void WHEN_valid_request_SHOULD_succeed()
+        public async Task WHEN_valid_request_SHOULD_succeed()
         {
             //Arrange
             var customerId = Guid.NewGuid();
@@ -91,7 +90,7 @@ namespace Orckestra.Composer.Cart.Tests.Services.Order
         }
 
         [Test]
-        public async void WHEN_order_is_not_customer_one_SHOULD_return_null()
+        public async Task WHEN_order_is_not_customer_one_SHOULD_return_null()
         {
             //Arrange
             var customerId = Guid.NewGuid();

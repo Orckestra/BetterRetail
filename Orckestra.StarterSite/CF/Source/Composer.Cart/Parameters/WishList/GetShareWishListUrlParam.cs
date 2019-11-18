@@ -19,6 +19,7 @@ namespace Orckestra.Composer.Cart.Parameters.WishList
         /// Optional
         /// </summary>
         public CultureInfo CultureInfo { get; set; }
+        public Guid WebsiteId { get; set; }
 
 
     }

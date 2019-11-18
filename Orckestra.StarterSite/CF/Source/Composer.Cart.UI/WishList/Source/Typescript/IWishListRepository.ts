@@ -17,7 +17,9 @@ module Orckestra.Composer {
         /**
          * Add a line item to the wishList of the current customer.
          */
-        addLineItem(productId: string, variantId: string, quantity: number): Q.Promise<void>;
+        addLineItem(productId: string, variantId: string, quantity: number,
+            recurringOrderFrequencyName?: string,
+            recurringOrderProgramName?: string): Q.Promise<void>;
         /**
          * Delete a line item from the wishList of the current customer.
          */

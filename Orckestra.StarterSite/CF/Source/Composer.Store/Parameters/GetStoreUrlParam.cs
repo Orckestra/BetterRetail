@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 
 namespace Orckestra.Composer.Store.Parameters
 {
@@ -11,5 +12,7 @@ namespace Orckestra.Composer.Store.Parameters
         public string StoreNumber { get; set; }
 
         public CultureInfo CultureInfo { get; set; }
+
+        public Guid WebsiteId { get; set; }
     }
 }

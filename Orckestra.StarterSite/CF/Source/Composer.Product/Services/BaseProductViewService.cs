@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Product.Parameters;
 using Orckestra.Composer.Product.Repositories;
@@ -10,7 +11,10 @@ using Orckestra.Composer.Product.ViewModels;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Dam;
 using Orckestra.Composer.Providers.Localization;
+using Orckestra.Composer.Repositories;
+using Orckestra.Composer.Search.Helpers;
 using Orckestra.Composer.Search.Repositories;
+using Orckestra.Composer.Utils;
 using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel.Products;
 
@@ -25,15 +29,17 @@ namespace Orckestra.Composer.Product.Services
 	    private readonly IDamProvider _damProvider;
 	    private readonly ILocalizationProvider _localizationProvider;
 	    private readonly IProductUrlProvider _productUrlProvider;
+        protected IRecurringOrdersSettings RecurringOrdersSettings { get; private set; }
 
-	    protected BaseProductViewService(
+        protected BaseProductViewService(
             IProductRepository productRepository, 
             IDamProvider damProvider, 
             IProductUrlProvider productUrlProvider, 
             IViewModelMapper viewModelMapper, 
             ILocalizationProvider localizationProvider,
             IRelationshipRepository relationshipRepository,
-            IInventoryLocationProvider inventoryLocationProvider)
+            IInventoryLocationProvider inventoryLocationProvider,
+            IRecurringOrdersSettings recurringOrdersSettings)
 	    {
             if (productRepository == null) { throw new ArgumentNullException("productRepository"); }
             if (damProvider == null) { throw new ArgumentNullException("damProvider"); }
@@ -50,7 +56,9 @@ namespace Orckestra.Composer.Product.Services
 	        _productUrlProvider = productUrlProvider;
             RelationshipRepository = relationshipRepository;
 	        InventoryLocationProvider = inventoryLocationProvider;
-	    }
+            RecurringOrdersSettings = recurringOrdersSettings;
+
+        }
 
         protected abstract Task<IEnumerable<ProductIdentifier>> GetProductIdentifiersAsync(TParam param);
 
@@ -226,6 +234,12 @@ namespace Orckestra.Composer.Product.Services
             {
                 vm.DisplaySpecialPrice = _localizationProvider.FormatPrice((decimal)vm.Price, cultureInfo);
             }
+
+            var recurringOrdersEnabled = RecurringOrdersSettings.Enabled;
+            var recurringOrderProgramName = productVariant.Product.PropertyBag.GetValueOrDefault<string>(Constants.ProductAttributes.RecurringOrderProgramName);
+
+            vm.RecurringOrderProgramName = recurringOrderProgramName;
+            vm.IsRecurringOrderEligible = recurringOrdersEnabled && !string.IsNullOrWhiteSpace(recurringOrderProgramName);
 
             return vm;
         }

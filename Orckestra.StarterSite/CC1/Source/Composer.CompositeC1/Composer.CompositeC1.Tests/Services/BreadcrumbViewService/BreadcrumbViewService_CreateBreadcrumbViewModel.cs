@@ -5,11 +5,13 @@ using System.Linq;
 using Composite.Data.Types;
 using FizzWare.NBuilder.Generators;
 using FluentAssertions;
+using Moq;
 using Moq.AutoMock;
 using NUnit.Framework;
 using Orckestra.Composer.CompositeC1.Services;
 using Orckestra.Composer.CompositeC1.Tests.Mocks;
 using Orckestra.Composer.Services.Breadcrumb;
+using Orckestra.ExperienceManagement.Configuration;
 
 namespace Orckestra.Composer.CompositeC1.Tests.Services.BreadcrumbViewService
 {
@@ -22,6 +24,7 @@ namespace Orckestra.Composer.CompositeC1.Tests.Services.BreadcrumbViewService
         public string HomePageName { get; } = "Home";
 
         public Guid FolderPageLevel1Id { get; } = Guid.NewGuid();
+        public Guid FolderPageTypeId { get;  } = Guid.NewGuid();
         public string FolderPageLevel1Name { get; } = "Folder";
 
         public Guid PageLevel1Id { get; } = Guid.NewGuid();
@@ -45,6 +48,13 @@ namespace Orckestra.Composer.CompositeC1.Tests.Services.BreadcrumbViewService
             var dataSource = BuildPageDataSource(contentPageId);
             var pageServiceMock = new PageServiceMock(dataSource);
             Container.Use<IPageService>(pageServiceMock);
+
+            var mockedSiteConfiguration = new Mock<ISiteConfiguration>();
+
+            mockedSiteConfiguration.Setup(a => a.GetPagesConfiguration()).Returns(new PagesConfiguration {
+                FolderId = FolderPageTypeId
+            });
+            Container.Use<ISiteConfiguration>(mockedSiteConfiguration);
 
             _sut = Container.CreateInstance<CompositeC1.Services.BreadcrumbViewService>();
 
@@ -168,12 +178,13 @@ namespace Orckestra.Composer.CompositeC1.Tests.Services.BreadcrumbViewService
                     PageTypeId = contentPageId,
                     ParentPageId = Guid.Empty
                 },
+
                 new PageMock
                 {
                     Id = FolderPageLevel1Id,
                     MenuTitle = FolderPageLevel1Name,
                     Url = GetRandom.WwwUrl(),
-                    PageTypeId = PagesConfiguration.FolderId,
+                    PageTypeId = FolderPageTypeId,
                     ParentPageId = HomePageId
                 },
                 new PageMock

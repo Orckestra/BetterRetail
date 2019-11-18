@@ -9,6 +9,7 @@ using Moq.AutoMock;
 using NUnit.Framework;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
+using Orckestra.Composer.Search.Context;
 using Orckestra.Composer.Search.Facets;
 using Orckestra.Composer.Search.Factory;
 using Orckestra.Composer.Search.Repositories;
@@ -118,10 +119,7 @@ namespace Orckestra.Composer.Search.Tests.Service
             SearchViewService service = _container.CreateInstance<SearchViewService>();
 
             // Act & Assert
-            Assert.Throws<ArgumentNullException>(async () =>
-            {
-                await service.GetSearchViewModelAsync(null);
-            });
+            Assert.ThrowsAsync<ArgumentNullException>(() => service.GetSearchViewModelAsync(null));
         }
 
         [Test]
@@ -167,15 +165,14 @@ namespace Orckestra.Composer.Search.Tests.Service
             SearchViewService service = _container.CreateInstance<SearchViewService>();
 
             // Act & Assert
-            Assert.Throws<ArgumentNullException>(async () =>
-            {
-                await service.GetSearchViewModelAsync(new SearchCriteria
+            Assert.ThrowsAsync<ArgumentNullException>(() => service.GetSearchViewModelAsync(
+                new SearchCriteria
                 {
                     Keywords = "any",
                     CultureInfo = null,
                     Scope = "global"
-                });
-            });
+                }
+            ));
         }
 
         [Test]
@@ -185,15 +182,14 @@ namespace Orckestra.Composer.Search.Tests.Service
             SearchViewService service = _container.CreateInstance<SearchViewService>();
 
             // Act & Assert
-            Assert.Throws<ArgumentNullException>(async () =>
-            {
-                await service.GetSearchViewModelAsync(new SearchCriteria
+            Assert.ThrowsAsync<ArgumentNullException>(() => service.GetSearchViewModelAsync(
+                new SearchCriteria
                 {
                     Keywords = "any",
                     CultureInfo = new CultureInfo(CultureName),
                     Scope = null
-                });
-            });
+                }
+            ));
         }
 
         [Test]
@@ -203,15 +199,14 @@ namespace Orckestra.Composer.Search.Tests.Service
             SearchViewService service = _container.CreateInstance<SearchViewService>();
 
             // Act & Assert
-            Assert.Throws<ArgumentNullException>(async () =>
-            {
-                await service.GetSearchViewModelAsync(new SearchCriteria
+            Assert.ThrowsAsync<ArgumentNullException>(() => service.GetSearchViewModelAsync(
+                new SearchCriteria
                 {
                     Keywords = "any",
                     CultureInfo = new CultureInfo(CultureName),
                     Scope = string.Empty
-                });
-            });
+                }
+            ));
         }
 
         [Test]
@@ -257,7 +252,7 @@ namespace Orckestra.Composer.Search.Tests.Service
             // Arrange
             SearchViewService service = _container.CreateInstance<SearchViewService>();
             var facetName = GetRandom.String(5);
-            SearchConfiguration.FacetSettings.Add(new FacetSetting(facetName));
+            SetupFacets(new FacetSetting(facetName));
 
             // Act
             SearchViewModel model = await service.GetSearchViewModelAsync(new SearchCriteria
@@ -346,5 +341,12 @@ namespace Orckestra.Composer.Search.Tests.Service
         //    // Assert
         //    model.SelectedFacets.IsAllRemovable.Should().BeFalse();
         //}
+
+        private void SetupFacets(params FacetSetting[] settings)
+        {
+            _container.GetMock<IFacetConfigurationContext>()
+                .Setup(x => x.GetFacetSettings())
+                .Returns(new List<FacetSetting>(settings));
+        }
     }
 }

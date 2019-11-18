@@ -4,7 +4,9 @@ using System.Globalization;
 using System.Linq;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
+using Orckestra.Composer.Search.Context;
 using Orckestra.Composer.Search.Facets;
+using Orckestra.Composer.Search.Providers.Facet;
 using Orckestra.Composer.Search.Providers.SelectedFacet;
 using Orckestra.Composer.Utils;
 using Orckestra.Overture;
@@ -13,24 +15,26 @@ namespace Orckestra.Composer.Search.Factory
 {
     public class SelectedFacetFactory : ProviderFactory<ISelectedFacetProvider>, ISelectedFacetFactory
     {
-         private ISelectedFacetProviderRegistry SelectedFacetProviderRegistry { get; set; }
+         private ISelectedFacetProviderRegistry SelectedFacetProviderRegistry { get; }
+         protected IFacetConfigurationContext FacetConfigContext { get; }
 
-         public SelectedFacetFactory(IDependencyResolver dependencyResolver, ISelectedFacetProviderRegistry selectedFacetProviderRegistry)
+         public SelectedFacetFactory(IDependencyResolver dependencyResolver, ISelectedFacetProviderRegistry selectedFacetProviderRegistry, IFacetConfigurationContext facetConfigContext)
             : base(dependencyResolver)
         {
             if (selectedFacetProviderRegistry == null) { throw new ArgumentNullException("selectedFacetProviderRegistry"); }
             SelectedFacetProviderRegistry = selectedFacetProviderRegistry;
+            FacetConfigContext = facetConfigContext;
         }
 
         /// <summary>
         /// Creates a new list of <see cref="SelectedFacet"/> based on a <param name="filter"></param> object.
         /// </summary>
-         public IEnumerable<SelectedFacet> CreateSelectedFacet(SearchFilter filter, CultureInfo cultureInfo)
+         public virtual IEnumerable<SelectedFacet> CreateSelectedFacet(SearchFilter filter, CultureInfo cultureInfo)
         {
             if (filter == null) { throw new ArgumentNullException("filter"); }
             if (string.IsNullOrWhiteSpace(filter.Name)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("Name"), "filter"); }
 
-            var setting = SearchConfiguration.FacetSettings
+            var setting = FacetConfigContext.GetFacetSettings()
                 .FirstOrDefault(s => s.FieldName.Equals(filter.Name, StringComparison.OrdinalIgnoreCase));
 
             if (setting == null)

@@ -27,7 +27,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
         }
 
         [Test]
-        public async void WHEN_valid_request_SHOULD_succeed()
+        public async Task WHEN_valid_request_SHOULD_succeed()
         {
             //Arrange
             var expectedEmail = GetRandom.Email();
@@ -50,7 +50,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
         }
 
         [Test]
-        public async void WHEN_bad_request_SHOULD_succeed()
+        public async Task WHEN_bad_request_SHOULD_succeed()
         {
             //Arrange
             var expectedEmail = GetRandom.Email();
@@ -79,7 +79,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             var membershipService = _container.CreateInstance<MembershipViewService>();
 
             //Act
-            var ex = Assert.Throws<ArgumentNullException>(async () => await membershipService.ForgotPasswordAsync(null));
+            var ex = Assert.ThrowsAsync<ArgumentNullException>(() => membershipService.ForgotPasswordAsync(null));
 
             //Assert
             ex.Message.Should().ContainEquivalentOf("param");
@@ -93,7 +93,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             var membershipService = _container.CreateInstance<MembershipViewService>();
 
             //Act
-            var ex = Assert.Throws<ArgumentException>(async () => await membershipService.ForgotPasswordAsync(
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => membershipService.ForgotPasswordAsync(
                 new ForgotPasswordParam
                 {
                     CultureInfo = cultureInfo,
@@ -116,7 +116,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             var membershipService = _container.CreateInstance<MembershipViewService>();
 
             //Act
-            var ex = Assert.Throws<ArgumentException>(async () => await membershipService.ForgotPasswordAsync(
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => membershipService.ForgotPasswordAsync(
                 new ForgotPasswordParam
                 {
                     CultureInfo = TestingExtensions.GetRandomCulture(),
@@ -139,7 +139,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             var membershipService = _container.CreateInstance<MembershipViewService>();
 
             //Act
-            var ex = Assert.Throws<ArgumentException>(async () => await membershipService.ForgotPasswordAsync(
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => membershipService.ForgotPasswordAsync(
                 new ForgotPasswordParam
                 {
                     CultureInfo = TestingExtensions.GetRandomCulture(),

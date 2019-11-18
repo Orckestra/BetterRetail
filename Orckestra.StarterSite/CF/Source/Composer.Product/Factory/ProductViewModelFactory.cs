@@ -4,14 +4,16 @@ using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Enums;
+using Orckestra.Composer.Factory;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Product.Parameters;
-using Orckestra.Composer.Product.Repositories;
 using Orckestra.Composer.Product.Services;
 using Orckestra.Composer.Product.ViewModels;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Dam;
+using Orckestra.Composer.Repositories;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Services.Lookup;
 using Orckestra.Composer.Utils;
@@ -30,6 +32,9 @@ namespace Orckestra.Composer.Product.Factory
         protected ILookupService LookupService { get; }
         protected IProductUrlProvider ProductUrlProvider { get; }
         protected IScopeViewService ScopeViewService { get; }
+        protected IRecurringOrdersRepository RecurringOrdersRepository { get; }
+        protected IRecurringOrderProgramViewModelFactory RecurringOrderProgramViewModelFactory { get; }
+        protected IRecurringOrdersSettings RecurringOrdersSettings { get; private set; }
 
         public ProductViewModelFactory(
             IViewModelMapper viewModelMapper,
@@ -38,23 +43,21 @@ namespace Orckestra.Composer.Product.Factory
             ILocalizationProvider localizationProvider,
             ILookupService lookupService,
             IProductUrlProvider productUrlProvider,
-            IScopeViewService scopeViewService)
+            IScopeViewService scopeViewService,
+            IRecurringOrdersRepository recurringOrdersRepository,
+            IRecurringOrderProgramViewModelFactory recurringOrderProgramViewModelFactory,
+            IRecurringOrdersSettings recurringOrdersSettings)
         {
-            if (viewModelMapper == null) { throw new ArgumentNullException(nameof(viewModelMapper)); }
-            if (productRepository == null) { throw new ArgumentNullException(nameof(productRepository)); }
-            if (damProvider == null) { throw new ArgumentNullException(nameof(damProvider)); }
-            if (localizationProvider == null) { throw new ArgumentNullException(nameof(localizationProvider)); }
-            if (lookupService == null) { throw new ArgumentNullException(nameof(lookupService)); }
-            if (productUrlProvider == null) { throw new ArgumentNullException(nameof(productUrlProvider)); }
-            if (scopeViewService == null) { throw new ArgumentNullException(nameof(scopeViewService)); }
-
-            ViewModelMapper = viewModelMapper;
-            ProductRepository = productRepository;
-            DamProvider = damProvider;
-            LocalizationProvider = localizationProvider;
-            LookupService = lookupService;
-            ProductUrlProvider = productUrlProvider;
-            ScopeViewService = scopeViewService;
+            ViewModelMapper = viewModelMapper ?? throw new ArgumentNullException(nameof(viewModelMapper));
+            ProductRepository = productRepository ?? throw new ArgumentNullException(nameof(productRepository));
+            DamProvider = damProvider ?? throw new ArgumentNullException(nameof(damProvider));
+            LocalizationProvider = localizationProvider ?? throw new ArgumentNullException(nameof(localizationProvider));
+            LookupService = lookupService ?? throw new ArgumentNullException(nameof(lookupService));
+            ProductUrlProvider = productUrlProvider ?? throw new ArgumentNullException(nameof(productUrlProvider));
+            ScopeViewService = scopeViewService ?? throw new ArgumentNullException(nameof(scopeViewService));
+            RecurringOrdersRepository = recurringOrdersRepository ?? throw new ArgumentNullException(nameof(recurringOrdersRepository));
+            RecurringOrderProgramViewModelFactory = recurringOrderProgramViewModelFactory ?? throw new ArgumentNullException(nameof(recurringOrderProgramViewModelFactory));
+            RecurringOrdersSettings = recurringOrdersSettings;
         }
 
         public virtual async Task<ProductViewModel> GetProductViewModel(GetProductParam param)
@@ -99,7 +102,48 @@ namespace Orckestra.Composer.Product.Factory
                 Currency = currency
             });
 
+            productViewModel = await SetViewModelRecurringOrdersRelatedProperties(param, productViewModel, product).ConfigureAwaitWithCulture(false);
+
             return productViewModel;
+        }
+
+        protected virtual async Task<ProductViewModel> SetViewModelRecurringOrdersRelatedProperties(GetProductParam param, ProductViewModel vm, Overture.ServiceModel.Products.Product product)
+        {
+            if (param == null) throw new ArgumentNullException(nameof(param));
+            if (vm == null) throw new ArgumentNullException(nameof(vm));
+
+            var recurringOrdersEnabled = RecurringOrdersSettings.Enabled;
+
+            var recurringOrderProgramName = product.PropertyBag.GetValueOrDefault<string>(Constants.ProductAttributes.RecurringOrderProgramName);
+
+            if (string.IsNullOrWhiteSpace(recurringOrderProgramName))
+            {
+                return vm;
+            }
+
+            vm.RecurringOrderProgramName = recurringOrderProgramName;
+            vm.Context["RecurringOrderProgramName"] = recurringOrderProgramName;
+
+            var program = await RecurringOrdersRepository.GetRecurringOrderProgram(param.Scope, recurringOrderProgramName).ConfigureAwaitWithCulture(false);
+
+            if (program == null)
+            {
+                return vm;
+            }
+
+           
+            vm.IsRecurringOrderEligible = recurringOrdersEnabled;
+            vm.Context["IsRecurringOrderEligible"] = recurringOrdersEnabled;
+
+            if (recurringOrdersEnabled)
+            {
+                var recurringOrderProgramViewModel = RecurringOrderProgramViewModelFactory.CreateRecurringOrderProgramViewModel(program, param.CultureInfo);
+
+                vm.RecurringOrderFrequencies = recurringOrderProgramViewModel.Frequencies;
+                vm.Context["RecurringOrderFrequencies"] = recurringOrderProgramViewModel.Frequencies;
+            }
+
+            return vm;
         }
 
         protected virtual ProductViewModel CreateViewModel(CreateProductDetailViewModelParam param)
@@ -145,6 +189,8 @@ namespace Orckestra.Composer.Product.Factory
             {
                 displayName = param.Product.DisplayName.GetLocalizedValue(param.CultureInfo.Name);
             }
+
+            productDetailViewModel.Price = param.Product.ListPrice;
 
             productDetailViewModel.ProductDetailUrl = ProductUrlProvider.GetProductUrl(new GetProductUrlParam
             {                
@@ -437,7 +483,7 @@ namespace Orckestra.Composer.Product.Factory
                                 ?? (g.Key ?? string.Empty).ToString(),
                         Value = g.Key,
                         Selected = false,
-                        Disabled = true,
+                        Disabled = false,
                         RelatedVariantIds = g.Select(o => o.Variant.Id).ToList()
                     })
                     .ToList();
@@ -500,18 +546,42 @@ namespace Orckestra.Composer.Product.Factory
                 //Stock
                 kvas.Add(new KeyVariantAttributeItem
                 {
-                    DisplayName =
-                        property.DisplayName.GetLocalizedValue(kvaParam.CultureInfo.Name) ?? property.PropertyName,
+                    DisplayName = property.DisplayName.GetLocalizedValue(kvaParam.CultureInfo.Name) ?? property.PropertyName,
                     PropertyName = property.PropertyName,
                     PropertyDataType = property.DataType.ToString("g"),
                     Values = items
                 });
             }
 
+            kvas = DisableMissingKvas(kvaParam, kvas);
+
             return EnableKvasInStock(kvaParam, kvas); 
         }
 
-        private List<KeyVariantAttributeItem> EnableKvasInStock(GenerateKvaItemsParam kvaParam, List<KeyVariantAttributeItem> kvas)
+        private List<KeyVariantAttributeItem> DisableMissingKvas(GenerateKvaItemsParam kvaParam, List<KeyVariantAttributeItem> kvas)
+        {
+            foreach (var selectedKva in kvaParam.SelectedKvas)
+            {
+                var existingKvasOtherThanSelected = kvaParam.ProductVariants
+                    //All product variants that have the same KVA as our selected one
+                    .Where(productVariant => productVariant.Kvas[selectedKva.Key].Equals(selectedKva.Value))
+                    .SelectMany(productVariant => productVariant.Kvas) //Flatten our product variants to their KVA values
+                                                                       //Ignore the KVAs retrieved that are the same type as our selected one (i.e. if our selected is Color, ignore all Color KVAs and keep the other ones)
+                    .Where(productVariantKva => !productVariantKva.Key.Equals(selectedKva.Key))
+                    .ToList();
+                var allPossibleKvasOtherThanSelected = kvas
+                    .Where(kva => !kva.PropertyName.Equals(selectedKva.Key))
+                    .SelectMany(v => v.Values);
+                var notExistingKva = allPossibleKvasOtherThanSelected.Where(x => !existingKvasOtherThanSelected.Any(ekva => ekva.Value.Equals(x.Value)));
+                foreach (var kva in notExistingKva)
+                {
+                    kva.Disabled = true;
+                };
+            };
+            return kvas;
+        }
+
+        protected virtual List<KeyVariantAttributeItem> EnableKvasInStock(GenerateKvaItemsParam kvaParam, List<KeyVariantAttributeItem> kvas)
         {            
             //Enable available kvas
             foreach (var kva in kvaParam.SelectedKvas)
@@ -540,11 +610,11 @@ namespace Orckestra.Composer.Product.Factory
         /// <param name="product"></param>
         /// <param name="variants"></param>
         /// <returns></returns>
-        private async Task<List<AllProductImages>> GetProductImages(
+        protected virtual async Task<List<AllProductImages>> GetProductImages(
             Overture.ServiceModel.Products.Product product,
             IList<Variant> variants)
         {
-            var productDetailImages = await DamProvider.GetAllProductImagesAsync(new GetAllProductImagesParam
+            var param = new GetAllProductImagesParam
             {
                 ImageSize = ProductConfiguration.ImageSize,
                 ThumbnailImageSize = ProductConfiguration.ThumbnailImageSize,
@@ -552,14 +622,12 @@ namespace Orckestra.Composer.Product.Factory
                 ProductId = product.Id,
                 PropertyBag = product.PropertyBag,
                 ProductDefinitionName = product.DefinitionName,
-                Variants = variants == null ? new List<VariantKey>() : variants.Select(variant => new VariantKey
-                {
-                    Id = variant.Id,
-                    KeyVariantAttributeValues = variant.PropertyBag
-                }).ToList()
-            }).ConfigureAwait(false);
+                Variants = variants == null ? new List<Variant>() : variants.ToList(),
+                MediaSet = product.MediaSet,
+                VariantMediaSet = product.VariantMediaSet
+            };
 
-            return productDetailImages;
+            return await DamProvider.GetAllProductImagesAsync(param).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -589,7 +657,7 @@ namespace Orckestra.Composer.Product.Factory
             return productDetailImageViewModels;
         }
 
-        private static IEnumerable<ProductDetailImageViewModel> SetFirstImageSelected(
+        protected static IEnumerable<ProductDetailImageViewModel> SetFirstImageSelected(
           IEnumerable<ProductDetailImageViewModel> imageViewModels)
         {
             // convert the IEnumerable to an array so that changes to the .First() element are persisted

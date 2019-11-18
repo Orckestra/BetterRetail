@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Configuration;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using System.Web.Security;
-using Orckestra.Composer.Configuration;
 using Orckestra.Composer.MyAccount.Parameters;
 using Orckestra.Composer.MyAccount.Providers;
 using Orckestra.Composer.MyAccount.Requests;
@@ -16,6 +14,7 @@ using Orckestra.Composer.Providers;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Utils;
 using Orckestra.Composer.WebAPIFilters;
+using Orckestra.ExperienceManagement.Configuration;
 using LoginViewModel = Orckestra.Composer.MyAccount.Requests.LoginViewModel;
 
 namespace Orckestra.Composer.MyAccount.Api
@@ -32,35 +31,27 @@ namespace Orckestra.Composer.MyAccount.Api
     [JQueryOnlyFilter]
     public class MembershipController : ApiController
     {
-        private readonly ComposerCookieAccesserConfigurationElement _cookieConfig;
-
-        protected IMyAccountUrlProvider MyAccountUrlProvider { get; }
-        protected IMembershipViewService MembershipViewService { get; }
-        protected IComposerContext ComposerContext { get; }
-        internal IFormsAuthenticationProxy FormsAuthentication { private get; set; }
+        protected virtual IMyAccountUrlProvider MyAccountUrlProvider { get; }
+        protected virtual IMembershipViewService MembershipViewService { get; }
+        protected virtual IComposerContext ComposerContext { get; }
+        protected virtual ISiteConfiguration SiteConfiguration { get; }
+        protected virtual IFormsAuthenticationProxy FormsAuthentication { get; set; }
+        public virtual IWebsiteContext WebsiteContext { get; set; }
 
         public MembershipController(
             IMyAccountUrlProvider myAccountUrlProvider,
             IMembershipViewService membershipViewService,
-            IComposerContext composerContext)
+            IComposerContext composerContext,
+            ISiteConfiguration siteConfiguration,
+            IWebsiteContext websiteContext)
         {
-            if (myAccountUrlProvider == null) { throw new ArgumentNullException(nameof(myAccountUrlProvider)); }
-            if (membershipViewService == null) { throw new ArgumentNullException(nameof(membershipViewService)); }
-            if (composerContext == null) { throw new ArgumentNullException(nameof(composerContext)); }
-
-            MyAccountUrlProvider = myAccountUrlProvider;
-            MembershipViewService = membershipViewService;
-            ComposerContext = composerContext;
-
-            //Configurations
-            //It's ok to omit this config, we simply fallback to the default values
-            var conf = ConfigurationManager.GetSection(ComposerConfigurationSection.ConfigurationName) as ComposerConfigurationSection;
-            var confComposer = conf ?? new ComposerConfigurationSection();
-            var confCookie = confComposer.ComposerCookieAccesser ?? new ComposerCookieAccesserConfigurationElement();
+            MyAccountUrlProvider = myAccountUrlProvider ?? throw new ArgumentNullException(nameof(myAccountUrlProvider));
+            MembershipViewService = membershipViewService ?? throw new ArgumentNullException(nameof(membershipViewService));
+            ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
+            SiteConfiguration = siteConfiguration ?? throw new ArgumentNullException(nameof(siteConfiguration)); ;
+            WebsiteContext = websiteContext ?? throw new ArgumentNullException(nameof(websiteContext));
 
             FormsAuthentication = new StaticFormsAuthenticationProxy();
-
-            _cookieConfig = confCookie;
         }
 
         /// <summary>
@@ -81,7 +72,7 @@ namespace Orckestra.Composer.MyAccount.Api
 
             if (string.IsNullOrWhiteSpace(returnUrl) || !UrlFormatter.IsReturnUrlValid(RequestUtils.GetBaseUrl(Request).ToString(), returnUrl))
             {
-                returnUrl = MyAccountUrlProvider.GetMyAccountUrl(new GetMyAccountUrlParam
+                returnUrl = MyAccountUrlProvider.GetMyAccountUrl(new BaseUrlParameter
                 {
                     CultureInfo = ComposerContext.CultureInfo
                 });
@@ -106,21 +97,16 @@ namespace Orckestra.Composer.MyAccount.Api
 
             if (loginRequest.IsRememberMe)
             {
-                var ticket = new FormsAuthenticationTicket(loginViewModel.Username, loginRequest.IsRememberMe, _cookieConfig.Timeout);
-                var encrypted = FormsAuthentication.Encrypt(ticket);
-
-                var cookie = new HttpCookie(FormsAuthentication.FormsCookieName, encrypted)
-                {
-                    Expires = DateTime.Now.AddMinutes(_cookieConfig.Timeout),
-                    HttpOnly = true,
-                    Secure = _cookieConfig.RequireSsl
-                };
-
-                HttpContext.Current.Response.Cookies.Add(cookie);
+                FormsAuthentication.SetAuthCookie(
+                    loginViewModel.Username,
+                    SiteConfiguration.CookieAccesserSettings.TimeoutInMinutes,
+                    loginRequest.IsRememberMe,
+                    WebsiteContext.WebsiteId.ToString(),
+                    SiteConfiguration.CookieAccesserSettings.RequireSsl);
             }
             else
             {
-                FormsAuthentication.SetAuthCookie(loginViewModel.Username, true);
+                FormsAuthentication.SetAuthCookie(loginViewModel.Username, true, WebsiteContext.WebsiteId.ToString());
             }
 
             return Ok(loginViewModel);
@@ -153,7 +139,7 @@ namespace Orckestra.Composer.MyAccount.Api
             response.ReturnUrl = logoutRequest.ReturnUrl;
             if (string.IsNullOrWhiteSpace(response.ReturnUrl) || !UrlFormatter.IsReturnUrlValid(RequestUtils.GetBaseUrl(Request).ToString(), response.ReturnUrl))
             {
-                response.ReturnUrl = MyAccountUrlProvider.GetLoginUrl(new GetMyAccountUrlParam
+                response.ReturnUrl = MyAccountUrlProvider.GetLoginUrl(new BaseUrlParameter
                 {
                     CultureInfo = ComposerContext.CultureInfo
                 });
@@ -194,7 +180,7 @@ namespace Orckestra.Composer.MyAccount.Api
 
             if (string.IsNullOrWhiteSpace(returnUrl) || !UrlFormatter.IsReturnUrlValid(RequestUtils.GetBaseUrl(Request).ToString(), returnUrl))
             {
-                returnUrl = MyAccountUrlProvider.GetMyAccountUrl(new GetMyAccountUrlParam
+                returnUrl = MyAccountUrlProvider.GetMyAccountUrl(new BaseUrlParameter
                 {
                     CultureInfo = ComposerContext.CultureInfo
                 });
@@ -232,7 +218,7 @@ namespace Orckestra.Composer.MyAccount.Api
 
             ComposerContext.IsGuest = false;
             ComposerContext.CustomerId = createAccountViewModel.CustomerId;
-            FormsAuthentication.SetAuthCookie(createAccountViewModel.Username, true);
+            FormsAuthentication.SetAuthCookie(createAccountViewModel.Username, true, WebsiteContext.WebsiteId.ToString());
 
             return Ok(createAccountViewModel);
         }
@@ -288,7 +274,7 @@ namespace Orckestra.Composer.MyAccount.Api
 
             if (string.IsNullOrWhiteSpace(returnUrl) || !UrlFormatter.IsReturnUrlValid(RequestUtils.GetBaseUrl(Request).ToString(), returnUrl))
             {
-                returnUrl = MyAccountUrlProvider.GetLoginUrl(new GetMyAccountUrlParam
+                returnUrl = MyAccountUrlProvider.GetLoginUrl(new BaseUrlParameter
                 {
                     CultureInfo = ComposerContext.CultureInfo
                 });

@@ -1,0 +1,99 @@
+<div data-templateid="RecurringCartDetailsAddress">
+    <div class="panel  panel-default">
+         {{#if IsLoading}}
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-10">
+                        <h2 class="h3">{{localize 'MyAccount' 'T_ShippingMethod' }}</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                {{>Loading}}
+            </div>
+        {{else}}
+            {{#unless EditMode}}
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-10">
+                        <h2 class="h3">{{localize 'MyAccount' 'T_Addresses' }}</h2>
+                    </div>
+                    <div class="col-xs-2">
+                        <button class="btn btn-link pull-right" type="button" 
+                        data-oc-click="toggleEditAddress" 
+                        title="{{localize 'CheckoutProcess' 'B_Edit'}}">
+                            <span class="fa  fa-pencil  fa-lg"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-xs-12  col-sm-6  col-md-6">
+                        <h2 class="h4">{{localize 'CheckoutProcess' 'T_ShippingAddress'}}</h2>
+                        <h5>{{ShippingAddress.AddressName}}</h5>
+                        <strong>
+                            <span data-qa="order-shipping-address-firstname">{{ShippingAddress.FirstName}}</span>&#160;<span data-qa="order-shipping-address-lastname">{{ShippingAddress.LastName}}</span>
+                        </strong>
+                        <br />
+                        <span data-qa="order-shipping-address-line1">{{ShippingAddress.Line1}}</span><br />
+                        {{#if ShippingAddress.Line2}}
+                            <span data-qa="order-shipping-address-line2">{{ShippingAddress.Line2}}</span><br />
+                        {{/if}}
+                        <span data-qa="order-shipping-address-city">{{ShippingAddress.City}}</span>,
+                        <span data-qa="order-shipping-address-region">{{ShippingAddress.RegionName}}</span>,
+                        <span data-qa="order-shipping-address-postalcode">{{ShippingAddress.PostalCode}}</span><br />
+                        <span data-qa="order-shipping-address-phone">{{ShippingAddress.PhoneNumber}}</span>
+                    </div>
+                    <div class="col-xs-12  col-sm-6  col-md-6">
+                        <h2 class="h4">{{localize 'MyAccount' 'T_BillingAddress'}}</h2>
+                        <h5>{{Payment.BillingAddress.AddressName}}</h5>
+                        <strong>
+                            <span data-qa="order-billing-address-firstname">{{Payment.BillingAddress.FirstName}}</span>&#160;<span data-qa="order-billing-address-lastname">{{Payment.BillingAddress.LastName}}</span>
+                        </strong>
+                        <br />
+                        <span data-qa="order-billing-address-line1">{{Payment.BillingAddress.Line1}}</span><br />
+                        {{#if Payment.BillingAddress.Line2}}
+                            <span data-qa="order-billing-address-line2">{{Payment.BillingAddress.Line2}}</span><br />
+                        {{/if}}
+                        <span data-qa="order-billing-address-city">{{Payment.BillingAddress.City}}</span>,
+                        <span data-qa="order-billing-address-region">{{Payment.BillingAddress.RegionName}}</span>,
+                        <span data-qa="order-billing-address-postalcode">{{Payment.BillingAddress.PostalCode}}</span><br />
+                        <span data-qa="order-billing-address-phone">{{Payment.BillingAddress.PhoneNumber}}</span>
+                    </div>
+                </div>
+            </div>
+            {{else}}
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-10">
+                        <h2 class="h3">{{localize 'MyAccount' 'T_Addresses' }}</h2>
+                    </div>
+                    <div class="col-xs-2">
+                        <button class="btn btn-link pull-right invisible" type="button" 
+                        title="{{localize 'CheckoutProcess' 'B_Edit'}}">
+                            <span class="fa  fa-pencil  fa-lg"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body"> 
+                {{>FormErrorMessages}}           
+                {{> RecurringCartShippingAddressRegistered}}
+                <br />
+                {{> RecurringCartBillingAddressRegistered}}           
+                        
+                <div class="col-xs-12 text-center">
+                    <button class="btn btn-default" type="button" 
+                        data-oc-click="toggleEditAddress">{{localize 'General' 'B_Cancel'}}</button>
+                    <button class="btn btn-primary"
+                        data-oc-click="saveEditAddress">{{localize 'MyAccount' 'B_SaveChanges'}}
+                        <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  hidden"></span>
+                    </button>
+                </div>
+            </div>
+            {{/unless}}
+        {{/if}}
+    </div>    
+    {{> AddressConfirmationModal}}
+</div>
