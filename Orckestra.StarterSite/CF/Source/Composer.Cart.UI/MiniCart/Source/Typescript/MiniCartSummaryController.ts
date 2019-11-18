@@ -14,6 +14,7 @@ module Orckestra.Composer {
 
         private cartService: CartService = new CartService(new CartRepository(), this.eventHub);
         private cacheProvider: ICacheProvider = CacheProvider.instance();
+        private timer: number;
 
         public initialize() {
             super.initialize();
@@ -43,6 +44,9 @@ module Orckestra.Composer {
             let notificationTime =  parseInt(miniCartContainer.data('notificationTime'), 10);
             let scrollToLineItemKey = e.data.ProductId + '-' + (e.data.VariantId || '');
 
+            //To reset timer
+            clearTimeout(this.timer);
+
             if (notificationTime > 0) {
                 miniCartContainer.addClass('displayMiniCart');
 
@@ -51,7 +55,7 @@ module Orckestra.Composer {
                     scrollTop: $('[data-lineitem-id="' + scrollToLineItemKey + '"]', miniCartContainer).position().top
                 }, 1000);
 
-                setTimeout(function(){
+                this.timer = setTimeout(function(){
                     miniCartContainer.removeClass('displayMiniCart');
                 }, notificationTime);
             }
@@ -59,10 +63,15 @@ module Orckestra.Composer {
 
         private onCloseMiniCart(e: IEventInformation): void {
             let miniCartContainer = $(this.context.container);
+
             miniCartContainer.addClass('hidden');
             setTimeout(function(){
                 miniCartContainer.removeClass('hidden');
-            }, 500);
+            }, 250);
+
+            //Hide the display and cancel the display timer to not have a flickering display
+            miniCartContainer.removeClass('displayMiniCart');
+            clearTimeout(this.timer);
         }
 
         protected onCheckout(actionContext: IControllerActionContext): void {
