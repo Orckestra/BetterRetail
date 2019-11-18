@@ -365,7 +365,7 @@ Pas de soucis, vous pouvez trouver d'excellentes suggestions de produits à offr
     <value>Prix unitaire</value>
   </data>
   <data name="L_UpdateAccountSuccess" xml:space="preserve">
-    <value>Vos changements ont été sauvegardé!</value>
+    <value>Vos changements ont été sauvegardés!</value>
   </data>
   <data name="P_ShareWishListCopyLink" xml:space="preserve">
     <value>L'URL est créé quand des articles sont ajoutés à la liste de souhaits.</value>

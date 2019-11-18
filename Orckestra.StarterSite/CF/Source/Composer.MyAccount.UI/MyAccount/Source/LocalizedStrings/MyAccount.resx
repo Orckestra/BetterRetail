@@ -365,7 +365,7 @@ Don't worry, you can still find great products to offer!</value>
     <value>Unit price</value>
   </data>
   <data name="L_UpdateAccountSuccess" xml:space="preserve">
-    <value>Your changes has been saved!</value>
+    <value>Your changes have been saved!</value>
   </data>
   <data name="P_ShareWishListCopyLink" xml:space="preserve">
     <value>The URL is created when you add items to your Wish List.</value>

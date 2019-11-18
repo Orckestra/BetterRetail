@@ -139,7 +139,7 @@
     <value>Voulez-vous vraiment supprimer cet article récurrent?</value>
   </data>
   <data name="L_UpdateRecurringScheduleSuccess" xml:space="preserve">
-    <value>Vos changements ont été sauvegardé!</value>
+    <value>Vos changements ont été sauvegardés!</value>
   </data>
 	<data name="T_RecurringScheduleDetailsNextOccurence" xml:space="preserve">
     <value>Prochaine date de traitement</value>
