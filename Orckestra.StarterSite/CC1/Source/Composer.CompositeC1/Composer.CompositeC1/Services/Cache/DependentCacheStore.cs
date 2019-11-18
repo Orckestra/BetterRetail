@@ -4,7 +4,7 @@ using Composite.Data;
 
 namespace Orckestra.Composer.CompositeC1.Services.Cache
 {
-    internal class DependentCacheStore<K, V> : CacheStore<K, V> where V : class
+    internal class DependentCacheStore<K, V> : CacheStore<K, V>
     {
         public List<CacheDependentEntry> DependentEntities { get; }
         public DependentCacheStore(string name, int maximumSize, params CacheDependentEntry[] dependentEntities) : base(name, maximumSize)

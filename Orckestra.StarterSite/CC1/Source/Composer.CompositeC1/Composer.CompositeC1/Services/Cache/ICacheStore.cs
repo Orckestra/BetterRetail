@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Orckestra.Composer.CompositeC1.Services.Cache
 {
-    public interface ICacheStore<K, V> where V: class
+    public interface ICacheStore<K, V>
     {
         string Name { get; }
         void Add(K key, V value);

@@ -2,9 +2,9 @@
 {
     public interface ICacheService
     {
-        ICacheStore<K, V> GetStore<K, V>(string name, int maximumSize) where V: class;
-        ICacheStore<K, V> GetStore<K, V>(string name) where V: class;
-        ICacheStore<K, V> GetStoreWithDependencies<K, V>(string name, int maximumSize, params CacheDependentEntry[] dependentEntities) where V : class;
-        ICacheStore<K, V> GetStoreWithDependencies<K, V>(string name, params CacheDependentEntry[] dependentEntities) where V : class;
+        ICacheStore<K, V> GetStore<K, V>(string name, int maximumSize);
+        ICacheStore<K, V> GetStore<K, V>(string name);
+        ICacheStore<K, V> GetStoreWithDependencies<K, V>(string name, int maximumSize, params CacheDependentEntry[] dependentEntities);
+        ICacheStore<K, V> GetStoreWithDependencies<K, V>(string name, params CacheDependentEntry[] dependentEntities);
     };
 }

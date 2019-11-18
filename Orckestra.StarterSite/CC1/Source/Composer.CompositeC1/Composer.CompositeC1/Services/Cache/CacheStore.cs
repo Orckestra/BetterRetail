@@ -5,7 +5,7 @@ using Composite.Data.Caching;
 
 namespace Orckestra.Composer.CompositeC1.Services.Cache
 {
-    internal class CacheStore<K, V> : ICacheStore<K, V>, IDisposable where V : class
+    internal class CacheStore<K, V> : ICacheStore<K, V>, IDisposable
     {
         private readonly Cache<K, CachedValue<V>> _cache;
 
@@ -23,7 +23,11 @@ namespace Orckestra.Composer.CompositeC1.Services.Cache
 
         public void Add(K key, V value) => _cache.Add(key, new CachedValue<V>(value));
 
-        public V Get(K key) => _cache.Get(key)?.Value;
+        public V Get(K key)
+        {
+            var cachedValue = _cache.Get(key);
+            return cachedValue == null ? default(V) : cachedValue.Value;
+        }
 
         public IEnumerable<K> GetKeys() => _cache.GetKeys();
 
