@@ -129,9 +129,6 @@
     <Reference Include="Orckestra.Composer.SearchQuery, Version=4.8.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Composer.4.8.0-Build\lib\net461\Orckestra.Composer.SearchQuery.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Composer.Sitemap, Version=4.8.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Composer.4.8.0-Build\lib\net461\Orckestra.Composer.Sitemap.dll</HintPath>
-    </Reference>
     <Reference Include="Orckestra.Composer.Store, Version=4.8.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Composer.4.8.0-Build\lib\net461\Orckestra.Composer.Store.dll</HintPath>
     </Reference>

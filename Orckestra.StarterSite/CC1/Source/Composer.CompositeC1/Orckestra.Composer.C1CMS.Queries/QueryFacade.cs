@@ -21,7 +21,7 @@ namespace Orckestra.Composer.C1CMS.Queries
 
             try
             {
-                var searchQueryRepository = ComposerHost.Current.Resolve<ISearchQueryRepository>();
+                var searchQueryRepository = ServiceLocator.GetService<ISearchQueryRepository>();
                 var siteConfiguration = ServiceLocator.GetService<ISiteConfiguration>();
                 var pageIdString = HttpContext.Current.Request["pageId"];
                 Guid pageId;

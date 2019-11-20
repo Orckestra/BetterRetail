@@ -192,8 +192,8 @@ namespace Orckestra.Composer.SearchQuery.Services
                 }
             }
 
-            viewModel.Context["ProductSearchResults"] = viewModel.ProductSearchResults;
-            viewModel.Context["MaxItemsPerPage"] = SearchConfiguration.MaxItemsPerPage;
+            viewModel.Context[nameof(viewModel.ProductSearchResults.SearchResults)] = viewModel.ProductSearchResults.SearchResults;
+            viewModel.Context[nameof(SearchConfiguration.MaxItemsPerPage)] = SearchConfiguration.MaxItemsPerPage;
             viewModel.Context["ListName"] = "Search Query";
 
             return viewModel;
