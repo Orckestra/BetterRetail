@@ -21,6 +21,7 @@ namespace Orckestra.Composer.Providers.Dam
         private const string ImageSizeFieldName = "{imageSize}";
         private const string SequenceNumberFieldName = "{sequenceNumber}";
         private const int MainImageSequenceNumber = 0;
+        private const string MediaTypeName = "Image";
 
         public ConventionBasedDamProvider(ISiteConfiguration siteConfiguration, IProductMediaSettingsRepository productMediaSettingsRepository)
         {
@@ -112,8 +113,10 @@ namespace Orckestra.Composer.Providers.Dam
             {
                 throw new ArgumentException("The product id is required.");
             }
-
-            if ((param.MediaSet?.Count > 0) || (param.VariantMediaSet?.Count > 0) || (param.Variants?.Any(variant => variant.MediaSet?.Count > 0) ?? false))
+          
+            if ((param.MediaSet?.Any(x => x.MediaType == MediaTypeName) ?? false)
+                || (param.VariantMediaSet?.Any(var => var.Media?.Any(x => x.MediaType == MediaTypeName) ?? false) ?? false)
+                || (param.Variants?.Any(variant => variant.MediaSet?.Any(x => x.MediaType == MediaTypeName) ?? false) ?? false))
             {
                 return await GetAllProductMediaImages(param).ConfigureAwait(false);
             }
@@ -199,7 +202,7 @@ namespace Orckestra.Composer.Providers.Dam
                 ProductZoomImageUrl = productMedia != null ? GetSizedImageUrl(productMedia, mediaSettings, param.ProductZoomImageSize) : "",
                 ProductId = param.ProductId,
                 VariantId = variantId,
-                SequenceNumber = productMedia.Position,
+                SequenceNumber = productMedia?.Position ?? 0,
                 FallbackImageUrl = GetFallbackImageUrl(mediaSettings),
             };
         }
@@ -224,9 +227,8 @@ namespace Orckestra.Composer.Providers.Dam
         {
             var _productMediaSettings = await ProductMediaSettingsRepository.GetProductMediaSettings().ConfigureAwait(false);
 
-            var result = param.MediaSet?.Count > 0 ?
-                param.MediaSet.Select(productMedia => CreateAllProductImages(productMedia, _productMediaSettings, param, null)).ToList()
-                : new List<AllProductImages>() { CreateAllProductImages(null, _productMediaSettings, param, null) };
+            var globalMediaSet = param.MediaSet?.Where(x => x.MediaType == MediaTypeName) ?? new List<ProductMedia>() { null };
+            var result = globalMediaSet.Select(productMedia => CreateAllProductImages(productMedia, _productMediaSettings, param, null)).ToList();
 
             if (param.Variants != null)
             {
@@ -237,11 +239,12 @@ namespace Orckestra.Composer.Providers.Dam
                     {
                         if (mediaVariant.AttributesToMatch.Any(atribute => variant.PropertyBag.Contains(atribute)))
                         {
-                            globalVariantMediaSet.AddRange(mediaVariant.Media);
+                            globalVariantMediaSet.AddRange(mediaVariant.Media?.Where(x => x.MediaType == MediaTypeName));
                         }
                     });
 
-                    var mediaSet = variant.MediaSet?.Count > 0 ? variant.MediaSet : globalVariantMediaSet.Count > 0 ? globalVariantMediaSet : param.MediaSet?.Count > 0 ? param.MediaSet : new List<ProductMedia>() { null };
+                    var localVariantMediaSet = variant.MediaSet?.Where(x => x.MediaType == MediaTypeName) ?? new List<ProductMedia>();
+                    var mediaSet = localVariantMediaSet.Any() ? localVariantMediaSet : globalVariantMediaSet.Any() ? globalVariantMediaSet : globalMediaSet;
                     result.AddRange(mediaSet.Select(productMedia => CreateAllProductImages(productMedia, _productMediaSettings, param, variant.Id)));
                 }
             }

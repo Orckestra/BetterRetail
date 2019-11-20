@@ -1,33 +1,45 @@
 ﻿using System;
 using System.Linq;
 using System.Web;
-using Autofac.Integration.Mvc;
 using Composite.Core.Routing;
 using Composite.Data;
 using Orckestra.Composer.Services;
 
 using Composite.Core.WebClient.Renderings.Page;
+using Composite.Data.Types;
+using Orckestra.Composer.CompositeC1.Services.Cache;
 
 namespace Orckestra.Composer.CompositeC1.Services
 {
-    public class WebsiteContext: IWebsiteContext
+    public class WebsiteContext : IWebsiteContext
     {
-        //private HttpRequestBase HttpRequest;
-
-
-        public WebsiteContext()
+        public WebsiteContext(HttpRequestBase httpRequest, ICacheService cacheService)
         {
-            //HttpRequest = httpRequest;
+            _httpRequest = httpRequest;
+            _cache = cacheService.GetStoreWithDependencies<string, Guid>("Hostname Bindings", 
+                new CacheDependentEntry<IHostnameBinding>()
+            );
         }
 
+        private readonly HttpRequestBase _httpRequest;
+        private readonly ICacheStore<string, Guid> _cache;
+
         private Guid _websiteId;
-        public Guid WebsiteId {
+        public Guid WebsiteId
+        {
             get
             {
                 if (_websiteId == Guid.Empty)
                 {
+                    var host = _httpRequest.Url?.Host;
+                    _websiteId = _cache.GetOrAdd(host, h => DataFacade
+                            .GetData<IHostnameBinding>(d => d.Hostname == h)
+                            .Select(d => d.HomePageId)
+                            .FirstOrDefault());
+                }
 
-
+                if (_websiteId == Guid.Empty)
+                {
                     if (SitemapNavigator.CurrentHomePageId != Guid.Empty)
                     {
                         _websiteId = SitemapNavigator.CurrentHomePageId;
@@ -36,7 +48,7 @@ namespace Orckestra.Composer.CompositeC1.Services
                     {
                         try
                         {
-                            var websiteId = HttpContext.Current.Request.Headers["WebsiteId"];
+                            var websiteId = _httpRequest.Headers["WebsiteId"];
                             Guid.TryParse(websiteId, out _websiteId);
                         }
                         catch (Exception e)
@@ -49,9 +61,7 @@ namespace Orckestra.Composer.CompositeC1.Services
 
                 if (_websiteId == Guid.Empty)
                 {
-                    var HttpRequest = (HttpRequestBase)AutofacDependencyResolver.Current.GetService(typeof(HttpRequestBase));
-
-                    var pageUrlData = GetPageUrldata(HttpRequest.Url);
+                    var pageUrlData = GetPageUrldata(_httpRequest.Url);
                     if (pageUrlData != null)
                     {
                         _websiteId = PageStructureInfo.GetAssociatedPageIds(pageUrlData.PageId, SitemapScope.AncestorsAndCurrent).LastOrDefault();

@@ -1,0 +1,25 @@
+﻿@inherits RazorFunction
+
+@functions {
+    public override string FunctionDescription
+    {
+        get  { return ""; }
+    }
+
+    [FunctionParameter(Label = "Query Name", Help = "Query Name", WidgetMarkup = Orckestra.ExperienceManagement.SearchQueryBuilder.Widgets.ProductSetQuerySelector)]
+    public string QueryName { get; set; }
+
+    [FunctionParameter(Label = "Number", Help = "", DefaultValue = "3")]
+    public string Number { get; set; }
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<head>
+</head>
+<body>
+<f:function name="Composer.Queries.ProductSet.Top" xmlns:f="http://www.composite.net/ns/function/1.0">
+    <f:param name="QueryName" value="@QueryName" />
+    <f:param name="Number" value="@Number" />
+</f:function>
+</body>
+</html>

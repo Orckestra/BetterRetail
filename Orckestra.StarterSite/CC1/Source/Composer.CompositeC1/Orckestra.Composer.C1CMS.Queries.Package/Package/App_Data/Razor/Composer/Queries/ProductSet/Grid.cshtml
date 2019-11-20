@@ -1,4 +1,4 @@
-﻿@inherits RazorFunction
+@inherits RazorFunction
 
 @functions {
     public override string FunctionDescription
@@ -6,13 +6,7 @@
         get { return "Display Search Query"; }
     }
 
-    [FunctionParameter(Label = "Query Name", Help = "Query Name", WidgetMarkup = @"<f:widgetfunction xmlns:f='http://www.composite.net/ns/function/1.0' name='Composite.Widgets.String.Selector'>
-                <f:param name='Options'>
-                         <f:function name='Composer.SearchQuery.Functions.GetSearchQueryList'>
-                             <f:param name='type' value='ProductSet' />
-                        </f:function>
-                </f:param>
-        </f:widgetfunction>")]
+    [FunctionParameter(Label = "Query Name", Help = "Query Name", WidgetMarkup = Orckestra.ExperienceManagement.SearchQueryBuilder.Widgets.ProductSetQuerySelector)]
     public string QueryName { get; set; }
 }
 
