@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Composite.Core.Application;
+﻿using Composite.Core.Application;
 using Microsoft.Extensions.DependencyInjection;
 using Orckestra.Composer.CompositeC1.Sitemap;
-using Orckestra.Composer.SearchQuery.Repositories;
 
 namespace Orckestra.Composer.Sitemap
 {
