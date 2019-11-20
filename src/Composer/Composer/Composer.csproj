@@ -207,6 +207,7 @@
     <Compile Include="ExceptionFilters\BaseExceptionFilter.cs" />
     <Compile Include="ExceptionFilters\ComposerExceptionFilter.cs" />
     <Compile Include="ComposerOvertureClient.cs" />
+    <Compile Include="Extensions\LookupExtensions.cs" />
     <Compile Include="Factory\IRecurringOrderProgramViewModelFactory.cs" />
     <Compile Include="Factory\IRecurringOrderTemplateViewModelFactory.cs" />
     <Compile Include="Factory\RecurringOrderProgramViewModelFactory.cs" />
