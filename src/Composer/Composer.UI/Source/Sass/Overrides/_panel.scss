@@ -43,4 +43,9 @@
     }
 
     border-color: $gray-light;
+
+    &.order-details-shipments {
+        box-shadow: none;
+        border: 0px;
+    }    
 }
