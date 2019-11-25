@@ -84,7 +84,7 @@
                                 value="{{Line1}}"
                                 required="true" {{#if_localized 'Forms' 'F_AddressRequiredError'}}data-parsley-required-message="{{localize 'Forms' 'F_AddressRequiredError'}}"{{/if_localized}}
                                 data-parsley-length="[2, 50]" {{#if_localized 'Forms' 'F_AddressLengthError'}}data-parsley-length-message="{{localize 'Forms' 'F_AddressLengthError'}}"{{/if_localized}}
-                                data-parsley-pattern="/^[a-zA-Z0-9\u00E0-\u00FC\.\-\s\'\,]+$/i" {{#if_localized 'Forms' 'F_AddressPatternError'}}data-parsley-pattern-message="{{localize 'Forms' 'F_AddressPatternError'}}"{{/if_localized}}
+                                data-parsley-pattern="/^[a-zA-Z0-9\u00E0-\u00FC\.\-\s\'\,\u0023\u00b0]+$/i" {{#if_localized 'Forms' 'F_AddressPatternError'}}data-parsley-pattern-message="{{localize 'Forms' 'F_AddressPatternError'}}"{{/if_localized}}
                                 />
                     </div>
                 </div>
@@ -102,7 +102,7 @@
                                 placeholder="{{localize 'Forms' 'F_ComplementaryAddressWaterMark'}}"
                                 value="{{Line2}}"
                                 data-parsley-length="[0, 36]" {{#if_localized 'Forms' 'F_ComplementaryAddressLengthError'}}data-parsley-length-message="{{localize 'Forms' 'F_ComplementaryAddressLengthError'}}"{{/if_localized}}
-                                data-parsley-pattern="/^[a-zA-Z0-9\u00E0-\u00FC\.\-\s\'\,]+$/i" {{#if_localized 'Forms' 'F_ComplementaryAddressPatternError'}}data-parsley-pattern-message="{{localize 'Forms' 'F_ComplementaryAddressPatternError'}}"{{/if_localized}}
+                                data-parsley-pattern="/^[a-zA-Z0-9\u00E0-\u00FC\.\-\s\'\,\u0023\u00b0]+$/i" {{#if_localized 'Forms' 'F_ComplementaryAddressPatternError'}}data-parsley-pattern-message="{{localize 'Forms' 'F_ComplementaryAddressPatternError'}}"{{/if_localized}}
                                 />
                     </div>
                 </div>

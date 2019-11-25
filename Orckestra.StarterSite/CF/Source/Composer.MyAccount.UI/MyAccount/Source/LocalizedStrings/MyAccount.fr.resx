@@ -365,7 +365,7 @@ Pas de soucis, vous pouvez trouver d'excellentes suggestions de produits à offr
     <value>Prix unitaire</value>
   </data>
   <data name="L_UpdateAccountSuccess" xml:space="preserve">
-    <value>Vos changements ont été sauvegardé!</value>
+    <value>Vos changements ont été sauvegardés!</value>
   </data>
   <data name="P_ShareWishListCopyLink" xml:space="preserve">
     <value>L'URL est créé quand des articles sont ajoutés à la liste de souhaits.</value>
@@ -449,7 +449,7 @@ Pas de soucis, vous pouvez trouver d'excellentes suggestions de produits à offr
     <value>Liste de souhaits publique de {0} {1}</value>
   </data>
   <data name="T_ShippingMethod" xml:space="preserve">
-    <value>Méthode de livraison</value>
+    <value>Informations de livraison</value>
   </data>
   <data name="T_SignIn" xml:space="preserve">
     <value>Connectez-vous pour accélérer vos achats</value>
@@ -480,5 +480,8 @@ Pas de soucis, vous pouvez trouver d'excellentes suggestions de produits à offr
   </data>  
   <data name="B_SaveChanges" xml:space="preserve">
     <value>Sauvegarder les changements</value>
+  </data>
+  <data name="T_ShippingAddress" xml:space="preserve">
+    <value>Adresse de l'expédition:</value>
   </data>
 </root>

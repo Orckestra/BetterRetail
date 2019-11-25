@@ -18,18 +18,20 @@
             <div class="row">
                 <div class="col-xs-12  col-sm-8  col-md-9">
                     <h2 class="h4">{{localize 'MyAccount' 'L_OrderShipping'}}</h2>
-                    {{#if ShippingAddress.FirstName}}
-                        <span data-qa="order-shipping-address-firstname">{{ShippingAddress.FirstName}}</span>&#160;<span data-qa="order-shipping-address-lastname">{{ShippingAddress.LastName}}</span>
-                        <br />
-                    {{/if}}
-                    <span data-qa="order-shipping-address-line1">{{ShippingAddress.Line1}}</span><br />
-                    {{#if ShippingAddress.Line2}}
-                        <span data-qa="order-shipping-address-line2">{{ShippingAddress.Line2}}</span><br />
-                    {{/if}}
-                    <span data-qa="order-shipping-address-city">{{ShippingAddress.City}}</span>,
-                    <span data-qa="order-shipping-address-region">{{ShippingAddress.RegionName}}</span>,
-                    <span data-qa="order-shipping-address-postalcode">{{ShippingAddress.PostalCode}}</span><br />
-                    <span data-qa="order-shipping-address-phone">{{ShippingAddress.PhoneNumber}}</span>
+                   {{#with ShippingAddress}}
+                        {{#if FirstName}}
+                            <span data-qa="order-shipping-address-fullname">{{FirstName}}{{#if LastName}}&nbsp;{{LastName}}{{/if}}</span>
+                            <br />
+                        {{/if}}
+                        <span data-qa="order-shipping-address-line1">{{Line1}}</span><br />
+                        {{#if Line2}}
+                            <span data-qa="order-shipping-address-line2">{{Line2}}</span><br />
+                        {{/if}}
+                        <span data-qa="order-shipping-address-city">{{City}}</span>,
+                        <span data-qa="order-shipping-address-region">{{RegionName}}</span>,
+                        <span data-qa="order-shipping-address-postalcode">{{PostalCode}}</span><br />
+                        <span data-qa="order-shipping-address-phone">{{PhoneNumber}}</span>
+                    {{/with}}
                 </div>
                 <div class="col-xs-12  col-sm-4  col-md-3 text-sm-right">
                     <h2 class="h4">{{ShippingMethod.DisplayName}}</h2>

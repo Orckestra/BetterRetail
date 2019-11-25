@@ -133,7 +133,7 @@
     <value>*The price indicated reflects the current price, as per today's date. Note that this price is subject to change at any time, without notice.</value>
   </data>
   <data name="L_UpdateRecurringScheduleSuccess" xml:space="preserve">
-    <value>Your changes has been saved!</value>
+    <value>Your changes have been saved!</value>
   </data>
 	<data name="T_RecurringSchedule" xml:space="preserve">
     <value>My Recurring Schedule</value>
