@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<package xmlns="http://schemas.microsoft.com/packaging/2013/01/nuspec.xsd" xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
-  <files>
- 
-    <file src="..\Composer\**\*.cs" target="src\Composer" xdt:Transform="Insert" />
-    <file src="..\Composer.*\**\*.cs" target="src" exclude="..\Composer*.Tests\**\*.cs;..\Composer.IntegrationTests\**\*.cs;..\Composer.LoadTest\**\*.cs" xdt:Transform="Insert" />
-  </files>
-</package>

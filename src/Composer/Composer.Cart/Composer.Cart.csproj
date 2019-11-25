@@ -1,0 +1,385 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{08F6FCB8-6065-4D31-B7DF-67FE67EE67E5}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Orckestra.Composer.Cart</RootNamespace>
+    <AssemblyName>Orckestra.Composer.Cart</AssemblyName>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\..\Solution Items\SharedAssemblyInfo.cs">
+      <Link>Properties\SharedAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="Api\AddressController.cs" />
+    <Compile Include="Api\RecurringCartController.cs" />
+    <Compile Include="Api\WishListController.cs" />
+    <Compile Include="Api\CartController.cs" />
+    <Compile Include="Api\OrderController.cs" />
+    <Compile Include="Api\PaymentController.cs" />
+    <Compile Include="Api\VaultProfileController.cs" />
+    <Compile Include="CartConfiguration.cs" />
+    <Compile Include="CartMessageLevels.cs" />
+    <Compile Include="CartPlugin.cs" />
+    <Compile Include="Extensions\CartExtensions.cs" />
+    <Compile Include="Extensions\ShipmentExtensions.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Extensions\PaymentExtensions.cs" />
+    <Compile Include="Factory\CartViewModelFactory.cs" />
+    <Compile Include="Parameters\CreateLightListOfLineItemDetailViewModelParam.cs" />
+    <Compile Include="Factory\IRecurringOrderCartViewModelFactory.cs" />
+    <Compile Include="Factory\RecurringOrderCartViewModelFactory.cs" />
+    <Compile Include="Factory\RewardEqualityComparer.cs" />
+    <Compile Include="Factory\RewardViewModelFactory.cs" />
+    <Compile Include="Factory\ICartViewModelFactory.cs" />
+    <Compile Include="Factory\IRewardViewModelFactory.cs" />
+    <Compile Include="Factory\ILineItemViewModelFactory.cs" />
+    <Compile Include="Factory\IPaymentProviderFactory.cs" />
+    <Compile Include="Factory\ITaxViewModelFactory.cs" />
+    <Compile Include="Factory\LineItemViewModelFactory.cs" />
+    <Compile Include="Factory\Order\FindOrdersRequestFactory.cs" />
+    <Compile Include="Factory\Order\IFindOrdersRequestFactory.cs" />
+    <Compile Include="Factory\Order\IOrderDetailsViewModelFactory.cs" />
+    <Compile Include="Factory\Order\IOrderHistoryViewModelFactory.cs" />
+    <Compile Include="Factory\Order\IShippingTrackingProviderFactory.cs" />
+    <Compile Include="Factory\Order\OrderDetailsViewModelFactory.cs" />
+    <Compile Include="Factory\Order\OrderHistoryViewModelFactory.cs" />
+    <Compile Include="Factory\Order\ShippingTrackingProviderFactory.cs" />
+    <Compile Include="Factory\PaymentProviderFactory.cs" />
+    <Compile Include="Factory\TaxViewModelFactory.cs" />
+    <Compile Include="Factory\UpdateCartParamFactory.cs" />
+    <Compile Include="Helper\RecurringOrderCartHelper.cs" />
+    <Compile Include="Helper\RecurringOrderCartViewModelNextOcurrenceComparer.cs" />
+    <Compile Include="OrderHistoryConfiguration.cs" />
+    <Compile Include="Parameters\AddCreditCardParam.cs" />
+    <Compile Include="Parameters\CreateListOfLineItemDetailViewModelParam.cs" />
+    <Compile Include="Parameters\CreateLineItemDetailViewModelParam.cs" />
+    <Compile Include="Parameters\CreateLightRecurringOrderCartViewModelParam.cs" />
+    <Compile Include="Parameters\CreateWishListViewModelParam.cs" />
+    <Compile Include="Parameters\GetCustomerPaymentMethodListViewModelParam.cs" />
+    <Compile Include="Parameters\GetCustomerPaymentMethodsForProviderParam.cs" />
+    <Compile Include="Parameters\GetKeyVariantAttributesParam.cs" />
+    <Compile Include="Parameters\GetLightRecurringOrderCartListViewModelParam.cs" />
+    <Compile Include="Parameters\GetPaymentParam.cs" />
+    <Compile Include="Parameters\GetRecurringOrderCartsViewModelFromCartsParam.cs" />
+    <Compile Include="Parameters\GetRecurringOrderCartsViewModelParam.cs" />
+    <Compile Include="Parameters\GetRecurringOrderCartViewModelParam.cs" />
+    <Compile Include="Parameters\GetShippingMethodsScopeParam.cs" />
+    <Compile Include="Parameters\Order\GetOrderChangesParam.cs" />
+    <Compile Include="Parameters\RemoveRecurringCartLineItemParam.cs" />
+    <Compile Include="Parameters\RescheduleRecurringCartParam.cs" />
+    <Compile Include="Parameters\UpdateRecurringCartLineItemParam.cs" />
+    <Compile Include="Parameters\UpdateRecurringOrderCartAddressesParam.cs" />
+    <Compile Include="Parameters\UpdateRecurringOrderCartBillingAddressParam.cs" />
+    <Compile Include="Parameters\UpdateRecurringOrderCartNextProcessingDateParam.cs" />
+    <Compile Include="Parameters\UpdateRecurringOrderCartShippingAddressParam.cs" />
+    <Compile Include="Parameters\UpdateRecurringOrderCartShippingMethodParam.cs" />
+    <Compile Include="Parameters\ValidatePaymentMethodsParam.cs" />
+    <Compile Include="Parameters\CreateRecurringOrderCartViewModelParam.cs" />
+    <Compile Include="Parameters\WishList\GetShareWishListUrlParam.cs" />
+    <Compile Include="Parameters\WishList\GetWishListUrlParam.cs" />
+    <Compile Include="Providers\WishList\IWishListUrlProvider.cs" />
+    <Compile Include="Requests\GetLineItemRequest.cs" />
+    <Compile Include="Parameters\AddPaymentParam.cs" />
+    <Compile Include="Parameters\AddVaultProfileViewModel.cs" />
+    <Compile Include="Parameters\GetActivePaymentParam.cs" />
+    <Compile Include="Parameters\GetCustomerPaymentProfilesParam.cs" />
+    <Compile Include="Parameters\RemovePaymentMethodParam.cs" />
+    <Compile Include="Parameters\SetDefaultCustomerPaymentMethodParam.cs" />
+    <Compile Include="Parameters\UpdateBillingAddressPostalCodeParam.cs" />
+    <Compile Include="Parameters\RemoveInvalidLineItemsParam.cs" />
+    <Compile Include="Parameters\CompleteCheckoutParam.cs" />
+    <Compile Include="Parameters\CouponParam.cs" />
+    <Compile Include="Parameters\AddLineItemParam.cs" />
+    <Compile Include="Parameters\EstimateShippingParam.cs" />
+    <Compile Include="Parameters\FixCartParam.cs" />
+    <Compile Include="Parameters\GetActivePaymentViewModelParam.cs" />
+    <Compile Include="Parameters\GetCartPaymentsParam.cs" />
+    <Compile Include="Parameters\GetCheckoutBreadcrumbParam.cs" />
+    <Compile Include="Parameters\GetCheckoutNavigationParam.cs" />
+    <Compile Include="Parameters\GetPaymentMethodsParam.cs" />
+    <Compile Include="Parameters\GetPaymentProvidersParam.cs" />
+    <Compile Include="Parameters\GetShippingMethodsParam.cs" />
+    <Compile Include="Parameters\InitializePaymentParam.cs" />
+    <Compile Include="Parameters\Order\CreateOrderDetailViewModelParam.cs" />
+    <Compile Include="Parameters\Order\GetCustomerOrdersParam.cs" />
+    <Compile Include="Parameters\Order\GetOrderForGuestParam.cs" />
+    <Compile Include="Parameters\Order\GetOrderHistoryViewModelParam.cs" />
+    <Compile Include="Parameters\Order\GetCustomerOrderParam.cs" />
+    <Compile Include="Parameters\Order\GetOrderParam.cs" />
+    <Compile Include="Parameters\Order\GetOrdersParam.cs" />
+    <Compile Include="Parameters\Order\GetShipmentNotesParam.cs" />
+    <Compile Include="Parameters\Order\OrderHistoryPaginationParam.cs" />
+    <Compile Include="Parameters\Order\OrderTense.cs" />
+    <Compile Include="Parameters\RemoveCouponsParam.cs" />
+    <Compile Include="Parameters\CreateCartViewModelParam.cs" />
+    <Compile Include="Parameters\GetCartParam.cs" />
+    <Compile Include="Parameters\GetCartsByCustomerIdParam.cs" />
+    <Compile Include="Parameters\RegionParam.cs" />
+    <Compile Include="Parameters\RemoveLineItemParam.cs" />
+    <Compile Include="Parameters\RemoveLineItemsParam.cs" />
+    <Compile Include="Parameters\UpdateCartParam.cs" />
+    <Compile Include="Parameters\UpdateCartViewModelParam.cs" />
+    <Compile Include="Parameters\UpdateCheckoutCartParam.cs" />
+    <Compile Include="Parameters\UpdateLineItemParam.cs" />
+    <Compile Include="Parameters\UpdatePaymentMethodParam.cs" />
+    <Compile Include="Parameters\SetCheapestShippingMethodParam.cs" />
+    <Compile Include="Parameters\UpdateShippingAddressPostalCodeParam.cs" />
+    <Compile Include="Parameters\UpdateShipmentParam.cs" />
+    <Compile Include="Parameters\VoidOrRemovePaymentParam.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Providers\CartMerge\CartMergeProvider.cs" />
+    <Compile Include="Providers\CartMerge\OverwriteCartMergeProvider.cs" />
+    <Compile Include="Providers\LineItemValidation\ILineItemValidationProvider.cs" />
+    <Compile Include="Providers\LineItemValidation\SurfacedErrorLineItemValidationProvider.cs" />
+    <Compile Include="Providers\Payment\IPaymentProviderRegistry.cs" />
+    <Compile Include="Providers\Payment\MonerisCanadaPaymentProvider.cs" />
+    <Compile Include="Providers\Payment\IPaymentProvider.cs" />
+    <Compile Include="Providers\Payment\OnSitePOSPaymentProvider.cs" />
+    <Compile Include="Providers\Payment\PaymentProviderRegistry.cs" />
+    <Compile Include="Providers\ShippingTracking\IShippingTrackingProvider.cs" />
+    <Compile Include="Providers\ShippingTracking\IShippingTrackingProviderRegistry.cs" />
+    <Compile Include="Providers\ShippingTracking\NullShippingTrackingProvider.cs" />
+    <Compile Include="Providers\ShippingTracking\ShippingTrackingProviderRegistry.cs" />
+    <Compile Include="Repositories\CartRepository.cs" />
+    <Compile Include="Repositories\FulfillmentMethodRepository.cs" />
+    <Compile Include="Repositories\IWishListRepository.cs" />
+    <Compile Include="Repositories\ICartRepository.cs" />
+    <Compile Include="Repositories\IFulfillmentMethodRepository.cs" />
+    <Compile Include="Repositories\Order\IOrderRepository.cs" />
+    <Compile Include="Repositories\IPaymentRepository.cs" />
+    <Compile Include="Repositories\IVaultProfileRepository.cs" />
+    <Compile Include="Repositories\Order\OrderRepository.cs" />
+    <Compile Include="Repositories\PaymentRepository.cs" />
+    <Compile Include="Repositories\VaultProfileRepository.cs" />
+    <Compile Include="Repositories\WishListRepository.cs" />
+    <Compile Include="Requests\CompleteCheckoutRequest.cs" />
+    <Compile Include="Requests\CouponRequest.cs" />
+    <Compile Include="Requests\AddLineItemViewModel.cs" />
+    <Compile Include="Requests\GetRecurringCartRequest.cs" />
+    <Compile Include="Requests\GetRecurringCartsPaymentMethodsRequest.cs" />
+    <Compile Include="Requests\GetRecurringOrderTemplatesPaymentMethodsRequest.cs" />
+    <Compile Include="Requests\RemoveLineItemViewModel.cs" />
+    <Compile Include="Requests\RemoveRecurringCartLineItemRequest.cs" />
+    <Compile Include="Requests\UpdateCartRequest.cs" />
+    <Compile Include="Requests\UpdateLineItemViewModel.cs" />
+    <Compile Include="Requests\UpdateRecurringCartLineItemRequest.cs" />
+    <Compile Include="Requests\UpdateRecurringCartNextProcessingDateRequest.cs" />
+    <Compile Include="Requests\UpdateRecurringCartPaymentMethodRequest.cs" />
+    <Compile Include="Requests\UpdateRecurringOrderCartBillingAddressRequest.cs" />
+    <Compile Include="Requests\UpdateRecurringOrderCartPaymentMethodRequest.cs" />
+    <Compile Include="Requests\UpdateRecurringOrderCartAddressRequest.cs" />
+    <Compile Include="Requests\UpdateRecurringCartShippingMethodRequest.cs" />
+    <Compile Include="Services\CartService.cs" />
+    <Compile Include="Services\CheckoutBreadcrumbViewService.cs" />
+    <Compile Include="Services\CheckoutNavigationViewService.cs" />
+    <Compile Include="Services\CheckoutService.cs" />
+    <Compile Include="Services\CouponViewService.cs" />
+    <Compile Include="Services\FixCartService.cs" />
+    <Compile Include="Services\ILineItemService.cs" />
+    <Compile Include="Services\IRecurringOrderCartsViewService.cs" />
+    <Compile Include="Services\IWishListViewService.cs" />
+    <Compile Include="Services\ICheckoutBreadcrumbViewService.cs" />
+    <Compile Include="Services\ICheckoutNavigationViewService.cs" />
+    <Compile Include="Services\IFixCartService.cs" />
+    <Compile Include="Services\LineItemService.cs" />
+    <Compile Include="Services\Order\IOrderHistoryViewService.cs" />
+    <Compile Include="Services\IPaymentViewService.cs" />
+    <Compile Include="Services\IVaultProfileViewService.cs" />
+    <Compile Include="Services\Order\OrderHistoryViewService.cs" />
+    <Compile Include="Services\PaymentViewService.cs" />
+    <Compile Include="Services\RecurringOrderCartsViewService.cs" />
+    <Compile Include="Services\ShippingMethodViewService.cs" />
+    <Compile Include="Services\ICartService.cs" />
+    <Compile Include="Services\ICheckoutService.cs" />
+    <Compile Include="Services\ICouponViewService.cs" />
+    <Compile Include="Services\IShippingMethodViewService.cs" />
+    <Compile Include="Services\UpdateOperation.cs" />
+    <Compile Include="Services\VaultProfileViewService.cs" />
+    <Compile Include="Services\WishListViewService.cs" />
+    <Compile Include="Utils\SharedWishListTokenizer.cs" />
+    <Compile Include="Utils\GuestOrderTokenizer.cs" />
+    <Compile Include="Utils\OrderToken.cs" />
+    <Compile Include="Utils\SharedWishListToken.cs" />
+    <Compile Include="ViewModels\ActivePaymentViewModel.cs" />
+    <Compile Include="ViewModels\AdditionalFeeSummaryViewModel.cs" />
+    <Compile Include="ViewModels\AddressViewModel.cs" />
+    <Compile Include="ViewModels\BillingAddressViewModel.cs" />
+    <Compile Include="ViewModels\CartMessageViewModel.cs" />
+    <Compile Include="ViewModels\CartProductSummaryViewModel.cs" />
+    <Compile Include="ViewModels\CartViewModel.cs" />
+    <Compile Include="ViewModels\CheckoutNavigationViewModel.cs" />
+    <Compile Include="ViewModels\CheckoutPaymentViewModel.cs" />
+    <Compile Include="ViewModels\CheckoutRedirectActionViewModel.cs" />
+    <Compile Include="ViewModels\CheckoutSignInAsGuestViewModel.cs" />
+    <Compile Include="ViewModels\CheckoutSignInAsReturningViewModel.cs" />
+    <Compile Include="ViewModels\CheckoutSignInViewModel.cs" />
+    <Compile Include="ViewModels\CompleteCheckoutLineItemViewModel.cs" />
+    <Compile Include="ViewModels\CompleteCheckoutViewModel.cs" />
+    <Compile Include="ViewModels\CouponsViewModel.cs" />
+    <Compile Include="ViewModels\CouponViewModel.cs" />
+    <Compile Include="ViewModels\CustomerPaymentMethodListViewModel.cs" />
+    <Compile Include="ViewModels\CustomerSummaryViewModel.cs" />
+    <Compile Include="ViewModels\GetGuestOrderViewModel.cs" />
+    <Compile Include="ViewModels\GetPaymentMethodsViewModel.cs" />
+    <Compile Include="ViewModels\AdditionalFeeViewModel.cs" />
+    <Compile Include="ViewModels\GetShippingMethodsByCartNameViewModel.cs" />
+    <Compile Include="ViewModels\GuestOrderDetailsViewModel.cs" />
+    <Compile Include="ViewModels\IRecurringOrderCartViewModel.cs" />
+    <Compile Include="ViewModels\IPaymentMethodViewModel.cs" />
+    <Compile Include="ViewModels\IRecurringOrderLineItemViewModel.cs" />
+    <Compile Include="ViewModels\LightLineItemDetailViewModel.cs" />
+    <Compile Include="ViewModels\LightRecurringOrderCartsViewModel.cs" />
+    <Compile Include="ViewModels\LightRecurringOrderCartViewModel.cs" />
+    <Compile Include="ViewModels\LineItemDetailViewModel.cs" />
+    <Compile Include="ViewModels\LineItemIdsViewModel.cs" />
+    <Compile Include="ViewModels\MinicartViewModel.cs" />
+    <Compile Include="ViewModels\MonerisAddVaultProfileViewModel.cs" />
+    <Compile Include="ViewModels\OrderSummaryViewModel.cs" />
+    <Compile Include="ViewModels\RecurringCartRemovePaymentMethodViewModel.cs" />
+    <Compile Include="ViewModels\RecurringOrderCartsRescheduleResultViewModel.cs" />
+    <Compile Include="ViewModels\RecurringOrderCartsViewModel.cs" />
+    <Compile Include="ViewModels\RemovePaymentMethodViewModel.cs" />
+    <Compile Include="ViewModels\Order\OrderChangeViewModel.cs" />
+    <Compile Include="ViewModels\RewardViewModel.cs" />
+    <Compile Include="ViewModels\Order\FindMyOrderViewModel.cs" />
+    <Compile Include="ViewModels\Order\LightOrderDetailViewModel.cs" />
+    <Compile Include="ViewModels\Order\OrderDetailInfoViewModel.cs" />
+    <Compile Include="ViewModels\Order\OrderDetailViewModel.cs" />
+    <Compile Include="ViewModels\Order\OrderHistoryPageViewModel.cs" />
+    <Compile Include="ViewModels\Order\OrderHistoryPaginationViewModel.cs" />
+    <Compile Include="ViewModels\Order\OrderHistoryViewModel.cs" />
+    <Compile Include="ViewModels\Order\OrderShipmentDetailViewModel.cs" />
+    <Compile Include="ViewModels\Order\OrderShipmentSummaryViewModel.cs" />
+    <Compile Include="ViewModels\Order\OrderSummaryPaymentViewModel.cs" />
+    <Compile Include="ViewModels\Order\OrderShippingMethodViewModel.cs" />
+    <Compile Include="ViewModels\Order\TrackingInfoViewModel.cs" />
+    <Compile Include="ViewModels\PaymentMethodViewModel.cs" />
+    <Compile Include="ViewModels\PaymentProviderViewModel.cs" />
+    <Compile Include="ViewModels\PaymentViewModel.cs" />
+    <Compile Include="ViewModels\RegisteredBillingAddressViewModel.cs" />
+    <Compile Include="ViewModels\RegisteredShippingAddressViewModel.cs" />
+    <Compile Include="ViewModels\SavedCreditCardPaymentViewModel.cs" />
+    <Compile Include="ViewModels\SetCustomerDefaultPaymentMethodViewModel.cs" />
+    <Compile Include="ViewModels\ShipmentAdditionalFeeViewModel.cs" />
+    <Compile Include="ViewModels\ShippingMethodsViewModel.cs" />
+    <Compile Include="ViewModels\ShippingMethodViewModel.cs" />
+    <Compile Include="ViewModels\TaxViewModel.cs" />
+    <Compile Include="ViewModels\SetShippingMethodViewModel.cs" />
+    <Compile Include="ViewModels\UpdateCartResultViewModel.cs" />
+    <Compile Include="ViewModels\UpdatePaymentMethodViewModel.cs" />
+    <Compile Include="ViewModels\UpdateBillingAddressViewModel.cs" />
+    <Compile Include="ViewModels\UpdateShippingAddressViewModel.cs" />
+    <Compile Include="ViewModels\WishListSummaryViewModel.cs" />
+    <Compile Include="ViewModels\WishListViewModel.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Composer.Product\Composer.Product.csproj">
+      <Project>{1f767098-1fbf-4cb9-8637-6529e1cc0b24}</Project>
+      <Name>Composer.Product</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Composer\Composer.csproj">
+      <Project>{d00bd58b-93fe-4f3d-bbc8-6f7873ca6830}</Project>
+      <Name>Composer</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Properties\PublishProfiles\Package.pubxml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Orckestra.AsyncExtensions, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\OrckestraCommerce.AsyncExtensions.4.0.0\lib\net461\Orckestra.AsyncExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Orckestra.ExperienceManagement.Configuration, Version=4.8.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Orckestra.ExperienceManagement.Configuration.4.8.0\lib\net471\Orckestra.ExperienceManagement.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Orckestra.Overture.Interfaces, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\OrckestraCommerce.Interfaces.4.0.0\lib\portable-net4+sl5+netcore45+wp8\Orckestra.Overture.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="Orckestra.Overture.Providers.MonerisPayment.ServiceModel, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\OrckestraCommerce.ServiceModel.Moneris.4.0.0\lib\net45\Orckestra.Overture.Providers.MonerisPayment.ServiceModel.dll</HintPath>
+    </Reference>
+    <Reference Include="Orckestra.Overture.RestClient, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\OrckestraCommerce.Client.4.0.0\lib\net452\Orckestra.Overture.RestClient.dll</HintPath>
+    </Reference>
+    <Reference Include="Orckestra.Overture.ServiceModel, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\OrckestraCommerce.ServiceModel.4.0.0\lib\net461\Orckestra.Overture.ServiceModel.dll</HintPath>
+    </Reference>
+    <Reference Include="Orckestra.Overture.ServiceModel.Requests, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\OrckestraCommerce.ServiceModel.Requests.4.0.0\lib\net461\Orckestra.Overture.ServiceModel.Requests.dll</HintPath>
+    </Reference>
+    <Reference Include="OrckestraCommerce.RecurringOrders.ServiceModel, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\OrckestraCommerce.RecurringOrders.ServiceModel.4.0.0\lib\portable-net4+sl5+netcore45+wp8\OrckestraCommerce.RecurringOrders.ServiceModel.dll</HintPath>
+    </Reference>
+    <Reference Include="OrckestraCommerce.RecurringOrders.ServiceModel.Requests, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\OrckestraCommerce.RecurringOrders.ServiceModel.Requests.4.0.0\lib\portable-net4+sl5+netcore45+wp8\OrckestraCommerce.RecurringOrders.ServiceModel.Requests.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Client, Version=4.0.0.0, Culture=neutral, PublicKeyToken=e06fbc6124f57c43, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\ServiceStack.Client.Signed.4.5.4\lib\net45\ServiceStack.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Interfaces, Version=4.0.0.0, Culture=neutral, PublicKeyToken=e06fbc6124f57c43, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\ServiceStack.Interfaces.4.5.4\lib\portable-wp80+sl5+net45+win8+wpa81+monotouch+monoandroid+xamarin.ios10\ServiceStack.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Text, Version=4.0.0.0, Culture=neutral, PublicKeyToken=e06fbc6124f57c43, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\ServiceStack.Text.Signed.4.5.4\lib\net45\ServiceStack.Text.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

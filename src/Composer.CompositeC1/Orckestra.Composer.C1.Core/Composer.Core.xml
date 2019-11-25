@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<pc:PackageCreator xmlns:mi="http://www.composite.net/ns/management/packageinstaller/1.0" xmlns:pc="http://www.composite.net/ns/management/packagecreator/2.0" xmlns:help="http://www.composite.net/ns/help/1.0">
+	<pc:DataItems />
+	<pc:MediaFolders>
+		<Add name="/" />
+	</pc:MediaFolders>
+	<pc:DynamicDataTypes>
+		<Add name="Orckestra.Composer.CompositeC1.DataTypes.Language" />
+		<Add name="Orckestra.Composer.CompositeC1.Pages.ComposerImage" />
+	</pc:DynamicDataTypes>
+	<pc:Files />
+	<pc:PageTypes>
+		<Add name="Account Page" />
+		<Add name="Category Landing Page" />
+		<Add name="Category Page" />
+		<Add name="Checkout Step Page" />
+		<Add name="Content Page" />
+		<Add name="Folder" />
+		<Add name="Product Page" />
+		<Add name="Search Page" />
+	</pc:PageTypes>
+	<pc:PageTemplates>
+		<Add name="Account Page Layout" />
+		<Add name="Category Landing Page Layout" />
+		<Add name="Category Page Layout" />
+		<Add name="Checkout Page Layout" />
+		<Add name="Default Page Layout" />
+	</pc:PageTemplates>
+	<pc:Functions>
+		<Add name="Composer.Grids.CartSideGrid" />
+		<Add name="Composer.Grids.SearchGrid" />
+		<Add name="Composer.Grids.TwoThirdsOneThird" />
+		<Add name="Composer.Grids.FullGrid" />
+		<Add name="Composer.Header" />
+		<Add name="Composer.CheckoutHeader" />
+		<Add name="Composer.PageTitle" />
+	</pc:Functions>
+	<mi:PackageRequirements minimumCompositeVersion="4.3.5611.30389" maximumCompositeVersion="9.9999.9999.9999" />
+	<mi:PackageInformation name="Composer.Core" groupName="Composer" version="1.0.0" author="Orckestra" website="http://composer-c1-cm-dev.orckestra.local/" readMoreUrl="http://composer-c1-cm-dev.orckestra.local/" id="08b33fbe-64a4-4b60-961b-36d7f7a8aa97" canBeUninstalled="true" systemLocking="hard" flushOnCompletion="true">
+		<TechnicalDetails>NT</TechnicalDetails>
+		<Description>NT</Description>
+	</mi:PackageInformation>
+</pc:PackageCreator>

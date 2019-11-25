@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/01/nuspec.xsd">
+  <metadata minClientVersion="2.8">
+    <id>Orckestra.ReferenceApplication</id>
+    <version>To be repalced</version>
+    <title>Composer</title>
+    <authors>Orckestra Inc.</authors>
+    <owners>Orckestra Inc.</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Composer Framework</description>
+    <summary>Composer Framework</summary>
+    <copyright>Orckestra Inc. 2019</copyright>
+    <dependencies>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="Build\nuspec\App_Readme\*" target="content\App_Readme\" />
+	
+    <file src="src\Composer\UI.Package\**\*" target="UI.Package\" />
+    <file src="src\Composer\Composer\bin\Release\Orckestra.Composer.dll" target="lib\net471" />
+    <file src="src\Composer\Composer.Cart\bin\Release\Orckestra.Composer.Cart.dll" target="lib\net471" />
+    <file src="src\Composer\Composer.MyAccount\bin\Release\Orckestra.Composer.MyAccount.dll" target="lib\net471" />
+    <file src="src\Composer\Composer.Product\bin\Release\Orckestra.Composer.Product.dll" target="lib\net471" />
+    <file src="src\Composer\Composer.Search\bin\Release\Orckestra.Composer.Search.dll" target="lib\net471" />
+    <file src="src\Composer\Composer.Store\bin\Release\Orckestra.Composer.Store.dll" target="lib\net471" />
+    <file src="src\Composer\Composer.Store\bin\Release\Orckestra.Composer.Store.dll" target="lib\net471" />
+    <file src="src\Composer\Orckestra.Composer.SearchQuery\bin\Release\Orckestra.Composer.SearchQuery.dll" target="lib\net471" />
+	
+    <file src="src\Composer.CompositeC1\Composer.CompositeC1.Mvc\bin\Orckestra.Composer.CompositeC1.dll" target="lib\net471" />
+    <file src="src\Composer.CompositeC1\Composer.CompositeC1.Mvc\bin\Orckestra.Composer.CompositeC1.*.dll" target="lib\net471" exclude="src\Composer.CompositeC1\Composer.CompositeC1.Mvc\bin\Orckestra.Composer.CompositeC1.Mvc.dll" />
+    <file src="src\Composer.CompositeC1\Composer.CompositeC1.Mvc\StartupHandler.cs" target="src" />
+
+    <!-- 
+    <file src="Installer\packages\generic\C1CMS\RefApp\Composer.C1.Core.zip" target="packaging\" />
+    <file src="Installer\packages\generic\C1CMS\RefApp\Composer.C1.Content.EN-CA.zip" target="packaging\" />
+    <file src="Installer\packages\generic\C1CMS\RefApp\Composer.C1.Content.FR-CA.zip" target="packaging\" /> 
+    -->
+
+  </files>
+</package>
