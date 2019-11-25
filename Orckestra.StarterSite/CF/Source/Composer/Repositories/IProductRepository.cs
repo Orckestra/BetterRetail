@@ -53,13 +53,5 @@ namespace Orckestra.Composer.Repositories
         /// <param name="productIds">The product id.</param>
         /// <returns></returns>
         Task<SearchResult> SearchProductByIdsAsync(List<string> productIds, string scope, string cultureName);
-
-        /// <summary>
-        /// Get image url for product
-        /// </summary>
-        /// <param name="productId">The product Id.</param>
-        /// <param name="variantId">The product variant Id.</param>
-        /// <returns></returns>
-        Task<string> GetImageUrlAsync(string productId, string variantId, string scope);
     }
 }

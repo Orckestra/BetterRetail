@@ -1,3 +1,4 @@
+using Orckestra.Composer.Enums;
 using Orckestra.Composer.Repositories;
 using Orckestra.Composer.Utils;
 using Orckestra.ExperienceManagement.Configuration;
@@ -21,7 +22,6 @@ namespace Orckestra.Composer.Providers.Dam
         private const string ImageSizeFieldName = "{imageSize}";
         private const string SequenceNumberFieldName = "{sequenceNumber}";
         private const int MainImageSequenceNumber = 0;
-        private const string MediaTypeName = "Image";
 
         public ConventionBasedDamProvider(ISiteConfiguration siteConfiguration, IProductMediaSettingsRepository productMediaSettingsRepository)
         {
@@ -80,17 +80,6 @@ namespace Orckestra.Composer.Providers.Dam
             return result;
         }
 
-        private ProductMainImage GetProductMainLocalImage(ProductImageRequest request, string imageSize)
-        {
-            return new ProductMainImage
-            {
-                ImageUrl = GetImageUrl(imageSize, request.ProductId, request.Variant.Id, MainImageSequenceNumber),
-                ProductId = request.ProductId,
-                VariantId = request.Variant.Id,
-                FallbackImageUrl = GetFallbackImageUrl()
-            };
-        }
-
         public virtual async Task<List<AllProductImages>> GetAllProductImagesAsync(GetAllProductImagesParam param)
         {
             if (param == null)
@@ -113,10 +102,10 @@ namespace Orckestra.Composer.Providers.Dam
             {
                 throw new ArgumentException("The product id is required.");
             }
-          
-            if ((param.MediaSet?.Any(x => x.MediaType == MediaTypeName) ?? false)
-                || (param.VariantMediaSet?.Any(var => var.Media?.Any(x => x.MediaType == MediaTypeName) ?? false) ?? false)
-                || (param.Variants?.Any(variant => variant.MediaSet?.Any(x => x.MediaType == MediaTypeName) ?? false) ?? false))
+
+            if ((param.MediaSet?.Any(x => x.MediaType == nameof(MediaTypeEnum.Image)) ?? false)
+                || (param.VariantMediaSet?.Any(var => var.Media?.Any(x => x.MediaType == nameof(MediaTypeEnum.Image)) ?? false) ?? false)
+                || (param.Variants?.Any(variant => variant.MediaSet?.Any(x => x.MediaType == nameof(MediaTypeEnum.Image)) ?? false) ?? false))
             {
                 return await GetAllProductMediaImages(param).ConfigureAwait(false);
             }
@@ -124,7 +113,19 @@ namespace Orckestra.Composer.Providers.Dam
             return GetAllProductLocalImages(param);
         }
 
-        private List<AllProductImages> GetAllProductLocalImages(GetAllProductImagesParam param)
+        #region Local Image functions
+        protected virtual ProductMainImage GetProductMainLocalImage(ProductImageRequest request, string imageSize)
+        {
+            return new ProductMainImage
+            {
+                ImageUrl = GetImageUrl(imageSize, request.ProductId, request.Variant.Id, MainImageSequenceNumber),
+                ProductId = request.ProductId,
+                VariantId = request.Variant.Id,
+                FallbackImageUrl = GetFallbackImageUrl()
+            };
+        }
+
+        protected virtual List<AllProductImages> GetAllProductLocalImages(GetAllProductImagesParam param)
         {
             var result = new List<AllProductImages>();
             for (var sequenceNumber = 0; sequenceNumber < ConventionBasedDamProviderConfiguration.MaxThumbnailImages; sequenceNumber++)
@@ -142,7 +143,7 @@ namespace Orckestra.Composer.Providers.Dam
             return result;
         }
 
-        private AllProductImages CreateAllProductImages(GetAllProductImagesParam param, string variantId, int sequenceNumber)
+        protected virtual AllProductImages CreateAllProductImages(GetAllProductImagesParam param, string variantId, int sequenceNumber)
         {
             return new AllProductImages
             {
@@ -157,12 +158,12 @@ namespace Orckestra.Composer.Providers.Dam
             };
         }
 
-        public string GetFallbackImageUrl()
+        public virtual string GetFallbackImageUrl()
         {
             return GetFormattedImageUrl(FallbackImageUrl);
         }
 
-        private string GetImageUrl(string imageSize, string productId, string variantId, int sequenceNumber)
+        protected virtual string GetImageUrl(string imageSize, string productId, string variantId, int sequenceNumber)
         {
             string imagePath;
 
@@ -188,12 +189,14 @@ namespace Orckestra.Composer.Providers.Dam
             return GetFormattedImageUrl(imagePath);
         }
 
-        private string GetFormattedImageUrl(string imageFilename)
+        protected virtual string GetFormattedImageUrl(string imageFilename)
         {
             return string.Format("{0}/{1}/{2}", ServerUrl, ImageFolderName, imageFilename);
         }
+        #endregion
 
-        private AllProductImages CreateAllProductImages(ProductMedia productMedia, MediaSettings mediaSettings, GetAllProductImagesParam param, string variantId)
+        #region MediaSet functions
+        protected virtual AllProductImages CreateAllProductImages(ProductMedia productMedia, MediaSettings mediaSettings, GetAllProductImagesParam param, string variantId)
         {
             return new AllProductImages
             {
@@ -207,10 +210,10 @@ namespace Orckestra.Composer.Providers.Dam
             };
         }
 
-        private string GetFallbackImageUrl(MediaSettings mediaSettings) => mediaSettings.MediaServerUrl + mediaSettings.MediaFallbackImageName;
-        private string GetImageUrl(string imagePath, MediaSettings mediaSettings) => imagePath.Replace("~/", mediaSettings.MediaServerUrl);
+        protected virtual string GetFallbackImageUrl(MediaSettings mediaSettings) => mediaSettings.MediaServerUrl + mediaSettings.MediaFallbackImageName;
+        protected virtual string GetImageUrl(string imagePath, MediaSettings mediaSettings) => imagePath.Replace("~/", mediaSettings.MediaServerUrl);
 
-        private string GetSizedImageUrl(ProductMedia productMedia, MediaSettings mediaSettings, string size)
+        protected virtual string GetSizedImageUrl(ProductMedia productMedia, MediaSettings mediaSettings, string size)
         {
             if (productMedia.ResizedInstances != null && productMedia.ResizedInstances.Length > 0 && !string.IsNullOrEmpty(size))
             {
@@ -223,35 +226,65 @@ namespace Orckestra.Composer.Providers.Dam
             return GetImageUrl(productMedia.Url, mediaSettings);
         }
 
-        private async Task<List<AllProductImages>> GetAllProductMediaImages(GetAllProductImagesParam param)
+        protected virtual async Task<List<AllProductImages>> GetAllProductMediaImages(GetAllProductImagesParam param)
         {
             var _productMediaSettings = await ProductMediaSettingsRepository.GetProductMediaSettings().ConfigureAwait(false);
 
-            var globalMediaSet = param.MediaSet?.Where(x => x.MediaType == MediaTypeName) ?? new List<ProductMedia>() { null };
+            var globalMediaSet = FilterImages(param.MediaSet) ?? new List<ProductMedia>() { null };
             var result = globalMediaSet.Select(productMedia => CreateAllProductImages(productMedia, _productMediaSettings, param, null)).ToList();
 
             if (param.Variants != null)
             {
                 foreach (Variant variant in param.Variants)
                 {
-                    var globalVariantMediaSet = new List<ProductMedia>();
-                    param.VariantMediaSet?.ForEach(mediaVariant =>
-                    {
-                        if (mediaVariant.AttributesToMatch.Any(atribute => variant.PropertyBag.Contains(atribute)))
-                        {
-                            globalVariantMediaSet.AddRange(mediaVariant.Media?.Where(x => x.MediaType == MediaTypeName));
-                        }
-                    });
-
-                    var localVariantMediaSet = variant.MediaSet?.Where(x => x.MediaType == MediaTypeName) ?? new List<ProductMedia>();
-                    var mediaSet = localVariantMediaSet.Any() ? localVariantMediaSet : globalVariantMediaSet.Any() ? globalVariantMediaSet : globalMediaSet;
+                    var variantMediaSet = GetVariantMediaSet(param.VariantMediaSet, variant);
+                    var mediaSet = variantMediaSet.Any() ? variantMediaSet : globalMediaSet;
                     result.AddRange(mediaSet.Select(productMedia => CreateAllProductImages(productMedia, _productMediaSettings, param, variant.Id)));
                 }
             }
             return result;
         }
 
-        private ProductMainImage GetProductMainMediaImage(ProductImageRequest request, MediaSettings mediaSettings)
+        protected virtual IEnumerable<ProductMedia> FilterImages(IEnumerable<ProductMedia> productMedias) => 
+            productMedias?.Where(x => x.MediaType == nameof(MediaTypeEnum.Image)).Where(x => x.IsRemoved != true);
+
+        protected virtual IEnumerable<ProductMedia> GetVariantMediaSet(List<VariantMediaSet> variantMediaSet, Variant variant)
+        {
+            if(variant != null)
+            {
+                var globalVariantMediaSet = new List<ProductMedia>();
+                variantMediaSet?.ForEach(mediaVariant =>
+                {
+                    if (mediaVariant.AttributesToMatch.Any(atribute => variant.PropertyBag.Contains(atribute)))
+                    {
+                        globalVariantMediaSet.AddRange(FilterImages(mediaVariant.Media));
+                    }
+                });
+
+                var localVariantMediaSet = FilterImages(variant.MediaSet) ?? new List<ProductMedia>();
+                return localVariantMediaSet.Any() ? localVariantMediaSet : globalVariantMediaSet;
+            }
+
+            return new List<ProductMedia>();
+        }
+
+        public virtual string GetMediaImageUrl(Product product, string variantId)
+        {
+            if (product == null)
+                return null;
+
+            var variant = product.Variants?.FirstOrDefault(v => v.Id.ToLower() == variantId.ToLower());
+
+            var variantMediaSet = GetVariantMediaSet(product.VariantMediaSet, variant);
+            var mediaSet = variantMediaSet.Any() ? variantMediaSet : FilterImages(product.MediaSet);
+
+            return mediaSet?
+                .Where(m => m.IsCover == true)
+                .Select(m => m.Url)
+                .LastOrDefault();
+        }
+
+        protected virtual ProductMainImage GetProductMainMediaImage(ProductImageRequest request, MediaSettings mediaSettings)
         {
             return new ProductMainImage
             {
@@ -261,5 +294,6 @@ namespace Orckestra.Composer.Providers.Dam
                 FallbackImageUrl = GetFallbackImageUrl(mediaSettings)
             };
         }
+        #endregion  
     }
 }

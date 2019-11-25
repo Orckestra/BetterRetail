@@ -172,39 +172,5 @@ namespace Orckestra.Composer.Repositories
 
             return OvertureClient.SendAsync(request);
         }
-
-        public virtual async Task<string> GetImageUrlAsync(string productId, string variantId, string scope)
-        {
-            if (productId == null) { throw new ArgumentNullException(nameof(productId)); }
-
-            var product = await GetProductAsync(new GetProductParam
-            {
-                ProductId = productId,
-                Scope = scope,
-            });
-
-            if (product == null)
-                return null;
-
-            var variant = product.Variants?.FirstOrDefault(v => v.Id == variantId);
-            var imageUrl = GetCoverImage(variant?.MediaSet);
-
-            if (string.IsNullOrEmpty(imageUrl))
-                imageUrl = GetCoverImage(product.MediaSet);
-
-            return imageUrl;
-        }
-
-        private string GetCoverImage(IEnumerable<ProductMedia> mediaSet)
-        {   
-            const string mediaTypeName = "Image";
-
-            return mediaSet?
-                .Where(m => m.MediaType == mediaTypeName)
-                .Where(m => m.IsCover == true)
-                .Where(m => m.IsRemoved != true)
-                .Select(m => m.Url)
-                .LastOrDefault();
-        }
     }
 }

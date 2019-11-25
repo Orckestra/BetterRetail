@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Orckestra.Composer.Repositories;
+using Orckestra.Composer.Parameters;
 
 namespace Orckestra.Composer.Services
 {
@@ -40,9 +41,9 @@ namespace Orckestra.Composer.Services
             return GetImageUrlsAsync(new[] { (lineItem.ProductId, lineItem.VariantId) });
         }
 
-        private async Task<List<ProductMainImage>> GetImageUrlsAsync(ICollection<(string productId, string variantId)> products)
+        protected virtual async Task<List<ProductMainImage>> GetImageUrlsAsync(ICollection<(string productId, string variantId)> products)
         {
-            var imageUrls = await GetImageUrlsForProducts(products).ConfigureAwait(false);
+            var imageUrls = await GetMediaImageUrlsForProducts(products).ConfigureAwait(false);
             var getImageParam = new GetProductMainImagesParam
             {
                 ImageSize = ImageConfiguration.CartThumbnailImageSize,
@@ -71,17 +72,25 @@ namespace Orckestra.Composer.Services
             return await DamProvider.GetProductMainImagesAsync(getImageParam).ConfigureAwait(false);
         }
 
-        private async Task<Dictionary<(string productId, string variantId), string>> GetImageUrlsForProducts(
+        protected virtual async Task<Dictionary<(string productId, string variantId), string>> GetMediaImageUrlsForProducts(
             IEnumerable<(string productId, string variantId)> products)
         {
             var tasks = products
                 .Distinct()
                 .Select(async product =>
-                    new
+                {
+                    var productEntity = await ProductRepository.GetProductAsync(new GetProductParam
+                    {
+                        ProductId = product.productId,
+                        Scope = ComposerContext.Scope,
+                    });
+
+                    return new
                     {
                         key = product,
-                        image = await ProductRepository.GetImageUrlAsync(product.productId, product.variantId, ComposerContext.Scope)
-                    });
+                        image = DamProvider.GetMediaImageUrl(productEntity, product.variantId)
+                    };
+                });
 
             var imagesList = await Task.WhenAll(tasks);
             return imagesList.ToDictionary(x => x.key, x => x.image);

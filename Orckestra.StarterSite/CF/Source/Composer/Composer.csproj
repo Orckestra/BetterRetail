@@ -196,6 +196,7 @@
     <Compile Include="Country\ICountryService.cs" />
     <Compile Include="Country\RegionViewModel.cs" />
     <Compile Include="Country\RetrieveCountryParam.cs" />
+    <Compile Include="Enums\MediaTypeEnum.cs" />
     <Compile Include="Enums\AccountStatusEnum.cs" />
     <Compile Include="Enums\InventoryStatusEnum.cs" />
     <Compile Include="Country\RetrieveRegionDisplayNameParam.cs" />

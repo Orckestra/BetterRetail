@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Orckestra.Composer.Providers.Dam;
+using Orckestra.Overture.ServiceModel.Products;
 
 namespace Orckestra.Composer.Providers
 {
@@ -22,5 +23,13 @@ namespace Orckestra.Composer.Providers
         /// <param name="param">The image, product and/or variant information which will be used to retrieve a list of images associated to them.</param>
         /// <returns>A list of all kinds of images associated to a product or variants.</returns>
         Task<List<AllProductImages>> GetAllProductImagesAsync(GetAllProductImagesParam param);
+
+        /// <summary>
+        /// Get main media image from product
+        /// </summary>
+        /// <param name="product">Full product entity</param>
+        /// <param name="variantId">Variant id key</param>
+        /// <returns>Url main media image</returns>
+        string GetMediaImageUrl(Product product, string variantId);
     }
 }
