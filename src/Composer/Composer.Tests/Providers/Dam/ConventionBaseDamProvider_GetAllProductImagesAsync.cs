@@ -7,6 +7,7 @@ using FluentAssertions;
 using Moq;
 using Moq.AutoMock;
 using NUnit.Framework;
+using Orckestra.Composer.Enums;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Dam;
 using Orckestra.Composer.Repositories;
@@ -260,6 +261,7 @@ namespace Orckestra.Composer.Tests.Providers.Dam
 
             return new ProductMedia()
             {
+                MediaType = nameof(MediaTypeEnum.Image),
                 Url = "~/" + GetRandom.String(32) + ".jpg",
                 ResizedInstances = ResizedInstances.ToArray()
             };
