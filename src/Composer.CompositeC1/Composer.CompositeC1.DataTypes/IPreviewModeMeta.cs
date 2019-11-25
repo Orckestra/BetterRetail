@@ -20,7 +20,7 @@ namespace Orckestra.Composer.CompositeC1.DataTypes
     public interface IPreviewModeMeta : IData, IPageMetaData, IPageData, IPageRelatedData, IPublishControlled, IProcessControlled, IVersioned
     {
         [ImmutableFieldId("7b1baab3-b83e-4dd5-3bf6-3a99da5a7cd3")]
-        [FormRenderingProfile(Label = "Product Id")]
+        [FormRenderingProfile(Label = "Product ID")]
         [StoreFieldType(PhysicalStoreFieldType.String, 16, IsNullable = true)]
         [FieldPosition(0)]
         [NullStringLengthValidator(0, 16)]
