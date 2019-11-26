@@ -29,7 +29,7 @@ module Orckestra.Composer {
 
             this.deleteModalElementSelector = '#confirmationModal';
 
-            this.uiModal = new UIModal(window, this.deleteModalElementSelector, this.deleteAddress, this);
+            this.uiModal = new UIModal(window, this.deleteModalElementSelector, this.deleteAddress, this, $(this.context.container));
         }
 
         protected registerSubscriptions() {
