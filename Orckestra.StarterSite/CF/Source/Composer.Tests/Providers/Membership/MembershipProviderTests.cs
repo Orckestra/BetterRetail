@@ -37,7 +37,7 @@ namespace Orckestra.Composer.Tests.Providers.Membership
             _mockScopeProvider = new Mock<IScopeProvider>();
             _mockScopeProvider.SetupGet(sp => sp.DefaultScope).Returns(FakeData.ScopeId);
 
-            _sut = new OvertureMembershipProvider(_mockClient.Object, _mockScopeProvider.Object);
+            _sut = new OvertureMembershipProvider(_mockClient.Object);
 
             _membershipConfig = new MembershipConfiguration()
             {
