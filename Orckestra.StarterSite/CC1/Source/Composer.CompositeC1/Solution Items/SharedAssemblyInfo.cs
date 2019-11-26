@@ -4,8 +4,8 @@
 [assembly: AssemblyCopyright("Copyright © 2018")]
 [assembly: AssemblyTrademark("Orckestra Technologies Inc. 2018")]
 
-[assembly: AssemblyVersion("4.8.1.0")]
-[assembly: AssemblyFileVersion("4.8.1.0")]
+[assembly: AssemblyVersion("4.8.2.0")]
+[assembly: AssemblyFileVersion("4.8.2.0")]
 
 #if DEBUG
 [assembly: AssemblyConfiguration("Debug")]
