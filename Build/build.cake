@@ -181,7 +181,7 @@ Task("Package")
 
 Task("All")
     .IsDependentOn("Build")
-    //.IsDependentOn("Tests")
+    .IsDependentOn("Tests")
     .IsDependentOn("Artifacts")
     .IsDependentOn("Package");
 

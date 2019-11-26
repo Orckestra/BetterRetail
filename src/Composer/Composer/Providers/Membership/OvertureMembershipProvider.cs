@@ -8,7 +8,6 @@ using System.Net;
 using System.Text.RegularExpressions;
 using System.Web.Security;
 using Autofac.Integration.Mvc;
-using Orckestra.Composer.Services;
 using Orckestra.Overture;
 using Orckestra.Overture.ServiceModel.Customers;
 using Orckestra.Overture.ServiceModel.Customers.Membership;
@@ -23,19 +22,8 @@ namespace Orckestra.Composer.Providers.Membership
     public class OvertureMembershipProvider : MembershipProvider
     {
         private IOvertureClient _client;
-        private IScopeProvider _scopeProvider;
         private MembershipConfiguration _configuration;
         private Regex _matchDomainUserRegex;
-
-        public OvertureMembershipProvider()
-        {
-        }
-
-        internal OvertureMembershipProvider(IOvertureClient client, IScopeProvider scopeProvider)
-        {
-            _client = client;
-            _scopeProvider = scopeProvider;
-        }
 
         public override bool EnablePasswordRetrieval
         {
@@ -97,6 +85,12 @@ namespace Orckestra.Composer.Providers.Membership
         public override string PasswordStrengthRegularExpression
         {
             get { return _configuration.PasswordStrengthRegularExpression; }
+        }
+
+        public virtual string GetCurrentScope()
+        {
+            var scopeProvider = (IScopeProvider)AutofacDependencyResolver.Current.GetService(typeof(IScopeProvider));
+            return scopeProvider?.DefaultScope;
         }
 
         public override void Initialize(string name, NameValueCollection config)
@@ -166,7 +160,7 @@ namespace Orckestra.Composer.Providers.Membership
                 Password = password,
                 PasswordQuestion = passwordQuestion,
                 PasswordAnswer = passwordAnswer,
-                ScopeId = _scopeProvider.DefaultScope
+                ScopeId = GetCurrentScope(),
             };
 
             try
@@ -236,7 +230,7 @@ namespace Orckestra.Composer.Providers.Membership
                 var updateRequest = new UpdateCustomerRequest(customer)
                 {
                     PasswordQuestion = newPasswordQuestion,
-                    ScopeId = _scopeProvider.DefaultScope
+                    ScopeId = GetCurrentScope()
                 };
 
                 var updatedCustomer = _client.Send(updateRequest);
@@ -355,7 +349,7 @@ namespace Orckestra.Composer.Providers.Membership
         {
             if (user == null) { throw new ArgumentNullException("user"); }
 
-            var request = new UpdateCustomerRequest(ConvertToCustomer(user)) { ScopeId = _scopeProvider.DefaultScope };
+            var request = new UpdateCustomerRequest(ConvertToCustomer(user)) { ScopeId = GetCurrentScope() };
 
             try
             {
@@ -380,7 +374,7 @@ namespace Orckestra.Composer.Providers.Membership
         {
             string domainUsername;
 
-            return TryGetDomainUser(username, out domainUsername) && 
+            return TryGetDomainUser(username, out domainUsername) &&
                    InternalLoginUser(username, password);
         }
 
@@ -397,7 +391,7 @@ namespace Orckestra.Composer.Providers.Membership
             var request = new GetCustomerRequest
             {
                 CustomerId = (Guid)providerUserKey,
-                ScopeId = _scopeProvider.DefaultScope
+                ScopeId = GetCurrentScope()
             };
 
             try
@@ -436,11 +430,12 @@ namespace Orckestra.Composer.Providers.Membership
 
         public override string GetUserNameByEmail(string email)
         {
+            var currentScope = GetCurrentScope();
             var request = new FindCustomersRequest
             {
                 SearchTerms = email,
-                FilteringScopes = _scopeProvider.DefaultScope,
-                ScopeId = _scopeProvider.DefaultScope,
+                FilteringScopes = currentScope,
+                ScopeId = currentScope,
                 Query = new Query
                 {
                     IncludeTotalCount = true,
@@ -456,8 +451,8 @@ namespace Orckestra.Composer.Providers.Membership
             {
                 var result = _client.Send(request);
 
-                return result.TotalCount == 0 
-                    ? null 
+                return result.TotalCount == 0
+                    ? null
                     : result.Results.First().Username;
             }
             catch (WebException ex)
@@ -477,11 +472,12 @@ namespace Orckestra.Composer.Providers.Membership
 
         public override MembershipUserCollection GetAllUsers(int pageIndex, int pageSize, out int totalRecords)
         {
+            var currentScope = GetCurrentScope();
             var request = new FindCustomersRequest
             {
                 SearchTerms = null,
-                FilteringScopes = _scopeProvider.DefaultScope,
-                ScopeId = _scopeProvider.DefaultScope,
+                FilteringScopes = currentScope,
+                ScopeId = currentScope,
                 Query = new Query
                 {
                     IncludeTotalCount = true,
@@ -517,11 +513,12 @@ namespace Orckestra.Composer.Providers.Membership
             var onlineSpan = new TimeSpan(0, System.Web.Security.Membership.UserIsOnlineTimeWindow, 0);
             var compareTime = DateTime.Now.Subtract(onlineSpan);
 
+            var currentScope = GetCurrentScope();
             var request = new FindCustomersRequest
             {
                 SearchTerms = null,
-                FilteringScopes = _scopeProvider.DefaultScope,
-                ScopeId = _scopeProvider.DefaultScope,
+                FilteringScopes = currentScope,
+                ScopeId = currentScope,
                 Query = new Query
                 {
                     IncludeTotalCount = true,
@@ -554,11 +551,12 @@ namespace Orckestra.Composer.Providers.Membership
         public override MembershipUserCollection FindUsersByName(string usernameToMatch, int pageIndex, int pageSize,
                                                                  out int totalRecords)
         {
+            var currentScope = GetCurrentScope();
             var request = new FindCustomersRequest
             {
                 SearchTerms = usernameToMatch,
-                FilteringScopes = _scopeProvider.DefaultScope,
-                ScopeId = _scopeProvider.DefaultScope,
+                FilteringScopes = currentScope,
+                ScopeId = currentScope,
                 Query = new Query
                 {
                     IncludeTotalCount = true,
@@ -592,11 +590,12 @@ namespace Orckestra.Composer.Providers.Membership
         public override MembershipUserCollection FindUsersByEmail(string emailToMatch, int pageIndex, int pageSize,
                                                                   out int totalRecords)
         {
+            var currentScope = GetCurrentScope();
             var request = new FindCustomersRequest
             {
                 SearchTerms = emailToMatch,
-                FilteringScopes = _scopeProvider.DefaultScope,
-                ScopeId = _scopeProvider.DefaultScope,
+                FilteringScopes = currentScope,
+                ScopeId = currentScope,
                 Query = new Query
                 {
                     IncludeTotalCount = true,
@@ -633,7 +632,7 @@ namespace Orckestra.Composer.Providers.Membership
 
             try
             {
-                var getRequest = new GetCustomerByUsernameRequest { Username = username, ScopeId = _scopeProvider.DefaultScope };
+                var getRequest = new GetCustomerByUsernameRequest { Username = username, ScopeId = GetCurrentScope() };
 
                 return _client.Send(getRequest);
             }
@@ -703,7 +702,7 @@ namespace Orckestra.Composer.Providers.Membership
                 var updateRequest = new UpdateCustomerRequest(customer)
                 {
                     AccountStatus = newStatus,
-                    ScopeId = _scopeProvider.DefaultScope
+                    ScopeId = GetCurrentScope()
                 };
 
                 var updatedCustomer = _client.Send(updateRequest);
@@ -726,7 +725,7 @@ namespace Orckestra.Composer.Providers.Membership
             {
                 UserName = domainUsername,
                 Password = password,
-                ScopeId = _scopeProvider.DefaultScope
+                ScopeId = GetCurrentScope()
             };
 
             try
@@ -751,7 +750,7 @@ namespace Orckestra.Composer.Providers.Membership
             {
                 UserName = domainUsername,
                 Password = password,
-                ScopeId = _scopeProvider.DefaultScope
+                ScopeId = GetCurrentScope()
             };
 
             try
@@ -808,8 +807,7 @@ namespace Orckestra.Composer.Providers.Membership
 
             _matchDomainUserRegex = new Regex(string.Format(@"^{0}\\(?<username>.+)$", OvertureMembershipConfiguration.DefaultMembershipDomain), RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-            _client = _client ?? ComposerHost.Current.Resolve<IOvertureClient>();
-            _scopeProvider = _scopeProvider ?? (IScopeProvider)AutofacDependencyResolver.Current.GetService(typeof(IScopeProvider));
+            _client = ComposerHost.Current.Resolve<IOvertureClient>();
 
             GetMembershipConfigurationFromOverture();
         }

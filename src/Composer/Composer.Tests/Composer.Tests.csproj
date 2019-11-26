@@ -211,6 +211,8 @@
     <Compile Include="AssemblyExtensions\AssemblyExtensions_SafeGetTypes.cs" />
     <Compile Include="AssemblyHelper\AssemblyHelper_SafeLoadAssemblies.cs" />
     <Compile Include="ComposerHost\ComposerAssemblies_ValidateWeightAttribute.cs" />
+    <Compile Include="Providers\Membership\AutofacDependencyResolverMoq.cs" />
+    <Compile Include="Providers\Membership\ComposerHostMoq.cs" />
     <Compile Include="ComposerHost\ComposerHost_CtorTests.cs" />
     <Compile Include="ComposerHost\ComposerHost_Init.cs" />
     <Compile Include="ComposerConfiguration_ClassDef.cs" />

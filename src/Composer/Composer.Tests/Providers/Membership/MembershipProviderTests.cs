@@ -24,11 +24,12 @@ namespace Orckestra.Composer.Tests.Providers.Membership
     [TestFixture]
     public class MembershipProviderTests
     {
-
         private Mock<IOvertureClient> _mockClient;
         private Mock<IScopeProvider> _mockScopeProvider;
         private OvertureMembershipProvider _sut;
         private MembershipConfiguration _membershipConfig;
+        private ComposerHostMoq _composerHostMoq;
+        private AutofacDependencyResolverMoq _autofacDependencyResolverMoq;
 
         [SetUp]
         public void Setup()
@@ -36,8 +37,12 @@ namespace Orckestra.Composer.Tests.Providers.Membership
             _mockClient = new Mock<IOvertureClient>(MockBehavior.Strict);
             _mockScopeProvider = new Mock<IScopeProvider>();
             _mockScopeProvider.SetupGet(sp => sp.DefaultScope).Returns(FakeData.ScopeId);
+            _composerHostMoq = new ComposerHostMoq();
+            _composerHostMoq.AutoMock.Provide(_mockClient.Object);
+            _autofacDependencyResolverMoq = new AutofacDependencyResolverMoq();
+            _autofacDependencyResolverMoq.AutoMock.Provide(_mockScopeProvider.Object);
 
-            _sut = new OvertureMembershipProvider(_mockClient.Object, _mockScopeProvider.Object);
+            _sut = new OvertureMembershipProvider();
 
             _membershipConfig = new MembershipConfiguration()
             {
@@ -60,6 +65,14 @@ namespace Orckestra.Composer.Tests.Providers.Membership
             _sut.Initialize("overture", config);
 
             InjectProvider(System.Web.Security.Membership.Providers, _sut);
+
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            _composerHostMoq.Dispose();
+            _autofacDependencyResolverMoq.Dispose();
         }
 
         public void LoginUser_should_returns_true_with_valid_password()
