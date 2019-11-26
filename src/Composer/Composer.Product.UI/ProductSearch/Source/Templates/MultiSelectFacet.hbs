@@ -7,7 +7,8 @@
                 {{else}}
                     <input type="checkbox" name="{{../../../FieldName}}[]" value="{{Value}}" data-oc-click="multiFacetChanged" />
                 {{/if}}
-                {{Title}}&#160;({{Quantity}})
+                 {{!-- Replaced the non-breakable space by a normal one --}}
+                {{Title}} ({{Quantity}})
             </label>
         </div>
     </li>

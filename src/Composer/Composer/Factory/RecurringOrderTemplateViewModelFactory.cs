@@ -1,4 +1,5 @@
 ﻿using Orckestra.Composer.Country;
+using Orckestra.Composer.Extensions;
 using Orckestra.Composer.Helper;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
@@ -11,19 +12,15 @@ using Orckestra.Composer.ViewModels;
 using Orckestra.Overture;
 using Orckestra.Overture.ServiceModel;
 using Orckestra.Overture.ServiceModel.Customers;
-using Orckestra.Overture.ServiceModel.Metadata;
 using Orckestra.Overture.ServiceModel.Orders;
 using Orckestra.Overture.ServiceModel.Products;
-using Orckestra.Overture.ServiceModel.RecurringOrders;
 using Orckestra.Overture.ServiceModel.Requests.Customers;
-using Orckestra.Overture.ServiceModel.Requests.Products;
+using Orckestra.Overture.ServiceModel.Requests.Metadata;
 using Orckestra.Overture.ServiceModel.Requests.RecurringOrders;
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Orckestra.Composer.Factory
@@ -257,7 +254,7 @@ namespace Orckestra.Composer.Factory
                 IncludeRelationships = false,
                 IncludeVariants = true
             };
-            var getProductResponse = OvertureClient.Send(getProductRequest);
+            var getProductResponse = await OvertureClient.SendAsync(getProductRequest).ConfigureAwaitWithCulture(false);
 
             if (getProductResponse == null ||
                 (getProductResponse != null && recrurringLineItem.VariantId != string.Empty
@@ -272,7 +269,7 @@ namespace Orckestra.Composer.Factory
                     },
                     ScopeId = recrurringLineItem.ScopeId
                 };
-                OvertureClient.Send(deleteRecurringLineItem);
+                await OvertureClient.SendAsync(deleteRecurringLineItem).ConfigureAwaitWithCulture(false);
 
                 return await Task.FromResult<RecurringOrderTemplateLineItemViewModel>(null).ConfigureAwaitWithCulture(false);
             }
@@ -324,7 +321,16 @@ namespace Orckestra.Composer.Factory
                 vm.Total = LocalizationProvider.FormatPrice((decimal)vm.Quantity * price, param.CultureInfo);
             }
 
-            vm.ProductSummary.Brand = getProductResponse.Brand;
+            //Adding brand display name
+            var brandLookup = await OvertureClient.SendAsync(new GetProductLookupRequest { LookupName = "Brand" }).ConfigureAwaitWithCulture(false);
+            var brandId = getProductResponse.Brand;
+
+            if (brandId != null)
+            {
+                string brandValue = Convert.ToString(brandId);
+                vm.ProductSummary.Brand = brandLookup?.GetDisplayName(brandValue, param.CultureInfo.Name) ?? brandId;
+            }
+
             var list = await ProductHelper.GetKeyVariantAttributes(getProductResponse, variant, param.CultureInfo, OvertureClient).ConfigureAwaitWithCulture(false);
             if (list != null && list.Count > 0)
             {
