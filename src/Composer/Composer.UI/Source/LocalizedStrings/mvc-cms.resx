@@ -135,9 +135,6 @@
   <data name="CompleteCheckoutUrl" xml:space="preserve">
     <value>checkout/order-confirmation</value>
   </data>
-  <data name="SearchInUrl" xml:space="preserve">
-    <value>search</value>
-  </data>
   <data name="Breadcrumb_ChangePassword" xml:space="preserve">
     <value>Change Password</value>
   </data>

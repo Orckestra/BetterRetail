@@ -8,7 +8,6 @@ using Orckestra.Composer.Search.Providers.SelectedFacet;
 using Orckestra.Composer.Search.Repositories;
 using Orckestra.Composer.Search.Services;
 using Orckestra.Overture;
-using Orckestra.Composer.Providers;
 
 namespace Orckestra.Composer.Search
 {
@@ -25,7 +24,6 @@ namespace Orckestra.Composer.Search
             host.Register<SearchBreadcrumbViewService, ISearchBreadcrumbViewService>();
             host.Register<FacetLocalizationProvider, IFacetLocalizationProvider>();
             host.Register<FromPriceProvider, IPriceProvider>();
-            host.Register<SearchUrlProvider, ISearchUrlProvider>();
             host.Register<SearchTermsTransformationProvider, ISearchTermsTransformationProvider>();
 
             host.MetadataRegistry.LoadViewModelMetadataInAssemblyOf(typeof (SearchPlugin).Assembly);

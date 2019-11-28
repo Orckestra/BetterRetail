@@ -117,7 +117,6 @@
     <Compile Include="Services\ProductViewModelFactory_BuildImages.cs" />
     <Compile Include="Services\ProductSpecificationsViewService_GetProductSpecificationsViewModelAsync.cs" />
     <Compile Include="Mock\FakeViewModelMapper.cs" />
-    <Compile Include="Providers\ProductUrlProvider_GetProductUrl.cs" />
     <Compile Include="Repositories\CategoryRepository_GetCategoriesPathAsync.cs" />
     <Compile Include="Repositories\CategoryRepository_GetCategoriesAsync.cs" />
     <Compile Include="Repositories\CategoryRepository_Ctor.cs" />

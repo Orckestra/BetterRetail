@@ -171,7 +171,6 @@
     <Compile Include="Providers\FacetPredicate\RangeFacetPredicateProvider.cs" />
     <Compile Include="Providers\Facet\RangeFacetProvider.cs" />
     <Compile Include="Providers\FromPriceProvider.cs" />
-    <Compile Include="Providers\SearchUrlProvider.cs" />
     <Compile Include="Parameters\CreateProductSearchResultsViewModelParam.cs" />
     <Compile Include="Providers\FacetPredicate\SingleSelectFacetPredicateProvider.cs" />
     <Compile Include="Providers\Facet\SingleSelectFacetProvider.cs" />

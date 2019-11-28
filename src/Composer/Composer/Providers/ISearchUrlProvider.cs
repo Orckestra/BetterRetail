@@ -1,17 +1,11 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Web.Routing;
 using Orckestra.Composer.Parameters;
 
 namespace Orckestra.Composer.Providers
 {
     public interface ISearchUrlProvider
     {
-        /// <summary>
-        /// Register routes for Search
-        /// </summary>
-        void RegisterRoutes(RouteCollection routeCollection);
-
         /// <summary>
         /// Builds the search URL
         /// </summary>

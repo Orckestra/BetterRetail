@@ -55,7 +55,6 @@
     <Compile Include="Parameters\GetProductSpecificationsParam.cs" />
     <Compile Include="ProductConfiguration.cs" />
     <Compile Include="Providers\ConfigurationInventoryLocationProvider.cs" />
-    <Compile Include="Providers\ProductUrlProvider.cs" />
     <Compile Include="Parameters\CreateProductDetailViewModelParam.cs" />
     <Compile Include="Parameters\GenerateKvaItemsParam.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

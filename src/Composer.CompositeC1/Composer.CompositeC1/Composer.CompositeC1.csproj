@@ -302,6 +302,7 @@
     <Compile Include="Providers\ScopeProvider.cs" />
     <Compile Include="Providers\RecurringCartUrlProvider.cs" />
     <Compile Include="Providers\RecurringScheduleUrlProvider.cs" />
+    <Compile Include="Providers\SearchUrlProvider.cs" />
     <Compile Include="Providers\StoreUrlProvider.cs" />
     <Compile Include="Providers\UrlProviderHelper.cs" />
     <Compile Include="RequestInterceptorHttpModule.cs" />
