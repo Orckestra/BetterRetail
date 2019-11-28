@@ -10,19 +10,26 @@ module Orckestra.Composer {
         private window: Window;
         private sender: any;
         private modalContextSelector: string;
+        private container: JQuery;
 
-        public constructor(window: Window, modalContextSelector: string, confirmAction, sender) {
+        public constructor(window: Window, modalContextSelector: string, confirmAction, sender, container = undefined) {
 
             this.confirmAction = confirmAction;
             this.modalContextSelector = modalContextSelector;
             this.window = window;
             this.sender = sender;
-            this.registerDomEvents();
+            this.container = container;
+            this.registerDomEvents(container);
         }
 
-        private registerDomEvents() : void {
-            $(this.window.document).on('click', '.modal--confirm',  this.confirmModal.bind(this));
-            $(this.window.document).on('click', '.modal--cancel', this.cancelModal.bind(this));
+        private registerDomEvents(container) : void {
+            if ( container === undefined ) {
+                $(this.window.document).on('click', '.modal--confirm',  this.confirmModal.bind(this));
+                $(this.window.document).on('click', '.modal--cancel', this.cancelModal.bind(this));
+            } else {
+                container.on('click', '.modal--confirm',  this.confirmModal.bind(this));
+                container.on('click', '.modal--cancel', this.cancelModal.bind(this));
+            }
         }
 
         private unregisterDomEvents() : void {
