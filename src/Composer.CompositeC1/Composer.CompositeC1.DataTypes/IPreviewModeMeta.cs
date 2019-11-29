@@ -15,7 +15,7 @@ namespace Orckestra.Composer.CompositeC1.DataTypes
     [DataAncestorProvider(typeof(NoAncestorDataAncestorProvider))]
     [ImmutableTypeId("3ea8c217-614f-4397-831e-7d6b314ff558")]
     [KeyTemplatedXhtmlRenderer(XhtmlRenderingType.Embedable, "<span>{label}</span>")]
-    [Title("Preview Mode")]
+    [Title("Product Preview Mode")]
     [LabelPropertyName("ProductId")]
     public interface IPreviewModeMeta : IData, IPageMetaData, IPageData, IPageRelatedData, IPublishControlled, IProcessControlled, IVersioned
     {
