@@ -119,7 +119,7 @@ namespace Orckestra.Composer.Search.Api
 
                 FacetValue categoryCount = categoryCounts
                         .Where((facet) => int.TryParse(CategoryFieldName.Match(facet.FieldName).Groups[1].Value, out int n) && parents.Count == n - 1)
-                        .Single()
+                        .FirstOrDefault()?
                         .Values
                         .Where((facetValue) => facetValue.Value == category.DisplayName[language]).SingleOrDefault();
                 

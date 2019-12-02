@@ -134,7 +134,7 @@ namespace Orckestra.Composer.Search.Services
             return Task.FromResult(facets);
         }
 
-        public async Task<List<Category>> GetAllCategories()
+        public virtual async Task<List<Category>> GetAllCategories()
         {
             return await CategoryRepository.GetCategoriesAsync(new GetCategoriesParam
             {
@@ -142,7 +142,7 @@ namespace Orckestra.Composer.Search.Services
             });
         }
 
-        public async Task<List<Orckestra.Overture.ServiceModel.Search.Facet>> GetCategoryProductCounts(string cultureName)
+        public virtual async Task<List<Orckestra.Overture.ServiceModel.Search.Facet>> GetCategoryProductCounts(string cultureName)
         {
             return await CategoryRepository.GetCategoryProductCount(ComposerContext.Scope, cultureName);
         }
