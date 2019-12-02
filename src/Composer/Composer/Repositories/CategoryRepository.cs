@@ -37,7 +37,7 @@ namespace Orckestra.Composer.Repositories
         /// </summary>
         /// <param name="param">The parameter.</param>
         /// <returns>List of categories.</returns>
-        public Task<List<Category>> GetCategoriesAsync(GetCategoriesParam param)
+        public virtual Task<List<Category>> GetCategoriesAsync(GetCategoriesParam param)
         {
             if (param == null) { throw new ArgumentNullException("param"); }
             if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("Scope"), "param"); }
@@ -146,17 +146,17 @@ namespace Orckestra.Composer.Repositories
 
         public virtual Task<List<Facet>> GetCategoryProductCount(string scopeId, string cultureName)
         {
-            var request = getAdvancedSearchRequest(scopeId, cultureName, "CategoryAutoSuggest");
+            var request = GetProductsAdvancedSearchRequest(scopeId, cultureName, "CategoryAutoSuggest");
             return Task.FromResult(OvertureClient.Send(request).Facets);
         }
 
         public virtual Task<List<Facet>> GetBrandProductCount(string scopeId, string cultureName)
         {
-            var request = getAdvancedSearchRequest(scopeId, cultureName, "BrandAutoSuggest");
+            var request = GetProductsAdvancedSearchRequest(scopeId, cultureName, "BrandAutoSuggest");
             return Task.FromResult(OvertureClient.Send(request).Facets);
         }
 
-        protected virtual AdvancedSearchRequest getAdvancedSearchRequest(string scopeId, string cultureName, string facetHierarchyId)
+        protected virtual AdvancedSearchRequest GetProductsAdvancedSearchRequest(string scopeId, string cultureName, string facetHierarchyId)
         {
             return new AdvancedSearchRequest
             {
