@@ -33,7 +33,7 @@ namespace Orckestra.Composer.Cart.Providers.CartMerge
         /// </summary>
         /// <param name="param"></param>
         /// <returns></returns>
-        public async Task MergeCartAsync(CartMergeParam param)
+        public virtual async Task MergeCartAsync(CartMergeParam param)
         {
             if (param == null) { throw new ArgumentNullException("param"); }
             if (param.GuestCustomerId == Guid.Empty) { throw new ArgumentException("param.GuestCustomerId"); }
