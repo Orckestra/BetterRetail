@@ -113,7 +113,7 @@ namespace Orckestra.Composer.CompositeC1.Services.Facet
         protected virtual IFacetConfiguration GetDefaultFacetConfiguration()
         {
             return DataQueryService.Get<IFacetConfiguration>()
-                .OrderByDescending(c => c.IsDefault)
+                .Where(c => c.IsDefault)
                 .FirstOrDefault();
         }
 
