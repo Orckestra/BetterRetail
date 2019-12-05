@@ -92,7 +92,7 @@ namespace Orckestra.Composer.CompositeC1.Tests.Services.FacetConfigurationContex
         }
 
         [Test]
-        public void WHEN_no_default_facetSettings_SHOULD_return_any_facetSettings()
+        public void WHEN_no_default_facetSettings_SHOULD_NOT_return_facetSettings()
         {
             // arrange
             var facet = CreateFacet();
@@ -103,8 +103,7 @@ namespace Orckestra.Composer.CompositeC1.Tests.Services.FacetConfigurationContex
             var facetSettings = _target.GetFacetSettings();
 
             // assert
-            facetSettings.Should().HaveCount(1);
-            facetSettings[0].FieldName.Should().Be(facet.FieldName);
+            facetSettings.Should().BeEmpty();
         }
 
         [Test]
@@ -182,7 +181,8 @@ namespace Orckestra.Composer.CompositeC1.Tests.Services.FacetConfigurationContex
         {
             // arrange
             var facet = CreateFacet();
-            CreateFacetConfig(facet);
+            var facetConfig = CreateFacetConfig(facet);
+            facetConfig.IsDefault = true;
             _target.GetFacetSettings();
             _facets.Clear();
             _facetConfigs.Clear();
@@ -193,6 +193,7 @@ namespace Orckestra.Composer.CompositeC1.Tests.Services.FacetConfigurationContex
             // assert
             facetSettings.Should().HaveCount(1);
             facetSettings[0].FieldName.Should().Be(facet.FieldName);
+           
         }
 
 
