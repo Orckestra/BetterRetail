@@ -133,6 +133,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataTypesEventRegistrator.cs" />
     <Compile Include="Facets\IFacetConfigurationMeta.cs" />
     <Compile Include="IPreviewModeMeta.cs" />
     <Compile Include="SearchAutocomplete\ISearchTerm.cs" />

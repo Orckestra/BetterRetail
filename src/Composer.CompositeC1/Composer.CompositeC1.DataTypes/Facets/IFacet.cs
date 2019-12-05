@@ -76,11 +76,11 @@ namespace Orckestra.Composer.CompositeC1.DataTypes.Facets
         [FieldPosition(4)]
         [IntegerRangeValidator(-2147483648, 2147483647)]
         [DefaultFieldIntValue(0)]
-        [FormRenderingProfile(Label = "Max Collapsed Items")]
+        [FormRenderingProfile(Label = "Max Items When Collapsed")]
         int MaxCollapsedValueCount { get; set; }
 
         [ImmutableFieldId("9ef9bccb-a218-4728-b14e-d62225b2a55e")]
-        [FormRenderingProfile(Label = "Max Expended Items")]
+        [FormRenderingProfile(Label = "Max Items When Expanded")]
         [StoreFieldType(PhysicalStoreFieldType.Integer, IsNullable = true)]
         [FieldPosition(5)]
         [NullIntegerRangeValidator(-2147483648, 2147483647)]

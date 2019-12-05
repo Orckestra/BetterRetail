@@ -13,7 +13,7 @@
   <ElementRoot>
     <Actions>
       <AddDataAction Label="Add Article" Type="Orckestra.Composer.Articles.DataTypes.IArticle"/>
-      <AddDataAction Label="Add Catgory" Type="Orckestra.Composer.Articles.DataTypes.IArticleCategory"/>
+      <AddDataAction Label="Add Category" Type="Orckestra.Composer.Articles.DataTypes.IArticleCategory"/>
     </Actions>
     <Children>
       <Element Label="Articles" Id="Articles">

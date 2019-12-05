@@ -16,6 +16,7 @@ namespace Orckestra.Composer.CompositeC1.DataTypes
         public static void OnInitialized()
         {
             EnsureCreateStore();
+            DataTypesEventRegistrator.Initialize();
         }
 
         private static void EnsureCreateStore()
