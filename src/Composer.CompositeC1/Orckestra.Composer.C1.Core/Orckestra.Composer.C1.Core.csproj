@@ -55,6 +55,7 @@
     <Content Include="Package\Datas\Composite.Data.Types.IGeneratedTypeWhiteLists_administrated.xml" />
     <Content Include="Package\Datas\Composite.Data.Types.IMediaFileDatas_public.xml" />
     <Content Include="Package\Datas\Composite.Data.Types.IMediaFolderDatas_public.xml" />
+    <Content Include="Package\Datas\Composite.Data.Types.IMethodBasedFunctionInfos_public.xml" />
     <Content Include="Package\Datas\Composite.Data.Types.IPageMetaDataDefinitions_public.xml" />
     <Content Include="Package\Datas\Composite.Data.Types.IPageTypeDefaultPageContents_public.xml" />
     <Content Include="Package\Datas\Composite.Data.Types.IPageTypeMetaDataTypeLinks_public.xml" />

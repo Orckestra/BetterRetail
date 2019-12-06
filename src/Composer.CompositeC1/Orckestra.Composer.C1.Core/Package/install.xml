@@ -111,6 +111,9 @@
         <Type type="Composite.Data.Types.IGeneratedTypeWhiteList,Composite">
           <Data dataScopeIdentifier="administrated" dataFilename="~\Datas\Composite.Data.Types.IGeneratedTypeWhiteLists_administrated.xml" />
         </Type>
+        <Type type="Composite.Data.Types.IMethodBasedFunctionInfo,Composite">
+          <Data dataScopeIdentifier="public" dataFilename="~\Datas\Composite.Data.Types.IMethodBasedFunctionInfos_public.xml" />
+        </Type>
       </Types>
     </mi:Add>
     <mi:Add installerType="Orckestra.Composer.CompositeC1.Installers.ComposerFragmentInstaller, Orckestra.Composer.CompositeC1" uninstallerType="Orckestra.Composer.CompositeC1.Installers.ComposerFragmentUninstaller, Orckestra.Composer.CompositeC1" />

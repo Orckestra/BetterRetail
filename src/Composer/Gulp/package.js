@@ -96,21 +96,6 @@
         gulp.watch(watch, ['package']);
     });
 
-    gulp.task('watch-styles', function (callback) {
-        gulp.watch('Composer.UI/Source/Sass/**/*', ['package-styles'])
-    });
-
-    gulp.task('package-styles', function (callback) {
-        runSequence(
-            'package-clean',
-            'package-framework',
-            'package-blades-sass',
-            'package-sass-imports',
-            'package-sass',
-            callback
-        );
-    });
-
     gulp.task('package-clean', function (callback) {
         return helpers.clean(dest, callback);
     });
@@ -141,57 +126,12 @@
 				.pipe(gulp.dest(c1MvcProject));
     });
 
-    gulp.task('package-copy-dll', function() {
-        function copyAssembliesTo(destinationFolder) {
-        // Copy assemblies to package destination
-
-        if (config.debug) {
-            helpers.log('Assemblies will be copied to ' + destinationFolder);
-        }
-
-        return gulp.src(config.composerAssemblies)
-            .pipe($.if(argv.verbose, $.using()))
-            .pipe(gulp.dest(destinationFolder));
-        }
-		
-		
-		// Open packages.config file
-        var composerPackagesConfigPath = path.join(config.composerCompositeC1, 'packages.config');
-        var composerPackagesConfigContent = fsSync.read(composerPackagesConfigPath);
-
-        // Extract version number for Composer
-        var match = composerPackagesConfigContent.match(/<package id="Composer" version="(.*?)" targetFramework=".*?" \/>/i);
-        if (match.length < 2) {
-            throw new Error('Cannot find Composer version in ' + composerPackagesConfigPath);
-        }
-        var version = match[1];
-        
-		copyAssembliesTo(path.join(config.composerCompositeC1, '../', 'packages/Composer.' + version, 'lib/net452'));
-		copyAssembliesTo(path.join(config.c1MvcProject, '../', 'packages/Composer.' + version, 'lib/net452'));
-        copyAssembliesTo(path.join(config.deployedWebsitePath, 'bin/'));
-    });
 
     gulp.task('package-sass-imports', function () {
         return gulp.src(path.join(dest, 'Sass', '**/*.scss'))
             .pipe($.if(argv.verbose, $.using()))
             .pipe($.sassGlobImport())
             .pipe(gulp.dest(path.join(dest, 'Sass')));
-    });
-
-    gulp.task('package-sass', function () {
-        return gulp.src(path.join(dest, 'Sass', '**/*.scss'))
-            .pipe($.if(argv.verbose, $.using()))
-            .pipe($.sass())
-            .pipe($.autoprefixer({
-                browsers: [
-                'last 3 versions',
-                'Explorer >= 8',
-                'iOS 7',
-                'last 10 Chrome version',
-                'last 5 Firefox version'
-                ]
-            }))
-            .pipe(gulp.dest(path.join(dest, 'Css')));
     });
 
 
@@ -352,8 +292,6 @@
             //'package-run-unit-tests',
             'package-templates',
             'package-blades-sass',
-            'package-sass-imports',
-            'package-sass',
             callback
         );
     });
@@ -362,7 +300,6 @@
         runSequence(
             'package',
             'package-copy-mvc',
-            'package-copy-dll',
             callback
         );
     });

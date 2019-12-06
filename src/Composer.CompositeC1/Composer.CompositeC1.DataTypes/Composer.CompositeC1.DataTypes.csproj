@@ -136,6 +136,7 @@
     <Compile Include="DataTypesEventRegistrator.cs" />
     <Compile Include="Facets\IFacetConfigurationMeta.cs" />
     <Compile Include="IPreviewModeMeta.cs" />
+    <Compile Include="IWebsiteStyleTheme.cs" />
     <Compile Include="SearchAutocomplete\ISearchTerm.cs" />
     <Compile Include="StartupHandler.cs" />
     <Compile Include="RecurringOrdersSettings.cs" />

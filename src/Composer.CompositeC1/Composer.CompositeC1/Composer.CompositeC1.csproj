@@ -341,6 +341,7 @@
     <Compile Include="UrlRewriteModule.cs" />
     <Compile Include="Utils\HttpContextHelper.cs" />
     <Compile Include="Utils\UrlUtils.cs" />
+    <Compile Include="Widgets\WidgetFunctions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">

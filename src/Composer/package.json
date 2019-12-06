@@ -43,8 +43,6 @@
     "gulp-replace": "0.5.4",
     "gulp-rev": "7.0.0",
     "gulp-run": "1.6.12",
-    "gulp-sass": "^3.0.0",
-    "gulp-sass-glob-import": "0.1.0",
     "gulp-shell": "0.5.2",
     "gulp-size": "2.1.0",
     "gulp-sourcemap": "1.0.1",
@@ -88,13 +86,13 @@
     "slash": "1.0.0",
     "through2": "2.0.1",
     "tslint": "3.7.0",
+    "typeahead.js": "0.11.1",
     "typescript": "1.8.9",
     "vinyl-buffer": "1.0.0",
     "vinyl-source-stream": "1.1.0",
     "vinyl-transform": "1.0.0",
     "webdriver-manager": "9.0.0",
     "xml2js": "0.4.16",
-    "yargs": "4.6.0",
-    "typeahead.js": "0.11.1"
+    "yargs": "4.6.0"
   }
 }
