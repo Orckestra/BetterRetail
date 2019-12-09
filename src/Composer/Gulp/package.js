@@ -168,15 +168,6 @@
         '!**/Templates/**/*'
     ];
 
-    gulp.task('package-blades-sass', function () {
-        var filter = $.filter(filters);
-
-        return gulp.src('./*.UI/*/Source/Sass/*')
-            .pipe($.if(argv.verbose, $.using()))
-            .pipe(through.obj(changePath))
-            .pipe($.if(argv.verbose, $.using()))
-            .pipe(gulp.dest(dest));
-    });
 
     gulp.task('package-framework', function () {
         var src = 'Composer.UI/Source/**/*';
@@ -291,7 +282,6 @@
             'package-copy-thirdparty',
             //'package-run-unit-tests',
             'package-templates',
-            'package-blades-sass',
             callback
         );
     });
