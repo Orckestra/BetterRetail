@@ -76,7 +76,7 @@ namespace Orckestra.Composer.Search.Api
                 searchResultsViewModel = await SearchViewService.GetSearchViewModelAsync(searchCriteria).ConfigureAwait(false);
             }
 
-            var vm = new AutoCompleteViewModel();
+            var vm = new AutoCompleteViewModel() { Suggestions = new List<ProductSearchViewModel>() };
             if (searchResultsViewModel.ProductSearchResults?.SearchResults?.Count > 0)
             {
                 vm.Suggestions = searchResultsViewModel.ProductSearchResults.SearchResults.Take(limit)
@@ -177,7 +177,10 @@ namespace Orckestra.Composer.Search.Api
 
             SearchTermsSuggestionsViewModel vm = new SearchTermsSuggestionsViewModel()
             {
-                Suggestions = suggestedTerms.Select(term => new SearchTermsSuggestionViewModel { DisplayName = term }).Take(limit).ToList()
+                Suggestions = suggestedTerms
+                    .OrderBy(term => term)
+                    .Select(term => new SearchTermsSuggestionViewModel { DisplayName = term })
+                    .Take(limit).ToList()
             };
             return Ok(vm);
         }
