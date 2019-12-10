@@ -111,19 +111,18 @@
 		 
 		var mvcSources = ['App_Data/Razor/', 'App_Data/PageTemplates/'];
 		mvcSources.forEach(function(destItem) {
-			helpers.log('Copying ' + destItem);
+			
 			var c1Site = path.join(config.deployedWebsitePath, destItem);
-			return gulp.src(path.join('../../CC1/Source/Composer.CompositeC1/Composer.CompositeC1.Mvc/', destItem, '**/*'))
+			helpers.log('Copying ' + c1Site);
+			return gulp.src(path.join('../../Composer.CompositeC1/Composer.CompositeC1.Mvc/', destItem, '**/*'))
 				.pipe(gulp.dest(c1Site))
 		});
 		
 		helpers.log('Copying ' + dest);
-		var c1Site = path.join(config.deployedWebsitePath, dest),
-			c1MvcProject = path.join('../../CC1/Source/Composer.CompositeC1/Composer.CompositeC1.Mvc', dest);
+		var c1Site = path.join(config.deployedWebsitePath, dest);
 
 		return gulp.src(path.join(dest, '**/*'))
-				.pipe(gulp.dest(c1Site))
-				.pipe(gulp.dest(c1MvcProject));
+				.pipe(gulp.dest(c1Site));
     });
 
 

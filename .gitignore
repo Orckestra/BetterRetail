@@ -249,3 +249,7 @@ Orckestra.StarterSite/CF/Source/Composer.Mvc.Sample.Tests
 
 # cake
 /build/tools/*
+/deployment/*
+/output/*
+/build/configuration/parameters.*.json
+package-lock.json

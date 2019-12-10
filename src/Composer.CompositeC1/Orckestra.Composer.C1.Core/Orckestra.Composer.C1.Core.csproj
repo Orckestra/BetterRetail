@@ -79,6 +79,10 @@
       <Project>{4fe997ff-a528-4908-885b-d5cb2bb41f2f}</Project>
       <Name>Composer.UI</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Composer.CompositeC1.Mvc\Composer.CompositeC1.Mvc.csproj">
+      <Project>{7e75d550-3c78-46d0-a124-065a5fffa0b2}</Project>
+      <Name>Composer.CompositeC1.Mvc</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Package\Views\Footer\FollowUs.cshtml" />

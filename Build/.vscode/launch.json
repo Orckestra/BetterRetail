@@ -2,12 +2,17 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Debug Cake",
+      "name": "Build",
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "build",
       "program": "${workspaceRoot}/tools/Addins/Cake.CoreCLR.0.35.0/Cake.dll",
-      "args": ["${workspaceRoot}/build.cake", "-debug", "-target=All"],
+      "args": [
+        "${workspaceRoot}/build.cake",
+        "-debug",
+        "-target=All",
+        "-verbosity=diagnostic"
+      ],
       "cwd": "${workspaceRoot}",
       "stopAtEntry": true,
       "externalConsole": false,

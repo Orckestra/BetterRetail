@@ -74,6 +74,17 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Composer.CompositeC1.Tests", "src\Composer.CompositeC1\Composer.CompositeC1.Tests\Composer.CompositeC1.Tests.csproj", "{DB2343A4-77DB-4B6E-82D0-74C7724FC821}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Composer.CompositeC1.Mvc", "src\Composer.CompositeC1\Composer.CompositeC1.Mvc\Composer.CompositeC1.Mvc.csproj", "{7E75D550-3C78-46D0-A124-065A5FFFA0B2}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A8B2D94C-8C2E-4AC5-875A-6E3540B56ADD} = {A8B2D94C-8C2E-4AC5-875A-6E3540B56ADD}
+		{8F9AD96B-47B6-4BBD-AD4E-0155B49D2BFD} = {8F9AD96B-47B6-4BBD-AD4E-0155B49D2BFD}
+		{112B646F-5193-45CC-A9EF-D632D853CFB1} = {112B646F-5193-45CC-A9EF-D632D853CFB1}
+		{B391AB82-48AB-4F73-B141-80EE9DE7D381} = {B391AB82-48AB-4F73-B141-80EE9DE7D381}
+		{0654D78B-DE8C-4EB7-B32B-34DD1AFE46BF} = {0654D78B-DE8C-4EB7-B32B-34DD1AFE46BF}
+		{9DFD94A1-FCCB-4B7B-8CCE-4D8F1D0E2B50} = {9DFD94A1-FCCB-4B7B-8CCE-4D8F1D0E2B50}
+		{460EACA2-1EDB-46BC-A508-F784E4A4DA97} = {460EACA2-1EDB-46BC-A508-F784E4A4DA97}
+		{8227ECD6-6D34-4F4D-BFBC-02BC52E7CE7A} = {8227ECD6-6D34-4F4D-BFBC-02BC52E7CE7A}
+		{4FE997FF-A528-4908-885B-D5CB2BB41F2F} = {4FE997FF-A528-4908-885B-D5CB2BB41F2F}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Articles", "Articles", "{A57608FB-0095-40B3-B1AD-9F70581DD3DD}"
 EndProject
@@ -98,6 +109,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.ContentSearch.Content", "src\Composer.CompositeC1\Orckestra.Composer.ContentSearch.Content\Orckestra.Composer.ContentSearch.Content.csproj", "{0654D78B-DE8C-4EB7-B32B-34DD1AFE46BF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.ContentSearch.Package", "src\Composer.CompositeC1\Orckestra.Composer.ContentSearch.Package\Orckestra.Composer.ContentSearch.Package.csproj", "{5C56B24A-09C3-4884-B769-E3E8A042EE6A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7E75D550-3C78-46D0-A124-065A5FFFA0B2} = {7E75D550-3C78-46D0-A124-065A5FFFA0B2}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.C1CMS.Queries", "src\Composer.CompositeC1\Orckestra.Composer.C1CMS.Queries\Orckestra.Composer.C1CMS.Queries.csproj", "{8F9AD96B-47B6-4BBD-AD4E-0155B49D2BFD}"
 EndProject

@@ -1,8 +1,8 @@
-#tool nuget:https://www.nuget.org/api/v2?package=NUnit.ConsoleRunner&version=3.10.0
-#addin nuget:https://www.nuget.org/api/v2?package=Cake.MsDeploy&version=0.8.0
-#addin nuget:https://www.nuget.org/api/v2?package=Cake.CoreCLR&version=0.35.0
+#tool "nuget:?package=NUnit.ConsoleRunner&version=3.10.0"
+#addin "nuget:?package=Cake.MsDeploy&version=0.8.0"
+#addin "nuget:?package=Cake.CoreCLR&version=0.35.0"
 
-#load "scripts/extensions.cake"
+#load "helpers/filesystem.cake"
 
 using System.Xml.Linq;
 using System.Text.RegularExpressions;
@@ -10,14 +10,30 @@ using System.Text.RegularExpressions;
 //////////////////////////////////////////////////////////////////////
 // ARGUMENTS
 //////////////////////////////////////////////////////////////////////
+var isShowingDoc = Context.Configuration.GetValue("showtree") != null;
 
 var target = Argument("target", "All");
 var configuration = Argument("configuration", "Release");
 var packageVersion = Argument("package-version", "");
 
-Information($"Target: {target}");
-Information($"Configuration: {configuration}");
-Information($"Package Version: {packageVersion}");
+if (target.ToLower() == "dev")
+    configuration = "Debug";
+
+if (!isShowingDoc)
+{
+    Information($"Target: {target}");
+    Information($"Configuration: {configuration}");
+    Information($"Package Version: {packageVersion}");
+}
+else
+{
+    Information("");
+    Information("-----------------------------------------------------------------------------------------------");
+    Information("-docs                     Displays available commands");
+    Information("-t All                    Executes specific target, default is 'ALL'");
+    Information("-configuration Release    Build configuration");
+    Information("-package-version=0.0.1   Nuget package version. If not specified, taken from 'SharedAssemblyInfo.cs'");
+}
 
 //////////////////////////////////////////////////////////////////////
 // PREPARATION
@@ -25,7 +41,7 @@ Information($"Package Version: {packageVersion}");
 
 var rootDir = "..";
 var srcDir = $"{rootDir}/src";
-var installerGenericPackagesDir = $"{rootDir}/Installer/packages/generic";
+var outputDir = $"{rootDir}/output";
 
 var solutionFile = GetFiles($"{rootDir}/*.sln").Single();
 
@@ -33,8 +49,7 @@ var solutionFile = GetFiles($"{rootDir}/*.sln").Single();
 // TASKS
 //////////////////////////////////////////////////////////////////////
 
-Task("Clean")
-    .Does(() =>
+Task("Clean").Does(() =>
 {
     Context.DeleteDirectories($"{srcDir}/**/bin/");
     Context.DeleteDirectories($"{srcDir}/**/obj/");
@@ -46,28 +61,24 @@ Task("Clean")
     Context.DeleteDirectories($"{srcDir}/**/_Package/");
     Context.DeleteDirectories($"{srcDir}/**/Release/");
 
-    Context.DeleteDirectories(installerGenericPackagesDir);
-    Context.DeleteDirectories($"{rootDir}/Build/output");
+    Context.DeleteDirectories(outputDir);
 });
 
 
-Task("Restore-NuGet-Packages")
-    .Does(() =>
+Task("Restore-NuGet-Packages").Does(() =>
 {
     NuGetRestore(solutionFile);
 });
 
 
-Task("Compile")
-    .Does(() =>
+Task("Compile").Does(() =>
 {
       MSBuild(solutionFile, settings =>
         settings.SetConfiguration(configuration));
 });
 
 
-Task("Run-NUnit-Tests")
-    .Does(() =>
+Task("Run-NUnit-Tests").Does(() =>
 {
     var testAssemblies = GetFiles($"{srcDir}/**/bin/{configuration}/*.Tests.dll");
     testAssemblies.Add(GetFiles($"{srcDir}/**/bin/{configuration}/*.IntegrationTests.dll"));
@@ -80,46 +91,16 @@ Task("Run-NUnit-Tests")
 });
 
 
-Task("Copy-To-Installer")
-    .Does(() =>
+Task("Copy-To-Artifacts").Does(() =>
 {
-    var installerRefAppDir = $"{installerGenericPackagesDir}/C1CMS/RefApp";
+    var artifactsDir = $"{outputDir}/artifacts";
 
-    CreateDirectory(installerRefAppDir);
-    CopyFiles($"{srcDir}/**/bin/**/*.zip", installerRefAppDir);
+    CreateDirectory(artifactsDir);
+    CopyFiles($"{srcDir}/**/bin/**/*.zip", artifactsDir);
 });
 
 
-Task("Copy-DeploymentFolder")
-    .Does(() =>
-{
-    var deploymentBaseFolder = "../src/Composer.CompositeC1/_Published/Composer.CompositeC1.Mvc";
-    var deploymentFolder = $"{deploymentBaseFolder}/Deployment";
-
-    CreateDirectory(deploymentFolder);
-    CopyFiles($"{srcDir}/Composer.CompositeC1/Composer.CompositeC1.Mvc/Deployment/*.*", deploymentFolder);
-
-    var settings = new MsDeploySettings
-    {
-        Verb = Operation.Sync,
-        Source = new ContentPathProvider
-        {
-            Direction = Direction.source,
-            Path = MakeAbsolute(File(deploymentBaseFolder)).ToString()
-        },
-        Destination = new PackageProvider
-        {
-            Direction = Direction.dest,
-            Path = MakeAbsolute(File($"{installerGenericPackagesDir}/C1CMS/DeploymentFolder.zip")).ToString()
-        },
-    };
-
-    MsDeploy(settings);
-});
-
-
-Task("Create-NuGet-Package")
-    .Does(() => 
+Task("Create-NuGet-Package").Does(() => 
 {
     var dependencies = XDocument
         .Load($"{srcDir}/Composer/Composer/packages.config")
@@ -154,7 +135,7 @@ Task("Create-NuGet-Package")
         Version = version,
         Dependencies = dependencies,
         BasePath = rootDir,
-        OutputDirectory = $"{rootDir}/Build/output"
+        OutputDirectory = outputDir,
     };
 
      NuGetPack($"{rootDir}/Build/nuspec/Orckestra.ReferenceApplication.nuspec", nuGetPackSettings);
@@ -173,17 +154,23 @@ Task("Tests")
     .IsDependentOn("Run-NUnit-Tests");
 
 Task("Artifacts")
-    .IsDependentOn("Copy-To-Installer")
-    .IsDependentOn("Copy-DeploymentFolder");
+    .IsDependentOn("Copy-To-Artifacts");
 
 Task("Package")
     .IsDependentOn("Create-NuGet-Package");
 
 Task("All")
+    .Description("Executed on build server")
     .IsDependentOn("Build")
     .IsDependentOn("Tests")
     .IsDependentOn("Artifacts")
     .IsDependentOn("Package");
+
+Task("Dev")
+    .Description("Should be used on dev machine only. Triggered before local install")
+    .IsDependentOn("Restore-NuGet-Packages")
+    .IsDependentOn("Compile")
+    .IsDependentOn("Artifacts");
 
 //////////////////////////////////////////////////////////////////////
 // EXECUTION
