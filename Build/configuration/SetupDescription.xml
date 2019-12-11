@@ -13,7 +13,8 @@
       <package id="3fffb96f-2447-4056-a5a0-db1cef901d23" url="http://package.composite.net/Download.ashx?package=Orckestra.Search.KeywordRedirect&amp;c1version=$(version)"/>
       <package id="0e4a0646-f69a-4911-8d11-bfdbcca78092" url="http://package.composite.net/Download.ashx?package=Orckestra.Versioning.VersionPublication&amp;c1version=$(version)"/>
       <package id="d665fbe2-3ca1-4c3a-b25b-79e4760e0c16" url="http://package.composite.net/Download.ashx?package=Orckestra.Web.Css.Sass&amp;c1version=$(version)"/>
-     
+      <package id="4c9310fe-f87b-4272-ba66-9fc4479e3697" url="http://package.composite.net/Download.ashx?package=Orckestra.Widgets.FilteredSelector&amp;c1version=$(version)"/>
+	  
       <!-- Exp Man -->
       <package id="43e544ae-bc8b-484f-bff3-176d4fcd35f1" url="http://experience-management-packages.c1preprod02.composite.net/Setup/branches/$(branch)/Packages/Orckestra.ExperienceManagement.Branding.zip"/>
       <package id="93b0e3b2-0cbf-482b-8231-a38d81043683" url="http://experience-management-packages.c1preprod02.composite.net/Setup/branches/$(branch)/Packages/Orckestra.ExperienceManagement.zip"/>
