@@ -1,5 +1,4 @@
 {
-  // NOTE: to override parameters for local deployment, create file *parameters.local.json*
   "ocs-cm-hostName": "",
   "ocsAuthToken": "",
 
@@ -13,5 +12,6 @@
   "websiteName": "composer-c1-{websiteSuffix}.develop.orckestra.cloud",
   "websiteUrl": "https://{websiteName}",
 
-  "setupDescription": "{{$\"{rootPath}/build/configuration/SetupDescription.xml\"}}"
+  "setupDescription": "{{$\"{rootPath}/build/configuration/SetupDescription.xml\"}}",
+  "baseCulture": "en-CA"
 }

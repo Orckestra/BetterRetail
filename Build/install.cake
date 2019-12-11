@@ -7,12 +7,13 @@
 #addin "nuget:?package=Microsoft.Web.Administration&version=11.1.0"
 #addin "nuget:?package=Microsoft.Win32.Registry&version=4.6.0"
 
-#tool "nuget:?package=OrckestraCommerce.Website.SetupServer&version=0.0.3"
+#tool "nuget:?package=OrckestraCommerce.Website.SetupServer&version=0.0.4"
 
 #load "helpers/filesystem.cake"
 #load "helpers/certificates.cake"
 #load "helpers/webrequests.cake"
 #load "helpers/cakeconfig.cake"
+#load "helpers/process.cake"
 
 using System.Diagnostics;
 using System.Xml.Linq;
@@ -28,11 +29,13 @@ var isShowingDoc = Context.Configuration.GetValue("showtree") != null;
 
 var target = Argument("target", "All");
 var environment = Argument<string>("env", null);
+var branch = Argument<string>("branch", "develop");
 
 if (!isShowingDoc)
 {
     Information($"Target: {target}");
     Information($"Environment: {environment}");
+    Information($"Branch: {branch}");
 }
 else
 {
@@ -40,7 +43,8 @@ else
     Information("-----------------------------------------------------------------------------------------------");
     Information("-docs                     Displays available commands");
     Information("-t All                    Executes specific target, default is 'ALL'");
-    Information("-env INT2                 Use environment from configuration. If not suplied, default is used");
+    Information("-env=INT2                 Use environment from configuration. If not suplied, default is used");
+    Information("-branch=develop           Branch of Experience Management, default is 'develop'");
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -57,9 +61,7 @@ var websiteDir = $"{deploymentDir}/Website";
 var directoryName = DirectoryPath.FromString(rootDir).GetDirectoryName();
 
 var setupPort = 9876;
-var setupServer = GetFiles($"{rootDir}/build/tools/**/*SetupServer.exe").Single();
-
-var baseCulture = "en-CA";
+var setupServer = GetFiles($"{rootDir}/build/tools/**/*SetupServer.exe").Last();
 
 //////////////////////////////////////////////////////////////////////
 // TASKS
@@ -86,7 +88,7 @@ Task("Load-CakeConfig").Does(() =>
 
     Parameters = config
         .UseRootPath(rootDir)
-        .Build();    
+        .Build();
 
     Information("");
     Information("PARAMETERS:");
@@ -95,7 +97,7 @@ Task("Load-CakeConfig").Does(() =>
         Information($"{{{kvPair.Key}}}: \"{kvPair.Value}\"");
     }
 
-    var requiredParameters = new [] { "C1Url", "websiteName", "setupDescription", "websiteUrl", "adminName", "adminEmail", "adminPassword" };
+    var requiredParameters = new [] { "C1Url", "websiteName", "setupDescription", "websiteUrl", "adminName", "adminEmail", "adminPassword", "baseCulture" };
     var hasError = false;
     foreach (var requiredParameter in requiredParameters)
     {
@@ -239,24 +241,22 @@ Process _process = null;
 Task("Start-SetupServer").Does(() => 
 {
     var setupTemplate = Parameters["setupDescription"];
-    _process = new Process();
-    _process.StartInfo.FileName = setupServer.ToString();
-    _process.StartInfo.Arguments = $@"--port {setupPort} --template ""{setupTemplate}"" ";
-    _process.StartInfo.CreateNoWindow = true;
-    _process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-    _process.Start();
+    _process = Context.StartHiddenProcess(setupServer.ToString(), "--port", setupPort, "--template" ,setupTemplate, "--branch", branch);
 });
 
 Task("Select-Package").Does(() => 
 {
-    if (_process.HasExited)
-        throw new Exception("Setup server has stopped unexpectedly");
-
     Context.MakeRequest($"{Parameters["websiteUrl"]}/Composite/top.aspx");
+
+    if (_process.HasExited)
+    {
+        Context.DisplayProcessOutput(_process);
+        throw new Exception("Setup server has stopped unexpectedly. Make sure you have 'dotnet core 3.1' installed");
+    }        
 
     var script = $@"
 $setupServiceWsdlUri = '{Parameters["websiteUrl"]}/Composite/services/Setup/SetupService.asmx?WSDL'
-$baseCulture = '{baseCulture}'
+$baseCulture = '{Parameters["baseCulture"]}'
 
 $proxy = New-WebServiceProxy -Uri $setupServiceWsdlUri 
 
@@ -286,9 +286,20 @@ if (!$setupResult)
     throw 'Website setup has failed'
 }}
 ";
-    var result = StartPowershellScript(script, new PowershellSettings()
-        .SetFormatOutput()
-        .SetLogOutput());
+    try
+    {
+        var result = StartPowershellScript(script, new PowershellSettings()
+            .SetFormatOutput()
+            .SetLogOutput());
+    }
+    catch
+    {
+        if (_process != null && !_process.HasExited)
+            _process.Kill();
+
+        Context.DisplayProcessOutput(_process);
+        throw;
+    }
 });
 
 Task("Stop-SetupServer").Does(() => 
@@ -352,7 +363,7 @@ Task("Patch-csproj.user").Does(() =>
     if (FileExists(dest))
     {
         DeleteFile(dest);
-    }        
+    }
     
     System.IO.File.WriteAllText(dest, content);
 });

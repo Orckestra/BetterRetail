@@ -24,7 +24,8 @@
 * Make sure you have installed *.develop.orckestra.local" 
 
 #### Build Projects
-* Run PS as Administrator `.\build\build.ps1 -t dev` to build Reference Application projects (Debug Build, without Unit Test). 
+* Run PS as Administrator `.\build\build.ps1 -t dev` to build Reference Application projects (Debug Build, without Unit Test).
+ 
 **NOTE**: Before completing a new feature make sure to run the `.\build\build.ps1' without dev parameter to validate all Unit Tests.
 
 
@@ -39,14 +40,15 @@
 }`
 
 #### Deploy 
-* Run PS as Administrator `.\build\install.ps1` to install Reference Application projects
-- you can configure parameters for different enviroments. Create file *ref.app.parameters.{enviroment}.json*
-- you can specify enviroment by adding parameter `-env={enviroment}`. Example create file  *ref.app.parameters.int2.json*  and run`.\build\install.ps1 -env=int2` 
+- Run PS as Administrator `.\build\install.ps1` to install Reference Application projects
+- You can configure parameters for different enviroments. Create file *ref.app.parameters.{enviroment}.json*
+- You can specify enviroment by adding parameter `-env={enviroment}`. Example create file  *ref.app.parameters.int2.json*  and run`.\build\install.ps1 -env=int2` 
 
 #### Deploy Notes
  * The Deploy creates website in IIS, downloads the specified C1 CMS version from GITHUB, initializes the RefApp Starter Site.
  * The C1 CMS location configured in parameters file *~\Build\configuration\parameters.json*, parameter name `C1Url` 
  * The additional C1 CMS packages, which can be installed on website can be configured in parameters file *~\Build\configuration\SetupDescription.xml*
+ * The setup description contains Experience Management packages from the *develop" branch by default. It is posible to intall packages from specific Experience Management bracnh, just run Install with parameter `-branch=master`
 
 
 #### How to Debug
@@ -54,6 +56,9 @@
 * Locate **Composer.CompositeC1.Mvc** project, right click and select "Make as StartUp Project"
 * Press F5
 * Yoa are Done!
+
+**NOTE**: If debug doesn't work make sure CurrentUser has execution policy
+Run in PS next commend `Set-ExecutionPolicy unrestricted -scope CurrentUser` 
 
  
 #### Build Frontend
