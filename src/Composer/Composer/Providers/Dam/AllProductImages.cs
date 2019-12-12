@@ -1,4 +1,6 @@
-﻿namespace Orckestra.Composer.Providers.Dam
+﻿using Orckestra.Overture.ServiceModel;
+
+namespace Orckestra.Composer.Providers.Dam
 {
     public class AllProductImages
     {
@@ -64,6 +66,11 @@
         public bool IsProductZoomImageUrlDefined
         {
             get { return ProductZoomImageUrl != null; }
-        }        
+        }
+
+        /// <summary>
+        /// Get or set alternate text for image
+        /// </summary>        
+        public LocalizedString Alt { get; set; }
     }
 }

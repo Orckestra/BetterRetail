@@ -207,6 +207,7 @@ namespace Orckestra.Composer.Providers.Dam
                 VariantId = variantId,
                 SequenceNumber = productMedia?.Position ?? 0,
                 FallbackImageUrl = GetFallbackImageUrl(mediaSettings),
+                Alt = productMedia?.Title,
             };
         }
 

@@ -41,7 +41,7 @@ namespace Orckestra.Composer.Product.Tests.Services
             var service = Container.CreateInstance<ProductViewModelFactoryProxy>();
             var productImages = CreateAllProductImages();
 
-            var images = service.BuildImagesProxy("1", "2", productImages, new CultureInfo("en-CA"));
+            var images = service.BuildImagesProxy("1", "2", "Men's Family Briefs Red", productImages, new CultureInfo("en-CA"));
 
             images.First().Selected.Should().BeTrue();
             images.Skip(1).First().Selected.Should().BeFalse();
@@ -82,10 +82,11 @@ namespace Orckestra.Composer.Product.Tests.Services
             public IEnumerable<ProductDetailImageViewModel> BuildImagesProxy(
                 string productId, 
                 string variantId, 
+                string productDisplayName,
                 IEnumerable<AllProductImages> productImages, 
                 CultureInfo cultureInfo)
             {
-                return BuildImages(productId, variantId, productImages, cultureInfo);
+                return BuildImages(productId, variantId, productDisplayName, productImages, cultureInfo);
             }
         }
     }
