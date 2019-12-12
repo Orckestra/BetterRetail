@@ -21,5 +21,7 @@ namespace Orckestra.Composer.Product.ViewModels
         public bool Selected { get; set; }
 
         public bool IsProductZoomImageUrlDefined { get; set; }
+
+        public string Alt { get; set; }
     }
 }

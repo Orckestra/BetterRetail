@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -183,13 +183,6 @@ namespace Orckestra.Composer.Product.Factory
                 ProductVariants = allVariantsVm
             });
 
-            var displayName = string.Empty;
-
-            if (param.Product.DisplayName != null)
-            {
-                displayName = param.Product.DisplayName.GetLocalizedValue(param.CultureInfo.Name);
-            }
-
             productDetailViewModel.Price = param.Product.ListPrice;
 
             productDetailViewModel.ProductDetailUrl = ProductUrlProvider.GetProductUrl(new GetProductUrlParam
@@ -197,7 +190,7 @@ namespace Orckestra.Composer.Product.Factory
                 CultureInfo = param.CultureInfo,
                 ProductId = param.Product.Id,
                 VariantId = param.VariantId,
-                ProductName = displayName
+                ProductName = productDisplayName
             });
 
             SetViewModelContext(productDetailViewModel, selectedVariantVm, allVariantsVm);
@@ -253,12 +246,12 @@ namespace Orckestra.Composer.Product.Factory
             CultureInfo cultureInfo,
             ProductViewModel productViewModel)
         {
-            var images = BuildImages(productId, null, productImages, cultureInfo).ToList();
+            var images = BuildImages(productId, null, productViewModel.DisplayName, productImages, cultureInfo).ToList();
             var selectedImage = images.FirstOrDefault(i => i.Selected) ?? images.FirstOrDefault();
 
             productViewModel.Images = images;
             productViewModel.SelectedImage = selectedImage;
-            productViewModel.FallbackImageUrl = selectedImage != null ? selectedImage.FallbackImageUrl : string.Empty;
+            productViewModel.FallbackImageUrl = selectedImage?.FallbackImageUrl ?? string.Empty;
         }
 
         protected virtual IEnumerable<VariantViewModel> GetVariantViewModels(
@@ -308,7 +301,7 @@ namespace Orckestra.Composer.Product.Factory
             CultureInfo cultureInfo,
             VariantViewModel variantViewModel)
         {
-            var images = BuildImages(productId, variantViewModel.Id, productImages, cultureInfo).ToList();
+            var images = BuildImages(productId, variantViewModel.Id, variantViewModel.DisplayName, productImages, cultureInfo).ToList();
             var selectedImage = images.FirstOrDefault(i => i.Selected) ?? images.FirstOrDefault();
 
             variantViewModel.Images = images;
@@ -641,6 +634,7 @@ namespace Orckestra.Composer.Product.Factory
         protected virtual IEnumerable<ProductDetailImageViewModel> BuildImages(
             string productId,
             string variantId,
+            string defaultAlt,
             IEnumerable<AllProductImages> productImages,
             CultureInfo cultureInfo)
         {
@@ -650,7 +644,12 @@ namespace Orckestra.Composer.Product.Factory
                 .Where(pi => string.Equals(pi.ProductId, productId, StringComparison.InvariantCultureIgnoreCase))
                 .Where(pi => string.Equals(pi.VariantId, variantId, StringComparison.InvariantCultureIgnoreCase))
                 .OrderBy(pi => pi.SequenceNumber)
-                .Select(pi => ViewModelMapper.MapTo<ProductDetailImageViewModel>(pi, cultureInfo));
+                .Select(pi => {
+                    var image = ViewModelMapper.MapTo<ProductDetailImageViewModel>(pi, cultureInfo);
+                    if (string.IsNullOrEmpty(image.Alt))
+                        image.Alt = defaultAlt;
+                    return image;
+                });
 
             var productDetailImageViewModels = SetFirstImageSelected(images);
 
