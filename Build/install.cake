@@ -14,6 +14,7 @@
 #load "helpers/webrequests.cake"
 #load "helpers/cakeconfig.cake"
 #load "helpers/process.cake"
+#load "helpers/symboliclink.cake"
 
 using System.Diagnostics;
 using System.Xml.Linq;
@@ -72,8 +73,7 @@ Dictionary<string, string> Parameters;
 string localSiteName = null;
 Task("Load-CakeConfig").Does(() =>
 {
-    var config = CakeConfig
-        .UseContext(Context)
+    var config = CreateCakeConfig()
         .UseFile($"{rootDir}/build/configuration/parameters.json")
         .UseFile($"{rootDir}/../ref.app.parameters.json")
         .UseFile($"{rootDir}/build/configuration/parameters.local.json");
@@ -154,7 +154,7 @@ Task("Remove-From-Hosts-File").Does(() =>
 
 Task("Clean-Deployment-Folder").Does(() =>
 {
-    Context.DeleteDirectories(deploymentDir);
+    DeleteDirectories(deploymentDir);
 });
 
 Task("Kill-Processes").Does(() =>
@@ -230,7 +230,6 @@ Task("Add-To-Hosts-File").Does(() =>
 
 Task("Modify-Configs").Does(() =>
 {
-    XmlPoke($"{websiteDir}/web.config", "/configuration/system.web/compilation/@debug", "true");
     XmlPoke($"{websiteDir}/App_Data/Composite/Composite.config", "/configuration/Composite.SetupConfiguration/@PackageServerUrl", $"http://localhost:{setupPort}");
     StopSite(localSiteName);
     StartSite(localSiteName);
@@ -241,16 +240,15 @@ Process _process = null;
 Task("Start-SetupServer").Does(() => 
 {
     var setupTemplate = Parameters["setupDescription"];
-    _process = Context.StartHiddenProcess(setupServer.ToString(), "--port", setupPort, "--template" ,setupTemplate, "--branch", branch);
+    _process = StartHiddenProcess(setupServer.ToString(), "--port", setupPort, "--template" ,setupTemplate, "--branch", branch);
 });
 
 Task("Select-Package").Does(() => 
 {
-    Context.MakeRequest($"{Parameters["websiteUrl"]}/Composite/top.aspx");
+    MakeRequest($"{Parameters["websiteUrl"]}/Composite/top.aspx");
 
     if (_process.HasExited)
     {
-        Context.DisplayProcessOutput(_process);
         throw new Exception("Setup server has stopped unexpectedly. Make sure you have 'dotnet core 3.1' installed");
     }        
 
@@ -297,7 +295,6 @@ if (!$setupResult)
         if (_process != null && !_process.HasExited)
             _process.Kill();
 
-        Context.DisplayProcessOutput(_process);
         throw;
     }
 });
@@ -310,7 +307,9 @@ Task("Stop-SetupServer").Does(() =>
     }
 });
 
-Task("Patch-ExperienceManagement-Config").Does(() =>  
+Task("Patch-ExperienceManagement-Config")
+    .IsDependentOn("Load-CakeConfig")
+    .Does(() =>  
 {
     var webConfig = $"{websiteDir}/App_Config/ExperienceManagement.config";
     var doc = XDocument.Load(webConfig);
@@ -348,10 +347,12 @@ Task("Install-Secondary-Language").Does(() =>
 
     StopSite(localSiteName);
     StartSite(localSiteName);
-    Context.MakeRequest($"{Parameters["websiteUrl"]}/Composite/top.aspx");
+    MakeRequest($"{Parameters["websiteUrl"]}/Composite/top.aspx");
 });
 
 #endregion
+
+#region Configure-Local-Debug
 
 Task("Patch-csproj.user").Does(() =>
 {
@@ -367,6 +368,25 @@ Task("Patch-csproj.user").Does(() =>
     
     System.IO.File.WriteAllText(dest, content);
 });
+
+Task("Configure-Symbolic-Links").Does(() =>
+{
+    ReplaceDirWithSymbolicLink($"{websiteDir}/UI.Package/Sass", $"{rootDir}/src/Composer/Composer.UI/Source/Sass");
+});
+
+Task("Modify-Configs-For-Debug").Does(() =>
+{
+    XmlPoke($"{websiteDir}/web.config", "/configuration/system.web/compilation/@debug", "true");
+    XmlPoke($"{websiteDir}/web.config", "/configuration/system.web/caching/outputCacheSettings/outputCacheProfiles/add/@enabled", "false");
+
+    StopSite(localSiteName);
+    StartSite(localSiteName);
+
+    MakeRequest($"{Parameters["websiteUrl"]}/Composite/top.aspx");
+});
+
+
+#endregion
 
 Task("Open-Website").Does(() =>
 {
@@ -408,11 +428,17 @@ Task("Install")
     .IsDependentOn("Install-C1")
     .IsDependentOn("Install-RefApp");
 
+Task("Configure-Local-Debug")
+    .IsDependentOn("Load-CakeConfig")
+    .IsDependentOn("Patch-csproj.user")
+    .IsDependentOn("Configure-Symbolic-Links")
+    .IsDependentOn("Modify-Configs-For-Debug");
+
 Task("All")
     .Description("Only this task should be used, everything else subtasks")
     .IsDependentOn("Uninstall")
     .IsDependentOn("Install")
-    .IsDependentOn("Patch-csproj.user")
+    .IsDependentOn("Configure-Local-Debug")
     .IsDependentOn("Open-Website");
 
 //////////////////////////////////////////////////////////////////////

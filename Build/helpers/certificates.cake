@@ -1,6 +1,6 @@
 using System.Security.Cryptography.X509Certificates;
 
-public static X509Certificate2 GetCertificate(string name)
+public X509Certificate2 GetCertificate(string name)
 {
     using (var localStore = new X509Store(StoreLocation.LocalMachine))
     using (var userStore = new X509Store(StoreLocation.CurrentUser))

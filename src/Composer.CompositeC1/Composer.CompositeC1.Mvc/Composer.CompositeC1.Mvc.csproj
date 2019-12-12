@@ -274,7 +274,6 @@
     <Content Include="App_Data\Composite\TreeDefinitions\NavigationElement.xml">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="App_Data\Composite\TreeDefinitions\SitemapElement.xml" />
     <Content Include="App_Data\PageTemplateFeatures\Descriptive HTML head elements.xml" />
     <Content Include="App_Data\PageTemplateFeatures\Minicart.html" />
     <Content Include="App_Data\PageTemplateFeatures\Social links.html" />

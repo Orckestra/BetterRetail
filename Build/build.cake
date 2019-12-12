@@ -51,17 +51,18 @@ var solutionFile = GetFiles($"{rootDir}/*.sln").Single();
 
 Task("Clean").Does(() =>
 {
-    Context.DeleteDirectories($"{srcDir}/**/bin/");
-    Context.DeleteDirectories($"{srcDir}/**/obj/");
+    DeleteDirectories($"{srcDir}/**/bin/");
+    DeleteDirectories($"{srcDir}/**/obj/");
 
-    Context.DeleteDirectories($"{srcDir}/**/node_modules/");
-    Context.DeleteDirectories($"{srcDir}/**/Composer/UI.Package/");
-    Context.DeleteDirectories($"{srcDir}/**/Composer.CompositeC1.Mvc/UI.Package/");
+    DeleteDirectories($"{srcDir}/**/node_modules/");
+    DeleteDirectories($"{srcDir}/**/Composer/UI.Package/");
+    DeleteDirectories($"{srcDir}/**/Composer.CompositeC1.Mvc/UI.Package/");
 
-    Context.DeleteDirectories($"{srcDir}/**/_Package/");
-    Context.DeleteDirectories($"{srcDir}/**/Release/");
+    DeleteDirectories($"{srcDir}/**/_Package/");
+    DeleteDirectories($"{srcDir}/**/Release/");
 
-    Context.DeleteDirectories(outputDir);
+    DeleteDirectories(outputDir);
+    DeleteDirectories($"{rootDir}/Installer/");
 });
 
 
@@ -99,6 +100,13 @@ Task("Copy-To-Artifacts").Does(() =>
     CopyFiles($"{srcDir}/**/bin/**/*.zip", artifactsDir);
 });
 
+Task("Copy-To-Legacy-Artifacts").Does(() =>
+{
+    var artifactsDir = $"{rootDir}/Installer/packages/generic/C1CMS/RefApp";
+
+    CreateDirectory(artifactsDir);
+    CopyFiles($"{srcDir}/**/bin/**/*.zip", artifactsDir);
+});
 
 Task("Create-NuGet-Package").Does(() => 
 {
@@ -154,7 +162,8 @@ Task("Tests")
     .IsDependentOn("Run-NUnit-Tests");
 
 Task("Artifacts")
-    .IsDependentOn("Copy-To-Artifacts");
+    .IsDependentOn("Copy-To-Artifacts")
+    .IsDependentOn("Copy-To-Legacy-Artifacts");
 
 Task("Package")
     .IsDependentOn("Create-NuGet-Package");

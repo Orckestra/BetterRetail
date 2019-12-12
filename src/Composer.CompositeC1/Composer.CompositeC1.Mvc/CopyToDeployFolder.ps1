@@ -21,7 +21,7 @@ if (Test-Path $depoymentFolder) {
     Copy-Item "$srcFolder\Composer.CompositeC1\Orckestra.Composer.Sitemap\bin\Debug\Orckestra.Composer.Sitemap.dll" -Destination "$depoymentFolder\Bin"
     Copy-Item "$srcFolder\Composer.CompositeC1\Composer.CompositeC1\bin\Debug\Orckestra.Composer.CompositeC1.dll" -Destination "$depoymentFolder\Bin"
 
-    Copy-Item -Path "$srcFolder\Composer.CompositeC1\Composer.CompositeC1.Mvc\UI.Package" -Destination "$depoymentFolder" -Recurse -Force
+    Copy-Item -Path (Get-Item -Path "$srcFolder\Composer.CompositeC1\Composer.CompositeC1.Mvc\UI.Package\*" -Exclude ('Sass')).FullName -Destination "$depoymentFolder\UI.Package" -Recurse -Force
     Copy-Item -Path "$srcFolder\Composer.CompositeC1\Orckestra.Composer.Articles.Package\Package\App_Data" -Destination "$depoymentFolder" -Recurse -Force
     Copy-Item -Path "$srcFolder\Composer.CompositeC1\Orckestra.Composer.C1.Core\Package\Views" -Destination "$depoymentFolder" -Recurse -Force
     Copy-Item -Path "$srcFolder\Composer.CompositeC1\Orckestra.Composer.C1CMS.Queries.Package\Package\App_Data" -Destination "$depoymentFolder" -Recurse -Force
@@ -31,9 +31,10 @@ if (Test-Path $depoymentFolder) {
     Copy-Item -Path "$srcFolder\Composer.CompositeC1\Orckestra.Composer.Sitemap.Package\Package\App_Data" -Destination "$depoymentFolder" -Recurse -Force
     Copy-Item -Path "$srcFolder\Composer.CompositeC1\Orckestra.Composer.Sitemap.Package\Package\Composite" -Destination "$depoymentFolder" -Recurse -Force
     Copy-Item -Path "$srcFolder\Composer.CompositeC1\Orckestra.Composer.SEO.Organization\Package\App_Data" -Destination "$depoymentFolder" -Recurse -Force
+
     
     Write-Host "Done"
 }
 else {
-    Write-Host "Not deployed yet. Run 'Build\BuildAndDeploy.ps1'"
+    Write-Host "Not deployed yet. Run 'Build\BuildAndInstall.ps1'"
 }
