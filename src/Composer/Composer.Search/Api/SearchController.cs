@@ -162,7 +162,10 @@ namespace Orckestra.Composer.Search.Api
 
             BrandSuggestionsViewModel vm = new BrandSuggestionsViewModel()
             {
-                Suggestions = brandList.Where((suggestion) => suggestion.DisplayName.ToLower().Contains(searchTerm)).Take(limit).ToList()
+                Suggestions = brandList
+                    .Where((suggestion) => suggestion.DisplayName.ToLower().Contains(searchTerm))
+                    .OrderBy(x => x.DisplayName)
+                    .Take(limit).ToList()
             };
             return Ok(vm);
         }
