@@ -1,10 +1,10 @@
-public static void DeleteDirectories(this ICakeContext context, string pattern)
+public void DeleteDirectories(string pattern)
 {
-    var directories = context.GetDirectories(pattern);
+    var directories = Context.GetDirectories(pattern);
     var deleteSettings = new DeleteDirectorySettings { Recursive = true, Force = true };
     foreach (var directory in directories)
     {
-        if (context.DirectoryExists(directory))
-            context.DeleteDirectory(directory, deleteSettings);
+        if (Context.DirectoryExists(directory))
+            Context.DeleteDirectory(directory, deleteSettings);
     }
 }

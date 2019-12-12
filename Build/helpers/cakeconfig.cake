@@ -26,14 +26,9 @@ public class CakeConfig : ICakeConfig
     private readonly ConfigurationBuilder _builder = new ConfigurationBuilder();
     private string _rootPath;
     
-    private CakeConfig(ICakeContext context)
+    public CakeConfig(ICakeContext context)
     {
         _context = context;
-    }
-
-    public static ICakeConfig UseContext(ICakeContext context)
-    {
-        return new CakeConfig(context);
     }
 
     public void AddFile(string filePath)
@@ -144,6 +139,11 @@ public class CakeConfig : ICakeConfig
         return result;
     }
 };
+
+public ICakeConfig CreateCakeConfig()
+{
+    return new CakeConfig(Context);
+}
 
 public interface ICakeConfig
 {

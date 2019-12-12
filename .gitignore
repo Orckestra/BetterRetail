@@ -253,3 +253,4 @@ Orckestra.StarterSite/CF/Source/Composer.Mvc.Sample.Tests
 /output/*
 /build/configuration/parameters.*.json
 package-lock.json
+**/Composer.UI/**/*.min.css

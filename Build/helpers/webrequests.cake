@@ -1,8 +1,8 @@
 using System.Net.Http;
 
-public static void MakeRequest(this ICakeContext context, string url)
+public void MakeRequest(string url)
 {
-    context.Information(url);
+    Information(url);
     try
     {
         using (var client = new HttpClient())
@@ -15,7 +15,7 @@ public static void MakeRequest(this ICakeContext context, string url)
     }
     catch
     {
-        context.Error(url);
+        Error(url);
         throw;
     }
 }

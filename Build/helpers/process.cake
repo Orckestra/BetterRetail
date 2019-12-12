@@ -1,6 +1,6 @@
 using System.Diagnostics;
 
-public static Process StartHiddenProcess(this ICakeContext context, string path, params object[] parameters)
+public Process StartHiddenProcess(string path, params object[] parameters)
 {
     var process = new Process();
     process.StartInfo.FileName = path;
@@ -13,17 +13,17 @@ public static Process StartHiddenProcess(this ICakeContext context, string path,
     return process;
 }
 
-public static void DisplayProcessOutput(this ICakeContext context, Process process)
+public void DisplayProcessOutput(Process process)
 {
     try
     {
         var output = process.StandardOutput.ReadToEnd();
-        context.Information($"{process.ProcessName} output:");
-        context.Information(output);
+        Context.Information($"{process.ProcessName} output:");
+        Context.Information(output);
     }
     catch (Exception ex)
     {
-        context.Warning($"Can't get output of process {process.ProcessName} error:");
-        context.Warning(ex.ToString());
+        Context.Warning($"Can't get output of process {process.ProcessName} error:");
+        Context.Warning(ex.ToString());
     }
 }
