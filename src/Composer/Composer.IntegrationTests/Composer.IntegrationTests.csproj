@@ -72,9 +72,37 @@
     <None Include="Properties\PublishProfiles\Package.pubxml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Composer.CompositeC1\Orckestra.Composer.Sitemap\Orckestra.Composer.Sitemap.csproj">
+      <Project>{8227ecd6-6d34-4f4d-bfbc-02bc52e7ce7a}</Project>
+      <Name>Orckestra.Composer.Sitemap</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Composer.Cart\Composer.Cart.csproj">
+      <Project>{08f6fcb8-6065-4d31-b7df-67fe67ee67e5}</Project>
+      <Name>Composer.Cart</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Composer.MyAccount\Composer.MyAccount.csproj">
+      <Project>{0a2628f0-3e30-4da6-852f-b2cbec9b968d}</Project>
+      <Name>Composer.MyAccount</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Composer.Product\Composer.Product.csproj">
+      <Project>{1f767098-1fbf-4cb9-8637-6529e1cc0b24}</Project>
+      <Name>Composer.Product</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Composer.Search\Composer.Search.csproj">
+      <Project>{ce6ad95e-0ebb-4e38-bf0b-27a67915fa68}</Project>
+      <Name>Composer.Search</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Composer.Store\Composer.Store.csproj">
+      <Project>{1407af7b-a1fe-4b52-906b-7503b6db0f2b}</Project>
+      <Name>Composer.Store</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Composer\Composer.csproj">
       <Project>{d00bd58b-93fe-4f3d-bbc8-6f7873ca6830}</Project>
       <Name>Composer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Orckestra.Composer.SearchQuery\Orckestra.Composer.SearchQuery.csproj">
+      <Project>{6dee1972-e64b-43f0-bbaf-04d0aa64dd60}</Project>
+      <Name>Orckestra.Composer.SearchQuery</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -363,10 +363,6 @@
       <Project>{b2be051e-82d7-4643-bb56-98f161833e30}</Project>
       <Name>Orckestra.ForTests</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Packaging\Packaging.csproj">
-      <Project>{1f28e387-e22c-4a3a-9584-8859b825b7b7}</Project>
-      <Name>Packaging</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />

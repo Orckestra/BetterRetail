@@ -16,44 +16,11 @@ namespace Orckestra.Composer.Tests.IntegrationTests
         private readonly Regex _composerDllRegex = new Regex(ComposerDllRegexPattern, RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase);
 
         private string _executingPath;
-        private string _targetConfiguration;
-        private string _packagingPath;
 
         [SetUp]
         public void SetUp()
         {
             _executingPath = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase, UriKind.Absolute).LocalPath);
-            _targetConfiguration = _executingPath.LastIndexOf("Debug", StringComparison.InvariantCultureIgnoreCase) > -1
-                ? "Debug"
-                : "Release";
-            _packagingPath = Path.Combine(_executingPath, "..\\..\\..", "Packaging\\bin\\", _targetConfiguration);
-
-            CopyPackages(Directory.GetFiles(_packagingPath));
-        }
-
-        private string GetFinalExecutingDllPath(string filePath)
-        {
-            var fileName = Path.GetFileName(filePath);
-            var newPath = Path.Combine(_executingPath, fileName);
-
-            return newPath;
-        }
-
-        private void CopyPackages(IEnumerable<string> filePaths)
-        {
-            foreach (var filePath in filePaths)
-            {
-                var newPath = GetFinalExecutingDllPath(filePath);
-
-                try
-                {
-                    File.Copy(filePath, newPath, true);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("Unable to copy '{0}'. This may be critical...{1}{1}{2}", Path.GetFileName(filePath), Environment.NewLine, ex);
-                }
-            }
         }
 
         [Test]
