@@ -1,11 +1,13 @@
 #tool "nuget:?package=NUnit.ConsoleRunner&version=3.10.0"
 #addin "nuget:?package=Cake.MsDeploy&version=0.8.0"
 #addin "nuget:?package=Cake.CoreCLR&version=0.35.0"
+#addin "nuget:?package=Cake.Npm&version=0.17.0"
 
 #load "helpers/filesystem.cake"
 
 using System.Xml.Linq;
 using System.Text.RegularExpressions;
+using Cake.Npm;
 
 //////////////////////////////////////////////////////////////////////
 // ARGUMENTS
@@ -78,7 +80,6 @@ Task("Compile").Does(() =>
         settings.SetConfiguration(configuration));
 });
 
-
 Task("Run-NUnit-Tests").Does(() =>
 {
     var testAssemblies = GetFiles($"{srcDir}/**/bin/{configuration}/*.Tests.dll");
@@ -89,6 +90,17 @@ Task("Run-NUnit-Tests").Does(() =>
         NoResults = true, 
         SkipNonTestAssemblies = true,
     });
+});
+
+
+Task("Run-Composer-UI-UnitTests").Does(() =>
+{
+    var settings = new NpmRunScriptSettings 
+    {
+        WorkingDirectory = $"{srcDir}/Composer/",
+        ScriptName = "unitTests",
+    };
+    NpmRunScript(settings);
 });
 
 
@@ -159,7 +171,8 @@ Task("Build")
     .IsDependentOn("Compile");
 
 Task("Tests")
-    .IsDependentOn("Run-NUnit-Tests");
+    .IsDependentOn("Run-NUnit-Tests")
+    .IsDependentOn("Run-Composer-UI-UnitTests");
 
 Task("Artifacts")
     .IsDependentOn("Copy-To-Artifacts")

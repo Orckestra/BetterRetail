@@ -138,14 +138,18 @@ module Orckestra.Composer {
         private replaceHistory(previousSelectedVariantId: string) {
             let variantId = this.context.viewModel.selectedVariantId;
 
-            //Variant selection is not valid use last valid
-            if (variantId === null) {
+            if (variantId === null && previousSelectedVariantId === null) {
                 return;
             }
 
             let pathArray = window.location.pathname.split('/').filter(Boolean);
+
             let prevVariantIdIndex = pathArray.lastIndexOf(previousSelectedVariantId); //Variant id should be at the foremost right
-            if (prevVariantIdIndex === -1) {
+            if (variantId === null) {
+                if (prevVariantIdIndex !== -1) {
+                    pathArray.splice(prevVariantIdIndex, 1);
+                }
+            } else  if (prevVariantIdIndex === -1) {
                 //We couldn't find the variant id in the path, which means the PDP was accessed without a variant in the URL.
                 //In that case, we add it right after the product id in the URL. If for some aweful reason the product id is not found,
                 //add the variant id at the end.
