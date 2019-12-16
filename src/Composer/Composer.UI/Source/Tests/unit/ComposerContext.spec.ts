@@ -7,6 +7,8 @@
 
 // TODO: Move this in to it's own file once the composer.mocks.js is built.
 
+// Init websiteId
+$('html').data('website', '66cdae67-43e5-4b40-badb-69476f8ec94f');
 
 (() => {
     // Visit http://jasmine.github.io for more information on unit testing with Jasmine.
