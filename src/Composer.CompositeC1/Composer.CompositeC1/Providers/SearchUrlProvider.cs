@@ -36,7 +36,10 @@ namespace Orckestra.Composer.CompositeC1.Providers
         public virtual string BuildSearchUrl(BuildSearchUrlParam param)
         {
             var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(param.SearchCriteria.CultureInfo, WebsiteContext.WebsiteId);
+            if (pagesConfiguration == null) return null;
+
             var url = PageService.GetPageUrl(pagesConfiguration.SearchPageId, param.SearchCriteria.CultureInfo);
+            if (url == null) return null;
 
             var finalUrl = UrlFormatter.AppendQueryString(url, BuildSearchQueryString(param));
             return finalUrl;
