@@ -48,7 +48,7 @@ namespace Orckestra.Composer.CompositeC1.DataTypes
         Nullable<Guid> RecurringCartsPageId { get; set; }
 
         [ImmutableFieldId("a74604fd-6c8a-4994-90dd-0f8c433980e4")]
-        [FormRenderingProfile(Label = "Is Recurring Orders Enabled")]
+        [FormRenderingProfile(Label = "Are Recurring Orders Enabled")]
         [FunctionBasedNewInstanceDefaultFieldValue("<f:function xmlns:f=\"http://www.composite.net/ns/function/1.0\" name=\"Composite.Co" +
     "nstant.Boolean\"><f:param name=\"Constant\" value=\"False\" /></f:function>")]
         [StoreFieldType(PhysicalStoreFieldType.Boolean)]

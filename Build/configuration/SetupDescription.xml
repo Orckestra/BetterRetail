@@ -32,7 +32,8 @@
       <package id="93141e5a-bdfe-459f-a4b6-f2652a1fe4c4" url="../../output/artifacts/Orckestra.Composer.SEO.Organization.Content.zip"/>
       <package id="1420b656-e993-4dfa-bfd8-e6dc000e3c00" url="../../output/artifacts/Orckestra.Composer.ContentSearch.Content.zip"/>
       <package id="1110b656-e993-4dfa-bfd8-e6dc000e3ca0" url="../../output/artifacts/Orckestra.Composer.Languages.zip"/>
-      
+      <package id="e02e04a9-d9c6-4f30-8584-85eb9692d225" url="../../output/artifacts/Orckestra.Composer.Sitemap.zip"/>
+	     
     </packages>
   </radio>
 </setup>

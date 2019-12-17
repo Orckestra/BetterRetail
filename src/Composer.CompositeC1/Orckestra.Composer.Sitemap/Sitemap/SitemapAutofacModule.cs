@@ -1,5 +1,4 @@
-﻿using System;
-using Autofac;
+﻿using Autofac;
 using Orckestra.Composer.CompositeC1.Providers;
 using Orckestra.Composer.CompositeC1.Services;
 using Orckestra.Composer.Providers;
@@ -8,7 +7,6 @@ using Orckestra.Composer.Sitemap;
 using Orckestra.Composer.Sitemap.Config;
 using Orckestra.Composer.Sitemap.Product;
 using Orckestra.Overture;
-using System.Web.Hosting;
 using Composite.Core;
 using Orckestra.Composer.Sitemap.Factory;
 using Orckestra.ExperienceManagement.Configuration;
@@ -20,7 +18,8 @@ namespace Orckestra.Composer.CompositeC1.Sitemap
     {
         protected override void Load(ContainerBuilder builder)
         {
-            if (C1SitemapConfiguration.IsScheduleDefined)
+            var sitemapConfiguration = ServiceLocator.GetService<IC1SitemapConfiguration>();
+            if (sitemapConfiguration.IsScheduleDefined)
             {
                 RegisterSitemapGenerationDependencies(builder);
             }
@@ -38,30 +37,20 @@ namespace Orckestra.Composer.CompositeC1.Sitemap
 
             builder.Register(container => ServiceLocator.GetService<ICookieAccesserSettings>()).SingleInstance();
             builder.Register(container => ServiceLocator.GetService<ICdnDamProviderSettings>()).SingleInstance();
+            builder.Register(container => ServiceLocator.GetService<IC1SitemapConfiguration>()).SingleInstance();
 
             builder.RegisterType<ScopeProvider>().As<IScopeProvider>().SingleInstance();
             builder.RegisterType<CultureService>().As<ICultureService>().SingleInstance();
 
-            var sitemapGeneratorConfig = new SitemapGeneratorConfig(
-                HostingEnvironment.MapPath(C1SitemapConfiguration.SitemapDirectory),
-                HostingEnvironment.MapPath("~/"),
-                HostingEnvironment.MapPath(C1SitemapConfiguration.WorkingDirectory)
-            );
-
             // C1 content sitemap provider
             builder.RegisterType<C1ContentSitemapEntryProvider>().AsSelf().SingleInstance();
-            builder.RegisterType<C1ContentSitemapNamer>().AsSelf().SingleInstance();
             builder.RegisterType<C1ContentSitemapProviderConfig>().AsSelf().SingleInstance();
             builder.RegisterType<C1ContentSitemapProvider>().As<ISitemapProvider>().SingleInstance();
-            builder.RegisterType<C1ContentSitemapPageExcludeProvider>().AsSelf().SingleInstance();
+            builder.RegisterType<C1ContentSitemapPageExcludeProvider>().As<IC1ContentSitemapPageExcludeProvider>().SingleInstance();
+            builder.RegisterType<C1ContentSitemapDataTypesIncluder>().As<IC1ContentSitemapDataTypesIncluder>().SingleInstance();
 
             // Product sitemap provider             
-            builder.Register(container => new ProductSitemapEntryProvider(
-                container.Resolve<IOvertureClient>(),
-                container.Resolve<IProductUrlProvider>(),
-                container.Resolve<IProductUrlParamFactory>()
-            )).AsSelf().SingleInstance();
-            builder.RegisterType<ProductSitemapNamer>().AsSelf().SingleInstance();
+            builder.RegisterType<ProductSitemapEntryProvider>().AsSelf().SingleInstance();
             builder.RegisterType<ProductSitemapProviderConfig>().AsSelf().SingleInstance();
             builder.RegisterType<ProductSitemapProvider>().As<ISitemapProvider>().SingleInstance();
 
@@ -69,7 +58,7 @@ namespace Orckestra.Composer.CompositeC1.Sitemap
             builder.RegisterType<SitemapIndexGenerator>().As<ISitemapIndexGenerator>().SingleInstance();
 
             // Sitemap Generator   
-            builder.Register(container => sitemapGeneratorConfig).As<ISitemapGeneratorConfig>().SingleInstance();
+            builder.Register(container => ServiceLocator.GetService<ISitemapGeneratorConfig>()).SingleInstance();
             builder.RegisterType<SitemapGenerator>().AsSelf().As<ISitemapGenerator>().SingleInstance();
         }
     }

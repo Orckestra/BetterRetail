@@ -2,21 +2,56 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Orckestra.Composer.CompositeC1.Sitemap
 {
     public class C1ContentSitemapProviderConfig : ISitemapProviderConfig
     {
-        public int NumberOfEntriesPerSitemap
+        private const string Default_SitemapFilePrefix = "content";
+
+        public string SitemapFilePrefix
         {
             get
             {
-                // We assume that all the content in Composite C1 can be included in 1 sitemap
-                // So returning int.MaxValue should be fine.
-                return int.MaxValue;
+                return ExtractSettingFromContentSitemapConfiguration((config) => config.SitemapFilePrefix, Default_SitemapFilePrefix);
             }
+        }
+
+        public static IEnumerable<Guid> PageIdsToExclude
+        {
+            get
+            {
+                return ExtractSettingFromContentSitemapConfiguration((config) => config.PageIdsToExclude)
+                    .Cast<ContentSitemapPageToExcludeElement>()
+                    .Select(element => new Guid(element.PageId));
+            }
+        }
+
+        public static IEnumerable<string> PageIdsFromConfigurationPropertiesToExclude
+        {
+            get
+            {
+                return ExtractSettingFromContentSitemapConfiguration((config) => config.PageIdsFromConfigurationPropertiesToExclude)
+                    .Cast<PageTypeFromConfigurationPropertiesElement>()
+                    .Select(element => element.Name); ;
+            }
+        }
+
+        public static IEnumerable<string> DataTypesToInclude
+        {
+            get
+            {
+                return ExtractSettingFromContentSitemapConfiguration((config) => config.DataTypesToInclude)
+                    .Cast<PageTypeFromConfigurationPropertiesElement>()
+                    .Select(element => element.Name); ;
+            }
+        }
+
+        private static T ExtractSettingFromContentSitemapConfiguration<T>(Func<ContentSitemapConfiguration, T> extractor, T defaultValue = default)
+        {
+            var contentSitemapConfiguration = SitemapConfiguration.Instance?.ContentSitemapConfiguration;
+
+            return contentSitemapConfiguration != null ? extractor(contentSitemapConfiguration) : defaultValue;
         }
     }
 }

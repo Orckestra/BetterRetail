@@ -10,7 +10,6 @@ using ServiceStack;
 using ServiceStack.Validation;
 using System.Configuration;
 using System.Linq;
-using Orckestra.Composer.Configuration;
 using Orckestra.Overture.RestClient;
 using Orckestra.ExperienceManagement.Configuration;
 using System.Net.Cache;

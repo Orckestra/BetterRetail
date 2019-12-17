@@ -8,6 +8,6 @@ namespace Orckestra.Composer.Sitemap.Config
 {
     public interface ISitemapProviderConfig
     {
-        int NumberOfEntriesPerSitemap { get; }
+        string SitemapFilePrefix { get; }
     }
 }

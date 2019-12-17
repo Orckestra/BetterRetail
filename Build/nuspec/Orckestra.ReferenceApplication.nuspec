@@ -25,6 +25,7 @@
     <file src="src\Composer\Composer.Store\bin\Release\Orckestra.Composer.Store.dll" target="lib\net471" />
     <file src="src\Composer\Composer.Store\bin\Release\Orckestra.Composer.Store.dll" target="lib\net471" />
     <file src="src\Composer\Orckestra.Composer.SearchQuery\bin\Release\Orckestra.Composer.SearchQuery.dll" target="lib\net471" />
+	<file src="src\Composer.CompositeC1\Orckestra.Composer.Sitemap\bin\Release\Orckestra.Composer.Sitemap.dll" target="lib\net471" />
 	
     <file src="src\Composer.CompositeC1\Composer.CompositeC1.Mvc\bin\Orckestra.Composer.CompositeC1.dll" target="lib\net471" />
     <file src="src\Composer.CompositeC1\Composer.CompositeC1.Mvc\bin\Orckestra.Composer.CompositeC1.*.dll" target="lib\net471" exclude="src\Composer.CompositeC1\Composer.CompositeC1.Mvc\bin\Orckestra.Composer.CompositeC1.Mvc.dll" />

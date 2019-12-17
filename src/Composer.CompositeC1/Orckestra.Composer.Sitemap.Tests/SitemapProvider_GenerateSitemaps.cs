@@ -2,6 +2,7 @@
 using Moq;
 using Moq.AutoMock;
 using NUnit.Framework;
+using Orckestra.Composer.CompositeC1.Sitemap;
 using Orckestra.Composer.Sitemap.Config;
 using Orckestra.Composer.Sitemap.Models;
 using System;
@@ -16,6 +17,8 @@ namespace Orckestra.Composer.Sitemap.Tests
     {
         private AutoMocker _container;
 
+        private const string sitemapFilePrefix = "test";
+
         [SetUp]
         public void Init()
         {
@@ -28,7 +31,6 @@ namespace Orckestra.Composer.Sitemap.Tests
             // ARRANGE
             var numberOfEntriesPerSitemap = 1000;
             MockSitemapProviderConfig(_container, numberOfEntriesPerSitemap);
-            MockSitemapNamer(_container);
 
             var provider = _container.GetMock<ISitemapEntryProvider>();
             provider.Setup(p => p.GetEntriesAsync(It.IsAny<SitemapParams>(), It.IsAny<CultureInfo>(), 0, numberOfEntriesPerSitemap))
@@ -60,7 +62,6 @@ namespace Orckestra.Composer.Sitemap.Tests
             // ARRANGE
             var numberOfEntriesPerSitemap = 1000;
             MockSitemapProviderConfig(_container, numberOfEntriesPerSitemap);
-            MockSitemapNamer(_container);
             
             var provider = _container.GetMock<ISitemapEntryProvider>();
             provider.Setup(p => p.GetEntriesAsync(It.IsAny<SitemapParams>(), It.IsAny<CultureInfo>(), 0, numberOfEntriesPerSitemap))
@@ -141,20 +142,15 @@ namespace Orckestra.Composer.Sitemap.Tests
             action.ShouldThrow<ArgumentException>();
         }
 
-        private static Mock<ISitemapNamer> MockSitemapNamer(AutoMocker container)
-        {
-            var namer = container.GetMock<ISitemapNamer>();
-            namer.Setup(n => n.GetSitemapName(It.IsAny<CultureInfo>(), It.IsAny<int>()))
-                .Returns<CultureInfo, int>((culture, index) => $"sitemap_{culture.Name}_{index}.xml");
-
-            return namer;
-        }
-
-        private static Mock<ISitemapProviderConfig> MockSitemapProviderConfig(AutoMocker container, int numberOfEntriesPerSitemap)
+        private static Mock<ISitemapProviderConfig> MockSitemapProviderConfig(AutoMocker container, int numberOfEntriesPerSitemap, string sitemapFilePrefix = sitemapFilePrefix)
         {
             var config = container.GetMock<ISitemapProviderConfig>();
-            config.Setup(c => c.NumberOfEntriesPerSitemap)
-                    .Returns(numberOfEntriesPerSitemap);
+            config.Setup(c => c.SitemapFilePrefix)
+                    .Returns(sitemapFilePrefix);
+
+            container.GetMock<IC1SitemapConfiguration>()
+                .Setup(c => c.NumberOfEntriesPerFile)
+                .Returns(numberOfEntriesPerSitemap);
 
             return config;
         }

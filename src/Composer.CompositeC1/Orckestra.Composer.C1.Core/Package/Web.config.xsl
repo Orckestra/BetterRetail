@@ -5,14 +5,12 @@
 
   <xsl:variable name="ComposerSectionGroup" xml:space="preserve">
     <sectionGroup name="composer" type="System.Configuration.ConfigurationSectionGroup, System.Configuration">
-      <section name="settings" type="Orckestra.Composer.Configuration.ComposerConfigurationSection, Orckestra.Composer" />
       <section name="caching" type="Orckestra.Overture.Components.Caching.CacheConfiguration, Orckestra.Caching" />
     </sectionGroup>
   </xsl:variable>
 
   <xsl:variable name="ComposerSection" xml:space="preserve">
   <composer>
-    <settings configSource="App_Config\Composer.config" />
     <caching configSource="App_Config\Caching.config" />
   </composer>
   </xsl:variable>
@@ -29,8 +27,6 @@
 
   <xsl:comment> OWIN </xsl:comment>
   <add key="owin:AutomaticAppStartup" value="false" />
-   <xsl:comment> Hangfire </xsl:comment>
-  <add key="hangfire:AutomaticAppStartup" value="false" />
 </appSettings>
 </xsl:variable>
 

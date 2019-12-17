@@ -229,7 +229,11 @@ namespace Orckestra.Composer.Cart.Factory.Order
             if (!string.IsNullOrWhiteSpace(shipment.Status))
             {
                 shipmentVm.ShipmentStatusName = shipment.Status;
-                shipmentVm.ShipmentStatus = param.ShipmentStatuses[shipment.Status];
+                if (param.ShipmentStatuses.TryGetValue(shipment.Status, out string shipmentStatusLookup))
+                {
+                    shipmentVm.ShipmentStatus = shipmentStatusLookup;
+                }
+
                 if (shipmentVm.History.Any(h => h.NewValue.Equals(shipment.Status)))
                 {
                     shipmentVm.ShipmentStatusDate = shipmentVm.History.OrderByDescending(x => x.Date).First(h => h.NewValue.Equals(shipment.Status)).Date;

@@ -94,6 +94,9 @@
       <HintPath>..\..\..\packages\C1CMS.Assemblies.6.6.6912.30810\lib\net471\Microsoft.Practices.ObjectBuilder.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Microsoft.ServiceBus, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\WindowsAzure.ServiceBus.3.4.0\lib\net45-full\Microsoft.ServiceBus.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
       <Private>False</Private>
@@ -108,8 +111,8 @@
     <Reference Include="Orckestra.Caching, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\OrckestraCommerce.Common.4.0.0\lib\net461\Orckestra.Caching.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.ExperienceManagement.Configuration, Version=4.8.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Orckestra.ExperienceManagement.Configuration.4.8.0\lib\net471\Orckestra.ExperienceManagement.Configuration.dll</HintPath>
+    <Reference Include="Orckestra.ExperienceManagement.Configuration, Version=4.8.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Orckestra.ExperienceManagement.Configuration.4.8.1\lib\net471\Orckestra.ExperienceManagement.Configuration.dll</HintPath>
     </Reference>
     <Reference Include="Orckestra.Logging, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\OrckestraCommerce.Common.4.0.0\lib\net461\Orckestra.Logging.dll</HintPath>
@@ -171,6 +174,8 @@
       <HintPath>..\..\..\packages\Rx-Linq.2.2.5\lib\net45\System.Reactive.Linq.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.Helpers.dll</HintPath>
@@ -215,15 +220,27 @@
     <Compile Include="..\..\Solution Items\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Config\ContentSitemapConfiguration.cs" />
+    <Compile Include="Config\ProductSitemapConfiguration.cs" />
+    <Compile Include="Config\SitemapConfiguration.cs" />
+    <Compile Include="EventHandlers\CommonEventMessageProcessor.cs" />
+    <Compile Include="EventHandlers\SitemapEventRegistrator.cs" />
     <Compile Include="Factory\IProductUrlParamFactory.cs" />
     <Compile Include="Factory\ProductUrlParamFactory.cs" />
+    <Compile Include="HttpHandlers\SitemapHttpHandler.cs" />
     <Compile Include="ISitemapIndexGenerator.cs" />
+    <Compile Include="Sitemap\SitemapResponse.cs" />
+    <Compile Include="Sitemap\C1ContentSitemapDataTypesIncluder.cs" />
+    <Compile Include="Sitemap\IC1ContentSitemapDataTypesIncluder.cs" />
+    <Compile Include="Sitemap\IC1ContentSitemapPageExcludeProvider.cs" />
+    <Compile Include="Services\ISitemapGeneratorScheduler.cs" />
+    <Compile Include="Services\SitemapGeneratorScheduler.cs" />
     <Compile Include="SitemapParams.cs" />
     <Compile Include="Sitemap\C1ContentSitemapEntryProvider.cs" />
-    <Compile Include="Sitemap\C1ContentSitemapNamer.cs" />
     <Compile Include="Sitemap\C1ContentSitemapPageExcludeProvider.cs" />
     <Compile Include="Sitemap\C1ContentSitemapProvider.cs" />
     <Compile Include="Sitemap\C1ContentSitemapProviderConfig.cs" />
+    <Compile Include="Sitemap\IC1SitemapConfiguration.cs" />
     <Compile Include="Sitemap\C1SitemapConfiguration.cs" />
     <Compile Include="Sitemap\IMultiSitemapGenerator.cs" />
     <Compile Include="Sitemap\MultiSitemapGenerator.cs" />
@@ -241,10 +258,8 @@
     <Compile Include="Config\ISitemapProviderConfig.cs" />
     <Compile Include="ISitemapEntryProvider.cs" />
     <Compile Include="ISitemapGenerator.cs" />
-    <Compile Include="ISitemapNamer.cs" />
     <Compile Include="ISitemapProvider.cs" />
     <Compile Include="Product\ProductSitemapEntryProvider.cs" />
-    <Compile Include="Product\ProductSitemapNamer.cs" />
     <Compile Include="Product\ProductSitemapProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\Sitemap.cs" />

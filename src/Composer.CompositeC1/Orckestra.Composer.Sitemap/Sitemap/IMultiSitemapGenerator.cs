@@ -8,6 +8,6 @@ namespace Orckestra.Composer.CompositeC1.Sitemap
 {
     public interface IMultiSitemapGenerator
     {
-        void GenerateSitemaps();
+        SitemapResponse GenerateSitemaps();
     }
 }

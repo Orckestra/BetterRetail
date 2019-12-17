@@ -1,7 +1,8 @@
 ﻿using FluentAssertions;
 using Moq.AutoMock;
 using NUnit.Framework;
-using Orckestra.Composer.Sitemap.Product;
+using Orckestra.Composer.CompositeC1.Sitemap;
+using Orckestra.Composer.Sitemap.Config;
 
 namespace Orckestra.Composer.Sitemap.Tests
 {
@@ -9,13 +10,20 @@ namespace Orckestra.Composer.Sitemap.Tests
     public class ProductSitemapNamer_IsMatch
     {
         private AutoMocker _container;
-        private ProductSitemapNamer _sut;
+        private SitemapProvider _sut;
 
         [SetUp]
         public void Init()
         {
             _container = new AutoMocker();
-            _sut = _container.CreateInstance<ProductSitemapNamer>();
+
+            _container.GetMock<ISitemapProviderConfig>()
+                .Setup(c => c.SitemapFilePrefix).Returns("products");
+
+            _container.GetMock<IC1SitemapConfiguration>()
+                .Setup(c => c.NumberOfEntriesPerFile).Returns(2500);
+
+            _sut = _container.CreateInstance<SitemapProvider>();
         }
 
         [Test]
@@ -32,19 +40,6 @@ namespace Orckestra.Composer.Sitemap.Tests
             // ASSERT
             resultA.Should().BeTrue();
             resultB.Should().BeTrue();
-        }
-
-        [Test]
-        public void WHEN_BadFileName_SHOULD_ReturnFalse()
-        {
-            // ARRANGE
-            string filename = "sitemap-en-products-245.json";            
-
-            // ACT
-            var result = _sut.IsMatch(filename);
-
-            // ASSERT
-            result.Should().BeFalse();
         }
 
         [Test]

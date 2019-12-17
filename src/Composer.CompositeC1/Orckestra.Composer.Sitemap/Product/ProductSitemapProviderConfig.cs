@@ -1,32 +1,25 @@
-﻿using Orckestra.Composer.Configuration;
-using Orckestra.Composer.Sitemap.Config;
+﻿using Orckestra.Composer.Sitemap.Config;
 using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Orckestra.Composer.Sitemap.Product
 {
     public class ProductSitemapProviderConfig : ISitemapProviderConfig
     {
-        private const int Default_NumberOfEntriesPerSitemap = 2500;
+        private const string Default_SitemapFilePrefix = "products";
 
-        public int NumberOfEntriesPerSitemap
+        public string SitemapFilePrefix
         {
             get
             {
-                var conf = ConfigurationManager.GetSection(ComposerConfigurationSection.ConfigurationName) as ComposerConfigurationSection;
-
-                if (conf.SitemapConfiguration != null && conf.SitemapConfiguration.ProductSitemapConfiguration != null)
-                {
-                    return conf.SitemapConfiguration.ProductSitemapConfiguration.NumberOfEntriesPerFile;
-                }
-                
-                // Default value;
-                return Default_NumberOfEntriesPerSitemap;
+                return ExtractSettingFromProductSitemapConfiguration((config) => config.SitemapFilePrefix, Default_SitemapFilePrefix);
             }
+        }
+
+        private static T ExtractSettingFromProductSitemapConfiguration<T>(Func<ProductSitemapConfiguration, T> extractor, T defaultValue = default)
+        {
+            var productSitemapConfig = SitemapConfiguration.Instance?.ProductSitemapConfiguration;
+
+            return productSitemapConfig != null ? extractor(productSitemapConfig) : defaultValue;
         }
     }
 }

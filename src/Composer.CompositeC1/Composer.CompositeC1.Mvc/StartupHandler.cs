@@ -8,7 +8,6 @@ using Composite.Functions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Orckestra.Composer.CompositeC1.DataTypes;
-using Orckestra.Composer.CompositeC1.Hangfire;
 using Orckestra.Composer.CompositeC1.Mvc.Controllers;
 using Orckestra.Composer.CompositeC1.Pages;
 using Orckestra.Composer.HttpModules;

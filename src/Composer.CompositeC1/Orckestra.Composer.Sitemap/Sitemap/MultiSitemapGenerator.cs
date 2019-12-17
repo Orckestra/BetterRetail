@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using Orckestra.Composer.Providers;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Sitemap;
 using System;
@@ -12,6 +11,7 @@ using Composite.Data.Types;
 using Orckestra.Composer.CompositeC1.Utils;
 using Orckestra.ExperienceManagement.Configuration;
 using Orckestra.ExperienceManagement.Configuration.DataTypes;
+using System.Web;
 
 namespace Orckestra.Composer.CompositeC1.Sitemap
 {
@@ -32,19 +32,25 @@ namespace Orckestra.Composer.CompositeC1.Sitemap
     {
         public IContainer Container { get; protected set; }
 
-        public MultiSitemapGenerator(ISiteConfiguration siteConfiguration)
+        public MultiSitemapGenerator(ISiteConfiguration siteConfiguration, IC1SitemapConfiguration c1SitemapConfiguration)
         {
             SiteConfiguration = siteConfiguration;
+            C1SitemapConfiguration = c1SitemapConfiguration;
 
             var builder = new ContainerBuilder();
+            RegisterAdditionalTypes(builder);
             builder.RegisterModule(new SitemapAutofacModule());
 
             Container = builder.Build();
         }
 
+        public virtual void RegisterAdditionalTypes(ContainerBuilder builder) { }
+
         public ISiteConfiguration SiteConfiguration { get; }
 
-        public void GenerateSitemaps()
+        public IC1SitemapConfiguration C1SitemapConfiguration { get; }
+
+        public SitemapResponse GenerateSitemaps()
         {
             using (var scope = Container.BeginLifetimeScope())
             {
@@ -73,24 +79,29 @@ namespace Orckestra.Composer.CompositeC1.Sitemap
                     }
                 }
 
+                var sitemapResponse = new SitemapResponse { SitemapList = new List<string>(), ErrorList = new List<string>() };
                 foreach (var website in websites)
                 {
-                    string websiteBaseUrl;
-                    if (websitesBaseUrl.TryGetValue(website.Key, out websiteBaseUrl))
+                    if (websitesBaseUrl.TryGetValue(website.Key, out string websiteBaseUrl))
                     {
+                        var sitemapUrl = $"{websiteBaseUrl}{VirtualPathUtility.ToAbsolute(C1SitemapConfiguration.SitemapDirectory, "/")}/{website.Key}";
                         sitemapGenerator.GenerateSitemaps(new SitemapParams
                         {
                             Website = website.Key,
                             BaseUrl = websiteBaseUrl,
                             Scope = SiteConfiguration.GetScopeIdByPageId(website.Key)
-                        }, $"{websiteBaseUrl}/{website.Key}", website.Value.ToArray());
+                        }, sitemapUrl, website.Value.ToArray());
+                        sitemapResponse.SitemapList.Add(websiteBaseUrl);
                     }
                     else
                     {
-                        Log.LogWarning(nameof(MultiSitemapGenerator),
-                            $"Website {website.Key} does not contain hostname");
+                        var websitePage = PageManager.GetPageById(website.Key);
+                        var errorMessage = $"The {websitePage?.Title} website has no hostname configuration.";
+                        Log.LogError(nameof(MultiSitemapGenerator), errorMessage);
+                        sitemapResponse.ErrorList.Add(errorMessage);
                     }
                 }
+                return sitemapResponse;
             }
         }
     }
