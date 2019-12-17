@@ -1,85 +1,97 @@
-﻿using Orckestra.Composer.Configuration;
+﻿using Composite.Core;
+using Composite.Data;
+using Orckestra.ExperienceManagement.Configuration;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using Composite.Data;
-using Orckestra.ExperienceManagement.Configuration;
-using Orckestra.ExperienceManagement.Configuration.DataTypes;
 
 namespace Orckestra.Composer.CompositeC1.Sitemap
 {
-    public class C1ContentSitemapPageExcludeProvider
+    public class C1ContentSitemapPageExcludeProvider : IC1ContentSitemapPageExcludeProvider
     {
         public ISiteConfiguration SiteConfiguration { get; private set; }
+        private IEnumerable<Guid> _pageIdsToExcludeFromConfig = C1ContentSitemapProviderConfig.PageIdsToExclude;
+        private IEnumerable<string> _siteConfigurationPagesToExcludesFromConfig = C1ContentSitemapProviderConfig.PageIdsFromConfigurationPropertiesToExclude;
 
         public C1ContentSitemapPageExcludeProvider(ISiteConfiguration siteConfiguration)
         {
             SiteConfiguration = siteConfiguration ?? throw new ArgumentNullException(nameof(siteConfiguration));
         }
 
-        public IEnumerable<Guid> GetPageIdsToExclude(Guid websiteId, CultureInfo culture)
+        public virtual IEnumerable<Guid> GetPageIdsToExclude(Guid websiteId, CultureInfo culture)
         {
-            //TODO: Cache
-            var conf = ConfigurationManager.GetSection(ComposerConfigurationSection.ConfigurationName) as ComposerConfigurationSection;
             var pageToExcludeIds = new List<Guid>();
 
-            if (conf?.SitemapConfiguration != null)
-            {
-                pageToExcludeIds.AddRange(conf
-                    .SitemapConfiguration
-                    .ContentSitemapConfiguration
-                    .PageIdsToExclude
-                    .Cast<ContentSitemapPageToExcludeElement>()
-                    .Select(element => new Guid(element.PageId)));
+            pageToExcludeIds.AddRange(_pageIdsToExcludeFromConfig);
 
-                var propertiesToExclude = conf.SitemapConfiguration
-                    .ContentSitemapConfiguration
-                    .TypesToExclude
-                    .Cast<ContentSitemapTypeToExcludeElement>()
-                    .Select(element => element.Name);
+            var pageIdsToExcludeFromTypes = GetPageIdsByProperties(websiteId, culture);
+            pageToExcludeIds.AddRange(pageIdsToExcludeFromTypes);
 
-                pageToExcludeIds.AddRange(GetPageIdsByProperties(websiteId, culture, new HashSet<string>(propertiesToExclude)));
-            }
             return pageToExcludeIds;
         }
 
-        public bool PageHasToBeExcluded(Guid websiteId, Guid pageId, CultureInfo culture)
+        protected virtual IEnumerable<Guid> GetPageIdsByProperties(Guid websiteId, CultureInfo culture)
         {
-            return GetPageIdsToExclude(websiteId, culture).Contains(pageId);
-        }
-
-        private IEnumerable<Guid> GetPageIdsByProperties(Guid websiteId, CultureInfo culture, HashSet<string> properties)
-        {
+            var result = new List<Guid>();
             using (var conn = new DataConnection(culture))
             {
-                var website = conn.Get<ISiteConfigurationMeta>().FirstOrDefault(d => d.PageId == websiteId);
-                foreach (var propertyInfo in website?.GetType()?.GetProperties(BindingFlags.Public).Where(d => properties.Contains(d.Name)))
+
+                var byType = _siteConfigurationPagesToExcludesFromConfig.Select(r => r.Split(new[] { '|' }))
+                .Select(parts => new { Type = parts[0], Prop = parts[1] })
+                .GroupBy(r => r.Type);
+
+                foreach (var group in byType)
                 {
-                    if (propertyInfo.PropertyType == typeof(Guid?))
+                    var type = Type.GetType(group.Key);
+
+                    if (type == null)
                     {
-                        var value = (Guid?)propertyInfo.GetValue(website);
-                        if (value.HasValue)
-                        {
-                            yield return value.Value;
-                        }
-                    } 
-                    else if (propertyInfo.PropertyType == typeof(string))
+                        Log.LogWarning("Sitemap generator", $"Configured {type} data type doesn't exists.");
+                        continue;
+                    }
+
+                    var configData = DataFacade.GetData(type).Cast<IPageRelatedData>().FirstOrDefault(d => d.PageId == websiteId);
+
+                    if (configData == null) continue;
+
+                    var configDataProperties = type.GetProperties(BindingFlags.Instance | BindingFlags.Public).ToDictionary(t => t.Name);
+
+                    foreach (var propertyName in group)
                     {
-                        var value = (string)propertyInfo.GetValue(website);
-                       
-                        if (!string.IsNullOrWhiteSpace(value))
+                        PropertyInfo propertyInfo;
+                        if (configDataProperties.TryGetValue(propertyName.Prop, out propertyInfo))
                         {
-                            foreach (var idString in value.Split(','))
+                            if (propertyInfo.PropertyType == typeof(Guid?))
                             {
-                                Guid id;
-                                if (Guid.TryParse(idString, out id))
+                                var value = (Guid?)propertyInfo.GetValue(configData);
+                                if (value.HasValue)
                                 {
-                                    yield return id;
+                                    yield return value.Value;
+                                }
+                            }
+                            else if (propertyInfo.PropertyType == typeof(Guid))
+                            {
+                                var value = (Guid)propertyInfo.GetValue(configData);
+                                if (value != Guid.Empty)
+                                {
+                                    yield return value;
+                                }
+                            }
+                            else if (propertyInfo.PropertyType == typeof(string))
+                            {
+                                var value = (string)propertyInfo.GetValue(configData);
+
+                                if (!string.IsNullOrWhiteSpace(value))
+                                {
+                                    foreach (var idString in value.Split(','))
+                                    {
+                                        if (Guid.TryParse(idString, out Guid id))
+                                        {
+                                            yield return id;
+                                        }
+                                    }
                                 }
                             }
                         }

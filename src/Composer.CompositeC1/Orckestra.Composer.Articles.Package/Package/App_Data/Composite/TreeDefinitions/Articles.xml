@@ -31,7 +31,7 @@
                   <DuplicateDataAction Label="Duplicate"/>
                 </Actions>
                 <Filters>
-                  <ParentIdFilter ParentType="Orckestra.Composer.Articles.DataTypes.IArticle" ReferenceFieldName="PageId" />
+                  <ParentIdFilter ParentType="Composite.Data.Types.IPage" ReferenceFieldName="PageId" />
                 </Filters>
                 <OrderBy>
                   <Field FieldName="Date" Direction="descending"></Field>

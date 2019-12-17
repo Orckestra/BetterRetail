@@ -16,13 +16,16 @@ namespace Orckestra.Composer.CompositeC1.Sitemap
 {
     public class C1ContentSitemapEntryProvider : ISitemapEntryProvider
     {
-        private readonly C1ContentSitemapPageExcludeProvider _pageToExcludeProvider;
+        private readonly IC1ContentSitemapPageExcludeProvider _pageToExcludeProvider;
+        private readonly IC1ContentSitemapDataTypesIncluder _dynamicPagesEntryProvider;
 
-        public C1ContentSitemapEntryProvider(C1ContentSitemapPageExcludeProvider pageToExcludeProvider)
+        public C1ContentSitemapEntryProvider(IC1ContentSitemapPageExcludeProvider pageToExcludeProvider, IC1ContentSitemapDataTypesIncluder dynamicPagesEntryProvider)
         {
             Guard.NotNull(pageToExcludeProvider, nameof(pageToExcludeProvider));
+            Guard.NotNull(dynamicPagesEntryProvider, nameof(dynamicPagesEntryProvider));
 
             _pageToExcludeProvider = pageToExcludeProvider;
+            _dynamicPagesEntryProvider = dynamicPagesEntryProvider;
         }
 
         public Task<IEnumerable<SitemapEntry>> GetEntriesAsync(SitemapParams sitemapParams, CultureInfo culture, int offset, int count)
@@ -49,18 +52,23 @@ namespace Orckestra.Composer.CompositeC1.Sitemap
                     new HttpResponse(new StringWriter())
                 );
             }
+            var entriesList = new List<SitemapEntry>();
 
             var rootNodes = provider.GetRootNodes().ToList();
 
             // Get root node associated to culture and website
             var rootNode = rootNodes.FirstOrDefault(node => node.Culture.Equals(culture) && node.Page?.Id == sitemapParams.Website);
 
-            var entries = rootNode?.GetAllNodes()
+            var pageIdsToExclude = _pageToExcludeProvider.GetPageIdsToExclude(sitemapParams.Website, culture);
+            var allNodes = rootNode?.GetAllNodes()
                 .OfType<CmsPageSiteMapNode>()
-                .Where(node => node.Page == null || _pageToExcludeProvider.PageHasToBeExcluded(sitemapParams.Website, node.Page.Id, culture) == false)
+                .Where(node => node.Page == null || !pageIdsToExclude.Contains(node.Page.Id))
                 .Select(node => CreateSitemapEntryFromCompositeC1SiteMapNode(sitemapParams.BaseUrl, node));
+            entriesList.AddRange(allNodes);
 
-            return Task.FromResult(entries ?? new List<SitemapEntry>());
+            var dynamicTypesToInclude = _dynamicPagesEntryProvider.GetEntries(sitemapParams, culture);
+            entriesList.AddRange(dynamicTypesToInclude);
+            return Task.FromResult(entriesList as IEnumerable<SitemapEntry>);
         }
 
         private SitemapEntry CreateSitemapEntryFromCompositeC1SiteMapNode(string baseUrl, CmsPageSiteMapNode node)

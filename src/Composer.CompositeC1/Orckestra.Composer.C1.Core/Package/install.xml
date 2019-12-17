@@ -18,10 +18,6 @@
         <File sourceFilename="~\Bin\Autofac.Integration.WebApi.dll" targetFilename="~\Bin\Autofac.Integration.WebApi.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Fasterflect.dll" targetFilename="~\Bin\Fasterflect.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Handlebars.dll" targetFilename="~\Bin\Handlebars.dll" allowOverwrite="true" />
-        <File sourceFilename="~\Bin\Hangfire.AspNet.dll" targetFilename="~\Bin\Hangfire.AspNet.dll" allowOverwrite="true" />
-        <File sourceFilename="~\Bin\Hangfire.Autofac.dll" targetFilename="~\Bin\Hangfire.Autofac.dll" allowOverwrite="true" />
-        <File sourceFilename="~\Bin\Hangfire.CompositeC1.dll" targetFilename="~\Bin\Hangfire.CompositeC1.dll" allowOverwrite="true" />
-        <File sourceFilename="~\Bin\Hangfire.Core.dll" targetFilename="~\Bin\Hangfire.Core.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Orckestra.Caching.dll" targetFilename="~\Bin\Orckestra.Caching.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Orckestra.AsyncExtensions.dll" targetFilename="~\Bin\Orckestra.AsyncExtensions.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Orckestra.Overture.Interfaces.dll" targetFilename="~\Bin\Orckestra.Overture.Interfaces.dll" allowOverwrite="true" />
@@ -52,6 +48,7 @@
         <File sourceFilename="~\Bin\Orckestra.Composer.CompositeC1.DataTypes.dll" targetFilename="~\Bin\Orckestra.Composer.CompositeC1.DataTypes.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Orckestra.ExperienceManagement.Configuration.dll" targetFilename="~\Bin\Orckestra.ExperienceManagement.Configuration.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Newtonsoft.Json.dll" targetFilename="~\Bin\Newtonsoft.Json.dll" allowOverwrite="true" addAssemblyBinding="true"/>
+		<File sourceFilename="~\Bin\Microsoft.ServiceBus.dll" targetFilename="~\Bin\Microsoft.ServiceBus.dll" allowOverwrite="true" />
       </Files>
     </mi:Add>
 

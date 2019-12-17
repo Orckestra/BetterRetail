@@ -127,6 +127,8 @@
     <Content Include="Package\App_Data\Composite\TreeDefinitions\SitemapElement.xml" />
     <Content Include="Package\Composite\content\sitemap\SitemapManagement.aspx" />
     <Content Include="Package\install.xml" />
+    <Content Include="Package\Web.config\Install.xsl" />
+    <Content Include="Package\Web.config\Uninstall.xsl" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -134,6 +136,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <Content Include="Package\App_Config\Sitemap.config">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

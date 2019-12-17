@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Orckestra.Composer.CompositeC1.Sitemap;
 
 namespace Orckestra.Composer.Sitemap.Product
 {
     public class ProductSitemapProvider : SitemapProvider
     {
-        public ProductSitemapProvider(ProductSitemapEntryProvider entryProvider, ProductSitemapNamer namer, ProductSitemapProviderConfig config) 
-            : base(entryProvider, namer, config)
+        public ProductSitemapProvider(ProductSitemapEntryProvider entryProvider, ProductSitemapProviderConfig config, IC1SitemapConfiguration mainConfig) 
+            : base(entryProvider, config, mainConfig)
         {
         }
     }

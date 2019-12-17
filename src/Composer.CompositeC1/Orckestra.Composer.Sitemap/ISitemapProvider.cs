@@ -11,6 +11,6 @@ namespace Orckestra.Composer.Sitemap
     {
         IEnumerable<Models.Sitemap> GenerateSitemaps(SitemapParams sitemapParams, CultureInfo culture);
 
-        ISitemapNamer Namer { get; }
+        bool IsMatch(string sitemapFilename);
     }
 }

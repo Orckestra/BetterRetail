@@ -10,7 +10,6 @@ using Autofac.Core;
 using Autofac.Integration.Mvc;
 using Newtonsoft.Json;
 using Orckestra.Caching;
-using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Kernel;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Localization;

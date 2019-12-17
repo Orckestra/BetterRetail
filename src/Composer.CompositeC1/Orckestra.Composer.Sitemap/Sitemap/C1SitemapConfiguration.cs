@@ -1,39 +1,32 @@
-﻿using Orckestra.Composer.Configuration;
+﻿using Orckestra.Composer.Sitemap.Config;
 using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.Hosting;
 
 namespace Orckestra.Composer.CompositeC1.Sitemap
 {
-    public static class C1SitemapConfiguration
+    public class C1SitemapConfiguration: IC1SitemapConfiguration
     {
-        public static bool IsScheduleDefined
+        public bool IsScheduleDefined
         {
-            get { return JobCronSchedule != null; }
+            get { return ScheduleDelayInSeconds > 0; }
         }
 
-        public static string JobCronSchedule
-        {
-            get
-            {
-                return ExtractSettingFromSitemapConfiguration((config) => config.JobCronSchedule);                
-            }
-        }
-
-        public static string BaseUrl
+        public int ScheduleDelayInSeconds
         {
             get
             {
-                return ExtractSettingFromSitemapConfiguration((config) => config.BaseUrl);
+                return ExtractSettingFromSitemapConfiguration((config) => config.ScheduleDelayInSeconds);                
             }
         }
 
-        public static string SitemapDirectory
+        public int NumberOfEntriesPerFile
+        {
+            get
+            {
+                return ExtractSettingFromSitemapConfiguration((config) => config.NumberOfEntriesPerFile);
+            }
+        }
+
+        public string SitemapDirectory
         {
             get
             {
@@ -41,7 +34,7 @@ namespace Orckestra.Composer.CompositeC1.Sitemap
             }
         }
 
-        public static string WorkingDirectory
+        public string WorkingDirectory
         {
             get
             {
@@ -49,17 +42,11 @@ namespace Orckestra.Composer.CompositeC1.Sitemap
             }
         }
 
-        private static T ExtractSettingFromSitemapConfiguration<T>(Func<SitemapConfiguration, T> extractor)
+        private static T ExtractSettingFromSitemapConfiguration<T>(Func<SitemapConfiguration, T> extractor, T defaultValue = default)
         {
-            var conf = ConfigurationManager.GetSection(ComposerConfigurationSection.ConfigurationName) as ComposerConfigurationSection;
-            T settingValue = default(T);
+            var sitemapConfig = SitemapConfiguration.Instance;
 
-            if (conf.SitemapConfiguration != null)
-            {
-                settingValue = extractor(conf.SitemapConfiguration);
-            }
-
-            return settingValue;
+            return sitemapConfig != null ? extractor(sitemapConfig) : defaultValue;
         }
     }
 }

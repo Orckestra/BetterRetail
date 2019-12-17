@@ -8,6 +8,7 @@ using Orckestra.Composer.CompositeC1.Services.DataQuery;
 using Orckestra.Composer.CompositeC1.Services.Facet;
 using Orckestra.Composer.HttpModules;
 using Orckestra.Composer.Mvc.Sample.Providers.UrlProvider;
+using Orckestra.Composer.Product.Providers;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Search;
 using Orckestra.Composer.Search.Providers;
@@ -15,6 +16,7 @@ using Orckestra.Composer.Store.Providers;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Services.Breadcrumb;
 using Orckestra.Overture;
+using Orckestra.Composer.CompositeC1.Settings;
 using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Search.Context;
 using Orckestra.ExperienceManagement.Configuration;
@@ -34,8 +36,8 @@ namespace Orckestra.Composer.CompositeC1
 
         private void RegisterDependencies(IComposerHost host)
         {
-            host.Register<Settings.RecurringOrdersSettings, IRecurringOrdersSettings>(ComponentLifestyle.PerRequest);
-            host.Register<Settings.GoogleSettings, IGoogleSettings>(ComponentLifestyle.PerRequest);
+            host.Register<RecurringOrdersSettings, IRecurringOrdersSettings>(ComponentLifestyle.PerRequest);
+            host.Register<GoogleSettings, IGoogleSettings>(ComponentLifestyle.PerRequest);
             host.Register<WebsiteContext, IWebsiteContext>(ComponentLifestyle.PerRequest);
             host.Register<AntiCookieTamperingExcluder, IAntiCookieTamperingExcluder>();
             host.Register<Providers.ScopeProvider, IScopeProvider>(ComponentLifestyle.PerRequest);
@@ -75,6 +77,7 @@ namespace Orckestra.Composer.CompositeC1
             host.Register<CacheService, ICacheService>(ComponentLifestyle.Singleton);
             host.Register<PreviewModeService, IPreviewModeService>();
             host.Register<AutocompleteProvider, IAutocompleteProvider>();
+            host.Register<Scheduler, IScheduler>(ComponentLifestyle.Singleton);
         }
     }
 }

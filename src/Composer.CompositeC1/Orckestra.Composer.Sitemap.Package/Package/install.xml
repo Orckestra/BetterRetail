@@ -11,10 +11,16 @@
 			<Files>
 				<File sourceFilename="~\App_Data\Composite\TreeDefinitions\SitemapElement.xml" targetFilename="~\App_Data\Composite\TreeDefinitions\SitemapElement.xml" allowOverwrite="false" />
 				<File sourceFilename="~\Bin\Orckestra.Composer.Sitemap.dll" targetFilename="~\Bin\Orckestra.Composer.Sitemap.dll" allowOverwrite="false" />
+				<File sourceFilename="~\App_Config\Sitemap.config" targetFilename="~\App_Config\Sitemap.config" allowOverwrite="false" />
 			</Files>
 			<Directories>
 				<Directory sourceDirectory="~\Composite\content\sitemap\" targetDirectory="~\Composite\content\sitemap\" allowOverwrite="false" deleteTargetDirectory="false" />
 			</Directories>
+		</mi:Add>
+		<mi:Add installerType="Composite.Core.PackageSystem.PackageFragmentInstallers.FileXslTransformationPackageFragmentInstaller, Composite" uninstallerType="Composite.Core.PackageSystem.PackageFragmentInstallers.FileXslTransformationPackageFragmentUninstaller, Composite">
+			<XslFiles>
+				<XslFile pathXml="~/Web.config" installXsl="~\Web.config\Install.xsl" uninstallXsl="~\Web.config\Uninstall.xsl" />
+			</XslFiles>
 		</mi:Add>
 	</mi:PackageFragmentInstallers>
 </mi:PackageInstaller>
