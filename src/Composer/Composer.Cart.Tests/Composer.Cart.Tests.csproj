@@ -1,0 +1,272 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\..\..\packages\NUnit3TestAdapter.3.15.1\build\net35\NUnit3TestAdapter.props" Condition="Exists('..\..\..\packages\NUnit3TestAdapter.3.15.1\build\net35\NUnit3TestAdapter.props')" />
+  <Import Project="..\..\..\packages\Microsoft.NET.Test.Sdk.16.3.0\build\net40\Microsoft.NET.Test.Sdk.props" Condition="Exists('..\..\..\packages\Microsoft.NET.Test.Sdk.16.3.0\build\net40\Microsoft.NET.Test.Sdk.props')" />
+  <Import Project="..\..\..\packages\Microsoft.CodeCoverage.16.3.0\build\netstandard1.0\Microsoft.CodeCoverage.props" Condition="Exists('..\..\..\packages\Microsoft.CodeCoverage.16.3.0\build\netstandard1.0\Microsoft.CodeCoverage.props')" />
+  <Import Project="..\..\..\packages\NUnit.3.12.0\build\NUnit.props" Condition="Exists('..\..\..\packages\NUnit.3.12.0\build\NUnit.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D965ED93-6B66-44CF-8B0E-D6339529FC03}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Orckestra.Composer.Cart.Tests</RootNamespace>
+    <AssemblyName>Orckestra.Composer.Cart.Tests</AssemblyName>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="FizzWare.NBuilder">
+      <HintPath>..\..\..\packages\NBuilder.3.0.1.1\lib\FizzWare.NBuilder.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentAssertions, Version=3.3.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\FluentAssertions.3.3.0\lib\net45\FluentAssertions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="FluentAssertions.Core, Version=3.3.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\FluentAssertions.3.3.0\lib\net45\FluentAssertions.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.CodeCoverage.Shim, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.CodeCoverage.16.3.0\lib\net45\Microsoft.VisualStudio.CodeCoverage.Shim.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Moq, Version=4.2.1507.118, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Moq.4.2.1507.0118\lib\net40\Moq.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Moq.AutoMock, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Moq.AutoMock.0.3.2.1\lib\net40\Moq.AutoMock.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=3.12.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\NUnit.3.12.0\lib\net45\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Orckestra.ExperienceManagement.Configuration, Version=4.8.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Orckestra.ExperienceManagement.Configuration.4.8.1\lib\net471\Orckestra.ExperienceManagement.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Orckestra.Overture.Interfaces, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\OrckestraCommerce.Interfaces.4.0.0\lib\portable-net4+sl5+netcore45+wp8\Orckestra.Overture.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="Orckestra.Overture.Providers.MonerisPayment.ServiceModel, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\OrckestraCommerce.ServiceModel.Moneris.4.0.0\lib\net45\Orckestra.Overture.Providers.MonerisPayment.ServiceModel.dll</HintPath>
+    </Reference>
+    <Reference Include="Orckestra.Overture.RestClient, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\OrckestraCommerce.Client.4.0.0\lib\net452\Orckestra.Overture.RestClient.dll</HintPath>
+    </Reference>
+    <Reference Include="Orckestra.Overture.ServiceModel, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\OrckestraCommerce.ServiceModel.4.0.0\lib\net461\Orckestra.Overture.ServiceModel.dll</HintPath>
+    </Reference>
+    <Reference Include="Orckestra.Overture.ServiceModel.Requests, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\OrckestraCommerce.ServiceModel.Requests.4.0.0\lib\net461\Orckestra.Overture.ServiceModel.Requests.dll</HintPath>
+    </Reference>
+    <Reference Include="OrckestraCommerce.RecurringOrders.ServiceModel, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\OrckestraCommerce.RecurringOrders.ServiceModel.4.0.0\lib\portable-net4+sl5+netcore45+wp8\OrckestraCommerce.RecurringOrders.ServiceModel.dll</HintPath>
+    </Reference>
+    <Reference Include="OrckestraCommerce.RecurringOrders.ServiceModel.Requests, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\OrckestraCommerce.RecurringOrders.ServiceModel.Requests.4.0.0\lib\portable-net4+sl5+netcore45+wp8\OrckestraCommerce.RecurringOrders.ServiceModel.Requests.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Client, Version=4.0.0.0, Culture=neutral, PublicKeyToken=e06fbc6124f57c43, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\ServiceStack.Client.Signed.4.5.4\lib\net45\ServiceStack.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Interfaces, Version=4.0.0.0, Culture=neutral, PublicKeyToken=e06fbc6124f57c43, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\ServiceStack.Interfaces.4.5.4\lib\portable-wp80+sl5+net45+win8+wpa81+monotouch+monoandroid+xamarin.ios10\ServiceStack.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Text, Version=4.0.0.0, Culture=neutral, PublicKeyToken=e06fbc6124f57c43, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\ServiceStack.Text.Signed.4.5.4\lib\net45\ServiceStack.Text.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.AspNet.Razor.3.2.7\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo_ComposerWeightAttribute.cs" />
+    <Compile Include="Factory\CartViewModelFactory_CreateViewModel.cs" />
+    <Compile Include="Factory\DiscountViewModelFactory_CreateViewModel.cs" />
+    <Compile Include="Factory\LineItemViewModelFactory_CreateViewModel.cs" />
+    <Compile Include="Factory\Order\FindOrdersRequestFactory_Create.cs" />
+    <Compile Include="Factory\Order\OrderDetailsViewModelFactory_CreateViewModel.cs" />
+    <Compile Include="Factory\Order\OrderHistoryViewModelFactory_CreateViewModel.cs" />
+    <Compile Include="Factory\Order\ShippingTrackingProviderFactory_ResolverProvider.cs" />
+    <Compile Include="Factory\TaxViewModelFactory_CreateViewModel.cs" />
+    <Compile Include="Mock\WishListRepositoryFactory.cs" />
+    <Compile Include="Mock\FakePaymentProvider.cs" />
+    <Compile Include="Factory\PaymentProviderFactory_ResolverProvider.cs" />
+    <Compile Include="Mock\CartRepositoryFactory.cs" />
+    <Compile Include="Mock\CartRepositoryUpdateCartMock.cs" />
+    <Compile Include="Mock\CartViewModelFactoryMock.cs" />
+    <Compile Include="Mock\FakeCartFactory.cs" />
+    <Compile Include="Mock\FakeShippingTrackingProvider.cs" />
+    <Compile Include="Mock\FakeFixCartService.cs" />
+    <Compile Include="Mock\FulfillmentRepositoryMock.cs" />
+    <Compile Include="Mock\RegionCodeProviderFactory.cs" />
+    <Compile Include="Mock\LocalizationProviderFactory.cs" />
+    <Compile Include="Mock\OvertureClientFactory.cs" />
+    <Compile Include="Mock\CountryServiceMock.cs" />
+    <Compile Include="Mock\ViewModelMapperFactory.cs" />
+    <Compile Include="Mock\ComposerJsonSerializerMock.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Providers\CartMergeProvider_MergeCartAsync.cs" />
+    <Compile Include="Providers\OverwriteCartMergeProvider_MergeCartAsync.cs" />
+    <Compile Include="Providers\SurfacedErrorLineItemValidationProvider_IsLineItemValid.cs" />
+    <Compile Include="Repositories\CartRepository_AddCouponAsync.cs" />
+    <Compile Include="Repositories\PaymentRepository_GetPaymentProviders.cs" />
+    <Compile Include="Repositories\WishListRepository_GetWishListAsync.cs" />
+    <Compile Include="Repositories\WishListRepository_RemoveLineItemAsync.cs" />
+    <Compile Include="Repositories\WishListRepository_AddLineItemAsync.cs" />
+    <Compile Include="Repositories\CartRepository_AddPaymentAsync.cs" />
+    <Compile Include="Repositories\CartRepository_CompleteCheckoutAsync.cs" />
+    <Compile Include="Repositories\CartRepository_RemoveCouponsAsync.cs" />
+    <Compile Include="Repositories\CartRepository_AddLineItemAsync.cs" />
+    <Compile Include="Repositories\CartRepository_GetCartsByCustomerIdAsync.cs" />
+    <Compile Include="Repositories\CartRepository_RemoveLineItemAsync.cs" />
+    <Compile Include="Repositories\CartRepository_RemoveLineItemsAsync.cs" />
+    <Compile Include="Repositories\CartRepository_RetrieveACartAsync.cs" />
+    <Compile Include="Repositories\CartRepository_UpdateLineItemAsync.cs" />
+    <Compile Include="CartConfiguration_ClassDef.cs" />
+    <Compile Include="Repositories\FulfillmentMethodRepository_Ctor.cs" />
+    <Compile Include="Repositories\FulfillmentMethodRepository_GetCalculatedFulfilmentMethods.cs" />
+    <Compile Include="Repositories\Order\OrderRepository_GetCustomerOrdersAsync.cs" />
+    <Compile Include="Repositories\Order\OrderRepository_GetOrderAsync.cs" />
+    <Compile Include="Repositories\Order\OrderRepository_GetShipmentNotesAsync.cs" />
+    <Compile Include="Repositories\PaymentRepository_GetCartPaymentsAsync.cs" />
+    <Compile Include="Repositories\PaymentRepository_GetPaymentMethodsAsync.cs" />
+    <Compile Include="Repositories\PaymentRepository_InitializePayment.cs" />
+    <Compile Include="Repositories\PaymentRepository_UpdatePaymentMethod.cs" />
+    <Compile Include="Repositories\PaymentRepository_VoidPaymentAsync.cs" />
+    <Compile Include="Repositories\PaymentRepository_RemovePaymentAsync.cs" />
+    <Compile Include="Repositories\VaultProfileRepository_AddProfile.cs" />
+    <Compile Include="Services\CartService_RemoveInvalidLineItemsAsync.cs" />
+    <Compile Include="Services\CartService_UpdateBillingAddressPostalCodeAsync.cs" />
+    <Compile Include="Services\CartService_UpdateShippingAddressPostalCodeAsync.cs" />
+    <Compile Include="Services\CartService_UpdateCartAsync.cs" />
+    <Compile Include="Services\CheckoutNavigationViewService_GetCheckoutNavigationViewModel.cs" />
+    <Compile Include="Services\CheckoutService_CompleteCheckoutAsync.cs" />
+    <Compile Include="Services\CheckoutService_UpdateCartAsync.cs" />
+    <Compile Include="Services\CouponViewService_AddCouponAsync.cs" />
+    <Compile Include="Services\CartService_RetrieveACartAsync.cs" />
+    <Compile Include="Services\CartService_AddLineItemAsync.cs" />
+    <Compile Include="Services\CartService_RemoveLineItemAsync.cs" />
+    <Compile Include="Services\CartService_UpdateLineItemAsync.cs" />
+    <Compile Include="Services\CouponViewService_RemoveCouponAsync.cs" />
+    <Compile Include="Services\FixCartService_FixCartAsync.cs" />
+    <Compile Include="Services\LineItemService_GetInvalidLineItems.cs" />
+    <Compile Include="Services\Order\OrderHistoryViewService_GetOrderDetailViewModelAsync.cs" />
+    <Compile Include="Services\Order\OrderHistoryViewService_GetOrderDetailViewModelForGuestAsync.cs" />
+    <Compile Include="Services\Order\OrderHistoryViewService_GetOrderHistoryViewModelAsync.cs" />
+    <Compile Include="Services\PaymentViewService_GetPaymentProviders.cs" />
+    <Compile Include="Services\PaymentViewService_GetPaymentMethodsAsync.cs" />
+    <Compile Include="Services\PaymentViewService_UpdatePaymentMethodAsync.cs" />
+    <Compile Include="Services\ShippingMethodViewService_SetCheapestShippingMethodAsync.cs" />
+    <Compile Include="Services\ShippingMethodViewService_GetShippingMethodsAsync.cs" />
+    <Compile Include="Services\ShippingMethodViewService_EstimateShippingAsync.cs" />
+    <Compile Include="Services\WishListViewService_GetWishListViewModelAsync.cs" />
+    <Compile Include="Utils\SharedWishListTokenizer_DecryptToken.cs" />
+    <Compile Include="Utils\SharedWishListTokenizer_GenerateToken.cs" />
+    <Compile Include="Utils\GuestOrderTokenizer_GenerateOrderToken.cs" />
+    <Compile Include="Utils\GuestOrderTokenizer_DecypherOrderToken.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Composer.Cart\Composer.Cart.csproj">
+      <Project>{08f6fcb8-6065-4d31-b7df-67fe67ee67e5}</Project>
+      <Name>Composer.Cart</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Composer\Composer.csproj">
+      <Project>{d00bd58b-93fe-4f3d-bbc8-6f7873ca6830}</Project>
+      <Name>Composer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Orckestra.ForTests\Orckestra.ForTests.csproj">
+      <Project>{b2be051e-82d7-4643-bb56-98f161833e30}</Project>
+      <Name>Orckestra.ForTests</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\..\packages\NUnit.3.12.0\build\NUnit.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NUnit.3.12.0\build\NUnit.props'))" />
+    <Error Condition="!Exists('..\..\..\packages\Microsoft.CodeCoverage.16.3.0\build\netstandard1.0\Microsoft.CodeCoverage.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeCoverage.16.3.0\build\netstandard1.0\Microsoft.CodeCoverage.props'))" />
+    <Error Condition="!Exists('..\..\..\packages\Microsoft.CodeCoverage.16.3.0\build\netstandard1.0\Microsoft.CodeCoverage.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeCoverage.16.3.0\build\netstandard1.0\Microsoft.CodeCoverage.targets'))" />
+    <Error Condition="!Exists('..\..\..\packages\Microsoft.NET.Test.Sdk.16.3.0\build\net40\Microsoft.NET.Test.Sdk.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.NET.Test.Sdk.16.3.0\build\net40\Microsoft.NET.Test.Sdk.props'))" />
+    <Error Condition="!Exists('..\..\..\packages\Microsoft.NET.Test.Sdk.16.3.0\build\net40\Microsoft.NET.Test.Sdk.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.NET.Test.Sdk.16.3.0\build\net40\Microsoft.NET.Test.Sdk.targets'))" />
+    <Error Condition="!Exists('..\..\..\packages\NUnit3TestAdapter.3.15.1\build\net35\NUnit3TestAdapter.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NUnit3TestAdapter.3.15.1\build\net35\NUnit3TestAdapter.props'))" />
+  </Target>
+  <Import Project="..\..\..\packages\Microsoft.CodeCoverage.16.3.0\build\netstandard1.0\Microsoft.CodeCoverage.targets" Condition="Exists('..\..\..\packages\Microsoft.CodeCoverage.16.3.0\build\netstandard1.0\Microsoft.CodeCoverage.targets')" />
+  <Import Project="..\..\..\packages\Microsoft.NET.Test.Sdk.16.3.0\build\net40\Microsoft.NET.Test.Sdk.targets" Condition="Exists('..\..\..\packages\Microsoft.NET.Test.Sdk.16.3.0\build\net40\Microsoft.NET.Test.Sdk.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

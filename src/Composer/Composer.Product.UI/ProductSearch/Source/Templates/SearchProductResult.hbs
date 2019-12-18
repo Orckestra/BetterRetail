@@ -1,0 +1,63 @@
+﻿<div class="product-tile  island-xl" data-has-variants="{{HasVariants}}" data-product-id="{{ProductId}}" data-product-variant-id="{{VariantId}}" data-qa="search-result" data-primary-category="{{PrimaryParentCategoryId}}" data-recurring-order-program-name="{{RecurringOrderProgramName}}">
+
+    <a class="product-tile-media" href="{{Url}}" data-productId="{{ProductId}}" data-index='{{@index}}' data-oc-click='searchProductClick'>
+        <img class="img-fluid" src="{{ImageUrl}}" alt="{{FullDisplayName}}" onerror="this.onerror=null; this.src='{{FallbackImageUrl}}'" />
+    </a>
+
+    <div class="product-tile-text">
+        <div class="row">
+            <div class="col-xs-9 col-sm-10">
+                {{#if Brand}}
+                    <strong class="text-uppercase  product-tile-brand" data-qa="search-product-brand" title="{{Brand}}">{{Brand}}</strong>
+                    <br/>
+                {{/if}}
+                <a data-qa="search-product-title" href="{{Url}}" title="{{FullDisplayName}}" data-productId="{{ProductId}}" data-index='{{@index}}' data-oc-click='searchProductClick'>{{DisplayName}}</a>
+            </div>
+            {{#if IsEligibleForRecurring}}
+                <div class="col-xs-3 col-sm-2 product-tile-recurring">
+                    <img src="/UI.Package/Images/recurring.svg" class="recurring-icon" alt="{{localize 'General' 'L_RecurringProduct'}}" title="{{localize 'General' 'L_RecurringProduct'}}" />
+                </div>
+            {{/if}}
+        </div>
+    </div>
+
+    {{#with Pricing}}
+
+        {{#if HasPriceRange}}
+            {{#if IsOnSale}}
+                <div class="product-tile-special-price">
+                    <small class="text-danger">{{localize 'List-Search' 'L_PriceFrom'}}</small>
+                </div>
+                <div class="product-tile-price">
+                    <span class="h4  text-danger">{{DisplaySpecialPrice}}</span>
+                </div>
+            {{else}}
+                <div class="product-tile-special-price">
+                    <small>{{localize 'List-Search' 'L_PriceFrom'}}</small>
+                </div>
+                <div class="product-tile-price">
+                    <span class="h4" data-qa="search-product-price">{{DisplayPrice}}</span>
+                </div>
+            {{/if}}
+        {{else}}
+            {{#if IsOnSale}}
+                <div class="product-tile-special-price">
+                    <del>{{DisplayPrice}}</del>
+                </div>
+                <div class="product-tile-price">
+                    <span class="h4  text-danger">{{DisplaySpecialPrice}}</span>
+                </div>
+            {{else}}
+                <div class="product-tile-special-price">
+                    <!--only used for proper spacing-->
+                </div>
+                <div class="product-tile-price">
+                    <span class="h4" data-qa="search-product-price">{{DisplayPrice}}</span>
+                </div>
+            {{/if}}
+        {{/if}}
+
+    {{/with}}
+
+    {{> AddToCartSearch}}
+</div>

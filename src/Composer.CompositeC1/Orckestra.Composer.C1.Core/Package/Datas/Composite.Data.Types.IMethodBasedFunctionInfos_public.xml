@@ -1,0 +1,4 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Data>
+  <Add Id="f204d929-7193-4621-a11a-f5109a3444a4" Type="Orckestra.Composer.CompositeC1.Widgets.WidgetFunctions" MethodName="GetWebsiteThemeOptions" Namespace="Orckestra.Composer.CompositeC1.Widgets.WidgetFunctions" UserMethodName="GetWebsiteThemeOptions" />
+</Data>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<setup xmlns="urn:Composte.C1.Setup" desc="&lt;p&gt;Choose your default setup - &lt;a href='http://www.orckestra.com/' target='_blank'&gt;read about them online&lt;/a&gt;. &lt;/p&gt;">
+  <radio label="Reference Application Website" key="100"
+       desc="'Reference Application Starter Website"
+       xmlns="urn:Composte.C1.Setup">
+    <packages>
+      <package id="01292282-3CB3-4d87-851F-DA49EF547F8A" url="http://package.composite.net/Setup/Downloads/3.x/BaseConfiguration.zip"/>
+      <package id="9B6B0EA9-1F21-4692-AFF8-BC9DD33CABEC" url="http://package.composite.net/Setup/Downloads/3.x/UserGroupsBaseConfiguration.zip"/>
+      <package id="ad6dd554-a3af-49e2-bf63-b0cfc79f5e3c" url="http://package.composite.net/Download.ashx?package=Composite.AspNet.MvcFunctions&amp;c1version=$(version)"/>
+      <package id="bba44c2a-9cc7-44ef-bc21-065c30a998af" url="http://package.composite.net/Download.ashx?package=Composite.Tools.PackageCreator&amp;c1version=$(version)"/>
+      <package id="443db04a-af4f-4eda-abdf-41bd052ded91" url="http://package.composite.net/Download.ashx?package=Orckestra.Search.WebsiteSearch&amp;c1version=$(version)"/>
+      <package id="76d60b61-8bd7-42ec-aaab-67efe4584c5f" url="http://package.composite.net/Download.ashx?package=Orckestra.Search.LuceneNET&amp;c1version=$(version)"/>
+      <package id="3fffb96f-2447-4056-a5a0-db1cef901d23" url="http://package.composite.net/Download.ashx?package=Orckestra.Search.KeywordRedirect&amp;c1version=$(version)"/>
+      <package id="0e4a0646-f69a-4911-8d11-bfdbcca78092" url="http://package.composite.net/Download.ashx?package=Orckestra.Versioning.VersionPublication&amp;c1version=$(version)"/>
+      <package id="d665fbe2-3ca1-4c3a-b25b-79e4760e0c16" url="http://package.composite.net/Download.ashx?package=Orckestra.Web.Css.Sass&amp;c1version=$(version)"/>
+      <package id="4c9310fe-f87b-4272-ba66-9fc4479e3697" url="http://package.composite.net/Download.ashx?package=Orckestra.Widgets.FilteredSelector&amp;c1version=$(version)"/>
+	  
+      <!-- Exp Man -->
+      <package id="43e544ae-bc8b-484f-bff3-176d4fcd35f1" url="http://experience-management-packages.c1preprod02.composite.net/Setup/branches/$(branch)/Packages/Orckestra.ExperienceManagement.Branding.zip"/>
+      <package id="93b0e3b2-0cbf-482b-8231-a38d81043683" url="http://experience-management-packages.c1preprod02.composite.net/Setup/branches/$(branch)/Packages/Orckestra.ExperienceManagement.zip"/>
+      <package id="958fa270-b40f-492f-ac1f-b94be26aed7c" url="http://experience-management-packages.c1preprod02.composite.net/Setup/branches/$(branch)/Packages/Orckestra.ExperienceManagement.CategoryMerchandising.zip"/>
+      <package id="3b0d07ef-3075-4e2e-a970-68e342d2b72c" url="http://experience-management-packages.c1preprod02.composite.net/Setup/branches/$(branch)/Packages/Orckestra.ExperienceManagement.FeaturedProducts.zip"/>
+      <package id="7020b656-e993-4dfa-bfd8-e6dc000e3ca6" url="http://experience-management-packages.c1preprod02.composite.net/Setup/branches/$(branch)/Packages/Orckestra.ExperienceManagement.QueryBuilder.zip"/>
+
+      <!-- Reff App -->
+      <package id="559d7bc6-d637-4d73-9a37-7704e7535742" url="../../output/artifacts/Composer.C1.Core.zip"/>
+      <package id="1220b656-e993-4dfa-bfd8-e6dc000e3ca3" url="../../output/artifacts/Orckestra.Composer.C1CMS.Queries.zip"/>
+      <package id="92141e5a-bdfe-459f-a4b6-f2652a1fe4c4" url="../../output/artifacts/Orckestra.Composer.SEO.Organization.zip"/>
+      <package id="1820b656-e993-4dfa-bfd8-e6dc000e3ca3" url="../../output/artifacts/Orckestra.Composer.Articles.zip"/>
+      <package id="1320b656-e993-4dfa-bfd8-e6dc000e3c03" url="../../output/artifacts/Orckestra.Composer.ContentSearch.zip"/>
+      <package id="606c15eb-5e0c-4043-8e9e-ca528c86fa26" url="../../output/artifacts/Composer.C1.Content.EN-CA.zip"/>
+      <package id="93141e5a-bdfe-459f-a4b6-f2652a1fe4c4" url="../../output/artifacts/Orckestra.Composer.SEO.Organization.Content.zip"/>
+      <package id="1420b656-e993-4dfa-bfd8-e6dc000e3c00" url="../../output/artifacts/Orckestra.Composer.ContentSearch.Content.zip"/>
+      <package id="1110b656-e993-4dfa-bfd8-e6dc000e3ca0" url="../../output/artifacts/Orckestra.Composer.Languages.zip"/>
+      <package id="e02e04a9-d9c6-4f30-8584-85eb9692d225" url="../../output/artifacts/Orckestra.Composer.Sitemap.zip"/>
+	     
+    </packages>
+  </radio>
+</setup>

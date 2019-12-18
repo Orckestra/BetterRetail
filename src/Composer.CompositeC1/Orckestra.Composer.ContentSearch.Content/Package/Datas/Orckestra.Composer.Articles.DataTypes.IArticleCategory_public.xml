@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Data>
+  <Add Id="210924ad-5f4c-4c6a-8e6d-89632effbf53" Title="Orckestra" UrlTitle="orckestra" PublicationStatus="published" SourceCultureName="en-CA" />
+  <Add Id="2d37af10-6e2e-4dbd-b144-42820edc55b3" Title="Lorem" UrlTitle="Lorem" PublicationStatus="published" SourceCultureName="en-CA" />
+  <Add Id="22485192-8558-4b28-b5e6-8393d934e8e3" Title="News" UrlTitle="News" PublicationStatus="published" SourceCultureName="en-CA" />
+  <Add Id="597ea4ed-fc76-4572-b583-a8b42c437716" Title="Articles" UrlTitle="Articles" PublicationStatus="published" SourceCultureName="en-CA" />
+  <Add Id="fe42ee11-755e-497f-8e7b-6ea920f8bd16" Title="Stories" UrlTitle="Stories" PublicationStatus="published" SourceCultureName="en-CA" />
+  <Add Id="ti42ee11-336e-497f-8r7b-2ea920f9hj16" Title="Important" UrlTitle="Important" PublicationStatus="published" SourceCultureName="en-CA" />
+</Data>

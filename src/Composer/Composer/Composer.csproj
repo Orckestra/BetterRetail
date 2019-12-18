@@ -1,0 +1,512 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D00BD58B-93FE-4F3D-BBC8-6F7873CA6830}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Orckestra.Composer</RootNamespace>
+    <AssemblyName>Orckestra.Composer</AssemblyName>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;LIBLOG_PUBLIC</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE;LIBLOG_PUBLIC</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Autofac">
+      <HintPath>..\..\..\packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="Autofac.Integration.Mvc, Version=3.3.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Autofac.Mvc5.3.3.4\lib\net45\Autofac.Integration.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Autofac.Integration.WebApi, Version=3.4.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\Autofac.WebApi2.3.4.0\lib\net45\Autofac.Integration.WebApi.dll</HintPath>
+    </Reference>
+    <Reference Include="Fasterflect">
+      <HintPath>..\..\..\packages\fasterflect.2.1.3\lib\net40\Fasterflect.dll</HintPath>
+    </Reference>
+    <Reference Include="Handlebars, Version=1.0.5615.36670, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Handlebars.Net.1.3.3\lib\Handlebars.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.SemanticLogging">
+      <HintPath>..\..\..\packages\EnterpriseLibrary.SemanticLogging.2.0.1406.1\lib\net45\Microsoft.Practices.EnterpriseLibrary.SemanticLogging.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\EnterpriseLibrary.TransientFaultHandling.6.0.1304.0\lib\portable-net45+win+wp8\Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling.Data, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\EnterpriseLibrary.TransientFaultHandling.Data.6.0.1304.1\lib\NET45\Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling.Data.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\..\..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Orckestra.AsyncExtensions, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\OrckestraCommerce.AsyncExtensions.4.0.0\lib\net461\Orckestra.AsyncExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Orckestra.Caching, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\OrckestraCommerce.Common.4.0.0\lib\net461\Orckestra.Caching.dll</HintPath>
+    </Reference>
+    <Reference Include="Orckestra.ExperienceManagement.Configuration, Version=4.8.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Orckestra.ExperienceManagement.Configuration.4.8.1\lib\net471\Orckestra.ExperienceManagement.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Orckestra.Logging, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\OrckestraCommerce.Common.4.0.0\lib\net461\Orckestra.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Orckestra.Overture.Interfaces, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\OrckestraCommerce.Interfaces.4.0.0\lib\portable-net4+sl5+netcore45+wp8\Orckestra.Overture.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="Orckestra.Overture.RestClient, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\OrckestraCommerce.Client.4.0.0\lib\net452\Orckestra.Overture.RestClient.dll</HintPath>
+    </Reference>
+    <Reference Include="Orckestra.Overture.ServiceModel, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\OrckestraCommerce.ServiceModel.4.0.0\lib\net461\Orckestra.Overture.ServiceModel.dll</HintPath>
+    </Reference>
+    <Reference Include="Orckestra.Overture.ServiceModel.Requests, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\OrckestraCommerce.ServiceModel.Requests.4.0.0\lib\net461\Orckestra.Overture.ServiceModel.Requests.dll</HintPath>
+    </Reference>
+    <Reference Include="OrckestraCommerce.RecurringOrders.ServiceModel, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\OrckestraCommerce.RecurringOrders.ServiceModel.4.0.0\lib\portable-net4+sl5+netcore45+wp8\OrckestraCommerce.RecurringOrders.ServiceModel.dll</HintPath>
+    </Reference>
+    <Reference Include="OrckestraCommerce.RecurringOrders.ServiceModel.Requests, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\OrckestraCommerce.RecurringOrders.ServiceModel.Requests.4.0.0\lib\portable-net4+sl5+netcore45+wp8\OrckestraCommerce.RecurringOrders.ServiceModel.Requests.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Client, Version=4.0.0.0, Culture=neutral, PublicKeyToken=e06fbc6124f57c43, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\ServiceStack.Client.Signed.4.5.4\lib\net45\ServiceStack.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Interfaces, Version=4.0.0.0, Culture=neutral, PublicKeyToken=e06fbc6124f57c43, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\ServiceStack.Interfaces.4.5.4\lib\portable-wp80+sl5+net45+win8+wpa81+monotouch+monoandroid+xamarin.ios10\ServiceStack.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Text, Version=4.0.0.0, Culture=neutral, PublicKeyToken=e06fbc6124f57c43, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\ServiceStack.Text.Signed.4.5.4\lib\net45\ServiceStack.Text.dll</HintPath>
+    </Reference>
+    <Reference Include="StackExchange.Redis.StrongName, Version=1.0.316.0, Culture=neutral, PublicKeyToken=c219ff1ca8c2ce46, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\StackExchange.Redis.StrongName.1.0.488\lib\net45\StackExchange.Redis.StrongName.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Core, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Rx-Core.2.2.5\lib\net45\System.Reactive.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Interfaces, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Rx-Interfaces.2.2.5\lib\net45\System.Reactive.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Linq, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Rx-Linq.2.2.5\lib\net45\System.Reactive.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.3\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.AspNet.Mvc.5.2.7\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.AspNet.Razor.3.2.7\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\Solution Items\SharedAssemblyInfo.cs">
+      <Link>Properties\SharedAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="Api\LocalizationController.cs" />
+    <Compile Include="Api\RecurringOrderTemplateController.cs" />
+    <Compile Include="App_Packages\LibLog.4.2\LibLog.cs" />
+    <Compile Include="ComposerConfiguration.cs" />
+    <Compile Include="Configuration\CacheConfigurationCategoryNames.cs" />
+    <Compile Include="Configuration\DisplayConfiguration.cs" />
+    <Compile Include="Configuration\IRecurringOrdersSettings.cs" />
+    <Compile Include="Configuration\IGoogleSettings.cs" />
+    <Compile Include="Configuration\ImageConfiguration.cs" />
+    <Compile Include="Country\CountryRepository.cs" />
+    <Compile Include="Country\CountryService.cs" />
+    <Compile Include="Country\CountryViewModel.cs" />
+    <Compile Include="Country\ICountryRepository.cs" />
+    <Compile Include="Country\ICountryService.cs" />
+    <Compile Include="Country\RegionViewModel.cs" />
+    <Compile Include="Country\RetrieveCountryParam.cs" />
+    <Compile Include="Enums\MediaTypeEnum.cs" />
+    <Compile Include="Enums\AccountStatusEnum.cs" />
+    <Compile Include="Enums\InventoryStatusEnum.cs" />
+    <Compile Include="Country\RetrieveRegionDisplayNameParam.cs" />
+    <Compile Include="Enums\LookupType.cs" />
+    <Compile Include="Enums\FooterTypeEnum.cs" />
+    <Compile Include="Enums\MenuTypeEnum.cs" />
+    <Compile Include="ExceptionFilters\AggregatedComposerExceptionFilter.cs" />
+    <Compile Include="ExceptionFilters\BaseExceptionFilter.cs" />
+    <Compile Include="ExceptionFilters\ComposerExceptionFilter.cs" />
+    <Compile Include="ComposerOvertureClient.cs" />
+    <Compile Include="Extensions\LookupExtensions.cs" />
+    <Compile Include="Factory\IRecurringOrderProgramViewModelFactory.cs" />
+    <Compile Include="Factory\IRecurringOrderTemplateViewModelFactory.cs" />
+    <Compile Include="Factory\RecurringOrderProgramViewModelFactory.cs" />
+    <Compile Include="Factory\RecurringOrderTemplateViewModelFactory.cs" />
+    <Compile Include="HttpModules\AntiCookieTamperingModule.cs" />
+    <Compile Include="HttpModules\IAntiCookieTamperingExcluder.cs" />
+    <Compile Include="IPerformanceDataCollector.cs" />
+    <Compile Include="Kernel\ComposerDependencyResolver.cs" />
+    <Compile Include="OutputCacheOptions.cs" />
+    <Compile Include="OutputCache\NullCacheProvider.cs" />
+    <Compile Include="Parameters\BaseUrlParameter.cs" />
+    <Compile Include="Parameters\BuildSearchUrlParam.cs" />
+    <Compile Include="Parameters\CreateProductPriceViewModelParam.cs" />
+    <Compile Include="Parameters\CreateRecurringOrderTemplatesViewModelParam.cs" />
+    <Compile Include="Parameters\CreateRecurringOrderTemplateDetailsViewModelParam.cs" />
+    <Compile Include="Parameters\CreateTemplateGroupedShippingAddressParam.cs" />
+    <Compile Include="Parameters\FindInventoryItemStatusParam.cs" />
+    <Compile Include="Parameters\GetFooterParam.cs" />
+    <Compile Include="Parameters\GetProductDefinitionParam.cs" />
+    <Compile Include="Parameters\GetProductParam.cs" />
+    <Compile Include="Parameters\GetProductsPriceParam.cs" />
+    <Compile Include="Parameters\GetRecurringCartsUrlParam.cs" />
+    <Compile Include="Parameters\GetRecurringOrderTemplateDetailParam.cs" />
+    <Compile Include="Parameters\GetRecurringOrderTemplatesParam.cs" />
+    <Compile Include="Parameters\GetRecurringScheduleDetailsBaseUrlParam.cs" />
+    <Compile Include="Parameters\GetRecurringCartDetailsUrlParam.cs" />
+    <Compile Include="Parameters\GetRecurringScheduleDetailsUrlParam.cs" />
+    <Compile Include="Parameters\GetRecurringScheduleUrlParam.cs" />
+    <Compile Include="Parameters\GetStickyLinksParam.cs" />
+    <Compile Include="Parameters\GetHomeMainMenuParam.cs" />
+    <Compile Include="Parameters\GetInventoryItemsBySkuParam.cs" />
+    <Compile Include="Parameters\GetScopeCurrencyParam.cs" />
+    <Compile Include="Parameters\GetScopeParam.cs" />
+    <Compile Include="Parameters\MapToTemplateLineItemViewModelParam.cs" />
+    <Compile Include="Parameters\RemoveRecurringOrderTemplateLineItemParam.cs" />
+    <Compile Include="Parameters\RemoveRecurringOrderTemplateLineItemsParam.cs" />
+    <Compile Include="Parameters\UpdateRecurringOrderTemplateLineItemParam.cs" />
+    <Compile Include="Parameters\UpdateRecurringOrderTemplateLineItemQuantityParam.cs" />
+    <Compile Include="Providers\Dam\ProductImageInfo.cs" />
+    <Compile Include="Providers\IPageNotFoundUrlProvider.cs" />
+    <Compile Include="Providers\ICountryCodeProvider.cs" />
+    <Compile Include="Repositories\IProductRepository.cs" />
+    <Compile Include="Providers\IRecurringCartUrlProvider.cs" />
+    <Compile Include="Providers\IRecurringScheduleUrlProvider.cs" />
+    <Compile Include="Repositories\IProductMediaSettingsRepository.cs" />
+    <Compile Include="Repositories\ProductRepository.cs" />
+    <Compile Include="Repositories\IInventoryRepository.cs" />
+    <Compile Include="Repositories\InventoryRepository.cs" />
+    <Compile Include="Repositories\IRecurringOrdersRepository.cs" />
+    <Compile Include="Repositories\IScopeRepository.cs" />
+    <Compile Include="Repositories\ProductMediaSettingsRepository.cs" />
+    <Compile Include="Repositories\RecurringOrdersRepository.cs" />
+    <Compile Include="Repositories\ScopeRepository.cs" />
+    <Compile Include="Parameters\GetIsPaymentMethodUsedInRecurringOrdersParam.cs" />
+    <Compile Include="Request\GetRecurringOrderTemplateDetailsRequest.cs" />
+    <Compile Include="Request\RemoveRecurringOrderTemplateLineItemRequest.cs" />
+    <Compile Include="Request\RemoveRecurringOrderTemplateLineItemsRequest.cs" />
+    <Compile Include="Request\UpdateRecurringOrderLineItemQuantityRequest.cs" />
+    <Compile Include="Request\UpdateRecurringOrderTemplateLineItemRequest.cs" />
+    <Compile Include="Services\ICategoryViewService.cs" />
+    <Compile Include="Services\IImageService.cs" />
+    <Compile Include="Services\ImageService.cs" />
+    <Compile Include="Services\IProductPriceViewService.cs" />
+    <Compile Include="Services\IRecurringOrderTemplatesViewService.cs" />
+    <Compile Include="Services\IScopeViewService.cs" />
+    <Compile Include="Services\IWebsiteContext.cs" />
+    <Compile Include="Services\ProductPriceViewService.cs" />
+    <Compile Include="Services\RecurringOrderTemplatesViewService.cs" />
+    <Compile Include="Services\ScopeViewService.cs" />
+    <Compile Include="Utils\Constants.cs" />
+    <Compile Include="Utils\Guard.cs" />
+    <Compile Include="Utils\LineItemHelper.cs" />
+    <Compile Include="Utils\MvcFilterRedirectUtil.cs" />
+    <Compile Include="Utils\ProductHelper.cs" />
+    <Compile Include="Utils\PropertyBagHelper.cs" />
+    <Compile Include="Utils\RecurringOrderTemplateHelper.cs" />
+    <Compile Include="ViewEngine\HandleBarsHelpers\FormatValueHelper.cs" />
+    <Compile Include="ViewEngine\HandleBarsHelpers\LookupHelper.cs" />
+    <Compile Include="ViewModels\CategoryViewModel.cs" />
+    <Compile Include="ViewModels\CurrencyViewModel.cs" />
+    <Compile Include="ViewModels\EnumLocalizationAttribute.cs" />
+    <Compile Include="ViewModels\ErrorViewModel.cs" />
+    <Compile Include="Exceptions\ComposerException.cs" />
+    <Compile Include="Extensions\CountryExtensions.cs" />
+    <Compile Include="Extensions\HttpRequestMessageExtension.cs" />
+    <Compile Include="HttpModules\SecurityModule.cs" />
+    <Compile Include="HttpModules\RequestBranderModule.cs" />
+    <Compile Include="IgnoreCheckAttribute.cs" />
+    <Compile Include="Kernel\ComposerAssemblyWeightAttribute.cs" />
+    <Compile Include="Kernel\ComposerEnvironment.cs" />
+    <Compile Include="Kernel\IComposerEnvironment.cs" />
+    <Compile Include="AspNetConfigurationManager.cs" />
+    <Compile Include="AssemblyExtensions.cs" />
+    <Compile Include="AssemblyHelper.cs" />
+    <Compile Include="IAspNetConfigurationManager.cs" />
+    <Compile Include="IComposerHost.cs" />
+    <Compile Include="IComposerPlugin.cs" />
+    <Compile Include="ComposerHost.cs" />
+    <Compile Include="Kernel\AutofacDependencyContainer.cs" />
+    <Compile Include="Kernel\AutofacDependancyResolver.cs" />
+    <Compile Include="MvcFilters\ValidateLanguageAttribute.cs" />
+    <Compile Include="Parameters\CartMergeParam.cs" />
+    <Compile Include="Parameters\GetCheckoutStepUrlParam.cs" />
+    <Compile Include="Parameters\GetFulfillmentLocationParam.cs" />
+    <Compile Include="Parameters\GetFulfillmentLocationsByScopeParam.cs" />
+    <Compile Include="Parameters\GetLookupDisplayNamesParam.cs" />
+    <Compile Include="Parameters\GetOrderUrlParameter.cs" />
+    <Compile Include="PreApplicationStartCode.cs" />
+    <Compile Include="Providers\Checkout\CheckoutStepPageInfo.cs" />
+    <Compile Include="Providers\Dam\AllProductImages.cs" />
+    <Compile Include="Providers\Dam\VariantKey.cs" />
+    <Compile Include="Providers\ExtensionTypeProxyFactory.cs" />
+    <Compile Include="Providers\ICartMergeProvider.cs" />
+    <Compile Include="Providers\ICartUrlProvider.cs" />
+    <Compile Include="Providers\IInventoryLocationProvider.cs" />
+    <Compile Include="Providers\IOrderUrlProvider.cs" />
+    <Compile Include="Providers\ProviderRegistry.cs" />
+    <Compile Include="Providers\ProviderFactory.cs" />
+    <Compile Include="Repositories\AddressRepository.cs" />
+    <Compile Include="Repositories\FulfillmentLocationsRepository.cs" />
+    <Compile Include="Repositories\IAddressRepository.cs" />
+    <Compile Include="Repositories\IFulfillmentLocationsRepository.cs" />
+    <Compile Include="Repositories\IProductSettingsRepository.cs" />
+    <Compile Include="Repositories\ProductSettingsRepository.cs" />
+    <Compile Include="Services\IImageViewService.cs" />
+    <Compile Include="Services\IMyAccountViewService.cs" />
+    <Compile Include="Services\IProductSettingsViewService.cs" />
+    <Compile Include="Services\ProductSettingsViewService.cs" />
+    <Compile Include="TypeExtensions\StringExtensions.cs" />
+    <Compile Include="Utils\EncryptionUtility.cs" />
+    <Compile Include="ViewEngine\HandleBarsBlockHelpers\EscapeHelper.cs" />
+    <Compile Include="ViewModels\ExtensionOf.cs" />
+    <Compile Include="ViewModels\Home\FooterEntryViewModel.cs" />
+    <Compile Include="ViewModels\Home\HomeMainMenuEntryViewModel.cs" />
+    <Compile Include="ViewModels\Home\FooterViewModel.cs" />
+    <Compile Include="ViewModels\Home\HomeMainMenuViewModel.cs" />
+    <Compile Include="ViewModels\Home\HomeNavigationImageViewModel.cs" />
+    <Compile Include="ViewModels\Home\HomeStickyLinksViewModel.cs" />
+    <Compile Include="ViewModels\Home\HomeStickyLinkViewModel.cs" />
+    <Compile Include="ViewModels\Home\IFooterEntryViewModel.cs" />
+    <Compile Include="ViewModels\Home\IMenuEntryViewModel.cs" />
+    <Compile Include="ViewModels\IBaseViewModel.cs" />
+    <Compile Include="ViewModels\IExtensionOf.cs" />
+    <Compile Include="ViewModels\ImageViewModel.cs" />
+    <Compile Include="ViewModels\KeyVariantAttributes.cs" />
+    <Compile Include="ViewModels\MenuNavigation\OptionalLinkEntryViewModel.cs" />
+    <Compile Include="ViewModels\MenuNavigation\OptionalLinkViewModel.cs" />
+    <Compile Include="ViewModels\MyAccount\MenuViewModel.cs" />
+    <Compile Include="ViewModels\MyAccount\MenuItemViewModel.cs" />
+    <Compile Include="ViewModels\ProductPriceViewModel.cs" />
+    <Compile Include="ViewModels\ProductSettingsViewModel.cs" />
+    <Compile Include="Services\Breadcrumb\GetBreadcrumbParam.cs" />
+    <Compile Include="Parameters\GetCategoriesPathParam.cs" />
+    <Compile Include="Parameters\GetLookupDisplayNameParam.cs" />
+    <Compile Include="Parameters\GetProductUrlParam.cs" />
+    <Compile Include="Parameters\SearchCriteria.cs" />
+    <Compile Include="Providers\BuildCategoryBrowsingUrlParam.cs" />
+    <Compile Include="Providers\ExtendICacheProviderAsync.cs" />
+    <Compile Include="Parameters\SearchFilter.cs" />
+    <Compile Include="Providers\Dam\ConventionBasedDamProviderConfiguration.cs" />
+    <Compile Include="Providers\Dam\GetAllProductImagesParam.cs" />
+    <Compile Include="Providers\Dam\ProductMainImage.cs" />
+    <Compile Include="Providers\Dam\ProductImageRequest.cs" />
+    <Compile Include="Providers\IComposerJsonSerializer.cs" />
+    <Compile Include="Providers\IMyAccountUrlProvider.cs" />
+    <Compile Include="Providers\ICategoryBrowsingProvider.cs" />
+    <Compile Include="Providers\IProductUrlProvider.cs" />
+    <Compile Include="Providers\IRegionCodeProvider.cs" />
+    <Compile Include="Providers\ISearchUrlProvider.cs" />
+    <Compile Include="Providers\Localization\ILocalizationRepository.cs" />
+    <Compile Include="Providers\Localization\LocalizationCategory.cs" />
+    <Compile Include="Providers\ComposerJsonSerializer.cs" />
+    <Compile Include="Providers\Localization\LocalizationHelper.cs" />
+    <Compile Include="Providers\Localization\LocalizationTree.cs" />
+    <Compile Include="Providers\Localization\ResxLocalizationRepository.cs" />
+    <Compile Include="Providers\Membership\OvertureMembershipConfiguration.cs" />
+    <Compile Include="Providers\Membership\OvertureMembershipProvider.cs" />
+    <Compile Include="Providers\RegionCode\RegionCodeProvider.cs" />
+    <Compile Include="Providers\RegionCode\RegionPostalCode.cs" />
+    <Compile Include="Repositories\CategoryRepository.cs" />
+    <Compile Include="Repositories\CustomerLookupRepository.cs" />
+    <Compile Include="Parameters\GetCategoriesParam.cs" />
+    <Compile Include="Repositories\ICategoryRepository.cs" />
+    <Compile Include="Repositories\OrderLookupRepository.cs" />
+    <Compile Include="Repositories\MarketingLookupRepository.cs" />
+    <Compile Include="Repositories\ProductLookupRepository.cs" />
+    <Compile Include="Repositories\LookupRepositoryFactory.cs" />
+    <Compile Include="Services\Cookie\ComposerCookieAccessor.cs" />
+    <Compile Include="Services\Cookie\ComposerCookieDto.cs" />
+    <Compile Include="Services\GetUrlParam.cs" />
+    <Compile Include="Providers\Dam\GetProductMainImagesParam.cs" />
+    <Compile Include="Plugin.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\ComposerContext.cs" />
+    <Compile Include="Services\Breadcrumb\IBreadcrumbViewService.cs" />
+    <Compile Include="Services\IComposerContext.cs" />
+    <Compile Include="Providers\Dam\ImageFileInfo.cs" />
+    <Compile Include="Services\ICookieAccessor.cs" />
+    <Compile Include="Providers\Dam\ConventionBasedDamProvider.cs" />
+    <Compile Include="Providers\IDamProvider.cs" />
+    <Compile Include="Providers\IScopeProvider.cs" />
+    <Compile Include="Services\IHomeViewService.cs" />
+    <Compile Include="Services\ILanguageSwitchService.cs" />
+    <Compile Include="Repositories\ILookupRepository.cs" />
+    <Compile Include="Repositories\ILookupRepositoryFactory.cs" />
+    <Compile Include="Services\Lookup\ILookupService.cs" />
+    <Compile Include="Services\Lookup\LookupService.cs" />
+    <Compile Include="Services\SettingsFromConfigFileService.cs" />
+    <Compile Include="Services\ISettingsService.cs" />
+    <Compile Include="Services\ICultureService.cs" />
+    <Compile Include="Providers\Localization\GetLocalizedParam.cs" />
+    <Compile Include="Providers\ILocalizationProvider.cs" />
+    <Compile Include="Providers\Localization\ResourceLocalizationProvider.cs" />
+    <Compile Include="Providers\Localization\LocalizationExtensions.cs" />
+    <Compile Include="Providers\RegionCode\CountryCodes.cs" />
+    <Compile Include="TypeExtensions\MvcUtils.cs" />
+    <Compile Include="TypeExtensions\ObjectExtensions.cs" />
+    <Compile Include="TypeExtensions\TypeExtensions.cs" />
+    <Compile Include="TypeExtensions\XmlReaderExtensions.cs" />
+    <Compile Include="Utils\ArgumentNullMessageFormatter.cs" />
+    <Compile Include="Utils\GuidUtility.cs" />
+    <Compile Include="Utils\ExtendEntityBase.cs" />
+    <Compile Include="Utils\RequestUtils.cs" />
+    <Compile Include="Utils\UrlFormatter.cs" />
+    <Compile Include="Utils\CultureInfoEqualityComparer.cs" />
+    <Compile Include="Utils\Tree.cs" />
+    <Compile Include="Utils\TreeNode.cs" />
+    <Compile Include="ViewEngine\HandleBarsBlockHelpers\CompareBlockHelper.cs" />
+    <Compile Include="ViewEngine\HandleBarsHelpers\LocalizeFormatHelper.cs" />
+    <Compile Include="ViewEngine\HandleBarsHelpers\LocalizeHelper.cs" />
+    <Compile Include="ViewEngine\HandleBarsBlockHelpers\IfIsLocalizedBlockHelper.cs" />
+    <Compile Include="ViewEngine\HandleBarsBlockHelpers\IfExistsBlockHelper.cs" />
+    <Compile Include="ViewEngine\HandleBarsBlockHelpers\IfNotEqualsBlockHelper.cs" />
+    <Compile Include="ViewEngine\HandleBarsBlockHelpers\IfEqualsBlockHelper.cs" />
+    <Compile Include="ViewEngine\HandleBarsBlockHelpers\IfLteBlockHelper.cs" />
+    <Compile Include="ViewEngine\HandleBarsBlockHelpers\IfGteBlockHelper.cs" />
+    <Compile Include="ViewEngine\HandleBarsBlockHelpers\IfLtBlockHelper.cs" />
+    <Compile Include="ViewEngine\HandleBarsBlockHelpers\IfGtBlockHelper.cs" />
+    <Compile Include="ViewEngine\IHandlebarsBlockHelper.cs" />
+    <Compile Include="ViewEngine\IHandlebarsHelper.cs" />
+    <Compile Include="ViewEngine\HandlebarsView.cs" />
+    <Compile Include="ViewEngine\HandlebarsViewEngine.cs" />
+    <Compile Include="ViewModels\BagPropertyMetadata.cs" />
+    <Compile Include="ViewModels\BaseViewModel.cs" />
+    <Compile Include="ViewModels\Breadcrumb\BreadcrumbItemViewModel.cs" />
+    <Compile Include="ViewModels\Breadcrumb\BreadcrumbViewModel.cs" />
+    <Compile Include="ViewModels\FormattingAttribute.cs" />
+    <Compile Include="ViewModels\FormattingAttributeValues.cs" />
+    <Compile Include="ViewModels\Home\HomeLogoViewModel.cs" />
+    <Compile Include="ViewModels\InstancePropertyMetadata.cs" />
+    <Compile Include="ViewModels\IViewModelPropertyFormatter.cs" />
+    <Compile Include="ViewModels\InvalidMetadataException.cs" />
+    <Compile Include="ViewModels\IPropertyMetadata.cs" />
+    <Compile Include="ViewModels\IViewModelMapper.cs" />
+    <Compile Include="ViewModels\IViewModelMetadataRegistry.cs" />
+    <Compile Include="ViewModels\LanguageSwitch\LanguageSwitchViewModel.cs" />
+    <Compile Include="ViewModels\LanguageSwitch\LanguageSwitchEntryViewModel.cs" />
+    <Compile Include="ViewModels\LookupAttribute.cs" />
+    <Compile Include="ViewModels\MapToAttribute.cs" />
+    <Compile Include="ViewModels\PageHeaderViewModel.cs" />
+    <Compile Include="ViewModels\ProductsPricesViewModel.cs" />
+    <Compile Include="ViewModels\PropertyMetadataBase.cs" />
+    <Compile Include="ViewModels\RecurringOrderProgramFrequencyViewModel.cs" />
+    <Compile Include="ViewModels\RecurringOrderProgramViewModel.cs" />
+    <Compile Include="ViewModels\RecurringOrderShippingMethodViewModel.cs" />
+    <Compile Include="ViewModels\RecurringOrdersTemplatesShippingMethodsViewModel.cs" />
+    <Compile Include="ViewModels\RecurringOrderTemplateAddressViewModel.cs" />
+    <Compile Include="ViewModels\RecurringOrderTemplateLineItemViewModel.cs" />
+    <Compile Include="ViewModels\RecurringOrderTemplatesViewModel.cs" />
+    <Compile Include="ViewModels\RecurringOrderTemplateViewModel.cs" />
+    <Compile Include="ViewModels\RecurringProductSummaryViewModel.cs" />
+    <Compile Include="ViewModels\ResxViewModelPropertyFormatter.cs" />
+    <Compile Include="ViewModels\VariantPriceViewModel.cs" />
+    <Compile Include="ViewModels\ViewModelMetadataRegistry.cs" />
+    <Compile Include="ViewModels\MetadataIgnoreAttribute.cs" />
+    <Compile Include="ViewModels\ViewModelMapper.cs" />
+    <Compile Include="ViewModels\ViewModelSerialization.cs" />
+    <Compile Include="WebAPIFilters\JQueryOnlyFilter.cs" />
+    <Compile Include="WebAPIFilters\ValidateLanguageAttribute.cs" />
+    <Compile Include="WebAPIFilters\ValidateModelStateAttribute.cs" />
+    <Compile Include="MvcFilters\ValidateReturnUrlAttribute.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Properties\PublishProfiles\Package.pubxml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

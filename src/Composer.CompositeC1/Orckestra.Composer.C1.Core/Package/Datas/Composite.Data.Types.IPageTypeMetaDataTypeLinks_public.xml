@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Data>
+  <Add Id="913f1be9-cf14-4def-af49-e67348ff16c8" PageTypeId="478dba78-4a1a-42c3-bb3e-7edc4da5b855" DataTypeId="991d5a0b-053e-4d43-91a1-5a0b4d96a85d" Name="Recurring Orders Settings" />
+  <Add Id="36ad9231-a4a7-47bf-8743-f81ca646e08b" PageTypeId="478dba78-4a1a-42c3-bb3e-7edc4da5b855" DataTypeId="164704b8-2ff5-40e4-a332-c1875b358eb1" Name="Site Configuration" />
+  <Add Id="732bd8b2-60ce-464d-85b2-e83dd0e0156f" PageTypeId="478dba78-4a1a-42c3-bb3e-7edc4da5b855" DataTypeId="591d5a4b-053e-4d43-91a1-5a0b4d96a85d" Name="Google Settings" />
+  <Add Id="9252bf3b-cb51-4718-9c48-6bfd91d55c3b" PageTypeId="478dba78-4a1a-42c3-bb3e-7edc4da5b855" DataTypeId="991d5a4b-053e-4d43-91a1-5a0b4d96a84d" Name="WebsiteStyleTheme" />
+  <Add Id="6d1c9037-a7ea-4fb1-a526-edd50cd29a3a" PageTypeId="8132f659-418b-4c39-b450-9c8c53a86bd4" DataTypeId="864704b8-2ff5-40e4-a332-c1875b358eb8" Name="ComposerCategoryLandingPage" />
+  <Add Id="969ab578-7b3c-43d3-925d-cf7a75ef9e63" PageTypeId="ab50b336-ee78-4c53-9fb6-022407c0d3ef" DataTypeId="864704b8-2ff5-40e4-a332-c1875b358eb8" Name="ComposerCategoryPage" />
+  <Add Id="8aa78794-a751-4559-8307-6fd27e144f6a" PageTypeId="f64fe76f-bb5a-4b6d-9499-e81762f25db6" DataTypeId="3ea8c217-614f-4397-831e-7d6b314ff558" Name="ProductPreviewMode" />
+</Data>

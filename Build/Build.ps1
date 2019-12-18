@@ -1,236 +1,253 @@
-﻿<# 
+##########################################################################
+# This is the Cake bootstrapper script for PowerShell.
+# This file was downloaded from https://github.com/cake-build/resources
+# Feel free to change this file to fit your needs.
+##########################################################################
+
+<#
+
 .SYNOPSIS
-Main script to execute build and test related tasks. This script is used on both development machines and build machines.
+This is a Powershell script to bootstrap a Cake build.
 
-.DESCRIPTION 
-This script is only a thin wrapper around our psake script (Build.psake.ps1). Since the current 
-script has parameters with 'ValidateSet', it is easier to use than the hashtable that has to
-be provided to Invoke-psake. It also avoids the need to import the psake module yourself.
+.DESCRIPTION
+This Powershell script will download NuGet if missing, restore NuGet tools (including Cake)
+and execute your Cake build script with the parameters you provide.
 
-Note that detailed logs of the operation being executed are available in '..\Logs'.
+.PARAMETER Script
+The build script to execute.
+.PARAMETER Target
+The build script target to run.
+.PARAMETER Configuration
+The build configuration to use.
+.PARAMETER Verbosity
+Specifies the amount of information to be displayed.
+.PARAMETER ShowDescription
+Shows description about tasks.
+.PARAMETER DryRun
+Performs a dry run.
+.PARAMETER Experimental
+Uses the nightly builds of the Roslyn script engine.
+.PARAMETER Mono
+Uses the Mono Compiler rather than the Roslyn script engine.
+.PARAMETER SkipToolPackageRestore
+Skips restoring of packages.
+.PARAMETER ScriptArgs
+Remaining arguments are added here.
 
-To print more details about progress, you can use the -Verbose common parameter.
+.LINK
+https://cakebuild.net
 
-To get up and running quickly on psake, refer to the following: https://github.com/psake/psake/wiki
-
-.EXAMPLE
-
-.\Build.ps1 -Docs
-
-List available tasks defined in Build.psake.ps1:
-
-.EXAMPLE
-
-.\Build.ps1 All
-
-This is the equivalent of Install-DevMachine.ps1.
-
-.EXAMPLE
-
-.\Build.ps1 -TaskList Clean,Compile -Configuration Release -BuildType Rolling
-
-Cleans and compiles everything in the 'Release' configuration as it is done in the 'Rolling' build.
 #>
 
-[cmdletbinding(DefaultParameterSetName="execute")]
-param(
-    # There are three types of build (dev, rolling and release). Depending on the BuildType provided,
-    # some tasks may be skipped. For example, when running a 'rolling' build, the integration tests 
-    # will be skipped since they are not executed in an rolling build. 
-    [Parameter(Position=1, ParameterSetName='execute')]
-    [ValidateSet('Dev', 'Rolling', 'Release')]
-    [string]$BuildType,
-
-    # The configuration to use when compiling/deploying/testing. Defaults to 'Debug'.
-    [Parameter(Position=2,ParameterSetName='execute')]
-    [ValidateSet('Debug', 'Release')]
+[CmdletBinding()]
+Param(
+    [string]$Script = "build.cake",
+    [string]$Target,
     [string]$Configuration,
+    [ValidateSet("Quiet", "Minimal", "Normal", "Verbose", "Diagnostic")]
+    [string]$Verbosity,
+    [switch]$ShowDescription,
+    [Alias("WhatIf", "Noop")]
+    [switch]$DryRun,
+    [switch]$Experimental,
+    [switch]$Mono,
+    [switch]$SkipToolPackageRestore,
+    [switch]$Docs,
+    [Parameter(Position=0,Mandatory=$false,ValueFromRemainingArguments=$true)]
+    [string[]]$ScriptArgs
+)
 
-    # Can be used to change the verbosity used when compiling the solutions. Defaults to 'normal'.
-    [Parameter(Position=3,ParameterSetName='execute')]
-    [ValidateSet('quiet', 'minimal', 'normal', 'detailed', 'diagnostic')]
-    [string]$MsbuildVerbosity,
+$scriptpath = $MyInvocation.MyCommand.Path
+$scriptDir = Split-Path $scriptpath
 
-    # Since the script is used both on dev machine and on build machine, this parameter is used to specify
-    # where it is called from. You should not have to use this parameter on your machine.
-    [Parameter(Position=4, ParameterSetName='execute')]
-    [switch]$IsRunningOnBuildMachine,
 
-    # Deployment flavor to deploy.
-    [Parameter(Position=5, ParameterSetName='execute')]
-    [ValidateSet('Nature','ComposerSitecore','ComposerC1')]
-    [string]$DeploymentFlavor = 'ComposerSitecore',
-
-    # Can be used to pass non standard properties to the psake script. This is usually only needed 
-    # when builds are started by the VSTS agents that have to provide some credentials.
-    [Parameter(Position=6, ParameterSetName='execute')]
-    $ExtraProperties,
-
-    # Use this switch to list the available tasks that can be provided to 'TaskList'.
-    [Parameter(ParameterSetName='doc')]
-    [switch]$Docs
-    )
-dynamicparam {
-    $options =  . (Join-Path $PSScriptRoot Get-BuildTaskList.ps1)
-	
-    Get-ChildItem (Join-Path $PSScriptRoot "..\packages\") -Include "New-DynamicParam.psm1" -Recurse -Force | Import-Module -Force
-
-	$HelpMessage = 'Which tasks do you want to run? Start the script with -Docs to list the available tasks.'
-	New-DynamicParameterGroup {
-        New-DynamicParam -Name TaskList -Type $([String[]]) |
-			Add-ParameterSet -Mandatory -Name 'execute' -HelpMessage $HelpMessage |
-			Add-ParameterSet -Name 'doc' -HelpMessage $HelpMessage | 
-			Add-ValidateSet -ValidateSet $options |
-            Add-Alias -Alias 'T' 
-	}
-}
-process {
-    $TaskList = $PSBoundParameters.TaskList
-
-if ($Configuration.Length -eq 0)
+[Reflection.Assembly]::LoadWithPartialName("System.Security") | Out-Null
+function MD5HashFile([string] $filePath)
 {
-    $Configuration = 'Release'
-}
-
-if ($BuildType.Length -eq 0)
-{
-    $BuildType = 'Dev'
-}
-
-if ($MsbuildVerbosity.Length -eq 0)
-{
-    $MsbuildVerbosity = 'normal'
-}
-
-# Fail on first error.
-$ErrorActionPreference = 'Stop'
-
-if ($IsRunningOnBuildMachine)
-{
-    Write-Host 'TFS environment variables:'
-    dir env:* | Format-Table
-}
-
-$psakeScript = Join-Path $PSScriptRoot 'Build.psake.ps1'
-
-function Get-TaskSubTree([int]$Indent, $Task, $TasksHashTable)
-{
-    $prefix = ' ' * $Indent
-    write-host "$prefix$($Task.Name)"
-	$Task.Name
-    foreach ($subTask in $Task.'Depends On')
+    if ([string]::IsNullOrEmpty($filePath) -or !(Test-Path $filePath -PathType Leaf))
     {
-        Get-TaskSubTree -Indent ($Indent + 2) $TasksHashTable[$subTask] $TasksHashTable
+        return $null
+    }
+
+    [System.IO.Stream] $file = $null;
+    [System.Security.Cryptography.MD5] $md5 = $null;
+    try
+    {
+        $md5 = [System.Security.Cryptography.MD5]::Create()
+        $file = [System.IO.File]::OpenRead($filePath)
+        return [System.BitConverter]::ToString($md5.ComputeHash($file))
+    }
+    finally
+    {
+        if ($file -ne $null)
+        {
+            $file.Dispose()
+        }
     }
 }
 
-if ($Docs)
+function GetProxyEnabledWebClient
 {
-    $tasks = Invoke-psake $psakeScript -structuredDocs -nologo
-    $tasksHashTable = @{}
-    $tasks | ForEach {$tasksHashTable[$_.Name] = $_}
-	#http://patorjk.com/software/taag/#p=display&f=Slant
-	Write-Host '
-********************************************************************************************
-********************************************************************************************
-                                                    \||/
-                                                    |  @___oo
-                                          /\  /\   / (__,,,,|
-                                         ) /^\) ^\/ _)
-                                         )   /^\/   _)
-                                         )   _ /  / _)
-                                     /\  )/\/ ||  | )_)
-                                    <  >      |(,,) )__)
-                                     ||      /    \)___)\
-                                     | \____(      )___) )___
-                                      \______(_______;;; __;;;                                                                   
- 
-********************************************************************************************
-********************************************************************************************
-'
-
-
-	if(!$TaskList){
-		Write-Host '
-The following displays the available tasks that you can provide to -TaskList. 
-The hierarchy of the tasks is also displayed.
-		'
-		$printedTasks = @()
-		
-		
-		Get-TaskSubTree -Indent 2 -Task $tasksHashTable['all'] -TasksHashTable $tasksHashTable | % {
-			$printedTasks += $_
-		}
-
-		$extraTasks = $tasks | Where-Object {$_.Name -notin $printedTasks }
-		if($extraTasks) {
-			Write-Host '***********************************************************'
-			Write-Host 'Extra tasks:'
-			$extraTasks | % { Write-Host "  $($_.Name)" }
-			Write-Host '***********************************************************'
-		}
-		Write-Host ''
-		return
-	}
-
-	Write-Host 'The following displays the hierarchy of the tasks passed with ''-TaskList''.'
-	
-	$TaskList | %{
-
-		$startupTask = $tasksHashTable[$_]
-		
-		Get-TaskSubTree -Indent 2 -Task $startupTask -TasksHashTable $tasksHashTable | Out-Null
-		Write-Host ''
-	}
+    $wc = New-Object System.Net.WebClient
+    $proxy = [System.Net.WebRequest]::GetSystemWebProxy()
+    $proxy.Credentials = [System.Net.CredentialCache]::DefaultCredentials        
+    $wc.Proxy = $proxy
+    return $wc
 }
-else
+
+Write-Host "Preparing to run build script..."
+
+Push-Location $scriptDir
+
+Try
 {
-    #
-    # If the user called the current script with -Verbose or -Debug, we want this option to propagate to 
-    # our psake script. By default, these options don't propagate to other modules. This is why 
-    # we have to do this propagation ourselves.
-    #
-    # See http://stackoverflow.com/questions/16406682/write-verbose-ignored-in-powershell-module for more details.
-    #
-    $verboseEnabled = (Write-Verbose 'x' 4>&1).Length -gt 0
 
-    $psakeProperties = @{
-        Configuration=$Configuration; 
-        BuildType=$BuildType; 
-        IsRunningOnBuildMachine=$IsRunningOnBuildMachine; 
-        MsbuildVerbosity=$MsbuildVerbosity;
-        DeploymentFlavor=$DeploymentFlavor
+    if(!$PSScriptRoot){
+        $PSScriptRoot = Split-Path $MyInvocation.MyCommand.Path -Parent
     }
 
-    foreach ($key in $ExtraProperties.Keys)
-    {
-        $value = $ExtraProperties[$key]
-        $psakeProperties.Add($key, $value)
+    $TOOLS_DIR = Join-Path $PSScriptRoot "tools"
+    $ADDINS_DIR = Join-Path $TOOLS_DIR "Addins"
+    $MODULES_DIR = Join-Path $TOOLS_DIR "Modules"
+    $NUGET_EXE = Join-Path $TOOLS_DIR "nuget.exe"
+    $CAKE_EXE = Join-Path $TOOLS_DIR "Cake/Cake.exe"
+    $NUGET_URL = "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
+    $PACKAGES_CONFIG = Join-Path $TOOLS_DIR "packages.config"
+    $PACKAGES_CONFIG_MD5 = Join-Path $TOOLS_DIR "packages.config.md5sum"
+    $ADDINS_PACKAGES_CONFIG = Join-Path $ADDINS_DIR "packages.config"
+    $MODULES_PACKAGES_CONFIG = Join-Path $MODULES_DIR "packages.config"
+
+    # Make sure tools folder exists
+    if ((Test-Path $PSScriptRoot) -and !(Test-Path $TOOLS_DIR)) {
+        Write-Verbose -Message "Creating tools directory..."
+        New-Item -Path $TOOLS_DIR -Type directory | out-null
     }
 
-    if ($IsRunningOnBuildMachine)
-    {
-        Write-Output $psakeProperties
+    # Make sure that packages.config exist.
+    if (!(Test-Path $PACKAGES_CONFIG)) {
+        Write-Verbose -Message "Downloading packages.config..."    
+        try {        
+            $wc = GetProxyEnabledWebClient
+            $wc.DownloadFile("https://cakebuild.net/download/bootstrapper/packages", $PACKAGES_CONFIG) } catch {
+            Throw "Could not download packages.config."
+        }
     }
 
-    Invoke-psake $psakeScript -properties $psakeProperties -taskLis $TaskList -nologo -Verbose:$verboseEnabled
-
-    if ($psake.build_success -ne $true)
-    {
-        throw 'psake failed.'
+    # Try find NuGet.exe in path if not exists
+    if (!(Test-Path $NUGET_EXE)) {
+        Write-Verbose -Message "Trying to find nuget.exe in PATH..."
+        $existingPaths = $Env:Path -Split ';' | Where-Object { (![string]::IsNullOrEmpty($_)) -and (Test-Path $_ -PathType Container) }
+        $NUGET_EXE_IN_PATH = Get-ChildItem -Path $existingPaths -Filter "nuget.exe" | Select -First 1
+        if ($NUGET_EXE_IN_PATH -ne $null -and (Test-Path $NUGET_EXE_IN_PATH.FullName)) {
+            Write-Verbose -Message "Found in PATH at $($NUGET_EXE_IN_PATH.FullName)."
+            $NUGET_EXE = $NUGET_EXE_IN_PATH.FullName
+        }
     }
 
-    <#if ($psake.number_of_test_run_errors -ne 0)
-    {
-        throw "psake ran until the end but $($psake.number_of_test_run_errors) test runs failed."
-    }#>
+    # Try download NuGet.exe if not exists
+    if (!(Test-Path $NUGET_EXE)) {
+        Write-Verbose -Message "Downloading NuGet.exe..."
+        try {
+            $wc = GetProxyEnabledWebClient
+            $wc.DownloadFile($NUGET_URL, $NUGET_EXE)
+        } catch {
+            Throw "Could not download NuGet.exe."
+        }
+    }
 
-    # We have to clear the last exit code that may be indicate failure.
-    # If we don't clear it, VSTS build will complain with errors like the 
-    # following:
-    #
-    #   2016-04-02T13:40:44.8205974Z ##[error]Process completed with exit code 1
-    #
-    $LASTEXITCODE = 0
+    # Save nuget.exe path to environment to be available to child processed
+    $ENV:NUGET_EXE = $NUGET_EXE
+
+    # Restore tools from NuGet?
+    if(-Not $SkipToolPackageRestore.IsPresent) {
+        Push-Location
+        Set-Location $TOOLS_DIR
+
+        # Check for changes in packages.config and remove installed tools if true.
+        [string] $md5Hash = MD5HashFile($PACKAGES_CONFIG)
+        if((!(Test-Path $PACKAGES_CONFIG_MD5)) -Or
+        ($md5Hash -ne (Get-Content $PACKAGES_CONFIG_MD5 ))) {
+            Write-Verbose -Message "Missing or changed package.config hash..."
+            Remove-Item * -Recurse -Exclude packages.config,nuget.exe
+        }
+
+        Write-Verbose -Message "Restoring tools from NuGet..."
+        $NuGetOutput = Invoke-Expression "&`"$NUGET_EXE`" install -ExcludeVersion -OutputDirectory `"$TOOLS_DIR`""
+
+        if ($LASTEXITCODE -ne 0) {
+            Throw "An error occurred while restoring NuGet tools."
+        }
+        else
+        {
+            $md5Hash | Out-File $PACKAGES_CONFIG_MD5 -Encoding "ASCII"
+        }
+        Write-Verbose -Message ($NuGetOutput | out-string)
+
+        Pop-Location
+    }
+
+    # Restore addins from NuGet
+    if (Test-Path $ADDINS_PACKAGES_CONFIG) {
+        Push-Location
+        Set-Location $ADDINS_DIR
+
+        Write-Verbose -Message "Restoring addins from NuGet..."
+        $NuGetOutput = Invoke-Expression "&`"$NUGET_EXE`" install -ExcludeVersion -OutputDirectory `"$ADDINS_DIR`""
+
+        if ($LASTEXITCODE -ne 0) {
+            Throw "An error occurred while restoring NuGet addins."
+        }
+
+        Write-Verbose -Message ($NuGetOutput | out-string)
+
+        Pop-Location
+    }
+
+    # Restore modules from NuGet
+    if (Test-Path $MODULES_PACKAGES_CONFIG) {
+        Push-Location
+        Set-Location $MODULES_DIR
+
+        Write-Verbose -Message "Restoring modules from NuGet..."
+        $NuGetOutput = Invoke-Expression "&`"$NUGET_EXE`" install -ExcludeVersion -OutputDirectory `"$MODULES_DIR`""
+
+        if ($LASTEXITCODE -ne 0) {
+            Throw "An error occurred while restoring NuGet modules."
+        }
+
+        Write-Verbose -Message ($NuGetOutput | out-string)
+
+        Pop-Location
+    }
+
+    # Make sure that Cake has been installed.
+    if (!(Test-Path $CAKE_EXE)) {
+        Throw "Could not find Cake.exe at $CAKE_EXE"
+    }
+
+
+
+    # Build Cake arguments
+    $cakeArguments = @("$Script");
+    if ($Target) { $cakeArguments += "-target=$Target" }
+    if ($Configuration) { $cakeArguments += "-configuration=$Configuration" }
+    if ($Verbosity) { $cakeArguments += "-verbosity=$Verbosity" }
+    if ($ShowDescription) { $cakeArguments += "-showdescription" }
+    if ($DryRun) { $cakeArguments += "-dryrun" }
+    if ($Experimental) { $cakeArguments += "-experimental" }
+    if ($Mono) { $cakeArguments += "-mono" }
+    if ($Docs) { $cakeArguments += "-showtree" }
+
+    $cakeArguments += $ScriptArgs
+
+    # Start Cake
+    Write-Host "Running build script..."
+    &$CAKE_EXE $cakeArguments
 }
+Finally
+{
+    Pop-Location
 }
+
+
+exit $LASTEXITCODE

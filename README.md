@@ -3,73 +3,67 @@
 [![Build Status](https://orckestra001.visualstudio.com/OrckestraCommerce/_apis/build/status/Product%20extension%20-%20RefApp?branchName=master)](https://orckestra001.visualstudio.com/OrckestraCommerce/_build/latest?definitionId=68&branchName=master)
 
 ### Domains
-**DEV** - http://composer-c1-cm-dev.develop.orckestra.cloud
+**DEV** - http://composer-c1-{FOLDER-NAME}.develop.orckestra.cloud
 
 
-### Local Build and Deploy
+### Dev Build and Deploy
 
 #### Getting Started
-* Get latest source code from branch 'master'
+* Get latest source code from branch 'dev'
 
 `$git clone https://github.com/Orckestra/ReferenceApplication.git`
 
 #### Prerequesites
 * VS 2019
+* .NET Core 3.1 or higher. Download from https://dotnet.microsoft.com/download/dotnet-core/3.1
 * IIS with URL Rewrite Module
-* NPM version 5.4.2 or 5.6.0 (npm -v to see version) - Must install node.js version 6.14.4 or 8.11.3 (this versions was tested to complete the Build)
+* NPM version 6.4.1, 6.9.1 (npm -v to see version) - Must install node.js version 8.12 or 10 (this versions was tested to complete the Build)
 * If you have npm installed, make sure that npm registry use default url *https://registry.npmjs.org/*
 - run `npm config get registry` to check
 - run `npm config set registry https://registry.npmjs.org/` to fix 
+* Make sure you have installed *.develop.orckestra.local" 
 
 #### Build Projects
-* Go to *./Build folder*
-* Run PS as Administrator `.\Build.ps1 -t all` to build Reference Application projects
+* Run PS as Administrator `.\build\build.ps1 -t dev` to build Reference Application projects (Debug Build, without Unit Test).
+ 
+**NOTE**: Before completing a new feature make sure to run the `.\build\build.ps1' without dev parameter to validate all Unit Tests.
+
 
 #### Deploy Parameters
-* Configure specific deploy parameters for your DEV enviroment
-* Go to *./Installer/configs/specific/DEV* folder
-* Create you own file *Parameters.Dev.xml*  and specify deploy parameters. See example below
-
-```<?xml version="1.0" encoding="utf-8"?>
-<parameters>
-  <param name="environment_suffix" value="dev"/>
- 
-  <param name="composer_apppool_username" value="NA"/>
-  <param name="composer_apppool_password" value="NA"/>
-  <param name="composer_apppool_identitytype" value="ApplicationPoolIdentity"/>
-  
-  <param name="machineKey-validationKey" value="***REMOVED***" />
-  <param name="machineKey-decryptionKey" value="***REMOVED***" />
-  
-  <param name="cms-c1-custom-packages" value="Composite.Tools.PackageCreator,Composite.Tools.StaticDataTypeCreator,Orckestra.Search.KeywordRedirect,Orckestra.Search.LuceneNET" />
-  
-  <param name="ocs-cm-hostName" value="***REMOVED***" />
-  <param name="ocs-cd-hostName" value="***REMOVED***" />
-  <param name="ocsAuthToken" value="***REMOVED***"/>
-	
-  <param name="gtm-containerid" value="ENTER_VALUE_HERE"/>
-</parameters>
-```
+* Configure specific deploy parameters for your DEV environment
+* Create your own file *ref.app.parameters.json* at the same level as your source code folder. Example: 
+`{
+  "ocs-cm-hostName": "",
+  "ocsAuthToken": "",
+  "adminName": "admin",
+  "adminPassword": "123456"
+}`
 
 #### Deploy 
-* Go to ./Installer folder
-* Run PS as Administrator `.\Invoke-EnvironmentDeployment.ps1 dev full-install` to deploy Reference Application Starter Site
-* After rhe Deploy make sure that correct Overture Url and AuthToken are used in ~/App_Config/ExperienceManagement.config file. For Cosmos DB verison you can use next values:
-  <add key="Overture.Url" value="https://***REMOVED***/api" />
-  <add key="Overture.AuthToken" value="***REMOVED***" />
+- Run PS as Administrator `.\build\install.ps1` to install Reference Application projects
+- You can configure parameters for different enviroments. Create file *ref.app.parameters.{enviroment}.json*
+- You can specify enviroment by adding parameter `-env={enviroment}`. Example create file  *ref.app.parameters.int2.json*  and run`.\build\install.ps1 -env=int2` 
 
-#### Deploy notes
- * The Deploy creates website in IIS, downloads the specified C1 CMS version from GITHUB, initializes the **Bare Bone** starter site and installs **Reference Application** packages as AutoInstall packages.
- * The C1 CMS version configured in parameters file *~\Installer\configs\generic\Parameters.xml*, parameter name `<param name="cms-c1-version" value="6.5" />` 
- * The additional C1 CMS packages, which can be installed on website can be configured in parameters file *~\Installer\configs\generic\Parameters.xml*, parameter name `<param name="cms-c1-custom-packages" value="Orckestra.Search.KeywordRedirect,Orckestra.Search.LuceneNET" />`
- * All C1 CMS packages are downloaded from C1 CMS packages server
+#### Deploy Notes
+ * The Deploy creates website in IIS, downloads the specified C1 CMS version from GITHUB, initializes the RefApp Starter Site.
+ * The C1 CMS location configured in parameters file *~\Build\configuration\parameters.json*, parameter name `C1Url` 
+ * The additional C1 CMS packages, which can be installed on website can be configured in parameters file *~\Build\configuration\SetupDescription.xml*
+ * The setup description contains Experience Management packages from the *develop" branch by default. It is posible to intall packages from specific Experience Management bracnh, just run Install with parameter `-branch=master`
+
+
+#### How to Debug
+* Open Orckestra.ReferenceApplication.sln in Visual Studio as Administrator
+* Locate **Composer.CompositeC1.Mvc** project, right click and select "Make as StartUp Project"
+* Press F5
+* Yoa are Done!
+
+**NOTE**: If debug doesn't work make sure CurrentUser has execution policy
+Run in PS next commend `Set-ExecutionPolicy unrestricted -scope CurrentUser` 
+
  
- #### Build Frontend
- To build Frontend Sass, Typescript and copy to the deployed website use next gulp command in folder *~\ReferenceApplication\Orckestra.StarterSite\CF\Source*
+#### Build Frontend
+ To build Frontend Typescript and copy to the deployed website use next gulp command in folder *~\src\Composer*
  `gulp devPackage`
- This gulp task also will copy DLLs of Composer and Composer.C1 projects.
 
-#### Deploy local changes 
-* Go to .\Orckestra.StarterSite\cf\Source
-* Build local dll with VisualStudio
-* Run PS as Administrator 'gulp devPackage' to deploy composer Dlls and front end files
+#### Build SASS
+TODO

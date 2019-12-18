@@ -1,7 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Data>
-  <Add Id="b38e80ba-0434-4c07-8e86-36ecc3c37f36" DisplayName="Category 1" URL="http://www.google.com" Target="" Order="1" IsStickyHeader="False" IsOptionalLink="False" PageId="f3dbd28d-365f-4d3e-91c3-7b730b39b294" SourceCultureName="en-CA" />
-  <Add Id="dde90c5a-939c-4862-99fd-8b54691b6a7a" DisplayName="Category 2" URL="http://www.orckestra.com" Target="" Order="1" IsStickyHeader="False" IsOptionalLink="False" PageId="f3dbd28d-365f-4d3e-91c3-7b730b39b294" SourceCultureName="en-CA" />
-  <Add Id="8d5f4412-73eb-469c-ab24-fa414bcb5f1d" DisplayName="Category 4" URL="http://www.google.com" Target="" Order="1" IsStickyHeader="False" IsOptionalLink="True" PageId="f3dbd28d-365f-4d3e-91c3-7b730b39b294" SourceCultureName="en-CA" />
-  <Add Id="44f8fc5f-a6d6-4d48-9f4a-275d11c25320" DisplayName="Category 3" URL="~/page(b3aba631-f426-4026-b2c2-b3197fcf3140)" Target="" Order="3" IsStickyHeader="True" IsOptionalLink="False" PageId="f3dbd28d-365f-4d3e-91c3-7b730b39b294" SourceCultureName="en-CA" />
-</Data>

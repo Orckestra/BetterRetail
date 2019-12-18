@@ -1,0 +1,47 @@
+﻿<cms:formdefinition xmlns:cms="http://www.composite.net/ns/management/bindingforms/1.0" xmlns="http://www.composite.net/ns/management/bindingforms/std.ui.controls.lib/1.0" xmlns:ff="http://www.composite.net/ns/management/bindingforms/std.function.lib/1.0" xmlns:f="http://www.composite.net/ns/function/1.0">
+  <cms:bindings>
+    <cms:binding name="Enabled" type="System.Boolean" />
+    <cms:binding name="RecurringSchedulePageId" type="System.Nullable`1[System.Guid]" optional="true" />
+    <cms:binding name="RecurringScheduleDetailsPageId" type="System.Nullable`1[System.Guid]" optional="true" />
+    <cms:binding name="RecurringCartDetailsPageId" type="System.Nullable`1[System.Guid]" optional="true" />
+    <cms:binding name="RecurringCartsPageId" type="System.Nullable`1[System.Guid]" optional="true" />
+    <cms:binding name="PublicationStatus" type="System.String" />
+    <cms:binding name="FieldName" type="System.String" />
+    <cms:binding name="Id" type="System.Guid" />
+    <cms:binding name="PageId" type="System.Guid" />
+    <cms:binding name="VersionId" type="System.Guid" />
+    <cms:binding name="SourceCultureName" type="System.String" />
+  </cms:bindings>
+  <cms:layout>
+    <cms:layout.label>
+      <cms:read source="Enabled" />
+    </cms:layout.label>
+    <FieldGroup Label="Recurring Orders Settings">
+      <CheckBox Label="Are Recurring Orders Enabled" Help="">
+        <CheckBox.Checked>
+          <cms:bind source="Enabled" />
+        </CheckBox.Checked>
+      </CheckBox>
+      <DataReferenceTreeSelector Label="Recurring Schedule Page" Help="" Handle="Composite.Management.PageIdSelectorDialog" DataType="Composite.Data.Types.IPage,Composite" NullValueAllowed="true">
+        <DataReferenceTreeSelector.Selected>
+          <cms:bind source="RecurringSchedulePageId" />
+        </DataReferenceTreeSelector.Selected>
+      </DataReferenceTreeSelector>
+      <DataReferenceTreeSelector Label="Recurring Schedule Details Page" Help="" Handle="Composite.Management.PageIdSelectorDialog" DataType="Composite.Data.Types.IPage,Composite" NullValueAllowed="true">
+        <DataReferenceTreeSelector.Selected>
+          <cms:bind source="RecurringScheduleDetailsPageId" />
+        </DataReferenceTreeSelector.Selected>
+      </DataReferenceTreeSelector>
+      <DataReferenceTreeSelector Label="Recurring Carts Page" Help="" Handle="Composite.Management.PageIdSelectorDialog" DataType="Composite.Data.Types.IPage,Composite" NullValueAllowed="true">
+        <DataReferenceTreeSelector.Selected>
+          <cms:bind source="RecurringCartsPageId" />
+        </DataReferenceTreeSelector.Selected>
+      </DataReferenceTreeSelector>
+      <DataReferenceTreeSelector Label="Recurring Cart Details Page" Help="" Handle="Composite.Management.PageIdSelectorDialog" DataType="Composite.Data.Types.IPage,Composite" NullValueAllowed="true">
+        <DataReferenceTreeSelector.Selected>
+          <cms:bind source="RecurringCartDetailsPageId" />
+        </DataReferenceTreeSelector.Selected>
+      </DataReferenceTreeSelector>
+    </FieldGroup>
+  </cms:layout>
+</cms:formdefinition>

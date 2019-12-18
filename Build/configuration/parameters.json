@@ -1,0 +1,17 @@
+{
+  "ocs-cm-hostName": "",
+  "ocsAuthToken": "",
+
+  "adminName": "",
+  "adminPassword": "",
+  "adminEmail": "build-bot@orckestra.com",
+
+  "C1Url": "https://github.com/Orckestra/C1-CMS-Foundation/releases/download/v6.8/C1.CMS.6.8.zip",
+
+  "websiteSuffix": "{{new System.IO.DirectoryInfo(rootPath).Name}}",
+  "websiteName": "composer-c1-{websiteSuffix}.develop.orckestra.cloud",
+  "websiteUrl": "https://{websiteName}",
+
+  "setupDescription": "{{$\"{rootPath}/build/configuration/SetupDescription.xml\"}}",
+  "baseCulture": "en-CA"
+}

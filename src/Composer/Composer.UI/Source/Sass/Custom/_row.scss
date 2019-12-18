@@ -1,0 +1,13 @@
+.row {
+    //Inverses the gutter width within a row
+    .inv-gutter {
+        margin-left:  ($grid-gutter-width / 2);
+        margin-right: ($grid-gutter-width / 2);
+    }
+
+    //Cancel the margins if the search grid is inside a row
+    .searchgrid {
+        margin-left: 0px;
+        margin-right: 0px;
+    }
+}

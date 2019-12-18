@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<pc:PackageCreator xmlns:mi="http://www.composite.net/ns/management/packageinstaller/1.0" xmlns:pc="http://www.composite.net/ns/management/packagecreator/2.0" xmlns:help="http://www.composite.net/ns/help/1.0">
+	<pc:DynamicDataTypes />
+	<pc:DataItems>
+		<Type type="Orckestra.Composer.CompositeC1.Pages.ComposerImage">
+			<Add Id="464f80b3-656c-4d4f-8cc6-7f0a8bb7d638">MediaArchive:/Composer/Checkout/creditcards-trust-icon.jpg</Add>
+		</Type>
+	</pc:DataItems>
+	<pc:Content>
+		<Add name="MetatypesData" />
+	</pc:Content>
+	<pc:PageTrees>
+		<Add name="f3dbd28d-365f-4d3e-91c3-7b730b39b294" root="false" data="true" />
+	</pc:PageTrees>
+	<mi:PackageRequirements minimumCompositeVersion="4.3.5611.30389" maximumCompositeVersion="9.9999.9999.9999" />
+	<mi:PackageInformation name="Composer.Content" groupName="Composer" version="1.0.0" author="Orckestra" website="http://composer-c1-cm-dev.orckestra.local/" readMoreUrl="http://composer-c1-cm-dev.orckestra.local/" id="33559fac-a76f-4d47-a00c-bb0b1b9993cf" canBeUninstalled="true" systemLocking="hard" flushOnCompletion="true">
+		<TechnicalDetails>NT</TechnicalDetails>
+		<Description>NT</Description>
+	</mi:PackageInformation>
+</pc:PackageCreator>

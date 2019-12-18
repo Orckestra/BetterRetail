@@ -246,3 +246,11 @@ Orckestra.StarterSite/CF/Source/Composer.Mvc.Sample.Tests
 /Orckestra.StarterSite/CF/Test/Composer.Spec/packages
 *.received.txt
 /Installer/configs/specific/DEV/Parameters.Dev.xml
+
+# cake
+/build/tools/*
+/deployment/*
+/output/*
+/build/configuration/parameters.*.json
+package-lock.json
+**/Composer.UI/**/*.min.css
