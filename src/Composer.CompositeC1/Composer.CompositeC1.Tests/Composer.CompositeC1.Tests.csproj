@@ -237,6 +237,7 @@
     </Compile>
     <Compile Include="Mappers\FacetsMapper_ConvertToFacetSetting.cs" />
     <Compile Include="Mocks\MainMenuMock.cs" />
+    <Compile Include="Mocks\ISiteConfigurationMetaMock.cs" />
     <Compile Include="Mocks\PageServiceMock.cs" />
     <Compile Include="Mocks\PageMock.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

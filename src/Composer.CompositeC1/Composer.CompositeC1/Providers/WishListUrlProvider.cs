@@ -43,6 +43,8 @@ namespace Orckestra.Composer.Mvc.Sample.Providers.UrlProvider
 
 
                 var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(parameters.CultureInfo, WebsiteContext.WebsiteId);
+                if (pagesConfiguration == null) return null;
+
                 return PageService.GetPageUrl(pagesConfiguration.MyWishListPageId, parameters.CultureInfo);
             }
         }

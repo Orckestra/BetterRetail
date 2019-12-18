@@ -166,6 +166,7 @@
     </Compile>
     <Compile Include="DataTypes\IContentTab.cs" />
     <Compile Include="DataTypes\ISortOption.cs" />
+    <Compile Include="Functions\WebsiteSearch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Search\MediaSearchDocumentBuilderExtension.cs" />
     <Compile Include="StartupHandler.cs" />

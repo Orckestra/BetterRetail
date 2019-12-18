@@ -28,6 +28,8 @@ namespace Orckestra.Composer.CompositeC1.Providers
             if (cultureInfo == null) { throw new ArgumentNullException("cultureInfo"); }
  
             var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(cultureInfo, WebsiteContext.WebsiteId);
+            if (pagesConfiguration == null) return null;
+
             var url = PageService.GetPageUrl(pagesConfiguration.OrderDetailsPageId, cultureInfo);
             return UrlProviderHelper.BuildUrlWithParams(url, null);
         }
@@ -37,6 +39,8 @@ namespace Orckestra.Composer.CompositeC1.Providers
             if (param == null) { throw new ArgumentNullException("param"); }
 
             var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(param.CultureInfo, WebsiteContext.WebsiteId);
+            if (pagesConfiguration == null) return null;
+
             var url = PageService.GetPageUrl(pagesConfiguration.OrderHistoryPageId, param.CultureInfo);
             return UrlProviderHelper.BuildUrlWithParams(url, null);
         }
@@ -46,6 +50,8 @@ namespace Orckestra.Composer.CompositeC1.Providers
             if (cultureInfo == null) { throw new ArgumentNullException("cultureInfo"); }
 
             var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(cultureInfo, WebsiteContext.WebsiteId);
+            if (pagesConfiguration == null) return null;
+
             var url = PageService.GetPageUrl(pagesConfiguration.GuestOrderDetailsPageId, cultureInfo);
             return UrlProviderHelper.BuildUrlWithParams(url, null);
         }
@@ -55,6 +61,8 @@ namespace Orckestra.Composer.CompositeC1.Providers
             if (cultureInfo == null) { throw new ArgumentNullException("cultureInfo"); }
 
             var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(cultureInfo, WebsiteContext.WebsiteId);
+            if (pagesConfiguration == null) return null;
+
             var url = PageService.GetPageUrl(pagesConfiguration.FindMyOrderPageId, cultureInfo);
             return UrlProviderHelper.BuildUrlWithParams(url, null);
         }

@@ -399,6 +399,10 @@
       <Project>{3e42c35e-b19c-4abe-80f8-fd268d44e11f}</Project>
       <Name>Composer.CompositeC1</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Orckestra.Composer.ContentSearch\Orckestra.Composer.ContentSearch.csproj">
+      <Project>{460eaca2-1edb-46bc-a508-f784e4a4da97}</Project>
+      <Name>Orckestra.Composer.ContentSearch</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Orckestra.Composer.Sitemap\Orckestra.Composer.Sitemap.csproj">
       <Project>{8227ecd6-6d34-4f4d-bfbc-02bc52e7ce7a}</Project>
       <Name>Orckestra.Composer.Sitemap</Name>

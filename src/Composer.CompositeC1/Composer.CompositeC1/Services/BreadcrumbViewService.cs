@@ -12,7 +12,6 @@ namespace Orckestra.Composer.CompositeC1.Services
     {
         protected IPageService _pageService;
         protected ISiteConfiguration SiteConfiguration { get; private set; }
-        protected PagesConfiguration PagesConfiguration { get; private set; }
 
 
         public BreadcrumbViewService(IPageService pageService, ISiteConfiguration siteConfiguration)
@@ -20,7 +19,6 @@ namespace Orckestra.Composer.CompositeC1.Services
             if (pageService == null) { throw new ArgumentNullException(nameof(pageService)); }
             _pageService = pageService;
             SiteConfiguration = siteConfiguration;
-            PagesConfiguration = SiteConfiguration.GetPagesConfiguration();
         }
 
         public virtual BreadcrumbViewModel CreateBreadcrumbViewModel(GetBreadcrumbParam param)
@@ -70,7 +68,8 @@ namespace Orckestra.Composer.CompositeC1.Services
                 DisplayName = parentPage.MenuTitle
             };
 
-            if (parentPage.PageTypeId != PagesConfiguration.FolderId)
+            var pagesConfiguration = SiteConfiguration.GetPagesConfiguration();
+            if (pagesConfiguration!= null && parentPage.PageTypeId != pagesConfiguration.FolderId)
             {
                 itemVM.Url = _pageService.GetPageUrl(parentPage);
             }

@@ -46,7 +46,10 @@ namespace Orckestra.Composer.CompositeC1.Providers
             using (ThreadDataManager.EnsureInitialize())
             {
                 var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(parameters.CultureInfo, WebsiteContext.WebsiteId);
+                if (pagesConfiguration == null) return null;
+                
                 var baseUrl = PageService.GetPageUrl(pagesConfiguration.StoreListPageId, parameters.CultureInfo);
+
                 var url = string.Format(UrlTemplate, baseUrl, UrlFormatter.Format(parameters.StoreName), parameters.StoreNumber);
                 var urlBuilder = new UrlBuilder(url);
                 return urlBuilder.ToString();

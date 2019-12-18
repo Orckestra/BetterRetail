@@ -72,10 +72,10 @@
     <Content Include="Package\Datas\Composite.Data.Types.IPageStructures_public.xml" />
     <Content Include="Package\Datas\Composite.Data.Types.IPages_administrated.xml" />
     <Content Include="Package\Datas\Composite.Data.Types.IPages_public.xml" />
-    <Content Include="Package\Datas\Orckestra.Composer.Articles.DataTypes.IArticleCategorys_administrated.xml" />
-    <Content Include="Package\Datas\Orckestra.Composer.Articles.DataTypes.IArticleCategorys_public.xml" />
-    <Content Include="Package\Datas\Orckestra.Composer.Articles.DataTypes.IArticles_administrated.xml" />
-    <Content Include="Package\Datas\Orckestra.Composer.Articles.DataTypes.IArticles_public.xml" />
+    <Content Include="Package\Datas\Orckestra.Composer.Articles.DataTypes.IArticleCategory_administrated.xml" />
+    <Content Include="Package\Datas\Orckestra.Composer.Articles.DataTypes.IArticleCategory_public.xml" />
+    <Content Include="Package\Datas\Orckestra.Composer.Articles.DataTypes.IArticle_administrated.xml" />
+    <Content Include="Package\Datas\Orckestra.Composer.Articles.DataTypes.IArticle_public.xml" />
     <Content Include="Package\Datas\Orckestra.Composer.ContentSearch.DataTypes.IContentTabs_administrated.xml" />
     <Content Include="Package\Datas\Orckestra.Composer.ContentSearch.DataTypes.IContentTabs_public.xml" />
     <Content Include="Package\Datas\Orckestra.Composer.ContentSearch.DataTypes.ISortOptions_public.xml" />
@@ -97,6 +97,12 @@
     <Content Include="Package\App_Data\Media\9732fcc7-63a6-49db-b89f-bbe07164a497" />
     <Content Include="Package\App_Data\Media\db9b90c6-7e83-4e7a-9c19-53b57a5e6bb5" />
     <Content Include="Package\App_Data\Media\f7765539-f09a-43e8-a558-b37d6c983b2d" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Package\App_Data\Media\afba73ea-a83a-446c-a401-3d3cc427f44d" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Package\App_Data\Media\a6c1dd3c-6732-4e69-b7f7-a4e584672541" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

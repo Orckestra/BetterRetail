@@ -64,6 +64,7 @@
         <!--Directory sourceDirectory="~\Bin\" targetDirectory="~\Bin\" allowOverwrite="true" deleteTargetDirectory="false" /-->
         <Directory sourceDirectory="~\App_Config\" targetDirectory="~\App_Config\" allowOverwrite="true" deleteTargetDirectory="false" />
         <Directory sourceDirectory="~\App_Data\" targetDirectory="~\App_Data\" allowOverwrite="true" deleteTargetDirectory="false" />
+        <Directory sourceDirectory="~\App_Code\" targetDirectory="~\App_Code\" allowOverwrite="true" deleteTargetDirectory="false" />
         <Directory sourceDirectory="~\Views\" targetDirectory="~\Views\" allowOverwrite="true" deleteTargetDirectory="false" />
       </Directories>
     </mi:Add>

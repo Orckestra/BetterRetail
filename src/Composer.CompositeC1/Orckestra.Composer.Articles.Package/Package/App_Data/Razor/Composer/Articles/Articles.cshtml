@@ -5,94 +5,93 @@
 @functions {
     public override string FunctionDescription
     {
-        get { return "Shortly describe this function here"; }
+        get { return "Articles List"; }
     }
 
-    [FunctionParameter(Label = "Articles count", Help = @"The number of article to display (5 by default).", DefaultValue = 5)]
-    public int ArticlesCount { get; set; }
+    [FunctionParameter(Label = "Articles count", Help = @"The number of article to display on the page (6 by default).", DefaultValue = 6)]
+    public int PageSize { get; set; }
 
     [FunctionParameter]
-    public RoutedData<Orckestra.Composer.Articles.DataTypes.IArticle> article { get; set; }
+    public RoutedData<Orckestra.Composer.Articles.DataTypes.IArticle> ArticleData { get; set; }
 
 }
 
 @{
-    var articles = article.List.OrderBy(i => i.Date).ToList();
+    var articles = ArticleData.List.OrderBy(i => i.Date).ToList();
 
     int pageCurrent;
-    int pageSize = ArticlesCount;
     if (!int.TryParse(Request.QueryString["p"], out pageCurrent))
     {
         pageCurrent = 1;
     }
 
-    int articlesCount = article.List.Count();
+    int articlesCount = ArticleData.List.Count();
 
-    var pageCount = (articlesCount + pageSize - 1) / pageSize;
-    var articlesList = articles.Skip(pageSize * (pageCurrent - 1)).Take(pageSize);
+    var pageCount = (articlesCount + PageSize - 1) / PageSize;
+    var articlesList = articles.Skip(PageSize * (pageCurrent - 1)).Take(PageSize);
 }
 
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
 <head>
 </head>
 <body>
-
-    <div>
-        @if (article.IsItem)
-        {
-            <img class="img-thumbnail" src="/media(@article.Item.Image)" />
+    @if (ArticleData.IsItem)
+    {
+        <div class="col-xs-12">
+            <img class="img-thumbnail" src="/media(@ArticleData.Item.Image)?h=400" />
             <h1>
-                @article.Item.Title
+                @ArticleData.Item.Title
             </h1>
             <div>
-                @FormattedDate(@article.Item.Date)
+                @FormattedDate(@ArticleData.Item.Date)
             </div>
             <div>
-                @Html.Raw(@article.Item.Content)
+                @Html.Raw(@ArticleData.Item.Content)
             </div>
             <div>
-                @Tags(@article.Item.Tags)
+                @Tags(@ArticleData.Item.Tags)
             </div>
+        </div>
+    }
+    else
+    {
 
-        }
-        else
+        if (pageCount > 1)
         {
-            <h1>List of articles: </h1>
+            <div class="pull-right">
+                @SearchHelpers.Pagination(pageCurrent, pageCount, 10, @ArticleData.ListUrl)
+            </div>
+        }
 
-            if (pageCount > 1)
-            {
 
-                <ul class="pagination">
-                    @Paging(pageCount, pageCurrent)
-                </ul>
-
-            }
-
-            <div class="row">
+        <div class="row">
+            <div class="thumbnail-container col-xs-12">
                 @foreach (var item in articlesList)
                 {
-
-                    <div class="col-sm-6 col-md-4">
-                        <div class="thumbnail inline">
-                            <a href="@article.ItemUrl(item)">
-                                <img src="/media(@item.Image)" />
-                                <div class="caption">
-                                    <h3>@item.Title</h3>
-                                    <p>@FormattedDate(@item.Date)</p>
-                                    <p>@item.Summary</p>
-                                    <p>@Tags(@item.Tags)</p>
-                                </div>
-                            </a>
-                        </div>
+                    <div class="thumbnail-item col-xs-12 col-sm-6 col-md-6 col-lg-4">
+                        <a href="@ArticleData.ItemUrl(item)">
+                            <img src="/media(@item.Image)?h=250" />
+                            <div class="caption">
+                                <h3>@item.Title</h3>
+                                <p>@FormattedDate(@item.Date)</p>
+                                <p>@item.Summary</p>
+                                <p>@Tags(@item.Tags)</p>
+                            </div>
+                        </a>
                     </div>
 
                 }
             </div>
+        </div>
+        if (pageCount > 1)
+        {
+            <div class="pull-right">
+                @SearchHelpers.Pagination(pageCurrent, pageCount, 10, @ArticleData.ListUrl)
+            </div>
         }
 
-    </div>
 
-
+    }
 </body>
 </html>
 
@@ -118,44 +117,4 @@
         <span class="glyphicon glyphicon-calendar"></span>
         @formattedDate
     </span>
-}
-
-@helper Paging(int pageCount, int pageCurrent)
-{
-    var groupsize = 10;
-    if (pageCurrent > groupsize)
-    {
-        <li><a href="~@article.ListUrl?p=1">&lt;&lt;</a></li>
-    }
-    if (pageCurrent > 1)
-    {
-        <li><a href="~@article.ListUrl?p=@(pageCurrent - 1)">&lt;</a></li>
-    }
-    var grouppage = (pageCurrent - 1) / groupsize;
-    for (int page = grouppage * groupsize + 1; page <= pageCount + 1 && page <= (grouppage + 1) * groupsize; page++)
-    {
-        if (page < pageCount + 1)
-        {
-            if (page == pageCurrent)
-            {
-                <li class="active">
-                    <span>
-                        @page
-                    </span>
-                </li>
-            }
-            else
-            {
-                <li><a href="~@article.ListUrl?p=@page">@page</a></li>
-            }
-        }
-    }
-    if (pageCurrent + 1 <= pageCount)
-    {
-        <li><a href="~@article.ListUrl?p=@(pageCurrent + 1)">&gt;</a></li>
-    }
-    if (grouppage < (pageCount - 1) / groupsize)
-    {
-        <li><a href="~@article.ListUrl?p=@pageCount">&gt;&gt;</a></li>
-    }
 }

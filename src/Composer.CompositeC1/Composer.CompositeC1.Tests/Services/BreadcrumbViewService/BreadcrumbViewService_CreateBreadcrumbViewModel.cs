@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using Composite.Data.Types;
+﻿using Composite.Data.Types;
 using FizzWare.NBuilder.Generators;
 using FluentAssertions;
 using Moq;
@@ -12,6 +8,10 @@ using Orckestra.Composer.CompositeC1.Services;
 using Orckestra.Composer.CompositeC1.Tests.Mocks;
 using Orckestra.Composer.Services.Breadcrumb;
 using Orckestra.ExperienceManagement.Configuration;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 
 namespace Orckestra.Composer.CompositeC1.Tests.Services.BreadcrumbViewService
 {
@@ -51,7 +51,8 @@ namespace Orckestra.Composer.CompositeC1.Tests.Services.BreadcrumbViewService
 
             var mockedSiteConfiguration = new Mock<ISiteConfiguration>();
 
-            mockedSiteConfiguration.Setup(a => a.GetPagesConfiguration()).Returns(new PagesConfiguration {
+           
+            mockedSiteConfiguration.Setup(a => a.GetPagesConfiguration()).Returns(new PagesConfiguration(new ISiteConfigurationMetaMock()) {
                 FolderId = FolderPageTypeId
             });
             Container.Use<ISiteConfiguration>(mockedSiteConfiguration);

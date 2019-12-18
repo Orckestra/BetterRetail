@@ -1,0 +1,14 @@
+.thumbnail-container {
+    display: flex;
+    align-items: baseline;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    padding: 0;
+}
+
+.thumbnail-item {
+    overflow: hidden;
+    img {
+        max-width: 100%;
+    }
+}

@@ -13,6 +13,8 @@
         <File sourceFilename="~\App_Data\Media\f7765539-f09a-43e8-a558-b37d6c983b2d" targetFilename="~\App_Data\Media\f7765539-f09a-43e8-a558-b37d6c983b2d" allowOverwrite="false" />
         <File sourceFilename="~\App_Data\Media\db9b90c6-7e83-4e7a-9c19-53b57a5e6bb5" targetFilename="~\App_Data\Media\db9b90c6-7e83-4e7a-9c19-53b57a5e6bb5" allowOverwrite="false" />
         <File sourceFilename="~\App_Data\Media\9732fcc7-63a6-49db-b89f-bbe07164a497" targetFilename="~\App_Data\Media\9732fcc7-63a6-49db-b89f-bbe07164a497" allowOverwrite="false" />
+        <File sourceFilename="~\App_Data\Media\afba73ea-a83a-446c-a401-3d3cc427f44d" targetFilename="~\App_Data\Media\afba73ea-a83a-446c-a401-3d3cc427f44d" allowOverwrite="false" />
+        <File sourceFilename="~\App_Data\Media\a6c1dd3c-6732-4e69-b7f7-a4e584672541" targetFilename="~\App_Data\Media\a6c1dd3c-6732-4e69-b7f7-a4e584672541" allowOverwrite="false" />
       </Files>
     </mi:Add>
     <mi:Add installerType="Composite.Core.PackageSystem.PackageFragmentInstallers.DataPackageFragmentInstaller, Composite" uninstallerType="Composite.Core.PackageSystem.PackageFragmentInstallers.DataPackageFragmentUninstaller, Composite">
@@ -52,16 +54,16 @@
           <Data dataScopeIdentifier="public" dataFilename="~\Datas\Composite.Data.Types.IDataItemTreeAttachmentPoints_public.xml" />
         </Type>
         <Type type="Orckestra.Composer.Articles.DataTypes.IArticleCategory,Orckestra.Composer.Articles">
-          <Data dataScopeIdentifier="administrated" locale="?" dataFilename="~\Datas\Orckestra.Composer.Articles.DataTypes.IArticleCategorys_administrated.xml" />
+          <Data dataScopeIdentifier="administrated" locale="?" dataFilename="~\Datas\Orckestra.Composer.Articles.DataTypes.IArticleCategory_administrated.xml" />
         </Type>
         <Type type="Orckestra.Composer.Articles.DataTypes.IArticleCategory,Orckestra.Composer.Articles">
-          <Data dataScopeIdentifier="public" locale="?" dataFilename="~\Datas\Orckestra.Composer.Articles.DataTypes.IArticleCategorys_public.xml" />
+          <Data dataScopeIdentifier="public" locale="?" dataFilename="~\Datas\Orckestra.Composer.Articles.DataTypes.IArticleCategory_public.xml" />
         </Type>
         <Type type="Orckestra.Composer.Articles.DataTypes.IArticle,Orckestra.Composer.Articles">
-          <Data dataScopeIdentifier="administrated" locale="?" dataFilename="~\Datas\Orckestra.Composer.Articles.DataTypes.IArticles_administrated.xml" />
+          <Data dataScopeIdentifier="administrated" locale="?" dataFilename="~\Datas\Orckestra.Composer.Articles.DataTypes.IArticle_administrated.xml" />
         </Type>
         <Type type="Orckestra.Composer.Articles.DataTypes.IArticle,Orckestra.Composer.Articles">
-          <Data dataScopeIdentifier="public" locale="?" dataFilename="~\Datas\Orckestra.Composer.Articles.DataTypes.IArticles_public.xml" />
+          <Data dataScopeIdentifier="public" locale="?" dataFilename="~\Datas\Orckestra.Composer.Articles.DataTypes.IArticle_public.xml" />
         </Type>
       </Types>
     </mi:Add>
