@@ -20,7 +20,7 @@ namespace Orckestra.Composer.CompositeC1
         {
             var httpContext = HttpContext.Current;
 
-            var customPageNotFoundUrl = PageNotFoundUrlProvider.Get404PageUrl(httpContext.Request.RawUrl);
+            var customPageNotFoundUrl = PageNotFoundUrlProvider.Get404PageUrl(httpContext.Request.Url.ToString());
 
             if (!string.IsNullOrEmpty(customPageNotFoundUrl))
             {

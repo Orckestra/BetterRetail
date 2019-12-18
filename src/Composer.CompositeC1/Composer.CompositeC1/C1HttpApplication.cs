@@ -74,7 +74,7 @@ namespace Orckestra.Composer.CompositeC1
                 var pageNotFoundUrlProvider = ComposerHost.Current.Resolve<IPageNotFoundUrlProvider>();
                 httpContext.Response.StatusCode = 404;
 
-                httpContext.Response.Redirect(pageNotFoundUrlProvider.Get404PageUrl(httpContext.Request.RawUrl));
+                httpContext.Response.Redirect(pageNotFoundUrlProvider.Get404PageUrl(httpContext.Request.Url.ToString()));
                 return true;
             }
 

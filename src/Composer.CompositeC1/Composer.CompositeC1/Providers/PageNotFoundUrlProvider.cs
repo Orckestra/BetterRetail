@@ -3,12 +3,9 @@ using System.Globalization;
 using System.Linq;
 using System.Web;
 using Composite.Core;
-using Composite.Data;
 using Orckestra.Composer.CompositeC1.Services;
 using Orckestra.Composer.Providers;
-using Orckestra.Composer.CompositeC1.Utils;
 using Orckestra.ExperienceManagement.Configuration;
-using Orckestra.Composer.Services;
 using Composite.Core.Routing;
 
 namespace Orckestra.Composer.CompositeC1.Providers
@@ -55,33 +52,18 @@ namespace Orckestra.Composer.CompositeC1.Providers
             if (pagesConfiguration.PageNotFoundPageId != Guid.Empty)
             {
                 var pageUrl = PageService.GetPageUrl(pagesConfiguration.PageNotFoundPageId, pageUrlData.LocalizationScope);
-                var urlBuilder = new UrlBuilder(pageUrl) { [ErrorPathQuerystringName] = HttpUtility.UrlEncode(requestedPath) };
 
+                if (pageUrl == null)
+                {
+                    Log.LogWarning("PageNotFoundUrlProvider", $"404 Page is not configured for website id {pageUrlData.PageId} and culture {pageUrlData.LocalizationScope}. Requested path: {requestedPath}");
+                    return PageService.GetPageUrl(pagesConfiguration.HomePageId, pageUrlData.LocalizationScope);
+                }
+
+                var urlBuilder = new UrlBuilder(pageUrl) { [ErrorPathQuerystringName] = HttpUtility.UrlEncode(requestedPath) };
                 return urlBuilder.ToString();
             }
             else return null;
           
         }
-
-        //TODO: Asked to make C1's utils method, so remove that when it is done.
-        private CultureInfo GetCultureInfo(string requestedUrl)
-        {
-            var urlMappingName = UrlUtils.ParseUrlMappingName(requestedUrl);
-
-            if (!string.IsNullOrWhiteSpace(urlMappingName) &&
-                DataLocalizationFacade.UrlMappingNames.Any(
-                    um => string.Equals(um, urlMappingName, StringComparison.OrdinalIgnoreCase)))
-            {
-                var cultureInfo = DataLocalizationFacade.GetCultureInfoByUrlMappingName(urlMappingName);
-
-                if (DataLocalizationFacade.ActiveLocalizationNames.Contains(cultureInfo.Name))
-                {
-                    return cultureInfo;
-                }
-            }
-
-            return DataLocalizationFacade.DefaultLocalizationCulture;
-        }
-
     }
 }
