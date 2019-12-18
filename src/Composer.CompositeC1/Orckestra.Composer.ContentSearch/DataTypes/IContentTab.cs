@@ -54,21 +54,28 @@ namespace Orckestra.Composer.ContentSearch.DataTypes
         [FieldPosition(2)]
         string DataTypes { get; set; }
 
+        [ImmutableFieldId("a601c37f-d654-4169-9de2-9ef8f9886aeb")]
+        [FormRenderingProfile(Label = "Page Types", HelpText = "Select Page Type to filter Search Results by. Works with C1 Page data type.", WidgetFunctionMarkup = @"<f:widgetfunction xmlns:f=""http://www.composite.net/ns/function/1.0"" name=""Composite.Widgets.String.Selector""><f:param xmlns:f=""http://www.composite.net/ns/function/1.0"" name=""Options""><f:function xmlns:f=""http://www.composite.net/ns/function/1.0"" name=""Orckestra.Composer.ContentSearch.Functions.WebsiteSearch.GetSearchablePageTypesOptions"" /></f:param><f:param name=""KeyFieldName"" value=""Item2"" /><f:param name=""LabelFieldName"" value=""Item1"" /><f:param name=""Multiple"" value=""True"" /><f:param name=""Compact"" value=""True"" /></f:widgetfunction>")]
+        [StoreFieldType(PhysicalStoreFieldType.String, 512, IsNullable = true)]
+        [FieldPosition(3)]
+        [NullStringLengthValidator(0, 512)]
+        string PageTypes { get; set; }
+
         [ImmutableFieldId("0a52e9a7-bf9d-4ea3-bbbe-e81f01fb5189")]
         [FormRenderingProfile(WidgetFunctionMarkup = @"<f:widgetfunction xmlns:f=""http://www.composite.net/ns/function/1.0"" name=""Composite.Widgets.String.Selector""><f:param xmlns:f=""http://www.composite.net/ns/function/1.0"" name=""Options""><f:function xmlns:f=""http://www.composite.net/ns/function/1.0"" name=""Orckestra.Search.WebsiteSearch.WebsiteSearchFacade.GetFacetOptions"" /></f:param><f:param name=""KeyFieldName"" value=""Item1"" /><f:param name=""LabelFieldName"" value=""Item2"" /><f:param name=""Multiple"" value=""True"" /><f:param name=""Compact"" value=""True"" /></f:widgetfunction>")]
         [StoreFieldType(PhysicalStoreFieldType.LargeString, IsNullable = true)]
-        [FieldPosition(3)]
+        [FieldPosition(4)]
         string Facets { get; set; }
 
         [ImmutableFieldId("a7325a27-6354-4363-b5c6-0e4974add6c7")]
         [FormRenderingProfile(Label = "Media Folders", HelpText = "Select specific media folders to make search by media files for current website only", WidgetFunctionMarkup = @"<f:widgetfunction xmlns:f=""http://www.composite.net/ns/function/1.0"" name=""Composite.Widgets.String.DataIdMultiSelector""><f:param name=""OptionsType"" value=""Composite.Data.Types.IMediaFileFolder,Composite"" /><f:param name=""CompactMode"" value=""True"" /></f:widgetfunction>")]
         [StoreFieldType(PhysicalStoreFieldType.LargeString, IsNullable = true)]
-        [FieldPosition(4)]
+        [FieldPosition(5)]
         string MediaFolders { get; set; }
 
         [ImmutableFieldId("96d4d695-b6b5-4619-aee6-ca3893caabe0")]
         [StoreFieldType(PhysicalStoreFieldType.Integer, IsNullable = true)]
-        [FieldPosition(5)]
+        [FieldPosition(6)]
         [NullIntegerRangeValidator(-2147483648, 2147483647)]
         [TreeOrdering(1)]
         Nullable<int> Order { get; set; }
