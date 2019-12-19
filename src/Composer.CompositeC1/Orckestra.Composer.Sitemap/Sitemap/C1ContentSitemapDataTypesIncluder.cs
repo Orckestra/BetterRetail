@@ -25,13 +25,15 @@ namespace Orckestra.Composer.CompositeC1.Sitemap
                 {
                     var type = Type.GetType(typeFullName);
                     if (type == null) { Log.LogInformation("Sitemap", $"The configured {type} doesn't exsits"); continue; }
-                  
+
                     var allWebsitePages = new HashSet<Guid>(PageStructureInfo.GetAssociatedPageIds(sitemapParams.Website, SitemapScope.All));
                     var items = DataFacade.GetData(type).Cast<IPageRelatedData>().Where(d => allWebsitePages.Contains(d.PageId));
 
                     foreach (var item in items)
                     {
-                        yield return CreateSitemapEntryFromRelatedData(sitemapParams.BaseUrl, item);
+                        var sitemapEntry = CreateSitemapEntryFromRelatedData(sitemapParams.BaseUrl, item);
+                        if (sitemapEntry != null)
+                            yield return sitemapEntry;
                     }
                 }
             }
@@ -43,6 +45,7 @@ namespace Orckestra.Composer.CompositeC1.Sitemap
 
             var dataRef = relatedData.ToDataReference();
             var pageUrlData = DataUrls.TryGetPageUrlData(dataRef);
+            if (pageUrlData == null) return null;
             var url = PageUrls.BuildUrl(pageUrlData).TrimStart('/');
 
             return new SitemapEntry
