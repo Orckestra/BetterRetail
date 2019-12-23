@@ -6,7 +6,7 @@
 @{
     string websiteTitle = HomePageNode.Title;
     var themeMeta = Data.Get<Orckestra.Composer.CompositeC1.DataTypes.IWebsiteStyleTheme>().FirstOrDefault(i => i.PageId == HomePageNode.Id);
-    var theme = themeMeta != null ? themeMeta.Theme : "default";
+    var theme = !string.IsNullOrEmpty(themeMeta?.Theme) ? themeMeta.Theme : "default";
 }
 <!DOCTYPE html>
 <html lang="@CultureInfo.CurrentCulture.Name" data-website="@HomePageNode.Id" xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:lang="http://www.composite.net/ns/localization/1.0" xmlns:asp="http://www.composite.net/ns/asp.net/controls">
