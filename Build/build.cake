@@ -64,7 +64,6 @@ Task("Clean").Does(() =>
     DeleteDirectories($"{srcDir}/**/Release/");
 
     DeleteDirectories(outputDir);
-    DeleteDirectories($"{rootDir}/Installer/");
 });
 
 
@@ -107,14 +106,6 @@ Task("Run-Composer-UI-UnitTests").Does(() =>
 Task("Copy-To-Artifacts").Does(() =>
 {
     var artifactsDir = $"{outputDir}/artifacts";
-
-    CreateDirectory(artifactsDir);
-    CopyFiles($"{srcDir}/**/bin/**/*.zip", artifactsDir);
-});
-
-Task("Copy-To-Legacy-Artifacts").Does(() =>
-{
-    var artifactsDir = $"{rootDir}/Installer/packages/generic/C1CMS/RefApp";
 
     CreateDirectory(artifactsDir);
     CopyFiles($"{srcDir}/**/bin/**/*.zip", artifactsDir);
@@ -175,8 +166,7 @@ Task("Tests")
     .IsDependentOn("Run-Composer-UI-UnitTests");
 
 Task("Artifacts")
-    .IsDependentOn("Copy-To-Artifacts")
-    .IsDependentOn("Copy-To-Legacy-Artifacts");
+    .IsDependentOn("Copy-To-Artifacts");
 
 Task("Package")
     .IsDependentOn("Create-NuGet-Package");
@@ -197,5 +187,4 @@ Task("Dev")
 //////////////////////////////////////////////////////////////////////
 // EXECUTION
 //////////////////////////////////////////////////////////////////////
-
 RunTarget(target);
