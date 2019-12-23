@@ -113,14 +113,19 @@ namespace Orckestra.Composer.Providers.Dam
 
             _productMediaSettings = await ProductMediaSettingsRepository.GetProductMediaSettings().ConfigureAwait(false);
 
-            if ((param.MediaSet?.Any(x => x.MediaType == nameof(MediaTypeEnum.Image)) ?? false)
-                || (param.VariantMediaSet?.Any(var => var.Media?.Any(x => x.MediaType == nameof(MediaTypeEnum.Image)) ?? false) ?? false)
-                || (param.Variants?.Any(variant => variant.MediaSet?.Any(x => x.MediaType == nameof(MediaTypeEnum.Image)) ?? false) ?? false))
+            if (IsProductHaveMedia(param.MediaSet, param.VariantMediaSet, param.Variants))
             {
                 return GetAllProductMediaImages(param);
             }
 
             return GetAllProductLocalImages(param);
+        }
+
+        protected virtual bool IsProductHaveMedia(IList<ProductMedia> mediaSet, IList<VariantMediaSet> variantMediaSet, IList<Variant> variants)
+        {
+            return (mediaSet?.Any(x => x.MediaType == nameof(MediaTypeEnum.Image)) ?? false)
+                || (variantMediaSet?.Any(var => var.Media?.Any(x => x.MediaType == nameof(MediaTypeEnum.Image)) ?? false) ?? false)
+                || (variants?.Any(variant => variant.MediaSet?.Any(x => x.MediaType == nameof(MediaTypeEnum.Image)) ?? false) ?? false);
         }
 
         #region Local Image functions
@@ -290,7 +295,7 @@ namespace Orckestra.Composer.Providers.Dam
             return mediaSet?
                 .Where(m => m.IsCover == true)
                 .Select(m => m.Url)
-                .LastOrDefault();
+                .LastOrDefault() ?? (IsProductHaveMedia(product.MediaSet, product.VariantMediaSet, product.Variants) ? "" : null);
         }
 
         protected virtual ProductMainImage GetProductMainMediaImage(ProductImageRequest request)
