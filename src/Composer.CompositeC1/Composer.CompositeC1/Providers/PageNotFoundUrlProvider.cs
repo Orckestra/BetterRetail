@@ -6,7 +6,7 @@ using Composite.Core;
 using Orckestra.Composer.CompositeC1.Services;
 using Orckestra.Composer.Providers;
 using Orckestra.ExperienceManagement.Configuration;
-using Composite.Core.Routing;
+using Orckestra.Composer.CompositeC1.Utils;
 
 namespace Orckestra.Composer.CompositeC1.Providers
 {
@@ -17,15 +17,9 @@ namespace Orckestra.Composer.CompositeC1.Providers
         protected IPageService PageService { get; private set; }
         protected ISiteConfiguration SiteConfiguration { get; private set; }
 
-        public PageNotFoundUrlProvider(IPageService pageService,
-            ISiteConfiguration siteConfiguration)
+        public PageNotFoundUrlProvider(IPageService pageService, ISiteConfiguration siteConfiguration)
         {
-            if (pageService == null)
-            {
-                throw new ArgumentNullException(nameof(pageService));
-            }
-
-            PageService = pageService;
+            PageService = pageService ?? throw new ArgumentNullException(nameof(pageService));
             SiteConfiguration = siteConfiguration;
         }
 
@@ -36,19 +30,14 @@ namespace Orckestra.Composer.CompositeC1.Providers
                 throw new ArgumentException("Requested Path is required", nameof(requestedPath));
             }
 
-            string url = requestedPath;
-            PageUrlData pageUrlData = null;
-            while (pageUrlData == null && url.LastIndexOf('/') > 0)
-            {
-                url = url.Substring(0, url.LastIndexOf('/'));
-                pageUrlData = PageUrls.ParseUrl(url.ToString());
-            }
-            if (pageUrlData == null)
+            var pageUrlData = C1Helper.GetPageUrlDataFromUrl(requestedPath);
+            var websiteId = C1Helper.GetWebsiteIdFromPageUrlData(pageUrlData);
+            if (pageUrlData == null || websiteId == Guid.Empty)
             {
                 return null;
             }
 
-            var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(pageUrlData.LocalizationScope, pageUrlData.PageId);
+            var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(pageUrlData.LocalizationScope, websiteId);
             if (pagesConfiguration.PageNotFoundPageId != Guid.Empty)
             {
                 var pageUrl = PageService.GetPageUrl(pagesConfiguration.PageNotFoundPageId, pageUrlData.LocalizationScope);

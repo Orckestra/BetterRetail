@@ -2,6 +2,7 @@ using System;
 using System.Collections.Specialized;
 using System.Linq;
 using Composite.Core.Routing;
+using Composite.Core.WebClient.Renderings.Page;
 using Composite.Data;
 using Composite.Data.Types;
 using Orckestra.Composer.CompositeC1.DataTypes;
@@ -66,6 +67,25 @@ namespace Orckestra.Composer.CompositeC1.Utils
                 var cssStyleValue = data.Get<CssStyle>().FirstOrDefault(x => x.Id == cssStyleId);
                 return cssStyleValue != null ? cssStyleValue.CssCode : string.Empty;
             }
+        }
+
+        public static PageUrlData GetPageUrlDataFromUrl(string urlStr)
+        {
+            PageUrlData pageUrlData = null;
+            while (pageUrlData == null && urlStr.LastIndexOf('/') > 0)
+            {
+                urlStr = urlStr.Substring(0, urlStr.LastIndexOf('/'));
+                pageUrlData = PageUrls.ParseUrl(urlStr.ToString());
+            }
+
+            return pageUrlData;
+        }
+
+        public static Guid GetWebsiteIdFromPageUrlData(PageUrlData pageUrlData)
+        {
+            if (pageUrlData == null) return Guid.Empty;
+
+            return PageStructureInfo.GetAssociatedPageIds(pageUrlData.PageId, SitemapScope.AncestorsAndCurrent).LastOrDefault();
         }
     }
 }

@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Linq;
 using System.Web;
-using Composite.Core.Routing;
 using Composite.Data;
-using Orckestra.Composer.Services;
-
-using Composite.Core.WebClient.Renderings.Page;
 using Composite.Data.Types;
 using Orckestra.Composer.CompositeC1.Services.Cache;
+using Orckestra.Composer.CompositeC1.Utils;
+using Orckestra.Composer.Services;
 
 namespace Orckestra.Composer.CompositeC1.Services
 {
@@ -61,29 +59,12 @@ namespace Orckestra.Composer.CompositeC1.Services
 
                 if (_websiteId == Guid.Empty)
                 {
-                    var pageUrlData = GetPageUrldata(_httpRequest.Url);
-                    if (pageUrlData != null)
-                    {
-                        _websiteId = PageStructureInfo.GetAssociatedPageIds(pageUrlData.PageId, SitemapScope.AncestorsAndCurrent).LastOrDefault();
-                    }
-
+                    var pageUrlData = C1Helper.GetPageUrlDataFromUrl(_httpRequest.Url.ToString());
+                    _websiteId = C1Helper.GetWebsiteIdFromPageUrlData(pageUrlData);
                 }
 
                 return _websiteId;
             }
-        }
-
-        private static PageUrlData GetPageUrldata(Uri url)
-        {
-            PageUrlData pageUrlData = null;
-            var urlStr = url.ToString();
-            while (pageUrlData == null && urlStr.LastIndexOf('/') > 0)
-            {
-                urlStr = urlStr.Substring(0, urlStr.LastIndexOf('/'));
-                pageUrlData = PageUrls.ParseUrl(urlStr.ToString());
-            }
-
-            return pageUrlData;
         }
     }
 }

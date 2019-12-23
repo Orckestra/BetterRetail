@@ -3,6 +3,7 @@ using Composite.Core.Logging;
 using Composite.Core.Routing;
 using Composite.Data;
 using Orckestra.Composer.CompositeC1.Services;
+using Orckestra.Composer.CompositeC1.Utils;
 using Orckestra.Composer.Utils;
 using Orckestra.ExperienceManagement.Configuration;
 using System;
@@ -57,7 +58,7 @@ namespace Orckestra.Composer.CompositeC1
                 int pathPatternIndex = -1;
                 if ((pathPatternIndex = GetUrlPathIndexForSpecificPagePattern(urlPathSegments, ProductUrlPathIndicatorRegex)) > -1)
                 {
-                    var pageUrlData = GetPageUrldata(url);
+                    var pageUrlData = C1Helper.GetPageUrlDataFromUrl(url.ToString());
                     var websiteId = siteConfiguration.GetWebsiteByPageId(pageUrlData.PageId);
                     var pagesConfiguration = siteConfiguration.GetPagesConfiguration(pageUrlData.LocalizationScope, websiteId);
                     var productPageUrl = _pageService.GetPageUrl(pagesConfiguration.ProductPageId, pageUrlData.LocalizationScope);
@@ -73,7 +74,7 @@ namespace Orckestra.Composer.CompositeC1
                 }
                 else if ((pathPatternIndex = GetUrlPathIndexForSpecificPagePattern(urlPathSegments, StoreUrlPathIndicatorRegex)) > -1)
                 {
-                    var pageUrlData = GetPageUrldata(url);
+                    var pageUrlData = C1Helper.GetPageUrlDataFromUrl(url.ToString());
                     var websiteId = siteConfiguration.GetWebsiteByPageId(pageUrlData.PageId);
                     var pagesConfiguration = siteConfiguration.GetPagesConfiguration(pageUrlData.LocalizationScope, websiteId);
                     var storePageUrl = _pageService.GetPageUrl(pagesConfiguration.StorePageId, pageUrlData.LocalizationScope);
@@ -97,19 +98,6 @@ namespace Orckestra.Composer.CompositeC1
 
             if (!string.IsNullOrEmpty(newUrl))
                 context.RewritePath(newUrl);
-        }
-
-        private static PageUrlData GetPageUrldata(Uri url)
-        {
-            PageUrlData pageUrlData = null;
-            var urlStr = url.ToString();
-            while (pageUrlData == null && urlStr.LastIndexOf('/') > 0)
-            {
-                urlStr = urlStr.Substring(0, urlStr.LastIndexOf('/'));
-                pageUrlData = PageUrls.ParseUrl(urlStr);
-            }
-
-            return pageUrlData;
         }
 
         /// <summary>
