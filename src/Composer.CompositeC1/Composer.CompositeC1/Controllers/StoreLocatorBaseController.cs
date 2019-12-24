@@ -3,7 +3,6 @@ using System.Globalization;
 using System.Net;
 using System.Web.Mvc;
 using Composite.Data;
-using Orckestra.Composer.Search.Providers;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Store.Services;
 using Orckestra.Composer.Store.Providers;
@@ -12,7 +11,6 @@ using Orckestra.Composer.Store.Parameters;
 using Orckestra.Composer.Utils;
 using Orckestra.Composer.Store;
 using Orckestra.Composer.Store.ViewModels;
-using Orckestra.ExperienceManagement.Configuration;
 
 namespace Orckestra.Composer.CompositeC1.Controllers
 {
@@ -36,19 +34,13 @@ namespace Orckestra.Composer.CompositeC1.Controllers
            ILanguageSwitchService languageSwitchService
             )
         {
-            if (composerContext == null) { throw new ArgumentNullException(nameof(composerContext)); }
-            if (storeViewService == null) { throw new ArgumentNullException(nameof(storeViewService)); }
-            if (storeLocatorViewService == null) { throw new ArgumentNullException(nameof(storeLocatorViewService)); }
-            if (storeDirectoryViewService == null) { throw new ArgumentNullException(nameof(storeDirectoryViewService)); }
-            if (languageSwitchService == null) { throw new ArgumentNullException(nameof(languageSwitchService)); }
-
-            ComposerContext = composerContext;
-            StoreViewService = storeViewService;
-            StoreLocatorViewService = storeLocatorViewService;
-            StoreDirectoryViewService = storeDirectoryViewService;
+            ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
+            StoreViewService = storeViewService ?? throw new ArgumentNullException(nameof(storeViewService));
+            StoreLocatorViewService = storeLocatorViewService ?? throw new ArgumentNullException(nameof(storeLocatorViewService));
+            StoreDirectoryViewService = storeDirectoryViewService ?? throw new ArgumentNullException(nameof(storeDirectoryViewService));
             StoreUrlProvider = storeUrlProvider;
             BreadcrumbViewService = breadcrumbViewService;
-            LanguageSwitchService = languageSwitchService;
+            LanguageSwitchService = languageSwitchService ?? throw new ArgumentNullException(nameof(languageSwitchService));
         }
 
 
@@ -209,6 +201,12 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         public virtual ActionResult LanguageSwitch(string storeNumber)
         {
             var baseUrl = RequestUtils.GetBaseUrl(Request).ToString();
+
+            if (storeNumber == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+            }
+
             var storeViewModel = StoreViewService.GetStoreViewModelAsync(new GetStoreParam
             {
                 BaseUrl = baseUrl,
