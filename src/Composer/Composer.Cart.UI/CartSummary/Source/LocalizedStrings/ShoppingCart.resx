@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -166,7 +166,7 @@
     <value>Enter your promotional code</value>
   </data>
   <data name="F_PromoCodeIndication" xml:space="preserve">
-    <value>You have no promotionnal code associated to your order yet.</value>
+    <value>You have no promotional code associated to your order yet.</value>
   </data>
   <data name="F_PromoCodeInvalid" xml:space="preserve">
     <value>The promotional code “{0}” is not valid, has been used or has expired.</value>
