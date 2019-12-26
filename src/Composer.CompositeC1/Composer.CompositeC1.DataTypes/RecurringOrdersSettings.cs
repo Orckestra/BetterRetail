@@ -23,28 +23,24 @@ namespace Orckestra.Composer.CompositeC1.DataTypes
         [FormRenderingProfile(Label = "Recurring Schedule Page")]
         [StoreFieldType(PhysicalStoreFieldType.Guid, IsNullable = true)]
         [FieldPosition(1)]
-        [LazyFunctionProviedProperty("<f:function xmlns:f=\"http://www.composite.net/ns/function/1.0\" name=\"Orckestra.ExperienceManagement.Configuration.Functions.SiteConfigurationPageValidatorContainer.PageValidator\" />")]
         Nullable<Guid> RecurringSchedulePageId { get; set; }
 
         [ImmutableFieldId("222704b4-1ff5-40e4-a332-c1875b358eb4")]
         [FormRenderingProfile(Label = "Recurring Schedule Details Page")]
         [StoreFieldType(PhysicalStoreFieldType.Guid, IsNullable = true)]
         [FieldPosition(1)]
-        [LazyFunctionProviedProperty("<f:function xmlns:f=\"http://www.composite.net/ns/function/1.0\" name=\"Orckestra.ExperienceManagement.Configuration.Functions.SiteConfigurationPageValidatorContainer.PageValidator\" />")]
         Nullable<Guid> RecurringScheduleDetailsPageId { get; set; }
 
         [ImmutableFieldId("223704b4-1ff5-40e4-a332-c1875b358eb4")]
         [FormRenderingProfile(Label = "Recurring Cart Details Page")]
         [StoreFieldType(PhysicalStoreFieldType.Guid, IsNullable = true)]
         [FieldPosition(1)]
-        [LazyFunctionProviedProperty("<f:function xmlns:f=\"http://www.composite.net/ns/function/1.0\" name=\"Orckestra.ExperienceManagement.Configuration.Functions.SiteConfigurationPageValidatorContainer.PageValidator\" />")]
         Nullable<Guid> RecurringCartDetailsPageId { get; set; }
 
         [ImmutableFieldId("224704b0-1ff5-40e4-a332-c1875b358eb3")]
         [FormRenderingProfile(Label = "Recurring Carts Page")]
         [StoreFieldType(PhysicalStoreFieldType.Guid, IsNullable = true)]
         [FieldPosition(1)]
-        [LazyFunctionProviedProperty("<f:function xmlns:f=\"http://www.composite.net/ns/function/1.0\" name=\"Orckestra.ExperienceManagement.Configuration.Functions.SiteConfigurationPageValidatorContainer.PageValidator\" />")]
         Nullable<Guid> RecurringCartsPageId { get; set; }
 
         [ImmutableFieldId("a74604fd-6c8a-4994-90dd-0f8c433980e4")]
