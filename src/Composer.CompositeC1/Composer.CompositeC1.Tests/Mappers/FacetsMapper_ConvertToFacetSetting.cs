@@ -35,9 +35,9 @@ namespace Orckestra.Composer.CompositeC1.Tests.Mappers
                 FieldName = GetRandom.String(10),
                 FacetType = "SingleSelect",
                 IsDisplayed = true,
-                StartValue = GetRandom.NumericString(2),
-                EndValue = GetRandom.NumericString(2),
-                GapSize = GetRandom.NumericString(2),
+                // StartValue = GetRandom.NumericString(2),
+                // EndValue = GetRandom.NumericString(2),
+                // GapSize = GetRandom.NumericString(2),
                 MaxCollapsedValueCount = GetRandom.Int(),
                 MaxExpendedValueCount = GetRandom.Int(),
                 SortWeight = GetRandom.Decimal(),
@@ -52,9 +52,9 @@ namespace Orckestra.Composer.CompositeC1.Tests.Mappers
             result.FacetType.Should().Be(FacetType.SingleSelect);
             result.FacetValueType.Should().Be(typeof(string));
             result.IsDisplayed.Should().Be(facet.IsDisplayed);
-            result.StartValue.Should().Be(facet.StartValue);
-            result.EndValue.Should().Be(facet.EndValue);
-            result.GapSize.Should().Be(facet.GapSize);
+            // result.StartValue.Should().Be(facet.StartValue);
+            // result.EndValue.Should().Be(facet.EndValue);
+            // result.GapSize.Should().Be(facet.GapSize);
             result.MaxCollapsedValueCount.Should().Be(facet.MaxCollapsedValueCount);
             result.MaxExpendedValueCount.Should().Be(facet.MaxExpendedValueCount);
             result.SortWeight.Should().Be((double)facet.SortWeight);

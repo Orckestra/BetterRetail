@@ -23,9 +23,9 @@ namespace Orckestra.Composer.CompositeC1.Mappers
                 MaxCollapsedValueCount = facet.MaxCollapsedValueCount,
                 MaxExpendedValueCount = facet.MaxExpendedValueCount.GetValueOrDefault(int.MaxValue),
                 DependsOn = dependsOn.Select(f => f.FieldName).ToList(),
-                StartValue = facet.StartValue,
-                EndValue = facet.EndValue,
-                GapSize = facet.GapSize,
+                // StartValue = facet.StartValue,
+                // EndValue = facet.EndValue,
+                // GapSize = facet.GapSize,
                 IsDisplayed = facet.IsDisplayed,
                 PromotedValues = promotedFacetValueSettings.Select(ConvertToPromotedFacetValueSetting).ToList(),
             };

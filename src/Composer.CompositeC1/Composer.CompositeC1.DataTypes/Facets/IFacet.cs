@@ -92,26 +92,26 @@ namespace Orckestra.Composer.CompositeC1.DataTypes.Facets
         [FieldPosition(6)]
         string DependsOn { get; set; }
 
-        [ImmutableFieldId("2cf211cd-c154-4824-84c6-f2a321c379ea")]
-        [StoreFieldType(PhysicalStoreFieldType.String, 64, IsNullable = true)]
-        [FieldPosition(7)]
-        [NullStringLengthValidator(0, 64)]
-        [FormRenderingProfile(Label = "Start Value")]
-        string StartValue { get; set; }
+        //[ImmutableFieldId("2cf211cd-c154-4824-84c6-f2a321c379ea")]
+        //[StoreFieldType(PhysicalStoreFieldType.String, 64, IsNullable = true)]
+        //[FieldPosition(7)]
+        //[NullStringLengthValidator(0, 64)]
+        //[FormRenderingProfile(Label = "Start Value")]
+        //string StartValue { get; set; }
 
-        [ImmutableFieldId("2ad74e60-f1be-4a30-b0ea-6a3c2f51bbbf")]
-        [StoreFieldType(PhysicalStoreFieldType.String, 64, IsNullable = true)]
-        [FieldPosition(8)]
-        [NullStringLengthValidator(0, 64)]
-        [FormRenderingProfile(Label = "End Value")]
-        string EndValue { get; set; }
+        //[ImmutableFieldId("2ad74e60-f1be-4a30-b0ea-6a3c2f51bbbf")]
+        //[StoreFieldType(PhysicalStoreFieldType.String, 64, IsNullable = true)]
+        //[FieldPosition(8)]
+        //[NullStringLengthValidator(0, 64)]
+        //[FormRenderingProfile(Label = "End Value")]
+        //string EndValue { get; set; }
 
-        [ImmutableFieldId("060cce6f-3d83-4dce-aafc-0c8c1f2b3463")]
-        [StoreFieldType(PhysicalStoreFieldType.String, 64, IsNullable = true)]
-        [FieldPosition(9)]
-        [NullStringLengthValidator(0, 64)]
-        [FormRenderingProfile(Label = "Gap Size")]
-        string GapSize { get; set; }
+        //[ImmutableFieldId("060cce6f-3d83-4dce-aafc-0c8c1f2b3463")]
+        //[StoreFieldType(PhysicalStoreFieldType.String, 64, IsNullable = true)]
+        //[FieldPosition(9)]
+        //[NullStringLengthValidator(0, 64)]
+        //[FormRenderingProfile(Label = "Gap Size")]
+        //string GapSize { get; set; }
 
         [ImmutableFieldId("ae0debff-eca2-4ed6-8567-49bd22c9234f")]
         [FunctionBasedNewInstanceDefaultFieldValue("<f:function xmlns:f=\"http://www.composite.net/ns/function/1.0\" name=\"Composite.Co" +
