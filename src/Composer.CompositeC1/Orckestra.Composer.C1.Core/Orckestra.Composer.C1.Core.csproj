@@ -67,10 +67,7 @@
     <Content Include="Package\Datas\Orckestra.Composer.CompositeC1.DataTypes.Facets.IFacets_public.xml" />
     <Content Include="Package\Datas\Orckestra.Composer.CompositeC1.DataTypes.Languages_administrated.xml" />
     <Content Include="Package\Datas\Orckestra.Composer.CompositeC1.DataTypes.Languages_public.xml" />
-    <Content Include="Package\error.html" />
     <Content Include="Package\install.xml" />
-    <Content Include="Package\robots.prd.txt" />
-    <Content Include="Package\robots.txt" />
     <Content Include="Package\Web.config.xsl" />
   </ItemGroup>
   <ItemGroup />
@@ -83,13 +80,6 @@
       <Project>{7e75d550-3c78-46d0-a124-065a5fffa0b2}</Project>
       <Name>Composer.CompositeC1.Mvc</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Package\Views\Footer\FollowUs.cshtml" />
-    <None Include="Package\Views\Product\ProductSEO.cshtml" />
-    <None Include="Package\Views\Shared\LanguageSwitch.cshtml" />
-    <None Include="Package\Views\Shared\PageHeader.cshtml" />
-    <None Include="Package\Views\web.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
@@ -110,6 +100,7 @@ mkdir %25TempPath%25
 Robocopy %25ProjectDir%25Package %25TempPath%25 /E /NJH /NDL /NS /NC /NP
 Robocopy %25WebProjectPath%25 %25TempPath%25 "robots*.txt" /NJH /NDL /NS /NC /NP
 Robocopy %25WebProjectPath%25 %25TempPath%25 "Web.config" /NJH /NDL /NS /NC /NP
+Robocopy %25WebProjectPath%25 %25TempPath%25 "error.html" /NJH /NDL /NS /NC /NP
 Robocopy %25WebProjectPath%25 %25TempPath%25 "Global.asax" /NJH /NDL /NS /NC /NP
 Robocopy %25WebProjectPath%25App_Data %25TempPath%25App_Data /E /NJH /NDL /NS /NC /NP
 Robocopy %25WebProjectPath%25App_Code %25TempPath%25App_Code /E /NJH /NDL /NS /NC /NP
