@@ -276,7 +276,8 @@ namespace Orckestra.Composer.Product.Factory
             foreach (var variant in validVariants)
             {
                 var variantVm = ViewModelMapper.MapTo<VariantViewModel>(variant, cultureInfo);
-                variantVm.DisplayName = displayName;
+                if(string.IsNullOrEmpty(variantVm.DisplayName))
+                    variantVm.DisplayName = displayName;
                 variantVm.Kvas = variant.PropertyBag
                     .Join(kvaPropertieNames, bagEntry => bagEntry.Key,
                         kvaPropertyName => kvaPropertyName,

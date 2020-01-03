@@ -77,6 +77,7 @@ module Orckestra.Composer {
                 renderTasks.push(this.renderAvailableAddToCart());
             }
             renderTasks.push(this.renderAddToWishList());
+            renderTasks.push(this.renderProductInformation());
 
             return Q.all(renderTasks);
         }
@@ -103,8 +104,13 @@ module Orckestra.Composer {
                 .then(result => this.render('ProductQuantity', { Quantity: quantity, Disabled: !result }));
         }
 
+        protected renderProductInformation(): Q.Promise<void> {
+            let vm = this.context.viewModel;
+            return Q.fcall(() => this.render('ProductInformation', vm));
+        }
+
         protected renderAddToWishList(): Q.Promise<void> {
-            var vm = this.context.viewModel;
+            let vm = this.context.viewModel;
             this.render('AddToWishList', { Loaded: false });
 
             if (this.isProductWithVariants() && this.isSelectedVariantUnavailable()) {
