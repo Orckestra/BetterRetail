@@ -54,10 +54,8 @@ namespace Orckestra.Composer.CompositeC1.Services
             Func<CultureInfo, string> urlBuilder, 
             CultureInfo currentCulture)
         {
-            var entries = supportedCultures
+            return supportedCultures
                 .Select(ci => CreateEntry(urlBuilder, ci, currentCulture)).Where(e => e.Url != null).OrderBy(e => e.DisplayName).ToList();
-            
-            return entries;
         }
 
         protected virtual LanguageSwitchEntryViewModel CreateEntry(
@@ -80,7 +78,8 @@ namespace Orckestra.Composer.CompositeC1.Services
 
         public virtual void SetEntryDisplayNames(LanguageSwitchEntryViewModel entry, CultureInfo entryCulture)
         {
-            entry.DisplayName = (entryCulture.CultureTypes & CultureTypes.SpecificCultures) != 0 ? entryCulture.Parent.DisplayName : entryCulture.DisplayName;
+            var displayName = (entryCulture.CultureTypes & CultureTypes.SpecificCultures) != 0 ? entryCulture.Parent.NativeName : entryCulture.NativeName;
+            entry.DisplayName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(displayName);
             entry.ShortDisplayName = entryCulture.TwoLetterISOLanguageName;
             entry.CultureName = entryCulture.Name;
         }
