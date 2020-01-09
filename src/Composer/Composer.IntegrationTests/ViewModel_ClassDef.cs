@@ -23,40 +23,6 @@ namespace Orckestra.Composer.Tests.IntegrationTests
             _executingPath = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase, UriKind.Absolute).LocalPath);
         }
 
-        [Test]
-        public void WHEN_class_is_ViewModel_SHOULD_extend_BaseViewModel()
-        {
-            var assembliesToTest = LoadComposerAssemblies();
-            var invalidVmCount = 0;
-            var baseType = typeof (BaseViewModel);
-
-            foreach (var assembly in assembliesToTest)
-            {
-                var viewModelTypes = assembly.GetTypes().Where(IsViewModel);
-
-                foreach (var vmType in viewModelTypes)
-                {
-                    var def = new ViewModelDefinition(vmType)
-                    {
-                        InheritsBase = vmType.BaseType.FullName == baseType.FullName,
-                        IsSealed = vmType.IsSealed
-                    };
-
-                    if (!def.IsValid())
-                    {
-                        Console.WriteLine(def);
-                        invalidVmCount++;
-                    }
-
-                }
-            }
-
-            Assert.IsNotEmpty(assembliesToTest, $"No assembly found in '${_executingPath}'");
-
-            Console.WriteLine("Found {0} invalid ViewModels.", invalidVmCount);
-            Assert.That(invalidVmCount == 0, "Some ViewModels are invalid. Please check output.");
-        }
-
         private static bool IsViewModel(Type t)
         {
             return 

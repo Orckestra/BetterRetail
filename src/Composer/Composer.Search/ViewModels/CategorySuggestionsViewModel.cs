@@ -1,9 +1,8 @@
-﻿using Orckestra.Composer.ViewModels;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Orckestra.Composer.Search.ViewModels
 {
-    public class CategorySuggestionsViewModel : BaseViewModel
+    public class CategorySuggestionsViewModel
     {
         public List<CategorySuggestionViewModel> Suggestions { get; set; }
     }
