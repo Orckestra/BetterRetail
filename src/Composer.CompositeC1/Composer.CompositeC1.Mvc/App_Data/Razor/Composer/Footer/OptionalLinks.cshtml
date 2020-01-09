@@ -18,13 +18,11 @@
 <head>
 </head>
 <body>
-    <div class="col-xs-12 col-md-8 col-md-push-4 col-mobile-flush">
-        <ul class="nav nav-legal">
-           @foreach (var optionalFooterEntity in optionalFooter)
-            {
-                <li><a href="@optionalFooterEntity.Url" style="@optionalFooterEntity.CssClass" target="@optionalFooterEntity.UrlTarget"><span>@optionalFooterEntity.DisplayName</span></a></li>
-            }
-        </ul>
-    </div>
+    <ul class="nav nav-legal">
+        @foreach (var optionalFooterEntity in optionalFooter)
+        {
+            <li><a href="@optionalFooterEntity.Url" style="@optionalFooterEntity.CssClass" target="@optionalFooterEntity.UrlTarget"><span>@optionalFooterEntity.DisplayName</span></a></li>
+        }
+    </ul>
 </body>
 </html>

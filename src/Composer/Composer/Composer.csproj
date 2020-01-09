@@ -405,7 +405,6 @@
     <Compile Include="Providers\Dam\ConventionBasedDamProvider.cs" />
     <Compile Include="Providers\IDamProvider.cs" />
     <Compile Include="Providers\IScopeProvider.cs" />
-    <Compile Include="Services\IHomeViewService.cs" />
     <Compile Include="Services\ILanguageSwitchService.cs" />
     <Compile Include="Repositories\ILookupRepository.cs" />
     <Compile Include="Repositories\ILookupRepositoryFactory.cs" />

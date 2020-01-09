@@ -69,7 +69,6 @@ namespace Orckestra.Composer.CompositeC1.Mvc
             functions.RegisterAction<HeaderController>("PageHeader", "Composer.Header.PageHeader");
 
             functions.RegisterAction<FooterController>("SocialLinks", "Composer.Footer.SocialLinks");
-            functions.RegisterAction<FooterController>("Copyright", "Composer.Footer.Copyright");
 
             functions.RegisterAction<SearchController>("PageHeader", "Composer.Search.PageHeader");
             functions.RegisterAction<SearchController>("Index", "Composer.Search.Index");
@@ -178,7 +177,6 @@ namespace Orckestra.Composer.CompositeC1.Mvc
             functions.RegisterAction<MyAccountController>("AddressList", "Composer.MyAccount.AddressList");
             functions.RegisterAction<MyAccountController>("CreateAddress", "Composer.MyAccount.CreateAddress");
             functions.RegisterAction<MyAccountController>("EditAddress", "Composer.MyAccount.UpdateAddress").IncludePathInfo();
-            functions.RegisterAction<MyAccountController>("MyAccountMenu", "Composer.MyAccount.MyAccountMenu");
             functions.RegisterAction<MyAccountController>("CurrentOrders", "Composer.MyAccount.CurrentOrders");
             functions.RegisterAction<MyAccountController>("PastOrders", "Composer.MyAccount.PastOrders");
             functions.RegisterAction<MyAccountController>("OrderDetails", "Composer.MyAccount.OrderDetails");

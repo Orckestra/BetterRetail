@@ -2,7 +2,6 @@ using System;
 using System.Net;
 using System.Web.Mvc;
 using Composite.Core.Xml;
-using Composite.Data;
 using Orckestra.Composer.Cart;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Parameters.Order;
@@ -31,8 +30,6 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         protected IComposerContext ComposerContext { get; private set; }
         protected IAddressRepository AddressRepository { get; private set; }
         protected IMyAccountUrlProvider MyAccountUrlProvider { get; private set; }
-        protected IOrderUrlProvider OrderUrlProvider { get; private set; }
-        protected IMyAccountViewService MyAccountViewService { get; private set; }
         protected IOrderHistoryViewService OrderHistoryViewService { get; private set; }
         protected IWishListViewService WishListViewService { get; private set; }
         protected IRecurringOrderTemplatesViewService RecurringOrderTemplatesViewService { get; private set; }
@@ -44,8 +41,6 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             IComposerContext composerContext,
             IAddressRepository addressRepository,
             IMyAccountUrlProvider myAccountUrlProvider,
-            IOrderUrlProvider orderUrlProvider,
-            IMyAccountViewService myAccountViewService,
             IOrderHistoryViewService orderHistoryViewService,
             IWishListViewService wishListViewService,
             IRecurringOrderTemplatesViewService recurringOrderTemplatesViewService,
@@ -56,8 +51,6 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
             AddressRepository = addressRepository ?? throw new ArgumentNullException(nameof(addressRepository));
             MyAccountUrlProvider = myAccountUrlProvider ?? throw new ArgumentNullException(nameof(myAccountUrlProvider));
-            OrderUrlProvider = orderUrlProvider ?? throw new ArgumentNullException(nameof(orderUrlProvider));
-            MyAccountViewService = myAccountViewService ?? throw new ArgumentNullException(nameof(myAccountViewService));
             OrderHistoryViewService = orderHistoryViewService ?? throw new ArgumentNullException(nameof(orderHistoryViewService));
             WishListViewService = wishListViewService ?? throw new ArgumentNullException(nameof(wishListViewService));
             RecurringOrderTemplatesViewService = recurringOrderTemplatesViewService ?? throw new ArgumentNullException(nameof(recurringOrderTemplatesViewService));
@@ -75,15 +68,6 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             }).Result;
 
             return View("AccountHeaderBlade", viewModel);
-        }
-
-        [AuthorizeAndRedirect]
-        public virtual ActionResult MyAccountMenu()
-        {
-            var currentPageId = SitemapNavigator.CurrentPageId;
-            var menuViewModel = MyAccountViewService.CreateMenu(currentPageId.ToString());
-
-            return View("MyAccountMenuBlade", menuViewModel);
         }
 
         [AuthorizeAndRedirect]

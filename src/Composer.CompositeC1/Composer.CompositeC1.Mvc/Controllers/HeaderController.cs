@@ -10,14 +10,12 @@ namespace Orckestra.Composer.CompositeC1.Mvc.Controllers
         public HeaderController(IPageService pageService, 
             IComposerContext composerContext, 
             ILanguageSwitchService languageSwitchService, 
-            IHomeViewService homeViewService, 
             IBreadcrumbViewService breadcrumbViewService) 
 
             : base(
             pageService, 
             composerContext, 
             languageSwitchService, 
-            homeViewService, 
             breadcrumbViewService)
         {
         }

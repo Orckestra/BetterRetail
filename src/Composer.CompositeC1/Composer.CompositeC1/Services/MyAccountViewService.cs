@@ -35,22 +35,15 @@ namespace Orckestra.Composer.CompositeC1.Services
             IRecurringOrdersSettings recurringOrdersSettings,
             ISiteConfiguration siteConfiguration)
         {
-            if (composerContext == null) throw new ArgumentNullException("composerContext");
-            if (myAccountUrlProvider == null) throw new ArgumentNullException("myAccountUrlProvider");
-            if (orderUrlProvider == null) throw new ArgumentNullException("orderUrlProvider");
-            if (pageService == null) throw new ArgumentNullException("pageService");
-            if (wishListUrlProvider == null) throw new ArgumentNullException("wishListUrlProvider");
-            if (recurringScheduleUrlProvider == null) throw new ArgumentNullException("recurringScheduleUrlProvider");
-
-            ComposerContext = composerContext;
-            MyAccountUrlProvider = myAccountUrlProvider;
-            OrderUrlProvider = orderUrlProvider;
-            WishListUrlProvider = wishListUrlProvider;
-            PageService = pageService;
-            RecurringScheduleUrlProvider = recurringScheduleUrlProvider;
-            WebsiteContext = websiteContext;
-            RecurringOrdersSettings = recurringOrdersSettings;
-            SiteConfiguration = siteConfiguration;
+            ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
+            MyAccountUrlProvider = myAccountUrlProvider ?? throw new ArgumentNullException(nameof(myAccountUrlProvider));
+            OrderUrlProvider = orderUrlProvider ?? throw new ArgumentNullException(nameof(orderUrlProvider));
+            WishListUrlProvider = wishListUrlProvider ?? throw new ArgumentNullException(nameof(wishListUrlProvider));
+            PageService = pageService ?? throw new ArgumentNullException(nameof(pageService));
+            RecurringScheduleUrlProvider = recurringScheduleUrlProvider ?? throw new ArgumentNullException(nameof(recurringScheduleUrlProvider));
+            WebsiteContext = websiteContext ?? throw new ArgumentNullException(nameof(websiteContext));
+            RecurringOrdersSettings = recurringOrdersSettings ?? throw new ArgumentNullException(nameof(recurringOrdersSettings));
+            SiteConfiguration = siteConfiguration ?? throw new ArgumentNullException(nameof(siteConfiguration));
         }
 
         public virtual MenuViewModel CreateMenu(string currentUrl)

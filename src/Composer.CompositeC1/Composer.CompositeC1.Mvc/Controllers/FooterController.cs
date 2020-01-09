@@ -6,13 +6,8 @@ namespace Orckestra.Composer.CompositeC1.Mvc.Controllers
 {
     public class FooterController : FooterBaseController
     {
-        public FooterController(IComposerContext composerContext, 
-            IHomeViewService homeViewService, 
-            ILocalizationProvider localizationProvider) 
-            
-            : base(composerContext, 
-                  homeViewService, 
-                  localizationProvider)
+        public FooterController(IComposerContext composerContext, ILocalizationProvider localizationProvider)
+            : base(composerContext, localizationProvider)
         {
         }
     }

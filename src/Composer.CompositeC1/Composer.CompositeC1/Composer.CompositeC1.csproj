@@ -314,7 +314,6 @@
     <Compile Include="Services\CompositeLanguageHelper.cs" />
     <Compile Include="Services\CultureService.cs" />
     <Compile Include="Services\ICategoryBrowsingService.cs" />
-    <Compile Include="Services\HomeViewService.cs" />
     <Compile Include="Services\ImageViewService.cs" />
     <Compile Include="Services\IMediaService.cs" />
     <Compile Include="Services\IPageService.cs" />

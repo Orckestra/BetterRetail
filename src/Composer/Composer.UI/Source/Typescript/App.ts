@@ -128,7 +128,6 @@
                 { name: 'MyAccount.NewPassword', controller: Orckestra.Composer.NewPasswordController },
                 { name: 'MyAccount.ReturningCustomer', controller: Orckestra.Composer.ReturningCustomerController },
                 { name: 'MyAccount.SignInHeader', controller: Orckestra.Composer.SignInHeaderController },
-                { name: 'MyAccount.MyAccountMenu', controller: Orckestra.Composer.MyAccountController },
                 { name: 'MyAccount.MyWishList', controller: Orckestra.Composer.MyWishListController },
                 { name: 'MyAccount.SharedWishList', controller: Orckestra.Composer.SharedWishListController },
                 { name: 'MyAccount.WishListInHeader', controller: Orckestra.Composer.WishListInHeaderController },

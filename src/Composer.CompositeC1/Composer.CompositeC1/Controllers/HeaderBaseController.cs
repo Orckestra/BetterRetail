@@ -17,28 +17,19 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         protected IPageService PageService { get; private set; }
         protected IComposerContext ComposerContext { get; private set; }
         protected ILanguageSwitchService LanguageSwitchService { get; private set; }
-        protected IHomeViewService HomeViewService { get; private set; }
         protected IBreadcrumbViewService BreadcrumbViewService { get; private set; }
 
         protected HeaderBaseController(
             IPageService pageService,
             IComposerContext composerContext, 
             ILanguageSwitchService languageSwitchService,
-            IHomeViewService homeViewService,
             IBreadcrumbViewService breadcrumbViewService
             )
         {
-            if (pageService == null) { throw new ArgumentNullException("pageService"); }
-            if (composerContext == null) { throw new ArgumentNullException("composerContext"); }
-            if (languageSwitchService == null) { throw new ArgumentNullException("languageSwitchService"); }
-            if (homeViewService == null) { throw new ArgumentNullException("homeViewService"); }
-            if (breadcrumbViewService == null) { throw new ArgumentNullException("breadcrumbViewService"); }
-
-            PageService = pageService;
-            ComposerContext = composerContext;
-            LanguageSwitchService = languageSwitchService;
-            HomeViewService = homeViewService;
-            BreadcrumbViewService = breadcrumbViewService;
+            PageService = pageService ?? throw new ArgumentNullException(nameof(pageService));
+            ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
+            LanguageSwitchService = languageSwitchService ?? throw new ArgumentNullException(nameof(languageSwitchService));
+            BreadcrumbViewService = breadcrumbViewService ?? throw new ArgumentNullException(nameof(breadcrumbViewService));
         }
 
         public virtual ActionResult LanguageSwitch()

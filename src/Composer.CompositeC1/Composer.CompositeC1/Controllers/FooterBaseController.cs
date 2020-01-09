@@ -8,22 +8,13 @@ namespace Orckestra.Composer.CompositeC1.Controllers
 {
     public class FooterBaseController : Controller
     {
-        protected IHomeViewService HomeViewService { get; private set; }
         protected IComposerContext ComposerContext { get; private set; }
         protected ILocalizationProvider LocalizationProvider { get; private set; }
 
-        public FooterBaseController(
-            IComposerContext composerContext,
-            IHomeViewService homeViewService,
-            ILocalizationProvider localizationProvider)
+        public FooterBaseController(IComposerContext composerContext, ILocalizationProvider localizationProvider)
         {
-            if (composerContext == null) { throw new ArgumentNullException(nameof(composerContext)); }
-            if (homeViewService == null) { throw new ArgumentNullException(nameof(homeViewService)); }
-            if (localizationProvider == null) { throw new ArgumentNullException(nameof(localizationProvider)); }
-
-            ComposerContext = composerContext;
-            HomeViewService = homeViewService;
-            LocalizationProvider = localizationProvider;
+            ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
+            LocalizationProvider = localizationProvider ?? throw new ArgumentNullException(nameof(localizationProvider));
         }
 
         public ActionResult SocialLinks()
@@ -37,13 +28,6 @@ namespace Orckestra.Composer.CompositeC1.Controllers
 
             var localizedFollowUsLabel = LocalizationProvider.GetLocalizedString(getLocalizedFollowUsParam);
             return View("FollowUs", model: string.IsNullOrWhiteSpace(localizedFollowUsLabel) ? string.Empty : localizedFollowUsLabel);
-        }
-
-        public ActionResult Copyright()
-        {
-            var copyrightValue = HomeViewService.GetCopyright(ComposerContext.CultureInfo).Result;
-
-            return Content(copyrightValue);
         }
     }
 }
