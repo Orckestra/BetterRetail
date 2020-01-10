@@ -26,8 +26,9 @@ namespace Orckestra.Composer.Repositories
         /// <returns></returns>
         public virtual async Task<MediaSettings> GetProductMediaSettings()
         {
-            var productMediaSettingsCacheKey = new CacheKey(CacheConfigurationCategoryNames.ProductMediaSettings);
-         
+            var productMediaSettingsCacheKey = new CacheKey(CacheConfigurationCategoryNames.ProductSettings);
+            productMediaSettingsCacheKey.AppendKeyParts("Media");
+
             return await CacheProvider.GetOrAddAsync(productMediaSettingsCacheKey, () => 
                 OvertureClient.SendAsync(new GetMediaSettingsRequest())
             ).ConfigureAwait(false);
