@@ -63,8 +63,6 @@ namespace Orckestra.Composer.Product.Tests.Services
             func.ShouldThrow<ArgumentException>();
         }
 
-        [TestCase("", "", "")]
-        [TestCase(null, "", "")]
         [TestCase("abc", "abcde", null)]
         public void WHEN_String_Parameters_Are_Invalid_SHOULD_Throw_ArgumentException(string productName, string categoryId, string scope)
         {

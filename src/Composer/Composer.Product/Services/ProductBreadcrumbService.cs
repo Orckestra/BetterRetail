@@ -50,7 +50,6 @@ namespace Orckestra.Composer.Product.Services
         protected virtual void AssertParameters(GetProductBreadcrumbParam parameters)
         {
             if (parameters == null) { throw new ArgumentNullException("parameters"); }
-            if (string.IsNullOrWhiteSpace(parameters.ProductName)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("productName"), "parameters"); }
             if (parameters.CultureInfo == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("CultureInfo"), "parameters"); }
 
             if (!string.IsNullOrWhiteSpace(parameters.CategoryId))
