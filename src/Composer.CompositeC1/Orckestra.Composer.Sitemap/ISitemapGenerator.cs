@@ -9,6 +9,6 @@ namespace Orckestra.Composer.Sitemap
 {
     public interface ISitemapGenerator
     {
-        void GenerateSitemaps(SitemapParams sitemapParams, string baseSitemapUrl, params CultureInfo[] cultures);
+        void GenerateSitemaps(Guid website, string baseUrl, string baseSitemapUrl, params CultureInfo[] cultures);
     }
 }

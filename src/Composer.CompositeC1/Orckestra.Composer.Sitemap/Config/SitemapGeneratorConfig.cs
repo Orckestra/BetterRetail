@@ -1,4 +1,5 @@
 ﻿using Orckestra.Composer.Utils;
+using System;
 using System.IO;
 
 namespace Orckestra.Composer.Sitemap.Config
@@ -17,14 +18,14 @@ namespace Orckestra.Composer.Sitemap.Config
             _workingDirectory = workingDirectory;
         }
 
-        public string GetSitemapDirectory(SitemapParams sitemapParams)
+        public string GetSitemapDirectory(Guid website)
         {
-            return Path.Combine( _sitemapDirectory, sitemapParams.Website.ToString());
+            return Path.Combine( _sitemapDirectory, website.ToString());
         }
 
-        public string GetWorkingDirectory(SitemapParams sitemapParams)
+        public string GetWorkingDirectory(Guid website)
         {
-            return Path.Combine(_workingDirectory, sitemapParams.Website.ToString());
+            return Path.Combine(_workingDirectory, website.ToString());
         }
 
         public string GetWorkingRootDirectory()

@@ -30,11 +30,11 @@ namespace Orckestra.Composer.Sitemap
             SitemapFilePrefix = config.SitemapFilePrefix;
         }
 
-        public IEnumerable<Models.Sitemap> GenerateSitemaps(SitemapParams sitemapParams, CultureInfo culture)
+        public IEnumerable<Models.Sitemap> GenerateSitemaps(SitemapParams sitemapParams)
         {
             Guard.NotNullOrWhiteSpace(sitemapParams.BaseUrl, nameof(sitemapParams.BaseUrl));
             Guard.NotNullOrWhiteSpace(sitemapParams.Scope, nameof(sitemapParams.Scope));
-            Guard.NotNull(culture, nameof(culture));
+            Guard.NotNull(sitemapParams.Culture, nameof(sitemapParams.Culture));
 
             var iterationIndex = 1;
             var offset = 0;
@@ -43,7 +43,7 @@ namespace Orckestra.Composer.Sitemap
             {
                 var entries = EntryProvider.GetEntriesAsync(
                     sitemapParams,
-                    culture: culture,
+                    culture: sitemapParams.Culture,
                     offset: offset,
                     count: NumberOfEntriesPerSitemap
                 ).Result;
@@ -54,7 +54,7 @@ namespace Orckestra.Composer.Sitemap
                 {
                     yield return new Models.Sitemap
                     {
-                        Name = isEntriesNotEnough && iterationIndex == 1 ? GetSitemapName(culture) : GetSitemapName(culture, iterationIndex),
+                        Name = isEntriesNotEnough && iterationIndex == 1 ? GetSitemapName(sitemapParams.Culture) : GetSitemapName(sitemapParams.Culture, iterationIndex),
                         Entries = entries.ToArray(),
                     };
 

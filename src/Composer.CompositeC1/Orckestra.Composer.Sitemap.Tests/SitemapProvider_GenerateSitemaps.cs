@@ -44,8 +44,9 @@ namespace Orckestra.Composer.Sitemap.Tests
             var sitemaps = sut.GenerateSitemaps(new SitemapParams()
             {
                 BaseUrl = "baseUrl", 
-                Scope = "scope"
-            }, new CultureInfo("en")).ToArray();
+                Scope = "scope",
+                Culture = new CultureInfo("en"),
+            }).ToArray();
 
             // ASSERT
             sitemaps.Count().Should().Be(2);
@@ -73,8 +74,9 @@ namespace Orckestra.Composer.Sitemap.Tests
             var sitemaps = sut.GenerateSitemaps(new SitemapParams()
             {
                 BaseUrl = "baseUrl", 
-                Scope = "scope"
-            }, new CultureInfo("en")).ToArray();
+                Scope = "scope",
+                Culture = new CultureInfo("en")
+            }).ToArray();
 
             // ASSERT            
             sitemaps.Count().Should().Be(1);
@@ -96,8 +98,9 @@ namespace Orckestra.Composer.Sitemap.Tests
             // ACT
             Action action = () => sut.GenerateSitemaps(new SitemapParams()
             {
-                Scope = "scope"
-            }, new CultureInfo("en")).ToArray();
+                Scope = "scope",
+                Culture = new CultureInfo("en")
+            }).ToArray();
 
             // ASSERT
             action.ShouldThrow<ArgumentException>();
@@ -116,8 +119,9 @@ namespace Orckestra.Composer.Sitemap.Tests
             Action action = () => sut.GenerateSitemaps(new SitemapParams()
             {
                 BaseUrl = "baseUrl",
-                Scope = "scope"
-            }, null).ToArray();
+                Scope = "scope",
+                Culture = null
+            }).ToArray();
 
             // ASSERT
             action.ShouldThrow<ArgumentException>();
@@ -135,8 +139,9 @@ namespace Orckestra.Composer.Sitemap.Tests
             // ACT
             Action action = () => sut.GenerateSitemaps(new SitemapParams()
             {
-                BaseUrl = "baseUrl"
-            }, new CultureInfo("en")).ToArray();
+                BaseUrl = "baseUrl",
+                Culture = new CultureInfo("en")
+            }).ToArray();
 
             // ASSERT
             action.ShouldThrow<ArgumentException>();

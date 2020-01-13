@@ -8,6 +8,9 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Orckestra.Composer.Sitemap.Models;
+using System;
+using Orckestra.ExperienceManagement.Configuration;
+using Composite.Data;
 
 namespace Orckestra.Composer.Sitemap
 {
@@ -19,34 +22,32 @@ namespace Orckestra.Composer.Sitemap
 
         private static object _exclusiveLock = new object();
 
-        private readonly IEnumerable<ISitemapProvider> _providers;
-        private readonly ISitemapIndexGenerator _indexGenerator;
-        private readonly ISitemapGeneratorConfig _config;
+        private IEnumerable<ISitemapProvider> Providers { get; }
+        private ISitemapIndexGenerator IndexGenerator { get; }
+        private ISitemapGeneratorConfig Config { get; }
+        private ISiteConfiguration SiteConfiguration { get; }
 
-        public SitemapGenerator(IEnumerable<ISitemapProvider> providers, ISitemapIndexGenerator indexGenerator, ISitemapGeneratorConfig config)
+        public SitemapGenerator(IEnumerable<ISitemapProvider> providers, ISitemapIndexGenerator indexGenerator, ISitemapGeneratorConfig config, ISiteConfiguration siteConfiguration)
         {
-            Guard.NotNull(providers, nameof(providers));
-            Guard.NotNull(indexGenerator, nameof(indexGenerator));
-            Guard.NotNull(config, nameof(config));
-
-            _providers = providers;
-            _indexGenerator = indexGenerator;
-            _config = config;
+            Providers = providers ?? throw new ArgumentNullException(nameof(ISitemapProvider));
+            IndexGenerator = indexGenerator ?? throw new ArgumentNullException(nameof(ISitemapIndexGenerator));
+            Config = config ?? throw new ArgumentNullException(nameof(ISitemapGeneratorConfig));
+            SiteConfiguration = siteConfiguration ?? throw new ArgumentNullException(nameof(siteConfiguration));
         }
 
-        public void GenerateSitemaps(SitemapParams sitemapParams, string baseSitemapUrl, params CultureInfo[] cultures)
+        public void GenerateSitemaps(Guid website, string baseUrl, string baseSitemapUrl, params CultureInfo[] cultures)
         {
-            Log.Info("Starting sitemaps generation");            
+            Log.Info("Starting sitemaps generation");
 
             var stopwatch = Stopwatch.StartNew();
 
-            Guard.NotNullOrWhiteSpace(sitemapParams.BaseUrl, nameof(sitemapParams.BaseUrl));            
-            Guard.NotNullOrWhiteSpace(sitemapParams.Scope, nameof(sitemapParams.Scope));
+            Guard.NotNullOrWhiteSpace(baseUrl, nameof(baseUrl));
             Guard.NotNullOrEmpty(cultures, nameof(cultures));
+            if (website == Guid.Empty) throw new ArgumentNullException(nameof(website));
 
             lock (_exclusiveLock)
             {
-                var sitemapDirectory = _config.GetSitemapDirectory(sitemapParams);
+                var sitemapDirectory = Config.GetSitemapDirectory(website);
                 EnsureDirectoryExists(sitemapDirectory);
 
                 var tasks = new List<Task>();
@@ -54,42 +55,57 @@ namespace Orckestra.Composer.Sitemap
 
                 try
                 {
-                    EnsureDirectoryExists(_config.GetWorkingDirectory(sitemapParams));
+                    EnsureDirectoryExists(Config.GetWorkingDirectory(website));
 
                     foreach (var culture in cultures)
                     {
-                        foreach (var provider in _providers)
+                        try
                         {
-                            // Start a new task for each provider. 
-                            // For example we can generate content + product sitemaps at the same time.
-                            tasks.Add(Task.Factory.StartNew(() =>
-                            {
-                                Log.Info($"Generating sitemap (type:{provider.GetType()}) for {culture.Name} in {sitemapParams.Scope} scope.");
-                                foreach (var sitemap in provider.GenerateSitemaps(sitemapParams, culture: culture))
-                                {
-                                    // Write sitemap to disk
-                                    Log.Info($"Writing sitemap {sitemap.Name}");
-                                    WriteSitemap(sitemap, sitemapParams);
+                            string scope = SiteConfiguration.GetPublishedScopeId(culture, website);
 
-                                    // Add sitemap name to the list for the index creation later
-                                    lock (sitemapNames)
+                            foreach (var provider in Providers)
+                            {
+                                // Start a new task for each provider. 
+                                // For example we can generate content + product sitemaps at the same time.
+                                tasks.Add(Task.Factory.StartNew(() =>
+                                {
+                                    Log.Info($"Generating sitemap (type:{provider.GetType()}) for {culture.Name} in {scope} scope.");
+                                    var sitemapParams = new SitemapParams
                                     {
-                                        sitemapNames.Add(sitemap.Name);
+                                        Website = website,
+                                        BaseUrl = baseUrl,
+                                        Scope = scope,
+                                        Culture = culture
+                                    };
+
+                                    foreach (var sitemap in provider.GenerateSitemaps(sitemapParams))
+                                    {
+                                        // Write sitemap to disk
+                                        Log.Info($"Writing sitemap {sitemap.Name}");
+                                        WriteSitemap(sitemap, website);
+
+                                        // Add sitemap name to the list for the index creation later
+                                        lock (sitemapNames)
+                                        {
+                                            sitemapNames.Add(sitemap.Name);
+                                        }
                                     }
-                                }
-                            }));
+                              
+                                }));
+                            }
                         }
+                        catch (ArgumentException) { }
                     }
 
                     Task.WhenAll(tasks).Wait();
 
                     // Write sitemap index
-                    var index = _indexGenerator.Generate(baseSitemapUrl, sitemapNames);
-                    WriteSitemapIndex(index, sitemapParams);
+                    var index = IndexGenerator.Generate(baseSitemapUrl, sitemapNames);
+                    WriteSitemapIndex(index, website);
 
                     // Deploy sitemaps and sitemap index
                     Log.Info($"Deploying sitemaps to {sitemapDirectory}");
-                    DeploySitemaps(sitemapParams);
+                    DeploySitemaps(website);
                 }
                 finally
                 {
@@ -101,11 +117,11 @@ namespace Orckestra.Composer.Sitemap
             }
         }
 
-        private void DeploySitemaps(SitemapParams sitemapParams)
+        private void DeploySitemaps(Guid website)
         {
-            var sitemapDirectory = _config.GetSitemapDirectory(sitemapParams);
+            var sitemapDirectory = Config.GetSitemapDirectory(website);
             var destDirInfo = new DirectoryInfo(sitemapDirectory);
-            var workingDirectory = _config.GetWorkingDirectory(sitemapParams);
+            var workingDirectory = Config.GetWorkingDirectory(website);
             var tempDirInfo = new DirectoryInfo(workingDirectory);
 
             var sitemapIndexOriginFilepath = Path.Combine(workingDirectory, SitemapIndexFilename);
@@ -120,7 +136,7 @@ namespace Orckestra.Composer.Sitemap
             // Cleanup destination directory first
             var siteMapsToDelete = destDirInfo
                 .GetFiles()
-                .Where(fileInfo => _providers.Any(provider => provider.IsMatch(fileInfo.Name)));
+                .Where(fileInfo => Providers.Any(provider => provider.IsMatch(fileInfo.Name)));
 
             foreach (var siteMapToDelete in siteMapsToDelete)
             {
@@ -149,22 +165,22 @@ namespace Orckestra.Composer.Sitemap
 
         private void DeleteWorkingDirectory()
         {
-            var workingDirectory = _config.GetWorkingRootDirectory();
+            var workingDirectory = Config.GetWorkingRootDirectory();
             if (Directory.Exists(workingDirectory))
             {
                 Directory.Delete(workingDirectory, recursive: true);
             }
         }
 
-        private void WriteSitemap(Models.Sitemap sitemap, SitemapParams sitemapParams)
+        private void WriteSitemap(Models.Sitemap sitemap, Guid website)
         {
-            var filePath = Path.Combine(_config.GetWorkingDirectory(sitemapParams), sitemap.Name);
+            var filePath = Path.Combine(Config.GetWorkingDirectory(website), sitemap.Name);
             sitemap.WriteToXml(filePath);
         }
 
-        private void WriteSitemapIndex(SitemapIndex sitemapIndex, SitemapParams sitemapParams)
+        private void WriteSitemapIndex(SitemapIndex sitemapIndex, Guid website)
         {
-            var filePath = Path.Combine(_config.GetWorkingDirectory(sitemapParams), SitemapIndexFilename);
+            var filePath = Path.Combine(Config.GetWorkingDirectory(website), SitemapIndexFilename);
             sitemapIndex.WriteToXml(filePath);
         }
     }

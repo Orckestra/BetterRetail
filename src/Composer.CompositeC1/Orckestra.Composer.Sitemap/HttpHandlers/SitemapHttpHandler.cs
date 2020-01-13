@@ -19,10 +19,7 @@ namespace Orckestra.Composer.Sitemap.HttpHandlers
             var sitemapGeneratorConfig = ServiceLocator.GetService<ISitemapGeneratorConfig>();
             var WebsiteContext = ServiceLocator.GetService<IWebsiteContext>();
 
-            var sitemapDirectory = sitemapGeneratorConfig.GetSitemapDirectory(new SitemapParams
-            {
-                Website = WebsiteContext.WebsiteId
-            });
+            var sitemapDirectory = sitemapGeneratorConfig.GetSitemapDirectory(WebsiteContext.WebsiteId);
             var sitemapFilepath = Path.Combine(sitemapDirectory, SitemapGenerator.SitemapIndexFilename);
 
             if (File.Exists(sitemapFilepath))

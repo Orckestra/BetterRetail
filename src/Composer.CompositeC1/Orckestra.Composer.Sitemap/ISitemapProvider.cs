@@ -9,7 +9,7 @@ namespace Orckestra.Composer.Sitemap
 {
     public interface ISitemapProvider
     {
-        IEnumerable<Models.Sitemap> GenerateSitemaps(SitemapParams sitemapParams, CultureInfo culture);
+        IEnumerable<Models.Sitemap> GenerateSitemaps(SitemapParams sitemapParams);
 
         bool IsMatch(string sitemapFilename);
     }

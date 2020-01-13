@@ -85,12 +85,7 @@ namespace Orckestra.Composer.CompositeC1.Sitemap
                     if (websitesBaseUrl.TryGetValue(website.Key, out string websiteBaseUrl))
                     {
                         var sitemapUrl = $"{websiteBaseUrl}{VirtualPathUtility.ToAbsolute(C1SitemapConfiguration.SitemapDirectory, "/")}/{website.Key}";
-                        sitemapGenerator.GenerateSitemaps(new SitemapParams
-                        {
-                            Website = website.Key,
-                            BaseUrl = websiteBaseUrl,
-                            Scope = SiteConfiguration.GetScopeIdByPageId(website.Key)
-                        }, sitemapUrl, website.Value.ToArray());
+                        sitemapGenerator.GenerateSitemaps(website.Key, websiteBaseUrl, sitemapUrl, website.Value.ToArray());
                         sitemapResponse.SitemapList.Add(websiteBaseUrl);
                     }
                     else

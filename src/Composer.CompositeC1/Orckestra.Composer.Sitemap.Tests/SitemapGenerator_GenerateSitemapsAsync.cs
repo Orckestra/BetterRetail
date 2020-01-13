@@ -4,6 +4,7 @@ using Moq.AutoMock;
 using NUnit.Framework;
 using Orckestra.Composer.Sitemap.Config;
 using Orckestra.Composer.Sitemap.Models;
+using Orckestra.ExperienceManagement.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -34,14 +35,20 @@ namespace Orckestra.Composer.Sitemap.Tests
             WorkingDirectory = Path.Combine(WorkingRootDirectory, Path.GetRandomFileName());
             var config = _container.GetMock<ISitemapGeneratorConfig>();
 
-            config.Setup(c => c.GetSitemapDirectory(It.IsAny<SitemapParams>())).Returns(SitemapDirectory);
+            config.Setup(c => c.GetSitemapDirectory(It.IsAny<Guid>())).Returns(SitemapDirectory);
             config.Setup(c => c.GetWorkingRootDirectory()).Returns(WorkingRootDirectory);
-            config.Setup(c => c.GetWorkingDirectory(It.IsAny<SitemapParams>())).Returns(WorkingDirectory);
+            config.Setup(c => c.GetWorkingDirectory(It.IsAny<Guid>())).Returns(WorkingDirectory);
 
             // Sitemap index generator
             var indexGenerator = _container.GetMock<ISitemapIndexGenerator>();
             indexGenerator.Setup(generator => generator.Generate(It.IsAny<string>(), It.IsAny<IEnumerable<string>>()))
                 .Returns(new SitemapIndex());
+
+
+          //  ISiteConfiguration siteConfiguration
+            var siteConfiguration = _container.GetMock<ISiteConfiguration>();
+            siteConfiguration.Setup(siteConfig => siteConfig.GetPublishedScopeId(It.IsAny<CultureInfo>(), It.IsAny<Guid>()))
+                .Returns("scope");
         }
 
         [Test]
@@ -50,31 +57,31 @@ namespace Orckestra.Composer.Sitemap.Tests
             // ARRANGE          
             string baseUrl = null;
             string baseSitemapUrl = "relativeUrl";
-            string scope = "scope";
+            Guid websiteId = Guid.NewGuid();
             CultureInfo[] cultures = new[] { new CultureInfo("en") };
 
             var sut = _container.CreateInstance<SitemapGenerator>();
 
             // ACT
-            Action action = () => sut.GenerateSitemaps(new SitemapParams(), baseSitemapUrl, cultures);
+            Action action = () => sut.GenerateSitemaps(websiteId, baseUrl, baseSitemapUrl, cultures);
 
             // ASSERT
             action.ShouldThrow<ArgumentException>();
         }
 
         [Test]
-        public void WHEN_ScopeNotSpecified_SHOULD_ThrowArgumentException()
+        public void WHEN_WebsiteNotSpecified_SHOULD_ThrowArgumentException()
         {
             // ARRANGE                
             string baseUrl = "baseUrl";
             string baseSitemapUrl = "relativeUrl";
-            string scope = null;
+            Guid websiteId = Guid.Empty;
             CultureInfo[] cultures = new[] { new CultureInfo("en") };
 
             var sut = _container.CreateInstance<SitemapGenerator>();
 
             // ACT
-            Action action = () => sut.GenerateSitemaps(new SitemapParams() { BaseUrl = baseUrl, Scope = scope}, baseSitemapUrl, cultures);
+            Action action = () => sut.GenerateSitemaps(websiteId, baseUrl, baseSitemapUrl, cultures);
 
             // ASSERT
             action.ShouldThrow<ArgumentException>();
@@ -86,13 +93,13 @@ namespace Orckestra.Composer.Sitemap.Tests
             // ARRANGE                
             string baseUrl = "baseUrl";
             string relativeUrl = "relativeUrl";
-            string scope = "scope";
+            Guid websiteId = Guid.NewGuid();
             CultureInfo[] cultures = new CultureInfo[0];
 
             var sut = _container.CreateInstance<SitemapGenerator>();
 
             // ACT
-            Action action = () => sut.GenerateSitemaps(new SitemapParams() { BaseUrl = baseUrl, Scope = scope}, relativeUrl, cultures);
+            Action action = () => sut.GenerateSitemaps(websiteId, baseUrl, relativeUrl, cultures);
 
             // ASSERT
             action.ShouldThrow<ArgumentException>();
@@ -111,7 +118,7 @@ namespace Orckestra.Composer.Sitemap.Tests
 
             string baseUrl = "baseUrl";
             string baseSitemapUrl = "relativeUrl";
-            string scope = "scope";
+            Guid websiteId = Guid.NewGuid();
             CultureInfo[] cultures = new[] { new CultureInfo("en") };
 
             var sut = _container.CreateInstance<SitemapGenerator>();
@@ -119,7 +126,7 @@ namespace Orckestra.Composer.Sitemap.Tests
             try
             {
                 // ACT
-                sut.GenerateSitemaps(new SitemapParams() { BaseUrl = baseUrl, Scope = scope }, baseSitemapUrl, cultures);
+                sut.GenerateSitemaps(websiteId, baseUrl, baseSitemapUrl, cultures);
 
                 // ASSERT
                 Assert_SitemapExists(SitemapDirectory, providerMock1.Sitemaps.Concat(providerMock2.Sitemaps).Concat(providerMock3.Sitemaps));
@@ -141,7 +148,7 @@ namespace Orckestra.Composer.Sitemap.Tests
 
             string baseUrl = "baseUrl";
             string baseSitemapUrl = "relativeUrl";
-            string scope = "scope";
+            Guid websiteId = Guid.NewGuid();
             CultureInfo[] cultures = new[] { new CultureInfo("en") };
 
             var sut = _container.CreateInstance<SitemapGenerator>();
@@ -149,7 +156,7 @@ namespace Orckestra.Composer.Sitemap.Tests
             try
             {
                 // ACT
-                sut.GenerateSitemaps(new SitemapParams() { BaseUrl = baseUrl, Scope = scope }, baseSitemapUrl, cultures);
+                sut.GenerateSitemaps(websiteId, baseUrl, baseSitemapUrl, cultures);
 
                 // ASSERT
                 _container.GetMock<ISitemapIndexGenerator>()
@@ -172,7 +179,7 @@ namespace Orckestra.Composer.Sitemap.Tests
 
             string baseUrl = "baseUrl";
             string relativeUrl = "relativeUrl";
-            string scope = "scope";
+            Guid websiteId = Guid.NewGuid();
             CultureInfo[] cultures = new[] { new CultureInfo("en") };
 
             var sut = _container.CreateInstance<SitemapGenerator>();
@@ -180,7 +187,7 @@ namespace Orckestra.Composer.Sitemap.Tests
             try
             {
                 // ACT
-                sut.GenerateSitemaps(new SitemapParams() { BaseUrl = baseUrl, Scope = scope }, relativeUrl, cultures);
+                sut.GenerateSitemaps(websiteId, baseUrl, relativeUrl, cultures);
 
                 // ASSERT
                 Directory.Exists(WorkingRootDirectory).Should().BeFalse();
@@ -196,7 +203,7 @@ namespace Orckestra.Composer.Sitemap.Tests
         {
             // ARRANGE                
             var provider = _container.GetMock<ISitemapProvider>();
-            provider.Setup(p => p.GenerateSitemaps(It.IsAny<SitemapParams>(), It.IsAny<CultureInfo>()))
+            provider.Setup(p => p.GenerateSitemaps(It.IsAny<SitemapParams>()))
               .Throws<Exception>();
             _container.Use<IEnumerable<ISitemapProvider>>(new[] { provider.Object });
 
@@ -204,7 +211,7 @@ namespace Orckestra.Composer.Sitemap.Tests
 
             string baseUrl = "baseUrl";
             string relativeUrl = "relativeUrl";
-            string scope = "scope";
+            Guid websiteId = Guid.NewGuid();
             CultureInfo[] cultures = new[] { new CultureInfo("en") };
 
             var sut = _container.CreateInstance<SitemapGenerator>();
@@ -212,7 +219,7 @@ namespace Orckestra.Composer.Sitemap.Tests
             try
             {
                 // ACT
-                Action action = () => sut.GenerateSitemaps(new SitemapParams() { BaseUrl = baseUrl, Scope = scope }, relativeUrl, cultures);
+                Action action = () => sut.GenerateSitemaps(websiteId, baseUrl, relativeUrl, cultures);
 
                 // ASSERT
                 action.ShouldThrow<Exception>();
@@ -230,7 +237,7 @@ namespace Orckestra.Composer.Sitemap.Tests
 
             var sitemaps = Enumerable.Range(1, 3).Select(sitemapIndex => CreateSitemap($"sitemap-provider-{providerIndex}.{sitemapIndex}.xml"));
 
-            provider.Setup(p => p.GenerateSitemaps(It.IsAny<SitemapParams>(), It.IsAny<CultureInfo>()))
+            provider.Setup(p => p.GenerateSitemaps(It.IsAny<SitemapParams>()))
               .Returns(sitemaps);
 
             return new ProviderMock
