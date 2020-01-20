@@ -405,6 +405,10 @@
       <Project>{460eaca2-1edb-46bc-a508-f784e4a4da97}</Project>
       <Name>Orckestra.Composer.ContentSearch</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Orckestra.Composer.HandlebarsCompiler\Orckestra.Composer.HandlebarsCompiler.csproj">
+      <Project>{3508a92e-cb4b-431d-bbdc-0ad5fabec20c}</Project>
+      <Name>Orckestra.Composer.HandlebarsCompiler</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Orckestra.Composer.Sitemap\Orckestra.Composer.Sitemap.csproj">
       <Project>{8227ecd6-6d34-4f4d-bfbc-02bc52e7ce7a}</Project>
       <Name>Orckestra.Composer.Sitemap</Name>

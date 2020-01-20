@@ -230,16 +230,6 @@
             .pipe(gulp.dest(uiPackageLocalizedStringsFolder));
     });
 
-
-    gulp.task('package-templates-compile-for-client-side', function () {
-
-        return helpers.getClientSideTemplatesCompiler({
-            templatesFolder: path.join(__dirname, '../', config.paths.rawTemplates),
-            compiledTemplateDestinationFolder: path.join(__dirname, '../UI.Package/', config.paths.javascript),
-            templatesBundleName: 'composer-templates'
-        });
-    });
-
     gulp.task('package-templates-if-any-exist', function (callback) {
 
         var fs = require('fs');
@@ -248,7 +238,6 @@
 
         if (fs.existsSync(rawTemplatesFolder)) {
             runSequence(
-                'package-templates-compile-for-client-side',
                 'package-templates-copy-hbs-to-ui-package',
                 'package-templates-copy-localized-strings-to-ui-package',
                 callback

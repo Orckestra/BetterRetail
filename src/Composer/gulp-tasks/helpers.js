@@ -229,34 +229,6 @@
                     .pipe(gulp.dest(options.scriptOutputFolder))
                 ]);
             },
-
-            getClientSideTemplatesCompiler: function(compilerOptions) {
-
-                var templatesFolder = compilerOptions.templatesFolder,
-                    compiledTemplateDestinationFolder = compilerOptions.compiledTemplateDestinationFolder,
-                    templatesBundleName = compilerOptions.templatesBundleName,
-                    templateNamespace = compilerOptions.templateNamespace || 'Orckestra.Composer.Templates',
-                    templateFilesGlob = templatesFolder + '/*.hbs',
-                    packagedTemplatesName = templatesBundleName + '.js',
-                    minifiedPackagedTemplatesName = templatesBundleName + '.min.js';
-
-                    $.util.log('Compiling templates from ' + templatesFolder);
-                $.util.log('Outputting compiled templates to ' + compiledTemplateDestinationFolder);
-
-                    return gulp.src([templateFilesGlob])
-                        .pipe($.if(argv.verbose, $.using()))
-                        .pipe($.handlebars())
-                        .pipe($.wrap('Handlebars.template(<%= contents %>)'))
-                        .pipe($.declare({
-                            namespace: templateNamespace,
-                            noRedeclare: true, // Avoid duplicate declarations
-                        }))
-                        .pipe($.concat(packagedTemplatesName))
-                        .pipe(gulp.dest(compiledTemplateDestinationFolder))
-                        .pipe($.uglify())
-                        .pipe($.concat(minifiedPackagedTemplatesName))
-                        .pipe(gulp.dest(compiledTemplateDestinationFolder));
-            }
         };
 
     module.exports = helpers;

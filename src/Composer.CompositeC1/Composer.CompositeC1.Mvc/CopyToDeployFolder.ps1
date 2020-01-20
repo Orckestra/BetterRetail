@@ -20,7 +20,8 @@ if (Test-Path $depoymentFolder) {
     Copy-Item "$srcFolder\Composer.CompositeC1\Orckestra.Composer.ContentSearch\bin\Debug\Orckestra.Composer.ContentSearch.dll" -Destination "$depoymentFolder\Bin"
     Copy-Item "$srcFolder\Composer.CompositeC1\Orckestra.Composer.Sitemap\bin\Debug\Orckestra.Composer.Sitemap.dll" -Destination "$depoymentFolder\Bin"
     Copy-Item "$srcFolder\Composer.CompositeC1\Composer.CompositeC1\bin\Debug\Orckestra.Composer.CompositeC1.dll" -Destination "$depoymentFolder\Bin"
-
+	Copy-Item "$srcFolder\Composer.CompositeC1\Orckestra.Composer.HandlebarsCompiler\bin\Debug\Orckestra.Composer.HandlebarsCompiler.dll" -Destination "$depoymentFolder\Bin"
+	
     Copy-Item -Path (Get-Item -Path "$srcFolder\Composer.CompositeC1\Composer.CompositeC1.Mvc\UI.Package\*" -Exclude ('Sass')).FullName -Destination "$depoymentFolder\UI.Package" -Recurse -Force
     Copy-Item -Path "$srcFolder\Composer.CompositeC1\Orckestra.Composer.Articles.Package\Package\App_Data" -Destination "$depoymentFolder" -Recurse -Force
     Copy-Item -Path "$srcFolder\Composer.CompositeC1\Orckestra.Composer.C1.Core\Package\Views" -Destination "$depoymentFolder" -Recurse -Force

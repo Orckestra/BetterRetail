@@ -10,7 +10,7 @@
     <mi:Add path="~\Bin\Orckestra.Composer.CompositeC1.DataTypes.dll" />
   </mi:PackageFragmentInstallerBinaries>
 
-  <mi:PackageFragmentInstallers>    
+  <mi:PackageFragmentInstallers>
     <mi:Add installerType="Composite.Core.PackageSystem.PackageFragmentInstallers.DllPackageFragmentInstaller, Composite" uninstallerType="Composite.Core.PackageSystem.PackageFragmentInstallers.DllPackageFragmentUninstaller, Composite">
       <Files>
         <File sourceFilename="~\Bin\Autofac.dll" targetFilename="~\Bin\Autofac.dll" allowOverwrite="true" addAssemblyBinding="true"/>
@@ -48,7 +48,10 @@
         <File sourceFilename="~\Bin\Orckestra.Composer.CompositeC1.DataTypes.dll" targetFilename="~\Bin\Orckestra.Composer.CompositeC1.DataTypes.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Orckestra.ExperienceManagement.Configuration.dll" targetFilename="~\Bin\Orckestra.ExperienceManagement.Configuration.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Newtonsoft.Json.dll" targetFilename="~\Bin\Newtonsoft.Json.dll" allowOverwrite="true" addAssemblyBinding="true"/>
-		<File sourceFilename="~\Bin\Microsoft.ServiceBus.dll" targetFilename="~\Bin\Microsoft.ServiceBus.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Microsoft.ServiceBus.dll" targetFilename="~\Bin\Microsoft.ServiceBus.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Orckestra.Composer.HandlebarsCompiler.dll" targetFilename="~\Bin\Orckestra.Composer.HandlebarsCompiler.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Jurassic.dll" targetFilename="~\Bin\Jurassic.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\NUglify.dll" targetFilename="~\Bin\NUglify.dll" allowOverwrite="true" />
       </Files>
     </mi:Add>
 

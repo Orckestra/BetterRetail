@@ -70,7 +70,9 @@
     <Content Include="Package\install.xml" />
     <Content Include="Package\Web.config.xsl" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Composer\Composer.UI\Composer.UI.csproj">
       <Project>{4fe997ff-a528-4908-885b-d5cb2bb41f2f}</Project>
