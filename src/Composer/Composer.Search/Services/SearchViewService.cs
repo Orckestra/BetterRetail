@@ -100,6 +100,12 @@ namespace Orckestra.Composer.Search.Services
                 ProductSearchResults = await GetProductSearchResultsAsync(criteria).ConfigureAwait(false)
             };
 
+            // TODO: Needed for some JS context - move to data-context-var where needed
+            viewModel.Context["TotalCount"] = viewModel.ProductSearchResults.TotalCount;
+            viewModel.Context["Keywords"] = viewModel.ProductSearchResults.Keywords;
+            viewModel.Context["CorrectedSearchTerms"] = viewModel.ProductSearchResults.CorrectedSearchTerms;
+            viewModel.Context["ListName"] = "Search Results";
+
             return viewModel;
         }
 

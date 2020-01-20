@@ -1,0 +1,78 @@
+﻿@inherits RazorFunction
+@using Orckestra.Composer.Search.Context;
+@using Orckestra.Composer.Providers.Localization
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Search Summary"; }
+    }
+
+    [FunctionParameter(Label = "Total", DefaultValue = null, Help = "Common Total for all search tabs")]
+    public long? Total { get; set; }
+
+    public ISearchRequestContext SearchRequestContext { get; set; }
+}
+
+@{
+    var viewModel = SearchRequestContext.ProductsSearchViewModel;
+    if (viewModel == null)
+    {
+        return;
+    }
+
+    if (Total == null)
+    {
+        Total = viewModel.ProductSearchResults.TotalCount;
+    }
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<head>
+</head>
+<body>
+    <div class="island" data-oc-controller="Product.SearchSummary" data-context="@viewModel.JsonContext">
+
+        @if (Total > 0)
+        {
+            var corrected = viewModel.ProductSearchResults.CorrectedSearchTerms;
+            var productsTotal = viewModel.ProductSearchResults.TotalCount;
+            if (!string.IsNullOrEmpty(corrected))
+            {
+                /// TODO: Waiting final solution from designer
+                var totalWithoutProducts = Total - productsTotal;
+                <h1>@($"{totalWithoutProducts} {LocalizationHelper.Localize("List-Search", "L_SearchResults")} \"{SearchRequestContext.SearchQuery }\"")</h1>
+                <p>
+                    @(LocalizationHelper.LocalizedFormat("List-Search", "SearchResult", viewModel.ProductSearchResults.CorrectedSearchTerms)) -
+                @(LocalizationHelper.LocalizedFormat("List-Search", "ProductMatches", productsTotal))
+            </p>
+        }
+        else
+        {
+            <h1>@($"{Total} {LocalizationHelper.Localize("List-Search", "L_SearchResults")} \"{SearchRequestContext.SearchQuery }\"")</h1>
+        }
+    }
+    else
+    {
+        <h1>
+            @($"{LocalizationHelper.Localize("List-Search", "L_NoResultsFor")} \"{SearchRequestContext.SearchQuery }\"")
+        </h1>
+    }
+        <!--Suggestions-->
+        @{
+            var suggestions = viewModel.ProductSearchResults.Suggestions;
+
+            if (suggestions != null && suggestions.Count > 0)
+            {
+                <p>
+                    <span>@LocalizationHelper.Localize("List-Search", "L_TryAnother")</span>
+                    @foreach (var item in suggestions)
+                    {
+                        <a href="@item.Url">@item.Title</a><span>&#160;</span>
+                    }
+                </p>
+            }
+        }
+    </div>
+</body>
+</html>

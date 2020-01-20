@@ -195,6 +195,9 @@
   <data name="L_DidYouMean" xml:space="preserve">
     <value>Did you mean </value>
   </data>
+  <data name="L_TryAnother" xml:space="preserve">
+    <value>Try another search with </value>
+  </data>
   <data name="L_NoResultsFor" xml:space="preserve">
     <value>No results were found for</value>
   </data>

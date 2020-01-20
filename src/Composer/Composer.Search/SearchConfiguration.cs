@@ -193,6 +193,6 @@ namespace Orckestra.Composer.Search
         /// <summary>
         /// Whether search term should be automatically corrected
         /// </summary>
-        public static bool AutoCorrectSearchTerms { get; set; } = true;
+        public static bool AutoCorrectSearchTerms { get; set; } = false;
     }
 }

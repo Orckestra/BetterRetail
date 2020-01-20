@@ -8,7 +8,14 @@ namespace Orckestra.Composer.Search.Context
 {
     public interface ISearchRequestContext
     {
+        SearchViewModel ProductsSearchViewModel { get; }
+        bool IsProductsSearchActive { get; set; }
+        int CurrentPage { get;  }
+        string SearchQuery { get; }
+
+        string SortBy { get; }
+
+        string SortDirection { get; }
         Task<PageHeaderViewModel> GetPageHeaderViewModelAsync(GetPageHeaderParam param);
-        Task<SearchViewModel> GetSearchViewModelAsync(GetSearchViewModelParam param);
     }
 }

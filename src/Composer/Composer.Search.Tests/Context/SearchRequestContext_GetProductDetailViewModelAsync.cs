@@ -33,38 +33,36 @@ namespace Orckestra.Composer.Search.Tests.Context
         }
 
         [Test]
-        public async Task WHEN_search_result_view_model_is_set_SHOULD_not_call_search_service()
+        public void WHEN_search_result_view_model_is_set_SHOULD_not_call_search_service()
         {
             //Arrange
             var container = new AutoMocker();
             var productRequestContext = container.CreateInstance<SearchRequestContext>();
+      
             _cultureInfo = new CultureInfo("en-US");
             _scope = GetRandom.String(10);
 
-            var getProductParam = new GetSearchViewModelParam
-            {
-                Keywords = GetRandom.String(10),
-                Request = _requestMock.Object,
-            };
-           
+              
             _viewModel = new SearchViewModel();
-            {
-            };
+            {    };
+
+            container.GetMock<HttpRequestBase>().Setup(m => m.Url).Returns(new Uri(@"https://contoso.com/search"));
+            container.GetMock<HttpRequestBase>().Setup(m => m.ApplicationPath).Returns("C:/website");
             container.GetMock<IComposerContext>().Setup(m => m.CultureInfo).Returns(_cultureInfo);
             container.GetMock<IComposerContext>().Setup(m => m.Scope).Returns(_scope);
             container.GetMock<ISearchViewService>().Setup(m => m.GetSearchViewModelAsync(It.IsAny<SearchCriteria>())).ReturnsAsync(_viewModel);
             var mock = container.GetMock<ISearchViewService>();
 
             //Act
-            var viewModel = await productRequestContext.GetSearchViewModelAsync(getProductParam);
-            var sameViewModel = await productRequestContext.GetSearchViewModelAsync(getProductParam);
-            sameViewModel = await productRequestContext.GetSearchViewModelAsync(getProductParam);
+            var viewModel =  productRequestContext.ProductsSearchViewModel;
+            var sameViewModel =  productRequestContext.ProductsSearchViewModel;
+            sameViewModel =  productRequestContext.ProductsSearchViewModel;
 
             //Assert
             //service should be called only once
             mock.Verify(service => service.GetSearchViewModelAsync(It.IsAny<SearchCriteria>()), Times.Once);
             
-            viewModel.Should().Be(sameViewModel);
+           viewModel.Should().Be(sameViewModel);
         }
     }
 }

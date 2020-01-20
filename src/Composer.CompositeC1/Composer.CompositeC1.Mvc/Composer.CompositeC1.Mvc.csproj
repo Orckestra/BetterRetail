@@ -312,6 +312,8 @@
     <Content Include="App_Data\Razor\Composer\Header\StickyLinks.cshtml" />
     <Content Include="App_Data\Razor\Composer\SearchBox.cshtml" />
     <Content Include="App_Config\ExperienceManagement.config" />
+    <Content Include="App_Code\SearchHelpers.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Search\Summary.cshtml" />
     <Content Include="App_Data\Razor\Composer\Footer\Copyright.cshtml" />
     <Content Include="App_Data\Razor\Composer\MyAccount\MyAccountMenu.cshtml" />
     <None Include="Properties\PublishProfiles\Website - CD.pubxml" />

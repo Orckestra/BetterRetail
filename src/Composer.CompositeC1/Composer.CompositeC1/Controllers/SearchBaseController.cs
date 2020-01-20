@@ -54,7 +54,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
                 return View("SearchResults");
             }
 
-            var searchViewModel = GetSearchViewModel(keywords, page, sortBy, sortDirection);
+            var searchViewModel = SearchRequestContext.ProductsSearchViewModel;
 
             searchViewModel.Context["SearchResults"] = searchViewModel.ProductSearchResults.SearchResults;
             searchViewModel.Context["Keywords"] = searchViewModel.ProductSearchResults.Keywords;
@@ -73,7 +73,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             [Bind(Prefix = SearchRequestParams.SortBy)]string sortBy = null, 
             [Bind(Prefix = SearchRequestParams.SortDirection)]string sortDirection = SearchRequestParams.DefaultSortDirection)
         {
-            var searchViewModel = GetSearchViewModel(keywords, page, sortBy, sortDirection);
+            var searchViewModel = GetSearchViewModel();
             
             return View("SelectedSearchFacets", searchViewModel);
         }
@@ -89,51 +89,21 @@ namespace Orckestra.Composer.CompositeC1.Controllers
                 return View("SearchFacetsEmpty");
             }
 
-            var searchViewModel = GetSearchViewModel(keywords, page, sortBy, sortDirection);
+            var searchViewModel = GetSearchViewModel();
 
             return searchViewModel.ProductSearchResults.TotalCount == 0
                 ? View("SearchFacetsEmpty")
                 : View("SearchFacets", searchViewModel.ProductSearchResults);
         }
  
-        public virtual ActionResult SearchSummary(
-            [Bind(Prefix = SearchRequestParams.Keywords)]string keywords, 
-            [Bind(Prefix = SearchRequestParams.Page)]int page = 1, 
-            [Bind(Prefix = SearchRequestParams.SortBy)]string sortBy = null, 
-            [Bind(Prefix = SearchRequestParams.SortDirection)]string sortDirection = SearchRequestParams.DefaultSortDirection)
-        {
-            if (!AreKeywordsValid(keywords))
-            {
-                return View("SearchSummary", new SearchViewModel { Keywords = keywords });
-            }
-
-            var searchViewModel = GetSearchViewModel(keywords, page, sortBy, sortDirection);
-
-            searchViewModel.Context["TotalCount"] = searchViewModel.ProductSearchResults.TotalCount;
-            searchViewModel.Context["Keywords"] = searchViewModel.ProductSearchResults.Keywords;
-            searchViewModel.Context["CorrectedSearchTerms"] = searchViewModel.ProductSearchResults.CorrectedSearchTerms;
-            searchViewModel.Context["ListName"] = "Search Results";
-
-            return View("SearchSummary", searchViewModel);
-        }
-
         protected virtual bool AreKeywordsValid(string keywords)
         {
             return SearchControllerHelper.AreKeywordsValid(keywords);
         }
 
-        protected virtual SearchViewModel GetSearchViewModel(string keywords, int page, string sortBy, string sortDirection)
+        protected virtual SearchViewModel GetSearchViewModel()
         {
-            var param = new GetSearchViewModelParam
-            {
-                Keywords = keywords,
-                Page = page,
-                SortBy = sortBy,
-                SortDirection = sortDirection,
-                Request = Request
-            };
-
-            return SearchRequestContext.GetSearchViewModelAsync(param).Result;
+                return SearchRequestContext.ProductsSearchViewModel;
         }
 
         public virtual ActionResult Breadcrumb(string keywords)
