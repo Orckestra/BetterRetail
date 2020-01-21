@@ -1,6 +1,7 @@
 ﻿using System;
 using Orckestra.Composer.CompositeC1.Mappers;
 using Orckestra.Composer.Cart.Providers.WishList;
+using Orckestra.Composer.CompositeC1.Context;
 using Orckestra.Composer.CompositeC1.Providers;
 using Orckestra.Composer.CompositeC1.Services;
 using Orckestra.Composer.CompositeC1.Services.Cache;
@@ -8,7 +9,6 @@ using Orckestra.Composer.CompositeC1.Services.DataQuery;
 using Orckestra.Composer.CompositeC1.Services.Facet;
 using Orckestra.Composer.HttpModules;
 using Orckestra.Composer.Mvc.Sample.Providers.UrlProvider;
-using Orckestra.Composer.Product.Providers;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Search;
 using Orckestra.Composer.Search.Providers;
@@ -77,6 +77,8 @@ namespace Orckestra.Composer.CompositeC1
             host.Register<PreviewModeService, IPreviewModeService>();
             host.Register<AutocompleteProvider, IAutocompleteProvider>();
             host.Register<Scheduler, IScheduler>(ComponentLifestyle.Singleton);
+
+            host.Register<ProductContext, IProductContext>(ComponentLifestyle.PerRequest);
         }
     }
 }

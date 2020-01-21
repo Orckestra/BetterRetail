@@ -4,6 +4,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Composite.Data;
+using Orckestra.Composer.CompositeC1.Context;
 using Orckestra.Composer.CompositeC1.DataTypes;
 using Orckestra.Composer.CompositeC1.Extensions;
 using Orckestra.Composer.CompositeC1.Services;
@@ -22,13 +23,13 @@ namespace Orckestra.Composer.CompositeC1.Controllers
     {
         protected IPageService PageService { get; private set; }
         protected IComposerContext ComposerContext { get; private set; }
-        protected IProductViewService ProductService { get; private set; }
         protected IProductSpecificationsViewService ProductSpecificationsViewService { get; private set; }
         protected IProductBreadcrumbService ProductBreadcrumbService { get; private set; }
         protected ILanguageSwitchService LanguageSwitchService { get; private set; }
         protected IProductUrlProvider ProductUrlProvider { get; private set; }
         protected IRelatedProductViewService RelatedProductViewService { get; private set; }
         protected Lazy<IPreviewModeService> PreviewModeService { get; }
+        protected IProductContext ProductContext { get; private set; }
 
         protected ProductBaseController(
             IPageService pageService,
@@ -39,48 +40,23 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             ILanguageSwitchService languageSwitchService,
             IProductUrlProvider productUrlProvider,
             IRelatedProductViewService relatedProductViewService,
-            Lazy<IPreviewModeService> previewModeService)
+            Lazy<IPreviewModeService> previewModeService,
+            IProductContext productContext)
         {
             PageService = pageService ?? throw new ArgumentNullException(nameof(pageService));
             ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
-            ProductService = productService ?? throw new ArgumentNullException(nameof(productService));
             ProductSpecificationsViewService = productSpecificationsViewService ?? throw new ArgumentNullException(nameof(productSpecificationsViewService));
             ProductBreadcrumbService = productBreadcrumbService ?? throw new ArgumentNullException(nameof(productBreadcrumbService));
             LanguageSwitchService = languageSwitchService ?? throw new ArgumentNullException(nameof(languageSwitchService));
             ProductUrlProvider = productUrlProvider ?? throw new ArgumentNullException(nameof(productUrlProvider));
             RelatedProductViewService = relatedProductViewService ?? throw new ArgumentNullException(nameof(relatedProductViewService));
             PreviewModeService = previewModeService ?? throw new ArgumentNullException(nameof(previewModeService));
+            ProductContext = productContext ?? throw new ArgumentNullException(nameof(productContext)); ;
         }
 
-        public virtual ActionResult ProductSummary(string id, string variantId)
+        public virtual ActionResult LanguageSwitch()
         {
-            return GetProductDetail(id, variantId);
-        }
-
-        public virtual ActionResult ProductDescription(string id, string variantId)
-        {
-            return GetProductDetail(id, variantId);
-        }
-
-        public virtual ActionResult ProductSEO(string id, string variantId)
-        {
-            return GetProductDetail(id, variantId);
-        }
-
-        public virtual ActionResult LanguageSwitch(string id)
-        {
-            if (string.IsNullOrWhiteSpace(id))
-            {
-                return this.HandlePreviewMode(() => LanguageSwitch(PreviewModeService.Value.GetProductId()));
-            }
-
-            var productViewModel = ProductService.GetProductViewModelAsync(new GetProductParam
-            {
-                ProductId = id,
-                CultureInfo = ComposerContext.CultureInfo,
-                Scope = ComposerContext.Scope,
-                BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
-            }).Result;
+            var productViewModel = ProductContext.ViewModel;
 
             if (productViewModel == null)
             {
@@ -110,20 +86,9 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             return productUrl;
         }
 
-        public virtual ActionResult Breadcrumb(string id)
+        public virtual ActionResult Breadcrumb()
         {
-            if (string.IsNullOrWhiteSpace(id))
-            {
-                return this.HandlePreviewMode(() => Breadcrumb(PreviewModeService.Value.GetProductId()));
-            }
-
-            var productViewModel = ProductService.GetProductViewModelAsync(new GetProductParam
-            {
-                ProductId = id,
-                CultureInfo = ComposerContext.CultureInfo,
-                Scope = ComposerContext.Scope,
-                BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
-            }).Result;
+            var productViewModel = ProductContext.ViewModel;
 
             if (productViewModel == null)
             {
@@ -143,53 +108,6 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             var breadcrumbViewModel = ProductBreadcrumbService.CreateBreadcrumbAsync(parameters).Result;
 
             return View(breadcrumbViewModel);
-        }
-
-        public virtual ActionResult PageHeader(string id)
-        {
-            if (string.IsNullOrWhiteSpace(id))
-            {
-                return this.HandlePreviewMode(() => PageHeader(PreviewModeService.Value.GetProductId()));
-            }
-
-            var vm = ProductService.GetPageHeaderViewModelAsync(new GetPageHeaderParam
-            {
-                ProductId = id,
-                CultureInfo = ComposerContext.CultureInfo,
-                Scope = ComposerContext.Scope,
-                BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
-
-            }).Result;
-
-            if (vm == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
-            }
-
-            return View(vm);
-        }
-
-        private ActionResult GetProductDetail(string id, string variantId)
-        {
-            if (string.IsNullOrWhiteSpace(id))
-            {
-                return this.HandlePreviewMode(() => GetProductDetail(PreviewModeService.Value.GetProductId(), string.Empty));
-            }
-            var productViewModel = ProductService.GetProductViewModelAsync(new GetProductParam
-            {
-                ProductId = id,
-                CultureInfo = ComposerContext.CultureInfo,
-                Scope = ComposerContext.Scope,
-                VariantId = variantId,
-                BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
-            }).Result;
-
-            if (productViewModel == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
-            }
-
-            return View(productViewModel);
         }
 
         public virtual ActionResult ProductSpecifications(string id, string variantId)

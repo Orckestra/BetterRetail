@@ -1,0 +1,29 @@
+@using Orckestra.Composer.CompositeC1.Context
+@using Orckestra.Composer.Product.ViewModels
+@inherits RazorFunction
+
+@functions {
+	public IProductContext ProductContext { get; set; }
+	public new ProductViewModel Model { get { return ProductContext.ViewModel; } }
+}
+
+@{ 
+    if(string.IsNullOrWhiteSpace(Model.Description)) { return;  }
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<head>
+</head>
+<body>
+	<div class="row">
+		<div class="col-md-10  col-md-offset-1">
+				<div>
+					<h2> @Html.Localize("ProductPage", "L_ProductDescription")</h2>
+					<div property="description">
+						@Html.Raw(Model.Description)
+					</div>
+				</div>
+		</div>
+	</div>
+</body>
+</html>

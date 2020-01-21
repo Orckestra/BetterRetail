@@ -316,6 +316,10 @@
     <Content Include="App_Data\Razor\Composer\Search\Summary.cshtml" />
     <Content Include="App_Data\Razor\Composer\Footer\Copyright.cshtml" />
     <Content Include="App_Data\Razor\Composer\MyAccount\MyAccountMenu.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Product\Description.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Product\SEO.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Product\Summary.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Product\PageHeader.cshtml" />
     <None Include="Properties\PublishProfiles\Website - CD.pubxml" />
     <None Include="Properties\PublishProfiles\Website.pubxml" />
     <Content Include="ViewModelAsExtensionModelTemplate.tt">
@@ -324,10 +328,11 @@
     </Content>
     <Content Include="Views\Footer\FollowUs.cshtml" />
     <Content Include="Views\web.config" />
-    <Content Include="Views\Product\ProductSEO.cshtml" />
     <Content Include="Views\Shared\PageHeader.cshtml" />
     <Content Include="Views\Shared\LanguageSwitch.cshtml" />
     <Content Include="web.config" />
+    <Content Include="Views\Product\Images.cshtml" />
+    <Content Include="Views\Product\Zoom.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\Solution Items\SharedAssemblyInfo.cs">

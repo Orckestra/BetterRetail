@@ -74,6 +74,11 @@ namespace Orckestra.Composer.Product.Api
                 }
             );
 
+            //Some additionnal Context Required by JS - used by Product Quick View on search page
+            vm.Context["Images"] = vm.Images;
+            vm.Context["SelectedImage"] = vm.SelectedImage;
+            vm.Context["FallbackImageUrl"] = vm.FallbackImageUrl;
+            vm.Context["allVariants"] = vm.Variants;
             return Ok(vm);
         }
 

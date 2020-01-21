@@ -36,19 +36,6 @@ module Orckestra.Composer {
             $('#addToCartModal').modal('hide');
         }
 
-        public selectImage(clickedImageIndex: number, concern: string) {
-            // find currently selected image and set selected to false
-            var index = _.findIndex(this.context.viewModel.Images, { Selected: true });
-
-            if (index > -1) {
-                this.context.viewModel.Images[index].Selected = false;
-            }
-
-            this.context.viewModel.Images[clickedImageIndex].Selected = true;
-            this.context.viewModel.SelectedImage.ImageUrl = this.context.viewModel.Images[clickedImageIndex].ImageUrl;
-            this.eventHub.publish(concern + 'ImagesChanged', { data: this.context.viewModel });
-        }
-
         public calculatePrice(productId: string, concern: string) {
             var data = { products: [productId] };
 

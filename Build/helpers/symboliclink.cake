@@ -27,14 +27,14 @@ public void ReplaceDirWithSymbolicLink(string destination, string source)
     }
 }
 
-public void ReplaceFilesWithSymbolicLinks(string destination, string source)
+public void ReplaceFilesWithHardLinks(string destination, string source)
 {
     var files = System.IO.Directory.GetFiles(source, "*", SearchOption.AllDirectories);
     foreach (var file in files)
     {
         var relativePath = GetRelativePath(source, file);
         var descFilePath = System.IO.Path.Combine(destination, relativePath);
-        ReplaceFileWithSymbolicLink(descFilePath, file);
+        ReplaceFileWithHardLink(descFilePath, file);
     }
 }
 
@@ -43,7 +43,7 @@ public string GetRelativePath(string relativeTo, string path)
     return System.IO.Path.GetFullPath(path).Replace(System.IO.Path.GetFullPath(relativeTo), "").TrimStart(new [] { '\\', '/' });
 }
 
-public void ReplaceFileWithSymbolicLink(string destination, string source)
+public void ReplaceFileWithHardLink(string destination, string source)
 {
     if (System.IO.File.Exists(destination))
         System.IO.File.Delete(destination);
@@ -55,6 +55,6 @@ public void ReplaceFileWithSymbolicLink(string destination, string source)
     var res = CreateHardLink(destination, source, IntPtr.Zero);
     if (!res)
     {
-        throw new Exception($"Failed to create sym link '{source}'->'{destination}'");
+        throw new Exception($"Failed to create hard link '{source}'->'{destination}'");
     }
 }

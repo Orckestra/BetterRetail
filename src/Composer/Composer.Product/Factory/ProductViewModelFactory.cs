@@ -163,6 +163,7 @@ namespace Orckestra.Composer.Product.Factory
 
             var allVariantsVm = GetVariantViewModels(param.Product.Variants, param.ProductDefinition.VariantProperties, productDisplayName, param.CultureInfo,
                 vvm => InitializeVariantImages(param.Product.Id, param.ProductDetailImages, param.CultureInfo, vvm)).ToList();
+            productDetailViewModel.Variants = allVariantsVm;
             var selectedVariantVm = GetSelectedVariantViewModel(param.VariantId, allVariantsVm);
 
             MergeSelectedVariantVmToProductVm(selectedVariantVm, productDetailViewModel);
@@ -375,22 +376,16 @@ namespace Orckestra.Composer.Product.Factory
 
             if (selectedVariantVm != null)
             {
-                productViewModel.Context["allVariants"] = allVariantsVm;
+                productViewModel.Context["allVariants"] = allVariantsVm.Select(v => new { v.ListPrice, v.Id, v.Kvas, v.Sku } );
                 productViewModel.Context["selectedVariantId"] = selectedVariantVm.Id;
                 productViewModel.Context["displayedVariantId"] = selectedVariantVm.Id;
             }
 
             //Some additionnal Context Required by JS
-            productViewModel.Context["Brand"] = productViewModel.Brand;
-            productViewModel.Context["BrandId"] = productViewModel.BrandId;
+
             productViewModel.Context["CategoryId"] = productViewModel.CategoryId;
             productViewModel.Context["Sku"] = productViewModel.Sku;
-            productViewModel.Context["Images"] = productViewModel.Images;
-            productViewModel.Context["SelectedImage"] = productViewModel.SelectedImage;
-            productViewModel.Context["FallbackImageUrl"] = productViewModel.FallbackImageUrl;
-            productViewModel.Context["DisplayName"] = productViewModel.DisplayName;
             productViewModel.Context["keyVariantAttributeItems"] = productViewModel.KeyVariantAttributeItems;
-            productViewModel.Context["IsProductZoomEnabled"] = productViewModel.IsProductZoomEnabled;
 
             // Transfer custom properties that might have been added
             foreach (var property in productViewModel.Bag)

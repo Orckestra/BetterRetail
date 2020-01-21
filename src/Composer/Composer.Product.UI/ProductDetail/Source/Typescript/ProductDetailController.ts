@@ -60,21 +60,34 @@ module Orckestra.Composer {
 
         protected onSelectedVariantIdChanged(e: IEventInformation) {
 
+            let varId = e.data.selectedVariantId || 'unavailable';
+            var all = $('[data-variant]');
+
+            $.each(all, (index, el) => {
+                let $el = $(el);
+                var vIds = $el.data('variant').toString().split(',');
+                if (vIds.indexOf(varId) >= 0) {
+                    this.handleHiddenImages($el);
+                    $el.removeClass('hidden');
+                } else {
+                    $el.addClass('hidden');
+                }
+            });
+
             this.renderData().done();
+        }
+
+        protected handleHiddenImages(el) {
+            el.find('img').each((index, img) => {
+                if (!$(img).attr('src')) {
+                    $(img).attr('src', $(img).data('src'));
+                }
+            });
         }
 
         protected onSelectedKvasChanged(e: IEventInformation) {
 
             this.render('KvaItems', {KeyVariantAttributeItems: e.data});
-        }
-
-        protected onImagesChanged(e: IEventInformation) {
-
-            if (this.isProductWithVariants() && this.isSelectedVariantUnavailable()) {
-                this.render('ProductImages', this.getUnavailableProductImages(e));
-            } else {
-                this.render('ProductImages', e.data);
-            }
         }
 
         private getUnavailableProductImages(e: IEventInformation): any {

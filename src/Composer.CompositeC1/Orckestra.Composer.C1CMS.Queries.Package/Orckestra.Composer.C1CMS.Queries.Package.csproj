@@ -63,7 +63,6 @@
     <Content Include="Package\App_Data\Razor\Composer\Components\Queries\Merchandising\Generic\Top.cshtml" />
     <Content Include="Package\App_Data\Razor\Composer\Queries\Merchandising\Grid.cshtml" />
     <Content Include="Package\App_Data\Razor\Composer\Queries\ProductSet\Grid.cshtml" />
-    <Content Include="Package\UI.Package\Templates\SearchQueryTopResults.hbs" />
     <Content Include="packages.config" />
     <Content Include="Package\App_Data\Razor\Composer\DatePicker\DatePicker.Includes.cshtml" />
     <Content Include="Package\App_Data\Razor\Composer\Components\Queries\ProductSet\Generic\Top.cshtml" />

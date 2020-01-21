@@ -28,34 +28,6 @@ namespace Orckestra.Composer.Product.Services
             ProductUrlProvider = productUrlProvider;
         }
 
-        public virtual async Task<PageHeaderViewModel> GetPageHeaderViewModelAsync(GetPageHeaderParam param)
-        {
-            if (param == null) { throw new ArgumentNullException("param"); }
-
-            var product = await GetProductViewModelAsync(new GetProductParam
-            {
-                ProductId = param.ProductId,
-                CultureInfo = param.CultureInfo,
-                Scope = param.Scope,
-                BaseUrl = param.BaseUrl
-
-            }).ConfigureAwait(false);
-
-            if (product == null)
-            {
-                return null;
-            }
-
-            var vm = new PageHeaderViewModel
-            {
-                PageTitle = GetPageTitle(product),
-                MetaDescription = GetProductDescription(product),
-                CanonicalUrl = GetCanonicalUrl(param, product)
-            };
-
-            return vm;
-        }
-
         protected virtual string GetPageTitle(ProductViewModel product)
         {
             return product.DisplayName;
@@ -99,9 +71,9 @@ namespace Orckestra.Composer.Product.Services
             }
         }
 
-        public virtual async Task<ProductViewModel> GetProductViewModelAsync(GetProductParam param)
+        public virtual Task<ProductViewModel> GetProductViewModelAsync(GetProductParam param)
         {
-            return await ProductViewModelFactory.GetProductViewModel(param).ConfigureAwait(false);
+            return ProductViewModelFactory.GetProductViewModel(param);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using Orckestra.Composer.CompositeC1.Context;
 using Orckestra.Composer.CompositeC1.Controllers;
 using Orckestra.Composer.CompositeC1.Services;
 using Orckestra.Composer.CompositeC1.Services.PreviewMode;
@@ -19,7 +20,8 @@ namespace Orckestra.Composer.CompositeC1.Mvc.Controllers
             ILanguageSwitchService languageSwitchService, 
             IProductUrlProvider productUrlProvider, 
             IRelatedProductViewService relatedProductViewService,
-            Lazy<IPreviewModeService> previewModeService) 
+            Lazy<IPreviewModeService> previewModeService,
+            IProductContext productContext) 
             
             : base(
             pageService, 
@@ -30,7 +32,8 @@ namespace Orckestra.Composer.CompositeC1.Mvc.Controllers
             languageSwitchService, 
             productUrlProvider, 
             relatedProductViewService,
-            previewModeService)
+            previewModeService,
+            productContext)
         {
         }
     }

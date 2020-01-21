@@ -68,7 +68,7 @@ namespace Orckestra.Composer.Repositories
                     {
                         //get all cultures to avoid reloading product page to retrieve new product details
                         CultureName = string.Empty,
-                        IncludePriceLists = true,
+                        IncludePriceLists = false,
                         IncludeRelationships = true,
                         IncludeVariants = true,
                         ProductId = param.ProductId,
@@ -81,7 +81,7 @@ namespace Orckestra.Composer.Repositories
                     return OvertureClient.SendAsync(request);
                 }).ConfigureAwait(false);
 
-            return param.ReturnInactive || (result != null && result.Active.HasValue && result.Active.Value) ? result : null;
+            return param.ReturnInactive || (result?.Active ?? false) ? result : null;
         }
 
         public virtual async Task<ProductDefinition> GetProductDefinitionAsync(GetProductDefinitionParam param)

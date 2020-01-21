@@ -76,7 +76,7 @@ namespace Orckestra.Composer.Tests.ComposerHost
 
                 //real assert
                 Console.WriteLine(assembly.FullName);
-                attributes.Length.Should().Be(1);
+                attributes.Length.Should().Be(1, $"Assembly '{assembly.FullName}' should have ComposerAssemblyWeight attribute");
             }
         }
         [Test]

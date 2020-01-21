@@ -372,6 +372,7 @@ Task("Patch-csproj.user").Does(() =>
 Task("Configure-Symbolic-Links").Does(() =>
 {
     ReplaceDirWithSymbolicLink($"{websiteDir}/UI.Package/Sass", $"{rootDir}/src/Composer/Composer.UI/Source/Sass");
+	//ReplaceDirWithSymbolicLink($"{websiteDir}/UI.Package/Templates", $"{rootDir}/src/Composer/Composer.UI/Source/Templates");
 });
 
 Task("Modify-Configs-For-Debug").Does(() =>
@@ -391,6 +392,25 @@ Task("Modify-Configs-For-Debug").Does(() =>
 Task("Open-Website").Does(() =>
 {
     Process.Start($"{Parameters["websiteUrl"]}/Composite/top.aspx");
+});
+
+
+Task("Link-Razor").Does(() =>
+{
+    Information("Link-Razor task");
+    var srcRazorDir = $"{rootDir}/src/Composer.CompositeC1/Composer.CompositeC1.Mvc/App_Data/Razor";
+    var targetRazorPath = new DirectoryPath($"{deploymentDir}/Website/App_Data/Razor");
+    var srcRazorPath = new DirectoryPath(srcRazorDir);
+    var files = GetFiles($"{srcRazorDir}/**/*.cshtml");
+    foreach(var file in files)
+    {
+        var razorFile = srcRazorPath.GetRelativePath(file);
+        var targetFile = targetRazorPath.CombineWithFilePath(razorFile);
+        
+        Information("RazorFile: {0}", razorFile);
+        ReplaceFileWithHardLink(targetFile.FullPath, file.FullPath);
+    }
+
 });
 
 
@@ -432,7 +452,9 @@ Task("Configure-Local-Debug")
     .IsDependentOn("Load-CakeConfig")
     .IsDependentOn("Patch-csproj.user")
     .IsDependentOn("Configure-Symbolic-Links")
+	.IsDependentOn("Link-Razor")
     .IsDependentOn("Modify-Configs-For-Debug");
+
 
 Task("All")
     .Description("Only this task should be used, everything else subtasks")
@@ -440,6 +462,11 @@ Task("All")
     .IsDependentOn("Install")
     .IsDependentOn("Configure-Local-Debug")
     .IsDependentOn("Open-Website");
+
+
+Task("Link")
+    .Description("Should be used on dev machine only. Used for link dev files")
+    .IsDependentOn("Link-Razor");
 
 //////////////////////////////////////////////////////////////////////
 // EXECUTION

@@ -11,17 +11,9 @@ module Orckestra.Composer {
             this.initZoom();
 
             this.eventHub.subscribe('productDetailSelectedVariantIdChanged', (e) => this.updateModalImages(e));
-            let vm = this.context.viewModel;
-            for (let variant of vm.allVariants) {
-                this.allImages[variant.Id] = variant.Images;
-            }
         }
 
         protected openZoom(event: JQueryEventObject) {
-            let context$: JQuery = $(event.target),
-                index: number = parseInt($('.js-thumbnail.active').attr('data-index'), 10);
-
-            $('.js-zoom-thumbnail').eq(index).click();
             event.preventDefault();
             $('.modal-fullscreen').modal();
         }
@@ -31,15 +23,14 @@ module Orckestra.Composer {
                 largeImage: HTMLImageElement = <HTMLImageElement>document.querySelector('.js-zoom-image'),
                 selector: string = event.target.tagName, // Clicked HTML element
                 $largeImage: JQuery = $(largeImage);
+            event.preventDefault();
 
-            if (selector.toLocaleLowerCase() !== 'a') {
-                context$ = context$.parent();
+            if (selector.toLocaleLowerCase() === 'img') {
+                var src = context$.attr('data-zoom-src');
+                $('.js-zoom-thumbnails').find('a').removeClass('active');
+                context$.parent().addClass('active');
+                $largeImage.attr('src', src);
             }
-
-            $('.js-zoom-thumbnail').removeClass('active');
-
-            context$.addClass('active');
-            $largeImage.attr('src', context$.attr('data-image'));
         }
 
         protected errorZoomedImage(event: JQueryEventObject) {
@@ -51,30 +42,18 @@ module Orckestra.Composer {
 
         protected initZoom() {
             $(document).on('click', '.js-zoom', (event: JQueryEventObject) => this.openZoom(event));
-            $(document).on('click', '.js-zoom-thumbnail', (event: JQueryEventObject) => this.changeZoomedImage(event));
+            $(document).on('click', '.js-zoom-thumbnails', (event: JQueryEventObject) => this.changeZoomedImage(event));
             $('.js-zoom-image').on('error', (event: JQueryEventObject) => this.errorZoomedImage(event));
-
-            // Select first thumbnail
-            $('.js-zoom-thumbnail').eq(0).click();
         }
 
         protected updateModalImages(e) {
-            if (e.data.initialSelectedVariantId !== e.data.selectedVariantId) {
-                let modalThumbs = $('.js-zoom-thumbnail');
-                let variantImages = this.allImages[e.data.selectedVariantId];
-                if (!_.isNull(variantImages) && !_.isEmpty(variantImages)) {
-                    // by default the platform sets 4 pictures for each product
-                    modalThumbs.each(function (i) {
-                        let link = $(this);
-                        let image = $(this).find('img');
-                        let idx = link.attr('data-index');
-                        link.css({ 'display': 'none' });
-                        // images are already ordered by sequence number
-                        link.attr('data-image', variantImages[idx].ProductZoomImageUrl);
-                        image.attr('src', variantImages[idx].ThumbnailUrl);
-                    });
+            $('.js-zoom-thumbnails').html('');
+            $('.js-thumbnails[data-variant="' + e.data.selectedVariantId + '"]').find('a').each((index, el) => {
+                $(el).clone().appendTo('.js-zoom-thumbnails');
+                if ($(el).hasClass('active')) {
+                    $(el).find('img').click();
                 }
-            }
+             });
         }
     }
 }

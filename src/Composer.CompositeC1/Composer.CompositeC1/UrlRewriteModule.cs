@@ -66,7 +66,7 @@ namespace Orckestra.Composer.CompositeC1
                     string productId = urlPathSegments.ElementAtOrDefault(pathPatternIndex + 1); //product Id is always in the path after the product path indicator
                     string variantId = urlPathSegments.ElementAtOrDefault(pathPatternIndex + 2); //variant Id is always in the path after the product id
 
-                    newUrl = UrlFormatter.AppendQueryString(productPageUrl, new NameValueCollection
+                    newUrl = UrlFormatter.AppendQueryString(productPageUrl, new NameValueCollection(context.Request.QueryString)
                     {
                         {"id", productId},
                         {"variantId", variantId}

@@ -77,7 +77,6 @@ module Orckestra.Composer {
                 renderTasks.push(this.renderAvailableAddToCart());
             }
             renderTasks.push(this.renderAddToWishList());
-            renderTasks.push(this.renderProductInformation());
 
             return Q.all(renderTasks);
         }
@@ -102,11 +101,6 @@ module Orckestra.Composer {
             return this.inventoryService
                 .isAvailableToSell(this.context.viewModel.Sku)
                 .then(result => this.render('ProductQuantity', { Quantity: quantity, Disabled: !result }));
-        }
-
-        protected renderProductInformation(): Q.Promise<void> {
-            let vm = this.context.viewModel;
-            return Q.fcall(() => this.render('ProductInformation', vm));
         }
 
         protected renderAddToWishList(): Q.Promise<void> {
@@ -282,9 +276,19 @@ module Orckestra.Composer {
         public selectImage(actionContext: IControllerActionContext) {
 
             actionContext.event.preventDefault();
+            var target = actionContext.event.target;
+            var mainSrc = $(target).attr('data-main-src');
+            var zoomSrc = $(target).attr('data-zoom-src');
 
-            var clickedImageIndex: any = actionContext.elementContext.data('index');
-            this.productService.selectImage(clickedImageIndex, this.concern);
+            if (target.tagName.toLowerCase() === 'img') {
+                $(target).parents('[data-variant]').find('a').removeClass('active');
+                $(target).parent('a').addClass('active');
+                $('.product-main-img:visible').attr('src', mainSrc);
+
+                var zoomThumbnail = $('.js-zoom-thumbnails').find('img[data-zoom-src="' + zoomSrc + '"]');
+                zoomThumbnail.click();
+            }
+
         }
 
         public selectKva(actionContext: IControllerActionContext) {

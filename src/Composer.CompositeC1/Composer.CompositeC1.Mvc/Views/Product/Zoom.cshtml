@@ -1,0 +1,40 @@
+﻿@using System.Web;
+@using System.Globalization;
+@model Orckestra.Composer.Product.ViewModels.ProductViewModel
+
+
+<div data-oc-controller="Product.ProductZoom">
+    <div class="modal fade modal-fullscreen product-details-zoom" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">@Model.DisplayName</h4>
+                </div>
+                <div class="modal-body tall">
+                    <div class="row">
+                        <div class="col-sm-9 col-sm-push-3">
+                            <img property="image" class="img-zoom js-zoom-image"
+                                 alt="@Model.DisplayName"
+                                 src="@Model.SelectedImage.ProductZoomImageUrl"
+                                 onerror="imgError(this)" />
+                        </div>
+                        <div class="col-sm-3 col-sm-pull-9">
+                            <section class="js-zoom-thumbnails">
+                                @foreach (var image in Model.Images)
+                                {
+                                    <div style="display: none">
+                                        <a href="#" class="thumbnail @(image.Selected ? "active": "")">
+                                            <img src="@image.ThumbnailUrl" data-zoom-src="@image.ProductZoomImageUrl" alt="@image.Alt"
+                                                 onload="imgLoaded(this)" />
+                                        </a>
+                                    </div>
+                                }
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</div>

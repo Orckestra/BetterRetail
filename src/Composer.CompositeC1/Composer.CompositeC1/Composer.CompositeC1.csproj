@@ -248,6 +248,9 @@
     <Compile Include="Cache\QueryValueCache.cs" />
     <Compile Include="Cache\SearchPageExclusion.cs" />
     <Compile Include="CategoriesNamespaces.cs" />
+    <Compile Include="Context\ContextHelper.cs" />
+    <Compile Include="Context\IProductContext.cs" />
+    <Compile Include="Context\ProductContext.cs" />
     <Compile Include="Controllers\BrowsingCategoriesBaseController.cs" />
     <Compile Include="Controllers\CartBaseController.cs" />
     <Compile Include="Controllers\CheckoutBaseController.cs" />
@@ -290,6 +293,8 @@
     <Compile Include="Providers\SearchUrlProvider.cs" />
     <Compile Include="Providers\StoreUrlProvider.cs" />
     <Compile Include="Providers\UrlProviderHelper.cs" />
+    <Compile Include="Razor\ComposerRazorFunction.cs" />
+    <Compile Include="Razor\WebPagesHtmlHelperExtensions.cs" />
     <Compile Include="RequestInterceptorHttpModule.cs" />
     <Compile Include="Providers\WishListUrlProvider.cs" />
     <Compile Include="Services\BreadcrumbViewService.cs" />

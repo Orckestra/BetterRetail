@@ -45,6 +45,8 @@ namespace Orckestra.Composer.Product.ViewModels
 
         public List<KeyVariantAttributeItem> KeyVariantAttributeItems { get; set; }
 
+        public List<VariantViewModel> Variants { get; set; }
+
         public List<ProductDetailImageViewModel> Images { get; set; }
 
         public bool IsProductZoomEnabled

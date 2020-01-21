@@ -84,11 +84,7 @@ namespace Orckestra.Composer.CompositeC1.Mvc
             functions.RegisterAction<BrowsingCategoriesController>("SelectedSearchFacets", "Composer.BrowsingCategories.SelectedFacets");
             functions.RegisterAction<BrowsingCategoriesController>("ChildCategories", "Composer.BrowsingCategories.ChildCategories");
 
-            functions.RegisterAction<ProductController>("ProductSEO", "Composer.Product.SEO");
-            functions.RegisterAction<ProductController>("PageHeader", "Composer.Product.PageHeader");
             functions.RegisterAction<ProductController>("LanguageSwitch", "Composer.Product.LanguageSwitch");
-            functions.RegisterAction<ProductController>("ProductSummary", "Composer.Product.Summary");
-            functions.RegisterAction<ProductController>("ProductDescription", "Composer.Product.Description");
             functions.RegisterAction<ProductController>("ProductSpecifications", "Composer.Product.Specifications");
             functions.RegisterAction<ProductController>("Breadcrumb", "Composer.Product.Breadcrumb");
             functions.RegisterAction<ProductController>("RelatedProducts", "Composer.Product.RelatedProducts", "Displays products/variants related to the product displayed on the current product/variant details page.  First products which are related via merchandising relationship will be displayed and if none are available then displays product in the same default category")
