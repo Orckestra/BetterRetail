@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -123,6 +123,15 @@
   <data name="AssociatedSearch" xml:space="preserve">
     <value>Recherches associées</value>
   </data>
+  <data name="ButWeFind_Part1" xml:space="preserve">
+    <value>Toutefois, nous avons trouvé</value>
+  </data>
+  <data name="ButWeFind_Part2" xml:space="preserve">
+    <value>correspondant à votre requête.</value>
+  </data>
+  <data name="ButWeFind_Separator" xml:space="preserve">
+    <value>et</value>
+  </data>
   <data name="B_Apply" xml:space="preserve">
     <value>Appliquer</value>
   </data>
@@ -234,6 +243,9 @@
   <data name="L_TopResultsFor" xml:space="preserve">
     <value>Les meilleurs résultats pour</value>
   </data>
+  <data name="L_TryAnother" xml:space="preserve">
+    <value>Essayez une nouvelle recherche avec</value>
+  </data>
   <data name="L_ViewAllResults" xml:space="preserve">
     <value>Rechercher tous les résultats</value>
   </data>
@@ -272,6 +284,9 @@
   </data>
   <data name="SearchResult" xml:space="preserve">
     <value>Résultats de recherche pour « {0} »</value>
+  </data>
+  <data name="WeAreSorry" xml:space="preserve">
+    <value>Nous sommes désolés, nous n’avons trouvé aucun résultats pour « {0} »  dans les produits.</value>
   </data>
   <data name="YourSearch" xml:space="preserve">
     <value>Votre recherche « {0} » a trouvé 0 résultats.</value>

@@ -279,4 +279,16 @@
   <data name="YourSearch" xml:space="preserve">
     <value>Your search “{0}” found 0 results.</value>
   </data>
+  <data name="ButWeFind_Part1" xml:space="preserve">
+    <value>But we did find</value>
+  </data>
+  <data name="ButWeFind_Part2" xml:space="preserve">
+    <value>matching your query.</value>
+  </data>
+  <data name="ButWeFind_Separator" xml:space="preserve">
+    <value>and</value>
+  </data>
+  <data name="WeAreSorry" xml:space="preserve">
+    <value>We are sorry, we could not find any matches for  “{0}”  in Products.</value>
+  </data>
 </root>

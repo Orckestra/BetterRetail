@@ -1,0 +1,41 @@
+﻿@inherits RazorFunction
+@using Orckestra.Composer.Search.Context;
+@using Orckestra.Composer.Providers.Localization
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Search Suggestions"; }
+    }
+
+    public ISearchRequestContext SearchRequestContext { get; set; }
+
+}
+
+@{
+    var vm = SearchRequestContext.ProductsSearchViewModel;
+    if (vm == null)
+    {
+        return;
+    }
+
+    var suggestions = vm.ProductSearchResults.Suggestions;
+    if (suggestions == null || suggestions.Count == 0)
+    {
+        return;
+    }
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<head>
+</head>
+<body>
+    <p>
+        <span>@LocalizationHelper.Localize("List-Search", "L_TryAnother")</span>
+        @foreach (var item in suggestions)
+        {
+            <a href="@item.Url">@item.Title</a><span>&#160;</span>
+        }
+    </p>
+</body>
+</html>

@@ -1,6 +1,8 @@
 ﻿@inherits RazorFunction
 @using Orckestra.Composer.Search.Context;
 @using Orckestra.Composer.Providers.Localization
+@using Orckestra.Composer.Search
+@using Orckestra.Composer.Search.ViewModels
 
 @functions {
     public override string FunctionDescription
@@ -8,71 +10,56 @@
         get { return "Search Summary"; }
     }
 
-    [FunctionParameter(Label = "Total", DefaultValue = null, Help = "Common Total for all search tabs")]
-    public long? Total { get; set; }
-
     public ISearchRequestContext SearchRequestContext { get; set; }
+
+    public SearchViewModel ProductsSearchViewModel
+    {
+        get
+        {
+            return SearchRequestContext.ProductsSearchViewModel;
+        }
+    }
 }
 
 @{
-    var viewModel = SearchRequestContext.ProductsSearchViewModel;
-    if (viewModel == null)
+    if (ProductsSearchViewModel == null)
     {
         return;
     }
 
-    if (Total == null)
-    {
-        Total = viewModel.ProductSearchResults.TotalCount;
-    }
+    var total = ProductsSearchViewModel.ProductSearchResults.TotalCount;
+
 }
 
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
 <head>
 </head>
 <body>
-    <div class="island" data-oc-controller="Product.SearchSummary" data-context="@viewModel.JsonContext">
+    <div class="island" data-oc-controller="Product.SearchSummary" data-context="@ProductsSearchViewModel.JsonContext">
 
-        @if (Total > 0)
+        @if (total > 0)
         {
-            var corrected = viewModel.ProductSearchResults.CorrectedSearchTerms;
-            var productsTotal = viewModel.ProductSearchResults.TotalCount;
+            var corrected = ProductsSearchViewModel.ProductSearchResults.CorrectedSearchTerms;
             if (!string.IsNullOrEmpty(corrected))
             {
-                /// TODO: Waiting final solution from designer
-                var totalWithoutProducts = Total - productsTotal;
-                <h1>@($"{totalWithoutProducts} {LocalizationHelper.Localize("List-Search", "L_SearchResults")} \"{SearchRequestContext.SearchQuery }\"")</h1>
-                <p>
-                    @(LocalizationHelper.LocalizedFormat("List-Search", "SearchResult", viewModel.ProductSearchResults.CorrectedSearchTerms)) -
-                @(LocalizationHelper.LocalizedFormat("List-Search", "ProductMatches", productsTotal))
-            </p>
+                <h2>@LocalizationHelper.LocalizedFormat("List-Search", "YourSearch", SearchRequestContext.SearchQuery)</h2>
+                <h1>@LocalizationHelper.LocalizedFormat("List-Search", "SearchResult", corrected)</h1>
+                <p>@LocalizationHelper.LocalizedFormat("List-Search", "ProductMatches", total)</p>
+
+            }
+            else
+            {
+                <h1><strong>@total</strong>@($" {LocalizationHelper.Localize("List-Search", "L_SearchResults")} \"{SearchRequestContext.SearchQuery }\"")</h1>
+            }
         }
         else
         {
-            <h1>@($"{Total} {LocalizationHelper.Localize("List-Search", "L_SearchResults")} \"{SearchRequestContext.SearchQuery }\"")</h1>
+            <h1>
+                @($"{LocalizationHelper.Localize("List-Search", "L_NoResultsFor")} \"{SearchRequestContext.SearchQuery }\"")
+            </h1>
         }
-    }
-    else
-    {
-        <h1>
-            @($"{LocalizationHelper.Localize("List-Search", "L_NoResultsFor")} \"{SearchRequestContext.SearchQuery }\"")
-        </h1>
-    }
-        <!--Suggestions-->
-        @{
-            var suggestions = viewModel.ProductSearchResults.Suggestions;
 
-            if (suggestions != null && suggestions.Count > 0)
-            {
-                <p>
-                    <span>@LocalizationHelper.Localize("List-Search", "L_TryAnother")</span>
-                    @foreach (var item in suggestions)
-                    {
-                        <a href="@item.Url">@item.Title</a><span>&#160;</span>
-                    }
-                </p>
-            }
-        }
+        @Function("Composer.Search.Suggestions")
     </div>
 </body>
 </html>
