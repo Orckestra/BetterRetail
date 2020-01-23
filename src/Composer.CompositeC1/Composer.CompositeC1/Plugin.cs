@@ -79,6 +79,9 @@ namespace Orckestra.Composer.CompositeC1
             host.Register<Scheduler, IScheduler>(ComponentLifestyle.Singleton);
 
             host.Register<ProductContext, IProductContext>(ComponentLifestyle.PerRequest);
+            host.Register<LazyPartialProvider, ILazyPartialProvider>();
+
+            host.RegisterApiControllers(typeof(Plugin).Assembly);
         }
     }
 }

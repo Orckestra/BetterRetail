@@ -236,6 +236,7 @@
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="AntiCookieTamperingExcluder.cs" />
+    <Compile Include="Api\PartialController.cs" />
     <Compile Include="AuthorizeAndRedirectAttribute.cs" />
     <Compile Include="C1HttpApplication.cs" />
     <Compile Include="C1PerformanceDataCollector.cs" />
@@ -282,6 +283,8 @@
     <Compile Include="Providers\CategoryBrowsingUrlProvider.cs" />
     <Compile Include="Providers\CartUrlProvider.cs" />
     <Compile Include="Providers\AutocompleteProvider.cs" />
+    <Compile Include="Providers\ILazyPartialProvider.cs" />
+    <Compile Include="Providers\LazyPartialProvider.cs" />
     <Compile Include="Providers\MyAccountUrlProvider.cs" />
     <Compile Include="Providers\OrderUrlProvider.cs" />
     <Compile Include="Providers\PageNotFoundUrlProvider.cs" />
