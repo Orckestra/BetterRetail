@@ -320,6 +320,7 @@
     <Content Include="App_Data\Razor\Composer\Product\SEO.cshtml" />
     <Content Include="App_Data\Razor\Composer\Product\Summary.cshtml" />
     <Content Include="App_Data\Razor\Composer\Product\PageHeader.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Product\RelatedProducts.cshtml" />
     <None Include="Properties\PublishProfiles\Website - CD.pubxml" />
     <None Include="Properties\PublishProfiles\Website.pubxml" />
     <Content Include="ViewModelAsExtensionModelTemplate.tt">

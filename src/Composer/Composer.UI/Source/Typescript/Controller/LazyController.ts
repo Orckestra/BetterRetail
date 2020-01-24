@@ -7,47 +7,58 @@ module Orckestra.Composer {
     public initialize() {
       super.initialize();
       this.loadContent();
-      console.log('LazyController initialize');
     }
 
     public loadContent() {
       let request = this.context.container.data('request');
-      let container = this.context.container;
       if (request) {
-        $.ajax({
-          url: '/api/partial/render',
-          type: 'POST',
-          data: JSON.stringify(request),
-          contentType: 'application/json; charset=utf-8',
-          success: function (a) {
-            //container.replaceWith(a);
-            $('[replace-this]').replaceWith(a);
-          }
+        //TODO: Add loader
+        ComposerClient.post('/api/partial/render', request).then((payload) => {
+          this.replaceContent(payload);
         });
-        // ComposerClient.post('/api/partial/render', request).then((payload) => {
-        //   console.log(payload);
-        //   //container.replaceWith('<div>!123234</div>');
-        //   container.replaceWith(payload);
-        //   $('[replace-this]').replaceWith(payload);
-
-        // });
       }
     }
 
-    // private sendRequest(data?: any) {
-    //   var settings: EnhancedJQueryAjaxSettings = {
-    //     contentType: 'application/json',
-    //     dataType: 'json',
-    //     data: data ? JSON.stringify(data) : null,
-    //     method: "POST",
-    //     url: url,
-    //     headers: {
-    //         'Accept-Language': this.getPageCulture(),
-    //         'WebsiteId': this.getWebsiteId()
-    //     }
-    // };
+    private replaceContent(newContent: string) {
+      var controllerRegistry: Orckestra.Composer.ControllerRegistry = new Orckestra.Composer.ControllerRegistry(),
+        controller: Orckestra.Composer.IController;
 
-    //   return Q($.ajax(settings)).fail(reason => this.onRequestRejected(reason));
-    // }
+      let newHtml = $(newContent);
+      this.context.container.replaceWith(newHtml);
+
+      var blades = newHtml.find('[data-oc-controller]').addBack('[data-oc-controller]'),
+        controllers: IController[] = [];
+
+      blades.each((index: number, item: HTMLElement) => {
+
+        var bladeName: string = item.getAttribute('data-oc-controller'),
+          context: Orckestra.Composer.IControllerContext;
+
+        if (controllerRegistry.isRegistered(bladeName)) {
+          context = {
+            container: $(item),
+            dataItemId: item.getAttribute('data-item-id'),
+            templateName: bladeName,
+            viewModel: JSON.parse(item.getAttribute('data-context') || window[item.getAttribute('data-context-var')] || '{}'),
+            window: window
+          };
+
+          controller = Orckestra.Composer.ControllerFactory.createController({
+            controllerName: bladeName,
+            context: context,
+            eventHub: this.eventHub,
+            composerContext: this.composerContext,
+            composerConfiguration: this.composerConfiguration
+          });
+
+          controller.initialize();
+          controllers.push(controller);
+        }
+      });
+
+      $(window).on('beforeunload', () => {
+        controllers.forEach(controller => controller.dispose());
+      });
+    }
   }
 }

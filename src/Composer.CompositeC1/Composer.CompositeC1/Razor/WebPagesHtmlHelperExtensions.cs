@@ -1,6 +1,12 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Threading;
+using System.Web;
+using System.Xml.Linq;
+using Composite.Core;
 using Orckestra.Composer;
+using Orckestra.Composer.CompositeC1.Providers;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Localization;
 
@@ -50,6 +56,26 @@ namespace Composite.AspNet.Razor
             }
 
             return string.Format(formatter, args);
+        }
+
+
+        public static IHtmlString LazyFunction(this System.Web.WebPages.Html.HtmlHelper htmlHelper, string name, object parameters)
+        {
+            //TODO: add function that collect all current razor function parameters and pass to lazy. ?
+            //TODO: render directly in preview mode
+            var lazyPartialProvider = ServiceLocator.GetService<ILazyPartialProvider>();
+            Debug.Assert(lazyPartialProvider != null, nameof(lazyPartialProvider) + " != null");
+
+            var protectedFunctionCall = lazyPartialProvider.ProtectFunctionCall(name,
+                Functions.ObjectToDictionary(parameters)
+                    .Where(d => d.Value != null)
+                    .ToDictionary(d => d.Key, d => d.Value.ToString()));
+
+            return new HtmlString(
+                new XElement("div",
+                    new XAttribute("data-oc-controller", "General.Lazy"),
+                    new XAttribute("data-request", protectedFunctionCall)).ToString());
+
         }
 
     }
