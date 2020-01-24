@@ -371,8 +371,10 @@ Task("Patch-csproj.user").Does(() =>
 
 Task("Configure-Symbolic-Links").Does(() =>
 {
-    ReplaceDirWithSymbolicLink($"{websiteDir}/UI.Package/Sass", $"{rootDir}/src/Composer/Composer.UI/Source/Sass");
-	//ReplaceDirWithSymbolicLink($"{websiteDir}/UI.Package/Templates", $"{rootDir}/src/Composer/Composer.UI/Source/Templates");
+    ReplaceDirWithSymbolicLink($"{websiteDir}/UI.Package/Sass", $"{rootDir}/src/Composer.CompositeC1/Composer.CompositeC1.Mvc/UI.Package/Sass");
+	ReplaceDirWithSymbolicLink($"{websiteDir}/UI.Package/Templates", $"{rootDir}/src/Composer.CompositeC1/Composer.CompositeC1.Mvc/UI.Package/Templates");
+	ReplaceDirWithSymbolicLink($"{websiteDir}/UI.Package/LocalizedStrings", $"{rootDir}/src/Composer.CompositeC1/Composer.CompositeC1.Mvc/UI.Package/LocalizedStrings");
+	
 });
 
 Task("Modify-Configs-For-Debug").Does(() =>

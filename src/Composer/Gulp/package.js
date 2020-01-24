@@ -87,7 +87,6 @@
         }
     };
 
-
     gulp.task('package-watch', function (callback) {
         var watch = [
             'Composer.UI/Source/**/*',
@@ -100,39 +99,13 @@
         return helpers.clean(dest, callback);
     });
 
-    gulp.task('package-copy-thirdparty', function() {
-        var thirdPartyScripts = '3rdParty/*.js';
-
-        return gulp.src(thirdPartyScripts)
-            .pipe(gulp.dest(path.join(dest, 'JavaScript')));
-    });
-
      gulp.task('package-copy-mvc', function() {
-		 
-		var mvcSources = ['App_Data/Razor/', 'App_Data/PageTemplates/'];
-		mvcSources.forEach(function(destItem) {
-			
-			var c1Site = path.join(config.deployedWebsitePath, destItem);
-			helpers.log('Copying ' + c1Site);
-			return gulp.src(path.join('../../Composer.CompositeC1/Composer.CompositeC1.Mvc/', destItem, '**/*'))
-				.pipe(gulp.dest(c1Site))
-		});
-		
-		helpers.log('Copying ' + dest);
-		var c1Site = path.join(config.deployedWebsitePath, dest);
+         helpers.log('Copying ' + dest);
+         var c1Site = path.join(config.deployedWebsitePath, dest);
 
-		return gulp.src(path.join(dest, '**/*'))
-				.pipe(gulp.dest(c1Site));
+         return gulp.src(path.join(dest, '**/*'))
+             .pipe(gulp.dest(c1Site));
     });
-
-
-    gulp.task('package-sass-imports', function () {
-        return gulp.src(path.join(dest, 'Sass', '**/*.scss'))
-            .pipe($.if(argv.verbose, $.using()))
-            .pipe($.sassGlobImport())
-            .pipe(gulp.dest(path.join(dest, 'Sass')));
-    });
-
 
     gulp.task('package-scripts', function (callback) {
         var bladeSourceDir = './*.UI/*/Source',
@@ -164,7 +137,6 @@
         '!**/Tests/**/*',
         '!**/Javascript',
         '!**/Javascript/**/*',
-        '!**/Templates/**/*'
     ];
 
 
@@ -185,91 +157,12 @@
         helpers.startUnitTests(config.karma.singleRun, callback);
     });
 
-    gulp.task('package-templates-merge-all-templates-to-one-folder', function () {
-
-        return gulp.src(['./*.UI/*/Source/Templates/**/*.hbs', './*.UI/Source/Templates/**/*.hbs'])
-            .pipe($.if(argv.verbose, $.using()))
-            .pipe($.rename({
-                dirname: ''
-            }))
-            .pipe(gulp.dest(config.paths.rawTemplates));
-    });
-
-    gulp.task('package-templates-merge-all-resx-to-one-folder', function () {
-
-        return gulp.src(['./*.UI/*/Source/LocalizedStrings/**/*.resx', './*.UI/Source/LocalizedStrings/**/*.resx'])
-            .pipe($.if(argv.verbose, $.using()))
-            .pipe($.rename({
-                dirname: ''
-            }))
-            .pipe(gulp.dest(config.paths.rawResourcesFolder));
-    });
-
-
-    gulp.task('package-templates-clean', function (callback) {
-
-        return helpers.clean(config.paths.temporaryTemplatesFolder, callback);
-    });
-
-
-    gulp.task('package-templates-copy-hbs-to-ui-package', function () {
-
-        var builtTemplatesFolder = path.join(__dirname, '../', config.paths.rawTemplates),
-            uiPackageTemplatesFolder = path.join(__dirname, '../UI.Package/', config.paths.templates);
-
-        return gulp.src([builtTemplatesFolder + '/*.hbs'])
-            .pipe(gulp.dest(uiPackageTemplatesFolder));
-    });
-
-    gulp.task('package-templates-copy-localized-strings-to-ui-package', function () {
-
-        var builtResourcesFolder = path.join(__dirname, '../', config.paths.rawResourcesFolder),
-            uiPackageLocalizedStringsFolder = path.join(__dirname, '../UI.Package/', config.paths.localizedStrings);
-
-        return gulp.src([builtResourcesFolder + '/**/*.resx'])
-            .pipe(gulp.dest(uiPackageLocalizedStringsFolder));
-    });
-
-    gulp.task('package-templates-if-any-exist', function (callback) {
-
-        var fs = require('fs');
-
-        var rawTemplatesFolder = path.join(__dirname, '../', config.paths.rawTemplates);
-
-        if (fs.existsSync(rawTemplatesFolder)) {
-            runSequence(
-                'package-templates-copy-hbs-to-ui-package',
-                'package-templates-copy-localized-strings-to-ui-package',
-                callback
-            );
-        } else {
-            $.util.log('There are no templates to deploy.');
-            callback();
-        }
-    });
-
-    gulp.task('package-templates', function (callback) {
-
-        return runSequence(
-            'package-templates-clean',
-            'package-templates-merge-all-templates-to-one-folder',
-            'package-templates-merge-all-resx-to-one-folder',
-            'package-templates-if-any-exist',
-            callback
-        );
-    });
-
-
-
-
     gulp.task('package', function (callback) {
         runSequence(
             'package-clean',
             'package-framework',
             'package-scripts',
-            'package-copy-thirdparty',
             //'package-run-unit-tests',
-            'package-templates',
             callback
         );
     });

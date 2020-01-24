@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
+using System.IO;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Web.Caching;
 using System.Web.Hosting;
 using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Kernel;
 using Orckestra.Composer.Utils;
 using Orckestra.Overture.Caching;
-using CacheItemPriority = System.Web.Caching.CacheItemPriority;
 
 namespace Orckestra.Composer.Providers.Localization
 {
@@ -18,21 +17,21 @@ namespace Orckestra.Composer.Providers.Localization
     /// </summary>
     internal class ResourceLocalizationProvider : ILocalizationProvider
     {
-        private readonly ICacheProvider _cacheProvider;
-        private readonly ILocalizationRepository<VirtualFile> _localizationRepository;
-        private readonly VirtualPathProvider _virtualPathProvider;
+        protected ICacheProvider CacheProvider { get; }
+        protected ILocalizationRepository<VirtualFile> LocalizationRepository { get; }
+        protected VirtualPathProvider VirtualPathProvider { get; }
+        private Dictionary<CacheKey, FileSystemWatcher> fileWacherCollection = new Dictionary<CacheKey, FileSystemWatcher>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceLocalizationProvider"/> class.
         /// </summary>
         public ResourceLocalizationProvider(IComposerEnvironment environment, ICacheProvider cacheProvider)
         {
-            if (environment == null) { throw new ArgumentNullException("environment"); }
-            if (cacheProvider == null) { throw new ArgumentNullException("cacheProvider"); }
+            if (environment == null) { throw new ArgumentNullException(nameof(environment)); }
 
-            _cacheProvider = cacheProvider;
-            _virtualPathProvider = environment.VirtualPathProvider;
-            _localizationRepository = new ResxLocalizationRepository(environment);
+            CacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));
+            VirtualPathProvider = environment.VirtualPathProvider;
+            LocalizationRepository = new ResxLocalizationRepository(environment);
         }
 
         /// <summary>
@@ -70,19 +69,19 @@ namespace Orckestra.Composer.Providers.Localization
                 CultureInfo = culture,
             };
 
-            var value = _cacheProvider.GetOrAddAsync(localizationTreeCacheKey, async () =>
+            var value = CacheProvider.GetOrAddAsync(localizationTreeCacheKey, async () =>
             {
-                List<string> fileDependencies = new List<string>();
+                string folderPhysicalPath = "";
                 LocalizationTree tree = new LocalizationTree(culture);
 
-                foreach (var categoryName in _localizationRepository.GetAllCategories())
+                foreach (var categoryName in LocalizationRepository.GetAllCategories())
                 {
                     LocalizationCategory category = new LocalizationCategory(categoryName);
 
-                    foreach (var source in _localizationRepository.GetPrioritizedSources(categoryName, culture))
+                    foreach (var source in LocalizationRepository.GetPrioritizedSources(categoryName, culture))
                     {
                         Dictionary<string, string> values =
-                            await _localizationRepository.GetValuesAsync(source).ConfigureAwait(false);
+                            await LocalizationRepository.GetValuesAsync(source).ConfigureAwait(false);
                         foreach (var kvp in values)
                         {
                             if (!category.LocalizedValues.ContainsKey(kvp.Key))
@@ -91,14 +90,17 @@ namespace Orckestra.Composer.Providers.Localization
                             }
                         }
 
-                        fileDependencies.Add(source.VirtualPath);
+                        Regex meinReg = new Regex("^[a-zA-Z]{1}:\\.*");
+                        if (string.IsNullOrEmpty(folderPhysicalPath) && !meinReg.IsMatch(source.VirtualPath))
+                        {
+                            folderPhysicalPath = HostingEnvironment.MapPath(source.VirtualPath.Substring(0, source.VirtualPath.LastIndexOf(source.Name)));
+                        }
                     }
 
                     tree.LocalizedCategories.Add(categoryName.ToLowerInvariant(), category);
                 }
 
-                MonitorFileChanges(localizationTreeCacheKey, fileDependencies);
-
+                MonitorLocalizationFiles(localizationTreeCacheKey, folderPhysicalPath);
                 return tree;
             });
 
@@ -106,31 +108,29 @@ namespace Orckestra.Composer.Providers.Localization
         }
 
         /// <summary>
-        /// Add a dummy cache entry, with file dependencies. 
-        /// On this dummy cache expiracy, purge the _cacheProvider.
+        /// Remove cache key if some files was changed 
         /// </summary>
         /// <param name="cacheKey">Key to invalidate on file change</param>
-        /// <param name="fileDependencies"></param>
-        private void MonitorFileChanges(CacheKey cacheKey, IList<string> fileDependencies)
+        /// <param name="directory">watch directory</param>
+        private void MonitorLocalizationFiles(CacheKey cacheKey, string directory)
         {
-            if (fileDependencies != null && fileDependencies.Any())
-            {
-                var monitoredFile = _virtualPathProvider.GetCacheDependency(fileDependencies.First(),
-                    fileDependencies, DateTime.UtcNow);
+            string fileWatcherMask = "*.resx";
 
-                HostingEnvironment.Cache.Add(cacheKey.GetFullCacheKey(),
-                    cacheKey,
-                    monitoredFile,
-                    Cache.NoAbsoluteExpiration,
-                    Cache.NoSlidingExpiration,
-                    CacheItemPriority.High,
-                    (s, removedCacheKey, reason) =>
-                    {
-                        _cacheProvider.Remove((CacheKey)removedCacheKey);
-                    });
+            if (!fileWacherCollection.ContainsKey(cacheKey) && !string.IsNullOrEmpty(directory))
+            {
+                var fileSystemWatcher = new FileSystemWatcher(directory, fileWatcherMask);
+
+                Action OnFileChanged = () => CacheProvider.Remove(cacheKey);
+
+                fileSystemWatcher.Created += (a, b) => OnFileChanged();
+                fileSystemWatcher.Changed += (a, b) => OnFileChanged();
+                fileSystemWatcher.Deleted += (a, b) => OnFileChanged();
+                fileSystemWatcher.Renamed += (a, b) => OnFileChanged();
+                fileSystemWatcher.EnableRaisingEvents = true;
+
+                fileWacherCollection.Add(cacheKey, fileSystemWatcher);
             }
         }
-
 
         /// <summary>
         /// Gets the localized string based on the category, the key and the culture.
@@ -179,7 +179,7 @@ namespace Orckestra.Composer.Providers.Localization
             LocalizationTree tree = await GetLocalizationTreeAsync(param.CultureInfo).ConfigureAwait(false);
 
             if (tree.LocalizedCategories.TryGetValue(param.Category.ToLowerInvariant(), out category)
-             && category.LocalizedValues.TryGetValue(param.Key,      out value))
+             && category.LocalizedValues.TryGetValue(param.Key, out value))
             {
                 return value;
             }

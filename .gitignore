@@ -213,32 +213,6 @@ GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
 
-# Starter Site Specific
-**/generic/
-**/UI.Package/
-**/_Published/
-**/Package.C1/*.zip
-**/Package.C1/Composer.C1.Core\Web.config
-**/Package.C1/Composer.C1.Core\App_Data
-**/Package.C1/Composer.C1.Core\Web.config
-/Orckestra.StarterSite/CF/Source/packages
-
-
-/Orckestra.StarterSite/CF/CC1/Source/Composer.CompositeC1/packages
-Orckestra.StarterSite/CF/Test/Nightwatch.js/reports/
-Orckestra.StarterSite/CF/Test/Nightwatch.js/nightwatch_report/
-Orckestra.StarterSite/CF/Test/Nightwatch.js/screenshots/
-Orckestra.StarterSite/CF/Test/selenium_report
-packages/*
-Orckestra.StarterSite/CF/tsUnitTests.karmalog
-Orckestra.StarterSite/CF/CF.LoadTests/packages
-Orckestra.StarterSite/CSC/Source/SitecoreConnect/packages
-Orckestra.StarterSite/CF/Test/CF.LoadTests/packages
-Orckestra.StarterSite/CF/Source/Composer.Mvc.Sample
-Orckestra.StarterSite/CF/Source/Composer.Mvc.Sample.Tests
-
-
-
 /packages/
 /Artifacts/
 /LocalNugetRepository/

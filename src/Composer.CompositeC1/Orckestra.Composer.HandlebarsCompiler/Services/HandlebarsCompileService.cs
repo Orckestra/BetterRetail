@@ -35,19 +35,21 @@ namespace Orckestra.Composer.HandlebarsCompiler.Services
 
             try
             {
+                var compiledString = precompileFileHeader;
+                foreach (var file in handlebarFiles)
+                {
+                    var name = Path.GetFileNameWithoutExtension(file);
+                    var template = File.ReadAllText(file);
+                    var precompileTemplate = scriptEngine.CallGlobalFunction("precompile", template).ToString();
+
+                    compiledString += string.Format(precompileFileTemplate, name, precompileTemplate);
+                }
+                var minifiedString = Uglify.Js(compiledString).Code;
+             
+                if (!string.IsNullOrEmpty(minifiedString))
                 using (var sw = new StreamWriter(compiledFile))
                 {
-                    var compiledString = precompileFileHeader;
-                    foreach (var file in handlebarFiles)
-                    {
-                        var name = Path.GetFileNameWithoutExtension(file);
-                        var template = File.ReadAllText(file);
-                        var precompileTemplate = scriptEngine.CallGlobalFunction("precompile", template).ToString();
-
-                        compiledString += string.Format(precompileFileTemplate, name, precompileTemplate);
-                    }
-
-                    sw.Write(Uglify.Js(compiledString));
+                    sw.Write(minifiedString);
                 }
             } catch (IOException)
             {

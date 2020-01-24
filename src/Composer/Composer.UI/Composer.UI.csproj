@@ -50,7 +50,7 @@
 SET dest=$(ProjectDir)..\..\Composer.CompositeC1\Composer.CompositeC1.Mvc\UI.Package\
 
 Robocopy %25source%25 %25dest%25 /E /NJH /NDL /NS /NC /NP
-if %25errorlevel%25 leq 1 exit 0 else exit %25errorlevel%25
+if %25errorlevel%25 leq 3 exit 0 else exit %25errorlevel%25
 </PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>

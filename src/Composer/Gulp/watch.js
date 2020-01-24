@@ -14,18 +14,10 @@
 
         plumber();
 
-        $.watch([path.join(baseGlobDirectory, 'Templates/*.hbs'), path.join(baseGlobDirectory, 'Templates/**/*.hbs')], function(){
-            runSequence('package-clean', 'package-templates', 'package-copy-mvc');
-        });
-
         $.watch([path.join(baseGlobDirectory, 'Typescript/*.ts'), path.join(baseGlobDirectory, 'Typescript/**/*.ts')], function(){
             runSequence('package-clean', 'package-scripts', 'package-copy-mvc');
         });
-        
-        $.watch([path.join(baseGlobDirectory, 'Sass/*.scss'), path.join(baseGlobDirectory, 'Sass/**/*.scss')], function(){
-            runSequence('package-clean', 'package-styles', 'package-copy-mvc');
-        });
-       
+
         $.watch(config.composerAssemblies, $.batch({ timeout: config.watch.delays.composerAssemblies }, function(done) {
             runSequence('package-clean', 'package-copy-dll', function() {
                 // Must call done in an anonymous function, because runSequence only accept a function.
