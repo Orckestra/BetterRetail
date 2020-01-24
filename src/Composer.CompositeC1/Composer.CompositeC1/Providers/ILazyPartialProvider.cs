@@ -10,6 +10,6 @@ namespace Orckestra.Composer.CompositeC1.Providers
     public interface ILazyPartialProvider
     {
         string ProtectFunctionCall(string functionName, Dictionary<string, string> parameters);
-        LazyFunctionCall UnprotectFuntionCall(string encryptedValue);
+        LazyFunctionCall UnprotectFunctionCall(string encryptedValue);
     }
 }

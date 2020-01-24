@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using Composite.Core.WebClient.Renderings.Page;
 
 namespace Orckestra.Composer.CompositeC1.Providers
 {
@@ -23,7 +24,7 @@ namespace Orckestra.Composer.CompositeC1.Providers
 
         public HttpContextBase HttpContext { get; }
 
-        public LazyFunctionCall UnprotectFuntionCall(string encryptedValue)
+        public LazyFunctionCall UnprotectFunctionCall(string encryptedValue)
         {
             try
             {
@@ -48,7 +49,8 @@ namespace Orckestra.Composer.CompositeC1.Providers
             {
                 FunctionName = functionName,
                 Parameters = parameters,
-                QueryString = HttpContext.Request.QueryString.ToString()
+                QueryString = HttpContext.Request.QueryString.ToString(),
+                PageId = PageRenderer.CurrentPageId,
 
             };
             string json = JsonConvert.SerializeObject(lazyFunctionCall);
