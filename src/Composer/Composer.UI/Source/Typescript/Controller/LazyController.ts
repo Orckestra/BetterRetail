@@ -1,6 +1,7 @@
 ///<reference path='../../Typings/tsd.d.ts' />
 ///<reference path='../Mvc/Controller.ts' />
 ///<reference path='../Mvc/ComposerClient.ts'/>
+///<reference path='../Mvc/ControllerFactory.ts' />
 
 module Orckestra.Composer {
   export class LazyController extends Controller {
