@@ -76,7 +76,7 @@ module Orckestra.Composer {
             });
         }
 
-        public productClick(products: IAnalyticsProduct[], listName: string) {
+        public productClick(product: IAnalyticsProduct, listName: string) {
             dataLayer.push({
                 event: 'productClick',
                 ecommerce: {
@@ -84,7 +84,7 @@ module Orckestra.Composer {
                         actionField: {
                             list: listName
                         },
-                        products: products
+                        products: [product]
                     }
                 }
             });
