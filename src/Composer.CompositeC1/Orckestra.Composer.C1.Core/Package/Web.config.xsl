@@ -81,7 +81,7 @@
     <xsl:copy><xsl:apply-templates select="@*" />
     <httpCookies httpOnlyCookies="true" requireSSL="true" />
     <authentication mode="Forms">
-      <forms loginUrl="login" name=".AUTH" cookieless="UseCookies" requireSSL="true" />
+      <forms loginUrl="login" name=".AUTH" cookieless="UseCookies" requireSSL="true" timeout="131760" />
     </authentication>
     <membership defaultProvider="composer">
       <providers>
