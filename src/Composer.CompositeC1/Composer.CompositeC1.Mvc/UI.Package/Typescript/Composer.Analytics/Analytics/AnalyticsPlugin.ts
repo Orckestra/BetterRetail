@@ -493,8 +493,8 @@ module Orckestra.Composer {
                 position: position
             };
 
-            var products: IAnalyticsProduct[] = [product];
-            this.productClick(products, data.ListName);
+            //var products: IAnalyticsProduct[] = [product];
+            this.productClick(product, data.ListName);
         }
 
         /**
