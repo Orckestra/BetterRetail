@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Web;
@@ -60,6 +61,17 @@ namespace Orckestra.Composer.Utils
             return new Uri(
                 builder.Uri,
                 new Uri(applicationPath, UriKind.Relative));
+        }
+
+        public static void DefineHttpContextIfNotExist(string baseUrl)
+        {
+            if (HttpContext.Current == null && !string.IsNullOrEmpty(baseUrl))
+            {
+                HttpContext.Current = new HttpContext(
+                    new HttpRequest(string.Empty, baseUrl, string.Empty),
+                    new HttpResponse(new StringWriter())
+                );
+            }
         }
     }
 }

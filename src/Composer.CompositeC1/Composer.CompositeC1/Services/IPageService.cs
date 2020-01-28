@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Web;
 using Composite.Data.Types;
-using Orckestra.Composer.CompositeC1.Pages;
 
 namespace Orckestra.Composer.CompositeC1.Services
 {
@@ -14,7 +14,7 @@ namespace Orckestra.Composer.CompositeC1.Services
 
         string GetRendererPageUrl(Guid pageId, CultureInfo cultureInfo = null);
 
-        string GetPageUrl(Guid pageId, CultureInfo cultureInfo = null);
+        string GetPageUrl(Guid pageId, CultureInfo cultureInfo = null, HttpContext httpContext = null);
 
         string GetPageUrl(IPage page);
 

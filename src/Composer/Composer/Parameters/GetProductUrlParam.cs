@@ -11,5 +11,7 @@ namespace Orckestra.Composer.Parameters
         public CultureInfo CultureInfo { get; set; }
 
         public string VariantId { get; set; }
+
+        public string BaseUrl { get; set; }
     }
 }
