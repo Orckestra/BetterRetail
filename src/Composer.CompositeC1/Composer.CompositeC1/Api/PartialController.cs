@@ -13,25 +13,30 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using System.Web.Http;
+using System.Web.UI;
 using Orckestra.Composer.Services;
 
 namespace Orckestra.Composer.CompositeC1.Api
 {
+    /// <summary>
+    /// Render C1 Functions
+    /// </summary>
     [ValidateLanguage]
     [JQueryOnlyFilter]
-    public class PartialController : ApiController
+    public class FunctionController : ApiController
     {
         protected string ContentType = "text/html";
+        private const string CacheProfileName = "C1Page";
 
         public IComposerContext ComposerContext { get; }
         public HttpContextBase HttpContext { get; }
-        public ILazyPartialProvider LazyPartialProvider { get; }
+        public ILazyFunctionCallDataProvider LazyFunctionCallDataProvider { get; }
 
-        public PartialController(IComposerContext composerContext, HttpContextBase httpContext, ILazyPartialProvider lazyPartialProvider)
+        public FunctionController(IComposerContext composerContext, HttpContextBase httpContext, ILazyFunctionCallDataProvider lazyFunctionCallDataProvider)
         {
             ComposerContext = composerContext;
             HttpContext = httpContext;
-            LazyPartialProvider = lazyPartialProvider;
+            LazyFunctionCallDataProvider = lazyFunctionCallDataProvider;
         }
 
 
@@ -39,12 +44,13 @@ namespace Orckestra.Composer.CompositeC1.Api
         [ActionName("body")]
         public virtual IHttpActionResult Body([FromBody] string body)
         {
+            InitializeFullPageCaching(System.Web.HttpContext.Current);
+
             if (string.IsNullOrWhiteSpace(body)) NotFound();
 
-            var decrypted = LazyPartialProvider.UnprotectFunctionCall(body);
+            var decrypted = LazyFunctionCallDataProvider.UnprotectFunctionCall(body);
             
             if (decrypted == null) return NotFound();
-
 
             HttpContext.RewritePath(HttpContext.Request.FilePath, HttpContext.Request.PathInfo, decrypted.QueryString);
 
@@ -105,6 +111,33 @@ namespace Orckestra.Composer.CompositeC1.Api
 
             return NotFound();
         }
+
+
+        public static void InitializeFullPageCaching(HttpContext context)
+        {
+            using (var page = new CacheableEmptyPage())
+            {
+                page.ProcessRequest(context);
+            }
+        }
+
+
+        private class CacheableEmptyPage : Page
+        {
+            protected override void FrameworkInitialize()
+            {
+                base.FrameworkInitialize();
+
+                // That's an equivalent of having <%@ OutputCache CacheProfile="C1Page" %> 
+                // on an *.aspx page
+
+                InitOutputCache(new OutputCacheParameters
+                {
+                    CacheProfile = CacheProfileName
+                });
+            }
+        }
+
     }
 
     public class LazyFunctionCall

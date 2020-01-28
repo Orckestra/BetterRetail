@@ -12,13 +12,13 @@ using Composite.Core.WebClient.Renderings.Page;
 
 namespace Orckestra.Composer.CompositeC1.Providers
 {
-    public class LazyPartialProvider : ILazyPartialProvider
+    public class LazyFunctionCallDataProvider : ILazyFunctionCallDataProvider
     {
         private static ILog Log = LogProvider.GetCurrentClassLogger();
 
         private static readonly EncryptionUtility EncryptionUtility = new EncryptionUtility();
         
-        public LazyPartialProvider(HttpContextBase httpContext) {
+        public LazyFunctionCallDataProvider(HttpContextBase httpContext) {
             HttpContext = httpContext;
         }
 

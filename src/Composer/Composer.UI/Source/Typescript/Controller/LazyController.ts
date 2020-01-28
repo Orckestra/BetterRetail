@@ -14,7 +14,7 @@ module Orckestra.Composer {
       let request = this.context.container.data('request');
       if (request) {
         //TODO: Add loader
-        ComposerClient.post('/api/partial/body', request).then((payload) => {
+        ComposerClient.post('/api/function/body', request).then((payload) => {
           this.replaceContent(payload);
         });
       }

@@ -59,11 +59,16 @@ namespace Composite.AspNet.Razor
         }
 
 
+        public static IHtmlString LazyFunction(this System.Web.WebPages.Html.HtmlHelper htmlHelper, string name)
+        {
+            return LazyFunction(htmlHelper, name, new { });
+        }
+
         public static IHtmlString LazyFunction(this System.Web.WebPages.Html.HtmlHelper htmlHelper, string name, object parameters)
         {
             //TODO: add function that collect all current razor function parameters and pass to lazy. ?
             //TODO: render directly in preview mode
-            var lazyPartialProvider = ServiceLocator.GetService<ILazyPartialProvider>();
+            var lazyPartialProvider = ServiceLocator.GetService<ILazyFunctionCallDataProvider>();
             Debug.Assert(lazyPartialProvider != null, nameof(lazyPartialProvider) + " != null");
 
             var protectedFunctionCall = lazyPartialProvider.ProtectFunctionCall(name,

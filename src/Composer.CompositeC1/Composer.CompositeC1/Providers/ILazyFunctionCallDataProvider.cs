@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Orckestra.Composer.CompositeC1.Providers
 {
-    public interface ILazyPartialProvider
+    public interface ILazyFunctionCallDataProvider
     {
         string ProtectFunctionCall(string functionName, Dictionary<string, string> parameters);
         LazyFunctionCall UnprotectFunctionCall(string encryptedValue);
