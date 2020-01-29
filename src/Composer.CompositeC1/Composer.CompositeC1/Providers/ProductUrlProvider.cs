@@ -1,7 +1,7 @@
 ﻿using System;
+using System.IO;
+using System.Web;
 using System.Web.Routing;
-using Composite.Core.Routing;
-using Composite.Data.Types;
 using Orckestra.Composer.CompositeC1.Services;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
@@ -15,13 +15,7 @@ namespace Orckestra.Composer.CompositeC1.Providers
     {
         protected IWebsiteContext WebsiteContext { get; private set; }
         protected ISiteConfiguration SiteConfiguration { get; private set; }
-        //{
-        //    get { return ComposerHost.Current.Resolve<IWebsiteContext>(); }
-        //}
         protected IPageService PageService { get; private set; }
-
-        private const string UrlTemplate = "/{0}/p-{1}/{2}";
-        private const string UrlTemplateVariant = "/{0}/p-{1}/{2}/{3}";
 
         public ProductUrlProvider(IPageService pageService, IWebsiteContext websiteContext, ISiteConfiguration siteConfiguration)
         {
@@ -43,24 +37,25 @@ namespace Orckestra.Composer.CompositeC1.Providers
                 ? parameters.ProductId
                 : parameters.ProductName;
             var formattedProductName = UrlFormatter.FormatProductName(productName);
-            string productPath;
 
-            var homeUrl = PageService.GetPageUrl(WebsiteContext.WebsiteId, parameters.CultureInfo)?.Trim('/');
+            var httpContext = !string.IsNullOrEmpty(parameters.BaseUrl) ? new HttpContext(
+                new HttpRequest(string.Empty, parameters.BaseUrl, string.Empty),
+                new HttpResponse(new StringWriter())
+            ) : null;
 
-            if (string.IsNullOrWhiteSpace(parameters.VariantId))
+            var homeUrl = PageService.GetPageUrl(WebsiteContext.WebsiteId, parameters.CultureInfo, httpContext)?.Trim('/');
+
+            string productPath = "";
+            if (!string.IsNullOrWhiteSpace(homeUrl))
             {
-                productPath = string.Format(UrlTemplate,
-                    homeUrl,
-                    formattedProductName,
-                    parameters.ProductId);
+                productPath += $"/{homeUrl}";
             }
-            else
+
+            productPath += $"/p-{formattedProductName}/{parameters.ProductId}";
+
+            if (!string.IsNullOrWhiteSpace(parameters.VariantId))
             {
-                productPath = string.Format(UrlTemplateVariant,
-                    homeUrl,
-                    formattedProductName,
-                    parameters.ProductId,
-                    parameters.VariantId);
+                productPath += $"/{parameters.VariantId}";
             }
 
             var uri = new Uri(productPath, UriKind.Relative);

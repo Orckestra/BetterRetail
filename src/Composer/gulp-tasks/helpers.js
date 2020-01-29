@@ -66,19 +66,20 @@
              * TODO: The config file should be configurable
              */
             startUnitTests: function(singleRun, done) {
-                var karma = require('karma').server;
-                karma.start({
-                        configFile: path.resolve(__dirname, 'karma.conf.js'),
-                        singleRun: singleRun
-                    },
-                    function karmaCallback(karmaResult) {
-                        helpers.log('Stopping tests with exit code : ' + karmaResult);
+                let karma = require('karma');
+                let server = new karma.Server({
+                    configFile: path.resolve(__dirname, 'karma.conf.js'),
+                    singleRun: singleRun
+                },
+                function karmaCallback(karmaResult) {
+                    helpers.log('Stopping tests with exit code : ' + karmaResult);
 
-                        if (done !== undefined) {
-                            done();
-                        }
+                    if (done !== undefined) {
+                        done();
                     }
-                );
+                });
+
+                server.start();
             },
 
             fileStreamFromString: function(filename, string) {

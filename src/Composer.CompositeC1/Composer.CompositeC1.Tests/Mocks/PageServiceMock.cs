@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Web;
 
 namespace Orckestra.Composer.CompositeC1.Tests.Mocks
 {
@@ -32,7 +33,7 @@ namespace Orckestra.Composer.CompositeC1.Tests.Mocks
             throw new NotImplementedException();
         }
 
-        public string GetPageUrl(Guid pageId, CultureInfo cultureInfo = null)
+        public string GetPageUrl(Guid pageId, CultureInfo cultureInfo = null, HttpContext httpContext = null)
         {
             var page = _dataSource.FirstOrDefault(p => p.Id == pageId);
 

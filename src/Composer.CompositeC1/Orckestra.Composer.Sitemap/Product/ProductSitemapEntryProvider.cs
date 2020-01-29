@@ -1,15 +1,12 @@
-﻿using Orckestra.Composer.Parameters;
-using Orckestra.Composer.Providers;
+﻿using Orckestra.Composer.Providers;
 using Orckestra.Composer.Utils;
 using Orckestra.Overture;
 using Orckestra.Overture.ServiceModel.Requests.Search;
 using Orckestra.Overture.ServiceModel.Search;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Orckestra.Overture.ServiceModel;
 using Orckestra.Composer.Logging;
@@ -23,7 +20,7 @@ namespace Orckestra.Composer.Sitemap.Product
         private static ILog Log = LogProvider.GetCurrentClassLogger();
 
         private const string ProductId = "ProductId";
-        private const string DisplayName = "DisplayName";        
+        private const string DisplayName = "DisplayName";
 
         private static string[] RequiredDocumentKeys = new[] { DisplayName };
 
@@ -46,7 +43,7 @@ namespace Orckestra.Composer.Sitemap.Product
             Guard.NotNull(sitemapParams, nameof(sitemapParams));
             Guard.NotNullOrWhiteSpace(sitemapParams.BaseUrl, $"{nameof(sitemapParams)}.{nameof(sitemapParams.BaseUrl)}");
             Guard.NotNullOrWhiteSpace(sitemapParams.Scope, $"{nameof(sitemapParams)}.{nameof(sitemapParams.Scope)}");
-            Guard.NotNull(culture, nameof(culture));            
+            Guard.NotNull(culture, nameof(culture));
 
             var request = new SearchProductRequest
             {
@@ -62,36 +59,29 @@ namespace Orckestra.Composer.Sitemap.Product
 
             if (!response.Documents.Any())
             {
-                return Enumerable.Empty<SitemapEntry>();                
+                return Enumerable.Empty<SitemapEntry>();
             }
 
-            return response.Documents.Select(document =>
-            {
-                if (!IsDocumentValid(document.PropertyBag))
-                {
-                    // If document is not valid just skip it...
-                    return null;
-                }
-
-                return CreateStandardSitemapEntry(sitemapParams, document.PropertyBag, culture);
-
-            }).Where(entry => entry != null);
+            return CreateStandardSitemapEntries(sitemapParams, response.Documents, culture);
         }
 
-        protected virtual SitemapEntry CreateStandardSitemapEntry(SitemapParams sitemapParams, PropertyBag propertyBag,
-            CultureInfo culture)
+        protected virtual IEnumerable<SitemapEntry> CreateStandardSitemapEntries(SitemapParams sitemapParams, List<Document> documents, CultureInfo culture)
         {
-
-            var productRelativeLocation = _productUrlProvider.GetProductUrl(
-                _productUrlParamFactory.GetProductUrlParams(sitemapParams, culture, propertyBag)
-            );
-
-            var productAbsoluteLocation = new Uri(new Uri(sitemapParams.BaseUrl), productRelativeLocation).ToString();
-
-            return new SitemapEntry
+            foreach (var product in documents)
             {
-                Location = productAbsoluteLocation,                
-            };
+                if (!IsDocumentValid(product.PropertyBag)) continue;
+
+                var productRelativeLocation = _productUrlProvider.GetProductUrl(
+                    _productUrlParamFactory.GetProductUrlParams(sitemapParams, culture, product.PropertyBag)
+                );
+
+                var productAbsoluteLocation = new Uri(new Uri(sitemapParams.BaseUrl), productRelativeLocation).ToString();
+
+                yield return new SitemapEntry
+                {
+                    Location = productAbsoluteLocation,
+                };
+            }
         }
 
         protected virtual bool IsDocumentValid(PropertyBag propertyBag)
@@ -102,7 +92,7 @@ namespace Orckestra.Composer.Sitemap.Product
 
                 if (!containsKey)
                 {
-                    Log.Warn($"Skipping insertion of product {propertyBag[ProductId]} in sitemap because property {key} is not defined.");                    
+                    Log.Warn($"Skipping insertion of product {propertyBag[ProductId]} in sitemap because property {key} is not defined.");
                 }
 
                 return containsKey;

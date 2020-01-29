@@ -58,7 +58,6 @@ Task("Clean").Does(() =>
 
     DeleteDirectories($"{srcDir}/**/node_modules/");
     DeleteDirectories($"{srcDir}/**/Composer/UI.Package/");
-    DeleteDirectories($"{srcDir}/**/Composer.CompositeC1.Mvc/UI.Package/");
 
     DeleteDirectories($"{srcDir}/**/_Package/");
     DeleteDirectories($"{srcDir}/**/Release/");

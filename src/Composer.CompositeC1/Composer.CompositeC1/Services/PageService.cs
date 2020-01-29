@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Web;
 using Composite.Core;
 using Composite.Core.Routing;
 using Composite.Data;
@@ -18,7 +19,7 @@ namespace Orckestra.Composer.CompositeC1.Services
 
         public PageService()
         {
-            
+
         }
         /// <summary>
         /// Returns a page in the given locale.
@@ -50,16 +51,16 @@ namespace Orckestra.Composer.CompositeC1.Services
             if (cultureInfo == null)
             {
                 cultureInfo = DataLocalizationFacade.DefaultLocalizationCulture;
-            } 
+            }
 
             var pageUrlData = new PageUrlData(pageId, PublicationScope.Published, cultureInfo);
 
             return PageUrls.BuildUrl(pageUrlData, UrlKind.Renderer);
         }
 
-        public virtual string GetPageUrl(Guid pageId, CultureInfo cultureInfo = null)
+        public virtual string GetPageUrl(Guid pageId, CultureInfo cultureInfo = null, HttpContext httpContext = null)
         {
-            if(pageId == Guid.Empty)
+            if (pageId == Guid.Empty)
             {
                 throw new ArgumentException(nameof(pageId));
             }
@@ -69,8 +70,10 @@ namespace Orckestra.Composer.CompositeC1.Services
                 return null;
             }
 
-            return PageUrls.BuildUrl(page);
-            
+            if (httpContext != null)
+                return PageUrls.BuildUrl(page, UrlKind.Public, new UrlSpace(httpContext));
+            else
+                return PageUrls.BuildUrl(page);
         }
 
         public virtual string GetPageUrl(IPage page)

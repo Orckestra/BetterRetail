@@ -2,14 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Orckestra.Composer.Sitemap.Models;
 using System.Globalization;
 using System.Web;
 using Composite.AspNet;
-using System.Diagnostics;
-using System.IO;
 using Orckestra.Composer.Utils;
 
 namespace Orckestra.Composer.CompositeC1.Sitemap
@@ -45,13 +42,8 @@ namespace Orckestra.Composer.CompositeC1.Sitemap
             // Because the GetRootNodes -> LoadSiteMap needs a valid HttpCurrent we create it if it is null 
             // by only using specifying the baseUrl in the HttpRequest object
             // Source: CompositeC1 -> CompositeC1SiteMapProvider.cs (line 276)
-            if (HttpContext.Current == null)
-            {
-                HttpContext.Current = new HttpContext(
-                    new HttpRequest(string.Empty, sitemapParams.BaseUrl, string.Empty),
-                    new HttpResponse(new StringWriter())
-                );
-            }
+            RequestUtils.DefineHttpContextIfNotExist(sitemapParams.BaseUrl);
+
             var entriesList = new List<SitemapEntry>();
 
             var rootNodes = provider.GetRootNodes().ToList();

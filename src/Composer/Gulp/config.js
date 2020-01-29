@@ -6,6 +6,7 @@
             _ = require('lodash'),
             path = require('path'),
             config = {};
+            let thirdPartyJavaScriptPath = '../../../Composer.CompositeC1/Composer.CompositeC1.Mvc/UI.Package/JavaScript/';
 
         config = _.merge(mainConfiguration, {
 
@@ -19,14 +20,13 @@
             karma: {
                 files: [
                     '../../3rdParty.ForTests/**/*.js',
-                    '../../3rdParty/jquery-1.11.2.min.js',
-                    '../../3rdParty/bootstrap.min.js',
-                    '../../3rdParty/lodash.min.js',
-                    '../../3rdParty/parsley.min.js',
-                    '../../3rdParty/handlebars.helpers.js',
-					'../../3rdParty/q-1.2.0.js',
-					'../../3rdParty/jquery.serialize-object.js',
-                    '../../3rdParty/typeahead.js',
+                    path.join(thirdPartyJavaScriptPath, 'jquery-1.11.2.min.js'),
+                    path.join(thirdPartyJavaScriptPath, 'lodash.min.js'),
+                    path.join(thirdPartyJavaScriptPath, 'parsley.min.js'),
+                    path.join(thirdPartyJavaScriptPath, 'handlebars.helpers.js'),
+                    path.join(thirdPartyJavaScriptPath, 'q-1.2.0.js'),
+                    path.join(thirdPartyJavaScriptPath, 'jquery.serialize-object.js'),
+                    path.join(thirdPartyJavaScriptPath, 'typeahead.js'),
                     '../../UI.Package/JavaScript/orckestra.composer.js',
                     path.join('../../', mainConfiguration.testsOutputFolder, '/**/*.js')
                 ],
