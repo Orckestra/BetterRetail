@@ -371,10 +371,12 @@ Task("Patch-csproj.user").Does(() =>
 
 Task("Configure-Symbolic-Links").Does(() =>
 {
+	StopPool(localSiteName);
     ReplaceDirWithSymbolicLink($"{websiteDir}/UI.Package/Sass", $"{rootDir}/src/Composer.CompositeC1/Composer.CompositeC1.Mvc/UI.Package/Sass");
 	ReplaceDirWithSymbolicLink($"{websiteDir}/UI.Package/Templates", $"{rootDir}/src/Composer.CompositeC1/Composer.CompositeC1.Mvc/UI.Package/Templates");
 	ReplaceDirWithSymbolicLink($"{websiteDir}/UI.Package/LocalizedStrings", $"{rootDir}/src/Composer.CompositeC1/Composer.CompositeC1.Mvc/UI.Package/LocalizedStrings");
-	
+	ReplaceDirWithSymbolicLink($"{websiteDir}/UI.Package/Typescript", $"{rootDir}/src/Composer.CompositeC1/Composer.CompositeC1.Mvc/UI.Package/Typescript");
+	StartPool(localSiteName);
 });
 
 Task("Modify-Configs-For-Debug").Does(() =>
