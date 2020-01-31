@@ -44,7 +44,8 @@ namespace Orckestra.Composer.Product.Services
             {
                 CultureInfo = param.CultureInfo,
                 ProductId = param.ProductId,
-                ProductName = product.DisplayName
+                ProductName = product.DisplayName,
+                SKU = product.Sku
             });
 
             if (HttpContext.Current == null)

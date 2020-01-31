@@ -191,6 +191,7 @@ namespace Orckestra.Composer.Product.Factory
                 CultureInfo = param.CultureInfo,
                 ProductId = param.Product.Id,
                 VariantId = param.VariantId,
+                SKU = param.Product.Sku,
                 ProductName = productDisplayName
             });
 

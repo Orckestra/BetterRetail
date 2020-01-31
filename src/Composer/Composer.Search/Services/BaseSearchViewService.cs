@@ -504,7 +504,8 @@ namespace Orckestra.Composer.Search.Services
                 ProductId = productSearchVm.ProductId,
                 ProductName = productSearchVm.FullDisplayName,
                 VariantId = productVariantId,
-                BaseUrl = baseUrl
+                BaseUrl = baseUrl,
+                SKU = productSearchVm.Sku
             });
         }
 

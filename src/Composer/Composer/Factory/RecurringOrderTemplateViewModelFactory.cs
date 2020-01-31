@@ -344,7 +344,8 @@ namespace Orckestra.Composer.Factory
                 CultureInfo = param.CultureInfo,
                 VariantId = recrurringLineItem.VariantId,
                 ProductId = recrurringLineItem.ProductId,
-                ProductName = vm.ProductSummary.DisplayName
+                ProductName = vm.ProductSummary.DisplayName,
+                SKU = recrurringLineItem.Sku
             });
 
 

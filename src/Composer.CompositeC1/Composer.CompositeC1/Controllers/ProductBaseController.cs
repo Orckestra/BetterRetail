@@ -67,20 +67,21 @@ namespace Orckestra.Composer.CompositeC1.Controllers
                 cultureInfo,
                 productViewModel.LocalizedDisplayNames[cultureInfo.Name],
                 productViewModel.ProductId,
-                productViewModel.SelectedVariantId),
+                productViewModel.SelectedVariantId, productViewModel.Sku),
                 ComposerContext.CultureInfo);
 
             return View("LanguageSwitch", languageSwitchViewModel);
         }
 
-        private string BuildUrl(CultureInfo cultureInfo, string productName, string productId, string variantId)
+        private string BuildUrl(CultureInfo cultureInfo, string productName, string productId, string variantId, string sku)
         {
             var productUrl = ProductUrlProvider.GetProductUrl(new GetProductUrlParam
             {                
                 CultureInfo = cultureInfo,
                 ProductId = productId,
                 ProductName = productName,
-                VariantId = variantId
+                VariantId = variantId,
+                SKU = sku
             });
 
             return productUrl;
