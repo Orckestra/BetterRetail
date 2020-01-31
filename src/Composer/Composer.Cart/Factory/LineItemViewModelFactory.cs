@@ -142,7 +142,8 @@ namespace Orckestra.Composer.Cart.Factory
                 CultureInfo = param.CultureInfo,
                 VariantId = lineItem.VariantId,
                 ProductId = lineItem.ProductId,
-                ProductName = lineItem.ProductSummary.DisplayName
+                ProductName = lineItem.ProductSummary.DisplayName,
+                SKU = lineItem.Sku
             });
 
             vm.AdditionalFees = MapLineItemAdditionalFeeViewModel(lineItem, param.CultureInfo).ToList();
@@ -294,7 +295,8 @@ namespace Orckestra.Composer.Cart.Factory
                 CultureInfo = param.CultureInfo,
                 VariantId = lineItem.VariantId,
                 ProductId = lineItem.ProductId,
-                ProductName = lineItem.ProductSummary.DisplayName
+                ProductName = lineItem.ProductSummary.DisplayName,
+                SKU = lineItem.Sku
             });
             
             return vm;
