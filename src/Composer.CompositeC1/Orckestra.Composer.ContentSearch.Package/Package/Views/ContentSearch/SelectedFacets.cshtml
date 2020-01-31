@@ -1,0 +1,30 @@
+﻿@model Orckestra.Composer.ContentSearch.ViewModels.ContentSearchViewModel
+@using Composite.AspNet.Razor
+@{
+    if (Model.SelectedFacets == null) { return; }
+}
+<div class="panel panel-default">
+    <div class="panel-body">
+        <h4>@Html.Localize("List-Search", "L_Selection")</h4>
+        <ul class="list-unstyled">
+            @foreach (var facet in Model.SelectedFacets)
+            {
+                foreach (var hit in facet.Hits)
+                {
+                    <li>
+                        <div class="row">
+                            <div class="col-xs-10">@hit.Label</div>
+                            <div class="col-xs-2">
+                                <a href="javascript://" onclick="removeSelection('@(hit.Key)')">
+                                    <span class="fa  fa-times  fa-lg"></span>
+                                </a>
+                            </div>
+                        </div>
+                    </li>
+                }
+            }
+        </ul>
+    </div>
+</div>
+
+

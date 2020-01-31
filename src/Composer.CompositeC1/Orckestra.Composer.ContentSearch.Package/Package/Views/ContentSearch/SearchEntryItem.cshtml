@@ -1,0 +1,21 @@
+﻿@using Orckestra.Composer.ContentSearch.ViewModels
+
+@model Orckestra.Composer.ContentSearch.ViewModels.SearchResultsEntryViewModel
+
+<div class="thumbnail thumbnail-item">
+    @if (Model.ImageUrl != null)
+    {
+        <div class="thumbnail-item-media">
+            <img class="img-fluid" src="@Model.ImageUrl?h=200" alt="@Model.Title" />
+        </div>
+    }
+
+    <div class="caption">
+        <a class="h4" href="@Model.DetailsUrl">@Html.Raw(@Model.Title)</a>
+        @if (Model.Description != null)
+        {
+            <p>@Model.Description</p>
+        }
+    </div>
+
+</div>

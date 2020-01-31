@@ -85,6 +85,9 @@
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Orckestra.Search.WebsiteSearch, Version=1.0.8.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\C1CMSPackages.Orckestra.Search.WebsiteSearch.1.0.8\lib\net461\Orckestra.Search.WebsiteSearch.dll</HintPath>
+    </Reference>
     <Reference Include="ServiceStack.Client, Version=4.0.0.0, Culture=neutral, PublicKeyToken=e06fbc6124f57c43, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\ServiceStack.Client.Signed.4.5.4\lib\net45\ServiceStack.Client.dll</HintPath>
       <Private>False</Private>
@@ -167,11 +170,23 @@
     <Compile Include="DataTypes\IContentTab.cs" />
     <Compile Include="DataTypes\ISortOption.cs" />
     <Compile Include="Functions\WebsiteSearch.cs" />
+    <Compile Include="Parameters\GetContentSearchParameter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Search\MediaSearchDocumentBuilderExtension.cs" />
+    <Compile Include="Services\ContentSearchViewService.cs" />
+    <Compile Include="Services\IContentSearchViewService.cs" />
     <Compile Include="StartupHandler.cs" />
+    <Compile Include="ViewModels\ContentSearchViewModel.cs" />
+    <Compile Include="ViewModels\ContentSearchTabViewModel.cs" />
+    <Compile Include="ViewModels\FacetViewModel.cs" />
+    <Compile Include="ViewModels\FacetHitViewModel.cs" />
+    <Compile Include="ViewModels\SearchResultsEntryViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Composer\Composer.Search\Composer.Search.csproj">
+      <Project>{ce6ad95e-0ebb-4e38-bf0b-27a67915fa68}</Project>
+      <Name>Composer.Search</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Composer.CompositeC1\Composer.CompositeC1.csproj">
       <Project>{3e42c35e-b19c-4abe-80f8-fd268d44e11f}</Project>
       <Name>Composer.CompositeC1</Name>
@@ -184,6 +199,7 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\..\..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
   <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">
