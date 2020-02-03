@@ -14,9 +14,8 @@ namespace Orckestra.Composer.Sitemap.Factory
                 WebsiteId = sitemapParams.Website,
                 CultureInfo = culture,
                 ProductId = (string)propertyBag["ProductId"],
-                ProductName = (string)propertyBag["DisplayName"]
-                SKU = (string)propertyBag["Sku"],
-
+                ProductName = (string)propertyBag["DisplayName"],
+                SKU = (string)propertyBag["Sku"]
             };
         }
     }
