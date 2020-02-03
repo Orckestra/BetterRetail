@@ -1,6 +1,12 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Threading;
+using System.Web;
+using System.Xml.Linq;
+using Composite.Core;
 using Orckestra.Composer;
+using Orckestra.Composer.CompositeC1.Providers;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Localization;
 
@@ -78,6 +84,35 @@ namespace Composite.AspNet.Razor
                     CultureInfo = Thread.CurrentThread.CurrentCulture
                 }
             );
+        }
+
+
+        public static IHtmlString LazyFunction(this System.Web.WebPages.Html.HtmlHelper htmlHelper, string name, string className = null, string loaderClassName = null)
+        {
+            return LazyFunction(htmlHelper, name, new { }, className, loaderClassName);
+        }
+
+        public static IHtmlString LazyFunction(this System.Web.WebPages.Html.HtmlHelper htmlHelper, string name, object parameters, string className = null, string loaderClassName = null)
+        {
+            //TODO: add function that collect all current razor function parameters and pass to lazy. ?
+            //TODO: render directly in preview mode
+            var lazyPartialProvider = ServiceLocator.GetService<ILazyFunctionCallDataProvider>();
+            Debug.Assert(lazyPartialProvider != null, nameof(lazyPartialProvider) + " != null");
+
+            var protectedFunctionCall = lazyPartialProvider.ProtectFunctionCall(name,
+                Functions.ObjectToDictionary(parameters)
+                    .Where(d => d.Value != null)
+                    .ToDictionary(d => d.Key, d => d.Value.ToString()));
+
+            return new HtmlString(
+                new XElement("div",
+                    new XAttribute("class", className ?? "text-center  text-muted  js-loading"),
+                    new XAttribute("data-oc-controller", "General.Lazy"),
+                    new XAttribute("data-request", protectedFunctionCall),
+                    new XElement("span",
+                        new XAttribute("class", loaderClassName ?? "fa  fa-spin  fa-circle-o-notch  fa-2x"))
+                    ).ToString());
+
         }
 
     }
