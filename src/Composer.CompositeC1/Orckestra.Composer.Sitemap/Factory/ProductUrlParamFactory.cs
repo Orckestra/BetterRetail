@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Orckestra.Composer.CompositeC1.Sitemap;
+﻿using Orckestra.Composer.CompositeC1.Sitemap;
 using Orckestra.Composer.Parameters;
 using Orckestra.Overture.ServiceModel;
+using System.Globalization;
 
 namespace Orckestra.Composer.Sitemap.Factory
 {
@@ -19,7 +14,8 @@ namespace Orckestra.Composer.Sitemap.Factory
                 WebsiteId = sitemapParams.Website,
                 CultureInfo = culture,
                 ProductId = (string)propertyBag["ProductId"],
-                ProductName = (string)propertyBag["DisplayName"]
+                ProductName = (string)propertyBag["DisplayName"],
+                SKU = (string)propertyBag["Sku"]
             };
         }
     }
