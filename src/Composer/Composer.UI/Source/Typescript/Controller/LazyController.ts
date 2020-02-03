@@ -13,7 +13,6 @@ module Orckestra.Composer {
     public loadContent() {
       let request = this.context.container.data('request');
       if (request) {
-        //TODO: Add loader
         ComposerClient.post('/api/function/body', request).then((payload) => {
           this.replaceContent(payload);
         });

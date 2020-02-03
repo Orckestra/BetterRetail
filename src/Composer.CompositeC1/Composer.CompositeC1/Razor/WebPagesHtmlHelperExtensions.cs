@@ -59,12 +59,12 @@ namespace Composite.AspNet.Razor
         }
 
 
-        public static IHtmlString LazyFunction(this System.Web.WebPages.Html.HtmlHelper htmlHelper, string name)
+        public static IHtmlString LazyFunction(this System.Web.WebPages.Html.HtmlHelper htmlHelper, string name, string className = null, string loaderClassName = null)
         {
-            return LazyFunction(htmlHelper, name, new { });
+            return LazyFunction(htmlHelper, name, new { }, className, loaderClassName);
         }
 
-        public static IHtmlString LazyFunction(this System.Web.WebPages.Html.HtmlHelper htmlHelper, string name, object parameters)
+        public static IHtmlString LazyFunction(this System.Web.WebPages.Html.HtmlHelper htmlHelper, string name, object parameters, string className = null, string loaderClassName = null)
         {
             //TODO: add function that collect all current razor function parameters and pass to lazy. ?
             //TODO: render directly in preview mode
@@ -78,8 +78,12 @@ namespace Composite.AspNet.Razor
 
             return new HtmlString(
                 new XElement("div",
+                    new XAttribute("class", className ?? "text-center  text-muted  js-loading"),
                     new XAttribute("data-oc-controller", "General.Lazy"),
-                    new XAttribute("data-request", protectedFunctionCall)).ToString());
+                    new XAttribute("data-request", protectedFunctionCall),
+                    new XElement("span",
+                        new XAttribute("class", loaderClassName ?? "fa  fa-spin  fa-circle-o-notch  fa-2x"))
+                    ).ToString());
 
         }
 
