@@ -6,8 +6,7 @@
         config = require('../config.js'),
         helpers = require('./helpers.js'),
         argv = require('yargs').argv,
-        runSequence = require('run-sequence').use(gulp),
-        typeScriptProject = $.typescript.createProject(config.defaultTypescriptSettings);
+        runSequence = require('run-sequence').use(gulp);
 
     /*
      * Cleans the folder where temporary tests files are outputted to.
@@ -32,7 +31,7 @@
 
         return helpers.transpileTypeScriptToJs({
                 typescriptFilesGlob: config.karma.filesToBuild,
-                typeScriptProject: typeScriptProject,
+                typeScriptProject: $.typescript.createProject(config.defaultTypescriptSettings),
                 debug: config.debug
             })
             .js
@@ -62,7 +61,7 @@
             dtsBundleName: config.dtsBundleName,
             scriptOutputFolder: config.javascriptFolder,
             dtsOutputFolder: config.dtsOutputFolder,
-            typeScriptProject: typeScriptProject,
+            typeScriptProject: $.typescript.createProject(config.defaultTypescriptSettings),
             typingsReference: config.typingsReferenceForBundledDts,
             generateSourceMaps: true,
             debug: config.debug
