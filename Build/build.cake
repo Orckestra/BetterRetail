@@ -90,6 +90,10 @@ Task("Run-NUnit-Tests").Does(() =>
     });
 });
 
+Task("Load-NPM-Modules").Does(() =>
+{
+	NpmInstall(settings => settings.FromPath($"{srcDir}/Composer/"));
+});
 
 Task("Run-Composer-UI-UnitTests").Does(() =>
 {
@@ -161,6 +165,7 @@ Task("Build")
     .IsDependentOn("Compile");
 
 Task("Tests")
+	.IsDependentOn("Load-NPM-Modules")
     .IsDependentOn("Run-NUnit-Tests")
     .IsDependentOn("Run-Composer-UI-UnitTests");
 
