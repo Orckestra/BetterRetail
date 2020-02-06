@@ -10,10 +10,10 @@
 
         config = _.merge(mainConfiguration, {
 
-            typescriptFilesGlob: ['./*.UI/*/Source/Typescript/**/*.ts', './*.UI/Source/Typescript/**/*.ts'],
-            typescriptFilesGlobForUnitTests: ['./*.UI/*/Source/Typescript/**/*.ts', './*.UI/Source/Typescript/**/*.ts', '!./Composer.UI/Source/Typescript/App.ts'],
-            dtsOutputFolder: './UI.Package/Typings',
-            javascriptFolder: './UI.Package/JavaScript',
+            typescriptFilesGlob: ['../Composer.CompositeC1/Composer.CompositeC1.Mvc/UI.Package/Typescript/**/*.ts'],
+            typescriptFilesGlobForUnitTests: ['../Composer.CompositeC1/Composer.CompositeC1.Mvc/UI.Package/Typescript/**/*.ts', '!../Composer.CompositeC1/Composer.CompositeC1.Mvc/UI.Package/Typescript/App.ts'],
+            dtsOutputFolder: '../Composer.CompositeC1/Composer.CompositeC1.Mvc/UI.Package/Typings',
+            javascriptFolder: '../Composer.CompositeC1/Composer.CompositeC1.Mvc/UI.Package/JavaScript',
             jsBundleName: 'orckestra.composer.js',
             dtsBundleName: 'orckestra.composer.d.ts',
 
@@ -27,20 +27,17 @@
                     path.join(thirdPartyJavaScriptPath, 'q-1.2.0.js'),
                     path.join(thirdPartyJavaScriptPath, 'jquery.serialize-object.js'),
                     path.join(thirdPartyJavaScriptPath, 'typeahead.js'),
-                    '../../UI.Package/JavaScript/orckestra.composer.js',
+                    '../../../Composer.CompositeC1/Composer.CompositeC1.Mvc/UI.Package/Javascript/orckestra.composer.js',
                     path.join('../../', mainConfiguration.testsOutputFolder, '/**/*.js')
                 ],
-                filesToBuild: [
-                    'Composer.UI/Source/Tests/unit/**/*.ts',
-                    'Composer.*.UI/*/Source/Tests/unit/**/*.ts'
-                ]
+                filesToBuild: ['../Composer.CompositeC1/Composer.CompositeC1.Mvc/UI.Package/Tests/**/*.ts']
             },
 
             tokens: ['Product', 'Cart', 'MyAccount'],
 
             documentationSettings: {
                 documentationName: 'Orckestra Composer',
-                outputFolder: './UI.Package/Documentation',
+                outputFolder: '../Composer.CompositeC1/Composer.CompositeC1.Mvc/UI.Package/Documentation',
                 moduleType: 'commonjs',
                 includeDeclarations: true
             },

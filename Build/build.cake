@@ -57,7 +57,6 @@ Task("Clean").Does(() =>
     DeleteDirectories($"{srcDir}/**/obj/");
 
     DeleteDirectories($"{srcDir}/**/node_modules/");
-    DeleteDirectories($"{srcDir}/**/Composer/UI.Package/");
 
     DeleteDirectories($"{srcDir}/**/_Package/");
     DeleteDirectories($"{srcDir}/**/Release/");
@@ -90,6 +89,10 @@ Task("Run-NUnit-Tests").Does(() =>
     });
 });
 
+Task("Load-NPM-Modules").Does(() =>
+{
+	NpmInstall(settings => settings.FromPath($"{srcDir}/Composer/"));
+});
 
 Task("Run-Composer-UI-UnitTests").Does(() =>
 {
@@ -101,6 +104,15 @@ Task("Run-Composer-UI-UnitTests").Does(() =>
     NpmRunScript(settings);
 });
 
+Task("Compile-Typescripts").Does(() =>
+{
+    var settings = new NpmRunScriptSettings 
+    {
+        WorkingDirectory = $"{srcDir}/Composer/",
+        ScriptName = "scripts",
+    };
+    NpmRunScript(settings);
+});
 
 Task("Copy-To-Artifacts").Does(() =>
 {
@@ -161,8 +173,13 @@ Task("Build")
     .IsDependentOn("Compile");
 
 Task("Tests")
+	.IsDependentOn("Load-NPM-Modules")
     .IsDependentOn("Run-NUnit-Tests")
     .IsDependentOn("Run-Composer-UI-UnitTests");
+
+Task("Frontend")
+    .IsDependentOn("Load-NPM-Modules")
+    .IsDependentOn("Compile-Typescripts");
 
 Task("Artifacts")
     .IsDependentOn("Copy-To-Artifacts");
@@ -174,6 +191,7 @@ Task("All")
     .Description("Executed on build server")
     .IsDependentOn("Build")
     .IsDependentOn("Tests")
+    .IsDependentOn("Frontend")
     .IsDependentOn("Artifacts")
     .IsDependentOn("Package");
 

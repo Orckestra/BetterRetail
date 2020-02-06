@@ -6,7 +6,7 @@
   "main": "gulpfile.js",
   "scripts": {
     "show-tasks": "gulp",
-    "package": "gulp package",
+    "scripts": "gulp scripts",
     "unitTests": "gulp unitTests"
   },
   "author": "Orckestra Inc.",

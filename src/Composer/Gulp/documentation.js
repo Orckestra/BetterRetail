@@ -1,4 +1,5 @@
-﻿(function() {
+﻿/* Do we use it? */
+(function() {
     'use strict';
 
     var gulp = require("gulp"),
