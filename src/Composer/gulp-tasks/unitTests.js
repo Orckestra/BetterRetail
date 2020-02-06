@@ -31,6 +31,7 @@
 
         return helpers.transpileTypeScriptToJs({
                 typescriptFilesGlob: config.karma.filesToBuild,
+                //Recreating typescript project because of gulp bug
                 typeScriptProject: $.typescript.createProject(config.defaultTypescriptSettings),
                 debug: config.debug
             })
@@ -61,6 +62,7 @@
             dtsBundleName: config.dtsBundleName,
             scriptOutputFolder: config.javascriptFolder,
             dtsOutputFolder: config.dtsOutputFolder,
+            //Recreating typescript project because of gulp bug
             typeScriptProject: $.typescript.createProject(config.defaultTypescriptSettings),
             typingsReference: config.typingsReferenceForBundledDts,
             generateSourceMaps: true,
