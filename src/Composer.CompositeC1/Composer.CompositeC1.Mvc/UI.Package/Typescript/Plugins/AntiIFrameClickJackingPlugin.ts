@@ -11,15 +11,7 @@ module Orckestra.Composer {
         }
 
         private getOrigin(window: Window) : string {
-            var origin: string;
-
-            // if (!window.location['origin']) {
-            //     window.location['origin'] = window.location.protocol + '//' + window.location.host;
-            // }
-
-            // origin = window.location['origin'];
-            origin = window.location.protocol + '//' + window.location.host;
-            return origin;
+             return window.location['origin'];
         }
     }
 }
