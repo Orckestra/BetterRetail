@@ -5,6 +5,7 @@
 ///<reference path='./Controller/SearchBoxController.ts' />
 ///<reference path='./Controller/PageNotFoundAnalyticsController.ts' />
 ///<reference path='./Controller/LanguageSwitchController.ts' />
+///<reference path='./Controller/LazyController.ts' />
 ///<reference path='./Composer.Product/ProductSearch/SortBySearchController.ts' />
 ///<reference path='./Composer.Product/ProductSearch/FacetSearchController.ts' />
 ///<reference path='./Composer.Product/ProductSearch/SearchResultsController.ts' />
@@ -86,6 +87,7 @@
                 { name: 'General.SearchBox', controller: Orckestra.Composer.SearchBoxController },
                 { name: 'General.LanguageSwitch', controller: Orckestra.Composer.LanguageSwitchController },
                 { name: 'General.AutocompleteSearchBox', controller: Orckestra.Composer.AutocompleteSearchBoxController },
+                { name: 'General.Lazy', controller: Orckestra.Composer.LazyController },
 
                 { name: 'Cart.FullCart', controller: Orckestra.Composer.FullCartController },
                 { name: 'Cart.OrderSummary', controller: Orckestra.Composer.OrderSummaryController },
