@@ -8,10 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Hosting;
 using NUglify;
+using Composite.Core;
 
 namespace Orckestra.Composer.HandlebarsCompiler.Services
 {
-    public class HandlebarsCompileService: IHandlebarsCompileService
+    public class HandlebarsCompileService : IHandlebarsCompileService
     {
         private readonly string fileCompileMask = "*.hbs";
 
@@ -40,18 +41,25 @@ namespace Orckestra.Composer.HandlebarsCompiler.Services
                 {
                     var name = Path.GetFileNameWithoutExtension(file);
                     var template = File.ReadAllText(file);
-                    var precompileTemplate = scriptEngine.CallGlobalFunction("precompile", template).ToString();
-
-                    compiledString += string.Format(precompileFileTemplate, name, precompileTemplate);
+                    try
+                    {
+                        var precompileTemplate = scriptEngine.CallGlobalFunction("precompile", template).ToString();
+                        compiledString += string.Format(precompileFileTemplate, name, precompileTemplate);
+                    }
+                    catch (JavaScriptException e)
+                    {
+                        Log.LogError("Error when compile handlebars to JavaScript", $"Error when compile {name} template.{e.Message}");
+                    }
                 }
                 var minifiedString = Uglify.Js(compiledString).Code;
-             
+
                 if (!string.IsNullOrEmpty(minifiedString))
-                using (var sw = new StreamWriter(compiledFile))
-                {
-                    sw.Write(minifiedString);
-                }
-            } catch (IOException)
+                    using (var sw = new StreamWriter(compiledFile))
+                    {
+                        sw.Write(minifiedString);
+                    }
+            }
+            catch (IOException)
             {
 
             }
@@ -67,7 +75,8 @@ namespace Orckestra.Composer.HandlebarsCompiler.Services
         {
             var namespaceArray = namespaceValue.Split('.').Select(x => $@"[""{x}""]");
 
-            precompileFileHeader = Enumerable.Range(1, namespaceArray.Count()).Aggregate("", (accumulate, index) => {
+            precompileFileHeader = Enumerable.Range(1, namespaceArray.Count()).Aggregate("", (accumulate, index) =>
+            {
                 var namespaceString = string.Join("", namespaceArray.Take(index));
                 return $"{accumulate} this{namespaceString} = this{namespaceString} || {{}}; ";
             });

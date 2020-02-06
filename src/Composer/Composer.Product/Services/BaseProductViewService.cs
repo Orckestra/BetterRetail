@@ -220,7 +220,7 @@ namespace Orckestra.Composer.Product.Services
             }
 
             vm.Url = GetProductUrl(baseUrl, cultureInfo, productId, variantId,
-                productVariant.Product.DisplayName.GetLocalizedValue(cultureInfo.Name));
+                productVariant.Product.DisplayName.GetLocalizedValue(cultureInfo.Name), productVariant.Product.Sku);
 
             vm.Quantity = GetQuantity();
             vm.ListPrice = GetProductBasePrice(prices, productVariant.Product, productVariant.Variant);
@@ -335,14 +335,15 @@ namespace Orckestra.Composer.Product.Services
             return productWithVariant;
         }
 
-        protected virtual string GetProductUrl(Uri baseUrl, CultureInfo cultureInfo, string productId, string variantId, string productName)
+        protected virtual string GetProductUrl(Uri baseUrl, CultureInfo cultureInfo, string productId, string variantId, string productName, string sku)
         {
             var param = new GetProductUrlParam
             {               
                 CultureInfo = cultureInfo, 
                 ProductId = productId, 
                 VariantId = variantId, 
-                ProductName = productName
+                ProductName = productName,
+                SKU = sku
             };
             
             return _productUrlProvider.GetProductUrl(param);

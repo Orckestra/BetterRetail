@@ -1,5 +1,4 @@
 ﻿using Orckestra.Composer.Enums;
-using Orckestra.ExperienceManagement.Configuration;
 using System.Collections.Generic;
 using System.Web;
 
@@ -55,11 +54,15 @@ namespace Orckestra.Composer
                 get { return _viewLocationFormats ?? new List<string>(); }
                 set { _viewLocationFormats = value; }
             }
+
+            /// <summary>
+            /// Directory relative to the AppDomainAppPath where to find the .hbs files
+            /// </summary>
+            public static string TamplateHbsDirectory { get; set; } = "~/UI.Package/Templates";
         }
 
         public static class ResxLocalizationRepositoryConfiguration
         {
-            private static string _localizationResxDirectory = @"~/UI.Package/LocalizedStrings";
             private static IList<string> _patternsForPossibleSources = new List<string>
             {
                 "{category}_Custom.{cultureName}.resx",
@@ -69,17 +72,12 @@ namespace Orckestra.Composer
                 "{category}.{twoLetterISOLanguageName}.resx",
                 "{category}.resx",
             };
-            private static string _regexSource = "^(?<category>[^_\\.]+)(?<customTag>_Custom){0,1}(?<culture>\\.[^\\.]+){0,1}\\.resx$";
 
             /// <summary>
             /// Directory relative to the AppDomainAppPath where to find the resx files
             /// used by the ResxLocalizationProvider
             /// </summary>
-            public static string LocalizationResxDirectory
-            {
-                get { return _localizationResxDirectory; }
-                set { _localizationResxDirectory = value; }
-            }
+            public static string LocalizationResxDirectory { get; set; } = @"~/UI.Package/LocalizedStrings";
 
             /// <summary>
             /// Sorted list of filename patterns that could possibly hold
@@ -102,11 +100,7 @@ namespace Orckestra.Composer
             /// <summary>
             /// Regex used to extract the category part of a filename
             /// </summary>
-            public static string RegexSource
-            {
-                get { return _regexSource;  }
-                set { _regexSource = value; }
-            }
+            public static string RegexSource { get; set; } = "^(?<category>[^_\\.]+)(?<customTag>_Custom){0,1}(?<culture>\\.[^\\.]+){0,1}\\.resx$";
         }
     }
 }

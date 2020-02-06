@@ -1,4 +1,4 @@
-@inherits RazorFunction
+@inherits Composer.Razor.ComposerRazorFunction
 @using Orckestra.Composer.Search.Context
 @using Orckestra.Composer.Search.ViewModels
 @using Orckestra.Search.WebsiteSearch;
@@ -7,6 +7,9 @@
 @using Orckestra.Composer.ContentSearch.DataTypes
 @using Orckestra.Composer.Search.RequestConstants
 @using Orckestra.Composer.Search
+@using Orckestra.Composer.ContentSearch.Services
+@using Orckestra.Composer.ContentSearch.Parameters
+@using Orckestra.Composer.ContentSearch.ViewModels
 
 @functions {
     public override string FunctionDescription
@@ -29,117 +32,44 @@
 
     public ISearchRequestContext SearchRequestContext { get; set; }
 
-    public ProductSearchResultsViewModel ProductSearchResults
-    {
-        get
-        {
-            return SearchRequestContext.ProductsSearchViewModel.ProductSearchResults;
-        }
-    }
+    public IContentSearchViewService ContentSearchViewService { get; set; }
 
-
-    public class ContentTabItem
-    {
-        public string UrlTitle { get; set; }
-        public string TabUrl { get; set; }
-        public string Title { get; set; }
-        public WebsiteSearchResult ContentResult { get; set; }
-        public long Total { get; set; }
-        public int PagesCount { get; set; }
-        public bool IsActive { get; set; }
-    }
-
-
-    private string GetTabUrl(IContentTab tab, string keywords = null)
-    {
-        if (string.IsNullOrEmpty(keywords))
-        {
-            keywords = SearchRequestContext.SearchQuery;
-        }
-        return $"{CurrentPageNode.Url}/{tab.UrlTitle}?{SearchRequestParams.Keywords}={keywords}";
-    }
+    public ProductSearchResultsViewModel ProductSearchResults => SearchRequestContext.ProductsSearchViewModel.ProductSearchResults;
 
     private bool IsProductsCorrected()
     {
-        var correctedTerms = ProductSearchResults.CorrectedSearchTerms;
-        return SearchConfiguration.AutoCorrectSearchTerms &&
-            !string.IsNullOrEmpty(correctedTerms);
-
-    }
-
-    private string[] GetFacetSelection(string fieldName)
-    {
-        var prefix = GetFacetFieldCheckboxPrefix(fieldName);
-        return Request.QueryString.AllKeys
-            .Where(key => key.StartsWith(prefix))
-            .Select(key => key.Substring(prefix.Length))
-            .ToArray();
-    }
-
-    string GetFacetFieldCheckboxPrefix(string fieldName)
-    {
-        return "f_" + fieldName + "_";
-    }
-
-
-    private readonly Dictionary<string, System.Type> KnowTypes = DataFacade.GetAllInterfaces().ToDictionary(t => t.FullName);
-    private WebsiteSearchQuery GetSearchRequestForContentTab(IContentTab tab, bool isTabActive, string searchQuery)
-    {
-        // keywords
-        var sq = searchQuery == "*" ? "*:*" : searchQuery;
-        string[] keywords = sq.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-
-        // datatypes
-        var tabTypes = tab.DataTypes.Split(',').ToList();
-        Type[] dataTypes = tabTypes != null ? tabTypes.Select(name => KnowTypes[name]).ToArray() : null;
-
-        // page types
-        var tabPageTypes = tab.PageTypes?.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-
-        // facets
-        var tabFacetsToQuery = !string.IsNullOrEmpty(tab.Facets) ? tab.Facets.Split(',') : Array.Empty<string>();
-        var facets = isTabActive ? tabFacetsToQuery.Select(fieldName => new WebsiteSearchQueryFacet
-        {
-            Name = fieldName,
-            Selections = GetFacetSelection(fieldName)
-        }).ToArray() : null;
-
-        // media folders
-        var selectedMediaFolders = tab.MediaFolders != null ? DataFacade.GetData<IMediaFileFolder>().Where(p => tab.MediaFolders.Contains(p.KeyPath))
-        .Select(i => i.GetDataEntityToken()).ToArray() : null;
-
-        var sortOptions = new List<SearchQuerySortOption>();
-        if (isTabActive && !string.IsNullOrEmpty(SearchRequestContext.SortDirection) && !string.IsNullOrEmpty(SearchRequestContext.SortBy))
-        {
-            var isReverted = SearchRequestContext.SortDirection == "desc" ? true : false;
-            sortOptions.Add(new SearchQuerySortOption(SearchRequestContext.SortBy, isReverted, SortTermsAs.String));
-        }
-
-        return new WebsiteSearchQuery
-        {
-            Culture = Data.CurrentLocale,
-            Keywords = keywords,
-            DataTypes = dataTypes,
-            PageTypes = tabPageTypes,
-            CurrentSiteOnly = CurrentSite,
-            PageNumber = isTabActive ? SearchRequestContext.CurrentPage - 1 : 0,
-            Facets = facets,
-            PageSize = PageSize,
-            SortOptions = sortOptions,
-            FilterByAncestorEntityTokens = selectedMediaFolders
-        };
+        return !string.IsNullOrEmpty(ProductSearchResults.CorrectedSearchTerms);
     }
 
 }
 
 @{
-    C1PageRoute.RegisterPathInfoUsage();
+    if (string.IsNullOrWhiteSpace(SearchRequestContext.SearchQuery)) { return; }
 
+    C1PageRoute.RegisterPathInfoUsage();
     string pathInfo = C1PageRoute.GetPathInfo();
     string currentTabPathInfo = pathInfo?.Split('/')[1];
 
-    var contentTabs = Data.Get<IContentTab>().Where(c => !string.IsNullOrEmpty(c.DataTypes)).OrderBy(t => t.Order).ToList();
-    var justProductsSearch = contentTabs.Count == 0;
+    var productTab = Data.Get<Orckestra.Composer.ContentSearch.DataTypes.IContentTab>().FirstOrDefault(t => t.IsProductTab);
+    var isProductTab = (productTab != null && (currentTabPathInfo == null || productTab.UrlTitle == currentTabPathInfo));
+
+    var contentSearchVm = ContentSearchViewService.GetContentSearchViewModel(new GetContentSearchParameter
+    {
+        Culture = Data.CurrentLocale,
+        PageSize = PageSize,
+        CurrentPage = SearchRequestContext.CurrentPage,
+        PathInfo = currentTabPathInfo,
+        CurrentSiteOnly = CurrentSite,
+        SearchQuery = SearchRequestContext.SearchQuery,
+        CorrectedSearchQuery = ProductSearchResults.CorrectedSearchTerms,
+        BaseUrl = CurrentPageNode.Url,
+        QueryKeys = Request.QueryString?.AllKeys,
+        ProductsTabActive = isProductTab,
+        SortBy = SearchRequestContext.SortBy,
+        SortDirection = SearchRequestContext.SortDirection
+    });
+
+    var justProductsSearch = contentSearchVm == null;
 
     if (justProductsSearch)
     {
@@ -148,59 +78,34 @@
         return;
     }
 
-    var productTab = Data.Get<Orckestra.Composer.ContentSearch.DataTypes.IContentTab>().FirstOrDefault(t => t.IsProductTab);
-    var isProductTab = (productTab != null && currentTabPathInfo == null) || (productTab != null && productTab.UrlTitle == currentTabPathInfo);
-
     if (currentTabPathInfo == null)
     {
-        currentTabPathInfo = productTab != null ? productTab.UrlTitle : contentTabs.First()?.UrlTitle;
+        currentTabPathInfo = productTab != null ? productTab.UrlTitle : contentSearchVm.Tabs.First()?.UrlTitle;
     }
-
-    List<ContentTabItem> tabs = new List<ContentTabItem>();
 
     SearchRequestContext.IsProductsSearchActive = isProductTab;
 
-    tabs.Add(new ContentTabItem
+    if (productTab != null)
     {
-        Title = productTab.Title,
-        UrlTitle = productTab.UrlTitle,
-        TabUrl = GetTabUrl(productTab),
-        Total = IsProductsCorrected() && !isProductTab ? 0 : ProductSearchResults.TotalCount,
-        IsActive = (productTab != null && currentTabPathInfo == null) || (productTab != null && productTab.UrlTitle == currentTabPathInfo)
-    });
-
-
-    if (!string.IsNullOrWhiteSpace(SearchRequestContext.SearchQuery))
-    {
-
-        foreach (var tab in contentTabs)
+        var productTabVm = new ContentSearchTabViewModel
         {
-            var searchQuery = IsProductsCorrected() && SearchRequestContext.IsProductsSearchActive ? ProductSearchResults.CorrectedSearchTerms :
-                SearchRequestContext.SearchQuery.Trim().ToLower();
-            var searchRequest = GetSearchRequestForContentTab(tab, currentTabPathInfo == tab.UrlTitle, searchQuery);
-            var result = WebsiteSearchFacade.Search(searchRequest);
+            Title = productTab.Title,
+            UrlTitle = productTab.UrlTitle,
+            TabUrl = $"{CurrentPageNode.Url}/{productTab.UrlTitle}?{SearchRequestParams.Keywords}={SearchRequestContext.SearchQuery}",
+            Total = IsProductsCorrected() && !isProductTab ? 0 : ProductSearchResults.TotalCount,
+            IsActive = (productTab != null && currentTabPathInfo == null) || (productTab != null && productTab.UrlTitle == currentTabPathInfo)
+        };
 
-            tabs.Add(new ContentTabItem
-            {
-                Title = tab.Title,
-                UrlTitle = tab.UrlTitle,
-                TabUrl = GetTabUrl(tab, searchQuery),
-                ContentResult = result,
-                PagesCount = (int)Math.Ceiling((decimal)result.ResultsFound / PageSize),
-                Total = result.ResultsFound,
-                IsActive = currentTabPathInfo == tab.UrlTitle
-            });
-        }
+        contentSearchVm.Tabs.Insert(0, productTabVm);
     }
 
-    var total = tabs.Select(t => t.Total).Sum();
-    var currentTab = tabs.FirstOrDefault(t => t.IsActive);
+    var currentTab = contentSearchVm.ActiveTab;
 }
 
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
 <head>
     <script type="text/javascript" defer="defer">
-        function SubmitContentSearchForm(sortBy, sortDirection) {
+        function submitContentSearchForm(sortBy, sortDirection) {
 
             if (sortBy) {
                 document.getElementById("sortBy").value = sortBy;
@@ -213,11 +118,10 @@
             document.getElementById('SearchForm').submit();
         }
 
-        function RemoveSelection(key) {
+        function removeSelection(key) {
             var checkbox = document.getElementById(key);
             checkbox.checked = !checkbox.checked;
             document.getElementById('SearchForm').submit();
-
         }
 
         function toggleMoreFacets(el) {
@@ -226,19 +130,17 @@
             var moreText = $(el).data("label-more");
             $(el).text($(targetId).hasClass("in") ? moreText : lessText);
         }
-
     </script>
 </head>
 <body>
+    @SearchSummary(contentSearchVm, isProductTab)
 
-    @SearchSummary(total, isProductTab, contentTabs)
-
-    @if (tabs.Count > 0)
+    @if (contentSearchVm.Tabs.Count > 0)
     {
         <div class="container-fluid search-tabs">
             <div class=" container">
                 <ul class="nav nav-tabs" role="tablist">
-                    @foreach (var tab in tabs)
+                    @foreach (var tab in contentSearchVm.Tabs)
                     {
                         var classValue = tab.IsActive ? "active" : "";
                         <li role="presentation" class="@classValue">
@@ -258,8 +160,13 @@
             {
                 if (ProductSearchResults.TotalCount == 0)
                 {
+                    var tabsWithResults = contentSearchVm.Tabs.Where(t => t.Total > 0).ToList();
                     <p>@Html.Localized("List-Search", "WeAreSorry", SearchRequestContext.SearchQuery)</p>
-                    @ShowButWeFindIn(tabs.Where(t => t.Total > 0).ToList())
+                    if (tabsWithResults.Count() > 0)
+                    {
+                        @ShowButWeFindIn(tabsWithResults)
+                        @ShowButWeFindInTeaser(tabsWithResults)
+                    }
                 }
                 @ShowProductsSearchResults()
             }
@@ -267,7 +174,8 @@
             {
                 if (currentTab != null)
                 {
-                    <form id="SearchForm" class="search-form form-inline" action="@CurrentPageNode.Url/@currentTab.UrlTitle" method="get" role="search">
+                    <form id="SearchForm" class="search-form form-inline"
+                          action="@CurrentPageNode.Url/@currentTab.UrlTitle" method="get" role="search">
                         <input id="keywords" type="hidden" value="@SearchRequestContext.SearchQuery" name="keywords" />
                         <div class="row">
                             <div class="col-xs-12">
@@ -275,7 +183,7 @@
                                 {
                                     <div class="row action-line">
                                         <div class="col-xs-6 visible-sm-block visible-xs-block">
-                                            <button type="button" class="btn  btn-default btn-dropdown " data-toggle="collapse" data-target="#facets" aria-expanded="false">
+                                            <button type="button" class="btn  btn-default btn-dropdown" data-toggle="collapse" data-target="#facets" aria-expanded="false">
                                                 @Html.Localize("List-Search", "B_Refine")
                                                 <span class="fa  fa-angle-down"></span>
                                             </button>
@@ -291,27 +199,24 @@
                             </div>
 
                             <div class="content-container col-xs-12">
-
                                 <div id="facets" class="col-sm-6 col-md-3 col-lg-2 @(currentTab.Total > 0 ? "facets" : "") collapse">
-                                    @ShowSelectedFacets(currentTab.ContentResult)
-                                    @ShowFacets(currentTab.ContentResult)
+                                    @Partial("ContentSearch", "SelectedFacets", contentSearchVm)
+                                    @Partial("ContentSearch", "Facets", contentSearchVm)
                                 </div>
-
                                 <div class="thumbnail-container col-sm-12 col-md-9 col-lg-10">
-                                    @foreach (var entry in currentTab.ContentResult.Entries)
+                                    @foreach (var entry in currentTab.SearchResults.Entries)
                                     {
-                                        @ShowContentSearchEntry(entry)
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            @ShowContentSearchEntry(entry)
+                                        </div>
                                     }
                                 </div>
-                            </div>
-
+                                    </div>
                             <div class="col-xs-12 visible-sm-block visible-xs-block">
                                 @ShowPaging(currentTab)
                             </div>
-
                         </div>
                     </form>
-
                 }
             }
         </div>
@@ -319,22 +224,22 @@
 </body>
 </html>
 
-@helper SearchSummary(long total, bool isProductTab, List<IContentTab> contentTabs)
+@helper SearchSummary(ContentSearchViewModel vm, bool isProductTab)
 {
-    if (IsProductsCorrected() && isProductTab)
+    if (IsProductsCorrected())
     {
         <h1>
             @($"{Html.Localize("List-Search", "L_NoResultsFor")} \"{SearchRequestContext.SearchQuery }\"")
         </h1>
         <p>@Html.Localized("List-Search", "WeAreSorry", SearchRequestContext.SearchQuery)</p>
-        @ShowSuggestedResultsOnOtherTabsForRequestedQuery(contentTabs)
-        <h2>@($"{total} {Html.Localize("List-Search", "L_SearchResults")} \"{ProductSearchResults.CorrectedSearchTerms}\"")</h2>
+        @ShowButWeFindIn(vm.SuggestedTabs)
+        <h2>@($"{vm.Total} {Html.Localize("List-Search", "L_SearchResults")} \"{ProductSearchResults.CorrectedSearchTerms}\"")</h2>
     }
     else
     {
-        if (total > 0)
+        if (vm.Total > 0)
         {
-            <h1><strong>@total</strong>@($" {Html.Localize("List-Search", "L_SearchResults")} \"{SearchRequestContext.SearchQuery }\"")</h1>
+            <h1><strong>@vm.Total</strong>@($" {Html.Localize("List-Search", "L_SearchResults")} \"{SearchRequestContext.SearchQuery }\"")</h1>
         }
         else
         {
@@ -346,48 +251,51 @@
     }
 }
 
-@helper ShowSuggestedResultsOnOtherTabsForRequestedQuery(List<IContentTab> contentTabs)
+@helper ShowButWeFindIn(List<ContentSearchTabViewModel> tabs)
 {
-    var suggestedTabs = new List<ContentTabItem>();
-    foreach (var tab in contentTabs)
-    {
-        var searchRequest = GetSearchRequestForContentTab(tab, false, SearchRequestContext.SearchQuery);
-        var result = WebsiteSearchFacade.Search(searchRequest);
-
-        if (result.ResultsFound > 0)
+    if (tabs == null || !tabs.Any()) { return; }
+    <p>
+        @Html.Localize("List-Search", "ButWeFind_Part1")
+        @for (var i = 0; i < tabs.Count(); i++)
         {
-            suggestedTabs.Add(new ContentTabItem
-            {
-                Title = tab.Title,
-                UrlTitle = tab.UrlTitle,
-                TabUrl = GetTabUrl(tab),
-                Total = result.ResultsFound
-            });
-        }
-    }
+            var tab = tabs[i];
+            <a href="@tab.TabUrl">@tab.Total @tab.Title</a>
 
-    @ShowButWeFindIn(suggestedTabs)
+            if (i < tabs.Count() - 1)
+            {
+                <text>@Html.Localize("List-Search", "ButWeFind_Separator")</text>
+            }
+        }
+        @Html.Localize("List-Search", "ButWeFind_Part2")
+    </p>
 }
 
-@helper ShowButWeFindIn(List<ContentTabItem> tabs)
+@helper ShowButWeFindInTeaser(List<ContentSearchTabViewModel> tabs)
 {
-    if (tabs.Any())
-    {
-        <p>
-            @Html.Localize("List-Search", "ButWeFind_Part1")
-            @for (var i = 0; i < tabs.Count(); i++)
-            {
-                var tab = tabs[i];
-                <a href="@tab.TabUrl">@tab.Total @tab.Title</a>
+    if (tabs == null || !tabs.Any()) { return; }
 
-                if (i < tabs.Count() - 1)
+    var teaserItemsCount = 3;
+    <div class="content-tab-teaser">
+        @foreach (var tab in tabs)
+        {
+            var resutls = tab.SearchResults.Entries.Take(teaserItemsCount);
+            <div class="header">
+                <h3 class="title">@tab.Title (@tab.Total)</h3>
+                @if (tab.Total > teaserItemsCount)
                 {
-                    <text>@Html.Localize("List-Search", "ButWeFind_Separator")</text>
+                <a href="@tab.TabUrl">See all @tab.Title</a>
                 }
-            }
-            @Html.Localize("List-Search", "ButWeFind_Part2")
-        </p>
-    }
+            </div>
+            <div class="row">
+                @foreach (var entry in resutls)
+                {
+                    <div class="col-xs-12 col-sm-4 col-md-4">
+                        @ShowContentSearchEntry(entry)
+                    </div>
+                }
+            </div>
+        }
+    </div>
 }
 
 @helper ShowProductsSearchResults()
@@ -405,8 +313,8 @@
 
 @helper ShowSortBy()
 {
-    var contentTabSortOptions = Data.Get<Orckestra.Composer.ContentSearch.DataTypes.ISortOption>().OrderBy(t => t.Order).ToList();
-    var selectedSortOption = contentTabSortOptions.Find(o => o.FieldName == SearchRequestContext.SortBy && (o.IsReverted && SearchRequestContext.SortDirection == "desc" || !o.IsReverted && SearchRequestContext.SortDirection == "asc"));
+    var sortOptions = Data.Get<Orckestra.Composer.ContentSearch.DataTypes.ISortOption>().OrderBy(t => t.Order).ToList();
+    var selectedSortOption = sortOptions.Find(o => o.FieldName == SearchRequestContext.SortBy && (o.IsReverted && SearchRequestContext.SortDirection == "desc" || !o.IsReverted && SearchRequestContext.SortDirection == "asc"));
     var selectedTitle = selectedSortOption != null ? selectedSortOption.Title : Html.Localize("List-Search", "F_Relevance_Option");
     <div class="dropdown">
         <span class="hidden-sm hidden-xs">@Html.Localize("List-Search", "L_Sorting")</span>
@@ -417,42 +325,26 @@
         <input type="hidden" id="sortDirection" name="sortDirection" value="@SearchRequestContext.SortDirection" />
         <input type="hidden" id="sortBy" name="sortBy" value="@SearchRequestContext.SortBy" />
         <ul class="dropdown-menu">
-            @foreach (var option in contentTabSortOptions)
+            @foreach (var sortOption in sortOptions)
             {
-                var sortByOption = option.FieldName;
-                var sortDirectionOption = option.IsReverted ? "desc" : "asc";
+                var sortDirectionOption = sortOption.IsReverted ? "desc" : "asc";
                 <li>
-                    <a onClick="SubmitContentSearchForm('@sortByOption','@sortDirectionOption')">
-                        @option.Title
+                    <a onClick="submitContentSearchForm('@sortOption.FieldName','@sortDirectionOption')">
+                        @sortOption.Title
                     </a>
                 </li>
             }
-
         </ul>
     </div>
 }
 
 @helper ShowContentSearchEntry(SearchResultEntry entry)
 {
-    var image = entry.FieldValues.Where(p => p.Key.Contains("Image")).Select(v => v.Value).FirstOrDefault();
-    var desc = entry.FieldValues.ContainsKey("desc") ? entry.FieldValues["desc"] : null;
-    <div class="thumbnail-item col-xs-12 col-sm-6 col-md-6 col-lg-4">
-        @if (image != null)
-        {
-            <img class="" src="~/media(@image.ToString())?h=250" alt="@entry.Title" />
-        }
-
-        <div class="caption">
-            <h3><a href="@entry.Url">@Html.Raw(@entry.Title)</a></h3>
-        </div>
-        @if (desc != null)
-        {
-            <p>@desc</p>
-        }
-    </div>
+    var vm = ContentSearchViewService.GetSearchResultsEntryViewModel(entry);
+    @Partial("ContentSearch", "SearchEntryItem", vm)
 }
 
-@helper ShowPaging(ContentTabItem tab)
+@helper ShowPaging(ContentSearchTabViewModel tab)
 {
     if (tab.Total > 1)
     {
@@ -460,107 +352,4 @@
             @SearchHelpers.Pagination(SearchRequestContext.CurrentPage, tab.PagesCount, 10, Request.Url.AbsoluteUri, SearchRequestParams.Page)
         </div>
     }
-}
-
-@helper ShowSelectedFacets(WebsiteSearchResult result)
-{
-    var selectedFacets = new Dictionary<string, List<SearchResultFacetHit>>();
-    int count = 0;
-    foreach (var r in result.Facets)
-    {
-        var facets = GetFacetSelection(r.Name).ToList();
-        count += facets.Count;
-        selectedFacets.Add(r.Name, r.Hits.Where(i => facets.Contains(i.Value)).ToList());
-    }
-    if (count > 0)
-    {
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <h4>@Html.Localize("List-Search", "L_Selection")</h4>
-                <ul class="list-unstyled">
-                    @foreach (var res in selectedFacets)
-                    {
-                        foreach (var hit in res.Value)
-                        {
-                            string key = GetFacetFieldCheckboxPrefix(res.Key) + hit.Value;
-                            bool isChecked = Request.QueryString.AllKeys.Contains(key);
-
-                            <li>
-                                <div class="row">
-                                    <div class="col-xs-10">@hit.Label</div>
-                                    <div class="col-xs-2">
-                                        <a href="javascript://" onclick="RemoveSelection('@(key)')">
-                                            <span class="fa  fa-times  fa-lg"></span>
-                                        </a>
-                                    </div>
-                                </div>
-                            </li>
-                        }
-                    }
-                </ul>
-            </div>
-        </div>
-    }
-
-}
-
-@helper ShowFacets(WebsiteSearchResult result)
-{
-    var labels = WebsiteSearchFacade.GetFacetOptions().ToDictionary(t => t.Item1, t => t.Item2);
-    var visibleFacetsCount = 5;
-    var index = 0;
-
-    <div>
-        @foreach (var facet in result.Facets)
-        {
-            index++;
-            if (facet.Hits.Count == 0)
-            {
-                continue;
-            }
-            var visibleFacets = facet.Hits.Take(visibleFacetsCount).ToList();
-            var hiddenFacets = facet.Hits.Skip(visibleFacetsCount).ToList();
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <h4>@labels[facet.Name]</h4>
-                    <div id="facet@(index)">
-                        <ul class="list-unstyled">
-                            @foreach (var hit in visibleFacets)
-                            {
-                                @RenderFacetHit(facet, hit)
-                            }
-                        </ul>
-                        @if (hiddenFacets.Count > 0)
-                        {
-                            <ul id="moreHits@(index)" class="list-unstyled collapse">
-                                @foreach (var hit in hiddenFacets)
-                                {
-                                    @RenderFacetHit(facet, hit)
-                                }
-                            </ul>
-                            <a class="btn  btn-link" onclick="toggleMoreFacets(this)" data-toggle="collapse" data-target="#moreHits@(index)"
-                               data-label-more="@Html.Localize("List-Search", "B_ShowMore")"
-                               data-label-less="@Html.Localize("List-Search", "B_ShowLess")">
-                                @Html.Localize("List-Search", "B_ShowMore")
-                            </a>
-                        }
-                    </div>
-                </div>
-            </div>
-        }
-    </div>
-}
-
-@helper RenderFacetHit(SearchResultFacet facet, SearchResultFacetHit hit)
-{
-    string key = GetFacetFieldCheckboxPrefix(facet.Name) + hit.Value;
-    bool isChecked = Request.QueryString.AllKeys.Contains(key);
-    <li>
-        <label for="@key">
-            <input id="@key" type="checkbox" name="@key"
-                   onchange="SubmitContentSearchForm()"
-                   @if (isChecked) { <text> checked="checked" </text> } />
-        </label>
-        @hit.Label (@hit.HitCount)
-    </li>
 }

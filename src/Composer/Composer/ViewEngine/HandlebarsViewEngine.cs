@@ -3,15 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Web.Caching;
 using System.Web.Hosting;
 using System.Web.Mvc;
 using HandlebarsDotNet;
-using Orckestra.Caching;
 using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Utils;
 using Orckestra.Overture.Caching;
-using CacheItemPriority = System.Web.Caching.CacheItemPriority;
+using static Orckestra.Composer.ComposerConfiguration;
 
 namespace Orckestra.Composer.ViewEngine
 {
@@ -21,9 +19,11 @@ namespace Orckestra.Composer.ViewEngine
     internal /*sealed*/ class HandlebarsViewEngine : VirtualPathProviderViewEngine
     {
         private readonly IHandlebars _handlebars;
-        private readonly ICacheProvider _cacheProvider;
+        protected ICacheProvider CacheProvider { get; }
 
         private static readonly Regex TemplatePartialFinder = new Regex(@"\{\{>\s*?(?<Partial>[^\s}]+)\s*?\}\}", RegexOptions.IgnoreCase | RegexOptions.Singleline | RegexOptions.Compiled);
+        private Dictionary<string, IEnumerable<string>> dependenciesList = new Dictionary<string, IEnumerable<string>>();
+        private FileSystemWatcher fileWacher;
 
         /// <summary>
         /// Create the core instance of the ViewEngine
@@ -31,14 +31,12 @@ namespace Orckestra.Composer.ViewEngine
         /// <param name="cacheProvider">The cache provider holding reusable items</param>
         public HandlebarsViewEngine(ICacheProvider cacheProvider)
         {
-            if(cacheProvider == null) { throw new ArgumentNullException("cacheProvider"); }
-
-            ViewLocationFormats = ComposerConfiguration.HandlebarsViewEngineConfiguration.ViewLocationFormats.ToArray();
+            ViewLocationFormats = HandlebarsViewEngineConfiguration.ViewLocationFormats.ToArray();
             PartialViewLocationFormats = ViewLocationFormats;
             ViewLocationCache = new DefaultViewLocationCache(TimeSpan.FromDays(1));
 
             _handlebars = Handlebars.Create(Handlebars.Configuration);
-            _cacheProvider = cacheProvider;
+            CacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));
         }
 
         /// <summary>
@@ -66,12 +64,12 @@ namespace Orckestra.Composer.ViewEngine
 
         private HandlebarsView GetViewFromCache(ControllerContext controllerContext, string virtualPath)
         {
-            CacheKey templateCacheKey =  new CacheKey(CacheConfigurationCategoryNames.HandlebarsView)
+            CacheKey templateCacheKey = new CacheKey(CacheConfigurationCategoryNames.HandlebarsView)
             {
-                Key = virtualPath
+                Key = virtualPath.Substring(virtualPath.LastIndexOf('/') + 1)
             };
 
-            return _cacheProvider.GetOrAdd(templateCacheKey, () =>
+            return CacheProvider.GetOrAdd(templateCacheKey, () =>
             {
                 //First, let's make sure the dependencies exist
                 Dictionary<string, HandlebarsView> dependencies = GetDependenciesFromCache(controllerContext,
@@ -85,11 +83,7 @@ namespace Orckestra.Composer.ViewEngine
                     compiledTemplate = _handlebars.Compile(template);
                 }
 
-                //Watch for file changes
-                List<string> fileDependencies = new List<string>();
-                fileDependencies.Add(virtualPath);
-                fileDependencies.AddRange(dependencies.Select(kvp => kvp.Value.VirtualPath));
-                MonitorFileChanges(templateCacheKey, fileDependencies);
+                InitMonitorTamplateFiles();
 
                 return new HandlebarsView(compiledTemplate, virtualPath, dependencies);
             });
@@ -103,7 +97,7 @@ namespace Orckestra.Composer.ViewEngine
         /// </summary>
         /// <param name="controllerContext"></param>
         /// <param name="virtualPath"></param>
-        private Dictionary<string,HandlebarsView> GetDependenciesFromCache(ControllerContext controllerContext, string virtualPath)
+        private Dictionary<string, HandlebarsView> GetDependenciesFromCache(ControllerContext controllerContext, string virtualPath)
         {
             Dictionary<string, HandlebarsView> dependencies = new Dictionary<string, HandlebarsView>();
 
@@ -164,29 +158,79 @@ namespace Orckestra.Composer.ViewEngine
         }
 
         //--
+        private void InitMonitorTamplateFiles()
+        {
+            if (fileWacher != null) return;
+
+            fileWacher = MonitorTamplateFiles(HostingEnvironment.MapPath(HandlebarsViewEngineConfiguration.TamplateHbsDirectory));
+            dependenciesList = GetTamplateDependencyList(HandlebarsViewEngineConfiguration.TamplateHbsDirectory);
+        }
 
         /// <summary>
-        /// Add a dummy cache entry, with file dependencies. 
-        /// On this dummy cache expiracy, purge the _cacheProvider.
+        /// Remove cache key if some files was changed 
         /// </summary>
-        /// <param name="cacheKey">Key to invalidate on file change</param>
-        /// <param name="fileDependencies"></param>
-        private void MonitorFileChanges(CacheKey cacheKey, IList<string> fileDependencies)
+        /// <param name="directory">watch physical directory</param>
+        private FileSystemWatcher MonitorTamplateFiles(string directory)
         {
-            if (fileDependencies != null && fileDependencies.Any())
-            {
-                var monitoredFile = VirtualPathProvider.GetCacheDependency(fileDependencies.First(), fileDependencies, DateTime.UtcNow);
+            if (string.IsNullOrEmpty(directory))
+                return null;
 
-                HostingEnvironment.Cache.Add(cacheKey.GetFullCacheKey(),
-                    cacheKey,
-                    monitoredFile,
-                    Cache.NoAbsoluteExpiration,
-                    Cache.NoSlidingExpiration,
-                    CacheItemPriority.High,
-                    (s, removedCacheKey, reason) =>
-                    {
-                        _cacheProvider.Remove((CacheKey)removedCacheKey);
-                    });
+            string fileWatcherMask = "*.hbs";
+            var fileSystemWatcher = new FileSystemWatcher(directory, fileWatcherMask);
+
+            fileSystemWatcher.Created += OnChanged;
+            fileSystemWatcher.Changed += OnChanged;
+            fileSystemWatcher.Deleted += OnChanged;
+            fileSystemWatcher.Renamed += OnRenamed;
+            fileSystemWatcher.EnableRaisingEvents = true;
+            return fileSystemWatcher;
+        }
+
+        /// <summary>
+        /// Find all handlebar dependency in folder
+        /// </summary>
+        /// <param name="virtDirectory">watch virtual directory</param>
+        private Dictionary<string, IEnumerable<string>> GetTamplateDependencyList(string virtDirectory)
+        {
+            var dependencyList = new Dictionary<string, IEnumerable<string>>();
+            var temaplateDirectory = VirtualPathProvider.GetDirectory(virtDirectory);
+
+            foreach (VirtualFile file in temaplateDirectory.Files)
+            {
+                var temaplateDependency = GetViewPartialNames(file.VirtualPath);
+                if (temaplateDependency.Any())
+                {
+                    dependencyList.Add(file.Name, temaplateDependency);
+                }
+            }
+
+            return dependencyList;
+        }
+
+        private void OnChanged(object source, FileSystemEventArgs e)
+        {
+            RemoveTemplateCacheKey(e.Name);
+        }
+
+        private void OnRenamed(object source, RenamedEventArgs e)
+        {
+            RemoveTemplateCacheKey(e.Name);
+        }
+
+        private void RemoveTemplateCacheKey(string templateFileName)
+        {
+            CacheKey templateCacheKey = new CacheKey(CacheConfigurationCategoryNames.HandlebarsView)
+            {
+                Key = templateFileName
+            };
+
+            CacheProvider.Remove(templateCacheKey);
+
+            var templateName = templateFileName.Substring(0, templateFileName.IndexOf('.'));
+            var templatesWitchContain = dependenciesList.Where(x => x.Value.Contains(templateName)).Select(x => x.Key);
+            foreach (var template in templatesWitchContain)
+            {
+                RemoveTemplateCacheKey(template);
             }
         }
         //--
@@ -203,14 +247,14 @@ namespace Orckestra.Composer.ViewEngine
 
             _handlebars.RegisterHelper(helper.HelperName, helper.HelperFunction);
         }
-        
+
         private void ValidateRegisterHelper(IHandlebarsHelper helper)
         {
             if (helper == null)
             {
                 throw new ArgumentNullException("helper");
             }
-        
+
             if (string.IsNullOrEmpty(helper.HelperName))
             {
                 throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("HelperName"), "helper");

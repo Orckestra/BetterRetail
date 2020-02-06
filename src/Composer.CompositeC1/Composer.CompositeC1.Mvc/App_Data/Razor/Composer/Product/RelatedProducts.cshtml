@@ -1,0 +1,44 @@
+@using Orckestra.Composer.CompositeC1.DataTypes
+@inherits RazorFunction
+
+@functions {
+	public override string FunctionDescription
+	{
+		get { return "Displays products/variants related to the product displayed on the current product/variant details page.  First products which are related via merchandising relationship will be displayed and if none are available then displays product in the same default category"; }
+	}
+
+
+	[FunctionParameter(Name = "merchandiseTypes", Label = "Products Merchandise Relationship Types to include", Help = "Specify the Merchandise Types ")]
+	public string merchandiseTypes { get; set; }
+
+	[FunctionParameter(Name = "headingText", Label = "Heading", DefaultValue = "You may also like", Help = "Displays the header of the related products block. The header must be short. Use text like \"You might also like\".")]
+	public string headingText { get; set; }
+
+	[FunctionParameter(Name = "displaySameCategoryProducts", Label = "Display products in the same category", DefaultValue = true, Help = "Specify if this block should display products in the same default category if no products are displayed based on specified relationship types.")]
+	public bool displaySameCategoryProducts { get; set; }
+
+	[FunctionParameter(Name = "maxItems", Label = "Number of maximum displayed products/variants", DefaultValue = 5, Help = "Specify the number of products/items displayed in this block. The maximum should be 15.")]
+	public int maxItems { get; set; }
+
+	[FunctionParameter(Name = "displayPrices", Label = "Display price on products", DefaultValue = true, Help = "Show the price on the products in this block.")]
+	public bool displayPrices { get; set; }
+
+	[FunctionParameter(Name = "displayAddToCart", Label = "Display \"Add to cart\" on products", DefaultValue = true, Help = "Show the \"Add to cart\" link on the products in this block.")]
+	public bool displayAddToCart { get; set; }
+
+
+	[FunctionParameter(Name = "backgroundStyle", Label = "Background style", DefaultValue = null, Help = "Specify the style of this block background")]
+	public DataReference<CssStyle> backgroundStyle { get; set; }
+}
+
+
+@Html.LazyFunction("Composer.Product.Instant.RelatedProducts", new
+{
+	merchandiseTypes = merchandiseTypes,
+	headingText = headingText,
+	displaySameCategoryProducts = displaySameCategoryProducts,
+	maxItems = maxItems,
+	displayPrices = displayPrices,
+	displayAddToCart = displayAddToCart,
+	backgroundStyle = backgroundStyle
+})

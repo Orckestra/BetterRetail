@@ -43,6 +43,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Orckestra.Search.WebsiteSearch, Version=1.0.8.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\C1CMSPackages.Orckestra.Search.WebsiteSearch.1.0.8\lib\net461\Orckestra.Search.WebsiteSearch.dll</HintPath>
+    </Reference>
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -87,6 +90,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="web.config" />
+    <Content Include="Package\Views\ContentSearch\Facets.cshtml" />
+    <Content Include="Package\Views\ContentSearch\SelectedFacets.cshtml" />
+    <Content Include="Package\Views\ContentSearch\SearchEntryItem.cshtml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>

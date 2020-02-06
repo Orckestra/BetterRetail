@@ -87,7 +87,7 @@ namespace Orckestra.Composer.CompositeC1.Mvc
             functions.RegisterAction<ProductController>("LanguageSwitch", "Composer.Product.LanguageSwitch");
             functions.RegisterAction<ProductController>("ProductSpecifications", "Composer.Product.Specifications");
             functions.RegisterAction<ProductController>("Breadcrumb", "Composer.Product.Breadcrumb");
-            functions.RegisterAction<ProductController>("RelatedProducts", "Composer.Product.RelatedProducts", "Displays products/variants related to the product displayed on the current product/variant details page.  First products which are related via merchandising relationship will be displayed and if none are available then displays product in the same default category")
+            functions.RegisterAction<ProductController>("RelatedProducts", "Composer.Product.Instant.RelatedProducts", "Displays products/variants related to the product displayed on the current product/variant details page.  First products which are related via merchandising relationship will be displayed and if none are available then displays product in the same default category")
                 .AddParameter("merchandiseTypes",
                     typeof(string),
                     label: "Products Merchandise Relationship Types to include",

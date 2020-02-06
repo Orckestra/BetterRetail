@@ -4,6 +4,7 @@ using Composite.Search.Crawling;
 using Microsoft.Extensions.DependencyInjection;
 using Orckestra.Composer.ContentSearch.DataTypes;
 using Orckestra.Composer.ContentSearch.Search;
+using Orckestra.Composer.ContentSearch.Services;
 
 namespace Orckestra.Composer.ContentSearch
 {
@@ -13,6 +14,7 @@ namespace Orckestra.Composer.ContentSearch
         public static void ConfigureServices(IServiceCollection collection)
         {
             collection.AddSingleton<ISearchDocumentBuilderExtension>(new MediaSearchDocumentBuilderExtension());
+            collection.AddTransient<IContentSearchViewService, ContentSearchViewService>();
         }
 
         public static void OnBeforeInitialize()
@@ -22,12 +24,8 @@ namespace Orckestra.Composer.ContentSearch
 
         public static void OnInitialized()
         {
-
             DynamicTypeManager.EnsureCreateStore(typeof(IContentTab));
             DynamicTypeManager.EnsureCreateStore(typeof(ISortOption));
-
         }
-        
-
     }
 }

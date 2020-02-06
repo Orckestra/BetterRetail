@@ -8,6 +8,11 @@
         margin: 0;
     }
 
+    .thumbnail-item-media {
+        max-height: 200px;
+        overflow: hidden;
+    }
+
     @media (max-width: $screen-xs) {
         .thumbnail-item {
             padding: 0;
@@ -69,3 +74,16 @@
         }
     }
 }
+
+.content-tab-teaser {
+    .header {
+        .title {
+            display: inline-flex;
+            margin-right: 30px;
+      }
+
+      a {
+        display: inline-flex;
+      }
+    }
+  }

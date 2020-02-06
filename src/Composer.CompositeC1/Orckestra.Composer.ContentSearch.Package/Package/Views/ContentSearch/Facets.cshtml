@@ -1,0 +1,57 @@
+﻿@using Orckestra.Composer.ContentSearch.ViewModels
+@using Composite.AspNet.Razor
+
+@model Orckestra.Composer.ContentSearch.ViewModels.ContentSearchViewModel
+@{
+    var visibleFacetsCount = 5;
+    var index = 0;
+}
+
+<div>
+    @foreach (var facet in Model.Facets)
+    {
+        index++;
+        var visibleFacets = facet.Hits.Take(visibleFacetsCount).ToList();
+        var hiddenFacets = facet.Hits.Skip(visibleFacetsCount).ToList();
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <h4>@facet.Label</h4>
+                <div id="facet@(index)">
+                    <ul class="list-unstyled">
+                        @foreach (var hit in visibleFacets)
+                        {
+                            @FacetHit(facet, hit)
+                        }
+                    </ul>
+                    @if (hiddenFacets.Count > 0)
+                    {
+                        <ul id="moreHits@(index)" class="list-unstyled collapse">
+                            @foreach (var hit in hiddenFacets)
+                            {
+                                @FacetHit(facet, hit)
+                            }
+                        </ul>
+                        <a class="btn  btn-link" onclick="toggleMoreFacets(this)" data-toggle="collapse" data-target="#moreHits@(index)"
+                           data-label-more="@Html.Localize("List-Search", "B_ShowMore")"
+                           data-label-less="@Html.Localize("List-Search", "B_ShowLess")">
+                            @Html.Localize("List-Search", "B_ShowMore")
+                        </a>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@helper FacetHit(FacetViewModel facet, FacetHitViewModel hit)
+{
+    bool isChecked = Request.QueryString.AllKeys.Contains(hit.Key);
+    <li>
+        <label for="@hit.Key">
+            <input id="@hit.Key" type="checkbox" name="@hit.Key"
+                   onchange="submitContentSearchForm()"
+                   @if (isChecked) { <text> checked="checked" </text> } />
+        </label>
+        @hit.Label (@hit.Count)
+    </li>
+}
