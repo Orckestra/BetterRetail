@@ -1,4 +1,5 @@
 ///<reference path='../../Typings/tsd.d.ts' />
+///<reference path='../Composer.Product/ProductSearch/Services/SearchService.ts' />
 
 module Orckestra.Composer {
     export class AutocompleteSearchService extends SearchService {
