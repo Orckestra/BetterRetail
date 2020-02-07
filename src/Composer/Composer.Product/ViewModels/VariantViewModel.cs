@@ -42,5 +42,7 @@ namespace Orckestra.Composer.Product.ViewModels
         /// The Value is the kva value for this variant
         /// </summary>
         public Dictionary<string,object> Kvas { get; set; }
+
+        public SpecificationsViewModel Specifications { get; set; }
     }
 }

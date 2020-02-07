@@ -14,8 +14,6 @@ namespace Orckestra.Composer.CompositeC1.Mvc.Controllers
         public ProductController(
             IPageService pageService, 
             IComposerContext composerContext, 
-            IProductViewService productService, 
-            IProductSpecificationsViewService productSpecificationsViewService, 
             IProductBreadcrumbService productBreadcrumbService, 
             ILanguageSwitchService languageSwitchService, 
             IProductUrlProvider productUrlProvider, 
@@ -26,8 +24,6 @@ namespace Orckestra.Composer.CompositeC1.Mvc.Controllers
             : base(
             pageService, 
             composerContext, 
-            productService, 
-            productSpecificationsViewService, 
             productBreadcrumbService, 
             languageSwitchService, 
             productUrlProvider, 

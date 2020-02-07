@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -77,35 +77,20 @@ namespace Orckestra.Composer.Product.Tests.Services
             var productSpecificationsViewService = _container.CreateInstance<ProductSpecificationsViewService>();
 
             // Assert
-            Assert.ThrowsAsync<ArgumentNullException>(() => productSpecificationsViewService.GetProductSpecificationsViewModelAsync(null));
+            Assert.Throws<ArgumentNullException>(() => productSpecificationsViewService.GetProductSpecificationsViewModel(null));
         }
 
         [Test]
-        public void WHEN_product_id_is_null_SHOULD_throw_ArgumentException()
+        public void WHEN_product_is_null_SHOULD_throw_ArgumentException()
         {
             // Arrange
             var productSpecificationsViewService = _container.CreateInstance<ProductSpecificationsViewService>();
 
             // Assert
-            Assert.ThrowsAsync<ArgumentException>(() => productSpecificationsViewService.GetProductSpecificationsViewModelAsync(
+            Assert.Throws<ArgumentException>(() => productSpecificationsViewService.GetProductSpecificationsViewModel(
                 new GetProductSpecificationsParam
                 {
-                    ProductId = null
-                }
-            ));
-        }
-
-        [Test]
-        public void WHEN_product_id_is_empty_SHOULD_throw_ArgumentException()
-        {
-            // Arrange
-            var productSpecificationsViewService = _container.CreateInstance<ProductSpecificationsViewService>();
-
-            // Assert
-            Assert.ThrowsAsync<ArgumentException>(() => productSpecificationsViewService.GetProductSpecificationsViewModelAsync(
-                new GetProductSpecificationsParam
-                {
-                    ProductId = string.Empty
+                    Product = null
                 }
             ));
         }
@@ -126,12 +111,12 @@ namespace Orckestra.Composer.Product.Tests.Services
             var productSpecificationsViewService = _container.CreateInstance<ProductSpecificationsViewService>();
 
             // Assert
-            Assert.DoesNotThrowAsync(() => productSpecificationsViewService.GetProductSpecificationsViewModelAsync(
+            Assert.DoesNotThrow(() => productSpecificationsViewService.GetProductSpecificationsViewModel(
                 new GetProductSpecificationsParam
                 {
-                    ProductId = ProductId,
+                    Product = product,
+                    ProductDefinition = productDefinition,
                     VariantId = null
-
                 }
             ));
         }
@@ -147,39 +132,22 @@ namespace Orckestra.Composer.Product.Tests.Services
             };
 
             var productDefinition = BuildProductDefinitionWithEachAttributeTypes();
-            SetupProductRepository(product, productDefinition);
 
             var productSpecificationsViewService = _container.CreateInstance<ProductSpecificationsViewService>();
 
             // Assert
-            Assert.DoesNotThrowAsync(() => productSpecificationsViewService.GetProductSpecificationsViewModelAsync(
+            Assert.DoesNotThrow(() => productSpecificationsViewService.GetProductSpecificationsViewModel(
                 new GetProductSpecificationsParam
                 {
-                    ProductId = ProductId,
+                    Product = product,
+                    ProductDefinition = productDefinition,
                     VariantId = string.Empty
                 }
             ));
         }
 
         [Test]
-        public void WHEN_product_not_found_SHOULD_throw_InvalidProductSpecificationsException()
-        {
-            // Arrange
-            SetupProductRepository();
-
-            var productSpecificationsViewService = _container.CreateInstance<ProductSpecificationsViewService>();
-
-            // Assert
-            Assert.ThrowsAsync<ProductSpecificationsNotFoundException>(() => productSpecificationsViewService.GetProductSpecificationsViewModelAsync(
-                new GetProductSpecificationsParam
-                {
-                    ProductId = "invalid"
-                }
-            ));
-        }
-
-        [Test]
-        public async Task WHEN_variant_found_SHOULD_return_variant_specifications()
+        public void WHEN_variant_found_SHOULD_return_variant_specifications()
         {
             // Arrange
             var product = new Overture.ServiceModel.Products.Product
@@ -201,17 +169,16 @@ namespace Orckestra.Composer.Product.Tests.Services
                 }
             };
             var productDefinition = BuildProductDefinitionWithEachAttributeTypes();
-            SetupProductRepository(product, productDefinition);
 
             var productSpecificationsViewService = _container.CreateInstance<ProductSpecificationsViewService>();
 
             // Act 
-            var specificationViewModel = await productSpecificationsViewService.GetProductSpecificationsViewModelAsync(new GetProductSpecificationsParam
+            var specificationViewModel = productSpecificationsViewService.GetProductSpecificationsViewModel(new GetProductSpecificationsParam
             {
-                ProductId = ProductId,
+                Product = product,
+                ProductDefinition = productDefinition,
                 VariantId = VariantId
-
-            }).ConfigureAwait(false);
+            });
 
             // Assert
             specificationViewModel.Should().NotBeNull();
@@ -226,7 +193,7 @@ namespace Orckestra.Composer.Product.Tests.Services
         }
 
         [Test]
-        public async Task WHEN_variant_not_found_SHOULD_return_product_specifications()
+        public void WHEN_variant_not_found_SHOULD_return_product_specifications()
         {
             // Arrange
             var product = new Overture.ServiceModel.Products.Product
@@ -248,17 +215,16 @@ namespace Orckestra.Composer.Product.Tests.Services
                 }
             };
             var productDefinition = BuildProductDefinitionWithEachAttributeTypes();
-            SetupProductRepository(product, productDefinition);
 
             var productSpecificationsViewService = _container.CreateInstance<ProductSpecificationsViewService>();
 
             // Act 
-            var specificationViewModel = await productSpecificationsViewService.GetProductSpecificationsViewModelAsync(new GetProductSpecificationsParam
+            var specificationViewModel = productSpecificationsViewService.GetProductSpecificationsViewModel(new GetProductSpecificationsParam
             {
-                ProductId = ProductId,
+                Product = product,
+                ProductDefinition = productDefinition,
                 VariantId = "invalid"
-
-            }).ConfigureAwait(false);
+            });
 
             // Assert
             specificationViewModel.Should().NotBeNull();
@@ -273,7 +239,7 @@ namespace Orckestra.Composer.Product.Tests.Services
         }
 
         [Test]
-        public async Task WHEN_empty_propertybag_SHOULD_return_empty_specification()
+        public void WHEN_empty_propertybag_SHOULD_return_null()
         {
             // Arrange
             var product = new Overture.ServiceModel.Products.Product
@@ -290,25 +256,23 @@ namespace Orckestra.Composer.Product.Tests.Services
             };
 
             var productDefinition = BuildProductDefinitionWithEachAttributeTypes();
-            SetupProductRepository(product, productDefinition);
 
             var productSpecificationsViewService = _container.CreateInstance<ProductSpecificationsViewService>();
 
             // Act 
-            var specificationViewModel = await productSpecificationsViewService.GetProductSpecificationsViewModelAsync(new GetProductSpecificationsParam
+            var specificationViewModel = productSpecificationsViewService.GetProductSpecificationsViewModel(new GetProductSpecificationsParam
             {
-                ProductId = ProductId,
+                Product = product,
+                ProductDefinition = productDefinition,
                 VariantId = VariantId
-
-            }).ConfigureAwait(false);
+            });
 
             // Assert
-            specificationViewModel.Should().NotBeNull();
-            specificationViewModel.Groups.Should().BeEmpty();
+            specificationViewModel.Should().BeNull();
         }
 
         [Test]
-        public async Task WHEN_propertybag_with_all_basic_attribute_types_SHOULD_return_correct_specification()
+        public void WHEN_propertybag_with_all_basic_attribute_types_SHOULD_return_correct_specification()
         {
             // Arrange
             var datetimeNow = DateTime.Now;
@@ -333,17 +297,15 @@ namespace Orckestra.Composer.Product.Tests.Services
                 }
             };
             var productDefinition = BuildProductDefinitionWithEachAttributeTypes();
-            SetupProductRepository(product, productDefinition);
 
             var productSpecificationsViewService = _container.CreateInstance<ProductSpecificationsViewService>();
 
             // Act 
-            var specificationViewModel = await productSpecificationsViewService.GetProductSpecificationsViewModelAsync(new GetProductSpecificationsParam
+            var specificationViewModel = productSpecificationsViewService.GetProductSpecificationsViewModel(new GetProductSpecificationsParam
             {
-                ProductId = ProductId,
-                VariantId = VariantId
-
-            }).ConfigureAwait(false);
+                Product = product,
+                ProductDefinition = productDefinition,
+            });
 
             // Assert
             specificationViewModel.Should().NotBeNull();
@@ -377,7 +339,7 @@ namespace Orckestra.Composer.Product.Tests.Services
         }
 
         [Test]
-        public async Task WHEN_propertybag_with_single_value_lookup_attribute_SHOULD_return_correct_specification()
+        public void WHEN_propertybag_with_single_value_lookup_attribute_SHOULD_return_correct_specification()
         {
             // Arrange
             var propertyName = GetRandom.String(32);
@@ -397,17 +359,15 @@ namespace Orckestra.Composer.Product.Tests.Services
             };
 
             var productDefinition = BuildProductDefinitionForLookupWithOneAttribute("attr Lookup", propertyName, lookupName);
-            SetupProductRepository(product, productDefinition);
 
             var productSpecificationsViewService = _container.CreateInstance<ProductSpecificationsViewService>();
 
             // Act 
-            var specificationViewModel = await productSpecificationsViewService.GetProductSpecificationsViewModelAsync(new GetProductSpecificationsParam
+            var specificationViewModel = productSpecificationsViewService.GetProductSpecificationsViewModel(new GetProductSpecificationsParam
             {
-                ProductId = ProductId,
-                VariantId = VariantId
-
-            }).ConfigureAwait(false);
+                Product = product,
+                ProductDefinition = productDefinition,
+            });
 
             // Assert
             var group = specificationViewModel.Groups.First();
@@ -418,7 +378,7 @@ namespace Orckestra.Composer.Product.Tests.Services
         }
 
         [Test]
-        public async Task WHEN_propertybag_with_multiple_value_lookup_attribute_SHOULD_return_correct_specification()
+        public void WHEN_propertybag_with_multiple_value_lookup_attribute_SHOULD_return_correct_specification()
         {
             // Arrange
             var propertyName = GetRandom.String(32);
@@ -438,17 +398,15 @@ namespace Orckestra.Composer.Product.Tests.Services
             };
 
             var productDefinition = BuildProductDefinitionForLookupWithOneAttribute("attr Lookup", propertyName, lookupName);
-            SetupProductRepository(product, productDefinition);
-
+           
             var productSpecificationsViewService = _container.CreateInstance<ProductSpecificationsViewService>();
 
             // Act 
-            var specificationViewModel = await productSpecificationsViewService.GetProductSpecificationsViewModelAsync(new GetProductSpecificationsParam
+            var specificationViewModel = productSpecificationsViewService.GetProductSpecificationsViewModel(new GetProductSpecificationsParam
             {
-                ProductId = ProductId,
-                VariantId = VariantId
-
-            }).ConfigureAwait(false);
+                Product = product,
+                ProductDefinition = productDefinition,
+            });
 
             // Assert
             var group = specificationViewModel.Groups.First();
@@ -459,7 +417,7 @@ namespace Orckestra.Composer.Product.Tests.Services
         }
 
         [Test]
-        public async Task SHOULD_return_specification_with_custom_formatting()
+        public void SHOULD_return_specification_with_custom_formatting()
         {
             // Arrange
             var product = new Overture.ServiceModel.Products.Product
@@ -476,17 +434,15 @@ namespace Orckestra.Composer.Product.Tests.Services
             };
 
             var productDefinition = BuildProductDefinitionWithOneAttribute("attr WithCustomResource", "attrWithCustomResource", PropertyDataType.Text);
-            SetupProductRepository(product, productDefinition);
-
+          
             var productSpecificationsViewService = _container.CreateInstance<ProductSpecificationsViewService>();
 
             // Act 
-            var specificationViewModel = await productSpecificationsViewService.GetProductSpecificationsViewModelAsync(new GetProductSpecificationsParam
+            var specificationViewModel = productSpecificationsViewService.GetProductSpecificationsViewModel(new GetProductSpecificationsParam
             {
-                ProductId = ProductId,
-                VariantId = VariantId
-
-            }).ConfigureAwait(false);
+                Product = product,
+                ProductDefinition = productDefinition,
+            });
 
             // Assert
             var group = specificationViewModel.Groups.First();
@@ -497,7 +453,7 @@ namespace Orckestra.Composer.Product.Tests.Services
         }
 
         [Test]
-        public async Task WHEN_empty_value_SHOULD_return_no_specification_attribute()
+        public void WHEN_empty_value_SHOULD_return_no_specification_attribute()
         {
             // Arrange
             var product = new Overture.ServiceModel.Products.Product
@@ -514,24 +470,22 @@ namespace Orckestra.Composer.Product.Tests.Services
             };
 
             var productDefinition = BuildProductDefinitionWithOneAttribute("attr 1", "attr1", PropertyDataType.Text);
-            SetupProductRepository(product, productDefinition);
-
+           
             var productSpecificationsViewService = _container.CreateInstance<ProductSpecificationsViewService>();
 
             // Act 
-            var specificationViewModel = await productSpecificationsViewService.GetProductSpecificationsViewModelAsync(new GetProductSpecificationsParam
+            var specificationViewModel = productSpecificationsViewService.GetProductSpecificationsViewModel(new GetProductSpecificationsParam
             {
-                ProductId = ProductId,
-                VariantId = VariantId
-
-            }).ConfigureAwait(false);
+                Product = product,
+                ProductDefinition = productDefinition,
+            });
 
             // Assert
             specificationViewModel.Groups.Should().BeEmpty();
         }
 
         [Test]
-        public async Task WHEN_excluded_group_SHOULD_return_no_group()
+        public void WHEN_excluded_group_SHOULD_return_no_group()
         {
             // Arrange
             var product = new Overture.ServiceModel.Products.Product
@@ -553,24 +507,21 @@ namespace Orckestra.Composer.Product.Tests.Services
             var productDefinition = BuildProductDefinitionWithOneAttribute("attr 1", "attr1", PropertyDataType.Text);
             productDefinition.PropertyGroups.First().Name = "Default"; //Excluded Group
 
-            SetupProductRepository(product, productDefinition);
-
             var productSpecificationsViewService = _container.CreateInstance<ProductSpecificationsViewService>();
 
             // Act 
-            var specificationViewModel = await productSpecificationsViewService.GetProductSpecificationsViewModelAsync(new GetProductSpecificationsParam
+            var specificationViewModel = productSpecificationsViewService.GetProductSpecificationsViewModel(new GetProductSpecificationsParam
             {
-                ProductId = ProductId,
-                VariantId = VariantId
-
-            }).ConfigureAwait(false);
+                Product = product,
+                ProductDefinition = productDefinition,
+            });
 
             // Assert
             specificationViewModel.Groups.Should().BeEmpty();
         }
 
         [Test]
-        public async Task WHEN_excluded_property_SHOULD_return_no_property()
+        public void WHEN_excluded_property_SHOULD_return_no_property()
         {
             // Arrange
             var product = new Overture.ServiceModel.Products.Product
@@ -591,29 +542,18 @@ namespace Orckestra.Composer.Product.Tests.Services
 
             var productDefinition = BuildProductDefinitionWithOneAttribute("attr 1", "ProductDefinition", PropertyDataType.Text);
             productDefinition.PropertyGroups.First().Name = "GroupTest";
-
-            SetupProductRepository(product, productDefinition);
-
+            
             var productSpecificationsViewService = _container.CreateInstance<ProductSpecificationsViewService>();
 
             // Act 
-            var specificationViewModel = await productSpecificationsViewService.GetProductSpecificationsViewModelAsync(new GetProductSpecificationsParam
+            var specificationViewModel = productSpecificationsViewService.GetProductSpecificationsViewModel(new GetProductSpecificationsParam
             {
-                ProductId = ProductId,
-                VariantId = VariantId
-
-            }).ConfigureAwait(false);
+                Product = product,
+                ProductDefinition = productDefinition,
+            });
 
             // Assert
             specificationViewModel.Groups.Should().BeEmpty();
-        }
-
-        private void SetupProductRepository()
-        {
-            var productRepository = new Mock<IProductRepository>();
-            productRepository.Setup(r => r.GetProductAsync(It.Is<GetProductParam>(param => param.ProductId != ProductId))).ReturnsAsync(null);
-
-            _container.Use(productRepository);
         }
 
         private void SetupProductRepository(Overture.ServiceModel.Products.Product product, ProductDefinition definition)

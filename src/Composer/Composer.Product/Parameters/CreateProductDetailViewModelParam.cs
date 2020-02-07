@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Globalization;
+using Orckestra.Composer.Product.ViewModels;
 using Orckestra.Composer.Providers.Dam;
 using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel.Metadata;
@@ -15,7 +16,6 @@ namespace Orckestra.Composer.Product.Parameters
         public CultureInfo CultureInfo { get; set; }
         public string VariantId { get; set; }
         public string BaseUrl { get; set; }
-
         public CurrencyViewModel Currency { get; set; }
 
         public CreateProductDetailViewModelParam()

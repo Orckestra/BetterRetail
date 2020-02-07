@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,6 +11,8 @@ using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Factory;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Product.Factory;
+using Orckestra.Composer.Product.Parameters;
+using Orckestra.Composer.Product.Services;
 using Orckestra.Composer.Product.ViewModels;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Dam;
@@ -44,6 +46,7 @@ namespace Orckestra.Composer.Product.Tests.Factories
             _container.Use(CreateProductRepository(supportedCulture, GenerateProductWithKva()));
             _container.Use(CreateViewModelMapper(supportedCulture));
             _container.Use(CreateLookupService());
+            _container.Use(CreateProductSpecificationsViewService());
 
             var productViewModelFactory = _container.CreateInstance<ProductViewModelFactory>();
 
@@ -53,7 +56,8 @@ namespace Orckestra.Composer.Product.Tests.Factories
                 ProductId = GetRandom.String(10),
                 CultureInfo = supportedCulture,
                 Scope = GetRandom.String(10),
-                BaseUrl = GetRandom.String(32)
+                BaseUrl = GetRandom.String(32),
+                
             })
             .ConfigureAwait(false);
 
@@ -104,6 +108,7 @@ namespace Orckestra.Composer.Product.Tests.Factories
             _container.Use(CreateProductRepository(notDefinedCulture, GenerateProductWithKva()));
             _container.Use(CreateViewModelMapper(notDefinedCulture));
             _container.Use(CreateLookupService());
+            _container.Use(CreateProductSpecificationsViewService());
 
             var productViewModelFactory = _container.CreateInstance<ProductViewModelFactory>();
 
@@ -163,6 +168,7 @@ namespace Orckestra.Composer.Product.Tests.Factories
             _container.Use(CreateProductRepository(culture, GenerateProductWithKva()));
             _container.Use(CreateViewModelMapper(culture));
             _container.Use(CreateLookupService());
+            _container.Use(CreateProductSpecificationsViewService());
 
             var productViewModelFactory = _container.CreateInstance<ProductViewModelFactory>();
 
@@ -197,7 +203,8 @@ namespace Orckestra.Composer.Product.Tests.Factories
                 IScopeViewService scopeViewService,
                 IRecurringOrdersRepository recurringOrdersRepository,
                 IRecurringOrderProgramViewModelFactory recurringOrderProgramViewModelFactory,
-                IRecurringOrdersSettings recurringOrdersSettings) 
+                IRecurringOrdersSettings recurringOrdersSettings,
+                IProductSpecificationsViewService productSpecificationsViewService) 
                 
                 : base(
                 viewModelMapper, 
@@ -209,7 +216,8 @@ namespace Orckestra.Composer.Product.Tests.Factories
                 scopeViewService,
                 recurringOrdersRepository,
                 recurringOrderProgramViewModelFactory,
-                recurringOrdersSettings)
+                recurringOrdersSettings,
+                productSpecificationsViewService)
             {
             }
 
@@ -236,6 +244,7 @@ namespace Orckestra.Composer.Product.Tests.Factories
             _container.Use(CreateProductRepository(supportedCulture, GenerateProductWithKva()));
             _container.Use(CreateViewModelMapper(supportedCulture));
             _container.Use(CreateLookupService());
+            _container.Use(CreateProductSpecificationsViewService());
 
             var productViewModelFactory = _container.CreateInstance<ProductViewModelFactoryWithTestGetLookupImageUrl>();
 
@@ -331,6 +340,21 @@ namespace Orckestra.Composer.Product.Tests.Factories
             return mapperMock;
         }
 
+        private static Mock<IProductSpecificationsViewService> CreateProductSpecificationsViewService()
+        {
+            var specificationMock = new SpecificationsViewModel
+            {
+                ProductId = GetRandom.String(32)
+            };
+
+            Mock<IProductSpecificationsViewService> productSpecificationsViewServiceMock = new Mock<IProductSpecificationsViewService>();
+            productSpecificationsViewServiceMock.Setup(
+                service => service.GetProductSpecificationsViewModel(It.IsNotNull<GetProductSpecificationsParam>()))
+                .Returns(specificationMock)
+                .Verifiable();
+
+            return productSpecificationsViewServiceMock;
+        }
         #endregion
 
         #region Fake data for products/products defintion.

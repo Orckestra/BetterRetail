@@ -22,20 +22,17 @@ namespace Orckestra.Composer.Product.Api
         protected IProductPriceViewService ProductPriceViewService { get; private set; }
         protected IComposerContext ComposerContext { get; private set; }
         protected IProductViewService ProductViewService { get; private set; }
-        protected IProductSpecificationsViewService ProductSpecificationsViewService { get; private set; }
 
         public ProductController(
             IProductPriceViewService productPriceViewService, 
             IComposerContext composerContext,
             IProductViewService productViewService,
-            IProductSpecificationsViewService productSpecificationsViewService,
             IRelatedProductViewService relatedProductViewService)
         {
-            ProductPriceViewService = productPriceViewService ?? throw new ArgumentNullException("productPriceViewService");
-            ComposerContext = composerContext ?? throw new ArgumentNullException("composerContext");
-            ProductViewService = productViewService ?? throw new ArgumentNullException("productViewService");
-            ProductSpecificationsViewService = productSpecificationsViewService ?? throw new ArgumentNullException("productSpecificationsViewService");
-            RelatedProductViewService = relatedProductViewService ?? throw new ArgumentNullException("relatedProductViewService");
+            ProductPriceViewService = productPriceViewService ?? throw new ArgumentNullException(nameof(productPriceViewService));
+            ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
+            ProductViewService = productViewService ?? throw new ArgumentNullException(nameof(productViewService));
+            RelatedProductViewService = relatedProductViewService ?? throw new ArgumentNullException(nameof(relatedProductViewService));
         }
 
         [ActionName("calculatePrices")]
@@ -96,19 +93,6 @@ namespace Orckestra.Composer.Product.Api
             };
 
             var vm = await RelatedProductViewService.GetRelatedProductsAsync(param);
-
-            return Ok(vm);
-        }
-
-        [ActionName("specifications")]
-        [HttpPost]
-        public virtual async Task<IHttpActionResult> Specifications(GetSpecificationsRequest request)
-        {
-            var vm = await ProductSpecificationsViewService.GetProductSpecificationsViewModelAsync(new GetProductSpecificationsParam
-            {
-                ProductId = request.ProductId,
-                VariantId = request.VariantId
-            });
 
             return Ok(vm);
         }

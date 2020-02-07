@@ -1,19 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Orckestra.Composer.Parameters;
-using Orckestra.Composer.Product.Exceptions;
 using Orckestra.Composer.Product.Extensions;
 using Orckestra.Composer.Product.Parameters;
-using Orckestra.Composer.Product.Repositories;
 using Orckestra.Composer.Product.ViewModels;
 using Orckestra.Composer.Providers;
-using Orckestra.Composer.Repositories;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Services.Lookup;
 using Orckestra.Overture.ServiceModel.Metadata;
-using Orckestra.Overture.ServiceModel.Products;
 
 namespace Orckestra.Composer.Product.Services
 {
@@ -22,24 +16,16 @@ namespace Orckestra.Composer.Product.Services
     /// </summary>
     public class ProductSpecificationsViewService : IProductSpecificationsViewService
     {
-        protected readonly IComposerContext _context;
-        protected readonly IProductRepository _productRepository;
-        protected readonly ProductFormatter _productFormatter;
+        protected IComposerContext Context { get; set; }
+        protected ProductFormatter ProductFormatter { get; set; }
 
-        public ProductSpecificationsViewService(IComposerContext context,
-                                                IProductRepository productRepository, 
-                                                ILocalizationProvider localizationProvider,
-                                                ILookupService lookupService)
+        public ProductSpecificationsViewService(IComposerContext context, ILocalizationProvider localizationProvider, ILookupService lookupService)
         {
-            if (context == null) { throw new ArgumentNullException("context"); }
-            if (productRepository == null) { throw new ArgumentNullException("productRepository"); }
-            if (localizationProvider == null) { throw new ArgumentNullException("localizationProvider"); }
-            if (lookupService == null) { throw new ArgumentNullException("lookupService"); }
+            if (localizationProvider == null) { throw new ArgumentNullException(nameof(localizationProvider)); }
+            if (lookupService == null) { throw new ArgumentNullException(nameof(lookupService)); }
 
-            _context = context;
-            _productRepository = productRepository;
-            _productFormatter = new ProductFormatter(localizationProvider, lookupService);
-
+            Context = context ?? throw new ArgumentNullException(nameof(context));            
+            ProductFormatter = new ProductFormatter(localizationProvider, lookupService);
         }
 
         /// <summary>
@@ -50,161 +36,100 @@ namespace Orckestra.Composer.Product.Services
         /// Instance of <see cref="SpecificationsViewModel" />.
         /// </returns>
         /// <exception cref="System.ArgumentNullException">param</exception>
-        public virtual async Task<SpecificationsViewModel> GetProductSpecificationsViewModelAsync(GetProductSpecificationsParam param)
+        public virtual SpecificationsViewModel GetProductSpecificationsViewModel(GetProductSpecificationsParam param)
         {
-            SpecificationsViewModel vm = GetEmptySpecificationsViewModel(param);
-            vm.Groups = await GetSpecificationsGroupsAsync(param).ConfigureAwait(false);
-            return vm;
-        }
+            if (param == null) throw new ArgumentNullException(nameof(param));
+            if (param.Product == null) throw new ArgumentException(nameof(param.Product));
+            if (param.ProductDefinition == null) throw new ArgumentException(nameof(param.ProductDefinition));
 
-        public virtual SpecificationsViewModel GetEmptySpecificationsViewModel(GetProductSpecificationsParam param)
-        {
-            if (param == null) { throw new ArgumentNullException("param"); }
-            if (string.IsNullOrWhiteSpace(param.ProductId)) { throw new ArgumentException("The product id cannot be null or white space"); }
+            if(IsInheritedSpecification(param))
+            {
+                return null;
+            }
 
             var vm = new SpecificationsViewModel
             {
-                ProductId = param.ProductId,
+                ProductId = param.Product.Id,
                 VariantId = param.VariantId,
-                Groups = new List<SpecificationsGroupViewModel>()
+                Groups = GetSpecificationsGroups(param)
             };
-
-            vm.Context["productId"] = vm.ProductId;
-            vm.Context["variantId"] = vm.VariantId;
 
             return vm;
         }
 
-        protected virtual async Task<List<SpecificationsGroupViewModel>> GetSpecificationsGroupsAsync(GetProductSpecificationsParam param)
+        protected virtual List<SpecificationsGroupViewModel> GetSpecificationsGroups(GetProductSpecificationsParam param)
         {
-            var productDefinition = await GetProductDefinitionAsync(param).ConfigureAwait(false);
-
-            if (productDefinition == null) { return null; }
-
-            var tasks = productDefinition.PropertyGroups
+            var specificationGroups = param.ProductDefinition.PropertyGroups
                 .Where(group => @group.IsIncluded())
                 .OrderBy(group => @group.DisplayOrder)
-                .Select(async group => new SpecificationsGroupViewModel
+                .Select(group => new SpecificationsGroupViewModel
                 {
-                    Title = GetLocalizedTitle(@group),
-                    Attributes = await GetSpecificationsAttributesAsync(@group, param).ConfigureAwait(false)
-                });
+                    Title = GetLocalizedTitle(@group.DisplayName),
+                    Attributes = GetSpecificationsAttributes(@group, param)
+                })
+                .Where(group => @group.Attributes.Any())
+                .ToList();
 
-            var specificationGroups = await Task.WhenAll(tasks).ConfigureAwait(false);
-
-            return specificationGroups.Where(group => @group.Attributes.Any()).ToList();
+            return specificationGroups;
         }
 
-        protected virtual async Task<ProductDefinition> GetProductDefinitionAsync(GetProductSpecificationsParam param)
+        protected virtual List<SpecificationsAttributeViewModel> GetSpecificationsAttributes(ProductPropertyDefinitionGroup group, GetProductSpecificationsParam param)
         {
-            var product = await GetProductAsync(param).ConfigureAwait(false);
+            var specificationAttributes = group.Properties
+                .Where(property => property.IsIncluded())
+                .OrderBy(property => property.DisplayOrder)
+                .Select(property => new SpecificationsAttributeViewModel
+                {
+                    PropertyName = property.PropertyName,
+                    Title = GetLocalizedTitle(property.DisplayName),
+                    Value = GetSpecificationsAttributeValue(property, param)
+                })
+                .Where(attribute => !string.IsNullOrWhiteSpace(attribute.Value))
+                .ToList();
 
-            if (product == null)
+            return specificationAttributes;
+        }
+
+        protected virtual string GetSpecificationsAttributeValue(ProductPropertyDefinition property, GetProductSpecificationsParam param)
+        {
+            var variantProperty = param.Product.Variants.FirstOrDefault(v => v.Id == param.VariantId)?.PropertyBag;
+            if (variantProperty?.ContainsKey(property.PropertyName) ?? false)
             {
-                throw new ProductSpecificationsNotFoundException("The specifications could not be found because the product does not exist");
+                return ProductFormatter.FormatValue(property, variantProperty[property.PropertyName], Context.CultureInfo);
             }
 
-            return await _productRepository.GetProductDefinitionAsync(new GetProductDefinitionParam
+            if (param.Product.PropertyBag?.ContainsKey(property.PropertyName) ?? false)
             {
-                Name = product.DefinitionName,
-                CultureInfo = _context.CultureInfo
-
-            }).ConfigureAwait(false);
-        }
-
-        protected string GetLocalizedTitle(ProductPropertyDefinitionGroup group)
-        {
-            return group.DisplayName.GetLocalizedValue(_context.CultureInfo.Name);
-        }
-
-        protected virtual async Task<List<SpecificationsAttributeViewModel>> GetSpecificationsAttributesAsync(ProductPropertyDefinitionGroup group, GetProductSpecificationsParam param)
-        {
-            var tasks = group.Properties
-                             .Where(property => property.IsIncluded())
-                             .OrderBy(property => property.DisplayOrder)
-                             .Select(async property => new SpecificationsAttributeViewModel
-                             {
-                                 PropertyName = property.PropertyName,
-                                 Title = GetLocalizedTitle(property),
-                                 Value = await GetSpecificationsAttributeValueAsync(property, param).ConfigureAwait(false)
-                             });
-
-            var specificationAttributes = await Task.WhenAll(tasks).ConfigureAwait(false);
-            return specificationAttributes.Where(attribute => !string.IsNullOrWhiteSpace(attribute.Value)).ToList();
-        }
-
-        protected string GetLocalizedTitle(ProductPropertyDefinition property)
-        {
-            return property.DisplayName.GetLocalizedValue(_context.CultureInfo.Name);
-        }
-
-        protected virtual async Task<string> GetSpecificationsAttributeValueAsync(ProductPropertyDefinition property, GetProductSpecificationsParam param)
-        {
-            if (await IsVariantAttributeAvailableAsync(property, param).ConfigureAwait(false))
-            {
-                return await GetVariantAttributeValueAsync(property, param).ConfigureAwait(false);
-            }
-
-            if (await IsProductAttributeAvailableAsync(property, param).ConfigureAwait(false))
-            {
-                return await GetProductAttributeValueAsync(property, param).ConfigureAwait(false);
+                return ProductFormatter.FormatValue(property, param.Product.PropertyBag[property.PropertyName], Context.CultureInfo);
             }
 
             return string.Empty;
         }
 
-        protected virtual async Task<bool> IsVariantAttributeAvailableAsync(ProductPropertyDefinition property, GetProductSpecificationsParam param)
+        protected string GetLocalizedTitle(Overture.ServiceModel.LocalizedString displayName)
         {
-            Variant variant = await GetVariantAsync(param).ConfigureAwait(false);
-            return variant != null && variant.PropertyBag != null && variant.PropertyBag.ContainsKey(property.PropertyName);
+            return displayName.GetLocalizedValue(Context.CultureInfo.Name);
         }
 
-        protected virtual async Task<string> GetVariantAttributeValueAsync(ProductPropertyDefinition property, GetProductSpecificationsParam param)
+        protected virtual bool IsInheritedSpecification(GetProductSpecificationsParam param)
         {
-            Variant variant = await GetVariantAsync(param).ConfigureAwait(false);
-            return _productFormatter.FormatValue(property, variant.PropertyBag[property.PropertyName], _context.CultureInfo);
-        }
+            var variant = param.Product.Variants.FirstOrDefault(v => v.Id == param.VariantId);
 
-        protected virtual async Task<bool> IsProductAttributeAvailableAsync(ProductPropertyDefinition property, GetProductSpecificationsParam param)
-        {
-            var product = await GetProductAsync(param).ConfigureAwait(false);
-            if (product == null)
-            {
-                throw new ProductSpecificationsNotFoundException("The specifications could not be found because the product does not exist or is inactive");
-            }
-            return product.PropertyBag != null && product.PropertyBag.ContainsKey(property.PropertyName);
-        }
+            if (variant == null)
+                return false;
 
-        protected virtual async Task<string> GetProductAttributeValueAsync(ProductPropertyDefinition property, GetProductSpecificationsParam param)
-        {
-            var product = await GetProductAsync(param).ConfigureAwait(false);
-            if (product == null)
-            {
-                throw new ProductSpecificationsNotFoundException("The specifications could not be found because the product does not exist or is inactive");
-            }
-            object value = product.PropertyBag[property.PropertyName];
-            return _productFormatter.FormatValue(property, value, _context.CultureInfo);
-        }
+            var allPropertyNames = param.ProductDefinition.PropertyGroups
+                .Where(group => @group.IsIncluded())
+                .Aggregate(new List<string>(), (allProperties, next) =>
+                 {
+                     var properties = next.Properties
+                        .Where(property => property.IsIncluded())
+                        .Select(property => property.PropertyName);
+                     allProperties.AddRange(properties);
+                     return allProperties;
+                 });
 
-        protected virtual async Task<Variant> GetVariantAsync(GetProductSpecificationsParam param)
-        {
-            var product = await GetProductAsync(param).ConfigureAwait(false);
-            if (product == null)
-            {
-                throw new ProductSpecificationsNotFoundException("The specifications could not be found because the product does not exist or is inactive");
-            }
-            return product.Variants.FirstOrDefault(v => v.Id == param.VariantId);
-        }
-
-        protected virtual async Task<Overture.ServiceModel.Products.Product> GetProductAsync(GetProductSpecificationsParam param) // it is ok to call this method multiple times within one request because the product is cached
-        {
-            return await _productRepository.GetProductAsync(new GetProductParam
-            {
-                ProductId = param.ProductId,
-                Scope = _context.Scope,
-                CultureInfo = _context.CultureInfo
-
-            }).ConfigureAwait(false);
+            return !allPropertyNames.Any(propertyName => variant.PropertyBag.ContainsKey(propertyName));
         }
     }
 }

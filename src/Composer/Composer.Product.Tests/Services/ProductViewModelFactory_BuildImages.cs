@@ -8,6 +8,7 @@ using NUnit.Framework;
 using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Factory;
 using Orckestra.Composer.Product.Factory;
+using Orckestra.Composer.Product.Services;
 using Orckestra.Composer.Product.Tests.Factories;
 using Orckestra.Composer.Product.ViewModels;
 using Orckestra.Composer.Providers;
@@ -63,7 +64,8 @@ namespace Orckestra.Composer.Product.Tests.Services
                 IScopeViewService scopeViewService,
                 IRecurringOrdersRepository recurringOrdersRepository,
                 IRecurringOrderProgramViewModelFactory recurringOrderProgramViewModelFactory,
-                IRecurringOrdersSettings recurringOrdersSettings)
+                IRecurringOrdersSettings recurringOrdersSettings,
+                IProductSpecificationsViewService productSpecificationsViewService)
             
                 : base(
                 viewModelMapper, 
@@ -75,7 +77,8 @@ namespace Orckestra.Composer.Product.Tests.Services
                 scopeViewService,
                 recurringOrdersRepository,
                 recurringOrderProgramViewModelFactory,
-                recurringOrdersSettings)
+                recurringOrdersSettings,
+                productSpecificationsViewService)
             {
             }
 

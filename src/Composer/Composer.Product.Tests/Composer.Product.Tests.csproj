@@ -116,7 +116,6 @@
     <Compile Include="Services\InventoryViewService_Ctor.cs" />
     <Compile Include="Services\InventoryViewService_FindInventoryItemStatus.cs" />
     <Compile Include="Services\ProductDetailsViewService_Ctor.cs" />
-    <Compile Include="Services\ProductSpecificationsViewService_GetEmptyProductSpecificationsViewModelAsync.cs" />
     <Compile Include="Services\ProductViewModelFactory_BuildImages.cs" />
     <Compile Include="Services\ProductSpecificationsViewService_GetProductSpecificationsViewModelAsync.cs" />
     <Compile Include="Mock\FakeViewModelMapper.cs" />

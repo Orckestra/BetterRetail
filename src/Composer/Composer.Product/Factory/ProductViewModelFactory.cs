@@ -35,6 +35,7 @@ namespace Orckestra.Composer.Product.Factory
         protected IRecurringOrdersRepository RecurringOrdersRepository { get; }
         protected IRecurringOrderProgramViewModelFactory RecurringOrderProgramViewModelFactory { get; }
         protected IRecurringOrdersSettings RecurringOrdersSettings { get; private set; }
+        protected IProductSpecificationsViewService ProductSpecificationsViewService { get; private set; }
 
         public ProductViewModelFactory(
             IViewModelMapper viewModelMapper,
@@ -46,7 +47,8 @@ namespace Orckestra.Composer.Product.Factory
             IScopeViewService scopeViewService,
             IRecurringOrdersRepository recurringOrdersRepository,
             IRecurringOrderProgramViewModelFactory recurringOrderProgramViewModelFactory,
-            IRecurringOrdersSettings recurringOrdersSettings)
+            IRecurringOrdersSettings recurringOrdersSettings,
+            IProductSpecificationsViewService productSpecificationsViewService)
         {
             ViewModelMapper = viewModelMapper ?? throw new ArgumentNullException(nameof(viewModelMapper));
             ProductRepository = productRepository ?? throw new ArgumentNullException(nameof(productRepository));
@@ -58,6 +60,7 @@ namespace Orckestra.Composer.Product.Factory
             RecurringOrdersRepository = recurringOrdersRepository ?? throw new ArgumentNullException(nameof(recurringOrdersRepository));
             RecurringOrderProgramViewModelFactory = recurringOrderProgramViewModelFactory ?? throw new ArgumentNullException(nameof(recurringOrderProgramViewModelFactory));
             RecurringOrdersSettings = recurringOrdersSettings;
+            ProductSpecificationsViewService = productSpecificationsViewService ?? throw new ArgumentNullException(nameof(productSpecificationsViewService));
         }
 
         public virtual async Task<ProductViewModel> GetProductViewModel(GetProductParam param)
@@ -99,7 +102,7 @@ namespace Orckestra.Composer.Product.Factory
                 CultureInfo = param.CultureInfo,
                 VariantId = param.VariantId,
                 BaseUrl = param.BaseUrl,
-                Currency = currency
+                Currency = currency,
             });
 
             productViewModel = await SetViewModelRecurringOrdersRelatedProperties(param, productViewModel, product).ConfigureAwaitWithCulture(false);
@@ -161,8 +164,14 @@ namespace Orckestra.Composer.Product.Factory
 
             var productDisplayName = productDetailViewModel.DisplayName ?? string.Empty;
 
-            var allVariantsVm = GetVariantViewModels(param.Product.Variants, param.ProductDefinition.VariantProperties, productDisplayName, param.CultureInfo,
-                vvm => InitializeVariantImages(param.Product.Id, param.ProductDetailImages, param.CultureInfo, vvm)).ToList();
+            var allVariantsVm = GetVariantViewModels(
+                param.Product.Variants, 
+                param.ProductDefinition.VariantProperties, 
+                productDisplayName, 
+                param.CultureInfo,
+                vvm => InitializeVariantImages(param.Product.Id, param.ProductDetailImages, param.CultureInfo, vvm),
+                vvm => InitializeVariantSpecificaton(param.Product, param.ProductDefinition, vvm)
+            ).ToList();
             productDetailViewModel.Variants = allVariantsVm;
             var selectedVariantVm = GetSelectedVariantViewModel(param.VariantId, allVariantsVm);
 
@@ -218,6 +227,11 @@ namespace Orckestra.Composer.Product.Factory
             }
 
             productDetailViewModel.Currency = param.Currency;
+            productDetailViewModel.Specifications = ProductSpecificationsViewService.GetProductSpecificationsViewModel(new GetProductSpecificationsParam
+            {
+                Product = param.Product,
+                ProductDefinition = param.ProductDefinition
+            });
 
             return productDetailViewModel;
         }
@@ -261,7 +275,8 @@ namespace Orckestra.Composer.Product.Factory
             IList<ProductPropertyDefinition> variantProperties,
             string displayName,
             CultureInfo cultureInfo,
-            Action<VariantViewModel> imageSetter)
+            Action<VariantViewModel> imageSetter,
+            Action<VariantViewModel> specificationSetter)
         {
             if (variants == null) { yield break; }
 
@@ -278,14 +293,18 @@ namespace Orckestra.Composer.Product.Factory
             foreach (var variant in validVariants)
             {
                 var variantVm = ViewModelMapper.MapTo<VariantViewModel>(variant, cultureInfo);
+                
                 if(string.IsNullOrEmpty(variantVm.DisplayName))
                     variantVm.DisplayName = displayName;
+                
                 variantVm.Kvas = variant.PropertyBag
                     .Join(kvaPropertieNames, bagEntry => bagEntry.Key,
                         kvaPropertyName => kvaPropertyName,
                         (bagEntry, kvaPropertyName) => bagEntry)
                     .ToDictionary(bagEntry => bagEntry.Key, bagEntry => bagEntry.Value);
+
                 imageSetter.Invoke(variantVm);
+                specificationSetter.Invoke(variantVm);
 
                 yield return variantVm;
             }
@@ -310,6 +329,26 @@ namespace Orckestra.Composer.Product.Factory
             variantViewModel.Images = images;
             variantViewModel.SelectedImage = selectedImage;
             variantViewModel.FallbackImageUrl = selectedImage != null ? selectedImage.FallbackImageUrl : string.Empty;
+        }
+
+        /// <summary>
+        /// Initializes specifications for a given variant.
+        /// </summary>
+        /// <param name="productId">ID of the product.</param>
+        /// <param name="productImages">Available product images.</param>
+        /// <param name="cultureInfo">Culture info.</param>
+        /// <param name="variantViewModel">ViewModel to be impacted.</param>
+        protected virtual void InitializeVariantSpecificaton(
+            Overture.ServiceModel.Products.Product product,
+            ProductDefinition productDefinition,
+            VariantViewModel variantViewModel)
+        {
+            variantViewModel.Specifications = ProductSpecificationsViewService.GetProductSpecificationsViewModel(new GetProductSpecificationsParam
+            {
+                VariantId = variantViewModel.Id,
+                Product = product,
+                ProductDefinition = productDefinition
+            });
         }
 
         /// <summary>

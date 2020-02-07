@@ -23,7 +23,6 @@ namespace Orckestra.Composer.CompositeC1.Controllers
     {
         protected IPageService PageService { get; private set; }
         protected IComposerContext ComposerContext { get; private set; }
-        protected IProductSpecificationsViewService ProductSpecificationsViewService { get; private set; }
         protected IProductBreadcrumbService ProductBreadcrumbService { get; private set; }
         protected ILanguageSwitchService LanguageSwitchService { get; private set; }
         protected IProductUrlProvider ProductUrlProvider { get; private set; }
@@ -34,8 +33,6 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         protected ProductBaseController(
             IPageService pageService,
             IComposerContext composerContext,
-            IProductViewService productService,
-            IProductSpecificationsViewService productSpecificationsViewService,
             IProductBreadcrumbService productBreadcrumbService,
             ILanguageSwitchService languageSwitchService,
             IProductUrlProvider productUrlProvider,
@@ -45,7 +42,6 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         {
             PageService = pageService ?? throw new ArgumentNullException(nameof(pageService));
             ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
-            ProductSpecificationsViewService = productSpecificationsViewService ?? throw new ArgumentNullException(nameof(productSpecificationsViewService));
             ProductBreadcrumbService = productBreadcrumbService ?? throw new ArgumentNullException(nameof(productBreadcrumbService));
             LanguageSwitchService = languageSwitchService ?? throw new ArgumentNullException(nameof(languageSwitchService));
             ProductUrlProvider = productUrlProvider ?? throw new ArgumentNullException(nameof(productUrlProvider));
@@ -109,21 +105,6 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             var breadcrumbViewModel = ProductBreadcrumbService.CreateBreadcrumbAsync(parameters).Result;
 
             return View(breadcrumbViewModel);
-        }
-
-        public virtual ActionResult ProductSpecifications(string id, string variantId)
-        {
-            if (string.IsNullOrEmpty(id))
-            {
-                return View();
-            }
-            var emptySpecificationsViewModel = ProductSpecificationsViewService.GetEmptySpecificationsViewModel(new GetProductSpecificationsParam
-            {
-                ProductId = id,
-                VariantId = variantId
-            });
-
-            return View(emptySpecificationsViewModel);
         }
 
         public virtual ActionResult RelatedProducts(string id, string merchandiseTypes, string headingText, int maxItems, bool displaySameCategoryProducts, bool displayPrices, bool displayAddToCart, DataReference<CssStyle> backgroundStyle=null)
