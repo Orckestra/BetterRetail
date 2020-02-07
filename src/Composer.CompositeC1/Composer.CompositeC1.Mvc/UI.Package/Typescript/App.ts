@@ -3,6 +3,7 @@
 ///<reference path='./JQueryPlugins/IPopOverJqueryPlugin.ts' />
 ///<reference path='./IComposerConfiguration.ts' />
 ///<reference path='./Controller/SearchBoxController.ts' />
+///<reference path='./Controller/AutocompleteSearchBoxController.ts' />
 ///<reference path='./Controller/PageNotFoundAnalyticsController.ts' />
 ///<reference path='./Controller/LanguageSwitchController.ts' />
 ///<reference path='./Controller/LazyController.ts' />
@@ -19,7 +20,6 @@
 ///<reference path='./Composer.Cart/Coupons/CouponController.ts' />
 ///<reference path='./Composer.Product/ProductDetail/ProductDetailController.ts' />
 ///<reference path='./Composer.Product/RelatedProducts/RelatedProductsController.ts' />
-///<reference path='./Composer.Product/ProductSpecification/ProductSpecificationsController.ts' />
 ///<reference path='./Composer.Product/ProductDetail/ProductZoomController.ts' />
 ///<reference path='./Composer.Cart/OrderSummary/OrderSummaryController.ts' />
 ///<reference path='./Composer.Cart/CheckoutGuestCustomerInfo/GuestCustomerInfoCheckoutController.ts' />
@@ -104,7 +104,6 @@
                 { name: 'Product.SearchSummary', controller: Orckestra.Composer.SearchSummaryController },
                 { name: 'Product.QuickView', controller: Orckestra.Composer.QuickViewController },
                 { name: 'Product.SelectedSearchFacets', controller: Orckestra.Composer.SelectedFacetSearchController },
-                { name: 'Product.ProductSpecifications', controller: Orckestra.Composer.ProductSpecificationsController },
                 { name: 'Product.ProductZoom', controller: Orckestra.Composer.ProductZoomController },
 
                 { name: 'Checkout.GuestCustomerInfo', controller: Orckestra.Composer.GuestCustomerInfoCheckoutController },
