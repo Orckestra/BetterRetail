@@ -27,7 +27,7 @@
         color: #C40001;
         font-size: 20em;
 
-        @media (max-width: $screen-xs-max) {
+         @include media-breakpoint-down(sm) {
             font-size: 18em;
         }
     }

@@ -1,7 +1,7 @@
 <div class="clearfix" data-templateid="OrderHistoryPagination">
 {{#if Pages}}
     {{#if_gt Pages.length 1 }}
-        <ul class="pull-right  pagination">
+        <ul class="float-right  pagination">
             {{#if PreviousPage.PageNumber }}
                 <li><a data-qa="order-pagination-previous" href="#" data-page="{{PreviousPage.PageNumber}}" data-oc-click="getOrders">{{PreviousPage.DisplayName}}</a></li>
             {{else }}

@@ -1,11 +1,11 @@
 .promotion {
     display: inline-block;
-    border-top: solid 1px $brand-info;
-    border-bottom: solid 1px $brand-info;
-    color: $brand-info;
-    padding-top: $line-height-computed / 2;
-    padding-bottom: $line-height-computed / 2;
-    margin-bottom: $line-height-computed;
+    border-top: solid 1px theme-color("info");
+    border-bottom: solid 1px theme-color("info");
+    color: theme-color("info");
+    padding-top: $spacer / 2;
+    padding-bottom: $spacer / 2;
+    margin-bottom: $spacer;
 }
 
 .promotion-block {

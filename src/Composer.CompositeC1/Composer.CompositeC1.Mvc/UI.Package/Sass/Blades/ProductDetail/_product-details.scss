@@ -11,7 +11,7 @@
   position: relative;
   //height: 0;
   //padding-bottom: $product-lg-image-ratio * 100%;
-  margin-bottom: round($line-height-computed / 2);
+  margin-bottom: round($spacer / 2);
 
   i {
     font-size: 2rem;
@@ -31,7 +31,7 @@
     margin-bottom: 0;
     width: 100%;
 
-    @media (max-width: $screen-sm-min) {
+    @include media-breakpoint-down(md) {
       margin: 0 5px;
     }
 
@@ -48,13 +48,13 @@
     .row {
       height: 100%;
 
-      @media (min-width: $screen-sm-min) {
+      @include media-breakpoint-up(md) {
         & > div {
           height: 100%;
         }
       }
 
-      @media (max-width: $screen-sm-min) {
+      @include media-breakpoint-down(md) {
         & > div {
           text-align: center;
         }

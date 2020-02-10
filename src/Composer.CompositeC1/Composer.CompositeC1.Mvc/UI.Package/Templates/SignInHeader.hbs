@@ -1,17 +1,17 @@
 <a data-templateid="SignInHeader"
    {{#if IsLoggedIn}}
-   {{#if IsOnMyAccount}} class="logged-in" {{/if}}
+   {{#if IsOnMyAccount}} class="nav-link logged-in" {{else}} class="nav-link"  {{/if}} 
    data-qa="login-my-account" href="{{Url}}" title="{{localize 'MyAccount' 'L_MyAccount'}}"
    {{else}}
-   data-qa="login-sign-in" href="{{Url}}" title="{{localize 'MyAccount' 'L_SignIn'}}"
+   data-qa="login-sign-in" href="{{Url}}" title="{{localize 'MyAccount' 'L_SignIn'}}" class="nav-link"
    {{/if}}
 >
-    <span class="fa  fa-user  fa-lg  affix-show-inline-block"></span>&#160;
+    <span class="fa  fa-user  fa-lg  sps--blw-show-inline-block"></span>&#160;
     {{#unless IsLoading }}
         {{#if IsLoggedIn}}
-            <span class="hidden-xs  hidden-sm  affix-hidden">{{localize 'MyAccount' 'L_MyAccount'}}</span>
+            <span class="d-none d-xl-inline sps--blw-hidden">{{localize 'MyAccount' 'L_MyAccount'}}</span>
         {{else}}
-            <span class="hidden-xs  hidden-sm  affix-hidden">{{localize 'MyAccount' 'L_SignIn'}}</span>
+            <span class="d-none d-xl-inline sps--blw-hidden">{{localize 'MyAccount' 'L_SignIn'}}</span>
         {{/if}}
     {{/unless}}
 </a>

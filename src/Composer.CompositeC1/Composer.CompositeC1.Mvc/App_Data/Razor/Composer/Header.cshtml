@@ -1,5 +1,4 @@
 ﻿@inherits RazorFunction
-@using Orckestra.Composer.Providers.Localization
 
 @functions {
     public override string FunctionDescription
@@ -15,36 +14,30 @@
 <head>
 </head>
 <body>
-    <header class="masthead masthead-with-mega-menu">
+    <header class="masthead masthead-with-mega-menu shadow-sm">
         <div class="header">
-            <nav data-spy="affix" data-offset-top="180" class="navbar navbar-inverse text-center">
-                <div class="container">
-                
-                    <button aria-label="Menu" type="button" data-toggle="collapse" data-target="#main-nav-collapse"
-                            class="main-nav-toggle navbar-toggle pull-xs-left  pull-sm-left"
-                            aria-expanded="false">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                
+            <nav class="navbar navbar-expand navbar-dark bg-dark p-0">
+                <div class="container-md px-lg-2">
 
+                    <ul class="navbar-nav">
+                        <li>
+                            <button class="navbar-toggler d-block d-md-none main-nav-toggle" aria-label="Menu" type="button" data-toggle="collapse" data-target="#main-nav-collapse" aria-expanded="false">
+                                <span class="navbar-toggler-icon"></span>
+                            </button>
+                        </li>
+
+                    </ul>
                     @Markup(LanguageSwitch)
-
                     <f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.Header.StickyLinks" />
 
-                    <ul class="nav navbar-nav navbar-right">
-                        <li>
-                            <f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.Store.LocatorInHeader" />
-                        </li>
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item"><f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.Store.LocatorInHeader" /></li>
                         <f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.Membership.SignInHeader" />
-                        <li>
-                            <f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.WishList.WishListInHeader" />
+                        <li class="nav-item"><f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.WishList.WishListInHeader" /></li>
+                        <li class="nav-item sps--blw-show-block">
+                            <a class="nav-link" href="#" title="@Html.Localize("General", "Search")" data-focus-element="#search-input"><span class="fa  fa-search"></span></a>
                         </li>
-                        <li class="affix-show-block">
-                            <a href="#" title="@LocalizationHelper.Localize("General", "Search", System.Threading.Thread.CurrentThread.CurrentCulture)" data-focus-element="#search-input"><span class="fa  fa-search"></span></a>
-                        </li>
-                        <li>
+                        <li class="nav-item position-relative">
                             <f:function name="Composite.Web.Html.Template.PageTemplateFeature" xmlns:f="http://www.composite.net/ns/function/1.0">
                                 <f:param name="FeatureName" value="Minicart" />
                             </f:function>
@@ -55,24 +48,26 @@
             </nav>
         </div>
 
-        <div data-templateid="mainNavigation">
-            <f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.Header.MainMenu" />
-        </div>
+        <f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.Header.MainMenu" />
 
-        <div class="container">
-            <div class="row">
-                <div class="col-xs-10  col-xs-push-1  col-md-push-0  col-md-6  col-lg-5  text-xs-center  text-md-left">
-                    <a href="@HomePageNode.Url" class="logo"><img src="~/UI.Package/Images/better-retail.png" alt="logo" /></a>
-                </div>
-                <div class="col-xs-12  col-md-4  col-md-offset-2  col-lg-4  col-lg-offset-3">
-                    <div class="row hidden-xs">
-                        <f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.Header.OptionalLinks" />
+        <div class="container-fluid bg-light  py-2">
+            <div class="container-md">
+                <div class="row justify-content-between ">
+                    <div class="col-10 col-xl-6 mx-auto mx-lg-0 justify-content-center align-self-center">
+                        <a href="@HomePageNode.Url" class="logo">
+                            <img src="~/UI.Package/Images/better-retail.png" alt="logo" />
+                        </a>
                     </div>
-                    <div class="row">
-                        <f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.SearchBox">
-                            <f:param name="Autocomplete" value="true" />
-                            <f:param name="MaxProductsAutocompleteCount" value="6" />
-                        </f:function>
+                    <div class="col-12 col-xl-6  justify-content-center align-self-center">
+                        <div class="d-none d-md-block clearfix">
+                            <f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.Header.OptionalLinks" />
+                        </div>
+                        <div>
+                            <f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.SearchBox">
+                                <f:param name="Autocomplete" value="true" />
+                                <f:param name="MaxProductsAutocompleteCount" value="6" />
+                            </f:function>
+                        </div>
                     </div>
                 </div>
             </div>

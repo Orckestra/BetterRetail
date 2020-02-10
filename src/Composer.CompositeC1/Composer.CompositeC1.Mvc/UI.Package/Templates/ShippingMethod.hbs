@@ -1,24 +1,23 @@
  <div data-templateid="ShippingMethod">
 {{#unless HasMethods}}
 {{else}}
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h2 class="h3">{{localize 'CheckoutProcess' 'T_ShippingMethod'}}</h2>
-        </div>
-        <div class="panel-body">
+    <div class="card">
+        <h5 class="card-header">{{localize 'CheckoutProcess' 'T_ShippingMethod'}}</h5>
+        
+        <div class="card-body">
             {{#if GettingCart}}
                 {{>Loading}}
             {{else}}
                 <p>{{localize 'CheckoutProcess' 'F_ShippingSelection'}}</p>
                 <div class="row">
-                    <div class="col-sm-6">
+                    <div class="col-md-6">
                         <form id="ShippingMethod" data-oc-submit="preventFormSubmit" method="post" autocomplete="on">
                             <input type="hidden" id="ShippingProviderId" name="ShippingProviderId" value="{{Methods.SelectedShippingProviderId}}" />
                             {{#each Methods.ShippingMethods }}
                                 <div class="form-group">
-                                    <label class="select-block {{#if_eq Name ../SelectedMethod}} active {{/if_eq}}" data-qa="checkout-shipping-method-{{@index}}" data-parent=".panel-body">
+                                    <label class="select-block {{#if_eq Name ../SelectedMethod}} active {{/if_eq}}" data-qa="checkout-shipping-method-{{@index}}" data-parent=".card-body">
                                         <span class="input-addon">
-                                            <input {{#if_eq Name ../SelectedMethod}} checked="checked" {{/if_eq}} data-parsley-class-handler-selector=".panel-body" data-parsley-errors-container="#method-errors" class="input" data-oc-change="methodSelected" type="radio" name="Name" value="{{Name}}" data-shipping-provider-id="{{ShippingProviderId}}" required="true" />
+                                            <input {{#if_eq Name ../SelectedMethod}} checked="checked" {{/if_eq}} data-parsley-class-handler-selector=".card-body" data-parsley-errors-container="#method-errors" class="input" data-oc-change="methodSelected" type="radio" name="Name" value="{{Name}}" data-shipping-provider-id="{{ShippingProviderId}}" required="true" />
                                         </span>
                                         <span class="content">
                                             {{DisplayName}} - {{Cost}}

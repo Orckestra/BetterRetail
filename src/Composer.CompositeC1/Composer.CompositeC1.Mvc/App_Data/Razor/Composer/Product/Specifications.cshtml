@@ -10,7 +10,7 @@
 
     public string SelectedVariantClass(params string[] ids)
     {
-        return ids.Contains(Model.SelectedVariantId) ? "" : "hidden";
+        return ids.Contains(Model.SelectedVariantId) ? "" : "d-none";
     }
 
     public bool IsWithoutVariants()
@@ -24,10 +24,9 @@
 </head>
 <body>
     <div class="row">
-        <div class="col-md-10  col-md-offset-1">
+        <div class="col-lg-10  offset-md-1">
             <hr />
             <h2>@Html.Localize("ProductPage", "L_ProductSpecifications")</h2>
-
             @Attributes()
         </div>
     </div>

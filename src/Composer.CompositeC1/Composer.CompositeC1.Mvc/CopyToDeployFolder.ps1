@@ -24,10 +24,12 @@ if (Test-Path $depoymentFolder) {
 	
     Copy-Item -Path (Get-Item -Path "$srcFolder\Composer.CompositeC1\Composer.CompositeC1.Mvc\UI.Package\*" -Exclude ('Sass')).FullName -Destination "$depoymentFolder\UI.Package" -Recurse -Force
     Copy-Item -Path "$srcFolder\Composer.CompositeC1\Orckestra.Composer.Articles.Package\Package\App_Data" -Destination "$depoymentFolder" -Recurse -Force
+	Copy-Item -Path "$srcFolder\Composer.CompositeC1\Composer.CompositeC1.Mvc\App_Data" -Destination "$depoymentFolder" -Recurse -Force
     Copy-Item -Path "$srcFolder\Composer.CompositeC1\Orckestra.Composer.C1.Core\Package\Views" -Destination "$depoymentFolder" -Recurse -Force
     Copy-Item -Path "$srcFolder\Composer.CompositeC1\Orckestra.Composer.C1CMS.Queries.Package\Package\App_Data" -Destination "$depoymentFolder" -Recurse -Force
     Copy-Item -Path "$srcFolder\Composer.CompositeC1\Orckestra.Composer.ContentSearch.Content\Package\App_Data" -Destination "$depoymentFolder" -Recurse -Force
     Copy-Item -Path "$srcFolder\Composer.CompositeC1\Orckestra.Composer.ContentSearch.Package\Package\App_Data" -Destination "$depoymentFolder" -Recurse -Force
+	Copy-Item -Path "$srcFolder\Composer.CompositeC1\Orckestra.Composer.ContentSearch.Package\Package\Views" -Destination "$depoymentFolder" -Recurse -Force
     Copy-Item -Path "$srcFolder\Composer.CompositeC1\Orckestra.Composer.SEO.Organization\Package\App_Data" -Destination "$depoymentFolder" -Recurse -Force
     Copy-Item -Path "$srcFolder\Composer.CompositeC1\Orckestra.Composer.Sitemap.Package\Package\App_Data" -Destination "$depoymentFolder" -Recurse -Force
     Copy-Item -Path "$srcFolder\Composer.CompositeC1\Orckestra.Composer.Sitemap.Package\Package\Composite" -Destination "$depoymentFolder" -Recurse -Force

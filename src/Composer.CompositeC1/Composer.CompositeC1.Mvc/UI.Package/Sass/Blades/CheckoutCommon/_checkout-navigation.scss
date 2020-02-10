@@ -1,5 +1,5 @@
 .checkout-navigation {
-    @extend %island-lg;
+    //@extend %island-xl;
 
     ul {
         display: table;
@@ -19,19 +19,19 @@
         }
 
         .checkout-navigation-step {
-            color: $gray-light;
-            border-color: $gray-light;
+            color: gray("400");
+            border-color: gray("400");
             border: solid 1px;
             border-left: 0;
             display: block;
-            padding-bottom: $padding-large-vertical;
-            padding-top: $padding-large-vertical;
+            padding-bottom:  map_get($spacers, 3);
+            padding-top:  map_get($spacers, 3);
         }
 
         a.checkout-navigation-step:hover,
         a.checkout-navigation-step:focus {
-            border-color: darken($brand-info, 10);
-            color: darken($brand-info, 10);
+            border-color: darken(theme-color("info"), 10);
+            color: darken(theme-color("info"), 10);
             outline: 0;
             text-decoration: none;
         }
@@ -42,8 +42,8 @@
             display: inline;
         }
         .checkout-navigation-step {
-            background: $brand-info;
-            border-color: $brand-info;
+            background: theme-color("info");
+            border-color: theme-color("info");
             color: #fff;
         }
         a:hover,
@@ -54,8 +54,8 @@
 
     .past .checkout-navigation-step {
         background: #fff;
-        border-color: $brand-info;
-        color: $brand-info;
+        border-color: theme-color("info");
+        color: theme-color("info");
     }
 
     li:first-child .checkout-navigation-step {
@@ -63,7 +63,7 @@
     }
 
 
-    @media (min-width: $screen-md-min) {
+    @include media-breakpoint-up(lg) {
         ul {
             table-layout: fixed;
         }
@@ -76,7 +76,7 @@
         }
     }
 
-    @media (min-width: $screen-sm-min) {
+    @include media-breakpoint-up(md) {
         margin-left: -$grid-gutter-width / 2;
         margin-right: -$grid-gutter-width / 2;
 

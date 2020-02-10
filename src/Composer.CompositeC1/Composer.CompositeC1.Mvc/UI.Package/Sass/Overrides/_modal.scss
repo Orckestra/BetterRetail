@@ -2,7 +2,7 @@
     border-radius: 0;
 }
 
-@media (min-width: $screen-sm-min) {
+@include media-breakpoint-up(md) {
     .modal-dialog {
         margin-top: 110px;
     }
@@ -35,17 +35,17 @@
     margin-left: auto;
     width: 100%;
 }
-@media (min-width: $screen-sm-min) {
+@include media-breakpoint-up(md) {
     .modal-fullscreen .modal-dialog {
         width: 750px;
     }
 }
-@media (min-width: $screen-md-min) {
+@include media-breakpoint-up(lg) {
     .modal-fullscreen .modal-dialog {
         width: 970px;
     }
 }
-@media (min-width: $screen-lg-min) {
+@include media-breakpoint-up(xl) {
     .modal-fullscreen .modal-dialog {
         width: 1170px;
     }

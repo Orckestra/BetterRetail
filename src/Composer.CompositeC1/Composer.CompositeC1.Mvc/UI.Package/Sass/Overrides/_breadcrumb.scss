@@ -1,11 +1,5 @@
 .breadcrumb {
-    display: inline-block;
-
-    > li {
-        + li:before {
-            padding: 0;
-        }
-    }
+    padding: 0 0;
     > .active {
         font-weight: bold;
         &:before {

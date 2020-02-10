@@ -4,7 +4,7 @@
  */
 .cart-quantity {
   margin: 0;
-  width: 40px;
+  min-width: 50px;
   display: inline-block;
   text-align: center;
 }
@@ -42,15 +42,15 @@
 }
 
 .cart-item + .cart-item {
-  border-top: solid 2px $gray;
+  border-top: solid 2px $gray-200;
   margin-top: $grid-gutter-width;
   padding-top: $grid-gutter-width;
 }
 
 .cart-caption {
   display: table-caption;
-  padding-top: $line-height-computed;
-  padding-bottom: $line-height-computed;
+  padding-top: $spacer;
+  padding-bottom: $spacer;
 }
 
 .cart-cell-group {
@@ -75,8 +75,8 @@
   /**
    * Cart attributes
    */
-  @media (max-width: $screen-xs-max) {
-    .xs-full {
+   @include media-breakpoint-down(sm) {
+    .sm-full {
       .cart-desc,
       .cart-price,
       .cart-qty,
@@ -103,15 +103,15 @@
 
 }
 
-@media (max-width: $screen-xs-max) {
+@include media-breakpoint-down(md) {
   .cart-row {
     .cart-desc {
-      padding-bottom: $padding-base-vertical;
+      padding-bottom: map_get($spacers, 2);
     }
   }
 }
 
-@media (min-width: $screen-sm-min) {
+@include media-breakpoint-up(lg) {
   /**
    * Fake table display in > small
    */
@@ -276,10 +276,10 @@
   padding-top: 10px;
   position: relative;
 
-  @media (min-width: $screen-xs-min) {
+  @include media-breakpoint-up(md) {
     padding-left: 30%;
   }
-  @media (min-width: $screen-sm-min) {
+  @include media-breakpoint-up(md) {
     padding-left: 11%;
   }
 }

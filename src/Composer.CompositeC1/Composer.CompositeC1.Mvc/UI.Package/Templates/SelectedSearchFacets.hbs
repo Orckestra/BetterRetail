@@ -1,29 +1,35 @@
 <div data-oc-controller="Product.SelectedSearchFacets">
 {{#if SelectedFacets.Facets }}
-    <div id="selectedFacets" class="panel  panel-default">
-        <div class="panel-body">
-            <h2 class="h4">{{localize 'List-Search' 'L_Selection'}}</h2>
+    <div id="selectedFacets" class="card facets-card  mb-3">
+        <div class="card-body">
+            <h5>{{localize 'List-Search' 'L_Selection'}}</h5>
             {{#if SelectedFacets.IsAllRemovable }}
-                <p class="clearfix"><a class="pull-right  small" data-qa="search-refiners-clear-all" href="#" {{#if ../../LandingPageUrls}}data-landingpageurl="{{../../LandingPageUrls.[0]}}"{{/if}} data-oc-click="clearSelectedFacets">{{localize 'List-Search' 'B_ClearAll'}}</a></p>
+            <p class="clearfix"><a class="float-right  small" data-qa="search-refiners-clear-all" href="#"
+                    {{#if ../../LandingPageUrls}}data-landingpageurl="{{../../LandingPageUrls.[0]}}" {{/if}}
+                    data-oc-click="clearSelectedFacets">{{localize 'List-Search' 'B_ClearAll'}}</a></p>
             {{/if}}
-            <ul class="list-unstyled">
+        
+            <ul class="list-group m-0">
                 {{#each SelectedFacets.Facets}}
-                    <li>
-                        <div class="row">
-                            <div class="col-xs-10">
-                                {{DisplayName}}
-                            </div>
-                            <div class="col-xs-2">
-                                {{#if IsRemovable}}
-                                    <a href="#" class="pull-right" data-qa="search-refiner-remove" data-facetfieldname="{{FieldName}}" data-facettype="{{FacetType}}" data-facetvalue="{{Value}}" {{#if ../../../LandingPageUrls}}data-facetlandingpageurl="{{lookup ../../../LandingPageUrls @index}}"{{/if}} title="{{DisplayName}}" data-oc-click="removeSelectedFacet"><span class="fa  fa-times  fa-lg"></span></a>
-                                {{else}}
-                                    <span class="pull-right  fa  fa-times  fa-lg  text-muted"></span>
-                                {{/if}}
-                            </div>
-                        </div>
-                    </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center p-0 mb-1 border-0">
+                    {{DisplayName}}
+                    <span class="badge">
+        
+                        {{#if IsRemovable}}
+                        <a href="#" class="float-right" data-qa="search-refiner-remove" data-facetfieldname="{{FieldName}}"
+                            data-facettype="{{FacetType}}" data-facetvalue="{{Value}}"
+                            {{#if ../../../LandingPageUrls}}data-facetlandingpageurl="{{lookup ../../../LandingPageUrls @index}}"
+                            {{/if}} title="{{DisplayName}}" data-oc-click="removeSelectedFacet"><span
+                                class="fa  fa-times  fa-lg"></span></a>
+                        {{else}}
+                        <span class="float-right  fa  fa-times  fa-lg  text-muted"></span>
+                        {{/if}}
+                    </span>
+                </li>
                 {{/each}}
             </ul>
+        
+        
         </div>
     </div>
 {{/if}}

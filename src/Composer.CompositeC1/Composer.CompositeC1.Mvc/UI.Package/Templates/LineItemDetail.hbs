@@ -34,9 +34,9 @@
                     </a>
                 </div>
 
-                <div class="cart-cell  cart-delete  text-xs-right  text-md-center">
+                <div class="cart-cell  cart-delete  text-sm-right  text-lg-center">
                     <button type="button"
-                            class="btn  btn-default  btn-sm"
+                            class="btn   btn-outline-secondary  btn-sm"
                             data-lineitemid="{{Id}}"
                             data-oc-click="deleteLineItem"
                             data-qa="cart-product-delete"
@@ -44,7 +44,7 @@
                             ><span class="fa  fa-times"></span></button>
                 </div>
 
-                <div class="cart-cell  cart-price  text-sm-right  hidden-xs">
+                <div class="cart-cell  cart-price  text-md-right  d-none d-sm-table-cell">
                     <div class="text-align-button  small">
                         {{#if IsOnSale}}
                         <del data-qa="cart-product-price">{{DefaultListPrice}}</del><br />
@@ -55,18 +55,18 @@
                     </div>
                 </div>
 
-                <div class="cart-cell  cart-qty  text-sm-center">
+                <div class="cart-cell  cart-qty  text-md-center">
                     {{#if IsValid}}
                     {{#if_eq Quantity 1}}
                         <button data-qa="cart-product-decrease" 
-                            class="btn  btn-default  btn-sm" 
+                            class="btn   btn-outline-secondary  btn-sm" 
                             disabled="disabled" 
                             data-lineitemid="{{Id}}" 
                             data-action="Decrement" 
                             data-quantity="{{Quantity}}"><span class="fa  fa-minus"></span></button>
                     {{else}}
                         <button data-qa="cart-product-decrease" 
-                            class="btn  btn-default  btn-sm" 
+                            class="btn   btn-outline-secondary  btn-sm" 
                             data-lineitemid="{{Id}}" 
                             data-action="Decrement" 
                             data-quantity="{{Quantity}}" 
@@ -80,7 +80,7 @@
 
                     {{#if IsValid}}
                         <button data-qa="cart-product-increase" 
-                            class="btn  btn-default  btn-sm" 
+                            class="btn   btn-outline-secondary  btn-sm" 
                             data-lineitemid="{{Id}}" 
                             data-action="Increment" 
                             data-quantity="{{Quantity}}" 
@@ -91,7 +91,7 @@
                     {{/if}}
                 </div>
 
-                <div class="cart-cell  cart-subtotal  text-sm-right">
+                <div class="cart-cell  cart-subtotal  text-md-right">
                     <div class="text-align-button small">
                         {{#if IsPriceDiscounted}}
                         <del data-qa="cart-product-subtotal-price">{{TotalWithoutDiscount}}</del><br />

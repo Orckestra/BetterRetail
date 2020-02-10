@@ -1,8 +1,3 @@
-.search-tabs {
-    padding: 10px 0 0 0;
-    background: $panel-default-heading-bg;
-}
-
 .search-results {
     .pagination {
         margin: 0;
@@ -13,7 +8,7 @@
         overflow: hidden;
     }
 
-    @media (max-width: $screen-xs) {
+    @include media-breakpoint-down(sm) {
         .thumbnail-item {
             padding: 0;
         }
@@ -23,25 +18,25 @@
         }
     }
 
-    @media (min-width: $screen-sm) {
+   @include media-breakpoint-up(md) {
         .content-container {
             padding: 0;
         }
     }
 
-    @media (max-width: $screen-sm) {
+    @include media-breakpoint-down(md) {
         .action-line {
             margin-bottom: 10px;
         }
     }
 
-    @media (max-width: $screen-md) {
+    @include media-breakpoint-down(lg) {
         .btn-dropdown {
             width: 100%;
         }
     }
 
-    @media (min-width : $screen-md) {
+    @include media-breakpoint-up(lg) {
         #facets {
             &.collapse {
                 display: block;
@@ -67,7 +62,7 @@
         }
     }
 
-    @media (min-width : $screen-lg) {
+    @include media-breakpoint-up(xl) {
         .action-line {
             margin-left: $col-lg-2-width !important;
             margin-bottom: 15px;

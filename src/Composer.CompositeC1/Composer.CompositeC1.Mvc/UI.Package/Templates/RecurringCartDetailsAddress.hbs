@@ -1,25 +1,25 @@
 <div data-templateid="RecurringCartDetailsAddress">
-    <div class="panel  panel-default">
+    <div class="card">
          {{#if IsLoading}}
-            <div class="panel-heading">
+            <div class="card-header">
                 <div class="row">
-                    <div class="col-xs-10">
-                        <h2 class="h3">{{localize 'MyAccount' 'T_ShippingMethod' }}</h2>
+                    <div class="col-10">
+                        <h5>{{localize 'MyAccount' 'T_ShippingMethod' }}</h5>
                     </div>
                 </div>
             </div>
-            <div class="panel-body">
+            <div class="card-body">
                 {{>Loading}}
             </div>
         {{else}}
             {{#unless EditMode}}
-            <div class="panel-heading">
+            <div class="card-header">
                 <div class="row">
-                    <div class="col-xs-10">
-                        <h2 class="h3">{{localize 'MyAccount' 'T_Addresses' }}</h2>
+                    <div class="col-10">
+                        <h5>{{localize 'MyAccount' 'T_Addresses' }}</h5>
                     </div>
-                    <div class="col-xs-2">
-                        <button class="btn btn-link pull-right" type="button" 
+                    <div class="col-2">
+                        <button class="btn btn-link float-right" type="button" 
                         data-oc-click="toggleEditAddress" 
                         title="{{localize 'CheckoutProcess' 'B_Edit'}}">
                             <span class="fa  fa-pencil  fa-lg"></span>
@@ -27,9 +27,9 @@
                     </div>
                 </div>
             </div>
-            <div class="panel-body">
+            <div class="card-body">
                 <div class="row">
-                    <div class="col-xs-12  col-sm-6  col-md-6">
+                    <div class="col-12  col-md-6  col-lg-6">
                         <h2 class="h4">{{localize 'MyAccount' 'T_ShippingAddress'}}</h2>
                         <h5>{{ShippingAddress.AddressName}}</h5>
                         <strong>
@@ -45,7 +45,7 @@
                         <span data-qa="order-shipping-address-postalcode">{{ShippingAddress.PostalCode}}</span><br />
                         <span data-qa="order-shipping-address-phone">{{ShippingAddress.PhoneNumber}}</span>
                     </div>
-                    <div class="col-xs-12  col-sm-6  col-md-6">
+                    <div class="col-12  col-md-6  col-lg-6">
                         <h2 class="h4">{{localize 'MyAccount' 'T_BillingAddress'}}</h2>
                         <h5>{{Payment.BillingAddress.AddressName}}</h5>
                         <strong>
@@ -64,31 +64,31 @@
                 </div>
             </div>
             {{else}}
-            <div class="panel-heading">
+            <div class="card-header">
                 <div class="row">
-                    <div class="col-xs-10">
-                        <h2 class="h3">{{localize 'MyAccount' 'T_Addresses' }}</h2>
+                    <div class="col-10">
+                        <h5>{{localize 'MyAccount' 'T_Addresses' }}</h5>
                     </div>
-                    <div class="col-xs-2">
-                        <button class="btn btn-link pull-right invisible" type="button" 
+                    <div class="col-2">
+                        <button class="btn btn-link float-right invisible" type="button" 
                         title="{{localize 'CheckoutProcess' 'B_Edit'}}">
                             <span class="fa  fa-pencil  fa-lg"></span>
                         </button>
                     </div>
                 </div>
             </div>
-            <div class="panel-body"> 
+            <div class="card-body"> 
                 {{>FormErrorMessages}}           
                 {{> RecurringCartShippingAddressRegistered}}
                 <br />
                 {{> RecurringCartBillingAddressRegistered}}           
                         
-                <div class="col-xs-12 text-center">
-                    <button class="btn btn-default" type="button" 
+                <div class="col-12 text-center">
+                    <button class="btn  btn-outline-secondary" type="button" 
                         data-oc-click="toggleEditAddress">{{localize 'General' 'B_Cancel'}}</button>
                     <button class="btn btn-primary"
                         data-oc-click="saveEditAddress">{{localize 'MyAccount' 'B_SaveChanges'}}
-                        <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  hidden"></span>
+                        <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  d-none"></span>
                     </button>
                 </div>
             </div>

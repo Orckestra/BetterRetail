@@ -1,7 +1,7 @@
-<a href="{{Url}}" data-qa="minicart-header" class="minicart-header" data-oc-controller="Cart.MiniCart" title="{{localize 'MiniCart' 'H_MinicartTitle'}}">
+<a href="{{Url}}" data-qa="minicart-header" class="nav-link minicart-header" data-oc-controller="Cart.MiniCart" title="{{localize 'MiniCart' 'H_MinicartTitle'}}">
     <span class="fa  fa-shopping-cart  fa-lg"></span>&#160;
-    <span class="hidden-xs  hidden-sm  affix-hidden">{{localize 'MiniCart' 'H_MinicartTitle'}}&#160;</span>
+    <span class="d-none d-xl-inline sps--blw-hidden">{{localize 'MiniCart' 'H_MinicartTitle'}}&#160;</span>
     <strong>{{>MinicartQuantity}}</strong>
 </a>
 {{>MinicartSummaryBlade}}
-{{>AddToCartNotificationModalContainer}}
+{{AddToCartNotificationModalContainer}}

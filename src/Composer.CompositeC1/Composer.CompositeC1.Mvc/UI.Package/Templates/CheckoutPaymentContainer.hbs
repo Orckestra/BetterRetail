@@ -1,8 +1,6 @@
-<div class="panel panel-default" data-oc-controller="Checkout.Payment" data-context="{{JsonContext}}">
-	<div class="panel-heading">
-        <h2 class="h3">{{localize 'MyAccount' 'T_PaymentMethod'}}</h2>
-    </div>
-    <div class="panel-body"> 
+<div class="card" data-oc-controller="Checkout.Payment" data-context="{{JsonContext}}">
+  <h5 class="card-header">{{localize 'MyAccount' 'T_PaymentMethod'}}</h5>
+  <div class="card-body"> 
 		{{>CheckoutPayment}}
 	</div>
 </div>

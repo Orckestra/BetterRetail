@@ -1,11 +1,9 @@
 <div data-templateid="OrderSummary">
     {{#unless IsLoading}}
         {{#unless IsCartEmpty}}
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h2 class="h3" data-qa="order-summary-title">{{localize 'ShoppingCart' 'T_OrderSummary'}}</h2>
-            </div>
-            <div class="panel-body">
+        <div class="card">
+            <h5 class="card-header" data-qa="order-summary-title">{{localize 'ShoppingCart' 'T_OrderSummary'}}</h5>
+            <div class="card-body">
                 {{#if Rewards}}
                 <div class="text-center">
                     <span class="promotion">
@@ -17,15 +15,15 @@
                 {{/if}}
 
                 <div class="row">
-                    <div class="col-xs-6  col-sm-7"><p>{{localize 'ShoppingCart' 'L_Subtotal'}}</p></div>
-                    <div class="col-xs-6  col-sm-5  text-right"><p data-qa="order-summary-subtotal">{{OrderSummary.SubTotal}}</p></div>
+                    <div class="col-6  col-md-7"><p>{{localize 'ShoppingCart' 'L_Subtotal'}}</p></div>
+                    <div class="col-6  col-md-5  text-right"><p data-qa="order-summary-subtotal">{{OrderSummary.SubTotal}}</p></div>
                 </div>
 
                 {{#each OrderSummary.ShipmentAdditionalFeeSummaryList}}
                     {{#if Taxable}}
                     <div class="row">
-                        <div class="col-xs-6  col-sm-7"><p>{{GroupName}}</p></div>
-                        <div class="col-xs-6  col-sm-5  text-right"><p>{{TotalAmount}}</p></div>
+                        <div class="col-6  col-md-7"><p>{{GroupName}}</p></div>
+                        <div class="col-6  col-md-5  text-right"><p>{{TotalAmount}}</p></div>
                     </div>
                     {{/if}}
                 {{/each}}
@@ -33,8 +31,8 @@
                 {{#each OrderSummary.AdditionalFeeSummaryList}}
                     {{#if Taxable}}
                     <div class="row">
-                        <div class="col-xs-6  col-sm-7"><p>{{GroupName}}</p></div>
-                        <div class="col-xs-6  col-sm-5  text-right"><p>{{TotalAmount}}</p></div>
+                        <div class="col-6  col-md-7"><p>{{GroupName}}</p></div>
+                        <div class="col-6  col-md-5  text-right"><p>{{TotalAmount}}</p></div>
                     </div>
                     {{/if}}
                 {{/each}}
@@ -42,12 +40,12 @@
                 {{#if OrderSummary.IsShippingEstimatedOrSelected}}
                     {{#if OrderSummary.IsShippingTaxable}}
                     <div class="row">
-                        <div class="col-xs-6  col-sm-7">
+                        <div class="col-6  col-md-7">
                             <p>
                               <a data-qa="order-summary-estimate-shipping" data-oc-click="openModal">{{#escape}}{{localizeFormat 'ShoppingCart' 'L_ShippingBasedOn' ShippingAddress.PostalCode}}{{/escape}}</a>
                             </p>
                         </div>
-                        <div class="col-xs-6  col-sm-5  text-right"><p data-qa="order-summary-shipping-fee">{{OrderSummary.Shipping}}</p></div>
+                        <div class="col-6  col-md-5  text-right"><p data-qa="order-summary-shipping-fee">{{OrderSummary.Shipping}}</p></div>
                     </div>
                     {{/if}}
                 {{/if}}
@@ -59,8 +57,8 @@
                 {{#each OrderSummary.ShipmentAdditionalFeeSummaryList}}
                     {{#unless Taxable}}
                     <div class="row">
-                        <div class="col-xs-6  col-sm-7"><p>{{GroupName}}</p></div>
-                        <div class="col-xs-6  col-sm-5  text-right"><p>{{TotalAmount}}</p></div>
+                        <div class="col-6  col-md-7"><p>{{GroupName}}</p></div>
+                        <div class="col-6  col-md-5  text-right"><p>{{TotalAmount}}</p></div>
                     </div>
                     {{/unless}}
                 {{/each}}
@@ -68,8 +66,8 @@
                 {{#each OrderSummary.AdditionalFeeSummaryList}}
                     {{#unless Taxable}}
                     <div class="row">
-                        <div class="col-xs-6  col-sm-7"><p>{{GroupName}}</p></div>
-                        <div class="col-xs-6  col-sm-5  text-right"><p>{{TotalAmount}}</p></div>
+                        <div class="col-6  col-md-7"><p>{{GroupName}}</p></div>
+                        <div class="col-6  col-md-5  text-right"><p>{{TotalAmount}}</p></div>
                     </div>
                     {{/unless}}
                 {{/each}}
@@ -77,36 +75,36 @@
                 {{#if OrderSummary.IsShippingEstimatedOrSelected}}
                     {{#unless OrderSummary.IsShippingTaxable}}
                     <div class="row">
-                        <div class="col-xs-6  col-sm-7">
+                        <div class="col-6  col-md-7">
                             <p>
                               <a data-qa="order-summary-estimate-shipping" data-oc-click="openModal">{{#escape}}{{localizeFormat 'ShoppingCart' 'L_ShippingBasedOn' ShippingAddress.PostalCode}}{{/escape}}</a>
                             </p>
                         </div>
-                        <div class="col-xs-6  col-sm-5  text-right"><p data-qa="order-summary-shipping-fee">{{OrderSummary.Shipping}}</p></div>
+                        <div class="col-6  col-md-5  text-right"><p data-qa="order-summary-shipping-fee">{{OrderSummary.Shipping}}</p></div>
                     </div>
                     {{/unless}}
                 {{else}}
                     <div class="row">
-                        <div class="col-xs-6  col-sm-7"><p>{{localize 'ShoppingCart' 'H_ShippingTaxes'}}</p></div>
-                        <div class="col-xs-6  col-sm-5  text-right">
+                        <div class="col-6  col-md-7"><p>{{localize 'ShoppingCart' 'H_ShippingTaxes'}}</p></div>
+                        <div class="col-6  col-md-5  text-right">
                             <a data-oc-click="openModal">{{localize 'ShoppingCart' 'B_ShippingTaxesEstimation'}}</a>
                         </div>
                     </div>
                 {{/if}}
 
                 <div class="row">
-                    <div class="col-xs-6  col-sm-7"><p><span class="h4">{{localize 'ShoppingCart' 'L_Total'}}</span></p></div>
-                    <div class="col-xs-6  col-sm-5  text-right"><p><span class="h4" data-qa="order-summary-total">{{OrderSummary.Total}}</span></p></div>
+                    <div class="col-6  col-md-7"><p><span class="h4">{{localize 'ShoppingCart' 'L_Total'}}</span></p></div>
+                    <div class="col-6  col-md-5  text-right"><p><span class="h4" data-qa="order-summary-total">{{OrderSummary.Total}}</span></p></div>
                 </div>
 
                 {{#if OrderSummary.SavingsTotal}}
-                <div class="row panel-body">
-                    <div class="panel-saving col-xs-12  text-center  text-success"><span data-qa="order-summary-discount">{{localize 'MyAccount' 'L_Savings'}}&nbsp;{{OrderSummary.SavingsTotal}}</span></div>
+                <div class="row">
+                    <div class="alert alert-success bg-white col-12  text-center text-success"><span data-qa="order-summary-discount">{{localize 'MyAccount' 'L_Savings'}}&nbsp;{{OrderSummary.SavingsTotal}}</span></div>
                 </div>
                 {{/if}}
 
                 <div class="row">
-                    <div class="col-xs-12">
+                    <div class="col-12">
                         <div class="additional-info">
                             <div class="multiline-message">
                                 <span class="fa  fa-comment-o  fa-lg  multiline-message-icon"></span> 
@@ -117,7 +115,7 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-xs-12">
+                    <div class="col-12">
                         {{#if InvalidLineItemCount}}
                         <div class="form-group">
                         {{/if}}
@@ -150,7 +148,7 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <button type="submit" class="btn  btn-default">
+                                    <button type="submit" class="btn   btn-outline-secondary">
                                         {{localize 'ShoppingCart' 'B_ShippingTaxesEstimation'}}
                                     </button>
                                 </div>

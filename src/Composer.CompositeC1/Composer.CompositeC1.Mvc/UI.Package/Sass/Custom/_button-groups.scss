@@ -1,4 +1,4 @@
-@media (max-width: $screen-sm-max) {
+@include media-breakpoint-down(md) {
     .btn-group-responsive {
         margin-bottom: -10px;
 
@@ -7,8 +7,8 @@
             width: 100%;
             margin-bottom: 10px;
         }
-        > .pull-left,
-        > .pull-right {
+        > .float-left,
+        > .float-right {
             float: none !important;
         }
     }
@@ -16,6 +16,6 @@
 
 .text-align-button {
     line-height: $line-height-base;
-    padding-top: $padding-base-vertical + 1; // 1 is border size
-    padding-bottom: $padding-base-vertical + 1; // 1 is border size
+    padding-top: map_get($spacers, 2) + 1; // 1 is border size
+    padding-bottom: map_get($spacers, 2) + 1; // 1 is border size
 }

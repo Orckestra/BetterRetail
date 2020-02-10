@@ -2,8 +2,8 @@
     {{#unless IsLoading }}
         {{#unless IsCartEmpty}}
         <div>
-            <div class="panel  panel-default">
-                <div class="panel-body">
+            <div class="card">
+                <div class="card-body">
                     <label class="h3" for="couponCode">{{localize 'ShoppingCart' 'F_PromoCode'}}</label>
 
                     <form name="addCoupon" data-oc-submit="applyCoupon">
@@ -11,9 +11,9 @@
                             <div class="input-group">
                                 <input data-qa="coupons-input" type="text" class="form-control" id="couponCode" name="couponCode" placeholder="{{localize 'ShoppingCart' 'F_PromoCodeWatermark'}}"/>
                                 <span class="input-group-btn">
-                                    <button data-qa="coupons-submit" type="submit" class="btn  btn-default" style="width: max-content">
+                                    <button data-qa="coupons-submit" type="submit" class="btn   btn-outline-secondary" style="width: max-content">
                                         {{localize 'ShoppingCart' 'B_ApplyPromoCode'}}
-                                        <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  hidden"></span>
+                                        <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  d-none"></span>
                                     </button>
                                 </span>
                             </div>

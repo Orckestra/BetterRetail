@@ -255,7 +255,6 @@
     <Compile Include="Controllers\BrowsingCategoriesBaseController.cs" />
     <Compile Include="Controllers\CartBaseController.cs" />
     <Compile Include="Controllers\CheckoutBaseController.cs" />
-    <Compile Include="Controllers\FooterBaseController.cs" />
     <Compile Include="Controllers\HeaderBaseController.cs" />
     <Compile Include="Controllers\MembershipBaseController.cs" />
     <Compile Include="Controllers\MyAccountBaseController.cs" />

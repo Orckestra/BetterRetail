@@ -11,34 +11,18 @@
 <head>
 </head>
 <body>
-    <footer>
-        <div data-templateid="Footer">
-            <div class="footer">
-                <div class="well">
-                    <f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.Footer.SocialLinks" />
-                    @*<div class="container">
-                        <div class="row">
-                            <div class="col-xs-12">
-                                <div class="follow-us pull-left">
-                                    <h4>Follow Us:</h4>
-                                </div>
-                                <f:function name="Composite.Web.Html.Template.PageTemplateFeature" xmlns:f="http://www.composite.net/ns/function/1.0">
-                                    <f:param name="FeatureName" value="Social links" />
-                                </f:function>
-                            </div>
-                        </div>
-                    </div>*@
+    <footer class="footer">
+        <div class="bg-light border-top p-2">
+            @Function("Composer.Footer.SocialLinks")
+        </div>
+        <div class="container-md">
+            @Function("Composer.Footer.MainFooter")
+            <div class="row justify-between no-gutter">
+                <div class="col-xl-8 order-lg-12">
+                    @Function("Composer.Footer.OptionalLinks")
                 </div>
-                <div class="container">
-                    <f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.Footer.MainFooter" />
-                    <div class="row">
-                        <div class="col-xs-12 col-md-8 col-md-push-4 col-mobile-flush">
-                            <f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.Footer.OptionalLinks" />
-                        </div>
-                        <div class="col-xs-12 col-md-4 col-md-pull-8">
-                            <f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.Footer.Copyright" />
-                        </div>
-                    </div>
+                <div class="col-xl-4 order-lg-1">
+                    @Function("Composer.Footer.Copyright")
                 </div>
             </div>
         </div>

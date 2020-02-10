@@ -22,7 +22,7 @@
         <meta name="description" content="@CurrentPageNode.Description" />
     }
     <f:function name="Composite.Web.Html.Template.CommonMetaTags" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <link rel="stylesheet" href="/UI.Package/Sass/@(theme).scss" />
 
     <link rel="apple-touch-icon" sizes="57x57" href="/UI.Package/Images/favicons/apple-touch-icon-57x57.png" />
@@ -60,7 +60,8 @@
 
     @RenderBody()
 
-    <script src="/UI.Package/JavaScript/jquery-1.11.2.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="/UI.Package/JavaScript/bootstrap.min.js"></script>
     <script src="/UI.Package/JavaScript/lodash.min.js"></script>
     <script src="/UI.Package/JavaScript/handlebars.runtime.min.js"></script>
@@ -69,6 +70,7 @@
     <script src="/UI.Package/JavaScript/parsley.min.js"></script>
     <script src="/UI.Package/JavaScript/slick.js"></script>
     <script src="/UI.Package/JavaScript/typeahead.js"></script>
+    <script src="/UI.Package/JavaScript/scrollPosStyler.js"></script>
     <script src="/UI.Package/JavaScript/jquery.serialize-object.min.js"></script>
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places,geometry"></script>
     <script type="text/javascript" src="/UI.Package/JavaScript/google.maps.utility.library.v3.markerwithlabel_packed.js"></script>

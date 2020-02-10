@@ -1,7 +1,6 @@
 .moneris {
     // height of a label + input inside a form group.
-    $form-group-computed-height: $line-height-computed + $input-height-base + $form-group-margin-bottom + 5px;
-    position: relative;
+    $form-group-computed-height: ($spacer + $input-height + $form-group-margin-bottom + 5px); position: relative;
     &-label {
         display: block;
         position: absolute;
@@ -14,6 +13,6 @@
         top: $form-group-computed-height;
     }
     &-ccv {
-        top: $form-group-computed-height * 2;
+        top: ($form-group-computed-height + $form-group-computed-height);
     }
 }

@@ -1,10 +1,10 @@
 <div  data-oc-controller="Store.Details" class="store-details" data-context="{{JsonContext}}">
 <h1>{{LocalizedDisplayName}}</h1> 
 <div class="row">
-    <div class="col-xs-12">
+    <div class="col-12">
         <div id="map" class="map"></div>
-         <div class="store-info  panel  panel-default">
-            <div class="panel-body"> 
+         <div class="store-info  card">
+            <div class="card-body"> 
                 {{#with Address}}
                     {{> StoreAddress}}
                 {{/with}}

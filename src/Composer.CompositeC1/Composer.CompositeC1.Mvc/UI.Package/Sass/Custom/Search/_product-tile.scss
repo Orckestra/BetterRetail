@@ -5,8 +5,8 @@
     top: $top;
     right: 0;
     width: 10%;
-    height: $line-height-computed;
-    @include gradient-horizontal(rgba(255,255,255,0), $body-bg, 0%, 100%);
+    height: $spacer;
+    @include gradient-x(rgba(255,255,255,0), $body-bg, 0%, 100%);
     pointer-events: none;
 }
 
@@ -14,9 +14,9 @@
     $lines-of-text: 3;
 
     .product-tile-text {
-        border-top: solid 1px lighten($gray-light, 7%);
+        border-top: solid 1px lighten(gray("400"), 7%);
         // 3 lines of text + half a line of spacing
-        height: floor($line-height-computed) * $lines-of-text + floor($line-height-computed / 2) - 1;
+        height: ($line-height-base * $font-size-base) * 3.5;
         padding-top: 3px;
         position: relative;
         overflow: hidden;
@@ -27,7 +27,7 @@
         }
 
         &:after {
-            @include tile-gradient-right($line-height-computed * ($lines-of-text - 1));
+            @include tile-gradient-right(($line-height-base * $font-size-base) * ($lines-of-text - 1));
         }
     }
 
@@ -36,11 +36,11 @@
     }
 
     .product-tile-price {
-        height: ceil($font-size-h4 * $line-height-base);
+        height: ceil($h4-font-size * $line-height-base);
     }
 
     .product-tile-special-price {
-        height: ceil($line-height-computed);
+        height: ceil(($line-height-base * $font-size-base));
     }
 
     .product-tile-media {

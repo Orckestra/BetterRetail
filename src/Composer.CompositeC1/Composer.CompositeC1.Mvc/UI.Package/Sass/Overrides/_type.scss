@@ -1,21 +1,21 @@
-h1, h3, h4,
-.h1, .h3, .h4 {
+ h4,
+.h4 {
     font-weight: bold;
 }
 
 h1, .h1,
 h2, .h2,
 h3, .h3 {
-    margin-bottom: $line-height-computed;
+    margin-bottom: $spacer;
 }
 
-@media (max-width: $screen-xs-max) {
-    h1, .h1 { font-size: $font-size-h1-xs; }
-    h2, .h2 { font-size: $font-size-h2-xs; }
-    h3, .h3 { font-size: $font-size-h3-xs; }
-    h4, .h4 { font-size: $font-size-h4-xs; }
-    h5, .h5 { font-size: $font-size-h5-xs; }
-    h6, .h6 { font-size: $font-size-h6-xs; }
+ @include media-breakpoint-down(sm) {
+    h1, .h1 { font-size: $font-size-h1-sm; }
+    h2, .h2 { font-size: $font-size-h1-sm; }
+    h3, .h3 { font-size: $font-size-h1-sm; }
+    h4, .h4 { font-size: $font-size-h1-sm; }
+    h5, .h5 { font-size: $font-size-h1-sm; }
+    h6, .h6 { font-size: $font-size-h1-sm; }
 }
 
 blockquote {
@@ -32,8 +32,8 @@ blockquote {
 
 .list-unstyled {
     li {
-        margin-bottom: $padding-base-vertical;
+        margin-bottom: map_get($spacers, 2);
     }
 }
 
-@include text-emphasis-variant('.text-gray', $gray);
+@include text-emphasis-variant('.text-gray', $gray-800);

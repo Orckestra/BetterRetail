@@ -402,7 +402,8 @@ Task("Open-Website").Does(() =>
 Task("Link-Razor").Does(() =>
 {
     Information("Link-Razor task");
-    var srcRazorDir = $"{rootDir}/src/Composer.CompositeC1/Composer.CompositeC1.Mvc/App_Data/Razor";
+   
+	var srcRazorDir = $"{rootDir}/src/Composer.CompositeC1/Composer.CompositeC1.Mvc/App_Data/Razor";
     var targetRazorPath = new DirectoryPath($"{deploymentDir}/Website/App_Data/Razor");
     var srcRazorPath = new DirectoryPath(srcRazorDir);
     var files = GetFiles($"{srcRazorDir}/**/*.cshtml");
@@ -413,7 +414,7 @@ Task("Link-Razor").Does(() =>
         
         Information("RazorFile: {0}", razorFile);
         ReplaceFileWithHardLink(targetFile.FullPath, file.FullPath);
-    }
+   }
 
 });
 

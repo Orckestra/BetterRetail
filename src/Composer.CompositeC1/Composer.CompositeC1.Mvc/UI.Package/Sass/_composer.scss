@@ -17,7 +17,6 @@
 /**
  * Blades
  */
-@import "Blades/_placeholder.scss";
 @import "Blades/AddToCartNotification/_notification-modal.scss";
 @import "Blades/CartSummary/_cart.scss";
 @import "Blades/CartSummary/_display-table.scss";
@@ -37,10 +36,10 @@
 @import "Blades/StoreLocator/_store-locator.scss";
 @import "Blades/WishList/_wishlist-tile.scss";
 @import "Blades/WishList/_wishlist.scss";
-
+  
 /**
  * Composer bootstrap overrides
- */
+*/
 @import "Overrides/_breadcrumb.scss";
 @import "Overrides/_button-groups.scss";
 @import "Overrides/_buttons.scss";
@@ -50,15 +49,13 @@
 @import "Overrides/_image.scss";
 @import "Overrides/_modal.scss";
 @import "Overrides/_navs.scss";
-@import "Overrides/_pager.scss";
 @import "Overrides/_pagination.scss";
-@import "Overrides/_panel.scss";
 @import "Overrides/_scaffolding.scss";
 @import "Overrides/_tables.scss";
 @import "Overrides/_tooltip.scss";
 @import "Overrides/_type.scss";
 @import "Overrides/_well.scss";
-
+ 
 /**
  * Composer custom components
  */
@@ -85,7 +82,6 @@
 @import "Custom/_select-block.scss";
 @import "Custom/_social-links.scss";
 @import "Custom/_thumbnail_flex.scss";
-@import "Custom/Responsive/_pull.scss";
 @import "Custom/Responsive/_text-align.scss";
 @import "Custom/Search/_product-tile.scss";
-@import "Custom/Search/_content-tabs.scss";
+@import "Custom/Search/_facets.scss";

@@ -12,29 +12,29 @@
 
 .dropdown-menu > .active > a:hover,
 .dropdown-menu > .active > a:focus {
-    background-color: darken($brand-info, 5%)
+    background-color: darken(theme-color("info"), 5%)
 }
 
-@media (max-width: $screen-xs-max) {
-    .dropdown-menu-xs-right {
-        left: auto;
-        right: 0;
-    }
-}
-@media (min-width: $screen-sm-min) and (max-width: $screen-sm-max) {
+ @include media-breakpoint-down(sm) {
     .dropdown-menu-sm-right {
         left: auto;
         right: 0;
     }
 }
-@media (min-width: $screen-md-min) and (max-width: $screen-md-max) {
+@include media-breakpoint-only(md) {
     .dropdown-menu-md-right {
         left: auto;
         right: 0;
     }
 }
-@media (min-width: $screen-lg-min) {
+@include media-breakpoint-only(lg) {
     .dropdown-menu-lg-right {
+        left: auto;
+        right: 0;
+    }
+}
+@include media-breakpoint-up(xl) {
+    .dropdown-menu-xl-right {
         left: auto;
         right: 0;
     }

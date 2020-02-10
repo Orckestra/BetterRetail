@@ -1,18 +1,18 @@
-<div class="panel {{#if IsPreferredShipping}} panel-primary {{else}} panel-default {{/if}}" data-address-id="{{Id}}">
-    <div class="panel-body  {{#if IsPreferredShipping}} text-primary {{/if}}">
+<div class="alert {{#if IsPreferredShipping}} alert-primary{{/if}}" data-address-id="{{Id}}">
+    <div class="{{#if IsPreferredShipping}} text-primary {{/if}}">
 
         <div class="row">
-            <div class="col-sm-4  col-sm-push-8  text-sm-right">
+            <div class="col-md-4 order-1  order-sm-2 text-lg-right">
                 {{#if IsPreferredShipping}}<strong>{{/if}}
                 <span class="h5">{{AddressName}}</span>
                 {{#if IsPreferredShipping}}</strong>{{/if}}
 
                 {{#if IsPreferredShipping}}
-                <br class="hidden-xs"/>
+                <br class="d-none d-sm-block"/>
                 <em class="text-muted">{{localize 'MyAccount' 'L_IsDefaultAddress'}}</em>
                 {{/if}}
             </div>
-            <div class="col-sm-8  col-sm-pull-4">
+            <div class="col-md-8  order-2  order-sm-1">
                 {{FirstName}}
                 {{LastName}}<br />
                 {{Line1}}<br />
@@ -25,7 +25,7 @@
                 {{PhoneNumber}}
             </div>
 
-            <div class="col-xs-12  text-right">
+            <div class="col-12 order-3  text-right">
                 <a class="btn  btn-link" data-qa="address-edit" href="{{UpdateAddressUrl}}" title="{{localize 'MyAccount' 'B_EditAddress'}}">
                     <span class="fa  fa-pencil  fa-lg"></span>
                 </a>
@@ -38,7 +38,7 @@
 
         {{#unless IsPreferredShipping}}
         <div class="row">
-            <div class="col-xs-12  text-right">
+            <div class="col-12  text-right">
                 <hr/>
                 <button type="button" class="btn  btn-primary" data-qa="address-setdefault" data-oc-click="setDefaultAddress">
                    {{localize 'MyAccount' 'B_SetDefaultAddress'}}

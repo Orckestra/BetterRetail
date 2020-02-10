@@ -1,4 +1,4 @@
-<div class="col-xs-6  col-sm-4  {{#if_eq @index 3}}hidden-sm{{/if_eq}}  col-md-3">
+<div class="col-6">
     <div class="product-tile" data-has-variants="{{HasVariants}}" data-product-id="{{ProductId}}" data-product-variant-id="{{VariantId}}" data-price="{{Price}}" data-recurringorderprogramname='{{RecurringOrderProgramName}}'>
         <a class="product-tile-media" href="{{Url}}" data-productId="{{ProductId}}" data-index='{{@index}}' data-recurringorderprogramname='{{RecurringOrderProgramName}}' data-oc-click='relatedProductsClick'>
             <img class="img-fluid" src="{{ImageUrl}}" alt="" onerror="this.onerror=null; this.src='{{FallbackImageUrl}}'" />
@@ -6,7 +6,7 @@
 
         <div class="product-tile-text">
             <div class="row">
-                <div class="col-xs-9 col-sm-10">
+                <div class="col-9 col-md-10">
                     {{#if Brand}}
                         <strong class="text-uppercase  product-tile-brand" data-qa="search-product-brand" title="{{Brand}}">{{Brand}}</strong>
                         <br/>
@@ -16,7 +16,7 @@
                     </a>
                 </div>
                 {{#if IsRecurringOrderEligible}}
-                    <div class="col-xs-3 col-sm-2 product-tile-recurring">
+                    <div class="col-3 col-md-2 product-tile-recurring">
                         <img src="/UI.Package/Images/recurring.svg" class="recurring-icon" alt="{{localize 'General' 'L_RecurringProduct'}}" title="{{localize 'General' 'L_RecurringProduct'}}" />
                     </div>
                 {{/if}}

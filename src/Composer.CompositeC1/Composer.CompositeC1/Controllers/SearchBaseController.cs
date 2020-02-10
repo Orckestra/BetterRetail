@@ -51,7 +51,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         {
             if (!AreKeywordsValid(keywords))
             {
-                return View("SearchResults");
+                return View("ProductsSearchResults");
             }
 
             var searchViewModel = SearchRequestContext.ProductsSearchViewModel;
@@ -64,7 +64,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             searchViewModel.Context["PaginationCurrentPage"] = searchViewModel.ProductSearchResults.Pagination.Pages.FirstOrDefault(p => p.IsCurrentPage);
 
 
-            return View("SearchResults", searchViewModel);
+            return View("ProductsSearchResults", searchViewModel);
         }
 
         public virtual ActionResult SelectedSearchFacets(

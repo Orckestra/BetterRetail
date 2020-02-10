@@ -2,20 +2,17 @@
 
 @model Orckestra.Composer.ContentSearch.ViewModels.SearchResultsEntryViewModel
 
-<div class="thumbnail thumbnail-item">
+<div class="card h-100">
     @if (Model.ImageUrl != null)
     {
-        <div class="thumbnail-item-media">
-            <img class="img-fluid" src="@Model.ImageUrl?h=200" alt="@Model.Title" />
-        </div>
+        <img class="card-img-top" src="@Model.ImageUrl?h=200" alt="@Model.Title" />
     }
 
-    <div class="caption">
-        <a class="h4" href="@Model.DetailsUrl">@Html.Raw(@Model.Title)</a>
+    <div class="card-body">
+        <a class="card-title" href="@Model.DetailsUrl">@Html.Raw(@Model.Title)</a>
         @if (Model.Description != null)
         {
-            <p>@Model.Description</p>
+            <p class="card-text">@Model.Description</p>
         }
     </div>
-
 </div>

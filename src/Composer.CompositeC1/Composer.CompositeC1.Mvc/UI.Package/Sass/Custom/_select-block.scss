@@ -5,20 +5,20 @@
 .select-block {
     position: relative;
     display: block;
-    border: solid 1px $input-border;
-    border-radius: $border-radius-base;
+    border: solid 1px $input-border-color;
+    border-radius: $border-radius;
     cursor: pointer;
     font-weight: inherit;
     transition: border-color .15s ease-out, background .15s ease-out;
 
     .input-addon {
-        background: $gray-lighter;
+        background: gray("200");
         position: absolute;
         top: -1px; bottom: -1px;
         left: -1px;
         width: 41px;
-        border: solid 1px $input-border;
-        border-radius: $border-radius-base;
+        border: solid 1px $input-border-color;
+        border-radius: $border-radius;
         transition: border-color .15s ease-out, background .15s ease-out;
 
     }
@@ -33,9 +33,9 @@
     .content {
         display: block;
         padding-left: 41px + $grid-gutter-width;
-        padding-right: $padding-base-horizontal;
-        padding-top: $padding-base-vertical;
-        padding-bottom: $padding-base-vertical;
+        padding-right: 12px;
+        padding-top: map_get($spacers, 2);
+        padding-bottom: map_get($spacers, 2);
         transition: border-color .15s ease-out;
     }
     .block {
@@ -44,32 +44,32 @@
 }
 
 .select-block.active {
-    border-color: $brand-info;
+    border-color: theme-color("info");
 
     .input-addon {
-        background-color: $brand-info;
-        border-color: $brand-info;
+        background-color: theme-color("info");
+        border-color: theme-color("info");
     }
     .content {
-        color: $brand-info;
+        color: theme-color("info");
     }
 }
 
 .select-block.parsley-error,
 .parsley-error .select-block {
-    border-color: $brand-danger;
+    border-color: theme-color("danger");
 
     .input-addon {
-        background-color: $brand-danger;
-        border-color: $brand-danger;
+        background-color: theme-color("danger");
+        border-color: theme-color("danger");
     }
     .content {
-        color: $brand-danger;
+        color: theme-color("danger");
     }
 }
 
 .select-block.disabled {
-    color: $gray;
-    background-color: $gray-lighter;
-    cursor: $cursor-disabled;
+    color: $gray-800;
+    background-color: gray("200");
+    cursor: default;
 }

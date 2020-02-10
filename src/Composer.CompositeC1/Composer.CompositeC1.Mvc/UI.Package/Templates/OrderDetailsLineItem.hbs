@@ -10,14 +10,14 @@
     {{/if}}
 
     <div class="row display-table">
-        <div class="display-table-cell col-xs-4 col-sm-2 text-center">
+        <div class="display-table-cell col-4 col-md-2 text-center">
             <a href="{{ProductUrl}}">
                 <img src="{{ImageUrl}}" class="img-fluid" alt="Thumbnail" onerror="this.onerror=null; this.src='{{FallbackImageUrl}}'" />
             </a>
         </div>
-        <div class="display-table-cell col-xs-8 col-sm-10">
+        <div class="display-table-cell col-8 col-md-10">
             <div class="display-table  xs-full">
-                <div class="display-table-cell col-sm-4 small">
+                <div class="display-table-cell col-md-4 small">
                     <p></p>
                     <div data-qa="cart-product-brand">{{ProductSummary.Brand}}</div>
                     <p>
@@ -30,10 +30,10 @@
                         {{/each}}
                         {{/if}}
                     </p>
-                    <!-- <p class="hidden-xs"><a href="#" class="btn btn-primary">Buy it again</a></p> -->
+                    <!-- <p class="d-none d-sm-block"><a href="#" class="btn btn-primary">Buy it again</a></p> -->
                 </div>
 
-                <div class="display-table-cell col-sm-2 text-sm-right  hidden-xs">
+                <div class="display-table-cell col-md-2 text-md-right  d-none d-sm-block">
                     <div class="text-align-button  small">
                         {{#if IsOnSale}}
                             <del data-qa="cart-product-price">{{DefaultListPrice}}</del><br />
@@ -44,19 +44,19 @@
                     </div>
                 </div>
 
-                <div class="display-table-cell col-sm-2 text-sm-center  small">
+                <div class="display-table-cell col-md-2 text-md-center  small">
                     <div class="row">
-                        <div class="col-sm-6 hidden-xs"><span class="text-muted">X</span></div>
-                        <div class="col-sm-6">
+                        <div class="col-md-6 d-none d-sm-block"><span class="text-muted">X</span></div>
+                        <div class="col-md-6">
                             <strong>
-                                <span class="visible-xs-inline">{{localize 'CheckoutProcess' 'L_QuantityMobile'}}</span>
+                                <span class="d-inline d-sm-none">{{localize 'CheckoutProcess' 'L_QuantityMobile'}}</span>
                                 <span data-qa="checkout-product-quantity">{{Quantity}}</span>
                             </strong>
                         </div>
                     </div>
                 </div>
 
-                <div class="display-table-cell col-sm-4 text-sm-right">
+                <div class="display-table-cell col-md-4 text-md-right">
                     <div class="text-align-button">
                         {{#if IsPriceDiscounted}}
                             <del data-qa="cart-product-subtotal-price">{{TotalWithoutDiscount}}</del><br />
@@ -75,7 +75,7 @@
             </div>
         </div>
         <!-- 
-        <div class="col-xs-12 visible-xs push-top">
+        <div class="col-12 d-block d-sm-none push-top">
             <a href="#" class="btn btn-primary btn-block">Buy it again</a>
         </div>
         -->

@@ -1,6 +1,6 @@
-<div data-templateid="StoresList">
+<div data-templateid="StoresList" class="row">
 {{#each Stores}}
-    <div class="col-xs-12  col-sm-6  col-md-4  stores-list-item" data-store-number="{{Number}}">
+    <div class="col-12  col-md-6  col-lg-4  stores-list-item" data-store-number="{{Number}}">
         {{> StoreTile}}
     </div>
 {{/each}}
@@ -13,7 +13,7 @@
            data-oc-click="nextPage"
            class="btn  btn-primary  btn-lg"> 
            {{localize 'Store' 'B_ShowMore'}}
-            <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  hidden"></span>
+            <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  d-none"></span>
         </a>
    </div>
 {{/with}}

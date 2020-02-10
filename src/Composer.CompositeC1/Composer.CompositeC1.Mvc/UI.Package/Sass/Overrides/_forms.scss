@@ -1,5 +1,5 @@
 
-@media (max-width: $screen-xs-min) {
+@include media-breakpoint-down(sm) {
     .form-control {
         font-size: 16px; // to prevent zoom on mobile
     }

@@ -6,7 +6,7 @@
     margin-left:  -($grid-gutter-width/2) !important;
 
     .panel & {
-        margin-right: -($panel-body-padding) !important;
-        margin-left:  -($panel-body-padding) !important;
+        margin-right: -($card-spacer-x) !important;
+        margin-left:  -($card-spacer-x) !important;
     }
 } 

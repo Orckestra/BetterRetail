@@ -17,29 +17,27 @@
 <body>
     @if (Model.IsMultiLanguage)
     {
-        <ul class="nav navbar-nav  pull-xs-left  pull-sm-left">
-            <li class="dropdown" data-oc-controller="General.LanguageSwitch" role="region" aria-label="Language selector">
+        <ul class="navbar-nav  float-md-left">
+            <li class="nav-item dropdown" data-oc-controller="General.LanguageSwitch" role="region" aria-label="Language selector">
                 <a href="@Model.CurrentLanguage.Url"
                    data-qa="language-selector"
-                   class="text-uppercase" data-toggle="dropdown">@Model.CurrentLanguage.ShortDisplayName
+                   class="nav-link dropdown-toggle text-uppercase" data-toggle="dropdown">@Model.CurrentLanguage.ShortDisplayName
                         <span class="sr-only">@Model.CurrentLanguage.DisplayName</span>
                 </a>
-                <ul class="dropdown-menu">
-                    @{
-                        var index = 0;
+                <div class="dropdown-menu">
+                    @{ var index = 0;
                         foreach (var item in Model.Entries)
                         {
-                            <li class="@(item.IsCurrent ? "active" : null)">
-                                <a data-oc-click="onLanguageSwitch"
-                                   href="@item.Url"
-                                   data-qa="language-value-@index"
-                                   aria-selected="@(item.IsCurrent ? "true" : null)">@item.DisplayName</a>
-                            </li>
+                            <a class="dropdown-item @(item.IsCurrent ? "active" : null)"
+                               data-oc-click="onLanguageSwitch"
+                               href="@item.Url"
+                               data-qa="language-value-@index"
+                               aria-selected="@(item.IsCurrent ? "true" : null)">@item.DisplayName</a>
+
                             index++;
                         }
                     }
-
-                </ul>
+                </div>
             </li>
         </ul>
     }

@@ -29,9 +29,9 @@
                     </p>
                 </div>
 
-                <div class="cart-cell  cart-delete  text-xs-right  text-md-center"></div>
+                <div class="cart-cell  cart-delete  text-sm-right  text-lg-center"></div>
 
-                <div class="cart-cell  cart-price  text-sm-right  hidden-xs">
+                <div class="cart-cell  cart-price  text-md-right  d-none d-sm-table-cell">
                     <div class="text-align-button  small">
                         {{#if IsOnSale}}
                             <del data-qa="cart-product-price">{{DefaultListPrice}}</del><br />
@@ -42,14 +42,14 @@
                     </div>
                 </div>
 
-                <div class="cart-cell  cart-qty  text-sm-center  small">
+                <div class="cart-cell  cart-qty  text-md-center  small">
                     <strong>
-                        <span class="visible-xs-inline">{{localize 'CheckoutProcess' 'L_QuantityMobile'}}</span>
+                        <span class="d-inline d-sm-none">{{localize 'CheckoutProcess' 'L_QuantityMobile'}}</span>
                         <span data-qa="checkout-product-quantity">{{Quantity}}</span>
                     </strong>
                 </div>
 
-                <div class="cart-cell  cart-subtotal  text-sm-right">
+                <div class="cart-cell  cart-subtotal  text-md-right">
                     <div class="text-align-button  small">
                         {{#if IsPriceDiscounted}}
                             <del data-qa="cart-product-subtotal-price">{{TotalWithoutDiscount}}</del><br />

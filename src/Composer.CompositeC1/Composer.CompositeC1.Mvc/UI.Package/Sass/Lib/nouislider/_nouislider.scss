@@ -83,7 +83,7 @@
     box-shadow: inset 0 1px 1px #f0f0f0;
 }
 .noUi-connect {
-    background: $brand-primary;
+    background: theme-color("primary");
     box-shadow: inset 0 0 3px rgba(51,51,51,0.45);
     transition: background 450ms;
 }
@@ -91,8 +91,8 @@
     border-radius: 2px;
 }
 .noUi-target {
-    border-radius: $border-radius-small;
-    border: 1px solid $gray-lighter;
+    border-radius: $border-radius-sm;
+    border: 1px solid $gray-200;
     box-shadow: inset 0 1px 1px #F0F0F0, 0 3px 6px -5px #BBB;
 }
 .noUi-target.noUi-connect {
@@ -113,10 +113,10 @@
     @extend .fa-2x;
     text-align: center;
     cursor: default;
-    color: $gray-base;
+    color: $black;
 }
 .noUi-active {
-    color: lighten($gray-base, 10%);
+    color: lighten($black, 10%);
 }
 
 /* Disabled state;

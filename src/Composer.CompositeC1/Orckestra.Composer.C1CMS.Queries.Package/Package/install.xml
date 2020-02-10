@@ -14,7 +14,6 @@
 				<File sourceFilename="~\App_Data\Components\Merchandising Queries\Top.xml" targetFilename="~\App_Data\Components\Merchandising Queries\Top.xml" allowOverwrite="true" />
 				<File sourceFilename="~\App_Data\Razor\Composer\Components\Queries\Merchandising\Generic\Top.cshtml" targetFilename="~\App_Data\Razor\Composer\Components\Queries\Merchandising\Generic\Top.cshtml" allowOverwrite="true" />
 				<File sourceFilename="~\App_Data\Razor\Composer\Components\Queries\ProductSet\Generic\Top.cshtml" targetFilename="~\App_Data\Razor\Composer\Components\Queries\ProductSet\Generic\Top.cshtml" allowOverwrite="true" />
-				<File sourceFilename="~\App_Data\Razor\Composer\DatePicker\DatePicker.Includes.cshtml" targetFilename="~\App_Data\Razor\Composer\DatePicker\DatePicker.Includes.cshtml" allowOverwrite="true" />
 				<File sourceFilename="~\App_Data\Razor\Composer\Queries\Merchandising\Grid.cshtml" targetFilename="~\App_Data\Razor\Composer\Queries\Merchandising\Grid.cshtml" allowOverwrite="true" />
 				<File sourceFilename="~\App_Data\Razor\Composer\Queries\ProductSet\Grid.cshtml" targetFilename="~\App_Data\Razor\Composer\Queries\ProductSet\Grid.cshtml" allowOverwrite="true" />
 				<File sourceFilename="~\App_Data\Components\Product Sets\Grid.xml" targetFilename="~\App_Data\Components\Product Sets\Grid.xml" allowOverwrite="true" />

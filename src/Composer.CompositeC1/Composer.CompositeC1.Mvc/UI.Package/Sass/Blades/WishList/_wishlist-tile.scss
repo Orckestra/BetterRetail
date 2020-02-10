@@ -4,8 +4,8 @@
     top: $top;
     right: 0;
     width: 10%;
-    height: $line-height-computed;
-    @include gradient-horizontal(rgba(255,255,255,0), $body-bg, 0%, 100%);
+    height: $spacer;
+    background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, #fff 100%);
     pointer-events: none;
 }
 
@@ -33,11 +33,11 @@
  }
  
  .wishlist-tile-price {
-     height: ceil($font-size-h4 * $line-height-base);
+    height: ceil($h4-font-size * $line-height-base);
  }
      
  .wishlist-tile-special-price {
-     height: ceil($line-height-computed);
+     height: ceil($spacer);
   }
 
   .wishlist-tile-add-to-cart {
@@ -45,7 +45,7 @@
       .btn {
         margin-top: 10px;
 
-        @media(max-width: $screen-xs-max) {
+        @include media-breakpoint-down(sm) {
             display: block;
             width: 100%;
         }
@@ -64,7 +64,7 @@
  .wishlist-tile-text {
     $lines-of-text: 3;
      // 3 lines of text + half a line of spacing
-     height: floor($line-height-computed) * $lines-of-text + floor($line-height-computed / 2) - 1;
+     height: ($line-height-base * $font-size-base) * 3.5;
      padding-top: 3px;
      position: relative;
      overflow: hidden;
@@ -75,14 +75,14 @@
      }
 
      &:after {
-         @include tile-gradient-right($line-height-computed * ($lines-of-text - 1));
+        @include tile-gradient-right(($line-height-base * $font-size-base) * ($lines-of-text - 1));
       }
 
-      @media (min-width: $screen-sm) {
-          border-top: solid 1px lighten($gray-light, 7%);
+      @include media-breakpoint-up(md) {
+          border-top: solid 1px lighten(gray("400"), 7%);
       }
 
-     @media (max-width: $screen-sm) {
+      @include media-breakpoint-down(md) {
          height: auto;
      }
   }

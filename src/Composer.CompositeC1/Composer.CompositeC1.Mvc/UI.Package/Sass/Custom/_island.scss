@@ -7,7 +7,7 @@
 %island-lg {
     padding-bottom: $grid-gutter-width;
 
-    @media (min-width: $screen-md-min) {
+    @include media-breakpoint-up(lg) {
         padding-bottom: $grid-gutter-width * 2;
     }
 }
@@ -16,7 +16,7 @@
 %island-xl {
     padding-bottom: $grid-gutter-width * 2;
 
-    @media (min-width: $screen-md-min) {
+    @include media-breakpoint-up(lg) {
         padding-bottom: $grid-gutter-width * 3;
     }
 }

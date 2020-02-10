@@ -6,7 +6,7 @@
     }
  }
 
-  @media (min-width: $screen-md-min) {
+  @include media-breakpoint-up(lg) {
     .store-details {
       
         .map { 
@@ -44,7 +44,7 @@
    
     &.is-today {
         font-weight: bold;
-        color: $text-color;
+        color: $body-color;
         margin: 0 -15px;
     }
     

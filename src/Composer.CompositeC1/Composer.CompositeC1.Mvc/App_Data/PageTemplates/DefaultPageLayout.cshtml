@@ -36,12 +36,12 @@
 			</html>
 		  </f:param>
 		</f:function>
-	    <div class="container">
+	    <div class="container-md">
 	        @Markup(Breadcrumb)
 	    </div>
 	<f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.Header.GeneralErrors"/>
 		@this.Function("Composer.Layout.Helpers.InjectContainerElements",
-                new { Document = Body, InjectedContainerClassName = "container", DontApplyClassNameList = "container-fluid,c1-wide" })
+                new { Document = Body, InjectedContainerClassName = "container-md", DontApplyClassNameList = "container-fluid,c1-wide" })
 	<f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.Footer"/>
     </body>
 </html>

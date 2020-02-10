@@ -1,19 +1,19 @@
 
 .form-control.parsley-error {
-    border-color: $brand-danger;
+    border-color: theme-color("danger");
     @include box-shadow(inset 0 1px 1px rgba(0,0,0,.075));
     &:focus {
-        border-color: darken($brand-danger, 10%);
-        $shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 6px lighten($brand-danger, 20%);
+        border-color: darken(theme-color("danger"), 10%);
+        $shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 6px lighten(theme-color("danger"), 20%);
         @include box-shadow($shadow);
     }
 }
 .parsley-success {
-    border-color: $brand-info;
+    border-color: theme-color("info");
 }
 
 .parsley-errors-list {
-    color: $brand-danger;
+    color: theme-color("danger");
     padding: 0;
     list-style-type: none;
 }
@@ -27,5 +27,5 @@
 }
 
 .error-item {
-    color: $brand-danger;
+    color: theme-color("danger");
 }

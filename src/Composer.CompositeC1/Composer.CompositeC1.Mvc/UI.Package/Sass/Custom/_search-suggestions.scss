@@ -1,39 +1,40 @@
 .twitter-typeahead {
   display: block !important;
+  width: 100%;
 }
 
 .tt-menu {
   //display: block !important; //uncomment to help debuggin or styling
 
   background-color: #FFFFFF;
-  border: 1px solid $gray;
+  border: 1px solid $gray-800;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
   left: auto !important;
   top: 52px !important;
   width: 100%;
 
-  @media (max-width: $screen-xs-max) {
+   @include media-breakpoint-down(sm) {
     left: 0 !important;
   }
 
-  @media (min-width: $screen-sm-min) {
+  @include media-breakpoint-up(md) {
     right: 0;
     width: 720px;
   }
-  @media (min-width: $screen-md-min) {
+  @include media-breakpoint-up(lg) {
     width: 940px;
   }
 
   &.right-empty {
-    @media (max-width: $screen-xs-max) {
+     @include media-breakpoint-down(sm) {
       display: none !important;
     }
 
-    @media (min-width: $screen-sm-min) {
+    @include media-breakpoint-up(md) {
       right: -10px;
       width: 500px;
     }
-    @media (min-width: $screen-md-min) {
+    @include media-breakpoint-up(lg) {
       width: 640px;
     }
   }
@@ -52,13 +53,14 @@
     pointer-events: none;
     right: 90%;
 
-    @media (min-width: $screen-sm-min) {
+    @include media-breakpoint-up(md) {
       right: 95px;
     }
-    @media (min-width: $screen-md-min) {
+    @include media-breakpoint-up(lg) {
       right: 160px;
     }
-    @media (min-width: $screen-lg-min) {
+
+    @include media-breakpoint-up(xl) {
       right: 170px;
     }
   }
@@ -73,7 +75,7 @@
 
   &:before {
     border-color: rgba(161, 172, 181, 0);
-    border-bottom-color: $gray;
+    border-bottom-color: $gray-800;
     border-width: 13px;
     margin-left: -13px;
   }
@@ -85,15 +87,15 @@
   vertical-align: top;
   width: 30%;
 
-  @media (max-width: $screen-xs-max) {
+   @include media-breakpoint-down(sm) {
     width: 100%;
   }
 
-  @media (min-width: $screen-md-min) {
+  @include media-breakpoint-up(lg) {
     width: 40%;
   }
 
-  .panel {
+  .card {
     margin-bottom: 0;
   }
 
@@ -112,7 +114,7 @@
     position: absolute;
     top: 0;
 
-    @media (min-width: $screen-sm-min) {
+    @include media-breakpoint-up(md) {
       border-left: 1px solid gray;
     }
   }
@@ -123,7 +125,7 @@
   vertical-align: top;
   width: 70%;
 
-  @media (min-width: $screen-md-min) {
+  @include media-breakpoint-up(lg) {
     width: 60%;
   }
 
@@ -133,7 +135,7 @@
     width: 100%;
   }
 
-  @media (max-width: $screen-xs-max) {
+   @include media-breakpoint-down(sm) {
     display: none;
   }
 }
@@ -146,12 +148,12 @@
   box-shadow: none;
   margin: 0;
 
-  .panel-heading {
+  .card-header {
     font-weight: 600;
   }
 
-  .panel-body {
-    padding: $spacing-base $spacing-large 0;
+  .card-body {
+    //padding: $spacing-base $spacing-large 0;
   }
 
   .product-tile {

@@ -21,7 +21,7 @@
         padding: 20px 30px;
 
         ul p {
-            border-bottom: 1px solid $gray-light;
+            border-bottom: 1px solid gray("400");
             padding-bottom: $grid-gutter-width/2;
         }
     }
@@ -31,9 +31,6 @@
         left: 0;
         right: 0;
     }
-    .dropdown > a {
-        
-    }
 
     &-toggle {
         border: none;
@@ -42,27 +39,25 @@
         padding: 4px 10px;
     }
 
+
+    .nav-link  {
+        position: relative;
+
+        &::after {
+            content: unset;
+        }
+    }
+
     // Mobile version
-    @media (max-width: $screen-xs-max) {
-        margin: -$grid-gutter-width 0 0;
-        
+    @include media-breakpoint-down(sm) {
+
         //the mobile menu will follow the sticky navbar
-        position: fixed;
-        top: 62px; //computed height of the navbar 
+        position: absolute;
+        top: 42px; //computed height of the navbar
         z-index: 100;
         left: 0;
         width: 100%;
-        
-        //main nav over the content and not pushing the content
-        .main-nav-menu {
-            position: absolute;
-            width: 100%;
-            background: #fff;
-            z-index: 100;
-            margin: 0;
-            padding-left: 0;
-            padding-right: 0;
-        }
+        background: #fff;
 
 
         ul,
@@ -88,13 +83,13 @@
 
             li {
                 a, span {
-                    background-color: $gray-lighter;
+                    background-color: gray("200");
                     display: block;
                     padding: $grid-gutter-width/4 $grid-gutter-width*2;
                 }
                 a:hover,
                 a:focus {
-                    background-color: $gray-light;
+                    background-color: gray("400");
                     border-color: $link-color;
                 }
 
@@ -106,7 +101,7 @@
         }
 
         .dropdown > a {
-            border-bottom: 1px solid $gray-lighter;
+            border-bottom: 1px solid gray("200");
             padding-right: $grid-gutter-width*3;
         }
 
@@ -124,7 +119,7 @@
             display: none;
         }
 
-        .open {
+         .dropdown.show {
             .fa-chevron-down {
                 display: none;
             }
@@ -140,41 +135,35 @@
     }
 
     // Tablet & desktop
-    @media (min-width: $screen-sm-min) {
+    @include media-breakpoint-up(md) {
         position: absolute;
-        bottom: -22px;
+        bottom: 0;
         width: 100%;
 
         .dropdown > a:hover,
         .dropdown > a:focus,
         .open > a {
-            background-color: darken($masthead-bg, 15%);
 
             &::after {
                 background-color: $link-color;
                 bottom: 0;
                 content: '';
                 height: 4px;
-                left: 0;
+                right: 0;
                 position: absolute;
                 width: 100%;
             }
         }
-
-        .fa {
-            display: none;
+        .dropdown:hover .dropdown-menu {
+            display: block;
         }
     }
 
     // Desktop
-    @media (min-width: $screen-md-min) {
-        position: absolute;
-        bottom: -22px;
+    @include media-breakpoint-up(lg) {
 
         // expand dropdown on hover
-        .dropdown:hover .dropdown-menu {
-        display: block;
-        }
+
     }
 }
 
@@ -182,11 +171,13 @@
     position:relative;
 
     &-with-mega-menu {
-        @media (min-width: $screen-sm-min) {
-            padding-bottom: 57px;
+
+        @include media-breakpoint-up(sm) {
+            padding-bottom: 50px;
         }
-        @media (min-width: $screen-md-min) {
-            padding-bottom: 61px;
+
+        @include media-breakpoint-down(sm) {
+            padding-bottom: 0;
         }
     }
 }
@@ -221,7 +212,7 @@ ul.main-nav-sticky {
             }
         }
     }
-    @media (min-width: $screen-sm-min) {
+    @include media-breakpoint-up(md) {
         .affix & {
             display: block;
             float: left;

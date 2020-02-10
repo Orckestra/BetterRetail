@@ -7,7 +7,7 @@
 
     string SelectedVariantClass(params string[] ids)
     {
-        return ids.Contains(Model.SelectedVariantId) ? "" : "hidden";
+        return ids.Contains(Model.SelectedVariantId) ? "" : "d-none";
     }
 
 }
@@ -28,9 +28,33 @@
 </head>
 <body>
     <div class="row">
+        <!-- Thumbnails -->
+        <div class="col-lg-2 order-2 order-md-1" >
+            @if (Model.Variants == null || Model.Variants.Count == 0)
+            {
+                <div class="row" data-oc-click="selectImage">
+                    @foreach (var image in Model.Images)
+                    {
+                        @RenderThumbnailImg(image, false)
+                    }
+                </div>
+            }
+            else
+            {
+                foreach (var variant in Model.Variants)
+                {
+                    <div data-variant="@variant.Id" class="row @SelectedVariantClass(variant.Id) js-thumbnails" data-oc-click="selectImage">
+                        @foreach (var image in variant.Images)
+                        {
+                            @RenderThumbnailImg(image, variant.Id != Model.SelectedVariantId)
+                        }
+                    </div>
+                }
+            }
 
+        </div>
         <!-- Main image -->
-        <div class="col-md-10  col-md-push-2">
+        <div class="col-lg-10 order-1 order-md-2">
             @if (Model.SelectedImage != null)
             {
                 <div class="product-details-media">
@@ -61,7 +85,7 @@
 
                     @if (Model.IsProductZoomEnabled)
                     {
-                        <a href="" class="product-details-zoom-trigger js-zoom hidden-xs">
+                        <a href="" class="product-details-zoom-trigger js-zoom d-none d-md-block">
                             <i class="fa fa-search"></i>
                         </a>
                     }
@@ -70,45 +94,22 @@
             }
         </div>
 
-        <!-- Thumbnails -->
-        <div class="col-md-2  col-md-pull-10">
-            @if (Model.Variants == null || Model.Variants.Count == 0)
-            {
-                <div class="row" data-oc-click="selectImage">
-                    @foreach (var image in Model.Images)
-                    {
-                        @RenderThumbnailImg(image, false)
-                    }
-                </div>
-            }
-            else
-            {
-                foreach (var variant in Model.Variants)
-                {
-                    <div data-variant="@variant.Id" class="row @SelectedVariantClass(variant.Id) js-thumbnails" data-oc-click="selectImage">
-                        @foreach (var image in variant.Images)
-                        {
-                            @RenderThumbnailImg(image, variant.Id != Model.SelectedVariantId)
-                        }
-                    </div>
-                }
-            }
 
-        </div>
     </div>
 </body>
 </html>
 
 @helper RenderThumbnailImg(ProductDetailImageViewModel image, bool isHidden)
 {
-    <div class="col-xs-3  col-md-12"
+    <div class="col-3  col-lg-12"
          style="display: none;">
         <a href="#" class="thumbnail @(image.Selected ? "active": "")" style="display: none;">
             <img @if (isHidden) { <text> data-src="@image.ThumbnailUrl" </text>  } else { <text> src="@image.ThumbnailUrl" </text> }
                  data-main-src="@image.ImageUrl"
                  data-zoom-src="@image.ProductZoomImageUrl"
                  alt="@image.Alt"
-                 onload="imgLoaded(this)" />
+                 onload="imgLoaded(this)"
+                 class="img-fluid" />
 
         </a>
     </div>

@@ -1,28 +1,26 @@
 <!--TODO: Localize-->
 {{#if_neq InvalidLineItemCount 0}}
-<div class="panel panel-default">
-    <div class="panel-heading">
+<div class="card">
+    <div class="card-header"> 
         <div class="row">
-            <div class="col-xs-10">
-                <h2 class="h3" data-qa="checkout-header-cart-details">{{localize 'ShoppingCart' 'T_UnavailableItems'}}</h2>
+            <div class="col-10">
+                <h5 data-qa="checkout-header-cart-details">{{localize 'ShoppingCart' 'T_UnavailableItems'}}</h5>
             </div>
-            <div class="col-xs-2">
-                <a href="{{OrderSummary.CheckoutStepUrls.[0]}}" class="pull-right" title="{{localize 'CheckoutProcess' 'B_Edit'}}"><span class="fa  fa-pencil  fa-lg"></span></a>
+            <div class="col-2">
+                <a href="{{OrderSummary.CheckoutStepUrls.[0]}}" class="float-right" title="{{localize 'CheckoutProcess' 'B_Edit'}}"><span class="fa  fa-pencil  fa-lg"></span></a>
             </div>
         </div>
     </div>
-    <div class="panel-body">
+    <div class="card-body">
         {{#if GettingCart}}
             {{>Loading}}
         {{else}}
                 {{#if_neq InvalidLineItemCount 0}}
-                    <div class="panel  panel-danger">
-                        <div class="panel-body">
+                    <div class="alert alert-danger">
                             <div class="multiline-message  text-danger">
                                 <span class="fa  fa-exclamation-triangle  multiline-message-icon"></span>
                                 <span>{{InvalidLineItemCount}} {{localize 'ShoppingCart' 'L_NoMoreAvailable'}}</span>
                             </div>
-                        </div>
                     </div>
                 {{/if_neq}}
 
@@ -37,18 +35,18 @@
 {{/if_neq}}
 
 {{#if_neq InvalidLineItemCount LineItemCount}}
-<div class="panel panel-default">
-    <div class="panel-heading">
+<div class="card">
+    <div class="card-header">
         <div class="row">
-            <div class="col-xs-10">
-                <h2 class="h3" data-qa="checkout-header-cart-details">{{localize 'MyAccount' 'T_CartDetails'}}</h2>
+            <div class="col-10">
+                <h5 data-qa="checkout-header-cart-details">{{localize 'MyAccount' 'T_CartDetails'}}</h5>
             </div>
-            <div class="col-xs-2">
-                <a href="{{OrderSummary.CheckoutStepUrls.[0]}}" class="pull-right" title="{{localize 'CheckoutProcess' 'B_Edit'}}"><span class="fa  fa-pencil  fa-lg"></span></a>
+            <div class="col-2">
+                <a href="{{OrderSummary.CheckoutStepUrls.[0]}}" class="float-right" title="{{localize 'CheckoutProcess' 'B_Edit'}}"><span class="fa  fa-pencil  fa-lg"></span></a>
             </div>
         </div>
     </div>
-    <div class="panel-body">
+    <div class="card-body">
         {{#if GettingCart}}
             {{>Loading}}
         {{else}}

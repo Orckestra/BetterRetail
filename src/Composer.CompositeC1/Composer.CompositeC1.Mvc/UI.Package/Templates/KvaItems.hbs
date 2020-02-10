@@ -1,9 +1,9 @@
 <div data-templateid="KvaItems">
     {{#each KeyVariantAttributeItems}}
         {{#if Values}}
-            <div class="island  btn-multiline" data-qa="product-variants" data-propertyname="{{PropertyName}}" data-propertydatatype="{{PropertyDataType}}">
+            <div class="mb-4  btn-multiline" data-qa="product-variants" data-propertyname="{{PropertyName}}" data-propertydatatype="{{PropertyDataType}}">
 
-            <h2 class="h6">{{DisplayName}}</h2>
+            <h5>{{DisplayName}}</h5>
 
             {{#each Values}}
                 {{#if Disabled}}
@@ -41,7 +41,7 @@
                           {{/if}}
                         </button>
                     {{else}}
-                        <button class="btn  btn-default  btn-sm"
+                        <button class="btn   btn-outline-secondary  btn-sm"
                                 data-oc-click="selectKva"
                                 value="{{Value}}">
                           {{#if ImageUrl}}

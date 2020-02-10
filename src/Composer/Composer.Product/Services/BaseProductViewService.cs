@@ -12,75 +12,64 @@ using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Dam;
 using Orckestra.Composer.Providers.Localization;
 using Orckestra.Composer.Repositories;
-using Orckestra.Composer.Search.Helpers;
-using Orckestra.Composer.Search.Repositories;
 using Orckestra.Composer.Utils;
 using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel.Products;
 
 namespace Orckestra.Composer.Product.Services
 {
-	public abstract class BaseProductViewService<TParam>
-	{
-	    protected readonly IProductRepository ProductRepository;
-	    protected readonly IRelationshipRepository RelationshipRepository;
-        protected readonly IInventoryLocationProvider InventoryLocationProvider;
-        private readonly IViewModelMapper _viewModelMapper;
-	    private readonly IDamProvider _damProvider;
-	    private readonly ILocalizationProvider _localizationProvider;
-	    private readonly IProductUrlProvider _productUrlProvider;
+    public abstract class BaseProductViewService<TParam>
+    {
+        protected IProductRepository ProductRepository { get; private set; }
+        protected IRelationshipRepository RelationshipRepository { get; private set; }
+        protected IInventoryLocationProvider InventoryLocationProvider { get; private set; }
+        protected IViewModelMapper ViewModelMapper { get; private set; }
+        protected IDamProvider DamProvider { get; private set; }
+        protected ILocalizationProvider LocalizationProvider { get; private set; }
+        protected IProductUrlProvider ProductUrlProvider { get; private set; }
         protected IRecurringOrdersSettings RecurringOrdersSettings { get; private set; }
 
         protected BaseProductViewService(
-            IProductRepository productRepository, 
-            IDamProvider damProvider, 
-            IProductUrlProvider productUrlProvider, 
-            IViewModelMapper viewModelMapper, 
+            IProductRepository productRepository,
+            IDamProvider damProvider,
+            IProductUrlProvider productUrlProvider,
+            IViewModelMapper viewModelMapper,
             ILocalizationProvider localizationProvider,
             IRelationshipRepository relationshipRepository,
             IInventoryLocationProvider inventoryLocationProvider,
             IRecurringOrdersSettings recurringOrdersSettings)
-	    {
-            if (productRepository == null) { throw new ArgumentNullException("productRepository"); }
-            if (damProvider == null) { throw new ArgumentNullException("damProvider"); }
-            if (productUrlProvider == null) { throw new ArgumentNullException("productUrlProvider"); }
-            if (viewModelMapper == null) { throw new ArgumentNullException("viewModelMapper"); }
-            if (localizationProvider == null) { throw new ArgumentNullException("localizationProvider"); }
-            if (relationshipRepository == null) { throw new ArgumentNullException("relationshipRepository"); }
-            if (inventoryLocationProvider == null) { throw new ArgumentNullException("inventoryLocationProvider"); }
-
-	        ProductRepository = productRepository;
-	        _viewModelMapper = viewModelMapper;
-	        _damProvider = damProvider;
-	        _localizationProvider = localizationProvider;
-	        _productUrlProvider = productUrlProvider;
-            RelationshipRepository = relationshipRepository;
-	        InventoryLocationProvider = inventoryLocationProvider;
-            RecurringOrdersSettings = recurringOrdersSettings;
-
+        {
+            ProductRepository = productRepository ?? throw new ArgumentNullException(nameof(productRepository));
+            ViewModelMapper = viewModelMapper ?? throw new ArgumentNullException(nameof(viewModelMapper));
+            DamProvider = damProvider ?? throw new ArgumentNullException(nameof(damProvider));
+            LocalizationProvider = localizationProvider ?? throw new ArgumentNullException(nameof(localizationProvider));
+            ProductUrlProvider = productUrlProvider ?? throw new ArgumentNullException(nameof(productUrlProvider));
+            RelationshipRepository = relationshipRepository ?? throw new ArgumentNullException(nameof(relationshipRepository));
+            InventoryLocationProvider = inventoryLocationProvider ?? throw new ArgumentNullException(nameof(inventoryLocationProvider));
+            RecurringOrdersSettings = recurringOrdersSettings ?? throw new ArgumentNullException(nameof(recurringOrdersSettings));
         }
 
         protected abstract Task<IEnumerable<ProductIdentifier>> GetProductIdentifiersAsync(TParam param);
 
-	    /// <summary>
-		/// A method to retrieve a list of Product and Variant Ids for products. This method can be used in collaboration with
-		/// <seealso cref="GetRelatedProductsAsync"/> to retrieve the full set of products.
-		/// </summary>
-		/// <param name="param"></param>
-		/// <returns>
-		/// This method returns a <see cref="RelatedProductsViewModel"/>, however none of its properties will be set.
-		/// The returned object is really just a container for the context to expose the produt identifiers to the
-		/// JsonContext on the front end.
-		/// </returns>
-		public async virtual Task<RelatedProductsViewModel> GetProductIdsAsync(TParam param)
-		{
-			// the identifiers will only be used by the front end 
-			var vm = new RelatedProductsViewModel();
+        /// <summary>
+        /// A method to retrieve a list of Product and Variant Ids for products. This method can be used in collaboration with
+        /// <seealso cref="GetRelatedProductsAsync"/> to retrieve the full set of products.
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns>
+        /// This method returns a <see cref="RelatedProductsViewModel"/>, however none of its properties will be set.
+        /// The returned object is really just a container for the context to expose the produt identifiers to the
+        /// JsonContext on the front end.
+        /// </returns>
+        public async virtual Task<RelatedProductsViewModel> GetProductIdsAsync(TParam param)
+        {
+            // the identifiers will only be used by the front end 
+            var vm = new RelatedProductsViewModel();
 
             vm.Context["ProductIdentifiers"] = await GetProductIdentifiersAsync(param).ConfigureAwait(false);
-			
+
             return vm;
-		}
+        }
 
         /// <summary>
         /// This method retrieves all the products for a product given in the <see cref="GetRelatedProductsParam"/>
@@ -129,12 +118,12 @@ namespace Orckestra.Composer.Product.Services
         protected virtual RelatedProductsViewModel CreateRelatedProductsViewModel(CreateRelatedProductViewModelParam param)
         {
             var relatedProductsViewModel = new RelatedProductsViewModel();
-            
+
             //iterate over the requested products
             foreach (var productVariant in param.ProductsWithVariant)
             {
                 // call the method that actually does the mapping for an individual product
-                var productVm =  CreateRelatedProductsViewModel(param.BaseUrl, param.CultureInfo, productVariant, param.Prices, param.Images);
+                var productVm = CreateRelatedProductsViewModel(param.BaseUrl, param.CultureInfo, productVariant, param.Prices, param.Images);
                 relatedProductsViewModel.Products.Add(productVm);
             }
 
@@ -158,7 +147,7 @@ namespace Orckestra.Composer.Product.Services
             }
 
             var productRequestTasks = new List<Task<ProductWithVariant>>();
-            
+
             foreach (var productIdentifier in param.ProductIds)
             {
                 // it's helpful to tie the VariantId to the product at this point
@@ -176,42 +165,48 @@ namespace Orckestra.Composer.Product.Services
 
         protected virtual async Task<List<ProductMainImage>> GetImagesAsync(IEnumerable<ProductWithVariant> products)
         {
-            var imageRequests =
-                products.Select(
-                    identifier => new ProductImageRequest
+            var imageRequests = products.Select(identifier => {
+                var imageRequest = new ProductImageRequest
+                {
+                    ProductId = identifier.Product.Id,
+                    Variant = identifier.Variant == null ? VariantKey.Empty : new VariantKey
                     {
-                        ProductId = identifier.Product.Id,
-                        Variant = identifier.Variant == null ? VariantKey.Empty : new VariantKey
-                        {
-                            Id = identifier.Variant.Id,
-                            KeyVariantAttributeValues = identifier.Variant.PropertyBag
-                        },
-                        PropertyBag = identifier.Variant != null ? identifier.Variant.PropertyBag : identifier.Product.PropertyBag,
-                        ProductDefinitionName = identifier.Product.DefinitionName
+                        Id = identifier.Variant.Id,
+                        KeyVariantAttributeValues = identifier.Variant.PropertyBag
+                    },
+                    ProductDefinitionName = identifier.Product.DefinitionName
+                };
 
-                    }).ToList();
+                var imageUrl = DamProvider.GetMediaImageUrl(identifier.Product, identifier.Variant?.Id);
+                if (imageUrl != null)
+                {
+                    imageRequest.PropertyBag = new Dictionary<string, object> { ["ImageUrl"] = imageUrl };
+                }
+                return imageRequest;
+            }).ToList();
+
             var imageRequestParam = new GetProductMainImagesParam
             {
                 ImageSize = ProductConfiguration.ProductSummaryImageSize,
                 ProductImageRequests = imageRequests
             };
 
-            var mainImages = await _damProvider.GetProductMainImagesAsync(imageRequestParam).ConfigureAwait(false);
-            
+            var mainImages = await DamProvider.GetProductMainImagesAsync(imageRequestParam).ConfigureAwait(false);
+
             return mainImages;
         }
 
         protected virtual RelatedProductViewModel CreateRelatedProductsViewModel(
-            Uri baseUrl, 
-            CultureInfo cultureInfo, 
-            ProductWithVariant productVariant, 
-            List<ProductPrice> prices, 
+            Uri baseUrl,
+            CultureInfo cultureInfo,
+            ProductWithVariant productVariant,
+            List<ProductPrice> prices,
             IEnumerable<ProductMainImage> images)
         {
             var productId = productVariant.Product.Id;
-            var variantId = productVariant.Variant != null ? productVariant.Variant.Id : null;           
+            var variantId = productVariant.Variant?.Id;
             var mainImage = images.FirstOrDefault(image => image.ProductId == productId && image.VariantId == variantId);
-            var vm = _viewModelMapper.MapTo<RelatedProductViewModel>(productVariant.Product, cultureInfo);
+            var vm = ViewModelMapper.MapTo<RelatedProductViewModel>(productVariant.Product, cultureInfo);
 
             if (mainImage != null)
             {
@@ -232,7 +227,7 @@ namespace Orckestra.Composer.Product.Services
 
             if (vm.Price != null)
             {
-                vm.DisplaySpecialPrice = _localizationProvider.FormatPrice((decimal)vm.Price, cultureInfo);
+                vm.DisplaySpecialPrice = LocalizationProvider.FormatPrice((decimal)vm.Price, cultureInfo);
             }
 
             var recurringOrdersEnabled = RecurringOrdersSettings.Enabled;
@@ -244,9 +239,9 @@ namespace Orckestra.Composer.Product.Services
             return vm;
         }
 
-	    protected virtual ProductQuantityViewModel GetQuantity()
-	    {
-	        ProductQuantityViewModel quantity = null;
+        protected virtual ProductQuantityViewModel GetQuantity()
+        {
+            ProductQuantityViewModel quantity = null;
 
             if (ProductConfiguration.IsQuantityDisplayed &&
                 ProductConfiguration.MinQuantity >= 1 &&
@@ -261,27 +256,27 @@ namespace Orckestra.Composer.Product.Services
             }
 
             return quantity;
-	    }
+        }
 
-	    protected virtual decimal? GetCurrentPrice(IEnumerable<ProductPrice> prices, Overture.ServiceModel.Products.Product product, Variant variant)
+        protected virtual decimal? GetCurrentPrice(IEnumerable<ProductPrice> prices, Overture.ServiceModel.Products.Product product, Variant variant)
         {
             // there may be multiple copies of the product if this is a variant, just take the first
             var price = prices.FirstOrDefault(p => p.ProductId == product.Id);
-            
+
             if (price == null) { return null; }
 
-	        if (variant == null) { return price.Pricing.Price; }
+            if (variant == null) { return price.Pricing.Price; }
 
-	        var variantPrice = price.VariantPrices.SingleOrDefault(vp => vp.VariantId == variant.Id);
+            var variantPrice = price.VariantPrices.SingleOrDefault(vp => vp.VariantId == variant.Id);
 
-	        return variantPrice == null ? null : (decimal?)variantPrice.Pricing.Price;
+            return variantPrice == null ? null : (decimal?)variantPrice.Pricing.Price;
         }
 
         protected virtual decimal? GetProductBasePrice(IEnumerable<ProductPrice> prices, Overture.ServiceModel.Products.Product product, Variant variant)
         {
             // there may be multiple copies of the product if this is a variant, just take the first
             var price = prices.FirstOrDefault(p => p.ProductId == product.Id);
-            
+
             if (price == null)
             {
                 return null;
@@ -306,17 +301,17 @@ namespace Orckestra.Composer.Product.Services
         /// <param name="cultureInfo"></param>
         /// <returns></returns>
         protected virtual async Task<ProductWithVariant> GetProductWithVariantAsync(
-            string productId, 
-            string variantId, 
+            string productId,
+            string variantId,
             string scope,
             CultureInfo cultureInfo)
         {
             var baseProduct = await ProductRepository.GetProductAsync(new GetProductParam
-                {
-                    CultureInfo = cultureInfo,
-                    ProductId = productId,
-                    Scope = scope
-                }).ConfigureAwait(false);
+            {
+                CultureInfo = cultureInfo,
+                ProductId = productId,
+                Scope = scope
+            }).ConfigureAwait(false);
 
             Variant baseVariant = null;
 
@@ -331,22 +326,22 @@ namespace Orckestra.Composer.Product.Services
             }
 
             var productWithVariant = new ProductWithVariant { Product = baseProduct, Variant = baseVariant };
-            
+
             return productWithVariant;
         }
 
         protected virtual string GetProductUrl(Uri baseUrl, CultureInfo cultureInfo, string productId, string variantId, string productName, string sku)
         {
             var param = new GetProductUrlParam
-            {               
-                CultureInfo = cultureInfo, 
-                ProductId = productId, 
-                VariantId = variantId, 
+            {
+                CultureInfo = cultureInfo,
+                ProductId = productId,
+                VariantId = variantId,
                 ProductName = productName,
                 SKU = sku
             };
-            
-            return _productUrlProvider.GetProductUrl(param);
+
+            return ProductUrlProvider.GetProductUrl(param);
         }
-	}
+    }
 }

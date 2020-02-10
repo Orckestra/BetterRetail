@@ -68,8 +68,6 @@ namespace Orckestra.Composer.CompositeC1.Mvc
             functions.RegisterAction<HeaderController>("Breadcrumb", "Composer.General.Breadcrumb");
             functions.RegisterAction<HeaderController>("PageHeader", "Composer.Header.PageHeader");
 
-            functions.RegisterAction<FooterController>("SocialLinks", "Composer.Footer.SocialLinks");
-
             functions.RegisterAction<SearchController>("PageHeader", "Composer.Search.PageHeader");
             functions.RegisterAction<SearchController>("Index", "Composer.Search.Index");
             functions.RegisterAction<SearchController>("SearchFacets", "Composer.Search.Facets");

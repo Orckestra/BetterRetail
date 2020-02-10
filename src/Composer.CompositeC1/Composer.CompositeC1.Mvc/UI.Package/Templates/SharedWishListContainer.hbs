@@ -1,12 +1,12 @@
 <div class="wishlist-shared" data-oc-controller="MyAccount.SharedWishList">
-    <div class="panel  panel-default">
+    <div class="card">
     
-    <div class="panel-heading  clearfix">
-        <h3 class="h3  pull-left">{{localize 'MyAccount' 'T_SharedWishList'}}</h3>
-        <div class="pull-right  wishlist-count  lead">{{> WishListQuantity}}&#160;{{localize 'MyAccount' 'T_WishListCount'}}</div>
+    <div class="card-header  clearfix">
+        <h5 class="float-left">{{localize 'MyAccount' 'T_SharedWishList'}}</h5>
+        <div class="float-right  wishlist-count  lead">{{> WishListQuantity}}&#160;{{localize 'MyAccount' 'T_WishListCount'}}</div>
     </div>
 
-    <div class="panel-body">
+    <div class="card-body">
         {{#if_eq TotalQuantity 0}}
             {{{EmptyContent}}}
          {{else}}

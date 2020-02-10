@@ -1,15 +1,12 @@
 <form id="CreateAccount" data-oc-submit="createAccount">
-    <div class="panel  panel-default">
-        <div class="panel-heading">
-            <h2 class="h3">{{localize 'MyAccount' 'T_MyInformation'}}</h2>
-        </div>
-
-        <div class="panel-body">
+    <div class="card">
+        <h5 class="card-header">{{localize 'MyAccount' 'T_MyInformation'}}</h5>
+        <div class="card-body">
 
             {{>FormErrorMessages}}
 
             <div class="row">
-                <div class="col-sm-6">
+                <div class="col-md-6">
                     <div class="form-group">
                         <label for="FirstName">{{localize 'Forms' 'F_FirstName'}}</label>
                         <input type="text" 
@@ -38,7 +35,7 @@
             </div>
 
             <div class="row">
-                <div class="col-sm-6">
+                <div class="col-md-6">
                     <div class="form-group">
                         <label for="LastName">{{localize 'Forms' 'F_LastName'}}</label>
                         <input type="text" 
@@ -63,7 +60,7 @@
             </div>
 
             <div class="row">
-                <div class="col-sm-6">
+                <div class="col-md-6">
                     <div class="form-group">
                         <label for="Email">{{localize 'Forms' 'F_Email'}}</label>
                         <input type="email"
@@ -88,7 +85,7 @@
             </div>
 
             <div class="row">
-                <div class="col-sm-6">
+                <div class="col-md-6">
                     <div class="form-group">
                         <label for="ConfirmationEmail">{{localize 'Forms' 'F_ConfirmationEmail'}}</label>
                         <input type="email" 
@@ -115,7 +112,7 @@
             </div>
 
             <div class="row">
-                <div class="col-sm-6">
+                <div class="col-md-6">
                     <div class="form-group">
                         <label for="Password">{{localize 'Forms' 'F_Password'}}</label>
                         <input type="password"
@@ -145,7 +142,7 @@
             </div>
 
             <div class="row">
-                <div class="col-sm-6">
+                <div class="col-md-6">
                     <div class="form-group">
                         <label for="ConfirmationPassword">{{localize 'Forms' 'F_ConfirmationPassword'}}</label>
                         <input type="password" 
@@ -190,11 +187,11 @@
     </div>
 
     <div class="row">
-        <div class="col-xs-12">
-            <div class="form-group  pull-right">
+        <div class="col-12">
+            <div class="form-group  float-right">
                 <button type="submit" class="btn  btn-primary" data-qa="register-submit">
                     {{localize 'MyAccount' 'B_CreateAccount'}}
-                    <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  hidden"></span>
+                    <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  d-none"></span>
                 </button>
             </div>
         </div>

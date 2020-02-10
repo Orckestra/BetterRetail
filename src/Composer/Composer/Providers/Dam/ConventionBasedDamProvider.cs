@@ -282,7 +282,7 @@ namespace Orckestra.Composer.Providers.Dam
             return new List<ProductMedia>();
         }
 
-        public virtual string GetMediaImageUrl(Product product, string variantId)
+        public virtual string GetMediaImageUrl(Product product, string variantId = "")
         {
             if (product == null)
                 return null;

@@ -68,9 +68,9 @@ module Orckestra.Composer {
                 var vIds = $el.data('variant').toString().split(',');
                 if (vIds.indexOf(varId) >= 0) {
                     this.handleHiddenImages($el);
-                    $el.removeClass('hidden');
+                    $el.removeClass('d-none');
                 } else {
-                    $el.addClass('hidden');
+                    $el.addClass('d-none');
                 }
             });
 
@@ -88,27 +88,6 @@ module Orckestra.Composer {
         protected onSelectedKvasChanged(e: IEventInformation) {
 
             this.render('KvaItems', {KeyVariantAttributeItems: e.data});
-        }
-
-        private getUnavailableProductImages(e: IEventInformation): any {
-
-            var fallbackImageUrl: string = e.data.FallbackImageUrl;
-
-            var image: any = {
-                ThumbnailUrl: fallbackImageUrl,
-                ImageUrl: fallbackImageUrl,
-                Selected: true
-            };
-
-            var vm: any = {
-                DisplayName: e.data.DisplayName,
-                Images: [image],
-                SelectedImage: {
-                    ImageUrl: fallbackImageUrl
-                }
-            };
-
-            return vm;
         }
 
         protected onPricesChanged(e: IEventInformation) {

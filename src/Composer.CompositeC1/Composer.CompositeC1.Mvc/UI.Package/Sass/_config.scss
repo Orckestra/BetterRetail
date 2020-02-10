@@ -11,8 +11,8 @@ $product-image-width: 388;
 $product-image-height: 498;
 
 // large image on product page
-$product-lg-image-width: 410;
-$product-lg-image-height: 526;
+$product-xl-image-width: 410;
+$product-xl-image-height: 526;
 
 // thumbnail image on product page
 $product-thumb-image-width: 80;
@@ -21,18 +21,18 @@ $product-thumb-image-height: 103;
 // calculated ratios
 // longer side / shorter side
 $product-image-ratio: $product-image-height / $product-image-width;
-$product-lg-image-ratio: $product-lg-image-height / $product-lg-image-width;
+$product-xl-image-ratio: $product-xl-image-height / $product-xl-image-width;
 $product-thumb-image-ratio: $product-thumb-image-height / $product-thumb-image-width;
 
 /**
  * Custom Font sizes
  */
-$font-size-h1-xs: $font-size-h1 * .8;
-$font-size-h2-xs: $font-size-h2;
-$font-size-h3-xs: $font-size-h3;
-$font-size-h4-xs: $font-size-h4;
-$font-size-h5-xs: $font-size-h5;
-$font-size-h6-xs: $font-size-h6;
+$font-size-h1-sm: $h1-font-size * .8;
+$font-size-h2-sm: $h2-font-size;
+$font-size-h3-sm: $h3-font-size;
+$h4-font-size-sm: $h4-font-size;
+$font-size-h5-sm: $h5-font-size;
+$font-size-h6-sm: $h6-font-size;
 
 /**
  * Font awesome config

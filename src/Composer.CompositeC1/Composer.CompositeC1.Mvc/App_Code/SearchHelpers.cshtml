@@ -24,13 +24,13 @@
 
         @if (pageCurrent > groupsize)
         {
-            <li><a href="@PageLink(1)">&lt;&lt;</a></li>
+            <li class="page-item"><a href="@PageLink(1)" tabindex="-1">&lt;&lt;</a></li>
         }
 
         @if (pageCurrent > 1)
         {
-            <li>
-                <a href="@PageLink(pageCurrent - 1)">&lt;</a>
+            <li class="page-item">
+                <a class="page-link"  href="@PageLink(pageCurrent - 1)">&lt;</a>
             </li>
         }
 
@@ -40,27 +40,27 @@
             {
                 if (page == pageCurrent)
                 {
-                    <li class="active">
-                        <span>
-                            @page
-                        </span>
+                    <li class="page-item active">
+                        <a class="page-link">
+                            @page <span class="sr-only">(current)</span>
+                        </a>
                     </li>
                 }
                 else
                 {
-                    <li>
-                        <a href="@PageLink(page)">@page</a>
+                    <li class="page-item">
+                        <a class="page-link" href="@PageLink(page)">@page</a>
                     </li>
                 }
             }
         }
         @if (pageCurrent + 1 <= pageCount)
         {
-            <li><a href="@PageLink(pageCurrent + 1)">&gt;</a></li>
+            <li class="page-item"><a  class="page-link" href="@PageLink(pageCurrent + 1)">&gt;</a></li>
         }
         @if (grouppage < (pageCount - 1) / groupsize)
         {
-            <li><a href="@PageLink(pageCount)">&gt;&gt;</a></li>
+            <li class="page-item"><a class="page-link" href="@PageLink(pageCount)">&gt;&gt;</a></li>
         }
     </ul>
 }

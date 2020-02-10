@@ -1,19 +1,19 @@
 {{#with Pagination}}
-<ul class="pull-right pagination">
+<ul class="float-right pagination">
     {{#if PreviousPage.Url }}
-        <li><a data-qa="search-pagination-previous" href="{{PreviousPage.Url}}">{{PreviousPage.DisplayName}}</a></li>
+        <li class="page-item"><a class="page-link" data-qa="search-pagination-previous" href="{{PreviousPage.Url}}">{{PreviousPage.DisplayName}}</a></li>
     {{else }}
         <li class="disabled"><span>{{PreviousPage.DisplayName}}</span></li>
     {{/if}}
     {{#each Pages}}
         {{#if IsCurrentPage}}
-            <li class="active"><a>{{DisplayName}}</a></li>
+            <li class="page-item active"><a class="page-link">{{DisplayName}}</a></li>
         {{else}}
-            <li><a href="{{Url}}">{{DisplayName}}</a></li>
+            <li><a href="{{Url}}" class="page-link">{{DisplayName}}</a></li>
         {{/if}}
     {{/each}}
     {{#if NextPage.Url }}
-        <li><a data-qa="search-pagination-next" href="{{NextPage.Url}}">{{NextPage.DisplayName}}</a></li>
+        <li class="page-item"><a class="page-link" data-qa="search-pagination-next" href="{{NextPage.Url}}">{{NextPage.DisplayName}}</a></li>
     {{else }}
         <li class="disabled"><span>{{NextPage.DisplayName}}</span></li>
     {{/if}}

@@ -1,16 +1,16 @@
-<div class="panel panel-suggestion hidden-xs">
+<div class="card panel-suggestion d-none d-sm-block">
 	<div class="arrow_box"></div>
-	<div class="panel-heading">{{localize 'General' 'L_Suggest_PossibleMatches'}}</div>
-	<div class="panel-body">
+	<div class="card-header">{{localize 'General' 'L_Suggest_PossibleMatches'}}</div>
+	<div class="card-body">
 		<div class="row">
 			{{#each this}}
-			<div class="col-sm-6">
+			<div class="col-md-6">
 				<div class="product-tile">
 					<div class="row">
-						<div class="col-xs-5">
+						<div class="col-5">
 							<a data-index="@index" data-oc-click="selectedProduct" data-sku="{{Sku}}" class="product-tile-media" href="{{Url}}"><img class="img-fluid" src="{{ImageUrl}}" alt="{{FullDisplayName}}" onerror="this.onerror=null; this.src='{{FallbackImageUrl}}'" /></a>
 						</div>
-						<div class="col-xs-7">
+						<div class="col-7">
 							<div class="product-tile-text">
 								{{#if BrandDisplayName}}
 								<span data-qa="search-product-brand">{{BrandDisplayName}}</span>

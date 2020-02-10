@@ -76,7 +76,7 @@
                 'AntiIFrameClickJacking',
                 'ComposerValidationLocalization',
                 'HelpBubbles',
-                'StickyAffix',
+                //'StickyAffix',
                 'SlickCarousel',
                 'FocusElement',
                 'GoogleAnalytics'

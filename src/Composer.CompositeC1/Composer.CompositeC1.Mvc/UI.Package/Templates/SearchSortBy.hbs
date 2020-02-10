@@ -1,12 +1,14 @@
-<div class="dropdown" data-oc-controller="Product.SortBySearch">
-    <span class="hidden-xs  hidden-sm">{{localize 'List-Search' 'L_Sorting'}}&#160;</span>
-    <button class="btn  btn-default  dropdown-toggle" type="button" data-qa="search-sort-by-toggle" data-toggle="dropdown" aria-expanded="true">
-      {{SelectedSortBy.DisplayName}}
-      <span class="fa  fa-angle-down"></span>
+<div class="dropdown  sort-by" data-oc-controller="Product.SortBySearch">
+    <span class="d-none d-lg-inline">{{localize 'List-Search' 'L_Sorting'}}&#160;</span>
+    <button class="btn   btn-outline-secondary  dropdown-toggle" type="button" data-qa="search-sort-by-toggle"
+        data-toggle="dropdown" aria-expanded="true">
+        {{SelectedSortBy.DisplayName}}
     </button>
-    <ul class="dropdown-menu  dropdown-menu-xs-right  dropdown-menu-sm-right" role="menu" data-qa="search-sort-by">
+    <div class="dropdown-menu  dropdown-menu-sm-right  dropdown-menu-md-right" role="menu" data-qa="search-sort-by">
         {{#each AvailableSortBys }}
-            <li><a href="#" data-sorting="{{SortingType}}" data-url="{{Url}}" data-oc-click="sortingChanged">{{DisplayName}}</a></li>
+        <a class="dropdown-item" href="#" data-sorting="{{SortingType}}" data-url="{{Url}}"
+            data-oc-click="sortingChanged">{{DisplayName}}
+        </a>
         {{/each}}
-    </ul>
+    </div>
 </div>

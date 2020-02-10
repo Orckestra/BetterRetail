@@ -1,8 +1,8 @@
 .nav .open > a,
 .nav .open > a:hover,
 .nav .open > a:focus {
-    background-color: $gray-lighter;
-    border-color: $gray-light;
+    background-color: gray("200");
+    border-color: gray("400");
 }
 
 .nav-pills {
@@ -38,7 +38,7 @@
 		}
 	    > a {
 			border-radius: 3px;
-			border: 1px solid $gray-light;
+			border: 1px solid gray("400");
 	    }
 	    + li {
 			margin-left: 0px;
@@ -47,8 +47,8 @@
 	    	a {
 	    		&, &:hover, &:focus {
 	    			color: #fff;
-	    			background-color: $brand-primary;
-	    			border: 1px solid darken($brand-primary, 10%);
+	    			background-color: theme-color("primary");
+	    			border: 1px solid darken(theme-color("primary"), 10%);
 	    		}
 	    	}
 	    }

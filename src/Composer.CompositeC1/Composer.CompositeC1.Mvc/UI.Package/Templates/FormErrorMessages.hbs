@@ -1,7 +1,6 @@
 <div data-templateid="FormErrorMessages">
     {{#if Errors}}
-    <div class="panel  panel-danger">
-        <div class="panel-body">
+    <div class="alert alert-danger">
             {{#each Errors}}
                 {{#if LocalizedErrorMessage}}
                     <div class="multiline-message  text-danger">
@@ -16,7 +15,6 @@
                     </div>
                 {{/if}}
             {{/each}}
-        </div>
     </div>
     {{/if}}
 </div>

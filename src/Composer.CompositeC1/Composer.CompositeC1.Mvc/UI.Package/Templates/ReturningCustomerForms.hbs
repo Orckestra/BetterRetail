@@ -2,7 +2,7 @@
     {{>ReturningCustomerFormsServerValidations }}
 
     <div class="row">
-        <div class="col-sm-6">
+        <div class="col-md-6">
             <div class="form-group">
                 <label for="username">{{localize 'Forms' 'F_Email'}}</label>
                 <input data-qa="login-email" class="form-control" id="username" name="Username"
@@ -18,7 +18,7 @@
     </div>
 
     <div class="row">
-        <div class="col-sm-6">
+        <div class="col-md-6">
             <div class="form-group">
                 <label for="password">{{localize 'Forms' 'F_Password'}}</label>
                 <input  data-qa="login-password" class="form-control" id="password" name="Password" autocomplete="off"
@@ -29,7 +29,7 @@
     </div>
 
     <div class="row">
-        <div class="col-sm-6">
+        <div class="col-md-6">
             <div class="form-group">
                 <div class="checkbox">
                     <label>
@@ -43,15 +43,15 @@
     </div>
 
     <div class="row">
-        <div class="col-sm-6">
+        <div class="col-md-6">
             <div class="form-group  text-right">
                 <button data-qa="login-submit" type="submit" class="btn  btn-primary  btn-lg  btn-block">{{localize 'CheckoutProcess' 'T_SignInCheckout'}}
-                    <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  hidden"></span>
+                    <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  d-none"></span>
                 </button>
             </div>
         </div>
 
-        <div class="col-xs-12">
+        <div class="col-12">
             <a href="{{ForgotPasswordUrl}}">{{localize 'MyAccount' 'H_ForgotPassword'}}</a>
         </div>
     </div>

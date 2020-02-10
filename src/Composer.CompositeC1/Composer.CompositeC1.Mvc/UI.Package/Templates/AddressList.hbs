@@ -1,9 +1,6 @@
-<div data-templateid="AddressList" class="panel  panel-default">
-    <div class="panel-heading">
-        <h2 class="h3">{{localize 'MyAccount' 'T_MyAddresses'}}</h2>
-    </div>
-
-    <div class="panel-body">
+<div data-templateid="AddressList" class="card">
+    <h5 class="card-header">{{localize 'MyAccount' 'T_MyAddresses'}}</h5>
+    <div class="card-body">
         {{#each Addresses}}
             {{#if IsPreferredShipping}}
                 {{>AddressListItem}}

@@ -1,25 +1,25 @@
 <div data-templateid="RecurringCartDetailsShippingMethod">
-    <div class="panel  panel-default">
+    <div class="card">
         {{#if IsLoading}}
-            <div class="panel-heading">
+            <div class="card-header">
                 <div class="row">
-                    <div class="col-xs-10">
+                    <div class="col-10">
                         <h2 class="h3">{{localize 'MyAccount' 'T_ShippingMethod' }}</h2>
                     </div>
                 </div>
             </div>
-            <div class="panel-body">
+            <div class="card-body">
                 {{>Loading}}
             </div>
         {{else}}
             {{#unless EditMode}}
-            <div class="panel-heading">
+            <div class="card-header">
                 <div class="row">
-                    <div class="col-xs-10">
+                    <div class="col-10">
                         <h2 class="h3">{{localize 'MyAccount' 'T_ShippingMethod' }}</h2>
                     </div>
-                    <div class="col-xs-2">
-                        <button class="btn btn-link pull-right" type="button" id="btntoggleEditShippingMethod"
+                    <div class="col-2">
+                        <button class="btn btn-link float-right" type="button" id="btntoggleEditShippingMethod"
                         data-shipping-method-display-name="{{ShippingMethod.DisplayName}}"
                         data-shipping-method-cost="{{ShippingMethod.Cost}}"                    
                         data-selected-shipping-method-name="{{ShippingMethod.Name}}"
@@ -33,10 +33,10 @@
                     </div>
                 </div>
             </div>
-            <div class="panel-body">
+            <div class="card-body">
                 {{#if ShippingMethod}}
                 <div class="row">
-                    <div class="col-xs-12">
+                    <div class="col-12">
                         <b>{{ShippingMethod.DisplayName}}</b>
                         <br />
                         {{ShippingMethod.Cost}}
@@ -44,20 +44,20 @@
                 </div>
                 {{else}}
                 <div class="row">
-                    <div class="col-md-12 text-center">
+                    <div class="col-lg-12 text-center">
                         <p>{{localize 'General' 'P_ShippingMethodLoadErrorMessage' }}</p>
                     </div>
                 </div>
                 {{/if}}
             </div>
             {{else}}
-            <div class="panel-heading">
+            <div class="card-header">
                 <div class="row">
-                    <div class="col-xs-10">
+                    <div class="col-10">
                         <h2 class="h3">{{localize 'MyAccount' 'T_ShippingMethod' }}</h2>
                     </div>
-                    <div class="col-xs-2">
-                        <button class="btn btn-link pull-right invisible" type="button" 
+                    <div class="col-2">
+                        <button class="btn btn-link float-right invisible" type="button" 
                         data-oc-click="toggleEditShippingMethod" 
                         title="{{localize 'CheckoutProcess' 'B_Edit'}}">
                             <span class="fa  fa-pencil  fa-lg"></span>
@@ -65,19 +65,19 @@
                     </div>
                 </div>
             </div>
-            <div class="panel-body">
+            <div class="card-body">
                 {{>FormErrorMessages}}  
                 {{#if ShippingMethods}}
                 {{!-- <p>{{localize 'CheckoutProcess' 'F_ShippingSelection'}}</p> --}}
                 <div class="row">
-                    <div class="col-sm-6">
+                    <div class="col-md-6">
                         <form id="ShippingMethod" data-oc-submit="preventFormSubmit" method="post" autocomplete="on">
                             <input type="hidden" id="ShippingProviderId" name="ShippingProviderId" value="{{ShippingMethods.SelectedShippingProviderId}}" />
                             {{#each ShippingMethods.ShippingMethods }}
                                 <div class="form-group">
-                                    <label class="select-block {{#if_eq Name ../SelectedMethod}} active {{/if_eq}}" data-qa="checkout-shipping-method-{{@index}}" data-parent=".panel-body">
+                                    <label class="select-block {{#if_eq Name ../SelectedMethod}} active {{/if_eq}}" data-qa="checkout-shipping-method-{{@index}}" data-parent=".card-body">
                                         <span class="input-addon">
-                                            <input {{#if_eq Name ../SelectedMethod}} checked="checked" {{/if_eq}} data-parsley-class-handler-selector=".panel-body" data-parsley-errors-container="#method-errors" 
+                                            <input {{#if_eq Name ../SelectedMethod}} checked="checked" {{/if_eq}} data-parsley-class-handler-selector=".card-body" data-parsley-errors-container="#method-errors" 
                                             class="input" data-oc-change="methodSelected" type="radio" name="ShippingMethod" value="{{Name}}" 
                                             data-is-ship-to-store-type="{{IsShipToStoreType}}" data-fulfillment-method-type="{{FulfillmentMethodTypeString}}" 
                                             data-shipping-provider-id="{{ShippingProviderId}}" required="true"                     
@@ -107,8 +107,8 @@
                         </form>
                     </div>
                 </div>         
-                <div class="col-xs-12 text-center">
-                    <button class="btn btn-default" type="button"  id="btntoggleEditShippingMethod"
+                <div class="col-12 text-center">
+                    <button class="btn  btn-outline-secondary" type="button"  id="btntoggleEditShippingMethod"
                         data-shipping-method-display-name="{{ShippingMethod.DisplayName}}"
                         data-shipping-method-cost="{{ShippingMethod.Cost}}"                    
                         data-selected-shipping-method-name="{{ShippingMethod.Name}}"
@@ -116,12 +116,12 @@
                         data-oc-click="toggleEditShippingMethod">{{localize 'General' 'B_Cancel'}}</button>
                     <button class="btn btn-primary"
                         data-oc-click="saveEditShippingMethod">{{localize 'MyAccount' 'B_SaveChanges'}}
-                            <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  hidden"></span>
+                            <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  d-none"></span>
                     </button>
                 </div>
                 {{else}}
                 <div class="row">
-                    <div class="col-md-12 text-center">
+                    <div class="col-lg-12 text-center">
                         <p>{{localize 'General' 'P_ShippingMethodLoadErrorMessage' }}</p>
                     </div>
                 </div>

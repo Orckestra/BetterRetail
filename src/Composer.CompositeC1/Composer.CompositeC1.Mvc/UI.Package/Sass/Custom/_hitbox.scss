@@ -1,18 +1,18 @@
 .hitbox {
     display: block;
     background: $body-bg;
-    border: dashed 2px $gray-light;
-    border-radius: $border-radius-base;
+    border: dashed 2px gray("400");
+    border-radius: $border-radius;
     font-weight: bold;
-    padding: $padding-large-vertical $padding-large-horizontal;
+    padding: 0.7rem 1.15rem;
     text-align: center;
     text-decoration: underline;
     transition: all .3s ease;
 
     &:hover,
     &:focus {
-        border-color: $brand-info;
-        color: $brand-info;
+        border-color: theme-color("info");
+        color: theme-color("info");
         text-decoration: none;
     }
 }

@@ -1,17 +1,14 @@
 <div data-templateid="CompleteCheckoutOrderSummary">
-    <div class="panel  panel-default">
-        <div class="panel-heading">
-            <h2 class="h3">{{localize 'ShoppingCart' 'T_OrderSummary'}}</h2>
-        </div>
-
-        <div class="panel-body">
+    <div class="card">
+        <h5 class="card-header">{{localize 'ShoppingCart' 'T_OrderSummary'}}</h5>
+        <div class="card-body">
             {{#if GettingCart}}
                 {{> Loading}}
             {{else}}
                {{> CheckoutOrderSummaryDetails}}
 
                 <div class="row">
-                    <div class="col-xs-12">
+                    <div class="col-12">
                         <hr>
 
                         <p class="text-center">{{localize 'CheckoutProcess' 'L_SubmitOrderIndication'}}</p>
@@ -24,7 +21,7 @@
                         <button class="btn  btn-success  btn-lg  btn-block {{#if InvalidLineItemCount}}disabled{{/if}}" data-oc-click="nextStep" {{#if InvalidLineItemCount}}disabled="disabled"{{/if}}
                              data-nextstepurl="{{OrderSummary.CheckoutCompleteUrlTarget}}">
                             {{localize 'CheckoutProcess' 'B_SubmitOrder'}}
-                            <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  hidden"></span>
+                            <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  d-none"></span>
                         </button>
 
                         {{#if InvalidLineItemCount}}

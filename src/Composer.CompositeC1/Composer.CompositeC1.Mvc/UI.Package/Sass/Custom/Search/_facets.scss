@@ -1,0 +1,41 @@
+.facets-card {
+    font-size: 90%;
+
+    .card-body {
+        padding-left: $card-spacer-x / 1.5;
+        padding-right: $card-spacer-x / 1.5;
+    }
+}
+
+.search-results {
+    .filters-row {
+        height: 55px;
+        font-size: 90%;
+
+        .btn, select {
+            font-size: 90%;
+        }
+    }
+
+    .sort-by .btn {
+        width: 100%;
+    }
+
+    @include media-breakpoint-up(lg) { 
+        .sort-by .btn {
+            width: auto;
+        }
+
+    }
+}
+
+@include media-breakpoint-up(lg) {
+    .facets-col {
+        margin-top: -55px;
+
+        &.collapse {
+            display: block;
+        }
+    }
+}
+

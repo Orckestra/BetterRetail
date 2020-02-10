@@ -1,8 +1,8 @@
 .well {
 	&-slim {
-		background-color: $well-bg;
-		border-top: 1px solid $well-border;
-		border-bottom: 1px solid $well-border;
+		background-color: $card-bg;
+		border-top: 1px solid $card-border-width;
+		border-bottom: 1px solid $card-border-width;
 		padding: 15px 0;
 	}
 }

@@ -11,15 +11,15 @@
     {{/if}}    
 
     <div class="row"> 
-        <div class="col-xs-6  col-sm-7"><p>{{localize 'MyAccount' 'L_Subtotal'}}</p></div>
-        <div class="col-xs-6  col-sm-5  text-right"><p data-qa="checkout-order-summary-subtotal">{{OrderSummary.SubTotal}}</p></div>
+        <div class="col-6  col-md-7"><p>{{localize 'MyAccount' 'L_Subtotal'}}</p></div>
+        <div class="col-6  col-md-5  text-right"><p data-qa="checkout-order-summary-subtotal">{{OrderSummary.SubTotal}}</p></div>
     </div>
 
     {{#each OrderSummary.ShipmentAdditionalFeeSummaryList}}
         {{#if Taxable}}
         <div class="row">
-            <div class="col-xs-6  col-sm-7"><p>{{GroupName}}</p></div>
-            <div class="col-xs-6  col-sm-5  text-right"><p data-qa="checkout-order-summary-shipment-taxable-additionalfees">{{TotalAmount}}</p></div>
+            <div class="col-6  col-md-7"><p>{{GroupName}}</p></div>
+            <div class="col-6  col-md-5  text-right"><p data-qa="checkout-order-summary-shipment-taxable-additionalfees">{{TotalAmount}}</p></div>
         </div>
         {{/if}}
     {{/each}}
@@ -27,8 +27,8 @@
     {{#each OrderSummary.AdditionalFeeSummaryList}}
         {{#if Taxable}}
         <div class="row">
-            <div class="col-xs-6  col-sm-7"><p>{{GroupName}}</p></div>
-            <div class="col-xs-6  col-sm-5  text-right"><p data-qa="checkout-order-summary-lineitem-taxable-additionalfees">{{TotalAmount}}</p></div>
+            <div class="col-6  col-md-7"><p>{{GroupName}}</p></div>
+            <div class="col-6  col-md-5  text-right"><p data-qa="checkout-order-summary-lineitem-taxable-additionalfees">{{TotalAmount}}</p></div>
         </div>
         {{/if}}
     {{/each}}
@@ -36,7 +36,7 @@
     {{#if OrderSummary.IsShippingEstimatedOrSelected}}
         {{#if OrderSummary.IsShippingTaxable}}
         <div class="row">
-            <div class="col-xs-6  col-sm-7">
+            <div class="col-6  col-md-7">
                 <p>
                   <span>
                     {{#escape}}
@@ -45,7 +45,7 @@
                     </span>
                 </p>
             </div>
-            <div class="col-xs-6  col-sm-5  text-right"><p data-qa="checkout-order-summary-shipping-fee">{{OrderSummary.Shipping}}</p></div>
+            <div class="col-6  col-md-5  text-right"><p data-qa="checkout-order-summary-shipping-fee">{{OrderSummary.Shipping}}</p></div>
         </div>
         {{/if}}
     {{/if}}
@@ -57,8 +57,8 @@
     {{#each OrderSummary.ShipmentAdditionalFeeSummaryList}}
         {{#unless Taxable}}
         <div class="row">
-            <div class="col-xs-6  col-sm-7"><p>{{GroupName}}</p></div>
-            <div class="col-xs-6  col-sm-5  text-right"><p data-qa="checkout-order-summary-shipment-nontaxable-additionalfees">{{TotalAmount}}</p></div>
+            <div class="col-6  col-md-7"><p>{{GroupName}}</p></div>
+            <div class="col-6  col-md-5  text-right"><p data-qa="checkout-order-summary-shipment-nontaxable-additionalfees">{{TotalAmount}}</p></div>
         </div>
         {{/unless}}
     {{/each}}
@@ -66,8 +66,8 @@
     {{#each OrderSummary.AdditionalFeeSummaryList}}
         {{#unless Taxable}}
         <div class="row">
-            <div class="col-xs-6  col-sm-7"><p>{{GroupName}}</p></div>
-            <div class="col-xs-6  col-sm-5  text-right"><p data-qa="checkout-order-summary-lineitem-nontaxable-additionalfees">{{TotalAmount}}</p></div>
+            <div class="col-6  col-md-7"><p>{{GroupName}}</p></div>
+            <div class="col-6  col-md-5  text-right"><p data-qa="checkout-order-summary-lineitem-nontaxable-additionalfees">{{TotalAmount}}</p></div>
         </div>
         {{/unless}}
     {{/each}}
@@ -75,7 +75,7 @@
     {{#if OrderSummary.IsShippingEstimatedOrSelected}}
         {{#unless OrderSummary.IsShippingTaxable}}
         <div class="row">
-            <div class="col-xs-6  col-sm-7">
+            <div class="col-6  col-md-7">
                 <p>
                   <span>
                     {{#escape}}
@@ -84,24 +84,24 @@
                     </span>
                 </p>
             </div>
-            <div class="col-xs-6  col-sm-5  text-right"><p data-qa="checkout-order-summary-shipping-fee">{{OrderSummary.Shipping}}</p></div>
+            <div class="col-6  col-md-5  text-right"><p data-qa="checkout-order-summary-shipping-fee">{{OrderSummary.Shipping}}</p></div>
         </div>
         {{/unless}}
     {{/if}} 
 
     <div class="row">
-        <div class="col-xs-6  col-sm-7"><p><span class="h4">{{localize 'MyAccount' 'L_Total'}}</span></p></div>
-        <div class="col-xs-6  col-sm-5  text-right"><p><span class="h4" data-qa="checkout-order-summary-total">{{OrderSummary.Total}}</span></p></div>
+        <div class="col-6  col-md-7"><p><span class="h4">{{localize 'MyAccount' 'L_Total'}}</span></p></div>
+        <div class="col-6  col-md-5  text-right"><p><span class="h4" data-qa="checkout-order-summary-total">{{OrderSummary.Total}}</span></p></div>
     </div>
 
     {{#if OrderSummary.SavingsTotal}}
-    <div class="row panel-body">
-        <div class="panel-saving col-xs-12  text-center  text-success"><span data-qa="order-summary-discount">{{localize 'MyAccount' 'L_Savings'}}&nbsp;{{OrderSummary.SavingsTotal}}</span></div>
+    <div class="row">
+        <div class="alert alert-success bg-white col-12 text-center text-success"><span data-qa="order-summary-discount">{{localize 'MyAccount' 'L_Savings'}}&nbsp;{{OrderSummary.SavingsTotal}}</span></div>
     </div>
     {{/if}}
 
     <div class="row">
-        <div class="col-xs-12">
+        <div class="col-12">
             <div class="additional-info">
                 <div class="multiline-message">
                     <span class="fa  fa-comment-o  fa-lg  multiline-message-icon"></span> 

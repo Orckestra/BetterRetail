@@ -27,15 +27,15 @@
                 </span>
                 <span class="content  clearfix">
                     <!-- Address name -->
-                    <strong class="pull-sm-right  pull-md-right  pull-lg-right">{{AddressName}}</strong>
-                    <br class="visible-xs-inline" />
+                    <strong class="float-md-right  float-lg-right  float-xl-right">{{AddressName}}</strong>
+                    <br class="d-inline d-sm-none" />
                     {{FirstName}} {{LastName}}<br/>
                     {{Line1}}<br/>
                     {{#if Line2}} {{Line2}}<br/> {{/if}}
                     {{PostalCode}} - {{City}}, {{RegionCode}}<br/>
                     {{PhoneNumber}}
 
-                    <span class="block  pull-right">
+                    <span class="block  float-right">
                         <a class="btn  btn-link" data-qa="checkout-address-edit" href="{{UpdateAddressUrl}}" title="{{localize 'MyAccount' 'B_EditAddress'}}">
                             <span class="fa  fa-pencil  fa-lg"></span>
                         </a>

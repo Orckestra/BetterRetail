@@ -1,8 +1,6 @@
-<div class="panel panel-default" data-templateid="CheckoutSignInAsGuest">
-    <div class="panel-heading">
-        <h2 class="h3">{{localize 'CheckoutProcess' 'T_LogInCheckout'}}</h2>
-    </div>
-    <div class="panel-body">
+<div class="card" data-templateid="CheckoutSignInAsGuest">
+    <h5 class="card-header">{{localize 'CheckoutProcess' 'T_LogInCheckout'}}</h5>
+    <div class="card-body">
         {{#if IsCartContainsRecurringLineitems}}           
             <p>{{localize 'CheckoutProcess' 'L_LogInCheckoutWithRecurring'}}</p>
         {{else}}

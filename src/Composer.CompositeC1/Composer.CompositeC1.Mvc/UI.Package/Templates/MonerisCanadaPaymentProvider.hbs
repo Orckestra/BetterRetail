@@ -3,19 +3,19 @@
     {{#if_gt SavedCreditCards.length 0}}
         <div id="moneris-saved-credit-cards" class="moneris-panel">
             <div class="row">
-                <div class="col-sm-12">
+                <div class="col-md-12">
                     <h4>{{localize 'CheckoutProcess' 'T_SelectCreditCart'}}</h4>        
                 </div>
             </div>
             <hr />
             <div class="row">
-                <div class="col-sm-12">
+                <div class="col-md-12">
                     {{>SavedCreditCartPaymentMethod}}
                 </div>
             </div>
             {{#unless IsCreditCardSelected}}
             <div class="row">
-                <div class="col-sm-12 text-center">
+                <div class="col-md-12 text-center">
                     <button class="btn btn-primary" 
                             type="button"
                             data-oc-click="payWithCreditCard">
@@ -33,7 +33,7 @@
         <div id="moneris-credit-card-form" class="moneris-panel">
 
             <div class="row">
-                <div class="col-sm-8">                
+                <div class="col-md-8">
                     <h4>{{localize 'CheckoutProcess' 'T_EnterPaymentInfomation'}}</h4>                
                 </div>
             </div>
@@ -41,12 +41,12 @@
             <hr />
 
             <div class="row">
-                <div class="col-sm-12">
+                <div class="col-md-12">
                     <div class="form-group">
                         <img class="img-responsive" src="{{ActivePaymentViewModel.CreditCardTrustImage.Url}}" alt="{{ActivePaymentViewModel.CreditCardTrustImage.Alt}}" />
                     </div>
                 </div>
-                <div class="col-sm-6">
+                <div class="col-md-6">
                     <div class="form-group">
                         <label for="cardholder">{{localize 'CheckoutProcess' 'L_CardHolderName'}}</label>
                         <input name="cardholder" id="cardholder" data-parsley-length="[5, 73]" required="true" data-parsley-pattern="/^[a-zA-Z\u00E0-\u00FC\.\-\s\']+$/i" type="text" class="form-control" placeholder="ex: Franklin Pollux" />
@@ -70,7 +70,7 @@
 
                         {{#if ActivePaymentViewModel.CanSavePaymentMethod}}
                             <div class="form-group">
-                                <div class="col-sm-12">
+                                <div class="col-md-12">
                                     <div class="checkbox">
                                         <label for="createPaymentProfile">
                                             <input name="createPaymentProfile" id="createPaymentProfile" type="checkbox" 

@@ -1,20 +1,14 @@
 <div  data-templateid="CheckoutOrderSummary">
     {{#if LoadCheckoutOrderSummary }}
-        <div class="panel panel-default">
+        <div class="card">
             {{#if GettingCart}}
-                <div class="panel-heading">
-                    <h2 class="h3" data-qa="order-summary-title">{{localize 'ShoppingCart' 'T_OrderSummary'}}</h2>
-                </div>
-                
-                <div class="panel-body">
+                <h5 class="card-header" data-qa="order-summary-title">{{localize 'ShoppingCart' 'T_OrderSummary'}}</h5>
+                <div class="card-body">
                     {{>Loading}}
                 </div>
             {{else}}
-                <div class="panel-heading">
-                    <h2 class="h3" data-qa="order-summary-title">{{localize 'ShoppingCart' 'T_OrderSummary'}}</h2>
-                </div>
-                
-                <div class="panel-body">
+                <h5 class="card-header" data-qa="order-summary-title">{{localize 'ShoppingCart' 'T_OrderSummary'}}</h5>
+                <div class="card-body">
                     <div>
                         <span data-qa="checkout-order-summary-number-of-products">{{TotalQuantity}} {{localize 'CheckoutProcess' 'L_Products'}}</span>
                         (<a href="{{OrderSummary.EditCartUrlTarget}}" data-qa="checkout-order-summary-edit-order">{{localize 'CheckoutProcess' 'B_EditShoppingCart'}}</a>)
@@ -25,7 +19,7 @@
                     {{>CheckoutOrderSummaryDetails}}
 
                     <div class="row">
-                        <div class="col-xs-12">
+                        <div class="col-12">
                             {{#if InvalidLineItemCount}}
                                 <div class="form-group">
                             {{/if}}
@@ -33,7 +27,7 @@
                             <button class="btn  btn-success  btn-lg  btn-block" data-qa="checkout-order-summary-next-step"
                             {{#if InvalidLineItemCount}}disabled="disabled"{{/if}} data-oc-click="nextStep" data-nextstepurl="{{OrderSummary.NextStepUrl}}">
                                 {{localize 'CheckoutProcess' 'B_NextStep'}}
-                            <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  hidden"></span>
+                            <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  d-none"></span>
                             </button>
 
                             {{#if InvalidLineItemCount}}

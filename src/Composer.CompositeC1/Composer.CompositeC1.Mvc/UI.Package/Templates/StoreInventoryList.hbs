@@ -1,10 +1,10 @@
-<div data-templateid="StoreInventoryList">
+<div data-templateid="StoreInventoryList" class="row">
 {{#if IsLoading}}
     {{>Loading}}
 {{else}}
 {{#if Stores}}
     {{#each Stores}}
-        <div class="col-md-6">
+        <div class="col-lg-6">
             {{> StoreInventoryTile}}
         </div>
     {{/each}}
@@ -13,13 +13,13 @@
 {{/if}}
 {{#if NextPage}}
 {{#with NextPage}}
-   <div class="col-xs-12 stores-list-paging">
+   <div class="col-12 stores-list-paging">
         <a data-qa="next-page"
            data-page="{{Page}}"
            data-oc-click="nextPage"
-           class="btn  btn-default">
+           class="btn   btn-outline-secondary">
            {{localize 'Store' 'B_ShowMore'}}
-           <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  hidden"></span>
+           <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  d-none"></span>
         </a>
    </div>
 {{/with}}

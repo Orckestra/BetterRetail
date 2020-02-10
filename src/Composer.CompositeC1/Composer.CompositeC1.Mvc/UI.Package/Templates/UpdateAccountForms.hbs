@@ -1,15 +1,13 @@
 <form id="UpdateAccount" data-oc-submit="updateAccount" data-oc-change="enableSubmitButton">
-    <div class="panel  panel-default">
-        <div class="panel-heading">
-            <h2 class="h3">{{localize 'MyAccount' 'T_MyInformation'}}</h2>
-        </div>
+    <div class="card">
+        <h5 class="card-header">{{localize 'MyAccount' 'T_MyInformation'}}</h5>
 
-        <div class="panel-body">
+        <div class="card-body">
             {{>UpdateAccountSuccessful}}
             {{>FormErrorMessages}}
 
             <div class="row">
-                <div class="col-sm-6">
+                <div class="col-md-6">
                     <div class="form-group">
                         <label for="FirstName">{{localize 'Forms' 'F_FirstName'}}</label>
                         <input name="FirstName" id="FirstName" data-qa="updateaccount-firstname"
@@ -29,7 +27,7 @@
             </div>
 
             <div class="row">
-                <div class="col-sm-6">
+                <div class="col-md-6">
                     <div class="form-group">
                         <label for="LastName">{{localize 'Forms' 'F_LastName'}}</label>
                         <input name="LastName" id="LastName" data-qa="updateaccount-lastname"
@@ -49,7 +47,7 @@
             </div>
 
             <div class="row">
-                <div class="col-sm-6">
+                <div class="col-md-6">
                     <div class="form-group">
                         <label for="Email">{{localize 'Forms' 'F_Email'}}</label>
                         <input name="Email" id="Email" data-qa="updateaccount-email"
@@ -69,7 +67,7 @@
             </div>
 
             <div class="row">
-                <div class="col-sm-6">
+                <div class="col-md-6">
                     <div class="form-group">
                         <label for="PreferredLanguage">{{localize 'Forms' 'F_PreferredLanguage'}}</label>
                         <select name="PreferredLanguage" id="PreferredLanguage" data-qa="updateaccount-preferredlanguage"
@@ -91,7 +89,7 @@
             </div>
 
             <div class="row">
-                <div class="col-sm-6">
+                <div class="col-md-6">
                     <a class="cta" href="{{ChangePasswordUrl}}" title="{{localize 'MyAccount' 'B_ChangePassword'}}">
                         {{localize 'MyAccount' 'B_ChangePassword'}}
                     </a>
@@ -101,11 +99,11 @@
     </div>
 
     <div class="row">
-        <div class="col-xs-12">
-            <div class="form-group  pull-right">
+        <div class="col-12">
+            <div class="form-group  float-right">
                 <button type="submit" class="btn  btn-primary" id="UpdateAccountSubmit" data-qa="updateaccount-submit" disabled="disabled">
                     {{localize 'MyAccount' 'B_UpdateAccount'}}
-                    <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  hidden"></span>
+                    <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  d-none"></span>
                 </button>
             </div>
         </div>

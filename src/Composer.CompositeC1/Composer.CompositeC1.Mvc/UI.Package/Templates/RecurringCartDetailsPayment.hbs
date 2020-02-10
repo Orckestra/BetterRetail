@@ -1,25 +1,25 @@
 <div data-templateid="RecurringCartDetailsPayment">
-    <div class="panel  panel-default">
+    <div class="card">
         {{#if IsLoading}}
-            <div class="panel-heading">
+            <div class="card-header">
                 <div class="row">
-                    <div class="col-xs-10">
-                        <h2 class="h3">{{localize 'MyAccount' 'T_PaymentMethod' }}</h2>
+                    <div class="col-10">
+                        <h5>{{localize 'MyAccount' 'T_PaymentMethod' }}</h5>
                     </div>
                 </div>
             </div>
-            <div class="panel-body">
+            <div class="card-body">
                 {{>Loading}}
             </div>
         {{else}}
             {{#unless EditMode}}
-            <div class="panel-heading">
+            <div class="card-header">
                 <div class="row">
-                    <div class="col-xs-10">
-                        <h2 class="h3">{{localize 'MyAccount' 'T_PaymentMethod' }}</h2>
+                    <div class="col-10">
+                        <h5>{{localize 'MyAccount' 'T_PaymentMethod' }}</h5>
                     </div>
-                    <div class="col-xs-2">
-                        <button class="btn btn-link pull-right" type="button" 
+                    <div class="col-2">
+                        <button class="btn btn-link float-right" type="button" 
                         data-selected-payment-id="{{Payment.PaymentMethod.Id}}"
                         data-oc-click="toggleEditPayment" 
                         title="{{localize 'CheckoutProcess' 'B_Edit'}}">
@@ -28,12 +28,12 @@
                     </div>
                 </div>
             </div>
-            <div class="panel-body">
+            <div class="card-body">
                 {{#if Payment}}
                 <div class="row payment">
-                    <div class="col-xs-12">
+                    <div class="col-12">
                         {{#with Payment.PaymentMethod}}
-                        <div class="col-xs-3  col-sm-3  col-md-3">
+                        <div class="col-3  col-md-3  col-lg-3">
                             {{#if CardMask}}
                                 <img src="/UI.Package/Images/creditcards/{{CardType}}.png" alt="{{CardType}}" class="img-responsive" />
                             {{else}}
@@ -41,7 +41,7 @@
                                 <!-- <img src="img/giftcard.png" alt="Gift Card" class="img-responsive"> -->
                             {{/if}}
                         </div>
-                        <div class="col-xs-9  col-sm-9  col-md-9">
+                        <div class="col-9  col-md-9  col-lg-9">
                             <p>
                                 <h2 class="h4">{{localize 'MyAccount' 'L_PaymentMethod'}}</h2>
                                 {{#if CardMask}}
@@ -54,7 +54,7 @@
                         </div>
                         {{#if IsExpired}}
                             <div class="row">
-                                <div class="col-sm-12 error-item strong">
+                                <div class="col-md-12 error-item strong">
                                     {{localize 'CheckoutProcess' 'F_SaveCreditCardForced_Expired' }}
                                 </div>
                             </div>
@@ -64,20 +64,20 @@
                 </div>
                 {{else}}
                 <div class="row payment">
-                    <div class="col-md-12 text-center">
+                    <div class="col-lg-12 text-center">
                         <p>{{localize 'General' 'P_PaymentLoadErrorMessage' }}</p>
                     </div>
                 </div>
                 {{/if}}
             </div>
             {{else}}        
-            <div class="panel-heading">
+            <div class="card-header">
                 <div class="row">
-                    <div class="col-xs-10">
+                    <div class="col-10">
                         <h2 class="h3">{{localize 'MyAccount' 'T_PaymentMethod' }}</h2>
                     </div>
-                    <div class="col-xs-2">
-                        <button class="btn btn-link pull-right invisible" type="button" 
+                    <div class="col-2">
+                        <button class="btn btn-link float-right invisible" type="button" 
                         data-selected-payment-id="{{Payment.PaymentMethod.Id}}"
                         title="{{localize 'CheckoutProcess' 'B_Edit'}}">
                             <span class="fa  fa-pencil  fa-lg"></span>
@@ -85,30 +85,30 @@
                     </div>
                 </div>
             </div>
-            <div class="panel-body">    
+            <div class="card-body">    
                 {{>FormErrorMessages}}           
                 {{#if_gt SavedCreditCards.length 0}}
                     <div id="moneris-saved-credit-cards" class="moneris-panel">
                         <div class="row">
-                            <div class="col-sm-12">
+                            <div class="col-md-12">
                                 <h4>{{localize 'CheckoutProcess' 'T_SelectCreditCart'}}</h4>        
                             </div>
                         </div>
                         <hr />
                         <div class="row">
-                            <div class="col-sm-12">
+                            <div class="col-md-12">
                                 {{>RecurringCartSavedCreditCartPaymentMethod}}
                             </div>
                         </div>
                     </div>
                 {{/if_gt}}
                         
-                <div class="col-xs-12 text-center">
-                    <button class="btn btn-default" type="button" 
+                <div class="col-12 text-center">
+                    <button class="btn  btn-outline-secondary" type="button" 
                         data-oc-click="toggleEditPayment">{{localize 'General' 'B_Cancel'}}</button>
                     <button class="btn btn-primary"
                         data-oc-click="saveEditPayment">{{localize 'MyAccount' 'B_SaveChanges'}}
-                        <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  hidden"></span>
+                        <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  d-none"></span>
                     </button>
                 </div>
             </div>            

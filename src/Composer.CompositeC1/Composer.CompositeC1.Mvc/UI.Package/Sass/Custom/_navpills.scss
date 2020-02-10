@@ -10,7 +10,7 @@
     display: inline-block;
 
     + li:before {
-      content: "#{$navpills-separator} "; // the space here is a nbsp, not as unicode escape because of issue with libsass.
+      content: "| "; // the space here is a nbsp, not as unicode escape because of issue with libsass.
       padding: 0 5px;
     }
   }

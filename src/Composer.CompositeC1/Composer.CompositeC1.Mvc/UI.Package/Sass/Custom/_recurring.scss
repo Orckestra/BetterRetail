@@ -3,14 +3,14 @@
   padding-bottom: 10px;
 
   .radio-row {
-    border: 1px solid $gray-light;
+    border: 1px solid gray("400");
     border-radius: 3px;
     margin-bottom: $grid-gutter-width / 2;
     padding: 0 15px 0 35px;
 
     &.selected {
-      background-color: $gray-lighter;
-      border-color: $gray-darker;
+      background-color: gray("200");
+      border-color: gray("600");
     }
   }
 
@@ -20,7 +20,7 @@
 }
 
 .recurring-orders-frequency-selection.template-details-frequency {
-  border: 1px solid $gray-light;
+  border: 1px solid gray("400");
   margin-left: 12px;
 }
 
@@ -44,7 +44,7 @@
     width: 50px;
   }
   > .img-small-thumbnail {
-    border: 1px solid $gray-light;
+    border: 1px solid gray("400");
   }
 }
 

@@ -128,9 +128,6 @@
       <HintPath>..\..\..\packages\C1CMS.Assemblies.6.6.6912.30810\lib\net471\Microsoft.Practices.ObjectBuilder.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Microsoft.ServiceBus, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Orckestra.ExperienceManagement.Configuration.4.8.3\lib\net471\Microsoft.ServiceBus.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
       <Private>True</Private>
@@ -325,19 +322,21 @@
     <Content Include="App_Data\Razor\Composer\Product\PageHeader.cshtml" />
     <Content Include="App_Data\Razor\Composer\Product\RelatedProducts.cshtml" />
     <Content Include="App_Data\Razor\Composer\Product\Specifications.cshtml" />
+    <Content Include="App_Data\Razor\Composer\DatePicker\DatePicker.Includes.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Footer\SocialLinks.cshtml" />
     <None Include="Properties\PublishProfiles\Website - CD.pubxml" />
     <None Include="Properties\PublishProfiles\Website.pubxml" />
     <Content Include="ViewModelAsExtensionModelTemplate.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>ViewModelAsExtensionModelTemplate.cs</LastGenOutput>
     </Content>
-    <Content Include="Views\Footer\FollowUs.cshtml" />
     <Content Include="Views\web.config" />
     <Content Include="Views\Shared\PageHeader.cshtml" />
     <Content Include="Views\Shared\LanguageSwitch.cshtml" />
     <Content Include="web.config" />
     <Content Include="Views\Product\Images.cshtml" />
     <Content Include="Views\Product\Zoom.cshtml" />
+    <Content Include="Views\Shared\Breadcrumb.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\Solution Items\SharedAssemblyInfo.cs">
@@ -350,7 +349,6 @@
     <Compile Include="Controllers\BrowsingCategoriesController.cs" />
     <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\CheckoutController.cs" />
-    <Compile Include="Controllers\FooterController.cs" />
     <Compile Include="Controllers\HeaderController.cs" />
     <Compile Include="Controllers\MembershipController.cs" />
     <Compile Include="Controllers\MyAccountController.cs" />

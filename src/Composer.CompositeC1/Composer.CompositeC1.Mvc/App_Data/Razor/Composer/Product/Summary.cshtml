@@ -13,7 +13,7 @@
 
     public string SelectedVariantClass(params string[] ids)
     {
-        return ids.Contains(Model.SelectedVariantId) ? "" : "hidden";
+        return ids.Contains(Model.SelectedVariantId) ? "" : "d-none";
     }
 
     public bool IsWithoutVariants()
@@ -31,10 +31,10 @@
 <body>
     <div data-oc-controller="Product.ProductDetail" data-productid="@Model.ProductId" data-context-var="productDetailContext">
         <div class="row">
-            <div class="col-md-6  col-sm-6">
+            <div class="col-lg-6  col-md-6">
                 @Partial("Product", "Images", Model)
             </div>
-            <div class="col-sm-6">
+            <div class="col-md-6">
 
                 @DisplayName()
 
@@ -46,24 +46,24 @@
 
                 @Partial("ProductRecurringFrequency", ProductContext.ViewModel)
 
-                <div class="row">
-                    <div class="col-xs-6  col-sm-5  col-md-4  col-lg-3">
+                <div class="row  mb-4">
+                    <div class="col-6  col-md-5  col-lg-4  col-xl-3">
                         @Partial("ProductQuantity", ProductContext.ViewModel)
                     </div>
                 </div>
 
-                <div class="island" property="offers" typeof="Offer">
+                <div class="mb-4" property="offers" typeof="Offer">
                     @Partial("PriceDiscount", ProductContext.ViewModel)
                 </div>
 
-                <div class="island">
+                <div class="mb-4">
                     @Partial("AddToCartProductDetail", ProductContext.ViewModel)
                     @Partial("AddToWishList", ProductContext.ViewModel)
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-xs-12">
+        <div class="row mb-2">
+            <div class="col-12">
                 @StoreInventoryLink()
             </div>
         </div>
@@ -92,24 +92,24 @@
             var ids = group.Select(v => v.Id).ToArray();
             <h1 data-variant="@(String.Join(",", ids))" class="@SelectedVariantClass(ids)">@group.Key</h1>
         }
-        <h1 data-variant="unavailable" class="hidden">@Model.DisplayName</h1>
+        <h1 data-variant="unavailable" class="d-none">@Model.DisplayName</h1>
     }
 }
 
 @helper Sku()
 {
-    <span class="hidden" property="sku">@Model.Sku</span>
+    <span class="d-none" property="sku">@Model.Sku</span>
 }
 
 @helper BrandName()
 {
-    <div class="h6" property="brand" data-qa="product-brand">@Model.Brand</div>
+    <h2 class="h5  mb-4" property="brand" data-qa="product-brand">@Model.Brand</h2>
 }
 
 @helper StoreInventoryLink()
 {
-    <div class="panel panel-default">
-        <div class="panel-body text-center">
+    <div class="card">
+        <div class="card-body text-center">
             <a href="#storeinventory">
                 <i class="fa  fa-file-text-o"></i>&#160;
                 @Html.Localize("Store", "H_StoreAvailability")
