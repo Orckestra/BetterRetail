@@ -165,7 +165,8 @@ namespace Orckestra.Composer.Product.Services
 
         protected virtual async Task<List<ProductMainImage>> GetImagesAsync(IEnumerable<ProductWithVariant> products)
         {
-            var imageRequests = products.Select(identifier => {
+            var imageRequests = products.Select(identifier =>
+            {
                 var imageRequest = new ProductImageRequest
                 {
                     ProductId = identifier.Product.Id,
@@ -225,10 +226,8 @@ namespace Orckestra.Composer.Product.Services
             //For now all the related products add to cart button is enable to add to cart
             vm.IsAvailableToSell = true;
 
-            if (vm.Price != null)
-            {
-                vm.DisplaySpecialPrice = LocalizationProvider.FormatPrice((decimal)vm.Price, cultureInfo);
-            }
+            vm.DisplaySpecialPrice = GetDisplayPrice(vm.Price, cultureInfo);
+            vm.DisplayPrice = GetDisplayPrice(vm.ListPrice, cultureInfo);
 
             var recurringOrdersEnabled = RecurringOrdersSettings.Enabled;
             var recurringOrderProgramName = productVariant.Product.PropertyBag.GetValueOrDefault<string>(Constants.ProductAttributes.RecurringOrderProgramName);
@@ -237,6 +236,11 @@ namespace Orckestra.Composer.Product.Services
             vm.IsRecurringOrderEligible = recurringOrdersEnabled && !string.IsNullOrWhiteSpace(recurringOrderProgramName);
 
             return vm;
+        }
+
+        protected virtual string GetDisplayPrice(decimal? price, CultureInfo cultureInfo)
+        {
+            return price != null ? LocalizationProvider.FormatPrice((decimal)price, cultureInfo) : null;
         }
 
         protected virtual ProductQuantityViewModel GetQuantity()
