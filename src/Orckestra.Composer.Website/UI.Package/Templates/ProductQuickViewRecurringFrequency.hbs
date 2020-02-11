@@ -1,24 +1,26 @@
 <div data-templateid="ProductQuickViewRecurringFrequency">
     {{#if isAvailableForRecurring}}
         <div class="recurring-modes form-group js-recurringModes">
-            <div class="radio-row {{#if_eq recurringMode "single"}}selected{{/if_eq}} js-recurringModeRow">
-                <div class="radio">
+            <div class="alert border mb-2 {{#if_eq recurringMode "single"}}selected{{/if_eq}} js-recurringModeRow">
+                <div class="form-check">
                     <input id="UseSingleQV" {{#if_eq recurringMode "single"}}checked="checked"{{/if_eq}} type="radio" data-target=".modeSelection"
                            name="recurringMode"
                            value="single"
-                           data-oc-change="changeRecurringMode"  />
-                    <label for="UseSingleQV">{{localize 'ProductPage' 'L_RecurringFrequencyOnce'}}</label>
+                           data-oc-change="changeRecurringMode"
+                           class="form-check-input"   />
+                    <label class="form-check-label" for="UseSingleQV">{{localize 'ProductPage' 'L_RecurringFrequencyOnce'}}</label>
                 </div>
             </div>
-            <div class="radio-row js-recurringModeRow {{#if_eq recurringMode "recurring"}}selected{{/if_eq}}">
-                <div class="radio">
+            <div class="alert border mb-2 js-recurringModeRow {{#if_eq recurringMode "recurring"}}selected{{/if_eq}}">
+                <div class="form-check">
                     <input  id="UseRecurringQV" {{#if_eq recurringMode "recurring"}}checked="checked"{{/if_eq}}
                             type="radio"
                             data-target=".modeSelection"
                             name="recurringMode"
                             value="recurring"
-                            data-oc-change="changeRecurringMode"  />
-                    <label for="UseRecurringQV">
+                            data-oc-change="changeRecurringMode"
+                            class="form-check-input"   />
+                    <label class="form-check-label" for="UseRecurringQV">
                         <img src="/UI.Package/Images/recurring.svg" class="recurring-icon" alt="{{localize 'General' 'L_RecurringProduct'}}" title="{{localize 'General' 'L_RecurringProduct'}}" /> {{localizeFormat 'ProductPage' 'L_RecurringPitch' (localize 'ProductPage' 'L_RecurringSaveRate') }}                        
                     </label>
                 </div>
@@ -26,7 +28,7 @@
                     <div class="row">
                         <div class="form-group">
                             <label for="recurringOrderFrequencyNameSelect">{{localize 'ProductPage' 'L_RecurringDeliveryFrequency'}}</label> 
-                            <button class="btn-link" role="button" data-trigger="click" data-toggle="popover" data-placement="top" title=""
+                            <button class="btn" role="button" data-trigger="click" data-toggle="popover" data-placement="top" title=""
                                     data-content="{{{recurringBubblePitch}}}" data-html="true" data-original-title="{{localize 'ProductPage' 'L_RecurringBubblePitchTitle'}}">
                                 <span class="fa fa-question-circle"></span>
                             </button>

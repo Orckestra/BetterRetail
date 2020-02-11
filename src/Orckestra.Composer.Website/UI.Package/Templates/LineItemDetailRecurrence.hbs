@@ -14,24 +14,26 @@
             </button>
         </div>
         <div id="recurringModes{{@index}}" class="recurring-modes form-group collapse js-recurringModes">
-            <div class="radio-row{{#unless RecurringOrderFrequencyName}} selected{{/unless}} js-recurringModeRow">
-                <div class="radio">
+            <div class="alert border mb-2 {{#unless RecurringOrderFrequencyName}} selected{{/unless}} js-recurringModeRow">
+                <div class="form-check">
                     <input id="UseSingle{{@index}}" {{#unless RecurringOrderFrequencyName}}checked="checked"{{/unless}} type="radio" data-target=".modeSelection"
                            name="recurringMode{{@index}}"
                            value="single"
-                           data-oc-change="changeRecurringMode"  />
-                    <label for="UseSingle{{@index}}">{{localize 'ProductPage' 'L_RecurringFrequencyOnce'}}</label>
+                           data-oc-change="changeRecurringMode"
+                           class="form-check-input"  />
+                    <label class="form-check-label" for="UseSingle{{@index}}">{{localize 'ProductPage' 'L_RecurringFrequencyOnce'}}</label>
                 </div>
             </div>
-            <div class="radio-row{{#if RecurringOrderFrequencyName}} selected{{/if}} js-recurringModeRow">
-                <div class="radio">
+            <div class="alert border mb-2 {{#if RecurringOrderFrequencyName}} selected{{/if}} js-recurringModeRow">
+                <div class="form-check">
                     <input  id="UseRecurring{{@index}}" {{#if RecurringOrderFrequencyName}}checked="checked"{{/if}}
                             type="radio"
                             data-target=".modeSelection"
                             name="recurringMode{{@index}}"
                             value="recurring"
-                            data-oc-change="changeRecurringMode"  />
-                    <label for="UseRecurring{{@index}}">
+                            data-oc-change="changeRecurringMode"
+                            class="form-check-input"  />
+                    <label class="form-check-label" for="UseRecurring{{@index}}">
                         <img src="/UI.Package/Images/recurring.svg" class="recurring-icon" alt="{{localize 'General' 'L_RecurringProduct'}}" title="{{localize 'General' 'L_RecurringProduct'}}" /> {{localizeFormat 'ProductPage' 'L_RecurringPitch' (localize 'ProductPage' 'L_RecurringSaveRate') }}
                     </label>
                 </div>
@@ -39,7 +41,7 @@
                     <div class="row">
                         <div class="col-10 col-md-9 col-lg-7 form-group">
                             <label for="recurringOrderFrequencyNameSelect{{@index}}">{{localize 'ProductPage' 'L_RecurringDeliveryFrequency'}}</label> 
-                            <button class="btn-link" role="button" data-trigger="click" data-toggle="popover" data-placement="top" title=""
+                            <button class="btn" role="button" data-trigger="click" data-toggle="popover" data-placement="top" title=""
                                     data-content="{{{localize 'ProductPage' 'L_RecurringBubblePitch'}}}" data-html="true" data-original-title="{{localize 'ProductPage' 'L_RecurringBubblePitchTitle'}}">
                                 <span class="fa fa-question-circle"></span>
                             </button>
