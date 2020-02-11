@@ -51,7 +51,10 @@ module Orckestra.Composer {
             $('.js-thumbnails[data-variant="' + e.data.selectedVariantId + '"]').find('a').each((index, el) => {
                 $(el).clone().appendTo('.js-zoom-thumbnails');
                 if ($(el).hasClass('active')) {
-                    $(el).find('img').click();
+                    var img = $(el).find('img');
+                    if ($(img).attr('src')) {
+                        $(img).click();
+                    }
                 }
              });
         }
