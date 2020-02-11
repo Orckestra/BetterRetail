@@ -9,12 +9,12 @@
 ### Dev Build and Deploy
 
 #### Getting Started
-* Get latest source code from branch 'dev'
+* Get the latest source code from branch 'dev'
 
 `$git clone https://github.com/Orckestra/ReferenceApplication.git`
 
-#### Prerequesites
-* VS 2019
+#### Prerequisites
+* Visual Studio 2019
 * .NET Core 3.1 or higher. Download from https://dotnet.microsoft.com/download/dotnet-core/3.1
 * IIS with URL Rewrite Module
 * NPM version 6.4.1, 6.9.1 (npm -v to see version) - Must install node.js version 8.12 or 10 (this versions was tested to complete the Build)
@@ -24,7 +24,7 @@
 * Make sure you have installed *.develop.orckestra.local" 
 
 #### Build Projects
-* Run PS as Administrator `.\build\build.ps1 -t dev` to build Reference Application projects (Debug Build, without Unit Test).
+* Run a Powershell Console as an Administrator `.\build\build.ps1 -t dev` to build Reference Application projects (Debug Build, without Unit Test).
  
 **NOTE**: Before completing a new feature make sure to run the `.\build\build.ps1' without dev parameter to validate all Unit Tests.
 
