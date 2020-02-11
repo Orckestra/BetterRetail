@@ -1,11 +1,10 @@
 {{#with Pagination}}
 <div class="pagination-dropdown ">
-    <ul class="pagination  m-0  " >
+    <ul class="pagination  m-0  align-items-center justify-content-end" >
         <li class="page-item previous  {{#unless PreviousPage.Url}}disabled{{/unless}}">
             <a class="page-link" title="{{PreviousPage.DisplayName}}" href="{{PreviousPage.Url}}">
                 <i class="fa  fa-arrow-circle-left"></i>&#160;{{PreviousPage.DisplayName}}
             </a>
-            &#160;
         </li>
 
         <li class="page-item mx-2">

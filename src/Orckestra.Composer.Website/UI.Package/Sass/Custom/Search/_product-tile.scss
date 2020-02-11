@@ -16,7 +16,7 @@
     .product-tile-text {
         border-top: solid 1px lighten(gray("400"), 7%);
         // 3 lines of text + half a line of spacing
-        height: ($line-height-base * $font-size-base) * 3.5;
+        height: ($line-height-base * $font-size-base) * 3;
         padding-top: 3px;
         position: relative;
         overflow: hidden;
