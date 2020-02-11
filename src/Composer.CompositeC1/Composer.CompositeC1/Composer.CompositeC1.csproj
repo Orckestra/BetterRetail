@@ -51,10 +51,6 @@
       <HintPath>..\..\..\packages\C1CMS.Assemblies.6.6.6912.30810\lib\net471\Composite.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Composite.AspNet.MvcFunctions, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Dependencies\Composite\Composite.AspNet.MvcFunctions.dll</HintPath>
-    </Reference>
     <Reference Include="Composite.Workflows, Version=6.6.6912.30813, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\C1CMS.Assemblies.6.6.6912.30810\lib\net471\Composite.Workflows.dll</HintPath>
       <Private>False</Private>

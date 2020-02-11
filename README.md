@@ -53,7 +53,7 @@
 
 #### How to Debug
 * Open Orckestra.ReferenceApplication.sln in Visual Studio as Administrator
-* Locate **Composer.CompositeC1.Mvc** project, right click and select "Make as StartUp Project"
+* Locate **Orckestra.Composer.Website** project, right click and select "Make as StartUp Project"
 * Press F5
 * Yoa are Done!
 

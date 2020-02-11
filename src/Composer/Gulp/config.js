@@ -6,14 +6,14 @@
             _ = require('lodash'),
             path = require('path'),
             config = {};
-            let thirdPartyJavaScriptPath = '../../../Composer.CompositeC1/Composer.CompositeC1.Mvc/UI.Package/JavaScript/';
+            let thirdPartyJavaScriptPath = '../../../Orckestra.Composer.Website/UI.Package/JavaScript/';
 
         config = _.merge(mainConfiguration, {
 
-            typescriptFilesGlob: ['../Composer.CompositeC1/Composer.CompositeC1.Mvc/UI.Package/Typescript/**/*.ts'],
-            typescriptFilesGlobForUnitTests: ['../Composer.CompositeC1/Composer.CompositeC1.Mvc/UI.Package/Typescript/**/*.ts', '!../Composer.CompositeC1/Composer.CompositeC1.Mvc/UI.Package/Typescript/App.ts'],
-            dtsOutputFolder: '../Composer.CompositeC1/Composer.CompositeC1.Mvc/UI.Package/Typings',
-            javascriptFolder: '../Composer.CompositeC1/Composer.CompositeC1.Mvc/UI.Package/JavaScript',
+            typescriptFilesGlob: ['../Orckestra.Composer.Website/UI.Package/Typescript/**/*.ts'],
+            typescriptFilesGlobForUnitTests: ['../Orckestra.Composer.Website/UI.Package/Typescript/**/*.ts', '!../Orckestra.Composer.Website/UI.Package/Typescript/App.ts'],
+            dtsOutputFolder: '../Orckestra.Composer.Website/UI.Package/Typings',
+            javascriptFolder: '../Orckestra.Composer.Website/UI.Package/JavaScript',
             jsBundleName: 'orckestra.composer.js',
             dtsBundleName: 'orckestra.composer.d.ts',
 
@@ -27,17 +27,17 @@
                     path.join(thirdPartyJavaScriptPath, 'q-1.2.0.js'),
                     path.join(thirdPartyJavaScriptPath, 'jquery.serialize-object.js'),
                     path.join(thirdPartyJavaScriptPath, 'typeahead.js'),
-                    '../../../Composer.CompositeC1/Composer.CompositeC1.Mvc/UI.Package/Javascript/orckestra.composer.js',
+                    '../../../Orckestra.Composer.Website/UI.Package/Javascript/orckestra.composer.js',
                     path.join('../../', mainConfiguration.testsOutputFolder, '/**/*.js')
                 ],
-                filesToBuild: ['../Composer.CompositeC1/Composer.CompositeC1.Mvc/UI.Package/Tests/**/*.ts']
+                filesToBuild: ['../Orckestra.Composer.Website/UI.Package/Tests/**/*.ts']
             },
 
             tokens: ['Product', 'Cart', 'MyAccount'],
 
             documentationSettings: {
                 documentationName: 'Orckestra Composer',
-                outputFolder: '../Composer.CompositeC1/Composer.CompositeC1.Mvc/UI.Package/Documentation',
+                outputFolder: '../Orckestra.Composer.Website/UI.Package/Documentation',
                 moduleType: 'commonjs',
                 includeDeclarations: true
             },

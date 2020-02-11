@@ -1,4 +1,4 @@
-﻿using Composite.AspNet.MvcFunctions;
+using Composite.AspNet.MvcFunctions;
 using Composite.Core;
 using Composite.Core.Application;
 using Composite.Core.ResourceSystem;
@@ -7,7 +7,7 @@ using Orckestra.Composer.C1CMS.Queries.Controllers;
 using System.Web.Mvc;
 using System.Xml.Linq;
 
-namespace Orckestra.Composer.CompositeC1.Mvc
+namespace Orckestra.Composer.Website
 {
     [ApplicationStartup(AbortStartupOnException = true)]
     public static class StartupHandler

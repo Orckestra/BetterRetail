@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29509.3
@@ -39,7 +39,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Composer.CompositeC1.DataTy
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Composer.CompositeC1.Tests", "src\Composer.CompositeC1\Composer.CompositeC1.Tests\Composer.CompositeC1.Tests.csproj", "{DB2343A4-77DB-4B6E-82D0-74C7724FC821}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Composer.CompositeC1.Mvc", "src\Composer.CompositeC1\Composer.CompositeC1.Mvc\Composer.CompositeC1.Mvc.csproj", "{7E75D550-3C78-46D0-A124-065A5FFFA0B2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.Website", "src\Orckestra.Composer.Website\Orckestra.Composer.Website.csproj", "{7E75D550-3C78-46D0-A124-065A5FFFA0B2}"
 	ProjectSection(ProjectDependencies) = postProject
 		{A8B2D94C-8C2E-4AC5-875A-6E3540B56ADD} = {A8B2D94C-8C2E-4AC5-875A-6E3540B56ADD}
 		{8F9AD96B-47B6-4BBD-AD4E-0155B49D2BFD} = {8F9AD96B-47B6-4BBD-AD4E-0155B49D2BFD}

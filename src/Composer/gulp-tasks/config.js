@@ -182,7 +182,7 @@ var path = require('path');
                     noLib: false,
                     removeComments: false,
                     target: ecmascriptTarget,
-                    sortOutput: true
+                    sortOutput: false
                 }
             };
 
