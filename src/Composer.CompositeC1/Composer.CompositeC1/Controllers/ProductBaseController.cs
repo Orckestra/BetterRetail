@@ -107,7 +107,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             return View(breadcrumbViewModel);
         }
 
-        public virtual ActionResult RelatedProducts(string id, string merchandiseTypes, string headingText, int maxItems, bool displaySameCategoryProducts, bool displayPrices, bool displayAddToCart, DataReference<CssStyle> backgroundStyle=null)
+        public virtual ActionResult RelatedProducts(string id, string merchandiseTypes, string headingText, int maxItems, bool displaySameCategoryProducts, bool displayPrices, bool displayAddToCart, DataReference<CssStyle> backgroundStyle = null)
         {
             if (string.IsNullOrEmpty(id))
             {
