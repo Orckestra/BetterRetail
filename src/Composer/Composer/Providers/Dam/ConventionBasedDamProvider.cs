@@ -282,12 +282,12 @@ namespace Orckestra.Composer.Providers.Dam
             return new List<ProductMedia>();
         }
 
-        public virtual string GetMediaImageUrl(Product product, string variantId = "")
+        public virtual string GetMediaImageUrl(Product product, string variantId)
         {
             if (product == null)
                 return null;
 
-            var variant = product.Variants?.FirstOrDefault(v => v.Id.ToLower() == variantId.ToLower());
+            var variant = !string.IsNullOrEmpty(variantId) ? product.Variants?.FirstOrDefault(v => v.Id.ToLower() == variantId.ToLower()) : null;
 
             var variantMediaSet = GetVariantMediaSet(product.VariantMediaSet, variant);
             var mediaSet = variantMediaSet.Any() ? variantMediaSet : FilterImages(product.MediaSet);
