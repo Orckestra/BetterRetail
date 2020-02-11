@@ -1,7 +1,7 @@
 <div class="wishlist-share" data-templateid="ShareWishList">
     <p>{{localize 'MyAccount' 'L_ShareWishListText'}}</p>
-    <div class="form-horizontal  {{#if_eq TotalQuantity 0}}inactive{{/if_eq}}">
-        <div class="form-group">
+    <div class="{{#if_eq TotalQuantity 0}}inactive{{/if_eq}}">
+        <div class="form-group row">
             <div class="col-12  col-md-6  col-lg-9">
                 <input id="txtShareUrl" type="text" class="form-control" placeholder="{{localize 'MyAccount' 'P_ShareWishListCopyLink'}}" value="{{ShareUrl}}" />
             </div>
