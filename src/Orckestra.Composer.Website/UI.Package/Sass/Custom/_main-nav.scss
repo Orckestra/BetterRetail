@@ -52,7 +52,7 @@
     @include media-breakpoint-down(sm) {
 
         //the mobile menu will follow the sticky navbar
-        position: absolute;
+        position: fixed;
         top: 42px; //computed height of the navbar
         z-index: 100;
         left: 0;
