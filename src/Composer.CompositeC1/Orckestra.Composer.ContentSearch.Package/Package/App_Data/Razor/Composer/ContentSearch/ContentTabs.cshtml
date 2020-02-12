@@ -180,9 +180,9 @@
                         <input id="keywords" type="hidden" value="@SearchRequestContext.SearchQuery" name="keywords" />
                         <div class="row">
                             <div class="col-12 col-lg-10 offset-lg-2">
-                                @if (currentTab.Total > 0)
-                                {
-                                    <div class="row filters-row">
+                                <div class="row filters-row">
+                                    @if (currentTab.Total > 0)
+                                    {
                                         <div class="col-6 d-lg-none">
                                             @ShowFacetsCollapseBtn()
                                         </div>
@@ -192,8 +192,8 @@
                                         <div class="col-6 d-none d-lg-block">
                                             @ShowPaging(currentTab)
                                         </div>
-                                    </div>
-                                }
+                                    }
+                                </div>
                             </div>
                             <div class="col-12">
                                 <div class="row">
