@@ -16,10 +16,14 @@ namespace Orckestra.Composer.CompositeC1
     {
         public void Init(HttpApplication context)
         {
-            context.PreRequestHandlerExecute += context_PreRequestHandlerExecute;
+            // We should check PathInfoUsed in PreRender,
+            // before C1 RequestInterceptor,
+            // after selecting renderer (~/Renderers/Page.aspx or CmsPageHttpHandler).
+            // CmsPageHttpHandler should throw HttpException(404) so it will be handled in HttpApplication.Application_Error
+            context.AcquireRequestState += context_AcquireRequestState;
         }
 
-        private void context_PreRequestHandlerExecute(object sender, EventArgs e)
+        private void context_AcquireRequestState(object sender, EventArgs e)
         {
             if (!SystemSetupFacade.IsSystemFirstTimeInitialized)
             {
@@ -31,7 +35,7 @@ namespace Orckestra.Composer.CompositeC1
 
             if (page != null && !string.IsNullOrWhiteSpace(C1PageRoute.GetPathInfo()))
             {
-                page.PreInit += (a, b) => CheckThatPathInfoHasBeenUsed(httpContext, page);
+                page.PreRender += (a, b) => CheckThatPathInfoHasBeenUsed(httpContext, page);
             }
         }
 
