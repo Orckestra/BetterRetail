@@ -14,14 +14,20 @@
     <div data-oc-controller="SingleCheckout.Shipping">
         <br />
         <div class="card">
-            <h4 class="card-header">
-                Shipping
-            </h4>
+            <div class="card-header">
+
+                <h4 class="float-left">
+                    Shipping
+                </h4>
+                <button class="btn btn-primary float-right">Continue </button>
+            </div>
+
+
             <div class="card-body">
                 <ul v-if="ShippingMethods">
                     <li v-for="method in ShippingMethods">
                         <span v-text="method.DisplayName">
-                         </span> - 
+                        </span> -
                         <span v-text="method.Cost"></span>
                     </li>
                 </ul>

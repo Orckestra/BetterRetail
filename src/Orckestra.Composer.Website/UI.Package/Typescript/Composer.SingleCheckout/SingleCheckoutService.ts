@@ -110,6 +110,7 @@ module Orckestra.Composer {
                 el: '#vueSingleCheckout',
                 data: checkoutContext,
                 mounted() {
+                    $("#vueSingleCheckout").removeClass('d-none');
                 },
                 computed: {
 
@@ -126,12 +127,10 @@ module Orckestra.Composer {
                     },
 
                     OrderCanBePlaced() {
-                        let email = this.cartViewModel.Customer.Email;
-                        return email &&  email.length > 0 ? true: false;
+                       return false;
                     }
                 }
             });
-
         }
 
         public registerController(controller: IBaseCheckoutController) {
