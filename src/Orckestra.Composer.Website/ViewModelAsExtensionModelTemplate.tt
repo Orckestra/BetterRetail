@@ -1,5 +1,5 @@
 <#@ template debug="false" hostspecific="false" language="C#" #>
-<#@ assembly name="$(SolutionDir)\Composer.CompositeC1\bin\Debug\Orckestra.Composer.dll" #>
+<#@ assembly name="$(SolutionDir)\Orckestra.Composer.CompositeC1\bin\Debug\Orckestra.Composer.dll" #>
 <#@ assembly name="$(SolutionDir)\Orckestra.Composer.Website\bin\Orckestra.Composer.Website.dll" #>
 <#@ assembly name="System.Core" #>
 <#@ import namespace="System.Linq" #>

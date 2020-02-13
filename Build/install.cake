@@ -170,7 +170,7 @@ Task("Kill-Processes").Does(() =>
 
 
 #region Install-C1
-
+//TODO: don't reload it every time, cache it somewhere if a version is the same
 Task("Download-C1").Does(() =>
 {
     DownloadFile(Parameters["C1Url"], C1File);
@@ -340,7 +340,7 @@ Task("Patch-ExperienceManagement-Config")
 Task("Install-Secondary-Language").Does(() => 
 {
     var autoInstallDir = $"{websiteDir}/App_Data/Composite/AutoInstallPackages";
-    var sourcePackage = $"{outputDir}/artifacts/Composer.C1.Content.FR-CA.zip";
+    var sourcePackage = $"{outputDir}/artifacts/Orckestra.Composer.C1.Content.FR-CA.zip";
     
     CreateDirectory(autoInstallDir);
     CopyFiles(sourcePackage, autoInstallDir);

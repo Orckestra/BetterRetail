@@ -173,7 +173,7 @@
     &-with-mega-menu {
 
         @include media-breakpoint-up(sm) {
-            padding-bottom: 50px;
+            padding-bottom: 40px;
         }
 
         @include media-breakpoint-down(sm) {

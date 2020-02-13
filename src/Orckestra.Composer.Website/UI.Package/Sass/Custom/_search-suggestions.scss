@@ -168,7 +168,7 @@
 
     .product-tile-text {
       font-weight: 400;
-      height: 90px;
+      height: ($line-height-base * $font-size-base) * 4;
 
       .suggestion-title {
         font-weight: 600;

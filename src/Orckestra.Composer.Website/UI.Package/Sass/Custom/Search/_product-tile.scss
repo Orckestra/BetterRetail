@@ -40,7 +40,12 @@
     }
 
     .product-tile-special-price {
-        height: ceil(($line-height-base * $font-size-base));
+        position: relative;
+        height: ceil(($line-height-base * $font-size-sm));
+        del {
+            position: absolute;
+            bottom: 0;
+        }
     }
 
     .product-tile-media {
