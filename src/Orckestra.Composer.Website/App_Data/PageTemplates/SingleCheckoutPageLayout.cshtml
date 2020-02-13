@@ -17,22 +17,23 @@
 }
 
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v-bind="vue" xmlns:f="http://www.composite.net/ns/function/1.0">
 	<head>
      	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 	</head>
-	<body>
-        <f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.Header.GeneralErrors" />
-		<f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.CheckoutHeader" />
-		<div id="vueSingleCheckout" class="container-md">
-			<div class="row">
-				<div class="col-8">
-					@Markup(Body)
-				</div>
-				<div class="col-4">
-					@Markup(Right)
-				</div>
-			</div>
-		</div>
-	</body>
+    <body>
+        @Function("Composer.Header.GeneralErrors")
+        @Function("Composer.Header.CheckoutHeader")
+        
+        <div id="vueSingleCheckout" class="container-md">
+            <div class="row">
+                <div class="col-8">
+                    @Markup(Body)
+                </div>
+                <div class="col-4">
+                    @Markup(Right)
+                </div>
+            </div>
+        </div>
+    </body>
 </html>

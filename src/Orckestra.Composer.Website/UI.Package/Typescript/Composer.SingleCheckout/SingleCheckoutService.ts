@@ -113,16 +113,21 @@ module Orckestra.Composer {
                 },
                 computed: {
 
-                    Customer() {
+                    Customer()  { 
                         return this.cartViewModel.Customer;
-                    },
-
+                     },
+                       
                     ShippingMethods() {
                         return  this.shippingMethodsViewModel.ShippingMethods;
                     },
 
-                    OrderSummary() {
+                    OrderSummary () {
                         return this.cartViewModel.OrderSummary;
+                    },
+
+                    OrderCanBePlaced() {
+                        let email = this.cartViewModel.Customer.Email;
+                        return email &&  email.length > 0 ? true: false;
                     }
                 }
             });
@@ -181,12 +186,7 @@ module Orckestra.Composer {
                 }
             });
 
-            if (!_.isNumber(CheckoutService.checkoutStep)) {
-                throw new Error('CheckoutService.checkoutStep has not been set or is not a number.');
-            }
-
             var emptyVm = {
-                CurrentStep: CheckoutService.checkoutStep,
                 UpdatedCart: {}
             };
 
@@ -197,7 +197,6 @@ module Orckestra.Composer {
         public completeCheckout(): Q.Promise<ICompleteCheckoutResult> {
 
             var emptyVm = {
-                CurrentStep: CheckoutService.checkoutStep,
                 UpdatedCart: {}
             };
 
@@ -283,7 +282,7 @@ module Orckestra.Composer {
         private collectValidationPromises(): Q.Promise<any> {
 
             var promises: Q.Promise<any>[] = [];
-            var controllerInstance: IBaseCheckoutController;
+            var controllerInstance: IBaseSingleCheckoutController;
             var controllerOptions: IRegisterControlOptions;
 
             for (var controllerName in this.registeredControllers) {

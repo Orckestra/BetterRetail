@@ -9,7 +9,7 @@ module Orckestra.Composer {
 
     export class BaseSingleCheckoutController extends Orckestra.Composer.Controller implements Orckestra.Composer.IBaseSingleCheckoutController {
 
-       // protected formInstances: IParsley[];
+        protected formInstances: IParsley[];
         protected checkoutService: ISingleCheckoutService;
 
         public viewModelName: string;
@@ -32,14 +32,14 @@ module Orckestra.Composer {
 
         public unregisterController() {
 
-           // this.checkoutService.unregisterController(this.viewModelName);
+           this.checkoutService.unregisterController(this.viewModelName);
         }
 
 
-        //public getValidationPromise(): Q.Promise<boolean> {
+        public getValidationPromise(): Q.Promise<boolean> {
 
-            //return Q.fcall(() => this.isValidForUpdate());
-       // }
+            return Q.fcall(() => this.isValidForUpdate());
+        }
 
         public getUpdateModelPromise(): Q.Promise<any> {
 
@@ -54,7 +54,7 @@ module Orckestra.Composer {
         protected registerSubscriptions(): void {
 
             this.eventHub.subscribe(`${this.viewModelName}Rendered`, () => {
-                //this.formInstances = this.registerFormsForValidation($('form', this.context.container));
+                this.formInstances = this.registerFormsForValidation($('form', this.context.container));
             });
         }
 
@@ -66,12 +66,12 @@ module Orckestra.Composer {
             return JSON.stringify(viewModel);
         }
 
-       // protected isValidForUpdate(): boolean {
+       protected isValidForUpdate(): boolean {
 
-            //var isValidForUpdate = _.all(this.formInstances, formInstance => formInstance.validate(undefined, true));
+            var isValidForUpdate = _.all(this.formInstances, formInstance => formInstance.validate(undefined, true));
 
-            //return isValidForUpdate;
-       // }
+            return isValidForUpdate;
+       }
 
         protected onRenderDataFailed(reason: any): void {
 

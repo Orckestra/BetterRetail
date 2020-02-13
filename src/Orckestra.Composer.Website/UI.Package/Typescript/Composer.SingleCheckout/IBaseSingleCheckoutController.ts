@@ -10,7 +10,7 @@ module Orckestra.Composer {
 
        // renderData(checkoutContext: ICheckoutContext): Q.Promise<void>;
 
-        //getValidationPromise(): Q.Promise<boolean>;
+        getValidationPromise(): Q.Promise<boolean>;
 
         getUpdateModelPromise(): Q.Promise<any>;
     }

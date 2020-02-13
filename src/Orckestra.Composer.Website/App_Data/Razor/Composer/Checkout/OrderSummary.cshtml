@@ -14,7 +14,7 @@
     <div data-oc-controller="SingleCheckout.OrderSummary">
         <br />
         <div class="card">
-            <h4 class="card-header">
+            <h4 class="card-header bg-dark  text-white">
                 Order Summary
             </h4>
             <div class="card-body">
@@ -41,7 +41,7 @@
                 </div>
                 <div class="row">
                     <div class="col-12">
-                        <button class="btn btn-success  w-100" disabled="disabled">Place Order</button>
+                        <button class="btn btn-success  w-100" v-bind:disabled="OrderCanBePlaced == false">Place Order</button>
                     </div>
                 </div>
             </div>
