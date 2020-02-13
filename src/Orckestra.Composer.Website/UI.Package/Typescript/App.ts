@@ -63,6 +63,10 @@
 ///<reference path='./Composer.MyAccount/RecurringCart/MyRecurringCartsController.ts' />
 ///<reference path='./Composer.MyAccount/RecurringCart/MyRecurringCartDetailsController.ts' />
 
+///<reference path='./Composer.SingleCheckout/UserInfoSingleCheckoutController.ts' />
+///<reference path='./Composer.SingleCheckout/ShippingSingleCheckoutController.ts' />
+///<reference path='./Composer.SingleCheckout/OrderSummarySingleCheckoutController.ts' />
+
 (() => {
     'use strict';
 
@@ -106,6 +110,9 @@
                 { name: 'Product.SelectedSearchFacets', controller: Orckestra.Composer.SelectedFacetSearchController },
                 { name: 'Product.ProductZoom', controller: Orckestra.Composer.ProductZoomController },
 
+                { name: 'SingleCheckout.UserInfo', controller: Orckestra.Composer.UserInfoSingleCheckoutController },
+                { name: 'SingleCheckout.Shipping', controller: Orckestra.Composer.ShippingSingleCheckoutController },
+                { name: 'SingleCheckout.OrderSummary', controller: Orckestra.Composer.OrderSummarySingleCheckoutController },
                 { name: 'Checkout.GuestCustomerInfo', controller: Orckestra.Composer.GuestCustomerInfoCheckoutController },
                 { name: 'Checkout.ShippingAddress', controller: Orckestra.Composer.ShippingAddressCheckoutController },
                 { name: 'Checkout.ShippingAddressRegistered', controller: Orckestra.Composer.ShippingAddressRegisteredController },

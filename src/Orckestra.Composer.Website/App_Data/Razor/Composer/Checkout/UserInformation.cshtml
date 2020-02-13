@@ -1,0 +1,49 @@
+﻿@inherits RazorFunction
+@using Orckestra.Composer.Providers.Localization
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "User Information"; }
+    }
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<head>
+
+</head>
+<body>
+    <div data-oc-controller="SingleCheckout.UserInfo">
+        <br />
+        <div class="card">
+            <h4 class="card-header">
+                Informations
+            </h4>
+            <div class="card-body">
+                <span v-text="Customer.FirstName" class="font-weight-bold"></span>
+                <span v-text="Customer.LastName" class="font-weight-bold"></span>
+                <div v-text="Customer.Email"></div>
+
+
+                <br />
+                <div class="form-group">
+                    <input v-model="cartViewModel.Customer.Email"
+                           class="form-control"
+                           required="required"
+                           placeholder="Email" type="email" />
+                </div>
+                <div class="form-group">
+                    <input v-model="cartViewModel.Customer.FirstName"
+                           class="form-control"
+                           placeholder="First Name" type="text" />
+                </div>
+                <div>
+                    <input v-model="cartViewModel.Customer.LastName"
+                           class="form-control"
+                           placeholder="Last Name" type="text" />
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

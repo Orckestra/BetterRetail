@@ -1,0 +1,32 @@
+﻿@inherits RazorFunction
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Shipping"; }
+    }
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<head>
+</head>
+<body>
+    <div data-oc-controller="SingleCheckout.Shipping">
+        <br />
+        <div class="card">
+            <h4 class="card-header">
+                Shipping
+            </h4>
+            <div class="card-body">
+                <ul v-if="ShippingMethods">
+                    <li v-for="method in ShippingMethods">
+                        <span v-text="method.DisplayName">
+                         </span> - 
+                        <span v-text="method.Cost"></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -324,6 +324,9 @@
     <Content Include="App_Data\Razor\Composer\Product\Specifications.cshtml" />
     <Content Include="App_Data\Razor\Composer\DatePicker\DatePicker.Includes.cshtml" />
     <Content Include="App_Data\Razor\Composer\Footer\SocialLinks.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Checkout\Shipping.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Checkout\UserInformation.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Checkout\OrderSummary.cshtml" />
     <None Include="Properties\PublishProfiles\Website - CD.pubxml" />
     <None Include="Properties\PublishProfiles\Website.pubxml" />
     <Content Include="ViewModelAsExtensionModelTemplate.tt">

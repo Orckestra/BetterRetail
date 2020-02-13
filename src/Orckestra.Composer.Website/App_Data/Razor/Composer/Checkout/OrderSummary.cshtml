@@ -1,0 +1,51 @@
+﻿@inherits RazorFunction
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Order Summary"; }
+    }
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<head>
+</head>
+<body>
+    <div data-oc-controller="SingleCheckout.OrderSummary">
+        <br />
+        <div class="card">
+            <h4 class="card-header">
+                Order Summary
+            </h4>
+            <div class="card-body">
+
+                <div class="row">
+
+                    <div class="col-6  col-md-7">
+                        <h4>@Html.Localize("MyAccount", "L_Total")</h4>
+                    </div>
+                    <div class="col-6  col-md-5  text-right">
+                        <h4 v-text="OrderSummary.Total" data-qa="checkout-order-summary-total"></h4>
+                    </div>
+                </div>
+                <div v-if="OrderSummary.SavingsTotal" class="row">
+                    <div class=" col-12 ">
+                        <div class="alert alert-success bg-white text-center text-success">
+                            <span data-qa="order-summary-discount">
+                                @Html.Localize("MyAccount", "L_Savings")
+                                &nbsp;
+                                <span v-text="OrderSummary.SavingsTotal"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <button class="btn btn-success  w-100" disabled="disabled">Place Order</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
