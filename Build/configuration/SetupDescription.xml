@@ -23,12 +23,12 @@
       <package id="7020b656-e993-4dfa-bfd8-e6dc000e3ca6" url="http://experience-management-packages.c1preprod02.composite.net/Setup/branches/$(branch)/Packages/Orckestra.ExperienceManagement.QueryBuilder.zip"/>
 
       <!-- Reff App  -->
-      <package id="559d7bc6-d637-4d73-9a37-7704e7535742" url="../../output/artifacts/Composer.C1.Core.zip"/>
+      <package id="559d7bc6-d637-4d73-9a37-7704e7535742" url="../../output/artifacts/Orckestra.Composer.C1.Core.zip"/>
       <package id="1220b656-e993-4dfa-bfd8-e6dc000e3ca3" url="../../output/artifacts/Orckestra.Composer.C1CMS.Queries.zip"/>
       <package id="92141e5a-bdfe-459f-a4b6-f2652a1fe4c4" url="../../output/artifacts/Orckestra.Composer.SEO.Organization.zip"/>
       <package id="1820b656-e993-4dfa-bfd8-e6dc000e3ca3" url="../../output/artifacts/Orckestra.Composer.Articles.zip"/>
       <package id="1320b656-e993-4dfa-bfd8-e6dc000e3c03" url="../../output/artifacts/Orckestra.Composer.ContentSearch.zip"/>
-      <package id="606c15eb-5e0c-4043-8e9e-ca528c86fa26" url="../../output/artifacts/Composer.C1.Content.EN-CA.zip"/>
+      <package id="606c15eb-5e0c-4043-8e9e-ca528c86fa26" url="../../output/artifacts/Orckestra.Composer.C1.Content.EN-CA.zip"/>
       <package id="93141e5a-bdfe-459f-a4b6-f2652a1fe4c4" url="../../output/artifacts/Orckestra.Composer.SEO.Organization.Content.zip"/>
       <package id="1420b656-e993-4dfa-bfd8-e6dc000e3c00" url="../../output/artifacts/Orckestra.Composer.ContentSearch.Content.zip"/>
       <package id="1110b656-e993-4dfa-bfd8-e6dc000e3ca0" url="../../output/artifacts/Orckestra.Composer.Languages.zip"/>

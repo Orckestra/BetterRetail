@@ -1,0 +1,431 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\..\packages\NUnit3TestAdapter.3.15.1\build\net35\NUnit3TestAdapter.props" Condition="Exists('..\..\packages\NUnit3TestAdapter.3.15.1\build\net35\NUnit3TestAdapter.props')" />
+  <Import Project="..\..\packages\NUnit.3.12.0\build\NUnit.props" Condition="Exists('..\..\packages\NUnit.3.12.0\build\NUnit.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{24EAEC4F-3E3C-4A4A-AB18-F8D64A7C0673}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Orckestra.Composer.Tests</RootNamespace>
+    <AssemblyName>Orckestra.Composer.Tests</AssemblyName>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Autofac, Version=3.5.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="Autofac.Extras.Moq, Version=4.0.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Autofac.Extras.Moq.4.0.0\lib\net45\Autofac.Extras.Moq.dll</HintPath>
+    </Reference>
+    <Reference Include="Autofac.Integration.Mvc, Version=3.3.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Autofac.Mvc5.3.3.4\lib\net45\Autofac.Integration.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="Autofac.Integration.WebApi, Version=3.4.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Autofac.WebApi2.3.4.0\lib\net45\Autofac.Integration.WebApi.dll</HintPath>
+    </Reference>
+    <Reference Include="Composite.Workflows, Version=6.6.6912.30813, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\C1CMS.Assemblies.6.6.6912.30810\lib\net471\Composite.Workflows.dll</HintPath>
+    </Reference>
+    <Reference Include="FizzWare.NBuilder">
+      <HintPath>..\..\packages\NBuilder.3.0.1.1\lib\FizzWare.NBuilder.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentAssertions, Version=3.3.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\FluentAssertions.3.3.0\lib\net45\FluentAssertions.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentAssertions.Core, Version=3.3.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\FluentAssertions.3.3.0\lib\net45\FluentAssertions.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Handlebars, Version=1.0.5615.36670, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Handlebars.Net.1.3.3\lib\Handlebars.dll</HintPath>
+    </Reference>
+    <Reference Include="HttpSimulator, Version=2.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\HttpSimulator.2.2.1\lib\net40\HttpSimulator.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyInjection, Version=1.1.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\C1CMS.Assemblies.6.6.6912.30810\lib\net471\Microsoft.Extensions.DependencyInjection.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=1.1.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\C1CMS.Assemblies.6.6.6912.30810\lib\net471\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common, Version=3.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\C1CMS.Assemblies.6.6.6912.30810\lib\net471\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Logging, Version=3.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\C1CMS.Assemblies.6.6.6912.30810\lib\net471\Microsoft.Practices.EnterpriseLibrary.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.SemanticLogging, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\EnterpriseLibrary.SemanticLogging.2.0.1406.1\lib\net45\Microsoft.Practices.EnterpriseLibrary.SemanticLogging.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.SemanticLogging.EventSourceAnalyzer, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\EnterpriseLibrary.SemanticLogging.EventSourceAnalyzer.2.0.1406.1\lib\net45\Microsoft.Practices.EnterpriseLibrary.SemanticLogging.EventSourceAnalyzer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\EnterpriseLibrary.TransientFaultHandling.6.0.1304.0\lib\portable-net45+win+wp8\Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling.Data, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\EnterpriseLibrary.TransientFaultHandling.Data.6.0.1304.1\lib\NET45\Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Validation, Version=3.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\C1CMS.Assemblies.6.6.6912.30810\lib\net471\Microsoft.Practices.EnterpriseLibrary.Validation.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ObjectBuilder, Version=1.0.51206.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\C1CMS.Assemblies.6.6.6912.30810\lib\net471\Microsoft.Practices.ObjectBuilder.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ServiceBus, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Orckestra.ExperienceManagement.Configuration.4.8.3\lib\net471\Microsoft.ServiceBus.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Moq, Version=4.2.1507.118, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Moq.4.2.1507.0118\lib\net40\Moq.dll</HintPath>
+    </Reference>
+    <Reference Include="Moq.AutoMock, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Moq.AutoMock.0.3.2.1\lib\net40\Moq.AutoMock.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=3.12.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\NUnit.3.12.0\lib\net45\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Orckestra.AsyncExtensions, Version=4.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\OrckestraCommerce.AsyncExtensions.4.1.0\lib\net461\Orckestra.AsyncExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Orckestra.Caching, Version=4.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\OrckestraCommerce.Common.4.1.0\lib\net461\Orckestra.Caching.dll</HintPath>
+    </Reference>
+    <Reference Include="Orckestra.ExperienceManagement.Configuration, Version=4.8.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Orckestra.ExperienceManagement.Configuration.4.8.3\lib\net471\Orckestra.ExperienceManagement.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Orckestra.Logging, Version=4.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\OrckestraCommerce.Common.4.1.0\lib\net461\Orckestra.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Orckestra.Overture.Interfaces, Version=4.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\OrckestraCommerce.Interfaces.4.1.0\lib\portable-net4+sl5+netcore45+wp8\Orckestra.Overture.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="Orckestra.Overture.RestClient, Version=4.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\OrckestraCommerce.Client.4.1.0\lib\net452\Orckestra.Overture.RestClient.dll</HintPath>
+    </Reference>
+    <Reference Include="Orckestra.Overture.ServiceModel, Version=4.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\OrckestraCommerce.ServiceModel.4.1.0\lib\net461\Orckestra.Overture.ServiceModel.dll</HintPath>
+    </Reference>
+    <Reference Include="Orckestra.Overture.ServiceModel.Requests, Version=4.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\OrckestraCommerce.ServiceModel.Requests.4.1.0\lib\net461\Orckestra.Overture.ServiceModel.Requests.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Client, Version=4.0.0.0, Culture=neutral, PublicKeyToken=e06fbc6124f57c43, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\ServiceStack.Client.Signed.4.5.4\lib\net45\ServiceStack.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Interfaces, Version=4.0.0.0, Culture=neutral, PublicKeyToken=e06fbc6124f57c43, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\ServiceStack.Interfaces.4.5.4\lib\portable-wp80+sl5+net45+win8+wpa81+monotouch+monoandroid+xamarin.ios10\ServiceStack.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Text, Version=4.0.0.0, Culture=neutral, PublicKeyToken=e06fbc6124f57c43, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\ServiceStack.Text.Signed.4.5.4\lib\net45\ServiceStack.Text.dll</HintPath>
+    </Reference>
+    <Reference Include="StackExchange.Redis.StrongName, Version=1.0.316.0, Culture=neutral, PublicKeyToken=c219ff1ca8c2ce46, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\StackExchange.Redis.StrongName.1.0.488\lib\net45\StackExchange.Redis.StrongName.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Extensions, Version=2.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Net.Http.2.2.29\lib\net45\System.Net.Http.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Core, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rx-Core.2.2.5\lib\net45\System.Reactive.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Interfaces, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rx-Interfaces.2.2.5\lib\net45\System.Reactive.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Linq, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rx-Linq.2.2.5\lib\net45\System.Reactive.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.Mvc.5.2.7\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.Razor.3.2.7\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="Composite, Version=6.6.6912.30810, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\C1CMS.Assemblies.6.6.6912.30810\lib\net471\Composite.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\src\Solution Items\SharedAssemblyInfo.cs">
+      <Link>Properties\SharedAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="Api\LocalizationController_GetTree.cs" />
+    <Compile Include="AssemblyExtensions\AssemblyExtensions_SafeGetTypes.cs" />
+    <Compile Include="AssemblyHelper\AssemblyHelper_SafeLoadAssemblies.cs" />
+    <Compile Include="ComposerHost\ComposerAssemblies_ValidateWeightAttribute.cs" />
+    <Compile Include="Providers\Membership\AutofacDependencyResolverMoq.cs" />
+    <Compile Include="Providers\Membership\ComposerHostMoq.cs" />
+    <Compile Include="ComposerHost\ComposerHost_CtorTests.cs" />
+    <Compile Include="ComposerHost\ComposerHost_Init.cs" />
+    <Compile Include="ComposerConfiguration_ClassDef.cs" />
+    <Compile Include="ComposerHost\ComposerHost_RegisterHandlerbarsHelper.cs" />
+    <Compile Include="ComposerHost\ServiceLocatorMoq.cs" />
+    <Compile Include="Country\CountryRepository_Ctor.cs" />
+    <Compile Include="Country\CountryRepository_RetrieveCountry.cs" />
+    <Compile Include="Country\CountryRepository_RetrieveRegions.cs" />
+    <Compile Include="Country\CountryService_Ctor.cs" />
+    <Compile Include="Country\CountryService_RetrieveCountry.cs" />
+    <Compile Include="Exceptions\ComposerException_ThrowIfAnyError.cs" />
+    <Compile Include="ExceptionFilters\ComposerExceptionFilter_OnException.cs" />
+    <Compile Include="ExceptionFilters\AggregatedComposerExceptionFilter_OnException.cs" />
+    <Compile Include="Localization\ResourceLocalizationProvider_GetLocalizedTreeAsync.cs" />
+    <Compile Include="Country\CountryService_RetrieveRegions.cs" />
+    <Compile Include="Localization\HandlebarViewResourceProviderTest.cs" />
+    <Compile Include="Localization\PostalCodeRegexPatternTest.cs" />
+    <Compile Include="Localization\ResourceLocalizationProvider_GetLocalizedString.cs" />
+    <Compile Include="ComposerHost\TestPlugin.cs" />
+    <Compile Include="Mock\CacheProviderFactory.cs" />
+    <Compile Include="Mock\ComposerContextFactory.cs" />
+    <Compile Include="Mock\ComposerEnvironmentFactory.cs" />
+    <Compile Include="Mock\CountryRepositoryFactory.cs" />
+    <Compile Include="Mock\HttpResponseFactory.cs" />
+    <Compile Include="Mock\HttpRequestFactory.cs" />
+    <Compile Include="Mock\LocalizationProviderFactory.cs" />
+    <Compile Include="Mock\OvertureClientFactory.cs" />
+    <Compile Include="Mock\ViewModelMapperFactory.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="BaseTest.cs" />
+    <Compile Include="Providers\Dam\ConventionBaseDamProvider_GetAllProductImagesAsync.cs" />
+    <Compile Include="Providers\Dam\ConventionBasedDamProvider_Ctor.cs" />
+    <Compile Include="Providers\Dam\ConventionBasedDamProvider_GetProductMainImagesAsync.cs" />
+    <Compile Include="Providers\Membership\MembershipProviderTests.cs" />
+    <Compile Include="Providers\ProxyFactory_Create.cs" />
+    <Compile Include="Providers\RegionCode\RegionCodeProvider_Ctor.cs" />
+    <Compile Include="Providers\RegionCode\RegionCodeProvider_GetRegion.cs" />
+    <Compile Include="Repositories\InventoryRepository_FindInventoryItemStatus.cs" />
+    <Compile Include="Services\Cookie\ComposerCookieAccesserTestsBase.cs" />
+    <Compile Include="Services\Scope\ScopeViewService_GetScopeCurrencyAsync.cs" />
+    <Compile Include="Repositories\FulfillmentLocationsRepository_GetFulfillmentLocationsByScope.cs" />
+    <Compile Include="Repositories\LookupRepositoryFactory_CreateLookupRepository.cs" />
+    <Compile Include="Repositories\ProductLookupRepository_GetLookupsAsync.cs" />
+    <Compile Include="Repositories\ProductSettingsRepository_GetProductSettings.cs" />
+    <Compile Include="Repositories\ScopeRepository_GetScopeAsync.cs" />
+    <Compile Include="Services\Cookie\ComposerCookieAccesser_Ctor.cs" />
+    <Compile Include="Services\Cookie\ComposerCookieAccesser_Read.cs" />
+    <Compile Include="Services\Cookie\ComposerCookieAccesser_Write.cs" />
+    <Compile Include="Localization\LocalizationExtensions_FormatPrice.cs" />
+    <Compile Include="Services\Lookup\LookupService_GetLookupsAsync.cs" />
+    <Compile Include="Services\Lookup\LookupService_GetLookupValueAsync.cs" />
+    <Compile Include="Services\ProductSettingsViewService_GetProductSettings.cs" />
+    <Compile Include="TypeExtensions\StringExtensions_IsBase64String.cs" />
+    <Compile Include="Util\CultureInfoEqualityComparer_Equals.cs" />
+    <Compile Include="Util\CultureInfoEqualityComparer_GetHashCode.cs" />
+    <Compile Include="Util\EncryptionUtilitity_TestEncryption.cs" />
+    <Compile Include="Util\EncryptionUtility_TestDecryption.cs" />
+    <Compile Include="Util\GuidUtility_Create.cs" />
+    <Compile Include="Util\RequestUrilsGetBaseUrl.cs" />
+    <Compile Include="Util\TreeNode_GetLevel.cs" />
+    <Compile Include="Util\Tree_Ctor.cs" />
+    <Compile Include="Util\TreeNode_Ctor.cs" />
+    <Compile Include="Util\UrlFormatter_AppendQueryString.cs" />
+    <Compile Include="Util\UrlFormatter_Format.cs" />
+    <Compile Include="Util\UrlFormatter_FormatProductName.cs" />
+    <Compile Include="Util\UrlFormatter_GetUriFromString.cs" />
+    <Compile Include="ViewEngine\HandlebarsBlockHelpers\IfNotEqualsBlockHelper_HelperFunction.cs" />
+    <Compile Include="ViewEngine\HandlebarsBlockHelpers\IfEqualsBlockHelper_HelperFunction.cs" />
+    <Compile Include="ViewEngine\HandlebarsHelpers\LocalizeFormatHelper_HelperFunction.cs" />
+    <Compile Include="ViewEngine\HandlebarsHelpers\LocalizeHelper_HelperFunction.cs" />
+    <Compile Include="ViewEngine\HandlebarsBlockHelpers\IfIsLocalizedBlockHelper_HelperFunction.cs" />
+    <Compile Include="ViewEngine\FakeTemplate.cs" />
+    <Compile Include="ViewEngine\HandlebarsBlockHelpers\IfExistsBlockHelper_HelperFunction.cs" />
+    <Compile Include="ViewEngine\HandlebarsBlockHelpers\IfGteBlockHelper_HelperFunction.cs" />
+    <Compile Include="ViewEngine\HandlebarsBlockHelpers\IfLteBlockHelper_HelperFunction.cs" />
+    <Compile Include="ViewEngine\HandlebarsBlockHelpers\IfLtBlockHelper_HelperFunction.cs" />
+    <Compile Include="ViewEngine\HandlebarsBlockHelpers\IfGtBlockHelper_HelperFunction.cs" />
+    <Compile Include="ViewEngine\HandlebarsBlockHelpers\TestViewModels.cs" />
+    <Compile Include="TypeExtensions\MvcUtils\MvcUtils_ExtractControllerName.cs" />
+    <Compile Include="TypeExtensions\MvcUtils\MvcUtils_GetActionInfos.cs" />
+    <Compile Include="TypeExtensions\MvcUtils\MvcUtils_GetControllerTypes.cs" />
+    <Compile Include="TypeExtensions\MvcUtils\TestControllers.cs" />
+    <Compile Include="TypeExtensions\TypeExtensions\TypeExtension_GetDefaultValue.cs" />
+    <Compile Include="ViewEngine\HandlebarViewEngine_GetOrCreateHandlebarView.cs" />
+    <Compile Include="ViewModels\BagPropertyMetadata_Ctor.cs" />
+    <Compile Include="ViewModels\BagPropertyMetadata_GetValue.cs" />
+    <Compile Include="ViewModels\BagPropertyMetadata_SetValue.cs" />
+    <Compile Include="ViewModels\BaseViewModel_AsExtendedModel.cs" />
+    <Compile Include="ViewModels\BaseViewModel_Context.cs" />
+    <Compile Include="ViewModels\ExtendedViewModel.cs" />
+    <Compile Include="ViewModels\INonExtensionViewModel.cs" />
+    <Compile Include="ViewModels\InstancePropertyMetadata_SetValue.cs" />
+    <Compile Include="ViewModels\InstancePropertyMetadata_GetValue.cs" />
+    <Compile Include="ViewModels\InstancePropertyMetadata_Ctor.cs" />
+    <Compile Include="ViewModels\ResxViewModelPropertyFormatter_Format.cs" />
+    <Compile Include="ViewModels\ViewModelMapper\ITestCategoryViewModelMetadata.cs" />
+    <Compile Include="ViewModels\ViewModelMapper\TestBaseCategory.cs" />
+    <Compile Include="ViewModels\ViewModelMapper\TestCategoryViewModel.cs" />
+    <Compile Include="ViewModels\ViewModelMapper\TestBaseCategoryViewModel.cs" />
+    <Compile Include="ViewModels\ViewModelMapper\TestProduct.cs" />
+    <Compile Include="ViewModels\ViewModelMapper\TestProductFactory.cs" />
+    <Compile Include="ViewModels\ViewModelMapper\TestProductViewModel.cs" />
+    <Compile Include="ViewModels\ViewModelMapper\TestCategory.cs" />
+    <Compile Include="ViewModels\ViewModelMapper\TestProductViewModelFactory.cs" />
+    <Compile Include="ViewModels\ViewModelMapper\ITestProductViewModelMetadata.cs" />
+    <Compile Include="ViewModels\ViewModelMapper\ViewModelMapper_MapTo.cs" />
+    <Compile Include="ViewModels\ViewModelMapper\ViewModelMapper_ToDictionary.cs" />
+    <Compile Include="ViewModels\ViewModelSerialization\TestViewModelForSerialization.cs" />
+    <Compile Include="ViewModels\ViewModelSerialization\ViewModelSerialization_CanConvert.cs" />
+    <Compile Include="ViewModels\ViewModelSerialization\ViewModelSerialization_ReadJson.cs" />
+    <Compile Include="ViewModels\ViewModelSerialization\ViewModelSerialization_WriteJson.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="ViewEngine\Assets\SubLevel2.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ViewEngine\Assets\OtherLeaf.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ViewEngine\Assets\SubLevel1.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ViewEngine\Assets\Root.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Properties\PublishProfiles\Package.pubxml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Orckestra.Composer.Product\Orckestra.Composer.Product.csproj">
+      <Project>{1F767098-1FBF-4CB9-8637-6529E1CC0B24}</Project>
+      <Name>Orckestra.Composer.Product</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Orckestra.Composer.Search\Orckestra.Composer.Search.csproj">
+      <Project>{CE6AD95E-0EBB-4E38-BF0B-27A67915FA68}</Project>
+      <Name>Orckestra.Composer.Search</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Orckestra.Composer\Orckestra.Composer.csproj">
+      <Project>{d00bd58b-93fe-4f3d-bbc8-6f7873ca6830}</Project>
+      <Name>Orckestra.Composer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Orckestra.ForTests\Orckestra.ForTests.csproj">
+      <Project>{b2be051e-82d7-4643-bb56-98f161833e30}</Project>
+      <Name>Orckestra.ForTests</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Localization\Assets\ResxLocalizationTest.fr-CA.resx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Localization\Assets\ResxLocalizationTest.resx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Localization\Assets\ResxLocalizationTest.fr.resx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Localization\Assets\ResxLocalizationTest.fr-BE.resx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Localization\Assets\ResxLocalizationTest_Custom.fr-BE.resx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Localization\Assets\CategoryNeutralOnly.resx">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Localization\Assets\CategoryCultureOnly.fr-CA.resx">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Localization\Assets\CategoryCustomOnly_Custom.resx">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\packages\NUnit.3.12.0\build\NUnit.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NUnit.3.12.0\build\NUnit.props'))" />
+    <Error Condition="!Exists('..\..\packages\NUnit3TestAdapter.3.15.1\build\net35\NUnit3TestAdapter.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NUnit3TestAdapter.3.15.1\build\net35\NUnit3TestAdapter.props'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

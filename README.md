@@ -62,8 +62,7 @@ Run in PS next commend `Set-ExecutionPolicy unrestricted -scope CurrentUser`
 
  
 #### Build Frontend
- To build Frontend Typescript and copy to the deployed website use next gulp command in folder *~\src\Composer*
- `gulp devPackage`
+TODO
 
 #### Build SASS
 TODO

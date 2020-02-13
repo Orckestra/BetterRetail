@@ -43,8 +43,9 @@ else
 
 var rootDir = "..";
 var srcDir = $"{rootDir}/src";
+var testsDir = $"{rootDir}/tests";
 var outputDir = $"{rootDir}/output";
-
+var buildDir = $"{rootDir}/build";
 var solutionFile = GetFiles($"{rootDir}/*.sln").Single();
 
 //////////////////////////////////////////////////////////////////////
@@ -79,8 +80,8 @@ Task("Compile").Does(() =>
 
 Task("Run-NUnit-Tests").Does(() =>
 {
-    var testAssemblies = GetFiles($"{srcDir}/**/bin/{configuration}/*.Tests.dll");
-    testAssemblies.Add(GetFiles($"{srcDir}/**/bin/{configuration}/*.IntegrationTests.dll"));
+    var testAssemblies = GetFiles($"{testsDir}/**/bin/{configuration}/*.Tests.dll");
+    testAssemblies.Add(GetFiles($"{testsDir}/**/bin/{configuration}/*.IntegrationTests.dll"));
 
     NUnit3(testAssemblies, new NUnit3Settings 
     { 
@@ -89,16 +90,17 @@ Task("Run-NUnit-Tests").Does(() =>
     });
 });
 
+//TODO: check - delete NPM modules which we don't use, update outdated packages
 Task("Load-NPM-Modules").Does(() =>
 {
-	NpmInstall(settings => settings.FromPath($"{srcDir}/Composer/"));
+	NpmInstall(settings => settings.FromPath($"{buildDir}/"));
 });
 
 Task("Run-Composer-UI-UnitTests").Does(() =>
 {
     var settings = new NpmRunScriptSettings 
     {
-        WorkingDirectory = $"{srcDir}/Composer/",
+        WorkingDirectory = $"{buildDir}/",
         ScriptName = "unitTests",
     };
     NpmRunScript(settings);
@@ -108,7 +110,7 @@ Task("Compile-Typescripts").Does(() =>
 {
     var settings = new NpmRunScriptSettings 
     {
-        WorkingDirectory = $"{srcDir}/Composer/",
+        WorkingDirectory = $"{buildDir}/",
         ScriptName = "scripts",
     };
     NpmRunScript(settings);
@@ -125,7 +127,7 @@ Task("Copy-To-Artifacts").Does(() =>
 Task("Create-NuGet-Package").Does(() => 
 {
     var dependencies = XDocument
-        .Load($"{srcDir}/Composer/Composer/packages.config")
+        .Load($"{srcDir}/Orckestra.Composer/packages.config")
         .Descendants("package")
         .Where(x => x.Attribute("developmentDependency") == null
             || !bool.Parse(x.Attribute("developmentDependency").Value))
@@ -173,8 +175,8 @@ Task("Build")
     .IsDependentOn("Compile");
 
 Task("Tests")
-	.IsDependentOn("Load-NPM-Modules")
     .IsDependentOn("Run-NUnit-Tests")
+	.IsDependentOn("Load-NPM-Modules")
     .IsDependentOn("Run-Composer-UI-UnitTests");
 
 Task("Frontend")

@@ -1,0 +1,133 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{EA8CAB27-7AF8-4913-B7A4-4703A0E6B4B7}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Package.C1</RootNamespace>
+    <AssemblyName>Package.C1</AssemblyName>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\Solution Items\SharedAssemblyInfo.cs">
+      <Link>Properties\SharedAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Composer.Core.xml" />
+    <Content Include="Package\Datas\Composite.Data.Types.ICompositionContainers_public.xml" />
+    <Content Include="Package\Datas\Composite.Data.Types.IDataItemTreeAttachmentPoint_publi.xml" />
+    <Content Include="Package\Datas\Composite.Data.Types.IGeneratedTypeWhiteLists_administrated.xml" />
+    <Content Include="Package\Datas\Composite.Data.Types.IMediaFileDatas_public.xml" />
+    <Content Include="Package\Datas\Composite.Data.Types.IMediaFolderDatas_public.xml" />
+    <Content Include="Package\Datas\Composite.Data.Types.IMethodBasedFunctionInfos_public.xml" />
+    <Content Include="Package\Datas\Composite.Data.Types.IPageMetaDataDefinitions_public.xml" />
+    <Content Include="Package\Datas\Composite.Data.Types.IPageTypeDefaultPageContents_public.xml" />
+    <Content Include="Package\Datas\Composite.Data.Types.IPageTypeMetaDataTypeLinks_public.xml" />
+    <Content Include="Package\Datas\Composite.Data.Types.IPageTypePageTemplateRestrictions_public.xml" />
+    <Content Include="Package\Datas\Composite.Data.Types.IPageTypes_public.xml" />
+    <Content Include="Package\Datas\Composite.Data.Types.IPageTypeTreeLinks_public.xml" />
+    <Content Include="Package\Datas\Composite.Data.Types.ISystemActiveLocale_public.xml" />
+    <Content Include="Package\Datas\Orckestra.Composer.CompositeC1.DataTypes.Facets.IFacetConfigurations_public.xml" />
+    <Content Include="Package\Datas\Orckestra.Composer.CompositeC1.DataTypes.Facets.IFacets_public.xml" />
+    <Content Include="Package\Datas\Orckestra.Composer.CompositeC1.DataTypes.Languages_administrated.xml" />
+    <Content Include="Package\Datas\Orckestra.Composer.CompositeC1.DataTypes.Languages_public.xml" />
+    <Content Include="Package\install.xml" />
+    <Content Include="Package\Web.config.xsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Orckestra.Composer.Website\Orckestra.Composer.Website.csproj">
+      <Project>{7e75d550-3c78-46d0-a124-065a5fffa0b2}</Project>
+      <Name>Orckestra.Composer.Website</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>SET PackageName=Orckestra.Composer.C1.Core
+SET SolutionDir=$(SolutionDir)
+SET ProjectDir=$(ProjectDir)
+
+SET TempPath=%25ProjectDir%25bin\%25PackageName%25\
+
+if exist TempPath (
+	DEL /F /Q TempPath -f
+)
+
+SET WebProjectPath=%25ProjectDir%25..\Orckestra.Composer.Website\
+
+mkdir %25TempPath%25
+
+Robocopy %25ProjectDir%25Package %25TempPath%25 /E /NJH /NDL /NS /NC /NP
+Robocopy %25WebProjectPath%25 %25TempPath%25 "robots*.txt" /NJH /NDL /NS /NC /NP
+Robocopy %25WebProjectPath%25 %25TempPath%25 "Web.config" /NJH /NDL /NS /NC /NP
+Robocopy %25WebProjectPath%25 %25TempPath%25 "error.html" /NJH /NDL /NS /NC /NP
+Robocopy %25WebProjectPath%25 %25TempPath%25 "Global.asax" /NJH /NDL /NS /NC /NP
+Robocopy %25WebProjectPath%25App_Data %25TempPath%25App_Data /E /NJH /NDL /NS /NC /NP
+Robocopy %25WebProjectPath%25App_Code %25TempPath%25App_Code /E /NJH /NDL /NS /NC /NP
+Robocopy %25WebProjectPath%25App_Config %25TempPath%25App_Config /E /NJH /NDL /NS /NC /NP
+Robocopy %25WebProjectPath%25Composite %25TempPath%25Composite /E /NJH /NDL /NS /NC /NP
+Robocopy %25WebProjectPath%25UI.Package "%25TempPath%25UI.Package" /E /NJH /NDL /NS /NC /NP
+Robocopy %25WebProjectPath%25Views %25TempPath%25Views /E /NJH /NDL /NS /NC /NP
+Robocopy %25WebProjectPath%25bin %25TempPath%25Bin *.dll /XF Composite*.dll /NJH /NDL /NS /NC /NP
+
+DEL /F /Q %25TempPath%25Bin\Orckestra.Logging.dll
+DEL /F /Q %25TempPath%25Bin\Microsoft.Extensions.DependencyInjection*.dll
+DEL /F /Q %25TempPath%25Bin\System.Reactive*.dll
+DEL /F /Q %25TempPath%25Bin\Microsoft.Practices.EnterpriseLibrary.Common.dll
+DEL /F /Q %25TempPath%25Bin\Microsoft.Practices.EnterpriseLibrary.Validation.dll
+DEL /F /Q %25TempPath%25Bin\Microsoft.Practices.EnterpriseLibrary.Logging.dll
+DEL /F /Q %25TempPath%25Bin\Microsoft.Practices.ObjectBuilder.dll
+DEL /F /Q %25TempPath%25Bin\Microsoft.Web.Infrastructure.dll
+
+"$(SolutionDir)packages\7-Zip.CommandLine.9.20.0\tools\7za.exe" a "$(ProjectDir)bin\%25PackageName%25.zip" "%25TempPath%25\*"</PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
