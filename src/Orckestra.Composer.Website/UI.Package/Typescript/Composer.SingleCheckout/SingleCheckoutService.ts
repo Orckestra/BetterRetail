@@ -10,6 +10,7 @@
 ///<reference path='../Composer.Cart/CheckoutCommon/ICheckoutService.ts' />
 ///<reference path='../Composer.Cart/CheckoutCommon/ICheckoutContext.ts' />
 ///<reference path='../Composer.Cart/CheckoutCommon/IRegisterOptions.ts' />
+///<reference path='./ISingleCheckoutService.ts' />
 
 
 module Orckestra.Composer {
@@ -25,7 +26,7 @@ module Orckestra.Composer {
         private orderCacheKey = 'orderCacheKey';
 
         private window: Window;
-        private eventHub: IEventHub;
+        private readonly eventHub: IEventHub;
         private registeredControllers: any = {};
         private allControllersReady: Q.Deferred<boolean>;
         private cacheProvider: ICacheProvider;
@@ -41,7 +42,7 @@ module Orckestra.Composer {
 
             if (!SingleCheckoutService.instance) {
                 SingleCheckoutService.instance = new SingleCheckoutService();
-            };
+            }
 
             return SingleCheckoutService.instance;
         }
@@ -75,10 +76,10 @@ module Orckestra.Composer {
 
         private initialize() {
 
-            var authenticatedPromise = this.membershipService.isAuthenticated();
-            var getCartPromise = this.getCart();
-            var regionsPromise: Q.Promise<any> = this.regionService.getRegions();
-            var shippingMethodsPromise: Q.Promise<any> = this.shippingMethodService.getShippingMethods();
+            let authenticatedPromise = this.membershipService.isAuthenticated();
+            let getCartPromise = this.getCart();
+            let regionsPromise: Q.Promise<any> = this.regionService.getRegions();
+            let shippingMethodsPromise: Q.Promise<any> = this.shippingMethodService.getShippingMethods();
 
             Q.all([authenticatedPromise, getCartPromise, regionsPromise, shippingMethodsPromise])
                 .spread((authVm, cartVm, regionsVm, shippingMethodsVm) => {
@@ -133,7 +134,7 @@ module Orckestra.Composer {
             });
         }
 
-        public registerController(controller: IBaseCheckoutController) {
+        public registerController(controller: IBaseSingleCheckoutController) {
 
             if (this.allControllersReady.promise.isPending()) {
                 this.allControllersReady.resolve(false);
@@ -195,7 +196,7 @@ module Orckestra.Composer {
 
         public completeCheckout(): Q.Promise<ICompleteCheckoutResult> {
 
-            var emptyVm = {
+            let emptyVm = {
                 UpdatedCart: {}
             };
 
@@ -217,7 +218,7 @@ module Orckestra.Composer {
 
                     console.log('Publishing the cart!');
 
-                    return this.cartService.completeCheckout(CheckoutService.checkoutStep);
+                    return this.cartService.completeCheckout(SingleCheckoutService.checkoutStep);
                 });
         }
 
@@ -239,11 +240,11 @@ module Orckestra.Composer {
 
         private getCartValidation(vm : any): Q.Promise<any> {
 
-            var validationPromise = this.collectValidationPromises();
+            let validationPromise = this.collectValidationPromises();
 
-            var promise = validationPromise.then((results : Array<boolean>) => {
-                console.log('Aggregrating all validation results');
-                var hasFailedValidation = _.any(results, r => !r);
+            return validationPromise.then((results: Array<boolean>) => {
+                console.log('Aggregating all validation results');
+                let hasFailedValidation = _.any(results, r => !r);
 
                 if (hasFailedValidation) {
                     throw new Error('There were validation errors.');
@@ -251,21 +252,19 @@ module Orckestra.Composer {
 
                 return vm;
             });
-
-            return promise;
         }
 
         private getCartUpdateViewModel(vm: any): Q.Promise<any> {
 
-            var updateModelPromise = this.collectUpdateModelPromises();
+            let updateModelPromise = this.collectUpdateModelPromises();
 
-            var promise = updateModelPromise.then((updates: Array<any>) => {
+            return updateModelPromise.then((updates: Array<any>) => {
                 console.log('Aggregating all ViewModel updates.');
 
                 _.each(updates, update => {
 
                     if (update) {
-                       var keys = _.keys(update);
+                        var keys = _.keys(update);
                         _.each(keys, key => {
                             vm.UpdatedCart[key] = update[key];
                         });
@@ -274,20 +273,17 @@ module Orckestra.Composer {
 
                 return vm;
             });
-
-            return promise;
         }
 
         private collectValidationPromises(): Q.Promise<any> {
 
-            var promises: Q.Promise<any>[] = [];
-            var controllerInstance: IBaseSingleCheckoutController;
-            var controllerOptions: IRegisterControlOptions;
+            let promises: Q.Promise<any>[] = [];
+            let controllerInstance: IBaseSingleCheckoutController;
 
-            for (var controllerName in this.registeredControllers) {
+            for (let controllerName in this.registeredControllers) {
 
                 if (this.registeredControllers.hasOwnProperty(controllerName)) {
-                    controllerInstance = <IBaseCheckoutController>this.registeredControllers[controllerName];
+                    controllerInstance = <IBaseSingleCheckoutController>this.registeredControllers[controllerName];
                     promises.push(controllerInstance.getValidationPromise());
                 }
             }
@@ -297,14 +293,13 @@ module Orckestra.Composer {
 
         private collectUpdateModelPromises(): Q.Promise<any> {
 
-            var promises: Q.Promise<any>[] = [];
-            var controllerInstance: IBaseCheckoutController;
-            var controllerOptions: IRegisterControlOptions;
+            let promises: Q.Promise<any>[] = [];
+            let controllerInstance: IBaseSingleCheckoutController;
 
-            for (var controllerName in this.registeredControllers) {
+            for (let controllerName in this.registeredControllers) {
 
                 if (this.registeredControllers.hasOwnProperty(controllerName)) {
-                    controllerInstance = <IBaseCheckoutController>this.registeredControllers[controllerName];
+                    controllerInstance = <IBaseSingleCheckoutController>this.registeredControllers[controllerName];
                     promises.push(controllerInstance.getUpdateModelPromise());
                 }
             }
@@ -319,9 +314,9 @@ module Orckestra.Composer {
             throw reason;
         }
 
-        public setOrderConfirmationToCache(orderConfirmationviewModel : any) : void {
+        public setOrderConfirmationToCache(orderConfirmationViewModel : any) : void {
 
-            this.cacheProvider.defaultCache.set(this.orderConfirmationCacheKey, orderConfirmationviewModel).done();
+            this.cacheProvider.defaultCache.set(this.orderConfirmationCacheKey, orderConfirmationViewModel).done();
         }
 
         public getOrderConfirmationFromCache(): Q.Promise<any> {
@@ -334,9 +329,9 @@ module Orckestra.Composer {
              this.cacheProvider.defaultCache.clear(this.orderConfirmationCacheKey).done();
         }
 
-        public setOrderToCache(orderConfirmationviewModel : any) : void {
+        public setOrderToCache(orderConfirmationViewModel : any) : void {
 
-            this.cacheProvider.defaultCache.set(this.orderCacheKey, orderConfirmationviewModel).done();
+            this.cacheProvider.defaultCache.set(this.orderCacheKey, orderConfirmationViewModel).done();
         }
     }
 }

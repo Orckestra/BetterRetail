@@ -3,6 +3,8 @@
 ///<reference path='../ErrorHandling/ErrorHandler.ts' />
 ///<reference path='./IBaseSingleCheckoutController.ts' />
 ///<reference path='../Composer.Cart/CheckoutCommon/ICheckoutContext.ts' />
+///<reference path='./ISingleCheckoutService.ts' />
+///<reference path='./SingleCheckoutService.ts' />
 
 module Orckestra.Composer {
     'use strict';
@@ -15,14 +17,11 @@ module Orckestra.Composer {
         public viewModelName: string;
 
         public initialize() {
-
             super.initialize();
 
             this.checkoutService = SingleCheckoutService.getInstance();
 
             this.registerController();
-
-          
         }
 
         protected registerController() {
@@ -59,19 +58,15 @@ module Orckestra.Composer {
         }
 
         protected getViewModelUpdated(): string {
-
-            var formContext = $('form', this.context.container),
+            let formContext = $('form', this.context.container),
                 viewModel = (<ISerializeObjectJqueryPlugin>formContext).serializeObject();
 
             return JSON.stringify(viewModel);
         }
 
-       protected isValidForUpdate(): boolean {
-
-            var isValidForUpdate = _.all(this.formInstances, formInstance => formInstance.validate(undefined, true));
-
-            return isValidForUpdate;
-       }
+        protected isValidForUpdate(): boolean {
+            return _.all(this.formInstances, formInstance => formInstance.validate(undefined, true));
+        }
 
         protected onRenderDataFailed(reason: any): void {
 
