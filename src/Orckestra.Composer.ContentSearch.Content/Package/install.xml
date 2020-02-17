@@ -19,15 +19,7 @@
     </mi:Add>
     <mi:Add installerType="Composite.Core.PackageSystem.PackageFragmentInstallers.DataPackageFragmentInstaller, Composite" uninstallerType="Composite.Core.PackageSystem.PackageFragmentInstallers.DataPackageFragmentUninstaller, Composite">
       <Types>
-        <Type type="Orckestra.Composer.ContentSearch.DataTypes.ISortOption,Orckestra.Composer.ContentSearch">
-          <Data dataScopeIdentifier="public" locale="?" dataFilename="~\Datas\Orckestra.Composer.ContentSearch.DataTypes.ISortOptions_public.xml" />
-        </Type>
-        <Type type="Orckestra.Composer.ContentSearch.DataTypes.IContentTab,Orckestra.Composer.ContentSearch">
-          <Data dataScopeIdentifier="administrated" locale="?" dataFilename="~\Datas\Orckestra.Composer.ContentSearch.DataTypes.IContentTabs_administrated.xml" />
-        </Type>
-        <Type type="Orckestra.Composer.ContentSearch.DataTypes.IContentTab,Orckestra.Composer.ContentSearch">
-          <Data dataScopeIdentifier="public" locale="?" dataFilename="~\Datas\Orckestra.Composer.ContentSearch.DataTypes.IContentTabs_public.xml" />
-        </Type>
+
           <Type type="Composite.Data.Types.IMediaFileData,Composite">
             <Data dataScopeIdentifier="public" dataFilename="~\Datas\Composite.Data.Types.IMediaFileDatas_public.xml" />
           </Type>

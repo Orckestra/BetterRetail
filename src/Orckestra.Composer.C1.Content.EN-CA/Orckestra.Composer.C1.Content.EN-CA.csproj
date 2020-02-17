@@ -70,6 +70,9 @@
     <Content Include="Package\Datas\Orckestra.Composer.CompositeC1.DataTypes.Navigation.OptionalLink_Unpublished_en-CA.xml" />
     <Content Include="Package\Datas\Orckestra.Composer.CompositeC1.DataTypes.RecurringOrdersSettingss_administrated.xml" />
     <Content Include="Package\Datas\Orckestra.Composer.CompositeC1.DataTypes.RecurringOrdersSettingss_public.xml" />
+    <Content Include="Package\Datas\Orckestra.Composer.ContentSearch.DataTypes.IContentTabs_administrated.xml" />
+    <Content Include="Package\Datas\Orckestra.Composer.ContentSearch.DataTypes.IContentTabs_public.xml" />
+    <Content Include="Package\Datas\Orckestra.Composer.ContentSearch.DataTypes.ISortOptions_public.xml" />
     <Content Include="Package\Datas\Orckestra.ExperienceManagement.Configuration.DataTypes.ISiteConfigurationMetas_administrated.xml" />
     <Content Include="Package\Datas\Orckestra.ExperienceManagement.Configuration.DataTypes.ISiteConfigurationMetas_public.xml" />
     <Content Include="Package\install.xml" />

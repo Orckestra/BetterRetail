@@ -1,6 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Data>
-  <Add Id="47317fdd-fd67-4958-addc-2e72b486b455" Type="Orckestra.Composer.ContentSearch.Functions.WebsiteSearch" MethodName="GetSearchablePageTypesOptions" Namespace="Orckestra.Composer.ContentSearch.Functions.WebsiteSearch" UserMethodName="GetSearchablePageTypesOptions" />
-  <Add Id="7a8cecf3-d345-4869-b955-272aee117c06" Type="Orckestra.Search.WebsiteSearch.WebsiteSearchFacade" MethodName="GetFacetOptions" Namespace="Orckestra.Search.WebsiteSearch.WebsiteSearchFacade" UserMethodName="GetFacetOptions" />
-  <Add Id="f096e317-7994-4479-ad42-a313a1a88bd1" Type="Orckestra.Search.WebsiteSearch.WebsiteSearchFacade" MethodName="GetSearchableDataTypeOptions" Namespace="Orckestra.Search.WebsiteSearch.WebsiteSearchFacade" UserMethodName="GetSearchableDataTypeOptions" />
-</Data>

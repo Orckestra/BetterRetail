@@ -264,6 +264,7 @@
   <ItemGroup>
     <Content Include="App_Data\Composite\DynamicTypeForms\Orckestra\Composer\CompositeC1\DataTypes\ISearchTerm.xml" />
     <Content Include="App_Data\Composite\DynamicTypeForms\Orckestra\Composer\CompositeC1\DataTypes\RecurringOrdersSettings.xml" />
+    <Content Include="App_Data\Composite\TreeDefinitions\ContentSearch.xml" />
     <Content Include="App_Data\Composite\TreeDefinitions\NavigationElement.xml">
       <SubType>Designer</SubType>
     </Content>
@@ -324,6 +325,8 @@
     <Content Include="App_Data\Razor\Composer\Product\Specifications.cshtml" />
     <Content Include="App_Data\Razor\Composer\DatePicker\DatePicker.Includes.cshtml" />
     <Content Include="App_Data\Razor\Composer\Footer\SocialLinks.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Search\Suggestions.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Search\ContentTabs.cshtml" />
     <None Include="Properties\PublishProfiles\Website - CD.pubxml" />
     <None Include="Properties\PublishProfiles\Website.pubxml" />
     <Content Include="ViewModelAsExtensionModelTemplate.tt">
@@ -337,6 +340,9 @@
     <Content Include="Views\Product\Images.cshtml" />
     <Content Include="Views\Product\Zoom.cshtml" />
     <Content Include="Views\Shared\Breadcrumb.cshtml" />
+    <Content Include="Views\ContentSearch\Facets.cshtml" />
+    <Content Include="Views\ContentSearch\SearchEntryItem.cshtml" />
+    <Content Include="Views\ContentSearch\SelectedFacets.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Solution Items\SharedAssemblyInfo.cs">

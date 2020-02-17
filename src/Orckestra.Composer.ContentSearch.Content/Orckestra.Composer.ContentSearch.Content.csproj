@@ -76,9 +76,6 @@
     <Content Include="Package\Datas\Orckestra.Composer.Articles.DataTypes.IArticleCategory_public.xml" />
     <Content Include="Package\Datas\Orckestra.Composer.Articles.DataTypes.IArticle_administrated.xml" />
     <Content Include="Package\Datas\Orckestra.Composer.Articles.DataTypes.IArticle_public.xml" />
-    <Content Include="Package\Datas\Orckestra.Composer.ContentSearch.DataTypes.IContentTabs_administrated.xml" />
-    <Content Include="Package\Datas\Orckestra.Composer.ContentSearch.DataTypes.IContentTabs_public.xml" />
-    <Content Include="Package\Datas\Orckestra.Composer.ContentSearch.DataTypes.ISortOptions_public.xml" />
     <Content Include="Package\install.xml">
       <SubType>Designer</SubType>
     </Content>
