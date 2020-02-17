@@ -100,25 +100,23 @@ namespace Orckestra.Composer.Search.Services
 
         protected virtual IList<PromotedFacetValue> BuildPromotedFacetValues(IEnumerable<Facet> facets)
         {
-            return
-                facets.SelectMany(facet =>
-                        facet.FacetValues
-                            .Where(value => value.IsPromoted)
-                    .Select(value =>
-                                    new
-                                    {
-                                        PromotionWeight = value.PromotionSortWeight,
-                                        FacetValue =
-                                            new PromotedFacetValue(facet.FieldName, facet.FacetType, value.Value)
-                                            {
-                                                Title = value.Title,
-                                                Quantity = value.Quantity,
-                                                IsSelected = value.IsSelected
-                                            }
-                                    }))
-                    .OrderBy(facetValue => facetValue.PromotionWeight)
-                    .Select(facetValue => facetValue.FacetValue)
-                    .ToList();
+            return facets
+                .SelectMany(facet => facet.FacetValues
+                    .Where(value => value.IsPromoted)
+                    .Select(value => new
+                    {
+                        PromotionWeight = value.PromotionSortWeight,
+                        FacetValue = new PromotedFacetValue(facet.FieldName, facet.FacetType, value.Value)
+                        {
+                            Title = value.Title,
+                            Quantity = value.Quantity,
+                            IsSelected = value.IsSelected
+                        }
+                    })
+                )
+                .OrderBy(facetValue => facetValue.PromotionWeight)
+                .Select(facetValue => facetValue.FacetValue)
+                .ToList();
         }
 
         private SearchPaginationViewModel BuildPaginationForSearchResults(
@@ -127,7 +125,7 @@ namespace Orckestra.Composer.Search.Services
         {
             var totalCount = searchResult.TotalCount;
             var itemsPerPage = SearchConfiguration.MaxItemsPerPage;
-            var totalPages = (int) Math.Ceiling((double) totalCount/itemsPerPage);
+            var totalPages = (int)Math.Ceiling((double)totalCount / itemsPerPage);
 
             var param = new CreateSearchPaginationParam<TParam>
             {
@@ -138,12 +136,14 @@ namespace Orckestra.Composer.Search.Services
                 CorrectedSearchTerms = searchResult.CorrectedSearchTerms
             };
 
+            var pages = GetPages(param);
             var pager = new SearchPaginationViewModel
             {
                 PreviousPage = GetPreviousPage(param),
                 NextPage = GetNextPage(param),
-                Pages = GetPages(param),
-                TotalNumberOfPages =  totalPages
+                CurrentPage = pages.FirstOrDefault(p => p.IsCurrentPage),
+                Pages = pages,
+                TotalNumberOfPages = totalPages
             };
 
             return pager;
@@ -232,7 +232,7 @@ namespace Orckestra.Composer.Search.Services
             productSearchVm.IsAvailableToSell = await GetProductSearchViewModelAvailableForSell(productSearchVm, productDocument).ConfigureAwait(false);
             productSearchVm.Pricing = await PriceProvider.GetPriceAsync(productSearchVm.HasVariants, productDocument).ConfigureAwait(false);
             productSearchVm.IsEligibleForRecurring = RecurringOrdersSettings.Enabled && productDocument.PropertyBag.IsEligibleForRecurring();
-          
+
             productSearchVm.Context["IsEligibleForRecurring "] = productSearchVm.IsEligibleForRecurring;
 
             return productSearchVm;
@@ -240,11 +240,11 @@ namespace Orckestra.Composer.Search.Services
 
         protected virtual string ExtractLookupId(string fieldName, PropertyBag propertyBag)
         {
-            if(propertyBag == null) { return null; }
+            if (propertyBag == null) { return null; }
             var fieldValue = propertyBag.ContainsKey(fieldName) ? propertyBag[fieldName] as string : null;
-            if(String.IsNullOrWhiteSpace(fieldValue)) { return null; }
+            if (String.IsNullOrWhiteSpace(fieldValue)) { return null; }
 
-            var extractedValues = fieldValue.Split(new []{"::"}, StringSplitOptions.None);
+            var extractedValues = fieldValue.Split(new[] { "::" }, StringSplitOptions.None);
             return extractedValues.Length < 3
                 ? null
                 : extractedValues[2];
@@ -315,14 +315,16 @@ namespace Orckestra.Composer.Search.Services
         protected virtual SearchPageViewModel GetNextPage(CreateSearchPaginationParam<TParam> param)
         {
             var searchCriteria = param.SearchParameters.Criteria;
-            var nextPage = new SearchPageViewModel {
+            var nextPage = new SearchPageViewModel
+            {
                 DisplayName = LocalizationProvider
                     .GetLocalizedString(new GetLocalizedParam
                     {
                         Category = "List-Search",
                         Key = "B_Next",
                         CultureInfo = searchCriteria.CultureInfo
-                    })};
+                    })
+            };
 
             if (param.CurrentPageIndex < param.TotalNumberOfPages)
             {
@@ -386,11 +388,13 @@ namespace Orckestra.Composer.Search.Services
                 var displayName = index.ToString(CultureInfo.InvariantCulture);
                 param.SearchParameters.Criteria.Page = index;
                 var searchUrl = GenerateUrl(param);
-                var searchPage = new SearchPageViewModel {
+                var searchPage = new SearchPageViewModel
+                {
                     DisplayName = displayName,
                     Url = searchUrl,
                     IsCurrentPage = index == param.CurrentPageIndex,
-                    UrlPath = searchUrl.Replace(param.SearchParameters.Criteria.BaseUrl, string.Empty) };
+                    UrlPath = searchUrl.Replace(param.SearchParameters.Criteria.BaseUrl, string.Empty)
+                };
 
                 pages.Add(searchPage);
             }
@@ -401,14 +405,16 @@ namespace Orckestra.Composer.Search.Services
         protected virtual SearchPageViewModel GetPreviousPage(CreateSearchPaginationParam<TParam> param)
         {
             var searchCriteria = param.SearchParameters.Criteria;
-            var previousPage = new SearchPageViewModel {
+            var previousPage = new SearchPageViewModel
+            {
                 DisplayName = LocalizationProvider
                 .GetLocalizedString(new GetLocalizedParam
                 {
                     Category = "List-Search",
                     Key = "B_Previous",
                     CultureInfo = searchCriteria.CultureInfo
-                })};
+                })
+            };
 
             if (param.CurrentPageIndex > 1)
             {
@@ -529,7 +535,7 @@ namespace Orckestra.Composer.Search.Services
             if (searchResult == null) { return null; }
 
             var imageUrls = await DamProvider.GetProductMainImagesAsync(GetImagesParam(searchResult.Documents)).ConfigureAwait(false);
-           
+
             var createSearchViewModelParam = new CreateProductSearchResultsViewModelParam<TParam>
             {
                 SearchParam = cloneParam,

@@ -25,6 +25,14 @@ namespace Orckestra.Composer.Search.ViewModels
         public SearchPageViewModel NextPage { get; set; }
 
         /// <summary>
+        /// Gets or sets properties for the [Current] page button.
+        /// </summary>
+        /// <value>
+        /// The current page.
+        /// </value>
+        public SearchPageViewModel CurrentPage { get; set; }
+
+        /// <summary>
         /// Gets or sets properties for the paged result set.
         /// </summary>
         /// <value>

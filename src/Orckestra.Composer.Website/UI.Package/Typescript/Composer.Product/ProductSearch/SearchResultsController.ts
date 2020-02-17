@@ -113,10 +113,6 @@ module Orckestra.Composer {
             });
         }
 
-        public pagerPageChanged(actionContext: IControllerActionContext) {
-            this.context.window.location.href = actionContext.elementContext.val();
-        }
-
         protected getProductDataForAnalytics(productId: string, price: any): any {
             var results = this.context.viewModel.SearchResults;
             var vm = _.find(results, (r: any) => r.ProductId === productId);
