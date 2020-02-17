@@ -15,13 +15,11 @@
         <br />
         <div class="card">
             <div class="card-header">
-
                 <h4 class="float-left">
                     Shipping
                 </h4>
-                <button class="btn btn-primary float-right">Continue </button>
+                <button v-on='{ click: shippingSelect }' class="btn btn-primary float-right">Continue </button>
             </div>
-
 
             <div class="card-body">
                 <ul v-if="ShippingMethods">

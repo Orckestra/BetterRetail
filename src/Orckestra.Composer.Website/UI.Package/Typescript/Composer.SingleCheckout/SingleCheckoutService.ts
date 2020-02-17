@@ -84,11 +84,12 @@ module Orckestra.Composer {
             Q.all([authenticatedPromise, getCartPromise, regionsPromise, shippingMethodsPromise])
                 .spread((authVm, cartVm, regionsVm, shippingMethodsVm) => {
 
-                    var results: ICheckoutContext = {
+                    let results: ICheckoutContext = {
                         authenticationViewModel: authVm,
                         cartViewModel: cartVm,
                         regionsViewModel: regionsVm,
-                        shippingMethodsViewModel: shippingMethodsVm
+                        shippingMethodsViewModel: shippingMethodsVm,
+                        editingCustomer: true
                     };
 
                     this.initializeVueComponent(results);
@@ -104,31 +105,32 @@ module Orckestra.Composer {
                 });
         }
 
-
         public initializeVueComponent(checkoutContext: ICheckoutContext) {
-
             this.vueSingleCheckout = new Vue({
                 el: '#vueSingleCheckout',
                 data: checkoutContext,
                 mounted() {
-                    $("#vueSingleCheckout").removeClass('d-none');
                 },
                 computed: {
-
                     Customer()  { 
                         return this.cartViewModel.Customer;
                      },
-                       
                     ShippingMethods() {
                         return  this.shippingMethodsViewModel.ShippingMethods;
                     },
-
                     OrderSummary () {
                         return this.cartViewModel.OrderSummary;
                     },
-
                     OrderCanBePlaced() {
                        return false;
+                    }
+                },
+                methods: {
+                    editCustomer(e) {
+                        this.editingCustomer = true;
+                    },
+                    shippingSelect(e) {
+                        this.editingCustomer = false;
                     }
                 }
             });
