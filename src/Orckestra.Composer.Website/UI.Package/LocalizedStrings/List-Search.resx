@@ -283,12 +283,21 @@
     <value>But we did find</value>
   </data>
   <data name="ButWeFind_Part2" xml:space="preserve">
-    <value>matching your query.</value>
+    <value>matching your query "{0}"</value>
   </data>
   <data name="ButWeFind_Separator" xml:space="preserve">
     <value>and</value>
   </data>
   <data name="WeAreSorry" xml:space="preserve">
     <value>We are sorry, we could not find any matches for  “{0}”  in Products.</value>
+  </data>
+  <data name="L_SearchResultsCorrected" xml:space="preserve">
+    <value>Showing {0} search results for "{1}"</value>
+  </data>
+  <data name="L_SearchResultsSeeAll" xml:space="preserve">
+    <value>See all {0}</value>
+  </data>
+  <data name="T_SearchResultsFoundIn" xml:space="preserve">
+    <value>{0} Found ({1})</value>
   </data>
 </root>

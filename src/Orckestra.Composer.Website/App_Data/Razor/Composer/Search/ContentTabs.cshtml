@@ -1,4 +1,4 @@
-@inherits Composer.Razor.ComposerRazorFunction
+﻿@inherits Composer.Razor.ComposerRazorFunction
 @using Orckestra.Composer.Search.Context
 @using Orckestra.Composer.Search.ViewModels
 @using Orckestra.Search.WebsiteSearch;
@@ -162,7 +162,7 @@
                 if (ProductSearchResults.TotalCount == 0)
                 {
                     var tabsWithResults = contentSearchVm.Tabs.Where(t => t.Total > 0).ToList();
-                    <p>@Html.Localized("List-Search", "WeAreSorry", SearchRequestContext.SearchQuery)</p>
+                    <p class="m-0">@Html.Localized("List-Search", "WeAreSorry", SearchRequestContext.SearchQuery)</p>
                     if (tabsWithResults.Count() > 0)
                     {
                         @ShowButWeFindIn(tabsWithResults)
@@ -227,14 +227,14 @@
 
 @helper SearchSummary(ContentSearchViewModel vm, bool isProductTab)
 {
-    if (IsProductsCorrected())
+    if (IsProductsCorrected() && isProductTab)
     {
-        <h1>
+        <h2>
             @($"{Html.Localize("List-Search", "L_NoResultsFor")} \"{SearchRequestContext.SearchQuery }\"")
-        </h1>
-        <p>@Html.Localized("List-Search", "WeAreSorry", SearchRequestContext.SearchQuery)</p>
+        </h2>
+        <p class="m-0">@Html.Localized("List-Search", "WeAreSorry", SearchRequestContext.SearchQuery)</p>
         @ShowButWeFindIn(vm.SuggestedTabs)
-        <h2>@($"{vm.Total} {Html.Localize("List-Search", "L_SearchResults")} \"{ProductSearchResults.CorrectedSearchTerms}\"")</h2>
+        <h1 class="mt-4">@(Html.Localized("List-Search", "L_SearchResultsCorrected", vm.Total, ProductSearchResults.CorrectedSearchTerms))</h1>
     }
     else
     {
@@ -248,6 +248,7 @@
                 @($"{Html.Localize("List-Search", "L_NoResultsFor")} \"{SearchRequestContext.SearchQuery }\"")
             </h1>
         }
+
         @Function("Composer.Search.Suggestions")
     }
 }
@@ -260,14 +261,14 @@
         @for (var i = 0; i < tabs.Count(); i++)
         {
             var tab = tabs[i];
-            <a href="@tab.TabUrl">@tab.Total @tab.Title</a>
+            <a href="@tab.TabUrl">@tab.Title (@tab.Total)</a>
 
             if (i < tabs.Count() - 1)
             {
                 <text>@Html.Localize("List-Search", "ButWeFind_Separator")</text>
             }
         }
-        @Html.Localize("List-Search", "ButWeFind_Part2")
+        @Html.Localized("List-Search", "ButWeFind_Part2", SearchRequestContext.SearchQuery)
     </p>
 }
 
@@ -281,13 +282,13 @@
         {
             var resutls = tab.SearchResults.Entries.Take(teaserItemsCount);
             <div class="header">
-                <h3 class="title">@tab.Title (@tab.Total)</h3>
+                <h3 class="title d-inline-flex  mt-3">@Html.Localized("List-Search", "T_SearchResultsFoundIn", tab.Title, tab.Total)</h3>
                 @if (tab.Total > teaserItemsCount)
                 {
-                    <a href="@tab.TabUrl">See all @tab.Title</a>
+                    <a class="d-inline-flex  ml-4" href="@tab.TabUrl">@Html.Localized("List-Search", "L_SearchResultsSeeAll", tab.Title)</a>
                 }
             </div>
-            <div class="row">
+            <div class="row mb-4">
                 @foreach (var entry in resutls)
                 {
                     <div class="col-12 col-sm-4 col-md-4">

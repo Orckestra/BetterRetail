@@ -79,6 +79,17 @@
         <Type type="Orckestra.Composer.CompositeC1.DataTypes.IWebsiteStyleTheme,Orckestra.Composer.CompositeC1.DataTypes">
           <Data dataScopeIdentifier="public" locale="?" dataFilename="~\Datas\Orckestra.Composer.CompositeC1.DataTypes.IWebsiteStyleThemes_public.xml" />
         </Type>
+
+        <!-- Content Search -->
+        <Type type="Orckestra.Composer.ContentSearch.DataTypes.ISortOption,Orckestra.Composer.ContentSearch">
+          <Data dataScopeIdentifier="public" locale="?" dataFilename="~\Datas\Orckestra.Composer.ContentSearch.DataTypes.ISortOptions_public.xml" />
+        </Type>
+        <Type type="Orckestra.Composer.ContentSearch.DataTypes.IContentTab,Orckestra.Composer.ContentSearch">
+          <Data dataScopeIdentifier="administrated" locale="?" dataFilename="~\Datas\Orckestra.Composer.ContentSearch.DataTypes.IContentTabs_administrated.xml" />
+        </Type>
+        <Type type="Orckestra.Composer.ContentSearch.DataTypes.IContentTab,Orckestra.Composer.ContentSearch">
+          <Data dataScopeIdentifier="public" locale="?" dataFilename="~\Datas\Orckestra.Composer.ContentSearch.DataTypes.IContentTabs_public.xml" />
+        </Type>
       </Types>
     </mi:Add>
   </mi:PackageFragmentInstallers>

@@ -11,7 +11,6 @@ using Orckestra.Composer.Search.Services;
 using Orckestra.Composer.Search.ViewModels;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Utils;
-using System.Linq;
 using Orckestra.Composer.CompositeC1.Controllers.Helpers;
 using Composite.Data;
 using Orckestra.Composer.Search.RequestConstants;
@@ -61,8 +60,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             searchViewModel.Context["TotalCount"] = searchViewModel.ProductSearchResults.TotalCount;
             searchViewModel.Context["MaxItemsPerPage"] = SearchConfiguration.MaxItemsPerPage;
             searchViewModel.Context["ListName"] = "Search Results";
-            searchViewModel.Context["PaginationCurrentPage"] = searchViewModel.ProductSearchResults.Pagination.Pages.FirstOrDefault(p => p.IsCurrentPage);
-
+            searchViewModel.Context["PaginationCurrentPage"] = searchViewModel.ProductSearchResults.Pagination.CurrentPage;
 
             return View("ProductsSearchResults", searchViewModel);
         }

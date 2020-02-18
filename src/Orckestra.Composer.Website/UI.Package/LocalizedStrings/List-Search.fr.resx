@@ -231,8 +231,14 @@
   <data name="L_SearchResults" xml:space="preserve">
     <value>résultats pour</value>
   </data>
+  <data name="L_SearchResultsCorrected" xml:space="preserve">
+    <value>Affichage de {0} résultats de recherche pour  « {1} »</value>
+  </data>
   <data name="L_SearchResultsForBreadcrumb" xml:space="preserve">
     <value>Résultats de recherche pour</value>
+  </data>
+  <data name="L_SearchResultsSeeAll" xml:space="preserve">
+    <value>Tout afficher</value>
   </data>
   <data name="L_Selection" xml:space="preserve">
     <value>Votre sélection</value>
@@ -284,6 +290,9 @@
   </data>
   <data name="SearchResult" xml:space="preserve">
     <value>Résultats de recherche pour « {0} »</value>
+  </data>
+  <data name="T_SearchResultsFoundIn" xml:space="preserve">
+    <value>{0} trouvés ({1})</value>
   </data>
   <data name="WeAreSorry" xml:space="preserve">
     <value>Nous sommes désolés, nous n’avons trouvé aucun résultats pour « {0} »  dans les produits.</value>
