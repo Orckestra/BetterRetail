@@ -21,18 +21,18 @@
                     Information
                 </h4>
                 <button class="btn btn-outline-secondary float-right"
-                    v-show='!editingCustomer' 
+                  
                     v-on='{ click: editCustomer }'>
                     Edit
                 </button>
             </div>
             <div v-if="Customer" class="card-body">
-                <div v-show='!editingCustomer'>
+                <div>
                     <span v-text="Customer.FirstName" class="font-weight-bold"></span>
                     <span v-text="Customer.LastName" class="font-weight-bold"></span>
                     <div v-text="Customer.Email"></div>
                 </div>
-                <div v-show='editingCustomer'>
+                <div>
                     <div class="form-group">
                         <input v-model="cartViewModel.Customer.Email"
                                class="form-control"

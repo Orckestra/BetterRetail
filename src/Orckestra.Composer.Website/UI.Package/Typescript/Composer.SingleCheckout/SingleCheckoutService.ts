@@ -88,8 +88,7 @@ module Orckestra.Composer {
                         authenticationViewModel: authVm,
                         cartViewModel: cartVm,
                         regionsViewModel: regionsVm,
-                        shippingMethodsViewModel: shippingMethodsVm,
-                        editingCustomer: true
+                        shippingMethodsViewModel: shippingMethodsVm
                     };
 
                     this.initializeVueComponent(results);
@@ -115,8 +114,14 @@ module Orckestra.Composer {
                     Customer()  { 
                         return this.cartViewModel.Customer;
                      },
+                    ShippingAddress() {
+                        return this.cartViewModel.ShippingAddress;
+                    },
                     ShippingMethods() {
                         return  this.shippingMethodsViewModel.ShippingMethods;
+                    },
+                    Rewards() {
+                        return this.cartViewModel.Rewards;
                     },
                     OrderSummary () {
                         return this.cartViewModel.OrderSummary;

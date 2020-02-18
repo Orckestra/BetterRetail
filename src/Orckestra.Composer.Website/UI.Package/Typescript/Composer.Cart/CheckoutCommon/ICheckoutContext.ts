@@ -6,7 +6,6 @@ module Orckestra.Composer {
         cartViewModel: any;
         regionsViewModel: any;
         shippingMethodsViewModel: any;
-        editingCustomer: boolean
     }
 
     export interface IAuthenticationViewModel {
