@@ -164,7 +164,7 @@ namespace Orckestra.Composer.ContentSearch.Services
         protected virtual List<ContentSearchTabViewModel> GetSuggestedTabs(GetContentSearchParameter param, List<IContentTab> contentTabs)
         {
             List<ContentSearchTabViewModel> vm = null;
-            if (param.ProductsTabActive && !string.IsNullOrEmpty(param.CorrectedSearchQuery))
+            if (param.ProductsTabActive && param.IsCorrectedSearchQuery)
             {
                 vm = new List<ContentSearchTabViewModel>();
                 foreach (var tab in contentTabs)
@@ -189,7 +189,9 @@ namespace Orckestra.Composer.ContentSearch.Services
         }
         protected virtual string GetSearchQuery(GetContentSearchParameter param)
         {
-            return param.ProductsTabActive && !string.IsNullOrEmpty(param.CorrectedSearchQuery) ? param.CorrectedSearchQuery : param.SearchQuery.Trim().ToLower();
+            return param.ProductsTabActive && param.IsCorrectedSearchQuery ?
+                param.CorrectedSearchQuery :
+                param.SearchQuery.Trim().ToLower();
         }
 
         protected virtual string GetTabUrl(GetContentSearchParameter param, IContentTab tab, string searchQuery)

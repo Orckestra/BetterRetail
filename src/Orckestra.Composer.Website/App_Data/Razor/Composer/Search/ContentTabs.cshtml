@@ -17,10 +17,6 @@
         get { return "Search Results with Content Tabs"; }
     }
 
-    [FunctionParameter(Label = "${Orckestra.Search.WebsiteSearch,SearchResults.PageSize.Label}",
-        Help = "${Orckestra.Search.WebsiteSearch,SearchResults.PageSize.Help}", DefaultValue = 6)]
-    public int PageSize { get; set; }
-
     [FunctionParameter(Label = "${Orckestra.Search.WebsiteSearch,SearchResults.CurrentSite.Label}",
         Help = "${Orckestra.Search.WebsiteSearch,SearchResults.CurrentSite.Help}", DefaultValue = true)]
     public bool CurrentSite { get; set; }
@@ -38,7 +34,7 @@
 
     private bool IsProductsCorrected()
     {
-        return !string.IsNullOrEmpty(ProductSearchResults.CorrectedSearchTerms);
+        return !string.IsNullOrEmpty(ProductSearchResults.CorrectedSearchTerms) && ProductSearchResults.TotalCount > 0;
     }
 
 }
@@ -57,11 +53,12 @@
     var contentSearchVm = ContentSearchViewService.GetContentSearchViewModel(new GetContentSearchParameter
     {
         Culture = Data.CurrentLocale,
-        PageSize = PageSize,
+        PageSize = SearchConfiguration.MaxItemsPerPage,
         CurrentPage = SearchRequestContext.CurrentPage,
         PathInfo = currentTabPathInfo,
         CurrentSiteOnly = CurrentSite,
         SearchQuery = SearchRequestContext.SearchQuery,
+        IsCorrectedSearchQuery = IsProductsCorrected(),
         CorrectedSearchQuery = ProductSearchResults.CorrectedSearchTerms,
         BaseUrl = CurrentPageNode.Url,
         QueryKeys = Request.QueryString?.AllKeys,
@@ -134,7 +131,7 @@
     </script>
 </head>
 <body>
-    @SearchSummary(contentSearchVm, isProductTab)
+    @SearchSummary(contentSearchVm, isProductTab, currentTab?.Title)
 
     @if (contentSearchVm.Tabs.Count > 0)
     {
@@ -157,23 +154,24 @@
     <div class="search-results">
         <!-- Tab panes -->
         <div class="tab-content mt-4">
-            @if (isProductTab)
+            @if (currentTab != null)
             {
-                if (ProductSearchResults.TotalCount == 0)
+                if (currentTab.Total == 0)
                 {
                     var tabsWithResults = contentSearchVm.Tabs.Where(t => t.Total > 0).ToList();
-                    <p class="m-0">@Html.Localized("List-Search", "WeAreSorry", SearchRequestContext.SearchQuery)</p>
+                    <p class="m-0">@Html.Localized("List-Search", "WeAreSorry", SearchRequestContext.SearchQuery, currentTab.Title)</p>
                     if (tabsWithResults.Count() > 0)
                     {
                         @ShowButWeFindIn(tabsWithResults)
                         @ShowButWeFindInTeaser(tabsWithResults)
                     }
                 }
-                @ShowProductsSearchResults()
-            }
-            else
-            {
-                if (currentTab != null)
+
+                if (isProductTab)
+                {
+                    @ShowProductsSearchResults()
+                }
+                else
                 {
                     <form id="SearchForm" class="search-form" method="get" role="search"
                           action="@CurrentPageNode.Url/@currentTab.UrlTitle">
@@ -225,14 +223,14 @@
 </body>
 </html>
 
-@helper SearchSummary(ContentSearchViewModel vm, bool isProductTab)
+@helper SearchSummary(ContentSearchViewModel vm, bool isProductTab, string tabTitle)
 {
     if (IsProductsCorrected() && isProductTab)
     {
         <h2>
             @($"{Html.Localize("List-Search", "L_NoResultsFor")} \"{SearchRequestContext.SearchQuery }\"")
         </h2>
-        <p class="m-0">@Html.Localized("List-Search", "WeAreSorry", SearchRequestContext.SearchQuery)</p>
+        <p class="m-0">@Html.Localized("List-Search", "WeAreSorry", SearchRequestContext.SearchQuery, tabTitle)</p>
         @ShowButWeFindIn(vm.SuggestedTabs)
         <h1 class="mt-4">@(Html.Localized("List-Search", "L_SearchResultsCorrected", vm.Total, ProductSearchResults.CorrectedSearchTerms))</h1>
     }
@@ -274,7 +272,7 @@
 
 @helper ShowButWeFindInTeaser(List<ContentSearchTabViewModel> tabs)
 {
-    if (tabs == null || !tabs.Any()) { return; }
+    if (tabs == null || !tabs.Any(t => t.SearchResults != null)) { return; }
 
     var teaserItemsCount = 3;
     <div class="content-tab-teaser">

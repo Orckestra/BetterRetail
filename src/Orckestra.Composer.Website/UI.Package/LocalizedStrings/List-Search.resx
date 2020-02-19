@@ -289,7 +289,7 @@
     <value>and</value>
   </data>
   <data name="WeAreSorry" xml:space="preserve">
-    <value>We are sorry, we could not find any matches for  “{0}”  in Products.</value>
+    <value>We are sorry, we could not find any matches for  “{0}”  in  {1}.</value>
   </data>
   <data name="L_SearchResultsCorrected" xml:space="preserve">
     <value>Showing {0} search results for "{1}"</value>
