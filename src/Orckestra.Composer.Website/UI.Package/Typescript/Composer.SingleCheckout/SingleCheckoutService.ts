@@ -84,6 +84,9 @@ module Orckestra.Composer {
             Q.all([authenticatedPromise, getCartPromise, regionsPromise, shippingMethodsPromise])
                 .spread((authVm, cartVm, regionsVm, shippingMethodsVm) => {
 
+                    if(!cartVm.Customer) {
+                        cartVm.Customer = {};
+                    }
                     let results: ICheckoutContext = {
                         authenticationViewModel: authVm,
                         cartViewModel: cartVm,
@@ -109,6 +112,7 @@ module Orckestra.Composer {
                 el: '#vueSingleCheckout',
                 data: checkoutContext,
                 mounted() {
+                    this.parsleyInit = $('#editCustomerForms').parsley();
                 },
                 computed: {
                     Customer()  { 
@@ -135,7 +139,11 @@ module Orckestra.Composer {
                         this.editingCustomer = true;
                     },
                     shippingSelect(e) {
-                        this.editingCustomer = false;
+                        this.parsleyInit.validate();
+
+                        if (this.parsleyInit.isValid()) {
+                            this.editingCustomer = false;
+                        }
                     }
                 }
             });

@@ -1,39 +1,39 @@
-﻿@inherits RazorPageTemplate
+@inherits RazorPageTemplate
 @using System.Globalization
-			  
+
 @functions {
-	public override void Configure()
-	{
-		TemplateId = new Guid("94b93a9f-df7f-41d7-89b6-d003d3e0c553");
-		TemplateTitle = "Single Checkout Page Layout";
-		Layout = "MasterLayout.cshtml";
-	}
-	
-   [Placeholder(Id="body", Title="Body", IsDefault=true)]
-	public XhtmlDocument Body { get; set; }
-	
-	[Placeholder(Id="Right", Title="Right")]
-	public XhtmlDocument Right { get; set; }
+    public override void Configure()
+    {
+        TemplateId = new Guid("94b93a9f-df7f-41d7-89b6-d003d3e0c553");
+        TemplateTitle = "Single Checkout Page Layout";
+        Layout = "MasterLayout.cshtml";
+    }
+
+    [Placeholder(Id = "body", Title = "Body", IsDefault = true)]
+    public XhtmlDocument Body { get; set; }
+
+    [Placeholder(Id = "Right", Title = "Right")]
+    public XhtmlDocument Right { get; set; }
 }
 
 
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v-bind="vue" xmlns:f="http://www.composite.net/ns/function/1.0">
-	<head>
-     	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-	</head>
-    <body>
-        @Function("Composer.Header.GeneralErrors")
-        @Function("Composer.CheckoutHeader")
-        
-        <div id="vueSingleCheckout" class="container-md checkout-page">
-            <div v-cloak="true" class="row" >
-                <div class="col-8">
-                    @Markup(Body)
-                </div>
-                <div class="col-4">
-                    @Markup(Right)
-                </div>
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    @Function("Composer.Header.GeneralErrors")
+    @Function("Composer.CheckoutHeader")
+
+    <div id="vueSingleCheckout" class="container-md checkout-page">
+        <div v-cloak="true" class="row">
+            <div class="col-8">
+                @Markup(Body)
+            </div>
+            <div class="col-4">
+                @Markup(Right)
             </div>
         </div>
-    </body>
+    </div>
+</body>
 </html>

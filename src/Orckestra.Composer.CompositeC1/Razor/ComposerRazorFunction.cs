@@ -39,6 +39,17 @@ namespace Composer.Razor
             return new HtmlString(sw.ToString());
         }
 
+        public IHtmlString HelpBubble(string category, string key)
+        {
+            var helpText = WebPagesHtmlHelperExtensions.Localize(category, key);
+            if (!string.IsNullOrEmpty(helpText))
+            {
+                return new HtmlString(Partial("HelpBubbleOpen", null).ToHtmlString() + helpText + Partial("HelpBubbleClose", null).ToHtmlString());
+            }
+
+            return new HtmlString("");
+        }
+
         internal class DefaultController : Controller { }
 
         /// <summary>

@@ -72,7 +72,8 @@ namespace Composite.AspNet.Razor
 
             return string.Format(formatter, args);
         }
-        private static string Localize(string category, string key)
+
+        public static string Localize(string category, string key)
         {
             var localizationProvider = ComposerHost.Current.Resolve<ILocalizationProvider>();
 
@@ -85,7 +86,6 @@ namespace Composite.AspNet.Razor
                 }
             );
         }
-
 
         public static IHtmlString LazyFunction(this System.Web.WebPages.Html.HtmlHelper htmlHelper, string name, string className = null, string loaderClassName = null)
         {
