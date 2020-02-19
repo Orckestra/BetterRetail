@@ -78,19 +78,25 @@ namespace Orckestra.Composer.Sitemap
                                         Culture = culture
                                     };
 
-                                    foreach (var sitemap in provider.GenerateSitemaps(sitemapParams))
+                                    try
                                     {
-                                        // Write sitemap to disk
-                                        Log.Info($"Writing sitemap {sitemap.Name}");
-                                        WriteSitemap(sitemap, website);
-
-                                        // Add sitemap name to the list for the index creation later
-                                        lock (sitemapNames)
+                                        foreach (var sitemap in provider.GenerateSitemaps(sitemapParams))
                                         {
-                                            sitemapNames.Add(sitemap.Name);
+                                            // Write sitemap to disk
+                                            Log.Info($"Writing sitemap {sitemap.Name}");
+                                            WriteSitemap(sitemap, website);
+
+                                            // Add sitemap name to the list for the index creation later
+                                            lock (sitemapNames)
+                                            {
+                                                sitemapNames.Add(sitemap.Name);
+                                            }
                                         }
                                     }
-                              
+                                    catch (Exception e) {
+                                        Log.Error(e.ToString());
+                                    }
+
                                 }));
                             }
                         }

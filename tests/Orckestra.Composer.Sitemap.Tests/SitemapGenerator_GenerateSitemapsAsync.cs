@@ -198,39 +198,6 @@ namespace Orckestra.Composer.Sitemap.Tests
             }
         }
 
-        [Test]
-        public void WHEN_ExceptionOccurs_SHOULD_DeleteWorkingDirectory()
-        {
-            // ARRANGE                
-            var provider = _container.GetMock<ISitemapProvider>();
-            provider.Setup(p => p.GenerateSitemaps(It.IsAny<SitemapParams>()))
-              .Throws<Exception>();
-            _container.Use<IEnumerable<ISitemapProvider>>(new[] { provider.Object });
-
-            Directory.CreateDirectory(SitemapDirectory);
-
-            string baseUrl = "baseUrl";
-            string relativeUrl = "relativeUrl";
-            Guid websiteId = Guid.NewGuid();
-            CultureInfo[] cultures = new[] { new CultureInfo("en") };
-
-            var sut = _container.CreateInstance<SitemapGenerator>();
-
-            try
-            {
-                // ACT
-                Action action = () => sut.GenerateSitemaps(websiteId, baseUrl, relativeUrl, cultures);
-
-                // ASSERT
-                action.ShouldThrow<Exception>();
-                Directory.Exists(WorkingRootDirectory).Should().BeFalse();
-            }
-            finally
-            {
-                Cleanup();
-            }
-        }
-
         private static ProviderMock MockSitemapProvider(int providerIndex)
         {
             var provider = new Mock<ISitemapProvider>();
