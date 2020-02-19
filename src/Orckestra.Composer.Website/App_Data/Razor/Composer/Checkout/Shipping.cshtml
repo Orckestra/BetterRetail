@@ -7,7 +7,7 @@
     }
 }
 
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on" xmlns:v-slot="v-slot">
 <head>
 </head>
 <body>
@@ -18,10 +18,10 @@
                 <h4 class="float-left">
                     Shipping
                 </h4>
-                <button v-on='{ click: shippingSelect }' class="btn btn-primary float-right">Continue </button>
+                <button v-show="!step.active" v-bind:disabled="!Customer.FirstName" v-on:click='step.navigateToTab(step.index)' class="btn btn-primary float-right">Continue </button>
             </div>
 
-            <div class="card-body">
+            <div class="card-body" v-show="step.active">
                 <ul v-if="ShippingMethods">
                     <li v-for="method in ShippingMethods">
                         <span v-text="method.DisplayName">

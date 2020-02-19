@@ -7,7 +7,7 @@
     }
 }
 
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on" xmlns:v-slot="v-slot">
 <head>
 
 </head>
@@ -19,18 +19,18 @@
                 <h4 class="float-left">
                     Information
                 </h4>
-                <button class="btn btn-outline-secondary float-right"
-                        v-on='{ click: editCustomer }'>
+                <button v-show="step.preview" class="btn btn-outline-secondary float-right"
+                         v-on:click='step.navigateToTab(step.index)'>
                     Edit
                 </button>
             </div>
             <div v-if="Customer" class="card-body">
-                <div>
+                <div v-if="step.preview">
                     <span v-text="Customer.FirstName" class="font-weight-bold"></span>
                     <span v-text="Customer.LastName" class="font-weight-bold"></span>
                     <div v-text="Customer.Email"></div>
                 </div>
-                <form id="editCustomerForms">
+                <form id="editCustomerForms"  v-if="step.active">
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="FirstName">@Html.Localize("Forms", "F_FirstName") *</label>

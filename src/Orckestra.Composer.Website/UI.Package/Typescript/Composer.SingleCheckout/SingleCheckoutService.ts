@@ -111,6 +111,11 @@ module Orckestra.Composer {
             this.vueSingleCheckout = new Vue({
                 el: '#vueSingleCheckout',
                 data: checkoutContext,
+                components: {
+                    'checkout-step': (<any>window).httpVueLoader('/UI.Package/Vue/CheckoutStep.vue'),
+                    'single-page-checkout': (<any>window).httpVueLoader('/UI.Package/Vue/Checkout.vue'),
+           
+                 },
                 mounted() {
                     this.parsleyInit = $('#editCustomerForms').parsley();
                 },
@@ -139,11 +144,10 @@ module Orckestra.Composer {
                         this.editingCustomer = true;
                     },
                     shippingSelect(e) {
+                        this.parsleyInit = $('#editCustomerForms').parsley();
                         this.parsleyInit.validate();
 
-                        if (this.parsleyInit.isValid()) {
-                            this.editingCustomer = false;
-                        }
+                        return this.parsleyInit.isValid();
                     }
                 }
             });
