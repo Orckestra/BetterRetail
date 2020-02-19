@@ -7,10 +7,6 @@
     white-space: normal;
 }
 
-.btn-inactive {
-    @include button-variant(gray("400"), #FFF, gray("400"));
-}
-
 button, a {
     &[aria-expanded="true"] {
         .fa-caret-up {
