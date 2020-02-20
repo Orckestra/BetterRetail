@@ -20,7 +20,7 @@ module Orckestra.Composer {
             super.initialize();
 
             this.checkoutService = SingleCheckoutService.getInstance();
-
+          
             this.registerController();
         }
 
@@ -51,10 +51,7 @@ module Orckestra.Composer {
         }
 
         protected registerSubscriptions(): void {
-
-            this.eventHub.subscribe(`${this.viewModelName}Rendered`, () => {
-                this.formInstances = this.registerFormsForValidation($('form', this.context.container));
-            });
+            this.formInstances = this.registerFormsForValidation($('form', this.context.container));
         }
 
         protected getViewModelUpdated(): string {
