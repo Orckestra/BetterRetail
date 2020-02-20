@@ -13,28 +13,27 @@
 </head>
 <body>
     <div data-oc-controller="SingleCheckout.UserInfo">
-        <br />
         <div class="card">
             <div class="card-header">
                 <h4 class="float-left">
                     Information
                 </h4>
                 <button v-show="step.preview" class="btn btn-outline-secondary float-right"
-                         v-on:click='step.navigateToTab(step.index)'>
+                         v-on:click='step.navigateToStep(step.index)'>
                     Edit
-                </button>
-            </div>
-            <div v-if="Customer" class="card-body">
+                </button> 
+            </div> 
+            <div v-if="Cart.Customer" class="card-body">
                 <div v-if="step.preview">
-                    <span v-text="Customer.FirstName" class="font-weight-bold"></span>
-                    <span v-text="Customer.LastName" class="font-weight-bold"></span>
-                    <div v-text="Customer.Email"></div>
+                    <span v-text="Cart.Customer.FirstName" class="font-weight-bold"></span>
+                    <span v-text="Cart.Customer.LastName" class="font-weight-bold"></span>
+                    <div v-text="Cart.Customer.Email"></div>
                 </div>
                 <form id="editCustomerForms"  v-if="step.active">
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="FirstName">@Html.Localize("Forms", "F_FirstName") *</label>
-                            <input v-model="cartViewModel.Customer.FirstName"
+                            <input v-model="Cart.Customer.FirstName"
                                    class="form-control"
                                    placeholder="@Html.Localize("Forms", "F_FirstNameWaterMark")"
                                    type="text"
@@ -42,12 +41,12 @@
                                    id="FirstName"
                                    data-parsley-length="[2, 36]"
                                    data-parsley-pattern="/^[a-zA-Z\u00E0-\u00FC\.\-\s\']+$/i"
-                                   @HelpBubble("Forms", "F_FirstNameIndication") />
+                                  />
                         </div>
 
                         <div class="form-group col-md-6">
                             <label for="LastName">@Html.Localize("Forms", "F_LastName") *</label>
-                            <input v-model="cartViewModel.Customer.LastName"
+                            <input v-model="Cart.Customer.LastName"
                                    id="LastName"
                                    class="form-control"
                                    placeholder="@Html.Localize("Forms", "F_LastNameWaterMark")"
@@ -62,7 +61,7 @@
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="Email">@Html.Localize("Forms", "F_Email") *</label>
-                            <input v-model="cartViewModel.Customer.Email"
+                            <input v-model="Cart.Customer.Email"
                                    type="email"
                                    id="Email"
                                    class="form-control"

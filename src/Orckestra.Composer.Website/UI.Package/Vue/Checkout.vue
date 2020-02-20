@@ -95,44 +95,44 @@ module.exports = {
     },
     provide () {
       return {
-        addTab: this.addTab,
-        removeTab: this.removeTab,
-        nextTab: this.nextTab
+        addStep: this.addStep,
+        removeStep: this.removeStep,
+        nextStep: this.nextStep
       }
     },
     data () {
       return {
-        activeTabIndex: 0,
+        activeStepIndex: 0,
         currentPercentage: 0,
         maxStep: 0,
         loading: false,
-        tabs: []
+        steps: []
       }
     },
     computed: {
       slotProps () {
         return {
-          nextTab: this.nextTab,
-          prevTab: this.prevTab,
-          activeTabIndex: this.activeTabIndex,
+          nextStep: this.nextStep,
+          prevStep: this.prevStep,
+          activeStepIndex: this.activeStepIndex,
           isLastStep: this.isLastStep,
           fillButtonStyle: this.fillButtonStyle
         }
       },
-      tabCount () {
-        return this.tabs.length
+      stepCount () {
+        return this.steps.length
       },
       isLastStep () {
-        return this.activeTabIndex === this.tabCount - 1
+        return this.activeStepIndex === this.stepCount - 1
       },
       isVertical () {
         return this.layout === 'vertical'
       },
       displayPrevButton () {
-        return this.activeTabIndex !== 0
+        return this.activeStepIndex !== 0
       },
       stepPercentage () {
-        return 1 / (this.tabCount * 2) * 100
+        return 1 / (this.stepCount * 2) * 100
       },
 
       fillButtonStyle () {
@@ -148,62 +148,62 @@ module.exports = {
         this.$emit('on-change', prevIndex, nextIndex)
         this.$emit('update:startIndex', nextIndex)
       },
-      addTab (item) {
+      addStep (item) {
         const index = this.$slots.default.filter(d => item.$vnode.tag == d.tag).indexOf(item.$vnode);
-        this.tabs.splice(index, 0, item)
+        this.steps.splice(index, 0, item)
         // if a step is added before the current one, go to it
-        if (index < this.activeTabIndex + 1) {
+        if (index < this.activeStepIndex + 1) {
           this.maxStep = index
-          this.changeTab(this.activeTabIndex + 1, index)
+          this.changeStep(this.activeStepIndex + 1, index)
         }
-        item.index = this.tabs.indexOf(item);
-        this.maxStep = this.tabs.length - 1; //TODO: fix it
+        item.index = this.steps.indexOf(item);
+        this.maxStep = this.steps.length - 1; //TODO: fix it
       },
-      removeTab (item) {
-        const tabs = this.tabs
+      removeStep (item) {
+        const tabs = this.steps
         const index = tabs.indexOf(item)
         if (index > -1) {
           // Go one step back if the current step is removed
-          if (index === this.activeTabIndex) {
-            this.maxStep = this.activeTabIndex - 1
-            this.changeTab(this.activeTabIndex, this.activeTabIndex - 1)
+          if (index === this.activeStepIndex) {
+            this.maxStep = this.activeStepIndex - 1
+            this.changeStep(this.activeStepIndex, this.activeStepIndex - 1)
           }
-          if (index < this.activeTabIndex) {
-            this.maxStep = this.activeTabIndex - 1
-            this.activeTabIndex = this.activeTabIndex - 1
-            this.emitTabChange(this.activeTabIndex + 1, this.activeTabIndex)
+          if (index < this.activeStepIndex) {
+            this.maxStep = this.activeStepIndex - 1
+            this.activeStepIndex = this.activeStepIndex - 1
+            this.emitTabChange(this.activeStepIndex + 1, this.activeStepIndex)
           }
           tabs.splice(index, 1)
         }
       },
       reset () {
         this.maxStep = 0;
-        this.tabs.forEach((tab) => {
+        this.steps.forEach((tab) => {
           tab.checked = false
         })
-        this.navigateToTab(0)
+        this.navigateToStep(0)
       },
       activateAll () {
-        this.maxStep = this.tabs.length - 1
-        this.tabs.forEach((tab) => {
+        this.maxStep = this.steps.length - 1
+        this.steps.forEach((tab) => {
           tab.checked = true
         })
       },
-      navigateToTab (index) {
-        let validate = index > this.activeTabIndex;
+      navigateToStep (index) {
+        let validate = index > this.activeStepIndex;
         if (index <= this.maxStep) {
           let cb = () => {
-            if (validate && index - this.activeTabIndex > 1) {
+            if (validate && index - this.activeStepIndex > 1) {
               // validate all steps recursively until destination index
-              this.changeTab(this.activeTabIndex, this.activeTabIndex + 1)
-              this.beforeTabChange(this.activeTabIndex, cb)
+              this.changeStep(this.activeStepIndex, this.activeStepIndex + 1)
+              this.beforeStepChange(this.activeStepIndex, cb)
             } else {
-              this.changeTab(this.activeTabIndex, index)
-              this.afterTabChange(this.activeTabIndex)
+              this.changeStep(this.activeStepIndex, index)
+              this.afterStepChange(this.activeStepIndex)
             }
           }
           if (validate) {
-            this.beforeTabChange(this.activeTabIndex, cb)
+            this.beforeStepChange(this.activeStepIndex, cb)
           } else {
             this.setValidationError(null)
             cb()
@@ -211,43 +211,43 @@ module.exports = {
         }
         return index <= this.maxStep
       },
-      nextTab () {
+      nextStep () {
         let cb = () => {
-          if (this.activeTabIndex < this.tabCount - 1) {
-            this.changeTab(this.activeTabIndex, this.activeTabIndex + 1)
-            this.afterTabChange(this.activeTabIndex)
+          if (this.activeStepIndex < this.stepCount - 1) {
+            this.changeStep(this.activeStepIndex, this.activeStepIndex + 1)
+            this.afterStepChange(this.activeStepIndex)
           } else {
             this.$emit('on-complete')
           }
         }
-        this.beforeTabChange(this.activeTabIndex, cb)
+        this.beforeStepChange(this.activeStepIndex, cb)
       },
-      prevTab () {
+      prevStep () {
         let cb = () => {
-          if (this.activeTabIndex > 0) {
+          if (this.activeStepIndex > 0) {
             this.setValidationError(null)
-            this.changeTab(this.activeTabIndex, this.activeTabIndex - 1)
+            this.changeStep(this.activeStepIndex, this.activeStepIndex - 1)
           }
         }
         if (this.validateOnBack) {
-          this.beforeTabChange(this.activeTabIndex, cb)
+          this.beforeStepChange(this.activeStepIndex, cb)
         } else {
           cb()
         }
       },
-      focusNextTab () {
-        let tabIndex = getFocusedTabIndex(this.tabs)
-        if (tabIndex !== -1 && tabIndex < this.tabs.length - 1) {
-          let tabToFocus = this.tabs[tabIndex + 1]
+      focusnextStep () {
+        let tabIndex = getFocusedStepIndex(this.steps)
+        if (tabIndex !== -1 && tabIndex < this.steps.length - 1) {
+          let tabToFocus = this.steps[tabIndex + 1]
           if (tabToFocus.checked) {
-            findElementAndFocus(tabToFocus.tabId)
+            findElementAndFocus(tabToFocus.stepId)
           }
         }
       },
-      focusPrevTab () {
-        let tabIndex = getFocusedTabIndex(this.tabs)
+      focusprevStep () {
+        let tabIndex = getFocusedStepIndex(this.steps)
         if (tabIndex !== -1 && tabIndex > 0) {
-          let toFocusId = this.tabs[tabIndex - 1].tabId
+          let toFocusId = this.steps[tabIndex - 1].stepId
           findElementAndFocus(toFocusId)
         }
       },
@@ -256,7 +256,7 @@ module.exports = {
         this.$emit('on-loading', value)
       },
       setValidationError (error) {
-        this.tabs[this.activeTabIndex].validationError = error
+        this.steps[this.activeStepIndex].validationError = error
         this.$emit('on-error', error)
       },
       validateBeforeChange (promiseFn, callback) {
@@ -279,78 +279,78 @@ module.exports = {
         }
       },
       executeBeforeChange (validationResult, callback) {
-        this.$emit('on-validate', validationResult, this.activeTabIndex)
+        this.$emit('on-validate', validationResult, this.activeStepIndex)
         if (validationResult) {
           callback()
         } else {
-          this.tabs[this.activeTabIndex].validationError = 'error'
+          this.steps[this.activeStepIndex].validationError = 'error'
         }
       },
-      beforeTabChange (index, callback) {
+      beforeStepChange (index, callback) {
         if (this.loading) {
           return
         }
-        let oldTab = this.tabs[index]
-        if (oldTab && oldTab.beforeChange !== undefined) {
-          let tabChangeRes = oldTab.beforeChange()
-          this.validateBeforeChange(tabChangeRes, callback)
+        let oldStep = this.steps[index]
+        if (oldStep && oldStep.beforeChange !== undefined) {
+          let stepChangeRes = oldStep.beforeChange()
+          this.validateBeforeChange(stepChangeRes, callback)
         } else {
           callback()
         }
       },
-      afterTabChange (index) {
+      afterStepChange (index) {
         if (this.loading) {
           return
         }
-        let newTab = this.tabs[index]
-        if (newTab && newTab.afterChange !== undefined) {
-          newTab.afterChange()
+        let newStep = this.steps[index]
+        if (newStep && newStep.afterChange !== undefined) {
+          newStep.afterChange()
         }
       },
-      changeTab (oldIndex, newIndex, emitChangeEvent = true) {
-        let oldTab = this.tabs[oldIndex]
-        let newTab = this.tabs[newIndex]
-        if (oldTab) {
-          oldTab.active = false
+      changeStep (oldIndex, newIndex, emitChangeEvent = true) {
+        let oldStep = this.steps[oldIndex]
+        let newStep = this.steps[newIndex]
+        if (oldStep) {
+          oldStep.active = false
         }
-        if (newTab) {
-          newTab.active = true
+        if (newStep) {
+          newStep.active = true
         }
-        if (emitChangeEvent && this.activeTabIndex !== newIndex) {
+        if (emitChangeEvent && this.activeStepIndex !== newIndex) {
           this.emitTabChange(oldIndex, newIndex)
         }
-        this.activeTabIndex = newIndex
-        this.activateTabAndCheckStep(this.activeTabIndex)
+        this.activeStepIndex = newIndex
+        this.activateStepAndCheckStep(this.activeStepIndex)
         return true
       },
-      deactivateTabs () {
-        this.tabs.forEach(tab => {
-          tab.active = false
+      deactivateSteps () {
+        this.steps.forEach(step => {
+          step.active = false
         })
       },
-      activateTab (index) {
-        this.deactivateTabs()
-        let tab = this.tabs[index]
-        if (tab) {
-          tab.active = true
-          tab.checked = true
+      activateStep (index) {
+        this.deactivateSteps()
+        let step = this.steps[index]
+        if (step) {
+          step.active = true
+          step.checked = true
         }
       },
-      activateTabAndCheckStep (index) {
-        this.activateTab(index)
+      activateStepAndCheckStep (index) {
+        this.activateStep(index)
         if (index > this.maxStep) {
           this.maxStep = index
         }
-        this.activeTabIndex = index
+        this.activeStepIndex = index
       },
-      initializeTabs () {
-        if (this.tabs.length > 0 && this.startIndex === 0) {
-          this.activateTab(this.activeTabIndex)
+      initializeSteps () {
+        if (this.steps.length > 0 && this.startIndex === 0) {
+          this.activateStep(this.activeStepIndex)
         }
-        if (this.startIndex < this.tabs.length) {
-          this.activateTabAndCheckStep(this.startIndex)
+        if (this.startIndex < this.steps.length) {
+          this.activateStepAndCheckStep(this.startIndex)
         } else {
-          window.console.warn(`Prop startIndex set to ${this.startIndex} is greater than the number of tabs - ${this.tabs.length}. Make sure that the starting index is less than the number of tabs registered`)
+          window.console.warn(`Prop startIndex set to ${this.startIndex} is greater than the number of steps - ${this.steps.length}. Make sure that the starting index is less than the number of tabs registered`)
         }
       },
 
@@ -359,7 +359,7 @@ module.exports = {
       }
     },
     mounted () {
-      this.initializeTabs()
+      this.initializeSteps()
     },
     watch: {
       '$route.path' (newRoute) {

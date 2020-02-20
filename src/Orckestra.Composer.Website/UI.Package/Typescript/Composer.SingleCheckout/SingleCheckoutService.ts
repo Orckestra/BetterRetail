@@ -87,27 +87,25 @@ module Orckestra.Composer {
                     if(!cartVm.Customer) {
                         cartVm.Customer = {};
                     }
-                    let results: ICheckoutContext = {
-                        authenticationViewModel: authVm,
-                        cartViewModel: cartVm,
-                        regionsViewModel: regionsVm,
-                        shippingMethodsViewModel: shippingMethodsVm
+                    let results: ISingleCheckoutContext = {
+                        IsAuthenticated: authVm,
+                        Cart: cartVm,
+                        Regions: regionsVm,
+                        ShippingMethods: shippingMethodsVm.ShippingMethods
                     };
 
                     this.initializeVueComponent(results);
-
-                    //return this.renderControllers(results);
                 })
                 .then(() => {
                     this.allControllersReady.resolve(true);
                 })
                 .fail((reason: any) => {
-                    console.error('Error while initializing CheckoutService.', reason);
+                    console.error('Error while initializing SingleCheckoutService.', reason);
                     ErrorHandler.instance().outputErrorFromCode('CheckoutRenderFailed');
                 });
         }
 
-        public initializeVueComponent(checkoutContext: ICheckoutContext) {
+        public initializeVueComponent(checkoutContext: ISingleCheckoutContext) {
             this.vueSingleCheckout = new Vue({
                 el: '#vueSingleCheckout',
                 data: checkoutContext,
@@ -121,32 +119,25 @@ module Orckestra.Composer {
                 },
                 computed: {
                     Customer()  { 
-                        return this.cartViewModel.Customer;
+                        return this.Cart.Customer;
                      },
                     ShippingAddress() {
-                        return this.cartViewModel.ShippingAddress;
-                    },
-                    ShippingMethods() {
-                        return  this.shippingMethodsViewModel.ShippingMethods;
+                        return this.Cart.ShippingAddress;
                     },
                     Rewards() {
-                        return this.cartViewModel.Rewards;
+                        return this.Cart.Rewards;
                     },
                     OrderSummary () {
-                        return this.cartViewModel.OrderSummary;
+                        return this.Cart.OrderSummary;
                     },
                     OrderCanBePlaced() {
                        return false;
                     }
                 },
                 methods: {
-                    editCustomer(e) {
-                        this.editingCustomer = true;
-                    },
-                    shippingSelect(e) {
+                    validateCustomer(e) {
                         this.parsleyInit = $('#editCustomerForms').parsley();
                         this.parsleyInit.validate();
-
                         return this.parsleyInit.isValid();
                     }
                 }

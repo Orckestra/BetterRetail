@@ -1,0 +1,43 @@
+﻿@inherits RazorFunction
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Shipping"; }
+    }
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on" xmlns:v-slot="v-slot">
+<head>
+</head>
+<body>
+    <div data-oc-controller="SingleCheckout.Shipping">
+        <div class="card  mt-4">
+            <div class="card-header">
+                <h4 class="float-left">
+                    Shipping
+				</h4>
+                <button v-show="step.displayContinueButton"
+                        v-bind:disabled="!Customer.FirstName"
+                        v-on:click="step.navigateToStep(step.index)"
+                        class="btn btn-primary float-right">
+                    Continue
+                </button>
+
+                <button v-show="step.preview" class="btn btn-outline-secondary float-right"
+                        v-on:click="step.navigateToStep(step.index)">
+                    Edit
+                </button>
+            </div>
+
+            <div class="card-body" v-show="step.active">
+                Select Shipping Method
+            </div>
+			
+			 <div class="card-body" v-show="step.preview">
+                Preview Selected Shipping Method
+            </div>
+        </div>
+    </div>
+</body>
+</html>

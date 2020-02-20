@@ -1,9 +1,9 @@
-<template>
+﻿<template>
   <div
     class="checkout-step-container"
     v-bind:class="{'text-success': active}"
     role="tabpanel"
-    :id="tabId"
+    :id="stepId"
   >
     <slot v-bind="slotProps"></slot>
   </div>
@@ -27,44 +27,46 @@ module.exports = {
       type: Function
     }
   },
-  inject: ["addTab", "removeTab", "nextTab"],
+  inject: ["addStep", "removeStep", "nextStep"],
   data() {
     return {
       active: false,
       index: null,
       validationError: null,
       checked: false,
-      tabId: ""
+      stepId: ""
     };
   },
   computed: {
     slotProps() {
       var self = this;
       return {
-        nextTab: this.$parent.nextTab,
-        prevTab: this.$parent.prevTab,
-        navigateToTab: this.$parent.navigateToTab,
-        activeTabIndex: this.$parent.activeTabIndex,
+        nextStep: this.$parent.nextStep,
+        prevStep: this.$parent.prevStep,
+        navigateToStep: this.$parent.navigateToStep,
+        activeStepIndex: this.$parent.activeStepIndex,
         isLastStep: this.$parent.isLastStep,
         index: this.index,
         active: this.active,
-        selectTab: () => {
-          this.$parent.navigateToTab(this.index);
+        displayContinueButton: (!this.active && ((this.$parent.activeStepIndex + 1) === this.index)),
+        selectStep: () => {
+          this.$parent.navigateToStep(this.index);
         },
-        preview: this.index < this.$parent.activeTabIndex
+        preview: this.index < this.$parent.activeStepIndex
       };
     },
+
   },
   methods: {
   },
   mounted() {
-    this.addTab(this);
+    this.addStep(this);
   },
   destroyed() {
     if (this.$el && this.$el.parentNode) {
       this.$el.parentNode.removeChild(this.$el);
     }
-    this.removeTab(this);
+    this.removeStep(this);
   }
 };
 </script>

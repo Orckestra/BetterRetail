@@ -1,0 +1,35 @@
+﻿@inherits RazorFunction
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Payment"; }
+    }
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on" xmlns:v-slot="v-slot">
+<head>
+</head>
+<body>
+    <div class="card  mt-4">
+        <div class="card-header">
+            <h4 class="float-left">
+                Payment
+            </h4>
+            <button v-show="step.displayContinueButton"
+                    v-on:click='step.navigateToStep(step.index)'
+                    class="btn btn-primary float-right">
+                Enter Payment
+            </button>
+        </div>
+
+        <div class="card-body" v-show="step.active">
+            Enter Cart Cart
+        </div>
+
+        <div class="card-body" v-show="step.preview">
+            Preview Cart
+        </div>
+    </div>
+</body>
+</html>
