@@ -8,6 +8,23 @@ module Orckestra.Composer {
 
         public initialize() {
             super.initialize();
+
+            var userInformationMixin = {
+                computed: {
+                    FulfilledCustomer() {
+                        return this.Cart.Customer.FirstName && this.Cart.Customer.LastName && this.Cart.Customer.Email;
+                    }
+                },
+                methods: {
+                    validateCustomer(e) {
+                        this.parsleyInit = $('#editCustomerForms').parsley();
+                        this.parsleyInit.validate();
+                        return this.parsleyInit.isValid();
+                    }
+                }
+            };
+
+            this.checkoutService.SingleCheckoutMixins.push(userInformationMixin);
         }
 
     }

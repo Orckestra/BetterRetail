@@ -68,16 +68,5 @@ module Orckestra.Composer {
             return _.all(this.formInstances, formInstance => formInstance.validate(undefined, true));
         }
 
-        protected onRenderDataFailed(reason: any): void {
-
-            this.removeLoading();
-            console.error(`Failed rendering the control in charge of '${this.viewModelName}'.`, reason);
-            ErrorHandler.instance().outputErrorFromCode('CheckoutRenderFailed');
-        }
-
-        protected removeLoading(): void {
-
-            this.context.container.find('.js-loading').hide();
-        }
     }
 }

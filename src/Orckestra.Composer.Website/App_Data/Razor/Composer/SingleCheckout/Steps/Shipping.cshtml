@@ -16,9 +16,9 @@
             <div class="card-header">
                 <h4 class="float-left">
                     Shipping
-				</h4>
+                </h4>
                 <button v-show="step.displayContinueButton"
-                        v-bind:disabled="!Customer.FirstName"
+                        v-bind:disabled="!FulfilledCustomer"
                         v-on:click="step.navigateToStep(step.index)"
                         class="btn btn-primary float-right">
                     Continue
@@ -33,8 +33,8 @@
             <div class="card-body" v-show="step.active">
                 Select Shipping Method
             </div>
-			
-			 <div class="card-body" v-show="step.preview">
+
+            <div class="card-body" v-show="step.preview">
                 Preview Selected Shipping Method
             </div>
         </div>

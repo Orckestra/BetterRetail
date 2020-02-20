@@ -20,6 +20,9 @@ module Orckestra.Composer {
 
         private static instance: ISingleCheckoutService;
 
+        public VueSingleCheckout: Vue;
+        public SingleCheckoutMixins: any = [];
+
         public static checkoutStep: number;
 
         private orderConfirmationCacheKey = 'orderConfirmationCacheKey';
@@ -35,8 +38,6 @@ module Orckestra.Composer {
         protected membershipService: IMembershipService;
         protected regionService: IRegionService;
         protected shippingMethodService: ShippingMethodService;
-
-        protected vueSingleCheckout: Vue;
 
         public static getInstance(): ISingleCheckoutService {
 
@@ -84,7 +85,7 @@ module Orckestra.Composer {
             Q.all([authenticatedPromise, getCartPromise, regionsPromise, shippingMethodsPromise])
                 .spread((authVm, cartVm, regionsVm, shippingMethodsVm) => {
 
-                    if(!cartVm.Customer) {
+                    if (!cartVm.Customer) {
                         cartVm.Customer = {};
                     }
                     let results: ISingleCheckoutContext = {
@@ -106,40 +107,37 @@ module Orckestra.Composer {
         }
 
         public initializeVueComponent(checkoutContext: ISingleCheckoutContext) {
-            this.vueSingleCheckout = new Vue({
+            this.VueSingleCheckout = new Vue({
                 el: '#vueSingleCheckout',
                 data: checkoutContext,
+                mixins: this.SingleCheckoutMixins,
                 components: {
                     'checkout-step': (<any>window).httpVueLoader('/UI.Package/Vue/CheckoutStep.vue'),
                     'single-page-checkout': (<any>window).httpVueLoader('/UI.Package/Vue/Checkout.vue'),
-           
-                 },
+
+                },
                 mounted() {
-                    this.parsleyInit = $('#editCustomerForms').parsley();
+                    
                 },
                 computed: {
-                    Customer()  { 
+                    Customer() {
                         return this.Cart.Customer;
-                     },
+                    },
                     ShippingAddress() {
                         return this.Cart.ShippingAddress;
                     },
                     Rewards() {
                         return this.Cart.Rewards;
                     },
-                    OrderSummary () {
+                    OrderSummary() {
                         return this.Cart.OrderSummary;
                     },
                     OrderCanBePlaced() {
-                       return false;
+                        return false;
                     }
                 },
                 methods: {
-                    validateCustomer(e) {
-                        this.parsleyInit = $('#editCustomerForms').parsley();
-                        this.parsleyInit.validate();
-                        return this.parsleyInit.isValid();
-                    }
+                   
                 }
             });
         }
@@ -159,7 +157,7 @@ module Orckestra.Composer {
                         var controllerName = controller.viewModelName;
                         this.registeredControllers[controllerName] = controller;
                     }
-            });
+                });
         }
 
         public unregisterController(controllerName: string) {
@@ -180,7 +178,7 @@ module Orckestra.Composer {
 
         public getCart(): Q.Promise<any> {
 
-             return this.invalidateCache()
+            return this.invalidateCache()
                 .then(() => this.cartService.getCart())
                 .fail(reason => {
                     this.handleError(reason);
@@ -190,11 +188,11 @@ module Orckestra.Composer {
         public updateCart(): Q.Promise<IUpdateCartResult> {
 
             this.allControllersReady.promise
-            .then(allControllersReady => {
-                if (!allControllersReady) {
-                    throw new Error('All registered controllers are not ready.');
-                }
-            });
+                .then(allControllersReady => {
+                    if (!allControllersReady) {
+                        throw new Error('All registered controllers are not ready.');
+                    }
+                });
 
             var emptyVm = {
                 UpdatedCart: {}
@@ -248,7 +246,7 @@ module Orckestra.Composer {
             return viewModelUpdatePromise;
         }
 
-        private getCartValidation(vm : any): Q.Promise<any> {
+        private getCartValidation(vm: any): Q.Promise<any> {
 
             let validationPromise = this.collectValidationPromises();
 
@@ -324,7 +322,7 @@ module Orckestra.Composer {
             throw reason;
         }
 
-        public setOrderConfirmationToCache(orderConfirmationViewModel : any) : void {
+        public setOrderConfirmationToCache(orderConfirmationViewModel: any): void {
 
             this.cacheProvider.defaultCache.set(this.orderConfirmationCacheKey, orderConfirmationViewModel).done();
         }
@@ -336,10 +334,10 @@ module Orckestra.Composer {
 
         public clearOrderConfirmationFromCache(): void {
 
-             this.cacheProvider.defaultCache.clear(this.orderConfirmationCacheKey).done();
+            this.cacheProvider.defaultCache.clear(this.orderConfirmationCacheKey).done();
         }
 
-        public setOrderToCache(orderConfirmationViewModel : any) : void {
+        public setOrderToCache(orderConfirmationViewModel: any): void {
 
             this.cacheProvider.defaultCache.set(this.orderCacheKey, orderConfirmationViewModel).done();
         }
