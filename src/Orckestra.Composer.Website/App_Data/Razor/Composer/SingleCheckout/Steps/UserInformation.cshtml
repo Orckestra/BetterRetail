@@ -18,12 +18,12 @@
                 <h4 class="float-left">
                     Information
                 </h4>
-                <button v-show="step.preview" class="btn btn-outline-secondary float-right"
-                         v-on:click='step.navigateToStep(step.index)'>
+                <button v-cloak="true" v-show="step.preview" class="btn btn-outline-secondary float-right"
+                        v-on:click='step.navigateToStep(step.index)'>
                     Edit
                 </button> 
             </div> 
-            <div v-if="Cart.Customer" class="card-body">
+            <div v-if="Cart.Customer" class="card-body" v-cloak="true">
                 <div v-if="step.preview">
                     <span v-text="Cart.Customer.FirstName" class="font-weight-bold"></span>
                     <span v-text="Cart.Customer.LastName" class="font-weight-bold"></span>
@@ -34,11 +34,12 @@
                         <div class="form-group col-md-6">
                             <label for="FirstName">@Html.Localize("Forms", "F_FirstName") *</label>
                             <input v-model="Cart.Customer.FirstName"
+								   id="FirstName"
+								   name="FirstName"
                                    class="form-control"
                                    placeholder="@Html.Localize("Forms", "F_FirstNameWaterMark")"
                                    type="text"
-                                   required=""
-                                   id="FirstName"
+                                   required="required"
                                    data-parsley-length="[2, 36]"
                                    data-parsley-pattern="/^[a-zA-Z\u00E0-\u00FC\.\-\s\']+$/i"
                                   />
@@ -48,10 +49,11 @@
                             <label for="LastName">@Html.Localize("Forms", "F_LastName") *</label>
                             <input v-model="Cart.Customer.LastName"
                                    id="LastName"
+								   name="LastName"
                                    class="form-control"
                                    placeholder="@Html.Localize("Forms", "F_LastNameWaterMark")"
                                    type="text"
-                                   required=""
+                                   required="required"
                                    data-parsley-length="[2, 36]"
                                    data-parsley-pattern="/^[a-zA-Z\u00E0-\u00FC\.\-\s\']+$/i"
                                    @HelpBubble("Forms", "F_LastNameIndication") />
@@ -62,11 +64,12 @@
                         <div class="form-group col-md-6">
                             <label for="Email">@Html.Localize("Forms", "F_Email") *</label>
                             <input v-model="Cart.Customer.Email"
+								   id="Email"
+								   name="Email"
                                    type="email"
-                                   id="Email"
                                    class="form-control"
                                    placeholder="@Html.Localize("Forms", "F_EmailWaterMark")"
-                                   required=""
+                                   required="required"
                                    @HelpBubble("Forms", "F_EmailAddressGuestIndication") />
                         </div>
                     </div>

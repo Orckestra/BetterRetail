@@ -22,6 +22,7 @@ module Orckestra.Composer {
             this.checkoutService = SingleCheckoutService.getInstance();
           
             this.registerController();
+            
         }
 
         protected registerController() {
@@ -42,6 +43,7 @@ module Orckestra.Composer {
 
         public getUpdateModelPromise(): Q.Promise<any> {
 
+            return Q.fcall(() => {});
             return Q.fcall(() => {
                 var vm = {};
                 vm[this.viewModelName] = this.getViewModelUpdated();
@@ -62,7 +64,7 @@ module Orckestra.Composer {
         }
 
         protected isValidForUpdate(): boolean {
-            return _.all(this.formInstances, formInstance => formInstance.validate(undefined, true));
+            return _.all(this.formInstances, formInstance => formInstance.validate());
         }
 
     }

@@ -20,21 +20,23 @@
                 <button v-show="step.displayContinueButton"
                         v-bind:disabled="!FulfilledCustomer"
                         v-on:click="step.navigateToStep(step.index)"
-                        class="btn btn-primary float-right">
+                        class="btn btn-primary float-right"
+						v-cloak="true">
                     Continue
                 </button>
 
                 <button v-show="step.preview" class="btn btn-outline-secondary float-right"
-                        v-on:click="step.navigateToStep(step.index)">
+                        v-on:click="step.navigateToStep(step.index)"
+						v-cloak="true">
                     Edit
                 </button>
             </div>
 
-            <div class="card-body" v-show="step.active">
+            <div class="card-body" v-show="step.active" v-cloak="true">
                 Select Shipping Method
             </div>
 
-            <div class="card-body" v-show="step.preview">
+            <div class="card-body" v-show="step.preview" v-cloak="true">
                 Preview Selected Shipping Method
             </div>
         </div>

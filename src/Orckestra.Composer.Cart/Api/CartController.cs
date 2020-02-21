@@ -128,11 +128,15 @@ namespace Orckestra.Composer.Cart.Api
 
             var checkoutStepInfos = CartUrlProvider.GetCheckoutStepPageInfos(getCartUrlParam);
 
-            var nextStepUrl = CartUrlProvider.GetCheckoutStepUrl(new GetCheckoutStepUrlParam
-            {                
-                CultureInfo = ComposerContext.CultureInfo,
-                StepNumber = updateCartRequest.CurrentStep.GetValueOrDefault() + 1
-            });
+            var nextStepUrl = string.Empty;
+            if (updateCartRequest.CurrentStep.HasValue)
+            {
+                nextStepUrl = CartUrlProvider.GetCheckoutStepUrl(new GetCheckoutStepUrlParam
+                {
+                    CultureInfo = ComposerContext.CultureInfo,
+                    StepNumber = updateCartRequest.CurrentStep.GetValueOrDefault() + 1
+                });
+            }
 
             var getCartParam = new GetCartParam
             {

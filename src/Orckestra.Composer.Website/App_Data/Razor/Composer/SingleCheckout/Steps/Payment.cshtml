@@ -18,16 +18,17 @@
             </h4>
             <button v-show="step.displayContinueButton"
                     v-on:click='step.navigateToStep(step.index)'
-                    class="btn btn-primary float-right">
+                    class="btn btn-primary float-right"
+                    v-cloak="true">
                 Enter Payment
             </button>
         </div>
 
-        <div class="card-body" v-show="step.active">
+        <div class="card-body" v-show="step.active" v-cloak="true">
             Enter Cart Cart
         </div>
 
-        <div class="card-body" v-show="step.preview">
+        <div class="card-body" v-show="step.preview" v-cloak="true">
             Preview Cart
         </div>
     </div>

@@ -16,7 +16,7 @@
             <h4 class="card-header bg-dark  text-white">
                 @Html.Localize("ShoppingCart", "T_OrderSummary")
             </h4>
-            <div class="card-body">
+            <div class="card-body" v-cloak="true">
                 @Rewars()
 
                 @SubTotal()

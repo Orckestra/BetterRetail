@@ -20,8 +20,8 @@ module Orckestra.Composer {
 
         private static instance: ISingleCheckoutService;
 
-        public VueSingleCheckout: Vue;
-        public SingleCheckoutMixins: any = [];
+        public VueCheckout: Vue;
+        public VueCheckoutMixins: any = [];
 
         public static checkoutStep: number;
 
@@ -107,10 +107,10 @@ module Orckestra.Composer {
         }
 
         public initializeVueComponent(checkoutContext: ISingleCheckoutContext) {
-            this.VueSingleCheckout = new Vue({
+            this.VueCheckout = new Vue({
                 el: '#vueSingleCheckout',
                 data: checkoutContext,
-                mixins: this.SingleCheckoutMixins,
+                mixins: this.VueCheckoutMixins,
                 components: {
                     'checkout-step': (<any>window).httpVueLoader('/UI.Package/Vue/CheckoutStep.vue'),
                     'single-page-checkout': (<any>window).httpVueLoader('/UI.Package/Vue/Checkout.vue'),
@@ -185,14 +185,17 @@ module Orckestra.Composer {
                 });
         }
 
-        public updateCart(): Q.Promise<IUpdateCartResult> {
+       // public updateCart(): Q.Promise<IUpdateCartResult> {
 
-            this.allControllersReady.promise
-                .then(allControllersReady => {
-                    if (!allControllersReady) {
-                        throw new Error('All registered controllers are not ready.');
-                    }
-                });
+        //    var emptyVm = {
+          //      UpdatedCart: {}
+         //   };
+
+          //  return this.buildCartUpdateViewModel(emptyVm)
+          //      .then(vm => this.cartService.updateCart(vm));
+       // }
+
+        public updateCart(): Q.Promise<IUpdateCartResult> {
 
             var emptyVm = {
                 UpdatedCart: {}
@@ -232,18 +235,18 @@ module Orckestra.Composer {
 
         private buildCartUpdateViewModel(vm: any): Q.Promise<any> {
 
-            var validationPromise: Q.Promise<any>;
-            var viewModelUpdatePromise: Q.Promise<any>;
+            //var validationPromise: Q.Promise<any>;
+            //var viewModelUpdatePromise: Q.Promise<any>;
 
-            validationPromise = Q(vm).then(vm => {
-                return this.getCartValidation(vm);
-            });
+           // validationPromise = Q(vm).then(vm => {
+           //     return this.getCartValidation(vm);
+           // });
 
-            viewModelUpdatePromise = validationPromise.then(vm => {
+          //  viewModelUpdatePromise = validationPromise.then(vm => {
                 return this.getCartUpdateViewModel(vm);
-            });
+           // });
 
-            return viewModelUpdatePromise;
+            ///return viewModelUpdatePromise;
         }
 
         private getCartValidation(vm: any): Q.Promise<any> {

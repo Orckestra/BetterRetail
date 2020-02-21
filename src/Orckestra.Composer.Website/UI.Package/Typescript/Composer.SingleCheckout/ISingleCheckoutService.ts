@@ -4,8 +4,8 @@ module Orckestra.Composer {
 
     export interface ISingleCheckoutService {
 
-        VueSingleCheckout: any;
-        SingleCheckoutMixins: any;
+        VueCheckout: any;
+        VueCheckoutMixins: any;
 
         registerController(controller: IController);
 
