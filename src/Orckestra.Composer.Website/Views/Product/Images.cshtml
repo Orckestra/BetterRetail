@@ -57,50 +57,46 @@
         <div class="col-lg-10 order-1 order-md-2">
             @if (Model.SelectedImage != null)
             {
-                <div class="product-details-media">
+            <div class="product-details-media">
 
-                    @if (Model.Variants == null || Model.Variants.Count == 0)
+                @if (Model.Variants == null || Model.Variants.Count == 0)
+                {
+                    <img class="product-main-img img-fluid"
+                         property="image"
+                         src="@Model.SelectedImage.ImageUrl"
+                         alt="@Model.SelectedImage.Alt"
+                         onerror="imgError(this)" />
+                }
+                else
+                {
+                    var mainImages = Model.Variants.GroupBy(v => v.SelectedImage.ImageUrl).ToList();
+                    foreach (var imageGroup in mainImages)
                     {
-                        <img class="product-main-img img-fluid"
+                        var ids = imageGroup.Select(v => v.Id).ToArray();
+                        var image = imageGroup.First().SelectedImage;
+                        <img class="product-main-img img-fluid @SelectedVariantClass(ids)"
+                             data-variant="@(String.Join(",", ids))"
                              property="image"
-                             src="@Model.SelectedImage.ImageUrl"
-                             alt="@Model.SelectedImage.Alt"
+                             src="@image.ImageUrl"
+                             alt="@image.Alt"
                              onerror="imgError(this)" />
                     }
-                    else
-                    {
-                        var mainImages = Model.Variants.GroupBy(v => v.SelectedImage.ImageUrl).ToList();
-                        foreach (var imageGroup in mainImages)
-                        {
-                            var ids = imageGroup.Select(v => v.Id).ToArray();
-                            var image = imageGroup.First().SelectedImage;
-                            <img class="product-main-img img-fluid @SelectedVariantClass(ids)"
-                                 data-variant="@(String.Join(",", ids))"
-                                 property="image"
-                                 src="@image.ImageUrl"
-                                 alt="@image.Alt"
-                                 onerror="imgError(this)" />
-                        }
-                    }
+                    <img data-variant="unavailable"
+                         class="product-main-img img-fluid d-none"
+                         property="image"
+                         src="@Model.FallbackImageUrl" />
+                }
 
-                    @if (Model.IsProductZoomEnabled)
-                    {
-                        <a href="" class="product-details-zoom-trigger js-zoom d-none d-md-block">
-                            <i class="fa fa-search"></i>
-                        </a>
-                    }
+                @if (Model.IsProductZoomEnabled)
+                {
+                    <a href="" class="product-details-zoom-trigger js-zoom d-none d-md-block">
+                        <i class="fa fa-search"></i>
+                    </a>
+                }
 
-                </div>
+            </div>
             }
-
-            <img data-variant="unavailable"
-                 class="product-main-img img-fluid d-none"
-                 property="image"
-                 src="@Model.FallbackImageUrl" />
-
          </div>
-
-
     </div>
 </body>
 </html>
