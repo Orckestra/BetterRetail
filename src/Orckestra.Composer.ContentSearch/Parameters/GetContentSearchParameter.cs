@@ -11,6 +11,7 @@ namespace Orckestra.Composer.ContentSearch.Parameters
     {
         public string BaseUrl { get; set; }
         public string SearchQuery { get; set; }
+        public bool IsCorrectedSearchQuery { get; set; }
         public string CorrectedSearchQuery { get; set; }
         public string SortBy { get; set; }
 

@@ -1,7 +1,7 @@
-.nav .open > a,
-.nav .open > a:hover,
-.nav .open > a:focus {
-    background-color: gray("200");
+.nav .show > a,
+.nav .show > a:hover,
+.nav .show > a:focus {
+    background-color: gray("200") !important;
     border-color: gray("400");
 }
 
