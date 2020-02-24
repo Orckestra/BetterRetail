@@ -376,6 +376,7 @@ Task("Configure-Symbolic-Links").Does(() =>
 	ReplaceDirWithSymbolicLink($"{websiteDir}/UI.Package/Templates", $"{rootDir}/src/Orckestra.Composer.Website/UI.Package/Templates");
 	ReplaceDirWithSymbolicLink($"{websiteDir}/UI.Package/LocalizedStrings", $"{rootDir}/src/Orckestra.Composer.Website/UI.Package/LocalizedStrings");
 	ReplaceDirWithSymbolicLink($"{websiteDir}/UI.Package/Typescript", $"{rootDir}/src/Orckestra.Composer.Website/UI.Package/Typescript");
+	ReplaceDirWithSymbolicLink($"{websiteDir}/UI.Package/Vue", $"{rootDir}/src/Orckestra.Composer.Website/UI.Package/Vue");
 	StartPool(localSiteName);
 });
 

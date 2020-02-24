@@ -468,10 +468,10 @@ namespace Orckestra.Composer.Cart.Factory
 
             var shippingMethodViewModel = ViewModelMapper.MapTo<ShippingMethodViewModel>(fulfillmentMethod, cultureInfo);
 
-            if (!fulfillmentMethod.ExpectedDeliveryDate.HasValue) { return shippingMethodViewModel; }
-
-            var totalDays = (int)Math.Ceiling((fulfillmentMethod.ExpectedDeliveryDate.Value - DateTime.UtcNow).TotalDays);
-            shippingMethodViewModel.ExpectedDaysBeforeDelivery = totalDays.ToString();
+            if (fulfillmentMethod.ExpectedDeliveryDate.HasValue) { 
+                var totalDays = (int)Math.Ceiling((fulfillmentMethod.ExpectedDeliveryDate.Value - DateTime.UtcNow).TotalDays);
+                shippingMethodViewModel.ExpectedDaysBeforeDelivery = totalDays.ToString();
+            }
 
             shippingMethodViewModel.IsShipToStoreType = fulfillmentMethod.FulfillmentMethodType == FulfillmentMethodType.ShipToStore;
             shippingMethodViewModel.FulfillmentMethodTypeString = fulfillmentMethod.FulfillmentMethodType.ToString();
