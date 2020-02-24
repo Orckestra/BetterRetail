@@ -51,6 +51,11 @@
     // Mobile version
     @include media-breakpoint-down(sm) {
 
+        .container-md {
+            padding-left: 0;
+            padding-right: 0;
+        }
+
         //the mobile menu will follow the sticky navbar
         position: fixed;
         top: 42px; //computed height of the navbar
@@ -142,7 +147,7 @@
 
         .dropdown > a:hover,
         .dropdown > a:focus,
-        .open > a {
+        .show > a {
 
             &::after {
                 background-color: $link-color;

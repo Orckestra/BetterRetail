@@ -1,0 +1,13 @@
+.navbar {
+    .main-nav-toggle {
+        margin: 0;
+    }
+    @include media-breakpoint-down(sm) {
+        .navbar-nav .nav-link { 
+            padding-left: 15px; 
+        }
+    }
+    .nav-link {
+        border: 0;
+    }
+}

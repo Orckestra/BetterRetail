@@ -27,7 +27,7 @@
         <div class="container-md">
                 <nav class="navbar navbar-expand-md megamenu p-0">
                     <div id="main-nav-collapse" class="collapse navbar-collapse" >
-                        <ul class="navbar-nav w-100" role="menubar">
+                        <ul class="nav navbar-nav w-100" role="menubar">
                             @foreach (var mainMenuEntry in mainMenu)
                             {
                                 <li class="nav-item dropdown main-nav-fw">
@@ -58,7 +58,7 @@
                                                 <!-- Content container to add padding -->
                                                 <div class="main-nav-content">
                                                     <div class="row">
-                                                        <div class="col-xl-8 px-1 px-md-3">
+                                                        <div class="col-xl-8">
                                                             <div class="row">
                                                                 @foreach (var subMenuEntry in @mainMenuEntry.Children as IEnumerable<HomeMainMenuEntryViewModel>)
                                                                 {
