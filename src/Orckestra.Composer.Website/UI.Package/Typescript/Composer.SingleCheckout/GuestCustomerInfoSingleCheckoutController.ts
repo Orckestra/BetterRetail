@@ -4,16 +4,17 @@
 module Orckestra.Composer {
     'use strict';
 
-    export class UserInfoSingleCheckoutController extends Orckestra.Composer.BaseSingleCheckoutController {
+    export class GuestCustomerInfoSingleCheckoutController extends Orckestra.Composer.BaseSingleCheckoutController {
        
         public initialize() {
-            var self: UserInfoSingleCheckoutController  = this;
-            self.viewModelName = 'UserInfo';
+            var self: GuestCustomerInfoSingleCheckoutController  = this;
+            self.viewModelName = 'GuestCustomerInfo';
 
             super.initialize();
             this.registerSubscriptions();
 
             var vueUserMixin = {
+
                 computed: {
                     FulfilledCustomer() {
                         return this.Cart.Customer.FirstName &&
@@ -27,13 +28,17 @@ module Orckestra.Composer {
                          this.parsleyInit = $('#editCustomerForms').parsley();
                          this.parsleyInit.validate();
                          let isValid = this.parsleyInit.isValid();
-                        // TODO: Investigate how to make this work: var isValid = this.isValidForUpdate();
-
+                        // TODO: Investigate how to make this work: var isValid = self.isValidForUpdate();
+                        
                         if (isValid) {
-                            self.checkoutService.updateCart().then(result => {
+                            if (self.isModified()) {
+                                self.checkoutService.updateCart().then(result => {
+                                    processCustomer.resolve(true);
+                                });
+                            } else {
                                 processCustomer.resolve(true);
-                            });
-                        } else  {
+                            }
+                        } else {
                             processCustomer.resolve(false);
                         };
 
@@ -46,19 +51,33 @@ module Orckestra.Composer {
             this.checkoutService.VueCheckoutMixins.push(vueUserMixin);
         }
 
+
+        protected isModified(): boolean {
+            var formData = this.getSerializedForm();
+            var keys = _.keys(formData);
+            var vueCustomerData = this.checkoutService.VueCheckout.Cart.Customer;
+            var initialCustomer = this.checkoutService.VueCheckout.Cart.Customer;// TODO - how to hande modifications
+            //var isModified = _.some(keys, (key) => initialCustomer[key] != vueCustomerData[key]);
+            var isModified = true;
+            return isModified;
+        }
         
         public getUpdateModelPromise(): Q.Promise<any> {
 
             return Q.fcall(() => {
                 var vm = {};
                 var vueCustomerData = this.checkoutService.VueCheckout.Cart.Customer;
-                var formData = {
-                    'FirstName': vueCustomerData.FirstName,
-                    'LastName': vueCustomerData.LastName,
-                    'Email': vueCustomerData.Email
-                };
+                var formData = this.getSerializedForm();
 
-                vm['GuestCustomerInfo'] = JSON.stringify(formData);
+                var keys = _.keys(formData);
+                _.each(keys, key => {
+                    if (vueCustomerData.hasOwnProperty(key)) {
+                        formData[key] = vueCustomerData[key];
+                    }
+                });
+
+                vm[this.viewModelName] = JSON.stringify(formData);
+
                 return vm;
             });
         }

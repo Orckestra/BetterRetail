@@ -63,6 +63,13 @@ module Orckestra.Composer {
             return JSON.stringify(viewModel);
         }
 
+        protected getSerializedForm(): string {
+            let formContext = $('form', this.context.container),
+                viewModel = (<ISerializeObjectJqueryPlugin>formContext).serializeObject();
+
+            return viewModel;
+        }
+
         protected isValidForUpdate(): boolean {
             return _.all(this.formInstances, formInstance => formInstance.validate());
         }

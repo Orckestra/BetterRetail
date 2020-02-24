@@ -364,10 +364,10 @@ namespace Orckestra.Composer.Cart.Services
                 cart.Customer = new CustomerSummary();
             }
 
-            cart.Customer.LastName = null;
-            cart.Customer.FirstName = null;
-            cart.Customer.MiddleName = null;
-            cart.Customer.Phone = null;
+            cart.Customer.LastName = customerSummaryViewModel.LastName;
+            cart.Customer.FirstName = customerSummaryViewModel.FirstName;
+            cart.Customer.MiddleName = customerSummaryViewModel.MiddleName;
+            cart.Customer.Phone = customerSummaryViewModel.Phone;
             cart.Customer.Email = customerSummaryViewModel.Email;
 
             return Task.FromResult(0);

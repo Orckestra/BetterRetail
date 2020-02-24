@@ -11,7 +11,7 @@
 ///<reference path='../Composer.Cart/CheckoutCommon/ICheckoutContext.ts' />
 ///<reference path='../Composer.Cart/CheckoutCommon/IRegisterOptions.ts' />
 ///<reference path='./ISingleCheckoutService.ts' />
-
+///<reference path='./ISingleCheckoutContext.ts' />
 
 module Orckestra.Composer {
     'use strict';
@@ -137,7 +137,16 @@ module Orckestra.Composer {
                     }
                 },
                 methods: {
-                   
+                    getCurrentStep() {
+                        //TODO.....
+                        if (!(this.Cart.Customer.FirstName &&
+                            this.Cart.Customer.LastName &&
+                            this.Cart.Customer.Email)) {
+                            return 0;
+                        } else {
+                            return 1
+                        };
+                    }
                 }
             });
         }

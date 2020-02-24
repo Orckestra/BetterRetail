@@ -12,7 +12,7 @@
 
 </head>
 <body>
-    <div data-oc-controller="SingleCheckout.UserInfo">
+    <div data-oc-controller="SingleCheckout.GuestCustomerInfo">
         <div class="card">
             <div class="card-header">
                 <h4 class="float-left">
@@ -23,13 +23,13 @@
                     Edit
                 </button> 
             </div> 
-            <div v-if="Cart.Customer" class="card-body" v-cloak="true">
+            <div v-show="Cart.Customer" class="card-body" v-cloak="true">
                 <div v-if="step.preview">
-                    <span v-text="Cart.Customer.FirstName" class="font-weight-bold"></span>
+                    <span v-text="Cart.Customer.FirstName" class="font-weight-bold"></span>&#160;
                     <span v-text="Cart.Customer.LastName" class="font-weight-bold"></span>
                     <div v-text="Cart.Customer.Email"></div>
                 </div>
-                <form id="editCustomerForms"  v-if="step.active">
+                <form id="editCustomerForms"  v-show="step.active">
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="FirstName">@Html.Localize("Forms", "F_FirstName") *</label>

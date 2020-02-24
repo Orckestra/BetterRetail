@@ -126,7 +126,7 @@ namespace Orckestra.Composer.Cart.Api
                 CultureInfo = ComposerContext.CultureInfo
             };
 
-            var checkoutStepInfos = CartUrlProvider.GetCheckoutStepPageInfos(getCartUrlParam);
+            
 
             var nextStepUrl = string.Empty;
             if (updateCartRequest.CurrentStep.HasValue)
@@ -162,12 +162,13 @@ namespace Orckestra.Composer.Cart.Api
             SetHomepageUrl(updateCartResultViewModel.Cart, homepageUrl);
             SetEditCartUrl(updateCartResultViewModel.Cart);
 
-            if (updateCartResultViewModel.Cart.OrderSummary != null)
-            {                
+            if (updateCartResultViewModel.Cart.OrderSummary != null && updateCartRequest.CurrentStep.HasValue)
+            {
+                var checkoutStepInfos = CartUrlProvider.GetCheckoutStepPageInfos(getCartUrlParam);
                 updateCartResultViewModel.Cart.OrderSummary.CheckoutStepUrls = checkoutStepInfos.Values.Select(x => x.Url).ToList();
             }
 
-            if (!updateCartResultViewModel.HasErrors)
+            if (!updateCartResultViewModel.HasErrors && updateCartRequest.CurrentStep.HasValue)
             {
                 updateCartResultViewModel.NextStepUrl = nextStepUrl;
             }
