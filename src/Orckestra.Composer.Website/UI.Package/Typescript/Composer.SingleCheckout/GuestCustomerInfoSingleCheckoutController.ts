@@ -5,16 +5,18 @@ module Orckestra.Composer {
     'use strict';
 
     export class GuestCustomerInfoSingleCheckoutController extends Orckestra.Composer.BaseSingleCheckoutController {
-       
+
         public initialize() {
-            var self: GuestCustomerInfoSingleCheckoutController  = this;
+            var self: GuestCustomerInfoSingleCheckoutController = this;
             self.viewModelName = 'GuestCustomerInfo';
 
             super.initialize();
             this.registerSubscriptions();
 
             var vueUserMixin = {
-
+                created() {
+                    this.customerBeforeEdit = { ...this.Cart.Customer }
+                },
                 computed: {
                     FulfilledCustomer() {
                         return this.Cart.Customer.FirstName &&
@@ -23,16 +25,17 @@ module Orckestra.Composer {
                     }
                 },
                 methods: {
-                    processCustomer()  {
-                         var  processCustomer: Q.Deferred<boolean> = Q.defer<boolean>();
-                         this.parsleyInit = $('#editCustomerForms').parsley();
-                         this.parsleyInit.validate();
-                         let isValid = this.parsleyInit.isValid();
+                    processCustomer() {
+                        var processCustomer: Q.Deferred<boolean> = Q.defer<boolean>();
+                        this.parsleyInit = $('#editCustomerForms').parsley();
+                        this.parsleyInit.validate();
+                        let isValid = this.parsleyInit.isValid();
                         // TODO: Investigate how to make this work: var isValid = self.isValidForUpdate();
-                        
+
                         if (isValid) {
-                            if (self.isModified()) {
+                            if (this.isCustomerModified()) {
                                 self.checkoutService.updateCart().then(result => {
+                                    this.customerBeforeEdit = { ...this.Cart.Customer };
                                     processCustomer.resolve(true);
                                 });
                             } else {
@@ -43,7 +46,13 @@ module Orckestra.Composer {
                         };
 
                         return processCustomer.promise;
+                    },
 
+                    isCustomerModified() {
+                        var formData = self.getSerializedForm();
+                        var keys = _.keys(formData);
+                        var isModified = _.some(keys, (key) => this.customerBeforeEdit[key] != this.Cart.Customer[key]);
+                        return isModified;
                     }
                 }
             };
@@ -51,19 +60,7 @@ module Orckestra.Composer {
             this.checkoutService.VueCheckoutMixins.push(vueUserMixin);
         }
 
-
-        protected isModified(): boolean {
-            var formData = this.getSerializedForm();
-            var keys = _.keys(formData);
-            var vueCustomerData = this.checkoutService.VueCheckout.Cart.Customer;
-            var initialCustomer = this.checkoutService.VueCheckout.Cart.Customer;// TODO - how to hande modifications
-            //var isModified = _.some(keys, (key) => initialCustomer[key] != vueCustomerData[key]);
-            var isModified = true;
-            return isModified;
-        }
-        
         public getUpdateModelPromise(): Q.Promise<any> {
-
             return Q.fcall(() => {
                 var vm = {};
                 var vueCustomerData = this.checkoutService.VueCheckout.Cart.Customer;
@@ -75,12 +72,9 @@ module Orckestra.Composer {
                         formData[key] = vueCustomerData[key];
                     }
                 });
-
                 vm[this.viewModelName] = JSON.stringify(formData);
-
                 return vm;
             });
         }
-
     }
 }

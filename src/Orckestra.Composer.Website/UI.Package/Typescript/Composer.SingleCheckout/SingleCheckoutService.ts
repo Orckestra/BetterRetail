@@ -194,16 +194,6 @@ module Orckestra.Composer {
                 });
         }
 
-       // public updateCart(): Q.Promise<IUpdateCartResult> {
-
-        //    var emptyVm = {
-          //      UpdatedCart: {}
-         //   };
-
-          //  return this.buildCartUpdateViewModel(emptyVm)
-          //      .then(vm => this.cartService.updateCart(vm));
-       // }
-
         public updateCart(): Q.Promise<IUpdateCartResult> {
 
             var emptyVm = {
@@ -211,7 +201,9 @@ module Orckestra.Composer {
             };
 
             return this.buildCartUpdateViewModel(emptyVm)
-                .then(vm => this.cartService.updateCart(vm));
+                .then(vm => {
+                    return this.cartService.updateCart(vm);
+                });
         }
 
         public completeCheckout(): Q.Promise<ICompleteCheckoutResult> {
