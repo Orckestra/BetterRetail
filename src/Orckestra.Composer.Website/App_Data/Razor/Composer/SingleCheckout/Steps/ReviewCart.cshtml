@@ -30,66 +30,35 @@
             </button>
         </div>
         <div class="card-body" v-show="step.active" v-cloak="true">
+            <div v-if="Cart.InvalidLineItemCount > 0" class="">
+                <div class="alert alert-danger  text-danger">
+                    <div class="multiline-message">
+                        <span class="fa  fa-exclamation-triangle  multiline-message-icon"></span>
+                        <span>
+                            {{Cart.InvalidLineItemCount}}
+                            @Html.Localize("ShoppingCart", "L_NoMoreAvailable")
+                        </span>
+                    </div>
+                </div>
+            </div>
+
             <table class="table  table-striped  table-light">
+                <thead>
+                    <tr class="row">
+                        <th scope="col" class="col-sm-6">Cart Items</th>
+                        <th scope="col" class="col-sm-2">Price</th>
+                        <th scope="col" class="col-sm-2">Quantity</th>
+                        <th scope="col" class="col-sm-2">Subtotal</th>
+                    </tr>
+                </thead>
                 <tbody>
-                    <tr v-if="item.IsValid" v-for="item in Cart.LineItemDetailViewModels" class="row">
-                        <td v-if="item.Rewards.Count" class="col-12">
-                            <p class="text-center alert alert-success">
-                                <em v-for="reward in item.Rewards">{{reward.Description}}</em>
-                                <br />
-                            </p>
-                        </td>
-                        <td class="col-sm-2">
-                            <img v-bind:src="item.ImageUrl" class="img-fluid" alt="thumbnail" xmlns:v-bind="v-bind" />
-                        </td>
-                        <td class="col-sm-5">
-                            <strong>{{item.ProductSummary.Brand}}</strong>
-                            <p>{{item.ProductSummary.DisplayName}}</p>
-                            <p v-if="item.VariantId">
-                                <span v-for="(keyV, index) in item.KeyVariantAttributesList">
-                                    <span v-if="index != 0">|</span>
-                                    {{keyV.Value}}
-                                </span>
-                            </p>
-                        </td>
-                        <td class="col-sm-2">
-                            <p v-if="item.IsOnSale">
-                                <del data-qa="cart-product-price">{{item.DefaultListPrice}}</del><br />
-                                <strong class="text-danger" data-qa="cart-product-sales-price">{{item.ListPrice}}</strong>
-                            </p>
-                            <strong v-else="v-else">{{item.DefaultListPrice}}</strong>
-                        </td>
-                        <td class="col-sm-1">
-                            <strong>
-                                <span class="d-inline d-sm-none">
-                                    @Html.Localize("CheckoutProcess", "L_QuantityMobile")
-                                </span>
-                                <span data-qa="checkout-product-quantity">{{item.Quantity}}</span>
-                            </strong>
-                        </td>
-                        <td class="col-sm-2">
-                            <p v-if="item.IsPriceDiscounted">
-                                <del data-qa="cart-product-subtotal-price">{{item.TotalWithoutDiscount}}</del><br />
-                                <strong data-qa="cart-product-subtotal-sales" class="text-danger">{{item.Total}}</strong>
-                            </p>
-                            <strong v-else="v-else" data-qa="cart-product-subtotal-price">{{item.Total}}</strong>
-                            <br />
-                            <p v-if="item.SavingsTotal">
-                                <span class="text-success">
-                                    @Html.Localize("ShoppingCart", "L_LineItemSavings")&#160;
-                                </span>
-                                <span class="text-success" data-qa="lineItem-savingstotal">{{item.SavingsTotal}}</span>
-                            </p>
-                            <em class="additional-fees d-block small">
-                                <span v-for="fee in item.AdditionalFees" class="block">
-                                    + {{fee.DisplayName}} {{fee.Amount}}
-                                    <span v-if="fee.Taxable">
-                                        @Html.Localize("ShoppingCart", "L_PlusTaxes")
-                                    </span>
-                                    {{fee.CalculationRule}}
-                                </span>
-                            </em>
-                        </td>
+                    <tr v-bind:class="{'table-danger': !item.IsValid}" v-for="item in Cart.LineItemDetailViewModels" class="row" v-bind:key="item.id">
+                        @CartItemsRewardsCell()
+                        @CartItemsImageCell()
+                        @CartItemsSummaryCell()
+                        @CartItemsDefaultPriceCell()
+                        @CartItemsQuantityCell()
+                        @CartItemsTotlaCell()
                     </tr>
                 </tbody>
             </table>
@@ -98,7 +67,7 @@
             <div class="row">
                 <div class="col-10">
                     <div class="row">
-                        <div class="col-2" v-if="item.IsValid" v-for="item in Cart.LineItemDetailViewModels">
+                        <div class="col-2" v-bind:class="{'border border-danger': !item.IsValid}" v-for="item in Cart.LineItemDetailViewModels">
                             <img v-bind:src="item.ImageUrl" class="img-fluid" alt="thumbnail" xmlns:v-bind="v-bind" />
                             <p class="text-center m-0">
                                 <span>{{item.Quantity}} X</span>
@@ -114,3 +83,84 @@
     </div>
 </body>
 </html>
+
+@helper CartItemsImageCell()
+{
+    <td class="col-sm-1">
+        <img v-bind:src="item.ImageUrl" class="img-fluid" alt="thumbnail" xmlns:v-bind="v-bind" />
+    </td>
+}
+
+@helper CartItemsRewardsCell()
+{
+    <td v-if="item.Rewards.Count" class="col-12">
+        <p class="text-center alert alert-success">
+            <em v-for="reward in item.Rewards">{{reward.Description}}</em>
+            <br />
+        </p>
+    </td>
+}
+
+@helper CartItemsSummaryCell()
+{
+    <td class="col-sm-5">
+        <strong>{{item.ProductSummary.Brand}}</strong>
+        <p>{{item.ProductSummary.DisplayName}}</p>
+        <p v-if="item.VariantId">
+            <span v-for="(keyV, index) in item.KeyVariantAttributesList">
+                <span v-if="index != 0">|</span>
+                {{keyV.Value}}
+            </span>
+        </p>
+    </td>
+}
+
+@helper CartItemsDefaultPriceCell()
+{
+    <td class="col-sm-2">
+        <p v-if="item.IsOnSale">
+            <del data-qa="cart-product-price">{{item.DefaultListPrice}}</del><br />
+            <strong class="text-danger" data-qa="cart-product-sales-price">{{item.ListPrice}}</strong>
+        </p>
+        <strong v-else="v-else">{{item.DefaultListPrice}}</strong>
+    </td>
+}
+
+@helper CartItemsQuantityCell()
+{
+    <td class="col-sm-2">
+        <strong>
+            <span class="d-inline d-sm-none">
+                @Html.Localize("CheckoutProcess", "L_QuantityMobile")
+            </span>
+            <span data-qa="checkout-product-quantity">{{item.Quantity}}</span>
+        </strong>
+    </td>
+}
+
+@helper CartItemsTotlaCell()
+{
+    <td class="col-sm-2">
+        <p v-if="item.IsPriceDiscounted">
+            <del data-qa="cart-product-subtotal-price">{{item.TotalWithoutDiscount}}</del><br />
+            <strong data-qa="cart-product-subtotal-sales" class="text-danger">{{item.Total}}</strong>
+        </p>
+        <strong v-else="v-else" data-qa="cart-product-subtotal-price">{{item.Total}}</strong>
+        <br />
+        <p v-if="item.SavingsTotal">
+            <span class="text-success">
+                @Html.Localize("ShoppingCart", "L_LineItemSavings")&#160;
+            </span>
+            <span class="text-success" data-qa="lineItem-savingstotal">{{item.SavingsTotal}}</span>
+        </p>
+        <em class="additional-fees d-block small">
+            <span v-for="fee in item.AdditionalFees" class="block">
+                + {{fee.DisplayName}} {{fee.Amount}}
+                <span v-if="fee.Taxable">
+                    @Html.Localize("ShoppingCart", "L_PlusTaxes")
+                </span>
+                {{fee.CalculationRule}}
+            </span>
+        </em>
+    </td>
+}
