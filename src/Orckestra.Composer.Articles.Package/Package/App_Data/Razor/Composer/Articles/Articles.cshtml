@@ -20,7 +20,7 @@
     var articles = ArticleData.List.OrderBy(i => i.Date).ToList();
 
     int pageCurrent;
-    if (!int.TryParse(Request.QueryString["p"], out pageCurrent))
+    if (!int.TryParse(Request.QueryString["page"], out pageCurrent))
     {
         pageCurrent = 1;
     }
@@ -37,7 +37,7 @@
 <body>
     @if (ArticleData.IsItem)
     {
-        <div class="col-xs-12">
+        <div class="col-12">
             <img class="img-thumbnail" src="/media(@ArticleData.Item.Image)?h=400" />
             <h1>
                 @ArticleData.Item.Title
@@ -58,35 +58,40 @@
 
         if (pageCount > 1)
         {
-            <div class="pull-right">
-                @SearchHelpers.Pagination(pageCurrent, pageCount, 10, @ArticleData.ListUrl)
+            <div class="row">
+                <div class="float-right">
+                    @SearchHelpers.Pagination(pageCurrent, pageCount, 10, @ArticleData.ListUrl)
+                </div>
             </div>
+           
         }
 
 
         <div class="row">
-            <div class="thumbnail-container col-xs-12">
                 @foreach (var item in articlesList)
                 {
-                    <div class="thumbnail-item col-xs-12 col-sm-6 col-md-6 col-lg-4">
-                        <a href="@ArticleData.ItemUrl(item)">
-                            <img src="/media(@item.Image)?h=250" />
-                            <div class="caption">
-                                <h3>@item.Title</h3>
-                                <p>@FormattedDate(@item.Date)</p>
-                                <p>@item.Summary</p>
-                                <p>@Tags(@item.Tags)</p>
-                            </div>
-                        </a>
+                    <div class="col-12 col-sm-6 col-md-6 col-lg-4 mb-3 pl-0">
+                        <div class="card h-100">
+                            <a href="@ArticleData.ItemUrl(item)">
+                                <img class="card-img-top" src="/media(@item.Image)?h=250" />
+                                <div class="card-body">
+                                    <h4 class="card-title">@item.Title</h4>
+                                    <p>@FormattedDate(@item.Date)</p>
+                                    <p>@item.Summary</p>
+                                    <p>@Tags(@item.Tags)</p>
+                                </div>
+                            </a>
+                        </div>
                     </div>
 
                 }
-            </div>
         </div>
         if (pageCount > 1)
         {
-            <div class="pull-right">
-                @SearchHelpers.Pagination(pageCurrent, pageCount, 10, @ArticleData.ListUrl)
+            <div class="row">
+                <div class="float-right">
+                    @SearchHelpers.Pagination(pageCurrent, pageCount, 10, @ArticleData.ListUrl)
+                </div>
             </div>
         }
 
