@@ -11,7 +11,7 @@
 <head>
 </head>
 <body>
-    <single-page-checkout xmlns:v-bind="v-bind" xmlns:v-on="v-on" xmlns:v-slot="v-slot" v-bind:start-index="getCurrentStep()">
+    <single-page-checkout xmlns:v-bind="v-bind" xmlns:v-on="v-on" xmlns:v-slot="v-slot" v-bind:start-index="CurrentStep">
         <checkout-step v-slot="step" v-bind:before-change="processCustomer">
             @Function("Composer.SingleCheckout.Steps.UserInformation")
         </checkout-step>

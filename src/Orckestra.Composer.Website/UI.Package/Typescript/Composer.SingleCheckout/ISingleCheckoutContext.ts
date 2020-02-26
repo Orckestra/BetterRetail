@@ -7,5 +7,6 @@ module Orckestra.Composer {
         Regions: any;
         ShippingMethods: any;
         CurrentStep: number;
+        IsLoading: boolean;
     }
 }

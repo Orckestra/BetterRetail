@@ -93,7 +93,8 @@ module Orckestra.Composer {
                         Cart: cartVm,
                         Regions: regionsVm,
                         ShippingMethods: shippingMethodsVm.ShippingMethods,
-                        CurrentStep: this.calculateCurrentStep(cartVm)
+                        CurrentStep: this.calculateCurrentStep(cartVm),
+                        IsLoading: false
                     };
 
                     this.initializeVueComponent(results);

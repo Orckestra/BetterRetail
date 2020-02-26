@@ -21,7 +21,7 @@ module Orckestra.Composer {
                     FulfilledCustomer() {
                         return this.Cart.Customer.FirstName &&
                             this.Cart.Customer.LastName &&
-                            this.Cart.Customer.Email;
+                            this.Cart.Customer.Email && !this.IsLoading;
                     }
                 },
                 methods: {
@@ -34,8 +34,10 @@ module Orckestra.Composer {
 
                         if (isValid) {
                             if (this.isCustomerModified()) {
+                                this.IsLoading = true;
                                 self.checkoutService.updateCart().then(result => {
                                     this.customerBeforeEdit = { ...this.Cart.Customer };
+                                    this.IsLoading = false;
                                     processCustomer.resolve(true);
                                 });
                             } else {
