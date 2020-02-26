@@ -128,7 +128,7 @@ module Orckestra.Composer {
                     'single-page-checkout': (<any>window).httpVueLoader('/UI.Package/Vue/Checkout.vue'),
                 },
                 mounted() {
-                    
+
                 },
                 computed: {
                     Customer() {
@@ -240,13 +240,13 @@ module Orckestra.Composer {
             //var validationPromise: Q.Promise<any>;
             //var viewModelUpdatePromise: Q.Promise<any>;
 
-           // validationPromise = Q(vm).then(vm => {
-           //     return this.getCartValidation(vm);
-           // });
+            // validationPromise = Q(vm).then(vm => {
+            //     return this.getCartValidation(vm);
+            // });
 
-          //  viewModelUpdatePromise = validationPromise.then(vm => {
-                return this.getCartUpdateViewModel(vm);
-           // });
+            //  viewModelUpdatePromise = validationPromise.then(vm => {
+            return this.getCartUpdateViewModel(vm);
+            // });
 
             ///return viewModelUpdatePromise;
         }

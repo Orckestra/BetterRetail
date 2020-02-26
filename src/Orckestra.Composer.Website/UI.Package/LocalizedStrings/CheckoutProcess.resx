@@ -328,4 +328,7 @@ Enter your credit card information</value>
   <data name="F_ReviewCart" xml:space="preserve">
     <value>Review Cart</value>
   </data>
+  <data name="T_Information" xml:space="preserve">
+    <value>Information</value>
+  </data>
 </root>

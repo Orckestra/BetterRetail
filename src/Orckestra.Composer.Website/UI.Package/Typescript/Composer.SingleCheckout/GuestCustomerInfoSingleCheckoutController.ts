@@ -19,9 +19,13 @@ module Orckestra.Composer {
                 },
                 computed: {
                     FulfilledCustomer() {
-                        return this.Cart.Customer.FirstName &&
-                            this.Cart.Customer.LastName &&
-                            this.Cart.Customer.Email && !this.IsLoading;
+                        var fulfilled = this.Cart.Customer.FirstName &&
+                        this.Cart.Customer.LastName &&
+                        this.Cart.Customer.Email && 
+                        !this.IsLoading
+                        //TODO: Parsey doesn't work as expected && (this.parsleyInit ? this.parsleyInit.isValid(): true);
+
+                        return fulfilled;
                     }
                 },
                 methods: {

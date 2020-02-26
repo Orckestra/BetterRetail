@@ -7,16 +7,25 @@
     }
 }
 
+@{ 
+    var firstNameLengthError = Html.Localize("Forms", "F_FirstNameLengthError");
+    var firstNamePatternError = Html.Localize("Forms", "F_FirstNamePatternError");
+
+    var lastNameLengthError = Html.Localize("Forms", "F_LastNameLengthError");
+    var lastNamePatternError = Html.Localize("Forms", "F_LastNamePatternError");
+
+    var emailLengthError = Html.Localize("Forms", "F_EmailLengthError");
+    var emailPatternError = Html.Localize("Forms", "F_EmailPatternError");
+}
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on" xmlns:v-slot="v-slot">
 <head>
-
 </head>
 <body>
     <div data-oc-controller="SingleCheckout.GuestCustomerInfo">
         <div class="card">
             <div class="card-header">
                 <h4 class="float-left">
-                    Information
+                    @Html.Localize("CheckoutProcess", "T_Information")
                 </h4>
                 <button v-cloak="true" v-show="step.preview" class="btn btn-outline-secondary float-right"
                         v-on:click='step.navigateToStep(step.index)'>
@@ -44,7 +53,9 @@
                                    type="text"
                                    required="required"
                                    data-parsley-length="[2, 36]"
-                                   data-parsley-pattern="/^[a-zA-Z\u00E0-\u00FC\.\-\s\']+$/i" />
+                                   data-parsley-pattern="/^[a-zA-Z\u00E0-\u00FC\.\-\s\']+$/i"
+                                   @if (!string.IsNullOrWhiteSpace(firstNameLengthError)) { <text> data-parsley-length-message="@firstNameLengthError" </text>  }
+                                   @if (!string.IsNullOrWhiteSpace(firstNamePatternError)) { <text> data-parsley-pattern-message="@firstNamePatternError" </text>  } />
                         </div>
 
                         <div class="form-group col-md-6">
@@ -59,7 +70,9 @@
                                    required="required"
                                    data-parsley-length="[2, 36]"
                                    data-parsley-pattern="/^[a-zA-Z\u00E0-\u00FC\.\-\s\']+$/i"
-                                   @HelpBubble("Forms", "F_LastNameIndication") />
+                                   @HelpBubble("Forms", "F_LastNameIndication")
+                                   @if (!string.IsNullOrWhiteSpace(lastNameLengthError)) { <text> data-parsley-length-message="@lastNameLengthError" </text> }
+                                   @if (!string.IsNullOrWhiteSpace(lastNamePatternError)) { <text> data-parsley-pattern-message="@lastNamePatternError" </text> } />
                         </div>
                     </div>
 
@@ -74,6 +87,10 @@
                                    class="form-control"
                                    placeholder="@Html.Localize("Forms", "F_EmailWaterMark")"
                                    required="required"
+                                   data-parsley-length="[2, 36]"
+                                   data-parsley-type="email"
+                                   @if (!string.IsNullOrWhiteSpace(emailLengthError)) { <text> data-parsley-length-message="@emailLengthError" </text> }
+                                   @if (!string.IsNullOrWhiteSpace(emailPatternError)) { <text> data-parsley-type-message="@emailPatternError" </text> }
                                    @HelpBubble("Forms", "F_EmailAddressGuestIndication") />
                         </div>
                     </div>
