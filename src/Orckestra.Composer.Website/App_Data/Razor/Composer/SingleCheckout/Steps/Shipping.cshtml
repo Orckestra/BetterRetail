@@ -22,13 +22,13 @@
                         v-on:click="step.navigateToStep(step.index)"
                         class="btn btn-primary float-right"
                         v-cloak="true">
-                    @Html.Localize("CheckoutProcess", "F_CheckoutProcessContinue")
+                    @Html.Localize("CheckoutProcess", "F_Continue")
                 </button>
 
                 <button v-show="step.preview" class="btn btn-outline-secondary float-right"
                         v-on:click="step.navigateToStep(step.index)"
                         v-cloak="true">
-                    @Html.Localize("CheckoutProcess", "F_CheckoutProcessEdit")
+                    @Html.Localize("CheckoutProcess", "F_Edit")
                 </button>
             </div>
 

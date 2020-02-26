@@ -12,11 +12,11 @@
 </head>
 <body>
     <div data-oc-controller="SingleCheckout.OrderSummary">
-        <div class="card">
-            <h4 class="card-header bg-dark  text-white">
+        <div class="card  mb-4  sps-order-summary sps  sps--abv" data-sps-offset="100">
+            <h4 class="card-header bg-primary border-primary  text-white">
                 @Html.Localize("ShoppingCart", "T_OrderSummary")
             </h4>
-            <div class="card-body" v-cloak="true">
+            <div class="card-body  bg-light" v-cloak="true">
                 @Rewars()
 
                 @SubTotal()

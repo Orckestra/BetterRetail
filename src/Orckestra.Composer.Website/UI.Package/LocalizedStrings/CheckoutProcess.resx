@@ -292,23 +292,17 @@ Enter your credit card information</value>
   <data name="B_AddCreditCard" xml:space="preserve">
     <value>Use another credit card</value>
   </data>
-  <data name="L_ExpirationDateForm" xml:space="preserve">
-    <value>Expiration Date (mmyy)</value>
+  <data name="F_Continue" xml:space="preserve">
+    <value>Continue</value>
   </data>
-
-
-  <data name="F_CheckoutProcessContinue" xml:space="preserve">
-      <value>Continue</value>
+  <data name="F_Edit" xml:space="preserve">
+    <value>Edit</value>
   </data>
-  <data name="F_CheckoutProcessEdit" xml:space="preserve">
-      <value>Edit</value>
-  </data>
-
   <data name="F_ShippingStepTitle" xml:space="preserve">
-      <value>Shipping</value>
+    <value>Shipping</value>
   </data>
   <data name="F_ShippingStepDescription" xml:space="preserve">
-      <value>We ship to any valid address, except A.P.O./F.P.O and P.O. Boxes.</value>
+    <value>We ship to any valid address, except A.P.O./F.P.O and P.O. Boxes.</value>
   </data>
   <data name="F_ShippingMethodToHome" xml:space="preserve">
     <value>Ship to Home</value>
@@ -320,12 +314,18 @@ Enter your credit card information</value>
     <value>Change</value>
   </data>
   <data name="F_SelectShippingType" xml:space="preserve">
-      <value>Select</value>
-    </data>
+    <value>Select</value>
+  </data>
   <data name="F_ShipTime" xml:space="preserve">
     <value>{0} days</value>
   </data>
   <data name="F_ShipTimeTitle" xml:space="preserve">
     <value>Estimated Ship Time:</value>
+  </data>
+  <data name="F_Review" xml:space="preserve">
+    <value>Review</value>
+  </data>
+  <data name="F_ReviewCart" xml:space="preserve">
+    <value>Review Cart</value>
   </data>
 </root>

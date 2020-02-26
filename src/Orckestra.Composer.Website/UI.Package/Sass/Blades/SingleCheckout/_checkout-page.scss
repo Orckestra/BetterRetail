@@ -30,3 +30,29 @@
         }
     }
 }
+
+
+@include media-breakpoint-up(sm) {
+    .sps-order-summary {
+
+        transition: all 0.25s ease;
+
+        &.sps--abv {
+            top: 0;
+        }
+
+        &.sps--blw {
+            position: fixed;
+            top: 20px;
+            transition: all 0.5s ease;
+        }
+    }
+}
+
+.fade-enter-active, .fade-leave-active {
+    transition: opacity 0.25s;
+}
+
+.fade-enter, .fade-leave-to {
+    opacity: 0;
+}

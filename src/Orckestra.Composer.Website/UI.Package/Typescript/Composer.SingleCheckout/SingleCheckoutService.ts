@@ -92,7 +92,8 @@ module Orckestra.Composer {
                         IsAuthenticated: authVm,
                         Cart: cartVm,
                         Regions: regionsVm,
-                        ShippingMethods: shippingMethodsVm.ShippingMethods
+                        ShippingMethods: shippingMethodsVm.ShippingMethods,
+                        CurrentStep: this.calculateCurrentStep(cartVm)
                     };
 
                     this.initializeVueComponent(results);
@@ -106,6 +107,16 @@ module Orckestra.Composer {
                 });
         }
 
+        public calculateCurrentStep(cart: any): number {
+            if (!(cart.Customer.FirstName &&
+                cart.Customer.LastName &&
+                cart.Customer.Email)) {
+                return 0;
+            } else {
+                return 1
+            };
+        }
+
         public initializeVueComponent(checkoutContext: ISingleCheckoutContext) {
             this.VueCheckout = new Vue({
                 el: '#vueSingleCheckout',
@@ -114,7 +125,6 @@ module Orckestra.Composer {
                 components: {
                     'checkout-step': (<any>window).httpVueLoader('/UI.Package/Vue/CheckoutStep.vue'),
                     'single-page-checkout': (<any>window).httpVueLoader('/UI.Package/Vue/Checkout.vue'),
-
                 },
                 mounted() {
                     
@@ -137,16 +147,6 @@ module Orckestra.Composer {
                     }
                 },
                 methods: {
-                    getCurrentStep() {
-                        //TODO.....
-                        if (!(this.Cart.Customer.FirstName &&
-                            this.Cart.Customer.LastName &&
-                            this.Cart.Customer.Email)) {
-                            return 0;
-                        } else {
-                            return 1
-                        };
-                    }
                 }
             });
         }

@@ -20,7 +20,7 @@
                 </h4>
                 <button v-cloak="true" v-show="step.preview" class="btn btn-outline-secondary float-right"
                         v-on:click='step.navigateToStep(step.index)'>
-                    Edit
+                    @Html.Localize("CheckoutProcess", "F_Edit")
                 </button> 
             </div> 
             <div v-show="Cart.Customer" class="card-body" v-cloak="true">
