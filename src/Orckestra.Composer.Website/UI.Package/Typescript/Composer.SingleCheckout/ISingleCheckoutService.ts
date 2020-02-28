@@ -13,6 +13,12 @@ module Orckestra.Composer {
 
         getCart(): Q.Promise<any>;
 
+        removeCartItem(id, productId): Q.Promise<any>;
+
+        updateCartItem(id: string, quantity: number, productId: string,
+            recurringOrderFrequencyName?: string,
+            recurringOrderProgramName?: string): Q.Promise<any>;
+
         updateCart(): Q.Promise<IUpdateCartResult>;
 
         completeCheckout(): Q.Promise<ICompleteCheckoutResult>;

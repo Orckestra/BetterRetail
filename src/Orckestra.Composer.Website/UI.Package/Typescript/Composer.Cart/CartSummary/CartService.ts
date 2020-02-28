@@ -109,7 +109,10 @@ module Orckestra.Composer {
 
             return this.cartRepository.updateLineItem(lineItemId, quantity, recurringOrderFrequencyName, recurringOrderProgramName)
                 .then(cart => this.setCartToCache(cart))
-                .then(cart => this.eventHub.publish('cartUpdated', { data: cart }));
+                .then(cart => {
+                    this.eventHub.publish('cartUpdated', { data: cart });
+                    return cart;
+                });
         }
 
         public deleteLineItem(lineItemId: string, productId: string): Q.Promise<any> {
@@ -123,7 +126,10 @@ module Orckestra.Composer {
 
             return this.cartRepository.deleteLineItem(lineItemId)
                 .then(cart => this.setCartToCache(cart))
-                .then(cart => this.eventHub.publish('cartUpdated', { data: cart }));
+                .then(cart => {
+                    this.eventHub.publish('cartUpdated', { data: cart });
+                    return cart;
+                });
         }
 
         public updateBillingMethodPostalCode(postalCode: string): Q.Promise<any> {

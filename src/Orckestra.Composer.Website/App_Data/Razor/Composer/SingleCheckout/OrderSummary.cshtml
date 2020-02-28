@@ -54,7 +54,7 @@
 
 @helper Rewars()
 {
-    <div v-if="Rewards" class="text-center">
+    <div v-if="Rewards.Lenght" class="text-center">
         <p class="promotion  mb-2">
             <em v-for="reward in Rewards">{{reward.Description}}</em>
         </p>

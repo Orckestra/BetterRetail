@@ -114,7 +114,7 @@ module Orckestra.Composer {
                 cart.Customer.Email)) {
                 return 0;
             } else {
-                return 1
+                return 2
             };
         }
 
@@ -143,11 +143,15 @@ module Orckestra.Composer {
                     OrderSummary() {
                         return this.Cart.OrderSummary;
                     },
+                    CartEmpty() {
+                        return this.Cart.LineItemDetailViewModels.length == 0;
+                    },
                     OrderCanBePlaced() {
                         return false;
                     }
                 },
                 methods: {
+
                 }
             });
         }
@@ -190,6 +194,26 @@ module Orckestra.Composer {
 
             return this.invalidateCache()
                 .then(() => this.cartService.getCart())
+                .fail(reason => {
+                    this.handleError(reason);
+                });
+        }
+
+        public removeCartItem(id: any, productId: any): Q.Promise<any> {
+
+            return this.invalidateCache().
+                then(() => this.cartService.deleteLineItem(id, productId))
+                .fail(reason => {
+                    this.handleError(reason);
+                });
+        }
+
+        public updateCartItem(id: string, quantity: number, productId: string,
+            recurringOrderFrequencyName?: string,
+            recurringOrderProgramName?: string): Q.Promise<any> {
+
+            return this.invalidateCache().
+                then(() => this.cartService.updateLineItem(id, quantity, productId, recurringOrderFrequencyName, recurringOrderProgramName))
                 .fail(reason => {
                     this.handleError(reason);
                 });

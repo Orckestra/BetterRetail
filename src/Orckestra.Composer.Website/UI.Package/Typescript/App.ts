@@ -65,6 +65,7 @@
 
 ///<reference path='./Composer.SingleCheckout/GuestCustomerInfoSingleCheckoutController.ts' />
 ///<reference path='./Composer.SingleCheckout/ShippingSingleCheckoutController.ts' />
+///<reference path='./Composer.SingleCheckout/ReviewCartSingleCheckoutController.ts' />
 ///<reference path='./Composer.SingleCheckout/OrderSummarySingleCheckoutController.ts' />
 
 (() => {
@@ -112,6 +113,7 @@
 
                 { name: 'SingleCheckout.GuestCustomerInfo', controller: Orckestra.Composer.GuestCustomerInfoSingleCheckoutController },
                 { name: 'SingleCheckout.Shipping', controller: Orckestra.Composer.ShippingSingleCheckoutController },
+                { name: 'SingleCheckout.ReviewCart', controller: Orckestra.Composer.ReviewCartSingleCheckoutController },
                 { name: 'SingleCheckout.OrderSummary', controller: Orckestra.Composer.OrderSummarySingleCheckoutController },
                 { name: 'Checkout.GuestCustomerInfo', controller: Orckestra.Composer.GuestCustomerInfoCheckoutController },
                 { name: 'Checkout.ShippingAddress', controller: Orckestra.Composer.ShippingAddressCheckoutController },

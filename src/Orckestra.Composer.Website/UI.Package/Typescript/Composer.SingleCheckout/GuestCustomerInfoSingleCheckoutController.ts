@@ -20,9 +20,9 @@ module Orckestra.Composer {
                 computed: {
                     FulfilledCustomer() {
                         var fulfilled = this.Cart.Customer.FirstName &&
-                        this.Cart.Customer.LastName &&
-                        this.Cart.Customer.Email && 
-                        !this.IsLoading
+                            this.Cart.Customer.LastName &&
+                            this.Cart.Customer.Email &&
+                            !this.IsLoading
                         //TODO: Parsey doesn't work as expected && (this.parsleyInit ? this.parsleyInit.isValid(): true);
 
                         return fulfilled;

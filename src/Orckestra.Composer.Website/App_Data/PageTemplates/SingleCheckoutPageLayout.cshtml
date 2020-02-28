@@ -23,15 +23,15 @@
     <script src="https://cdn.jsdelivr.net/npm/http-vue-loader@1.4.1/src/httpVueLoader.min.js"></script>
 </head>
 <body>
-    @Function("Composer.Header.GeneralErrors")
     @Function("Composer.CheckoutHeader")
-
+    @Function("Composer.Header.GeneralErrors")
     <div id="vueSingleCheckout" class="container-md checkout-page">
         <div class="row">
-            <div class="col-8">
+            <div class="col-12 col-sm-8">
+                <h1>@CurrentPageNode.Title</h1>
                 @Markup(Body)
             </div>
-            <div class="col-4">
+            <div class="col-12 col-sm-4">
                 @Markup(Right)
             </div>
         </div>

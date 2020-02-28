@@ -36,6 +36,7 @@
     .sps-order-summary {
 
         transition: all 0.25s ease;
+        max-width: 350px;
 
         &.sps--abv {
             top: 0;
@@ -55,4 +56,12 @@
 
 .fade-enter, .fade-leave-to {
     opacity: 0;
+}
+
+.cart-items-list-leave-to, .cart-items-list-enter {
+    opacity: 0;
+    //transform: translateY(30px);
+}
+.cart-items-list-enter-active, .cart-items-list-leave-active {
+    transition: all 0.25s ease;
 }
