@@ -304,10 +304,10 @@ Enter your credit card information</value>
   <data name="F_ShippingStepDescription" xml:space="preserve">
     <value>We ship to any valid address, except A.P.O./F.P.O and P.O. Boxes.</value>
   </data>
-  <data name="F_ShippingMethodToHome" xml:space="preserve">
+  <data name="T_ShippingMethodType" xml:space="preserve">
     <value>Ship to Home</value>
   </data>
-  <data name="F_ShippingMethodPickUp" xml:space="preserve">
+  <data name="T_PickUpMethodType" xml:space="preserve">
     <value>Pick Up In-Store</value>
   </data>
   <data name="F_ChangeShippingType" xml:space="preserve">

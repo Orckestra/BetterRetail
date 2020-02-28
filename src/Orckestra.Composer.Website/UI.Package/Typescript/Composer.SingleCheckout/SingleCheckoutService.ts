@@ -80,10 +80,10 @@ module Orckestra.Composer {
             let authenticatedPromise = this.membershipService.isAuthenticated();
             let getCartPromise = this.getCart();
             let regionsPromise: Q.Promise<any> = this.regionService.getRegions();
-            let shippingMethodsPromise: Q.Promise<any> = this.shippingMethodService.getShippingMethods();
+            let shippingMethodTypesPromise: Q.Promise<any> = this.shippingMethodService.getShippingMethodTypes();
 
-            Q.all([authenticatedPromise, getCartPromise, regionsPromise, shippingMethodsPromise])
-                .spread((authVm, cartVm, regionsVm, shippingMethodsVm) => {
+            Q.all([authenticatedPromise, getCartPromise, regionsPromise, shippingMethodTypesPromise])
+                .spread((authVm, cartVm, regionsVm, shippingMethodTypesVm) => {
 
                     if (!cartVm.Customer) {
                         cartVm.Customer = {};
@@ -92,7 +92,7 @@ module Orckestra.Composer {
                         IsAuthenticated: authVm,
                         Cart: cartVm,
                         Regions: regionsVm,
-                        ShippingMethods: shippingMethodsVm.ShippingMethods,
+                        ShippingMethodTypes: shippingMethodTypesVm.ShippingMethodTypes,
                         CurrentStep: this.calculateCurrentStep(cartVm),
                         IsLoading: false
                     };
@@ -115,7 +115,7 @@ module Orckestra.Composer {
                 return 0;
             } else {
                 return 2
-            };
+            }
         }
 
         public initializeVueComponent(checkoutContext: ISingleCheckoutContext) {

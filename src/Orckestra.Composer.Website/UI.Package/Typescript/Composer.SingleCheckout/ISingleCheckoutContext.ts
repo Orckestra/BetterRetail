@@ -5,7 +5,7 @@ module Orckestra.Composer {
         IsAuthenticated: boolean;
         Cart: any;
         Regions: any;
-        ShippingMethods: any;
+        ShippingMethodTypes: any;
         CurrentStep: number;
         IsLoading: boolean;
     }

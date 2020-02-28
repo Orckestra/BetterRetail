@@ -290,7 +290,9 @@
     <Compile Include="ViewModels\SavedCreditCardPaymentViewModel.cs" />
     <Compile Include="ViewModels\SetCustomerDefaultPaymentMethodViewModel.cs" />
     <Compile Include="ViewModels\ShipmentAdditionalFeeViewModel.cs" />
+    <Compile Include="ViewModels\ShippingMethodTypesViewModel.cs" />
     <Compile Include="ViewModels\ShippingMethodsViewModel.cs" />
+    <Compile Include="ViewModels\ShippingMethodTypeViewModel.cs" />
     <Compile Include="ViewModels\ShippingMethodViewModel.cs" />
     <Compile Include="ViewModels\TaxViewModel.cs" />
     <Compile Include="ViewModels\SetShippingMethodViewModel.cs" />

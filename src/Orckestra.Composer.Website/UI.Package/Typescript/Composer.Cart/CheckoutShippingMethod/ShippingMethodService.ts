@@ -13,5 +13,9 @@ module Orckestra.Composer {
 
             return ComposerClient.get('/api/cart/shippingmethods');
         }
+
+        public getShippingMethodTypes(): Q.Promise<any> {
+            return ComposerClient.get('/api/cart/groupedshippingmethods');
+        }
     }
 }

@@ -54,22 +54,14 @@ namespace Orckestra.Composer.Cart.Factory
             ILineItemViewModelFactory lineItemViewModelFactory,
             IRewardViewModelFactory rewardViewModelFactory)
         {
-            if (localizationProvider == null) { throw new ArgumentNullException("localizationProvider"); }
-            if (viewModelMapper == null) { throw new ArgumentNullException("viewModelMapper"); }
-            if (fulfillmentMethodRepository == null) { throw new ArgumentNullException("fulfillmentMethodRepository"); }
-            if (countryService == null) { throw new ArgumentNullException("countryService"); }
-            if (taxViewModelFactory == null) { throw new ArgumentNullException("taxViewModelFactory"); }
-            if (lineItemViewModelFactory == null) { throw new ArgumentNullException("lineItemViewModelFactory"); }
-            if (rewardViewModelFactory == null) { throw new ArgumentNullException("rewardViewModelFactory"); }
-
-            LocalizationProvider = localizationProvider;
-            ViewModelMapper = viewModelMapper;
-            FulfillmentMethodRepository = fulfillmentMethodRepository;
-            CountryService = countryService;
+            LocalizationProvider = localizationProvider ?? throw new ArgumentNullException(nameof(localizationProvider));
+            ViewModelMapper = viewModelMapper ?? throw new ArgumentNullException(nameof(viewModelMapper));
+            FulfillmentMethodRepository = fulfillmentMethodRepository ?? throw new ArgumentNullException(nameof(fulfillmentMethodRepository));
+            CountryService = countryService ?? throw new ArgumentNullException(nameof(countryService));
             ComposerContext = composerContext;
-            TaxViewModelFactory = taxViewModelFactory;
-            LineItemViewModelFactory = lineItemViewModelFactory;
-            RewardViewModelFactory = rewardViewModelFactory;
+            TaxViewModelFactory = taxViewModelFactory ?? throw new ArgumentNullException(nameof(taxViewModelFactory));
+            LineItemViewModelFactory = lineItemViewModelFactory ?? throw new ArgumentNullException(nameof(lineItemViewModelFactory));
+            RewardViewModelFactory = rewardViewModelFactory ?? throw new ArgumentNullException(nameof(rewardViewModelFactory));
         }
 
         public virtual CartViewModel CreateCartViewModel(CreateCartViewModelParam param)
@@ -477,6 +469,36 @@ namespace Orckestra.Composer.Cart.Factory
             shippingMethodViewModel.FulfillmentMethodTypeString = fulfillmentMethod.FulfillmentMethodType.ToString();
 
             return shippingMethodViewModel;
+        }
+
+        public virtual ShippingMethodTypeViewModel GetShippingMethodTypeViewModel(FulfillmentMethodType fulfillmentMethodType, IList<ShippingMethodViewModel> shippingMethods, CultureInfo cultureInfo)
+        {
+            SetDefaultShippingMethod(shippingMethods);
+
+            var fulfillmentMethodTypeString = fulfillmentMethodType.ToString();
+            var displayName = LocalizationProvider.GetLocalizedString(new GetLocalizedParam
+            {
+                Category = "CheckoutProcess",
+                Key = $"T_{fulfillmentMethodTypeString}MethodType",
+                CultureInfo = cultureInfo
+            });
+
+            return new ShippingMethodTypeViewModel
+            {
+                FulfillmentMethodType = fulfillmentMethodType,
+                FulfillmentMethodTypeString = fulfillmentMethodTypeString,
+                DisplayName = displayName,
+                ShippingMethods = shippingMethods
+            };
+        }
+
+        protected virtual void SetDefaultShippingMethod(IList<ShippingMethodViewModel> shippingMethods)
+        {
+            var defaultMethod = shippingMethods.FirstOrDefault();
+            if (defaultMethod != null)
+            {
+                defaultMethod.IsSelected = true;
+            }
         }
 
         /// <summary>

@@ -195,6 +195,26 @@ namespace Orckestra.Composer.Cart.Api
             return Ok(shippingMethodsViewModel);
         }
 
+
+        /// <summary>
+        /// Get the shipping methods available for the current cart
+        /// </summary>
+        /// <returns>A Json representation of the Shipping methods</returns>
+        [HttpGet]
+        [ActionName("groupedshippingmethods")]
+        public virtual async Task<IHttpActionResult> GetGroupedShippingMethods()
+        {
+            var shippingMethodTypesViewModel = await ShippingMethodService.GetShippingMethodTypesAsync(new GetShippingMethodsParam
+            {
+                Scope = ComposerContext.Scope,
+                CultureInfo = ComposerContext.CultureInfo,
+                CustomerId = ComposerContext.CustomerId,
+                CartName = CartConfiguration.ShoppingCartName
+            });
+
+            return Ok(shippingMethodTypesViewModel);
+        }
+
         /// <summary>
         /// Get the shipping methods available for a specific cart name
         /// </summary>
