@@ -31,6 +31,16 @@ module Orckestra.Composer {
                     });
                 },
                 computed: {
+                    FulfilledShipping() {
+                        var fulfilled = this.Cart.ShippingMethod &&
+                            this.ShippingAddress.Line1 &&
+                            this.ShippingAddress.City &&
+                            this.ShippingAddress.RegionCode &&
+                            this.ShippingAddress.PostalCode &&
+                            !this.IsLoading
+                       
+                        return fulfilled;
+                    }
                 },
                 methods: {
                     processShipping() {

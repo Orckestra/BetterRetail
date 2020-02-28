@@ -23,11 +23,11 @@
                 <div v-if="step.active" class="col-sm-3  font-weight-bold text-center  d-none d-sm-block">Quantity</div>
                 <div v-if="step.active" class="col-sm-2  font-weight-bold text-center  d-none d-sm-block">Subtotal</div>
                 <div v-if="step.displayContinueButton" class="col-7">
-                    <button v-bind:disabled="false"
+                    <button v-bind:disabled="!FulfilledShipping"
                             v-on:click='step.navigateToStep(step.index)'
                             class="btn btn-primary float-right"
                             v-cloak="true">
-                        @Html.Localize("CheckoutProcess", "F_Continue")
+                        @Html.Localize("CheckoutProcess", "F_Review")
                     </button>
                 </div>
                 <div v-show="step.preview" class="col-7">
