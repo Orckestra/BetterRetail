@@ -36,7 +36,6 @@ module Orckestra.Composer {
                             this.debounceUpdateItem = _.debounce(id => {
                                 this.IsLoading = true;
                                 let itemToUpdate = _.find(this.Cart.LineItemDetailViewModels, (i: any) => i.Id === id);
-                                console.log('I am fired ' + id + ' For Quantity ' + itemToUpdate.Quantity);
                                 self.checkoutService.updateCartItem(itemToUpdate.Id,
                                     itemToUpdate.Quantity,
                                     itemToUpdate.ProductId,
@@ -58,11 +57,15 @@ module Orckestra.Composer {
 
                     removeCartItem(index) {
                         var item = this.Cart.LineItemDetailViewModels[index];
+                        this.IsLoading = true;
                         self.checkoutService.removeCartItem(item.Id, item.ProductId)
                             .then(cart => {
                                 if (cart) {
                                     this.Cart = cart;
                                 }
+                            })
+                            .finally(() => {
+                                this.IsLoading = false;
                             });
 
                         this.Cart.LineItemDetailViewModels.splice(index, 1);
