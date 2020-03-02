@@ -473,6 +473,7 @@ namespace Orckestra.Composer.Cart.Factory
 
         public virtual ShippingMethodTypeViewModel GetShippingMethodTypeViewModel(FulfillmentMethodType fulfillmentMethodType, IList<ShippingMethodViewModel> shippingMethods, CultureInfo cultureInfo)
         {
+            shippingMethods = FilterShippingMethods(shippingMethods, fulfillmentMethodType);
             SetDefaultShippingMethod(shippingMethods);
 
             var fulfillmentMethodTypeString = fulfillmentMethodType.ToString();
@@ -494,10 +495,19 @@ namespace Orckestra.Composer.Cart.Factory
 
         protected virtual void SetDefaultShippingMethod(IList<ShippingMethodViewModel> shippingMethods)
         {
-            var defaultMethod = shippingMethods.FirstOrDefault();
+            var defaultMethod = shippingMethods.OrderBy(method => method.CostDouble).FirstOrDefault();
             if (defaultMethod != null)
             {
                 defaultMethod.IsSelected = true;
+            }
+        }
+
+        protected virtual IList<ShippingMethodViewModel> FilterShippingMethods(IList<ShippingMethodViewModel> shippingMethods, FulfillmentMethodType fulfillmentMethodType)
+        {
+            switch (fulfillmentMethodType)
+            {
+                case FulfillmentMethodType.PickUp: return new List<ShippingMethodViewModel> { shippingMethods.FirstOrDefault() };
+                default: return shippingMethods;
             }
         }
 

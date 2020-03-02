@@ -35,7 +35,7 @@
             <div class="card-body" v-show="step.active" v-cloak="true">
                 <p>@Html.Localize("CheckoutProcess", "F_ShippingStepDescription")</p>
 
-                <div class="form-row" novalidate="novalidate">
+                <div class="form-row" novalidate="novalidate" id="AccordionShippingMethodType">
                     <div class="col-md-6 pb-3" v-for="shippingMethodType in ShippingMethodTypes">
                         <div class="select-shipping-block">
                             <div class="input-group" data-parent=".card-body">
@@ -43,7 +43,7 @@
                                     <input data-parsley-class-handler-selector=".card-body"
                                            data-parsley-errors-container="#method-errors"
                                            class="input" type="radio"
-                                           v-model="SelectedShippingMethodType"
+                                           v-bind:checked="shippingMethodType.FulfillmentMethodTypeString === Cart.ShippingMethod.FulfillmentMethodTypeString"
                                            required=""
                                            name="SelectedShippingMethodType"
                                            xmlns:v-bind="v-bind"
@@ -63,13 +63,13 @@
                                     <div v-if="shippingMethodType.SelectedMethod">
                                         <p class="mb-0" v-if="shippingMethodType.IsModified">
                                             <strong id="ship-class" v-if="shippingMethodType.SelectedMethod">{{shippingMethodType.SelectedMethod.DisplayName}}</strong> |
-                                            <a v-bind:href="'#ShippingType' + shippingMethodType.FulfillmentMethodTypeString"
+                                            <a v-bind:href="'#ShippingMethod' + shippingMethodType.FulfillmentMethodTypeString"
                                                data-toggle="collapse"
                                                role="button"
                                                aria-expanded="true"
-                                               v-bind:aria-controls="'ShippingType' + shippingMethodType.FulfillmentMethodTypeString"
+                                               v-bind:aria-controls="'ShippingMethod' + shippingMethodType.FulfillmentMethodTypeString"
                                                class="cta">
-                                                @Html.Localize("CheckoutProcess", "F_ChangeShippingType")
+                                                @Html.Localize("CheckoutProcess", "F_ChangeShippingMethod")
                                             </a>
                                         </p>
                                         <span v-if="shippingMethodType.SelectedMethod.ExpectedDaysBeforeDelivery" id="ship-delay" class="clearfix">
@@ -78,7 +78,7 @@
                                     </div>
                                 </label>
                             </div>
-                            <div class="collapse" v-if="shippingMethodType.IsModified" v-bind:Id="'ShippingType' + shippingMethodType.FulfillmentMethodTypeString">
+                            <div class="collapse" v-if="shippingMethodType.IsModified" v-bind:Id="'ShippingMethod' + shippingMethodType.FulfillmentMethodTypeString" data-parent="#AccordionShippingMethodType">
                                 <ul class="list-group list-group-flush">
                                     <li v-for="shippingMethod in shippingMethodType.ShippingMethods" class="list-group-item">
                                         <div class="row">
@@ -91,7 +91,7 @@
                                             </div>
                                             <div class="col-4">
                                                 <button class="btn btn-outline-secondary float-right" v-on:click='selectShippingMethod(shippingMethod)'>
-                                                    @Html.Localize("CheckoutProcess", "F_SelectShippingType")
+                                                    @Html.Localize("CheckoutProcess", "F_SelectShippingMethod")
                                                 </button>
                                             </div>
                                         </div>
@@ -230,14 +230,14 @@
                     <div class="col-12">
                         <div class="row justify-content-between">
                             <span class="h4">{{Cart.ShippingMethod.DisplayName}}</span>
-                            <span>{{Cart.ShippingMethod.SelectedMethod.Cost}}</span>
+                            <span>{{Cart.ShippingMethod.Cost}}</span>
                         </div>
                         <div class="row">
                             <span>{{ShippingAddress.Line1}} {{ShippingAddress.Line2}} {{ShippingAddress.City}} {{ShippingAddress.RegionCode}} {{ShippingAddress.PostalCode}}</span>
                         </div>
-                        <div class="row" v-if="Cart.ShippingMethod.SelectedMethod">
-                            <span v-if="Cart.ShippingMethod.SelectedMethod.ExpectedDaysBeforeDelivery" id="ship-delay" class="clearfix">
-                                <strong>@Html.Localize("CheckoutProcess", "F_ShipTimeTitle")</strong> {{Cart.ShippingMethod.SelectedMethod.ExpectedDaysBeforeDelivery}} @Html.Localize("CheckoutProcess", "L_DeliveryDaysNumber")
+                        <div class="row" v-if="Cart.ShippingMethod">
+                            <span v-if="Cart.ShippingMethod.ExpectedDaysBeforeDelivery" id="ship-delay" class="clearfix">
+                                <strong>@Html.Localize("CheckoutProcess", "F_ShipTimeTitle")</strong> {{Cart.ShippingMethod.ExpectedDaysBeforeDelivery}} @Html.Localize("CheckoutProcess", "L_DeliveryDaysNumber")
                             </span>
                         </div>
                     </div>

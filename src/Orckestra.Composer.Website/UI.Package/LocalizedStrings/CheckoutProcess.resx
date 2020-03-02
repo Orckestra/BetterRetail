@@ -310,10 +310,10 @@ Enter your credit card information</value>
   <data name="T_PickUpMethodType" xml:space="preserve">
     <value>Pick Up In-Store</value>
   </data>
-  <data name="F_ChangeShippingType" xml:space="preserve">
+  <data name="F_ChangeShippingMethod" xml:space="preserve">
     <value>Change</value>
   </data>
-  <data name="F_SelectShippingType" xml:space="preserve">
+  <data name="F_SelectShippingMethod" xml:space="preserve">
     <value>Select</value>
   </data>
   <data name="F_ShipTime" xml:space="preserve">
