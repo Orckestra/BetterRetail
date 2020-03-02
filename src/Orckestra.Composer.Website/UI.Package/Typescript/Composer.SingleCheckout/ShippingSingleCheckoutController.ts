@@ -16,7 +16,6 @@ module Orckestra.Composer {
 
             let vueShippingMixin = {
                 data: {
-                    SelectedShippingMethodType: null
                 },
                 mounted() {
                     let selectedProviderId = this.Cart.ShippingMethod ? this.Cart.ShippingMethod.ShippingProviderId : undefined;
@@ -24,45 +23,59 @@ module Orckestra.Composer {
                         type.IsModified = type.ShippingMethods.length > 1;
 
                         let selectedInCart = type.ShippingMethods.find(method => method.ShippingProviderId === selectedProviderId);
-                        if(selectedInCart) {
-                            this.SelectedShippingMethodType = type.FulfillmentMethodTypeString;
-                        }
                         type.SelectedMethod = selectedInCart || type.ShippingMethods.find(method => method.IsSelected)
                     });
                 },
                 computed: {
                     FulfilledShipping() {
-                        var fulfilled = this.Cart.ShippingMethod &&
+                        let fulfilled = this.Cart.ShippingMethod &&
                             this.ShippingAddress.Line1 &&
                             this.ShippingAddress.City &&
                             this.ShippingAddress.RegionCode &&
                             this.ShippingAddress.PostalCode &&
-                            !this.IsLoading
+                            !this.IsLoading;
                        
                         return fulfilled;
                     }
                 },
                 methods: {
                     processShipping() {
-                        this.Cart.ShippingMethod = this.ShippingMethodTypes.find(type => type.FulfillmentMethodTypeString === this.SelectedShippingMethodType);
-                        return !!this.Cart.ShippingMethod;
+
+                        return true;
                     },
                     selectShippingMethod(methodEntity: any) {
                         this.ShippingMethodTypes = this.ShippingMethodTypes.map(x =>
                             x.FulfillmentMethodTypeString === methodEntity.FulfillmentMethodTypeString ? { ...x, SelectedMethod: methodEntity } : x
                         );
-                        this.SelectedShippingMethodType = methodEntity.FulfillmentMethodTypeString;
+
+                        this.Cart.ShippingMethod = methodEntity;
                         this.onChangeShippingMethodTypeAction(methodEntity.FulfillmentMethodTypeString);
+                        this.changeMethodsCollapseState(methodEntity.FulfillmentMethodTypeString, 'hide');
                     },
                     changeShippingMethodType(e: any) {
                         const { value } = e.target;
+                        let shippingMethodType = this.ShippingMethodTypes.find(method =>
+                            method.FulfillmentMethodTypeString === value
+                        );
+
+                        if(this.Cart.ShippingMethod) {
+                            this.changeMethodsCollapseState(this.Cart.ShippingMethod.FulfillmentMethodTypeString, 'hide');
+                        }
+                        this.Cart.ShippingMethod = shippingMethodType.SelectedMethod;
                         this.onChangeShippingMethodTypeAction(value);
+
                     },
                     onChangeShippingMethodTypeAction(value: any) {
                         if(value === FulfillmentMethodTypes.Shipping) {
                             $('#ShippingAddress').collapse('show')
                         } else {
                             $('#ShippingAddress').collapse('hide')
+                        }
+                    },
+                    changeMethodsCollapseState(shippingMethodType: string, command: string) {
+                        let shippingMethodCollapse = $(`#ShippingMethod${shippingMethodType}`);
+                        if(shippingMethodCollapse) {
+                            shippingMethodCollapse.collapse(command);
                         }
                     }
                 }
