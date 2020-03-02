@@ -13,6 +13,8 @@ module Orckestra.Composer {
 
         public initialize() {
             super.initialize();
+            let self: ShippingSingleCheckoutController = this;
+            self.viewModelName = 'ShippingMethod';
 
             let vueShippingMixin = {
                 data: {
@@ -36,6 +38,9 @@ module Orckestra.Composer {
                             !this.IsLoading;
                        
                         return fulfilled;
+                    },
+                    SelectedMethodTypeString() {
+                        return this.Cart.ShippingMethod ? this.Cart.ShippingMethod.FulfillmentMethodTypeString : '';
                     }
                 },
                 methods: {
@@ -48,9 +53,9 @@ module Orckestra.Composer {
                             x.FulfillmentMethodTypeString === methodEntity.FulfillmentMethodTypeString ? { ...x, SelectedMethod: methodEntity } : x
                         );
 
-                        this.Cart.ShippingMethod = methodEntity;
-                        this.onChangeShippingMethodTypeAction(methodEntity.FulfillmentMethodTypeString);
                         this.changeMethodsCollapseState(methodEntity.FulfillmentMethodTypeString, 'hide');
+                        this.onChangeShippingMethodTypeAction(methodEntity.FulfillmentMethodTypeString);
+                       this.updateShippingMethodProcess(methodEntity);
                     },
                     changeShippingMethodType(e: any) {
                         const { value } = e.target;
@@ -61,9 +66,8 @@ module Orckestra.Composer {
                         if(this.Cart.ShippingMethod) {
                             this.changeMethodsCollapseState(this.Cart.ShippingMethod.FulfillmentMethodTypeString, 'hide');
                         }
-                        this.Cart.ShippingMethod = shippingMethodType.SelectedMethod;
                         this.onChangeShippingMethodTypeAction(value);
-
+                        this.updateShippingMethodProcess(shippingMethodType.SelectedMethod);
                     },
                     onChangeShippingMethodTypeAction(value: any) {
                         if(value === FulfillmentMethodTypes.Shipping) {
@@ -77,6 +81,20 @@ module Orckestra.Composer {
                         if(shippingMethodCollapse) {
                             shippingMethodCollapse.collapse(command);
                         }
+                    },
+                    updateShippingMethodProcess(methodEntity: any){
+                        let oldValue = { ...this.Cart.ShippingMethod };
+                        this.Cart.ShippingMethod = methodEntity;
+
+                        this.IsLoading = true;
+                        self.checkoutService.updateCart().then(result => {
+                            const { Cart } = result;
+                           this.Cart = Cart;
+                        }).catch(e => {
+                            this.Cart.ShippingMethod = oldValue;
+                        }).finally(() => {
+                            this.IsLoading = false;
+                        });
                     }
                 }
             };
@@ -84,5 +102,13 @@ module Orckestra.Composer {
             this.checkoutService.VueCheckoutMixins.push(vueShippingMixin);
         }
 
+        public getUpdateModelPromise(): Q.Promise<any> {
+            return Q.fcall(() => {
+                let vm = {};
+                let vueShippingMethodData = this.checkoutService.VueCheckout.Cart.ShippingMethod;
+                vm[this.viewModelName] = JSON.stringify(vueShippingMethodData);
+                return vm;
+            });
+        }
     }
 }

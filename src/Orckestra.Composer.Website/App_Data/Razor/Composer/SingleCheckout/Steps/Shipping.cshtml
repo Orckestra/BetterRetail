@@ -43,7 +43,8 @@
                                     <input data-parsley-class-handler-selector=".card-body"
                                            data-parsley-errors-container="#method-errors"
                                            class="input" type="radio"
-                                           v-bind:checked="shippingMethodType.FulfillmentMethodTypeString === Cart.ShippingMethod.FulfillmentMethodTypeString"
+                                           v-bind:checked="shippingMethodType.FulfillmentMethodTypeString === SelectedMethodTypeString"
+                                           v-bind:disabled="IsLoading"
                                            required=""
                                            name="SelectedShippingMethodType"
                                            xmlns:v-bind="v-bind"
@@ -90,7 +91,7 @@
                                                 <p class="mb-0 font-weight-bolder">{{shippingMethod.Cost}}</p>
                                             </div>
                                             <div class="col-4">
-                                                <button class="btn btn-outline-secondary float-right" v-on:click='selectShippingMethod(shippingMethod)'>
+                                                <button class="btn btn-outline-secondary float-right" v-on:click='selectShippingMethod(shippingMethod)'  v-bind:disabled="IsLoading">
                                                     @Html.Localize("CheckoutProcess", "F_SelectShippingMethod")
                                                 </button>
                                             </div>
@@ -235,7 +236,7 @@
                         <div class="row">
                             <span>{{ShippingAddress.Line1}} {{ShippingAddress.Line2}} {{ShippingAddress.City}} {{ShippingAddress.RegionCode}} {{ShippingAddress.PostalCode}}</span>
                         </div>
-                        <div class="row" v-if="Cart.ShippingMethod">
+                        <div class="row">
                             <span v-if="Cart.ShippingMethod.ExpectedDaysBeforeDelivery" id="ship-delay" class="clearfix">
                                 <strong>@Html.Localize("CheckoutProcess", "F_ShipTimeTitle")</strong> {{Cart.ShippingMethod.ExpectedDaysBeforeDelivery}} @Html.Localize("CheckoutProcess", "L_DeliveryDaysNumber")
                             </span>
