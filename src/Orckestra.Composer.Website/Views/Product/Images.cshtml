@@ -15,8 +15,9 @@
 <head>
     <script>
         function imgError(el) {
-             el.onerror = null;
-             el.src = '@Model.FallbackImageUrl';
+            if (el.src !== '@Model.FallbackImageUrl') {
+                el.src = '@Model.FallbackImageUrl';
+            }
         }
         function imgLoaded(el) {
             if (el.complete) {
