@@ -14,5 +14,10 @@
   "websiteUrl": "https://{websiteName}",
 
   "setupDescription": "{{$\"{rootPath}/build/configuration/SetupDescription.xml\"}}",
-  "baseCulture": "en-CA"
+  "baseCulture": "en-CA",
+
+  "occ-hostName": "occ-dev-localdeployment",
+  "serviceBus-keyName": "RootManageSharedAccessKey",
+  "serviceBus-key": "***REMOVED***",
+  "serviceBus-topicPrefix": "***REMOVED***"
 }
