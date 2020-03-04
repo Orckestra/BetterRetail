@@ -61,7 +61,7 @@
     </Reference>
     <Reference Include="Composite, Version=6.6.6912.30810, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\C1CMS.Assemblies.6.6.6912.30810\lib\net471\Composite.dll</HintPath>
-      <Private>True</Private>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Composite.AspNet.MvcFunctions, Version=1.0.15.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\C1CMSPackages.Composite.AspNet.MvcFunctions.1.0.15\lib\net461\Composite.AspNet.MvcFunctions.dll</HintPath>
@@ -275,7 +275,6 @@
     <Content Include="Deployment\InstallCulture.aspx" />
     <Content Include="Deployment\InstallPackages.aspx" />
     <Content Include="Composite\content\forms\Administrative\EditPage.xml" />
-    <Content Include="Composite\content\sitemap\SitemapManagement.aspx" />
     <Content Include="Deployment\SyncCategories.aspx" />
     <Content Include="App_Data\PageTemplates\CheckoutPageLayout.cshtml" />
     <Content Include="App_Data\PageTemplates\MasterLayout.cshtml" />
@@ -335,6 +334,7 @@
     <Content Include="App_Data\Razor\Composer\SingleCheckout\Steps.cshtml" />
     <Content Include="App_Data\Razor\Composer\SingleCheckout\Steps\ReviewCart.cshtml" />
     <Content Include="App_Data\Razor\Composer\SingleCheckout\Steps\Payment.cshtml" />
+    <Content Include="App_Data\Razor\Composer\SingleCheckout\Steps\ShippingAddress.cshtml" />
     <None Include="Properties\PublishProfiles\Website - CD.pubxml" />
     <None Include="Properties\PublishProfiles\Website.pubxml" />
     <Content Include="ViewModelAsExtensionModelTemplate.tt">

@@ -39,7 +39,7 @@ module Orckestra.Composer {
                         if (isValid) {
                             if (this.isCustomerModified()) {
                                 this.IsLoading = true;
-                                self.checkoutService.updateCart().then(result => {
+                                self.checkoutService.updateCart(self.viewModelName).then(result => {
                                     this.customerBeforeEdit = { ...this.Cart.Customer };
                                     this.IsLoading = false;
                                     processCustomer.resolve(true);

@@ -184,7 +184,10 @@
     <value>ex: Montreal</value>
   </data>
   <data name="F_ComplementaryAddress" xml:space="preserve">
-    <value>Address Complementary (optional)</value>
+    <value>Appartment / Suite / Building</value>
+  </data>
+  <data name="F_ComplementaryAddressAdd" xml:space="preserve">
+    <value>Add Appartment / Suite / Building</value>
   </data>
   <data name="F_ComplementaryAddressError" xml:space="preserve">
     <value />

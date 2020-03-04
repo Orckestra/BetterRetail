@@ -88,12 +88,13 @@ module Orckestra.Composer {
                     if (!cartVm.Customer) {
                         cartVm.Customer = {};
                     }
+
                     let results: ISingleCheckoutContext = {
                         IsAuthenticated: authVm,
                         Cart: cartVm,
                         Regions: regionsVm,
                         ShippingMethodTypes: shippingMethodTypesVm.ShippingMethodTypes,
-                        CurrentStep: this.calculateCurrentStep(cartVm),
+                        StartStep: this.calculateStartStep(cartVm),
                         IsLoading: false
                     };
 
@@ -108,13 +109,21 @@ module Orckestra.Composer {
                 });
         }
 
-        public calculateCurrentStep(cart: any): number {
+        public calculateStartStep(cart: any): number {
             if (!(cart.Customer.FirstName &&
                 cart.Customer.LastName &&
                 cart.Customer.Email)) {
-                return 0;
+                return 0; // Inforamtion
             } else {
-                return 1;
+                if(!(cart.ShippingMethod &&
+                    cart.ShippingAddress.Line1 &&
+                    cart.ShippingAddress.City &&
+                    cart.ShippingAddress.RegionCode &&
+                    cart.ShippingAddress.PostalCode)) {
+                    return 1; // Shipping
+                } else {
+                    return 2; // Review Cart
+                }
             }
         }
 
@@ -219,13 +228,13 @@ module Orckestra.Composer {
                 });
         }
 
-        public updateCart(): Q.Promise<IUpdateCartResult> {
+        public updateCart(controllerName: string = null): Q.Promise<IUpdateCartResult> {
 
             var emptyVm = {
                 UpdatedCart: {}
             };
 
-            return this.buildCartUpdateViewModel(emptyVm)
+            return this.buildCartUpdateViewModel(emptyVm, controllerName)
                 .then(vm => {
                     return this.cartService.updateCart(vm);
                 });
@@ -259,7 +268,7 @@ module Orckestra.Composer {
                 });
         }
 
-        private buildCartUpdateViewModel(vm: any): Q.Promise<any> {
+        private buildCartUpdateViewModel(vm: any, controllerName: string = null): Q.Promise<any> {
 
             //var validationPromise: Q.Promise<any>;
             //var viewModelUpdatePromise: Q.Promise<any>;
@@ -269,7 +278,7 @@ module Orckestra.Composer {
             // });
 
             //  viewModelUpdatePromise = validationPromise.then(vm => {
-            return this.getCartUpdateViewModel(vm);
+            return this.getCartUpdateViewModel(vm, controllerName);
             // });
 
             ///return viewModelUpdatePromise;
@@ -291,9 +300,9 @@ module Orckestra.Composer {
             });
         }
 
-        private getCartUpdateViewModel(vm: any): Q.Promise<any> {
+        private getCartUpdateViewModel(vm: any, controllerName: string = null): Q.Promise<any> {
 
-            let updateModelPromise = this.collectUpdateModelPromises();
+            let updateModelPromise = this.collectUpdateModelPromises(controllerName);
 
             return updateModelPromise.then((updates: Array<any>) => {
                 console.log('Aggregating all ViewModel updates.');
@@ -328,16 +337,23 @@ module Orckestra.Composer {
             return Q.all(promises);
         }
 
-        private collectUpdateModelPromises(): Q.Promise<any> {
+        private collectUpdateModelPromises(controllerName: string = null): Q.Promise<any> {
 
             let promises: Q.Promise<any>[] = [];
             let controllerInstance: IBaseSingleCheckoutController;
 
-            for (let controllerName in this.registeredControllers) {
-
+            if (controllerName) {
                 if (this.registeredControllers.hasOwnProperty(controllerName)) {
                     controllerInstance = <IBaseSingleCheckoutController>this.registeredControllers[controllerName];
                     promises.push(controllerInstance.getUpdateModelPromise());
+                }
+            } else {
+                for (let controllerName in this.registeredControllers) {
+
+                    if (this.registeredControllers.hasOwnProperty(controllerName)) {
+                        controllerInstance = <IBaseSingleCheckoutController>this.registeredControllers[controllerName];
+                        promises.push(controllerInstance.getUpdateModelPromise());
+                    }
                 }
             }
 

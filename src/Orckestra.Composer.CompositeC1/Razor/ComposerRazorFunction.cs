@@ -1,5 +1,6 @@
 ﻿using Composite.AspNet.Razor;
 using Composite.Core.Instrumentation;
+using System;
 using System.IO;
 using System.Web;
 using System.Web.Mvc;
@@ -45,6 +46,18 @@ namespace Composer.Razor
             if (!string.IsNullOrEmpty(helpText))
             {
                 return new HtmlString(Partial("HelpBubbleOpen", null).ToHtmlString() + helpText + Partial("HelpBubbleClose", null).ToHtmlString());
+            }
+
+            return new HtmlString("");
+        }
+
+        public IHtmlString ParsleyMessage(string category, string key, string dataParsleyKey)
+        {
+            var message = WebPagesHtmlHelperExtensions.Localize(category, key);
+            if (!string.IsNullOrEmpty(message))
+            {
+                message = String.Format("data-parsley-{0}=\"{1}\"", dataParsleyKey, message);
+                return new HtmlString(HttpUtility.HtmlDecode(message));
             }
 
             return new HtmlString("");

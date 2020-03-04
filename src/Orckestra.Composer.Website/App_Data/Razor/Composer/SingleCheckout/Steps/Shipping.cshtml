@@ -32,38 +32,40 @@
                 </button>
             </div>
 
-            <div class="card-body" v-show="step.active" v-cloak="true">
+            <div class="card-body  bg-light" v-show="step.active" v-cloak="true">
                 <p>@Html.Localize("CheckoutProcess", "F_ShippingStepDescription")</p>
 
                 <div class="form-row" novalidate="novalidate" id="AccordionShippingMethodType">
                     <div class="col-md-6 pb-3" v-for="shippingMethodType in ShippingMethodTypes">
-                        <div class="select-shipping-block">
-                            <div class="input-group" data-parent=".card-body">
-                                <div class="input-addon">
-                                    <input data-parsley-class-handler-selector=".card-body"
-                                           data-parsley-errors-container="#method-errors"
-                                           class="input" type="radio"
-                                           v-bind:checked="shippingMethodType.FulfillmentMethodTypeString === SelectedMethodTypeString"
-                                           v-bind:disabled="IsLoading"
-                                           required=""
-                                           name="SelectedShippingMethodType"
-                                           xmlns:v-bind="v-bind"
-                                           v-bind:value="shippingMethodType.FulfillmentMethodTypeString"
-                                           v-bind:id="shippingMethodType.FulfillmentMethodTypeString + '-radio'"
-                                           v-on:change="changeShippingMethodType" xmlns:v-on="v-on" />
-                                </div>
-                                <label class="radio-content" v-bind:for="shippingMethodType.FulfillmentMethodTypeString + '-radio'">
+                        <div class="border  rounded bg-white  p-3">
+                            <div class="form-check">
+
+                                <input data-parsley-class-handler-selector=".card-body"
+                                       data-parsley-errors-container="#method-errors"
+                                       class="form-check-input" type="radio"
+                                       v-bind:checked="shippingMethodType.FulfillmentMethodTypeString === SelectedMethodTypeString"
+                                       v-bind:disabled="IsLoading"
+                                       required="required"
+                                       name="SelectedShippingMethodType"
+                                       xmlns:v-bind="v-bind"
+                                       v-bind:value="shippingMethodType.FulfillmentMethodTypeString"
+                                       v-bind:id="shippingMethodType.FulfillmentMethodTypeString + '-radio'"
+                                       v-on:change="changeShippingMethodType"
+                                       xmlns:v-on="v-on" />
+
+                                <label class="form-check-label" v-bind:for="shippingMethodType.FulfillmentMethodTypeString + '-radio'">
                                     <div class="d-flex justify-content-between">
-                                        <div>
-                                            <p class="h4 ">{{shippingMethodType.DisplayName}}</p>
-                                        </div>
+                                        <p class="h4 ">{{shippingMethodType.DisplayName}}</p>
+
                                         <div class="text-right" v-if="shippingMethodType.SelectedMethod">
-                                            <p id="ship-price" class="h4">{{shippingMethodType.SelectedMethod.Cost || @Html.Localize("ShoppingCart", "L_Free")}}</p>
+                                            <p class="h4">{{shippingMethodType.SelectedMethod.Cost || @Html.Localize("ShoppingCart", "L_Free")}}</p>
                                         </div>
                                     </div>
                                     <div v-if="shippingMethodType.SelectedMethod">
                                         <p class="mb-0" v-if="shippingMethodType.IsModified">
-                                            <strong id="ship-class" v-if="shippingMethodType.SelectedMethod">{{shippingMethodType.SelectedMethod.DisplayName}}</strong> |
+                                            <strong v-if="shippingMethodType.SelectedMethod">
+                                                {{shippingMethodType.SelectedMethod.DisplayName}}
+                                            </strong> |
                                             <a v-bind:href="'#ShippingMethod' + shippingMethodType.FulfillmentMethodTypeString"
                                                data-toggle="collapse"
                                                role="button"
@@ -73,13 +75,18 @@
                                                 @Html.Localize("CheckoutProcess", "F_ChangeShippingMethod")
                                             </a>
                                         </p>
-                                        <span v-if="shippingMethodType.SelectedMethod.ExpectedDaysBeforeDelivery" id="ship-delay" class="clearfix">
-                                            <strong>@Html.Localize("CheckoutProcess", "F_ShipTimeTitle")</strong> {{shippingMethodType.SelectedMethod.ExpectedDaysBeforeDelivery}} @Html.Localize("CheckoutProcess", "L_DeliveryDaysNumber")
+                                        <span v-if="shippingMethodType.SelectedMethod.ExpectedDaysBeforeDelivery" class="clearfix">
+                                            <strong>@Html.Localize("CheckoutProcess", "F_ShipTimeTitle")</strong>
+                                            {{shippingMethodType.SelectedMethod.ExpectedDaysBeforeDelivery}}
+                                            @Html.Localize("CheckoutProcess", "L_DeliveryDaysNumber")
                                         </span>
                                     </div>
                                 </label>
                             </div>
-                            <div class="collapse" v-if="shippingMethodType.IsModified" v-bind:Id="'ShippingMethod' + shippingMethodType.FulfillmentMethodTypeString" data-parent="#AccordionShippingMethodType">
+                            <div class="collapse"
+                                 v-if="shippingMethodType.IsModified"
+                                 v-bind:Id="'ShippingMethod' + shippingMethodType.FulfillmentMethodTypeString"
+                                 data-parent="#AccordionShippingMethodType">
                                 <ul class="list-group list-group-flush">
                                     <li v-for="shippingMethod in shippingMethodType.ShippingMethods" class="list-group-item">
                                         <div class="row">
@@ -91,7 +98,7 @@
                                                 <p class="mb-0 font-weight-bolder">{{shippingMethod.Cost}}</p>
                                             </div>
                                             <div class="col-4">
-                                                <button class="btn btn-outline-secondary float-right" v-on:click='selectShippingMethod(shippingMethod)'  v-bind:disabled="IsLoading">
+                                                <button class="btn btn-outline-secondary float-right" v-on:click='selectShippingMethod(shippingMethod)' v-bind:disabled="IsLoading">
                                                     @Html.Localize("CheckoutProcess", "F_SelectShippingMethod")
                                                 </button>
                                             </div>
@@ -102,128 +109,11 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="mt-4 collapse" id="ShippingAddress">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="Line1">@Html.Localize("Forms", "F_Address") *</label>
-                                <input name="Line1" id="Line1" data-qa="editaddress-address"
-                                       @HelpBubble("Forms", "F_AddressIndication")
-                                       type="text"
-                                       class="form-control"
-                                       placeholder="@Html.Localize("Forms", "F_AddressWaterMark")"
-                                       v-model="Cart.ShippingAddress.Line1"
-                                       required="true"
-                                       @ParsleyRequiredMessage("Forms", "F_AddressRequiredError")
-                                       data-parsley-length="[2, 50]"
-                                       @ParsleyLengthMessage("Forms", "F_AddressLengthError")
-                                       data-parsley-pattern="/^[a-zA-Z0-9\u00E0-\u00FC\.\-\s\'\,\u0023\u00b0]+$/i"
-                                       @ParsleyPatternMessage("Forms", "F_AddressPatternError") />
-                            </div>
-                        </div>
+                <transition name="fade">
+                    <div v-if="IsShippingMethodType" id="shippingAddress" class="mt-2  pt-2  border-top">
+                        @Function("Composer.SingleCheckout.Steps.ShippingAddress")
                     </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="Line2">@Html.Localize("Forms", "F_ComplementaryAddress")</label>
-                                <input name="Line2" id="Line2" data-qa="editaddress-complementary-address"
-                                       @HelpBubble("Forms", "F_ComplementaryAddressIndication")
-                                       type="text"
-                                       class="form-control"
-                                       placeholder="@Html.Localize("Forms", "F_ComplementaryAddressWaterMark")"
-                                       v-model="Cart.ShippingAddress.Line2"
-                                       data-parsley-length="[0, 36]"
-                                       @ParsleyLengthMessage("Forms", "F_ComplementaryAddressLengthError")
-                                       data-parsley-pattern="/^[a-zA-Z0-9\u00E0-\u00FC\.\-\s\'\,\u0023\u00b0]+$/i"
-                                       @ParsleyPatternMessage("Forms", "F_ComplementaryAddressPatternError") />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="City">@Html.Localize("Forms", "F_City") *</label>
-                                <input name="City" id="City" data-qa="editaddress-city"
-                                       @HelpBubble("Forms", "F_CityIndication")
-                                       type="text"
-                                       class="form-control"
-                                       placeholder="@Html.Localize("Forms", "F_CityWaterMark")"
-                                       v-model="Cart.ShippingAddress.City"
-                                       required="true"
-                                       @ParsleyRequiredMessage("Forms", "F_CityRequiredError")
-                                       data-parsley-length="[3, 36]"
-                                       @ParsleyLengthMessage("Forms", "F_CityLengthError")
-                                       data-parsley-pattern="/^[a-zA-Z\u00E0-\u00FC\.\-\s\']+$/i"
-                                       @ParsleyPatternMessage("Forms", "F_CityPatternError") />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <input type="hidden" name="CountryCode" v-model="Cart.ShippingAddress.CountryCode" />
-                                        <label for="RegionCode">@Html.Localize("Forms", "F_Province") *</label>
-                                        <span class="loading-indicator-regions  fa  fa-spin  fa-fw  fa-circle-o-notch  d-none"></span>
-
-                                        <select data-templateid="AddressRegionPicker" name="RegionCode" id="RegionCode"
-                                                data-qa="checkout-shipping-province-selector"
-                                                @HelpBubble("Forms", "F_ProvinceIndication")
-                                                class="form-control" v-model="Cart.ShippingAddress.RegionCode" required="true">
-                                            <option v-for="(region, index) in Regions"
-                                                    v-bind:data-qa="'checkout-shipping-province-' + index"
-                                                    v-bind:value="region.IsoCode">
-                                                {{region.Name}}
-                                            </option>
-
-                                            <option v-if="!Regions" data-qa="checkout-shipping-province-0"
-                                                    v-text="Cart.ShippingAddress.RegionCode" selected="selected"></option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="PostalCode">@Html.Localize("Forms", "F_PostalCode") *</label>
-                                        <input name="PostalCode" id="PostalCode" data-qa="editaddress-postalcode"
-                                               data-oc-change="adjustPostalCode" data-parsley-group="shipping-based-on"
-                                               @HelpBubble("Forms", "F_PostalCodeIndication")
-                                               type="text"
-                                               class="form-control"
-                                               placeholder="@Html.Localize("Forms", "F_PostalCodeWaterMark")"
-                                               v-model="Cart.ShippingAddress.PostalCode"
-                                               required="true"
-                                               @ParsleyRequiredMessage("Forms", "F_PostalCodeRequiredError")
-                                               data-parsley-length="[6, 7]"
-                                               @ParsleyLengthMessage("Forms", "F_PostalCodeLengthError")
-                                               v-bind:data-parsley-pattern="Cart.ShippingAddress.PostalCodeRegex"
-                                               @ParsleyPatternMessage("Forms", "F_PostalCodePatternError") />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="PhoneNumber">@Html.Localize("Forms", "F_PhoneNumber") *</label>
-                                <input name="PhoneNumber" id="PhoneNumber" data-qa="editaddress-phone"
-                                       @HelpBubble("Forms", "F_PhoneNumberIndication")
-                                       type="tel"
-                                       class="form-control"
-                                       placeholder="@Html.Localize("Forms", "F_PhoneNumberWaterMark")"
-                                       v-model="Cart.ShippingAddress.PhoneNumber"
-                                       required="true"
-                                       @ParsleyRequiredMessage("Forms", "F_PhoneNumberRequiredError")
-                                       data-parsley-length="[7, 36]"
-                                       @ParsleyLengthMessage("Forms", "F_PhoneNumberLengthError")
-                                       v-bind:data-parsley-pattern="Cart.ShippingAddress.PhoneRegex"
-                                       @ParsleyPatternMessage("Forms", "F_PhoneNumberPatternError") />
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                </transition>
             </div>
 
             <div class="card-body" v-show="step.preview" v-cloak="true">
@@ -234,7 +124,7 @@
                             <span>{{Cart.ShippingMethod.Cost}}</span>
                         </div>
                         <div class="row">
-                            <span>{{ShippingAddress.Line1}} {{ShippingAddress.Line2}} {{ShippingAddress.City}} {{ShippingAddress.RegionCode}} {{ShippingAddress.PostalCode}}</span>
+                            {{ShippingAddressPreview}}
                         </div>
                         <div class="row">
                             <span v-if="Cart.ShippingMethod.ExpectedDaysBeforeDelivery" id="ship-delay" class="clearfix">
@@ -248,33 +138,3 @@
     </div>
 </body>
 </html>
-
-@helper ParsleyRequiredMessage(string category, string key)
-{
-    var helpText = Html.Localize(category, key);
-    if (!string.IsNullOrEmpty(helpText))
-    {
-        helpText = String.Format("data-parsley-required-message=\"{0}\"", helpText);
-        @Html.Raw(HttpUtility.HtmlDecode(helpText));
-    }
-}
-
-@helper ParsleyLengthMessage(string category, string key)
-{
-    var helpText = Html.Localize(category, key);
-    if (!string.IsNullOrEmpty(helpText))
-    {
-        helpText = String.Format("data-parsley-length-message=\"{0}\"", helpText);
-        @Html.Raw(HttpUtility.HtmlDecode(helpText));
-    }
-}
-
-@helper ParsleyPatternMessage(string category, string key)
-{
-    var helpText = Html.Localize(category, key);
-    if (!string.IsNullOrEmpty(helpText))
-    {
-        helpText = String.Format("data-parsley-pattern-message=\"{0}\"", helpText);
-        @Html.Raw(HttpUtility.HtmlDecode(helpText));
-    }
-}

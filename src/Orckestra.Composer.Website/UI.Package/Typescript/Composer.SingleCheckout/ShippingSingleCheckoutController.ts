@@ -41,11 +41,16 @@ module Orckestra.Composer {
                     },
                     SelectedMethodTypeString() {
                         return this.Cart.ShippingMethod ? this.Cart.ShippingMethod.FulfillmentMethodTypeString : '';
+                    },
+                    IsShippingMethodType() {
+                        return this.Cart.ShippingMethod.FulfillmentMethodTypeString === FulfillmentMethodTypes.Shipping;
+                    },
+                    IsPickUpMethodType() {
+                        return this.Cart.ShippingMethod.FulfillmentMethodTypeString === FulfillmentMethodTypes.PickUp;
                     }
                 },
                 methods: {
                     processShipping() {
-
                         return true;
                     },
                     selectShippingMethod(methodEntity: any) {
@@ -54,8 +59,7 @@ module Orckestra.Composer {
                         );
 
                         this.changeMethodsCollapseState(methodEntity.FulfillmentMethodTypeString, 'hide');
-                        this.onChangeShippingMethodTypeAction(methodEntity.FulfillmentMethodTypeString);
-                       this.updateShippingMethodProcess(methodEntity);
+                        this.updateShippingMethodProcess(methodEntity);
                     },
                     changeShippingMethodType(e: any) {
                         const { value } = e.target;
@@ -66,16 +70,16 @@ module Orckestra.Composer {
                         if(this.Cart.ShippingMethod) {
                             this.changeMethodsCollapseState(this.Cart.ShippingMethod.FulfillmentMethodTypeString, 'hide');
                         }
-                        this.onChangeShippingMethodTypeAction(value);
-                        this.updateShippingMethodProcess(shippingMethodType.SelectedMethod);
-                    },
-                    onChangeShippingMethodTypeAction(value: any) {
-                        if(value === FulfillmentMethodTypes.Shipping) {
-                            $('#ShippingAddress').collapse('show')
-                        } else {
-                            $('#ShippingAddress').collapse('hide')
+
+                        if (!this.debounceUpdateShippingMethod) {
+                            this.debounceUpdateShippingMethod = _.debounce(methodType => {
+                                this.updateShippingMethodProcess(methodType.SelectedMethod);
+                            }, 800);
                         }
+
+                        this.debounceUpdateShippingMethod(shippingMethodType);
                     },
+
                     changeMethodsCollapseState(shippingMethodType: string, command: string) {
                         let shippingMethodCollapse = $(`#ShippingMethod${shippingMethodType}`);
                         if(shippingMethodCollapse) {
@@ -87,9 +91,9 @@ module Orckestra.Composer {
                         this.Cart.ShippingMethod = methodEntity;
 
                         this.IsLoading = true;
-                        self.checkoutService.updateCart().then(result => {
+                        self.checkoutService.updateCart(self.viewModelName).then(result => {
                             const { Cart } = result;
-                           this.Cart = Cart;
+                            this.Cart = Cart;
                         }).catch(e => {
                             this.Cart.ShippingMethod = oldValue;
                         }).finally(() => {

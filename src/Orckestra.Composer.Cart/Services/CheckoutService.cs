@@ -606,8 +606,14 @@ namespace Orckestra.Composer.Cart.Services
                 Line2 = addressViewModel.Line2,
                 PhoneNumber = addressViewModel.PhoneNumber,
                 PostalCode = addressViewModel.PostalCode,
-                RegionCode = addressViewModel.RegionCode
+                RegionCode = addressViewModel.RegionCode,
+                PropertyBag = new PropertyBag()
             };
+
+            if (addressViewModel.Bag != null)
+            {
+                address.PropertyBag = new PropertyBag(addressViewModel.Bag);
+            }
 
             return address;
         }

@@ -6,7 +6,7 @@ module Orckestra.Composer {
 
         viewModelName: string;
 
-        unregisterController();
+       // unregisterController();
 
        // renderData(checkoutContext: ICheckoutContext): Q.Promise<void>;
 

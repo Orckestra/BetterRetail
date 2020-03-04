@@ -11,11 +11,11 @@
 <head>
 </head>
 <body>
-    <single-page-checkout xmlns:v-bind="v-bind" xmlns:v-on="v-on" xmlns:v-slot="v-slot" v-bind:start-index="CurrentStep">
+    <single-page-checkout xmlns:v-bind="v-bind" xmlns:v-on="v-on" xmlns:v-slot="v-slot" v-bind:start-index="StartStep">
         <checkout-step v-slot="step" v-bind:before-change="processCustomer">
             @Function("Composer.SingleCheckout.Steps.UserInformation")
         </checkout-step>
-        <checkout-step v-slot="step" v-bind:before-change="processShipping">
+        <checkout-step v-slot="step" v-bind:before-change="processShippingAddress">
             @Function("Composer.SingleCheckout.Steps.Shipping")
         </checkout-step>
         <checkout-step v-slot="step">

@@ -6,7 +6,7 @@ module Orckestra.Composer {
         Cart: any;
         Regions: any;
         ShippingMethodTypes: any;
-        CurrentStep: number;
+        StartStep: number;
         IsLoading: boolean;
     }
 }

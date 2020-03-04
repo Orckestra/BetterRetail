@@ -1,0 +1,131 @@
+@inherits Composer.Razor.ComposerRazorFunction
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Shipping Address"; }
+    }
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on" xmlns:v-slot="v-slot">
+<head>
+</head>
+<body>
+    <div data-oc-controller="SingleCheckout.ShippingAddress">
+        <form id="addressForm">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="Line1">@Html.Localize("Forms", "F_Address") *</label>
+                        <input name="Line1" id="Line1"
+                               @HelpBubble("Forms", "F_AddressIndication")
+                               type="text"
+                               class="form-control"
+                               placeholder="@Html.Localize("Forms", "F_AddressWaterMark")"
+                               v-model="Cart.ShippingAddress.Line1"
+                               required="required"
+                               @ParsleyMessage("Forms", "F_AddressRequiredError", "required-message")
+                               data-parsley-length="[2, 50]"
+                               @ParsleyMessage("Forms", "F_AddressLengthError", "length-message")
+                               data-parsley-pattern="/^[a-zA-Z0-9\u00E0-\u00FC\.\-\s\'\,\u0023\u00b0]+$/i"
+                               @ParsleyMessage("Forms", "F_AddressPatternError", "pattern-message") />
+                    </div>
+                    <div v-if="ComplementaryAddressAddState" class="form-group">
+                        <a href="#complementaryAddress"
+                           data-toggle="collapse"
+                           v-on:click="ComplementaryAddressAddState = !ComplementaryAddressAddState"
+                           role="button"
+                           aria-expanded="false"
+                           aria-controls="complementaryAddress">
+                            <span class="fa-lg fa fa-plus-circle"></span>
+                            @Html.Localize("Forms", "F_ComplementaryAddressAdd")
+                        </a>
+                    </div>
+                    <div id="complementaryAddress" class="form-group" v-bind:class="{'collapse': ComplementaryAddressAddState}">
+                        <label for="Line2">@Html.Localize("Forms", "F_ComplementaryAddress")</label>
+                        <input name="Line2" id="Line2"
+                               @HelpBubble("Forms", "F_ComplementaryAddressIndication")
+                               type="text"
+                               class="form-control"
+                               placeholder="@Html.Localize("Forms", "F_ComplementaryAddressWaterMark")"
+                               v-model="Cart.ShippingAddress.Line2"
+                               data-parsley-length="[0, 36]"
+                               @ParsleyMessage("Forms", "F_ComplementaryAddressLengthError", "length-message")
+                               data-parsley-pattern="/^[a-zA-Z0-9\u00E0-\u00FC\.\-\s\'\,\u0023\u00b0]+$/i"
+                               @ParsleyMessage("Forms", "F_ComplementaryAddressPatternError", "pattern-message") />
+                    </div>
+                    <div class="form-group">
+                        <label for="City">@Html.Localize("Forms", "F_City") *</label>
+                        <input name="City" id="City" data-qa="editaddress-city"
+                               @HelpBubble("Forms", "F_CityIndication")
+                               type="text"
+                               class="form-control"
+                               placeholder="@Html.Localize("Forms", "F_CityWaterMark")"
+                               v-model="Cart.ShippingAddress.City"
+                               required="true"
+                               @ParsleyMessage("Forms", "F_CityRequiredError", "required-message")
+                               data-parsley-length="[3, 36]"
+                               @ParsleyMessage("Forms", "F_CityLengthError", "length-message")
+                               data-parsley-pattern="/^[a-zA-Z\u00E0-\u00FC\.\-\s\']+$/i"
+                               @ParsleyMessage("Forms", "F_CityPatternError", "pattern-message") />
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" name="CountryCode" v-model="Cart.ShippingAddress.CountryCode" />
+                        <label for="RegionCode">@Html.Localize("Forms", "F_Province") *</label>
+                        <span class="loading-indicator-regions  fa  fa-spin  fa-fw  fa-circle-o-notch  d-none"></span>
+
+                        <select data-templateid="AddressRegionPicker" name="RegionCode" id="RegionCode"
+                                data-qa="checkout-shipping-province-selector"
+                                @HelpBubble("Forms", "F_ProvinceIndication")
+                                class="form-control"
+                                v-model="Cart.ShippingAddress.RegionCode"
+                                required="required">
+                            <option v-for="(region, index) in Regions"
+                                    v-bind:data-qa="'checkout-shipping-province-' + index"
+                                    v-bind:value="region.IsoCode">
+                                {{region.Name}}
+                            </option>
+
+                            <option v-if="!Regions" data-qa="checkout-shipping-province-0"
+                                    v-text="Cart.ShippingAddress.RegionCode"
+                                    selected="selected">
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="PostalCode">@Html.Localize("Forms", "F_PostalCode") *</label>
+                        <input name="PostalCode" id="PostalCode" data-qa="editaddress-postalcode"
+                               data-oc-change="adjustPostalCode" data-parsley-group="shipping-based-on"
+                               @HelpBubble("Forms", "F_PostalCodeIndication")
+                               type="text"
+                               class="form-control"
+                               placeholder="@Html.Localize("Forms", "F_PostalCodeWaterMark")"
+                               v-model="Cart.ShippingAddress.PostalCode"
+                               required="true"
+                               @ParsleyMessage("Forms", "F_PostalCodeRequiredError", "required-message")
+                               data-parsley-length="[6, 7]"
+                               @ParsleyMessage("Forms", "F_PostalCodeLengthError", "length-message")
+                               v-bind:data-parsley-pattern="Cart.ShippingAddress.PostalCodeRegex"
+                               @ParsleyMessage("Forms", "F_PostalCodePatternError", "pattern-message") />
+                    </div>
+                    <div class="form-group">
+                        <label for="PhoneNumber">@Html.Localize("Forms", "F_PhoneNumber") *</label>
+                        <input name="PhoneNumber" id="PhoneNumber" data-qa="editaddress-phone"
+                               @HelpBubble("Forms", "F_PhoneNumberIndication")
+                               type="tel"
+                               class="form-control"
+                               placeholder="@Html.Localize("Forms", "F_PhoneNumberWaterMark")"
+                               v-model="Cart.ShippingAddress.PhoneNumber"
+                               required="required"
+                               @ParsleyMessage("Forms", "F_PhoneNumberRequiredError", "required-message")
+                               data-parsley-length="[7, 36]"
+                               @ParsleyMessage("Forms", "F_PhoneNumberLengthError", "length-message")
+                               v-bind:data-parsley-pattern="Cart.ShippingAddress.PhoneRegex"
+                               @ParsleyMessage("Forms", "F_PhoneNumberPatternError", "pattern-message") />
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
