@@ -11,12 +11,11 @@
 
 module.exports = {
     name: 'single-page-checkout',
-    components: {
-    },
+    components: {},
     props: {
       id: {
         type: String,
-        default: 'fw_' + (new Date()).valueOf()
+        default: 'fw_' + new Date().valueOf()
       },
       title: {
         type: String,
@@ -43,6 +42,7 @@ module.exports = {
         default: false
       },
       validateOnBack: Boolean,
+
       /***
        * Applies to text, border and circle
        */
@@ -69,11 +69,12 @@ module.exports = {
       stepSize: {
         type: String,
         default: 'md',
-        validator: (value) => {
-          let acceptedValues = ['xs', 'sm', 'md', 'lg']
-          return acceptedValues.indexOf(value) !== -1
+        validator: function validator(value) {
+          var acceptedValues = ['xs', 'sm', 'md', 'lg'];
+          return acceptedValues.indexOf(value) !== -1;
         }
       },
+
       /**
        * Name of the transition when transition between steps
        * */
@@ -81,6 +82,7 @@ module.exports = {
         type: String,
         default: ''
       },
+
       /***
        *
        * Index of the initial tab to display
@@ -88,283 +90,323 @@ module.exports = {
       startIndex: {
         type: Number,
         default: 0,
-        validator: (value) => {
-          return value >= 0
+        validator: function validator(value) {
+          return value >= 0;
         }
       }
     },
-    provide () {
+    provide: function provide() {
       return {
         addStep: this.addStep,
         removeStep: this.removeStep,
         nextStep: this.nextStep
-      }
+      };
     },
-    data () {
+    data: function data() {
       return {
         activeStepIndex: 0,
         currentPercentage: 0,
         maxStep: 0,
         loading: false,
         steps: []
-      }
+      };
     },
     computed: {
-      slotProps () {
+      slotProps: function slotProps() {
         return {
           nextStep: this.nextStep,
           prevStep: this.prevStep,
           activeStepIndex: this.activeStepIndex,
           isLastStep: this.isLastStep,
           fillButtonStyle: this.fillButtonStyle
-        }
+        };
       },
-      stepCount () {
-        return this.steps.length
+      stepCount: function stepCount() {
+        return this.steps.length;
       },
-      isLastStep () {
-        return this.activeStepIndex === this.stepCount - 1
+      isLastStep: function isLastStep() {
+        return this.activeStepIndex === this.stepCount - 1;
       },
-      isVertical () {
-        return this.layout === 'vertical'
+      isVertical: function isVertical() {
+        return this.layout === 'vertical';
       },
-      displayPrevButton () {
-        return this.activeStepIndex !== 0
+      displayPrevButton: function displayPrevButton() {
+        return this.activeStepIndex !== 0;
       },
-      stepPercentage () {
-        return 1 / (this.stepCount * 2) * 100
+      stepPercentage: function stepPercentage() {
+        return 1 / (this.stepCount * 2) * 100;
       },
-
-      fillButtonStyle () {
+      fillButtonStyle: function fillButtonStyle() {
         return {
           backgroundColor: this.color,
           borderColor: this.color,
           color: 'white'
-        }
-      },
+        };
+      }
     },
     methods: {
-      emitTabChange (prevIndex, nextIndex) {
-        this.$emit('on-change', prevIndex, nextIndex)
-        this.$emit('update:startIndex', nextIndex)
+      emitTabChange: function emitTabChange(prevIndex, nextIndex) {
+        this.$emit('on-change', prevIndex, nextIndex);
+        this.$emit('update:startIndex', nextIndex);
       },
-      addStep (item) {
-        const index = this.$slots.default.filter(d => item.$vnode.tag == d.tag).indexOf(item.$vnode);
-        this.steps.splice(index, 0, item)
-        // if a step is added before the current one, go to it
+      addStep: function addStep(item) {
+        var index = this.$slots.default.filter(function (d) {
+          return item.$vnode.tag == d.tag;
+        }).indexOf(item.$vnode);
+        this.steps.splice(index, 0, item); // if a step is added before the current one, go to it
+
         if (index < this.activeStepIndex + 1) {
-          this.maxStep = index
-          this.changeStep(this.activeStepIndex + 1, index)
+          this.maxStep = index;
+          this.changeStep(this.activeStepIndex + 1, index);
         }
+
         item.index = this.steps.indexOf(item);
         this.maxStep = this.steps.length - 1; //TODO: fix it
       },
-      removeStep (item) {
-        const tabs = this.steps
-        const index = tabs.indexOf(item)
+      removeStep: function removeStep(item) {
+        var tabs = this.steps;
+        var index = tabs.indexOf(item);
+
         if (index > -1) {
           // Go one step back if the current step is removed
           if (index === this.activeStepIndex) {
-            this.maxStep = this.activeStepIndex - 1
-            this.changeStep(this.activeStepIndex, this.activeStepIndex - 1)
+            this.maxStep = this.activeStepIndex - 1;
+            this.changeStep(this.activeStepIndex, this.activeStepIndex - 1);
           }
-          if (index < this.activeStepIndex) {
-            this.maxStep = this.activeStepIndex - 1
-            this.activeStepIndex = this.activeStepIndex - 1
-            this.emitTabChange(this.activeStepIndex + 1, this.activeStepIndex)
-          }
-          tabs.splice(index, 1)
-        }
-      },
-      reset () {
-        this.maxStep = 0;
-        this.steps.forEach((tab) => {
-          tab.checked = false
-        })
-        this.navigateToStep(0)
-      },
-      activateAll () {
-        this.maxStep = this.steps.length - 1
-        this.steps.forEach((tab) => {
-          tab.checked = true
-        })
-      },
-      navigateToStep (index) {
-        let validate = index > this.activeStepIndex;
-        if (index <= this.maxStep) {
-          let cb = () => {
-            if (validate && index - this.activeStepIndex > 1) {
-              // validate all steps recursively until destination index
-              this.changeStep(this.activeStepIndex, this.activeStepIndex + 1)
-              this.beforeStepChange(this.activeStepIndex, cb)
-            } else {
-              this.changeStep(this.activeStepIndex, index)
-              this.afterStepChange(this.activeStepIndex)
-            }
-          }
-          if (validate) {
-            this.beforeStepChange(this.activeStepIndex, cb)
-          } else {
-            this.setValidationError(null)
-            cb()
-          }
-        }
-        return index <= this.maxStep
-      },
-      nextStep () {
-        let cb = () => {
-          if (this.activeStepIndex < this.stepCount - 1) {
-            this.changeStep(this.activeStepIndex, this.activeStepIndex + 1)
-            this.afterStepChange(this.activeStepIndex)
-          } else {
-            this.$emit('on-complete')
-          }
-        }
-        this.beforeStepChange(this.activeStepIndex, cb)
-      },
-      prevStep () {
-        let cb = () => {
-          if (this.activeStepIndex > 0) {
-            this.setValidationError(null)
-            this.changeStep(this.activeStepIndex, this.activeStepIndex - 1)
-          }
-        }
-        if (this.validateOnBack) {
-          this.beforeStepChange(this.activeStepIndex, cb)
-        } else {
-          cb()
-        }
-      },
-      focusnextStep () {
-        let tabIndex = getFocusedStepIndex(this.steps)
-        if (tabIndex !== -1 && tabIndex < this.steps.length - 1) {
-          let tabToFocus = this.steps[tabIndex + 1]
-          if (tabToFocus.checked) {
-            findElementAndFocus(tabToFocus.stepId)
-          }
-        }
-      },
-      focusprevStep () {
-        let tabIndex = getFocusedStepIndex(this.steps)
-        if (tabIndex !== -1 && tabIndex > 0) {
-          let toFocusId = this.steps[tabIndex - 1].stepId
-          findElementAndFocus(toFocusId)
-        }
-      },
-      setLoading (value) {
-        this.loading = value
-        this.$emit('on-loading', value)
-      },
-      setValidationError (error) {
-        this.steps[this.activeStepIndex].validationError = error
-        this.$emit('on-error', error)
-      },
-      validateBeforeChange (promiseFn, callback) {
-        this.setValidationError(null)
-        // we have a promise
-        if (this.isPromise(promiseFn)) {
-          this.setLoading(true)
-          promiseFn.then((res) => {
-            this.setLoading(false)
-            let validationResult = res === true
-            this.executeBeforeChange(validationResult, callback)
-          }).catch((error) => {
-            this.setLoading(false)
-            this.setValidationError(error)
-          })
-          // we have a simple function
-        } else {
-          let validationResult = promiseFn === true
-          this.executeBeforeChange(validationResult, callback)
-        }
-      },
-      executeBeforeChange (validationResult, callback) {
-        this.$emit('on-validate', validationResult, this.activeStepIndex)
-        if (validationResult) {
-          callback()
-        } else {
-          this.steps[this.activeStepIndex].validationError = 'error'
-        }
-      },
-      beforeStepChange (index, callback) {
-        if (this.loading) {
-          return
-        }
-        let oldStep = this.steps[index]
-        if (oldStep && oldStep.beforeChange !== undefined) {
-          let stepChangeRes = oldStep.beforeChange()
-          this.validateBeforeChange(stepChangeRes, callback)
-        } else {
-          callback()
-        }
-      },
-      afterStepChange (index) {
-        if (this.loading) {
-          return
-        }
-        let newStep = this.steps[index]
-        if (newStep && newStep.afterChange !== undefined) {
-          newStep.afterChange()
-        }
-      },
-      changeStep (oldIndex, newIndex, emitChangeEvent = true) {
-        let oldStep = this.steps[oldIndex]
-        let newStep = this.steps[newIndex]
-        if (oldStep) {
-          oldStep.active = false
-        }
-        if (newStep) {
-          newStep.active = true
-        }
-        if (emitChangeEvent && this.activeStepIndex !== newIndex) {
-          this.emitTabChange(oldIndex, newIndex)
-        }
-        this.activeStepIndex = newIndex
-        this.activateStepAndCheckStep(this.activeStepIndex)
-        return true
-      },
-      deactivateSteps () {
-        this.steps.forEach(step => {
-          step.active = false
-        })
-      },
-      activateStep (index) {
-        this.deactivateSteps()
-        let step = this.steps[index]
-        if (step) {
-          step.active = true
-          step.checked = true
-        }
-      },
-      activateStepAndCheckStep (index) {
-        this.activateStep(index)
-        if (index > this.maxStep) {
-          this.maxStep = index
-        }
-        this.activeStepIndex = index
-      },
-      initializeSteps () {
-        if (this.steps.length > 0 && this.startIndex === 0) {
-          this.activateStep(this.activeStepIndex)
-        }
-        if (this.startIndex < this.steps.length) {
-          this.activateStepAndCheckStep(this.startIndex)
-        } else {
-          window.console.warn(`Prop startIndex set to ${this.startIndex} is greater than the number of steps - ${this.steps.length}. Make sure that the starting index is less than the number of tabs registered`)
-        }
-      },
 
-      isPromise (func) {
-        return func.then && typeof func.then === 'function'
+          if (index < this.activeStepIndex) {
+            this.maxStep = this.activeStepIndex - 1;
+            this.activeStepIndex = this.activeStepIndex - 1;
+            this.emitTabChange(this.activeStepIndex + 1, this.activeStepIndex);
+          }
+
+          tabs.splice(index, 1);
+        }
+      },
+      reset: function reset() {
+        this.maxStep = 0;
+        this.steps.forEach(function (tab) {
+          tab.checked = false;
+        });
+        this.navigateToStep(0);
+      },
+      activateAll: function activateAll() {
+        this.maxStep = this.steps.length - 1;
+        this.steps.forEach(function (tab) {
+          tab.checked = true;
+        });
+      },
+      navigateToStep: function navigateToStep(index) {
+        var _this = this;
+
+        var validate = index > this.activeStepIndex;
+
+        if (index <= this.maxStep) {
+          var cb = function cb() {
+            if (validate && index - _this.activeStepIndex > 1) {
+              // validate all steps recursively until destination index
+              _this.changeStep(_this.activeStepIndex, _this.activeStepIndex + 1);
+
+              _this.beforeStepChange(_this.activeStepIndex, cb);
+            } else {
+              _this.changeStep(_this.activeStepIndex, index);
+
+              _this.afterStepChange(_this.activeStepIndex);
+            }
+          };
+
+          if (validate) {
+            this.beforeStepChange(this.activeStepIndex, cb);
+          } else {
+            this.setValidationError(null);
+            cb();
+          }
+        }
+
+        return index <= this.maxStep;
+      },
+      nextStep: function nextStep() {
+        var _this2 = this;
+
+        var cb = function cb() {
+          if (_this2.activeStepIndex < _this2.stepCount - 1) {
+            _this2.changeStep(_this2.activeStepIndex, _this2.activeStepIndex + 1);
+
+            _this2.afterStepChange(_this2.activeStepIndex);
+          } else {
+            _this2.$emit('on-complete');
+          }
+        };
+
+        this.beforeStepChange(this.activeStepIndex, cb);
+      },
+      prevStep: function prevStep() {
+        var _this3 = this;
+
+        var cb = function cb() {
+          if (_this3.activeStepIndex > 0) {
+            _this3.setValidationError(null);
+
+            _this3.changeStep(_this3.activeStepIndex, _this3.activeStepIndex - 1);
+          }
+        };
+
+        if (this.validateOnBack) {
+          this.beforeStepChange(this.activeStepIndex, cb);
+        } else {
+          cb();
+        }
+      },
+      focusnextStep: function focusnextStep() {
+        var tabIndex = getFocusedStepIndex(this.steps);
+
+        if (tabIndex !== -1 && tabIndex < this.steps.length - 1) {
+          var tabToFocus = this.steps[tabIndex + 1];
+
+          if (tabToFocus.checked) {
+            findElementAndFocus(tabToFocus.stepId);
+          }
+        }
+      },
+      focusprevStep: function focusprevStep() {
+        var tabIndex = getFocusedStepIndex(this.steps);
+
+        if (tabIndex !== -1 && tabIndex > 0) {
+          var toFocusId = this.steps[tabIndex - 1].stepId;
+          findElementAndFocus(toFocusId);
+        }
+      },
+      setLoading: function setLoading(value) {
+        this.loading = value;
+        this.$emit('on-loading', value);
+      },
+      setValidationError: function setValidationError(error) {
+        this.steps[this.activeStepIndex].validationError = error;
+        this.$emit('on-error', error);
+      },
+      validateBeforeChange: function validateBeforeChange(promiseFn, callback) {
+        var _this4 = this;
+
+        this.setValidationError(null); // we have a promise
+
+        if (this.isPromise(promiseFn)) {
+          this.setLoading(true);
+          promiseFn.then(function (res) {
+            _this4.setLoading(false);
+
+            var validationResult = res === true;
+
+            _this4.executeBeforeChange(validationResult, callback);
+          }).catch(function (error) {
+            _this4.setLoading(false);
+
+            _this4.setValidationError(error);
+          }); // we have a simple function
+        } else {
+          var validationResult = promiseFn === true;
+          this.executeBeforeChange(validationResult, callback);
+        }
+      },
+      executeBeforeChange: function executeBeforeChange(validationResult, callback) {
+        this.$emit('on-validate', validationResult, this.activeStepIndex);
+
+        if (validationResult) {
+          callback();
+        } else {
+          this.steps[this.activeStepIndex].validationError = 'error';
+        }
+      },
+      beforeStepChange: function beforeStepChange(index, callback) {
+        if (this.loading) {
+          return;
+        }
+
+        var oldStep = this.steps[index];
+
+        if (oldStep && oldStep.beforeChange !== undefined) {
+          var stepChangeRes = oldStep.beforeChange();
+          this.validateBeforeChange(stepChangeRes, callback);
+        } else {
+          callback();
+        }
+      },
+      afterStepChange: function afterStepChange(index) {
+        if (this.loading) {
+          return;
+        }
+
+        var newStep = this.steps[index];
+
+        if (newStep && newStep.afterChange !== undefined) {
+          newStep.afterChange();
+        }
+      },
+      changeStep: function changeStep(oldIndex, newIndex) {
+        var emitChangeEvent = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
+        var oldStep = this.steps[oldIndex];
+        var newStep = this.steps[newIndex];
+
+        if (oldStep) {
+          oldStep.active = false;
+        }
+
+        if (newStep) {
+          newStep.active = true;
+        }
+
+        if (emitChangeEvent && this.activeStepIndex !== newIndex) {
+          this.emitTabChange(oldIndex, newIndex);
+        }
+
+        this.activeStepIndex = newIndex;
+        this.activateStepAndCheckStep(this.activeStepIndex);
+        return true;
+      },
+      deactivateSteps: function deactivateSteps() {
+        this.steps.forEach(function (step) {
+          step.active = false;
+        });
+      },
+      activateStep: function activateStep(index) {
+        this.deactivateSteps();
+        var step = this.steps[index];
+
+        if (step) {
+          step.active = true;
+          step.checked = true;
+        }
+      },
+      activateStepAndCheckStep: function activateStepAndCheckStep(index) {
+        this.activateStep(index);
+
+        if (index > this.maxStep) {
+          this.maxStep = index;
+        }
+
+        this.activeStepIndex = index;
+      },
+      initializeSteps: function initializeSteps() {
+        if (this.steps.length > 0 && this.startIndex === 0) {
+          this.activateStep(this.activeStepIndex);
+        }
+
+        if (this.startIndex < this.steps.length) {
+          this.activateStepAndCheckStep(this.startIndex);
+        } else {
+          window.console.warn("Prop startIndex set to ".concat(this.startIndex, " is greater than the number of steps - ").concat(this.steps.length, ". Make sure that the starting index is less than the number of tabs registered"));
+        }
+      },
+      isPromise: function isPromise(func) {
+        return func.then && typeof func.then === 'function';
       }
     },
-    mounted () {
-      this.initializeSteps()
+    mounted: function mounted() {
+      this.initializeSteps();
     },
     watch: {
-      '$route.path' (newRoute) {
-        this.checkRouteChange(newRoute)
+      '$route.path': function $routePath(newRoute) {
+        this.checkRouteChange(newRoute);
       }
     }
-  }
+};
 </script>

@@ -2,7 +2,7 @@
     <div class="checkout-step-container"
          v-bind:class="{'active-step': active}"
          role="tabpanel"
-         :id="stepId">
+         v-bind:id="stepId">
         <slot v-bind="slotProps"></slot>
     </div>
 </template>
@@ -26,7 +26,7 @@
             }
         },
         inject: ["addStep", "removeStep", "nextStep"],
-        data() {
+        data: function() {
             return {
                 active: false,
                 index: null,
@@ -36,7 +36,7 @@
             };
         },
         computed: {
-            slotProps() {
+            slotProps: function() {
                 var self = this;
                 return {
                     nextStep: this.$parent.nextStep,
@@ -47,7 +47,7 @@
                     index: this.index,
                     active: this.active,
                     displayContinueButton: (!this.active && ((this.$parent.activeStepIndex + 1) === this.index)),
-                    selectStep: () => {
+                    selectStep: function() {
                         this.$parent.navigateToStep(this.index);
                     },
                     preview: this.index < this.$parent.activeStepIndex
@@ -57,10 +57,10 @@
         },
         methods: {
         },
-        mounted() {
+        mounted: function() {
             this.addStep(this);
         },
-        destroyed() {
+        destroyed: function() {
             if (this.$el && this.$el.parentNode) {
                 this.$el.parentNode.removeChild(this.$el);
             }

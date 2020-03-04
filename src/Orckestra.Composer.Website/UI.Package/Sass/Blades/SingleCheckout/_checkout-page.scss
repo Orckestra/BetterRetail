@@ -36,7 +36,7 @@
     .sps-order-summary {
 
         transition: all 0.25s ease;
-        max-width: 350px;
+        max-width: 200px;
 
         &.sps--abv {
             top: 0;
@@ -47,6 +47,24 @@
             top: 20px;
             transition: all 0.5s ease;
         }
+    }
+}
+
+@include media-breakpoint-up(md) {
+    .sps-order-summary {
+        max-width: 210px;
+    }
+}
+
+@include media-breakpoint-up(lg) {
+    .sps-order-summary {
+        max-width: 290px;
+    }
+}
+
+@include media-breakpoint-up(xl) {
+    .sps-order-summary {
+        max-width: 350px;
     }
 }
 
