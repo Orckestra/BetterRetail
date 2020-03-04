@@ -7,7 +7,10 @@
     }
 }
 
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on" xmlns:v-slot="v-slot">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" 
+      xmlns:v-bind="v-bind" 
+      xmlns:v-on="v-on" 
+      xmlns:v-slot="v-slot">
 <head>
 </head>
 <body>
@@ -62,7 +65,7 @@
                                class="form-control"
                                placeholder="@Html.Localize("Forms", "F_CityWaterMark")"
                                v-model="Cart.ShippingAddress.City"
-                               required="true"
+                               required="required"
                                @ParsleyMessage("Forms", "F_CityRequiredError", "required-message")
                                data-parsley-length="[3, 36]"
                                @ParsleyMessage("Forms", "F_CityLengthError", "length-message")
@@ -94,14 +97,18 @@
                     </div>
                     <div class="form-group">
                         <label for="PostalCode">@Html.Localize("Forms", "F_PostalCode") *</label>
-                        <input name="PostalCode" id="PostalCode" data-qa="editaddress-postalcode"
-                               data-oc-change="adjustPostalCode" data-parsley-group="shipping-based-on"
+                        <input name="PostalCode"
+                               id="PostalCode" 
+                               data-qa="editaddress-postalcode"
                                @HelpBubble("Forms", "F_PostalCodeIndication")
                                type="text"
                                class="form-control"
                                placeholder="@Html.Localize("Forms", "F_PostalCodeWaterMark")"
+                               v-on:input="adjustPostalCode"
+                               v-on:change="changePostalCode"
                                v-model="Cart.ShippingAddress.PostalCode"
-                               required="true"
+                               required="required"
+                               data-parsley-group="shipping-based-on"
                                @ParsleyMessage("Forms", "F_PostalCodeRequiredError", "required-message")
                                data-parsley-length="[6, 7]"
                                @ParsleyMessage("Forms", "F_PostalCodeLengthError", "length-message")

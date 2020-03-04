@@ -191,7 +191,7 @@ module Orckestra.Composer {
 
         public updatePostalCode(postalCode: string): Q.Promise<void> {
 
-            return this.cartService.updateBillingMethodPostalCode(postalCode);
+            return this.cartService.updateShippingMethodPostalCode(postalCode);
         }
 
         public invalidateCache(): Q.Promise<void> {
@@ -235,7 +235,7 @@ module Orckestra.Composer {
             let vue: any = this.VueCheckout;
 
             vue.IsLoading = true;
-            return this.buildCartUpdateViewModel(emptyVm)
+            return this.buildCartUpdateViewModel(emptyVm, controllerName)
                 .then(vm => this.cartService.updateCart(vm))
                 .finally(() => {
                     vue.IsLoading = false;

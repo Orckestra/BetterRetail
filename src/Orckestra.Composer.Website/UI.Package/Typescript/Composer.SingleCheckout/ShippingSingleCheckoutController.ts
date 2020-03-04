@@ -43,10 +43,12 @@ module Orckestra.Composer {
                         return this.Cart.ShippingMethod ? this.Cart.ShippingMethod.FulfillmentMethodTypeString : '';
                     },
                     IsShippingMethodType() {
-                        return this.Cart.ShippingMethod.FulfillmentMethodTypeString === FulfillmentMethodTypes.Shipping;
+                        return this.Cart.ShippingMethod &&
+                            this.Cart.ShippingMethod.FulfillmentMethodTypeString === FulfillmentMethodTypes.Shipping;
                     },
                     IsPickUpMethodType() {
-                        return this.Cart.ShippingMethod.FulfillmentMethodTypeString === FulfillmentMethodTypes.PickUp;
+                        return this.Cart.ShippingMethod &&
+                            this.Cart.ShippingMethod.FulfillmentMethodTypeString === FulfillmentMethodTypes.PickUp;
                     }
                 },
                 methods: {
@@ -92,7 +94,7 @@ module Orckestra.Composer {
 
                         if(methodEntity.ShippingProviderId === oldValue.ShippingProviderId) return;
 
-                        self.checkoutService.updateCart(self.viewModelName))
+                        self.checkoutService.updateCart(self.viewModelName)
                             .then(({ Cart }) => {
                                 this.Cart = Cart;
                             }).catch(e => {

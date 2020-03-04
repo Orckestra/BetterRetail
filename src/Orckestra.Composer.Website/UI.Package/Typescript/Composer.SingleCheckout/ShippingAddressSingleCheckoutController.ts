@@ -11,6 +11,8 @@ module Orckestra.Composer {
             var self: ShippingAddressSingleCheckoutController = this;
             self.viewModelName = 'ShippingAddress';
 
+
+
             let vueShippingAddressMixin = {
                 data: {
                     ComplementaryAddressAddState: false
@@ -37,14 +39,13 @@ module Orckestra.Composer {
                             this.parsleyInit = $('#addressForm').parsley();
                             this.parsleyInit.validate();
                             let isValid = this.parsleyInit.isValid();
-                            // TODO: Investigate how to make this work: var isValid = self.isValidForUpdate();
-
+      
                             if (isValid) {
                                 if (this.isAddressModified()) {
-                                    this.IsLoading = true;
-                                    self.checkoutService.updateCart(self.viewModelName).then(result => {
+                                    self.checkoutService.updateCart(self.viewModelName)
+                                    .then(cart => {
                                         this.adressBeforeEdit = { ...this.Cart.ShippingAddress };
-                                        this.IsLoading = false;
+                                        this.Cart = cart;
                                         processAddress.resolve(true);
                                     });
                                 } else {
@@ -58,11 +59,23 @@ module Orckestra.Composer {
 
                         return true;
                     },
+                    changePostalCode() {
+                        this.IsLoading = true;
+                        self.checkoutService.updatePostalCode(this.Cart.ShippingAddress.PostalCode)
+                        .then(cart => {
+                             this.Cart = cart;
+                        })
+                        .finally(() => this.IsLoading = false);;
+
+                    },
                     isAddressModified() {
                         var formData = self.getSerializedForm();
                         var keys = _.keys(formData);
                         var isModified = _.some(keys, (key) => this.adressBeforeEdit[key] != this.Cart.ShippingAddress[key]);
                         return isModified;
+                    },
+                    adjustPostalCode() {
+                        this.Cart.ShippingAddress.PostalCode = this.Cart.ShippingAddress.PostalCode.toUpperCase();
                     }
                 }
             };
@@ -81,7 +94,6 @@ module Orckestra.Composer {
                     if (vueAddressData.hasOwnProperty(key)) {
                         formData[key] = vueAddressData[key];
                     }
-
                 });
 
                 formData["FirstName"] = this.checkoutService.VueCheckout.Cart.Customer.FirstName;
