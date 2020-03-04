@@ -22,7 +22,7 @@ module Orckestra.Composer {
                         var fulfilled = this.Cart.Customer.FirstName &&
                             this.Cart.Customer.LastName &&
                             this.Cart.Customer.Email &&
-                            !this.IsLoading
+                            !this.IsLoading;
                         //TODO: Parsey doesn't work as expected && (this.parsleyInit ? this.parsleyInit.isValid(): true);
 
                         return fulfilled;
@@ -38,10 +38,8 @@ module Orckestra.Composer {
 
                         if (isValid) {
                             if (this.isCustomerModified()) {
-                                this.IsLoading = true;
                                 self.checkoutService.updateCart().then(result => {
                                     this.customerBeforeEdit = { ...this.Cart.Customer };
-                                    this.IsLoading = false;
                                     processCustomer.resolve(true);
                                 });
                             } else {
@@ -49,7 +47,7 @@ module Orckestra.Composer {
                             }
                         } else {
                             processCustomer.resolve(false);
-                        };
+                        }
 
                         return processCustomer.promise;
                     },

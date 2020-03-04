@@ -220,14 +220,16 @@ module Orckestra.Composer {
         }
 
         public updateCart(): Q.Promise<IUpdateCartResult> {
-
-            var emptyVm = {
+            let emptyVm = {
                 UpdatedCart: {}
             };
+            let vue: any = this.VueCheckout;
 
+            vue.IsLoading = true;
             return this.buildCartUpdateViewModel(emptyVm)
-                .then(vm => {
-                    return this.cartService.updateCart(vm);
+                .then(vm => this.cartService.updateCart(vm))
+                .finally(() => {
+                    vue.IsLoading = false;
                 });
         }
 

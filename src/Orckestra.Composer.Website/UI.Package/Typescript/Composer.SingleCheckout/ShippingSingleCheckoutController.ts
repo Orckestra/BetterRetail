@@ -86,15 +86,14 @@ module Orckestra.Composer {
                         let oldValue = { ...this.Cart.ShippingMethod };
                         this.Cart.ShippingMethod = methodEntity;
 
-                        this.IsLoading = true;
-                        self.checkoutService.updateCart().then(result => {
-                            const { Cart } = result;
-                           this.Cart = Cart;
-                        }).catch(e => {
-                            this.Cart.ShippingMethod = oldValue;
-                        }).finally(() => {
-                            this.IsLoading = false;
-                        });
+                        if(methodEntity.ShippingProviderId === oldValue.ShippingProviderId) return;
+
+                        self.checkoutService.updateCart()
+                            .then(({ Cart }) => {
+                                this.Cart = Cart;
+                            }).catch(e => {
+                                this.Cart.ShippingMethod = oldValue;
+                            })
                     }
                 }
             };
@@ -105,8 +104,8 @@ module Orckestra.Composer {
         public getUpdateModelPromise(): Q.Promise<any> {
             return Q.fcall(() => {
                 let vm = {};
-                let vueShippingMethodData = this.checkoutService.VueCheckout.Cart.ShippingMethod;
-                vm[this.viewModelName] = JSON.stringify(vueShippingMethodData);
+                let { Name, ShippingProviderId } = this.checkoutService.VueCheckout.Cart.ShippingMethod;
+                vm[this.viewModelName] = JSON.stringify({ Name, ShippingProviderId });
                 return vm;
             });
         }
