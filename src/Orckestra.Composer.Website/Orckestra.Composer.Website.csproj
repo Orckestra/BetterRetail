@@ -334,7 +334,7 @@
     <Content Include="App_Data\Razor\Composer\SingleCheckout\Steps.cshtml" />
     <Content Include="App_Data\Razor\Composer\SingleCheckout\Steps\ReviewCart.cshtml" />
     <Content Include="App_Data\Razor\Composer\SingleCheckout\Steps\Payment.cshtml" />
-    <Content Include="App_Data\Razor\Composer\SingleCheckout\Steps\ShippingAddress.cshtml" />
+    <Content Include="App_Data\Razor\Composer\SingleCheckout\Components\Address.cshtml" />
     <None Include="Properties\PublishProfiles\Website - CD.pubxml" />
     <None Include="Properties\PublishProfiles\Website.pubxml" />
     <Content Include="ViewModelAsExtensionModelTemplate.tt">

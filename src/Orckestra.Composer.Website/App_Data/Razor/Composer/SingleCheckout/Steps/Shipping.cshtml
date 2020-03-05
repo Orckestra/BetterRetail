@@ -1,4 +1,4 @@
-@inherits Composer.Razor.ComposerRazorFunction
+﻿@inherits Composer.Razor.ComposerRazorFunction
 
 @functions {
     public override string FunctionDescription
@@ -53,7 +53,7 @@
                                        v-on:change="changeShippingMethodType"
                                        xmlns:v-on="v-on" />
 
-                                <label class="form-check-label" v-bind:for="shippingMethodType.FulfillmentMethodTypeString + '-radio'">
+                                <label class="form-check-label d-block" v-bind:for="shippingMethodType.FulfillmentMethodTypeString + '-radio'">
                                     <div class="d-flex justify-content-between">
                                         <p class="h4 ">{{shippingMethodType.DisplayName}}</p>
 
@@ -83,7 +83,7 @@
                                     </div>
                                 </label>
                             </div>
-                            <div class="collapse"
+                            <div class="collapse  mt-4  border-top"
                                  v-if="shippingMethodType.IsModified"
                                  v-bind:Id="'ShippingMethod' + shippingMethodType.FulfillmentMethodTypeString"
                                  data-parent="#AccordionShippingMethodType">
@@ -111,7 +111,7 @@
                 </div>
                 <transition name="fade">
                     <div v-if="IsShippingMethodType" id="shippingAddress" class="mt-2  pt-2  border-top">
-                        @Function("Composer.SingleCheckout.Steps.ShippingAddress")
+                        @Function("Composer.SingleCheckout.Components.Address")
                     </div>
                 </transition>
             </div>

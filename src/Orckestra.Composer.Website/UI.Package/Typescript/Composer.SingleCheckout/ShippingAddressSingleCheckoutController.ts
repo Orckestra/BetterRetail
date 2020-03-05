@@ -43,9 +43,10 @@ module Orckestra.Composer {
                             if (isValid) {
                                 if (this.isAddressModified()) {
                                     self.checkoutService.updateCart(self.viewModelName)
-                                    .then(cart => {
+                                    .then(result => {
+                                        const { Cart } = result;
                                         this.adressBeforeEdit = { ...this.Cart.ShippingAddress };
-                                        this.Cart = cart;
+                                        this.Cart = Cart;
                                         processAddress.resolve(true);
                                     });
                                 } else {
@@ -62,8 +63,17 @@ module Orckestra.Composer {
                     changePostalCode() {
                         this.IsLoading = true;
                         self.checkoutService.updatePostalCode(this.Cart.ShippingAddress.PostalCode)
-                        .then(cart => {
-                             this.Cart = cart;
+                        .then((cart: any) => {
+                            
+                             this.Cart = {
+                                ...this.Cart,
+                                ShippingAddress: {...this.Cart.ShippingAddress, 
+                                    PostalCode: cart.ShippingAddress.PostalCode,
+                                    RegionCode: cart.ShippingAddress.RegionCode,
+                                    RegionName: cart.ShippingAddress.RegionName
+                                },
+                                OrderSummary: cart.OrderSummary
+                            };
                         })
                         .finally(() => this.IsLoading = false);;
 
