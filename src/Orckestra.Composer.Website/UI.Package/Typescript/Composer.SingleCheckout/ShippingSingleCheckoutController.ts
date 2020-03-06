@@ -1,5 +1,7 @@
 ///<reference path='../..//Typings/tsd.d.ts' />
 ///<reference path='./BaseSingleCheckoutController.ts' />
+///<reference path='../Composer.MyAccount/Common/CustomerService.ts' />
+///<reference path='../Composer.Cart/CheckoutShippingAddressRegistered/ShippingAddressRegisteredService.ts' />
 
 module Orckestra.Composer {
     'use strict';
@@ -11,6 +13,10 @@ module Orckestra.Composer {
 
     export class ShippingSingleCheckoutController extends Orckestra.Composer.BaseSingleCheckoutController {
 
+        protected customerService: ICustomerService = new CustomerService(new CustomerRepository());
+        protected shippingAddressRegisteredService: ShippingAddressRegisteredService =
+            new ShippingAddressRegisteredService(this.customerService);
+
         public initialize() {
             super.initialize();
             let self: ShippingSingleCheckoutController = this;
@@ -18,15 +24,19 @@ module Orckestra.Composer {
 
             let vueShippingMixin = {
                 data: {
+                    RegisteredAddresses: {},
+                    SelectedShippingAddressId: null
                 },
                 mounted() {
-                    let selectedProviderId = this.Cart.ShippingMethod ? this.Cart.ShippingMethod.ShippingProviderId : undefined;
-                    this.ShippingMethodTypes.forEach(type => {
-                        type.IsModified = type.ShippingMethods.length > 1;
+                    this.calculateSelectedMethod();
 
-                        let selectedInCart = type.ShippingMethods.find(method => method.ShippingProviderId === selectedProviderId);
-                        type.SelectedMethod = selectedInCart || type.ShippingMethods.find(method => method.IsSelected)
-                    });
+                    if (this.IsAuthenticated) {
+                        self.shippingAddressRegisteredService.getShippingAddresses(this.Cart)
+                            .then(data => {
+                                this.RegisteredAddresses = data.Addresses;
+                                this.SelectedShippingAddressId = data.SelectedShippingAddressId;
+                            })
+                    }
                 },
                 computed: {
                     FulfilledShipping() {
@@ -36,7 +46,7 @@ module Orckestra.Composer {
                             this.ShippingAddress.RegionCode &&
                             this.ShippingAddress.PostalCode &&
                             !this.IsLoading;
-                       
+
                         return fulfilled;
                     },
                     SelectedMethodTypeString() {
@@ -49,7 +59,9 @@ module Orckestra.Composer {
                     IsPickUpMethodType() {
                         return this.Cart.ShippingMethod &&
                             this.Cart.ShippingMethod.FulfillmentMethodTypeString === FulfillmentMethodTypes.PickUp;
-                    }
+                    },
+
+
                 },
                 methods: {
                     processShipping() {
@@ -69,7 +81,7 @@ module Orckestra.Composer {
                             method.FulfillmentMethodTypeString === value
                         );
 
-                        if(this.Cart.ShippingMethod) {
+                        if (this.Cart.ShippingMethod) {
                             this.changeMethodsCollapseState(this.Cart.ShippingMethod.FulfillmentMethodTypeString, 'hide');
                         }
 
@@ -84,15 +96,15 @@ module Orckestra.Composer {
 
                     changeMethodsCollapseState(shippingMethodType: string, command: string) {
                         let shippingMethodCollapse = $(`#ShippingMethod${shippingMethodType}`);
-                        if(shippingMethodCollapse) {
+                        if (shippingMethodCollapse) {
                             shippingMethodCollapse.collapse(command);
                         }
                     },
-                    updateShippingMethodProcess(methodEntity: any){
+                    updateShippingMethodProcess(methodEntity: any) {
                         let oldValue = { ...this.Cart.ShippingMethod };
                         this.Cart.ShippingMethod = methodEntity;
 
-                        if(methodEntity.ShippingProviderId === oldValue.ShippingProviderId) return;
+                        if (methodEntity.ShippingProviderId === oldValue.ShippingProviderId) return;
 
                         self.checkoutService.updateCart(self.viewModelName)
                             .then(({ Cart }) => {
@@ -100,6 +112,16 @@ module Orckestra.Composer {
                             }).catch(e => {
                                 this.Cart.ShippingMethod = oldValue;
                             })
+                    },
+
+                    calculateSelectedMethod() {
+                        let selectedProviderId = this.Cart.ShippingMethod ? this.Cart.ShippingMethod.ShippingProviderId : undefined;
+                        this.ShippingMethodTypes.forEach(type => {
+                            type.IsModified = type.ShippingMethods.length > 1;
+
+                            let selectedInCart = type.ShippingMethods.find(method => method.ShippingProviderId === selectedProviderId);
+                            type.SelectedMethod = selectedInCart || type.ShippingMethods.find(method => method.IsSelected)
+                        });
                     }
                 }
             };

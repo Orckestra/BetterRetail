@@ -90,7 +90,7 @@ module Orckestra.Composer {
                     }
 
                     let results: ISingleCheckoutContext = {
-                        IsAuthenticated: authVm,
+                        IsAuthenticated: authVm.IsAuthenticated,
                         Cart: cartVm,
                         Regions: regionsVm,
                         ShippingMethodTypes: shippingMethodTypesVm.ShippingMethodTypes,

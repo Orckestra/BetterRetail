@@ -11,8 +11,6 @@ module Orckestra.Composer {
             var self: ShippingAddressSingleCheckoutController = this;
             self.viewModelName = 'ShippingAddress';
 
-
-
             let vueShippingAddressMixin = {
                 data: {
                     ComplementaryAddressAddState: false
@@ -105,10 +103,7 @@ module Orckestra.Composer {
                         formData[key] = vueAddressData[key];
                     }
                 });
-
-                formData["FirstName"] = this.checkoutService.VueCheckout.Cart.Customer.FirstName;
-                formData["LastName"] = this.checkoutService.VueCheckout.Cart.Customer.LastName;
-
+     
                 vm[this.viewModelName] = JSON.stringify(formData);
                 return vm;
             });

@@ -1,4 +1,4 @@
-@inherits Composer.Razor.ComposerRazorFunction
+﻿@inherits Composer.Razor.ComposerRazorFunction
 
 @functions {
     public override string FunctionDescription
@@ -7,9 +7,9 @@
     }
 }
 
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" 
-      xmlns:v-bind="v-bind" 
-      xmlns:v-on="v-on" 
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0"
+      xmlns:v-bind="v-bind"
+      xmlns:v-on="v-on"
       xmlns:v-slot="v-slot">
 <head>
 </head>
@@ -18,6 +18,38 @@
         <form id="addressForm">
             <div class="row">
                 <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="ShippingAddressFirstName">@Html.Localize("Forms", "F_FirstName") *</label>
+                        <input v-model="Cart.ShippingAddress.FirstName"
+                               id="ShippingAddressFirstName"
+                               name="FirstName"
+                               v-bind:disabled="IsLoading"
+                               class="form-control"
+                               placeholder="@Html.Localize("Forms", "F_FirstNameWaterMark")"
+                               type="text"
+                               required="required"
+                               data-parsley-length="[2, 36]"
+                               data-parsley-pattern="/^[a-zA-Z\u00E0-\u00FC\.\-\s\']+$/i"
+                               @HelpBubble("Forms", "F_FirstNameIndication")
+                               @ParsleyMessage("Forms", "F_FirstNameLengthError", "length-message")
+                               @ParsleyMessage("Forms", "F_FirstNamePatternError", "pattern-message") />
+                    </div>
+                    <div class="form-group">
+                        <label for="ShippingAddressLastName">@Html.Localize("Forms", "F_LastName") *</label>
+                        <input v-model="Cart.ShippingAddress.LastName"
+                               id="ShippingAddressLastName"
+                               name="LastName"
+                               v-bind:disabled="IsLoading"
+                               class="form-control"
+                               placeholder="@Html.Localize("Forms", "F_LastNameWaterMark")"
+                               type="text"
+                               required="required"
+                               data-parsley-length="[2, 36]"
+                               data-parsley-pattern="/^[a-zA-Z\u00E0-\u00FC\.\-\s\']+$/i"
+                               @HelpBubble("Forms", "F_LastNameIndication")
+                               @ParsleyMessage("Forms", "F_LastNameLengthError", "length-message")
+                               @ParsleyMessage("Forms", "F_LastNamePatternError", "pattern-message") />
+                    </div>
                     <div class="form-group">
                         <label for="Line1">@Html.Localize("Forms", "F_Address") *</label>
                         <input name="Line1" id="Line1"
@@ -98,7 +130,7 @@
                     <div class="form-group">
                         <label for="PostalCode">@Html.Localize("Forms", "F_PostalCode") *</label>
                         <input name="PostalCode"
-                               id="PostalCode" 
+                               id="PostalCode"
                                data-qa="editaddress-postalcode"
                                @HelpBubble("Forms", "F_PostalCodeIndication")
                                type="text"
@@ -116,6 +148,7 @@
                                @ParsleyMessage("Forms", "F_PostalCodePatternError", "pattern-message") />
                     </div>
                     <div class="form-group">
+
                         <label for="PhoneNumber">@Html.Localize("Forms", "F_PhoneNumber") *</label>
                         <input name="PhoneNumber" id="PhoneNumber" data-qa="editaddress-phone"
                                @HelpBubble("Forms", "F_PhoneNumberIndication")

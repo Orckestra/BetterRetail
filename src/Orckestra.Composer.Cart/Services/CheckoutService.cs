@@ -393,13 +393,16 @@ namespace Orckestra.Composer.Cart.Services
 
             shipment.Address = newAddress;
 
-            await ShippingMethodViewService.EstimateShippingAsync(new EstimateShippingParam
+            if (shipment.FulfillmentMethod == null)
             {
-                Cart = cart,
-                CultureInfo = CultureInfo.GetCultureInfo(cart.CultureName), //TODO: Fix me
-                ForceUpdate = isShippingChanged
+                await ShippingMethodViewService.EstimateShippingAsync(new EstimateShippingParam
+                {
+                    Cart = cart,
+                    CultureInfo = CultureInfo.GetCultureInfo(cart.CultureName), //TODO: Fix me
+                    ForceUpdate = isShippingChanged
 
-            }).ConfigureAwait(false);
+                }).ConfigureAwait(false);
+            }
         }
 
 
