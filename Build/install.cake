@@ -15,6 +15,7 @@
 #load "helpers/cakeconfig.cake"
 #load "helpers/process.cake"
 #load "helpers/symboliclink.cake"
+#load "helpers/formating.cake"
 
 using System.Diagnostics;
 using System.Xml.Linq;
@@ -54,7 +55,8 @@ else
 
 var rootDir = MakeAbsolute(DirectoryPath.FromString("..")).FullPath;
 var outputDir = $"{rootDir}/output";
-var C1File = $"{outputDir}/C1.zip";
+var cacheDir = $"{rootDir}/Build/.cache";
+var C1File = $"{cacheDir}/C1.zip";
 
 var deploymentDir = $"{rootDir}/deployment";
 var websiteDir = $"{deploymentDir}/Website";
@@ -170,10 +172,49 @@ Task("Kill-Processes").Does(() =>
 
 
 #region Install-C1
-//TODO: don't reload it every time, cache it somewhere if a version is the same
 Task("Download-C1").Does(() =>
 {
-    DownloadFile(Parameters["C1Url"], C1File);
+    string url = Parameters["C1Url"];
+    string downloadingMessage = $"Downloading C1 CMS by the URL {url}.";
+    bool getInfoRes = GetServerFileInfo(url, out DateTime modifiedOnServer, out long sizeOnServer);
+    if (getInfoRes == false)
+    {
+        Information(downloadingMessage);
+        CreateDirectory(FilePath.FromString(C1File).GetDirectory());
+        DownloadFile(url, C1File); 
+        return;
+    }
+    
+    if (!System.IO.File.Exists(C1File))
+    {
+        Information($"Cannot find C1 CMS on path {C1File}.");
+        Information(downloadingMessage);
+        CreateDirectory(FilePath.FromString(C1File).GetDirectory());
+        DownloadFile(url, C1File);
+        Information($"File modified on the server on {FormatDate(modifiedOnServer)}");
+        System.IO.File.SetLastWriteTime(C1File, modifiedOnServer);
+        return;
+    }
+
+    FileInfo fi = new System.IO.FileInfo(C1File);
+    DateTime modifiedLocal = fi.LastWriteTime;
+    long sizeLocal = fi.Length;
+
+    if (modifiedLocal != modifiedOnServer || sizeLocal != sizeOnServer)
+    {
+        Information($"Server file modification timestamp: {FormatDate(modifiedOnServer)}");
+        Information($"Local file modification timestamp: {FormatDate(modifiedLocal)}");
+        Information($"Server file size: {sizeOnServer}");
+        Information($"Local file size: {sizeLocal}");
+        Information(downloadingMessage);
+        DownloadFile(url, C1File);
+        System.IO.File.SetLastWriteTime(C1File, modifiedOnServer);
+        return;
+    }
+    else
+    {
+       Information($"Last C1 CMS file with {sizeLocal} size and {FormatDate(modifiedLocal)} modification timestamp was found by the local path {C1File}"); 
+    }
 });
 
 Task("Unpack-C1").Does(() =>

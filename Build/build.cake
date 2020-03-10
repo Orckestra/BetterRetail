@@ -1,13 +1,20 @@
 #tool "nuget:?package=NUnit.ConsoleRunner&version=3.10.0"
+#tool "nuget:?package=Microsoft.TypeScript.Compiler&version=3.1.5"
+
 #addin "nuget:?package=Cake.MsDeploy&version=0.8.0"
 #addin "nuget:?package=Cake.CoreCLR&version=0.35.0"
 #addin "nuget:?package=Cake.Npm&version=0.17.0"
+#addin "nuget:?package=Cake.Karma&version=0.2.0"
 
 #load "helpers/filesystem.cake"
+#load "helpers/typescripts.cake"
 
+using System;
+using System.IO;
 using System.Xml.Linq;
 using System.Text.RegularExpressions;
 using Cake.Npm;
+using Cake.Karma;
 
 //////////////////////////////////////////////////////////////////////
 // ARGUMENTS
@@ -52,17 +59,23 @@ var solutionFile = GetFiles($"{rootDir}/*.sln").Single();
 // TASKS
 //////////////////////////////////////////////////////////////////////
 
-Task("Clean").Does(() =>
+Task("Clean-Solution").Does(() =>
 {
     DeleteDirectories($"{srcDir}/**/bin/");
     DeleteDirectories($"{srcDir}/**/obj/");
-
     DeleteDirectories($"{srcDir}/**/node_modules/");
-
     DeleteDirectories($"{srcDir}/**/_Package/");
     DeleteDirectories($"{srcDir}/**/Release/");
 
+    DeleteDirectories($"{buildDir}/.temp");
+
     DeleteDirectories(outputDir);
+});
+
+Task("Compile-Solution").Does(() =>
+{
+      MSBuild(solutionFile, settings =>
+        settings.SetConfiguration(configuration));
 });
 
 
@@ -71,12 +84,11 @@ Task("Restore-NuGet-Packages").Does(() =>
     NuGetRestore(solutionFile);
 });
 
-
-Task("Compile").Does(() =>
+Task("Restore-NPM-Packages").Does(() =>
 {
-      MSBuild(solutionFile, settings =>
-        settings.SetConfiguration(configuration));
+	NpmInstall(settings => settings.FromPath($"{buildDir}/"));
 });
+
 
 Task("Run-NUnit-Tests").Does(() =>
 {
@@ -90,30 +102,64 @@ Task("Run-NUnit-Tests").Does(() =>
     });
 });
 
-//TODO: check - delete NPM modules which we don't use, update outdated packages
-Task("Load-NPM-Modules").Does(() =>
+Task("Clean-Typescripts-Unit-Tests").Does(() => 
 {
-	NpmInstall(settings => settings.FromPath($"{buildDir}/"));
+    var filesToDelete = GetFiles($"{srcDir}/Orckestra.Composer.Website/UI.Package/**/orckestra.composer.tests.*");
+    DeleteFiles(filesToDelete);
+    DeleteDirectories($"{buildDir}/.temp");
 });
 
-Task("Run-Composer-UI-UnitTests").Does(() =>
+Task("Prepare-Typescripts-Unit-Tests").Does(() =>
 {
-    var settings = new NpmRunScriptSettings 
-    {
-        WorkingDirectory = $"{buildDir}/",
-        ScriptName = "unitTests",
-    };
-    NpmRunScript(settings);
+    var destPath = $"{buildDir}/.temp";
+    DeleteDirectories(destPath);
+    CopyDirectory($"{srcDir}/Orckestra.Composer.Website/UI.Package/Tests", $"{destPath}/Tests");
+    CopyDirectory($"{srcDir}/Orckestra.Composer.Website/UI.Package/Typescript", $"{destPath}/Typescript");
+    CopyDirectory($"{srcDir}/Orckestra.Composer.Website/UI.Package/Typings", $"{destPath}/Typings");
 });
 
-Task("Compile-Typescripts").Does(() =>
+
+Task("Compile-Typescripts-Unit-Tests").Does(() =>
 {
-    var settings = new NpmRunScriptSettings 
+    CompileTypeScripts(rootDir, $"--project {buildDir}/tsconfigs/unittests.json", 30);
+});
+
+Task("Compile-Typescripts-TestBase").Does(() =>
+{
+    CompileTypeScripts(rootDir, $"--project {rootDir}/Build/tsconfigs/orckestra_tests.json", 30);
+});
+
+Task("Compile-Typescripts-Default").Does(() =>
+{
+    CompileTypeScripts(rootDir, $"--project {rootDir}/Build/tsconfigs/orckestra.json", 30);
+});
+
+Task("Run-Karma-Tests-Default")
+.Does(() => 
+{
+    var settings = new KarmaStartSettings
     {
-        WorkingDirectory = $"{buildDir}/",
-        ScriptName = "scripts",
+       ConfigFile = "karma.conf.js",
+       
+       RunMode = KarmaRunMode.Local
     };
-    NpmRunScript(settings);
+    KarmaStart(settings);
+});
+
+
+Task("Run-Karma-Tests-Debug")
+.Does(() => 
+{
+    var settings = new KarmaStartSettings
+    {
+       ConfigFile = "karma.conf.js",
+       RunMode = KarmaRunMode.Local,
+       LogLevel = KarmaLogLevel.Debug,
+       SingleRun = false,
+       NoSingleRun = true,
+       Browsers = new List<string>(){"Chrome"}
+    };
+    KarmaStart(settings);
 });
 
 Task("Copy-To-Artifacts").Does(() =>
@@ -166,41 +212,72 @@ Task("Create-NuGet-Package").Does(() =>
 });
 
 //////////////////////////////////////////////////////////////////////
+// GROUPS
+//////////////////////////////////////////////////////////////////////
+
+Task("Prepare-Karma-Tests")
+.IsDependentOn("Clean-Typescripts-Unit-Tests")
+.IsDependentOn("Compile-Typescripts-TestBase")
+.IsDependentOn("Prepare-Typescripts-Unit-Tests")
+.IsDependentOn("Compile-Typescripts-Unit-Tests");
+
+Task("Build")
+    .IsDependentOn("Clean-Solution")
+    .IsDependentOn("Restore-NuGet-Packages")
+    .IsDependentOn("Compile-Solution")
+    .IsDependentOn("Restore-NPM-Packages")
+    .IsDependentOn("Compile-Typescripts-Default");
+
+//////////////////////////////////////////////////////////////////////
 // TASK TARGETS
 //////////////////////////////////////////////////////////////////////
 
-Task("Build")
-    .IsDependentOn("Clean")
-    .IsDependentOn("Restore-NuGet-Packages")
-    .IsDependentOn("Compile");
+Task("NUnit-Tests")
+.Description("Unit tests to control projects source code")
+.IsDependentOn("Clean-Solution")
+.IsDependentOn("Compile-Solution")
+.IsDependentOn("Run-NUnit-Tests");
+
+Task("Karma-Tests")
+.Description("Unit tests to control typescripts")
+.IsDependentOn("Prepare-Karma-Tests")
+.IsDependentOn("Run-Karma-Tests-Default");
+
+Task("Karma-Debug")
+.Description("Task to run Karma unit tests in debug mode")
+.IsDependentOn("Prepare-Karma-Tests")
+.IsDependentOn("Run-Karma-Tests-Debug");
+
+Task("Compile-Typescripts")
+.Description("Task to compile default orckestra.composer.js javascripts")
+.IsDependentOn("Compile-Typescripts-Default");
 
 Task("Tests")
-    .IsDependentOn("Run-NUnit-Tests")
-	.IsDependentOn("Load-NPM-Modules")
-    .IsDependentOn("Run-Composer-UI-UnitTests");
-
-Task("Frontend")
-    .IsDependentOn("Load-NPM-Modules")
-    .IsDependentOn("Compile-Typescripts");
+    .Description("Task to run all available tests")
+    .IsDependentOn("NUnit-Tests")
+    .IsDependentOn("Karma-Tests");
 
 Task("Artifacts")
+    .Description("Task to copy artifacts")
     .IsDependentOn("Copy-To-Artifacts");
 
 Task("Package")
+    .Description("Task to create a package")
     .IsDependentOn("Create-NuGet-Package");
 
 Task("All")
-    .Description("Executed on build server")
+    .Description("Executed on build server, default task")
     .IsDependentOn("Build")
     .IsDependentOn("Tests")
-    .IsDependentOn("Frontend")
     .IsDependentOn("Artifacts")
     .IsDependentOn("Package");
 
 Task("Dev")
     .Description("Should be used on dev machine only. Triggered before local install")
     .IsDependentOn("Restore-NuGet-Packages")
-    .IsDependentOn("Compile")
+    .IsDependentOn("Compile-Solution")
+    .IsDependentOn("Restore-NPM-Packages")
+    .IsDependentOn("Compile-Typescripts-Default")
     .IsDependentOn("Artifacts");
 
 //////////////////////////////////////////////////////////////////////
