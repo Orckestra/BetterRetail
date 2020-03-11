@@ -326,6 +326,7 @@
     <Content Include="App_Data\Razor\Composer\Footer\SocialLinks.cshtml" />
     <Content Include="App_Data\Razor\Composer\Search\Suggestions.cshtml" />
     <Content Include="App_Data\Razor\Composer\Search\ContentTabs.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Layout\Includes\Javascript.cshtml" />
     <None Include="Properties\PublishProfiles\Website - CD.pubxml" />
     <None Include="Properties\PublishProfiles\Website.pubxml" />
     <Content Include="ViewModelAsExtensionModelTemplate.tt">
