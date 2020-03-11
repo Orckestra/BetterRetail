@@ -67,6 +67,13 @@
           <Data dataScopeIdentifier="public" locale="fr-CA" dataFilename="~\Datas\Orckestra.Composer.CompositeC1.DataTypes.IWebsiteStyleThemes_public.xml" />
         </Type>
 
+        <Type type="Orckestra.Composer.CompositeC1.DataTypes.GoogleSettings,Orckestra.Composer.CompositeC1.DataTypes">
+          <Data dataScopeIdentifier="administrated" locale="fr-CA" dataFilename="~\Datas\Orckestra.Composer.CompositeC1.DataTypes.GoogleSettingss_administrated.xml" />
+        </Type>
+        <Type type="Orckestra.Composer.CompositeC1.DataTypes.GoogleSettings,Orckestra.Composer.CompositeC1.DataTypes">
+          <Data dataScopeIdentifier="public" locale="fr-CA" dataFilename="~\Datas\Orckestra.Composer.CompositeC1.DataTypes.GoogleSettingss_public.xml" />
+        </Type>
+
         <!-- Content Search -->
         <Type type="Orckestra.Composer.ContentSearch.DataTypes.ISortOption,Orckestra.Composer.ContentSearch">
           <Data dataScopeIdentifier="public" locale="fr-CA" dataFilename="~\Datas\Orckestra.Composer.ContentSearch.DataTypes.ISortOptions_public.xml" />

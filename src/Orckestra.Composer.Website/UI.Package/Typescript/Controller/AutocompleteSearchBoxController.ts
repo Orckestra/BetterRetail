@@ -1,6 +1,8 @@
 ///<reference path='../../Typings/tsd.d.ts' />
-///<reference path='../App.ts' />
 ///<reference path='../Services/AutocompleteSearchService.ts' />
+/// <reference path='../Events/EventHub.ts' />
+/// <reference path='./SearchBoxController.ts' />
+///<reference path='../Mvc/ComposerClient.ts' />
 
 module Orckestra.Composer {
     export class AutocompleteSearchBoxController extends SearchBoxController {

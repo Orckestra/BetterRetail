@@ -36,7 +36,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
                 CustomerId = GetRandom.Guid(),
                 CartName = GetRandom.String(32),
                 LineItemId = GetRandom.Guid(),
-                Quantity = GetRandom.PositiveInt(),
+                Quantity = 1000,
                 GiftMessage = GetRandom.String(32),
                 GiftWrap = GetRandom.Boolean(),
             }).Result;
@@ -60,7 +60,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
                 CustomerId = GetRandom.Guid(),
                 CartName = GetRandom.String(32),
                 LineItemId = GetRandom.Guid(),
-                Quantity = GetRandom.PositiveInt(),
+                Quantity = 1000,
                 GiftMessage = GetRandom.String(32),
                 GiftWrap = GetRandom.Boolean(),
             }).Result;

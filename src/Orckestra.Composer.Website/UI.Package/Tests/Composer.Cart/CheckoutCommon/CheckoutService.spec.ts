@@ -28,30 +28,37 @@
             });
         });
 
-        describe('WHEN calling getCart when not setting CheckoutStep', () => {
-            it('SHOULD throw an error', () => {
-                expect(() => {
-                        checkoutServiceSingleton.getCart();
-                    })
-                    .toThrowError('CheckoutService.checkoutStep has not been set or is not a number.');
+        describe('WHEN not setting CheckoutStep', () => 
+        {
+            beforeEach(() => {
+                Orckestra.Composer.CheckoutService.checkoutStep = undefined;
             });
-        });
-
-        describe('WHEN calling updateCart when not setting CheckoutStep', () => {
-            it('SHOULD throw an error', () => {
-                expect(() => {
-                        checkoutServiceSingleton.updateCart();
-                    })
-                    .toThrowError('CheckoutService.checkoutStep has not been set or is not a number.');
+ 
+            describe('WHEN calling getCart', () => {
+                it('SHOULD throw an error', () => {
+                    expect(() => {
+                            checkoutServiceSingleton.getCart();
+                        })
+                        .toThrowError('CheckoutService.checkoutStep has not been set or is not a number.');
+                });
             });
-        });
-
-        describe('WHEN calling completeCheckout when not setting CheckoutStep', () => {
-            it('SHOULD throw an error', () => {
-                expect(() => {
-                        checkoutServiceSingleton.completeCheckout();
-                    })
-                    .toThrowError('CheckoutService.checkoutStep has not been set or is not a number.');
+    
+            describe('WHEN calling updateCart', () => {
+                it('SHOULD throw an error', () => {
+                    expect(() => {
+                            checkoutServiceSingleton.updateCart();
+                        })
+                        .toThrowError('CheckoutService.checkoutStep has not been set or is not a number.');
+                });
+            });
+    
+            describe('WHEN calling completeCheckout', () => {
+                it('SHOULD throw an error', () => {
+                    expect(() => {
+                            checkoutServiceSingleton.completeCheckout();
+                        })
+                        .toThrowError('CheckoutService.checkoutStep has not been set or is not a number.');
+                });
             });
         });
 

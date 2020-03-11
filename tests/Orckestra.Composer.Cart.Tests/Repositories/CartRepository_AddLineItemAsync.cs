@@ -240,7 +240,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
                 CartName = GetRandom.String(32),
                 ProductId = GetRandom.String(32),
                 VariantId = variantId,
-                Quantity = GetRandom.Int(0, 1000)
+                Quantity = 1000
             }).Result;
 
             // Assert

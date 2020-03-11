@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "target": "ES5",
+    "outDir": "../.temp",
+    "removeComments": false,
+    "declaration": true,
+    "noImplicitAny": false,
+    "noLib": false
+  },
+  "include": ["../.temp/Tests/**/*.ts"]
+}

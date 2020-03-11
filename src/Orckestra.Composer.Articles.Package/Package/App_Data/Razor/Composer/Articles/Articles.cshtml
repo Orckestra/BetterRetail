@@ -37,21 +37,24 @@
 <body>
     @if (ArticleData.IsItem)
     {
-        <div class="col-12">
+    <div class="col-12">
+        @if (!string.IsNullOrWhiteSpace(ArticleData.Item.Image))
+        {
             <img class="img-thumbnail" src="/media(@ArticleData.Item.Image)?h=400" />
-            <h1>
-                @ArticleData.Item.Title
-            </h1>
-            <div>
-                @FormattedDate(@ArticleData.Item.Date)
-            </div>
-            <div>
-                @Html.Raw(@ArticleData.Item.Content)
-            </div>
-            <div>
-                @Tags(@ArticleData.Item.Tags)
-            </div>
+        }
+        <h1>
+            @ArticleData.Item.Title
+        </h1>
+        <div>
+            @FormattedDate(@ArticleData.Item.Date)
         </div>
+        <div>
+            @Html.Raw(@ArticleData.Item.Content)
+        </div>
+        <div>
+            @Tags(@ArticleData.Item.Tags)
+        </div>
+    </div>
     }
     else
     {
@@ -73,7 +76,10 @@
                     <div class="col-12 col-sm-6 col-md-6 col-lg-4 mb-3 pl-0">
                         <div class="card h-100">
                             <a href="@ArticleData.ItemUrl(item)">
-                                <img class="card-img-top" src="/media(@item.Image)?h=250" />
+                                @if (!string.IsNullOrWhiteSpace(item.Image))
+                                {
+                                    <img class="card-img-top" src="/media(@item.Image)?h=250" />
+                                }
                                 <div class="card-body">
                                     <h4 class="card-title">@item.Title</h4>
                                     <p>@FormattedDate(@item.Date)</p>

@@ -285,7 +285,7 @@
     <Content Include="App_Data\Razor\Composer\Grids\TwoThirdsOneThird.cshtml" />
     <Content Include="App_Data\Razor\Composer\Header.cshtml" />
     <Content Include="App_Data\Razor\Composer\Grids\FullGrid.cshtml" />
-    <Content Include="App_Config\Caching.config" />
+    <None Include="App_Config\Caching.config" />
     <Content Include="App_Data\Razor\Composer\Grids\OneThirdTwoThirds.cshtml" />
     <Content Include="App_Data\Razor\Composer\Grids\AccountGrid.cshtml" />
     <Content Include="App_Data\PageTemplates\AccountPageLayout.cshtml" />
@@ -311,7 +311,7 @@
     <Content Include="App_Data\Razor\Composer\Header\OptionalLinks.cshtml" />
     <Content Include="App_Data\Razor\Composer\Header\StickyLinks.cshtml" />
     <Content Include="App_Data\Razor\Composer\SearchBox.cshtml" />
-    <Content Include="App_Config\ExperienceManagement.config" />
+    <None Include="App_Config\ExperienceManagement.config" />
     <Content Include="App_Code\SearchHelpers.cshtml" />
     <Content Include="App_Data\Razor\Composer\Search\Summary.cshtml" />
     <Content Include="App_Data\Razor\Composer\Footer\Copyright.cshtml" />
@@ -336,6 +336,7 @@
     <Content Include="App_Data\Razor\Composer\SingleCheckout\Steps\Payment.cshtml" />
     <Content Include="App_Code\CheckoutHelpers.cshtml" />
     <Content Include="App_Code\Forms\ShippingAddress.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Layout\Includes\Javascript.cshtml" />
     <None Include="Properties\PublishProfiles\Website - CD.pubxml" />
     <None Include="Properties\PublishProfiles\Website.pubxml" />
     <Content Include="ViewModelAsExtensionModelTemplate.tt">

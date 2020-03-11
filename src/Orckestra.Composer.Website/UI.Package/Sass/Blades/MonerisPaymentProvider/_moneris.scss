@@ -10,9 +10,9 @@
         top: 0;
     }
     &-expiration {
-        top: $form-group-computed-height;
+        top: 74px;
     }
     &-ccv {
-        top: ($form-group-computed-height + $form-group-computed-height);
+        top: 148px;
     }
 }

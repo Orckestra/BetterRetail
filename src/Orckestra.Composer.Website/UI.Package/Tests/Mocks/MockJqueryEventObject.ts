@@ -50,6 +50,9 @@ module Orckestra.Composer.Mocks {
         target: document.createElement('div'),
         type: '',
         timeStamp: 0,
-        which: 0
+        which: 0,
+        composed: undefined,
+        composedPath: undefined,
+        NONE: undefined
     };
 }

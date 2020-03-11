@@ -1,58 +1,56 @@
-﻿// Karma configuration
-// Generated on Wed Mar 18 2015 13:15:38 GMT-0400 (Eastern Daylight Time)
-
-module.exports = function(config) {
-
-    var gulpConfig = require("./Gulp/config");
-
+﻿module.exports = function(config) {
+    var path = require('path'),
+        thirdPartyJavaScriptPath = '../src/Orckestra.Composer.Website/UI.Package/JavaScript/',
+        testsOutputFolder = './.temp/Tests';
+    
+    //TODO: add ESLint and Coverage
+    //TODO: check do we use all third party java scripts for tests
+    //html reporter removed since its dependencies outdated and we have junit reporter to see file log
+    
     config.set({
-        // base path that will be used to resolve all patterns (eg. files, exclude)
-        basePath: '',
+        frameworks: ['jasmine', 'sinon'],
+        files: 
+        [
+            '../tests/3rdParty.ForTests/**/*.js',
+            path.join(thirdPartyJavaScriptPath, 'jquery-1.11.2.min.js'),
+            path.join(thirdPartyJavaScriptPath, 'lodash.min.js'),
+            path.join(thirdPartyJavaScriptPath, 'parsley.min.js'),
+            path.join(thirdPartyJavaScriptPath, 'q-1.2.0.js'),
+            path.join(thirdPartyJavaScriptPath, 'jquery.serialize-object.js'),
+            path.join(thirdPartyJavaScriptPath, 'typeahead.js'),
+            '../src/Orckestra.Composer.Website/UI.Package/Javascript/orckestra.composer.tests.js',
+            path.join(testsOutputFolder, '/**/*.js')],
+        filesToBuild: ['../src/Orckestra.Composer.Website/UI.Package/Tests/**/*.ts'],
+        reporters: 
+        [
+            'spec',
+            'junit'
+        ],
 
-        // frameworks to use
-        // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-        frameworks: gulpConfig.karma.frameworks,
-
-        // list of files / patterns to load in the browser
-        files: gulpConfig.karma.files,
-
-        // list of files to exclude
-        exclude: gulpConfig.karma.excludedFiles,
-
-        // preprocess matching files before serving them to the browser
-        // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
-        preprocessors: gulpConfig.karma.preprocessors,
-
-        // test results reporter to use
-        // possible values: 'dots', 'progress'
-        // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-        reporters: gulpConfig.karma.reporters,
-
-        // web server port
-        port: gulpConfig.karma.port,
-
-        // enable / disable colors in the output (reporters and logs)
+        testsOutputFolder: testsOutputFolder,
         colors: true,
 
-        // level of logging
+        // level of logging	
         // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
         logLevel: config.LOG_INFO,
+        
+        browsers: ['PhantomJS'],
+        
+        plugins: 
+        [
+            'karma-jasmine',
+            'karma-sinon',
+            'karma-chrome-launcher',
+            'karma-phantomjs-launcher',
+            'karma-spec-reporter',
+            'karma-junit-reporter'
+        ],
 
-        // enable / disable watching file and executing tests whenever any file changes
-        autoWatch: true,
+        junitReporter: {
+            outputDir: testsOutputFolder + '/test-results/',
+            outputFile: 'karma.junit.xml'
+        },
 
-        // start these browsers
-        // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-        browsers: gulpConfig.karma.browsers,
-
-        plugins: gulpConfig.karma.plugins,
-
-        htmlReporter: gulpConfig.karma.htmlReporter,
-
-        junitReporter: gulpConfig.karma.junitReporter,
-
-        // Continuous Integration mode
-        // if true, Karma captures browsers, runs the tests and exits
-        singleRun: gulpConfig.karma.singleRun
+        singleRun: true      
     });
 };
