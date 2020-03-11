@@ -21,18 +21,19 @@
                         v-bind:disabled="!FulfilledCustomer"
                         v-on:click="step.navigateToStep(step.index)"
                         class="btn btn-primary float-right"
-                        v-cloak="true">
+                        v-cloak="true"
+                        data-qa="continue-to-shipping-btn">
                     @Html.Localize("CheckoutProcess", "F_Continue")
                 </button>
 
-                <button v-show="step.preview" class="btn btn-outline-secondary float-right"
+                <button v-show="step.preview" class="btn btn-outline-secondary float-right" data-qa="edit-shipping-btn"
                         v-on:click="step.navigateToStep(step.index)"
                         v-cloak="true">
                     @Html.Localize("CheckoutProcess", "F_Edit")
                 </button>
             </div>
 
-            <div class="card-body  bg-light" v-show="step.active" v-cloak="true">
+            <div class="card-body  bg-light" v-show="step.active" v-cloak="true" data-qa="shipping-active-state">
                 <p>@Html.Localize("CheckoutProcess", "F_ShippingStepDescription")</p>
 
                 <div class="form-row" novalidate="novalidate" id="AccordionShippingMethodType">
@@ -110,26 +111,43 @@
                     </div>
                 </div>
                 <transition name="fade">
-                    <div v-if="IsShippingMethodType" id="shippingAddress" class="mt-2  pt-2  border-top">
-                        @Function("Composer.SingleCheckout.Components.Address")
+                    <div v-if="IsShippingMethodType" class="mt-2  pt-2  border-top">
+                        <div v-if="IsAuthenticated">
+                            <div v-for="address in RegisteredAddresses"
+								 v-bind:key="address.Id"
+								 class="border  rounded p-3  mb-2"
+								 v-bind:class="{ 'bg-light border-primary': address.Id == SelectedShippingAddressId, 'bg-white': address.Id != SelectedShippingAddressId}">
+
+							     @CustomerShippingAddressRadio()
+								
+                            </div>
+							<div v-if="AddingNewAddressMode">
+								  @Forms.ShippingAddress.Form("AddNewAddress", "addNewAddressForm")
+							</div>
+							<div>
+								<button class="btn btn-link" v-on:click="AddingNewAddressMode=true">Add New Address</button>
+							</div>
+                        </div>
+                        <div v-else="v-else">
+                            <div data-oc-controller="SingleCheckout.ShippingAddress">
+                                @Forms.ShippingAddress.Form("Cart.ShippingAddress", "addressForm")
+                            </div>
+                        </div>
                     </div>
                 </transition>
             </div>
-
-            <div class="card-body" v-show="step.preview" v-cloak="true">
+            <div class="card-body" v-show="step.preview" v-cloak="true" data-qa="shipping-preview-state">
                 <div v-if="Cart.ShippingMethod">
-                    <div class="col-12">
-                        <div class="row justify-content-between">
-                            <span class="h4">{{Cart.ShippingMethod.DisplayName}}</span>
-                            <span>{{Cart.ShippingMethod.Cost}}</span>
-                        </div>
-                        <div class="row">
-                            {{ShippingAddressPreview}}
-                        </div>
-                        <div class="row">
-                            <span v-if="Cart.ShippingMethod.ExpectedDaysBeforeDelivery" id="ship-delay" class="clearfix">
+                    <div class="row">
+                        <div class="col-12 col-sm-10">
+                            <p class="h4">{{Cart.ShippingMethod.DisplayName}}</p>
+                            @CheckoutHelpers.ShippingAddressPreview("ShippingAddress")
+                            <span v-if="Cart.ShippingMethod.ExpectedDaysBeforeDelivery" data-qa="shippingmethod-expecteddays-info" class="clearfix">
                                 <strong>@Html.Localize("CheckoutProcess", "F_ShipTimeTitle")</strong> {{Cart.ShippingMethod.ExpectedDaysBeforeDelivery}} @Html.Localize("CheckoutProcess", "L_DeliveryDaysNumber")
                             </span>
+                        </div>
+                        <div class="col-12 col-sm-2">
+                            @Html.Localize("MyAccount", "L_Total"): <span>{{Cart.ShippingMethod.Cost}}</span>
                         </div>
                     </div>
                 </div>
@@ -138,3 +156,26 @@
     </div>
 </body>
 </html>
+
+@helper CustomerShippingAddressRadio()
+{
+    <div class="form-check">
+        <input data-parsley-errors-container="#adresses-errors"
+               class="form-check-input" type="radio"
+               v-bind:checked="address.Id === SelectedShippingAddressId"
+               v-bind:disabled="IsLoading"
+               required="required"
+               name="ShippingAddressId"
+               v-bind:value="address.ShippingAddressId"
+               v-bind:id="address.Id + '-radio'"
+               v-on:change=""
+               xmlns:v-on="v-on"
+               xmlns:v-bind="v-bind" />
+        <label class="form-check-label d-block" v-bind:for="address.Id + '-radio'">
+            <div class="row">
+                <div class="col-12 col-sm-9 order-2  order-sm-1">@CheckoutHelpers.ShippingAddressPreview("address")</div>
+                <div class="col-12 col-sm-3  order-1  order-sm-2 font-weight-bolder"><p class="text-left text-sm-right"> {{address.AddressName}}</p></div>
+            </div>
+        </label>
+    </div>
+}

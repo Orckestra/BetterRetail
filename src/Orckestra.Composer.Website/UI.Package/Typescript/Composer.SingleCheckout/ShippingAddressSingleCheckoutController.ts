@@ -23,37 +23,31 @@ module Orckestra.Composer {
                  
                 },
                 computed: {
-                    ShippingAddressPreview() {
-                        return `${this.ShippingAddress.Line1}${this.ShippingAddress.Line2 ? ' ' + this.ShippingAddress.Line2: ''}, 
-                        ${this.ShippingAddress.City}, 
-                        ${this.ShippingAddress.RegionName}, ${this.ShippingAddress.PostalCode}`;
-                    }
                 },
                 methods: {
                     processShippingAddress() {
 
                         if (this.IsShippingMethodType) {
-                            var processAddress: Q.Deferred<boolean> = Q.defer<boolean>();
-                            this.parsleyInit = $('#addressForm').parsley();
-                            this.parsleyInit.validate();
-                            let isValid = this.parsleyInit.isValid();
-      
-                            if (isValid) {
-                                if (this.isAddressModified()) {
-                                    self.checkoutService.updateCart(self.viewModelName)
-                                    .then(result => {
-                                        const { Cart } = result;
-                                        this.adressBeforeEdit = { ...this.Cart.ShippingAddress };
-                                        this.Cart = Cart;
-                                        processAddress.resolve(true);
-                                    });
+                            var processShipping: Q.Deferred<boolean> = Q.defer<boolean>();
+                            if (!this.IsAuthenticated) {
+                                let isValid = this.initializeParsey('#addressForm');
+                                if (isValid) {
+                                    if (this.isAddressModified()) {
+                                        self.checkoutService.updateCart(self.viewModelName)
+                                            .then(result => {
+                                                const { Cart } = result;
+                                                this.adressBeforeEdit = { ...this.Cart.ShippingAddress };
+                                                this.Cart = Cart;
+                                                processShipping.resolve(true);
+                                            });
+                                    } else {
+                                        processShipping.resolve(true);
+                                    }
                                 } else {
-                                    processAddress.resolve(true);
-                                }
-                            } else {
-                                processAddress.resolve(false);
-                            };
-                            return processAddress.promise;
+                                    processShipping.resolve(false);
+                                };
+                                return processShipping.promise;
+                            }
                         }
 
                         return true;

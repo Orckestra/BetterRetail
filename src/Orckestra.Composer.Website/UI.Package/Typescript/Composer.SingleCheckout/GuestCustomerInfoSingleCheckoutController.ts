@@ -31,10 +31,7 @@ module Orckestra.Composer {
                 methods: {
                     processCustomer() {
                         var processCustomer: Q.Deferred<boolean> = Q.defer<boolean>();
-                        this.parsleyInit = $('#editCustomerForms').parsley();
-                        this.parsleyInit.validate();
-                        let isValid = this.parsleyInit.isValid();
-                        // TODO: Investigate how to make this work: var isValid = self.isValidForUpdate();
+                        let isValid = this.initializeParsey('#editCustomerForms');
 
                         if (isValid) {
                             if (this.isCustomerModified()) {

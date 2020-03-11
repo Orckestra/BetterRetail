@@ -25,6 +25,8 @@ module Orckestra.Composer {
             let vueShippingMixin = {
                 data: {
                     RegisteredAddresses: {},
+                    AddingNewAddressMode: false,
+                    AddNewAddress: {},
                     SelectedShippingAddressId: null
                 },
                 mounted() {

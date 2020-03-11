@@ -32,14 +32,16 @@
                     <button v-bind:disabled="!FulfilledShipping"
                             v-on:click='step.navigateToStep(step.index)'
                             class="btn btn-primary float-right"
-                            v-cloak="true">
+                            v-cloak="true"
+                            data-qa="continue-to-reviewcart-btn">
                         @Html.Localize("CheckoutProcess", "F_Review")
                     </button>
                 </div>
                 <div v-show="step.preview" class="col-7">
                     <button class="btn btn-outline-secondary float-right"
                             v-on:click='step.navigateToStep(step.index)'
-                            v-cloak="true">
+                            v-cloak="true"
+                            data-qa="edit-reviewcart-btn">
                         @Html.Localize("CheckoutProcess", "F_Review")
                     </button>
                 </div>
@@ -49,7 +51,7 @@
             <p>@Html.Localize("ShoppingCart", "L_EmptyShoppingCart")</p>
             <a href="@HomePageNode.Url" class="btn btn-primary">@Html.Localize("ShoppingCart", "B_StartShopping")</a>
         </div>
-        <div v-if="step.active" class="card-body bg-light pt-0" v-cloak="true">
+        <div v-if="step.active" class="card-body bg-light pt-0" v-cloak="true" data-qa="reviewcart-active-state">
             <div v-if="Cart.InvalidLineItemCount > 0">
                 <div class="alert alert-danger  text-danger">
                     <div class="multiline-message">
@@ -88,7 +90,7 @@
             </div>
         </div>
 
-        <div v-if="step.preview" class="card-body bg-light" v-cloak="true">
+        <div v-if="step.preview" class="card-body bg-light" v-cloak="true" data-qa="reviewcart-preview-state">
             <div class="row">
                 <div class="col-12 col-sm-10">
                     <div class="row">

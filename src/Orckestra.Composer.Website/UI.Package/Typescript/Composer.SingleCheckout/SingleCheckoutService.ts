@@ -160,7 +160,11 @@ module Orckestra.Composer {
                     }
                 },
                 methods: {
-
+                        initializeParsey(formId: any): boolean {
+                            this.parsleyInit = $(formId).parsley();
+                            this.parsleyInit.validate();
+                            return this.parsleyInit.isValid();
+                        }
                 }
             });
         }

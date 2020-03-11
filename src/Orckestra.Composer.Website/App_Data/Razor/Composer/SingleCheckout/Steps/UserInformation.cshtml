@@ -34,13 +34,13 @@
             </div>
 
             <div class="card-body  bg-light" v-cloak="true">
-                <div v-if="step.preview" key="preview">
+                <div v-if="step.preview" key="preview"  data-qa="information-preview-state">
                     <span v-text="Cart.Customer.FirstName" class="font-weight-bold"></span>&#160;
                     <span v-text="Cart.Customer.LastName" class="font-weight-bold"></span>
                     <div v-text="Cart.Customer.Email"></div>
                 </div>
 
-                <form id="editCustomerForms" v-if="step.active" key="active">
+                <form id="editCustomerForms" v-if="step.active" key="active" data-qa="information-active-state">
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="FirstName">@Html.Localize("Forms", "F_FirstName") *</label>
