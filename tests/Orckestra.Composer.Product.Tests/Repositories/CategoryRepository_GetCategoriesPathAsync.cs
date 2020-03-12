@@ -56,18 +56,18 @@ namespace Orckestra.Composer.Product.Tests.Repositories
 
             var overtureClientMock = _container.GetMock<IOvertureClient>();
             overtureClientMock
-            .Setup(client => client.SendAsync(It.IsNotNull<GetCategoriesRequest>()))
-            .ReturnsAsync(new List<Category>(categoriesToReturn))
+            .Setup(client => client.SendAsync(It.IsNotNull<GetCategoriesV2Request>()))
+            .ReturnsAsync(new CategoryList() { Categories = new List<Category>(categoriesToReturn) })
             .Verifiable();
 
             var cacheProvider = _container.GetMock<ICacheProvider>();
             cacheProvider
                 .Setup(provider => provider.GetOrAddAsync(
                     It.IsNotNull<CacheKey>(),
-                    It.IsNotNull<Func<Task<List<Category>>>>(),
-                    It.IsAny<Func<List<Category>, Task>>(),
+                    It.IsNotNull<Func<Task<CategoryList>>>(),
+                    It.IsAny<Func<CategoryList, Task>>(),
                     It.IsAny<CacheKey>()))
-                .Returns<CacheKey, Func<Task<List<Category>>>, Func<List<Category>, Task>, CacheKey>(
+                .Returns<CacheKey, Func<Task<CategoryList>>, Func<CategoryList, Task>, CacheKey>(
                     (key, func, arg3, arg4) => func())
                 .Verifiable();
         }
@@ -87,8 +87,8 @@ namespace Orckestra.Composer.Product.Tests.Repositories
 
             _container.Verify<ICacheProvider>(oc => oc.GetOrAddAsync(
                 It.IsNotNull<CacheKey>(),
-                It.IsNotNull<Func<Task<List<Category>>>>(),
-                It.IsAny<Func<List<Category>, Task>>(),
+                It.IsNotNull<Func<Task<CategoryList>>>(),
+                It.IsAny<Func<CategoryList, Task>>(),
                 It.IsAny<CacheKey>()));
         }
 
