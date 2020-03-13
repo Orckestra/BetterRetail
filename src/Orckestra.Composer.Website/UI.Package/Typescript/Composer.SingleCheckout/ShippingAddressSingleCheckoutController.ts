@@ -43,53 +43,75 @@ module Orckestra.Composer {
                         var processShipping: Q.Deferred<boolean> = Q.defer<boolean>();
                         let isValid = this.initializeParsey('#addressForm');
                         if (isValid) {
-                            if (this.isAddressModified()) {
-                                self.checkoutService.updateCart(self.viewModelName)
-                                    .then(result => {
-                                        const { Cart } = result;
-                                        this.adressBeforeEdit = { ...this.Cart.ShippingAddress };
-                                        this.Cart = Cart;
-                                        processShipping.resolve(true);
-                                    });
+                              if (this.addressModified()) {
+                                  this.changePostalCode().then(success => {
+                                      if (success) {
+                                          self.checkoutService.updateCart(self.viewModelName)
+                                              .then(result => {
+                                                  const { Cart } = result;
+                                                  this.adressBeforeEdit = { ...this.Cart.ShippingAddress };
+                                                  this.Cart = Cart;
+                                                  processShipping.resolve(true);
+                                              })
+                                              .fail(reason => {
+                                                  console.log(reason);
+                                                  processShipping.resolve(false);
+                                              });
+                                      } else {
+                                        processShipping.resolve(false);
+                                      }
+                                  })
+                               
                             } else {
                                 processShipping.resolve(true);
                             }
                         } else {
                             processShipping.resolve(false);
                         };
+
                         return processShipping.promise;
                     },
-                    changePostalCode() {
+                    recalculateShippingFee() {
                        
                         let isValid = this.initializeParsey('#addressForm');
-                        this.PostalCodeError = false;
                         if (isValid) {
-                            this.IsLoading = true;
-                            self.checkoutService.updatePostalCode(this.Cart.ShippingAddress.PostalCode)
-                                .then((cart: any) => {
-
-                                    this.Cart = {
-                                        ...this.Cart,
-                                        ShippingAddress: {
-                                            ...this.Cart.ShippingAddress,
-                                            PostalCode: cart.ShippingAddress.PostalCode,
-                                            RegionCode: cart.ShippingAddress.RegionCode,
-                                            RegionName: cart.ShippingAddress.RegionName
-                                        },
-                                        OrderSummary: cart.OrderSummary
-                                    };
-                                })
-                                .fail(e => {
-                                    if(e && e.Errors) {
-                                        this.PostalCodeError = true;
-                                        console.log(e.Errors);
-                                    }
-                                })
-                                .finally(() => this.IsLoading = false);
+                            this.changePostalCode();
                         }
 
                     },
-                    isAddressModified() {
+                    changePostalCode() {
+                        var processPostalCode: Q.Deferred<boolean> = Q.defer<boolean>();
+         
+                        this.PostalCodeError = false;
+                        if (this.adressBeforeEdit.PostalCode != this.Cart.ShippingAddress.PostalCode) {
+                            this.IsLoading = true;
+                            self.checkoutService.updatePostalCode(this.Cart.ShippingAddress.PostalCode).then((cart: any) => {
+                                this.adressBeforeEdit = { ...this.Cart.ShippingAddress };
+                                this.Cart = {
+                                    ...this.Cart,
+                                    ShippingAddress: {
+                                        ...this.Cart.ShippingAddress,
+                                        PostalCode: cart.ShippingAddress.PostalCode,
+                                        RegionCode: cart.ShippingAddress.RegionCode,
+                                        RegionName: cart.ShippingAddress.RegionName
+                                    },
+                                    OrderSummary: cart.OrderSummary
+                                };
+                                processPostalCode.resolve(true);
+                            })
+                            .fail(reason => {
+                                console.log(reason);
+                                this.PostalCodeError = true;
+                                processPostalCode.resolve(false);
+                            })
+                            .finally(() => this.IsLoading = false);
+                        } else {
+                            processPostalCode.resolve(true);
+                        }
+                        return processPostalCode.promise;
+                    },
+
+                    addressModified() {
                         var formData = self.getSerializedForm();
                         var keys = _.keys(formData);
                         var isModified = _.some(keys, (key) => this.adressBeforeEdit[key] != this.Cart.ShippingAddress[key]);

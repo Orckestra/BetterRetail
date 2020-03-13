@@ -6,8 +6,17 @@
     border-color: $primary !important;
 }
 
+.form-group.postalcode {
+    .parsley-errors-list {
+        position: absolute;
+        bottom: -1.3rem;
+        min-width: 200px;
+    }
+}
+
 
 @include media-breakpoint-up(sm) {
+
     .sps-order-summary {
 
         transition: all 0.25s ease;

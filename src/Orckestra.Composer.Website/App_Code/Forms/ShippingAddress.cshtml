@@ -1,7 +1,7 @@
 ﻿@using Composite.AspNet.Razor
 @using System.Web.Mvc
 
-@helper Form(string vueAddressBinding, string formId = "addressForm", string onPostalCodeChange = "changePostalCode")
+@helper Form(string vueAddressBinding, string formId = "addressForm", string onPostalCodeChange = "recalculateShippingFee")
 {
     <form id="@formId">
         <div class="row">
@@ -141,7 +141,7 @@
                                @Html.ParsleyMessage("Forms", "F_PostalCodePatternError", "pattern-message") />
                     </div>
                     <div class="form-group col-sm-7 mt-auto">
-                        <button class="btn btn-sm btn-link" v-on:click.prevent="@(onPostalCodeChange)">
+                        <button class="btn btn-sm btn-link" data-qa="recalculate-shipping-fee-btn" v-on:click.prevent="@(onPostalCodeChange)">
                             @Html.Localize("CheckoutProcess", "F_RecalculateShippingFee")
                         </button>
                     </div>

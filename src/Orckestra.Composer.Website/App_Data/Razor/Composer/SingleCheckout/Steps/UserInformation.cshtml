@@ -27,7 +27,9 @@
                 <h4 class="float-left">
                     @Html.Localize("CheckoutProcess", "T_Information")
                 </h4>
-                <button v-cloak="true" v-show="step.preview" class="btn btn-outline-secondary float-right"
+                <button v-cloak="true" v-show="step.preview" 
+                        data-qa="information-edit-btn"
+                        class="btn btn-outline-secondary float-right"
                         v-on:click='step.navigateToStep(step.index)'>
                     @Html.Localize("CheckoutProcess", "F_Edit")
                 </button>
