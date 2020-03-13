@@ -35,9 +35,9 @@
 
             <div class="card-body  bg-light" v-cloak="true">
                 <div v-if="step.preview" key="preview"  data-qa="information-preview-state">
-                    <span v-text="Cart.Customer.FirstName" class="font-weight-bold"></span>&#160;
-                    <span v-text="Cart.Customer.LastName" class="font-weight-bold"></span>
-                    <div v-text="Cart.Customer.Email"></div>
+                    <span data-qa="information-firstName" v-text="Cart.Customer.FirstName" class="font-weight-bold"></span>&#160;
+                    <span data-qa="information-lastName" v-text="Cart.Customer.LastName" class="font-weight-bold"></span>
+                    <div data-qa="information-email" v-text="Cart.Customer.Email"></div>
                 </div>
 
                 <form id="editCustomerForms" v-if="step.active" key="active" data-qa="information-active-state">
@@ -47,6 +47,7 @@
                             <input v-model="Cart.Customer.FirstName"
                                    id="FirstName"
                                    name="FirstName"
+                                   data-qa="information-firtsName-input"
                                    v-bind:disabled="IsLoading"
                                    class="form-control"
                                    placeholder="@Html.Localize("Forms", "F_FirstNameWaterMark")"
@@ -63,6 +64,7 @@
                             <input v-model="Cart.Customer.LastName"
                                    id="LastName"
                                    name="LastName"
+                                   data-qa="information-lastName-input"
                                    v-bind:disabled="IsLoading"
                                    class="form-control"
                                    placeholder="@Html.Localize("Forms", "F_LastNameWaterMark")"
@@ -82,6 +84,7 @@
                             <input v-model="Cart.Customer.Email"
                                    id="Email"
                                    name="Email"
+                                   data-qa="information-email-input"
                                    v-bind:disabled="IsLoading"
                                    type="email"
                                    class="form-control"

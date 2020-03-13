@@ -13,7 +13,8 @@ module Orckestra.Composer {
 
             let vueShippingAddressMixin = {
                 data: {
-                    ComplementaryAddressAddState: false
+                    ComplementaryAddressAddState: false,
+                    PostalCodeError: false
                 },
                 created()  {
                     this.adressBeforeEdit = { ...this.Cart.ShippingAddress };
@@ -28,46 +29,64 @@ module Orckestra.Composer {
                     processShippingAddress() {
 
                         if (this.IsShippingMethodType) {
-                            var processShipping: Q.Deferred<boolean> = Q.defer<boolean>();
+                          
                             if (!this.IsAuthenticated) {
-                                let isValid = this.initializeParsey('#addressForm');
-                                if (isValid) {
-                                    if (this.isAddressModified()) {
-                                        self.checkoutService.updateCart(self.viewModelName)
-                                            .then(result => {
-                                                const { Cart } = result;
-                                                this.adressBeforeEdit = { ...this.Cart.ShippingAddress };
-                                                this.Cart = Cart;
-                                                processShipping.resolve(true);
-                                            });
-                                    } else {
-                                        processShipping.resolve(true);
-                                    }
-                                } else {
-                                    processShipping.resolve(false);
-                                };
-                                return processShipping.promise;
+                                return this.processGuestShippingAddress();
+                            } else {
+                                return this.processRegisteredShippingAddress();
                             }
                         }
 
                         return true;
                     },
+                    processGuestShippingAddress() {
+                        var processShipping: Q.Deferred<boolean> = Q.defer<boolean>();
+                        let isValid = this.initializeParsey('#addressForm');
+                        if (isValid) {
+                            if (this.isAddressModified()) {
+                                self.checkoutService.updateCart(self.viewModelName)
+                                    .then(result => {
+                                        const { Cart } = result;
+                                        this.adressBeforeEdit = { ...this.Cart.ShippingAddress };
+                                        this.Cart = Cart;
+                                        processShipping.resolve(true);
+                                    });
+                            } else {
+                                processShipping.resolve(true);
+                            }
+                        } else {
+                            processShipping.resolve(false);
+                        };
+                        return processShipping.promise;
+                    },
                     changePostalCode() {
-                        this.IsLoading = true;
-                        self.checkoutService.updatePostalCode(this.Cart.ShippingAddress.PostalCode)
-                        .then((cart: any) => {
-                            
-                             this.Cart = {
-                                ...this.Cart,
-                                ShippingAddress: {...this.Cart.ShippingAddress, 
-                                    PostalCode: cart.ShippingAddress.PostalCode,
-                                    RegionCode: cart.ShippingAddress.RegionCode,
-                                    RegionName: cart.ShippingAddress.RegionName
-                                },
-                                OrderSummary: cart.OrderSummary
-                            };
-                        })
-                        .finally(() => this.IsLoading = false);;
+                       
+                        let isValid = this.initializeParsey('#addressForm');
+                        this.PostalCodeError = false;
+                        if (isValid) {
+                            this.IsLoading = true;
+                            self.checkoutService.updatePostalCode(this.Cart.ShippingAddress.PostalCode)
+                                .then((cart: any) => {
+
+                                    this.Cart = {
+                                        ...this.Cart,
+                                        ShippingAddress: {
+                                            ...this.Cart.ShippingAddress,
+                                            PostalCode: cart.ShippingAddress.PostalCode,
+                                            RegionCode: cart.ShippingAddress.RegionCode,
+                                            RegionName: cart.ShippingAddress.RegionName
+                                        },
+                                        OrderSummary: cart.OrderSummary
+                                    };
+                                })
+                                .fail(e => {
+                                    if(e && e.Errors) {
+                                        this.PostalCodeError = true;
+                                        console.log(e.Errors);
+                                    }
+                                })
+                                .finally(() => this.IsLoading = false);
+                        }
 
                     },
                     isAddressModified() {
@@ -88,17 +107,9 @@ module Orckestra.Composer {
         public getUpdateModelPromise(): Q.Promise<any> {
             return Q.fcall(() => {
                 var vm = {};
-                var vueAddressData = this.checkoutService.VueCheckout.Cart.ShippingAddress;
-                var formData: any = this.getSerializedForm();
-
-                var keys = _.keys(formData);
-                _.each(keys, key => {
-                    if (vueAddressData.hasOwnProperty(key)) {
-                        formData[key] = vueAddressData[key];
-                    }
-                });
-     
-                vm[this.viewModelName] = JSON.stringify(formData);
+                var vueData = this.checkoutService.VueCheckout;
+                var vueAddressData = vueData.AddingNewAddressMode ? vueData.AddNewAddress : vueData.Cart.ShippingAddress;
+                vm[this.viewModelName] = JSON.stringify(vueAddressData);
                 return vm;
             });
         }

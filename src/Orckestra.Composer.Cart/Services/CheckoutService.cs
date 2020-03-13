@@ -573,13 +573,16 @@ namespace Orckestra.Composer.Cart.Services
             }
 
             //In the case the user didn't do estimate shipping before
-            await ShippingMethodViewService.EstimateShippingAsync(new EstimateShippingParam
+            if (shipment.FulfillmentMethod == null)
             {
-                Cart = cart,
-                CultureInfo = CultureInfo.GetCultureInfo(cart.CultureName), //TODO: Fix me
-                ForceUpdate = isShippingChanged
+                await ShippingMethodViewService.EstimateShippingAsync(new EstimateShippingParam
+                {
+                    Cart = cart,
+                    CultureInfo = CultureInfo.GetCultureInfo(cart.CultureName), //TODO: Fix me
+                    ForceUpdate = isShippingChanged
 
-            }).ConfigureAwait(false);
+                }).ConfigureAwait(false);
+            }
         }
 
         protected virtual bool IsEqual(Address firstAddress, Address secondAddress)

@@ -73,6 +73,6 @@ module Orckestra.Composer {
         protected isValidForUpdate(): boolean {
             return _.all(this.formInstances, formInstance => formInstance.validate());
         }
-
+      
     }
 }

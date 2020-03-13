@@ -25,3 +25,16 @@ button, a {
         }
     }
 }
+
+.btn {
+    &.btn-dashed-block {
+        width: 100%;
+        border: dashed 1px  $gray-400;
+        background: #fff;
+
+        &:hover, &:focus {
+            border: dashed 1px  $gray-600;
+            color: $primary;
+        }
+    }
+}

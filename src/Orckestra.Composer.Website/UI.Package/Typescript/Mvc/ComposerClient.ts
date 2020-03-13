@@ -85,7 +85,7 @@ module Orckestra.Composer {
             }
 
             if (reason.readyState === 4 && reason.status === 500 && reason.responseJSON !== null) {
-                throw { Errors: reason.responseJSON.Errors };
+                throw { Errors: reason.responseJSON.Errors || reason.responseJSON.ExceptionMessage };
             }
 
             throw reason;

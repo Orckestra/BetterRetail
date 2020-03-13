@@ -14,8 +14,7 @@ module Orckestra.Composer {
     export class ShippingSingleCheckoutController extends Orckestra.Composer.BaseSingleCheckoutController {
 
         protected customerService: ICustomerService = new CustomerService(new CustomerRepository());
-        protected shippingAddressRegisteredService: ShippingAddressRegisteredService =
-            new ShippingAddressRegisteredService(this.customerService);
+      
 
         public initialize() {
             super.initialize();
@@ -24,21 +23,11 @@ module Orckestra.Composer {
 
             let vueShippingMixin = {
                 data: {
-                    RegisteredAddresses: {},
-                    AddingNewAddressMode: false,
-                    AddNewAddress: {},
-                    SelectedShippingAddressId: null
+
                 },
                 mounted() {
                     this.calculateSelectedMethod();
 
-                    if (this.IsAuthenticated) {
-                        self.shippingAddressRegisteredService.getShippingAddresses(this.Cart)
-                            .then(data => {
-                                this.RegisteredAddresses = data.Addresses;
-                                this.SelectedShippingAddressId = data.SelectedShippingAddressId;
-                            })
-                    }
                 },
                 computed: {
                     FulfilledShipping() {
@@ -115,6 +104,7 @@ module Orckestra.Composer {
                                 this.Cart.ShippingMethod = oldValue;
                             })
                     },
+                   
 
                     calculateSelectedMethod() {
                         let selectedProviderId = this.Cart.ShippingMethod ? this.Cart.ShippingMethod.ShippingProviderId : undefined;

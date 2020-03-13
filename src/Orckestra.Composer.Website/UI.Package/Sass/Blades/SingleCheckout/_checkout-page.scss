@@ -1,34 +1,9 @@
 .checkout-page {
     [v-cloak] { display:none; }
 }
-.select-shipping-block {
-    border: solid 1px $input-border-color;
-    border-radius: $border-radius;
-    transition: border-color .15s ease-out, background .15s ease-out;
 
-    & .selected {
-        background: #f3f6f7;
-        border-color: #0f4e66;
-    }
-    .collapse {
-        border-top: solid 1px $input-border-color;
-    }
-    .input-group {
-        position: relative;
-        display: flex;
-        cursor: pointer;
-        font-weight: inherit;
-
-        .input-addon {
-            padding-top: 30px;
-            padding-left: 20px;
-        }
-
-        .radio-content {
-            padding: 30px 20px 30px 10px;
-            flex: 1;
-        }
-    }
+.selected-method-type {
+    border-color: $primary !important;
 }
 
 

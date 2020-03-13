@@ -38,11 +38,13 @@
 
                 <div class="form-row" novalidate="novalidate" id="AccordionShippingMethodType">
                     <div class="col-md-6 pb-3" v-for="shippingMethodType in ShippingMethodTypes">
-                        <div class="border  rounded bg-white  p-3">
+                        <div class="border  rounded bg-white  p-3"  
+							 v-bind:class="{'selected-method-type': shippingMethodType.FulfillmentMethodTypeString === SelectedMethodTypeString}">
                             <div class="form-check">
 
                                 <input data-parsley-class-handler-selector=".card-body"
                                        data-parsley-errors-container="#method-errors"
+									   v-bind:data-qa="'radio-method-type-' + shippingMethodType.FulfillmentMethodTypeString"
                                        class="form-check-input" type="radio"
                                        v-bind:checked="shippingMethodType.FulfillmentMethodTypeString === SelectedMethodTypeString"
                                        v-bind:disabled="IsLoading"
@@ -54,7 +56,8 @@
                                        v-on:change="changeShippingMethodType"
                                        xmlns:v-on="v-on" />
 
-                                <label class="form-check-label d-block" v-bind:for="shippingMethodType.FulfillmentMethodTypeString + '-radio'">
+                                <label class="form-check-label d-block" 
+									   v-bind:for="shippingMethodType.FulfillmentMethodTypeString + '-radio'">
                                     <div class="d-flex justify-content-between">
                                         <p class="h4 ">{{shippingMethodType.DisplayName}}</p>
 
@@ -73,7 +76,7 @@
                                                aria-expanded="true"
                                                v-bind:aria-controls="'ShippingMethod' + shippingMethodType.FulfillmentMethodTypeString"
                                                class="cta">
-                                                @Html.Localize("CheckoutProcess", "F_ChangeShippingMethod")
+                                               @Html.Localize("CheckoutProcess", "F_ChangeShippingMethod")
                                             </a>
                                         </p>
                                         <span v-if="shippingMethodType.SelectedMethod.ExpectedDaysBeforeDelivery" class="clearfix">
@@ -94,7 +97,8 @@
                                             <div class="col-8">
                                                 <p class="mb-0 font-weight-bolder">{{shippingMethod.DisplayName}}</p>
                                                 <p v-if="shippingMethod.ExpectedDaysBeforeDelivery" class="mb-0">
-                                                    @Html.Localize("CheckoutProcess", "F_ShipTimeTitle") {{shippingMethod.ExpectedDaysBeforeDelivery}} @Html.Localize("CheckoutProcess", "L_DeliveryDaysNumber")
+                                                    @Html.Localize("CheckoutProcess", "F_ShipTimeTitle") {{shippingMethod.ExpectedDaysBeforeDelivery}} 
+													@Html.Localize("CheckoutProcess", "L_DeliveryDaysNumber")
                                                 </p>
                                                 <p class="mb-0 font-weight-bolder">{{shippingMethod.Cost}}</p>
                                             </div>
@@ -112,7 +116,7 @@
                 </div>
                 <transition name="fade">
                     <div v-if="IsShippingMethodType" class="mt-2  pt-2  border-top">
-                        <div v-if="IsAuthenticated">
+                        <div v-if="IsAuthenticated" data-oc-controller="SingleCheckout.ShippingAddressRegistered">
                             <div v-for="address in RegisteredAddresses"
 								 v-bind:key="address.Id"
 								 class="border  rounded p-3  mb-2"
@@ -121,17 +125,20 @@
 							     @CustomerShippingAddressRadio()
 								
                             </div>
-							<div v-if="AddingNewAddressMode">
-								  @Forms.ShippingAddress.Form("AddNewAddress", "addNewAddressForm")
+							<div v-if="AddingNewAddressMode" class="border-top mt-4 pt-4">
+								  @Forms.ShippingAddress.Form("AddNewAddress", "addNewAddressForm", "changePostalCodeRegistered")
 							</div>
 							<div>
-								<button class="btn btn-link" v-on:click="AddingNewAddressMode=true">Add New Address</button>
+								<button v-if="!AddingNewAddressMode" class="btn btn-dashed-block"
+										v-on:click="addNewAddressMode" 
+										data-qa="checkout-create-address-link">
+									@Html.Localize("MyAccount", "B_AddNewAddress")
+								</button>
 							</div>
                         </div>
-                        <div v-else="v-else">
-                            <div data-oc-controller="SingleCheckout.ShippingAddress">
-                                @Forms.ShippingAddress.Form("Cart.ShippingAddress", "addressForm")
-                            </div>
+                        <div v-else="v-else" data-oc-controller="SingleCheckout.ShippingAddress">
+							
+                             @Forms.ShippingAddress.Form("Cart.ShippingAddress", "addressForm")
                         </div>
                     </div>
                 </transition>
@@ -167,8 +174,9 @@
                required="required"
                name="ShippingAddressId"
                v-bind:value="address.ShippingAddressId"
-               v-bind:id="address.Id + '-radio'"
-               v-on:change=""
+	           v-bind:id="address.Id + '-radio'"
+			   v-bind:data-qa="'radio-address-' + address.Id"
+               v-on:change="changeRegisteredShippingAddress(address.Id)"
                xmlns:v-on="v-on"
                xmlns:v-bind="v-bind" />
         <label class="form-check-label d-block" v-bind:for="address.Id + '-radio'">

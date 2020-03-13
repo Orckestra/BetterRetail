@@ -3,13 +3,13 @@
 
 @helper ShippingAddressPreview(string vueBinding)
 {
-<p class="mb-0">
-    <strong>{{@(vueBinding).FirstName}} {{@(vueBinding).LastName}}</strong><br />
-    <span>{{@(vueBinding).Line1}}</span><br />
-    <span v-if="@(vueBinding).Line2">{{@(vueBinding).Line2}}<br /></span>
-    <span>{{@(vueBinding).City}}</span><br />
-    <span>{{@(vueBinding).RegionName}}</span>,
-    <span>{{@(vueBinding).PostalCode}}</span>
-</p>
+    <p class="mb-0">
+        <strong>{{@(vueBinding).FirstName}} {{@(vueBinding).LastName}}</strong><br />
+        <span>{{@(vueBinding).Line1}}</span><br />
+        <span v-if="@(vueBinding).Line2">{{@(vueBinding).Line2}}<br /></span>
+        <span>{{@(vueBinding).City}}</span><br />
+        <span>{{@(vueBinding).RegionName}}</span>,
+        <span>{{@(vueBinding).PostalCode}}</span>
+    </p>
 }
 
