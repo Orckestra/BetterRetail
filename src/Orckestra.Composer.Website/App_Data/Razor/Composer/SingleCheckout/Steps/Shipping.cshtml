@@ -39,7 +39,7 @@
                 <div class="form-row" novalidate="novalidate" id="AccordionShippingMethodType">
                     <div class="col-md-6 pb-3" v-for="shippingMethodType in ShippingMethodTypes">
                         <div class="border  rounded bg-white  p-3"  
-							 v-bind:class="{'selected-method-type': shippingMethodType.FulfillmentMethodTypeString === SelectedMethodTypeString}">
+							 v-bind:class="{'selected-method-type bg-selected': shippingMethodType.FulfillmentMethodTypeString === SelectedMethodTypeString}">
                             <div class="form-check">
 
                                 <input data-parsley-class-handler-selector=".card-body"
@@ -120,18 +120,18 @@
                             <div v-for="address in RegisteredAddresses"
 								 v-bind:key="address.Id"
 								 class="border  rounded p-3  mb-2"
-								 v-bind:class="{ 'bg-light border-primary': address.Id == SelectedShippingAddressId, 'bg-white': address.Id != SelectedShippingAddressId}">
+								 v-bind:class="{ 'bg-selected border-primary': address.Id == SelectedShippingAddressId, 'bg-white': address.Id != SelectedShippingAddressId}">
 
 							     @CustomerShippingAddressRadio()
 								
                             </div>
 							<div v-if="AddingNewAddressMode" class="border-top mt-4 pt-4">
-								  @Forms.ShippingAddress.Form("AddNewAddress", "addNewAddressForm", "changePostalCodeRegistered")
+								  @Forms.ShippingAddress.Form("Cart.ShippingAddress", "addNewAddressForm")
 							</div>
 							<div>
 								<button v-if="!AddingNewAddressMode" class="btn btn-dashed-block"
 										v-on:click="addNewAddressMode" 
-										data-qa="checkout-create-address-link">
+										data-qa="shipping-add-address-link">
 									@Html.Localize("MyAccount", "B_AddNewAddress")
 								</button>
 							</div>
@@ -182,7 +182,7 @@
         <label class="form-check-label d-block" v-bind:for="address.Id + '-radio'">
             <div class="row">
                 <div class="col-12 col-sm-9 order-2  order-sm-1">@CheckoutHelpers.ShippingAddressPreview("address")</div>
-                <div class="col-12 col-sm-3  order-1  order-sm-2 font-weight-bolder"><p class="text-left text-sm-right"> {{address.AddressName}}</p></div>
+                <div class="col-12 col-sm-3  order-1  order-sm-2 font-weight-bolder"><p class="text-left text-sm-right h5"> {{address.AddressName}}</p></div>
             </div>
         </label>
     </div>

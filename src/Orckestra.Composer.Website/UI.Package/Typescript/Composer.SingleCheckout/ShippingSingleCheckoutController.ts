@@ -31,14 +31,20 @@ module Orckestra.Composer {
                 },
                 computed: {
                     FulfilledShipping() {
-                        let fulfilled = this.Cart.ShippingMethod &&
+
+                        let fulfilledAddress =
+                            this.ShippingAddress.FirstName &&
+                            this.ShippingAddress.LastName &&
                             this.ShippingAddress.Line1 &&
                             this.ShippingAddress.City &&
                             this.ShippingAddress.RegionCode &&
-                            this.ShippingAddress.PostalCode &&
-                            !this.IsLoading;
+                            this.ShippingAddress.PostalCode;
 
-                        return fulfilled;
+                        if (this.IsAuthenticated) {
+                            fulfilledAddress = fulfilledAddress || this.SelectedShippingAddressId
+                        }
+
+                        return fulfilledAddress && this.Cart.ShippingMethod && !this.IsLoading;
                     },
                     SelectedMethodTypeString() {
                         return this.Cart.ShippingMethod ? this.Cart.ShippingMethod.FulfillmentMethodTypeString : '';
@@ -56,6 +62,9 @@ module Orckestra.Composer {
                 },
                 methods: {
                     processShipping() {
+                        if (this.IsShippingMethodType) {
+                            return this.processShippingAddress();
+                        }
                         return true;
                     },
                     selectShippingMethod(methodEntity: any) {

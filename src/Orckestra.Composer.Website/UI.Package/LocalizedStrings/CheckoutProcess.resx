@@ -334,4 +334,7 @@ Enter your credit card information</value>
   <data name="F_RecalculateShippingFee" xml:space="preserve">
     <value>Recalulate Shipping Fees</value>
   </data>
+  <data name="F_PlaceOrder" xml:space="preserve">
+    <value>Place Order</value>
+  </data>
 </root>

@@ -18,7 +18,6 @@ module Orckestra.Composer {
                 data: {
                     RegisteredAddresses: {},
                     AddingNewAddressMode: false,
-                    AddNewAddress: { },
                     SelectedShippingAddressId: null
                 },
                 created() {
@@ -34,39 +33,19 @@ module Orckestra.Composer {
                                 if (!isNewAddreess) {
                                     this.SelectedShippingAddressId = data.SelectedShippingAddressId;
                                 } else {
-                                    this.AddNewAddress = {...this.ShippingAddress};
                                     this.AddingNewAddressMode = true;
                                 }
-                                this.AddNewAddress.CountryCode = this.ShippingAddress.CountryCode;
                             });
-                        
-                        
                     }
                 },
                 computed: {
                 },
                 methods: {
 
-                    processRegisteredShippingAddress() {
-                        if (this.AddingNewAddressMode) {
-                            var processShipping: Q.Deferred<boolean> = Q.defer<boolean>();
-                            let isValid = this.initializeParsey('#addNewAddressForm');
-                            if (isValid) {
-                                self.checkoutService.updateCart("ShippingAddress")
-                                .then(result => {
-                                    const { Cart } = result;
-                                    this.Cart = Cart;
-                                    processShipping.resolve(true);
-                                });
-                            } else {
-                                processShipping.resolve(false);
-                            };
-                            return processShipping.promise;
-                        } else { return true; };
-                    },
                     addNewAddressMode() {
                         this.AddingNewAddressMode = true;
                         this.SelectedShippingAddressId = undefined;
+                        this.Cart.ShippingAddress = { CountryCode: this.Cart.ShippingAddress.CountryCode };
                     },
                     changeRegisteredShippingAddress(addressId) {
 
@@ -84,28 +63,6 @@ module Orckestra.Composer {
 
                         this.debounceChangeRegisteredShippingAddress();
                     },
-                    changePostalCodeRegistered() {
-                        let isValid = this.initializeParsey('#addNewAddressForm');
-                        if (isValid) {
-                            this.IsLoading = true;
-                            self.checkoutService.updatePostalCode(this.AddNewAddress.PostalCode)
-                                .then((cart: any) => {
-
-                                    this.Cart = {
-                                        ...this.Cart,
-                                        ShippingAddress: {
-                                            ...this.Cart.ShippingAddress,
-                                            PostalCode: cart.ShippingAddress.PostalCode,
-                                            RegionCode: cart.ShippingAddress.RegionCode,
-                                            RegionName: cart.ShippingAddress.RegionName
-                                        },
-                                        OrderSummary: cart.OrderSummary
-                                    };
-                                })
-                                .finally(() => this.IsLoading = false);
-                        }
-                    },
-
                 }
             };
 

@@ -16,76 +16,67 @@ module Orckestra.Composer {
                     ComplementaryAddressAddState: false,
                     PostalCodeError: false
                 },
-                created()  {
+                created() {
                     this.adressBeforeEdit = { ...this.Cart.ShippingAddress };
                     this.ComplementaryAddressAddState = !this.Cart.ShippingAddress.Line2;
                 },
                 mounted() {
-                 
+
                 },
                 computed: {
                 },
                 methods: {
+
                     processShippingAddress() {
-
-                        if (this.IsShippingMethodType) {
-                          
-                            if (!this.IsAuthenticated) {
-                                return this.processGuestShippingAddress();
-                            } else {
-                                return this.processRegisteredShippingAddress();
-                            }
-                        }
-
-                        return true;
-                    },
-                    processGuestShippingAddress() {
-                        var processShipping: Q.Deferred<boolean> = Q.defer<boolean>();
-                        let isValid = this.initializeParsey('#addressForm');
+                        var processShippingAddress: Q.Deferred<boolean> = Q.defer<boolean>();
+                        let formId = !this.IsAuthenticated ? '#addressForm' : '#addNewAddressForm';
+                        let isValid = this.initializeParsey(formId);
                         if (isValid) {
-                              if (this.addressModified()) {
-                                  this.changePostalCode().then(success => {
-                                      if (success) {
-                                          self.checkoutService.updateCart(self.viewModelName)
-                                              .then(result => {
-                                                  const { Cart } = result;
-                                                  this.adressBeforeEdit = { ...this.Cart.ShippingAddress };
-                                                  this.Cart = Cart;
-                                                  processShipping.resolve(true);
-                                              })
-                                              .fail(reason => {
-                                                  console.log(reason);
-                                                  processShipping.resolve(false);
-                                              });
-                                      } else {
-                                        processShipping.resolve(false);
-                                      }
-                                  })
-                               
+                            if (this.addressModified()) {
+                                let postalCode = this.Cart.ShippingAddress.PostalCode;
+                                this.changePostalCode(postalCode).then(success => {
+                                    if (success) {
+                                        self.checkoutService.updateCart(self.viewModelName)
+                                            .then(result => {
+                                                const { Cart } = result;
+                                                this.adressBeforeEdit = { ...this.Cart.ShippingAddress };
+                                                this.Cart = Cart;
+                                                processShippingAddress.resolve(true);
+                                            })
+                                            .fail(reason => {
+                                                console.log(reason);
+                                                processShippingAddress.resolve(false);
+                                            });
+                                    } else {
+                                        processShippingAddress.resolve(false);
+                                    }
+                                })
+
                             } else {
-                                processShipping.resolve(true);
+                                processShippingAddress.resolve(true);
                             }
                         } else {
-                            processShipping.resolve(false);
+                            processShippingAddress.resolve(false);
                         };
 
-                        return processShipping.promise;
+                        return processShippingAddress.promise;
                     },
                     recalculateShippingFee() {
-                       
-                        let isValid = this.initializeParsey('#addressForm');
+
+                        let formId = !this.IsAuthenticated ? '#addressForm' : '#addNewAddressForm';
+                        let isValid = this.initializeParsey(formId);
                         if (isValid) {
-                            this.changePostalCode();
+                            this.changePostalCode(this.Cart.ShippingAddress.PostalCode);
                         }
 
                     },
-                    changePostalCode() {
+                    changePostalCode(postalCode: any) {
                         var processPostalCode: Q.Deferred<boolean> = Q.defer<boolean>();
-         
+
                         this.PostalCodeError = false;
-                        if (this.adressBeforeEdit.PostalCode != this.Cart.ShippingAddress.PostalCode) {
+                        if (this.adressBeforeEdit.PostalCode != postalCode) {
                             this.IsLoading = true;
-                            self.checkoutService.updatePostalCode(this.Cart.ShippingAddress.PostalCode).then((cart: any) => {
+                            self.checkoutService.updatePostalCode(postalCode).then((cart: any) => {
                                 this.adressBeforeEdit = { ...this.Cart.ShippingAddress };
                                 this.Cart = {
                                     ...this.Cart,
@@ -99,12 +90,12 @@ module Orckestra.Composer {
                                 };
                                 processPostalCode.resolve(true);
                             })
-                            .fail(reason => {
-                                console.log(reason);
-                                this.PostalCodeError = true;
-                                processPostalCode.resolve(false);
-                            })
-                            .finally(() => this.IsLoading = false);
+                                .fail(reason => {
+                                    console.log(reason);
+                                    this.PostalCodeError = true;
+                                    processPostalCode.resolve(false);
+                                })
+                                .finally(() => this.IsLoading = false);
                         } else {
                             processPostalCode.resolve(true);
                         }
@@ -129,8 +120,7 @@ module Orckestra.Composer {
         public getUpdateModelPromise(): Q.Promise<any> {
             return Q.fcall(() => {
                 var vm = {};
-                var vueData = this.checkoutService.VueCheckout;
-                var vueAddressData = vueData.AddingNewAddressMode ? vueData.AddNewAddress : vueData.Cart.ShippingAddress;
+                var vueAddressData = this.checkoutService.VueCheckout.Cart.ShippingAddress;
                 vm[this.viewModelName] = JSON.stringify(vueAddressData);
                 return vm;
             });

@@ -56,7 +56,7 @@
 {
     <div v-if="Rewards.Lenght" class="text-center">
         <p class="promotion  mb-2">
-            <em v-for="reward in Rewards">{{reward.Description}}</em>
+            <em v-for="(reward, index) in Rewards" v-bind:data-qa="'reward-' +  index">{{reward.Description}}</em>
         </p>
     </div>
 }
@@ -95,7 +95,7 @@
     <div v-if="OrderSummary.SavingsTotal" class="row  mb-2">
         <div class=" col-12 ">
             <div class="alert alert-success bg-white text-center text-success  m-0">
-                <span data-qa="order-summary-discount">
+                <span data-qa="checkout-order-summary-discount">
                     @Html.Localize("MyAccount", "L_Savings")
                     &#160;
                     <span v-text="OrderSummary.SavingsTotal"></span>
@@ -159,7 +159,7 @@
 
 @helper Taxes()
 {
-    <div class="row  mb-2" v-for="tax in OrderSummary.Taxes">
+    <div class="row  mb-2" v-for="(tax, index) in OrderSummary.Taxes" v-bind:data-qa="'tax-' + index">
         <div class="col-7">
             {{tax.DisplayName}}
             <span v-if="tax.Percentage">({{tax.Percentage}})</span>
@@ -188,8 +188,10 @@
 {
     <div class="row  mb-2">
         <div class="col-12">
-            <button class="btn btn-success  w-100  text-uppercase" v-bind:disabled="OrderCanBePlaced == false">
-                Place Order
+            <button class="btn btn-success  w-100  text-uppercase"
+                    data-qa="chechout-place-order-btn"
+                    v-bind:disabled="OrderCanBePlaced == false">
+                @Html.Localize("CheckoutProcess", "F_PlaceOrder")
             </button>
         </div>
     </div>
