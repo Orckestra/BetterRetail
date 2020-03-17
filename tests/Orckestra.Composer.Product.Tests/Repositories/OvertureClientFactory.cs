@@ -35,8 +35,8 @@ namespace Orckestra.Composer.Product.Tests.Repositories
 
             var overtureClientMock = new Mock<IOvertureClient>();
             overtureClientMock
-            .Setup(client => client.SendAsync(It.IsNotNull<GetCategoriesRequest>()))
-            .ReturnsAsync(new List<Category>(categoriesToReturn))
+            .Setup(client => client.SendAsync(It.IsNotNull<GetCategoriesV2Request>()))
+            .ReturnsAsync(new CategoryList() { Categories = new List<Category>(categoriesToReturn) })
             .Verifiable();
             return overtureClientMock;
         }
