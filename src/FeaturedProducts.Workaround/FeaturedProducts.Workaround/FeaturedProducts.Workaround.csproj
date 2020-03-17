@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{B5E98ACB-93AB-465E-B98C-2A9D5B8A903E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>FeaturedProducts.Workaround</RootNamespace>
+    <AssemblyName>FeaturedProducts.Workaround</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Orckestra.Composer">
+      <HintPath>..\..\Orckestra.Composer.Search\bin\Debug\Orckestra.Composer.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Orckestra.Composer.Search">
+      <HintPath>..\..\Orckestra.Composer.Search\bin\Debug\Orckestra.Composer.Search.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Orckestra.ExperienceManagement.Configuration">
+      <HintPath>..\..\Orckestra.Composer.Search\bin\Debug\Orckestra.ExperienceManagement.Configuration.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Orckestra.Overture.Interfaces">
+      <HintPath>..\..\Orckestra.Composer.Search\bin\Debug\Orckestra.Overture.Interfaces.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Orckestra.Overture.RestClient">
+      <HintPath>..\..\Orckestra.Composer.Search\bin\Debug\Orckestra.Overture.RestClient.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Orckestra.Overture.ServiceModel">
+      <HintPath>..\..\Orckestra.Composer.Search\bin\Debug\Orckestra.Overture.ServiceModel.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Orckestra.Overture.ServiceModel.Requests">
+      <HintPath>..\..\Orckestra.Composer.Search\bin\Debug\Orckestra.Overture.ServiceModel.Requests.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="ServiceStack.Client">
+      <HintPath>..\..\Orckestra.Composer.Search\bin\Debug\ServiceStack.Client.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="ServiceStack.Interfaces">
+      <HintPath>..\..\Orckestra.Composer.Search\bin\Debug\ServiceStack.Interfaces.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="ServiceStack.Text">
+      <HintPath>..\..\Orckestra.Composer.Search\bin\Debug\ServiceStack.Text.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Plugin.cs" />
+    <Compile Include="WorkaroundProductRequestFactory.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
