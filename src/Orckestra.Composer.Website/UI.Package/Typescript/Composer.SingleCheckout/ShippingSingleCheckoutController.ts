@@ -62,7 +62,7 @@ module Orckestra.Composer {
                 },
                 methods: {
                     processShipping() {
-                        if (this.IsShippingMethodType) {
+                        if (this.IsShippingMethodType && !this.ShippingAddress.AddressBookId) {
                             return this.processShippingAddress();
                         }
                         return true;

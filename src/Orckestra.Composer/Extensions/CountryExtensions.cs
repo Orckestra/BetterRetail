@@ -13,18 +13,18 @@ namespace Orckestra.Composer.Extensions
             if (country == null) { throw new ArgumentNullException("country"); }
             if (string.IsNullOrWhiteSpace(postalCode)) { throw new ArgumentException("The postal code cannot be null or contain only whitespaces"); }
 
-            if (string.IsNullOrWhiteSpace(country.PostalCodeRegex))
+            if (!string.IsNullOrWhiteSpace(country.PostalCodeRegex))
             {
-                throw new InvalidOperationException(string.Format("{0} does not have a regex for postal codes", country.CountryName));
+                var regex = new Regex(country.PostalCodeRegex, RegexOptions.CultureInvariant | RegexOptions.IgnoreCase);
+                if (regex.IsMatch(postalCode))
+                {
+                    return;
+                }
+                else
+                {
+                    throw new InvalidOperationException(string.Format("The postal code {0} does not match the regex of {1}", postalCode, country.CountryName));
+                }
             }
-
-            var regex = new Regex(country.PostalCodeRegex, RegexOptions.CultureInvariant | RegexOptions.IgnoreCase);
-            if (regex.IsMatch(postalCode))
-            {
-                return;
-            }
-
-            throw new InvalidOperationException(string.Format("The postal code {0} does not match the regex of {1}", postalCode, country.CountryName));
         }
     }
 }

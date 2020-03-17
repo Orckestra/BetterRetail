@@ -34,6 +34,9 @@ module Orckestra.Composer {
                         let isValid = this.initializeParsey('#editCustomerForms');
 
                         if (isValid) {
+
+                            this.preFillShippingAddress();
+
                             if (this.isCustomerModified()) {
                                 self.checkoutService.updateCart(self.viewModelName).then(result => {
                                     this.customerBeforeEdit = { ...this.Cart.Customer };
@@ -47,6 +50,13 @@ module Orckestra.Composer {
                         }
 
                         return processCustomer.promise;
+                    },
+
+                    preFillShippingAddress() {
+                        if (!this.Cart.ShippingAddress.FirstName && !this.Cart.ShippingAddress.LastName) {
+                            this.Cart.ShippingAddress.FirstName = this.Customer.FirstName;
+                            this.Cart.ShippingAddress.LastName = this.Customer.LastName;
+                        }
                     },
 
                     isCustomerModified() {
