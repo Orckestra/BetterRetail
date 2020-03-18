@@ -71,11 +71,14 @@ module Orckestra.Composer {
                         this.AddingNewAddressMode = false;
                     },
                     processShipping() {
-                        if (this.IsShippingMethodType && !this.ShippingAddress.AddressBookId) {
-                            if (this.AddingNewAddressMode) {
+                        if (this.IsShippingMethodType) {
+                            if (this.IsAuthenticated && this.AddingNewAddressMode) {
                                 return this.processAddingNewShippingAddress();
                             } else {
-                                return this.processShippingAddress();
+                                if (!this.ShippingAddress.AddressBookId ||
+                                    this.ShippingAddress.AddressBookId == '00000000-0000-0000-0000-000000000000') {
+                                    return this.processShippingAddress();
+                                }
                             }
                         }
                         return true;
