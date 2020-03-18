@@ -29,11 +29,13 @@ button, a {
 .btn {
     &.btn-dashed-block {
         width: 100%;
-        border: dashed 1px  $gray-400;
+        border: dashed 2px  $gray-400;
         background: #fff;
+        font-weight: bold;
+        color: $primary;
 
         &:hover, &:focus {
-            border: dashed 1px  $gray-600;
+            border: dashed 2px  $gray-600;
             color: $primary;
         }
     }
