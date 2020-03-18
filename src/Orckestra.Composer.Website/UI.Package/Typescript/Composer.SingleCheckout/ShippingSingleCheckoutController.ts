@@ -38,7 +38,8 @@ module Orckestra.Composer {
                             this.ShippingAddress.Line1 &&
                             this.ShippingAddress.City &&
                             this.ShippingAddress.RegionCode &&
-                            this.ShippingAddress.PostalCode;
+                            this.ShippingAddress.PostalCode &&
+                            this.ShippingAddress.PhoneNumber;
 
                         if (this.IsAuthenticated) {
                             fulfilledAddress = fulfilledAddress || this.SelectedShippingAddressId
@@ -61,9 +62,21 @@ module Orckestra.Composer {
 
                 },
                 methods: {
+                    prepareShipping() {
+                        if (!this.Cart.ShippingAddress.FirstName && !this.Cart.ShippingAddress.LastName) {
+                            this.Cart.ShippingAddress.FirstName = this.Customer.FirstName;
+                            this.Cart.ShippingAddress.LastName = this.Customer.LastName;
+                        }
+                        this.ComplementaryAddressAddState = !this.Cart.ShippingAddress.Line2;
+                        this.AddingNewAddressMode = false;
+                    },
                     processShipping() {
                         if (this.IsShippingMethodType && !this.ShippingAddress.AddressBookId) {
-                            return this.processShippingAddress();
+                            if (this.AddingNewAddressMode) {
+                                return this.processAddingNewShippingAddress();
+                            } else {
+                                return this.processShippingAddress();
+                            }
                         }
                         return true;
                     },

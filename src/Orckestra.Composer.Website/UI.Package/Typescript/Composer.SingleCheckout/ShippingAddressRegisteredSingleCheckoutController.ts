@@ -4,7 +4,7 @@
 module Orckestra.Composer {
     'use strict';
 
-    export class ShippingAddressRegisteredSingleCheckoutController extends Orckestra.Composer.BaseSingleCheckoutController {
+    export class ShippingAddressRegisteredSingleCheckoutController extends Orckestra.Composer.ShippingAddressSingleCheckoutController {
         protected customerService: ICustomerService = new CustomerService(new CustomerRepository());
         protected shippingAddressRegisteredService: ShippingAddressRegisteredService =
             new ShippingAddressRegisteredService(this.customerService);
@@ -21,7 +21,7 @@ module Orckestra.Composer {
                     SelectedShippingAddressId: null,
                     IsPreferredShipping: false,
                     AddressName: null,
-                    SaveAddressToBookMode: false
+                    AddressNameAlreadyInUseError: false
                 },
                 created() {
 
@@ -48,37 +48,70 @@ module Orckestra.Composer {
                     addNewAddressMode() {
                         this.AddingNewAddressMode = true;
                         this.SelectedShippingAddressId = undefined;
+                        this.ComplementaryAddressAddState = !this.Cart.ShippingAddress.Line2;
                         this.Cart.ShippingAddress = { CountryCode: this.Cart.ShippingAddress.CountryCode };
                     },
-                    
-                    changeRegisteredShippingAddress(addressId) {
+
+                    processAddingNewShippingAddress() {
+                        var processAddingNewShippingAddress: Q.Deferred<boolean> = Q.defer<boolean>();
+                        let formId = '#addNewAddressForm';
+                        let isValid = this.initializeParsey(formId);
+                        if (isValid) {
+
+                            let postalCode = this.Cart.ShippingAddress.PostalCode;
+                            this.changePostalCode(postalCode).then(success => {
+                                if (success) {
+                                    let addressData = { ...this.Cart.ShippingAddress };
+                                    addressData.AddressName = this.AddressName;
+
+                                    self.customerService.createAddress(addressData, null).then(address => {
+                                        this.RegisteredAddresses.push(address);
+                                        this.changeRegisteredShippingAddress(address.Id, processAddingNewShippingAddress);
+
+                                    }).fail((reason) => {
+                                        console.log(reason);
+                                        if (reason.Errors && _.find(reason.Errors, (e: any) => e.ErrorCode == 'NameAlreadyUsed')) {
+                                            this.AddressNameAlreadyInUseError = true;
+                                        }
+                                        processAddingNewShippingAddress.resolve(false);
+                                    });
+                                } else {
+                                    processAddingNewShippingAddress.resolve(false);
+                                }
+                            })
+
+                        } else {
+                            processAddingNewShippingAddress.resolve(false);
+                        };
+
+                        return processAddingNewShippingAddress.promise;
+                    },
+
+                    changeRegisteredShippingAddress(addressId, addingNewAddressPromise = null) {
 
                         this.SelectedShippingAddressId = addressId;
                         this.AddingNewAddressMode = false;
                         if (!this.debounceChangeRegisteredShippingAddress) {
-                            this.debounceChangeRegisteredShippingAddress = _.debounce(() => {
+                            this.debounceChangeRegisteredShippingAddress = _.debounce((addingNewAddressPromise) => {
                                 self.checkoutService.updateCart(self.viewModelName).then((response: any) => {
                                     let { Cart } = response;
                                     this.Cart = Cart;
+                                    if (addingNewAddressPromise) {
+                                        addingNewAddressPromise.resolve(true);
+                                    }
+                                }).fail((reason) => {
+                                    console.log(reason);
+                                   
+                                    if (addingNewAddressPromise) {
+                                        addingNewAddressPromise.resolve(false);
+                                    }
                                 });
                             }, 500);
                         }
 
-                        this.debounceChangeRegisteredShippingAddress();
-                    },
-                    saveAddessToAddressBook() {
-                        let addressData = { ...this.Cart.ShippingAddress };
-                        addressData.AddressName= this.AddressName;
-                        addressData.IsPreferredShipping = this.IsPreferredShipping;
-
-                        self.customerService.createAddress(addressData, null).then(address => {
-                            this.SaveAddressToBookMode = false;
-                            this.RegisteredAddresses.push(address);
-                            this.changeRegisteredShippingAddress(address.Id);
-           
-                        });
-
+                        this.debounceChangeRegisteredShippingAddress(addingNewAddressPromise);
                     }
+
                 }
             };
 

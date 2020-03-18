@@ -1,15 +1,15 @@
 ﻿@using Composite.AspNet.Razor
 @using System.Web.Mvc
 
-@helper ShippingAddressPreview(string vueBinding)
+@helper ShippingAddressPreview(string vueBinding, string qaPrefix = "shipping-address-preview")
 {
     <p class="mb-0">
-        <strong>{{@(vueBinding).FirstName}} {{@(vueBinding).LastName}}</strong><br />
-        <span>{{@(vueBinding).Line1}}</span><br />
-        <span v-if="@(vueBinding).Line2">{{@(vueBinding).Line2}}<br /></span>
-        <span>{{@(vueBinding).City}}</span><br />
-        <span>{{@(vueBinding).RegionName}}</span>,
-        <span>{{@(vueBinding).PostalCode}}</span>
+        <strong data-qa="@(qaPrefix)-fullname">{{@(vueBinding).FirstName}} {{@(vueBinding).LastName}}</strong><br />
+        <span data-qa="@(qaPrefix)-line1">{{@(vueBinding).Line1}}</span><br />
+        <span data-qa="@(qaPrefix)-line2" v-if="@(vueBinding).Line2">{{@(vueBinding).Line2}}<br /></span>
+        <span data-qa="@(qaPrefix)-city">{{@(vueBinding).City}}</span><br />
+        <span data-qa="@(qaPrefix)-regionName">{{@(vueBinding).RegionName}}</span>,
+        <span data-qa="@(qaPrefix)-postalCode">{{@(vueBinding).PostalCode}}</span>
     </p>
 }
 

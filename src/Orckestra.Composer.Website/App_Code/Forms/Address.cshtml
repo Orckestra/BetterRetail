@@ -1,11 +1,43 @@
 ﻿@using Composite.AspNet.Razor
 @using System.Web.Mvc
 
-@helper Form(string vueAddressBinding, string formId = "addressForm", string onPostalCodeChange = "recalculateShippingFee")
+@helper Form(string vueAddressBinding, string formId = "addressForm", bool showAddressName = false, string onPostalCodeChange = "recalculateShippingFee")
 {
     <form id="@formId">
         <div class="row">
             <div class="col-md-6">
+                @if (showAddressName)
+                {
+                    <div class="form-group">
+                        <label for="AddressName">@Html.Localize("Forms", "F_AddressName") *</label>
+                        <input id="AddressName"
+                               name="AddressName"
+                               v-model="AddressName"
+                               v-bind:disabled="IsLoading"
+                               class="form-control"
+                               placeholder="@Html.Localize("Forms", "F_AddressNameWaterMark")"
+                               type="text"
+                               required="required"
+                               data-parsley-length="[2, 36]"
+                               data-parsley-pattern="/^[a-zA-Z\u00E0-\u00FC\.\-\s\']+$/i"
+                               @Html.HelpBubble("Forms", "F_AddressNameIndication")
+                               @Html.ParsleyMessage("Forms", "F_AddressNameLengthError", "length-message")
+                               @Html.ParsleyMessage("Forms", "F_AddressNamePatternError", "pattern-message")
+                               v-on:change="AddressNameAlreadyInUseError=false" xmlns:v-on="v-on" />
+                        <p class="text-danger mt-1"
+                           data-qa="addressname-already-in-use-error"
+                           v-if="AddressNameAlreadyInUseError">@Html.Localize("Errors", "L_NameAlreadyUsed")</p>
+                    </div>
+                    <!--TODO: div class="form-group form-check">
+            <input name="IsPreferredShipping"
+                   v-model="IsPreferredShipping"
+                   id="IsPreferredShipping"
+                   class="form-check-input"
+                   data-qa="editaddress-ispreferredshipping"
+                   type="checkbox" />
+            <label for="IsPreferredShipping" class="form-check-label">Html.Localize("Forms", "F_IsPreferredShipping")</label>
+        </div-->
+                }
                 <div class="form-group">
                     <label for="@(formId)FirstName">@Html.Localize("Forms", "F_FirstName") *</label>
                     <input v-model="@(vueAddressBinding).FirstName"

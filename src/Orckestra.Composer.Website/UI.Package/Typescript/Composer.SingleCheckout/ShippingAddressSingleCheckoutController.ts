@@ -18,7 +18,6 @@ module Orckestra.Composer {
                 },
                 created() {
                     this.adressBeforeEdit = { ...this.Cart.ShippingAddress };
-                    this.ComplementaryAddressAddState = !this.Cart.ShippingAddress.Line2;
                 },
                 mounted() {
 
