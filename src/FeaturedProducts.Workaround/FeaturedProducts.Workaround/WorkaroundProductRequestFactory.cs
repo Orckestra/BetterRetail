@@ -15,20 +15,20 @@ using Orckestra.Overture.ServiceModel.SearchQueries;
 
 namespace FeaturedProducts.Workaround
 {
-    public class WorkaroundProductRequestFactory: ProductRequestFactory
+    public class WorkaroundProductRequestFactory: IProductRequestFactory
     {
         protected IOvertureClient OvertureClient { get; }
         protected IFacetPredicateFactory FacetPredicateFactory { get; }
 
         public WorkaroundProductRequestFactory(
-            IOvertureClient overtureClient, IFacetConfigurationContext facetConfigContext, IFacetPredicateFactory facetPredicateFactory)
+            IOvertureClient overtureClient, IFacetPredicateFactory facetPredicateFactory)
         {
             OvertureClient = overtureClient ?? throw new ArgumentNullException(nameof(overtureClient));
             FacetPredicateFactory = facetPredicateFactory ?? throw new ArgumentNullException(nameof(facetPredicateFactory));
         }
 
 
-        public override SearchAvailableProductsBaseRequest CreateProductRequest(SearchCriteria criteria)
+        public virtual SearchAvailableProductsBaseRequest CreateProductRequest(SearchCriteria criteria)
         {
             var categoryCriteria = criteria as CategorySearchCriteria;
             if (categoryCriteria != null)
@@ -42,7 +42,7 @@ namespace FeaturedProducts.Workaround
                 
             }
 
-            return base.CreateProductRequest(criteria);
+            return CreateProductRequest(criteria.Scope);
         }
 
         private string[] GetFilteredFeaturedProducts(CategorySearchCriteria categoryCriteria)
@@ -121,5 +121,50 @@ namespace FeaturedProducts.Workaround
             return facetPredicates;
         }
 
+        /// <summary>
+        /// Creates the query to see which products are active for a given catalog, i.e. scope.
+        /// </summary>
+        /// <param name="scopeId">The scope identifier.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentException">scope id cannot be null or empty;scopeId</exception>
+        public virtual SearchAvailableProductsRequest CreateProductRequest(string scopeId)
+        {
+            if (string.IsNullOrWhiteSpace(scopeId)) { throw new ArgumentException("scope id cannot be null or empty", "scopeId"); }
+
+            var request = new SearchAvailableProductsRequest
+            {
+                Query = CreateQuery(scopeId)
+            };
+
+            return request;
+        }
+
+        protected virtual Query CreateQuery(string scopeId)
+        {
+            if (string.IsNullOrWhiteSpace(scopeId)) { throw new ArgumentException("scope id cannot be null or empty", "scopeId"); }
+
+            return new Query
+            {
+                Filter = new FilterGroup
+                {
+                    BinaryOperator = BinaryOperator.And,
+                    Filters = new List<Filter>
+                    {
+                        new Filter
+                        {
+                            Member = "CatalogId",
+                            Operator = Operator.Equals,
+                            Value = scopeId
+                        },
+                        new Filter
+                        {
+                            Member = "Active",
+                            Operator = Operator.Equals,
+                            Value= bool.TrueString
+                        }
+                    }
+                }
+            };
+        }
     }
 }
