@@ -13,9 +13,9 @@
 <body>
     <div data-oc-controller="SingleCheckout.Shipping">
         <div class="card  mt-4">
-            <div class="card-header">
+            <div class="card-header"> 
                 <h4 class="float-left">
-                    @Html.Localize("CheckoutProcess", "F_ShippingStepTitle")
+                    @Html.Localize("CheckoutProcess", "F_ShippingStepTitle") 
                 </h4>
                 <button v-show="step.displayContinueButton"
                         v-bind:disabled="!FulfilledCustomer"
@@ -112,7 +112,7 @@
                                 </ul>
                             </div>
                         </div>
-                    </div>
+                    </div> 
                 </div>
                 <transition name="fade">
                     <div v-if="IsShippingMethodType" class="mt-2  pt-2  border-top">
@@ -125,9 +125,56 @@
 							     @CustomerShippingAddressRadio()
 								
                             </div>
-							<div v-if="AddingNewAddressMode" class="border-top mt-4 pt-4">
-								  @Forms.ShippingAddress.Form("Cart.ShippingAddress", "addNewAddressForm")
-							</div>
+                            <div v-if="AddingNewAddressMode" class="border-top mt-4 pt-4">
+
+                                @Forms.ShippingAddress.Form("Cart.ShippingAddress", "addNewAddressForm")
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group form-check">
+                                            <input id="saveAddress"
+                                                   name="saveAddress"
+                                                   type="checkbox"
+                                                   class="form-check-input"
+                                                   xmlns:v-on="v-on"
+                                                   v-on:change="SaveAddressToBookMode=!SaveAddressToBookMode" />
+                                            <label for="saveAddress" class="form-check-label">Save this address to my address book</label>
+                                        </div>
+                                        <div v-if="SaveAddressToBookMode" class="alert border bg-white">
+                                            <div class="form-group">
+                                                <label for="AddressName">@Html.Localize("Forms", "F_AddressName") *</label>
+                                                <input id="AddressName"
+                                                       name="AddressName"
+                                                       v-model="AddressName"
+                                                       v-bind:disabled="IsLoading"
+                                                       class="form-control"
+                                                       placeholder="@Html.Localize("Forms", "F_AddressNameWaterMark")"
+                                                       type="text"
+                                                       required="required"
+                                                       data-parsley-length="[2, 36]"
+                                                       data-parsley-pattern="/^[a-zA-Z\u00E0-\u00FC\.\-\s\']+$/i"
+                                                       @Html.HelpBubble("Forms", "F_AddressNameIndication")
+                                                       @Html.ParsleyMessage("Forms", "F_AddressNameLengthError", "length-message")
+                                                       @Html.ParsleyMessage("Forms", "F_AddressNamePatternError", "pattern-message") />
+                                            </div>
+
+                                            <div class="form-group form-check">
+                                                <input name="IsPreferredShipping"
+                                                       v-model="IsPreferredShipping"
+                                                       id="IsPreferredShipping"
+                                                       class="form-check-input"
+                                                       data-qa="editaddress-ispreferredshipping"
+                                                       type="checkbox" />
+                                                <label for="IsPreferredShipping" class="form-check-label">@Html.Localize("Forms", "F_IsPreferredShipping")</label>
+                                            </div>
+                                            <div class="form-group">
+                                                <button v-on:click="saveAddessToAddressBook" class="btn btn-sm btn-primary">Save Address</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
 							<div>
 								<button v-if="!AddingNewAddressMode" class="btn btn-dashed-block"
 										v-on:click="addNewAddressMode" 

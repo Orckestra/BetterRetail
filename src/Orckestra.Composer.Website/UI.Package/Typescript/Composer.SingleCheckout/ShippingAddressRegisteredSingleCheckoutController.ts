@@ -18,7 +18,10 @@ module Orckestra.Composer {
                 data: {
                     RegisteredAddresses: {},
                     AddingNewAddressMode: false,
-                    SelectedShippingAddressId: null
+                    SelectedShippingAddressId: null,
+                    IsPreferredShipping: false,
+                    AddressName: null,
+                    SaveAddressToBookMode: false
                 },
                 created() {
 
@@ -47,13 +50,13 @@ module Orckestra.Composer {
                         this.SelectedShippingAddressId = undefined;
                         this.Cart.ShippingAddress = { CountryCode: this.Cart.ShippingAddress.CountryCode };
                     },
+                    
                     changeRegisteredShippingAddress(addressId) {
 
                         this.SelectedShippingAddressId = addressId;
                         this.AddingNewAddressMode = false;
                         if (!this.debounceChangeRegisteredShippingAddress) {
                             this.debounceChangeRegisteredShippingAddress = _.debounce(() => {
-                                console.log(this.SelectedShippingAddressId);
                                 self.checkoutService.updateCart(self.viewModelName).then((response: any) => {
                                     let { Cart } = response;
                                     this.Cart = Cart;
@@ -63,6 +66,19 @@ module Orckestra.Composer {
 
                         this.debounceChangeRegisteredShippingAddress();
                     },
+                    saveAddessToAddressBook() {
+                        let addressData = { ...this.Cart.ShippingAddress };
+                        addressData.AddressName= this.AddressName;
+                        addressData.IsPreferredShipping = this.IsPreferredShipping;
+
+                        self.customerService.createAddress(addressData, null).then(address => {
+                            this.SaveAddressToBookMode = false;
+                            this.RegisteredAddresses.push(address);
+                            this.changeRegisteredShippingAddress(address.Id);
+           
+                        });
+
+                    }
                 }
             };
 

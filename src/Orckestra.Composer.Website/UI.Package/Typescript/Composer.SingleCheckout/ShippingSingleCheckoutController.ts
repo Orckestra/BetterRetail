@@ -108,7 +108,7 @@ module Orckestra.Composer {
 
                         self.checkoutService.updateCart(self.viewModelName)
                             .then(({ Cart }) => {
-                                this.Cart = Cart;
+                                this.Cart.OrderSummary = Cart.OrderSummary;
                             }).catch(e => {
                                 this.Cart.ShippingMethod = oldValue;
                             })
