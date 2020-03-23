@@ -147,7 +147,7 @@
 @helper CartItemsDefaultPriceCell()
 {
     <p v-if="item.IsOnSale">
-        <del data-qa="cart-product-price">{{item.DefaultListPrice}}</del><br />
+        <del v-bind:data-qa="'cart-item-defaultprice-del-' + index">{{item.DefaultListPrice}}</del><br />
         <strong class="text-danger" v-bind:data-qa="'cart-item-salesprice-' + index">{{item.ListPrice}}</strong>
     </p>
     <p v-else="v-else" v-bind:data-qa="'cart-item-defaultprice-' + index">{{item.DefaultListPrice}}</p>
@@ -180,10 +180,10 @@
 {
     <div>
         <p v-if="item.IsPriceDiscounted">
-            <del v-bind:data-qa="'cart-item-subtotal-price-del-'+ index">{{item.TotalWithoutDiscount}}</del><br />
+            <del v-bind:data-qa="'cart-item-subtotal-del-'+ index">{{item.TotalWithoutDiscount}}</del><br />
             <strong v-bind:data-qa="'cart-subtotal-sales-'+ index" class="text-danger">{{item.Total}}</strong>
         </p>
-        <strong v-else="v-else" v-bind:data-qa="'cart-item-subtotal-price-' + index">{{item.Total}}</strong>
+        <strong v-else="v-else" v-bind:data-qa="'cart-item-subtotal-' + index">{{item.Total}}</strong>
         <br />
         <p v-if="item.SavingsTotal">
             <span class="text-success">
