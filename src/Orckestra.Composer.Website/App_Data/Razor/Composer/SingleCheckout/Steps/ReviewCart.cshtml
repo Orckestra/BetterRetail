@@ -64,8 +64,8 @@
                 </div>
             </div>
             <div v-if="!CartEmpty" is="transition-group" name="cart-items-list">
-                <div class="row  border-bottom  pt-3 pb-2" 
-                     v-bind:class="{'bg-danger': !item.IsValid}" 
+                <div class="row pt-3" 
+					 v-bind:class="{'border-bottom pb-2': index != Cart.LineItemDetailViewModels.length - 1, 'bg-danger': !item.IsValid}"
                      v-for="(item, index) in Cart.LineItemDetailViewModels" 
                      v-bind:key="item.Id"
                      v-bind:data-qa="'cart-item-' + index">
@@ -96,7 +96,7 @@
 
         <div v-if="step.preview" class="card-body bg-light" v-cloak="true" data-qa="reviewcart-preview-state">
             <div class="row">
-                <div class="col-12 col-sm-10">
+                <div class="col-12 col-sm-8">
                     <div class="row">
                         <div class="col-4  col-sm-2" 
                              v-bind:class="{'border border-danger': !item.IsValid}" 
@@ -110,8 +110,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-12  col-sm-2" data-qa="reviewcart-preview-subtotal">
-                    @Html.Localize("MyAccount", "L_Total"): {{OrderSummary.SubTotal}}
+                <div class="col-12  col-sm-4" data-qa="reviewcart-preview-subtotal">
+					<div class="float-sm-right">@Html.Localize("MyAccount", "L_Total"): <span class="h5">{{OrderSummary.SubTotal}}</span></div>
                 </div>
             </div>
         </div>
