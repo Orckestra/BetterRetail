@@ -1,5 +1,6 @@
 ///<reference path='../..//Typings/tsd.d.ts' />
 ///<reference path='./BaseSingleCheckoutController.ts' />
+///<reference path='./ShippingAddressSingleCheckoutController.ts' />
 
 module Orckestra.Composer {
     'use strict';
