@@ -64,7 +64,11 @@
                 </div>
             </div>
             <div v-if="!CartEmpty" is="transition-group" name="cart-items-list">
-                <div class="row  border-bottom  pt-3 pb-2" v-bind:class="{'bg-danger': !item.IsValid}" v-for="(item, index) in Cart.LineItemDetailViewModels" v-bind:key="item.Id">
+                <div class="row  border-bottom  pt-3 pb-2" 
+                     v-bind:class="{'bg-danger': !item.IsValid}" 
+                     v-for="(item, index) in Cart.LineItemDetailViewModels" 
+                     v-bind:key="item.Id"
+                     v-bind:data-qa="'cart-item-' + index">
                     <div v-if="item.Rewards.Count" class="col-12 order-1">
                         @CartItemsRewardsCell()
                     </div>
@@ -94,15 +98,19 @@
             <div class="row">
                 <div class="col-12 col-sm-10">
                     <div class="row">
-                        <div class="col-4  col-sm-2" v-bind:class="{'border border-danger': !item.IsValid}" v-bind:key="item.id" v-for="item in Cart.LineItemDetailViewModels">
-                            <img v-bind:src="item.ImageUrl" class="img-fluid" alt="thumbnail" xmlns:v-bind="v-bind" />
+                        <div class="col-4  col-sm-2" 
+                             v-bind:class="{'border border-danger': !item.IsValid}" 
+                             v-bind:key="item.id" 
+                             v-for="(item, index) in Cart.LineItemDetailViewModels">
+                                <img v-bind:src="item.ImageUrl" class="img-fluid" alt="thumbnail" xmlns:v-bind="v-bind" 
+                                     v-bind:data-qa="'cart-item-preview-img-' + index"/>
                             <p class="text-center m-0">
-                                <span>{{item.Quantity}} X</span>
+                                <span v-bind:data-qa="'cart-item-preview-quantity-' + index">{{item.Quantity}} X</span>
                             </p>
                         </div>
                     </div>
                 </div>
-                <div class="col-12  col-sm-2">
+                <div class="col-12  col-sm-2" data-qa="reviewcart-preview-subtotal">
                     @Html.Localize("MyAccount", "L_Total"): {{OrderSummary.SubTotal}}
                 </div>
             </div>
@@ -127,10 +135,11 @@
 @helper CartItemsSummaryCell()
 {
     <div>
-        <strong>{{item.ProductSummary.Brand}}</strong>
-        <p class="mb-2">{{item.ProductSummary.DisplayName}}</p>
-        <p v-if="item.VariantId" class="mb-2 mb-sm-0">
-            <span v-for="(keyV, index) in item.KeyVariantAttributesList"><span v-if="index != 0"> | </span>{{keyV.Value}}</span>
+        <strong v-bind:data-qa="'cart-item-brand-' + index">{{item.ProductSummary.Brand}}</strong>
+        <p v-bind:data-qa="'cart-item-name-' + index" class="mb-2">{{item.ProductSummary.DisplayName}}</p>
+        <p v-if="item.VariantId" class="mb-2 mb-sm-0" v-bind:data-qa="'cart-item-variant-' + index">
+            <span v-for="(keyV, index) in item.KeyVariantAttributesList">
+                <span v-if="index != 0"> | </span>{{keyV.Value}}</span>
         </p>
     </div>
 }
@@ -139,9 +148,9 @@
 {
     <p v-if="item.IsOnSale">
         <del data-qa="cart-product-price">{{item.DefaultListPrice}}</del><br />
-        <strong class="text-danger" data-qa="cart-product-sales-price">{{item.ListPrice}}</strong>
+        <strong class="text-danger" v-bind:data-qa="'cart-item-salesprice-' + index">{{item.ListPrice}}</strong>
     </p>
-    <p v-else="v-else">{{item.DefaultListPrice}}</p>
+    <p v-else="v-else" v-bind:data-qa="'cart-item-defaultprice-' + index">{{item.DefaultListPrice}}</p>
 }
 
 @helper CartItemsQuantityCell()
@@ -155,7 +164,7 @@
         </button>
 
         <strong class="form-control rounded-0"
-                v-text="item.Quantity"> </strong>
+                v-text="item.Quantity" v-bind:data-qa="'cart-item-quantity-' + index"> </strong>
 
         <button class="btn  btn-sm btn-outline-secondary"
                 v-bind:disabled="IncrementDisabled(item)"
@@ -171,16 +180,16 @@
 {
     <div>
         <p v-if="item.IsPriceDiscounted">
-            <del data-qa="cart-product-subtotal-price">{{item.TotalWithoutDiscount}}</del><br />
-            <strong data-qa="cart-product-subtotal-sales" class="text-danger">{{item.Total}}</strong>
+            <del v-bind:data-qa="'cart-item-subtotal-price-del-'+ index">{{item.TotalWithoutDiscount}}</del><br />
+            <strong v-bind:data-qa="'cart-subtotal-sales-'+ index" class="text-danger">{{item.Total}}</strong>
         </p>
-        <strong v-else="v-else" data-qa="cart-product-subtotal-price">{{item.Total}}</strong>
+        <strong v-else="v-else" v-bind:data-qa="'cart-item-subtotal-price-' + index">{{item.Total}}</strong>
         <br />
         <p v-if="item.SavingsTotal">
             <span class="text-success">
                 @Html.Localize("ShoppingCart", "L_LineItemSavings")&#160;
             </span>
-            <span class="text-success" data-qa="lineItem-savingstotal">{{item.SavingsTotal}}</span>
+            <span class="text-success" v-bind:data-qa="'cart-item-savingstotal-' + index">{{item.SavingsTotal}}</span>
         </p>
         <em class="additional-fees d-block small">
             <span v-for="fee in item.AdditionalFees" class="block">
@@ -198,7 +207,8 @@
 {
     <button v-on:click="removeCartItem(index)"
             v-bind:disabled="IsLoading"
-            class="btn btn-link">
+            class="btn btn-link"
+            v-bind:data-qa="'cart-item-remove-btn-' + index">
         @Html.Localize("ShoppingCart", "F_RemoveItem")
     </button>
 }
