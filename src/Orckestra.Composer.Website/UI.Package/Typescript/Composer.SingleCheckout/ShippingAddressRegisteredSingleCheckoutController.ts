@@ -47,9 +47,14 @@ module Orckestra.Composer {
 
                     addNewAddressMode() {
                         this.AddingNewAddressMode = true;
+                        this.adressBeforeEdit = {};
+                        this.AddressName = null;
                         this.SelectedShippingAddressId = undefined;
-                        this.ComplementaryAddressAddState = !this.Cart.ShippingAddress.Line2;
-                        this.Cart.ShippingAddress = { CountryCode: this.Cart.ShippingAddress.CountryCode };
+                        this.ComplementaryAddressAddState = true;
+                        this.Cart.ShippingAddress = { 
+                            FirstName: this.Cart.ShippingAddress.FirstName || this.Cart.Customer.FirstName,
+                            LastName: this.Cart.ShippingAddress.LastName || this.Cart.Customer.LastName,
+                            CountryCode: this.Cart.ShippingAddress.CountryCode };
                     },
 
                     processAddingNewShippingAddress() {
@@ -65,6 +70,7 @@ module Orckestra.Composer {
                                     addressData.AddressName = this.AddressName;
 
                                     self.customerService.createAddress(addressData, null).then(address => {
+                                        address.RegionName = this.ShippingAddress.RegionName;
                                         this.RegisteredAddresses.push(address);
                                         this.changeRegisteredShippingAddress(address.Id, processAddingNewShippingAddress);
 
