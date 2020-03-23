@@ -98,6 +98,8 @@ module Orckestra.Composer {
                         IsLoading: false
                     };
 
+                    this.handleCheckoutSecurity(cartVm);
+
                     this.initializeVueComponent(results);
                 })
                 .then(() => {
@@ -107,6 +109,13 @@ module Orckestra.Composer {
                     console.error('Error while initializing SingleCheckoutService.', reason);
                     ErrorHandler.instance().outputErrorFromCode('CheckoutRenderFailed');
                 });
+        }
+
+        public handleCheckoutSecurity(cart: any) {
+
+            if (cart.IsCartEmpty) {
+                this.window.location.href = cart.OrderSummary.CheckoutRedirectAction.RedirectUrl;
+            }
         }
 
         public calculateStartStep(cart: any): number {

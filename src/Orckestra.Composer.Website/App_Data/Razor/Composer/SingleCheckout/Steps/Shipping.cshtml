@@ -99,15 +99,15 @@
             <div class="card-body" v-show="step.preview" v-cloak="true" data-qa="shipping-preview-state">
                 <div v-if="Cart.ShippingMethod">
                     <div class="row">
-                        <div class="col-12 col-sm-10">
+                        <div class="col-12 col-sm-8">
                             <p class="h4">{{Cart.ShippingMethod.DisplayName}}</p>
                             @CheckoutHelpers.ShippingAddressPreview("ShippingAddress")
                             <span v-if="Cart.ShippingMethod.ExpectedDaysBeforeDelivery" data-qa="shippingmethod-expecteddays-info" class="clearfix">
                                 <strong>@Html.Localize("CheckoutProcess", "F_ShipTimeTitle")</strong> {{Cart.ShippingMethod.ExpectedDaysBeforeDelivery}} @Html.Localize("CheckoutProcess", "L_DeliveryDaysNumber")
                             </span>
                         </div>
-                        <div class="col-12 col-sm-2">
-                            @Html.Localize("MyAccount", "L_Total"): <span>{{Cart.ShippingMethod.Cost}}</span>
+                        <div class="col-12 col-sm-4">
+                            <div class="float-sm-right">@Html.Localize("MyAccount", "L_Total"): <span class="h5">{{Cart.ShippingMethod.Cost}}</span></div>
                         </div>
                     </div>
                 </div>

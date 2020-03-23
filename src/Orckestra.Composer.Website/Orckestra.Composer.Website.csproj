@@ -285,6 +285,7 @@
     <Content Include="App_Data\Razor\Composer\Grids\TwoThirdsOneThird.cshtml" />
     <Content Include="App_Data\Razor\Composer\Header.cshtml" />
     <Content Include="App_Data\Razor\Composer\Grids\FullGrid.cshtml" />
+    <Content Include="App_Code\Forms\Address.cshtml" />
     <None Include="App_Config\Caching.config" />
     <Content Include="App_Data\Razor\Composer\Grids\OneThirdTwoThirds.cshtml" />
     <Content Include="App_Data\Razor\Composer\Grids\AccountGrid.cshtml" />
@@ -335,7 +336,6 @@
     <Content Include="App_Data\Razor\Composer\SingleCheckout\Steps\ReviewCart.cshtml" />
     <Content Include="App_Data\Razor\Composer\SingleCheckout\Steps\Payment.cshtml" />
     <Content Include="App_Code\CheckoutHelpers.cshtml" />
-    <Content Include="App_Code\Forms\ShippingAddress.cshtml" />
     <Content Include="App_Data\Razor\Composer\Layout\Includes\Javascript.cshtml" />
     <None Include="Properties\PublishProfiles\Website - CD.pubxml" />
     <None Include="Properties\PublishProfiles\Website.pubxml" />
