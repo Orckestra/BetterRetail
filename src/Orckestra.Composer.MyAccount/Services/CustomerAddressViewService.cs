@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
@@ -44,23 +44,14 @@ namespace Orckestra.Composer.MyAccount.Services
             IComposerContext composerContext,
             IRecurringOrderCartsViewService recurringOrderCartsViewService)
         {
-            if (viewModelMapper == null) { throw new ArgumentNullException("viewModelMapper"); }
-            if (customerRepository == null) { throw new ArgumentNullException("customerRepository"); }
-            if (customerAddressRepository == null) { throw new ArgumentNullException("customerAddressRepository"); }
-            if (addressRepository == null) { throw new ArgumentNullException("addressRepository"); }
-            if (myAccountUrlProvider == null) { throw new ArgumentNullException("myAccountUrlProvider"); }
-            if (countryService == null) { throw new ArgumentNullException("countryService"); }
-            if (composerContext == null) { throw new ArgumentNullException("composerContext"); }
-            if (recurringOrderCartsViewService == null) { throw new ArgumentNullException("recurringOrderCartsViewService"); }
-
-            ViewModelMapper = viewModelMapper;
-            CustomerRepository = customerRepository;
-            CustomerAddressRepository = customerAddressRepository;
-            AddressRepository = addressRepository;
-            MyAccountUrlProvider = myAccountUrlProvider;
-            CountryService = countryService;
-            ComposerContext = composerContext;
-            RecurringOrderCartsViewService = recurringOrderCartsViewService;
+            ViewModelMapper = viewModelMapper ?? throw new ArgumentNullException(nameof(viewModelMapper));
+            CustomerRepository = customerRepository ?? throw new ArgumentNullException(nameof(customerRepository));
+            CustomerAddressRepository = customerAddressRepository ?? throw new ArgumentNullException(nameof(customerAddressRepository));
+            AddressRepository = addressRepository ?? throw new ArgumentNullException(nameof(addressRepository));
+            MyAccountUrlProvider = myAccountUrlProvider ?? throw new ArgumentNullException(nameof(myAccountUrlProvider));
+            CountryService = countryService ?? throw new ArgumentNullException(nameof(countryService));
+            ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
+            RecurringOrderCartsViewService = recurringOrderCartsViewService ?? throw new ArgumentNullException(nameof(recurringOrderCartsViewService));
         }
 
         /// <summary>
@@ -199,13 +190,13 @@ namespace Orckestra.Composer.MyAccount.Services
         /// <returns></returns>
         public virtual async Task<AddressListViewModel> GetAddressListViewModelAsync(GetAddressListViewModelParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param"); }
-            if (param.CultureInfo == null) { throw new ArgumentException("param.CultureInfo"); }
-            if (param.CustomerId == Guid.Empty) { throw new ArgumentException("param.CustomerId"); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException("param.Scope"); }
-            if (string.IsNullOrWhiteSpace(param.AddAddressUrl)) { throw new ArgumentException("param.AddAddressUrl"); }
-            if (string.IsNullOrWhiteSpace(param.EditAddressBaseUrl)) { throw new ArgumentException("param.EditAddressBaseUrl"); }
-            if (string.IsNullOrWhiteSpace(param.CountryCode)) { throw new ArgumentException("param.CountryCode"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(nameof(param.CultureInfo)); }
+            if (param.CustomerId == Guid.Empty) { throw new ArgumentException(nameof(param.CustomerId)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(nameof(param.Scope)); }
+            if (string.IsNullOrWhiteSpace(param.AddAddressUrl)) { throw new ArgumentException(nameof(param.AddAddressUrl)); }
+            if (string.IsNullOrWhiteSpace(param.EditAddressBaseUrl)) { throw new ArgumentException(nameof(param.EditAddressBaseUrl)); }
+            if (string.IsNullOrWhiteSpace(param.CountryCode)) { throw new ArgumentException(nameof(param.CountryCode)); }
 
             var customer = await CustomerRepository.GetCustomerByIdAsync(new GetCustomerByIdParam
             {

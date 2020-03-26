@@ -14,6 +14,7 @@ using Orckestra.Composer.Providers;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Utils;
 using Orckestra.Composer.WebAPIFilters;
+using Orckestra.Composer.Logging;
 
 namespace Orckestra.Composer.Cart.Api
 {
@@ -21,6 +22,7 @@ namespace Orckestra.Composer.Cart.Api
     [JQueryOnlyFilter]
     public class CartController : ApiController
     {
+        private static ILog Log = LogProvider.GetCurrentClassLogger();
         protected ICartService CartService { get; private set; }
         protected IComposerContext ComposerContext { get; private set; }
         protected ICouponViewService CouponViewService { get; private set; }
@@ -38,20 +40,13 @@ namespace Orckestra.Composer.Cart.Api
             ICartUrlProvider cartUrlProvider,
             IRecurringOrdersSettings recurringOrdersSettings)
         {
-            if (cartService == null) { throw new ArgumentNullException("cartService"); }
-            if (composerContext == null) { throw new ArgumentNullException("composerContext"); }
-            if (couponViewService == null) { throw new ArgumentNullException("couponViewService"); }
-            if (checkoutService == null) { throw new ArgumentNullException("checkoutService"); }
-            if (shippingMethodService == null) { throw new ArgumentNullException("shippingMethodService"); }
-            if (cartUrlProvider == null) { throw new ArgumentNullException("cartUrlProvider"); }
-
-            CartService = cartService;
-            ComposerContext = composerContext;
-            CouponViewService = couponViewService;
-            CheckoutService = checkoutService;
-            ShippingMethodService = shippingMethodService;
-            CartUrlProvider = cartUrlProvider;
-            RecurringOrdersSettings = recurringOrdersSettings;
+            CartService = cartService ?? throw new ArgumentNullException(nameof(cartService));
+            ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
+            CouponViewService = couponViewService ?? throw new ArgumentNullException(nameof(couponViewService));
+            CheckoutService = checkoutService ?? throw new ArgumentNullException(nameof(checkoutService));
+            ShippingMethodService = shippingMethodService ?? throw new ArgumentNullException(nameof(shippingMethodService));
+            CartUrlProvider = cartUrlProvider ?? throw new ArgumentNullException(nameof(cartUrlProvider));
+            RecurringOrdersSettings = recurringOrdersSettings ?? throw new ArgumentNullException(nameof(recurringOrdersSettings));
         }
 
         /// <summary>
@@ -62,8 +57,7 @@ namespace Orckestra.Composer.Cart.Api
         [ActionName("getcart")]
         public virtual async Task<IHttpActionResult> GetCart()
         {
-
-            var homepageUrl = GetHomepageUrl();            
+            var homepageUrl = GetHomepageUrl();
 
             var cartViewModel = await CartService.GetCartViewModelAsync(new GetCartParam
             {
@@ -79,31 +73,38 @@ namespace Orckestra.Composer.Cart.Api
 
             if (cartViewModel.OrderSummary != null)
             {
-                var checkoutUrlTarget = GetCheckoutUrl();
-                var checkoutStepInfos = CartUrlProvider.GetCheckoutStepPageInfos(new BaseUrlParameter
+                //TODO: Temporary solution with try catch for old checkout steps.Need to clean, when we remove old checkout
+                try
                 {
-                    CultureInfo = ComposerContext.CultureInfo
-                });
-                //Build redirect url in case of the customer try to access an unauthorized step.
-                var stepNumber = cartViewModel.OrderSummary.CheckoutRedirectAction.LastCheckoutStep;
-                if (!checkoutStepInfos.ContainsKey(stepNumber))
-                {
-                    return BadRequest("StepNumber is invalid");
-                }
+                    var checkoutUrlTarget = GetCheckoutUrl();
+                    var checkoutStepInfos = CartUrlProvider.GetCheckoutStepPageInfos(new BaseUrlParameter
+                    {
+                        CultureInfo = ComposerContext.CultureInfo
+                    });
+                    //Build redirect url in case of the customer try to access an unauthorized step.
+                    var stepNumber = cartViewModel.OrderSummary.CheckoutRedirectAction.LastCheckoutStep;
+                    if (!checkoutStepInfos.ContainsKey(stepNumber))
+                    {
+                        return BadRequest($"{nameof(stepNumber)} is invalid");
+                    }
 
-                var checkoutStepInfo = checkoutStepInfos[stepNumber];
+                    var checkoutStepInfo = checkoutStepInfos[stepNumber];
 
-                //If the cart contains recurring items and user is not authenticated, redirect to sign in
-                if (RecurringOrdersSettings.Enabled && cartViewModel.HasRecurringLineitems && !ComposerContext.IsAuthenticated)
-                {
-                    cartViewModel.OrderSummary.CheckoutRedirectAction.RedirectUrl = checkoutUrlTarget;
+                    //If the cart contains recurring items and user is not authenticated, redirect to sign in
+                    if (RecurringOrdersSettings.Enabled && cartViewModel.HasRecurringLineitems && !ComposerContext.IsAuthenticated)
+                    {
+                        cartViewModel.OrderSummary.CheckoutRedirectAction.RedirectUrl = checkoutUrlTarget;
+                    }
+                    else
+                    {
+                        cartViewModel.OrderSummary.CheckoutRedirectAction.RedirectUrl = checkoutStepInfo.Url;
+                    }
+                    cartViewModel.OrderSummary.CheckoutStepUrls = checkoutStepInfos.Values.Select(x => x.Url).ToList();
+                    cartViewModel.OrderSummary.CheckoutUrlTarget = checkoutUrlTarget;
                 }
-                else
-                {
-                    cartViewModel.OrderSummary.CheckoutRedirectAction.RedirectUrl = checkoutStepInfo.Url;
-                }
-                cartViewModel.OrderSummary.CheckoutStepUrls = checkoutStepInfos.Values.Select(x => x.Url).ToList();
-                cartViewModel.OrderSummary.CheckoutUrlTarget = checkoutUrlTarget;
+                catch (ArgumentException e) {
+                    Log.Error(e.ToString());
+                };
             }
 
             return Ok(cartViewModel);
@@ -126,7 +127,7 @@ namespace Orckestra.Composer.Cart.Api
                 CultureInfo = ComposerContext.CultureInfo
             };
 
-            
+
 
             var nextStepUrl = string.Empty;
             if (updateCartRequest.CurrentStep.HasValue)
@@ -544,7 +545,7 @@ namespace Orckestra.Composer.Cart.Api
             var checkoutStepInfos = CartUrlProvider.GetCheckoutStepPageInfos(getCartUrlParam);
 
             var checkoutSignInUrl = CartUrlProvider.GetCheckoutSignInUrl(new BaseUrlParameter
-            {                
+            {
                 CultureInfo = ComposerContext.CultureInfo,
                 ReturnUrl = ComposerContext.IsAuthenticated ? null : checkoutStepInfos[1].Url
             });
@@ -565,7 +566,7 @@ namespace Orckestra.Composer.Cart.Api
         protected virtual string GetHomepageUrl()
         {
             var homepageUrl = CartUrlProvider.GetHomepageUrl(new BaseUrlParameter
-            {                
+            {
                 CultureInfo = ComposerContext.CultureInfo
             });
 
@@ -603,7 +604,7 @@ namespace Orckestra.Composer.Cart.Api
             if (request == null) { return BadRequest("No request body found."); }
 
             var nextStepUrl = CartUrlProvider.GetCheckoutStepUrl(new GetCheckoutStepUrlParam
-            {                
+            {
                 CultureInfo = ComposerContext.CultureInfo,
                 StepNumber = request.CurrentStep + 1
             });
@@ -635,7 +636,7 @@ namespace Orckestra.Composer.Cart.Api
                 Scope = ComposerContext.Scope,
                 CultureInfo = ComposerContext.CultureInfo
             }).ConfigureAwait(false);
-            
+
             return Ok(shippingMethodsViewModel);
         }
     }
