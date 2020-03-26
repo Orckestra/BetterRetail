@@ -35,7 +35,7 @@ module Orckestra.Composer {
                                 this.RegisteredAddresses = data.Addresses;
                                 var isNewAddreess = !this.ShippingAddress.AddressBookId && this.ShippingAddress.PostalCode;
                                 if (!isNewAddreess) {
-                                    this.SelectedShippingAddressId = data.SelectedShippingAddressId;
+                                    this.changeRegisteredShippingAddress(data.SelectedShippingAddressId);
                                 } else {
                                     this.AddingNewAddressMode = true;
                                 }

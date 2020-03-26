@@ -460,6 +460,11 @@ namespace Orckestra.Composer.Cart.Factory
 
             var shippingMethodViewModel = ViewModelMapper.MapTo<ShippingMethodViewModel>(fulfillmentMethod, cultureInfo);
 
+            if(string.IsNullOrWhiteSpace(shippingMethodViewModel.DisplayName))
+            {
+                shippingMethodViewModel.DisplayName = shippingMethodViewModel.Name;
+            }
+
             if (fulfillmentMethod.ExpectedDeliveryDate.HasValue) { 
                 var totalDays = (int)Math.Ceiling((fulfillmentMethod.ExpectedDeliveryDate.Value - DateTime.UtcNow).TotalDays);
                 shippingMethodViewModel.ExpectedDaysBeforeDelivery = totalDays.ToString();
