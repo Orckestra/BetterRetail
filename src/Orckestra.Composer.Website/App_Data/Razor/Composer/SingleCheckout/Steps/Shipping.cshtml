@@ -29,7 +29,7 @@
                     @Html.Localize("CheckoutProcess", "F_Continue")
                 </button>
 
-                <button v-show="step.preview" class="btn btn-outline-secondary float-right" 
+                <button v-show="step.preview" class="btn btn-outline-secondary float-right"
                         data-qa="edit-shipping-btn"
                         v-on:click="step.navigateToStep(step.index)"
                         v-cloak="true">
@@ -38,14 +38,14 @@
             </div>
 
             <div class="card-body  bg-light" v-show="step.active" v-cloak="true" data-qa="shipping-active-state">
-                
+
                 <p>@Html.Localize("CheckoutProcess", "F_ShippingStepDescription")</p>
 
                 <div class="form-row" novalidate="novalidate" id="AccordionShippingMethodType">
                     <div class="col-md-6 pb-3" v-for="shippingMethodType in ShippingMethodTypes">
                         <div class="border  rounded bg-white  p-3"
                              v-bind:class="{'selected-method-type bg-selected': shippingMethodType.FulfillmentMethodTypeString === SelectedMethodTypeString}">
-                            
+
                             @ShippingMethodTypeOption()
 
                             <div class="collapse  mt-4  border-top"
@@ -54,7 +54,6 @@
                                  data-parent="#AccordionShippingMethodType">
 
                                 @ShippingMethodsListForTypeOption()
-
                             </div>
                         </div>
                     </div>
@@ -62,30 +61,28 @@
 
                 <transition name="fade">
                     <div v-if="IsShippingMethodType">
-
                         @if (ComposerContext.IsAuthenticated)
                         {
-                        <div data-oc-controller="SingleCheckout.ShippingAddressRegistered">
+                            <div data-oc-controller="SingleCheckout.ShippingAddressRegistered">
+                                <div v-for="address in RegisteredAddresses"
+                                     v-bind:key="address.Id"
+                                     class="border rounded p-3 mb-2 bg-white"
+                                     v-bind:class="{ 'bg-selected border-primary': address.Id == SelectedShippingAddressId }">
 
-                            <div v-for="address in RegisteredAddresses"
-                                 v-bind:key="address.Id"
-                                 class="border  rounded p-3  mb-2"
-                                 v-bind:class="{ 'bg-selected border-primary': address.Id == SelectedShippingAddressId, 'bg-white': address.Id != SelectedShippingAddressId}">
+                                    @RegisteredShippingAddressOption()
+                                </div>
+                                <div v-if="AddingNewAddressMode" class="border-top mt-4 pt-4">
+                                    @Forms.Address.Form("Cart.ShippingAddress", "addNewAddressForm", true)
+                                </div>
 
-                                @RegisteredShippingAddressOption()
+                                <button v-if="!AddingNewAddressMode" class="btn btn-dashed-block"
+                                        v-on:click="addNewAddressMode"
+                                        v-bind:disabled="IsLoading"
+                                        data-qa="shipping-add-address-link">
+                                    @Html.Localize("MyAccount", "B_AddNewAddress")
+                                </button>
+
                             </div>
-                            <div v-if="AddingNewAddressMode" class="border-top mt-4 pt-4">
-                                @Forms.Address.Form("Cart.ShippingAddress", "addNewAddressForm", true)
-                            </div>
-
-                            <button v-if="!AddingNewAddressMode" class="btn btn-dashed-block"
-                                    v-on:click="addNewAddressMode"
-                                    v-bind:disabled="IsLoading"
-                                    data-qa="shipping-add-address-link">
-                                @Html.Localize("MyAccount", "B_AddNewAddress")
-                            </button>
-
-                        </div>
                         }
                         else
                         {
@@ -182,9 +179,16 @@
                     <p class="mb-0 font-weight-bolder">{{shippingMethod.Cost}}</p>
                 </div>
                 <div class="col-4">
-                    <button class="btn btn-outline-secondary float-right" v-on:click='selectShippingMethod(shippingMethod)' v-bind:disabled="IsLoading">
+                    <button v-if="shippingMethodType.SelectedMethod.ShippingProviderId !== shippingMethod.ShippingProviderId"
+                            class="btn btn-outline-secondary float-right" v-on:click='selectShippingMethod(shippingMethod)' v-bind:disabled="IsLoading">
                         @Html.Localize("CheckoutProcess", "F_SelectShippingMethod")
                     </button>
+
+                    <div v-if="shippingMethodType.SelectedMethod.ShippingProviderId === shippingMethod.ShippingProviderId"
+                         class="bg-success rounded p-2 position-absolute"
+                         style="bottom: 0; right: 15px;">
+                        <span class="text-white text-nowrap"><i class="fa fa-check" style="font-size: 1rem"></i> @Html.Localize("CheckoutProcess", "L_Selected")</span>
+                    </div>
                 </div>
             </div>
         </li>
