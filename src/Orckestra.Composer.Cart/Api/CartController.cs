@@ -592,14 +592,7 @@ namespace Orckestra.Composer.Cart.Api
         [ValidateModelState]
         public virtual async Task<IHttpActionResult> CompleteCheckout(CompleteCheckoutRequest request)
         {
-            if (request == null) { return BadRequest("No request body found."); }
-
-            var nextStepUrl = CartUrlProvider.GetCheckoutStepUrl(new GetCheckoutStepUrlParam
-            {
-                CultureInfo = ComposerContext.CultureInfo,
-                StepNumber = request.CurrentStep + 1
-            });
-
+ 
             var checkoutViewModel = await CheckoutService.CompleteCheckoutAsync(new CompleteCheckoutParam
             {
                 CartName = CartConfiguration.ShoppingCartName,
@@ -609,7 +602,19 @@ namespace Orckestra.Composer.Cart.Api
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
             });
 
-            checkoutViewModel.NextStepUrl = nextStepUrl;
+            if (request != null)
+            {
+                ///TODO: this is for old checkout - need to clean later
+                var nextStepUrl = CartUrlProvider.GetCheckoutStepUrl(new GetCheckoutStepUrlParam
+                {
+                    CultureInfo = ComposerContext.CultureInfo,
+                    StepNumber = request.CurrentStep + 1
+                });
+                checkoutViewModel.NextStepUrl = nextStepUrl;
+            }
+
+            checkoutViewModel.NextStepUrl = CartUrlProvider.GetCheckoutConfirmationPageUrl(
+                new BaseUrlParameter { CultureInfo = ComposerContext.CultureInfo });
 
             return Ok(checkoutViewModel);
         }

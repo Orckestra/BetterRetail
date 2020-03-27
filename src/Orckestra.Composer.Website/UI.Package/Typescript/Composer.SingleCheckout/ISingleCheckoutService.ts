@@ -21,11 +21,19 @@ module Orckestra.Composer {
 
         updateCart(controllerName?: string): Q.Promise<IUpdateCartResult>;
 
+        updatePaymentMethod(param: any): Q.Promise<IActivePaymentViewModel>;
+
         completeCheckout(): Q.Promise<ICompleteCheckoutResult>;
 
         updatePostalCode(postalCode: string): Q.Promise<void>;
 
         invalidateCache(): Q.Promise<void>;
+
+        getPaymentProviders(paymentProviders: Array<any>) : Array<BaseCheckoutPaymentProvider>;
+
+        getPaymentCheckout(): Q.Promise<ICheckoutPaymentViewModel>;
+
+        updateBillingPostalCode(postalCode: string): Q.Promise<void>;
 
         ///setOrderConfirmationToCache(orderConfirmationviewModel : any) : void;
 

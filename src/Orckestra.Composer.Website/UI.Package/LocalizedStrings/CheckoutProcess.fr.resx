@@ -250,7 +250,7 @@
     <value>Type :</value>
   </data>
   <data name="L_VerificationNumber" xml:space="preserve">
-    <value>Numéro de vérification</value>
+    <value>CVV</value>
   </data>
   <data name="L_YourOrderNumber" xml:space="preserve">
     <value>Votre numéro de commande :</value>

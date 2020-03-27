@@ -25,7 +25,6 @@ module Orckestra.Composer {
                 computed: {
                 },
                 methods: {
-
                     processShippingAddress() {
                         var processShippingAddress: Q.Deferred<boolean> = Q.defer<boolean>();
                         let formId = !this.IsAuthenticated ? '#addressForm' : '#addNewAddressForm';
@@ -56,7 +55,7 @@ module Orckestra.Composer {
                             }
                         } else {
                             processShippingAddress.resolve(false);
-                        };
+                        }
 
                         return processShippingAddress.promise;
                     },
@@ -118,8 +117,8 @@ module Orckestra.Composer {
 
         public getUpdateModelPromise(): Q.Promise<any> {
             return Q.fcall(() => {
-                var vm = {};
-                var vueAddressData = this.checkoutService.VueCheckout.Cart.ShippingAddress;
+                let vm = {};
+                let vueAddressData = this.checkoutService.VueCheckout.Cart.ShippingAddress;
                 vm[this.viewModelName] = JSON.stringify(vueAddressData);
                 return vm;
             });

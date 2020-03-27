@@ -21,7 +21,7 @@
         <checkout-step v-slot="step">
             @Function("Composer.SingleCheckout.Steps.ReviewCart")
         </checkout-step>
-        <checkout-step v-slot="step">
+        <checkout-step v-slot="step" v-bind:after-change="preparePayment">
             @Function("Composer.SingleCheckout.Steps.Payment")
         </checkout-step>
     </single-page-checkout>

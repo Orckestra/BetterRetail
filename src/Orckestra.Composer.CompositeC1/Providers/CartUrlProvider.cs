@@ -60,14 +60,22 @@ namespace Orckestra.Composer.CompositeC1.Providers
             return urlBuilder.ToString();
         }
 
+        public virtual string GetCheckoutConfirmationPageUrl(BaseUrlParameter parameters)
+        {
+            if (parameters == null) { throw new ArgumentNullException(nameof(parameters)); }
+            if (parameters.CultureInfo == null) { throw new ArgumentException($"{nameof(parameters.CultureInfo)} is required", nameof(parameters)); }
+
+            var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(parameters.CultureInfo, WebsiteContext.WebsiteId);
+            return PageService.GetPageUrl(pagesConfiguration.CheckoutConfirmationPageId, parameters.CultureInfo);
+        }
+
         public virtual string GetCheckoutPageUrl(BaseUrlParameter parameters)
         {
             if (parameters == null) { throw new ArgumentNullException(nameof(parameters)); }
             if (parameters.CultureInfo == null) { throw new ArgumentException($"{nameof(parameters.CultureInfo)} is required", nameof(parameters)); }
 
             var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(parameters.CultureInfo, WebsiteContext.WebsiteId);
-            //TODO:  return PageService.GetPageUrl(pagesConfiguration.CheckoutPageId, parameters.CultureInfo); 
-            return Path.Combine(PageService.GetPageUrl(WebsiteContext.WebsiteId, parameters.CultureInfo), "checkout" );
+            return PageService.GetPageUrl(pagesConfiguration.CheckoutPageId, parameters.CultureInfo);
         }
 
         private static string GetReturnUrl(BaseUrlParameter parameters)

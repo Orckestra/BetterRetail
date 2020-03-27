@@ -144,11 +144,14 @@
   <data name="B_ViewCreditCards" xml:space="preserve">
     <value>View credit cards</value>
   </data>
+  <data name="B_EditPayment" xml:space="preserve">
+      <value>Enter Payment</value>
+  </data>
   <data name="F_BillingNo" xml:space="preserve">
     <value>No</value>
   </data>
   <data name="F_BillingSameShipping" xml:space="preserve">
-    <value>Use same as shipping address ?</value>
+    <value>Use my shipping address as the billing address</value>
   </data>
   <data name="F_BillingYes" xml:space="preserve">
     <value>Yes</value>
@@ -193,7 +196,7 @@
     <value>Cardholder Name</value>
   </data>
   <data name="L_CardNumber" xml:space="preserve">
-    <value>Credit Card Number</value>
+    <value>Card number:</value>
   </data>
   <data name="L_CheckoutSignIn" xml:space="preserve">
     <value>Checkout Sign In</value>
@@ -211,10 +214,13 @@
     <value>You will receive an email confirmation at</value>
   </data>
   <data name="L_ExpirationDate" xml:space="preserve">
-    <value>Expiration Date</value>
+    <value>Expires on:</value>
   </data>
+  <data name="L_Default" xml:space="preserve">
+      <value>(Default)</value>
+    </data>
   <data name="L_ExpirationDateForm" xml:space="preserve">
-    <value>Expiration Date (mmyy)</value>
+    <value>Expiry Date</value>
   </data>
   <data name="L_InvalidCart" xml:space="preserve">
     <value>Your cart contains items that are either out of stock or are now unavailable.</value>
@@ -250,7 +256,7 @@
     <value>Type:</value>
   </data>
   <data name="L_VerificationNumber" xml:space="preserve">
-    <value>Verification Number</value>
+    <value>CVV</value>
   </data>
   <data name="L_YourOrderNumber" xml:space="preserve">
     <value>Your order number:</value>

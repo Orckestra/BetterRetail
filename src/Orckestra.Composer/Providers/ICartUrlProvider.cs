@@ -62,5 +62,7 @@ namespace Orckestra.Composer.Providers
         /// <param name="param"></param>
         /// <returns></returns>
         string GetHomepageUrl(BaseUrlParameter param);
+
+        string GetCheckoutConfirmationPageUrl(BaseUrlParameter param);
     }
 }

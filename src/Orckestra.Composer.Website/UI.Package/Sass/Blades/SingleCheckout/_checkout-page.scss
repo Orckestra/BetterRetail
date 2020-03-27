@@ -1,5 +1,11 @@
 .checkout-page {
     [v-cloak] { display:none; }
+
+    .card-header {
+        .btn {
+            text-transform: uppercase;
+        }
+    }
 }
 
 .selected-method-type {
@@ -9,8 +15,8 @@
 .form-group.postalcode {
     .parsley-errors-list {
         position: absolute;
-        bottom: -1.3rem;
-        min-width: 200px;
+        bottom:  -40px;
+        min-width: 330px;
     }
 }
 
@@ -62,8 +68,8 @@
 
 .cart-items-list-leave-to, .cart-items-list-enter {
     opacity: 0;
-    //transform: translateY(30px);
 }
+
 .cart-items-list-enter-active, .cart-items-list-leave-active {
     transition: all 0.25s ease;
 }

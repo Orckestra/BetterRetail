@@ -76,7 +76,7 @@ module Orckestra.Composer {
         /**
          * Complete the checkout, thereby clearing every item in the cart of the current customer.
          */
-        completeCheckout(currentStep: number): Q.Promise<ICompleteCheckoutResult>;
+        completeCheckout(currentStep?: number): Q.Promise<ICompleteCheckoutResult>;
 
         /**
          * Clear the Cart cache

@@ -174,7 +174,7 @@ module Orckestra.Composer {
                  .then((result: IUpdateCartResult) => this.setCartToCache(result.Cart).then(() => result));
         }
 
-        public completeCheckout(currentStep: number): Q.Promise<ICompleteCheckoutResult> {
+        public completeCheckout(currentStep: number = null): Q.Promise<ICompleteCheckoutResult> {
 
             return this.cartRepository.completeCheckout(currentStep)
                  .then((result: ICompleteCheckoutResult) => this.setCartToCache(null).then(() => result));

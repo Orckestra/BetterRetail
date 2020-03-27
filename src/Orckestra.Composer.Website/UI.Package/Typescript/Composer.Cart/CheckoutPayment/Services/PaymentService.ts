@@ -41,5 +41,17 @@ module Orckestra.Composer {
         public setPaymentMethod(request : any) : Q.Promise<IPaymentViewModel> {
             return this.paymentRepository.setPaymentMethod(request);
         }
+
+        /**
+         * Return a list of acceptable payment providers and methods details with labels
+         * @return {ICheckoutPaymentViewModel} payment details
+         */
+        public getCheckoutPayment() : Q.Promise<ICheckoutPaymentViewModel> {
+            return this.paymentRepository.getCheckoutPayment();
+        }
+
+        public updatePaymentMethod(request : any) : Q.Promise<IActivePaymentViewModel> {
+            return this.paymentRepository.updatePaymentMethod(request);
+        }
     }
 }

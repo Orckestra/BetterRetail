@@ -124,6 +124,12 @@
                                 cardholder: cardholderName
                             };
                         },
+                        parsley: () => {
+                            return {
+                                validate: () => {},
+                                isValid: () => !!cardholderName
+                            }
+                        },
                         find: jQueryStub
                     };
                 }
@@ -306,6 +312,7 @@
         beforeEach(() => {
             let jQueryStub: SinonStub;
             let windowStub: Window = <Window> {};
+            let cardholder = chance.name();
 
             composerClientStub = sinon.stub(Orckestra.Composer.ComposerClient, 'post', (url: string, data: any) => {
                 return Q({
@@ -315,7 +322,13 @@
 
             jQueryStub = sinon.stub().withArgs(jasmine.any(Object)).returns({
                 on: (eventName: string, handler: Function): JQuery => { return <any>jQueryStub; },
-                off: (eventName: string, handler: Function): JQuery => { return <any>jQueryStub; }
+                off: (eventName: string, handler: Function): JQuery => { return <any>jQueryStub; },
+                parsley: () => {
+                    return {
+                        validate: () => {},
+                        isValid: () => !!cardholder
+                    }
+                },
             });
             $ = <any>jQueryStub;
 
@@ -324,7 +337,7 @@
             paymentProvider = new Orckestra.Composer.CreditCardMonerisCanadaPaymentProvider(
                 windowStub, paymentService, eventHub);
 
-            paymentProvider._formData = { cardholder: chance.name() };
+            paymentProvider._formData = { cardholder };
             paymentProvider._monerisResponseData = <any>{ dataKey: chance.string() };
             paymentProvider.registerDomEvents();
         });

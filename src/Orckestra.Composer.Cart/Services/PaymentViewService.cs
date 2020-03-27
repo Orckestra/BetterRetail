@@ -1,18 +1,15 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Orckestra.Composer.Cart.Extensions;
 using Orckestra.Composer.Cart.Factory;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Providers.Payment;
 using Orckestra.Composer.Cart.Repositories;
-using Orckestra.Composer.Cart.Requests;
 using Orckestra.Composer.Cart.ViewModels;
 using Orckestra.Composer.Enums;
-using Orckestra.Composer.Factory;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Requests;
 using Orckestra.Composer.Services;
@@ -44,29 +41,21 @@ namespace Orckestra.Composer.Cart.Services
         protected IRecurringOrdersSettings RecurringOrdersSettings { get; private set; }
 
         public PaymentViewService(IPaymentRepository paymentRepository, ICartViewModelFactory cartViewModelFactory, ICartRepository cartRepository,
-         ILookupService lookupService, IViewModelMapper viewModelMapper, IPaymentProviderFactory paymentProviderFactory, 
-         IRecurringOrderTemplatesViewService recurringOrderTemplatesViewService, 
+         ILookupService lookupService, IViewModelMapper viewModelMapper, IPaymentProviderFactory paymentProviderFactory,
+         IRecurringOrderTemplatesViewService recurringOrderTemplatesViewService,
          IRecurringOrderCartsViewService recurringOrderCartsViewService,
          IRecurringOrdersSettings recurringOrdersSettings
          )
         {
-            if (paymentRepository == null) { throw new ArgumentNullException("paymentRepository"); }
-            if (cartViewModelFactory == null) { throw new ArgumentNullException("cartViewModelFactory"); }
-            if (lookupService == null) { throw new ArgumentNullException("lookupService"); }
-            if (viewModelMapper == null) { throw new ArgumentNullException("viewModelMapper"); }
-            if (paymentProviderFactory == null) { throw new ArgumentNullException("paymentProviderFactory"); }
-            if (recurringOrderTemplatesViewService == null) { throw new ArgumentNullException("recurringOrderTemplatesViewService"); }
-            if (recurringOrderCartsViewService == null) { throw new ArgumentNullException("recurringOrderCartsViewService"); }
-
-            PaymentRepository = paymentRepository;
-            CartViewModelFactory = cartViewModelFactory;
-            CartRepository = cartRepository;
-            LookupService = lookupService;
-            ViewModelMapper = viewModelMapper;
-            PaymentProviderFactory = paymentProviderFactory;
-            RecurringOrderTemplatesViewService = recurringOrderTemplatesViewService;
-            RecurringOrderCartsViewService = recurringOrderCartsViewService;
-            RecurringOrdersSettings = recurringOrdersSettings;
+            PaymentRepository = paymentRepository ?? throw new ArgumentNullException(nameof(paymentRepository));
+            CartViewModelFactory = cartViewModelFactory ?? throw new ArgumentNullException(nameof(cartViewModelFactory));
+            CartRepository = cartRepository ?? throw new ArgumentNullException(nameof(cartRepository));
+            LookupService = lookupService ?? throw new ArgumentNullException(nameof(lookupService));
+            ViewModelMapper = viewModelMapper ?? throw new ArgumentNullException(nameof(viewModelMapper));
+            PaymentProviderFactory = paymentProviderFactory ?? throw new ArgumentNullException(nameof(paymentProviderFactory));
+            RecurringOrderTemplatesViewService = recurringOrderTemplatesViewService ?? throw new ArgumentNullException(nameof(recurringOrderTemplatesViewService));
+            RecurringOrderCartsViewService = recurringOrderCartsViewService ?? throw new ArgumentNullException(nameof(recurringOrderCartsViewService));
+            RecurringOrdersSettings = recurringOrdersSettings ?? throw new ArgumentNullException(nameof(recurringOrdersSettings));
         }
 
 
@@ -143,6 +132,39 @@ namespace Orckestra.Composer.Cart.Services
         /// </summary>
         /// <param name="param">GetPaymentMethodsParam</param>
         /// <returns>A List of PaymentMethodViewModel</returns>
+        public virtual async Task<SingleCheckoutPaymentViewModel> GetSingleCheckoutPaymentAsync(GetPaymentMethodsParam param)
+        {
+            var providers = await GetPaymentProvidersAsync(new GetPaymentProvidersParam
+            {
+                Scope = param.Scope,
+                CultureInfo = param.CultureInfo
+            }).ConfigureAwait(false);
+
+            param.ProviderNames = providers.Select(p => p.ProviderName).ToList();
+
+            var results = await GetPaymentMethodsAsync(param);
+
+            if (results.ActivePaymentViewModel == null)
+            {
+                results.ActivePaymentViewModel = new ActivePaymentViewModel()
+                {
+                    Id = results.PaymentId ?? default
+                };
+            }
+
+            return new SingleCheckoutPaymentViewModel()
+            {
+                PaymentMethods = results.PaymentMethods,
+                PaymentProviders = providers.ToList(),
+                ActivePaymentViewModel = results.ActivePaymentViewModel
+            };
+        }
+
+        /// <summary>
+        /// Get the Active Payment methods available for a cart.
+        /// </summary>
+        /// <param name="param">GetPaymentMethodsParam</param>
+        /// <returns>A List of PaymentMethodViewModel</returns>
         public virtual async Task<CheckoutPaymentViewModel> GetPaymentMethodsAsync(GetPaymentMethodsParam param)
         {
             if (param == null) { throw new ArgumentNullException("param"); }
@@ -184,8 +206,8 @@ namespace Orckestra.Composer.Cart.Services
             return vm;
         }
 
-        protected virtual async Task<List<IPaymentMethodViewModel>> MapPaymentMethodsViewModel(IEnumerable<PaymentMethod> paymentMethods, 
-            CultureInfo cultureInfo, 
+        protected virtual async Task<List<IPaymentMethodViewModel>> MapPaymentMethodsViewModel(IEnumerable<PaymentMethod> paymentMethods,
+            CultureInfo cultureInfo,
             Guid customerId,
             string scope)
         {
@@ -205,15 +227,21 @@ namespace Orckestra.Composer.Cart.Services
                 {
                     var paymentProvider = ObtainPaymentProvider(methodViewModel.PaymentProviderName);
                     methodViewModel.PaymentProviderType = paymentProvider?.ProviderType;
-                    
+
                     await IsSavedCardUsedInRecurringOrders(methodViewModel, cultureInfo, customerId, scope).ConfigureAwaitWithCulture(false);
+
+                    IsCreditCardPaymentMethod(methodViewModel);
 
                     paymentMethodViewModels.Add(methodViewModel);
                 }
             }
 
             return paymentMethodViewModels.ToList();
+        }
 
+        protected virtual void IsCreditCardPaymentMethod(IPaymentMethodViewModel paymentMethod)
+        {
+            paymentMethod.IsCreditCardPaymentMethod = paymentMethod.PaymentProviderType == "MonerisCanadaPaymentProvider";
         }
 
         protected virtual async Task<IPaymentMethodViewModel> IsSavedCardUsedInRecurringOrders(IPaymentMethodViewModel methodViewModel,
@@ -246,10 +274,20 @@ namespace Orckestra.Composer.Cart.Services
 
             var paymentId = payment.Id;
 
+            IPaymentMethodViewModel activePaymentMethodVm = null;
             ActivePaymentViewModel activePaymentVm = null;
+
             if (payment.PaymentMethod != null)
             {
+                activePaymentMethodVm = paymentMethodViewModels.FirstOrDefault(pm =>
+                    pm.Id == payment.PaymentMethod.Id &&
+                    pm.PaymentProviderName == payment.PaymentMethod.PaymentProviderName &&
+                    pm.IsValid
+                );
+            }
 
+            if (activePaymentMethodVm != null)
+            {
                 var provider = PaymentProviderFactory.ResolveProvider(payment.PaymentMethod.PaymentProviderName);
 
                 activePaymentVm = GetActivePaymentViewModel(new GetActivePaymentViewModelParam
@@ -259,39 +297,35 @@ namespace Orckestra.Composer.Cart.Services
                     PaymentProvider = provider,
                     IsAuthenticated = isAuthenticated
                 });
-
-                var activePaymentMethodVm =
-                    paymentMethodViewModels.FirstOrDefault(
-                        pm =>
-                            pm.Id == payment.PaymentMethod.Id &&
-                            pm.PaymentProviderName == payment.PaymentMethod.PaymentProviderName &&
-                            pm.IsValid);
-
-                if (activePaymentMethodVm != null)
-                {
-                    activePaymentMethodVm.IsSelected = true;
-                }
-
+            }
+            else
+            {
                 // If active payment is set to soemthing that doesn't exists anymore
                 // Select the first payment method available...
-                if (activePaymentVm != null && activePaymentMethodVm == null)
+                var validPaymentMethods = paymentMethodViewModels.Where(pm => pm.IsValid);
+                activePaymentMethodVm = validPaymentMethods.FirstOrDefault(pm => pm.Default) ?? validPaymentMethods.FirstOrDefault();
+
+                activePaymentVm = await UpdateActivePaymentMethodAsync(new UpdatePaymentMethodParam
                 {
-                    activePaymentVm = await UpdateActivePaymentMethodAsync(new UpdatePaymentMethodParam
-                    {
-                        CartName = cart.Name,
-                        CultureInfo = cultureInfo,
-                        CustomerId = cart.CustomerId,
-                        IsAuthenticated = isAuthenticated,
-                        Scope = cart.ScopeId,
-                        PaymentId = activePaymentVm.Id,
-                        PaymentMethodId = paymentMethodViewModels.First().Id,
-                        PaymentProviderName = paymentMethodViewModels.First().PaymentProviderName,
-                    }).ConfigureAwait(false);
+                    CartName = cart.Name,
+                    CultureInfo = cultureInfo,
+                    CustomerId = cart.CustomerId,
+                    IsAuthenticated = isAuthenticated,
+                    Scope = cart.ScopeId,
+                    PaymentId = paymentId,
+                    PaymentMethodId = activePaymentMethodVm.Id,
+                    PaymentProviderName = activePaymentMethodVm.PaymentProviderName,
+                }).ConfigureAwait(false);
 
+                if (activePaymentVm != null)
+                {
                     paymentId = activePaymentVm.Id;
-
-                    paymentMethodViewModels.First().IsSelected = true;
                 }
+            }
+
+            if (activePaymentMethodVm != null)
+            {
+                activePaymentMethodVm.IsSelected = true;
             }
 
             var vm = new CheckoutPaymentViewModel
@@ -320,7 +354,7 @@ namespace Orckestra.Composer.Cart.Services
                 IsAuthenticated = param.IsAuthenticated,
                 ProviderNames = param.ProviderNames,
                 Scope = param.Scope,
-            }).ConfigureAwait(false);           
+            }).ConfigureAwait(false);
 
             return vm;
         }
@@ -605,7 +639,8 @@ namespace Orckestra.Composer.Cart.Services
             if (param.PaymentId == default(Guid)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("PaymentId"), nameof(param)); }
             if (param.PaymentMethodId == default(Guid)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("PaymentMethodId"), nameof(param)); }
 
-            var activePayment = await PaymentRepository.GetPaymentAsync(new GetPaymentParam {
+            var activePayment = await PaymentRepository.GetPaymentAsync(new GetPaymentParam
+            {
                 CartName = param.CartName,
                 CultureInfo = param.CultureInfo,
                 CustomerId = param.CustomerId,

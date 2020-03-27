@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -44,7 +45,10 @@ namespace Orckestra.Composer.Cart.Tests.Services
         {
             //Arrange
             MockLookupService();
-            MockGetCart();
+            var paymentId = GetRandom.Guid();
+            MockGetCart(paymentId);
+            MockCartPayments(paymentId);
+            MockPaymentProvider();
 
             var paymentMethods = new List<PaymentMethod>
             {
@@ -80,7 +84,10 @@ namespace Orckestra.Composer.Cart.Tests.Services
         {
             //Arrange
             MockLookupService();
-            MockGetCart();
+            var paymentId = GetRandom.Guid();
+            MockGetCart(paymentId);
+            MockCartPayments(paymentId);
+            MockPaymentProvider();
 
             var activeMethodId = GetRandom.Guid();
             var paymentMethods = new List<PaymentMethod>
@@ -143,7 +150,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
             };
 
             MockPaymentMethods(paymentMethods);
-            MockGetCart(activeMethod);
+            MockGetCart(GetRandom.Guid(), activeMethod);
 
             var sut = _container.CreateInstance<PaymentViewService>();
 
@@ -186,12 +193,40 @@ namespace Orckestra.Composer.Cart.Tests.Services
         {
             var mockedPaymentMethodRepository = _container.GetMock<IPaymentRepository>();
 
-            mockedPaymentMethodRepository.Setup(
-                r => r.GetPaymentMethodsAsync(It.IsAny<GetPaymentMethodsParam>()))
+            mockedPaymentMethodRepository.Setup(r => r.GetPaymentMethodsAsync(It.IsAny<GetPaymentMethodsParam>()))
                 .ReturnsAsync(availableMethods);
         }
 
-        private void MockGetCart(PaymentMethod activePaymentMethod = null)
+        private void MockCartPayments(Guid paymentId)
+        {
+            var mockedPaymentMethodRepository = _container.GetMock<IPaymentRepository>();
+            mockedPaymentMethodRepository.Setup(pr => pr.GetCartPaymentsAsync(It.IsNotNull<GetCartPaymentsParam>()))
+                .ReturnsAsync(new List<Payment>() {
+                    new Payment
+                    {
+                        Id = paymentId,
+                        Amount = 0.0m,
+                        BillingAddress = new Address()
+                        {
+                            City = GetRandom.String(18),
+                            CountryCode = GetRandom.String(2, true),
+                            FirstName = GetRandom.String(8),
+                            LastName = GetRandom.String(12),
+                            IsPreferredBilling = GetRandom.Boolean(),
+                            IsPreferredShipping = GetRandom.Boolean(),
+                            Email = GetRandom.Email(),
+                            Line1 = GetRandom.Phrase(20),
+                            Line2 = string.Empty,
+                            PhoneNumber = GetRandom.Usa.PhoneNumber(),
+                            PostalCode = GetRandom.String(7, true),
+                            RegionCode = GetRandom.String(5, true)
+                        },
+                        PaymentStatus = PaymentStatus.New,
+                    }
+                });
+        }
+
+        private void MockGetCart(Guid paymentId,  PaymentMethod activePaymentMethod = null)
         {
             var cartRepoMock = _container.GetMock<ICartRepository>();
             cartRepoMock.Setup(repo => repo.GetCartAsync(It.IsAny<GetCartParam>()))
@@ -207,7 +242,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
                         {
                             new Payment
                             {
-                                Id = GetRandom.Guid(),
+                                Id = paymentId,
                                 PaymentStatus = PaymentStatus.New,
                                 BillingAddress = new Address(),
                                 PaymentMethod = activePaymentMethod
@@ -235,6 +270,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
                 CultureInfo = new CultureInfo("en-US"),
                 ProviderNames = new List<string> { GetRandom.String(7), GetRandom.String(7) },
                 CartName = GetRandom.String(32),
+                CustomerId = GetRandom.Guid()
             };
         }
     }

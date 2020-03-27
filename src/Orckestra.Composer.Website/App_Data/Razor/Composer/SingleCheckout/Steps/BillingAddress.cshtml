@@ -1,0 +1,59 @@
+﻿@inherits RazorFunction
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "BillingAddress"; }
+    }
+
+    public IComposerContext ComposerContext { get; set; }
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on" xmlns:v-slot="v-slot">
+<head>
+</head>
+<body>
+    <div class="border-top mt-2 pt-4" data-oc-controller="SingleCheckout.BillingAddress">
+        <div class="row mb-2">
+            <div class="col-12">
+                <h4>@Html.Localize("CheckoutProcess", "T_BillingAddress")</h4>
+            </div>
+        </div>
+
+        <div class="form-check mb-4">
+            <input name="useShippingAddress" id="useShippingAddress" type="checkbox"
+                   class="form-check-input"
+                   v-bind:checked="BillingAddress.UseShippingAddress"
+                   v-model="BillingAddress.UseShippingAddress"
+                   v-on:change="changeUseShippingAddress" />
+            <label for="useShippingAddress" class="form-check-label">
+                @Html.Localize("CheckoutProcess", "F_BillingSameShipping")
+            </label>
+        </div>
+
+        <div v-if="!BillingAddress.UseShippingAddress">
+            @if (ComposerContext.IsAuthenticated)
+            {
+                <div v-for="address in RegisteredAddresses"
+                     v-bind:key="address.Id"
+                     class="border rounded p-3 mb-2 bg-white"
+                     v-bind:class="{ 'bg-selected border-primary': address.Id == BillingAddress.AddressBookId }">
+                    @CheckoutHelpers.AddressRadioOption("BillingAddressId", "BillingAddress.AddressBookId", "changeRegisteredBillingAddress")
+                </div>
+            }
+            <div v-if="!IsAuthenticated || AddingNewAddressMode" class="border-top mt-4 pt-4">
+                @Forms.Address.Form("Cart.Payment.BillingAddress", "billingAddressForm", false, "")
+            </div>
+            @if (ComposerContext.IsAuthenticated)
+            {
+                <button v-if="!AddingNewAddressMode" class="btn btn-dashed-block"
+                        v-on:click="addNewBillingAddressMode"
+                        v-bind:disabled="IsLoading"
+                        data-qa="shipping-add-address-link">
+                    @Html.Localize("MyAccount", "B_AddNewAddress")
+                </button>
+            }
+        </div>
+    </div>
+</body>
+</html>

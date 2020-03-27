@@ -105,7 +105,7 @@
                                 <img v-bind:src="item.ImageUrl" class="img-fluid" alt="thumbnail" xmlns:v-bind="v-bind" 
                                      v-bind:data-qa="'cart-item-preview-img-' + index"/>
                             <p class="text-center m-0">
-                                <span v-bind:data-qa="'cart-item-preview-quantity-' + index">{{item.Quantity}} X</span>
+                                <strong v-bind:data-qa="'cart-item-preview-quantity-' + index">x{{item.Quantity}}</strong> 
                             </p>
                         </div>
                     </div>

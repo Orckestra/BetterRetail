@@ -80,5 +80,7 @@ namespace Orckestra.Composer.Cart.ViewModels
         /// Indicate whether this card is used in a recurring orders.
         /// </summary>
         public bool IsUsedInRecurringOrders { get; set; }
+
+        public bool IsCreditCardPaymentMethod { get; set; }
     }
 }

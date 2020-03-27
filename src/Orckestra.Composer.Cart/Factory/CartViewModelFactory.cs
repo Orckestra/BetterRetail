@@ -570,7 +570,7 @@ namespace Orckestra.Composer.Cart.Factory
 
             if (!string.IsNullOrWhiteSpace(savedCreditCard.ExpiryDate))
             {
-                var expirationDate = ParseCreditCartExpiryDate(savedCreditCard.ExpiryDate);
+                var expirationDate = ParseCreditCardExpiryDate(savedCreditCard.ExpiryDate);
                 expirationDate = expirationDate.AddDays(DateTime.DaysInMonth(expirationDate.Year, expirationDate.Month) - 1);
                 savedCreditCard.IsExpired = expirationDate < DateTime.UtcNow;
             }
@@ -578,7 +578,7 @@ namespace Orckestra.Composer.Cart.Factory
             return savedCreditCard;
         }
 
-        protected virtual DateTime ParseCreditCartExpiryDate(string expiryDate)
+        protected virtual DateTime ParseCreditCardExpiryDate(string expiryDate)
         {
             var formats = new[]
             {

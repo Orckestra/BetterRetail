@@ -33,8 +33,8 @@ module Orckestra.Composer {
                         self.shippingAddressRegisteredService.getShippingAddresses(this.Cart)
                             .then(data => {
                                 this.RegisteredAddresses = data.Addresses;
-                                var isNewAddreess = !this.ShippingAddress.AddressBookId && this.ShippingAddress.PostalCode;
-                                if (!isNewAddreess) {
+                                let isNewAddress = !this.ShippingAddress.AddressBookId && this.ShippingAddress.PostalCode;
+                                if (!isNewAddress) {
                                     this.changeRegisteredShippingAddress(data.SelectedShippingAddressId);
                                 } else {
                                     this.AddingNewAddressMode = true;
@@ -89,7 +89,7 @@ module Orckestra.Composer {
 
                         } else {
                             processAddingNewShippingAddress.resolve(false);
-                        };
+                        }
 
                         return processAddingNewShippingAddress.promise;
                     },
@@ -127,9 +127,10 @@ module Orckestra.Composer {
 
         public getUpdateModelPromise(): Q.Promise<any> {
             return Q.fcall(() => {
-                var vm = {};
-                var selectedAddressId = this.checkoutService.VueCheckout.SelectedShippingAddressId;
+                let vm = {};
+                let selectedAddressId = this.checkoutService.VueCheckout.SelectedShippingAddressId;
                 vm[this.viewModelName] = JSON.stringify({ ShippingAddressId: selectedAddressId });
+
                 return vm;
             });
         }

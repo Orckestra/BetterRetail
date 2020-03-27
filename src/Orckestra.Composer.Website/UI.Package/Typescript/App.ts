@@ -69,6 +69,8 @@
 ///<reference path='./Composer.SingleCheckout/ShippingAddressRegisteredSingleCheckoutController.ts' />
 ///<reference path='./Composer.SingleCheckout/ReviewCartSingleCheckoutController.ts' />
 ///<reference path='./Composer.SingleCheckout/OrderSummarySingleCheckoutController.ts' />
+///<reference path='./Composer.SingleCheckout/PaymentSingleCheckoutController.ts' />
+///<reference path='./Composer.SingleCheckout/BillingAddressSingleCheckoutController.ts' />
 
 (() => {
     'use strict';
@@ -119,6 +121,8 @@
                 { name: 'SingleCheckout.ShippingAddressRegistered', controller: Orckestra.Composer.ShippingAddressRegisteredSingleCheckoutController },
                 { name: 'SingleCheckout.ReviewCart', controller: Orckestra.Composer.ReviewCartSingleCheckoutController },
                 { name: 'SingleCheckout.OrderSummary', controller: Orckestra.Composer.OrderSummarySingleCheckoutController },
+                { name: 'SingleCheckout.Payment', controller: Orckestra.Composer.PaymentSingleCheckoutController },
+                { name: 'SingleCheckout.BillingAddress', controller: Orckestra.Composer.BillingAddressSingleCheckoutController },
                 { name: 'Checkout.GuestCustomerInfo', controller: Orckestra.Composer.GuestCustomerInfoCheckoutController },
                 { name: 'Checkout.ShippingAddress', controller: Orckestra.Composer.ShippingAddressCheckoutController },
                 { name: 'Checkout.ShippingAddressRegistered', controller: Orckestra.Composer.ShippingAddressRegisteredController },

@@ -511,7 +511,8 @@ namespace Orckestra.Composer.Cart.Services
 
             country.Validate(param.PostalCode);
 
-            payment.BillingAddress.PropertyBag[AddressBookIdPropertyBagKey] = Guid.Empty; // because the updated address will not correspond to any registered address
+            if(payment.BillingAddress.PropertyBag != null)
+                payment.BillingAddress.PropertyBag[AddressBookIdPropertyBagKey] = Guid.Empty; // because the updated address will not correspond to any registered address
             payment.BillingAddress.PostalCode = param.PostalCode;
             payment.BillingAddress.CountryCode = country.IsoCode;
             payment.BillingAddress.RegionCode = GetRegionCodeBasedOnPostalCode(param.PostalCode, param.CountryCode);

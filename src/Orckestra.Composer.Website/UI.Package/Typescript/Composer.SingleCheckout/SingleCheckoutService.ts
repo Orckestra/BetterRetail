@@ -10,6 +10,9 @@
 ///<reference path='../Composer.Cart/CheckoutCommon/ICheckoutService.ts' />
 ///<reference path='../Composer.Cart/CheckoutCommon/ICheckoutContext.ts' />
 ///<reference path='../Composer.Cart/CheckoutCommon/IRegisterOptions.ts' />
+///<reference path='../Composer.Cart/CheckoutPayment/Services/PaymentService.ts' />
+///<reference path='../Composer.Cart/CheckoutPayment/Repositories/PaymentRepository.ts' />
+///<reference path='../Composer.Cart/CheckoutPayment/Providers/CheckoutPaymentProviderFactory.ts' />
 ///<reference path='./ISingleCheckoutService.ts' />
 ///<reference path='./ISingleCheckoutContext.ts' />
 
@@ -22,8 +25,6 @@ module Orckestra.Composer {
 
         public VueCheckout: Vue;
         public VueCheckoutMixins: any = [];
-
-        public static checkoutStep: number;
 
         private orderConfirmationCacheKey = 'orderConfirmationCacheKey';
         private orderCacheKey = 'orderCacheKey';
@@ -38,6 +39,8 @@ module Orckestra.Composer {
         protected membershipService: IMembershipService;
         protected regionService: IRegionService;
         protected shippingMethodService: ShippingMethodService;
+        protected paymentService: IPaymentService;
+        protected paymentProviderFactory: CheckoutPaymentProviderFactory;
 
         public static getInstance(): ISingleCheckoutService {
 
@@ -63,6 +66,8 @@ module Orckestra.Composer {
             this.membershipService = new MembershipService(new MembershipRepository());
             this.regionService = new RegionService();
             this.shippingMethodService = new ShippingMethodService();
+            this.paymentService = new PaymentService(this.eventHub, new PaymentRepository());
+            this.paymentProviderFactory = new CheckoutPaymentProviderFactory(this.window, this.eventHub);
             this.registerAllControllersInitialized();
 
             SingleCheckoutService.instance = this;
@@ -94,6 +99,7 @@ module Orckestra.Composer {
                         Cart: cartVm,
                         Regions: regionsVm,
                         ShippingMethodTypes: shippingMethodTypesVm.ShippingMethodTypes,
+                        Payment: null,
                         StartStep: this.calculateStartStep(cartVm),
                         IsLoading: false
                     };
@@ -163,17 +169,18 @@ module Orckestra.Composer {
                     },
                     CartEmpty() {
                         return this.Cart.LineItemDetailViewModels.length == 0;
-                    },
-                    OrderCanBePlaced() {
-                        return false;
                     }
                 },
                 methods: {
-                        initializeParsey(formId: any): boolean {
-                            this.parsleyInit = $(formId).parsley();
-                            this.parsleyInit.validate();
-                            return this.parsleyInit.isValid();
-                        }
+                    updateOrderCanBePlaced() {
+                        let stepComponent = this.$children && this.$children[0];
+                        this.OrderCanBePlaced = stepComponent && stepComponent.maxStep === stepComponent.activeStepIndex;
+                    },
+                    initializeParsey(formId: any): boolean {
+                        this.parsleyInit = $(formId).parsley();
+                        this.parsleyInit.validate();
+                        return this.parsleyInit.isValid();
+                    }
                 }
             });
         }
@@ -255,31 +262,39 @@ module Orckestra.Composer {
                 });
         }
 
-        public completeCheckout(): Q.Promise<ICompleteCheckoutResult> {
+        public updatePaymentMethod(param: any): Q.Promise<IActivePaymentViewModel> {
+            let vue: any = this.VueCheckout;
 
-            let emptyVm = {
-                UpdatedCart: {}
-            };
+            vue.IsLoading = true;
+            return this.paymentService.updatePaymentMethod(param)
+                .finally(() => {
+                    vue.IsLoading = false;
+                });
+        }
 
-            return this.buildCartUpdateViewModel(emptyVm)
-                .then(vm => {
+        public completeCheckout(): Q.Promise<any> {
+            console.log('completeCheckout(): Publishing the cart!');
 
-                    if (_.isEmpty(vm.UpdatedCart)) {
-                        console.log('No modification required to the cart.');
-                        return vm;
+            return this.cartService.completeCheckout()
+                .then((result: ICompleteCheckoutResult) => {
+                    if (_.isEmpty(result.OrderNumber)) {
+                        throw {
+                            message: 'We could not complete the order because the order number is empty',
+                            data: result
+                        };
                     }
 
-                    return this.cartService.updateCart(vm);
+                    this.eventHub.publish('checkoutCompleted', { data: result });
+                    this.setOrderToCache(result);
+
+                    this.setOrderConfirmationToCache(result);
+                    if (result.NextStepUrl) {
+                        window.location.href = result.NextStepUrl;
+                    }
                 })
-                .then(result => {
-
-                    if (result && result.HasErrors) {
-                        throw new Error('Error while updating the cart. Complete Checkout will not complete.');
-                    }
-
-                    console.log('Publishing the cart!');
-
-                    return this.cartService.completeCheckout(SingleCheckoutService.checkoutStep);
+                .fail(reason => {
+                    console.error('An error occurred while completing the checkout.', reason);
+                    ErrorHandler.instance().outputErrorFromCode('CompleteCheckoutFailed');
                 });
         }
 
@@ -400,6 +415,22 @@ module Orckestra.Composer {
         public setOrderToCache(orderConfirmationViewModel: any): void {
 
             this.cacheProvider.defaultCache.set(this.orderCacheKey, orderConfirmationViewModel).done();
+        }
+
+        public getPaymentProviders(paymentProviders: Array<any>) : Array<BaseCheckoutPaymentProvider> {
+            if (_.isEmpty(paymentProviders)) {
+                console.error('No payment provider was found');
+            }
+
+            return paymentProviders.map((vm: any) => this.paymentProviderFactory.getInstance(vm.ProviderType, vm.ProviderName));
+        }
+
+        public getPaymentCheckout(): Q.Promise<ICheckoutPaymentViewModel> {
+            return this.paymentService.getCheckoutPayment();
+        }
+
+        public updateBillingPostalCode(postalCode: string): Q.Promise<void> {
+            return this.cartService.updateBillingMethodPostalCode(postalCode);
         }
     }
 }

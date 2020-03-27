@@ -1,4 +1,5 @@
 ///<reference path='../../Typings/tsd.d.ts' />
+///<reference path='../Composer.Cart/CheckoutPayment/ViewModels/ICheckoutPaymentViewModel.ts' />
 
 module Orckestra.Composer {
     export interface ISingleCheckoutContext {
@@ -6,6 +7,7 @@ module Orckestra.Composer {
         Cart: any;
         Regions: any;
         ShippingMethodTypes: any;
+        Payment: ICheckoutPaymentViewModel;
         StartStep: number;
         IsLoading: boolean;
     }

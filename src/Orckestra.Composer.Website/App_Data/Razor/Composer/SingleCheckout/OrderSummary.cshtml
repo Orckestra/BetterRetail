@@ -7,7 +7,7 @@
     }
 }
 
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
 <head>
 </head>
 <body>
@@ -82,8 +82,8 @@
             <h4>@Html.Localize("MyAccount", "L_Total")</h4>
         </div>
         <div class="col-6  col-md-5  text-right">
-            <div v-if="IsLoading" class="spinner-border text-info" role="status">
-                <span class="sr-only">Loading...</span>
+			<div v-if="IsLoading">
+				@CheckoutHelpers.LoadingSpinner()
             </div>
             <h4 v-else="v-else" v-text="OrderSummary.Total" data-qa="checkout-order-summary-total"></h4>
         </div>
@@ -190,7 +190,10 @@
         <div class="col-12">
             <button class="btn btn-success  w-100  text-uppercase"
                     data-qa="chechout-place-order-btn"
-                    v-bind:disabled="OrderCanBePlaced == false">
+                    v-bind:disabled="!OrderCanBePlaced"
+                    v-on:click="processCompleteCheckout()">
+				<span v-if="IsCompleteCheckoutLoading" class="spinner-border spinner-border-sm" role="status">&#160;
+				</span>
                 @Html.Localize("CheckoutProcess", "F_PlaceOrder")
             </button>
         </div>
