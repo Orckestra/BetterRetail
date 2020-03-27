@@ -82,7 +82,7 @@ namespace Orckestra.Composer.Product.Services
         /// <returns></returns>
         public async virtual Task<RelatedProductsViewModel> GetRelatedProductsAsync(GetRelatedProductsParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
 
             if (!param.ProductIds.Any())
             {
@@ -95,7 +95,7 @@ namespace Orckestra.Composer.Product.Services
             var productIds = param.ProductIds.Select(p => p.ProductId).ToList();
             var prices = ProductRepository.CalculatePricesAsync(productIds, param.Scope);
             var images = GetImagesAsync(products);
-            await Task.WhenAll(prices, images).ConfigureAwait(false);
+            await Task.WhenAll(prices, images);
 
             var createVmParam = new CreateRelatedProductViewModelParam
             {
@@ -103,8 +103,8 @@ namespace Orckestra.Composer.Product.Services
                 CultureInfo = param.CultureInfo,
                 ProductsWithVariant = products,
                 Scope = param.Scope,
-                Prices = prices.Result,
-                Images = images.Result
+                Prices = await prices,
+                Images = await images
             };
 
             var vm = CreateRelatedProductsViewModel(createVmParam);
@@ -143,7 +143,7 @@ namespace Orckestra.Composer.Product.Services
         {
             if (param == null)
             {
-                throw new ArgumentNullException("param");
+                throw new ArgumentNullException(nameof(param));
             }
 
             var productRequestTasks = new List<Task<ProductWithVariant>>();

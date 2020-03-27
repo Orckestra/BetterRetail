@@ -57,8 +57,8 @@ namespace Orckestra.Composer.Services
             var vm = CreateProductsPricesViewModel(new CreateProductPriceViewModelParam
             {
                 CultureInfo = getProductPriceParam.CultureInfo,
-                ProductPrices = productsPriceTask.Result,
-                CurrencyViewModel = currencyTask.Result
+                ProductPrices = await productsPriceTask,
+                CurrencyViewModel = await currencyTask
             });
 
             return vm;

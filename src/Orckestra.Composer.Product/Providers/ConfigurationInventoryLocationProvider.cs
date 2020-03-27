@@ -24,13 +24,9 @@ namespace Orckestra.Composer.Product.Providers
             IWebsiteContext websiteContext,
             ISiteConfiguration siteConfiguration)
         {
-            if (fulfillmentLocationsRepository == null) { throw new ArgumentNullException("fulfillmentLocationsRepository"); }
-            if (inventoryRepository == null) { throw new ArgumentNullException("inventoryRepository"); }
-            if (websiteContext == null) { throw new ArgumentNullException(nameof(websiteContext)); }
-
-            FulfillmentLocationsRepository = fulfillmentLocationsRepository;
-            InventoryRepository = inventoryRepository;
-            WebsiteContext = websiteContext;
+            FulfillmentLocationsRepository = fulfillmentLocationsRepository ?? throw new ArgumentNullException(nameof(fulfillmentLocationsRepository));
+            InventoryRepository = inventoryRepository ?? throw new ArgumentNullException(nameof(inventoryRepository));
+            WebsiteContext = websiteContext ?? throw new ArgumentNullException(nameof(websiteContext));
             SiteConfiguration = siteConfiguration;
         }
 
@@ -49,7 +45,9 @@ namespace Orckestra.Composer.Product.Providers
         /// <returns></returns>
         public virtual Task<List<string>> GetInventoryLocationIdsForSearchAsync()
         {
-            return Task.FromResult(new List<string> { SiteConfiguration.GetInventoryAndFulfillmentLocationId(WebsiteContext.WebsiteId) });
+            var task = Task.FromResult(new List<string> { SiteConfiguration.GetInventoryAndFulfillmentLocationId(WebsiteContext.WebsiteId) });
+            task.ConfigureAwait(false);
+            return task;
         }
 
         public virtual string SetDefaultInventoryLocationId(string inventoryLocationId)
@@ -68,14 +66,17 @@ namespace Orckestra.Composer.Product.Providers
 
             var getLocationsTask = FulfillmentLocationsRepository.GetFulfillmentLocationsByScopeAsync(p);
             //TODO: See Bug #6064 - The search crash when inventory is disabled and the fulfillment location is wrong
-            var defaultLocationIdTask = GetDefaultInventoryLocationIdAsync();
-            await Task.WhenAll(getLocationsTask, defaultLocationIdTask).ConfigureAwait(false);
+            var getDefaultLocationIdTask = GetDefaultInventoryLocationIdAsync();
+            await Task.WhenAll(getLocationsTask, getDefaultLocationIdTask).ConfigureAwait(false);
 
-            var location = GetMatchingLocation(getLocationsTask.Result, defaultLocationIdTask.Result);
+            var locations = await getLocationsTask;
+            var defaultLocationId = await getDefaultLocationIdTask;
+
+            var location = GetMatchingLocation(locations, defaultLocationId);
             if (location == null)
             {
-                throw new ArgumentException(String.Format("Could not find any active fulfillment location in the scope '{0}' to support the Inventory Location Id '{1}'",
-                    param.Scope, defaultLocationIdTask.Result), "param");
+                throw new ArgumentException(string.Format("Could not find any active fulfillment location in the scope '{0}' to support the Inventory Location Id '{1}'",
+                    param.Scope, defaultLocationId), "param");
             }
 
             return location;

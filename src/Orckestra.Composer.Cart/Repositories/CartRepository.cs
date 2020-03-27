@@ -29,11 +29,8 @@ namespace Orckestra.Composer.Cart.Repositories
 
         public CartRepository(IOvertureClient overtureClient, ICacheProvider cacheProvider)
         {
-            if (overtureClient == null) { throw new ArgumentNullException("overtureClient"); }
-            if (cacheProvider == null) { throw new ArgumentNullException("cacheProvider"); }
-
-            OvertureClient = overtureClient;
-            CacheProvider = cacheProvider;
+            OvertureClient = overtureClient ?? throw new ArgumentNullException(nameof(overtureClient));
+            CacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));
         }
 
         /// <summary>
@@ -239,7 +236,7 @@ namespace Orckestra.Composer.Cart.Repositories
         public virtual Task<ProcessedCart> RemoveLineItemsAsync(RemoveLineItemsParam param)
         {
             if (param == null) { throw new ArgumentNullException("param"); }
-            if (String.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("Scope"), "param"); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("Scope"), "param"); }
             if (String.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("CartName"), "param"); }
             if (param.CultureInfo == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("CultureInfo"), "param"); }
             if (param.CustomerId == Guid.Empty) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("CustomerId"), "param"); }
@@ -465,7 +462,7 @@ namespace Orckestra.Composer.Cart.Repositories
                 CartType = CartConfiguration.RecurringOrderCartType
             };
 
-            var cartSummaries = await OvertureClient.SendAsync(request).ConfigureAwaitWithCulture(false);
+            var cartSummaries = await OvertureClient.SendAsync(request).ConfigureAwait(false);
 
             var resultTasks = cartSummaries.Select(cart =>
             {
@@ -481,7 +478,7 @@ namespace Orckestra.Composer.Cart.Repositories
                 return GetCartAsync(getCartParam);
             });
 
-            var carts = await Task.WhenAll(resultTasks).ConfigureAwaitWithCulture(false);
+            var carts = await Task.WhenAll(resultTasks);
 
             carts.Where(i => i != null);
 
@@ -500,7 +497,7 @@ namespace Orckestra.Composer.Cart.Repositories
                 CartName = param.CartName
             };
 
-            return await OvertureClient.SendAsync(request).ConfigureAwaitWithCulture(false);
+            return await OvertureClient.SendAsync(request).ConfigureAwait(false);
         }
         public virtual async Task<HttpWebResponse> RemoveRecurringCartLineItemAsync(RemoveRecurringCartLineItemParam param)
         {
@@ -513,7 +510,7 @@ namespace Orckestra.Composer.Cart.Repositories
                 LineItemIds = new List<Guid>() { param.LineItemId }
             };
 
-            return await OvertureClient.SendAsync(request).ConfigureAwaitWithCulture(false);
+            return await OvertureClient.SendAsync(request).ConfigureAwait(false);
         }
     }
 }

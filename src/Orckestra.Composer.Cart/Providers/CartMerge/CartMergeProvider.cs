@@ -21,11 +21,8 @@ namespace Orckestra.Composer.Cart.Providers.CartMerge
 
         public CartMergeProvider(ICartRepository cartRepository, IFixCartService fixCartService)
         {
-            if (cartRepository == null) { throw new ArgumentNullException("cartRepository"); }
-            if (fixCartService == null) { throw new ArgumentNullException("fixCartService"); }
-
-            CartRepository = cartRepository;
-            FixCartService = fixCartService;
+            CartRepository = cartRepository ?? throw new ArgumentNullException(nameof(cartRepository));
+            FixCartService = fixCartService ?? throw new ArgumentNullException(nameof(fixCartService));
         }
 
         /// <summary>
@@ -58,10 +55,10 @@ namespace Orckestra.Composer.Cart.Providers.CartMerge
                 CultureInfo = CultureInfo.InvariantCulture
             });
 
-            await Task.WhenAll(getLoggedCustomerCartTask, getGuestCustomerCartTask).ConfigureAwait(false);
+            var result = await Task.WhenAll(getLoggedCustomerCartTask, getGuestCustomerCartTask).ConfigureAwait(false);
 
-            var loggedCustomerCart = getLoggedCustomerCartTask.Result;
-            var guestCustomerCart = getGuestCustomerCartTask.Result;
+            var loggedCustomerCart = result[0];
+            var guestCustomerCart = result[1];
 
             var guestCustomerLineItems = guestCustomerCart.GetLineItems();
             var loggedCustomerLineItems = loggedCustomerCart.GetLineItems();

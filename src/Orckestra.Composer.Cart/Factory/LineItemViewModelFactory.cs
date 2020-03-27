@@ -2,25 +2,23 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
+using Orckestra.Composer.Cart.Helper;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Providers.LineItemValidation;
 using Orckestra.Composer.Cart.ViewModels;
+using Orckestra.Composer.Configuration;
+using Orckestra.Composer.Factory;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Dam;
+using Orckestra.Composer.Providers.Localization;
+using Orckestra.Composer.Repositories;
+using Orckestra.Composer.Services;
+using Orckestra.Composer.Utils;
 using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel.Orders;
-using Orckestra.Composer.Providers.Localization;
-using Orckestra.Composer.Cart.Repositories.Order;
-using System.Threading.Tasks;
-using Orckestra.Composer.Services;
-using Orckestra.Composer.Cart.Helper;
-using Orckestra.Composer.Repositories;
-using Orckestra.Composer.Utils;
-using Orckestra.Composer.Helper;
-using Orckestra.Composer.Factory;
 using Orckestra.Overture.ServiceModel.RecurringOrders;
-using Orckestra.Composer.Configuration;
 
 namespace Orckestra.Composer.Cart.Factory
 {
@@ -46,24 +44,15 @@ namespace Orckestra.Composer.Cart.Factory
             IRecurringOrderProgramViewModelFactory recurringOrderProgramViewModelFactory,
             IRecurringOrdersSettings recurringOrdersSettings)
         {
-            if (localizationProvider == null) { throw new ArgumentNullException("localizationProvider"); }
-            if (viewModelMapper == null) { throw new ArgumentNullException("viewModelMapper"); }
-            if (productUrlProvider == null) { throw new ArgumentNullException("productUrlProvider"); }
-            if (rewardViewModelFactory == null) { throw new ArgumentNullException("rewardViewModelFactory"); }
-            if (lineItemValidationProvider == null) { throw new ArgumentNullException("lineItemValidationProvider"); }
-            if (recurringOrderRepository == null) { throw new ArgumentNullException("recurringOrderRepository"); }
-            if (composerContext == null) { throw new ArgumentNullException("composerContext"); }
-            if (recurringOrderProgramViewModelFactory == null) { throw new ArgumentNullException("recurringOrderProgramViewModelFactory"); }
-
-            ViewModelMapper = viewModelMapper;
-            LocalizationProvider = localizationProvider;
-            ProductUrlProvider = productUrlProvider;
-            RewardViewModelFactory = rewardViewModelFactory;
-            LineItemValidationProvider = lineItemValidationProvider;
-            RecurringOrderRepository = recurringOrderRepository;
-            ComposerContext = composerContext;
-            RecurringOrderProgramViewModelFactory = recurringOrderProgramViewModelFactory;
-            RecurringOrdersSettings = recurringOrdersSettings;
+            ViewModelMapper = viewModelMapper ?? throw new ArgumentNullException(nameof(viewModelMapper));
+            LocalizationProvider = localizationProvider ?? throw new ArgumentNullException(nameof(localizationProvider));
+            ProductUrlProvider = productUrlProvider ?? throw new ArgumentNullException(nameof(productUrlProvider));
+            RewardViewModelFactory = rewardViewModelFactory ?? throw new ArgumentNullException(nameof(rewardViewModelFactory));
+            LineItemValidationProvider = lineItemValidationProvider ?? throw new ArgumentNullException(nameof(lineItemValidationProvider));
+            RecurringOrderRepository = recurringOrderRepository ?? throw new ArgumentNullException(nameof(recurringOrderRepository));
+            ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
+            RecurringOrderProgramViewModelFactory = recurringOrderProgramViewModelFactory ?? throw new ArgumentNullException(nameof(recurringOrderProgramViewModelFactory));
+            RecurringOrdersSettings = recurringOrdersSettings ?? throw new ArgumentNullException(nameof(recurringOrdersSettings));
         }
 
         /// <summary>
@@ -163,7 +152,7 @@ namespace Orckestra.Composer.Cart.Factory
 
             if (string.IsNullOrEmpty(recurringProgramName) || !RecurringOrdersSettings.Enabled) { return false; }
 
-            var program = await RecurringOrderRepository.GetRecurringOrderProgram(scope, recurringProgramName).ConfigureAwaitWithCulture(false);
+            var program = await RecurringOrderRepository.GetRecurringOrderProgram(scope, recurringProgramName).ConfigureAwait(false);
 
             vm.RecurringOrderFrequencyDisplayName = GetRecurringOrderFrequencyDisplayName(program, lineItem, cultureInfo);
 

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Orckestra.Composer.Cart.Factory;
+﻿using Orckestra.Composer.Cart.Factory;
 using Orckestra.Composer.Cart.Helper;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Repositories;
@@ -20,9 +14,13 @@ using Orckestra.Composer.Services;
 using Orckestra.Composer.Services.Lookup;
 using Orckestra.Composer.Utils;
 using Orckestra.Overture;
-using Orckestra.Overture.ServiceModel.Orders;
 using Orckestra.Overture.ServiceModel.RecurringOrders;
 using Orckestra.Overture.ServiceModel.Requests.RecurringOrders;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Orckestra.Composer.Cart.Services
 {
@@ -55,29 +53,17 @@ namespace Orckestra.Composer.Cart.Services
             IRecurringScheduleUrlProvider recurringScheduleUrlProvider,
             IRecurringOrdersSettings recurringOrdersSettings)
         {
-            if (cartRepository == null) { throw new ArgumentNullException(nameof(cartRepository)); }
-            if (overtureClient == null) { throw new ArgumentNullException(nameof(overtureClient)); }
-            if (recurringOrderCartViewModelFactory == null) { throw new ArgumentNullException(nameof(recurringOrderCartViewModelFactory)); }
-            if (imageService == null) { throw new ArgumentNullException(nameof(imageService)); }
-            if (lookupService == null) { throw new ArgumentNullException(nameof(lookupService)); }
-            if (recurringOrdersRepository == null) { throw new ArgumentNullException(nameof(recurringOrdersRepository)); }
-            if (composerContext == null) { throw new ArgumentNullException(nameof(composerContext)); }
-            if (addressRepository == null) { throw new ArgumentNullException(nameof(addressRepository)); }
-            if (couponViewService == null) { throw new ArgumentNullException(nameof(couponViewService)); }
-            if (recurringCartUrlProvider == null) { throw new ArgumentNullException(nameof(recurringCartUrlProvider)); }
-            if (recurringScheduleUrlProvider == null) { throw new ArgumentNullException(nameof(recurringScheduleUrlProvider)); }
-
-            OvertureClient = overtureClient;
-            CartRepository = cartRepository;
-            RecurringOrderCartViewModelFactory = recurringOrderCartViewModelFactory;
-            ImageService = imageService;
-            LookupService = lookupService;
-            RecurringOrdersRepository = recurringOrdersRepository;
-            ComposerContext = composerContext;
-            AddressRepository = addressRepository;
-            CouponViewService = couponViewService;
-            RecurringCartUrlProvider = recurringCartUrlProvider;
-            RecurringScheduleUrlProvider = recurringScheduleUrlProvider;
+            OvertureClient = overtureClient ?? throw new ArgumentNullException(nameof(overtureClient));
+            CartRepository = cartRepository ?? throw new ArgumentNullException(nameof(cartRepository));
+            RecurringOrderCartViewModelFactory = recurringOrderCartViewModelFactory ?? throw new ArgumentNullException(nameof(recurringOrderCartViewModelFactory));
+            ImageService = imageService ?? throw new ArgumentNullException(nameof(imageService));
+            LookupService = lookupService ?? throw new ArgumentNullException(nameof(lookupService));
+            RecurringOrdersRepository = recurringOrdersRepository ?? throw new ArgumentNullException(nameof(recurringOrdersRepository));
+            ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
+            AddressRepository = addressRepository ?? throw new ArgumentNullException(nameof(addressRepository));
+            CouponViewService = couponViewService ?? throw new ArgumentNullException(nameof(couponViewService));
+            RecurringCartUrlProvider = recurringCartUrlProvider ?? throw new ArgumentNullException(nameof(recurringCartUrlProvider));
+            RecurringScheduleUrlProvider = recurringScheduleUrlProvider ?? throw new ArgumentNullException(nameof(recurringScheduleUrlProvider));
             RecurringOrdersSettings = recurringOrdersSettings;
         }
 
@@ -93,7 +79,7 @@ namespace Orckestra.Composer.Cart.Services
                 Carts = carts,
                 BaseUrl = param.BaseUrl,
                 CultureInfo = param.CultureInfo
-            }).ConfigureAwaitWithCulture(false);
+            });
         }
 
         public virtual async Task<RecurringOrderCartsViewModel> GetRecurringOrderCartListViewModelFromCartsAsync(GetRecurringOrderCartsViewModelFromCartsParam param)
@@ -133,7 +119,7 @@ namespace Orckestra.Composer.Cart.Services
                 CultureInfo = param.CultureInfo,
                 LookupType = LookupType.Order,
                 LookupName = "PaymentMethodType",
-            }).ConfigureAwait(false);
+            });
 
             param.PaymentMethodDisplayNames = methodDisplayNames;
 
@@ -142,19 +128,19 @@ namespace Orckestra.Composer.Cart.Services
                                                         .Distinct(StringComparer.OrdinalIgnoreCase)
                                                         .ToList();
             var programTasks = roProgramNames.Select(programName => RecurringOrdersRepository.GetRecurringOrderProgram(ComposerContext.Scope, programName));
-            var programs = await Task.WhenAll(programTasks).ConfigureAwait(false);
+            var programs = await Task.WhenAll(programTasks);
             param.RecurringOrderPrograms = programs.ToList();
 
             var vm = RecurringOrderCartViewModelFactory.CreateRecurringOrderCartViewModel(param);
 
-            await ExtendLineItems(vm, ComposerContext.Scope, ComposerContext.CustomerId, ComposerContext.CultureInfo).ConfigureAwaitWithCulture(false);
+            await ExtendLineItems(vm, ComposerContext.Scope, ComposerContext.CustomerId, ComposerContext.CultureInfo);
 
             return vm;
         }
 
         protected virtual async Task<bool> ExtendLineItems(CartViewModel vm, string scope, Guid customerId, CultureInfo culture)
         {
-            var recurringOrderLineItems = await RecurringOrdersRepository.GetRecurringOrderTemplates(scope, customerId).ConfigureAwaitWithCulture(false);
+            var recurringOrderLineItems = await RecurringOrdersRepository.GetRecurringOrderTemplates(scope, customerId).ConfigureAwait(false);
 
             foreach(var lineItem in vm.LineItemDetailViewModels)
             {
@@ -204,7 +190,7 @@ namespace Orckestra.Composer.Cart.Services
                 CultureInfo = param.CultureInfo,
                 BaseUrl = param.BaseUrl,
             }));
-            var viewModels = await Task.WhenAll(tasks).ConfigureAwait(false);
+            var viewModels = await Task.WhenAll(tasks);
 
             return new LightRecurringOrderCartsViewModel
             {
@@ -252,7 +238,7 @@ namespace Orckestra.Composer.Cart.Services
                 CultureInfo = param.CultureInfo,
                 IncludeInvalidCouponsMessages = false,
                 BaseUrl = param.BaseUrl,
-            }).ConfigureAwaitWithCulture(false);
+            });
 
             return vm;
         }
@@ -275,7 +261,7 @@ namespace Orckestra.Composer.Cart.Services
             }).ConfigureAwait(false);
 
             var shipment = cart.Shipments.First();
-            var newAddress = await AddressRepository.GetAddressByIdAsync(param.ShippingAddressId).ConfigureAwaitWithCulture(false);
+            var newAddress = await AddressRepository.GetAddressByIdAsync(param.ShippingAddressId);
             if (newAddress == null)
                 throw new InvalidOperationException("Address not found");
             shipment.Address = newAddress;
@@ -290,22 +276,21 @@ namespace Orckestra.Composer.Cart.Services
             }
             else if (param.BillingAddressId != Guid.Empty)
             {
-                var newbillingAddress = await AddressRepository.GetAddressByIdAsync(param.BillingAddressId).ConfigureAwaitWithCulture(false);
+                var newbillingAddress = await AddressRepository.GetAddressByIdAsync(param.BillingAddressId);
                 if (newbillingAddress == null)
                     throw new InvalidOperationException("Address not found");
                 payment.BillingAddress = newbillingAddress;
                 payment.BillingAddressId = newbillingAddress.Id; 
             }
 
-            var updatedCart = await CartRepository.UpdateCartAsync(UpdateCartParamFactory.Build(cart)).ConfigureAwaitWithCulture(false);
+            var updatedCart = await CartRepository.UpdateCartAsync(UpdateCartParamFactory.Build(cart));
 
             var vm = await CreateCartViewModelAsync(new CreateRecurringOrderCartViewModelParam
             {
                 Cart = updatedCart,
                 CultureInfo = param.CultureInfo,
                 IncludeInvalidCouponsMessages = false,
-                BaseUrl = param.BaseUrl,
-            }).ConfigureAwait(false);
+                BaseUrl = param.BaseUrl});
 
             return vm;
         }
@@ -333,7 +318,7 @@ namespace Orckestra.Composer.Cart.Services
             }).ConfigureAwait(false);
 
             var shipment = cart.Shipments.First();
-            var newAddress = await AddressRepository.GetAddressByIdAsync(param.BillingAddressId).ConfigureAwaitWithCulture(false);
+            var newAddress = await AddressRepository.GetAddressByIdAsync(param.BillingAddressId);
             var payment = cart.Payments.First();
             if (payment == null)
                 throw new InvalidOperationException("No payment");
@@ -347,15 +332,14 @@ namespace Orckestra.Composer.Cart.Services
                 shipment.Address = newAddress;
             }
 
-            var updatedCart = await CartRepository.UpdateCartAsync(UpdateCartParamFactory.Build(cart)).ConfigureAwaitWithCulture(false);
+            var updatedCart = await CartRepository.UpdateCartAsync(UpdateCartParamFactory.Build(cart));
 
             var vm = await CreateCartViewModelAsync(new CreateRecurringOrderCartViewModelParam
             {
                 Cart = updatedCart,
                 CultureInfo = param.CultureInfo,
                 IncludeInvalidCouponsMessages = false,
-                BaseUrl = param.BaseUrl,
-            }).ConfigureAwait(false);
+                BaseUrl = param.BaseUrl});
 
             return vm;
         }
@@ -374,12 +358,12 @@ namespace Orckestra.Composer.Cart.Services
                 CustomerId = param.CustomerId,
                 Scope = param.Scope,
                 ExecuteWorkflow = false
-            }).ConfigureAwaitWithCulture(false);
+            }).ConfigureAwait(false);
 
             var originalCartName = param.CartName;
 
             //get customer recurring lineitems
-            var listOfRecurringLineItems = await RecurringOrdersRepository.GetRecurringOrderTemplates(param.Scope, param.CustomerId).ConfigureAwaitWithCulture(false);
+            var listOfRecurringLineItems = await RecurringOrdersRepository.GetRecurringOrderTemplates(param.Scope, param.CustomerId);
 
             if (listOfRecurringLineItems == null)
                 throw new InvalidOperationException($"Recurring lineItems for customer {param.CustomerId} not found");
@@ -424,7 +408,7 @@ namespace Orckestra.Composer.Cart.Services
                 NextOccurence = newDate,
                 Scope = param.Scope,
                 CartName = param.CartName
-            }).ConfigureAwait(false);
+            });
 
             var vm = new RecurringOrderCartsRescheduleResultViewModel();
 
@@ -434,7 +418,7 @@ namespace Orckestra.Composer.Cart.Services
                 Scope = param.Scope,
                 CustomerId = param.CustomerId,
                 CultureInfo = param.CultureInfo
-            }).ConfigureAwait(false);
+            });
 
             vm.RescheduledCartHasMerged = !carts.Any(rc => string.Compare(rc.Name, originalCartName, StringComparison.OrdinalIgnoreCase) == 0);
 
@@ -476,8 +460,7 @@ namespace Orckestra.Composer.Cart.Services
                 CultureInfo = param.CultureInfo,
                 BaseUrl = param.BaseUrl,
                 CustomerId = param.CustomerId,
-                Scope = param.Scope
-            }).ConfigureAwaitWithCulture(false);
+                Scope = param.Scope});
         }
 
         public virtual async Task<CartViewModel> UpdateLineItemAsync(UpdateLineItemParam param)
@@ -503,7 +486,7 @@ namespace Orckestra.Composer.Cart.Services
                 CouponCodes = CouponViewService.GetInvalidCouponsCode(cart.Coupons).ToList(),
                 CustomerId = param.CustomerId,
                 Scope = param.ScopeId
-            }).ConfigureAwait(false);
+            });
 
             var vmParam = new CreateRecurringOrderCartViewModelParam
             {
@@ -513,7 +496,7 @@ namespace Orckestra.Composer.Cart.Services
                 BaseUrl = param.BaseUrl
             };
 
-            var viewModel = await CreateCartViewModelAsync(vmParam).ConfigureAwait(false);
+            var viewModel = await CreateCartViewModelAsync(vmParam);
 
             return viewModel;
         }
@@ -583,7 +566,7 @@ namespace Orckestra.Composer.Cart.Services
                 }
             }
 
-            await Task.WhenAll(tasks).ConfigureAwaitWithCulture(false);
+            await Task.WhenAll(tasks);
             return true;
         }
     }

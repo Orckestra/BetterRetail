@@ -55,10 +55,10 @@ namespace Orckestra.Composer.Cart.Providers.CartMerge
                 CultureInfo = CultureInfo.InvariantCulture,
             });
 
-            Task.WaitAll(getLoggedCustomerTask, getGuestCustomerTask);
+            var result = await Task.WhenAll(getLoggedCustomerTask, getGuestCustomerTask).ConfigureAwait(false);
 
-            var loggedCustomerCart = getLoggedCustomerTask.Result;
-            var guestCustomerCart = getGuestCustomerTask.Result;
+            var loggedCustomerCart = result[0];
+            var guestCustomerCart = result[1];
 
             var guestCustomerLineItems = guestCustomerCart.GetLineItems();
 
@@ -70,7 +70,7 @@ namespace Orckestra.Composer.Cart.Providers.CartMerge
             loggedCustomerCart.Shipments.First().LineItems = guestCustomerLineItems;
             loggedCustomerCart.Coupons = guestCustomerCart.Coupons;
 
-            var cart = await CartRepository.UpdateCartAsync(UpdateCartParamFactory.Build(loggedCustomerCart)).ConfigureAwait(false);
+            var cart = await CartRepository.UpdateCartAsync(UpdateCartParamFactory.Build(loggedCustomerCart));
 
             await FixCartService.FixCartAsync(new FixCartParam
             {
