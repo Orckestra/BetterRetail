@@ -12,6 +12,7 @@ using Orckestra.Composer.Cart.Repositories;
 using Orckestra.Composer.Cart.ViewModels;
 using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Enums;
+using Orckestra.Composer.Logging;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Requests;
 using Orckestra.Composer.Services;
