@@ -24,6 +24,13 @@ namespace Orckestra.Composer.Providers
         string GetCheckoutSignInUrl(BaseUrlParameter parameters);
 
         /// <summary>
+        /// Get the Url of the Checkout page.
+        /// </summary>
+        /// <param name="parameters">The parameters</param>
+        /// <returns>The Cart url</returns>
+        string GetCheckoutPageUrl(BaseUrlParameter parameters);
+
+        /// <summary>
         /// Gets the URL of a specified StepNumber checkout step.
         /// </summary>
         /// <param name="parameters">Parameters.</param>

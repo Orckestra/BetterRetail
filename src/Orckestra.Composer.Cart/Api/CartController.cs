@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -542,17 +543,7 @@ namespace Orckestra.Composer.Cart.Api
                 CultureInfo = ComposerContext.CultureInfo
             };
 
-            var checkoutStepInfos = CartUrlProvider.GetCheckoutStepPageInfos(getCartUrlParam);
-
-            var checkoutSignInUrl = CartUrlProvider.GetCheckoutSignInUrl(new BaseUrlParameter
-            {
-                CultureInfo = ComposerContext.CultureInfo,
-                ReturnUrl = ComposerContext.IsAuthenticated ? null : checkoutStepInfos[1].Url
-            });
-
-            var checkoutUrlTarget = ComposerContext.IsAuthenticated ? checkoutStepInfos[1].Url : checkoutSignInUrl;
-
-            return checkoutUrlTarget;
+            return CartUrlProvider.GetCheckoutPageUrl(getCartUrlParam);
         }
 
         protected virtual void SetCheckoutUrl(CartViewModel cartViewModel, string checkoutUrl)

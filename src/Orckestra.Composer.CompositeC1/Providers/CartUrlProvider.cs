@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Composite.Core;
 using Orckestra.Composer.CompositeC1.Services;
@@ -57,6 +58,16 @@ namespace Orckestra.Composer.CompositeC1.Providers
             urlBuilder["ReturnUrl"] = GetReturnUrl(parameters); // url builder will encode the query string value
 
             return urlBuilder.ToString();
+        }
+
+        public virtual string GetCheckoutPageUrl(BaseUrlParameter parameters)
+        {
+            if (parameters == null) { throw new ArgumentNullException(nameof(parameters)); }
+            if (parameters.CultureInfo == null) { throw new ArgumentException($"{nameof(parameters.CultureInfo)} is required", nameof(parameters)); }
+
+            var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(parameters.CultureInfo, WebsiteContext.WebsiteId);
+            //TODO:  return PageService.GetPageUrl(pagesConfiguration.CheckoutPageId, parameters.CultureInfo); 
+            return Path.Combine(PageService.GetPageUrl(WebsiteContext.WebsiteId, parameters.CultureInfo), "checkout" );
         }
 
         private static string GetReturnUrl(BaseUrlParameter parameters)
