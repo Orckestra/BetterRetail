@@ -60,7 +60,7 @@ namespace Orckestra.Composer.CompositeC1.Context
                 Scope = ComposerContext.Scope,
                 VariantId = variantId,
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
-            }).ConfigureAwaitWithCulture(false);
+            }).ConfigureAwait(false);
 
             return productViewModel;
         }

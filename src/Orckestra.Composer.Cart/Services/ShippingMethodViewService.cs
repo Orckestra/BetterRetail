@@ -125,8 +125,8 @@ namespace Orckestra.Composer.Cart.Services
             if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException("param.Scope is required", "param"); }
             if (param.CustomerId == Guid.Empty) { throw new ArgumentException("param.CustomerId is required", "param"); }
             if (param.CultureInfo == null) { throw new ArgumentException("param.CultureInfo is required", "param"); }
-
-            var cart = await CartRepository.GetCartAsync(new GetCartParam
+            //misleading method name, creates a cart if it does not exist, not just a "get" call
+            await CartRepository.GetCartAsync(new GetCartParam
             {
                 BaseUrl = string.Empty,
                 CartName = param.CartName,
@@ -135,7 +135,7 @@ namespace Orckestra.Composer.Cart.Services
                 Scope = param.Scope
             }).ConfigureAwait(false);
 
-            return await GetShippingMethodsAsync(param).ConfigureAwaitWithCulture(false);
+            return await GetShippingMethodsAsync(param);
         }
 
         protected virtual Task<List<FulfillmentMethod>> GetFulfillmentMethods(GetShippingMethodsParam param)
@@ -163,7 +163,7 @@ namespace Orckestra.Composer.Cart.Services
                 CultureInfo = param.CultureInfo,
                 ForceUpdate = true
 
-            }).ConfigureAwait(false);
+            });
 
             return await CartService.UpdateCartAsync(new UpdateCartViewModelParam
             {
@@ -182,7 +182,7 @@ namespace Orckestra.Composer.Cart.Services
                 Shipments = cart.Shipments,
                 Status = cart.Status
 
-            }).ConfigureAwait(false);
+            });
         }
 
         /// <summary>
@@ -255,7 +255,7 @@ namespace Orckestra.Composer.Cart.Services
             if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException("param.Scope is required", "param"); }
             if (param.CultureInfo == null) { throw new ArgumentException("param.CultureInfo is required", "param"); }
 
-            var fulfillmentMethods = await FulfillmentMethodRepository.GetFulfillmentMethods(param.Scope).ConfigureAwaitWithCulture(false);
+            var fulfillmentMethods = await FulfillmentMethodRepository.GetFulfillmentMethods(param.Scope).ConfigureAwait(false);
 
             if (fulfillmentMethods == null)
             {
@@ -314,7 +314,7 @@ namespace Orckestra.Composer.Cart.Services
 
             shipment.FulfillmentMethod = fulfillmentMethod;
 
-            var updatedCart = await CartRepository.UpdateCartAsync(UpdateCartParamFactory.Build(cart)).ConfigureAwait(false);
+            var updatedCart = await CartRepository.UpdateCartAsync(UpdateCartParamFactory.Build(cart));
 
             var vm = await RecurringOrderCartsViewService.CreateCartViewModelAsync(new CreateRecurringOrderCartViewModelParam
             {
@@ -322,7 +322,7 @@ namespace Orckestra.Composer.Cart.Services
                 CultureInfo = new CultureInfo(updatedCart.CultureName),
                 IncludeInvalidCouponsMessages = false,
                 BaseUrl = param.BaseUrl,
-            }).ConfigureAwait(false);
+            });
 
             return vm;
         }

@@ -83,8 +83,8 @@ namespace Orckestra.Composer.Store.Services
                     .Take(viewModelParam.PageSize)
                     .ToList();
 
-            var isInventoryEnabled = IsInventoryEnabledAsync(viewModelParam).Result;
-            var statusDisplayNames = GetInventoryStatusDisplayNames(viewModelParam, isInventoryEnabled);
+            var isInventoryEnabled = await IsInventoryEnabledAsync(viewModelParam);
+            var statusDisplayNames = await GetInventoryStatusDisplayNamesAsync(viewModelParam, isInventoryEnabled);
 
             foreach (var store in storesForCurrentPage)
             {
@@ -136,16 +136,16 @@ namespace Orckestra.Composer.Store.Services
             };
         }
 
-        protected virtual Dictionary<string, string> GetInventoryStatusDisplayNames(GetStoreInventoryViewModelParam param,
-            bool isEnabled)
+        protected async virtual Task<Dictionary<string, string>> GetInventoryStatusDisplayNamesAsync
+            (GetStoreInventoryViewModelParam param, bool isEnabled)
         {
             return isEnabled
-                ? LookupService.GetLookupDisplayNamesAsync(new GetLookupDisplayNamesParam
+                ? await LookupService.GetLookupDisplayNamesAsync(new GetLookupDisplayNamesParam
                 {
                     CultureInfo = param.CultureInfo,
                     LookupType = LookupType.Order,
                     LookupName = "LineItemStatus"
-                }).Result
+                })
                 : null;
         }
 

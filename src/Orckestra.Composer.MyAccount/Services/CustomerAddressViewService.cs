@@ -279,7 +279,7 @@ namespace Orckestra.Composer.MyAccount.Services
                 return null;
             }
 
-            var address = AddressRepository.GetAddressByIdAsync(param.AddressId).Result;
+            var address = await AddressRepository.GetAddressByIdAsync(param.AddressId);
 
             return await GetEditAddressViewModel(new GetEditAddressViewModelParam
             {

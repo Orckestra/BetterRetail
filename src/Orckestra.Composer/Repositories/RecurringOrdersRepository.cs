@@ -20,11 +20,8 @@ namespace Orckestra.Composer.Repositories
 
         public RecurringOrdersRepository(IOvertureClient overtureClient, ICacheProvider cacheProvider)
         {
-            if (overtureClient == null) { throw new ArgumentNullException(nameof(overtureClient)); }
-            if (cacheProvider == null) { throw new ArgumentNullException(nameof(cacheProvider)); }
-
-            OvertureClient = overtureClient;
-            CacheProvider = cacheProvider;
+            OvertureClient = overtureClient ?? throw new ArgumentNullException(nameof(overtureClient));
+            CacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));
         }
         public virtual Task<ListOfRecurringOrderLineItems> GetRecurringOrderTemplates(string scope, Guid customerId)
         {
@@ -57,7 +54,7 @@ namespace Orckestra.Composer.Repositories
 
         public virtual async Task<ListOfRecurringOrderLineItems> UpdateRecurringOrderTemplateLineItemQuantityAsync(UpdateRecurringOrderTemplateLineItemQuantityParam param)
         {
-            var lineitems = await GetRecurringOrderTemplates(param.ScopeId, param.CustomerId).ConfigureAwaitWithCulture(false);
+            var lineitems = await GetRecurringOrderTemplates(param.ScopeId, param.CustomerId).ConfigureAwait(false);
 
             var lineitem = GetRecurringOrderLineItemFromTemplates(lineitems, param.RecurringLineItemId);
 
@@ -73,7 +70,7 @@ namespace Orckestra.Composer.Repositories
                     MustApplyUpdatesToRecurringCart = false
                 };
 
-                return await OvertureClient.SendAsync(request).ConfigureAwaitWithCulture(false);
+                return await OvertureClient.SendAsync(request);
             }
 
             return new ListOfRecurringOrderLineItems();
@@ -107,7 +104,7 @@ namespace Orckestra.Composer.Repositories
 
         public virtual async Task<ListOfRecurringOrderLineItems> UpdateRecurringOrderTemplateLineItemAsync(UpdateRecurringOrderTemplateLineItemParam param)
         {
-            var lineitems = await GetRecurringOrderTemplates(param.ScopeId, param.CustomerId).ConfigureAwaitWithCulture(false);
+            var lineitems = await GetRecurringOrderTemplates(param.ScopeId, param.CustomerId).ConfigureAwait(false);
 
             var lineitem = GetRecurringOrderLineItemFromTemplates(lineitems, param.LineItemId);
 
@@ -136,7 +133,7 @@ namespace Orckestra.Composer.Repositories
                     LineItems = lineitems.RecurringOrderLineItems
                 };
 
-                return await OvertureClient.SendAsync(request).ConfigureAwaitWithCulture(false);
+                return await OvertureClient.SendAsync(request);
             }
 
             return new ListOfRecurringOrderLineItems();

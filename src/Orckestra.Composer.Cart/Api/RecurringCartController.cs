@@ -1,19 +1,15 @@
 ﻿using System;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
-using System.Web.Http.Results;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Requests;
 using Orckestra.Composer.Cart.Services;
-using Orckestra.Composer.Cart.ViewModels;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Utils;
 using Orckestra.Composer.WebAPIFilters;
-using Orckestra.Overture.ServiceModel.Orders;
 
 namespace Orckestra.Composer.Cart.Api
 {
@@ -38,32 +34,24 @@ namespace Orckestra.Composer.Cart.Api
             ICartService cartService,
             ICartUrlProvider cartUrlProvider)
         {
-            if (recurringOrderCarstService == null) throw new ArgumentNullException(nameof(recurringOrderCarstService), ArgumentNullMessageFormatter.FormatErrorMessage(nameof(recurringOrderCarstService)));
-            if (composerContext == null) throw new ArgumentNullException(nameof(composerContext), ArgumentNullMessageFormatter.FormatErrorMessage(nameof(composerContext)));
-            if (paymentViewService == null) throw new ArgumentNullException(nameof(paymentViewService), ArgumentNullMessageFormatter.FormatErrorMessage(nameof(paymentViewService)));
-            if (recurringOrderTemplatesService == null) throw new ArgumentNullException(nameof(recurringOrderTemplatesService), ArgumentNullMessageFormatter.FormatErrorMessage(nameof(recurringOrderTemplatesService)));
-            if (shippingMethodViewService == null) throw new ArgumentNullException(nameof(shippingMethodViewService), ArgumentNullMessageFormatter.FormatErrorMessage(nameof(shippingMethodViewService)));
-            if (cartService == null) throw new ArgumentNullException(nameof(shippingMethodViewService), ArgumentNullMessageFormatter.FormatErrorMessage(nameof(cartService)));
-            if (cartUrlProvider == null) throw new ArgumentNullException(nameof(cartUrlProvider), ArgumentNullMessageFormatter.FormatErrorMessage(nameof(cartUrlProvider)));
-
-            RecurringOrderCartsService = recurringOrderCarstService;
-            ComposerContext = composerContext;
-            PaymentViewService = paymentViewService;
-            RecurringOrderTemplatesService = recurringOrderTemplatesService;
-            ShippingMethodViewService = shippingMethodViewService;
-            CartService = cartService;
-            CartUrlProvider = cartUrlProvider;
+            RecurringOrderCartsService = recurringOrderCarstService ?? throw new ArgumentNullException(nameof(recurringOrderCarstService));
+            ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
+            PaymentViewService = paymentViewService ?? throw new ArgumentNullException(nameof(paymentViewService)); ;
+            RecurringOrderTemplatesService = recurringOrderTemplatesService ?? throw new ArgumentNullException(nameof(recurringOrderTemplatesService));
+            ShippingMethodViewService = shippingMethodViewService ?? throw new ArgumentNullException(nameof(shippingMethodViewService));
+            CartService = cartService ?? throw new ArgumentNullException(nameof(cartService));
+            CartUrlProvider = cartUrlProvider ?? throw new ArgumentNullException(nameof(cartUrlProvider));
         }
 
         [HttpGet]
         [ActionName("getrecurringordercarts")]
-        public virtual async Task<IHttpActionResult> GeRecurringOrderCartsByUser()
+        public virtual async Task<IHttpActionResult> GetRecurringOrderCartsByUser()
         {
-            //This call manages products/variants that have been deleted in templates.
-            //When cleaning those templates, it should clean the carts too.
-            //In most cases, generating the templates is not a big load, if it's a problem, create a new call in 
-            //RecurringOrderTemplateViewModelFactory to only check templates are fine and clean up if not.
-            var templatesVm = await RecurringOrderTemplatesService.GetRecurringOrderTemplatesViewModelAsync(new GetRecurringOrderTemplatesParam
+            //This call manages products/variants that have been deleted in templates.	
+            //When cleaning those templates, it should clean the carts too.	
+            //In most cases, generating the templates is not a big load, if it's a problem, create a new call in 	
+            //RecurringOrderTemplateViewModelFactory to only check templates are fine and clean up if not.	
+            await RecurringOrderTemplatesService.GetRecurringOrderTemplatesViewModelAsync(new GetRecurringOrderTemplatesParam
             {
                 Scope = ComposerContext.Scope,
                 CustomerId = ComposerContext.CustomerId,
@@ -93,7 +81,7 @@ namespace Orckestra.Composer.Cart.Api
                 CustomerId = ComposerContext.CustomerId,
                 Scope = ComposerContext.Scope,
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
-            });
+            }).ConfigureAwait(false);
 
             return Ok(viewModel);
         }
@@ -136,8 +124,7 @@ namespace Orckestra.Composer.Cart.Api
             if (request.ShippingMethodName == null) { return BadRequest("Missing Request Body"); }
             if (!ModelState.IsValid) { return BadRequest(ModelState); }
             
-
-            var results = await ShippingMethodViewService.UpdateRecurringOrderCartShippingMethodAsync(new UpdateRecurringOrderCartShippingMethodParam()
+            var results = await ShippingMethodViewService.UpdateRecurringOrderCartShippingMethodAsync(new UpdateRecurringOrderCartShippingMethodParam
             {
                 CartName = request.CartName,
                 CultureInfo = ComposerContext.CultureInfo,
@@ -146,7 +133,7 @@ namespace Orckestra.Composer.Cart.Api
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
                 ShippingMethodName = request.ShippingMethodName,
                 ShippingProviderId = request.ShippingProviderId
-            });
+            }).ConfigureAwait(false);
 
             return Ok(results);
         }
@@ -162,8 +149,9 @@ namespace Orckestra.Composer.Cart.Api
                 Scope = ComposerContext.Scope,
                 CultureInfo = ComposerContext.CultureInfo
             };
+
             var providers = await PaymentViewService.GetPaymentProvidersAsync(param).ConfigureAwait(false);
-      
+
             var vm = await PaymentViewService.UpdateRecurringOrderCartPaymentMethodAsync(new UpdatePaymentMethodParam
             {
                 CartName = request.CartName,
@@ -176,7 +164,7 @@ namespace Orckestra.Composer.Cart.Api
                 PaymentType = request.PaymentType,
                 ProviderNames = providers.Select(p => p.ProviderName).ToList(),
                 IsAuthenticated = ComposerContext.IsAuthenticated
-            }, RequestUtils.GetBaseUrl(Request).ToString()).ConfigureAwait(false);
+            }, RequestUtils.GetBaseUrl(Request).ToString());
 
             return Ok(vm);
         }
@@ -188,7 +176,7 @@ namespace Orckestra.Composer.Cart.Api
             if (request == null) { return BadRequest("Missing Request Body"); }
             if (!ModelState.IsValid) { return BadRequest(ModelState); }
 
-            var vm = await RecurringOrderCartsService.UpdateRecurringOrderCartNextOccurenceAsync(new UpdateRecurringOrderCartNextOccurenceParam()
+            var vm = await RecurringOrderCartsService.UpdateRecurringOrderCartNextOccurenceAsync(new UpdateRecurringOrderCartNextOccurenceParam
             {
                 CultureInfo = ComposerContext.CultureInfo,
                 Scope = ComposerContext.Scope,
@@ -216,7 +204,7 @@ namespace Orckestra.Composer.Cart.Api
                 Scope = ComposerContext.Scope,
                 CultureInfo = ComposerContext.CultureInfo,
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
-            }).ConfigureAwait(false); ;
+            }).ConfigureAwait(false);
 
             return Ok(vm);
         }
@@ -244,7 +232,7 @@ namespace Orckestra.Composer.Cart.Api
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
                 RecurringOrderFrequencyName = request.RecurringOrderFrequencyName,
                 RecurringOrderProgramName = request.RecurringOrderProgramName
-            });
+            }).ConfigureAwait(false); ;
 
             return Ok(vm);
         }
@@ -269,7 +257,7 @@ namespace Orckestra.Composer.Cart.Api
                 LineItemId = new Guid(request.LineItemId),
                 CartName = request.CartName,
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
-            }).ConfigureAwaitWithCulture(false);
+            }).ConfigureAwait(false);
 
             return Ok(vm);
         }
@@ -281,7 +269,11 @@ namespace Orckestra.Composer.Cart.Api
             var url = CartUrlProvider.GetCheckoutSignInUrl(new BaseUrlParameter
             {
                 CultureInfo = ComposerContext.CultureInfo,
-                ReturnUrl = CartUrlProvider.GetCheckoutStepUrl(new GetCheckoutStepUrlParam() { CultureInfo = ComposerContext.CultureInfo, StepNumber = 1 })
+                ReturnUrl = CartUrlProvider.GetCheckoutStepUrl(new GetCheckoutStepUrlParam
+                { 
+                    CultureInfo = ComposerContext.CultureInfo, 
+                    StepNumber = 1 
+                })
             });
 
             return Ok(url);

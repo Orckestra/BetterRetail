@@ -78,20 +78,18 @@ namespace Orckestra.Composer.Product.Factory
             var productDefinition = await ProductRepository.GetProductDefinitionAsync(new GetProductDefinitionParam
             {
                 Name = product.DefinitionName,
-                CultureInfo = param.CultureInfo
-            }).ConfigureAwait(false);
+                CultureInfo = param.CultureInfo});
 
             if (productDefinition == null) { return null; }
 
             //TODO: Use the GetLookupDisplayName
-            var productLookups = await LookupService.GetLookupsAsync(LookupType.Product).ConfigureAwait(false);
-            var productDetailImages = await GetProductImages(product, product.Variants).ConfigureAwait(false);
+            var productLookups = await LookupService.GetLookupsAsync(LookupType.Product);
+            var productDetailImages = await GetProductImages(product, product.Variants);
 
             var currency = await ScopeViewService.GetScopeCurrencyAsync(new GetScopeCurrencyParam
             {
                 CultureInfo = param.CultureInfo,
-                Scope = param.Scope
-            }).ConfigureAwait(false);
+                Scope = param.Scope});
 
             var productViewModel = CreateViewModel(new CreateProductDetailViewModelParam
             {
@@ -105,7 +103,7 @@ namespace Orckestra.Composer.Product.Factory
                 Currency = currency,
             });
 
-            productViewModel = await SetViewModelRecurringOrdersRelatedProperties(param, productViewModel, product).ConfigureAwaitWithCulture(false);
+            productViewModel = await SetViewModelRecurringOrdersRelatedProperties(param, productViewModel, product);
 
             return productViewModel;
         }
@@ -127,7 +125,7 @@ namespace Orckestra.Composer.Product.Factory
             vm.RecurringOrderProgramName = recurringOrderProgramName;
             vm.Context["RecurringOrderProgramName"] = recurringOrderProgramName;
 
-            var program = await RecurringOrdersRepository.GetRecurringOrderProgram(param.Scope, recurringOrderProgramName).ConfigureAwaitWithCulture(false);
+            var program = await RecurringOrdersRepository.GetRecurringOrderProgram(param.Scope, recurringOrderProgramName).ConfigureAwait(false);
 
             if (program == null)
             {

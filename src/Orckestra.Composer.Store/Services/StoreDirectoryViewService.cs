@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Orckestra.Composer.Country;
+﻿using Orckestra.Composer.Country;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Localization;
 using Orckestra.Composer.Store.Extentions;
@@ -11,6 +7,10 @@ using Orckestra.Composer.Store.Parameters;
 using Orckestra.Composer.Store.Providers;
 using Orckestra.Composer.Store.Repositories;
 using Orckestra.Composer.Store.ViewModels;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 
 namespace Orckestra.Composer.Store.Services
@@ -75,10 +75,11 @@ namespace Orckestra.Composer.Store.Services
                 })).ToList();
 
             model.Pagination = BuildPagination(totalCount, viewModelParam);
-            model.Groups = GetStoreDirectoryGroups(stores, viewModelParam);
+            model.Groups = await GetStoreDirectoryGroupsAsync(stores, viewModelParam);
+
             foreach (var countryGroup in model.Groups)
             {
-                countryGroup.Anchors = GetStoreDirectoryCountryGroupAnchors(sortedResults, countryGroup, viewModelParam);
+                countryGroup.Anchors = await GetStoreDirectoryCountryGroupAnchorsAsync(sortedResults, countryGroup, viewModelParam);
             }
 
             return model;
@@ -87,7 +88,6 @@ namespace Orckestra.Composer.Store.Services
         #region Protected Methods
         protected virtual StorePaginationViewModel BuildPagination(int totalCount, GetStoresParam param)
         {
-            var totalPages = GetTotalPages(totalCount, param.PageSize);
             StorePageViewModel prevPage = null, nextPage = null;
             if (param.PageSize * param.PageNumber < totalCount)
             {
@@ -168,54 +168,62 @@ namespace Orckestra.Composer.Store.Services
             return null;
         }
 
-        protected virtual List<StoreDirectoryGroupViewModel> GetStoreDirectoryGroups(IList<StoreViewModel> stores, GetStoresParam viewModelParam)
+        protected async virtual Task<List<StoreDirectoryGroupViewModel>> GetStoreDirectoryGroupsAsync(IList<StoreViewModel> stores, GetStoresParam viewModelParam)
         {
             var groups = StoreDirectoryGroupByMany(stores, st => st.Address.CountryCode, st => st.Address.RegionCode, st => st.Address.City).ToList();
 
             foreach (var countryGroup in groups)
             {
                 var countryCode = countryGroup.Key.ToString();
-                countryGroup.DisplayName = CountryService.RetrieveCountryDisplayNameAsync(new RetrieveCountryParam
+                countryGroup.DisplayName = await CountryService.RetrieveCountryDisplayNameAsync(new RetrieveCountryParam
                 {
                     CultureInfo = viewModelParam.CultureInfo,
                     IsoCode = countryCode
-                }).Result ?? countryCode;
+                }) ?? countryCode;
 
                 foreach (var regionGroup in countryGroup.SubGroups)
                 {
                     regionGroup.DisplayName =
-                        CountryService.RetrieveRegionDisplayNameAsync(new RetrieveRegionDisplayNameParam
+                        await CountryService.RetrieveRegionDisplayNameAsync(new RetrieveRegionDisplayNameParam
                         {
                             CultureInfo = viewModelParam.CultureInfo,
                             IsoCode = countryCode,
                             RegionCode = regionGroup.Key.ToString()
-                        }).Result;
+                        });
                 }
             }
             return groups;
         }
 
-        protected virtual List<StoreDirectoryAnchorViewModel> GetStoreDirectoryCountryGroupAnchors(IList<Overture.ServiceModel.Customers.Stores.Store> stores,
+        protected virtual async Task<List<StoreDirectoryAnchorViewModel>> GetStoreDirectoryCountryGroupAnchorsAsync(
+            IList<Overture.ServiceModel.Customers.Stores.Store> stores,
             StoreDirectoryGroupViewModel countryGroup,
             GetStoresParam viewModelParam)
         {
-            var regions = stores.Where(st => st.FulfillmentLocation.Addresses[0].CountryCode == countryGroup.Key.ToString()).Select(st => st.FulfillmentLocation.Addresses[0].RegionCode).Distinct().OrderBy(r => r);
-            var anchors = new List<StoreDirectoryAnchorViewModel>();
+            var countryCode = countryGroup.Key.ToString();
+            var anchors = new SortedDictionary<string, StoreDirectoryAnchorViewModel>();
+            int ind = 0;
 
-            foreach (var region in regions)
+            foreach (var store in stores)
             {
-                var store = stores.First(st => st.FulfillmentLocation.Addresses[0].RegionCode == region);
-                var index = stores.IndexOf(store);
-                var pageNumber = GetTotalPages(index + 1, viewModelParam.PageSize);
-                anchors.Add(new StoreDirectoryAnchorViewModel
+                ind++;
+                var region = store.FulfillmentLocation.Addresses[0].RegionCode;
+
+                if (store.FulfillmentLocation.Addresses[0].CountryCode != countryCode || anchors.Keys.Contains(region))
                 {
-                    DisplayName = CountryService.RetrieveRegionDisplayNameAsync(new RetrieveRegionDisplayNameParam
+                    continue;
+                }
+                
+                var pageNumber = GetTotalPages(ind, viewModelParam.PageSize);
+                anchors.Add(region, new StoreDirectoryAnchorViewModel
+                {
+                    DisplayName = await CountryService.RetrieveRegionDisplayNameAsync(new RetrieveRegionDisplayNameParam
                     {
                         CultureInfo = viewModelParam.CultureInfo,
-                        IsoCode = countryGroup.Key.ToString(),
-                        RegionCode = region,
-                    }).Result,
-                    Key = "#" + region,
+                        IsoCode = countryCode,
+                        RegionCode = region
+                    }),
+                Key = "#" + region,
                     Url = pageNumber == viewModelParam.PageNumber ? string.Empty : StoreUrlProvider.GetStoresDirectoryUrl(new GetStoresDirectoryUrlParam
                     {
                         BaseUrl = viewModelParam.BaseUrl,
@@ -224,8 +232,9 @@ namespace Orckestra.Composer.Store.Services
                     })
                 });
             }
-            return anchors;
+            return anchors.Values.ToList();
         }
+
         private int GetTotalPages(int total, int pageSize)
         {
             return (int)Math.Ceiling((double)total / pageSize);

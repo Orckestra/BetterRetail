@@ -47,13 +47,13 @@ namespace Orckestra.Composer.Search.Context
             ViewModel = await CategoryBrowsingViewService.GetCategoryBrowsingViewModelAsync(new GetCategoryBrowsingViewModelParam
             {
                 CategoryId = param.CategoryId,
-                CategoryName = GetCategoryName(param.CategoryId),
+                CategoryName = await GetCategoryNameAsync(param.CategoryId),
                 BaseUrl = RequestUtils.GetBaseUrl(param.Request).ToString(),
                 IsAllProducts = CategoryMetaContext.GetIsAllProductPage(),
                 Page = param.Page,
                 SortBy = param.SortBy,
                 SortDirection = param.SortDirection,
-                InventoryLocationIds = InventoryLocationProvider.GetInventoryLocationIdsForSearchAsync().Result,
+                InventoryLocationIds = await InventoryLocationProvider.GetInventoryLocationIdsForSearchAsync(),
                 SelectedFacets = SearchUrlProvider.BuildSelectedFacets(param.Request.QueryString).ToList(),
                 CultureInfo = ComposerContext.CultureInfo,
             }).ConfigureAwait(false);
@@ -61,15 +61,15 @@ namespace Orckestra.Composer.Search.Context
             return ViewModel;
         }
 
-        private string GetCategoryName(string categoryId)
+        private async Task<string> GetCategoryNameAsync(string categoryId)
         {
-            var categoryViewModels = CategoryViewService.GetCategoriesPathAsync(new GetCategoriesPathParam()
+            var categoryViewModels = await CategoryViewService.GetCategoriesPathAsync(new GetCategoriesPathParam()
             {
                 Scope = ComposerContext.Scope,
                 CultureInfo = ComposerContext.CultureInfo,
                 CategoryId = categoryId
 
-            }).Result;
+            });
 
             if (categoryViewModels == null)
             {

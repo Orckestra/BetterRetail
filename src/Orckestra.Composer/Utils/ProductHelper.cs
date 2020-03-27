@@ -1,5 +1,7 @@
-﻿using Orckestra.Composer.Configuration;
-using Orckestra.Composer.Utils;
+﻿using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Threading.Tasks;
 using Orckestra.Composer.ViewModels;
 using Orckestra.Overture;
 using Orckestra.Overture.ServiceModel;
@@ -7,19 +9,11 @@ using Orckestra.Overture.ServiceModel.Metadata;
 using Orckestra.Overture.ServiceModel.Products;
 using Orckestra.Overture.ServiceModel.Requests.Metadata;
 using Orckestra.Overture.ServiceModel.Requests.Products;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Orckestra.Composer.Utils
 {
     public static class ProductHelper
     {
-
         static ProductHelper()
         {
         }
@@ -36,9 +30,7 @@ namespace Orckestra.Composer.Utils
             }
         }
 
-
-
-        public static async Task<List<KeyVariantAttributes>> GetKeyVariantAttributes(Orckestra.Overture.ServiceModel.Products.Product product, Variant variant, CultureInfo culture, IOvertureClient client)
+        public static async Task<List<KeyVariantAttributes>> GetKeyVariantAttributes(Product product, Variant variant, CultureInfo culture, IOvertureClient client)
         {
             if (variant == null)
                 return null;
@@ -51,7 +43,7 @@ namespace Orckestra.Composer.Utils
 
             var productDef = client.Send(request);
 
-            var lookups = await GetLookups(productDef, client).ConfigureAwaitWithCulture(false);
+            var lookups = await GetLookups(productDef, client).ConfigureAwait(false);
 
             if (variant.PropertyBag == null) return null;
 
@@ -150,7 +142,7 @@ namespace Orckestra.Composer.Utils
                 lookupTasks.Add(client.SendAsync(request));
             }
 
-            var lookupResults = await Task.WhenAll(lookupTasks).ConfigureAwaitWithCulture(false);
+            var lookupResults = await Task.WhenAll(lookupTasks).ConfigureAwait(false);
             foreach (var lookup in lookupResults)
             {
                 if (lookup != null)

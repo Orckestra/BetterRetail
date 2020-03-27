@@ -47,10 +47,7 @@ namespace Orckestra.Composer.Store.Services
             if (string.IsNullOrWhiteSpace(param.StoreNumber)) { throw new ArgumentNullException("storeNumber"); }
             if (string.IsNullOrWhiteSpace(param.BaseUrl)) { throw new ArgumentNullException("baseUrl"); }
 
-            var overtureStore =
-               await
-                   StoreRepository.GetStoreByNumberAsync(param)
-                       .ConfigureAwait(false);
+            var overtureStore = await StoreRepository.GetStoreByNumberAsync(param).ConfigureAwait(false);
             if (overtureStore == null)
             {
                 return null;
@@ -168,7 +165,7 @@ namespace Orckestra.Composer.Store.Services
                 Scope = param.Scope
             };
 
-            var stores = await StoreRepository.GetStoresAsync(getStoresParam).ConfigureAwaitWithCulture(false);
+            var stores = await StoreRepository.GetStoresAsync(getStoresParam).ConfigureAwait(false);
             if (stores.Results != null)
             {
                 var vm = stores.Results
