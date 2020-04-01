@@ -51,19 +51,15 @@ module Orckestra.Composer {
                             this.BillingAddress.FirstName = this.Customer.FirstName;
                             this.BillingAddress.LastName = this.Customer.LastName;
                         }
-                        this.ComplementaryAddressAddState = !this.BillingAddress.Line2;
-                        this.AddingNewAddressMode = !this.BillingAddress.AddressBookId;
-
-                        let emptyBillingAddress = false;
+                 
                         let billingAddressParams = ['FirstName', 'LastName', 'Line1', 'City', 'RegionCode', 'PostalCode', 'PhoneNumber'];
 
                         billingAddressParams.forEach(param => {
                             if (this.BillingAddress[param] === null) {
-                                emptyBillingAddress = true;
                                 this.BillingAddress[param] = '';
                             }
                         });
-                        return emptyBillingAddress ? this.updateBillingAddress() : Q.resolve(true);
+                        return Q.resolve(true);
                     },
 
                     updateBillingAddress(): Q.Promise<boolean> {

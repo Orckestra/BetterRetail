@@ -27,14 +27,17 @@ module Orckestra.Composer {
                 methods: {
                     processShippingAddress() {
                         var processShippingAddress: Q.Deferred<boolean> = Q.defer<boolean>();
-                        let formId = !this.IsAuthenticated ? '#addressForm' : '#addNewAddressForm';
+                        let formId = '#addressForm';
                         let isValid = this.initializeParsey(formId);
                         if (isValid) {
                             if (this.addressModified()) {
                                 let postalCode = this.Cart.ShippingAddress.PostalCode;
                                 this.changePostalCode(postalCode).then(success => {
                                     if (success) {
-                                        self.checkoutService.updateCart([self.viewModelName])
+                                        //WHEN CHANGING SHIPPING, WE ALSO NEED UPDATE BILLING
+                                        let controlersToUpdate = [self.viewModelName, 'BillingAddress'];
+                                        this.prepareBillingAddress()
+                                            .then(() => self.checkoutService.updateCart(controlersToUpdate))
                                             .then(result => {
                                                 const { Cart } = result;
                                                 this.adressBeforeEdit = { ...this.Cart.ShippingAddress };
