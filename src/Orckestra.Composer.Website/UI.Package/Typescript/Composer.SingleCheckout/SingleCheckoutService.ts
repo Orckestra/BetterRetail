@@ -128,16 +128,16 @@ module Orckestra.Composer {
             if (!(cart.Customer.FirstName &&
                 cart.Customer.LastName &&
                 cart.Customer.Email)) {
-                return 0; // Inforamtion
+                return 0; // Information
             } else {
-                if(!(cart.ShippingMethod &&
+                if (!(cart.ShippingMethod &&
                     cart.ShippingAddress.Line1 &&
                     cart.ShippingAddress.City &&
                     cart.ShippingAddress.RegionCode &&
                     cart.ShippingAddress.PostalCode)) {
                     return 1; // Shipping
                 } else {
-                    return 2; // Review Cart
+                    return 3; // Billing
                 }
             }
         }
@@ -172,10 +172,7 @@ module Orckestra.Composer {
                     }
                 },
                 methods: {
-                    updateOrderCanBePlaced() {
-                        let stepComponent = this.$children && this.$children[0];
-                        this.OrderCanBePlaced = stepComponent && stepComponent.maxStep === stepComponent.activeStepIndex;
-                    },
+
                     initializeParsey(formId: any): boolean {
                         this.parsleyInit = $(formId).parsley();
                         this.parsleyInit.validate();
@@ -248,14 +245,14 @@ module Orckestra.Composer {
                 });
         }
 
-        public updateCart(controllerName: string = null): Q.Promise<IUpdateCartResult> {
+        public updateCart(controllerNames: Array<string> = null): Q.Promise<IUpdateCartResult> {
             let emptyVm = {
                 UpdatedCart: {}
             };
             let vue: any = this.VueCheckout;
 
             vue.IsLoading = true;
-            return this.buildCartUpdateViewModel(emptyVm, controllerName)
+            return this.buildCartUpdateViewModel(emptyVm, controllerNames)
                 .then(vm => this.cartService.updateCart(vm))
                 .finally(() => {
                     vue.IsLoading = false;
@@ -298,7 +295,7 @@ module Orckestra.Composer {
                 });
         }
 
-        private buildCartUpdateViewModel(vm: any, controllerName: string = null): Q.Promise<any> {
+        private buildCartUpdateViewModel(vm: any, controllersName = null): Q.Promise<any> {
 
             //var validationPromise: Q.Promise<any>;
             //var viewModelUpdatePromise: Q.Promise<any>;
@@ -308,7 +305,7 @@ module Orckestra.Composer {
             // });
 
             //  viewModelUpdatePromise = validationPromise.then(vm => {
-            return this.getCartUpdateViewModel(vm, controllerName);
+            return this.getCartUpdateViewModel(vm, controllersName);
             // });
 
             ///return viewModelUpdatePromise;
@@ -330,9 +327,9 @@ module Orckestra.Composer {
             });
         }
 
-        private getCartUpdateViewModel(vm: any, controllerName: string = null): Q.Promise<any> {
+        private getCartUpdateViewModel(vm: any, controllersName = null): Q.Promise<any> {
 
-            let updateModelPromise = this.collectUpdateModelPromises(controllerName);
+            let updateModelPromise = this.collectUpdateModelPromises(controllersName);
 
             return updateModelPromise.then((updates: Array<any>) => {
                 console.log('Aggregating all ViewModel updates.');
@@ -367,25 +364,23 @@ module Orckestra.Composer {
             return Q.all(promises);
         }
 
-        private collectUpdateModelPromises(controllerName: string = null): Q.Promise<any> {
+        private collectUpdateModelPromises(controllerNames = null): Q.Promise<any> {
 
             let promises: Q.Promise<any>[] = [];
             let controllerInstance: IBaseSingleCheckoutController;
 
-            if (controllerName) {
+            for (let controllerName in this.registeredControllers) {
+
+                if (controllerNames && !controllerNames.find(i => i === controllerName)) {
+                    continue;
+                }
+
                 if (this.registeredControllers.hasOwnProperty(controllerName)) {
                     controllerInstance = <IBaseSingleCheckoutController>this.registeredControllers[controllerName];
                     promises.push(controllerInstance.getUpdateModelPromise());
                 }
-            } else {
-                for (let controllerName in this.registeredControllers) {
-
-                    if (this.registeredControllers.hasOwnProperty(controllerName)) {
-                        controllerInstance = <IBaseSingleCheckoutController>this.registeredControllers[controllerName];
-                        promises.push(controllerInstance.getUpdateModelPromise());
-                    }
-                }
             }
+
 
             return Q.all(promises);
         }
@@ -417,7 +412,7 @@ module Orckestra.Composer {
             this.cacheProvider.defaultCache.set(this.orderCacheKey, orderConfirmationViewModel).done();
         }
 
-        public getPaymentProviders(paymentProviders: Array<any>) : Array<BaseCheckoutPaymentProvider> {
+        public getPaymentProviders(paymentProviders: Array<any>): Array<BaseCheckoutPaymentProvider> {
             if (_.isEmpty(paymentProviders)) {
                 console.error('No payment provider was found');
             }

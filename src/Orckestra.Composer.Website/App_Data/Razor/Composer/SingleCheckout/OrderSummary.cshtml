@@ -13,9 +13,9 @@
 <body>
     <div data-oc-controller="SingleCheckout.OrderSummary">
         <div class="card  mb-4  sps-order-summary sps  sps--abv" data-sps-offset="100">
-            <h4 class="card-header bg-primary border-primary  text-white">
+            <h3 class="card-header bg-primary border-primary  text-white">
                 @Html.Localize("ShoppingCart", "T_OrderSummary")
-            </h4>
+            </h3>
             <div class="card-body  bg-light" v-cloak="true">
                 @Rewars()
 
@@ -82,8 +82,8 @@
             <h4>@Html.Localize("MyAccount", "L_Total")</h4>
         </div>
         <div class="col-6  col-md-5  text-right">
-			<div v-if="IsLoading">
-				@CheckoutHelpers.LoadingSpinner()
+            <div v-if="IsLoading">
+                @CheckoutHelpers.LoadingSpinner()
             </div>
             <h4 v-else="v-else" v-text="OrderSummary.Total" data-qa="checkout-order-summary-total"></h4>
         </div>
@@ -107,28 +107,28 @@
 
 @helper TaxableShipmentAdditionalFeeSummary()
 {
-    <div class="row  mb-2" v-if="feeSummary.Taxable" v-for="feeSummary in OrderSummary.ShipmentAdditionalFeeSummaryList">
+    <div class="row  mb-2" data-qa="taxable-shipment-additional-fee-summary" v-if="feeSummary.Taxable" v-for="feeSummary in OrderSummary.ShipmentAdditionalFeeSummaryList">
         @FeeSummary()
     </div>
 }
 
 @helper NotTaxableShipmentAdditionalFeeSummary()
 {
-    <div class="row  mb-2" v-if="!feeSummary.Taxable" v-for="feeSummary in OrderSummary.ShipmentAdditionalFeeSummaryList">
+    <div class="row  mb-2" data-qa="nottaxable-shipment-additional-fee-summary" v-if="!feeSummary.Taxable" v-for="feeSummary in OrderSummary.ShipmentAdditionalFeeSummaryList">
         @FeeSummary()
     </div>
 }
 
 @helper TaxableAdditionalFeeSummary()
 {
-    <div class="row  mb-2" v-if="feeSummary.Taxable" v-for="feeSummary in OrderSummary.AdditionalFeeSummaryList">
+    <div class="row mb-2" data-qa="taxable-additional-fee-summary" v-if="feeSummary.Taxable" v-for="feeSummary in OrderSummary.AdditionalFeeSummaryList">
         @FeeSummary()
     </div>
 }
 
 @helper NotTaxableAdditionalFeeSummary()
 {
-    <div class="row  mb-2" v-if="!feeSummary.Taxable" v-for="feeSummary in OrderSummary.AdditionalFeeSummaryList">
+    <div class="row  mb-2" data-qa="nottaxable-additional-fee-summary" v-if="!feeSummary.Taxable" v-for="feeSummary in OrderSummary.AdditionalFeeSummaryList">
         @FeeSummary()
     </div>
 }
@@ -192,8 +192,9 @@
                     data-qa="chechout-place-order-btn"
                     v-bind:disabled="!OrderCanBePlaced"
                     v-on:click="processCompleteCheckout()">
-				<span v-if="IsCompleteCheckoutLoading" class="spinner-border spinner-border-sm" role="status">&#160;
-				</span>
+                <span v-if="IsCompleteCheckoutLoading" class="spinner-border spinner-border-sm" role="status">
+                    &#160;
+                </span>
                 @Html.Localize("CheckoutProcess", "F_PlaceOrder")
             </button>
         </div>

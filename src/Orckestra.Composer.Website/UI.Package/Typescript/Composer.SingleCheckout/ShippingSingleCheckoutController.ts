@@ -23,10 +23,12 @@ module Orckestra.Composer {
 
             let vueShippingMixin = {
                 data: {
-
+                    //THIS PROPERTY IS NEEDED FOR DETERMING IF REVIEW CART STEP IS FULFILLED
+                    ShippingSaved: false 
                 },
                 mounted() {
                     this.calculateSelectedMethod();
+                    this.ShippingSaved = this.FulfilledShipping; 
 
                 },
                 computed: {
@@ -45,10 +47,13 @@ module Orckestra.Composer {
                             fulfilledAddress = fulfilledAddress || this.SelectedShippingAddressId
                         }
 
-                        return fulfilledAddress && this.Cart.ShippingMethod && !this.IsLoading;
+                        return (fulfilledAddress && this.Cart.ShippingMethod) ? true: false;
                     },
                     SelectedMethodTypeString() {
                         return this.Cart.ShippingMethod ? this.Cart.ShippingMethod.FulfillmentMethodTypeString : '';
+                    },
+                    SelectedMethodType() {
+                        return this.ShippingMethodTypes.find(type => type.FulfillmentMethodTypeString === this.Cart.ShippingMethod.FulfillmentMethodTypeString);
                     },
                     IsShippingMethodType() {
                         return this.Cart.ShippingMethod &&
@@ -79,6 +84,20 @@ module Orckestra.Composer {
                                     this.ShippingAddress.AddressBookId == '00000000-0000-0000-0000-000000000000') {
                                     return this.processShippingAddress();
                                 }
+                            }
+                        }
+                        return true;
+                    },
+                    processBilling() {
+                        if (this.IsShippingMethodType) {
+                            if (this.IsAuthenticated) {
+                                if (this.AddingNewAddressMode) {
+                                    return this.processAddingNewBillingAddress();
+                                } else {
+                                    return this.processBillingAddressRegistered();
+                                }
+                            } else {
+                                return this.processBillingAddress();
                             }
                         }
                         return true;
@@ -122,7 +141,7 @@ module Orckestra.Composer {
 
                         if (methodEntity.ShippingProviderId === oldValue.ShippingProviderId) return;
 
-                        self.checkoutService.updateCart(self.viewModelName)
+                        self.checkoutService.updateCart([self.viewModelName])
                             .then(({ Cart }) => {
                                 this.Cart.OrderSummary = Cart.OrderSummary;
                             }).catch(e => {

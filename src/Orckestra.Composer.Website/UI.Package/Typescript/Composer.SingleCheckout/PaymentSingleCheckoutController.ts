@@ -18,6 +18,9 @@ module Orckestra.Composer {
 
                 },
                 computed: {
+                    FulfilledPayment() {
+                        return (this.FulfilledBillingAddress && this.ActivePayment) ? true : false;
+                    },
                     MainPaymentMethods() {
                         return this.Payment.PaymentMethods.filter(method => !method.IsCreditCardPaymentMethod);
                     },
@@ -38,7 +41,7 @@ module Orckestra.Composer {
                         return this.Payment.PaymentProviders.map(p => p.ProviderName);
                     },
                     ActivePayment() {
-                        return this.Payment.ActivePaymentViewModel;
+                        return this.Payment ? this.Payment.ActivePaymentViewModel : null;
                     },
                     CreditCardTrustImage() {
                         return this.Payment.CreditCardTrustImage;
@@ -107,22 +110,24 @@ module Orckestra.Composer {
                     processPayment(): Q.Promise<IUpdateCartResult> {
                         let activeProvider = this.findActivePaymentProvider();
 
-                        return this.processBillingAddress()
-                            .then(() => activeProvider.validatePayment(this.Payment.ActivePaymentViewModel))
+                        return activeProvider.validatePayment(this.Payment.ActivePaymentViewModel)
                             .then(success => {
                                 if (!success) return Q.reject('Card information not valid');
 
-                                return self.checkoutService.updateCart(self.viewModelName)
+                                return self.checkoutService.updateCart([self.viewModelName])
                             });
                     },
 
                     preparePayment(): Q.Promise<boolean> {
-                        return this.prepareBillingAddress()
-                            .then(() => self.checkoutService.getPaymentCheckout())
-                            .then(paymentVm => {
-                                this.Payment = paymentVm;
-                                return true;
-                            });
+                        if (!this.Payment) {
+                            return self.checkoutService.getPaymentCheckout()
+                                .then(paymentVm => {
+                                    this.Payment = paymentVm;
+                                    return true;
+                                });
+                        } else {
+                            return Q.resolve(true);
+                        }
                     }
                 }
             };

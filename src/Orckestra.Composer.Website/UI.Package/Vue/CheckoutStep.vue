@@ -1,6 +1,6 @@
 ﻿<template>
     <div class="checkout-step-container"
-         v-bind:class="{'active-step': active}"
+         v-bind:class="{'active-step': active, 'fulfilled-step' : fulfilled, 'preview-step': slotProps.preview, 'next-step': slotProps.next}"
          role="tabpanel"
          v-bind:id="stepId">
         <slot v-bind="slotProps"></slot>
@@ -23,7 +23,9 @@
              */
             afterChange: {
                 type: Function
-            }
+            },
+
+            fulfilled: Boolean
         },
         inject: ["addStep", "removeStep", "nextStep"],
         data: function() {
@@ -46,11 +48,12 @@
                     isLastStep: this.$parent.isLastStep,
                     index: this.index,
                     active: this.active,
-                    displayContinueButton: (!this.active && ((this.$parent.activeStepIndex + 1) === this.index)),
+                    displayContinueButton: (!this.fulfilled && ((this.$parent.activeStepIndex + 1) === this.index)),
                     selectStep: function() {
                         this.$parent.navigateToStep(this.index);
                     },
-                    preview: this.index < this.$parent.activeStepIndex
+                    preview: this.fulfilled && !this.active, 
+                    next: this.index === this.$parent.activeStepIndex + 1
                 };
             },
 
@@ -59,6 +62,9 @@
         },
         mounted: function() {
             this.addStep(this);
+            if(this.fulfilled === undefined) {
+                this.fulfilled = true;
+            }
         },
         destroyed: function() {
             if (this.$el && this.$el.parentNode) {

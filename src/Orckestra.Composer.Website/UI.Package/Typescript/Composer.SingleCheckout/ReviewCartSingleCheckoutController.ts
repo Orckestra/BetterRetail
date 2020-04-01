@@ -14,7 +14,14 @@ module Orckestra.Composer {
             this.registerSubscriptions();
 
             var vueReviewCartMixin = {
-
+                data: {
+               
+                },
+                computed: {
+                    FulfilledCart() {
+                        return (this.FulfilledShipping && this.ShippingSaved) ? true: false;
+                    }
+                },
                 methods: {
                     DecrementDisabled(item) {
                         return item.Quantity < 2 || this.IsLoading;

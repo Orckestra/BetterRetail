@@ -145,7 +145,7 @@
     <value>View credit cards</value>
   </data>
   <data name="B_EditPayment" xml:space="preserve">
-      <value>Enter Payment</value>
+    <value>Enter Payment</value>
   </data>
   <data name="F_BillingNo" xml:space="preserve">
     <value>No</value>
@@ -208,7 +208,7 @@
     <value> days</value>
   </data>
   <data name="L_Selected" xml:space="preserve">
-      <value>SELECTED</value>
+    <value>SELECTED</value>
   </data>
   <data name="L_EmailConfirmation" xml:space="preserve">
     <value>You will receive an email confirmation at</value>
@@ -217,8 +217,8 @@
     <value>Expires on:</value>
   </data>
   <data name="L_Default" xml:space="preserve">
-      <value>(Default)</value>
-    </data>
+    <value>(Default)</value>
+  </data>
   <data name="L_ExpirationDateForm" xml:space="preserve">
     <value>Expiry Date</value>
   </data>

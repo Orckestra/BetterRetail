@@ -1,10 +1,10 @@
 ﻿@inherits RazorFunction
 
 @functions {
-	public override string FunctionDescription
-	{
-		get { return "Page"; }
-	}
+    public override string FunctionDescription
+    {
+        get { return "Page"; }
+    }
 }
 
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
@@ -12,16 +12,24 @@
 </head>
 <body>
     <single-page-checkout xmlns:v-bind="v-bind" xmlns:v-on="v-on" xmlns:v-slot="v-slot" v-bind:start-index="StartStep">
-        <checkout-step v-slot="step" v-bind:before-change="processCustomer" >
+        <checkout-step v-slot="step" v-bind:before-change="processCustomer"
+                       v-bind:fulfilled="FulfilledCustomer">
             @Function("Composer.SingleCheckout.Steps.UserInformation")
         </checkout-step>
-        <checkout-step v-slot="step" v-bind:before-change="processShipping" v-bind:after-change="prepareShipping">
+        <checkout-step v-slot="step" v-bind:before-change="processShipping"
+                       v-bind:after-change="prepareShipping"
+                       v-bind:fulfilled="FulfilledShipping">
             @Function("Composer.SingleCheckout.Steps.Shipping")
         </checkout-step>
-        <checkout-step v-slot="step">
+        <checkout-step v-slot="step" v-bind:fulfilled="FulfilledCart">
             @Function("Composer.SingleCheckout.Steps.ReviewCart")
         </checkout-step>
-        <checkout-step v-slot="step" v-bind:after-change="preparePayment">
+        <checkout-step v-slot="step" v-bind:before-change="processBilling"
+                       v-bind:fulfilled="FulfilledBillingAddress">
+            @Function("Composer.SingleCheckout.Steps.BillingAddress")
+        </checkout-step>
+        <checkout-step v-slot="step" v-bind:after-change="preparePayment"
+                       v-bind:fulfilled="FulfilledPayment">
             @Function("Composer.SingleCheckout.Steps.Payment")
         </checkout-step>
     </single-page-checkout>

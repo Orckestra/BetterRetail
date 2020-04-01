@@ -7,7 +7,7 @@
     }
 }
 
-@{ 
+@{
     var firstNameLengthError = Html.Localize("Forms", "F_FirstNameLengthError");
     var firstNamePatternError = Html.Localize("Forms", "F_FirstNamePatternError");
 
@@ -24,10 +24,10 @@
     <div data-oc-controller="SingleCheckout.GuestCustomerInfo">
         <div class="card">
             <div class="card-header">
-                <h4 class="float-left">
+                <h3 class="float-left">
                     @Html.Localize("CheckoutProcess", "T_Information")
-                </h4>
-                <button v-cloak="true" v-show="step.preview" 
+                </h3>
+                <button v-cloak="true" v-show="step.preview"
                         data-qa="information-edit-btn"
                         class="btn btn-outline-secondary float-right"
                         v-on:click='step.navigateToStep(step.index)'>
@@ -36,7 +36,7 @@
             </div>
 
             <div class="card-body  bg-light" v-cloak="true">
-                <div v-if="step.preview" key="preview"  data-qa="information-preview-state">
+                <div v-if="step.preview" key="preview" data-qa="information-preview-state">
                     <span data-qa="information-firstName" v-text="Cart.Customer.FirstName" class="font-weight-bold"></span>&#160;
                     <span data-qa="information-lastName" v-text="Cart.Customer.LastName" class="font-weight-bold"></span>
                     <div data-qa="information-email" v-text="Cart.Customer.Email"></div>
@@ -57,8 +57,8 @@
                                    required="required"
                                    data-parsley-length="[2, 36]"
                                    data-parsley-pattern="/^[a-zA-Z\u00E0-\u00FC\.\-\s\']+$/i"
-                                   @if (!string.IsNullOrWhiteSpace(firstNameLengthError)) { <text> data-parsley-length-message="@firstNameLengthError" </text>  }
-                                   @if (!string.IsNullOrWhiteSpace(firstNamePatternError)) { <text> data-parsley-pattern-message="@firstNamePatternError" </text>  } />
+                                   @if (!string.IsNullOrWhiteSpace(firstNameLengthError)) { <text> data-parsley-length-message="@firstNameLengthError" </text> }
+                                   @if (!string.IsNullOrWhiteSpace(firstNamePatternError)) { <text> data-parsley-pattern-message="@firstNamePatternError" </text> } />
                         </div>
 
                         <div class="form-group col-md-6">

@@ -3,41 +3,42 @@
 
 @helper AddressPreview(string vueBinding, string qaPrefix = "shipping-address-preview")
 {
-<p class="mb-0">
-    <strong data-qa="@(qaPrefix)-fullname">{{@(vueBinding).FirstName}} {{@(vueBinding).LastName}}</strong><br />
-    <span data-qa="@(qaPrefix)-line1">{{@(vueBinding).Line1}}</span><br />
-    <span data-qa="@(qaPrefix)-line2" v-if="@(vueBinding).Line2">{{@(vueBinding).Line2}}<br /></span>
-    <span data-qa="@(qaPrefix)-city">{{@(vueBinding).City}}</span><br />
-    <span data-qa="@(qaPrefix)-regionName">{{@(vueBinding).RegionName}}</span>,
-    <span data-qa="@(qaPrefix)-postalCode">{{@(vueBinding).PostalCode}}</span>
-</p>
+    <p class="mb-0">
+        <strong data-qa="@(qaPrefix)-fullname">{{@(vueBinding).FirstName}} {{@(vueBinding).LastName}}</strong><br />
+        <span data-qa="@(qaPrefix)-line1">{{@(vueBinding).Line1}}</span>
+        <span data-qa="@(qaPrefix)-line2" v-if="@(vueBinding).Line2">, {{@(vueBinding).Line2}}<br /></span>
+        <span data-qa="@(qaPrefix)-city">{{@(vueBinding).City}}</span><br />
+        <span data-qa="@(qaPrefix)-regionName">{{@(vueBinding).RegionName}}</span>,
+        <span data-qa="@(qaPrefix)-postalCode">{{@(vueBinding).PostalCode}}</span>
+    </p>
 }
 
-@helper AddressRadioOption(string name = "ShippingAddressId", string selected = "SelectedShippingAddressId", string onChange = "changeRegisteredShippingAddress")
+
+@helper AddressRadioOption(string name = "ShippingAddressId", string selected = "AddressBookId", string onChange = "changeRegisteredShippingAddress")
 {
-<div class="form-check">
-    <input data-parsley-errors-container="#adresses-errors"
-           class="form-check-input" type="radio"
-           v-bind:checked="address.Id === @selected"
-           v-bind:disabled="IsLoading"
-           required="required"
-           name="@name"
-           v-bind:value="address.ShippingAddressId"
-           v-bind:id="address.Id + '-radio-@name'"
-           v-on:change="@(onChange)(address.Id)"
-           xmlns:v-on="v-on"
-           xmlns:v-bind="v-bind" />
-    <label class="form-check-label d-block" v-bind:for="address.Id + '-radio-@name'">
-        <div class="row">
-            <div class="col-12 col-sm-9 order-2  order-sm-1">@AddressPreview("address")</div>
-            <div class="col-12 col-sm-3  order-1  order-sm-2 font-weight-bolder"><p class="text-left text-sm-right h5"> {{address.AddressName}}</p></div>
-        </div>
-    </label>
-</div>
+    <div class="form-check">
+        <input data-parsley-errors-container="#adresses-errors"
+               class="form-check-input" type="radio"
+               v-bind:checked="address.Id == @selected"
+               v-bind:disabled="IsLoading"
+               required="required"
+               name="@name"
+               v-bind:value="address.Id"
+               v-bind:id="'@(name)-' + index"
+               v-on:change="@(onChange)(address.Id)"
+               xmlns:v-on="v-on"
+               xmlns:v-bind="v-bind" />
+        <label class="form-check-label d-block" v-bind:for="'@(name)-' + index">
+            <div class="row">
+                <div class="col-12 col-sm-9 order-2  order-sm-1">@AddressPreview("address")</div>
+                <div class="col-12 col-sm-3  order-1  order-sm-2 font-weight-bolder"><p class="text-left text-sm-right h5"> {{address.AddressName}}</p></div>
+            </div>
+        </label>
+    </div>
 }
 
-
-@helper LoadingSpinner() {
+@helper LoadingSpinner()
+{
     <div class="spinner-border text-info" role="status">
         <span class="sr-only">Loading...</span>
     </div>

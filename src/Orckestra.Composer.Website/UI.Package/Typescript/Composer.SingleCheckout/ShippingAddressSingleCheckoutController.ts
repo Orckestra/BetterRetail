@@ -34,10 +34,11 @@ module Orckestra.Composer {
                                 let postalCode = this.Cart.ShippingAddress.PostalCode;
                                 this.changePostalCode(postalCode).then(success => {
                                     if (success) {
-                                        self.checkoutService.updateCart(self.viewModelName)
+                                        self.checkoutService.updateCart([self.viewModelName])
                                             .then(result => {
                                                 const { Cart } = result;
                                                 this.adressBeforeEdit = { ...this.Cart.ShippingAddress };
+                                                this.ShippingSaved = true;
                                                 this.Cart = Cart;
                                                 processShippingAddress.resolve(true);
                                             })

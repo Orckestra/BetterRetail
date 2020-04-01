@@ -5,6 +5,24 @@
         .btn {
             text-transform: uppercase;
         }
+
+        h3 {
+            margin: 0;
+        }
+    }
+
+    .checkout-step-container {
+
+        .card-header {
+            opacity: 0.4;
+        }
+
+       
+        &.active-step, &.next-step, &.fulfilled-step {
+            .card-header {
+                opacity: 1;
+            }
+        }
     }
 }
 

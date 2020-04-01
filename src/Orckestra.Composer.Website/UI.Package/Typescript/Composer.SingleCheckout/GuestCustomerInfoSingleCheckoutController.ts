@@ -21,11 +21,9 @@ module Orckestra.Composer {
                     FulfilledCustomer() {
                         var fulfilled = this.Cart.Customer.FirstName &&
                             this.Cart.Customer.LastName &&
-                            this.Cart.Customer.Email &&
-                            !this.IsLoading;
-                        //TODO: Parsey doesn't work as expected && (this.parsleyInit ? this.parsleyInit.isValid(): true);
-
-                        return fulfilled;
+                            this.Cart.Customer.Email;
+ 
+                        return fulfilled ? true : false;
                     }
                 },
                 methods: {
@@ -36,7 +34,7 @@ module Orckestra.Composer {
                         if (isValid) {
 
                             if (this.isCustomerModified()) {
-                                self.checkoutService.updateCart(self.viewModelName).then(result => {
+                                self.checkoutService.updateCart([self.viewModelName]).then(result => {
                                     this.customerBeforeEdit = { ...this.Cart.Customer };
                                     processCustomer.resolve(true);
                                 });

@@ -14,21 +14,27 @@
     <div data-oc-controller="SingleCheckout.Payment">
         <div class="card  mt-4">
             <div class="card-header">
-                <h4 class="float-left">
+                <h3 class="float-left">
                     @Html.Localize("MyAccount", "T_PaymentMethod")
-                </h4>
+                </h3>
                 <button v-show="step.displayContinueButton"
                         v-on:click='step.navigateToStep(step.index)'
                         class="btn btn-primary float-right"
                         v-cloak="true">
                     @Html.Localize("CheckoutProcess", "B_EditPayment")
                 </button>
+                <button v-show="step.preview" class="btn btn-outline-secondary float-right"
+                        data-qa="edit-payment-btn"
+                        v-on:click="step.navigateToStep(step.index)"
+                        v-cloak="true">
+                    @Html.Localize("CheckoutProcess", "F_Edit")
+                </button>
             </div>
-			<div v-if="!Payment"  class="card-body bg-light text-center" v-show="step.active" v-cloak="true">
-				@CheckoutHelpers.LoadingSpinner()
-			</div>
+            <div v-if="!Payment" class="card-body bg-light text-center" v-show="step.active" v-cloak="true">
+                @CheckoutHelpers.LoadingSpinner()
+            </div>
             <div v-else="v-else" class="card-body bg-light" v-show="step.active" v-cloak="true">
-				
+
                 <form id="PaymentForm">
                     <div class="form-row">
                         <div class="col-md-6 pb-3" v-if="HasCreditCardProvider">
@@ -101,24 +107,7 @@
                                                    xmlns:v-on="v-on" />
 
                                             <label class="form-check-label d-block" v-bind:for="paymentMethod.Id">
-                                                <div class="row">
-                                                    <div class="col-md-3 text-sm-left text-md-center">
-                                                        <img v-bind:src="'/UI.Package/Images/creditcards/' + paymentMethod.CardType + '.png'"
-                                                             v-bind:alt="paymentMethod.CardType" xmlns:v-bind="v-bind" />
-                                                    </div>
-
-                                                    <div class="col-md-9 d-flex justify-content-between">
-                                                        <div>
-                                                            <p class="h4">{{paymentMethod.CardHolderName}}</p>
-                                                            <p class="mb-0">@Html.Localize("CheckoutProcess", "L_CardNumber") {{paymentMethod.CardMask}}</p>
-                                                            <p class="mb-0">@Html.Localize("CheckoutProcess", "L_ExpirationDate") {{paymentMethod.ExpiryDate}}</p>
-                                                            <p v-if="paymentMethod.IsExpired" class="mb-0 error-item strong">@Html.Localize("CheckoutProcess", "F_SaveCreditCardForced_Expired")</p>
-                                                        </div>
-                                                        <div v-if="paymentMethod.Default" class="align-self-end strong">
-                                                            @Html.Localize("CheckoutProcess", "L_Default")
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                @PreviewCartTypeMethod("paymentMethod")
                                             </label>
 
                                             <button v-if="false" type="button" style="position: absolute; top: 0; right: 0;"
@@ -154,14 +143,41 @@
                             </div>
                         </div>
                     </div>
-
-                    @Function("Composer.SingleCheckout.Steps.BillingAddress")
                 </form>
             </div>
             <div class="card-body bg-light" v-show="step.preview" v-cloak="true">
-
+                <div v-if="ActivePayment">
+                    <div v-if="ActivePayment.PaymentMethodType == 'SavedCreditCard'">
+                        @PreviewCartTypeMethod("SelectedPaymentMethod")
+                    </div>
+                    <div v-else="v-else">
+                        <h4>{{SelectedPaymentMethod.DisplayName}}</h4>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </body>
 </html>
+
+@helper PreviewCartTypeMethod(string vueMethodBinding)
+{
+    <div class="row">
+        <div class="col-md-3 text-sm-left text-md-center">
+            <img v-bind:src="'/UI.Package/Images/creditcards/' + @(vueMethodBinding).CardType + '.png'"
+                 v-bind:alt="@(vueMethodBinding).CardType" xmlns:v-bind="v-bind" />
+        </div>
+
+        <div class="col-md-9 d-flex justify-content-between">
+            <div>
+                <p class="h4">{{@(vueMethodBinding).CardHolderName}}</p>
+                <p class="mb-0">@Html.Localize("CheckoutProcess", "L_CardNumber") {{@(vueMethodBinding).CardMask}}</p>
+                <p class="mb-0">@Html.Localize("CheckoutProcess", "L_ExpirationDate") {{@(vueMethodBinding).ExpiryDate}}</p>
+                <p v-if="@(vueMethodBinding).IsExpired" class="mb-0 error-item strong">@Html.Localize("CheckoutProcess", "F_SaveCreditCardForced_Expired")</p>
+            </div>
+            <div v-if="@(vueMethodBinding).Default" class="align-self-end strong">
+                @Html.Localize("CheckoutProcess", "L_Default")
+            </div>
+        </div>
+    </div>
+}

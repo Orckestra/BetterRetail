@@ -859,14 +859,17 @@ namespace Orckestra.Composer.Cart.Factory
 
             var addressViewModel = ViewModelMapper.MapTo<BillingAddressViewModel>(address, cultureInfo);
 
-            var regionName = CountryService.RetrieveRegionDisplayNameAsync(new RetrieveRegionDisplayNameParam
+            if (!string.IsNullOrWhiteSpace(address.RegionCode))
             {
-                CultureInfo = cultureInfo,
-                IsoCode = ComposerContext.CountryCode,
-                RegionCode = address.RegionCode
-            }).Result;
+                var regionName = CountryService.RetrieveRegionDisplayNameAsync(new RetrieveRegionDisplayNameParam
+                {
+                    CultureInfo = cultureInfo,
+                    IsoCode = ComposerContext.CountryCode,
+                    RegionCode = address.RegionCode
+                }).Result;
 
-            addressViewModel.RegionName = regionName;
+                addressViewModel.RegionName = regionName;
+            }
 
             return addressViewModel;
         }

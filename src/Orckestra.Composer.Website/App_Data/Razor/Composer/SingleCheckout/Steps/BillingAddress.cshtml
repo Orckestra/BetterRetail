@@ -13,46 +13,67 @@
 <head>
 </head>
 <body>
-    <div class="border-top mt-2 pt-4" data-oc-controller="SingleCheckout.BillingAddress">
-        <div class="row mb-2">
-            <div class="col-12">
-                <h4>@Html.Localize("CheckoutProcess", "T_BillingAddress")</h4>
+    <div class="card  mt-4">
+        <div class="card-header">
+            <h3 class="float-left">
+                @Html.Localize("CheckoutProcess", "T_BillingAddress")
+            </h3>
+            <button v-show="step.displayContinueButton"
+                    v-bind:disabled="!FulfilledCart"
+                    v-on:click="step.navigateToStep(step.index)"
+                    class="btn btn-primary float-right"
+                    v-cloak="true"
+                    data-qa="continue-to-shipping-btn">
+                @Html.Localize("CheckoutProcess", "F_Continue")
+            </button>
+            <button v-show="step.preview" class="btn btn-outline-secondary float-right"
+                    data-qa="edit-payment-btn"
+                    v-on:click="step.navigateToStep(step.index)"
+                    v-cloak="true">
+                @Html.Localize("CheckoutProcess", "F_Edit")
+            </button>
+        </div>
+        <div class="card-body  bg-light" v-show="step.active" v-cloak="true" data-qa="billing-active-state">
+            <div class="form-check mb-4" data-oc-controller="SingleCheckout.BillingAddress">
+                <input name="useShippingAddress" id="useShippingAddress" type="checkbox"
+                       class="form-check-input"
+                       v-bind:checked="BillingAddress.UseShippingAddress"
+                       v-model="BillingAddress.UseShippingAddress"
+                       v-on:change="changeUseShippingAddress" />
+                <label for="useShippingAddress" class="form-check-label">
+                    @Html.Localize("CheckoutProcess", "F_BillingSameShipping")
+                </label>
             </div>
-        </div>
+            <div v-if="BillingAddress.UseShippingAddress">
+                @CheckoutHelpers.AddressPreview("ShippingAddress", "billing-address-preview")
+            </div>
 
-        <div class="form-check mb-4">
-            <input name="useShippingAddress" id="useShippingAddress" type="checkbox"
-                   class="form-check-input"
-                   v-bind:checked="BillingAddress.UseShippingAddress"
-                   v-model="BillingAddress.UseShippingAddress"
-                   v-on:change="changeUseShippingAddress" />
-            <label for="useShippingAddress" class="form-check-label">
-                @Html.Localize("CheckoutProcess", "F_BillingSameShipping")
-            </label>
-        </div>
-
-        <div v-if="!BillingAddress.UseShippingAddress">
-            @if (ComposerContext.IsAuthenticated)
-            {
-                <div v-for="address in RegisteredAddresses"
-                     v-bind:key="address.Id"
-                     class="border rounded p-3 mb-2 bg-white"
-                     v-bind:class="{ 'bg-selected border-primary': address.Id == BillingAddress.AddressBookId }">
-                    @CheckoutHelpers.AddressRadioOption("BillingAddressId", "BillingAddress.AddressBookId", "changeRegisteredBillingAddress")
+            <div v-if="!BillingAddress.UseShippingAddress" data-oc-controller="SingleCheckout.BillingAddressRegistered">
+                @if (ComposerContext.IsAuthenticated)
+                {
+                    <div v-for="(address, index) in RegisteredAddresses"
+                         v-bind:key="address.Id"
+                         class="border rounded p-3 mb-2 bg-white"
+                         v-bind:class="{ 'bg-selected border-primary': address.Id == BillingAddress.AddressBookId }">
+                        @CheckoutHelpers.AddressRadioOption("BillingAddressId", "BillingAddress.AddressBookId", "changeRegisteredBillingAddress")
+                    </div>
+                }
+                <div v-if="!IsAuthenticated || AddingNewAddressMode" class="border-top mt-4 pt-4">
+                    @Forms.Address.Form("Cart.Payment.BillingAddress", "billingAddressForm", false, "")
                 </div>
-            }
-            <div v-if="!IsAuthenticated || AddingNewAddressMode" class="border-top mt-4 pt-4">
-                @Forms.Address.Form("Cart.Payment.BillingAddress", "billingAddressForm", false, "")
+                @if (ComposerContext.IsAuthenticated)
+                {
+                    <!--TODO:button v-if="!AddingNewAddressMode" class="btn btn-dashed-block"
+                            v-on:click="addNewBillingAddressMode"
+                            v-bind:disabled="IsLoading"
+                            data-qa="billing-add-address-link">
+                        @Html.Localize("MyAccount", "B_AddNewAddress")
+                    </button-->
+                }
             </div>
-            @if (ComposerContext.IsAuthenticated)
-            {
-                <button v-if="!AddingNewAddressMode" class="btn btn-dashed-block"
-                        v-on:click="addNewBillingAddressMode"
-                        v-bind:disabled="IsLoading"
-                        data-qa="shipping-add-address-link">
-                    @Html.Localize("MyAccount", "B_AddNewAddress")
-                </button>
-            }
+        </div>
+        <div class="card-body  bg-light" v-show="step.preview" v-cloak="true" data-qa="billing-preview-state">
+            @CheckoutHelpers.AddressPreview("BillingAddress", "billing-address-preview")
         </div>
     </div>
 </body>

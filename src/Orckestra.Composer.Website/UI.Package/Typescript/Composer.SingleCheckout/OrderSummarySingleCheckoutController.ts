@@ -20,7 +20,7 @@ module Orckestra.Composer {
                             && !this.IsCompleteCheckoutLoading
                             && this.Payment
                             && this.FulfilledBillingAddress;
-                            //TODO: && this.FullfilledPaymentInformation;
+                        //TODO: && this.FullfilledPaymentInformation;
                     }
                 },
                 methods: {
@@ -28,6 +28,10 @@ module Orckestra.Composer {
                         this.IsCompleteCheckoutLoading = true;
                         return this.processPayment()
                             .then(() => self.checkoutService.completeCheckout())
+                            .fail(reason => {
+                                console.error('An error occurred while completing the checkout.', reason);
+                                ErrorHandler.instance().outputErrorFromCode('CompleteCheckoutFailed');
+                            })
                             .finally(() => this.IsCompleteCheckoutLoading = false);
                     },
                 }

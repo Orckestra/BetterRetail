@@ -19,7 +19,7 @@ module Orckestra.Composer {
             recurringOrderFrequencyName?: string,
             recurringOrderProgramName?: string): Q.Promise<any>;
 
-        updateCart(controllerName?: string): Q.Promise<IUpdateCartResult>;
+        updateCart(controllerNames?: Array<string>): Q.Promise<IUpdateCartResult>;
 
         updatePaymentMethod(param: any): Q.Promise<IActivePaymentViewModel>;
 

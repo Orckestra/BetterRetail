@@ -25,22 +25,22 @@ module Orckestra.Composer {
                 computed: {
                     FulfilledBillingAddress() {
 
-                        let fulfilled = this.BillingAddress.UseShippingAddress || (
+                        let fulfilled =
                             this.BillingAddress.FirstName &&
                             this.BillingAddress.LastName &&
                             this.BillingAddress.Line1 &&
                             this.BillingAddress.City &&
                             this.BillingAddress.RegionCode &&
                             this.BillingAddress.PostalCode &&
-                            this.BillingAddress.PhoneNumber);
+                            this.BillingAddress.PhoneNumber;
 
                         if (this.IsAuthenticated) {
                             fulfilled = fulfilled || this.BillingAddress.AddressBookId
                         }
 
-                        return fulfilled;
+                        return fulfilled ? true : false;
                     },
-                    
+
                     BillingAddress() {
                         return this.Cart.Payment.BillingAddress;
                     }
@@ -58,30 +58,32 @@ module Orckestra.Composer {
                         let billingAddressParams = ['FirstName', 'LastName', 'Line1', 'City', 'RegionCode', 'PostalCode', 'PhoneNumber'];
 
                         billingAddressParams.forEach(param => {
-                            if(this.BillingAddress[param] === null) {
+                            if (this.BillingAddress[param] === null) {
                                 emptyBillingAddress = true;
                                 this.BillingAddress[param] = '';
                             }
                         });
                         return emptyBillingAddress ? this.updateBillingAddress() : Q.resolve(true);
                     },
+
                     updateBillingAddress(): Q.Promise<boolean> {
-                        return self.checkoutService.updateCart(self.viewModelName)
+                        return self.checkoutService.updateCart([self.viewModelName])
                             .then(result => {
-                                const {Cart} = result;
+                                const { Cart } = result;
                                 this.Cart = Cart;
-                                this.billingAdressBeforeEdit = {...this.Cart.Payment.BillingAddress};
+                                this.billingAdressBeforeEdit = { ...this.Cart.Payment.BillingAddress };
                                 this.AddingNewAddressMode = !this.BillingAddress.AddressBookId;
                                 return true;
                             });
                     },
-                    processBillingAddress(): Q.Promise<boolean>  {
-                        if(!this.billingAddressModified())
+
+                    processBillingAddress(): Q.Promise<boolean> {
+                        if (!this.billingAddressModified())
                             return Q.resolve(true);
 
-                        if (!this.BillingAddress.UseShippingAddress && (!this.IsAuthenticated || this.AddingNewAddressMode)) {
+                        if (!this.BillingAddress.UseShippingAddress) {
                             let isValid = this.initializeParsey('#billingAddressForm');
-                            if(!isValid) {
+                            if (!isValid) {
                                 return Q.reject('Form not valid');
                             }
 
@@ -102,7 +104,7 @@ module Orckestra.Composer {
                         this.IsLoading = true;
                         return self.checkoutService.updateBillingPostalCode(postalCode)
                             .then((cart: any) => {
-                                let {PostalCode, RegionCode, RegionName} = cart.Payment.BillingAddress;
+                                let { PostalCode, RegionCode, RegionName } = cart.Payment.BillingAddress;
                                 this.Cart.Payment.BillingAddress = {
                                     ...this.BillingAddress,
                                     PostalCode,
@@ -117,19 +119,28 @@ module Orckestra.Composer {
                             })
                             .finally(() => this.IsLoading = false);
                     },
+
                     billingAddressModified() {
                         let formData = self.getSerializedForm();
                         let keys = ['UseShippingAddress', ..._.keys(formData), 'AddressBookId'];
                         return this.BillingAddress && _.some(keys, (key) => this.billingAdressBeforeEdit[key] != this.BillingAddress[key]);
                     },
+
                     addNewBillingAddressMode() {
                         this.AddingNewAddressMode = true;
                         this.clearBillingAddress();
                     },
+
+                    changeUseShippingAddress(event) {
+                        let { checked } = event.target;
+                        if (!checked) {
+                            this.clearBillingAddress();
+                        }
+                    },
                     clearBillingAddress() {
                         this.ComplementaryAddressAddState = false;
 
-                        let {FirstName, LastName, CountryCode, UseShippingAddress} = this.Cart.Payment.BillingAddress;
+                        let { FirstName, LastName, CountryCode, UseShippingAddress } = this.Cart.Payment.BillingAddress;
                         this.Cart.Payment.BillingAddress = {
                             FirstName: FirstName || this.Cart.Customer.FirstName,
                             LastName: LastName || this.Cart.Customer.LastName,
@@ -137,16 +148,6 @@ module Orckestra.Composer {
                             Line1: '', City: '', RegionCode: '', PostalCode: '', PhoneNumber: ''
                         };
                     },
-                    changeRegisteredBillingAddress(addressId) {
-                        this.BillingAddress.AddressBookId = addressId;
-                        this.AddingNewAddressMode = false;
-                    },
-                    changeUseShippingAddress(event) {
-                        let { checked } = event.target;
-                        if(!checked) {
-                            this.clearBillingAddress();
-                        }
-                    }
                 }
             };
 
@@ -156,17 +157,8 @@ module Orckestra.Composer {
         public getUpdateModelPromise(): Q.Promise<any> {
             return Q.fcall(() => {
                 let vm = {};
-                let { Payment, IsAuthenticated } = this.checkoutService.VueCheckout.Cart;
-                let { AddressBookId, UseShippingAddress } = Payment.BillingAddress;
-
-                if(IsAuthenticated && (AddressBookId || UseShippingAddress)){
-                    vm['BillingAddressRegistered'] = JSON.stringify({
-                        UseShippingAddress,
-                        BillingAddressId: AddressBookId
-                    });
-                } else {
-                    vm['BillingAddress'] = JSON.stringify(Payment.BillingAddress);
-                }
+                let { Payment } = this.checkoutService.VueCheckout.Cart;
+                vm['BillingAddress'] = JSON.stringify(Payment.BillingAddress);
                 return vm;
             });
         }

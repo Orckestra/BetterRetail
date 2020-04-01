@@ -17,9 +17,9 @@
     <div data-oc-controller="SingleCheckout.Shipping">
         <div class="card  mt-4">
             <div class="card-header">
-                <h4 class="float-left">
+                <h3 class="float-left">
                     @Html.Localize("CheckoutProcess", "F_ShippingStepTitle")
-                </h4>
+                </h3>
                 <button v-show="step.displayContinueButton"
                         v-bind:disabled="!FulfilledCustomer"
                         v-on:click="step.navigateToStep(step.index)"
@@ -64,12 +64,11 @@
                         @if (ComposerContext.IsAuthenticated)
                         {
                             <div data-oc-controller="SingleCheckout.ShippingAddressRegistered">
-                                <div v-for="address in RegisteredAddresses"
+                                <div v-for="(address, index) in RegisteredAddresses"
                                      v-bind:key="address.Id"
                                      class="border rounded p-3 mb-2 bg-white"
-                                     v-bind:class="{ 'bg-selected border-primary': address.Id == SelectedShippingAddressId }">
-
-                                    @CheckoutHelpers.AddressRadioOption("ShippingAddressId", "SelectedShippingAddressId", "changeRegisteredShippingAddress")
+                                     v-bind:class="{ 'bg-selected border-primary': address.Id == ShippingAddress.AddressBookId }">
+                                    @CheckoutHelpers.AddressRadioOption("ShippingAddressId", "ShippingAddress.AddressBookId", "changeRegisteredShippingAddress")
                                 </div>
                                 <div v-if="AddingNewAddressMode" class="border-top mt-4 pt-4">
                                     @Forms.Address.Form("Cart.ShippingAddress", "addNewAddressForm", true)
@@ -93,11 +92,11 @@
                     </div>
                 </transition>
             </div>
-            <div class="card-body" v-show="step.preview" v-cloak="true" data-qa="shipping-preview-state">
+            <div class="card-body bg-light" v-show="step.preview" v-cloak="true" data-qa="shipping-preview-state">
                 <div v-if="Cart.ShippingMethod">
                     <div class="row">
                         <div class="col-12 col-sm-8">
-                            <p class="h4">{{Cart.ShippingMethod.DisplayName}}</p>
+                            <p class="h4">{{SelectedMethodType.DisplayName}}</p>
                             @CheckoutHelpers.AddressPreview("ShippingAddress")
                             <span v-if="Cart.ShippingMethod.ExpectedDaysBeforeDelivery" data-qa="shippingmethod-expecteddays-info" class="clearfix">
                                 <strong>@Html.Localize("CheckoutProcess", "F_ShipTimeTitle")</strong> {{Cart.ShippingMethod.ExpectedDaysBeforeDelivery}} @Html.Localize("CheckoutProcess", "L_DeliveryDaysNumber")
@@ -180,11 +179,11 @@
                 </div>
                 <div class="col-4 align-self-end">
                     <div v-if="shippingMethodType.SelectedMethod.ShippingProviderId === shippingMethod.ShippingProviderId"
-                         class="bg-success rounded float-right d-inline-flex"
+                         class="bg-success btn-sm rounded float-right d-inline-flex"
                          style="padding: .375rem">
                         <span class="text-white text-nowrap"><i class="fa fa-check fa-lg"></i> @Html.Localize("CheckoutProcess", "L_Selected")</span>
                     </div>
-                    <button v-else="v-else" class="btn btn-outline-secondary float-right" 
+                    <button v-else="v-else" class="btn btn-sm btn-outline-secondary text-uppercase float-right"
                             v-on:click='selectShippingMethod(shippingMethod)' v-bind:disabled="IsLoading">
                         @Html.Localize("CheckoutProcess", "F_SelectShippingMethod")
                     </button>

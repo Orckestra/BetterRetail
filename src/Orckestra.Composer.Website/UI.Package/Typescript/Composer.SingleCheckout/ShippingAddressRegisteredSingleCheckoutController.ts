@@ -33,12 +33,12 @@ module Orckestra.Composer {
                         self.shippingAddressRegisteredService.getShippingAddresses(this.Cart)
                             .then(data => {
                                 this.RegisteredAddresses = data.Addresses;
-                                let isNewAddress = !this.ShippingAddress.AddressBookId && this.ShippingAddress.PostalCode;
-                                if (!isNewAddress) {
-                                    this.changeRegisteredShippingAddress(data.SelectedShippingAddressId);
-                                } else {
-                                    this.AddingNewAddressMode = true;
-                                }
+                              //  let isNewAddress = !this.ShippingAddress.AddressBookId && this.ShippingAddress.PostalCode;
+                              //  if (!isNewAddress) {
+                               //     this.changeRegisteredShippingAddress(data.SelectedShippingAddressId);
+                               // } else {
+                               //     this.AddingNewAddressMode = true;
+                                //}
                             });
                     }
                 },
@@ -100,9 +100,12 @@ module Orckestra.Composer {
                         this.AddingNewAddressMode = false;
                         if (!this.debounceChangeRegisteredShippingAddress) {
                             this.debounceChangeRegisteredShippingAddress = _.debounce((addingNewAddressPromise) => {
-                                self.checkoutService.updateCart(self.viewModelName).then((response: any) => {
+                                //WHEN CHANGING SHIPPING, WE ALSO NEED UPDATE BILLING
+                                let controlersToUpdate = [self.viewModelName, 'BillingAddressRegistered'];
+                                self.checkoutService.updateCart(controlersToUpdate).then((response: any) => {
                                     let { Cart } = response;
                                     this.Cart = Cart;
+                                    this.ShippingSaved = true;
                                     if (addingNewAddressPromise) {
                                         addingNewAddressPromise.resolve(true);
                                     }
