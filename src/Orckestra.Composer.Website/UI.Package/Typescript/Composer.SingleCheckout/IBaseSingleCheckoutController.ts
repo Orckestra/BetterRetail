@@ -13,5 +13,7 @@ module Orckestra.Composer {
         getValidationPromise(): Q.Promise<boolean>;
 
         getUpdateModelPromise(): Q.Promise<any>;
+
+        getViewModelNameForUpdatePromise(): Q.Promise<any>;
     }
 }

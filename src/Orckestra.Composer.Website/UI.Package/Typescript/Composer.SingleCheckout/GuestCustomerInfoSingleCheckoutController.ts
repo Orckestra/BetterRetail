@@ -35,7 +35,7 @@ module Orckestra.Composer {
 
                             if (this.isCustomerModified()) {
                                 self.checkoutService.updateCart([self.viewModelName]).then(result => {
-                                    this.customerBeforeEdit = { ...this.Cart.Customer };
+                                    this.Cart.Customer = result.Cart.Customer;
                                     processCustomer.resolve(true);
                                 });
                             } else {
@@ -49,8 +49,7 @@ module Orckestra.Composer {
                     },
 
                     isCustomerModified() {
-                        var formData = self.getSerializedForm();
-                        var keys = _.keys(formData);
+                        var keys = _.keys(this.Cart.Customer);
                         var isModified = _.some(keys, (key) => this.customerBeforeEdit[key] != this.Cart.Customer[key]);
                         return isModified;
                     }
@@ -60,19 +59,25 @@ module Orckestra.Composer {
             this.checkoutService.VueCheckoutMixins.push(vueUserMixin);
         }
 
+        public getViewModelNameForUpdatePromise(): Q.Promise<any> {
+            return Q.fcall(() => {
+                var vueData = this.checkoutService.VueCheckout;
+                let isValid = vueData.initializeParsey('#editCustomerForms');
+                if(!isValid) {
+                    return Q.reject('User information is not valid');
+                }
+
+                if (vueData.isCustomerModified()) {
+                    return this.viewModelName;
+                };
+            });
+        }
+
         public getUpdateModelPromise(): Q.Promise<any> {
             return Q.fcall(() => {
                 var vm = {};
                 var vueCustomerData = this.checkoutService.VueCheckout.Cart.Customer;
-                var formData = this.getSerializedForm();
-
-                var keys = _.keys(formData);
-                _.each(keys, key => {
-                    if (vueCustomerData.hasOwnProperty(key)) {
-                        formData[key] = vueCustomerData[key];
-                    }
-                });
-                vm[this.viewModelName] = JSON.stringify(formData);
+                vm[this.viewModelName] = JSON.stringify(vueCustomerData);
                 return vm;
             });
         }

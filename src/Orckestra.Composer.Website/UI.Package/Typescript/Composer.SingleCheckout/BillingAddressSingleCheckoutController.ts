@@ -13,6 +13,8 @@ module Orckestra.Composer {
 
             let vueBillingAddressMixin = {
                 data: {
+                     //THIS PROPERTY IS NEEDED FOR DETERMING IF SHIPPING STEP WAS ENTERED AT LEAST ONCE 
+                    BillingEnteredOnce: false,
                     AddingNewAddressMode: false,
                     ComplementaryAddressAddState: false,
                     PostalCodeError: false
@@ -25,7 +27,7 @@ module Orckestra.Composer {
                 computed: {
                     FulfilledBillingAddress() {
 
-                        let fulfilled =
+                        let fulfilled = 
                             this.BillingAddress.FirstName &&
                             this.BillingAddress.LastName &&
                             this.BillingAddress.Line1 &&
@@ -38,7 +40,7 @@ module Orckestra.Composer {
                             fulfilled = fulfilled || this.BillingAddress.AddressBookId
                         }
 
-                        return fulfilled ? true : false;
+                        return fulfilled && this.BillingEnteredOnce ? true : false;
                     },
 
                     BillingAddress() {
@@ -65,15 +67,16 @@ module Orckestra.Composer {
                     updateBillingAddress(): Q.Promise<boolean> {
                         return self.checkoutService.updateCart([self.viewModelName])
                             .then(result => {
-                                const { Cart } = result;
-                                this.Cart = Cart;
-                                this.billingAdressBeforeEdit = { ...this.Cart.Payment.BillingAddress };
+                                let { Cart } = result;
+                                this.Cart.Payment.BillingAddress = Cart.Payment.BillingAddress;
+                                this.BillingEnteredOnce = true;
                                 this.AddingNewAddressMode = !this.BillingAddress.AddressBookId;
                                 return true;
                             });
                     },
 
                     processBillingAddress(): Q.Promise<boolean> {
+                        
                         if (!this.billingAddressModified())
                             return Q.resolve(true);
 
@@ -117,8 +120,7 @@ module Orckestra.Composer {
                     },
 
                     billingAddressModified() {
-                        let formData = self.getSerializedForm();
-                        let keys = ['UseShippingAddress', ..._.keys(formData), 'AddressBookId'];
+                        let keys = _.keys(this.BillingAddress);
                         return this.BillingAddress && _.some(keys, (key) => this.billingAdressBeforeEdit[key] != this.BillingAddress[key]);
                     },
 

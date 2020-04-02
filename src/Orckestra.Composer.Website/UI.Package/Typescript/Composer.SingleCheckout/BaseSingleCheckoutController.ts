@@ -44,23 +44,14 @@ module Orckestra.Composer {
         public getUpdateModelPromise(): Q.Promise<any> {
 
             return Q.fcall(() => {});
-            return Q.fcall(() => {
-                var vm = {};
-                vm[this.viewModelName] = this.getViewModelUpdated();
+        }
 
-                return vm;
-            });
+        public getViewModelNameForUpdatePromise(): Q.Promise<any> {
+            return Q.resolve(null);
         }
 
         protected registerSubscriptions(): void {
             this.formInstances = this.registerFormsForValidation($('form', this.context.container));
-        }
-
-        protected getViewModelUpdated(): string {
-            let formContext = $('form', this.context.container),
-                viewModel = (<ISerializeObjectJqueryPlugin>formContext).serializeObject();
-
-            return JSON.stringify(viewModel);
         }
 
         protected getSerializedForm(): string {

@@ -35,12 +35,12 @@ module Orckestra.Composer {
 
         updateBillingPostalCode(postalCode: string): Q.Promise<void>;
 
-        ///setOrderConfirmationToCache(orderConfirmationviewModel : any) : void;
+        collectViewModelNamesForUpdateCart():  Q.Promise<any>;
 
-        //(): Q.Promise<any>;
+        setOrderConfirmationToCache(orderConfirmationviewModel : any) : void;
 
-        //clearOrderConfirmationFromCache(): void;
+        clearOrderConfirmationFromCache(): void;
 
-        //setOrderToCache(orderConfirmationviewModel : any) : void;
+        setOrderToCache(orderConfirmationviewModel : any) : void;
     }
 }

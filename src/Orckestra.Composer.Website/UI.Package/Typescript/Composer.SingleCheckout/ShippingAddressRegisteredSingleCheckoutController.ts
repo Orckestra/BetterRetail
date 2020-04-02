@@ -104,8 +104,8 @@ module Orckestra.Composer {
                                 let controlersToUpdate = [self.viewModelName, 'BillingAddressRegistered'];
                                 self.checkoutService.updateCart(controlersToUpdate).then((response: any) => {
                                     let { Cart } = response;
-                                    this.Cart = Cart;
-                                    this.ShippingSaved = true;
+                                    this.Cart.ShippingAddress = Cart.ShippingAddress;
+                                    this.Cart.Payment.BillingAddress = Cart.Payment.BillingAddress;
                                     if (addingNewAddressPromise) {
                                         addingNewAddressPromise.resolve(true);
                                     }

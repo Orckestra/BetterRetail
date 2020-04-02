@@ -174,9 +174,12 @@ module Orckestra.Composer {
                 methods: {
 
                     initializeParsey(formId: any): boolean {
-                        this.parsleyInit = $(formId).parsley();
-                        this.parsleyInit.validate();
-                        return this.parsleyInit.isValid();
+                        let parsleyInit = $(formId).parsley();
+                        if (parsleyInit) {
+                            parsleyInit.validate();
+                            return parsleyInit.isValid();
+                        }
+                        return true;
                     }
                 }
             });
@@ -250,13 +253,37 @@ module Orckestra.Composer {
                 UpdatedCart: {}
             };
             let vue: any = this.VueCheckout;
-
             vue.IsLoading = true;
+
             return this.buildCartUpdateViewModel(emptyVm, controllerNames)
                 .then(vm => this.cartService.updateCart(vm))
+                .then(result => {
+                    let { Cart } = result;
+                    vue.customerBeforeEdit = { ... Cart.Customer };
+                    vue.adressBeforeEdit = { ... Cart.ShippingAddress };
+                    vue.billingAdressBeforeEdit = { ...Cart.Payment.BillingAddress };
+                    vue.Cart.OrderSummary = Cart.OrderSummary;
+                    return result;
+                })
                 .finally(() => {
                     vue.IsLoading = false;
                 });
+        }
+
+
+        public collectViewModelNamesForUpdateCart(): Q.Promise<any> {
+            let controllerInstance: IBaseSingleCheckoutController;
+            let promises: Q.Promise<any>[] = [];
+
+            for (let controllerName in this.registeredControllers) {
+
+                if (this.registeredControllers.hasOwnProperty(controllerName)) {
+                    controllerInstance = <IBaseSingleCheckoutController>this.registeredControllers[controllerName];
+                    promises.push(controllerInstance.getViewModelNameForUpdatePromise());
+                }
+            }
+
+            return Q.all(promises);
         }
 
         public updatePaymentMethod(param: any): Q.Promise<IActivePaymentViewModel> {

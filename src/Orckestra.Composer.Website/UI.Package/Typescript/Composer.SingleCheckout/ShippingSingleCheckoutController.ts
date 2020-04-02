@@ -23,12 +23,12 @@ module Orckestra.Composer {
 
             let vueShippingMixin = {
                 data: {
-                    //THIS PROPERTY IS NEEDED FOR DETERMING IF REVIEW CART STEP IS FULFILLED
-                    ShippingSaved: false 
+                    //THIS PROPERTY IS NEEDED FOR DETERMING IF SHIPPING STEP WAS ENTERED AT LIST ONCE - USED IN REVIEW CART STEP IS FULFILLED
+                    ShippingEnteredOnce: false 
                 },
                 mounted() {
                     this.calculateSelectedMethod();
-                    this.ShippingSaved = this.FulfilledShipping; 
+                    this.ShippingEnteredOnce = this.FulfilledShipping; 
 
                 },
                 computed: {
@@ -76,6 +76,7 @@ module Orckestra.Composer {
                         this.AddingNewAddressMode = false;
                     },
                     processShipping() {
+                        this.ShippingEnteredOnce = true;
                         if (this.IsShippingMethodType) {
                             if (this.IsAuthenticated && this.AddingNewAddressMode) {
                                 return this.processAddingNewShippingAddress();
@@ -89,6 +90,7 @@ module Orckestra.Composer {
                         return true;
                     },
                     processBilling() {
+                        this.BillingEnteredOnce = true;
                         if (this.IsShippingMethodType) {
                             if (this.IsAuthenticated) {
                                 if (this.AddingNewAddressMode) {

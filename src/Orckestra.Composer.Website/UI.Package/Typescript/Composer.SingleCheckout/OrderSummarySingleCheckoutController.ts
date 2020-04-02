@@ -12,7 +12,7 @@ module Orckestra.Composer {
 
             let vueCompleteCheckoutMixin = {
                 data: {
-                    IsCompleteCheckoutLoading: false,
+                    IsCompleteCheckoutLoading: false
                 },
                 computed: {
                     OrderCanBePlaced() {
@@ -20,20 +20,24 @@ module Orckestra.Composer {
                             && !this.IsCompleteCheckoutLoading
                             && this.Payment
                             && this.FulfilledBillingAddress;
-                        //TODO: && this.FullfilledPaymentInformation;
                     }
                 },
                 methods: {
                     processCompleteCheckout(): Q.Promise<any> {
                         this.IsCompleteCheckoutLoading = true;
-                        return this.processPayment()
+                        return self.checkoutService.collectViewModelNamesForUpdateCart().
+                            then(viewModels => {
+
+                                return self.checkoutService.updateCart(viewModels)
+
+                            })
                             .then(() => self.checkoutService.completeCheckout())
                             .fail(reason => {
                                 console.error('An error occurred while completing the checkout.', reason);
                                 ErrorHandler.instance().outputErrorFromCode('CompleteCheckoutFailed');
                             })
                             .finally(() => this.IsCompleteCheckoutLoading = false);
-                    },
+                    }
                 }
             };
 

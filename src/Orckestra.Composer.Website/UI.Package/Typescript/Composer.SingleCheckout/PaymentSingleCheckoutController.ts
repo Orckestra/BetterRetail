@@ -13,6 +13,8 @@ module Orckestra.Composer {
             self.viewModelName = 'Payment';
             const SAVED_CREDIT_CARD = 'SavedCreditCard';
 
+            this.eventHub.subscribe("cartBillingAddressUpdated", this.onBillinAddressUpdated)
+
             let vuePaymentMixin = {
                 data: {
 
@@ -133,6 +135,24 @@ module Orckestra.Composer {
             };
 
             this.checkoutService.VueCheckoutMixins.push(vuePaymentMixin);
+        }
+
+        protected onBillinAddressUpdated(e) {
+            let vueData = e.data;
+            vueData.preparePayment();
+        }
+
+        public getViewModelNameForUpdatePromise(): Q.Promise<any> {
+            return Q.fcall(() => {
+                let vueData = this.checkoutService.VueCheckout;
+                let activeProvider = vueData.findActivePaymentProvider();
+                return activeProvider.validatePayment(vueData.Payment.ActivePaymentViewModel)
+                    .then(success => {
+                        if (!success) return Q.reject('Payment information not valid');
+
+                        return this.viewModelName;
+                   });
+            });
         }
 
         public getUpdateModelPromise(): Q.Promise<any> {

@@ -27,6 +27,7 @@ module Orckestra.Composer {
                 methods: {
                     processShippingAddress() {
                         var processShippingAddress: Q.Deferred<boolean> = Q.defer<boolean>();
+                        this.ShippingEnteredOnce = true;
                         let formId = '#addressForm';
                         let isValid = this.initializeParsey(formId);
                         if (isValid) {
@@ -39,10 +40,9 @@ module Orckestra.Composer {
                                         this.prepareBillingAddress()
                                             .then(() => self.checkoutService.updateCart(controlersToUpdate))
                                             .then(result => {
-                                                const { Cart } = result;
-                                                this.adressBeforeEdit = { ...this.Cart.ShippingAddress };
-                                                this.ShippingSaved = true;
-                                                this.Cart = Cart;
+                                                let { Cart } = result;
+                                                this.Cart.Payment.BillingAddress = Cart.Payment.BillingAddress;
+                                                self.eventHub.publish("cartBillingAddressUpdated", {data: this});
                                                 processShippingAddress.resolve(true);
                                             })
                                             .fail(reason => {
@@ -105,18 +105,29 @@ module Orckestra.Composer {
                     },
 
                     addressModified() {
-                        var formData = self.getSerializedForm();
-                        var keys = _.keys(formData);
+                        var keys = _.keys(this.Cart.ShippingAddress);
                         var isModified = _.some(keys, (key) => this.adressBeforeEdit[key] != this.Cart.ShippingAddress[key]);
                         return isModified;
                     },
                     adjustPostalCode() {
                         this.Cart.ShippingAddress.PostalCode = this.Cart.ShippingAddress.PostalCode.toUpperCase();
+                        if(this.BillingAddress && this.BillingAddress.PostalCode) {
+                            this.BillingAddress.PostalCode = this.BillingAddress.PostalCode.toUpperCase();
+                        }
                     }
                 }
             };
 
             this.checkoutService.VueCheckoutMixins.push(vueShippingAddressMixin);
+        }
+
+        public getViewModelNameForUpdatePromise(): Q.Promise<any> {
+            return Q.fcall(() => {
+                var vueData = this.checkoutService.VueCheckout;
+                if (vueData.addressModified()) {
+                    return this.viewModelName;
+                };
+            });
         }
 
         public getUpdateModelPromise(): Q.Promise<any> {
