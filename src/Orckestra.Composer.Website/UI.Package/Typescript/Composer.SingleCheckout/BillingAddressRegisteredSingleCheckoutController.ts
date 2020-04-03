@@ -24,9 +24,9 @@ module Orckestra.Composer {
                     processBillingAddressRegistered() {
                         if (this.BillingAddress.UseShippingAddress && !this.FulfilledBillingAddress) {
                             return self.checkoutService.updateCart([self.viewModelName])
-                            .then(() => {
-                                  return true;
-                            });
+                                .then(() => {
+                                    return true;
+                                });
                         } else {
                             return true; //TODO: ...
                         }
@@ -38,7 +38,9 @@ module Orckestra.Composer {
                         if (!this.debouncechangeRegisteredBillingAddress) {
                             this.debouncechangeRegisteredBillingAddress = _.debounce((addingNewAddressPromise) => {
                                 let controlersToUpdate = [self.viewModelName];
-                                self.checkoutService.updateCart(controlersToUpdate).then(() => {
+                                self.checkoutService.updateCart(controlersToUpdate).then((result) => {
+                                    let { Cart } = result;
+                                    this.Cart.Payment.BillingAddress = Cart.Payment.BillingAddress;
                                     if (addingNewAddressPromise) {
                                         addingNewAddressPromise.resolve(true);
                                     }
