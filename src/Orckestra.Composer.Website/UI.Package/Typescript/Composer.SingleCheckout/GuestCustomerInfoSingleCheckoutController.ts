@@ -9,6 +9,7 @@ module Orckestra.Composer {
         public initialize() {
             var self: GuestCustomerInfoSingleCheckoutController = this;
             self.viewModelName = 'GuestCustomerInfo';
+            self.formSelector = '#editCustomerForms';
 
             super.initialize();
             this.registerSubscriptions();
@@ -29,7 +30,7 @@ module Orckestra.Composer {
                 methods: {
                     processCustomer() {
                         var processCustomer: Q.Deferred<boolean> = Q.defer<boolean>();
-                        let isValid = this.initializeParsey('#editCustomerForms');
+                        let isValid = this.initializeParsey(self.formSelector);
 
                         if (isValid) {
 
@@ -62,7 +63,7 @@ module Orckestra.Composer {
         public getViewModelNameForUpdatePromise(): Q.Promise<any> {
             return Q.fcall(() => {
                 var vueData = this.checkoutService.VueCheckout;
-                let isValid = vueData.initializeParsey('#editCustomerForms');
+                let isValid = vueData.initializeParsey(this.formSelector);
                 if(!isValid) {
                     return Q.reject('User information is not valid');
                 }

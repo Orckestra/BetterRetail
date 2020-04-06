@@ -15,14 +15,22 @@ module Orckestra.Composer {
 
             var vueReviewCartMixin = {
                 data: {
-               
+                    ReviewCartEnteredOnce: false
+                },
+                mounted() {
+                    this.ReviewCartEnteredOnce = this.FulfilledCart;
                 },
                 computed: {
                     FulfilledCart() {
-                        return (this.FulfilledShipping && this.ShippingEnteredOnce) ? true: false;
-                    }
+                        return !!(this.FulfilledShipping && this.ShippingEnteredOnce);
+                    },
                 },
                 methods: {
+                    processCart() {
+                        this.ReviewCartEnteredOnce = true;
+                        return true;
+                    }
+                    ,
                     DecrementDisabled(item) {
                         return item.Quantity < 2 || this.IsLoading;
                     },

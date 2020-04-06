@@ -10,6 +10,7 @@ module Orckestra.Composer {
             super.initialize();
             var self: ShippingAddressSingleCheckoutController = this;
             self.viewModelName = 'ShippingAddress';
+            self.formSelector = '#addressForm';
 
             let vueShippingAddressMixin = {
                 data: {
@@ -27,9 +28,7 @@ module Orckestra.Composer {
                 methods: {
                     processShippingAddress() {
                         var processShippingAddress: Q.Deferred<boolean> = Q.defer<boolean>();
-                        this.ShippingEnteredOnce = true;
-                        let formId = '#addressForm';
-                        let isValid = this.initializeParsey(formId);
+                        let isValid = this.initializeParsey(self.formSelector);
                         if (isValid) {
                             if (this.addressModified()) {
                                 let postalCode = this.Cart.ShippingAddress.PostalCode;
@@ -39,10 +38,9 @@ module Orckestra.Composer {
                                         let controlersToUpdate = [self.viewModelName, 'BillingAddress'];
                                         this.prepareBillingAddress()
                                             .then(() => self.checkoutService.updateCart(controlersToUpdate))
-                                            .then(result => {
-                                                let { Cart } = result;
-                                                this.Cart.Payment.BillingAddress = Cart.Payment.BillingAddress;
-                                                self.eventHub.publish("cartBillingAddressUpdated", {data: this});
+                                            .then(() => {
+                                                this.ShippingEnteredOnce = true;
+                                                self.eventHub.publish("cartBillingAddressUpdated", { data: this });
                                                 processShippingAddress.resolve(true);
                                             })
                                             .fail(reason => {
@@ -111,7 +109,7 @@ module Orckestra.Composer {
                     },
                     adjustPostalCode() {
                         this.Cart.ShippingAddress.PostalCode = this.Cart.ShippingAddress.PostalCode.toUpperCase();
-                        if(this.BillingAddress && this.BillingAddress.PostalCode) {
+                        if (this.BillingAddress && this.BillingAddress.PostalCode) {
                             this.BillingAddress.PostalCode = this.BillingAddress.PostalCode.toUpperCase();
                         }
                     }
@@ -124,6 +122,11 @@ module Orckestra.Composer {
         public getViewModelNameForUpdatePromise(): Q.Promise<any> {
             return Q.fcall(() => {
                 var vueData = this.checkoutService.VueCheckout;
+                let isValid = vueData.initializeParsey(this.formSelector);
+                if (!isValid) {
+                    return Q.reject('Address information is not valid');
+                }
+
                 if (vueData.addressModified()) {
                     return this.viewModelName;
                 };

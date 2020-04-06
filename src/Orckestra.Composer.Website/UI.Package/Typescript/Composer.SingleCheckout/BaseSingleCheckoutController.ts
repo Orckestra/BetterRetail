@@ -12,6 +12,7 @@ module Orckestra.Composer {
     export class BaseSingleCheckoutController extends Orckestra.Composer.Controller implements Orckestra.Composer.IBaseSingleCheckoutController {
 
         protected formInstances: IParsley[];
+        protected formSelector: string;
         protected checkoutService: ISingleCheckoutService;
 
         public viewModelName: string;

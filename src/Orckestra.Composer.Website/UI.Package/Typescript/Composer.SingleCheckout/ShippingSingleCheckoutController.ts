@@ -76,7 +76,7 @@ module Orckestra.Composer {
                         this.AddingNewAddressMode = false;
                     },
                     processShipping() {
-                        this.ShippingEnteredOnce = true;
+                       
                         if (this.IsShippingMethodType) {
                             if (this.IsAuthenticated && this.AddingNewAddressMode) {
                                 return this.processAddingNewShippingAddress();
@@ -87,6 +87,7 @@ module Orckestra.Composer {
                                 }
                             }
                         }
+                        this.ShippingEnteredOnce = true;
                         return true;
                     },
                     processBilling() {
@@ -145,7 +146,7 @@ module Orckestra.Composer {
 
                         self.checkoutService.updateCart([self.viewModelName])
                             .then(({ Cart }) => {
-                                this.Cart.OrderSummary = Cart.OrderSummary;
+                                this.prepareShipping();
                             }).catch(e => {
                                 this.Cart.ShippingMethod = oldValue;
                             })

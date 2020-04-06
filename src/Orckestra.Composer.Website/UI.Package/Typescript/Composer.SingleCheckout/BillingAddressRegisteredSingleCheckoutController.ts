@@ -62,6 +62,20 @@ module Orckestra.Composer {
             this.checkoutService.VueCheckoutMixins.push(vueBillingAddressRegisteredMixin);
         }
 
+        public getViewModelNameForUpdatePromise(): Q.Promise<any> {
+            return Q.fcall(() => {
+                var vueData = this.checkoutService.VueCheckout;
+                if(!vueData.IsAuthenticated) {
+                    return;
+                }
+
+                if (vueData.billingAddressModified()) {
+                    return this.viewModelName;
+                };
+            });
+        }
+
+
         public getUpdateModelPromise(): Q.Promise<any> {
             return Q.fcall(() => {
                 let vm = {};

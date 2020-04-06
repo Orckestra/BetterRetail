@@ -261,8 +261,8 @@ module Orckestra.Composer {
                     let { Cart } = result;
                     vue.customerBeforeEdit = { ... Cart.Customer };
                     vue.adressBeforeEdit = { ... Cart.ShippingAddress };
-                    vue.billingAdressBeforeEdit = { ...Cart.Payment.BillingAddress };
-                    vue.Cart.OrderSummary = Cart.OrderSummary;
+                    vue.billingAddressBeforeEdit = { ...Cart.Payment.BillingAddress };
+                    vue.Cart = Cart;
                     return result;
                 })
                 .finally(() => {
