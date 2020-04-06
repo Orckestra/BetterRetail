@@ -613,7 +613,8 @@ namespace Orckestra.Composer.Cart.Factory
             }).Result;
 
             addressViewModel.RegionName = regionName;
-            addressViewModel.PhoneNumber = LocalizationProvider.FormatPhoneNumber(address.PhoneNumber, cultureInfo);
+            addressViewModel.PhoneNumber = address.PhoneNumber;
+            addressViewModel.PhoneNumberFormated = LocalizationProvider.FormatPhoneNumber(address.PhoneNumber, cultureInfo);
 
             return addressViewModel;
         }

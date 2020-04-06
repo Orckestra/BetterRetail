@@ -128,8 +128,6 @@ namespace Orckestra.Composer.Cart.Api
                 CultureInfo = ComposerContext.CultureInfo
             };
 
-
-
             var nextStepUrl = string.Empty;
             if (updateCartRequest.CurrentStep.HasValue)
             {
