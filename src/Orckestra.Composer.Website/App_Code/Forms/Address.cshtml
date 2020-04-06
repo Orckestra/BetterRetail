@@ -170,6 +170,7 @@
                                v-model="@(vueAddressBinding).PostalCode"
                                required="required"
                                data-parsley-group="shipping-based-on"
+                               data-parsley-errors-container=".postalcode-errors"
                                @Html.ParsleyMessage("Forms", "F_PostalCodeRequiredError", "required-message")
                                data-parsley-length="[6, 7]"
                                @Html.ParsleyMessage("Forms", "F_PostalCodeLengthError", "length-message")
@@ -184,7 +185,7 @@
                             </button>
                         </div>
                     }
-                    <div class="form-group col-12">
+                    <div  class="form-group col-12 postalcode-errors mt-n2">
                         <span class="text-danger" v-if="PostalCodeError">@Html.Localize("Errors", "L_InvalidZipPostalCodeFormat")</span>
                     </div>
                 </div>

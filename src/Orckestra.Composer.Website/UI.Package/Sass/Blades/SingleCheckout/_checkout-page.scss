@@ -30,15 +30,6 @@
     border-color: $primary !important;
 }
 
-.form-group.postalcode {
-    .parsley-errors-list {
-        position: absolute;
-        bottom:  -40px;
-        min-width: 330px;
-    }
-}
-
-
 @include media-breakpoint-up(sm) {
 
     .sps-order-summary {
