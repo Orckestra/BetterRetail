@@ -1,25 +1,34 @@
-<div class="clearfix" data-templateid="OrderHistoryPagination">
+<div class="clearfix mt-4" data-templateid="OrderHistoryPagination" >
 {{#if Pages}}
     {{#if_gt Pages.length 1 }}
         <ul class="float-right  pagination">
             {{#if PreviousPage.PageNumber }}
-                <li><a data-qa="order-pagination-previous" href="#" data-page="{{PreviousPage.PageNumber}}" data-oc-click="getOrders">{{PreviousPage.DisplayName}}</a></li>
+                <li class="page-item">
+                    <a  class="page-link" data-qa="order-pagination-previous" href="#" data-page="{{PreviousPage.PageNumber}}" data-oc-click="getOrders">{{PreviousPage.DisplayName}}</a></li>
             {{else }}
-                <li class="disabled"><span>{{PreviousPage.DisplayName}}</span></li>
+                <li class="disabled page-item">
+                    <a class="page-link">
+                        {{PreviousPage.DisplayName}}
+                    </a>
+                </li>
             {{/if}}
 
             {{#each Pages}}
                 {{#if IsCurrentPage}}
-                    <li class="active"><a>{{DisplayName}}</a></li>
+                    <li class="active page-item">
+                        <a class="page-link">{{DisplayName}}</a>
+                    </li>
                 {{else}}
-                    <li><a href="#" data-page="{{PageNumber}}" data-oc-click="getOrders">{{DisplayName}}</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#" data-page="{{PageNumber}}" data-oc-click="getOrders">{{DisplayName}}</a>
+                    </li>
                 {{/if}}
             {{/each}}
 
             {{#if NextPage.PageNumber }}
-                <li><a data-qa="order-pagination-next" href="#" data-page="{{NextPage.PageNumber}}" data-oc-click="getOrders">{{NextPage.DisplayName}}</a></li>
+                <li class="page-item"><a class="page-link" data-qa="order-pagination-next" href="#" data-page="{{NextPage.PageNumber}}" data-oc-click="getOrders">{{NextPage.DisplayName}}</a></li>
             {{else }}
-                <li class="disabled"><span>{{NextPage.DisplayName}}</span></li>
+                <li class="disabled page-item"><a class="page-link">{{NextPage.DisplayName}}</a></li>
             {{/if}}
         </ul>
     {{/if_gt}}

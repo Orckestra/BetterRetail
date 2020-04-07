@@ -64,9 +64,9 @@ module Orckestra.Composer {
         private onCloseMiniCart(e: IEventInformation): void {
             let miniCartContainer = $(this.context.container);
 
-            miniCartContainer.addClass('hidden');
+            miniCartContainer.addClass('d-none');
             setTimeout(function(){
-                miniCartContainer.removeClass('hidden');
+                miniCartContainer.removeClass('d-none');
             }, 250);
 
             //Hide the display and cancel the display timer to not have a flickering display
