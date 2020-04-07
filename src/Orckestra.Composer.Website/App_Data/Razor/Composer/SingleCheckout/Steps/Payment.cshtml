@@ -122,6 +122,7 @@
                             <div class="row" v-if="IsSavedCreditCardSelected">
                                 <div class="col-12 text-center">
                                     <button class="btn btn-dashed-block  mb-2"
+											data-qa="add-credit-card-btn"
                                             type="button"
                                             v-on:click="selectNewCreditCardPaymentMethod"
                                             v-bind:disabled="IsLoading">
@@ -136,6 +137,7 @@
 
                             <div class="form-check  mb-4" v-if="ActivePayment.CanSavePaymentMethod">
                                 <input name="createPaymentProfile" id="createPaymentProfile"
+									   data-qa="save-credit-card-checkbox"
                                        type="checkbox" class="form-check-input"
                                        v-bind:required="ActivePayment.MustSavePaymentMethod"
                                        data-parsley-error-message="@Html.Localize("CheckoutProcess", "F_SaveCreditCardForced_Explain")" />

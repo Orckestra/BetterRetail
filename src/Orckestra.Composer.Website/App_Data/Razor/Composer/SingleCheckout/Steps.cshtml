@@ -12,7 +12,6 @@
 </head>
 <body>
     <single-page-checkout xmlns:v-bind="v-bind" xmlns:v-on="v-on" xmlns:v-slot="v-slot" v-bind:start-index="StartStep">
-		
         <checkout-step v-slot="step" v-bind:before-change="processCustomer"
                        v-bind:fulfilled="FulfilledCustomer">
             @Function("Composer.SingleCheckout.Steps.UserInformation")
@@ -23,11 +22,11 @@
             @Function("Composer.SingleCheckout.Steps.Shipping")
         </checkout-step>
         <checkout-step v-slot="step" v-bind:fulfilled="FulfilledCart"
-									 v-bind:before-change="processCart">
+                       v-bind:before-change="processCart">
             @Function("Composer.SingleCheckout.Steps.ReviewCart")
         </checkout-step>
-        <checkout-step v-slot="step" v-bind:after-change="prepareBillingAddress" 
-			                         v-bind:before-change="processBilling"
+        <checkout-step v-slot="step" v-bind:after-change="prepareBillingAddress"
+                       v-bind:before-change="processBilling"
                        v-bind:fulfilled="FulfilledBillingAddress">
             @Function("Composer.SingleCheckout.Steps.BillingAddress")
         </checkout-step>
