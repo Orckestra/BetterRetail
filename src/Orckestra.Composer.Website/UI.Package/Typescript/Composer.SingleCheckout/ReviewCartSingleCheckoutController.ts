@@ -14,28 +14,25 @@ module Orckestra.Composer {
             this.registerSubscriptions();
 
             var vueReviewCartMixin = {
-                data: {
-                    ReviewCartEnteredOnce: false
-                },
                 mounted() {
-                    this.ReviewCartEnteredOnce = this.FulfilledCart;
+                    this.Steps.EnteredOnce.ReviewCart = this.FulfilledCart;
                 },
                 computed: {
                     FulfilledCart() {
-                        return !!(this.FulfilledShipping && this.ShippingEnteredOnce);
+                        return !!(this.FulfilledShipping && this.Steps.EnteredOnce.Shipping);
                     },
                 },
                 methods: {
                     processCart() {
-                        this.ReviewCartEnteredOnce = true;
+                        this.Steps.EnteredOnce.ReviewCart= true;
                         return true;
                     }
                     ,
                     DecrementDisabled(item) {
-                        return item.Quantity < 2 || this.IsLoading;
+                        return item.Quantity < 2 || this.Mode.Loading;
                     },
                     IncrementDisabled(item) {
-                        return item.Quantity >= 99 || this.IsLoading;
+                        return item.Quantity >= 99 || this.Mode.Loading;
                     },
                     updateItemQuantity(id, action: string = '') {
                         let item = _.find(this.Cart.LineItemDetailViewModels, (i: any) => i.Id === id);
@@ -49,7 +46,7 @@ module Orckestra.Composer {
 
                         if (!this.debounceUpdateItem) {
                             this.debounceUpdateItem = _.debounce(id => {
-                                this.IsLoading = true;
+                                this.Mode.Loading = true;
                                 let itemToUpdate = _.find(this.Cart.LineItemDetailViewModels, (i: any) => i.Id === id);
                                 self.checkoutService.updateCartItem(itemToUpdate.Id,
                                     itemToUpdate.Quantity,
@@ -62,7 +59,7 @@ module Orckestra.Composer {
                                         }
                                     })
                                     .finally(() => {
-                                        this.IsLoading = false;
+                                        this.Mode.Loading = false;
                                     })
                             }, 400);
                         }
@@ -72,7 +69,7 @@ module Orckestra.Composer {
 
                     removeCartItem(index) {
                         var item = this.Cart.LineItemDetailViewModels[index];
-                        this.IsLoading = true;
+                        this.Mode.Loading = true;
                         self.checkoutService.removeCartItem(item.Id, item.ProductId)
                             .then(cart => {
                                 if (cart) {
@@ -80,7 +77,7 @@ module Orckestra.Composer {
                                 }
                             })
                             .finally(() => {
-                                this.IsLoading = false;
+                                this.Mode.Loading = false;
                             });
 
                         this.Cart.LineItemDetailViewModels.splice(index, 1);

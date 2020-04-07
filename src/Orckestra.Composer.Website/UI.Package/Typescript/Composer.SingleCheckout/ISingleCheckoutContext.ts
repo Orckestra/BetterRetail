@@ -8,7 +8,5 @@ module Orckestra.Composer {
         Regions: any;
         ShippingMethodTypes: any;
         Payment: ICheckoutPaymentViewModel;
-        StartStep: number;
-        IsLoading: boolean;
     }
 }

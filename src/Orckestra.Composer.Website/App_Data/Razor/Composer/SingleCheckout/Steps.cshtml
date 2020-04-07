@@ -11,18 +11,18 @@
 <head>
 </head>
 <body>
-    <single-page-checkout xmlns:v-bind="v-bind" xmlns:v-on="v-on" xmlns:v-slot="v-slot" v-bind:start-index="StartStep">
+    <single-page-checkout xmlns:v-bind="v-bind" xmlns:v-on="v-on" xmlns:v-slot="v-slot" v-bind:start-index="Steps.StartStep">
         <checkout-step v-slot="step" v-bind:before-change="processCustomer"
                        v-bind:fulfilled="FulfilledCustomer">
             @Function("Composer.SingleCheckout.Steps.UserInformation")
         </checkout-step>
-        <checkout-step v-slot="step" v-bind:before-change="processShipping"
-                       v-bind:after-change="prepareShipping"
+        <checkout-step v-slot="step" v-bind:after-change="prepareShipping"
+                       v-bind:before-change="processShipping"
                        v-bind:fulfilled="FulfilledShipping">
             @Function("Composer.SingleCheckout.Steps.Shipping")
         </checkout-step>
-        <checkout-step v-slot="step" v-bind:fulfilled="FulfilledCart"
-                       v-bind:before-change="processCart">
+        <checkout-step v-slot="step" v-bind:before-change="processCart"
+                       v-bind:fulfilled="FulfilledCart" >
             @Function("Composer.SingleCheckout.Steps.ReviewCart")
         </checkout-step>
         <checkout-step v-slot="step" v-bind:after-change="prepareBillingAddress"

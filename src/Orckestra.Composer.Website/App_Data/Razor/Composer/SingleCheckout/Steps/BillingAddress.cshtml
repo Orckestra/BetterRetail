@@ -58,17 +58,17 @@
                         @CheckoutHelpers.AddressRadioOption("BillingAddressId", "BillingAddress.AddressBookId", "changeRegisteredBillingAddress")
                     </div>
                 }
-                <div v-if="!IsAuthenticated || AddingNewAddressMode" class="border-top mt-4 pt-4">
+                <div v-if="!IsAuthenticated || Mode.AddingNewAddress" class="border-top mt-4 pt-4">
                     @Forms.Address.Form("Cart.Payment.BillingAddress", "billingAddressForm", false, "")
                 </div>
                 @if (ComposerContext.IsAuthenticated)
                 {
-                    <!--TODO:button v-if="!AddingNewAddressMode" class="btn btn-dashed-block"
-                            v-on:click="addNewBillingAddressMode"
-                            v-bind:disabled="IsLoading"
-                            data-qa="billing-add-address-link">
-                        @Html.Localize("MyAccount", "B_AddNewAddress")
-                    </button-->
+                    <!--TODO:button v-if="!Mode.AddingNewAddress" class="btn btn-dashed-block"
+                v-on:click="addNewBillingAddressMode"
+                v-bind:disabled="Mode.Loading"
+                data-qa="billing-add-address-link">
+            @Html.Localize("MyAccount", "B_AddNewAddress")
+        </button-->
                 }
             </div>
         </div>

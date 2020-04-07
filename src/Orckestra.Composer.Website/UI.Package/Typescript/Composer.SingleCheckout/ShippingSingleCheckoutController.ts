@@ -22,13 +22,9 @@ module Orckestra.Composer {
             self.viewModelName = 'ShippingMethod';
 
             let vueShippingMixin = {
-                data: {
-                    //THIS PROPERTY IS NEEDED FOR DETERMING IF SHIPPING STEP WAS ENTERED AT LIST ONCE - USED IN REVIEW CART STEP IS FULFILLED
-                    ShippingEnteredOnce: false 
-                },
                 mounted() {
                     this.calculateSelectedMethod();
-                    this.ShippingEnteredOnce = this.FulfilledShipping; 
+                    this.Steps.EnteredOnce.Shipping = this.FulfilledShipping; 
 
                 },
                 computed: {
@@ -72,13 +68,13 @@ module Orckestra.Composer {
                             this.Cart.ShippingAddress.FirstName = this.Customer.FirstName;
                             this.Cart.ShippingAddress.LastName = this.Customer.LastName;
                         }
-                        this.ComplementaryAddressAddState = !this.Cart.ShippingAddress.Line2;
-                        this.AddingNewAddressMode = false;
+                        this.Mode.AddingLine2Address = !this.Cart.ShippingAddress.Line2;
+                        this.Mode.AddingNewAddress = false;
                     },
                     processShipping() {
                        
                         if (this.IsShippingMethodType) {
-                            if (this.IsAuthenticated && this.AddingNewAddressMode) {
+                            if (this.IsAuthenticated && this.Mode.AddingNewAddress) {
                                 return this.processAddingNewShippingAddress();
                             } else {
                                 if (!this.ShippingAddress.AddressBookId ||
@@ -87,14 +83,14 @@ module Orckestra.Composer {
                                 }
                             }
                         }
-                        this.ShippingEnteredOnce = true;
+                        this.Steps.EnteredOnce.Shipping = true;
                         return true;
                     },
                     processBilling() {
-                        this.BillingEnteredOnce = true;
+                        this.Steps.EnteredOnce.Billing = true;
                         if (this.IsShippingMethodType) {
                             if (this.IsAuthenticated) {
-                                if (this.AddingNewAddressMode) {
+                                if (this.Mode.AddingNewAddress) {
                                     return this.processAddingNewBillingAddress();
                                 } else {
                                     return this.processBillingAddressRegistered();

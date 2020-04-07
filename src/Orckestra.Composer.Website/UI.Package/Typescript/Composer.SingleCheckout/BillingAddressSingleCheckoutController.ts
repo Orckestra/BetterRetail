@@ -13,18 +13,12 @@ module Orckestra.Composer {
             self.formSelector = '#billingAddressForm';
 
             let vueBillingAddressMixin = {
-                data: {
-                     //THIS PROPERTY IS NEEDED FOR DETERMING IF SHIPPING STEP WAS ENTERED AT LEAST ONCE 
-                    BillingEnteredOnce: false,
-                    AddingNewAddressMode: false,
-                    ComplementaryAddressAddState: false,
-                    PostalCodeError: false
-                },
+
                 created() {
                     this.billingAddressBeforeEdit = { ...this.Cart.Payment.BillingAddress }; 
                 },
                 mounted() {
-                    this.BillingEnteredOnce = this.FulfilledBillingAddress;
+                    this.Steps.EnteredOnce.Billing = this.FulfilledBillingAddress;
                 },
                 computed: {
                     FulfilledBillingAddress() {
@@ -42,7 +36,7 @@ module Orckestra.Composer {
                             fulfilled = fulfilled || this.BillingAddress.AddressBookId
                         }
 
-                        return !!(fulfilled && this.ReviewCartEnteredOnce);
+                        return !!(fulfilled && this.Steps.EnteredOnce.ReviewCart);
                     },
 
                     BillingAddress() {
@@ -60,10 +54,8 @@ module Orckestra.Composer {
                  
                         let billingAddressParams = ['FirstName', 'LastName', 'Line1', 'City', 'RegionCode', 'PostalCode', 'PhoneNumber'];
 
-                        let isEmpty = false;
                         billingAddressParams.forEach(param => {
                             if (this.BillingAddress[param] === null) {
-                                isEmpty = true;
                                 this.BillingAddress[param] = '';
                             }
                         });
@@ -76,8 +68,8 @@ module Orckestra.Composer {
                             .then(result => {
                                 let { Cart } = result;
                                 this.Cart.Payment.BillingAddress = Cart.Payment.BillingAddress;
-                                this.BillingEnteredOnce = true;
-                                this.AddingNewAddressMode = !this.BillingAddress.AddressBookId;
+                                this.Steps.EnteredOnce.Billing = true;
+                                this.Mode.AddingNewAddress = !this.BillingAddress.AddressBookId;
                                 return true;
                             });
                     },
@@ -102,12 +94,12 @@ module Orckestra.Composer {
                     },
 
                     changeBillingPostalCode(postalCode: any): Q.Promise<boolean> {
-                        this.PostalCodeError = false;
+                        this.Errors.PostalCodeError = false;
                         if (this.billingAddressBeforeEdit.PostalCode === postalCode) {
                             return Q.resolve(true);
                         }
 
-                        this.IsLoading = true;
+                        this.Mode.Loading = true;
                         return self.checkoutService.updateBillingPostalCode(postalCode)
                             .then((cart: any) => {
                                 let { PostalCode, RegionCode, RegionName } = cart.Payment.BillingAddress;
@@ -120,10 +112,10 @@ module Orckestra.Composer {
                                 return true;
                             })
                             .fail(reason => {
-                                this.PostalCodeError = true;
+                                this.Errors.PostalCodeError = true;
                                 throw Error(reason);
                             })
-                            .finally(() => this.IsLoading = false);
+                            .finally(() => this.Mode.Loading = false);
                     },
 
                     billingAddressModified() {
@@ -134,7 +126,7 @@ module Orckestra.Composer {
                     },
 
                     addNewBillingAddressMode() {
-                        this.AddingNewAddressMode = true;
+                        this.Mode.AddingNewAddress = true;
                         this.clearBillingAddress();
                     },
 
@@ -145,7 +137,7 @@ module Orckestra.Composer {
                         }
                     },
                     clearBillingAddress() {
-                        this.ComplementaryAddressAddState = false;
+                        this.Mode.AddingLine2Address = false;
 
                         let { FirstName, LastName, CountryCode, UseShippingAddress } = this.Cart.Payment.BillingAddress;
                         this.Cart.Payment.BillingAddress = {

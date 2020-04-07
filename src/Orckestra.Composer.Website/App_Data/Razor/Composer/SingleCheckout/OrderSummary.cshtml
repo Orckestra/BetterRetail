@@ -192,7 +192,7 @@
                     data-qa="chechout-place-order-btn"
                     v-bind:disabled="!OrderCanBePlaced"
                     v-on:click="processCompleteCheckout()">
-                <span v-if="IsCompleteCheckoutLoading" class="spinner-border spinner-border-sm" role="status">
+                <span v-if="Mode.CompleteCheckoutLoading" class="spinner-border spinner-border-sm" role="status">
                     &#160;
                 </span>
                 @Html.Localize("CheckoutProcess", "F_PlaceOrder")

@@ -11,20 +11,18 @@ module Orckestra.Composer {
             let self: OrderSummarySingleCheckoutController = this;
 
             let vueCompleteCheckoutMixin = {
-                data: {
-                    IsCompleteCheckoutLoading: false
-                },
+
                 computed: {
                     OrderCanBePlaced() {
-                        return !this.IsLoading
-                            && !this.IsCompleteCheckoutLoading
+                        return !this.Mode.Loading
+                            && !this.Mode.CompleteCheckoutLoading
                             && this.Payment
                             && this.FulfilledBillingAddress;
                     }
                 },
                 methods: {
                     processCompleteCheckout(): Q.Promise<any> {
-                        this.IsCompleteCheckoutLoading = true;
+                        this.Mode.CompleteCheckoutLoading = true;
                         return self.checkoutService.collectViewModelNamesForUpdateCart().
                             then(viewModels => {
 
@@ -36,7 +34,7 @@ module Orckestra.Composer {
                                 console.error('An error occurred while completing the checkout.', reason);
                                 ErrorHandler.instance().outputErrorFromCode('CompleteCheckoutFailed');
                             })
-                            .finally(() => this.IsCompleteCheckoutLoading = false);
+                            .finally(() => this.Mode.CompleteCheckoutLoading = false);
                     }
                 }
             };

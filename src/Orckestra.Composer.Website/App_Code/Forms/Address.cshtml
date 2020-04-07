@@ -24,10 +24,10 @@
                                @Html.HelpBubble("Forms", "F_AddressNameIndication")
                                @Html.ParsleyMessage("Forms", "F_AddressNameLengthError", "length-message")
                                @Html.ParsleyMessage("Forms", "F_AddressNamePatternError", "pattern-message")
-                               v-on:change="AddressNameAlreadyInUseError=false" xmlns:v-on="v-on" />
+                               v-on:change="Errors.AddressNameAlreadyInUseError=false" xmlns:v-on="v-on" />
                         <p class="text-danger mt-1"
                            data-qa="address-name-already-in-use-error"
-                           v-if="AddressNameAlreadyInUseError">@Html.Localize("Errors", "L_NameAlreadyUsed")</p>
+                           v-if="Errors.AddressNameAlreadyInUseError">@Html.Localize("Errors", "L_NameAlreadyUsed")</p>
                     </div>
                     <!--TODO: div class="form-group form-check">
             <input name="IsPreferredShipping"
@@ -89,11 +89,11 @@
                            data-parsley-pattern="/^[a-zA-Z0-9\u00E0-\u00FC\.\-\s\'\,\u0023\u00b0]+$/i"
                            @Html.ParsleyMessage("Forms", "F_AddressPatternError", "pattern-message") />
                 </div>
-                <div v-if="ComplementaryAddressAddState" class="form-group">
+                <div v-if="Mode.AddingLine2Address" class="form-group">
                     <a href="#complementaryAddress"
                        data-toggle="collapse"
                         data-qa="address-line2-link"
-                       v-on:click="ComplementaryAddressAddState = !ComplementaryAddressAddState"
+                       v-on:click="Mode.AddingLine2Address = !Mode.AddingLine2Address"
                        role="button"
                        aria-expanded="false"
                        aria-controls="complementaryAddress">
@@ -101,7 +101,7 @@
                         @Html.Localize("Forms", "F_ComplementaryAddressAdd")
                     </a>
                 </div>
-                <div id="complementaryAddress" class="form-group" v-bind:class="{'collapse': ComplementaryAddressAddState}">
+                <div id="complementaryAddress" class="form-group" v-bind:class="{'collapse': Mode.AddingLine2Address}">
                     <label for="@(formId)Line2">@Html.Localize("Forms", "F_ComplementaryAddress")</label>
                     <input name="Line2" id="@(formId)Line2"  data-qa="address-line2-input"
                            @Html.HelpBubble("Forms", "F_ComplementaryAddressIndication")
@@ -186,7 +186,7 @@
                         </div>
                     }
                     <div  class="form-group col-12 postalcode-errors mt-n2">
-                        <span class="text-danger" v-if="PostalCodeError">@Html.Localize("Errors", "L_InvalidZipPostalCodeFormat")</span>
+                        <span class="text-danger" v-if="Errors.PostalCodeError">@Html.Localize("Errors", "L_InvalidZipPostalCodeFormat")</span>
                     </div>
                 </div>
                 <div class="form-group">

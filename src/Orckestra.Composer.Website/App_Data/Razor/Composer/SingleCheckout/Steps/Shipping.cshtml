@@ -70,11 +70,11 @@
                                      v-bind:class="{ 'bg-selected border-primary': address.Id == ShippingAddress.AddressBookId }">
                                     @CheckoutHelpers.AddressRadioOption("ShippingAddressId", "ShippingAddress.AddressBookId", "changeRegisteredShippingAddress")
                                 </div>
-                                <div v-if="AddingNewAddressMode" class="border-top mt-4 pt-4">
+                                <div v-if="Mode.AddingNewAddress" class="border-top mt-4 pt-4">
                                     @Forms.Address.Form("Cart.ShippingAddress", "addNewAddressForm", true)
                                 </div>
 
-                                <button v-if="!AddingNewAddressMode" class="btn btn-dashed-block"
+                                <button v-if="!Mode.AddingNewAddress" class="btn btn-dashed-block"
                                         v-on:click="addNewAddressMode"
                                         v-bind:disabled="IsLoading"
                                         data-qa="shipping-add-address-link">

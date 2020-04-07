@@ -16,12 +16,10 @@ module Orckestra.Composer {
             this.eventHub.subscribe("cartBillingAddressUpdated", this.onBillinAddressUpdated)
 
             let vuePaymentMixin = {
-                data: {
 
-                },
                 computed: {
                     FulfilledPayment() {
-                        return !!(this.FulfilledBillingAddress && this.ActivePayment && this.BillingEnteredOnce);
+                        return !!(this.FulfilledBillingAddress && this.ActivePayment && this.Steps.EnteredOnce.Billing);
                     },
                     MainPaymentMethods() {
                         return this.Payment.PaymentMethods.filter(method => !method.IsCreditCardPaymentMethod);
@@ -151,7 +149,7 @@ module Orckestra.Composer {
                         if (!success) return Q.reject('Payment information not valid');
 
                         return this.viewModelName;
-                   });
+                    });
             });
         }
 

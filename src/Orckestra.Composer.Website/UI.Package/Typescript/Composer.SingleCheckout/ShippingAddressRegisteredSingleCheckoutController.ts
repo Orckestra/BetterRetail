@@ -18,11 +18,8 @@ module Orckestra.Composer {
             let vueShippingAddressRegisteredMixin = {
                 data: {
                     RegisteredAddresses: {},
-                    AddingNewAddressMode: false,
                     SelectedShippingAddressId: null,
-                    IsPreferredShipping: false,
                     AddressName: null,
-                    AddressNameAlreadyInUseError: false
                 },
                 created() {
 
@@ -33,12 +30,6 @@ module Orckestra.Composer {
                         self.shippingAddressRegisteredService.getShippingAddresses(this.Cart)
                             .then(data => {
                                 this.RegisteredAddresses = data.Addresses;
-                              //  let isNewAddress = !this.ShippingAddress.AddressBookId && this.ShippingAddress.PostalCode;
-                              //  if (!isNewAddress) {
-                               //     this.changeRegisteredShippingAddress(data.SelectedShippingAddressId);
-                               // } else {
-                               //     this.AddingNewAddressMode = true;
-                                //}
                             });
                     }
                 },
@@ -47,11 +38,11 @@ module Orckestra.Composer {
                 methods: {
 
                     addNewAddressMode() {
-                        this.AddingNewAddressMode = true;
+                        this.Mode.AddingNewAddress = true;
                         this.adressBeforeEdit = {};
                         this.AddressName = null;
                         this.SelectedShippingAddressId = undefined;
-                        this.ComplementaryAddressAddState = true;
+                        this.Mode.AddingLine2Address = true;
                         this.Cart.ShippingAddress = { 
                             FirstName: this.Cart.ShippingAddress.FirstName || this.Cart.Customer.FirstName,
                             LastName: this.Cart.ShippingAddress.LastName || this.Cart.Customer.LastName,
@@ -78,7 +69,7 @@ module Orckestra.Composer {
                                     }).fail((reason) => {
                                         console.log(reason);
                                         if (reason.Errors && _.find(reason.Errors, (e: any) => e.ErrorCode == 'NameAlreadyUsed')) {
-                                            this.AddressNameAlreadyInUseError = true;
+                                            this.Errors.AddressNameAlreadyInUseError = true;
                                         }
                                         processAddingNewShippingAddress.resolve(false);
                                     });
@@ -97,7 +88,7 @@ module Orckestra.Composer {
                     changeRegisteredShippingAddress(addressId, addingNewAddressPromise = null) {
 
                         this.SelectedShippingAddressId = addressId;
-                        this.AddingNewAddressMode = false;
+                        this.Mode.AddingNewAddress = false;
                         if (!this.debounceChangeRegisteredShippingAddress) {
                             this.debounceChangeRegisteredShippingAddress = _.debounce((addingNewAddressPromise) => {
                                 //WHEN CHANGING SHIPPING, WE ALSO NEED UPDATE BILLING

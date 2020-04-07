@@ -13,10 +13,6 @@ module Orckestra.Composer {
             self.formSelector = '#addressForm';
 
             let vueShippingAddressMixin = {
-                data: {
-                    ComplementaryAddressAddState: false,
-                    PostalCodeError: false
-                },
                 created() {
                     this.adressBeforeEdit = { ...this.Cart.ShippingAddress };
                 },
@@ -39,7 +35,7 @@ module Orckestra.Composer {
                                         this.prepareBillingAddress()
                                             .then(() => self.checkoutService.updateCart(controlersToUpdate))
                                             .then(() => {
-                                                this.ShippingEnteredOnce = true;
+                                                this.Steps.EnteredOnce.Shipping = true;
                                                 self.eventHub.publish("cartBillingAddressUpdated", { data: this });
                                                 processShippingAddress.resolve(true);
                                             })
@@ -73,9 +69,9 @@ module Orckestra.Composer {
                     changePostalCode(postalCode: any) {
                         var processPostalCode: Q.Deferred<boolean> = Q.defer<boolean>();
 
-                        this.PostalCodeError = false;
+                        this.Errors.PostalCodeError = false;
                         if (this.adressBeforeEdit.PostalCode != postalCode) {
-                            this.IsLoading = true;
+                            this.Mode.Loading = true;
                             self.checkoutService.updatePostalCode(postalCode).then((cart: any) => {
                                 this.adressBeforeEdit = { ...this.Cart.ShippingAddress };
                                 this.Cart = {
@@ -92,10 +88,10 @@ module Orckestra.Composer {
                             })
                                 .fail(reason => {
                                     console.log(reason);
-                                    this.PostalCodeError = true;
+                                    this.Errors.PostalCodeError = true;
                                     processPostalCode.resolve(false);
                                 })
-                                .finally(() => this.IsLoading = false);
+                                .finally(() => this.Mode.Loading = false);
                         } else {
                             processPostalCode.resolve(true);
                         }

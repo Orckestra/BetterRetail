@@ -99,9 +99,7 @@ module Orckestra.Composer {
                         Cart: cartVm,
                         Regions: regionsVm,
                         ShippingMethodTypes: shippingMethodTypesVm.ShippingMethodTypes,
-                        Payment: null,
-                        StartStep: this.calculateStartStep(cartVm),
-                        IsLoading: false
+                        Payment: null
                     };
 
                     this.handleCheckoutSecurity(cartVm);
@@ -143,9 +141,36 @@ module Orckestra.Composer {
         }
 
         public initializeVueComponent(checkoutContext: ISingleCheckoutContext) {
+            let startStep = this.calculateStartStep(checkoutContext.Cart)
             this.VueCheckout = new Vue({
                 el: '#vueSingleCheckout',
-                data: checkoutContext,
+                data: {
+                    Cart: checkoutContext.Cart,
+                    Regions: checkoutContext.Regions,
+                    ShippingMethodTypes: checkoutContext.ShippingMethodTypes,
+                    Payment: null,
+                    Steps: {
+                        StartStep: startStep,
+                        EnteredOnce: {
+                            Information: true,
+                            Shipping: false,
+                            ReviewCart: false,
+                            Billing: false,
+                            Payment: false
+                        }
+                    },
+                    Mode: {
+                        AddingNewAddress: false,
+                        AddingLine2Address: false,
+                        CompleteCheckoutLoading: false,
+                        Loading: false,
+                        Authenticated: checkoutContext.IsAuthenticated
+                    },
+                    Errors: {
+                        PostalCodeError: false,
+                        AddressNameAlreadyInUseError: false
+                    }
+                },
                 mixins: this.VueCheckoutMixins,
                 components: {
                     'checkout-step': (<any>window).httpVueLoader('/UI.Package/Vue/CheckoutStep.vue'),
@@ -169,6 +194,12 @@ module Orckestra.Composer {
                     },
                     CartEmpty() {
                         return this.Cart.LineItemDetailViewModels.length == 0;
+                    },
+                    IsLoading() {
+                        return this.Mode.Loading;
+                    },
+                    IsAuthenticated() {
+                        return this.Mode.Authenticated;
                     }
                 },
                 methods: {
@@ -253,7 +284,7 @@ module Orckestra.Composer {
                 UpdatedCart: {}
             };
             let vue: any = this.VueCheckout;
-            vue.IsLoading = true;
+            vue.Mode.Loading = true;
 
             return this.buildCartUpdateViewModel(emptyVm, controllerNames)
                 .then(vm => this.cartService.updateCart(vm))
@@ -266,7 +297,7 @@ module Orckestra.Composer {
                     return result;
                 })
                 .finally(() => {
-                    vue.IsLoading = false;
+                    vue.Mode.Loading = false;
                 });
         }
 
@@ -289,10 +320,10 @@ module Orckestra.Composer {
         public updatePaymentMethod(param: any): Q.Promise<IActivePaymentViewModel> {
             let vue: any = this.VueCheckout;
 
-            vue.IsLoading = true;
+            vue.Mode.Loading = true;
             return this.paymentService.updatePaymentMethod(param)
                 .finally(() => {
-                    vue.IsLoading = false;
+                    vue.Mode.Loading = false;
                 });
         }
 

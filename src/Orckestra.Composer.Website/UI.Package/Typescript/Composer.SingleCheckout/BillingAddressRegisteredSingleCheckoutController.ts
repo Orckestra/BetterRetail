@@ -12,11 +12,7 @@ module Orckestra.Composer {
             self.viewModelName = 'BillingAddressRegistered';
 
             let vueBillingAddressRegisteredMixin = {
-                data: {
-                    AddingNewAddressMode: false,
-                    ComplementaryAddressAddState: false,
-                    PostalCodeError: false
-                },
+ 
                 computed: {
 
                 },
@@ -34,7 +30,7 @@ module Orckestra.Composer {
                     ,
                     changeRegisteredBillingAddress(addressId, addingNewAddressPromise = null) {
                         this.BillingAddress.AddressBookId = addressId;
-                        this.AddingNewAddressMode = false;
+                        this.Mode.AddingNewAddress = false;
                         if (!this.debouncechangeRegisteredBillingAddress) {
                             this.debouncechangeRegisteredBillingAddress = _.debounce((addingNewAddressPromise) => {
                                 let controlersToUpdate = [self.viewModelName];
