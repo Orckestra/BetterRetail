@@ -24,7 +24,7 @@ module Orckestra.Composer {
 
         private initializeWishListQuantity(): void {
 
-            if (!this.context.viewModel.IsAuthenticated) {
+            if (this.context.viewModel.IsAuthenticated === false) {
                 this._wishListService.clearCache();
             }
 
