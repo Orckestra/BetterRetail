@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Web.Mvc;
-using Composite.Data;
+﻿using Composite.Data;
 using Orckestra.Composer.Cart;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Services;
@@ -13,8 +10,9 @@ using Orckestra.Composer.Providers;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Services.Breadcrumb;
 using Orckestra.Composer.Utils;
-using Orckestra.ExperienceManagement.Configuration;
-using Orckestra.Overture;
+using System;
+using System.Linq;
+using System.Web.Mvc;
 
 namespace Orckestra.Composer.CompositeC1.Controllers
 {
@@ -201,18 +199,6 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         public virtual ActionResult CompleteCheckoutOrderSummary()
         {
             return View("CompleteCheckoutOrderSummaryContainer", BuildCartViewModel());
-        }
-
-        public virtual ActionResult CheckoutFinalStepOrderSummary()
-        {
-            var cartViewModel = BuildCartViewModel();
-
-            cartViewModel.Context.Add("RedirectUrl", UrlProvider.GetCartUrl(new BaseUrlParameter
-            {
-                CultureInfo = ComposerContext.CultureInfo
-            }));
-
-            return View("CheckoutOrderConfirmationContainer", BuildCartViewModel());
         }
 
         public virtual ActionResult BillingAddress()

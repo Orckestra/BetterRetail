@@ -588,7 +588,7 @@ namespace Orckestra.Composer.Cart.Api
         [ActionName("completecheckout")]
         [HttpPost]
         [ValidateModelState]
-        public virtual async Task<IHttpActionResult> CompleteCheckout(CompleteCheckoutRequest request)
+        public virtual async Task<IHttpActionResult> CompleteCheckout()
         {
  
             var checkoutViewModel = await CheckoutService.CompleteCheckoutAsync(new CompleteCheckoutParam
@@ -600,19 +600,10 @@ namespace Orckestra.Composer.Cart.Api
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
             });
 
-            if (request != null)
-            {
-                ///TODO: this is for old checkout - need to clean later
-                var nextStepUrl = CartUrlProvider.GetCheckoutStepUrl(new GetCheckoutStepUrlParam
-                {
-                    CultureInfo = ComposerContext.CultureInfo,
-                    StepNumber = request.CurrentStep + 1
-                });
-                checkoutViewModel.NextStepUrl = nextStepUrl;
-            }
-
             checkoutViewModel.NextStepUrl = CartUrlProvider.GetCheckoutConfirmationPageUrl(
                 new BaseUrlParameter { CultureInfo = ComposerContext.CultureInfo });
+
+            checkoutViewModel.IsAuthenticated = ComposerContext.IsAuthenticated;
 
             return Ok(checkoutViewModel);
         }

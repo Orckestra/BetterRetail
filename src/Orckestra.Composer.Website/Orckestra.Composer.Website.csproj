@@ -342,6 +342,7 @@
     <Content Include="App_Code\CheckoutHelpers.cshtml" />
     <Content Include="App_Data\Razor\Composer\Layout\Includes\Javascript.cshtml" />
     <Content Include="App_Data\Razor\Composer\SingleCheckout\Steps\BillingAddress.cshtml" />
+    <Content Include="App_Data\Razor\Composer\SingleCheckout\Confirmation.cshtml" />
     <None Include="Properties\PublishProfiles\Website - CD.pubxml" />
     <None Include="Properties\PublishProfiles\Website.pubxml" />
     <Content Include="ViewModelAsExtensionModelTemplate.tt">

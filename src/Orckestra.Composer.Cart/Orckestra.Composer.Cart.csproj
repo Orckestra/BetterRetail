@@ -243,7 +243,6 @@
     <Compile Include="ViewModels\CheckoutSignInAsGuestViewModel.cs" />
     <Compile Include="ViewModels\CheckoutSignInAsReturningViewModel.cs" />
     <Compile Include="ViewModels\CheckoutSignInViewModel.cs" />
-    <Compile Include="ViewModels\CompleteCheckoutLineItemViewModel.cs" />
     <Compile Include="ViewModels\CompleteCheckoutViewModel.cs" />
     <Compile Include="ViewModels\CouponsViewModel.cs" />
     <Compile Include="ViewModels\CouponViewModel.cs" />

@@ -60,19 +60,6 @@ namespace Orckestra.Composer.Cart.Tests.Mock
                 LineItemCount = GetRandom.PositiveInt()
             };
 
-            CompleteCheckoutLineItemViewModel dummyCheckoutLineItem = new CompleteCheckoutLineItemViewModel
-            {
-                Brand = null,
-                BrandId = null,
-                CategoryId = GetRandom.String(32),
-                KeyVariantAttributesList = new List<KeyVariantAttributes>(),
-                Name = GetRandom.String(32),
-                Price = GetRandom.Decimal(),
-                ProductId = GetRandom.String(5),
-                Quantity = GetRandom.Int(),
-                VariantId = GetRandom.String(32)
-            };
-
             var rewardViewModel = new RewardViewModel()
             {
                 Description = GetRandom.Phrase(40)
@@ -85,14 +72,6 @@ namespace Orckestra.Composer.Cart.Tests.Mock
             };
 
             var viewModelMapper = new Mock<IViewModelMapper>();            
-
-            viewModelMapper.Setup(
-                mapper =>
-                    mapper.MapTo<CompleteCheckoutLineItemViewModel>(It.IsNotNull<LineItem>(),
-                        It.IsNotNull<CultureInfo>()))
-                .Returns(dummyCheckoutLineItem)
-            .Verifiable();
-
 
             viewModelMapper.Setup(
                 mapper =>

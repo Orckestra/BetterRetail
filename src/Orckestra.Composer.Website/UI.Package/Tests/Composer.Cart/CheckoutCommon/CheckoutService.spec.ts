@@ -165,6 +165,8 @@
         return Q.fcall<Orckestra.Composer.ICompleteCheckoutResult>(() => {
             return {
                 OrderNumber: '',
+                CustomerFirstName: '',
+                CustomerLastName: '',
                 CustomerEmail: '',
                 NextStepUrl: ''
             };

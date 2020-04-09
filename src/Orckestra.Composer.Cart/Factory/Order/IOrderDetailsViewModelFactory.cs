@@ -11,5 +11,12 @@ namespace Orckestra.Composer.Cart.Factory.Order
         /// <param name="param"></param>
         /// <returns></returns>
         OrderDetailViewModel CreateViewModel(CreateOrderDetailViewModelParam param);
+
+        /// <summary>
+        /// Creates a LightOrderDetailViewModel
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        LightOrderDetailViewModel CreateLightViewModel(CreateOrderDetailViewModelParam param);
     }
 }

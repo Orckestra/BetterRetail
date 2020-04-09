@@ -53,6 +53,8 @@ namespace Orckestra.Composer.Cart.Parameters.Order
         /// </summary>
         public string BaseUrl { get; set; }
 
+        public string OrderDetailBaseUrl { get; set; }
+
         public CreateOrderDetailViewModelParam()
         {
             OrderStatuses = new Dictionary<string, string>();

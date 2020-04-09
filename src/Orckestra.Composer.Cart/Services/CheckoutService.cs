@@ -7,7 +7,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Orckestra.Composer.Cart.Extensions;
 using Orckestra.Composer.Cart.Factory;
+using Orckestra.Composer.Cart.Factory.Order;
 using Orckestra.Composer.Cart.Parameters;
+using Orckestra.Composer.Cart.Parameters.Order;
 using Orckestra.Composer.Cart.Repositories;
 using Orckestra.Composer.Cart.ViewModels;
 using Orckestra.Composer.Enums;
@@ -35,6 +37,8 @@ namespace Orckestra.Composer.Cart.Services
         private readonly Dictionary<string, UpdateOperation> _updateOperations;
 
         protected ICartRepository CartRepository { get; private set; }
+        protected IOrderDetailsViewModelFactory OrderDetailsViewModelFactory { get; private set; }
+        protected virtual IOrderUrlProvider OrderUrlProvider { get; private set; }
         protected ICartService CartService { get; private set; }
         protected IComposerJsonSerializer ComposerJsonSerializer { get; private set; }
         protected ICartViewModelFactory CartViewModelFactory { get; private set; }
@@ -74,33 +78,24 @@ namespace Orckestra.Composer.Cart.Services
             IFulfillmentMethodRepository fulfillmentMethodRepository,
             IViewModelMapper viewModelMapper,
             ILineItemViewModelFactory lineItemViewModelFactory,
-            IPaymentRepository paymentRepository)
+            IPaymentRepository paymentRepository,
+            IOrderDetailsViewModelFactory orderDetailsViewModelFactory,
+            IOrderUrlProvider orderUrlProvider)
         {
-            if (cartRepository == null) { throw new ArgumentNullException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(cartRepository))); }
-            if (cartService == null) { throw new ArgumentNullException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(cartService))); }
-            if (composerJsonSerializer == null) { throw new ArgumentNullException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(ComposerJsonSerializer))); }
-            if (cartViewModelFactory == null) { throw new ArgumentNullException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(cartViewModelFactory))); }
-            if (lookupService == null) { throw new ArgumentNullException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(LookupService))); }
-            if (addressRepository == null) { throw new ArgumentNullException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(addressRepository))); }
-            if (shippingMethodViewService == null) { throw new ArgumentNullException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(shippingMethodViewService))); }
-            if (imageService == null) { throw new ArgumentNullException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(imageService))); }
-            if (fulfillmentMethodRepository == null) { throw new ArgumentNullException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(fulfillmentMethodRepository))); }
-            if (viewModelMapper == null) { throw new ArgumentNullException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(viewModelMapper))); }
-            if (lineItemViewModelFactory == null) { throw new ArgumentNullException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(lineItemViewModelFactory)));}
-            if (paymentRepository == null) { throw new ArgumentNullException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(paymentRepository))); }
-
-            CartRepository = cartRepository;
-            CartService = cartService;
-            ComposerJsonSerializer = composerJsonSerializer;
-            CartViewModelFactory = cartViewModelFactory;
-            LookupService = lookupService;
-            AddressRepository = addressRepository;
-            ShippingMethodViewService = shippingMethodViewService;
-            ImageService = imageService;
-            FulfillmentMethodRepository = fulfillmentMethodRepository;
-            ViewModelMapper = viewModelMapper;
-            LineItemViewModelFactory = lineItemViewModelFactory;
-            PaymentRepository = paymentRepository;
+            CartRepository = cartRepository ?? throw new ArgumentNullException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(cartRepository)));
+            CartService = cartService ?? throw new ArgumentNullException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(cartService)));
+            ComposerJsonSerializer = composerJsonSerializer ?? throw new ArgumentNullException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(ComposerJsonSerializer)));
+            CartViewModelFactory = cartViewModelFactory ?? throw new ArgumentNullException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(cartViewModelFactory)));
+            LookupService = lookupService ?? throw new ArgumentNullException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(LookupService)));
+            AddressRepository = addressRepository ?? throw new ArgumentNullException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(addressRepository)));
+            ShippingMethodViewService = shippingMethodViewService ?? throw new ArgumentNullException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(shippingMethodViewService)));
+            ImageService = imageService ?? throw new ArgumentNullException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(imageService)));
+            FulfillmentMethodRepository = fulfillmentMethodRepository ?? throw new ArgumentNullException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(fulfillmentMethodRepository)));
+            ViewModelMapper = viewModelMapper ?? throw new ArgumentNullException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(viewModelMapper)));
+            LineItemViewModelFactory = lineItemViewModelFactory ?? throw new ArgumentNullException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(lineItemViewModelFactory)));
+            PaymentRepository = paymentRepository ?? throw new ArgumentNullException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(paymentRepository)));
+            OrderDetailsViewModelFactory = orderDetailsViewModelFactory ?? throw new ArgumentNullException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(orderDetailsViewModelFactory)));
+            OrderUrlProvider = orderUrlProvider ?? throw new ArgumentNullException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(orderUrlProvider)));
 
             _updateOperations = new Dictionary<string, UpdateOperation>();
 
@@ -122,25 +117,52 @@ namespace Orckestra.Composer.Cart.Services
 
             var order = await CartRepository.CompleteCheckoutAsync(param).ConfigureAwait(false);
 
-            return MapOrderToCompleteCheckoutViewModel(order, param.CultureInfo); 
+            return await MapOrderToCompleteCheckoutViewModel(order, param).ConfigureAwait(false); 
         }
 
-        protected virtual CompleteCheckoutViewModel MapOrderToCompleteCheckoutViewModel(Overture.ServiceModel.Orders.Order order, CultureInfo cultureInfo)
+        protected virtual async Task<CompleteCheckoutViewModel> MapOrderToCompleteCheckoutViewModel(Overture.ServiceModel.Orders.Order order,
+            CompleteCheckoutParam param)
         {
             if (order == null) { return null; }
+
+            var orderStatuses = await LookupService.GetLookupDisplayNamesAsync(new GetLookupDisplayNamesParam
+            {
+                CultureInfo = param.CultureInfo,
+                LookupType = LookupType.Order,
+                LookupName = "OrderStatus",
+            }).ConfigureAwait(false);
+
+            var productImageInfo = new ProductImageInfo
+            {
+                ImageUrls = await ImageService.GetImageUrlsAsync(order.Cart.GetLineItems()).ConfigureAwait(false)
+            };
+
+            var getVmOrderParam = new CreateOrderDetailViewModelParam { 
+                Order = order,
+                CultureInfo = param.CultureInfo,
+                OrderStatuses = orderStatuses,
+                OrderDetailBaseUrl = OrderUrlProvider.GetOrderDetailsBaseUrl(param.CultureInfo),
+                BaseUrl = param.BaseUrl,
+                ProductImageInfo = productImageInfo,
+            };
+
+            var orderViewModel = OrderDetailsViewModelFactory.CreateLightViewModel(getVmOrderParam);
 
             var completeCheckoutViewModel = new CompleteCheckoutViewModel
             {
                 OrderNumber = order.OrderNumber,
+                Order = orderViewModel,
                 CustomerEmail = order.Cart.Customer.Email,
+                CustomerFirstName = order.Cart.Customer.FirstName,
+                CustomerLastName = order.Cart.Customer.LastName,
                 Affiliation = order.Cart.OrderLocation?.Name,
                 Revenu = order.Cart.Total,
                 Tax = order.Cart.TaxTotal,
                 Shipping = order.Cart.FulfillmentCost,
                 ShippingOptions = order.Cart.Shipments?.FirstOrDefault()?.FulfillmentMethod.FulfillmentMethodType.ToString().ToLowerInvariant(),
                 BillingCurrency = order.Cart.BillingCurrency,
-                Coupons = MapCoupons(order, cultureInfo),
-                LineItems = MapCompleteCheckoutLineItems(order, cultureInfo)
+                Coupons = MapCoupons(order, param.CultureInfo),
+                LineItems = orderViewModel?.Shipments.FirstOrDefault()?.LineItems
             };
 
             return completeCheckoutViewModel;
@@ -156,37 +178,6 @@ namespace Orckestra.Composer.Cart.Services
             var couponsViewModel = CartViewModelFactory.GetCouponsViewModel(order.Cart, cultureInfo, false);
 
             return couponsViewModel != null ? couponsViewModel.ApplicableCoupons : new List<CouponViewModel>();
-        }
-
-        protected virtual List<CompleteCheckoutLineItemViewModel> MapCompleteCheckoutLineItems(Overture.ServiceModel.Orders.Order order, CultureInfo cultureInfo)
-        {
-            var lineItems = order.Cart.GetLineItems().Select(li =>
-            {
-                var viewModel = ViewModelMapper.MapTo<CompleteCheckoutLineItemViewModel>(li, cultureInfo);
-
-                var brandProperty = li.ProductSummary.Brand ?? string.Empty;
-
-                var brand = string.IsNullOrWhiteSpace(brandProperty) ? string.Empty : LookupService.GetLookupDisplayNameAsync(new GetLookupDisplayNameParam
-                {
-                    Delimiter = ", ",
-                    LookupName = "Brand",
-                    LookupType = LookupType.Product,
-                    Value = li.ProductSummary.Brand,
-                    CultureInfo = cultureInfo
-                }).Result;
-                viewModel.Name = li.ProductSummary.DisplayName;
-                viewModel.BrandId = brandProperty;
-                viewModel.Brand = brand;
-                viewModel.CategoryId = li.ProductSummary.PrimaryParentCategoryId;
-                viewModel.KeyVariantAttributesList = LineItemViewModelFactory.GetKeyVariantAttributes(new GetKeyVariantAttributesParam {
-                    KvaValues = li.KvaValues,
-                    KvaDisplayValues = li.KvaDisplayValues
-                }).ToList();
-
-                return viewModel;
-            });
-
-            return lineItems.ToList();
         }
 
         /// <summary>
