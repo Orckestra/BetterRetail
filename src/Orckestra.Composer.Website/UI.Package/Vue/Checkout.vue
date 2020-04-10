@@ -203,24 +203,11 @@ module.exports = {
 
         if (index <= this.maxStep) {
           var cb = function cb() {
-            if (validate && index - _this.activeStepIndex > 1) {
-              // validate all steps recursively until destination index
-              _this.changeStep(_this.activeStepIndex, _this.activeStepIndex + 1);
-
-              _this.beforeStepChange(_this.activeStepIndex, cb);
-            } else {
-              _this.changeStep(_this.activeStepIndex, index);
-
-              _this.afterStepChange(_this.activeStepIndex);
-            }
+             _this.beforeStepEnter(index);
+             _this.changeStep(_this.activeStepIndex, index);
           };
 
-          if (validate) {
-            this.beforeStepChange(this.activeStepIndex, cb);
-          } else {
-            this.setValidationError(null);
-            cb();
-          }
+           this.beforeStepChange(this.activeStepIndex, cb);
         }
 
         return index <= this.maxStep;
@@ -328,6 +315,17 @@ module.exports = {
           this.validateBeforeChange(stepChangeRes, callback);
         } else {
           callback();
+        }
+      },
+      beforeStepEnter: function beforeStepEnter(index) {
+        if (this.loading) {
+          return;
+        }
+
+        var newStep = this.steps[index];
+
+        if (newStep && newStep.beforeEnter !== undefined) {
+          newStep.beforeEnter();
         }
       },
       afterStepChange: function afterStepChange(index) {

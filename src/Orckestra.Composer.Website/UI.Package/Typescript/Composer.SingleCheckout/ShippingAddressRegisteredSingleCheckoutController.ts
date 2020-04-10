@@ -98,6 +98,7 @@ module Orckestra.Composer {
                                     this.Cart.ShippingAddress = Cart.ShippingAddress;
                                     this.Cart.Payment.BillingAddress = Cart.Payment.BillingAddress;
                                     if (addingNewAddressPromise) {
+                                        this.Steps.EnteredOnce.Shipping = true;
                                         addingNewAddressPromise.resolve(true);
                                     }
                                 }).fail((reason) => {

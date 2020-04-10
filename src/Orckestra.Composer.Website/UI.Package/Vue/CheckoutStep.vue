@@ -17,6 +17,14 @@
             beforeChange: {
                 type: Function
             },
+
+            /***
+             * Function to execute before tab enter. Return value must be boolean
+             * If the return result is false, tab switch is restricted
+             */
+            beforeEnter: {
+                type: Function
+            },
             /***
              * Function to execute after tab switch. Return void for now.
              * Safe to assume necessary validation has already occured
