@@ -58,11 +58,11 @@
                 <div class="col-sm-4 text-sm-right">
                     @if (ComposerContext.IsAuthenticated)
                     {
-                        <a v-bind:href="Order.Url" class="cta">@Html.Localize("CheckoutProcess", "H_OrderDetail")</a>
+                        <a data-qa="confirmation-order-details-link" v-bind:href="Order.Url" class="cta">@Html.Localize("CheckoutProcess", "H_OrderDetail")</a>
                     }
                     else
                     {
-                        <a href="#" v-on:click.prevent="findMyOrder" class="cta">@Html.Localize("CheckoutProcess", "H_OrderDetail")</a>
+                        <a data-qa="confirmation-order-details-link" href="#" v-on:click.prevent="findMyOrder" class="cta">@Html.Localize("CheckoutProcess", "H_OrderDetail")</a>
                     }
                 </div>
             </div>
@@ -70,8 +70,8 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-sm-8">
-                    <p class="m-0">@Html.Localized("MyAccount", "L_OrderNumber", "{{Order.OrderInfos.OrderNumber}}")</p>
-                    <p>
+                    <p class="m-0" data-qa="confirmation-order-number">@Html.Localized("MyAccount", "L_OrderNumber", "{{Order.OrderInfos.OrderNumber}}")</p>
+                    <p data-qa="confirmation-order-status">
                         <span class="text-warning font-weight-bold">{{Order.OrderInfos.OrderStatus}}</span>
                     </p>
                     <div class="row">
@@ -85,7 +85,7 @@
                     </div>
                 </div>
                 <div class="col-sm-4 text-sm-right">
-                    @Html.Localize("MyAccount", "L_Total"): <strong class="h5">{{Order.OrderInfos.PricePaid}}</strong>
+                    @Html.Localize("MyAccount", "L_Total"): <strong class="h5" data-qa="confirmation-order-total">{{Order.OrderInfos.PricePaid}}</strong>
                 </div>
             </div>
         </div>
