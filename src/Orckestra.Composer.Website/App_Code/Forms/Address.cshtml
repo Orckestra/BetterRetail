@@ -146,7 +146,7 @@
                         <option v-for="(region, index) in Regions"
                                 v-bind:data-qa="'checkout-shipping-province-' + index"
                                 v-bind:value="region.IsoCode">
-                            {{region.Name}}
+                            {{region.Name || region.IsoCode}}
                         </option>
 
                         <option v-if="!Regions" data-qa="address-province-0"
