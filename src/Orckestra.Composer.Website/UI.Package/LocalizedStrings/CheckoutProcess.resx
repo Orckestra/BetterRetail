@@ -211,7 +211,7 @@
     <value>SELECTED</value>
   </data>
   <data name="L_EmailConfirmation" xml:space="preserve">
-    <value>You will receive an email confirmation at</value>
+    <value>Your order confirmation and receipt will be sent to {0}. If you did not receive the email, check your spam folder.</value>
   </data>
   <data name="L_ExpirationDate" xml:space="preserve">
     <value>Expires on:</value>
@@ -259,7 +259,7 @@
     <value>CVV</value>
   </data>
   <data name="L_YourOrderNumber" xml:space="preserve">
-    <value>Your order number:</value>
+    <value>Your order  #{0} has been placed.</value>
   </data>
   <data name="Quantity" xml:space="preserve">
     <value>Quantity</value>
@@ -293,7 +293,7 @@ Enter your credit card information</value>
     <value>Sign in</value>
   </data>
   <data name="T_ThankYou" xml:space="preserve">
-    <value>Thank you for your order,</value>
+    <value>Thank you</value>
   </data>
   <data name="T_SelectCreditCart" xml:space="preserve">
     <value>Select a credit card</value>
@@ -345,5 +345,8 @@ Enter your credit card information</value>
   </data>
   <data name="F_PlaceOrder" xml:space="preserve">
     <value>Place Order</value>
+  </data>
+  <data name="H_OrderDetail" xml:space="preserve">
+    <value>Order Details</value>
   </data>
 </root>

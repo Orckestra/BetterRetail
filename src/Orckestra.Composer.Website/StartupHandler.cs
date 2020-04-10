@@ -144,7 +144,6 @@ namespace Orckestra.Composer.Website
             functions.RegisterAction<CheckoutController>("CheckoutSignInAsGuest", "Composer.Checkout.CheckoutSignInAsGuest");
             functions.RegisterAction<CheckoutController>("CheckoutSignInAsCustomer", "Composer.Checkout.CheckoutSignInAsCustomer");
             functions.RegisterAction<CheckoutController>("CheckoutOrderSummary", "Composer.Checkout.CheckoutOrderSummary");
-            functions.RegisterAction<CheckoutController>("CheckoutFinalStepOrderSummary", "Composer.Checkout.CheckoutFinalStepOrderSummary");
             functions.RegisterAction<CheckoutController>("CheckoutComplete", "Composer.Checkout.CheckoutComplete");
             functions.RegisterAction<CheckoutController>("ShippingAddressRegistered", "Composer.Checkout.ShippingAddressRegistered");
             functions.RegisterAction<CheckoutController>("BillingAddress", "Composer.Checkout.BillingAddress");

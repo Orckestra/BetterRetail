@@ -1,0 +1,93 @@
+﻿@inherits Composer.Razor.ComposerRazorFunction
+@using Orckestra.Composer.Providers;
+@using Orckestra.Composer.Parameters;
+@using System.Threading;
+@using Composite.Core.WebClient.Renderings.Page;
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Checkout Confirmation"; }
+    }
+
+    public ICartUrlProvider CartUrlProvider { get; set; }
+
+    public IComposerContext ComposerContext { get; set; }
+}
+
+@{
+    var isPreview = PageRenderer.RenderingReason == RenderingReason.C1ConsoleBrowserPageView;
+    var redirectUrl = isPreview ? null : CartUrlProvider.GetCartUrl(new BaseUrlParameter
+    {
+        CultureInfo = Thread.CurrentThread.CurrentCulture
+    });
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
+<head>
+    <script id="vuejs" src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    @*CompleteCheckoutViewModel is used as model to render data with Vue Js *@
+    <div class="row">
+        <div class="col-lg-8">
+            <div id="vueCheckoutOrderConfirmation" v-if="Order"
+                 @if (!isPreview) { <text> v-cloak="true" </text> }
+                 data-oc-controller="Checkout.CheckoutOrderConfirmation"
+                 data-redirectUrl="@redirectUrl">
+
+                <h1 data-qa="confirmation-thankyou">@Html.Localize("CheckoutProcess", "T_ThankYou") {{CustomerFirstName}} {{CustomerLastName}}!</h1>
+                <p data-qa="confirmation-order-number">@Html.Raw(@Html.Localized("CheckoutProcess", "L_YourOrderNumber", "<strong>{{OrderNumber}}</strong>"))</p>
+                <p>@Html.Raw(@Html.Localized("CheckoutProcess", "L_EmailConfirmation", "<strong>{{CustomerEmail}}</strong>"))</p>
+
+                @DisplayOrderDetails()
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+@helper DisplayOrderDetails()
+{
+    <div class="card mt-4" data-qa="confirmation-order-details">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-sm-8">
+                    <h3 class="m-0">@Html.Localize("MyAccount", "T_OrderSummary")</h3>
+                </div>
+                <div class="col-sm-4 text-sm-right">
+                    @if (ComposerContext.IsAuthenticated)
+                    {
+                        <a v-bind:href="Order.Url" class="cta">@Html.Localize("CheckoutProcess", "H_OrderDetail")</a>
+                    }
+                    else
+                    {
+                        <a href="#" v-on:click.prevent="findMyOrder" class="cta">@Html.Localize("CheckoutProcess", "H_OrderDetail")</a>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-sm-8">
+                    <p class="m-0">@Html.Localized("MyAccount", "L_OrderNumber", "{{Order.OrderInfos.OrderNumber}}")</p>
+                    <p>
+                        <span class="text-warning font-weight-bold">{{Order.OrderInfos.OrderStatus}}</span>
+                    </p>
+                    <div class="row">
+                        <div class="col-4  col-sm-2" v-bind:key="item.id" v-for="(item, index) in LineItems">
+                            <img v-bind:src="item.ImageUrl" class="img-fluid" alt="thumbnail" xmlns:v-bind="v-bind"
+                                 v-bind:data-qa="'confirmation-item-preview-img-' + index" />
+                            <p class="text-center m-0">
+                                <strong v-bind:data-qa="'confirmation-item-preview-quantity-' + index">x{{item.Quantity}}</strong>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4 text-sm-right">
+                    @Html.Localize("MyAccount", "L_Total"): <strong class="h5">{{Order.OrderInfos.PricePaid}}</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+}

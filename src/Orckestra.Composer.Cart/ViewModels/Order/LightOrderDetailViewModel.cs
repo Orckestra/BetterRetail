@@ -10,6 +10,8 @@ namespace Orckestra.Composer.Cart.ViewModels.Order
         /// </summary>
         public OrderDetailInfoViewModel OrderInfos { get; set; }
 
+        public List<OrderShipmentDetailViewModel> Shipments { get; set; }
+
         /// <summary>
         /// Gets or sets the order URL.
         /// </summary>

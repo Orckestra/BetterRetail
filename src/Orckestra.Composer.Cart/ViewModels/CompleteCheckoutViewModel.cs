@@ -1,13 +1,20 @@
 ﻿using System.Collections.Generic;
+using Orckestra.Composer.Cart.ViewModels.Order;
 using Orckestra.Composer.ViewModels;
 
 namespace Orckestra.Composer.Cart.ViewModels
 {
     public sealed class CompleteCheckoutViewModel : BaseViewModel
     {
+        public bool IsAuthenticated { get; set; }
+        public LightOrderDetailViewModel Order { get; set; }
         public string OrderNumber { get; set; }
 
         public string CustomerEmail { get; set; }
+
+        public string CustomerFirstName { get; set; }
+
+        public string CustomerLastName { get; set; }
 
         public string NextStepUrl { get; set; }
 
@@ -27,11 +34,11 @@ namespace Orckestra.Composer.Cart.ViewModels
 
         public string BillingCurrency { get; set; }
 
-        public List<CompleteCheckoutLineItemViewModel> LineItems { get; set; }
+        public List<LineItemDetailViewModel> LineItems { get; set; }
 
         public CompleteCheckoutViewModel()
         {
-            LineItems = new List<CompleteCheckoutLineItemViewModel>();
+            LineItems = new List<LineItemDetailViewModel>();
             Coupons = new List<CouponViewModel>();
         }
     }
