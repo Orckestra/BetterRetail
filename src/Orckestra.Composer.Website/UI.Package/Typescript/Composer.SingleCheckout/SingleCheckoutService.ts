@@ -116,8 +116,7 @@ module Orckestra.Composer {
         }
 
         public handleCheckoutSecurity(cart: any) {
-
-            if (cart.IsCartEmpty) {
+            if (cart.IsCartEmpty && !Utils.IsC1ConsolePreview()) {
                 this.window.location.href = cart.OrderSummary.CheckoutRedirectAction.RedirectUrl;
             }
         }

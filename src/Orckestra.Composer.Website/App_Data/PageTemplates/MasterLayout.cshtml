@@ -1,5 +1,6 @@
 @using System.Globalization
 @using System.Web.WebPages.Html
+@using Composite.Core.WebClient.Renderings.Page;
 
 
 @inherits Composite.AspNet.Razor.CompositeC1WebPage
@@ -7,9 +8,11 @@
     string websiteTitle = HomePageNode.Title;
     var themeMeta = Data.Get<Orckestra.Composer.CompositeC1.DataTypes.IWebsiteStyleTheme>().FirstOrDefault(i => i.PageId == HomePageNode.Id);
     var theme = !string.IsNullOrEmpty(themeMeta?.Theme) ? themeMeta.Theme : "default";
+    var isPreview = PageRenderer.RenderingReason == RenderingReason.C1ConsoleBrowserPageView;
 }
 <!DOCTYPE html>
-<html lang="@CultureInfo.CurrentCulture.Name" data-website="@HomePageNode.Id" xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:lang="http://www.composite.net/ns/localization/1.0" xmlns:asp="http://www.composite.net/ns/asp.net/controls">
+<html lang="@CultureInfo.CurrentCulture.Name" data-website="@HomePageNode.Id" data-console-preview="@isPreview"
+      xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:lang="http://www.composite.net/ns/localization/1.0" xmlns:asp="http://www.composite.net/ns/asp.net/controls">
 <head>
     <f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.Analytics.GTMAnalytics">
         <f:param name="Section" value="header" />

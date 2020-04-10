@@ -7,7 +7,7 @@
     }
 }
 
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" >
 <head>
 </head>
 <body>
@@ -22,7 +22,7 @@
             @Function("Composer.SingleCheckout.Steps.Shipping")
         </checkout-step>
         <checkout-step v-slot="step" v-bind:before-change="processCart"
-                       v-bind:fulfilled="FulfilledCart" >
+                       v-bind:fulfilled="FulfilledCart">
             @Function("Composer.SingleCheckout.Steps.ReviewCart")
         </checkout-step>
         <checkout-step v-slot="step" v-bind:after-change="prepareBillingAddress"
