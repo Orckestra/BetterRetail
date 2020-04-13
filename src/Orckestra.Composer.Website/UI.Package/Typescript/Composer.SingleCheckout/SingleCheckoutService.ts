@@ -19,6 +19,14 @@
 module Orckestra.Composer {
     'use strict';
 
+    export enum CheckoutStepNumbers {
+        Information = 0,
+        Shipping = 1,
+        ReviewCart = 2,
+        Billing = 3,
+        Payment = 4
+    }
+
     export enum FulfillmentMethodTypes {
         Shipping = 'Shipping',
         PickUp = 'PickUp'
@@ -120,13 +128,13 @@ module Orckestra.Composer {
                 });
         }
 
-        public handleCheckoutSecurity(cart: any) {
+        private handleCheckoutSecurity(cart: any) {
             if (cart.IsCartEmpty && !Utils.IsC1ConsolePreview()) {
                 this.window.location.href = cart.OrderSummary.CheckoutRedirectAction.RedirectUrl;
             }
         }
 
-        public initializeVueComponent(checkoutContext: ISingleCheckoutContext) {
+        private initializeVueComponent(checkoutContext: ISingleCheckoutContext) {
             let startStep = this.calculateStartStep(checkoutContext.Cart, checkoutContext.IsAuthenticated);
             this.VueCheckout = new Vue({
                 el: '#vueSingleCheckout',
@@ -208,17 +216,17 @@ module Orckestra.Composer {
             if (!(cart.Customer.FirstName &&
                 cart.Customer.LastName &&
                 cart.Customer.Email)) {
-                return 0; // Information
+                return CheckoutStepNumbers.Information
             } else {
                 if (!(this.isShippingFulfilled(cart, isAuthenticated))) {
-                    return 1; // Shipping
+                    return CheckoutStepNumbers.Shipping
                 } else {
-                    return 3; // Billing
+                    return CheckoutStepNumbers.Billing
                 }
             }
         }
 
-        public isShippingFulfilled(cart: any, isAuthenticated: boolean): boolean {
+        private isShippingFulfilled(cart: any, isAuthenticated: boolean): boolean {
             if (!(cart.ShippingMethod)) return false;
 
             let address = cart.ShippingAddress.Line1 &&
@@ -244,7 +252,7 @@ module Orckestra.Composer {
             return false;
         }
 
-        public isAddressBookIdEmpty(bookId) {
+        private isAddressBookIdEmpty(bookId) {
             return bookId == '00000000-0000-0000-0000-000000000000' || !bookId;
         }
 
@@ -270,7 +278,6 @@ module Orckestra.Composer {
 
             delete this.registeredControllers[controllerName];
         }
-
 
         public updatePostalCode(postalCode: string): Q.Promise<void> {
 
@@ -322,8 +329,8 @@ module Orckestra.Composer {
                 .then(vm => this.cartService.updateCart(vm))
                 .then(result => {
                     let { Cart } = result;
-                    vue.customerBeforeEdit = { ... Cart.Customer };
-                    vue.adressBeforeEdit = { ... Cart.ShippingAddress };
+                    vue.customerBeforeEdit = { ...Cart.Customer };
+                    vue.adressBeforeEdit = { ...Cart.ShippingAddress };
                     vue.billingAddressBeforeEdit = { ...Cart.Payment.BillingAddress };
                     vue.Cart = Cart;
                     return result;
