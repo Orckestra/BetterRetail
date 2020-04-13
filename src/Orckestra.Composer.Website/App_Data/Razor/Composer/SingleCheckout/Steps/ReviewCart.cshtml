@@ -29,21 +29,10 @@
                     <span v-cloak="true">@Html.Localize("MyAccount", "L_Subtotal")</span>
                 </div>
                 <div v-if="step.displayContinueButton" class="col-7">
-                    <button v-bind:disabled="!FulfilledShipping"
-                            v-on:click='step.navigateToStep(step.index)'
-                            class="btn btn-primary float-right"
-                            v-cloak="true"
-                            data-qa="continue-to-reviewcart-btn">
-                        @Html.Localize("CheckoutProcess", "F_Continue")
-                    </button>
+                    @CheckoutHelpers.StepContinueButton("!FulfilledShipping", "reviewcart")
                 </div>
                 <div v-show="step.preview" class="col-7">
-                    <button class="btn btn-outline-secondary float-right"
-                            v-on:click='step.navigateToStep(step.index)'
-                            v-cloak="true"
-                            data-qa="edit-reviewcart-btn">
-                        @Html.Localize("CheckoutProcess", "F_Review")
-                    </button>
+                    @CheckoutHelpers.StepEditButton("reviewcart", "F_Review")
                 </div>
             </div>
         </div>

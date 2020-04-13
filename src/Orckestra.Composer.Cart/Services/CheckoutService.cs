@@ -25,6 +25,7 @@ using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel;
 using Orckestra.Overture.ServiceModel.Customers;
 using Orckestra.Overture.ServiceModel.Orders;
+using Orckestra.Composer.Store.Repositories;
 
 namespace Orckestra.Composer.Cart.Services
 {
@@ -50,6 +51,9 @@ namespace Orckestra.Composer.Cart.Services
         protected IViewModelMapper ViewModelMapper { get; private set; }
         protected ILineItemViewModelFactory LineItemViewModelFactory { get; private set; }
         protected IPaymentRepository PaymentRepository { get; private set; }
+        protected IStoreRepository StoreRepository { get; private set; }
+        protected IInventoryLocationProvider InventoryLocationProvider { get; private set; }
+
 
         /// <summary>
         /// CheckoutService constructor
@@ -80,7 +84,9 @@ namespace Orckestra.Composer.Cart.Services
             ILineItemViewModelFactory lineItemViewModelFactory,
             IPaymentRepository paymentRepository,
             IOrderDetailsViewModelFactory orderDetailsViewModelFactory,
-            IOrderUrlProvider orderUrlProvider)
+            IOrderUrlProvider orderUrlProvider,
+            IStoreRepository storeRepository,
+            IInventoryLocationProvider inventoryLocationProvider)
         {
             CartRepository = cartRepository ?? throw new ArgumentNullException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(cartRepository)));
             CartService = cartService ?? throw new ArgumentNullException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(cartService)));
@@ -96,11 +102,14 @@ namespace Orckestra.Composer.Cart.Services
             PaymentRepository = paymentRepository ?? throw new ArgumentNullException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(paymentRepository)));
             OrderDetailsViewModelFactory = orderDetailsViewModelFactory ?? throw new ArgumentNullException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(orderDetailsViewModelFactory)));
             OrderUrlProvider = orderUrlProvider ?? throw new ArgumentNullException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(orderUrlProvider)));
+            StoreRepository = storeRepository ?? throw new ArgumentNullException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(storeRepository)));
+            InventoryLocationProvider = inventoryLocationProvider ?? throw new ArgumentNullException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(inventoryLocationProvider)));
 
             _updateOperations = new Dictionary<string, UpdateOperation>();
 
             RegisterCartUpdateOperation<AddressViewModel>("ShippingAddress", UpdateShippingAddress, 1);
             RegisterCartUpdateOperation<RegisteredShippingAddressViewModel>("ShippingAddressRegistered", UpdateRegisteredShippingAddress, 1);
+            RegisterCartUpdateOperation<PickUpAddressViewModel>("PickUpAddress", UpdatePickUpAddress, 1);
             RegisterCartUpdateOperation<CustomerSummaryViewModel>("GuestCustomerInfo", UpdateCustomer, 2);
             RegisterCartUpdateOperation<BillingAddressViewModel>("BillingAddress", UpdateBillingAddress, 3);
             RegisterCartUpdateOperation<RegisteredBillingAddressViewModel>("BillingAddressRegistered", UpdateRegisteredBillingAddress, 3);
@@ -416,6 +425,16 @@ namespace Orckestra.Composer.Cart.Services
                 return;
             }
 
+            if (shipment.PickUpLocationId.HasValue)
+            {
+                shipment.PickUpLocationId = null;
+                var fulfillmentLocation = await InventoryLocationProvider.GetFulfillmentLocationAsync(new GetFulfillmentLocationParam
+                {
+                    Scope = cart.ScopeId
+                }).ConfigureAwait(false);
+                shipment.FulfillmentLocationId = fulfillmentLocation.Id;
+            }
+
             shipment.FulfillmentMethod = await GetFulfillmentMethodAsync(cart, shippingMethodViewModel);
         }
 
@@ -574,6 +593,49 @@ namespace Orckestra.Composer.Cart.Services
 
                 }).ConfigureAwait(false);
             }
+        }
+
+        protected virtual async Task UpdatePickUpAddress(Overture.ServiceModel.Orders.Cart cart, PickUpAddressViewModel pickUpAddressViewModel)
+        {
+            if (pickUpAddressViewModel == null || pickUpAddressViewModel.PickUpLocationId == Guid.Empty)
+            {
+                return;
+            }
+
+            var shipment = cart.Shipments.FirstOrDefault();
+
+            if (shipment == null)
+            {
+                return;
+            }
+
+            shipment.PickUpLocationId = pickUpAddressViewModel.PickUpLocationId;
+            shipment.FulfillmentLocationId = pickUpAddressViewModel.PickUpLocationId;
+
+            var store = await StoreRepository.GetStoreAsync(new Store.Parameters.GetStoreParam
+            {
+                Id = pickUpAddressViewModel.PickUpLocationId,
+                CultureInfo = new CultureInfo(cart.CultureName),
+                Scope = cart.ScopeId
+            }).ConfigureAwait(false);
+            
+            var storeAddress = store.FulfillmentLocation.Addresses.FirstOrDefault();
+
+            var address = new Address
+            {
+                AddressName = store.Name,
+                City = storeAddress.City,
+                CountryCode = storeAddress.CountryCode,
+                FirstName = cart.Customer.FirstName,
+                LastName = cart.Customer.LastName,
+                Line1 = storeAddress.Line1,
+                Line2 = storeAddress.Line2,
+                PhoneNumber = storeAddress.PhoneNumber,
+                PostalCode = storeAddress.PostalCode,
+                RegionCode = storeAddress.RegionCode,
+                PropertyBag = storeAddress.PropertyBag
+            };
+            shipment.Address = address;
         }
 
         protected virtual bool IsEqual(Address firstAddress, Address secondAddress)

@@ -25,8 +25,6 @@
 
  .static-map-pin {
      position: absolute;
-     top: 50%;
-     left: 50%;
      margin-top: -50px;
      margin-left: -13px;
      height: 50px;
@@ -37,6 +35,29 @@
      line-height: 29px;
      color: #fff;
      z-index: 1000;
+ }
+
+ .store-tile-map {
+     position: relative;
+
+     .static-map-pin {
+        top: 50%;
+        left: 50%;
+     }
+ }
+
+ .store-tile-title {
+     &.with-pin {
+         position: relative;
+         padding-left: 20px;
+         margin-bottom: 6px;
+     }
+
+    .static-map-pin {
+        left: 0;
+        top: 40px;
+        height: 45px;
+     }
  }
 
 .store-open-hour {

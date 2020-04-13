@@ -310,7 +310,7 @@ namespace Orckestra.Composer.Cart.Factory
             }
 
             MapOneShipment(shipment, cultureInfo, imageInfo, baseUrl, cartVm, cart);
-            cartVm.Payment = GetPaymentViewModel(payments, shipment.Address, paymentMethodDisplayNames, cultureInfo);
+            cartVm.Payment = GetPaymentViewModel(payments, shipment, paymentMethodDisplayNames, cultureInfo);
         }
 
         /// <summary>
@@ -334,6 +334,7 @@ namespace Orckestra.Composer.Cart.Factory
             cartVm.Rewards = RewardViewModelFactory.CreateViewModel(shipment.Rewards, cultureInfo, RewardLevel.FulfillmentMethod, RewardLevel.Shipment).ToList();
             cartVm.OrderSummary.Taxes = TaxViewModelFactory.CreateTaxViewModels(shipment.Taxes, cultureInfo).ToList();
             cartVm.ShippingAddress = GetAddressViewModel(shipment.Address, cultureInfo);
+            cartVm.PickUpLocationId = shipment.PickUpLocationId;
 
             cartVm.LineItemDetailViewModels = LineItemViewModelFactory.CreateViewModel(new CreateListOfLineItemDetailViewModelParam
             {
@@ -792,7 +793,7 @@ namespace Orckestra.Composer.Cart.Factory
         /// </summary>
         protected virtual PaymentViewModel GetPaymentViewModel(
             List<Payment> payments,
-            Address shippingAddress,
+            Shipment shipping,
             Dictionary<string, string> paymentMethodDisplayNames,
             CultureInfo cultureInfo)
         {
@@ -816,7 +817,7 @@ namespace Orckestra.Composer.Cart.Factory
                 paymentMethodViewModel = GetPaymentMethodViewModel(payment.PaymentMethod, paymentMethodDisplayNames, cultureInfo);
             }
 
-            var billingAddressViewModel = GetBillingAddressViewModel(payment.BillingAddress, shippingAddress, cultureInfo);
+            var billingAddressViewModel = GetBillingAddressViewModel(payment.BillingAddress, shipping, cultureInfo);
 
             return new PaymentViewModel
             {
@@ -838,13 +839,16 @@ namespace Orckestra.Composer.Cart.Factory
             };
         }
 
-        protected virtual BillingAddressViewModel GetBillingAddressViewModel(Address billingAddress, Address shippingAddress, CultureInfo cultureInfo)
+        protected virtual BillingAddressViewModel GetBillingAddressViewModel(Address billingAddress, Shipment shipping, CultureInfo cultureInfo)
         {
             if (billingAddress == null)
             {
-                return new BillingAddressViewModel { UseShippingAddress = true };
+                var useShippingAddress = shipping.FulfillmentMethod == null ? true :
+                    shipping.FulfillmentMethod.FulfillmentMethodType == FulfillmentMethodType.Shipping;
+                return new BillingAddressViewModel { UseShippingAddress = useShippingAddress };
             }
 
+            var shippingAddress = shipping.Address;
             var billingAddressViewModel = MapBillingAddressViewModel(billingAddress, cultureInfo);
             billingAddressViewModel.UseShippingAddress = shippingAddress != null && AreAddressEqual(shippingAddress, billingAddress);
 

@@ -7,24 +7,24 @@ module Orckestra.Composer {
     export class GuestCustomerInfoSingleCheckoutController extends Orckestra.Composer.BaseSingleCheckoutController {
 
         public initialize() {
-            var self: GuestCustomerInfoSingleCheckoutController = this;
+            let self: GuestCustomerInfoSingleCheckoutController = this;
             self.viewModelName = 'GuestCustomerInfo';
             self.formSelector = '#editCustomerForms';
 
             super.initialize();
             this.registerSubscriptions();
 
-            var vueUserMixin = {
+            let vueUserMixin = {
                 created() {
                     this.customerBeforeEdit = { ...this.Cart.Customer }
                 },
                 computed: {
                     FulfilledCustomer() {
-                        var fulfilled = this.Cart.Customer.FirstName &&
+                        let fulfilled = this.Cart.Customer.FirstName &&
                             this.Cart.Customer.LastName &&
                             this.Cart.Customer.Email;
  
-                        return fulfilled ? true : false;
+                        return !!fulfilled;
                     }
                 },
                 methods: {
@@ -50,8 +50,8 @@ module Orckestra.Composer {
                     },
 
                     isCustomerModified() {
-                        var keys = _.keys(this.Cart.Customer);
-                        var isModified = _.some(keys, (key) => this.customerBeforeEdit[key] != this.Cart.Customer[key]);
+                        let keys = _.keys(this.Cart.Customer);
+                        let isModified = _.some(keys, (key) => this.customerBeforeEdit[key] != this.Cart.Customer[key]);
                         return isModified;
                     }
                 }
@@ -70,14 +70,14 @@ module Orckestra.Composer {
 
                 if (vueData.isCustomerModified()) {
                     return this.viewModelName;
-                };
+                }
             });
         }
 
         public getUpdateModelPromise(): Q.Promise<any> {
             return Q.fcall(() => {
-                var vm = {};
-                var vueCustomerData = this.checkoutService.VueCheckout.Cart.Customer;
+                let vm = {};
+                let vueCustomerData = this.checkoutService.VueCheckout.Cart.Customer;
                 vm[this.viewModelName] = JSON.stringify(vueCustomerData);
                 return vm;
             });

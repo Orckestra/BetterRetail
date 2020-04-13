@@ -31,9 +31,9 @@ module Orckestra.Composer {
                                 this.changePostalCode(postalCode).then(success => {
                                     if (success) {
                                         //WHEN CHANGING SHIPPING, WE ALSO NEED UPDATE BILLING
-                                        let controlersToUpdate = [self.viewModelName, 'BillingAddress'];
+                                        let controllersToUpdate = [self.viewModelName, 'BillingAddress'];
                                         this.prepareBillingAddress()
-                                            .then(() => self.checkoutService.updateCart(controlersToUpdate))
+                                            .then(() => self.checkoutService.updateCart(controllersToUpdate))
                                             .then(() => {
                                                 this.Steps.EnteredOnce.Shipping = true;
                                                 self.eventHub.publish("cartBillingAddressUpdated", { data: this });
@@ -99,8 +99,8 @@ module Orckestra.Composer {
                     },
 
                     addressModified() {
-                        var keys = _.keys(this.Cart.ShippingAddress);
-                        var isModified = _.some(keys, (key) => this.adressBeforeEdit[key] != this.Cart.ShippingAddress[key]);
+                        let keys = _.keys(this.Cart.ShippingAddress);
+                        let isModified = _.some(keys, (key) => this.adressBeforeEdit[key] != this.Cart.ShippingAddress[key]);
                         return isModified;
                     },
                     adjustPostalCode() {
@@ -125,7 +125,7 @@ module Orckestra.Composer {
 
                 if (vueData.addressModified()) {
                     return this.viewModelName;
-                };
+                }
             });
         }
 

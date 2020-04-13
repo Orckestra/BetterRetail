@@ -10,12 +10,11 @@ namespace Orckestra.Composer.Website.Controllers
     {
         public StoreLocatorController(IComposerContext composerContext,
             IStoreViewService storeViewService,
-            IStoreLocatorViewService storeLocatorViewService,
             IStoreDirectoryViewService storeDirectoryViewService,
             IStoreUrlProvider storeUrlProvider,
             IBreadcrumbViewService breadcrumbViewService,
             ILanguageSwitchService languageSwitchViewService) :
-            base(composerContext, storeViewService, storeLocatorViewService, storeDirectoryViewService, storeUrlProvider, breadcrumbViewService, languageSwitchViewService)
+            base(composerContext, storeViewService, storeDirectoryViewService, storeUrlProvider, breadcrumbViewService, languageSwitchViewService)
         {
         }
     }

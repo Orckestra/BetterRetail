@@ -186,11 +186,12 @@
     <Compile Include="Parameters\GetEmptyStoreLocatorViewModelParam.cs" />
     <Compile Include="Parameters\GetMapClustersParam.cs" />
     <Compile Include="Parameters\GetMapConfigurationViewModelParam.cs" />
+    <Compile Include="Parameters\GetStoreParam.cs" />
     <Compile Include="Parameters\GetStoreInventoryViewModelParam.cs" />
     <Compile Include="Parameters\GetStoreLocatorViewModelParam.cs" />
     <Compile Include="Parameters\GetStorePageViewModelParam.cs" />
     <Compile Include="Parameters\GetStoreScheduleParam.cs" />
-    <Compile Include="Parameters\GetStoreParam.cs" />
+    <Compile Include="Parameters\GetStoreByNumberParam.cs" />
     <Compile Include="Parameters\GetStoresForInStorePickupViewModelParam.cs" />
     <Compile Include="Providers\IGeoCoordinate.cs" />
     <Compile Include="Providers\IMapClustererProvider.cs" />

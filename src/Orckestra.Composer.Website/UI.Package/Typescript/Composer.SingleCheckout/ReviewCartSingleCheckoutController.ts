@@ -7,7 +7,7 @@ module Orckestra.Composer {
     export class ReviewCartSingleCheckoutController extends Orckestra.Composer.BaseSingleCheckoutController {
 
         public initialize() {
-            var self: ReviewCartSingleCheckoutController = this;
+            let self: ReviewCartSingleCheckoutController = this;
             self.viewModelName = 'ReviewCart';
 
             super.initialize();

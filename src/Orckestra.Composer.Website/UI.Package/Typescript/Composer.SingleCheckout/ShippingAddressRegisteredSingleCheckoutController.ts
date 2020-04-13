@@ -1,6 +1,7 @@
 ///<reference path='../..//Typings/tsd.d.ts' />
 ///<reference path='./BaseSingleCheckoutController.ts' />
 ///<reference path='./ShippingAddressSingleCheckoutController.ts' />
+///<reference path='../Composer.Cart/CheckoutShippingAddressRegistered/ShippingAddressRegisteredService.ts' />
 
 module Orckestra.Composer {
     'use strict';
@@ -12,7 +13,7 @@ module Orckestra.Composer {
 
         public initialize() {
             super.initialize();
-            var self: ShippingAddressRegisteredSingleCheckoutController = this;
+            let self: ShippingAddressRegisteredSingleCheckoutController = this;
             self.viewModelName = 'ShippingAddressRegistered';
 
             let vueShippingAddressRegisteredMixin = {
@@ -43,14 +44,10 @@ module Orckestra.Composer {
                         this.AddressName = null;
                         this.SelectedShippingAddressId = undefined;
                         this.Mode.AddingLine2Address = true;
-                        this.Cart.ShippingAddress = { 
-                            FirstName: this.Cart.ShippingAddress.FirstName || this.Cart.Customer.FirstName,
-                            LastName: this.Cart.ShippingAddress.LastName || this.Cart.Customer.LastName,
-                            CountryCode: this.Cart.ShippingAddress.CountryCode };
+                        this.clearShippingAddress();
                     },
-
                     processAddingNewShippingAddress() {
-                        var processAddingNewShippingAddress: Q.Deferred<boolean> = Q.defer<boolean>();
+                        let processAddingNewShippingAddress: Q.Deferred<boolean> = Q.defer<boolean>();
                         let formId = '#addNewAddressForm';
                         let isValid = this.initializeParsey(formId);
                         if (isValid) {
@@ -71,6 +68,10 @@ module Orckestra.Composer {
                                         if (reason.Errors && _.find(reason.Errors, (e: any) => e.ErrorCode == 'NameAlreadyUsed')) {
                                             this.Errors.AddressNameAlreadyInUseError = true;
                                         }
+                                        if (reason.Errors && _.find(reason.Errors, (e: any) => e.ErrorCode == 'InvalidPhoneFormat')) {
+                                            this.Errors.InvalidPhoneFormatError = true;
+                                        }
+                                        
                                         processAddingNewShippingAddress.resolve(false);
                                     });
                                 } else {
@@ -92,8 +93,8 @@ module Orckestra.Composer {
                         if (!this.debounceChangeRegisteredShippingAddress) {
                             this.debounceChangeRegisteredShippingAddress = _.debounce((addingNewAddressPromise) => {
                                 //WHEN CHANGING SHIPPING, WE ALSO NEED UPDATE BILLING
-                                let controlersToUpdate = [self.viewModelName, 'BillingAddressRegistered'];
-                                self.checkoutService.updateCart(controlersToUpdate).then((response: any) => {
+                                let controllersToUpdate = [self.viewModelName, 'BillingAddressRegistered'];
+                                self.checkoutService.updateCart(controllersToUpdate).then((response: any) => {
                                     let { Cart } = response;
                                     this.Cart.ShippingAddress = Cart.ShippingAddress;
                                     this.Cart.Payment.BillingAddress = Cart.Payment.BillingAddress;

@@ -17,18 +17,8 @@
                 <h3 class="float-left">
                     @Html.Localize("MyAccount", "T_PaymentMethod")
                 </h3>
-                <button v-show="step.displayContinueButton"
-                        v-on:click='step.navigateToStep(step.index)'
-                        class="btn btn-primary float-right"
-                        v-cloak="true">
-                    @Html.Localize("CheckoutProcess", "B_EditPayment")
-                </button>
-                <button v-show="step.preview" class="btn btn-outline-secondary float-right"
-                        data-qa="edit-payment-btn"
-                        v-on:click="step.navigateToStep(step.index)"
-                        v-cloak="true">
-                    @Html.Localize("CheckoutProcess", "F_Edit")
-                </button>
+                @CheckoutHelpers.StepContinueButton("!FulfilledBillingAddress", "payment", "B_EditPayment")
+                @CheckoutHelpers.StepEditButton("payment")
             </div>
             <div v-if="!Payment" class="card-body bg-light text-center" v-show="step.active" v-cloak="true">
                 @CheckoutHelpers.LoadingSpinner()

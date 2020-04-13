@@ -39,7 +39,7 @@ namespace Orckestra.Composer.Store.Services
             StoreUrlProvider = storeUrlProvider;
         }
 
-        public virtual async Task<StoreViewModel> GetStoreViewModelAsync(GetStoreParam param)
+        public virtual async Task<StoreViewModel> GetStoreViewModelAsync(GetStoreByNumberParam param)
         {
             if (param == null) { throw new ArgumentNullException("param"); }
             if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentNullException("scope"); }
@@ -78,7 +78,7 @@ namespace Orckestra.Composer.Store.Services
         {
             if (param == null) { throw new ArgumentNullException("storepageheaderparam");}
 
-            var store = await GetStoreViewModelAsync(new GetStoreParam
+            var store = await GetStoreViewModelAsync(new GetStoreByNumberParam
             {
                 StoreNumber = param.StoreNumber,
                 CultureInfo = param.CultureInfo,

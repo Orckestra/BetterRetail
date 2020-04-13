@@ -6,11 +6,6 @@
 module Orckestra.Composer {
     'use strict';
 
-    enum FulfillmentMethodTypes {
-        Shipping = 'Shipping',
-        PickUp = 'PickUp'
-    }
-
     export class ShippingSingleCheckoutController extends Orckestra.Composer.BaseSingleCheckoutController {
 
         protected customerService: ICustomerService = new CustomerService(new CustomerRepository());
@@ -43,7 +38,11 @@ module Orckestra.Composer {
                             fulfilledAddress = fulfilledAddress || this.SelectedShippingAddressId
                         }
 
-                        return (fulfilledAddress && this.Cart.ShippingMethod) ? true: false;
+                        if(this.IsPickUpMethodType) {
+                            fulfilledAddress = this.Cart.PickUpLocationId;
+                        }
+
+                        return !!(fulfilledAddress && this.Cart.ShippingMethod);
                     },
                     SelectedMethodTypeString() {
                         return this.Cart.ShippingMethod ? this.Cart.ShippingMethod.FulfillmentMethodTypeString : '';
@@ -68,8 +67,17 @@ module Orckestra.Composer {
                             this.Cart.ShippingAddress.FirstName = this.Customer.FirstName;
                             this.Cart.ShippingAddress.LastName = this.Customer.LastName;
                         }
+
                         this.Mode.AddingLine2Address = !this.Cart.ShippingAddress.Line2;
                         this.Mode.AddingNewAddress = false;
+                    },
+                    clearShippingAddress() {
+                        let { ShippingAddress: { FirstName, LastName, CountryCode }, Customer } = this.Cart;
+                        this.Cart.ShippingAddress = {
+                            FirstName: FirstName || Customer.FirstName,
+                            LastName: LastName || Customer.LastName,
+                            CountryCode
+                        };
                     },
                     processShipping() {
                        
@@ -82,24 +90,22 @@ module Orckestra.Composer {
                                     return this.processShippingAddress();
                                 }
                             }
+                        } else if(this.IsPickUpMethodType) {
+                            return this.processPickUpAddress()
                         }
                         this.Steps.EnteredOnce.Shipping = true;
                         return true;
                     },
                     processBilling() {
-                        this.Steps.EnteredOnce.Billing = true;
-                        if (this.IsShippingMethodType) {
-                            if (this.IsAuthenticated) {
-                                if (this.Mode.AddingNewAddress) {
-                                    return this.processAddingNewBillingAddress();
-                                } else {
-                                    return this.processBillingAddressRegistered();
-                                }
+                        if (this.IsAuthenticated) {
+                            if (this.Mode.AddingNewAddress) {
+                                return this.processAddingNewBillingAddress();
                             } else {
-                                return this.processBillingAddress();
+                                return this.processBillingAddressRegistered();
                             }
+                        } else {
+                            return this.processBillingAddress();
                         }
-                        return true;
                     },
                     selectShippingMethod(methodEntity: any) {
                         this.ShippingMethodTypes = this.ShippingMethodTypes.map(x =>
@@ -135,16 +141,21 @@ module Orckestra.Composer {
                         }
                     },
                     updateShippingMethodProcess(methodEntity: any) {
-                        let oldValue = { ...this.Cart.ShippingMethod };
+                        let oldShippingMethod = { ...this.Cart.ShippingMethod };
+                        let oldShippingAddress = { ...this.Cart.ShippingAddress };
+                        let oldPickUpLocationId = this.Cart.PickUpLocationId;
+
                         this.Cart.ShippingMethod = methodEntity;
 
-                        if (methodEntity.ShippingProviderId === oldValue.ShippingProviderId) return;
+                        if (methodEntity.ShippingProviderId === oldShippingMethod.ShippingProviderId) return;
 
                         self.checkoutService.updateCart([self.viewModelName])
                             .then(({ Cart }) => {
+                                this.Cart.ShippingAddress = oldShippingAddress;
+                                this.Cart.PickUpLocationId = oldPickUpLocationId;
                                 this.prepareShipping();
                             }).catch(e => {
-                                this.Cart.ShippingMethod = oldValue;
+                                this.Cart.ShippingMethod = oldShippingMethod;
                             })
                     },
                    

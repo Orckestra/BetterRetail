@@ -13,7 +13,7 @@ module Orckestra.Composer {
             self.viewModelName = 'Payment';
             const SAVED_CREDIT_CARD = 'SavedCreditCard';
 
-            this.eventHub.subscribe("cartBillingAddressUpdated", this.onBillinAddressUpdated)
+            this.eventHub.subscribe("cartBillingAddressUpdated", this.onBillingAddressUpdated);
 
             let vuePaymentMixin = {
 
@@ -93,7 +93,7 @@ module Orckestra.Composer {
                             Providers: providers
                         }).then((result) => {
                             this.Payment.ActivePaymentViewModel = result;
-                        }).catch(e => {
+                        }).catch(() => {
                             this.selectPaymentMethod(oldPayment.Id);
                         })
                     },
@@ -135,7 +135,7 @@ module Orckestra.Composer {
             this.checkoutService.VueCheckoutMixins.push(vuePaymentMixin);
         }
 
-        protected onBillinAddressUpdated(e) {
+        protected onBillingAddressUpdated(e) {
             let vueData = e.data;
             vueData.preparePayment();
         }

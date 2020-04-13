@@ -205,6 +205,7 @@
                            @Html.ParsleyMessage("Forms", "F_PhoneNumberLengthError", "length-message")
                            v-bind:data-parsley-pattern="@(vueAddressBinding).PhoneRegex"
                            @Html.ParsleyMessage("Forms", "F_PhoneNumberPatternError", "pattern-message") />
+                    <p class="text-danger" v-if="Errors.InvalidPhoneFormatError">@Html.Localize("Errors", "L_InvalidPhoneFormat")</p>
                 </div>
             </div>
         </div>

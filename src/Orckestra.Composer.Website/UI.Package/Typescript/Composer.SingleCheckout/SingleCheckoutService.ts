@@ -19,6 +19,11 @@
 module Orckestra.Composer {
     'use strict';
 
+    export enum FulfillmentMethodTypes {
+        Shipping = 'Shipping',
+        PickUp = 'PickUp'
+    }
+
     export class SingleCheckoutService implements ISingleCheckoutService {
 
         private static instance: ISingleCheckoutService;
@@ -29,7 +34,7 @@ module Orckestra.Composer {
         private orderConfirmationCacheKey = 'orderConfirmationCacheKey';
         private orderCacheKey = 'orderCacheKey';
 
-        private window: Window;
+        private readonly window: Window;
         private readonly eventHub: IEventHub;
         private registeredControllers: any = {};
         private allControllersReady: Q.Deferred<boolean>;
@@ -121,26 +126,8 @@ module Orckestra.Composer {
             }
         }
 
-        public calculateStartStep(cart: any): number {
-            if (!(cart.Customer.FirstName &&
-                cart.Customer.LastName &&
-                cart.Customer.Email)) {
-                return 0; // Information
-            } else {
-                if (!(cart.ShippingMethod &&
-                    cart.ShippingAddress.Line1 &&
-                    cart.ShippingAddress.City &&
-                    cart.ShippingAddress.RegionCode &&
-                    cart.ShippingAddress.PostalCode)) {
-                    return 1; // Shipping
-                } else {
-                    return 3; // Billing
-                }
-            }
-        }
-
         public initializeVueComponent(checkoutContext: ISingleCheckoutContext) {
-            let startStep = this.calculateStartStep(checkoutContext.Cart)
+            let startStep = this.calculateStartStep(checkoutContext.Cart, checkoutContext.IsAuthenticated);
             this.VueCheckout = new Vue({
                 el: '#vueSingleCheckout',
                 data: {
@@ -167,7 +154,9 @@ module Orckestra.Composer {
                     },
                     Errors: {
                         PostalCodeError: false,
-                        AddressNameAlreadyInUseError: false
+                        InvalidPhoneFormatError: false,
+                        AddressNameAlreadyInUseError: false,
+                        StoreLocatorLocationError: false,
                     }
                 },
                 mixins: this.VueCheckoutMixins,
@@ -215,6 +204,50 @@ module Orckestra.Composer {
             });
         }
 
+        public calculateStartStep(cart: any, isAuthenticated: boolean): number {
+            if (!(cart.Customer.FirstName &&
+                cart.Customer.LastName &&
+                cart.Customer.Email)) {
+                return 0; // Information
+            } else {
+                if (!(this.isShippingFulfilled(cart, isAuthenticated))) {
+                    return 1; // Shipping
+                } else {
+                    return 3; // Billing
+                }
+            }
+        }
+
+        public isShippingFulfilled(cart: any, isAuthenticated: boolean): boolean {
+            if (!(cart.ShippingMethod)) return false;
+
+            let address = cart.ShippingAddress.Line1 &&
+                cart.ShippingAddress.City &&
+                cart.ShippingAddress.RegionCode &&
+                cart.ShippingAddress.PostalCode;
+
+            let isShipToHome = cart.ShippingMethod.FulfillmentMethodTypeString === FulfillmentMethodTypes.Shipping;
+            let isPickUp = cart.ShippingMethod.FulfillmentMethodTypeString === FulfillmentMethodTypes.PickUp;
+
+            if (isAuthenticated && isShipToHome) {
+                return (address && !this.isAddressBookIdEmpty(cart.ShippingAddress.AddressBookId))
+            }
+
+            if (!isAuthenticated && isShipToHome) {
+                return !!(address)
+            }
+
+            if (isPickUp) {
+                return (address && cart.ShippingAddress.AddressName)
+            }
+
+            return false;
+        }
+
+        public isAddressBookIdEmpty(bookId) {
+            return bookId == '00000000-0000-0000-0000-000000000000' || !bookId;
+        }
+
         public registerController(controller: IBaseSingleCheckoutController) {
 
             if (this.allControllersReady.promise.isPending()) {
@@ -227,7 +260,7 @@ module Orckestra.Composer {
                     if (allControllersReady) {
                         throw new Error('Too late to register all controllers are ready.');
                     } else {
-                        var controllerName = controller.viewModelName;
+                        let controllerName = controller.viewModelName;
                         this.registeredControllers[controllerName] = controller;
                     }
                 });

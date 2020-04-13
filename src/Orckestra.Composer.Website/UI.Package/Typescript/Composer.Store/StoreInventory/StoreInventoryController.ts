@@ -96,7 +96,7 @@ module Orckestra.Composer {
                         if (currentLocation) {
                             this._searchPoint = currentLocation;
                             this.getStoresInventory();
-                            this._geoService.getAddtressByLocation(currentLocation).then(result => {
+                            this._geoService.getAddressByLocation(currentLocation).then(result => {
                                 this.cache.set(this._searchPointAddressCacheKey, result);
                                 this._searchBoxJQ.val(result);
                             });

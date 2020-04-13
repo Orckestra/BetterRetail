@@ -186,8 +186,6 @@ namespace Orckestra.Composer.Website
             functions.RegisterAction<OrderController>("FindMyOrder", "Composer.Order.FindMyOrder");
             functions.RegisterAction<OrderController>("OrderDetails", "Composer.Order.OrderDetails");
 
-            functions.RegisterAction<StoreLocatorController>("Index", "Composer.Store.Locator")
-                .AddParameter("pagesize", typeof(int), false, label: "Page Size", helpText: "The max count of the items to show in the list.");
             functions.RegisterAction<StoreLocatorController>("StoreDetails", "Composer.Store.Details", "Store Details")
                 .AddParameter("zoom", typeof(int), false, label: "Map Zoom Level", helpText: "Define the resolution of the map view. Zoom levels between 0 and 21+. Default is 14 (streets).");
             functions.RegisterAction<StoreLocatorController>("Breadcrumb", "Composer.Store.Breadcrumb");

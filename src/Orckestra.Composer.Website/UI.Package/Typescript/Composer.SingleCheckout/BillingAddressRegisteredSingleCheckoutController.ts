@@ -1,10 +1,10 @@
 ///<reference path='../..//Typings/tsd.d.ts' />
-///<reference path='./BaseSingleCheckoutController.ts' />
+///<reference path='./BillingAddressSingleCheckoutController.ts' />
 
 module Orckestra.Composer {
     'use strict';
 
-    export class BillingAddressRegisteredSingleCheckoutController extends Orckestra.Composer.BaseSingleCheckoutController {
+    export class BillingAddressRegisteredSingleCheckoutController extends Orckestra.Composer.BillingAddressSingleCheckoutController {
 
         public initialize() {
             super.initialize();
@@ -21,6 +21,7 @@ module Orckestra.Composer {
                         if (this.BillingAddress.UseShippingAddress && !this.FulfilledBillingAddress) {
                             return self.checkoutService.updateCart([self.viewModelName])
                                 .then(() => {
+                                    this.Steps.EnteredOnce.Billing = true;
                                     return true;
                                 });
                         } else {
@@ -33,8 +34,8 @@ module Orckestra.Composer {
                         this.Mode.AddingNewAddress = false;
                         if (!this.debouncechangeRegisteredBillingAddress) {
                             this.debouncechangeRegisteredBillingAddress = _.debounce((addingNewAddressPromise) => {
-                                let controlersToUpdate = [self.viewModelName];
-                                self.checkoutService.updateCart(controlersToUpdate).then((result) => {
+                                let controllersToUpdate = [self.viewModelName];
+                                self.checkoutService.updateCart(controllersToUpdate).then((result) => {
                                     let { Cart } = result;
                                     this.Cart.Payment.BillingAddress = Cart.Payment.BillingAddress;
                                     if (addingNewAddressPromise) {

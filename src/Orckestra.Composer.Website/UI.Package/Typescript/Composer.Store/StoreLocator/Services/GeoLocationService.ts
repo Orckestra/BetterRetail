@@ -13,27 +13,21 @@ module Orckestra.Composer {
         }
 
         public geolocate(): Q.Promise<any> {
-            if (this._browserGeolocation) {
-                return this.getCurrentLocation()
-                    .catch((reason) => {
-                        console.log(reason);
-                        return this._currenctLocation;
-                    });
-            }
-
-            return null;
+            return this._browserGeolocation ? this.getCurrentLocation() : Q.reject('browserGeolocation not define');
         }
 
-        public getCurrentLocation(): Q.Promise<google.maps.LatLng> {
-            var deferred = Q.defer<google.maps.LatLng>();
+        private getCurrentLocation(): Q.Promise<google.maps.LatLng> {
+            let deferred = Q.defer<google.maps.LatLng>();
             this._browserGeolocation.getCurrentPosition((pos) => {
                 this._currenctLocation = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
                 deferred.resolve(this._currenctLocation);
-            }, () => { deferred.reject('problems to get current location'); });
+            }, (error) => {
+                deferred.reject(error);
+            });
             return deferred.promise;
         }
 
-        public getAddtressByLocation(location: google.maps.LatLng): Q.Promise<string> {
+        public getAddressByLocation(location: google.maps.LatLng): Q.Promise<string> {
             var deferred = Q.defer<string>();
 
             this._geocoder.geocode({ location: location },

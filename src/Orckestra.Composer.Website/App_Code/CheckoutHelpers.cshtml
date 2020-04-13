@@ -1,16 +1,39 @@
 ﻿@using Composite.AspNet.Razor
 @using System.Web.Mvc
 
+@helper StepContinueButton(string disabled, string dataqakey, string label ="F_Continue")
+{
+    <button v-show="step.displayContinueButton"
+            v-bind:disabled="@disabled"
+            v-on:click="step.navigateToStep(step.index)"
+            class="btn btn-primary float-right"
+            v-cloak="true"
+            data-qa="continue-to-@dataqakey-btn">
+        @Html.Localize("CheckoutProcess", label)
+    </button>
+}
+
+@helper StepEditButton(string dataqakey, string label = "F_Edit")
+{
+    <button v-show="step.preview" class="btn btn-outline-secondary float-right"
+            data-qa="edit-@(dataqakey)-btn"
+            v-on:click="step.navigateToStep(step.index)"
+            v-cloak="true">
+        @Html.Localize("CheckoutProcess", label)
+    </button>
+}
+
 @helper AddressPreview(string vueBinding, string qaPrefix = "shipping-address-preview")
 {
-    <p class="mb-0">
-        <strong data-qa="@(qaPrefix)-fullname">{{@(vueBinding).FirstName}} {{@(vueBinding).LastName}}</strong><br />
-        <span data-qa="@(qaPrefix)-line1">{{@(vueBinding).Line1}}</span>
-        <span data-qa="@(qaPrefix)-line2" v-if="@(vueBinding).Line2">, {{@(vueBinding).Line2}}</span><br />
-        <span data-qa="@(qaPrefix)-city">{{@(vueBinding).City}}</span><br />
-        <span data-qa="@(qaPrefix)-regionName">{{@(vueBinding).RegionName}}</span>,
-        <span data-qa="@(qaPrefix)-postalCode">{{@(vueBinding).PostalCode}}</span>
-    </p>
+<p class="mb-0">
+    <strong v-if="@(vueBinding).AddressName" data-qa="@(qaPrefix)-name">{{@(vueBinding).AddressName}}<br /></strong>
+    <strong v-if="@(vueBinding).FirstName" data-qa="@(qaPrefix)-fullname">{{@(vueBinding).FirstName}} {{@(vueBinding).LastName}}<br /></strong>
+    <span data-qa="@(qaPrefix)-line1">{{@(vueBinding).Line1}}</span>
+    <span data-qa="@(qaPrefix)-line2" v-if="@(vueBinding).Line2">, {{@(vueBinding).Line2}}</span><br />
+    <span data-qa="@(qaPrefix)-city">{{@(vueBinding).City}}</span><br />
+    <span data-qa="@(qaPrefix)-regionName">{{@(vueBinding).RegionName}}</span>,
+    <span data-qa="@(qaPrefix)-postalCode">{{@(vueBinding).PostalCode}}</span>
+</p>
 }
 
 

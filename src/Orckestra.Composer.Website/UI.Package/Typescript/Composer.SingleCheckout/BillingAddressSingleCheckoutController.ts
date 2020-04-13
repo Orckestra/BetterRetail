@@ -53,21 +53,23 @@ module Orckestra.Composer {
                         }
                  
                         let billingAddressParams = ['FirstName', 'LastName', 'Line1', 'City', 'RegionCode', 'PostalCode', 'PhoneNumber'];
-
+                        
                         billingAddressParams.forEach(param => {
                             if (this.BillingAddress[param] === null) {
                                 this.BillingAddress[param] = '';
                             }
                         });
 
+                        if (this.IsPickUpMethodType) {
+                            this.Cart.Payment.BillingAddress.UseShippingAddress = false;
+                        }
+
                         return Q.resolve(true);
                     },
 
                     updateBillingAddress(): Q.Promise<boolean> {
                         return self.checkoutService.updateCart([self.viewModelName])
-                            .then(result => {
-                                let { Cart } = result;
-                                this.Cart.Payment.BillingAddress = Cart.Payment.BillingAddress;
+                            .then(() => {
                                 this.Steps.EnteredOnce.Billing = true;
                                 this.Mode.AddingNewAddress = !this.BillingAddress.AddressBookId;
                                 return true;
@@ -87,7 +89,8 @@ module Orckestra.Composer {
 
                             let postalCode = this.BillingAddress.PostalCode;
                             return this.changeBillingPostalCode(postalCode)
-                                .then(() => this.updateBillingAddress())
+                                .then(() => this.updateBillingAddress());
+                                
                         } else {
                             return this.updateBillingAddress()
                         }
