@@ -112,7 +112,7 @@
                             <div class="row" v-if="IsSavedCreditCardSelected">
                                 <div class="col-12 text-center">
                                     <button class="btn btn-dashed-block  mb-2"
-											data-qa="add-credit-card-btn"
+                                            data-qa="add-credit-card-btn"
                                             type="button"
                                             v-on:click="selectNewCreditCardPaymentMethod"
                                             v-bind:disabled="IsLoading">
@@ -127,7 +127,7 @@
 
                             <div class="form-check  mb-4" v-if="ActivePayment.CanSavePaymentMethod">
                                 <input name="createPaymentProfile" id="createPaymentProfile"
-									   data-qa="save-credit-card-checkbox"
+                                       data-qa="save-credit-card-checkbox"
                                        type="checkbox" class="form-check-input"
                                        v-bind:required="ActivePayment.MustSavePaymentMethod"
                                        data-parsley-error-message="@Html.Localize("CheckoutProcess", "F_SaveCreditCardForced_Explain")" />
@@ -143,7 +143,9 @@
                         @PreviewCartTypeMethod("SelectedPaymentMethod")
                     </div>
                     <div v-else="v-else">
-                        <h4>{{SelectedPaymentMethod.DisplayName}}</h4>
+
+                        @PreviewCashTypeMethod()
+
                     </div>
                 </div>
             </div>
@@ -172,4 +174,17 @@
             </div>
         </div>
     </div>
+}
+
+@helper PreviewCashTypeMethod()
+{
+    <div class="row">
+        <div class="col-md-3 text-sm-left text-md-center">
+            <img src="~/UI.Package/Images/payments/cash.png" alt="cash" class="img-fluid" />
+        </div>
+        <div class="col-md-9">
+            <h4>{{SelectedPaymentMethod.DisplayName}}</h4>
+        </div>
+    </div>
+
 }
