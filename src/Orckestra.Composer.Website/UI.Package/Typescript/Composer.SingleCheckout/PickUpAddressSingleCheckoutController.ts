@@ -8,7 +8,6 @@ module Orckestra.Composer {
     export class PickUpAddressSingleCheckoutController extends Orckestra.Composer.StoreLocatorController implements Orckestra.Composer.IBaseSingleCheckoutController {
         public viewModelName: string = 'PickUpAddress';
         protected checkoutService: ISingleCheckoutService;
-        protected vueCheckout: any;
 
         protected registerStoreLocatorVue() {
             let self: PickUpAddressSingleCheckoutController = this;

@@ -16,6 +16,9 @@
 ///<reference path='./ISingleCheckoutService.ts' />
 ///<reference path='./ISingleCheckoutContext.ts' />
 ///<reference path='../Composer.MyAccount/Common/CustomerService.ts' />
+///<reference path='./VueComponents/CheckoutStepVueComponent.ts' />
+///<reference path='./VueComponents/CheckoutPageVueComponent.ts' />
+
 
 module Orckestra.Composer {
     'use strict';
@@ -140,6 +143,10 @@ module Orckestra.Composer {
             let startStep = this.calculateStartStep(checkoutContext.Cart, checkoutContext.IsAuthenticated);
             this.VueCheckout = new Vue({
                 el: '#vueSingleCheckout',
+                components: {
+                    [CheckoutPageVueComponent.componentMame] : CheckoutPageVueComponent.getComponent(),
+                    [CheckoutStepVueComponent.componentMame] : CheckoutStepVueComponent.getComponent(),
+                },
                 data: {
                     Cart: checkoutContext.Cart,
                     Regions: checkoutContext.Regions,
@@ -170,10 +177,6 @@ module Orckestra.Composer {
                     }
                 },
                 mixins: this.VueCheckoutMixins,
-                components: {
-                    'checkout-step': (<any>window).httpVueLoader('/UI.Package/Vue/CheckoutStep.vue'),
-                    'single-page-checkout': (<any>window).httpVueLoader('/UI.Package/Vue/Checkout.vue'),
-                },
                 mounted() {
 
                 },
