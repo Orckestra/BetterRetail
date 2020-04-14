@@ -5,52 +5,64 @@ module Orckestra.Composer {
     'use strict';
 
     export class BillingAddressRegisteredSingleCheckoutController extends Orckestra.Composer.BillingAddressSingleCheckoutController {
-
+ 
         public initialize() {
             super.initialize();
             let self: BillingAddressRegisteredSingleCheckoutController = this;
             self.viewModelName = 'BillingAddressRegistered';
 
             let vueBillingAddressRegisteredMixin = {
- 
+
                 computed: {
 
                 },
                 methods: {
                     processBillingAddressRegistered() {
-                        if (this.BillingAddress.UseShippingAddress && !this.FulfilledBillingAddress) {
+                        if (this.billingAddressModified()) {
                             return self.checkoutService.updateCart([self.viewModelName])
                                 .then(() => {
                                     this.Steps.EnteredOnce.Billing = true;
                                     return true;
                                 });
                         } else {
-                            return true; //TODO: ...
+                            return true;
                         }
+                    },
+                    addBillingAddressToMyAddressBook() {
+                        let formId = '#addNewBillingAddressForm';
+                        let isValid = this.initializeParsey(formId);
+                        if (!isValid) {
+                            return Q.reject('Billing Address information is not valid');
+                        }
+                        let addressData = { ...this.Cart.Payment.BillingAddress };
+                        addressData.AddressName = this.AddressName;
+
+                        self.checkoutService.saveAddressToMyAccountAddressBook(addressData)
+                            .then(address => {
+                                return this.changeRegisteredBillingAddress(address.Id);
+                            })
+                            .fail((reason) => {
+                                console.log(reason);
+                                if (reason.Errors && _.find(reason.Errors, (e: any) => e.ErrorCode == 'NameAlreadyUsed')) {
+                                    this.Errors.AddressNameAlreadyInUseError = true;
+                                }
+                                if (reason.Errors && _.find(reason.Errors, (e: any) => e.ErrorCode == 'InvalidPhoneFormat')) {
+                                    this.Errors.InvalidPhoneFormatError = true;
+                                }
+                            });
                     }
                     ,
-                    changeRegisteredBillingAddress(addressId, addingNewAddressPromise = null) {
+                    changeRegisteredBillingAddress(addressId) {
                         this.BillingAddress.AddressBookId = addressId;
                         this.Mode.AddingNewAddress = false;
-                        if (!this.debouncechangeRegisteredBillingAddress) {
-                            this.debouncechangeRegisteredBillingAddress = _.debounce((addingNewAddressPromise) => {
-                                let controllersToUpdate = [self.viewModelName];
-                                self.checkoutService.updateCart(controllersToUpdate).then((result) => {
-                                    let { Cart } = result;
-                                    this.Cart.Payment.BillingAddress = Cart.Payment.BillingAddress;
-                                    if (addingNewAddressPromise) {
-                                        addingNewAddressPromise.resolve(true);
-                                    }
-                                }).fail((reason) => {
-                                    console.log(reason);
 
-                                    if (addingNewAddressPromise) {
-                                        addingNewAddressPromise.resolve(false);
-                                    }
-                                });
+                        if (!this.debouncechangeRegisteredBillingAddress) {
+                            this.debouncechangeRegisteredBillingAddress = _.debounce(() => {
+                                let controllersToUpdate = [self.viewModelName];
+                                self.checkoutService.updateCart(controllersToUpdate)
                             }, 500);
                         }
-                        this.debouncechangeRegisteredBillingAddress(addingNewAddressPromise);
+                        this.debouncechangeRegisteredBillingAddress();
                     },
 
                 }
@@ -62,7 +74,7 @@ module Orckestra.Composer {
         public getViewModelNameForUpdatePromise(): Q.Promise<any> {
             return Q.fcall(() => {
                 var vueData = this.checkoutService.VueCheckout;
-                if(!vueData.IsAuthenticated) {
+                if (!vueData.IsAuthenticated) {
                     return;
                 }
 

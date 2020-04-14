@@ -26,7 +26,7 @@ module Orckestra.Composer {
                         var processShippingAddress: Q.Deferred<boolean> = Q.defer<boolean>();
                         let isValid = this.initializeParsey(self.formSelector);
                         if (isValid) {
-                            if (this.addressModified()) {
+                            if (this.shippingAddressModified()) {
                                 let postalCode = this.Cart.ShippingAddress.PostalCode;
                                 this.changePostalCode(postalCode).then(success => {
                                     if (success) {
@@ -98,7 +98,7 @@ module Orckestra.Composer {
                         return processPostalCode.promise;
                     },
 
-                    addressModified() {
+                    shippingAddressModified() {
                         let keys = _.keys(this.Cart.ShippingAddress);
                         let isModified = _.some(keys, (key) => this.adressBeforeEdit[key] != this.Cart.ShippingAddress[key]);
                         return isModified;
@@ -123,7 +123,7 @@ module Orckestra.Composer {
                     return Q.reject('Address information is not valid');
                 }
 
-                if (vueData.addressModified()) {
+                if (vueData.shippingAddressModified()) {
                     return this.viewModelName;
                 }
             });

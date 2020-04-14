@@ -38,12 +38,23 @@
                              v-bind:class="{ 'bg-selected border-primary': address.Id == BillingAddress.AddressBookId }">
                             @CheckoutHelpers.AddressRadioOption("BillingAddressId", "BillingAddress.AddressBookId", "changeRegisteredBillingAddress")
                         </div>
-                        <!--TODO:button v-if="!Mode.AddingNewAddress" class="btn btn-dashed-block"
-                                v-on:click="addNewBillingAddressMode"
+                        <div v-if="Mode.AddingNewAddress" class="border-top mt-4 pt-4">
+                            @Forms.Address.Form("Cart.Payment.BillingAddress", "addNewBillingAddressForm", true, null)
+
+                            <button class="btn btn-primary mt-1"
+                                    v-on:click="addBillingAddressToMyAddressBook()"
+                                    v-bind:disabled="Mode.Loading"
+                                    data-qa="billing-save-address-link">
+                                @Html.Localize("MyAccount", "B_SaveNewAddress")
+                            </button>
+                        </div>
+                        <button v-if="!Mode.AddingNewAddress" class="btn btn-dashed-block"
+                                v-on:click="addNewBillingAddress"
                                 v-bind:disabled="Mode.Loading"
                                 data-qa="billing-add-address-link">
                             @Html.Localize("MyAccount", "B_AddNewAddress")
-                        </button-->
+                        </button>
+
                     </div>
                 </div>
             }

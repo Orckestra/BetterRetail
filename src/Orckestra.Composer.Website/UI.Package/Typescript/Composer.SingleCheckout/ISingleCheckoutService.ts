@@ -44,5 +44,7 @@ module Orckestra.Composer {
         clearOrderConfirmationFromCache(): void;
 
         setOrderToCache(orderConfirmationviewModel : any) : void;
+
+        saveAddressToMyAccountAddressBook(address: any): Q.Promise<any>;
     }
 }

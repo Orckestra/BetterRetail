@@ -72,6 +72,7 @@ module Orckestra.Composer {
                         this.Mode.AddingNewAddress = false;
                     },
                     clearShippingAddress() {
+                        this.Mode.AddingLine2Address = true;
                         let { ShippingAddress: { FirstName, LastName, CountryCode }, Customer } = this.Cart;
                         this.Cart.ShippingAddress = {
                             FirstName: FirstName || Customer.FirstName,
@@ -82,27 +83,23 @@ module Orckestra.Composer {
                     processShipping() {
                        
                         if (this.IsShippingMethodType) {
-                            if (this.IsAuthenticated && this.Mode.AddingNewAddress) {
-                                return this.processAddingNewShippingAddress();
+                            if (this.IsAuthenticated) {
+                                return this.processShippingAddressRegistered();
                             } else {
-                                if (!this.ShippingAddress.AddressBookId ||
-                                    this.ShippingAddress.AddressBookId == '00000000-0000-0000-0000-000000000000') {
-                                    return this.processShippingAddress();
-                                }
+                                return this.processShippingAddress();
                             }
-                        } else if(this.IsPickUpMethodType) {
+                        }
+
+                        if (this.IsPickUpMethodType) {
                             return this.processPickUpAddress()
                         }
+
                         this.Steps.EnteredOnce.Shipping = true;
                         return true;
                     },
                     processBilling() {
                         if (this.IsAuthenticated) {
-                            if (this.Mode.AddingNewAddress) {
-                                return this.processAddingNewBillingAddress();
-                            } else {
-                                return this.processBillingAddressRegistered();
-                            }
+                            return this.processBillingAddressRegistered();
                         } else {
                             return this.processBillingAddress();
                         }

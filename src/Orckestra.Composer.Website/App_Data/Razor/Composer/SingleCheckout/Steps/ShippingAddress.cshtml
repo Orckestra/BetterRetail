@@ -24,6 +24,12 @@
             </div>
             <div v-if="Mode.AddingNewAddress" class="border-top mt-4 pt-4">
                 @Forms.Address.Form("Cart.ShippingAddress", "addNewAddressForm", true)
+                <button class="btn btn-primary mt-1"
+                        v-on:click="addShippingAddressToMyAddressBook()"
+                        v-bind:disabled="Mode.Loading"
+                        data-qa="shipping-save-address-link">
+                    @Html.Localize("MyAccount", "B_SaveNewAddress")
+                </button>
             </div>
 
             <button v-if="!Mode.AddingNewAddress" class="btn btn-dashed-block"

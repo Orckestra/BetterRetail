@@ -50,6 +50,7 @@ module Orckestra.Composer {
 
         protected cartService: ICartService;
         protected membershipService: IMembershipService;
+        protected customerService: ICustomerService = new CustomerService(new CustomerRepository());
         protected regionService: IRegionService;
         protected shippingMethodService: ShippingMethodService;
         protected paymentService: IPaymentService;
@@ -332,6 +333,7 @@ module Orckestra.Composer {
                     vue.customerBeforeEdit = { ...Cart.Customer };
                     vue.adressBeforeEdit = { ...Cart.ShippingAddress };
                     vue.billingAddressBeforeEdit = { ...Cart.Payment.BillingAddress };
+                    vue.Errors = {};
                     vue.Cart = Cart;
                     return result;
                 })
@@ -523,6 +525,15 @@ module Orckestra.Composer {
 
         public updateBillingPostalCode(postalCode: string): Q.Promise<void> {
             return this.cartService.updateBillingMethodPostalCode(postalCode);
+        }
+
+        public saveAddressToMyAccountAddressBook(address: any): Q.Promise<any> {
+            return this.customerService.createAddress(address, null).then(address => {
+                var vue: any = this.VueCheckout;
+                vue.RegisteredAddresses.push(address);
+                return address;
+            }
+            );
         }
     }
 }

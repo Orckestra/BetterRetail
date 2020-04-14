@@ -37,53 +37,58 @@ module Orckestra.Composer {
                 computed: {
                 },
                 methods: {
+                    processShippingAddressRegistered() {
+                        if (this.shippingAddressModified()) {
+                            return self.checkoutService.updateCart([self.viewModelName])
+                                .then(() => {
+                                    this.Steps.EnteredOnce.Shipping = true;
+                                    return true;
+                                });
+                        } else {
+                            return true;
+                        }
+                    },
 
                     addNewAddressMode() {
                         this.Mode.AddingNewAddress = true;
                         this.adressBeforeEdit = {};
                         this.AddressName = null;
                         this.SelectedShippingAddressId = undefined;
-                        this.Mode.AddingLine2Address = true;
                         this.clearShippingAddress();
                     },
-                    processAddingNewShippingAddress() {
-                        let processAddingNewShippingAddress: Q.Deferred<boolean> = Q.defer<boolean>();
+
+                    addShippingAddressToMyAddressBook() {
                         let formId = '#addNewAddressForm';
                         let isValid = this.initializeParsey(formId);
-                        if (isValid) {
+                        if (!isValid) {
+                            return Q.reject('Shipping Address information is not valid');
+                        }
 
-                            let postalCode = this.Cart.ShippingAddress.PostalCode;
-                            this.changePostalCode(postalCode).then(success => {
+                        let postalCode = this.Cart.ShippingAddress.PostalCode;
+                        this.changePostalCode(postalCode)
+                            .then(success => {
                                 if (success) {
                                     let addressData = { ...this.Cart.ShippingAddress };
                                     addressData.AddressName = this.AddressName;
 
-                                    self.customerService.createAddress(addressData, null).then(address => {
-                                        address.RegionName = this.ShippingAddress.RegionName;
-                                        this.RegisteredAddresses.push(address);
-                                        this.changeRegisteredShippingAddress(address.Id, processAddingNewShippingAddress);
-
-                                    }).fail((reason) => {
-                                        console.log(reason);
-                                        if (reason.Errors && _.find(reason.Errors, (e: any) => e.ErrorCode == 'NameAlreadyUsed')) {
-                                            this.Errors.AddressNameAlreadyInUseError = true;
-                                        }
-                                        if (reason.Errors && _.find(reason.Errors, (e: any) => e.ErrorCode == 'InvalidPhoneFormat')) {
-                                            this.Errors.InvalidPhoneFormatError = true;
-                                        }
-                                        
-                                        processAddingNewShippingAddress.resolve(false);
-                                    });
+                                    self.checkoutService.saveAddressToMyAccountAddressBook(addressData)
+                                        .then(address => {
+                                            address.RegionName = this.ShippingAddress.RegionName;
+                                            this.changeRegisteredShippingAddress(address.Id);
+                                        })
+                                        .fail((reason) => {
+                                            console.log(reason);
+                                            if (reason.Errors && _.find(reason.Errors, (e: any) => e.ErrorCode == 'NameAlreadyUsed')) {
+                                                this.Errors.AddressNameAlreadyInUseError = true;
+                                            }
+                                            if (reason.Errors && _.find(reason.Errors, (e: any) => e.ErrorCode == 'InvalidPhoneFormat')) {
+                                                this.Errors.InvalidPhoneFormatError = true;
+                                            }
+                                        });
                                 } else {
-                                    processAddingNewShippingAddress.resolve(false);
+                                    //
                                 }
                             })
-
-                        } else {
-                            processAddingNewShippingAddress.resolve(false);
-                        }
-
-                        return processAddingNewShippingAddress.promise;
                     },
 
                     changeRegisteredShippingAddress(addressId, addingNewAddressPromise = null) {
@@ -104,17 +109,15 @@ module Orckestra.Composer {
                                     }
                                 }).fail((reason) => {
                                     console.log(reason);
-                                   
+
                                     if (addingNewAddressPromise) {
                                         addingNewAddressPromise.resolve(false);
                                     }
                                 });
                             }, 500);
                         }
-
                         this.debounceChangeRegisteredShippingAddress(addingNewAddressPromise);
                     }
-
                 }
             };
 

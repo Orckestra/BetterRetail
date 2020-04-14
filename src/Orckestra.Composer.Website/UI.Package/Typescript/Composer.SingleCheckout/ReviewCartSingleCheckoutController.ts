@@ -19,7 +19,7 @@ module Orckestra.Composer {
                 },
                 computed: {
                     FulfilledCart() {
-                        return !!(this.FulfilledShipping && this.Steps.EnteredOnce.Shipping);
+                        return !!(this.Steps.EnteredOnce.Shipping);
                     },
                 },
                 methods: {

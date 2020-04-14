@@ -122,13 +122,12 @@ module Orckestra.Composer {
                     },
 
                     billingAddressModified() {
-                        let keys = _.keys(this.BillingAddress);
-                        let dataToCompare = this.BillingAddress.UseShippingAddress ? this.ShippingAddress: this.BillingAddress;
-                        dataToCompare.UseShippingAddress = this.BillingAddress.UseShippingAddress;
+                        let keys = _.keys(this.BillingAddress).filter(k => k != 'UseShippingAddress');
+                        let dataToCompare = this.BillingAddress.UseShippingAddress ? this.ShippingAddress : this.BillingAddress;
                         return this.BillingAddress && _.some(keys, (key) => this.billingAddressBeforeEdit[key] != dataToCompare[key]);
                     },
 
-                    addNewBillingAddressMode() {
+                    addNewBillingAddress() {
                         this.Mode.AddingNewAddress = true;
                         this.clearBillingAddress();
                     },
@@ -140,7 +139,7 @@ module Orckestra.Composer {
                         }
                     },
                     clearBillingAddress() {
-                        this.Mode.AddingLine2Address = false;
+                        this.Mode.AddingLine2Address = true;
 
                         let { FirstName, LastName, CountryCode, UseShippingAddress } = this.Cart.Payment.BillingAddress;
                         this.Cart.Payment.BillingAddress = {
