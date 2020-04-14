@@ -15,6 +15,7 @@
 ///<reference path='../Composer.Cart/CheckoutPayment/Providers/CheckoutPaymentProviderFactory.ts' />
 ///<reference path='./ISingleCheckoutService.ts' />
 ///<reference path='./ISingleCheckoutContext.ts' />
+///<reference path='../Composer.MyAccount/Common/CustomerService.ts' />
 
 module Orckestra.Composer {
     'use strict';
