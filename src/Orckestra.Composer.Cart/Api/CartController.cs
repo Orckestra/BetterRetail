@@ -162,10 +162,11 @@ namespace Orckestra.Composer.Cart.Api
             SetHomepageUrl(updateCartResultViewModel.Cart, homepageUrl);
             SetEditCartUrl(updateCartResultViewModel.Cart);
 
-            if (updateCartResultViewModel.Cart.OrderSummary != null && updateCartRequest.CurrentStep.HasValue)
+            if (updateCartResultViewModel.Cart.OrderSummary != null)
             {
                 var checkoutStepInfos = CartUrlProvider.GetCheckoutStepPageInfos(getCartUrlParam);
                 updateCartResultViewModel.Cart.OrderSummary.CheckoutStepUrls = checkoutStepInfos.Values.Select(x => x.Url).ToList();
+                updateCartResultViewModel.Cart.OrderSummary.CheckoutUrlTarget = GetCheckoutUrl();
             }
 
             if (!updateCartResultViewModel.HasErrors && updateCartRequest.CurrentStep.HasValue)
