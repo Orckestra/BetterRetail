@@ -72,7 +72,6 @@
         <Directory sourceDirectory="~\UI.Package\Typescript\" targetDirectory="~\UI.Package\Typescript\" allowOverwrite="true" deleteTargetDirectory="false" />
         <Directory sourceDirectory="~\UI.Package\Typings\" targetDirectory="~\UI.Package\Typings\" allowOverwrite="true" deleteTargetDirectory="false" />
         <Directory sourceDirectory="~\UI.Package\Fonts\" targetDirectory="~\UI.Package\Fonts\" allowOverwrite="true" deleteTargetDirectory="false" />
-        <Directory sourceDirectory="~\UI.Package\Vue\" targetDirectory="~\UI.Package\Vue\" allowOverwrite="true" deleteTargetDirectory="false" />
         <!--Directory sourceDirectory="~\Bin\" targetDirectory="~\Bin\" allowOverwrite="true" deleteTargetDirectory="false" /-->
         <Directory sourceDirectory="~\App_Config\" targetDirectory="~\App_Config\" allowOverwrite="true" deleteTargetDirectory="false" />
         <Directory sourceDirectory="~\App_Data\" targetDirectory="~\App_Data\" allowOverwrite="true" deleteTargetDirectory="false" />
