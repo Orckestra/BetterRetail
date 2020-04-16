@@ -6,12 +6,18 @@
   "adminPassword": "",
   "adminEmail": "build-bot@orckestra.com",
 
-  "C1Url": "https://github.com/Orckestra/C1-CMS-Foundation/releases/download/v6.8/C1.CMS.6.8.zip",
+  //"C1Url": "https://github.com/Orckestra/C1-CMS-Foundation/releases/download/v6.8/C1.CMS.6.8.zip",
+  "C1Url": "http://core03.orckestra.local/TrunkBuild_20191224.1/Composite%20C1%20VS2015_6.8.7297.21838_TrunkBuild_20191224.1_dev.zip",
 
   "websiteSuffix": "{{new System.IO.DirectoryInfo(rootPath).Name}}",
   "websiteName": "composer-c1-{websiteSuffix}.develop.orckestra.cloud",
   "websiteUrl": "https://{websiteName}",
 
   "setupDescription": "{{$\"{rootPath}/build/configuration/SetupDescription.xml\"}}",
-  "baseCulture": "en-CA"
+  "baseCulture": "en-CA",
+
+  "occ-hostName": "occ-dev-localdeployment",
+  "serviceBus-keyName": "RootManageSharedAccessKey",
+  "serviceBus-key": "***REMOVED***",
+  "serviceBus-topicPrefix": "***REMOVED***"
 }

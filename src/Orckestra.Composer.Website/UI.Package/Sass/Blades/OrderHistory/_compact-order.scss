@@ -1,0 +1,51 @@
+.compact-order {
+  $order-padding: 20px;
+  padding-top: $order-padding;
+  padding-bottom: $order-padding;
+
+  @include media-breakpoint-down(sm) {
+    border: solid 1px gray("200");
+    border-radius: $border-radius-sm;
+    padding: $order-padding;
+    margin-bottom: $order-padding;
+  }
+
+  @include media-breakpoint-up(md) {
+    border: solid 1px gray("400");
+    padding: 20px;
+  }
+  &-date {
+    margin-bottom: 20px;
+  }
+  &-total {
+    text-align: center;
+
+    @include media-breakpoint-up(md) {
+      text-align: right;
+    }
+  }
+  &-status {
+    display: inline-block;
+    font-weight: bold;
+    &::first-letter {
+      text-transform: uppercase;
+    }
+  }
+  &-splitter {
+    margin-top: 15px;
+    margin-top: 15px;
+  }
+
+  &-header {
+    border-bottom: 1px solid gray("200");
+  }
+
+  &-body {
+    padding-top: 20px;
+  }
+
+  hr {
+    margin: 10px 0;
+  }
+}
+

@@ -16,20 +16,20 @@
   <files>
     <file src="Build\nuspec\App_Readme\*" target="content\App_Readme\" />
 	
-    <file src="src\Composer\UI.Package\**\*" target="UI.Package\" />
-    <file src="src\Composer\Composer\bin\Release\Orckestra.Composer.dll" target="lib\net471" />
-    <file src="src\Composer\Composer.Cart\bin\Release\Orckestra.Composer.Cart.dll" target="lib\net471" />
-    <file src="src\Composer\Composer.MyAccount\bin\Release\Orckestra.Composer.MyAccount.dll" target="lib\net471" />
-    <file src="src\Composer\Composer.Product\bin\Release\Orckestra.Composer.Product.dll" target="lib\net471" />
-    <file src="src\Composer\Composer.Search\bin\Release\Orckestra.Composer.Search.dll" target="lib\net471" />
-    <file src="src\Composer\Composer.Store\bin\Release\Orckestra.Composer.Store.dll" target="lib\net471" />
-    <file src="src\Composer\Composer.Store\bin\Release\Orckestra.Composer.Store.dll" target="lib\net471" />
-    <file src="src\Composer\Orckestra.Composer.SearchQuery\bin\Release\Orckestra.Composer.SearchQuery.dll" target="lib\net471" />
-	<file src="src\Composer.CompositeC1\Orckestra.Composer.Sitemap\bin\Release\Orckestra.Composer.Sitemap.dll" target="lib\net471" />
+    
+    <file src="src\Orckestra.Composer\bin\Release\Orckestra.Composer.dll" target="lib\net471" />
+    <file src="src\Orckestra.Composer.Cart\bin\Release\Orckestra.Composer.Cart.dll" target="lib\net471" />
+    <file src="src\Orckestra.Composer.MyAccount\bin\Release\Orckestra.Composer.MyAccount.dll" target="lib\net471" />
+    <file src="src\Orckestra.Composer.Product\bin\Release\Orckestra.Composer.Product.dll" target="lib\net471" />
+    <file src="src\Orckestra.Composer.Search\bin\Release\Orckestra.Composer.Search.dll" target="lib\net471" />
+    <file src="src\Orckestra.Composer.Store\bin\Release\Orckestra.Composer.Store.dll" target="lib\net471" />
+    <file src="src\Orckestra.Composer.Store\bin\Release\Orckestra.Composer.Store.dll" target="lib\net471" />
+    <file src="src\Orckestra.Composer.SearchQuery\bin\Release\Orckestra.Composer.SearchQuery.dll" target="lib\net471" />
+	<file src="src\Orckestra.Composer.Sitemap\bin\Release\Orckestra.Composer.Sitemap.dll" target="lib\net471" />
 	
-    <file src="src\Composer.CompositeC1\Composer.CompositeC1.Mvc\bin\Orckestra.Composer.CompositeC1.dll" target="lib\net471" />
-    <file src="src\Composer.CompositeC1\Composer.CompositeC1.Mvc\bin\Orckestra.Composer.CompositeC1.*.dll" target="lib\net471" exclude="src\Composer.CompositeC1\Composer.CompositeC1.Mvc\bin\Orckestra.Composer.CompositeC1.Mvc.dll" />
-    <file src="src\Composer.CompositeC1\Composer.CompositeC1.Mvc\StartupHandler.cs" target="src" />
-
+    <file src="src\Orckestra.Composer.Website\bin\Orckestra.Composer.CompositeC1.dll" target="lib\net471" />
+    <file src="src\Orckestra.Composer.Website\bin\Orckestra.Composer.CompositeC1.*.dll" target="lib\net471" exclude="src\Orckestra.Composer.Website\bin\Orckestra.Composer.Website.dll" />
+    <file src="src\Orckestra.Composer.Website\StartupHandler.cs" target="src" />
+    <file src="src\Orckestra.Composer.Website\UI.Package\**\*" target="UI.Package\" />
   </files>
 </package>

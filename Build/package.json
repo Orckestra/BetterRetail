@@ -1,0 +1,20 @@
+{
+  "name": "occ-starter-site",
+  "version": "1.0.1",
+  "description": "Client-side for Orckestra Commerce Cloud Starter Site",
+  "repository": "https://orckestra001.visualstudio.com/DefaultCollection/OrckestraCommerce/_git/ExperienceManagement",
+  "author": "Orckestra A/S",
+  "license": "ISC",
+  "devDependencies": {
+    "jasmine-core": "3.5.0",
+    "karma": "4.4.1",
+    "karma-chrome-launcher": "3.1.0",
+    "karma-cli": "2.0.0",
+    "karma-jasmine": "3.1.1",
+    "karma-phantomjs-launcher": "1.0.4",
+    "karma-sinon": "1.0.5",
+    "karma-spec-reporter": "0.0.32",
+    "karma-junit-reporter": "2.0.1",
+    "sinon": "1.17.3"
+  }
+}

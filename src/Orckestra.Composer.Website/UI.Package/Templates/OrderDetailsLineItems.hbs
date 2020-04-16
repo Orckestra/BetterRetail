@@ -1,0 +1,39 @@
+ <div data-templateid="OrderDetailsLineItems">
+     <div class="card-header d-none d-sm-block">
+        <div class="row">
+            <div class="col-2  text-center">
+                {{localize 'MyAccount' 'L_OrderLineItemProductsTitle'}}
+            </div>
+            <div class="col-10">
+                <div class="row  xs-full">
+                    <div class="col-4 small">
+
+                    </div>
+
+                    <div class="d-sm-block col-2 text-md-right  d-none">
+                        <div class="small">
+                            {{localize 'MyAccount' 'L_UnitPrice'}}
+                        </div>
+                    </div>
+
+                    <div class="col-2 text-md-center">
+                        <div class="small">
+                            {{localize 'MyAccount' 'L_Quantity'}}
+                        </div>
+                    </div>
+
+                    <div class="col-4 text-md-right">
+                        <div class="small">
+                            {{localize 'MyAccount' 'L_Subtotal'}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">        
+        {{#each LineItems}}
+            {{>OrderDetailsLineItem}}
+        {{/each}}
+    </div>
+</div>

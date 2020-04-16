@@ -1,0 +1,92 @@
+@inherits RazorFunction
+@using Orckestra.Composer.CompositeC1.Services;
+@using Orckestra.Composer.Services;
+@using Orckestra.ExperienceManagement.Configuration;
+
+
+@functions {
+    public IPageService PageService { get; set; }
+    public IComposerContext ComposerContext { get; set; }
+    public ISiteConfiguration SiteConfiguration { get; set; }
+
+    [FunctionParameter(Label = "Autocomplete", Help = "Enable autocomplete suggestions", DefaultValue = false)]
+    public bool Autocomplete { get; set; }
+
+    [FunctionParameter(Label = "Categories", Help = "Enable categories suggestions", DefaultValue = true)]
+    public bool Categories { get; set; }
+
+    [FunctionParameter(Label = "Brands", Help = "Enable brands suggestions", DefaultValue = true)]
+    public bool Brands { get; set; }
+
+    [FunctionParameter(Label = "SearchTerms", Help = "Enable search terms suggestions", DefaultValue = true)]
+    public bool SearchTerms { get; set; }
+
+    [FunctionParameter(Label = "MaxProductsAutocompleteCount", Help = "Maximum autocomplete result count", DefaultValue = 8)]
+    public int MaxProductsAutocompleteCount { get; set; }
+
+    [FunctionParameter(Label = "MaxSearchTermsSuggestionsCount", Help = "Maximum search terms suggestions count", DefaultValue = 5)]
+    public int MaxSearchTermsSuggestionsCount { get; set; }
+
+    [FunctionParameter(Label = "MaxCategoriesSuggestionsCount", Help = "Maximum categories suggestions count", DefaultValue = 4)]
+    public int MaxCategoriesSuggestionsCount { get; set; }
+
+    [FunctionParameter(Label = "MaxBrandSuggestionsCount", Help = "Maximum brand suggestions count", DefaultValue = 3)]
+    public int MaxBrandSuggestionsCount { get; set; }
+}
+
+@{
+    var cultureInfo = ComposerContext.CultureInfo;
+    var searchPageId = SiteConfiguration.GetPagesConfiguration().SearchPageId;
+
+    var keywords = Request.QueryString["keywords"] ?? string.Empty;
+    var actionTarget = PageService.GetRendererPageUrl(searchPageId, cultureInfo);
+    var dataController = Autocomplete ? "General.AutocompleteSearchBox" : "General.SearchBox";
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<head>
+</head>
+<body>
+    <div id="search-box" class="search-box" data-oc-controller="@dataController"
+         data-categories-enable="@Categories"
+         data-brands-enable="@Brands"
+         data-search-terms-enable="@SearchTerms"
+         data-autocomplete-limit="@MaxProductsAutocompleteCount"
+         data-search-terms-limit="@MaxSearchTermsSuggestionsCount"
+         data-categories-limit="@MaxCategoriesSuggestionsCount"
+         data-brand-limit="@MaxBrandSuggestionsCount">
+        <form method="GET" action="@actionTarget" id="frm-search-box">
+  
+
+            <div class="form-row">
+                <div class="col-12  col-xl-9 offset-xl-3">
+                    <div class="input-group input-group-sm">
+                        <input id="search-input" data-qa="search-input"
+                               class="form-control form-control-sm js-typeahead" type="search" name="keywords"
+                               placeholder="@Html.Localize("List-Search", "F_SearchWaterMark")" value="@keywords"
+                               required="required"
+                               data-parsley-required-message=""
+                               data-parsley-antixss="true"
+                               data-parsley-antixss-message="@Html.Localize("Errors", "L_InvalidCharsInSearchBox")"
+                               data-parsley-class-handler-selector="form"
+                               data-parsley-errors-container="#search-errors" />
+                        <div class="input-group-append input-group-append-sm">
+                            <button data-qa="search-button"
+                                    class="btn btn-outline-secondary  border-0"
+                                    title="@Html.Localize("List-Search", "B_Search")"
+                                    type="submit">
+                                <span class="fa  fa-search"></span>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="search-errors" class="invalid-feedback">
+                    </div>
+                </div>
+                
+
+                
+            </div>
+        </form>
+    </div>
+</body>
+</html>

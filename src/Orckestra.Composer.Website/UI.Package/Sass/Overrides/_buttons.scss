@@ -1,0 +1,27 @@
+.btn {
+    &.disabled,
+    &:disabled,
+    fieldset[disabled] & {
+        opacity: 0.5;
+    }
+    white-space: normal;
+}
+
+button, a {
+    &[aria-expanded="true"] {
+        .fa-caret-up {
+            display: inline;
+        }
+        .fa-caret-down {
+            display: none;
+        }
+    }
+    &[aria-expanded="false"] {
+        .fa-caret-up {
+            display: none;
+        }
+        .fa-caret-down {
+          display: inline;  
+        }
+    }
+}

@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Data>
+  <Add Id="678773af-4437-47a5-aa40-8eaa8385bd0b" Title="Oldest to Newest" IsReverted="False" FieldName="lastupdated" Order="4" SourceCultureName="fr-CA" />
+  <Add Id="84d8a89b-2e3d-4f44-be06-6cf15965c8a9" Title="Z to A" IsReverted="True" FieldName="label" Order="2" SourceCultureName="fr-CA" />
+  <Add Id="8e99737f-37cb-4782-81ce-5ba330e47515" Title="Newest to Oldest" IsReverted="True" FieldName="lastupdated" Order="3" SourceCultureName="fr-CA" />
+  <Add Id="960d02c3-499c-400d-9f38-4365b3d14ea0" Title="A to Z" IsReverted="False" FieldName="label" Order="1" SourceCultureName="fr-CA" />
+</Data>

@@ -1,0 +1,24 @@
+<div data-templateid="RecurringScheduleDetailsAddresses" class="card">
+    {{#if IsLoading}}
+        {{>Loading}}
+    {{else}}
+        <div class="card-header">
+            <div class="row">
+                <div class="col-10">
+                    <h5>{{localize 'MyAccount' 'T_Addresses' }}</h5>
+                </div>
+                <div class="col-2">
+                    <button class="btn btn-link float-right invisible" type="button" 
+                    title="{{localize 'CheckoutProcess' 'B_Edit'}}">
+                        <span class="fa  fa-pencil  fa-lg"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">            
+            {{> RecurringCartShippingAddressRegistered}}
+            <br />
+            {{> RecurringScheduleBillingAddressRegistered}}   
+        </div>
+    {{/if}}   
+</div>

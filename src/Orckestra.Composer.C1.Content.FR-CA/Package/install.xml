@@ -1,0 +1,91 @@
+<?xml version="1.0" standalone="yes"?>
+<mi:PackageInstaller xmlns:mi="http://www.composite.net/ns/management/packageinstaller/1.0">
+  <mi:PackageRequirements minimumCompositeVersion="4.3.5611.30389" maximumCompositeVersion="9.9999.9999.9999" />
+  <mi:PackageInformation name="Orckestra.Composer.C1.Content.FR_CA" groupName="Composer" version="1.0.0" author="Orckestra" website="http://composer-c1-cm-dev.orckestra.local/" readMoreUrl="http://composer-c1-cm-dev.orckestra.local/" id="f77d9b8c-2990-4965-902d-ee4db85bcbe3" canBeUninstalled="true" systemLocking="hard" flushOnCompletion="false">
+    <TechnicalDetails>NT</TechnicalDetails>
+    <Description>NT</Description>
+  </mi:PackageInformation>
+  <mi:PackageFragmentInstallerBinaries />
+
+  <mi:PackageFragmentInstallers>
+    <mi:Add installerType="Composite.Core.PackageSystem.PackageFragmentInstallers.DataPackageFragmentInstaller, Composite" uninstallerType="Composite.Core.PackageSystem.PackageFragmentInstallers.DataPackageFragmentUninstaller, Composite">
+      <Types>
+        <Type type="Composite.Data.Types.IPage,Composite">
+          <Data dataScopeIdentifier="administrated" locale="fr-CA" dataFilename="~\Datas\Composite.Data.Types.IPages_administrated.xml" />
+        </Type>
+        <Type type="Composite.Data.Types.IPage,Composite">
+          <Data dataScopeIdentifier="public" locale="fr-CA" dataFilename="~\Datas\Composite.Data.Types.IPages_public.xml" />
+        </Type>
+
+        <Type type="Composite.Data.Types.IPagePlaceholderContent,Composite">
+          <Data dataScopeIdentifier="administrated" locale="fr-CA" dataFilename="~\Datas\Composite.Data.Types.IPagePlaceholderContents_administrated.xml" />
+        </Type>
+        <Type type="Composite.Data.Types.IPagePlaceholderContent,Composite">
+          <Data dataScopeIdentifier="public" locale="fr-CA" dataFilename="~\Datas\Composite.Data.Types.IPagePlaceholderContents_public.xml" />
+        </Type>
+
+        <Type type="Orckestra.Composer.CompositeC1.DataTypes.UrlTarget,Orckestra.Composer.CompositeC1.DataTypes">
+          <Data dataScopeIdentifier="public" locale="fr-CA" dataFilename="~\Datas\Composite.Data.Types.TargetUrlElements_public.xml" />
+          <Data dataScopeIdentifier="administrated" locale="fr-CA" dataFilename="~\Datas\Composite.Data.Types.TargetUrlElements_public.xml" />
+        </Type>
+        <Type type="Orckestra.Composer.CompositeC1.DataTypes.CssStyle,Orckestra.Composer.CompositeC1.DataTypes">
+          <Data dataScopeIdentifier="public" locale="fr-CA" dataFilename="~\Datas\Composite.Data.Types.CssStyleElements_public.xml" />
+          <Data dataScopeIdentifier="administrated" locale="fr-CA" dataFilename="~\Datas\Composite.Data.Types.CssStyleElements_public.xml" />
+        </Type>
+        <Type type="Orckestra.Composer.CompositeC1.DataTypes.Navigation.MainMenu,Orckestra.Composer.CompositeC1.DataTypes">
+          <Data dataScopeIdentifier="public" locale="fr-CA" dataFilename="~\Datas\Composite.Data.Types.Navigation.NavigationElements.Header_public.xml" />
+          <Data dataScopeIdentifier="administrated" locale="fr-CA" dataFilename="~\Datas\Composite.Data.Types.Navigation.NavigationElements.Header_public.xml" />
+        </Type>
+        <Type type="Orckestra.Composer.CompositeC1.DataTypes.Navigation.StickyHeader,Orckestra.Composer.CompositeC1.DataTypes">
+          <Data dataScopeIdentifier="public" locale="fr-CA" dataFilename="~\Datas\Composite.Data.Types.Navigation.NavigationElements.StickyHeader_public.xml" />
+          <Data dataScopeIdentifier="administrated" locale="fr-CA" dataFilename="~\Datas\Composite.Data.Types.Navigation.NavigationElements.StickyHeader_public.xml" />
+        </Type>
+        <Type type="Orckestra.Composer.CompositeC1.DataTypes.Navigation.FooterOptionalLink,Orckestra.Composer.CompositeC1.DataTypes">
+          <Data dataScopeIdentifier="public" locale="fr-CA" dataFilename="~\Datas\Composite.Data.Types.Navigation.FooterOptionalLink_public.xml" />
+          <Data dataScopeIdentifier="administrated" locale="fr-CA" dataFilename="~\Datas\Composite.Data.Types.Navigation.FooterOptionalLink_public.xml" />
+        </Type>
+        <Type type="Orckestra.Composer.CompositeC1.DataTypes.Navigation.Footer,Orckestra.Composer.CompositeC1.DataTypes">
+          <Data dataScopeIdentifier="public" locale="fr-CA" dataFilename="~\Datas\Composite.Data.Types.Navigation.NavigationElements.Footer_public.xml" />
+          <Data dataScopeIdentifier="administrated" locale="fr-CA" dataFilename="~\Datas\Composite.Data.Types.Navigation.NavigationElements.Footer_public.xml" />
+        </Type>
+         <Type type="Orckestra.ExperienceManagement.Configuration.DataTypes.ISiteConfigurationMeta,Orckestra.ExperienceManagement.Configuration">
+          <Data dataScopeIdentifier="administrated" locale="fr-CA" dataFilename="~\Datas\Orckestra.ExperienceManagement.Configuration.DataTypes.ISiteConfigurations_administrated.xml" />
+        </Type>
+        <Type type="Orckestra.ExperienceManagement.Configuration.DataTypes.ISiteConfigurationMeta,Orckestra.ExperienceManagement.Configuration">
+          <Data dataScopeIdentifier="public" locale="fr-CA" dataFilename="~\Datas\Orckestra.ExperienceManagement.Configuration.DataTypes.ISiteConfigurations_public.xml" />
+        </Type>
+        <Type type="Orckestra.Composer.CompositeC1.DataTypes.RecurringOrdersSettings,Orckestra.Composer.CompositeC1.DataTypes">
+					<Data dataScopeIdentifier="administrated" locale="fr-CA" dataFilename="~\Datas\Orckestra.Composer.CompositeC1.DataTypes.RecurringOrdersSettingss_administrated.xml" />
+				</Type>
+				<Type type="Orckestra.Composer.CompositeC1.DataTypes.RecurringOrdersSettings,Orckestra.Composer.CompositeC1.DataTypes">
+					<Data dataScopeIdentifier="public" locale="fr-CA" dataFilename="~\Datas\Orckestra.Composer.CompositeC1.DataTypes.RecurringOrdersSettingss_public.xml" />
+				</Type>
+        <Type type="Orckestra.Composer.CompositeC1.DataTypes.IWebsiteStyleTheme,Orckestra.Composer.CompositeC1.DataTypes">
+          <Data dataScopeIdentifier="administrated" locale="fr-CA" dataFilename="~\Datas\Orckestra.Composer.CompositeC1.DataTypes.IWebsiteStyleThemes_administrated.xml" />
+        </Type>
+        <Type type="Orckestra.Composer.CompositeC1.DataTypes.IWebsiteStyleTheme,Orckestra.Composer.CompositeC1.DataTypes">
+          <Data dataScopeIdentifier="public" locale="fr-CA" dataFilename="~\Datas\Orckestra.Composer.CompositeC1.DataTypes.IWebsiteStyleThemes_public.xml" />
+        </Type>
+
+        <Type type="Orckestra.Composer.CompositeC1.DataTypes.GoogleSettings,Orckestra.Composer.CompositeC1.DataTypes">
+          <Data dataScopeIdentifier="administrated" locale="fr-CA" dataFilename="~\Datas\Orckestra.Composer.CompositeC1.DataTypes.GoogleSettingss_administrated.xml" />
+        </Type>
+        <Type type="Orckestra.Composer.CompositeC1.DataTypes.GoogleSettings,Orckestra.Composer.CompositeC1.DataTypes">
+          <Data dataScopeIdentifier="public" locale="fr-CA" dataFilename="~\Datas\Orckestra.Composer.CompositeC1.DataTypes.GoogleSettingss_public.xml" />
+        </Type>
+
+        <!-- Content Search -->
+        <Type type="Orckestra.Composer.ContentSearch.DataTypes.ISortOption,Orckestra.Composer.ContentSearch">
+          <Data dataScopeIdentifier="public" locale="fr-CA" dataFilename="~\Datas\Orckestra.Composer.ContentSearch.DataTypes.ISortOptions_public.xml" />
+        </Type>
+        <Type type="Orckestra.Composer.ContentSearch.DataTypes.IContentTab,Orckestra.Composer.ContentSearch">
+          <Data dataScopeIdentifier="administrated" locale="fr-CA" dataFilename="~\Datas\Orckestra.Composer.ContentSearch.DataTypes.IContentTabs_administrated.xml" />
+        </Type>
+        <Type type="Orckestra.Composer.ContentSearch.DataTypes.IContentTab,Orckestra.Composer.ContentSearch">
+          <Data dataScopeIdentifier="public" locale="fr-CA" dataFilename="~\Datas\Orckestra.Composer.ContentSearch.DataTypes.IContentTabs_public.xml" />
+        </Type>
+        
+      </Types>
+    </mi:Add>
+  </mi:PackageFragmentInstallers>
+</mi:PackageInstaller>

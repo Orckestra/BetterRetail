@@ -1,0 +1,9 @@
+<div data-oc-controller="Orders.CurrentOrders">
+    <div class="card">
+        <h5 class="card-header">{{localize 'MyAccount' 'T_CurrentOrders' }}</h5>
+        <div class="card-body">
+            {{>CurrentOrders}}
+        </div>
+    </div>
+    {{> OrderHistoryPagination }}
+</div>

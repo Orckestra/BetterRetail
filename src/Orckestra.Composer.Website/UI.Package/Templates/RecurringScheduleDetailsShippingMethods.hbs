@@ -1,0 +1,49 @@
+<div data-templateid="RecurringScheduleDetailsShippingMethods" class="card">
+    {{#if IsLoading}}
+        {{>Loading}}
+    {{else}}
+        <div class="card-header">
+            <div class="row">
+                <div class="col-10">
+                    <h5>{{localize 'MyAccount' 'T_ShippingMethod' }}</h5>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            {{#if ShippingMethods}}
+            {{!-- <p>{{localize 'CheckoutProcess' 'F_ShippingSelection'}}</p> --}}
+            <div class="row">
+                <div class="col-md-6">
+                    <form id="ShippingMethod" data-oc-submit="preventFormSubmit" method="post" autocomplete="on">
+                        <input type="hidden" id="ShippingProviderId" name="ShippingProviderId" value="{{ShippingMethods.SelectedShippingProviderId}}" />
+                        {{#each ShippingMethods.ShippingMethods }}
+                            <div class="form-group">
+                                <label class="select-block {{#if_eq Name ../SelectedMethod}} active {{/if_eq}}" data-qa="checkout-shipping-method" data-parent=".card-body">
+                                    <span class="input-addon">
+                                        <input {{#if_eq Name ../SelectedMethod}} checked="checked" {{/if_eq}} data-parsley-class-handler-selector=".card-body" data-parsley-errors-container="#method-errors" 
+                                        class="input" data-oc-change="methodSelected" type="radio" name="ShippingMethod" value="{{Name}}" 
+                                        data-shipping-provider-id="{{ShippingProviderId}}" required="true"                     
+                                        data-shipping-method-display-name="{{DisplayName}}"
+                                        data-selected-shipping-method-name="{{Name}}"/>
+                                    </span>
+                                    <span class="content">
+                                        {{DisplayName}}
+                                    </span>
+                                </label>
+                            </div>
+                        {{/each}}
+
+                        <div id="method-errors"></div>
+                    </form>
+                </div>
+            </div>      
+            {{else}}
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <p>{{localize 'General' 'P_ShippingMethodLoadErrorMessage' }}</p>
+                </div>
+            </div>
+            {{/if}}
+        </div>
+    {{/if}}   
+</div>

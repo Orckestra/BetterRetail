@@ -15,6 +15,7 @@
 #load "helpers/cakeconfig.cake"
 #load "helpers/process.cake"
 #load "helpers/symboliclink.cake"
+#load "helpers/formating.cake"
 
 using System.Diagnostics;
 using System.Xml.Linq;
@@ -54,7 +55,8 @@ else
 
 var rootDir = MakeAbsolute(DirectoryPath.FromString("..")).FullPath;
 var outputDir = $"{rootDir}/output";
-var C1File = $"{outputDir}/C1.zip";
+var cacheDir = $"{rootDir}/Build/.cache";
+var C1File = $"{cacheDir}/C1.zip";
 
 var deploymentDir = $"{rootDir}/deployment";
 var websiteDir = $"{deploymentDir}/Website";
@@ -170,10 +172,49 @@ Task("Kill-Processes").Does(() =>
 
 
 #region Install-C1
-
 Task("Download-C1").Does(() =>
 {
-    DownloadFile(Parameters["C1Url"], C1File);
+    string url = Parameters["C1Url"];
+    string downloadingMessage = $"Downloading C1 CMS by the URL {url}.";
+    bool getInfoRes = GetServerFileInfo(url, out DateTime modifiedOnServer, out long sizeOnServer);
+    if (getInfoRes == false)
+    {
+        Information(downloadingMessage);
+        CreateDirectory(FilePath.FromString(C1File).GetDirectory());
+        DownloadFile(url, C1File); 
+        return;
+    }
+    
+    if (!System.IO.File.Exists(C1File))
+    {
+        Information($"Cannot find C1 CMS on path {C1File}.");
+        Information(downloadingMessage);
+        CreateDirectory(FilePath.FromString(C1File).GetDirectory());
+        DownloadFile(url, C1File);
+        Information($"File modified on the server on {FormatDate(modifiedOnServer)}");
+        System.IO.File.SetLastWriteTime(C1File, modifiedOnServer);
+        return;
+    }
+
+    FileInfo fi = new System.IO.FileInfo(C1File);
+    DateTime modifiedLocal = fi.LastWriteTime;
+    long sizeLocal = fi.Length;
+
+    if (modifiedLocal != modifiedOnServer || sizeLocal != sizeOnServer)
+    {
+        Information($"Server file modification timestamp: {FormatDate(modifiedOnServer)}");
+        Information($"Local file modification timestamp: {FormatDate(modifiedLocal)}");
+        Information($"Server file size: {sizeOnServer}");
+        Information($"Local file size: {sizeLocal}");
+        Information(downloadingMessage);
+        DownloadFile(url, C1File);
+        System.IO.File.SetLastWriteTime(C1File, modifiedOnServer);
+        return;
+    }
+    else
+    {
+       Information($"Last C1 CMS file with {sizeLocal} size and {FormatDate(modifiedLocal)} modification timestamp was found by the local path {C1File}"); 
+    }
 });
 
 Task("Unpack-C1").Does(() =>
@@ -340,7 +381,7 @@ Task("Patch-ExperienceManagement-Config")
 Task("Install-Secondary-Language").Does(() => 
 {
     var autoInstallDir = $"{websiteDir}/App_Data/Composite/AutoInstallPackages";
-    var sourcePackage = $"{outputDir}/artifacts/Composer.C1.Content.FR-CA.zip";
+    var sourcePackage = $"{outputDir}/artifacts/Orckestra.Composer.C1.Content.FR-CA.zip";
     
     CreateDirectory(autoInstallDir);
     CopyFiles(sourcePackage, autoInstallDir);
@@ -356,11 +397,11 @@ Task("Install-Secondary-Language").Does(() =>
 
 Task("Patch-csproj.user").Does(() =>
 {
-    var userFile = $"{rootDir}/build/configuration/Composer.CompositeC1.Mvc.csproj.user";
+    var userFile = $"{rootDir}/build/configuration/Orckestra.Composer.Website.csproj.user";
     var content = System.IO.File.ReadAllText(userFile);
     content = content.Replace("{CustomServerUrl}", Parameters["websiteUrl"]);
 
-    var dest = $"{rootDir}/src/Composer.CompositeC1/Composer.CompositeC1.Mvc/Composer.CompositeC1.Mvc.csproj.user";
+    var dest = $"{rootDir}/src/Orckestra.Composer.Website/Orckestra.Composer.Website.csproj.user";
     if (FileExists(dest))
     {
         DeleteFile(dest);
@@ -371,7 +412,12 @@ Task("Patch-csproj.user").Does(() =>
 
 Task("Configure-Symbolic-Links").Does(() =>
 {
-    ReplaceDirWithSymbolicLink($"{websiteDir}/UI.Package/Sass", $"{rootDir}/src/Composer/Composer.UI/Source/Sass");
+	StopPool(localSiteName);
+    ReplaceDirWithSymbolicLink($"{websiteDir}/UI.Package/Sass", $"{rootDir}/src/Orckestra.Composer.Website/UI.Package/Sass");
+	ReplaceDirWithSymbolicLink($"{websiteDir}/UI.Package/Templates", $"{rootDir}/src/Orckestra.Composer.Website/UI.Package/Templates");
+	ReplaceDirWithSymbolicLink($"{websiteDir}/UI.Package/LocalizedStrings", $"{rootDir}/src/Orckestra.Composer.Website/UI.Package/LocalizedStrings");
+	ReplaceDirWithSymbolicLink($"{websiteDir}/UI.Package/Typescript", $"{rootDir}/src/Orckestra.Composer.Website/UI.Package/Typescript");
+	StartPool(localSiteName);
 });
 
 Task("Modify-Configs-For-Debug").Does(() =>
@@ -391,6 +437,26 @@ Task("Modify-Configs-For-Debug").Does(() =>
 Task("Open-Website").Does(() =>
 {
     Process.Start($"{Parameters["websiteUrl"]}/Composite/top.aspx");
+});
+
+
+Task("Link-Razor").Does(() =>
+{
+    Information("Link-Razor task");
+   
+	var srcRazorDir = $"{rootDir}/src/Orckestra.Composer.Website/App_Data/Razor";
+    var targetRazorPath = new DirectoryPath($"{deploymentDir}/Website/App_Data/Razor");
+    var srcRazorPath = new DirectoryPath(srcRazorDir);
+    var files = GetFiles($"{srcRazorDir}/**/*.cshtml");
+    foreach(var file in files)
+    {
+        var razorFile = srcRazorPath.GetRelativePath(file);
+        var targetFile = targetRazorPath.CombineWithFilePath(razorFile);
+        
+        Information("RazorFile: {0}", razorFile);
+        ReplaceFileWithHardLink(targetFile.FullPath, file.FullPath);
+   }
+
 });
 
 
@@ -432,7 +498,9 @@ Task("Configure-Local-Debug")
     .IsDependentOn("Load-CakeConfig")
     .IsDependentOn("Patch-csproj.user")
     .IsDependentOn("Configure-Symbolic-Links")
+	.IsDependentOn("Link-Razor")
     .IsDependentOn("Modify-Configs-For-Debug");
+
 
 Task("All")
     .Description("Only this task should be used, everything else subtasks")
@@ -440,6 +508,11 @@ Task("All")
     .IsDependentOn("Install")
     .IsDependentOn("Configure-Local-Debug")
     .IsDependentOn("Open-Website");
+
+
+Task("Link")
+    .Description("Should be used on dev machine only. Used for link dev files")
+    .IsDependentOn("Link-Razor");
 
 //////////////////////////////////////////////////////////////////////
 // EXECUTION

@@ -1,45 +1,44 @@
-﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29509.3
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Composer", "src\Composer\Composer\Composer.csproj", "{D00BD58B-93FE-4F3D-BBC8-6F7873CA6830}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer", "src\Orckestra.Composer\Orckestra.Composer.csproj", "{D00BD58B-93FE-4F3D-BBC8-6F7873CA6830}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Composer.Cart", "src\Composer\Composer.Cart\Composer.Cart.csproj", "{08F6FCB8-6065-4D31-B7DF-67FE67EE67E5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.Cart", "src\Orckestra.Composer.Cart\Orckestra.Composer.Cart.csproj", "{08F6FCB8-6065-4D31-B7DF-67FE67EE67E5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Composer.Cart.Tests", "src\Composer\Composer.Cart.Tests\Composer.Cart.Tests.csproj", "{D965ED93-6B66-44CF-8B0E-D6339529FC03}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.Cart.Tests", "tests\Orckestra.Composer.Cart.Tests\Orckestra.Composer.Cart.Tests.csproj", "{D965ED93-6B66-44CF-8B0E-D6339529FC03}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Composer.MyAccount", "src\Composer\Composer.MyAccount\Composer.MyAccount.csproj", "{0A2628F0-3E30-4DA6-852F-B2CBEC9B968D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.MyAccount", "src\Orckestra.Composer.MyAccount\Orckestra.Composer.MyAccount.csproj", "{0A2628F0-3E30-4DA6-852F-B2CBEC9B968D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Composer.MyAccount.Tests", "src\Composer\Composer.MyAccount.Tests\Composer.MyAccount.Tests.csproj", "{1E290AA1-36ED-484E-B3E7-ADDCB3DC9D1A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.MyAccount.Tests", "tests\Orckestra.Composer.MyAccount.Tests\Orckestra.Composer.MyAccount.Tests.csproj", "{1E290AA1-36ED-484E-B3E7-ADDCB3DC9D1A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Composer.Product", "src\Composer\Composer.Product\Composer.Product.csproj", "{1F767098-1FBF-4CB9-8637-6529E1CC0B24}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.Product", "src\Orckestra.Composer.Product\Orckestra.Composer.Product.csproj", "{1F767098-1FBF-4CB9-8637-6529E1CC0B24}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Composer.Product.Tests", "src\Composer\Composer.Product.Tests\Composer.Product.Tests.csproj", "{11C4BDBF-34BE-4094-A07C-EDC712671071}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.Product.Tests", "tests\Orckestra.Composer.Product.Tests\Orckestra.Composer.Product.Tests.csproj", "{11C4BDBF-34BE-4094-A07C-EDC712671071}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Composer.Search", "src\Composer\Composer.Search\Composer.Search.csproj", "{CE6AD95E-0EBB-4E38-BF0B-27A67915FA68}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.Search", "src\Orckestra.Composer.Search\Orckestra.Composer.Search.csproj", "{CE6AD95E-0EBB-4E38-BF0B-27A67915FA68}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Composer.Search.Tests", "src\Composer\Composer.Search.Tests\Composer.Search.Tests.csproj", "{964B228B-C9FA-49AB-82C2-4F417D1BCFCB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.Search.Tests", "tests\Orckestra.Composer.Search.Tests\Orckestra.Composer.Search.Tests.csproj", "{964B228B-C9FA-49AB-82C2-4F417D1BCFCB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Composer.Store", "src\Composer\Composer.Store\Composer.Store.csproj", "{1407AF7B-A1FE-4B52-906B-7503B6DB0F2B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.Store", "src\Orckestra.Composer.Store\Orckestra.Composer.Store.csproj", "{1407AF7B-A1FE-4B52-906B-7503B6DB0F2B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Composer.Store.Tests", "src\Composer\Composer.Store.Tests\Composer.Store.Tests.csproj", "{9BDB2A7F-8D0E-44EA-B270-547891C63A3E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.Store.Tests", "tests\Orckestra.Composer.Store.Tests\Orckestra.Composer.Store.Tests.csproj", "{9BDB2A7F-8D0E-44EA-B270-547891C63A3E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Composer.Tests", "src\Composer\Composer.Tests\Composer.Tests.csproj", "{24EAEC4F-3E3C-4A4A-AB18-F8D64A7C0673}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.Tests", "tests\Orckestra.Composer.Tests\Orckestra.Composer.Tests.csproj", "{24EAEC4F-3E3C-4A4A-AB18-F8D64A7C0673}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Composer.IntegrationTests", "src\Composer\Composer.IntegrationTests\Composer.IntegrationTests.csproj", "{32B4C021-6FB5-44DB-8A12-6710DEB4429E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.IntegrationTests", "tests\Orckestra.Composer.IntegrationTests\Orckestra.Composer.IntegrationTests.csproj", "{32B4C021-6FB5-44DB-8A12-6710DEB4429E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.ForTests", "src\Composer\Orckestra.ForTests\Orckestra.ForTests.csproj", "{B2BE051E-82D7-4643-BB56-98F161833E30}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.ForTests", "tests\Orckestra.ForTests\Orckestra.ForTests.csproj", "{B2BE051E-82D7-4643-BB56-98F161833E30}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4 - C1 CMS Packages", "4 - C1 CMS Packages", "{303355EE-E2EF-46D5-8B56-BE44E9F3D93D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Composer.CompositeC1", "src\Composer.CompositeC1\Composer.CompositeC1\Composer.CompositeC1.csproj", "{3E42C35E-B19C-4ABE-80F8-FD268D44E11F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.CompositeC1", "src\Orckestra.Composer.CompositeC1\Orckestra.Composer.CompositeC1.csproj", "{3E42C35E-B19C-4ABE-80F8-FD268D44E11F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Composer.CompositeC1.DataTypes", "src\Composer.CompositeC1\Composer.CompositeC1.DataTypes\Composer.CompositeC1.DataTypes.csproj", "{E84BF038-FC5E-4841-8C5A-918FE8EAFF8F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.CompositeC1.DataTypes", "src\Orckestra.Composer.CompositeC1.DataTypes\Orckestra.Composer.CompositeC1.DataTypes.csproj", "{E84BF038-FC5E-4841-8C5A-918FE8EAFF8F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Composer.CompositeC1.Tests", "src\Composer.CompositeC1\Composer.CompositeC1.Tests\Composer.CompositeC1.Tests.csproj", "{DB2343A4-77DB-4B6E-82D0-74C7724FC821}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.CompositeC1.Tests", "tests\Orckestra.Composer.CompositeC1.Tests\Orckestra.Composer.CompositeC1.Tests.csproj", "{DB2343A4-77DB-4B6E-82D0-74C7724FC821}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Composer.CompositeC1.Mvc", "src\Composer.CompositeC1\Composer.CompositeC1.Mvc\Composer.CompositeC1.Mvc.csproj", "{7E75D550-3C78-46D0-A124-065A5FFFA0B2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.Website", "src\Orckestra.Composer.Website\Orckestra.Composer.Website.csproj", "{7E75D550-3C78-46D0-A124-065A5FFFA0B2}"
 	ProjectSection(ProjectDependencies) = postProject
 		{A8B2D94C-8C2E-4AC5-875A-6E3540B56ADD} = {A8B2D94C-8C2E-4AC5-875A-6E3540B56ADD}
 		{8F9AD96B-47B6-4BBD-AD4E-0155B49D2BFD} = {8F9AD96B-47B6-4BBD-AD4E-0155B49D2BFD}
@@ -49,14 +48,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Composer.CompositeC1.Mvc", 
 		{9DFD94A1-FCCB-4B7B-8CCE-4D8F1D0E2B50} = {9DFD94A1-FCCB-4B7B-8CCE-4D8F1D0E2B50}
 		{460EACA2-1EDB-46BC-A508-F784E4A4DA97} = {460EACA2-1EDB-46BC-A508-F784E4A4DA97}
 		{8227ECD6-6D34-4F4D-BFBC-02BC52E7CE7A} = {8227ECD6-6D34-4F4D-BFBC-02BC52E7CE7A}
-		{4FE997FF-A528-4908-885B-D5CB2BB41F2F} = {4FE997FF-A528-4908-885B-D5CB2BB41F2F}
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Articles", "Articles", "{A57608FB-0095-40B3-B1AD-9F70581DD3DD}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Content", "Content", "{B8DA1457-A933-4B02-A5DF-2F899148CF50}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ContentSearch", "ContentSearch", "{770A2997-276D-405D-92CF-19305490154D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Queries", "Queries", "{7B284A42-216E-45CE-BA98-311E3FF283D8}"
 EndProject
@@ -64,34 +60,29 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SEO", "SEO", "{92C9596E-51D
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sitemap", "Sitemap", "{89454FDA-66CB-4FCA-A164-E84CEF8D8D23}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.Articles", "src\Composer.CompositeC1\Orckestra.Composer.Articles\Orckestra.Composer.Articles.csproj", "{9DFD94A1-FCCB-4B7B-8CCE-4D8F1D0E2B50}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.Articles", "src\Orckestra.Composer.Articles\Orckestra.Composer.Articles.csproj", "{9DFD94A1-FCCB-4B7B-8CCE-4D8F1D0E2B50}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.Articles.Package", "src\Composer.CompositeC1\Orckestra.Composer.Articles.Package\Orckestra.Composer.Articles.Package.csproj", "{8E9E5849-176E-4B52-830E-6E466BACE126}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.Articles.Package", "src\Orckestra.Composer.Articles.Package\Orckestra.Composer.Articles.Package.csproj", "{8E9E5849-176E-4B52-830E-6E466BACE126}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.Languages.Package", "src\Composer.CompositeC1\Orckestra.Composer.Languages\Orckestra.Composer.Languages.Package.csproj", "{B391AB82-48AB-4F73-B141-80EE9DE7D381}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.Languages.Package", "src\Orckestra.Composer.Languages.Package\Orckestra.Composer.Languages.Package.csproj", "{B391AB82-48AB-4F73-B141-80EE9DE7D381}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.ContentSearch", "src\Composer.CompositeC1\Orckestra.Composer.ContentSearch\Orckestra.Composer.ContentSearch.csproj", "{460EACA2-1EDB-46BC-A508-F784E4A4DA97}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.ContentSearch", "src\Orckestra.Composer.ContentSearch\Orckestra.Composer.ContentSearch.csproj", "{460EACA2-1EDB-46BC-A508-F784E4A4DA97}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.ContentSearch.Content", "src\Composer.CompositeC1\Orckestra.Composer.ContentSearch.Content\Orckestra.Composer.ContentSearch.Content.csproj", "{0654D78B-DE8C-4EB7-B32B-34DD1AFE46BF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.ContentSearch.Content", "src\Orckestra.Composer.ContentSearch.Content\Orckestra.Composer.ContentSearch.Content.csproj", "{0654D78B-DE8C-4EB7-B32B-34DD1AFE46BF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.ContentSearch.Package", "src\Composer.CompositeC1\Orckestra.Composer.ContentSearch.Package\Orckestra.Composer.ContentSearch.Package.csproj", "{5C56B24A-09C3-4884-B769-E3E8A042EE6A}"
-	ProjectSection(ProjectDependencies) = postProject
-		{7E75D550-3C78-46D0-A124-065A5FFFA0B2} = {7E75D550-3C78-46D0-A124-065A5FFFA0B2}
-	EndProjectSection
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.C1CMS.Queries", "src\Orckestra.Composer.C1CMS.Queries\Orckestra.Composer.C1CMS.Queries.csproj", "{8F9AD96B-47B6-4BBD-AD4E-0155B49D2BFD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.C1CMS.Queries", "src\Composer.CompositeC1\Orckestra.Composer.C1CMS.Queries\Orckestra.Composer.C1CMS.Queries.csproj", "{8F9AD96B-47B6-4BBD-AD4E-0155B49D2BFD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.C1CMS.Queries.Package", "src\Orckestra.Composer.C1CMS.Queries.Package\Orckestra.Composer.C1CMS.Queries.Package.csproj", "{112B646F-5193-45CC-A9EF-D632D853CFB1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.C1CMS.Queries.Package", "src\Composer.CompositeC1\Orckestra.Composer.C1CMS.Queries.Package\Orckestra.Composer.C1CMS.Queries.Package.csproj", "{112B646F-5193-45CC-A9EF-D632D853CFB1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.SEO.Organization.Content", "src\Orckestra.Composer.SEO.Organization.Content\Orckestra.Composer.SEO.Organization.Content.csproj", "{A8B2D94C-8C2E-4AC5-875A-6E3540B56ADD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.SEO.Organization.Content", "src\Composer.CompositeC1\Orckestra.Composer.SEO.Content\Orckestra.Composer.SEO.Organization.Content.csproj", "{A8B2D94C-8C2E-4AC5-875A-6E3540B56ADD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.SEO.Organization.Package", "src\Orckestra.Composer.SEO.Organization.Package\Orckestra.Composer.SEO.Organization.Package.csproj", "{199BF438-4F90-4C1C-941A-AF6B69A53396}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.SEO.Organization.Package", "src\Composer.CompositeC1\Orckestra.Composer.SEO.Organization\Orckestra.Composer.SEO.Organization.Package.csproj", "{199BF438-4F90-4C1C-941A-AF6B69A53396}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.Sitemap", "src\Orckestra.Composer.Sitemap\Orckestra.Composer.Sitemap.csproj", "{8227ECD6-6D34-4F4D-BFBC-02BC52E7CE7A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.Sitemap", "src\Composer.CompositeC1\Orckestra.Composer.Sitemap\Orckestra.Composer.Sitemap.csproj", "{8227ECD6-6D34-4F4D-BFBC-02BC52E7CE7A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.Sitemap.Package", "src\Orckestra.Composer.Sitemap.Package\Orckestra.Composer.Sitemap.Package.csproj", "{0136D28A-88DF-4C96-94FD-C1D6B4D4AE18}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.Sitemap.Package", "src\Composer.CompositeC1\Orckestra.Composer.Sitemap.Package\Orckestra.Composer.Sitemap.Package.csproj", "{0136D28A-88DF-4C96-94FD-C1D6B4D4AE18}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.Sitemap.Tests", "src\Composer.CompositeC1\Orckestra.Composer.Sitemap.Tests\Orckestra.Composer.Sitemap.Tests.csproj", "{FDE26B94-980B-4155-A9A8-7CF6433C7658}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.Sitemap.Tests", "tests\Orckestra.Composer.Sitemap.Tests\Orckestra.Composer.Sitemap.Tests.csproj", "{FDE26B94-980B-4155-A9A8-7CF6433C7658}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C6D12807-C2E7-41CC-A31C-8DCFD141612E}"
 	ProjectSection(SolutionItems) = preProject
@@ -103,15 +94,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GTM", "GTM", "{4D7151A7-7C4
 		src\GTM\GTM-ReferenceApp.json = src\GTM\GTM-ReferenceApp.json
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.SearchQuery", "src\Composer\Orckestra.Composer.SearchQuery\Orckestra.Composer.SearchQuery.csproj", "{6DEE1972-E64B-43F0-BBAF-04D0AA64DD60}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.SearchQuery", "src\Orckestra.Composer.SearchQuery\Orckestra.Composer.SearchQuery.csproj", "{6DEE1972-E64B-43F0-BBAF-04D0AA64DD60}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.C1.Core", "src\Composer.CompositeC1\Orckestra.Composer.C1.Core\Orckestra.Composer.C1.Core.csproj", "{EA8CAB27-7AF8-4913-B7A4-4703A0E6B4B7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.C1.Core", "src\Orckestra.Composer.C1.Core\Orckestra.Composer.C1.Core.csproj", "{EA8CAB27-7AF8-4913-B7A4-4703A0E6B4B7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.C1.Content.FR-CA", "src\Composer.CompositeC1\Orckestra.Composer.C1.Content.FR-CA\Orckestra.Composer.C1.Content.FR-CA.csproj", "{09F0C4FB-DDBF-4C06-8A27-A1CE7BD29233}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.C1.Content.FR-CA", "src\Orckestra.Composer.C1.Content.FR-CA\Orckestra.Composer.C1.Content.FR-CA.csproj", "{09F0C4FB-DDBF-4C06-8A27-A1CE7BD29233}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.C1.Content.EN-CA", "src\Composer.CompositeC1\Orckestra.Composer.C1.Content.EN-CA\Orckestra.Composer.C1.Content.EN-CA.csproj", "{91BA9F0C-A917-46A8-9165-C91CD540AE08}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Composer.UI", "src\Composer\Composer.UI\Composer.UI.csproj", "{4FE997FF-A528-4908-885B-D5CB2BB41F2F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.C1.Content.EN-CA", "src\Orckestra.Composer.C1.Content.EN-CA\Orckestra.Composer.C1.Content.EN-CA.csproj", "{91BA9F0C-A917-46A8-9165-C91CD540AE08}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1 - Website", "1 - Website", "{4C9DCD77-1564-4C86-AD89-DCC674C54879}"
 EndProject
@@ -122,6 +111,12 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5 - Tests", "5 - Tests", "{832CD4F4-EF5A-44B0-92FF-D159B6276AF7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1- Core", "1- Core", "{2290CF95-EF97-4E7A-ADD6-D902AD8DAAAC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.HandlebarsCompiler", "src\Orckestra.Composer.HandlebarsCompiler\Orckestra.Composer.HandlebarsCompiler.csproj", "{3508A92E-CB4B-431D-BBDC-0AD5FABEC20C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.LoadTest", "tests\Orckestra.Composer.LoadTest\Orckestra.Composer.LoadTest.csproj", "{3AFCC15C-B3E7-4F44-9D67-44018FDFDABE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.LoadTest.Tests", "tests\Orckestra.Composer.LoadTest.Tests\Orckestra.Composer.LoadTest.Tests.csproj", "{7501DDC4-8A28-4DF3-ADC6-5132D043E738}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -221,10 +216,6 @@ Global
 		{0654D78B-DE8C-4EB7-B32B-34DD1AFE46BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0654D78B-DE8C-4EB7-B32B-34DD1AFE46BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0654D78B-DE8C-4EB7-B32B-34DD1AFE46BF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5C56B24A-09C3-4884-B769-E3E8A042EE6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5C56B24A-09C3-4884-B769-E3E8A042EE6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5C56B24A-09C3-4884-B769-E3E8A042EE6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5C56B24A-09C3-4884-B769-E3E8A042EE6A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8F9AD96B-47B6-4BBD-AD4E-0155B49D2BFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8F9AD96B-47B6-4BBD-AD4E-0155B49D2BFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8F9AD96B-47B6-4BBD-AD4E-0155B49D2BFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -269,10 +260,18 @@ Global
 		{91BA9F0C-A917-46A8-9165-C91CD540AE08}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{91BA9F0C-A917-46A8-9165-C91CD540AE08}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{91BA9F0C-A917-46A8-9165-C91CD540AE08}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4FE997FF-A528-4908-885B-D5CB2BB41F2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4FE997FF-A528-4908-885B-D5CB2BB41F2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4FE997FF-A528-4908-885B-D5CB2BB41F2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4FE997FF-A528-4908-885B-D5CB2BB41F2F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3508A92E-CB4B-431D-BBDC-0AD5FABEC20C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3508A92E-CB4B-431D-BBDC-0AD5FABEC20C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3508A92E-CB4B-431D-BBDC-0AD5FABEC20C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3508A92E-CB4B-431D-BBDC-0AD5FABEC20C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3AFCC15C-B3E7-4F44-9D67-44018FDFDABE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3AFCC15C-B3E7-4F44-9D67-44018FDFDABE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3AFCC15C-B3E7-4F44-9D67-44018FDFDABE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3AFCC15C-B3E7-4F44-9D67-44018FDFDABE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7501DDC4-8A28-4DF3-ADC6-5132D043E738}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7501DDC4-8A28-4DF3-ADC6-5132D043E738}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7501DDC4-8A28-4DF3-ADC6-5132D043E738}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7501DDC4-8A28-4DF3-ADC6-5132D043E738}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -298,29 +297,29 @@ Global
 		{7E75D550-3C78-46D0-A124-065A5FFFA0B2} = {4C9DCD77-1564-4C86-AD89-DCC674C54879}
 		{A57608FB-0095-40B3-B1AD-9F70581DD3DD} = {303355EE-E2EF-46D5-8B56-BE44E9F3D93D}
 		{B8DA1457-A933-4B02-A5DF-2F899148CF50} = {303355EE-E2EF-46D5-8B56-BE44E9F3D93D}
-		{770A2997-276D-405D-92CF-19305490154D} = {303355EE-E2EF-46D5-8B56-BE44E9F3D93D}
 		{7B284A42-216E-45CE-BA98-311E3FF283D8} = {303355EE-E2EF-46D5-8B56-BE44E9F3D93D}
 		{92C9596E-51D2-423E-9EE3-371DAC653F40} = {303355EE-E2EF-46D5-8B56-BE44E9F3D93D}
 		{89454FDA-66CB-4FCA-A164-E84CEF8D8D23} = {303355EE-E2EF-46D5-8B56-BE44E9F3D93D}
 		{9DFD94A1-FCCB-4B7B-8CCE-4D8F1D0E2B50} = {A57608FB-0095-40B3-B1AD-9F70581DD3DD}
 		{8E9E5849-176E-4B52-830E-6E466BACE126} = {A57608FB-0095-40B3-B1AD-9F70581DD3DD}
 		{B391AB82-48AB-4F73-B141-80EE9DE7D381} = {B8DA1457-A933-4B02-A5DF-2F899148CF50}
-		{460EACA2-1EDB-46BC-A508-F784E4A4DA97} = {770A2997-276D-405D-92CF-19305490154D}
-		{0654D78B-DE8C-4EB7-B32B-34DD1AFE46BF} = {770A2997-276D-405D-92CF-19305490154D}
-		{5C56B24A-09C3-4884-B769-E3E8A042EE6A} = {770A2997-276D-405D-92CF-19305490154D}
+		{460EACA2-1EDB-46BC-A508-F784E4A4DA97} = {B770DD6A-41C2-4576-80D9-58023319B204}
+		{0654D78B-DE8C-4EB7-B32B-34DD1AFE46BF} = {B8DA1457-A933-4B02-A5DF-2F899148CF50}
 		{8F9AD96B-47B6-4BBD-AD4E-0155B49D2BFD} = {7B284A42-216E-45CE-BA98-311E3FF283D8}
 		{112B646F-5193-45CC-A9EF-D632D853CFB1} = {7B284A42-216E-45CE-BA98-311E3FF283D8}
 		{A8B2D94C-8C2E-4AC5-875A-6E3540B56ADD} = {92C9596E-51D2-423E-9EE3-371DAC653F40}
 		{199BF438-4F90-4C1C-941A-AF6B69A53396} = {92C9596E-51D2-423E-9EE3-371DAC653F40}
 		{8227ECD6-6D34-4F4D-BFBC-02BC52E7CE7A} = {89454FDA-66CB-4FCA-A164-E84CEF8D8D23}
 		{0136D28A-88DF-4C96-94FD-C1D6B4D4AE18} = {89454FDA-66CB-4FCA-A164-E84CEF8D8D23}
-		{FDE26B94-980B-4155-A9A8-7CF6433C7658} = {89454FDA-66CB-4FCA-A164-E84CEF8D8D23}
+		{FDE26B94-980B-4155-A9A8-7CF6433C7658} = {832CD4F4-EF5A-44B0-92FF-D159B6276AF7}
 		{6DEE1972-E64B-43F0-BBAF-04D0AA64DD60} = {B770DD6A-41C2-4576-80D9-58023319B204}
 		{EA8CAB27-7AF8-4913-B7A4-4703A0E6B4B7} = {2290CF95-EF97-4E7A-ADD6-D902AD8DAAAC}
 		{09F0C4FB-DDBF-4C06-8A27-A1CE7BD29233} = {B8DA1457-A933-4B02-A5DF-2F899148CF50}
 		{91BA9F0C-A917-46A8-9165-C91CD540AE08} = {B8DA1457-A933-4B02-A5DF-2F899148CF50}
-		{4FE997FF-A528-4908-885B-D5CB2BB41F2F} = {B2EB548A-B668-42D3-A646-C43E59D8BFCE}
 		{2290CF95-EF97-4E7A-ADD6-D902AD8DAAAC} = {303355EE-E2EF-46D5-8B56-BE44E9F3D93D}
+		{3508A92E-CB4B-431D-BBDC-0AD5FABEC20C} = {4C9DCD77-1564-4C86-AD89-DCC674C54879}
+		{3AFCC15C-B3E7-4F44-9D67-44018FDFDABE} = {832CD4F4-EF5A-44B0-92FF-D159B6276AF7}
+		{7501DDC4-8A28-4DF3-ADC6-5132D043E738} = {832CD4F4-EF5A-44B0-92FF-D159B6276AF7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {31789445-A48E-4454-9EC2-4B738A35383C}

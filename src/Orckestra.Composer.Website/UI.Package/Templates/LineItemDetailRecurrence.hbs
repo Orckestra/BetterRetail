@@ -1,0 +1,77 @@
+{{#if RecurringOrderProgramName}}
+{{#if RecurringOrderProgramFrequencies}}
+{{#if RecurringOrderProgramFrequencies.length}}
+    <div class="cart-recurring js-cartRecurring">
+        <div class="cart-recurring-cta js-cartRecurringCta">
+            <img src="/UI.Package/Images/recurring.svg" class="recurring-icon" alt="{{localize 'General' 'L_RecurringProduct'}}" title="{{localize 'General' 'L_RecurringProduct'}}" />
+            {{#if RecurringOrderFrequencyName}}
+                &nbsp;{{RecurringOrderFrequencyDisplayName}}
+            {{else}}
+                &nbsp;{{localize 'ProductPage' 'L_RecurringFrequencyOnce'}}
+            {{/if}}
+            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#recurringModes{{@index}}" aria-expanded="false" aria-controls="recurringModes{{@index}}" data-oc-click="expandRecurringModes">
+                {{localize 'ShoppingCart' 'L_RecurringChangeFrequency'}}
+            </button>
+        </div>
+        <div id="recurringModes{{@index}}" class="recurring-modes form-group collapse js-recurringModes">
+            <div class="alert border mb-2 {{#unless RecurringOrderFrequencyName}} selected{{/unless}} js-recurringModeRow">
+                <div class="form-check">
+                    <input id="UseSingle{{@index}}" {{#unless RecurringOrderFrequencyName}}checked="checked"{{/unless}} type="radio" data-target=".modeSelection"
+                           name="recurringMode{{@index}}"
+                           value="single"
+                           data-oc-change="changeRecurringMode"
+                           class="form-check-input"  />
+                    <label class="form-check-label" for="UseSingle{{@index}}">{{localize 'ProductPage' 'L_RecurringFrequencyOnce'}}</label>
+                </div>
+            </div>
+            <div class="alert border mb-2 {{#if RecurringOrderFrequencyName}} selected{{/if}} js-recurringModeRow">
+                <div class="form-check">
+                    <input  id="UseRecurring{{@index}}" {{#if RecurringOrderFrequencyName}}checked="checked"{{/if}}
+                            type="radio"
+                            data-target=".modeSelection"
+                            name="recurringMode{{@index}}"
+                            value="recurring"
+                            data-oc-change="changeRecurringMode"
+                            class="form-check-input"  />
+                    <label class="form-check-label" for="UseRecurring{{@index}}">
+                        <img src="/UI.Package/Images/recurring.svg" class="recurring-icon" alt="{{localize 'General' 'L_RecurringProduct'}}" title="{{localize 'General' 'L_RecurringProduct'}}" /> {{localizeFormat 'ProductPage' 'L_RecurringPitch' (localize 'ProductPage' 'L_RecurringSaveRate') }}
+                    </label>
+                </div>
+                <div class="recurring-frequencies  collapse  modeSelection{{#if RecurringOrderFrequencyName}} in{{/if}}  ">
+                    <div class="row">
+                        <div class="col-10 col-md-9 col-lg-7 form-group">
+                            <label for="recurringOrderFrequencyNameSelect{{@index}}">{{localize 'ProductPage' 'L_RecurringDeliveryFrequency'}}</label> 
+                            <button class="btn" role="button" data-trigger="click" data-toggle="popover" data-placement="top" title=""
+                                    data-content="{{{localize 'ProductPage' 'L_RecurringBubblePitch'}}}" data-html="true" data-original-title="{{localize 'ProductPage' 'L_RecurringBubblePitchTitle'}}">
+                                <span class="fa fa-question-circle"></span>
+                            </button>
+                            <select id="recurringOrderFrequencyNameSelect{{@index}}" class="recurring-orders-frequency-selection form-control">
+                                {{!-- <option value="" {{#unless RecurringOrderFrequencyName}}selected="selected"{{/unless}}>{{localize 'ShoppingCart' 'L_RecurringChooseFrequency'}}</option> --}}
+                                {{#each RecurringOrderProgramFrequencies}}
+                                    <option value="{{RecurringOrderFrequencyName}}"
+                                            {{#if_eq RecurringOrderFrequencyName ../RecurringOrderFrequencyName}}selected="selected"{{/if_eq}}>
+                                        {{DisplayName}}
+                                    </option>
+                                {{/each}}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="btn btn-secondary" type="button" data-toggle="collapse" data-target="#recurringModes{{@index}}"
+                    aria-expanded="false" aria-controls="recurringModes{{@index}}"
+                    data-oc-click="resetLineItemRecurringFrequency"
+                    data-recurringorderfrequencyname="{{RecurringOrderFrequencyName}}">{{localize 'ShoppingCart' 'B_CancelRecurrenceChanges'}}</button>
+            <button class="btn btn-primary"
+                    data-oc-click="updateLineItemRecurringFrequency"
+                    data-lineitemid="{{Id}}"
+                    data-productid="{{ProductId}}"
+                    data-quantity="{{Quantity}}"
+                    data-recurringorderfrequencyname="{{RecurringOrderFrequencyName}}"
+                    data-recurringorderprogramname="{{RecurringOrderProgramName}}">{{localize 'ShoppingCart' 'B_ApplyRecurrenceChanges'}}
+            </button>
+        </div>
+    </div>
+{{/if}}
+{{/if}}
+{{/if}}

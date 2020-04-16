@@ -1,0 +1,14 @@
+{{#if ChildCategories}}
+    <div data-oc-controller="Product.FacetSearch">
+        <div class="card mb-3" >
+            <div class="card-body" data-oc-controller="Product.SelectedSearchFacets">
+                <h4>{{localize 'List-Search' 'L_RefinerCategories'}}</h4>
+                <ul class="list-unstyled">
+                    {{#each ChildCategories}}
+                    <li><a href="#" data-qa="search-category-single-select" data-categoryurl="{{Url}}" data-facetfieldname="category" data-facetvalue="{{Title}}" data-oc-click="addSingleSelectCategory">{{Title}}</a></li>
+                    {{/each}}
+                </ul>
+            </div>
+        </div>
+    </div>
+{{/if}}

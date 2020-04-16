@@ -1,0 +1,20 @@
+<div class="products-search-results" data-oc-controller="Product.SearchResults" data-context="{{JsonContext}}">
+    {{#if ProductSearchResults.TotalCount}}
+    {{#if_gt ProductSearchResults.TotalCount 0 }}
+        <!-- Search results -->
+        {{#with ProductSearchResults}}
+        <div class="row">
+            {{#each SearchResults}}
+            <div class="col-6  col-md-4  col-xl-3"  data-qa="search-results">
+                {{> SearchProductResult}}
+            </div>
+            {{/each}}
+        </div>
+        {{/with}}
+        <!--Product quick view-->
+        <div>
+            {{> ProductQuickViewDataBlade}}
+        </div>
+    {{/if_gt}}
+    {{/if}}
+</div>

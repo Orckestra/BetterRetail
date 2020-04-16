@@ -1,0 +1,12 @@
+/**
+ * Pull items full width of `.island` parents.
+ */
+.bleed{
+    margin-right: -($grid-gutter-width/2) !important;
+    margin-left:  -($grid-gutter-width/2) !important;
+
+    .panel & {
+        margin-right: -($card-spacer-x) !important;
+        margin-left:  -($card-spacer-x) !important;
+    }
+} 

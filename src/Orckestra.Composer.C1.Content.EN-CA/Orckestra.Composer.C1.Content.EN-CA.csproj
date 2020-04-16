@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{91BA9F0C-A917-46A8-9165-C91CD540AE08}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Package.C1.Content.EN_CA</RootNamespace>
+    <AssemblyName>Package.C1.Content.EN-CA</AssemblyName>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\Solution Items\SharedAssemblyInfo.cs">
+      <Link>Properties\SharedAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Composer.Content.xml" />
+    <Content Include="Composer.Core.xml" />
+    <Content Include="Package\Datas\Composite.Data.Types.CssStyleElements_public.xml" />
+    <Content Include="Package\Datas\Composite.Data.Types.IPagePlaceholderContents_administrated.xml" />
+    <Content Include="Package\Datas\Composite.Data.Types.IPagePlaceholderContents_public.xml" />
+    <Content Include="Package\Datas\Composite.Data.Types.IPageStructures_public.xml" />
+    <Content Include="Package\Datas\Composite.Data.Types.IPages_administrated.xml" />
+    <Content Include="Package\Datas\Composite.Data.Types.IPages_public.xml" />
+    <Content Include="Package\Datas\Composite.Data.Types.Navigation.FooterOptionalLink_public.xml" />
+    <Content Include="Package\Datas\Composite.Data.Types.Navigation.HeaderOptionalLink_public.xml" />
+    <Content Include="Package\Datas\Composite.Data.Types.Navigation.NavigationElements.Footer_public.xml" />
+    <Content Include="Package\Datas\Composite.Data.Types.Navigation.NavigationElements.Header_public.xml" />
+    <Content Include="Package\Datas\Composite.Data.Types.Navigation.NavigationElements.StickyHeader_public.xml" />
+    <Content Include="Package\Datas\Composite.Data.Types.TargetUrlElements_public.xml" />
+    <Content Include="Package\Datas\Orckestra.Composer.CompositeC1.DataTypes.GoogleSettingss_administrated.xml" />
+    <Content Include="Package\Datas\Orckestra.Composer.CompositeC1.DataTypes.GoogleSettingss_public.xml" />
+    <Content Include="Package\Datas\Orckestra.Composer.CompositeC1.DataTypes.IWebsiteStyleThemes_administrated.xml" />
+    <Content Include="Package\Datas\Orckestra.Composer.CompositeC1.DataTypes.IWebsiteStyleThemes_public.xml" />
+    <Content Include="Package\Datas\Orckestra.Composer.CompositeC1.DataTypes.Navigation.OptionalLink_Unpublished_en-CA.xml" />
+    <Content Include="Package\Datas\Orckestra.Composer.CompositeC1.DataTypes.RecurringOrdersSettingss_administrated.xml" />
+    <Content Include="Package\Datas\Orckestra.Composer.CompositeC1.DataTypes.RecurringOrdersSettingss_public.xml" />
+    <Content Include="Package\Datas\Orckestra.Composer.ContentSearch.DataTypes.IContentTabs_administrated.xml" />
+    <Content Include="Package\Datas\Orckestra.Composer.ContentSearch.DataTypes.IContentTabs_public.xml" />
+    <Content Include="Package\Datas\Orckestra.Composer.ContentSearch.DataTypes.ISortOptions_public.xml" />
+    <Content Include="Package\Datas\Orckestra.ExperienceManagement.Configuration.DataTypes.ISiteConfigurationMetas_administrated.xml" />
+    <Content Include="Package\Datas\Orckestra.ExperienceManagement.Configuration.DataTypes.ISiteConfigurationMetas_public.xml" />
+    <Content Include="Package\install.xml" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>SET PackageName=Orckestra.Composer.C1.Content.EN-CA
+"$(SolutionDir)packages\7-Zip.CommandLine.9.20.0\tools\7za.exe" a "$(ProjectDir)bin\%25PackageName%25.zip" "$(ProjectDir)Package\*"
+</PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,59 @@
+<div data-templateid="KvaItems">
+    {{#each KeyVariantAttributeItems}}
+        {{#if Values}}
+            <div class="mb-4  btn-multiline" data-qa="product-variants" data-propertyname="{{PropertyName}}" data-propertydatatype="{{PropertyDataType}}">
+
+            <h5>{{DisplayName}}</h5>
+
+            {{#each Values}}
+                {{#if Disabled}}
+                    {{#if Selected}}
+                        <button class="btn  btn-outline-secondary disabled  btn-sm active"
+                                data-oc-click="selectKva"
+                                value="{{Value}}">
+                          {{#if ImageUrl}}
+                            <img class="img-fluid" src="{{ImageUrl}}" alt="{{Title}}" />
+                          {{else}}
+                            {{Title}}
+                          {{/if}}
+                        </button>
+                    {{else}}
+                        <button class="btn  btn-outline-secondary disabled  btn-sm"
+                                data-oc-click="selectKva"
+                                value="{{Value}}">
+                          {{#if ImageUrl}}
+                            <img class="img-fluid" src="{{ImageUrl}}" alt="{{Title}}" />
+                          {{else}}
+                            {{Title}}
+                          {{/if}}
+                        </button>
+                    {{/if}}
+
+                {{else}}
+                    {{#if Selected}}
+                        <button class="btn  btn-primary  btn-sm active"
+                                data-oc-click="selectKva"
+                                value="{{Value}}">
+                          {{#if ImageUrl}}
+                            <img class="img-fluid" src="{{ImageUrl}}" alt="{{Title}}" />
+                          {{else}}
+                            {{Title}}
+                          {{/if}}
+                        </button>
+                    {{else}}
+                        <button class="btn   btn-outline-secondary  btn-sm"
+                                data-oc-click="selectKva"
+                                value="{{Value}}">
+                          {{#if ImageUrl}}
+                            <img class="img-fluid" src="{{ImageUrl}}" alt="{{Title}}" />
+                          {{else}}
+                            {{Title}}
+                          {{/if}}
+                        </button>
+                    {{/if}}
+                {{/if}}
+            {{/each}}
+        </div>
+        {{/if}}
+    {{/each}}
+</div>

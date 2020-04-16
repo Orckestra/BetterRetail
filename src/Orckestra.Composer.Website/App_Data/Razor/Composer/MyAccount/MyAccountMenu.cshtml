@@ -1,0 +1,76 @@
+﻿@inherits RazorFunction
+@using Orckestra.Composer.Services;
+
+
+@functions {
+    public IMyAccountViewService MyAccountViewService { get; set; }
+}
+
+@{
+    var currentPageId = SitemapNavigator.CurrentPageId;
+    var menuViewModel = MyAccountViewService.CreateMenu(currentPageId.ToString());
+    var menuItems = menuViewModel.MenuItems;
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<head>
+</head>
+<body>
+    <div>
+        <div class="card  d-none d-md-block">
+            <div class="card-body">
+                <h2 class="h4">@Html.Localize("MyAccount", "L_MyAccount")</h2>
+                <nav>
+                    <ul class="list-unstyled">
+                        @foreach (var menuItem in menuItems)
+                        {
+                            <li>
+                                <a href="@menuItem.Url">
+                                    @if (menuItem.IsActive)
+                                    {
+                                        <strong>@menuItem.Name</strong>
+                                    }
+                                    else
+                                    {
+                                        @menuItem.Name
+                                    }
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+        <div class="form-group  d-xl-none">
+            <div class="dropdown">
+                <button class="btn btn-block btn-outline-secondary  dropdown-toggle" type="button" id="dropdownMyAccount" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    @foreach (var menuItem in menuItems)
+                    {
+                        if (menuItem.IsActive)
+                        {
+                            @menuItem.Name
+                        }
+                    }
+                    <span class="caret"></span>
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMyAccount">
+                    @foreach (var menuItem in menuItems)
+                    {
+                        <a class="dropdown-item" href="@menuItem.Url">
+                            @if (menuItem.IsActive)
+                            {
+                                <strong>@menuItem.Name</strong>
+                            }
+                            else
+                            {
+                                @menuItem.Name
+                            }
+                        </a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

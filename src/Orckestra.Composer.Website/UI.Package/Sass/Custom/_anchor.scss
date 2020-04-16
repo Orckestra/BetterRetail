@@ -1,0 +1,7 @@
+//offsetting the html anchor to adjust for fixed navbar
+.anchor-offset {
+    display: block;
+    position: relative;
+    top: -($nav-link-height + 20);
+    visibility: hidden;
+}

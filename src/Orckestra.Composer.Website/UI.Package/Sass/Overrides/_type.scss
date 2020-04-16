@@ -1,0 +1,39 @@
+ h4,
+.h4 {
+    font-weight: bold;
+}
+
+h1, .h1,
+h2, .h2,
+h3, .h3 {
+    margin-bottom: $spacer;
+}
+
+ @include media-breakpoint-down(sm) {
+    h1, .h1 { font-size: $font-size-h1-sm; }
+    h2, .h2 { font-size: $font-size-h1-sm; }
+    h3, .h3 { font-size: $font-size-h1-sm; }
+    h4, .h4 { font-size: $font-size-h1-sm; }
+    h5, .h5 { font-size: $font-size-h1-sm; }
+    h6, .h6 { font-size: $font-size-h1-sm; }
+}
+
+blockquote {
+    font-weight: bold;
+
+    footer,
+    small,
+    .small {
+        font-weight: normal;
+        font-size: 12px;
+    }
+}
+
+
+.list-unstyled {
+    li {
+        margin-bottom: map_get($spacers, 2);
+    }
+}
+
+@include text-emphasis-variant('.text-gray', $gray-800);

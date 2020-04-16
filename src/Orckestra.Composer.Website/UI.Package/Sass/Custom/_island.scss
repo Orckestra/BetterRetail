@@ -1,0 +1,22 @@
+.island,
+%island {
+    padding-bottom: $grid-gutter-width;
+}
+
+.island-lg,
+%island-lg {
+    padding-bottom: $grid-gutter-width;
+
+    @include media-breakpoint-up(lg) {
+        padding-bottom: $grid-gutter-width * 2;
+    }
+}
+
+.island-xl,
+%island-xl {
+    padding-bottom: $grid-gutter-width * 2;
+
+    @include media-breakpoint-up(lg) {
+        padding-bottom: $grid-gutter-width * 3;
+    }
+}
