@@ -428,6 +428,7 @@ namespace Orckestra.Composer.Cart.Services
             if (shipment.PickUpLocationId.HasValue)
             {
                 shipment.PickUpLocationId = null;
+                shipment.Address = null;
                 var fulfillmentLocation = await InventoryLocationProvider.GetFulfillmentLocationAsync(new GetFulfillmentLocationParam
                 {
                     Scope = cart.ScopeId

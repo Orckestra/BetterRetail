@@ -144,8 +144,8 @@ module Orckestra.Composer {
             this.VueCheckout = new Vue({
                 el: '#vueSingleCheckout',
                 components: {
-                    [CheckoutPageVueComponent.componentMame] : CheckoutPageVueComponent.getComponent(),
-                    [CheckoutStepVueComponent.componentMame] : CheckoutStepVueComponent.getComponent(),
+                    [CheckoutPageVueComponent.componentMame]: CheckoutPageVueComponent.getComponent(),
+                    [CheckoutStepVueComponent.componentMame]: CheckoutStepVueComponent.getComponent(),
                 },
                 data: {
                     Cart: checkoutContext.Cart,
@@ -218,20 +218,28 @@ module Orckestra.Composer {
         }
 
         public calculateStartStep(cart: any, isAuthenticated: boolean): number {
-            if (!(cart.Customer.FirstName &&
-                cart.Customer.LastName &&
-                cart.Customer.Email)) {
+            if (!this.customerFulfilled(cart)) {
                 return CheckoutStepNumbers.Information
             } else {
-                if (!(this.isShippingFulfilled(cart, isAuthenticated))) {
+                if (!(this.shippingFulfilled(cart, isAuthenticated))) {
                     return CheckoutStepNumbers.Shipping
                 } else {
-                    return CheckoutStepNumbers.Billing
+                    if (!this.billingFulfilled(cart, isAuthenticated)) {
+                        return CheckoutStepNumbers.Billing;
+                    } else {
+                        return CheckoutStepNumbers.Payment
+                    }
                 }
             }
         }
 
-        private isShippingFulfilled(cart: any, isAuthenticated: boolean): boolean {
+        public customerFulfilled(cart: any): boolean {
+            return !!(cart.Customer.FirstName &&
+                cart.Customer.LastName &&
+                cart.Customer.Email);
+        }
+
+        public shippingFulfilled(cart: any, isAuthenticated: boolean): boolean {
             if (!(cart.ShippingMethod)) return false;
 
             let address = cart.ShippingAddress.Line1 &&
@@ -251,10 +259,31 @@ module Orckestra.Composer {
             }
 
             if (isPickUp) {
-                return (address && cart.ShippingAddress.AddressName)
+                return !!(cart.PickUpLocationId)
             }
 
             return false;
+        }
+
+        public billingFulfilled(cart: any, isAuthenticated: boolean): boolean {
+            if (!(cart.Payment)) return false;
+
+            let billindAddress = cart.Payment.BillingAddress;
+
+            let addressFullfilled = billindAddress.FirstName &&
+                billindAddress.LastName &&
+                billindAddress.Line1 &&
+                billindAddress.City &&
+                billindAddress.RegionCode &&
+                billindAddress.PostalCode &&
+                billindAddress.PhoneNumber;
+
+
+            if (isAuthenticated) {
+                return addressFullfilled && !this.isAddressBookIdEmpty(billindAddress.AddressBookId)
+            } else {
+                return !!(addressFullfilled);
+            }
         }
 
         private isAddressBookIdEmpty(bookId) {

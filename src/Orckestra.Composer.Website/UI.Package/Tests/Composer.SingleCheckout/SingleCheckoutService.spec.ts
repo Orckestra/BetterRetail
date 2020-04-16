@@ -128,7 +128,7 @@
                     expect(step3).toEqual(CheckoutStepNumbers.Shipping);
                 });
 
-                it('SHOULD return Billing (2) step when ShippingAddress is fulfilled for Shipping method type', () => {
+                it('SHOULD return Billing step when ShippingAddress is fulfilled for Shipping method type', () => {
                     //Arrange
                     let cart = {
                         Customer: {
@@ -153,7 +153,7 @@
                     expect(step).toEqual(CheckoutStepNumbers.Billing);
                 });
 
-                it('SHOULD return Shipping (1)) step when ShippingAddress is not fulfilled for PickUp method type', () => {
+                it('SHOULD return Shipping step when PickUpLocationId is not set for PickUp method type', () => {
                     //Arrange
                     let cart = {
                         Customer: {
@@ -179,7 +179,7 @@
                     expect(step).toEqual(CheckoutStepNumbers.Shipping);
                 });
 
-                it('SHOULD return Billing (2) step when ShippingAddress is fulfilled for PickUp method type', () => {
+                it('SHOULD return Billing  step when PickUpLocationId is set for PickUp method type', () => {
                     //Arrange
                     let cart = {
                         Customer: {
@@ -190,12 +190,14 @@
                         ShippingMethod: {
                             FulfillmentMethodTypeString: Orckestra.Composer.FulfillmentMethodTypes.PickUp
                         },
+                        PickUpLocationId: '123',
                         ShippingAddress: {
                             AddressName: 'Store 1',
                             Line1: 'Line1',
                             City: 'City',
                             RegionCode: 'RegionCode',
                             PostalCode: 'PostalCode'
+
                         }
                     }
                     ///Act
@@ -208,7 +210,7 @@
 
             describe('Registered Cutomer', () => {
                 let isAuthenticated = true;
-                it('SHOULD return Information (0) step when Customer data is missing', () => {
+                it('SHOULD return Information step when Customer data is missing', () => {
                     //Arrange
                     let cart = {
                         Customer: {
@@ -224,7 +226,7 @@
                     expect(step).toEqual(CheckoutStepNumbers.Information);
                 });
 
-                it('SHOULD return 1 (Information) step when Customer Email is missing', () => {
+                it('SHOULD return Information step when Customer Email is missing', () => {
                     //Arrange
                     let cart = {
                         Customer: {
@@ -337,7 +339,7 @@
                     expect(step).toEqual(CheckoutStepNumbers.Billing);
                 });
 
-                it('SHOULD return Shipping step when ShippingAddress.AddressName is not fulfilled for PickUp method type', () => {
+                it('SHOULD return Shipping step when PickUpLocationId is not set for PickUp method type', () => {
                     //Arrange
                     let cart = {
                         Customer: {
@@ -349,7 +351,7 @@
                             FulfillmentMethodTypeString: Orckestra.Composer.FulfillmentMethodTypes.PickUp
                         },
                         ShippingAddress: {
-                            AddressName: '',
+                            AddressName: 'Some',
                             Line1: 'Line1',
                             City: 'City',
                             RegionCode: 'RegionCode',
@@ -363,7 +365,7 @@
                     expect(step).toEqual(CheckoutStepNumbers.Shipping);
                 });
 
-                it('SHOULD return Billing step when ShippingAddress.AddressName is fulfilled for PickUp method type', () => {
+                it('SHOULD return Billing step when PickUpLocationId is set for PickUp method type', () => {
                     //Arrange
                     let cart = {
                         Customer: {
@@ -374,12 +376,14 @@
                         ShippingMethod: {
                             FulfillmentMethodTypeString: Orckestra.Composer.FulfillmentMethodTypes.PickUp
                         },
+                        PickUpLocationId: '123',
                         ShippingAddress: {
                             AddressName: 'Store 1',
                             Line1: 'Line1',
                             City: 'City',
                             RegionCode: 'RegionCode',
                             PostalCode: 'PostalCode'
+
                         }
                     }
                     ///Act

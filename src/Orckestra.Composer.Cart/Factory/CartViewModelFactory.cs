@@ -118,6 +118,11 @@ namespace Orckestra.Composer.Cart.Factory
             if (vm.ShippingAddress != null)
             {
                 vm.ShippingAddress.PhoneRegex = CountryService.RetrieveCountryAsync(CountryParam).Result.PhoneRegex;
+
+                if (vm.Payment != null && vm.Payment.BillingAddress != null)
+                {
+                    vm.Payment.BillingAddress.PhoneRegex = vm.ShippingAddress.PhoneRegex;
+                }
             }
         }
 
@@ -606,16 +611,22 @@ namespace Orckestra.Composer.Cart.Factory
 
             var addressViewModel = ViewModelMapper.MapTo<AddressViewModel>(address, cultureInfo);
 
-            var regionName = CountryService.RetrieveRegionDisplayNameAsync(new RetrieveRegionDisplayNameParam
+            if (address.RegionCode != null)
             {
-                CultureInfo = cultureInfo,
-                IsoCode = ComposerContext.CountryCode,
-                RegionCode = address.RegionCode
-            }).Result;
+                var regionName = CountryService.RetrieveRegionDisplayNameAsync(new RetrieveRegionDisplayNameParam
+                {
+                    CultureInfo = cultureInfo,
+                    IsoCode = ComposerContext.CountryCode,
+                    RegionCode = address.RegionCode
+                }).Result;
+                addressViewModel.RegionName = regionName;
+            }
 
-            addressViewModel.RegionName = regionName;
-            addressViewModel.PhoneNumber = address.PhoneNumber;
-            addressViewModel.PhoneNumberFormated = LocalizationProvider.FormatPhoneNumber(address.PhoneNumber, cultureInfo);
+            if (address.PhoneNumber != null)
+            {
+                addressViewModel.PhoneNumber = address.PhoneNumber;
+                addressViewModel.PhoneNumberFormated = LocalizationProvider.FormatPhoneNumber(address.PhoneNumber, cultureInfo);
+            }
 
             return addressViewModel;
         }

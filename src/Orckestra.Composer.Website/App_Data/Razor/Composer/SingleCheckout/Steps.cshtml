@@ -31,6 +31,7 @@
             @Function("Composer.SingleCheckout.Steps.BillingAddress")
         </checkout-step>
         <checkout-step v-slot="step" v-bind:before-enter="preparePayment"
+					   v-bind:before-change="processPayment"
                        v-bind:fulfilled="FulfilledPayment">
             @Function("Composer.SingleCheckout.Steps.Payment")
         </checkout-step>

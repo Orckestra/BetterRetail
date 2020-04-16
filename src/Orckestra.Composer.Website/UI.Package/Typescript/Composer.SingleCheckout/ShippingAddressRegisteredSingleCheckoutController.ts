@@ -45,6 +45,7 @@ module Orckestra.Composer {
                                     return true;
                                 });
                         } else {
+                            this.Steps.EnteredOnce.Shipping = true;
                             return true;
                         }
                     },
@@ -122,6 +123,16 @@ module Orckestra.Composer {
             };
 
             this.checkoutService.VueCheckoutMixins.push(vueShippingAddressRegisteredMixin);
+        }
+
+        public getViewModelNameForUpdatePromise(): Q.Promise<any> {
+            return Q.fcall(() => {
+                var vueData = this.checkoutService.VueCheckout;
+
+                if (vueData.shippingAddressModified()) {
+                    return this.viewModelName;
+                }
+            });
         }
 
         public getUpdateModelPromise(): Q.Promise<any> {

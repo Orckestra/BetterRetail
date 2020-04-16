@@ -20,11 +20,7 @@ module Orckestra.Composer {
                 },
                 computed: {
                     FulfilledCustomer() {
-                        let fulfilled = this.Cart.Customer.FirstName &&
-                            this.Cart.Customer.LastName &&
-                            this.Cart.Customer.Email;
- 
-                        return !!fulfilled;
+                        return self.checkoutService.customerFulfilled(this.Cart);
                     }
                 },
                 methods: {

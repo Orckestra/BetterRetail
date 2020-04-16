@@ -41,7 +41,7 @@
 
 @helper StoreTile()
 {
-    <div class="card h-100">
+    <div class="store-tile card h-100  @(ShowMap ? "": "pin-in-title" )">
         @if (ShowMap)
         {
             @StoreMap()
@@ -84,7 +84,7 @@
 
 @helper StoreTitle()
 {
-    <div class="store-tile-title d-flex justify-content-between flex-nowrap @(ShowMap ? "": "with-pin" )">
+    <div class="store-tile-title d-flex justify-content-between flex-nowrap">
         <h5>
 			@if (!ShowMap)
             {

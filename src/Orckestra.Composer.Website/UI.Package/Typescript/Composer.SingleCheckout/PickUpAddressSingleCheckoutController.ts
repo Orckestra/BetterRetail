@@ -40,11 +40,21 @@ module Orckestra.Composer {
                     },
                     processPickUpAddress(): Q.Promise<any> {
                         let controllersToUpdate = [self.viewModelName];
+
+                        if(!this.pickUpAddressModified())
+                            return  Q.resolve(true);
+
                         return self.checkoutService.updateCart(controllersToUpdate)
                             .then(() => {
                                 this.Steps.EnteredOnce.Shipping = true;
                                 return true;
                             });
+                    },
+                    preparePickUpAddress() {
+                        this.pickUpLocationIdBeforeEdit = this.Cart.PickUpLocationId;
+                    },
+                    pickUpAddressModified() {
+                        return this.pickUpLocationIdBeforeEdit !== this.Cart.PickUpLocationId;
                     }
                 }
             };
@@ -67,7 +77,11 @@ module Orckestra.Composer {
         }
 
         public getViewModelNameForUpdatePromise(): Q.Promise<any> {
-            return Q.resolve(null);
+            let vueData = this.checkoutService.VueCheckout;
+            if (vueData.pickUpAddressModified()) {
+                return Q.resolve(this.viewModelName);
+            }
         }
+
     }
 }

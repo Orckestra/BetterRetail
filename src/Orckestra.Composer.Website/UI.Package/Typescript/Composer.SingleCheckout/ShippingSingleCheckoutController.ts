@@ -19,36 +19,19 @@ module Orckestra.Composer {
             let vueShippingMixin = {
                 mounted() {
                     this.calculateSelectedMethod();
-                    this.Steps.EnteredOnce.Shipping = this.FulfilledShipping; 
-
+                    this.Steps.EnteredOnce.Shipping = this.FulfilledShipping;
+                    this.prepareShipping();
                 },
                 computed: {
                     FulfilledShipping() {
-
-                        let fulfilledAddress =
-                            this.ShippingAddress.FirstName &&
-                            this.ShippingAddress.LastName &&
-                            this.ShippingAddress.Line1 &&
-                            this.ShippingAddress.City &&
-                            this.ShippingAddress.RegionCode &&
-                            this.ShippingAddress.PostalCode &&
-                            this.ShippingAddress.PhoneNumber;
-
-                        if (this.IsAuthenticated) {
-                            fulfilledAddress = fulfilledAddress || this.SelectedShippingAddressId
-                        }
-
-                        if(this.IsPickUpMethodType) {
-                            fulfilledAddress = this.Cart.PickUpLocationId;
-                        }
-
-                        return !!(fulfilledAddress && this.Cart.ShippingMethod);
+                        return self.checkoutService.shippingFulfilled(this.Cart, this.IsAuthenticated);
                     },
                     SelectedMethodTypeString() {
                         return this.Cart.ShippingMethod ? this.Cart.ShippingMethod.FulfillmentMethodTypeString : '';
                     },
                     SelectedMethodType() {
-                        return this.ShippingMethodTypes.find(type => type.FulfillmentMethodTypeString === this.Cart.ShippingMethod.FulfillmentMethodTypeString);
+                        return this.Cart.ShippingMethod &&
+                        this.ShippingMethodTypes.find(type => type.FulfillmentMethodTypeString === this.Cart.ShippingMethod.FulfillmentMethodTypeString);
                     },
                     IsShippingMethodType() {
                         return this.Cart.ShippingMethod &&
@@ -70,11 +53,25 @@ module Orckestra.Composer {
 
                         this.Mode.AddingLine2Address = !this.Cart.ShippingAddress.Line2;
                         this.Mode.AddingNewAddress = false;
+
+                        this.ShippingMethodTypes.forEach(methodType => {
+                            if(this.IsPickUpMethodType && methodType.FulfillmentMethodTypeString === FulfillmentMethodTypes.Shipping) {
+                                methodType.OldAddress = this.getClearShippingAddress();
+                            } else {
+                                methodType.OldAddress = this.Cart.ShippingAddress;
+                            }
+                        });
+
+                        this.preparePickUpAddress();
                     },
                     clearShippingAddress() {
                         this.Mode.AddingLine2Address = true;
+                        this.Cart.ShippingAddress = this.getClearShippingAddress();
+                    },
+                    getClearShippingAddress(): any {
                         let { ShippingAddress: { FirstName, LastName, CountryCode }, Customer } = this.Cart;
-                        this.Cart.ShippingAddress = {
+
+                        return {
                             FirstName: FirstName || Customer.FirstName,
                             LastName: LastName || Customer.LastName,
                             CountryCode
@@ -139,18 +136,19 @@ module Orckestra.Composer {
                     },
                     updateShippingMethodProcess(methodEntity: any) {
                         let oldShippingMethod = { ...this.Cart.ShippingMethod };
-                        let oldShippingAddress = { ...this.Cart.ShippingAddress };
                         let oldPickUpLocationId = this.Cart.PickUpLocationId;
 
+                        if(this.SelectedMethodType)
+                            this.SelectedMethodType.OldAddress = { ...this.Cart.ShippingAddress };
                         this.Cart.ShippingMethod = methodEntity;
 
                         if (methodEntity.ShippingProviderId === oldShippingMethod.ShippingProviderId) return;
 
+                        this.Cart.ShippingAddress = this.getClearShippingAddress();
                         self.checkoutService.updateCart([self.viewModelName])
                             .then(({ Cart }) => {
-                                this.Cart.ShippingAddress = oldShippingAddress;
+                                this.Cart.ShippingAddress = this.SelectedMethodType.OldAddress;
                                 this.Cart.PickUpLocationId = oldPickUpLocationId;
-                                this.prepareShipping();
                             }).catch(e => {
                                 this.Cart.ShippingMethod = oldShippingMethod;
                             })

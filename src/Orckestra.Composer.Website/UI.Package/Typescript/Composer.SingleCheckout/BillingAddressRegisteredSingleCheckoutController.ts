@@ -25,6 +25,7 @@ module Orckestra.Composer {
                                     return true;
                                 });
                         } else {
+                            this.Steps.EnteredOnce.Billing = true;
                             return true;
                         }
                     },

@@ -16,7 +16,11 @@ module Orckestra.Composer {
             this.eventHub.subscribe("cartBillingAddressUpdated", this.onBillingAddressUpdated);
 
             let vuePaymentMixin = {
-
+                mounted() {
+                    if (this.FulfilledBillingAddress) {
+                        this.preparePayment();
+                    }
+                },
                 computed: {
                     FulfilledPayment() {
                         return !!(this.FulfilledBillingAddress && this.ActivePayment && this.Steps.EnteredOnce.Billing);
@@ -107,15 +111,22 @@ module Orckestra.Composer {
                         return self.activePaymentProvider = this.Providers.find(provider => provider.providerType === ProviderType);
                     },
 
-                    processPayment(): Q.Promise<IUpdateCartResult> {
+                    processPayment(): Q.Promise<boolean> {
                         let activeProvider = this.findActivePaymentProvider();
 
                         return activeProvider.validatePayment(this.Payment.ActivePaymentViewModel)
                             .then(success => {
                                 if (!success) return Q.reject('Card information not valid');
-
-                                return self.checkoutService.updateCart([self.viewModelName])
+                                return true;
                             });
+                    },
+
+                    submitPayment(): Q.Promise<any> {
+                       return this.processPayment()
+                        .then(() => {
+                            console.log('Committing payment information.');
+                            return self.activePaymentProvider.submitPayment(this.Payment.ActivePaymentViewModel);
+                        });
                     },
 
                     preparePayment(): Q.Promise<boolean> {
@@ -138,27 +149,6 @@ module Orckestra.Composer {
         protected onBillingAddressUpdated(e) {
             let vueData = e.data;
             vueData.preparePayment();
-        }
-
-        public getViewModelNameForUpdatePromise(): Q.Promise<any> {
-            return Q.fcall(() => {
-                let vueData = this.checkoutService.VueCheckout;
-                let activeProvider = vueData.findActivePaymentProvider();
-                return activeProvider.validatePayment(vueData.Payment.ActivePaymentViewModel)
-                    .then(success => {
-                        if (!success) return Q.reject('Payment information not valid');
-
-                        return this.viewModelName;
-                    });
-            });
-        }
-
-        public getUpdateModelPromise(): Q.Promise<any> {
-            return Q.fcall(() => {
-                console.log('Committing payment information.');
-                let { Payment } = this.checkoutService.VueCheckout;
-                return this.activePaymentProvider.submitPayment(Payment.ActivePaymentViewModel);
-            });
         }
     }
 }

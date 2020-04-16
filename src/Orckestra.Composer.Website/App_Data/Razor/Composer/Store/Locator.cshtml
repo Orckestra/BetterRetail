@@ -79,7 +79,7 @@
 
 @helper SearchStoreInput(string postedAddress)
 {
-    <div v-if="Errors.StoreLocatorLocationError" class="text-danger mb-2">@Html.Localize("Store", "L_MyLocationError")</div>
+    <div v-if="StoreLocatorLocationError" class="text-danger mb-2">@Html.Localize("Store", "L_MyLocationError")</div>
     <div class="form-group form-row align-items-center">
         <div class="col-12 col-md-6 col-lg-4 mb-2 mb-md-0">
             <input id="storeLocatorSearchInput"

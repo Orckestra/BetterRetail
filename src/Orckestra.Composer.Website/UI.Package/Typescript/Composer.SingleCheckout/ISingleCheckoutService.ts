@@ -15,6 +15,12 @@ module Orckestra.Composer {
 
         calculateStartStep(cart: any, isAuthenticated: boolean): number;
 
+        customerFulfilled(cart: any): boolean;
+
+        shippingFulfilled(cart: any, isAuthenticated: boolean): boolean;
+        
+        billingFulfilled(cart: any, isAuthenticated: boolean): boolean;
+
         removeCartItem(id, productId): Q.Promise<any>;
 
         updateCartItem(id: string, quantity: number, productId: string,

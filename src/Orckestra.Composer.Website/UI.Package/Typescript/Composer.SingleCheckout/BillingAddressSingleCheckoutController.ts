@@ -22,28 +22,13 @@ module Orckestra.Composer {
                 },
                 computed: {
                     FulfilledBillingAddress() {
-                       
-                        let fulfilled =
-                            this.BillingAddress.FirstName &&
-                            this.BillingAddress.LastName &&
-                            this.BillingAddress.Line1 &&
-                            this.BillingAddress.City &&
-                            this.BillingAddress.RegionCode &&
-                            this.BillingAddress.PostalCode &&
-                            this.BillingAddress.PhoneNumber;
-
-                        if (this.IsAuthenticated) {
-                            fulfilled = fulfilled || this.BillingAddress.AddressBookId
-                        }
-
-                        return !!(fulfilled && this.Steps.EnteredOnce.ReviewCart);
+                        return self.checkoutService.billingFulfilled(this.Cart, this.IsAuthenticated)
+                            && this.Steps.EnteredOnce.ReviewCart;
                     },
-
                     BillingAddress() {
                         return this.Cart.Payment.BillingAddress;
                     }
                 },
-
             
                 methods: {
                     prepareBillingAddress(): Q.Promise<boolean> {

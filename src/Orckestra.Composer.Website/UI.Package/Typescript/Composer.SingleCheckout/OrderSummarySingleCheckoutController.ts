@@ -26,10 +26,9 @@ module Orckestra.Composer {
                         this.Mode.CompleteCheckoutLoading = true;
                         return self.checkoutService.collectViewModelNamesForUpdateCart().
                             then(viewModels => {
-
-                                return self.checkoutService.updateCart(viewModels)
-
+                                return self.checkoutService.updateCart(viewModels);
                             })
+                            .then(() => this.submitPayment())
                             .then(() => self.checkoutService.completeCheckout())
                             .fail(reason => {
                                 console.error('An error occurred while completing the checkout.', reason);

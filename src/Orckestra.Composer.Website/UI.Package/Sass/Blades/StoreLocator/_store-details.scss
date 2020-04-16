@@ -23,6 +23,19 @@
     }
   }
 
+  .store-tile{
+      &.pin-in-title {
+        .store-tile-title {
+            position: relative;
+            padding-left: 25px;
+        }
+
+        .store-address {
+            padding-left: 25px;
+        }
+      }
+  }
+
  .static-map-pin {
      position: absolute;
      margin-top: -50px;
@@ -47,15 +60,10 @@
  }
 
  .store-tile-title {
-     &.with-pin {
-         position: relative;
-         padding-left: 20px;
-         margin-bottom: 6px;
-     }
 
     .static-map-pin {
-        left: 0;
-        top: 40px;
+        left: 5px;
+        top: 45px;
         height: 45px;
      }
  }
