@@ -130,6 +130,7 @@ module Orckestra.Composer {
                         }
 
                         item.index = this.steps.indexOf(item);
+                        item.stepId = 'step' + index;
                         this.maxStep = this.steps.length - 1; //TODO: fix it
                     },
                     removeStep: function removeStep(item) {
@@ -172,6 +173,7 @@ module Orckestra.Composer {
                             let cb = () => {
                                 this.beforeStepEnter(index);
                                 this.changeStep(this.activeStepIndex, index);
+                                this.scrollToStep(index);
                             };
 
                             this.beforeStepChange(this.activeStepIndex, cb);
@@ -320,6 +322,14 @@ module Orckestra.Composer {
                         this.activeStepIndex = newIndex;
                         this.activateStepAndCheckStep(this.activeStepIndex);
                         return true;
+                    },
+                    scrollToStep: function scrollToStep(stepIndex) {
+                        let stepId = this.steps[stepIndex].stepId;
+                        setTimeout(function () {
+                            $('html, body').animate({
+                                scrollTop: $('#' + stepId).offset().top
+                            }, 500, function () { });
+                        }, 200);
                     },
                     deactivateSteps: function deactivateSteps() {
                         this.steps.forEach(function (step) {

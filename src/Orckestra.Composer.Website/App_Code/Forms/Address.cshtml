@@ -9,8 +9,8 @@
                 @if (showAddressName)
                 {
                     <div class="form-group">
-                        <label for="AddressName">@Html.Localize("Forms", "F_AddressName") *</label>
-                        <input id="AddressName"
+                        <label for="@(formId)AddressName">@Html.Localize("Forms", "F_AddressName") *</label>
+                        <input id="@(formId)AddressName"
                                name="AddressName"
                                data-qa="address-name-input"
                                v-model="AddressName"
