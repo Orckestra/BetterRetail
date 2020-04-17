@@ -83,6 +83,7 @@ namespace Orckestra.Composer.Cart.Factory
             vm.OrderSummary.AdditionalFeeSummaryList = GetAdditionalFeesSummary(vm.LineItemDetailViewModels, param.CultureInfo);
 
             SetDefaultCountryCode(vm);
+            SetDefaultShippingAddressNames(vm);
             SetPostalCodeRegexPattern(vm);
             SetPhoneNumberRegexPattern(vm);
 
@@ -95,6 +96,19 @@ namespace Orckestra.Composer.Cart.Factory
             vm.IsAuthenticated = ComposerContext.IsAuthenticated;
 
             return vm;
+        }
+
+        protected virtual void SetDefaultShippingAddressNames(CartViewModel vm)
+        {
+            if (vm.ShippingAddress != null && vm.Customer != null)
+            {
+                if (string.IsNullOrWhiteSpace(vm.ShippingAddress.FirstName) &&
+                    string.IsNullOrWhiteSpace(vm.ShippingAddress.LastName))
+                {
+                    vm.ShippingAddress.FirstName = vm.Customer.FirstName;
+                    vm.ShippingAddress.LastName = vm.Customer.LastName;
+                }
+            }
         }
 
         //TODO: Remove this once we support the notion of countries other than Canada and also have a country picker
@@ -339,6 +353,7 @@ namespace Orckestra.Composer.Cart.Factory
             cartVm.Rewards = RewardViewModelFactory.CreateViewModel(shipment.Rewards, cultureInfo, RewardLevel.FulfillmentMethod, RewardLevel.Shipment).ToList();
             cartVm.OrderSummary.Taxes = TaxViewModelFactory.CreateTaxViewModels(shipment.Taxes, cultureInfo).ToList();
             cartVm.ShippingAddress = GetAddressViewModel(shipment.Address, cultureInfo);
+
             cartVm.PickUpLocationId = shipment.PickUpLocationId;
 
             cartVm.LineItemDetailViewModels = LineItemViewModelFactory.CreateViewModel(new CreateListOfLineItemDetailViewModelParam
