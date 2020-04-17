@@ -543,6 +543,12 @@ namespace Orckestra.Composer.Cart.Services
                 }
 
                 var newAddress = await AddressRepository.GetAddressByIdAsync(registeredBillingAddressViewModel.BillingAddressId).ConfigureAwait(false);
+
+                if(newAddress == null)
+                {
+                    return;
+                }
+
                 var isBillingChanged = payment.BillingAddress == null || !IsEqual(payment.BillingAddress, newAddress);
 
                 if (isBillingChanged)

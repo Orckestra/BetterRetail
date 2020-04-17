@@ -15,6 +15,7 @@ module Orckestra.Composer {
             super.initialize();
             let self: ShippingAddressRegisteredSingleCheckoutController = this;
             self.viewModelName = 'ShippingAddressRegistered';
+            self.formSelector = '#addNewAddressForm';
 
             let vueShippingAddressRegisteredMixin = {
                 data: {
@@ -56,11 +57,11 @@ module Orckestra.Composer {
                         this.AddressName = null;
                         this.SelectedShippingAddressId = undefined;
                         this.clearShippingAddress();
+                        this.initializeParsey(self.formSelector);
                     },
 
                     addShippingAddressToMyAddressBook() {
-                        let formId = '#addNewAddressForm';
-                        let isValid = this.initializeParsey(formId);
+                        let isValid = this.validateParsey(self.formSelector);
                         if (!isValid) {
                             return Q.reject('Shipping Address information is not valid');
                         }

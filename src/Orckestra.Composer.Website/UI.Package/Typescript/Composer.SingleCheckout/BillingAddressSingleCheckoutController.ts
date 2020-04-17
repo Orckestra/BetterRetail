@@ -67,7 +67,7 @@ module Orckestra.Composer {
                             return Q.resolve(true);
 
                         if (!this.BillingAddress.UseShippingAddress) {
-                            let isValid = this.initializeParsey(self.formSelector);
+                            let isValid = this.validateParsey(self.formSelector);
                             if (!isValid) {
                                 return Q.reject('Billing Address information is not valid');
                             }
@@ -112,11 +112,6 @@ module Orckestra.Composer {
                         return this.BillingAddress && _.some(keys, (key) => this.billingAddressBeforeEdit[key] != dataToCompare[key]);
                     },
 
-                    addNewBillingAddress() {
-                        this.Mode.AddingNewAddress = true;
-                        this.clearBillingAddress();
-                    },
-
                     changeUseShippingAddress(event) {
                         let { checked } = event.target;
                         if (!checked) {
@@ -146,7 +141,7 @@ module Orckestra.Composer {
                 if(vueData.IsAuthenticated) {
                     return;
                 }
-                let isValid = vueData.initializeParsey(this.formSelector);
+                let isValid = vueData.validateParsey(this.formSelector);
                 if(!isValid) {
                     console.log('Billing Address information is not valid')
                     return Q.reject('Billing Address information is not valid');

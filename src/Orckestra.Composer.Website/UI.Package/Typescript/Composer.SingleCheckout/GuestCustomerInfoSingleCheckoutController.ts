@@ -12,11 +12,13 @@ module Orckestra.Composer {
             self.formSelector = '#editCustomerForms';
 
             super.initialize();
-            this.registerSubscriptions();
 
             let vueUserMixin = {
                 created() {
-                    this.customerBeforeEdit = { ...this.Cart.Customer }
+                    this.customerBeforeEdit = { ...this.Cart.Customer };
+                },
+                mounted() {
+                    this.initializeParsey(self.formSelector);
                 },
                 computed: {
                     FulfilledCustomer() {
@@ -24,15 +26,17 @@ module Orckestra.Composer {
                     }
                 },
                 methods: {
+                    prepareCustomer() {
+                        this.initializeParsey(self.formSelector);
+                    },
                     processCustomer() {
                         var processCustomer: Q.Deferred<boolean> = Q.defer<boolean>();
-                        let isValid = this.initializeParsey(self.formSelector);
+                        let isValid = this.validateParsey(self.formSelector);
 
                         if (isValid) {
 
                             if (this.isCustomerModified()) {
                                 self.checkoutService.updateCart([self.viewModelName]).then(result => {
-                                    this.Cart.Customer = result.Cart.Customer;
                                     processCustomer.resolve(true);
                                 });
                             } else {
@@ -59,8 +63,8 @@ module Orckestra.Composer {
         public getViewModelNameForUpdatePromise(): Q.Promise<any> {
             return Q.fcall(() => {
                 var vueData = this.checkoutService.VueCheckout;
-                let isValid = vueData.initializeParsey(this.formSelector);
-                if(!isValid) {
+                let isValid = vueData.validateParsey(this.formSelector);
+                if (!isValid) {
                     return Q.reject('User information is not valid');
                 }
 

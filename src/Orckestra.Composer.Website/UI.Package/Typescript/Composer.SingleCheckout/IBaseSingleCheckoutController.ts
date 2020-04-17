@@ -6,12 +6,6 @@ module Orckestra.Composer {
 
         viewModelName: string;
 
-       // unregisterController();
-
-       // renderData(checkoutContext: ICheckoutContext): Q.Promise<void>;
-
-        getValidationPromise(): Q.Promise<boolean>;
-
         getUpdateModelPromise(): Q.Promise<any>;
 
         getViewModelNameForUpdatePromise(): Q.Promise<any>;

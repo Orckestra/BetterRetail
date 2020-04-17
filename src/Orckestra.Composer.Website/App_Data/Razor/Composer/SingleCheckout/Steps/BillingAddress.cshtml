@@ -38,7 +38,7 @@
                              v-bind:class="{ 'bg-selected border-primary': address.Id == BillingAddress.AddressBookId }">
                             @CheckoutHelpers.AddressRadioOption("BillingAddressId", "BillingAddress.AddressBookId", "changeRegisteredBillingAddress")
                         </div>
-                        <div v-if="Mode.AddingNewAddress" class="border-top mt-4 pt-4">
+                        <div v-show="Mode.AddingNewAddress" class="border-top mt-4 pt-4">
                             @Forms.Address.Form("Cart.Payment.BillingAddress", "addNewBillingAddressForm", true, null)
 
                             <button class="btn btn-primary mt-1"

@@ -11,7 +11,6 @@ module Orckestra.Composer {
             self.viewModelName = 'ReviewCart';
 
             super.initialize();
-            this.registerSubscriptions();
 
             var vueReviewCartMixin = {
                 mounted() {

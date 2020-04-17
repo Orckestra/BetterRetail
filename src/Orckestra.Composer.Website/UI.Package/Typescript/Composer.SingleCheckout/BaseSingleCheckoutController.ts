@@ -12,7 +12,7 @@ module Orckestra.Composer {
     export class BaseSingleCheckoutController extends Orckestra.Composer.Controller implements Orckestra.Composer.IBaseSingleCheckoutController {
 
         protected formInstances: IParsley[];
-        protected formSelector: string;
+        protected formSelector: string = 'form';
         protected checkoutService: ISingleCheckoutService;
 
         public viewModelName: string;
@@ -36,12 +36,6 @@ module Orckestra.Composer {
            this.checkoutService.unregisterController(this.viewModelName);
         }
 
-
-        public getValidationPromise(): Q.Promise<boolean> {
-
-            return Q.fcall(() => this.isValidForUpdate());
-        }
-
         public getUpdateModelPromise(): Q.Promise<any> {
 
             return Q.fcall(() => {});
@@ -50,21 +44,5 @@ module Orckestra.Composer {
         public getViewModelNameForUpdatePromise(): Q.Promise<any> {
             return Q.resolve(null);
         }
-
-        protected registerSubscriptions(): void {
-            this.formInstances = this.registerFormsForValidation($('form', this.context.container));
-        }
-
-        protected getSerializedForm(): string {
-            let formContext = $('form', this.context.container),
-                viewModel = (<ISerializeObjectJqueryPlugin>formContext).serializeObject();
-
-            return viewModel;
-        }
-
-        protected isValidForUpdate(): boolean {
-            return _.all(this.formInstances, formInstance => formInstance.validate());
-        }
-      
     }
 }

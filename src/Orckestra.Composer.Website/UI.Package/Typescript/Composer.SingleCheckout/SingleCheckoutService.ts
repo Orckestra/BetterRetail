@@ -205,12 +205,17 @@ module Orckestra.Composer {
                 },
                 methods: {
 
-                    initializeParsey(formId: any): boolean {
+                    initializeParsey(formId: any): void {
+                        $(formId).parsley({ trigger: 'focusout change' });
+                    },
+
+                    validateParsey(formId: any): boolean {
                         let parsleyInit = $(formId).parsley();
                         if (parsleyInit) {
                             parsleyInit.validate();
                             return parsleyInit.isValid();
                         }
+
                         return true;
                     }
                 }
@@ -375,7 +380,6 @@ module Orckestra.Composer {
                 });
         }
 
-
         public collectViewModelNamesForUpdateCart(): Q.Promise<any> {
             let controllerInstance: IBaseSingleCheckoutController;
             let promises: Q.Promise<any>[] = [];
@@ -429,34 +433,8 @@ module Orckestra.Composer {
 
         private buildCartUpdateViewModel(vm: any, controllersName = null): Q.Promise<any> {
 
-            //var validationPromise: Q.Promise<any>;
-            //var viewModelUpdatePromise: Q.Promise<any>;
-
-            // validationPromise = Q(vm).then(vm => {
-            //     return this.getCartValidation(vm);
-            // });
-
-            //  viewModelUpdatePromise = validationPromise.then(vm => {
             return this.getCartUpdateViewModel(vm, controllersName);
-            // });
 
-            ///return viewModelUpdatePromise;
-        }
-
-        private getCartValidation(vm: any): Q.Promise<any> {
-
-            let validationPromise = this.collectValidationPromises();
-
-            return validationPromise.then((results: Array<boolean>) => {
-                console.log('Aggregating all validation results');
-                let hasFailedValidation = _.any(results, r => !r);
-
-                if (hasFailedValidation) {
-                    throw new Error('There were validation errors.');
-                }
-
-                return vm;
-            });
         }
 
         private getCartUpdateViewModel(vm: any, controllersName = null): Q.Promise<any> {
@@ -480,22 +458,6 @@ module Orckestra.Composer {
             });
         }
 
-        private collectValidationPromises(): Q.Promise<any> {
-
-            let promises: Q.Promise<any>[] = [];
-            let controllerInstance: IBaseSingleCheckoutController;
-
-            for (let controllerName in this.registeredControllers) {
-
-                if (this.registeredControllers.hasOwnProperty(controllerName)) {
-                    controllerInstance = <IBaseSingleCheckoutController>this.registeredControllers[controllerName];
-                    promises.push(controllerInstance.getValidationPromise());
-                }
-            }
-
-            return Q.all(promises);
-        }
-
         private collectUpdateModelPromises(controllerNames = null): Q.Promise<any> {
 
             let promises: Q.Promise<any>[] = [];
@@ -512,7 +474,6 @@ module Orckestra.Composer {
                     promises.push(controllerInstance.getUpdateModelPromise());
                 }
             }
-
 
             return Q.all(promises);
         }

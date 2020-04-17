@@ -17,14 +17,14 @@ module Orckestra.Composer {
                     this.adressBeforeEdit = { ...this.Cart.ShippingAddress };
                 },
                 mounted() {
-
+                    this.initializeParsey(self.formSelector);
                 },
                 computed: {
                 },
                 methods: {
                     processShippingAddress() {
                         var processShippingAddress: Q.Deferred<boolean> = Q.defer<boolean>();
-                        let isValid = this.initializeParsey(self.formSelector);
+                        let isValid = this.validateParsey(self.formSelector);
                         if (isValid) {
                             if (this.shippingAddressModified()) {
                                 let postalCode = this.Cart.ShippingAddress.PostalCode;
@@ -60,7 +60,7 @@ module Orckestra.Composer {
                     recalculateShippingFee() {
 
                         let formId = !this.IsAuthenticated ? '#addressForm' : '#addNewAddressForm';
-                        let isValid = this.initializeParsey(formId);
+                        let isValid = this.validateParsey(formId);
                         if (isValid) {
                             this.changePostalCode(this.Cart.ShippingAddress.PostalCode);
                         }

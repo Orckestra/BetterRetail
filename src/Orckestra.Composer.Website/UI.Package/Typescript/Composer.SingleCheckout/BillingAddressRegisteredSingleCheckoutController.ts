@@ -10,6 +10,7 @@ module Orckestra.Composer {
             super.initialize();
             let self: BillingAddressRegisteredSingleCheckoutController = this;
             self.viewModelName = 'BillingAddressRegistered';
+            self.formSelector = '#addNewBillingAddressForm';
 
             let vueBillingAddressRegisteredMixin = {
 
@@ -29,9 +30,14 @@ module Orckestra.Composer {
                             return true;
                         }
                     },
+                    addNewBillingAddress() {
+                        this.Mode.AddingNewAddress = true;
+                        this.clearBillingAddress();
+                        this.initializeParsey(self.formSelector);
+                    },
+
                     addBillingAddressToMyAddressBook() {
-                        let formId = '#addNewBillingAddressForm';
-                        let isValid = this.initializeParsey(formId);
+                        let isValid = this.validateParsey(self.formSelector);
                         if (!isValid) {
                             return Q.reject('Billing Address information is not valid');
                         }

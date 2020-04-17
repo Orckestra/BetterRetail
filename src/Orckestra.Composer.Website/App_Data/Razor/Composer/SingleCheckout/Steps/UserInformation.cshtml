@@ -37,7 +37,7 @@
                     <div data-qa="information-email" v-text="Cart.Customer.Email"></div>
                 </div>
 
-                <form id="editCustomerForms" v-if="step.active" key="active" data-qa="information-active-state">
+                <form id="editCustomerForms" v-show="step.active" key="active" data-qa="information-active-state">
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="FirstName">@Html.Localize("Forms", "F_FirstName") *</label>
