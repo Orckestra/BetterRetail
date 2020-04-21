@@ -17,18 +17,24 @@ namespace Composite.AspNet.Razor
     public static class WebPagesHtmlHelperExtensions
     {
 
-        public static IHtmlString HelpBubble(this System.Web.WebPages.Html.HtmlHelper htmlHelper, string category, string key)
+        public static IHtmlString HelpBubble(this System.Web.WebPages.Html.HtmlHelper htmlHelper, string category, string key, params object[] args)
         {
             var helpText = Localize(category, key);
-            if (!string.IsNullOrEmpty(helpText))
+
+            if (string.IsNullOrEmpty(helpText))
             {
-                return new HtmlString(string.Format(@"data-toggle=""popover""
-                data-container=""body""
-                data-trigger=""focus""
-                data-content=""&lt;div class='multiline-message'&gt;&lt;span class='multiline-message-icon  fa  fa-comment-o  fa-lg'&gt;&lt;/span&gt;{0}&lt;/div&gt;""", helpText));
+                return new HtmlString("");
             }
 
-            return new HtmlString("");
+            if (args.Length > 0)
+            {
+                helpText = Localized(category, key, args);
+            }
+
+            return new HtmlString(string.Format(@"data-toggle=""popover""
+            data-container=""body""
+            data-trigger=""focus""
+            data-content=""&lt;div class='multiline-message'&gt;&lt;span class='multiline-message-icon  fa  fa-comment-o  fa-lg'&gt;&lt;/span&gt;{0}&lt;/div&gt;""", helpText));
         }
 
         public static IHtmlString ParsleyMessage(this System.Web.WebPages.Html.HtmlHelper htmlHelper, string category, string key, string dataParsleyKey)
@@ -68,9 +74,7 @@ namespace Composite.AspNet.Razor
 
         public static string Localized(this System.Web.Mvc.HtmlHelper htmlHelper, string category, string key, params object[] args)
         {
-            var formatter = Localize(htmlHelper, category, key);
-
-            return Format(formatter, category, key, args);
+            return Localized(category, key, args);
         }
 
         /// <summary>
@@ -84,9 +88,7 @@ namespace Composite.AspNet.Razor
         /// <returns></returns>
         public static string Localized(this System.Web.WebPages.Html.HtmlHelper htmlHelper, string category, string key, params object[] args)
         {
-            var formatter = Localize(htmlHelper, category, key);
-
-            return Format(formatter, category, key, args);
+            return Localized(category, key, args);
         }
 
         private static string Format(string formatter, string category, string key, params object[] args)
@@ -114,6 +116,12 @@ namespace Composite.AspNet.Razor
             );
         }
 
+        public static string Localized(string category, string key, params object[] args)
+        {
+            var formatter = Localize(category, key);
+
+            return Format(formatter, category, key, args);
+        }
 
 
         public static IHtmlString LazyFunction(this System.Web.WebPages.Html.HtmlHelper htmlHelper, string name, string className = null, string loaderClassName = null)

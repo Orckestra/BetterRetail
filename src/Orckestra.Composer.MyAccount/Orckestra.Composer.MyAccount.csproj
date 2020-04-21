@@ -47,6 +47,8 @@
     <Compile Include="Parameters\EditAddressParam.cs" />
     <Compile Include="Parameters\GetAccountStatusViewModelParam.cs" />
     <Compile Include="Parameters\GetCreateAddressViewModelAsyncParam.cs" />
+    <Compile Include="Parameters\GetCustomerByEmailParam.cs" />
+    <Compile Include="Parameters\GetCustomerByUsernameParam.cs" />
     <Compile Include="Parameters\GetCustomerChangePasswordViewModelParam.cs" />
     <Compile Include="Parameters\GetEditAddressViewModelAsyncParam.cs" />
     <Compile Include="Parameters\GetEditAddressViewModelParam.cs" />
@@ -108,6 +110,7 @@
     <Compile Include="ViewModels\AddressListItemViewModel.cs" />
     <Compile Include="ViewModels\DeleteAddressStatusViewModel.cs" />
     <Compile Include="ViewModels\EditAddressViewModel.cs" />
+    <Compile Include="ViewModels\IsUserExistViewModel.cs" />
     <Compile Include="ViewModels\IsAuthenticatedViewModel.cs" />
     <Compile Include="ViewModels\PreferredLanguageViewModel.cs" />
     <Compile Include="ViewModels\SetDefaultAddressStatusViewModel.cs" />

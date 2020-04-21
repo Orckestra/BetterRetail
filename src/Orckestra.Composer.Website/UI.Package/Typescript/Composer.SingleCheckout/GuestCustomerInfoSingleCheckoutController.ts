@@ -14,6 +14,12 @@ module Orckestra.Composer {
             super.initialize();
 
             let vueUserMixin = {
+                data: {
+                    CheckedEmailAddress: {
+                        Email: '',
+                        IsExist: false
+                    }
+                },
                 created() {
                     this.customerBeforeEdit = { ...this.Cart.Customer };
                 },
@@ -22,37 +28,95 @@ module Orckestra.Composer {
                 },
                 computed: {
                     FulfilledCustomer() {
-                        return self.checkoutService.customerFulfilled(this.Cart);
+                        let { Email, Password } = this.Cart.Customer;
+                        let fulfilledSignIn = Email && Password;
+                        let fulfilled = self.checkoutService.customerFulfilled(this.Cart);
+                        return !!(this.Mode.SignIn === SignInModes.SigningIn ? fulfilledSignIn : fulfilled);
+                    },
+                    BaseInformationMode() {
+                        return this.Mode.SignIn === SignInModes.Base
+                    },
+                    UserExistsMode() {
+                        return this.Mode.SignIn === SignInModes.UserExists
+                    },
+                    SigningInMode() {
+                        return this.Mode.SignIn === SignInModes.SigningIn
+                    },
+                    ShowSignInButton() {
+                        return this.FulfilledShipping && this.SigningInMode
                     }
                 },
                 methods: {
                     prepareCustomer() {
                         this.initializeParsey(self.formSelector);
                     },
-                    processCustomer() {
-                        var processCustomer: Q.Deferred<boolean> = Q.defer<boolean>();
+                    processCustomerWithSignInCheck(): Q.Promise<boolean> {
+                        return !this.ShowSignInButton ? this.processCustomer() : this.skipEditUserInformation()
+                    },
+                    processCustomer(): Q.Promise<boolean> {
                         let isValid = this.validateParsey(self.formSelector);
+                        if (!isValid)
+                            return Q.reject('User information is not valid');
 
-                        if (isValid) {
+                        if(!this.IsAuthenticated) {
+                            switch (this.Mode.SignIn) {
+                                case SignInModes.Base:
+                                    return this.checkUserExist(this.Cart.Customer.Email).then(result => {
+                                        if(result) return !result;
 
-                            if (this.isCustomerModified()) {
-                                self.checkoutService.updateCart([self.viewModelName]).then(result => {
-                                    processCustomer.resolve(true);
-                                });
-                            } else {
-                                processCustomer.resolve(true);
+                                        if(!this.isCustomerModified()) return true;
+
+                                        return self.checkoutService.updateCart([self.viewModelName])
+                                            .then(() => true);
+                                    });
+                                case SignInModes.SigningIn:
+                                    let {Email: Username, Password} = this.Cart.Customer;
+                                    let loginData = {Username, Password};
+                                    return self.checkoutService.loginUser(loginData);
                             }
-                        } else {
-                            processCustomer.resolve(false);
                         }
 
-                        return processCustomer.promise;
-                    },
+                        if (!this.isCustomerModified())
+                            return Q.resolve(true);
 
+                        return self.checkoutService.updateCart([self.viewModelName])
+                            .then(() => true);
+                    },
+                    skipEditUserInformation() {
+                        this.Mode.SignIn = SignInModes.Base;
+                        this.Cart.Customer = { ...this.customerBeforeEdit };
+                        return true;
+                    },
                     isCustomerModified() {
                         let keys = _.keys(this.Cart.Customer);
                         let isModified = _.some(keys, (key) => this.customerBeforeEdit[key] != this.Cart.Customer[key]);
                         return isModified;
+                    },
+                    signInButton() {
+                        this.resetParsley(self.formSelector);
+                        this.Mode.SignIn = SignInModes.SigningIn;
+                    },
+                    continueAsGuestButton() {
+                        this.resetParsley(self.formSelector);
+                        this.Mode.SignIn = SignInModes.Base;
+                        this.checkUserExist(this.Cart.Customer.Email);
+                    },
+                    onChangeUsername(e) {
+                        if(this.UserExistsMode)
+                            this.Mode.SignIn = SignInModes.Base;
+                    },
+                    checkUserExist(email: string): Q.Promise<boolean> {
+                        if(this.CheckedEmailAddress.Email === email) {
+                            this.Mode.SignIn = this.CheckedEmailAddress.IsExist ? SignInModes.UserExists : SignInModes.Base;
+                            return Q.resolve(this.CheckedEmailAddress.IsExist);
+                        }
+
+                        return self.checkoutService.checkUserExist(email)
+                            .then(result => {
+                                this.Mode.SignIn = result ? SignInModes.UserExists : SignInModes.Base;
+                                this.CheckedEmailAddress = { Email: email, IsExist: result };
+                                return result
+                            });
                     }
                 }
             };

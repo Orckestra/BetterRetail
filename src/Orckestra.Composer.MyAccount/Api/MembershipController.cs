@@ -356,5 +356,26 @@ namespace Orckestra.Composer.MyAccount.Api
 
             return Ok(vm);
         }
+
+
+        /// <summary>
+        /// Return true if the user exist
+        /// </summary>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpGet]
+        [ActionName("isExist")]
+        public virtual async Task<IHttpActionResult> IsUserExist(string email)
+        {
+            var getCustomerByEmailParam = new GetCustomerByEmailParam
+            {
+                CultureInfo = ComposerContext.CultureInfo,
+                Scope = ComposerContext.Scope,
+                Email = email
+            };
+
+            var isUserExistViewModel = await MembershipViewService.GetIsUserExistViewModelAsync(getCustomerByEmailParam);
+            return Ok(isUserExistViewModel);
+        }
     }
 }

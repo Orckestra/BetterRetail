@@ -52,5 +52,9 @@ module Orckestra.Composer {
         setOrderToCache(orderConfirmationviewModel : any) : void;
 
         saveAddressToMyAccountAddressBook(address: any): Q.Promise<any>;
+
+        loginUser(formData: any): Q.Promise<any>;
+
+        checkUserExist(username: string): Q.Promise<boolean>;
     }
 }

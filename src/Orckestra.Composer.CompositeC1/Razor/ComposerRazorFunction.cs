@@ -40,29 +40,6 @@ namespace Composer.Razor
             return new HtmlString(sw.ToString());
         }
 
-        public IHtmlString HelpBubble(string category, string key)
-        {
-            var helpText = WebPagesHtmlHelperExtensions.Localize(category, key);
-            if (!string.IsNullOrEmpty(helpText))
-            {
-                return new HtmlString(Partial("HelpBubbleOpen", null).ToHtmlString() + helpText + Partial("HelpBubbleClose", null).ToHtmlString());
-            }
-
-            return new HtmlString("");
-        }
-
-        public IHtmlString ParsleyMessage(string category, string key, string dataParsleyKey)
-        {
-            var message = WebPagesHtmlHelperExtensions.Localize(category, key);
-            if (!string.IsNullOrEmpty(message))
-            {
-                message = String.Format("data-parsley-{0}=\"{1}\"", dataParsleyKey, message);
-                return new HtmlString(HttpUtility.HtmlDecode(message));
-            }
-
-            return new HtmlString("");
-        }
-
         internal class DefaultController : Controller { }
 
         /// <summary>

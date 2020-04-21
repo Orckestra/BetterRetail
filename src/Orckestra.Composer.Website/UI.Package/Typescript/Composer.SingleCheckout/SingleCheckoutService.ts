@@ -18,6 +18,8 @@
 ///<reference path='../Composer.MyAccount/Common/CustomerService.ts' />
 ///<reference path='./VueComponents/CheckoutStepVueComponent.ts' />
 ///<reference path='./VueComponents/CheckoutPageVueComponent.ts' />
+///<reference path='../Composer.MyAccount/Common/MyAccountEvents.ts' />
+///<reference path='../Composer.MyAccount/Common/MyAccountStatus.ts' />
 
 
 module Orckestra.Composer {
@@ -34,6 +36,12 @@ module Orckestra.Composer {
     export enum FulfillmentMethodTypes {
         Shipping = 'Shipping',
         PickUp = 'PickUp'
+    }
+
+    export enum SignInModes {
+        Base,
+        UserExists,
+        SigningIn
     }
 
     export class SingleCheckoutService implements ISingleCheckoutService {
@@ -163,6 +171,7 @@ module Orckestra.Composer {
                         }
                     },
                     Mode: {
+                        SignIn: SignInModes.Base,
                         AddingNewAddress: false,
                         AddingLine2Address: false,
                         CompleteCheckoutLoading: false,
@@ -217,6 +226,9 @@ module Orckestra.Composer {
                         }
 
                         return true;
+                    },
+                    resetParsley(formId: any): void {
+                        $(formId).parsley().reset();
                     }
                 }
             });
@@ -528,6 +540,33 @@ module Orckestra.Composer {
                 return address;
             }
             );
+        }
+
+        public loginUser(formData: any): Q.Promise<boolean> {
+            let returnUrl = window.location.pathname;
+
+            return this.membershipService.login(formData, returnUrl)
+                .then(result => {
+                    if (result.Status === MyAccountStatus[MyAccountStatus.Success]) {
+                        this.eventHub.publish(MyAccountEvents[MyAccountEvents.LoggedIn], { data: result });
+                        this.cacheProvider.defaultCache.set('customerId', null).done();
+                        this.cacheProvider.customCache.fullClear();
+
+                        if (result.ReturnUrl) {
+                            window.location.href = result.ReturnUrl;
+                        }
+                    }
+                    return true;
+                }).fail(({ Errors: [ error ] }) => {
+                    console.error('An error occurred while logging in.', error.ErrorMessage);
+                    ErrorHandler.instance().outputError(error);
+                    return false;
+                });
+        }
+
+        public checkUserExist(email: string): Q.Promise<boolean> {
+            return this.membershipService.isUserExist(email)
+                .then(result => result.IsExist);
         }
     }
 }
