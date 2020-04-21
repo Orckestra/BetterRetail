@@ -23,6 +23,8 @@ namespace Orckestra.Composer.HandlebarsCompiler
 
         public static void OnInitialized(IFileWatcherService fileWatcherService, IHandlebarsCompileService compileService)
         {
+            if (!HostingEnvironment.IsHosted) return;
+
             var templatesPath = HostingEnvironment.MapPath(HandlebarsCompileConfig.TemplatesPath);
             var compiledFile = HostingEnvironment.MapPath(HandlebarsCompileConfig.CompiledFilePath);
 

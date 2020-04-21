@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<setup>
+  <radio>
+    <packages>
+      <!-- Reff App  -->
+      <package id="93141e5a-bdfe-459f-a4b6-f2652a1fe4c4" url="../../output/artifacts/Orckestra.Composer.SEO.Organization.Content.zip"/>
+      <package id="f77d9b8c-2990-4965-902d-ee4db85bcbe" url="../../output/artifacts/Orckestra.Composer.C1.Content.FR-CA.zip"/>
+    </packages>
+  </radio>
+</setup>

@@ -1,13 +1,14 @@
+using System.Web.Hosting;
+using System.Web.Mvc;
+using System.Xml.Linq;
 using Composite.AspNet.MvcFunctions;
 using Composite.Core;
 using Composite.Core.Application;
 using Composite.Core.ResourceSystem;
 using Composite.Functions;
 using Orckestra.Composer.C1CMS.Queries.Controllers;
-using System.Web.Mvc;
-using System.Xml.Linq;
 
-namespace Orckestra.Composer.Website
+namespace Orckestra.Composer.C1CMS.Queries
 {
     [ApplicationStartup(AbortStartupOnException = true)]
     public static class StartupHandler
@@ -20,6 +21,8 @@ namespace Orckestra.Composer.Website
 
         public static void OnInitialized()
         {
+            if (!HostingEnvironment.IsHosted) return;
+
             Log.LogInformation("SearchQueryBuilder", "OnInitialized");
 
             var functions = MvcFunctionRegistry.NewFunctionCollection();
