@@ -15,7 +15,7 @@ module Orckestra.Composer {
             let vueBillingAddressMixin = {
 
                 created() {
-                    this.billingAddressBeforeEdit = { ...this.Cart.Payment.BillingAddress }; 
+                    this.billingAddressBeforeEdit = { ...this.Cart.Payment.BillingAddress };
                 },
                 mounted() {
                     this.Steps.EnteredOnce.Billing = this.FulfilledBillingAddress;
@@ -29,16 +29,16 @@ module Orckestra.Composer {
                         return this.Cart.Payment.BillingAddress;
                     }
                 },
-            
+
                 methods: {
                     prepareBillingAddress(): Q.Promise<boolean> {
                         if (!this.BillingAddress.FirstName && !this.BillingAddress.LastName) {
                             this.BillingAddress.FirstName = this.Customer.FirstName;
                             this.BillingAddress.LastName = this.Customer.LastName;
                         }
-                 
+
                         let billingAddressParams = ['FirstName', 'LastName', 'Line1', 'City', 'RegionCode', 'PostalCode', 'PhoneNumber'];
-                        
+
                         billingAddressParams.forEach(param => {
                             if (this.BillingAddress[param] === null) {
                                 this.BillingAddress[param] = '';
@@ -62,7 +62,7 @@ module Orckestra.Composer {
                     },
 
                     processBillingAddress(): Q.Promise<boolean> {
-                        
+
                         if (!this.billingAddressModified())
                             return Q.resolve(true);
 
@@ -75,7 +75,7 @@ module Orckestra.Composer {
                             let postalCode = this.BillingAddress.PostalCode;
                             return this.changeBillingPostalCode(postalCode)
                                 .then(() => this.updateBillingAddress());
-                                
+
                         } else {
                             return this.updateBillingAddress()
                         }
@@ -114,8 +114,20 @@ module Orckestra.Composer {
 
                     changeUseShippingAddress(event) {
                         let { checked } = event.target;
-                        if (!checked) {
-                            this.clearBillingAddress();
+                        if (checked == this.billingAddressBeforeEdit.UseShippingAddress) {
+                            this.Cart.Payment.BillingAddress = { ...this.billingAddressBeforeEdit };
+                        } else {
+                            if (!checked) {
+                                this.clearBillingAddress();
+                            } else {
+                                this.copyShippingAddress();
+                            }
+                        }
+                    },
+                    copyShippingAddress() {
+                        let { FirstName, LastName, CountryCode, Line1, City, RegionCode, PostalCode, PhoneNumber, AddressBookId } = this.Cart.ShippingAddress;
+                        this.Cart.Payment.BillingAddress = {
+                            FirstName, LastName, CountryCode, Line1, City, RegionCode, PostalCode, PhoneNumber, AddressBookId, UseShippingAddress: true
                         }
                     },
                     clearBillingAddress() {
@@ -138,11 +150,11 @@ module Orckestra.Composer {
         public getViewModelNameForUpdatePromise(): Q.Promise<any> {
             return Q.fcall(() => {
                 var vueData = this.checkoutService.VueCheckout;
-                if(vueData.IsAuthenticated) {
+                if (vueData.IsAuthenticated) {
                     return;
                 }
                 let isValid = vueData.validateParsey(this.formSelector);
-                if(!isValid) {
+                if (!isValid) {
                     console.log('Billing Address information is not valid')
                     return Q.reject('Billing Address information is not valid');
                 }

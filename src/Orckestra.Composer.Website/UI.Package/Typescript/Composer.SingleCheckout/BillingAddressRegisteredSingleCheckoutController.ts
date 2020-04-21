@@ -5,7 +5,7 @@ module Orckestra.Composer {
     'use strict';
 
     export class BillingAddressRegisteredSingleCheckoutController extends Orckestra.Composer.BillingAddressSingleCheckoutController {
- 
+
         public initialize() {
             super.initialize();
             let self: BillingAddressRegisteredSingleCheckoutController = this;

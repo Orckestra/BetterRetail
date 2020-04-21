@@ -25,34 +25,34 @@ module Orckestra.Composer {
                     processShippingAddress() {
                         var processShippingAddress: Q.Deferred<boolean> = Q.defer<boolean>();
                         let isValid = this.validateParsey(self.formSelector);
-                        if (isValid) {
-                            if (this.shippingAddressModified()) {
-                                let postalCode = this.Cart.ShippingAddress.PostalCode;
-                                this.changePostalCode(postalCode).then(success => {
-                                    if (success) {
-                                        //WHEN CHANGING SHIPPING, WE ALSO NEED UPDATE BILLING
-                                        let controllersToUpdate = [self.viewModelName, 'BillingAddress'];
-                                        this.prepareBillingAddress()
-                                            .then(() => self.checkoutService.updateCart(controllersToUpdate))
-                                            .then(() => {
-                                                this.Steps.EnteredOnce.Shipping = true;
-                                                self.eventHub.publish("cartBillingAddressUpdated", { data: this });
-                                                processShippingAddress.resolve(true);
-                                            })
-                                            .fail(reason => {
-                                                console.log(reason);
-                                                processShippingAddress.resolve(false);
-                                            });
-                                    } else {
-                                        processShippingAddress.resolve(false);
-                                    }
-                                })
+                        if (!isValid) {
+                            return Q.reject('Shipping Address information is not valid');
+                        }
 
-                            } else {
-                                processShippingAddress.resolve(true);
-                            }
+                        if (this.shippingAddressModified()) {
+                            let postalCode = this.Cart.ShippingAddress.PostalCode;
+                            this.changePostalCode(postalCode).then(success => {
+                                if (success) {
+                                    //WHEN CHANGING SHIPPING, WE ALSO NEED UPDATE BILLING
+                                    let controllersToUpdate = [self.viewModelName, 'BillingAddress'];
+                                    this.prepareBillingAddress()
+                                        .then(() => self.checkoutService.updateCart(controllersToUpdate))
+                                        .then(() => {
+                                            this.Steps.EnteredOnce.Shipping = true;
+                                            self.eventHub.publish("cartBillingAddressUpdated", { data: this });
+                                            processShippingAddress.resolve(true);
+                                        })
+                                        .fail(reason => {
+                                            console.log(reason);
+                                            processShippingAddress.resolve(false);
+                                        });
+                                } else {
+                                    processShippingAddress.resolve(false);
+                                }
+                            })
+
                         } else {
-                            processShippingAddress.resolve(false);
+                            processShippingAddress.resolve(true);
                         }
 
                         return processShippingAddress.promise;
@@ -118,9 +118,9 @@ module Orckestra.Composer {
         public getViewModelNameForUpdatePromise(): Q.Promise<any> {
             return Q.fcall(() => {
                 var vueData = this.checkoutService.VueCheckout;
-                let isValid = vueData.initializeParsey(this.formSelector);
+                let isValid = vueData.validateParsey(this.formSelector);
                 if (!isValid) {
-                    return Q.reject('Address information is not valid');
+                    return Q.reject('Shipping Address information is not valid');
                 }
 
                 if (vueData.shippingAddressModified()) {

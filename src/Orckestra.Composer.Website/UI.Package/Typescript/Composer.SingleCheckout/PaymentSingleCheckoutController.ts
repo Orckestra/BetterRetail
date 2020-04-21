@@ -23,7 +23,7 @@ module Orckestra.Composer {
                 },
                 computed: {
                     FulfilledPayment() {
-                        return !!(this.FulfilledBillingAddress && this.ActivePayment && this.Steps.EnteredOnce.Billing);
+                        return !!(this.ActivePayment && this.Steps.EnteredOnce.Billing);
                     },
                     MainPaymentMethods() {
                         return this.Payment.PaymentMethods.filter(method => !method.IsCreditCardPaymentMethod);
