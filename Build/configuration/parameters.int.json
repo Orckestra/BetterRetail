@@ -1,0 +1,10 @@
+{
+  "environments":{
+    "int": {
+      "adminName": "admin",
+      "adminPassword": "123456",
+      "ocs-cm-hostName": "",
+      "ocsAuthToken": ""
+    }
+  }
+}
