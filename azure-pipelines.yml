@@ -1,0 +1,144 @@
+# ASP.NET
+# Build and test ASP.NET projects.
+# Add steps that publish symbols, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
+
+trigger:
+- master
+
+stages:
+- stage: Build
+  jobs:
+  - job: Build
+
+    pool:
+      vmImage: 'windows-2019'
+
+    variables:
+      buildPlatform: 'Any CPU'
+      buildConfiguration: 'Release'
+
+
+    steps:
+    - task: NodeTool@0
+      displayName: 'Use Node 10.x'
+      inputs:
+        versionSpec: 10.x
+
+    - task: GitVersion@5
+      inputs:
+        runtime: 'full'
+        configFilePath: 'GitVersionConfig.yaml'
+        updateAssemblyInfo: true
+        updateAssemblyInfoFilename: 'src/Solution Items/SharedAssemblyInfo.cs'
+        
+    - task: PowerShell@1
+      displayName: Build
+      inputs:
+        scriptName: Build/build.ps1
+        arguments: '-t Build'
+        workingFolder: Orckestra.StarterSite/CF/Source
+        failOnStandardError: false
+
+    # - task: PowerShell@1
+    #   displayName: Tests
+    #   inputs:
+    #     scriptName: Build/build.ps1
+    #     arguments: '-t Tests'
+    #     workingFolder: Orckestra.StarterSite/CF/Source
+    #     failOnStandardError: false
+
+    - task: PowerShell@1
+      displayName: Artifacts
+      inputs:
+        scriptName: Build/build.ps1
+        arguments: '-t Artifacts'
+        workingFolder: Orckestra.StarterSite/CF/Source
+        failOnStandardError: false
+
+    - task: PowerShell@1
+      displayName: Package
+      inputs:
+        scriptName: Build/build.ps1
+        arguments: '-t Package'
+        workingFolder: Orckestra.StarterSite/CF/Source
+        failOnStandardError: false
+
+    - task: CopyFiles@2
+      displayName: 'Copy Packages to artifacts'
+      inputs:
+        SourceFolder: '$(build.sourcesdirectory)'
+        Contents: '**\output\**\*.zip'
+        TargetFolder: '$(build.artifactstagingdirectory)'
+        OverWrite: true
+      continueOnError: true
+      condition: succeededOrFailed()
+
+    - task: CopyFiles@2
+      displayName: 'Copy Nuget to artifacts'
+      inputs:
+        SourceFolder: '$(build.sourcesdirectory)'
+        Contents: '**\output\**\*.nupkg'
+        TargetFolder: '$(build.artifactstagingdirectory)'
+        OverWrite: true
+      continueOnError: true
+      condition: succeededOrFailed()
+
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Artifact: c1packages'
+      inputs:
+        PathtoPublish: '$(build.artifactstagingdirectory)'
+        ArtifactName: c1packages
+      continueOnError: true
+      condition: succeededOrFailed()
+      timeoutInMinutes: 240
+
+- stage: Deploy
+  jobs:
+  - job: Deploy
+
+    pool:
+      vmImage: 'windows-2019'
+    steps:
+      - task: DownloadBuildArtifacts@0
+        inputs:
+          buildType: 'current'
+          downloadType: 'single'
+          artifactName: 'c1packages'
+          downloadPath: '$(build.sourcesdirectory)'
+
+      - task: CopyFiles@2
+        displayName: 'Copy Artifacts to output folder'
+        inputs:
+          SourceFolder: '$(build.sourcesdirectory)\c1packages\output\artifacts'
+          Contents: '**'
+          TargetFolder: 'output\artifacts'
+
+      - task: FileTransform@2
+        displayName: 'Variable substitution'
+        inputs:
+          folderPath: '$(build.sourcesdirectory)/Build/configuration'
+          xmlTransformationRules: ''
+          jsonTargetFiles: '*.json'
+
+      - task: PowerShell@2
+        displayName: Install Website
+        inputs:
+          filePath: 'Build/install.ps1'
+          arguments: '-t Build-Website -env=int'
+
+      - task: 7z@1
+        displayName: 'Archive Website'
+        inputs:
+          Folder: '$(build.sourcesdirectory)/deployment/Website/'
+          Archive: '$(build.artifactstagingdirectory)/Website.zip'
+          ArchiveFormat: 'zip'
+
+      - task: PublishBuildArtifacts@1
+        displayName: 'Publish Artifact: website'
+        inputs:
+          PathtoPublish: '$(build.artifactstagingdirectory)'
+          ArtifactName: website
+        continueOnError: true
+        condition: succeededOrFailed()
+        timeoutInMinutes: 240

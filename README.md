@@ -19,8 +19,6 @@ Get the latest source code from the [dev](https://github.com/Orckestra/Reference
 
 ## Prerequisites
 A development environment  has to include:
-- [.NET Core 3.1 or higher](https://dotnet.microsoft.com/download/dotnet-core/3.1)
-- [.NET Framework 4.7.1](https://www.microsoft.com/en-us/download/details.aspx?id=56119) (migration to .NET Core)
 - [Node.js with NPM](https://nodejs.org/en/download/releases/)
 	- Recommended to use Node.js with the version 10.10 or higher and NPM with the version 6.4.1 or higher. If NPM already installed, run in a command line the command `npm -v` to check the current version
 	- Be sure, that NPM registry uses default [https://registry.npmjs.org](https://registry.npmjs.org) URL
@@ -97,9 +95,11 @@ The typical configuration file has the following params:
   - `baseCulture` - a culture to be used for a deploying website.
   
   Other settings usually not have to be changed but still can be.
+
+Settings for specific environment can be set in any json file as {"environments": {"int": { "<paramName>": "<paramValue>" }}}, But this json file should be included in specific deploy (see rules above). This will allow to set setting param using Azure Pipelines [JSON variable substitution](https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/transforms-variable-substitution?view=azure-devops&tabs=Classic#json-variable-substitution).
   
 ### Additional packages
-During a deploy can be installed a set of additional packages. Additional packages to be installed defined in the **{solution_dir_path}\configuration\SetupDescription.xml** file. 
+During a deploy can be installed a set of additional packages. Additional packages to be installed defined in the **{solution_dir_path}\build\configuration\SetupDescription.xml** file. 
 
 ## Deploy
 To deploy the Reference Application run in Administrator mode the Powershell script by the path `{solution_dir_path}\build\install.ps1`. 
@@ -111,7 +111,9 @@ In general, the full deploy process includes the following steps:
 
 If you need to deploy using configuration from a specific file, use `-env={keyword}` param and argument. So if you want to use the configuration from the **parameters.int2.json** file, then run in Powershell the deploying command `{solution_dir}\build\install.ps1 -env=int2`. The configuration file parameters.int2.json have the highest priority in this case. 
 
-A file **{solution_dir_path}\configuration\SetupDescription.xml** includes packages to be installed during deploy. These packages installing from the **develop** branch by default. To install packages from a specific Experience Management branch, use during a deploy`-branch={branch_name}` param and argument. For example, `{solution_dir}\build\install.ps1 -branch=develop`.
+The file **{solution_dir_path}\build\configuration\SetupDescription.xml** includes packages to be installed during deploy. These packages installing from the **develop** branch by default. To install packages from a specific Experience Management branch, use during a deploy`-branch={branch_name}` param and argument. For example, `{solution_dir}\build\install.ps1 -branch=develop`.
+
+The file **{solution_dir_path}\build\configuration\SetupDescriptionSecondary.xml** includes packages to be installed after. 
 
 After successfully deploying the Reference Application configured and ready to use in IIS.
 

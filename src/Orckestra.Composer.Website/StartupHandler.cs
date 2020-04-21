@@ -1,3 +1,5 @@
+using System;
+using System.Web.Hosting;
 using Autofac.Integration.Mvc;
 using Composite.AspNet.MvcFunctions;
 using Composite.Core.Application;
@@ -17,6 +19,7 @@ using Orckestra.ExperienceManagement.Configuration.DataTypes;
 using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Routing;
+using Composite.Core;
 
 namespace Orckestra.Composer.Website
 {
@@ -26,6 +29,8 @@ namespace Orckestra.Composer.Website
         private static IComposerHost _host;
         public static void Start()
         {
+            if (!HostingEnvironment.IsHosted) return;
+
             DynamicModuleUtility.RegisterModule(typeof(SecurityModule));
             SetUpSearchConfiguration();
         }
@@ -37,6 +42,8 @@ namespace Orckestra.Composer.Website
 
         public static void OnInitialized()
         {
+            if (!HostingEnvironment.IsHosted) return;
+
             GlobalConfiguration.Configure(WebApiConfig.Register);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             LogProvider.SetCurrentLogProvider(C1LogProvider.Instance);
@@ -215,6 +222,8 @@ namespace Orckestra.Composer.Website
 
         public static void ConfigureServices(IServiceCollection collection)
         {
+            if (!HostingEnvironment.IsHosted) return;
+
             _host = new ComposerHost();
             _host.LoadPlugins();
             foreach(var type in _host.RegisteredInterfaces)

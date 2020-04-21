@@ -7,7 +7,6 @@
 #addin "nuget:?package=Microsoft.Web.Administration&version=11.1.0"
 #addin "nuget:?package=Microsoft.Win32.Registry&version=4.6.0"
 
-#tool "nuget:?package=OrckestraCommerce.Website.SetupServer&version=0.0.4"
 
 #load "helpers/filesystem.cake"
 #load "helpers/certificates.cake"
@@ -15,6 +14,7 @@
 #load "helpers/cakeconfig.cake"
 #load "helpers/process.cake"
 #load "helpers/symboliclink.cake"
+#load "helpers/packageinstaller.cake"
 #load "helpers/formating.cake"
 
 using System.Diagnostics;
@@ -63,8 +63,7 @@ var websiteDir = $"{deploymentDir}/Website";
 
 var directoryName = DirectoryPath.FromString(rootDir).GetDirectoryName();
 
-var setupPort = 9876;
-var setupServer = GetFiles($"{rootDir}/build/tools/**/*SetupServer.exe").Last();
+Func<string,string, string> secure = (key, value) => new[] { "ocsAuthToken" }.Contains(key) ? "<hidden>" : value;
 
 //////////////////////////////////////////////////////////////////////
 // TASKS
@@ -75,7 +74,7 @@ Dictionary<string, string> Parameters;
 string localSiteName = null;
 Task("Load-CakeConfig").Does(() =>
 {
-    var config = CreateCakeConfig()
+    var config = CreateCakeConfig(environment)
         .UseFile($"{rootDir}/build/configuration/parameters.json")
         .UseFile($"{rootDir}/../ref.app.parameters.json")
         .UseFile($"{rootDir}/build/configuration/parameters.local.json");
@@ -96,10 +95,10 @@ Task("Load-CakeConfig").Does(() =>
     Information("PARAMETERS:");
     foreach (var kvPair in Parameters)
     {
-        Information($"{{{kvPair.Key}}}: \"{kvPair.Value}\"");
+        Information($"{{{kvPair.Key}}}: \"{secure(kvPair.Key, kvPair.Value)}\"");
     }
 
-    var requiredParameters = new [] { "C1Url", "websiteName", "setupDescription", "websiteUrl", "adminName", "adminEmail", "adminPassword", "baseCulture" };
+    var requiredParameters = new [] { "C1Url", "websiteName", "setupDescription", "websiteUrl", "baseCulture" };
     var hasError = false;
     foreach (var requiredParameter in requiredParameters)
     {
@@ -157,15 +156,6 @@ Task("Remove-From-Hosts-File").Does(() =>
 Task("Clean-Deployment-Folder").Does(() =>
 {
     DeleteDirectories(deploymentDir);
-});
-
-Task("Kill-Processes").Does(() =>
-{
-    var processes = Process.GetProcessesByName(setupServer.GetFilenameWithoutExtension().ToString());
-    foreach (var process in processes)
-    {
-        process.Kill();
-    }
 });
 
 #endregion
@@ -269,82 +259,10 @@ Task("Add-To-Hosts-File").Does(() =>
 
 #region Install-RefApp
 
-Task("Modify-Configs").Does(() =>
+Task("Install-Packages").Does(() => 
 {
-    XmlPoke($"{websiteDir}/App_Data/Composite/Composite.config", "/configuration/Composite.SetupConfiguration/@PackageServerUrl", $"http://localhost:{setupPort}");
-    StopSite(localSiteName);
-    StartSite(localSiteName);
-});
-
-Process _process = null;
-
-Task("Start-SetupServer").Does(() => 
-{
-    var setupTemplate = Parameters["setupDescription"];
-    _process = StartHiddenProcess(setupServer.ToString(), "--port", setupPort, "--template" ,setupTemplate, "--branch", branch);
-});
-
-Task("Select-Package").Does(() => 
-{
-    MakeRequest($"{Parameters["websiteUrl"]}/Composite/top.aspx");
-
-    if (_process.HasExited)
-    {
-        throw new Exception("Setup server has stopped unexpectedly. Make sure you have 'dotnet core 3.1' installed");
-    }        
-
-    var script = $@"
-$setupServiceWsdlUri = '{Parameters["websiteUrl"]}/Composite/services/Setup/SetupService.asmx?WSDL'
-$baseCulture = '{Parameters["baseCulture"]}'
-
-$proxy = New-WebServiceProxy -Uri $setupServiceWsdlUri 
-
-Write-Output 'mapped wsdl proxy...'
-
-$proxy.Timeout = 5 * 60 * 1000
-$setupDescription = $proxy.GetSetupDescription('true') 
-$xml = New-Object -TypeName xml
-$xml.AppendChild($xml.ImportNode($setupDescription, $true)) | Out-Null
-
-echo 'Setup chosen:'
-$xml.setup
-
-$setupXml = (($xml.setup.radio)).OuterXml
-
-$selection = '<setup>' + $setupXml + '</setup>'
-echo 'Setup chosen:'
-$selection
-echo 'Running setup...'
-
-$setupResult = $proxy.SetUp($selection, '{Parameters["adminName"]}','{Parameters["adminEmail"]}','{Parameters["adminPassword"]}',$baseCulture,$baseCulture,'false')
-echo 'Setup result:'
-$setupResult;
-
-if (!$setupResult)
-{{
-    throw 'Website setup has failed'
-}}
-";
-    try
-    {
-        var result = StartPowershellScript(script, new PowershellSettings()
-            .SetFormatOutput()
-            .SetLogOutput());
-    }
-    catch
-    {
-        if (_process != null && !_process.HasExited)
-            _process.Kill();
-
-        throw;
-    }
-});
-
-Task("Stop-SetupServer").Does(() => 
-{
-    if (_process != null)
-    {
-        _process.Kill();
+    using(var installer = GetPackageInstaller(websiteDir)) {
+        installer.InstallPackagesFromConfig(Parameters["baseCulture"], Parameters["setupDescription"], branch);
     }
 });
 
@@ -378,17 +296,13 @@ Task("Patch-ExperienceManagement-Config")
    doc.Save(webConfig);
 });
 
-Task("Install-Secondary-Language").Does(() => 
+Task("Install-Secondary-Packages").Does(() => 
 {
-    var autoInstallDir = $"{websiteDir}/App_Data/Composite/AutoInstallPackages";
-    var sourcePackage = $"{outputDir}/artifacts/Orckestra.Composer.C1.Content.FR-CA.zip";
-    
-    CreateDirectory(autoInstallDir);
-    CopyFiles(sourcePackage, autoInstallDir);
-
-    StopSite(localSiteName);
-    StartSite(localSiteName);
-    MakeRequest($"{Parameters["websiteUrl"]}/Composite/top.aspx");
+    if(!string.IsNullOrWhiteSpace(Parameters["setupDescriptionSecondary"])) {
+        using(var installer = GetPackageInstaller(websiteDir)) {
+            installer.InstallPackagesFromConfig(Parameters["baseCulture"], Parameters["setupDescriptionSecondary"], branch);
+        }
+    }
 });
 
 #endregion
@@ -424,11 +338,6 @@ Task("Modify-Configs-For-Debug").Does(() =>
 {
     XmlPoke($"{websiteDir}/web.config", "/configuration/system.web/compilation/@debug", "true");
     XmlPoke($"{websiteDir}/web.config", "/configuration/system.web/caching/outputCacheSettings/outputCacheProfiles/add/@enabled", "false");
-
-    StopSite(localSiteName);
-    StartSite(localSiteName);
-
-    MakeRequest($"{Parameters["websiteUrl"]}/Composite/top.aspx");
 });
 
 
@@ -469,7 +378,6 @@ Task("Uninstall")
     .IsDependentOn("Remove-Website")
     .IsDependentOn("Remove-ApplicationPool")
     .IsDependentOn("Remove-From-Hosts-File")
-    .IsDependentOn("Kill-Processes")
     .IsDependentOn("Clean-Deployment-Folder");
 
 Task("Install-C1")
@@ -483,12 +391,9 @@ Task("Install-C1")
 
 Task("Install-RefApp")
     .IsDependentOn("Load-CakeConfig")
-    .IsDependentOn("Modify-Configs")
-    .IsDependentOn("Start-SetupServer")
-    .IsDependentOn("Select-Package")
-    .IsDependentOn("Stop-SetupServer")
+    .IsDependentOn("Install-Packages")
     .IsDependentOn("Patch-ExperienceManagement-Config")
-    .IsDependentOn("Install-Secondary-Language");
+    .IsDependentOn("Install-Secondary-Packages");
 
 Task("Install")
     .IsDependentOn("Install-C1")
@@ -513,6 +418,15 @@ Task("All")
 Task("Link")
     .Description("Should be used on dev machine only. Used for link dev files")
     .IsDependentOn("Link-Razor");
+
+
+Task("Build-Website")
+    .IsDependentOn("Load-CakeConfig")
+    .IsDependentOn("Clean-Deployment-Folder")
+    .IsDependentOn("Download-C1")
+    .IsDependentOn("Unpack-C1")
+    .IsDependentOn("Install-RefApp");
+
 
 //////////////////////////////////////////////////////////////////////
 // EXECUTION
