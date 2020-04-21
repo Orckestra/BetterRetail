@@ -557,7 +557,7 @@ module Orckestra.Composer {
                         }
                     }
                     return true;
-                }).fail(({ Errors: [ error ] }) => {
+                }).fail(({ Errors: [error] }) => {
                     console.error('An error occurred while logging in.', error.ErrorMessage);
                     ErrorHandler.instance().outputError(error);
                     return false;

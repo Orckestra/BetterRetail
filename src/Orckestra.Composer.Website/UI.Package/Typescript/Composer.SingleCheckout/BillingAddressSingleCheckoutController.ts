@@ -64,7 +64,10 @@ module Orckestra.Composer {
                     processBillingAddress(): Q.Promise<boolean> {
 
                         if (!this.billingAddressModified())
-                            return Q.resolve(true);
+                            { 
+                                this.Steps.EnteredOnce.Billing = true;
+                                return Q.resolve(true); 
+                            }
 
                         if (!this.BillingAddress.UseShippingAddress) {
                             let isValid = this.validateParsey(self.formSelector);
@@ -125,9 +128,9 @@ module Orckestra.Composer {
                         }
                     },
                     copyShippingAddress() {
-                        let { FirstName, LastName, CountryCode, Line1, City, RegionCode, PostalCode, PhoneNumber, AddressBookId } = this.Cart.ShippingAddress;
+                        let { FirstName, LastName, CountryCode, Line1, City, RegionCode, PostalCode, PhoneNumber, AddressBookId, PhoneRegex } = this.Cart.ShippingAddress;
                         this.Cart.Payment.BillingAddress = {
-                            FirstName, LastName, CountryCode, Line1, City, RegionCode, PostalCode, PhoneNumber, AddressBookId, UseShippingAddress: true
+                            FirstName, LastName, CountryCode, Line1, City, RegionCode, PostalCode, PhoneNumber, AddressBookId, PhoneRegex, UseShippingAddress: true
                         }
                     },
                     clearBillingAddress() {

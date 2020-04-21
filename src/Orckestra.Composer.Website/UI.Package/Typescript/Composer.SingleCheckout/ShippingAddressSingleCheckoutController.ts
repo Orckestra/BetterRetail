@@ -22,6 +22,16 @@ module Orckestra.Composer {
                 computed: {
                 },
                 methods: {
+                    prepareShippingAddress() {
+                        if (!this.Cart.ShippingAddress.FirstName && !this.Cart.ShippingAddress.LastName) {
+                            this.Cart.ShippingAddress.FirstName = this.Customer.FirstName;
+                            this.Cart.ShippingAddress.LastName = this.Customer.LastName;
+                        }
+
+                        this.Mode.AddingLine2Address = !this.Cart.ShippingAddress.Line2;
+                        this.Mode.AddingNewAddress = false;
+                        this.initializeParsey(self.formSelector);
+                    },
                     processShippingAddress() {
                         var processShippingAddress: Q.Deferred<boolean> = Q.defer<boolean>();
                         let isValid = this.validateParsey(self.formSelector);

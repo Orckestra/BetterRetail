@@ -171,12 +171,29 @@ module Orckestra.Composer {
 
                         if (index <= this.maxStep) {
                             let cb = () => {
-                                this.beforeStepEnter(index);
-                                this.changeStep(this.activeStepIndex, index);
-                                this.scrollToStep(index);
-                            };
-
-                            this.beforeStepChange(this.activeStepIndex, cb);
+                                if (validate && index - this.activeStepIndex > 1) {
+                                    // validate all steps recursively until destination index
+                                    this.changeStep(this.activeStepIndex, this.activeStepIndex + 1);
+                                    this.beforeStepChange(this.activeStepIndex, cb);
+                                } else {
+                                    this.beforeStepEnter(index);
+                                    this.changeStep(this.activeStepIndex, index)
+                                    this.scrollToStep(index);
+                                    this.afterStepChange(this.activeStepIndex);
+                                }
+                            }
+                            if (validate) {
+                                this.beforeStepChange(this.activeStepIndex, cb)
+                            } else {
+                                // when trying leave already savedd step(edit mode) when edit it we need to validate it
+                                let step = this.steps[this.activeStepIndex + 1];
+                                if (step && step.fulfilled) {
+                                    this.beforeStepChange(this.activeStepIndex, cb);
+                                } else {
+                                    this.setValidationError(null)
+                                    cb()
+                                }
+                            }
                         }
 
                         return index <= this.maxStep;
@@ -267,6 +284,7 @@ module Orckestra.Composer {
                         }
                     },
                     beforeStepChange: function beforeStepChange(index, callback) {
+                        //alert('before-change-' + index);
                         if (this.loading) {
                             return;
                         }
