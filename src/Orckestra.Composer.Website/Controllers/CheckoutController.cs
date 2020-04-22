@@ -16,8 +16,6 @@ namespace Orckestra.Composer.Website.Controllers
             IBreadcrumbViewService breadcrumbViewService, 
             ILanguageSwitchService languageSwitchService, 
             ICartUrlProvider urlProvider, 
-            ICheckoutNavigationViewService checkoutNavigationViewService, 
-            IPaymentViewService paymentViewService, 
             IMyAccountUrlProvider myAccountUrlProvider, 
             ICartService cartService,
 			IWebsiteContext websiteContext) : 
@@ -27,8 +25,6 @@ namespace Orckestra.Composer.Website.Controllers
                 breadcrumbViewService, 
                 languageSwitchService, 
                 urlProvider, 
-                checkoutNavigationViewService, 
-                paymentViewService,
                 myAccountUrlProvider,
                 cartService,
 				websiteContext)

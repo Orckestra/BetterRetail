@@ -1,12 +1,11 @@
-///<reference path='../../../Typings/tsd.d.ts' />
-///<reference path='../CheckoutCommon/BaseCheckoutController.ts' />
-///<reference path='../../../Typings/vue/index.d.ts' />
-///<reference path='../FindMyOrder/IFindOrderService.ts' />
+///<reference path='../../Typings/tsd.d.ts' />
+///<reference path='../../Typings/vue/index.d.ts' />
+///<reference path='../Composer.Cart/FindMyOrder/IFindOrderService.ts' />
 
 module Orckestra.Composer {
     'use strict';
 
-    export class CheckoutOrderConfirmationController extends Orckestra.Composer.Controller {
+    export class OrderConfirmationController extends Orckestra.Composer.Controller {
 
         private cacheProvider: ICacheProvider;
         private findOrderService: IFindOrderService;
@@ -15,7 +14,7 @@ module Orckestra.Composer {
         public VueCheckoutOrderConfirmation: Vue;
 
         public initialize() {
-            var self: CheckoutOrderConfirmationController = this;
+            var self: OrderConfirmationController = this;
             super.initialize();
             this.cacheProvider = CacheProvider.instance();
             this.findOrderService = new FindOrderService(this.eventHub);

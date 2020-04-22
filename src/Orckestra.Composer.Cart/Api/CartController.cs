@@ -1,21 +1,19 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using System.Web.Http;
-using System.Web.Http.Results;
-using Orckestra.Composer.Cart.Parameters;
+﻿using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Requests;
 using Orckestra.Composer.Cart.Services;
 using Orckestra.Composer.Cart.ViewModels;
 using Orckestra.Composer.Configuration;
+using Orckestra.Composer.Logging;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Utils;
 using Orckestra.Composer.WebAPIFilters;
-using Orckestra.Composer.Logging;
+using System;
+using System.Net;
+using System.Threading.Tasks;
+using System.Web.Http;
+using System.Web.Http.Results;
 
 namespace Orckestra.Composer.Cart.Api
 {
@@ -74,34 +72,22 @@ namespace Orckestra.Composer.Cart.Api
 
             if (cartViewModel.OrderSummary != null)
             {
-                //TODO: Temporary solution with try catch for old checkout steps.Need to clean, when we remove old checkout
                 try
                 {
-                    var checkoutUrlTarget = GetCheckoutUrl();
-                    var checkoutStepInfos = CartUrlProvider.GetCheckoutStepPageInfos(new BaseUrlParameter
+                    cartViewModel.OrderSummary.CheckoutUrlTarget = GetCheckoutUrl();
+                    if (cartViewModel.IsCartEmpty)
                     {
-                        CultureInfo = ComposerContext.CultureInfo
-                    });
-                    //Build redirect url in case of the customer try to access an unauthorized step.
-                    var stepNumber = cartViewModel.OrderSummary.CheckoutRedirectAction.LastCheckoutStep;
-                    if (!checkoutStepInfos.ContainsKey(stepNumber))
-                    {
-                        return BadRequest($"{nameof(stepNumber)} is invalid");
-                    }
+                        cartViewModel.OrderSummary.CheckoutRedirectAction.RedirectUrl = GetCartUrl();
 
-                    var checkoutStepInfo = checkoutStepInfos[stepNumber];
-
-                    //If the cart contains recurring items and user is not authenticated, redirect to sign in
-                    if (RecurringOrdersSettings.Enabled && cartViewModel.HasRecurringLineitems && !ComposerContext.IsAuthenticated)
-                    {
-                        cartViewModel.OrderSummary.CheckoutRedirectAction.RedirectUrl = checkoutUrlTarget;
                     }
                     else
                     {
-                        cartViewModel.OrderSummary.CheckoutRedirectAction.RedirectUrl = checkoutStepInfo.Url;
+                        //If the cart contains recurring items and user is not authenticated, redirect to sign in
+                        if (RecurringOrdersSettings.Enabled && cartViewModel.HasRecurringLineitems && !ComposerContext.IsAuthenticated)
+                        {
+                            cartViewModel.OrderSummary.CheckoutRedirectAction.RedirectUrl = GetCheckoutSignInUrl();
+                        }
                     }
-                    cartViewModel.OrderSummary.CheckoutStepUrls = checkoutStepInfos.Values.Select(x => x.Url).ToList();
-                    cartViewModel.OrderSummary.CheckoutUrlTarget = checkoutUrlTarget;
                 }
                 catch (ArgumentException e) {
                     Log.Error(e.ToString());
@@ -122,21 +108,6 @@ namespace Orckestra.Composer.Cart.Api
         {
             if (updateCartRequest == null) { return BadRequest("updateCartRequest is required"); }
             if (!ModelState.IsValid) { return BadRequest(ModelState); }
-
-            var getCartUrlParam = new BaseUrlParameter
-            {
-                CultureInfo = ComposerContext.CultureInfo
-            };
-
-            var nextStepUrl = string.Empty;
-            if (updateCartRequest.CurrentStep.HasValue)
-            {
-                nextStepUrl = CartUrlProvider.GetCheckoutStepUrl(new GetCheckoutStepUrlParam
-                {
-                    CultureInfo = ComposerContext.CultureInfo,
-                    StepNumber = updateCartRequest.CurrentStep.GetValueOrDefault() + 1
-                });
-            }
 
             var getCartParam = new GetCartParam
             {
@@ -164,14 +135,7 @@ namespace Orckestra.Composer.Cart.Api
 
             if (updateCartResultViewModel.Cart.OrderSummary != null)
             {
-                var checkoutStepInfos = CartUrlProvider.GetCheckoutStepPageInfos(getCartUrlParam);
-                updateCartResultViewModel.Cart.OrderSummary.CheckoutStepUrls = checkoutStepInfos.Values.Select(x => x.Url).ToList();
                 updateCartResultViewModel.Cart.OrderSummary.CheckoutUrlTarget = GetCheckoutUrl();
-            }
-
-            if (!updateCartResultViewModel.HasErrors && updateCartRequest.CurrentStep.HasValue)
-            {
-                updateCartResultViewModel.NextStepUrl = nextStepUrl;
             }
 
             return Ok(updateCartResultViewModel);
@@ -543,6 +507,26 @@ namespace Orckestra.Composer.Cart.Api
             };
 
             return CartUrlProvider.GetCheckoutPageUrl(getCartUrlParam);
+        }
+
+        protected virtual string GetCheckoutSignInUrl()
+        {
+            var getCartUrlParam = new BaseUrlParameter
+            {
+                CultureInfo = ComposerContext.CultureInfo
+            };
+
+            return CartUrlProvider.GetCheckoutSignInUrl(getCartUrlParam);
+        }
+
+        protected virtual string GetCartUrl()
+        {
+            var getCartUrlParam = new BaseUrlParameter
+            {
+                CultureInfo = ComposerContext.CultureInfo
+            };
+
+            return CartUrlProvider.GetCartUrl(getCartUrlParam);
         }
 
         protected virtual void SetCheckoutUrl(CartViewModel cartViewModel, string checkoutUrl)

@@ -11,7 +11,6 @@ using Orckestra.Composer.Services;
 using Orckestra.Composer.Services.Breadcrumb;
 using Orckestra.Composer.Utils;
 using System;
-using System.Linq;
 using System.Web.Mvc;
 
 namespace Orckestra.Composer.CompositeC1.Controllers
@@ -25,8 +24,6 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         protected IBreadcrumbViewService BreadcrumbViewService { get; private set; }
         protected ILanguageSwitchService LanguageSwitchService { get; private set; }
         protected ICartUrlProvider UrlProvider { get; private set; }
-        protected ICheckoutNavigationViewService CheckoutNavigationViewService { get; private set; }
-        protected IPaymentViewService PaymentViewService { get; private set; }
         protected IMyAccountUrlProvider MyAccountUrlProvider { get; private set; }
         protected IWebsiteContext WebsiteContext { get; private set; }
         protected ICartService CartService { get; private set; }
@@ -38,8 +35,6 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             IBreadcrumbViewService breadcrumbViewService,
             ILanguageSwitchService languageSwitchService,
             ICartUrlProvider urlProvider,
-            ICheckoutNavigationViewService checkoutNavigationViewService,
-            IPaymentViewService paymentViewService,
             IMyAccountUrlProvider myAccountUrlProvider,
             ICartService cartService,
             IWebsiteContext websiteContext
@@ -51,8 +46,6 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             if (breadcrumbViewService == null) { throw new ArgumentNullException("breadcrumbViewService"); }
             if (languageSwitchService == null) { throw new ArgumentNullException("languageSwitchService"); }
             if (urlProvider == null) { throw new ArgumentNullException("urlProvider"); }
-            if (checkoutNavigationViewService == null) { throw new ArgumentNullException("checkoutNavigationViewService"); }
-            if (paymentViewService == null) { throw new ArgumentNullException("paymentViewService"); }
             if (myAccountUrlProvider == null) { throw new ArgumentNullException("myAccountUrlProvider"); }
             if (cartService == null) { throw new ArgumentNullException("cartService"); }
 
@@ -62,49 +55,9 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             BreadcrumbViewService = breadcrumbViewService;
             LanguageSwitchService = languageSwitchService;
             UrlProvider = urlProvider;
-            CheckoutNavigationViewService = checkoutNavigationViewService;
-            PaymentViewService = paymentViewService;
             MyAccountUrlProvider = myAccountUrlProvider;
             WebsiteContext = websiteContext;
             CartService = cartService;
-        }
-
-        public virtual ActionResult GuestCustomerInfo()
-        {
-            return View("GuestCustomerInfoContainer", BuildCartViewModel());
-        }
-
-        public virtual ActionResult ShippingAddress()
-        {
-            return View("ShippingAddressContainer", BuildCartViewModel());
-        }
-
-        public virtual ActionResult ShippingMethod()
-        {
-            return View("ShippingMethodContainer", BuildCartViewModel());
-        }
-
-        public virtual ActionResult CheckoutComplete()
-        {
-            return View("CheckoutCompleteContainer", BuildCartViewModel());
-        }
-
-        public virtual ActionResult CheckoutPayment()
-        {
-            var checkoutPaymentViewModel = new CheckoutPaymentViewModel
-            {
-                IsLoading = true
-            };
-
-            var getPaymentProvidersParam = new GetPaymentProvidersParam
-            {
-                Scope = ComposerContext.Scope,
-                CultureInfo = ComposerContext.CultureInfo
-            };
-
-            checkoutPaymentViewModel.Context.Add("PaymentProviders", PaymentViewService.GetPaymentProvidersAsync(getPaymentProvidersParam).Result.ToList());
-
-            return View("CheckoutPaymentContainer", checkoutPaymentViewModel);
         }
 
         public virtual ActionResult Breadcrumb()
@@ -141,16 +94,15 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         [MustBeAnonymous(MustBeAnonymousAttribute.CartDestination)]
         public virtual ActionResult CheckoutSignInAsGuest()
         {
-            var stepOneUrl = UrlProvider.GetCheckoutStepUrl(new GetCheckoutStepUrlParam
+            var checkoutUrl = UrlProvider.GetCheckoutPageUrl(new BaseUrlParameter
             {
-                CultureInfo = ComposerContext.CultureInfo,
-                StepNumber = 1
+                CultureInfo = ComposerContext.CultureInfo
             });
 
             var registerUrl = MyAccountUrlProvider.GetCreateAccountUrl(new BaseUrlParameter
             {
                 CultureInfo = ComposerContext.CultureInfo,
-                ReturnUrl = stepOneUrl
+                ReturnUrl = checkoutUrl
             });
 
             var cart = CartService.GetCartViewModelAsync(new GetCartParam()
@@ -167,7 +119,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
 
             var checkoutSignInAsGuestViewModel = new CheckoutSignInAsGuestViewModel
             {
-                CheckoutUrlTarget = stepOneUrl,
+                CheckoutUrlTarget = checkoutUrl,
                 RegisterUrl = registerUrl,
                 IsCartContainsRecurringLineitems = hasRecurringItems
             };
@@ -191,49 +143,6 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             return View("ReturningCustomerBlade", vm);
         }
 
-        public virtual ActionResult CheckoutOrderSummary()
-        {
-            return View("CheckoutOrderSummaryContainer", BuildCartViewModel());
-        }
-
-        public virtual ActionResult CompleteCheckoutOrderSummary()
-        {
-            return View("CompleteCheckoutOrderSummaryContainer", BuildCartViewModel());
-        }
-
-        public virtual ActionResult BillingAddress()
-        {
-            return View("BillingAddressContainer", BuildCartViewModel());
-        }
-
-        public virtual ActionResult BillingAddressRegistered()
-        {
-            return View("BillingAddressRegisteredContainer", BuildCartViewModel());
-        }
-
-        public virtual ActionResult ShippingAddressRegistered()
-        {
-            return View("ShippingAddressRegisteredContainer", BuildCartViewModel());
-        }
-
-        public virtual ActionResult CheckoutNavigation()
-        {
-            var navigationPageInfos = UrlProvider.GetCheckoutStepPageInfos(new BaseUrlParameter
-            {
-                CultureInfo = ComposerContext.CultureInfo
-            });
-
-            var currentStep = PageService.GetCheckoutStepPageNumber(SitemapNavigator.CurrentHomePageId, SitemapNavigator.CurrentPageId, ComposerContext.CultureInfo);
-
-            var checkoutNavigationViewModel = CheckoutNavigationViewService.GetCheckoutNavigationViewModel(new GetCheckoutNavigationParam
-            {
-                StepUrls = navigationPageInfos,
-                CurrentStep = currentStep
-            });
-
-            return View("CheckoutNavigation", checkoutNavigationViewModel);
-        }
-
         protected virtual CartViewModel BuildCartViewModel()
         {
             var cartViewModel = new CartViewModel
@@ -241,10 +150,6 @@ namespace Orckestra.Composer.CompositeC1.Controllers
                 GettingCart = true,
                 IsAuthenticated = ComposerContext.IsAuthenticated
             };
-
-            var currentStep = PageService.GetCheckoutStepPageNumber(SitemapNavigator.CurrentHomePageId, SitemapNavigator.CurrentPageId, ComposerContext.CultureInfo);
-
-            cartViewModel.Context.Add("CurrentStep", currentStep);
 
             return cartViewModel;
         }

@@ -25,5 +25,7 @@ namespace Orckestra.Composer.MyAccount.Parameters
         /// The Culture for any displayable values
         /// </summary>
         public CultureInfo CultureInfo { get; set; }
+
+        public bool IncludeAddresses { get; set; } = false;
     }
 }

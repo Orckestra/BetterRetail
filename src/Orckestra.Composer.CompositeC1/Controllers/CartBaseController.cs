@@ -41,21 +41,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
 
             if (cartViewModel == null) { return View("CartSummaryBlade", (CartViewModel) null); }
 
-            SetCurrentStepContext(cartViewModel);
-
             return View("CartSummaryBlade", cartViewModel);
-        }
-
-        protected virtual void SetCurrentStepContext(CartViewModel cartViewModel)
-        {
-            var page = PageService.GetPage(SitemapNavigator.CurrentPageId);
-            var checkoutSteps = PageService.GetCheckoutStepPages(SitemapNavigator.CurrentHomePageId, ComposerContext.CultureInfo);
-
-            if (checkoutSteps != null && checkoutSteps.Contains(SitemapNavigator.CurrentPageId.ToString()))
-            {
-                cartViewModel.Context["CurrentStep"] = checkoutSteps.FindIndex(a => a == SitemapNavigator.CurrentPageId.ToString());
-            }
-
         }
 
         public virtual ActionResult OrderSummary()

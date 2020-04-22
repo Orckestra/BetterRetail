@@ -231,7 +231,6 @@
     <Compile Include="Services\CartService_UpdateBillingAddressPostalCodeAsync.cs" />
     <Compile Include="Services\CartService_UpdateShippingAddressPostalCodeAsync.cs" />
     <Compile Include="Services\CartService_UpdateCartAsync.cs" />
-    <Compile Include="Services\CheckoutNavigationViewService_GetCheckoutNavigationViewModel.cs" />
     <Compile Include="Services\CheckoutService_CompleteCheckoutAsync.cs" />
     <Compile Include="Services\CheckoutService_UpdateCartAsync.cs" />
     <Compile Include="Services\CouponViewService_AddCouponAsync.cs" />

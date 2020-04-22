@@ -53,7 +53,7 @@ namespace Orckestra.Composer.MyAccount.Repositories
 
             var getCustomerByUsernameRequest = new GetCustomerRequest
             {
-                IncludeAddresses = false,
+                IncludeAddresses = getCustomerByIdParam.IncludeAddresses,
                 ScopeId = getCustomerByIdParam.Scope,
                 CustomerId = getCustomerByIdParam.CustomerId,
             };

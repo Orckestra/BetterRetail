@@ -85,37 +85,12 @@ namespace Orckestra.Composer.MyAccount.Api
         //TODO: Change the method name for GetAdressListAsync or something similar because it confuse people
         public virtual async Task<IHttpActionResult> GetShippingAddressAsync()
         {
-            string addAddressUrl = "/";
-            string editAddressBaseUrl = "/";
-            //TODO: Temporary solution with try catch for old checkout steps.Need to clean, when we remove old checkout
-            try
-            {
-                var checkoutAddressStepUrl = CartUrlProvider.GetCheckoutStepUrl(new GetCheckoutStepUrlParam
-                {
-                    CultureInfo = ComposerContext.CultureInfo,
-                    StepNumber = 1,
-                });
-
-                var urlParam = new BaseUrlParameter
-                {
-                    CultureInfo = ComposerContext.CultureInfo,
-                    ReturnUrl = checkoutAddressStepUrl
-                };
-
-                addAddressUrl = CartUrlProvider.GetCheckoutAddAddressUrl(urlParam);
-                editAddressBaseUrl = CartUrlProvider.GetCheckoutUpdateAddressBaseUrl(urlParam);
-            }
-            catch (ArgumentException e) {
-                Log.Error(e.ToString());
-            };
 
             var viewModel = await CustomerAddressViewService.GetAddressListViewModelAsync(new GetAddressListViewModelParam
             {
                 CustomerId = ComposerContext.CustomerId,
                 CultureInfo = ComposerContext.CultureInfo,
                 Scope = ComposerContext.Scope,
-                AddAddressUrl = addAddressUrl,
-                EditAddressBaseUrl = editAddressBaseUrl,
                 CountryCode = ComposerContext.CountryCode
             });
 

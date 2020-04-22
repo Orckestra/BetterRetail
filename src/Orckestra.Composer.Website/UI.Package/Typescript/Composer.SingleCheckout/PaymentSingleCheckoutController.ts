@@ -96,8 +96,11 @@ module Orckestra.Composer {
                             PaymentType: paymentMethodEntity.PaymentType,
                             Providers: providers
                         }).then((result) => {
+                            ErrorHandler.instance().removeErrors();
                             this.Payment.ActivePaymentViewModel = result;
-                        }).catch(() => {
+                        }).fail((reason) => {
+                            console.error('Error while changing the payment method.', reason);
+                            ErrorHandler.instance().outputErrorFromCode('PaymentMethodChangeFailed');
                             this.selectPaymentMethod(oldPayment.Id);
                         })
                     },

@@ -81,40 +81,5 @@ namespace Orckestra.Composer.CompositeC1.Services
             var url = PageUrls.BuildUrl(page);
             return url;
         }
-
-        public virtual List<string> GetCheckoutStepPages(Guid currentHomePageId, CultureInfo cultureInfo = null)
-        {
-            var siteConfiguration = ServiceLocator.GetService<ISiteConfiguration>();
-            var steps = siteConfiguration.GetPagesConfiguration(cultureInfo, currentHomePageId).CheckoutSteps;
-            if (!string.IsNullOrWhiteSpace(steps))
-            {
-                return steps.Split(new char[] { ',' }).ToList();
-            }
-
-            return null;
-        }
-
-        public virtual List<string> GetCheckoutNavigationPages(Guid currentHomePageId, CultureInfo cultureInfo = null)
-        {
-            var siteConfiguration = ServiceLocator.GetService<ISiteConfiguration>();
-            var nav = siteConfiguration.GetPagesConfiguration(cultureInfo, currentHomePageId).CheckoutNavigation;
-            if (!string.IsNullOrWhiteSpace(nav))
-            {
-                return nav.Split(new char[] { ',' }).ToList();
-            }
-
-            return null;
-        }
-
-        public virtual int GetCheckoutStepPageNumber(Guid currentHomePageId, Guid pageId, CultureInfo cultureInfo = null)
-        {
-            var steps = GetCheckoutStepPages(currentHomePageId, cultureInfo);
-            if (steps != null)
-            {
-                return steps.FindIndex(s => s == pageId.ToString());
-            }
-
-            return -1;
-        }
     }
 }

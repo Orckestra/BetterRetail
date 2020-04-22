@@ -33,7 +33,7 @@
         <div class="col-lg-8">
             <div id="vueCheckoutOrderConfirmation" v-if="Order"
                  @if (!isPreview) { <text> v-cloak="true" </text> }
-                 data-oc-controller="Checkout.CheckoutOrderConfirmation"
+                 data-oc-controller="SingleCheckout.OrderConfirmation"
                  data-redirectUrl="@redirectUrl">
 
                 <h1 data-qa="confirmation-thankyou">@Html.Localize("CheckoutProcess", "T_ThankYou") {{CustomerFirstName}} {{CustomerLastName}}!</h1>

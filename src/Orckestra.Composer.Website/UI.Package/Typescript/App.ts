@@ -22,13 +22,6 @@
 ///<reference path='./Composer.Product/RelatedProducts/RelatedProductsController.ts' />
 ///<reference path='./Composer.Product/ProductDetail/ProductZoomController.ts' />
 ///<reference path='./Composer.Cart/OrderSummary/OrderSummaryController.ts' />
-///<reference path='./Composer.Cart/CheckoutGuestCustomerInfo/GuestCustomerInfoCheckoutController.ts' />
-///<reference path='./Composer.Cart/CheckoutShippingAddress/ShippingAddressCheckoutController.ts' />
-///<reference path='./Composer.Cart/CheckoutShippingMethod/ShippingMethodCheckoutController.ts' />
-///<reference path='./Composer.Cart/CheckoutBillingAddress/BillingAddressCheckoutController.ts' />
-///<reference path='./Composer.Cart/CheckoutBillingAddressRegistered/BillingAddressRegisteredCheckoutController.ts' />
-///<reference path='./Composer.Cart/CheckoutOrderConfirmation/CheckoutOrderConfirmationController.ts' />
-///<reference path='./Composer.Cart/CheckoutComplete/CheckoutCompleteController.ts' />
 ///<reference path='./Composer.MyAccount/AddressList/AddressListController.ts' />
 ///<reference path='./Composer.MyAccount/ChangePassword/ChangePasswordController.ts' />
 ///<reference path='./Composer.MyAccount/CreateAccount/CreateAccountController.ts' />
@@ -41,11 +34,6 @@
 ///<reference path='./Composer.MyAccount/WishList/MyWishListController.ts' />
 ///<reference path='./Composer.MyAccount/WishListShared/SharedWishListController.ts' />
 ///<reference path='./Composer.MyAccount/WishList/WishListInHeaderController.ts' />
-///<reference path='./Composer.Cart/CheckoutShippingAddressRegistered/ShippingAddressRegisteredController.ts' />
-///<reference path='./Composer.Cart/CheckoutOrderSummary/CheckoutOrderSummaryController.ts' />
-///<reference path='./Composer.Cart/CheckoutOrderSummary/CompleteCheckoutOrderSummaryController.ts' />
-///<reference path='./Composer.Cart/CheckoutPayment/CheckoutPaymentController.ts' />
-///<reference path='./Composer.Cart/CheckoutCommon/CheckoutNavigationController.ts' />
 ///<reference path='./Composer.MyAccount/SignInHeader/SignInHeaderController.ts' />
 ///<reference path='./Composer.MyAccount/MyAccount/MyAccountController.ts' />
 ///<reference path='./Composer.Cart/OrderHistory/CurrentOrdersController.ts' />
@@ -73,6 +61,7 @@
 ///<reference path='./Composer.SingleCheckout/BillingAddressSingleCheckoutController.ts' />
 ///<reference path='./Composer.SingleCheckout/BillingAddressRegisteredSingleCheckoutController.ts' />
 ///<reference path='./Composer.SingleCheckout/PickUpAddressSingleCheckoutController.ts' />
+///<reference path='./Composer.SingleCheckout/OrderConfirmationController.ts' />
 
 (() => {
     'use strict';
@@ -127,19 +116,8 @@
                 { name: 'SingleCheckout.BillingAddress', controller: Orckestra.Composer.BillingAddressSingleCheckoutController },
                 { name: 'SingleCheckout.BillingAddressRegistered', controller: Orckestra.Composer.BillingAddressRegisteredSingleCheckoutController },
                 { name: 'SingleCheckout.PickUpStoreAddress', controller: Orckestra.Composer.PickUpAddressSingleCheckoutController },
-                { name: 'Checkout.GuestCustomerInfo', controller: Orckestra.Composer.GuestCustomerInfoCheckoutController },
-                { name: 'Checkout.ShippingAddress', controller: Orckestra.Composer.ShippingAddressCheckoutController },
-                { name: 'Checkout.ShippingAddressRegistered', controller: Orckestra.Composer.ShippingAddressRegisteredController },
-                { name: 'Checkout.ShippingMethod', controller: Orckestra.Composer.ShippingMethodCheckoutController },
-                { name: 'Checkout.OrderSummary', controller: Orckestra.Composer.CheckoutOrderSummaryController },
-                { name: 'Checkout.CompleteOrderSummary', controller: Orckestra.Composer.CompleteCheckoutOrderSummaryController },
-                { name: 'Checkout.CheckoutComplete', controller: Orckestra.Composer.CheckoutCompleteController },
-                { name: 'Checkout.CheckoutOrderConfirmation', controller: Orckestra.Composer.CheckoutOrderConfirmationController },
-                { name: 'Checkout.BillingAddress', controller: Orckestra.Composer.BillingAddressCheckoutController },
-                { name: 'Checkout.BillingAddressRegistered', controller: Orckestra.Composer.BillingAddressRegisteredCheckoutController },
-                { name: 'Checkout.Payment', controller: Orckestra.Composer.CheckoutPaymentController },
-                { name: 'Checkout.Navigation', controller: Orckestra.Composer.CheckoutNavigationController },
-
+                { name: 'SingleCheckout.OrderConfirmation', controller: Orckestra.Composer.OrderConfirmationController },
+             
                 { name: 'MyAccount.AddressList', controller: Orckestra.Composer.AddressListController },
                 { name: 'MyAccount.ChangePassword', controller: Orckestra.Composer.ChangePasswordController },
                 { name: 'MyAccount.CreateAccount', controller: Orckestra.Composer.CreateAccountController },

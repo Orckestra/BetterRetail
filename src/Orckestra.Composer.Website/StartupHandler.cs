@@ -145,22 +145,11 @@ namespace Orckestra.Composer.Website
                 helpText: "Notification time of the minicart when an item is added/updated in cart (in seconds)."
             );
 
-            functions.RegisterAction<CheckoutController>("GuestCustomerInfo", "Composer.Checkout.GuestCustomerInfo");
-            functions.RegisterAction<CheckoutController>("ShippingAddress", "Composer.Checkout.ShippingAddress");
-            functions.RegisterAction<CheckoutController>("ShippingMethod", "Composer.Checkout.ShippingMethod");
             functions.RegisterAction<CheckoutController>("CheckoutSignInAsGuest", "Composer.Checkout.CheckoutSignInAsGuest");
             functions.RegisterAction<CheckoutController>("CheckoutSignInAsCustomer", "Composer.Checkout.CheckoutSignInAsCustomer");
-            functions.RegisterAction<CheckoutController>("CheckoutOrderSummary", "Composer.Checkout.CheckoutOrderSummary");
-            functions.RegisterAction<CheckoutController>("CheckoutComplete", "Composer.Checkout.CheckoutComplete");
-            functions.RegisterAction<CheckoutController>("ShippingAddressRegistered", "Composer.Checkout.ShippingAddressRegistered");
-            functions.RegisterAction<CheckoutController>("BillingAddress", "Composer.Checkout.BillingAddress");
-            functions.RegisterAction<CheckoutController>("BillingAddressRegistered", "Composer.Checkout.BillingAddressRegistered");
             functions.RegisterAction<CheckoutController>("Breadcrumb", "Composer.Checkout.Breadcrumb");
             functions.RegisterAction<CheckoutController>("ConfirmationBreadcrumb", "Composer.Checkout.ConfirmationBreadcrumb");
             functions.RegisterAction<CheckoutController>("LanguageSwitch", "Composer.Checkout.LanguageSwitch");
-            functions.RegisterAction<CheckoutController>("CompleteCheckoutOrderSummary", "Composer.Checkout.CompleteCheckoutOrderSummary");
-            functions.RegisterAction<CheckoutController>("CheckoutPayment", "Composer.Checkout.CheckoutPayment");
-            functions.RegisterAction<CheckoutController>("CheckoutNavigation", "Composer.Checkout.CheckoutNavigation");
 
             functions.RegisterAction<MembershipController>("SignInHeaderBlade", "Composer.Membership.SignInHeader");
             functions.RegisterAction<MembershipController>("ReturningCustomerBlade", "Composer.Membership.ReturningCustomer");

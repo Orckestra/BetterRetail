@@ -200,7 +200,6 @@
     <Compile Include="Requests\UpdateRecurringCartShippingMethodRequest.cs" />
     <Compile Include="Services\CartService.cs" />
     <Compile Include="Services\CheckoutBreadcrumbViewService.cs" />
-    <Compile Include="Services\CheckoutNavigationViewService.cs" />
     <Compile Include="Services\CheckoutService.cs" />
     <Compile Include="Services\CouponViewService.cs" />
     <Compile Include="Services\FixCartService.cs" />
@@ -208,7 +207,6 @@
     <Compile Include="Services\IRecurringOrderCartsViewService.cs" />
     <Compile Include="Services\IWishListViewService.cs" />
     <Compile Include="Services\ICheckoutBreadcrumbViewService.cs" />
-    <Compile Include="Services\ICheckoutNavigationViewService.cs" />
     <Compile Include="Services\IFixCartService.cs" />
     <Compile Include="Services\LineItemService.cs" />
     <Compile Include="Services\Order\IOrderHistoryViewService.cs" />

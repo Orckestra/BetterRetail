@@ -194,15 +194,14 @@ namespace Orckestra.Composer.MyAccount.Services
             if (param.CultureInfo == null) { throw new ArgumentException(nameof(param.CultureInfo)); }
             if (param.CustomerId == Guid.Empty) { throw new ArgumentException(nameof(param.CustomerId)); }
             if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(nameof(param.Scope)); }
-            if (string.IsNullOrWhiteSpace(param.AddAddressUrl)) { throw new ArgumentException(nameof(param.AddAddressUrl)); }
-            if (string.IsNullOrWhiteSpace(param.EditAddressBaseUrl)) { throw new ArgumentException(nameof(param.EditAddressBaseUrl)); }
             if (string.IsNullOrWhiteSpace(param.CountryCode)) { throw new ArgumentException(nameof(param.CountryCode)); }
 
             var customer = await CustomerRepository.GetCustomerByIdAsync(new GetCustomerByIdParam
             {
                 CultureInfo = param.CultureInfo,
                 CustomerId = param.CustomerId,
-                Scope = param.Scope
+                Scope = param.Scope,
+                IncludeAddresses = true,
             }).ConfigureAwait(false);
 
             IList<Address> addresses = customer.Addresses;
@@ -241,16 +240,19 @@ namespace Orckestra.Composer.MyAccount.Services
             var viewModel = ViewModelMapper.MapTo<AddressListViewModel>(customer, param.CultureInfo);
 
             viewModel.AddAddressUrl = param.AddAddressUrl;
+
             viewModel.Addresses = addresses.Select(address =>
             {
                 var addressVm = ViewModelMapper.MapTo<AddressListItemViewModel>(address, param.CultureInfo);
-
-                var editUrlWithParam = UrlFormatter.AppendQueryString(param.EditAddressBaseUrl, new NameValueCollection
+                if (!string.IsNullOrWhiteSpace(param.EditAddressBaseUrl))
                 {
-                    {"addressId", address.Id.ToString()}
-                });
-
-                addressVm.UpdateAddressUrl = editUrlWithParam;
+                    var editUrlWithParam = UrlFormatter.AppendQueryString(param.EditAddressBaseUrl,
+                        new NameValueCollection
+                        {
+                             {"addressId", address.Id.ToString()}
+                        });
+                    addressVm.UpdateAddressUrl = editUrlWithParam;
+                }
 
                 var region = regions.FirstOrDefault(x => x.IsoCode == address.RegionCode);
                 addressVm.RegionName = region != null ? region.Name : string.Empty;

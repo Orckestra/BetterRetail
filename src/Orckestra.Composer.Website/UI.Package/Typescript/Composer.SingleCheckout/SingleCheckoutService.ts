@@ -142,8 +142,9 @@ module Orckestra.Composer {
         }
 
         private handleCheckoutSecurity(cart: any) {
-            if (cart.IsCartEmpty && !Utils.IsC1ConsolePreview()) {
-                this.window.location.href = cart.OrderSummary.CheckoutRedirectAction.RedirectUrl;
+            let redirectUrl = cart.OrderSummary.CheckoutRedirectAction.RedirectUrl;
+            if (redirectUrl && !Utils.IsC1ConsolePreview()) {
+                this.window.location.href = redirectUrl;
             }
         }
 
@@ -383,7 +384,10 @@ module Orckestra.Composer {
                     vue.customerBeforeEdit = { ...Cart.Customer };
                     vue.adressBeforeEdit = { ...Cart.ShippingAddress };
                     vue.billingAddressBeforeEdit = { ...Cart.Payment.BillingAddress };
-                    vue.Errors = {};
+                    let errorKeys = _.keys(vue.Errors);
+                    _.each(errorKeys, key => {
+                        vue.Errors[key] = false;
+                    });
                     vue.Cart = Cart;
                     return result;
                 })

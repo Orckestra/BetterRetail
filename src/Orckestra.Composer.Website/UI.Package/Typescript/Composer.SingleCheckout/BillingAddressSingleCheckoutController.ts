@@ -136,11 +136,11 @@ module Orckestra.Composer {
                     clearBillingAddress() {
                         this.Mode.AddingLine2Address = true;
 
-                        let { FirstName, LastName, CountryCode, UseShippingAddress } = this.Cart.Payment.BillingAddress;
+                        let { FirstName, LastName, CountryCode, PhoneRegex, PostalCodeRegexPattern, UseShippingAddress } = this.Cart.Payment.BillingAddress;
                         this.Cart.Payment.BillingAddress = {
                             FirstName: FirstName || this.Cart.Customer.FirstName,
                             LastName: LastName || this.Cart.Customer.LastName,
-                            CountryCode, UseShippingAddress, AddressBookId: null,
+                            CountryCode, PhoneRegex, PostalCodeRegexPattern, UseShippingAddress, AddressBookId: null,
                             Line1: '', City: '', RegionCode: '', PostalCode: '', PhoneNumber: ''
                         };
                     },
