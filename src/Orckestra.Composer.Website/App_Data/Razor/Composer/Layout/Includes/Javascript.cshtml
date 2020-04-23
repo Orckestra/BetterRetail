@@ -35,5 +35,13 @@
     <script src="/UI.Package/JavaScript/orckestra.composer.js"></script>
     <script src="/UI.Package/JavaScript/composer-templates.min.js"></script>
     <f:function name="Composer.DatePicker.DatePicker.Includes" />
+    @if (HttpContext.Current.IsDebuggingEnabled)
+    {
+        <script id="vuejs" src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    }
+    else
+    {
+        <script id="vuejs" src="~/UI.Package/JavaScript/vue.min.js"></script>
+    }
 </body>
 </html>
