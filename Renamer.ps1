@@ -59,10 +59,6 @@ function ProcessRecursiveRenaming($subDirectory){
 	Sort-Object -Property Length -Descending |
 	ForEach-Object{
 		$Item = Get-Item $_
-
-        if ($Item.FullName -eq $directory + "\Renamer.ps1"){
-            continue}
-
 		$PathRoot = $Item.FullName | Split-Path
 		$OldName = $Item.FullName | Split-Path -Leaf
 		$NewName = $OldName -replace $OldText, $NewText
