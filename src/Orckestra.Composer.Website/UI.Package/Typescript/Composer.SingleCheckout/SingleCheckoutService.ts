@@ -20,6 +20,7 @@
 ///<reference path='./VueComponents/CheckoutPageVueComponent.ts' />
 ///<reference path='../Composer.MyAccount/Common/MyAccountEvents.ts' />
 ///<reference path='../Composer.MyAccount/Common/MyAccountStatus.ts' />
+///<reference path='../Composer.Cart/CheckoutShippingAddressRegistered/ShippingAddressRegisteredService.ts' />
 
 
 module Orckestra.Composer {
