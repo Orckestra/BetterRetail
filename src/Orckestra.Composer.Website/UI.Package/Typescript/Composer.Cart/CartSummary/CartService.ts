@@ -52,9 +52,9 @@ module Orckestra.Composer {
             return reason === CacheError.Expired || reason === CacheError.NotFound;
         }
 
-        public getFreshCart(): Q.Promise<any> {
+        public getFreshCart(force: boolean = false): Q.Promise<any> {
 
-            if (!CartService.GettingFreshCart) {
+            if (!CartService.GettingFreshCart || force) {
                 CartService.GettingFreshCart = this.cartRepository.getCart()
                     .then(cart => this.setCartToCache(cart));
             }

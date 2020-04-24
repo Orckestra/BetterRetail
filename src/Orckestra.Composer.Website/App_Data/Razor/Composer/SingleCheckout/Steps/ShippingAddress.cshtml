@@ -5,17 +5,13 @@
     {
         get { return "Shipping Address"; }
     }
-
-    public IComposerContext ComposerContext { get; set; }
 }
 
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on" xmlns:v-slot="v-slot">
 <head>
 </head>
 <body>
-    @if (ComposerContext.IsAuthenticated)
-    {
-        <div data-oc-controller="SingleCheckout.ShippingAddressRegistered">
+        <div v-if="IsAuthenticated" data-oc-controller="SingleCheckout.ShippingAddressRegistered">
             <div v-for="(address, index) in RegisteredAddresses"
                  v-bind:key="address.Id"
                  class="border rounded p-3 mb-2 bg-white"
@@ -40,12 +36,9 @@
             </button>
 
         </div>
-    }
-    else
-    {
-        <div data-oc-controller="SingleCheckout.ShippingAddress">
+
+        <div  v-if="!IsAuthenticated" data-oc-controller="SingleCheckout.ShippingAddress">
             @Forms.Address.Form("Cart.ShippingAddress", "addressForm")
-        </div>
-    }
+       </div>
 </body>
 </html>

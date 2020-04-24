@@ -5,8 +5,6 @@
     {
         get { return "User Information"; }
     }
-
-    public IComposerContext ComposerContext { get; set; }
 }
 
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on" xmlns:v-slot="v-slot">
@@ -48,8 +46,7 @@
 @helper Information_Step_Active()
 {
     <form id="editCustomerForms">
-        @if (ComposerContext.IsAuthenticated)
-        {
+        <div v-if="IsAuthenticated">
             <div class="form-row">
                 <div class="col-md-6">
                     <strong>@Html.Localize("Forms", "F_FirstName")</strong><br />{{Cart.Customer.FirstName}}
@@ -59,13 +56,10 @@
                 </div>
             </div>
             <div class="form-row mt-3">
-                @EmailField(true)
+                @EmailField("Email", true)
             </div>
-        }
-
-        @if (!ComposerContext.IsAuthenticated)
-        {
-
+        </div>
+        <div v-if="!IsAuthenticated">
             <div class="form-row" v-show="!SigningInMode">
                 <div class="form-group col-md-6">
                     <label for="FirstName">@Html.Localize("Forms", "F_FirstName") *</label>
@@ -103,8 +97,9 @@
                 </div>
             </div>
 
+            @Forms.Validations.SignInErrors("Errors.SignIn")
             <div class="form-row">
-                @EmailField()
+                @EmailField("username")
             </div>
             <div class="form-row" v-show="SigningInMode">
                 <div class="form-group col-md-6">
@@ -142,24 +137,24 @@
 
             <div class="row" v-if="ShowSignInButton">
                 <div class="col-12 mt-3">
-                    <button class="btn btn-primary" v-on:click="processCustomer">
+                    <button class="btn btn-primary" v-on:click.prevent="signInAndContinue">
                         @Html.Localize("CheckoutProcess", "F_SignInAndContinue")
                     </button>
                 </div>
             </div>
-        }
+        </div>
     </form>
 }
 
-@helper EmailField(bool disbled = false)
+@helper EmailField(string id = "Email", bool disbled = false)
 {
     <div class="form-group col-md-6">
-        <label for="Email">@Html.Localize("Forms", "F_Email") *</label>
+        <label for="@id">@Html.Localize("Forms", "F_Email") *</label>
         <input v-model="Cart.Customer.Email"
-               id="Email"
+               id="@id"
                name="Email"
                data-qa="information-email-input"
-               @if (!disbled) { <text> v-bind:disabled="IsLoading" </text>  } else { <text> disabled="disabled" </text>  }
+               @if (!disbled) { <text> v-bind:disabled="IsLoading" </text>  } else { <text> disabled="disabled" </text> }
                type="email"
                v-on:change="onChangeUsername"
                class="form-control"

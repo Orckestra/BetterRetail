@@ -5,8 +5,6 @@
     {
         get { return "BillingAddress"; }
     }
-
-    public IComposerContext ComposerContext { get; set; }
 }
 
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on" xmlns:v-slot="v-slot">
@@ -22,9 +20,7 @@
             @CheckoutHelpers.StepEditButton("billing")
         </div>
         <div class="card-body  bg-light" v-show="step.active" v-cloak="true" data-qa="billing-active-state">
-            @if (ComposerContext.IsAuthenticated)
-            {
-                <div data-oc-controller="SingleCheckout.BillingAddressRegistered">
+                <div v-if="IsAuthenticated" data-oc-controller="SingleCheckout.BillingAddressRegistered">
                     <div v-if="IsShippingMethodType">
                         @UseShippingAddressCheckbox()
                     </div>
@@ -57,10 +53,8 @@
 
                     </div>
                 </div>
-            }
-            else
-            {
-                <div data-oc-controller="SingleCheckout.BillingAddress">
+            
+                <div v-if="!IsAuthenticated" data-oc-controller="SingleCheckout.BillingAddress">
                     <div v-if="IsShippingMethodType">
                         @UseShippingAddressCheckbox()
                     </div>
@@ -71,7 +65,6 @@
                         @Forms.Address.Form("Cart.Payment.BillingAddress", "billingAddressForm", false, "")
                     </div>
                 </div>
-            }
         </div>
 
         <div class="card-body  bg-light" v-show="step.preview" v-cloak="true" data-qa="billing-preview-state">

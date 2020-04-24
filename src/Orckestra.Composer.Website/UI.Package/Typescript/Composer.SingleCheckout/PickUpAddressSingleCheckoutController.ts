@@ -46,7 +46,7 @@ module Orckestra.Composer {
 
                         return self.checkoutService.updateCart(controllersToUpdate)
                             .then(() => {
-                                this.Steps.EnteredOnce.Shipping = true;
+                                this.Steps.Shipping.EnteredOnce = true;
                                 return true;
                             });
                     },

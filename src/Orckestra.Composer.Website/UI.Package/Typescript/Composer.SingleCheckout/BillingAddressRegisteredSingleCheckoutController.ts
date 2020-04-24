@@ -4,7 +4,7 @@
 module Orckestra.Composer {
     'use strict';
 
-    export class BillingAddressRegisteredSingleCheckoutController extends Orckestra.Composer.BillingAddressSingleCheckoutController {
+    export class BillingAddressRegisteredSingleCheckoutController extends Orckestra.Composer.BaseSingleCheckoutController {
 
         public initialize() {
             super.initialize();
@@ -22,11 +22,11 @@ module Orckestra.Composer {
                         if (this.billingAddressModified()) {
                             return self.checkoutService.updateCart([self.viewModelName])
                                 .then(() => {
-                                    this.Steps.EnteredOnce.Billing = true;
+                                    this.Steps.Billing.EnteredOnce = true;
                                     return true;
                                 });
                         } else {
-                            this.Steps.EnteredOnce.Billing = true;
+                            this.Steps.Billing.EnteredOnce = true;
                             return true;
                         }
                     },

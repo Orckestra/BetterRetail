@@ -63,6 +63,8 @@ module Orckestra.Composer {
         protected cartService: ICartService;
         protected membershipService: IMembershipService;
         protected customerService: ICustomerService = new CustomerService(new CustomerRepository());
+        protected shippingAddressRegisteredService: ShippingAddressRegisteredService =
+            new ShippingAddressRegisteredService(this.customerService);
         protected regionService: IRegionService;
         protected shippingMethodService: ShippingMethodService;
         protected paymentService: IPaymentService;
@@ -163,12 +165,25 @@ module Orckestra.Composer {
                     Payment: null,
                     Steps: {
                         StartStep: startStep,
-                        EnteredOnce: {
-                            Information: true,
-                            Shipping: false,
-                            ReviewCart: false,
-                            Billing: false,
-                            Payment: false
+                        Information: {
+                            EnteredOnce: true,
+                            Loading: false
+                        },
+                        Shipping: {
+                            EnteredOnce: false,
+                            Loading: false
+                        },
+                        ReviewCart: {
+                            EnteredOnce: false,
+                            Loading: false
+                        },
+                        Billing: {
+                            EnteredOnce: false,
+                            Loading: false
+                        },
+                        Payment: {
+                            EnteredOnce: false,
+                            Loading: false
                         }
                     },
                     Mode: {
@@ -184,11 +199,11 @@ module Orckestra.Composer {
                         InvalidPhoneFormatError: false,
                         AddressNameAlreadyInUseError: false,
                         StoreLocatorLocationError: false,
+                        SignIn: false
                     }
                 },
                 mixins: this.VueCheckoutMixins,
                 mounted() {
-
                 },
                 computed: {
                     Customer() {
@@ -233,6 +248,10 @@ module Orckestra.Composer {
                     }
                 }
             });
+
+            if (checkoutContext.IsAuthenticated) {
+                this.loadUserAddresses();
+            }
         }
 
         public calculateStartStep(cart: any, isAuthenticated: boolean): number {
@@ -381,14 +400,7 @@ module Orckestra.Composer {
                 .then(vm => this.cartService.updateCart(vm))
                 .then(result => {
                     let { Cart } = result;
-                    vue.customerBeforeEdit = { ...Cart.Customer };
-                    vue.adressBeforeEdit = { ...Cart.ShippingAddress };
-                    vue.billingAddressBeforeEdit = { ...Cart.Payment.BillingAddress };
-                    let errorKeys = _.keys(vue.Errors);
-                    _.each(errorKeys, key => {
-                        vue.Errors[key] = false;
-                    });
-                    vue.Cart = Cart;
+                    this.updateVueState(vue, Cart);
                     return result;
                 })
                 .finally(() => {
@@ -396,28 +408,24 @@ module Orckestra.Composer {
                 });
         }
 
-        public collectViewModelNamesForUpdateCart(): Q.Promise<any> {
-            let controllerInstance: IBaseSingleCheckoutController;
-            let promises: Q.Promise<any>[] = [];
-
-            for (let controllerName in this.registeredControllers) {
-
-                if (this.registeredControllers.hasOwnProperty(controllerName)) {
-                    controllerInstance = <IBaseSingleCheckoutController>this.registeredControllers[controllerName];
-                    promises.push(controllerInstance.getViewModelNameForUpdatePromise());
-                }
-            }
-
-            return Q.all(promises);
+        protected updateVueState(vue: any, Cart: any) {
+            vue.customerBeforeEdit = { ...Cart.Customer };
+            vue.adressBeforeEdit = { ...Cart.ShippingAddress };
+            vue.billingAddressBeforeEdit = { ...Cart.Payment.BillingAddress };
+            let errorKeys = _.keys(vue.Errors);
+            _.each(errorKeys, key => {
+                vue.Errors[key] = false;
+            });
+            vue.Cart = Cart;
         }
 
         public updatePaymentMethod(param: any): Q.Promise<IActivePaymentViewModel> {
             let vue: any = this.VueCheckout;
 
-            vue.Mode.Loading = true;
+            vue.Steps.Payment.Loading = true;
             return this.paymentService.updatePaymentMethod(param)
                 .finally(() => {
-                    vue.Mode.Loading = false;
+                    vue.Steps.Payment.Loading = false
                 });
         }
 
@@ -445,6 +453,21 @@ module Orckestra.Composer {
                     console.error('An error occurred while completing the checkout.', reason);
                     ErrorHandler.instance().outputErrorFromCode('CompleteCheckoutFailed');
                 });
+        }
+
+        public collectViewModelNamesForUpdateCart(): Q.Promise<any> {
+            let controllerInstance: IBaseSingleCheckoutController;
+            let promises: Q.Promise<any>[] = [];
+
+            for (let controllerName in this.registeredControllers) {
+
+                if (this.registeredControllers.hasOwnProperty(controllerName)) {
+                    controllerInstance = <IBaseSingleCheckoutController>this.registeredControllers[controllerName];
+                    promises.push(controllerInstance.getViewModelNameForUpdatePromise());
+                }
+            }
+
+            return Q.all(promises);
         }
 
         private buildCartUpdateViewModel(vm: any, controllersName = null): Q.Promise<any> {
@@ -548,29 +571,60 @@ module Orckestra.Composer {
 
         public loginUser(formData: any): Q.Promise<boolean> {
             let returnUrl = window.location.pathname;
+            var vue: any = this.VueCheckout;
+            vue.Steps.Information.Loading = true;
 
             return this.membershipService.login(formData, returnUrl)
-                .then(result => {
-                    if (result.Status === MyAccountStatus[MyAccountStatus.Success]) {
-                        this.eventHub.publish(MyAccountEvents[MyAccountEvents.LoggedIn], { data: result });
-                        this.cacheProvider.defaultCache.set('customerId', null).done();
-                        this.cacheProvider.customCache.fullClear();
-
-                        if (result.ReturnUrl) {
-                            window.location.href = result.ReturnUrl;
-                        }
-                    }
+                .then(result =>  this.onLoginFulfilled(result, vue))
+                .then(() => this.cartService.getFreshCart(true))
+                .then((cart) => {
+                    this.updateVueState(vue, cart);
+                    vue.Mode.Authenticated = true;
+                    vue.Mode.SignIn = SignInModes.Base;
+                    vue.Steps.Information.Loading = false;
                     return true;
-                }).fail(({ Errors: [error] }) => {
-                    console.error('An error occurred while logging in.', error.ErrorMessage);
-                    ErrorHandler.instance().outputError(error);
+                })
+                .fail(({ Errors: [error] }) => {
+                    this.onLoginRejected(error, vue);
                     return false;
-                });
+                }).finally(() => vue.Steps.Information.Loading = false );
+        }
+
+        private onLoginFulfilled(result: any, vueData: any) {
+
+            if (result.Status === MyAccountStatus[MyAccountStatus.Success]) {
+               
+                this.eventHub.publish(MyAccountEvents[MyAccountEvents.LoggedIn], { data: result });
+                this.cacheProvider.defaultCache.set('customerId', null).done();
+                this.cacheProvider.customCache.fullClear();
+                this.loadUserAddresses();
+                return true;
+               // vueData.$children[0].navigateToStep(CheckoutStepNumbers.Shipping);
+            } else {
+                vueData.Errors.SignIn = result.Status;
+            }
+        }
+
+        private onLoginRejected(error: any, vueData: any) {
+            let errorCode = MyAccountStatus[MyAccountStatus.AjaxFailed];
+            if (error && error.ErrorCode) {
+                errorCode = error.ErrorCode;
+            }
+            console.error('An error occurred while logging in.', error.ErrorMessage);
+            vueData.Errors.SignIn = errorCode;
         }
 
         public checkUserExist(email: string): Q.Promise<boolean> {
             return this.membershipService.isUserExist(email)
                 .then(result => result.IsExist);
+        }
+
+        public loadUserAddresses(): Q.Promise<any>  {
+            let vue: any = this.VueCheckout;
+            return this.shippingAddressRegisteredService.getShippingAddresses(vue.Cart)
+                .then(data => {
+                    vue.RegisteredAddresses = data.Addresses;
+                });
         }
     }
 }

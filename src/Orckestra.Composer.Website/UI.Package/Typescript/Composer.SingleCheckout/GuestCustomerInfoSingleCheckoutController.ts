@@ -96,6 +96,14 @@ module Orckestra.Composer {
                         this.resetParsley(self.formSelector);
                         this.Mode.SignIn = SignInModes.SigningIn;
                     },
+                    signInAndContinue() {
+                        let { Email: Username, Password } = this.Cart.Customer;
+                        let loginData = { Username, Password };
+                        self.checkoutService.loginUser(loginData)
+                            .then(() => {
+                                this.$children[0].navigateToStep(CheckoutStepNumbers.Shipping);
+                            });
+                    },
                     continueAsGuestButton() {
                         this.resetParsley(self.formSelector);
                         this.Mode.SignIn = SignInModes.Base;

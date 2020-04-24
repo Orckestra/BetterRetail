@@ -6,11 +6,8 @@
 module Orckestra.Composer {
     'use strict';
 
-    export class ShippingAddressRegisteredSingleCheckoutController extends Orckestra.Composer.ShippingAddressSingleCheckoutController {
-        protected customerService: ICustomerService = new CustomerService(new CustomerRepository());
-        protected shippingAddressRegisteredService: ShippingAddressRegisteredService =
-            new ShippingAddressRegisteredService(this.customerService);
-
+    export class ShippingAddressRegisteredSingleCheckoutController extends Orckestra.Composer.BaseSingleCheckoutController {
+    
         public initialize() {
             super.initialize();
             let self: ShippingAddressRegisteredSingleCheckoutController = this;
@@ -23,30 +20,16 @@ module Orckestra.Composer {
                     SelectedShippingAddressId: null,
                     AddressName: null,
                 },
-                created() {
-
-                },
-                mounted() {
-
-                    if (this.IsAuthenticated) {
-                        self.shippingAddressRegisteredService.getShippingAddresses(this.Cart)
-                            .then(data => {
-                                this.RegisteredAddresses = data.Addresses;
-                            });
-                    }
-                },
-                computed: {
-                },
                 methods: {
                     processShippingAddressRegistered() {
                         if (this.shippingAddressModified()) {
                             return self.checkoutService.updateCart([self.viewModelName])
                                 .then(() => {
-                                    this.Steps.EnteredOnce.Shipping = true;
+                                    this.Steps.Shipping.EnteredOnce = true;
                                     return true;
                                 });
                         } else {
-                            this.Steps.EnteredOnce.Shipping = true;
+                            this.Steps.Shipping.EnteredOnce = true;
                             return true;
                         }
                     },
@@ -106,7 +89,7 @@ module Orckestra.Composer {
                                     this.Cart.ShippingAddress = Cart.ShippingAddress;
                                     this.Cart.Payment.BillingAddress = Cart.Payment.BillingAddress;
                                     if (addingNewAddressPromise) {
-                                        this.Steps.EnteredOnce.Shipping = true;
+                                        this.Steps.Shipping.EnteredOnce = true;
                                         addingNewAddressPromise.resolve(true);
                                     }
                                 }).fail((reason) => {
@@ -129,7 +112,10 @@ module Orckestra.Composer {
         public getViewModelNameForUpdatePromise(): Q.Promise<any> {
             return Q.fcall(() => {
                 var vueData = this.checkoutService.VueCheckout;
-
+                if (!vueData.IsAuthenticated) {
+                    return;
+                }
+                
                 if (vueData.shippingAddressModified()) {
                     return this.viewModelName;
                 }

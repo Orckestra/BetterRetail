@@ -23,7 +23,7 @@ module Orckestra.Composer {
                 },
                 computed: {
                     FulfilledPayment() {
-                        return !!(this.ActivePayment && this.Steps.EnteredOnce.Billing);
+                        return !!(this.ActivePayment && this.Steps.Billing.EnteredOnce);
                     },
                     MainPaymentMethods() {
                         return this.Payment.PaymentMethods.filter(method => !method.IsCreditCardPaymentMethod);
@@ -88,7 +88,7 @@ module Orckestra.Composer {
                     changePaymentMethodProcess(paymentId: string, paymentMethodEntity: any, providers: Array<string>) {
                         let oldPayment = this.SelectedPaymentMethod;
                         this.selectPaymentMethod(paymentMethodEntity.Id);
-
+                      
                         self.checkoutService.updatePaymentMethod({
                             PaymentId: paymentId,
                             PaymentProviderName: paymentMethodEntity.PaymentProviderName,
@@ -102,7 +102,7 @@ module Orckestra.Composer {
                             console.error('Error while changing the payment method.', reason);
                             ErrorHandler.instance().outputErrorFromCode('PaymentMethodChangeFailed');
                             this.selectPaymentMethod(oldPayment.Id);
-                        })
+                        });
                     },
 
                     selectPaymentMethod(paymentId: string) {
@@ -134,9 +134,11 @@ module Orckestra.Composer {
 
                     preparePayment(): Q.Promise<boolean> {
                         if (!this.Payment) {
+                            this.Steps.Payment.Loading = true;
                             return self.checkoutService.getPaymentCheckout()
                                 .then(paymentVm => {
                                     this.Payment = paymentVm;
+                                    this.Steps.Payment.Loading = false;
                                     return true;
                                 });
                         } else {

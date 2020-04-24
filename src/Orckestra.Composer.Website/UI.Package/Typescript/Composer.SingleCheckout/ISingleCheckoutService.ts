@@ -56,5 +56,7 @@ module Orckestra.Composer {
         loginUser(formData: any): Q.Promise<any>;
 
         checkUserExist(username: string): Q.Promise<boolean>;
+
+        loadUserAddresses(): Q.Promise<any>;
     }
 }

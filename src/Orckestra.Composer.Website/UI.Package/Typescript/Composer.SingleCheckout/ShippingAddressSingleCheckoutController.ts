@@ -48,7 +48,7 @@ module Orckestra.Composer {
                                     this.prepareBillingAddress()
                                         .then(() => self.checkoutService.updateCart(controllersToUpdate))
                                         .then(() => {
-                                            this.Steps.EnteredOnce.Shipping = true;
+                                            this.Steps.Shipping.EnteredOnce = true;
                                             self.eventHub.publish("cartBillingAddressUpdated", { data: this });
                                             processShippingAddress.resolve(true);
                                         })

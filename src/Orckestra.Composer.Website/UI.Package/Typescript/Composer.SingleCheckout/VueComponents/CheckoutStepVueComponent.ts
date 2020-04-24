@@ -36,7 +36,8 @@ module Orckestra.Composer {
                         type: Function
                     },
 
-                    fulfilled: Boolean
+                    fulfilled: Boolean,
+                    loading: Boolean
                 },
                 inject: ["addStep", "removeStep", "nextStep"],
                 data: function () {
@@ -84,9 +85,19 @@ module Orckestra.Composer {
                 },
                 template: `
                     <div class="checkout-step-container"
-                         v-bind:class="{'active-step': active, 'fulfilled-step' : fulfilled, 'preview-step': slotProps.preview, 'next-step': slotProps.next}"
+                         v-bind:class="{'active-step': active, 
+                         'fulfilled-step' : fulfilled, 
+                         'preview-step': slotProps.preview, 
+                         'next-step': slotProps.next,
+                         'loading' : loading
+                        }"
                          role="tabpanel"
                          v-bind:id="stepId">
+                         <div class="loading-spinner">
+                            <div class="spinner-border text-info" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                         </div>
                         <slot v-bind="slotProps"></slot>
                     </div>`
             }
