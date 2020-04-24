@@ -196,7 +196,7 @@
     <value>Cardholder Name</value>
   </data>
   <data name="L_CardNumber" xml:space="preserve">
-    <value>Card number:</value>
+    <value>Card Number</value>
   </data>
   <data name="L_CheckoutSignIn" xml:space="preserve">
     <value>Checkout Sign In</value>
