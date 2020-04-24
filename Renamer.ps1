@@ -7,7 +7,7 @@ Rename all files and directories names, and replace files content, from "ClientN
 Will check if the script is executed in Clientname git repos directory.
 
 If we have files and directories like :
-
+ 
  - Orckestra.Composer.CompositeC1.Mvc.txt
  - Orckestra.Composer.CompositeC1.Mvc/MyFile.txt
  - OtherDirectory/MyFileContent.txt with content like 'This is my Orckestra.Composer.CompositeC1.Mvc'
@@ -37,6 +37,7 @@ Push-Location $PSScriptRoot
 
 $StartTime = $(Get-Date)
 $directory = (Get-Location)
+$baseDir = $directory.Path + "\src\" + $NewText;
 $RenamerScriptName = $MyInvocation.MyCommand.Name
 [string[]]$Excludes = @('node_modules', 'lib', 'Packages', 'obj', 'bin', $RenamerScriptName )
 
@@ -50,7 +51,7 @@ function CheckIfScriptIsInClientNameGitRepos(){
 	}
 }
 
-# This function will rename recursively Directories, Files and Files contents from «ClientName» to $NewText
+# This function will rename recursively Directories, Files and Files contents from "ClientName" to $NewText
 function ProcessRecursiveRenaming($subDirectory){	
 	$OldText = "Orckestra.Composer.Website"
 	Get-ChildItem $subDirectory -Exclude $Excludes | 
@@ -76,7 +77,7 @@ function ProcessRecursiveRenaming($subDirectory){
 						if($MustChange){
 							$ShowInGreen = $true
 						}
-						$_ -replace $OldText, $NewText
+						$_.replace($OldText, $NewText).replace($NewText + ".dll", $OldText + ".dll")
 					} | 
 					Set-Content $Item
 				}
@@ -111,12 +112,44 @@ function UpdateParametersAllXml(){
 	$xmlParameterFileContent.Save($xmlFilePath)
 }
 
+#Fixing known issues after renaming
+
+# After renaming namespaces from "Orckestra.Website.*" into something other
+# some classes lose inherited access to the "Orckestra.Website" namespace
+function FixUsings(){
+
+    $list = New-Object Collections.Generic.List[String]
+    $list.Add($baseDir + "\App_Start\ComposerConfig.cs")
+    $list.Add($baseDir + "\Plugin.cs")
+    $list.Add($baseDir + "\StartupHandler.cs")
+    foreach ($filePath in $list) {
+        $content = Get-Content -Path $filePath
+        $output = @()
+        $output += "using Orckestra.Composer;"
+        $output += $content
+        Set-Content -Path $filePath -Value $Output
+    }
+}
+
+# Keeping assemply name as Orckestra.Composer.Website.dll since there are 
+# dependencies based on assembly name
+function FixAssemblyName(){
+	$filePath = $baseDir + "\" + $NewText + ".csproj"
+	$content = Get-Content -Path $filePath
+	$content = $content -replace "<AssemblyName>(.+?)<\/AssemblyName>", "<AssemblyName>Orckestra.Composer.Website</AssemblyName>"
+	Set-Content -Path $filePath -Value $content
+}
+
 #Start of process
 Write-Host "Start of process" -ForegroundColor Green
 
 #CheckIfScriptIsInClientNameGitRepos
 
 ProcessRecursiveRenaming($directory)
+
+FixUsings
+
+FixAssemblyName
 
 #UpdateParametersAllXml
 
