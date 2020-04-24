@@ -1,12 +1,7 @@
-﻿using FluentAssertions;
+﻿using System.IO;
+using System.Linq;
 using NUnit.Framework;
 using Orckestra.Composer.Sitemap.Models;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Orckestra.Composer.Sitemap.Tests
 {
@@ -16,24 +11,24 @@ namespace Orckestra.Composer.Sitemap.Tests
         [Test]
         public void WHEN_SitemapIsSerialized_SHOULD_RespectSitemapXsd()
         {
-            // ARRANGE            
-            var urlSitemapXsd = "http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd";
-            var @namespace = "http://www.sitemaps.org/schemas/sitemap/0.9";
+            // ARRANGE  
+            var xsdResourceName = "Orckestra.Composer.Sitemap.Tests.sitemap.xsd";
+            var targetNamespace = "http://www.sitemaps.org/schemas/sitemap/0.9";
 
-            var filePath = Path.GetTempFileName();
+            var xmlFilePath = Path.GetTempFileName();
             var sitemap = CreateSitemap();
             
             try
             {
                 // ACT
-                sitemap.WriteToXml(filePath);
+                sitemap.WriteToXml(xmlFilePath);
 
                 // ASSERT
-                XsdValidator.IsValidXml(filePath, urlSitemapXsd, @namespace).Should().BeTrue("Validation against XSD failed. Check test output for more details.");
+                Assert.DoesNotThrow(() => XsdValidator.ValidateXml(xmlFilePath, xsdResourceName, targetNamespace));
             }
             finally
             {
-                File.Delete(filePath);
+                File.Delete(xmlFilePath);
             }   
         }
 
