@@ -114,10 +114,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1- Core", "1- Core", "{2290
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.HandlebarsCompiler", "src\Orckestra.Composer.HandlebarsCompiler\Orckestra.Composer.HandlebarsCompiler.csproj", "{3508A92E-CB4B-431D-BBDC-0AD5FABEC20C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.LoadTest", "tests\Orckestra.Composer.LoadTest\Orckestra.Composer.LoadTest.csproj", "{3AFCC15C-B3E7-4F44-9D67-44018FDFDABE}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.LoadTest.Tests", "tests\Orckestra.Composer.LoadTest.Tests\Orckestra.Composer.LoadTest.Tests.csproj", "{7501DDC4-8A28-4DF3-ADC6-5132D043E738}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -264,14 +260,6 @@ Global
 		{3508A92E-CB4B-431D-BBDC-0AD5FABEC20C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3508A92E-CB4B-431D-BBDC-0AD5FABEC20C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3508A92E-CB4B-431D-BBDC-0AD5FABEC20C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3AFCC15C-B3E7-4F44-9D67-44018FDFDABE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3AFCC15C-B3E7-4F44-9D67-44018FDFDABE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3AFCC15C-B3E7-4F44-9D67-44018FDFDABE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3AFCC15C-B3E7-4F44-9D67-44018FDFDABE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7501DDC4-8A28-4DF3-ADC6-5132D043E738}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7501DDC4-8A28-4DF3-ADC6-5132D043E738}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7501DDC4-8A28-4DF3-ADC6-5132D043E738}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7501DDC4-8A28-4DF3-ADC6-5132D043E738}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -318,8 +306,6 @@ Global
 		{91BA9F0C-A917-46A8-9165-C91CD540AE08} = {B8DA1457-A933-4B02-A5DF-2F899148CF50}
 		{2290CF95-EF97-4E7A-ADD6-D902AD8DAAAC} = {303355EE-E2EF-46D5-8B56-BE44E9F3D93D}
 		{3508A92E-CB4B-431D-BBDC-0AD5FABEC20C} = {4C9DCD77-1564-4C86-AD89-DCC674C54879}
-		{3AFCC15C-B3E7-4F44-9D67-44018FDFDABE} = {832CD4F4-EF5A-44B0-92FF-D159B6276AF7}
-		{7501DDC4-8A28-4DF3-ADC6-5132D043E738} = {832CD4F4-EF5A-44B0-92FF-D159B6276AF7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {31789445-A48E-4454-9EC2-4B738A35383C}

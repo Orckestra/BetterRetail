@@ -14,18 +14,7 @@ namespace Orckestra.ForTests
 
        protected Mock<TInterface> Dependency<TInterface>() where TInterface : class
         {
-            var dependency = Container.GetMock<TInterface>();
-            try
-            {
-                
-            }
-            catch
-            {
-
-            }
-            return dependency;
+            return Container.GetMock<TInterface>();
         }
-
- 
     }
 }

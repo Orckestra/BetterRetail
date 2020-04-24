@@ -50,7 +50,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
                 CartName    = GetRandom.String(32),
                 ProductId   = GetRandom.String(32),
                 VariantId   = GetRandom.String(32),
-                Quantity    = GetRandom.PositiveInt(),
+                Quantity    = 1000,
                 BaseUrl = GetRandom.String(32)
             }).Result;
 
@@ -73,7 +73,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
                 CartName    = GetRandom.String(32),
                 ProductId   = GetRandom.String(32),
                 VariantId   = GetRandom.String(32),
-                Quantity    = GetRandom.PositiveInt(),
+                Quantity    = 1000,
                 BaseUrl =  GetRandom.String(32)
             }).Result;
 
@@ -228,7 +228,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
                 CartName    = GetRandom.String(32),
                 ProductId   = GetRandom.String(32),
                 VariantId   = variantId,
-                Quantity    = GetRandom.PositiveInt(),
+                Quantity    = 1000,
                 BaseUrl = GetRandom.String(32)
             }).Result;
 

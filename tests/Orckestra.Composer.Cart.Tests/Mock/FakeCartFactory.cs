@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using FizzWare.NBuilder.Generators;
@@ -74,24 +75,18 @@ namespace Orckestra.Composer.Cart.Tests.Mock
             };
         }
 
-        internal static Tax CreateTax(IList<Tax> taxes, CultureInfo cultureInfo)
+        internal static Tax CreateTax(CultureInfo cultureInfo, double? taxTotalAmount, string taxCode, string localizedValue)
         {
             var tax = new Tax()
             {
-                Code = GetRandom.String(5),
+                Code = taxCode,
                 DisplayName = new LocalizedString()
-                    {
-                        { cultureInfo.Name, GetRandom.String(10)}
-                    },
-                Id = GetRandom.Guid(),
-                TaxTotal = (decimal) GetRandom.Double()
+                {
+                    { cultureInfo.Name, localizedValue }
+                },
+                Id = Guid.NewGuid(),
+                TaxTotal = Convert.ToDecimal(taxTotalAmount)
             };
-
-            if (taxes != null)
-            {
-                taxes.Add(tax);
-            }
-
             return tax;
         }
 
