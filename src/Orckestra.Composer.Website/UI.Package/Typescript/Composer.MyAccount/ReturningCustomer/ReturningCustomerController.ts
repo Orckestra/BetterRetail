@@ -62,7 +62,7 @@ module Orckestra.Composer {
                 .done();
         }
 
-        private loginImpl(actionContext: IControllerActionContext): Q.Promise<any> {
+        protected loginImpl(actionContext: IControllerActionContext): Q.Promise<any> {
 
             var formData: any = (<ISerializeObjectJqueryPlugin>actionContext.elementContext).serializeObject();
             var href: string = window.location.href;

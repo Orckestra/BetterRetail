@@ -65,7 +65,8 @@ namespace Orckestra.Composer.Product.Tests.Services
                 IRecurringOrdersRepository recurringOrdersRepository,
                 IRecurringOrderProgramViewModelFactory recurringOrderProgramViewModelFactory,
                 IRecurringOrdersSettings recurringOrdersSettings,
-                IProductSpecificationsViewService productSpecificationsViewService)
+                IProductSpecificationsViewService productSpecificationsViewService,
+                IMyAccountUrlProvider myAccountUrlProvider)
             
                 : base(
                 viewModelMapper, 
@@ -78,7 +79,8 @@ namespace Orckestra.Composer.Product.Tests.Services
                 recurringOrdersRepository,
                 recurringOrderProgramViewModelFactory,
                 recurringOrdersSettings,
-                productSpecificationsViewService)
+                productSpecificationsViewService,
+                myAccountUrlProvider)
             {
             }
 

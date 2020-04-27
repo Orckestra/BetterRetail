@@ -46,7 +46,6 @@
     <Compile Include="Extensions\ProductPropertyDefinitionGroupExtensions.cs" />
     <Compile Include="Factory\IProductViewModelFactory.cs" />
     <Compile Include="Factory\ProductViewModelFactory.cs" />
-    <Compile Include="GetProductPropertiesByCategoryNameParam.cs" />
     <Compile Include="Parameters\CreateCategoryViewModelParam.cs" />
     <Compile Include="Parameters\CreateRelatedProductViewModelParam.cs" />
     <Compile Include="Parameters\GetProductBreadcrumbParam.cs" />

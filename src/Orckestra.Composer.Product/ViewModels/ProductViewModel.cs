@@ -73,6 +73,8 @@ namespace Orckestra.Composer.Product.ViewModels
         /// </summary>
         public List<RecurringOrderProgramFrequencyViewModel> RecurringOrderFrequencies { get; set; }
 
+        public string CreateAccountUrl { get; set; }
+
         public SpecificationsViewModel Specifications { get; set; }
 
         public ProductViewModel()
