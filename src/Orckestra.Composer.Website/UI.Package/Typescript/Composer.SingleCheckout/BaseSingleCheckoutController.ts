@@ -43,5 +43,9 @@ module Orckestra.Composer {
         public getViewModelNameForUpdatePromise(): Q.Promise<any> {
             return Q.resolve(null);
         }
+
+        protected getContainer(): JQuery {
+            return $(`[data-oc-controller='${this.context.container.data('oc-controller')}']`);
+        }
     }
 }

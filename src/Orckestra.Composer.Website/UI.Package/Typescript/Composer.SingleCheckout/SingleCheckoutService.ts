@@ -21,6 +21,7 @@
 ///<reference path='../Composer.MyAccount/Common/MyAccountEvents.ts' />
 ///<reference path='../Composer.MyAccount/Common/MyAccountStatus.ts' />
 ///<reference path='../Composer.Cart/CheckoutShippingAddressRegistered/ShippingAddressRegisteredService.ts' />
+///<reference path='../UI/UIModal.ts' />
 
 
 module Orckestra.Composer {
@@ -153,6 +154,8 @@ module Orckestra.Composer {
 
         private initializeVueComponent(checkoutContext: ISingleCheckoutContext) {
             let startStep = this.calculateStartStep(checkoutContext.Cart, checkoutContext.IsAuthenticated);
+            let deleteModalElementSelector: string = '#deleteAddressModal';
+
             this.VueCheckout = new Vue({
                 el: '#vueSingleCheckout',
                 components: {
@@ -164,6 +167,7 @@ module Orckestra.Composer {
                     Regions: checkoutContext.Regions,
                     ShippingMethodTypes: checkoutContext.ShippingMethodTypes,
                     Payment: null,
+                    RegisteredAddresses: {},
                     Steps: {
                         StartStep: startStep,
                         Information: {
@@ -201,9 +205,17 @@ module Orckestra.Composer {
                         AddressNameAlreadyInUseError: false,
                         StoreLocatorLocationError: false,
                         SignIn: false
+                    },
+                    Modal: {
+                        deleteAddressModal: null,
                     }
                 },
                 mixins: this.VueCheckoutMixins,
+                mounted() {
+                    if (this.Mode.Authenticated) {
+                        this.Modal.deleteAddressModal = new UIModal(window, deleteModalElementSelector, this.deleteAddress, this);
+                    }
+                },
                 computed: {
                     Customer() {
                         return this.Cart.Customer;
@@ -244,6 +256,13 @@ module Orckestra.Composer {
                     },
                     resetParsley(formId: any): void {
                         $(formId).parsley().reset();
+                    },
+                    deleteAddress(event: JQueryEventObject): Q.Promise<void> {
+                        let element = $(event.target);
+                        let $addressListItem = element.closest('[data-address-id]');
+                        let addressId = $addressListItem.data('address-id');
+
+                        return SingleCheckoutService.instance.deleteAddress(addressId);
                     }
                 }
             });
@@ -566,6 +585,16 @@ module Orckestra.Composer {
                 return address;
             }
             );
+        }
+
+        public deleteAddress(addressId: any): Q.Promise<any> {
+            return this.customerService.deleteAddress(addressId, null).then(() => {
+                let vue: any = this.VueCheckout;
+                const index = vue.RegisteredAddresses.findIndex(address => address.Id === addressId);
+                if (index > -1) {
+                    vue.RegisteredAddresses.splice(index, 1);
+                }
+            });
         }
 
         public loginUser(formData: any): Q.Promise<boolean> {

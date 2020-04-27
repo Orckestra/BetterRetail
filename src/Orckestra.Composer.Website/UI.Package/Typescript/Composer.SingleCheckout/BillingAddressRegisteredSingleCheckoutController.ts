@@ -13,9 +13,8 @@ module Orckestra.Composer {
             self.formSelector = '#addNewBillingAddressForm';
 
             let vueBillingAddressRegisteredMixin = {
-
-                computed: {
-
+                data: {
+                    deleteBillingAddressModal: null,
                 },
                 methods: {
                     processBillingAddressRegistered() {
@@ -57,8 +56,7 @@ module Orckestra.Composer {
                                     this.Errors.InvalidPhoneFormatError = true;
                                 }
                             });
-                    }
-                    ,
+                    },
                     changeRegisteredBillingAddress(addressId) {
                         this.BillingAddress.AddressBookId = addressId;
                         this.Mode.AddingNewAddress = false;
@@ -71,7 +69,9 @@ module Orckestra.Composer {
                         }
                         this.debouncechangeRegisteredBillingAddress();
                     },
-
+                    deleteBillingAddressConfirm(event: JQueryEventObject) {
+                        this.Modal.deleteAddressModal.openModal(event);
+                    },
                 }
             };
 

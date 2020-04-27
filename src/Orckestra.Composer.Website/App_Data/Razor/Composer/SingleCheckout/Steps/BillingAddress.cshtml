@@ -1,4 +1,4 @@
-﻿@inherits RazorFunction
+@inherits RazorFunction
 
 @functions {
     public override string FunctionDescription
@@ -32,7 +32,7 @@
                              v-bind:key="address.Id"
                              class="border rounded p-3 mb-2 bg-white"
                              v-bind:class="{ 'bg-selected border-primary': address.Id == BillingAddress.AddressBookId }">
-                            @CheckoutHelpers.AddressRadioOption("BillingAddressId", "BillingAddress.AddressBookId", "changeRegisteredBillingAddress")
+                            @CheckoutHelpers.AddressRadioOption("BillingAddressId", "BillingAddress.AddressBookId", "changeRegisteredBillingAddress", "deleteBillingAddressConfirm")
                         </div>
                         <div v-show="Mode.AddingNewAddress" class="border-top mt-4 pt-4">
                             @Forms.Address.Form("Cart.Payment.BillingAddress", "addNewBillingAddressForm", true, null)
@@ -50,7 +50,6 @@
                                 data-qa="billing-add-address-link">
                             @Html.Localize("MyAccount", "B_AddNewAddress")
                         </button>
-
                     </div>
                 </div>
             

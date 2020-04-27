@@ -16,7 +16,6 @@ module Orckestra.Composer {
 
             let vueShippingAddressRegisteredMixin = {
                 data: {
-                    RegisteredAddresses: {},
                     SelectedShippingAddressId: null,
                     AddressName: null,
                 },
@@ -63,12 +62,16 @@ module Orckestra.Composer {
                                         })
                                         .fail((reason) => {
                                             console.log(reason);
-                                            if (reason.Errors && _.find(reason.Errors, (e: any) => e.ErrorCode === 'NameAlreadyUsed')) {
-                                                this.Errors.AddressNameAlreadyInUseError = true;
-                                            }
-                                            if (reason.Errors && _.find(reason.Errors, (e: any) => e.ErrorCode === 'InvalidPhoneFormat')) {
-                                                this.Errors.InvalidPhoneFormatError = true;
-                                            }
+                                            if(!reason.Errors) return;
+
+                                            reason.Errors.forEach((e: any) => {
+                                                switch (e.ErrorCode) {
+                                                    case 'NameAlreadyUsed':
+                                                        this.Errors.AddressNameAlreadyInUseError = true; break;
+                                                    case 'InvalidPhoneFormat':
+                                                        this.Errors.InvalidPhoneFormatError = true; break;
+                                                }
+                                            })
                                         });
                                 } else {
                                     //
@@ -102,7 +105,10 @@ module Orckestra.Composer {
                             }, 500);
                         }
                         this.debounceChangeRegisteredShippingAddress(addingNewAddressPromise);
-                    }
+                    },
+                    deleteShippingAddressConfirm(event: JQueryEventObject) {
+                        this.Modal.deleteAddressModal.openModal(event);
+                    },
                 }
             };
 
@@ -131,6 +137,5 @@ module Orckestra.Composer {
                 return vm;
             });
         }
-
     }
 }
