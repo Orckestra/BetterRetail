@@ -7,7 +7,7 @@ module Orckestra.Composer {
     'use strict';
 
     export class ShippingAddressRegisteredSingleCheckoutController extends Orckestra.Composer.BaseSingleCheckoutController {
-    
+
         public initialize() {
             super.initialize();
             let self: ShippingAddressRegisteredSingleCheckoutController = this;
@@ -63,17 +63,17 @@ module Orckestra.Composer {
                                         })
                                         .fail((reason) => {
                                             console.log(reason);
-                                            if (reason.Errors && _.find(reason.Errors, (e: any) => e.ErrorCode == 'NameAlreadyUsed')) {
+                                            if (reason.Errors && _.find(reason.Errors, (e: any) => e.ErrorCode === 'NameAlreadyUsed')) {
                                                 this.Errors.AddressNameAlreadyInUseError = true;
                                             }
-                                            if (reason.Errors && _.find(reason.Errors, (e: any) => e.ErrorCode == 'InvalidPhoneFormat')) {
+                                            if (reason.Errors && _.find(reason.Errors, (e: any) => e.ErrorCode === 'InvalidPhoneFormat')) {
                                                 this.Errors.InvalidPhoneFormatError = true;
                                             }
                                         });
                                 } else {
                                     //
                                 }
-                            })
+                            });
                     },
 
                     changeRegisteredShippingAddress(addressId, addingNewAddressPromise = null) {
@@ -115,7 +115,7 @@ module Orckestra.Composer {
                 if (!vueData.IsAuthenticated) {
                     return;
                 }
-                
+
                 if (vueData.shippingAddressModified()) {
                     return this.viewModelName;
                 }

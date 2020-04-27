@@ -50,10 +50,10 @@ module Orckestra.Composer {
                             })
                             .fail((reason) => {
                                 console.log(reason);
-                                if (reason.Errors && _.find(reason.Errors, (e: any) => e.ErrorCode == 'NameAlreadyUsed')) {
+                                if (reason.Errors && _.find(reason.Errors, (e: any) => e.ErrorCode === 'NameAlreadyUsed')) {
                                     this.Errors.AddressNameAlreadyInUseError = true;
                                 }
-                                if (reason.Errors && _.find(reason.Errors, (e: any) => e.ErrorCode == 'InvalidPhoneFormat')) {
+                                if (reason.Errors && _.find(reason.Errors, (e: any) => e.ErrorCode === 'InvalidPhoneFormat')) {
                                     this.Errors.InvalidPhoneFormatError = true;
                                 }
                             });
@@ -66,7 +66,7 @@ module Orckestra.Composer {
                         if (!this.debouncechangeRegisteredBillingAddress) {
                             this.debouncechangeRegisteredBillingAddress = _.debounce(() => {
                                 let controllersToUpdate = [self.viewModelName];
-                                self.checkoutService.updateCart(controllersToUpdate)
+                                self.checkoutService.updateCart(controllersToUpdate);
                             }, 500);
                         }
                         this.debouncechangeRegisteredBillingAddress();
@@ -87,7 +87,7 @@ module Orckestra.Composer {
 
                 if (vueData.billingAddressModified()) {
                     return this.viewModelName;
-                };
+                }
             });
         }
 

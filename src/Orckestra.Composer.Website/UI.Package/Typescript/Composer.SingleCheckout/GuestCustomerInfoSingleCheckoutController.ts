@@ -34,16 +34,16 @@ module Orckestra.Composer {
                         return !!(this.Mode.SignIn === SignInModes.SigningIn ? fulfilledSignIn : fulfilled);
                     },
                     BaseInformationMode() {
-                        return this.Mode.SignIn === SignInModes.Base
+                        return this.Mode.SignIn === SignInModes.Base;
                     },
                     UserExistsMode() {
-                        return this.Mode.SignIn === SignInModes.UserExists
+                        return this.Mode.SignIn === SignInModes.UserExists;
                     },
                     SigningInMode() {
-                        return this.Mode.SignIn === SignInModes.SigningIn
+                        return this.Mode.SignIn === SignInModes.SigningIn;
                     },
                     ShowSignInButton() {
-                        return this.FulfilledShipping && this.SigningInMode
+                        return this.FulfilledShipping && this.SigningInMode;
                     }
                 },
                 methods: {
@@ -51,20 +51,21 @@ module Orckestra.Composer {
                         this.initializeParsey(self.formSelector);
                     },
                     processCustomerWithSignInCheck(): Q.Promise<boolean> {
-                        return !this.ShowSignInButton ? this.processCustomer() : this.skipEditUserInformation()
+                        return !this.ShowSignInButton ? this.processCustomer() : this.skipEditUserInformation();
                     },
                     processCustomer(): Q.Promise<boolean> {
                         let isValid = this.validateParsey(self.formSelector);
-                        if (!isValid)
+                        if (!isValid) {
                             return Q.reject('User information is not valid');
+                        }
 
-                        if(!this.IsAuthenticated) {
+                        if (!this.IsAuthenticated) {
                             switch (this.Mode.SignIn) {
                                 case SignInModes.Base:
                                     return this.checkUserExist(this.Cart.Customer.Email).then(result => {
-                                        if(result) return !result;
+                                        if (result) { return !result; }
 
-                                        if(!this.isCustomerModified()) return true;
+                                        if (!this.isCustomerModified()) { return true; }
 
                                         return self.checkoutService.updateCart([self.viewModelName])
                                             .then(() => true);
@@ -76,8 +77,9 @@ module Orckestra.Composer {
                             }
                         }
 
-                        if (!this.isCustomerModified())
+                        if (!this.isCustomerModified()) {
                             return Q.resolve(true);
+                        }
 
                         return self.checkoutService.updateCart([self.viewModelName])
                             .then(() => true);
@@ -89,7 +91,7 @@ module Orckestra.Composer {
                     },
                     isCustomerModified() {
                         let keys = _.keys(this.Cart.Customer);
-                        let isModified = _.some(keys, (key) => this.customerBeforeEdit[key] != this.Cart.Customer[key]);
+                        let isModified = _.some(keys, (key) => this.customerBeforeEdit[key] !== this.Cart.Customer[key]);
                         return isModified;
                     },
                     signInButton() {
@@ -110,11 +112,12 @@ module Orckestra.Composer {
                         this.checkUserExist(this.Cart.Customer.Email);
                     },
                     onChangeUsername(e) {
-                        if(this.UserExistsMode)
+                        if (this.UserExistsMode) {
                             this.Mode.SignIn = SignInModes.Base;
+                        }
                     },
                     checkUserExist(email: string): Q.Promise<boolean> {
-                        if(this.CheckedEmailAddress.Email === email) {
+                        if (this.CheckedEmailAddress.Email === email) {
                             this.Mode.SignIn = this.CheckedEmailAddress.IsExist ? SignInModes.UserExists : SignInModes.Base;
                             return Q.resolve(this.CheckedEmailAddress.IsExist);
                         }
@@ -123,7 +126,7 @@ module Orckestra.Composer {
                             .then(result => {
                                 this.Mode.SignIn = result ? SignInModes.UserExists : SignInModes.Base;
                                 this.CheckedEmailAddress = { Email: email, IsExist: result };
-                                return result
+                                return result;
                             });
                     }
                 }

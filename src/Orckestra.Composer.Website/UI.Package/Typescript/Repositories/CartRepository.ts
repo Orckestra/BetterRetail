@@ -156,7 +156,7 @@ module Orckestra.Composer {
                 };
 
                 return ComposerClient.post('/api/cart/completecheckout', data);
-            } 
+            }
 
             return ComposerClient.post('/api/cart/completecheckout', null);
         }

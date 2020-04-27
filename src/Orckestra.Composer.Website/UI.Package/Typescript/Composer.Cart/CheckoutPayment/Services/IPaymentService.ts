@@ -26,6 +26,6 @@ module Orckestra.Composer {
          */
         getCheckoutPayment() : Q.Promise<ICheckoutPaymentViewModel>;
 
-        updatePaymentMethod(request : any) : Q.Promise<IActivePaymentViewModel>
+        updatePaymentMethod(request : any) : Q.Promise<IActivePaymentViewModel>;
     }
 }

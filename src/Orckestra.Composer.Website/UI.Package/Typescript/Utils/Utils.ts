@@ -26,7 +26,7 @@ module Orckestra.Composer {
         }
 
         public static IsC1ConsolePreview(): boolean {
-            return $('html').data('console-preview') == 'True';
+            return $('html').data('console-preview') === 'True';
         }
     }
 }

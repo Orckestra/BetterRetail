@@ -21,9 +21,9 @@ module Orckestra.Composer {
             super.initialize();
 
             this.checkoutService = SingleCheckoutService.getInstance();
-          
+
             this.registerController();
-            
+
         }
 
         protected registerController() {
@@ -37,8 +37,7 @@ module Orckestra.Composer {
         }
 
         public getUpdateModelPromise(): Q.Promise<any> {
-
-            return Q.fcall(() => {});
+            return Q.resolve(null);
         }
 
         public getViewModelNameForUpdatePromise(): Q.Promise<any> {

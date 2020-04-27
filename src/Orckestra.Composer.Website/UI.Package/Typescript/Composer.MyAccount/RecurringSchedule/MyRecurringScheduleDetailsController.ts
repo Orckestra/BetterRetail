@@ -314,7 +314,7 @@ module Orckestra.Composer {
                         return x.RecurringOrderTemplateLineItemViewModels;
                         });
 
-                        var templateLineItemsList = _.reduce(templateLineItems,  function(a, b){ return a.concat(b); }, []);
+                        var templateLineItemsList = _.reduce(templateLineItems,  function(a, b) { return a.concat(b); }, []);
                         var item = templateLineItemsList.filter(u => u.Id === this.id);
 
                         var vm = {

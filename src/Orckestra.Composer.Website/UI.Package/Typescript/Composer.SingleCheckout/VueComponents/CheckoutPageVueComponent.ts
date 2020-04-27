@@ -120,7 +120,7 @@ module Orckestra.Composer {
                     },
                     addStep: function addStep(item) {
                         var index = this.$slots.default.filter(function (d) {
-                            return item.$vnode.tag == d.tag;
+                            return item.$vnode.tag === d.tag;
                         }).indexOf(item.$vnode);
                         this.steps.splice(index, 0, item); // if a step is added before the current one, go to it
 
@@ -177,21 +177,21 @@ module Orckestra.Composer {
                                     this.beforeStepChange(this.activeStepIndex, cb);
                                 } else {
                                     this.beforeStepEnter(index);
-                                    this.changeStep(this.activeStepIndex, index)
+                                    this.changeStep(this.activeStepIndex, index);
                                     this.scrollToStep(index);
                                     this.afterStepChange(this.activeStepIndex);
                                 }
-                            }
+                            };
                             if (validate) {
-                                this.beforeStepChange(this.activeStepIndex, cb)
+                                this.beforeStepChange(this.activeStepIndex, cb);
                             } else {
                                 // when trying leave already savedd step(edit mode) when edit it we need to validate it
                                 let step = this.steps[this.activeStepIndex + 1];
                                 if (step && step.fulfilled) {
                                     this.beforeStepChange(this.activeStepIndex, cb);
                                 } else {
-                                    this.setValidationError(null)
-                                    cb()
+                                    this.setValidationError(null);
+                                    cb();
                                 }
                             }
                         }
@@ -346,7 +346,7 @@ module Orckestra.Composer {
                         setTimeout(function () {
                             $('html, body').animate({
                                 scrollTop: $('#' + stepId).offset().top
-                            }, 500, function () { });
+                            }, 500);
                         }, 200);
                     },
                     deactivateSteps: function deactivateSteps() {
@@ -387,14 +387,14 @@ module Orckestra.Composer {
                 mounted: function mounted() {
                     this.initializeSteps();
                 },
-                template: ` 
+                template: `
                     <div :id="id ? id : ''" class="single-page-checkout" :class="[stepSize, {vertical: isVertical}]" >
                         <div class="wizard-tab-content">
                           <slot v-bind="slotProps">
                           </slot>
                         </div>
                     </div>`
-            }
+            };
         }
     }
 }

@@ -5,7 +5,7 @@ module Orckestra.Composer {
 
     export class CheckoutHelpers {
         public static getFocusedElementId() {
-            return document.activeElement.id
+            return document.activeElement.id;
         }
 
         public static getFocusedStepIndex(steps: any = []) {
@@ -15,11 +15,11 @@ module Orckestra.Composer {
 
         public static findElementAndFocus(elemId) {
             let elem = document.getElementById(elemId);
-            elem.focus()
+            elem.focus();
         }
 
         public static isPromise(func) {
-            return func.then && typeof func.then === 'function'
+            return func.then && typeof func.then === 'function';
         }
     }
 }

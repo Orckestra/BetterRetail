@@ -12,7 +12,7 @@ module Orckestra.Composer {
         pos: number;
 
         public parseHistoryState() {
-            if (!history.state) return;
+            if (!history.state) { return; }
 
             if (history.state.p_lat && history.state.p_lng) {
                 this.point = new google.maps.LatLng(history.state.p_lat, history.state.p_lng);

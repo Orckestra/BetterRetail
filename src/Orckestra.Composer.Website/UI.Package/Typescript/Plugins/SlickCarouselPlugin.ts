@@ -8,7 +8,7 @@ module Orckestra.Composer {
         public initialize(window: Window, document: HTMLDocument) {
             this.subscriptEvents();
             this.initSlick();
-        };
+        }
 
         public initSlick(): void {
 
@@ -53,7 +53,7 @@ module Orckestra.Composer {
                     slickInstance.slick(slickOptions);
                 }
             });
-        };
+        }
 
         private subscriptEvents(): void {
             var self = this;

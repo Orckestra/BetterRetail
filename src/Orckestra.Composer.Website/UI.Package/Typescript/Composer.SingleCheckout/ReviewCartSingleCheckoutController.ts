@@ -23,7 +23,7 @@ module Orckestra.Composer {
                 },
                 methods: {
                     processCart() {
-                        this.Steps.ReviewCart.EnteredOnce= true;
+                        this.Steps.ReviewCart.EnteredOnce = true;
                         return true;
                     }
                     ,
@@ -59,7 +59,7 @@ module Orckestra.Composer {
                                     })
                                     .finally(() => {
                                         this.Mode.Loading = false;
-                                    })
+                                    });
                             }, 400);
                         }
 

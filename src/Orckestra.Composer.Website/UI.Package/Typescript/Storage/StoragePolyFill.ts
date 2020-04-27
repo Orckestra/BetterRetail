@@ -107,6 +107,6 @@ module Orckestra.Composer {
                     return sessionStoragePolyFill;
             }
         }
-    };
+    }
 }
 

@@ -38,7 +38,7 @@ module Orckestra.Composer {
              * Needs the select block of a same group to have data-parent defined
              * OR that they be in the same form.
              */
-            $('body').on('change', '.select-block', function(){
+            $('body').on('change', '.select-block', function() {
                 var input = $(this).find('.input');
                 var type = input.attr('type');
                 var name = input.attr('name');

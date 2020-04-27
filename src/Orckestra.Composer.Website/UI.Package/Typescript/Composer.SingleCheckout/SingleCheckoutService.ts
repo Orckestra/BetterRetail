@@ -204,8 +204,6 @@ module Orckestra.Composer {
                     }
                 },
                 mixins: this.VueCheckoutMixins,
-                mounted() {
-                },
                 computed: {
                     Customer() {
                         return this.Cart.Customer;
@@ -220,7 +218,7 @@ module Orckestra.Composer {
                         return this.Cart.OrderSummary;
                     },
                     CartEmpty() {
-                        return this.Cart.LineItemDetailViewModels.length == 0;
+                        return !!this.Cart.LineItemDetailViewModels.length;
                     },
                     IsLoading() {
                         return this.Mode.Loading;
@@ -257,15 +255,15 @@ module Orckestra.Composer {
 
         public calculateStartStep(cart: any, isAuthenticated: boolean): number {
             if (!this.customerFulfilled(cart)) {
-                return CheckoutStepNumbers.Information
+                return CheckoutStepNumbers.Information;
             } else {
                 if (!(this.shippingFulfilled(cart, isAuthenticated))) {
-                    return CheckoutStepNumbers.Shipping
+                    return CheckoutStepNumbers.Shipping;
                 } else {
                     if (!this.billingFulfilled(cart, isAuthenticated)) {
                         return CheckoutStepNumbers.Billing;
                     } else {
-                        return CheckoutStepNumbers.Payment
+                        return CheckoutStepNumbers.Payment;
                     }
                 }
             }
@@ -278,7 +276,7 @@ module Orckestra.Composer {
         }
 
         public shippingFulfilled(cart: any, isAuthenticated: boolean): boolean {
-            if (!(cart.ShippingMethod)) return false;
+            if (!(cart.ShippingMethod)) { return false; }
 
             let address = cart.ShippingAddress.Line1 &&
                 cart.ShippingAddress.City &&
@@ -289,22 +287,22 @@ module Orckestra.Composer {
             let isPickUp = cart.ShippingMethod.FulfillmentMethodTypeString === FulfillmentMethodTypes.PickUp;
 
             if (isAuthenticated && isShipToHome) {
-                return (address && !this.isAddressBookIdEmpty(cart.ShippingAddress.AddressBookId))
+                return (address && !this.isAddressBookIdEmpty(cart.ShippingAddress.AddressBookId));
             }
 
             if (!isAuthenticated && isShipToHome) {
-                return !!(address)
+                return !!(address);
             }
 
             if (isPickUp) {
-                return !!(cart.PickUpLocationId)
+                return !!(cart.PickUpLocationId);
             }
 
             return false;
         }
 
         public billingFulfilled(cart: any, isAuthenticated: boolean): boolean {
-            if (!(cart.Payment)) return false;
+            if (!(cart.Payment)) { return false; }
 
             let billindAddress = cart.Payment.BillingAddress;
 
@@ -318,14 +316,14 @@ module Orckestra.Composer {
 
 
             if (isAuthenticated) {
-                return addressFullfilled && !this.isAddressBookIdEmpty(billindAddress.AddressBookId)
+                return addressFullfilled && !this.isAddressBookIdEmpty(billindAddress.AddressBookId);
             } else {
                 return !!(addressFullfilled);
             }
         }
 
         private isAddressBookIdEmpty(bookId) {
-            return bookId == '00000000-0000-0000-0000-000000000000' || !bookId;
+            return bookId === '00000000-0000-0000-0000-000000000000' || !bookId;
         }
 
         public registerController(controller: IBaseSingleCheckoutController) {
@@ -426,7 +424,7 @@ module Orckestra.Composer {
             vue.Steps.Payment.Loading = true;
             return this.paymentService.updatePaymentMethod(param)
                 .finally(() => {
-                    vue.Steps.Payment.Loading = false
+                    vue.Steps.Payment.Loading = false;
                 });
         }
 
@@ -594,7 +592,7 @@ module Orckestra.Composer {
         private onLoginFulfilled(result: any, vueData: any) {
 
             if (result.Status === MyAccountStatus[MyAccountStatus.Success]) {
-               
+
                 this.eventHub.publish(MyAccountEvents[MyAccountEvents.LoggedIn], { data: result });
                 this.cacheProvider.defaultCache.set('customerId', null).done();
                 this.cacheProvider.customCache.fullClear();

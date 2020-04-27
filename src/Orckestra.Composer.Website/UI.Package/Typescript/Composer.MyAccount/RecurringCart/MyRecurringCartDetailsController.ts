@@ -21,7 +21,7 @@ module Orckestra.Composer {
         ShippingMethod = 1,
         Address = 2,
         Payment = 3
-    };
+    }
 
     //From Composer
     export enum ShippingMethodType {
@@ -242,7 +242,7 @@ module Orckestra.Composer {
                             }
                         });
 
-                        var vm = {
+                        let vm = {
                             EditMode: this.editShippingMethod,
                             ShippingMethods: shippingMethods,
                             SelectedMethod: selectedShippingMethodName,
@@ -259,33 +259,22 @@ module Orckestra.Composer {
                     });
             } else {
                 if (this.hasShippingMethodTypeChanged) {
-
                     shippingMethodDisplayName = context.data('shipping-method-display-name-tmp');
                     shippingMethodCost = context.data('shipping-method-cost-tmp');
                     shippingMethodName = context.data('selected-shipping-method-name-tmp');
                     shippingMethodFulfillmentType = context.data('selected-shipping-method-fulfillment-type-tmp');
-
-                    var vm = {
-                        EditMode: this.editShippingMethod,
-                        ShippingMethod: {
-                            DisplayName: shippingMethodDisplayName,
-                            Cost: shippingMethodCost,
-                            Name: shippingMethodName,
-                            FulfillmentMethodTypeString: shippingMethodFulfillmentType
-                        }
-                    };
-
-                } else {
-                    var vm = {
-                        EditMode: this.editShippingMethod,
-                        ShippingMethod: {
-                            DisplayName: shippingMethodDisplayName,
-                            Cost: shippingMethodCost,
-                            Name: shippingMethodName,
-                            FulfillmentMethodTypeString: shippingMethodFulfillmentType
-                        }
-                    };
                 }
+
+                let vm = {
+                    EditMode: this.editShippingMethod,
+                    ShippingMethod: {
+                        DisplayName: shippingMethodDisplayName,
+                        Cost: shippingMethodCost,
+                        Name: shippingMethodName,
+                        FulfillmentMethodTypeString: shippingMethodFulfillmentType
+                    }
+                };
+
                 this.render('RecurringCartDetailsShippingMethod', vm);
                 busy.done();
             }
@@ -343,7 +332,7 @@ module Orckestra.Composer {
         }
 
         public manageSaveShippingMethod(newType, actionContext) {
-            //When shipping method is changed from ship to store and ship to home, address must correspond to 
+            //When shipping method is changed from ship to store and ship to home, address must correspond to
             //store adress/home address.
             //When the type change, we wait to save shipping method and open adresse section. Then, when saving valid address,
             //also save the shipping method.

@@ -39,14 +39,14 @@ module Orckestra.Composer {
                     fulfilled: Boolean,
                     loading: Boolean
                 },
-                inject: ["addStep", "removeStep", "nextStep"],
+                inject: ['addStep', 'removeStep', 'nextStep'],
                 data: function () {
                     return {
                         active: false,
                         index: null,
                         validationError: null,
                         checked: false,
-                        stepId: ""
+                        stepId: ''
                     };
                 },
                 computed: {
@@ -85,9 +85,9 @@ module Orckestra.Composer {
                 },
                 template: `
                     <div class="checkout-step-container"
-                         v-bind:class="{'active-step': active, 
-                         'fulfilled-step' : fulfilled, 
-                         'preview-step': slotProps.preview, 
+                         v-bind:class="{'active-step': active,
+                         'fulfilled-step' : fulfilled,
+                         'preview-step': slotProps.preview,
                          'next-step': slotProps.next,
                          'loading' : loading
                         }"
@@ -100,7 +100,7 @@ module Orckestra.Composer {
                          </div>
                         <slot v-bind="slotProps"></slot>
                     </div>`
-            }
+            };
         }
     }
 }

@@ -61,7 +61,7 @@ module Orckestra.Composer {
             return deferred.promise;
         }
 
-        /// By default render with default value for ViewModel.GoogleDirectionsLink (direction with Empty Start Point), 
+        /// By default render with default value for ViewModel.GoogleDirectionsLink (direction with Empty Start Point),
         /// and when User Accept his Current Location, just in async task update HREF attributes and attach current location coordinates.
         /// We do not update the ViewModel before rendering, as we need to wait for User Input
         public updateDirectionLinksWithLatLngSourceAddress(container: JQuery, sourceLocation: google.maps.LatLng) {

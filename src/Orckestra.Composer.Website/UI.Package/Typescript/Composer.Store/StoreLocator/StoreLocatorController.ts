@@ -77,7 +77,7 @@ module Orckestra.Composer {
 
                     this.searchBoxSetBounds(configuration.Bounds);
 
-                    return this._mapService.mapInitialized().then(() => postedAddress)
+                    return this._mapService.mapInitialized().then(() => postedAddress);
                 })
                 .then(postedAddress => {
                     if (this._historyState.isDefined()) {
@@ -129,7 +129,7 @@ module Orckestra.Composer {
                         self.searchCurrentLocation();
                     }
                 }
-            }
+            };
         }
 
         protected registerStoreLocatorVue() {
@@ -150,7 +150,7 @@ module Orckestra.Composer {
                         this.SelectedStoreId = store.Id;
                     },
                     showStoreLocatorLocationError() {
-                        this.StoreLocatorLocationError = true
+                        this.StoreLocatorLocationError = true;
                     }
                 }
             });
@@ -198,7 +198,7 @@ module Orckestra.Composer {
             // first check if address is posted from other page.
             let postedAddress = this.getPostedAddress();
 
-            if (postedAddress)  return Q.resolve(postedAddress);
+            if (postedAddress) {  return Q.resolve(postedAddress); }
 
             // then check history state
             this._historyState.parseHistoryState();
@@ -253,7 +253,7 @@ module Orckestra.Composer {
         }
 
         protected getPageSize(): any {
-            return this.context.container.data('pagesize')
+            return this.context.container.data('pagesize');
         }
 
         private searchBoxSetBounds(bounds: any) {
@@ -378,7 +378,7 @@ module Orckestra.Composer {
 
         protected setNearestStoreInfo(info: string) {
             let nearestInfoPanel = this.findElement('#store-locator-nearest');
-            if(!nearestInfoPanel.length) return;
+            if (!nearestInfoPanel.length) { return; }
 
 
             if (!this.findElement('#nearestInfo').length) {
@@ -398,7 +398,7 @@ module Orckestra.Composer {
             let mapBounds = this._mapService.getBounds(this._storeLocatorOptions.markerPadding);
             let searchPoint = this._searchPoint;
 
-            return this._storeLocatorService.getStores(mapBounds.getSouthWest(), mapBounds.getNorthEast(), searchPoint, page, pageSize)
+            return this._storeLocatorService.getStores(mapBounds.getSouthWest(), mapBounds.getNorthEast(), searchPoint, page, pageSize);
         }
 
         protected setGoogleDirectionLinks(): Q.Promise<any> {

@@ -117,7 +117,7 @@
                 { name: 'SingleCheckout.BillingAddressRegistered', controller: Orckestra.Composer.BillingAddressRegisteredSingleCheckoutController },
                 { name: 'SingleCheckout.PickUpStoreAddress', controller: Orckestra.Composer.PickUpAddressSingleCheckoutController },
                 { name: 'SingleCheckout.OrderConfirmation', controller: Orckestra.Composer.OrderConfirmationController },
-             
+
                 { name: 'MyAccount.AddressList', controller: Orckestra.Composer.AddressListController },
                 { name: 'MyAccount.ChangePassword', controller: Orckestra.Composer.ChangePasswordController },
                 { name: 'MyAccount.CreateAccount', controller: Orckestra.Composer.CreateAccountController },

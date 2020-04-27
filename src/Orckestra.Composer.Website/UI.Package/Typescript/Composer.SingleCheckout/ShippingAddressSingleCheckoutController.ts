@@ -49,7 +49,7 @@ module Orckestra.Composer {
                                         .then(() => self.checkoutService.updateCart(controllersToUpdate))
                                         .then(() => {
                                             this.Steps.Shipping.EnteredOnce = true;
-                                            self.eventHub.publish("cartBillingAddressUpdated", { data: this });
+                                            self.eventHub.publish('cartBillingAddressUpdated', { data: this });
                                             processShippingAddress.resolve(true);
                                         })
                                         .fail(reason => {
@@ -59,7 +59,7 @@ module Orckestra.Composer {
                                 } else {
                                     processShippingAddress.resolve(false);
                                 }
-                            })
+                            });
 
                         } else {
                             processShippingAddress.resolve(true);
@@ -80,7 +80,7 @@ module Orckestra.Composer {
                         var processPostalCode: Q.Deferred<boolean> = Q.defer<boolean>();
 
                         this.Errors.PostalCodeError = false;
-                        if (this.adressBeforeEdit.PostalCode != postalCode) {
+                        if (this.adressBeforeEdit.PostalCode !== postalCode) {
                             this.Mode.Loading = true;
                             self.checkoutService.updatePostalCode(postalCode).then((cart: any) => {
                                 this.adressBeforeEdit = { ...this.Cart.ShippingAddress };
@@ -110,7 +110,7 @@ module Orckestra.Composer {
 
                     shippingAddressModified() {
                         let keys = _.keys(this.Cart.ShippingAddress);
-                        let isModified = _.some(keys, (key) => this.adressBeforeEdit[key] != this.Cart.ShippingAddress[key]);
+                        let isModified = _.some(keys, (key) => this.adressBeforeEdit[key] !== this.Cart.ShippingAddress[key]);
                         return isModified;
                     },
                     adjustPostalCode() {

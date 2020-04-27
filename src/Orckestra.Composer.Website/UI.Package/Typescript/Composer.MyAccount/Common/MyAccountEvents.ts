@@ -16,5 +16,5 @@ module Orckestra.Composer {
         LoggedOut,
         PasswordChanged,
         ForgotPasswordInstructionSent
-    };
+    }
 }

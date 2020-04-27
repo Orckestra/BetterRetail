@@ -36,13 +36,14 @@ module Orckestra.Composer {
                         this.Cart.PickUpLocationId = store.Id;
                     },
                     showStoreLocatorLocationError() {
-                        this.Errors.StoreLocatorLocationError = true
+                        this.Errors.StoreLocatorLocationError = true;
                     },
                     processPickUpAddress(): Q.Promise<any> {
                         let controllersToUpdate = [self.viewModelName];
 
-                        if(!this.pickUpAddressModified())
+                        if (!this.pickUpAddressModified()) {
                             return  Q.resolve(true);
+                        }
 
                         return self.checkoutService.updateCart(controllersToUpdate)
                             .then(() => {

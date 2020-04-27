@@ -63,10 +63,9 @@ module Orckestra.Composer {
 
                     processBillingAddress(): Q.Promise<boolean> {
 
-                        if (!this.billingAddressModified())
-                            { 
+                        if (!this.billingAddressModified()) {
                                 this.Steps.Billing.EnteredOnce = true;
-                                return Q.resolve(true); 
+                                return Q.resolve(true);
                             }
 
                         if (!this.BillingAddress.UseShippingAddress) {
@@ -80,7 +79,7 @@ module Orckestra.Composer {
                                 .then(() => this.updateBillingAddress());
 
                         } else {
-                            return this.updateBillingAddress()
+                            return this.updateBillingAddress();
                         }
                     },
 
@@ -110,14 +109,14 @@ module Orckestra.Composer {
                     },
 
                     billingAddressModified() {
-                        let keys = _.keys(this.BillingAddress).filter(k => k != 'UseShippingAddress');
+                        let keys = _.keys(this.BillingAddress).filter(k => k !== 'UseShippingAddress');
                         let dataToCompare = this.BillingAddress.UseShippingAddress ? this.ShippingAddress : this.BillingAddress;
-                        return this.BillingAddress && _.some(keys, (key) => this.billingAddressBeforeEdit[key] != dataToCompare[key]);
+                        return this.BillingAddress && _.some(keys, (key) => this.billingAddressBeforeEdit[key] !== dataToCompare[key]);
                     },
 
                     changeUseShippingAddress(event) {
                         let { checked } = event.target;
-                        if (checked == this.billingAddressBeforeEdit.UseShippingAddress) {
+                        if (checked === this.billingAddressBeforeEdit.UseShippingAddress) {
                             this.Cart.Payment.BillingAddress = { ...this.billingAddressBeforeEdit };
                         } else {
                             if (!checked) {
@@ -131,7 +130,7 @@ module Orckestra.Composer {
                         let { FirstName, LastName, CountryCode, Line1, City, RegionCode, PostalCode, PhoneNumber, AddressBookId, PhoneRegex } = this.Cart.ShippingAddress;
                         this.Cart.Payment.BillingAddress = {
                             FirstName, LastName, CountryCode, Line1, City, RegionCode, PostalCode, PhoneNumber, AddressBookId, PhoneRegex, UseShippingAddress: true
-                        }
+                        };
                     },
                     clearBillingAddress() {
                         this.Mode.AddingLine2Address = true;
@@ -158,13 +157,13 @@ module Orckestra.Composer {
                 }
                 let isValid = vueData.validateParsey(this.formSelector);
                 if (!isValid) {
-                    console.log('Billing Address information is not valid')
+                    console.log('Billing Address information is not valid');
                     return Q.reject('Billing Address information is not valid');
                 }
 
                 if (vueData.billingAddressModified()) {
                     return this.viewModelName;
-                };
+                }
             });
         }
 

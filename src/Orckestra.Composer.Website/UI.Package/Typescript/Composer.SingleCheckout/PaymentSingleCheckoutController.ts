@@ -13,7 +13,7 @@ module Orckestra.Composer {
             self.viewModelName = 'Payment';
             const SAVED_CREDIT_CARD = 'SavedCreditCard';
 
-            this.eventHub.subscribe("cartBillingAddressUpdated", this.onBillingAddressUpdated);
+            this.eventHub.subscribe('cartBillingAddressUpdated', this.onBillingAddressUpdated);
 
             let vuePaymentMixin = {
                 mounted() {
@@ -88,7 +88,7 @@ module Orckestra.Composer {
                     changePaymentMethodProcess(paymentId: string, paymentMethodEntity: any, providers: Array<string>) {
                         let oldPayment = this.SelectedPaymentMethod;
                         this.selectPaymentMethod(paymentMethodEntity.Id);
-                      
+
                         self.checkoutService.updatePaymentMethod({
                             PaymentId: paymentId,
                             PaymentProviderName: paymentMethodEntity.PaymentProviderName,
@@ -119,7 +119,7 @@ module Orckestra.Composer {
 
                         return activeProvider.validatePayment(this.Payment.ActivePaymentViewModel)
                             .then(success => {
-                                if (!success) return Q.reject('Card information not valid');
+                                if (!success) { return Q.reject('Card information not valid'); }
                                 return true;
                             });
                     },

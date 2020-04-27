@@ -37,7 +37,7 @@ module Orckestra.Composer {
 
             if (!CheckoutService.instance) {
                 CheckoutService.instance = new CheckoutService();
-            };
+            }
 
             return CheckoutService.instance;
         }
