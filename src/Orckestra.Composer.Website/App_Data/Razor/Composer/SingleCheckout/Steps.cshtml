@@ -13,7 +13,7 @@
 <body>
     <checkout-page xmlns:v-bind="v-bind" xmlns:v-on="v-on" xmlns:v-slot="v-slot" v-bind:start-index="Steps.StartStep">
         <checkout-step v-slot="step" v-bind:before-enter="prepareCustomer"
-                       v-bind:before-change="processCustomerWithSignInCheck"
+                       v-bind:before-change="processCustomer"
                        v-bind:fulfilled="FulfilledCustomer"
                        v-bind:loading="Steps.Information.Loading">
             @Function("Composer.SingleCheckout.Steps.UserInformation")

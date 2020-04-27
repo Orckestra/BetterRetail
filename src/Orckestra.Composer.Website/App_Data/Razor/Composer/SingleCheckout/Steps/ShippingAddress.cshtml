@@ -12,11 +12,13 @@
 </head>
 <body>
         <div v-if="IsAuthenticated" data-oc-controller="SingleCheckout.ShippingAddressRegistered">
-            <div v-for="(address, index) in RegisteredAddresses"
-                 v-bind:key="address.Id"
-                 class="border rounded p-3 mb-2 bg-white"
-                 v-bind:class="{ 'bg-selected border-primary': address.Id == ShippingAddress.AddressBookId }">
-                @CheckoutHelpers.AddressRadioOption("ShippingAddressId", "ShippingAddress.AddressBookId", "changeRegisteredShippingAddress", "deleteShippingAddressConfirm")
+            <div is="transition-group" name="items-list">
+                <div v-for="(address, index) in RegisteredAddresses"
+                     v-bind:key="address.Id"
+                     class="border rounded p-3 mb-2 bg-white"
+                     v-bind:class="{ 'bg-selected border-primary': address.Id == ShippingAddress.AddressBookId }">
+                    @CheckoutHelpers.AddressRadioOption("ShippingAddressId", "ShippingAddress.AddressBookId", "changeRegisteredShippingAddress", "deleteShippingAddressConfirm")
+                </div>
             </div>
             <div v-show="Mode.AddingNewAddress" class="border-top mt-4 pt-4">
                 @Forms.Address.Form("Cart.ShippingAddress", "addNewAddressForm", true)

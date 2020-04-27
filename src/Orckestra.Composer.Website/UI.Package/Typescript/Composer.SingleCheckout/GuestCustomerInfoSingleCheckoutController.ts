@@ -50,10 +50,14 @@ module Orckestra.Composer {
                     prepareCustomer() {
                         this.initializeParsey(self.formSelector);
                     },
-                    processCustomerWithSignInCheck(): Q.Promise<boolean> {
-                        return !this.ShowSignInButton ? this.processCustomer() : this.skipEditUserInformation();
-                    },
                     processCustomer(): Q.Promise<boolean> {
+
+                        if(this.ShowSignInButton) {
+                            this.Mode.SignIn = SignInModes.Base;
+                            this.Cart.Customer = { ...this.customerBeforeEdit };
+                            return Q.resolve(true);;
+                        }
+
                         let isValid = this.validateParsey(self.formSelector);
                         if (!isValid) {
                             return Q.reject('User information is not valid');
@@ -64,11 +68,7 @@ module Orckestra.Composer {
                                 case SignInModes.Base:
                                     return this.checkUserExist(this.Cart.Customer.Email).then(result => {
                                         if (result) { return !result; }
-
-                                        if (!this.isCustomerModified()) { return true; }
-
-                                        return self.checkoutService.updateCart([self.viewModelName])
-                                            .then(() => true);
+                                        return this.updateCustomer();
                                     });
                                 case SignInModes.SigningIn:
                                     let {Email: Username, Password} = this.Cart.Customer;
@@ -77,18 +77,19 @@ module Orckestra.Composer {
                             }
                         }
 
+                        return this.updateCustomer();
+                    },
+
+                    updateCustomer(): Q.Promise<boolean> {
                         if (!this.isCustomerModified()) {
                             return Q.resolve(true);
                         }
 
+                        this.Steps.Information.Loading = true;
                         return self.checkoutService.updateCart([self.viewModelName])
-                            .then(() => true);
+                            .then(() => true).finally(() => this.Steps.Information.Loading = false);
                     },
-                    skipEditUserInformation() {
-                        this.Mode.SignIn = SignInModes.Base;
-                        this.Cart.Customer = { ...this.customerBeforeEdit };
-                        return true;
-                    },
+
                     isCustomerModified() {
                         let keys = _.keys(this.Cart.Customer);
                         let isModified = _.some(keys, (key) => this.customerBeforeEdit[key] !== this.Cart.Customer[key]);
@@ -102,13 +103,16 @@ module Orckestra.Composer {
                         let { Email: Username, Password } = this.Cart.Customer;
                         let loginData = { Username, Password };
                         self.checkoutService.loginUser(loginData)
-                            .then(() => {
-                                this.$children[0].navigateToStep(CheckoutStepNumbers.Shipping);
+                            .then((success) => {
+                                if (success) {
+                                    this.$children[0].navigateToStep(CheckoutStepNumbers.Shipping);
+                                }
                             });
                     },
                     continueAsGuestButton() {
                         this.resetParsley(self.formSelector);
                         this.Mode.SignIn = SignInModes.Base;
+                        this.Errors.SignIn = false;
                         this.checkUserExist(this.Cart.Customer.Email);
                     },
                     onChangeUsername(e) {

@@ -90,10 +90,10 @@
     opacity: 0;
 }
 
-.cart-items-list-leave-to, .cart-items-list-enter {
+.items-list-leave-to, .items-list-enter {
     opacity: 0;
 }
 
-.cart-items-list-enter-active, .cart-items-list-leave-active {
+.items-list-enter-active, .items-list-leave-active {
     transition: all 0.25s ease;
 }

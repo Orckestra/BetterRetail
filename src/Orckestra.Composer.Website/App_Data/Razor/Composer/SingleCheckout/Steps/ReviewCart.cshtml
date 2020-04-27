@@ -72,13 +72,13 @@
             </div>
         </div>
     </div>
-    <div v-if="!CartEmpty" is="transition-group" name="cart-items-list">
+    <div v-if="!CartEmpty" is="transition-group" name="items-list">
         <div class="row pt-3"
              v-bind:class="{'border-bottom pb-2': index != Cart.LineItemDetailViewModels.length - 1, 'bg-danger': !item.IsValid}"
              v-for="(item, index) in Cart.LineItemDetailViewModels"
              v-bind:key="item.Id"
              v-bind:data-qa="'cart-item-' + index">
-            <div v-if="item.Rewards.length" class="col-12 order-1  text-center">
+            <div v-if="item.Rewards &amp;&amp; item.Rewards.length" class="col-12 order-1  text-center">
                 @CartItemRewardsCell()
             </div>
             <div class="col-2 col-sm-1  order-2">
@@ -237,7 +237,7 @@
 
 @helper CartItemRecurringOrderProgram()
 {
-    <div v-if="item.RecurringOrderProgramFrequencies.length" v-bind:data-qa="'cart-item-reccuring-icon-' + index" class="mt-2">
+    <div v-if="item.RecurringOrderProgramFrequencies" v-bind:data-qa="'cart-item-reccuring-icon-' + index" class="mt-2">
         <div class="cart-recurring-cta js-cartRecurringCta">
             @RecurringOrderProgramIcon()
             <span v-if="item.RecurringOrderFrequencyName">
