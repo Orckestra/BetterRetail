@@ -19,7 +19,7 @@ module Orckestra.Composer {
             let vueShippingMixin = {
                 mounted() {
                     this.calculateSelectedMethod();
-                    this.Steps.EnteredOnce.Shipping = this.FulfilledShipping;
+                    this.Steps.Shipping.EnteredOnce = this.FulfilledShipping;
                     this.prepareShipping();
                 },
                 computed: {

@@ -218,7 +218,7 @@ module Orckestra.Composer {
                         return this.Cart.OrderSummary;
                     },
                     CartEmpty() {
-                        return !!this.Cart.LineItemDetailViewModels.length;
+                        return !this.Cart.LineItemDetailViewModels.length;
                     },
                     IsLoading() {
                         return this.Mode.Loading;
