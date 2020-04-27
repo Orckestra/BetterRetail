@@ -11,8 +11,16 @@
 <head>
 </head>
 <body>
-    <div data-oc-controller="SingleCheckout.OrderSummary">
+    <div data-oc-controller="SingleCheckout.OrderSummary" 
+         class="checkout-step-container  active-step" 
+         v-bind:class="{'loading': Mode.CompleteCheckoutLoading}">
+
         <div class="card  mb-4  sps-order-summary sps  sps--abv" data-sps-offset="100">
+            <div class="loading-spinner">
+                <span class="spinner-border text-info" role="status">
+                    &#160;
+                </span>
+            </div>
             <h3 class="card-header bg-primary border-primary  text-white">
                 @Html.Localize("ShoppingCart", "T_OrderSummary")
             </h3>
@@ -82,7 +90,7 @@
             <h4>@Html.Localize("MyAccount", "L_Total")</h4>
         </div>
         <div class="col-6  col-md-5  text-right">
-            <div v-if="IsLoading">
+            <div v-if="IsLoading &amp;&amp; !Mode.CompleteCheckoutLoading">
                 @CheckoutHelpers.LoadingSpinner()
             </div>
             <h4 v-else="v-else" v-text="OrderSummary.Total" data-qa="checkout-order-summary-total"></h4>
@@ -192,9 +200,6 @@
                     data-qa="chechout-place-order-btn"
                     v-bind:disabled="!OrderCanBePlaced"
                     v-on:click="processCompleteCheckout()">
-                <span v-if="Mode.CompleteCheckoutLoading" class="spinner-border spinner-border-sm" role="status">
-                    &#160;
-                </span>
                 @Html.Localize("CheckoutProcess", "F_PlaceOrder")
             </button>
         </div>

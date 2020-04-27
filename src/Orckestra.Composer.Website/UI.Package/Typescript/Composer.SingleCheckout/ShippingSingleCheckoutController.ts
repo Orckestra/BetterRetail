@@ -56,26 +56,13 @@ module Orckestra.Composer {
 
                         this.ShippingMethodTypes.forEach(methodType => {
                             if (this.IsPickUpMethodType && methodType.FulfillmentMethodTypeString === FulfillmentMethodTypes.Shipping) {
-                                methodType.OldAddress = this.getClearShippingAddress();
+                                methodType.OldAddress = this.clearShippingAddress();
                             } else {
                                 methodType.OldAddress = this.Cart.ShippingAddress;
                             }
                         });
 
                         this.preparePickUpAddress();
-                    },
-                    clearShippingAddress() {
-                        this.Mode.AddingLine2Address = true;
-                        this.Cart.ShippingAddress = this.getClearShippingAddress();
-                    },
-                    getClearShippingAddress(): any {
-                        let { ShippingAddress: { FirstName, LastName, CountryCode }, Customer } = this.Cart;
-
-                        return {
-                            FirstName: FirstName || Customer.FirstName,
-                            LastName: LastName || Customer.LastName,
-                            CountryCode
-                        };
                     },
                     processShipping() {
 
@@ -145,17 +132,27 @@ module Orckestra.Composer {
 
                         if (methodEntity.ShippingProviderId === oldShippingMethod.ShippingProviderId) { return; }
 
-                        this.Cart.ShippingAddress = this.getClearShippingAddress();
+                        this.Cart.ShippingAddress = this.clearShippingAddress();
                         self.checkoutService.updateCart([self.viewModelName])
-                            .then(({ Cart }) => {
+                            .then(() => {
                                 this.Cart.ShippingAddress = this.SelectedMethodType.OldAddress;
                                 this.Cart.PickUpLocationId = oldPickUpLocationId;
                             }).catch(e => {
                                 this.Cart.ShippingMethod = oldShippingMethod;
                             });
                     },
+                    clearShippingAddress() {
+                        this.Mode.AddingLine2Address = true;
+                        let { ShippingAddress: { FirstName, LastName, CountryCode, PhoneRegex, PostalCodeRegexPattern }, Customer } = this.Cart;
 
-
+                        return {
+                            FirstName: FirstName || Customer.FirstName,
+                            LastName: LastName || Customer.LastName,
+                            PhoneRegex,
+                            PostalCodeRegexPattern,
+                            CountryCode
+                        };
+                    },
                     calculateSelectedMethod() {
                         let selectedProviderId = this.Cart.ShippingMethod ? this.Cart.ShippingMethod.ShippingProviderId : undefined;
                         this.ShippingMethodTypes.forEach(type => {

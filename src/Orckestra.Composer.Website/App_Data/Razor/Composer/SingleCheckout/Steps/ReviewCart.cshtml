@@ -120,7 +120,7 @@
                     <p class="text-center m-0">
                         <strong v-bind:data-qa="'cart-item-preview-quantity-' + index">x{{item.Quantity}}</strong>
                     </p>
-                    <div v-if="item.RecurringOrderProgramName" class="position-absolute" style="top: 0; right: 0;">
+                    <div v-if="item.RecurringOrderProgramName &amp;&amp; item.RecurringOrderProgramFrequencies" class="position-absolute" style="top: 0; right: 0;">
                         @RecurringOrderProgramIcon()
                     </div>
                 </div>

@@ -51,22 +51,12 @@ module Orckestra.Composer {
 
                         return Q.resolve(true);
                     },
-
-                    updateBillingAddress(): Q.Promise<boolean> {
-                        return self.checkoutService.updateCart([self.viewModelName])
-                            .then(() => {
-                                this.Steps.Billing.EnteredOnce = true;
-                                this.Mode.AddingNewAddress = !this.BillingAddress.AddressBookId;
-                                return true;
-                            });
-                    },
-
                     processBillingAddress(): Q.Promise<boolean> {
 
                         if (!this.billingAddressModified()) {
-                                this.Steps.Billing.EnteredOnce = true;
-                                return Q.resolve(true);
-                            }
+                            this.Steps.Billing.EnteredOnce = true;
+                            return Q.resolve(true);
+                        }
 
                         if (!this.BillingAddress.UseShippingAddress) {
                             let isValid = this.validateParsey(self.formSelector);
@@ -82,7 +72,16 @@ module Orckestra.Composer {
                             return this.updateBillingAddress();
                         }
                     },
-
+                    updateBillingAddress(): Q.Promise<boolean> {
+                        this.Steps.Billing.Loading = true;
+                        return self.checkoutService.updateCart([self.viewModelName])
+                            .then(() => {
+                                this.Steps.Billing.EnteredOnce = true;
+                                this.Mode.AddingNewAddress = !this.BillingAddress.AddressBookId;
+                                return true;
+                            })
+                            .finally(() =>  this.Steps.Billing.Loading = false);
+                    },
                     changeBillingPostalCode(postalCode: any): Q.Promise<boolean> {
                         this.Errors.PostalCodeError = false;
                         if (this.billingAddressBeforeEdit.PostalCode === postalCode) {
