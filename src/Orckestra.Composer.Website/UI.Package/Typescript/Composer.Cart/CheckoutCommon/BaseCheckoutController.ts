@@ -47,10 +47,7 @@ module Orckestra.Composer {
         public getUpdateModelPromise(): Q.Promise<any> {
 
             return Q.fcall(() => {
-                var vm = {};
-                vm[this.viewModelName] = this.getViewModelUpdated();
-
-                return vm;
+                return {[this.viewModelName]: this.getViewModelUpdated()};
             });
         }
 

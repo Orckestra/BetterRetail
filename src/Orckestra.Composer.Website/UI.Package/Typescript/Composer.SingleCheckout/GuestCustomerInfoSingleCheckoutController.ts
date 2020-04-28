@@ -52,10 +52,10 @@ module Orckestra.Composer {
                     },
                     processCustomer(): Q.Promise<boolean> {
 
-                        if(this.ShowSignInButton) {
+                        if (this.ShowSignInButton) {
                             this.Mode.SignIn = SignInModes.Base;
                             this.Cart.Customer = { ...this.customerBeforeEdit };
-                            return Q.resolve(true);;
+                            return Q.resolve(true);
                         }
 
                         let isValid = this.validateParsey(self.formSelector);
@@ -155,10 +155,8 @@ module Orckestra.Composer {
 
         public getUpdateModelPromise(): Q.Promise<any> {
             return Q.fcall(() => {
-                let vm = {};
                 let vueCustomerData = this.checkoutService.VueCheckout.Cart.Customer;
-                vm[this.viewModelName] = JSON.stringify(vueCustomerData);
-                return vm;
+                return {[this.viewModelName]: JSON.stringify(vueCustomerData)};
             });
         }
     }

@@ -196,13 +196,11 @@
             <del v-bind:data-qa="'cart-item-subtotal-del-'+ index">{{item.TotalWithoutDiscount}}</del><br />
             <strong v-bind:data-qa="'cart-subtotal-sales-'+ index" class="text-danger">{{item.Total}}</strong>
         </div>
-        <strong v-else="v-else" v-bind:data-qa="'cart-item-subtotal-' + index">{{item.Total}}</strong>
-        <div v-if="item.SavingsTotal" style="font-size: 90%">
-            <span class="text-success">
-                @Html.Localize("ShoppingCart", "L_LineItemSavings")&#160;
-            </span>
+        <div v-else="v-else"><strong v-bind:data-qa="'cart-item-subtotal-' + index">{{item.Total}}</strong></div>
+        <small v-if="item.SavingsTotal">
+            <span class="text-success">@Html.Localize("ShoppingCart", "L_LineItemSavings") </span>
             <span class="text-success" v-bind:data-qa="'cart-item-savingstotal-' + index">{{item.SavingsTotal}}</span>
-        </div>
+        </small>
         <em class="additional-fees d-block small">
             <span v-for="fee in item.AdditionalFees" class="block">
                 + {{fee.DisplayName}} {{fee.Amount}}

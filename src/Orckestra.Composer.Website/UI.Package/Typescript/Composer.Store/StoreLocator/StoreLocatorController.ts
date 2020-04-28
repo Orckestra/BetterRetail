@@ -77,7 +77,7 @@ module Orckestra.Composer {
                         }
 
                         this.searchBoxSetBounds(configuration.Bounds);
-                        return postedAddress
+                        return postedAddress;
                     });
                 })
                 .then(postedAddress => {
@@ -99,7 +99,7 @@ module Orckestra.Composer {
                     }
                 })
                 .then(currentLocation => {
-                    if (!currentLocation) return ;
+                    if (!currentLocation) { return ; }
                     this.eventHub.publish('searchPointChanged', { data: currentLocation });
                 })
                 .fail(reason => this.handlePromiseFail('StoreLocator Initialize', reason));

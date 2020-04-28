@@ -22,8 +22,8 @@ module Orckestra.Composer {
                 mounted() {
                     self.VueStoreList = this;
 
-                    if(this.IsPickUpMethodType){
-                        this.initializeMap()
+                    if (this.IsPickUpMethodType) {
+                        this.initializeMap();
                     }
                 },
                 computed: {
@@ -68,9 +68,9 @@ module Orckestra.Composer {
                         return this.pickUpLocationIdBeforeEdit !== this.Cart.PickUpLocationId;
                     },
                     initializeMap() {
-                        if(this.initialized) return;
+                        if (this.initialized) { return; }
                         this.initialized = true;
-                        commonOptions.mounted()
+                        commonOptions.mounted();
                     },
                     onSelectPickUpMethod() {
                         this.initializeMap();
@@ -88,10 +88,8 @@ module Orckestra.Composer {
 
         public getUpdateModelPromise(): Q.Promise<any> {
             return Q.fcall(() => {
-                let vm = {};
                 let { PickUpLocationId } = this.checkoutService.VueCheckout.Cart;
-                vm[this.viewModelName] = JSON.stringify({ PickUpLocationId });
-                return vm;
+                return {[this.viewModelName]: JSON.stringify({ PickUpLocationId })};
             });
         }
 

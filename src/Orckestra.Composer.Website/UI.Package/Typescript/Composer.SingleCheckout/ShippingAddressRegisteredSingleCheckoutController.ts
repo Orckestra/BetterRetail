@@ -64,7 +64,7 @@ module Orckestra.Composer {
                                         })
                                         .fail((reason) => {
                                             console.log(reason);
-                                            if(!reason.Errors) return;
+                                            if (!reason.Errors) { return; }
 
                                             reason.Errors.forEach((e: any) => {
                                                 switch (e.ErrorCode) {
@@ -73,7 +73,7 @@ module Orckestra.Composer {
                                                     case 'InvalidPhoneFormat':
                                                         this.Errors.InvalidPhoneFormatError = true; break;
                                                 }
-                                            })
+                                            });
                                         });
                                 } else {
                                     //
@@ -121,11 +121,8 @@ module Orckestra.Composer {
 
         public getUpdateModelPromise(): Q.Promise<any> {
             return Q.fcall(() => {
-                let vm = {};
                 let selectedAddressId = this.checkoutService.VueCheckout.SelectedShippingAddressId;
-                vm[this.viewModelName] = JSON.stringify({ ShippingAddressId: selectedAddressId });
-
-                return vm;
+                return {[this.viewModelName]: JSON.stringify({ ShippingAddressId: selectedAddressId })};
             });
         }
     }
