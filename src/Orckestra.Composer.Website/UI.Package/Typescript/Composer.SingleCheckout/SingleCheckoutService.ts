@@ -492,7 +492,6 @@ module Orckestra.Composer {
         private buildCartUpdateViewModel(vm: any, controllersName = null): Q.Promise<any> {
 
             return this.getCartUpdateViewModel(vm, controllersName);
-
         }
 
         private getCartUpdateViewModel(vm: any, controllersName = null): Q.Promise<any> {

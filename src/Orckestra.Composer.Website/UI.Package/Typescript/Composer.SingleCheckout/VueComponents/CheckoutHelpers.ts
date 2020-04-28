@@ -15,7 +15,9 @@ module Orckestra.Composer {
 
         public static findElementAndFocus(elemId) {
             let elem = document.getElementById(elemId);
-            elem.focus();
+            if(elem) {
+                elem.focus();
+            }
         }
 
         public static isPromise(func) {
