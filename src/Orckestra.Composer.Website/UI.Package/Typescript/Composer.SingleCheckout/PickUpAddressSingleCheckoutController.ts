@@ -5,14 +5,16 @@
 module Orckestra.Composer {
     'use strict';
 
-    export class PickUpAddressSingleCheckoutController extends Orckestra.Composer.StoreLocatorController implements Orckestra.Composer.IBaseSingleCheckoutController {
+    export class PickUpAddressSingleCheckoutController extends Orckestra.Composer.StoreLocatorController
+        implements Orckestra.Composer.IBaseSingleCheckoutController {
+
         public viewModelName: string = 'PickUpAddress';
         protected checkoutService: ISingleCheckoutService;
 
         protected registerStoreLocatorVue() {
             let self: PickUpAddressSingleCheckoutController = this;
             this.checkoutService = SingleCheckoutService.getInstance();
-            let commonOptions =  this.getCommonStoreLocatorVueConfig(self);
+            let commonOptions = this.getCommonStoreLocatorVueConfig(self);
 
             let vueStoreLocatorMixin = {
                 data: {
@@ -46,13 +48,13 @@ module Orckestra.Composer {
                     processPickUpAddress(): Q.Promise<any> {
                         let controllersToUpdate = [self.viewModelName];
 
-                        if(!this.Cart.PickUpLocationId) {
+                        if (!this.Cart.PickUpLocationId) {
                             this.Errors.StoreNotSelectedError = true;
                             return Q.reject('PickUpLocationId is not specified');
                         }
 
                         if (!this.pickUpAddressModified()) {
-                            return  Q.resolve(true);
+                            return Q.resolve(true);
                         }
 
                         return self.checkoutService.updateCart(controllersToUpdate)
@@ -89,7 +91,7 @@ module Orckestra.Composer {
         public getUpdateModelPromise(): Q.Promise<any> {
             return Q.fcall(() => {
                 let { PickUpLocationId } = this.checkoutService.VueCheckout.Cart;
-                return {[this.viewModelName]: JSON.stringify({ PickUpLocationId })};
+                return { [this.viewModelName]: JSON.stringify({ PickUpLocationId }) };
             });
         }
 

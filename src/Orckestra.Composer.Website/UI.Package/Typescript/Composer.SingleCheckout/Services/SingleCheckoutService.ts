@@ -605,7 +605,7 @@ module Orckestra.Composer {
             vue.Steps.Information.Loading = true;
 
             return this.membershipService.login(formData, returnUrl)
-                .then(result =>  this.onLoginFulfilled(result, vue))
+                .then(result => this.onLoginFulfilled(result, vue))
                 .then(() => this.cartService.getFreshCart(true))
                 .then((cart) => {
                     this.updateVueState(vue, cart);
@@ -617,7 +617,7 @@ module Orckestra.Composer {
                 .fail(({ Errors: [error] }) => {
                     this.onLoginRejected(error, vue);
                     return false;
-                }).finally(() => vue.Steps.Information.Loading = false );
+                }).finally(() => vue.Steps.Information.Loading = false);
         }
 
         private onLoginFulfilled(result: any, vueData: any) {
@@ -629,7 +629,7 @@ module Orckestra.Composer {
                 this.cacheProvider.customCache.fullClear();
                 this.loadUserAddresses();
                 return true;
-               // vueData.$children[0].navigateToStep(CheckoutStepNumbers.Shipping);
+                // vueData.$children[0].navigateToStep(CheckoutStepNumbers.Shipping);
             } else {
                 vueData.Errors.SignIn = result.Status;
             }
@@ -649,13 +649,13 @@ module Orckestra.Composer {
                 .then(result => result.IsExist);
         }
 
-        public loadUserAddresses(): Q.Promise<any>  {
+        public loadUserAddresses(): Q.Promise<any> {
             let vue: any = this.VueCheckout;
             return this.shippingAddressRegisteredService.getShippingAddresses(vue.Cart)
                 .then(data => {
                     vue.RegisteredAddresses = data.Addresses;
                     vue.SelectedShippingAddressId = data.SelectedShippingAddressId;
-                    if(this.isAddressBookIdEmpty(vue.Cart.ShippingAddress.AddressBookId)) {
+                    if (this.isAddressBookIdEmpty(vue.Cart.ShippingAddress.AddressBookId)) {
                         vue.Cart.ShippingAddress.AddressBookId = data.SelectedShippingAddressId;
                     }
                 });

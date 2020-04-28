@@ -126,15 +126,20 @@ module Orckestra.Composer {
                         }
                     },
                     copyShippingAddress() {
-                        let { FirstName, LastName, CountryCode, Line1, City, RegionCode, PostalCode, PhoneNumber, AddressBookId, PhoneRegex } = this.Cart.ShippingAddress;
+                        let { FirstName, LastName, CountryCode,
+                            Line1, City, RegionCode, PostalCode,
+                            PhoneNumber, AddressBookId, PhoneRegex } = this.Cart.ShippingAddress;
                         this.Cart.Payment.BillingAddress = {
-                            FirstName, LastName, CountryCode, Line1, City, RegionCode, PostalCode, PhoneNumber, AddressBookId, PhoneRegex, UseShippingAddress: true
+                            FirstName, LastName, CountryCode,
+                            Line1, City, RegionCode, PostalCode,
+                            PhoneNumber, AddressBookId, PhoneRegex, UseShippingAddress: true
                         };
                     },
                     clearBillingAddress() {
                         this.Mode.AddingLine2Address = true;
 
-                        let { FirstName, LastName, CountryCode, PhoneRegex, PostalCodeRegexPattern, UseShippingAddress } = this.Cart.Payment.BillingAddress;
+                        let { FirstName, LastName, CountryCode,
+                            PhoneRegex, PostalCodeRegexPattern, UseShippingAddress } = this.Cart.Payment.BillingAddress;
                         this.Cart.Payment.BillingAddress = {
                             FirstName: FirstName || this.Cart.Customer.FirstName,
                             LastName: LastName || this.Cart.Customer.LastName,
