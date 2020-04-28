@@ -5,9 +5,7 @@
 module Orckestra.Composer {
     'use strict';
 
-    export class PickUpAddressSingleCheckoutController extends Orckestra.Composer.StoreLocatorController
-        implements Orckestra.Composer.IBaseSingleCheckoutController {
-
+    export class PickUpAddressSingleCheckoutController extends StoreLocatorController implements IBaseSingleCheckoutController {
         public viewModelName: string = 'PickUpAddress';
         protected checkoutService: ISingleCheckoutService;
 

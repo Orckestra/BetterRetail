@@ -31,8 +31,9 @@ module Orckestra.Composer {
                     },
                     SelectedMethodType() {
                         return this.Cart.ShippingMethod &&
-                            this.ShippingMethodTypes
-                                .find(type => type.FulfillmentMethodTypeString === this.Cart.ShippingMethod.FulfillmentMethodTypeString);
+                        this.ShippingMethodTypes.find(
+                            type => type.FulfillmentMethodTypeString === this.Cart.ShippingMethod.FulfillmentMethodTypeString
+                        );
                     },
                     IsShippingMethodType() {
                         return this.Cart.ShippingMethod &&
