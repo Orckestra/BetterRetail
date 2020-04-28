@@ -2,8 +2,7 @@
 ///<reference path='../../Typescript/Repositories/CartRepository.ts' />
 ///<reference path='../../Typescript/Mvc/ComposerClient.ts' />
 ///<reference path='../../Typescript/Events/EventHub.ts' />
-///<reference path='../../Typescript/Composer.Cart/CheckoutCommon/BaseCheckoutController.ts' />
-///<reference path='../../Typescript/Composer.SingleCheckout/SingleCheckoutService.ts' />
+///<reference path='../../Typescript/Composer.SingleCheckout/Services/SingleCheckoutService.ts' />
 
 (() => {
 
@@ -143,7 +142,8 @@
                             Line1: 'Line1',
                             City: 'City',
                             RegionCode: 'RegionCode',
-                            PostalCode: 'PostalCode'
+                            PostalCode: 'PostalCode',
+                            PhoneNumber: 'PhoneNumber'
                         }
                     }
                     ///Act
@@ -329,7 +329,8 @@
                             Line1: 'Line1',
                             City: 'City',
                             RegionCode: 'RegionCode',
-                            PostalCode: 'PostalCode'
+                            PostalCode: 'PostalCode',
+                            PhoneNumber: 'PhoneNumber'
                         }
                     }
                     ///Act

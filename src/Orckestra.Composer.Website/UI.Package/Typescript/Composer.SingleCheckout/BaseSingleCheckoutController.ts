@@ -3,8 +3,8 @@
 ///<reference path='../ErrorHandling/ErrorHandler.ts' />
 ///<reference path='./IBaseSingleCheckoutController.ts' />
 ///<reference path='../Composer.Cart/CheckoutCommon/ICheckoutContext.ts' />
-///<reference path='./ISingleCheckoutService.ts' />
-///<reference path='./SingleCheckoutService.ts' />
+///<reference path='./Services/ISingleCheckoutService.ts' />
+///<reference path='./Services/SingleCheckoutService.ts' />
 
 module Orckestra.Composer {
     'use strict';

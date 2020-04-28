@@ -1,4 +1,4 @@
-///<reference path='../../Typings/tsd.d.ts' />
+///<reference path='../../../Typings/tsd.d.ts' />
 
 module Orckestra.Composer {
 

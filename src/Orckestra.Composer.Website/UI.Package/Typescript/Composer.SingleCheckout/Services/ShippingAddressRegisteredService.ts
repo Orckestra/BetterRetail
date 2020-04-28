@@ -1,7 +1,6 @@
 ///<reference path='../../../Typings/tsd.d.ts' />
-///<reference path='../../Mvc/ComposerClient.ts' />
 ///<reference path='../../Composer.MyAccount/Common/CustomerService.ts' />
-///<reference path='../CheckoutCommon/AddressDto.ts' />
+///<reference path='../../Composer.Cart/CheckoutCommon/AddressDto.ts' />
 
 module Orckestra.Composer {
     'use strict';

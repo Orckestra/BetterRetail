@@ -16,8 +16,8 @@
                 <div v-for="(address, index) in RegisteredAddresses"
                      v-bind:key="address.Id"
                      class="border rounded p-3 mb-2 bg-white"
-                     v-bind:class="{ 'bg-selected border-primary': address.Id == ShippingAddress.AddressBookId }">
-                    @CheckoutHelpers.AddressRadioOption("ShippingAddressId", "ShippingAddress.AddressBookId", "changeRegisteredShippingAddress", "deleteShippingAddressConfirm")
+                     v-bind:class="{ 'bg-selected border-primary': address.Id == SelectedShippingAddressId }">
+                    @CheckoutHelpers.AddressRadioOption("ShippingAddressId", "SelectedShippingAddressId", "changeRegisteredShippingAddress", "deleteShippingAddressConfirm")
                 </div>
             </div>
             <div v-show="Mode.AddingNewAddress" class="border-top mt-4 pt-4">

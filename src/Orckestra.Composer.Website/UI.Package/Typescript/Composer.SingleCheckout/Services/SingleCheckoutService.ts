@@ -1,27 +1,27 @@
-///<reference path='../../Typings/tsd.d.ts' />
-///<reference path='../../Typings/vue/index.d.ts' />
-///<reference path='../Composer.MyAccount/Common/MembershipService.ts' />
-///<reference path='../ErrorHandling/ErrorHandler.ts' />
-///<reference path='../Repositories/CartRepository.ts' />
-///<reference path='../Composer.Cart/CheckoutShippingMethod/ShippingMethodService.ts' />
-///<reference path='../Composer.Cart/CartSummary/CartService.ts' />
-///<reference path='./IBaseSingleCheckoutController.ts' />
-///<reference path='../Composer.Cart/CheckoutCommon/RegionService.ts' />
-///<reference path='../Composer.Cart/CheckoutCommon/ICheckoutService.ts' />
-///<reference path='../Composer.Cart/CheckoutCommon/ICheckoutContext.ts' />
-///<reference path='../Composer.Cart/CheckoutCommon/IRegisterOptions.ts' />
-///<reference path='../Composer.Cart/CheckoutPayment/Services/PaymentService.ts' />
-///<reference path='../Composer.Cart/CheckoutPayment/Repositories/PaymentRepository.ts' />
-///<reference path='../Composer.Cart/CheckoutPayment/Providers/CheckoutPaymentProviderFactory.ts' />
+///<reference path='../../../Typings/tsd.d.ts' />
+///<reference path='../../../Typings/vue/index.d.ts' />
+///<reference path='../../Composer.MyAccount/Common/MembershipService.ts' />
+///<reference path='../../ErrorHandling/ErrorHandler.ts' />
+///<reference path='../../Repositories/CartRepository.ts' />
+///<reference path='./ShippingMethodService.ts' />
+///<reference path='../../Composer.Cart/CartSummary/CartService.ts' />
+///<reference path='../IBaseSingleCheckoutController.ts' />
+///<reference path='../../Composer.Cart/CheckoutCommon/RegionService.ts' />
+///<reference path='../../Composer.Cart/CheckoutCommon/ICheckoutService.ts' />
+///<reference path='../../Composer.Cart/CheckoutCommon/ICheckoutContext.ts' />
+///<reference path='../../Composer.Cart/CheckoutCommon/IRegisterOptions.ts' />
+///<reference path='../../Composer.Cart/CheckoutPayment/Services/PaymentService.ts' />
+///<reference path='../../Composer.Cart/CheckoutPayment/Repositories/PaymentRepository.ts' />
+///<reference path='../../Composer.Cart/CheckoutPayment/Providers/CheckoutPaymentProviderFactory.ts' />
 ///<reference path='./ISingleCheckoutService.ts' />
-///<reference path='./ISingleCheckoutContext.ts' />
-///<reference path='../Composer.MyAccount/Common/CustomerService.ts' />
-///<reference path='./VueComponents/CheckoutStepVueComponent.ts' />
-///<reference path='./VueComponents/CheckoutPageVueComponent.ts' />
-///<reference path='../Composer.MyAccount/Common/MyAccountEvents.ts' />
-///<reference path='../Composer.MyAccount/Common/MyAccountStatus.ts' />
-///<reference path='../Composer.Cart/CheckoutShippingAddressRegistered/ShippingAddressRegisteredService.ts' />
-///<reference path='../UI/UIModal.ts' />
+///<reference path='../ISingleCheckoutContext.ts' />
+///<reference path='../../Composer.MyAccount/Common/CustomerService.ts' />
+///<reference path='../VueComponents/CheckoutStepVueComponent.ts' />
+///<reference path='../VueComponents/CheckoutPageVueComponent.ts' />
+///<reference path='../../Composer.MyAccount/Common/MyAccountEvents.ts' />
+///<reference path='../../Composer.MyAccount/Common/MyAccountStatus.ts' />
+///<reference path='../Services/ShippingAddressRegisteredService.ts' />
+///<reference path='../../UI/UIModal.ts' />
 
 
 module Orckestra.Composer {
@@ -301,13 +301,14 @@ module Orckestra.Composer {
             let address = cart.ShippingAddress.Line1 &&
                 cart.ShippingAddress.City &&
                 cart.ShippingAddress.RegionCode &&
-                cart.ShippingAddress.PostalCode;
+                cart.ShippingAddress.PostalCode &&
+                cart.ShippingAddress.PhoneNumber;
 
             let isShipToHome = cart.ShippingMethod.FulfillmentMethodTypeString === FulfillmentMethodTypes.Shipping;
             let isPickUp = cart.ShippingMethod.FulfillmentMethodTypeString === FulfillmentMethodTypes.PickUp;
 
             if (isAuthenticated && isShipToHome) {
-                return (address && !this.isAddressBookIdEmpty(cart.ShippingAddress.AddressBookId));
+                return (!this.isAddressBookIdEmpty(cart.ShippingAddress.AddressBookId));
             }
 
             if (!isAuthenticated && isShipToHome) {
@@ -336,7 +337,7 @@ module Orckestra.Composer {
 
 
             if (isAuthenticated) {
-                return addressFullfilled && !this.isAddressBookIdEmpty(billindAddress.AddressBookId);
+                return !!addressFullfilled && !this.isAddressBookIdEmpty(billindAddress.AddressBookId);
             } else {
                 return !!(addressFullfilled);
             }
@@ -653,6 +654,10 @@ module Orckestra.Composer {
             return this.shippingAddressRegisteredService.getShippingAddresses(vue.Cart)
                 .then(data => {
                     vue.RegisteredAddresses = data.Addresses;
+                    vue.SelectedShippingAddressId = data.SelectedShippingAddressId;
+                    if(this.isAddressBookIdEmpty(vue.Cart.ShippingAddress.AddressBookId)) {
+                        vue.Cart.ShippingAddress.AddressBookId = data.SelectedShippingAddressId;
+                    }
                 });
         }
     }

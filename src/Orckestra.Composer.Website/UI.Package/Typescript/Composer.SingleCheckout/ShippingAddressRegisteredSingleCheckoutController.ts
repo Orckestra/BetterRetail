@@ -1,7 +1,6 @@
 ///<reference path='../..//Typings/tsd.d.ts' />
 ///<reference path='./BaseSingleCheckoutController.ts' />
 ///<reference path='./ShippingAddressSingleCheckoutController.ts' />
-///<reference path='../Composer.Cart/CheckoutShippingAddressRegistered/ShippingAddressRegisteredService.ts' />
 
 module Orckestra.Composer {
     'use strict';
@@ -22,7 +21,10 @@ module Orckestra.Composer {
                 methods: {
                     processShippingAddressRegistered() {
                         if (this.shippingAddressModified()) {
-                            return self.checkoutService.updateCart([self.viewModelName])
+                            //WHEN CHANGING SHIPPING, WE ALSO NEED UPDATE BILLING
+                            let controllersToUpdate = [self.viewModelName, 'BillingAddressRegistered'];
+                            this.prepareBillingAddress();
+                            return self.checkoutService.updateCart(controllersToUpdate)
                                 .then(() => {
                                     this.Steps.Shipping.EnteredOnce = true;
                                     return true;
@@ -79,32 +81,21 @@ module Orckestra.Composer {
                             });
                     },
 
-                    changeRegisteredShippingAddress(addressId, addingNewAddressPromise = null) {
+                    changeRegisteredShippingAddress(addressId) {
 
                         this.SelectedShippingAddressId = addressId;
                         this.Mode.AddingNewAddress = false;
                         if (!this.debounceChangeRegisteredShippingAddress) {
-                            this.debounceChangeRegisteredShippingAddress = _.debounce((addingNewAddressPromise) => {
+                            this.debounceChangeRegisteredShippingAddress = _.debounce(() => {
                                 //WHEN CHANGING SHIPPING, WE ALSO NEED UPDATE BILLING
                                 let controllersToUpdate = [self.viewModelName, 'BillingAddressRegistered'];
-                                self.checkoutService.updateCart(controllersToUpdate).then((response: any) => {
-                                    let { Cart } = response;
-                                    this.Cart.ShippingAddress = Cart.ShippingAddress;
-                                    this.Cart.Payment.BillingAddress = Cart.Payment.BillingAddress;
-                                    if (addingNewAddressPromise) {
-                                        this.Steps.Shipping.EnteredOnce = true;
-                                        addingNewAddressPromise.resolve(true);
-                                    }
-                                }).fail((reason) => {
-                                    console.log(reason);
-
-                                    if (addingNewAddressPromise) {
-                                        addingNewAddressPromise.resolve(false);
-                                    }
-                                });
+                                self.checkoutService.updateCart(controllersToUpdate)
+                                    .fail((reason) => {
+                                        console.log(reason);
+                                    });
                             }, 500);
                         }
-                        this.debounceChangeRegisteredShippingAddress(addingNewAddressPromise);
+                        this.debounceChangeRegisteredShippingAddress();
                     },
                     deleteShippingAddressConfirm(event: JQueryEventObject) {
                         this.Modal.deleteAddressModal.openModal(event);
