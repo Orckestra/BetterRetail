@@ -55,13 +55,21 @@ namespace Orckestra.Composer.Cart.ViewModels.Order
         public string CustomerId { get; set; }
 
         /// <summary>
+        /// Gets or sets the formatted total.
+        /// </summary>
+        /// <value>
+        /// The formatted total.
+        /// </value>
+        [Formatting("General", "PriceFormat")]
+        [MapTo("Total")]
+        public string PricePaidFormatted { get; set; }
+
+        /// <summary>
         /// Gets or sets the total.
         /// </summary>
         /// <value>
         /// The total.
         /// </value>
-        [Formatting("General", "PriceFormat")]
-        [MapTo("Total")]
         public string PricePaid { get; set; }
 
         /// <summary>
