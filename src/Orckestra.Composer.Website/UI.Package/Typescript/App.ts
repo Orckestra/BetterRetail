@@ -111,7 +111,10 @@
                 { name: 'SingleCheckout.GuestCustomerInfo', controller: Orckestra.Composer.GuestCustomerInfoSingleCheckoutController },
                 { name: 'SingleCheckout.Shipping', controller: Orckestra.Composer.ShippingSingleCheckoutController },
                 { name: 'SingleCheckout.ShippingAddress', controller: Orckestra.Composer.ShippingAddressSingleCheckoutController },
-                { name: 'SingleCheckout.ShippingAddressRegistered', controller: Orckestra.Composer.ShippingAddressRegisteredSingleCheckoutController },
+                {
+                    name: 'SingleCheckout.ShippingAddressRegistered',
+                    controller: Orckestra.Composer.ShippingAddressRegisteredSingleCheckoutController
+                },
                 { name: 'SingleCheckout.ReviewCart', controller: Orckestra.Composer.ReviewCartSingleCheckoutController },
                 { name: 'SingleCheckout.OrderSummary', controller: Orckestra.Composer.OrderSummarySingleCheckoutController },
                 { name: 'SingleCheckout.Payment', controller: Orckestra.Composer.PaymentSingleCheckoutController },

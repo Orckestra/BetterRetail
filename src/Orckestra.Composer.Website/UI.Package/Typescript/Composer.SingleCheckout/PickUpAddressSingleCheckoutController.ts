@@ -5,7 +5,7 @@
 module Orckestra.Composer {
     'use strict';
 
-    export class PickUpAddressSingleCheckoutController extends Orckestra.Composer.StoreLocatorController implements Orckestra.Composer.IBaseSingleCheckoutController {
+    export class PickUpAddressSingleCheckoutController extends StoreLocatorController implements IBaseSingleCheckoutController {
         public viewModelName: string = 'PickUpAddress';
         protected checkoutService: ISingleCheckoutService;
 
@@ -46,7 +46,7 @@ module Orckestra.Composer {
                     processPickUpAddress(): Q.Promise<any> {
                         let controllersToUpdate = [self.viewModelName];
 
-                        if(!this.Cart.PickUpLocationId) {
+                        if (!this.Cart.PickUpLocationId) {
                             this.Errors.StoreNotSelectedError = true;
                             return Q.reject('PickUpLocationId is not specified');
                         }

@@ -15,7 +15,7 @@ module Orckestra.Composer {
 
         public static findElementAndFocus(elemId) {
             let elem = document.getElementById(elemId);
-            if(elem) {
+            if (elem) {
                 elem.focus();
             }
         }
