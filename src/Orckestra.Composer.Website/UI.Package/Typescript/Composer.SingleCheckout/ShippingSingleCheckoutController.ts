@@ -42,7 +42,6 @@ module Orckestra.Composer {
                             this.Cart.ShippingMethod.FulfillmentMethodTypeString === FulfillmentMethodTypes.PickUp;
                     },
 
-
                 },
                 methods: {
                     prepareShipping() {
@@ -108,7 +107,10 @@ module Orckestra.Composer {
 
                         if (!this.debounceUpdateShippingMethod) {
                             this.debounceUpdateShippingMethod = _.debounce(methodType => {
-                                this.updateShippingMethodProcess(methodType.SelectedMethod);
+                                this.updateShippingMethodProcess(methodType.SelectedMethod)
+                                    .then(() => {
+                                        if(this.IsPickUpMethodType) this.onSelectPickUpMethod();
+                                    });
                             }, 800);
                         }
 
@@ -121,7 +123,7 @@ module Orckestra.Composer {
                             shippingMethodCollapse.collapse(command);
                         }
                     },
-                    updateShippingMethodProcess(methodEntity: any) {
+                    updateShippingMethodProcess(methodEntity: any): Q.Promise<any> {
                         let oldShippingMethod = { ...this.Cart.ShippingMethod };
                         let oldPickUpLocationId = this.Cart.PickUpLocationId;
 
@@ -133,11 +135,11 @@ module Orckestra.Composer {
                         if (methodEntity.ShippingProviderId === oldShippingMethod.ShippingProviderId) { return; }
 
                         this.Cart.ShippingAddress = this.clearShippingAddress();
-                        self.checkoutService.updateCart([self.viewModelName])
+                        return self.checkoutService.updateCart([self.viewModelName])
                             .then(() => {
                                 this.Cart.ShippingAddress = this.SelectedMethodType.OldAddress;
                                 this.Cart.PickUpLocationId = oldPickUpLocationId;
-                            }).catch(e => {
+                            }).catch(() => {
                                 this.Cart.ShippingMethod = oldShippingMethod;
                             });
                     },

@@ -16,11 +16,15 @@ module Orckestra.Composer {
 
             let vueStoreLocatorMixin = {
                 data: {
-                    ...commonOptions.data
+                    ...commonOptions.data,
+                    initialized: false
                 },
                 mounted() {
                     self.VueStoreList = this;
-                    commonOptions.mounted();
+
+                    if(this.IsPickUpMethodType){
+                        this.initializeMap()
+                    }
                 },
                 computed: {
                     SelectedStore() {
@@ -56,6 +60,14 @@ module Orckestra.Composer {
                     },
                     pickUpAddressModified() {
                         return this.pickUpLocationIdBeforeEdit !== this.Cart.PickUpLocationId;
+                    },
+                    initializeMap() {
+                        if(this.initialized) return;
+                        this.initialized = true;
+                        commonOptions.mounted()
+                    },
+                    onSelectPickUpMethod() {
+                        this.initializeMap();
                     }
                 }
             };

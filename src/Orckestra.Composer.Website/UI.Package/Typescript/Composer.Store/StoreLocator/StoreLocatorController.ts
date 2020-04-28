@@ -71,13 +71,14 @@ module Orckestra.Composer {
 
                     this._mapService.initialize(mapOptions);
 
-                    if (!this._historyState.isDefined()) {
-                        this._mapService.centerMap(configuration.Bounds);
-                    }
+                    return this._mapService.mapInitialized().then(() => {
+                        if (!this._historyState.isDefined()) {
+                            this._mapService.centerMap(configuration.Bounds);
+                        }
 
-                    this.searchBoxSetBounds(configuration.Bounds);
-
-                    return this._mapService.mapInitialized().then(() => postedAddress);
+                        this.searchBoxSetBounds(configuration.Bounds);
+                        return postedAddress
+                    });
                 })
                 .then(postedAddress => {
                     if (this._historyState.isDefined()) {
@@ -88,13 +89,18 @@ module Orckestra.Composer {
                     if (postedAddress) {
                         return this._geoService.getLocationByAddress(postedAddress);
                     } else {
-                        return this.getCurrentLocation();
+                        return this.getCurrentLocation()
+                            .then(currentLocation => this._geoService.getAddressByLocation(currentLocation)
+                                .then(address => {
+                                    this.setPostedAddress(address);
+                                    return currentLocation;
+                                })
+                            );
                     }
                 })
                 .then(currentLocation => {
-                    if (currentLocation) {
-                        this.eventHub.publish('searchPointChanged', { data: currentLocation });
-                    }
+                    if (!currentLocation) return ;
+                    this.eventHub.publish('searchPointChanged', { data: currentLocation });
                 })
                 .fail(reason => this.handlePromiseFail('StoreLocator Initialize', reason));
         }
@@ -208,7 +214,8 @@ module Orckestra.Composer {
                 .then(cachedAddr => {
                     this.setPostedAddress(cachedAddr);
                     return cachedAddr;
-                });
+
+                }).fail(() =>  '');
         }
 
         protected getMapOptions(storeLocatorOption: IStoreLocatorInitializationOptions, historyState: IStoreLocatorHistoryState): IMapOptions {
@@ -331,7 +338,7 @@ module Orckestra.Composer {
                         }
                     }
 
-                    let center = this._mapService.getBounds().getCenter();
+                    let center = this._mapService.getMap().getCenter();
                     this._historyState.historyPushState({ page, point: searchPoint, zoom: zoomLevel, center });
                     this._isSearch = false;
                 })
@@ -358,15 +365,12 @@ module Orckestra.Composer {
 
         public searchCurrentLocation() {
             this._geoService.geolocate()
-                .then(currentLocation => {
-                    this.eventHub.publish('searchPointChanged', { data: currentLocation });
-
-                    return this._geoService.getAddressByLocation(currentLocation);
-                })
-                .then(address => {
-                    this.setPostedAddress(address);
-                    this._searchPointMarker.setTitle(address);
-                })
+                .then(currentLocation => this._geoService.getAddressByLocation(currentLocation)
+                    .then( address => {
+                        this.setPostedAddress(address);
+                        this.eventHub.publish('searchPointChanged', { data: currentLocation });
+                    })
+                )
                 .fail(reason => this.handlePromiseFail('StoreLocator searchCurrentLocation', reason));
         }
 
@@ -409,7 +413,6 @@ module Orckestra.Composer {
         }
 
         protected restoreMapFromHistoryState() {
-            console.log('Restore data from history state');
             this._searchPoint = this._historyState.point;
             this.createSearchPointMarker(this._historyState.point, this.getPostedAddress());
 

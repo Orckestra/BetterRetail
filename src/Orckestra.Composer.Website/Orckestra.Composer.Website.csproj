@@ -290,6 +290,7 @@
     <Content Include="App_Data\Razor\Composer\Grids\FullGrid.cshtml" />
     <Content Include="App_Code\Forms\Address.cshtml" />
     <Content Include="App_Code\Forms\CreditCard.cshtml" />
+    <Content Include="App_Code\AddressHelpers.cshtml" />
     <None Include="App_Config\Caching.config" />
     <Content Include="App_Data\Razor\Composer\Grids\OneThirdTwoThirds.cshtml" />
     <Content Include="App_Data\Razor\Composer\Grids\AccountGrid.cshtml" />
