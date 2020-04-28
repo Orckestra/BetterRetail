@@ -109,7 +109,7 @@ module Orckestra.Composer {
                             this.debounceUpdateShippingMethod = _.debounce(methodType => {
                                 this.updateShippingMethodProcess(methodType.SelectedMethod)
                                     .then(() => {
-                                        if(this.IsPickUpMethodType) this.onSelectPickUpMethod();
+                                        if (this.IsPickUpMethodType) { this.onSelectPickUpMethod(); }
                                     });
                             }, 800);
                         }
@@ -172,10 +172,8 @@ module Orckestra.Composer {
 
         public getUpdateModelPromise(): Q.Promise<any> {
             return Q.fcall(() => {
-                let vm = {};
                 let { Name, ShippingProviderId } = this.checkoutService.VueCheckout.Cart.ShippingMethod;
-                vm[this.viewModelName] = JSON.stringify({ Name, ShippingProviderId });
-                return vm;
+                return {[this.viewModelName]: JSON.stringify({ Name, ShippingProviderId })};
             });
         }
     }

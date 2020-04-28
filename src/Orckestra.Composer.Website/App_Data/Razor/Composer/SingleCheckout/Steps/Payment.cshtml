@@ -20,7 +20,7 @@
                 @CheckoutHelpers.StepContinueButton("!FulfilledBillingAddress", "payment", "B_EditPayment")
                 @CheckoutHelpers.StepEditButton("payment")
             </div>
-            <div  class="card-body bg-light" v-show="step.active" v-cloak="true">
+            <div class="card-body bg-light" v-show="step.active" v-cloak="true">
                 <form v-if="Payment" id="PaymentForm">
                     <div class="form-row">
                         <div class="col-md-6 pb-3" v-if="HasCreditCardProvider">
@@ -39,8 +39,6 @@
                                                id="CreditCard-radio"
                                                v-on:change="changePaymentMethod"
                                                xmlns:v-on="v-on" />
-
-
                                         <div class="row">
                                             <div class="col-6">
                                                 @Html.Localize("CheckoutProcess", "B_UseCreditCard")

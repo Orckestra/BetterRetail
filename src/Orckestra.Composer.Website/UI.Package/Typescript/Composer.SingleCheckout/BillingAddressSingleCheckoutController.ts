@@ -168,10 +168,8 @@ module Orckestra.Composer {
 
         public getUpdateModelPromise(): Q.Promise<any> {
             return Q.fcall(() => {
-                let vm = {};
                 let { Payment } = this.checkoutService.VueCheckout.Cart;
-                vm[this.viewModelName] = JSON.stringify(Payment.BillingAddress);
-                return vm;
+                return {[this.viewModelName]: JSON.stringify(Payment.BillingAddress)};
             });
         }
 

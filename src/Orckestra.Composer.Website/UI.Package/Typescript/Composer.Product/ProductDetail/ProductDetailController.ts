@@ -110,7 +110,7 @@ module Orckestra.Composer {
         protected renderAddToCartButton(isAuthenticated: boolean) {
             let { Sku } = this.context.viewModel;
 
-            if(!isAuthenticated && this.recurringMode === RecurringMode.Recurring) {
+            if (!isAuthenticated && this.recurringMode === RecurringMode.Recurring) {
                 return this.renderUnavailableAddToCart();
             }
 
@@ -196,7 +196,7 @@ module Orckestra.Composer {
             this.recurringMode = actionContext.elementContext.val();
 
             this._membershipService.isAuthenticated().then(({IsAuthenticated}) => {
-                if(IsAuthenticated) return;
+                if (IsAuthenticated) { return; }
                 return this.renderAddToCartButton(IsAuthenticated);
             });
         }
