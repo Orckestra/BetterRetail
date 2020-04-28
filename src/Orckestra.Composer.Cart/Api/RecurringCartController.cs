@@ -269,10 +269,9 @@ namespace Orckestra.Composer.Cart.Api
             var url = CartUrlProvider.GetCheckoutSignInUrl(new BaseUrlParameter
             {
                 CultureInfo = ComposerContext.CultureInfo,
-                ReturnUrl = CartUrlProvider.GetCheckoutStepUrl(new GetCheckoutStepUrlParam
+                ReturnUrl = CartUrlProvider.GetCheckoutPageUrl(new BaseUrlParameter
                 { 
-                    CultureInfo = ComposerContext.CultureInfo, 
-                    StepNumber = 1 
+                    CultureInfo = ComposerContext.CultureInfo
                 })
             });
 

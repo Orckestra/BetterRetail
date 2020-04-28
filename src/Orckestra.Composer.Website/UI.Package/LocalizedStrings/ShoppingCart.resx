@@ -288,4 +288,7 @@
   <data name="Title.CartNotFound" xml:space="preserve">
     <value>Cart was not found</value>
   </data>
+  <data name="F_RemoveItem" xml:space="preserve">
+    <value>Remove Product</value>
+  </data>
 </root>

@@ -24,5 +24,9 @@ module Orckestra.Composer {
         public static getWebsiteId () {
             return $('html').data('website');
         }
+
+        public static IsC1ConsolePreview(): boolean {
+            return $('html').data('console-preview') === 'True';
+        }
     }
 }

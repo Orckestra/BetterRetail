@@ -82,6 +82,8 @@ namespace Orckestra.Composer.Cart.ViewModels
         [Required(AllowEmptyStrings = false)]
         public string PhoneNumber { get; set; }
 
+        public string PhoneNumberFormated { get; set; }
+
         /// <summary>
         /// Phone Number regular expression to validate format
         /// </summary>

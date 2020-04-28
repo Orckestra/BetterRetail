@@ -1,0 +1,73 @@
+﻿@using Composite.AspNet.Razor
+@using System.Web.Mvc
+
+@helper StepContinueButton(string disabled, string dataqakey, string label = "F_Continue")
+{
+    <button v-show="step.displayContinueButton"
+            v-bind:disabled="@disabled"
+            v-on:click="step.navigateToStep(step.index)"
+            class="btn btn-primary float-right"
+            v-cloak="true"
+            data-qa="continue-to-@dataqakey-btn">
+        @Html.Localize("CheckoutProcess", label)
+    </button>
+}
+
+@helper StepEditButton(string dataqakey, string label = "F_Edit")
+{
+    <button v-show="step.preview" class="btn btn-outline-secondary float-right"
+            data-qa="edit-@(dataqakey)-btn"
+            v-on:click="step.navigateToStep(step.index)"
+            v-cloak="true">
+        @Html.Localize("CheckoutProcess", label)
+    </button>
+}
+
+@helper AddressPreview(string vueBinding, string qaPrefix = "shipping-address-preview")
+{
+    <p class="mb-0">
+        <strong v-if="@(vueBinding).AddressName" data-qa="@(qaPrefix)-name">{{@(vueBinding).AddressName}}<br /></strong>
+        <strong v-if="@(vueBinding).FirstName" data-qa="@(qaPrefix)-fullname">{{@(vueBinding).FirstName}} {{@(vueBinding).LastName}}<br /></strong>
+        <span data-qa="@(qaPrefix)-line1">{{@(vueBinding).Line1}}</span>
+        <span data-qa="@(qaPrefix)-line2" v-if="@(vueBinding).Line2">, {{@(vueBinding).Line2}}</span><br />
+        <span data-qa="@(qaPrefix)-city">{{@(vueBinding).City}}</span><br />
+        <span data-qa="@(qaPrefix)-regionName">{{@(vueBinding).RegionName}}</span>,
+        <span data-qa="@(qaPrefix)-postalCode">{{@(vueBinding).PostalCode}}</span>
+    </p>
+}
+
+
+@helper AddressRadioOption(string name = "ShippingAddressId", string selected = "AddressBookId", string onChange = "changeRegisteredShippingAddress", string onDelete = "deleteShippingAddressConfirm")
+{
+    <div class="form-check" v-bind:data-address-id="address.Id">
+        <input data-parsley-errors-container="#adresses-errors"
+               class="form-check-input" type="radio"
+               v-bind:checked="address.Id == @selected"
+               v-bind:disabled="IsLoading"
+               required="required"
+               name="@name"
+               v-bind:value="address.Id"
+               v-bind:id="'@(name)-' + index"
+               v-on:change="@(onChange)(address.Id)"
+               xmlns:v-on="v-on"
+               xmlns:v-bind="v-bind" />
+        <label class="form-check-label d-block" v-bind:for="'@(name)-' + index">
+            <div class="row">
+                <div class="col-12 col-sm-9 order-2 order-sm-1">@AddressPreview("address")</div>
+                <div class="col-12 col-sm-3 order-1 order-sm-2 font-weight-bolder d-flex align-items-start justify-content-between flex-sm-column align-items-sm-end">
+                    <p class="h5"> {{address.AddressName}}</p>
+                    <button type="button" class="btn btn-link" data-qa="address-delete" v-on:click="@onDelete" title="@Html.Localize("MyAccount", "B_DeleteAddress")">
+                        <span class="fa fa-trash-o fa-lg"></span>
+                    </button>
+                </div>
+            </div>
+        </label>
+    </div>
+}
+
+@helper LoadingSpinner()
+{
+    <div class="spinner-border text-info" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+}

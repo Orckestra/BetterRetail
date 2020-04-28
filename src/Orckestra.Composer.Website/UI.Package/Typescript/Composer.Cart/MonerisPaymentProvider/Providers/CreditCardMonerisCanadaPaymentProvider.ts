@@ -5,6 +5,7 @@
 ///<reference path='../../../JQueryPlugins/ISerializeObjectJqueryPlugin.ts' />
 ///<reference path='../../../ErrorHandling/ErrorHandler.ts' />
 ///<reference path='../../CheckoutPayment/ViewModels/IActivePaymentViewModel.ts' />
+///<reference path='../../../JQueryPlugins/IParsleyJqueryPlugin.ts' />
 
 module Orckestra.Composer {
     'use strict';
@@ -188,23 +189,29 @@ module Orckestra.Composer {
                     shouldShowGeneral = true;
                 }
 
-                errorNode.removeClass('hide');
+                errorNode.removeClass('d-none');
             });
 
             if (shouldShowGeneral) {
-                $('#monerisErrorGeneral').removeClass('hide');
+                $('#monerisErrorGeneral').removeClass('d-none');
             }
         }
 
         private collectAndValidateFormData(): any {
+            this.validateForm();
+
             let form = <ISerializeObjectJqueryPlugin> this.getForm();
-            let formData = this._formData || form.serializeObject();
+            return this._formData || form.serializeObject();
+        }
 
-            if (!formData.cardholder) {
-                throw new Error('The form does not contain a field named "cardholder". This is required.');
+        private validateForm(): boolean {
+            let form = <IParsleyJqueryPlugin>this.getForm();
+            let parsley: IParsley = form.parsley();
+            parsley.validate();
+            if (!parsley.isValid()) {
+                throw new Error('The form does not valid');
             }
-
-            return formData;
+            return parsley.isValid();
         }
 
         private getMonerisIFrame() : HTMLIFrameElement {
@@ -220,9 +227,9 @@ module Orckestra.Composer {
         private hideAllMonerisErrors(): void {
             this.getForm()
                 .find('.parsley-errors-list>.parsley-required')
-                .addClass('hide');
+                .addClass('d-none');
 
-            $('#monerisErrorGeneral').addClass('hide');
+            $('#monerisErrorGeneral').addClass('d-none');
         }
 
         /**
@@ -230,7 +237,7 @@ module Orckestra.Composer {
          * @return {JQuery} jQuery object.
          */
         private getForm(): JQuery {
-            var form = $('#PaymentForm');
+            let form = $('#PaymentForm');
 
             if (!form || _.isEmpty(form)) {
                 throw new Error('Could not find the element PaymentForm on this page.');

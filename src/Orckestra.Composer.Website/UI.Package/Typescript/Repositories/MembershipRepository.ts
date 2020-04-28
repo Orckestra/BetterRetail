@@ -78,5 +78,14 @@ module Orckestra.Composer {
 
             return ComposerClient.get('/api/membership/isAuthenticated');
         }
+
+
+        /**
+        * If user with this username exist
+        */
+        public isUserExist(email: string): Q.Promise<any> {
+
+            return ComposerClient.get('/api/membership/isExist?email=' + email);
+        }
     }
 }

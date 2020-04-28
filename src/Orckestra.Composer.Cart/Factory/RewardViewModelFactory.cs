@@ -44,9 +44,8 @@ namespace Orckestra.Composer.Cart.Factory
             var eligibleRewards = ((rewardLevels == null || rewardLevels.Length == 0)
                 ? rewards
                 : rewards
-                .Where(d => rewardLevels.Contains(d.Level)))
-                .Where(d => !string.IsNullOrWhiteSpace(d.Description));
-
+                .Where(d => rewardLevels.Contains(d.Level)));
+                
             var comparer = new RewardEqualityComparer();
 
             foreach (var vm in eligibleRewards.Distinct(comparer).Select(d => ViewModelMapper.MapTo<RewardViewModel>(d, cultureInfo)))

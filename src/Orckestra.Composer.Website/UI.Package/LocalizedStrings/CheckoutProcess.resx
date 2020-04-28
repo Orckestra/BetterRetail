@@ -144,11 +144,14 @@
   <data name="B_ViewCreditCards" xml:space="preserve">
     <value>View credit cards</value>
   </data>
+  <data name="B_EditPayment" xml:space="preserve">
+    <value>Enter Payment</value>
+  </data>
   <data name="F_BillingNo" xml:space="preserve">
     <value>No</value>
   </data>
   <data name="F_BillingSameShipping" xml:space="preserve">
-    <value>Use same as shipping address ?</value>
+    <value>Use my shipping address as the billing address</value>
   </data>
   <data name="F_BillingYes" xml:space="preserve">
     <value>Yes</value>
@@ -193,7 +196,7 @@
     <value>Cardholder Name</value>
   </data>
   <data name="L_CardNumber" xml:space="preserve">
-    <value>Credit Card Number</value>
+    <value>Card Number</value>
   </data>
   <data name="L_CheckoutSignIn" xml:space="preserve">
     <value>Checkout Sign In</value>
@@ -204,14 +207,20 @@
   <data name="L_DeliveryDaysNumber" xml:space="preserve">
     <value> days</value>
   </data>
+  <data name="L_Selected" xml:space="preserve">
+    <value>SELECTED</value>
+  </data>
   <data name="L_EmailConfirmation" xml:space="preserve">
-    <value>You will receive an email confirmation at</value>
+    <value>Your order confirmation and receipt will be sent to {0}. If you did not receive the email, check your spam folder.</value>
   </data>
   <data name="L_ExpirationDate" xml:space="preserve">
-    <value>Expiration Date</value>
+    <value>Expires on:</value>
+  </data>
+  <data name="L_Default" xml:space="preserve">
+    <value>(Default)</value>
   </data>
   <data name="L_ExpirationDateForm" xml:space="preserve">
-    <value>Expiration Date (mmyy)</value>
+    <value>Expiry Date</value>
   </data>
   <data name="L_InvalidCart" xml:space="preserve">
     <value>Your cart contains items that are either out of stock or are now unavailable.</value>
@@ -247,10 +256,10 @@
     <value>Type:</value>
   </data>
   <data name="L_VerificationNumber" xml:space="preserve">
-    <value>Verification Number</value>
+    <value>CVV</value>
   </data>
   <data name="L_YourOrderNumber" xml:space="preserve">
-    <value>Your order number:</value>
+    <value>Your order  #{0} has been placed.</value>
   </data>
   <data name="Quantity" xml:space="preserve">
     <value>Quantity</value>
@@ -284,7 +293,7 @@ Enter your credit card information</value>
     <value>Sign in</value>
   </data>
   <data name="T_ThankYou" xml:space="preserve">
-    <value>Thank you for your order,</value>
+    <value>Thank you</value>
   </data>
   <data name="T_SelectCreditCart" xml:space="preserve">
     <value>Select a credit card</value>
@@ -292,7 +301,73 @@ Enter your credit card information</value>
   <data name="B_AddCreditCard" xml:space="preserve">
     <value>Use another credit card</value>
   </data>
-  <data name="L_ExpirationDateForm" xml:space="preserve">
-    <value>Expiration Date (mmyy)</value>
+  <data name="F_Continue" xml:space="preserve">
+    <value>Continue</value>
+  </data>
+  <data name="F_ContinueAsGuest" xml:space="preserve">
+    <value>Continue As Guest</value>
+  </data>
+  <data name="F_SignInAndContinue" xml:space="preserve">
+      <value>Sign-in And Continue</value>
+    </data>
+  <data name="F_Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="F_ShippingStepTitle" xml:space="preserve">
+    <value>Shipping</value>
+  </data>
+  <data name="F_ShippingStepDescription" xml:space="preserve">
+    <value>We ship to any valid address, except A.P.O./F.P.O and P.O. Boxes.</value>
+  </data>
+  <data name="T_ShippingMethodType" xml:space="preserve">
+    <value>Ship to Home</value>
+  </data>
+  <data name="T_PickUpMethodType" xml:space="preserve">
+    <value>Pick Up In-Store</value>
+  </data>
+  <data name="F_ChangeShippingMethod" xml:space="preserve">
+    <value>Change</value>
+  </data>
+  <data name="F_SelectShippingMethod" xml:space="preserve">
+    <value>Select</value>
+  </data>
+  <data name="F_ShipTime" xml:space="preserve">
+    <value>{0} days</value>
+  </data>
+  <data name="F_ShipTimeTitle" xml:space="preserve">
+    <value>Estimated Ship Time:</value>
+  </data>
+  <data name="F_Review" xml:space="preserve">
+    <value>Review</value>
+  </data>
+  <data name="F_ReviewCart" xml:space="preserve">
+    <value>Review Cart</value>
+  </data>
+  <data name="T_Information" xml:space="preserve">
+    <value>Information</value>
+  </data>
+  <data name="F_RecalculateShippingFee" xml:space="preserve">
+    <value>Recalulate Shipping Fees</value>
+  </data>
+  <data name="F_PlaceOrder" xml:space="preserve">
+    <value>Place Order</value>
+  </data>
+  <data name="H_OrderDetail" xml:space="preserve">
+    <value>Order Details</value>
+  </data>
+  <data name="L_SignInNow" xml:space="preserve">
+    <value>Already a client?</value>
+  </data>
+  <data name="B_SignInNow" xml:space="preserve">
+    <value>Sign-in now</value>
+  </data>
+  <data name="B_ContinueAsGuest" xml:space="preserve">
+    <value>Continue as guest</value>
+  </data>
+  <data name="L_AccountAlreadyExists" xml:space="preserve">
+    <value>An account already exists with this email!</value>
+  </data>
+  <data name="B_SignInNowAndSaveTime" xml:space="preserve">
+    <value>Sign-in and save time!</value>
   </data>
 </root>

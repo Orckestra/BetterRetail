@@ -1,0 +1,184 @@
+﻿@inherits RazorFunction
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Payment"; }
+    }
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on" xmlns:v-slot="v-slot">
+<head>
+</head>
+<body>
+    <div data-oc-controller="SingleCheckout.Payment">
+        <div class="card  mt-4">
+            <div class="card-header">
+                <h3 class="float-left">
+                    @Html.Localize("MyAccount", "T_PaymentMethod")
+                </h3>
+                @CheckoutHelpers.StepContinueButton("!FulfilledBillingAddress", "payment", "B_EditPayment")
+                @CheckoutHelpers.StepEditButton("payment")
+            </div>
+            <div class="card-body bg-light" v-show="step.active" v-cloak="true">
+                <form v-if="Payment" id="PaymentForm">
+                    <div class="form-row">
+                        <div class="col-md-6 pb-3" v-if="HasCreditCardProvider">
+                            <div class="border rounded bg-white" v-bind:class="{'bg-selected border-primary' : IsCreditCardProviderSelect}">
+                                <div class="form-check">
+                                    <label class="form-check-label d-block p-3" for="CreditCard-radio">
+                                        <input data-parsley-class-handler-selector=".card-body"
+                                               data-parsley-errors-container="#method-errors"
+                                               class="form-check-input" type="radio"
+                                               v-bind:checked="IsCreditCardProviderSelect"
+                                               v-bind:disabled="IsLoading"
+                                               required="required"
+                                               name="PaymentMethod"
+                                               xmlns:v-bind="v-bind"
+                                               value="CreditCard"
+                                               id="CreditCard-radio"
+                                               v-on:change="changePaymentMethod"
+                                               xmlns:v-on="v-on" />
+                                        <div class="row">
+                                            <div class="col-6">
+                                                @Html.Localize("CheckoutProcess", "B_UseCreditCard")
+                                            </div>
+                                            <div class="col-6">
+                                                <img class="img-fluid" v-bind:src="CreditCardTrustImage.Url" v-bind:alt="CreditCardTrustImage.Alt" xmlns:v-bind="v-bind" />
+                                            </div>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 pb-3" v-for="paymentMethod in MainPaymentMethods">
+                            <div class="border rounded bg-white" v-bind:class="{'bg-selected' : paymentMethod.IsSelected}">
+                                <div class="form-check">
+                                    <label class="form-check-label d-block p-3" v-bind:for="paymentMethod.PaymentType + '-radio'">
+                                        <input data-parsley-class-handler-selector=".card-body"
+                                               data-parsley-errors-container="#method-errors"
+                                               class="form-check-input" type="radio"
+                                               v-bind:checked="paymentMethod.IsSelected"
+                                               v-bind:disabled="IsLoading"
+                                               required="required"
+                                               name="PaymentMethod"
+                                               xmlns:v-bind="v-bind"
+                                               v-bind:value="paymentMethod.PaymentType"
+                                               v-bind:id="paymentMethod.PaymentType + '-radio'"
+                                               v-on:change="changePaymentMethod"
+                                               xmlns:v-on="v-on" />
+                                        {{paymentMethod.DisplayName}}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div v-if="IsCreditCardProviderSelected">
+                        <div v-if="SavedCreditCardMethods.length" class="border-top mt-2 pt-4">
+                            <div class="form-row">
+                                <div class="col-12 pb-3" v-for="paymentMethod in SavedCreditCardMethods">
+                                    <div class="border rounded bg-white p-3" v-bind:class="{'bg-selected border-primary' : paymentMethod.IsSelected}">
+                                        <div class="form-check">
+                                            <input name="CardPaymentMethod"
+                                                   class="form-check-input" type="radio"
+                                                   v-bind:id="paymentMethod.Id"
+                                                   v-bind:value="paymentMethod.Id"
+                                                   v-bind:checked="paymentMethod.IsSelected"
+                                                   v-bind:disabled="!paymentMethod.IsValid || IsLoading"
+                                                   xmlns:v-bind="v-bind"
+                                                   v-on:change="changeCardPaymentMethod"
+                                                   xmlns:v-on="v-on" />
+
+                                            <label class="form-check-label d-block" v-bind:for="paymentMethod.Id">
+                                                @PreviewCartTypeMethod("paymentMethod")
+                                            </label>
+
+                                            <button v-if="false" type="button" style="position: absolute; top: 0; right: 0;"
+                                                    class="btn   btn-outline-secondary  btn-sm  moneris--deletecard">
+                                                @Html.Localize("CheckoutProcess", "B_DeleteCard")
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row" v-if="IsSavedCreditCardSelected">
+                                <div class="col-12 text-center">
+                                    <button class="btn btn-dashed-block  mb-2"
+                                            data-qa="add-credit-card-btn"
+                                            type="button"
+                                            v-on:click="selectNewCreditCardPaymentMethod"
+                                            v-bind:disabled="IsLoading">
+                                        @Html.Localize("CheckoutProcess", "B_AddCreditCard")
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div v-if="!IsSavedCreditCardSelected" class="border-top mt-2 pt-4">
+                            @Forms.CreditCard.Form("creditCardForm")
+
+                            <div class="form-check  mb-4" v-if="ActivePayment.CanSavePaymentMethod">
+                                <input name="createPaymentProfile" id="createPaymentProfile"
+                                       data-qa="save-credit-card-checkbox"
+                                       type="checkbox" class="form-check-input"
+                                       v-bind:required="ActivePayment.MustSavePaymentMethod"
+                                       data-parsley-error-message="@Html.Localize("CheckoutProcess", "F_SaveCreditCardForced_Explain")" />
+                                <label class="form-check-label" for="createPaymentProfile">@Html.Localize("CheckoutProcess", "F_SaveCreditCard")</label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="card-body bg-light" v-show="step.preview" v-cloak="true">
+                <div v-if="ActivePayment">
+                    <div v-if="ActivePayment.PaymentMethodType == 'SavedCreditCard'">
+                        @PreviewCartTypeMethod("SelectedPaymentMethod")
+                    </div>
+                    <div v-else="v-else">
+
+                        @PreviewCashTypeMethod()
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+@helper PreviewCartTypeMethod(string vueMethodBinding)
+{
+    <div class="row">
+        <div class="col-md-3 text-sm-left text-md-center">
+            <img v-bind:src="'/UI.Package/Images/creditcards/' + @(vueMethodBinding).CardType + '.png'"
+                 v-bind:alt="@(vueMethodBinding).CardType" xmlns:v-bind="v-bind" />
+        </div>
+
+        <div class="col-md-9 d-flex justify-content-between">
+            <div>
+                <p class="h4">{{@(vueMethodBinding).CardHolderName}}</p>
+                <p class="mb-0">@Html.Localize("CheckoutProcess", "L_CardNumber") {{@(vueMethodBinding).CardMask}}</p>
+                <p class="mb-0">@Html.Localize("CheckoutProcess", "L_ExpirationDate") {{@(vueMethodBinding).ExpiryDate}}</p>
+                <p v-if="@(vueMethodBinding).IsExpired" class="mb-0 error-item strong">@Html.Localize("CheckoutProcess", "F_SaveCreditCardForced_Expired")</p>
+            </div>
+            <div v-if="@(vueMethodBinding).Default" class="align-self-end strong">
+                @Html.Localize("CheckoutProcess", "L_Default")
+            </div>
+        </div>
+    </div>
+}
+
+@helper PreviewCashTypeMethod()
+{
+    <div class="row">
+        <div class="col-md-3 text-sm-left text-md-center">
+            <img src="~/UI.Package/Images/payments/cash.png" alt="cash" class="img-fluid" />
+        </div>
+        <div class="col-md-9">
+            <h4>{{SelectedPaymentMethod.DisplayName}}</h4>
+        </div>
+    </div>
+
+}

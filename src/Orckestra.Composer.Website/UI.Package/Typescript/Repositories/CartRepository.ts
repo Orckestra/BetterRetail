@@ -149,11 +149,16 @@ module Orckestra.Composer {
 
         public completeCheckout(currentStep: number): Q.Promise<ICompleteCheckoutResult> {
 
-            var data = {
-                CurrentStep: currentStep
-            };
+            if (currentStep) {
+                //TODO: this is for old checkout, need to clean later
+                var data = {
+                    CurrentStep: currentStep
+                };
 
-            return ComposerClient.post('/api/cart/completecheckout', data);
+                return ComposerClient.post('/api/cart/completecheckout', data);
+            }
+
+            return ComposerClient.post('/api/cart/completecheckout', null);
         }
     }
 }

@@ -95,5 +95,14 @@ namespace Orckestra.Composer.MyAccount.Services
         /// <param name="param"></param>
         /// <returns></returns>
         LoginViewModel GetLoginViewModel(GetLoginViewModelParam param);
+
+        /// <summary>
+        /// Return true if the user exist
+        /// </summary>
+        /// <param name="param">Builder params <see cref="GetCustomerByEmailParam"/></param>
+        /// <returns>
+        /// The view model is user exist
+        /// </returns>
+        Task<IsUserExistViewModel> GetIsUserExistViewModelAsync(GetCustomerByEmailParam getCustomerByEmailParam);
     }
 }

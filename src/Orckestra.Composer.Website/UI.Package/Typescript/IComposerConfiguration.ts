@@ -9,5 +9,5 @@ module Orckestra.Composer {
             profileId: string;
         };
         controllers: IControllerConfiguration[];
-    };
+    }
 }

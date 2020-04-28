@@ -145,7 +145,10 @@
     <value>Shipping frequency</value>
   </data>
   <data name="L_RecurringPitch" xml:space="preserve">
-    <value>Transform into recurring order and &lt;span class="text-danger"&gt;save {0} off&lt;/span&gt;</value>
+    <value>Make it a recurring order and &lt;span class="text-danger"&gt;save {0} off&lt;/span&gt;</value>
+  </data>
+  <data name="L_RecurringSignInPitch" xml:space="preserve">
+    <value>Sign in to make it recurring order and &lt;span class="text-danger"&gt;save {0} off&lt;/span&gt;</value>
   </data>
   <data name="L_RecurringBubblePitch" xml:space="preserve">
     <value>Select your preferred delivery frequency for this product.</value>

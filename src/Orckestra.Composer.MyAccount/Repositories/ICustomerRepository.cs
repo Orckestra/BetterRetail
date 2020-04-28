@@ -29,6 +29,24 @@ namespace Orckestra.Composer.MyAccount.Repositories
         Task<Customer> GetCustomerByTicketAsync(string ticket);
 
         /// <summary>
+        /// Gets a single Customer identifier by username
+        /// </summary>
+        /// <param name="getCustomerByUsernameParam">The Repository call params <see cref="GetCustomerByUsernameParam"/></param>
+        /// <returns>
+        /// The Customer matching the requested username, or null
+        /// </returns>
+        Task<Customer> GetCustomerByUsernameAsync(GetCustomerByUsernameParam getCustomerByUsernameParam);
+
+        /// <summary>
+        /// Search  Customers by email
+        /// </summary>
+        /// <param name="getCustomerByEmailParam">The Repository call params <see cref="GetCustomerByEmailParam"/></param>
+        /// <returns>
+        /// The Customer matching the requested Email, or null
+        /// </returns>
+        Task<CustomerQueryResult> GetCustomerByEmailAsync(GetCustomerByEmailParam getCustomerByEmailParam);
+
+        /// <summary>
         /// Create a new Customer
         /// </summary>
         /// <param name="param">The Repository call params <see cref="CreateUserParam"/></param>

@@ -1,0 +1,156 @@
+﻿@inherits Composer.Razor.ComposerRazorFunction
+
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Store List"; }
+    }
+
+    [FunctionParameter(Label = "Show Itinerary Link", Help = "Show itinerary link.", DefaultValue = true)]
+    public bool ShowItineraryLink { get; set; }
+
+    [FunctionParameter(Label = "Show Map", Help = "Show map at the top of the list tile.", DefaultValue = true)]
+    public bool ShowMap { get; set; }
+
+    [FunctionParameter(Label = "Can Select Store", Help = "When true, the select button is shown.", DefaultValue = false)]
+    public bool CanSelectStore { get; set; }
+
+    [FunctionParameter(Label = "Stores Grid Css Style", Help = "Stores Grid Css Style. Default is 'col-12 col-md-4'", DefaultValue = "col-12 col-md-4")]
+    public string StoresGridCssClass { get; set; }
+}
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
+<head>
+</head>
+<body>
+    <div id="vueStoreList" class="row" v-cloak="v-cloak">
+        <div v-for="(store, index) in Stores"
+             class="mb-4 @StoresGridCssClass"
+             v-bind:data-store-number="store.Number">
+            @StoreTile()
+        </div>
+        <div v-if="NextPage" class="col-12 text-center">
+            @StoresNextButton()
+        </div>
+    </div>
+</body>
+</html>
+
+@helper StoreTile()
+{
+    <div class="store-tile card h-100  @(ShowMap ? "": "pin-in-title" )">
+        @if (ShowMap)
+        {
+            @StoreMap()
+        }
+        <div class="card-body p-3">
+            @if (ShowItineraryLink)
+            {
+                <div class="text-right mb-2">
+                    @StoreItineraryLink()
+                </div>
+            }
+
+            @StoreTitle()
+
+            @StoreAddress()
+
+            <div class="d-flex justify-content-between flex-nowrap align-items-end">
+                @StoreAvailability()
+
+                @if (CanSelectStore)
+                {
+                    @StoreSelectButton()
+                }
+            </div>
+        </div>
+    </div>
+}
+
+@helper StoreMap()
+{
+    <div class="store-tile-map">
+        <a v-bind:href="store.Url"
+           v-on:click="onTitleClick">
+            <img xmlns:v-bind="v-bind" alt="map" v-bind:src="store.GoogleStaticMapUrl + '&amp;size=380x120'"
+                 class="w-100" v-bind:data-store-index="index" />
+        </a>
+        <div class="static-map-pin">{{store.SearchIndex}}</div>
+    </div>
+}
+
+@helper StoreTitle()
+{
+    <div class="store-tile-title d-flex justify-content-between flex-nowrap">
+        <h5>
+            @if (!ShowMap)
+            {
+                <div class="static-map-pin">{{store.SearchIndex}}</div>
+            }
+            <a v-bind:href="store.Url"
+               v-on:click="onTitleClick"
+               v-bind:title="store.LocalizedDisplayName">
+                {{store.LocalizedDisplayName}}
+            </a>
+        </h5>
+        <div class="text-right" v-if="store.DestinationToSearchPoint">
+            {{store.DestinationToSearchPoint}} km
+        </div>
+
+    </div>
+}
+
+@helper StoreItineraryLink()
+{
+    <a v-bind:href="store.GoogleDirectionsLink" class="cta ctaGoogleDir" target="_blank">
+        @Html.Localize("Store", "H_Itinerary")
+    </a>
+}
+
+@helper StoreAddress()
+{
+    <address class="store-address">
+        <div>{{store.Address.Line1}}</div>
+        <div v-if="store.Address.Line2">{{store.Address.Line2}}</div>
+        <div>{{store.Address.City}}, {{store.Address.RegionName}}, {{store.Address.PostalCode}}, {{store.Address.CountryName}}</div>
+        <div><span class="store-phone">{{store.Address.PhoneNumber}}</span></div>
+    </address>
+}
+
+
+
+@helper StoreAvailability()
+{
+    <span class="text-success" v-bind:class="{'text-danger': !store.Schedule.IsOpenNow}">
+        <span v-if="store.Schedule.IsOpenNow" class="font-weight-bold text-uppercase">@Html.Localize("Store", "L_StoreOpen")</span>
+        <span v-else="v-else" class="font-weight-bold text-uppercase">@Html.Localize("Store", "L_StoreClosed")</span>
+        <span v-for="openTime in store.Schedule.TodayOpeningTimes"> {{openTime.BeginTime}} - {{openTime.EndTime}}</span>
+    </span>
+}
+
+@helper StoreSelectButton()
+{
+    <div>
+        <div v-if="SelectedStoreId === store.Id"
+             class="bg-success btn-sm border border-success">
+            <span class="text-white text-nowrap">
+                <i class="fa fa-check fa-lg"></i>
+                @Html.Localize("CheckoutProcess", "L_Selected")
+            </span>
+        </div>
+        <button v-else="v-else" class="btn btn-sm btn-outline-secondary text-uppercase float-right"
+                v-on:click='selectPickupStore(store)'>
+            @Html.Localize("CheckoutProcess", "F_SelectShippingMethod")
+        </button>
+    </div>
+}
+
+@helper StoresNextButton()
+{
+    <button class="btn btn-primary text-uppercase" v-on:click="loadNextStoresPage">
+        @Html.Localize("Store", "B_ShowMore")
+        <span class="loading-indicator fa fa-spin fa-fw fa-circle-o-notch d-none"></span>
+    </button>
+}

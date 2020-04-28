@@ -5,6 +5,7 @@
 #addin "nuget:?package=Cake.CoreCLR&version=0.35.0"
 #addin "nuget:?package=Cake.Npm&version=0.17.0"
 #addin "nuget:?package=Cake.Karma&version=0.2.0"
+#addin "nuget:?package=Cake.Powershell&version=0.4.8"
 
 #load "helpers/filesystem.cake"
 #load "helpers/typescripts.cake"
@@ -54,10 +55,27 @@ var testsDir = $"{rootDir}/tests";
 var outputDir = $"{rootDir}/output";
 var buildDir = $"{rootDir}/build";
 var solutionFile = GetFiles($"{rootDir}/*.sln").Single();
+var tslintFiles = $"{srcDir}/Orckestra.Composer.Website/UI.Package/Typescript/**/*.ts";
+var tslintConfig = $"{buildDir}/tslint.json";
 
 //////////////////////////////////////////////////////////////////////
 // TASKS
 //////////////////////////////////////////////////////////////////////
+Task("Tslint-Tests").Does(() =>
+{
+    StartPowershellScript("Invoke-Command", args =>
+        {
+            args.Append($"-ScriptBlock {{tslint {tslintFiles} --config {tslintConfig}}}");
+        });
+});
+
+Task("Tslint-Fix").Does(() =>
+{
+    StartPowershellScript("Invoke-Command", args =>
+        {
+            args.Append($"-ScriptBlock {{tslint {tslintFiles} --config {tslintConfig} --fix}}");
+        });
+});
 
 Task("Clean-Solution").Does(() =>
 {

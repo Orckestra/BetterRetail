@@ -39,7 +39,7 @@ namespace Orckestra.Composer.Store.Api
         public virtual async Task<IHttpActionResult> GetStore(StoreRequest request)
         {
             var baseUrl = RequestUtils.GetBaseUrl(Request).ToString();
-            var vm = await StoreViewService.GetStoreViewModelAsync(new GetStoreParam
+            var vm = await StoreViewService.GetStoreViewModelAsync(new GetStoreByNumberParam
             {
                 BaseUrl = baseUrl,
                 CultureInfo = ComposerContext.CultureInfo,

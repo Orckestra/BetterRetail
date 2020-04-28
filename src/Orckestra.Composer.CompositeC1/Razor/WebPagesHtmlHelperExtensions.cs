@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
@@ -15,6 +16,38 @@ namespace Composite.AspNet.Razor
 {
     public static class WebPagesHtmlHelperExtensions
     {
+
+        public static IHtmlString HelpBubble(this System.Web.WebPages.Html.HtmlHelper htmlHelper, string category, string key, params object[] args)
+        {
+            var helpText = Localize(category, key);
+
+            if (string.IsNullOrEmpty(helpText))
+            {
+                return new HtmlString("");
+            }
+
+            if (args.Length > 0)
+            {
+                helpText = Localized(category, key, args);
+            }
+
+            return new HtmlString(string.Format(@"data-toggle=""popover""
+            data-container=""body""
+            data-trigger=""focus""
+            data-content=""&lt;div class='multiline-message'&gt;&lt;span class='multiline-message-icon  fa  fa-comment-o  fa-lg'&gt;&lt;/span&gt;{0}&lt;/div&gt;""", helpText));
+        }
+
+        public static IHtmlString ParsleyMessage(this System.Web.WebPages.Html.HtmlHelper htmlHelper, string category, string key, string dataParsleyKey)
+        {
+            var message = Localize(category, key);
+            if (!string.IsNullOrEmpty(message))
+            {
+                message = string.Format("data-parsley-{0}=\"{1}\"", dataParsleyKey, message);
+                return new HtmlString(HttpUtility.HtmlDecode(message));
+            }
+
+            return new HtmlString("");
+        }
         /// <summary>
         /// Localizes the strings from Razor using specified key.
         /// </summary>
@@ -41,9 +74,7 @@ namespace Composite.AspNet.Razor
 
         public static string Localized(this System.Web.Mvc.HtmlHelper htmlHelper, string category, string key, params object[] args)
         {
-            var formatter = Localize(htmlHelper, category, key);
-
-            return Format(formatter, category, key, args);
+            return Localized(category, key, args);
         }
 
         /// <summary>
@@ -57,9 +88,7 @@ namespace Composite.AspNet.Razor
         /// <returns></returns>
         public static string Localized(this System.Web.WebPages.Html.HtmlHelper htmlHelper, string category, string key, params object[] args)
         {
-            var formatter = Localize(htmlHelper, category, key);
-
-            return Format(formatter, category, key, args);
+            return Localized(category, key, args);
         }
 
         private static string Format(string formatter, string category, string key, params object[] args)
@@ -72,7 +101,8 @@ namespace Composite.AspNet.Razor
 
             return string.Format(formatter, args);
         }
-        private static string Localize(string category, string key)
+
+        public static string Localize(string category, string key)
         {
             var localizationProvider = ComposerHost.Current.Resolve<ILocalizationProvider>();
 
@@ -84,6 +114,13 @@ namespace Composite.AspNet.Razor
                     CultureInfo = Thread.CurrentThread.CurrentCulture
                 }
             );
+        }
+
+        public static string Localized(string category, string key, params object[] args)
+        {
+            var formatter = Localize(category, key);
+
+            return Format(formatter, category, key, args);
         }
 
 

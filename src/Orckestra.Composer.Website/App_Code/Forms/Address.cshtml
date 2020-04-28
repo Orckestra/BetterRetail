@@ -1,0 +1,214 @@
+﻿@using Composite.AspNet.Razor
+@using System.Web.Mvc
+
+@helper Form(string vueAddressBinding, string formId = "addressForm", bool showAddressName = false, string onPostalCodeChange = "recalculateShippingFee")
+{
+    <form id="@formId">
+        <div class="row">
+            <div class="col-md-6">
+                @if (showAddressName)
+                {
+                    <div class="form-group">
+                        <label for="@(formId)AddressName">@Html.Localize("Forms", "F_AddressName") *</label>
+                        <input id="@(formId)AddressName"
+                               name="AddressName"
+                               data-qa="address-name-input"
+                               v-model="AddressName"
+                               v-bind:disabled="IsLoading"
+                               class="form-control"
+                               placeholder="@Html.Localize("Forms", "F_AddressNameWaterMark")"
+                               type="text"
+                               required="required"
+                               data-parsley-length="[2, 36]"
+                               data-parsley-pattern="/^[a-zA-Z0-9\u00E0-\u00FC\.\-\s\']+$/i"
+                               @Html.HelpBubble("Forms", "F_AddressNameIndication")
+                               @Html.ParsleyMessage("Forms", "F_AddressNameLengthError", "length-message")
+                               @Html.ParsleyMessage("Forms", "F_AddressNamePatternError", "pattern-message")
+                               v-on:change="Errors.AddressNameAlreadyInUseError=false" xmlns:v-on="v-on" />
+                        <p class="text-danger mt-1"
+                           data-qa="address-name-already-in-use-error"
+                           v-if="Errors.AddressNameAlreadyInUseError">@Html.Localize("Errors", "L_NameAlreadyUsed")</p>
+                    </div>
+                    <!--TODO: div class="form-group form-check">
+            <input name="IsPreferredShipping"
+                   v-model="IsPreferredShipping"
+                   id="IsPreferredShipping"
+                   class="form-check-input"
+                   data-qa="editaddress-ispreferredshipping"
+                   type="checkbox" />
+            <label for="IsPreferredShipping" class="form-check-label">Html.Localize("Forms", "F_IsPreferredShipping")</label>
+        </div-->
+                }
+                <div class="form-group">
+                    <label for="@(formId)FirstName">@Html.Localize("Forms", "F_FirstName") *</label>
+                    <input v-model="@(vueAddressBinding).FirstName"
+                           id="@(formId)FirstName"
+                           name="FirstName"
+                           data-qa="address-firstname-input"
+                           v-bind:disabled="IsLoading"
+                           class="form-control"
+                           placeholder="@Html.Localize("Forms", "F_FirstNameWaterMark")"
+                           type="text"
+                           required="required"
+                           data-parsley-length="[2, 36]"
+                           data-parsley-pattern="/^[a-zA-Z\u00E0-\u00FC\.\-\s\']+$/i"
+                           @Html.HelpBubble("Forms", "F_FirstNameIndication")
+                           @Html.ParsleyMessage("Forms", "F_FirstNameLengthError", "length-message")
+                           @Html.ParsleyMessage("Forms", "F_FirstNamePatternError", "pattern-message") />
+                </div>
+                <div class="form-group">
+                    <label for="@(formId)LastName">@Html.Localize("Forms", "F_LastName") *</label>
+                    <input v-model="@(vueAddressBinding).LastName"
+                           id="@(formId)LastName"
+                           name="LastName"
+                            data-qa="address-lastname-input"
+                           v-bind:disabled="IsLoading"
+                           class="form-control"
+                           placeholder="@Html.Localize("Forms", "F_LastNameWaterMark")"
+                           type="text"
+                           required="required"
+                           data-parsley-length="[2, 36]"
+                           data-parsley-pattern="/^[a-zA-Z\u00E0-\u00FC\.\-\s\']+$/i"
+                           @Html.HelpBubble("Forms", "F_LastNameIndication")
+                           @Html.ParsleyMessage("Forms", "F_LastNameLengthError", "length-message")
+                           @Html.ParsleyMessage("Forms", "F_LastNamePatternError", "pattern-message") />
+                </div>
+                <div class="form-group">
+                    <label for="@(formId)Line1">@Html.Localize("Forms", "F_Address") *</label>
+                    <input name="Line1" id="@(formId)Line1"  data-qa="address-line1-input"
+                           @Html.HelpBubble("Forms", "F_AddressIndication")
+                           type="text"
+                           v-bind:disabled="IsLoading"
+                           class="form-control"
+                           placeholder="@Html.Localize("Forms", "F_AddressWaterMark")"
+                           v-model="@(vueAddressBinding).Line1"
+                           required="required"
+                           @Html.ParsleyMessage("Forms", "F_AddressRequiredError", "required-message")
+                           data-parsley-length="[2, 50]"
+                           @Html.ParsleyMessage("Forms", "F_AddressLengthError", "length-message")
+                           data-parsley-pattern="/^[a-zA-Z0-9\u00E0-\u00FC\.\-\s\'\,\u0023\u00b0]+$/i"
+                           @Html.ParsleyMessage("Forms", "F_AddressPatternError", "pattern-message") />
+                </div>
+                <div v-if="Mode.AddingLine2Address" class="form-group">
+                    <a href="#complementaryAddress"
+                       data-toggle="collapse"
+                        data-qa="address-line2-link"
+                       v-on:click="Mode.AddingLine2Address = !Mode.AddingLine2Address"
+                       role="button"
+                       aria-expanded="false"
+                       aria-controls="complementaryAddress">
+                        <span class="fa-lg fa fa-plus-circle"></span>
+                        @Html.Localize("Forms", "F_ComplementaryAddressAdd")
+                    </a>
+                </div>
+                <div id="complementaryAddress" class="form-group" v-bind:class="{'collapse': Mode.AddingLine2Address}">
+                    <label for="@(formId)Line2">@Html.Localize("Forms", "F_ComplementaryAddress")</label>
+                    <input name="Line2" id="@(formId)Line2"  data-qa="address-line2-input"
+                           @Html.HelpBubble("Forms", "F_ComplementaryAddressIndication")
+                           type="text"
+                           v-bind:disabled="IsLoading"
+                           class="form-control"
+                           placeholder="@Html.Localize("Forms", "F_ComplementaryAddressWaterMark")"
+                           v-model="@(vueAddressBinding).Line2"
+                           data-parsley-length="[0, 36]"
+                           @Html.ParsleyMessage("Forms", "F_ComplementaryAddressLengthError", "length-message")
+                           data-parsley-pattern="/^[a-zA-Z0-9\u00E0-\u00FC\.\-\s\'\,\u0023\u00b0]+$/i"
+                           @Html.ParsleyMessage("Forms", "F_ComplementaryAddressPatternError", "pattern-message") />
+                </div>
+                <div class="form-group">
+                    <label for="@(formId)City">@Html.Localize("Forms", "F_City") *</label>
+                    <input name="City" id="@(formId)City" data-qa="address-city-input"
+                           @Html.HelpBubble("Forms", "F_CityIndication")
+                           type="text"
+                           v-bind:disabled="IsLoading"
+                           class="form-control"
+                           placeholder="@Html.Localize("Forms", "F_CityWaterMark")"
+                           v-model="@(vueAddressBinding).City"
+                           required="required"
+                           @Html.ParsleyMessage("Forms", "F_CityRequiredError", "required-message")
+                           data-parsley-length="[3, 36]"
+                           @Html.ParsleyMessage("Forms", "F_CityLengthError", "length-message")
+                           data-parsley-pattern="/^[a-zA-Z\u00E0-\u00FC\.\-\s\']+$/i"
+                           @Html.ParsleyMessage("Forms", "F_CityPatternError", "pattern-message") />
+                </div>
+                <div class="form-group">
+                    <input type="hidden" name="CountryCode" v-model="@(vueAddressBinding).CountryCode" />
+                    <label for="@(formId)RegionCode">@Html.Localize("Forms", "F_Province") *</label>
+                    <span class="loading-indicator-regions  fa  fa-spin  fa-fw  fa-circle-o-notch  d-none"></span>
+
+                    <select data-templateid="AddressRegionPicker" name="RegionCode" id="@(formId)RegionCode"
+                            data-qa="address-province-selector"
+                            v-bind:disabled="IsLoading"
+                            @Html.HelpBubble("Forms", "F_ProvinceIndication")
+                            class="form-control"
+                            v-model="@(vueAddressBinding).RegionCode"
+                            required="required">
+                        <option v-for="(region, index) in Regions"
+                                v-bind:data-qa="'checkout-shipping-province-' + index"
+                                v-bind:value="region.IsoCode">
+                            {{region.Name || region.IsoCode}}
+                        </option>
+
+                        <option v-if="!Regions" data-qa="address-province-0"
+                                v-text="@(vueAddressBinding).RegionCode"
+                                selected="selected">
+                        </option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <div class="form-group postalcode col-sm-5">
+                        <label for="@(formId)PostalCode">@Html.Localize("Forms", "F_PostalCode") *</label>
+                        <input name="PostalCode"
+                               id="@(formId)PostalCode"
+                               data-qa="address-postalcode-input"
+                               v-bind:disabled="IsLoading"
+                               @Html.HelpBubble("Forms", "F_PostalCodeIndication")
+                               type="text"
+                               class="form-control"
+                               placeholder="@Html.Localize("Forms", "F_PostalCodeWaterMark")"
+                               v-on:input="adjustPostalCode"
+                               v-model="@(vueAddressBinding).PostalCode"
+                               required="required"
+                               data-parsley-group="shipping-based-on"
+                               data-parsley-errors-container=".postalcode-errors"
+                               @Html.ParsleyMessage("Forms", "F_PostalCodeRequiredError", "required-message")
+                               data-parsley-length="[6, 7]"
+                               @Html.ParsleyMessage("Forms", "F_PostalCodeLengthError", "length-message")
+                               v-bind:data-parsley-pattern="@(vueAddressBinding).PostalCodeRegexPattern"
+                               @Html.ParsleyMessage("Forms", "F_PostalCodePatternError", "pattern-message") />
+                    </div>
+                    @if (!string.IsNullOrEmpty(onPostalCodeChange))
+                    {
+                        <div class="form-group col-sm-7 mt-auto">
+                            <button class="btn btn-sm btn-link" data-qa="recalculate-shipping-fee-btn" v-on:click.prevent="@(onPostalCodeChange)">
+                                @Html.Localize("CheckoutProcess", "F_RecalculateShippingFee")
+                            </button>
+                        </div>
+                    }
+                    <div  class="form-group col-12 postalcode-errors mt-n2">
+                        <span class="text-danger" v-if="Errors.PostalCodeError">@Html.Localize("Errors", "L_InvalidZipPostalCodeFormat")</span>
+                    </div>
+                </div>
+                <div class="form-group">
+
+                    <label for="@(formId)PhoneNumber">@Html.Localize("Forms", "F_PhoneNumber") *</label>
+                    <input name="PhoneNumber" id="@(formId)PhoneNumber" data-qa="address-phone-input"
+                           @Html.HelpBubble("Forms", "F_PhoneNumberIndication")
+                           type="tel"
+                           v-bind:disabled="IsLoading"
+                           class="form-control"
+                           placeholder="@Html.Localize("Forms", "F_PhoneNumberWaterMark")"
+                           v-model="@(vueAddressBinding).PhoneNumber"
+                           required="required"
+                           @Html.ParsleyMessage("Forms", "F_PhoneNumberRequiredError", "required-message")
+                           data-parsley-length="[7, 36]"
+                           @Html.ParsleyMessage("Forms", "F_PhoneNumberLengthError", "length-message")
+                           v-bind:data-parsley-pattern="@(vueAddressBinding).PhoneRegex"
+                           @Html.ParsleyMessage("Forms", "F_PhoneNumberPatternError", "pattern-message") />
+                    <p class="text-danger" v-if="Errors.InvalidPhoneFormatError">@Html.Localize("Errors", "L_InvalidPhoneFormat")</p>
+                </div>
+            </div>
+        </div>
+    </form>
+}
+

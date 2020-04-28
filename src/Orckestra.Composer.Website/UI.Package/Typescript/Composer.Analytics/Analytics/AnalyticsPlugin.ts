@@ -168,7 +168,7 @@ module Orckestra.Composer {
                 if (facetKey.indexOf('category') !== -1) {
                     facetKey = 'category';
                 }
-            };
+            }
 
             let searchFilters: IAnalyticsSearchFilters = {
                 facetKey: facetKey,

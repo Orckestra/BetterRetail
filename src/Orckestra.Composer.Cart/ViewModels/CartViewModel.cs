@@ -68,6 +68,11 @@ namespace Orckestra.Composer.Cart.ViewModels
         public ShippingMethodViewModel ShippingMethod { get; set; }
 
         /// <summary>
+        /// The address of the store of the first shipment.
+        /// </summary>
+        public Guid? PickUpLocationId { get; set; }
+
+        /// <summary>
         /// The Customer info.
         /// </summary>
         public CustomerSummaryViewModel Customer { get; set; }

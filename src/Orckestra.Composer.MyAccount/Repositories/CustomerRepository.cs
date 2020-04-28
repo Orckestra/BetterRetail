@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Exceptions;
@@ -7,6 +8,7 @@ using Orckestra.Composer.Providers;
 using Orckestra.Overture;
 using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel.Customers;
+using Orckestra.Overture.ServiceModel.Queries;
 using Orckestra.Overture.ServiceModel.Requests.Customers;
 using Orckestra.Overture.ServiceModel.Requests.Customers.Membership;
 
@@ -23,11 +25,8 @@ namespace Orckestra.Composer.MyAccount.Repositories
 
         public CustomerRepository(IOvertureClient overtureClient, ICacheProvider cacheProvider)
         {
-            if (overtureClient == null) { throw new ArgumentNullException("overtureClient"); }
-            if (cacheProvider == null) { throw new ArgumentNullException("cacheProvider"); }
-
-            OvertureClient = overtureClient;
-            CacheProvider = cacheProvider;
+            OvertureClient = overtureClient ?? throw new ArgumentNullException(nameof(overtureClient));
+            CacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));
         }
 
         /// <summary>
@@ -54,7 +53,7 @@ namespace Orckestra.Composer.MyAccount.Repositories
 
             var getCustomerByUsernameRequest = new GetCustomerRequest
             {
-                IncludeAddresses = false,
+                IncludeAddresses = getCustomerByIdParam.IncludeAddresses,
                 ScopeId = getCustomerByIdParam.Scope,
                 CustomerId = getCustomerByIdParam.CustomerId,
             };
@@ -79,6 +78,79 @@ namespace Orckestra.Composer.MyAccount.Repositories
             var customer = await OvertureClient.SendAsync(request).ConfigureAwait(false);
 
             return customer;
+        }
+
+        /// <summary>
+        /// Gets a single Customer identifier by username
+        /// </summary>
+        /// <param name="getCustomerByUsernameParam">The Repository call params <see cref="GetCustomerByUsernameParam"/></param>
+        /// <returns>
+        /// The Customer matching the requested username, or null
+        /// </returns>
+        public virtual Task<Customer> GetCustomerByUsernameAsync(GetCustomerByUsernameParam getCustomerByUsernameParam)
+        {
+            if (getCustomerByUsernameParam == null) { throw new ArgumentNullException(nameof(getCustomerByUsernameParam)); }
+            if (getCustomerByUsernameParam.CultureInfo == null) { throw new ArgumentException(nameof(getCustomerByUsernameParam.CultureInfo)); }
+            if (string.IsNullOrWhiteSpace(getCustomerByUsernameParam.Scope)) { throw new ArgumentException(nameof(getCustomerByUsernameParam.Scope)); }
+            if (string.IsNullOrWhiteSpace(getCustomerByUsernameParam.Username)) { throw new ArgumentException(nameof(getCustomerByUsernameParam.Username)); }
+
+            var cacheKey = new CacheKey(CacheConfigurationCategoryNames.Customer)
+            {
+                Scope = getCustomerByUsernameParam.Scope,
+                CultureInfo = getCustomerByUsernameParam.CultureInfo,
+            };
+
+            cacheKey.AppendKeyParts(getCustomerByUsernameParam.Username);
+
+            var getCustomerByUsernameRequest = new GetCustomerByUsernameRequest
+            {
+                IncludeAddresses = false,
+                ScopeId = getCustomerByUsernameParam.Scope,
+                Username = getCustomerByUsernameParam.Username,
+            };
+
+            return CacheProvider.GetOrAddAsync(cacheKey, () => OvertureClient.SendAsync(getCustomerByUsernameRequest));
+        }
+
+        /// <summary>
+        /// Search  Customers by email
+        /// </summary>
+        /// <param name="getCustomerByEmailParam">The Repository call params <see cref="GetCustomerByEmailParam"/></param>
+        /// <returns>
+        /// The Customer matching the requested Email, or null
+        /// </returns>
+        public virtual Task<CustomerQueryResult> GetCustomerByEmailAsync(GetCustomerByEmailParam getCustomerByEmailParam)
+        {
+            if (getCustomerByEmailParam == null) { throw new ArgumentNullException(nameof(getCustomerByEmailParam)); }
+            if (getCustomerByEmailParam.CultureInfo == null) { throw new ArgumentException(nameof(getCustomerByEmailParam.CultureInfo)); }
+            if (string.IsNullOrWhiteSpace(getCustomerByEmailParam.Scope)) { throw new ArgumentException(nameof(getCustomerByEmailParam.Scope)); }
+            if (string.IsNullOrWhiteSpace(getCustomerByEmailParam.Email)) { throw new ArgumentException(nameof(getCustomerByEmailParam.Email)); }
+
+            var cacheKey = new CacheKey(CacheConfigurationCategoryNames.Customer + "Search")
+            {
+                Scope = getCustomerByEmailParam.Scope,
+                CultureInfo = getCustomerByEmailParam.CultureInfo,
+            };
+
+            cacheKey.AppendKeyParts(getCustomerByEmailParam.Email);
+
+            var request = new FindCustomersRequest
+            {
+                SearchTerms = getCustomerByEmailParam.Email,
+                FilteringScopes = getCustomerByEmailParam.Scope,
+                ScopeId = getCustomerByEmailParam.Scope,
+                Query = new Query
+                {
+                    IncludeTotalCount = true,
+                    Sortings = new List<QuerySorting>
+                                {
+                                    new QuerySorting { PropertyName = "AccountStatus", Direction = SortDirection.Ascending},
+                                    new QuerySorting { PropertyName = "LastActivityDate", Direction = SortDirection.Descending}
+                                }
+                }
+            };
+
+            return CacheProvider.GetOrAddAsync(cacheKey, () => OvertureClient.SendAsync(request));
         }
 
         /// <summary>

@@ -36,6 +36,7 @@ namespace Orckestra.Composer.Product.Factory
         protected IRecurringOrderProgramViewModelFactory RecurringOrderProgramViewModelFactory { get; }
         protected IRecurringOrdersSettings RecurringOrdersSettings { get; private set; }
         protected IProductSpecificationsViewService ProductSpecificationsViewService { get; private set; }
+        protected IMyAccountUrlProvider MyAccountUrlProvider { get; private set; }
 
         public ProductViewModelFactory(
             IViewModelMapper viewModelMapper,
@@ -48,7 +49,8 @@ namespace Orckestra.Composer.Product.Factory
             IRecurringOrdersRepository recurringOrdersRepository,
             IRecurringOrderProgramViewModelFactory recurringOrderProgramViewModelFactory,
             IRecurringOrdersSettings recurringOrdersSettings,
-            IProductSpecificationsViewService productSpecificationsViewService)
+            IProductSpecificationsViewService productSpecificationsViewService,
+            IMyAccountUrlProvider myAccountUrlProvider)
         {
             ViewModelMapper = viewModelMapper ?? throw new ArgumentNullException(nameof(viewModelMapper));
             ProductRepository = productRepository ?? throw new ArgumentNullException(nameof(productRepository));
@@ -61,6 +63,7 @@ namespace Orckestra.Composer.Product.Factory
             RecurringOrderProgramViewModelFactory = recurringOrderProgramViewModelFactory ?? throw new ArgumentNullException(nameof(recurringOrderProgramViewModelFactory));
             RecurringOrdersSettings = recurringOrdersSettings;
             ProductSpecificationsViewService = productSpecificationsViewService ?? throw new ArgumentNullException(nameof(productSpecificationsViewService));
+            MyAccountUrlProvider = myAccountUrlProvider ?? throw new ArgumentNullException(nameof(myAccountUrlProvider));
         }
 
         public virtual async Task<ProductViewModel> GetProductViewModel(GetProductParam param)
@@ -200,6 +203,12 @@ namespace Orckestra.Composer.Product.Factory
                 VariantId = param.VariantId,
                 SKU = param.Product.Sku,
                 ProductName = productDisplayName
+            });
+
+            productDetailViewModel.CreateAccountUrl = MyAccountUrlProvider.GetCreateAccountUrl(new BaseUrlParameter
+            {
+                CultureInfo = param.CultureInfo,
+                ReturnUrl = productDetailViewModel.ProductDetailUrl
             });
 
             SetViewModelContext(productDetailViewModel, selectedVariantVm, allVariantsVm);
@@ -424,6 +433,7 @@ namespace Orckestra.Composer.Product.Factory
             productViewModel.Context["CategoryId"] = productViewModel.CategoryId;
             productViewModel.Context["Sku"] = productViewModel.Sku;
             productViewModel.Context["keyVariantAttributeItems"] = productViewModel.KeyVariantAttributeItems;
+            productViewModel.Context["CreateAccountUrl"] = productViewModel.CreateAccountUrl;
 
             // Transfer custom properties that might have been added
             foreach (var property in productViewModel.Bag)

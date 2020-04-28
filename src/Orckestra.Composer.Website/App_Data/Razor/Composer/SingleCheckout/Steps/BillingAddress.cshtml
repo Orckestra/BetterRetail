@@ -1,0 +1,88 @@
+@inherits RazorFunction
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "BillingAddress"; }
+    }
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on" xmlns:v-slot="v-slot">
+<head>
+</head>
+<body>
+    <div class="card  mt-4">
+        <div class="card-header">
+            <h3 class="float-left">
+                @Html.Localize("CheckoutProcess", "T_BillingAddress")
+            </h3>
+            @CheckoutHelpers.StepContinueButton("!FulfilledCart", "billing")
+            @CheckoutHelpers.StepEditButton("billing")
+        </div>
+        <div class="card-body  bg-light" v-show="step.active" v-cloak="true" data-qa="billing-active-state">
+                <div v-if="IsAuthenticated" data-oc-controller="SingleCheckout.BillingAddressRegistered">
+                    <div v-if="IsShippingMethodType">
+                        @UseShippingAddressCheckbox()
+                    </div>
+                    <div v-if="BillingAddress.UseShippingAddress">
+                        @CheckoutHelpers.AddressPreview("ShippingAddress", "billing-address-preview")
+                    </div>
+                    <div v-if="!BillingAddress.UseShippingAddress">
+                        <div v-for="(address, index) in RegisteredAddresses"
+                             v-bind:key="address.Id"
+                             class="border rounded p-3 mb-2 bg-white"
+                             v-bind:class="{ 'bg-selected border-primary': address.Id == BillingAddress.AddressBookId }">
+                            @CheckoutHelpers.AddressRadioOption("BillingAddressId", "BillingAddress.AddressBookId", "changeRegisteredBillingAddress", "deleteBillingAddressConfirm")
+                        </div>
+                        <div v-show="Mode.AddingNewAddress" class="border-top mt-4 pt-4">
+                            @Forms.Address.Form("Cart.Payment.BillingAddress", "addNewBillingAddressForm", true, null)
+
+                            <button class="btn btn-primary mt-1"
+                                    v-on:click="addBillingAddressToMyAddressBook()"
+                                    v-bind:disabled="Mode.Loading"
+                                    data-qa="billing-save-address-link">
+                                @Html.Localize("MyAccount", "B_SaveNewAddress")
+                            </button>
+                        </div>
+                        <button v-if="!Mode.AddingNewAddress" class="btn btn-dashed-block"
+                                v-on:click="addNewBillingAddress"
+                                v-bind:disabled="Mode.Loading"
+                                data-qa="billing-add-address-link">
+                            @Html.Localize("MyAccount", "B_AddNewAddress")
+                        </button>
+                    </div>
+                </div>
+            
+                <div v-if="!IsAuthenticated" data-oc-controller="SingleCheckout.BillingAddress">
+                    <div v-if="IsShippingMethodType">
+                        @UseShippingAddressCheckbox()
+                    </div>
+                    <div v-if="BillingAddress.UseShippingAddress">
+                        @CheckoutHelpers.AddressPreview("ShippingAddress", "billing-address-preview")
+                    </div>
+                    <div v-if="!BillingAddress.UseShippingAddress">
+                        @Forms.Address.Form("Cart.Payment.BillingAddress", "billingAddressForm", false, "")
+                    </div>
+                </div>
+        </div>
+
+        <div class="card-body  bg-light" v-show="step.preview" v-cloak="true" data-qa="billing-preview-state">
+            @CheckoutHelpers.AddressPreview("BillingAddress", "billing-address-preview")
+        </div>
+    </div>
+</body>
+</html>
+
+@helper UseShippingAddressCheckbox()
+{
+    <div class="form-check border-bottom mb-3 pb-3">
+        <input id="useShippingAddress" name="useShippingAddress" type="checkbox"
+               class="form-check-input"
+               v-bind:checked="BillingAddress.UseShippingAddress"
+               v-model="BillingAddress.UseShippingAddress"
+               v-on:change="changeUseShippingAddress" />
+        <label for="useShippingAddress" class="form-check-label">
+            @Html.Localize("CheckoutProcess", "F_BillingSameShipping")
+        </label>
+    </div>
+}

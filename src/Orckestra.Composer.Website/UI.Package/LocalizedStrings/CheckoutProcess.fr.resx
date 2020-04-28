@@ -204,6 +204,9 @@
   <data name="L_DeliveryDaysNumber" xml:space="preserve">
     <value> jours</value>
   </data>
+  <data name="L_Selected" xml:space="preserve">
+    <value>CHOISI</value>
+  </data>
   <data name="L_EmailConfirmation" xml:space="preserve">
     <value>Le courriel de confirmation sera envoyé à l'adresse courriel</value>
   </data>
@@ -226,7 +229,7 @@
     <value>Votre carte de crédit sera débitée une fois la commande soumise</value>
   </data>
   <data name="L_OrderConfirmation" xml:space="preserve">
-    <value>Confirmation de la commande</value>
+    <value>Votre confirmation de commande ainsi que votre reçu seront envoyés prochainement à votre adresse courriel {0}. Si vous n’avez pas reçu ce courriel, veuillez vérifier dans le dossier des courriels indésirables.</value>
   </data>
   <data name="L_Products" xml:space="preserve">
     <value>Articles</value>
@@ -247,10 +250,10 @@
     <value>Type :</value>
   </data>
   <data name="L_VerificationNumber" xml:space="preserve">
-    <value>Numéro de vérification</value>
+    <value>CVV</value>
   </data>
   <data name="L_YourOrderNumber" xml:space="preserve">
-    <value>Votre numéro de commande :</value>
+    <value>Votre commande #{0} est passée.</value>
   </data>
   <data name="Quantity" xml:space="preserve">
     <value>Quantité</value>
@@ -283,7 +286,7 @@
     <value>Se connecter</value>
   </data>
   <data name="T_ThankYou" xml:space="preserve">
-    <value>Merci pour votre commande,</value>
+    <value>Merci</value>
   </data>
   <data name="T_SelectCreditCart" xml:space="preserve">
     <value>Sélectionner une carte de crédit</value>
@@ -291,7 +294,10 @@
   <data name="B_AddCreditCard" xml:space="preserve">
     <value>Utiliser une autre carte de crédit</value>
   </data>
-  <data name="L_ExpirationDateForm" xml:space="preserve">
-    <value>Date d'expiration (mmaa)</value>
+  <data name="F_PlaceOrder" xml:space="preserve">
+    <value>Passer la commande</value>
+  </data>
+  <data name="H_OrderDetail" xml:space="preserve">
+    <value>Détails de la commande</value>
   </data>
 </root>

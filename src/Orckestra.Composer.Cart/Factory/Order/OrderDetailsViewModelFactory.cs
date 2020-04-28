@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
 using Orckestra.Composer.Cart.Extensions;
@@ -10,6 +11,7 @@ using Orckestra.Composer.Cart.ViewModels.Order;
 using Orckestra.Composer.Country;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Localization;
+using Orckestra.Composer.Utils;
 using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel.Orders;
 
@@ -97,7 +99,7 @@ namespace Orckestra.Composer.Cart.Factory.Order
             viewModel.ShippingMethod = GetShippingMethodViewModel(param);
             viewModel.Payments = GetPaymentViewModels(param);
             viewModel.OrderSummary = CartViewModelFactory.GetOrderSummaryViewModel(param.Order.Cart, param.CultureInfo);
-            viewModel.OrderSummary.Taxes = TaxViewModelFactory.CreateTaxViewModels(shipments.SelectMany(s=>s.Taxes).ToList(), param.CultureInfo).ToList();
+            viewModel.OrderSummary.Taxes = TaxViewModelFactory.CreateTaxViewModels(shipments.SelectMany(s => s.Taxes).ToList(), param.CultureInfo).ToList();
             MapAdditionalFees(viewModel, param);
 #pragma warning restore 618
 
@@ -106,6 +108,28 @@ namespace Orckestra.Composer.Cart.Factory.Order
             {
                 viewModel.Shipments.ForEach(x => x.LineItems.Reverse());
             }
+
+            return viewModel;
+        }
+
+        public virtual LightOrderDetailViewModel CreateLightViewModel(CreateOrderDetailViewModelParam param)
+        {
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(nameof(param.CultureInfo)); }
+            if (param.Order == null) { throw new ArgumentException(nameof(param.Order)); }
+            if (param.OrderStatuses == null) { throw new ArgumentException(nameof(param.OrderStatuses)); }
+            if (param.ProductImageInfo == null) { throw new ArgumentException(nameof(param.ProductImageInfo)); }
+
+            var viewModel = new LightOrderDetailViewModel();
+            viewModel.OrderInfos = GetOrderInfosViewModel(param);
+            viewModel.Shipments = GetShipmentViewModels(param);
+
+            var orderDetailUrl = UrlFormatter.AppendQueryString(param.OrderDetailBaseUrl, new NameValueCollection
+                {
+                    {"id", param.Order.OrderNumber}
+                });
+
+            viewModel.Url = orderDetailUrl;
 
             return viewModel;
         }
@@ -183,7 +207,7 @@ namespace Orckestra.Composer.Cart.Factory.Order
 
         protected virtual OrderChangeViewModel MapOrderChangeViewModel(OrderHistoryItem orderHistoryItem, CultureInfo cultureInfo)
         {
-           var orderChangeVm = ViewModelMapper.MapTo<OrderChangeViewModel>(orderHistoryItem, cultureInfo);
+            var orderChangeVm = ViewModelMapper.MapTo<OrderChangeViewModel>(orderHistoryItem, cultureInfo);
 
             return orderChangeVm;
         }
@@ -245,7 +269,7 @@ namespace Orckestra.Composer.Cart.Factory.Order
                 shipmentVm.ShipmentStatus = string.Empty;
                 shipmentVm.ShipmentStatusDate = string.Empty;
             }
-            
+
             shipmentVm.ShippingMethod = GetShippingMethodViewModel(shipment, param);
             return shipmentVm;
         }
@@ -309,7 +333,7 @@ namespace Orckestra.Composer.Cart.Factory.Order
                 {
                     model = new OrderSummaryPaymentViewModel();
                 }
-                
+
                 paymentVMs.Add(model);
             }
 

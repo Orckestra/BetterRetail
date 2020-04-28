@@ -1,0 +1,99 @@
+.checkout-page {
+    [v-cloak] { display:none; }
+
+    .card-header {
+        .btn {
+            text-transform: uppercase;
+        }
+
+        h3 {
+            margin: 0;
+        }
+    }
+
+    .checkout-step-container {
+
+        position: relative;
+
+        .card-header {
+            opacity: 0.4;
+        }
+
+       
+        &.active-step, &.next-step, &.fulfilled-step {
+            .card-header {
+                opacity: 1;
+            }
+        }
+
+        .loading-spinner {
+            position: absolute; top: 50%; left: 50%; margin-left: -1rem;
+            z-index: 10;
+            display: none;
+        }
+
+        &.loading {
+            opacity: 0.6;
+            .loading-spinner {
+                display: block;
+            }
+        }
+    }
+}
+
+.selected-method-type {
+    border-color: $primary !important;
+}
+
+@include media-breakpoint-up(sm) {
+
+    .sps-order-summary {
+
+        transition: all 0.25s ease;
+        max-width: 200px;
+
+        &.sps--abv {
+            top: 0;
+        }
+
+        &.sps--blw {
+            position: fixed;
+            top: 20px;
+            transition: all 0.5s ease;
+        }
+    }
+}
+
+@include media-breakpoint-up(md) {
+    .sps-order-summary {
+        max-width: 210px;
+    }
+}
+
+@include media-breakpoint-up(lg) {
+    .sps-order-summary {
+        max-width: 290px;
+    }
+}
+
+@include media-breakpoint-up(xl) {
+    .sps-order-summary {
+        max-width: 350px;
+    }
+}
+
+.fade-enter-active, .fade-leave-active {
+    transition: opacity 0.25s;
+}
+
+.fade-enter, .fade-leave-to {
+    opacity: 0;
+}
+
+.items-list-leave-to, .items-list-enter {
+    opacity: 0;
+}
+
+.items-list-enter-active, .items-list-leave-active {
+    transition: all 0.25s ease;
+}

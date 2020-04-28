@@ -2,7 +2,7 @@
 ///<reference path='../../Composer.MyAccount/Common/MembershipService.ts' />
 ///<reference path='../../ErrorHandling/ErrorHandler.ts' />
 ///<reference path='../../Repositories/CartRepository.ts' />
-///<reference path='../CheckoutShippingMethod/ShippingMethodService.ts' />
+///<reference path='../../Composer.SingleCheckout/Services/ShippingMethodService.ts' />
 ///<reference path='../CartSummary/CartService.ts' />
 ///<reference path='./IBaseCheckoutController.ts' />
 ///<reference path='./RegionService.ts' />
@@ -37,7 +37,7 @@ module Orckestra.Composer {
 
             if (!CheckoutService.instance) {
                 CheckoutService.instance = new CheckoutService();
-            };
+            }
 
             return CheckoutService.instance;
         }

@@ -159,6 +159,11 @@ To debug typescripts unit tests:
 - To run or re-run unit tests just update opened page in Chrome
 - To debug typescripts unit tests click on the **Debug** button in the website content area, then in the new opened tab press **F12** key and then locate to the **Sources** tab where in the tree expand the **"base"** folder. Select the needed typescript unit test and set up a breakpoint.
 
+To lint check typescripts 
+- Make shure you have installed [TSLint] (https://www.npmjs.com/package/tslint)
+- Run in Powershell a command: `{solution_dir_path}\build\build.ps1 -Target Tslint-Tests`.
+- Run in Powershell a command: `{solution_dir_path}\build\build.ps1 -Target Tslint-Fix`. for fixes linting errors for select rules (this may overwrite linted files) 
+
 ## Related projects
 Reference Application is dependent on [C1 CMS Foundation](https://github.com/Orckestra/C1-CMS-Foundation) and can use [C1 CMS packages](https://github.com/Orckestra/CMS-Packages)
 

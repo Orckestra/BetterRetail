@@ -42,23 +42,23 @@
 
                 @Sku()
 
-                @Partial("KvaItems", ProductContext.ViewModel)
+                @Partial("KvaItems", Model)
 
-                @Partial("ProductRecurringFrequency", ProductContext.ViewModel)
+                @Function("Composer.Product.RecurringFrequency")
 
                 <div class="row  mb-4">
                     <div class="col-6  col-md-5  col-lg-4  col-xl-3">
-                        @Partial("ProductQuantity", ProductContext.ViewModel)
+                        @Partial("ProductQuantity", Model)
                     </div>
                 </div>
 
                 <div class="mb-4" property="offers" typeof="Offer">
-                    @Partial("PriceDiscount", ProductContext.ViewModel)
+                    @Partial("PriceDiscount", Model)
                 </div>
 
                 <div class="mb-4">
-                    @Partial("AddToCartProductDetail", ProductContext.ViewModel)
-                    @Partial("AddToWishList", ProductContext.ViewModel)
+                    @Partial("AddToCartProductDetail", Model)
+                    @Partial("AddToWishList", Model)
                 </div>
             </div>
         </div>
@@ -117,4 +117,3 @@
         </div>
     </div>
 }
-

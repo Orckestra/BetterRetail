@@ -172,7 +172,7 @@
     <value>An error occurred while the cart was loading. Please &lt;a href="javascript:window.location.reload();"&gt; reload the page&lt;/a&gt;.</value>
   </data>
   <data name="L_NameAlreadyUsed" xml:space="preserve">
-    <value>The specified Addresse Name is already use for another address.</value>
+    <value>This address name is already in use.</value>
   </data>
   <data name="L_NoLocalizedErrorMessage" xml:space="preserve">
     <value>An error occured, please try again later.</value>
@@ -206,7 +206,7 @@
   </data>
   <data name="L_RecurringCartShippingMethodMissing" xml:space="preserve">
     <value>An error occurred while updating your shipping method. Missing shipping method Id.</value>
-  </data>  
+  </data>
   <data name="L_RecurringCartShippingMethodUpdateFailed" xml:space="preserve">
     <value>An error occurred while updating your shipping method. Try again.</value>
   </data>
@@ -215,22 +215,22 @@
   </data>
   <data name="L_RecurringCartPaymentUpdateFailed" xml:space="preserve">
     <value>An error occurred while updating your payment method. Try again.</value>
-  </data>  
+  </data>
   <data name="L_RecurringScheduleBillingAddressMissing" xml:space="preserve">
     <value>An error occurred while updating your recurring schedule. Missing billing address Id.</value>
-  </data>  
+  </data>
   <data name="L_RecurringSchedulePaymentMissing" xml:space="preserve">
     <value>An error occurred while updating your recurring schedule. Missing payment Id.</value>
-  </data>  
+  </data>
   <data name="L_RecurringScheduleShippingAddressMissing" xml:space="preserve">
     <value>An error occurred while updating your recurring schedule. Missing shipping address Id.</value>
-  </data>  
-   <data name="L_RecurringScheduleShippingProviderMissing" xml:space="preserve">
+  </data>
+  <data name="L_RecurringScheduleShippingProviderMissing" xml:space="preserve">
     <value>An error occurred while updating your recurring schedule. Missing shipping provider Id.</value>
-  </data> 
+  </data>
   <data name="L_RecurringScheduleUpdateFailed" xml:space="preserve">
     <value>An error occurred while updating your recurring schedule. Try again.</value>
-  </data>  
+  </data>
   <data name="L_RelatedProductLoadFailed" xml:space="preserve">
     <value>An error occurred while loading related products. Please &lt;a href="javascript:window.location.reload();"&gt; reload the page&lt;/a&gt;.</value>
   </data>
@@ -251,5 +251,8 @@
   </data>
   <data name="L_UserNameAlreadyUsed" xml:space="preserve">
     <value>This user account already exist, did you forgot your password?</value>
+  </data>
+  <data name="L_SelectAStore" xml:space="preserve">
+    <value>Please select a store.</value>
   </data>
 </root>

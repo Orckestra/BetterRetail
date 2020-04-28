@@ -18,7 +18,6 @@ namespace Orckestra.Composer.CompositeC1.Controllers
     {
         protected IComposerContext ComposerContext { get; private set; }
         protected IStoreViewService StoreViewService { get; set; }
-        protected IStoreLocatorViewService StoreLocatorViewService { get; set; }
         protected IStoreDirectoryViewService StoreDirectoryViewService { get; set; }
         protected IStoreUrlProvider StoreUrlProvider { get; private set; }
         protected IBreadcrumbViewService BreadcrumbViewService { get; private set; }
@@ -27,7 +26,6 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         protected StoreLocatorBaseController(
            IComposerContext composerContext,
            IStoreViewService storeViewService,
-           IStoreLocatorViewService storeLocatorViewService,
            IStoreDirectoryViewService storeDirectoryViewService,
            IStoreUrlProvider storeUrlProvider,
            IBreadcrumbViewService breadcrumbViewService,
@@ -36,28 +34,10 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         {
             ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
             StoreViewService = storeViewService ?? throw new ArgumentNullException(nameof(storeViewService));
-            StoreLocatorViewService = storeLocatorViewService ?? throw new ArgumentNullException(nameof(storeLocatorViewService));
             StoreDirectoryViewService = storeDirectoryViewService ?? throw new ArgumentNullException(nameof(storeDirectoryViewService));
-            StoreUrlProvider = storeUrlProvider;
-            BreadcrumbViewService = breadcrumbViewService;
+            StoreUrlProvider = storeUrlProvider ?? throw new ArgumentNullException(nameof(storeUrlProvider));
+            BreadcrumbViewService = breadcrumbViewService ?? throw new ArgumentNullException(nameof(breadcrumbViewService));
             LanguageSwitchService = languageSwitchService ?? throw new ArgumentNullException(nameof(languageSwitchService));
-        }
-
-
-        public virtual ActionResult Index(int pagesize = 9)
-        {
-            var model = StoreLocatorViewService.GetEmptyStoreLocatorViewModel(new GetEmptyStoreLocatorViewModelParam
-            {
-                CultureInfo = ComposerContext.CultureInfo,
-                BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
-            });
-            model.Context.Add("pageSize", pagesize);
-
-            if (!string.IsNullOrWhiteSpace(Request["storeDirectorySearchInput"]))
-            {
-                model.PostedAddress = Request["storeDirectorySearchInput"];
-            }
-            return View("StoreLocator", model);
         }
 
         public virtual ActionResult StoreDirectory(int page = 1)
@@ -90,7 +70,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             }
             var baseUrl = RequestUtils.GetBaseUrl(Request).ToString();
 
-            var model = StoreViewService.GetStoreViewModelAsync(new GetStoreParam {
+            var model = StoreViewService.GetStoreViewModelAsync(new GetStoreByNumberParam {
                 Scope = ComposerContext.Scope,
                 CultureInfo = ComposerContext.CultureInfo,
                 StoreNumber = storeNumber,
@@ -154,7 +134,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
                 CurrentPageId = SitemapNavigator.CurrentPageId.ToString(),
                 CultureInfo = ComposerContext.CultureInfo
             });
-            var model = StoreViewService.GetStoreViewModelAsync(new GetStoreParam
+            var model = StoreViewService.GetStoreViewModelAsync(new GetStoreByNumberParam
             {
                 Scope = ComposerContext.Scope,
                 CultureInfo = ComposerContext.CultureInfo,
@@ -207,7 +187,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.NotFound);
             }
 
-            var storeViewModel = StoreViewService.GetStoreViewModelAsync(new GetStoreParam
+            var storeViewModel = StoreViewService.GetStoreViewModelAsync(new GetStoreByNumberParam
             {
                 BaseUrl = baseUrl,
                 CultureInfo = ComposerContext.CultureInfo,

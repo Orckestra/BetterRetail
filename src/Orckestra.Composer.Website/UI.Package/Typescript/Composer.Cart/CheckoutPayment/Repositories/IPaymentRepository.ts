@@ -20,5 +20,13 @@ module Orckestra.Composer {
         removePaymentMethod(paymentMethodId: string, paymentProviderName: string): Q.Promise<void>;
 
         setPaymentMethod(request : any) : Q.Promise<IPaymentViewModel>;
+
+        /**
+         * Return a list of payment methods and payment provider
+         * @return {ICheckoutPaymentViewModel} Instance of the provider.
+         */
+        getCheckoutPayment() : Q.Promise<ICheckoutPaymentViewModel>;
+
+        updatePaymentMethod(request : any) : Q.Promise<IActivePaymentViewModel>;
     }
 }

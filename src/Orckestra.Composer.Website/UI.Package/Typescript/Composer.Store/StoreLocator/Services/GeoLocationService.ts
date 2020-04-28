@@ -13,27 +13,21 @@ module Orckestra.Composer {
         }
 
         public geolocate(): Q.Promise<any> {
-            if (this._browserGeolocation) {
-                return this.getCurrentLocation()
-                    .catch((reason) => {
-                        console.log(reason);
-                        return this._currenctLocation;
-                    });
-            }
-
-            return null;
+            return this._browserGeolocation ? this.getCurrentLocation() : Q.reject('browserGeolocation not define');
         }
 
-        public getCurrentLocation(): Q.Promise<google.maps.LatLng> {
-            var deferred = Q.defer<google.maps.LatLng>();
+        private getCurrentLocation(): Q.Promise<google.maps.LatLng> {
+            let deferred = Q.defer<google.maps.LatLng>();
             this._browserGeolocation.getCurrentPosition((pos) => {
                 this._currenctLocation = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
                 deferred.resolve(this._currenctLocation);
-            }, () => { deferred.reject('problems to get current location'); });
+            }, (error) => {
+                deferred.reject(error);
+            });
             return deferred.promise;
         }
 
-        public getAddtressByLocation(location: google.maps.LatLng): Q.Promise<string> {
+        public getAddressByLocation(location: google.maps.LatLng): Q.Promise<string> {
             var deferred = Q.defer<string>();
 
             this._geocoder.geocode({ location: location },
@@ -67,7 +61,7 @@ module Orckestra.Composer {
             return deferred.promise;
         }
 
-        /// By default render with default value for ViewModel.GoogleDirectionsLink (direction with Empty Start Point), 
+        /// By default render with default value for ViewModel.GoogleDirectionsLink (direction with Empty Start Point),
         /// and when User Accept his Current Location, just in async task update HREF attributes and attach current location coordinates.
         /// We do not update the ViewModel before rendering, as we need to wait for User Input
         public updateDirectionLinksWithLatLngSourceAddress(container: JQuery, sourceLocation: google.maps.LatLng) {

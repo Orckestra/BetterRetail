@@ -18,6 +18,17 @@ namespace Orckestra.Composer.Cart.Services
         Task<ShippingMethodsViewModel> GetShippingMethodsAsync(GetShippingMethodsParam param);
 
         /// <summary>
+        /// Get the Shipping methods available for a shipment grouped by type.
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns>The ShippingMethodTypesViewModel</returns>
+        Task<ShippingMethodTypesViewModel> GetShippingMethodTypesAsync(GetShippingMethodsParam param);
+
+        bool FilterShippingMethodView(ShippingMethodViewModel sippingMethod);
+
+        int OrderShippingMethodTypeView(ShippingMethodTypeViewModel sippingMethodType);
+
+        /// <summary>
         /// Get the Shipping methods available for a shipment. Calls the GetCart to get the shipment Id.
         /// </summary>
         /// <param name="param"></param>

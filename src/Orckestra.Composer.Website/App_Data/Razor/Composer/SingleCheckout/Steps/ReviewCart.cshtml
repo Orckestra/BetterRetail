@@ -1,0 +1,257 @@
+﻿@inherits RazorFunction
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Review Cart"; }
+    }
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on" xmlns:v-slot="v-slot">
+<head>
+</head>
+<body>
+    <div data-oc-controller="SingleCheckout.ReviewCart" class="card  mt-4">
+        <div class="card-header">
+            @Cart_Step_Header()
+        </div>
+
+        <div v-if="CartEmpty" class="text-center alert alert-warning  m-0" v-cloak="true">
+            <p>@Html.Localize("ShoppingCart", "L_EmptyShoppingCart")</p>
+            <a href="@HomePageNode.Url" class="btn btn-primary">@Html.Localize("ShoppingCart", "B_StartShopping")</a>
+        </div>
+
+        <div v-if="step.active" class="card-body bg-light pt-0" v-cloak="true" data-qa="reviewcart-active-state">
+            @Cart_Step_ActiveMode()
+        </div>
+
+        <div v-if="step.preview" class="card-body bg-light" v-cloak="true" data-qa="reviewcart-preview-state">
+            @* PREVIEW MODE of CART *@
+            @Cart_Step_PreviewMode()
+        </div>
+    </div>
+</body>
+</html>
+
+@helper Cart_Step_Header()
+{
+    <div class="row">
+        <div class="col-5">
+            <h3>
+                @Html.Localize("CheckoutProcess", "F_ReviewCart")
+            </h3>
+        </div>
+        <div v-if="step.active" class="col-sm-2  font-weight-bold text-center d-none d-sm-block">
+            <span v-cloak="true">@Html.Localize("MyAccount", "L_UnitPrice")</span>
+        </div>
+        <div v-if="step.active" class="col-sm-3  font-weight-bold text-center  d-none d-sm-block">
+            <span v-cloak="true">@Html.Localize("MyAccount", "L_Quantity")</span>
+        </div>
+        <div v-if="step.active" class="col-sm-2  font-weight-bold text-center  d-none d-sm-block" v-cloak="true">
+            <span v-cloak="true">@Html.Localize("MyAccount", "L_Subtotal")</span>
+        </div>
+        <div v-if="step.displayContinueButton" class="col-7">
+            @CheckoutHelpers.StepContinueButton("!FulfilledShipping", "reviewcart")
+        </div>
+        <div v-show="step.preview" class="col-7">
+            @CheckoutHelpers.StepEditButton("reviewcart", "F_Review")
+        </div>
+    </div>
+}
+
+@helper Cart_Step_ActiveMode()
+{
+    <div v-if="Cart.InvalidLineItemCount > 0">
+        <div class="alert alert-danger  text-danger">
+            <div class="multiline-message">
+                <span class="fa  fa-exclamation-triangle  multiline-message-icon"></span>
+                <span>
+                    {{Cart.InvalidLineItemCount}}
+                    @Html.Localize("ShoppingCart", "L_NoMoreAvailable")
+                </span>
+            </div>
+        </div>
+    </div>
+    <div v-if="!CartEmpty" is="transition-group" name="items-list">
+        <div class="row pt-3"
+             v-bind:class="{'border-bottom pb-2': index != Cart.LineItemDetailViewModels.length - 1, 'bg-danger': !item.IsValid}"
+             v-for="(item, index) in Cart.LineItemDetailViewModels"
+             v-bind:key="item.Id"
+             v-bind:data-qa="'cart-item-' + index">
+            <div v-if="item.Rewards &amp;&amp; item.Rewards.length" class="col-12 order-1  text-center">
+                @CartItemRewardsCell()
+            </div>
+            <div class="col-2 col-sm-1  order-2">
+                @CartItemImageCell()
+            </div>
+            <div class="col-8 col-sm-4  order-3">
+                @CartItemSummaryCell()
+            </div>
+            <div class="col-sm-2  text-center d-none d-sm-block order-4">
+                @CartItemDefaultPriceCell()
+            </div>
+            <div class="offset-2 offset-sm-0 2 col-sm-3  text-left text-sm-center  order-6">
+                @CartItemQuantityCell()
+            </div>
+            <div class="offset-2 offset-sm-0 col-sm-2  text-left text-sm-center  order-7">
+                @CartItemTotalCell()
+            </div>
+            <div class="col-2 d-block d-sm-none order-5">
+                @RemoveCartItemMobileBtn()
+            </div>
+            <div v-if="item.RecurringOrderProgramName" class="col-12  offset-2 offset-sm-1  order-8">
+                @CartItemRecurringOrderProgram()
+            </div>
+        </div>
+    </div>
+}
+
+@helper Cart_Step_PreviewMode()
+{
+    <div class="row">
+        <div class="col-12 col-sm-8">
+            <div class="row">
+                <div class="col-4  col-sm-2"
+                     v-bind:class="{'border border-danger': !item.IsValid}"
+                     v-bind:key="item.id"
+                     v-for="(item, index) in Cart.LineItemDetailViewModels">
+                    <img v-bind:src="item.ImageUrl" class="img-fluid" alt="thumbnail" xmlns:v-bind="v-bind"
+                         v-bind:data-qa="'cart-item-preview-img-' + index" />
+                    <p class="text-center m-0">
+                        <strong v-bind:data-qa="'cart-item-preview-quantity-' + index">x{{item.Quantity}}</strong>
+                    </p>
+                    <div v-if="item.RecurringOrderProgramName &amp;&amp; item.RecurringOrderProgramFrequencies" class="position-absolute" style="top: 0; right: 0;">
+                        @RecurringOrderProgramIcon()
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12  col-sm-4" data-qa="reviewcart-preview-subtotal">
+            <div class="float-sm-right">@Html.Localize("MyAccount", "L_Total"): <span class="h5">{{OrderSummary.SubTotal}}</span></div>
+        </div>
+    </div>
+}
+
+@helper CartItemImageCell()
+{
+    <img v-bind:src="item.ImageUrl" class="img-fluid" alt="thumbnail" xmlns:v-bind="v-bind" />
+}
+
+@helper CartItemRewardsCell()
+{
+    <div class="promotion">
+        <em v-for="reward in item.Rewards">{{reward.Description || reward.PromotionName}} <br /></em>
+    </div>
+}
+
+@helper CartItemSummaryCell()
+{
+    <div>
+        <strong v-bind:data-qa="'cart-item-brand-' + index">{{item.ProductSummary.Brand}}</strong>
+        <p v-bind:data-qa="'cart-item-name-' + index" class="mb-2">{{item.ProductSummary.DisplayName}}</p>
+        <p v-if="item.VariantId" class="mb-2 mb-sm-0" v-bind:data-qa="'cart-item-variant-' + index">
+            <span v-for="(keyV, index) in item.KeyVariantAttributesList">
+                <span v-if="index != 0"> | </span>{{keyV.Value}}
+            </span>
+        </p>
+    </div>
+}
+
+@helper CartItemDefaultPriceCell()
+{
+    <p v-if="item.IsOnSale">
+        <del v-bind:data-qa="'cart-item-defaultprice-del-' + index">{{item.DefaultListPrice}}</del><br />
+        <strong class="text-danger" v-bind:data-qa="'cart-item-salesprice-' + index">{{item.ListPrice}}</strong>
+    </p>
+    <p v-else="v-else" v-bind:data-qa="'cart-item-defaultprice-' + index">{{item.DefaultListPrice}}</p>
+}
+
+@helper CartItemQuantityCell()
+{
+    <div v-if="item.IsValid" class="btn-group mb-2" role="group">
+
+        <button class="btn btn-sm btn-outline-secondary"
+                v-bind:disabled="DecrementDisabled(item)"
+                v-on:click="updateItemQuantity(item.Id, 'decrement')">
+            <span class="fa  fa-minus"></span>
+        </button>
+
+        <strong class="form-control rounded-0"
+                v-text="item.Quantity" v-bind:data-qa="'cart-item-quantity-' + index"> </strong>
+
+        <button class="btn  btn-sm btn-outline-secondary"
+                v-bind:disabled="IncrementDisabled(item)"
+                v-on:click="updateItemQuantity(item.Id, 'increment')">
+            <span class="fa  fa-plus"></span>
+        </button>
+
+    </div>
+    <div class="d-none d-sm-block">@RemoveCartItemLink()</div>
+}
+
+@helper CartItemTotalCell()
+{
+    <div>
+        <div v-if="item.IsPriceDiscounted">
+            <del v-bind:data-qa="'cart-item-subtotal-del-'+ index">{{item.TotalWithoutDiscount}}</del><br />
+            <strong v-bind:data-qa="'cart-subtotal-sales-'+ index" class="text-danger">{{item.Total}}</strong>
+        </div>
+        <div v-else="v-else"><strong v-bind:data-qa="'cart-item-subtotal-' + index">{{item.Total}}</strong></div>
+        <small v-if="item.SavingsTotal">
+            <span class="text-success">@Html.Localize("ShoppingCart", "L_LineItemSavings") </span>
+            <span class="text-success" v-bind:data-qa="'cart-item-savingstotal-' + index">{{item.SavingsTotal}}</span>
+        </small>
+        <em class="additional-fees d-block small">
+            <span v-for="fee in item.AdditionalFees" class="block">
+                + {{fee.DisplayName}} {{fee.Amount}}
+                <span v-if="fee.Taxable">
+                    @Html.Localize("ShoppingCart", "L_PlusTaxes")
+                </span>
+                {{fee.CalculationRule}}
+            </span>
+        </em>
+    </div>
+}
+
+@helper RemoveCartItemLink()
+{
+    <button v-on:click="removeCartItem(index)"
+            v-bind:disabled="IsLoading"
+            class="btn btn-link"
+            v-bind:data-qa="'cart-item-remove-btn-' + index">
+        @Html.Localize("ShoppingCart", "F_RemoveItem")
+    </button>
+}
+
+@helper RemoveCartItemMobileBtn()
+{
+    <button v-on:click="removeCartItem(index)"
+            v-bind:disabled="IsLoading"
+            class="btn btn-sm btn-outline-secondary"
+            aria-label="@Html.Localize("ShoppingCart", "F_RemoveItem")">
+        <span aria-hidden="true" class="fa  fa-times"></span>
+    </button>
+}
+
+@helper CartItemRecurringOrderProgram()
+{
+    <div v-if="item.RecurringOrderProgramFrequencies" v-bind:data-qa="'cart-item-reccuring-icon-' + index" class="mt-2">
+        <div class="cart-recurring-cta js-cartRecurringCta">
+            @RecurringOrderProgramIcon()
+            <span v-if="item.RecurringOrderFrequencyName">
+                {{item.RecurringOrderFrequencyDisplayName}}
+            </span>
+            <span v-else="else">
+                @Html.Localize("ProductPage", "L_RecurringFrequencyOnce")
+            </span>
+        </div>
+    </div>
+}
+
+@helper RecurringOrderProgramIcon()
+{
+    <img src="~/UI.Package/Images/recurring.svg"
+         class="recurring-icon"
+         alt="@Html.Localize("General", "L_RecurringProduct")"
+         title="@Html.Localize("General", "L_RecurringProduct")" />
+}

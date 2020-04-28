@@ -41,5 +41,7 @@ namespace Orckestra.Composer.Cart.ViewModels
         string PaymentType { get; set; }
 
         bool IsValid { get; }
+
+        bool IsCreditCardPaymentMethod { get; set; }
     }
 }

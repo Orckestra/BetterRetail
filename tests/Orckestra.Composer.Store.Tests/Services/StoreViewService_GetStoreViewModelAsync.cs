@@ -53,7 +53,7 @@ namespace Orckestra.Composer.Store.Tests.Services
             //Act
             Func<Task> asyncFunction = async () =>
             {
-                await storeViewService.GetStoreViewModelAsync(new GetStoreParam
+                await storeViewService.GetStoreViewModelAsync(new GetStoreByNumberParam
                 {
                     StoreNumber = storeNumber,
                     Scope = scope,

@@ -54,22 +54,14 @@ namespace Orckestra.Composer.Cart.Factory
             ILineItemViewModelFactory lineItemViewModelFactory,
             IRewardViewModelFactory rewardViewModelFactory)
         {
-            if (localizationProvider == null) { throw new ArgumentNullException("localizationProvider"); }
-            if (viewModelMapper == null) { throw new ArgumentNullException("viewModelMapper"); }
-            if (fulfillmentMethodRepository == null) { throw new ArgumentNullException("fulfillmentMethodRepository"); }
-            if (countryService == null) { throw new ArgumentNullException("countryService"); }
-            if (taxViewModelFactory == null) { throw new ArgumentNullException("taxViewModelFactory"); }
-            if (lineItemViewModelFactory == null) { throw new ArgumentNullException("lineItemViewModelFactory"); }
-            if (rewardViewModelFactory == null) { throw new ArgumentNullException("rewardViewModelFactory"); }
-
-            LocalizationProvider = localizationProvider;
-            ViewModelMapper = viewModelMapper;
-            FulfillmentMethodRepository = fulfillmentMethodRepository;
-            CountryService = countryService;
+            LocalizationProvider = localizationProvider ?? throw new ArgumentNullException(nameof(localizationProvider));
+            ViewModelMapper = viewModelMapper ?? throw new ArgumentNullException(nameof(viewModelMapper));
+            FulfillmentMethodRepository = fulfillmentMethodRepository ?? throw new ArgumentNullException(nameof(fulfillmentMethodRepository));
+            CountryService = countryService ?? throw new ArgumentNullException(nameof(countryService));
             ComposerContext = composerContext;
-            TaxViewModelFactory = taxViewModelFactory;
-            LineItemViewModelFactory = lineItemViewModelFactory;
-            RewardViewModelFactory = rewardViewModelFactory;
+            TaxViewModelFactory = taxViewModelFactory ?? throw new ArgumentNullException(nameof(taxViewModelFactory));
+            LineItemViewModelFactory = lineItemViewModelFactory ?? throw new ArgumentNullException(nameof(lineItemViewModelFactory));
+            RewardViewModelFactory = rewardViewModelFactory ?? throw new ArgumentNullException(nameof(rewardViewModelFactory));
         }
 
         public virtual CartViewModel CreateCartViewModel(CreateCartViewModelParam param)
@@ -91,6 +83,7 @@ namespace Orckestra.Composer.Cart.Factory
             vm.OrderSummary.AdditionalFeeSummaryList = GetAdditionalFeesSummary(vm.LineItemDetailViewModels, param.CultureInfo);
 
             SetDefaultCountryCode(vm);
+            SetDefaultShippingAddressNames(vm);
             SetPostalCodeRegexPattern(vm);
             SetPhoneNumberRegexPattern(vm);
 
@@ -103,6 +96,19 @@ namespace Orckestra.Composer.Cart.Factory
             vm.IsAuthenticated = ComposerContext.IsAuthenticated;
 
             return vm;
+        }
+
+        protected virtual void SetDefaultShippingAddressNames(CartViewModel vm)
+        {
+            if (vm.ShippingAddress != null && vm.Customer != null)
+            {
+                if (string.IsNullOrWhiteSpace(vm.ShippingAddress.FirstName) &&
+                    string.IsNullOrWhiteSpace(vm.ShippingAddress.LastName))
+                {
+                    vm.ShippingAddress.FirstName = vm.Customer.FirstName;
+                    vm.ShippingAddress.LastName = vm.Customer.LastName;
+                }
+            }
         }
 
         //TODO: Remove this once we support the notion of countries other than Canada and also have a country picker
@@ -126,6 +132,11 @@ namespace Orckestra.Composer.Cart.Factory
             if (vm.ShippingAddress != null)
             {
                 vm.ShippingAddress.PhoneRegex = CountryService.RetrieveCountryAsync(CountryParam).Result.PhoneRegex;
+
+                if (vm.Payment != null && vm.Payment.BillingAddress != null)
+                {
+                    vm.Payment.BillingAddress.PhoneRegex = vm.ShippingAddress.PhoneRegex;
+                }
             }
         }
 
@@ -318,7 +329,7 @@ namespace Orckestra.Composer.Cart.Factory
             }
 
             MapOneShipment(shipment, cultureInfo, imageInfo, baseUrl, cartVm, cart);
-            cartVm.Payment = GetPaymentViewModel(payments, shipment.Address, paymentMethodDisplayNames, cultureInfo);
+            cartVm.Payment = GetPaymentViewModel(payments, shipment, paymentMethodDisplayNames, cultureInfo);
         }
 
         /// <summary>
@@ -342,6 +353,8 @@ namespace Orckestra.Composer.Cart.Factory
             cartVm.Rewards = RewardViewModelFactory.CreateViewModel(shipment.Rewards, cultureInfo, RewardLevel.FulfillmentMethod, RewardLevel.Shipment).ToList();
             cartVm.OrderSummary.Taxes = TaxViewModelFactory.CreateTaxViewModels(shipment.Taxes, cultureInfo).ToList();
             cartVm.ShippingAddress = GetAddressViewModel(shipment.Address, cultureInfo);
+
+            cartVm.PickUpLocationId = shipment.PickUpLocationId;
 
             cartVm.LineItemDetailViewModels = LineItemViewModelFactory.CreateViewModel(new CreateListOfLineItemDetailViewModelParam
             {
@@ -468,15 +481,60 @@ namespace Orckestra.Composer.Cart.Factory
 
             var shippingMethodViewModel = ViewModelMapper.MapTo<ShippingMethodViewModel>(fulfillmentMethod, cultureInfo);
 
-            if (!fulfillmentMethod.ExpectedDeliveryDate.HasValue) { return shippingMethodViewModel; }
+            if(string.IsNullOrWhiteSpace(shippingMethodViewModel.DisplayName))
+            {
+                shippingMethodViewModel.DisplayName = shippingMethodViewModel.Name;
+            }
 
-            var totalDays = (int)Math.Ceiling((fulfillmentMethod.ExpectedDeliveryDate.Value - DateTime.UtcNow).TotalDays);
-            shippingMethodViewModel.ExpectedDaysBeforeDelivery = totalDays.ToString();
+            if (fulfillmentMethod.ExpectedDeliveryDate.HasValue) { 
+                var totalDays = (int)Math.Ceiling((fulfillmentMethod.ExpectedDeliveryDate.Value - DateTime.UtcNow).TotalDays);
+                shippingMethodViewModel.ExpectedDaysBeforeDelivery = totalDays.ToString();
+            }
 
             shippingMethodViewModel.IsShipToStoreType = fulfillmentMethod.FulfillmentMethodType == FulfillmentMethodType.ShipToStore;
             shippingMethodViewModel.FulfillmentMethodTypeString = fulfillmentMethod.FulfillmentMethodType.ToString();
 
             return shippingMethodViewModel;
+        }
+
+        public virtual ShippingMethodTypeViewModel GetShippingMethodTypeViewModel(FulfillmentMethodType fulfillmentMethodType, IList<ShippingMethodViewModel> shippingMethods, CultureInfo cultureInfo)
+        {
+            shippingMethods = FilterShippingMethods(shippingMethods, fulfillmentMethodType);
+            SetDefaultShippingMethod(shippingMethods);
+
+            var fulfillmentMethodTypeString = fulfillmentMethodType.ToString();
+            var displayName = LocalizationProvider.GetLocalizedString(new GetLocalizedParam
+            {
+                Category = "CheckoutProcess",
+                Key = $"T_{fulfillmentMethodTypeString}MethodType",
+                CultureInfo = cultureInfo
+            });
+
+            return new ShippingMethodTypeViewModel
+            {
+                FulfillmentMethodType = fulfillmentMethodType,
+                FulfillmentMethodTypeString = fulfillmentMethodTypeString,
+                DisplayName = displayName,
+                ShippingMethods = shippingMethods
+            };
+        }
+
+        protected virtual void SetDefaultShippingMethod(IList<ShippingMethodViewModel> shippingMethods)
+        {
+            var defaultMethod = shippingMethods.OrderBy(method => method.CostDouble).FirstOrDefault();
+            if (defaultMethod != null)
+            {
+                defaultMethod.IsSelected = true;
+            }
+        }
+
+        protected virtual IList<ShippingMethodViewModel> FilterShippingMethods(IList<ShippingMethodViewModel> shippingMethods, FulfillmentMethodType fulfillmentMethodType)
+        {
+            switch (fulfillmentMethodType)
+            {
+                case FulfillmentMethodType.PickUp: return new List<ShippingMethodViewModel> { shippingMethods.FirstOrDefault() };
+                default: return shippingMethods;
+            }
         }
 
         /// <summary>
@@ -533,7 +591,7 @@ namespace Orckestra.Composer.Cart.Factory
 
             if (!string.IsNullOrWhiteSpace(savedCreditCard.ExpiryDate))
             {
-                var expirationDate = ParseCreditCartExpiryDate(savedCreditCard.ExpiryDate);
+                var expirationDate = ParseCreditCardExpiryDate(savedCreditCard.ExpiryDate);
                 expirationDate = expirationDate.AddDays(DateTime.DaysInMonth(expirationDate.Year, expirationDate.Month) - 1);
                 savedCreditCard.IsExpired = expirationDate < DateTime.UtcNow;
             }
@@ -541,7 +599,7 @@ namespace Orckestra.Composer.Cart.Factory
             return savedCreditCard;
         }
 
-        protected virtual DateTime ParseCreditCartExpiryDate(string expiryDate)
+        protected virtual DateTime ParseCreditCardExpiryDate(string expiryDate)
         {
             var formats = new[]
             {
@@ -568,15 +626,22 @@ namespace Orckestra.Composer.Cart.Factory
 
             var addressViewModel = ViewModelMapper.MapTo<AddressViewModel>(address, cultureInfo);
 
-            var regionName = CountryService.RetrieveRegionDisplayNameAsync(new RetrieveRegionDisplayNameParam
+            if (address.RegionCode != null)
             {
-                CultureInfo = cultureInfo,
-                IsoCode = ComposerContext.CountryCode,
-                RegionCode = address.RegionCode
-            }).Result;
+                var regionName = CountryService.RetrieveRegionDisplayNameAsync(new RetrieveRegionDisplayNameParam
+                {
+                    CultureInfo = cultureInfo,
+                    IsoCode = ComposerContext.CountryCode,
+                    RegionCode = address.RegionCode
+                }).Result;
+                addressViewModel.RegionName = regionName;
+            }
 
-            addressViewModel.RegionName = regionName;
-            addressViewModel.PhoneNumber = LocalizationProvider.FormatPhoneNumber(address.PhoneNumber, cultureInfo);
+            if (address.PhoneNumber != null)
+            {
+                addressViewModel.PhoneNumber = address.PhoneNumber;
+                addressViewModel.PhoneNumberFormated = LocalizationProvider.FormatPhoneNumber(address.PhoneNumber, cultureInfo);
+            }
 
             return addressViewModel;
         }
@@ -754,7 +819,7 @@ namespace Orckestra.Composer.Cart.Factory
         /// </summary>
         protected virtual PaymentViewModel GetPaymentViewModel(
             List<Payment> payments,
-            Address shippingAddress,
+            Shipment shipping,
             Dictionary<string, string> paymentMethodDisplayNames,
             CultureInfo cultureInfo)
         {
@@ -778,7 +843,7 @@ namespace Orckestra.Composer.Cart.Factory
                 paymentMethodViewModel = GetPaymentMethodViewModel(payment.PaymentMethod, paymentMethodDisplayNames, cultureInfo);
             }
 
-            var billingAddressViewModel = GetBillingAddressViewModel(payment.BillingAddress, shippingAddress, cultureInfo);
+            var billingAddressViewModel = GetBillingAddressViewModel(payment.BillingAddress, shipping, cultureInfo);
 
             return new PaymentViewModel
             {
@@ -800,13 +865,16 @@ namespace Orckestra.Composer.Cart.Factory
             };
         }
 
-        protected virtual BillingAddressViewModel GetBillingAddressViewModel(Address billingAddress, Address shippingAddress, CultureInfo cultureInfo)
+        protected virtual BillingAddressViewModel GetBillingAddressViewModel(Address billingAddress, Shipment shipping, CultureInfo cultureInfo)
         {
             if (billingAddress == null)
             {
-                return new BillingAddressViewModel { UseShippingAddress = true };
+                var useShippingAddress = shipping.FulfillmentMethod == null ? true :
+                    shipping.FulfillmentMethod.FulfillmentMethodType == FulfillmentMethodType.Shipping;
+                return new BillingAddressViewModel { UseShippingAddress = useShippingAddress };
             }
 
+            var shippingAddress = shipping.Address;
             var billingAddressViewModel = MapBillingAddressViewModel(billingAddress, cultureInfo);
             billingAddressViewModel.UseShippingAddress = shippingAddress != null && AreAddressEqual(shippingAddress, billingAddress);
 
@@ -822,14 +890,17 @@ namespace Orckestra.Composer.Cart.Factory
 
             var addressViewModel = ViewModelMapper.MapTo<BillingAddressViewModel>(address, cultureInfo);
 
-            var regionName = CountryService.RetrieveRegionDisplayNameAsync(new RetrieveRegionDisplayNameParam
+            if (!string.IsNullOrWhiteSpace(address.RegionCode))
             {
-                CultureInfo = cultureInfo,
-                IsoCode = ComposerContext.CountryCode,
-                RegionCode = address.RegionCode
-            }).Result;
+                var regionName = CountryService.RetrieveRegionDisplayNameAsync(new RetrieveRegionDisplayNameParam
+                {
+                    CultureInfo = cultureInfo,
+                    IsoCode = ComposerContext.CountryCode,
+                    RegionCode = address.RegionCode
+                }).Result;
 
-            addressViewModel.RegionName = regionName;
+                addressViewModel.RegionName = regionName;
+            }
 
             return addressViewModel;
         }

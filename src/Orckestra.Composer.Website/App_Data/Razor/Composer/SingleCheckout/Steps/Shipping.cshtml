@@ -1,0 +1,166 @@
+﻿@inherits Composer.Razor.ComposerRazorFunction
+@using Orckestra.Composer.Services
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Shipping"; }
+    }
+
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on" xmlns:v-slot="v-slot">
+<head>
+</head>
+<body>
+    <div data-oc-controller="SingleCheckout.Shipping">
+        <div class="card  mt-4">
+            <div class="card-header">
+                <h3 class="float-left">
+                    @Html.Localize("CheckoutProcess", "F_ShippingStepTitle")
+                </h3>
+                <div v-if="UserExistsMode">@CheckoutHelpers.StepContinueButton("!FulfilledCustomer", "shipping", "F_ContinueAsGuest")</div>
+                <div v-else-if="SigningInMode">@CheckoutHelpers.StepContinueButton("!FulfilledCustomer", "shipping", "F_SignInAndContinue")</div>
+                <div v-else="v-else">@CheckoutHelpers.StepContinueButton("!FulfilledCustomer", "shipping")</div>
+
+                @CheckoutHelpers.StepEditButton("shipping")
+            </div>
+
+            <div class="card-body  bg-light" v-show="step.active" v-cloak="true" data-qa="shipping-active-state">
+                @Forms.Validations.SelectStoreError("Errors.StoreNotSelectedError")
+               <p>@Html.Localize("CheckoutProcess", "F_ShippingStepDescription")</p>
+                <div class="form-row" novalidate="novalidate" id="AccordionShippingMethodType">
+                    <div class="col-md-6 pb-3" v-for="shippingMethodType in ShippingMethodTypes">
+                        <div class="border  rounded bg-white  p-3"
+                             v-bind:class="{'selected-method-type bg-selected': shippingMethodType.FulfillmentMethodTypeString === SelectedMethodTypeString}">
+                            @ShippingMethodTypeOption()
+                            <div class="collapse  mt-4  border-top"
+                                 v-if="shippingMethodType.IsModified"
+                                 v-bind:Id="'ShippingMethod' + shippingMethodType.FulfillmentMethodTypeString"
+                                 data-parent="#AccordionShippingMethodType">
+                                @ShippingMethodsListForTypeOption()
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <transition-group name="fade">
+                    <div v-if="IsShippingMethodType" key="AddressSelector">
+                        @Function("Composer.SingleCheckout.Steps.ShippingAddress")
+                    </div>
+                    <div v-show="IsPickUpMethodType" key="StoreSelector" class="row">
+                        @Function("Composer.SingleCheckout.Steps.PickUpAddress")
+                    </div>
+                </transition-group>
+            </div>
+
+            <div class="card-body bg-light" v-show="step.preview" v-cloak="true" data-qa="shipping-preview-state">
+                <div v-if="Cart.ShippingMethod">
+                    <div class="row">
+                        <div class="col-12 col-sm-8">
+                            <h4>{{SelectedMethodType.DisplayName}}</h4>
+
+                            @CheckoutHelpers.AddressPreview("ShippingAddress")
+
+                            <span v-if="Cart.ShippingMethod.ExpectedDaysBeforeDelivery"
+                                  data-qa="shippingmethod-expecteddays-info" class="clearfix">
+                                <strong>
+                                    @Html.Localize("CheckoutProcess", "F_ShipTimeTitle")
+                                </strong>
+                                {{Cart.ShippingMethod.ExpectedDaysBeforeDelivery}}
+                                @Html.Localize("CheckoutProcess", "L_DeliveryDaysNumber")
+                            </span>
+                        </div>
+                        <div class="col-12 col-sm-4">
+                            <div class="float-sm-right">
+                                @Html.Localize("MyAccount", "L_Total"): <span class="h5">{{Cart.ShippingMethod.Cost}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+@helper ShippingMethodTypeOption()
+{
+    <div class="form-check">
+
+        <input data-parsley-class-handler-selector=".card-body"
+               data-parsley-errors-container="#method-errors"
+               v-bind:data-qa="'radio-method-type-' + shippingMethodType.FulfillmentMethodTypeString"
+               class="form-check-input" type="radio"
+               v-bind:checked="shippingMethodType.FulfillmentMethodTypeString === SelectedMethodTypeString"
+               v-bind:disabled="IsLoading"
+               required="required"
+               name="SelectedShippingMethodType"
+               xmlns:v-bind="v-bind"
+               v-bind:value="shippingMethodType.FulfillmentMethodTypeString"
+               v-bind:id="shippingMethodType.FulfillmentMethodTypeString + '-radio'"
+               v-on:change="changeShippingMethodType"
+               xmlns:v-on="v-on" />
+
+        <label class="form-check-label d-block"
+               v-bind:for="shippingMethodType.FulfillmentMethodTypeString + '-radio'">
+            <div class="d-flex justify-content-between">
+                <p class="h4 ">{{shippingMethodType.DisplayName}}</p>
+
+                <div class="text-right" v-if="shippingMethodType.SelectedMethod">
+                    <p class="h4">{{shippingMethodType.SelectedMethod.Cost || @Html.Localize("ShoppingCart", "L_Free")}}</p>
+                </div>
+            </div>
+            <div v-if="shippingMethodType.SelectedMethod">
+                <p class="mb-0" v-if="shippingMethodType.IsModified">
+                    <strong v-if="shippingMethodType.SelectedMethod">
+                        {{shippingMethodType.SelectedMethod.DisplayName}}
+                    </strong> |
+                    <a v-bind:href="'#ShippingMethod' + shippingMethodType.FulfillmentMethodTypeString"
+                       data-toggle="collapse"
+                       role="button"
+                       aria-expanded="true"
+                       v-bind:aria-controls="'ShippingMethod' + shippingMethodType.FulfillmentMethodTypeString"
+                       class="cta">
+                        @Html.Localize("CheckoutProcess", "F_ChangeShippingMethod")
+                    </a>
+                </p>
+                <span v-if="shippingMethodType.SelectedMethod.ExpectedDaysBeforeDelivery" class="clearfix">
+                    <strong>@Html.Localize("CheckoutProcess", "F_ShipTimeTitle")</strong>
+                    {{shippingMethodType.SelectedMethod.ExpectedDaysBeforeDelivery}}
+                    @Html.Localize("CheckoutProcess", "L_DeliveryDaysNumber")
+                </span>
+            </div>
+        </label>
+    </div>
+}
+
+@helper ShippingMethodsListForTypeOption()
+{
+    <ul class="list-group list-group-flush">
+        <li v-for="shippingMethod in shippingMethodType.ShippingMethods" class="list-group-item">
+            <div class="row">
+                <div class="col-8">
+                    <p class="mb-0 font-weight-bolder">{{shippingMethod.DisplayName}}</p>
+                    <p v-if="shippingMethod.ExpectedDaysBeforeDelivery" class="mb-0">
+                        @Html.Localize("CheckoutProcess", "F_ShipTimeTitle") {{shippingMethod.ExpectedDaysBeforeDelivery}}
+                        @Html.Localize("CheckoutProcess", "L_DeliveryDaysNumber")
+                    </p>
+                    <p class="mb-0 font-weight-bolder">{{shippingMethod.Cost}}</p>
+                </div>
+                <div class="col-4 align-self-end">
+                    <div v-if="shippingMethodType.SelectedMethod.ShippingProviderId === shippingMethod.ShippingProviderId"
+                         class="bg-success btn-sm rounded float-right d-inline-flex">
+                        <span class="text-white text-nowrap">
+                            <i class="fa fa-check fa-lg"></i>
+                            @Html.Localize("CheckoutProcess", "L_Selected")
+                        </span>
+                    </div>
+                    <button v-else="v-else" class="btn btn-sm btn-outline-secondary text-uppercase float-right"
+                            v-on:click='selectShippingMethod(shippingMethod)' v-bind:disabled="IsLoading">
+                        @Html.Localize("CheckoutProcess", "F_SelectShippingMethod")
+                    </button>
+                </div>
+            </div>
+        </li>
+    </ul>
+}

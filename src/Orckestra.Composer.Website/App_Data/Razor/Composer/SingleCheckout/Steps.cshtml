@@ -1,0 +1,46 @@
+﻿@inherits RazorFunction
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Page"; }
+    }
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<head>
+</head>
+<body>
+    <checkout-page xmlns:v-bind="v-bind" xmlns:v-on="v-on" xmlns:v-slot="v-slot" v-bind:start-index="Steps.StartStep">
+        <checkout-step v-slot="step" v-bind:before-enter="prepareCustomer"
+                       v-bind:before-change="processCustomer"
+                       v-bind:fulfilled="FulfilledCustomer"
+                       v-bind:loading="Steps.Information.Loading">
+            @Function("Composer.SingleCheckout.Steps.UserInformation")
+        </checkout-step>
+        <checkout-step v-slot="step" v-bind:before-enter="prepareShipping"
+                       v-bind:before-change="processShipping"
+                       v-bind:fulfilled="FulfilledShipping"
+                       v-bind:loading="Steps.Shipping.Loading">
+            @Function("Composer.SingleCheckout.Steps.Shipping")
+        </checkout-step>
+        <checkout-step v-slot="step" v-bind:before-change="processCart"
+                       v-bind:fulfilled="FulfilledCart">
+            @Function("Composer.SingleCheckout.Steps.ReviewCart")
+        </checkout-step>
+        <checkout-step v-slot="step" v-bind:before-enter="prepareBillingAddress"
+                       v-bind:before-change="processBilling"
+                       v-bind:fulfilled="FulfilledBillingAddress"
+                       v-bind:loading="Steps.Billing.Loading">
+            @Function("Composer.SingleCheckout.Steps.BillingAddress")
+        </checkout-step>
+        <checkout-step v-slot="step" v-bind:before-enter="preparePayment"
+                       v-bind:before-change="processPayment"
+                       v-bind:fulfilled="FulfilledPayment"
+                       v-bind:loading="Steps.Payment.Loading">
+            @Function("Composer.SingleCheckout.Steps.Payment")
+        </checkout-step>
+    </checkout-page>
+    @AddressHelpers.deleteAddressConfirmationModal("deleteAddressModal")
+</body>
+</html>

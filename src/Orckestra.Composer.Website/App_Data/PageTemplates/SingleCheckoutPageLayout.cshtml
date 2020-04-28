@@ -1,0 +1,39 @@
+@inherits RazorPageTemplate
+@using System.Globalization
+
+@functions {
+    public override void Configure()
+    {
+        TemplateId = new Guid("94b93a9f-df7f-41d7-89b6-d003d3e0c553");
+        TemplateTitle = "Single Checkout Page Layout";
+        Layout = "MasterLayout.cshtml";
+    }
+
+    [Placeholder(Id = "body", Title = "Body", IsDefault = true)]
+    public XhtmlDocument Body { get; set; }
+
+    [Placeholder(Id = "Right", Title = "Right")]
+    public XhtmlDocument Right { get; set; }
+}
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<head>
+    <title>@CurrentPageNode.Title</title>
+</head>
+<body>
+    @Function("Composer.CheckoutHeader")
+    @Function("Composer.Header.GeneralErrors")
+    <div id="vueSingleCheckout" class="container-md checkout-page mb-5">
+        <div class="row">
+            <div class="col-12 col-sm-8  mb-4">
+                <h1>@CurrentPageNode.Title</h1>
+                @Markup(Body)
+            </div>
+            <div class="col-12 col-sm-4">
+                @Markup(Right)
+            </div>
+        </div>
+    </div>
+</body>
+</html>

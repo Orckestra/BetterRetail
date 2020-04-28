@@ -40,5 +40,17 @@ module Orckestra.Composer {
             return <Q.Promise<IPaymentViewModel>>
                 ComposerClient.put('/api/payment/paymentMethod', request);
         }
+
+        /**
+         * Return a list of payment methods and payment provider
+         * @return {ICheckoutPaymentViewModel} Instance of the provider.
+         */
+        public getCheckoutPayment(): Q.Promise<ICheckoutPaymentViewModel> {
+            return <Q.Promise<ICheckoutPaymentViewModel>> ComposerClient.get('/api/payment/checkoutpayment');
+        }
+
+        public updatePaymentMethod(request : any) : Q.Promise<IActivePaymentViewModel> {
+            return <Q.Promise<IActivePaymentViewModel>> ComposerClient.put('/api/payment/checkoutpayment', request);
+        }
     }
 }

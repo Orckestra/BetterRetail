@@ -52,9 +52,9 @@ module Orckestra.Composer {
             return reason === CacheError.Expired || reason === CacheError.NotFound;
         }
 
-        public getFreshCart(): Q.Promise<any> {
+        public getFreshCart(force: boolean = false): Q.Promise<any> {
 
-            if (!CartService.GettingFreshCart) {
+            if (!CartService.GettingFreshCart || force) {
                 CartService.GettingFreshCart = this.cartRepository.getCart()
                     .then(cart => this.setCartToCache(cart));
             }
@@ -109,7 +109,10 @@ module Orckestra.Composer {
 
             return this.cartRepository.updateLineItem(lineItemId, quantity, recurringOrderFrequencyName, recurringOrderProgramName)
                 .then(cart => this.setCartToCache(cart))
-                .then(cart => this.eventHub.publish('cartUpdated', { data: cart }));
+                .then(cart => {
+                    this.eventHub.publish('cartUpdated', { data: cart });
+                    return cart;
+                });
         }
 
         public deleteLineItem(lineItemId: string, productId: string): Q.Promise<any> {
@@ -123,7 +126,10 @@ module Orckestra.Composer {
 
             return this.cartRepository.deleteLineItem(lineItemId)
                 .then(cart => this.setCartToCache(cart))
-                .then(cart => this.eventHub.publish('cartUpdated', { data: cart }));
+                .then(cart => {
+                    this.eventHub.publish('cartUpdated', { data: cart });
+                    return cart;
+                });
         }
 
         public updateBillingMethodPostalCode(postalCode: string): Q.Promise<any> {
@@ -168,7 +174,7 @@ module Orckestra.Composer {
                  .then((result: IUpdateCartResult) => this.setCartToCache(result.Cart).then(() => result));
         }
 
-        public completeCheckout(currentStep: number): Q.Promise<ICompleteCheckoutResult> {
+        public completeCheckout(currentStep: number = null): Q.Promise<ICompleteCheckoutResult> {
 
             return this.cartRepository.completeCheckout(currentStep)
                  .then((result: ICompleteCheckoutResult) => this.setCartToCache(null).then(() => result));

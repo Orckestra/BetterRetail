@@ -61,7 +61,7 @@
     </Reference>
     <Reference Include="Composite, Version=6.6.6912.30810, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\C1CMS.Assemblies.6.6.6912.30810\lib\net471\Composite.dll</HintPath>
-      <Private>True</Private>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Composite.AspNet.MvcFunctions, Version=1.0.15.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\C1CMSPackages.Composite.AspNet.MvcFunctions.1.0.15\lib\net461\Composite.AspNet.MvcFunctions.dll</HintPath>
@@ -128,6 +128,9 @@
       <HintPath>..\..\packages\C1CMS.Assemblies.6.6.6912.30810\lib\net471\Microsoft.Practices.ObjectBuilder.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Microsoft.ServiceBus, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Orckestra.ExperienceManagement.Configuration.4.8.3-singlecheckout-beta\lib\net471\Microsoft.ServiceBus.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
       <Private>True</Private>
@@ -142,7 +145,7 @@
       <HintPath>..\..\packages\OrckestraCommerce.Common.4.2.0\lib\net461\Orckestra.Caching.dll</HintPath>
     </Reference>
     <Reference Include="Orckestra.ExperienceManagement.Configuration, Version=4.8.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Orckestra.ExperienceManagement.Configuration.4.8.3\lib\net471\Orckestra.ExperienceManagement.Configuration.dll</HintPath>
+      <HintPath>..\..\packages\Orckestra.ExperienceManagement.Configuration.4.8.3-singlecheckout-beta\lib\net471\Orckestra.ExperienceManagement.Configuration.dll</HintPath>
     </Reference>
     <Reference Include="Orckestra.Logging, Version=4.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\OrckestraCommerce.Common.4.2.0\lib\net461\Orckestra.Logging.dll</HintPath>
@@ -285,6 +288,10 @@
     <Content Include="App_Data\Razor\Composer\Grids\TwoThirdsOneThird.cshtml" />
     <Content Include="App_Data\Razor\Composer\Header.cshtml" />
     <Content Include="App_Data\Razor\Composer\Grids\FullGrid.cshtml" />
+    <Content Include="App_Code\Forms\Address.cshtml" />
+    <Content Include="App_Code\Forms\CreditCard.cshtml" />
+    <Content Include="App_Code\AddressHelpers.cshtml" />
+    <Content Include="App_Code\Forms\Validations.cshtml" />
     <None Include="App_Config\Caching.config" />
     <Content Include="App_Data\Razor\Composer\Grids\OneThirdTwoThirds.cshtml" />
     <Content Include="App_Data\Razor\Composer\Grids\AccountGrid.cshtml" />
@@ -324,9 +331,25 @@
     <Content Include="App_Data\Razor\Composer\Product\Specifications.cshtml" />
     <Content Include="App_Data\Razor\Composer\DatePicker\DatePicker.Includes.cshtml" />
     <Content Include="App_Data\Razor\Composer\Footer\SocialLinks.cshtml" />
+    <Content Include="App_Data\Razor\Composer\SingleCheckout\Steps\Shipping.cshtml" />
+    <Content Include="App_Data\Razor\Composer\SingleCheckout\Steps\UserInformation.cshtml" />
+    <Content Include="App_Data\Razor\Composer\SingleCheckout\OrderSummary.cshtml" />
+    <Content Include="App_Data\PageTemplates\SingleCheckoutPageLayout.cshtml" />
+    <Content Include="App_Data\Razor\web.config" />
     <Content Include="App_Data\Razor\Composer\Search\Suggestions.cshtml" />
     <Content Include="App_Data\Razor\Composer\Search\ContentTabs.cshtml" />
+    <Content Include="App_Data\Razor\Composer\SingleCheckout\Steps.cshtml" />
+    <Content Include="App_Data\Razor\Composer\SingleCheckout\Steps\ReviewCart.cshtml" />
+    <Content Include="App_Data\Razor\Composer\SingleCheckout\Steps\Payment.cshtml" />
+    <Content Include="App_Code\CheckoutHelpers.cshtml" />
     <Content Include="App_Data\Razor\Composer\Layout\Includes\Javascript.cshtml" />
+    <Content Include="App_Data\Razor\Composer\SingleCheckout\Steps\BillingAddress.cshtml" />
+    <Content Include="App_Data\Razor\Composer\SingleCheckout\Steps\PickUpAddress.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Store\Locator.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Store\List.cshtml" />
+    <Content Include="App_Data\Razor\Composer\SingleCheckout\Confirmation.cshtml" />
+    <Content Include="App_Data\Razor\Composer\SingleCheckout\Steps\ShippingAddress.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Product\RecurringFrequency.cshtml" />
     <None Include="Properties\PublishProfiles\Website - CD.pubxml" />
     <None Include="Properties\PublishProfiles\Website.pubxml" />
     <Content Include="ViewModelAsExtensionModelTemplate.tt">

@@ -5,6 +5,7 @@ using FluentAssertions;
 using Moq;
 using Moq.AutoMock;
 using NUnit.Framework;
+using Orckestra.Composer.Cart.Factory.Order;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Repositories;
 using Orckestra.Composer.Cart.Services;
@@ -27,7 +28,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
 
             _container.Use(ViewModelMapperFactory.Create());
             _container.Use(CartViewModelFactoryMock.Create());
-
+    
             var cartRepoMock = _container.GetMock<ICartRepository>();
             cartRepoMock.Setup(repo => repo.CompleteCheckoutAsync(It.IsNotNull<CompleteCheckoutParam>()))
                 .Returns((CompleteCheckoutParam p) =>

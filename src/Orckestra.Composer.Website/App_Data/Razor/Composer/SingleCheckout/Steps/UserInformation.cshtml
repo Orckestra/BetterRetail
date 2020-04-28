@@ -1,0 +1,169 @@
+﻿@inherits Composer.Razor.ComposerRazorFunction
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "User Information"; }
+    }
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on" xmlns:v-slot="v-slot">
+<head>
+</head>
+<body>
+    <div data-oc-controller="SingleCheckout.GuestCustomerInfo">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="float-left">
+                    @Html.Localize("CheckoutProcess", "T_Information")
+                </h3>
+                @CheckoutHelpers.StepEditButton("information")
+            </div>
+
+            <div class="card-body  bg-light" v-cloak="true">
+                <div v-if="step.preview" key="preview" data-qa="information-preview-state">
+                    @Information_Step_Preview()
+                </div>
+                <div v-show="step.active" key="active" data-qa="information-active-state">
+                    @Information_Step_Active()
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>
+
+@helper Information_Step_Preview()
+{
+    <div>
+        <span data-qa="information-firstName" v-text="Cart.Customer.FirstName" class="font-weight-bold"></span>&#160;
+        <span data-qa="information-lastName" v-text="Cart.Customer.LastName" class="font-weight-bold"></span>
+        <div data-qa="information-email" v-text="Cart.Customer.Email"></div>
+    </div>
+}
+
+@helper Information_Step_Active()
+{
+    <form id="editCustomerForms">
+        <div v-if="IsAuthenticated">
+            <div class="form-row">
+                <div class="col-md-6">
+                    <strong>@Html.Localize("Forms", "F_FirstName")</strong><br />{{Cart.Customer.FirstName}}
+                </div>
+                <div class="col-md-6">
+                    <strong>@Html.Localize("Forms", "F_LastName")</strong><br />{{Cart.Customer.LastName}}
+                </div>
+            </div>
+            <div class="form-row mt-3">
+                @EmailField("Email", true)
+            </div>
+        </div>
+        <div v-if="!IsAuthenticated">
+            <div class="form-row" v-show="!SigningInMode">
+                <div class="form-group col-md-6">
+                    <label for="FirstName">@Html.Localize("Forms", "F_FirstName") *</label>
+                    <input v-model="Cart.Customer.FirstName"
+                           id="FirstName"
+                           name="FirstName"
+                           data-qa="information-firtsName-input"
+                           v-bind:disabled="IsLoading"
+                           class="form-control"
+                           placeholder="@Html.Localize("Forms", "F_FirstNameWaterMark")"
+                           v-bind:type="!SigningInMode ? 'text' : 'hidden'"
+                           required="required"
+                           data-parsley-length="[2, 36]"
+                           data-parsley-pattern="/^[a-zA-Z\u00E0-\u00FC\.\-\s\']+$/i"
+                           @Html.ParsleyMessage("Forms", "F_FirstNameLengthError", "length-message")
+                           @Html.ParsleyMessage("Forms", "F_FirstNamePatternError", "pattern-message") />
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label for="LastName">@Html.Localize("Forms", "F_LastName") *</label>
+                    <input v-model="Cart.Customer.LastName"
+                           id="LastName"
+                           name="LastName"
+                           data-qa="information-lastName-input"
+                           v-bind:disabled="IsLoading"
+                           class="form-control"
+                           placeholder="@Html.Localize("Forms", "F_LastNameWaterMark")"
+                           v-bind:type="!SigningInMode ? 'text' : 'hidden'"
+                           required="required"
+                           data-parsley-length="[2, 36]"
+                           data-parsley-pattern="/^[a-zA-Z\u00E0-\u00FC\.\-\s\']+$/i"
+                           @Html.HelpBubble("Forms", "F_LastNameIndication")
+                           @Html.ParsleyMessage("Forms", "F_LastNameLengthError", "length-message")
+                           @Html.ParsleyMessage("Forms", "F_LastNamePatternError", "pattern-message") />
+                </div>
+            </div>
+
+            @Forms.Validations.SignInErrors("Errors.SignIn")
+            <div class="form-row">
+                @EmailField("username")
+            </div>
+            <div class="form-row" v-show="SigningInMode">
+                <div class="form-group col-md-6">
+                    <label for="Password">@Html.Localize("Forms", "F_Password") *</label>
+                    <input v-model="Cart.Customer.Password"
+                           id="Password"
+                           name="Password"
+                           data-qa="information-password-input"
+                           v-bind:disabled="IsLoading"
+                           v-bind:type="SigningInMode ? 'password' : 'hidden'"
+                           class="form-control"
+                           required="required"
+                           data-parsley-length="[2, 36]"
+                           @Html.HelpBubble("Forms", "F_PasswordIndication", 8)
+                           @Html.ParsleyMessage("Forms", "F_PasswordLengthError", "length-message")
+                           @Html.ParsleyMessage("Forms", "F_PasswordPatternError", "type-message") />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <span v-if="BaseInformationMode">
+                        @Html.Localize("CheckoutProcess", "L_SignInNow")
+                        <a href="#" role="button" v-on:click="signInButton" class="cta">@Html.Localize("CheckoutProcess", "B_SignInNow")</a>
+                    </span>
+                    <span v-if="UserExistsMode">
+                        <span class="h5">@Html.Localize("CheckoutProcess", "L_AccountAlreadyExists") </span>
+                        <a href="#" role="button" v-on:click="signInButton" class="btn-link btn">@Html.Localize("CheckoutProcess", "B_SignInNowAndSaveTime")</a>
+                    </span>
+                    <span v-if="SigningInMode">
+                        @Html.Localize("MyAccount", "H_ForgotPassword")
+                        <a href="#" role="button" v-on:click="continueAsGuestButton" class="cta">@Html.Localize("CheckoutProcess", "B_ContinueAsGuest")</a>
+                    </span>
+                </div>
+            </div>
+
+            <div class="row" v-if="ShowSignInButton">
+                <div class="col-12 mt-3">
+                    <button class="btn btn-primary" v-on:click.prevent="signInAndContinue">
+                        @Html.Localize("CheckoutProcess", "F_SignInAndContinue")
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+}
+
+@helper EmailField(string id = "Email", bool disbled = false)
+{
+    <div class="form-group col-md-6">
+        <label for="@id">@Html.Localize("Forms", "F_Email") *</label>
+        <input v-model="Cart.Customer.Email"
+               id="@id"
+               name="Email"
+               data-qa="information-email-input"
+               @if (!disbled) { <text> v-bind:disabled="IsLoading" </text>  } else { <text> disabled="disabled" </text> }
+               type="email"
+               v-on:change="onChangeUsername"
+               class="form-control"
+               placeholder="@Html.Localize("Forms", "F_EmailWaterMark")"
+               required="required"
+               data-parsley-length="[2, 36]"
+               data-parsley-type="email"
+               @Html.HelpBubble("Forms", "F_EmailAddressGuestIndication")
+               @Html.ParsleyMessage("Forms", "F_EmailLengthError", "length-message")
+               @Html.ParsleyMessage("Forms", "F_EmailPatternError", "type-message") />
+    </div>
+}

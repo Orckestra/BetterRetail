@@ -1,5 +1,6 @@
 ﻿using Composite.AspNet.Razor;
 using Composite.Core.Instrumentation;
+using System;
 using System.IO;
 using System.Web;
 using System.Web.Mvc;

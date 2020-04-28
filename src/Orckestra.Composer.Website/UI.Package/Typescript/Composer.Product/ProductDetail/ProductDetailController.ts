@@ -2,12 +2,18 @@
 ///<reference path='../../Composer.Cart/RecurringOrder/Repositories/RecurringOrderRepository.ts' />
 
 module Orckestra.Composer {
+
+    enum RecurringMode  {
+        Single = 'Single',
+        Recurring = 'Recurring'
+    }
+
     export class ProductDetailController extends Orckestra.Composer.ProductController {
 
         protected concern: string = 'productDetail';
 
         private selectedRecurringOrderFrequencyName: string;
-        private recurringMode: string = 'single';
+        private recurringMode: RecurringMode;
 
         public initialize() {
 
@@ -31,6 +37,10 @@ module Orckestra.Composer {
                 this.notifyAnalyticsOfProductDetailsImpression();
             });
             Q.when(this.renderData()).done(() => addToCartBusy.done());
+
+            let $recurringOrderContainer = this.context.container.find('[data-recurring-mode]');
+            this.recurringMode = $recurringOrderContainer.data('recurring-mode');
+            this.selectedRecurringOrderFrequencyName = $recurringOrderContainer.data('recurring-order-frequency');
         }
 
         protected getListNameForAnalytics(): string {
@@ -52,10 +62,7 @@ module Orckestra.Composer {
         }
 
         protected publishProductImpressionEvent(data: any) {
-            this.eventHub.publish('productDetailsRendered',
-                {
-                    data: data
-                });
+            this.eventHub.publish('productDetailsRendered', { data });
         }
 
         protected onSelectedVariantIdChanged(e: IEventInformation) {
@@ -91,12 +98,8 @@ module Orckestra.Composer {
         }
 
         protected onPricesChanged(e: IEventInformation) {
-
-            if (this.isProductWithVariants() && this.isSelectedVariantUnavailable()) {
-                this.render('PriceDiscount', null);
-            } else {
-                this.render('PriceDiscount', e.data);
-            }
+            let vm = this.isProductWithVariants() && this.isSelectedVariantUnavailable() ? null : e.data;
+            this.render('PriceDiscount', vm);
         }
 
         protected renderUnavailableAddToCart(): Q.Promise<void> {
@@ -104,15 +107,22 @@ module Orckestra.Composer {
             return Q.fcall(() => this.render('AddToCartProductDetail', {IsUnavailable: true}));
         }
 
+        protected renderAddToCartButton(isAuthenticated: boolean) {
+            let { Sku } = this.context.viewModel;
+
+            if (!isAuthenticated && this.recurringMode === RecurringMode.Recurring) {
+                return this.renderUnavailableAddToCart();
+            }
+
+            return this.inventoryService.isAvailableToSell(Sku)
+                .then(IsAvailableToSell =>
+                    this.render('AddToCartProductDetail', { IsAvailableToSell })
+                );
+        }
+
         protected renderAvailableAddToCart(): Q.Promise<void> {
-
-            var sku: string = this.context.viewModel.Sku;
-
-            return this.inventoryService.isAvailableToSell(sku)
-                .then(result => {
-                    this.render('AddToCartProductDetail', {IsAvailableToSell: result});
-                    this.renderRecurringAddToCartProductDetailFrequency();
-                });
+            return this._membershipService.isAuthenticated()
+                .then(({IsAuthenticated}) => this.renderAddToCartButton(IsAuthenticated));
         }
 
         public selectKva(actionContext: IControllerActionContext) {
@@ -152,10 +162,8 @@ module Orckestra.Composer {
                 pathArray[prevVariantIdIndex] = variantId;
             }
 
-            let builtPath = window.location.protocol
-            + '//'
-            + window.location.host
-            + this.productService.buildUrlPath(pathArray);
+            let {protocol, host} = window.location;
+            let builtPath = `${protocol}//${host}${this.productService.buildUrlPath(pathArray)}`;
 
             history.replaceState( {} , null, builtPath);
         }
@@ -169,32 +177,6 @@ module Orckestra.Composer {
             };
 
             return this.renderAvailableQuantity(quantity);
-        }
-
-        private renderRecurringAddToCartProductDetailFrequency() {
-            let loc = LocalizationProvider.instance(),
-                recurringBubblePitch = ((loc.getLocalizedString('ProductPage', 'L_RecurringBubblePitch'))),
-                availableFrequencies = this.context.viewModel.RecurringOrderFrequencies || [];
-
-            if (!this.selectedRecurringOrderFrequencyName && availableFrequencies.length > 0) {
-                this.selectedRecurringOrderFrequencyName = availableFrequencies[0].RecurringOrderFrequencyName;
-            }
-
-            this.inventoryService.isAvailableToSell(this.context.viewModel.Sku)
-                .then(result => {
-                    if (this.context.viewModel.IsRecurringOrderEligible && result) {
-                        this.render('ProductRecurringFrequency', {
-                            recurringMode: this.recurringMode,
-                            isAvailableForRecurring: this.context.viewModel.IsRecurringOrderEligible,
-                            availableFrequencies: availableFrequencies.map(freq => ({
-                                recurringOrderFrequencyName: freq.RecurringOrderFrequencyName,
-                                displayName: freq.DisplayName
-                            })),
-                            selectedRecurringOrderFrequencyName: this.selectedRecurringOrderFrequencyName,
-                            recurringBubblePitch: recurringBubblePitch
-                        });
-                    }
-                });
         }
 
         public onRecurringOrderFrequencySelectChanged(actionContext: IControllerActionContext) {
@@ -212,10 +194,15 @@ module Orckestra.Composer {
             actionContext.elementContext.closest('.js-recurringModeRow').addClass('selected');
             $('.modeSelection').collapse('toggle');
             this.recurringMode = actionContext.elementContext.val();
+
+            this._membershipService.isAuthenticated().then(({IsAuthenticated}) => {
+                if (IsAuthenticated) { return; }
+                return this.renderAddToCartButton(IsAuthenticated);
+            });
         }
 
         public addToCartButtonClick(actionContext: IControllerActionContext) {
-            let frequencyName = this.recurringMode === 'single' ? null : this.selectedRecurringOrderFrequencyName;
+            let frequencyName = this.recurringMode === RecurringMode.Single ? null : this.selectedRecurringOrderFrequencyName;
             this.addLineItem(actionContext, frequencyName, this.context.viewModel.RecurringOrderProgramName);
         }
     }

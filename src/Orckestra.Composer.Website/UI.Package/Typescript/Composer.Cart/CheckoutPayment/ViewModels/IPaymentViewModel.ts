@@ -7,6 +7,7 @@ module Orckestra.Composer {
     export interface IPaymentViewModel {
         PaymentId: string;
         PaymentMethods: Array<IPaymentMethodViewModel>;
+        PaymentProviders: Array<BaseCheckoutPaymentProvider>;
         UponReceptionPaymentMethodViewModels: Array<IPaymentMethodViewModel>;
         OnlinePaymentMethodViewModels: Array<IPaymentMethodViewModel>;
         CreditCardPaymentMethod: IPaymentMethodViewModel;

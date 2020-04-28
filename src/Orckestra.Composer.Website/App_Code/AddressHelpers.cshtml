@@ -1,0 +1,20 @@
+﻿@using Composite.AspNet.Razor
+@using System.Web.Mvc
+
+@helper deleteAddressConfirmationModal(string modalId = "deleteAddressModal")
+{
+    <div class="modal" id="@modalId">
+        <div class="modal-dialog  modal-sm">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <button type="button" class="close" data-dismiss="modal" title="@Html.Localize("General", "B_Close")"><span class="fa fa-times-circle"></span></button>
+                    @Html.Localize("MyAccount", "L_ConfirmDeleteAddress")
+                </div>
+                <div class="modal-footer">
+                    <button class="btn   btn-outline-secondary  modal--cancel" type="button">@Html.Localize("General", "B_Cancel")</button>
+                    <button class="btn  btn-primary  modal--confirm" type="button">@Html.Localize("General", "B_Delete")</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
