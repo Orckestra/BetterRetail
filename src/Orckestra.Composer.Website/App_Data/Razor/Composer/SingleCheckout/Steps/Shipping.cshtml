@@ -27,7 +27,8 @@
             </div>
 
             <div class="card-body  bg-light" v-show="step.active" v-cloak="true" data-qa="shipping-active-state">
-                <p>@Html.Localize("CheckoutProcess", "F_ShippingStepDescription")</p>
+                @Forms.Validations.SelectStoreError("Errors.StoreNotSelectedError")
+               <p>@Html.Localize("CheckoutProcess", "F_ShippingStepDescription")</p>
                 <div class="form-row" novalidate="novalidate" id="AccordionShippingMethodType">
                     <div class="col-md-6 pb-3" v-for="shippingMethodType in ShippingMethodTypes">
                         <div class="border  rounded bg-white  p-3"

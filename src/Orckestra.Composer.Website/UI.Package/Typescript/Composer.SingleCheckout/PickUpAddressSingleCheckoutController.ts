@@ -38,12 +38,18 @@ module Orckestra.Composer {
                     ...commonOptions.methods,
                     selectPickupStore(store: any) {
                         this.Cart.PickUpLocationId = store.Id;
+                        this.Errors.StoreNotSelectedError = false;
                     },
                     showStoreLocatorLocationError() {
                         this.Errors.StoreLocatorLocationError = true;
                     },
                     processPickUpAddress(): Q.Promise<any> {
                         let controllersToUpdate = [self.viewModelName];
+
+                        if(!this.Cart.PickUpLocationId) {
+                            this.Errors.StoreNotSelectedError = true;
+                            return Q.reject('PickUpLocationId is not specified');
+                        }
 
                         if (!this.pickUpAddressModified()) {
                             return  Q.resolve(true);

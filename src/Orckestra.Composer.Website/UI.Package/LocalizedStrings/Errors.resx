@@ -252,4 +252,7 @@
   <data name="L_UserNameAlreadyUsed" xml:space="preserve">
     <value>This user account already exist, did you forgot your password?</value>
   </data>
+  <data name="L_SelectAStore" xml:space="preserve">
+    <value>Please select a store.</value>
+  </data>
 </root>

@@ -204,6 +204,7 @@ module Orckestra.Composer {
                         InvalidPhoneFormatError: false,
                         AddressNameAlreadyInUseError: false,
                         StoreLocatorLocationError: false,
+                        StoreNotSelectedError: false,
                         SignIn: false
                     },
                     Modal: {
