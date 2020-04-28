@@ -229,7 +229,7 @@
     <value>Votre carte de crédit sera débitée une fois la commande soumise</value>
   </data>
   <data name="L_OrderConfirmation" xml:space="preserve">
-    <value>Votre confirmation de commande ainsi que votre reçu seront envoyés prochainement à votre adresse courriel {0}. Si vous n’avez pas reçu ce courriel, veuillez vérifier dans le dossier des courriels indésirables.</value>
+    <value>Confirmation de commande</value>
   </data>
   <data name="L_Products" xml:space="preserve">
     <value>Articles</value>
@@ -299,5 +299,14 @@
   </data>
   <data name="H_OrderDetail" xml:space="preserve">
     <value>Détails de la commande</value>
+  </data>
+  <data name="F_Continue" xml:space="preserve">
+    <value>Continuer</value>
+  </data>
+  <data name="F_Edit" xml:space="preserve">
+    <value>Éditer</value>
+  </data>
+  <data name="F_ReviewCart" xml:space="preserve">
+    <value>Revoir le panier</value>
   </data>
 </root>

@@ -11,16 +11,13 @@
 <head>
 </head>
 <body>
-    <div data-oc-controller="SingleCheckout.OrderSummary" 
-         class="checkout-step-container  active-step" 
+    <div data-oc-controller="SingleCheckout.OrderSummary"
+         class="checkout-step-container  active-step"
          v-bind:class="{'loading': Mode.CompleteCheckoutLoading}">
 
         <div class="card  mb-4  sps-order-summary sps  sps--abv" data-sps-offset="100">
-            <div class="loading-spinner">
-                <span class="spinner-border text-info" role="status">
-                    &#160;
-                </span>
-            </div>
+            @LoadingSpinner()
+
             <h3 class="card-header bg-primary border-primary  text-white">
                 @Html.Localize("ShoppingCart", "T_OrderSummary")
             </h3>
@@ -203,5 +200,14 @@
                 @Html.Localize("CheckoutProcess", "F_PlaceOrder")
             </button>
         </div>
+    </div>
+}
+
+@helper LoadingSpinner()
+{
+    <div class="loading-spinner">
+        <span class="spinner-border text-info" role="status">
+            &#160;
+        </span>
     </div>
 }

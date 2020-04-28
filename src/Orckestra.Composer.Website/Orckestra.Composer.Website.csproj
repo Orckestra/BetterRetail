@@ -279,7 +279,6 @@
     <Content Include="Deployment\InstallPackages.aspx" />
     <Content Include="Composite\content\forms\Administrative\EditPage.xml" />
     <Content Include="Deployment\SyncCategories.aspx" />
-    <Content Include="App_Data\PageTemplates\CheckoutPageLayout.cshtml" />
     <Content Include="App_Data\PageTemplates\MasterLayout.cshtml" />
     <Content Include="App_Data\PageTemplates\DefaultPageLayout.cshtml" />
     <Content Include="App_Data\Razor\Composer\CheckoutHeader.cshtml" />
