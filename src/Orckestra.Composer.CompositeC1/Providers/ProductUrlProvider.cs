@@ -8,6 +8,7 @@ using Orckestra.Composer.Providers;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Utils;
 using Orckestra.ExperienceManagement.Configuration;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.CompositeC1.Providers
 {
@@ -31,7 +32,9 @@ namespace Orckestra.Composer.CompositeC1.Providers
 
         public virtual string GetProductUrl(GetProductUrlParam parameters)
         {
-            Assert(parameters);
+            if (parameters == null) { throw new ArgumentNullException(nameof(parameters)); }
+            if (string.IsNullOrWhiteSpace(parameters.ProductId)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(parameters.ProductId)), nameof(parameters)); }
+            if (parameters.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(parameters.CultureInfo)), nameof(parameters)); }
 
             var productName = string.IsNullOrWhiteSpace(parameters.ProductName)
                 ? parameters.ProductId
@@ -45,7 +48,7 @@ namespace Orckestra.Composer.CompositeC1.Providers
 
             var homeUrl = PageService.GetPageUrl(WebsiteContext.WebsiteId, parameters.CultureInfo, httpContext)?.Trim('/');
 
-            string productPath = "";
+            string productPath = string.Empty;
             if (!string.IsNullOrWhiteSpace(homeUrl))
             {
                 productPath += $"/{homeUrl}";
@@ -61,13 +64,6 @@ namespace Orckestra.Composer.CompositeC1.Providers
             var uri = new Uri(productPath, UriKind.Relative);
 
             return uri.ToString();
-        }
-
-        private void Assert(GetProductUrlParam parameters)
-        {
-            if (parameters == null) { throw new ArgumentNullException(nameof(parameters)); }
-            if (string.IsNullOrWhiteSpace(parameters.ProductId)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("ProductId"), nameof(parameters)); }
-            if (parameters.CultureInfo == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("CultureInfo"), nameof(parameters)); }
         }
     }
 }

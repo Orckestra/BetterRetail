@@ -50,8 +50,7 @@ namespace Orckestra.Composer.Search.Context
         {
             get
             {
-                int page;
-                return int.TryParse(Request[SearchRequestParams.Page], out page) && page >= 1 ? page : 1;
+                return int.TryParse(Request[SearchRequestParams.Page], out int page) && page > 0 ? page : 1;
             }
         }
 
@@ -83,7 +82,7 @@ namespace Orckestra.Composer.Search.Context
 
         public virtual async Task<PageHeaderViewModel> GetPageHeaderViewModelAsync(GetPageHeaderParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
 
             return await SearchViewService.GetPageHeaderViewModelAsync(param).ConfigureAwait(false);
         }

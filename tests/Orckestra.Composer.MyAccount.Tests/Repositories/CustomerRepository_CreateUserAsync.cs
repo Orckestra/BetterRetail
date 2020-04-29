@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using FizzWare.NBuilder.Generators;
 using FluentAssertions;
@@ -13,6 +14,7 @@ using Orckestra.ForTests;
 using Orckestra.Overture;
 using Orckestra.Overture.ServiceModel.Customers;
 using Orckestra.Overture.ServiceModel.Requests.Customers.Membership;
+using static Orckestra.Composer.Utils.ExpressionUtility;
 
 namespace Orckestra.Composer.MyAccount.Tests.Repositories
 {
@@ -379,10 +381,11 @@ namespace Orckestra.Composer.MyAccount.Tests.Repositories
             var customerRepository = _container.CreateInstance<CustomerRepository>();
 
             // Act
-            var exception = Assert.ThrowsAsync<ArgumentNullException>(() => customerRepository.CreateUserAsync(null));
+            Expression<Func<Task<Customer>>> expression = () => customerRepository.CreateUserAsync(null);
+            var exception = Assert.ThrowsAsync<ArgumentNullException>(() => expression.Compile().Invoke());
 
             //Assert
-            exception.Message.Should().Contain("createUserParam");
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
         }
     }
 }

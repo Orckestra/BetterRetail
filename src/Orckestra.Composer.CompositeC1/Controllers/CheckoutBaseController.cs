@@ -40,24 +40,15 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             IWebsiteContext websiteContext
             )
         {
-            if (pageService == null) { throw new ArgumentNullException("pageService"); }
-            if (composerContext == null) { throw new ArgumentNullException("composerContext"); }
-            if (confirmationBreadcrumbViewService == null) { throw new ArgumentNullException("confirmationBreadcrumbViewService"); }
-            if (breadcrumbViewService == null) { throw new ArgumentNullException("breadcrumbViewService"); }
-            if (languageSwitchService == null) { throw new ArgumentNullException("languageSwitchService"); }
-            if (urlProvider == null) { throw new ArgumentNullException("urlProvider"); }
-            if (myAccountUrlProvider == null) { throw new ArgumentNullException("myAccountUrlProvider"); }
-            if (cartService == null) { throw new ArgumentNullException("cartService"); }
-
-            PageService = pageService;
-            ComposerContext = composerContext;
-            ConfirmationBreadcrumbViewService = confirmationBreadcrumbViewService;
-            BreadcrumbViewService = breadcrumbViewService;
-            LanguageSwitchService = languageSwitchService;
-            UrlProvider = urlProvider;
-            MyAccountUrlProvider = myAccountUrlProvider;
+            PageService = pageService ?? throw new ArgumentNullException(nameof(pageService));
+            ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
+            ConfirmationBreadcrumbViewService = confirmationBreadcrumbViewService ?? throw new ArgumentNullException(nameof(confirmationBreadcrumbViewService));
+            BreadcrumbViewService = breadcrumbViewService ?? throw new ArgumentNullException(nameof(breadcrumbViewService));
+            LanguageSwitchService = languageSwitchService ?? throw new ArgumentNullException(nameof(languageSwitchService));
+            UrlProvider = urlProvider ?? throw new ArgumentNullException(nameof(urlProvider));
+            MyAccountUrlProvider = myAccountUrlProvider ?? throw new ArgumentNullException(nameof(myAccountUrlProvider));
             WebsiteContext = websiteContext;
-            CartService = cartService;
+            CartService = cartService ?? throw new ArgumentNullException(nameof(cartService));
         }
 
         public virtual ActionResult Breadcrumb()

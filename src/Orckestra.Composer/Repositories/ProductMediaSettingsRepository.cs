@@ -15,8 +15,8 @@ namespace Orckestra.Composer.Repositories
 
         public ProductMediaSettingsRepository(IOvertureClient overtureClient, ICacheProvider cacheProvider)
         {
-            OvertureClient = overtureClient ?? throw new ArgumentNullException("overtureClient");
-            CacheProvider = cacheProvider ?? throw new ArgumentNullException("cacheProvider");
+            OvertureClient = overtureClient ?? throw new ArgumentNullException(nameof(overtureClient));
+            CacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));
         }
 
         /// <summary>

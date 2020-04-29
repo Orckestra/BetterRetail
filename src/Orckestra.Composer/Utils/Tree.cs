@@ -31,10 +31,9 @@ namespace Orckestra.Composer.Utils
             {
                 var category = kvp.Value;
 
-                TreeNode<TValue> parent;
                 var parentKey = parentKeySelector(category.Value);
                 if (parentKey != null
-                    && TryGetValue(parentKey, out parent))
+                    && TryGetValue(parentKey, out TreeNode<TValue> parent))
                 {
                     category.Parent = parent;
                     parent.Children.Add(category);

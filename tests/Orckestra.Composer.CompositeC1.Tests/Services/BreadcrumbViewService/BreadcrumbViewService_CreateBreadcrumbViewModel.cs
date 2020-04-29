@@ -12,6 +12,10 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
+using static Orckestra.Composer.Utils.ExpressionUtility;
+using Orckestra.Composer.ViewModels.Breadcrumb;
+using System.Linq.Expressions;
 
 namespace Orckestra.Composer.CompositeC1.Tests.Services.BreadcrumbViewService
 {
@@ -73,18 +77,17 @@ namespace Orckestra.Composer.CompositeC1.Tests.Services.BreadcrumbViewService
         public void WHEN_PageId_does_not_match_any_SHOULD_throw_ArgumentException()
         {
             //Arrange
-            var pageId = Guid.NewGuid();
             var param = new GetBreadcrumbParam
             {
                 CultureInfo = CultureInfo.InvariantCulture,
-                CurrentPageId = pageId.ToString()
+                CurrentPageId = Guid.NewGuid().ToString()
             };
 
             //Act & Assert
-            var ex = Assert.Throws<ArgumentException>(() => _sut.CreateBreadcrumbViewModel(param));
+            Expression<Func<BreadcrumbViewModel>> expression = () => _sut.CreateBreadcrumbViewModel(param);
+            var exception = Assert.Throws<InvalidOperationException>(() => expression.Compile().Invoke());
 
-            ex.ParamName.Should().Be(nameof(param.CurrentPageId));
-
+            exception.Message.Should().StartWith("Could not find any page matching this ID.");
         }
 
         [Test]

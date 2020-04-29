@@ -8,6 +8,7 @@ using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel.Orders;
 using Orckestra.Overture.ServiceModel.Requests.Orders.Shopping;
 using Orckestra.Overture.ServiceModel.Requests.Orders.Shopping.LineItems;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Cart.Repositories
 {
@@ -18,20 +19,17 @@ namespace Orckestra.Composer.Cart.Repositories
 
         public WishListRepository(IOvertureClient overtureClient, ICacheProvider cacheProvider)
         {
-            if (overtureClient == null) { throw new ArgumentNullException("overtureClient"); }
-            if (cacheProvider == null) { throw new ArgumentNullException("cacheProvider"); }
-
-            OvertureClient = overtureClient;
-            CacheProvider = cacheProvider;
+            OvertureClient = overtureClient ?? throw new ArgumentNullException(nameof(overtureClient));
+            CacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));
         }
 
         public virtual async Task<ProcessedCart> GetWishListAsync(GetCartParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param", "param is required"); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException("param.Scope is required", "param"); }
-            if (param.CultureInfo == null) { throw new ArgumentException("param.CultureInfo is required", "param"); }
-            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException("param.CartName is required", "param"); }
-            if (param.CustomerId == Guid.Empty) { throw new ArgumentException("param.CustomerId is required", "param"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartName)), nameof(param)); }
+            if (param.CustomerId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param)); }
 
             var cacheKey = BuildWishListCacheKey(param.Scope, param.CustomerId, param.CartName);
 
@@ -50,13 +48,13 @@ namespace Orckestra.Composer.Cart.Repositories
 
         public virtual async Task<ProcessedCart> AddLineItemAsync(AddLineItemParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param", "param is required"); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException("param.Scope is required", "param"); }
-            if (param.CultureInfo == null) { throw new ArgumentException("param.CultureInfo is required", "param"); }
-            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException("param.CartName is required", "param"); }
-            if (param.CustomerId == Guid.Empty) { throw new ArgumentException("param.CustomerId is required", "param"); }
-            if (string.IsNullOrWhiteSpace(param.ProductId)) { throw new ArgumentException("param.ProductId is required", "param"); }
-            if (param.Quantity <= 0) { throw new ArgumentException("param.Quantity must be positive, greater than 0", "param"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartName)), nameof(param)); }
+            if (param.CustomerId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.ProductId)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.ProductId)), nameof(param)); }
+            if (param.Quantity < 1) { throw new ArgumentOutOfRangeException(nameof(param), param.Quantity, GetMessageOfZeroNegative(nameof(param.Quantity))); }
 
             var request = BuildAddLineItemRequestFromParam(param);
             var cacheKey = BuildWishListCacheKey(param.Scope, param.CustomerId, param.CartName);
@@ -66,12 +64,12 @@ namespace Orckestra.Composer.Cart.Repositories
 
         public virtual async Task<ProcessedCart> RemoveLineItemAsync(RemoveLineItemParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param", "param is required"); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException("param.Scope is required", "param"); }
-            if (param.CultureInfo == null) { throw new ArgumentException("param.CultureInfo is required", "param"); }
-            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException("param.CartName is required", "param"); }
-            if (param.LineItemId == Guid.Empty) { throw new ArgumentException("param.LineItemId is required", "param"); }
-            if (param.CustomerId == Guid.Empty) { throw new ArgumentException("param.CustomerId is required", "param"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartName)), nameof(param)); }
+            if (param.LineItemId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.LineItemId)), nameof(param)); }
+            if (param.CustomerId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param)); }
 
             var request = new RemoveLineItemRequest
             {

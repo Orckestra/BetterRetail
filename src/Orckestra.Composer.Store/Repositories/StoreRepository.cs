@@ -4,21 +4,20 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Orckestra.Composer.Configuration;
-using Orckestra.Composer.Providers;
 using Orckestra.Composer.Store.Parameters;
-using Orckestra.Overture.ServiceModel.Customers.Stores;
 using Orckestra.Overture;
 using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel.Customers;
+using Orckestra.Overture.ServiceModel.Customers.Stores;
 using Orckestra.Overture.ServiceModel.Queries;
 using Orckestra.Overture.ServiceModel.Requests.Customers.CustomProfiles;
 using Orckestra.Overture.ServiceModel.Requests.Customers.Stores;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Store.Repositories
 {
     public class StoreRepository : IStoreRepository
     {
-
         protected IOvertureClient OvertureClient { get; private set; }
         protected ICacheProvider CacheProvider { get; private set; }
 
@@ -36,19 +35,19 @@ namespace Orckestra.Composer.Store.Repositories
             CacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));
         }
 
-        public virtual async Task<FindStoresQueryResult> GetStoresAsync(GetStoresParam getStoresParam)
+        public virtual async Task<FindStoresQueryResult> GetStoresAsync(GetStoresParam param)
         {
-            if (string.IsNullOrWhiteSpace(getStoresParam.Scope)) { throw new ArgumentException("scope"); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
 
             var cacheKey = new CacheKey(CacheConfigurationCategoryNames.Store)
             {
-                Scope = getStoresParam.Scope
+                Scope = param.Scope
             };
             cacheKey.AppendKeyParts(GETSTORES_CACHE_KEYPART);
 
             var request = new FindStoresRequest
             {
-                ScopeId = getStoresParam.Scope,
+                ScopeId = param.Scope,
                 Query = new Query
                 {
                     StartingIndex = 0,
@@ -61,8 +60,7 @@ namespace Orckestra.Composer.Store.Repositories
                 }
             };
 
-            var stores = await CacheProvider.GetOrAddAsync(cacheKey, () => OvertureClient.SendAsync(request))
-                    .ConfigureAwait(false);
+            var stores = await CacheProvider.GetOrAddAsync(cacheKey, () => OvertureClient.SendAsync(request)).ConfigureAwait(false);
 
             // TODO: Remove this as soon as the FindStoresRequest returns localized display names.
             if (stores.Results.Any(s => s.DisplayName != null))
@@ -70,10 +68,10 @@ namespace Orckestra.Composer.Store.Repositories
                 return stores;
             }
             // Try get DisplayNames
-            if (getStoresParam.IncludeExtraInfo)
+            if (param.IncludeExtraInfo)
             {
                 var ids = stores.Results.Select(x => x.Id).ToList();
-                var extraStoresInfo = await GetExtraStoresInfoAsync(ids, getStoresParam).ConfigureAwait(false);
+                var extraStoresInfo = await GetExtraStoresInfoAsync(ids, param).ConfigureAwait(false);
 
                 for (var index = 0; index < stores.Results.Count; index++)
                 {
@@ -111,8 +109,8 @@ namespace Orckestra.Composer.Store.Repositories
 
         public virtual async Task<Overture.ServiceModel.Customers.Stores.Store> GetStoreByNumberAsync(GetStoreByNumberParam param)
         {
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException("scope"); }
-            if (string.IsNullOrWhiteSpace(param.StoreNumber)) { throw new ArgumentException("storeNumber"); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.StoreNumber)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.StoreNumber)), nameof(param)); }
 
             var cacheKey = new CacheKey(CacheConfigurationCategoryNames.Store)
             {
@@ -156,13 +154,14 @@ namespace Orckestra.Composer.Store.Repositories
 
         public virtual async Task<FulfillmentSchedule> GetStoreScheduleAsync(GetStoreScheduleParam param)
         {
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException("scope"); }
-            if (param.FulfillmentLocationId == null) { throw new ArgumentException("fulfillmentLocationId"); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
+            if (param.FulfillmentLocationId == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.FulfillmentLocationId)), nameof(param)); }
 
             var cacheKey = new CacheKey(CacheConfigurationCategoryNames.StoreSchedule)
             {
                 Scope = param.Scope
             };
+
             cacheKey.AppendKeyParts(param.FulfillmentLocationId.ToString());
 
             var request = new GetScheduleRequest
@@ -172,9 +171,7 @@ namespace Orckestra.Composer.Store.Repositories
                 ScheduleType = ScheduleType.OpeningHours
             };
 
-            return
-                await
-                    CacheProvider.GetOrAddAsync(cacheKey, () => OvertureClient.SendAsync(request)).ConfigureAwait(false);
+            return await CacheProvider.GetOrAddAsync(cacheKey, () => OvertureClient.SendAsync(request)).ConfigureAwait(false);
         }
 
         protected virtual List<Filter> GetStoreFilters()

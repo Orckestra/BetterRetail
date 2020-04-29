@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Orckestra.Composer.Configuration;
-using Orckestra.Composer.Providers;
 using Orckestra.Overture;
 using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel;
@@ -14,14 +13,10 @@ namespace Orckestra.Composer.Repositories
         protected IOvertureClient OvertureClient { get; private set; }
         protected ICacheProvider CacheProvider { get; private set; }
 
-        public AddressRepository(IOvertureClient overtureClient,
-            ICacheProvider cacheProvider)
+        public AddressRepository(IOvertureClient overtureClient, ICacheProvider cacheProvider)
         {
-            if (overtureClient == null) { throw new ArgumentNullException("overtureClient"); }
-            if (cacheProvider == null) { throw new ArgumentNullException("cacheProvider"); }
-
-            OvertureClient = overtureClient;
-            CacheProvider = cacheProvider;
+            OvertureClient = overtureClient ?? throw new ArgumentNullException(nameof(overtureClient));
+            CacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));
         }
 
         /// <summary>
@@ -33,7 +28,7 @@ namespace Orckestra.Composer.Repositories
         /// </returns>
         public Task<Address> GetAddressByIdAsync(Guid addressId)
         {
-            if (addressId == Guid.Empty) { throw new ArgumentNullException("addressId"); }
+            if (addressId == Guid.Empty) { throw new ArgumentNullException(nameof(addressId)); }
 
             var request = new GetAddressRequest
             {

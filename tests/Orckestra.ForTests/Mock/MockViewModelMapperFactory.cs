@@ -21,7 +21,7 @@ namespace Orckestra.ForTests.Mock
 
             var formatterMock = new Mock<IViewModelPropertyFormatter>();
             formatterMock.Setup(m => m.Format(It.IsAny<object>(), It.IsNotNull<IPropertyMetadata>(), It.IsAny<CultureInfo>()))
-                .Returns((object value, IPropertyMetadata meta, CultureInfo culture) => value == null ? null : value.ToString());
+                .Returns((object value, IPropertyMetadata meta, CultureInfo culture) => value?.ToString());
 
             var lookupServiceMock = new Mock<ILookupService>();
             var localizationProviderMock = new Mock<ILocalizationProvider>();

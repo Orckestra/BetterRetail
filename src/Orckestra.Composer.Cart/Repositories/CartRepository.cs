@@ -5,9 +5,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Configuration;
-using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
-using Orckestra.Composer.Utils;
 using Orckestra.Overture;
 using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel.Orders;
@@ -19,6 +17,7 @@ using Orckestra.Overture.ServiceModel.Requests.Orders.Shopping.Payments;
 using Orckestra.Overture.ServiceModel.Requests.Orders.Shopping.Shipments;
 using Orckestra.Overture.ServiceModel.Requests.RecurringOrders;
 using ServiceStack;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Cart.Repositories
 {
@@ -43,10 +42,10 @@ namespace Orckestra.Composer.Cart.Repositories
         /// <returns>List of Cart Summaries</returns>
         public virtual Task<List<CartSummary>> GetCartsByCustomerIdAsync(GetCartsByCustomerIdParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param", "param is required"); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException("param.Scope is required", "param"); }
-            if (param.CultureInfo == null) { throw new ArgumentException("param.CultureInfo is required", "param"); }
-            if (param.CustomerId == Guid.Empty) { throw new ArgumentException("param.CustomerId is required", "param"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
+            if (param.CustomerId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param)); }
 
             var request = new GetCartsByCustomerIdRequest
             {
@@ -67,11 +66,11 @@ namespace Orckestra.Composer.Cart.Repositories
         /// <returns>The Processed Cart requested or an empty one if it doesn't exist</returns>
         public virtual Task<ProcessedCart> GetCartAsync(GetCartParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param", "param is required"); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException("param.Scope is required", "param"); }
-            if (param.CultureInfo == null) { throw new ArgumentException("param.CultureInfo is required", "param"); }
-            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException("param.CartName is required", "param"); }
-            if (param.CustomerId == Guid.Empty) { throw new ArgumentException("param.CustomerId is required", "param"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartName)), nameof(param)); }
+            if (param.CustomerId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param)); }
 
             var cacheKey = BuildCartCacheKey(param.Scope, param.CustomerId, param.CartName);
 
@@ -91,11 +90,11 @@ namespace Orckestra.Composer.Cart.Repositories
 
         public virtual Task<PaymentMethod> SetDefaultCustomerPaymentMethod(SetDefaultCustomerPaymentMethodParam param)
         {
-            if (param == null) { throw new ArgumentNullException(nameof(param), "param is required"); }
-            if (param.CustomerId == Guid.Empty) { throw new ArgumentException("param.CustomerId is required", nameof(param.CustomerId)); }
-            if (param.PaymentMethodId == Guid.Empty) { throw new ArgumentException("param.PaymentMethodId is required", nameof(param.PaymentMethodId)); }
-            if (string.IsNullOrWhiteSpace(param.PaymentProviderName)) { throw new ArgumentException("param.PaymentProviderName", nameof(param.PaymentProviderName)); }
-            if (string.IsNullOrWhiteSpace(param.ScopeId)) { throw new ArgumentException("param.ScopeId is required", nameof(param.ScopeId)); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (param.CustomerId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param)); }
+            if (param.PaymentMethodId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.PaymentMethodId)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.PaymentProviderName)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.PaymentProviderName)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.ScopeId)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.ScopeId)), nameof(param)); }
 
             var request = new SetDefaultCustomerPaymentMethodRequest
             {
@@ -124,13 +123,13 @@ namespace Orckestra.Composer.Cart.Repositories
         /// <returns>The full and updated cart details</returns>
         public virtual Task<ProcessedCart> AddLineItemAsync(AddLineItemParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param", "param is required"); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException("param.Scope is required", "param"); }
-            if (param.CultureInfo == null) { throw new ArgumentException("param.CultureInfo is required", "param"); }
-            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException("param.CartName is required", "param"); }
-            if (param.CustomerId == Guid.Empty) { throw new ArgumentException("param.CustomerId is required", "param"); }
-            if (string.IsNullOrWhiteSpace(param.ProductId)) { throw new ArgumentException("param.ProductId is required", "param"); }
-            if (param.Quantity <= 0) { throw new ArgumentException("param.Quantity must be positive, greater than 0", "param"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartName)), nameof(param)); }
+            if (param.CustomerId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.ProductId)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.ProductId)), nameof(param)); }
+            if (param.Quantity < 1) { throw new ArgumentOutOfRangeException(nameof(param), param.Quantity, GetMessageOfZeroNegative(nameof(param.Quantity))); }
 
             var request = BuildAddLineItemRequestFromParam(param);
             var cacheKey = BuildCartCacheKey(param.Scope, param.CustomerId, param.CartName);
@@ -161,11 +160,11 @@ namespace Orckestra.Composer.Cart.Repositories
         /// <returns></returns>
         public virtual async Task<ProcessedCart> AddPaymentAsync(AddPaymentParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param", "param is required"); }
-            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException("param.CartName is required", "param"); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException("param.Scope is required", "param"); }
-            if (param.CultureInfo == null) { throw new ArgumentException("param.CultureInfo is required", "param"); }
-            if (param.CustomerId == Guid.Empty) { throw new ArgumentException("param.CustomerId is required", "param"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartName)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
+            if (param.CustomerId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param)); }
 
             var request = BuildAddPaymentRequest(param);
 
@@ -208,12 +207,12 @@ namespace Orckestra.Composer.Cart.Repositories
         /// <returns>The full and updated cart details</returns>
         public virtual Task<ProcessedCart> RemoveLineItemAsync(RemoveLineItemParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param", "param is required"); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException("param.Scope is required", "param"); }
-            if (param.CultureInfo == null) { throw new ArgumentException("param.CultureInfo is required", "param"); }
-            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException("param.CartName is required", "param"); }
-            if (param.LineItemId == Guid.Empty) { throw new ArgumentException("param.LineItemId is required", "param"); }
-            if (param.CustomerId == Guid.Empty) { throw new ArgumentException("param.CustomerId is required", "param"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartName)), nameof(param)); }
+            if (param.LineItemId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.LineItemId)), nameof(param)); }
+            if (param.CustomerId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param)); }
 
             var request = new RemoveLineItemRequest
             {
@@ -235,30 +234,43 @@ namespace Orckestra.Composer.Cart.Repositories
         /// <returns></returns>
         public virtual Task<ProcessedCart> RemoveLineItemsAsync(RemoveLineItemsParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param"); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("Scope"), "param"); }
-            if (String.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("CartName"), "param"); }
-            if (param.CultureInfo == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("CultureInfo"), "param"); }
-            if (param.CustomerId == Guid.Empty) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("CustomerId"), "param"); }
-            if (param.LineItems == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("LineItems"), "param"); }
-            if (param.LineItems.Any(li => li.Id == Guid.Empty)) { throw new ArgumentException("LineItems may not contain an empty Guid for Id", "param"); }
-            if (param.LineItems.Any(li => String.IsNullOrWhiteSpace(li.ProductId))) { throw new ArgumentException("LineItems may not contain an empty string for ProductId", "param"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartName)), nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
+            if (param.CustomerId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param)); }
+            if (param.LineItems == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.LineItems)), nameof(param)); }
 
+            var list = new List<LineItemInfo>();
+            for(int i = 0; i < param.LineItems.Count; i++)
+            {
+                var currentLine = param.LineItems[i];
+                if (currentLine.Id == Guid.Empty)
+                {
+                    throw new InvalidOperationException($"Line item with index {i} has empty id");
+                }
+                else if (string.IsNullOrWhiteSpace(currentLine.ProductId))
+                {
+                    throw new InvalidOperationException($"Line item with index {i} has null or white space product id");
+                }
+                list.Add(new LineItemInfo
+                {
+                    Id = currentLine.Id,
+                    ProductId = currentLine.ProductId,
+                    VariantId = currentLine.VariantId,
+                    Quantity = 0.0,
+                    RecurringOrderFrequencyName = string.Empty,
+                    RecurringOrderProgramName = string.Empty,
+                });
+            }
+            //Removing method, but AddOrUpdate request, it is unclear
             var request = new AddOrUpdateLineItemsRequest
             {
                 CartName = param.CartName,
                 CultureName = param.CultureInfo.Name,
                 CustomerId = param.CustomerId,
                 ScopeId = param.Scope,
-                LineItems = param.LineItems.Select(li => new LineItemInfo
-                {
-                    Id = li.Id,
-                    ProductId = li.ProductId,
-                    VariantId = li.VariantId,
-                    Quantity = 0.0,
-                    RecurringOrderFrequencyName = string.Empty,
-                    RecurringOrderProgramName = string.Empty,
-                }).ToList()
+                LineItems = list
             };
 
             var cacheKey = BuildCartCacheKey(param.Scope, param.CustomerId, param.CartName);
@@ -272,13 +284,13 @@ namespace Orckestra.Composer.Cart.Repositories
         /// <returns>The full and updated cart details</returns>
         public virtual Task<ProcessedCart> UpdateLineItemAsync(UpdateLineItemParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param", "param is required"); }
-            if (string.IsNullOrWhiteSpace(param.ScopeId)) { throw new ArgumentException("param.ScopeId is required", "param"); }
-            if (param.CultureInfo == null) { throw new ArgumentException("param.CultureInfo is required", "param"); }
-            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException("param.CartName is required", "param"); }
-            if (param.LineItemId == Guid.Empty) { throw new ArgumentException("param.LineItemId is required", "param"); }
-            if (param.CustomerId == Guid.Empty) { throw new ArgumentException("param.CustomerId is required", "param"); }
-            if (param.Quantity < 1) { throw new ArgumentException("param.Quantity should be 0 or greater", "param"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.ScopeId)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.ScopeId)), nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartName)), nameof(param)); }
+            if (param.LineItemId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.LineItemId)), nameof(param)); }
+            if (param.CustomerId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param)); }
+            if (param.Quantity < 1) { throw new ArgumentOutOfRangeException(nameof(param), param.Quantity, GetMessageOfZeroNegative(nameof(param.Quantity))); }
 
             var request = new UpdateLineItemRequest
             {
@@ -306,12 +318,12 @@ namespace Orckestra.Composer.Cart.Repositories
         /// <returns>The full and updated cart details.</returns>
         public virtual Task<ProcessedCart> AddCouponAsync(CouponParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param"); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException("Scope may not be null or whitespace.", "param"); }
-            if (param.CustomerId == Guid.Empty) { throw new ArgumentException("CustomerId may not be Empty", "param"); }
-            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException("CartName may not be null or whitespace.", "param"); }
-            if (param.CultureInfo == null) { throw new ArgumentNullException("param", "CultureInfo cannot be null."); }
-            if (string.IsNullOrWhiteSpace(param.CouponCode)) { throw new ArgumentException("CouponCode may not be null or whitespace", "param"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
+            if (param.CustomerId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartName)), nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.CouponCode)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CouponCode)), nameof(param)); }
 
             var request = new AddCouponRequest
             {
@@ -333,12 +345,11 @@ namespace Orckestra.Composer.Cart.Repositories
         /// <returns></returns>
         public virtual async Task RemoveCouponsAsync(RemoveCouponsParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param"); }
-            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException("Cart name cannot be null or whitespace", "param"); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException("Scope cannot be null or whitespace", "param"); }
-            if (param.CustomerId == Guid.Empty) { throw new ArgumentException("CustomerId cannot be Empty GUID", "param"); }
-            if (param.CouponCodes == null) { throw new ArgumentNullException("param"); }
-
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartName)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
+            if (param.CustomerId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param)); }
+            if (param.CouponCodes == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CouponCodes)), nameof(param)); }
 
             foreach (var couponCode in param.CouponCodes)
             {
@@ -364,7 +375,7 @@ namespace Orckestra.Composer.Cart.Repositories
         {
             var request = new UpdateCartRequest
             {
-                CultureName = param.CultureInfo != null ? param.CultureInfo.Name : null,
+                CultureName = param.CultureInfo?.Name,
                 CustomerId = param.CustomerId,
                 ScopeId = param.Scope,
                 CartName = param.CartName,
@@ -430,11 +441,11 @@ namespace Orckestra.Composer.Cart.Repositories
 
         public virtual Task<Overture.ServiceModel.Orders.Order> CompleteCheckoutAsync(CompleteCheckoutParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param", "param"); }
-            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("param.CartName"), "param"); }
-            if (param.CultureInfo == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("CultureInfo"), "param"); }
-            if (param.CustomerId == Guid.Empty) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("CustomerId"), "param"); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("Scope"), "param"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartName)), nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
+            if (param.CustomerId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
 
             var request = new CompleteCheckoutRequest
             {
@@ -450,9 +461,9 @@ namespace Orckestra.Composer.Cart.Repositories
         public virtual async Task<List<ProcessedCart>> GetRecurringCartsAsync(GetRecurringOrderCartsViewModelParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
-            if (param.CultureInfo == null) { throw new ArgumentException(nameof(param.CultureInfo)); }
-            if (param.CustomerId == Guid.Empty) { throw new ArgumentException(nameof(param.CustomerId)); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(nameof(param.Scope)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
+            if (param.CustomerId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
 
             var request = new GetCartsByCustomerIdRequest()
             {
@@ -466,7 +477,7 @@ namespace Orckestra.Composer.Cart.Repositories
 
             var resultTasks = cartSummaries.Select(cart =>
             {
-                var getCartParam = (new GetCartParam
+                var getCartParam = new GetCartParam
                 {
                     Scope = param.Scope,
                     CultureInfo = param.CultureInfo,
@@ -474,15 +485,13 @@ namespace Orckestra.Composer.Cart.Repositories
                     CartName = cart.Name,
                     BaseUrl = param.BaseUrl,
                     ExecuteWorkflow = true
-                });
+                };
                 return GetCartAsync(getCartParam);
             });
 
             var carts = await Task.WhenAll(resultTasks);
 
-            carts.Where(i => i != null);
-
-            return carts.ToList();
+            return carts.Where(i => i != null).ToList();
         }
 
         public virtual async Task<ListOfRecurringOrderLineItems> RescheduleRecurringCartAsync(RescheduleRecurringCartParam param)

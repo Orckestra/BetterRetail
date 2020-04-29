@@ -20,14 +20,9 @@ namespace Orckestra.Composer.Utils
 
         public static string GetProductOrVariantDisplayName(Product prduct, Variant variant, CultureInfo culture)
         {
-            if (variant != null)
-            {
-                return variant.DisplayName != null ? variant.DisplayName.GetLocalizedValue(culture.Name) : prduct.DisplayName.GetLocalizedValue(culture.Name);
-            }
-            else
-            {
-                return prduct.DisplayName.GetLocalizedValue(culture.Name);
-            }
+            return variant?.DisplayName != null
+                ? variant.DisplayName.GetLocalizedValue(culture.Name)
+                : prduct.DisplayName.GetLocalizedValue(culture.Name);
         }
 
         public static async Task<List<KeyVariantAttributes>> GetKeyVariantAttributes(Product product, Variant variant, CultureInfo culture, IOvertureClient client)
@@ -47,16 +42,14 @@ namespace Orckestra.Composer.Utils
 
             if (variant.PropertyBag == null) return null;
 
-            var keyVariantAttributes = productDef.VariantProperties.Where(x => x.IsKeyVariant)
-                                                        .OrderBy(x => x.KeyVariantOrder)
-                                                        .ToList();
+            var list = new List<(int?, KeyVariantAttributes)>();
 
-            if (!keyVariantAttributes.Any()) return null;
-
-            var list = new List<KeyVariantAttributes>();
-
-            foreach (var keyVariantAttribute in keyVariantAttributes)
+            foreach (var keyVariantAttribute in productDef.VariantProperties)
             {
+                if (!keyVariantAttribute.IsKeyVariant)
+                {
+                    continue;
+                }
                 object kvaValue;
                 if (keyVariantAttribute.DataType.Equals(PropertyDataType.Lookup))
                 {
@@ -71,16 +64,18 @@ namespace Orckestra.Composer.Utils
 
                 if (kvaValue != null)
                 {
-                    list.Add(new KeyVariantAttributes()
-                    {
-                        Key = keyVariantAttribute.PropertyName,
-                        Value = kvaValue.ToString(),
-                        OriginalValue = variant.PropertyBag[keyVariantAttribute.PropertyName].ToString()
-                    });
+                    list.Add(
+                        (keyVariantAttribute.KeyVariantOrder,
+                        new KeyVariantAttributes
+                        {
+                            Key = keyVariantAttribute.PropertyName,
+                            Value = kvaValue.ToString(),
+                            OriginalValue = variant.PropertyBag[keyVariantAttribute.PropertyName].ToString()
+                    }));
                 }
             }
 
-            return list;
+            return list.Count == 0 ? null : list.OrderBy(x => x.Item1).Select(x => x.Item2).ToList();
         }
 
         private static object GetLocalizedKvaDisplayValueFromValue(string cultureName, Variant variant, ProductPropertyDefinition keyVariantAttribute)
@@ -105,16 +100,15 @@ namespace Orckestra.Composer.Utils
 
         private static string GetLocalizedKvaDisplayValueFromLookup(Lookup lookup, string cultureName, Variant variant, ProductPropertyDefinition keyVariantAttribute)
         {
-
             if (lookup == null)
             {
                 return variant.PropertyBag[keyVariantAttribute.PropertyName] as string;
             }
 
             var firstOrDefault =
-                lookup.Values.FirstOrDefault(x => x.Value.Equals(variant.PropertyBag[keyVariantAttribute.PropertyName]));
+                lookup.Values.Find(x => x.Value.Equals(variant.PropertyBag[keyVariantAttribute.PropertyName]));
 
-            if (firstOrDefault == null || firstOrDefault.DisplayName == null)
+            if (firstOrDefault?.DisplayName == null)
             {
                 return variant.PropertyBag[keyVariantAttribute.PropertyName] as string;
             }
@@ -126,33 +120,27 @@ namespace Orckestra.Composer.Utils
 
         private static async Task<List<Lookup>> GetLookups(ProductDefinition productDef, IOvertureClient client)
         {
-            var kvaLookupAttributes = productDef.VariantProperties.Where(vp => vp.IsKeyVariant && vp.DataType == PropertyDataType.Lookup)
-                                                         .Select(vp => vp.LookupDefinition.LookupName);
+            var kvaLookupAttributes = productDef.VariantProperties
+                .Where(vp => vp.IsKeyVariant && vp.DataType == PropertyDataType.Lookup)
+                .Select(vp => vp.LookupDefinition.LookupName);
 
-            var results = new List<Lookup>();
-            var lookupTasks = new List<Task<Lookup>>();
-
-            foreach (var name in kvaLookupAttributes.Distinct())
+            var lookupTasks = new Dictionary<string,Task<Lookup>>();
+            
+            foreach (var name in kvaLookupAttributes)
             {
+                if (lookupTasks.ContainsKey(name))
+                {
+                    continue;
+                }
                 var request = new GetProductLookupRequest
                 {
                     LookupName = name
                 };
 
-                lookupTasks.Add(client.SendAsync(request));
+                lookupTasks.Add(name, client.SendAsync(request));
             }
-
-            var lookupResults = await Task.WhenAll(lookupTasks).ConfigureAwait(false);
-            foreach (var lookup in lookupResults)
-            {
-                if (lookup != null)
-                {
-                    results.Add(lookup);
-                }
-            }
-
-            return results;
+            var lookupResults = await Task.WhenAll(lookupTasks.Values).ConfigureAwait(false);
+            return lookupResults.Where(x => x != null).ToList();
         }
-
     }
 }

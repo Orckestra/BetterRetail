@@ -2,31 +2,18 @@
 using System.Net.Http.Formatting;
 using System.Web.Http;
 using System.Web.Mvc;
-using System.Web.Routing;
 using Autofac;
-using Autofac.Integration.Mvc;
 using Autofac.Integration.WebApi;
-using Orckestra.Composer.Providers;
 using Orckestra.Composer.Kernel;
 
 namespace Orckestra.Composer
 {
     internal class AspNetConfigurationManager : IAspNetConfigurationManager
     {
-        public void Configure(ILifetimeScope lifetimeScope,
-            IViewEngine viewEngine,
-            MediaTypeFormatter mediaTypeFormatter)
+        public void Configure(ILifetimeScope lifetimeScope, IViewEngine viewEngine, MediaTypeFormatter mediaTypeFormatter)
         {
-
-            if (viewEngine == null)
-            {
-                throw new ArgumentNullException("viewEngine");
-            }
-
-            if (mediaTypeFormatter == null)
-            {
-                throw new ArgumentNullException("mediaTypeFormatter");
-            }
+            if (viewEngine == null) { throw new ArgumentNullException(nameof(viewEngine));}
+            if (mediaTypeFormatter == null) { throw new ArgumentNullException(nameof(mediaTypeFormatter)); }
             
             RegisterMvc(lifetimeScope, viewEngine);
             RegisterWebApi(lifetimeScope, mediaTypeFormatter);

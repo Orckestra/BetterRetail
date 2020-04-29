@@ -1,15 +1,15 @@
-using Orckestra.Composer.Configuration;
-using Orckestra.Composer.Providers;
-using Orckestra.Composer.Providers.Dam;
-using Orckestra.Overture.ServiceModel.Orders;
-using Orckestra.Overture.ServiceModel.RecurringOrders;
-using Orckestra.Overture.ServiceModel.Requests.RecurringOrders;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Orckestra.Composer.Repositories;
+using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Parameters;
+using Orckestra.Composer.Providers;
+using Orckestra.Composer.Providers.Dam;
+using Orckestra.Composer.Repositories;
+using Orckestra.Overture.ServiceModel.Orders;
+using Orckestra.Overture.ServiceModel.RecurringOrders;
+using Orckestra.Overture.ServiceModel.Requests.RecurringOrders;
 
 namespace Orckestra.Composer.Services
 {
@@ -23,7 +23,7 @@ namespace Orckestra.Composer.Services
         {
             DamProvider = damProvider ?? throw new ArgumentNullException(nameof(damProvider));
             ProductRepository = productRepository ?? throw new ArgumentNullException(nameof(productRepository));
-            ComposerContext = composerContext ?? throw new ArgumentNullException("composerContext");
+            ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
         }
 
         public virtual Task<List<ProductMainImage>> GetImageUrlsAsync(IEnumerable<LineItem> lineItems)

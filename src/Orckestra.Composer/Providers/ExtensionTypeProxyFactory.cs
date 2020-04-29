@@ -27,9 +27,7 @@ namespace Orckestra.Composer.Providers
         /// <summary>
         ///     <see cref="ExtensionTypeProxyFactory"/> is a singleton and should not be instanciated
         /// </summary>
-        private ExtensionTypeProxyFactory()
-        {
-        }
+        private ExtensionTypeProxyFactory() { }
 
         /// <summary>
         /// This method should be called only in unit tests. elsewhere use <see cref="Default"/> to get the singleton instead.
@@ -106,13 +104,10 @@ namespace Orckestra.Composer.Providers
         /// <param name="viewModel">View model which the new instance should extend.</param>
         public T Create<T>(IBaseViewModel viewModel)
         {
-            if (viewModel == null)
-            {
-                throw new ArgumentNullException("viewModel");
-            }
+            if (viewModel == null) { throw new ArgumentNullException(nameof(viewModel)); }
 
             var extensionType = typeof(T);
-            Type proxyType = _proxyTypes.GetOrAdd(extensionType, BuildProxyType); 
+            Type proxyType = _proxyTypes.GetOrAdd(extensionType, BuildProxyType);
 
             var proxy = (T)Activator.CreateInstance(proxyType);
             ((IExtension)proxy).SetBaseViewModel(viewModel);
@@ -345,10 +340,7 @@ namespace Orckestra.Composer.Providers
         /// <exception cref="InvalidOperationException">Thrown if <paramref name="extensionType" /> does not meet the criteria</exception>
         private void ValidateType(Type extensionType)
         {
-            if (extensionType == null)
-            {
-                throw new ArgumentNullException("extensionType");
-            }
+            if (extensionType == null) { throw new ArgumentNullException(nameof(extensionType)); }
 
             ValidateTypeIsInterface(extensionType);
             ValidateTypeExtendsIExtensionOf(extensionType);
@@ -362,12 +354,29 @@ namespace Orckestra.Composer.Providers
         private void ValidateTypeExtendsIExtensionOf(Type type)
         {
             var exensionType = typeof(IExtensionOf<>);
-            var extensionInterfaces = type.GetInterfaces()
-                .Where(t => t.IsGenericType &&
-                            exensionType.IsAssignableFrom(t.GetGenericTypeDefinition()))
-                .ToList();
 
-            var extensionInterfacesCount = extensionInterfaces.Count;
+            var typeInterfaces = type.GetInterfaces();
+            var extensionInterfacesCount = 0;
+            Type extensionInterface = null;
+
+            foreach (var t in typeInterfaces)
+            {
+                if (t.IsGenericType && exensionType.IsAssignableFrom(t.GetGenericTypeDefinition()))
+                {
+                    if (extensionInterfacesCount == 0)
+                    {
+                        extensionInterface = t;
+                    }
+
+                    extensionInterfacesCount++;
+
+                    if (extensionInterfacesCount > 1)
+                    {
+                        break;
+                    }         
+                }
+            }
+
             if (extensionInterfacesCount > 1)
             {
                 throw new InvalidOperationException(string.Format("The type {0} cannot extend more than once {1}",
@@ -380,7 +389,6 @@ namespace Orckestra.Composer.Providers
             }
 
             // Ensure type extends a view model
-            var extensionInterface = extensionInterfaces[0];
             var extendedType = extensionInterface.GetGenericArguments()[0];
             if (extendedType == null)
             {

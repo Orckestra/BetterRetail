@@ -44,7 +44,7 @@ namespace Orckestra.Composer.Store.Tests.Services
         [TestCase("0001", null, "http://foo.com")]
         [TestCase("0001", "Canada", null)]
         [TestCase(null, null, null)]
-        public void WHEN_SomeParam_Is_Null_SHOULD_Throw_Argument_Null_Exception(string storeNumber, string scope,
+        public void WHEN_SomeParam_Is_Null_SHOULD_Throw_Argument_Exception(string storeNumber, string scope,
             string baseUrl)
         {
             //Arrange
@@ -63,7 +63,7 @@ namespace Orckestra.Composer.Store.Tests.Services
             };
 
             //Assert
-            asyncFunction.ShouldThrow<ArgumentNullException>();
+            asyncFunction.ShouldThrow<ArgumentException>();
         }
 
         private Mock<IStoreUrlProvider> CreateStoreUrlProvider()

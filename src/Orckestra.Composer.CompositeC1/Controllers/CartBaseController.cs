@@ -1,12 +1,12 @@
-﻿using Composite.Data;
+﻿using System;
+using System.Web.Mvc;
+using Composite.Data;
 using Orckestra.Composer.Cart.ViewModels;
 using Orckestra.Composer.CompositeC1.Services;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Services.Breadcrumb;
-using System;
-using System.Web.Mvc;
 using ActionResult = System.Web.Mvc.ActionResult;
 
 namespace Orckestra.Composer.CompositeC1.Controllers
@@ -24,15 +24,10 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             IPageService pageService,
             IBreadcrumbViewService breadcrumbViewService)
         {
-            if (composerContext == null) { throw new ArgumentNullException("composerContext"); }
-            if (cartUrlProvider == null) { throw new ArgumentNullException("cartUrlProvider"); }
-            if (pageService == null) { throw new ArgumentNullException("pageService"); }
-            if (breadcrumbViewService == null) { throw new ArgumentNullException("breadcrumbViewService"); }
-
-            ComposerContext = composerContext;
-            CartUrlProvider = cartUrlProvider;
-            PageService = pageService;
-            BreadcrumbViewService = breadcrumbViewService;
+            ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
+            CartUrlProvider = cartUrlProvider ?? throw new ArgumentNullException(nameof(cartUrlProvider));
+            PageService = pageService ?? throw new ArgumentNullException(nameof(pageService));
+            BreadcrumbViewService = breadcrumbViewService ?? throw new ArgumentNullException(nameof(breadcrumbViewService));
         }
 
         public virtual ActionResult CartSummary()

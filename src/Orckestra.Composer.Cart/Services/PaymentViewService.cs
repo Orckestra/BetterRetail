@@ -17,10 +17,10 @@ using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Requests;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Services.Lookup;
-using Orckestra.Composer.Utils;
 using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.Providers;
 using Orckestra.Overture.ServiceModel.Orders;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Cart.Services
 {
@@ -58,7 +58,6 @@ namespace Orckestra.Composer.Cart.Services
             RecurringOrdersSettings = recurringOrdersSettings ?? throw new ArgumentNullException(nameof(recurringOrdersSettings));
         }
 
-
         /// <summary>
         /// Gets an enumeration of all available payment providers.
         /// </summary>
@@ -67,8 +66,8 @@ namespace Orckestra.Composer.Cart.Services
         public virtual async Task<IEnumerable<PaymentProviderViewModel>> GetPaymentProvidersAsync(GetPaymentProvidersParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
-            if (param.CultureInfo == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param.CultureInfo)), nameof(param)); }
-            if (param.Scope == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param.Scope)), nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
+            if (param.Scope == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.Scope)), nameof(param)); }
 
             var providers = PaymentProviderFactory.ResolveAllProviders();
             providers = await FilterAvailablePaymentProviders(param, providers).ConfigureAwait(false);
@@ -84,35 +83,43 @@ namespace Orckestra.Composer.Cart.Services
             return viewModels;
         }
 
-
         protected virtual async Task<IEnumerable<IPaymentProvider>> FilterAvailablePaymentProviders(GetPaymentProvidersParam param, IEnumerable<IPaymentProvider> providers)
         {
             var availablePaymentProvidersTask = PaymentRepository.GetPaymentProviders(param.Scope).ConfigureAwait(false);
             var availableProvidersTask = PaymentRepository.GetProviders(param.Scope, ProviderType.Payment);
+
             var availablePaymentProviders = await availablePaymentProvidersTask;
             var availableProviders = await availableProvidersTask;
 
+            var availableProvidersDic = new Dictionary<string, Overture.ServiceModel.Providers.Provider>(StringComparer.OrdinalIgnoreCase);
+            foreach (var el in availableProviders)
+            {
+                if (!el.IsActive || availableProvidersDic.ContainsKey(el.ImplementationTypeName)) { continue; }
+
+                availableProvidersDic.Add(el.ImplementationTypeName, el);
+            }
+
+            var availablePaymentProvidersDic = new Dictionary<Guid, Overture.ServiceModel.Providers.PaymentProviderInfo>();
+            foreach (var el in availablePaymentProviders)
+            {
+                if (availablePaymentProvidersDic.ContainsKey(el.Id)) { continue; } 
+                
+                availablePaymentProvidersDic.Add(el.Id, el);
+            }
+
             var result = new List<IPaymentProvider>();
+
             foreach (var provider in providers)
             {
-                var availableProvider = availableProviders
-                    .Where(p => p.ImplementationTypeName.Equals(provider.ProviderType, StringComparison.OrdinalIgnoreCase))
-                    .Where(p => p.IsActive)
-                    .FirstOrDefault();
+                availableProvidersDic.TryGetValue(provider.ProviderType, out var availableProvider);
+                if (availableProvider == null) { continue; }
 
-                if (availableProvider == null)
-                    continue;
-
-                var availablePaymentProvider = availablePaymentProviders
-                    .Where(p => p.Id == availableProvider.Id)
-                    .FirstOrDefault();
-
-                if (availablePaymentProvider == null)
-                    continue;
+                availablePaymentProvidersDic.TryGetValue(availableProvider.Id, out var availablePaymentProvider);
+                if (availablePaymentProvider == null) { continue; }
 
                 var supportedCultureIds = availablePaymentProvider.SupportedCultureIds.Split(',').Select(c => c.Trim());
-                if (!supportedCultureIds.Any(c => c.Equals(param.CultureInfo.Name, StringComparison.OrdinalIgnoreCase)))
-                    continue;
+
+                if (!supportedCultureIds.Any(c => c.Equals(param.CultureInfo.Name, StringComparison.OrdinalIgnoreCase))) { continue; }
 
                 result.Add(provider);
             }
@@ -120,11 +127,9 @@ namespace Orckestra.Composer.Cart.Services
             return result;
         }
 
-
         protected virtual PaymentProviderViewModel MapPaymentProviderViewModel(IPaymentProvider paymentProvider, CultureInfo cultureInfo)
         {
-            var vm = ViewModelMapper.MapTo<PaymentProviderViewModel>(paymentProvider, cultureInfo);
-            return vm;
+            return ViewModelMapper.MapTo<PaymentProviderViewModel>(paymentProvider, cultureInfo);
         }
 
         /// <summary>
@@ -167,10 +172,10 @@ namespace Orckestra.Composer.Cart.Services
         /// <returns>A List of PaymentMethodViewModel</returns>
         public virtual async Task<CheckoutPaymentViewModel> GetPaymentMethodsAsync(GetPaymentMethodsParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param"); }
-            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("CartName"), "param"); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("Scope"), "param"); }
-            if (param.ProviderNames == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("ProviderName"), "param"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartName)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
+            if (param.ProviderNames == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.ProviderNames)), nameof(param)); }
 
             var paymentMethods = await GetAllPaymentMethodsAsync(param).ConfigureAwait(false);
             var cart = await CartRepository.GetCartAsync(new GetCartParam
@@ -190,7 +195,7 @@ namespace Orckestra.Composer.Cart.Services
             if (hasRecurring)
             {
                 var supported = CartConfiguration.SupportedRecurringOrderPaymentMethodTypes;
-                paymentMethods = paymentMethods.Where(p => supported.Where(s => s.ToString() == p.PaymentType).Count() > 0).ToList();
+                paymentMethods = paymentMethods.Where(p => supported.Any(s => s.ToString() == p.PaymentType)).ToList();
             }
 
             var vm = await MapCheckoutPaymentViewModel(cart, paymentMethods, param.CultureInfo, param.IsAuthenticated);
@@ -236,7 +241,7 @@ namespace Orckestra.Composer.Cart.Services
                 }
             }
 
-            return paymentMethodViewModels.ToList();
+            return paymentMethodViewModels;
         }
 
         protected virtual void IsCreditCardPaymentMethod(IPaymentMethodViewModel paymentMethod)
@@ -244,16 +249,15 @@ namespace Orckestra.Composer.Cart.Services
             paymentMethod.IsCreditCardPaymentMethod = paymentMethod.PaymentProviderType == "MonerisCanadaPaymentProvider";
         }
 
-        protected virtual async Task<IPaymentMethodViewModel> IsSavedCardUsedInRecurringOrders(IPaymentMethodViewModel methodViewModel,
+        protected virtual async Task<IPaymentMethodViewModel> IsSavedCardUsedInRecurringOrders(
+            IPaymentMethodViewModel methodViewModel,
             CultureInfo cultureInfo,
             Guid customerId,
             string scope)
         {
-            if (methodViewModel is SavedCreditCardPaymentMethodViewModel)
+            if (methodViewModel is SavedCreditCardPaymentMethodViewModel vm)
             {
-                SavedCreditCardPaymentMethodViewModel vm = methodViewModel as SavedCreditCardPaymentMethodViewModel;
-
-                vm.IsUsedInRecurringOrders = await RecurringOrderTemplatesViewService.GetIsPaymentMethodUsedInRecurringOrders(new GetIsPaymentMethodUsedInRecurringOrdersRequest()
+                vm.IsUsedInRecurringOrders = await RecurringOrderTemplatesViewService.GetIsPaymentMethodUsedInRecurringOrders(new GetIsPaymentMethodUsedInRecurringOrdersRequest
                 {
                     CultureInfo = cultureInfo,
                     CustomerId = customerId,
@@ -266,7 +270,11 @@ namespace Orckestra.Composer.Cart.Services
             return methodViewModel;
         }
 
-        protected virtual async Task<CheckoutPaymentViewModel> MapCheckoutPaymentViewModel(Overture.ServiceModel.Orders.Cart cart, List<IPaymentMethodViewModel> paymentMethodViewModels, CultureInfo cultureInfo, bool isAuthenticated)
+        protected virtual async Task<CheckoutPaymentViewModel> MapCheckoutPaymentViewModel(
+            Overture.ServiceModel.Orders.Cart cart, 
+            List<IPaymentMethodViewModel> paymentMethodViewModels, 
+            CultureInfo cultureInfo, 
+            bool isAuthenticated)
         {
             var payment = GetActivePayment(cart);
 
@@ -362,13 +370,13 @@ namespace Orckestra.Composer.Cart.Services
         public virtual async Task<ActivePaymentViewModel> UpdateActivePaymentMethodAsync(UpdatePaymentMethodParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
-            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("CartName"), nameof(param)); }
-            if (string.IsNullOrWhiteSpace(param.PaymentProviderName)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("PaymentProviderName"), nameof(param)); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("Scope"), nameof(param)); }
-            if (param.CultureInfo == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("CultureInfo"), nameof(param)); }
-            if (param.CustomerId == default(Guid)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("CustomerId"), nameof(param)); }
-            if (param.PaymentId == default(Guid)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("PaymentId"), nameof(param)); }
-            if (param.PaymentMethodId == default(Guid)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("PaymentMethodId"), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartName)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.PaymentProviderName)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.PaymentProviderName)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
+            if (param.CustomerId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param)); }
+            if (param.PaymentId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.PaymentId)), nameof(param)); }
+            if (param.PaymentMethodId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.PaymentMethodId)), nameof(param)); }
 
             var payments = await GetCartPaymentsAsync(param).ConfigureAwait(false);
             var activePayment = payments.GetPayment(param.PaymentId);
@@ -416,12 +424,13 @@ namespace Orckestra.Composer.Cart.Services
 
         protected virtual async Task<bool> ValidatePaymentMethod(ValidatePaymentMethodParam param)
         {
-            Guard.NotNullOrWhiteSpace(param.CartName, nameof(param.CartName));
-            Guard.NotNullOrWhiteSpace(param.Scope, nameof(param.Scope));
-            Guard.NotNullOrWhiteSpace(param.ProviderName, nameof(param.ProviderName));
-            Guard.NotNull(param.CultureInfo, nameof(param.CultureInfo));
-            Guard.NotNull(param.CustomerId, nameof(param.CustomerId));
-            Guard.NotNull(param.PaymentMethodId, nameof(param.PaymentMethodId));
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartName)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.ProviderName)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.ProviderName)), nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
+            if (param.CustomerId == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CustomerId)), nameof(param)); }
+            if (param.PaymentMethodId == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.PaymentMethodId)), nameof(param)); }
 
             var getPaymentMethodParam = new GetPaymentMethodsParam()
             {
@@ -436,23 +445,18 @@ namespace Orckestra.Composer.Cart.Services
                 }
             };
 
-            var paymentMethod = await GetAllPaymentMethodsAsync(getPaymentMethodParam).ConfigureAwait(false);
-            if (paymentMethod == null || paymentMethod.All(p => p.Id != param.PaymentMethodId))
-            {
-                throw new Exception($"Payment method for provider name /'{param.ProviderName}/' not found.");
-            }
-            return paymentMethod
-                .FirstOrDefault(p => p.Id == param.PaymentMethodId)
-                .IsValid;
+            var paymentMethods = await GetAllPaymentMethodsAsync(getPaymentMethodParam).ConfigureAwait(false);
+            var paymentMethod = paymentMethods?.Find(x => x.Id == param.PaymentMethodId);
+            return paymentMethod?.IsValid ?? throw new Exception($"Payment method for provider name /'{param.ProviderName}/' not found."); ;
         }
 
         public virtual async Task<ActivePaymentViewModel> GetActivePayment(GetActivePaymentParam param)
         {
-            if (param == null) throw new ArgumentNullException(nameof(param), ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param)));
-            if (param.CustomerId == Guid.Empty) throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param.CustomerId)), nameof(param.CustomerId));
-            if (param.CultureInfo == null) throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param.CultureInfo)), nameof(param.CultureInfo));
-            if (String.IsNullOrWhiteSpace(param.CartName)) throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param.CartName)), nameof(param.CartName));
-            if (String.IsNullOrWhiteSpace(param.Scope)) throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param.Scope)), nameof(param.Scope));
+            if (param == null) throw new ArgumentNullException(nameof(param));
+            if (param.CustomerId == Guid.Empty) throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param));
+            if (param.CultureInfo == null) throw new ArgumentNullException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param));
+            if (string.IsNullOrWhiteSpace(param.CartName)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartName)), nameof(param));
+            if (string.IsNullOrWhiteSpace(param.Scope)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param));
 
             var cart = await CartRepository.GetCartAsync(new GetCartParam
             {
@@ -477,12 +481,10 @@ namespace Orckestra.Composer.Cart.Services
 
         public virtual Task RemovePaymentMethodAsync(RemovePaymentMethodParam param)
         {
-            if (param == null) throw new ArgumentNullException(nameof(param), "param is required");
-            if (param.PaymentMethodId == Guid.Empty) throw new ArgumentException("param.PaymentMethodId is required", nameof(param.PaymentMethodId));
-
+            if (param == null) throw new ArgumentNullException(nameof(param));
+            if (param.PaymentMethodId == Guid.Empty) throw new ArgumentException(GetMessageOfEmpty(nameof(param.PaymentMethodId)), nameof(param));
             return PaymentRepository.RemovePaymentMethodAsync(param);
         }
-
 
         protected virtual async Task<Payment> PreparePaymentSwitch(UpdatePaymentMethodParam param, Payment activePayment)
         {
@@ -527,7 +529,8 @@ namespace Orckestra.Composer.Cart.Services
         /// <param name="updatePaymentMethodParam">Parameters passed to the UpdatePaymentMethodAsync method.</param>
         /// <returns>Instance of the <see cref="InitializePaymentParam"/> that will be used to make the call.</returns>
         /// <remarks>It may be useful to override this method to augment the request with AdditionalData or Options for the request.</remarks>
-        protected virtual InitializePaymentParam BuildInitializePaymentParam(Overture.ServiceModel.Orders.Cart cart,
+        protected virtual InitializePaymentParam BuildInitializePaymentParam(
+            Overture.ServiceModel.Orders.Cart cart,
             UpdatePaymentMethodParam updatePaymentMethodParam)
         {
             var param = new InitializePaymentParam
@@ -550,7 +553,7 @@ namespace Orckestra.Composer.Cart.Services
         /// <returns></returns>
         protected virtual ActivePaymentViewModel GetActivePaymentViewModel(GetActivePaymentViewModelParam param)
         {
-            if (param.Cart == null) { return null; }
+            if (param?.Cart == null) { return null; }
 
             var payment = GetActivePayment(param.Cart);
             var vm = ViewModelMapper.MapTo<ActivePaymentViewModel>(payment, param.CultureInfo);
@@ -585,7 +588,7 @@ namespace Orckestra.Composer.Cart.Services
 
         protected virtual Payment GetActivePayment(Overture.ServiceModel.Orders.Cart cart)
         {
-            return cart.Payments == null ? null : cart.Payments.FirstOrDefault(p => !p.IsVoided());
+            return cart.Payments?.Find(p => !p.IsVoided());
         }
 
         protected virtual IPaymentProvider ObtainPaymentProvider(string paymentProviderName)
@@ -594,14 +597,14 @@ namespace Orckestra.Composer.Cart.Services
         }
         public virtual async Task<CustomerPaymentMethodListViewModel> GetCustomerPaymentMethodListViewModelAsync(GetCustomerPaymentMethodListViewModelParam param)
         {
-            if (param == null) throw new ArgumentNullException(nameof(param), ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param)));
+            if (param == null) throw new ArgumentNullException(nameof(param));
 
             var tasks = param.ProviderNames.Select(pName => PaymentRepository.GetCustomerPaymentMethodForProviderAsync(new GetCustomerPaymentMethodsForProviderParam
             {
                 CustomerId = param.CustomerId,
                 ScopeId = param.ScopeId,
                 ProviderName = pName
-            })).ToArray();
+            }));
 
             try
             {
@@ -612,10 +615,10 @@ namespace Orckestra.Composer.Cart.Services
                 Log.Warn($"GetCustomerPaymentMethodsRequest failed. {e.ToString()}");
             }
 
-            tasks = tasks.Where(t => !t.IsFaulted).ToArray();
-            var paymentMethods = tasks.SelectMany(t => t.Result).ToList();
-
-            var savedCreditCardVm = paymentMethods.Select(s => CartViewModelFactory.MapSavedCreditCard(s, param.CultureInfo)).ToList();
+            var savedCreditCardVm = tasks
+                .Where(t => !t.IsFaulted)
+                .SelectMany(t => t.Result)
+                .Select(s => CartViewModelFactory.MapSavedCreditCard(s, param.CultureInfo)).ToList();
 
             List<Task> taskList = new List<Task>();
             foreach (var vm in savedCreditCardVm)
@@ -635,13 +638,13 @@ namespace Orckestra.Composer.Cart.Services
         public virtual async Task<CartViewModel> UpdateRecurringOrderCartPaymentMethodAsync(UpdatePaymentMethodParam param, string baseUrl)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
-            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("CartName"), nameof(param)); }
-            if (string.IsNullOrWhiteSpace(param.PaymentProviderName)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("PaymentProviderName"), nameof(param)); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("Scope"), nameof(param)); }
-            if (param.CultureInfo == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("CultureInfo"), nameof(param)); }
-            if (param.CustomerId == default(Guid)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("CustomerId"), nameof(param)); }
-            if (param.PaymentId == default(Guid)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("PaymentId"), nameof(param)); }
-            if (param.PaymentMethodId == default(Guid)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("PaymentMethodId"), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartName)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.PaymentProviderName)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.PaymentProviderName)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
+            if (param.CustomerId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param)); }
+            if (param.PaymentId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.PaymentId)), nameof(param)); }
+            if (param.PaymentMethodId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.PaymentMethodId)), nameof(param)); }
 
             var activePayment = await PaymentRepository.GetPaymentAsync(new GetPaymentParam
             {

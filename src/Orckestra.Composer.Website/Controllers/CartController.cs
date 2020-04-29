@@ -18,8 +18,6 @@ namespace Orckestra.Composer.Website.Controllers
             composerContext, 
             cartUrlProvider, 
             pageService,
-            breadcrumbViewService)
-        {
-        }
+            breadcrumbViewService) { }
     }
 }

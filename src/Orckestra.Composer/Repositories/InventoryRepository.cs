@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Orckestra.Caching;
 using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Parameters;
-using Orckestra.Composer.Utils;
 using Orckestra.Overture;
 using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel.Products.Inventory;
 using Orckestra.Overture.ServiceModel.Requests.Products.Inventory;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
+
 
 namespace Orckestra.Composer.Repositories
 {
@@ -17,15 +17,10 @@ namespace Orckestra.Composer.Repositories
         protected IOvertureClient OvertureClient { get; private set; }
         protected ICacheProvider CacheProvider { get; private set; }
 
-        public InventoryRepository(
-            IOvertureClient overtureClient,
-            ICacheProvider cacheProvider)
+        public InventoryRepository(IOvertureClient overtureClient, ICacheProvider cacheProvider)
         {
-            if (overtureClient == null) { throw new ArgumentNullException("overtureClient"); }
-            if (cacheProvider == null) { throw new ArgumentNullException("cacheProvider"); }
-
-            OvertureClient = overtureClient;
-            CacheProvider = cacheProvider;
+            OvertureClient = overtureClient ?? throw new ArgumentNullException(nameof(overtureClient));
+            CacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));
         }
 
         /// <summary>
@@ -35,11 +30,11 @@ namespace Orckestra.Composer.Repositories
         /// <returns></returns>
         public virtual async Task<List<InventoryItemAvailability>> FindInventoryItemStatus(FindInventoryItemStatusParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param"); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("Scope"), "param"); }
-            if (param.Skus == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("Skus"), "param"); }
-            if (param.Skus.Count == 0) { throw new ArgumentException("Skus is empty", "param"); }
-            if (string.IsNullOrWhiteSpace(param.InventoryLocationId)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("InventoryLocationId"), "param"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
+            if (param.Skus == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.Skus)), nameof(param)); }
+            if (param.Skus.Count == 0) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.Skus)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.InventoryLocationId)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.InventoryLocationId)), nameof(param)); }
 
             var request = new FindInventoryItemStatusByLocationAndSkusRequest
             {
@@ -61,9 +56,9 @@ namespace Orckestra.Composer.Repositories
         /// <returns></returns>
         public virtual async Task<InventoryItemStatusDetailsQueryResult> GetInventoryItemsBySkuAsync(GetInventoryItemsBySkuParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param"); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("Scope"), "param"); }
-            if (param.Sku == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("Sku"), "param"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
+            if (param.Sku == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.Sku)), nameof(param)); }
 
             var cacheKey = new CacheKey(CacheConfigurationCategoryNames.StoreInventoryItems)
             {

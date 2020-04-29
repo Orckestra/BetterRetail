@@ -69,21 +69,20 @@ namespace Orckestra.Composer.WebAPIFilters
 
         private CultureInfo GetFirstMatchingCultureInfo(List<string> acceptedLanguages, CultureInfo[] supportedCultures)
         {
-            if (acceptedLanguages == null) { return null; }
+            if (acceptedLanguages is null || !acceptedLanguages.Any() || supportedCultures is null || !supportedCultures.Any()) { return null; }
 
-
-            //By Name
-            var resolvedCulture = acceptedLanguages.Join(supportedCultures, lang => lang, ci => ci.Name, (lang, ci) => ci)
-                                                   .FirstOrDefault();
-
-            //By lang
-            if (resolvedCulture == null)
+            foreach (var supportedCulture in supportedCultures)
             {
-                resolvedCulture = acceptedLanguages.Join(supportedCultures, lang => lang, ci => ci.TwoLetterISOLanguageName, (lang, ci) => ci)
-                                                       .FirstOrDefault();
+                foreach (var acceptLanguage in acceptedLanguages)
+                {
+                    if (acceptLanguage.Equals(supportedCulture.Name, StringComparison.OrdinalIgnoreCase)
+                        || acceptLanguage.Equals(supportedCulture.TwoLetterISOLanguageName, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return supportedCulture;
+                    }
+                }
             }
-
-            return resolvedCulture;
+            return null;
         }
 
         private HttpResponseMessage BuildBadRequestResponse()

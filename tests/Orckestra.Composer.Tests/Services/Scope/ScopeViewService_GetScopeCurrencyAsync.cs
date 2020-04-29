@@ -11,6 +11,9 @@ using Orckestra.Composer.Repositories;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
+using static Orckestra.Composer.Utils.ExpressionUtility;
+using System.Linq.Expressions;
 
 namespace Orckestra.Composer.Tests.Services.Scope
 {
@@ -53,9 +56,11 @@ namespace Orckestra.Composer.Tests.Services.Scope
             var sut = _container.CreateInstance<ScopeViewService>();
 
             //Act & Assert
-            var ex = Assert.ThrowsAsync<ArgumentException>(() => sut.GetScopeCurrencyAsync(param));
+            Expression<Func<Task<CurrencyViewModel>>> expression = () => sut.GetScopeCurrencyAsync(param);
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => expression.Compile().Invoke());
 
-            ex.ParamName.Should().Be(nameof(param.Scope));
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
+            exception.Message.Should().StartWith(GetMessageOfNullWhiteSpace(nameof(param.Scope)));
         }
 
         [Test]
@@ -70,9 +75,11 @@ namespace Orckestra.Composer.Tests.Services.Scope
             var sut = _container.CreateInstance<ScopeViewService>();
 
             //Act & Assert
-            var ex = Assert.ThrowsAsync<ArgumentException>(() => sut.GetScopeCurrencyAsync(param));
+            Expression<Func<Task<CurrencyViewModel>>> expression = () => sut.GetScopeCurrencyAsync(param);
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => expression.Compile().Invoke());
 
-            ex.ParamName.Should().Be(nameof(param.CultureInfo));
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
+            exception.Message.Should().StartWith(GetMessageOfNull(nameof(param.CultureInfo)));
         }
 
         [Test]

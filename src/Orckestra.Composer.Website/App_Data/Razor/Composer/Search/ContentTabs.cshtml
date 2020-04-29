@@ -160,7 +160,7 @@
                 {
                     var tabsWithResults = contentSearchVm.Tabs.Where(t => t.Total > 0).ToList();
                     <p class="m-0">@Html.Localized("List-Search", "WeAreSorry", SearchRequestContext.SearchQuery, currentTab.Title)</p>
-                    if (tabsWithResults.Count() > 0)
+                    if (tabsWithResults.Any())
                     {
                         @ShowButWeFindIn(tabsWithResults)
                         @ShowButWeFindInTeaser(tabsWithResults)
@@ -256,12 +256,12 @@
     if (tabs == null || !tabs.Any()) { return; }
     <p>
         @Html.Localize("List-Search", "ButWeFind_Part1")
-        @for (var i = 0; i < tabs.Count(); i++)
+        @for (var i = 0; i < tabs.Count; i++)
         {
             var tab = tabs[i];
             <a href="@tab.TabUrl">@tab.Title (@tab.Total)</a>
 
-            if (i < tabs.Count() - 1)
+            if (i < tabs.Count - 1)
             {
                 <text>@Html.Localize("List-Search", "ButWeFind_Separator")</text>
             }

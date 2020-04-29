@@ -37,7 +37,7 @@ namespace Orckestra.Composer.HttpModules
             //If not mutually exclusive
             if (isAuth == isGuest)
             {
-                if (isAuth & isGuest)   
+                if (isAuth && isGuest)   
                 {
                     //This means you are logged in, but you are a guest. You need to log back in.
                     RemoveAuth(httpContext);
@@ -55,13 +55,7 @@ namespace Orckestra.Composer.HttpModules
         private bool ShouldHandleRequest(HttpContextBase httpContext)
         {
             var excluder = (IAntiCookieTamperingExcluder)AutofacDependencyResolver.Current.GetService(typeof(IAntiCookieTamperingExcluder));
-
-            if (excluder != null)
-            {
-                return excluder.ShouldHandleRequest(httpContext);
-            }
-
-            return true;
+            return excluder != null ? excluder.ShouldHandleRequest(httpContext) : true;
         }
 
         private void RemoveComposerCookie(HttpContextBase httpContext)
@@ -74,7 +68,7 @@ namespace Orckestra.Composer.HttpModules
         {
             if (FormsAuthentication.IsEnabled)
             {
-                var cookie = new HttpCookie(FormsAuthentication.FormsCookieName, "")
+                var cookie = new HttpCookie(FormsAuthentication.FormsCookieName, string.Empty)
                 {
                     Expires = DateTime.UtcNow.AddDays(-30),
                     HttpOnly = true
@@ -83,7 +77,7 @@ namespace Orckestra.Composer.HttpModules
                 httpContext.Response.Cookies.Set(cookie);
             }
 
-            httpContext.User = new GenericPrincipal(new GenericIdentity(""), new string[0]);
+            httpContext.User = new GenericPrincipal(new GenericIdentity(string.Empty), new string[0]);
         }
 
         private bool IsAuthenticated(HttpContextBase httpContext)
@@ -109,9 +103,7 @@ namespace Orckestra.Composer.HttpModules
             }
         }
 
-        public void Dispose()
-        {
-        }
+        public void Dispose() { }
 
         protected virtual ICookieAccessor<ComposerCookieDto> GetCookieHandler(HttpContextBase httpContext)
         {

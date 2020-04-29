@@ -1,5 +1,6 @@
-﻿using Composite.Core.Xml;
-using Composite.Data;
+﻿using System;
+using System.Web.Mvc;
+using Composite.Core.Xml;
 using Orckestra.Composer.Cart;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Parameters.WishList;
@@ -14,8 +15,6 @@ using Orckestra.Composer.Providers;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Services.Breadcrumb;
 using Orckestra.Composer.Utils;
-using System;
-using System.Web.Mvc;
 
 namespace Orckestra.Composer.CompositeC1.Controllers
 {
@@ -39,19 +38,12 @@ namespace Orckestra.Composer.CompositeC1.Controllers
            IWebsiteContext websiteContext
             )
         {
-            if (composerContext == null) { throw new ArgumentNullException(nameof(composerContext)); }
-            if (customerViewService == null) { throw new ArgumentNullException(nameof(customerViewService)); }
-            if (breadcrumbViewService == null) { throw new ArgumentNullException(nameof(breadcrumbViewService)); }
-            if (localizationProvider == null) { throw new ArgumentNullException(nameof(localizationProvider)); }
-            if (wishListUrlProvider == null) { throw new ArgumentNullException(nameof(wishListUrlProvider)); }
-            if (wishListViewService == null) { throw new ArgumentNullException(nameof(wishListViewService)); }
-
-            ComposerContext = composerContext;
-            CustomerViewService = customerViewService;
-            BreadcrumbViewService = breadcrumbViewService;
-            LocalizationProvider = localizationProvider;
-            WishListUrlProvider = wishListUrlProvider;
-            WishLisViewService = wishListViewService;
+            ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
+            CustomerViewService = customerViewService ?? throw new ArgumentNullException(nameof(customerViewService));
+            BreadcrumbViewService = breadcrumbViewService ?? throw new ArgumentNullException(nameof(breadcrumbViewService));
+            LocalizationProvider = localizationProvider ?? throw new ArgumentNullException(nameof(localizationProvider));
+            WishListUrlProvider = wishListUrlProvider ?? throw new ArgumentNullException(nameof(wishListUrlProvider));
+            WishLisViewService = wishListViewService ?? throw new ArgumentNullException(nameof(wishListViewService));
         }
 
         public ActionResult WishListInHeader()
@@ -72,17 +64,11 @@ namespace Orckestra.Composer.CompositeC1.Controllers
 
         public ActionResult SharedWishList(string id, XhtmlDocument emptyWishListContent)
         {
-            if (string.IsNullOrEmpty(id))
-            {
-                return HttpNotFound();
-            }
+            if (string.IsNullOrEmpty(id)) { return HttpNotFound(); }
 
             var param = SharedWishListTokenizer.DecryptToken(id);
 
-            if (param == null)
-            {
-                return HttpNotFound();
-            }
+            if (param == null) { return HttpNotFound(); }
 
             var customerStatus = CustomerViewService.GetAccountStatusViewModelAsync(new GetAccountStatusViewModelParam
                 {
@@ -91,10 +77,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
                     CustomerId = param.CustomerId
                 }).Result;
 
-            if (customerStatus == null || customerStatus.Status == AccountStatusEnum.Inactive)
-            {
-                return HttpNotFound();
-            }
+            if (customerStatus == null || customerStatus.Status == AccountStatusEnum.Inactive) { return HttpNotFound(); }
 
             var vm = WishLisViewService.GetWishListViewModelAsync(new GetCartParam
             {
@@ -105,27 +88,18 @@ namespace Orckestra.Composer.CompositeC1.Controllers
                 CustomerId = param.CustomerId
             }).Result;
 
-            if (vm != null && vm.TotalQuantity == 0 && emptyWishListContent != null)
-            {
-                return View("SharedWishListContainer", new {TotalQuantity = 0, EmptyContent = emptyWishListContent.Body});
-            }
-
-            return View("SharedWishListContainer", vm);
+            return vm != null && vm.TotalQuantity == 0 && emptyWishListContent != null
+                ? View("SharedWishListContainer", new {TotalQuantity = 0, EmptyContent = emptyWishListContent.Body})
+                : View("SharedWishListContainer", vm);
         }
 
         public ActionResult SharedWishListTitle(string id)
         {
-            if (string.IsNullOrEmpty(id))
-            {
-                return View("SharedWishListHeaderBlade");
-            }
+            if (string.IsNullOrEmpty(id)) { return View("SharedWishListHeaderBlade"); }
 
             var param = SharedWishListTokenizer.DecryptToken(id);
 
-            if (param == null)
-            {
-                return HttpNotFound();
-            }
+            if (param == null) { return HttpNotFound(); }
 
             var vm = CustomerViewService.GetAccountHeaderViewModelAsync(new GetAccountHeaderViewModelParam
             {
@@ -134,13 +108,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
                 CustomerId = param.CustomerId
             }).Result;
 
-            if (vm == null)
-            {
-                return HttpNotFound();
-            }
-
-            return View("SharedWishListHeaderContainer", vm);
+            return vm == null ? HttpNotFound() : (ActionResult)View("SharedWishListHeaderContainer", vm);
         }
-
     }
 }

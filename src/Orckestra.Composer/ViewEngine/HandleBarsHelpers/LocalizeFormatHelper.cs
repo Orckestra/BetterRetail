@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Threading;
-using System.Web;
 using HandlebarsDotNet;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Localization;
@@ -14,12 +13,7 @@ namespace Orckestra.Composer.ViewEngine.HandleBarsHelpers
 
         public LocalizeFormatHelper(ILocalizationProvider localizationProvider)
         {
-            if (localizationProvider == null)
-            {
-                throw new ArgumentNullException("localizationProvider");
-            }
-
-            _localizationProvider = localizationProvider;
+            _localizationProvider = localizationProvider ?? throw new ArgumentNullException(nameof(localizationProvider));
         }
 
         public string HelperName { get { return "localizeFormat"; } }

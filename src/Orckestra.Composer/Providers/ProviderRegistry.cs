@@ -2,7 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Orckestra.Composer.Utils;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Providers
 {
@@ -32,9 +32,14 @@ namespace Orckestra.Composer.Providers
         /// <param name="providerType">Type of the provider. This type needs to derive from <see cref="T"/>.</param>
         public void RegisterProvider(string name, Type providerType)
         {
-            if (string.IsNullOrWhiteSpace(name)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("name"), "name"); }
-            if (providerType == null) { throw new ArgumentNullException("providerType"); }
-            if (!typeof(T).IsAssignableFrom(providerType)) { throw new ArgumentException(string.Format("providerType must extend {0}.", typeof(T).AssemblyQualifiedName), "providerType"); }
+            if (string.IsNullOrWhiteSpace(name)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(), nameof(name)); }
+            if (providerType == null) { throw new ArgumentNullException(nameof(providerType)); }
+
+            if (!typeof(T).IsAssignableFrom(providerType)) 
+            { 
+                throw new ArgumentException(string.Format("providerType must extend {0}.", 
+                typeof(T).AssemblyQualifiedName), nameof(providerType)); 
+            }
 
             _registeredProviders.AddOrUpdate(name, providerType, (s, type) => providerType);
         }
@@ -51,8 +56,7 @@ namespace Orckestra.Composer.Providers
                 throw new InvalidOperationException("No providers have been registered. Please add at least one.");
             }
 
-            Type type;
-            if (!_registeredProviders.TryGetValue(name, out type))
+            if (!_registeredProviders.TryGetValue(name, out Type type))
             {
                 throw new ArgumentException(string.Format("'{0}' didn't match any registered provider.", name), "name");
             }

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
+using Composite.Core;
 using Orckestra.Composer.CompositeC1.Services;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
@@ -50,50 +50,41 @@ namespace Orckestra.Composer.CompositeC1.Providers
         /// </summary>
         /// <param name="queryString">The query string.</param>
         /// <returns></returns>
-        public virtual IEnumerable<SearchFilter> BuildSelectedFacets(NameValueCollection queryString)
+        public virtual IEnumerable<SearchFilter> BuildSelectedFacets(NameValueCollection collection)
         {
-            if (queryString == null)
+            if (collection == null || collection.Count == 0) return null;
+
+            SortedDictionary<string, SearchFilter> result = new SortedDictionary<string, SearchFilter>();
+
+            foreach (string element in collection)
             {
-                return null;
-            }
+                var match = Regex.Match(
+                    element,
+                    $"{SearchConfiguration.FilterNameParameterPrefix}([0-9]+)",
+                    RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
 
-            // TODO use NameValue collection directly.
-            var queryStringTokens = queryString.ToString().Split('&');
+                if (!match.Success) continue;
 
-            var filterNameTokens = queryStringTokens
-                .Where(x => x.StartsWith(SearchConfiguration.FilterNameParameterPrefix, StringComparison.InvariantCultureIgnoreCase))
-                .OrderBy(x => x)
-                .Select(x => x.Split('='))
-                .ToList();
+                var fnValue = collection[SearchConfiguration.FilterNameParameterPrefix + match.Groups[1].Value];
 
-            var filterValueTokens = queryStringTokens
-                .Where(x => x.StartsWith(SearchConfiguration.FilterValueParameterPrefix, StringComparison.InvariantCultureIgnoreCase))
-                .OrderBy(x => x)
-                .Select(x => x.Split('='))
-                .ToList();
-
-            var filters = new List<SearchFilter>();
-
-            foreach (var filterNameToken in filterNameTokens)
-            {
-                var filterPosition = Regex.Replace(filterNameToken[0], "[A-Za-z=]", string.Empty);
-                var filterValueToken = filterValueTokens
-                    .FirstOrDefault(x => x[0].Equals(SearchConfiguration.FilterValueParameterPrefix + filterPosition, StringComparison.InvariantCultureIgnoreCase));
-
-                if (filterValueToken == null)
+                if (string.IsNullOrEmpty(fnValue))
                 {
+                    Log.LogWarning(nameof(SearchUrlProvider), $"{element} facet key value is null or empty.");
                     continue;
                 }
 
-                filters.Add(new SearchFilter
+                var fvValue = collection[SearchConfiguration.FilterValueParameterPrefix + match.Groups[1].Value];
+
+                if (string.IsNullOrEmpty(fvValue)) continue;
+
+                result.Add(fnValue, new SearchFilter
                 {
-                    Name = HttpUtility.UrlDecode(filterNameToken[1]),
-                    // TODO: Split here and support list of values here instead of doing it when building facet predicates.
-                    Value = HttpUtility.UrlDecode(filterValueToken[1])
+                    Name = HttpUtility.UrlDecode(fnValue),
+                    Value = HttpUtility.UrlDecode(fvValue)
                 });
             }
 
-            return filters;
+            return result.Values;
         }
     }
 }

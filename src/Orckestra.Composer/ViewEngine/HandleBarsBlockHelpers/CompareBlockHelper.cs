@@ -22,14 +22,12 @@ namespace Orckestra.Composer.ViewEngine.HandleBarsBlockHelpers
                 throw new HandlebarsException(string.Format("{{{{{0}}}}} helper must have exactly two arguments", HelperName));
             }
 
-            T v1;
-            T v2;
-            if (!TryParse(arguments[0], out v1))
+            if (!TryParse(arguments[0], out T v1))
             {
                 throw new ArgumentException(string.Format("The first argument of {{{{{0}}}}} helper must be parseable as a {1}", HelperName, typeof(T).Name));
             }
 
-            if (!TryParse(arguments[1], out v2))
+            if (!TryParse(arguments[1], out T v2))
             {
                 throw new ArgumentException(string.Format("The second parameter of {{{{{0}}}}} helper must be parseable as a {1}", HelperName, typeof(T).Name));
             }

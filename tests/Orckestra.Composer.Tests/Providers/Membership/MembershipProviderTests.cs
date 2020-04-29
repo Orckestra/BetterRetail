@@ -226,8 +226,7 @@ namespace Orckestra.Composer.Tests.Providers.Membership
             _mockClient.Setup(x => x.Send(It.IsAny<CreateCustomerMembershipRequest>()))
                        .Throws(new ValidationError("UserNameAlreadyUsed", "Username already exists."));
 
-            MembershipCreateStatus status;
-            var user = _sut.CreateUser(@"duplicateUsername", FakeData.ValidPassword, FakeData.ValidEmail, null, null, false, null, out status);
+            var user = _sut.CreateUser(@"duplicateUsername", FakeData.ValidPassword, FakeData.ValidEmail, null, null, false, null, out MembershipCreateStatus status);
 
             status.Should().Be(MembershipCreateStatus.DuplicateUserName);
             user.Should().BeNull();
@@ -239,10 +238,9 @@ namespace Orckestra.Composer.Tests.Providers.Membership
         {
             _mockClient.Setup(x => x.Send(It.IsAny<CreateCustomerMembershipRequest>()))
                         .Throws(new ValidationError("UserNameAlreadyUsed", "Username already exists."));
-        
-            MembershipCreateStatus status;
-            var user = _sut.CreateUser(FakeData.ValidUsername, FakeData.ValidPassword, "duplicateEmail", null, null, false, null, out status);
-        
+
+            var user = _sut.CreateUser(FakeData.ValidUsername, FakeData.ValidPassword, "duplicateEmail", null, null, false, null, out MembershipCreateStatus status);
+
             Assert.AreEqual(MembershipCreateStatus.DuplicateEmail, status);
             Assert.IsNull(user);
         }
@@ -255,8 +253,7 @@ namespace Orckestra.Composer.Tests.Providers.Membership
             _mockClient.Setup(x => x.Send(It.IsAny<CreateCustomerMembershipRequest>()))
                        .Throws(new ValidationError("InvalidOperationException", "The customer membership creation failed: InvalidPassword."));
 
-            MembershipCreateStatus status;
-            var user = _sut.CreateUser(FakeData.ValidUsername, FakeData.ValidPassword, FakeData.ValidEmail, null, null, false, null, out status);
+            var user = _sut.CreateUser(FakeData.ValidUsername, FakeData.ValidPassword, FakeData.ValidEmail, null, null, false, null, out MembershipCreateStatus status);
 
             status.Should().Be(MembershipCreateStatus.InvalidPassword);
             user.Should().BeNull();
@@ -281,8 +278,7 @@ namespace Orckestra.Composer.Tests.Providers.Membership
             _mockClient.Setup(x => x.Send(It.IsAny<CreateCustomerMembershipRequest>()))
                        .Returns(customer);
 
-            MembershipCreateStatus status;
-            var user = _sut.CreateUser(FakeData.ValidUsername, FakeData.ValidPassword, FakeData.ValidEmail, null, null, false, null, out status);
+            var user = _sut.CreateUser(FakeData.ValidUsername, FakeData.ValidPassword, FakeData.ValidEmail, null, null, false, null, out MembershipCreateStatus status);
 
             status.Should().Be(MembershipCreateStatus.Success);
             user.Should().NotBeNull();
@@ -296,8 +292,7 @@ namespace Orckestra.Composer.Tests.Providers.Membership
             _mockClient.Setup(x => x.Send(It.IsAny<CreateCustomerMembershipRequest>()))
                        .Throws<WebServiceException>();
 
-            MembershipCreateStatus status;
-            _sut.Invoking(x => x.CreateUser(FakeData.ValidUsername, FakeData.ValidPassword, FakeData.ValidEmail, null, null, false, null, out status))
+            _sut.Invoking(x => x.CreateUser(FakeData.ValidUsername, FakeData.ValidPassword, FakeData.ValidEmail, null, null, false, null, out MembershipCreateStatus status))
                 .ShouldThrow<MembershipCreateUserException>();
         }
 
@@ -476,8 +471,7 @@ namespace Orckestra.Composer.Tests.Providers.Membership
             _mockClient.Setup(x => x.Send(It.IsAny<FindCustomersRequest>()))
                        .Returns(queryResult);
 
-            int totalRecord;
-            var users = _sut.GetAllUsers(0, 10, out totalRecord);
+            var users = _sut.GetAllUsers(0, 10, out int totalRecord);
 
             var isEquivalent = GetRequestValidator(null, 0, 10);
             _mockClient.Verify(x => x.Send(It.Is<FindCustomersRequest>(req => isEquivalent(req))));
@@ -493,8 +487,7 @@ namespace Orckestra.Composer.Tests.Providers.Membership
             _mockClient.Setup(x => x.Send(It.IsAny<FindCustomersRequest>()))
                        .Throws<WebServiceException>();
 
-            int totalRecords;
-            _sut.Invoking(x => x.GetAllUsers(0, 10, out totalRecords))
+            _sut.Invoking(x => x.GetAllUsers(0, 10, out int totalRecords))
                 .ShouldThrow<ProviderException>();
         }
 
@@ -752,8 +745,6 @@ namespace Orckestra.Composer.Tests.Providers.Membership
         [Test]
         public void FindUsersByName_should_returns_users()
         {
-            int totalRecord;
-
             var queryResult = new CustomerQueryResult()
             {
                 Results = new List<Customer> { new Customer() { Username = FakeData.ValidUsername, Email = FakeData.ValidEmail } },
@@ -763,7 +754,7 @@ namespace Orckestra.Composer.Tests.Providers.Membership
             _mockClient.Setup(x => x.Send(It.IsAny<FindCustomersRequest>()))
                        .Returns(queryResult);
 
-            var users = _sut.FindUsersByName(FakeData.ValidUsername, 0, 10, out totalRecord);
+            var users = _sut.FindUsersByName(FakeData.ValidUsername, 0, 10, out int totalRecord);
 
             var isEquivalent = GetRequestValidator(FakeData.ValidUsername, 0, 10);
             _mockClient.Verify(x => x.Send(It.Is<FindCustomersRequest>(req => isEquivalent(req))));
@@ -781,16 +772,13 @@ namespace Orckestra.Composer.Tests.Providers.Membership
             _mockClient.Setup(x => x.Send(It.IsAny<FindCustomersRequest>()))
                        .Throws<ProviderException>();
 
-            int totalRecord;
-            _sut.Invoking(x => x.FindUsersByName(FakeData.ValidUsername, 0, 10, out totalRecord))
+            _sut.Invoking(x => x.FindUsersByName(FakeData.ValidUsername, 0, 10, out int totalRecord))
                 .ShouldThrow<ProviderException>();
         }
 
         [Test]
         public void FindUsersByEmail_should_returns_matching_users()
         {
-            int totalRecord;
-
             var queryResult = new CustomerQueryResult()
             {
                 Results = new List<Customer> { new Customer() { Username = FakeData.ValidUsername, Email = FakeData.ValidEmail } },
@@ -800,7 +788,7 @@ namespace Orckestra.Composer.Tests.Providers.Membership
             _mockClient.Setup(x => x.Send(It.IsAny<FindCustomersRequest>()))
                        .Returns(queryResult);
 
-            var users = _sut.FindUsersByEmail(FakeData.ValidEmail, 0, 10, out totalRecord);
+            var users = _sut.FindUsersByEmail(FakeData.ValidEmail, 0, 10, out int totalRecord);
 
             var isEquivalent = GetRequestValidator(FakeData.ValidEmail, 0, 10);
             _mockClient.Verify(x => x.Send(It.Is<FindCustomersRequest>(req => isEquivalent(req))));
@@ -818,8 +806,7 @@ namespace Orckestra.Composer.Tests.Providers.Membership
             _mockClient.Setup(x => x.Send(It.IsAny<FindCustomersRequest>()))
                        .Throws<ProviderException>();
 
-            int totalRecord;
-            _sut.Invoking(x => x.FindUsersByEmail(FakeData.ValidEmail, 0, 10, out totalRecord))
+            _sut.Invoking(x => x.FindUsersByEmail(FakeData.ValidEmail, 0, 10, out int totalRecord))
                 .ShouldThrow<ProviderException>();
         }
 

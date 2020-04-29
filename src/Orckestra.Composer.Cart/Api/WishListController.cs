@@ -1,19 +1,12 @@
 ﻿using System;
-using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
-using System.Web.Http.Results;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Requests;
 using Orckestra.Composer.Cart.Services;
-using Orckestra.Composer.Cart.ViewModels;
-using Orckestra.Composer.Parameters;
-using Orckestra.Composer.Providers;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Utils;
 using Orckestra.Composer.WebAPIFilters;
-using Orckestra.ExperienceManagement.Configuration;
 
 namespace Orckestra.Composer.Cart.Api
 {
@@ -28,11 +21,8 @@ namespace Orckestra.Composer.Cart.Api
             IWishListViewService wishListViewService,
             IComposerContext composerContext)
         {
-            if (wishListViewService == null) { throw new ArgumentNullException("wishListViewService"); }
-            if (composerContext == null) { throw new ArgumentNullException("composerContext"); }
-
-            WishListViewService = wishListViewService;
-            ComposerContext = composerContext;
+            WishListViewService = wishListViewService ?? throw new ArgumentNullException(nameof(wishListViewService));
+            ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
         }
 
         /// <summary>
@@ -53,7 +43,6 @@ namespace Orckestra.Composer.Cart.Api
                 WorkflowToExecute = CartConfiguration.WishListWorkflowToExecute,
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
                 //WebsiteId = SiteConfiguration.GetWebsiteId()
-
             });
 
             return Ok(viewModel);

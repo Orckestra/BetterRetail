@@ -156,24 +156,17 @@ namespace Orckestra.Composer.Store.Factory
 
         public virtual StorePageViewModel BuildNextPage(GetStorePageViewModelParam param)
         {
-            if (param.CurrentPageNumber < GetTotalPages(param.Total, param.PageSize))
-            {
-                return new StorePageViewModel
+            return param.CurrentPageNumber < GetTotalPages(param.Total, param.PageSize)
+                ? new StorePageViewModel
                 {
                     Page = param.CurrentPageNumber + 1
-                };
-            }
-
-            return null;
+                }
+                : null;
         }
 
         protected virtual StoreScheduleViewModel CreateStoreScheduleViewModel(CreateStoreViewModelParam param)
         {
-
-            if (param.Store.StoreSchedule == null)
-            {
-                return null;
-            }
+            if (param.Store.StoreSchedule == null) { return null; }
 
             var model = new StoreScheduleViewModel();
             var storeNowTime = DateTime.Now;
@@ -187,8 +180,7 @@ namespace Orckestra.Composer.Store.Factory
             model.OpeningHours = GetOpeningHours(param, storeNowTime);
             model.OpeningHourExceptions = GetOpeningHourExceptions(param, storeNowTime);
 
-            var todayOpeningTimes =
-                StoreScheduleProvider.GetOpeningTimes(param.Store.StoreSchedule, storeNowTime).ToList();
+            var todayOpeningTimes = StoreScheduleProvider.GetOpeningTimes(param.Store.StoreSchedule, storeNowTime).ToList();
             model.TodayOpeningTimes = todayOpeningTimes.Select(ot => GetScheduleIntervalViewModel(ot, param.CultureInfo)).ToList();
 
             model.IsOpenNow = IsTimeInIntervals(storeNowTime.TimeOfDay, todayOpeningTimes);
@@ -274,7 +266,6 @@ namespace Orckestra.Composer.Store.Factory
                             IsoCode = overtureAddress.CountryCode
                         }).Result;
 
-
                         var regionName =
                             CountryService.RetrieveRegionDisplayNameAsync(new RetrieveRegionDisplayNameParam
                             {
@@ -286,15 +277,14 @@ namespace Orckestra.Composer.Store.Factory
                         addressViewModel.CountryName = !string.IsNullOrWhiteSpace(countryName)
                             ? countryName
                             : overtureAddress.CountryCode.ToUpper();
+
                         addressViewModel.RegionName = !string.IsNullOrWhiteSpace(regionName)
                             ? regionName
                             : overtureAddress.RegionCode;
                     }
                 }
             }
-
             return addressViewModel;
-
         }
 
 
@@ -314,12 +304,9 @@ namespace Orckestra.Composer.Store.Factory
                 CultureInfo = cultureInfo
             });
 
-            long phoneNumberAsInt;
-            if (localFormattingString != null && long.TryParse(phoneNumber, out phoneNumberAsInt))
-            {
-                return string.Format(cultureInfo, localFormattingString, phoneNumberAsInt);
-            }
-            return phoneNumber;
+            return localFormattingString != null && long.TryParse(phoneNumber, out long phoneNumberAsInt)
+                ? string.Format(cultureInfo, localFormattingString, phoneNumberAsInt)
+                : phoneNumber;
         }
 
         #region Google Maps Properties
@@ -336,43 +323,31 @@ namespace Orckestra.Composer.Store.Factory
         }
         protected virtual string GetGoogleStaticMapUrl(StoreAddressViewModel addressViewModel)
         {
-            if (addressViewModel == null) return null;
-
-           return GoogleMaps.GetStaticMapImgUrl(GoogleMapAddressParams(addressViewModel), "roadmap");
-
+            return addressViewModel == null 
+                ? null 
+                : GoogleMaps.GetStaticMapImgUrl(GoogleMapAddressParams(addressViewModel), "roadmap");
         }
 
         private string[] GoogleMapAddressParams(StoreAddressViewModel model)
         {
-            string[] arr;
-            if (model.Latitude != null && model.Longitude != null)
-            {
-                arr = new[]
+            return model.Latitude != null && model.Longitude != null
+                ? (new[]
                 {
                     ((double) model.Latitude).ToString("0.00000", CultureInfo.InvariantCulture),
                     ((double) model.Longitude).ToString("0.00000", CultureInfo.InvariantCulture)
-                };
-            }
-            else
-            {
-                arr = new[] {model.Line1, model.City, model.PostalCode, model.CountryName};
-            }
-            return arr;
+                })
+                : (new[] {model.Line1, model.City, model.PostalCode, model.CountryName});
         }
 
         #endregion
 
         protected bool IsTimeInIntervals(TimeSpan time, IEnumerable<ScheduleInterval> intervals)
         {
-            return
-                intervals.Select(interval => time >= interval.BeginingTime && time < interval.EndingTime)
-                    .FirstOrDefault();
+            return intervals.Select(interval => time >= interval.BeginingTime && time < interval.EndingTime).FirstOrDefault();
         }
         protected int GetTotalPages(int total, int pageSize)
         {
             return (int)Math.Ceiling((double)total / pageSize);
         }
-
-
     }
 }

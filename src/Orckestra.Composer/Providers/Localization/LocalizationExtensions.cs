@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using System.Linq;
 
 namespace Orckestra.Composer.Providers.Localization
 {
@@ -18,20 +17,9 @@ namespace Orckestra.Composer.Providers.Localization
         /// <returns></returns>
         public static string GetLocalizedErrorMessage(this ILocalizationProvider localizationProvider, string errorCode, CultureInfo cultureInfo)
         {
-            if (localizationProvider == null)
-            {
-                throw new ArgumentNullException("localizationProvider");
-            }
-
-            if (errorCode == null)
-            {
-                throw new ArgumentNullException("errorCode");
-            }
-
-            if (cultureInfo == null)
-            {
-                throw new ArgumentNullException("cultureInfo");
-            }
+            if (localizationProvider == null) { throw new ArgumentNullException(nameof(localizationProvider)); }
+            if (errorCode == null) { throw new ArgumentNullException(nameof(errorCode)); }
+            if (cultureInfo == null) { throw new ArgumentNullException(nameof(cultureInfo)); }
 
             return localizationProvider.GetLocalizedString(new GetLocalizedParam
             {
@@ -50,15 +38,8 @@ namespace Orckestra.Composer.Providers.Localization
         /// <returns></returns>
         public static string FormatPrice(this ILocalizationProvider localizationProvider, decimal price, CultureInfo cultureInfo)
         {
-            if (localizationProvider == null)
-            {
-                throw new ArgumentNullException("localizationProvider");
-            }
-
-            if (cultureInfo == null)
-            {
-                throw new ArgumentNullException("cultureInfo");
-            }
+            if (localizationProvider == null) { throw new ArgumentNullException(nameof(localizationProvider)); }
+            if (cultureInfo == null) { throw new ArgumentNullException(nameof(cultureInfo)); }
 
             var format = localizationProvider.GetLocalizedString(new GetLocalizedParam
             {
@@ -72,15 +53,8 @@ namespace Orckestra.Composer.Providers.Localization
 
         public static string FormatPhoneNumber(this ILocalizationProvider localizationProvider, string phoneNumber, CultureInfo cultureInfo)
         {
-            if (localizationProvider == null)
-            {
-                throw new ArgumentNullException(nameof(localizationProvider));
-            }
-
-            if (cultureInfo == null)
-            {
-                throw new ArgumentNullException(nameof(cultureInfo));
-            }
+            if (localizationProvider == null) { throw new ArgumentNullException(nameof(localizationProvider)); }
+            if (cultureInfo == null) { throw new ArgumentNullException(nameof(cultureInfo)); }
 
             var format = localizationProvider.GetLocalizedString(new GetLocalizedParam
             {
@@ -89,8 +63,7 @@ namespace Orckestra.Composer.Providers.Localization
                 CultureInfo = cultureInfo
             });
 
-            double phoneNumberDouble;
-            return !string.IsNullOrWhiteSpace(phoneNumber) && double.TryParse(phoneNumber, out phoneNumberDouble)
+            return !string.IsNullOrWhiteSpace(phoneNumber) && double.TryParse(phoneNumber, out double phoneNumberDouble)
                 ? string.Format(cultureInfo, format, phoneNumberDouble)
                 : phoneNumber;
         }

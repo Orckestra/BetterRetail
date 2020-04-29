@@ -1,13 +1,13 @@
-﻿using Orckestra.Composer.Parameters;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Repositories;
 using Orckestra.Composer.Services;
 using Orckestra.ExperienceManagement.Configuration;
 using Orckestra.Overture.ServiceModel.Orders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Orckestra.Composer.Product.Providers
 {
@@ -75,8 +75,8 @@ namespace Orckestra.Composer.Product.Providers
             var location = GetMatchingLocation(locations, defaultLocationId);
             if (location == null)
             {
-                throw new ArgumentException(string.Format("Could not find any active fulfillment location in the scope '{0}' to support the Inventory Location Id '{1}'",
-                    param.Scope, defaultLocationId), "param");
+                throw new InvalidOperationException($"Could not find any active fulfillment location in the scope '{param.Scope}' " +
+                    $"to support the Inventory Location Id '{defaultLocationId}'");
             }
 
             return location;
@@ -106,7 +106,7 @@ namespace Orckestra.Composer.Product.Providers
                 fulfillmentLocations.FirstOrDefault(
                     loc =>
                         loc.IsActive &&
-                        String.Equals(loc.InventoryLocationId, locationId, StringComparison.InvariantCultureIgnoreCase));
+                        string.Equals(loc.InventoryLocationId, locationId, StringComparison.InvariantCultureIgnoreCase));
 
             return location;
         }

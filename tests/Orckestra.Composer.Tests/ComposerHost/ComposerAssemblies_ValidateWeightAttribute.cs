@@ -54,8 +54,9 @@ namespace Orckestra.Composer.Tests.ComposerHost
                 lastAssembly.FullName.Should().Contain("Orckestra.Composer.Tests");
             }
             else
+            {
                 Assert.Fail();
-
+            }
         }
         [Test]
         public void WHEN_assemblies_for_plugin_registration_are_retrieved_they_SHOULD_HAVE_ComposerAssemblyWeightAttribute()
@@ -94,11 +95,10 @@ namespace Orckestra.Composer.Tests.ComposerHost
                 var attributes = assembly.GetCustomAttributes(typeof(ComposerAssemblyWeightAttribute), false);
                 if (attributes.Length > 0)
                 {
-                    var attribute = attributes[0] as ComposerAssemblyWeightAttribute;
-                    if (attribute != null)
+                    if (attributes[0] is ComposerAssemblyWeightAttribute attribute)
                     {
                         int weight = attribute.ComposerAssemblyWeigh;
-                        
+
                         //real assert
                         weight.Should().BeGreaterOrEqualTo(previousWeight);
 

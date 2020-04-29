@@ -11,7 +11,7 @@ using Orckestra.Overture.ServiceModel.Queries;
 using Orckestra.Overture.ServiceModel.Requests.Search;
 using Orckestra.Overture.ServiceModel.Search;
 using ServiceStack;
-
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Search.Repositories
 {
@@ -37,8 +37,8 @@ namespace Orckestra.Composer.Search.Repositories
         public virtual async Task<ProductSearchResult> SearchProductAsync(SearchCriteria criteria)
         {
             if (criteria == null) { throw new ArgumentNullException(nameof(criteria)); }
-            if (criteria.CultureInfo == null) { throw new ArgumentException($"{nameof(criteria)}.{nameof(criteria.CultureInfo)}"); }
-            if (string.IsNullOrWhiteSpace(criteria.Scope)) { throw new ArgumentException($"{nameof(criteria)}.{nameof(criteria.Scope)}"); }
+            if (criteria.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(criteria.CultureInfo)), nameof(criteria)); }
+            if (string.IsNullOrWhiteSpace(criteria.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(criteria.Scope)), nameof(criteria)); }
 
             var request = CreateSearchRequest(criteria);
 
@@ -66,14 +66,12 @@ namespace Orckestra.Composer.Search.Repositories
 
         protected virtual async Task<ProductSearchResult> ExecuteProductSearchRequestAsync(SearchAvailableProductsBaseRequest request)
         {
-            var returnProductSerachResult = request as IReturn<ProductSearchResult>;
-            if (returnProductSerachResult != null)
+            if (request is IReturn<ProductSearchResult> returnProductSerachResult)
             {
                 return await OvertureClient.SendAsync(returnProductSerachResult).ConfigureAwait(false);
             }
-            var returnSearchAvailableProductsByCategoryResponse =
-                request as IReturn<SearchAvailableProductsByCategoryResponse>;
-            if (returnSearchAvailableProductsByCategoryResponse != null)
+
+            if (request is IReturn<SearchAvailableProductsByCategoryResponse> returnSearchAvailableProductsByCategoryResponse)
             {
                 return await OvertureClient.SendAsync(returnSearchAvailableProductsByCategoryResponse).ConfigureAwait(false);
             }
@@ -91,7 +89,7 @@ namespace Orckestra.Composer.Search.Repositories
             {
                 var facetSetting = facetSettings.FirstOrDefault(setting => setting.FieldName == facet.FieldName);
 
-                if (facetSetting?.FacetType == Facets.FacetType.MultiSelect || selectedFacets.FirstOrDefault(selectedFacet => selectedFacet.Name == facet.FieldName) == null)
+                if (facetSetting?.FacetType == Facets.FacetType.MultiSelect || selectedFacets.Find(selectedFacet => selectedFacet.Name == facet.FieldName) == null)
                 {
                     strippedFacets.Add(facet);
                 }
@@ -167,14 +165,10 @@ namespace Orckestra.Composer.Search.Repositories
 
         protected virtual QuerySorting BuildQuerySortings(SearchCriteria criteria)
         {
-            if (string.IsNullOrWhiteSpace(criteria.SortBy))
-            {
-                return null;
-            }
+            if (string.IsNullOrWhiteSpace(criteria.SortBy)) { return null; }
 
-            var sortDirection =
-                (string.IsNullOrWhiteSpace(criteria.SortDirection) ||
-                (criteria.SortDirection.Equals("asc", StringComparison.InvariantCultureIgnoreCase)))
+            var sortDirection = 
+                string.IsNullOrWhiteSpace(criteria.SortDirection) || criteria.SortDirection.Equals("asc", StringComparison.InvariantCultureIgnoreCase)
                 ? SortDirection.Ascending
                 : SortDirection.Descending;
 

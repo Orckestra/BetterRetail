@@ -10,7 +10,7 @@ namespace Orckestra.Composer.Kernel
 
         public AutofacDependancyResolver(ILifetimeScope container)
         {
-            _container = container ?? throw new ArgumentNullException("container");
+            _container = container ?? throw new ArgumentNullException(nameof(container));
         }
 
         public object Resolve(Type type)
@@ -25,15 +25,12 @@ namespace Orckestra.Composer.Kernel
 
         public object TryResolve(Type type)
         {
-            object result = null;
-
-            return _container.TryResolve(type, out result) ? result : null;
+            return _container.TryResolve(type, out object result) ? result : null;
         }
 
         public T TryResolve<T>() where T : class
         {
-            object result = null;
-            return _container.TryResolve(typeof(T), out result) ? (T)result : null;
+            return _container.TryResolve(typeof(T), out object result) ? (T)result : null;
         }
     }
 }

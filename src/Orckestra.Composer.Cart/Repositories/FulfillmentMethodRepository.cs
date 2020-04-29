@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Configuration;
-using Orckestra.Composer.Utils;
 using Orckestra.Overture;
 using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel.Orders;
 using Orckestra.Overture.ServiceModel.Requests.Orders;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Cart.Repositories
 {
@@ -32,10 +32,10 @@ namespace Orckestra.Composer.Cart.Repositories
         public virtual Task<List<FulfillmentMethod>> GetCalculatedFulfillmentMethods(GetShippingMethodsParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
-            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param.CartName)), nameof(param)); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param.Scope)), nameof(param)); }
-            if (param.CustomerId == Guid.Empty) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param.CustomerId)), nameof(param)); }
-            if (param.CultureInfo == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param.CultureInfo)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartName)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
+            if (param.CustomerId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
 
             var request = new FindCalculatedFulfillmentMethodsRequest
             {
@@ -50,7 +50,7 @@ namespace Orckestra.Composer.Cart.Repositories
 
         public virtual Task<GetFulfillmentMethodsResponse> GetFulfillmentMethods(string scopeId)
         {            
-            if (string.IsNullOrWhiteSpace(scopeId)) { throw new ArgumentNullException("scopeId", "scopeId is required"); }
+            if (string.IsNullOrWhiteSpace(scopeId)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(), nameof(scopeId)); }
 
             var cacheKey = GetCacheKeyForFulfillmentMethodsByScope(scopeId);
 

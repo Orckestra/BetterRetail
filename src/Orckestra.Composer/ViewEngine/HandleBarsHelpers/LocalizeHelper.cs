@@ -13,12 +13,7 @@ namespace Orckestra.Composer.ViewEngine.HandleBarsHelpers
 
         public LocalizeHelper(ILocalizationProvider localizationProvider)
         {
-            if (localizationProvider == null)
-            {
-                throw new ArgumentNullException("localizationProvider");
-            }
-
-            _localizationProvider = localizationProvider;
+            _localizationProvider = localizationProvider ?? throw new ArgumentNullException(nameof(localizationProvider));
         }
 
         public string HelperName { get { return "localize"; } }

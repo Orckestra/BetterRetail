@@ -31,7 +31,7 @@ namespace Orckestra.Composer.Services.Lookup
 
         public async Task<string> GetLookupDisplayNameAsync(GetLookupDisplayNameParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
 
             var splitLookups = param.Value.Split('|');
             var lookupStringBuilder = new StringBuilder();
@@ -55,7 +55,7 @@ namespace Orckestra.Composer.Services.Lookup
 
         public async Task<Dictionary<string, string>> GetLookupDisplayNamesAsync(GetLookupDisplayNamesParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
 
             var lookupDisplayNames = new Dictionary<string, string>();
 
@@ -95,7 +95,6 @@ namespace Orckestra.Composer.Services.Lookup
         private async Task<string> GetDistinctLookup(LookupType lookupType, string lookupName, string value,
             CultureInfo cultureInfo)
         {
-
             ILookupRepository repository = _lookupRepositoryFactory.CreateLookupRepository(lookupType);
             var lookup = await repository.GetLookupAsync(lookupName).ConfigureAwait(false);
             if (lookup == null)
@@ -104,9 +103,7 @@ namespace Orckestra.Composer.Services.Lookup
             }
             var lookupValue = lookup.Values.SingleOrDefault(v => v.Value == value);
 
-            return lookupValue == null
-                ? null
-                : lookupValue.DisplayName.GetLocalizedValue(cultureInfo.Name);
+            return lookupValue?.DisplayName.GetLocalizedValue(cultureInfo.Name);
         }
     }
 }

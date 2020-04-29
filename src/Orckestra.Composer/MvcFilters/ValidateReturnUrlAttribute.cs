@@ -22,7 +22,7 @@ namespace Orckestra.Composer.MvcFilters
 
                 var returnUrl = ExtractReturnUrl(query);
 
-                if (!String.IsNullOrWhiteSpace(returnUrl))
+                if (!string.IsNullOrWhiteSpace(returnUrl))
                 {
                     var isLocal = IsUrlLocal(filterContext, returnUrl);
 
@@ -39,8 +39,7 @@ namespace Orckestra.Composer.MvcFilters
 
         private bool IsChildActionOnly(ActionExecutingContext filterContext)
         {
-            var childActionAttr = filterContext.ActionDescriptor.GetCustomAttributes(typeof (ChildActionOnlyAttribute),
-                true);
+            var childActionAttr = filterContext.ActionDescriptor.GetCustomAttributes(typeof (ChildActionOnlyAttribute), true);
 
             return childActionAttr.Any();
         }
@@ -66,14 +65,14 @@ namespace Orckestra.Composer.MvcFilters
         {
             var key = GetReturnUrlKey(query);
 
-            return String.IsNullOrWhiteSpace(key)
+            return string.IsNullOrWhiteSpace(key)
                 ? null
                 : query[key];
         }
 
         private string GetReturnUrlKey(IDictionary<string, string> query)
         {
-            var key = query.Keys.FirstOrDefault(k => String.Equals(k, ReturnUrlKey, StringComparison.InvariantCultureIgnoreCase));
+            var key = query.Keys.FirstOrDefault(k => string.Equals(k, ReturnUrlKey, StringComparison.InvariantCultureIgnoreCase));
             return key;
         }
 
@@ -91,12 +90,10 @@ namespace Orckestra.Composer.MvcFilters
             var originalUrl = filterContext.HttpContext.Request.Url.ToString();
             var newUrl = UrlFormatter.AppendQueryString(originalUrl, new NameValueCollection()
             {
-                { returnUrlKey, String.Empty }
+                { returnUrlKey, string.Empty }
             });
 
             filterContext.Redirect(newUrl);
-        }
-
-        
+        }        
     }
 }

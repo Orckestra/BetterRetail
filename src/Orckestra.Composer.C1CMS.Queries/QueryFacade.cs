@@ -1,14 +1,12 @@
-﻿using Composite.Core;
-using Orckestra.Composer.Configuration;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using Composite.Core;
 using Orckestra.Composer.SearchQuery.Parameters;
 using Orckestra.Composer.SearchQuery.Repositories;
 using Orckestra.ExperienceManagement.Configuration;
 using Orckestra.Overture.ServiceModel.SearchQueries;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Web;
 
 namespace Orckestra.Composer.C1CMS.Queries
 {
@@ -16,16 +14,14 @@ namespace Orckestra.Composer.C1CMS.Queries
     {
         public static List<string> GetSearchQueryList(string type)
         {
-            SearchQueryType queryType;
-            Enum.TryParse(type, out queryType);
+            Enum.TryParse(type, out SearchQueryType queryType);
 
             try
             {
                 var searchQueryRepository = ServiceLocator.GetService<ISearchQueryRepository>();
                 var siteConfiguration = ServiceLocator.GetService<ISiteConfiguration>();
                 var pageIdString = HttpContext.Current.Request["pageId"];
-                Guid pageId;
-                if (Guid.TryParse(pageIdString, out pageId))
+                if (Guid.TryParse(pageIdString, out Guid pageId))
                 {
                     var scope = siteConfiguration.GetScopeIdByPageId(pageId);
                     var queries = searchQueryRepository.GetSearchQueriesAsync(new GetSearchQueriesParam()
@@ -37,6 +33,7 @@ namespace Orckestra.Composer.C1CMS.Queries
                     return queries.SearchQueries.Select(d => d.Name).ToList();
                 }
             }
+            //TODO: add catch processing
             catch
             {
                 // ignored

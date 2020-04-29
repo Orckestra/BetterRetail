@@ -40,7 +40,7 @@ namespace Orckestra.Composer.Product.Tests.Services
                             }
                     });
 
-            result.Count().Should().Be(1);
+            result.Length.Should().Be(1);
             result.First().Variant.Id.Should().Be("2");
         }
     }

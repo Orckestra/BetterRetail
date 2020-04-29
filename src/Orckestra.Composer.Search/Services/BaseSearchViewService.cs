@@ -25,6 +25,7 @@ using Orckestra.Overture.ServiceModel.Search;
 using Facet = Orckestra.Composer.Search.Facets.Facet;
 using SearchFilter = Orckestra.Composer.Parameters.SearchFilter;
 using Suggestion = Orckestra.Composer.Search.ViewModels.Suggestion;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Search.Services
 {
@@ -242,7 +243,7 @@ namespace Orckestra.Composer.Search.Services
         {
             if (propertyBag == null) { return null; }
             var fieldValue = propertyBag.ContainsKey(fieldName) ? propertyBag[fieldName] as string : null;
-            if (String.IsNullOrWhiteSpace(fieldValue)) { return null; }
+            if (string.IsNullOrWhiteSpace(fieldValue)) { return null; }
 
             var extractedValues = fieldValue.Split(new[] { "::" }, StringSplitOptions.None);
             return extractedValues.Length < 3
@@ -273,10 +274,7 @@ namespace Orckestra.Composer.Search.Services
 
         protected virtual SelectedFacets FlattenFilterList(IList<SearchFilter> filters, CultureInfo cultureInfo)
         {
-            if (filters == null)
-            {
-                throw new ArgumentNullException("filters");
-            }
+            if (filters == null) { throw new ArgumentNullException(nameof(filters)); }
 
             var facets = new List<SelectedFacet>();
 
@@ -431,32 +429,19 @@ namespace Orckestra.Composer.Search.Services
 
         protected static bool HasVariants(ProductDocument resultItem)
         {
-            if (resultItem == null)
-            {
-                return false;
-            }
-            if (resultItem.PropertyBag == null)
+            if (resultItem?.PropertyBag == null)
             {
                 return false;
             }
 
-            object variantCountObject;
-
-            if (!resultItem.PropertyBag.TryGetValue("GroupCount", out variantCountObject))
-            {
-                return false;
-            }
-
-            if (variantCountObject == null)
+            if (!resultItem.PropertyBag.TryGetValue("GroupCount", out object variantCountObject) || variantCountObject == null)
             {
                 return false;
             }
 
             var variantCountString = variantCountObject.ToString();
 
-            int result;
-
-            int.TryParse(variantCountString, out result);
+            int.TryParse(variantCountString, out int result);
 
             return result > 0;
         }
@@ -472,9 +457,8 @@ namespace Orckestra.Composer.Search.Services
                 productVariantId = productSearchVm.VariantId;
             }
 
-            ProductMainImage mainImage;
             var imageKey = Tuple.Create(productSearchVm.ProductId, productVariantId);
-            var imageExists = imgDictionary.TryGetValue(imageKey, out mainImage);
+            var imageExists = imgDictionary.TryGetValue(imageKey, out ProductMainImage mainImage);
 
             if (imageExists)
             {
@@ -524,10 +508,10 @@ namespace Orckestra.Composer.Search.Services
         /// <exception cref="System.ArgumentException"></exception>
         protected virtual async Task<ProductSearchResultsViewModel> SearchAsync(TParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param"); }
-            if (param.Criteria == null) { throw new ArgumentNullException("Criteria"); }
-            if (param.Criteria.CultureInfo == null) { throw new ArgumentNullException("CultureInfo"); }
-            if (string.IsNullOrWhiteSpace(param.Criteria.Scope)) { throw new ArgumentNullException("criteria.Scope"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (param.Criteria == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.Criteria)), nameof(param)); }
+            if (param.Criteria.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.Criteria.CultureInfo)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Criteria.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Criteria.Scope)), nameof(param)); }
 
             var searchResult = await SearchRepository.SearchProductAsync(param.Criteria).ConfigureAwait(false);
             var cloneParam = (TParam)param.Clone();
@@ -567,13 +551,10 @@ namespace Orckestra.Composer.Search.Services
 
         private static string TrimProductDisplayName(string displayName)
         {
-            if (string.IsNullOrWhiteSpace(displayName))
-            {
-                return string.Empty;
-            }
+            if (string.IsNullOrWhiteSpace(displayName)) { return string.Empty; }
 
-            var trimmedDisplayName = displayName.Substring(0,
-                Math.Min(displayName.Length, DisplayConfiguration.ProductNameMaxLength));
+            var trimmedDisplayName = displayName.Substring(
+                0, Math.Min(displayName.Length, DisplayConfiguration.ProductNameMaxLength));
 
             return trimmedDisplayName;
         }

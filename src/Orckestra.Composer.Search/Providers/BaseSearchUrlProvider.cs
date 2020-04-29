@@ -15,12 +15,9 @@ namespace Orckestra.Composer.Search.Providers
         public NameValueCollection BuildSearchQueryString(BuildSearchUrlParam param)
         {
             var queryString = new NameValueCollection();
-            if (param.SearchCriteria == null)
-            {
-                return queryString;
-            }
+            if (param.SearchCriteria == null) { return queryString; }
 
-            if (!String.IsNullOrEmpty(param.CorrectedSearchTerms))
+            if (!string.IsNullOrEmpty(param.CorrectedSearchTerms))
             {
                 queryString.Add(SearchRequestParams.Keywords, param.CorrectedSearchTerms);
             }
@@ -39,7 +36,7 @@ namespace Orckestra.Composer.Search.Providers
                 queryString.Add(SearchRequestParams.SortDirection, param.SearchCriteria.SortDirection);
             }
 
-            if (param.SearchCriteria.Page >= 1)
+            if (param.SearchCriteria.Page > 0)
             {
                 queryString.Add(SearchRequestParams.Page, param.SearchCriteria.Page.ToString(CultureInfo.InvariantCulture));
             }

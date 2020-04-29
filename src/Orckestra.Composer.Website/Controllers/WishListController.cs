@@ -17,8 +17,6 @@ namespace Orckestra.Composer.Website.Controllers
            IWishListUrlProvider wishListUrlProvider,
            IWishListViewService wishListViewService,
            IWebsiteContext websiteContext) :
-            base(composerContext, customerViewService, breadcrumbViewService, localizationProvider, wishListUrlProvider, wishListViewService, websiteContext)
-        {
-        }
+            base(composerContext, customerViewService, breadcrumbViewService, localizationProvider, wishListUrlProvider, wishListViewService, websiteContext) { }
     }
 }

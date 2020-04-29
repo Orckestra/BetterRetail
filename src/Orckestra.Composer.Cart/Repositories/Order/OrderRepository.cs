@@ -7,6 +7,7 @@ using Orckestra.Overture;
 using Orckestra.Overture.ServiceModel.Customers;
 using Orckestra.Overture.ServiceModel.Orders;
 using Orckestra.Overture.ServiceModel.Requests.Orders;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Cart.Repositories.Order
 {
@@ -17,11 +18,8 @@ namespace Orckestra.Composer.Cart.Repositories.Order
 
         public OrderRepository(IOvertureClient overtureClient, IFindOrdersRequestFactory findOrdersRequestFactory)
         {
-            if (overtureClient == null) { throw new ArgumentNullException("overtureClient"); }
-            if (findOrdersRequestFactory == null) { throw new ArgumentNullException("findOrdersRequestFactory"); }
-
-            OvertureClient = overtureClient;
-            FindOrdersRequestFactory = findOrdersRequestFactory;
+            OvertureClient = overtureClient ?? throw new ArgumentNullException(nameof(overtureClient));
+            FindOrdersRequestFactory = findOrdersRequestFactory ?? throw new ArgumentNullException(nameof(findOrdersRequestFactory));
         }
 
         /// <summary>
@@ -31,15 +29,15 @@ namespace Orckestra.Composer.Cart.Repositories.Order
         /// <returns></returns>
         public virtual async Task<OrderQueryResult> GetCustomerOrdersAsync(GetCustomerOrdersParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param"); }
-            if (param.CultureInfo == null) { throw new ArgumentException("param.CultureInfo"); }
-            if (param.CustomerId == null) { throw new ArgumentException("param.CustomerId"); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException("param.Scope"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
+            if (param.CustomerId == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CustomerId)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
 
             var request = FindOrdersRequestFactory.Create(param);
             var result = await OvertureClient.SendAsync(request).ConfigureAwait(false);
 
-            return result != null && result.TotalCount > 0 ? result : null;
+            return result?.TotalCount > 0 ? result : null;
         }
 
         /// <summary>
@@ -49,9 +47,9 @@ namespace Orckestra.Composer.Cart.Repositories.Order
         /// <returns></returns>
         public virtual Task<Overture.ServiceModel.Orders.Order> GetOrderAsync(GetOrderParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param"); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException("param.Scope"); }
-            if (string.IsNullOrWhiteSpace(param.OrderNumber)) { throw new ArgumentException("param.OrderNumber"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.OrderNumber)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.OrderNumber)), nameof(param)); }
 
             var request = new GetOrderByNumberRequest
             {
@@ -72,9 +70,9 @@ namespace Orckestra.Composer.Cart.Repositories.Order
         /// <returns></returns>
         public virtual Task<List<Overture.ServiceModel.Orders.OrderHistoryItem>> GetOrderChangesAsync(GetOrderChangesParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param"); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException("param.Scope"); }
-            if (string.IsNullOrWhiteSpace(param.OrderNumber)) { throw new ArgumentException("param.OrderNumber"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.OrderNumber)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.OrderNumber)), nameof(param)); }
 
             var request = new GetOrderHistoryRequest()
             {
@@ -92,9 +90,9 @@ namespace Orckestra.Composer.Cart.Repositories.Order
         /// <returns></returns>
         public virtual Task<List<Note>> GetShipmentNotesAsync(GetShipmentNotesParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param"); }
-            if (param.ShipmentId == Guid.Empty) { throw new ArgumentException("param.ShipmentId"); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException("param.Scope"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (param.ShipmentId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.ShipmentId)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
 
             var request = new GetShipmentNotesRequest
             {

@@ -19,10 +19,7 @@ namespace Orckestra.Composer.ViewModels
         /// <returns>Instance of the value.</returns>
         public object GetValue(BaseViewModel viewModel)
         {
-            if (viewModel == null)
-            {
-                throw new ArgumentNullException("viewModel");
-            }
+            if (viewModel == null) { throw new ArgumentNullException(nameof(viewModel)); }
 
             if (!viewModel.Bag.ContainsKey(PropertyName))
             {
@@ -40,10 +37,7 @@ namespace Orckestra.Composer.ViewModels
         /// <param name="value">Value to set in the instance's property.</param>
         public void SetValue(BaseViewModel viewModel, object value)
         {
-            if (viewModel == null)
-            {
-                throw new ArgumentNullException("viewModel");
-            }
+            if (viewModel == null) { throw new ArgumentNullException(nameof(viewModel)); }
 
             viewModel.Bag[PropertyName] = value;
         }

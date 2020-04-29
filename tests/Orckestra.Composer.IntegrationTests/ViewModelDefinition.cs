@@ -28,7 +28,7 @@ namespace Orckestra.Composer.Tests.IntegrationTests
         {
             if (IsValid())
             {
-                return String.Format("Type '{0}' is valid.", TargettedType.FullName);
+                return string.Format("Type '{0}' is valid.", TargettedType.FullName);
             }
 
             var sBuilder = new StringBuilder();

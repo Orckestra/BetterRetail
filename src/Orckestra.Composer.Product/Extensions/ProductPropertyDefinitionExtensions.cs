@@ -7,7 +7,7 @@ namespace Orckestra.Composer.Product.Extensions
     {
         public static bool IsIncluded(this ProductPropertyDefinition property)
         {
-            if (property == null) { throw new ArgumentNullException("property"); }
+            if (property == null) { throw new ArgumentNullException(nameof(property)); }
 
             return !SpecificationConfiguration.ExcludedSpecificationProperty.Contains(property.PropertyName);
         }

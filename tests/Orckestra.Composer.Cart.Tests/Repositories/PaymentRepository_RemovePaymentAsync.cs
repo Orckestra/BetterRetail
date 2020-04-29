@@ -10,6 +10,10 @@ using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Repositories;
 using Orckestra.Overture;
 using Orckestra.Overture.ServiceModel.Requests.Orders.Shopping.Payments;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
+using static Orckestra.Composer.Utils.ExpressionUtility;
+using System.Linq.Expressions;
+using Orckestra.Overture.ServiceModel.Orders;
 
 namespace Orckestra.Composer.Cart.Tests.Repositories
 {
@@ -80,12 +84,12 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var sut = _container.CreateInstance<PaymentRepository>();
 
             //Act
-            var exception = Assert.ThrowsAsync<ArgumentException>(() => sut.RemovePaymentAsync(param));
+            Expression<Func<Task<ProcessedCart>>> expression = () => sut.RemovePaymentAsync(param);
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => expression.Compile().Invoke());
 
             //Assert
-            exception.Should().NotBeNull();
-            exception.ParamName.Should().Be("param");
-            exception.Message.Should().ContainEquivalentOf("cartName");
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
+            exception.Message.Should().StartWith(GetMessageOfNullWhiteSpace(nameof(param.CartName)));
         }
 
         [TestCase(null)]
@@ -108,12 +112,12 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var sut = _container.CreateInstance<PaymentRepository>();
 
             //Act
-            var exception = Assert.ThrowsAsync<ArgumentException>(() => sut.RemovePaymentAsync(param));
+            Expression<Func<Task<ProcessedCart>>> expression = () => sut.RemovePaymentAsync(param);
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => expression.Compile().Invoke());
 
             //Assert
-            exception.Should().NotBeNull();
-            exception.ParamName.Should().Be("param");
-            exception.Message.Should().ContainEquivalentOf("scope");
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
+            exception.Message.Should().StartWith(GetMessageOfNullWhiteSpace(nameof(param.Scope)));
         }
 
         [Test]

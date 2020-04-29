@@ -1,10 +1,6 @@
-﻿using Orckestra.Overture.ServiceModel;
+﻿using System;
+using Orckestra.Overture.ServiceModel;
 using Orckestra.Overture.ServiceModel.Metadata;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Orckestra.Composer.Extensions
 {
@@ -19,12 +15,11 @@ namespace Orckestra.Composer.Extensions
         /// <returns></returns>
         public static LocalizedString GetDisplayNames(this Lookup lookup, string value)
         {
-            value = value?.Trim();
-            if (lookup == null || lookup.Values == null || lookup.Values.Count == 0 || string.IsNullOrEmpty(value)) return null;
+            if (lookup?.Values == null || lookup.Values.Count == 0 || string.IsNullOrWhiteSpace(value)) return null;
+            value = value.Trim();
 
             var foundLookup = lookup.Values
-                .FirstOrDefault(lookupValue => string.Equals(lookupValue.Value?.Trim(), value, StringComparison.InvariantCultureIgnoreCase));
-
+                .Find(lookupValue => string.Equals(lookupValue.Value?.Trim(), value, StringComparison.InvariantCultureIgnoreCase));
             return foundLookup?.DisplayName;
         }
 
@@ -38,11 +33,12 @@ namespace Orckestra.Composer.Extensions
         /// <returns></returns>
         public static string GetDisplayName(this Lookup lookup, string value, string cultureName)
         {
-            value = value?.Trim();
-            cultureName = cultureName?.Trim();
-            if (string.IsNullOrEmpty(value) || string.IsNullOrEmpty(cultureName)) return null;
+            if (lookup is null || string.IsNullOrWhiteSpace(value) || string.IsNullOrWhiteSpace(cultureName)) return null;
 
-            var displayNames = lookup?.GetDisplayNames(value);
+            value = value.Trim();
+            cultureName = cultureName.Trim();
+
+            var displayNames = lookup.GetDisplayNames(value);
             return displayNames?.GetLocalizedValue(cultureName);
         }
     }

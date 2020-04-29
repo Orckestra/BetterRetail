@@ -57,7 +57,7 @@ namespace Orckestra.Composer.Store.Tests.Services
         [TestCase(null, "http://foo.com")]
         [TestCase(null, "http://foo.com")]
         [TestCase(null, null)]
-        public void WHEN_RequiredParams_Is_Null_SHOULD_Throw_Argument_Null_Exception(string scope,
+        public void WHEN_RequiredParams_Is_Null_SHOULD_Throw_Argument_Exception(string scope,
             string baseUrl)
         {
             //Arrange
@@ -75,7 +75,7 @@ namespace Orckestra.Composer.Store.Tests.Services
             };
 
             //Assert
-            asyncFunction.ShouldThrow<ArgumentNullException>();
+            asyncFunction.ShouldThrow<ArgumentException>();
         }
 
         [Test]

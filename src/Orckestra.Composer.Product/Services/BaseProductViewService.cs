@@ -84,10 +84,7 @@ namespace Orckestra.Composer.Product.Services
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
 
-            if (!param.ProductIds.Any())
-            {
-                return new RelatedProductsViewModel();
-            }
+            if (!param.ProductIds.Any()) { return new RelatedProductsViewModel(); }
 
             var products = await RetrieveProductsAsync(param).ConfigureAwait(false);
 
@@ -141,10 +138,7 @@ namespace Orckestra.Composer.Product.Services
         /// </returns>
         protected virtual async Task<ProductWithVariant[]> RetrieveProductsAsync(GetRelatedProductsParam param)
         {
-            if (param == null)
-            {
-                throw new ArgumentNullException(nameof(param));
-            }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
 
             var productRequestTasks = new List<Task<ProductWithVariant>>();
 
@@ -248,7 +242,7 @@ namespace Orckestra.Composer.Product.Services
             ProductQuantityViewModel quantity = null;
 
             if (ProductConfiguration.IsQuantityDisplayed &&
-                ProductConfiguration.MinQuantity >= 1 &&
+                ProductConfiguration.MinQuantity > 0 &&
                 ProductConfiguration.MaxQuantity >= ProductConfiguration.MinQuantity)
             {
                 quantity = new ProductQuantityViewModel
@@ -281,15 +275,9 @@ namespace Orckestra.Composer.Product.Services
             // there may be multiple copies of the product if this is a variant, just take the first
             var price = prices.FirstOrDefault(p => p.ProductId == product.Id);
 
-            if (price == null)
-            {
-                return null;
-            }
+            if (price == null) { return null; }
 
-            if (variant == null)
-            {
-                return price.DefaultPrice;
-            }
+            if (variant == null) { return price.DefaultPrice; }
 
             var variantPrice = price.VariantPrices.SingleOrDefault(vp => vp.VariantId == variant.Id);
 
@@ -319,14 +307,11 @@ namespace Orckestra.Composer.Product.Services
 
             Variant baseVariant = null;
 
-            if (baseProduct == null)
-            {
-                return null;
-            }
+            if (baseProduct == null) { return null; }
 
             if (baseProduct?.Variants != null)
             {
-                baseVariant = baseProduct.Variants.FirstOrDefault(variant => variant.Id == variantId);
+                baseVariant = baseProduct.Variants.Find(variant => variant.Id == variantId);
             }
 
             var productWithVariant = new ProductWithVariant { Product = baseProduct, Variant = baseVariant };

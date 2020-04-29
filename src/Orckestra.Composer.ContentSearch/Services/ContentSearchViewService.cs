@@ -16,7 +16,6 @@ namespace Orckestra.Composer.ContentSearch.Services
     public class ContentSearchViewService : IContentSearchViewService
     {
         private readonly Dictionary<string, System.Type> KnowTypes = DataFacade.GetAllInterfaces().ToDictionary(t => t.FullName);
-
         protected IMediaService MediaService { get; private set; }
         public ContentSearchViewService(IMediaService mediaService)
         {
@@ -26,10 +25,7 @@ namespace Orckestra.Composer.ContentSearch.Services
         public virtual ContentSearchViewModel GetContentSearchViewModel(GetContentSearchParameter param)
         {
             var contentTabs = DataFacade.GetData<IContentTab>().Where(c => !string.IsNullOrEmpty(c.DataTypes)).OrderBy(t => t.Order).ToList();
-            if (contentTabs == null || contentTabs.Count == 0)
-            {
-                return null;
-            }
+            if (contentTabs == null || contentTabs.Count == 0) { return null; }
 
             var vm = new ContentSearchViewModel();
 
@@ -65,38 +61,41 @@ namespace Orckestra.Composer.ContentSearch.Services
 
         public virtual SearchResultsEntryViewModel GetSearchResultsEntryViewModel(SearchResultEntry entry)
         {
-            var vm = new SearchResultsEntryViewModel();
-            vm.Title = entry.Title;
-            vm.DetailsUrl = entry.Url;
-            vm.ImageUrl = GetSearchEntryImage(entry);
-            vm.Description = GetSearchEntryDesc(entry);
-            vm.FieldsBag = entry.FieldValues;
+            var vm = new SearchResultsEntryViewModel
+            {
+                Title = entry.Title,
+                DetailsUrl = entry.Url,
+                ImageUrl = GetSearchEntryImage(entry),
+                Description = GetSearchEntryDesc(entry),
+                FieldsBag = entry.FieldValues
+            };
 
             return vm;
         }
 
         protected virtual string GetSearchEntryImage(SearchResultEntry entry)
         {
-            var image = entry.FieldValues.Where(p => p.Key.Contains("Image")).Select(v => v.Value).FirstOrDefault();
-            if (image == null)
+            string imageResult = null, mimeTypeResult = null;
+
+            foreach(var el in entry.FieldValues)
             {
-                var mimeType = entry.FieldValues.Where(p => p.Key.Contains("MimeType")).Select(v => v.Value).FirstOrDefault();
-                if (mimeType != null && mimeType.ToString().StartsWith("image/"))
+                if (el.Key.Contains("Image"))
                 {
-                    return entry.Url;
+                    imageResult = MediaService.GetMediaUrl(el.Value.ToString());
+                    break;
+                }
+                //implementing the same logic, remembering the first mimetype, but keeping search for image key
+                if (mimeTypeResult == null && el.Key.Contains("MimeType") && el.Value.ToString().StartsWith("image/"))
+                {
+                    mimeTypeResult = entry.Url;
                 }
             }
-            else
-            {
-                return MediaService.GetMediaUrl(image.ToString());
-            };
-
-            return null;
+            return imageResult ?? mimeTypeResult;
         }
 
         protected virtual string GetSearchEntryDesc(SearchResultEntry entry)
         {
-            var desc = entry.FieldValues.ContainsKey("desc") ? entry.FieldValues["desc"] : null;
+            entry.FieldValues.TryGetValue("desc", out var desc);
             return desc?.ToString();
         }
 
@@ -129,10 +128,8 @@ namespace Orckestra.Composer.ContentSearch.Services
 
                     vm.Add(facet);
                 }
-
                 return vm;
             }
-
             return null;
         }
 
@@ -206,10 +203,9 @@ namespace Orckestra.Composer.ContentSearch.Services
             var sq = searchQuery == "*" ? "*:*" : searchQuery;
             string[] keywords = sq.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
-
             // datatypes
             var tabTypes = tab.DataTypes.Split(',').ToList();
-            Type[] dataTypes = tabTypes != null ? tabTypes.Select(name => KnowTypes[name]).ToArray() : null;
+            Type[] dataTypes = tabTypes?.Select(name => KnowTypes[name]).ToArray();
 
             // page types
             var tabPageTypes = tab.PageTypes?.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);

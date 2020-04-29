@@ -17,6 +17,7 @@ using Orckestra.Composer.Utils;
 using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel;
 using Orckestra.Overture.ServiceModel.Customers;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.MyAccount.Services
 {
@@ -63,11 +64,11 @@ namespace Orckestra.Composer.MyAccount.Services
         /// </returns>
         public virtual async Task<EditAddressViewModel> CreateAddressAsync(CreateAddressParam createAddressParam)
         {
-            if (createAddressParam == null) { throw new ArgumentNullException("createAddressParam"); }
-            if (createAddressParam.CultureInfo == null) { throw new ArgumentException("createAddressParam.CultureInfo"); }
-            if (createAddressParam.CustomerId == Guid.Empty) { throw new ArgumentException("createAddressParam.CustomerId"); }
-            if (createAddressParam.EditAddress == null) { throw new ArgumentException("createAddressParam.EditAddress"); }
-            if (string.IsNullOrWhiteSpace(createAddressParam.Scope)) { throw new ArgumentException("createAddressParam.Scope"); }
+            if (createAddressParam == null) { throw new ArgumentNullException(nameof(createAddressParam)); }
+            if (createAddressParam.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(createAddressParam.CultureInfo)), nameof(createAddressParam)); }
+            if (createAddressParam.CustomerId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(createAddressParam.CustomerId)), nameof(createAddressParam)); }
+            if (createAddressParam.EditAddress == null) { throw new ArgumentException(GetMessageOfNull(nameof(createAddressParam.EditAddress)), nameof(createAddressParam)); }
+            if (string.IsNullOrWhiteSpace(createAddressParam.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(createAddressParam.Scope)), nameof(createAddressParam)); }
 
             var createdAddress = await CustomerAddressRepository
                 .CreateAddressAsync(createAddressParam.CustomerId,
@@ -104,24 +105,18 @@ namespace Orckestra.Composer.MyAccount.Services
         /// </returns>
         public virtual async Task<EditAddressViewModel> UpdateAddressAsync(EditAddressParam editAddressParam)
         {
-            if (editAddressParam == null) { throw new ArgumentNullException("editAddressParam"); }
-            if (editAddressParam.EditAddress == null) { throw new ArgumentException("editAddressParam.EditAddress"); }
-            if (editAddressParam.AddressId == Guid.Empty) { throw new ArgumentException("editAddressParam.AddressId"); }
-            if (editAddressParam.CustomerId == Guid.Empty) { throw new ArgumentException("editAddressParam.CustomerId"); }
-            if (editAddressParam.CultureInfo == null) { throw new ArgumentException("editAddressParam.CultureInfo"); }
-            if (string.IsNullOrWhiteSpace(editAddressParam.Scope)) { throw new ArgumentException("editAddressParam.Scope"); }
+            if (editAddressParam == null) { throw new ArgumentNullException(nameof(editAddressParam)); }
+            if (editAddressParam.EditAddress == null) { throw new ArgumentException(GetMessageOfNull(nameof(editAddressParam.EditAddress)), nameof(editAddressParam)); }
+            if (editAddressParam.AddressId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(editAddressParam.AddressId)), nameof(editAddressParam)); }
+            if (editAddressParam.CustomerId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(editAddressParam.CustomerId)), nameof(editAddressParam)); }
+            if (editAddressParam.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(editAddressParam.CultureInfo)), nameof(editAddressParam)); }
+            if (string.IsNullOrWhiteSpace(editAddressParam.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(editAddressParam.Scope)), nameof(editAddressParam)); }
 
             var baseAddress = await AddressRepository.GetAddressByIdAsync(editAddressParam.AddressId).ConfigureAwait(false);
 
-            if (baseAddress == null)
-            {
-                return null;
-            }
+            if (baseAddress == null) { return null; }
 
-            if (!await EnsureAddressBelongsToCustomer(editAddressParam.CustomerId, editAddressParam.Scope, baseAddress.Id).ConfigureAwait(false))
-            {
-                return null;
-            }
+            if (!await EnsureAddressBelongsToCustomer(editAddressParam.CustomerId, editAddressParam.Scope, baseAddress.Id).ConfigureAwait(false)) { return null; }
 
             var updatedAddress = await CustomerAddressRepository
                 .UpdateAddressAsync(editAddressParam.CustomerId,
@@ -168,15 +163,12 @@ namespace Orckestra.Composer.MyAccount.Services
         /// </returns>
         public virtual async Task<DeleteAddressStatusViewModel> DeleteAddressAsync(DeleteAddressParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param"); }
-            if (param.CustomerId == Guid.Empty) { throw new ArgumentException("param.CustomerId"); }
-            if (param.AddressId == Guid.Empty) { throw new ArgumentException("param.AddressId"); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException("param.Scope"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (param.CustomerId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param)); }
+            if (param.AddressId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.AddressId)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
 
-            if (!await EnsureAddressBelongsToCustomer(param.CustomerId, param.Scope, param.AddressId).ConfigureAwait(false))
-            {
-                return null;
-            }
+            if (!await EnsureAddressBelongsToCustomer(param.CustomerId, param.Scope, param.AddressId).ConfigureAwait(false)) { return null; }
 
             await CustomerAddressRepository.DeleteAddressAsync(param.AddressId).ConfigureAwait(false);
 
@@ -191,10 +183,10 @@ namespace Orckestra.Composer.MyAccount.Services
         public virtual async Task<AddressListViewModel> GetAddressListViewModelAsync(GetAddressListViewModelParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
-            if (param.CultureInfo == null) { throw new ArgumentException(nameof(param.CultureInfo)); }
-            if (param.CustomerId == Guid.Empty) { throw new ArgumentException(nameof(param.CustomerId)); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(nameof(param.Scope)); }
-            if (string.IsNullOrWhiteSpace(param.CountryCode)) { throw new ArgumentException(nameof(param.CountryCode)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
+            if (param.CustomerId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.CountryCode)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CountryCode)), nameof(param)); }
 
             var customer = await CustomerRepository.GetCustomerByIdAsync(new GetCustomerByIdParam
             {
@@ -204,13 +196,8 @@ namespace Orckestra.Composer.MyAccount.Services
                 IncludeAddresses = true,
             }).ConfigureAwait(false);
 
-            IList<Address> addresses = customer.Addresses;
-
-            if (addresses == null)
-            {
-                addresses = await CustomerAddressRepository.GetCustomerAddressesAsync(
-                    customer.Id, param.Scope).ConfigureAwait(false);
-            }
+            IList<Address> addresses = customer.Addresses 
+                ?? await CustomerAddressRepository.GetCustomerAddressesAsync(customer.Id, param.Scope).ConfigureAwait(false);
 
             var regions = await CountryService.RetrieveRegionsAsync(new RetrieveCountryParam
             {
@@ -270,16 +257,13 @@ namespace Orckestra.Composer.MyAccount.Services
         /// <returns></returns>
         public virtual async Task<EditAddressViewModel> GetEditAddressViewModelAsync(GetEditAddressViewModelAsyncParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param"); }
-            if (param.CultureInfo == null) { throw new ArgumentException("param.CultureInfo"); }
-            if (param.CustomerId == Guid.Empty) { throw new ArgumentException("param.CustomerId"); }
-            if (param.AddressId == Guid.Empty) { throw new ArgumentException("param.AddressId"); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException("param.Scope"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
+            if (param.CustomerId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param)); }
+            if (param.AddressId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.AddressId)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
 
-            if (!await EnsureAddressBelongsToCustomer(param.CustomerId, param.Scope, param.AddressId).ConfigureAwait(false))
-            {
-                return null;
-            }
+            if (!await EnsureAddressBelongsToCustomer(param.CustomerId, param.Scope, param.AddressId).ConfigureAwait(false)) { return null; }
 
             var address = await AddressRepository.GetAddressByIdAsync(param.AddressId);
 
@@ -298,11 +282,11 @@ namespace Orckestra.Composer.MyAccount.Services
         /// <returns></returns>
         public virtual async Task<EditAddressViewModel> GetCreateAddressViewModelAsync(GetCreateAddressViewModelAsyncParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param"); }
-            if (param.CultureInfo == null) { throw new ArgumentException("param.CultureInfo"); }
-            if (param.CustomerId == Guid.Empty) { throw new ArgumentException("param.CustomerId"); }
-            if (string.IsNullOrWhiteSpace(param.CountryCode)) { throw new ArgumentException("param.CountryCode"); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException("param.Scope"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
+            if (param.CustomerId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.CountryCode)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CountryCode)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
 
             var customer = await CustomerRepository.GetCustomerByIdAsync(new GetCustomerByIdParam
             {
@@ -338,22 +322,16 @@ namespace Orckestra.Composer.MyAccount.Services
         /// </returns>
         public virtual async Task<SetDefaultAddressStatusViewModel> SetDefaultAddressAsync(SetDefaultAddressParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param"); }
-            if (param.CustomerId == Guid.Empty) { throw new ArgumentException("param.CustomerId"); }
-            if (param.AddressId == Guid.Empty) { throw new ArgumentException("param.AddressId"); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException("param.Scope"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (param.CustomerId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param)); }
+            if (param.AddressId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.AddressId)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
 
             var address = await AddressRepository.GetAddressByIdAsync(param.AddressId).ConfigureAwait(false);
 
-            if (address == null)
-            {
-                return null;
-            }
+            if (address == null) { return null; }
 
-            if (!await EnsureAddressBelongsToCustomer(param.CustomerId, param.Scope, address.Id).ConfigureAwait(false))
-            {
-                return null;
-            }
+            if (!await EnsureAddressBelongsToCustomer(param.CustomerId, param.Scope, address.Id).ConfigureAwait(false)) { return null; }
 
             address.IsPreferredShipping = true;
             address.IsPreferredBilling = true;
@@ -368,17 +346,15 @@ namespace Orckestra.Composer.MyAccount.Services
         /// </summary>
         /// <param name="param"></param>
         /// <returns></returns>
-        public virtual async Task<AddressListItemViewModel> GetDefaultAddressViewModelAsync(
-            GetAddressesForCustomerParam param)
+        public virtual async Task<AddressListItemViewModel> GetDefaultAddressViewModelAsync(GetAddressesForCustomerParam param)
         {
             var addresses = await CustomerAddressRepository.GetCustomerAddressesAsync(
                 param.CustomerId, param.Scope).ConfigureAwait(false);
-            if (addresses == null)
-            {
-                return null;
-            }
+
+            if (addresses == null) { return null; }
+
             var addressVm = new AddressListItemViewModel();
-            var defaultAddress = addresses.FirstOrDefault(a => a.IsPreferredShipping);
+            var defaultAddress = addresses.Find(a => a.IsPreferredShipping);
             if (defaultAddress != null)
             {
                 addressVm = ViewModelMapper.MapTo<AddressListItemViewModel>(defaultAddress, param.CultureInfo);
@@ -389,10 +365,7 @@ namespace Orckestra.Composer.MyAccount.Services
 
         protected virtual async Task UpdateAddressAsync(Guid customerId, Guid otherAddressId, Guid addressId)
         {
-            if (otherAddressId == addressId)
-            {
-                return;
-            }
+            if (otherAddressId == addressId) { return; }
 
             var otherAddress = await AddressRepository.GetAddressByIdAsync(otherAddressId).ConfigureAwait(false);
 
@@ -410,8 +383,8 @@ namespace Orckestra.Composer.MyAccount.Services
         /// <returns></returns>
         protected virtual async Task<EditAddressViewModel> GetEditAddressViewModel(GetEditAddressViewModelParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param"); }
-            if (param.CultureInfo == null) { throw new ArgumentException("param.CultureInfo"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
 
             var countryParam = new RetrieveCountryParam
             {

@@ -126,7 +126,7 @@ namespace Orckestra.Composer.Cart.Tests.Factory
             var sut = Container.CreateInstance<CartViewModelFactory>();
 
             // Act and Assert
-            Assert.Throws<ArgumentNullException>(() => sut.CreateCartViewModel(p));
+            Assert.Throws<ArgumentException>(() => sut.CreateCartViewModel(p));
         }
 
         [Test]
@@ -146,7 +146,7 @@ namespace Orckestra.Composer.Cart.Tests.Factory
             var sut = Container.CreateInstance<CartViewModelFactory>();
 
             // Act and Assert
-            Assert.Throws<ArgumentNullException>(() => sut.CreateCartViewModel(p));
+            Assert.Throws<ArgumentException>(() => sut.CreateCartViewModel(p));
         }
 
         [Test]
@@ -169,7 +169,7 @@ namespace Orckestra.Composer.Cart.Tests.Factory
             var sut = Container.CreateInstance<CartViewModelFactory>();
 
             // Act and Assert
-            Assert.Throws<ArgumentNullException>(() => sut.CreateCartViewModel(p));
+            Assert.Throws<ArgumentException>(() => sut.CreateCartViewModel(p));
         }
 
         [Test]
@@ -619,7 +619,7 @@ namespace Orckestra.Composer.Cart.Tests.Factory
             for (int i = 0; i < vm.Coupons.ApplicableCoupons.Count; i++)
             {
                 var currentReward = rewardList[i];
-                var applicableCoupon = vm.Coupons.ApplicableCoupons.FirstOrDefault(c => c.PromotionId == currentReward.PromotionId);
+                var applicableCoupon = vm.Coupons.ApplicableCoupons.Find(c => c.PromotionId == currentReward.PromotionId);
                 applicableCoupon.Should().NotBeNull();
                 applicableCoupon.PromotionId.Should().Be(currentReward.PromotionId);
                 applicableCoupon.Amount.Should().Be(currentReward.Amount);

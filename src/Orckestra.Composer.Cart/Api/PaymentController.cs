@@ -56,7 +56,7 @@ namespace Orckestra.Composer.Cart.Api
                 IsAuthenticated = ComposerContext.IsAuthenticated
             });
 
-            if (vm != null && vm.ActivePaymentViewModel != null)
+            if (vm?.ActivePaymentViewModel != null)
             {
                 vm.ActivePaymentViewModel.CreditCardTrustImage = trustImageVm;
             }
@@ -126,8 +126,10 @@ namespace Orckestra.Composer.Cart.Api
                 IsAuthenticated = ComposerContext.IsAuthenticated
             });
 
-            if(vm != null)
+            if (vm != null)
+            {
                 vm.CreditCardTrustImage = ImageService.GetCheckoutTrustImageViewModel(ComposerContext.CultureInfo);
+            }  
 
             return Ok(vm);
         }

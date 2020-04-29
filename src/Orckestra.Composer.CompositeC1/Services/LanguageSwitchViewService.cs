@@ -13,15 +13,13 @@ namespace Orckestra.Composer.CompositeC1.Services
 
         public LanguageSwitchViewService(ICultureService cultureService)
         {
-            if (cultureService == null) { throw new ArgumentNullException("cultureService"); }
-
-            CultureService = cultureService;
+            CultureService = cultureService ?? throw new ArgumentNullException(nameof(cultureService));
         }
 
         public virtual LanguageSwitchViewModel GetViewModel(Func<CultureInfo, string> urlBuilder, CultureInfo currentCulture)
         {
-            if (urlBuilder == null) { throw new ArgumentNullException("urlBuilder"); }
-            if (currentCulture == null) { throw new ArgumentNullException("currentCulture"); }
+            if (urlBuilder == null) { throw new ArgumentNullException(nameof(urlBuilder)); }
+            if (currentCulture == null) { throw new ArgumentNullException(nameof(currentCulture)); }
 
             var supportedCultures = CultureService.GetAllSupportedCultures();
 
@@ -83,6 +81,5 @@ namespace Orckestra.Composer.CompositeC1.Services
             entry.ShortDisplayName = entryCulture.TwoLetterISOLanguageName;
             entry.CultureName = entryCulture.Name;
         }
-
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Xml;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.TypeExtensions
 {
@@ -12,10 +13,10 @@ namespace Orckestra.Composer.TypeExtensions
         /// </summary>
         public static async Task<bool> ReadToFollowingAsync(this XmlReader reader, string localName, string namespaceUri)
         {
-            if (reader == null) { throw new ArgumentNullException("reader"); }
-            if (reader.NameTable == null) { throw new ArgumentNullException("reader.NameTable"); }
-            if (string.IsNullOrEmpty(localName)) { throw new ArgumentException("localName is empty or null"); }
-            if (namespaceUri == null) { throw new ArgumentNullException("namespaceUri"); }
+            if (reader == null) { throw new ArgumentNullException(nameof(reader)); }
+            if (reader.NameTable == null) { throw new ArgumentException(GetMessageOfNull(nameof(reader.NameTable)), nameof(reader)); }
+            if (string.IsNullOrEmpty(localName)) { throw new ArgumentException(GetMessageOfNullEmpty(), nameof(localName)); }
+            if (namespaceUri == null) { throw new ArgumentNullException(nameof(namespaceUri)); }
 
             // atomize local name and namespace
 
@@ -25,9 +26,7 @@ namespace Orckestra.Composer.TypeExtensions
             // find element with that name 
             while (await reader.ReadAsync().ConfigureAwait(false))
             {
-                if (reader.NodeType == XmlNodeType.Element && 
-                   (localName == reader.LocalName) && 
-                   (namespaceUri == reader.NamespaceURI))
+                if (reader.NodeType == XmlNodeType.Element && localName == reader.LocalName && namespaceUri == reader.NamespaceURI)
                 {
                     return true;
                 }
@@ -42,10 +41,10 @@ namespace Orckestra.Composer.TypeExtensions
         /// </summary>
         public static async Task<bool> ReadToDescendantAsync(this XmlReader reader, string localName, string namespaceUri)
         {
-            if (reader == null) { throw new ArgumentNullException("reader"); }
-            if (reader.NameTable == null) { throw new ArgumentNullException("reader.NameTable"); }
-            if (string.IsNullOrEmpty(localName)) { throw new ArgumentException("localName is empty or null"); }
-            if (namespaceUri == null) { throw new ArgumentNullException("namespaceUri"); }
+            if (reader == null) { throw new ArgumentNullException(nameof(reader)); }
+            if (reader.NameTable == null) { throw new ArgumentException(GetMessageOfNull(nameof(reader.NameTable)), nameof(reader)); }
+            if (string.IsNullOrEmpty(localName)) { throw new ArgumentException(GetMessageOfNullEmpty(), nameof(localName)); }
+            if (namespaceUri == null) { throw new ArgumentNullException(nameof(namespaceUri)); }
             
             // save the element or root depth 
             var parentDepth = reader.Depth;

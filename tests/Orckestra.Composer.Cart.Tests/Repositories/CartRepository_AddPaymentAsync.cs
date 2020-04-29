@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using FizzWare.NBuilder.Generators;
 using FluentAssertions;
@@ -14,6 +15,8 @@ using Orckestra.Overture;
 using Orckestra.Overture.ServiceModel;
 using Orckestra.Overture.ServiceModel.Orders;
 using Orckestra.Overture.ServiceModel.Requests.Orders.Shopping.Payments;
+using static Orckestra.Composer.Utils.ExpressionUtility;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Cart.Tests.Repositories
 {
@@ -69,10 +72,11 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var sut = _container.CreateInstance<CartRepository>();
 
             //Act
-            var exception = Assert.ThrowsAsync<ArgumentNullException>(() => sut.AddPaymentAsync(null));
+            Expression<Func<Task<ProcessedCart>>> expression = () => sut.AddPaymentAsync(null);
+            var exception = Assert.ThrowsAsync<ArgumentNullException>(() => expression.Compile().Invoke());
 
             //Assert
-            exception.ParamName.Should().BeEquivalentTo("param");
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
         }
 
         [TestCase("")]
@@ -92,11 +96,12 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             };
 
             //Act
-            var exception = Assert.ThrowsAsync<ArgumentException>(() => sut.AddPaymentAsync(param));
+            Expression<Func<Task<ProcessedCart>>> expression = () => sut.AddPaymentAsync(param);
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => expression.Compile().Invoke());
 
             //Assert
-            exception.ParamName.Should().BeEquivalentTo("param");
-            exception.Message.Should().ContainEquivalentOf("param.CartName");
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
+            exception.Message.Should().StartWith(GetMessageOfNullWhiteSpace(nameof(param.CartName)));
         }
 
         [TestCase("")]
@@ -116,11 +121,12 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             };
 
             //Act
-            var exception = Assert.ThrowsAsync<ArgumentException>(() => sut.AddPaymentAsync(param));
+            Expression<Func<Task<ProcessedCart>>> expression = () => sut.AddPaymentAsync(param);
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => expression.Compile().Invoke());
 
             //Assert
-            exception.ParamName.Should().BeEquivalentTo("param");
-            exception.Message.Should().ContainEquivalentOf("param.Scope");
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
+            exception.Message.Should().StartWith(GetMessageOfNullWhiteSpace(nameof(param.Scope)));
         }
 
         [Test]
@@ -138,11 +144,12 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             };
 
             //Act
-            var exception = Assert.ThrowsAsync<ArgumentException>(() => sut.AddPaymentAsync(param));
+            Expression<Func<Task<ProcessedCart>>> expression = () => sut.AddPaymentAsync(param);
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => expression.Compile().Invoke());
 
             //Assert
-            exception.ParamName.Should().BeEquivalentTo("param");
-            exception.Message.Should().ContainEquivalentOf("param.CultureInfo");
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
+            exception.Message.Should().StartWith(GetMessageOfNull(nameof(param.CultureInfo)));
         }
 
         [Test]
@@ -160,11 +167,12 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             };
 
             //Act
-            var exception = Assert.ThrowsAsync<ArgumentException>(() => sut.AddPaymentAsync(param));
+            Expression<Func<Task<ProcessedCart>>> expression = () => sut.AddPaymentAsync(param);
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => expression.Compile().Invoke());
 
             //Assert
-            exception.ParamName.Should().BeEquivalentTo("param");
-            exception.Message.Should().ContainEquivalentOf("param.CustomerId");
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
+            exception.Message.Should().StartWith(GetMessageOfEmpty(nameof(param.CustomerId)));
         }
 
         [TestCase(false)]

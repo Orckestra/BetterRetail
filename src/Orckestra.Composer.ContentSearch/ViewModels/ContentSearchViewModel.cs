@@ -13,7 +13,7 @@ namespace Orckestra.Composer.ContentSearch.ViewModels
         public List<ContentSearchTabViewModel> Tabs { get; set; }
         public List<ContentSearchTabViewModel> SuggestedTabs { get; set; }
 
-        public ContentSearchTabViewModel ActiveTab => Tabs.FirstOrDefault(t => t.IsActive);
+        public ContentSearchTabViewModel ActiveTab => Tabs.Find(t => t.IsActive);
 
         public List<FacetViewModel> SelectedFacets { get; set;}
 

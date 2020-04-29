@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Orckestra.Caching;
 using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Parameters;
-using Orckestra.Composer.Providers;
-using Orckestra.Composer.Utils;
 using Orckestra.Overture;
 using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel.Orders;
 using Orckestra.Overture.ServiceModel.Requests.Orders.Shopping;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
+
 
 namespace Orckestra.Composer.Repositories
 {
@@ -20,17 +19,14 @@ namespace Orckestra.Composer.Repositories
 
         public FulfillmentLocationsRepository(IOvertureClient overtureClient, ICacheProvider cacheProvider)
         {
-            if (overtureClient == null) { throw new ArgumentNullException("overtureClient"); }
-            if (cacheProvider == null) { throw new ArgumentNullException("cacheProvider"); }
-
-            OvertureClient = overtureClient;
-            CacheProvider = cacheProvider;
+            OvertureClient = overtureClient ?? throw new ArgumentNullException(nameof(overtureClient));
+            CacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));
         }
 
         public Task<List<FulfillmentLocation>> GetFulfillmentLocationsByScopeAsync(GetFulfillmentLocationsByScopeParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param"); }
-            if (String.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("Scope"), "param"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
 
             var cacheKey = GetCacheKeyForFulfillmentLocationsByScope(param);
 

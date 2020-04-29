@@ -11,6 +11,7 @@ using Orckestra.Composer.Providers.Checkout;
 using Orckestra.Composer.Services;
 using Orckestra.ExperienceManagement.Configuration;
 using Orckestra.Overture.Caching;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.CompositeC1.Providers
 {
@@ -35,7 +36,7 @@ namespace Orckestra.Composer.CompositeC1.Providers
         public virtual string GetCartUrl(BaseUrlParameter parameters)
         {
             if (parameters == null) { throw new ArgumentNullException(nameof(parameters)); }
-            if (parameters.CultureInfo == null) { throw new ArgumentException($"{nameof(parameters.CultureInfo)} is required", nameof(parameters)); }
+            if (parameters.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(parameters.CultureInfo)), nameof(parameters)); }
 
             var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(parameters.CultureInfo, WebsiteContext.WebsiteId);
             return PageService.GetPageUrl(pagesConfiguration.CartPageId, parameters.CultureInfo);
@@ -53,15 +54,12 @@ namespace Orckestra.Composer.CompositeC1.Providers
         public virtual string GetCheckoutSignInUrl(BaseUrlParameter parameters)
         {
             if (parameters == null) { throw new ArgumentNullException(nameof(parameters)); }
-            if (parameters.CultureInfo == null) { throw new ArgumentException($"{nameof(parameters.CultureInfo)} is required", nameof(parameters)); }
+            if (parameters.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(parameters.CultureInfo)), nameof(parameters)); }
 
             var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(parameters.CultureInfo, WebsiteContext.WebsiteId);
             var signInPath = PageService.GetPageUrl(pagesConfiguration.CheckoutSignInPageId, parameters.CultureInfo);
 
-            if (string.IsNullOrWhiteSpace(parameters.ReturnUrl))
-            {
-                return signInPath;
-            }
+            if (string.IsNullOrWhiteSpace(parameters.ReturnUrl)) { return signInPath; }
 
             var urlBuilder = new UrlBuilder(signInPath);
             urlBuilder["ReturnUrl"] = GetReturnUrl(parameters); // url builder will encode the query string value
@@ -93,8 +91,7 @@ namespace Orckestra.Composer.CompositeC1.Providers
 
             var url = PageService.GetPageUrl(WebsiteContext.WebsiteId, param.CultureInfo);
             ///TODO - fix this
-            if (string.IsNullOrWhiteSpace(url))
-                return url;
+            if (string.IsNullOrWhiteSpace(url)) return url;
 
             return UrlProviderHelper.BuildUrlWithParams(url, param.ReturnUrl);
         }

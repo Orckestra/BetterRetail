@@ -76,9 +76,9 @@ namespace Orckestra.Composer.Cart.Tests.Factory.Order
             vm.OrderInfos.OrderStatus.ShouldAllBeEquivalentTo("In Progress");
             vm.OrderSummary.Should().NotBeNull();
             vm.Payments.Should().NotBeNull();
-            vm.Payments.Count().ShouldBeEquivalentTo(2);
+            vm.Payments.Count.ShouldBeEquivalentTo(2);
             vm.Shipments.Should().NotBeNull();
-            vm.Shipments.Count().ShouldBeEquivalentTo(2);
+            vm.Shipments.Count.ShouldBeEquivalentTo(2);
             vm.ShippingAddress.Should().NotBeNull();
             vm.BillingAddress.Should().NotBeNull();
             vm.ShippingMethod.Should().NotBeNull();
@@ -97,7 +97,7 @@ namespace Orckestra.Composer.Cart.Tests.Factory.Order
             //Assert
             vm.Should().NotBeNull();
             vm.BillingAddress.Should().NotBeNull();
-            vm.Payments.Count().ShouldBeEquivalentTo(2);
+            vm.Payments.Count.ShouldBeEquivalentTo(2);
             vm.Payments.ForEach(payment => payment.BillingAddress.Should().NotBeNull());
         }
 
