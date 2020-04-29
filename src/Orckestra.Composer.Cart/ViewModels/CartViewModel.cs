@@ -46,6 +46,8 @@ namespace Orckestra.Composer.Cart.ViewModels
         /// </summary>
         public string HomepageUrl { get; set; }
 
+        public string ForgotPasswordUrl { get; set; }
+
         /// <summary>
         /// Displays the discounts on the cart.
         /// </summary>

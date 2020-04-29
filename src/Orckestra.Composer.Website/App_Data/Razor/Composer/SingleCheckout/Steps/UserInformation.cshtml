@@ -129,11 +129,12 @@
                         <a href="#" role="button" v-on:click="signInButton" class="cta">@Html.Localize("CheckoutProcess", "B_SignInNow")</a>
                     </span>
                     <span v-if="UserExistsMode">
-                        <span class="h5">@Html.Localize("CheckoutProcess", "L_AccountAlreadyExists") </span>
-                        <a href="#" role="button" v-on:click="signInButton" class="btn-link btn">@Html.Localize("CheckoutProcess", "B_SignInNowAndSaveTime")</a>
+                        <span class="h5">@Html.Localize("CheckoutProcess", "L_AccountAlreadyExists")  </span>
+                        <a href="#" role="button" v-on:click="signInButton" class="h5 cta">@Html.Localize("CheckoutProcess", "B_SignInNowAndSaveTime")</a>
                     </span>
                     <span v-if="SigningInMode">
-                        @Html.Localize("MyAccount", "H_ForgotPassword")
+                        <a v-bind:href="Cart.ForgotPasswordUrl">@Html.Localize("MyAccount", "H_ForgotPassword")</a>
+                        &#160; 
                         <a href="#" role="button" v-on:click="continueAsGuestButton" class="cta">@Html.Localize("CheckoutProcess", "B_ContinueAsGuest")</a>
                     </span>
                 </div>

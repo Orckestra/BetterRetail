@@ -35,5 +35,7 @@ namespace Orckestra.Composer.Providers
         string GetCheckoutConfirmationPageUrl(BaseUrlParameter param);
 
         string GetCheckoutSignInUrl(BaseUrlParameter parameters);
+
+        string GetForgotPasswordPageUrl(BaseUrlParameter parameters);
     }
 }
