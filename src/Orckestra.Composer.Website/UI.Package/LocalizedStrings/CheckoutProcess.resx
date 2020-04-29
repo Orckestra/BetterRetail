@@ -305,11 +305,11 @@ Enter your credit card information</value>
     <value>Continue</value>
   </data>
   <data name="F_ContinueAsGuest" xml:space="preserve">
-    <value>Continue As Guest</value>
+    <value>Continue as guest</value>
   </data>
   <data name="F_SignInAndContinue" xml:space="preserve">
-      <value>Sign-in And Continue</value>
-    </data>
+    <value>Sign in And Continue</value>
+  </data>
   <data name="F_Edit" xml:space="preserve">
     <value>Edit</value>
   </data>
@@ -359,15 +359,15 @@ Enter your credit card information</value>
     <value>Already a client?</value>
   </data>
   <data name="B_SignInNow" xml:space="preserve">
-    <value>Sign-in now</value>
+    <value>Sign in now</value>
   </data>
   <data name="B_ContinueAsGuest" xml:space="preserve">
-    <value>Continue as guest</value>
+    <value>Continue as a guest</value>
   </data>
   <data name="L_AccountAlreadyExists" xml:space="preserve">
-    <value>An account already exists with this email!</value>
+    <value>An account already exists with this email address.</value>
   </data>
   <data name="B_SignInNowAndSaveTime" xml:space="preserve">
-    <value>Sign-in and save time!</value>
+    <value>Sign in and save time!</value>
   </data>
 </root>

@@ -16,6 +16,7 @@ using Orckestra.Overture.ServiceModel.Marketing;
 using Orckestra.Overture.ServiceModel.Orders;
 using Orckestra.Composer.Cart.ViewModels.Order;
 using Orckestra.Composer.Providers.Dam;
+using Orckestra.Composer.Parameters;
 
 namespace Orckestra.Composer.Cart.Factory
 {
@@ -43,6 +44,7 @@ namespace Orckestra.Composer.Cart.Factory
         protected ITaxViewModelFactory TaxViewModelFactory { get; private set; }
         protected ILineItemViewModelFactory LineItemViewModelFactory { get; private set; }
         protected IRewardViewModelFactory RewardViewModelFactory { get; private set; }
+        protected ICartUrlProvider CartUrlProvider { get; private set; }
 
         public CartViewModelFactory(
             ILocalizationProvider localizationProvider,
@@ -52,7 +54,8 @@ namespace Orckestra.Composer.Cart.Factory
             IComposerContext composerContext,
             ITaxViewModelFactory taxViewModelFactory,
             ILineItemViewModelFactory lineItemViewModelFactory,
-            IRewardViewModelFactory rewardViewModelFactory)
+            IRewardViewModelFactory rewardViewModelFactory,
+            ICartUrlProvider cartUrlProvider)
         {
             LocalizationProvider = localizationProvider ?? throw new ArgumentNullException(nameof(localizationProvider));
             ViewModelMapper = viewModelMapper ?? throw new ArgumentNullException(nameof(viewModelMapper));
@@ -62,6 +65,7 @@ namespace Orckestra.Composer.Cart.Factory
             TaxViewModelFactory = taxViewModelFactory ?? throw new ArgumentNullException(nameof(taxViewModelFactory));
             LineItemViewModelFactory = lineItemViewModelFactory ?? throw new ArgumentNullException(nameof(lineItemViewModelFactory));
             RewardViewModelFactory = rewardViewModelFactory ?? throw new ArgumentNullException(nameof(rewardViewModelFactory));
+            CartUrlProvider = cartUrlProvider ?? throw new ArgumentNullException(nameof(cartUrlProvider));
         }
 
         public virtual CartViewModel CreateCartViewModel(CreateCartViewModelParam param)
@@ -87,6 +91,16 @@ namespace Orckestra.Composer.Cart.Factory
             SetPostalCodeRegexPattern(vm);
             SetPhoneNumberRegexPattern(vm);
 
+            var getUrlParam = new BaseUrlParameter
+            {
+                CultureInfo = ComposerContext.CultureInfo
+            };
+
+            SetHomepageUrl(vm, getUrlParam);
+            SetEditCartUrl(vm, getUrlParam);
+            SetCheckoutUrl(vm, getUrlParam);
+            SetForgotPasswordPageUrl(vm, getUrlParam);
+
             // Reverse the items order in the Cart so the last added item will be the first in the list
             if (vm.LineItemDetailViewModels != null)
             {
@@ -96,6 +110,40 @@ namespace Orckestra.Composer.Cart.Factory
             vm.IsAuthenticated = ComposerContext.IsAuthenticated;
 
             return vm;
+        }
+
+        protected virtual void SetForgotPasswordPageUrl(CartViewModel cartViewModel, BaseUrlParameter getUrlParam)
+        {
+            cartViewModel.ForgotPasswordUrl = CartUrlProvider.GetForgotPasswordPageUrl(getUrlParam);
+        }
+
+        protected virtual void SetCheckoutUrl(CartViewModel cartViewModel, BaseUrlParameter getUrlParam)
+        {
+            if (cartViewModel.OrderSummary != null)
+            {
+                var checkoutUrl = CartUrlProvider.GetCheckoutPageUrl(getUrlParam);
+                cartViewModel.OrderSummary.CheckoutUrlTarget = checkoutUrl;
+            }
+        }
+
+        protected virtual void SetHomepageUrl(CartViewModel cartViewModel, BaseUrlParameter getUrlParam)
+        {
+
+            if (cartViewModel != null)
+            {
+                var homepageUrl = CartUrlProvider.GetHomepageUrl(getUrlParam);
+
+                cartViewModel.HomepageUrl = homepageUrl;
+            }
+        }
+
+        protected void SetEditCartUrl(CartViewModel cartViewModel, BaseUrlParameter getUrlParam)
+        {
+            if (cartViewModel.OrderSummary != null)
+            {
+                var cartUrl = CartUrlProvider.GetCartUrl(getUrlParam);
+                cartViewModel.OrderSummary.EditCartUrlTarget = cartUrl;
+            }
         }
 
         protected virtual void SetDefaultShippingAddressNames(CartViewModel vm)

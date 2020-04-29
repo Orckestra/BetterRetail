@@ -98,5 +98,14 @@ namespace Orckestra.Composer.CompositeC1.Providers
 
             return UrlProviderHelper.BuildUrlWithParams(url, param.ReturnUrl);
         }
+
+        public string GetForgotPasswordPageUrl(BaseUrlParameter param)
+        {
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException($"{nameof(param.CultureInfo)} is required", nameof(param)); }
+
+            var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(param.CultureInfo, WebsiteContext.WebsiteId);
+            return PageService.GetPageUrl(pagesConfiguration.ForgotPasswordPageId, param.CultureInfo);
+        }
     }
 }
