@@ -17,6 +17,6 @@
             {{/unless}}
             <br/><span class="compact-order-status {{#if_eq OrderInfos.OrderStatusRaw 'InProgress'}}text-warning{{else}}{{#if_eq OrderInfos.OrderStatusRaw 'Canceled'}}text-danger{{else}}text-success{{/if_eq}}{{/if_eq}}">{{ OrderInfos.OrderStatus }}</span>
         </div>
-        <div class="col-sm-4 text-sm-right">Total: <h5>{{OrderInfos.PricePaidFormatted}}</h5></div>
+        <div class="col-sm-4 text-sm-right">Total: <h5>{{OrderInfos.PricePaid}}</h5></div>
     </div>
 </div>

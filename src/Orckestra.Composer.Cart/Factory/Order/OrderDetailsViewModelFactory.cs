@@ -143,8 +143,7 @@ namespace Orckestra.Composer.Cart.Factory.Order
             orderInfos.OrderStatus = param.OrderStatuses[param.Order.OrderStatus];
             orderInfos.OrderStatusRaw = param.Order.OrderStatus;
             orderInfos.BillingCurrency = param.Order.Cart.BillingCurrency;
-            orderInfos.PricePaidFormatted = LocalizationProvider.FormatPrice((decimal)param.Order.Cart.Total, param.CultureInfo);
-            orderInfos.PricePaid = ((decimal)param.Order.Cart.Total).ToString("N");
+            orderInfos.PricePaid = LocalizationProvider.FormatPrice((decimal)param.Order.Cart.Total, param.CultureInfo);
 
             return orderInfos;
         }
