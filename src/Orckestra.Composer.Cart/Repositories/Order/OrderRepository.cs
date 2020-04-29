@@ -6,6 +6,7 @@ using Orckestra.Composer.Cart.Parameters.Order;
 using Orckestra.Overture;
 using Orckestra.Overture.ServiceModel.Customers;
 using Orckestra.Overture.ServiceModel.Orders;
+using Orckestra.Overture.ServiceModel.Requests.Customers;
 using Orckestra.Overture.ServiceModel.Requests.Orders;
 
 namespace Orckestra.Composer.Cart.Repositories.Order
@@ -17,11 +18,8 @@ namespace Orckestra.Composer.Cart.Repositories.Order
 
         public OrderRepository(IOvertureClient overtureClient, IFindOrdersRequestFactory findOrdersRequestFactory)
         {
-            if (overtureClient == null) { throw new ArgumentNullException("overtureClient"); }
-            if (findOrdersRequestFactory == null) { throw new ArgumentNullException("findOrdersRequestFactory"); }
-
-            OvertureClient = overtureClient;
-            FindOrdersRequestFactory = findOrdersRequestFactory;
+            OvertureClient = overtureClient ?? throw new ArgumentNullException(nameof(overtureClient));
+            FindOrdersRequestFactory = findOrdersRequestFactory ?? throw new ArgumentNullException(nameof(findOrdersRequestFactory));
         }
 
         /// <summary>
@@ -49,9 +47,9 @@ namespace Orckestra.Composer.Cart.Repositories.Order
         /// <returns></returns>
         public virtual Task<Overture.ServiceModel.Orders.Order> GetOrderAsync(GetOrderParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param"); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException("param.Scope"); }
-            if (string.IsNullOrWhiteSpace(param.OrderNumber)) { throw new ArgumentException("param.OrderNumber"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(nameof(param.Scope)); }
+            if (string.IsNullOrWhiteSpace(param.OrderNumber)) { throw new ArgumentException(nameof(param.OrderNumber)); }
 
             var request = new GetOrderByNumberRequest
             {
@@ -103,6 +101,45 @@ namespace Orckestra.Composer.Cart.Repositories.Order
             };
 
             return OvertureClient.SendAsync(request);
+        }
+
+        /// <summary>
+        /// Update order with current id.
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        public virtual Task<Overture.ServiceModel.Orders.Order> UpdateOrderAsync(SaveOrderParam param)
+        {
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (param.OrderId == default) { throw new ArgumentException(nameof(param.OrderId)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(nameof(param.Scope)); }
+            if (param.Order == null) { throw new ArgumentException(nameof(param.Order)); }
+
+            var request = new SaveOrderRequest
+            {
+                ScopeId = param.Scope,
+                OrderId = param.OrderId,
+                Order = param.Order,
+            };
+
+            return OvertureClient.SendAsync(request);
+        }
+
+        /// <summary>
+        /// Get Customer by Id
+        /// </summary>
+        /// <param name="customerId"></param>
+        /// <param name="scopeId"></param>
+        /// <returns></returns>
+        public virtual Task<Customer> GetCustomerByIdAsync(Guid customerId, string scopeId)
+        {
+            var getCustomerRequest = new GetCustomerRequest
+            {
+                CustomerId = customerId,
+                ScopeId = scopeId
+            };
+
+            return OvertureClient.SendAsync(getCustomerRequest);
         }
     }
 }

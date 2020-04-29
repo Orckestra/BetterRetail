@@ -94,6 +94,8 @@
     <Compile Include="Parameters\GetRecurringOrderCartViewModelParam.cs" />
     <Compile Include="Parameters\GetShippingMethodsScopeParam.cs" />
     <Compile Include="Parameters\Order\GetOrderChangesParam.cs" />
+    <Compile Include="Parameters\Order\SaveOrderParam.cs" />
+    <Compile Include="Parameters\Order\UpdateOrderCustomerParam.cs" />
     <Compile Include="Parameters\RemoveRecurringCartLineItemParam.cs" />
     <Compile Include="Parameters\RescheduleRecurringCartParam.cs" />
     <Compile Include="Parameters\UpdateRecurringCartLineItemParam.cs" />

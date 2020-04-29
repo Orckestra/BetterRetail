@@ -57,7 +57,9 @@ module Orckestra.Composer {
                         mounted() {
                             self.findUserAsync(result.CustomerEmail).then(isExist => {
                                 this.IsUserExist = isExist;
-                            })
+                            });
+
+
                         },
                         methods: {
                             findMyOrder() {
@@ -70,7 +72,14 @@ module Orckestra.Composer {
                                 });
                             },
                             createAccount() {
-                                self.createCustomer(this.CustomerFirstName, this.CustomerLastName, this.CustomerEmail, this.Password);
+                                self.createCustomer(this.CustomerFirstName, this.CustomerLastName, this.CustomerEmail, this.Password)
+                                    .then(result => {
+                                        self.findOrderService.addOrderToCurrentUser(this.OrderNumber).then(() => {
+                                            if (result.ReturnUrl) {
+                                                window.location.replace(decodeURIComponent(result.ReturnUrl));
+                                            }
+                                        });
+                                    });
                             },
                         }
                     });
@@ -79,7 +88,7 @@ module Orckestra.Composer {
                         data: { StepNumber: 'confirmation' }
                     });
 
-                    //this.cacheProvider.defaultCache.clear(this.orderConfirmationCacheKey).done();
+                    this.cacheProvider.defaultCache.clear(this.orderConfirmationCacheKey).done();
                 })
                 .fail((reason: any) => {
 
@@ -112,9 +121,7 @@ module Orckestra.Composer {
                     this.eventHub.publish(MyAccountEvents[MyAccountEvents.LoggedIn], { data: result });
                 }
 
-                if (result.ReturnUrl) {
-                    window.location.replace(decodeURIComponent(result.ReturnUrl));
-                }
+               return result;
             });
         }
     }

@@ -28,12 +28,9 @@ namespace Orckestra.Composer.Cart.Api
             IOrderHistoryViewService orderHistoryViewService,
             IOrderUrlProvider orderUrlProvider)
         {
-            if (orderHistoryViewService == null) { throw new ArgumentNullException("orderHistoryViewService"); }
-            if (composerContext == null) { throw new ArgumentNullException("composerContext"); }
-
-            OrderHistoryViewService = orderHistoryViewService;
+            OrderHistoryViewService = orderHistoryViewService ?? throw new ArgumentNullException(nameof(orderHistoryViewService));
             OrderUrlProvider = orderUrlProvider;
-            ComposerContext = composerContext;
+            ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
         }
 
         [HttpPost]
@@ -118,6 +115,23 @@ namespace Orckestra.Composer.Cart.Api
             };
 
             return Ok(vm);
+        }
+
+        [HttpPost]
+        [ActionName("add-order")]
+        public virtual async Task<IHttpActionResult> AddOrderToCustomer(string id)
+        {
+            if (string.IsNullOrEmpty(id)) { return BadRequest("No order found."); }
+
+            var viewModel = await OrderHistoryViewService.UpdateOrderCustomerAsync(new UpdateOrderCustomerParam
+            {
+                CultureInfo = ComposerContext.CultureInfo,
+                CustomerId = ComposerContext.CustomerId,
+                Scope = ComposerContext.Scope,
+                OrderNumber = id
+            });
+
+            return Ok(viewModel);
         }
     }
 }

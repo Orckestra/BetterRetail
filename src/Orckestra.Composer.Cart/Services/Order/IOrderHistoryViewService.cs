@@ -26,5 +26,12 @@ namespace Orckestra.Composer.Cart.Services.Order
         /// <param name="param"></param>
         /// <returns></returns>
         Task<OrderDetailViewModel> GetOrderDetailViewModelForGuestAsync(GetOrderForGuestParam param);
+
+        /// <summary>
+        /// Update Order Customer Id
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        Task<Overture.ServiceModel.Orders.Order> UpdateOrderCustomerAsync(UpdateOrderCustomerParam param);
     }
 }

@@ -5,5 +5,7 @@
 module Orckestra.Composer {
     export interface IFindOrderService {
         getOrderDetailsUrl(req: IGetOrderDetailsUrlRequest): Q.Promise<IGuestOrderDetailsViewModel>;
+
+        addOrderToCurrentUser(orderNumber: string): Q.Promise<any>;
     }
 }
