@@ -370,4 +370,10 @@ Enter your credit card information</value>
   <data name="B_SignInNowAndSaveTime" xml:space="preserve">
     <value>Sign in and save time!</value>
   </data>
+  <data name="T_SaveInformation" xml:space="preserve">
+    <value>Save your information for next time</value>
+  </data>
+  <data name="L_CreateAccountForFastCheckout" xml:space="preserve">
+    <value>Create an account and enjoy faster checkout, access to purchase history, wish lists and more.</value>
+  </data>
 </root>

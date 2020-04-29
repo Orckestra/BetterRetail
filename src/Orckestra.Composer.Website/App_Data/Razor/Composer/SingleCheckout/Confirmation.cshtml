@@ -14,7 +14,7 @@
 
     public IComposerContext ComposerContext { get; set; }
 
-     public override bool PreventFunctionOutputCaching { get { return true; } }
+    public override bool PreventFunctionOutputCaching { get { return true; } }
 }
 
 @{
@@ -43,6 +43,37 @@
                 <p>@Html.Raw(@Html.Localized("CheckoutProcess", "L_EmailConfirmation", "<strong>{{CustomerEmail}}</strong>"))</p>
 
                 @DisplayOrderDetails()
+
+                @if (!ComposerContext.IsAuthenticated)
+                {
+                    <div v-if="!IsUserExist" class="mt-4">
+                        <h3><strong>@Html.Localize("CheckoutProcess", "T_SaveInformation")</strong></h3>
+                        <p>@Html.Localize("CheckoutProcess", "L_CreateAccountForFastCheckout")</p>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="Password">@Html.Localize("Forms", "F_Password") *</label>
+                                <input v-model="Password"
+                                       id="Password"
+                                       name="Password"
+                                       data-qa="information-password-input"
+                                       v-bind:disabled="IsLoading"
+                                       type="password"
+                                       class="form-control"
+                                       required="required"
+                                       data-parsley-length="[2, 36]"
+                                       @Html.ParsleyMessage("Forms", "F_PasswordLengthError", "length-message")
+                                       @Html.ParsleyMessage("Forms", "F_PasswordPatternError", "type-message") />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 mt-3">
+                                <button class="btn btn-success text-uppercase" v-on:click.prevent="createAccount">
+                                    @Html.Localize("MyAccount", "B_CreateAccount")
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                }
             </div>
         </div>
     </div>
