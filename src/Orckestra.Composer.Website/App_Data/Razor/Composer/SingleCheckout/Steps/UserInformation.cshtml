@@ -1,4 +1,4 @@
-﻿@inherits Composer.Razor.ComposerRazorFunction
+@inherits Composer.Razor.ComposerRazorFunction
 
 @functions {
     public override string FunctionDescription
@@ -56,7 +56,7 @@
                 </div>
             </div>
             <div class="form-row mt-3">
-                @EmailField("Email", true)
+                @EmailField("Email", false, true)
             </div>
         </div>
         <div v-if="!IsAuthenticated">
@@ -98,9 +98,14 @@
             </div>
 
             @Forms.Validations.SignInErrors("Errors.SignIn")
-            <div class="form-row">
-                @EmailField("username")
+            <div class="form-row" v-show="!SigningInMode">
+                @EmailField("username", true)
+
             </div>
+            <div class="form-row" v-show="SigningInMode">
+                @EmailField("username", false)
+            </div>
+
             <div class="form-row" v-show="SigningInMode">
                 <div class="form-group col-md-6">
                     <label for="Password">@Html.Localize("Forms", "F_Password") *</label>
@@ -113,7 +118,6 @@
                            class="form-control"
                            required="required"
                            data-parsley-length="[2, 36]"
-                           @Html.HelpBubble("Forms", "F_PasswordIndication", 8)
                            @Html.ParsleyMessage("Forms", "F_PasswordLengthError", "length-message")
                            @Html.ParsleyMessage("Forms", "F_PasswordPatternError", "type-message") />
                 </div>
@@ -146,7 +150,7 @@
     </form>
 }
 
-@helper EmailField(string id = "Email", bool disbled = false)
+@helper EmailField(string id = "Email", bool showHelpBubble = true, bool disbled = false)
 {
     <div class="form-group col-md-6">
         <label for="@id">@Html.Localize("Forms", "F_Email") *</label>
@@ -162,7 +166,7 @@
                required="required"
                data-parsley-length="[2, 36]"
                data-parsley-type="email"
-               @Html.HelpBubble("Forms", "F_EmailAddressGuestIndication")
+               @if (showHelpBubble) { @Html.HelpBubble("Forms", "F_EmailAddressGuestIndication") }
                @Html.ParsleyMessage("Forms", "F_EmailLengthError", "length-message")
                @Html.ParsleyMessage("Forms", "F_EmailPatternError", "type-message") />
     </div>
