@@ -3,6 +3,9 @@
 @using Orckestra.Composer.Parameters;
 @using System.Threading;
 @using Composite.Core.WebClient.Renderings.Page;
+@using Orckestra.Composer.MyAccount.Services;
+@using Orckestra.Composer.MyAccount.ViewModels;
+
 
 @functions {
     public override string FunctionDescription
@@ -14,6 +17,8 @@
 
     public IComposerContext ComposerContext { get; set; }
 
+    public IMembershipViewService MembershipViewService { get; set; }
+
     public override bool PreventFunctionOutputCaching { get { return true; } }
 }
 
@@ -23,6 +28,9 @@
     {
         CultureInfo = Thread.CurrentThread.CurrentCulture
     });
+
+    var passwordPatternViewModel = new PasswordPatternViewModel();
+    MembershipViewService.SetPasswordValidationRules(passwordPatternViewModel);
 }
 
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
@@ -44,7 +52,7 @@
 
                 @DisplayOrderDetails()
 
-                <div v-if="ShowCreateAccountForm" class="mt-4">
+                <form v-if="ShowCreateAccountForm" class="mt-4" id="formCreateAccount">
                     <h3><strong>@Html.Localize("CheckoutProcess", "T_SaveInformation")</strong></h3>
                     <p>@Html.Localize("CheckoutProcess", "L_CreateAccountForFastCheckout")</p>
                     <div class="form-row">
@@ -58,9 +66,12 @@
                                    type="password"
                                    class="form-control"
                                    required="required"
-                                   data-parsley-length="[2, 36]"
+                                   data-parsley-length="[@passwordPatternViewModel.MinRequiredPasswordLength, 256]"
+                                   data-parsley-pattern="@passwordPatternViewModel.PasswordRegexPattern"
+                                   @Html.ParsleyMessage("Forms", "F_PasswordRequiredError", "required-message")
                                    @Html.ParsleyMessage("Forms", "F_PasswordLengthError", "length-message")
-                                   @Html.ParsleyMessage("Forms", "F_PasswordPatternError", "type-message") />
+                                   @Html.ParsleyMessage("Forms", "F_PasswordPatternError", "pattern-message", passwordPatternViewModel.MinRequiredNonAlphanumericCharacters)
+                                   @Html.HelpBubble("Forms", "F_PasswordIndication", passwordPatternViewModel.MinRequiredPasswordLength) />
                         </div>
                     </div>
                     <div class="row">
@@ -70,7 +81,7 @@
                             </button>
                         </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>

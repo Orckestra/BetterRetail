@@ -104,6 +104,7 @@
     <Compile Include="Services\MembershipViewService.cs" />
     <Compile Include="Providers\StaticMembershipProxy.cs" />
     <Compile Include="ViewModels\AccountStatusViewModel.cs" />
+    <Compile Include="ViewModels\PasswordPatternViewModel.cs" />
     <Compile Include="ViewModels\ChangePasswordViewModel.cs" />
     <Compile Include="ViewModels\AccountHeaderViewModel.cs" />
     <Compile Include="ViewModels\AddressListViewModel.cs" />

@@ -66,7 +66,7 @@ module Orckestra.Composer {
 
                             self.IsAuthenticated().then(isAuthenticated => {
                                 this.IsAuthenticated = isAuthenticated;
-                            })
+                            });
                         },
                         computed: {
                             ShowCreateAccountForm() {
@@ -84,15 +84,21 @@ module Orckestra.Composer {
                                 });
                             },
                             createAccount() {
+                                let parsleyInit = this.getCreateAccountForm().parsley();
+                                if (parsleyInit && !parsleyInit.validate()) { return; }
+
                                 self.createCustomer(this.CustomerFirstName, this.CustomerLastName, this.CustomerEmail, this.Password)
-                                    .then(result => {
-                                        self.findOrderService.addOrderToCurrentUser(this.OrderNumber).then(() => {
+                                    .then(result => self.findOrderService.addOrderToCurrentUser(this.OrderNumber)
+                                        .then(() => {
                                             if (result.ReturnUrl) {
                                                 window.location.replace(decodeURIComponent(result.ReturnUrl));
                                             }
-                                        });
-                                    });
+                                        })
+                                    );
                             },
+                            getCreateAccountForm(): JQuery {
+                                return $("#formCreateAccount");
+                            }
                         }
                     });
 

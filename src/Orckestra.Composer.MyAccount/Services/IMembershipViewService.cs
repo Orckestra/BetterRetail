@@ -104,5 +104,11 @@ namespace Orckestra.Composer.MyAccount.Services
         /// The view model is user exist
         /// </returns>
         Task<IsUserExistViewModel> GetIsUserExistViewModelAsync(GetCustomerByEmailParam getCustomerByEmailParam);
+
+        /// <summary>
+        /// Set rules for password validation
+        /// </summary>
+        /// <param name="viewModel">viewModel for update <see cref="PasswordPatternViewModel"/></param>
+        void SetPasswordValidationRules(PasswordPatternViewModel viewModel);
     }
 }
