@@ -57,22 +57,19 @@ namespace Orckestra.Composer.Store.Tests.Services
         [TestCase(null, "http://foo.com")]
         [TestCase(null, "http://foo.com")]
         [TestCase(null, null)]
-        public void WHEN_RequiredParams_Is_Null_SHOULD_Throw_Argument_Exception(string scope,
-            string baseUrl)
+        public void WHEN_ParamsProperty_Is_Null_SHOULD_Throw_Argument_Exception(string scope, string baseUrl)
         {
             //Arrange
             var service = _container.CreateInstance<StoreLocatorViewService>();
+            var param = new GetStoreLocatorViewModelParam
+            {
+                Scope = scope,
+                BaseUrl = baseUrl,
+                CultureInfo = CultureInfo.CreateSpecificCulture("en-CA")
+            };
 
             //Act
-            Func<Task> asyncFunction = async () =>
-            {
-                await service.GetStoreLocatorViewModelAsync(new GetStoreLocatorViewModelParam
-                {
-                    Scope = scope,
-                    BaseUrl = baseUrl,
-                    CultureInfo = CultureInfo.CreateSpecificCulture("en-CA")
-                });
-            };
+            Func<Task> asyncFunction = async () => { await service.GetStoreLocatorViewModelAsync(param); };
 
             //Assert
             asyncFunction.ShouldThrow<ArgumentException>();
