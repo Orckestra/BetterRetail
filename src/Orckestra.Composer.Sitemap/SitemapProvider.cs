@@ -20,10 +20,9 @@ namespace Orckestra.Composer.Sitemap
         public SitemapProvider(ISitemapEntryProvider entryProvider, ISitemapProviderConfig config, IC1SitemapConfiguration param)
         {
             if (config == null) { throw new ArgumentNullException(nameof(config)); }
-            if (param.NumberOfEntriesPerFile < 1) 
-                throw new ArgumentOutOfRangeException(nameof(param), param.NumberOfEntriesPerFile, GetMessageOfZeroNegative(nameof(param.NumberOfEntriesPerFile)));
+            if (param.NumberOfEntriesPerFile < 1) throw new ArgumentOutOfRangeException(nameof(param), param.NumberOfEntriesPerFile, GetMessageOfZeroNegative(nameof(param.NumberOfEntriesPerFile)));
 
-            EntryProvider = entryProvider;
+            EntryProvider = entryProvider ?? throw new ArgumentNullException(nameof(entryProvider));
             NumberOfEntriesPerSitemap = param.NumberOfEntriesPerFile;
             SitemapFilePrefix = config.SitemapFilePrefix;
         }
