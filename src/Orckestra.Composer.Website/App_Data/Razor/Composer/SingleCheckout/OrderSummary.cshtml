@@ -148,7 +148,7 @@
 
 @helper Shipping()
 {
-    <div v-if="OrderSummary.IsShippingEstimatedOrSelected" class="row  mb-2">
+    <div v-if="IsShippingEstimatedOrSelected" class="row  mb-2">
         <div class="col-6  col-md-7">
             <span v-if="ShippingAddress">
                 @Html.Localized("ShoppingCart", "L_ShippingBasedOn", "{{ShippingAddress.PostalCode}}")
