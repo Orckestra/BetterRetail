@@ -278,7 +278,8 @@
     <div class="content-tab-teaser">
         @foreach (var tab in tabs)
         {
-            var resutls = tab.SearchResults.Entries.Take(teaserItemsCount);
+            var resutls = tab.SearchResults?.Entries?.Take(teaserItemsCount);
+            if(resutls == null) { continue; }
             <div class="header">
                 <h3 class="title d-inline-flex  mt-3">@Html.Localized("List-Search", "T_SearchResultsFoundIn", tab.Title, tab.Total)</h3>
                 @if (tab.Total > teaserItemsCount)

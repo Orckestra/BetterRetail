@@ -3,8 +3,8 @@
 
 @helper deleteAddressConfirmationModal(string modalId = "deleteAddressModal")
 {
-    <div class="modal" id="@modalId">
-        <div class="modal-dialog  modal-sm">
+    <div class="modal" id="@modalId" tabindex="-1" role="dialog">
+        <div class="modal-dialog  modal-sm" role="document">
             <div class="modal-content">
                 <div class="modal-body">
                     <button type="button" class="close" data-dismiss="modal" title="@Html.Localize("General", "B_Close")"><span class="fa fa-times-circle"></span></button>

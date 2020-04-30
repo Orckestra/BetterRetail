@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <HeaderOptionalLinkElements>
-  <Add Id="5957805d-350a-49d9-aef0-428a79abe13c" DisplayName="FAQ" Url="~/page(200eb67f-65fe-4dc1-92f1-1628efacaa54)" Order="1"   PublicationStatus="published" PageId="f3dbd28d-365f-4d3e-91c3-7b730b39b294" SourceCultureName="en-CA" />
-  <Add Id="d5c72eaf-cf0a-4a6d-8341-76d281f3ca63" DisplayName="Terms &amp; Conditions" Url="~/page(200eb67f-65fe-4dc1-92f1-1628efacaa54)" Order="1"   PublicationStatus="published" PageId="f3dbd28d-365f-4d3e-91c3-7b730b39b294" SourceCultureName="en-CA" />
-  <Add Id="dfdda4a2-34dd-46e1-977f-d4a81fedc7ab" DisplayName="Login" Url="~/page(200eb67f-65fe-4dc1-92f1-1628efacaa54)" Order="1"   PublicationStatus="published" PageId="f3dbd28d-365f-4d3e-91c3-7b730b39b294" SourceCultureName="en-CA" />
+  <Add Id="5957805d-350a-49d9-aef0-428a79abe13c" DisplayName="FAQ" Url="~/page(f3dbd28d-365f-4d3e-91c3-7b730b39b294)" Order="1"   PublicationStatus="published" PageId="f3dbd28d-365f-4d3e-91c3-7b730b39b294" SourceCultureName="en-CA" />
+  <Add Id="d5c72eaf-cf0a-4a6d-8341-76d281f3ca63" DisplayName="Terms &amp; Conditions" Url="~/page(f3dbd28d-365f-4d3e-91c3-7b730b39b294)" Order="1"   PublicationStatus="published" PageId="f3dbd28d-365f-4d3e-91c3-7b730b39b294" SourceCultureName="en-CA" />
 </HeaderOptionalLinkElements>

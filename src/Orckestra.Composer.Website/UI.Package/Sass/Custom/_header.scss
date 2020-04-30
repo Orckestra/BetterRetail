@@ -15,7 +15,7 @@
 } 
  
 .masthead {
-   
+  
     &-with-mega-menu {
         margin-bottom: $grid-gutter-width;
         padding-bottom: $grid-gutter-width;
@@ -64,11 +64,8 @@
         }
         .navbar-nav > li {
             float: left;
-            border-right: solid 1px gray("600");
         }
-        .navbar-nav > li:first-child {
-            border-left: solid 1px gray("600");
-        }  
+
         .navbar-nav > li > a {
             padding-top: 10px;  
             padding-bottom: 10px;
