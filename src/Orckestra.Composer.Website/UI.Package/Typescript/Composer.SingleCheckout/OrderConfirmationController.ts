@@ -8,6 +8,7 @@
 ///<reference path='../Composer.MyAccount/Common/MembershipService.ts' />
 ///<reference path='../Composer.MyAccount/Common/MyAccountEvents.ts' />
 ///<reference path='../Composer.MyAccount/Common/MyAccountStatus.ts' />
+///<reference path='../Composer.MyAccount/SignInHeader/SignInHeaderService.ts' />
 
 module Orckestra.Composer {
     'use strict';
@@ -17,6 +18,8 @@ module Orckestra.Composer {
         private cacheProvider: ICacheProvider;
         private findOrderService: IFindOrderService;
         private membershipService: IMembershipService;
+        protected signInHeaderService: SignInHeaderService;
+
         private orderConfirmationCacheKey = 'orderConfirmationCacheKey';
         private orderCacheKey = 'orderCacheKey';
         public VueCheckoutOrderConfirmation: Vue;
@@ -27,6 +30,7 @@ module Orckestra.Composer {
             this.cacheProvider = CacheProvider.instance();
             this.findOrderService = new FindOrderService(this.eventHub);
             this.membershipService = new MembershipService(new MembershipRepository());
+            this.signInHeaderService = new SignInHeaderService(new SignInHeaderRepository());
 
             this.cacheProvider.defaultCache.get<any>(this.orderCacheKey)
                 .then((result: ICompleteCheckoutResult) => {
@@ -52,6 +56,7 @@ module Orckestra.Composer {
                             Password: null,
                             IsUserExist: true,
                             IsLoading: false,
+                            IsAuthenticated: false,
                             ...result
                         },
                         mounted() {
@@ -59,7 +64,14 @@ module Orckestra.Composer {
                                 this.IsUserExist = isExist;
                             });
 
-
+                            self.IsAuthenticated().then(isAuthenticated => {
+                                this.IsAuthenticated = isAuthenticated;
+                            })
+                        },
+                        computed: {
+                            ShowCreateAccountForm() {
+                                return !this.IsUserExist && !this.IsAuthenticated
+                            }
                         },
                         methods: {
                             findMyOrder() {
@@ -123,6 +135,14 @@ module Orckestra.Composer {
 
                return result;
             });
+        }
+
+        private IsAuthenticated(): Q.Promise<boolean> {
+            let cultureInfo = $('html').attr('lang');
+            let websiteId = $('html').data('website');
+            let param = { cultureInfo, websiteId };
+
+            return this.signInHeaderService.getSignInHeader(param).then(result => result.IsLoggedIn)
         }
     }
 }
