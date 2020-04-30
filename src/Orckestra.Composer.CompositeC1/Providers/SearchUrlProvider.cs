@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
 using Composite.Core;
@@ -54,7 +55,7 @@ namespace Orckestra.Composer.CompositeC1.Providers
         {
             if (collection == null || collection.Count == 0) return null;
 
-            SortedDictionary<string, SearchFilter> result = new SortedDictionary<string, SearchFilter>();
+            List<SearchFilter> result = new List<SearchFilter>();
 
             foreach (string element in collection)
             {
@@ -77,14 +78,13 @@ namespace Orckestra.Composer.CompositeC1.Providers
 
                 if (string.IsNullOrEmpty(fvValue)) continue;
 
-                result.Add(fnValue, new SearchFilter
+                result.Add(new SearchFilter
                 {
                     Name = HttpUtility.UrlDecode(fnValue),
                     Value = HttpUtility.UrlDecode(fvValue)
                 });
             }
-
-            return result.Values;
+            return result.OrderBy(x=> x.Name).ThenBy(x=> x.Value).ToList();
         }
     }
 }
