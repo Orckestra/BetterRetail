@@ -253,7 +253,7 @@ namespace Orckestra.Composer.Cart.Factory.Order
                     else
                     {
                         int cIndex = string.Compare(shipmentStatusDate, el.Date);
-                        if (cIndex < 0)
+                        if (cIndex > 0)
                         {
                             shipmentStatusDate = el.Date;
                         }
