@@ -6,13 +6,14 @@
 - [Certificate](#certificate)
 - [Build](#build)
 - [Configuring](#configuring)
+- [Renaming](#renaming-the-web-site-project)
 - [Deploy](#deploy)
 - [Development](#development)
 - [Debug](#debug)
 - [Related projects](#related-projects)
 - [FAQ](#faq)
 
-## Gettings started
+## Getting started
 Get the latest source code from the [dev](https://github.com/Orckestra/BetterRetail/tree/dev) branch:
 - using the git command `$git clone https://github.com/Orckestra/BetterRetail.git`
 - with a direct download [by the following link](https://github.com/Orckestra/BetterRetail/archive/dev.zip)
