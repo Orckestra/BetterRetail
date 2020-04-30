@@ -274,21 +274,15 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Orckestra.Composer.CompositeC1\Orckestra.Composer.CompositeC1.csproj">
+      <Project>{3e42c35e-b19c-4abe-80f8-fd268d44e11f}</Project>
+      <Name>Orckestra.Composer.CompositeC1</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Orckestra.Composer\Orckestra.Composer.csproj">
       <Project>{d00bd58b-93fe-4f3d-bbc8-6f7873ca6830}</Project>
       <Name>Orckestra.Composer</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Orckestra.Composer.SearchQuery\Orckestra.Composer.SearchQuery.csproj">
-      <Project>{6dee1972-e64b-43f0-bbaf-04d0aa64dd60}</Project>
-      <Name>Orckestra.Composer.SearchQuery</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Orckestra.Composer.CompositeC1\Orckestra.Composer.CompositeC1.csproj">
-      <Project>{3e42c35e-b19c-4abe-80f8-fd268d44e11f}</Project>
-      <Name>Orckestra.Composer.CompositeC1</Name>
-      <Private>False</Private>
-    </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
   <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">
