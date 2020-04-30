@@ -44,7 +44,9 @@
             <div id="vueCheckoutOrderConfirmation" v-if="Order"
                  @if (!isPreview) { <text> v-cloak="true" </text> }
                  data-oc-controller="SingleCheckout.OrderConfirmation"
-                 data-redirectUrl="@redirectUrl">
+                 data-redirectUrl="@redirectUrl"
+                 data-password-pattern="@passwordPatternViewModel.PasswordRegexPattern"
+                 data-password-length="@passwordPatternViewModel.MinRequiredPasswordLength">
 
                 <h1 data-qa="confirmation-thankyou">@Html.Localize("CheckoutProcess", "T_ThankYou") {{CustomerFirstName}} {{CustomerLastName}}!</h1>
                 <p data-qa="confirmation-order-number">@Html.Raw(@Html.Localized("CheckoutProcess", "L_YourOrderNumber", "<strong>{{OrderNumber}}</strong>"))</p>
@@ -63,6 +65,7 @@
                                    name="Password"
                                    data-qa="information-password-input"
                                    v-bind:disabled="IsLoading"
+                                   v-on:input="onChangePassword"
                                    type="password"
                                    class="form-control"
                                    required="required"
@@ -74,6 +77,7 @@
                                    @Html.HelpBubble("Forms", "F_PasswordIndication", passwordPatternViewModel.MinRequiredPasswordLength) />
                         </div>
                     </div>
+                    <p v-if="PasswordStrength">Strength: <strong>{{PasswordStrength}}</strong></p>
                     <div class="row">
                         <div class="col-12 mt-3">
                             <button class="btn btn-success text-uppercase" v-on:click.prevent="createAccount">

@@ -9,6 +9,7 @@
 ///<reference path='../Composer.MyAccount/Common/MyAccountEvents.ts' />
 ///<reference path='../Composer.MyAccount/Common/MyAccountStatus.ts' />
 ///<reference path='../Composer.MyAccount/SignInHeader/SignInHeaderService.ts' />
+///<reference path='../Utils/PasswordCheckService.ts' />
 
 module Orckestra.Composer {
     'use strict';
@@ -18,7 +19,8 @@ module Orckestra.Composer {
         private cacheProvider: ICacheProvider;
         private findOrderService: IFindOrderService;
         private membershipService: IMembershipService;
-        protected signInHeaderService: SignInHeaderService;
+        private signInHeaderService: SignInHeaderService;
+        private passwordCheckService: PasswordCheckService;
 
         private orderConfirmationCacheKey = 'orderConfirmationCacheKey';
         private orderCacheKey = 'orderCacheKey';
@@ -31,6 +33,10 @@ module Orckestra.Composer {
             this.findOrderService = new FindOrderService(this.eventHub);
             this.membershipService = new MembershipService(new MembershipRepository());
             this.signInHeaderService = new SignInHeaderService(new SignInHeaderRepository());
+            this.passwordCheckService = new PasswordCheckService({
+                passwordPattern: RegExp(this.context.container.data('password-pattern')),
+                minimumLength: this.context.container.data('password-length')
+            });
 
             this.cacheProvider.defaultCache.get<any>(this.orderCacheKey)
                 .then((result: ICompleteCheckoutResult) => {
@@ -57,6 +63,7 @@ module Orckestra.Composer {
                             IsUserExist: true,
                             IsLoading: false,
                             IsAuthenticated: false,
+                            PasswordStrength: '',
                             ...result
                         },
                         mounted() {
@@ -74,6 +81,9 @@ module Orckestra.Composer {
                             }
                         },
                         methods: {
+                            getCreateAccountForm(): JQuery {
+                                return $("#formCreateAccount");
+                            },
                             findMyOrder() {
                                 let findMyOrderRequest = {
                                     OrderNumber: this.OrderNumber,
@@ -96,8 +106,9 @@ module Orckestra.Composer {
                                         })
                                     );
                             },
-                            getCreateAccountForm(): JQuery {
-                                return $("#formCreateAccount");
+                            onChangePassword(e: any) {
+                                let { value } = e.target;
+                                this.PasswordStrength = self.passwordCheckService.checkPasswordStrength(value);
                             }
                         }
                     });
@@ -106,7 +117,7 @@ module Orckestra.Composer {
                         data: { StepNumber: 'confirmation' }
                     });
 
-                    this.cacheProvider.defaultCache.clear(this.orderConfirmationCacheKey).done();
+                    // this.cacheProvider.defaultCache.clear(this.orderConfirmationCacheKey).done();
                 })
                 .fail((reason: any) => {
 
