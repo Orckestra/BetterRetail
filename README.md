@@ -101,6 +101,9 @@ Settings for specific environment can be set in any json file as {"environments"
 ### Additional packages
 During a deploy can be installed a set of additional packages. Additional packages to be installed defined in the **{solution_dir_path}\build\configuration\SetupDescription.xml** file. 
 
+##Renaming the web site project
+In order to make it easier for developers to have a custom name for the web application project, we have supplied an easy to user renamer.ps1 script. If for example, you would like to have you website called MySuperStore.Website, simply run <em>./renamer.ps1 MySuperstore.Website</em>
+
 ## Deploy
 To deploy the Reference Application run in Administrator mode the Powershell script by the path `{solution_dir_path}\build\install.ps1`. 
 In general, the full deploy process includes the following steps:
