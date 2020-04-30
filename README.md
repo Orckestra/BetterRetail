@@ -13,9 +13,9 @@
 - [FAQ](#faq)
 
 ## Gettings started
-Get the latest source code from the [dev](https://github.com/Orckestra/ReferenceApplication/tree/dev) branch:
-- using the git command `$git clone https://github.com/Orckestra/ReferenceApplication.git`
-- with a direct download [by the following link](https://github.com/Orckestra/ReferenceApplication/archive/dev.zip)
+Get the latest source code from the [dev](https://github.com/Orckestra/BetterRetail/tree/dev) branch:
+- using the git command `$git clone https://github.com/Orckestra/BetterRetail.git`
+- with a direct download [by the following link](https://github.com/Orckestra/BetterRetail/archive/dev.zip)
 
 ## Prerequisites
 A development environment  has to include:
