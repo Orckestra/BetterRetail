@@ -579,7 +579,7 @@ namespace Orckestra.Composer.Cart.Factory
             Dictionary<string, string> paymentMethodDisplayNames,
             CultureInfo cultureInfo)
         {
-            if (paymentMethod == null) { return null; }
+            if (paymentMethod == null || paymentMethodDisplayNames == null) { return null; }
 
             paymentMethodDisplayNames.TryGetValue(paymentMethod.Type.ToString(), out string paymentMethodDisplayName);
 
