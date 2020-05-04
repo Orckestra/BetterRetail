@@ -12,7 +12,6 @@ using Orckestra.Composer.MyAccount.Providers;
 using Orckestra.Composer.Repositories;
 using Orckestra.Composer.MyAccount.Services;
 using Orckestra.Composer.MyAccount.Tests.Mock;
-using Orckestra.Composer.Tests.Mock;
 using Orckestra.ForTests;
 
 namespace Orckestra.Composer.MyAccount.Tests.Services

@@ -163,6 +163,7 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo_ComposerWeightAttribute.cs" />
     <Compile Include="Mock\MockAddressFactory.cs" />
+    <Compile Include="Mock\MockCustomerFactory.cs" />
     <Compile Include="Mock\MockMembershipProviderFactory.cs" />
     <Compile Include="Mock\MockMembershipFactory.cs" />
     <Compile Include="Mock\MockHttpContext.cs" />
@@ -208,10 +209,6 @@
     <ProjectReference Include="..\..\src\Orckestra.Composer\Orckestra.Composer.csproj">
       <Project>{D00BD58B-93FE-4F3D-BBC8-6F7873CA6830}</Project>
       <Name>Orckestra.Composer</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Orckestra.Composer.Tests\Orckestra.Composer.Tests.csproj">
-      <Project>{24eaec4f-3e3c-4a4a-ab18-f8d64a7c0673}</Project>
-      <Name>Orckestra.Composer.Tests</Name>
     </ProjectReference>
     <ProjectReference Include="..\Orckestra.ForTests\Orckestra.ForTests.csproj">
       <Project>{B2BE051E-82D7-4643-BB56-98F161833E30}</Project>

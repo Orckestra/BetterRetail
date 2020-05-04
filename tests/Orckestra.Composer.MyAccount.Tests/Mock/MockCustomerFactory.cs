@@ -5,7 +5,7 @@ using Orckestra.ForTests;
 using Orckestra.Overture.ServiceModel;
 using Orckestra.Overture.ServiceModel.Customers;
 
-namespace Orckestra.Composer.Tests.Mock
+namespace Orckestra.Composer.MyAccount.Tests.Mock
 {
     internal static class MockCustomerFactory
     {

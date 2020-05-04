@@ -13,7 +13,6 @@ using Orckestra.Composer.MyAccount.Tests.Mock;
 using Orckestra.Composer.MyAccount.ViewModels;
 using Orckestra.Composer.Repositories;
 using Orckestra.Composer.Parameters;
-using Orckestra.Composer.Tests.Mock;
 using Orckestra.ForTests;
 using Orckestra.ForTests.Mock;
 using System.Threading.Tasks;
