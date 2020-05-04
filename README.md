@@ -111,7 +111,7 @@ In general, the full deploy process includes the following steps:
 
 If you need to deploy using configuration from a specific file, use `-env={keyword}` param and argument. So if you want to use the configuration from the **parameters.int2.json** file, then run in Powershell the deploying command `{solution_dir}\build\install.ps1 -env=int2`. The configuration file parameters.int2.json have the highest priority in this case. 
 
-A file **{solution_dir_path}\configuration\SetupDescription.xml** includes packages to be installed during deploy. These packages installing from the **develop** branch by default. To install packages from a specific Experience Management branch, use during a deploy`-branch={branch_name}` param and argument. For example, `{solution_dir}\build\install.ps1 -branch=develop`.
+A file **{solution_dir_path}\configuration\SetupDescription.xml** includes packages to be installed during deploy. These packages installing from the **develop** branch by default. To install packages from a specific Experience Management branch, set "em-branch"{branch_name} in parameters.
 
 After successfully deploying the Reference Application configured and ready to use in IIS.
 

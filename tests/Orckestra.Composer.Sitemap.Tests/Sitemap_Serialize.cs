@@ -13,29 +13,29 @@ namespace Orckestra.Composer.Sitemap.Tests
     [TestFixture]
     public class Sitemap_Serialize
     {
-        [Test]
-        public void WHEN_SitemapIsSerialized_SHOULD_RespectSitemapXsd()
-        {
-            // ARRANGE            
-            var urlSitemapXsd = "http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd";
-            var @namespace = "http://www.sitemaps.org/schemas/sitemap/0.9";
+        //[Test]
+        //public void WHEN_SitemapIsSerialized_SHOULD_RespectSitemapXsd()
+        //{
+        //    // ARRANGE            
+        //    var urlSitemapXsd = "http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd";
+        //    var @namespace = "http://www.sitemaps.org/schemas/sitemap/0.9";
 
-            var filePath = Path.GetTempFileName();
-            var sitemap = CreateSitemap();
+        //    var filePath = Path.GetTempFileName();
+        //    var sitemap = CreateSitemap();
             
-            try
-            {
-                // ACT
-                sitemap.WriteToXml(filePath);
+        //    try
+        //    {
+        //        // ACT
+        //        sitemap.WriteToXml(filePath);
 
-                // ASSERT
-                XsdValidator.IsValidXml(filePath, urlSitemapXsd, @namespace).Should().BeTrue("Validation against XSD failed. Check test output for more details.");
-            }
-            finally
-            {
-                File.Delete(filePath);
-            }   
-        }
+        //        // ASSERT
+        //        XsdValidator.IsValidXml(filePath, urlSitemapXsd, @namespace).Should().BeTrue("Validation against XSD failed. Check test output for more details.");
+        //    }
+        //    finally
+        //    {
+        //        File.Delete(filePath);
+        //    }   
+        //}
 
         private static Models.Sitemap CreateSitemap()
         {

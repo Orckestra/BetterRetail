@@ -31,13 +31,11 @@ var isShowingDoc = Context.Configuration.GetValue("showtree") != null;
 
 var target = Argument("target", "All");
 var environment = Argument<string>("env", null);
-var branch = Argument<string>("branch", "develop");
 
 if (!isShowingDoc)
 {
     Information($"Target: {target}");
     Information($"Environment: {environment}");
-    Information($"Branch: {branch}");
 }
 else
 {
@@ -46,7 +44,6 @@ else
     Information("-docs                     Displays available commands");
     Information("-t All                    Executes specific target, default is 'ALL'");
     Information("-env=INT2                 Use environment from configuration. If not suplied, default is used");
-    Information("-branch=develop           Branch of Experience Management, default is 'develop'");
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -73,6 +70,7 @@ var setupServer = GetFiles($"{rootDir}/build/tools/**/*SetupServer.exe").Last();
 
 Dictionary<string, string> Parameters;
 string localSiteName = null;
+string branch = null;
 Task("Load-CakeConfig").Does(() =>
 {
     var config = CreateCakeConfig()
@@ -126,6 +124,7 @@ Task("Load-CakeConfig").Does(() =>
     }
 
     localSiteName = Parameters["websiteName"];
+    branch = string.IsNullOrWhiteSpace(Parameters["em-branch"]) ? "develop" : Parameters["em-branch"];
 });
 
 
