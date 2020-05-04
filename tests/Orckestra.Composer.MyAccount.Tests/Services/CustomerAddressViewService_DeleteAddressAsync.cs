@@ -6,6 +6,8 @@ using FluentAssertions;
 using Moq;
 using Moq.AutoMock;
 using NUnit.Framework;
+using Orckestra.Composer.Repositories;
+using Orckestra.Composer.Parameters;
 using Orckestra.Composer.MyAccount.Parameters;
 using Orckestra.Composer.MyAccount.Repositories;
 using Orckestra.Composer.MyAccount.Services;

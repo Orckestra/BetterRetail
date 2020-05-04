@@ -255,7 +255,11 @@
     <Compile Include="Parameters\CreateRecurringOrderTemplatesViewModelParam.cs" />
     <Compile Include="Parameters\CreateRecurringOrderTemplateDetailsViewModelParam.cs" />
     <Compile Include="Parameters\CreateTemplateGroupedShippingAddressParam.cs" />
+    <Compile Include="Parameters\CreateUserParam.cs" />
     <Compile Include="Parameters\FindInventoryItemStatusParam.cs" />
+    <Compile Include="Parameters\GetCustomerByEmailParam.cs" />
+    <Compile Include="Parameters\GetCustomerByIdParam.cs" />
+    <Compile Include="Parameters\GetCustomerByUsernameParam.cs" />
     <Compile Include="Parameters\GetFooterParam.cs" />
     <Compile Include="Parameters\GetProductDefinitionParam.cs" />
     <Compile Include="Parameters\GetProductParam.cs" />
@@ -275,11 +279,15 @@
     <Compile Include="Parameters\MapToTemplateLineItemViewModelParam.cs" />
     <Compile Include="Parameters\RemoveRecurringOrderTemplateLineItemParam.cs" />
     <Compile Include="Parameters\RemoveRecurringOrderTemplateLineItemsParam.cs" />
+    <Compile Include="Parameters\SendResetPasswordInstructionsParam.cs" />
     <Compile Include="Parameters\UpdateRecurringOrderTemplateLineItemParam.cs" />
     <Compile Include="Parameters\UpdateRecurringOrderTemplateLineItemQuantityParam.cs" />
+    <Compile Include="Parameters\UpdateUserParam.cs" />
     <Compile Include="Providers\Dam\ProductImageInfo.cs" />
     <Compile Include="Providers\IPageNotFoundUrlProvider.cs" />
     <Compile Include="Providers\ICountryCodeProvider.cs" />
+    <Compile Include="Repositories\CustomerRepository.cs" />
+    <Compile Include="Repositories\ICustomerRepository.cs" />
     <Compile Include="Repositories\IProductRepository.cs" />
     <Compile Include="Providers\IRecurringCartUrlProvider.cs" />
     <Compile Include="Providers\IRecurringScheduleUrlProvider.cs" />

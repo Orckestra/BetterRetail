@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
-using Orckestra.Composer.MyAccount.Parameters;
+using Orckestra.Composer.Parameters;
 using Orckestra.Overture.ServiceModel.Customers;
 
-namespace Orckestra.Composer.MyAccount.Repositories
+namespace Orckestra.Composer.Repositories
 {
     /// <summary>
     /// Repository for interacting with Customers

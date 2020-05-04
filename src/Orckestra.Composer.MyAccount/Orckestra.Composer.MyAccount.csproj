@@ -47,8 +47,6 @@
     <Compile Include="Parameters\EditAddressParam.cs" />
     <Compile Include="Parameters\GetAccountStatusViewModelParam.cs" />
     <Compile Include="Parameters\GetCreateAddressViewModelAsyncParam.cs" />
-    <Compile Include="Parameters\GetCustomerByEmailParam.cs" />
-    <Compile Include="Parameters\GetCustomerByUsernameParam.cs" />
     <Compile Include="Parameters\GetCustomerChangePasswordViewModelParam.cs" />
     <Compile Include="Parameters\GetEditAddressViewModelAsyncParam.cs" />
     <Compile Include="Parameters\GetEditAddressViewModelParam.cs" />
@@ -60,7 +58,6 @@
     <Compile Include="Parameters\GetSignInHeaderParam.cs" />
     <Compile Include="Parameters\GetUpdateAccountViewModelParam.cs" />
     <Compile Include="Parameters\GetAccountHeaderViewModelParam.cs" />
-    <Compile Include="Parameters\CreateUserParam.cs" />
     <Compile Include="Parameters\CustomerAndStatus.cs" />
     <Compile Include="Parameters\GetCustomerByTicketParam.cs" />
     <Compile Include="Parameters\MyAccountStatus.cs" />
@@ -69,15 +66,12 @@
     <Compile Include="Api\MembershipController.cs" />
     <Compile Include="MyAccountConfiguration.cs" />
     <Compile Include="Parameters\GetChangePasswordViewModelParam.cs" />
-    <Compile Include="Parameters\GetCustomerByIdParam.cs" />
     <Compile Include="Parameters\GetForgotPasswordViewModelParam.cs" />
     <Compile Include="Parameters\GetLoginViewModelParam.cs" />
     <Compile Include="Parameters\GetResetPasswordViewModelParam.cs" />
     <Compile Include="Parameters\LoginParam.cs" />
-    <Compile Include="Parameters\SendResetPasswordInstructionsParam.cs" />
     <Compile Include="Parameters\SetDefaultAddressParam.cs" />
     <Compile Include="Parameters\UpdateAccountParam.cs" />
-    <Compile Include="Parameters\UpdateUserParam.cs" />
     <Compile Include="Providers\StaticFormsAuthenticationProxy.cs" />
     <Compile Include="Providers\IFormsAuthenticationProxy.cs" />
     <Compile Include="Repositories\ICustomerAddressRepository.cs" />
@@ -93,8 +87,6 @@
     <Compile Include="Requests\LoginViewModel.cs" />
     <Compile Include="MyAccountPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repositories\CustomerRepository.cs" />
-    <Compile Include="Repositories\ICustomerRepository.cs" />
     <Compile Include="Parameters\CreateCustomerViewModelParam.cs" />
     <Compile Include="Requests\ResetPasswordRequest.cs" />
     <Compile Include="Responses\LogoutResponse.cs" />

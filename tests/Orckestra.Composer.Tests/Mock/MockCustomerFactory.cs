@@ -5,9 +5,9 @@ using Orckestra.ForTests;
 using Orckestra.Overture.ServiceModel;
 using Orckestra.Overture.ServiceModel.Customers;
 
-namespace Orckestra.Composer.MyAccount.Tests.Mock
+namespace Orckestra.Composer.Tests.Mock
 {
-    internal static class MockCustomerFactory
+    public static class MockCustomerFactory
     {
         /// <summary>
         /// Gets a random Customer
