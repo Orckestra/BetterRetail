@@ -356,7 +356,7 @@ Enter your credit card information</value>
     <value>Order Details</value>
   </data>
   <data name="L_SignInNow" xml:space="preserve">
-    <value>Already a client?</value>
+    <value>Already a customer?</value>
   </data>
   <data name="B_SignInNow" xml:space="preserve">
     <value>Sign in now</value>
