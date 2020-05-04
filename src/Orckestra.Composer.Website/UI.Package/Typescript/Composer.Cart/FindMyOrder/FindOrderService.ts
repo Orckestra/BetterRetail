@@ -27,7 +27,7 @@ module Orckestra.Composer {
         }
 
         public addOrderToCurrentUser(orderNumber: string): Q.Promise<any> {
-            return ComposerClient.post(`/api/order/add-order/${orderNumber}`, {});
+            return ComposerClient.post(`/api/order/attach-customer/${orderNumber}`, {});
         }
     }
 }

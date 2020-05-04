@@ -113,7 +113,7 @@ namespace Orckestra.Composer.Cart.Api
         }
 
         [HttpPost]
-        [ActionName("add-order")]
+        [ActionName("attach-customer")]
         public virtual async Task<IHttpActionResult> AddOrderToCustomer(string id)
         {
             if (string.IsNullOrEmpty(id)) { return BadRequest("No order found."); }

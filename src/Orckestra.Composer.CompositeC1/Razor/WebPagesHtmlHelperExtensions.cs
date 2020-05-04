@@ -28,7 +28,7 @@ namespace Composite.AspNet.Razor
 
             if (args.Length > 0)
             {
-                helpText = Localized(category, key, args);
+                helpText = Format(helpText, category, key, args);
             }
 
             return new HtmlString(string.Format(@"data-toggle=""popover""
@@ -48,7 +48,7 @@ namespace Composite.AspNet.Razor
 
             if (args.Length > 0)
             {
-                message = Localized(category, key, args);
+                message = Format(message, category, key, args);
             }
         
             message = string.Format("data-parsley-{0}=\"{1}\"", dataParsleyKey, message);

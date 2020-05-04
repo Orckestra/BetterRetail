@@ -64,6 +64,7 @@ module Orckestra.Composer {
                             IsLoading: false,
                             IsAuthenticated: false,
                             PasswordStrength: '',
+                            ShowPassword: false,
                             ...result
                         },
                         mounted() {
@@ -97,6 +98,7 @@ module Orckestra.Composer {
                                 let parsleyInit = this.getCreateAccountForm().parsley();
                                 if (parsleyInit && !parsleyInit.validate()) { return; }
 
+                                this.IsLoading = true;
                                 self.createCustomer(this.CustomerFirstName, this.CustomerLastName, this.CustomerEmail, this.Password)
                                     .then(result => self.findOrderService.addOrderToCurrentUser(this.OrderNumber)
                                         .then(() => {
@@ -104,11 +106,17 @@ module Orckestra.Composer {
                                                 window.location.replace(decodeURIComponent(result.ReturnUrl));
                                             }
                                         })
-                                    );
+                                    )
+                                    .finally(() => {
+                                        this.IsLoading = false;
+                                    });
                             },
                             onChangePassword(e: any) {
                                 let { value } = e.target;
                                 this.PasswordStrength = self.passwordCheckService.checkPasswordStrength(value);
+                            },
+                            showPasswordToggle() {
+                                this.ShowPassword = !this.ShowPassword;
                             }
                         }
                     });
