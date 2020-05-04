@@ -8,7 +8,6 @@
 ///<reference path='../Composer.MyAccount/Common/MembershipService.ts' />
 ///<reference path='../Composer.MyAccount/Common/MyAccountEvents.ts' />
 ///<reference path='../Composer.MyAccount/Common/MyAccountStatus.ts' />
-///<reference path='../Composer.MyAccount/SignInHeader/SignInHeaderService.ts' />
 ///<reference path='../Utils/PasswordCheckService.ts' />
 
 module Orckestra.Composer {
@@ -19,7 +18,6 @@ module Orckestra.Composer {
         private cacheProvider: ICacheProvider;
         private findOrderService: IFindOrderService;
         private membershipService: IMembershipService;
-        private signInHeaderService: SignInHeaderService;
         private passwordCheckService: PasswordCheckService;
 
         private orderConfirmationCacheKey = 'orderConfirmationCacheKey';
@@ -32,7 +30,6 @@ module Orckestra.Composer {
             this.cacheProvider = CacheProvider.instance();
             this.findOrderService = new FindOrderService(this.eventHub);
             this.membershipService = new MembershipService(new MembershipRepository());
-            this.signInHeaderService = new SignInHeaderService(new SignInHeaderRepository());
             this.passwordCheckService = new PasswordCheckService({
                 passwordPattern: RegExp(this.context.container.data('password-pattern')),
                 minimumLength: this.context.container.data('password-length')
@@ -163,11 +160,7 @@ module Orckestra.Composer {
         }
 
         private IsAuthenticated(): Q.Promise<boolean> {
-            let cultureInfo = $('html').attr('lang');
-            let websiteId = $('html').data('website');
-            let param = { cultureInfo, websiteId };
-
-            return this.signInHeaderService.getSignInHeader(param).then(result => result.IsLoggedIn)
+            return this.membershipService.isAuthenticated().then(result => result.IsAuthenticated);
         }
     }
 }
