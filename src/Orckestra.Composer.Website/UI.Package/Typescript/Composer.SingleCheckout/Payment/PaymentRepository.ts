@@ -1,9 +1,9 @@
-///<reference path='../../../../Typings/tsd.d.ts' />
-///<reference path='../../../Mvc/ComposerClient.ts' />
+///<reference path='../../../Typings/tsd.d.ts' />
+///<reference path='../../Mvc/ComposerClient.ts' />
 ///<reference path="./IPaymentRepository.ts" />
-///<reference path="../ViewModels/IPaymentViewModel.ts" />
-///<reference path="../ViewModels/IActivePaymentViewModel.ts" />
-///<reference path="../ViewModels/IPaymentProfileListViewModel.ts" />
+///<reference path="./ViewModels/IPaymentViewModel.ts" />
+///<reference path="./ViewModels/IActivePaymentViewModel.ts" />
+///<reference path="./ViewModels/IPaymentProfileListViewModel.ts" />
 
 module Orckestra.Composer {
     export class PaymentRepository implements IPaymentRepository {

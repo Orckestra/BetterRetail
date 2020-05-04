@@ -1,5 +1,5 @@
-///<reference path='../../../../Typings/tsd.d.ts' />
-///<reference path='../ViewModels/IPaymentMethodViewModel.ts' />
+///<reference path='../../../Typings/tsd.d.ts' />
+///<reference path='./ViewModels/IPaymentMethodViewModel.ts' />
 
 module Orckestra.Composer {
     export interface IPaymentRepository {

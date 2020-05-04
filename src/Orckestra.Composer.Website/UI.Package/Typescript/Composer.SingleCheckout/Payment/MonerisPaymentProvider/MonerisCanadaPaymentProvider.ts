@@ -4,10 +4,10 @@
 ///<reference path='./Providers/BaseSpecializedMonerisCanadaPaymentProvider.ts' />
 ///<reference path='./Providers/CreditCardMonerisCanadaPaymentProvider.ts' />
 ///<reference path='./Providers/SavedCreditCardMonerisCanadaPaymentProvider.ts' />
-///<reference path='../CheckoutPayment/Providers/BaseCheckoutPaymentProvider.ts' />
-///<reference path='../../../Typings/tsd.d.ts' />
-///<reference path='../../Events/IEventHub.ts' />
-///<reference path='../../JQueryPlugins/ISerializeObjectJqueryPlugin.ts' />
+///<reference path='../BaseCheckoutPaymentProvider.ts' />
+///<reference path='../../../../Typings/tsd.d.ts' />
+///<reference path='../../../Events/IEventHub.ts' />
+///<reference path='../../../JQueryPlugins/ISerializeObjectJqueryPlugin.ts' />
 
 module Orckestra.Composer {
     'use strict';

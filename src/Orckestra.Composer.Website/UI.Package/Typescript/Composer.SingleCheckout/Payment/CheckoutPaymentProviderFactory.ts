@@ -1,5 +1,5 @@
-/// <reference path='../../../../Typings/tsd.d.ts' />
-/// <reference path='../../../Events/IEventHub.ts' />
+/// <reference path='../../../Typings/tsd.d.ts' />
+/// <reference path='../../Events/IEventHub.ts' />
 /// <reference path='./BaseCheckoutPaymentProvider.ts' />
 
 module Orckestra.Composer {

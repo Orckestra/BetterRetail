@@ -1,9 +1,9 @@
 ///<reference path='./ICreateVaultTokenOptions.ts' />
 ///<reference path='./ISetDefaultCustomerPaymentMethodViewModel.ts' />
 ///<reference path='./IMonerisAddVaultProfileViewModel.ts' />
-///<reference path='../CheckoutPayment/ViewModels/IPaymentMethodViewModel.ts' />
-///<reference path='../../../Typings/tsd.d.ts' />
-///<reference path='../../Mvc/ComposerClient.ts' />
+///<reference path='../ViewModels/IPaymentMethodViewModel.ts' />
+///<reference path='../../../../Typings/tsd.d.ts' />
+///<reference path='../../../Mvc/ComposerClient.ts' />
 
 module Orckestra.Composer {
     export class MonerisPaymentService {

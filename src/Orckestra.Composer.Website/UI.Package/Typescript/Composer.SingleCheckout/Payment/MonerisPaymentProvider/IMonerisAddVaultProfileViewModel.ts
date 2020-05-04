@@ -1,4 +1,4 @@
-/// <reference path="../CheckoutPayment/ViewModels/IActivePaymentViewModel.ts" />
+/// <reference path="../ViewModels/IActivePaymentViewModel.ts" />
 
 module Orckestra.Composer {
     export interface IMonerisAddVaultProfileViewModel {

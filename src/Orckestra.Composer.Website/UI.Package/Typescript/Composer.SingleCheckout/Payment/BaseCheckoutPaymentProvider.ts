@@ -1,6 +1,6 @@
-///<reference path='../../../../Typings/tsd.d.ts' />
-///<reference path='../../../System/IDisposable.ts' />
-///<reference path='../ViewModels/IActivePaymentViewModel.ts' />
+///<reference path='../../../Typings/tsd.d.ts' />
+///<reference path='../../System/IDisposable.ts' />
+///<reference path='./ViewModels/IActivePaymentViewModel.ts' />
 
 module Orckestra.Composer {
     'use strict';

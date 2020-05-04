@@ -1,5 +1,5 @@
-///<reference path='../../../Typings/tsd.d.ts' />
-///<reference path='../../Mvc/ComposerClient.ts' />
+///<reference path='../../Typings/tsd.d.ts' />
+///<reference path='../Mvc/ComposerClient.ts' />
 ///<reference path='./IRegionService.ts' />
 
 module Orckestra.Composer {

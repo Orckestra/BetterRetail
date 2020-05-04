@@ -1,6 +1,6 @@
 ///<reference path='../MonerisPaymentService.ts' />
-///<reference path='../../../../Typings/tsd.d.ts' />
-///<reference path='../../CheckoutPayment/ViewModels/IActivePaymentViewModel.ts' />
+///<reference path='../../../../../Typings/tsd.d.ts' />
+///<reference path='../../../Payment/ViewModels/IActivePaymentViewModel.ts' />
 
 module Orckestra.Composer {
     'use strict';

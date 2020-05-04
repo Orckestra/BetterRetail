@@ -1,11 +1,11 @@
 ///<reference path='./BaseSpecializedMonerisCanadaPaymentProvider.ts' />
 ///<reference path='../MonerisPaymentService.ts' />
 ///<reference path='../IMonerisResponseData.ts' />
-///<reference path='../../../../Typings/tsd.d.ts' />
-///<reference path='../../../JQueryPlugins/ISerializeObjectJqueryPlugin.ts' />
-///<reference path='../../../ErrorHandling/ErrorHandler.ts' />
-///<reference path='../../CheckoutPayment/ViewModels/IActivePaymentViewModel.ts' />
-///<reference path='../../../JQueryPlugins/IParsleyJqueryPlugin.ts' />
+///<reference path='../../../../../Typings/tsd.d.ts' />
+///<reference path='../../../../JQueryPlugins/ISerializeObjectJqueryPlugin.ts' />
+///<reference path='../../../../ErrorHandling/ErrorHandler.ts' />
+///<reference path='../../../Payment/ViewModels/IActivePaymentViewModel.ts' />
+///<reference path='../../../../JQueryPlugins/IParsleyJqueryPlugin.ts' />
 
 module Orckestra.Composer {
     'use strict';

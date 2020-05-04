@@ -1,7 +1,7 @@
-///<reference path='../../../Typings/tsd.d.ts' />
-///<reference path='../../Events/IEventHub.ts' />
-///<reference path='../CheckoutPayment/ViewModels/IActivePaymentViewModel.ts' />
-///<reference path='../CheckoutPayment/Providers/BaseCheckoutPaymentProvider.ts' />
+///<reference path='../../../../Typings/tsd.d.ts' />
+///<reference path='../../../Events/IEventHub.ts' />
+///<reference path='../ViewModels/IActivePaymentViewModel.ts' />
+///<reference path='../BaseCheckoutPaymentProvider.ts' />
 
 module Orckestra.Composer {
     'use strict';

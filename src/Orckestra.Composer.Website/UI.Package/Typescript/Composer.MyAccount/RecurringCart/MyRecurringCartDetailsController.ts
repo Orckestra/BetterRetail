@@ -9,7 +9,7 @@
 ///<reference path='../../Composer.Store/Store/IStoreService.ts' />
 ///<reference path='../../Composer.Store/Store/StoreService.ts' />
 ///<reference path='../../UI/UIModal.ts' />
-///<reference path='../../Composer.Cart/MonerisPaymentProvider/MonerisPaymentService.ts' />
+///<reference path='../../Composer.SingleCheckout/Payment/MonerisPaymentProvider/MonerisPaymentService.ts' />
 ///<reference path='../Common/MyAccountEvents.ts' />
 ///<reference path='../Common/DatepickerService.ts' />
 ///<reference path='../../Utils/Utils.ts' />
