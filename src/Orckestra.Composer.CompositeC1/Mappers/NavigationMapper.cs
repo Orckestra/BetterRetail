@@ -2,29 +2,22 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Web.UI.WebControls;
 using Composite.Data;
 using Orckestra.Composer.CompositeC1.DataTypes.Navigation;
 using Orckestra.Composer.CompositeC1.Utils;
 using Orckestra.Composer.Enums;
 using Orckestra.Composer.ViewModels.Home;
 using Orckestra.Composer.ViewModels.MenuNavigation;
-using System.Web;
-using Orckestra.Composer.Utils;
 
 namespace Orckestra.Composer.CompositeC1.Mappers
 {
-
     public class NavigationMapper : INavigationMapper
     {
         private readonly GoogleAnalyticsNavigationUrlProvider _analyticsNavigationUrlHelper;
 
         public NavigationMapper(GoogleAnalyticsNavigationUrlProvider analyticsNavigationUrlHelper)
         {
-            Guard.NotNull(analyticsNavigationUrlHelper, nameof(analyticsNavigationUrlHelper));
-
-            _analyticsNavigationUrlHelper = analyticsNavigationUrlHelper;
+            _analyticsNavigationUrlHelper = analyticsNavigationUrlHelper ?? throw new ArgumentNullException(nameof(analyticsNavigationUrlHelper));
         }
 
         public virtual IEnumerable<IMenuEntryViewModel> MapMainMenuItems(List<MainMenu> mainMenuItems, Guid? parentId = null)

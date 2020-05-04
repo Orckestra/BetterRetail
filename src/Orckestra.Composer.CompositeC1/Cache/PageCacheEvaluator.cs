@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 
 namespace Orckestra.Composer.CompositeC1.Cache
 {
@@ -8,7 +7,7 @@ namespace Orckestra.Composer.CompositeC1.Cache
         public bool ShouldCache(Uri requestUri)
         {
             var applicableExclusion =
-                CacheConfiguration.CacheExclusions.FirstOrDefault(ce => ce.ShouldApplyExclusion(requestUri));
+                CacheConfiguration.CacheExclusions.Find(ce => ce.ShouldApplyExclusion(requestUri));
 
             if (applicableExclusion != null)
             {

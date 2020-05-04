@@ -1,11 +1,11 @@
-﻿using Autofac.Integration.Mvc;
+﻿using System;
+using System.Linq;
+using System.Web;
+using Autofac.Integration.Mvc;
 using Newtonsoft.Json;
 using Orckestra.Composer.Logging;
 using Orckestra.Composer.Utils;
 using Orckestra.ExperienceManagement.Configuration;
-using System;
-using System.Linq;
-using System.Web;
 
 namespace Orckestra.Composer.Services.Cookie
 {
@@ -59,12 +59,8 @@ namespace Orckestra.Composer.Services.Cookie
 
         public ComposerCookieAccessor(HttpRequestBase httpRequest, HttpResponseBase httpResponse)
         {
-            //Dependencies
-            if (httpRequest  == null) { throw new ArgumentNullException("httpRequest"); }
-            if (httpResponse == null) { throw new ArgumentNullException("httpResponse"); }
-
-            _httpRequest  = httpRequest;
-            _httpResponse = httpResponse;
+            _httpRequest = httpRequest ?? throw new ArgumentNullException(nameof(httpRequest));
+            _httpResponse = httpResponse ?? throw new ArgumentNullException(nameof(httpResponse));
 
             _websiteContext =
                 (IWebsiteContext) AutofacDependencyResolver.Current.GetService(typeof(IWebsiteContext));
@@ -109,8 +105,7 @@ namespace Orckestra.Composer.Services.Cookie
 
                 string[] pack = cookieValue.Split(ValidSeparators, 2, StringSplitOptions.None);
                 //Extract back the version (Item1)
-                int version;
-                if (!int.TryParse(pack.FirstOrDefault() ?? string.Empty, out version))
+                if (!int.TryParse(pack.FirstOrDefault() ?? string.Empty, out int version))
                 {
                     version = 0;
                 }
@@ -173,10 +168,12 @@ namespace Orckestra.Composer.Services.Cookie
             string cookieValue = string.Join(ExposedSeparator, Version.ToString(), protectedPayload);
 
             //Write to cookie
-            HttpCookie cookie = new HttpCookie(_cookieName, cookieValue);
-            cookie.Secure   = _requireSsl;
-            cookie.HttpOnly = true;
-            cookie.Expires  = DateTime.UtcNow.AddMinutes(_timeoutInMinutes);
+            HttpCookie cookie = new HttpCookie(_cookieName, cookieValue)
+            {
+                Secure = _requireSsl,
+                HttpOnly = true,
+                Expires = DateTime.UtcNow.AddMinutes(_timeoutInMinutes)
+            };
             if (!string.IsNullOrWhiteSpace(_cookieDomain))
             {
                 cookie.Domain = _cookieDomain;
@@ -190,7 +187,7 @@ namespace Orckestra.Composer.Services.Cookie
 
         public void Clear()
         {
-            var cookie = new HttpCookie(_cookieName, "")
+            var cookie = new HttpCookie(_cookieName, string.Empty)
             {
                 HttpOnly = true,
                 Secure = _requireSsl,

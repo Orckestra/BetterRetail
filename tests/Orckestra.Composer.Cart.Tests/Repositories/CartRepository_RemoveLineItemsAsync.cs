@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using FizzWare.NBuilder.Generators;
 using FluentAssertions;
@@ -14,6 +13,7 @@ using Orckestra.Overture;
 using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel.Orders;
 using Orckestra.Overture.ServiceModel.Requests.Orders.Shopping.LineItems;
+using static Orckestra.Composer.Utils.ExpressionUtility;
 
 namespace Orckestra.Composer.Cart.Tests.Repositories
 {
@@ -217,12 +217,11 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var sut = Container.CreateInstance<CartRepository>();
 
             //Act
-            var exception = Assert.ThrowsAsync<ArgumentException>(() => sut.RemoveLineItemsAsync(p));
+            Expression<Func<Task<ProcessedCart>>> expression = () => sut.RemoveLineItemsAsync(p);
+            var exception = Assert.ThrowsAsync<InvalidOperationException>(() => expression.Compile().Invoke());
 
             //Assert
-            exception.ParamName.Should().NotBeNullOrWhiteSpace();
-            exception.Message.Should().ContainEquivalentOf("LineItems");
-            exception.Message.Should().ContainEquivalentOf("Id");
+            exception.Message.Should().ContainEquivalentOf("Line item with index ");
         }
         
         [TestCase(null)]
@@ -251,12 +250,11 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var sut = Container.CreateInstance<CartRepository>();
 
             //Act
-            var exception = Assert.ThrowsAsync<ArgumentException>(() => sut.RemoveLineItemsAsync(p));
+            Expression<Func<Task<ProcessedCart>>> expression = () => sut.RemoveLineItemsAsync(p);
+            var exception = Assert.ThrowsAsync<InvalidOperationException>(() => expression.Compile().Invoke());
 
             //Assert
-            exception.ParamName.Should().NotBeNullOrWhiteSpace();
-            exception.Message.Should().ContainEquivalentOf("LineItems");
-            exception.Message.Should().ContainEquivalentOf("ProductId");
+            exception.Message.Should().ContainEquivalentOf("Line item with index ");
         }
 
         [Test]

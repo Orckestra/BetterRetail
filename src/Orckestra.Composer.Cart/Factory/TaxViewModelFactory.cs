@@ -18,19 +18,13 @@ namespace Orckestra.Composer.Cart.Factory
         public TaxViewModelFactory(IViewModelMapper viewModelMapper,
             ILocalizationProvider localizationProvider)
         {
-            if (localizationProvider == null) { throw new ArgumentNullException("localizationProvider"); }
-            if (viewModelMapper == null) { throw new ArgumentNullException("viewModelMapper"); }
-
-            ViewModelMapper = viewModelMapper;
-            LocalizationProvider = localizationProvider;
+            ViewModelMapper = viewModelMapper ?? throw new ArgumentNullException(nameof(viewModelMapper));
+            LocalizationProvider = localizationProvider ?? throw new ArgumentNullException(nameof(localizationProvider));
         }
 
         public virtual IEnumerable<TaxViewModel> CreateTaxViewModels(IEnumerable<Tax> taxes, CultureInfo cultureInfo)
         {
-            if (taxes == null)
-            {
-                yield break;
-            }
+            if (taxes == null) { yield break; }
 
             var taxesByCodes = taxes.Where(x=>x.TaxTotal.HasValue && x.TaxTotal.Value > 0).GroupBy(t => t.DisplayName);
 

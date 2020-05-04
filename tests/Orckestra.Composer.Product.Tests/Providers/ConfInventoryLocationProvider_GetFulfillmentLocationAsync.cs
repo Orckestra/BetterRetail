@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using FizzWare.NBuilder.Generators;
 using FluentAssertions;
@@ -98,7 +99,7 @@ namespace Orckestra.Composer.Product.Tests.Providers
         }
 
         [Test]
-        public void WHEN_Locations_do_not_contain_default_id_THROWS_ArgumentException()
+        public void WHEN_Locations_do_not_contain_default_id_THROWS_InvalidOperationException()
         {
             //Arrange
             var defaultInventoryLocationId = GetRandom.String(6); //Changing the ID between generation of list and execution of SUT.
@@ -111,13 +112,11 @@ namespace Orckestra.Composer.Product.Tests.Providers
             var sut = Container.CreateInstance<ConfigurationInventoryLocationProvider>();
 
             //Act
-            var exception = Assert.ThrowsAsync<ArgumentException>(() => sut.GetFulfillmentLocationAsync(p));
+            Expression<Func<Task<FulfillmentLocation>>> expression = () => sut.GetFulfillmentLocationAsync(p);
+            var exception = Assert.ThrowsAsync<InvalidOperationException>(() => expression.Compile().Invoke());
 
             //Assert
-            exception.Should().NotBeNull();
-            exception.ParamName.ShouldBeEquivalentTo("param");
-            exception.Message.Should().ContainEquivalentOf(p.Scope);
-            exception.Message.Should().ContainEquivalentOf(defaultInventoryLocationId);
+            exception.Message.Should().ContainEquivalentOf("Could not find any active fulfillment location in the scope");
         }
 
     }

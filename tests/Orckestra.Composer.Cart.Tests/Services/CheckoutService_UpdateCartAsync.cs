@@ -166,7 +166,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
             var service = _container.CreateInstance<CheckoutService>();
 
             // Act and Assert
-            Assert.Throws<ArgumentNullException>(() => service.RegisterCartUpdateOperation<CustomerSummaryViewModel>(operationName, UpdateCustomerCustom, GetRandom.PositiveInt(100)));
+            Assert.Throws<ArgumentException>(() => service.RegisterCartUpdateOperation<CustomerSummaryViewModel>(operationName, UpdateCustomerCustom, GetRandom.PositiveInt(100)));
         }
 
         [Test]

@@ -224,9 +224,8 @@ namespace Orckestra.Composer.Product.Tests.Services
                 .Setup(lp => lp.GetLocalizedString(It.IsNotNull<GetLocalizedParam>()))
                 .Returns<GetLocalizedParam>(param =>
                 {
-                    string value;
                     string key = string.Format("{0}.{1}", param.Category, param.Key);
-                    if (!dummyFormats.TryGetValue(key, out value))
+                    if (!dummyFormats.TryGetValue(key, out string value))
                     {
                         value = null;
                     }

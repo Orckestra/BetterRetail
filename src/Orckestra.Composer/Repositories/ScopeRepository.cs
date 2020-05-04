@@ -2,11 +2,12 @@
 using System.Threading.Tasks;
 using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Parameters;
-using Orckestra.Composer.Providers;
 using Orckestra.Overture;
 using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel;
 using Orckestra.Overture.ServiceModel.Requests;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
+
 
 namespace Orckestra.Composer.Repositories
 {
@@ -29,8 +30,8 @@ namespace Orckestra.Composer.Repositories
         /// <returns></returns>
         public virtual Task<Scope> GetScopeAsync(GetScopeParam param)
         {
-            if(param == null) { throw new ArgumentNullException(nameof(param)); }
-            if(string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException("Scope is required", nameof(param.Scope)); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
 
             var key = new CacheKey(CacheConfigurationCategoryNames.Scopes, param.Scope);
 

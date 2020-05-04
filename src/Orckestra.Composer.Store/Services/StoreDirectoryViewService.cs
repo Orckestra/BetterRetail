@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Store.Services
 {
@@ -36,24 +37,26 @@ namespace Orckestra.Composer.Store.Services
             LocalizationProvider = localizationProvider;
             CountryService = countryService;
         }
-        public virtual async Task<StoreDirectoryViewModel> GetStoreDirectoryViewModelAsync(GetStoresParam viewModelParam)
+        public virtual async Task<StoreDirectoryViewModel> GetStoreDirectoryViewModelAsync(GetStoresParam param)
         {
-            if (string.IsNullOrWhiteSpace(viewModelParam.Scope)) { throw new ArgumentException("scope"); }
-            if (viewModelParam.CultureInfo == null) { throw new ArgumentNullException("cultureInfo"); }
-            if (string.IsNullOrWhiteSpace(viewModelParam.BaseUrl)) { throw new ArgumentException("baseUrl"); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.BaseUrl)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.BaseUrl)), nameof(param)); }
 
-            var model = new StoreDirectoryViewModel();
-            model.StoreLocatorPageUrl = StoreUrlProvider.GetStoreLocatorUrl(new GetStoreLocatorUrlParam
+            var model = new StoreDirectoryViewModel
             {
-                BaseUrl = viewModelParam.BaseUrl,
-                CultureInfo = viewModelParam.CultureInfo,
-                Page = 1
-            });
+                StoreLocatorPageUrl = StoreUrlProvider.GetStoreLocatorUrl(new GetStoreLocatorUrlParam
+                {
+                    BaseUrl = param.BaseUrl,
+                    CultureInfo = param.CultureInfo,
+                    Page = 1
+                })
+            };
 
             var overtureStores = await StoreRepository.GetStoresAsync(new GetStoresParam
             {
-                CultureInfo = viewModelParam.CultureInfo,
-                Scope = viewModelParam.Scope,
+                CultureInfo = param.CultureInfo,
+                Scope = param.Scope,
                 PageNumber = 1,
                 PageSize = int.MaxValue
             }).ConfigureAwait(false);
@@ -61,25 +64,22 @@ namespace Orckestra.Composer.Store.Services
             var sortedResults = SortStoreDirectoryResult(overtureStores.Results);
 
             //get result for currect page
-            var totalCount = sortedResults.Count();
-            var result =
-                sortedResults.Skip((viewModelParam.PageNumber - 1) * viewModelParam.PageSize)
-                    .Take(viewModelParam.PageSize).OrderBy(st => st.Name).ToList();
+            var totalCount = sortedResults.Count;
+            var result = sortedResults.Skip((param.PageNumber - 1) * param.PageSize).Take(param.PageSize).OrderBy(st => st.Name).ToList();
 
-            var stores =
-                result.Select(it => StoreViewModelFactory.CreateStoreViewModel(new CreateStoreViewModelParam
-                {
-                    Store = it,
-                    CultureInfo = viewModelParam.CultureInfo,
-                    BaseUrl = viewModelParam.BaseUrl
-                })).ToList();
+            var stores = result.Select(it => StoreViewModelFactory.CreateStoreViewModel(new CreateStoreViewModelParam
+            {
+                Store = it,
+                CultureInfo = param.CultureInfo,
+                BaseUrl = param.BaseUrl
+            })).ToList();
 
-            model.Pagination = BuildPagination(totalCount, viewModelParam);
-            model.Groups = await GetStoreDirectoryGroupsAsync(stores, viewModelParam);
+            model.Pagination = BuildPagination(totalCount, param);
+            model.Groups = await GetStoreDirectoryGroupsAsync(stores, param);
 
             foreach (var countryGroup in model.Groups)
             {
-                countryGroup.Anchors = await GetStoreDirectoryCountryGroupAnchorsAsync(sortedResults, countryGroup, viewModelParam);
+                countryGroup.Anchors = await GetStoreDirectoryCountryGroupAnchorsAsync(sortedResults, countryGroup, param);
             }
 
             return model;
@@ -154,15 +154,15 @@ namespace Orckestra.Composer.Store.Services
 
                 //reduce the list recursively until zero
                 var nextSelectors = groupSelectors.Skip(1).ToArray();
-                return
-                    elements.GroupBy(selector).OrderBy(g => g.Key).Select(
+                return elements.GroupBy(selector).OrderBy(g => g.Key).Select(
                         g => new StoreDirectoryGroupViewModel
                         {
                             Key = g.Key,
                             Count = g.Count(),
                             Items = g.ToList(),
-                            SubGroups =
-                                nextSelectors.Any() ? StoreDirectoryGroupByMany(g, nextSelectors).ToList() : null
+                            SubGroups = nextSelectors.Any() 
+                                        ? StoreDirectoryGroupByMany(g, nextSelectors).ToList() 
+                                        : null
                         });
             }
             return null;
@@ -183,13 +183,12 @@ namespace Orckestra.Composer.Store.Services
 
                 foreach (var regionGroup in countryGroup.SubGroups)
                 {
-                    regionGroup.DisplayName =
-                        await CountryService.RetrieveRegionDisplayNameAsync(new RetrieveRegionDisplayNameParam
-                        {
-                            CultureInfo = viewModelParam.CultureInfo,
-                            IsoCode = countryCode,
-                            RegionCode = regionGroup.Key.ToString()
-                        });
+                    regionGroup.DisplayName = await CountryService.RetrieveRegionDisplayNameAsync(new RetrieveRegionDisplayNameParam
+                    {
+                        CultureInfo = viewModelParam.CultureInfo,
+                        IsoCode = countryCode,
+                        RegionCode = regionGroup.Key.ToString()
+                    });
                 }
             }
             return groups;
@@ -224,7 +223,9 @@ namespace Orckestra.Composer.Store.Services
                         RegionCode = region
                     }),
                 Key = "#" + region,
-                    Url = pageNumber == viewModelParam.PageNumber ? string.Empty : StoreUrlProvider.GetStoresDirectoryUrl(new GetStoresDirectoryUrlParam
+                    Url = pageNumber == viewModelParam.PageNumber 
+                    ? string.Empty 
+                    : StoreUrlProvider.GetStoresDirectoryUrl(new GetStoresDirectoryUrlParam
                     {
                         BaseUrl = viewModelParam.BaseUrl,
                         CultureInfo = viewModelParam.CultureInfo,

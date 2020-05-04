@@ -3,6 +3,7 @@ using System.Configuration;
 using System.Linq;
 using System.Web.Configuration;
 using Orckestra.Composer.Logging;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Services
 {
@@ -21,7 +22,7 @@ namespace Orckestra.Composer.Services
         /// <returns></returns>
         public T GetAppSetting<T>(string settingName)
         {
-            if (string.IsNullOrWhiteSpace(settingName)) { throw new ArgumentException("settingName cannot be null or whitespace."); }
+            if (string.IsNullOrWhiteSpace(settingName)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(), nameof(settingName)); }
 
             if (!IsSettingInAppSettings(settingName))
             {
@@ -50,7 +51,7 @@ namespace Orckestra.Composer.Services
             {
                 Log.ErrorException(ex.Message, ex);               
 
-                return default(T);
+                return default;
             }
         }
 

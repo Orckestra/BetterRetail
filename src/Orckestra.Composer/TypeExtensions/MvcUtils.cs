@@ -26,7 +26,7 @@ namespace Orckestra.Composer.TypeExtensions
         /// <returns>Enumeration of controllers discovered. If none found, will return an empty enumeration.</returns>
         public static IEnumerable<Type> GetControllerTypes(_Assembly assemblyToCrawl)
         {
-            if (assemblyToCrawl == null) { throw new ArgumentNullException("assemblyToCrawl"); }
+            if (assemblyToCrawl == null) { throw new ArgumentNullException(nameof(assemblyToCrawl)); }
 
             var controllerTypes =
                 assemblyToCrawl.GetTypes().Where(t => t.Inherits<Controller>() && t.IsPublic && !t.IsAbstract && ControllerNameRegex.IsMatch(t.Name));
@@ -41,7 +41,7 @@ namespace Orckestra.Composer.TypeExtensions
         /// <returns></returns>
         public static IEnumerable<MethodInfo> GetActionInfos(Type controllerType)
         {
-            if (controllerType == null) { throw new ArgumentNullException("controllerType"); }
+            if (controllerType == null) { throw new ArgumentNullException(nameof(controllerType)); }
 
             var actionInfos = controllerType
                 .GetMethods(Flags.InstancePublic)

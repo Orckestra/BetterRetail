@@ -9,6 +9,8 @@ using Orckestra.Composer.Store.ViewModels;
 using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel.Customers;
 
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
+
 namespace Orckestra.Composer.Store.Services
 {
     public class StoreScheduleViewService : IStoreScheduleViewService
@@ -28,9 +30,9 @@ namespace Orckestra.Composer.Store.Services
         }
         public virtual async Task<StoreScheduleViewModel> GetStoreScheduleViewModelAsync(GetStoreScheduleParam param)
         {
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException("scope"); }
-            if (param.CultureInfo == null) { throw new ArgumentNullException("cultureInfo"); }
-            if (param.FulfillmentLocationId == null) { throw new ArgumentException("fulfillmentLocationId"); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
+            if (param.FulfillmentLocationId == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.FulfillmentLocationId)), nameof(param)); }
 
             var overtureSchedule = await StoreRepository.GetStoreScheduleAsync(param).ConfigureAwait(false);
             var model = ViewModelMapper.MapTo<StoreScheduleViewModel>(overtureSchedule, param.CultureInfo);

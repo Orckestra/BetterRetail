@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Specialized;
 using System.Web.Mvc;
-using Composite.Data;
 using Orckestra.Composer.Cart.Parameters.Order;
 using Orckestra.Composer.Cart.Services.Order;
 using Orckestra.Composer.Cart.Utils;
@@ -23,13 +22,9 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             IOrderUrlProvider orderUrlProvider,
             IOrderHistoryViewService orderHistoryViewService)
         {
-            if (composerContext == null) { throw new ArgumentNullException("composerContext"); }
-            if (orderUrlProvider == null) { throw new ArgumentNullException("orderUrlProvider"); }
-            if (orderHistoryViewService == null) { throw new ArgumentNullException("orderHistoryViewService"); }
-
-            ComposerContext = composerContext;
-            OrderUrlProvider = orderUrlProvider;
-            OrderHistoryViewService = orderHistoryViewService;
+            ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
+            OrderUrlProvider = orderUrlProvider ?? throw new ArgumentNullException(nameof(orderUrlProvider));
+            OrderHistoryViewService = orderHistoryViewService ?? throw new ArgumentNullException(nameof(orderHistoryViewService));
         }
 
         public virtual ActionResult FindMyOrder(bool? orderNotFound)

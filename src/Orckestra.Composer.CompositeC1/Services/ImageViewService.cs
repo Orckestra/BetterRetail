@@ -1,8 +1,8 @@
-﻿using Orckestra.Composer.Services;
+﻿using System;
+using System.Globalization;
+using Orckestra.Composer.Services;
 using Orckestra.Composer.ViewModels;
 using Orckestra.ExperienceManagement.Configuration;
-using System;
-using System.Globalization;
 
 namespace Orckestra.Composer.CompositeC1.Services
 {
@@ -14,16 +14,14 @@ namespace Orckestra.Composer.CompositeC1.Services
 
         public ImageViewService(IMediaService mediaService, IWebsiteContext websiteContext, ISiteConfiguration siteConfiguration)
         {
-            if (mediaService == null) { throw new ArgumentNullException("mediaService"); }
-
-            MediaService = mediaService;
+            MediaService = mediaService ?? throw new ArgumentNullException(nameof(mediaService));
             WebsiteContext = websiteContext;
             SiteConfiguration = siteConfiguration;
         }
 
         public virtual ImageViewModel GetCheckoutTrustImageViewModel(CultureInfo cultureInfo)
         {
-            if (cultureInfo == null) { throw new ArgumentNullException("cultureInfo"); }
+            if (cultureInfo == null) { throw new ArgumentNullException(nameof(cultureInfo)); }
 
             var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(cultureInfo, WebsiteContext.WebsiteId);
             var imageInfo = MediaService.GetImageInfo(pagesConfiguration.CreditCardsTrustIconId, cultureInfo);

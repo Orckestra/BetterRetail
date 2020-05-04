@@ -119,7 +119,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
 
             //Assert
             result.Should().NotBeNull();
-            result.PaymentMethods.Count().ShouldBeEquivalentTo(1);
+            result.PaymentMethods.Count.ShouldBeEquivalentTo(1);
             var paymentMethod = result.PaymentMethods.FirstOrDefault();
             paymentMethod.Should().NotBeNull();
             paymentMethod.Id.ShouldBeEquivalentTo(activeMethodId);

@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using Orckestra.Composer.Cart.Providers.ShippingTracking;
 using Orckestra.Composer.Providers;
-using Orckestra.Composer.Utils;
 using Orckestra.Overture;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Cart.Factory.Order
 {
@@ -20,7 +20,7 @@ namespace Orckestra.Composer.Cart.Factory.Order
      
         public IShippingTrackingProvider ResolveProvider(string name)
         {
-            if (String.IsNullOrWhiteSpace(name)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("name"), "name"); }
+            if (string.IsNullOrWhiteSpace(name)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(), nameof(name)); }
 
             Type providerType;
             if (!ShippingTrackingProviderRegistry.IsProviderRegistered(name))

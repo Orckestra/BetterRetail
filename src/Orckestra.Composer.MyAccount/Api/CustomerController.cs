@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Orckestra.Composer.MyAccount.Parameters;
@@ -68,10 +67,7 @@ namespace Orckestra.Composer.MyAccount.Api
 
             var viewModel = await CustomerViewService.UpdateAccountAsync(param);
 
-            if (viewModel == null)
-            {
-                return Unauthorized();
-            }
+            if (viewModel == null) { return Unauthorized(); }
 
             viewModel.AddressListUrl = addressListUrl;
             viewModel.ChangePasswordUrl = changePasswordUrl;
@@ -85,7 +81,6 @@ namespace Orckestra.Composer.MyAccount.Api
         //TODO: Change the method name for GetAdressListAsync or something similar because it confuse people
         public virtual async Task<IHttpActionResult> GetShippingAddressAsync()
         {
-
             var viewModel = await CustomerAddressViewService.GetAddressListViewModelAsync(new GetAddressListViewModelParam
             {
                 CustomerId = ComposerContext.CustomerId,
@@ -172,10 +167,7 @@ namespace Orckestra.Composer.MyAccount.Api
                 ReturnUrl = returnUrl
             });
 
-            if (viewModel == null)
-            {
-                return Unauthorized();
-            }
+            if (viewModel == null) { return Unauthorized(); }
 
             return Ok(viewModel);
         }
@@ -191,10 +183,7 @@ namespace Orckestra.Composer.MyAccount.Api
                 AddressId = id
             });
 
-            if (viewModel == null)
-            {
-                return Unauthorized();
-            }
+            if (viewModel == null) { return Unauthorized(); }
 
             return Ok(viewModel);
         }
@@ -210,10 +199,7 @@ namespace Orckestra.Composer.MyAccount.Api
                 AddressId = id
             });
 
-            if (viewModel == null)
-            {
-                return Unauthorized();
-            }
+            if (viewModel == null) { return Unauthorized(); }
 
             return Ok(viewModel);
         }
@@ -241,9 +227,18 @@ namespace Orckestra.Composer.MyAccount.Api
                 RecurringScheduleId = request.Id
             });
 
-            var addAddressUrl = MyAccountUrlProvider.GetAddAddressUrl(new BaseUrlParameter { CultureInfo = ComposerContext.CultureInfo, ReturnUrl = recurringOrderScheduleUrl });
-            var editAddressBaseUrl = MyAccountUrlProvider.GetUpdateAddressBaseUrl(new BaseUrlParameter { CultureInfo = ComposerContext.CultureInfo, ReturnUrl = recurringOrderScheduleUrl });
+            var addAddressUrl = MyAccountUrlProvider.GetAddAddressUrl(new BaseUrlParameter 
+            { 
+                CultureInfo = ComposerContext.CultureInfo, 
+                ReturnUrl = recurringOrderScheduleUrl 
+            });
 
+            var editAddressBaseUrl = MyAccountUrlProvider.GetUpdateAddressBaseUrl(new BaseUrlParameter 
+            { 
+                CultureInfo = ComposerContext.CultureInfo, 
+                ReturnUrl = recurringOrderScheduleUrl 
+            });
+            
             var viewModel = await CustomerAddressViewService.GetAddressListViewModelAsync(new GetAddressListViewModelParam
             {
                 CustomerId = ComposerContext.CustomerId,

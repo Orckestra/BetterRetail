@@ -117,7 +117,7 @@ namespace Orckestra.Composer.Product.Tests.Services
         }
 
         [Test]
-        public void WHEN_Passing_Null_ScopeId_SHOULD_Throw_NullArgumentException()
+        public void WHEN_Passing_Null_ScopeId_SHOULD_Throw_ArgumentException()
         {
             var inventoryRepository = new Mock<IInventoryRepository>();
             var viewModelMapper = new Mock<IViewModelMapper>();
@@ -134,11 +134,11 @@ namespace Orckestra.Composer.Product.Tests.Services
                 }
             };
 
-            Assert.ThrowsAsync<ArgumentNullException>(() => inventoryViewService.FindInventoryItemStatus(param));
+            Assert.ThrowsAsync<ArgumentException>(() => inventoryViewService.FindInventoryItemStatus(param));
         }
 
         [Test]
-        public void WHEN_Passing_Null_Skus_SHOULD_Throw_NullArgumentException()
+        public void WHEN_Passing_Null_Skus_SHOULD_Throw_ArgumentException()
         {
             var inventoryRepository = new Mock<IInventoryRepository>();
             var viewModelMapper = new Mock<IViewModelMapper>();
@@ -152,7 +152,7 @@ namespace Orckestra.Composer.Product.Tests.Services
                 Skus = null
             };
 
-            Assert.ThrowsAsync<ArgumentNullException>(() => inventoryViewService.FindInventoryItemStatus(param));
+            Assert.ThrowsAsync<ArgumentException>(() => inventoryViewService.FindInventoryItemStatus(param));
         }
 
         [Test]

@@ -17,6 +17,10 @@ using Orckestra.Composer.Providers.Localization;
 using Orckestra.Composer.Repositories;
 using Orckestra.Composer.Services;
 using Orckestra.Overture.ServiceModel.Products;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
+using static Orckestra.Composer.Utils.ExpressionUtility;
+using System.Linq.Expressions;
+using Orckestra.Composer.ViewModels;
 
 namespace Orckestra.Composer.Product.Tests.Services
 {
@@ -120,16 +124,17 @@ namespace Orckestra.Composer.Product.Tests.Services
             //Arrange
             _container.Use(CreateProductRepositoryWithProductPriceNoVariant());
             var productService = _container.CreateInstance<ProductPriceViewService>();
+            var param = new GetProductsPriceParam();
 
             //Act
-            var action = new Action(async () => await productService.CalculatePricesAsync(new GetProductsPriceParam()));
+            var action = new Action(async () => await productService.CalculatePricesAsync(param));
 
             // Act
-            var exception = Assert.ThrowsAsync<ArgumentNullException>(() => productService.CalculatePricesAsync(null));
+            Expression<Func<Task<ProductsPricesViewModel>>> expression = () => productService.CalculatePricesAsync(null);
+            var exception = Assert.ThrowsAsync<ArgumentNullException>(() => expression.Compile().Invoke());
 
             //Assert
-            exception.ParamName.Should().BeSameAs("getProductPriceParam");
-
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
         }
 
         [Test]
@@ -149,10 +154,12 @@ namespace Orckestra.Composer.Product.Tests.Services
             };
 
             // Act
-            var exception = Assert.ThrowsAsync<ArgumentException>(() => productService.CalculatePricesAsync(param));
+            Expression<Func<Task<ProductsPricesViewModel>>> expression = () => productService.CalculatePricesAsync(param);
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => expression.Compile().Invoke());
 
             //Assert
-            exception.ParamName.Should().BeSameAs("getProductPriceParam");
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
+            exception.Message.Should().StartWith(GetMessageOfNullEmpty(nameof(param.Scope)));
         }
 
         [Test]
@@ -172,10 +179,11 @@ namespace Orckestra.Composer.Product.Tests.Services
             };
 
             // Act
-            var exception = Assert.ThrowsAsync<ArgumentException>(() => productService.CalculatePricesAsync(param));
+            Expression<Func<Task<ProductsPricesViewModel>>> expression = () => productService.CalculatePricesAsync(param);
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => expression.Compile().Invoke());
 
             //Assert
-            exception.ParamName.Should().BeSameAs("getProductPriceParam");
+            exception.Message.Should().StartWith(GetMessageOfNull(nameof(param.CultureInfo)));
         }
 
         #region Mock

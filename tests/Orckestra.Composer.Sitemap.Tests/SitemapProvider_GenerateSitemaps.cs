@@ -49,9 +49,9 @@ namespace Orckestra.Composer.Sitemap.Tests
             }).ToArray();
 
             // ASSERT
-            sitemaps.Count().Should().Be(2);
-            sitemaps.ElementAt(0).Entries.Count().Should().Be(1000);
-            sitemaps.ElementAt(1).Entries.Count().Should().Be(3);
+            sitemaps.Length.Should().Be(2);
+            sitemaps.ElementAt(0).Entries.Length.Should().Be(1000);
+            sitemaps.ElementAt(1).Entries.Length.Should().Be(3);
 
             // Verify that entry provider has been called 2 times
             provider.Verify(p => p.GetEntriesAsync(It.IsAny<SitemapParams>(), It.IsAny<CultureInfo>(), It.IsAny<int>(), It.IsAny<int>()), Times.Exactly(2));
@@ -79,8 +79,8 @@ namespace Orckestra.Composer.Sitemap.Tests
             }).ToArray();
 
             // ASSERT            
-            sitemaps.Count().Should().Be(1);
-            sitemaps.ElementAt(0).Entries.Count().Should().Be(500);
+            sitemaps.Length.Should().Be(1);
+            sitemaps.ElementAt(0).Entries.Length.Should().Be(500);
 
             // Verify that entry provider has not been called 1 time
             provider.Verify(p => p.GetEntriesAsync(It.IsAny<SitemapParams>(), It.IsAny<CultureInfo>(), It.IsAny<int>(), It.IsAny<int>()), Times.Once());

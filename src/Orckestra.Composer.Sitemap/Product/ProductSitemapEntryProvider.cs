@@ -1,17 +1,17 @@
-﻿using Orckestra.Composer.Providers;
-using Orckestra.Composer.Utils;
-using Orckestra.Overture;
-using Orckestra.Overture.ServiceModel.Requests.Search;
-using Orckestra.Overture.ServiceModel.Search;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using Orckestra.Overture.ServiceModel;
 using Orckestra.Composer.Logging;
+using Orckestra.Composer.Providers;
 using Orckestra.Composer.Sitemap.Factory;
 using Orckestra.Composer.Sitemap.Models;
+using Orckestra.Overture;
+using Orckestra.Overture.ServiceModel;
+using Orckestra.Overture.ServiceModel.Requests.Search;
+using Orckestra.Overture.ServiceModel.Search;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Sitemap.Product
 {
@@ -30,24 +30,21 @@ namespace Orckestra.Composer.Sitemap.Product
 
         public ProductSitemapEntryProvider(IOvertureClient overtureClient, IProductUrlProvider productUrlProvider, IProductUrlParamFactory productUrlParamFactory)
         {
-            Guard.NotNull(overtureClient, nameof(overtureClient));
-            Guard.NotNull(productUrlProvider, nameof(productUrlProvider));
-
-            _overtureClient = overtureClient;
-            _productUrlProvider = productUrlProvider;
+            _overtureClient = overtureClient ?? throw new ArgumentNullException(nameof(overtureClient));
+            _productUrlProvider = productUrlProvider ?? throw new ArgumentNullException(nameof(productUrlProvider));
             _productUrlParamFactory = productUrlParamFactory;
         }
 
-        public virtual async Task<IEnumerable<SitemapEntry>> GetEntriesAsync(SitemapParams sitemapParams, CultureInfo culture, int offset, int count)
+        public virtual async Task<IEnumerable<SitemapEntry>> GetEntriesAsync(SitemapParams param, CultureInfo culture, int offset, int count)
         {
-            Guard.NotNull(sitemapParams, nameof(sitemapParams));
-            Guard.NotNullOrWhiteSpace(sitemapParams.BaseUrl, $"{nameof(sitemapParams)}.{nameof(sitemapParams.BaseUrl)}");
-            Guard.NotNullOrWhiteSpace(sitemapParams.Scope, $"{nameof(sitemapParams)}.{nameof(sitemapParams.Scope)}");
-            Guard.NotNull(culture, nameof(culture));
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.BaseUrl)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.BaseUrl)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
+            if (culture == null) { throw new ArgumentNullException(nameof(culture)); }
 
             var request = new SearchProductRequest
             {
-                ScopeId = sitemapParams.Scope,
+                ScopeId = param.Scope,
                 CultureName = culture.Name,
                 Keywords = "*",
                 StartingIndex = offset,
@@ -57,12 +54,9 @@ namespace Orckestra.Composer.Sitemap.Product
 
             var response = await _overtureClient.SendAsync(request).ConfigureAwait(false);
 
-            if (!response.Documents.Any())
-            {
-                return Enumerable.Empty<SitemapEntry>();
-            }
+            if (!response.Documents.Any()) { return Enumerable.Empty<SitemapEntry>(); }
 
-            return CreateStandardSitemapEntries(sitemapParams, response.Documents, culture);
+            return CreateStandardSitemapEntries(param, response.Documents, culture);
         }
 
         protected virtual IEnumerable<SitemapEntry> CreateStandardSitemapEntries(SitemapParams sitemapParams, List<Document> documents, CultureInfo culture)

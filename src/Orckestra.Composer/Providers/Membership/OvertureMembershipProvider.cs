@@ -61,8 +61,7 @@ namespace Orckestra.Composer.Providers.Membership
         {
             get
             {
-                MembershipPasswordFormat passwordFormat;
-                if (!Enum.TryParse(_configuration.PasswordStrategy.ToString(), out passwordFormat))
+                if (!Enum.TryParse(_configuration.PasswordStrategy.ToString(), out MembershipPasswordFormat passwordFormat))
                 {
                     throw new InvalidOperationException(
                         "Unable to parse MembershipPasswordFormat from Overture's MembershipPasswordStrategy.");
@@ -120,8 +119,7 @@ namespace Orckestra.Composer.Providers.Membership
                                                   bool isApproved, object providerUserKey,
                                                   out MembershipCreateStatus status)
         {
-            string domainUsername;
-            if (TryGetDomainUser(username, out domainUsername))
+            if (TryGetDomainUser(username, out string domainUsername))
             {
                 // Username shouldn't contain domain
                 status = MembershipCreateStatus.UserRejected;
@@ -213,11 +211,9 @@ namespace Orckestra.Composer.Providers.Membership
         /// <exception cref="System.ArgumentNullException">username</exception>
         /// <exception cref="System.InvalidOperationException"></exception>
         /// <exception cref="System.Configuration.Provider.ProviderException"></exception>
-        public override bool ChangePasswordQuestionAndAnswer(string username, string password,
-                                                             string newPasswordQuestion,
-                                                             string newPasswordAnswer)
+        public override bool ChangePasswordQuestionAndAnswer(string username, string password, string newPasswordQuestion, string newPasswordAnswer)
         {
-            if (username == null) { throw new ArgumentNullException("username"); }
+            if (username == null) { throw new ArgumentNullException(nameof(username)); }
 
             try
             {
@@ -347,7 +343,7 @@ namespace Orckestra.Composer.Providers.Membership
 
         public override void UpdateUser(MembershipUser user)
         {
-            if (user == null) { throw new ArgumentNullException("user"); }
+            if (user == null) { throw new ArgumentNullException(nameof(user)); }
 
             var request = new UpdateCustomerRequest(ConvertToCustomer(user)) { ScopeId = GetCurrentScope() };
 
@@ -372,9 +368,7 @@ namespace Orckestra.Composer.Providers.Membership
 
         public override bool ValidateUser(string username, string password)
         {
-            string domainUsername;
-
-            return TryGetDomainUser(username, out domainUsername) &&
+            return TryGetDomainUser(username, out _) &&
                    InternalLoginUser(username, password);
         }
 
@@ -385,7 +379,8 @@ namespace Orckestra.Composer.Providers.Membership
 
         public override MembershipUser GetUser(object providerUserKey, bool userIsOnline)
         {
-            if (providerUserKey == null) { throw new ArgumentNullException("providerUserKey"); }
+            if (providerUserKey == null) { throw new ArgumentNullException(nameof(providerUserKey)); }
+
             if (!(providerUserKey is Guid)) { throw new ArgumentException("Provider user key must be a valid guid."); }
 
             var request = new GetCustomerRequest
@@ -628,7 +623,7 @@ namespace Orckestra.Composer.Providers.Membership
 
         private Customer GetCustomerByUsername(string username)
         {
-            if (username == null) { throw new ArgumentNullException("username"); }
+            if (username == null) { throw new ArgumentNullException(nameof(username)); }
 
             try
             {
@@ -657,7 +652,7 @@ namespace Orckestra.Composer.Providers.Membership
                                       customer.PasswordQuestion, null, isApproved, isLockedOut,
                                       customer.Created, customer.LastLoginDate,
                                       customer.LastActivityDate,
-                                      customer.LastPasswordChanged, default(DateTime));
+                                      customer.LastPasswordChanged, default);
         }
 
         private static Customer ConvertToCustomer(MembershipUser user)
@@ -691,7 +686,7 @@ namespace Orckestra.Composer.Providers.Membership
 
         private bool UpdateUserAccountStatus(string username, AccountStatus newStatus)
         {
-            if (username == null) { throw new ArgumentNullException("username"); }
+            if (username == null) { throw new ArgumentNullException(nameof(username)); }
 
             try
             {
@@ -779,7 +774,7 @@ namespace Orckestra.Composer.Providers.Membership
             {
                 var match = _matchDomainUserRegex.Match(fullyQualifiedUsername);
 
-                username = match.Groups["username"] != null ? match.Groups["username"].Value : null;
+                username = match.Groups["username"]?.Value;
                 return match.Success;
             }
 

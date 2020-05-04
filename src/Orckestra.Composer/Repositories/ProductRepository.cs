@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Parameters;
-using Orckestra.Composer.Utils;
 using Orckestra.Overture;
 using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel.Metadata;
@@ -12,6 +10,8 @@ using Orckestra.Overture.ServiceModel.Products;
 using Orckestra.Overture.ServiceModel.Requests.Products;
 using Orckestra.Overture.ServiceModel.Requests.Search;
 using Orckestra.Overture.ServiceModel.Search;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
+
 
 namespace Orckestra.Composer.Repositories
 {
@@ -25,8 +25,8 @@ namespace Orckestra.Composer.Repositories
 
         public ProductRepository(IOvertureClient overtureClient, ICacheProvider cacheProvider)
         {
-            OvertureClient = overtureClient ?? throw new ArgumentNullException("overtureClient");
-            CacheProvider = cacheProvider ?? throw new ArgumentNullException("cacheProvider");
+            OvertureClient = overtureClient ?? throw new ArgumentNullException(nameof(overtureClient));
+            CacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));
         }
 
         /// <summary>
@@ -34,26 +34,15 @@ namespace Orckestra.Composer.Repositories
         /// </summary>
         /// <param name="param">The parameter.</param>
         /// <returns>
-        /// Instance of <see cref="Orckestra.Overture.ServiceModel.Products.Product" />.
+        /// Instance of <see cref="Product" />.
         /// </returns>
         /// <exception cref="System.ArgumentNullException">param</exception>
         /// <exception cref="System.ArgumentException"></exception>
-        public virtual async Task<Overture.ServiceModel.Products.Product> GetProductAsync(GetProductParam param)
+        public virtual async Task<Product> GetProductAsync(GetProductParam param)
         {
-            if (param == null)
-            {
-                throw new ArgumentNullException("param");
-            }
-
-            if (string.IsNullOrWhiteSpace(param.Scope))
-            {
-                throw new ArgumentException("param.Scope must not be null or whitespace.", "param");
-            }
-
-            if (string.IsNullOrWhiteSpace(param.ProductId))
-            {
-                throw new ArgumentException("param.ProductId must not be null or whitespace.", "param");
-            }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.ProductId)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.ProductId)), nameof(param)); }
 
             var productCacheKey = new CacheKey(CacheConfigurationCategoryNames.Product)
             {
@@ -86,10 +75,7 @@ namespace Orckestra.Composer.Repositories
 
         public virtual async Task<ProductDefinition> GetProductDefinitionAsync(GetProductDefinitionParam param)
         {
-            if (param == null)
-            {
-                throw new ArgumentNullException("param");
-            }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
 
             var productDefinitionCacheKey = new CacheKey(CacheConfigurationCategoryNames.ProductDefinition);
             productDefinitionCacheKey.AppendKeyParts(param.Name);
@@ -117,15 +103,8 @@ namespace Orckestra.Composer.Repositories
         /// <returns></returns>
         public virtual Task<List<ProductPrice>> CalculatePricesAsync(List<string> productIds, string scope)
         {
-            if (productIds == null)
-            {
-                throw new ArgumentNullException("productIds");
-            }
-
-            if (scope == null)
-            {
-                throw new ArgumentNullException("scope");
-            }
+            if (productIds == null) { throw new ArgumentNullException(nameof(productIds)); }
+            if (scope == null) { throw new ArgumentNullException(nameof(scope)); }
          
             var request = new CalculatePricesofProductsRequest
             {
@@ -145,8 +124,8 @@ namespace Orckestra.Composer.Repositories
         /// <returns></returns>
         public virtual Task<EffectivePriceEntryInfo> GetEffectivePrice(string productId, string scope)
         {
-            if (productId == null) { throw new ArgumentNullException("productId"); }
-            if (scope == null) { throw new ArgumentNullException("scope"); }
+            if (productId == null) { throw new ArgumentNullException(nameof(productId)); }
+            if (scope == null) { throw new ArgumentNullException(nameof(scope)); }
 
             var request = new GetEffectivePriceEntryInfoRequest()
             {
@@ -160,8 +139,8 @@ namespace Orckestra.Composer.Repositories
 
         public virtual Task<SearchResult> SearchProductByIdsAsync(List<string> productIds, string scope, string cultureName)
         {
-            if (productIds == null) { throw new ArgumentNullException("productIds"); }
-            if (scope == null) {  throw new ArgumentNullException("scope"); }
+            if (productIds == null) { throw new ArgumentNullException(nameof(productIds)); }
+            if (scope == null) {  throw new ArgumentNullException(nameof(scope)); }
 
             var request = new SearchProductByIdsRequest
             {

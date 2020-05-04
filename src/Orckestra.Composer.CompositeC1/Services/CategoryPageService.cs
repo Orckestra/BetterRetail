@@ -14,10 +14,10 @@ using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Localization;
 using Orckestra.Composer.Repositories;
 using Orckestra.Composer.Search;
-using Orckestra.Composer.Utils;
-using Orckestra.Overture.ServiceModel.Products;
 using Orckestra.Composer.Services;
+using Orckestra.Composer.Utils;
 using Orckestra.ExperienceManagement.Configuration.DataTypes;
+using Orckestra.Overture.ServiceModel.Products;
 
 namespace Orckestra.Composer.CompositeC1.Services
 {
@@ -36,15 +36,10 @@ namespace Orckestra.Composer.CompositeC1.Services
             ILocalizationProvider localizationProvider,
             ICultureService cultureService)
 		{
-			if (categoryRepository == null) { throw new ArgumentNullException("categoryRepository"); }
-			if (scopeProvider == null) { throw new ArgumentNullException("scopeProvider"); }
-			if (localizationProvider == null) { throw new ArgumentNullException("localizationProvider"); }
-            if (cultureService == null) { throw new ArgumentNullException("cultureService"); }
-
-            ScopeProvider = scopeProvider;
-			LocalizationProvider = localizationProvider;
-			CategoryRepository = categoryRepository;
-            CultureService = cultureService;
+			ScopeProvider = scopeProvider ?? throw new ArgumentNullException(nameof(scopeProvider));
+			LocalizationProvider = localizationProvider ?? throw new ArgumentNullException(nameof(localizationProvider));
+			CategoryRepository = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository));
+            CultureService = cultureService ?? throw new ArgumentNullException(nameof(cultureService));
 
 	        RootPageId = (Guid) CategoriesConfiguration.CategoriesSyncConfiguration["RootPageId"];
 		}
@@ -54,9 +49,7 @@ namespace Orckestra.Composer.CompositeC1.Services
 		    var categories = CategoryRepository
 		        .GetCategoriesTreeAsync(new GetCategoriesParam {Scope = ScopeProvider.DefaultScope}).Result;
 			
-            CategoryPageData categoryPageData = null;
-			categoryPageData = GetCategoryPages();
-
+            CategoryPageData categoryPageData = GetCategoryPages();
 			EnsureCategoryPages(categories["Root"], categoryPageData);
 		}
 

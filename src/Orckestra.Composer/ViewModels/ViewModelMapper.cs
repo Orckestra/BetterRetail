@@ -27,15 +27,10 @@ namespace Orckestra.Composer.ViewModels
         public ViewModelMapper(IViewModelMetadataRegistry metadataRegistry, IViewModelPropertyFormatter viewModelPropertyFormatter, 
             ILookupService lookupService, ILocalizationProvider localizationProvider)
         {
-            if (metadataRegistry == null) { throw new ArgumentNullException(nameof(metadataRegistry)); }
-            if (viewModelPropertyFormatter == null) { throw new ArgumentNullException(nameof(viewModelPropertyFormatter));}
-            if (lookupService == null) { throw new ArgumentNullException(nameof(lookupService)); }
-            if (localizationProvider == null) { throw new ArgumentNullException(nameof(localizationProvider)); }
-
-            _metadataRegistry = metadataRegistry;
-            _viewModelPropertyFormatter = viewModelPropertyFormatter;
-            _lookupService = lookupService;
-            _localizationProvider = localizationProvider;
+            _metadataRegistry = metadataRegistry ?? throw new ArgumentNullException(nameof(metadataRegistry));
+            _viewModelPropertyFormatter = viewModelPropertyFormatter ?? throw new ArgumentNullException(nameof(viewModelPropertyFormatter));
+            _lookupService = lookupService ?? throw new ArgumentNullException(nameof(lookupService));
+            _localizationProvider = localizationProvider ?? throw new ArgumentNullException(nameof(localizationProvider));
         }
 
 
@@ -46,7 +41,7 @@ namespace Orckestra.Composer.ViewModels
         /// <returns>Dictionnary of key-value pairs based on the metadata of the given <see cref="vm"/>'s type.</returns>
         public IDictionary<string, object> ToDictionary(IBaseViewModel vm)
         {
-            if (vm == null) { throw new ArgumentNullException("vm"); }
+            if (vm == null) { throw new ArgumentNullException(nameof(vm)); }
 
             return vm.ToDictionary();
         }

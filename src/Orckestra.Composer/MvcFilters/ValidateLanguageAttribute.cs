@@ -31,10 +31,7 @@ namespace Orckestra.Composer.MvcFilters
             var acceptedLanguages = GetAcceptLanguageHeaders(filterContext.HttpContext.Request);
             var resolvedCulture = GetFirstMatchingCultureInfo(acceptedLanguages, CultureService.GetAllSupportedCultures());
 
-            if (resolvedCulture == null)
-            {
-                throw new HttpResponseException(BuildBadRequestResponse());
-            }
+            if (resolvedCulture == null) { throw new HttpResponseException(BuildBadRequestResponse()); }
 
             SetThreadCulture(resolvedCulture);
 
@@ -45,10 +42,7 @@ namespace Orckestra.Composer.MvcFilters
         {
             var requestValues = request.UserLanguages;
 
-            if (requestValues == null || !requestValues.Any())
-            {
-                return null;
-            }
+            if (requestValues == null || !requestValues.Any()) { return null; }
 
             return requestValues.Select(GetQuantifiedValue)
                                 .OrderByDescending(t => t.Item1)
@@ -64,9 +58,9 @@ namespace Orckestra.Composer.MvcFilters
         private Tuple<decimal, string> GetQuantifiedValue(string couple)
         {
             decimal quantity = 1.0m;
-            string value = "";
+            string value = string.Empty;
 
-            var parts = (couple ?? "").Split(';');
+            var parts = (couple ?? string.Empty).Split(';');
             if (parts.Length > 0)
             {
                 value = parts[0];
@@ -81,30 +75,28 @@ namespace Orckestra.Composer.MvcFilters
 
         private CultureInfo GetFirstMatchingCultureInfo(List<string> acceptedLanguages, CultureInfo[] supportedCultures)
         {
-            if (acceptedLanguages == null) { return null; }
+            if (acceptedLanguages is null || !acceptedLanguages.Any() || supportedCultures is null || !supportedCultures.Any()) { return null; }
 
-
-            //By Name
-            var resolvedCulture = acceptedLanguages.Join(supportedCultures, lang => lang, ci => ci.Name, (lang, ci) => ci)
-                                                   .FirstOrDefault();
-
-            //By lang
-            if (resolvedCulture == null)
+            foreach (var supportedCulture in supportedCultures)
             {
-                resolvedCulture = acceptedLanguages.Join(supportedCultures, lang => lang, ci => ci.TwoLetterISOLanguageName, (lang, ci) => ci)
-                                                       .FirstOrDefault();
+                foreach (var acceptLanguage in acceptedLanguages)
+                {
+                    if (acceptLanguage.Equals(supportedCulture.Name, StringComparison.OrdinalIgnoreCase)
+                        || acceptLanguage.Equals(supportedCulture.TwoLetterISOLanguageName, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return supportedCulture;
+                    }
+                }
             }
-
-            return resolvedCulture;
+            return null;
         }
 
         private HttpResponseMessage BuildBadRequestResponse()
         {
             return new HttpResponseMessage(HttpStatusCode.BadRequest)
             {
-                Content =
-                    new StringContent(
-                        "The HTTP Header 'Accept-Language' was not set or the value was not resolved into a supported culture.")
+                Content = new StringContent(
+                    "The HTTP Header 'Accept-Language' was not set or the value was not resolved into a supported culture.")
             };
         }
 

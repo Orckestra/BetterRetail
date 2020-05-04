@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Orckestra.Composer.Search.Facets;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Search
 {
@@ -8,7 +9,7 @@ namespace Orckestra.Composer.Search
     {
         public FacetSetting(string fieldname)
         {
-            if (string.IsNullOrEmpty(fieldname)) { throw new ArgumentNullException("fieldname"); }
+            if (string.IsNullOrEmpty(fieldname)) { throw new ArgumentException(GetMessageOfNullEmpty(), nameof(fieldname)); }
 
             FieldName = fieldname;
             FacetType = FacetType.SingleSelect;

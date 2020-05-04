@@ -173,10 +173,11 @@ namespace Orckestra.Composer.Cart.Tests.Factory
             //Assert
             vm.Should().NotBeNullOrEmpty();
             vm.Should().HaveSameCount(param.LineItems);
+            var collection = vm.ToList();
 
-            for (int i = 0; i < vm.ToList().Count; i++)
+            for (int i = 0; i < collection.Count; i++)
             {
-                var liVm = vm.ToList()[i];
+                var liVm = collection[i];
 
                 liVm.Should().NotBeNull();
                 liVm.Id.Should().Be(lineItem.Id);

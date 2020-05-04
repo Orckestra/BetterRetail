@@ -12,6 +12,9 @@ using Orckestra.Overture;
 using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel;
 using Orckestra.Overture.ServiceModel.Requests;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
+using static Orckestra.Composer.Utils.ExpressionUtility;
+using System.Linq.Expressions;
 
 namespace Orckestra.Composer.Tests.Repositories
 {
@@ -65,10 +68,11 @@ namespace Orckestra.Composer.Tests.Repositories
             var sut = _container.CreateInstance<ScopeRepository>();
 
             //Act & Assert
-            var ex = Assert.ThrowsAsync<ArgumentException>(() => sut.GetScopeAsync(param));
+            Expression<Func<Task<Scope>>> expression = () => sut.GetScopeAsync(param);
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => expression.Compile().Invoke());
 
-            ex.ParamName.Should().Be(nameof(param.Scope));
-            ex.Message.Should().NotBeNullOrWhiteSpace();
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
+            exception.Message.Should().StartWith(GetMessageOfNullWhiteSpace(nameof(param.Scope)));
         }
 
         [Test]

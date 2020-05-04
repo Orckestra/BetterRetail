@@ -8,6 +8,7 @@ using Orckestra.Composer.Providers;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Services.Lookup;
 using Orckestra.Overture.ServiceModel.Metadata;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Product.Services
 {
@@ -24,7 +25,8 @@ namespace Orckestra.Composer.Product.Services
             if (localizationProvider == null) { throw new ArgumentNullException(nameof(localizationProvider)); }
             if (lookupService == null) { throw new ArgumentNullException(nameof(lookupService)); }
 
-            Context = context ?? throw new ArgumentNullException(nameof(context));            
+            Context = context ?? throw new ArgumentNullException(nameof(context));    
+            
             ProductFormatter = new ProductFormatter(localizationProvider, lookupService);
         }
 
@@ -39,13 +41,10 @@ namespace Orckestra.Composer.Product.Services
         public virtual SpecificationsViewModel GetProductSpecificationsViewModel(GetProductSpecificationsParam param)
         {
             if (param == null) throw new ArgumentNullException(nameof(param));
-            if (param.Product == null) throw new ArgumentException(nameof(param.Product));
-            if (param.ProductDefinition == null) throw new ArgumentException(nameof(param.ProductDefinition));
+            if (param.Product == null) throw new ArgumentException(GetMessageOfNull(nameof(param.Product)), nameof(param));
+            if (param.ProductDefinition == null) throw new ArgumentException(GetMessageOfNull(nameof(param.ProductDefinition)), nameof(param));
 
-            if(IsInheritedSpecification(param))
-            {
-                return null;
-            }
+            if (IsInheritedSpecification(param)) { return null; }
 
             var vm = new SpecificationsViewModel
             {
@@ -92,7 +91,7 @@ namespace Orckestra.Composer.Product.Services
 
         protected virtual string GetSpecificationsAttributeValue(ProductPropertyDefinition property, GetProductSpecificationsParam param)
         {
-            var variantProperty = param.Product.Variants.FirstOrDefault(v => v.Id == param.VariantId)?.PropertyBag;
+            var variantProperty = param.Product.Variants.Find(v => v.Id == param.VariantId)?.PropertyBag;
             if (variantProperty?.ContainsKey(property.PropertyName) ?? false)
             {
                 return ProductFormatter.FormatValue(property, variantProperty[property.PropertyName], Context.CultureInfo);
@@ -115,8 +114,7 @@ namespace Orckestra.Composer.Product.Services
         {
             var variant = param.Product.Variants.FirstOrDefault(v => v.Id == param.VariantId);
 
-            if (variant == null)
-                return false;
+            if (variant == null) return false;
 
             var allPropertyNames = param.ProductDefinition.PropertyGroups
                 .Where(group => @group.IsIncluded())

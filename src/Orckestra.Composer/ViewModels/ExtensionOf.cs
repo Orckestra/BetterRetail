@@ -1,5 +1,6 @@
 ﻿using System;
 using Orckestra.Composer.Providers;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.ViewModels
 {
@@ -16,10 +17,8 @@ namespace Orckestra.Composer.ViewModels
         /// </summary>
         public void SetBaseViewModel(IBaseViewModel baseViewModel)
         {
-            if (baseViewModel == null)
-            {
-                throw new ArgumentNullException("baseViewModel");
-            }
+            if (baseViewModel == null) { throw new ArgumentNullException(nameof(baseViewModel)); }
+
             Model = (TModel)baseViewModel;
         }
 
@@ -34,15 +33,11 @@ namespace Orckestra.Composer.ViewModels
         /// </summary>
         protected T GetValue<T>(string propertyName)
         {
-            if (string.IsNullOrEmpty(propertyName))
-            {
-                throw new ArgumentNullException("propertyName");
-            }
+            if (string.IsNullOrEmpty(propertyName)) { throw new ArgumentException(GetMessageOfNullEmpty(), nameof(propertyName)); }
 
-            object value;
-            if (Model == null || Model.Bag == null || !Model.Bag.TryGetValue(propertyName, out value) || value == null)
+            if (Model == null || Model.Bag == null || !Model.Bag.TryGetValue(propertyName, out object value) || value == null)
             {
-                return default(T);
+                return default;
             }
             return (T)value;
         }
@@ -52,10 +47,7 @@ namespace Orckestra.Composer.ViewModels
         /// </summary>
         protected void SetValue<T>(T value, string propertyName)
         {
-            if (string.IsNullOrEmpty(propertyName))
-            {
-                throw new ArgumentNullException("propertyName");
-            }
+            if (string.IsNullOrEmpty(propertyName)) { throw new ArgumentException(GetMessageOfNullEmpty(), nameof(propertyName)); }
 
             if (Model == null || Model.Bag == null)
             {

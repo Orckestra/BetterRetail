@@ -57,10 +57,11 @@ namespace Orckestra.Composer.Cart.Tests.Factory
             //Assert
             vm.Should().NotBeNullOrEmpty();
             vm.Should().HaveSameCount(_rewards);
+            var collection = vm.ToList();
 
-            for (int i = 0; i < vm.ToList().Count; i++)
+            for (int i = 0; i < collection.Count; i++)
             {
-                var d = vm.ToList()[i];
+                var d = collection[i];
 
                 d.Should().NotBeNull();
                 d.Description.Should().Be(_rewards[i].Description);

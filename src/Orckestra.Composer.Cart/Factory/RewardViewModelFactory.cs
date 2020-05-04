@@ -14,14 +14,10 @@ namespace Orckestra.Composer.Cart.Factory
         protected IViewModelMapper ViewModelMapper { get; private set; }
         protected ILocalizationProvider LocalizationProvider { get; private set; }
 
-        public RewardViewModelFactory(IViewModelMapper viewModelMapper,
-            ILocalizationProvider localizationProvider)
+        public RewardViewModelFactory(IViewModelMapper viewModelMapper, ILocalizationProvider localizationProvider)
         {
-            if (localizationProvider == null) { throw new ArgumentNullException("localizationProvider"); }
-            if (viewModelMapper == null) { throw new ArgumentNullException("viewModelMapper"); }
-
-            ViewModelMapper = viewModelMapper;
-            LocalizationProvider = localizationProvider;
+            ViewModelMapper = viewModelMapper ?? throw new ArgumentNullException(nameof(viewModelMapper));
+            LocalizationProvider = localizationProvider ?? throw new ArgumentNullException(nameof(localizationProvider));
         }
 
         /// <summary>
@@ -36,10 +32,7 @@ namespace Orckestra.Composer.Cart.Factory
             CultureInfo cultureInfo,
             params RewardLevel[] rewardLevels)
         {
-            if (rewards == null)
-            {
-                yield break;
-            }
+            if (rewards == null) { yield break; }
 
             var eligibleRewards = ((rewardLevels == null || rewardLevels.Length == 0)
                 ? rewards

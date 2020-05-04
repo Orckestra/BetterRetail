@@ -1,5 +1,6 @@
 ﻿using System;
 using Orckestra.Composer.Utils;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Cart.Utils
 {
@@ -14,9 +15,9 @@ namespace Orckestra.Composer.Cart.Utils
         /// <returns></returns>
         public static string GenerateToken(SharedWishListToken token)
         {
-            if (token == null) { throw new ArgumentNullException("token"); }
-            if (token.CustomerId == Guid.Empty) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("CustomerId"), "token"); }
-            if (String.IsNullOrWhiteSpace(token.Scope)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("Scope"), "token"); }
+            if (token == null) { throw new ArgumentNullException(nameof(token)); }
+            if (token.CustomerId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(token.CustomerId)), nameof(token)); }
+            if (string.IsNullOrWhiteSpace(token.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(token.Scope)), nameof(token)); }
 
             var encryptor = new EncryptionUtility();
 
@@ -35,7 +36,7 @@ namespace Orckestra.Composer.Cart.Utils
         /// <returns></returns>
         public static SharedWishListToken DecryptToken(string token)
         {
-            if (string.IsNullOrWhiteSpace(token)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("token"), "token"); }
+            if (string.IsNullOrWhiteSpace(token)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(), nameof(token)); }
 
             if (!token.IsBase64String()) { return null; }
 
@@ -48,13 +49,9 @@ namespace Orckestra.Composer.Cart.Utils
             var splittedTokens = rawToken.Split(new[] { TokenSeparator }, 2, StringSplitOptions.None);
 
             //Invalid token.
-            if (splittedTokens.Length != 2)
-            {
-                return null;
-            }
+            if (splittedTokens.Length != 2) { return null; }
 
-            Guid customerId;
-            if (Guid.TryParse(splittedTokens[0], out customerId))
+            if (Guid.TryParse(splittedTokens[0], out Guid customerId))
             {
                 return new SharedWishListToken
                 {

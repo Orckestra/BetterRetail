@@ -15,6 +15,7 @@ using Orckestra.Composer.ViewModels;
 using Orckestra.Composer.Repositories;
 using System.Collections.Generic;
 using Orckestra.Overture.ServiceModel.Products;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Search.Services
 {
@@ -59,7 +60,6 @@ namespace Orckestra.Composer.Search.Services
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
 
-
             var pageHeaderViewModel = new PageHeaderViewModel
             {
                 PageTitle = GetPageTitle(param),
@@ -91,7 +91,7 @@ namespace Orckestra.Composer.Search.Services
         public virtual async Task<SearchViewModel> GetSearchViewModelAsync(SearchCriteria criteria)
         {
             if (criteria == null) { throw new ArgumentNullException(nameof(criteria)); }
-            if (criteria.SelectedFacets == null) { throw new ArgumentNullException(nameof(criteria.SelectedFacets)); }
+            if (criteria.SelectedFacets == null) { throw new ArgumentException(GetMessageOfNull(nameof(criteria.SelectedFacets)), nameof(criteria)); }
 
             var viewModel = new SearchViewModel
             {
@@ -111,8 +111,8 @@ namespace Orckestra.Composer.Search.Services
 
         protected override string GenerateUrl(CreateSearchPaginationParam<SearchParam> param)
         {
-            if (param.SearchParameters == null) { throw new ArgumentNullException(nameof(param)); }
-            if (param.SearchParameters.Criteria == null) { throw new ArgumentException("param.Criteria is null", nameof(param)); }
+            if (param.SearchParameters == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.SearchParameters)), nameof(param)); }
+            if (param.SearchParameters.Criteria == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.SearchParameters.Criteria)), nameof(param)); }
 
             return SearchUrlProvider.BuildSearchUrl(new BuildSearchUrlParam
             {

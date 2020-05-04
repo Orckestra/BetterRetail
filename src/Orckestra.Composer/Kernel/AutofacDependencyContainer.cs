@@ -54,7 +54,7 @@ namespace Orckestra.Composer.Kernel
             }
             else
             {
-                throw new ArgumentOutOfRangeException("lifestyle");
+                throw new ArgumentOutOfRangeException(nameof(lifestyle), lifestyle, null);
             }
         }
 

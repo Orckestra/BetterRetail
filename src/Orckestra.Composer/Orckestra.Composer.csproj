@@ -309,8 +309,9 @@
     <Compile Include="Services\RecurringOrderTemplatesViewService.cs" />
     <Compile Include="Services\ScopeViewService.cs" />
     <Compile Include="Utils\Constants.cs" />
-    <Compile Include="Utils\Guard.cs" />
+    <Compile Include="Utils\ExpressionUtility.cs" />
     <Compile Include="Utils\LineItemHelper.cs" />
+    <Compile Include="Utils\MessagesHelper.cs" />
     <Compile Include="Utils\MvcFilterRedirectUtil.cs" />
     <Compile Include="Utils\ProductHelper.cs" />
     <Compile Include="Utils\PropertyBagHelper.cs" />
@@ -457,7 +458,6 @@
     <Compile Include="TypeExtensions\ObjectExtensions.cs" />
     <Compile Include="TypeExtensions\TypeExtensions.cs" />
     <Compile Include="TypeExtensions\XmlReaderExtensions.cs" />
-    <Compile Include="Utils\ArgumentNullMessageFormatter.cs" />
     <Compile Include="Utils\GuidUtility.cs" />
     <Compile Include="Utils\ExtendEntityBase.cs" />
     <Compile Include="Utils\RequestUtils.cs" />

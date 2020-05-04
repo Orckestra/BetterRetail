@@ -14,7 +14,9 @@ using Orckestra.Composer.Repositories;
 using Orckestra.ExperienceManagement.Configuration;
 using Orckestra.ExperienceManagement.Configuration.Settings;
 using Orckestra.Overture.ServiceModel.Products;
-
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
+using static Orckestra.Composer.Utils.ExpressionUtility;
+using System.Linq.Expressions;
 
 namespace Orckestra.Composer.Tests.Providers.Dam
 {
@@ -60,9 +62,10 @@ namespace Orckestra.Composer.Tests.Providers.Dam
             IDamProvider damProvider = _container.CreateInstance<ConventionBasedDamProvider>();
 
             // Act & Assert
-            var exception = Assert.ThrowsAsync<ArgumentNullException>(() => damProvider.GetAllProductImagesAsync(null));
+            Expression<Func<Task<List<AllProductImages>>>> expression = () => damProvider.GetAllProductImagesAsync(null);
+            var exception = Assert.ThrowsAsync<ArgumentNullException>(() => expression.Compile().Invoke());
 
-            exception.Message.Should().Be("The method parameter is required.\r\nParameter name: param");
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
         }
 
         [Test]
@@ -82,9 +85,11 @@ namespace Orckestra.Composer.Tests.Providers.Dam
             };
 
             // Act & Assert
-            var exception = Assert.ThrowsAsync<ArgumentException>(() => damProvider.GetAllProductImagesAsync(param));
+            Expression<Func<Task<List<AllProductImages>>>> expression = () => damProvider.GetAllProductImagesAsync(param);
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => expression.Compile().Invoke());
 
-            exception.Message.Should().Be("The image size is required.");
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
+            exception.Message.Should().StartWith(GetMessageOfNullWhiteSpace(nameof(param.ImageSize)));
         }
 
         [Test]
@@ -104,9 +109,11 @@ namespace Orckestra.Composer.Tests.Providers.Dam
             };
 
             // Act & Assert
-            var exception = Assert.ThrowsAsync<ArgumentException>(() => damProvider.GetAllProductImagesAsync(param));
+            Expression<Func<Task<List<AllProductImages>>>> expression = () => damProvider.GetAllProductImagesAsync(param);
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => expression.Compile().Invoke());
 
-            exception.Message.Should().Be("The thumbnail image size is required.");
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
+            exception.Message.Should().StartWith(GetMessageOfNullWhiteSpace(nameof(param.ThumbnailImageSize)));
         }
 
         [Test]
@@ -126,9 +133,11 @@ namespace Orckestra.Composer.Tests.Providers.Dam
             };
 
             // Act & Assert
-            var exception = Assert.ThrowsAsync<ArgumentException>(() => damProvider.GetAllProductImagesAsync(param));
+            Expression<Func<Task<List<AllProductImages>>>> expression = () => damProvider.GetAllProductImagesAsync(param);
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => expression.Compile().Invoke());
 
-            exception.Message.Should().Be("The product zoom image size is required.");
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
+            exception.Message.Should().StartWith(GetMessageOfNullWhiteSpace(nameof(param.ProductZoomImageSize)));
         }
 
         [Test]
@@ -148,9 +157,11 @@ namespace Orckestra.Composer.Tests.Providers.Dam
             };
 
             // Act & Assert
-            var exception = Assert.ThrowsAsync<ArgumentException>(() => damProvider.GetAllProductImagesAsync(param));
+            Expression<Func<Task<List<AllProductImages>>>> expression = () => damProvider.GetAllProductImagesAsync(param);
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => expression.Compile().Invoke());
 
-            exception.Message.Should().Be("The product id is required.");
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
+            exception.Message.Should().StartWith(GetMessageOfNullWhiteSpace(nameof(param.ProductId)));
         }
 
         [Test]
@@ -433,9 +444,9 @@ namespace Orckestra.Composer.Tests.Providers.Dam
             results.Where(result => result.ProductId != expectedProductId).Should().BeEmpty("Because all results should match the requested product id");
             results.Where(result => result.ProductId == expectedProductId).Should().NotBeNullOrEmpty("Because the product must be found");
 
-            results.FirstOrDefault(result => result.VariantId == null).ImageUrl.Should().Be("");
-            results.FirstOrDefault(result => result.VariantId == variant1Id).ImageUrl.Should().Be("");
-            results.FirstOrDefault(result => result.VariantId == variant2Id).ImageUrl.Contains(imageUrl).Should().Be(true);
+            results.Find(result => result.VariantId == null).ImageUrl.Should().Be("");
+            results.Find(result => result.VariantId == variant1Id).ImageUrl.Should().Be("");
+            results.Find(result => result.VariantId == variant2Id).ImageUrl.Contains(imageUrl).Should().Be(true);
         }
     }
 }

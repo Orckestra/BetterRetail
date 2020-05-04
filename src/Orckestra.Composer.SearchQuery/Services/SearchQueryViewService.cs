@@ -1,4 +1,10 @@
-﻿using Orckestra.Composer.Configuration;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Globalization;
+using System.Linq;
+using System.Threading.Tasks;
+using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Dam;
@@ -23,12 +29,7 @@ using Orckestra.Overture.ServiceModel;
 using Orckestra.Overture.ServiceModel.Products.Inventory;
 using Orckestra.Overture.ServiceModel.Search;
 using Orckestra.Overture.ServiceModel.Search.Pricing;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Globalization;
-using System.Linq;
-using System.Threading.Tasks;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.SearchQuery.Services
 {
@@ -74,11 +75,8 @@ namespace Orckestra.Composer.SearchQuery.Services
              scopeViewService,
              recurringOrdersSettings)
         {
-            if (searchQueryRepository == null) { throw new ArgumentNullException("searchQueryRepository"); }
-            if (searchQueryUrlProvider == null) { throw new ArgumentNullException("searchQuerySearchRepository"); }
-
-            SearchQueryRepository = searchQueryRepository;
-            SearchQueryUrlProvider = searchQueryUrlProvider;
+            SearchQueryRepository = searchQueryRepository ?? throw new ArgumentNullException(nameof(searchQueryRepository));
+            SearchQueryUrlProvider = searchQueryUrlProvider ?? throw new ArgumentNullException(nameof(searchQueryUrlProvider));
             ProductSettingsRepository = productSettingsRepository;
             InventoryRepository = inventoryRepository;
         }
@@ -89,10 +87,11 @@ namespace Orckestra.Composer.SearchQuery.Services
         {
             SearchQueryViewModel viewModel;
 
-            Debug.Assert(param.CultureInfo != null, "param.CultureInfo != null");
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (param.CultureInfo != null) { throw new ArgumentException($"Value of {nameof(param.CultureInfo)} should be null", nameof(param)); }
+            if (param.Criteria != null) { throw new ArgumentException($"Value of {nameof(param.Criteria)} should be null", nameof(param)); }
 
-            var searchQueryProducts =
-                await SearchQueryRepository.SearchQueryProductAsync(new SearchQueryProductParams()
+            var searchQueryProducts = await SearchQueryRepository.SearchQueryProductAsync(new SearchQueryProductParams
                 {
                     CultureName = param.CultureInfo.Name,
                     QueryName = param.QueryName,
@@ -134,7 +133,7 @@ namespace Orckestra.Composer.SearchQuery.Services
 
             var imageUrls = await DamProvider.GetProductMainImagesAsync(getImageParam).ConfigureAwait(false);
 
-            Debug.Assert(param.Criteria != null, "param.Criteria != null");
+            
 
             var newCriteria = param.Criteria.Clone();
 
@@ -204,9 +203,13 @@ namespace Orckestra.Composer.SearchQuery.Services
             if (documents == null) throw new ArgumentNullException(nameof(documents));
             if (inventoryLocations == null) throw new ArgumentNullException(nameof(inventoryLocations));
 
+            var lookup = inventoryLocations
+                .Where(x=> x.Identifier != null)
+                .ToLookup(el => el.Identifier?.Sku, el => el, StringComparer.OrdinalIgnoreCase);
+
             foreach (var productDocument in documents)
             {
-                productDocument.InventoryLocationStatuses = inventoryLocations.Where(d => d.Identifier != null && d.Identifier.Sku == productDocument.Sku).ToList();
+                productDocument.InventoryLocationStatuses = lookup[productDocument.Sku].ToList();
             }
         }
 
@@ -215,37 +218,35 @@ namespace Orckestra.Composer.SearchQuery.Services
             var productSettings = await ProductSettingsRepository.GetProductSettings(scope).ConfigureAwait(false);
             if (productSettings.IsInventoryEnabled)
             {
-
                 var result = new List<ProductDocument>();
+                var availableInventoryStatuses = new HashSet<InventoryStatus>();
 
-                var availableInventoryStatuses = new List<InventoryStatus>();
                 foreach (var s in productSettings.AvailableInventoryStatuses.Split('|'))
                 {
-                    InventoryStatus status;
-                    if (Enum.TryParse(s, out status))
+                    if (Enum.TryParse(s, out InventoryStatus status))
                     {
                         availableInventoryStatuses.Add(status);
                     }
                 }
 
-
-
                 foreach (var productDocument in documents)
                 {
-                    var isAvailableInventoryStatus = (
-                        from inventoryLocationStatus in productDocument.InventoryLocationStatuses
-                        from inventoryItemStatuse in inventoryLocationStatus.Statuses
-                        select inventoryItemStatuse.Status)
-                       .Any(inventoryItemStatus => availableInventoryStatuses
-                       .Any(availableStatusForSell => availableStatusForSell == inventoryItemStatus));
-
-                    if (isAvailableInventoryStatus)
+                    bool nextDocument = false;
+                    foreach(var inventoryLocationStatus in productDocument.InventoryLocationStatuses)
                     {
-                        result.Add(productDocument);
+                        foreach(var inventoryItemStatus in inventoryLocationStatus.Statuses)
+                        {
+                            if (availableInventoryStatuses.Contains(inventoryItemStatus.Status))
+                            {
+                                result.Add(productDocument);
+                                nextDocument = true;
+                                break;
+                            }
+                        }
+                        if (nextDocument) break;
                     }
                 }
-
-                return result.ToList();
+                return result;
             }
             else
             {
@@ -257,13 +258,14 @@ namespace Orckestra.Composer.SearchQuery.Services
         protected virtual async Task<SelectedFacets> GetSelectedFacetsAsync(SearchParam param)
         {
             var selectedFacets = param.Criteria.SelectedFacets;
-            return FlattenFilterList(selectedFacets, param.Criteria.CultureInfo);
+            return await Task.FromResult(FlattenFilterList(selectedFacets, param.Criteria.CultureInfo));
         }
 
         public ProductDocument ToProductDocument(Document document)
         {
             if (document == null) return null;
             var productDoc = new ProductDocument();
+
             if (document.PropertyBag != null)
             {
                 productDoc.PropertyBag = new PropertyBag(document.PropertyBag);
@@ -281,20 +283,18 @@ namespace Orckestra.Composer.SearchQuery.Services
 
                 //Legacy pricing fields
 
-#pragma warning disable 612, 618
+                #pragma warning disable 612, 618
                 if (document.PropertyBag.ContainsKey(nameof(productDoc.CurrentPrice)) && document.PropertyBag[nameof(productDoc.CurrentPrice)] != null)
                     productDoc.CurrentPrice = double.Parse(document.PropertyBag[nameof(productDoc.CurrentPrice)].ToString());
                 if (document.PropertyBag.ContainsKey(nameof(productDoc.DefaultPrice)) && document.PropertyBag[nameof(productDoc.DefaultPrice)] != null)
                     productDoc.DefaultPrice = double.Parse(document.PropertyBag[nameof(productDoc.DefaultPrice)].ToString());
                 if (document.PropertyBag.ContainsKey(nameof(productDoc.RegularPrice)) && document.PropertyBag[nameof(productDoc.RegularPrice)] != null)
                     productDoc.RegularPrice = double.Parse(document.PropertyBag[nameof(productDoc.RegularPrice)].ToString());
-#pragma warning restore 612, 618
+                #pragma warning restore 612, 618
 
                 //New pricing fields
                 productDoc.EntityPricing = document.PropertyBag.GetOrDeserializePropertyBagEntity<EntityPricing>(nameof(ProductDocument.EntityPricing));
                 productDoc.GroupPricing = document.PropertyBag.GetOrDeserializePropertyBagEntity<GroupPricing>(nameof(ProductDocument.GroupPricing));
-
-
             }
 
             return productDoc;
@@ -322,35 +322,17 @@ namespace Orckestra.Composer.SearchQuery.Services
 
         private static bool HasVariants(ProductDocument resultItem)
         {
-            if (resultItem == null)
-            {
-                return false;
-            }
-            if (resultItem.PropertyBag == null)
-            {
-                return false;
-            }
+            if (resultItem?.PropertyBag == null) { return false; }
 
-            object variantCountObject;
+            if (!resultItem.PropertyBag.TryGetValue("GroupCount", out object variantCountObject)) { return false; }
 
-            if (!resultItem.PropertyBag.TryGetValue("GroupCount", out variantCountObject))
-            {
-                return false;
-            }
-
-            if (variantCountObject == null)
-            {
-                return false;
-            }
+            if (variantCountObject == null) { return false; }
 
             var variantCountString = variantCountObject.ToString();
 
-            int result;
-
-            int.TryParse(variantCountString, out result);
+            int.TryParse(variantCountString, out int result);
 
             return result > 1; // If the document has only one variant then server returns EntityPrice instead of GroupPrice
         }
-
     }
 }

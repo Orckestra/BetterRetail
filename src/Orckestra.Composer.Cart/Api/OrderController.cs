@@ -10,7 +10,6 @@ using Orckestra.Composer.Providers;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Utils;
 using Orckestra.Composer.WebAPIFilters;
-using Orckestra.ExperienceManagement.Configuration;
 
 namespace Orckestra.Composer.Cart.Api
 {
@@ -48,8 +47,7 @@ namespace Orckestra.Composer.Cart.Api
                 Page = param.Page,
                 OrderTense = OrderTense.CurrentOrders,
                 //WebsiteId = SiteConfiguration.GetWebsiteId()
-            }
-            );
+            });
 
             return Ok(viewModel);
         }
@@ -93,10 +91,7 @@ namespace Orckestra.Composer.Cart.Api
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
             });
 
-            if (orderDetailViewModel == null)
-            {
-                return NotFound();
-            }
+            if (orderDetailViewModel == null) { return NotFound(); }
 
             var token = GuestOrderTokenizer.GenerateOrderToken(new OrderToken
             {

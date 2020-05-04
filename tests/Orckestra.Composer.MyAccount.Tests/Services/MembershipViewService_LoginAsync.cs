@@ -14,6 +14,11 @@ using Orckestra.Composer.MyAccount.Services;
 using Orckestra.Composer.MyAccount.Tests.Mock;
 using Orckestra.ForTests;
 using Orckestra.Overture.ServiceModel.Customers;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
+using static Orckestra.Composer.Utils.ExpressionUtility;
+
+using System.Linq.Expressions;
+using Orckestra.Composer.MyAccount.ViewModels;
 
 namespace Orckestra.Composer.MyAccount.Tests.Services
 {
@@ -316,10 +321,11 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             sut.Membership = _container.Get<IMembershipProxy>();
 
             // Act
-            var exception = Assert.ThrowsAsync<ArgumentNullException>(() => sut.LoginAsync(null));
+            Expression<Func<Task<LoginViewModel>>> expression = () => sut.LoginAsync(null);
+            var exception = Assert.ThrowsAsync<ArgumentNullException>(() => expression.Compile().Invoke());
 
             //Assert
-            exception.Message.Should().Contain("loginParam");
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
         }
 
         [Test]
@@ -362,10 +368,12 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             };
 
             // Act
-            var exception = Assert.ThrowsAsync<ArgumentException>(() => sut.LoginAsync(param));
+            Expression<Func<Task<LoginViewModel>>> expression = () => sut.LoginAsync(param);
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => expression.Compile().Invoke());
 
             //Assert
-            exception.Message.Should().Contain("loginParam.Password");
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
+            exception.Message.Should().StartWith(GetMessageOfNullWhiteSpace(nameof(param.Password)));
         }
 
         [Test]
@@ -386,10 +394,12 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             };
 
             // Act
-            var exception = Assert.ThrowsAsync<ArgumentException>(() => sut.LoginAsync(param));
+            Expression<Func<Task<LoginViewModel>>> expression = () => sut.LoginAsync(param);
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => expression.Compile().Invoke());
 
             //Assert
-            exception.Message.Should().Contain("loginParam.Username");
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
+            exception.Message.Should().StartWith(GetMessageOfNullWhiteSpace(nameof(param.Username)));
         }
 
         [Test]
@@ -410,10 +420,12 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             };
 
             // Act
-            var exception = Assert.ThrowsAsync<ArgumentException>(() => sut.LoginAsync(param));
+            Expression<Func<Task<LoginViewModel>>> expression = () => sut.LoginAsync(param);
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => expression.Compile().Invoke());
 
             //Assert
-            exception.Message.Should().Contain("loginParam.Scope");
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
+            exception.Message.Should().StartWith(GetMessageOfNullWhiteSpace(nameof(param.Scope)));
         }
 
         private static MembershipUser MockMembershipUser(string name, Guid providerUserKey, string email, string passwordQuestion,

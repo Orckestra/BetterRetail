@@ -63,7 +63,7 @@ namespace Orckestra.Composer.Sitemap.Tests
             var sitemapIndex = sut.Generate(baseSitemapUrl, sitemapNames);
 
             // ASSERT
-            sitemapIndex.Entries.Count().Should().Be(2);
+            sitemapIndex.Entries.Length.Should().Be(2);
             sitemapIndex.Entries.All(entry =>
                 !string.IsNullOrWhiteSpace(entry.Location) &&
                 !string.IsNullOrWhiteSpace(entry.LastModification)).Should().BeTrue();
@@ -81,7 +81,7 @@ namespace Orckestra.Composer.Sitemap.Tests
             var sitemapIndex = sut.Generate(baseSitemapUrl, sitemapNames);
 
             // ASSERT
-            sitemapIndex.Entries.Count().Should().Be(2);
+            sitemapIndex.Entries.Length.Should().Be(2);
             sitemapIndex.Entries.ElementAt(0).Location.Should().Be("https://hostname.com/baseUrl/sitemap1");
             sitemapIndex.Entries.ElementAt(1).Location.Should().Be("https://hostname.com/baseUrl/sitemap2");            
         }
@@ -89,8 +89,7 @@ namespace Orckestra.Composer.Sitemap.Tests
         // Source: http://stackoverflow.com/questions/7578857/how-to-check-whether-a-string-is-a-valid-http-url
         private static bool IsLocationValid(string uriString)
         {
-            Uri uriResult;
-            bool result = Uri.TryCreate(uriString, UriKind.Absolute, out uriResult)
+            bool result = Uri.TryCreate(uriString, UriKind.Absolute, out Uri uriResult)
                 && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
 
             return result;

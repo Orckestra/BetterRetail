@@ -96,9 +96,9 @@ namespace Orckestra.Composer.Cart.Tests.Providers
 
         private bool VerifyMergedCart(UpdateCartParam param)
         {
-            param.Shipments.First().LineItems.Count().ShouldBeEquivalentTo(1);
+            param.Shipments.First().LineItems.Count.ShouldBeEquivalentTo(1);
 
-            var lineItem1 = param.Shipments.First().LineItems.FirstOrDefault(x => x.ProductId == "P1");
+            var lineItem1 = param.Shipments.First().LineItems.Find(x => x.ProductId == "P1");
             lineItem1.Should().NotBeNull();
             lineItem1.Quantity.ShouldBeEquivalentTo(1);
 

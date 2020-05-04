@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using Orckestra.Composer.Cart.Providers.Payment;
 using Orckestra.Composer.Providers;
-using Orckestra.Composer.Utils;
 using Orckestra.Overture;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Cart.Factory
 {
@@ -24,7 +24,7 @@ namespace Orckestra.Composer.Cart.Factory
         /// <returns></returns>
         public IPaymentProvider ResolveProvider(string name)
         {
-            if (string.IsNullOrWhiteSpace(name)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("name"), "name"); }
+            if (string.IsNullOrWhiteSpace(name)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(), nameof(name)); }
 
             Type providerType = PaymentProviderRegistry.ResolveProviderType(name);
 

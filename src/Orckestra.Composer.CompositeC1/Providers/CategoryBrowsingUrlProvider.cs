@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using System.Threading.Tasks;
 using Composite.Core.Threading;
 using Orckestra.Composer.CompositeC1.Services;
 using Orckestra.Composer.Configuration;
@@ -19,11 +18,8 @@ namespace Orckestra.Composer.CompositeC1.Providers
 
         public CategoryBrowsingUrlProvider(ICacheProvider cacheProvider, IPageService pageService)
         {
-            if (cacheProvider == null) { throw new ArgumentNullException("cacheProvider"); }
-            if (pageService == null) { throw new ArgumentNullException("pageService"); }
-
-            CacheProvider = cacheProvider;
-            PageService = pageService;
+            CacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));
+            PageService = pageService ?? throw new ArgumentNullException(nameof(pageService));
         }
 
         public string BuildCategoryBrowsingUrl(BuildCategoryBrowsingUrlParam param)
@@ -34,15 +30,13 @@ namespace Orckestra.Composer.CompositeC1.Providers
            var categoryBaseUrl = CacheProvider.GetOrAdd(cacheKey, () => GetPageUrl(itemId, param.CultureInfo));
 
             // Category page is not found
-            if (categoryBaseUrl == null)
-            {
-                return null;
-            }
+            if (categoryBaseUrl == null) { return null; }
 
             var finalUrl = UrlFormatter.AppendQueryString(categoryBaseUrl, BuildSearchQueryString(new BuildSearchUrlParam
             {
                 SearchCriteria = param.Criteria
             }));
+
             return finalUrl;
         }
 

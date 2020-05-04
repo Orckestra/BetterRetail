@@ -16,6 +16,9 @@ using Orckestra.Composer.Cart.ViewModels;
 using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel;
 using Orckestra.Overture.ServiceModel.Orders;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
+using static Orckestra.Composer.Utils.ExpressionUtility;
+using System.Linq.Expressions;
 
 namespace Orckestra.Composer.Cart.Tests.Services
 {
@@ -229,11 +232,12 @@ namespace Orckestra.Composer.Cart.Tests.Services
             var sut = _container.CreateInstance<PaymentViewService>();
 
             //Act
-            var exception = Assert.ThrowsAsync<ArgumentException>(() => sut.UpdatePaymentMethodAsync(param));
+            Expression<Func<Task<CheckoutPaymentViewModel>>> expression = () => sut.UpdatePaymentMethodAsync(param);
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => expression.Compile().Invoke());
 
             //Assert
-            exception.ParamName.Should().BeEquivalentTo("param");
-            exception.Message.Should().ContainEquivalentOf("cartname");
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
+            exception.Message.Should().StartWith(GetMessageOfNullWhiteSpace(nameof(param.CartName)));
         }
 
         [TestCase(null)]
@@ -258,11 +262,12 @@ namespace Orckestra.Composer.Cart.Tests.Services
             var sut = _container.CreateInstance<PaymentViewService>();
 
             //Act
-            var exception = Assert.ThrowsAsync<ArgumentException>(() => sut.UpdatePaymentMethodAsync(param));
+            Expression<Func<Task<CheckoutPaymentViewModel>>> expression = () => sut.UpdatePaymentMethodAsync(param);
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => expression.Compile().Invoke());
 
             //Assert
-            exception.ParamName.Should().BeEquivalentTo("param");
-            exception.Message.Should().ContainEquivalentOf("PaymentProviderName");
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
+            exception.Message.Should().StartWith(GetMessageOfNullWhiteSpace(nameof(param.PaymentProviderName)));
         }
 
         [TestCase(null)]
@@ -287,11 +292,12 @@ namespace Orckestra.Composer.Cart.Tests.Services
             var sut = _container.CreateInstance<PaymentViewService>();
 
             //Act
-            var exception = Assert.ThrowsAsync<ArgumentException>(() => sut.UpdatePaymentMethodAsync(param));
+            Expression<Func<Task<CheckoutPaymentViewModel>>> expression = () => sut.UpdatePaymentMethodAsync(param);
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => expression.Compile().Invoke());
 
             //Assert
-            exception.ParamName.Should().BeEquivalentTo("param");
-            exception.Message.Should().ContainEquivalentOf("scope");
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
+            exception.Message.Should().StartWith(GetMessageOfNullWhiteSpace(nameof(param.Scope)));
         }
 
         [Test]

@@ -1,19 +1,19 @@
-﻿using Orckestra.Composer.Parameters;
-using Orckestra.Composer.Providers;
-using Orckestra.Composer.Search.Services;
-using Orckestra.Composer.Search.ViewModels;
-using Orckestra.Composer.Search.Providers;
-using Orckestra.Composer.Services;
-using Orckestra.Composer.Utils;
-using Orckestra.Composer.WebAPIFilters;
-using Orckestra.Overture.ServiceModel.Products;
-using Orckestra.Overture.ServiceModel.Search;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web.Http;
+using Orckestra.Composer.Parameters;
+using Orckestra.Composer.Providers;
+using Orckestra.Composer.Search.Providers;
+using Orckestra.Composer.Search.Services;
+using Orckestra.Composer.Search.ViewModels;
+using Orckestra.Composer.Services;
+using Orckestra.Composer.Utils;
+using Orckestra.Composer.WebAPIFilters;
+using Orckestra.Overture.ServiceModel.Products;
+using Orckestra.Overture.ServiceModel.Search;
 
 namespace Orckestra.Composer.Search.Api
 {
@@ -135,8 +135,8 @@ namespace Orckestra.Composer.Search.Api
             };
 
             List<CategorySuggestionViewModel> finalSuggestions = categorySuggestionList
-                .OrderByDescending((category) => category.Quantity)
                 .Where((suggestion) => suggestion.DisplayName.ToLower().Contains(searchTerm))
+                .OrderByDescending((category) => category.Quantity)
                 .Take(limit)
                 .ToList();
 
@@ -187,6 +187,5 @@ namespace Orckestra.Composer.Search.Api
             };
             return Ok(vm);
         }
-       
     }
 }

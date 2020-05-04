@@ -87,7 +87,6 @@ namespace Orckestra.Composer.ViewModels
             }
         }
 
-
         /// <summary>
         /// Creates metadata for the given ViewModel type. If the metadata already exists, an <see cref="InvalidOperationException"/> is thrown.
         /// </summary>
@@ -95,8 +94,7 @@ namespace Orckestra.Composer.ViewModels
         /// <returns>List of <see cref="IPropertyMetadata"/> for the specified <see cref="viewModelType"/>.</returns>
         private List<IPropertyMetadata> CreateMetadataFor(Type viewModelType)
         {
-            List<IPropertyMetadata> metadataList;
-            bool metaAlreadyExist = _metadata.TryGetValue(viewModelType, out metadataList);
+            bool metaAlreadyExist = _metadata.TryGetValue(viewModelType, out List<IPropertyMetadata> metadataList);
 
             if (metaAlreadyExist)
             {
@@ -116,10 +114,7 @@ namespace Orckestra.Composer.ViewModels
         /// <param name="viewModelType">Type to register.</param>
         private void RegisterViewModel(Type viewModelType)
         {
-            if (viewModelType == null)
-            {
-                throw new ArgumentNullException("viewModelType");
-            }
+            if (viewModelType == null) { throw new ArgumentNullException(nameof(viewModelType)); }
 
             var properties = GetProperties(viewModelType);
             var metadataList = CreateMetadataFor(viewModelType);
@@ -162,8 +157,7 @@ namespace Orckestra.Composer.ViewModels
         /// <returns>List of <see cref="IPropertyMetadata"/> for the specified <see cref="viewModelType"/>.</returns>
         private List<IPropertyMetadata> GetMetadataFor(Type viewModelType, Type metadataType)
         {
-            List<IPropertyMetadata> metadata;
-            var couldRetrieveMetadata = _metadata.TryGetValue(viewModelType, out metadata);
+            var couldRetrieveMetadata = _metadata.TryGetValue(viewModelType, out List<IPropertyMetadata> metadata);
 
             if (!couldRetrieveMetadata)
             {

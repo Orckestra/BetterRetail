@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Composite.Core.Collections.Generic;
@@ -15,12 +13,7 @@ namespace Orckestra.Composer.HandlebarsCompiler.Services
 
         public virtual DateTime GetCachedFolderLastUpdateDateUtc(string directory, string fileMask)
         {
-            var cacheRecord = directoryInfo[directory];
-
-            if (cacheRecord == null)
-            {
-                cacheRecord = WatchOnDirectory(directory, fileMask, null);
-            }
+            var cacheRecord = directoryInfo[directory] ?? WatchOnDirectory(directory, fileMask, null);
 
             var cachedResult = cacheRecord.LastTimeUpdatedUtc;
             if (cachedResult.HasValue) return cachedResult.Value;
@@ -34,7 +27,7 @@ namespace Orckestra.Composer.HandlebarsCompiler.Services
         {
             var files = Directory.GetFiles(directory, fileMask, SearchOption.AllDirectories);
 
-            if (files.Length == 0) return DateTime.Now;
+            if (files.Length == 0) return DateTime.UtcNow;
 
             DateTime result = File.GetLastWriteTimeUtc(files[0]);
             foreach (var file in files.Skip(1))
@@ -51,7 +44,7 @@ namespace Orckestra.Composer.HandlebarsCompiler.Services
 
         private void OnFileChanged(CachedDirectoryInfo cachedDirectoryInfo)
         {
-            cachedDirectoryInfo.LastTimeUpdatedUtc = DateTime.Now;
+            cachedDirectoryInfo.LastTimeUpdatedUtc = DateTime.UtcNow;
             cachedDirectoryInfo.OnChange?.Invoke();
         }
 
@@ -74,7 +67,6 @@ namespace Orckestra.Composer.HandlebarsCompiler.Services
                     cacheRecord.FileSystemWatcher.Changed += (a, b) => OnFileChanged(cacheRecord);
                     cacheRecord.FileSystemWatcher.Deleted += (a, b) => OnFileChanged(cacheRecord);
                     cacheRecord.FileSystemWatcher.Renamed += (a, b) => OnFileChanged(cacheRecord);
-
                     cacheRecord.FileSystemWatcher.EnableRaisingEvents = true;
 
                     directoryInfo[directory] = cacheRecord;

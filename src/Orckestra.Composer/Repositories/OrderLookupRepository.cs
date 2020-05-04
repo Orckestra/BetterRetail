@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Orckestra.Composer.Configuration;
-using Orckestra.Composer.Providers;
 using Orckestra.Overture;
 using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel.Metadata;
@@ -17,11 +16,8 @@ namespace Orckestra.Composer.Repositories
 
         public OrderLookupRepository(IOvertureClient overtureClient, ICacheProvider cacheProvider)
         {
-            if (overtureClient == null) { throw new ArgumentNullException("overtureClient"); }
-            if (cacheProvider == null) {  throw new ArgumentNullException("cacheProvider"); }
-
-            _overtureClient = overtureClient;
-            _cacheProvider = cacheProvider;
+            _overtureClient = overtureClient ?? throw new ArgumentNullException(nameof(overtureClient));
+            _cacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));
         }
 
         /// <summary>

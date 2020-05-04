@@ -11,6 +11,7 @@ using Orckestra.Overture.ServiceModel.Queries;
 using Orckestra.Overture.ServiceModel.Requests.Products;
 using Orckestra.Overture.ServiceModel.Requests.Search;
 using Orckestra.Overture.ServiceModel.Search;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Repositories
 {
@@ -25,11 +26,8 @@ namespace Orckestra.Composer.Repositories
 
         public CategoryRepository(IOvertureClient overtureClient, ICacheProvider cacheProvider)
         {
-            if (overtureClient == null) { throw new ArgumentNullException("overtureClient"); }
-            if (cacheProvider == null) { throw new ArgumentNullException("cacheProvider"); }
-
-            OvertureClient = overtureClient;
-            CacheProvider = cacheProvider;
+            OvertureClient = overtureClient ?? throw new ArgumentNullException(nameof(overtureClient));
+            CacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));
         }
 
         /// <summary>
@@ -39,8 +37,8 @@ namespace Orckestra.Composer.Repositories
         /// <returns>List of categories.</returns>
         public async virtual Task<List<Category>> GetCategoriesAsync(GetCategoriesParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param"); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("Scope"), "param"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
 
             var cacheKey = new CacheKey(CacheConfigurationCategoryNames.Category)
             {
@@ -61,8 +59,8 @@ namespace Orckestra.Composer.Repositories
         /// <returns></returns>
         public Task<Tree<Category, string>> GetCategoriesTreeAsync(GetCategoriesParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param"); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException("param.Scope may not be null or whitespace", "param"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
 
             return GetCategoriesTreeAsync(param.Scope);
         }
@@ -77,9 +75,9 @@ namespace Orckestra.Composer.Repositories
         /// <exception cref="System.ArgumentNullException">param</exception>
         public async Task<List<Category>> GetCategoriesPathAsync(GetCategoriesPathParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param"); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("Scope"), "param"); }
-            if (string.IsNullOrWhiteSpace(param.CategoryId)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("CategoryId"), "param"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.CategoryId)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CategoryId)), nameof(param)); }
 
             var categoriesTree = await GetCategoriesTreeAsync(param.Scope).ConfigureAwait(false);
 
@@ -88,15 +86,16 @@ namespace Orckestra.Composer.Repositories
 
         private static List<Category> BuildPathFromTree(Tree<Category, string> categoriesTree, string categoryId)
         {
-            TreeNode<Category> categoryNode;
-            if (!categoriesTree.TryGetValue(categoryId, out categoryNode))
+            if (!categoriesTree.TryGetValue(categoryId, out TreeNode<Category> categoryNode))
             {
                 throw new ArgumentException("categoryId doesn't exist", "categoryId");
             }
 
-            var path = new List<Category>();
+            var path = new List<Category>
+            {
+                categoryNode.Value
+            };
 
-            path.Add(categoryNode.Value);
             while (categoryNode.HasParent)
             {
                 categoryNode = categoryNode.Parent;
@@ -126,8 +125,7 @@ namespace Orckestra.Composer.Repositories
             var categoriesIdLookup = new Dictionary<int, Category>();
             foreach (var category in categories)
             {
-                object itemId;
-                if (category.PropertyBag.TryGetValue(PropertyBagItemId, out itemId))
+                if (category.PropertyBag.TryGetValue(PropertyBagItemId, out object itemId))
                 {
                     categoriesIdLookup[(int)itemId] = category;
                 }
@@ -136,8 +134,7 @@ namespace Orckestra.Composer.Repositories
             // Set each category's PrimaryParentCategoryId based on inner ids
             foreach (var category in categories)
             {
-                object parentCategoryId;
-                if (category.PropertyBag.TryGetValue(PropertyBagParentItemId, out parentCategoryId))
+                if (category.PropertyBag.TryGetValue(PropertyBagParentItemId, out object parentCategoryId))
                 {
                     var parentCategory = categoriesIdLookup[(int)parentCategoryId];
                     category.PrimaryParentCategoryId = parentCategory.Id;

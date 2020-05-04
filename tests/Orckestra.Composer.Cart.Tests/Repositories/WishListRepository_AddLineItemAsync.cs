@@ -8,6 +8,11 @@ using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Repositories;
 using Orckestra.Composer.Cart.Tests.Mock;
 using Orckestra.ForTests;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
+using static Orckestra.Composer.Utils.ExpressionUtility;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
+using Orckestra.Overture.ServiceModel.Orders;
 
 namespace Orckestra.Composer.Cart.Tests.Repositories
 {
@@ -23,15 +28,10 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             _container = new AutoMocker();
         }
 
-        [TestCase(null, "en-CA", "WishList", "randomCustomerId", "productId0001", 1, "param.Scope")]
-        [TestCase("", "en-CA", "WishList", "randomCustomerId", "productId0001", 1, "param.Scope")]
-        [TestCase("Canada", null, "WishList", "randomCustomerId", "productId0001", 1, "param.CultureInfo")]
-        [TestCase("Canada", "en-CA", "WishList", "randomCustomerId", null, 1, "param.ProductId")]
-        [TestCase("Canada", "en-CA", "WishList", "randomCustomerId", "", 1, "param.ProductId")]
-        [TestCase("Canada", "en-CA", "WishList", "randomCustomerId", "productId0001", 0, "param.Quantity")]
-        [TestCase("Canada", "en-CA", "WishList", null, "productId0001", 1, "param.CustomerId")]
-        public void WHEN_Param_Is_NullOrWhitespace_SHOULD_Throw_ArgumentException(string scope, string cultureName,
-            string cartName, string customerId, string productId, int quantity, string paramName)
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase(" \t\r\n")]
+        public void WHEN_Scope_Is_NullOrWhitespace_SHOULD_Throw_ArgumentException(string scope)
         {
             // Arrange
             _container.Use(OvertureClientFactory.Create());
@@ -39,21 +39,127 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var param = new AddLineItemParam
             {
                 Scope = scope,
-                CultureInfo =
-                        string.IsNullOrWhiteSpace(cultureName) ? null : CultureInfo.GetCultureInfo(cultureName),
-                CustomerId = string.IsNullOrWhiteSpace(customerId) ? Guid.Empty : GetRandom.Guid(),
-                CartName = cartName,
+                CultureInfo = CultureInfo.GetCultureInfo("en-CA"),
+                CustomerId = Guid.NewGuid(),
+                CartName = "WishList",
+                ProductId = "ProductId",
+                VariantId = "VariantId",
+                Quantity = 1
+            };
+
+            // Act
+            Expression<Func<Task<ProcessedCart>>> expression = () => repository.AddLineItemAsync(param);
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => expression.Compile().Invoke());
+
+            //Assert
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
+            exception.Message.Should().StartWith(GetMessageOfNullWhiteSpace(nameof(param.Scope)));
+        }
+
+        public void WHEN_CultureInfo_Is_Null_SHOULD_Throw_ArgumentException()
+        {
+            // Arrange
+            _container.Use(OvertureClientFactory.Create());
+            var repository = _container.CreateInstance<WishListRepository>();
+            var param = new AddLineItemParam
+            {
+                Scope = "Canada",
+                CultureInfo = null,
+                CustomerId = Guid.NewGuid(),
+                CartName = "WishList",
+                ProductId = "ProductId",
+                VariantId = "VariantId",
+                Quantity = 1
+            };
+
+            // Act
+            Expression<Func<Task<ProcessedCart>>> expression = () => repository.AddLineItemAsync(param);
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => expression.Compile().Invoke());
+
+            //Assert
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
+            exception.Message.Should().StartWith(GetMessageOfNull(nameof(param.CultureInfo)));
+        }
+
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase(" \t\r\n")]
+        public void WHEN_ProductId_Is_NullOrWhitespace_SHOULD_Throw_ArgumentException(string productId)
+        {
+            // Arrange
+            _container.Use(OvertureClientFactory.Create());
+            var repository = _container.CreateInstance<WishListRepository>();
+            var param = new AddLineItemParam
+            {
+                Scope = "Canada",
+                CultureInfo = CultureInfo.GetCultureInfo("en-CA"),
+                CustomerId = Guid.NewGuid(),
+                CartName = "WishList",
                 ProductId = productId,
-                VariantId = GetRandom.String(10),
+                VariantId = "VariantId",
+                Quantity = 1
+            };
+
+            // Act
+            Expression<Func<Task<ProcessedCart>>> expression = () => repository.AddLineItemAsync(param);
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => expression.Compile().Invoke());
+
+            //Assert
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
+            exception.Message.Should().StartWith(GetMessageOfNullWhiteSpace(nameof(param.ProductId)));
+        }
+
+        [TestCase(0)]
+        [TestCase(-1)]
+        [TestCase(int.MinValue)]
+        public void WHEN_Quantity_Is_ZeroNegative_SHOULD_Throw_ArgumentException(int quantity)
+        {
+            // Arrange
+            _container.Use(OvertureClientFactory.Create());
+            var repository = _container.CreateInstance<WishListRepository>();
+            var param = new AddLineItemParam
+            {
+                Scope = "Canada",
+                CultureInfo = CultureInfo.GetCultureInfo("en-CA"),
+                CustomerId = Guid.NewGuid(),
+                CartName = "WishList",
+                ProductId = "ProductId",
+                VariantId = "VariantId",
                 Quantity = quantity
             };
 
             // Act
-            var exception = Assert.ThrowsAsync<ArgumentException>(() => repository.AddLineItemAsync(param));
+            Expression<Func<Task<ProcessedCart>>> expression = () => repository.AddLineItemAsync(param);
+            var exception = Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => expression.Compile().Invoke());
 
             //Assert
-            exception.ParamName.Should().BeSameAs("param");
-            exception.Message.Should().Contain(paramName);
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
+            exception.Message.Should().StartWith(GetMessageOfZeroNegative(nameof(param.Quantity)));
+        }
+
+        public void WHEN_CustomerId_Is_Empty_SHOULD_Throw_ArgumentException()
+        {
+            // Arrange
+            _container.Use(OvertureClientFactory.Create());
+            var repository = _container.CreateInstance<WishListRepository>();
+            var param = new AddLineItemParam
+            {
+                Scope = "Canada",
+                CultureInfo = null,
+                CustomerId = Guid.Empty,
+                CartName = "WishList",
+                ProductId = "ProductId",
+                VariantId = "VariantId",
+                Quantity = 1
+            };
+
+            // Act
+            Expression<Func<Task<ProcessedCart>>> expression = () => repository.AddLineItemAsync(param);
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => expression.Compile().Invoke());
+
+            //Assert
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
+            exception.Message.Should().StartWith(GetMessageOfEmpty(nameof(param.CustomerId)));
         }
 
         [TestCase(null)]

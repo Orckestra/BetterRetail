@@ -5,7 +5,6 @@ using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Services;
 using Orckestra.Composer.Extensions;
 using Orckestra.Composer.Services;
-using Orckestra.Composer.Utils;
 using Orckestra.Composer.WebAPIFilters;
 
 namespace Orckestra.Composer.Cart.Api
@@ -21,13 +20,9 @@ namespace Orckestra.Composer.Cart.Api
         public VaultProfileController(IComposerContext composerContext, IVaultProfileViewService vaultProfileViewService,
             IImageViewService imageViewService)
         {
-            if (composerContext == null) { throw new ArgumentNullException("composerContext"); }
-            if (vaultProfileViewService == null) { throw new ArgumentNullException("vaultProfileViewService"); }
-            if (imageViewService == null) { throw new ArgumentNullException("imageViewService"); }
-
-            ComposerContext = composerContext;
-            VaultProfileViewService = vaultProfileViewService;
-            ImageViewService = imageViewService;
+            ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
+            VaultProfileViewService = vaultProfileViewService ?? throw new ArgumentNullException(nameof(vaultProfileViewService));
+            ImageViewService = imageViewService ?? throw new ArgumentNullException(nameof(imageViewService));
         }
 
         [HttpPost]
@@ -54,7 +49,7 @@ namespace Orckestra.Composer.Cart.Api
             var creditCartTrustImage = ImageViewService.GetCheckoutTrustImageViewModel(ComposerContext.CultureInfo);
             var viewModel = await VaultProfileViewService.AddCreditCardAsync(addCreditCardParam);
 
-            if (viewModel != null && viewModel.ActivePayment != null)
+            if (viewModel?.ActivePayment != null)
             {
                 viewModel.ActivePayment.CreditCardTrustImage = creditCartTrustImage;
 

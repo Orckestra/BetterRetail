@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 // ReSharper disable once CheckNamespace
-
 
 namespace System
 {
@@ -10,7 +10,7 @@ namespace System
 
         public static bool IsBase64String(this string str)
         {
-            if(String.IsNullOrWhiteSpace(str)) { return false; }
+            if(string.IsNullOrWhiteSpace(str)) { return false; }
 
             var s = str.Trim();
             var isMatch = s.Length%4 == 0 && Base64Regex.IsMatch(s);
@@ -18,13 +18,10 @@ namespace System
             return isMatch;
         }
 
-        public static Guid ToGuid(this string str)
+        public static Guid ToGuid(this string guid)
         {
-            if (String.IsNullOrWhiteSpace(str))
-            {
-                throw new ArgumentException("Guid value cannot be null, empty or whitespaces");
-            }
-            return Guid.Parse(str);
+            if (string.IsNullOrWhiteSpace(guid)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(), nameof(guid)); }
+            return Guid.Parse(guid);
         }
     }
 }

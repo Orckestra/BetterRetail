@@ -10,6 +10,11 @@ using Orckestra.Composer.Cart.Tests.Mock;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Localization;
 using Orckestra.ForTests;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
+using static Orckestra.Composer.Utils.ExpressionUtility;
+using System.Threading.Tasks;
+using Orckestra.Composer.Cart.ViewModels;
+using System.Linq.Expressions;
 
 namespace Orckestra.Composer.Cart.Tests.Services
 {
@@ -97,11 +102,12 @@ namespace Orckestra.Composer.Cart.Tests.Services
             };
 
             // Act
-            var exception = Assert.ThrowsAsync<ArgumentException>(() => service.GetCartViewModelAsync(param));
+            Expression<Func<Task<CartViewModel>>> expression = () => service.GetCartViewModelAsync(param);
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => expression.Compile().Invoke());
 
             //Assert
-            exception.ParamName.Should().BeSameAs("param");
-            exception.Message.Should().Contain("param.Scope");
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
+            exception.Message.Should().StartWith(GetMessageOfNullWhiteSpace(nameof(param.Scope)));
         }
 
         [Test]
@@ -120,11 +126,12 @@ namespace Orckestra.Composer.Cart.Tests.Services
             };
 
             // Act
-            var exception = Assert.ThrowsAsync<ArgumentException>(() => service.GetCartViewModelAsync(param));
+            Expression<Func<Task<CartViewModel>>> expression = () => service.GetCartViewModelAsync(param);
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => expression.Compile().Invoke());
 
             //Assert
-            exception.ParamName.Should().BeSameAs("param");
-            exception.Message.Should().Contain("param.CultureInfo");
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
+            exception.Message.Should().StartWith(GetMessageOfNull(nameof(param.CultureInfo)));
         }
 
         [Test]
@@ -143,11 +150,12 @@ namespace Orckestra.Composer.Cart.Tests.Services
             };
 
             // Act
-            var exception = Assert.ThrowsAsync<ArgumentException>(() => service.GetCartViewModelAsync(param));
+            Expression<Func<Task<CartViewModel>>> expression = () => service.GetCartViewModelAsync(param);
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => expression.Compile().Invoke());
 
             //Assert
-            exception.ParamName.Should().BeSameAs("param");
-            exception.Message.Should().Contain("param.CustomerId");
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
+            exception.Message.Should().StartWith(GetMessageOfEmpty(nameof(param.CustomerId)));
         }
 
         [TestCase(null)]
@@ -168,11 +176,12 @@ namespace Orckestra.Composer.Cart.Tests.Services
             };
 
             // Act
-            var exception = Assert.ThrowsAsync<ArgumentException>(() => service.GetCartViewModelAsync(param));
+            Expression<Func<Task<CartViewModel>>> expression = () => service.GetCartViewModelAsync(param);
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => expression.Compile().Invoke());
 
             //Assert
-            exception.ParamName.Should().BeSameAs("param");
-            exception.Message.Should().Contain("param.CartName");
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
+            exception.Message.Should().StartWith(GetMessageOfNullWhiteSpace(nameof(param.CartName)));
         }
 
         [Test]

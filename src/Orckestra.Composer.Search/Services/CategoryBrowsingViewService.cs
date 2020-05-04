@@ -17,6 +17,7 @@ using Orckestra.Composer.Services;
 using Orckestra.Composer.Utils;
 using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel.Products;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Search.Services
 {
@@ -60,21 +61,17 @@ namespace Orckestra.Composer.Search.Services
             composerContext,
             productSettings,
             scopeViewService,
-            recurringOrdersSettings
-            )
+            recurringOrdersSettings)
         {
-            if (categoryRepository == null) { throw new ArgumentNullException(nameof(categoryRepository)); }
-            if (categoryBrowsingUrlProvider == null) { throw new ArgumentNullException(nameof(categoryBrowsingUrlProvider)); }
-
-            CategoryRepository = categoryRepository;
-            CategoryBrowsingUrlProvider = categoryBrowsingUrlProvider;
+            CategoryRepository = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository));
+            CategoryBrowsingUrlProvider = categoryBrowsingUrlProvider ?? throw new ArgumentNullException(nameof(categoryBrowsingUrlProvider));
         }
 
         public virtual async Task<CategoryBrowsingViewModel> GetCategoryBrowsingViewModelAsync(GetCategoryBrowsingViewModelParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
-            if (param.CategoryId == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("CategoryId")); }
-            if (param.SelectedFacets == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("SelectedFacets")); }
+            if (param.CategoryId == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CategoryId)), nameof(param)); }
+            if (param.SelectedFacets == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.SelectedFacets)), nameof(param)); }
 
             var node = await GetCurrentCategoryNodeAsync(param).ConfigureAwait(false);
             var landingPageUrls = GetLandingPageUrls(node, param);
@@ -92,8 +89,7 @@ namespace Orckestra.Composer.Search.Services
             return viewModel;
         }
 
-        protected virtual List<string> GetLandingPageUrls(TreeNode<Category> startNode,
-            GetCategoryBrowsingViewModelParam param)
+        protected virtual List<string> GetLandingPageUrls(TreeNode<Category> startNode, GetCategoryBrowsingViewModelParam param)
         {
             var urlStack = new Stack<string>();
             var currentNode = startNode;
@@ -101,7 +97,7 @@ namespace Orckestra.Composer.Search.Services
             while (currentNode != null && !IsCategoryFacetSystem(currentNode.Value, currentNode.GetLevel()))
             {
                 var url = GetParentPageUrl(currentNode, param);
-                urlStack.Push(url ?? String.Empty);
+                urlStack.Push(url ?? string.Empty);
 
                 currentNode = currentNode.Parent;
             }
@@ -136,8 +132,7 @@ namespace Orckestra.Composer.Search.Services
         protected virtual async Task<SelectedFacets> GetSelectedFacetsAsync(GetCategoryBrowsingViewModelParam param)
         {
             List<SearchFilter> selectedCategories = await GetSelectedCategoriesAsync(param).ConfigureAwait(false);
-            List<SearchFilter> selectedFacets = param.SelectedFacets;
-            List<SearchFilter> allFacets = selectedCategories.Concat(selectedFacets).ToList();
+            List<SearchFilter> allFacets = selectedCategories.Concat(param.SelectedFacets).ToList();
 
             return FlattenFilterList(allFacets, param.CultureInfo);
         }
@@ -148,7 +143,7 @@ namespace Orckestra.Composer.Search.Services
 
             return selectedCategories.Select((category, i) => new SearchFilter
             {
-                Name = String.Format("CategoryLevel{0}_Facet", i + 1),
+                Name = string.Format("CategoryLevel{0}_Facet", i + 1),
                 Value = category.DisplayName.GetLocalizedValue(ComposerContext.CultureInfo.Name),
                 IsSystem = IsCategoryFacetSystem(category, i)
             }).ToList();
@@ -181,12 +176,9 @@ namespace Orckestra.Composer.Search.Services
                 Scope = ComposerContext.Scope
             }).ConfigureAwait(false);
 
-            if (tree.ContainsKey(param.CategoryId))
-            {
-                return tree[param.CategoryId];
-            }
+            if (tree.ContainsKey(param.CategoryId)) { return tree[param.CategoryId]; }
 
-            throw new InvalidOperationException(String.Format("{0} does not exist in the retrieved category tree", param.CategoryId));
+            throw new InvalidOperationException(string.Format("{0} does not exist in the retrieved category tree", param.CategoryId));
         }
 
         protected virtual async Task<ProductSearchResultsViewModel> GetProductSearchResultsAsync(GetCategoryBrowsingViewModelParam param)
@@ -250,7 +242,7 @@ namespace Orckestra.Composer.Search.Services
             //If the category has no URL, it probably means there is no item for it in the CMS yet...
             var childCategories = children
                 .Select(childCategory => CreateChildCategoryViewModel(childCategory.Value, param))
-                .Where(childCategory => !String.IsNullOrWhiteSpace(childCategory.Url)).ToList();
+                .Where(childCategory => !string.IsNullOrWhiteSpace(childCategory.Url)).ToList();
 
             return childCategories;
         }
@@ -307,13 +299,10 @@ namespace Orckestra.Composer.Search.Services
         {
             foreach (var filter in cloneParam.CategoryFilters)
             {
-                if (filter == null)
-                {
-                    continue;
-                }
+                if (filter == null) { continue; }
 
                 var categoryFilter = cloneParam.Criteria.SelectedFacets
-                    .FirstOrDefault(f => filter.Name == f.Name && filter.Value == f.Value);
+                    .Find(f => filter.Name == f.Name && filter.Value == f.Value);
 
                 if (categoryFilter != null)
                 {

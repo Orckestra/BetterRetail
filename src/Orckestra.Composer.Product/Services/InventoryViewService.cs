@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Orckestra.Composer.Enums;
 using Orckestra.Composer.Parameters;
@@ -7,6 +8,7 @@ using Orckestra.Composer.Product.ViewModels.Inventory;
 using Orckestra.Composer.Repositories;
 using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel.Products.Inventory;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Product.Services
 {
@@ -17,11 +19,8 @@ namespace Orckestra.Composer.Product.Services
 
         public InventoryViewService(IInventoryRepository inventoryRepository, IViewModelMapper viewModelMapper)
         {
-            if (inventoryRepository == null) { throw new ArgumentNullException("inventoryRepository"); }
-            if (viewModelMapper == null) { throw new ArgumentNullException("viewModelMapper"); }
-
-            InventoryRepository = inventoryRepository;
-            ViewModelMapper = viewModelMapper;
+            InventoryRepository = inventoryRepository ?? throw new ArgumentNullException(nameof(inventoryRepository));
+            ViewModelMapper = viewModelMapper ?? throw new ArgumentNullException(nameof(viewModelMapper));
         }
 
         /// <summary>
@@ -31,18 +30,13 @@ namespace Orckestra.Composer.Product.Services
         /// <returns></returns>
         public virtual async Task<List<InventoryItemAvailabilityViewModel>> FindInventoryItemStatus(FindInventoryItemStatusParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param"); }
-            if (param.Scope == null) { throw new ArgumentNullException("ScopeId"); }
-            if (param.Skus == null) { throw new ArgumentNullException("Skus"); }
-            if (param.CultureInfo == null) { throw new ArgumentException("CultureInfo"); }
-            if (param.Skus.Count == 0) { throw new ArgumentException("Skus is empty"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (param.Scope == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.Scope)), nameof(param)); }
+            if (param.Skus == null || !param.Skus.Any()) { throw new ArgumentException(GetMessageOfNullEmpty(nameof(param.Skus)), nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
 
-            var inventoryItemsAvailability = await InventoryRepository.FindInventoryItemStatus(param).ConfigureAwait(false);
-
-            if (inventoryItemsAvailability == null)
-            {
+            var inventoryItemsAvailability = await InventoryRepository.FindInventoryItemStatus(param).ConfigureAwait(false) ??
                 throw new NullReferenceException("Inventory is not properly configured. Make sure Enable Inventory Management is set to True");
-            }
 
             var inventoryItemsAvailabilityViewModel = new List<InventoryItemAvailabilityViewModel>();
 

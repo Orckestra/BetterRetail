@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using Orckestra.Composer.Enums;
 using Orckestra.Composer.Parameters;
-using Orckestra.Composer.Product.Parameters;
 using Orckestra.Composer.Product.Requests;
 using Orckestra.Composer.Product.Services;
 using Orckestra.Composer.Product.ViewModels.Inventory;
@@ -30,10 +29,10 @@ namespace Orckestra.Composer.Product.Api
             IInventoryLocationProvider inventoryLocationProvider,
             IProductSettingsViewService productSettingsViewService)
         {
-            ComposerContext = composerContext ?? throw new ArgumentNullException("composerContext");
-            InventoryViewService = inventoryViewService ?? throw new ArgumentNullException("inventoryViewService");
-            InventoryLocationProvider = inventoryLocationProvider ?? throw new ArgumentNullException("inventoryLocationProvider");
-            ProductSettingsViewService = productSettingsViewService ?? throw new ArgumentNullException("productSettingsViewService");
+            ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
+            InventoryViewService = inventoryViewService ?? throw new ArgumentNullException(nameof(inventoryViewService));
+            InventoryLocationProvider = inventoryLocationProvider ?? throw new ArgumentNullException(nameof(inventoryLocationProvider));
+            ProductSettingsViewService = productSettingsViewService ?? throw new ArgumentNullException(nameof(productSettingsViewService));
         }
 
         [ActionName("findInventoryItems")]
@@ -71,8 +70,7 @@ namespace Orckestra.Composer.Product.Api
 
         protected virtual async Task<List<InventoryItemAvailabilityViewModel>> FindInventoryItemStatus(List<string> skus)
         {
-            var inventoryItemsAvailabilityViewModel = await InventoryViewService.FindInventoryItemStatus(
-                new FindInventoryItemStatusParam
+            var inventoryItemsAvailabilityViewModel = await InventoryViewService.FindInventoryItemStatus(new FindInventoryItemStatusParam
             {
                 CultureInfo = ComposerContext.CultureInfo,
                 Scope = ComposerContext.Scope,
@@ -89,10 +87,9 @@ namespace Orckestra.Composer.Product.Api
             IEnumerable<InventoryItemAvailabilityViewModel> inventoryItemsAvailabilityViewModel)
         {
             return from inventoryItemAvailabilityViewModel
-                     in inventoryItemsAvailabilityViewModel
+                   in inventoryItemsAvailabilityViewModel
                    let firstStatus = inventoryItemAvailabilityViewModel.Statuses.FirstOrDefault()
-                   where firstStatus != null
-                   where availableInventoryStatuses.Contains(firstStatus.Status)
+                   where firstStatus != null && availableInventoryStatuses.Contains(firstStatus.Status)
                    select inventoryItemAvailabilityViewModel.Identifier.Sku;
         }
 

@@ -8,6 +8,7 @@ using Orckestra.Composer.Cart.Repositories;
 using Orckestra.Composer.Cart.Services;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Cart.Providers.CartMerge
 {
@@ -18,11 +19,8 @@ namespace Orckestra.Composer.Cart.Providers.CartMerge
 
         public OverwriteCartMergeProvider(ICartRepository cartRepository, IFixCartService fixCartService)
         {
-            if (cartRepository == null) { throw new ArgumentNullException("cartRepository"); }
-            if (fixCartService == null) { throw new ArgumentNullException("fixCartService"); }
-
-            CartRepository = cartRepository;
-            FixCartService = fixCartService;
+            CartRepository = cartRepository ?? throw new ArgumentNullException(nameof(cartRepository));
+            FixCartService = fixCartService ?? throw new ArgumentNullException(nameof(fixCartService));
         }
 
         /// <summary>
@@ -32,10 +30,10 @@ namespace Orckestra.Composer.Cart.Providers.CartMerge
         /// <returns></returns>
         public async Task MergeCartAsync(CartMergeParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param"); }
-            if (param.GuestCustomerId == Guid.Empty) { throw new ArgumentException("param.GuestCustomerId"); }
-            if (param.LoggedCustomerId == Guid.Empty) { throw new ArgumentException("param.LoggedCustomerId"); }
-            if (string.IsNullOrEmpty(param.Scope)) { throw new ArgumentException("param.Scope"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (param.GuestCustomerId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.GuestCustomerId)), nameof(param)); }
+            if (param.LoggedCustomerId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.LoggedCustomerId)), nameof(param)); }
+            if (string.IsNullOrEmpty(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
 
             if (param.GuestCustomerId == param.LoggedCustomerId) { return; }
 
@@ -62,10 +60,7 @@ namespace Orckestra.Composer.Cart.Providers.CartMerge
 
             var guestCustomerLineItems = guestCustomerCart.GetLineItems();
 
-            if (!guestCustomerLineItems.Any())
-            {
-                return;
-            }
+            if (!guestCustomerLineItems.Any()) { return; }
 
             loggedCustomerCart.Shipments.First().LineItems = guestCustomerLineItems;
             loggedCustomerCart.Coupons = guestCustomerCart.Coupons;

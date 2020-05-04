@@ -9,6 +9,10 @@ using Orckestra.Composer.Cart.Repositories;
 using Orckestra.Composer.Cart.Tests.Mock;
 using Orckestra.ForTests;
 using Orckestra.Overture.ServiceModel.Orders;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
+using static Orckestra.Composer.Utils.ExpressionUtility;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace Orckestra.Composer.Cart.Tests.Repositories
 {
@@ -109,11 +113,12 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             };
 
             // Act
-            var exception = Assert.ThrowsAsync<ArgumentException>(() => repository.AddLineItemAsync(param));
+            Expression<Func<Task<ProcessedCart>>> expression = () => repository.AddLineItemAsync(param);
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => expression.Compile().Invoke());
 
             //Assert
-            exception.ParamName.Should().BeSameAs("param");
-            exception.Message.Should().Contain("param.Scope");
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
+            exception.Message.Should().StartWith(GetMessageOfNullWhiteSpace(nameof(param.Scope)));
         }
 
         [Test]
@@ -134,11 +139,12 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             };
 
             // Act
-            var exception = Assert.ThrowsAsync<ArgumentException>(() => repository.AddLineItemAsync(param));
+            Expression<Func<Task<ProcessedCart>>> expression = () => repository.AddLineItemAsync(param);
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => expression.Compile().Invoke());
 
             //Assert
-            exception.ParamName.Should().BeSameAs("param");
-            exception.Message.Should().Contain("param.CultureInfo");
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
+            exception.Message.Should().StartWith(GetMessageOfNull(nameof(param.CultureInfo)));
         }
 
         [Test]
@@ -159,11 +165,12 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             };
 
             // Act
-            var exception = Assert.ThrowsAsync<ArgumentException>(() => repository.AddLineItemAsync(param));
+            Expression<Func<Task<ProcessedCart>>> expression = () => repository.AddLineItemAsync(param);
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => expression.Compile().Invoke());
 
             //Assert
-            exception.ParamName.Should().BeSameAs("param");
-            exception.Message.Should().Contain("param.CustomerId");
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
+            exception.Message.Should().StartWith(GetMessageOfEmpty(nameof(param.CustomerId)));
         }
 
         [Test]
@@ -187,11 +194,12 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             };
 
             // Act
-            var exception = Assert.ThrowsAsync<ArgumentException>(() => repository.AddLineItemAsync(param));
+            Expression<Func<Task<ProcessedCart>>> expression = () => repository.AddLineItemAsync(param);
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => expression.Compile().Invoke());
 
             //Assert
-            exception.ParamName.Should().BeSameAs("param");
-            exception.Message.Should().Contain("param.CartName");
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
+            exception.Message.Should().StartWith(GetMessageOfNullWhiteSpace(nameof(param.CartName)));
         }
 
         [Test]
@@ -215,11 +223,12 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             };
 
             // Act
-            var exception = Assert.ThrowsAsync<ArgumentException>(() => repository.AddLineItemAsync(param));
+            Expression<Func<Task<ProcessedCart>>> expression = () => repository.AddLineItemAsync(param);
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => expression.Compile().Invoke());
 
             //Assert
-            exception.ParamName.Should().BeSameAs("param");
-            exception.Message.Should().Contain("param.ProductId");
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
+            exception.Message.Should().StartWith(GetMessageOfNullWhiteSpace(nameof(param.ProductId)));
         }
 
         [TestCase(null)]
@@ -251,7 +260,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
         [TestCase(0)]
         [TestCase(-1)]
         [TestCase(int.MinValue)]
-        public void WHEN_Quantity_Is_Not_Positive_SHOULD_Throw_ArgumentException(int quantity)
+        public void WHEN_Quantity_Is_Not_Positive_SHOULD_Throw_ArgumentOutOfRangeException(int quantity)
         {
             // Arrange
             _container.Use(OvertureClientFactory.Create());
@@ -268,11 +277,12 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             };
 
             // Act
-            var exception = Assert.ThrowsAsync<ArgumentException>(() => repository.AddLineItemAsync(param));
+            Expression<Func<Task<ProcessedCart>>> expression = () => repository.AddLineItemAsync(param);
+            var exception = Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => expression.Compile().Invoke());
 
             //Assert
-            exception.ParamName.Should().BeSameAs("param");
-            exception.Message.Should().Contain("param.Quantity");
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
+            exception.Message.Should().StartWith(GetMessageOfZeroNegative(nameof(param.Quantity)));
         }
 
 

@@ -160,13 +160,13 @@ namespace Orckestra.Composer.Search.Tests.Service
         }
 
         [Test]
-        public void WHEN_culture_info_is_null_SHOULD_throw_argument_null_exception()
+        public void WHEN_culture_info_is_null_SHOULD_throw_argument_exception()
         {
             // Arrange
             SearchViewService service = _container.CreateInstance<SearchViewService>();
 
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentNullException>(() => service.GetSearchViewModelAsync(
+            Assert.ThrowsAsync<ArgumentException>(() => service.GetSearchViewModelAsync(
                 new SearchCriteria
                 {
                     Keywords = "any",
@@ -183,7 +183,7 @@ namespace Orckestra.Composer.Search.Tests.Service
             SearchViewService service = _container.CreateInstance<SearchViewService>();
 
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentNullException>(() => service.GetSearchViewModelAsync(
+            Assert.ThrowsAsync<ArgumentException>(() => service.GetSearchViewModelAsync(
                 new SearchCriteria
                 {
                     Keywords = "any",
@@ -200,7 +200,7 @@ namespace Orckestra.Composer.Search.Tests.Service
             SearchViewService service = _container.CreateInstance<SearchViewService>();
 
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentNullException>(() => service.GetSearchViewModelAsync(
+            Assert.ThrowsAsync<ArgumentException>(() => service.GetSearchViewModelAsync(
                 new SearchCriteria
                 {
                     Keywords = "any",

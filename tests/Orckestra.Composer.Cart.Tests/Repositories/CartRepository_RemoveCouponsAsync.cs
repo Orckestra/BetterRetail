@@ -9,6 +9,10 @@ using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Repositories;
 using Orckestra.Overture;
 using Orckestra.Overture.ServiceModel.Requests.Orders.Shopping.Coupons;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
+using static Orckestra.Composer.Utils.ExpressionUtility;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace Orckestra.Composer.Cart.Tests.Repositories
 {
@@ -81,7 +85,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
         }
 
         [Test]
-        public void WHEN_couponCodes_is_null_SHOULD_throw_ArgumentNullException()
+        public void WHEN_couponCodes_is_null_SHOULD_throw_ArgumentException()
         {
             //Arrange
             var p = new RemoveCouponsParam()
@@ -95,10 +99,11 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var sut = Container.CreateInstance<CartRepository>();
 
             //Act
-            var ex = Assert.ThrowsAsync<ArgumentNullException>(() => sut.RemoveCouponsAsync(p));
+            Expression<Func<Task>> expression = () => sut.RemoveCouponsAsync(p);
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => expression.Compile().Invoke());
 
-            //Assert
-            ex.ParamName.Should().BeEquivalentTo("param");
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
+            exception.Message.Should().StartWith(GetMessageOfNull(nameof(p.CouponCodes)));
         }
 
         [Test]

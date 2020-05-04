@@ -18,32 +18,16 @@ namespace Orckestra.Composer.ExceptionFilters
 
         protected BaseExceptionFilter(IComposerContext context, ILocalizationProvider localizationProvider)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException("context");
-            }
-
-            if (localizationProvider == null)
-            {
-                throw new ArgumentNullException("localizationProvider");
-            }
-
-            Context = context;
-            LocalizationProvider = localizationProvider;
+            Context = context ?? throw new ArgumentNullException(nameof(context));
+            LocalizationProvider = localizationProvider ?? throw new ArgumentNullException(nameof(localizationProvider));
         }
 
         public void OnException(HttpActionExecutedContext context)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException("context");
-            }
+            if (context == null) { throw new ArgumentNullException(nameof(context)); }
 
             List<ErrorViewModel> errors = GetLocalizedErrors(context);
-            if (errors.Count == 0)
-            {
-                return;
-            }
+            if (errors.Count == 0) return;
 
             var value = new { Errors = errors };
 

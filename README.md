@@ -1,21 +1,22 @@
 # Orckestra Reference Application Starter Site
-[![Build Status](https://orckestra001.visualstudio.com/OrckestraCommerce/_apis/build/status/Product%20extension%20-%20RefApp?branchName=master)](https://orckestra001.visualstudio.com/OrckestraCommerce/_build/latest?definitionId=68&branchName=master)
+[![Build Status](https://orckestra001.visualstudio.com/OrckestraCommerce/_apis/build/status/Product%20extension%20-%20RefApp?branchName=dev)](https://orckestra001.visualstudio.com/OrckestraCommerce/_build/latest?definitionId=68&branchName=dev)
 ## Table of Contents
 - [Getting started](#getting-started)
 - [Prerequisites](#prerequisites)
 - [Certificate](#certificate)
 - [Build](#build)
 - [Configuring](#configuring)
+- [Renaming](#renaming-the-web-site-project)
 - [Deploy](#deploy)
 - [Development](#development)
 - [Debug](#debug)
 - [Related projects](#related-projects)
 - [FAQ](#faq)
 
-## Gettings started
-Get the latest source code from the [dev](https://github.com/Orckestra/ReferenceApplication/tree/dev) branch:
-- using the git command `$git clone https://github.com/Orckestra/ReferenceApplication.git`
-- with a direct download [by the following link](https://github.com/Orckestra/ReferenceApplication/archive/dev.zip)
+## Getting started
+Get the latest source code from the [dev](https://github.com/Orckestra/BetterRetail/tree/dev) branch:
+- using the git command `$git clone https://github.com/Orckestra/BetterRetail.git`
+- with a direct download [by the following link](https://github.com/Orckestra/BetterRetail/archive/dev.zip)
 
 ## Prerequisites
 A development environment  has to include:
@@ -100,6 +101,9 @@ Settings for specific environment can be set in any json file as {"environments"
   
 ### Additional packages
 During a deploy can be installed a set of additional packages. Additional packages to be installed defined in the **{solution_dir_path}\build\configuration\SetupDescription.xml** file. 
+
+## Renaming the web site project
+In order to make it easier for developers to have a custom name for the web application project, we have supplied an easy to user renamer.ps1 script. If for example, you would like to have you website called MySuperStore.Website, simply run <em>./renamer.ps1 MySuperstore.Website</em>
 
 ## Deploy
 To deploy the Reference Application run in Administrator mode the Powershell script by the path `{solution_dir_path}\build\install.ps1`. 

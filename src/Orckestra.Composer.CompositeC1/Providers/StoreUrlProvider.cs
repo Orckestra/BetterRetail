@@ -10,6 +10,7 @@ using Orckestra.Composer.Store.Parameters;
 using Orckestra.Composer.Store.Providers;
 using Orckestra.Composer.Utils;
 using Orckestra.ExperienceManagement.Configuration;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.CompositeC1.Providers
 {
@@ -24,11 +25,8 @@ namespace Orckestra.Composer.CompositeC1.Providers
 
         public StoreUrlProvider(ILocalizationProvider localizationProvider, IPageService pageService, IWebsiteContext wbsiteContext, ISiteConfiguration siteConfiguration)
         {
-            if (localizationProvider == null) { throw new ArgumentNullException("localizationProvider"); }
-            if (pageService == null) { throw new ArgumentNullException("pageService"); }
-
-            LocalizationProvider = localizationProvider;
-            PageService = pageService;
+            LocalizationProvider = localizationProvider ?? throw new ArgumentNullException(nameof(localizationProvider));
+            PageService = pageService ?? throw new ArgumentNullException(nameof(pageService));
             WebsiteContext = wbsiteContext;
             SiteConfiguration = siteConfiguration;
         }
@@ -40,7 +38,10 @@ namespace Orckestra.Composer.CompositeC1.Providers
 
         public virtual string GetStoreUrl(GetStoreUrlParam parameters)
         {
-            Assert(parameters);
+            if (parameters == null) { throw new ArgumentNullException(nameof(parameters)); }
+            if (string.IsNullOrWhiteSpace(parameters.BaseUrl)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(parameters.BaseUrl)), nameof(parameters)); }
+            if (string.IsNullOrWhiteSpace(parameters.StoreNumber)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(parameters.StoreNumber)), nameof(parameters)); }
+            if (parameters.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(parameters.CultureInfo)), nameof(parameters)); }
             // Because of ConfigureAwait(false), we lost context here.
             // Therefore we need to re-initialize C1 context because getting the Url.
             using (ThreadDataManager.EnsureInitialize())
@@ -62,7 +63,8 @@ namespace Orckestra.Composer.CompositeC1.Providers
             {
                 var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(parameters.CultureInfo, WebsiteContext.WebsiteId);
                 var url = PageService.GetPageUrl(pagesConfiguration.StoreListPageId, parameters.CultureInfo);
-                if(string.IsNullOrEmpty(url)) {
+                if(string.IsNullOrEmpty(url)) 
+                {
                     Log.LogError("StoreUrlProvider", "StoreList PageId is not configured");
                     return string.Empty;
                 }
@@ -83,14 +85,6 @@ namespace Orckestra.Composer.CompositeC1.Providers
                     queryString.Add("page", parameters.Page.ToString());
                 return UrlFormatter.AppendQueryString(urlBuilder.ToString(), queryString);
             }
-        }
-
-        private void Assert(GetStoreUrlParam parameters)
-        {
-            if (parameters == null) { throw new ArgumentNullException("parameters"); }
-            if (string.IsNullOrWhiteSpace(parameters.BaseUrl)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("BaseUrl"), "parameters"); }
-            if (string.IsNullOrWhiteSpace(parameters.StoreNumber)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("StoreNumber"), "parameters"); }
-            if (parameters.CultureInfo == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("CultureInfo"), "parameters"); }
         }
     }
 }

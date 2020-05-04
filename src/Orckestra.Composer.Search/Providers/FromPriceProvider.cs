@@ -2,8 +2,8 @@
 using System.Threading.Tasks;
 using Orckestra.Composer.Search.ViewModels;
 using Orckestra.Composer.Services;
-using Orckestra.Composer.Utils;
 using Orckestra.Overture.ServiceModel.Search;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Search.Providers
 {
@@ -20,16 +20,14 @@ namespace Orckestra.Composer.Search.Providers
 
         public FromPriceProvider(IComposerContext composerContext)
         {
-            if (composerContext == null) { throw new ArgumentNullException(nameof(composerContext)); }
-
-            ComposerContext = composerContext;
+            ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
         }
 
         // https://tfs12.orckestra.com/overture%20solutions/WorkItemTracking/v1.0/AttachFileHandler.ashx?FileID=5412&FileName=SearchItemPrice.pdf
         public Task<ProductPriceSearchViewModel> GetPriceAsync(bool? hasVariants, ProductDocument document)
         {
-            if (document.PropertyBag == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(document.PropertyBag))); }            
             if (document == null) { throw new ArgumentNullException(nameof(document)); }
+            if (document.PropertyBag == null) { throw new ArgumentException(GetMessageOfNull(nameof(document.PropertyBag)), nameof(document)); }            
 
             var productPriceSearchViewModel = hasVariants.Value ?
                 GetProductPriceWithVariant(document) :
@@ -40,42 +38,23 @@ namespace Orckestra.Composer.Search.Providers
 
         private ProductPriceSearchViewModel GetProductPriceWithVariant(ProductDocument document)
         {
-            if (HasOneOrMoreVariantInDiscount(document))
-            {
-                return CreateOneOrMoreVariantInDiscountPrice(document);
-            }
-            else
-            {
-                return CreateNoVariantInDiscountPrice(document);
-            }
+            return HasOneOrMoreVariantInDiscount(document)
+                ? CreateOneOrMoreVariantInDiscountPrice(document)
+                : CreateNoVariantInDiscountPrice(document);
         }
 
         private ProductPriceSearchViewModel CreateNoVariantInDiscountPrice(ProductDocument document)
         {
-            if (AreAllVariantRegularPriceTheSame(document))
-            {
-                var regularPrice = GetFromRegularPrice(document);
-
-                return CreatePrice(document, false, false, null, regularPrice);
-            }
-            else
-            {
-                var minRegularPrice = GetFromRegularPrice(document);
-
-                return CreatePrice(document, true, false, null, minRegularPrice);
-            }
+            return AreAllVariantRegularPriceTheSame(document)
+                ? CreatePrice(document, false, false, null, GetFromRegularPrice(document))
+                : CreatePrice(document, true, false, null, GetFromRegularPrice(document));
         }
 
         private ProductPriceSearchViewModel CreateOneOrMoreVariantInDiscountPrice(ProductDocument document)
         {
-            if (AreAllVariantRegularPriceTheSame(document))
-            {
-                return CreateAllVariantRegularPriceTheSamePrice(document);
-            }
-            else
-            {
-                return CreateNotAllVariantRegularPriceTheSamePrice(document);
-            }
+            return AreAllVariantRegularPriceTheSame(document)
+                ? CreateAllVariantRegularPriceTheSamePrice(document)
+                : CreateNotAllVariantRegularPriceTheSamePrice(document);
         }
 
         private ProductPriceSearchViewModel CreateNotAllVariantRegularPriceTheSamePrice(ProductDocument document)
@@ -147,15 +126,14 @@ namespace Orckestra.Composer.Search.Providers
             var fromRegularPrice = GetPriceForComparison(GetFromRegularPrice(document) ?? 0);
             var toRegularPrice = GetPriceForComparison(GetToRegularPrice(document) ?? 0);
 
-            return fromDiscountPrice < fromRegularPrice ||
-                   toDiscountPrice < toRegularPrice;
+            return fromDiscountPrice < fromRegularPrice || toDiscountPrice < toRegularPrice;
         }
 
         private ProductPriceSearchViewModel GetProductPriceWithoutVariant(ProductDocument document)
         {
-            return IsInDiscount(document) ?
-                CreatePrice(document, false, true, document.EntityPricing.CurrentPrice, document.EntityPricing.RegularPrice) :
-                CreatePrice(document, false, false, null, document.EntityPricing.RegularPrice);
+            return IsInDiscount(document) 
+                ? CreatePrice(document, false, true, document.EntityPricing.CurrentPrice, document.EntityPricing.RegularPrice) 
+                : CreatePrice(document, false, false, null, document.EntityPricing.RegularPrice);
         }
 
         private ProductPriceSearchViewModel CreatePrice(
@@ -190,9 +168,7 @@ namespace Orckestra.Composer.Search.Providers
 
         private string GetDisplayPrice(double? price)
         {
-            if (!price.HasValue) { return null; }
-
-            return price.Value.ToString("C2", ComposerContext.CultureInfo);
+            return !price.HasValue ? null : price.Value.ToString("C2", ComposerContext.CultureInfo);
         }
 
         private static int GetPriceForComparison(double price)
@@ -212,36 +188,36 @@ namespace Orckestra.Composer.Search.Providers
         {
             var propertyBag = document.PropertyBag;
 
-            return propertyBag.ContainsKey(GroupCurrentPriceFromProperty) ?
-                   Convert.ToDouble(propertyBag[GroupCurrentPriceFromProperty]) :
-                   (double?)null;
+            return propertyBag.ContainsKey(GroupCurrentPriceFromProperty) 
+                ? Convert.ToDouble(propertyBag[GroupCurrentPriceFromProperty]) 
+                : (double?)null;
         }
 
         private static double? GetToDiscountPrice(ProductDocument document)
         {
             var propertyBag = document.PropertyBag;
 
-            return propertyBag.ContainsKey(GroupCurrentPriceToProperty) ?
-                   Convert.ToDouble(propertyBag[GroupCurrentPriceToProperty]) :
-                   (double?)null;
+            return propertyBag.ContainsKey(GroupCurrentPriceToProperty) 
+                ? Convert.ToDouble(propertyBag[GroupCurrentPriceToProperty]) 
+                : (double?)null;
         }
 
         private static double? GetFromRegularPrice(ProductDocument document)
         {
             var propertyBag = document.PropertyBag;
 
-            return propertyBag.ContainsKey(GroupRegularPriceFromProperty) ?
-                   Convert.ToDouble(propertyBag[GroupRegularPriceFromProperty]) :
-                   (double?)null;
+            return propertyBag.ContainsKey(GroupRegularPriceFromProperty) 
+                ? Convert.ToDouble(propertyBag[GroupRegularPriceFromProperty]) 
+                : (double?)null;
         }
 
         private static double? GetToRegularPrice(ProductDocument document)
         {
             var propertyBag = document.PropertyBag;
 
-            return propertyBag.ContainsKey(GroupRegularPriceToProperty) ?
-                   Convert.ToDouble(propertyBag[GroupRegularPriceToProperty]) :
-                   (double?)null;
+            return propertyBag.ContainsKey(GroupRegularPriceToProperty) 
+                ? Convert.ToDouble(propertyBag[GroupRegularPriceToProperty]) 
+                : (double?)null;
         }
     }
 }

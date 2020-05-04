@@ -6,10 +6,9 @@ using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Search.Context;
 using Orckestra.Composer.Search.Facets;
-using Orckestra.Composer.Search.Providers;
 using Orckestra.Composer.Search.Providers.Facet;
-using Orckestra.Composer.Utils;
 using Orckestra.Overture;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Search.Factory
 {
@@ -21,8 +20,7 @@ namespace Orckestra.Composer.Search.Factory
         public FacetFactory(IDependencyResolver dependencyResolver, IFacetProviderRegistry facetProviderRegistry, IFacetConfigurationContext facetConfigContext)
             : base(dependencyResolver)
         {
-            if (facetProviderRegistry == null) { throw new ArgumentNullException("facetProviderRegistry"); }
-            FacetProviderRegistry = facetProviderRegistry;
+            FacetProviderRegistry = facetProviderRegistry ?? throw new ArgumentNullException(nameof(facetProviderRegistry));
             FacetConfigContext = facetConfigContext;
         }
 
@@ -31,16 +29,13 @@ namespace Orckestra.Composer.Search.Factory
         /// </summary>
         public Facet CreateFacet(Overture.ServiceModel.Search.Facet facet, IReadOnlyList<SearchFilter> selectedFacets, CultureInfo cultureInfo)
         {
-            if (facet == null) { throw new ArgumentNullException("facet"); }
-            if (string.IsNullOrWhiteSpace(facet.FieldName)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("FieldName"), "facet"); }
+            if (facet == null) { throw new ArgumentNullException(nameof(facet)); }
+            if (string.IsNullOrWhiteSpace(facet.FieldName)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(facet.FieldName)), nameof(facet)); }
 
             var setting = FacetConfigContext.GetFacetSettings()
-                    .FirstOrDefault(s => s.FieldName.Equals(facet.FieldName, StringComparison.OrdinalIgnoreCase));
+                    .Find(s => s.FieldName.Equals(facet.FieldName, StringComparison.OrdinalIgnoreCase));
 
-            if (setting == null)
-            {
-                return null;
-            }
+            if (setting == null) { return null; }
 
             Type factoryType = FacetProviderRegistry.ResolveProviderType(setting.FacetType.ToString());
 

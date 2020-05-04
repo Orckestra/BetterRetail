@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Data>
-  <Add Id="0c9f46ef-1ade-42a0-b71c-81d5a8d38344" DisplayName="Women" Target="d5203756-52fe-413e-a8ea-1ddacbf6549b" Url="~/page(0aeabf8f-f298-5c02-b45a-fb639781cd8d)" Order="1"   PublicationStatus="published" PageId="f3dbd28d-365f-4d3e-91c3-7b730b39b294" SourceCultureName="fr-CA"/>
-  <Add Id="f7752318-be3c-4eb8-9969-20d8188190f9" DisplayName="Men" Target="d5203756-52fe-413e-a8ea-1ddacbf6549b" Url="~/page(8e07355a-1772-5da5-b49f-8148f5a46ae3)" Order="2"   PublicationStatus="published" PageId="f3dbd28d-365f-4d3e-91c3-7b730b39b294" SourceCultureName="fr-CA"/>
+  <Add Id="0c9f46ef-1ade-42a0-b71c-81d5a8d38344" DisplayName="Women" Target="d5203756-52fe-413e-a8ea-1ddacbf6549b" Url="~/page(f3dbd28d-365f-4d3e-91c3-7b730b39b294)" Order="1"   PublicationStatus="published" PageId="f3dbd28d-365f-4d3e-91c3-7b730b39b294" SourceCultureName="fr-CA"/>
+  <Add Id="f7752318-be3c-4eb8-9969-20d8188190f9" DisplayName="Men" Target="d5203756-52fe-413e-a8ea-1ddacbf6549b" Url="~/page(f3dbd28d-365f-4d3e-91c3-7b730b39b294)" Order="2"   PublicationStatus="published" PageId="f3dbd28d-365f-4d3e-91c3-7b730b39b294" SourceCultureName="fr-CA"/>
 </Data>
 

@@ -11,6 +11,10 @@ using Orckestra.ForTests;
 using Orckestra.Overture.ServiceModel.Marketing;
 using Orckestra.Overture.ServiceModel.Orders;
 using System.Threading.Tasks;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
+using static Orckestra.Composer.Utils.ExpressionUtility;
+using Orckestra.Composer.Cart.ViewModels;
+using System.Linq.Expressions;
 
 namespace Orckestra.Composer.Cart.Tests.Services
 {
@@ -165,11 +169,12 @@ namespace Orckestra.Composer.Cart.Tests.Services
             };
 
             // Act
-            var exception = Assert.ThrowsAsync<ArgumentException>(() => service.UpdateCartAsync(param));
+            Expression<Func<Task<CartViewModel>>> expression = () => service.UpdateCartAsync(param);
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => expression.Compile().Invoke());
 
             //Assert
-            exception.ParamName.Should().BeSameAs("param");
-            exception.Message.Should().Contain("CartName");
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
+            exception.Message.Should().StartWith(GetMessageOfNullWhiteSpace(nameof(param.CartName)));
         }
 
         [TestCase(null)]
@@ -196,11 +201,12 @@ namespace Orckestra.Composer.Cart.Tests.Services
             };
 
             // Act
-            var exception = Assert.ThrowsAsync<ArgumentException>(() => service.UpdateCartAsync(param));
+            Expression<Func<Task<CartViewModel>>> expression = () => service.UpdateCartAsync(param);
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => expression.Compile().Invoke());
 
             //Assert
-            exception.ParamName.Should().BeSameAs("param");
-            exception.Message.Should().Contain("BaseUrl");
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
+            exception.Message.Should().StartWith(GetMessageOfNullWhiteSpace(nameof(param.BaseUrl)));
         }
 
         [Test]
@@ -255,11 +261,12 @@ namespace Orckestra.Composer.Cart.Tests.Services
             };
 
             // Act
-            var exception = Assert.ThrowsAsync<ArgumentException>(() => service.UpdateCartAsync(param));
+            Expression<Func<Task<CartViewModel>>> expression = () => service.UpdateCartAsync(param);
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => expression.Compile().Invoke());
 
             //Assert
-            exception.ParamName.Should().BeSameAs("param");
-            exception.Message.Should().Contain("BillingCurrency");
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
+            exception.Message.Should().StartWith(GetMessageOfNullWhiteSpace(nameof(param.BillingCurrency)));
         }
 
         [TestCase(null)]
@@ -286,11 +293,12 @@ namespace Orckestra.Composer.Cart.Tests.Services
             };
 
             // Act
-            var exception = Assert.ThrowsAsync<ArgumentException>(() => service.UpdateCartAsync(param));
+            Expression<Func<Task<CartViewModel>>> expression = () => service.UpdateCartAsync(param);
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => expression.Compile().Invoke());
 
             //Assert
-            exception.ParamName.Should().BeSameAs("param");
-            exception.Message.Should().Contain("CartType");
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
+            exception.Message.Should().StartWith(GetMessageOfNullWhiteSpace(nameof(param.CartType)));
         }
 
         [Test]
@@ -345,11 +353,12 @@ namespace Orckestra.Composer.Cart.Tests.Services
             };
 
             // Act
-            var exception = Assert.ThrowsAsync<ArgumentException>(() => service.UpdateCartAsync(param));
+            Expression<Func<Task<CartViewModel>>> expression = () => service.UpdateCartAsync(param);
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => expression.Compile().Invoke());
 
             //Assert
-            exception.ParamName.Should().BeSameAs("param");
-            exception.Message.Should().Contain("Scope");
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
+            exception.Message.Should().StartWith(GetMessageOfNullWhiteSpace(nameof(param.Scope)));
         }
 
         [TestCase(null)]
@@ -376,11 +385,12 @@ namespace Orckestra.Composer.Cart.Tests.Services
             };
 
             // Act
-            var exception = Assert.ThrowsAsync<ArgumentException>(() => service.UpdateCartAsync(param));
+            Expression<Func<Task<CartViewModel>>> expression = () => service.UpdateCartAsync(param);
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => expression.Compile().Invoke());
 
             //Assert
-            exception.ParamName.Should().BeSameAs("param");
-            exception.Message.Should().Contain("Status");
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
+            exception.Message.Should().StartWith(GetMessageOfNullWhiteSpace(nameof(param.Status)));
         }
     }
 }

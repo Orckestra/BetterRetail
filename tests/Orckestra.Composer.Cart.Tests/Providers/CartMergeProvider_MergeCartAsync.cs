@@ -106,17 +106,17 @@ namespace Orckestra.Composer.Cart.Tests.Providers
 
         private bool VerifyMergedCart(UpdateCartParam param)
         {
-            param.Shipments.First().LineItems.Count().ShouldBeEquivalentTo(3);
+            param.Shipments.First().LineItems.Count.ShouldBeEquivalentTo(3);
            
-            var lineItem1 = param.Shipments.First().LineItems.FirstOrDefault(x => x.ProductId == "P1");
+            var lineItem1 = param.Shipments.First().LineItems.Find(x => x.ProductId == "P1");
             lineItem1.Should().NotBeNull();
             lineItem1.Quantity.ShouldBeEquivalentTo(5);
 
-            var lineItem2 = param.Shipments.First().LineItems.FirstOrDefault(x => x.ProductId == "P2");
+            var lineItem2 = param.Shipments.First().LineItems.Find(x => x.ProductId == "P2");
             lineItem2.Should().NotBeNull();
             lineItem2.Quantity.ShouldBeEquivalentTo(1);
 
-            var lineItem3 = param.Shipments.First().LineItems.FirstOrDefault(x => x.ProductId == "P3");
+            var lineItem3 = param.Shipments.First().LineItems.Find(x => x.ProductId == "P3");
             lineItem3.Should().NotBeNull();
             lineItem3.Quantity.ShouldBeEquivalentTo(1);
 

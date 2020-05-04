@@ -1,11 +1,11 @@
-﻿using Composite.Core;
-using Composite.Data;
-using Orckestra.ExperienceManagement.Configuration;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using Composite.Core;
+using Composite.Data;
+using Orckestra.ExperienceManagement.Configuration;
 
 namespace Orckestra.Composer.CompositeC1.Sitemap
 {
@@ -37,7 +37,6 @@ namespace Orckestra.Composer.CompositeC1.Sitemap
             var result = new List<Guid>();
             using (var conn = new DataConnection(culture))
             {
-
                 var byType = _siteConfigurationPagesToExcludesFromConfig.Select(r => r.Split(new[] { '|' }))
                 .Select(parts => new { Type = parts[0], Prop = parts[1] })
                 .GroupBy(r => r.Type);
@@ -60,8 +59,7 @@ namespace Orckestra.Composer.CompositeC1.Sitemap
 
                     foreach (var propertyName in group)
                     {
-                        PropertyInfo propertyInfo;
-                        if (configDataProperties.TryGetValue(propertyName.Prop, out propertyInfo))
+                        if (configDataProperties.TryGetValue(propertyName.Prop, out PropertyInfo propertyInfo))
                         {
                             if (propertyInfo.PropertyType == typeof(Guid?))
                             {

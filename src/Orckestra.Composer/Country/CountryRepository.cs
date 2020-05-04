@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Orckestra.Composer.Configuration;
-using Orckestra.Composer.Providers;
-using Orckestra.Composer.Utils;
 using Orckestra.Overture;
 using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel;
 using Orckestra.Overture.ServiceModel.Requests;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
+
 
 namespace Orckestra.Composer.Country
 {
@@ -18,11 +18,8 @@ namespace Orckestra.Composer.Country
 
         public CountryRepository(IOvertureClient overtureClient, ICacheProvider cacheProvider)
         {
-            if (overtureClient == null) { throw new ArgumentNullException("overtureClient"); }
-            if (cacheProvider == null) { throw new ArgumentNullException("cacheProvider"); }
-
-            _overtureClient = overtureClient;
-            _cacheProvider = cacheProvider;
+            _overtureClient = overtureClient ?? throw new ArgumentNullException(nameof(overtureClient));
+            _cacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));
         }
 
         /// <summary>
@@ -32,7 +29,7 @@ namespace Orckestra.Composer.Country
         /// <returns></returns>
         public async Task<Overture.ServiceModel.Country> RetrieveCountry(RetrieveCountryParam param)
         {
-            if (string.IsNullOrWhiteSpace(param.IsoCode)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("IsoCode"), "param"); }
+            if (string.IsNullOrWhiteSpace(param.IsoCode)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.IsoCode)), nameof(param)); }
 
             var countryCacheKey = new CacheKey(CacheConfigurationCategoryNames.Country);
             countryCacheKey.AppendKeyParts(param.IsoCode);
@@ -58,8 +55,8 @@ namespace Orckestra.Composer.Country
         /// <returns>A list of Region</returns>
         public async Task<IEnumerable<Region>> RetrieveRegions(RetrieveCountryParam param)
         {
-            if (string.IsNullOrWhiteSpace(param.IsoCode)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("IsoCode"), "param"); }
-            if (param.CultureInfo == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("CultureInfo"), "param"); }
+            if (string.IsNullOrWhiteSpace(param.IsoCode)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.IsoCode)), nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
 
             var regionsCacheKey = new CacheKey(CacheConfigurationCategoryNames.Regions)
             {

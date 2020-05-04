@@ -20,6 +20,9 @@ module Orckestra.Composer {
                             && this.FulfilledShipping
                             && this.FulfilledBillingAddress
                             && this.Payment;
+                    },
+                    IsShippingEstimatedOrSelected() {
+                        return this.OrderSummary.IsShippingEstimatedOrSelected && !this.IsPickUpMethodType
                     }
                 },
                 methods: {
