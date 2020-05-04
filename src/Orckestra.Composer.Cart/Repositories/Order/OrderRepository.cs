@@ -112,9 +112,9 @@ namespace Orckestra.Composer.Cart.Repositories.Order
         public virtual Task<Overture.ServiceModel.Orders.Order> UpdateOrderAsync(SaveOrderParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
-            if (param.OrderId == default) { throw new ArgumentException(nameof(param.OrderId)); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(nameof(param.Scope)); }
-            if (param.Order == null) { throw new ArgumentException(nameof(param.Order)); }
+            if (param.OrderId == default) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.OrderId))); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope))); }
+            if (param.Order == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.Order))); }
 
             var request = new SaveOrderRequest
             {

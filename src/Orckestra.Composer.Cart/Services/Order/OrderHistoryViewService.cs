@@ -173,15 +173,20 @@ namespace Orckestra.Composer.Cart.Services.Order
         public virtual async Task<Overture.ServiceModel.Orders.Order> UpdateOrderCustomerAsync(UpdateOrderCustomerParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
-            if (param.CultureInfo == null) { throw new ArgumentException(nameof(param.CultureInfo)); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(nameof(param.Scope)); }
-            if (string.IsNullOrWhiteSpace(param.OrderNumber)) { throw new ArgumentException(nameof(param.OrderNumber)); }
-            if (param.CustomerId == default) { throw new ArgumentException(nameof(param.CustomerId)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.CultureInfo))); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope))); }
+            if (string.IsNullOrWhiteSpace(param.OrderNumber)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.OrderNumber))); }
+            if (param.CustomerId == default) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId))); }
 
             var order = await OrderRepository.GetOrderAsync(param).ConfigureAwait(false);
+            if (order == null)
+            {
+                return null;
+            }
+
             var customer = await OrderRepository.GetCustomerByIdAsync(param.CustomerId, param.Scope).ConfigureAwait(false);
 
-            if (order == null || customer == null || order.Cart.Customer.Email != customer.Email)
+            if (customer == null || order.Cart.Customer.Email != customer.Email)
             {
                 return null;
             }
@@ -204,9 +209,9 @@ namespace Orckestra.Composer.Cart.Services.Order
             var shipmentsNotes = await GetShipmentsNotes(order.Cart.Shipments, getOrderParam.Scope).ConfigureAwait(false);
 
             var orderChanges = await OrderRepository.GetOrderChangesAsync(new GetOrderChangesParam
-            { 
-                OrderNumber = getOrderParam.OrderNumber, 
-                Scope = getOrderParam.Scope 
+            {
+                OrderNumber = getOrderParam.OrderNumber,
+                Scope = getOrderParam.Scope
             }).ConfigureAwait(false);
 
             var orderStatuses = await LookupService.GetLookupDisplayNamesAsync(new GetLookupDisplayNamesParam
