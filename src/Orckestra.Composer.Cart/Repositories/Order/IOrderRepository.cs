@@ -37,7 +37,7 @@ namespace Orckestra.Composer.Cart.Repositories.Order
         /// </summary>
         /// <param name="param"></param>
         /// <returns></returns>
-        Task<Overture.ServiceModel.Orders.Order> UpdateOrderAsync(SaveOrderParam param);
+        Task<Overture.ServiceModel.Orders.Order> UpdateOrderAsync(UpdateOrderParam param);
 
         /// <summary>
         /// Get Customer by Id

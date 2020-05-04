@@ -2,7 +2,7 @@
 
 namespace Orckestra.Composer.Cart.Parameters.Order
 {
-    public class SaveOrderParam
+    public class UpdateOrderParam
     {
         /// <summary>
         /// Gets or sets the scope.

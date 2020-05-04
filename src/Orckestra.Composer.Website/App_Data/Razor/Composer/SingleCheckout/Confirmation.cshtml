@@ -131,7 +131,7 @@
                        @Html.HelpBubble("Forms", "F_PasswordIndication", passwordPatternViewModel.MinRequiredPasswordLength) />
             </div>
             <div  class="form-group p-2 col-auto">
-                <a href="#" role="button" v-on:click="showPasswordToggle" class="text-decoration-none">
+                <a href="#" role="button" v-on:click.prevent="showPasswordToggle" class="text-decoration-none">
                     <strong v-if="ShowPassword"><i class="fa fa-eye-slash"></i> @Html.Localize("Forms", "L_HidePassword")</strong>
                     <strong v-else="v-else"><i class="fa fa-eye"></i> @Html.Localize("Forms", "L_ShowPassword")</strong>
                 </a>

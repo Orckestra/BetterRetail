@@ -173,7 +173,7 @@ namespace Orckestra.Composer.Cart.Services.Order
         public virtual async Task<Overture.ServiceModel.Orders.Order> UpdateOrderCustomerAsync(UpdateOrderCustomerParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
-            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.CultureInfo))); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo))); }
             if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope))); }
             if (string.IsNullOrWhiteSpace(param.OrderNumber)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.OrderNumber))); }
             if (param.CustomerId == default) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId))); }
@@ -192,7 +192,7 @@ namespace Orckestra.Composer.Cart.Services.Order
             }
 
             order.CustomerId = customer.Id.ToString();
-            var updatedOrder = await OrderRepository.UpdateOrderAsync(new SaveOrderParam
+            var updatedOrder = await OrderRepository.UpdateOrderAsync(new UpdateOrderParam
             {
                 Scope = param.Scope,
                 Order = order,
