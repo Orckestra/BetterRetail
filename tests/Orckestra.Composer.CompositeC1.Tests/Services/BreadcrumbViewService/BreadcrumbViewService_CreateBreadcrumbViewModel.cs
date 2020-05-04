@@ -28,7 +28,7 @@ namespace Orckestra.Composer.CompositeC1.Tests.Services.BreadcrumbViewService
         public string HomePageName { get; } = "Home";
 
         public Guid FolderPageLevel1Id { get; } = Guid.NewGuid();
-        public Guid FolderPageTypeId { get;  } = Guid.Parse("9a89191f-fc93-47ee-8b9b-022611c37fa6");
+        public Guid FolderPageTypeId { get; } = Guid.Parse("9a89191f-fc93-47ee-8b9b-022611c37fa6");
         public string FolderPageLevel1Name { get; } = "Folder";
 
         public Guid PageLevel1Id { get; } = Guid.NewGuid();
@@ -55,7 +55,7 @@ namespace Orckestra.Composer.CompositeC1.Tests.Services.BreadcrumbViewService
 
             var mockedSiteConfiguration = new Mock<ISiteConfiguration>();
 
-           
+
             mockedSiteConfiguration.Setup(a => a.GetPagesConfiguration()).Returns(new PagesConfiguration(new ISiteConfigurationMetaMock()));
             Container.Use<ISiteConfiguration>(mockedSiteConfiguration);
 
