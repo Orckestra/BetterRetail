@@ -77,7 +77,12 @@
                                    @Html.HelpBubble("Forms", "F_PasswordIndication", passwordPatternViewModel.MinRequiredPasswordLength) />
                         </div>
                     </div>
-                    <p v-if="PasswordStrength">Strength: <strong>{{PasswordStrength}}</strong></p>
+                    <p v-if="PasswordStrength">
+                        <span>Strength: </span>
+                        <strong v-bind:class="[PasswordStrength === 'strong' ? 'text-success' : PasswordStrength === 'ok' ? 'text-warning' : 'text-danger']">
+                            {{PasswordStrength}}
+                        </strong>
+                    </p>
                     <div class="row">
                         <div class="col-12 mt-3">
                             <button class="btn btn-success text-uppercase" v-on:click.prevent="createAccount">

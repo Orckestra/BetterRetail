@@ -117,7 +117,7 @@ module Orckestra.Composer {
                         data: { StepNumber: 'confirmation' }
                     });
 
-                    // this.cacheProvider.defaultCache.clear(this.orderConfirmationCacheKey).done();
+                    this.cacheProvider.defaultCache.clear(this.orderConfirmationCacheKey).done();
                 })
                 .fail((reason: any) => {
 
