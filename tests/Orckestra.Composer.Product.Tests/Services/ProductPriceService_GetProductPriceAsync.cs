@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using FizzWare.NBuilder.Generators;
@@ -176,7 +177,7 @@ namespace Orckestra.Composer.Product.Tests.Services
             var exception = Assert.ThrowsAsync<ArgumentException>(() => expression.Compile().Invoke());
 
             //Assert
-            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression).First().Name);
             exception.Message.Should().StartWith(GetMessageOfNull(nameof(param.CultureInfo)));
         }
 
