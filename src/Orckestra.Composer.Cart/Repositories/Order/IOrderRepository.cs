@@ -38,13 +38,5 @@ namespace Orckestra.Composer.Cart.Repositories.Order
         /// <param name="param"></param>
         /// <returns></returns>
         Task<Overture.ServiceModel.Orders.Order> UpdateOrderAsync(UpdateOrderParam param);
-
-        /// <summary>
-        /// Get Customer by Id
-        /// </summary>
-        /// <param name="customerId"></param>
-        /// <param name="scopeId"></param>
-        /// <returns></returns>
-        Task<Customer> GetCustomerByIdAsync(Guid customerId, string scopeId);
     }
 }

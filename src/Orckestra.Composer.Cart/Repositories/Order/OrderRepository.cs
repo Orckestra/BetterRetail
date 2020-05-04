@@ -125,22 +125,5 @@ namespace Orckestra.Composer.Cart.Repositories.Order
 
             return OvertureClient.SendAsync(request);
         }
-
-        /// <summary>
-        /// Get Customer by Id
-        /// </summary>
-        /// <param name="customerId"></param>
-        /// <param name="scopeId"></param>
-        /// <returns></returns>
-        public virtual Task<Customer> GetCustomerByIdAsync(Guid customerId, string scopeId)
-        {
-            var getCustomerRequest = new GetCustomerRequest
-            {
-                CustomerId = customerId,
-                ScopeId = scopeId
-            };
-
-            return OvertureClient.SendAsync(getCustomerRequest);
-        }
     }
 }

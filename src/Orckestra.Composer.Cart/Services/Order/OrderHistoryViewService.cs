@@ -10,6 +10,7 @@ using Orckestra.Composer.Enums;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Dam;
+using Orckestra.Composer.Repositories;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Services.Lookup;
 using Orckestra.Overture.ServiceModel.Orders;
@@ -26,6 +27,7 @@ namespace Orckestra.Composer.Cart.Services.Order
         protected virtual IOrderDetailsViewModelFactory OrderDetailsViewModelFactory { get; private set; }
         protected virtual IImageService ImageService { get; private set; }
         protected virtual IShippingTrackingProviderFactory ShippingTrackingProviderFactory { get; private set; }
+        protected virtual ICustomerRepository CustomerRepository { get; private set; }
 
         public OrderHistoryViewService(
             IOrderHistoryViewModelFactory orderHistoryViewModelFactory,
@@ -34,7 +36,8 @@ namespace Orckestra.Composer.Cart.Services.Order
             ILookupService lookupService,
             IOrderDetailsViewModelFactory orderDetailsViewModelFactory,
             IImageService imageService,
-            IShippingTrackingProviderFactory shippingTrackingProviderFactory)
+            IShippingTrackingProviderFactory shippingTrackingProviderFactory,
+            ICustomerRepository customerRepository)
         {
             OrderHistoryViewModelFactory = orderHistoryViewModelFactory ?? throw new ArgumentNullException(nameof(orderHistoryViewModelFactory));
             OrderUrlProvider = orderUrlProvider ?? throw new ArgumentNullException(nameof(orderUrlProvider));
@@ -43,6 +46,7 @@ namespace Orckestra.Composer.Cart.Services.Order
             OrderDetailsViewModelFactory = orderDetailsViewModelFactory ?? throw new ArgumentNullException(nameof(orderDetailsViewModelFactory));
             ImageService = imageService ?? throw new ArgumentNullException(nameof(imageService));
             ShippingTrackingProviderFactory = shippingTrackingProviderFactory ?? throw new ArgumentNullException(nameof(shippingTrackingProviderFactory));
+            CustomerRepository = customerRepository ?? throw new ArgumentNullException(nameof(customerRepository));
         }
 
         /// <summary>
@@ -184,7 +188,12 @@ namespace Orckestra.Composer.Cart.Services.Order
                 return null;
             }
 
-            var customer = await OrderRepository.GetCustomerByIdAsync(param.CustomerId, param.Scope).ConfigureAwait(false);
+            var customer = await CustomerRepository.GetCustomerByIdAsync(new GetCustomerByIdParam
+            {
+                CultureInfo = param.CultureInfo,
+                CustomerId = param.CustomerId,
+                Scope = param.Scope
+            }).ConfigureAwait(false);
 
             if (customer == null || order.Cart.Customer.Email != customer.Email)
             {
