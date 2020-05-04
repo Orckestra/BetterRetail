@@ -367,7 +367,8 @@ namespace Orckestra.Composer.Cart.Services
                         if (string.IsNullOrEmpty(lineitem.RecurringOrderFrequencyName) 
                             || string.IsNullOrEmpty(lineitem.RecurringOrderProgramName)) { continue; }
 
-                        var recurringOrderLineitem = lookup[lineitem.ProductId]?.FirstOrDefault(x => x.VariantId == lineitem.VariantId);
+                        var recurringOrderLineitem = lookup[lineitem.ProductId]?
+                            .FirstOrDefault(x => string.Equals(x.VariantId, lineitem.VariantId, StringComparison.OrdinalIgnoreCase));
                         if (recurringOrderLineitem == null) { continue; }
 
                         //V: Kept the same logic just for case, but think checking a guid was provided to figure out, have we found an object or not

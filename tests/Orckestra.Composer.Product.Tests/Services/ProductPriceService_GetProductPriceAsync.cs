@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using FizzWare.NBuilder.Generators;
 using FluentAssertions;
@@ -8,19 +10,15 @@ using Moq;
 using Moq.AutoMock;
 using NUnit.Framework;
 using Orckestra.Composer.Parameters;
-using Orckestra.Composer.Product.Parameters;
-using Orckestra.Composer.Product.Repositories;
-using Orckestra.Composer.Product.Services;
 using Orckestra.Composer.Product.Tests.Mock;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Localization;
 using Orckestra.Composer.Repositories;
 using Orckestra.Composer.Services;
-using Orckestra.Overture.ServiceModel.Products;
-using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
-using static Orckestra.Composer.Utils.ExpressionUtility;
-using System.Linq.Expressions;
 using Orckestra.Composer.ViewModels;
+using Orckestra.Overture.ServiceModel.Products;
+using static Orckestra.Composer.Utils.ExpressionUtility;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Product.Tests.Services
 {
@@ -124,10 +122,6 @@ namespace Orckestra.Composer.Product.Tests.Services
             //Arrange
             _container.Use(CreateProductRepositoryWithProductPriceNoVariant());
             var productService = _container.CreateInstance<ProductPriceViewService>();
-            var param = new GetProductsPriceParam();
-
-            //Act
-            var action = new Action(async () => await productService.CalculatePricesAsync(param));
 
             // Act
             Expression<Func<Task<ProductsPricesViewModel>>> expression = () => productService.CalculatePricesAsync(null);
@@ -183,6 +177,7 @@ namespace Orckestra.Composer.Product.Tests.Services
             var exception = Assert.ThrowsAsync<ArgumentException>(() => expression.Compile().Invoke());
 
             //Assert
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression).First().Name);
             exception.Message.Should().StartWith(GetMessageOfNull(nameof(param.CultureInfo)));
         }
 
