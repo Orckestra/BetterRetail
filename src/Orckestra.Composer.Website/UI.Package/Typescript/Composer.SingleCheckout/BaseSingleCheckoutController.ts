@@ -2,7 +2,6 @@
 ///<reference path='../JQueryPlugins/ISerializeObjectJqueryPlugin.ts' />
 ///<reference path='../ErrorHandling/ErrorHandler.ts' />
 ///<reference path='./IBaseSingleCheckoutController.ts' />
-///<reference path='../Composer.Cart/CheckoutCommon/ICheckoutContext.ts' />
 ///<reference path='./Services/ISingleCheckoutService.ts' />
 ///<reference path='./Services/SingleCheckoutService.ts' />
 
