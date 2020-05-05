@@ -1,10 +1,10 @@
 ///<reference path='../../../../Typings/tsd.d.ts' />
-///<reference path='../../../../Typescript/Composer.Cart/MonerisPaymentProvider/MonerisCanadaPaymentProvider.ts' />
-///<reference path='../../../../Typescript/Composer.Cart/MonerisPaymentProvider/Providers/CreditCardMonerisCanadaPaymentProvider.ts' />
-///<reference path='../../../../Typescript/Composer.Cart/MonerisPaymentProvider/ICreateVaultTokenOptions.ts' />
-///<reference path='../../../../Typescript/Composer.Cart/MonerisPaymentProvider/IMonerisResponseData.ts' />
-///<reference path='../../../../Typescript/Composer.Cart/MonerisPaymentProvider/MonerisPaymentService.ts' />
-///<reference path='../../../../Typescript/Composer.Cart/CheckoutPayment/ViewModels/IActivePaymentViewModel.ts' />
+///<reference path='../../../../Typescript/Composer.SingleCheckout/Payment/MonerisPaymentProvider/MonerisCanadaPaymentProvider.ts' />
+///<reference path='../../../../Typescript/Composer.SingleCheckout/Payment/MonerisPaymentProvider/Providers/CreditCardMonerisCanadaPaymentProvider.ts' />
+///<reference path='../../../../Typescript/Composer.SingleCheckout/Payment/MonerisPaymentProvider/ICreateVaultTokenOptions.ts' />
+///<reference path='../../../../Typescript/Composer.SingleCheckout/Payment/MonerisPaymentProvider/IMonerisResponseData.ts' />
+///<reference path='../../../../Typescript/Composer.SingleCheckout/Payment/MonerisPaymentProvider/MonerisPaymentService.ts' />
+///<reference path='../../../../Typescript/Composer.SingleCheckout/Payment//ViewModels/IActivePaymentViewModel.ts' />
 
 (() => {
     //Used to test constructor's logic and dispose logic.

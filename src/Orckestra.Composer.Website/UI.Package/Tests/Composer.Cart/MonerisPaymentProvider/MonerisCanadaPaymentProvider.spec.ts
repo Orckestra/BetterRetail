@@ -1,9 +1,9 @@
 ///<reference path='../../../Typings/tsd.d.ts' />
-///<reference path='../../../Typescript/Composer.Cart/MonerisPaymentProvider/MonerisCanadaPaymentProvider.ts' />
-///<reference path='../../../Typescript/Composer.Cart/MonerisPaymentProvider/Providers/BaseSpecializedMonerisCanadaPaymentProvider.ts' />
-///<reference path='../../../Typescript/Composer.Cart/MonerisPaymentProvider/ICreateVaultTokenOptions.ts' />
-///<reference path='../../../Typescript/Composer.Cart/MonerisPaymentProvider/IMonerisResponseData.ts' />
-///<reference path='../../../Typescript/Composer.Cart/CheckoutPayment/ViewModels/IActivePaymentViewModel.ts' />
+///<reference path='../../../Typescript/Composer.SingleCheckout/Payment/MonerisPaymentProvider/MonerisCanadaPaymentProvider.ts' />
+///<reference path='../../../Typescript/Composer.SingleCheckout/Payment/MonerisPaymentProvider/Providers/BaseSpecializedMonerisCanadaPaymentProvider.ts' />
+///<reference path='../../../Typescript/Composer.SingleCheckout/Payment/MonerisPaymentProvider/ICreateVaultTokenOptions.ts' />
+///<reference path='../../../Typescript/Composer.SingleCheckout/Payment/MonerisPaymentProvider/IMonerisResponseData.ts' />
+///<reference path='../../../Typescript/Composer.SingleCheckout/Payment/ViewModels/IActivePaymentViewModel.ts' />
 
 (() => {
     // Validate that we instanciate 2 providers

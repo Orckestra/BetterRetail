@@ -1,6 +1,6 @@
 ///<reference path='../../../Typings/tsd.d.ts' />
-///<reference path='../../../Typescript/Composer.Cart/OnSitePaymentProvider/OnSitePOSPaymentProvider.ts' />
-///<reference path='../../../Typescript/Composer.Cart/CheckoutPayment/ViewModels/IActivePaymentViewModel.ts' />
+///<reference path='../../../Typescript/Composer.SingleCheckout/Payment/OnSitePaymentProvider/OnSitePOSPaymentProvider.ts' />
+///<reference path='../../../Typescript/Composer.SingleCheckout/Payment/ViewModels/IActivePaymentViewModel.ts' />
 
 (() => {
     'use strict';
