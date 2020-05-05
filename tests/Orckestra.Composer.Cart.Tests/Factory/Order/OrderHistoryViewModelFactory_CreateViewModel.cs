@@ -120,7 +120,7 @@ namespace Orckestra.Composer.Cart.Tests.Factory.Order
             var orderVm = vm.Orders.FirstOrDefault();
             orderVm.OrderInfos.CustomerId.ShouldBeEquivalentTo(customerId);
             orderVm.OrderInfos.Id.ShouldBeEquivalentTo(orderId);
-            orderVm.OrderInfos.OrderStatus.ShouldBeEquivalentTo("In Progress");
+            orderVm.OrderInfos.OrderStatus.Should().NotBeNullOrEmpty();
         }
 
         [Test]
