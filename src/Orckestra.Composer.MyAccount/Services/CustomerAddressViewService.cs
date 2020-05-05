@@ -72,8 +72,7 @@ namespace Orckestra.Composer.MyAccount.Services
             if (string.IsNullOrWhiteSpace(createAddressParam.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(createAddressParam.Scope)), nameof(createAddressParam)); }
 
             var createdAddress = await CustomerAddressRepository
-                .CreateAddressAsync(createAddressParam.CustomerId,
-                    ConvertToAddress(new Address(), createAddressParam.EditAddress), createAddressParam.Scope)
+                .CreateAddressAsync(createAddressParam.CustomerId, ConvertToAddress(new Address(), createAddressParam.EditAddress), createAddressParam.Scope)
                 .ConfigureAwait(false);
 
             if (createAddressParam.EditAddress.IsPreferredShipping || createAddressParam.EditAddress.IsPreferredBilling)
@@ -197,8 +196,7 @@ namespace Orckestra.Composer.MyAccount.Services
                 IncludeAddresses = true,
             }).ConfigureAwait(false);
 
-            IList<Address> addresses = customer.Addresses 
-                ?? await CustomerAddressRepository.GetCustomerAddressesAsync(customer.Id, param.Scope).ConfigureAwait(false);
+            IList<Address> addresses = customer.Addresses ?? await CustomerAddressRepository.GetCustomerAddressesAsync(customer.Id, param.Scope).ConfigureAwait(false);
 
             var regions = await CountryService.RetrieveRegionsAsync(new RetrieveCountryParam
             {
@@ -404,6 +402,17 @@ namespace Orckestra.Composer.MyAccount.Services
             {
                 viewModel.PostalCodeRegex = country.PostalCodeRegex;
                 viewModel.PhoneRegex = country.PhoneRegex;
+            }
+
+            if (param.Address.RegionCode != null)
+            {
+                var regionName = await CountryService.RetrieveRegionDisplayNameAsync(new RetrieveRegionDisplayNameParam
+                {
+                    CultureInfo = param.CultureInfo,
+                    IsoCode = ComposerContext.CountryCode,
+                    RegionCode = param.Address.RegionCode
+                }).ConfigureAwait(false); ;
+                viewModel.RegionName = regionName;
             }
 
             return viewModel;
