@@ -130,12 +130,22 @@ namespace Orckestra.Composer.Cart.Factory.Order
 
             var orderInfos = ViewModelMapper.MapTo<OrderDetailInfoViewModel>(param.Order, param.CultureInfo);
 
-            orderInfos.OrderStatus = param.OrderStatuses[param.Order.OrderStatus];
+            orderInfos.OrderStatus = GetOrderStatusDisplayName(param);
             orderInfos.OrderStatusRaw = param.Order.OrderStatus;
             orderInfos.BillingCurrency = param.Order.Cart.BillingCurrency;
             orderInfos.PricePaid = LocalizationProvider.FormatPrice((decimal)param.Order.Cart.Total, param.CultureInfo);
 
             return orderInfos;
+        }
+
+        protected virtual string GetOrderStatusDisplayName(CreateOrderDetailViewModelParam param)
+        {
+            return LocalizationProvider.GetLocalizedString(new GetLocalizedParam
+            {
+                Category = "General",
+                Key = "L_OrderStatus_" + param.Order.OrderStatus,
+                CultureInfo = param.CultureInfo
+            });
         }
 
         protected virtual List<OrderChangeViewModel> GetOrderChangesViewModel(IEnumerable<OrderHistoryItem> orderChanges, CultureInfo cultureInfo, params string[] historyCategories)

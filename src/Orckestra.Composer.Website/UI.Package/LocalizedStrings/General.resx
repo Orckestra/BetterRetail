@@ -230,8 +230,29 @@
   </data>
   <data name="T_FindYourOrder" xml:space="preserve">
     <value>Find your order</value>
-  </data>  
+  </data>
   <data name="P_ShippingMethodLoadErrorMessage" xml:space="preserve">
     <value>The shipping method information is not available.</value>
+  </data>
+  <data name="L_OrderStatus_Canceled" xml:space="preserve">
+    <value>Canceled</value>
+  </data>
+  <data name="L_OrderStatus_Completed" xml:space="preserve">
+    <value>Completed</value>
+  </data>
+  <data name="L_OrderStatus_InProgress" xml:space="preserve">
+    <value>Processing order</value>
+  </data>
+  <data name="L_OrderStatus_New" xml:space="preserve">
+    <value>Order received</value>
+  </data>
+  <data name="L_OrderStatus_OnHold" xml:space="preserve">
+    <value>On Hold</value>
+  </data>
+  <data name="L_OrderStatus_PartiallyFulfilled" xml:space="preserve">
+    <value>Partially Fulfilled</value>
+  </data>
+  <data name="L_OrderStatus_PendingProcess" xml:space="preserve">
+    <value>Pending</value>
   </data>
 </root>
