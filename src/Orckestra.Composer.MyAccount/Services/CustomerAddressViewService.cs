@@ -406,12 +406,12 @@ namespace Orckestra.Composer.MyAccount.Services
 
             if (param.Address.RegionCode != null)
             {
-                var regionName = CountryService.RetrieveRegionDisplayNameAsync(new RetrieveRegionDisplayNameParam
+                var regionName = await CountryService.RetrieveRegionDisplayNameAsync(new RetrieveRegionDisplayNameParam
                 {
                     CultureInfo = param.CultureInfo,
                     IsoCode = ComposerContext.CountryCode,
                     RegionCode = param.Address.RegionCode
-                }).Result;
+                }).ConfigureAwait(false); ;
                 viewModel.RegionName = regionName;
             }
 
