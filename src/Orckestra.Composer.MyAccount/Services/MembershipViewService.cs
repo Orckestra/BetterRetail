@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using System.Web.Security;
 using Orckestra.Composer.MyAccount.Parameters;
 using Orckestra.Composer.MyAccount.Providers;
-using Orckestra.Composer.MyAccount.Repositories;
 using Orckestra.Composer.MyAccount.ViewModels;
+using Orckestra.Composer.Repositories;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Membership;
@@ -108,9 +108,6 @@ namespace Orckestra.Composer.MyAccount.Services
         {
             var viewModel = ViewModelMapper.MapTo<CreateAccountViewModel>(param.Customer, param.CultureInfo) ?? new CreateAccountViewModel();
 
-            viewModel.MinRequiredPasswordLength = MembershipProvider.MinRequiredPasswordLength;
-            viewModel.MinRequiredNonAlphanumericCharacters = MembershipProvider.MinRequiredNonAlphanumericCharacters;
-            viewModel.PasswordRegexPattern = CreatePasswordRegexPattern().ToString();
             viewModel.TermsAndConditionsUrl = param.TermsAndConditionsUrl;
             viewModel.Status = param.Status?.ToString("G") ?? string.Empty;
             viewModel.ReturnUrl = param.ReturnUrl;
@@ -118,6 +115,8 @@ namespace Orckestra.Composer.MyAccount.Services
             viewModel.Username = param.Customer != null ? param.Customer.Username : string.Empty;
             viewModel.CustomerId = param.Customer?.Id ?? Guid.Empty;
             viewModel.Created = param.Customer?.Created ?? DateTime.MinValue;
+
+            SetPasswordValidationRules(viewModel);
 
             return viewModel;
         }
@@ -361,11 +360,10 @@ namespace Orckestra.Composer.MyAccount.Services
             var viewModel = ViewModelMapper.MapTo<ResetPasswordViewModel>(param.Customer, param.CultureInfo) ?? new ResetPasswordViewModel();
 
             viewModel.Status = param.Status.HasValue ? param.Status.Value.ToString("G") : string.Empty;
-            viewModel.MinRequiredPasswordLength = MembershipProvider.MinRequiredPasswordLength;
-            viewModel.MinRequiredNonAlphanumericCharacters = MembershipProvider.MinRequiredNonAlphanumericCharacters;
-            viewModel.PasswordRegexPattern = CreatePasswordRegexPattern().ToString();
             viewModel.ForgotPasswordUrl = param.ForgotPasswordUrl;
             viewModel.ReturnUrl = param.ReturnUrl;
+
+            SetPasswordValidationRules(viewModel);
 
             if (param.Customer == null)
             {
@@ -498,6 +496,17 @@ namespace Orckestra.Composer.MyAccount.Services
         }
 
         /// <summary>
+        /// Set rules for password validation
+        /// </summary>
+        /// <param name="viewModel">viewModel for update <see cref="PasswordPatternViewModel"/></param>
+        public virtual void SetPasswordValidationRules(PasswordPatternViewModel viewModel)
+        {
+            viewModel.MinRequiredPasswordLength = MembershipProvider.MinRequiredPasswordLength;
+            viewModel.MinRequiredNonAlphanumericCharacters = MembershipProvider.MinRequiredNonAlphanumericCharacters;
+            viewModel.PasswordRegexPattern = CreatePasswordRegexPattern().ToString();
+        }
+
+        /// <summary>
         /// Get the view Model to display a Change Password Form and Form result
         /// </summary>
         /// <param name="param">Builder params <see cref="GetChangePasswordViewModelParam"/></param>
@@ -511,10 +520,8 @@ namespace Orckestra.Composer.MyAccount.Services
                 : new ChangePasswordViewModel();
 
             viewModel.Status = param.Status.HasValue ? param.Status.Value.ToString("G") : string.Empty;
-            viewModel.MinRequiredPasswordLength = MembershipProvider.MinRequiredPasswordLength;
-            viewModel.MinRequiredNonAlphanumericCharacters = MembershipProvider.MinRequiredNonAlphanumericCharacters;
-            viewModel.PasswordRegexPattern = CreatePasswordRegexPattern().ToString();
             viewModel.ReturnUrl = param.ReturnUrl;
+            SetPasswordValidationRules(viewModel);
 
             return viewModel;
         }
@@ -525,7 +532,7 @@ namespace Orckestra.Composer.MyAccount.Services
         /// <returns></returns>
         protected virtual Regex CreatePasswordRegexPattern()
         {
-            return new Regex(@"(.*(?:[\!\@\#\$\%\^\&\*\(\)_\-\+\=\[\{\]\}\;\:\>\|\.\/\?]).*){" + MembershipProvider.MinRequiredNonAlphanumericCharacters + "}");            
+            return new Regex($@"(.*(?:[\!\@\#\$\%\^\&\*\(\)_\-\+\=\[\{{\]\}}\;\:\>\|\.\/\?]).*){{{MembershipProvider.MinRequiredNonAlphanumericCharacters}}}");
         }
 
         /// <summary>

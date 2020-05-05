@@ -356,7 +356,7 @@ Enter your credit card information</value>
     <value>Order Details</value>
   </data>
   <data name="L_SignInNow" xml:space="preserve">
-    <value>Already a client?</value>
+    <value>Already a customer?</value>
   </data>
   <data name="B_SignInNow" xml:space="preserve">
     <value>Sign in now</value>
@@ -369,5 +369,11 @@ Enter your credit card information</value>
   </data>
   <data name="B_SignInNowAndSaveTime" xml:space="preserve">
     <value>Sign in and save time!</value>
+  </data>
+  <data name="T_SaveInformation" xml:space="preserve">
+    <value>Save your information for next time</value>
+  </data>
+  <data name="L_CreateAccountForFastCheckout" xml:space="preserve">
+    <value>Create an account and enjoy faster checkout, access to purchase history, wish lists and more.</value>
   </data>
 </root>

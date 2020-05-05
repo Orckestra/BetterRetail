@@ -358,7 +358,7 @@
     <Content Include="Views\web.config" />
     <Content Include="Views\Shared\PageHeader.cshtml" />
     <Content Include="Views\Shared\LanguageSwitch.cshtml" />
-    <Content Include="web.config" />
+    <None Include="web.config" />
     <Content Include="Views\Product\Images.cshtml" />
     <Content Include="Views\Product\Zoom.cshtml" />
     <Content Include="Views\Shared\Breadcrumb.cshtml" />

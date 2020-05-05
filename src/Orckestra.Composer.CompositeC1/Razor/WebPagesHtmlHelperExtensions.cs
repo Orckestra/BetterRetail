@@ -28,7 +28,7 @@ namespace Composite.AspNet.Razor
 
             if (args.Length > 0)
             {
-                helpText = Localized(category, key, args);
+                helpText = Format(helpText, category, key, args);
             }
 
             return new HtmlString(string.Format(@"data-toggle=""popover""
@@ -37,16 +37,22 @@ namespace Composite.AspNet.Razor
             data-content=""&lt;div class='multiline-message'&gt;&lt;span class='multiline-message-icon  fa  fa-comment-o  fa-lg'&gt;&lt;/span&gt;{0}&lt;/div&gt;""", helpText));
         }
 
-        public static IHtmlString ParsleyMessage(this System.Web.WebPages.Html.HtmlHelper htmlHelper, string category, string key, string dataParsleyKey)
+        public static IHtmlString ParsleyMessage(this System.Web.WebPages.Html.HtmlHelper htmlHelper, string category, string key, string dataParsleyKey, params object[] args)
         {
             var message = Localize(category, key);
-            if (!string.IsNullOrEmpty(message))
+
+            if (string.IsNullOrEmpty(message))
             {
-                message = string.Format("data-parsley-{0}=\"{1}\"", dataParsleyKey, message);
-                return new HtmlString(HttpUtility.HtmlDecode(message));
+                return new HtmlString("");
             }
 
-            return new HtmlString("");
+            if (args.Length > 0)
+            {
+                message = Format(message, category, key, args);
+            }
+        
+            message = string.Format("data-parsley-{0}=\"{1}\"", dataParsleyKey, message);
+            return new HtmlString(HttpUtility.HtmlDecode(message));
         }
         /// <summary>
         /// Localizes the strings from Razor using specified key.

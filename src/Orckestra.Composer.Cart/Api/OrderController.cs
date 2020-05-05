@@ -111,5 +111,22 @@ namespace Orckestra.Composer.Cart.Api
 
             return Ok(vm);
         }
+
+        [HttpPost]
+        [ActionName("attach-customer")]
+        public virtual async Task<IHttpActionResult> AddOrderToCustomer(string id)
+        {
+            if (string.IsNullOrEmpty(id)) { return BadRequest("No order found."); }
+
+            var viewModel = await OrderHistoryViewService.UpdateOrderCustomerAsync(new UpdateOrderCustomerParam
+            {
+                CultureInfo = ComposerContext.CultureInfo,
+                CustomerId = ComposerContext.CustomerId,
+                Scope = ComposerContext.Scope,
+                OrderNumber = id
+            });
+
+            return Ok(viewModel);
+        }
     }
 }

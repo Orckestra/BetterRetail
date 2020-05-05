@@ -3,6 +3,9 @@
 @using Orckestra.Composer.Parameters;
 @using System.Threading;
 @using Composite.Core.WebClient.Renderings.Page;
+@using Orckestra.Composer.MyAccount.Services;
+@using Orckestra.Composer.MyAccount.ViewModels;
+
 
 @functions {
     public override string FunctionDescription
@@ -14,7 +17,9 @@
 
     public IComposerContext ComposerContext { get; set; }
 
-     public override bool PreventFunctionOutputCaching { get { return true; } }
+    public IMembershipViewService MembershipViewService { get; set; }
+
+    public override bool PreventFunctionOutputCaching { get { return true; } }
 }
 
 @{
@@ -23,6 +28,9 @@
     {
         CultureInfo = Thread.CurrentThread.CurrentCulture
     });
+
+    var passwordPatternViewModel = new PasswordPatternViewModel();
+    MembershipViewService.SetPasswordValidationRules(passwordPatternViewModel);
 }
 
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
@@ -36,13 +44,17 @@
             <div id="vueCheckoutOrderConfirmation" v-if="Order"
                  @if (!isPreview) { <text> v-cloak="true" </text> }
                  data-oc-controller="SingleCheckout.OrderConfirmation"
-                 data-redirectUrl="@redirectUrl">
+                 data-redirectUrl="@redirectUrl"
+                 data-password-pattern="@passwordPatternViewModel.PasswordRegexPattern"
+                 data-password-length="@passwordPatternViewModel.MinRequiredPasswordLength">
 
                 <h1 data-qa="confirmation-thankyou">@Html.Localize("CheckoutProcess", "T_ThankYou") {{CustomerFirstName}} {{CustomerLastName}}!</h1>
                 <p data-qa="confirmation-order-number">@Html.Raw(@Html.Localized("CheckoutProcess", "L_YourOrderNumber", "<strong>{{OrderNumber}}</strong>"))</p>
                 <p>@Html.Raw(@Html.Localized("CheckoutProcess", "L_EmailConfirmation", "<strong>{{CustomerEmail}}</strong>"))</p>
 
                 @DisplayOrderDetails()
+
+                @CreateAccountForm(passwordPatternViewModel)
             </div>
         </div>
     </div>
@@ -92,4 +104,55 @@
             </div>
         </div>
     </div>
+}
+
+@helper CreateAccountForm(PasswordPatternViewModel passwordPatternViewModel)
+{
+    <form v-if="ShowCreateAccountForm" class="mt-4" id="formCreateAccount">
+        <h3>@Html.Localize("CheckoutProcess", "T_SaveInformation")</h3>
+        <p>@Html.Localize("CheckoutProcess", "L_CreateAccountForFastCheckout")</p>
+        <div class="form-row align-items-end">
+            <div class="form-group col-md-6">
+                <label for="Password">@Html.Localize("Forms", "F_Password") *</label>
+                <input v-model="Password"
+                       id="Password"
+                       name="Password"
+                       data-qa="information-password-input"
+                       v-bind:disabled="IsLoading"
+                       v-on:input="onChangePassword"
+                       v-bind:type="ShowPassword ? 'text' : 'password'"
+                       class="form-control"
+                       required="required"
+                       data-parsley-length="[@passwordPatternViewModel.MinRequiredPasswordLength, 256]"
+                       data-parsley-pattern="@passwordPatternViewModel.PasswordRegexPattern"
+                       @Html.ParsleyMessage("Forms", "F_PasswordRequiredError", "required-message")
+                       @Html.ParsleyMessage("Forms", "F_PasswordLengthError", "length-message")
+                       @Html.ParsleyMessage("Forms", "F_PasswordPatternError", "pattern-message", passwordPatternViewModel.MinRequiredNonAlphanumericCharacters)
+                       @Html.HelpBubble("Forms", "F_PasswordIndication", passwordPatternViewModel.MinRequiredPasswordLength) />
+            </div>
+            <div  class="form-group p-2 col-auto">
+                <a href="#" role="button" v-on:click.prevent="showPasswordToggle" class="text-decoration-none">
+                    <strong v-if="ShowPassword"><i class="fa fa-eye-slash"></i> @Html.Localize("Forms", "L_HidePassword")</strong>
+                    <strong v-else="v-else"><i class="fa fa-eye"></i> @Html.Localize("Forms", "L_ShowPassword")</strong>
+                </a>
+            </div>
+        </div>
+        <p v-if="PasswordStrength === 'short'">@PasswordStrengthCase("L_PasswordStrengthShort", "text-danger")</p>
+        <p v-else-if="PasswordStrength === 'common'">@PasswordStrengthCase("L_PasswordStrengthCommon", "text-danger")</p>
+        <p v-else-if="PasswordStrength === 'weak'">@PasswordStrengthCase("L_PasswordStrengthWeak", "text-danger")</p>
+        <p v-else-if="PasswordStrength === 'ok'">@PasswordStrengthCase("L_PasswordStrengthOk", "text-warning")</p>
+        <p v-else-if="PasswordStrength === 'strong'">@PasswordStrengthCase("L_PasswordStrengthStrong", "text-success")</p>
+        <div class="row">
+            <div class="col-12 mt-3">
+                <button class="btn btn-success text-uppercase" v-on:click.prevent="createAccount" v-bind:disabled="IsLoading">
+                    @Html.Localize("MyAccount", "B_CreateAccount")
+                </button>
+            </div>
+        </div>
+    </form>
+}
+
+@helper PasswordStrengthCase(string typeLable, string color)
+{
+    @Html.Localize("Forms", "L_PasswordStrength") <strong class="@color">@Html.Localize("Forms", typeLable)</strong>
 }

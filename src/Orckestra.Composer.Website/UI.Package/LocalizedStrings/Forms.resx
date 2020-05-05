@@ -522,4 +522,28 @@
   <data name="F_TermsAndConditionsRequiredError" xml:space="preserve">
     <value />
   </data>
+  <data name="L_PasswordStrength" xml:space="preserve">
+    <value>Strength:</value>
+  </data>
+  <data name="L_PasswordStrengthShort" xml:space="preserve">
+    <value>short</value>
+  </data>
+  <data name="L_PasswordStrengthCommon" xml:space="preserve">
+    <value>common</value>
+  </data>
+  <data name="L_PasswordStrengthWeak" xml:space="preserve">
+    <value>weak</value>
+  </data>
+  <data name="L_PasswordStrengthOk" xml:space="preserve">
+    <value>ok</value>
+  </data>
+  <data name="L_PasswordStrengthStrong" xml:space="preserve">
+    <value>strong</value>
+  </data>
+  <data name="L_ShowPassword" xml:space="preserve">
+    <value>Show</value>
+  </data>
+  <data name="L_HidePassword" xml:space="preserve">
+    <value>Hide</value>
+  </data>
 </root>

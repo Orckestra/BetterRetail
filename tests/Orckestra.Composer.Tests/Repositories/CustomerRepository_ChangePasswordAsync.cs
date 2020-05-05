@@ -5,12 +5,12 @@ using Moq;
 using Moq.AutoMock;
 using NUnit.Framework;
 using Orckestra.Composer.Exceptions;
-using Orckestra.Composer.MyAccount.Repositories;
+using Orckestra.Composer.Repositories;
 using Orckestra.Overture;
 using Orckestra.Overture.ServiceModel.Customers.Membership;
 using Orckestra.Overture.ServiceModel.Requests.Customers.Membership;
 
-namespace Orckestra.Composer.MyAccount.Tests.Repositories
+namespace Orckestra.Composer.Tests.Repositories
 {
     // ReSharper disable once InconsistentNaming
     class CustomerRepository_ChangePasswordAsync

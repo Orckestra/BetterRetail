@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 
-namespace Orckestra.Composer.MyAccount.Parameters
+namespace Orckestra.Composer.Parameters
 {
     /// <summary>
     /// Service call params to create a new User Account

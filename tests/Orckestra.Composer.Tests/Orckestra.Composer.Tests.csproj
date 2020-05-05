@@ -214,6 +214,7 @@
     <Compile Include="AssemblyExtensions\AssemblyExtensions_SafeGetTypes.cs" />
     <Compile Include="AssemblyHelper\AssemblyHelper_SafeLoadAssemblies.cs" />
     <Compile Include="ComposerHost\ComposerAssemblies_ValidateWeightAttribute.cs" />
+    <Compile Include="Mock\MockCustomerFactory.cs" />
     <Compile Include="Providers\Membership\AutofacDependencyResolverMoq.cs" />
     <Compile Include="Providers\Membership\ComposerHostMoq.cs" />
     <Compile Include="ComposerHost\ComposerHost_CtorTests.cs" />
@@ -253,6 +254,13 @@
     <Compile Include="Providers\ProxyFactory_Create.cs" />
     <Compile Include="Providers\RegionCode\RegionCodeProvider_Ctor.cs" />
     <Compile Include="Providers\RegionCode\RegionCodeProvider_GetRegion.cs" />
+    <Compile Include="Repositories\CustomerRepository_ChangePasswordAsync.cs" />
+    <Compile Include="Repositories\CustomerRepository_CreateUserAsync.cs" />
+    <Compile Include="Repositories\CustomerRepository_GetCustomerByIdAsync.cs" />
+    <Compile Include="Repositories\CustomerRepository_GetCustomerByTicketAsync.cs" />
+    <Compile Include="Repositories\CustomerRepository_ResetPasswordAsync.cs" />
+    <Compile Include="Repositories\CustomerRepository_SendResetPasswordInstructionsAsync.cs" />
+    <Compile Include="Repositories\CustomerRepository_UpdateUserAsync.cs" />
     <Compile Include="Repositories\InventoryRepository_FindInventoryItemStatus.cs" />
     <Compile Include="Services\Cookie\ComposerCookieAccesserTestsBase.cs" />
     <Compile Include="Services\Scope\ScopeViewService_GetScopeCurrencyAsync.cs" />

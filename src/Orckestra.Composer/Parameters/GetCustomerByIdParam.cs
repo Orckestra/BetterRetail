@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Globalization;
 
-namespace Orckestra.Composer.MyAccount.Parameters
+namespace Orckestra.Composer.Parameters
 {
     /// <summary>
     /// Repository call param to retreive a single Customer based on it's unique identifier
     /// </summary>
-    public class GetCustomerByUsernameParam
+    public class GetCustomerByIdParam 
     {
         /// <summary>
         /// (Mandatory)
-        /// The username of the customer to look for
+        /// The unique Id of the customer to look for
         /// </summary>
-        public string Username { get; set; }
+        public Guid CustomerId { get; set; }
 
         /// <summary>
         /// (Mandatory)
@@ -25,5 +25,7 @@ namespace Orckestra.Composer.MyAccount.Parameters
         /// The Culture for any displayable values
         /// </summary>
         public CultureInfo CultureInfo { get; set; }
+
+        public bool IncludeAddresses { get; set; } = false;
     }
 }

@@ -4,13 +4,13 @@ using FluentAssertions;
 using Moq;
 using Moq.AutoMock;
 using NUnit.Framework;
-using Orckestra.Composer.MyAccount.Parameters;
-using Orckestra.Composer.MyAccount.Repositories;
-using Orckestra.Composer.MyAccount.Tests.Mock;
+using Orckestra.Composer.Parameters;
+using Orckestra.Composer.Repositories;
+using Orckestra.Composer.Tests.Mock;
 using Orckestra.Overture;
 using Orckestra.Overture.ServiceModel.Requests.Customers;
 
-namespace Orckestra.Composer.MyAccount.Tests.Repositories
+namespace Orckestra.Composer.Tests.Repositories
 {
     class CustomerRepositoryUpdateUserAsync
     {

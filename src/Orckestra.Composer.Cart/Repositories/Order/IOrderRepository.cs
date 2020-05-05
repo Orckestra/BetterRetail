@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Orckestra.Composer.Cart.Parameters.Order;
 using Orckestra.Overture.ServiceModel.Customers;
@@ -30,5 +31,12 @@ namespace Orckestra.Composer.Cart.Repositories.Order
         /// <param name="param"></param>
         /// <returns></returns>
         Task<List<Note>> GetShipmentNotesAsync(GetShipmentNotesParam param);
+
+        /// <summary>
+        /// Update order with current id.
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        Task<Overture.ServiceModel.Orders.Order> UpdateOrderAsync(UpdateOrderParam param);
     }
 }
