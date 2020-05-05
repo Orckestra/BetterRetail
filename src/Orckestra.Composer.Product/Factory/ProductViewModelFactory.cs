@@ -82,7 +82,8 @@ namespace Orckestra.Composer.Product.Factory
             var productDefinition = await ProductRepository.GetProductDefinitionAsync(new GetProductDefinitionParam
             {
                 Name = product.DefinitionName,
-                CultureInfo = param.CultureInfo});
+                CultureInfo = param.CultureInfo
+            });
 
             if (productDefinition == null) { return null; }
 
@@ -93,7 +94,8 @@ namespace Orckestra.Composer.Product.Factory
             var currency = await ScopeViewService.GetScopeCurrencyAsync(new GetScopeCurrencyParam
             {
                 CultureInfo = param.CultureInfo,
-                Scope = param.Scope});
+                Scope = param.Scope
+            });
 
             var productViewModel = CreateViewModel(new CreateProductDetailViewModelParam
             {
@@ -135,7 +137,7 @@ namespace Orckestra.Composer.Product.Factory
             {
                 return vm;
             }
-           
+
             vm.IsRecurringOrderEligible = recurringOrdersEnabled;
             vm.Context["IsRecurringOrderEligible"] = recurringOrdersEnabled;
 
@@ -166,9 +168,9 @@ namespace Orckestra.Composer.Product.Factory
             var productDisplayName = productDetailViewModel.DisplayName ?? string.Empty;
 
             var allVariantsVm = GetVariantViewModels(
-                param.Product.Variants, 
-                param.ProductDefinition.VariantProperties, 
-                productDisplayName, 
+                param.Product.Variants,
+                param.ProductDefinition.VariantProperties,
+                productDisplayName,
                 param.CultureInfo,
                 vvm => InitializeVariantImages(param.Product.Id, param.ProductDetailImages, param.CultureInfo, vvm),
                 vvm => InitializeVariantSpecificaton(param.Product, param.ProductDefinition, vvm)
@@ -198,7 +200,7 @@ namespace Orckestra.Composer.Product.Factory
             productDetailViewModel.Price = param.Product.ListPrice;
 
             productDetailViewModel.ProductDetailUrl = ProductUrlProvider.GetProductUrl(new GetProductUrlParam
-            {                
+            {
                 CultureInfo = param.CultureInfo,
                 ProductId = param.Product.Id,
                 VariantId = param.VariantId,
@@ -298,12 +300,12 @@ namespace Orckestra.Composer.Product.Factory
             foreach (var variant in validVariants)
             {
                 var variantVm = ViewModelMapper.MapTo<VariantViewModel>(variant, cultureInfo);
-                
-                if(string.IsNullOrEmpty(variantVm.DisplayName))
+
+                if (string.IsNullOrEmpty(variantVm.DisplayName))
                 {
                     variantVm.DisplayName = displayName;
                 }
-                
+
                 variantVm.Kvas = variant.PropertyBag
                     .Join(kvaPropertieNames, bagEntry => bagEntry.Key,
                         kvaPropertyName => kvaPropertyName,
@@ -423,7 +425,7 @@ namespace Orckestra.Composer.Product.Factory
 
             if (selectedVariantVm != null)
             {
-                productViewModel.Context["allVariants"] = allVariantsVm.Select(v => new { v.ListPrice, v.Id, v.Kvas, v.Sku } );
+                productViewModel.Context["allVariants"] = allVariantsVm.Select(v => new { v.ListPrice, v.Id, v.Kvas, v.Sku });
                 productViewModel.Context["selectedVariantId"] = selectedVariantVm.Id;
                 productViewModel.Context["displayedVariantId"] = selectedVariantVm.Id;
             }
@@ -591,7 +593,7 @@ namespace Orckestra.Composer.Product.Factory
 
             kvas = DisableMissingKvas(kvaParam, kvas);
 
-            return EnableKvasInStock(kvaParam, kvas); 
+            return EnableKvasInStock(kvaParam, kvas);
         }
 
         private List<KeyVariantAttributeItem> DisableMissingKvas(GenerateKvaItemsParam kvaParam, List<KeyVariantAttributeItem> kvas)
@@ -618,7 +620,7 @@ namespace Orckestra.Composer.Product.Factory
         }
 
         protected virtual List<KeyVariantAttributeItem> EnableKvasInStock(GenerateKvaItemsParam kvaParam, List<KeyVariantAttributeItem> kvas)
-        {            
+        {
             //Enable available kvas
             foreach (var kva in kvaParam.SelectedKvas)
             {
@@ -687,29 +689,30 @@ namespace Orckestra.Composer.Product.Factory
                 .Where(pi => string.Equals(pi.ProductId, productId, StringComparison.InvariantCultureIgnoreCase))
                 .Where(pi => string.Equals(pi.VariantId, variantId, StringComparison.InvariantCultureIgnoreCase))
                 .OrderBy(pi => pi.SequenceNumber)
-                .Select(pi => {
+                .Select(pi =>
+                {
                     var image = ViewModelMapper.MapTo<ProductDetailImageViewModel>(pi, cultureInfo);
                     if (string.IsNullOrEmpty(image.Alt))
                         image.Alt = defaultAlt;
                     return image;
                 });
 
-            var productDetailImageViewModels = SetFirstImageSelected(images);
+            if (!images.Any(image => image.Selected))
+            {
+                SetFirstImageSelected(images);
+            }
 
-            return productDetailImageViewModels;
+            return images;
         }
 
-        protected static IEnumerable<ProductDetailImageViewModel> SetFirstImageSelected(
-          IEnumerable<ProductDetailImageViewModel> imageViewModels)
+        protected static void SetFirstImageSelected(IEnumerable<ProductDetailImageViewModel> imageViewModels)
         {
-            var list = imageViewModels.ToList();
-            var firstImage = list.FirstOrDefault();
+            var firstImage = imageViewModels.FirstOrDefault();
 
             if (firstImage != null)
             {
                 firstImage.Selected = true;
             }
-            return list;
         }
 
         /// <summary>
