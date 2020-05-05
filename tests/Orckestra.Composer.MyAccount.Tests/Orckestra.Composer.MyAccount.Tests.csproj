@@ -163,9 +163,9 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo_ComposerWeightAttribute.cs" />
     <Compile Include="Mock\MockAddressFactory.cs" />
+    <Compile Include="Mock\MockCustomerFactory.cs" />
     <Compile Include="Mock\MockMembershipProviderFactory.cs" />
     <Compile Include="Mock\MockMembershipFactory.cs" />
-    <Compile Include="Mock\MockCustomerFactory.cs" />
     <Compile Include="Mock\MockHttpContext.cs" />
     <Compile Include="Mock\MockComposerContextFactory.cs" />
     <Compile Include="Mock\MockMyAccountUrlProviderFactory.cs" />
@@ -173,14 +173,7 @@
     <Compile Include="Repositories\CustomerAddressRepository_CreateAddressAsync.cs" />
     <Compile Include="Repositories\CustomerAddressRepository_DeleteAddressAsync.cs" />
     <Compile Include="Repositories\CustomerAddressRepository_UpdateAddressAsync.cs" />
-    <Compile Include="Repositories\CustomerRepository_ChangePasswordAsync.cs" />
-    <Compile Include="Repositories\CustomerRepository_ResetPasswordAsync.cs" />
-    <Compile Include="Repositories\CustomerRepository_SendResetPasswordInstructionsAsync.cs" />
-    <Compile Include="Repositories\CustomerRepository_CreateUserAsync.cs" />
     <Compile Include="Repositories\CustomerAddressRepository_GetCustomerAddressesAsync.cs" />
-    <Compile Include="Repositories\CustomerRepository_GetCustomerByIdAsync.cs" />
-    <Compile Include="Repositories\CustomerRepository_GetCustomerByTicketAsync.cs" />
-    <Compile Include="Repositories\CustomerRepository_UpdateUserAsync.cs" />
     <Compile Include="Services\CustomerAddressViewService_CreateAddressAsync.cs" />
     <Compile Include="Services\CustomerAddressViewService_DeleteAddressAsync.cs" />
     <Compile Include="Services\CustomerAddressViewService_GetAddressListViewModel.cs" />

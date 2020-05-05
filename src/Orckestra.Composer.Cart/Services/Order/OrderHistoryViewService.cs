@@ -10,6 +10,7 @@ using Orckestra.Composer.Enums;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Dam;
+using Orckestra.Composer.Repositories;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Services.Lookup;
 using Orckestra.Overture.ServiceModel.Orders;
@@ -26,6 +27,7 @@ namespace Orckestra.Composer.Cart.Services.Order
         protected virtual IOrderDetailsViewModelFactory OrderDetailsViewModelFactory { get; private set; }
         protected virtual IImageService ImageService { get; private set; }
         protected virtual IShippingTrackingProviderFactory ShippingTrackingProviderFactory { get; private set; }
+        protected virtual ICustomerRepository CustomerRepository { get; private set; }
 
         public OrderHistoryViewService(
             IOrderHistoryViewModelFactory orderHistoryViewModelFactory,
@@ -34,16 +36,17 @@ namespace Orckestra.Composer.Cart.Services.Order
             ILookupService lookupService,
             IOrderDetailsViewModelFactory orderDetailsViewModelFactory,
             IImageService imageService,
-            IShippingTrackingProviderFactory shippingTrackingProviderFactory)
+            IShippingTrackingProviderFactory shippingTrackingProviderFactory,
+            ICustomerRepository customerRepository)
         {
             OrderHistoryViewModelFactory = orderHistoryViewModelFactory ?? throw new ArgumentNullException(nameof(orderHistoryViewModelFactory));
             OrderUrlProvider = orderUrlProvider ?? throw new ArgumentNullException(nameof(orderUrlProvider));
             LookupService = lookupService ?? throw new ArgumentNullException(nameof(lookupService));
             OrderRepository = orderRepository ?? throw new ArgumentNullException(nameof(orderRepository));
-            OrderUrlProvider = orderUrlProvider;
             OrderDetailsViewModelFactory = orderDetailsViewModelFactory ?? throw new ArgumentNullException(nameof(orderDetailsViewModelFactory));
             ImageService = imageService ?? throw new ArgumentNullException(nameof(imageService));
             ShippingTrackingProviderFactory = shippingTrackingProviderFactory ?? throw new ArgumentNullException(nameof(shippingTrackingProviderFactory));
+            CustomerRepository = customerRepository ?? throw new ArgumentNullException(nameof(customerRepository));
         }
 
         /// <summary>
@@ -166,6 +169,48 @@ namespace Orckestra.Composer.Cart.Services.Order
             return viewModel;
         }
 
+        /// <summary>
+        /// Update Order Customer Id
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        public virtual async Task<Overture.ServiceModel.Orders.Order> UpdateOrderCustomerAsync(UpdateOrderCustomerParam param)
+        {
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo))); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope))); }
+            if (string.IsNullOrWhiteSpace(param.OrderNumber)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.OrderNumber))); }
+            if (param.CustomerId == default) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId))); }
+
+            var order = await OrderRepository.GetOrderAsync(param).ConfigureAwait(false);
+            if (order == null)
+            {
+                return null;
+            }
+
+            var customer = await CustomerRepository.GetCustomerByIdAsync(new GetCustomerByIdParam
+            {
+                CultureInfo = param.CultureInfo,
+                CustomerId = param.CustomerId,
+                Scope = param.Scope
+            }).ConfigureAwait(false);
+
+            if (customer == null || order.Cart.Customer.Email != customer.Email)
+            {
+                return null;
+            }
+
+            order.CustomerId = customer.Id.ToString();
+            var updatedOrder = await OrderRepository.UpdateOrderAsync(new UpdateOrderParam
+            {
+                Scope = param.Scope,
+                Order = order,
+                OrderId = Guid.Parse(order.Id)
+            });
+
+            return updatedOrder;
+        }
+
         protected virtual async Task<OrderDetailViewModel> BuildOrderDetailViewModelAsync(
             Overture.ServiceModel.Orders.Order order,
             GetOrderParam getOrderParam)
@@ -173,9 +218,9 @@ namespace Orckestra.Composer.Cart.Services.Order
             var shipmentsNotes = await GetShipmentsNotes(order.Cart.Shipments, getOrderParam.Scope).ConfigureAwait(false);
 
             var orderChanges = await OrderRepository.GetOrderChangesAsync(new GetOrderChangesParam
-            { 
-                OrderNumber = getOrderParam.OrderNumber, 
-                Scope = getOrderParam.Scope 
+            {
+                OrderNumber = getOrderParam.OrderNumber,
+                Scope = getOrderParam.Scope
             }).ConfigureAwait(false);
 
             var orderStatuses = await LookupService.GetLookupDisplayNamesAsync(new GetLookupDisplayNamesParam

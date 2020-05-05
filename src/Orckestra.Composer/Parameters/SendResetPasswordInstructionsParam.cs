@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Orckestra.Composer.MyAccount.Parameters
+namespace Orckestra.Composer.Parameters
 {
     public class SendResetPasswordInstructionsParam
     {

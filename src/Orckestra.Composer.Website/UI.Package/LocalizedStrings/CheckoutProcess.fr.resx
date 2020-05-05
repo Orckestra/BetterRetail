@@ -309,4 +309,25 @@
   <data name="F_ReviewCart" xml:space="preserve">
     <value>Revoir le panier</value>
   </data>
+  <data name="L_SignInNow" xml:space="preserve">
+    <value>Déjà client?</value>
+  </data>
+  <data name="B_SignInNow" xml:space="preserve">
+    <value>Connectez vous maintenant</value>
+  </data>
+  <data name="B_ContinueAsGuest" xml:space="preserve">
+    <value>Continuer en tant qu'invité</value>
+  </data>
+  <data name="L_AccountAlreadyExists" xml:space="preserve">
+    <value>Un compte existe déjà avec cette adresse e-mail.</value>
+  </data>
+  <data name="B_SignInNowAndSaveTime" xml:space="preserve">
+    <value>Connectez-vous et gagnez du temps!</value>
+  </data>
+  <data name="T_SaveInformation" xml:space="preserve">
+    <value>Enregistrez vos informations pour la prochaine fois</value>
+  </data>
+  <data name="L_CreateAccountForFastCheckout" xml:space="preserve">
+    <value>Créez un compte et profitez d'un paiement plus rapide, accédez à l'historique des achats, aux listes de souhaits et plus encore.</value>
+  </data>
 </root>

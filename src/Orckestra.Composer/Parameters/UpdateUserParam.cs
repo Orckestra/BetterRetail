@@ -1,6 +1,6 @@
 ﻿using Orckestra.Overture.ServiceModel.Customers;
 
-namespace Orckestra.Composer.MyAccount.Parameters
+namespace Orckestra.Composer.Parameters
 {
     public class UpdateUserParam
     {

@@ -197,20 +197,6 @@ namespace Orckestra.Composer.Factory
             return itemList;
         }
 
-        //TODO: rename to GetCustomerAsync if used, directly return customer without await
-        protected virtual async Task<Customer> GetCustomer(Guid customerId, string scopeId)
-        {
-            var getCustomerRequest = new GetCustomerRequest
-            {
-                CustomerId = customerId,
-                ScopeId = scopeId
-            };
-
-            var customer = await OvertureClient.SendAsync(getCustomerRequest).ConfigureAwait(false);
-
-            return customer;
-        }
-
         public virtual async Task<RecurringOrderTemplateLineItemViewModel> MapToTemplateLineItemViewModel(MapToTemplateLineItemViewModelParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }

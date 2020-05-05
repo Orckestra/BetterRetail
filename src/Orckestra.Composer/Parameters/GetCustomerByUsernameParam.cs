@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Globalization;
 
-namespace Orckestra.Composer.MyAccount.Parameters
+namespace Orckestra.Composer.Parameters
 {
     /// <summary>
     /// Repository call param to retreive a single Customer based on it's unique identifier
     /// </summary>
-    public class GetCustomerByEmailParam
+    public class GetCustomerByUsernameParam
     {
         /// <summary>
         /// (Mandatory)
         /// The username of the customer to look for
         /// </summary>
-        public string Email { get; set; }
+        public string Username { get; set; }
 
         /// <summary>
         /// (Mandatory)

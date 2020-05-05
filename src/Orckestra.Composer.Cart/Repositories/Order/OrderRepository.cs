@@ -6,6 +6,7 @@ using Orckestra.Composer.Cart.Parameters.Order;
 using Orckestra.Overture;
 using Orckestra.Overture.ServiceModel.Customers;
 using Orckestra.Overture.ServiceModel.Orders;
+using Orckestra.Overture.ServiceModel.Requests.Customers;
 using Orckestra.Overture.ServiceModel.Requests.Orders;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
@@ -98,6 +99,28 @@ namespace Orckestra.Composer.Cart.Repositories.Order
             {
                 ScopeId = param.Scope,
                 ShipmentId = param.ShipmentId
+            };
+
+            return OvertureClient.SendAsync(request);
+        }
+
+        /// <summary>
+        /// Update order with current id.
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        public virtual Task<Overture.ServiceModel.Orders.Order> UpdateOrderAsync(UpdateOrderParam param)
+        {
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (param.OrderId == default) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.OrderId))); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope))); }
+            if (param.Order == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.Order))); }
+
+            var request = new SaveOrderRequest
+            {
+                ScopeId = param.Scope,
+                OrderId = param.OrderId,
+                Order = param.Order,
             };
 
             return OvertureClient.SendAsync(request);
