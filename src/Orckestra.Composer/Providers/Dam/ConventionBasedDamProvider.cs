@@ -195,6 +195,7 @@ namespace Orckestra.Composer.Providers.Dam
                 SequenceNumber = productMedia?.Position ?? 0,
                 FallbackImageUrl = GetFallbackImageUrl(),
                 Alt = productMedia?.Title,
+                Selected = productMedia?.IsCover ?? false,
             };
         }
 
@@ -241,7 +242,7 @@ namespace Orckestra.Composer.Providers.Dam
         {
             return productMedias?.Where(x => x.MediaType == nameof(MediaTypeEnum.Image) && x.IsRemoved != true);
         }
-           
+
         protected virtual IEnumerable<ProductMedia> GetVariantMediaSet(List<VariantMediaSet> variantMediaSet, Variant variant)
         {
             if (variant != null)
