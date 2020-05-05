@@ -695,7 +695,7 @@ namespace Orckestra.Composer.Product.Factory
                     if (string.IsNullOrEmpty(image.Alt))
                         image.Alt = defaultAlt;
                     return image;
-                });
+                }).ToList();
 
             if (!images.Any(image => image.Selected))
             {
