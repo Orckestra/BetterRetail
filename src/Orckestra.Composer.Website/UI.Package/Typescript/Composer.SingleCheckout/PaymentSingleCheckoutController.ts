@@ -13,7 +13,7 @@ module Orckestra.Composer {
             self.viewModelName = 'Payment';
             const SAVED_CREDIT_CARD = 'SavedCreditCard';
 
-                let vuePaymentMixin = {
+            let vuePaymentMixin = {
                 mounted() {
                     if (this.FulfilledBillingAddress) {
                         this.preparePayment();
@@ -123,11 +123,11 @@ module Orckestra.Composer {
                     },
 
                     submitPayment(): Q.Promise<any> {
-                       return this.processPayment()
-                        .then(() => {
-                            console.log('Committing payment information.');
-                            return self.activePaymentProvider.submitPayment(this.Payment.ActivePaymentViewModel);
-                        });
+                        return this.processPayment()
+                            .then(() => {
+                                console.log('Committing payment information.');
+                                return self.activePaymentProvider.submitPayment(this.Payment.ActivePaymentViewModel);
+                            });
                     },
 
                     preparePayment(): Q.Promise<boolean> {

@@ -272,7 +272,7 @@ namespace Orckestra.Composer.Cart.Factory.Order
             return LocalizationProvider.GetLocalizedString(new GetLocalizedParam
             {
                 Category = "General",
-                Key = "L_OrderStatus_" + rawOrder.OrderStatus,
+                Key = $"L_OrderStatus_{rawOrder.OrderStatus}",
                 CultureInfo = param.CultureInfo
             });
         }
