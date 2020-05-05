@@ -9,6 +9,7 @@
 ///<reference path='../Composer.MyAccount/Common/MyAccountEvents.ts' />
 ///<reference path='../Composer.MyAccount/Common/MyAccountStatus.ts' />
 ///<reference path='../Utils/PasswordCheckService.ts' />
+///<reference path='../ErrorHandling/ErrorHandler.ts' />
 
 module Orckestra.Composer {
     'use strict';
@@ -156,6 +157,9 @@ module Orckestra.Composer {
                 }
 
                return result;
+            }).fail(({Errors: [error]}) => {
+                ErrorHandler.instance().outputErrorFromCode(error.ErrorCode);
+                throw error;
             });
         }
 
