@@ -99,7 +99,7 @@
             <div class="col-2 d-block d-sm-none order-5">
                 @RemoveCartItemMobileBtn()
             </div>
-            <div v-if="item.RecurringOrderProgramName" class="col-12  offset-2 offset-sm-1  order-8">
+            <div v-if="item.RecurringOrderProgramName" class="col-11  offset-2 offset-sm-1  order-8">
                 @CartItemRecurringOrderProgram()
             </div>
         </div>
@@ -235,8 +235,11 @@
 
 @helper CartItemRecurringOrderProgram()
 {
-    <div v-if="item.RecurringOrderProgramFrequencies" v-bind:data-qa="'cart-item-reccuring-icon-' + index" class="mt-2">
-        <div class="cart-recurring-cta js-cartRecurringCta">
+    <div v-if="item.RecurringOrderProgramFrequencies" v-bind:data-qa="'cart-item-reccuring-icon-' + index" class="mt-2"
+         v-bind:Id="'recurringOrderContainer' + index">
+        <div v-bind:Id="'recurringLabel' + index"
+             class="cart-recurring-cta js-cartRecurringCta collapse show"
+             v-bind:data-parent="'#recurringOrderContainer' + index">
             @RecurringOrderProgramIcon()
             <span v-if="item.RecurringOrderFrequencyName">
                 {{item.RecurringOrderFrequencyDisplayName}}
@@ -244,6 +247,16 @@
             <span v-else="else">
                 @Html.Localize("ProductPage", "L_RecurringFrequencyOnce")
             </span>
+            <button class="btn btn-link" type="button" data-toggle="collapse" aria-expanded="false"
+                    v-bind:data-target="'#recurringModes' + index"
+                    v-bind:aria-controls="'recurringModes' + index">
+                @Html.Localize("ShoppingCart", "L_RecurringChangeFrequency")
+            </button>
+        </div>
+        <div v-bind:data-parent="'#recurringOrderContainer' + index"
+             v-bind:Id="'recurringModes' + index"
+             class="collapse">
+            @RecurringModes()
         </div>
     </div>
 }
@@ -254,4 +267,77 @@
          class="recurring-icon"
          alt="@Html.Localize("General", "L_RecurringProduct")"
          title="@Html.Localize("General", "L_RecurringProduct")" />
+}
+
+@helper RecurringModes()
+{
+    <div class="mt-2 form-group">
+        <div class="alert border mb-2 bg-white" v-bind:class="{'bg-selected border-primary': !item.RecurringOrderFrequencyName}">
+            <div class="form-check">
+                <input v-bind:Id="'UseSingle' + index"
+                       v-bind:checked="!item.RecurringOrderFrequencyName"
+                       type="radio"
+                       data-target=".modeSelection"
+                       v-bind:name="'recurringMode-' + index"
+                       v-bind:disabled="IsLoading"
+                       value="single"
+                       v-on:change="changeRecurringMode($event, item)"
+                       class="form-check-input" xmlns:v-bind="v-bind" xmlns:v-on="v-on" />
+                <label class="form-check-label" v-bind:for="'UseSingle' + index">@Html.Localize("ProductPage", "L_RecurringFrequencyOnce")</label>
+            </div>
+        </div>
+        <div class="alert border mb-2 bg-white" v-bind:class="{'bg-selected border-primary': item.RecurringOrderFrequencyName}">
+            <div class="form-check">
+                <input v-bind:Id="'UseRecurring' + index"
+                       v-bind:checked="item.RecurringOrderFrequencyName !== null"
+                       type="radio"
+                       data-target=".modeSelection"
+                       v-bind:name="'recurringMode-' + index"
+                       v-bind:disabled="IsLoading"
+                       value="recurring"
+                       v-on:change="changeRecurringMode($event, item)"
+                       class="form-check-input" xmlns:v-bind="v-bind" xmlns:v-on="v-on" />
+                <label class="form-check-label" v-bind:for="'UseRecurring' + index">
+                    @RecurringOrderProgramIcon()
+                    @Html.Raw(Html.Localized("ProductPage", "L_RecurringPitch", Html.Localize("ProductPage", "L_RecurringSaveRate")))
+                </label>
+            </div>
+            <div class="recurring-frequencies collapse modeSelection mt-4" v-bind:class="{'show': item.RecurringOrderFrequencyName}">
+                <div class="row">
+                    <div class="col-10 col-md-9 col-lg-7 form-group">
+                        <label for="recurringOrderFrequencyNameSelect">@Html.Localize("ProductPage", "L_RecurringDeliveryFrequency")</label>
+                        <button class="btn" role="button" data-trigger="click" data-toggle="popover" data-placement="top" title=""
+                                data-content="@Html.Localize("ProductPage", "L_RecurringBubblePitch")"
+                                data-html="true"
+                                data-original-title="@Html.Localize("ProductPage", "L_RecurringBubblePitchTitle")">
+                            <span class="fa fa-question-circle"></span>
+                        </button>
+                        <select id="recurringOrderFrequencyNameSelect"
+                                class="recurring-orders-frequency-selection form-control"
+                                v-model="item.RecurringOrderFrequencyName">
+                            <option v-for="(recurringOrder, index) in item.RecurringOrderProgramFrequencies"
+                                    v-bind:value="recurringOrder.RecurringOrderFrequencyName">
+                                {{recurringOrder.DisplayName}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="float-right">
+            <button class="btn btn-secondary" type="button" data-toggle="collapse" aria-expanded="false"
+                    v-bind:data-target="'#recurringLabel' + index"
+                    v-bind:aria-controls="'recurringLabel' + index"
+                    v-bind:disabled="IsLoading"
+                    v-on:click="resetLineItemRecurringFrequency(item)">
+                @Html.Localize("ShoppingCart", "B_CancelRecurrenceChanges")
+            </button>
+            <button class="btn btn-primary"
+                    v-on:click="updateLineItemRecurringFrequency($event, item)"
+                    v-bind:data-lablecollapse="'recurringLabel' + index"
+                    v-bind:disabled="IsLoading">
+                @Html.Localize("ShoppingCart", "B_ApplyRecurrenceChanges")
+            </button>
+        </div>
+    </div>
 }

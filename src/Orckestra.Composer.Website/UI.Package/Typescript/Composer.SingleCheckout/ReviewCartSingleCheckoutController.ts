@@ -15,6 +15,7 @@ module Orckestra.Composer {
             var vueReviewCartMixin = {
                 mounted() {
                     this.Steps.ReviewCart.EnteredOnce = this.FulfilledCart;
+                    this.updateBeforeEditLineItemList();
                 },
                 computed: {
                     FulfilledCart() {
@@ -45,21 +46,12 @@ module Orckestra.Composer {
 
                         if (!this.debounceUpdateItem) {
                             this.debounceUpdateItem = _.debounce(id => {
-                                this.Mode.Loading = true;
                                 let itemToUpdate = _.find(this.Cart.LineItemDetailViewModels, (i: any) => i.Id === id);
                                 self.checkoutService.updateCartItem(itemToUpdate.Id,
                                     itemToUpdate.Quantity,
                                     itemToUpdate.ProductId,
-                                    itemToUpdate.RecurringOrderFrequencyName === '' ? null : itemToUpdate.RecurringOrderFrequencyName,
+                                    itemToUpdate.RecurringOrderFrequencyName ? itemToUpdate.RecurringOrderFrequencyName : null,
                                     itemToUpdate.RecurringOrderProgramName)
-                                    .then(cart => {
-                                        if (cart) {
-                                            this.Cart = cart;
-                                        }
-                                    })
-                                    .finally(() => {
-                                        this.Mode.Loading = false;
-                                    });
                             }, 400);
                         }
 
@@ -80,6 +72,46 @@ module Orckestra.Composer {
                             });
 
                         this.Cart.LineItemDetailViewModels.splice(index, 1);
+                    },
+                    changeRecurringMode(e, item) {
+                        let { value } = e.target;
+                        item.RecurringOrderFrequencyName = value !== 'single' && item.RecurringOrderProgramFrequencies.length
+                            ? item.RecurringOrderProgramFrequencies[0].RecurringOrderFrequencyName : null
+                    },
+                    resetLineItemRecurringFrequency(item) {
+                        let oldItem = this.beforeEditLineItemList.find(lineItem => lineItem.id === item.Id);
+                        item.RecurringOrderFrequencyName = oldItem.name;
+                        item.RecurringOrderFrequencyDisplayName = oldItem.displayName;
+                    },
+                    updateLineItemRecurringFrequency(event, item) {
+                        let collapseId = $(event.target).data('lablecollapse');
+
+                        if(!this.isRecurringFrequencyModified(item)) {
+                            this.collapseById(collapseId, 'show');
+                            return;
+                        }
+
+                        self.checkoutService.updateCartItem(item.Id,
+                            item.Quantity,
+                            item.ProductId,
+                            item.RecurringOrderFrequencyName ? item.RecurringOrderFrequencyName : null,
+                            item.RecurringOrderProgramName)
+                            .finally(() => {
+                               this.collapseById(collapseId, 'show');
+                            })
+                    },
+                    collapseById(collapseId: string, action: string) {
+                        $(`#${collapseId}`).collapse(action);
+                    },
+                    isRecurringFrequencyModified(item: any): boolean {
+                        return this.beforeEditLineItemList.find(i => i.id === item.Id && i.name !== item.RecurringOrderFrequencyName)
+                    },
+                    updateBeforeEditLineItemList() {
+                        this.beforeEditLineItemList = this.Cart.LineItemDetailViewModels.map(item => ({
+                            name: item.RecurringOrderFrequencyName,
+                            displayName: item.RecurringOrderFrequencyDisplayName,
+                            id: item.Id
+                        }));
                     }
                 }
             };

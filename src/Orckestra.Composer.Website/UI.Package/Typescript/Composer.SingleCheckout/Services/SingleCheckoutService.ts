@@ -399,11 +399,20 @@ module Orckestra.Composer {
         public updateCartItem(id: string, quantity: number, productId: string,
             recurringOrderFrequencyName?: string,
             recurringOrderProgramName?: string): Q.Promise<any> {
+            let vue: any = this.VueCheckout;
+            vue.Mode.Loading = true;
 
             return this.invalidateCache().
                 then(() => this.cartService.updateLineItem(id, quantity, productId, recurringOrderFrequencyName, recurringOrderProgramName))
+                .then(Cart => {
+                    this.updateVueState(vue, Cart);
+                    return Cart;
+                })
                 .fail(reason => {
                     this.handleError(reason);
+                })
+                .finally(() => {
+                    vue.Mode.Loading = false;
                 });
         }
 
@@ -435,6 +444,7 @@ module Orckestra.Composer {
                 vue.Errors[key] = false;
             });
             vue.Cart = Cart;
+            vue.updateBeforeEditLineItemList();
         }
 
         public updatePaymentMethod(param: any): Q.Promise<IActivePaymentViewModel> {
