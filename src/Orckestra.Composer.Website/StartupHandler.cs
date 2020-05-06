@@ -166,7 +166,6 @@ namespace Orckestra.Composer.Website
             functions.RegisterAction<MyAccountController>("EditAddress", "Composer.MyAccount.UpdateAddress").IncludePathInfo();
             functions.RegisterAction<MyAccountController>("CurrentOrders", "Composer.MyAccount.CurrentOrders");
             functions.RegisterAction<MyAccountController>("PastOrders", "Composer.MyAccount.PastOrders");
-            functions.RegisterAction<MyAccountController>("OrderDetails", "Composer.MyAccount.OrderDetails");
             functions.RegisterAction<MyAccountController>("WishList", "Composer.MyAccount.WishList")
                 .AddParameter("emptyWishListContent", typeof(XhtmlDocument), true, label: "Empty Wish List Content", helpText: "That content will be shown when Wish List is Empty");
             functions.RegisterAction<MyAccountController>("RecurringSchedule", "Composer.MyAccount.RecurringSchedule");

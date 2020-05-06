@@ -1,0 +1,84 @@
+﻿@inherits RazorFunction
+@using Orckestra.Composer.Services;
+@using Orckestra.Composer.Cart.Services.Order;
+@using Orckestra.Composer.Cart.Parameters.Order;
+@using Orckestra.Composer.Utils;
+
+
+@functions {
+    public IOrderHistoryViewService OrderHistoryViewService { get; set; }
+    public IComposerContext ComposerContext { get; set; }
+}
+
+@{
+    var id = Request["id"];
+    if (string.IsNullOrEmpty(id))
+    {
+        return;
+    }
+
+    var order = OrderHistoryViewService.GetOrderDetailViewModelAsync(new GetCustomerOrderParam
+    {
+        OrderNumber = id,
+        CustomerId = ComposerContext.CustomerId,
+        Scope = ComposerContext.Scope,
+        CultureInfo = ComposerContext.CultureInfo,
+        CountryCode = ComposerContext.CountryCode,
+        BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
+    }).Result;
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<head>
+</head>
+<body>
+    <div data-oc-controller="Orders.OrderDetails">
+
+        <div class="card">
+            <h5 class="card-header">
+                @Html.Localize("MyAccount", "T_OrderDetails")
+            </h5>
+            <div class="card-body">
+                @OrderSummary()
+            </div>
+
+            @OrderShipments()
+        </div>
+
+
+    </div>
+</body>
+</html>
+
+@helper OrderSummary()
+{
+    <div class="card">
+        <div class="card-header">
+            @Html.Localized("MyAccount", "L_OrderedOn", order.OrderInfos.OrderDate)
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-8">
+                    @Html.Localized("MyAccount", "L_OrderNumber", order.OrderInfos.OrderNumber)
+
+                    @{
+                        var status = order.OrderInfos.OrderStatusRaw;
+                        var statusCss = status == "InProgress" ? "text-warning" :
+                            status == "Canceled" ? "text-danger" : "text-success";
+                    }
+
+                    <strong class="@statusCss">@order.OrderInfos.OrderStatus</strong>
+                </div>
+                <div class="col-4 text-right">
+                    @Html.Localize("MyAccount", "L_Total"):
+                    <h5>@order.OrderInfos.PricePaid}}</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@helper OrderShipments()
+{
+
+}

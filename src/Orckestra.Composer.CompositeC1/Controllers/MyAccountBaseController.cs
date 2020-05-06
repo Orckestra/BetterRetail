@@ -177,7 +177,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
 
             var vm = OrderHistoryViewService.GetOrderDetailViewModelAsync(new GetCustomerOrderParam
             {
-                OrderNumber = id,
+                OrderNumber = Request["id"],
                 CustomerId = ComposerContext.CustomerId,
                 Scope = ComposerContext.Scope,
                 CultureInfo = ComposerContext.CultureInfo,
