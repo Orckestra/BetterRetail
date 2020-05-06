@@ -231,7 +231,7 @@ namespace Orckestra.Composer.Cart.Factory.Order
             var lightOrderVm = new LightOrderDetailViewModel();
             var orderInfo = ViewModelMapper.MapTo<OrderDetailInfoViewModel>(rawOrder, param.CultureInfo);
 
-            orderInfo.OrderStatus = param.OrderStatuses[rawOrder.OrderStatus];
+            orderInfo.OrderStatus = GetOrderStatusDisplayName(rawOrder, param);
             orderInfo.OrderStatusRaw = rawOrder.OrderStatus;
 
             var orderDetailUrl = UrlFormatter.AppendQueryString(param.OrderDetailBaseUrl, new NameValueCollection
@@ -265,6 +265,16 @@ namespace Orckestra.Composer.Cart.Factory.Order
             }
 
             return lightOrderVm;
+        }
+
+        protected virtual string GetOrderStatusDisplayName(OrderItem rawOrder, GetOrderHistoryViewModelParam param)
+        {
+            return LocalizationProvider.GetLocalizedString(new GetLocalizedParam
+            {
+                Category = "General",
+                Key = $"L_OrderStatus_{rawOrder.OrderStatus}",
+                CultureInfo = param.CultureInfo
+            });
         }
     }
 }

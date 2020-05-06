@@ -73,7 +73,7 @@ namespace Orckestra.Composer.Cart.Tests.Factory.Order
             vm.Should().NotBeNull();
             vm.OrderInfos.Should().NotBeNull();
             vm.OrderInfos.OrderNumber.ShouldAllBeEquivalentTo(order.OrderNumber);
-            vm.OrderInfos.OrderStatus.ShouldAllBeEquivalentTo("In Progress");
+            vm.OrderInfos.OrderStatus.Should().NotBeNullOrEmpty();
             vm.OrderSummary.Should().NotBeNull();
             vm.Payments.Should().NotBeNull();
             vm.Payments.Count.ShouldBeEquivalentTo(2);

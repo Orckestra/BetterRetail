@@ -31,9 +31,10 @@ module Orckestra.Composer {
             this.cacheProvider = CacheProvider.instance();
             this.findOrderService = new FindOrderService(this.eventHub);
             this.membershipService = new MembershipService(new MembershipRepository());
+            let form = this.context.container.find('form');
             this.passwordCheckService = new PasswordCheckService({
-                passwordPattern: RegExp(this.context.container.data('password-pattern')),
-                minimumLength: this.context.container.data('password-length')
+                passwordPattern: RegExp(form.data('password-pattern')),
+                minimumLength: form.data('password-length')
             });
 
             this.cacheProvider.defaultCache.get<any>(this.orderCacheKey)

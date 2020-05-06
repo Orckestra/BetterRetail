@@ -61,6 +61,14 @@ namespace Orckestra.Composer.Providers.Dam
         public string FallbackImageUrl { get; set; }
 
         /// <summary>
+        /// Gets or sets is Image selected.
+        /// </summary>
+        /// <value>
+        /// Is Image Selected.
+        /// </value>
+        public bool Selected { get; set; }
+
+        /// <summary>
         /// Get the status if product zoom image URL is defined
         /// </summary>        
         public bool IsProductZoomImageUrlDefined

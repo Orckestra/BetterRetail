@@ -313,10 +313,10 @@
     <value>Déjà client?</value>
   </data>
   <data name="B_SignInNow" xml:space="preserve">
-    <value>Connectez vous maintenant</value>
+    <value>Connectez-vous maintenant</value>
   </data>
   <data name="B_ContinueAsGuest" xml:space="preserve">
-    <value>Continuer en tant qu'invité</value>
+    <value>Continuer en tant qu’invité</value>
   </data>
   <data name="L_AccountAlreadyExists" xml:space="preserve">
     <value>Un compte existe déjà avec cette adresse e-mail.</value>

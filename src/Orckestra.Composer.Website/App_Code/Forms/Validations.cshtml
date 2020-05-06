@@ -24,3 +24,15 @@
         <div>@Html.Localize("Errors", "L_SelectAStore")</div>
     </div>
 }
+
+@helper PasswordStrengthMessage(string vueBinding = "PasswordStrength")
+{
+    <p v-if="@vueBinding">
+        @Html.Localize("Forms", "L_PasswordStrength")
+        <strong v-if="@vueBinding === 'short'" class="text-danger">@Html.Localize("Forms", "L_PasswordStrengthShort")</strong>
+        <strong v-else-if="@vueBinding === 'common'" class="text-danger">@Html.Localize("Forms", "L_PasswordStrengthCommon")</strong>
+        <strong v-else-if="@vueBinding === 'weak'" class="text-danger">@Html.Localize("Forms", "L_PasswordStrengthWeak")</strong>
+        <strong v-else-if="@vueBinding === 'ok'" class="text-warning">@Html.Localize("Forms", "L_PasswordStrengthOk")</strong>
+        <strong v-else-if="@vueBinding === 'strong'" class="text-success">@Html.Localize("Forms", "L_PasswordStrengthStrong")</strong>
+    </p>
+}
