@@ -161,7 +161,6 @@ namespace Orckestra.Composer.Website
 
             functions.RegisterAction<MyAccountController>("AccountHeader", "Composer.MyAccount.AccountHeader");
             functions.RegisterAction<MyAccountController>("UpdateAccount", "Composer.MyAccount.UpdateAccount");
-            functions.RegisterAction<MyAccountController>("AddressList", "Composer.MyAccount.AddressList");
             functions.RegisterAction<MyAccountController>("CreateAddress", "Composer.MyAccount.CreateAddress");
             functions.RegisterAction<MyAccountController>("EditAddress", "Composer.MyAccount.UpdateAddress").IncludePathInfo();
             functions.RegisterAction<MyAccountController>("CurrentOrders", "Composer.MyAccount.CurrentOrders");
