@@ -121,7 +121,7 @@
           <Data dataScopeIdentifier="administrated" dataFilename="~\Datas\Composite.Data.Types.IGeneratedTypeWhiteLists_administrated.xml" />
         </Type>
         <Type type="Composite.Data.Types.IFolderWhiteList,Composite">
-          <Data dataScopeIdentifier="administrated" dataFilename="~\Datas\Composite.Data.Types.IFolderWhiteList_administrated.xml.xml" />
+          <Data dataScopeIdentifier="administrated" dataFilename="~\Datas\Composite.Data.Types.IFolderWhiteList_administrated.xml" />
         </Type>
         <Type type="Composite.Data.Types.IMethodBasedFunctionInfo,Composite">
           <Data dataScopeIdentifier="public" dataFilename="~\Datas\Composite.Data.Types.IMethodBasedFunctionInfos_public.xml" />
