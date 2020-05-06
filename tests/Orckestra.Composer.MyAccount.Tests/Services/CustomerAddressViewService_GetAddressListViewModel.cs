@@ -62,8 +62,6 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
                 Scope = GetRandom.String(32),
                 CustomerId = Guid.NewGuid(),
                 CultureInfo = TestingExtensions.GetRandomCulture(),
-                AddAddressUrl = GetRandom.String(32),
-                EditAddressBaseUrl = GetRandom.String(32),
                 CountryCode = GetRandom.String(32)
             };
 
@@ -71,7 +69,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
 
             //Assert
             viewModel.Should().NotBeNull("This view model should never be null");
-            viewModel.AddAddressUrl.ShouldBeEquivalentTo(param.AddAddressUrl);
+            viewModel.AddAddressUrl.Should().NotBeNullOrEmpty();
             viewModel.Addresses.First().AddressName.ShouldBeEquivalentTo(address.AddressName);
         }
 
@@ -98,8 +96,6 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             {
                 Scope = GetRandom.String(32),
                 CustomerId = Guid.NewGuid(),
-                AddAddressUrl = GetRandom.String(32),
-                EditAddressBaseUrl = GetRandom.String(32),
                 CultureInfo = cultureInfo,
                 CountryCode = GetRandom.String(32)
             };
@@ -124,8 +120,6 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
                 Scope = scope,
                 CustomerId = Guid.NewGuid(),
                 CultureInfo = TestingExtensions.GetRandomCulture(),
-                AddAddressUrl = GetRandom.String(32),
-                EditAddressBaseUrl = GetRandom.String(32),
                 CountryCode = GetRandom.String(32)
             };
 
@@ -149,8 +143,6 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
                 Scope = GetRandom.String(32),
                 CustomerId = Guid.NewGuid(),
                 CultureInfo = TestingExtensions.GetRandomCulture(),
-                AddAddressUrl = GetRandom.String(32),
-                EditAddressBaseUrl = GetRandom.String(32),
                 CountryCode = countryCode
             };
 
@@ -170,8 +162,6 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             {
                 Scope = GetRandom.String(32),
                 CultureInfo = TestingExtensions.GetRandomCulture(),
-                AddAddressUrl = GetRandom.String(32),
-                EditAddressBaseUrl = GetRandom.String(32),
                 CountryCode = GetRandom.String(32)
             };
 
