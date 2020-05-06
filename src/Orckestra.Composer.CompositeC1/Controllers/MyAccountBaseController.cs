@@ -95,30 +95,6 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         }
 
         [AuthorizeAndRedirect]
-        [OutputCache(Duration = 0, NoStore = true)]
-        public virtual ActionResult AddressList()
-        {
-            var urlParam = new BaseUrlParameter
-            {
-                CultureInfo = ComposerContext.CultureInfo
-            };
-            var addAddressUrl = MyAccountUrlProvider.GetAddAddressUrl(urlParam);
-            var editAddressBaseUrl = MyAccountUrlProvider.GetUpdateAddressBaseUrl(urlParam);
-
-            var viewModel = CustomerAddressViewService.GetAddressListViewModelAsync(new GetAddressListViewModelParam
-            {
-                CustomerId = ComposerContext.CustomerId,
-                CultureInfo = ComposerContext.CultureInfo,
-                Scope = ComposerContext.Scope,
-                AddAddressUrl = addAddressUrl,
-                EditAddressBaseUrl = editAddressBaseUrl,
-                CountryCode = ComposerContext.CountryCode
-            }).Result;
-
-            return View("AddressListBlade", viewModel);
-        }
-
-        [AuthorizeAndRedirect]
         public virtual ActionResult CreateAddress()
         {
             var viewModel = CustomerAddressViewService.GetCreateAddressViewModelAsync(new GetCreateAddressViewModelAsyncParam

@@ -1,0 +1,119 @@
+﻿@inherits RazorFunction
+@using Orckestra.Composer.Services;
+@using Orckestra.Composer.MyAccount.Services;
+@using Orckestra.Composer.MyAccount.Parameters;
+@using Orckestra.Composer.MyAccount.ViewModels;
+
+
+@functions {
+    public ICustomerAddressViewService CustomerAddressViewService { get; set; }
+    public IComposerContext ComposerContext { get; set; }
+}
+
+@{
+    var addressesViewModel = CustomerAddressViewService.GetAddressListViewModelAsync(
+        new GetAddressListViewModelParam
+        {
+            CustomerId = ComposerContext.CustomerId,
+            CultureInfo = ComposerContext.CultureInfo,
+            Scope = ComposerContext.Scope,
+            CountryCode = ComposerContext.CountryCode
+        }).Result;
+
+    var preferredAddress = addressesViewModel.Addresses.Find(a => a.IsPreferredShipping);
+    var addressess = addressesViewModel.Addresses.FindAll(a => !a.IsPreferredShipping);
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<head>
+</head>
+<body>
+    <div data-oc-controller="MyAccount.AddressList">
+        <div class="card">
+            <h5 class="card-header">
+                @Html.Localize("MyAccount", "T_MyAddresses")
+            </h5>
+            <div class="card-body">
+                @if (preferredAddress != null)
+                {
+                    @AddressItem(preferredAddress)
+                }
+
+                <div class="form-group">
+                    <a href="@addressesViewModel.AddAddressUrl"
+                       class="hitbox"
+                       title="@Html.Localize("MyAccount", "B_AddNewAddress")">
+                        @Html.Localize("MyAccount", "B_AddNewAddress")
+                    </a>
+                </div>
+
+                @foreach (var address in addressess)
+                {
+                    @AddressItem(address)
+                }
+            </div>
+        </div>
+        @AddressHelpers.deleteAddressConfirmationModal("confirmationModal")
+    </div>
+</body>
+</html>
+
+@helper AddressItem(AddressListItemViewModel address)
+{
+    <div class="card  mb-3 @(address.IsPreferredShipping ? "bg-selected border-primary" : "")"
+         data-qa="address-@address.AddressName"
+         data-address-id="@address.Id">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4 order-1  order-sm-2 text-lg-right">
+                    <h5>@address.AddressName</h5>
+                    @if (address.IsPreferredShipping)
+                    {
+                        <br class="d-none d-sm-block" />
+                        <em class="text-muted">
+                            @Html.Localize("MyAccount", "L_IsDefaultAddress")
+                        </em>
+                    }
+
+                </div>
+                <div class="col-md-8  order-2  order-sm-1">
+                    @address.FirstName
+                    @address.LastName<br />
+                    @address.Line1<br />
+                    @if (!string.IsNullOrEmpty(address.Line2))
+                    {
+                        @address.Line2<br />
+                    }
+                    @address.City}},
+                    @address.RegionName,
+                    @address.PostalCode<br />
+                    @address.PhoneNumber
+                </div>
+
+                <div class="col-12 order-3  text-right">
+                    <a class="btn  btn-link" data-qa="address-edit"
+                       href="@address.UpdateAddressUrl"
+                       title="@Html.Localize("MyAccount", "B_EditAddress")">
+                        <span class="fa  fa-pencil  fa-lg"></span>
+                    </a>
+                    <button type="button" class="btn  btn-link"
+                            data-qa="address-delete" data-oc-click="deleteAddressConfirm"
+                            title="@Html.Localize("MyAccount", "B_DeleteAddress")">
+                        <span class="fa  fa-trash-o  fa-lg"></span>
+                    </button>
+
+                    @if (!address.IsPreferredShipping)
+                    {
+                        <div class="text-right  mt-2">
+                            <button type="button" class="btn  btn-primary"
+                                    data-qa="address-setdefault"
+                                    data-oc-click="setDefaultAddress">
+                                @Html.Localize("MyAccount", "B_SetDefaultAddress")
+                            </button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}

@@ -52,6 +52,7 @@
     <Content Include="Composer.Core.xml" />
     <Content Include="Package\Datas\Composite.Data.Types.ICompositionContainers_public.xml" />
     <Content Include="Package\Datas\Composite.Data.Types.IDataItemTreeAttachmentPoint_publi.xml" />
+    <Content Include="Package\Datas\Composite.Data.Types.IFolderWhiteList_administrated.xml" />
     <Content Include="Package\Datas\Composite.Data.Types.IGeneratedTypeWhiteLists_administrated.xml" />
     <Content Include="Package\Datas\Composite.Data.Types.IMediaFileDatas_public.xml" />
     <Content Include="Package\Datas\Composite.Data.Types.IMediaFolderDatas_public.xml" />
