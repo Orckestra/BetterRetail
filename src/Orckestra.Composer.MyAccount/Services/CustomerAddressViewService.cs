@@ -224,15 +224,21 @@ namespace Orckestra.Composer.MyAccount.Services
             IEnumerable<RegionViewModel> regions)
         {
             var viewModel = ViewModelMapper.MapTo<AddressListViewModel>(customer, param.CultureInfo);
+            var urlParam = new BaseUrlParameter
+            {
+                CultureInfo = ComposerContext.CultureInfo
+            };
+            var addAddressUrl = MyAccountUrlProvider.GetAddAddressUrl(urlParam);
+            var editAddressBaseUrl = MyAccountUrlProvider.GetUpdateAddressBaseUrl(urlParam);
 
-            viewModel.AddAddressUrl = param.AddAddressUrl;
+            viewModel.AddAddressUrl = addAddressUrl;
 
             viewModel.Addresses = addresses.Select(address =>
             {
                 var addressVm = ViewModelMapper.MapTo<AddressListItemViewModel>(address, param.CultureInfo);
-                if (!string.IsNullOrWhiteSpace(param.EditAddressBaseUrl))
+                if (!string.IsNullOrWhiteSpace(editAddressBaseUrl))
                 {
-                    var editUrlWithParam = UrlFormatter.AppendQueryString(param.EditAddressBaseUrl,
+                    var editUrlWithParam = UrlFormatter.AppendQueryString(editAddressBaseUrl,
                         new NameValueCollection
                         {
                              {"addressId", address.Id.ToString()}

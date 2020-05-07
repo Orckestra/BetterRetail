@@ -306,8 +306,8 @@ __pycache__/
 *.pyc
 
 # Cake
-tools/
-!tools/packages.config
+Build/tools/*
+!Build/tools/packages.config
 
 # Tabs Studio
 *.tss
