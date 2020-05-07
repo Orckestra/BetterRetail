@@ -21,6 +21,9 @@ module Orckestra.Composer {
                     FulfilledCart() {
                         return !!(this.Steps.Shipping.EnteredOnce);
                     },
+                    IsReviewCartLoading() {
+                        return this.Steps.ReviewCart.Loading;
+                    }
                 },
                 methods: {
                     processCart() {
@@ -29,10 +32,10 @@ module Orckestra.Composer {
                     }
                     ,
                     DecrementDisabled(item) {
-                        return item.Quantity < 2 || this.Mode.Loading;
+                        return item.Quantity < 2 || this.IsReviewCartLoading;
                     },
                     IncrementDisabled(item) {
-                        return item.Quantity >= 99 || this.Mode.Loading;
+                        return item.Quantity >= 99 || this.IsReviewCartLoading;
                     },
                     updateItemQuantity(id, action: string = '') {
                         let item = _.find(this.Cart.LineItemDetailViewModels, (i: any) => i.Id === id);
@@ -60,7 +63,7 @@ module Orckestra.Composer {
 
                     removeCartItem(index) {
                         var item = this.Cart.LineItemDetailViewModels[index];
-                        this.Mode.Loading = true;
+                        this.Steps.ReviewCart.Loading = true;
                         self.checkoutService.removeCartItem(item.Id, item.ProductId)
                             .then(cart => {
                                 if (cart) {
@@ -68,7 +71,7 @@ module Orckestra.Composer {
                                 }
                             })
                             .finally(() => {
-                                this.Mode.Loading = false;
+                                this.Steps.ReviewCart.Loading = false;
                             });
 
                         this.Cart.LineItemDetailViewModels.splice(index, 1);

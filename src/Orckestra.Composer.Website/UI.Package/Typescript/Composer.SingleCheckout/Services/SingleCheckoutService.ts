@@ -400,7 +400,7 @@ module Orckestra.Composer {
             recurringOrderFrequencyName?: string,
             recurringOrderProgramName?: string): Q.Promise<any> {
             let vue: any = this.VueCheckout;
-            vue.Mode.Loading = true;
+            vue.Steps.ReviewCart.Loading = true;
 
             return this.invalidateCache().
                 then(() => this.cartService.updateLineItem(id, quantity, productId, recurringOrderFrequencyName, recurringOrderProgramName))
@@ -412,7 +412,7 @@ module Orckestra.Composer {
                     this.handleError(reason);
                 })
                 .finally(() => {
-                    vue.Mode.Loading = false;
+                    vue.Steps.ReviewCart.Loading = false;
                 });
         }
 

@@ -216,7 +216,7 @@
 @helper RemoveCartItemLink()
 {
     <button v-on:click="removeCartItem(index)"
-            v-bind:disabled="IsLoading"
+            v-bind:disabled="IsReviewCartLoading"
             class="btn btn-link"
             v-bind:data-qa="'cart-item-remove-btn-' + index">
         @Html.Localize("ShoppingCart", "F_RemoveItem")
@@ -226,7 +226,7 @@
 @helper RemoveCartItemMobileBtn()
 {
     <button v-on:click="removeCartItem(index)"
-            v-bind:disabled="IsLoading"
+            v-bind:disabled="IsReviewCartLoading"
             class="btn btn-sm btn-outline-secondary"
             aria-label="@Html.Localize("ShoppingCart", "F_RemoveItem")">
         <span aria-hidden="true" class="fa  fa-times"></span>
