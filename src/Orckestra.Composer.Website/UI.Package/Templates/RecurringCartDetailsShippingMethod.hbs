@@ -1,13 +1,9 @@
 <div data-templateid="RecurringCartDetailsShippingMethod">
-    <div class="card">
+    <div class="card bg-light  mt-3">
         {{#if IsLoading}}
-            <div class="card-header">
-                <div class="row">
-                    <div class="col-10">
-                        <h2 class="h3">{{localize 'MyAccount' 'T_ShippingMethod' }}</h2>
-                    </div>
-                </div>
-            </div>
+            <h3 class="card-header">
+               {{localize 'MyAccount' 'T_ShippingMethod' }}
+            </h3>
             <div class="card-body">
                 {{>Loading}}
             </div>
@@ -16,7 +12,7 @@
             <div class="card-header">
                 <div class="row">
                     <div class="col-10">
-                        <h2 class="h3">{{localize 'MyAccount' 'T_ShippingMethod' }}</h2>
+                        <h3 class="m-0">{{localize 'MyAccount' 'T_ShippingMethod' }}</h3>
                     </div>
                     <div class="col-2">
                         <button class="btn btn-link float-right" type="button" id="btntoggleEditShippingMethod"

@@ -37,44 +37,5 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             return View("FindMyOrderContainer", findMyOrderViewModel);
         }
 
-        public virtual ActionResult OrderDetails(string token)
-        {
-            var orderToken = string.IsNullOrWhiteSpace(token) ? null : GuestOrderTokenizer.DecypherOrderToken(token);
-
-            var findMyOrderUrl = OrderUrlProvider.GetFindMyOrderUrl(ComposerContext.CultureInfo);
-
-            OrderDetailViewModel orderDetailViewModel = null;
-
-            if (IsOrderTokenValid(orderToken))
-            {
-                orderDetailViewModel = OrderHistoryViewService.GetOrderDetailViewModelForGuestAsync(new GetOrderForGuestParam
-                {
-                    OrderNumber = orderToken.OrderNumber,
-                    Email = orderToken.Email,
-                    Scope = ComposerContext.Scope,
-                    CultureInfo = ComposerContext.CultureInfo,
-                    CountryCode = ComposerContext.CountryCode,
-                    BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
-                }).Result;
-            }
-
-            if (orderDetailViewModel != null) { return View("OrderDetailsContainer", orderDetailViewModel); }
-
-            var findMyOrderUrlWithParams = UrlFormatter.AppendQueryString(findMyOrderUrl, new NameValueCollection
-            {
-                {"orderNotFound", "true"}
-            });
-
-            return Redirect(findMyOrderUrlWithParams);
-        }
-
-        private static bool IsOrderTokenValid(OrderToken orderToken)
-        {
-            var isValid = orderToken != null
-                          && !string.IsNullOrWhiteSpace(orderToken.Email)
-                          && !string.IsNullOrWhiteSpace(orderToken.OrderNumber);
-
-            return isValid;
-        }
     }
 }

@@ -351,6 +351,8 @@
     <Content Include="App_Data\Razor\Composer\Product\RecurringFrequency.cshtml" />
     <Content Include="App_Data\Razor\Composer\MyAccount\OrderDetails.cshtml" />
     <Content Include="App_Data\Razor\Composer\MyAccount\AddressList.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Order\OrderDetails.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Order\Details.cshtml" />
     <None Include="Properties\PublishProfiles\Website - CD.pubxml" />
     <None Include="Properties\PublishProfiles\Website.pubxml" />
     <Content Include="ViewModelAsExtensionModelTemplate.tt">

@@ -144,31 +144,6 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         }
 
         [AuthorizeAndRedirect]
-        public virtual ActionResult OrderDetails(string id)
-        {
-            if (string.IsNullOrEmpty(id))
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
-            }
-
-            var vm = OrderHistoryViewService.GetOrderDetailViewModelAsync(new GetCustomerOrderParam
-            {
-                OrderNumber = Request["id"],
-                CustomerId = ComposerContext.CustomerId,
-                Scope = ComposerContext.Scope,
-                CultureInfo = ComposerContext.CultureInfo,
-                CountryCode = ComposerContext.CountryCode,
-                BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
-            }).Result;
-
-            if (vm == null)
-            {
-                return new HttpUnauthorizedResult();
-            }
-            return View("OrderDetailsContainer", vm);
-        }
-
-        [AuthorizeAndRedirect]
         public virtual ActionResult WishList(XhtmlDocument emptyWishListContent)
         {
             var vm = WishListViewService.GetWishListViewModelAsync(new GetCartParam
