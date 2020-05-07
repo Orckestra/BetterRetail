@@ -1,4 +1,4 @@
-﻿@inherits RazorFunction
+@inherits RazorFunction
 
 @functions {
     public override string FunctionDescription
@@ -247,7 +247,8 @@
             <span v-else="else">
                 @Html.Localize("ProductPage", "L_RecurringFrequencyOnce")
             </span>
-            <button class="btn btn-link" type="button" data-toggle="collapse" aria-expanded="false"
+            <button v-if="IsAuthenticated" class="btn btn-link" type="button"
+                    data-toggle="collapse" aria-expanded="false"
                     v-bind:data-target="'#recurringModes' + index"
                     v-bind:aria-controls="'recurringModes' + index">
                 @Html.Localize("ShoppingCart", "L_RecurringChangeFrequency")
@@ -314,7 +315,8 @@
                         </button>
                         <select id="recurringOrderFrequencyNameSelect"
                                 class="recurring-orders-frequency-selection form-control"
-                                v-model="item.RecurringOrderFrequencyName">
+                                v-model="item.RecurringOrderFrequencyName"
+                                v-bind:disabled="IsLoading">
                             <option v-for="(recurringOrder, index) in item.RecurringOrderProgramFrequencies"
                                     v-bind:value="recurringOrder.RecurringOrderFrequencyName">
                                 {{recurringOrder.DisplayName}}
