@@ -291,6 +291,7 @@
     <Content Include="App_Code\Forms\CreditCard.cshtml" />
     <Content Include="App_Code\AddressHelpers.cshtml" />
     <Content Include="App_Code\Forms\Validations.cshtml" />
+    <Content Include="App_Code\RecurringOrderHelpers.cshtml" />
     <None Include="App_Config\Caching.config" />
     <Content Include="App_Data\Razor\Composer\Grids\OneThirdTwoThirds.cshtml" />
     <Content Include="App_Data\Razor\Composer\Grids\AccountGrid.cshtml" />

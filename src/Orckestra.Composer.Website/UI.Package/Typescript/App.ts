@@ -62,6 +62,7 @@
 ///<reference path='./Composer.SingleCheckout/BillingAddressSingleCheckoutController.ts' />
 ///<reference path='./Composer.SingleCheckout/BillingAddressRegisteredSingleCheckoutController.ts' />
 ///<reference path='./Composer.SingleCheckout/PickUpAddressSingleCheckoutController.ts' />
+///<reference path='./Composer.SingleCheckout/ChangeRecurringFrequencyCheckoutController.ts' />
 ///<reference path='./Composer.SingleCheckout/OrderConfirmationController.ts' />
 
 (() => {
@@ -121,6 +122,7 @@
                 { name: 'SingleCheckout.BillingAddress', controller: Orckestra.Composer.BillingAddressSingleCheckoutController },
                 { name: 'SingleCheckout.BillingAddressRegistered', controller: Orckestra.Composer.BillingAddressRegisteredSingleCheckoutController },
                 { name: 'SingleCheckout.PickUpStoreAddress', controller: Orckestra.Composer.PickUpAddressSingleCheckoutController },
+                { name: 'SingleCheckout.ChangeRecurringFrequency', controller: Orckestra.Composer.ChangeRecurringFrequencyCheckoutController },
                 { name: 'SingleCheckout.OrderConfirmation', controller: Orckestra.Composer.OrderConfirmationController },
 
                 { name: 'MyAccount.AddressList', controller: Orckestra.Composer.AddressListController },

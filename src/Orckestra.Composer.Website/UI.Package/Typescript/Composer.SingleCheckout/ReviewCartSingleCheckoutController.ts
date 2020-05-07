@@ -12,9 +12,10 @@ module Orckestra.Composer {
 
             super.initialize();
 
-            var vueReviewCartMixin = {
+            let vueReviewCartMixin = {
                 mounted() {
                     this.Steps.ReviewCart.EnteredOnce = this.FulfilledCart;
+                    this.updateBeforeEditLineItemList();
                 },
                 computed: {
                     FulfilledCart() {
@@ -45,27 +46,17 @@ module Orckestra.Composer {
 
                         if (!this.debounceUpdateItem) {
                             this.debounceUpdateItem = _.debounce(id => {
-                                this.Mode.Loading = true;
                                 let itemToUpdate = _.find(this.Cart.LineItemDetailViewModels, (i: any) => i.Id === id);
                                 self.checkoutService.updateCartItem(itemToUpdate.Id,
                                     itemToUpdate.Quantity,
                                     itemToUpdate.ProductId,
-                                    itemToUpdate.RecurringOrderFrequencyName === '' ? null : itemToUpdate.RecurringOrderFrequencyName,
+                                    itemToUpdate.RecurringOrderFrequencyName ? itemToUpdate.RecurringOrderFrequencyName : null,
                                     itemToUpdate.RecurringOrderProgramName)
-                                    .then(cart => {
-                                        if (cart) {
-                                            this.Cart = cart;
-                                        }
-                                    })
-                                    .finally(() => {
-                                        this.Mode.Loading = false;
-                                    });
                             }, 400);
                         }
 
                         this.debounceUpdateItem(id);
                     },
-
                     removeCartItem(index) {
                         var item = this.Cart.LineItemDetailViewModels[index];
                         this.Mode.Loading = true;
@@ -80,6 +71,9 @@ module Orckestra.Composer {
                             });
 
                         this.Cart.LineItemDetailViewModels.splice(index, 1);
+                    },
+                    updateBeforeEditLineItemList() {
+                        this.beforeEditLineItemList = this.Cart.LineItemDetailViewModels.map(x => ({ ...x}));
                     }
                 }
             };
