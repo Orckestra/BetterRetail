@@ -99,8 +99,8 @@
             <div class="col-2 d-block d-sm-none order-5">
                 @RemoveCartItemMobileBtn()
             </div>
-            <div v-if="item.RecurringOrderProgramName" class="col-11  offset-2 offset-sm-1  order-8">
-                @RecurringOrderHelpers.CartItemRecurringOrderProgram("SingleCheckout.ChangeRecurringFrequency")
+            <div v-if="item.RecurringOrderProgramName" class="col-11  offset-2 offset-sm-1  order-8" data-oc-controller="SingleCheckout.ChangeRecurringFrequency">
+                @RecurringOrderHelpers.CartItemRecurringOrderProgram("item")
             </div>
         </div>
     </div>
