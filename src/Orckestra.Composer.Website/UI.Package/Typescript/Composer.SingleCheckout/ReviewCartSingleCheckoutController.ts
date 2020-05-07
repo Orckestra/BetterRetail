@@ -12,7 +12,7 @@ module Orckestra.Composer {
 
             super.initialize();
 
-            var vueReviewCartMixin = {
+            let vueReviewCartMixin = {
                 mounted() {
                     this.Steps.ReviewCart.EnteredOnce = this.FulfilledCart;
                     this.updateBeforeEditLineItemList();
@@ -60,7 +60,6 @@ module Orckestra.Composer {
 
                         this.debounceUpdateItem(id);
                     },
-
                     removeCartItem(index) {
                         var item = this.Cart.LineItemDetailViewModels[index];
                         this.Steps.ReviewCart.Loading = true;
@@ -75,39 +74,6 @@ module Orckestra.Composer {
                             });
 
                         this.Cart.LineItemDetailViewModels.splice(index, 1);
-                    },
-                    changeRecurringMode(e, item) {
-                        let { value } = e.target;
-                        item.RecurringOrderFrequencyName = value !== 'single' && item.RecurringOrderProgramFrequencies.length
-                            ? item.RecurringOrderProgramFrequencies[0].RecurringOrderFrequencyName : null
-                    },
-                    resetLineItemRecurringFrequency(item) {
-                        let oldItem = this.beforeEditLineItemList.find(lineItem => lineItem.id === item.Id);
-                        item.RecurringOrderFrequencyName = oldItem.name;
-                        item.RecurringOrderFrequencyDisplayName = oldItem.displayName;
-                    },
-                    updateLineItemRecurringFrequency(event, item) {
-                        let collapseId = $(event.target).data('lablecollapse');
-
-                        if(!this.isRecurringFrequencyModified(item)) {
-                            this.collapseById(collapseId, 'show');
-                            return;
-                        }
-
-                        self.checkoutService.updateCartItem(item.Id,
-                            item.Quantity,
-                            item.ProductId,
-                            item.RecurringOrderFrequencyName ? item.RecurringOrderFrequencyName : null,
-                            item.RecurringOrderProgramName)
-                            .finally(() => {
-                               this.collapseById(collapseId, 'show');
-                            })
-                    },
-                    collapseById(collapseId: string, action: string) {
-                        $(`#${collapseId}`).collapse(action);
-                    },
-                    isRecurringFrequencyModified(item: any): boolean {
-                        return this.beforeEditLineItemList.find(i => i.id === item.Id && i.name !== item.RecurringOrderFrequencyName)
                     },
                     updateBeforeEditLineItemList() {
                         this.beforeEditLineItemList = this.Cart.LineItemDetailViewModels.map(item => ({

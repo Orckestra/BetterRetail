@@ -1,9 +1,10 @@
 ﻿@using Composite.AspNet.Razor
 @using System.Web.Mvc
 
-@helper CartItemRecurringOrderProgram()
+@helper CartItemRecurringOrderProgram(string controllerName)
 {
-    <div v-if="item.RecurringOrderProgramFrequencies" v-bind:data-qa="'cart-item-reccuring-icon-' + index" class="mt-2"
+    <div data-oc-controller="@controllerName" 
+         v-if="item.RecurringOrderProgramFrequencies" v-bind:data-qa="'cart-item-reccuring-icon-' + index" class="mt-2"
          v-bind:Id="'recurringOrderContainer' + index">
         <div v-bind:Id="'recurringLabel' + index"
              class="cart-recurring-cta js-cartRecurringCta collapse show"
