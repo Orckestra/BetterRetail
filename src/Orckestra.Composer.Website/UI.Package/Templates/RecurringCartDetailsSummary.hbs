@@ -1,11 +1,11 @@
 <div data-templateid="RecurringCartDetailsSummary">
-    <div class="card">
+    <div class="card bg-light">
 
         {{#unless EditMode}}
         <div class="card-header">
             <div class="row">
                 <div class="col-10">
-                    <h5>{{localize 'RecurringCart' 'T_RecurringCartDetails' }}</h5>
+                    <h3 class="m-0">{{localize 'RecurringCart' 'T_RecurringCartDetails' }}</h3>
                 </div>
                 <div class="col-2">
                     <button class="btn btn-link float-right" type="button" id="btntoggleEditNextOccurence"
@@ -21,7 +21,7 @@
             </div>
         </div>
         <div class="card-body">
-            <div class="compact-order">
+            <div class="compact-order bg-white">
                 <div><strong>{{localizeFormat 'RecurringCart' 'L_UpcomingDate' FormatedNextOccurence}}</strong></div>
                 <hr />
                 <div class="row">

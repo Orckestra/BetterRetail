@@ -165,7 +165,6 @@ namespace Orckestra.Composer.Website
             functions.RegisterAction<MyAccountController>("EditAddress", "Composer.MyAccount.UpdateAddress").IncludePathInfo();
             functions.RegisterAction<MyAccountController>("CurrentOrders", "Composer.MyAccount.CurrentOrders");
             functions.RegisterAction<MyAccountController>("PastOrders", "Composer.MyAccount.PastOrders");
-            functions.RegisterAction<MyAccountController>("OrderDetails", "Composer.MyAccount.OrderDetails");
             functions.RegisterAction<MyAccountController>("WishList", "Composer.MyAccount.WishList")
                 .AddParameter("emptyWishListContent", typeof(XhtmlDocument), true, label: "Empty Wish List Content", helpText: "That content will be shown when Wish List is Empty");
             functions.RegisterAction<MyAccountController>("RecurringSchedule", "Composer.MyAccount.RecurringSchedule");
@@ -179,7 +178,6 @@ namespace Orckestra.Composer.Website
             functions.RegisterAction<WishListController>("SharedWishListTitle", "Composer.WishList.SharedTitle");
 
             functions.RegisterAction<OrderController>("FindMyOrder", "Composer.Order.FindMyOrder");
-            functions.RegisterAction<OrderController>("OrderDetails", "Composer.Order.OrderDetails");
 
             functions.RegisterAction<StoreLocatorController>("StoreDetails", "Composer.Store.Details", "Store Details")
                 .AddParameter("zoom", typeof(int), false, label: "Map Zoom Level", helpText: "Define the resolution of the map view. Zoom levels between 0 and 21+. Default is 14 (streets).");
