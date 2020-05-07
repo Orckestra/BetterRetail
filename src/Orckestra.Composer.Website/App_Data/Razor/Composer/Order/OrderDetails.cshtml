@@ -47,10 +47,8 @@
     if (order == null)
     {
         var findMyOrderUrl = OrderUrlProvider.GetFindMyOrderUrl(ComposerContext.CultureInfo);
-        var findMyOrderUrlWithParams = UrlFormatter.AppendQueryString(findMyOrderUrl, new NameValueCollection
-    {
-                {"orderNotFound", "true"}
-            });
+        var findMyOrderUrlWithParams = UrlFormatter.AppendQueryString(findMyOrderUrl,
+            new NameValueCollection { { "orderNotFound", "true" } });
 
         Response.Redirect(findMyOrderUrlWithParams);
     }
