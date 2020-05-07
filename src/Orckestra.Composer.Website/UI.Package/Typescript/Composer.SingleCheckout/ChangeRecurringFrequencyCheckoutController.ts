@@ -19,9 +19,9 @@ module Orckestra.Composer {
                             ? item.RecurringOrderProgramFrequencies[0].RecurringOrderFrequencyName : null
                     },
                     resetLineItemRecurringFrequency(item) {
-                        let oldItem = this.beforeEditLineItemList.find(lineItem => lineItem.id === item.Id);
-                        item.RecurringOrderFrequencyName = oldItem.name;
-                        item.RecurringOrderFrequencyDisplayName = oldItem.displayName;
+                        let oldItem = this.beforeEditLineItemList.find(lineItem => lineItem.Id === item.Id);
+                        item.RecurringOrderFrequencyName = oldItem.RecurringOrderFrequencyName;
+                        item.RecurringOrderFrequencyDisplayName = oldItem.RecurringOrderFrequencyDisplayName;
                     },
                     updateLineItemRecurringFrequency(event, item) {
                         let collapseId = $(event.target).data('lablecollapse');
@@ -44,7 +44,7 @@ module Orckestra.Composer {
                         $(`#${collapseId}`).collapse(action);
                     },
                     isRecurringFrequencyModified(item: any): boolean {
-                        return this.beforeEditLineItemList.find(i => i.id === item.Id && i.name !== item.RecurringOrderFrequencyName)
+                        return this.beforeEditLineItemList.find(i => i.Id === item.Id && i.RecurringOrderFrequencyName !== item.RecurringOrderFrequencyName)
                     },
                 }
             };

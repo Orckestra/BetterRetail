@@ -76,11 +76,7 @@ module Orckestra.Composer {
                         this.Cart.LineItemDetailViewModels.splice(index, 1);
                     },
                     updateBeforeEditLineItemList() {
-                        this.beforeEditLineItemList = this.Cart.LineItemDetailViewModels.map(item => ({
-                            name: item.RecurringOrderFrequencyName,
-                            displayName: item.RecurringOrderFrequencyDisplayName,
-                            id: item.Id
-                        }));
+                        this.beforeEditLineItemList = this.Cart.LineItemDetailViewModels.map(x => ({ ...x}));
                     }
                 }
             };
