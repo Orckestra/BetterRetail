@@ -96,16 +96,13 @@
                     {
                         @Html.Localize("MyAccount", "L_OrderDelivered") @shipping.ShipmentStatusDate
                     }
+                    else if (status == "Canceled")
+                    {
+                        @Html.Localize("MyAccount", "L_OrderCancel") @shipping.ShipmentStatusDate
+                    }
                     else
                     {
-                        if (status == "Canceled")
-                        {
-                            @Html.Localize("MyAccount", "L_OrderCancel") @shipping.ShipmentStatusDate
-                        }
-                        else
-                        {
-                            @Html.Raw(Html.Localize("MyAccount", "L_OrderInProgress"))
-                        }
+                        @Html.Raw(Html.Localize("MyAccount", "L_OrderInProgress"))
                     }
                 </div>
             </div>
@@ -232,18 +229,12 @@
                         <div>
                             <strong>@item.ProductSummary.Brand</strong>
                             <p class="mb-2">@item.ProductSummary.DisplayName</p>
-                            <p v-if="item.VariantId" class="mb-2 mb-sm-0">
-                                @{ var kindex = 0; }
-                                @foreach (var keyV in item.KeyVariantAttributesList)
-                                {
-                                    kindex++;
-                                    if (kindex != 1)
-                                    {
-                                        <span> | </span>
-                                    }
-                                    @keyV.Value
-                                }
-                            </p>
+                            @if (!string.IsNullOrEmpty(item.VariantId))
+                            {
+                                <p class="mb-2 mb-sm-0">
+                                    @String.Join(" | ", item.KeyVariantAttributesList.Select(i => i.Value).ToArray())
+                                </p>
+                            }
                         </div>
                     </div>
                     <div class="col-sm-2  text-center d-none d-sm-block order-4">
@@ -267,7 +258,6 @@
                     <div class="offset-2 offset-sm-0 col-sm-2  text-left text-sm-center  order-7">
                         @if (item.IsPriceDiscounted)
                         {
-
                             <del>@item.TotalWithoutDiscount</del><br />
                             <strong class="text-danger">@item.Total</strong>
                         }
