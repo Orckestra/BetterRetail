@@ -1,8 +1,8 @@
 {{#if_neq InvalidLineItemCount 0}}
-<div class="card">
+<div class="card bg-light mt-3">
     <div class="card-header  clearfix">
         <div class="cart-header-title  float-left">
-            <h5>{{localize 'ShoppingCart' 'T_UnavailableItems'}}</h5>
+            <h3 class="m-0">{{localize 'ShoppingCart' 'T_UnavailableItems'}}</h3>
         </div>
     </div>
     <div class="card-body">
@@ -20,10 +20,10 @@
 {{/if_neq}}
 
 {{#if_neq InvalidLineItemCount LineItemCount}}
-<div class="card">
+<div class="card bg-light mt-3">
     <div class="card-header  clearfix">
         <div class="cart-header-title  float-left">
-            <h5>{{localize 'RecurringCart' 'T_RecurringCartDetailsLineItems'}}</h5>
+            <h3 class="m-0">{{localize 'RecurringCart' 'T_RecurringCartDetailsLineItems'}}</h3>
         </div>
         <div class="cart-header-labels  float-left">
             <div class="cart-header-price  text-right  float-left  d-none d-sm-block">{{localize 'MyAccount' 'L_UnitPrice'}}</div>

@@ -1,0 +1,65 @@
+﻿@inherits RazorFunction
+@using Orckestra.Composer.Services;
+@using Orckestra.Composer.Cart.Services.Order;
+@using Orckestra.Composer.Cart.Parameters.Order;
+@using Orckestra.Composer.Utils;
+@using Orckestra.Composer.Cart.ViewModels.Order;
+@using Orckestra.Composer.Cart.ViewModels;
+@using System.Xml.Linq;
+@using System.Linq;
+@using Orckestra.Composer.Cart.Utils;
+@using Orckestra.Composer.Providers;
+@using System.Collections.Specialized;
+
+@functions {
+    public IOrderHistoryViewService OrderHistoryViewService { get; set; }
+    public IComposerContext ComposerContext { get; set; }
+    public IOrderUrlProvider OrderUrlProvider { get; set; }
+
+    private bool IsOrderTokenValid(OrderToken orderToken)
+    {
+        var isValid = orderToken != null
+                      && !string.IsNullOrWhiteSpace(orderToken.Email)
+                      && !string.IsNullOrWhiteSpace(orderToken.OrderNumber);
+
+        return isValid;
+    }
+}
+
+@{
+    var token = Request["token"];
+    var orderToken = string.IsNullOrWhiteSpace(token) ? null : GuestOrderTokenizer.DecypherOrderToken(token);
+    OrderDetailViewModel order = null;
+
+    if (IsOrderTokenValid(orderToken))
+    {
+        order = OrderHistoryViewService.GetOrderDetailViewModelForGuestAsync(new GetOrderForGuestParam
+        {
+            OrderNumber = orderToken.OrderNumber,
+            Email = orderToken.Email,
+            Scope = ComposerContext.Scope,
+            CultureInfo = ComposerContext.CultureInfo,
+            CountryCode = ComposerContext.CountryCode,
+            BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
+        }).Result;
+    }
+
+    if (order == null)
+    {
+        var findMyOrderUrl = OrderUrlProvider.GetFindMyOrderUrl(ComposerContext.CultureInfo);
+        var findMyOrderUrlWithParams = UrlFormatter.AppendQueryString(findMyOrderUrl,
+            new NameValueCollection { { "orderNotFound", "true" } });
+
+        Response.Redirect(findMyOrderUrlWithParams);
+    }
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<head>
+</head>
+<body>
+    <div data-oc-controller="Orders.OrderDetails">
+        @Function("Composer.Order.Details", new { Order = order })
+    </div>
+</body>
+</html>

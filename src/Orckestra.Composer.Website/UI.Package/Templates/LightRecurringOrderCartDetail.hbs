@@ -1,25 +1,30 @@
-<div data-templateid="LightRecurringOrderCartDetail" class="compact-order">
+<div data-templateid="LightRecurringOrderCartDetail" class="card  mb-2">
+    <div class="card-header">
     <div class="row">
-        <div class="col-8"><strong>{{localizeFormat 'RecurringCart' 'L_UpcomingDate' FormatedNextOccurence}}</strong></div>
+        <div class="col-8"><h5 class="m-0">{{localizeFormat 'RecurringCart' 'L_UpcomingDate' FormatedNextOccurence}}</h5></div>
         <div class="col-4 text-right"><a href="{{CartDetailUrl}}" class="cta">{{ localize 'MyAccount' 'H_RecurringCartDetails' }}</a></div>
     </div>
-    <hr />
-    <div class="row">
-        <div class="col-8">
-            <span class="compact-order-status text-gray">{{localize 'RecurringCart' 'L_StatusPendingPreparation' }}</span>           
-        </div>
-        <div class="col-4 text-right">{{localize 'RecurringCart' 'L_Total' }}<strong class="h4">{{Total}}</strong></div>
     </div>
-    <div class="container-fluid recurring-container-thumbnail">
+    <div class="card-body">
         <div class="row">
-            <div class="small-thumbnail">
-                <img src="/UI.Package/Images/recurring.svg" class="recurring-icon" alt="{{localize 'General' 'L_RecurringProduct'}}" title="{{localize 'General' 'L_RecurringProduct'}}" /> 
+            <div class="col-8">
+                <span class="compact-order-status text-gray">{{localize 'RecurringCart' 'L_StatusPendingPreparation' }}</span>           
             </div>
-            {{#each LineItemDetailViewModels }}
+            <div class="col-4 text-right">{{localize 'RecurringCart' 'L_Total' }}<h5>{{Total}}</h5></div>
+        </div>
+  
+        <div class="row mt-2">
+            <div class="col-12">
+                <div class="small-thumbnail">
+                 <img src="/UI.Package/Images/recurring.svg" class="recurring-icon" alt="{{localize 'General' 'L_RecurringProduct'}}" title="{{localize 'General' 'L_RecurringProduct'}}" /> 
+                </div>
+                 {{#each LineItemDetailViewModels }}
+           
                 <div class="small-thumbnail item">
                     <img src="{{ImageUrl}}" class="img-small-thumbnail img-fluid" alt="Thumbnail" onerror="this.onerror=null; this.src='{{FallbackImageUrl}}'" />
                 </div>
-            {{/each}}
-        </div>
+                {{/each}}
+            </div>
+         </div>
     </div>
 </div>

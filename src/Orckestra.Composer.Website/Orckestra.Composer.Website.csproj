@@ -291,6 +291,7 @@
     <Content Include="App_Code\Forms\CreditCard.cshtml" />
     <Content Include="App_Code\AddressHelpers.cshtml" />
     <Content Include="App_Code\Forms\Validations.cshtml" />
+    <Content Include="App_Code\RecurringOrderHelpers.cshtml" />
     <None Include="App_Config\Caching.config" />
     <Content Include="App_Data\Razor\Composer\Grids\OneThirdTwoThirds.cshtml" />
     <Content Include="App_Data\Razor\Composer\Grids\AccountGrid.cshtml" />
@@ -349,7 +350,10 @@
     <Content Include="App_Data\Razor\Composer\SingleCheckout\Confirmation.cshtml" />
     <Content Include="App_Data\Razor\Composer\SingleCheckout\Steps\ShippingAddress.cshtml" />
     <Content Include="App_Data\Razor\Composer\Product\RecurringFrequency.cshtml" />
+    <Content Include="App_Data\Razor\Composer\MyAccount\OrderDetails.cshtml" />
     <Content Include="App_Data\Razor\Composer\MyAccount\AddressList.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Order\OrderDetails.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Order\Details.cshtml" />
     <None Include="Properties\PublishProfiles\Website - CD.pubxml" />
     <None Include="Properties\PublishProfiles\Website.pubxml" />
     <Content Include="ViewModelAsExtensionModelTemplate.tt">
