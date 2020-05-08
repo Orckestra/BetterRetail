@@ -1,0 +1,333 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="B_DeleteCard" xml:space="preserve">
+    <value>Supprimer</value>
+  </data>
+  <data name="B_Edit" xml:space="preserve">
+    <value>Modifier</value>
+  </data>
+  <data name="B_EditShoppingCart" xml:space="preserve">
+    <value>Modifier votre panier</value>
+  </data>
+  <data name="B_GuestCheckout" xml:space="preserve">
+    <value>Commander maintenant</value>
+  </data>
+  <data name="B_NextStep" xml:space="preserve">
+    <value>Étape suivante</value>
+  </data>
+  <data name="B_UseCreditCard" xml:space="preserve">
+    <value>Carte de crédit</value>
+  </data>
+  <data name="B_PrintYourInvoice" xml:space="preserve">
+    <value>Imprimer votre facture</value>
+  </data>
+  <data name="B_SubmitOrder" xml:space="preserve">
+    <value>Valider et soumettre votre commande</value>
+  </data>
+  <data name="B_ViewCreditCards" xml:space="preserve">
+    <value>Voir cartes sauvegardées</value>
+  </data>
+  <data name="F_BillingNo" xml:space="preserve">
+    <value>Non</value>
+  </data>
+  <data name="F_BillingSameShipping" xml:space="preserve">
+    <value>Voulez-vous utiliser l'adresse de livraison comme adresse de facturation ?</value>
+  </data>
+  <data name="F_BillingYes" xml:space="preserve">
+    <value>Oui</value>
+  </data>
+  <data name="F_SaveCreditCard" xml:space="preserve">
+    <value>Cochez cette case pour sauvegarder cette carte de crédit et l'utiliser pour des commandes récurrentes futures.</value>
+  </data>
+  <data name="F_SaveCreditCardForced" xml:space="preserve">
+    <value>Cette carte sera sauvegardée</value>
+  </data>
+  <data name="F_SaveCreditCardForced_Expired" xml:space="preserve">
+    <value>Carte expirée</value>
+  </data>
+  <data name="F_SaveCreditCardForced_Explain" xml:space="preserve">
+    <value>Vous devez sauvegarder cette carte pour l'utiliser dans des commandes récurrentes.</value>
+  </data>
+  <data name="F_SaveCreditCardForced_ExplainTitle" xml:space="preserve">
+    <value>Titre: Carte Sauvegardée</value>
+  </data>
+  <data name="F_SaveCreditCardForced_LearnMore" xml:space="preserve">
+    <value>En savoir plus</value>
+  </data>
+  <data name="F_ShippingSelection" xml:space="preserve">
+    <value>Veuillez choisir votre méthode de livraison</value>
+  </data>
+  <data name="F_ShippingSelectionIndication" xml:space="preserve">
+    <value>Vous recevrez un numéro de suivi par courriel une fois votre commande soumise.</value>
+  </data>
+  <data name="F_Step1Title" xml:space="preserve">
+    <value>Information sur la livraison</value>
+  </data>
+  <data name="F_Step2Title" xml:space="preserve">
+    <value>Méthode de paiement</value>
+  </data>
+  <data name="F_Step3Title" xml:space="preserve">
+    <value>Verification de la commande</value>
+  </data>
+  <data name="H_CheckCart" xml:space="preserve">
+    <value>Veuillez réviser votre panier.</value>
+  </data>
+  <data name="L_CardHolderName" xml:space="preserve">
+    <value>Nom du titulaire de la carte</value>
+  </data>
+  <data name="L_CardNumber" xml:space="preserve">
+    <value>Numéro de la carte</value>
+  </data>
+  <data name="L_CheckoutSignIn" xml:space="preserve">
+    <value>Connexion à la caisse</value>
+  </data>
+  <data name="L_Confirm" xml:space="preserve">
+    <value>Voulez-vous vraiment supprimer cette adresse ?</value>
+  </data>
+  <data name="L_DeliveryDaysNumber" xml:space="preserve">
+    <value> jours</value>
+  </data>
+  <data name="L_Selected" xml:space="preserve">
+    <value>CHOISI</value>
+  </data>
+  <data name="L_EmailConfirmation" xml:space="preserve">
+    <value>Le courriel de confirmation sera envoyé à l'adresse courriel</value>
+  </data>
+  <data name="L_ExpirationDate" xml:space="preserve">
+    <value>Date d’expiration</value>
+  </data>
+  <data name="L_ExpirationDateForm" xml:space="preserve">
+    <value>Date d’expiration (mmyy)</value>
+  </data>
+  <data name="L_InvalidCart" xml:space="preserve">
+    <value>Votre panier contient des articles qui sont en rupture de stock ou qui ne sont plus disponibles.</value>
+  </data>
+  <data name="L_LogInCheckout" xml:space="preserve">
+    <value>Vous pouvez créer une commande sans vous inscrire. Vous pourrez vous inscrire après avoir passer à la caisse.</value>
+  </data>
+  <data name="L_LogInCheckoutWithRecurring" xml:space="preserve">
+    <value>Vous ne pouvez pas créer une commande récurrente si vous n'êtes pas enregistré(e). Veuillez vous connecter ou créer un compte pour profiter de ce service.</value>
+  </data>
+  <data name="L_NextStepIndication" xml:space="preserve">
+    <value>Votre carte de crédit sera débitée une fois la commande soumise</value>
+  </data>
+  <data name="L_OrderConfirmation" xml:space="preserve">
+    <value>Confirmation de commande</value>
+  </data>
+  <data name="L_Products" xml:space="preserve">
+    <value>Articles</value>
+  </data>
+  <data name="L_QuantityMobile" xml:space="preserve">
+    <value>Quantité :</value>
+  </data>
+  <data name="L_RecurrenceNeedCreateAccount" xml:space="preserve">
+    <value>Your recurring items will be changed to a single shipping if you don't register before checkout.</value>
+  </data>
+  <data name="L_SignInCheckout" xml:space="preserve">
+    <value>Connectez-vous pour accélérer la prise de commande. Vous pourrez la consulter dans votre historique</value>
+  </data>
+  <data name="L_SubmitOrderIndication" xml:space="preserve">
+    <value>Cliquez ce bouton pour soumettre votre commande</value>
+  </data>
+  <data name="L_Type" xml:space="preserve">
+    <value>Type :</value>
+  </data>
+  <data name="L_VerificationNumber" xml:space="preserve">
+    <value>CVV</value>
+  </data>
+  <data name="L_YourOrderNumber" xml:space="preserve">
+    <value>Votre commande #{0} est passée.</value>
+  </data>
+  <data name="Quantity" xml:space="preserve">
+    <value>Quantité</value>
+  </data>
+  <data name="Subtotal" xml:space="preserve">
+    <value>Sous-total</value>
+  </data>
+  <data name="T_BillingAddress" xml:space="preserve">
+    <value>Adresse de facturation</value>
+  </data>
+  <data name="T_BillingAddressSpecify" xml:space="preserve">
+    <value>Entrez votre adresse de facturation</value>
+  </data>
+  <data name="T_EnterPaymentInfomation" xml:space="preserve">
+    <value>Entrez vos informations de paiement</value>
+  </data>
+  <data name="T_Informations" xml:space="preserve">
+    <value>Information</value>
+  </data>
+  <data name="T_LogInCheckout" xml:space="preserve">
+    <value>Invités &amp;amp; nouveaux clients</value>
+  </data>
+  <data name="T_ShippingAddress" xml:space="preserve">
+    <value>Adresse de livraison</value>
+  </data>
+  <data name="T_ShippingMethod" xml:space="preserve">
+    <value>Méthode de livraison</value>
+  </data>
+  <data name="T_SignInCheckout" xml:space="preserve">
+    <value>Se connecter</value>
+  </data>
+  <data name="T_ThankYou" xml:space="preserve">
+    <value>Merci</value>
+  </data>
+  <data name="T_SelectCreditCart" xml:space="preserve">
+    <value>Sélectionner une carte de crédit</value>
+  </data>
+  <data name="B_AddCreditCard" xml:space="preserve">
+    <value>Utiliser une autre carte de crédit</value>
+  </data>
+  <data name="F_PlaceOrder" xml:space="preserve">
+    <value>Passer la commande</value>
+  </data>
+  <data name="H_OrderDetail" xml:space="preserve">
+    <value>Détails de la commande</value>
+  </data>
+  <data name="F_Continue" xml:space="preserve">
+    <value>Continuer</value>
+  </data>
+  <data name="F_Edit" xml:space="preserve">
+    <value>Éditer</value>
+  </data>
+  <data name="F_ReviewCart" xml:space="preserve">
+    <value>Revoir le panier</value>
+  </data>
+  <data name="L_SignInNow" xml:space="preserve">
+    <value>Déjà client?</value>
+  </data>
+  <data name="B_SignInNow" xml:space="preserve">
+    <value>Connectez-vous maintenant</value>
+  </data>
+  <data name="B_ContinueAsGuest" xml:space="preserve">
+    <value>Continuer en tant qu’invité</value>
+  </data>
+  <data name="L_AccountAlreadyExists" xml:space="preserve">
+    <value>Un compte existe déjà avec cette adresse e-mail.</value>
+  </data>
+  <data name="B_SignInNowAndSaveTime" xml:space="preserve">
+    <value>Connectez-vous et gagnez du temps!</value>
+  </data>
+  <data name="T_SaveInformation" xml:space="preserve">
+    <value>Enregistrez vos informations pour la prochaine fois</value>
+  </data>
+  <data name="L_CreateAccountForFastCheckout" xml:space="preserve">
+    <value>Créez un compte et profitez d'un paiement plus rapide, accédez à l'historique des achats, aux listes de souhaits et plus encore.</value>
+  </data>
+</root>
