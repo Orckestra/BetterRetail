@@ -66,13 +66,14 @@ module Orckestra.Composer {
                     },
                 },
                 template: `
-                <transition-group name="collapse"
+                <transition-group name="collapse" tag="div"
                         @before-enter="beforeEnter"
                         @enter="enter"
                         @after-enter="afterEnter"
                         @before-leave="beforeLeave"
                         @leave="leave"
-                        @after-leave="afterLeave">
+                        @after-leave="afterLeave"
+                        class="collapse-transition">
                     <slot />
                 </transition-group>`
             };
