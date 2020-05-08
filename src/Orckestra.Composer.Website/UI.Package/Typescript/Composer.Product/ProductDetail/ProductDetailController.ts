@@ -36,11 +36,12 @@ module Orckestra.Composer {
 
                 this.notifyAnalyticsOfProductDetailsImpression();
             });
-            Q.when(this.renderData()).done(() => addToCartBusy.done());
-
-            let $recurringOrderContainer = this.context.container.find('[data-recurring-mode]');
-            this.recurringMode = $recurringOrderContainer.data('recurring-mode');
-            this.selectedRecurringOrderFrequencyName = $recurringOrderContainer.data('recurring-order-frequency');
+            Q.when(this.renderData()).done(() => {
+                addToCartBusy.done();
+                let $recurringOrderContainer = this.context.container.find('[data-recurring-mode]');
+                this.recurringMode = $recurringOrderContainer.data('recurring-mode');
+                this.selectedRecurringOrderFrequencyName = $recurringOrderContainer.data('recurring-order-frequency');
+            });
         }
 
         protected getListNameForAnalytics(): string {
