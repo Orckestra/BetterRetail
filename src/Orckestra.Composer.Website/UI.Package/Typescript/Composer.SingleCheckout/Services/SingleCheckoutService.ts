@@ -16,6 +16,7 @@
 ///<reference path='../../Composer.MyAccount/Common/CustomerService.ts' />
 ///<reference path='../VueComponents/CheckoutStepVueComponent.ts' />
 ///<reference path='../VueComponents/CheckoutPageVueComponent.ts' />
+///<reference path='../VueComponents/TransitionCollapseVueComponent.ts' />
 ///<reference path='../../Composer.MyAccount/Common/MyAccountEvents.ts' />
 ///<reference path='../../Composer.MyAccount/Common/MyAccountStatus.ts' />
 ///<reference path='../Services/ShippingAddressRegisteredService.ts' />
@@ -159,6 +160,7 @@ module Orckestra.Composer {
                 components: {
                     [CheckoutPageVueComponent.componentMame]: CheckoutPageVueComponent.getComponent(),
                     [CheckoutStepVueComponent.componentMame]: CheckoutStepVueComponent.getComponent(),
+                    [TransitionCollapseVueComponent.componentMame]: TransitionCollapseVueComponent.getComponent(),
                 },
                 data: {
                     Cart: checkoutContext.Cart,

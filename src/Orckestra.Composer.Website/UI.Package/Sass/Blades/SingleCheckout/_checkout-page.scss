@@ -39,6 +39,11 @@
             }
         }
     }
+
+    .collapse-enter-active {
+        overflow: hidden;
+        transition: height 1s ease;
+    }
 }
 
 .selected-method-type {
