@@ -347,7 +347,7 @@ module Orckestra.Composer {
                             $('html, body').animate({
                                 scrollTop: $('#' + stepId).offset().top
                             }, 500);
-                        }, 200);
+                        }, 500);
                     },
                     deactivateSteps: function deactivateSteps() {
                         this.steps.forEach(function (step) {

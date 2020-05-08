@@ -19,7 +19,8 @@
             @CheckoutHelpers.StepContinueButton("!FulfilledCart", "billing")
             @CheckoutHelpers.StepEditButton("billing")
         </div>
-        <div class="card-body  bg-light" v-show="step.active" v-cloak="true" data-qa="billing-active-state">
+        <transition-collapse>
+            <div class="card-body  bg-light" v-show="step.active" v-cloak="true" data-qa="billing-active-state" key="active">
                 <div v-if="IsAuthenticated" data-oc-controller="SingleCheckout.BillingAddressRegistered">
                     <div v-if="IsShippingMethodType">
                         @UseShippingAddressCheckbox()
@@ -52,7 +53,7 @@
                         </button>
                     </div>
                 </div>
-            
+
                 <div v-if="!IsAuthenticated" data-oc-controller="SingleCheckout.BillingAddress">
                     <div v-if="IsShippingMethodType">
                         @UseShippingAddressCheckbox()
@@ -64,11 +65,12 @@
                         @Forms.Address.Form("Cart.Payment.BillingAddress", "billingAddressForm", false, "")
                     </div>
                 </div>
-        </div>
+            </div>
 
-        <div class="card-body  bg-light" v-show="step.preview" v-cloak="true" data-qa="billing-preview-state">
-            @CheckoutHelpers.AddressPreview("BillingAddress", "billing-address-preview")
-        </div>
+            <div class="card-body  bg-light" v-show="step.preview" v-cloak="true" data-qa="billing-preview-state" key="preview">
+                @CheckoutHelpers.AddressPreview("BillingAddress", "billing-address-preview")
+            </div>
+        </transition-collapse>
     </div>
 </body>
 </html>

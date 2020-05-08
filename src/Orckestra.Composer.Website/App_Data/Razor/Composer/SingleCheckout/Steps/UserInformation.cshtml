@@ -21,12 +21,14 @@
             </div>
 
             <div class="card-body  bg-light" v-cloak="true">
-                <div v-if="step.preview" key="preview" data-qa="information-preview-state">
-                    @Information_Step_Preview()
-                </div>
-                <div v-show="step.active" key="active" data-qa="information-active-state">
-                    @Information_Step_Active()
-                </div>
+                <transition-collapse>
+                    <div v-if="step.preview" key="preview" data-qa="information-preview-state">
+                        @Information_Step_Preview()
+                    </div>
+                    <div v-show="step.active" key="active" data-qa="information-active-state">
+                        @Information_Step_Active()
+                    </div>
+                </transition-collapse>
             </div>
 
         </div>
@@ -134,7 +136,7 @@
                     </span>
                     <span v-if="SigningInMode">
                         <a v-bind:href="Cart.ForgotPasswordUrl">@Html.Localize("MyAccount", "H_ForgotPassword")</a>
-                        &#160; 
+                        &#160;
                         <a href="#" role="button" v-on:click="continueAsGuestButton" class="cta">@Html.Localize("CheckoutProcess", "B_ContinueAsGuest")</a>
                     </span>
                 </div>
