@@ -263,12 +263,11 @@
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.Xml.Linq" />
-	<Reference Include="System.Data" />
+    <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\Composite\DynamicTypeForms\Orckestra\Composer\CompositeC1\DataTypes\ISearchTerm.xml" />
     <Content Include="App_Data\Composite\DynamicTypeForms\Orckestra\Composer\CompositeC1\DataTypes\RecurringOrdersSettings.xml" />
-    <Content Include="App_Data\Composite\DynamicTypeForms\Orckestra\Composer\CompositeC1\DataTypes\FAQ.xml" />
     <Content Include="App_Data\Composite\TreeDefinitions\ContentSearch.xml" />
     <Content Include="App_Data\Composite\TreeDefinitions\NavigationElement.xml">
       <SubType>Designer</SubType>
@@ -356,7 +355,6 @@
     <Content Include="App_Data\Razor\Composer\MyAccount\AddressList.cshtml" />
     <Content Include="App_Data\Razor\Composer\Order\OrderDetails.cshtml" />
     <Content Include="App_Data\Razor\Composer\Order\Details.cshtml" />
-    <Content Include="App_Data\Razor\Orckestra\Lists\FAQ.cshtml" />
     <None Include="Properties\PublishProfiles\Website - CD.pubxml" />
     <None Include="Properties\PublishProfiles\Website.pubxml" />
     <Content Include="ViewModelAsExtensionModelTemplate.tt">
@@ -462,6 +460,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\Composite\DynamicTypeForms\Orckestra\List\" />
+    <Folder Include="App_Data\Razor\Orckestra\Lists\" />
     <Folder Include="Views\ProductSet\" />
     <Folder Include="Views\SearchQuery\" />
   </ItemGroup>
