@@ -25,59 +25,60 @@
 
                 @CheckoutHelpers.StepEditButton("shipping")
             </div>
+            <transition-collapse>
+                <div class="card-body  bg-light" v-show="step.active" v-cloak="true" data-qa="shipping-active-state" key="active">
+                    @Forms.Validations.SelectStoreError("Errors.StoreNotSelectedError")
+                    <p>@Html.Localize("CheckoutProcess", "F_ShippingStepDescription")</p>
+                    <div class="form-row" novalidate="novalidate" id="AccordionShippingMethodType">
+                        <div class="col-md-6 pb-3" v-for="shippingMethodType in ShippingMethodTypes">
+                            <div class="border  rounded bg-white  p-3"
+                                 v-bind:class="{'selected-method-type bg-selected': shippingMethodType.FulfillmentMethodTypeString === SelectedMethodTypeString}">
+                                @ShippingMethodTypeOption()
+                                <div class="collapse  mt-4  border-top"
+                                     v-if="shippingMethodType.IsModified"
+                                     v-bind:Id="'ShippingMethod' + shippingMethodType.FulfillmentMethodTypeString"
+                                     data-parent="#AccordionShippingMethodType">
+                                    @ShippingMethodsListForTypeOption()
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <transition-group name="fade">
+                        <div v-if="IsShippingMethodType" key="AddressSelector">
+                            @Function("Composer.SingleCheckout.Steps.ShippingAddress")
+                        </div>
+                        <div v-show="IsPickUpMethodType" key="StoreSelector" class="row">
+                            @Function("Composer.SingleCheckout.Steps.PickUpAddress")
+                        </div>
+                    </transition-group>
+                </div>
 
-            <div class="card-body  bg-light" v-show="step.active" v-cloak="true" data-qa="shipping-active-state">
-                @Forms.Validations.SelectStoreError("Errors.StoreNotSelectedError")
-               <p>@Html.Localize("CheckoutProcess", "F_ShippingStepDescription")</p>
-                <div class="form-row" novalidate="novalidate" id="AccordionShippingMethodType">
-                    <div class="col-md-6 pb-3" v-for="shippingMethodType in ShippingMethodTypes">
-                        <div class="border  rounded bg-white  p-3"
-                             v-bind:class="{'selected-method-type bg-selected': shippingMethodType.FulfillmentMethodTypeString === SelectedMethodTypeString}">
-                            @ShippingMethodTypeOption()
-                            <div class="collapse  mt-4  border-top"
-                                 v-if="shippingMethodType.IsModified"
-                                 v-bind:Id="'ShippingMethod' + shippingMethodType.FulfillmentMethodTypeString"
-                                 data-parent="#AccordionShippingMethodType">
-                                @ShippingMethodsListForTypeOption()
+                <div class="card-body bg-light" v-show="step.preview" v-cloak="true" data-qa="shipping-preview-state" key="preview">
+                    <div v-if="Cart.ShippingMethod">
+                        <div class="row">
+                            <div class="col-12 col-sm-8">
+                                <h4>{{SelectedMethodType.DisplayName}}</h4>
+
+                                @CheckoutHelpers.AddressPreview("ShippingAddress")
+
+                                <span v-if="Cart.ShippingMethod.ExpectedDaysBeforeDelivery"
+                                      data-qa="shippingmethod-expecteddays-info" class="clearfix">
+                                    <strong>
+                                        @Html.Localize("CheckoutProcess", "F_ShipTimeTitle")
+                                    </strong>
+                                    {{Cart.ShippingMethod.ExpectedDaysBeforeDelivery}}
+                                    @Html.Localize("CheckoutProcess", "L_DeliveryDaysNumber")
+                                </span>
+                            </div>
+                            <div class="col-12 col-sm-4">
+                                <div class="float-sm-right">
+                                    @Html.Localize("MyAccount", "L_Total"): <span class="h5">{{Cart.ShippingMethod.Cost}}</span>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <transition-group name="fade">
-                    <div v-if="IsShippingMethodType" key="AddressSelector">
-                        @Function("Composer.SingleCheckout.Steps.ShippingAddress")
-                    </div>
-                    <div v-show="IsPickUpMethodType" key="StoreSelector" class="row">
-                        @Function("Composer.SingleCheckout.Steps.PickUpAddress")
-                    </div>
-                </transition-group>
-            </div>
-
-            <div class="card-body bg-light" v-show="step.preview" v-cloak="true" data-qa="shipping-preview-state">
-                <div v-if="Cart.ShippingMethod">
-                    <div class="row">
-                        <div class="col-12 col-sm-8">
-                            <h4>{{SelectedMethodType.DisplayName}}</h4>
-
-                            @CheckoutHelpers.AddressPreview("ShippingAddress")
-
-                            <span v-if="Cart.ShippingMethod.ExpectedDaysBeforeDelivery"
-                                  data-qa="shippingmethod-expecteddays-info" class="clearfix">
-                                <strong>
-                                    @Html.Localize("CheckoutProcess", "F_ShipTimeTitle")
-                                </strong>
-                                {{Cart.ShippingMethod.ExpectedDaysBeforeDelivery}}
-                                @Html.Localize("CheckoutProcess", "L_DeliveryDaysNumber")
-                            </span>
-                        </div>
-                        <div class="col-12 col-sm-4">
-                            <div class="float-sm-right">
-                                @Html.Localize("MyAccount", "L_Total"): <span class="h5">{{Cart.ShippingMethod.Cost}}</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            </transition-collapse>
         </div>
     </div>
 </body>

@@ -40,7 +40,7 @@
             Scope = ComposerContext.Scope,
             CultureInfo = ComposerContext.CultureInfo,
             CountryCode = ComposerContext.CountryCode,
-            BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
+            BaseUrl = RequestUtils.GetBaseUrl(Request.Url, Request.ApplicationPath).ToString()
         }).Result;
     }
 
