@@ -53,12 +53,13 @@ namespace Orckestra.Composer.CompositeC1.Providers
         /// <returns></returns>
         public virtual IEnumerable<SearchFilter> BuildSelectedFacets(NameValueCollection collection)
         {
-            if (collection == null || collection.Count == 0) return null;
+            if (collection == null) return null;
 
             List<SearchFilter> result = new List<SearchFilter>();
 
             foreach (string element in collection)
             {
+                if (string.IsNullOrEmpty(element)) { continue; }
                 var match = Regex.Match(
                     element,
                     $"{SearchConfiguration.FilterNameParameterPrefix}([0-9]+)",
