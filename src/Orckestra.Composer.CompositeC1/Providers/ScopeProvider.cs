@@ -23,7 +23,7 @@ namespace Orckestra.Composer.CompositeC1.Providers
             return SiteConfiguration.GetScopeId(WebsiteContext.WebsiteId);
         }
 
-        public string DefaultScope
+        public virtual string DefaultScope
         {
             get { return _lazyDefaultScope.Value; }
         }
