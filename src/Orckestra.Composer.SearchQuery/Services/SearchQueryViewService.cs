@@ -88,8 +88,8 @@ namespace Orckestra.Composer.SearchQuery.Services
             SearchQueryViewModel viewModel;
 
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
-            if (param.CultureInfo != null) { throw new ArgumentException($"Value of {nameof(param.CultureInfo)} should be null", nameof(param)); }
-            if (param.Criteria != null) { throw new ArgumentException($"Value of {nameof(param.Criteria)} should be null", nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
+            if (param.Criteria == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.Criteria)), nameof(param)); }
 
             var searchQueryProducts = await SearchQueryRepository.SearchQueryProductAsync(new SearchQueryProductParams
                 {
