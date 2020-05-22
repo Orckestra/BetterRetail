@@ -22,7 +22,7 @@
                 @Html.Localize("ShoppingCart", "T_OrderSummary")
             </h3>
             <div class="card-body  bg-light" v-cloak="true">
-                @Rewars()
+                @Rewards()
 
                 @SubTotal()
 
@@ -57,11 +57,11 @@
 </body>
 </html>
 
-@helper Rewars()
+@helper Rewards()
 {
     <div v-if="OrderSummary.Rewards.length" class="text-center">
         <p class="promotion  mb-2">
-            <em v-for="(reward, index) in OrderSummary.Rewards" v-bind:data-qa="'reward-' +  index">{{reward.Description || reward.PromotionName}}</em>
+            <em v-for="(reward, index) in OrderSummary.Rewards" v-bind:data-qa="'reward-' +  index">{{reward.Description || reward.PromotionName}}<br/></em>
         </p>
     </div>
 }
