@@ -329,8 +329,11 @@
             @if (order.OrderSummary.Rewards != null &&
                 order.OrderSummary.Rewards.Count > 0)
             {
-                <p class="promotion  mb-2  text-center">
-                    <em v-for="(reward, index) in OrderSummary.Rewards" v-bind:data-qa="'reward-' +  index">{{reward.Description || reward.PromotionName}}</em>
+                <p class="promotion  mb-2  text-center  d-block">
+                    @foreach (var reward in order.OrderSummary.Rewards)
+                    {
+                        <em>@(!string.IsNullOrEmpty(reward.Description) ? reward.Description : reward.PromotionName)</em><br />
+                    }
                 </p>
             }
             <div class="row mb-2">
