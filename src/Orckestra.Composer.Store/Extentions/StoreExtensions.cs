@@ -72,7 +72,7 @@ namespace Orckestra.Composer.Store.Extentions
                     && bound.Contains(address.Latitude.Value, address.Longitude.Value)
                 : false;
         }
-
+        //TODO: Rename from CalculateDestination to CalculateDistance
         public static double CalculateDestination(this Overture.ServiceModel.Customers.Stores.Store store, Coordinate searchPoint)
         {
             return store.HasLocation()
