@@ -9,6 +9,7 @@ using Orckestra.Composer.Store.Providers;
 using Orckestra.Composer.Store.Repositories;
 using Orckestra.Composer.Store.ViewModels;
 using Orckestra.Overture.ServiceModel.Customers;
+using Orckestra.Overture.ServiceModel.Customers.Stores;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Store.Services
@@ -51,6 +52,25 @@ namespace Orckestra.Composer.Store.Services
             });
 
             IEnumerable<Overture.ServiceModel.Customers.Stores.Store> stores = overtureStores.Results;
+            if (!stores.Any()) { return model; }
+
+            if (param.SearchPoint != null)
+            {
+                var nearestStore = stores.First();
+                var nearestDist = nearestStore.CalculateDestination(param.SearchPoint);
+
+                foreach (var store in stores)
+                {
+                    var currentDist = store.CalculateDestination(param.SearchPoint);
+
+                    if (store.CalculateDestination(param.SearchPoint) < nearestDist)
+                    {
+                        nearestStore = store;
+                        nearestDist = currentDist;
+                    }
+                }
+                model.NearestStoreCoordinate = new StoreGeoCoordinate(nearestStore);
+            }
 
             var index = 1;
 
@@ -62,8 +82,8 @@ namespace Orckestra.Composer.Store.Services
             if (param.SearchPoint != null)
             {
                 stores = stores.OrderBy(s => s.CalculateDestination(param.SearchPoint));
-                model.NearestStoreCoordinate = new StoreGeoCoordinate(stores.FirstOrDefault());
             }
+
             var storeIndexes = stores.ToDictionary(d => d.Number, d => index++);
 
             var storesForCurrentPage = stores.Skip((param.PageNumber - 1) * param.PageSize).Take(param.PageSize).ToList();
