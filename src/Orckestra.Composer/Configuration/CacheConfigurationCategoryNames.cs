@@ -44,6 +44,8 @@ namespace Orckestra.Composer.Configuration
 
         public static string CategoryUrls = "CategoryUrls";
 
+        public static string CategoryMap = "CategoryMap";
+
         /// <summary>
         /// Cache name where Customers information will be stored
         /// </summary>
@@ -77,7 +79,7 @@ namespace Orckestra.Composer.Configuration
         public static string RecurringOrderPrograms = "RecurringOrderPrograms";
 
         /// <summary>
-        /// Cache used for the list of fulfillementMEthods for a scope
+        /// Cache used for the list of fulfillment methods for a scope
         /// </summary>
         public static string FulfillmentMethodsByScope = "FulfillmentMethodsByScope";
 
