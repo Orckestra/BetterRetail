@@ -27,7 +27,7 @@ namespace Orckestra.Composer.ViewEngine.HandleBarsHelpers
 
             var parms = new GetLocalizedParam
             {
-                CultureInfo = Thread.CurrentThread.CurrentCulture,
+                CultureInfo = Thread.CurrentThread.CurrentUICulture,
                 Category    = (arguments[0] ?? string.Empty).ToString(),
                 Key         = (arguments[1] ?? string.Empty).ToString(),
             };

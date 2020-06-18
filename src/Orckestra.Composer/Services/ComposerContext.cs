@@ -11,6 +11,8 @@ namespace Orckestra.Composer.Services
     //TODO: Rename to ComposerRequestContext
     public class ComposerContext : IComposerContext
     {
+        internal static readonly string HttpContextItem_CurrentCulture = "C1_CurrentCulture";
+
         protected ICookieAccessor<ComposerCookieDto> CookieAccessor { get; }
         protected IScopeProvider ScopeProvider { get; }
         protected HttpContextBase HttpContextBase { get; }
@@ -59,7 +61,7 @@ namespace Orckestra.Composer.Services
                 if (_cultureInfo == null)
                 {
                     //Second attempt, get from current thread
-                    _cultureInfo = Thread.CurrentThread.CurrentCulture;
+                    _cultureInfo = HttpContext.Current?.Items[HttpContextItem_CurrentCulture] as CultureInfo ?? Thread.CurrentThread.CurrentCulture;
                 }
 
                 return _cultureInfo;

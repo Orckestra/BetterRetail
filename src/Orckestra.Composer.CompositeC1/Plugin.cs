@@ -80,6 +80,7 @@ namespace Orckestra.Composer.CompositeC1
 
             host.Register<ProductContext, IProductContext>(ComponentLifestyle.PerRequest);
             host.Register<LazyFunctionCallDataProvider, ILazyFunctionCallDataProvider>();
+            host.Register<LanguageFallbackProvider, ILanguageFallbackProvider>();
 
             host.RegisterApiControllers(typeof(Plugin).Assembly);
         }

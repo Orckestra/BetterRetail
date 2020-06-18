@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using Composite.Data;
 using Composite.Data.Types;
 using Orckestra.Composer.Services.Breadcrumb;
 using Orckestra.Composer.ViewModels.Breadcrumb;
@@ -24,7 +26,7 @@ namespace Orckestra.Composer.CompositeC1.Services
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
 
             var pageId = new Guid(param.CurrentPageId);
-            var page = _pageService.GetPage(pageId, param.CultureInfo) ?? 
+            var page = _pageService.GetPageNode(pageId, param.CultureInfo) ?? 
                 throw new InvalidOperationException("Could not find any page matching this ID.");
 
             var breadcrumbViewModel = new BreadcrumbViewModel
@@ -36,26 +38,28 @@ namespace Orckestra.Composer.CompositeC1.Services
             return breadcrumbViewModel;
         }
 
-        protected virtual List<BreadcrumbItemViewModel> CreateBreadcrumbItems(GetBreadcrumbParam param, IPage page)
+        protected virtual List<BreadcrumbItemViewModel> CreateBreadcrumbItems(GetBreadcrumbParam param, PageNode page)
         {
             var breadcrumbStack = new Stack<BreadcrumbItemViewModel>();
-            var parentPageId = _pageService.GetParentPageId(page);
+            var parentPageId = PageManager.GetParentId(page.Id);
+            //var parentPageId = _pageService.GetParentPageId(page);
 
             while (parentPageId != Guid.Empty)
             {
-                var parentPage = _pageService.GetPage(parentPageId, param.CultureInfo);
+                var parentPage = _pageService.GetPageNode(parentPageId, param.CultureInfo);
 
                 var itemVM = CreateParentPageItem(parentPage);
                 breadcrumbStack.Push(itemVM);
 
-                parentPageId = _pageService.GetParentPageId(parentPage);
+                parentPageId = PageManager.GetParentId(parentPage.Id);
+                //parentPageId = _pageService.GetParentPageId(parentPage);
             }
 
             var items = UnrollStack(breadcrumbStack).ToList();
             return items;
         }
 
-        protected virtual BreadcrumbItemViewModel CreateParentPageItem(IPage parentPage)
+        protected virtual BreadcrumbItemViewModel CreateParentPageItem(PageNode parentPage)
         {
             var itemVM = new BreadcrumbItemViewModel
             {
@@ -63,9 +67,10 @@ namespace Orckestra.Composer.CompositeC1.Services
             };
 
             var pagesConfiguration = SiteConfiguration.GetPagesConfiguration();
-            if (pagesConfiguration!= null && parentPage.PageTypeId != pagesConfiguration.FolderId)
+            if (pagesConfiguration!= null && parentPage.GetPageProperty(p => p.PageTypeId) != pagesConfiguration.FolderId)
             {
-                itemVM.Url = _pageService.GetPageUrl(parentPage);
+                //itemVM.Url = _pageService.GetPageUrl(parentPage);
+                itemVM.Url = parentPage.Url;
             }
 
             return itemVM;
@@ -78,5 +83,16 @@ namespace Orckestra.Composer.CompositeC1.Services
                 yield return breadcrumbStack.Pop();
             }
         }
+
+    }
+    internal static class PageNodeExtensions
+    {
+        public static T GetPageProperty<T>(this PageNode pageNode, Func<IPage, T> getPropertyMethod)
+        {
+            var pageProp = typeof(PageNode).GetProperty("_page", BindingFlags.NonPublic | BindingFlags.Instance);
+            var getter = pageProp?.GetGetMethod(nonPublic: true);
+            return getter?.Invoke(pageNode, null) is IPage page ? getPropertyMethod(page) : default;
+        }
+
     }
 }

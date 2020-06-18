@@ -2,7 +2,9 @@
 using System.Globalization;
 using System.Net.Http;
 using System.Web.Mvc;
+using Composite.Core;
 using Composite.Data;
+using Orckestra.Composer.CompositeC1.Providers;
 using Orckestra.Composer.CompositeC1.Services;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Services.Breadcrumb;
@@ -18,18 +20,20 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         protected IComposerContext ComposerContext { get; private set; }
         protected ILanguageSwitchService LanguageSwitchService { get; private set; }
         protected IBreadcrumbViewService BreadcrumbViewService { get; private set; }
+        protected ILanguageFallbackProvider LanguageFallbackProvider { get; private set; }
 
         protected HeaderBaseController(
             IPageService pageService,
             IComposerContext composerContext,
             ILanguageSwitchService languageSwitchService,
             IBreadcrumbViewService breadcrumbViewService
-            )
+        )
         {
             PageService = pageService ?? throw new ArgumentNullException(nameof(pageService));
             ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
             LanguageSwitchService = languageSwitchService ?? throw new ArgumentNullException(nameof(languageSwitchService));
             BreadcrumbViewService = breadcrumbViewService ?? throw new ArgumentNullException(nameof(breadcrumbViewService));
+            LanguageFallbackProvider = ServiceLocator.GetService<ILanguageFallbackProvider>() ?? throw new ArgumentNullException(nameof(LanguageFallbackProvider));
         }
 
         public virtual ActionResult LanguageSwitch()
@@ -41,13 +45,29 @@ namespace Orckestra.Composer.CompositeC1.Controllers
 
         private string BuildUrl(CultureInfo culture)
         {
-            var pageId = SitemapNavigator.CurrentPageId;
-            var pageUrl = PageService.GetPageUrl(pageId, culture);
+            
+            using (LanguageFallbackProvider.GetInvariantLanguageScope())
+            {
+                var pageId = SitemapNavigator.CurrentPageId;
 
-            if (pageUrl == null) { return null; }
+                using (var connection = new DataConnection(culture))
+                {
+                    var page = connection.SitemapNavigator.GetPageNodeById(pageId);
+                    if (page == null)
+                    {
+                        return null;
+                    }
+                    var pageUrl = page.Url;
 
-            var url = UrlFormatter.AppendQueryString(pageUrl, Request.Url.ParseQueryString());
-            return url;
+                    if (pageUrl == null)
+                    {
+                        return null;
+                    }
+
+                    var url = UrlFormatter.AppendQueryString(pageUrl, Request.Url.ParseQueryString());
+                    return url;
+                }
+            }
         }
 
 
@@ -64,7 +84,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
 
         public virtual ActionResult PageHeader()
         {
-            var page = PageService.GetPage(SitemapNavigator.CurrentPageId);
+            var page = PageService.GetPageNode(SitemapNavigator.CurrentPageId);
             var canonicalUrl = page != null ? UrlUtils.ToAbsolute(PageService.GetPageUrl(page.Id)) : string.Empty;
 
             var pageHeaderViewModel = new PageHeaderViewModel

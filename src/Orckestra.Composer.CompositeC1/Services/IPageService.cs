@@ -2,13 +2,17 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Web;
+using Composite.Data;
 using Composite.Data.Types;
 
 namespace Orckestra.Composer.CompositeC1.Services
 {
     public interface IPageService
     {
+
         IPage GetPage(Guid pageId, CultureInfo cultureInfo = null);
+
+        PageNode GetPageNode(Guid pageId, CultureInfo cultureInfo = null);
 
         Guid GetParentPageId(IPage page);
 

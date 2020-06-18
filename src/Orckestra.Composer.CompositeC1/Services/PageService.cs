@@ -17,6 +17,7 @@ namespace Orckestra.Composer.CompositeC1.Services
         protected ISiteConfiguration SiteConfiguration { get; private set; }
         public PageService() { }
 
+
         /// <summary>
         /// Returns a page in the given locale.
         /// </summary>
@@ -28,6 +29,21 @@ namespace Orckestra.Composer.CompositeC1.Services
             using (new DataConnection(cultureInfo))
             {
                 return PageManager.GetPageById(pageId);
+            }
+        }
+
+
+        /// <summary>
+        /// Returns a page node in the given locale.
+        /// </summary>
+        /// <param name="pageId"></param>
+        /// <param name="cultureInfo"></param>
+        /// <returns></returns>
+        public virtual PageNode GetPageNode(Guid pageId, CultureInfo cultureInfo = null)
+        {
+            using (var connection = new DataConnection(cultureInfo))
+            {
+                return connection.SitemapNavigator.GetPageNodeById(pageId);
             }
         }
 
@@ -58,12 +74,20 @@ namespace Orckestra.Composer.CompositeC1.Services
         {
             if (pageId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(), nameof(pageId)); }
 
-            var page = GetPage(pageId, cultureInfo);
-            return page == null
-                ? null
-                : httpContext != null 
-                    ? PageUrls.BuildUrl(page, UrlKind.Public, new UrlSpace(httpContext)) 
-                    : PageUrls.BuildUrl(page);
+            var page = GetPageNode(pageId, cultureInfo);
+            if (page != null)
+            {
+                return page.Url;
+            }
+
+            return null;
+            
+            //TODO:
+            //return page == null
+            //    ? null
+            //    : httpContext != null 
+            //        ? PageUrls.BuildUrl(page, UrlKind.Public, new UrlSpace(httpContext)) 
+            //        : PageUrls.BuildUrl(page);
         }
 
         public virtual string GetPageUrl(IPage page)

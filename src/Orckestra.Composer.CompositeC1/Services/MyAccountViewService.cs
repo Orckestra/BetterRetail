@@ -64,11 +64,12 @@ namespace Orckestra.Composer.CompositeC1.Services
 
             var menu = new MenuViewModel { MenuItems = new List<MenuItemViewModel>() };
             var pageConfiguration = SiteConfiguration.GetPagesConfiguration(ComposerContext.CultureInfo, WebsiteContext.WebsiteId);
-            var myAccountPage = PageService.GetPage(pageConfiguration.MyAccountPageId, ComposerContext.CultureInfo);
-            var myAddressPage = PageService.GetPage(pageConfiguration.AddressListPageId, ComposerContext.CultureInfo);
-            var myOrderHistoryPage = PageService.GetPage(pageConfiguration.OrderHistoryPageId, ComposerContext.CultureInfo);
-            var myWishListage = PageService.GetPage(pageConfiguration.MyWishListPageId, ComposerContext.CultureInfo);
-            var myRecurringSchedulePage = PageService.GetPage(RecurringOrdersSettings.RecurringSchedulePageId, ComposerContext.CultureInfo);
+            
+            var myAccountPage = PageService.GetPageNode(pageConfiguration.MyAccountPageId, ComposerContext.CultureInfo);
+            var myAddressPage = PageService.GetPageNode(pageConfiguration.AddressListPageId, ComposerContext.CultureInfo);
+            var myOrderHistoryPage = PageService.GetPageNode(pageConfiguration.OrderHistoryPageId, ComposerContext.CultureInfo);
+            var myWishListage = PageService.GetPageNode(pageConfiguration.MyWishListPageId, ComposerContext.CultureInfo);
+            var myRecurringSchedulePage = PageService.GetPageNode(RecurringOrdersSettings.RecurringSchedulePageId, ComposerContext.CultureInfo);
 
             var myAccountMenuItem = new MenuItemViewModel
             {

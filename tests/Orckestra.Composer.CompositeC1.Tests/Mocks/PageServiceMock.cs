@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Web;
+using Composite.Data;
 
 namespace Orckestra.Composer.CompositeC1.Tests.Mocks
 {
@@ -18,6 +19,16 @@ namespace Orckestra.Composer.CompositeC1.Tests.Mocks
         }
 
         public IPage GetPage(Guid pageId, CultureInfo cultureInfo = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        PageNode IPageService.GetPageNode(Guid pageId, CultureInfo cultureInfo)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IPage GetPageNode(Guid pageId, CultureInfo cultureInfo = null)
         {
             return _dataSource.FirstOrDefault(p => p.Id == pageId);
         }
