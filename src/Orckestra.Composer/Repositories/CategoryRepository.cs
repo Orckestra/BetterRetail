@@ -35,7 +35,7 @@ namespace Orckestra.Composer.Repositories
         /// </summary>
         /// <param name="param">The parameter.</param>
         /// <returns>List of categories.</returns>
-        public async virtual Task<List<Category>> GetCategoriesAsync(GetCategoriesParam param)
+        public virtual async Task<List<Category>> GetCategoriesAsync(GetCategoriesParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
             if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
@@ -45,10 +45,12 @@ namespace Orckestra.Composer.Repositories
                 Scope = param.Scope
             };
 
-            var result = await CacheProvider.GetOrAddAsync(cacheKey, () => OvertureClient.SendAsync(new GetCategoriesV2Request
+            var result = await CacheProvider.GetOrAddAsync(cacheKey, 
+                () => OvertureClient.SendAsync(new GetCategoriesV2Request
             {
                 ScopeId = param.Scope
-            }));
+            })).ConfigureAwait(false);
+
             return result?.Categories;
         }
 
