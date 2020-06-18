@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Composite.Data;
+using Orckestra.Composer.CompositeC1.Cache;
 using Orckestra.Composer.CompositeC1.DataTypes.Navigation;
 using Orckestra.Composer.CompositeC1.Utils;
 using Orckestra.Composer.Enums;
@@ -14,6 +15,7 @@ namespace Orckestra.Composer.CompositeC1.Mappers
     public class NavigationMapper : INavigationMapper
     {
         private readonly GoogleAnalyticsNavigationUrlProvider _analyticsNavigationUrlHelper;
+        private static readonly QueryCache<NavigationImage, Guid> _navigationImageCache = new QueryCache<NavigationImage, Guid>(_ => _.MenuItemParentId);
 
         public NavigationMapper(GoogleAnalyticsNavigationUrlProvider analyticsNavigationUrlHelper)
         {
@@ -93,9 +95,9 @@ namespace Orckestra.Composer.CompositeC1.Mappers
 
         public virtual NavigationImage GetNavigationImage(Guid menuItemId, CultureInfo cultureInfo)
         {
-            using (DataConnection data = new DataConnection(cultureInfo))
+            using (new DataConnection(cultureInfo))
             {
-                return data.Get<NavigationImage>().FirstOrDefault(x => x.MenuItemParentId == menuItemId);
+                return _navigationImageCache[menuItemId];
             }
         }
     }
