@@ -89,14 +89,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
                 return View(emptyView, emptyViewModel);
             }
 
-            var container = RequestContext.GetCategoryAvailableProductsAsync(new GetBrowseCategoryParam
-            {
-                Request = Request,
-                Page = page,
-                SortBy = sortBy,
-                SortDirection = sortDirection,
-                CategoryId = categoryId,
-            }).Result;
+            var container = RequestContext.ViewModel;
 
             var viewName = container.ProductSearchResults.TotalCount <= 0 ? emptyView : filledView;
             var model = viewModelSelector.Invoke(container);
@@ -121,15 +114,6 @@ namespace Orckestra.Composer.CompositeC1.Controllers
                 model.Context["ListName"] = "Category Browsing";
                 model.Context["PaginationCurrentPage"] = model.ProductSearchResults.Pagination.Pages.FirstOrDefault(p => p.IsCurrentPage);
             }
-        }
-
-        protected string GetMetadataDefinitionName(Guid pageTypeId)
-        {
-            var meta = pageTypeId == CategoryPages.CategoryLandingPageTypeId
-                ? "ComposerCategoryLandingPage"
-                : "ComposerCategoryPage";
-
-            return meta;
         }
 
         public ActionResult LanguageSwitch()
