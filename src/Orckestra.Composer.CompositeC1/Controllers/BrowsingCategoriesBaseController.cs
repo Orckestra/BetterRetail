@@ -13,6 +13,7 @@ using System.Web.Mvc;
 using Orckestra.Composer.Search;
 using Orckestra.Composer.Search.Parameters;
 using Orckestra.Composer.Search.RequestConstants;
+using System.Threading.Tasks;
 
 namespace Orckestra.Composer.CompositeC1.Controllers
 {
@@ -89,7 +90,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
                 return View(emptyView, emptyViewModel);
             }
 
-            var container = RequestContext.ViewModel;
+            var container = RequestContext.GetViewModelAsync().Result;
 
             var viewName = container.ProductSearchResults.TotalCount <= 0 ? emptyView : filledView;
             var model = viewModelSelector.Invoke(container);

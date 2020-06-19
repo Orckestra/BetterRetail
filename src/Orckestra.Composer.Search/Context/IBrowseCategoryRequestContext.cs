@@ -1,12 +1,13 @@
 ﻿using Orckestra.Composer.Search.ViewModels;
+using System.Threading.Tasks;
 
 namespace Orckestra.Composer.Search.Context
 {
     public interface IBrowseCategoryRequestContext
     {
         /// <summary>
-        /// CategoryBrowsingViewModel ViewModel for the current request
+        /// Get CategoryBrowsingViewModel for the current request
         /// </summary>
-        CategoryBrowsingViewModel ViewModel { get; }
+        Task<CategoryBrowsingViewModel> GetViewModelAsync();
     }
 }
