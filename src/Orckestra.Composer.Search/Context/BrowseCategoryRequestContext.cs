@@ -53,8 +53,8 @@ namespace Orckestra.Composer.Search.Context
             SearchUrlProvider = searchUrlProvider ?? throw new ArgumentNullException(nameof(searchUrlProvider));
             InventoryLocationProvider = inventoryLocationProvider ?? throw new ArgumentNullException(nameof(inventoryLocationProvider));
             CategoryViewService = categoryViewService ?? throw new ArgumentNullException(nameof(categoryViewService));
-            CategoryMetaContext = categoryMetaContext ?? throw new ArgumentNullException(nameof(categoryMetaContext)); ;
-            Request = request ?? throw new ArgumentNullException(nameof(request)); ;
+            CategoryMetaContext = categoryMetaContext ?? throw new ArgumentNullException(nameof(categoryMetaContext));
+            Request = request ?? throw new ArgumentNullException(nameof(request));
 
             _viewModel = new Lazy<CategoryBrowsingViewModel>(() =>
             {
