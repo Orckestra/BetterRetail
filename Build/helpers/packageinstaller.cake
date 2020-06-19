@@ -1,4 +1,4 @@
-#tool "nuget:?package=Composite.PackageInstaller&version=0.1.4"
+#tool "nuget:?package=Composite.PackageInstaller&version=0.1.6"
 using Cake.Core;
 using Cake.Core.Annotations;
 
