@@ -4,20 +4,29 @@ using System.Linq;
 using Composite.Core.Routing;
 using Composite.Core.WebClient.Renderings.Page;
 using Composite.Data;
-using Composite.Data.Types;
+using Orckestra.Composer.CompositeC1.Cache;
 using Orckestra.Composer.CompositeC1.DataTypes;
 
 namespace Orckestra.Composer.CompositeC1.Utils
 {
-    public class C1Helper
+    public static class C1Helper
     {
+        internal static QueryCache<UrlTarget, Guid> _urlTargetCache = new QueryCache<UrlTarget, Guid>(_ => _.Id);
+        internal static QueryCache<CssStyle, Guid> _cssStyleCache = new QueryCache<CssStyle, Guid>(_ => _.Id);
+
         public static bool IsUrlPagePublished(string url)
         {
             if (IsExternalLink(url)) return true;
 
-            using (DataConnection data = new DataConnection())
+            var guidStr = GetPageGuidFromUrl(url);
+            if (string.IsNullOrWhiteSpace(guidStr) || !Guid.TryParse(guidStr, out var pageId))
             {
-                return Queryable.Any(data.Get<IPage>(), x => x.Id.ToString() == GetPageGuidFromUrl(url) && x.PublicationStatus == "published");
+                return false;
+            }
+
+            using (new DataConnection(PublicationScope.Published))
+            {
+                return PageManager.GetPageById(pageId) != null;
             }
         }
 
@@ -51,22 +60,14 @@ namespace Orckestra.Composer.CompositeC1.Utils
         {
             if (targetId == null) return string.Empty;
 
-            using (DataConnection data = new DataConnection())
-            {
-                var targetValue = data.Get<UrlTarget>().FirstOrDefault(x => x.Id == targetId);
-                return targetValue != null ? targetValue.Value : string.Empty;
-            }
+            return _urlTargetCache[targetId.Value]?.Value ?? string.Empty;
         }
 
         public static string GetCssStyleValue(Guid? cssStyleId)
         {
             if (cssStyleId == null) return string.Empty;
 
-            using (DataConnection data = new DataConnection())
-            {
-                var cssStyleValue = data.Get<CssStyle>().FirstOrDefault(x => x.Id == cssStyleId);
-                return cssStyleValue != null ? cssStyleValue.CssCode : string.Empty;
-            }
+            return _cssStyleCache[cssStyleId.Value]?.CssCode;
         }
 
         public static PageUrlData GetPageUrlDataFromUrl(string urlStr)
@@ -75,7 +76,7 @@ namespace Orckestra.Composer.CompositeC1.Utils
             while (pageUrlData == null && urlStr.LastIndexOf('/') > 0)
             {
                 urlStr = urlStr.Substring(0, urlStr.LastIndexOf('/'));
-                pageUrlData = PageUrls.ParseUrl(urlStr.ToString());
+                pageUrlData = PageUrls.ParseUrl(urlStr);
             }
 
             return pageUrlData;

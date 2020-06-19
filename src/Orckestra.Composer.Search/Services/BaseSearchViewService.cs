@@ -473,6 +473,8 @@ namespace Orckestra.Composer.Search.Services
             CultureInfo cultureInfo)
         {
             productSearchVm.DisplayName = TrimProductDisplayName(productSearchVm.FullDisplayName);
+            productSearchVm.Description = null; // We don't need Description in Search Results, setting to null, to reduce HTML size
+
 
             //TODO use ProductDocument property when overture will have add it.
             if (productSearchVm.Bag.ContainsKey("DefinitionName"))
