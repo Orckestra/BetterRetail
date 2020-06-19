@@ -15,7 +15,7 @@
 <head>
     <script>
         function imgError(el) {
-            if (el.src !== '@Model.FallbackImageUrl') {
+            if (!el.src.includes('@Model.FallbackImageUrl')) {
                 el.src = '@Model.FallbackImageUrl';
             }
         }

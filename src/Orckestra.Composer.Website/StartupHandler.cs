@@ -1,5 +1,3 @@
-using System;
-using System.Web.Hosting;
 using Autofac.Integration.Mvc;
 using Composite.AspNet.MvcFunctions;
 using Composite.Core.Application;
@@ -10,16 +8,16 @@ using Composite.Functions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Orckestra.Composer.CompositeC1.DataTypes;
-using Orckestra.Composer.Website.Controllers;
 using Orckestra.Composer.CompositeC1.Pages;
 using Orckestra.Composer.HttpModules;
 using Orckestra.Composer.Logging;
 using Orckestra.Composer.Search;
+using Orckestra.Composer.Website.Controllers;
 using Orckestra.ExperienceManagement.Configuration.DataTypes;
+using System.Web.Hosting;
 using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Routing;
-using Composite.Core;
 
 namespace Orckestra.Composer.Website
 {
