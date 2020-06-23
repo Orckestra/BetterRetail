@@ -1,16 +1,13 @@
-﻿using System.Threading.Tasks;
-using Orckestra.Composer.Search.Parameters;
-using Orckestra.Composer.Search.ViewModels;
+﻿using Orckestra.Composer.Search.ViewModels;
+using System.Threading.Tasks;
 
 namespace Orckestra.Composer.Search.Context
 {
     public interface IBrowseCategoryRequestContext
     {
         /// <summary>
-        /// Gets all products for a given category.
+        /// Get CategoryBrowsingViewModel for the current request
         /// </summary>
-        /// <param name="param"></param>
-        /// <returns></returns>
-        Task<CategoryBrowsingViewModel> GetCategoryAvailableProductsAsync(GetBrowseCategoryParam param);
+        Task<CategoryBrowsingViewModel> GetViewModelAsync();
     }
 }
