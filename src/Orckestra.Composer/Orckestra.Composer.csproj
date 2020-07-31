@@ -283,6 +283,7 @@
     <Compile Include="Parameters\UpdateRecurringOrderTemplateLineItemParam.cs" />
     <Compile Include="Parameters\UpdateRecurringOrderTemplateLineItemQuantityParam.cs" />
     <Compile Include="Parameters\UpdateUserParam.cs" />
+    <Compile Include="Providers\CurrentLanguageProvider.cs" />
     <Compile Include="Providers\Dam\ProductImageInfo.cs" />
     <Compile Include="Providers\IPageNotFoundUrlProvider.cs" />
     <Compile Include="Providers\ICountryCodeProvider.cs" />

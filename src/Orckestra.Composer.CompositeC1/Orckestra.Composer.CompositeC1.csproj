@@ -47,9 +47,8 @@
       <HintPath>..\..\packages\Autofac.WebApi2.3.4.0\lib\net45\Autofac.Integration.WebApi.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Composite, Version=6.6.6912.30810, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\C1CMS.Assemblies.6.6.6912.30810\lib\net471\Composite.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="Composite">
+      <HintPath>..\..\..\..\Git\C1-CMS-Foundation\Website\bin\Composite.dll</HintPath>
     </Reference>
     <Reference Include="Composite.Workflows, Version=6.6.6912.30813, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\C1CMS.Assemblies.6.6.6912.30810\lib\net471\Composite.Workflows.dll</HintPath>

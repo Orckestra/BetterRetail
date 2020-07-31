@@ -55,8 +55,8 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Composite, Version=6.6.6912.30810, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\C1CMS.Assemblies.6.6.6912.30810\lib\net471\Composite.dll</HintPath>
-      <Private>True</Private>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Git\C1-CMS-Foundation\Website\bin\Composite.dll</HintPath>
     </Reference>
     <Reference Include="Composite.Workflows, Version=6.6.6912.30813, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\C1CMS.Assemblies.6.6.6912.30810\lib\net471\Composite.Workflows.dll</HintPath>
@@ -253,6 +253,7 @@
     <Compile Include="Mappers\FacetsMapper_ConvertToFacetSetting.cs" />
     <Compile Include="Mocks\MainMenuMock.cs" />
     <Compile Include="Mocks\ISiteConfigurationMetaMock.cs" />
+    <Compile Include="Mocks\PageNodeMock.cs" />
     <Compile Include="Mocks\PageServiceMock.cs" />
     <Compile Include="Mocks\PageMock.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

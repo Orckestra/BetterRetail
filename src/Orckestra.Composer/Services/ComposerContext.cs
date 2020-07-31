@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using System.Runtime.Remoting.Messaging;
 using System.Threading;
 using System.Web;
 using Orckestra.Composer.Providers;
@@ -11,13 +12,12 @@ namespace Orckestra.Composer.Services
     //TODO: Rename to ComposerRequestContext
     public class ComposerContext : IComposerContext
     {
-        internal static readonly string HttpContextItem_CurrentCulture = "C1_CurrentCulture";
-
         protected ICookieAccessor<ComposerCookieDto> CookieAccessor { get; }
         protected IScopeProvider ScopeProvider { get; }
         protected HttpContextBase HttpContextBase { get; }
         protected ICountryCodeProvider CountryCodeProvider { get; }
         protected IWebsiteContext WebsiteContext { get; }
+        public IContextLanguageProvider ContextLanguageProvider { get; private set; }
         protected EncryptionUtility EncryptionUtility { get; }
 
         public ComposerContext(
@@ -25,13 +25,15 @@ namespace Orckestra.Composer.Services
             IScopeProvider scopeProvider,
             HttpContextBase httpContextBase,
             ICountryCodeProvider countryCodeProvider,
-            IWebsiteContext websiteContext)
+            IWebsiteContext websiteContext,
+            IContextLanguageProvider contextLanguageProvider)
         {
             CookieAccessor = cookieAccessor ?? throw new ArgumentNullException(nameof(cookieAccessor));
             ScopeProvider = scopeProvider ?? throw new ArgumentNullException(nameof(scopeProvider));
             HttpContextBase = httpContextBase ?? throw new ArgumentNullException(nameof(httpContextBase));
             CountryCodeProvider = countryCodeProvider ?? throw new ArgumentNullException(nameof(countryCodeProvider));
             WebsiteContext = websiteContext ?? throw new ArgumentNullException(nameof(websiteContext));
+            ContextLanguageProvider = contextLanguageProvider ?? throw new ArgumentNullException(nameof(contextLanguageProvider)); ;
             EncryptionUtility = new EncryptionUtility();
 
             SetAuthenticated();
@@ -61,7 +63,7 @@ namespace Orckestra.Composer.Services
                 if (_cultureInfo == null)
                 {
                     //Second attempt, get from current thread
-                    _cultureInfo = HttpContext.Current?.Items[HttpContextItem_CurrentCulture] as CultureInfo ?? Thread.CurrentThread.CurrentCulture;
+                    _cultureInfo = ContextLanguageProvider.GetCurrentCultureInfo();
                 }
 
                 return _cultureInfo;

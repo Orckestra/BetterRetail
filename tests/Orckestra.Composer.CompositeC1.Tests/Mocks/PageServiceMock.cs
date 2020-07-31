@@ -20,17 +20,14 @@ namespace Orckestra.Composer.CompositeC1.Tests.Mocks
 
         public IPage GetPage(Guid pageId, CultureInfo cultureInfo = null)
         {
-            throw new NotImplementedException();
-        }
-
-        PageNode IPageService.GetPageNode(Guid pageId, CultureInfo cultureInfo)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IPage GetPageNode(Guid pageId, CultureInfo cultureInfo = null)
-        {
             return _dataSource.FirstOrDefault(p => p.Id == pageId);
+        }
+
+
+        public PageNode GetPageNode(Guid pageId, CultureInfo cultureInfo = null)
+        {
+            var page = GetPage(pageId, cultureInfo);
+            return page == null ? null : new PageNodeMock(page, this);
         }
 
         public Guid GetParentPageId(IPage page)

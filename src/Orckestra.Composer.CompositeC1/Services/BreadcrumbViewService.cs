@@ -41,18 +41,14 @@ namespace Orckestra.Composer.CompositeC1.Services
         protected virtual List<BreadcrumbItemViewModel> CreateBreadcrumbItems(GetBreadcrumbParam param, PageNode page)
         {
             var breadcrumbStack = new Stack<BreadcrumbItemViewModel>();
-            var parentPageId = PageManager.GetParentId(page.Id);
-            //var parentPageId = _pageService.GetParentPageId(page);
+            var parentPage = page.ParentPage;
 
-            while (parentPageId != Guid.Empty)
+            while (parentPage != null)
             {
-                var parentPage = _pageService.GetPageNode(parentPageId, param.CultureInfo);
-
                 var itemVM = CreateParentPageItem(parentPage);
                 breadcrumbStack.Push(itemVM);
 
-                parentPageId = PageManager.GetParentId(parentPage.Id);
-                //parentPageId = _pageService.GetParentPageId(parentPage);
+                parentPage = parentPage.ParentPage;
             }
 
             var items = UnrollStack(breadcrumbStack).ToList();
@@ -67,9 +63,8 @@ namespace Orckestra.Composer.CompositeC1.Services
             };
 
             var pagesConfiguration = SiteConfiguration.GetPagesConfiguration();
-            if (pagesConfiguration!= null && parentPage.GetPageProperty(p => p.PageTypeId) != pagesConfiguration.FolderId)
+            if (pagesConfiguration!= null && parentPage.Page.PageTypeId != pagesConfiguration.FolderId)
             {
-                //itemVM.Url = _pageService.GetPageUrl(parentPage);
                 itemVM.Url = parentPage.Url;
             }
 
@@ -85,14 +80,5 @@ namespace Orckestra.Composer.CompositeC1.Services
         }
 
     }
-    internal static class PageNodeExtensions
-    {
-        public static T GetPageProperty<T>(this PageNode pageNode, Func<IPage, T> getPropertyMethod)
-        {
-            var pageProp = typeof(PageNode).GetProperty("_page", BindingFlags.NonPublic | BindingFlags.Instance);
-            var getter = pageProp?.GetGetMethod(nonPublic: true);
-            return getter?.Invoke(pageNode, null) is IPage page ? getPropertyMethod(page) : default;
-        }
 
-    }
 }

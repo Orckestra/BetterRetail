@@ -43,6 +43,7 @@ namespace Orckestra.Composer
             host.Register<RecurringOrderProgramViewModelFactory, IRecurringOrderProgramViewModelFactory>();
             host.Register<ProductPriceViewService, IProductPriceViewService>();
             host.Register<ProductRepository, IProductRepository>();
+            host.Register<ContextLanguageProvider, IContextLanguageProvider>();
 
             host.MetadataRegistry.LoadViewModelMetadataInAssemblyOf(GetType().Assembly);
 
