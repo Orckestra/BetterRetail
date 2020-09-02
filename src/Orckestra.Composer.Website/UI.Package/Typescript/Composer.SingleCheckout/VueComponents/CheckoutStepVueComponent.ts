@@ -14,29 +14,35 @@ module Orckestra.Composer {
             return {
                 props: {
                     /***
-                     * Function to execute before tab switch. Return value must be boolean
-                     * If the return result is false, tab switch is restricted
+                     * Function to execute before step switch. Return value must be boolean
+                     * If the return result is false, step switch is restricted
                      */
                     beforeChange: {
                         type: Function
                     },
 
                     /***
-                     * Function to execute before tab enter. Return value must be boolean
-                     * If the return result is false, tab switch is restricted
+                     * Function to execute before step enter. Return value must be boolean
+                     * If the return result is false, step switch is restricted
                      */
                     beforeEnter: {
                         type: Function
                     },
                     /***
-                     * Function to execute after tab switch. Return void for now.
+                     * Function to execute after step switch. Return void for now.
                      * Safe to assume necessary validation has already occured
                      */
                     afterChange: {
                         type: Function
                     },
+                    /***
+                     * Function to determine if step fulfilled so next step can be switched. Return value must be boolean
+                     */
 
                     fulfilled: Boolean,
+                    /***
+                     * Property to determine if this step is loading. It is used to show loading spinner over the step container
+                     */
                     loading: Boolean
                 },
                 inject: ['addStep', 'removeStep', 'nextStep', 'isStepExist', 'nextStepId', 'getPrevStepInstance'],

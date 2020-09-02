@@ -54,7 +54,7 @@ module Orckestra.Composer {
                     },
                     /***
                      *
-                     * Index of the initial tab to display
+                     * Index of the initial step to display
                      */
                     startIndex: {
                         type: Number,
