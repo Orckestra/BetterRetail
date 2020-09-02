@@ -64,16 +64,19 @@ module Orckestra.Composer {
                         }
                     }
                 },
-                provide: function provide() {
+                provide() {
                     return {
                         addStep: this.addStep,
                         removeStep: this.removeStep,
-                        nextStep: this.nextStep
+                        nextStep: this.nextStep,
+						isStepExist: this.isStepExist,
+						nextStepId: this.nextStepId,
+						getPrevStepInstance: this.getPrevStepInstance
                     };
                 },
                 data: function data() {
                     return {
-                        activeStepIndex: 0,
+                        activeStepId: 0,
                         currentPercentage: 0,
                         maxStep: 0,
                         loading: false,
@@ -85,7 +88,7 @@ module Orckestra.Composer {
                         return {
                             nextStep: this.nextStep,
                             prevStep: this.prevStep,
-                            activeStepIndex: this.activeStepIndex,
+                            activeStepId: this.activeStepId,
                             isLastStep: this.isLastStep,
                             fillButtonStyle: this.fillButtonStyle
                         };
@@ -94,13 +97,13 @@ module Orckestra.Composer {
                         return this.steps.length;
                     },
                     isLastStep: function isLastStep() {
-                        return this.activeStepIndex === this.stepCount - 1;
+                        return this.activeStepId === this.stepCount - 1;
                     },
                     isVertical: function isVertical() {
                         return this.layout === 'vertical';
                     },
                     displayPrevButton: function displayPrevButton() {
-                        return this.activeStepIndex !== 0;
+                        return this.activeStepId !== 0;
                     },
                     stepPercentage: function stepPercentage() {
                         return 1 / (this.stepCount * 2) * 100;
@@ -111,84 +114,93 @@ module Orckestra.Composer {
                             borderColor: this.color,
                             color: 'white'
                         };
-                    }
+                    },
                 },
                 methods: {
-                    emitTabChange: function emitTabChange(prevIndex, nextIndex) {
+                	getStepInstance(id) {
+                		return this.steps.find(step => step.id === id);
+					},
+					getNextStepInstance(id) {
+						let listIndex = this.steps.findIndex(step => step.id === id);
+						return this.steps[listIndex + 1];
+					},
+					getPrevStepInstance(id) {
+						let listIndex = this.steps.findIndex(step => step.id === id);
+						return this.steps[listIndex - 1];
+					},
+					nextStepId() {
+						let nextStep = this.getNextStepInstance(this.activeStepId);
+						return nextStep && nextStep.id;
+					},
+                    emitStepChange(prevIndex, nextIndex) {
                         this.$emit('on-change', prevIndex, nextIndex);
                         this.$emit('update:startIndex', nextIndex);
                     },
-                    addStep: function addStep(item) {
-                        var index = this.$slots.default.filter(function (d) {
-                            return item.$vnode.tag === d.tag;
-                        }).indexOf(item.$vnode);
+                    addStep(item) {
+                        const index = this.$slots.default.filter(d => item.$vnode.tag === d.tag)
+                            .indexOf(item.$vnode);
                         this.steps.splice(index, 0, item); // if a step is added before the current one, go to it
 
-                        if (index < this.activeStepIndex + 1) {
+                        if (index < this.activeStepId + 1) {
                             this.maxStep = index;
-                            this.changeStep(this.activeStepIndex + 1, index);
+                            this.changeStep(this.getNextStepInstance(this.activeStepId), this.getStepInstance(index));
                         }
 
-                        item.index = this.steps.indexOf(item);
-                        item.stepId = 'step' + index;
+                        item.id = this.steps.indexOf(item);
+                        item.elementId = 'step' + index;
                         this.maxStep = this.steps.length - 1; //TODO: fix it
                     },
-                    removeStep: function removeStep(item) {
-                        var tabs = this.steps;
-                        var index = tabs.indexOf(item);
+                    removeStep(item) {
+						let index = this.steps.indexOf(item);
 
                         if (index > -1) {
                             // Go one step back if the current step is removed
-                            if (index === this.activeStepIndex) {
-                                this.maxStep = this.activeStepIndex - 1;
-                                this.changeStep(this.activeStepIndex, this.activeStepIndex - 1);
+                            if (this.steps[index].id === this.activeStepId) {
+                                this.changeStep(this.getStepInstance(this.activeStepId), this.getPrevStepInstance(this.activeStepId));
                             }
 
-                            if (index < this.activeStepIndex) {
-                                this.maxStep = this.activeStepIndex - 1;
-                                this.activeStepIndex = this.activeStepIndex - 1;
-                                this.emitTabChange(this.activeStepIndex + 1, this.activeStepIndex);
-                            }
+							this.maxStep = this.steps.length - 1;
 
-                            tabs.splice(index, 1);
+							this.steps.splice(index, 1);
                         }
                     },
-                    reset: function reset() {
+					isStepExist(step) {
+						return this.steps.indexOf(step) >= 0;
+					},
+                    reset() {
                         this.maxStep = 0;
                         this.steps.forEach(function (tab) {
                             tab.checked = false;
                         });
                         this.navigateToStep(0);
                     },
-                    activateAll: function activateAll() {
+                    activateAll() {
                         this.maxStep = this.steps.length - 1;
-                        this.steps.forEach(function (tab) {
-                            tab.checked = true;
-                        });
+                        this.steps.forEach(step => step.checked = true);
                     },
-                    navigateToStep: function navigateToStep(index) {
-                        var validate = index > this.activeStepIndex;
+                    navigateToStep(id) {
+                        let validate = id > this.activeStepId;
 
-                        if (index <= this.maxStep) {
+                        if (id <= this.maxStep) {
                             let cb = () => {
-                                if (validate && index - this.activeStepIndex > 1) {
-                                    // validate all steps recursively until destination index
-                                    this.changeStep(this.activeStepIndex, this.activeStepIndex + 1);
-                                    this.beforeStepChange(this.activeStepIndex, cb);
+                                if (validate && id - this.activeStepId > 1) {
+                                    // validate all steps recursively until destination id
+                                    this.changeStep(this.getStepInstance(this.activeStepId), this.getNextStepInstance(this.activeStepId));
+                                    this.beforeStepChange(this.activeStepId, cb);
                                 } else {
-                                    this.beforeStepEnter(index);
-                                    this.changeStep(this.activeStepIndex, index);
-                                    this.scrollToStep(index);
-                                    this.afterStepChange(this.activeStepIndex);
+                                    this.beforeStepEnter(id);
+                                    this.changeStep(this.getStepInstance(this.activeStepId), this.getStepInstance(id));
+                                    this.scrollToStep(id);
+                                    this.afterStepChange(this.activeStepId);
                                 }
                             };
                             if (validate) {
-                                this.beforeStepChange(this.activeStepIndex, cb);
+                                this.beforeStepChange(this.activeStepId, cb);
                             } else {
-                                // when trying leave already savedd step(edit mode) when edit it we need to validate it
-                                let step = this.steps[this.activeStepIndex + 1];
+                                // when trying leave already saved step(edit mode) when edit it we need to validate it
+                                let step = this.getNextStepInstance(this.activeStepId);
                                 if (step && step.fulfilled) {
-                                    this.beforeStepChange(this.activeStepIndex, cb);
+                                    this.beforeStepChange(this.activeStepId, cb);
                                 } else {
                                     this.setValidationError(null);
                                     cb();
@@ -196,32 +208,32 @@ module Orckestra.Composer {
                             }
                         }
 
-                        return index <= this.maxStep;
+                        return id <= this.maxStep;
                     },
                     nextStep: function nextStep() {
                         let cb = () => {
-                            if (this.activeStepIndex < this.stepCount - 1) {
-                                this.changeStep(this.activeStepIndex, this.activeStepIndex + 1);
+                            if (this.activeStepId < this.stepCount - 1) {
+                                this.changeStep(this.getStepInstance(this.activeStepId), this.getNextStepInstance(this.activeStepId));
 
-                                this.afterStepChange(this.activeStepIndex);
+                                this.afterStepChange(this.activeStepId);
                             } else {
                                 this.$emit('on-complete');
                             }
                         };
 
-                        this.beforeStepChange(this.activeStepIndex, cb);
+                        this.beforeStepChange(this.activeStepId, cb);
                     },
                     prevStep: function prevStep() {
                         let cb = () => {
-                            if (this.activeStepIndex > 0) {
+                            if (this.activeStepId > 0) {
                                 this.setValidationError(null);
 
-                                this.changeStep(this.activeStepIndex, this.activeStepIndex - 1);
+                                this.changeStep(this.getStepInstance(this.activeStepId), this.getPrevStepInstance(this.activeStepId));
                             }
                         };
 
                         if (this.validateOnBack) {
-                            this.beforeStepChange(this.activeStepIndex, cb);
+                            this.beforeStepChange(this.activeStepId, cb);
                         } else {
                             cb();
                         }
@@ -230,10 +242,10 @@ module Orckestra.Composer {
                         var tabIndex = CheckoutHelpers.getFocusedStepIndex(this.steps);
 
                         if (tabIndex !== -1 && tabIndex < this.steps.length - 1) {
-                            var tabToFocus = this.steps[tabIndex + 1];
+                            var tabToFocus = this.getNextStepInstance(tabIndex);
 
                             if (tabToFocus.checked) {
-                                CheckoutHelpers.findElementAndFocus(tabToFocus.stepId);
+                                CheckoutHelpers.findElementAndFocus(tabToFocus.elementId);
                             }
                         }
                     },
@@ -241,7 +253,7 @@ module Orckestra.Composer {
                         var tabIndex = CheckoutHelpers.getFocusedStepIndex(this.steps);
 
                         if (tabIndex !== -1 && tabIndex > 0) {
-                            var toFocusId = this.steps[tabIndex - 1].stepId;
+                            var toFocusId = this.getPrevStepInstance(tabIndex).elementId;
                             CheckoutHelpers.findElementAndFocus(toFocusId);
                         }
                     },
@@ -250,7 +262,7 @@ module Orckestra.Composer {
                         this.$emit('on-loading', value);
                     },
                     setValidationError: function setValidationError(error) {
-                        this.steps[this.activeStepIndex].validationError = error;
+                        this.getStepInstance(this.activeStepId).validationError = error;
                         this.$emit('on-error', error);
                     },
                     validateBeforeChange: function validateBeforeChange(promiseFn, callback) {
@@ -275,55 +287,54 @@ module Orckestra.Composer {
                         }
                     },
                     executeBeforeChange: function executeBeforeChange(validationResult, callback) {
-                        this.$emit('on-validate', validationResult, this.activeStepIndex);
+                        this.$emit('on-validate', validationResult, this.activeStepId);
 
                         if (validationResult) {
                             callback();
                         } else {
-                            this.steps[this.activeStepIndex].validationError = 'error';
+                            this.getStepInstance(this.activeStepId).validationError = 'error';
                         }
                     },
-                    beforeStepChange: function beforeStepChange(index, callback) {
-                        //alert('before-change-' + index);
+                    beforeStepChange(id, callback) {
                         if (this.loading) {
                             return;
                         }
 
-                        var oldStep = this.steps[index];
+                        let oldStep = this.getStepInstance(id);
 
                         if (oldStep && oldStep.beforeChange !== undefined) {
-                            var stepChangeRes = oldStep.beforeChange();
+							let stepChangeRes = oldStep.beforeChange();
                             this.validateBeforeChange(stepChangeRes, callback);
                         } else {
                             callback();
                         }
                     },
-                    beforeStepEnter: function beforeStepEnter(index) {
+                    beforeStepEnter(id) {
                         if (this.loading) {
                             return;
                         }
 
-                        var newStep = this.steps[index];
+                        let newStep = this.getStepInstance(id);
 
                         if (newStep && newStep.beforeEnter !== undefined) {
                             newStep.beforeEnter();
                         }
                     },
-                    afterStepChange: function afterStepChange(index) {
+                    afterStepChange(id) {
                         if (this.loading) {
                             return;
                         }
 
-                        var newStep = this.steps[index];
+                        let newStep = this.getStepInstance(id);
 
                         if (newStep && newStep.afterChange !== undefined) {
                             newStep.afterChange();
                         }
                     },
-                    changeStep: function changeStep(oldIndex, newIndex) {
+                    changeStep(oldStep, newStep) {
                         var emitChangeEvent = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
-                        var oldStep = this.steps[oldIndex];
-                        var newStep = this.steps[newIndex];
+						let newId = newStep && newStep.id;
+						let oldId = oldStep && oldStep.id;
 
                         if (oldStep) {
                             oldStep.active = false;
@@ -333,19 +344,19 @@ module Orckestra.Composer {
                             newStep.active = true;
                         }
 
-                        if (emitChangeEvent && this.activeStepIndex !== newIndex) {
-                            this.emitTabChange(oldIndex, newIndex);
+                        if (emitChangeEvent && this.activeStepId !== newId) {
+                            this.emitStepChange(oldId, newId);
                         }
 
-                        this.activeStepIndex = newIndex;
-                        this.activateStepAndCheckStep(this.activeStepIndex);
+                        this.activeStepId = newId;
+                        this.activateStepAndCheckStep(this.activeStepId);
                         return true;
                     },
                     scrollToStep: function scrollToStep(stepIndex) {
-                        let stepId = this.steps[stepIndex].stepId;
+                        let elementId = this.getStepInstance(stepIndex).elementId;
                         setTimeout(function () {
                             $('html, body').animate({
-                                scrollTop: $('#' + stepId).offset().top
+                                scrollTop: $('#' + elementId).offset().top
                             }, 500);
                         }, 500);
                     },
@@ -354,27 +365,27 @@ module Orckestra.Composer {
                             step.active = false;
                         });
                     },
-                    activateStep: function activateStep(index) {
+                    activateStep(id) {
                         this.deactivateSteps();
-                        var step = this.steps[index];
+                        let step = this.getStepInstance(id);
 
                         if (step) {
                             step.active = true;
                             step.checked = true;
                         }
                     },
-                    activateStepAndCheckStep: function activateStepAndCheckStep(index) {
-                        this.activateStep(index);
+                    activateStepAndCheckStep(id) {
+                        this.activateStep(id);
 
-                        if (index > this.maxStep) {
-                            this.maxStep = index;
+                        if (id > this.maxStep) {
+                            this.maxStep = id;
                         }
 
-                        this.activeStepIndex = index;
+                        this.activeStepId = id;
                     },
                     initializeSteps: function initializeSteps() {
                         if (this.steps.length > 0 && this.startIndex === 0) {
-                            this.activateStep(this.activeStepIndex);
+                            this.activateStep(this.activeStepId);
                         }
 
                         if (this.startIndex < this.steps.length) {
@@ -384,7 +395,7 @@ module Orckestra.Composer {
                         }
                     },
                 },
-                mounted: function mounted() {
+                mounted() {
                     this.initializeSteps();
                 },
                 template: `

@@ -5,7 +5,7 @@
 {
     <button v-show="step.displayContinueButton"
             v-bind:disabled="@disabled"
-            v-on:click="step.navigateToStep(step.index)"
+            v-on:click="step.navigateToStep(step.id)"
             class="btn btn-primary float-right"
             v-cloak="true"
             data-qa="continue-to-@dataqakey-btn">
@@ -17,7 +17,7 @@
 {
     <button v-show="step.preview" class="btn btn-outline-secondary float-right"
             data-qa="edit-@(dataqakey)-btn"
-            v-on:click="step.navigateToStep(step.index)"
+            v-on:click="step.navigateToStep(step.id)"
             v-cloak="true">
         @Html.Localize("CheckoutProcess", label)
     </button>

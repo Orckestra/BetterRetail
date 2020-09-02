@@ -52,7 +52,7 @@
             <span v-cloak="true">@Html.Localize("MyAccount", "L_Subtotal")</span>
         </div>
         <div v-if="step.displayContinueButton" class="col-7">
-            @CheckoutHelpers.StepContinueButton("!FulfilledShipping", "reviewcart")
+            @CheckoutHelpers.StepContinueButton("!prevFulfilled", "reviewcart")
         </div>
         <div v-show="step.preview" class="col-7">
             @CheckoutHelpers.StepEditButton("reviewcart", "F_Review")

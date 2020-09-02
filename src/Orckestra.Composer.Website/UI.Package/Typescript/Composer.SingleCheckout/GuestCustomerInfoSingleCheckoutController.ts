@@ -71,8 +71,8 @@ module Orckestra.Composer {
                                         return this.updateCustomer();
                                     });
                                 case SignInModes.SigningIn:
-                                    let {Email: Username, Password} = this.Cart.Customer;
-                                    let loginData = {Username, Password};
+                                    let { Email: Username, Password } = this.Cart.Customer;
+                                    let loginData = { Username, Password };
                                     return self.checkoutService.loginUser(loginData);
                             }
                         }
@@ -105,7 +105,7 @@ module Orckestra.Composer {
                         self.checkoutService.loginUser(loginData)
                             .then((success) => {
                                 if (success) {
-                                    this.$children[0].navigateToStep(CheckoutStepNumbers.Shipping);
+                                    this.navigateToStep(CheckoutStepNumbers.Shipping);
                                 }
                             });
                     },
@@ -156,7 +156,7 @@ module Orckestra.Composer {
         public getUpdateModelPromise(): Q.Promise<any> {
             return Q.fcall(() => {
                 let vueCustomerData = this.checkoutService.VueCheckout.Cart.Customer;
-                return {[this.viewModelName]: JSON.stringify(vueCustomerData)};
+                return { [this.viewModelName]: JSON.stringify(vueCustomerData) };
             });
         }
     }

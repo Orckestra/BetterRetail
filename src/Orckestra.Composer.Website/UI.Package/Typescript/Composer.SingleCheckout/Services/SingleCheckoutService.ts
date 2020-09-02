@@ -258,6 +258,15 @@ module Orckestra.Composer {
                     resetParsley(formId: any): void {
                         $(formId).parsley().reset();
                     },
+                    removeStep(step: any) {
+                        /// Remove checkout step by the id
+                        let checkoutStepsComponent = this.$children[0];
+                        checkoutStepsComponent.removeStep(checkoutStepsComponent.$children[step]);
+                    },
+                    navigateToStep(step: any) {
+                        /// Navigate to checkout step by the id
+                        this.$children[0].navigateToStep(step);
+                    },
                     deleteAddress(event: JQueryEventObject): Q.Promise<void> {
                         let element = $(event.target);
                         let $addressListItem = element.closest('[data-address-id]');

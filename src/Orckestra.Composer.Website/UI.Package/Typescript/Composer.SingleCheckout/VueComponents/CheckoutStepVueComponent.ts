@@ -39,45 +39,49 @@ module Orckestra.Composer {
                     fulfilled: Boolean,
                     loading: Boolean
                 },
-                inject: ['addStep', 'removeStep', 'nextStep'],
-                data: function () {
+                inject: ['addStep', 'removeStep', 'nextStep', 'isStepExist', 'nextStepId', 'getPrevStepInstance'],
+                data() {
                     return {
                         active: false,
-                        index: null,
+                        id: null,
                         validationError: null,
                         checked: false,
-                        stepId: ''
+                        elementId: ''
                     };
                 },
                 computed: {
-                    slotProps: function () {
-                        var self = this;
+                    slotProps() {
                         return {
                             nextStep: this.$parent.nextStep,
                             prevStep: this.$parent.prevStep,
                             navigateToStep: this.$parent.navigateToStep,
-                            activeStepIndex: this.$parent.activeStepIndex,
+                            activeStepId: this.$parent.activeStepId,
                             isLastStep: this.$parent.isLastStep,
-                            index: this.index,
+                            id: this.id,
                             active: this.active,
-                            displayContinueButton: (!this.fulfilled && ((this.$parent.activeStepIndex + 1) === this.index)),
+                            displayContinueButton: (!this.fulfilled && (this.nextStepId() === this.id)),
                             selectStep: function () {
-                                this.$parent.navigateToStep(this.index);
+                                this.$parent.navigateToStep(this.id);
                             },
                             preview: this.fulfilled && !this.active,
-                            next: this.index === this.$parent.activeStepIndex + 1
+                            next: this.id === this.nextStepId(),
+							show: this.isStepExist(this),
+							prevFulfilled: (() => {
+								let prevStep = this.getPrevStepInstance(this.id);
+								return prevStep && prevStep.fulfilled
+							})()
                         };
                     },
 
                 },
                 methods: {},
-                mounted: function () {
+                mounted() {
                     this.addStep(this);
                     if (this.fulfilled === undefined) {
                         this.fulfilled = true;
                     }
                 },
-                destroyed: function () {
+                destroyed() {
                     if (this.$el && this.$el.parentNode) {
                         this.$el.parentNode.removeChild(this.$el);
                     }
@@ -85,6 +89,7 @@ module Orckestra.Composer {
                 },
                 template: `
                     <div class="checkout-step-container"
+                    	 v-show="slotProps.show"
                          v-bind:class="{'active-step': active,
                          'fulfilled-step' : fulfilled,
                          'preview-step': slotProps.preview,
@@ -92,7 +97,7 @@ module Orckestra.Composer {
                          'loading' : loading
                         }"
                          role="tabpanel"
-                         v-bind:id="stepId">
+                         v-bind:id="elementId">
                          <div class="loading-spinner">
                             <div class="spinner-border text-info" role="status">
                                 <span class="sr-only">Loading...</span>
