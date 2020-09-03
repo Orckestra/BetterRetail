@@ -5,7 +5,8 @@ module Orckestra.Composer {
     'use strict';
 
     export class CheckoutStepVueComponent {
-        static  componentMame: string = 'checkout-step';
+        static componentMame: string = 'checkout-step';
+
         static initialize() {
             Vue.component(this.componentMame, this.getComponent());
         }
@@ -71,11 +72,11 @@ module Orckestra.Composer {
                             },
                             preview: this.fulfilled && !this.active,
                             next: this.id === this.nextStepId(),
-							show: this.isStepExist(this),
-							prevFulfilled: (() => {
-								let prevStep = this.getPrevStepInstance(this.id);
-								return prevStep && prevStep.fulfilled
-							})()
+                            show: this.isStepExist(this),
+                            prevFulfilled: (() => {
+                                let prevStep = this.getPrevStepInstance(this.id);
+                                return prevStep && prevStep.fulfilled
+                            })()
                         };
                     },
 

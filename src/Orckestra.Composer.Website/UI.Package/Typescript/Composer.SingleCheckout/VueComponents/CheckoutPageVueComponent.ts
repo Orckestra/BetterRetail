@@ -6,7 +6,8 @@ module Orckestra.Composer {
     'use strict';
 
     export class CheckoutPageVueComponent {
-        static  componentMame: string = 'checkout-page';
+        static componentMame: string = 'checkout-page';
+
         static initialize() {
             Vue.component(this.componentMame, this.getComponent());
         }
@@ -69,9 +70,9 @@ module Orckestra.Composer {
                         addStep: this.addStep,
                         removeStep: this.removeStep,
                         nextStep: this.nextStep,
-						isStepExist: this.isStepExist,
-						nextStepId: this.nextStepId,
-						getPrevStepInstance: this.getPrevStepInstance
+                        isStepExist: this.isStepExist,
+                        nextStepId: this.nextStepId,
+                        getPrevStepInstance: this.getPrevStepInstance
                     };
                 },
                 data: function data() {
@@ -117,21 +118,21 @@ module Orckestra.Composer {
                     },
                 },
                 methods: {
-                	getStepInstance(id) {
-                		return this.steps.find(step => step.id === id);
-					},
-					getNextStepInstance(id) {
-						let listIndex = this.steps.findIndex(step => step.id === id);
-						return this.steps[listIndex + 1];
-					},
-					getPrevStepInstance(id) {
-						let listIndex = this.steps.findIndex(step => step.id === id);
-						return this.steps[listIndex - 1];
-					},
-					nextStepId() {
-						let nextStep = this.getNextStepInstance(this.activeStepId);
-						return nextStep && nextStep.id;
-					},
+                    getStepInstance(id) {
+                        return this.steps.find(step => step.id === id);
+                    },
+                    getNextStepInstance(id) {
+                        let listIndex = this.steps.findIndex(step => step.id === id);
+                        return this.steps[listIndex + 1];
+                    },
+                    getPrevStepInstance(id) {
+                        let listIndex = this.steps.findIndex(step => step.id === id);
+                        return this.steps[listIndex - 1];
+                    },
+                    nextStepId() {
+                        let nextStep = this.getNextStepInstance(this.activeStepId);
+                        return nextStep && nextStep.id;
+                    },
                     emitStepChange(prevIndex, nextIndex) {
                         this.$emit('on-change', prevIndex, nextIndex);
                         this.$emit('update:startIndex', nextIndex);
@@ -151,7 +152,7 @@ module Orckestra.Composer {
                         this.maxStep = this.steps.length - 1; //TODO: fix it
                     },
                     removeStep(item) {
-						let index = this.steps.indexOf(item);
+                        let index = this.steps.indexOf(item);
 
                         if (index > -1) {
                             // Go one step back if the current step is removed
@@ -159,14 +160,14 @@ module Orckestra.Composer {
                                 this.changeStep(this.getStepInstance(this.activeStepId), this.getPrevStepInstance(this.activeStepId));
                             }
 
-							this.maxStep = this.steps.length - 1;
+                            this.maxStep = this.steps.length - 1;
 
-							this.steps.splice(index, 1);
+                            this.steps.splice(index, 1);
                         }
                     },
-					isStepExist(step) {
-						return this.steps.indexOf(step) >= 0;
-					},
+                    isStepExist(step) {
+                        return this.steps.indexOf(step) >= 0;
+                    },
                     reset() {
                         this.maxStep = 0;
                         this.steps.forEach(function (tab) {
@@ -210,7 +211,7 @@ module Orckestra.Composer {
 
                         return id <= this.maxStep;
                     },
-                    nextStep: function nextStep() {
+                    nextStep() {
                         let cb = () => {
                             if (this.activeStepId < this.stepCount - 1) {
                                 this.changeStep(this.getStepInstance(this.activeStepId), this.getNextStepInstance(this.activeStepId));
@@ -223,7 +224,7 @@ module Orckestra.Composer {
 
                         this.beforeStepChange(this.activeStepId, cb);
                     },
-                    prevStep: function prevStep() {
+                    prevStep() {
                         let cb = () => {
                             if (this.activeStepId > 0) {
                                 this.setValidationError(null);
@@ -238,7 +239,7 @@ module Orckestra.Composer {
                             cb();
                         }
                     },
-                    focusnextStep: function focusnextStep() {
+                    focusnextStep() {
                         var tabIndex = CheckoutHelpers.getFocusedStepIndex(this.steps);
 
                         if (tabIndex !== -1 && tabIndex < this.steps.length - 1) {
@@ -249,7 +250,7 @@ module Orckestra.Composer {
                             }
                         }
                     },
-                    focusprevStep: function focusprevStep() {
+                    focusprevStep() {
                         var tabIndex = CheckoutHelpers.getFocusedStepIndex(this.steps);
 
                         if (tabIndex !== -1 && tabIndex > 0) {
@@ -257,15 +258,15 @@ module Orckestra.Composer {
                             CheckoutHelpers.findElementAndFocus(toFocusId);
                         }
                     },
-                    setLoading: function setLoading(value) {
+                    setLoading(value) {
                         this.loading = value;
                         this.$emit('on-loading', value);
                     },
-                    setValidationError: function setValidationError(error) {
+                    setValidationError(error) {
                         this.getStepInstance(this.activeStepId).validationError = error;
                         this.$emit('on-error', error);
                     },
-                    validateBeforeChange: function validateBeforeChange(promiseFn, callback) {
+                    validateBeforeChange(promiseFn, callback) {
                         this.setValidationError(null); // we have a promise
 
                         if (CheckoutHelpers.isPromise(promiseFn)) {
@@ -286,7 +287,7 @@ module Orckestra.Composer {
                             this.executeBeforeChange(validationResult, callback);
                         }
                     },
-                    executeBeforeChange: function executeBeforeChange(validationResult, callback) {
+                    executeBeforeChange(validationResult, callback) {
                         this.$emit('on-validate', validationResult, this.activeStepId);
 
                         if (validationResult) {
@@ -303,7 +304,7 @@ module Orckestra.Composer {
                         let oldStep = this.getStepInstance(id);
 
                         if (oldStep && oldStep.beforeChange !== undefined) {
-							let stepChangeRes = oldStep.beforeChange();
+                            let stepChangeRes = oldStep.beforeChange();
                             this.validateBeforeChange(stepChangeRes, callback);
                         } else {
                             callback();
@@ -333,8 +334,8 @@ module Orckestra.Composer {
                     },
                     changeStep(oldStep, newStep) {
                         var emitChangeEvent = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
-						let newId = newStep && newStep.id;
-						let oldId = oldStep && oldStep.id;
+                        let newId = newStep && newStep.id;
+                        let oldId = oldStep && oldStep.id;
 
                         if (oldStep) {
                             oldStep.active = false;
@@ -352,7 +353,7 @@ module Orckestra.Composer {
                         this.activateStepAndCheckStep(this.activeStepId);
                         return true;
                     },
-                    scrollToStep: function scrollToStep(stepIndex) {
+                    scrollToStep(stepIndex) {
                         let elementId = this.getStepInstance(stepIndex).elementId;
                         setTimeout(function () {
                             $('html, body').animate({
@@ -360,7 +361,7 @@ module Orckestra.Composer {
                             }, 500);
                         }, 500);
                     },
-                    deactivateSteps: function deactivateSteps() {
+                    deactivateSteps() {
                         this.steps.forEach(function (step) {
                             step.active = false;
                         });
@@ -383,7 +384,7 @@ module Orckestra.Composer {
 
                         this.activeStepId = id;
                     },
-                    initializeSteps: function initializeSteps() {
+                    initializeSteps() {
                         if (this.steps.length > 0 && this.startIndex === 0) {
                             this.activateStep(this.activeStepId);
                         }
