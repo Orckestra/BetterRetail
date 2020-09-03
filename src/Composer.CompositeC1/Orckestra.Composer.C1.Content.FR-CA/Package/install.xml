@@ -1,7 +1,7 @@
 <?xml version="1.0" standalone="yes"?>
 <mi:PackageInstaller xmlns:mi="http://www.composite.net/ns/management/packageinstaller/1.0">
   <mi:PackageRequirements minimumCompositeVersion="4.3.5611.30389" maximumCompositeVersion="9.9999.9999.9999" />
-  <mi:PackageInformation name="Composer.C1.Content.FR_CA" groupName="Composer" version="1.0.0" author="Orckestra" website="http://composer-c1-cm-dev.orckestra.local/" readMoreUrl="http://composer-c1-cm-dev.orckestra.local/" id="f77d9b8c-2990-4965-902d-ee4db85bcbe3" canBeUninstalled="true" systemLocking="hard" flushOnCompletion="false">
+  <mi:PackageInformation name="Composer.C1.Content.FR_CA" groupName="Composer" version="4.8.3.1" author="Orckestra" website="http://composer-c1-cm-dev.orckestra.local/" readMoreUrl="http://composer-c1-cm-dev.orckestra.local/" id="f77d9b8c-2990-4965-902d-ee4db85bcbe3" canBeUninstalled="true" systemLocking="hard" flushOnCompletion="false">
     <TechnicalDetails>NT</TechnicalDetails>
     <Description>NT</Description>
   </mi:PackageInformation>

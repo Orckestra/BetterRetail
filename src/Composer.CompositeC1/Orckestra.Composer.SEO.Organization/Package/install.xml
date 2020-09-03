@@ -1,7 +1,7 @@
 <?xml version="1.0" standalone="yes"?>
 <mi:PackageInstaller xmlns:mi="http://www.composite.net/ns/management/packageinstaller/1.0">
   <mi:PackageRequirements minimumCompositeVersion="6.0.0.0" maximumCompositeVersion="9.9999.9999.9999" />
-  <mi:PackageInformation name="Orckestra.Composer.SEO.Organization" groupName="Orckestra.Composer.SEO" version="1.0.0" author="Orckestra A/S" website="https://c1.orckestra.com/" readMoreUrl="-" id="92141e5a-bdfe-459f-a4b6-f2652a1fe4c4" canBeUninstalled="true" systemLocking="hard" flushOnCompletion="true" allowOverwrite="false">
+  <mi:PackageInformation name="Orckestra.Composer.SEO.Organization" groupName="Orckestra.Composer.SEO" version="4.8.3.1" author="Orckestra A/S" website="https://c1.orckestra.com/" readMoreUrl="-" id="92141e5a-bdfe-459f-a4b6-f2652a1fe4c4" canBeUninstalled="true" systemLocking="hard" flushOnCompletion="true" allowOverwrite="false">
     <TechnicalDetails>-</TechnicalDetails>
     <Description>-</Description>
   </mi:PackageInformation>

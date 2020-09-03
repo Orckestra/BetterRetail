@@ -1,7 +1,7 @@
 <?xml version="1.0" standalone="yes"?>
 <mi:PackageInstaller xmlns:mi="http://www.composite.net/ns/management/packageinstaller/1.0">
   <mi:PackageRequirements minimumCompositeVersion="6.0.0.0" maximumCompositeVersion="9.9999.9999.9999" />
-  <mi:PackageInformation name="Composer.C1.Core" groupName="Composer" version="1.0.0" author="Orckestra" website="http://composer-c1-cm-dev.orckestra.local/" readMoreUrl="http://composer-c1-cm-dev.orckestra.local/" id="08b33fbe-64a4-4b60-961b-36d7f7a8aa97" canBeUninstalled="true" systemLocking="hard" flushOnCompletion="true">
+  <mi:PackageInformation name="Composer.C1.Core" groupName="Composer" version="4.8.3.1" author="Orckestra" website="http://composer-c1-cm-dev.orckestra.local/" readMoreUrl="http://composer-c1-cm-dev.orckestra.local/" id="08b33fbe-64a4-4b60-961b-36d7f7a8aa97" canBeUninstalled="true" systemLocking="hard" flushOnCompletion="true">
     <TechnicalDetails>Composer.C1.Core</TechnicalDetails>
     <Description>Composer.C1.Core</Description>
   </mi:PackageInformation>

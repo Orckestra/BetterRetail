@@ -1,7 +1,7 @@
 <?xml version="1.0" standalone="yes"?>
 <mi:PackageInstaller xmlns:mi="http://www.composite.net/ns/management/packageinstaller/1.0">
 	<mi:PackageRequirements minimumCompositeVersion="5.0" maximumCompositeVersion="9.9999.9999.9999" />
-	<mi:PackageInformation name="Orckestra.Composer.C1CMS.Queries" groupName="Orckestra.Composer.C1CMS" version="4.8.0" author="Orckestra " website="https://orckestra.com/" readMoreUrl="https://orckestra.com/" id="1220b656-e993-4dfa-bfd8-e6dc000e3ca3" canBeUninstalled="true" systemLocking="hard" flushOnCompletion="true" allowOverwrite="false" reloadConsoleOnCompletion="true">
+	<mi:PackageInformation name="Orckestra.Composer.C1CMS.Queries" groupName="Orckestra.Composer.C1CMS" version="4.8.3.1" author="Orckestra " website="https://orckestra.com/" readMoreUrl="https://orckestra.com/" id="1220b656-e993-4dfa-bfd8-e6dc000e3ca3" canBeUninstalled="true" systemLocking="hard" flushOnCompletion="true" allowOverwrite="false" reloadConsoleOnCompletion="true">
 		<TechnicalDetails>Register MVC Queries function to display data on frontend</TechnicalDetails>
 		<Description>Display Search Queries on Orckestra Starter Site</Description>
 	</mi:PackageInformation>
