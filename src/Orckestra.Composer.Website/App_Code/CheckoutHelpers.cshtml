@@ -1,10 +1,10 @@
 ﻿@using Composite.AspNet.Razor
 @using System.Web.Mvc
 
-@helper StepContinueButton(string disabled, string dataqakey, string label = "F_Continue")
+@helper StepContinueButton(string dataqakey = null, string disabledBinding = "!step.prevFulfilled", string label = "F_Continue")
 {
     <button v-show="step.displayContinueButton"
-            v-bind:disabled="@disabled"
+            v-bind:disabled="@disabledBinding"
             v-on:click="step.navigateToStep(step.id)"
             class="btn btn-primary float-right"
             v-cloak="true"

@@ -18,6 +18,11 @@
                        v-bind:loading="Steps.Information.Loading">
             @Function("Composer.SingleCheckout.Steps.UserInformation")
         </checkout-step>
+        <checkout-step v-slot="step"
+                       v-bind:before-change="processNewStep"
+                       v-bind:fulfilled="FulfilledNewStep">
+            @Function("Composer.SingleCheckout.Steps.NewStep")
+        </checkout-step>
         <checkout-step v-slot="step" v-bind:before-enter="prepareShipping"
                        v-bind:before-change="processShipping"
                        v-bind:fulfilled="FulfilledShipping"

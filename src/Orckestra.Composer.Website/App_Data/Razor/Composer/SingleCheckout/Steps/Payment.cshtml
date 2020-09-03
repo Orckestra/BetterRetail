@@ -17,7 +17,7 @@
                 <h3 class="float-left">
                     @Html.Localize("MyAccount", "T_PaymentMethod")
                 </h3>
-                @CheckoutHelpers.StepContinueButton("!step.prevFulfilled", "payment", "B_EditPayment")
+                @CheckoutHelpers.StepContinueButton("payment", "B_EditPayment")
                 @CheckoutHelpers.StepEditButton("payment")
             </div>
             <transition-collapse>
