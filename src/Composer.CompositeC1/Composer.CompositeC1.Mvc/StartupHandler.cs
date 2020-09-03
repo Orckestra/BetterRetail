@@ -1,4 +1,5 @@
-﻿using Autofac.Integration.Mvc;
+﻿using System.Web.Hosting;
+using Autofac.Integration.Mvc;
 using Composite.AspNet.MvcFunctions;
 using Composite.Core.Application;
 using Composite.Core.Xml;
@@ -26,6 +27,8 @@ namespace Orckestra.Composer.CompositeC1.Mvc
         private static IComposerHost _host;
         public static void Start()
         {
+            if (!HostingEnvironment.IsHosted) return;
+
             DynamicModuleUtility.RegisterModule(typeof(SecurityModule));
             SetUpSearchConfiguration();
         }
@@ -37,6 +40,8 @@ namespace Orckestra.Composer.CompositeC1.Mvc
 
         public static void OnInitialized()
         {
+            if (!HostingEnvironment.IsHosted) return;
+
             GlobalConfiguration.Configure(WebApiConfig.Register);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             LogProvider.SetCurrentLogProvider(C1LogProvider.Instance);

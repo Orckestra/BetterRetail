@@ -1,4 +1,5 @@
-﻿using Composite.AspNet.MvcFunctions;
+﻿using System.Web.Hosting;
+using Composite.AspNet.MvcFunctions;
 using Composite.Core;
 using Composite.Core.Application;
 using Composite.Core.ResourceSystem;
@@ -20,6 +21,8 @@ namespace Orckestra.Composer.CompositeC1.Mvc
 
         public static void OnInitialized()
         {
+            if (!HostingEnvironment.IsHosted) return;
+
             Log.LogInformation("SearchQueryBuilder", "OnInitialized");
 
             var functions = MvcFunctionRegistry.NewFunctionCollection();

@@ -19,11 +19,15 @@ namespace Orckestra.Composer.Sitemap
 
         public static void OnInitialized()
         {
+            if (!HostingEnvironment.IsHosted) return;
+
             SitemapEventRegistrator.Initialize();
         }
 
         public static void ConfigureServices(IServiceCollection collection)
         {
+            if (!HostingEnvironment.IsHosted) return;
+
             var sitemapConfiguration = new C1SitemapConfiguration();
             collection.AddSingleton<IC1SitemapConfiguration>(container => sitemapConfiguration);
 

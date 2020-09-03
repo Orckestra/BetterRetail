@@ -1,4 +1,5 @@
-﻿using Composite.AspNet.MvcFunctions;
+﻿using System.Web.Hosting;
+using Composite.AspNet.MvcFunctions;
 using Composite.Core.Application;
 using Composite.Data.DynamicTypes;
 using Composite.Search.Crawling;
@@ -13,6 +14,8 @@ namespace Orckestra.Composer.Articles
     {
         public static void ConfigureServices(IServiceCollection collection)
         {
+            if (!HostingEnvironment.IsHosted) return;
+
             collection.AddSingleton<IDataFieldProcessorProvider>(new ArticlesDataFieldProcessorProvider());
         }
 
