@@ -395,6 +395,10 @@ module Orckestra.Composer {
                             window.console.warn(`Prop startIndex set to ${this.startIndex} is greater than the number of steps - ${this.steps.length}. Make sure that the starting index is less than the number of tabs registered`);
                         }
                     },
+                    findNotFilledStepId() {
+                        let step = this.steps.find((step, index ) => !step.fulfilled || index === this.steps.length - 1);
+                        return step && step.id;
+                    }
                 },
                 mounted() {
                     this.initializeSteps();

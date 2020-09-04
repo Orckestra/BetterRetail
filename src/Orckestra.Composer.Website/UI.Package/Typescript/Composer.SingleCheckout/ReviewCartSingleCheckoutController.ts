@@ -19,15 +19,14 @@ module Orckestra.Composer {
                 },
                 computed: {
                     FulfilledCart() {
-                        return !!(this.Steps.Shipping.EnteredOnce);
+                        return true;
                     },
                 },
                 methods: {
                     processCart() {
                         this.Steps.ReviewCart.EnteredOnce = true;
                         return true;
-                    }
-                    ,
+                    },
                     DecrementDisabled(item) {
                         return item.Quantity < 2 || this.Mode.Loading;
                     },
