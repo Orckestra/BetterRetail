@@ -22,8 +22,7 @@ module Orckestra.Composer {
                 },
                 computed: {
                     FulfilledBillingAddress() {
-                        return self.checkoutService.billingFulfilled(this.Cart, this.IsAuthenticated)
-                            && this.Steps.ReviewCart.EnteredOnce;
+                        return self.checkoutService.billingFulfilled(this.Cart, this.IsAuthenticated);
                     },
                     BillingAddress() {
                         return this.Cart.Payment.BillingAddress;

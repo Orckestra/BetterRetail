@@ -40,7 +40,10 @@ module Orckestra.Composer {
                      * Function to determine if step fulfilled so next step can be switched. Return value must be boolean
                      */
 
-                    fulfilled: Boolean,
+                    fulfilled:  {
+                        type: Boolean,
+                        default: true
+                    },
                     /***
                      * Property to determine if this step is loading. It is used to show loading spinner over the step container
                      */
@@ -66,11 +69,11 @@ module Orckestra.Composer {
                             isLastStep: this.$parent.isLastStep,
                             id: this.id,
                             active: this.active,
-                            displayContinueButton: (!this.fulfilled && (this.nextStepId() === this.id)),
+                            displayContinueButton: (!this.checked && (this.nextStepId() === this.id)),
                             selectStep: function () {
                                 this.$parent.navigateToStep(this.id);
                             },
-                            preview: this.fulfilled && !this.active,
+                            preview: this.fulfilled && this.checked && !this.active,
                             next: this.id === this.nextStepId(),
                             show: this.isStepExist(this),
                             prevFulfilled: (() => {
@@ -84,9 +87,6 @@ module Orckestra.Composer {
                 methods: {},
                 mounted() {
                     this.addStep(this);
-                    if (this.fulfilled === undefined) {
-                        this.fulfilled = true;
-                    }
                 },
                 destroyed() {
                     if (this.$el && this.$el.parentNode) {

@@ -14,13 +14,7 @@ module Orckestra.Composer {
 
             let vueReviewCartMixin = {
                 mounted() {
-                    this.Steps.ReviewCart.EnteredOnce = this.FulfilledCart;
                     this.updateBeforeEditLineItemList();
-                },
-                computed: {
-                    FulfilledCart() {
-                        return true;
-                    },
                 },
                 methods: {
                     processCart() {

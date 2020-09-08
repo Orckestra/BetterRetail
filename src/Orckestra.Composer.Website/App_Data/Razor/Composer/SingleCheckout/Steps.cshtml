@@ -24,8 +24,7 @@
                        v-bind:loading="Steps.Shipping.Loading">
             @Function("Composer.SingleCheckout.Steps.Shipping")
         </checkout-step>
-        <checkout-step v-slot="step" v-bind:before-change="processCart"
-                       v-bind:fulfilled="FulfilledCart">
+        <checkout-step v-slot="step" v-bind:before-change="processCart">
             @Function("Composer.SingleCheckout.Steps.ReviewCart")
         </checkout-step>
         <checkout-step v-slot="step" v-bind:before-enter="prepareBillingAddress"

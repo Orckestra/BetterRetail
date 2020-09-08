@@ -142,14 +142,14 @@ module Orckestra.Composer {
                             .indexOf(item.$vnode);
                         this.steps.splice(index, 0, item); // if a step is added before the current one, go to it
 
-                        if (index < this.activeStepId + 1) {
-                            this.maxStep = index;
-                            this.changeStep(this.getNextStepInstance(this.activeStepId), this.getStepInstance(index));
-                        }
-
                         item.id = this.steps.indexOf(item);
                         item.elementId = 'step' + index;
                         this.maxStep = this.steps.length - 1; //TODO: fix it
+
+                        if (index < this.activeStepId + 1) {
+                            //this.maxStep = index;
+                            this.changeStep(this.getNextStepInstance(this.activeStepId), this.getStepInstance(index));
+                        }
                     },
                     removeStep(item) {
                         let index = this.steps.indexOf(item);
@@ -343,6 +343,7 @@ module Orckestra.Composer {
 
                         if (newStep) {
                             newStep.active = true;
+                            newStep.checked = true;
                         }
 
                         if (emitChangeEvent && this.activeStepId !== newId) {
@@ -368,7 +369,11 @@ module Orckestra.Composer {
                     },
                     activateStep(id) {
                         this.deactivateSteps();
-                        let step = this.getStepInstance(id);
+
+                        let step = this.steps.find(step => {
+                            step.checked = true;
+                            return step.id === id
+                        });
 
                         if (step) {
                             step.active = true;
@@ -396,7 +401,7 @@ module Orckestra.Composer {
                         }
                     },
                     findNotFilledStepId() {
-                        let step = this.steps.find((step, index ) => !step.fulfilled || index === this.steps.length - 1);
+                        let step = this.steps.find((step, index) => !step.fulfilled || index === this.steps.length - 1);
                         return step && step.id;
                     }
                 },
