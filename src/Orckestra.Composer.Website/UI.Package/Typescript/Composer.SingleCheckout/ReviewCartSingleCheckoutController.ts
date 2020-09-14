@@ -18,7 +18,6 @@ module Orckestra.Composer {
                 },
                 methods: {
                     processCart() {
-                        this.Steps.ReviewCart.EnteredOnce = true;
                         return true;
                     },
                     DecrementDisabled(item) {

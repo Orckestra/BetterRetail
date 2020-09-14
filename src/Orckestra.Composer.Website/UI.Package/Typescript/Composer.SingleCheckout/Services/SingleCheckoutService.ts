@@ -170,23 +170,18 @@ module Orckestra.Composer {
                     Steps: {
                         StartStep: 0,
                         Information: {
-                            EnteredOnce: true,
                             Loading: false
                         },
                         Shipping: {
-                            EnteredOnce: false,
                             Loading: false
                         },
                         ReviewCart: {
-                            EnteredOnce: false,
                             Loading: false
                         },
                         Billing: {
-                            EnteredOnce: false,
                             Loading: false
                         },
                         Payment: {
-                            EnteredOnce: false,
                             Loading: false
                         }
                     },

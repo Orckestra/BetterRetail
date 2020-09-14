@@ -19,20 +19,16 @@ module Orckestra.Composer {
                     AddressName: null,
                 },
                 methods: {
-                    processShippingAddressRegistered() {
-                        if (this.shippingAddressModified()) {
-                            //WHEN CHANGING SHIPPING, WE ALSO NEED UPDATE BILLING
-                            let controllersToUpdate = [self.viewModelName, 'BillingAddressRegistered'];
-                            this.prepareBillingAddress();
-                            return self.checkoutService.updateCart(controllersToUpdate)
-                                .then(() => {
-                                    this.Steps.Shipping.EnteredOnce = true;
-                                    return true;
-                                });
-                        } else {
-                            this.Steps.Shipping.EnteredOnce = true;
-                            return true;
+                    processShippingAddressRegistered(): Q.Promise<boolean> {
+                        if(!this.shippingAddressModified()) {
+                            return Q.resolve(true);
                         }
+
+                        //WHEN CHANGING SHIPPING, WE ALSO NEED UPDATE BILLING
+                        let controllersToUpdate = [self.viewModelName, 'BillingAddressRegistered'];
+                        this.prepareBillingAddress();
+                        return self.checkoutService.updateCart(controllersToUpdate)
+                            .then(() => true);
                     },
 
                     addNewAddressMode() {

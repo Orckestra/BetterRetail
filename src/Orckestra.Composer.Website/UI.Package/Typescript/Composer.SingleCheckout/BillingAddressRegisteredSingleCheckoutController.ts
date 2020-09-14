@@ -17,17 +17,13 @@ module Orckestra.Composer {
                     deleteBillingAddressModal: null,
                 },
                 methods: {
-                    processBillingAddressRegistered() {
-                        if (this.billingAddressModified()) {
-                            return self.checkoutService.updateCart([self.viewModelName])
-                                .then(() => {
-                                    this.Steps.Billing.EnteredOnce = true;
-                                    return true;
-                                });
-                        } else {
-                            this.Steps.Billing.EnteredOnce = true;
-                            return true;
+                    processBillingAddressRegistered():Q.Promise<boolean> {
+                        if (!this.billingAddressModified()) {
+                            return Q.resolve(true);
                         }
+
+                        return self.checkoutService.updateCart([self.viewModelName])
+                            .then(() => true);
                     },
                     addNewBillingAddress() {
                         this.Mode.AddingNewAddress = true;

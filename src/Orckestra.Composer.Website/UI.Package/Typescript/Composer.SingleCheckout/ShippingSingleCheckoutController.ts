@@ -19,7 +19,6 @@ module Orckestra.Composer {
             let vueShippingMixin = {
                 mounted() {
                     this.calculateSelectedMethod();
-                    this.Steps.Shipping.EnteredOnce = this.FulfilledShipping;
                     this.prepareShipping();
                 },
                 computed: {
@@ -65,8 +64,7 @@ module Orckestra.Composer {
 
                         this.preparePickUpAddress();
                     },
-                    processShipping() {
-
+                    processShipping(): Q.Promise<boolean> {
                         if (this.IsShippingMethodType) {
                             if (this.IsAuthenticated) {
                                 return this.processShippingAddressRegistered();
@@ -79,8 +77,7 @@ module Orckestra.Composer {
                             return this.processPickUpAddress();
                         }
 
-                        this.Steps.EnteredOnce.Shipping = true;
-                        return true;
+                        return Q.resolve(true);
                     },
                     processBilling() {
                         if (this.IsAuthenticated) {

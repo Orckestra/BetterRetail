@@ -32,40 +32,33 @@ module Orckestra.Composer {
                         this.Mode.AddingNewAddress = false;
                         this.initializeParsey(self.formSelector);
                     },
-                    processShippingAddress() {
-                        var processShippingAddress: Q.Deferred<boolean> = Q.defer<boolean>();
+                    processShippingAddress(): Q.Promise<boolean> {
                         let isValid = this.validateParsey(self.formSelector);
                         if (!isValid) {
                             return Q.reject('Shipping Address information is not valid');
                         }
 
-                        if (this.shippingAddressModified()) {
-                            let postalCode = this.Cart.ShippingAddress.PostalCode;
-                            this.changePostalCode(postalCode).then(success => {
-                                if (success) {
-                                    //WHEN CHANGING SHIPPING, WE ALSO NEED UPDATE BILLING
-                                    let controllersToUpdate = [self.viewModelName, 'BillingAddress'];
-                                    this.prepareBillingAddress()
-                                        .then(() => self.checkoutService.updateCart(controllersToUpdate))
-                                        .then(() => {
-                                            this.Steps.Shipping.EnteredOnce = true;
-                                            self.eventHub.publish('cartBillingAddressUpdated', { data: this });
-                                            processShippingAddress.resolve(true);
-                                        })
-                                        .fail(reason => {
-                                            console.log(reason);
-                                            processShippingAddress.resolve(false);
-                                        });
-                                } else {
-                                    processShippingAddress.resolve(false);
-                                }
-                            });
-
-                        } else {
-                            processShippingAddress.resolve(true);
+                        if (!this.shippingAddressModified()) {
+                           return Q.resolve(true);
                         }
 
-                        return processShippingAddress.promise;
+                        let postalCode = this.Cart.ShippingAddress.PostalCode;
+                        return this.changePostalCode(postalCode).then(success => {
+                            if (!success) return false;
+
+                            //WHEN CHANGING SHIPPING, WE ALSO NEED UPDATE BILLING
+                            let controllersToUpdate = [self.viewModelName, 'BillingAddress'];
+                            return this.prepareBillingAddress()
+                                .then(() => self.checkoutService.updateCart(controllersToUpdate))
+                                .then(() => {
+                                    self.eventHub.publish('cartBillingAddressUpdated', { data: this });
+                                    return true;
+                                })
+                                .fail(reason => {
+                                    console.log(reason);
+                                    return false;
+                                });
+                        });
                     },
                     recalculateShippingFee() {
 
