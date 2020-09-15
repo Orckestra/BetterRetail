@@ -10,37 +10,35 @@ module Orckestra.Composer {
 
     export class PastOrdersController extends Controller {
         protected orderService = new OrderService();
+        protected VuePastOrderData: Vue;
+
 
         public initialize() {
             super.initialize();
 
-            this.getPastOrders();
-        }
+            let self: PastOrdersController = this;
 
-        public getOrders(context: IControllerActionContext) {
-            var page: number = context.elementContext.data('page');
-
-            context.event.preventDefault();
-            this.getPastOrders({ page: page });
-        }
-
-        private getPastOrders(param? : IGetOrderParameters) {
-            var busyHandle = this.asyncBusy();
-
-            this.orderService.getPastOrders(param)
-                .done((viewModel) => {
-                    this.render('PastOrders', viewModel);
-
-                    if (!_.isEmpty(viewModel)) {
-                        this.render('OrderHistoryPagination', viewModel.Pagination);
+            self.orderService.getPastOrders().then(data => {
+                this.VuePastOrderData = new Vue({
+                    el: '#vuePastOrders',
+                    data: {
+                        Orders: data ? data.Orders : null,
+                        Pagination: data ? data.Pagination : null,
+                        Loading: false
+                    },
+                    methods: {
+                        getOrders(page: any) {
+                            this.Loading = true;
+                            self.orderService.getPastOrders({ page }).then(data => {
+                                this.Orders = data.Orders;
+                                this.Pagination = data.Pagination;
+                            })
+                                .fail(reason => console.log(reason))
+                                .fin(() => this.Loading = false);
+                        }
                     }
-
-                    busyHandle.done();
-                },
-                (reason) => {
-                    console.error(reason);
-                    busyHandle.done();
-                });
+                })
+            });
         }
     }
 }

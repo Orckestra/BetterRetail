@@ -132,18 +132,6 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         }
 
         [AuthorizeAndRedirect]
-        public virtual ActionResult CurrentOrders()
-        {
-            return View("CurrentOrdersContainer", GetOrderHistoryViewModel());
-        }
-
-        [AuthorizeAndRedirect]
-        public virtual ActionResult PastOrders()
-        {
-            return View("PastOrdersContainer", GetOrderHistoryViewModel());
-        }
-
-        [AuthorizeAndRedirect]
         public virtual ActionResult WishList(XhtmlDocument emptyWishListContent)
         {
             var vm = WishListViewService.GetWishListViewModelAsync(new GetCartParam
