@@ -17,13 +17,9 @@ module Orckestra.Composer {
                 created() {
                     this.billingAddressBeforeEdit = { ...this.Cart.Payment.BillingAddress };
                 },
-                mounted() {
-                    this.Steps.Billing.EnteredOnce = this.FulfilledBillingAddress;
-                },
                 computed: {
                     FulfilledBillingAddress() {
-                        return self.checkoutService.billingFulfilled(this.Cart, this.IsAuthenticated)
-                            && this.Steps.ReviewCart.EnteredOnce;
+                        return self.checkoutService.billingFulfilled(this.Cart, this.IsAuthenticated);
                     },
                     BillingAddress() {
                         return this.Cart.Payment.BillingAddress;
@@ -54,7 +50,6 @@ module Orckestra.Composer {
                     processBillingAddress(): Q.Promise<boolean> {
 
                         if (!this.billingAddressModified()) {
-                            this.Steps.Billing.EnteredOnce = true;
                             return Q.resolve(true);
                         }
 
@@ -76,7 +71,6 @@ module Orckestra.Composer {
                         this.Steps.Billing.Loading = true;
                         return self.checkoutService.updateCart([self.viewModelName])
                             .then(() => {
-                                this.Steps.Billing.EnteredOnce = true;
                                 this.Mode.AddingNewAddress = !this.BillingAddress.AddressBookId;
                                 return true;
                             })

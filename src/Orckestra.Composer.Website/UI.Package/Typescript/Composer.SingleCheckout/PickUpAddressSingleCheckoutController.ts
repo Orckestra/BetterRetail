@@ -43,7 +43,7 @@ module Orckestra.Composer {
                     showStoreLocatorLocationError() {
                         this.Errors.StoreLocatorLocationError = true;
                     },
-                    processPickUpAddress(): Q.Promise<any> {
+                    processPickUpAddress(): Q.Promise<boolean> {
                         let controllersToUpdate = [self.viewModelName];
 
                         if (!this.Cart.PickUpLocationId) {
@@ -56,10 +56,7 @@ module Orckestra.Composer {
                         }
 
                         return self.checkoutService.updateCart(controllersToUpdate)
-                            .then(() => {
-                                this.Steps.Shipping.EnteredOnce = true;
-                                return true;
-                            });
+                            .then(() => true);
                     },
                     preparePickUpAddress() {
                         this.pickUpLocationIdBeforeEdit = this.Cart.PickUpLocationId;

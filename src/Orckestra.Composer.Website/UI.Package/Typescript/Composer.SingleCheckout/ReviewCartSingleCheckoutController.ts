@@ -14,20 +14,12 @@ module Orckestra.Composer {
 
             let vueReviewCartMixin = {
                 mounted() {
-                    this.Steps.ReviewCart.EnteredOnce = this.FulfilledCart;
                     this.updateBeforeEditLineItemList();
-                },
-                computed: {
-                    FulfilledCart() {
-                        return !!(this.Steps.Shipping.EnteredOnce);
-                    },
                 },
                 methods: {
                     processCart() {
-                        this.Steps.ReviewCart.EnteredOnce = true;
                         return true;
-                    }
-                    ,
+                    },
                     DecrementDisabled(item) {
                         return item.Quantity < 2 || this.Mode.Loading;
                     },

@@ -152,7 +152,6 @@ module Orckestra.Composer {
         }
 
         private initializeVueComponent(checkoutContext: ISingleCheckoutContext) {
-            let startStep = this.calculateStartStep(checkoutContext.Cart, checkoutContext.IsAuthenticated);
             let deleteModalElementSelector: string = '#deleteAddressModal';
 
             this.VueCheckout = new Vue({
@@ -169,25 +168,20 @@ module Orckestra.Composer {
                     Payment: null,
                     RegisteredAddresses: {},
                     Steps: {
-                        StartStep: startStep,
+                        StartStep: 0,
                         Information: {
-                            EnteredOnce: true,
                             Loading: false
                         },
                         Shipping: {
-                            EnteredOnce: false,
                             Loading: false
                         },
                         ReviewCart: {
-                            EnteredOnce: false,
                             Loading: false
                         },
                         Billing: {
-                            EnteredOnce: false,
                             Loading: false
                         },
                         Payment: {
-                            EnteredOnce: false,
                             Loading: false
                         }
                     },
@@ -216,6 +210,8 @@ module Orckestra.Composer {
                     if (this.Mode.Authenticated) {
                         this.Modal.deleteAddressModal = new UIModal(window, deleteModalElementSelector, this.deleteAddress, this);
                     }
+
+                    this.CheckoutPageComponent.activateStepAndCheckStep(this.CheckoutPageComponent.findNotFilledStepId())
                 },
                 computed: {
                     Customer() {
@@ -238,6 +234,9 @@ module Orckestra.Composer {
                     },
                     IsAuthenticated() {
                         return this.Mode.Authenticated;
+                    },
+                    CheckoutPageComponent() {
+                        return this.$children[0];
                     }
                 },
                 methods: {
@@ -257,6 +256,14 @@ module Orckestra.Composer {
                     },
                     resetParsley(formId: any): void {
                         $(formId).parsley().reset();
+                    },
+                    removeStep(step: any) {
+                        /// Remove checkout step by the id
+                        this.CheckoutPageComponent.removeStep(this.CheckoutPageComponent.$children[step]);
+                    },
+                    navigateToStep(step: any) {
+                        /// Navigate to checkout step by the id
+                        this.CheckoutPageComponent.navigateToStep(step);
                     },
                     deleteAddress(event: JQueryEventObject): Q.Promise<void> {
                         let element = $(event.target);

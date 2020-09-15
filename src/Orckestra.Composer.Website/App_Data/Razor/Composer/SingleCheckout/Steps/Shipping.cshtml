@@ -19,9 +19,9 @@
                 <h3 class="float-left">
                     @Html.Localize("CheckoutProcess", "F_ShippingStepTitle")
                 </h3>
-                <div v-if="UserExistsMode">@CheckoutHelpers.StepContinueButton("!FulfilledCustomer", "shipping", "F_ContinueAsGuest")</div>
-                <div v-else-if="SigningInMode">@CheckoutHelpers.StepContinueButton("!FulfilledCustomer", "shipping", "F_SignInAndContinue")</div>
-                <div v-else="v-else">@CheckoutHelpers.StepContinueButton("!FulfilledCustomer", "shipping")</div>
+                <div v-if="UserExistsMode">@CheckoutHelpers.StepContinueButton("shipping", "F_ContinueAsGuest")</div>
+                <div v-else-if="SigningInMode">@CheckoutHelpers.StepContinueButton("shipping", "F_SignInAndContinue")</div>
+                <div v-else="v-else">@CheckoutHelpers.StepContinueButton("shipping")</div>
 
                 @CheckoutHelpers.StepEditButton("shipping")
             </div>
