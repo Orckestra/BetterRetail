@@ -98,7 +98,6 @@ module Orckestra.Composer {
                     <div class="checkout-step-container"
                     	 v-show="slotProps.show"
                          v-bind:class="{'active-step': active,
-                         'fulfilled-step' : fulfilled,
                          'preview-step': slotProps.preview,
                          'next-step': slotProps.next,
                          'loading' : loading

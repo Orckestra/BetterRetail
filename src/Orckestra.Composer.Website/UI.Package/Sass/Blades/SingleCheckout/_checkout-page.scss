@@ -20,7 +20,7 @@
         }
 
        
-        &.active-step, &.next-step, &.fulfilled-step {
+        &.active-step, &.next-step, &.preview-step {
             .card-header {
                 opacity: 1;
             }
