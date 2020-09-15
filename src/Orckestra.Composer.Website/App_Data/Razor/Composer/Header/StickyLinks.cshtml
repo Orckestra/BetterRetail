@@ -17,11 +17,12 @@
 <head>
 </head>
 <body>
-    <ul class="nav main-nav-sticky">
+    <ul class="nav navbar-nav main-nav-sticky">
         @foreach (var sticyMenuEntity in @stickyMenu)
         {
-            <li>
+            <li class="nav-item">
                 <a data-qa="main-menu-sticky-link"
+                   class="nav-link"
                    href="@sticyMenuEntity.Url"
                    target="@sticyMenuEntity.UrlTarget">
                     @sticyMenuEntity.DisplayName
