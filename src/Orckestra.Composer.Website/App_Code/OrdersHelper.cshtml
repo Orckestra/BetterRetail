@@ -21,15 +21,17 @@
                     @Html.Localized("MyAccount", "L_OrderNumber", "{{order.OrderInfos.OrderNumber}}")
                     @if (!IsPastOrders)
                     {
-                        <br />
-                        <span class="text-aldi-gray-error" v-if="order.ShipmentSummaries[0].ScheduledShipDate">
-                            @Html.Localized("MyAccount", "L_ScheduledShipping", "{{order.ShipmentSummaries[0].ScheduledShipDate}}")
-                        </span>
-                        <div v-if="order.ShipmentSummaries[0].TrackingInfo">
-                            <a v-if="order.ShipmentSummaries[0].TrackingInfo" v-bind:href="order.ShipmentSummaries[0].TrackingInfo.Url">
-                                @Html.Localize("MyAccount", "H_OrderTracking")
-                            </a>
-                        </div>
+                        <p v-if="order.ShipmentSummaries.length">
+                            <span class="text-aldi-gray-error" v-if="order.ShipmentSummaries[0].ScheduledShipDate">
+                                @Html.Localized("MyAccount", "L_ScheduledShipping", "{{order.ShipmentSummaries[0].ScheduledShipDate}}")
+                            </span>
+                            <span v-if="order.ShipmentSummaries[0].TrackingInfo">
+                                <br />
+                                <a v-bind:href="order.ShipmentSummaries[0].TrackingInfo.Url">
+                                    @Html.Localize("MyAccount", "H_OrderTracking")
+                                </a>
+                            </span>
+                        </p>
                     }
                     <br />
                     <span class="compact-order-status"
