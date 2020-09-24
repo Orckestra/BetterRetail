@@ -27,17 +27,20 @@ namespace Orckestra.Composer.MyAccount.Services
         protected ICustomerRepository CustomerRepository { get; private set; }
         protected ICultureService CultureService { get; private set; }
         protected ILocalizationProvider LocalizationProvider { get; private set; }
+        protected IRegexRulesProvider RegexRulesProvider { get; }
 
         public CustomerViewService(
             IViewModelMapper viewModelMapper,
             ICustomerRepository customerRepository,
             ICultureService cultureService,
-            ILocalizationProvider localizationProvider)
+            ILocalizationProvider localizationProvider,
+            IRegexRulesProvider regexRulesProvider)
         {
             ViewModelMapper = viewModelMapper ?? throw new ArgumentNullException(nameof(viewModelMapper));
             CustomerRepository = customerRepository ?? throw new ArgumentNullException(nameof(customerRepository));
             CultureService = cultureService ?? throw new ArgumentNullException(nameof(cultureService));
             LocalizationProvider = localizationProvider ?? throw new ArgumentNullException(nameof(localizationProvider));
+            RegexRulesProvider = regexRulesProvider ?? throw new ArgumentNullException(nameof(regexRulesProvider));
         }
 
         /// <summary>
@@ -164,6 +167,7 @@ namespace Orckestra.Composer.MyAccount.Services
             customer.FirstName = updateParam.FirstName;
             customer.LastName = updateParam.LastName;
             customer.Language = updateParam.PreferredLanguage;
+            customer.PhoneNumber = updateParam.PhoneNumber;
         }
 
         protected virtual UpdateAccountViewModel GetUpdateAccountViewModel(GetUpdateAccountViewModelParam param, Customer customer)
@@ -173,6 +177,7 @@ namespace Orckestra.Composer.MyAccount.Services
             viewModel.Status = param.Status.HasValue ? param.Status.Value.ToString("G") : string.Empty;
             viewModel.ReturnUrl = param.ReturnUrl;
             viewModel.Languages = GetPreferredLanguageViewModel(param.CultureInfo, customer.Language);
+            viewModel.PhoneNumberRegEx = RegexRulesProvider.GetPhoneNumberRegex();
 
             return viewModel;
         }

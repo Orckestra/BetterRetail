@@ -52,5 +52,15 @@ namespace Orckestra.Composer.MyAccount.ViewModels
         /// the date the customer was created
         /// </summary>
         public DateTime Created { get; set; }
+
+        /// <summary>
+        /// The PhoneNumber for the User account
+        /// </summary>
+        public string PhoneNumber { get; set; }
+
+        /// <summary>
+        /// The PhoneNumber RegEx validation rule
+        /// </summary>
+        public string PhoneNumberRegEx { get; set; }
     }
 }

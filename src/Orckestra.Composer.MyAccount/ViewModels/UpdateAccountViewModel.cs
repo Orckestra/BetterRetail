@@ -48,6 +48,15 @@ namespace Orckestra.Composer.MyAccount.ViewModels
         /// </summary>
         public IList<PreferredLanguageViewModel> Languages { get; set; }
 
+        /// <summary>
+        /// The PhoneNumber for the User account
+        /// </summary>
+        public string PhoneNumber { get; set; }
+        /// <summary>
+        /// The PhoneNumber RegEx validation rule
+        /// </summary>
+        public string PhoneNumberRegEx { get; set; }
+
         public UpdateAccountViewModel()
         {
             Languages = new List<PreferredLanguageViewModel>();
