@@ -113,7 +113,7 @@ namespace Orckestra.Composer.MyAccount.Services
         void SetPasswordValidationRules(PasswordPatternViewModel viewModel);
 
         /// <summary>
-        /// Clears customer login information stored in cookies.
+        /// Clears customer information from the context.
         /// </summary>
         void LogOutCustomer();
     }

@@ -577,9 +577,6 @@ namespace Orckestra.Composer.MyAccount.Services
             return originalUsername;
         }
 
-        /// <summary>
-        /// Clears customer information from the context.
-        /// </summary>
         public virtual void LogOutCustomer()
         {
             ComposerContext.CustomerId = Guid.Empty;
