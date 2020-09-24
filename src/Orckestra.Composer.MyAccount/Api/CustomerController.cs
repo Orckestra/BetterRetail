@@ -58,6 +58,7 @@ namespace Orckestra.Composer.MyAccount.Api
                 Email = request.Email,
                 FirstName = request.FirstName,
                 LastName = request.LastName,
+                PhoneNumber = request.PhoneNumber,
                 CultureInfo = ComposerContext.CultureInfo,
             };
 

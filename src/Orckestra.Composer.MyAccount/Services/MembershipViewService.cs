@@ -25,6 +25,7 @@ namespace Orckestra.Composer.MyAccount.Services
         protected IViewModelMapper ViewModelMapper { get; private set; }
         protected ICustomerRepository CustomerRepository { get; private set; }
         protected ICartMergeProvider CartMergeProvider { get; private set; }
+        public IRegexRulesProvider RegexRulesProvider { get; }
 
         /// <summary>
         /// For Unit test purposes
@@ -35,7 +36,8 @@ namespace Orckestra.Composer.MyAccount.Services
             IMyAccountUrlProvider myAccountUrlProvider,
             IViewModelMapper viewModelMapper,
             ICustomerRepository customerRepository,
-            ICartMergeProvider cartMergeProvider)
+            ICartMergeProvider cartMergeProvider,
+            IRegexRulesProvider regexRulesProvider)
         {
             Membership = new StaticMembershipProxy();
 
@@ -43,6 +45,7 @@ namespace Orckestra.Composer.MyAccount.Services
             ViewModelMapper = viewModelMapper ?? throw new ArgumentNullException(nameof(viewModelMapper));
             CustomerRepository = customerRepository ?? throw new ArgumentNullException(nameof(customerRepository));
             CartMergeProvider = cartMergeProvider ?? throw new ArgumentNullException(nameof(cartMergeProvider));
+            RegexRulesProvider = regexRulesProvider ?? throw new ArgumentNullException(nameof(regexRulesProvider));
         }
 
         /// <summary>
@@ -115,6 +118,7 @@ namespace Orckestra.Composer.MyAccount.Services
             viewModel.Username = param.Customer != null ? param.Customer.Username : string.Empty;
             viewModel.CustomerId = param.Customer?.Id ?? Guid.Empty;
             viewModel.Created = param.Customer?.Created ?? DateTime.MinValue;
+            viewModel.PhoneNumberRegEx = RegexRulesProvider.GetPhoneNumberRegex();
 
             SetPasswordValidationRules(viewModel);
 
