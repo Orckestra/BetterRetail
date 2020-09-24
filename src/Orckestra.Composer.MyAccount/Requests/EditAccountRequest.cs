@@ -27,6 +27,12 @@ namespace Orckestra.Composer.MyAccount.Requests
         public string LastName { get; set; }
 
         /// <summary>
+        /// (Optional)
+        /// The PhoneNumber for the User account
+        /// </summary>
+        public string PhoneNumber { get; set; }
+
+        /// <summary>
         /// (Mandatory)
         /// The preferred communication Culture iso code for the User
         /// </summary>

@@ -193,6 +193,7 @@ namespace Orckestra.Composer.MyAccount.Api
                 Email = registerRequest.Email,
                 FirstName = registerRequest.FirstName,
                 LastName = registerRequest.LastName,
+                PhoneNumber = registerRequest.PhoneNumber,
                 PasswordQuestion = registerRequest.PasswordQuestion,
                 PasswordAnswer = registerRequest.PasswordAnswer,
                 ReturnUrl = returnUrl,

@@ -48,6 +48,11 @@ namespace Orckestra.Composer.Parameters
         public string LastName { get; set; }
 
         /// <summary>
+        /// Phone number of a user
+        /// </summary>
+        public string PhoneNumber { get; set; }
+
+        /// <summary>
         /// (Mandatory)
         /// The scope in which the User will be created
         /// </summary>
