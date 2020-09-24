@@ -111,5 +111,10 @@ namespace Orckestra.Composer.MyAccount.Services
         /// </summary>
         /// <param name="viewModel">viewModel for update <see cref="PasswordPatternViewModel"/></param>
         void SetPasswordValidationRules(PasswordPatternViewModel viewModel);
+
+        /// <summary>
+        /// Clears customer login information stored in cookies.
+        /// </summary>
+        void LogOutCustomer();
     }
 }
