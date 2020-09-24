@@ -13,6 +13,7 @@ using Orckestra.Composer.Providers.Membership;
 using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel.Customers;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
+using Orckestra.Composer.Services;
 
 namespace Orckestra.Composer.MyAccount.Services
 {
@@ -26,6 +27,7 @@ namespace Orckestra.Composer.MyAccount.Services
         protected ICustomerRepository CustomerRepository { get; private set; }
         protected ICartMergeProvider CartMergeProvider { get; private set; }
         public IRegexRulesProvider RegexRulesProvider { get; }
+        protected IComposerContext ComposerContext { get; }
 
         /// <summary>
         /// For Unit test purposes
@@ -37,6 +39,7 @@ namespace Orckestra.Composer.MyAccount.Services
             IViewModelMapper viewModelMapper,
             ICustomerRepository customerRepository,
             ICartMergeProvider cartMergeProvider,
+            IComposerContext composerContext,
             IRegexRulesProvider regexRulesProvider)
         {
             Membership = new StaticMembershipProxy();
@@ -45,6 +48,7 @@ namespace Orckestra.Composer.MyAccount.Services
             ViewModelMapper = viewModelMapper ?? throw new ArgumentNullException(nameof(viewModelMapper));
             CustomerRepository = customerRepository ?? throw new ArgumentNullException(nameof(customerRepository));
             CartMergeProvider = cartMergeProvider ?? throw new ArgumentNullException(nameof(cartMergeProvider));
+            ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
             RegexRulesProvider = regexRulesProvider ?? throw new ArgumentNullException(nameof(regexRulesProvider));
         }
 
@@ -571,6 +575,12 @@ namespace Orckestra.Composer.MyAccount.Services
         protected virtual string GenerateUserName(string originalUsername)
         {
             return originalUsername;
+        }
+
+        public virtual void LogOutCustomer()
+        {
+            ComposerContext.CustomerId = Guid.Empty;
+            ComposerContext.IsGuest = true;
         }
     }
 }

@@ -131,7 +131,7 @@ namespace Orckestra.Composer.MyAccount.Api
 
             if (!logoutRequest.PreserveCustomerInfo)
             {
-                InvalidateCustomerCookie();
+                MembershipViewService.LogOutCustomer();
             }
 
             FormsAuthentication.SignOut();
@@ -148,14 +148,6 @@ namespace Orckestra.Composer.MyAccount.Api
             return Ok(response);
         }
 
-        /// <summary>
-        /// Remove information relative to the Customer himself
-        /// </summary>
-        protected virtual void InvalidateCustomerCookie()
-        {
-            ComposerContext.CustomerId = Guid.Empty;
-            ComposerContext.IsGuest = true;
-        }
 
         /// <summary>
         /// Create the Account based on the Request
