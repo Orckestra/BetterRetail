@@ -1,4 +1,4 @@
-# Orckestra Reference Application Starter Site
+# Orckestra Better Retail Grocery Starter Site
 [![Build Status](https://orckestra001.visualstudio.com/OrckestraCommerce/_apis/build/status/Product%20extension%20-%20RefApp?branchName=dev)](https://orckestra001.visualstudio.com/OrckestraCommerce/_build/latest?definitionId=68&branchName=dev)
 ## Table of Contents
 - [Getting started](#getting-started)
@@ -14,9 +14,9 @@
 - [FAQ](#faq)
 
 ## Getting started
-Get the latest source code from the [dev](https://github.com/Orckestra/BetterRetail/tree/dev) branch:
-- using the git command `$git clone https://github.com/Orckestra/BetterRetail.git`
-- with a direct download [by the following link](https://github.com/Orckestra/BetterRetail/archive/dev.zip)
+Get the latest source code from the [develop](https://github.com/Orckestra/BetterRetailGrocery/tree/develop) branch:
+- using the git command `$git clone https://github.com/Orckestra/BetterRetailGrocery.git`
+- with a direct download [by the following link](https://github.com/Orckestra/BetterRetailGrocery/archive/develop.zip)
 
 ## Prerequisites
 A development environment  has to include:
@@ -42,7 +42,6 @@ In general, the full build process includes the following steps:
 - Running solution unit-tests;
 - Running typescripts unit-tests;
 - Creating artifacts;
-- Creating a package
 
 It is also available to run a specific (separate) task of a build if to pass `-Target` param and to specify a task name. For example, to run again all tests execute in Powershell `{solution_dir_path}\build\build.ps1 -Target Tests` command. In the table below is the list of build tasks.
 | Task name | Description |
@@ -67,7 +66,7 @@ Typescripts compile into javascript during the build process, but for developmen
 - to use [Orckestra.Web.Typescript](https://github.com/Orckestra/CMS-Packages/tree/master/Orckestra.Web.Typescript) package, so any typescripts changes can be automatically recompiled into javascript using defined in this package settings.
 
 ### SASS
-The Reference Application uses SASS by default. For dynamic Saas compilation into CSS designed [Orckestra.Web.Css.Sass](https://github.com/Orckestra/CMS-Packages/tree/master/Composite.Web.Css.Sass) package.
+The Grocery Application uses SASS by default. For dynamic Saas compilation into CSS designed [Orckestra.Web.Css.Sass](https://github.com/Orckestra/CMS-Packages/tree/master/Composite.Web.Css.Sass) package.
 
 ## Configuring
 ### Reference application
@@ -119,12 +118,18 @@ The file **{solution_dir_path}\build\configuration\SetupDescription.xml** includ
 
 The file **{solution_dir_path}\build\configuration\SetupDescriptionSecondary.xml** includes packages to be installed after. 
 
-After successfully deploying the Reference Application configured and ready to use in IIS.
+After successfully deploying the Grocery Application configured and ready to use in IIS.
 
 
 ## Development
 ### Making changes to the dev branch
 To make a change to the dev branch create a pull request
+### Sycn core changes from BetterRetail
+Grocery repo was initialized from BetterRetail dev branch, so it has all its history. 
+If you need to fix something in BetterRetail part, need to do PR to BetterRetail repo and when PR is merged to dev branch, sync this change to Grocery.
+
+In your Grocery local repo configure Remote Url to BetterRetail repo and use it to sync changes.
+
 ### Branches naming convention
 Branches have to be named in the following way: {type_in_plural}/{task_number}-{description}.
 
@@ -133,13 +138,13 @@ For example:
 - features/10101-tree-selector
 
 ## Debug
-### Reference Application solution
+### Grocery Application solution
 - Open the **Web.config** file in the root of a deployed website, locate to the **configuration/system.web/compilation** path, set up `debug` attribute to `true`
-- Open solution project file **{solution_dir_path}\Orckestra.ReferenceApplication.sln** with Visual Studio in Administrator mode
+- Open solution project file **{solution_dir_path}\Orckestra.Grocery.sln** with Visual Studio in Administrator mode
 - In Visual Studio select **Debug - Attach to process** and select a **w3wp** process of a needed website
 
 ### Cake files
-Cake uses to build and deploy the Reference Application. 
+Cake uses to build and deploy the Grocery Application. 
 To debug a specific cake file:
 - Restore NuGet packages: run in Powershell a command `{solution_dir_path}\build\build.ps1 -Target Restore-NuGet-Packages`
 - Open the target .cake file with Visual Studio in Administrator mode, set up a breakpoint in it
@@ -169,7 +174,9 @@ To lint check typescripts
 - Run in Powershell a command: `{solution_dir_path}\build\build.ps1 -Target Tslint-Fix`. for fixes linting errors for select rules (this may overwrite linted files) 
 
 ## Related projects
-Reference Application is dependent on [C1 CMS Foundation](https://github.com/Orckestra/C1-CMS-Foundation) and can use [C1 CMS packages](https://github.com/Orckestra/CMS-Packages)
+Grocery Application is dependent on [Better Retail Application](https://github.com/Orckestra/BetterRetail). It was initialized from dev branch of Better Retail repo, but has its own solution and website project. So any core changes in Better Retail can be synchronized here with git pull action.
+
+Grocery Application is dependent on [C1 CMS Foundation](https://github.com/Orckestra/C1-CMS-Foundation) and can use [C1 CMS packages](https://github.com/Orckestra/CMS-Packages)
 
 ## FAQ
 Q: Cannot execute PowerShell scripts because of PowerShell execution policy {TODO: set here specific error}
