@@ -1,0 +1,5 @@
+<em class="additional-fees block small" data-templateid="AdditionalFees">
+    {{#each AdditionalFees}}
+        <span class="block">+ {{DisplayName}} {{Amount}} {{#if Taxable}}{{localize 'ShoppingCart' 'L_PlusTaxes'}} {{/if}}{{CalculationRule}} </span>
+    {{/each}}
+</em>  

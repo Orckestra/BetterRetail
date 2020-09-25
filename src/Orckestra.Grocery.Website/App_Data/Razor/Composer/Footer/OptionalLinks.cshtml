@@ -1,0 +1,26 @@
+@inherits RazorFunction
+@using Orckestra.Composer.ViewModels.MenuNavigation
+@using Orckestra.Composer.CompositeC1.Mappers;
+@using Orckestra.Composer.CompositeC1.DataTypes.Navigation;
+
+
+@functions {
+    public INavigationMapper HomeNavigationMapper { get; set; }
+}
+
+@{
+    var currentPageId = SitemapNavigator.CurrentHomePageId;
+    var optionalFooterData = Data.Get<FooterOptionalLink>().Where(x => x.PageId == currentPageId).ToList();
+    var optionalFooter = HomeNavigationMapper.MapFooterOptionalLinksItems(optionalFooterData) as IEnumerable<OptionalLinkEntryViewModel>;
+}
+
+<ul class="nav nav-legal float-lg-right">
+    @foreach (var optionalFooterEntity in optionalFooter)
+    {
+        <li class="nav-item">
+            <a  class="nav-link" href="@optionalFooterEntity.Url" style="@optionalFooterEntity.CssClass" target="@optionalFooterEntity.UrlTarget">
+                <span>@optionalFooterEntity.DisplayName</span>
+            </a>
+        </li>
+    }
+</ul>

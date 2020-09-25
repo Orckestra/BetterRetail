@@ -1,0 +1,12 @@
+<div class="card panel-suggestion">
+    <div class="card-header">{{localize 'General' 'L_Suggest_Categories'}}</div>
+    <div class="card-body">
+        <ul>
+            {{#each this}}
+                <li>
+                    <a data-oc-click="selectedCategorySuggestion" data-suggestion="{{DisplayName}}" data-parents="{{Parents}}" role="link" tabindex="0">{{#each Parents}}{{this}} > {{/each}}{{ DisplayName }}</a>
+                </li>
+            {{/each}}
+        </ul>
+    </div>
+</div>

@@ -1,0 +1,258 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="B_AddToCartProductDetail" xml:space="preserve">
+    <value>Add to cart</value>
+  </data>
+  <data name="B_AddToCartProductDetailDiscontinued" xml:space="preserve">
+    <value>Discontinued</value>
+  </data>
+  <data name="B_AddToCartProductDetailOOS" xml:space="preserve">
+    <value>Out of stock</value>
+  </data>
+  <data name="B_AddToCartProductDetailUnavailable" xml:space="preserve">
+    <value>Unavailable</value>
+  </data>
+  <data name="B_AddToCartProductList" xml:space="preserve">
+    <value>Buy now</value>
+  </data>
+  <data name="B_AddToCartProductListOOS" xml:space="preserve">
+    <value>Out of stock</value>
+  </data>
+  <data name="B_Back" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="B_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="B_CancelOrder" xml:space="preserve">
+    <value>Cancel Order</value>
+  </data>
+  <data name="B_Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="B_Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="B_FindMyOrder" xml:space="preserve">
+    <value>Find my order</value>
+  </data>
+  <data name="B_PrintOrder" xml:space="preserve">
+    <value>Print Invoice</value>
+  </data>
+  <data name="B_ReOrder" xml:space="preserve">
+    <value>Add this order to my cart</value>
+  </data>
+  <data name="English (Canada)" xml:space="preserve">
+    <value>English (Canada)</value>
+  </data>
+  <data name="French (Canada)" xml:space="preserve">
+    <value>French (Canada)</value>
+  </data>
+  <data name="L_Breadcrumb" xml:space="preserve">
+    <value>You are in:</value>
+  </data>
+  <data name="L_Copyright" xml:space="preserve">
+    <value>©{0}. Better Retail inc. All rights reserved.</value>
+  </data>
+  <data name="L_ErrorAjaxFailed" xml:space="preserve">
+    <value>An error occured, please try again later</value>
+  </data>
+  <data name="L_ErrorUnauthorized" xml:space="preserve">
+    <value>Your session has expired. Please login again.</value>
+  </data>
+  <data name="L_FindAStore" xml:space="preserve">
+    <value>Find a store</value>
+  </data>
+  <data name="L_FindMyOrderLoginText" xml:space="preserve">
+    <value>If you have an account, you may login to view your entire order history with more complete details.</value>
+  </data>
+  <data name="L_FindMyOrderText" xml:space="preserve">
+    <value>To see the status of a recent order, enter your order number and the email address used when placing your order.</value>
+  </data>
+  <data name="L_FollowUs" xml:space="preserve">
+    <value>Follow us :</value>
+  </data>
+  <data name="L_Home" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="L_Loading" xml:space="preserve">
+    <value>Loading</value>
+  </data>
+  <data name="L_Of" xml:space="preserve">
+    <value>of</value>
+  </data>
+  <data name="L_OrderNotFound" xml:space="preserve">
+    <value>We can't find your order in the system. Make sure to use the same email address and order number as specified in your order confirmation email.</value>
+  </data>
+  <data name="L_QuoteClose" xml:space="preserve">
+    <value>”</value>
+  </data>
+  <data name="L_QuoteOpen" xml:space="preserve">
+    <value>“</value>
+  </data>
+  <data name="L_RecurringProduct" xml:space="preserve">
+    <value>Product eligible to recurring order</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+    <value>Log in</value>
+  </data>
+  <data name="OpeningHourFormat" xml:space="preserve">
+    <value>{0:h\:mm}</value>
+  </data>
+  <data name="P_PaymentLoadErrorMessage" xml:space="preserve">
+    <value>The payment information is not available please contact customer service.</value>
+  </data>
+  <data name="PercentageFormat" xml:space="preserve">
+    <value>{0:P2}</value>
+  </data>
+  <data name="PriceFormat" xml:space="preserve">
+    <value>{0:C}</value>
+  </data>
+  <data name="ShortDateFormat" xml:space="preserve">
+    <value>{0:MMMM dd, yyyy}</value>
+  </data>
+  <data name="T_FindYourOrder" xml:space="preserve">
+    <value>Find your order</value>
+  </data>
+  <data name="P_ShippingMethodLoadErrorMessage" xml:space="preserve">
+    <value>The shipping method information is not available.</value>
+  </data>
+  <data name="L_OrderStatus_Canceled" xml:space="preserve">
+    <value>Canceled</value>
+  </data>
+  <data name="L_OrderStatus_Completed" xml:space="preserve">
+    <value>Completed</value>
+  </data>
+  <data name="L_OrderStatus_InProgress" xml:space="preserve">
+    <value>Processing order</value>
+  </data>
+  <data name="L_OrderStatus_New" xml:space="preserve">
+    <value>Order received</value>
+  </data>
+  <data name="L_OrderStatus_OnHold" xml:space="preserve">
+    <value>On Hold</value>
+  </data>
+  <data name="L_OrderStatus_PartiallyFulfilled" xml:space="preserve">
+    <value>Partially Fulfilled</value>
+  </data>
+  <data name="L_OrderStatus_PendingProcess" xml:space="preserve">
+    <value>Pending</value>
+  </data>
+</root>

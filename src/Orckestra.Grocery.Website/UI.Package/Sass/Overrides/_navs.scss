@@ -1,0 +1,56 @@
+.nav .show > a,
+.nav .show > a:hover,
+.nav .show > a:focus {
+    background-color: gray("200") !important;
+    border-color: gray("400");
+}
+
+.nav-pills {
+	list-style: none;
+	> li {
+	    float: left;
+	    + li {
+			margin-left: 2px;
+	    }
+	}
+}
+
+.nav.nav-pills {
+	list-style: none;
+	> li {
+	    float: left;
+	    &:first-child:not(:last-child) {
+	    	> a {
+	    		border-bottom-right-radius: 0;
+	    		border-top-right-radius: 0;
+	    	}
+	    }
+	    &:not(:first-child):not(:last-child) {
+	    	> a {
+	    		border-radius: 0;
+	    	}
+	    }
+		&:last-child:not(:first-child) {
+			> a {
+				border-bottom-left-radius: 0;
+				border-top-left-radius: 0;
+			}
+		}
+	    > a {
+			border-radius: 3px;
+			border: 1px solid gray("400");
+	    }
+	    + li {
+			margin-left: 0px;
+	    }
+	    &.active {
+	    	a {
+	    		&, &:hover, &:focus {
+	    			color: #fff;
+	    			background-color: theme-color("primary");
+	    			border: 1px solid darken(theme-color("primary"), 10%);
+	    		}
+	    	}
+	    }
+	}
+}

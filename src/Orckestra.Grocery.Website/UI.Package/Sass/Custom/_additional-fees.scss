@@ -1,0 +1,15 @@
+
+.additional-fees {
+    display: block;
+    margin-top: 5px;
+    font-size: 10px;
+
+    span {
+        display: block;
+
+        + span {
+          margin-top: 2px;
+        }
+    }
+} 
+  

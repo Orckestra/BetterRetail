@@ -1,0 +1,44 @@
+﻿@inherits Composer.Razor.ComposerRazorFunction
+@using Orckestra.Composer.Services;
+@using Orckestra.Composer.Cart.Services.Order;
+@using Orckestra.Composer.Cart.Parameters.Order;
+@using Orckestra.Composer.Utils;
+@using Orckestra.Composer.Cart.ViewModels.Order;
+@using Orckestra.Composer.Cart.ViewModels;
+@using System.Xml.Linq;
+@using System.Linq;
+
+@functions {
+    public IOrderHistoryViewService OrderHistoryViewService { get; set; }
+    public IComposerContext ComposerContext { get; set; }
+}
+
+@{
+    RedirectNotAuthorized();
+
+    var id = Request["id"];
+    if (string.IsNullOrEmpty(id))
+    {
+        return;
+    }
+
+    var order = OrderHistoryViewService.GetOrderDetailViewModelAsync(new GetCustomerOrderParam
+    {
+        OrderNumber = id,
+        CustomerId = ComposerContext.CustomerId,
+        Scope = ComposerContext.Scope,
+        CultureInfo = ComposerContext.CultureInfo,
+        CountryCode = ComposerContext.CountryCode,
+        BaseUrl = RequestUtils.GetBaseUrl(Request.Url, Request.ApplicationPath).ToString()
+    }).Result;
+
+}
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<head>
+</head>
+<body>
+    <div data-oc-controller="Orders.OrderDetails">
+        @Function("Composer.Order.Details", new { Order = order } )
+    </div>
+</body>
+</html>

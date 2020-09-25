@@ -1,0 +1,300 @@
+/**
+ * Cart item quantity: [-] Qty [+]
+ * To set the width to prevent jumping of buttons
+ */
+.cart-quantity {
+  margin: 0;
+  min-width: 50px;
+  display: inline-block;
+  text-align: center;
+}
+.cart-quantity-template {
+  margin: 0;
+  width: 25px;
+  display: inline-block;
+  text-align: center;
+}
+
+/**
+ * Fake cell for cart item detail.
+ */
+.cart-cell {
+  float: left;
+  box-sizing: border-box;
+  padding-left: $grid-gutter-width / 2;
+  padding-right: $grid-gutter-width / 2;
+}
+
+/**
+ * Flush cell
+ */
+.cart-cell-flush {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.cart-row {
+  @include clearfix();
+
+  &.is-loading {
+    opacity: 0.7
+  }
+}
+
+.cart-item + .cart-item {
+  border-top: solid 2px $gray-200;
+  margin-top: $grid-gutter-width;
+  padding-top: $grid-gutter-width;
+}
+
+.cart-caption {
+  display: table-caption;
+  padding-top: $spacer;
+  padding-bottom: $spacer;
+}
+
+.cart-cell-group {
+  display: table-row-group;
+}
+
+/**
+ *  Different values width for layouting
+ */
+.cart-row {
+  .cart-image {
+    width: 30%;
+  }
+  /**
+   *  All the attributes shown beside the image
+   */
+  .cart-attributes {
+    float: left;
+    width: 70%;
+  }
+
+  /**
+   * Cart attributes
+   */
+   @include media-breakpoint-down(sm) {
+    .sm-full {
+      .cart-desc,
+      .cart-price,
+      .cart-qty,
+      .cart-subtotal {
+        width: 100%;
+      }
+    }
+  }
+  .cart-desc,
+  .cart-price,
+  .cart-qty,
+  .cart-subtotal {
+    width: 75%;
+  }
+  .recurring-schedule {
+    .cart-frequency {
+      width: 75%;
+    }
+  }
+
+  .cart-delete {
+    width: 25%;
+  }
+
+}
+
+@include media-breakpoint-down(md) {
+  .cart-row {
+    .cart-desc {
+      padding-bottom: map_get($spacers, 2);
+    }
+  }
+}
+
+@include media-breakpoint-up(lg) {
+  /**
+   * Fake table display in > small
+   */
+  .cart-row {
+    display: table;
+    table-layout: fixed;
+
+    .cart-image {
+      width: 11%;
+    }
+
+    // these are in a sub cell so they must add up to 100%
+    .cart-desc {
+      width: 28%;
+    }
+    .cart-delete {
+      width: 10%;
+    }
+    .cart-price {
+      width: 16%;
+    }
+    .cart-qty {
+      width: 30%;
+    }
+    .cart-subtotal {
+      width: 16%;
+    }
+
+    .recurring-schedule {
+       // these are in a sub cell so they must add up to 100%
+      .cart-desc {
+        width: 25%;
+      }
+      .cart-price {
+        width: 15%;
+      }
+      .cart-qty {
+        width: 27%;
+      }
+      .cart-subtotal {
+        width: 15%;
+      }      
+      .cart-frequency {
+        width: 18%;
+      }
+    }
+
+    .recurring-schedule-details {
+      // these are in a sub cell so they must add up to 100%
+     .cart-desc {
+       width: 32%;
+     }
+     .cart-price {
+       width: 16%;
+     }
+     .cart-price-multiplier {
+       width: 12%;
+     }
+     .cart-qty {
+       width: 20%;
+     }
+     .cart-subtotal {
+       width: 20%;
+     }     
+   }
+
+    .cart-attributes {
+      width: 100%;
+      display: table;
+      float: none;
+      vertical-align: middle;
+    }
+  }
+  .cart-cell {
+    float: none;
+    display: table-cell;
+    vertical-align: middle;
+  }
+  .cart-cell-flush {
+    display: table-cell;
+    vertical-align: middle;
+    width: 89%;
+  }
+
+  /**
+   *  Header is a bit tricky, a lot of magic value based on alignement of inner value.
+   */
+  .cart-header-title {
+    width: 45%;
+    float: left;
+    &.recurring-schedule {      
+      width: 35%;
+    }
+    &.recurring-schedule-details {      
+      width: 40%;
+    }
+  }
+  .cart-header-labels {
+    margin-top: 6px;
+    width: 55%;
+    float: left;
+    &.recurring-schedule {      
+      width: 65%;
+    }
+    &.recurring-schedule-details {      
+      width: 60%;
+    }
+  }
+
+  .cart-header-price,
+  .cart-header-qty,
+  .cart-header-subtotal {
+    padding-left: $grid-gutter-width / 2;
+    padding-right: $grid-gutter-width / 2;
+  }
+
+  .cart-header-price {
+    width: 25.7%;
+  }
+  .cart-header-qty {
+    width: 47.8%;
+  }
+  .cart-header-subtotal {
+    width: 26.5%;
+  }
+
+  //recurring schedule page
+  .recurring-schedule {
+    .cart-header-price {
+      width: 20%;
+    }
+    .cart-header-qty {
+      width: 35%;
+    }
+    .cart-header-subtotal {
+      width: 19%;
+    }
+    .cart-header-frequency {   
+      width: 26%;
+    }  
+  }
+  //recurring schedule details page
+  .recurring-schedule-details {
+    .cart-header-price {
+      width: 25%;
+    }
+    .cart-header-qty {
+      width: 54%;
+    }
+    .cart-header-subtotal {
+      width: 21%;
+    } 
+  }
+}
+
+.cart-subtotal-price {
+  font-size: 16px;
+}
+
+.cart-recurring {
+  margin-top: 5px;
+  padding-top: 10px;
+  position: relative;
+
+  @include media-breakpoint-up(md) {
+    padding-left: 30%;
+  }
+  @include media-breakpoint-up(md) {
+    padding-left: 11%;
+  }
+}
+
+.button-like-link {
+  background:none!important;
+  border:none; 
+  padding:0!important;
+  text-decoration:underline;
+  cursor:pointer;
+ &:disabled{
+     cursor: not-allowed;
+     pointer-events: none;
+     opacity: 0.5;
+     filter: alpha(opacity=50);
+     box-shadow: none;
+  }
+}

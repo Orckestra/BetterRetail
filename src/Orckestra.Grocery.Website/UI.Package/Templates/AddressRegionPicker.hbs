@@ -1,0 +1,17 @@
+<select data-templateid="AddressRegionPicker" name="RegionCode" id="RegionCode" data-qa="checkout-shipping-province-selector"
+    {{#if_localized 'Forms' 'F_ProvinceIndication'}}
+        {{>HelpBubbleOpen}}{{localize 'Forms' 'F_ProvinceIndication'}}{{>HelpBubbleClose}}
+    {{/if_localized}}
+    class="form-control" value='{{RegionCode}}' required="true">
+    {{#if Regions}}
+        {{#each Regions }}
+            {{#if_eq IsoCode ../SelectedRegion}}
+                <option data-qa="checkout-shipping-province-{{@index}}" value="{{IsoCode}}" selected="selected">{{Name}}</option>
+            {{else}}
+                <option data-qa="checkout-shipping-province-{{@index}}" value="{{IsoCode}}" >{{Name}}</option>
+            {{/if_eq}}
+        {{/each}}
+    {{else}}
+    <option data-qa="checkout-shipping-province-0" value="{{RegionCode}}" selected="selected"> </option>
+    {{/if}}
+</select>

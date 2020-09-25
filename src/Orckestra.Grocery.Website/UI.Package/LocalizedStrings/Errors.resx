@@ -1,0 +1,258 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="L_AddToCartFailed" xml:space="preserve">
+    <value>An error occurred while adding the product to the cart. Please try again.</value>
+  </data>
+  <data name="L_ChangePasswordFailed" xml:space="preserve">
+    <value>An error occured. Please check your information and try again.</value>
+  </data>
+  <data name="L_CheckoutNextStepFailed" xml:space="preserve">
+    <value>Cannot proceed to the next step of the checkout. Please check your data and try again.</value>
+  </data>
+  <data name="L_CheckoutRenderFailed" xml:space="preserve">
+    <value>An error occurred while loading the checkout page. Please &lt;a href="javascript:window.location.reload();"&gt; reload the page&lt;/a&gt;.</value>
+  </data>
+  <data name="L_CompleteCheckoutFailed" xml:space="preserve">
+    <value>Cannot complete your order. Please check your payment and address informations, and try again.</value>
+  </data>
+  <data name="L_CustomerMembershipDoesNotExist" xml:space="preserve">
+    <value>Unknown email address.</value>
+  </data>
+  <data name="L_EmailAlreadyExists" xml:space="preserve">
+    <value>The specified email already exists in the system.</value>
+  </data>
+  <data name="L_ErrorWithTicket" xml:space="preserve">
+    <value>Unable to process your request. Please request a new forgot password link and try again.</value>
+  </data>
+  <data name="L_InvalidCharsInSearchBox" xml:space="preserve">
+    <value>Your search terms contain unauthorized characters.</value>
+  </data>
+  <data name="L_InvalidDateSelected" xml:space="preserve">
+    <value>The next occurence date has an invalid value.</value>
+  </data>
+  <data name="L_InvalidFrequencySelected" xml:space="preserve">
+    <value>The frequency has an invalid value.</value>
+  </data>
+  <data name="L_InvalidPassword" xml:space="preserve">
+    <value>The specified Password is invalid.</value>
+  </data>
+  <data name="L_InvalidPhoneFormat" xml:space="preserve">
+    <value>The specified phone number is invalid.</value>
+  </data>
+  <data name="L_InvalidZipPostalCodeFormat" xml:space="preserve">
+    <value>The specified Zip/PostalCode for the address does not fit the validation pattern.</value>
+  </data>
+  <data name="L_LineItemDeleteFailed" xml:space="preserve">
+    <value>An error occurred while we attempted to remove the item from the cart. Please try again.</value>
+  </data>
+  <data name="L_LineItemUpdateFailed" xml:space="preserve">
+    <value>An error occurred while updating your cart. Please try again.</value>
+  </data>
+  <data name="L_LineItemQuantityFailed" xml:space="preserve">
+    <value>An error occurred while updating your cart. Try again.</value>
+  </data>
+  <data name="L_LoadCartFailed" xml:space="preserve">
+    <value>An error occurred while the cart was loading. Please &lt;a href="javascript:window.location.reload();"&gt; reload the page&lt;/a&gt;.</value>
+  </data>
+  <data name="L_NameAlreadyUsed" xml:space="preserve">
+    <value>This address name is already in use.</value>
+  </data>
+  <data name="L_NoLocalizedErrorMessage" xml:space="preserve">
+    <value>An error occured, please try again later.</value>
+  </data>
+  <data name="L_PasswordDoesNotMatch" xml:space="preserve">
+    <value>The specified passwords do not match.</value>
+  </data>
+  <data name="L_PasswordQuestionNoSet" xml:space="preserve">
+    <value>A question must be set.</value>
+  </data>
+  <data name="L_PaymentMethodChangeFailed" xml:space="preserve">
+    <value>An error occurred while updating your payment method. Please try again.</value>
+  </data>
+  <data name="L_PostalCodeUpdateFailed" xml:space="preserve">
+    <value>An error occurred while updating your cart. Please try again.</value>
+  </data>
+  <data name="L_ProceedToCheckoutFailed" xml:space="preserve">
+    <value>Cannot reach the checkout. Please try again.</value>
+  </data>
+  <data name="L_QuickViewLoadFailed" xml:space="preserve">
+    <value>An error occurred while loading the product. Please try again.</value>
+  </data>
+  <data name="L_RecurringCartAddressesUpdateFailed" xml:space="preserve">
+    <value>An error occurred while updating your addresses. Try again.</value>
+  </data>
+  <data name="L_RecurringCartBillingAddressMissing" xml:space="preserve">
+    <value>An error occurred while updating your billing address. Missing billing address Id.</value>
+  </data>
+  <data name="L_RecurringCartShippingAddressMissing" xml:space="preserve">
+    <value>An error occurred while updating your shipping address. Missing shipping address Id.</value>
+  </data>
+  <data name="L_RecurringCartShippingMethodMissing" xml:space="preserve">
+    <value>An error occurred while updating your shipping method. Missing shipping method Id.</value>
+  </data>
+  <data name="L_RecurringCartShippingMethodUpdateFailed" xml:space="preserve">
+    <value>An error occurred while updating your shipping method. Try again.</value>
+  </data>
+  <data name="L_RecurringCartPaymentMissing" xml:space="preserve">
+    <value>An error occurred while updating your payment method. Missing payment Id.</value>
+  </data>
+  <data name="L_RecurringCartPaymentUpdateFailed" xml:space="preserve">
+    <value>An error occurred while updating your payment method. Try again.</value>
+  </data>
+  <data name="L_RecurringScheduleBillingAddressMissing" xml:space="preserve">
+    <value>An error occurred while updating your recurring schedule. Missing billing address Id.</value>
+  </data>
+  <data name="L_RecurringSchedulePaymentMissing" xml:space="preserve">
+    <value>An error occurred while updating your recurring schedule. Missing payment Id.</value>
+  </data>
+  <data name="L_RecurringScheduleShippingAddressMissing" xml:space="preserve">
+    <value>An error occurred while updating your recurring schedule. Missing shipping address Id.</value>
+  </data>
+  <data name="L_RecurringScheduleShippingProviderMissing" xml:space="preserve">
+    <value>An error occurred while updating your recurring schedule. Missing shipping provider Id.</value>
+  </data>
+  <data name="L_RecurringScheduleUpdateFailed" xml:space="preserve">
+    <value>An error occurred while updating your recurring schedule. Try again.</value>
+  </data>
+  <data name="L_RelatedProductLoadFailed" xml:space="preserve">
+    <value>An error occurred while loading related products. Please &lt;a href="javascript:window.location.reload();"&gt; reload the page&lt;/a&gt;.</value>
+  </data>
+  <data name="L_ResetPasswordFailed" xml:space="preserve">
+    <value>An error occured while processing the request to reset your password.</value>
+  </data>
+  <data name="L_SearchResultsLoadFailed" xml:space="preserve">
+    <value>An error occurred while loading suggested products. Please &lt;a href="javascript:window.location.reload();"&gt; reload the page&lt;/a&gt;.</value>
+  </data>
+  <data name="L_SelectedVariantChangeFailed" xml:space="preserve">
+    <value>An error occurred while loading the product. Please try again.</value>
+  </data>
+  <data name="L_SendResetPasswordInstructionsFailed" xml:space="preserve">
+    <value>An error occured while sending the instructions to reset your password.</value>
+  </data>
+  <data name="L_ShippingMethodUpdateFailed" xml:space="preserve">
+    <value>An error occurred while updating your cart. Please try again.</value>
+  </data>
+  <data name="L_UserNameAlreadyUsed" xml:space="preserve">
+    <value>This user account already exist, did you forgot your password?</value>
+  </data>
+  <data name="L_SelectAStore" xml:space="preserve">
+    <value>Please select a store.</value>
+  </data>
+</root>

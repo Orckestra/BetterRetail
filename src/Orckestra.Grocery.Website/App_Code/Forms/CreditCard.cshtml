@@ -1,0 +1,59 @@
+﻿@using Composite.AspNet.Razor
+@using System.Web.Mvc
+
+@helper Form(string formId = "creditCardForm")
+{
+    var panLabel = Html.Localize("CheckoutProcess", "L_CardNumber");
+    var expLabel = Html.Localize("CheckoutProcess", "L_ExpirationDateForm");
+    var cvdLabel = Html.Localize("CheckoutProcess", "L_VerificationNumber");
+
+    var monerisFormParam = @"&display_labels=1&css_body=background:none;overflow:hidden;
+        &css_textbox_exp=width:calc(50% - 10px);
+        &css_textbox_cvd=width:calc(50% - 10px);margin-left:calc(50% %2B 10px);
+        &css_textbox=background:%23fff none;border: 1px solid%23c4c4c4;border-radius:3px;box-sizing:border-box;color:%23232323;display:block;font: 16px%2F1.43 Arial,Helvetica,sans-serif;height:34px;margin:0.5rem 0 1rem;padding:6px 12px;width:100%;
+        &css_input_label=font:bold 0.875rem%2F1.43 Arial,Helvetica,sans-serif;
+        &css_label_cvd=display:block;margin-top:calc(-34px - 1.5rem - 20px);margin-left:calc(50% %2B 10px);" +
+        string.Format(@"&pan_label={0}&exp_label={1}&cvd_label={2}", panLabel, expLabel, cvdLabel);
+
+    <form id="@formId">
+        <div class="row mb-2">
+            <div class="col-12">
+                <h4>@Html.Localize("CheckoutProcess", "T_EnterPaymentInfomation")</h4>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <ul class="parsley-errors-list mb-2">
+                    <li id="monerisError945" class="d-none parsley-required">@Html.Localize("Moneris", "L_MonerisError_945")</li>
+                    <li id="monerisError944" class="d-none parsley-required">@Html.Localize("Moneris", "L_MonerisError_944")</li>
+                    <li id="monerisError943" class="d-none parsley-required">@Html.Localize("Moneris", "L_MonerisError_943")</li>
+                    <li id="monerisErrorGeneral" class="d-none parsley-required">@Html.Localize("Moneris", "L_MonerisError_General")</li>
+                </ul>
+                <div class="form-group">
+                    <label for="cardholder">@Html.Localize("CheckoutProcess", "L_CardHolderName")</label>
+                    <input name="cardholder"
+                           id="cardholder"
+                           data-parsley-length="[5, 73]"
+                           required="required"
+                           data-parsley-pattern="/^[a-zA-Z\u00E0-\u00FC\.\-\s\']+$/i"
+                           type="text"
+                           class="form-control"
+                           placeholder="ex: Franklin Pollux"
+                           data-qa="cardholder-name-input" />
+                </div>
+
+                <iframe class="iframe" id="monerisFrame"
+                        v-bind:src="ActivePayment.CapturePaymentUrl + '@monerisFormParam'"
+                        xmlns:v-bind="v-bind"
+                        frame=""
+                        tabindex="0"
+                        border="0"
+                        scrolling="no"
+                        style="border: none; width: 100%; height: 150px; overflow: hidden; max-width: 360px">
+                </iframe>
+            </div>
+        </div>
+    </form>
+}
+

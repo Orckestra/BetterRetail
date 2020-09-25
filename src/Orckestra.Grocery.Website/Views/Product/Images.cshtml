@@ -1,0 +1,120 @@
+﻿@using System.Web;
+@using System.Globalization;
+@using Orckestra.Composer.Product.ViewModels;
+@model Orckestra.Composer.Product.ViewModels.ProductViewModel
+
+@{
+
+    string SelectedVariantClass(params string[] ids)
+    {
+        return ids.Contains(Model.SelectedVariantId) ? "" : "d-none";
+    }
+
+}
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<head>
+    <script>
+        function imgError(el) {
+            if (!el.src.includes('@Model.FallbackImageUrl')) {
+                el.src = '@Model.FallbackImageUrl';
+            }
+        }
+        function imgLoaded(el) {
+            if (el.complete) {
+                el.parentNode.style.display = 'block';
+                el.parentNode.parentNode.style.display = 'block';
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="row">
+        <!-- Thumbnails -->
+        <div class="col-lg-2 order-2 order-md-1" >
+            @if (Model.Variants == null || Model.Variants.Count == 0)
+            {
+                <div class="row" data-oc-click="selectImage">
+                    @foreach (var image in Model.Images)
+                    {
+                        @RenderThumbnailImg(image, false)
+                    }
+                </div>
+            }
+            else
+            {
+                foreach (var variant in Model.Variants)
+                {
+                    <div data-variant="@variant.Id" class="row @SelectedVariantClass(variant.Id) js-thumbnails" data-oc-click="selectImage">
+                        @foreach (var image in variant.Images)
+                        {
+                            @RenderThumbnailImg(image, variant.Id != Model.SelectedVariantId)
+                        }
+                    </div>
+                }
+            }
+
+        </div>
+        <!-- Main image -->
+        <div class="col-lg-10 order-1 order-md-2">
+            @if (Model.SelectedImage != null)
+            {
+            <div class="product-details-media">
+
+                @if (Model.Variants == null || Model.Variants.Count == 0)
+                {
+                    <img class="product-main-img img-fluid"
+                         property="image"
+                         src="@Model.SelectedImage.ImageUrl"
+                         alt="@Model.SelectedImage.Alt"
+                         onerror="imgError(this)" />
+                }
+                else
+                {
+                    var mainImages = Model.Variants.GroupBy(v => v.SelectedImage.ImageUrl).ToList();
+                    foreach (var imageGroup in mainImages)
+                    {
+                        var ids = imageGroup.Select(v => v.Id).ToArray();
+                        var image = imageGroup.First().SelectedImage;
+                        <img class="product-main-img img-fluid @SelectedVariantClass(ids)"
+                             data-variant="@(String.Join(",", ids))"
+                             property="image"
+                             src="@image.ImageUrl"
+                             alt="@image.Alt"
+                             onerror="imgError(this)" />
+                    }
+                    <img data-variant="unavailable"
+                         class="product-main-img img-fluid d-none"
+                         property="image"
+                         src="@Model.FallbackImageUrl" />
+                }
+
+                @if (Model.IsProductZoomEnabled)
+                {
+                    <a href="" class="product-details-zoom-trigger js-zoom d-none d-md-block">
+                        <i class="fa fa-search"></i>
+                    </a>
+                }
+
+            </div>
+            }
+         </div>
+    </div>
+</body>
+</html>
+
+@helper RenderThumbnailImg(ProductDetailImageViewModel image, bool isHidden)
+{
+    <div class="col-3  col-lg-12"
+         style="display: none;">
+        <a href="#" class="thumbnail @(image.Selected ? "active": "")" style="display: none;">
+            <img @if (isHidden) { <text> data-src="@image.ThumbnailUrl" </text>  } else { <text> src="@image.ThumbnailUrl" </text> }
+                 data-main-src="@image.ImageUrl"
+                 data-zoom-src="@image.ProductZoomImageUrl"
+                 alt="@image.Alt"
+                 onload="imgLoaded(this)"
+                 class="img-fluid" />
+
+        </a>
+    </div>
+}
+

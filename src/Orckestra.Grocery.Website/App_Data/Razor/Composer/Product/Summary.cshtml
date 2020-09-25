@@ -1,0 +1,119 @@
+﻿@inherits Composer.Razor.ComposerRazorFunction
+@using Orckestra.Composer.CompositeC1.Context
+@using Orckestra.Composer.Product.ViewModels
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Product Summary"; }
+    }
+    public IProductContext ProductContext { get; set; }
+    public new ProductViewModel Model { get { return ProductContext.ViewModel; } }
+
+
+    public string SelectedVariantClass(params string[] ids)
+    {
+        return ids.Contains(Model.SelectedVariantId) ? "" : "d-none";
+    }
+
+    public bool IsWithoutVariants()
+    {
+        return Model.Variants == null || Model.Variants.Count == 0;
+    }
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<head>
+    <script type="text/javascript">
+        var productDetailContext = '@Model.JsonContext';
+    </script>
+</head>
+<body>
+    <div data-oc-controller="Product.ProductDetail" data-productid="@Model.ProductId" data-context-var="productDetailContext">
+        <div class="row">
+            <div class="col-lg-6  col-md-6">
+                @Partial("Product", "Images", Model)
+            </div>
+            <div class="col-md-6">
+
+                @DisplayName()
+
+                @BrandName()
+
+                @Sku()
+
+                @Partial("KvaItems", Model)
+
+                @Html.LazyFunction("Composer.Product.RecurringFrequency")
+
+                <div class="row  mb-4">
+                    <div class="col-6  col-md-5  col-lg-4  col-xl-3">
+                        @Partial("ProductQuantity", Model)
+                    </div>
+                </div>
+
+                <div class="mb-4" property="offers" typeof="Offer">
+                    @Partial("PriceDiscount", Model)
+                </div>
+
+                <div class="mb-4">
+                    @Partial("AddToCartProductDetail", Model)
+                    @Partial("AddToWishList", Model)
+                </div>
+            </div>
+        </div>
+        <div class="row mb-2">
+            <div class="col-12">
+                @StoreInventoryLink()
+            </div>
+        </div>
+    </div>
+
+    @if (Model.IsProductZoomEnabled)
+    {
+        @Partial("Product", "Zoom", Model)
+    }
+
+</body>
+</html>
+
+@helper DisplayName()
+{
+    if (IsWithoutVariants())
+    {
+        <h1>@Model.DisplayName</h1>
+    }
+    else
+    {
+        var displayNames = Model.Variants.GroupBy(v => v.DisplayName).ToList();
+
+        foreach (var group in displayNames)
+        {
+            var ids = group.Select(v => v.Id).ToArray();
+            <h1 data-variant="@(String.Join(",", ids))" class="@SelectedVariantClass(ids)">@group.Key</h1>
+        }
+        <h1 data-variant="unavailable" class="d-none">@Model.DisplayName</h1>
+    }
+}
+
+@helper Sku()
+{
+    <span class="d-none" property="sku">@Model.Sku</span>
+}
+
+@helper BrandName()
+{
+    <h2 class="h5  mb-4" property="brand" data-qa="product-brand">@Model.Brand</h2>
+}
+
+@helper StoreInventoryLink()
+{
+    <div class="card">
+        <div class="card-body text-center">
+            <a href="#storeinventory">
+                <i class="fa  fa-file-text-o"></i>&#160;
+                @Html.Localize("Store", "H_StoreAvailability")
+            </a>
+        </div>
+    </div>
+}

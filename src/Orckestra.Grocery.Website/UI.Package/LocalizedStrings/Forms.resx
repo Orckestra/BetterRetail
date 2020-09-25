@@ -1,0 +1,549 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="F_Address" xml:space="preserve">
+    <value>Address</value>
+  </data>
+  <data name="F_AddressError" xml:space="preserve">
+    <value />
+  </data>
+  <data name="F_AddressIndication" xml:space="preserve">
+    <value />
+  </data>
+  <data name="F_AddressName" xml:space="preserve">
+    <value>Name your address</value>
+  </data>
+  <data name="F_AddressNameError" xml:space="preserve">
+    <value />
+  </data>
+  <data name="F_AddressNameIndication" xml:space="preserve">
+    <value>Naming this address will help you find it afterward</value>
+  </data>
+  <data name="F_AddressNameLengthError" xml:space="preserve">
+    <value />
+  </data>
+  <data name="F_AddressNamePatternError" xml:space="preserve">
+    <value />
+  </data>
+  <data name="F_AddressNameRequiredError" xml:space="preserve">
+    <value />
+  </data>
+  <data name="F_AddressNameValidation" xml:space="preserve">
+    <value />
+  </data>
+  <data name="F_AddressNameWaterMark" xml:space="preserve">
+    <value>ex: Home</value>
+  </data>
+  <data name="F_AddressValidation" xml:space="preserve">
+    <value />
+  </data>
+  <data name="F_AddressWaterMark" xml:space="preserve">
+    <value>ex: Home</value>
+  </data>
+  <data name="F_AtLeast" xml:space="preserve">
+    <value>You must select at least %s choices.</value>
+  </data>
+  <data name="F_AtMost" xml:space="preserve">
+    <value>You must select %s choices or fewer.</value>
+  </data>
+  <data name="F_BetweenRange" xml:space="preserve">
+    <value>This value should be between %s and %s.</value>
+  </data>
+  <data name="F_CheckRange" xml:space="preserve">
+    <value>You must select between %s and %s choices.</value>
+  </data>
+  <data name="F_City" xml:space="preserve">
+    <value>City</value>
+  </data>
+  <data name="F_CityError" xml:space="preserve">
+    <value />
+  </data>
+  <data name="F_CityIndication" xml:space="preserve">
+    <value />
+  </data>
+  <data name="F_CityValidation" xml:space="preserve">
+    <value />
+  </data>
+  <data name="F_CityWaterMark" xml:space="preserve">
+    <value>ex: Montreal</value>
+  </data>
+  <data name="F_ComplementaryAddress" xml:space="preserve">
+    <value>Appartment / Suite / Building</value>
+  </data>
+  <data name="F_ComplementaryAddressAdd" xml:space="preserve">
+    <value>Add Appartment / Suite / Building</value>
+  </data>
+  <data name="F_ComplementaryAddressError" xml:space="preserve">
+    <value />
+  </data>
+  <data name="F_ComplementaryAddressIndication" xml:space="preserve">
+    <value />
+  </data>
+  <data name="F_ComplementaryAddressValidation" xml:space="preserve">
+    <value />
+  </data>
+  <data name="F_ComplementaryAddressWaterMark" xml:space="preserve">
+    <value>ex: Building 42</value>
+  </data>
+  <data name="F_ConfirmationEmail" xml:space="preserve">
+    <value>Confirm your email address</value>
+  </data>
+  <data name="F_ConfirmationEmailEqualToError" xml:space="preserve">
+    <value>The emails should be the same.</value>
+  </data>
+  <data name="F_ConfirmationEmailIndication" xml:space="preserve">
+    <value />
+  </data>
+  <data name="F_ConfirmationEmailRequiredError" xml:space="preserve">
+    <value />
+  </data>
+  <data name="F_ConfirmationEmailWaterMark" xml:space="preserve">
+    <value>ex: franklin.pollux@orckestra.com</value>
+  </data>
+  <data name="F_ConfirmationNewPassword" xml:space="preserve">
+    <value>New password confirmation</value>
+  </data>
+  <data name="F_ConfirmationNewPasswordEqualToError" xml:space="preserve">
+    <value>The passwords should be the same.</value>
+  </data>
+  <data name="F_ConfirmationNewPasswordIndication" xml:space="preserve">
+    <value />
+  </data>
+  <data name="F_ConfirmationNewPasswordRequiredError" xml:space="preserve">
+    <value />
+  </data>
+  <data name="F_ConfirmationPassword" xml:space="preserve">
+    <value>Confirm your password</value>
+  </data>
+  <data name="F_ConfirmationPasswordEqualToError" xml:space="preserve">
+    <value>The passwords should be the same.</value>
+  </data>
+  <data name="F_ConfirmationPasswordIndication" xml:space="preserve">
+    <value />
+  </data>
+  <data name="F_ConfirmationPasswordRequiredError" xml:space="preserve">
+    <value />
+  </data>
+  <data name="F_DefaultInvalidMessage" xml:space="preserve">
+    <value>This value seems to be invalid.</value>
+  </data>
+  <data name="F_Email" xml:space="preserve">
+    <value>My Email Address</value>
+  </data>
+  <data name="F_EmailAddressGuestError" xml:space="preserve">
+    <value />
+  </data>
+  <data name="F_EmailAddressGuestIndication" xml:space="preserve">
+    <value>You will get your tracking number as well as order receipt to this email address.</value>
+  </data>
+  <data name="F_EmailAddressGuestValidation" xml:space="preserve">
+    <value />
+  </data>
+  <data name="F_EmailError" xml:space="preserve">
+    <value />
+  </data>
+  <data name="F_EmailForgottenIndication" xml:space="preserve">
+    <value>Forgot email address? If you have forgotten your Email address please create a new account</value>
+  </data>
+  <data name="F_EmailIndication" xml:space="preserve">
+    <value>Your email address will be used to login to the site</value>
+  </data>
+  <data name="F_EmailLengthError" xml:space="preserve">
+    <value />
+  </data>
+  <data name="F_EmailPatternError" xml:space="preserve">
+    <value />
+  </data>
+  <data name="F_EmailRequiredError" xml:space="preserve">
+    <value />
+  </data>
+  <data name="F_EmailSignInIndication" xml:space="preserve">
+    <value />
+  </data>
+  <data name="F_EmailValidation" xml:space="preserve">
+    <value />
+  </data>
+  <data name="F_EmailWaterMark" xml:space="preserve">
+    <value>ex: franklin.pollux@orckestra.com</value>
+  </data>
+  <data name="F_Enterprise" xml:space="preserve">
+    <value>Enterprise (optional)</value>
+  </data>
+  <data name="F_EnterpriseWaterMark" xml:space="preserve">
+    <value>ex: Orckestra Conseil</value>
+  </data>
+  <data name="F_FirstName" xml:space="preserve">
+    <value>First Name</value>
+  </data>
+  <data name="F_FirstNameError" xml:space="preserve">
+    <value>This field contains errors</value>
+  </data>
+  <data name="F_FirstNameIndication" xml:space="preserve">
+    <value>This field can only accept letters</value>
+  </data>
+  <data name="F_FirstNameLengthError" xml:space="preserve">
+    <value />
+  </data>
+  <data name="F_FirstNamePatternError" xml:space="preserve">
+    <value>This field can only accept letters</value>
+  </data>
+  <data name="F_FirstNameRequiredError" xml:space="preserve">
+    <value />
+  </data>
+  <data name="F_FirstNameValidation" xml:space="preserve">
+    <value>Hi Franklin</value>
+  </data>
+  <data name="F_FirstNameWaterMark" xml:space="preserve">
+    <value>ex: Franklin</value>
+  </data>
+  <data name="F_GreaterThanOrEqual" xml:space="preserve">
+    <value>This value should be greater than or equal to %s.</value>
+  </data>
+  <data name="F_InvalidAlphanumeric" xml:space="preserve">
+    <value>This value should be alphanumeric.</value>
+  </data>
+  <data name="F_InvalidDigits" xml:space="preserve">
+    <value>This value should be digits.</value>
+  </data>
+  <data name="F_InvalidEmail" xml:space="preserve">
+    <value>This value should be a valid email.</value>
+  </data>
+  <data name="F_InvalidInteger" xml:space="preserve">
+    <value>This value should be a valid integer.</value>
+  </data>
+  <data name="F_InvalidLength" xml:space="preserve">
+    <value>This value length is invalid. It should be between %s and %s characters long.</value>
+  </data>
+  <data name="F_InvalidNumber" xml:space="preserve">
+    <value>This value should be a valid number.</value>
+  </data>
+  <data name="F_InvalidPattern" xml:space="preserve">
+    <value>This value seems to be invalid.</value>
+  </data>
+  <data name="F_InvalidUrl" xml:space="preserve">
+    <value>This value should be a valid url.</value>
+  </data>
+  <data name="F_IsPreferredShipping" xml:space="preserve">
+    <value>Set as default address</value>
+  </data>
+  <data name="F_IsPreferredShippingIndication" xml:space="preserve">
+    <value>Simplify your purchases by setting up a preferred delivery address.  Your address is then pre-selected by default when placing an order.  </value>
+  </data>
+  <data name="F_LastName" xml:space="preserve">
+    <value>Last Name</value>
+  </data>
+  <data name="F_LastNameError" xml:space="preserve">
+    <value />
+  </data>
+  <data name="F_LastNameIndication" xml:space="preserve">
+    <value />
+  </data>
+  <data name="F_LastNameLengthError" xml:space="preserve">
+    <value />
+  </data>
+  <data name="F_LastNamePatternError" xml:space="preserve">
+    <value>This field can only accept letters</value>
+  </data>
+  <data name="F_LastNameRequiredError" xml:space="preserve">
+    <value />
+  </data>
+  <data name="F_LastNameValidation" xml:space="preserve">
+    <value />
+  </data>
+  <data name="F_LastNameWaterMark" xml:space="preserve">
+    <value>ex: Pollux</value>
+  </data>
+  <data name="F_LessThanOrEqual" xml:space="preserve">
+    <value>This value should be lower than or equal to %s.</value>
+  </data>
+  <data name="F_MaximumLength" xml:space="preserve">
+    <value>This value is too long. It should have %s characters or fewer.</value>
+  </data>
+  <data name="F_MinimumLength" xml:space="preserve">
+    <value>This value is too short. It should have %s characters or more.</value>
+  </data>
+  <data name="F_NewPassword" xml:space="preserve">
+    <value>New password</value>
+  </data>
+  <data name="F_NewPasswordError" xml:space="preserve">
+    <value />
+  </data>
+  <data name="F_NewPasswordIndication" xml:space="preserve">
+    <value>Your password must have a minimum of {0} characters including at least 1 special character.</value>
+  </data>
+  <data name="F_NewPasswordLengthError" xml:space="preserve">
+    <value />
+  </data>
+  <data name="F_NewPasswordPatternError" xml:space="preserve">
+    <value>The new password must contain at least {0} non alphanumeric characters</value>
+  </data>
+  <data name="F_NewPasswordRequiredError" xml:space="preserve">
+    <value />
+  </data>
+  <data name="F_OldPassword" xml:space="preserve">
+    <value>Current password</value>
+  </data>
+  <data name="F_OldPasswordIndication" xml:space="preserve">
+    <value />
+  </data>
+  <data name="F_OldPasswordRequiredError" xml:space="preserve">
+    <value />
+  </data>
+  <data name="F_OrderEmailIndication" xml:space="preserve">
+    <value>Make sure to use the same email address where you received your order confirmation</value>
+  </data>
+  <data name="F_OrderNumber" xml:space="preserve">
+    <value>Order Number</value>
+  </data>
+  <data name="F_OrderNumberIndication" xml:space="preserve">
+    <value>You can find your order number in the order confirmation email</value>
+  </data>
+  <data name="F_OrderNumberWaterMark" xml:space="preserve">
+    <value>1045</value>
+  </data>
+  <data name="F_Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="F_PasswordError" xml:space="preserve">
+    <value />
+  </data>
+  <data name="F_PasswordIndication" xml:space="preserve">
+    <value>Your password must have a minimum of {0} characters including at least 1 special character.</value>
+  </data>
+  <data name="F_PasswordLengthError" xml:space="preserve">
+    <value />
+  </data>
+  <data name="F_PasswordPatternError" xml:space="preserve">
+    <value>The password must contain at least {0} non alphanumeric characters</value>
+  </data>
+  <data name="F_PasswordRequiredError" xml:space="preserve">
+    <value />
+  </data>
+  <data name="F_PasswordValidation" xml:space="preserve">
+    <value />
+  </data>
+  <data name="F_PaymentOption" xml:space="preserve">
+    <value>Pay With</value>
+  </data>
+  <data name="F_PaymentOptionIndication" xml:space="preserve">
+    <value />
+  </data>
+  <data name="F_PhoneNumber" xml:space="preserve">
+    <value>Phone Number</value>
+  </data>
+  <data name="F_PhoneNumberGuestError" xml:space="preserve">
+    <value />
+  </data>
+  <data name="F_PhoneNumberGuestIndication" xml:space="preserve">
+    <value />
+  </data>
+  <data name="F_PhoneNumberGuestValidation" xml:space="preserve">
+    <value />
+  </data>
+  <data name="F_PhoneNumberGuestWaterMark" xml:space="preserve">
+    <value />
+  </data>
+  <data name="F_PhoneNumberWaterMark" xml:space="preserve">
+    <value>ex: (514)962-1660</value>
+  </data>
+  <data name="F_PostalCode" xml:space="preserve">
+    <value>Postal Code</value>
+  </data>
+  <data name="F_PostalCodeError" xml:space="preserve">
+    <value />
+  </data>
+  <data name="F_PostalCodeIndication" xml:space="preserve">
+    <value />
+  </data>
+  <data name="F_PostalCodeValidation" xml:space="preserve">
+    <value />
+  </data>
+  <data name="F_PostalCodeWaterMark" xml:space="preserve">
+    <value>ex : H3Z 2Y7</value>
+  </data>
+  <data name="F_PreferredLanguage" xml:space="preserve">
+    <value>Preferred Language</value>
+  </data>
+  <data name="F_PreferredLanguageIndication" xml:space="preserve">
+    <value />
+  </data>
+  <data name="F_Province" xml:space="preserve">
+    <value>Province</value>
+  </data>
+  <data name="F_ProvinceIndication" xml:space="preserve">
+    <value />
+  </data>
+  <data name="F_RememberMe" xml:space="preserve">
+    <value>Stay signed in</value>
+  </data>
+  <data name="F_RememberMeDescription" xml:space="preserve">
+    <value>If this is a public or shared device, uncheck and sign out when you're done to protect your account.</value>
+  </data>
+  <data name="F_RememberMeLearnMore" xml:space="preserve">
+    <value>Learn more</value>
+  </data>
+  <data name="F_Required" xml:space="preserve">
+    <value>This value is required.</value>
+  </data>
+  <data name="F_Sex" xml:space="preserve">
+    <value>Sex</value>
+  </data>
+  <data name="F_SexMan" xml:space="preserve">
+    <value>Man</value>
+  </data>
+  <data name="F_SexWoman" xml:space="preserve">
+    <value>Woman</value>
+  </data>
+  <data name="F_ShouldEqual" xml:space="preserve">
+    <value>This value should be the same.</value>
+  </data>
+  <data name="F_ShouldNotBeBlank" xml:space="preserve">
+    <value>This value should not be blank.</value>
+  </data>
+  <data name="F_TermsAndConditions" xml:space="preserve">
+    <value>I have read and I accept the &lt;a href="{0}"&gt;terms and conditions&lt;/a&gt;.</value>
+  </data>
+  <data name="F_TermsAndConditionsRequiredError" xml:space="preserve">
+    <value />
+  </data>
+  <data name="L_PasswordStrength" xml:space="preserve">
+    <value>Strength:</value>
+  </data>
+  <data name="L_PasswordStrengthShort" xml:space="preserve">
+    <value>short</value>
+  </data>
+  <data name="L_PasswordStrengthCommon" xml:space="preserve">
+    <value>common</value>
+  </data>
+  <data name="L_PasswordStrengthWeak" xml:space="preserve">
+    <value>weak</value>
+  </data>
+  <data name="L_PasswordStrengthOk" xml:space="preserve">
+    <value>ok</value>
+  </data>
+  <data name="L_PasswordStrengthStrong" xml:space="preserve">
+    <value>strong</value>
+  </data>
+  <data name="L_ShowPassword" xml:space="preserve">
+    <value>Show</value>
+  </data>
+  <data name="L_HidePassword" xml:space="preserve">
+    <value>Hide</value>
+  </data>
+</root>

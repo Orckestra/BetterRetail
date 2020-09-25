@@ -1,0 +1,9 @@
+<div data-templateid="CreateAccount">
+    {{#if_eq Status 'Success'}}
+        {{>CreateAccountSuccess }}
+    {{else}}{{#if_eq Status 'RequiresApproval'}}
+        {{>CreateAccountRequiresApproval }}
+    {{else}}
+        {{>CreateAccountForms }}
+    {{/if_eq}}{{/if_eq}}
+</div>

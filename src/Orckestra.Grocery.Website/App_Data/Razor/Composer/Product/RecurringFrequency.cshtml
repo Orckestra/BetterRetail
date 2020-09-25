@@ -1,0 +1,149 @@
+@using Orckestra.Composer.CompositeC1.Context
+@using Orckestra.Composer.Product.ViewModels
+@inherits Composer.Razor.ComposerRazorFunction
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Product Recurring Frequency"; }
+    }
+    public IProductContext ProductContext { get; set; }
+    public new ProductViewModel Model { get { return ProductContext.ViewModel; } }
+    public IComposerContext ComposerContext { get; set; }
+    public override bool PreventFunctionOutputCaching { get { return true; } }
+
+    public enum RecurringMode
+    {
+        Single,
+        Recurring
+    }
+}
+
+@{
+    if (!Model.IsRecurringOrderEligible)
+    {
+        return;
+    }
+
+    RecurringMode SelectedRecurringMode;
+    try
+    {
+        SelectedRecurringMode = (RecurringMode)Enum.Parse(typeof(RecurringMode), Request.QueryString["recurringmode"]);
+    }
+    catch (Exception)
+    {
+        SelectedRecurringMode = RecurringMode.Single;
+    }
+
+    var SelectedRecurringOrderFrequencyName = Model.RecurringOrderFrequencies?.FirstOrDefault()?.RecurringOrderFrequencyName;
+}
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<head>
+</head>
+<body>
+    <div data-recurring-mode="@(SelectedRecurringMode.ToString())"
+         data-recurring-order-frequency="@(SelectedRecurringOrderFrequencyName)">
+        <div class="recurring-modes form-group js-recurringModes">
+            <div class="alert border mb-2 @(SelectedRecurringMode == RecurringMode.Single ? "selected" : "") js-recurringModeRow">
+                <div class="form-check">
+                    <input id="UseSingle"
+                           @(SelectedRecurringMode == RecurringMode.Single ? Html.Raw(@"checked=""checked""") : null)
+                           type="radio"
+                           data-target=".modeSelection"
+                           name="recurringMode"
+                           value="@(RecurringMode.Single.ToString())"
+                           data-oc-change="changeRecurringMode"
+                           class="form-check-input" />
+                    <label class="form-check-label" for="UseSingle">@Html.Localize("ProductPage", "L_RecurringFrequencyOnce")</label>
+                </div>
+            </div>
+            <div class="alert border mb-2 @(SelectedRecurringMode == RecurringMode.Recurring ? "selected" : "") js-recurringModeRow">
+                <div class="form-check">
+                    <input id="UseRecurring"
+                           @(SelectedRecurringMode == RecurringMode.Recurring ? Html.Raw(@"checked=""checked""") : null)
+                           type="radio"
+                           data-target=".modeSelection"
+                           name="recurringMode"
+                           value="@(RecurringMode.Recurring.ToString())"
+                           data-oc-change="changeRecurringMode"
+                           class="form-check-input" />
+                    <label class="form-check-label" for="UseRecurring">
+                        <img src="/UI.Package/Images/recurring.svg" class="recurring-icon"
+                             alt="@Html.Localize("General", "L_RecurringProduct")"
+                             title="@Html.Localize("General", "L_RecurringProduct")" />
+                        @Html.Raw(Html.Localized("ProductPage", ComposerContext.IsAuthenticated ? "L_RecurringPitch" : "L_RecurringSignInPitch", Html.Localize("ProductPage", "L_RecurringSaveRate")))
+                    </label>
+                </div>
+                <div class="recurring-frequencies collapse @(SelectedRecurringMode == RecurringMode.Recurring ? "show" : "") modeSelection mt-4">
+                    @if (ComposerContext.IsAuthenticated)
+                    {
+                        <div class="row">
+                            <div class="col-10 col-md-9 col-lg-7 form-group">
+                                <label for="recurringOrderFrequencyNameSelect">@Html.Localize("ProductPage", "L_RecurringDeliveryFrequency")</label>
+                                <button class="btn" role="button" data-trigger="click" data-toggle="popover" data-placement="top" title=""
+                                        data-content="@Html.Localize("ProductPage", "L_RecurringBubblePitch")"
+                                        data-html="true"
+                                        data-original-title="@Html.Localize("ProductPage", "L_RecurringBubblePitchTitle")">
+                                    <span class="fa fa-question-circle"></span>
+                                </button>
+                                <select id="recurringOrderFrequencyNameSelect"
+                                        class="recurring-orders-frequency-selection form-control"
+                                        data-oc-change="onRecurringOrderFrequencySelectChanged">
+                                    @foreach (var recurringOrder in Model.RecurringOrderFrequencies)
+                                    {
+                                        <option value="@recurringOrder.RecurringOrderFrequencyName"
+                                                @(recurringOrder.RecurringOrderFrequencyName == SelectedRecurringOrderFrequencyName ? Html.Raw(@"selected=""selected""") : null)>
+                                            @recurringOrder.DisplayName
+                                        </option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div data-oc-controller="Product.RecurringOrderSignInForm"
+                             data-product-url="@($"{Model.ProductDetailUrl}?recurringmode={RecurringMode.Recurring.ToString()}")">
+                            <form name="login" data-oc-submit="login" method="post" autocomplete="on" action="#">
+                                @Partial("ReturningCustomerFormsServerValidations", null)
+                                <div class="row">
+                                    <div class="col-10 col-lg-9 form-group">
+                                        <label for="username">@Html.Localize("Forms", "F_Email") *</label>
+                                        <input data-qa="login-email" class="form-control" id="username" name="Username"
+                                               type="email"
+                                               placeholder="@Html.Localize("Forms", "F_EmailWaterMark")"
+                                               @Html.HelpBubble("Forms", "F_EmailSignInIndication")
+                                               required="required"
+                                               @Html.ParsleyMessage("Forms", "F_EmailRequiredError", "required-message") />
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-10 col-lg-9 form-group">
+                                        <label for="password">@Html.Localize("Forms", "F_Password") *</label>
+                                        <input data-qa="login-password" class="form-control" id="password" name="Password" autocomplete="off"
+                                               type="password" required="required"
+                                               @Html.ParsleyMessage("Forms", "F_PasswordRequiredError", "required-message") />
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-10 col-lg-9 form-group">
+                                        <button data-qa="login-submit" type="submit" class="btn btn-primary">
+                                            @Html.Localize("MyAccount", "L_SignIn")
+                                            <span class="loading-indicator fa fa-spin fa-fw fa-circle-o-notch d-none"></span>
+                                        </button>
+                                        <a href="@($"{Model.CreateAccountUrl}?recurringmode={RecurringMode.Recurring.ToString()}")" role="button" class="btn btn-secondary">@Html.Localize("MyAccount", "B_CreateAccount")</a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<div data-templateid="RecurringCartDetailsPayment">
+    <div class="card  bg-light mt-3">
+        {{#if IsLoading}}
+            <h3 class="card-header">
+                {{localize 'MyAccount' 'T_PaymentMethod' }}
+            </h3>
+            <div class="card-body">
+                {{>Loading}}
+            </div>
+        {{else}}
+            {{#unless EditMode}}
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-10">
+                        <h3 class="m-0">{{localize 'MyAccount' 'T_PaymentMethod' }}</h3>
+                    </div>
+                    <div class="col-2">
+                        <button class="btn btn-link float-right" type="button" 
+                        data-selected-payment-id="{{Payment.PaymentMethod.Id}}"
+                        data-oc-click="toggleEditPayment" 
+                        title="{{localize 'CheckoutProcess' 'B_Edit'}}">
+                            <span class="fa  fa-pencil  fa-lg"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                {{#if Payment}}
+                <div class="row payment">
+                    <div class="col-12">
+                        {{#with Payment.PaymentMethod}}
+                        <div class="col-3  col-md-3  col-lg-3">
+                            {{#if CardMask}}
+                                <img src="/UI.Package/Images/creditcards/{{CardType}}.png" alt="{{CardType}}" class="img-fluid" />
+                            {{else}}
+                                <img src="/UI.Package/Images/payments/cash.png" alt="Cash" class="img-fluid" />
+                                <!-- <img src="img/giftcard.png" alt="Gift Card" class="img-fluid"> -->
+                            {{/if}}
+                        </div>
+                        <div class="col-9  col-md-9  col-lg-9">
+                            <p>
+                                <h2 class="h4">{{localize 'MyAccount' 'L_PaymentMethod'}}</h2>
+                                {{#if CardMask}}
+                                    {{localize 'MyAccount' 'L_CreditCardNumber' }} {{CardMask}}
+                                    <br />{{localize 'MyAccount' 'L_CreditCardExpires' }} {{ExpiryDate}}
+                                {{else}}
+                                    {{PaymentType}}
+                                {{/if}}
+                            </p>
+                        </div>
+                        {{#if IsExpired}}
+                            <div class="row">
+                                <div class="col-md-12 error-item strong">
+                                    {{localize 'CheckoutProcess' 'F_SaveCreditCardForced_Expired' }}
+                                </div>
+                            </div>
+                        {{/if}}
+                        {{/with}}
+                    </div>
+                </div>
+                {{else}}
+                <div class="row payment">
+                    <div class="col-lg-12 text-center">
+                        <p>{{localize 'General' 'P_PaymentLoadErrorMessage' }}</p>
+                    </div>
+                </div>
+                {{/if}}
+            </div>
+            {{else}}        
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-10">
+                        <h2 class="h3">{{localize 'MyAccount' 'T_PaymentMethod' }}</h2>
+                    </div>
+                    <div class="col-2">
+                        <button class="btn btn-link float-right invisible" type="button" 
+                        data-selected-payment-id="{{Payment.PaymentMethod.Id}}"
+                        title="{{localize 'CheckoutProcess' 'B_Edit'}}">
+                            <span class="fa  fa-pencil  fa-lg"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">    
+                {{>FormErrorMessages}}           
+                {{#if_gt SavedCreditCards.length 0}}
+                    <div id="moneris-saved-credit-cards" class="moneris-panel">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h4>{{localize 'CheckoutProcess' 'T_SelectCreditCart'}}</h4>        
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-md-12">
+                                {{>RecurringCartSavedCreditCartPaymentMethod}}
+                            </div>
+                        </div>
+                    </div>
+                {{/if_gt}}
+                        
+                <div class="col-12 text-center">
+                    <button class="btn  btn-outline-secondary" type="button" 
+                        data-oc-click="toggleEditPayment">{{localize 'General' 'B_Cancel'}}</button>
+                    <button class="btn btn-primary"
+                        data-oc-click="saveEditPayment">{{localize 'MyAccount' 'B_SaveChanges'}}
+                        <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  d-none"></span>
+                    </button>
+                </div>
+            </div>            
+            {{> RecurringCartPaymentConfirmationModal}}
+            {{/unless}}
+        {{/if}}
+    </div>
+</div>

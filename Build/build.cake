@@ -54,8 +54,8 @@ var srcDir = $"{rootDir}/src";
 var testsDir = $"{rootDir}/tests";
 var outputDir = $"{rootDir}/output";
 var buildDir = $"{rootDir}/build";
-var solutionFile = GetFiles($"{rootDir}/*.sln").Single();
-var tslintFiles = $"{srcDir}/Orckestra.Composer.Website/UI.Package/Typescript/**/*.ts";
+var solutionFile = GetFiles($"{rootDir}/*Grocery.sln").Single();
+var tslintFiles = $"{srcDir}/Orckestra.Grocery.Website/UI.Package/Typescript/**/*.ts";
 var tslintConfig = $"{buildDir}/tslint.json";
 
 //////////////////////////////////////////////////////////////////////
@@ -287,8 +287,7 @@ Task("All")
     .Description("Executed on build server, default task")
     .IsDependentOn("Build")
     .IsDependentOn("Tests")
-    .IsDependentOn("Artifacts")
-    .IsDependentOn("Package");
+    .IsDependentOn("Artifacts");
 
 Task("Dev")
     .Description("Should be used on dev machine only. Triggered before local install")

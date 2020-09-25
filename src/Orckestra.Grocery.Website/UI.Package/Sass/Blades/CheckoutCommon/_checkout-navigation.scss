@@ -1,0 +1,96 @@
+.checkout-navigation {
+    //@extend %island-xl;
+
+    ul {
+        display: table;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        font-weight: bold;
+    }
+    li {
+        display: table-cell;
+        text-align: center;
+        font-size: 16px;
+        min-width: 36px;
+
+        .name {
+            display: none;
+        }
+
+        .checkout-navigation-step {
+            color: gray("400");
+            border-color: gray("400");
+            border: solid 1px;
+            border-left: 0;
+            display: block;
+            padding-bottom:  map_get($spacers, 3);
+            padding-top:  map_get($spacers, 3);
+        }
+
+        a.checkout-navigation-step:hover,
+        a.checkout-navigation-step:focus {
+            border-color: darken(theme-color("info"), 10);
+            color: darken(theme-color("info"), 10);
+            outline: 0;
+            text-decoration: none;
+        }
+    }
+
+    .active {
+        .name {
+            display: inline;
+        }
+        .checkout-navigation-step {
+            background: theme-color("info");
+            border-color: theme-color("info");
+            color: #fff;
+        }
+        a:hover,
+        a:focus {
+            color: #fff;
+        }
+    }
+
+    .past .checkout-navigation-step {
+        background: #fff;
+        border-color: theme-color("info");
+        color: theme-color("info");
+    }
+
+    li:first-child .checkout-navigation-step {
+        border-left: solid 1px;
+    }
+
+
+    @include media-breakpoint-up(lg) {
+        ul {
+            table-layout: fixed;
+        }
+        li {
+            font-size: 24px;
+        }
+
+        .checkout-navigation-step {
+            border-radius: 2px;
+        }
+    }
+
+    @include media-breakpoint-up(md) {
+        margin-left: -$grid-gutter-width / 2;
+        margin-right: -$grid-gutter-width / 2;
+
+        li {
+            font-size: 18px;
+
+            .checkout-navigation-step {
+                border: solid 1px;
+                margin-left: $grid-gutter-width / 2;
+                margin-right: $grid-gutter-width / 2;
+            }
+        }
+        li .name {
+            display: inline;
+        }
+    }
+}

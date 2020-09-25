@@ -1,0 +1,33 @@
+@inherits Composer.Razor.ComposerRazorFunction
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Current Orders"; }
+    }
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
+<head>
+</head>
+<body>
+    <div data-oc-controller="Orders.CurrentOrders">
+        <div id="vueCurrentOrders">
+            <div class="card bg-light">
+                <h3 class="card-header">
+                    @Html.Localize("MyAccount", "T_CurrentOrders")
+                </h3>
+                <div class="card-body busy-container" v-cloak="true" v-bind:class="{ 'busy': Loading }">
+                    @GeneralHelpers.LoadingSpinner()
+                    <div v-if="Orders">
+                         @OrdersHelper.CompactOrderDetails()
+                    </div>
+                    <div v-else="else">
+                        <span class="text-muted px-4">@Html.Localize("MyAccount", "L_CurrentOrdersEmpty")</span>
+                    </div>
+                </div>
+            </div>
+            @OrdersHelper.OrderHistoryPagination()
+        </div>
+    </div>
+</body>
+</html>

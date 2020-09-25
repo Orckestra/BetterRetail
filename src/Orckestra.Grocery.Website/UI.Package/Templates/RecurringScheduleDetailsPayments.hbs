@@ -1,0 +1,27 @@
+<div data-templateid="RecurringScheduleDetailsPayments" class="card bg-light  mt-3">
+    {{#if IsLoading}}
+        {{>Loading}}
+    {{else}}
+        <h3 class="card-header">
+            {{localize 'MyAccount' 'T_PaymentMethod' }}
+        </h3>
+        <div class="card-body">            
+            {{#if_gt SavedCreditCards.length 0}}
+                <div id="moneris-saved-credit-cards" class="moneris-panel">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4>{{localize 'CheckoutProcess' 'T_SelectCreditCart'}}</h4>        
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-md-12">
+                            {{>RecurringScheduleSavedCreditCartPaymentMethod}}
+                        </div>
+                    </div>
+                </div>
+            {{/if_gt}}
+        </div>            
+        {{> RecurringCartPaymentConfirmationModal}}
+    {{/if}}   
+</div>

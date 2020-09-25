@@ -1,0 +1,29 @@
+<div data-templateid="CompatOrderDetail" class="card mb-4">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-sm-8">
+                <h5 class="m-0">{{localizeFormat 'MyAccount' 'L_OrderedOn' OrderInfos.OrderDate}}</h5>
+            </div>
+            <div class="col-sm-4 text-sm-right">
+                <a href="{{Url}}" class="cta">{{ localize 'MyAccount' 'H_OrderDetail' }}</a>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-sm-8">
+                {{localizeFormat 'MyAccount' 'L_OrderNumber' OrderInfos.OrderNumber}}
+                {{#unless PastOrder}}
+                    {{#if ShipmentSummaries.[0].ScheduledShipDate}}
+                        <br />{{localizeFormat 'MyAccount' 'L_ScheduledShipping' ShipmentSummaries.[0].ScheduledShipDate}}
+                    {{/if}}
+                    {{#if ShipmentSummaries.[0].TrackingInfo.Url }}
+                        <br /><a href="{{ShipmentSummaries.[0].TrackingInfo.Url}}">{{ localize 'MyAccount' 'H_OrderTracking' }}</a>
+                    {{/if}}
+                {{/unless}}
+                <br/><span class="compact-order-status {{#if_eq OrderInfos.OrderStatusRaw 'InProgress'}}text-warning{{else}}{{#if_eq OrderInfos.OrderStatusRaw 'Canceled'}}text-danger{{else}}text-success{{/if_eq}}{{/if_eq}}">{{ OrderInfos.OrderStatus }}</span>
+            </div>
+            <div class="col-sm-4 text-sm-right">Total: <h5>{{OrderInfos.PricePaid}}</h5></div>
+        </div>
+    </div>
+</div>

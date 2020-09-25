@@ -1,0 +1,59 @@
+﻿@using System.Globalization
+@using Orckestra.Composer.CompositeC1.Context
+@using Orckestra.Composer.Product.ViewModels
+
+@inherits RazorFunction
+
+
+@functions {
+	public IProductContext ProductContext { get; set; }
+	public new ProductViewModel Model { get { return ProductContext.ViewModel; } }
+}
+
+@{
+	var productUrl = string.Format("{0}{1}", Request.Url.GetLeftPart(UriPartial.Authority), Model.ProductDetailUrl);
+	var productPrice = Model.Price.HasValue ? Model.Price.Value.ToString("n2", CultureInfo.InvariantCulture) : null;
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<head prefix="og: http://ogp.me/ns#
+      product: http://ogp.me/ns/product#">
+	<meta name="description" content="@Model.Description" />
+	@* Open Graph Tags *@
+	<meta property="og:type" content="product" />
+	<meta property="og:description" content="@Model.Description" />
+	<meta property="og:title" content="@Model.DisplayName" />
+	<meta property="og:url" content="@productUrl" />
+	@if (Model.SelectedImage != null)
+	{
+		<meta property="og:image" content="@Model.SelectedImage.ImageUrl" />
+	}
+	<meta property="product:price:amount" content="@productPrice" />
+	<meta property="product:price:currency" content="@Model.Currency.IsoCode" />
+
+	@* JSON-LD Schema structured data *@
+	<script type="application/ld+json">
+		{
+		"@@context": "http://schema.org",
+		"@@type": "Product",
+		"description": "@Model.Description",
+		"name": "@Model.DisplayName",
+		"sku": "@Model.Sku",
+		"brand": "@Model.Brand",
+		@if (Model.SelectedImage != null)
+		{
+			@: "image": "@Model.SelectedImage.ImageUrl",
+		}
+		"url": "@productUrl",
+		"identifier" : "@Model.ProductId",
+		"offers": {
+		"@@type": "Offer",
+		"price": "@productPrice",
+		"priceCurrency": "@Model.Currency.IsoCode"
+		}
+		}
+	</script>
+</head>
+<body>
+</body>
+</html>

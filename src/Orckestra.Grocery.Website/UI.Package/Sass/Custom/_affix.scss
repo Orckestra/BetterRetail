@@ -1,0 +1,18 @@
+
+.affix-show-block {
+    display: none !important;
+}
+.affix-show-inline-block {
+    display: inline-block !important;
+}
+.affix {
+    .affix-hidden {
+        display: none !important;
+    }
+    .affix-show-block {
+        display: block !important;
+    }
+    .affix-show-inline-block {
+        display: inline-block !important;
+    }
+}

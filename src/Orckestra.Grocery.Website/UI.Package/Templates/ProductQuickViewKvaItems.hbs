@@ -1,0 +1,24 @@
+<div data-templateid='ProductQuickViewKvaItems'>
+    {{#each KeyVariantAttributeItems}}
+        {{#if Values}}
+            <div class="island  btn-multiline" data-qa="product-variants" data-propertyname="{{PropertyName}}" data-propertydatatype="{{PropertyDataType}}">
+
+                <label for="{{PropertyName}}-{{@key}}">{{DisplayName}}</label>
+
+                {{#if_eq Values.length 1}}
+                    {{#with Values.[0]}}
+                        <div>
+                            {{Title}}{{#if Disabled}} {{localize 'ShoppingCart' 'L_ItemNotAvailable'}}{{/if}}
+                        </div>
+                    {{/with}}
+                {{else}}
+                    <select name="{{PropertyName}}-{{@key}}" id="{{PropertyName}}-{{@key}}" class="form-control" data-oc-change="selectKva">
+                        {{#each Values}}
+                            <option value="{{Value}}"{{#if Selected}} selected="selected"{{/if}}>{{Title}}{{#if Disabled}} {{localize 'ShoppingCart' 'L_ItemNotAvailable'}}{{/if}}</option>
+                        {{/each}}
+                    </select>
+                {{/if_eq}}
+            </div>
+        {{/if}}
+    {{/each}}
+</div>

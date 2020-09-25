@@ -1,0 +1,12 @@
+<div data-templateid="RecurringOrderTemplates">
+   {{>GeneralErrorContainer}}
+    <div>
+        {{#if IsLoading}} 
+           {{>Loading}} 
+        {{else}}
+           {{>RecurringOrderTemplatesLineItems}}
+
+           {{>RecurringOrderTemplateRemoveConfirmationModal}}           
+        {{/if}} 
+   </div>
+</div>

@@ -1,0 +1,42 @@
+.btn {
+    &.disabled,
+    &:disabled,
+    fieldset[disabled] & {
+        opacity: 0.5;
+    }
+    white-space: normal;
+}
+
+button, a {
+    &[aria-expanded="true"] {
+        .fa-caret-up {
+            display: inline;
+        }
+        .fa-caret-down {
+            display: none;
+        }
+    }
+    &[aria-expanded="false"] {
+        .fa-caret-up {
+            display: none;
+        }
+        .fa-caret-down {
+          display: inline;  
+        }
+    }
+}
+
+.btn {
+    &.btn-dashed-block {
+        width: 100%;
+        border: dashed 2px  $gray-400;
+        background: #fff;
+        font-weight: bold;
+        color: $primary;
+
+        &:hover, &:focus {
+            border: dashed 2px  $gray-600;
+            color: $primary;
+        }
+    }
+}

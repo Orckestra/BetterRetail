@@ -1,0 +1,37 @@
+{{#with Pagination}}
+<div class="pagination-dropdown ">
+    <ul class="pagination m-0  align-items-center justify-content-end" >
+        <li class="page-item previous  {{#unless PreviousPage.Url}}disabled{{/unless}}">
+            <a class="page-link" title="{{PreviousPage.DisplayName}}" href="{{PreviousPage.Url}}">
+                <i class="fa  fa-arrow-circle-left"></i>&#160;{{PreviousPage.DisplayName}}
+            </a>
+        </li>
+
+        <li class="page-item mx-2">
+            <div class="dropdown">
+                <button class="btn btn-outline-secondary  dropdown-toggle" type="button" data-qa="page-select-toggle"
+                    data-toggle="dropdown" aria-expanded="true">
+                    {{localize 'List-Search' 'L_PageInDropDown'}}&#160;{{CurrentPage.DisplayName}}
+                </button>
+                <div class="dropdown-menu dropdown-menu-sm-right dropdown-menu-md-right" role="menu" data-qa="page-select">
+                    {{#each Pages }}
+                    <a class="dropdown-item" href="{{UrlPath}}" data-url="{{UrlPath}}">
+                        {{localize 'List-Search' 'L_PageInDropDown'}}&#160;{{DisplayName}}
+                    </a>
+                    {{/each}}
+                </div>
+            </div>
+        </li>
+
+        <li class="page-item ">
+            <span class="d-flex-inline pt-2">
+                &#160;{{localizeFormat 'List-Search' 'L_PageOfTotalItems' TotalNumberOfPages}}&#160;</span>
+        </li>
+        <li class="page-item  next ml-2  {{#unless NextPage.Url}}disabled{{/unless}}">
+            <a class="page-link" title="{{NextPage.DisplayName}}" href="{{NextPage.Url}}">
+                {{NextPage.DisplayName}}&#160;<i class="fa  fa-arrow-circle-right"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+{{/with}}

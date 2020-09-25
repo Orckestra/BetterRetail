@@ -1,0 +1,26 @@
+<div data-templateid="RecurringScheduleDetailsNextOccurence" class="card  bg-light mt-3">
+    {{#if IsLoading}}
+        {{>Loading}}
+    {{else}}
+        <div class="card-header">
+           <div class="row">
+                <div class="col-10">
+                    <h3 class="m-0">{{localize 'RecurringSchedule' 'T_RecurringScheduleDetailsNextOccurence' }}</h3>
+                </div>
+            </div>
+        </div>
+         <div class="card-body form-group">
+            <div class="row compact-order-header">
+                <div class="col-md-6">
+                    <div class="compact-order-date">
+                        <strong><label for="NextOcurrence" >{{localize 'RecurringCart' 'L_NextOccurence'}}</label></strong>
+                        <br />
+                        <input class="form-control datepicker" id="NextOcurrence" value="{{NextOccurenceValue}}" />
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                </div>
+            </div>            
+        </div>
+    {{/if}}   
+</div>

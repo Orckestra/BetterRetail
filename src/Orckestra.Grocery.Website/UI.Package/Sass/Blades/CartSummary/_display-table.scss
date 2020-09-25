@@ -1,0 +1,17 @@
+.display-table {
+	@include media-breakpoint-up(md) {
+		display: table;
+		table-layout: fixed;
+		width: 100%;
+	}
+	
+
+	&-cell {
+		@include media-breakpoint-up(md) {
+			display: table-cell;
+			vertical-align: middle;
+			float: none;
+		}
+		
+	}
+}

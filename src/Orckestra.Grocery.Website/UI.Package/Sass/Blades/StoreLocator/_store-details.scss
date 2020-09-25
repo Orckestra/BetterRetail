@@ -1,0 +1,85 @@
+.store-details {
+    
+     .map {
+        height: 240px;
+        background: #E5E3DF;
+    }
+ }
+
+  @include media-breakpoint-up(lg) {
+    .store-details {
+      
+        .map { 
+            height: 340px;
+        }
+        
+        .store-info {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            z-index: 1000;
+            width: 350px;
+        }
+    }
+  }
+
+  .store-tile{
+      &.pin-in-title {
+        .store-tile-title {
+            position: relative;
+            padding-left: 25px;
+        }
+
+        .store-address {
+            padding-left: 25px;
+        }
+      }
+  }
+
+ .static-map-pin {
+     position: absolute;
+     margin-top: -50px;
+     margin-left: -13px;
+     height: 50px;
+     width: 26px;
+     background: url(/UI.Package/Images/map/marker.png) no-repeat;
+     text-align: center;
+     font-size: 11px;
+     line-height: 29px;
+     color: #fff;
+     z-index: 1000;
+ }
+
+ .store-tile-map {
+     position: relative;
+
+     .static-map-pin {
+        top: 50%;
+        left: 50%;
+     }
+ }
+
+ .store-tile-title {
+
+    .static-map-pin {
+        left: 5px;
+        top: 45px;
+        height: 45px;
+     }
+ }
+
+.store-open-hour {
+   padding: 2px 0;
+   
+    &.is-today {
+        font-weight: bold;
+        color: $body-color;
+        margin: 0 -15px;
+    }
+    
+    .schedule-status {
+        position: absolute;
+        left: -20px;
+        top: -5px; 
+    }
+}

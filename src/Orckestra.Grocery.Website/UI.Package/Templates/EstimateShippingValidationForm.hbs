@@ -1,0 +1,20 @@
+<div data-templateid="EstimateShippingValidationForm">
+  {{#if PostalCodeMalformed}}
+    <div class="alert  alert-danger">
+      <div class="multiline-message">
+        <span class="fa  fa-exclamation-triangle  multiline-message-icon"></span>
+        <span>{{localize 'ShoppingCart' 'F_PostalCodeErrorBegin'}}</span>
+        <span>{{PostalCode}}</span>
+        <span>{{localize 'ShoppingCart' 'F_PostalCodeErrorEnd'}}</span>
+      </div>
+    </div>
+  {{else if PostalCodeEmpty}}
+    <div class="alert  alert-danger">
+      <div class="multiline-message">
+        <span class="fa  fa-exclamation-triangle  multiline-message-icon"></span>
+        <span>{{localize 'ShoppingCart' 'F_EmptyPostalCodeError'}}</span>
+      </div>
+    </div>
+  </div>
+  {{/if}}
+</div>

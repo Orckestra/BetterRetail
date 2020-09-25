@@ -1,0 +1,21 @@
+<span data-templateid="AddToWishList">
+{{#if Loaded}}
+    {{#if IsInWishList}}
+        <a data-qa="product-remove-from-wishlist"
+           data-oc-click="removeLineItemToWishList"
+           data-id="{{Id}}"
+           title="{{localize 'MyAccount' 'H_RemoveFromTheWishList'}}"
+           class="add-to-wishlist  active">
+            <i class="fa  fa-2x  fa-heart"></i>
+        </a>
+    {{else}}
+        <a data-qa="product-add-to-wishlist" 
+           data-oc-click="addLineItemToWishList"
+           title="{{localize 'MyAccount' 'H_AddToWishList'}}"
+           class="add-to-wishlist">
+            <i class="fa  fa-2x  fa-heart-o"></i>
+        </a>
+    {{/if}}
+{{/if}}
+</span>
+

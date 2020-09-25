@@ -1,0 +1,19 @@
+<form id="RecurringCartPayment" data-oc-submit="preventFormSubmit">
+    <input type="radio"
+            class="d-none"
+            name="PaymentId"
+            checked="checked"
+            data-parsley-class-handler-selector="form"
+            data-parsley-errors-container="#payment-errors"
+            data-payment-id={{PaymentId}}
+            required="required" />
+    {{!-- <div>
+        <a href="{{AddPaymentUrl}}" data-qa="checkout-create-payment-link" class="hitbox" title="{{localize 'MyAccount' 'B_AddNewPayment'}}">{{localize 'MyAccount' 'B_AddNewPayment'}}</a>
+    </div> --}}
+
+    {{#if_neq SavedCreditCards.length 0}}<br/>{{/if_neq}}
+
+    {{#each SavedCreditCards}}
+        {{>RecurringScheduleSavedCreditCardPaymentMethodItem}}
+    {{/each}}    
+</form>

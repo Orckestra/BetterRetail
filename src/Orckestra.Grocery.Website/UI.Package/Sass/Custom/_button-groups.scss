@@ -1,0 +1,21 @@
+@include media-breakpoint-down(md) {
+    .btn-group-responsive {
+        margin-bottom: -10px;
+
+        .btn {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        > .float-left,
+        > .float-right {
+            float: none !important;
+        }
+    }
+}
+
+.text-align-button {
+    line-height: $line-height-base;
+    padding-top: map_get($spacers, 2) + 1; // 1 is border size
+    padding-bottom: map_get($spacers, 2) + 1; // 1 is border size
+}

@@ -1,0 +1,9 @@
+.breadcrumb {
+    padding: 0 0;
+    > .active {
+        font-weight: bold;
+        &:before {
+            font-weight: normal;
+        }
+    }
+}

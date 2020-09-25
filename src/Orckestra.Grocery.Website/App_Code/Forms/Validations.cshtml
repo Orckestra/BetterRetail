@@ -1,0 +1,38 @@
+﻿@using Composite.AspNet.Razor
+@using System.Web.Mvc
+
+@helper SignInErrors(string vueStatusBinding)
+{
+    <div v-if="@vueStatusBinding" class="alert alert-danger text-danger">
+        <span class="fa  fa-times-circle-o  fa-lg  pull-left mt-1"></span>&#32;
+        <div v-if="@vueStatusBinding == 'RequiresApproval'">
+            @Html.Localize("MyAccount", "L_SignInErrorRequiresApproval")
+        </div>
+        <div v-else-if="@vueStatusBinding == 'L_ErrorAjaxFailed'">
+            @Html.Localize("MyAccount", "L_ErrorAjaxFailed")
+        </div>
+        <div v-else="else">
+            @Html.Localize("MyAccount", "L_SignInError")
+        </div>
+    </div>
+}
+
+@helper SelectStoreError(string vueStatusBinding)
+{
+    <div id="selectStoreError" v-if="@vueStatusBinding" class="alert alert-danger text-danger">
+        <span class="fa  fa-times-circle-o  fa-lg  pull-left mt-1"></span>&#32;
+        <div>@Html.Localize("Errors", "L_SelectAStore")</div>
+    </div>
+}
+
+@helper PasswordStrengthMessage(string vueBinding = "PasswordStrength")
+{
+    <p v-if="@vueBinding">
+        @Html.Localize("Forms", "L_PasswordStrength")
+        <strong v-if="@vueBinding === 'short'" class="text-danger">@Html.Localize("Forms", "L_PasswordStrengthShort")</strong>
+        <strong v-else-if="@vueBinding === 'common'" class="text-danger">@Html.Localize("Forms", "L_PasswordStrengthCommon")</strong>
+        <strong v-else-if="@vueBinding === 'weak'" class="text-danger">@Html.Localize("Forms", "L_PasswordStrengthWeak")</strong>
+        <strong v-else-if="@vueBinding === 'ok'" class="text-warning">@Html.Localize("Forms", "L_PasswordStrengthOk")</strong>
+        <strong v-else-if="@vueBinding === 'strong'" class="text-success">@Html.Localize("Forms", "L_PasswordStrengthStrong")</strong>
+    </p>
+}

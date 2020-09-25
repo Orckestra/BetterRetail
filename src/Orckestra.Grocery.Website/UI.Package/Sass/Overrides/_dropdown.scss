@@ -1,0 +1,42 @@
+.dropdown-header {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.dropdown-menu {
+    .divider {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+}
+
+.dropdown-menu > .active > a:hover,
+.dropdown-menu > .active > a:focus {
+    background-color: darken(theme-color("info"), 5%)
+}
+
+ @include media-breakpoint-down(sm) {
+    .dropdown-menu-sm-right {
+        left: auto;
+        right: 0;
+    }
+}
+@include media-breakpoint-only(md) {
+    .dropdown-menu-md-right {
+        left: auto;
+        right: 0;
+    }
+}
+@include media-breakpoint-only(lg) {
+    .dropdown-menu-lg-right {
+        left: auto;
+        right: 0;
+    }
+}
+@include media-breakpoint-up(xl) {
+    .dropdown-menu-xl-right {
+        left: auto;
+        right: 0;
+    }
+}
+

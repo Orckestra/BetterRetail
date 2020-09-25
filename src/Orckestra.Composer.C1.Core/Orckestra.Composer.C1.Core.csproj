@@ -75,9 +75,9 @@
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Orckestra.Composer.Website\Orckestra.Composer.Website.csproj">
+    <ProjectReference Include="..\Orckestra.Grocery.Website\Orckestra.Composer.Grocery.Website.csproj">
       <Project>{7e75d550-3c78-46d0-a124-065a5fffa0b2}</Project>
-      <Name>Orckestra.Composer.Website</Name>
+      <Name>Orckestra.Composer.Grocery.Website</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
@@ -92,7 +92,7 @@ if exist TempPath (
 	DEL /F /Q TempPath -f
 )
 
-SET WebProjectPath=%25ProjectDir%25..\Orckestra.Composer.Website\
+SET WebProjectPath=%25ProjectDir%25..\Orckestra.Grocery.Website\
 
 mkdir %25TempPath%25
 
