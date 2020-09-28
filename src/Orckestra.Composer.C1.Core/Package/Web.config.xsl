@@ -144,10 +144,18 @@
 
   <xsl:template match="/configuration/system.webServer/modules">
     <xsl:copy>
-      <xsl:apply-templates select="@* | node()" />
+      <xsl:apply-templates select="@*" />
+
+      <xsl:if test="count(add[@name='ContextPreservationHttpModule'])=0">
+        <add name="ContextPreservationHttpModule" type="Orckestra.Composer.CompositeC1.ContextPreservationHttpModule, Orckestra.Composer.CompositeC1" />
+      </xsl:if>
+
+      <xsl:apply-templates select="node()" />
+
       <xsl:if test="count(add[@name='ComposerRequestInterceptor'])=0">
         <add name="ComposerRequestInterceptor" type="Orckestra.Composer.CompositeC1.RequestInterceptorHttpModule, Orckestra.Composer.CompositeC1" />
       </xsl:if>
+
     </xsl:copy>
   </xsl:template>
 
