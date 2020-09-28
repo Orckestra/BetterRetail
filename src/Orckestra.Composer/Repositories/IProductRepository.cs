@@ -1,9 +1,10 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Orckestra.Composer.Parameters;
 using Orckestra.Overture.ServiceModel.Metadata;
 using Orckestra.Overture.ServiceModel.Products;
 using Orckestra.Overture.ServiceModel.Search;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Orckestra.Composer.Repositories
 {
@@ -38,6 +39,15 @@ namespace Orckestra.Composer.Repositories
         /// <param name="scope">The scope.</param>
         /// <returns></returns>
         Task<List<ProductPrice>> CalculatePricesAsync(List<string> productIds, string scope);
+
+        /// <summary>
+        /// Gets the products price for a specified date.
+        /// </summary>
+        /// <param name="productIds">The product ids.</param>
+        /// <param name="scope">The scope.</param>
+        /// <param name="effectiveDate">The effective date for the prices.</param>
+        /// <returns></returns>
+        Task<List<ProductPrice>> CalculatePricesAsync(List<string> productIds, string scope, DateTime? effectiveDate);
 
         /// <summary>
         /// Gets the effective price info for a given product.

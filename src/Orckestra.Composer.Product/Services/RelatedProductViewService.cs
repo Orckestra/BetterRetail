@@ -9,6 +9,7 @@ using Orckestra.Composer.Product.Repositories;
 using Orckestra.Composer.Product.ViewModels;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Repositories;
+using Orckestra.Composer.Services;
 using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel.Products;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
@@ -26,9 +27,10 @@ namespace Orckestra.Composer.Product.Services
             IViewModelMapper viewModelMapper,
             ILocalizationProvider localizationProvider,
             IInventoryLocationProvider inventoryLocationProvider,
-            IRecurringOrdersSettings recurringOrdersSettings)
+            IRecurringOrdersSettings recurringOrdersSettings,
+            IFulfillmentContext fulfillmentContext)
 
-            : base(productRepository, damProvider, productUrlProvider, viewModelMapper, localizationProvider, relationshipRepository, inventoryLocationProvider, recurringOrdersSettings) { }
+            : base(productRepository, damProvider, productUrlProvider, viewModelMapper, localizationProvider, relationshipRepository, inventoryLocationProvider, recurringOrdersSettings, fulfillmentContext) { }
 
         protected override async Task<IEnumerable<ProductIdentifier>> GetProductIdentifiersAsync(GetProductIdentifiersParam param)
         {
@@ -74,7 +76,8 @@ namespace Orckestra.Composer.Product.Services
                 MaxItems = getProductIdentifiersParam.MaxItems,
                 SortBy = "score",
                 InventoryLocationIds = await InventoryLocationProvider.GetInventoryLocationIdsForSearchAsync(),
-                CurrentProductId = getProductIdentifiersParam.ProductId
+                CurrentProductId = getProductIdentifiersParam.ProductId,
+                AvailabilityDate = FulfillmentContext.AvailabilityAndPriceDate
             };
 
             var sameCategoryProducts = await RelationshipRepository.GetProductInSameCategoryAsync(productInSameCategoryParam).ConfigureAwait(false);

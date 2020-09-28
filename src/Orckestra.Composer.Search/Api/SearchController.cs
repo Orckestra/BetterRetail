@@ -31,19 +31,22 @@ namespace Orckestra.Composer.Search.Api
         protected IInventoryLocationProvider InventoryLocationProvider { get; private set; }
         protected ISearchTermsTransformationProvider SearchTermsTransformationProvider { get; private set; }
         protected IAutocompleteProvider AutocompleteProvider { get; private set; }
+        protected IFulfillmentContext FulfillmentContext { get; }
 
         public SearchController(
             IComposerContext composerContext, 
             ISearchViewService searchViewService, 
             IInventoryLocationProvider inventoryLocationProvider, 
             ISearchTermsTransformationProvider searchTermsTransformationProvider,
-            IAutocompleteProvider autocompleteProvider)
+            IAutocompleteProvider autocompleteProvider,
+            IFulfillmentContext fulfillmentContext)
         {
             ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
             SearchViewService = searchViewService ?? throw new ArgumentNullException(nameof(searchViewService));
             InventoryLocationProvider = inventoryLocationProvider ?? throw new ArgumentNullException(nameof(inventoryLocationProvider));
             SearchTermsTransformationProvider = searchTermsTransformationProvider ?? throw new ArgumentNullException(nameof(searchTermsTransformationProvider));
             AutocompleteProvider = autocompleteProvider ?? throw new ArgumentNullException(nameof(autocompleteProvider));
+            FulfillmentContext = fulfillmentContext ?? throw new ArgumentNullException(nameof(fulfillmentContext));
         }
 
      
@@ -67,6 +70,7 @@ namespace Orckestra.Composer.Search.Api
                 Scope = ComposerContext.Scope,
                 CultureInfo = ComposerContext.CultureInfo,
                 InventoryLocationIds = await InventoryLocationProvider.GetInventoryLocationIdsForSearchAsync().ConfigureAwait(false),
+                AvailabilityDate = FulfillmentContext.AvailabilityAndPriceDate
             };
 
             var searchResultsViewModel = await SearchViewService.GetSearchViewModelAsync(searchCriteria).ConfigureAwait(false);

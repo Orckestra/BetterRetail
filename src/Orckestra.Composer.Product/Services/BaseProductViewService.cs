@@ -12,6 +12,7 @@ using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Dam;
 using Orckestra.Composer.Providers.Localization;
 using Orckestra.Composer.Repositories;
+using Orckestra.Composer.Services;
 using Orckestra.Composer.Utils;
 using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel.Products;
@@ -28,6 +29,7 @@ namespace Orckestra.Composer.Product.Services
         protected ILocalizationProvider LocalizationProvider { get; private set; }
         protected IProductUrlProvider ProductUrlProvider { get; private set; }
         protected IRecurringOrdersSettings RecurringOrdersSettings { get; private set; }
+        protected IFulfillmentContext FulfillmentContext { get; }
 
         protected BaseProductViewService(
             IProductRepository productRepository,
@@ -37,7 +39,8 @@ namespace Orckestra.Composer.Product.Services
             ILocalizationProvider localizationProvider,
             IRelationshipRepository relationshipRepository,
             IInventoryLocationProvider inventoryLocationProvider,
-            IRecurringOrdersSettings recurringOrdersSettings)
+            IRecurringOrdersSettings recurringOrdersSettings,
+            IFulfillmentContext fulfillmentContext)
         {
             ProductRepository = productRepository ?? throw new ArgumentNullException(nameof(productRepository));
             ViewModelMapper = viewModelMapper ?? throw new ArgumentNullException(nameof(viewModelMapper));
@@ -47,6 +50,7 @@ namespace Orckestra.Composer.Product.Services
             RelationshipRepository = relationshipRepository ?? throw new ArgumentNullException(nameof(relationshipRepository));
             InventoryLocationProvider = inventoryLocationProvider ?? throw new ArgumentNullException(nameof(inventoryLocationProvider));
             RecurringOrdersSettings = recurringOrdersSettings ?? throw new ArgumentNullException(nameof(recurringOrdersSettings));
+            FulfillmentContext = fulfillmentContext ?? throw new ArgumentNullException(nameof(fulfillmentContext));
         }
 
         protected abstract Task<IEnumerable<ProductIdentifier>> GetProductIdentifiersAsync(TParam param);
@@ -90,7 +94,7 @@ namespace Orckestra.Composer.Product.Services
 
             // make a single request to get all product prices at once, instead of making a request for each product
             var productIds = param.ProductIds.Select(p => p.ProductId).ToList();
-            var prices = ProductRepository.CalculatePricesAsync(productIds, param.Scope);
+            var prices = ProductRepository.CalculatePricesAsync(productIds, param.Scope, FulfillmentContext.AvailabilityAndPriceDate);
             var images = GetImagesAsync(products);
             await Task.WhenAll(prices, images);
 

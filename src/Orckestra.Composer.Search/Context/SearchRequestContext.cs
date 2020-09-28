@@ -22,12 +22,14 @@ namespace Orckestra.Composer.Search.Context
         protected ISearchViewService SearchViewService { get; private set; }
         protected SearchViewModel SearchViewModel { get; private set; }
         public IInventoryLocationProvider InventoryLocationProvider { get; set; }
+        protected IFulfillmentContext FulfillmentContext { get; }
         protected ISearchUrlProvider SearchUrlProvider { get; private set; }
 
         public SearchRequestContext(IComposerContext composerContext,
             ISearchViewService searchViewService,
             IInventoryLocationProvider inventoryLocationProvider,
             ISearchUrlProvider searchUrlProvider,
+            IFulfillmentContext fulfillmentContext,
             HttpRequestBase request)
         {
 
@@ -35,6 +37,7 @@ namespace Orckestra.Composer.Search.Context
             SearchViewService = searchViewService ?? throw new ArgumentNullException(nameof(searchViewService));
             InventoryLocationProvider = inventoryLocationProvider ?? throw new ArgumentNullException(nameof(inventoryLocationProvider));
             SearchUrlProvider = searchUrlProvider ?? throw new ArgumentNullException(nameof(searchUrlProvider));
+            FulfillmentContext = fulfillmentContext ?? throw new ArgumentNullException(nameof(fulfillmentContext));
             Request = request;
 
             _viewModel = new Lazy<SearchViewModel>(() =>
@@ -102,6 +105,7 @@ namespace Orckestra.Composer.Search.Context
                 CultureInfo = ComposerContext.CultureInfo,
                 Scope = ComposerContext.Scope,
                 InventoryLocationIds = InventoryLocationProvider.GetInventoryLocationIdsForSearchAsync().Result,
+                AvailabilityDate = FulfillmentContext.AvailabilityAndPriceDate,
                 AutoCorrect = SearchConfiguration.AutoCorrectSearchTerms
             };
             criteria.SelectedFacets.AddRange(SearchUrlProvider.BuildSelectedFacets(Request.QueryString));

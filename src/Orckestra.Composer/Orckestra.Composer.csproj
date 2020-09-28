@@ -309,6 +309,7 @@
     <Compile Include="Request\UpdateRecurringOrderLineItemQuantityRequest.cs" />
     <Compile Include="Request\UpdateRecurringOrderTemplateLineItemRequest.cs" />
     <Compile Include="Services\ICategoryViewService.cs" />
+    <Compile Include="Services\IFulfillmentContext.cs" />
     <Compile Include="Services\IImageService.cs" />
     <Compile Include="Services\ImageService.cs" />
     <Compile Include="Services\IProductPriceViewService.cs" />

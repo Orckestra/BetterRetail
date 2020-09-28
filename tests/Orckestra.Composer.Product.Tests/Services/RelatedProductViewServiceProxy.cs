@@ -6,6 +6,7 @@ using Orckestra.Composer.Product.Services;
 using Orckestra.Composer.Product.ViewModels;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Repositories;
+using Orckestra.Composer.Services;
 using Orckestra.Composer.ViewModels;
 
 namespace Orckestra.Composer.Product.Tests.Services
@@ -18,7 +19,8 @@ namespace Orckestra.Composer.Product.Tests.Services
             productUrlProvider, IViewModelMapper viewModelMapper,
             ILocalizationProvider localizationProvider, 
             IInventoryLocationProvider inventoryLocationProvider,
-            IRecurringOrdersSettings recurringOrdersSettings) : base(productRepository, relationshipRepository, damProvider, productUrlProvider, viewModelMapper, localizationProvider, inventoryLocationProvider, recurringOrdersSettings)
+            IRecurringOrdersSettings recurringOrdersSettings,
+            IFulfillmentContext fulfillmentContext) : base(productRepository, relationshipRepository, damProvider, productUrlProvider, viewModelMapper, localizationProvider, inventoryLocationProvider, recurringOrdersSettings, fulfillmentContext)
         {
         }
 

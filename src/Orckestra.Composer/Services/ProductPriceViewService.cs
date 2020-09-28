@@ -20,13 +20,16 @@ namespace Orckestra.Composer.Services
         protected IViewModelMapper ViewModelMapper { get; }
         protected IScopeViewService ScopeViewService { get; }
 
+        protected IFulfillmentContext FulfillmentContext { get; }
+
         public ProductPriceViewService(IProductRepository productRepository, ILocalizationProvider localizationProvider, IViewModelMapper viewModelMapper,
-            IScopeViewService scopeViewService)
+            IScopeViewService scopeViewService, IFulfillmentContext fulfillmentContext)
         {
             ProductRepository = productRepository ?? throw new ArgumentNullException(nameof(productRepository));
             LocalizationProvider = localizationProvider ?? throw new ArgumentNullException(nameof(localizationProvider));
             ViewModelMapper = viewModelMapper ?? throw new ArgumentNullException(nameof(viewModelMapper));
             ScopeViewService = scopeViewService ?? throw new ArgumentNullException(nameof(scopeViewService));
+            FulfillmentContext = fulfillmentContext ?? throw new ArgumentNullException(nameof(fulfillmentContext));
         }
 
         /// <summary>
@@ -41,7 +44,7 @@ namespace Orckestra.Composer.Services
             if (string.IsNullOrEmpty(param.Scope)) { throw new ArgumentException(GetMessageOfNullEmpty(nameof(param.Scope)), nameof(param)); }
             if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
 
-            var productsPriceTask = ProductRepository.CalculatePricesAsync(param.ProductIds, param.Scope);
+            var productsPriceTask = ProductRepository.CalculatePricesAsync(param.ProductIds, param.Scope, FulfillmentContext.AvailabilityAndPriceDate);
             var currencyTask = ScopeViewService.GetScopeCurrencyAsync(new GetScopeCurrencyParam
             {
                 Scope = param.Scope,
