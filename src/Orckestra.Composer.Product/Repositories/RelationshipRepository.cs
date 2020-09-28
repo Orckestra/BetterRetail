@@ -37,6 +37,7 @@ namespace Orckestra.Composer.Product.Repositories
             request.CultureName = getProductsInSameCategoryParam.CultureInfo.Name;
             request.InventoryLocationIds = getProductsInSameCategoryParam.InventoryLocationIds;
             request.ScopeId = getProductsInSameCategoryParam.Scope;
+            request.AvailabilityDate = getProductsInSameCategoryParam.AvailabilityDate;
 
             var sortDefinitions = BuildQuerySortings(getProductsInSameCategoryParam.SortBy, getProductsInSameCategoryParam.SortDirection);
 
