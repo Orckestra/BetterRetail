@@ -233,7 +233,7 @@ namespace Orckestra.Composer.Product.Tests.Services
                 }
             });
 
-            productRepositoryMock.Setup(repo => repo.CalculatePricesAsync(It.IsAny<List<string>>(), It.IsAny<string>()))
+            productRepositoryMock.Setup(repo => repo.CalculatePricesAsync(It.IsAny<List<string>>(), It.IsAny<string>(), It.IsAny<DateTime?>()))
                                  .ReturnsAsync(productPriceList)
                                  .Verifiable();
 
@@ -254,7 +254,7 @@ namespace Orckestra.Composer.Product.Tests.Services
                 VariantPrices = new List<VariantPrice>()
             });
 
-            productRepositoryMock.Setup(repo => repo.CalculatePricesAsync(It.IsAny<List<string>>(), It.IsAny<string>()))
+            productRepositoryMock.Setup(repo => repo.CalculatePricesAsync(It.IsAny<List<string>>(), It.IsAny<string>(), It.IsAny<DateTime?>()))
                                  .ReturnsAsync(productPriceList)
                                  .Verifiable();
 

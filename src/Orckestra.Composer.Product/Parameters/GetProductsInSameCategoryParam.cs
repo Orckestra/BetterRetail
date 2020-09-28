@@ -20,5 +20,9 @@ namespace Orckestra.Composer.Product.Parameters
         /// Purpose is to be excluded from same categories results
         /// </summary>
         public string CurrentProductId { get; set; }
+        /// <summary>
+        /// The date on which product should be available, and based on which effective price should be calculated.
+        /// </summary>
+        public DateTime? AvailabilityDate { get; set; }
     }
 }

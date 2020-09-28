@@ -30,6 +30,7 @@ namespace Orckestra.Composer.Search.Services
 
         protected ICategoryRepository CategoryRepository { get; }
         protected ICategoryBrowsingUrlProvider CategoryBrowsingUrlProvider { get; }
+        protected IFulfillmentContext FulfillmentContext { get; }
 
         public CategoryBrowsingViewService(
             ISearchRepository searchRepository,
@@ -46,7 +47,8 @@ namespace Orckestra.Composer.Search.Services
             IComposerContext composerContext,
             IProductSettingsViewService productSettings,
             IScopeViewService scopeViewService,
-            IRecurringOrdersSettings recurringOrdersSettings)
+            IRecurringOrdersSettings recurringOrdersSettings,
+            IFulfillmentContext fulfillmentContext)
 
             : base(
             searchRepository,
@@ -65,6 +67,7 @@ namespace Orckestra.Composer.Search.Services
         {
             CategoryRepository = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository));
             CategoryBrowsingUrlProvider = categoryBrowsingUrlProvider ?? throw new ArgumentNullException(nameof(categoryBrowsingUrlProvider));
+            FulfillmentContext = fulfillmentContext ?? throw new ArgumentNullException(nameof(fulfillmentContext));
         }
 
         public virtual async Task<CategoryBrowsingViewModel> GetCategoryBrowsingViewModelAsync(GetCategoryBrowsingViewModelParam param)
@@ -204,6 +207,7 @@ namespace Orckestra.Composer.Search.Services
                 NumberOfItemsPerPage = SearchConfiguration.MaxItemsPerPage,
                 IncludeFacets = true,
                 InventoryLocationIds = param.InventoryLocationIds,
+                AvailabilityDate = FulfillmentContext.AvailabilityAndPriceDate,
                 StartingIndex = (param.Page - 1) * SearchConfiguration.MaxItemsPerPage, // The starting index is zero-based.
                 SortBy = param.SortBy,
                 SortDirection = param.SortDirection,
