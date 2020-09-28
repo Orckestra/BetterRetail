@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 
 namespace Orckestra.Composer.Parameters
@@ -94,7 +95,12 @@ namespace Orckestra.Composer.Parameters
 
         public bool AutoCorrect { get; set; }
 
-	    public SearchCriteria Clone()
+        /// <summary>
+        /// The date on which product should be available, and based on which effective price should be calculated.
+        /// </summary>
+        public DateTime? AvailabilityDate { get; set; }
+
+        public SearchCriteria Clone()
 	    {
 		    var clone = (SearchCriteria)MemberwiseClone();
 		    clone.SelectedFacets = new List<SearchFilter>();

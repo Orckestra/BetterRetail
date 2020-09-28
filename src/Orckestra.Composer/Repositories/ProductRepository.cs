@@ -103,14 +103,27 @@ namespace Orckestra.Composer.Repositories
         /// <returns></returns>
         public virtual Task<List<ProductPrice>> CalculatePricesAsync(List<string> productIds, string scope)
         {
-            if (productIds == null) { throw new ArgumentNullException(nameof(productIds)); }
-            if (scope == null) { throw new ArgumentNullException(nameof(scope)); }
-         
+            return CalculatePricesAsync(productIds, scope, null);
+        }
+
+        /// <summary>
+        /// Gets products prices.
+        /// </summary>
+        /// <param name="productIds">The product ids.</param>
+        /// <param name="scope">The scope.</param>
+        /// <param name="effectiveDate">The effective date for the prices.</param>
+        /// <returns></returns>
+        public virtual Task<List<ProductPrice>> CalculatePricesAsync(List<string> productIds, string scope, DateTime? effectiveDate)
+        {
+            if (productIds == null) throw new ArgumentNullException(nameof(productIds));
+            if (scope == null) throw new ArgumentNullException(nameof(scope));
+
             var request = new CalculatePricesofProductsRequest
             {
                 ProductIds = productIds,
                 ScopeId = scope,
-                IncludeVariants = true
+                IncludeVariants = true,
+                Time = effectiveDate ?? DateTime.MinValue
             };
 
             return OvertureClient.SendAsync(request);

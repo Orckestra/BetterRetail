@@ -113,6 +113,7 @@ namespace Orckestra.Composer.Search.Repositories
             request.FacetPredicates = BuildFacetPredicates(criteria);
             request.InventoryLocationIds = criteria.InventoryLocationIds;
             request.AutoCorrect = criteria.AutoCorrect;
+            request.AvailabilityDate = criteria.AvailabilityDate;
 
             var sortDefinitions = BuildQuerySortings(criteria);
 
