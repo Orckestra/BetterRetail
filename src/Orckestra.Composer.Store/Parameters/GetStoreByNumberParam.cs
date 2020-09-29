@@ -18,5 +18,12 @@ namespace Orckestra.Composer.Store.Parameters
         public bool IncludeSchedules { get; set; } = true;
 
         public Coordinate SearchPoint { get; set; }
+
+        public GetStoreByNumberParam Clone()
+        {
+            var param = (GetStoreByNumberParam)MemberwiseClone();
+            param.SearchPoint = this.SearchPoint?.Clone();
+            return param;
+        }
     }
 }
