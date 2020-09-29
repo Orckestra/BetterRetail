@@ -16,5 +16,12 @@ namespace Orckestra.Composer.Store.Parameters
         public bool IncludeMarkers { get; set; } = false;
         public int PageSize { get; set; }
         public int PageNumber { get; set; }
+        public GetStoreLocatorViewModelParam Clone()
+        {
+            var param = (GetStoreLocatorViewModelParam)MemberwiseClone();
+            param.MapBounds = this.MapBounds?.Clone();
+            param.SearchPoint = this.SearchPoint?.Clone();
+            return param;
+        }
     }
 }

@@ -85,5 +85,13 @@ namespace Orckestra.Composer.Store.Models
         }
 
         private bool _initialized = false;
+
+        public Bounds Clone()
+        {
+            var bounds = (Bounds)MemberwiseClone();
+            bounds.NorthEast = this.NorthEast.Clone();
+            bounds.SouthWest = this.SouthWest.Clone();
+            return bounds;
+        }
     }
 }
