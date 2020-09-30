@@ -89,11 +89,13 @@ namespace Orckestra.Composer.Repositories
         /// The updated Customer.
         /// </returns>
         Task<Customer> UpdateUserAsync(UpdateUserParam param);
+
         /// <summary>
         /// Update preferred store of a customer
         /// </summary>
         /// <param name="param">Parameters container</param>
         /// <returns>The updated customer</returns>
         Task<Customer> UpdateUserPreferredStoreAsync(UpdateUserPreferredStoreParam param);
+
     }
 }
