@@ -213,6 +213,31 @@ namespace Orckestra.Composer.Repositories
         }
 
         /// <summary>
+        /// Update preferred store of a customer
+        /// </summary>
+        /// <param name="param">Parameters container</param>
+        /// <returns>The updated customer</returns>
+        public virtual async Task<Customer> UpdateUserPreferredStoreAsync(UpdateUserPreferredStoreParam param)
+        {
+            if (param == null) throw new ArgumentNullException(nameof(param));
+            if (param.CustomerId == Guid.Empty) throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param));
+            if (string.IsNullOrWhiteSpace(param.ScopeId)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.ScopeId)), nameof(param));
+            if (param.StoreId == Guid.Empty && string.IsNullOrWhiteSpace(param.StoreNumber)) throw new ArgumentException($"Both {nameof(param.StoreId)} and {nameof(param.StoreNumber)} are null or empty", nameof(param));
+
+            var request = new UpdatePreferredStoreRequest
+            {
+                ScopeId = param.ScopeId.ToString(),
+                StoreId = param.StoreId,
+                StoreNumber = param.StoreNumber,
+                CustomerId = param.CustomerId
+            };
+
+            var updatedCustomer = await OvertureClient.SendAsync(request).ConfigureAwait(false);
+
+            return updatedCustomer;
+        }
+
+        /// <summary>
         /// Sends instructions to the given email address on how to reset it's Customer's password
         /// </summary>
         /// <param name="param"></param>
