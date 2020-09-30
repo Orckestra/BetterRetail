@@ -54,6 +54,7 @@
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\PaymentExtensions.cs" />
     <Compile Include="Factory\CartViewModelFactory.cs" />
+    <Compile Include="Parameters\AddLineItemsParam.cs" />
     <Compile Include="Parameters\CreateLightListOfLineItemDetailViewModelParam.cs" />
     <Compile Include="Factory\IRecurringOrderCartViewModelFactory.cs" />
     <Compile Include="Factory\RecurringOrderCartViewModelFactory.cs" />
@@ -84,10 +85,12 @@
     <Compile Include="Parameters\CreateLineItemDetailViewModelParam.cs" />
     <Compile Include="Parameters\CreateLightRecurringOrderCartViewModelParam.cs" />
     <Compile Include="Parameters\CreateWishListViewModelParam.cs" />
+    <Compile Include="Parameters\DeleteCartParam.cs" />
     <Compile Include="Parameters\GetCustomerPaymentMethodListViewModelParam.cs" />
     <Compile Include="Parameters\GetCustomerPaymentMethodsForProviderParam.cs" />
     <Compile Include="Parameters\GetKeyVariantAttributesParam.cs" />
     <Compile Include="Parameters\GetLightRecurringOrderCartListViewModelParam.cs" />
+    <Compile Include="Parameters\GetLineItemsParam.cs" />
     <Compile Include="Parameters\GetPaymentParam.cs" />
     <Compile Include="Parameters\GetRecurringOrderCartsViewModelFromCartsParam.cs" />
     <Compile Include="Parameters\GetRecurringOrderCartsViewModelParam.cs" />
