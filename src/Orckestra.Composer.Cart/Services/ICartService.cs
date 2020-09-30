@@ -17,11 +17,17 @@ namespace Orckestra.Composer.Cart.Services
         Task<CartViewModel> AddLineItemAsync(AddLineItemParam param);
 
         /// <summary>
-        /// Retrieve a cart
+        /// Retrieve a cart and create CartViewModel
         /// </summary>
         /// <param name="param"></param>
         /// <returns>The Lightweight CartViewModel</returns>
         Task<CartViewModel> GetCartViewModelAsync(GetCartParam param);
+
+        /// <summary>
+        /// Create CartViewModel
+        /// </summary>
+        /// <returns>CartViewModel</returns>
+        Task<CartViewModel> CreateCartViewModelAsync(CreateCartViewModelParam param);
 
         /// <summary>
         /// Remove line item to the cart.

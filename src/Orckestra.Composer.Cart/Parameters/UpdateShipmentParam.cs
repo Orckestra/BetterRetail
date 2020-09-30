@@ -76,5 +76,10 @@ namespace Orckestra.Composer.Cart.Parameters
         /// The fulfillment schedule mode.
         /// </summary>
         public FulfillmentScheduleMode FulfillmentScheduleMode { get; set; }
+
+        /// <summary>
+        /// Gets or sets the pick-up location identifier required when the selected shipping method type is ship to store; any value will be ignored otherwise.
+        /// </summary>
+        public Guid? PickUpLocationId { get; set; }
     }
 }

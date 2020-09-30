@@ -276,7 +276,7 @@ namespace Orckestra.Composer.Cart.Services
 
         //TODO: Would it be possible to add cache here too without too much problem?
         //TODO: Because it is called 3 times when you retrieve the Cart
-        protected virtual async Task<CartViewModel> CreateCartViewModelAsync(CreateCartViewModelParam param)
+        public virtual async Task<CartViewModel> CreateCartViewModelAsync(CreateCartViewModelParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
             if (param.Cart == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.Cart)), nameof(param)); }

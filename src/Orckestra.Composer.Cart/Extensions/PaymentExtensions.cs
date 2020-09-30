@@ -5,7 +5,7 @@ using Orckestra.Overture.ServiceModel.Orders;
 
 namespace Orckestra.Composer.Cart.Extensions
 {
-    internal static class PaymentExtensions
+    public static class PaymentExtensions
     {
         public static bool IsVoided(this Payment payment)
         {
