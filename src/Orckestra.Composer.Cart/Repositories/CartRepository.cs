@@ -88,6 +88,32 @@ namespace Orckestra.Composer.Cart.Repositories
             return CacheProvider.GetOrAddAsync(cacheKey, () => OvertureClient.SendAsync(request));
         }
 
+        /// <summary>
+        /// Delete a cart
+        /// </summary>
+        /// <param name="param">Parameters to be used for deleting</param>
+        /// <returns>Http web response of deleting operation</returns>
+        public virtual async Task<HttpWebResponse> DeleteCartAsync(DeleteCartParam param)
+        {
+            if (param == null) throw new ArgumentNullException(nameof(param));
+            if (string.IsNullOrWhiteSpace(param.Scope)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param));
+            if (param.CultureInfo == null) throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param));
+            if (string.IsNullOrWhiteSpace(param.CartName)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartName)), nameof(param));
+            if (param.CustomerId == Guid.Empty) throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param));
+
+            DeleteCartRequest request = new DeleteCartRequest
+            {
+                CartName = param.CartName,
+                CultureName = param.CultureInfo.Name,
+                CustomerId = param.CustomerId,
+                ScopeId = param.Scope
+            };
+            CacheKey cacheKey = BuildCartCacheKey(param.Scope, param.CustomerId, param.CartName);
+            await CacheProvider.RemoveAsync(cacheKey);
+
+            return await OvertureClient.SendAsync(request);
+        }
+
         public virtual Task<PaymentMethod> SetDefaultCustomerPaymentMethod(SetDefaultCustomerPaymentMethodParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
@@ -151,6 +177,36 @@ namespace Orckestra.Composer.Cart.Repositories
                 RecurringOrderFrequencyName = param.RecurringOrderFrequencyName,
                 RecurringOrderProgramName = param.RecurringOrderProgramName
             };
+        }
+
+        /// <summary>
+        /// Add one or more line items to a cart.
+        /// In case cart does not exist - it will be created.
+        /// If a product or a  variant already exists in a cart, it will be merged with adding ones.
+        /// </summary>
+        /// <param name="param">Parameters to be used for adding</param>
+        /// <returns>Processed cart</returns>
+        public virtual Task<ProcessedCart> AddLineItemsAsync(AddLineItemsParam param)
+        {
+            if (param == null) throw new ArgumentNullException(nameof(param));
+            if (string.IsNullOrWhiteSpace(param.CartName)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartName)), nameof(param));
+            if (string.IsNullOrWhiteSpace(param.Scope)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param));
+            if (param.CultureInfo == null) throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param));
+            if (param.CustomerId == Guid.Empty) throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param));
+            if (param.LineItems == null || param.LineItems.Count == 0) throw new ArgumentException(GetMessageOfNullEmpty(nameof(param.LineItems)), nameof(param));
+
+            AddOrUpdateLineItemsRequest request = new AddOrUpdateLineItemsRequest
+            {
+                CartName = param.CartName,
+                CultureName = param.CultureInfo.Name,
+                CustomerId = param.CustomerId,
+                LineItems = param.LineItems,
+                ScopeId = param.Scope
+            };
+
+            CacheKey cacheKey = BuildCartCacheKey(param.Scope, param.CustomerId, param.CartName);
+
+            return CacheProvider.ExecuteAndSetAsync(cacheKey, () => OvertureClient.SendAsync(request));
         }
 
         /// <summary>
@@ -312,6 +368,31 @@ namespace Orckestra.Composer.Cart.Repositories
         }
 
         /// <summary>
+        /// Get line items of a cart of a customer
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns>Line items of a cart</returns>
+        public virtual Task<List<LineItem>> GetLineItemsAsync(GetLineItemsParam param)
+        {
+            if (param == null) throw new ArgumentNullException(nameof(param));
+            if (string.IsNullOrWhiteSpace(param.Scope)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param));
+            if (param.CultureInfo == null) throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param));
+            if (string.IsNullOrWhiteSpace(param.CartName)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartName)), nameof(param));
+            if (param.CustomerId == Guid.Empty) throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param));
+
+            GetLineItemsInCartRequest request = new GetLineItemsInCartRequest
+            {
+                CultureName = param.CultureInfo.Name,
+                CustomerId = param.CustomerId,
+                ScopeId = param.Scope,
+                CartName = param.CartName
+            };
+
+            //Avoid caching because of returning with type of line items
+            return OvertureClient.SendAsync(request);
+        }
+
+        /// <summary>
         /// Adds a coupon to the Cart, then returns an instance of the cart.
         /// </summary>
         /// <param name="param"></param>
@@ -426,6 +507,7 @@ namespace Orckestra.Composer.Cart.Repositories
                 CustomerId = param.CustomerId,
                 Id = param.Id,
                 CultureName = param.CultureInfo.Name,
+                PickUpLocationId = param.PickUpLocationId,
                 FulfillmentLocationId = param.FulfillmentLocationId,
                 FulfillmentMethodName = param.FulfillmentMethodName,
                 FulfillmentScheduleMode = param.FulfillmentScheduleMode,

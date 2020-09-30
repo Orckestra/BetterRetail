@@ -20,6 +20,15 @@ namespace Orckestra.Composer.Cart.Repositories
         Task<ProcessedCart> AddLineItemAsync(AddLineItemParam param);
 
         /// <summary>
+        /// Add one or more line items to a cart.
+        /// In case cart does not exist - it will be created.
+        /// If a product or a  variant already exists in a cart, it will be merged with adding ones.
+        /// </summary>
+        /// <param name="param">Parameters to be used for adding</param>
+        /// <returns>Processed cart</returns>
+        Task<ProcessedCart> AddLineItemsAsync(AddLineItemsParam param);
+
+        /// <summary>
         /// Adds a payment on the first shipment of the specified cart.
         /// </summary>
         /// <param name="param">Parameters used to add a payment to the cart.</param>
@@ -58,6 +67,14 @@ namespace Orckestra.Composer.Cart.Repositories
         Task<ProcessedCart> RemoveLineItemAsync(RemoveLineItemParam param);
 
         /// <summary>
+        /// Delete a cart
+        /// </summary>
+        /// <param name="param">Parameters to be used for deleting</param>
+        /// <returns>Http web response of deleting operation</returns>
+        Task<HttpWebResponse> DeleteCartAsync(DeleteCartParam param);
+
+
+        /// <summary>
         /// Removes many line items from the cart at once.
         /// </summary>
         /// <param name="param"></param>
@@ -70,6 +87,13 @@ namespace Orckestra.Composer.Cart.Repositories
         /// <param name="param"></param>
         /// <returns>The full and updated cart details</returns>
         Task<ProcessedCart> UpdateLineItemAsync(UpdateLineItemParam param);
+
+        /// <summary>
+        /// Get line items of a cart of a customer
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns>Line items of a cart</returns>
+        Task<List<LineItem>> GetLineItemsAsync(GetLineItemsParam param);
 
         /// <summary>
         /// Adds a coupon to the Cart, then returns an instance of the cart.
