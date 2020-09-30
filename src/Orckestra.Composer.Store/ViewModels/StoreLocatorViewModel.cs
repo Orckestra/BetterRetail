@@ -11,6 +11,8 @@ namespace Orckestra.Composer.Store.ViewModels
         public IList<StoreClusterViewModel> Markers { get; set; }
 
         public StoreGeoCoordinate NearestStoreCoordinate { get; set; }
+        public double NearestDistance { get; set; }
+        public string LengthMeasureUnit { get; set; }
 
         public string PostedAddress { get; set; }
 
