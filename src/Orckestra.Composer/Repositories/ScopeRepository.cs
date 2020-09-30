@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Parameters;
@@ -50,6 +50,24 @@ namespace Orckestra.Composer.Repositories
             });
 
             return scope;
+        }
+
+        public virtual Task<Scope> GetAllScopesAsync()
+        {
+            var key = new CacheKey(CacheConfigurationCategoryNames.Scopes, nameof(GetAllScopesAsync));
+
+            return CacheProvider.GetOrAddAsync(key, () =>
+            {
+                var getScopeRequest = new GetScopeRequest
+                {
+                    ScopeId = "Global",
+                    IncludeCurrency = false,
+                    IncludeChildren = true,
+                    CultureName = null
+                };
+
+                return OvertureClient.SendAsync(getScopeRequest);
+            });
         }
     }
 }

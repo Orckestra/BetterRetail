@@ -1,4 +1,5 @@
-﻿using Composite.Core.WebClient.Renderings.Data;
+﻿using System;
+using Composite.Core.WebClient.Renderings.Data;
 using Composite.Data;
 using Composite.Data.Hierarchy;
 using Composite.Data.Hierarchy.DataAncestorProviders;
@@ -49,5 +50,20 @@ namespace Orckestra.Composer.CompositeC1.DataTypes
         [FieldPosition(2)]
         [NullIntegerRangeValidator(-2147483648, 2147483647)]
         Nullable<int> MapsMarkerPadding { get; set; }
+        [ImmutableFieldId("42c33c58-0e2e-42ab-bbd0-f673f60d7c10")]
+        [FormRenderingProfile(Label = "Length measure unit")]
+        [FunctionBasedNewInstanceDefaultFieldValue("<f:function xmlns:f=\"http://www.composite.net/ns/function/1.0\" name=\"Composite.Co" +
+            "nstant.String\"><f:param name=\"Constant\" value=\"mi\" /></f:function>")]
+        [StoreFieldType(PhysicalStoreFieldType.String, 256)]
+        [FieldPosition(3)]
+        string LengthMeasureUnit { get; set; }
+
+        [ImmutableFieldId("32aced52-d65b-4cf3-a13b-5275e218ab5d")]
+        [FormRenderingProfile(HelpText = "Set up a distance, in which stores will be available for a customer")]
+        [StoreFieldType(PhysicalStoreFieldType.Decimal, 28, 2, IsNullable = true)]
+        [FieldPosition(4)]
+        [DecimalPrecisionValidator(28, 2)]
+        [DefaultFieldDecimalValue(0)]
+        Nullable<decimal> StoresAvailabilityDistance { get; set; }
     }
 }

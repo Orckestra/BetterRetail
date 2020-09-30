@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Orckestra.Composer.ViewModels;
 
 namespace Orckestra.Composer.Cart.ViewModels.Order
@@ -70,6 +71,9 @@ namespace Orckestra.Composer.Cart.ViewModels.Order
         /// Gets or sets the Shipping method viewmodel for this shipment.
         /// </summary>
         public OrderShippingMethodViewModel ShippingMethod { get; set; }
+        public Guid FulfillmentLocationId {get; set; }
+
+        public string FulfillmentScheduleReservationNumber { get; set; }
 
         public OrderShipmentDetailViewModel()
         {

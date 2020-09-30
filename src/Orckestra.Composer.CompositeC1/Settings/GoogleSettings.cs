@@ -1,9 +1,13 @@
-﻿using Composite.Data;
-using Orckestra.Composer.CompositeC1.DataTypes;
-using Orckestra.Composer.Configuration;
-using Orckestra.Composer.Services;
-using System;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using Composite.Data;
+using Orckestra.Composer.Configuration;
+using Orckestra.Composer.Enums;
+using Orckestra.Composer.Providers.Localization;
+using Orckestra.Composer.Services;
 
 namespace Orckestra.Composer.CompositeC1.Settings
 {
@@ -68,6 +72,27 @@ namespace Orckestra.Composer.CompositeC1.Settings
 
                 return 30;
             }
+        }
+        public LengthMeasureUnitEnum LengthMeasureUnit
+        {
+            get
+            {
+                return (LengthMeasureUnitEnum)Enum.Parse(typeof(LengthMeasureUnitEnum), GoogleSettingsMeta.LengthMeasureUnit);
+            }
+        }
+
+        public decimal? StoresAvailabilityDistance
+        {
+            get
+            {
+                return GoogleSettingsMeta.StoresAvailabilityDistance;
+            }
+        }
+
+        public static IEnumerable GetAvailableLengthMeasureUnits()
+        {
+            IEnumerable<LengthMeasureUnitEnum> values = Enum.GetValues(typeof(LengthMeasureUnitEnum)).Cast<LengthMeasureUnitEnum>();
+            return values.Select(d => new { Key = d, Label = LocalizationHelper.LocalizedFormat("General", d.ToString(), d, CultureInfo.CurrentUICulture) });
         }
     }
 }
