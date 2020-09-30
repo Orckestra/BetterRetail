@@ -53,7 +53,7 @@ namespace Orckestra.Composer.CompositeC1.DataTypes
         [ImmutableFieldId("42c33c58-0e2e-42ab-bbd0-f673f60d7c10")]
         [FormRenderingProfile(Label = "Length measure unit")]
         [FunctionBasedNewInstanceDefaultFieldValue("<f:function xmlns:f=\"http://www.composite.net/ns/function/1.0\" name=\"Composite.Co" +
-            "nstant.String\"><f:param name=\"Constant\" value=\"mi\" /></f:function>")]
+            "nstant.String\"><f:param name=\"Constant\" value=\"km\" /></f:function>")]
         [StoreFieldType(PhysicalStoreFieldType.String, 256)]
         [FieldPosition(3)]
         string LengthMeasureUnit { get; set; }
