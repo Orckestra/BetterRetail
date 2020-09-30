@@ -321,7 +321,6 @@
     <Compile Include="Services\ProductPriceViewService.cs" />
     <Compile Include="Services\RecurringOrderTemplatesViewService.cs" />
     <Compile Include="Services\ScopeViewService.cs" />
-    <Compile Include="Parameters\UpdateUserPreferredStoreParam.cs" />
     <Compile Include="Utils\Constants.cs" />
     <Compile Include="Utils\ExpressionUtility.cs" />
     <Compile Include="Utils\LineItemHelper.cs" />
