@@ -1,4 +1,5 @@
-﻿using Orckestra.Composer.ViewModels;
+using Orckestra.Composer.ViewModels;
+using Orckestra.Overture.ServiceModel.Orders;
 
 namespace Orckestra.Composer.Cart.ViewModels.Order
 {
@@ -20,5 +21,7 @@ namespace Orckestra.Composer.Cart.ViewModels.Order
         /// Indicate if the shipping is taxable 
         /// </summary>
         public bool Taxable { get; set; }
+
+        public FulfillmentMethodType FulfillmentMethodType { get; set; }
     }
 }

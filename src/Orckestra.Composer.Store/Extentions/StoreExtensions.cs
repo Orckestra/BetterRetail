@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Orckestra.Composer.Configuration;
+using Orckestra.Composer.Enums;
 using Orckestra.Composer.Store.Models;
 using Orckestra.Composer.Store.Utils;
 using Orckestra.Composer.Store.ViewModels;
+using Orckestra.Overture.ServiceModel.Customers.Stores;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Store.Extentions
@@ -73,12 +77,28 @@ namespace Orckestra.Composer.Store.Extentions
                 : false;
         }
 
-        public static double CalculateDestination(this Overture.ServiceModel.Customers.Stores.Store store, Coordinate searchPoint)
+        public static double CalculateDestination(this Overture.ServiceModel.Customers.Stores.Store store, Coordinate searchPoint, LengthMeasureUnitEnum lengthMeasureUnit)
         {
+            double radius = lengthMeasureUnit == LengthMeasureUnitEnum.km 
+                ? EarthRadiusMeasurement.Kilometers 
+                : EarthRadiusMeasurement.Miles;
+
             return store.HasLocation()
                 ? Math.Round(GeoCodeCalculator.CalcDistance(store.GetLatitude(), store.GetLongitude(),
-                    searchPoint.Lat, searchPoint.Lng, EarthRadiusMeasurement.Kilometers), 2)
+                    searchPoint.Lat, searchPoint.Lng, radius), 2)
                 : double.MaxValue;
+        }
+
+        public static IEnumerable<Overture.ServiceModel.Customers.Stores.Store> FilterSortStoresByDistanceToCustomer(
+            this IEnumerable<Overture.ServiceModel.Customers.Stores.Store> stores, IGoogleSettings settings, Coordinate searchPoint)
+        {
+            return from store in stores
+                   let distanceToCustomer = store.CalculateDestination(searchPoint, settings.LengthMeasureUnit)
+                   where settings.StoresAvailabilityDistance == null
+                     ? true
+                     : distanceToCustomer <= (double)settings.StoresAvailabilityDistance
+                   orderby distanceToCustomer
+                   select store;
         }
     }
 }

@@ -11,5 +11,6 @@ namespace Orckestra.Composer.Store.Services
         Task<StoreViewModel> GetStoreViewModelAsync(GetStoreByNumberParam viewModelParam);
         Task<PageHeaderViewModel> GetPageHeaderViewModelAsync(GetStorePageHeaderViewModelParam param);
         Task<List<StoreViewModel>> GetStoresForInStorePickupViewModelAsync(GetStoresForInStorePickupViewModelParam param);
+        Task<List<StoreViewModel>> GetAllStoresViewModelAsync(GetStoresParam param);
     }
 }

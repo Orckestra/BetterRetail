@@ -16,6 +16,11 @@ namespace Orckestra.Composer.Store.Parameters
         public bool IncludeMarkers { get; set; } = false;
         public int PageSize { get; set; }
         public int PageNumber { get; set; }
+        /// <summary>
+        /// To return or not to return the coordinate of the nearest available
+        /// store from all stores in the scope, not depending on map bounds param
+        /// </summary>
+        public bool IncludeNearestStoreCoordinate { get; set; }
         public GetStoreLocatorViewModelParam Clone()
         {
             var param = (GetStoreLocatorViewModelParam)MemberwiseClone();

@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
+using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Logging;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Localization;
@@ -27,17 +28,20 @@ namespace Orckestra.Composer.Store.Services
         protected IStoreRepository StoreRepository { get; private set; }
         protected ILocalizationProvider LocalizationProvider { get; private set; }
         protected IStoreUrlProvider StoreUrlProvider { get; private set; }
+		public IGoogleSettings GoogleSettings { get; }
 
         public StoreViewService(
             IStoreRepository storeRepository,
             IStoreViewModelFactory storeViewModelFactory,
             ILocalizationProvider localizationProvider,
-            IStoreUrlProvider storeUrlProvider)
+			IStoreUrlProvider storeUrlProvider,
+			IGoogleSettings googleSettings)
         {
             StoreViewModelFactory = storeViewModelFactory;
             StoreRepository = storeRepository;
             LocalizationProvider = localizationProvider;
             StoreUrlProvider = storeUrlProvider;
+			GoogleSettings = googleSettings ?? throw new ArgumentNullException(nameof(googleSettings));
         }
 
         public virtual async Task<StoreViewModel> GetStoreViewModelAsync(GetStoreByNumberParam param)
@@ -173,5 +177,28 @@ namespace Orckestra.Composer.Store.Services
 
             return new List<StoreViewModel>();
         }
+		public virtual async Task<List<StoreViewModel>> GetAllStoresViewModelAsync(GetStoresParam param)
+		{
+			var overtureStores = await StoreRepository.GetStoresAsync(param).ConfigureAwait(false);
+			IEnumerable<Overture.ServiceModel.Customers.Stores.Store> stores = overtureStores.Results;
+
+			if (stores == null) return new List<StoreViewModel>();
+
+			stores = stores.Where(s => s.IsActive && s.FulfillmentLocation != null && s.FulfillmentLocation.IsActive);
+
+			if (param.SearchPoint != null)
+			{
+				stores = stores.FilterSortStoresByDistanceToCustomer(GoogleSettings, param.SearchPoint);
+			}
+
+			var vm = stores.Select(s => StoreViewModelFactory.CreateStoreViewModel(new CreateStoreViewModelParam
+			{
+				BaseUrl = param.BaseUrl,
+				CultureInfo = param.CultureInfo,
+				Store = s,
+				SearchPoint = param.SearchPoint
+			})).ToList();
+			return vm;
+		}
     }
 }

@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using Orckestra.Composer.Parameters;
 using Orckestra.Overture.ServiceModel;
 
@@ -12,5 +12,12 @@ namespace Orckestra.Composer.Repositories
         /// <param name="param"></param>
         /// <returns></returns>
         Task<Scope> GetScopeAsync(GetScopeParam param);
+
+
+        /// <summary>
+        /// Returns the Global scope, with all the descendant scopes populated.
+        /// </summary>
+        /// <returns>Global scope object with children elements</returns>
+        Task<Scope> GetAllScopesAsync();
     }
 }
