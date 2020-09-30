@@ -283,6 +283,8 @@ namespace Orckestra.Composer.Cart.Factory.Order
             }
 
             shipmentVm.ShippingMethod = GetShippingMethodViewModel(shipment, param);
+            shipmentVm.FulfillmentScheduleReservationNumber = shipment.FulfillmentScheduleReservationNumber;
+            shipmentVm.FulfillmentLocationId = shipment.FulfillmentLocationId;
             return shipmentVm;
         }
 

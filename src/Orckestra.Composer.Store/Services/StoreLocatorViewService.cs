@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Store.Extentions;
 using Orckestra.Composer.Store.Factory;
 using Orckestra.Composer.Store.Parameters;
@@ -19,17 +20,20 @@ namespace Orckestra.Composer.Store.Services
         protected IStoreViewModelFactory StoreViewModelFactory { get; private set; }
         protected IStoreUrlProvider StoreUrlProvider { get; private set; }
         protected IMapClustererProvider MapClustererProvider { get; private set; }
+        public IGoogleSettings GoogleSettings { get; }
 
         public StoreLocatorViewService(
             IStoreRepository storeRepository,
             IStoreViewModelFactory storeViewModelFactory,
             IStoreUrlProvider storeUrlProvider,
-            IMapClustererProvider mapClustererProvider)
+            IMapClustererProvider mapClustererProvider,
+            IGoogleSettings googleSettings)
         {
             StoreRepository = storeRepository;
             StoreViewModelFactory = storeViewModelFactory;
             StoreUrlProvider = storeUrlProvider;
             MapClustererProvider = mapClustererProvider;
+            GoogleSettings = googleSettings ?? throw new ArgumentNullException(nameof(googleSettings));
         }
         public virtual async Task<StoreLocatorViewModel> GetStoreLocatorViewModelAsync(GetStoreLocatorViewModelParam param)
         {
@@ -41,7 +45,8 @@ namespace Orckestra.Composer.Store.Services
             var overtureStores = await StoreRepository.GetStoresAsync(new GetStoresParam 
             { 
                 Scope = param.Scope, 
-                IncludeExtraInfo = true 
+                IncludeExtraInfo = true,
+                CultureInfo = param.CultureInfo
             }).ConfigureAwait(false);
 
             var model = GetEmptyStoreLocatorViewModel(new GetEmptyStoreLocatorViewModelParam
@@ -51,19 +56,45 @@ namespace Orckestra.Composer.Store.Services
             });
 
             IEnumerable<Overture.ServiceModel.Customers.Stores.Store> stores = overtureStores.Results;
+            if (stores == null || !stores.Any()) return model;
 
             var index = 1;
 
+            //Select the closest store coordinate from all available stores before map InBounds filtering
+            if (param.IncludeNearestStoreCoordinate && param.SearchPoint != null)
+            {
+                var closestStore = stores.First();
+                var closestDistance = closestStore.CalculateDestination(param.SearchPoint, GoogleSettings.LengthMeasureUnit);
+                foreach (var currentStore in stores)
+                {
+                    var currentDistance = currentStore.CalculateDestination(param.SearchPoint, GoogleSettings.LengthMeasureUnit);
+                    if (currentDistance < closestDistance)
+                    {
+                        closestStore = currentStore;
+                        closestDistance = currentDistance;
+                    }
+                }
+                if (closestDistance <= (double)GoogleSettings.StoresAvailabilityDistance)
+                {
+                    model.NearestDistance = closestDistance;
+                    model.LengthMeasureUnit = GoogleSettings.LengthMeasureUnit.ToString();
+                    model.NearestStoreCoordinate = new StoreGeoCoordinate(closestStore);
+                }
+            }
+
+            //Inbound filtering
             if (param.MapBounds != null)
             {
                 stores = stores.Where(st => st.InBounds(param.MapBounds));
             }
 
+            //Affect next filtering and ordering to the filtered by map bounds result
             if (param.SearchPoint != null)
             {
-                stores = stores.OrderBy(s => s.CalculateDestination(param.SearchPoint));
-                model.NearestStoreCoordinate = new StoreGeoCoordinate(stores.FirstOrDefault());
+                stores = stores.FilterSortStoresByDistanceToCustomer(GoogleSettings, param.SearchPoint);
             }
+
+            if (!stores.Any()) return model;
             var storeIndexes = stores.ToDictionary(d => d.Number, d => index++);
 
             var storesForCurrentPage = stores.Skip((param.PageNumber - 1) * param.PageSize).Take(param.PageSize).ToList();

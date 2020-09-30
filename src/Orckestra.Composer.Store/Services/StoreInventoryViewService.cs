@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Enums;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Repositories;
@@ -24,13 +25,15 @@ namespace Orckestra.Composer.Store.Services
         protected ILookupService LookupService { get; private set; }
         protected IProductSettingsViewService ProductSettingsViewService { get; private set; }
         protected IInventoryRepository InventoryRepository { get; private set; }
+		protected IGoogleSettings GoogleSettings { get; private set; }
 
         public StoreInventoryViewService(
             IStoreViewModelFactory storeViewModelFactory,
             IStoreRepository storeRepository,
             ILookupService lookupService,
             IProductSettingsViewService productSettingsViewService,
-            IInventoryRepository inventoryRepository)
+			IInventoryRepository inventoryRepository,
+			IGoogleSettings googleSettings)
         {
             StoreViewModelFactory = storeViewModelFactory;
             StoreRepository = storeRepository;
@@ -38,6 +41,7 @@ namespace Orckestra.Composer.Store.Services
             ProductSettingsViewService = productSettingsViewService;
             InventoryRepository = inventoryRepository;
 
+			GoogleSettings = googleSettings;
         }
 
         public virtual async Task<StoreInventoryViewModel> GetStoreInventoryViewModelAsync(GetStoreInventoryViewModelParam param)
@@ -67,7 +71,7 @@ namespace Orckestra.Composer.Store.Services
             var index = 1;
             if (param.SearchPoint != null)
             {
-                stores = stores.OrderBy(s => s.CalculateDestination(param.SearchPoint)).ToList();
+				stores = stores.FilterSortStoresByDistanceToCustomer(GoogleSettings, param.SearchPoint).ToList();
             }
 
             var storeIndexes = stores.ToDictionary(d => d.Number, d => index++);

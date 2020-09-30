@@ -9,6 +9,7 @@ using FluentAssertions;
 using Moq;
 using Moq.AutoMock;
 using NUnit.Framework;
+using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Store.Factory;
 using Orckestra.Composer.Store.Models;
 using Orckestra.Composer.Store.Parameters;
@@ -36,6 +37,7 @@ namespace Orckestra.Composer.Store.Tests.Services
             _container.Use(CreateStoreUrlProvider());
             _container.Use(CreateStoreRepository(StoresNumbers));
             _container.Use(CreateStoreViewModelFactory(StoresNumbers));
+            _container.GetMock<IGoogleSettings>().Setup(c => c.StoresAvailabilityDistance).Returns(decimal.MaxValue);
         }
 
         [Test]
@@ -172,7 +174,8 @@ namespace Orckestra.Composer.Store.Tests.Services
                 BaseUrl = "http://foo.com",
                 IncludeMarkers = false,
                 PageNumber = 1,
-                PageSize = 4
+                PageSize = 4,
+                IncludeNearestStoreCoordinate = true
             };
         }
 

@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Repositories;
 using Orckestra.Composer.ViewModels;
-
+using Orckestra.Overture.Caching;
+using Orckestra.Overture.ServiceModel;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Services
@@ -14,10 +17,13 @@ namespace Orckestra.Composer.Services
 
         protected IViewModelMapper ViewModelMapper { get; }
 
-        public ScopeViewService(IScopeRepository scopeRepository, IViewModelMapper viewModelMapper)
+        protected ICacheProvider CacheProvider { get; }
+
+        public ScopeViewService(IScopeRepository scopeRepository, IViewModelMapper viewModelMapper, ICacheProvider cacheProvider)
         {
             ScopeRepository = scopeRepository;
             ViewModelMapper = viewModelMapper;
+            CacheProvider = cacheProvider;
         }
 
         public virtual async Task<CurrencyViewModel> GetScopeCurrencyAsync(GetScopeCurrencyParam param)
@@ -40,6 +46,83 @@ namespace Orckestra.Composer.Services
             }
 
             return vm;
+        }
+
+        public virtual async Task<string> GetSaleScopeAsync(string scope)
+        {
+            if (string.IsNullOrWhiteSpace(scope)) throw new System.ArgumentException(GetMessageOfNullWhiteSpace(nameof(scope)));
+
+            var dependentScopes = await GetDependentScopesWithParents().ConfigureAwait(false);
+            return dependentScopes.ContainsKey(scope) ? dependentScopes[scope] : scope;
+        }
+
+        protected virtual async Task<Dictionary<string, string>> GetDependentScopesWithParents()
+        {
+            var key = new CacheKey(CacheConfigurationCategoryNames.Scopes, nameof(GetDependentScopesWithParents));
+
+            var dependentsScopes = await CacheProvider.GetOrAddAsync(key, async () =>
+            {
+                var result = new Dictionary<string, string>();
+                var scope = await ScopeRepository.GetAllScopesAsync().ConfigureAwait(false);
+                foreach (var saleScope in GetSaleScopes(scope))
+                {
+                    foreach (var dependentScope in GetDependantsScopes(saleScope))
+                    {
+                        result[dependentScope.Id] = saleScope.Id;
+                    }
+                }
+
+                return result;
+            }).ConfigureAwait(false);
+            return dependentsScopes;
+        }
+
+        private IEnumerable<Scope> GetSaleScopes(Scope scope)
+        {
+            if (scope == null)
+                yield break;
+            foreach (var child in scope.Children)
+            {
+                switch (child.Type)
+                {
+                    case ScopeType.Sale:
+                        yield return child;
+                        break;
+                    case ScopeType.Virtual:
+                        {
+                            foreach (var virtualChild in GetSaleScopes(child))
+                            {
+                                yield return virtualChild;
+                            }
+
+                            break;
+                        }
+                }
+            }
+        }
+
+        private IEnumerable<Scope> GetDependantsScopes(Scope scope)
+        {
+            if (scope == null)
+                yield break;
+            foreach (var child in scope.Children)
+            {
+                switch (child.Type)
+                {
+                    case ScopeType.Dependant:
+                        yield return child;
+                        break;
+                    case ScopeType.Virtual:
+                        {
+                            foreach (var virtualChild in GetDependantsScopes(child))
+                            {
+                                yield return virtualChild;
+                            }
+
+                            break;
+                        }
+                }
+            }
         }
     }
 }

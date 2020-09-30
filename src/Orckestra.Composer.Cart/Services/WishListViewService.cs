@@ -10,6 +10,7 @@ using Orckestra.Composer.Cart.Repositories;
 using Orckestra.Composer.Cart.ViewModels;
 using Orckestra.Composer.Providers.Dam;
 using Orckestra.Composer.Services;
+using Orckestra.Overture.ServiceModel.Orders;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Cart.Services
@@ -102,6 +103,13 @@ namespace Orckestra.Composer.Cart.Services
             });
         }
 
+        protected virtual Task<ProcessedCart> FixWishList(ProcessedCart wishList)
+        {
+            return FixCartService.SetFulfillmentLocationIfRequired(new FixCartParam
+            {
+                Cart = wishList
+            });
+        }
         public virtual async Task<WishListSummaryViewModel> GetWishListSummaryViewModelAsync(GetCartParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
