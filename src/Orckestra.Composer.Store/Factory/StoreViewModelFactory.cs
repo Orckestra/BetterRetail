@@ -70,6 +70,13 @@ namespace Orckestra.Composer.Store.Factory
 
             storeViewModel.Schedule = CreateStoreScheduleViewModel(param);
 
+            if (param.Store.FulfillmentLocation != null)
+            {
+                storeViewModel.SupportDelivery = param.Store.FulfillmentLocation.SupportDelivery;
+                storeViewModel.SupportPickUp = param.Store.FulfillmentLocation.SupportPickUp;
+                storeViewModel.InventoryLocationId = param.Store.FulfillmentLocation.InventoryLocationId;
+            }
+
             return storeViewModel;
         }
 

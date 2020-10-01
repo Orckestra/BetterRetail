@@ -33,7 +33,7 @@ namespace Orckestra.Composer.Store.Api
         [ValidateModelState]
         public virtual async Task<IHttpActionResult> GetStores()
         {
-            var vm = await StoreViewService.GetStoresForInStorePickupViewModelAsync(new GetStoresForInStorePickupViewModelParam
+            var vm = await StoreViewService.GetAllStoresViewModelAsync(new GetStoresParam
             {
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
                 CultureInfo = ComposerContext.CultureInfo,
