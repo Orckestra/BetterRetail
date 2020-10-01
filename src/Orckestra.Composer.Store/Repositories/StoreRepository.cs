@@ -37,6 +37,8 @@ namespace Orckestra.Composer.Store.Repositories
 
         public virtual async Task<FindStoresQueryResult> GetStoresAsync(GetStoresParam param)
         {
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
             if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
 
             var cacheKey = new CacheKey(CacheConfigurationCategoryNames.Store)
@@ -48,6 +50,8 @@ namespace Orckestra.Composer.Store.Repositories
             var request = new FindStoresRequest
             {
                 ScopeId = param.Scope,
+                IncludeChildScopes = true,
+                CultureName = param.CultureInfo.Name,
                 Query = new Query
                 {
                     StartingIndex = 0,
@@ -73,17 +77,14 @@ namespace Orckestra.Composer.Store.Repositories
                 var ids = stores.Results.Select(x => x.Id).ToList();
                 var extraStoresInfo = await GetExtraStoresInfoAsync(ids, param).ConfigureAwait(false);
 
-                for (var index = 0; index < stores.Results.Count; index++)
-                {
-                    var store = stores.Results[index];
-                    var extraInfo = extraStoresInfo[index];
-                    object displayName = null;
-                    extraInfo?.PropertyBag.TryGetValue("DisplayName", out displayName);
-                    if (displayName != null)
-                    {
+                extraStoresInfo?.ForEach(extraStoreInfo => {
+                    extraStoreInfo.PropertyBag.TryGetValue("DisplayName", out object displayName);
+                    if (displayName == null) return;
+
+                    var store = stores.Results.FirstOrDefault(st => st.Id == extraStoreInfo.Id);
+                    if (store == null) return;
                         store.DisplayName = displayName as Overture.ServiceModel.LocalizedString;
-                    }
-                }
+                });
             }
 
             return stores;
