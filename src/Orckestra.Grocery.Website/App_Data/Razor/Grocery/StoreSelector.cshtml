@@ -1,0 +1,192 @@
+@inherits RazorFunction
+@using Orckestra.Overture.ServiceModel.Orders;
+@using Orckestra.ExperienceManagement.Configuration
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Store Stepper"; }
+    }
+
+    public ISiteConfiguration SiteConfiguration { get; set; }
+
+    [FunctionParameter(Label = "Stepper Title", DefaultValue = "Shop better in there easy steps")]
+    public string StepperTitle { get; set; }
+
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0"
+      xmlns:v-bind="v-bind" xmlns:v-on="v-on">
+<head>
+</head>
+<body>
+    <div data-oc-controller="Grocery.StoreSelector" class="container-md store-selector">
+        <div class="row">
+            <div class="col-12 col-sm-10 offset-sm-1 border p-4">
+                    <div id="vueStoreSelector"
+                         v-cloak="v-cloak">
+                        <div v-if="DefaultStore" class="row justify-content-center text-center">
+                            <div class="col-12 col-sm-10 col-lg-8">
+                                <strong>{{DefaultStore.LocalizedDisplayName}}</strong><br />
+                                <a class="cta" href="#" v-on:click.prevent="DefaultStore = undefined">
+                                    @Html.Localize("Grocery", "B_ChangeStore")
+                                </a>
+                                <div class="mt-4">
+                                    @StartShoppingButton()
+                                </div>
+                            </div>
+                        </div>
+                        <div v-show="!DefaultStore">
+                            @if(!String.IsNullOrEmpty(StepperTitle)) { 
+                                <h2 class="text-center mb-4">@StepperTitle</h2>
+                            }
+                            <stepper xmlns:v-bind="v-bind" xmlns:v-on="v-on" xmlns:v-slot="v-slot" v-bind:show-previous-steps="true">
+                                @Location_Step()
+
+                                @ShippingMethodType_Step()
+
+                                @Stores_Step()
+
+                                @TimeSlots_Step()
+                            </stepper>
+                        </div>
+                    </div>
+              
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+@helper Location_Step()
+{
+<stepper-step v-slot="step"
+              v-bind:before-change="processLocation"
+              v-bind:fulfilled="IsLocationFilled"
+              v-bind:loading="false"
+              title="@Html.Localize("Grocery", "T_Step_CheckServiceNear")"
+              mobile-title="@Html.Localize("Grocery", "TM_Step_CheckServiceNear")">
+
+    <p class="text-center mt-1 mt-sm-5"><strong>@Html.Localize("Grocery", "L_EnterPostalCode")</strong></p>
+    <div class="form-row justify-content-center">
+        <div class="col-12 col-sm-5">
+            <div class="input-group">
+                <input class="form-control" type="text"
+                       placeholder="@Html.Localize("Store", "I_Placeholder")"
+                       v-model="PostalCode"
+                       ref="postalCodeInput"
+                       xmlns:v-bind="v-bind" />
+                <button class="btn bg-transparent input-icon" 
+                        v-on:click.prevent="PostalCode = ''" ><i class="fa fa-times" />
+                </button>
+            </div>
+        </div>
+        <div class="col-12 col-sm-7 mt-2 mt-sm-0">
+            <button class="btn w-100 btn-primary text-uppercase" 
+                    v-on:click.prevent="step.selectStep(); step.nextStep();" 
+                    v-bind:disabled="!IsLocationFilled">
+                @Html.Localize("Grocery", "B_CheckServiceAvailability")
+            </button>
+        </div>
+    </div>
+</stepper-step>
+}
+
+@helper ShippingMethodType_Step()
+{
+<stepper-step v-slot="step"
+              v-bind:before-change="processShippingMethodType"
+              v-bind:reset-changes="clearShippingMethodType"
+              v-bind:fulfilled="IsShippingMethodTypeFilled"
+              title="@Html.Localize("Grocery", "T_Step_SelectDeliveryMethod")"
+              mobile-title="@Html.Localize("Grocery", "TM_Step_SelectDeliveryMethod")">
+    <h2 class="pt-4 text-center">@Html.Localize("Grocery", "L_ServicesNear")</h2>
+    <div class="form-row">
+        <div class="col-md-6 pb-3 d-flex"  v-for="shippingMethod in ShippingMethodTypes">
+            @ShippingMethodTypeOption()
+        </div>
+    </div>
+</stepper-step>
+}
+
+@helper ShippingMethodTypeOption()
+{
+    <div class="border rounded bg-white p-3 flex-grow-1 shipping-methods"
+         v-bind:class="{'selected-method-type bg-selected': ShippingMethodType === shippingMethod.FulfillmentMethodTypeString}">
+        <div class="form-check">
+            <input class="form-check-input" type="radio"
+                   v-bind:value="shippingMethod.FulfillmentMethodTypeString"
+                   name="ShippingMethod"
+                   v-bind:Id="shippingMethod.FulfillmentMethodTypeString + '-radio'"
+                   v-model="ShippingMethodType"
+                   xmlns:v-bind="v-bind"
+                   xmlns:v-on="v-on"
+                   v-on:change="step.selectStep(); step.nextStep()" />
+            <label class="form-check-label d-block"
+                   v-bind:for="shippingMethod.FulfillmentMethodTypeString + '-radio'">
+                <strong>
+                    <i class="fa mr-1"
+                       v-bind:class="[
+                           shippingMethod.FulfillmentMethodTypeString === '@(FulfillmentMethodType.PickUp)' ? 'fa-home' : ''
+                           || 'fa-truck'
+                       ]" />
+                    <span> {{shippingMethod.DisplayName}}</span>
+                </strong>
+                <p class="mb-0 text-height-0">
+                    <small v-if="shippingMethod.FulfillmentMethodTypeString === '@(FulfillmentMethodType.Shipping)'">
+                        @Html.Localize("Grocery", "L_ShippingMethodDescriptionShipping")
+                    </small>
+                    <small v-if="shippingMethod.FulfillmentMethodTypeString === '@(FulfillmentMethodType.PickUp)'">
+                        @Html.Localize("Grocery", "L_ShippingMethodDescriptionPickUp")
+                    </small>
+                </p>
+            </label>
+        </div>
+    </div>
+}
+
+@helper Stores_Step()
+{
+    <stepper-step v-slot="step"
+                  v-bind:reset-changes="clearSelectedStore"
+                  v-bind:fulfilled="IsStoreIdFilled"
+                  v-bind:before-change="processStore"
+                  title="@Html.Localize("Grocery", "T_Step_SelectStore")"
+                  mobile-title="@Html.Localize("Grocery", "TM_Step_SelectStore")">
+        <hr />
+        <h2 class="text-center">@Html.Localize("Grocery", "T_PickStore")</h2>
+        @Function("Grocery.StoreSelector.StoresList")
+
+        <div v-if="NoStores" class="alert bg-light">
+            @Html.Localize("Grocery", "L_StoresNotAvailableMessage")
+        </div>
+
+    </stepper-step>
+}
+
+@helper TimeSlots_Step()
+{
+<stepper-step v-slot="step"
+              v-bind:reset-changes="clearSelectedTimeSlot"
+              v-bind:fulfilled="IsTimeSlotFilled"
+              title="@Html.Localize("Grocery", "T_Step_SelectDate")"
+              mobile-title="@Html.Localize("Grocery", "TM_Step_SelectDate")">
+    <hr />
+    <h2 class="text-center">@Html.Localize("Grocery", "T_PickTimeSlot")</h2>
+    <div class="mb-3">
+        @Function("Grocery.StoreSelector.TimeSlotCalendar")
+    </div>
+    @Forms.Validations.ShowError("Errors.TimeSlotSelectionError")
+    <div class="text-center mt-3">
+        @StartShoppingButton()
+    </div>
+</stepper-step>
+}
+
+@helper StartShoppingButton()
+{
+<a ref="startShoppingButton" class="btn btn-primary btn-block  text-uppercase"
+   href="@HomePageNode.Url">
+    @Html.Localize("Grocery", "B_StartShopping")
+</a>
+}

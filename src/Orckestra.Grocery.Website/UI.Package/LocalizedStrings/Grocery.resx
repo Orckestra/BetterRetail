@@ -1,0 +1,239 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="B_BookYourSlot" xml:space="preserve">
+    <value>Book your slot</value>
+  </data>
+  <data name="B_ChangeSlot" xml:space="preserve">
+    <value>Change slot</value>
+  </data>
+  <data name="B_ChangeStore" xml:space="preserve">
+    <value>Change store</value>
+  </data>
+  <data name="B_Check" xml:space="preserve">
+    <value>Check</value>
+  </data>
+  <data name="B_CheckServiceAvailability" xml:space="preserve">
+    <value>Check service availability</value>
+  </data>
+  <data name="B_NotNow" xml:space="preserve">
+    <value>Not now</value>
+  </data>
+  <data name="B_StartShopping" xml:space="preserve">
+    <value>Start Shopping</value>
+  </data>
+  <data name="H_ChangeStoreModal" xml:space="preserve">
+    <value>Your collection store</value>
+  </data>
+  <data name="H_ChangeTimeSlotModal" xml:space="preserve">
+    <value>Choose Date &amp; Time Slot</value>
+  </data>
+  <data name="L_AvailableSlot" xml:space="preserve">
+    <value>Available</value>
+  </data>
+  <data name="L_ChangeStoreWarning" xml:space="preserve">
+    <value>Some items may not be available at all collection stores. If you change your collection store your basket will be updated.</value>
+  </data>
+  <data name="L_CollectOrder" xml:space="preserve">
+    <value>Collect your order at:</value>
+  </data>
+  <data name="L_EnterPostalCode" xml:space="preserve">
+    <value>Enter your postal code to see the stores or services available near you.</value>
+  </data>
+  <data name="L_FullSlot" xml:space="preserve">
+    <value>Full</value>
+  </data>
+  <data name="L_NoSlotsForStoreWarning" xml:space="preserve">
+    <value>Sorry, there are no time slots available at this store. Please try again later or select another store.</value>
+  </data>
+  <data name="L_ReservationExpired" xml:space="preserve">
+    <value>Your slot reservation has expired.</value>
+  </data>
+  <data name="L_ReservedUntil" xml:space="preserve">
+    <value>Your slot is reserved until {0}</value>
+  </data>
+  <data name="L_ServicesNear" xml:space="preserve">
+    <value>Services near you</value>
+  </data>
+  <data name="L_ShippingMethodDescriptionPickUp" xml:space="preserve">
+    <value>Select this option to view a list of stores
+near you offering this service.</value>
+  </data>
+  <data name="L_ShippingMethodDescriptionShipping" xml:space="preserve">
+    <value>Good news! The delivery service is
+available for you.</value>
+  </data>
+  <data name="L_StoresNotAvailableMessage" xml:space="preserve">
+    <value>Sorry, no service is available in this area.</value>
+  </data>
+  <data name="L_TimeSlotLoadingError" xml:space="preserve">
+    <value>An error occurred while loading time slots. Please try again later.</value>
+  </data>
+  <data name="L_TimeSlotQuotaIsFull" xml:space="preserve">
+    <value>This time slot is fully booked. Please try another one.</value>
+  </data>
+  <data name="L_TimeSlotReservationAlreadyBookedForThisCart" xml:space="preserve">
+    <value>Time slot reservation already booked for this Cart. Please try another one.</value>
+  </data>
+  <data name="L_TimeSlotReservationFailed" xml:space="preserve">
+    <value>An error occurred while reserving this time slot. Please try another one.</value>
+  </data>
+  <data name="L_TimeSlotRow" xml:space="preserve">
+    <value>{0} to {1}</value>
+  </data>
+  <data name="L_Today" xml:space="preserve">
+    <value>today</value>
+  </data>
+  <data name="L_Tomorrow" xml:space="preserve">
+    <value>tomorrow</value>
+  </data>
+  <data name="L_UnavailableSlot" xml:space="preserve">
+    <value>NA</value>
+  </data>
+  <data name="TM_Step_CheckServiceNear" xml:space="preserve">
+    <value>Check availability</value>
+  </data>
+  <data name="TM_Step_SelectDate" xml:space="preserve">
+    <value>Select timeslot</value>
+  </data>
+  <data name="TM_Step_SelectDeliveryMethod" xml:space="preserve">
+    <value>Pickup or Delivery?</value>
+  </data>
+  <data name="TM_Step_SelectStore" xml:space="preserve">
+    <value>Select Store</value>
+  </data>
+  <data name="T_PickStore" xml:space="preserve">
+    <value>Pick your store</value>
+  </data>
+  <data name="T_PickTimeSlot" xml:space="preserve">
+    <value>Pick a timeslot</value>
+  </data>
+  <data name="T_Step_CheckServiceNear" xml:space="preserve">
+    <value>Check service availability near you</value>
+  </data>
+  <data name="T_Step_SelectDate" xml:space="preserve">
+    <value>Pick a date and time of fulfillment</value>
+  </data>
+  <data name="T_Step_SelectDeliveryMethod" xml:space="preserve">
+    <value>Select to pick up your order or get it delivered</value>
+  </data>
+  <data name="T_Step_SelectStore" xml:space="preserve">
+    <value>Select the default store to fulfill your order</value>
+  </data>
+</root>

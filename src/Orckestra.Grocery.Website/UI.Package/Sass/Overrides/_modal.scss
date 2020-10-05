@@ -50,3 +50,7 @@
         width: 1170px;
     }
 }
+
+.pac-container {
+    z-index: $zindex-popover;
+  }

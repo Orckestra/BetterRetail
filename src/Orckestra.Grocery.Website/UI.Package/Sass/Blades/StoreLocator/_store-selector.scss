@@ -1,0 +1,44 @@
+.store-selector {
+    .bs-stepper-header {
+      display: none;
+    }
+  
+    .store-row {
+      .store-row-map {
+        position: relative;
+        background-position: center;
+        width: 130%;
+        height: 100%;
+  
+        .static-map-pin {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+        }
+      }
+  
+      .select-btn-container {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+      }
+    }
+  
+    .footnote {
+      color: $gray-500;
+      font-size: 11px;
+      text-align: left;
+  
+      a {
+        color: $gray-500;
+        font-weight: 400;
+        white-space: nowrap;
+      }
+    }
+  
+    .shipping-methods .form-check-input {
+      left: 0;
+      margin-left: 0;
+    }
+  }
+  

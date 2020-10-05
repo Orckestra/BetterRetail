@@ -1,0 +1,102 @@
+@inherits Composer.Razor.ComposerRazorFunction
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Time Slot Calendar"; }
+    }
+
+    [FunctionParameter(Label = "Cell Height", Help = "Cell heigth in pixels", DefaultValue = 28)]
+    public int CellHeight { get; set; }
+
+    [FunctionParameter(Label = "Container Height", Help = "Container heigth in pixels", DefaultValue = null)]
+    public int? ContainerHeight { get; set; }
+}
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
+<head>
+</head>
+<body>
+    <div class="time-slot-selector mt-3">
+        <div v-if="DayAvailabilityList.length" class="d-flex justify-content-between align-items-center bg-light mb-2 row">
+            <button v-on:click="prevDay"
+                    v-bind:disabled="disablePrevDay"
+                    type="button" class="btn">
+                <i class="fa fa-angle-left fa-2x"></i>
+            </button>
+            <span class="h4 m-0">{{StartDayLabel}}</span>
+            <button v-on:click="nexDay"
+                    v-bind:disabled="disableNextDay"
+                    type="button" class="btn">
+                <i class="fa fa-angle-right fa-2x"></i>
+            </button>
+        </div>
+
+        <table v-if="DayAvailabilityList.length" class="table table-sm time-slot-table m-0">
+            <tr>
+                <td class="p-0 border-0">
+                   <table class="table table-sm time-slot-table m-0">
+                            <tr>
+                                <th scope="col" class="border-0 p-0 label-col"></th>
+                                <th v-for="day in DisplayedDays" class="text-center border-0">
+                                    <p>{{day.DayOfWeekString}}</p>
+                                    <strong>{{day.Day}}</strong>
+                                </th>
+                            </tr>
+                        </table>
+                </td>
+            </tr>
+            <tr>
+                <td class="p-0 pr-1">
+                    <div class="overflow-auto thin-scrollbar" style="@(ContainerHeight != null ? $"height:{ContainerHeight}px;" : "")">
+                        <table class="table table-sm time-slot-table m-0 mt-2">
+                            <template v-for="(timeSlotRow, index) in TimeSlotRows">
+                                <tr style="height:@(CellHeight)px">
+                                    <th scope="row" class="border-0 p-0 label-col position-relative">
+                                        <span class="label-text">{{timeSlotRow}}</span>
+                                    </th>
+                                    <td v-for="day in DisplayedDays" class="position-relative border-0">
+                                        <template v-if="index === 0">
+                                            <button v-for="slot in day.SlotList"
+                                                    type="button"
+                                                    class="btn p-0 time-slot-item border modal--confirm"
+                                                    v-bind:disabled="!slot.IsAvailable"
+                                                    v-on:click="selectTimeSlot(slot, day)"
+                                                    xmlns:v-bind="v-bind"
+                                                    xmlns:v-on="v-on"
+                                                    v-bind:style="{
+                                                        top: (slot.StartDecimalTime - BeginTime) * 2 * @(CellHeight) + 'px',
+                                                        bottom: - (slot.EndDecimalTime - BeginTime - 0.5) * 2 * @(CellHeight) + 'px'
+                                                    }"
+                                                    v-bind:class="[
+                                                        ReservedSlotId === day.Date + slot.Id ? 'btn-success' : 'default-item',
+                                                        slot.IsBlocked ? 'blocked' : ''
+                                                    ]">
+                                                <small v-if="slot.IsAvailable">@Html.Localize("Grocery", "L_AvailableSlot")</small>
+                                                <small v-else-if="slot.IsFull" class="full">@Html.Localize("Grocery", "L_FullSlot")</small>
+                                                <small v-else="v-else">@Html.Localize("Grocery", "L_UnavailableSlot")</small>
+                                            </button>
+                                        </template>
+                                    </td>
+                                </tr>
+
+                                <tr style="height:@(CellHeight)px" class="half-hour-row">
+                                    <th scope="row" class="border-0 p-0 label-col"></th>
+                                    <td v-for="day in DisplayedDays" class="border-0"></td>
+                                </tr>
+                            </template>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <div v-else="v-else">
+            <div class="alert alert-danger ml-10" v-if="!Errors.TimeSlotLoadingError">
+                @Html.Localize("Grocery", "L_NoSlotsForStoreWarning")
+            </div>
+            @Forms.Validations.ShowError("Errors.TimeSlotLoadingError", "L_TimeSlotLoadingError")
+        </div>
+    </div>
+</body>
+</html>

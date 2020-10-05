@@ -1,0 +1,103 @@
+.time-slot-selector {
+
+    .time-slot-day {
+        height: 2rem;
+        width: 2rem;
+        border-radius: 1rem;
+        * {
+            line-height: 2rem;
+        }
+
+        &.active {
+            background-color: #22c2fd;
+        }
+
+        &:hover {
+            background-color: lightgray;
+            cursor: pointer;
+        }
+    }
+
+
+    .time-slot-table {
+        table-layout: fixed;
+
+        .btn {
+            font-weight: normal;
+        }
+
+        .half-hour-row {
+            td {
+                border-top: 1px dotted $gray-300;
+            }
+        }
+
+        .label-col {
+            width: 70px;
+        }
+
+        .label-text {
+            position: absolute;
+            font-weight: normal;
+            font-size: 14px;
+            bottom: -20px;
+            left: 0;
+            line-height: 20px;
+        }
+
+        .time-slot-item {
+            right: 0;
+            left: 0;
+            position: absolute;
+            z-index: $zindex-dropdown;
+            margin: 2px;
+            border-radius: 5px;
+            width: 100%;
+            width: -moz-available;
+            width: -webkit-fill-available;
+            width: fill-available;
+
+            cursor: pointer;
+
+            .time-slot-label {
+                top: 50%;
+                position: relative;
+                margin-top: -10px;
+            }
+
+			&.default-item {
+			  	background-color: $gray-100;
+  				color: black;
+			  	&:not(:disabled):not(.disabled):hover, &:not(:disabled):not(.disabled):active {
+					background-color: #e2e6ea;
+			  	}
+			}
+
+            &.blocked {
+                background-color: rgba(255,163,163,0.2);
+                border-color: #E0CFCF;
+                opacity: 1;
+                cursor: default;
+            }
+        }
+    }
+
+    .bg-gray {
+        background-color: $gray-100;
+    }
+
+    @include media-breakpoint-up(md) {
+        margin-left: -5px !important;
+        margin-right: -5px !important;
+    }
+
+    small {
+        @media (min-device-width: 320px) {
+            font-size: 70% !important;
+        }
+
+        @media (max-device-width: 320px) {
+            font-size: 55% !important;
+        }
+    } 
+}

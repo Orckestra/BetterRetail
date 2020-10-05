@@ -104,6 +104,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.Handleba
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.Grocery.Website", "src\Orckestra.Grocery.Website\Orckestra.Composer.Grocery.Website.csproj", "{7E75D550-3C78-46D0-A124-065A5FFFA0B2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.Grocery", "src\Orckestra.Composer.Grocery\Orckestra.Composer.Grocery.csproj", "{ECC87B80-7C56-40B3-9961-6BD04B5DAF22}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -250,6 +252,10 @@ Global
 		{7E75D550-3C78-46D0-A124-065A5FFFA0B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7E75D550-3C78-46D0-A124-065A5FFFA0B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7E75D550-3C78-46D0-A124-065A5FFFA0B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ECC87B80-7C56-40B3-9961-6BD04B5DAF22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECC87B80-7C56-40B3-9961-6BD04B5DAF22}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECC87B80-7C56-40B3-9961-6BD04B5DAF22}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECC87B80-7C56-40B3-9961-6BD04B5DAF22}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -296,6 +302,7 @@ Global
 		{2290CF95-EF97-4E7A-ADD6-D902AD8DAAAC} = {303355EE-E2EF-46D5-8B56-BE44E9F3D93D}
 		{3508A92E-CB4B-431D-BBDC-0AD5FABEC20C} = {4C9DCD77-1564-4C86-AD89-DCC674C54879}
 		{7E75D550-3C78-46D0-A124-065A5FFFA0B2} = {4C9DCD77-1564-4C86-AD89-DCC674C54879}
+		{ECC87B80-7C56-40B3-9961-6BD04B5DAF22} = {B770DD6A-41C2-4576-80D9-58023319B204}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {31789445-A48E-4454-9EC2-4B738A35383C}

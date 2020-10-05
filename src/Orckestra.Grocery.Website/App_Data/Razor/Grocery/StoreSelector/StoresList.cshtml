@@ -1,0 +1,44 @@
+@inherits Composer.Razor.ComposerRazorFunction
+
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Stores List"; }
+    }
+}
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
+<head>
+</head>
+<body>
+    <div v-if="Stores.length" v-cloak="true" class="stores-list">
+        <div v-if="!Mode.SeeMoreStores" class="row">
+            <div v-if="SelectedStoreId" class="col-12">
+                @StoreHelpers.StoreListRow("SelectedStore")
+            </div>
+            <div v-else="else" class="col-12">
+                @StoreHelpers.StoreListRow("NearestStore")
+            </div>
+            <div v-if="Stores.length > 1" class="col-12  mt-2  text-right">
+                <a href="#" class="cta  text-lowercase" v-on:click.prevent="seeMoreStores()">
+                    @Html.Localize("Store", "B_ShowMore")
+                </a>
+            </div>
+        </div>
+        <div v-else="else" class="row">
+            <div v-for="(store, index) in Stores" class="col-12 mb-2">
+                @StoreHelpers.StoreListRow("store")
+            </div>
+            <div v-if="Stores.length > 1" class="col-12  text-right">
+                <a href="#" class="cta  text-lowercase" v-on:click.prevent="seeLessStores()">
+                    @Html.Localize("Store", "B_ShowLess")
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+

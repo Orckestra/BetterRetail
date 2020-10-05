@@ -1,0 +1,50 @@
+﻿<cms:formdefinition xmlns:cms="http://www.composite.net/ns/management/bindingforms/1.0" xmlns="http://www.composite.net/ns/management/bindingforms/std.ui.controls.lib/1.0" xmlns:ff="http://www.composite.net/ns/management/bindingforms/std.function.lib/1.0" xmlns:f="http://www.composite.net/ns/function/1.0">
+  <cms:bindings>
+    <cms:binding name="GTMContainerId" type="System.String" />
+    <cms:binding name="MapsApiKey" type="System.String" />
+    <cms:binding name="MapsZoomLevel" type="System.Int32" />
+    <cms:binding name="MapsMarkerPadding" type="System.Int32" />
+    <cms:binding name="LengthMeasureUnit" type="System.String" />
+    <cms:binding name="StoresAvailabilityDistance" type="System.Decimal" />
+  </cms:bindings>
+  <cms:layout>
+    <cms:layout.label>
+      <cms:read source="GTMContainerId" />
+    </cms:layout.label>
+    <FieldGroup Label="GEO Settings">
+      <TextBox Label="GTM Container Id" Help="" SpellCheck="true">
+        <TextBox.Text>
+          <cms:bind source="GTMContainerId" />
+        </TextBox.Text>
+      </TextBox>
+      <TextBox Label="Google Maps API Key" Help="" SpellCheck="true">
+        <TextBox.Text>
+          <cms:bind source="MapsApiKey" />
+        </TextBox.Text>
+      </TextBox>
+      <TextBox Label="Google Maps ZoomLevel" Help="" Type="Integer">
+        <TextBox.Text>
+          <cms:bind source="MapsZoomLevel" />
+        </TextBox.Text>
+      </TextBox>
+      <TextBox Label="Maps Marker Padding" Help="" Type="Integer">
+        <TextBox.Text>
+          <cms:bind source="MapsMarkerPadding" />
+        </TextBox.Text>
+      </TextBox>
+      <KeySelector Label="Length Measure Unit" Help="Select measuring unit to be used for length values" OptionsKeyField="Key" OptionsLabelField="Label" Required="true">
+        <KeySelector.Selected>
+          <cms:bind source="LengthMeasureUnit" />
+        </KeySelector.Selected>
+        <KeySelector.Options>
+          <ff:StaticMethodCall Type="Orckestra.Composer.CompositeC1.Settings.GoogleSettings" Method="GetAvailableLengthMeasureUnits" />
+        </KeySelector.Options>
+      </KeySelector>
+      <TextBox Label="Stores Availability Distance" Help="Set up a distance, in which stores will be available for a customer" Type="Decimal">
+        <TextBox.Text>
+          <cms:bind source="StoresAvailabilityDistance" />
+        </TextBox.Text>
+      </TextBox>
+    </FieldGroup>
+  </cms:layout>
+</cms:formdefinition>

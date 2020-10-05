@@ -36,3 +36,19 @@
 .error-item {
     color: theme-color("danger");
 }
+
+.input-icon {
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 100;
+}
+
+.error-box {
+    padding-left: 30px;
+    .fa {
+      position: absolute;
+      top: 15px;
+      left: 7px;
+    }
+  }

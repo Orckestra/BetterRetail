@@ -107,6 +107,7 @@ Robocopy %25WebProjectPath%25App_Config %25TempPath%25App_Config /E /NJH /NDL /N
 Robocopy %25WebProjectPath%25Composite %25TempPath%25Composite /E /NJH /NDL /NS /NC /NP
 Robocopy %25WebProjectPath%25UI.Package "%25TempPath%25UI.Package" /E /NJH /NDL /NS /NC /NP
 Robocopy %25WebProjectPath%25Views %25TempPath%25Views /E /NJH /NDL /NS /NC /NP
+Robocopy %25WebProjectPath%25Frontend %25TempPath%25Frontend /E /NJH /NDL /NS /NC /NP
 Robocopy %25WebProjectPath%25bin %25TempPath%25Bin *.dll /XF Composite*.dll /NJH /NDL /NS /NC /NP
 
 DEL /F /Q %25TempPath%25Bin\Orckestra.Logging.dll

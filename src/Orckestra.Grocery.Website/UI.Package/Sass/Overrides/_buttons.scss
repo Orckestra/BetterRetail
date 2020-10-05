@@ -5,6 +5,10 @@
         opacity: 0.5;
     }
     white-space: normal;
+
+    &.primary {
+        text-transform: uppercase;
+    }
 }
 
 button, a {

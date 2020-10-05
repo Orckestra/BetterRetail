@@ -310,11 +310,11 @@ Task("Install-Secondary-Packages").Does(() =>
 
 Task("Patch-csproj.user").Does(() =>
 {
-    var userFile = $"{rootDir}/build/configuration/Orckestra.Composer.Website.csproj.user";
+    var userFile = $"{rootDir}/build/configuration/Orckestra.Composer.Grocery.Website.csproj.user";
     var content = System.IO.File.ReadAllText(userFile);
     content = content.Replace("{CustomServerUrl}", Parameters["websiteUrl"]);
 
-    var dest = $"{rootDir}/src/Orckestra.Composer.Website/Orckestra.Composer.Website.csproj.user";
+    var dest = $"{rootDir}/src/Orckestra.Grocery.Website/Orckestra.Composer.Grocery.Website.csproj.user";
     if (FileExists(dest))
     {
         DeleteFile(dest);
@@ -326,10 +326,10 @@ Task("Patch-csproj.user").Does(() =>
 Task("Configure-Symbolic-Links").Does(() =>
 {
 	StopPool(localSiteName);
-    ReplaceDirWithSymbolicLink($"{websiteDir}/UI.Package/Sass", $"{rootDir}/src/Orckestra.Composer.Website/UI.Package/Sass");
-	ReplaceDirWithSymbolicLink($"{websiteDir}/UI.Package/Templates", $"{rootDir}/src/Orckestra.Composer.Website/UI.Package/Templates");
-	ReplaceDirWithSymbolicLink($"{websiteDir}/UI.Package/LocalizedStrings", $"{rootDir}/src/Orckestra.Composer.Website/UI.Package/LocalizedStrings");
-	ReplaceDirWithSymbolicLink($"{websiteDir}/UI.Package/Typescript", $"{rootDir}/src/Orckestra.Composer.Website/UI.Package/Typescript");
+    ReplaceDirWithSymbolicLink($"{websiteDir}/UI.Package/Sass", $"{rootDir}/src/Orckestra.Grocery.Website/UI.Package/Sass");
+	ReplaceDirWithSymbolicLink($"{websiteDir}/UI.Package/Templates", $"{rootDir}/src/Orckestra.Grocery.Website/UI.Package/Templates");
+	ReplaceDirWithSymbolicLink($"{websiteDir}/UI.Package/LocalizedStrings", $"{rootDir}/src/Orckestra.Grocery.Website/UI.Package/LocalizedStrings");
+	ReplaceDirWithSymbolicLink($"{websiteDir}/UI.Package/Typescript", $"{rootDir}/src/Orckestra.Grocery.Website/UI.Package/Typescript");
 	StartPool(localSiteName);
 });
 
@@ -352,7 +352,7 @@ Task("Link-Razor").Does(() =>
 {
     Information("Link-Razor task");
    
-	var srcRazorDir = $"{rootDir}/src/Orckestra.Composer.Website/App_Data/Razor";
+	var srcRazorDir = $"{rootDir}/src/Orckestra.Grocery.Website/App_Data/Razor";
     var targetRazorPath = new DirectoryPath($"{deploymentDir}/Website/App_Data/Razor");
     var srcRazorPath = new DirectoryPath(srcRazorDir);
     var files = GetFiles($"{srcRazorDir}/**/*.cshtml");

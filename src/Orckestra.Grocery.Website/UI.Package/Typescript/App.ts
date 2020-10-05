@@ -65,6 +65,11 @@
 ///<reference path='./Composer.SingleCheckout/ChangeRecurringFrequencyCheckoutController.ts' />
 ///<reference path='./Composer.SingleCheckout/OrderConfirmationController.ts' />
 
+///<reference path='./Composer.Grocery/StoreSelector/StoreSelectorController.ts' />
+///<reference path='./Composer.Grocery/StoreSelector/SelectedStoreInHeaderController.ts' />
+///<reference path='./Composer.Grocery/StoreSelector/SelectedStoreInCartController.ts' />
+///<reference path='./Composer.Grocery/StoreSelector/ChangeStoreModalController.ts' />
+
 (() => {
     'use strict';
 
@@ -152,6 +157,12 @@
                 { name: 'Store.Details', controller: Orckestra.Composer.StoreDetailsController },
                 { name: 'Store.Directory', controller: Orckestra.Composer.StoresDirectoryController },
                 { name: 'Store.Inventory', controller: Orckestra.Composer.StoreInventoryController },
+
+                { name: 'Grocery.StoreSelector', controller: Orckestra.Composer.StoreSelectorController },
+                { name: 'Grocery.SelectedStoreInHeader', controller: Orckestra.Composer.SelectedStoreInHeaderController },
+                { name: 'Grocery.SelectedStoreInCart', controller: Orckestra.Composer.SelectedStoreInCartController },
+                { name: 'Grocery.ChangeStoreModal', controller: Orckestra.Composer.ChangeStoreModalController },
+
                 { name: 'PageNotFound.Analytics', controller: Orckestra.Composer.PageNotFoundAnalyticsController }
             ]
         };

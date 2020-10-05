@@ -5,7 +5,7 @@
   <styles>
     <style file="styles/core.css" />
     <style file="../../styles/visualeditor.common.css" />
-	<style file="../../../UI.Package/Css/composer.css" />
+	<style file="../../../UI.Package/Sass/default.min.css" />
   </styles>
 
   <!--

@@ -1,0 +1,68 @@
+@inherits Composer.Razor.ComposerRazorFunction
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Selected Store In Header"; }
+    }
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://www.composite.net/ns/function/1.0"
+      xmlns:v-bind="v-bind" xmlns:v-on="v-on">
+<head>
+</head>
+<body>
+    <div id="vueSelectedStoreInHeader" data-oc-controller="Grocery.SelectedStoreInHeader"
+         v-cloak="v-cloak" class="pull-left">
+        <ul class="navbar-nav p-0">
+            <li class="nav-item" v-if="!Store">
+                <a class="nav-link" href="#" v-on:click.prevent="changeStoreModal($event, true)">
+                    @StoreIcon()
+                </a>
+            </li>
+            <li class="nav-item dropdown" v-else="v-else">
+                <a class="nav-link" data-toggle="dropdown">
+                    @StoreIcon()
+                </a>
+                <div class="dropdown-menu selected-store p-2">
+                    @Forms.Validations.ShowError("Errors.TimeSlotReservationAlreadyBookedForThisCart", "L_TimeSlotReservationAlreadyBookedForThisCart")
+                    @Forms.Validations.ShowError("Errors.TimeSlotSelectionError", "L_TimeSlotError")
+                    <div v-if="Store">
+                        <div class="row">
+                            <div class="col-12">
+                                @StoreHelpers.SelectedStorePreview("SelectedStore")
+                            </div>
+                            <div class="col-12">
+                                @StoreHelpers.SelectedTimeSlotPreview("SelectedStore")
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li class="px-1 px-md-3"><span class="vertical-division nav-icon-lg"></span></li>
+        </ul>
+    </div>
+</body>
+</html>
+
+
+@helper StoreIcon()
+{
+    <span class="d-none d-lg-inline">
+        <i class="fa fa-home mr-2"></i>
+        <span v-if="Store">
+            <span class="d-none d-lg-inline">
+                {{Store.LocalizedDisplayName}}<span v-if="TimeSlotReservationTentative">&nbsp;|&nbsp;{{TimeSlotReservationDisplay}}</span>
+            </span>
+            <span class="d-lg-none">
+                @Html.Localize("Grocery", "B_BookSlot")
+            </span>
+        </span>
+        <span v-else="v-else">@Html.Localize("Grocery", "B_BookSlot")</span>
+    </span>
+
+    <span class="d-flex flex-column align-items-center d-lg-none text-uppercase">
+        <i class="fa fa-store mr-2"></i>
+        @Html.Localize("Grocery", "B_BookSlot")
+    </span>
+}

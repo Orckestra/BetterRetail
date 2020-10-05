@@ -169,7 +169,7 @@
     <value>You are in:</value>
   </data>
   <data name="L_Copyright" xml:space="preserve">
-    <value>©{0}. Better Retail inc. All rights reserved.</value>
+    <value>©{0}. Better Grocery inc. All rights reserved.</value>
   </data>
   <data name="L_ErrorAjaxFailed" xml:space="preserve">
     <value>An error occured, please try again later</value>

@@ -44,6 +44,7 @@
         <File sourceFilename="~\Bin\Orckestra.Composer.SearchQuery.dll" targetFilename="~\Bin\Orckestra.Composer.SearchQuery.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Orckestra.Composer.Store.dll" targetFilename="~\Bin\Orckestra.Composer.Store.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Orckestra.Composer.Grocery.Website.dll" targetFilename="~\Bin\Orckestra.Composer.Grocery.Website.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Orckestra.Composer.Grocery.dll" targetFilename="~\Bin\Orckestra.Composer.Grocery.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Orckestra.Composer.CompositeC1.dll" targetFilename="~\Bin\Orckestra.Composer.CompositeC1.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Orckestra.Composer.CompositeC1.DataTypes.dll" targetFilename="~\Bin\Orckestra.Composer.CompositeC1.DataTypes.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Orckestra.Composer.ContentSearch.dll" targetFilename="~\Bin\Orckestra.Composer.ContentSearch.dll" allowOverwrite="true" />
@@ -62,6 +63,7 @@
         <File sourceFilename="~\robots.prd.txt" targetFilename="~\robots.prd.txt" allowOverwrite="true" />
         <File sourceFilename="~\Global.asax" targetFilename="~\Global.asax" allowOverwrite="true" />
         <File sourceFilename="~\error.html" targetFilename="~\error.html" allowOverwrite="true" />
+        <File sourceFilename="~\Frontend\Config\VisualEditor\common.xml" targetFilename="~\Frontend\Config\VisualEditor\common.xml" allowOverwrite="true" />
       </Files>
       <Directories>
         <Directory sourceDirectory="~\UI.Package\Images\" targetDirectory="~\UI.Package\Images\" allowOverwrite="true" deleteTargetDirectory="false" />

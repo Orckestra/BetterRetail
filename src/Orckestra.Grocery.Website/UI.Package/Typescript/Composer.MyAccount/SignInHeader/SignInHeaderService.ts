@@ -53,21 +53,21 @@ module Orckestra.Composer {
 
         public invalidateCache(): Q.Promise<void> {
 
-            return this.cacheProvider.customCache.fullClear();
+            return this.cacheProvider.sessionCache.fullClear();
         }
 
         private getSignInHeaderFromCache(param: any): Q.Promise<any> {
 
             var composedKey = this.buildSignedInCacheKey(param);
 
-            return this.cacheProvider.customCache.get<any>(composedKey);
+            return this.cacheProvider.sessionCache.get<any>(composedKey);
         }
 
         private setSignInHeaderToCache(param: any, cart: any): Q.Promise<any> {
 
             var composedKey = this.buildSignedInCacheKey(param);
 
-            return this.cacheProvider.customCache.set(composedKey, cart, this.cachePolicy);
+            return this.cacheProvider.sessionCache.set(composedKey, cart, this.cachePolicy);
         }
     }
 }

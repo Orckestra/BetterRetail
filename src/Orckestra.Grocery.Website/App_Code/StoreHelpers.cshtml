@@ -1,0 +1,176 @@
+@using Composite.AspNet.Razor
+
+@helper StoreAddress(string vueBinding, bool displayPhone = true)
+{
+    <address class="store-address  mb-0">
+        <span class="d-block text-nowrap">{{@(vueBinding).Address.Line1}}</span>
+        <span class="d-block text-nowrap" v-if="@(vueBinding).Address.Line2">{{@(vueBinding).Address.Line2}}</span>
+        <span class="d-block">{{@(vueBinding).Address.City}}, {{@(vueBinding).Address.RegionName}}, {{@(vueBinding).Address.PostalCode}}, {{@(vueBinding).Address.CountryName}}</span>
+        @if (displayPhone)
+        {
+            <span class="d-block">
+                <span v-if="@(vueBinding).PhoneNumber" class="store-phone">{{@(vueBinding).PhoneNumber}}</span>
+                <span v-else="else" class="store-phone">{{@(vueBinding).Address.PhoneNumber}}</span>
+            </span>
+        }
+    </address>
+}
+
+@helper StoreAvailability(string vueBinding)
+{
+    <span v-if="@(vueBinding).Schedule">
+        <span class="text-success" v-bind:class="{'text-danger': !@(vueBinding).Schedule.IsOpenNow}">
+            <span v-if="@(vueBinding).Schedule.IsOpenNow" class="font-weight-bold text-uppercase">@Html.Localize("Store", "L_StoreOpen")</span>
+            <span v-else="v-else" class="font-weight-bold text-uppercase">@Html.Localize("Store", "L_StoreClosed")</span>
+            <span v-for="openTime in @(vueBinding).Schedule.TodayOpeningTimes"> {{openTime.BeginTime}} - {{openTime.EndTime}}</span>
+        </span>
+    </span>
+}
+
+@helper SelectedTimeSlotPreview(string vueBinding, bool showChangeLink = true)
+{
+    <div>
+        <div class="d-flex mb-2 align-items-center">
+            <i class="icoaldi-clock-circle text-light-gray icon-dark"></i>
+            <h6 class="ml-2 mb-0">@Html.Localize("Store", "H_SelectTimeSlotInCart")</h6>
+        </div>
+        <div v-if="@(vueBinding).TimeSlot">
+            <div class="border p-3 rounded position-relative busy-container" v-bind:class="{ 'busy': @(vueBinding).TimeSlotLoading }">
+                @GeneralHelpers.LoadingSpinner()
+                <strong>{{@(vueBinding).TimeSlot.DayOfWeekString}}, {{@(vueBinding).TimeSlotReservation.Day}} {{@(vueBinding).TimeSlotReservation.DisplayMonth}}</strong>
+                <p class="m-0">
+                    {{@(vueBinding).TimeSlot.DisplayBeginTime}} to {{@(vueBinding).TimeSlot.DisplayEndTime}}
+                </p>
+            </div>
+            @if (showChangeLink)
+            {
+                <a class="cta my-1 float-right" href="#" v-on:click.prevent="changeStoreModal($event, false)">
+                    @Html.Localize("Grocery", "B_ChangeSlot")
+                </a>
+            }
+        </div>
+        @if (showChangeLink)
+        {
+            <div v-else="v-else">
+                <button v-on:click.prevent="changeStoreModal($event, false)" class="btn btn-block btn-primary">
+                    @Html.Localize("Grocery", "B_BookYourSlot")
+                </button>
+            </div>
+        }
+        <div v-if="TimeSlotReservationTentative" v-cloak="true" class="text-danger mt-2">
+            @Html.Localized("Grocery", "L_ReservedUntil", " {{TimeSlotReservationExpireTime}} ")
+            <span v-if="TimeSlotReservationExpireRelativeDayIndex === 0"> @Html.Localize("Grocery", "L_Today")</span>
+            <span v-else-if="TimeSlotReservationExpireRelativeDayIndex === 1"> @Html.Localize("Grocery", "L_Tomorrow")</span>
+            <span v-else-if="TimeSlotReservationExpireRelativeDayIndex === -1"> {{TimeSlotReservationExpireDate}}</span>
+        </div>
+        <div v-if="TimeSlotReservationExpired" v-cloak="true" class="text-danger mt-2">
+            @Html.Localize("Grocery", "L_ReservationExpired")
+        </div>
+    </div>
+}
+
+@helper SelectedStorePreview(string vueBinding, bool showChangeLink = true, string isStoreExist = "")
+{
+    if (string.IsNullOrWhiteSpace(isStoreExist))
+    {
+        isStoreExist = $"{vueBinding}.Store";
+    }
+
+    <div>
+        <div class="d-flex mb-2 align-items-center">
+            <i class="icoaldi-store-circle text-light-gray icon-dark"></i>
+            <h6 class="ml-2 mb-0">@Html.Localize("Grocery", "H_SelectedStoreInCart")</h6>
+        </div>
+
+        <div v-if="@(isStoreExist)">
+            <div class="border p-3 rounded  position-relative busy-container" v-bind:class="{ 'busy': @(vueBinding).StoreLoading }">
+                @GeneralHelpers.LoadingSpinner()
+                <div>
+                    <div class="mb-2">
+                        <strong>{{@(vueBinding).Store.LocalizedDisplayName}}</strong>
+                        @StoreAddress(vueBinding + ".Store", false)
+                    </div>
+                    <div class="mb-2 text-nowrap">
+                        <strong>@Html.Localize("Store", "T_OpenHours")</strong><br />
+                        @StoreAvailability(vueBinding + ".Store")
+                    </div>
+                    <div>
+                        <strong>@Html.Localize("Store", "T_Phone"):</strong><br />
+                        <span v-if="@(vueBinding).Store.PhoneNumber">{{@(vueBinding).Store.PhoneNumber}}</span>
+                        <span v-else="else">{{@(vueBinding).Store.Address.PhoneNumber}}</span>
+                    </div>
+                </div>
+            </div>
+            @if (showChangeLink)
+            {
+                <a class="cta my-1 float-right" href="#" v-on:click.prevent="changeStoreModal($event, true)">
+                    @Html.Localize("Grocery", "B_ChangeStore")
+                </a>
+            }
+        </div>
+        @if (showChangeLink)
+        {
+            <div v-else="v-else">
+                <a class="cta" href="#" v-on:click.prevent="changeStoreModal($event, true)">
+                    @Html.Localize("Grocery", "B_SelectStore")
+                </a>
+            </div>
+        }
+    </div>
+}
+
+@helper StoreListRow(string vueBinding)
+{
+    <div class="card bg-light store-row">
+        <div class="row">
+            <div class="col-3 col-sm-2">
+                <div class="store-row-map" v-bind:style="{ 'background-image': 'url(' + @(vueBinding).GoogleStaticMapUrl + '&amp;size=200x200)' } ">
+                    <a v-bind:href="@(vueBinding).Url" target="_blank"
+                       class="d-block position-relative  w-100  h-100">
+                        <div class="static-map-pin"></div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-6 col-sm-7">
+                <div class="p-2 text-left">
+                    <strong>{{@(vueBinding).LocalizedDisplayName}}</strong>
+                    <div class="mt-1">
+                        <small>
+                            @StoreAddress(vueBinding)
+                        </small>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-3">
+                <div class="p-2  h-100 position-relative">
+                    <div class="text-right"
+                         v-if="@(vueBinding).DestinationToSearchPoint">
+                        at {{@(vueBinding).DestinationToSearchPoint}} {{@(vueBinding).LengthMeasureUnit}}
+                    </div>
+                    @StoreSelectButton(vueBinding)
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@helper StoreSelectButton(string vueBinding)
+{
+    <div class="select-btn-container">
+        <div v-if="SelectedStoreId === @(vueBinding).Id"
+             class="bg-success btn-sm border border-success">
+            <span class="text-white text-nowrap">
+                <i class="fa fa-check fa-lg"></i>
+                @Html.Localize("CheckoutProcess", "L_Selected")
+            </span>
+        </div>
+        <button v-else="v-else"
+                v-bind:disabled="IsLoading"
+                class="btn btn-sm btn-outline-secondary text-uppercase float-right"
+                v-on:click='selectStore(@(vueBinding), step)'>
+            @Html.Localize("CheckoutProcess", "F_SelectShippingMethod")
+            @GeneralHelpers.ButtonLoadingSpinner("IsLoading")
+        </button>
+    </div>
+}

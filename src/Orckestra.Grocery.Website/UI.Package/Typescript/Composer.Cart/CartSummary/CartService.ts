@@ -181,7 +181,7 @@ module Orckestra.Composer {
         }
 
         public invalidateCache(): Q.Promise<void> {
-
+            CartService.GettingFreshCart = undefined;
             return this.cacheProvider.defaultCache.clear(this.cacheKey);
         }
 

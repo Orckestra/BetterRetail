@@ -138,38 +138,38 @@
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.AsyncExtensions, Version=4.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\OrckestraCommerce.AsyncExtensions.4.2.0\lib\net461\Orckestra.AsyncExtensions.dll</HintPath>
+    <Reference Include="Orckestra.AsyncExtensions, Version=4.3.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\OrckestraCommerce.AsyncExtensions.4.3.3\lib\net461\Orckestra.AsyncExtensions.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Caching, Version=4.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\OrckestraCommerce.Common.4.2.0\lib\net461\Orckestra.Caching.dll</HintPath>
+    <Reference Include="Orckestra.Caching, Version=4.3.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\OrckestraCommerce.Common.4.3.3\lib\net461\Orckestra.Caching.dll</HintPath>
     </Reference>
     <Reference Include="Orckestra.ExperienceManagement.Configuration, Version=4.9.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Orckestra.ExperienceManagement.Configuration.4.9.0\lib\net471\Orckestra.ExperienceManagement.Configuration.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Logging, Version=4.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\OrckestraCommerce.Common.4.2.0\lib\net461\Orckestra.Logging.dll</HintPath>
+    <Reference Include="Orckestra.Logging, Version=4.3.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\OrckestraCommerce.Common.4.3.3\lib\net461\Orckestra.Logging.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Overture.Interfaces, Version=4.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\OrckestraCommerce.Interfaces.4.2.0\lib\portable-net4+sl5+netcore45+wp8\Orckestra.Overture.Interfaces.dll</HintPath>
+    <Reference Include="Orckestra.Overture.Interfaces, Version=4.3.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\OrckestraCommerce.Interfaces.4.3.3\lib\portable-net4+sl5+netcore45+wp8\Orckestra.Overture.Interfaces.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Overture.Providers.MonerisPayment.ServiceModel, Version=4.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\OrckestraCommerce.ServiceModel.Moneris.4.2.0\lib\net45\Orckestra.Overture.Providers.MonerisPayment.ServiceModel.dll</HintPath>
+    <Reference Include="Orckestra.Overture.Providers.MonerisPayment.ServiceModel, Version=4.3.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\OrckestraCommerce.ServiceModel.Moneris.4.3.3\lib\net45\Orckestra.Overture.Providers.MonerisPayment.ServiceModel.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Overture.RestClient, Version=4.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\OrckestraCommerce.Client.4.2.0\lib\net452\Orckestra.Overture.RestClient.dll</HintPath>
+    <Reference Include="Orckestra.Overture.RestClient, Version=4.3.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\OrckestraCommerce.Client.4.3.3\lib\net452\Orckestra.Overture.RestClient.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Overture.ServiceModel, Version=4.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\OrckestraCommerce.ServiceModel.4.2.0\lib\net461\Orckestra.Overture.ServiceModel.dll</HintPath>
+    <Reference Include="Orckestra.Overture.ServiceModel, Version=4.3.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\OrckestraCommerce.ServiceModel.4.3.3\lib\net461\Orckestra.Overture.ServiceModel.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Overture.ServiceModel.Requests, Version=4.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\OrckestraCommerce.ServiceModel.Requests.4.2.0\lib\net461\Orckestra.Overture.ServiceModel.Requests.dll</HintPath>
+    <Reference Include="Orckestra.Overture.ServiceModel.Requests, Version=4.3.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\OrckestraCommerce.ServiceModel.Requests.4.3.3\lib\net461\Orckestra.Overture.ServiceModel.Requests.dll</HintPath>
     </Reference>
-    <Reference Include="OrckestraCommerce.RecurringOrders.ServiceModel, Version=4.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\OrckestraCommerce.RecurringOrders.ServiceModel.4.2.0\lib\portable-net4+sl5+netcore45+wp8\OrckestraCommerce.RecurringOrders.ServiceModel.dll</HintPath>
+    <Reference Include="OrckestraCommerce.RecurringOrders.ServiceModel, Version=4.3.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\OrckestraCommerce.RecurringOrders.ServiceModel.4.3.3\lib\portable-net4+sl5+netcore45+wp8\OrckestraCommerce.RecurringOrders.ServiceModel.dll</HintPath>
     </Reference>
-    <Reference Include="OrckestraCommerce.RecurringOrders.ServiceModel.Requests, Version=4.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\OrckestraCommerce.RecurringOrders.ServiceModel.Requests.4.2.0\lib\portable-net4+sl5+netcore45+wp8\OrckestraCommerce.RecurringOrders.ServiceModel.Requests.dll</HintPath>
+    <Reference Include="OrckestraCommerce.RecurringOrders.ServiceModel.Requests, Version=4.3.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\OrckestraCommerce.RecurringOrders.ServiceModel.Requests.4.3.3\lib\portable-net4+sl5+netcore45+wp8\OrckestraCommerce.RecurringOrders.ServiceModel.Requests.dll</HintPath>
     </Reference>
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
@@ -266,6 +266,7 @@
     <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\Composite\DynamicTypeForms\Orckestra\Composer\CompositeC1\DataTypes\GoogleSettings.xml" />
     <Content Include="App_Data\Composite\DynamicTypeForms\Orckestra\Composer\CompositeC1\DataTypes\ISearchTerm.xml" />
     <Content Include="App_Data\Composite\DynamicTypeForms\Orckestra\Composer\CompositeC1\DataTypes\RecurringOrdersSettings.xml" />
     <Content Include="App_Data\Composite\TreeDefinitions\ContentSearch.xml" />
@@ -295,6 +296,7 @@
     <Content Include="App_Code\RecurringOrderHelpers.cshtml" />
     <Content Include="App_Code\OrdersHelper.cshtml" />
     <Content Include="App_Code\GeneralHelpers.cshtml" />
+    <Content Include="App_Code\StoreHelpers.cshtml" />
     <None Include="App_Config\Caching.config" />
     <Content Include="App_Data\Razor\Composer\Grids\OneThirdTwoThirds.cshtml" />
     <Content Include="App_Data\Razor\Composer\Grids\AccountGrid.cshtml" />
@@ -359,6 +361,11 @@
     <Content Include="App_Data\Razor\Composer\Order\Details.cshtml" />
     <Content Include="App_Data\Razor\Composer\MyAccount\CurrentOrders.cshtml" />
     <Content Include="App_Data\Razor\Composer\MyAccount\PastOrders.cshtml" />
+    <Content Include="App_Data\Razor\Grocery\ChangeStoreModal.cshtml" />
+    <Content Include="App_Data\Razor\Grocery\SelectedStoreInHeader.cshtml" />
+    <Content Include="App_Data\Razor\Grocery\StoreSelector\StoresList.cshtml" />
+    <Content Include="App_Data\Razor\Grocery\StoreSelector\TimeSlotCalendar.cshtml" />
+    <Content Include="App_Data\Razor\Grocery\StoreSelector.cshtml" />
     <None Include="Properties\PublishProfiles\Website - CD.pubxml" />
     <None Include="Properties\PublishProfiles\Website.pubxml" />
     <Content Include="Views\web.config" />
@@ -407,6 +414,10 @@
     <ProjectReference Include="..\Orckestra.Composer.Cart\Orckestra.Composer.Cart.csproj">
       <Project>{08f6fcb8-6065-4d31-b7df-67fe67ee67e5}</Project>
       <Name>Orckestra.Composer.Cart</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Orckestra.Composer.Grocery\Orckestra.Composer.Grocery.csproj">
+      <Project>{ecc87b80-7c56-40b3-9961-6bd04b5daf22}</Project>
+      <Name>Orckestra.Composer.Grocery</Name>
     </ProjectReference>
     <ProjectReference Include="..\Orckestra.Composer.MyAccount\Orckestra.Composer.MyAccount.csproj">
       <Project>{0a2628f0-3e30-4da6-852f-b2cbec9b968d}</Project>

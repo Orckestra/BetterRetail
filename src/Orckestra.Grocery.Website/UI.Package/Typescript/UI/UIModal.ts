@@ -1,4 +1,5 @@
 ///<reference path='../../Typings/tsd.d.ts' />
+///<reference path='../Events/EventHub.ts' />
 
 module Orckestra.Composer {
 
@@ -11,6 +12,7 @@ module Orckestra.Composer {
         private sender: any;
         private modalContextSelector: string;
         private container: JQuery;
+        protected eventHub: IEventHub = EventHub.instance();
 
         public constructor(window: Window, modalContextSelector: string, confirmAction, sender, container = undefined) {
 
@@ -19,7 +21,7 @@ module Orckestra.Composer {
             this.window = window;
             this.sender = sender;
             this.container = container;
-            this.registerDomEvents(container);
+
         }
 
         private registerDomEvents(container) : void {
@@ -37,10 +39,11 @@ module Orckestra.Composer {
             $(this.window.document).off('click', '.modal--cancel', this.cancelModal);
         }
 
-        public openModal = (event: JQueryEventObject) => {
+        public openModal = (event: JQueryEventObject, data = undefined) => {
 
             this.modalContext = $(this.modalContextSelector);
             this.confirmDeferred = Q.defer();
+            this.registerDomEvents(this.container);
 
             this.modalContext.on('shown.bs.modal', (event: JQueryEventObject) => {
                 $('[data-dismiss]', event.target).focus();
@@ -53,10 +56,13 @@ module Orckestra.Composer {
                     this.confirmDeferred.resolve(false);
                 }
             });
+
             this.modalContext.modal('show');
+            this.eventHub.publish("modal-opened", { data });
 
             this.confirmDeferred.promise
                 .then((value) => {
+                    this.unregisterDomEvents();
                     this.modalContext.modal('hide');
 
                     if (value) {
@@ -66,7 +72,7 @@ module Orckestra.Composer {
                 .done(null, (error) => {
                     console.log(error);
                 });
-        }
+        };
 
         public confirmModal() {
             this.confirmDeferred.resolve(true);

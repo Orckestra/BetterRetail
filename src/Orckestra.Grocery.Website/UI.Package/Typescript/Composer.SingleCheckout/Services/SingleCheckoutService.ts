@@ -34,11 +34,6 @@ module Orckestra.Composer {
         Payment = 4
     }
 
-    export enum FulfillmentMethodTypes {
-        Shipping = 'Shipping',
-        PickUp = 'PickUp'
-    }
-
     export enum SignInModes {
         Base,
         UserExists,
@@ -642,7 +637,7 @@ module Orckestra.Composer {
 
                 this.eventHub.publish(MyAccountEvents[MyAccountEvents.LoggedIn], { data: result });
                 this.cacheProvider.defaultCache.set('customerId', null).done();
-                this.cacheProvider.customCache.fullClear();
+                this.cacheProvider.sessionCache.fullClear();
                 this.loadUserAddresses();
                 return true;
                 // vueData.$children[0].navigateToStep(CheckoutStepNumbers.Shipping);

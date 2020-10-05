@@ -36,3 +36,19 @@
         <strong v-else-if="@vueBinding === 'strong'" class="text-success">@Html.Localize("Forms", "L_PasswordStrengthStrong")</strong>
     </p>
 }
+
+@helper ShowError(string vueStatusBinding, string localizationKey)
+{
+    <div v-if="@vueStatusBinding" class="alert alert-danger text-danger error-box">
+        <span class="fa  fa-times-circle-o  fa-lg  pull-left mt-1"></span>&#32;
+        <div>@Html.Localize("Errors", @localizationKey)</div>
+    </div>
+}
+
+@helper ShowError(string error)
+{
+    <div v-if="@error" class="alert alert-danger text-danger error-box">
+        <span class="fa  fa-times-circle-o  fa-lg"></span>&#32;
+        <div>{{@error}}</div>
+    </div>
+}
