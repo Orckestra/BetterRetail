@@ -365,6 +365,7 @@
     <Content Include="App_Data\Razor\Grocery\SelectedStoreInHeader.cshtml" />
     <Content Include="App_Data\Razor\Grocery\StoreSelector\StoresList.cshtml" />
     <Content Include="App_Data\Razor\Grocery\StoreSelector\TimeSlotCalendar.cshtml" />
+    <Content Include="App_Data\Razor\Grocery\BootstrapCarousel.cshtml" />
     <Content Include="App_Data\Razor\Grocery\StoreSelector.cshtml" />
     <None Include="Properties\PublishProfiles\Website - CD.pubxml" />
     <None Include="Properties\PublishProfiles\Website.pubxml" />

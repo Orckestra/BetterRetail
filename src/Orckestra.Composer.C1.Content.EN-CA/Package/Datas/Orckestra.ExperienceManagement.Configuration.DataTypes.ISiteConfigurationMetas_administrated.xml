@@ -2,9 +2,9 @@
 <Data>
   <Add Id="94b61513-fd75-4917-ac13-ac5eb09ec468"
        FieldName="SiteConfiguration"
-       Scope="BetterRetailCanada"
-       InventoryAndFulfillmentLocationId="BRC-5000"
-       CountryCode="CA"
+       Scope="Aldi_GB"
+       InventoryAndFulfillmentLocationId="E1232"
+       CountryCode="GB"
        CreditCardsTrustIconId="MediaArchive:40d9ba8b-4afe-45b6-b161-6b619973a4c1"
        ProductDetailsPage="b3aba631-f426-4026-b2c2-b3197fcf3140"
        LoginPage="200eb67f-65fe-4dc1-92f1-1628efacaa54"

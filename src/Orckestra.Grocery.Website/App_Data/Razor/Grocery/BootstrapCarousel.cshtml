@@ -1,0 +1,98 @@
+@using Orckestra.Web.Html
+@inherits RazorFunction
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Bootstrap Carousel"; }
+    }
+
+    private const string optionsWidgetMarkup = @" <f:widgetfunction xmlns:f='http://www.composite.net/ns/function/1.0' name='Composite.Widgets.String.Selector'>
+<f:param name='Options'>
+<f:function name='Composite.Utils.String.Split'>
+<f:param name='String' value='Use Full Page Width,Show Indicators,Show Navigation Controls' />
+</f:function>
+</f:param>
+<f:param name=""Multiple"" value=""True"" />
+<f:param name=""Required"" value=""False"" />
+</f:widgetfunction>";
+    [FunctionParameter(Label = "Display Options", WidgetMarkup = optionsWidgetMarkup, DefaultValue = "Show Navigation Controls,Show Indicators")]
+    public string Options { get; set; }
+
+    private const string optionsWidgetMarkupTest = @" <f:widgetfunction xmlns:f='http://www.composite.net/ns/function/1.0' name='Composite.Widgets.String.Selector'>
+<f:param name='Options'>
+<f:function name='Composite.Utils.String.Split'>
+<f:param name='String' value='Slider' />
+</f:function>
+</f:param>
+<f:param name=""Multiple"" value=""True"" />
+<f:param name=""Required"" value=""False"" />
+</f:widgetfunction>";
+    [FunctionParameter(Label = "Slider Options", WidgetMarkup = optionsWidgetMarkupTest, DefaultValue = "5000")]
+    public string SliderOptions { get; set; }
+
+    [FunctionParameter(Label = "Slider Speed", Help = "Millisecond before slide change", DefaultValue = "5000")]
+    public string SliderSpeed { get; set; }
+
+    [FunctionParameter(Label = "Full width bottom aligned caption", Help = "Caption is taking the full slide width and is aligned at the bottom.", DefaultValue = false)]
+    public bool isFullWidthBottomCaption { get; set; }
+
+}
+
+@{
+    var slides = Data.Get<BootstrapCarousel>().Where(s => s.PageId == CurrentPageNode.Id).OrderBy(s => s.Order).ToList();
+    if (!slides.Any()) { return; }
+
+    var isIndicators = Options.Contains("Indicators");
+    var isControls = Options.Contains("Navigation Controls");
+    var isFullWidth = Options.Contains("Use Full Page Width");
+    var hasSliderFullWidth = SliderOptions.Contains("Slider");
+
+}
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<head>
+    @*<link id="font-awesome-css" rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" />*@
+</head>
+<body>
+    <div class="@(isFullWidth ? "c1-wide" : "") @(isFullWidthBottomCaption ? "full-width-caption" : "") @(isFullWidthBottomCaption && isIndicators ? "mb-5" : "")">
+        <div id="bootstrapcarousel" data-interval="@(hasSliderFullWidth ? @SliderSpeed : "false")"
+             class="carousel slide" data-ride="carousel">
+            <!-- Indicators -->
+            @if (isIndicators)
+            {
+                <ol class="carousel-indicators">
+                    @for (var i = 0; i < slides.Count(); i++)
+                    {
+                        <li data-target="#bootstrapcarousel" data-slide-to="@i"
+                            class="@(i == 0 ? "active btn-dots" : " btn-dots")"></li>
+                    }
+                </ol>
+            }
+            <div class="carousel-inner">
+                @for (var i = 0; i < slides.Count(); i++)
+                {
+                    var slide = slides[i];
+                    <div class="carousel-item @(i == 0 ? "active" : "")">
+                        <img class="d-block w-100" src="~/media(@slide.Image)" alt="slide" />
+                        <div class="carousel-caption d-none d-md-block">
+                            @Html.Raw(slide.Caption)
+                        </div>
+                    </div>
+                }
+            </div>
+            <!-- Controls -->
+            @if (isControls)
+            {
+                <a class="carousel-control-prev" href="#bootstrapcarousel" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Prev</span>
+                </a>
+                <a class="carousel-control-next" href="#bootstrapcarousel" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            }
+        </div>
+    </div>
+</body>
+</html>

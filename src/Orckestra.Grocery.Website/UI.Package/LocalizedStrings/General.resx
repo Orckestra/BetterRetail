@@ -255,4 +255,10 @@
   <data name="L_OrderStatus_PendingProcess" xml:space="preserve">
     <value>Pending</value>
   </data>
+  <data name="km" xml:space="preserve">
+    <value>Kilometre</value>
+  </data>
+  <data name="mi" xml:space="preserve">
+    <value>Mile</value>
+  </data>
 </root>

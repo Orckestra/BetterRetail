@@ -2,4 +2,5 @@
 <Data>
   <Add Id="5f6e9d17-a467-4dbf-aad7-cfed5bafbc66" Path="/Composer" />
   <Add Id="69e32716-2bb5-449a-92c2-75423dac9175" Path="/Composer/Checkout" />
+  <Add Id="929f1eec-7c60-49a4-a18f-ee48143965c6" Path="/Grocery" />
 </Data>

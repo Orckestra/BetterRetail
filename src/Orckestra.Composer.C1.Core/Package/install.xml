@@ -86,6 +86,9 @@
         <Type type="Composite.Data.Types.ICompositionContainer,Composite">
           <Data dataScopeIdentifier="public" dataFilename="~\Datas\Composite.Data.Types.ICompositionContainers_public.xml" />
         </Type>
+        <Type type="Composite.Data.Types.IPageFolderDefinition,Composite">
+          <Data dataScopeIdentifier="public" dataFilename="~\Datas\Composite.Data.Types.IPageFolderDefinitions_public.xml" />
+        </Type>
         <Type type="Composite.Data.Types.IMediaFileData,Composite">
           <Data dataScopeIdentifier="public" dataFilename="~\Datas\Composite.Data.Types.IMediaFileDatas_public.xml" />
         </Type>

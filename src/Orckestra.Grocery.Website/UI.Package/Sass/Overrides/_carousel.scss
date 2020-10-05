@@ -1,0 +1,11 @@
+.carousel {
+    max-height: 360px;
+    overflow: hidden;
+    margin-bottom: 3rem;
+
+    .carousel-item {
+        img {
+            margin-top: -25%;
+        }
+    }
+}
