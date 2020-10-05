@@ -31,7 +31,7 @@ namespace Orckestra.Composer.Store.Services
 
             if (param.LoadStoresBounds)
             {
-                var stores = await StoreRepository.GetStoresAsync(new GetStoresParam { Scope = param.Scope, IncludeExtraInfo = false });
+                var stores = await StoreRepository.GetStoresAsync(new GetStoresParam { Scope = param.Scope, IncludeExtraInfo = false, CultureInfo = param.CultureInfo });
                 vm.Bounds = GetStoresBounds(stores.Results);
             }
             return vm;
