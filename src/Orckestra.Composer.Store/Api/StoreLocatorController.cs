@@ -87,7 +87,7 @@ namespace Orckestra.Composer.Store.Api
                 IncludeMarkers = true
             }).ConfigureAwait(false);
 
-            if (request.IsSearch && !vm.Markers.Any() && vm.NearestStoreCoordinate != null)
+            if (request.IsSearch && (vm.Markers == null || !vm.Markers.Any()) && vm.NearestStoreCoordinate != null)
             {
                 // if no markers in requested search bounds, return the coordinates of the nearest store, so always see one store on the map
                 return Ok(vm.NearestStoreCoordinate.GetCoordinate());
@@ -105,7 +105,8 @@ namespace Orckestra.Composer.Store.Api
                 MapConfigurationViewService.GetMapConfigurationViewModelAsync(new GetMapConfigurationViewModelParam
                 {
                     Scope = ComposerContext.Scope,
-                    LoadStoresBounds = true
+                    LoadStoresBounds = true,
+                    CultureInfo = ComposerContext.CultureInfo
                 });
 
             return Ok(vm);
