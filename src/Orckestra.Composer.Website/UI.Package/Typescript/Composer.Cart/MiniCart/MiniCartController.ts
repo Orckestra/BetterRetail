@@ -12,7 +12,7 @@ module Orckestra.Composer {
 
     export class MiniCartController extends Orckestra.Composer.Controller {
 
-        private cartService: CartService = new CartService(new CartRepository(), this.eventHub);
+        private cartService: ICartService = CartService.getInstance();
 
         public initialize() {
 

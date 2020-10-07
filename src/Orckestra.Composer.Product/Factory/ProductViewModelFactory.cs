@@ -1,9 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Enums;
 using Orckestra.Composer.Factory;
@@ -20,6 +14,12 @@ using Orckestra.Composer.Utils;
 using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel.Metadata;
 using Orckestra.Overture.ServiceModel.Products;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Product.Factory
@@ -223,18 +223,7 @@ namespace Orckestra.Composer.Product.Factory
             productDetailViewModel.Description = FixHtml(productDetailViewModel.Description);
 
             productDetailViewModel.DefinitionName = param.ProductDefinition.Name;
-
-            if (ProductConfiguration.IsQuantityDisplayed &&
-                ProductConfiguration.MinQuantity > 0 &&
-                ProductConfiguration.MaxQuantity >= ProductConfiguration.MinQuantity)
-            {
-                productDetailViewModel.Quantity = new ProductQuantityViewModel
-                {
-                    Min = ProductConfiguration.MinQuantity,
-                    Max = ProductConfiguration.MaxQuantity,
-                    Value = ProductConfiguration.MinQuantity
-                };
-            }
+            productDetailViewModel.Quantity = QuantityConfiguration.GetProductQuantity();
 
             productDetailViewModel.Currency = param.Currency;
             productDetailViewModel.Specifications = ProductSpecificationsViewService.GetProductSpecificationsViewModel(new GetProductSpecificationsParam

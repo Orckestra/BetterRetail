@@ -6,6 +6,7 @@
 /// <reference path='./IAnalyticsSearchFilters.ts' />
 /// <reference path='../../Plugins/IPlugin.ts' />
 /// <reference path='../../Composer.MyAccount/Common/MyAccountEvents.ts' />
+/// <reference path='../../Composer.Product/ProductEvents.ts' />
 
 module Orckestra.Composer {
     export class AnalyticsPlugin implements IAnalyticsPlugin, IPlugin {
@@ -32,11 +33,11 @@ module Orckestra.Composer {
          * Binds all the events for Analytics
          */
         public registerSubscriptions() {
-            this.eventHub.subscribe('lineItemAdding', (eventInfo: IEventInformation) => {
+            this.eventHub.subscribe(ProductEvents.LineItemAdding, (eventInfo: IEventInformation) => {
                 this.onLineItemAdding(eventInfo);
             });
 
-            this.eventHub.subscribe('lineItemRemoving', (eventInfo: IEventInformation) => {
+            this.eventHub.subscribe(ProductEvents.LineItemRemoving, (eventInfo: IEventInformation) => {
                 this.onLineItemRemoving(eventInfo);
             });
 

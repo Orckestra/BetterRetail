@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,10 +14,13 @@ using Orckestra.Composer.Extensions;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Dam;
+using Orckestra.Composer.Providers.Localization;
+using Orckestra.Composer.Repositories;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Services.Lookup;
 using Orckestra.Overture.ServiceModel;
 using Orckestra.Overture.ServiceModel.Orders;
+using Orckestra.Overture.ServiceModel.Products;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Cart.Services
@@ -37,6 +41,8 @@ namespace Orckestra.Composer.Cart.Services
         protected ICountryService CountryService { get; private set; }
         protected IRegionCodeProvider RegionCodeProvider { get; private set; }
         protected IImageService ImageService { get; private set; }
+        protected ICategoryRepository CategoryRepository { get; private set; }
+        protected ILocalizationProvider LocalizationProvider { get; private set; }
 
         /// <summary>
         /// CartService constructor
@@ -61,7 +67,9 @@ namespace Orckestra.Composer.Cart.Services
             IFixCartService fixCartService,
             ICountryService countryService,
             IRegionCodeProvider regionCodeProvider,
-            IImageService imageService)
+            IImageService imageService,
+            ICategoryRepository categoryRepository,
+            ILocalizationProvider localizationProvider)
         {
             CartRepository = cartRepository ?? throw new ArgumentNullException(nameof(cartRepository));
             CartViewModelFactory = cartViewModelFactory ?? throw new ArgumentNullException(nameof(cartViewModelFactory));
@@ -72,6 +80,8 @@ namespace Orckestra.Composer.Cart.Services
             CountryService = countryService ?? throw new ArgumentNullException(nameof(fixCartService));
             RegionCodeProvider = regionCodeProvider ?? throw new ArgumentNullException(nameof(regionCodeProvider));
             ImageService = imageService ?? throw new ArgumentNullException(nameof(imageService));
+            LocalizationProvider = localizationProvider ?? throw new ArgumentNullException(nameof(localizationProvider));
+            CategoryRepository = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository));
         }
 
         /// <summary>
@@ -298,7 +308,56 @@ namespace Orckestra.Composer.Cart.Services
 
             var vm = CartViewModelFactory.CreateCartViewModel(param);
 
+            if(CartConfiguration.GroupCartItemsByPrimaryCategory)
+            {
+                vm.GroupedLineItemDetailViewModels = await GetGroupedLineItems(vm, param).ConfigureAwait(false);
+            }
+
             return vm;
+        }
+
+        protected async Task<List<GroupedLineItemDetailViewModel>> GetGroupedLineItems(CartViewModel vm, CreateCartViewModelParam param)
+        {
+            var categoryTree = await CategoryRepository.GetCategoriesTreeAsync(new GetCategoriesParam
+            {
+                Scope = param.Cart.ScopeId
+            }).ConfigureAwait(false);
+
+            return vm.LineItemDetailViewModels?
+                .Select(li =>
+                {
+                    Category topLevelCategory = null;
+                    if (!string.IsNullOrWhiteSpace(li.ProductSummary.CategoryId))
+                    {
+                        var categories = categoryTree.BuildPathFromTree(li.ProductSummary.CategoryId);
+                        topLevelCategory = categories?.LastOrDefault(c => c.Id != "Root");
+                    }
+
+                    li.ProductSummary.TopLevelCategoryId = topLevelCategory?.Id ?? "Root";
+                    li.ProductSummary.TopLevelCategoryName = topLevelCategory?.DisplayName?.GetLocalizedValue(param.CultureInfo.Name)
+                        ?? LocalizationProvider.GetLocalizedString(new GetLocalizedParam
+                        {
+                            Category = "CheckoutProcess",
+                            Key = "L_UndefinedLineItemCategory",
+                            CultureInfo = param.CultureInfo
+                        });
+
+                    return li;
+
+                })
+                .GroupBy(li => li.ProductSummary.TopLevelCategoryId)
+                .Select(lineItemsGroup =>
+                {
+                    var li = lineItemsGroup.First();
+                    return new GroupedLineItemDetailViewModel
+                    {
+                        TopLevelCategoryId = lineItemsGroup.Key,
+                        TopLevelCategoryName = li.ProductSummary.TopLevelCategoryName,
+                        LineItemDetailViewModels = lineItemsGroup.ToList(),
+                        Quantity = lineItemsGroup.Sum(l => l.Quantity)
+                    };
+                }
+                ).OrderBy(c => c.TopLevelCategoryId == "Root").ThenBy(c => c.TopLevelCategoryName).ToList();
         }
 
         public virtual async Task<CartViewModel> RemoveInvalidLineItemsAsync(RemoveInvalidLineItemsParam param)

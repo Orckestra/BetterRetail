@@ -1,0 +1,73 @@
+﻿@inherits RazorFunction
+@using Orckestra.Composer.Cart
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Cart Order Summary"; }
+    }
+}
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
+<head>
+</head>
+<body>
+    <div data-oc-controller="Cart.OrderSummary">
+        <div v-if="Cart &amp;&amp; !Cart.IsCartEmpty" class="card">
+            <h3 class="card-header" data-qa="order-summary-title">
+                @Html.Localize("ShoppingCart", "T_OrderSummary")
+            </h3>
+            <div class="card-body">
+                @OrderSummaryHelpers.Rewards()
+
+                @OrderSummaryHelpers.SubTotal()
+
+                @OrderSummaryHelpers.TaxableShipmentAdditionalFeeSummary()
+
+                @OrderSummaryHelpers.TaxableAdditionalFeeSummary()
+
+                <div v-if="OrderSummary.IsShippingTaxable">
+                    @OrderSummaryHelpers.Shipping()
+                </div>
+
+                @OrderSummaryHelpers.Taxes()
+
+                @OrderSummaryHelpers.NotTaxableShipmentAdditionalFeeSummary()
+
+                @OrderSummaryHelpers.NotTaxableAdditionalFeeSummary()
+
+                <div v-if="!OrderSummary.IsShippingTaxable">
+                    @OrderSummaryHelpers.Shipping()
+                </div>
+
+                @OrderSummaryHelpers.Totals()
+
+                @OrderSummaryHelpers.SavingsTotal()
+
+                @OrderSummaryHelpers.AdditionalFeesMessage()
+
+                <div v-if="Cart.InvalidLineItemCount > 0" class="text-danger">
+                    @Html.Localize("ShoppingCart", "L_RemoveUnavailableItems")
+                </div>
+
+                @CheckoutBtn()
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+@helper CheckoutBtn()
+{
+    <div class="row  mb-2">
+        <div class="col-12">
+            <button class="btn btn-success  w-100  text-uppercase"
+                    data-qa="order-summary-checkout-btn"
+                    v-on:click="proceedToCheckout()">
+                @Html.Localize("ShoppingCart", "B_Checkout")
+            </button>
+        </div>
+    </div>
+}
+

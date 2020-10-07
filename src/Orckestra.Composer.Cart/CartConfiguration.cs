@@ -56,5 +56,10 @@ namespace Orckestra.Composer.Cart
             PaymentMethodType.CreditCard,
             PaymentMethodType.SavedCreditCard
         };
+
+        /// <summary>
+        /// If true, cart items will be grouped by product primary category
+        /// </summary>
+        public static bool GroupCartItemsByPrimaryCategory { get; set; }
     }
 }

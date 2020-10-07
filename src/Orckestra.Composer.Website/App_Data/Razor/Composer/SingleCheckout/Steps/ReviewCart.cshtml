@@ -80,16 +80,16 @@
              v-bind:key="item.Id"
              v-bind:data-qa="'cart-item-' + index">
             <div v-if="item.Rewards &amp;&amp; item.Rewards.length" class="col-12 order-1  text-center">
-                @CartItemRewardsCell()
+                @CartSummaryHelpers.CartItemRewardsCell()
             </div>
             <div class="col-2 col-sm-1  order-2">
-                @CartItemImageCell()
+                @CartSummaryHelpers.CartItemImageCell()
             </div>
             <div class="col-8 col-sm-4  order-3">
-                @CartItemSummaryCell()
+                @CartSummaryHelpers.CartItemSummaryCell()
             </div>
             <div class="col-sm-2  text-center d-none d-sm-block order-4">
-                @CartItemDefaultPriceCell()
+                @CartSummaryHelpers.CartItemDefaultPriceCell()
             </div>
             <div class="offset-2 offset-sm-0 2 col-sm-3  text-left text-sm-center  order-6">
                 @CartItemQuantityCell()
@@ -100,7 +100,8 @@
             <div class="col-2 d-block d-sm-none order-5">
                 @RemoveCartItemMobileBtn()
             </div>
-            <div v-if="item.RecurringOrderProgramName" class="col-11  offset-2 offset-sm-1  order-8" data-oc-controller="SingleCheckout.ChangeRecurringFrequency">
+            <div v-if="item.RecurringOrderProgramName" class="col-11  offset-2 offset-sm-1  order-8" 
+                 data-oc-controller="SingleCheckout.ChangeRecurringFrequency">
                 @RecurringOrderHelpers.CartItemRecurringOrderProgram("item")
             </div>
         </div>
@@ -116,7 +117,7 @@
                      v-bind:class="{'border border-danger': !item.IsValid}"
                      v-bind:key="item.id"
                      v-for="(item, index) in Cart.LineItemDetailViewModels">
-                    @CartItemImageCell()
+                    @CartSummaryHelpers.CartItemImageCell()
                     <p class="text-center m-0">
                         <strong v-bind:data-qa="'cart-item-preview-quantity-' + index">x{{item.Quantity}}</strong>
                     </p>
@@ -132,40 +133,7 @@
     </div>
 }
 
-@helper CartItemImageCell()
-{
-    <img v-bind:src="item.ImageUrl" class="img-fluid" alt="thumbnail" xmlns:v-bind="v-bind"
-         v-bind:onerror="'this.onerror=null; this.src=\'' + item.FallbackImageUrl + '\''" />
-}
 
-@helper CartItemRewardsCell()
-{
-    <div class="promotion">
-        <em v-for="reward in item.Rewards">{{reward.Description || reward.PromotionName}} <br /></em>
-    </div>
-}
-
-@helper CartItemSummaryCell()
-{
-    <div>
-        <strong v-bind:data-qa="'cart-item-brand-' + index">{{item.ProductSummary.Brand}}</strong>
-        <p v-bind:data-qa="'cart-item-name-' + index" class="mb-2">{{item.ProductSummary.DisplayName}}</p>
-        <p v-if="item.VariantId" class="mb-2 mb-sm-0" v-bind:data-qa="'cart-item-variant-' + index">
-            <span v-for="(keyV, index) in item.KeyVariantAttributesList">
-                <span v-if="index != 0"> | </span>{{keyV.Value}}
-            </span>
-        </p>
-    </div>
-}
-
-@helper CartItemDefaultPriceCell()
-{
-    <p v-if="item.IsOnSale">
-        <del v-bind:data-qa="'cart-item-defaultprice-del-' + index">{{item.DefaultListPrice}}</del><br />
-        <strong class="text-danger" v-bind:data-qa="'cart-item-salesprice-' + index">{{item.ListPrice}}</strong>
-    </p>
-    <p v-else="v-else" v-bind:data-qa="'cart-item-defaultprice-' + index">{{item.DefaultListPrice}}</p>
-}
 
 @helper CartItemQuantityCell()
 {
@@ -187,7 +155,7 @@
         </button>
 
     </div>
-    <div class="d-none d-sm-block">@RemoveCartItemLink()</div>
+    <div class="d-none d-sm-block">@CartSummaryHelpers.RemoveCartItemLink()</div>
 }
 
 @helper CartItemTotalCell()

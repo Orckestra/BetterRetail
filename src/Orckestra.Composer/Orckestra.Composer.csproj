@@ -220,6 +220,7 @@
     <Compile Include="Configuration\IRecurringOrdersSettings.cs" />
     <Compile Include="Configuration\IGoogleSettings.cs" />
     <Compile Include="Configuration\ImageConfiguration.cs" />
+    <Compile Include="Configuration\QuantityConfiguration.cs" />
     <Compile Include="Country\CountryRepository.cs" />
     <Compile Include="Country\CountryService.cs" />
     <Compile Include="Country\CountryViewModel.cs" />
@@ -239,6 +240,7 @@
     <Compile Include="ExceptionFilters\BaseExceptionFilter.cs" />
     <Compile Include="ExceptionFilters\ComposerExceptionFilter.cs" />
     <Compile Include="ComposerOvertureClient.cs" />
+    <Compile Include="Extensions\CategoryExtensions.cs" />
     <Compile Include="Extensions\LookupExtensions.cs" />
     <Compile Include="Factory\IRecurringOrderProgramViewModelFactory.cs" />
     <Compile Include="Factory\IRecurringOrderTemplateViewModelFactory.cs" />
@@ -403,6 +405,7 @@
     <Compile Include="ViewModels\MyAccount\MenuViewModel.cs" />
     <Compile Include="ViewModels\MyAccount\MenuItemViewModel.cs" />
     <Compile Include="ViewModels\ProductPriceViewModel.cs" />
+    <Compile Include="ViewModels\ProductQuantityViewModel.cs" />
     <Compile Include="ViewModels\ProductSettingsViewModel.cs" />
     <Compile Include="Services\Breadcrumb\GetBreadcrumbParam.cs" />
     <Compile Include="Parameters\GetCategoriesPathParam.cs" />

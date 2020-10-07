@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Orckestra.Composer.Configuration;
+using Orckestra.Composer.Extensions;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Utils;
 using Orckestra.Overture;
@@ -83,30 +84,10 @@ namespace Orckestra.Composer.Repositories
 
             var categoriesTree = await GetCategoriesTreeAsync(param.Scope).ConfigureAwait(false);
 
-            return BuildPathFromTree(categoriesTree, param.CategoryId);
+            return categoriesTree.BuildPathFromTree(param.CategoryId);
         }
 
-        private static List<Category> BuildPathFromTree(Tree<Category, string> categoriesTree, string categoryId)
-        {
-            if (!categoriesTree.TryGetValue(categoryId, out TreeNode<Category> categoryNode))
-            {
-                throw new ArgumentException("categoryId doesn't exist", "categoryId");
-            }
-
-            var path = new List<Category>
-            {
-                categoryNode.Value
-            };
-
-            while (categoryNode.HasParent)
-            {
-                categoryNode = categoryNode.Parent;
-                path.Add(categoryNode.Value);
-            }
-
-            return path;
-        }
-
+   
         private async Task<Tree<Category, string>> GetCategoriesTreeAsync(string scope)
         {
             var categories = await GetCategoriesAsync(new GetCategoriesParam

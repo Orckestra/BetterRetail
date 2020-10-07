@@ -11,7 +11,7 @@ module Orckestra.Composer {
     export class WishListController extends Orckestra.Composer.Controller {
 
         protected _wishListService: IWishListService = new WishListService(new WishListRepository(), this.eventHub);
-        protected _cartService: CartService = new CartService(new CartRepository(), this.eventHub);
+        protected _cartService: ICartService =  CartService.getInstance();
 
         public initialize() {
 

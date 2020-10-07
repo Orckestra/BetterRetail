@@ -12,25 +12,32 @@ module Orckestra.Composer {
     export class CartService implements ICartService {
 
         protected static GettingFreshCart: Q.Promise<any>;
-
+        private static instance: ICartService;
+        public VueCart: Vue;
+        public VueCartMixins: any = [];
         protected cacheKey: string;
         protected cachePolicy: ICachePolicy = { slidingExpiration: 300 }; // 5min
         protected cacheProvider: ICacheProvider;
         protected cartRepository: ICartRepository;
         protected eventHub: IEventHub;
 
-        constructor(cartRepository: ICartRepository, eventHub: IEventHub) {
+        constructor() {
 
-            if (!cartRepository) {
-                throw new Error('Error: cartRepository is required');
-            }
-            if (!eventHub) {
-                throw new Error('Error: eventHub is required');
-            }
             this.cacheKey = `CartViewModel|${Utils.getWebsiteId()}`;
             this.cacheProvider = CacheProvider.instance();
-            this.cartRepository = cartRepository;
-            this.eventHub = eventHub;
+            this.cartRepository = new CartRepository();
+            this.eventHub = EventHub.instance();
+
+            CartService.instance = this;
+        }
+
+        public static getInstance(): ICartService {
+
+            if (!CartService.instance) {
+                CartService.instance = new CartService();
+            }
+
+            return CartService.instance;
         }
 
         public getCart(): Q.Promise<any> {
@@ -181,7 +188,7 @@ module Orckestra.Composer {
         }
 
         public invalidateCache(): Q.Promise<void> {
-
+            CartService.GettingFreshCart = undefined;
             return this.cacheProvider.defaultCache.clear(this.cacheKey);
         }
 

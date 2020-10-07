@@ -6,6 +6,7 @@
 ///<reference path='../../ErrorHandling/ErrorHandler.ts' />
 ///<reference path='../../Composer.Analytics/Analytics/GoogleAnalyticsPlugin.ts' />
 ///<reference path='../CartSummary/CartService.ts' />
+///<reference path='../CartSummary/CartStateService.ts' />
 ///<reference path='./OrderSummaryService.ts' />
 
 module Orckestra.Composer {
@@ -13,21 +14,42 @@ module Orckestra.Composer {
     export class OrderSummaryController extends Orckestra.Composer.Controller {
 
         private cacheProvider: ICacheProvider = CacheProvider.instance();
-        private cartService: ICartService = new CartService(new CartRepository(), this.eventHub);
+        private cartService: ICartService = CartService.getInstance();
+        private cartStateService: ICartStateService = CartStateService.getInstance();
         private orderSummaryService: OrderSummaryService = new OrderSummaryService(this.cartService, this.eventHub);
         private postalCodeModal : any;
         private postalCodeInput : any;
 
         public initialize() {
             super.initialize();
-            this.registerSubscriptions();
+            let self: OrderSummaryController = this;
+
+            let cartOrderSummaryMixins = {
+                methods: {
+                    proceedToCheckout() {
+                        let nextStepUrl = this.OrderSummary.CheckoutUrlTarget;
+                        if (!nextStepUrl) {
+                            throw 'No next step Url was defined.';
+                        }
+
+                        AnalyticsPlugin.setCheckoutOrigin('Checkout');
+
+                        this.Mode.Loading = true;
+                        self.orderSummaryService.cleanCart().done(() => {
+                            window.location.href = nextStepUrl;
+                        }, reason => {
+                            console.error('Error while proceeding to Checkout', reason);
+                            ErrorHandler.instance().outputErrorFromCode('ProceedToCheckoutFailed');
+                        });
+                    }
+                }
+            };
+
+            this.cartStateService.VueCartMixins.push(cartOrderSummaryMixins);
         }
 
-        private registerSubscriptions() {
 
-            this.eventHub.subscribe('cartUpdated', e => this.render('OrderSummary', e.data));
-        }
-
+        //TODO:
         public openModal(actionContext: IControllerActionContext) {
 
             this.postalCodeModal = $('#postalCodeModal');
@@ -86,27 +108,6 @@ module Orckestra.Composer {
                     ErrorHandler.instance().outputErrorFromCode('PostalCodeUpdateFailed');
                 })
                 .fin(() => busyHandle.done());
-        }
-
-        public proceedToCheckout(actionContext: IControllerActionContext): void {
-
-            var nextStepUrl: string = actionContext.elementContext.data('nextstepurl').toString();
-
-            if (!nextStepUrl) {
-                throw 'No next step Url was defined.';
-            }
-
-            AnalyticsPlugin.setCheckoutOrigin('Checkout');
-
-            var busy: UIBusyHandle = this.asyncBusy();
-
-            this.orderSummaryService.cleanCart().done(() => {
-                window.location.href = nextStepUrl;
-            }, reason => {
-                console.error('Error while proceeding to Checkout', reason);
-                ErrorHandler.instance().outputErrorFromCode('ProceedToCheckoutFailed');
-                busy.done();
-            });
         }
     }
 }

@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using Orckestra.Composer.Cart.Helper;
-using Orckestra.Composer.Helper;
+﻿using Orckestra.Composer.Cart.Helper;
+using Orckestra.Composer.Configuration;
 using Orckestra.Composer.ViewModels;
+using System;
+using System.Collections.Generic;
 
 namespace Orckestra.Composer.Cart.ViewModels
 {
@@ -35,6 +35,11 @@ namespace Orckestra.Composer.Cart.ViewModels
         /// List of line items (different products)
         /// </summary>
         public List<LineItemDetailViewModel> LineItemDetailViewModels { get; set; }
+
+        /// <summary>
+        /// Grouped LineItems by Primary Parent Category
+        /// </summary>
+        public List<GroupedLineItemDetailViewModel> GroupedLineItemDetailViewModels { get; set; }
 
         /// <summary>
         /// The order summary at the right of the cart where is the total and subtotal
@@ -118,6 +123,8 @@ namespace Orckestra.Composer.Cart.ViewModels
                 return RecurringOrderCartHelper.IsCartContainsRecurringOrderItems(LineItemDetailViewModels);
             }
         }
+
+        public ProductQuantityViewModel QuantityRange => QuantityConfiguration.GetProductQuantity();
 
         public CartViewModel()
         {

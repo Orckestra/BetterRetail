@@ -1,6 +1,7 @@
 ///<reference path='../../../Typings/tsd.d.ts' />
 ///<reference path='../../Events/EventHub.ts' />
 ///<reference path='../CartSummary/CartService.ts' />
+///<reference path='../CartSummary/CartEvents.ts' />
 
 module Orckestra.Composer {
     'use strict';
@@ -39,7 +40,7 @@ module Orckestra.Composer {
                        .then(() => this.cartService.getCart())
                        .then(cart => {
 
-                           this.eventHub.publish('cartUpdated', { data: cart });
+                           this.eventHub.publish(CartEvents.CartUpdated, { data: cart });
                            this.publishCouponUpdatedEvent(cart, true);
 
                         }, reason => {
@@ -62,14 +63,14 @@ module Orckestra.Composer {
                        .then(() => this.cartService.getCart())
                        .then(cart => {
 
-                           this.eventHub.publish('cartUpdated', { data: cart });
+                           this.eventHub.publish(CartEvents.CartUpdated, { data: cart });
                            this.publishCouponUpdatedEvent(cart, true);
 
                        }, reason => this.publishCouponUpdatedEvent(undefined, false));
         }
 
         private publishCouponUpdatedEvent(result: any, isSuccess: boolean) {
-            this.eventHub.publish('couponUpdated', { data: result });
+            this.eventHub.publish(CartEvents.CouponUpdated, { data: result });
         }
     }
 }
