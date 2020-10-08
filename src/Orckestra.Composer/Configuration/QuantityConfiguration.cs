@@ -8,7 +8,7 @@ namespace Orckestra.Composer.Configuration
     public static class QuantityConfiguration
     {
         public static bool IsQuantityDisplayed = true;
-        public static int MinQuantity = 0;
+        public static int MinQuantity = 1;
         public static int MaxQuantity = 99;
 
         public static ProductQuantityViewModel GetProductQuantity()
