@@ -174,7 +174,7 @@ module Orckestra.Composer {
             var quantity = {
                 Min: quantityAdded.Min,
                 Max: quantityAdded.Max,
-                Value: quantityAdded.Min
+                Value: 1
             };
 
             return this.renderAvailableQuantity(quantity);

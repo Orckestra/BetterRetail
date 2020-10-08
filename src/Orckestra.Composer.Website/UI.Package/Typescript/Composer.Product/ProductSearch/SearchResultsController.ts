@@ -12,7 +12,7 @@ module Orckestra.Composer {
     'use strict';
 
     export class SearchResultsController extends Orckestra.Composer.Controller {
-        protected cartService: CartService = new CartService(new CartRepository(), this.eventHub);
+        protected cartService: ICartService = CartService.getInstance();
         protected productService: ProductService = new ProductService(this.eventHub, this.context);
         protected currentPage: any;
 

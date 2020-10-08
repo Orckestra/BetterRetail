@@ -12,11 +12,6 @@ namespace Orckestra.Composer.Product
         public static string ProductSummaryImageSize = "L";
         public static string ProductZoomImageSize = "XL";
         public static string LookupCacheCategory = "Lookup";
-
-        public static bool IsQuantityDisplayed = true;
-        public static int MinQuantity = 1;
-        public static int MaxQuantity = 99;
-
     }
 
     public static class SpecificationConfiguration

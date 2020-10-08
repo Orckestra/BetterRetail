@@ -15,7 +15,7 @@ module Orckestra.Composer {
         protected debounceUpdateLineItem: (args: any) => void;
 
         protected loaded: boolean = false;
-        protected cartService: CartService = new CartService(new CartRepository(), this.eventHub);
+        protected cartService: ICartService = CartService.getInstance();
 
         public initialize() {
 

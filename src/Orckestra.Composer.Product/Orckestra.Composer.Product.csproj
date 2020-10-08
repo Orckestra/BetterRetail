@@ -82,7 +82,6 @@
     <Compile Include="ViewModels\Inventory\InventoryItemStatusViewModel.cs" />
     <Compile Include="ViewModels\Inventory\InventoryQuantityViewModel.cs" />
     <Compile Include="ViewModels\Inventory\InventoryScheduleViewModel.cs" />
-    <Compile Include="ViewModels\ProductQuantityViewModel.cs" />
     <Compile Include="ViewModels\ProductIdentifier.cs" />
     <Compile Include="ViewModels\ProductViewModel.cs" />
     <Compile Include="ViewModels\ProductWithVariant.cs" />
