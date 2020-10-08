@@ -30,29 +30,6 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             BreadcrumbViewService = breadcrumbViewService ?? throw new ArgumentNullException(nameof(breadcrumbViewService));
         }
 
-        public virtual ActionResult CartSummary()
-        {
-            var cartViewModel = GetCartViewModel();
-
-            if (cartViewModel == null) { return View("CartSummaryBlade", (CartViewModel) null); }
-
-            return View("CartSummaryBlade", cartViewModel);
-        }
-
-        public virtual ActionResult OrderSummary()
-        {
-            var cartViewModel = GetCartViewModel();
-
-            return View("OrderSummaryBlade", cartViewModel);
-        }
-
-        public virtual ActionResult Coupons()
-        {
-            var cartViewModel = GetCartViewModel();
-
-            return View("CouponsBlade", cartViewModel);
-        }
-
         protected virtual CartViewModel GetCartViewModel()
         {
             var cartViewModel = new CartViewModel

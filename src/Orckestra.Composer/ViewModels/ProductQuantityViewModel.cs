@@ -1,6 +1,6 @@
 ﻿using Orckestra.Composer.ViewModels;
 
-namespace Orckestra.Composer.Product.ViewModels
+namespace Orckestra.Composer.ViewModels
 {
     public sealed class ProductQuantityViewModel : BaseViewModel
     {

@@ -243,21 +243,7 @@ namespace Orckestra.Composer.Product.Services
 
         protected virtual ProductQuantityViewModel GetQuantity()
         {
-            ProductQuantityViewModel quantity = null;
-
-            if (ProductConfiguration.IsQuantityDisplayed &&
-                ProductConfiguration.MinQuantity > 0 &&
-                ProductConfiguration.MaxQuantity >= ProductConfiguration.MinQuantity)
-            {
-                quantity = new ProductQuantityViewModel
-                {
-                    Min = ProductConfiguration.MinQuantity,
-                    Max = ProductConfiguration.MaxQuantity,
-                    Value = ProductConfiguration.MinQuantity
-                };
-            }
-
-            return quantity;
+            return QuantityConfiguration.GetProductQuantity();
         }
 
         protected virtual decimal? GetCurrentPrice(IEnumerable<ProductPrice> prices, Overture.ServiceModel.Products.Product product, Variant variant)

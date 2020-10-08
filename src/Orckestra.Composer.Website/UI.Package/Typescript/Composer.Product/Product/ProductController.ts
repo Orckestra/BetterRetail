@@ -20,7 +20,7 @@ module Orckestra.Composer {
 
         protected inventoryService = new InventoryService();
         protected productService: ProductService = new ProductService(this.eventHub, this.context);
-        protected cartService: CartService = new CartService(new CartRepository(), this.eventHub);
+        protected cartService: ICartService =  CartService.getInstance();
         protected _wishListService: WishListService = new WishListService(new WishListRepository(), this.eventHub);
         protected _membershipService: IMembershipService = new MembershipService(new MembershipRepository());
 

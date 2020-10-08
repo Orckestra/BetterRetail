@@ -284,7 +284,6 @@
     <Content Include="App_Data\PageTemplates\MasterLayout.cshtml" />
     <Content Include="App_Data\PageTemplates\DefaultPageLayout.cshtml" />
     <Content Include="App_Data\Razor\Composer\CheckoutHeader.cshtml" />
-    <Content Include="App_Data\Razor\Composer\Grids\CartSideGrid.cshtml" />
     <Content Include="App_Data\Razor\Composer\Grids\SearchGrid.cshtml" />
     <Content Include="App_Data\Razor\Composer\Grids\TwoThirdsOneThird.cshtml" />
     <Content Include="App_Data\Razor\Composer\Header.cshtml" />
@@ -296,6 +295,8 @@
     <Content Include="App_Code\RecurringOrderHelpers.cshtml" />
     <Content Include="App_Code\OrdersHelper.cshtml" />
     <Content Include="App_Code\GeneralHelpers.cshtml" />
+    <Content Include="App_Code\CartSummaryHelpers.cshtml" />
+    <Content Include="App_Code\OrderSummaryHelpers.cshtml" />
     <None Include="App_Config\Caching.config" />
     <Content Include="App_Data\Razor\Composer\Grids\OneThirdTwoThirds.cshtml" />
     <Content Include="App_Data\Razor\Composer\Grids\AccountGrid.cshtml" />
@@ -360,6 +361,10 @@
     <Content Include="App_Data\Razor\Composer\Order\Details.cshtml" />
     <Content Include="App_Data\Razor\Composer\MyAccount\CurrentOrders.cshtml" />
     <Content Include="App_Data\Razor\Composer\MyAccount\PastOrders.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Cart\FullCart.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Cart\CartSummary.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Cart\OrderSummary.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Cart\Coupons.cshtml" />
     <None Include="Properties\PublishProfiles\Website - CD.pubxml" />
     <None Include="Properties\PublishProfiles\Website.pubxml" />
     <Content Include="ViewModelAsExtensionModelTemplate.tt">

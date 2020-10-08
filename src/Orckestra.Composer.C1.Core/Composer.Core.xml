@@ -27,7 +27,6 @@
 		<Add name="Default Page Layout" />
 	</pc:PageTemplates>
 	<pc:Functions>
-		<Add name="Composer.Grids.CartSideGrid" />
 		<Add name="Composer.Grids.SearchGrid" />
 		<Add name="Composer.Grids.TwoThirdsOneThird" />
 		<Add name="Composer.Grids.FullGrid" />
