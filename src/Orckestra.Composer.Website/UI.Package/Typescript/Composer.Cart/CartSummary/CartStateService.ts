@@ -56,12 +56,6 @@ module Orckestra.Composer {
                     }
                 },
                 methods: {
-                    DecrementDisabled(item) {
-                        return this.IsLoading || (this.Cart.QuantityRange && item.Quantity <= this.Cart.QuantityRange.Min);
-                    },
-                    IncrementDisabled(item) {
-                        return this.IsLoading || (this.Cart.QuantityRange && item.Quantity >= this.Cart.QuantityRange.Max);
-                    },
                     updateBeforeEditLineItemList() {
                         this.beforeEditLineItemList = this.Cart.LineItemDetailViewModels.map(x => ({ ...x}));
                     }

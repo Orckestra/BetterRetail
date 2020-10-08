@@ -316,7 +316,7 @@ namespace Orckestra.Composer.Cart.Services
             return vm;
         }
 
-        protected async Task<List<GroupedLineItemDetailViewModel>> GetGroupedLineItems(CartViewModel vm, CreateCartViewModelParam param)
+        protected virtual async Task<List<GroupedLineItemDetailViewModel>> GetGroupedLineItems(CartViewModel vm, CreateCartViewModelParam param)
         {
             var categoryTree = await CategoryRepository.GetCategoriesTreeAsync(new GetCategoriesParam
             {
