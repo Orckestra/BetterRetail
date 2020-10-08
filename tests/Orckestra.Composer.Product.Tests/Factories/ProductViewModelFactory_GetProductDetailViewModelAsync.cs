@@ -237,7 +237,7 @@ namespace Orckestra.Composer.Product.Tests.Factories
             //Assert
             model.Quantity.Min.Should().Be(QuantityConfiguration.MinQuantity);
             model.Quantity.Max.Should().Be(QuantityConfiguration.MaxQuantity);
-            model.Quantity.Value.Should().Be(QuantityConfiguration.MinQuantity);
+            model.Quantity.Value.Should().Be(1);
         }
 
         [Test]
