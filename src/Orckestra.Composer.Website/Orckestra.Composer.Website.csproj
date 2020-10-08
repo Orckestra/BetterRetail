@@ -61,7 +61,7 @@
     </Reference>
     <Reference Include="Composite, Version=6.10.7583.21856, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\C1CMS.Assemblies.6.10.7583.21856\lib\net471\Composite.dll</HintPath>
-      <Private>False</Private>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Composite.AspNet.MvcFunctions, Version=1.0.15.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\C1CMSPackages.Composite.AspNet.MvcFunctions.1.0.15\lib\net461\Composite.AspNet.MvcFunctions.dll</HintPath>
