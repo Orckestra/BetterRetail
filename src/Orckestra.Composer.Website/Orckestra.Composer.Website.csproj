@@ -284,7 +284,6 @@
     <Content Include="App_Data\PageTemplates\MasterLayout.cshtml" />
     <Content Include="App_Data\PageTemplates\DefaultPageLayout.cshtml" />
     <Content Include="App_Data\Razor\Composer\CheckoutHeader.cshtml" />
-    <Content Include="App_Data\Razor\Composer\Grids\CartSideGrid.cshtml" />
     <Content Include="App_Data\Razor\Composer\Grids\SearchGrid.cshtml" />
     <Content Include="App_Data\Razor\Composer\Grids\TwoThirdsOneThird.cshtml" />
     <Content Include="App_Data\Razor\Composer\Header.cshtml" />

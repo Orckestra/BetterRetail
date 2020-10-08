@@ -5,6 +5,7 @@
 ///<reference path='../../Events/EventHub.ts' />
 ///<reference path='../../Utils/Utils.ts' />
 ///<reference path='./ICartService.ts' />
+///<reference path='./CartEvents.ts' />
 
 module Orckestra.Composer {
     'use strict';
@@ -86,7 +87,7 @@ module Orckestra.Composer {
                 Price: price
             };
 
-            this.eventHub.publish('cartUpdating', { data: data });
+            this.eventHub.publish(CartEvents.CartUpdating, { data: data });
 
             return this.cartRepository.addLineItem(productId, variantId, quantity, recurringOrderFrequencyName, recurringOrderProgramName)
                 .then(cart => this.setCartToCache(cart))
@@ -97,7 +98,7 @@ module Orckestra.Composer {
                         VariantId: variantId
                     };
 
-                    this.eventHub.publish('cartUpdated', { data: cart });
+                    this.eventHub.publish(CartEvents.CartUpdated, { data: cart });
                     this.eventHub.publish('lineItemAddedToCart', { data: addedToCartData });
                 });
         }
@@ -112,12 +113,12 @@ module Orckestra.Composer {
                 ProductId: productId
             };
 
-            this.eventHub.publish('cartUpdating', { data: data });
+            this.eventHub.publish(CartEvents.CartUpdating, { data: data });
 
             return this.cartRepository.updateLineItem(lineItemId, quantity, recurringOrderFrequencyName, recurringOrderProgramName)
                 .then(cart => this.setCartToCache(cart))
                 .then(cart => {
-                    this.eventHub.publish('cartUpdated', { data: cart });
+                    this.eventHub.publish(CartEvents.CartUpdated, { data: cart });
                     return cart;
                 });
         }
@@ -129,12 +130,12 @@ module Orckestra.Composer {
                 ProductId: productId
             };
 
-            this.eventHub.publish('cartUpdating', { data: data });
+            this.eventHub.publish(CartEvents.CartUpdating, { data: data });
 
             return this.cartRepository.deleteLineItem(lineItemId)
                 .then(cart => this.setCartToCache(cart))
                 .then(cart => {
-                    this.eventHub.publish('cartUpdated', { data: cart });
+                    this.eventHub.publish(CartEvents.CartUpdated, { data: cart });
                     return cart;
                 });
         }
