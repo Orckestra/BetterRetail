@@ -110,7 +110,7 @@
         </div>
         <div class="col-6  col-md-5  text-right">
             <div v-if="IsLoading">
-                @CheckoutHelpers.LoadingSpinner()
+                @GeneralHelpers.LoadingSpinner()
             </div>
             <h4 v-else="v-else" v-text="OrderSummary.Total" data-qa="order-summary-total"></h4>
         </div>
