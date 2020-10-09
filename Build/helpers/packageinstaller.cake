@@ -1,4 +1,4 @@
-#tool "nuget:?package=Composite.PackageInstaller&version=0.1.6"
+#tool "nuget:?package=Composite.PackageInstaller&version=0.1.7.1"
 using Cake.Core;
 using Cake.Core.Annotations;
 
@@ -21,7 +21,11 @@ public class PackageInstaller : IDisposable
 
          _context.Information("Inject Package Installer to Website");
         foreach (var installerFile in this._installerFiles) {
-            var file = _context.GetFiles($"{rootDir}/build/tools/Composite.PackageInstaller*/**/{installerFile}").Last();
+            var mask = $"{rootDir}/build/tools/Composite.PackageInstaller*/**/{installerFile}";
+            var file = _context.GetFiles(mask).LastOrDefault();
+            if (file == null)
+                throw new InvalidOperationException("Failed to find a file by mask: " + mask);
+
             _context.CopyFile(file, $"{_websiteDir}/Bin/{file.GetFilename()}");
         }
 
