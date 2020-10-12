@@ -137,6 +137,7 @@
     <mi:Add installerType="Composite.Core.PackageSystem.PackageFragmentInstallers.FileXslTransformationPackageFragmentInstaller, Composite" uninstallerType="Composite.Core.PackageSystem.PackageFragmentInstallers.FileXslTransformationPackageFragmentUninstaller, Composite">
       <XslFiles>
         <XslFile pathXml="~\Web.config" installXsl="~\Web.config.xsl" />
+        <XslFile pathXml="~\App_Data\Composite\Composite.config" installXsl="~\Composite.config.xsl" />
       </XslFiles>
     </mi:Add>
 

@@ -8,6 +8,8 @@
 @functions {
     public ICustomerAddressViewService CustomerAddressViewService { get; set; }
     public IComposerContext ComposerContext { get; set; }
+    // Returning true informs the system that current function's output should be excluded from cache
+    public override bool PreventFunctionOutputCaching { get { return true; } } 
 }
 
 @{
