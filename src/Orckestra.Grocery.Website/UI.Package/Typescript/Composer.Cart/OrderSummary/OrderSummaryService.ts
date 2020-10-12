@@ -1,6 +1,7 @@
 ///<reference path='../../../Typings/tsd.d.ts' />
 ///<reference path='../../Events/EventHub.ts' />
 ///<reference path='../CartSummary/CartService.ts' />
+///<reference path='../CartSummary/CartEvents.ts' />
 
 module Orckestra.Composer {
     'use strict';
@@ -25,12 +26,12 @@ module Orckestra.Composer {
 
         public setCheapestShippingMethodUsing(postalCode: string): Q.Promise<void> {
 
-            this.eventHub.publish('cartUpdating', { data: { PostalCode: postalCode } });
+            this.eventHub.publish(CartEvents.CartUpdating, { data: { PostalCode: postalCode } });
 
             return this.cartService.updateShippingMethodPostalCode(postalCode)
                        .then(() => this.cartService.setCheapestShippingMethod())
                        .then(() => this.cartService.getCart())
-                       .then(cart => this.eventHub.publish('cartUpdated', { data: cart }))
+                       .then(cart => this.eventHub.publish(CartEvents.CartUpdated, { data: cart }))
                        .fail((reason: any) => {
                            console.error('Error while updating the shipping method using the postal code', reason);
                            throw reason;

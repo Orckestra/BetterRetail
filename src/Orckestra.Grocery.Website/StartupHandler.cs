@@ -129,11 +129,7 @@ namespace Orckestra.Composer.Grocery.Website
                     typeof(DataReference<CssStyle>),
                     label: "Background style",
                     helpText: "Specify the style of this block background");
-
-            functions.RegisterAction<CartController>("CartSummary", "Composer.Cart.CartSummary");
-            functions.RegisterAction<CartController>("OrderSummary", "Composer.Cart.OrderSummary");
-            functions.RegisterAction<CartController>("Coupons", "Composer.Cart.Coupons");
-
+  
             functions.RegisterAction<CartController>("Minicart", "Composer.Cart.Minicart").AddParameter(
                 "notificationTimeInSeconds",
                 typeof(int),

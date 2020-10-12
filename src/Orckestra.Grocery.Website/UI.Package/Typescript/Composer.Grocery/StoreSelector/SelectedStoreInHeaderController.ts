@@ -39,11 +39,11 @@ module Orckestra.Composer {
                 },
                 mounted() {
                     this.ChangeStoreModal = new UIModal(window, "#changeStoreModal", this.selectStore, this);
-                    self.eventHub.subscribe(SelectedStoreEvents[SelectedStoreEvents.StoreSelected],  e => this.onStoreSelected(e.data));
-                    self.eventHub.subscribe(SelectedStoreEvents[SelectedStoreEvents.StoreUpdating], e => this.onStoreUpdating(e.data));
-                    self.eventHub.subscribe(SelectedStoreEvents[SelectedStoreEvents.TimeSlotSelected],  e => this.onSlotSelected(e.data));
-                    self.eventHub.subscribe(SelectedStoreEvents[SelectedStoreEvents.TimeSlotUpdating], e => this.onSlotUpdating(e.data));
-                    self.eventHub.subscribe(SelectedStoreEvents[SelectedStoreEvents.TimeSlotSelectionFailed], e => this.onSlotFailed(e.data));
+                    self.eventHub.subscribe(SelectedStoreEvents.StoreSelected,  e => this.onStoreSelected(e.data));
+                    self.eventHub.subscribe(SelectedStoreEvents.StoreUpdating, e => this.onStoreUpdating(e.data));
+                    self.eventHub.subscribe(SelectedStoreEvents.TimeSlotSelected,  e => this.onSlotSelected(e.data));
+                    self.eventHub.subscribe(SelectedStoreEvents.TimeSlotUpdating, e => this.onSlotUpdating(e.data));
+                    self.eventHub.subscribe(SelectedStoreEvents.TimeSlotSelectionFailed, e => this.onSlotFailed(e.data));
                 },
                 computed: {
                     Store() {

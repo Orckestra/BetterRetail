@@ -14,7 +14,7 @@ module Orckestra.Composer {
         public VueChangeStoreModal: Vue;
         protected selectedStoreService: ISelectedStoreService = SelectedStoreService.instance();
         protected storeService: IStoreService = StoreService.instance();
-        protected cartService: CartService = new CartService(new CartRepository(), this.eventHub);
+        protected cartService = CartService.getInstance();
         public initialize() {
             super.initialize();
             this.initializeVueComponent();
@@ -97,7 +97,7 @@ module Orckestra.Composer {
                             if (places && places.length && places[0].geometry) {
                                 this.Location = places[0].geometry.location;
                                 this.PostalCode = this.$refs.postalCodeInput.value;
-                                self.eventHub.publish(SelectedStoreEvents[SelectedStoreEvents.LocationSelected], { data: this.Location });
+                                self.eventHub.publish(SelectedStoreEvents.LocationSelected, { data: this.Location });
                             } else {
                                 this.Location = undefined;
                                 this.Stores = [];
@@ -149,11 +149,12 @@ module Orckestra.Composer {
                                 this.SelectedStoreId = Store ? Store.Id : undefined;
                             })
                     },
-                    selectStore(store: any): Q.Promise<boolean> {
+                    selectStore(event, store: any): Q.Promise<boolean> {
                         if (!this.Mode.ChangeStore) return;
 
                         this.Mode.Loading = true;
-                        self.eventHub.publish(SelectedStoreEvents[SelectedStoreEvents.StoreUpdating], { data: store });
+                        var busy = self.asyncBusy({elementContext: $(event.target)});
+                        self.eventHub.publish(SelectedStoreEvents.StoreUpdating, { data: store });
                         return self.selectedStoreService.setStore(store.Id)
                             .then(result => {
                                 if (result) {
@@ -168,17 +169,18 @@ module Orckestra.Composer {
                             .then(([cart,]: any[]) => {
                                 this.CurrentShipmentId = cart.CurrentShipmentId;
                                 this.ShippingMethod = cart.ShippingMethod;
-                                self.eventHub.publish('cartUpdated', { data: cart });
+                                self.eventHub.publish(CartEvents.CartUpdated, { data: cart });
                             })
                             .fail((reason) => {
                                 console.log(reason);
                                 return false;
                             })
                             .fin(() => {
+                                busy.done();
                                 this.Mode.Loading = false;
                                 this.Mode.ChangeStore = false;
-                                self.eventHub.publish(SelectedStoreEvents[SelectedStoreEvents.StoreSelected], { data: store });
-                                self.eventHub.publish(SelectedStoreEvents[SelectedStoreEvents.TimeSlotSelected], {
+                                self.eventHub.publish(SelectedStoreEvents.StoreSelected, { data: store });
+                                self.eventHub.publish(SelectedStoreEvents.TimeSlotSelected, {
                                     data: { TimeSlot: undefined, TimeSlotReservation: undefined }
                                 });
                             });
@@ -209,20 +211,20 @@ module Orckestra.Composer {
                         this.Location = undefined;
                     },
                     selectTimeSlot(timeSlot, day) {
-                        self.eventHub.publish(SelectedStoreEvents[SelectedStoreEvents.TimeSlotUpdating], { data: timeSlot });
+                        self.eventHub.publish(SelectedStoreEvents.TimeSlotUpdating, { data: timeSlot });
                         self.selectedStoreService.setTimeSlotId(this.SelectedStoreId, this.CurrentShipmentId, timeSlot.Id, day.Date)
                             .then(cart => {
                                 const {TimeSlotReservation} = cart;
                                 this.ReservedSlotData = { TimeSlot: { ...timeSlot }, TimeSlotReservation };
-                                self.eventHub.publish(SelectedStoreEvents[SelectedStoreEvents.TimeSlotSelected], { data: this.ReservedSlotData });
+                                self.eventHub.publish(SelectedStoreEvents.TimeSlotSelected, { data: this.ReservedSlotData });
                                 self.eventHub.publish('cartUpdated', { data: cart });
                             })
                             .fail(reason => {
                                 console.log(reason);
-                                self.eventHub.publish(SelectedStoreEvents[SelectedStoreEvents.TimeSlotSelected], {
+                                self.eventHub.publish(SelectedStoreEvents.TimeSlotSelected, {
                                     data: { TimeSlot: undefined, TimeSlotReservation: undefined }
                                 });
-                                self.eventHub.publish(SelectedStoreEvents[SelectedStoreEvents.TimeSlotSelectionFailed], { data: reason.Errors });
+                                self.eventHub.publish(SelectedStoreEvents.TimeSlotSelectionFailed, { data: reason.Errors });
                                });
                     },
                     nexDay() {

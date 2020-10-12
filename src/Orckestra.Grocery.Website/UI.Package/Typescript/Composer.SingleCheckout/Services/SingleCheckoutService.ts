@@ -86,7 +86,7 @@ module Orckestra.Composer {
             this.allControllersReady = Q.defer<boolean>();
             this.cacheProvider = CacheProvider.instance();
 
-            this.cartService = new CartService(new CartRepository(), this.eventHub);
+            this.cartService = CartService.getInstance();
             this.membershipService = new MembershipService(new MembershipRepository());
             this.regionService = new RegionService();
             this.shippingMethodService = new ShippingMethodService();

@@ -34,7 +34,9 @@ module Orckestra.Composer {
 
             this.timeoutHandle = setTimeout(() => {
 
+              
                 this.containerContext.find(':input:enabled').addClass('async-busy').prop('disabled', true);
+                
                 this.loadingIndicatorContext.removeClass('d-none');
 
             }, msDelay);
@@ -46,6 +48,7 @@ module Orckestra.Composer {
 
             this.loadingIndicatorContext.addClass('d-none');
             this.containerContext.find(':input.async-busy').removeClass('async-busy').prop('disabled', false);
+
         }
     }
 }

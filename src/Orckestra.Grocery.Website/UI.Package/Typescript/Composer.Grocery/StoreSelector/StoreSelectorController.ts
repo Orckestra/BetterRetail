@@ -17,7 +17,7 @@ module Orckestra.Composer {
         protected storeService: IStoreService = StoreService.instance();
         protected selectedStoreService: ISelectedStoreService = SelectedStoreService.instance();
         protected shippingMethodService: ShippingMethodService = new ShippingMethodService();
-        protected cartService: CartService = new CartService(new CartRepository(), this.eventHub);
+        protected cartService = CartService.getInstance();
 
         public initialize() {
             super.initialize();
@@ -172,9 +172,12 @@ module Orckestra.Composer {
                         this.Stores = self.storeService.filterStoresByFulfillmentMethod(this.AllStores, this.ShippingMethodType);
                         return Q.resolve(true);
                     },
-                    selectStore(store: any, step: any): Q.Promise<boolean> {
+                    selectStore(event, store: any, step: any): Q.Promise<boolean> {
                         this.Mode.Loading = true;
                         this.Errors.TimeSlotSelectionError = false;
+
+                        var busy = self.asyncBusy({elementContext: $(event.target)});
+ 
                         step.selectStep(); //Select store step for erase next steps
                         self.cartService.invalidateCache();
                         return self.selectedStoreService.setFulFilledMethodType(this.ShippingMethodType)
@@ -195,6 +198,7 @@ module Orckestra.Composer {
                             })
                             .fin(() => { 
                                 this.Mode.Loading = false;
+                                busy.done();
                                 self.eventHub.publish(SelectedStoreEvents[SelectedStoreEvents.StoreSelected], { data: store });
                                 self.eventHub.publish(SelectedStoreEvents[SelectedStoreEvents.TimeSlotSelected], {
                                     data: { TimeSlot: undefined, TimeSlotReservation: undefined }

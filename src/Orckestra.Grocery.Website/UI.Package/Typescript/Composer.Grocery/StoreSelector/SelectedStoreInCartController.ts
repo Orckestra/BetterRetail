@@ -2,6 +2,7 @@
 ///<reference path='../../Mvc/Controller.ts' />
 ///<reference path='../SelectedStoreService.ts' />
 /// <reference path='../../Composer.Cart/CartSummary/CartService.ts' />
+/// <reference path='../../Composer.Cart/CartSummary/ICartStateService.ts' />
 ///<reference path='../../UI/UIModal.ts' />
 ///<reference path='../SelectedStoreEvents.ts' />
 /// <reference path='../TimeSlotsHelper.ts' />
@@ -11,28 +12,27 @@ module Orckestra.Composer {
 
     export class SelectedStoreInCartController extends Controller {
 
-        public VueSelectedStore: Vue;
         protected storeService: ISelectedStoreService = SelectedStoreService.instance();
-		protected cartService: CartService = new CartService(new CartRepository(), this.eventHub);
+        protected cartService = CartService.getInstance();
+        protected cartStateService: ICartStateService = CartStateService.getInstance();
         public initialize() {
             super.initialize();
-           
+            this.initializeVueComponent();
+
 			this.storeService.getFreshStore().then((selectedStore) => {
-				this.initializeVueComponent(selectedStore);
-			});
+                let vueData: any = this.cartStateService.VueFullCart;
+				vueData.SelectedStore = {...selectedStore, StoreLoading: false, TimeSlotLoading: false };
+			}); 
         }
 
-        private initializeVueComponent(selectedStore) {
+        private initializeVueComponent() {
             let self: SelectedStoreInCartController = this;
-
             let commonTimeSlotReservationOptions =  TimeSlotsHelper.getCommonTimeSlotReservationVueConfig();
-            this.VueSelectedStore = new Vue({
-                el: '#vueSelectedStoreInCart',
+            let storeSummaryMixins = {
                 data: {
                     SelectedStore: {
                         TimeSlotReservation: undefined,
                         Store: undefined,
-                        ...selectedStore,
                         StoreLoading: false, TimeSlotLoading: false
                     },
                     ChangeStoreModal: null,
@@ -42,11 +42,11 @@ module Orckestra.Composer {
                 },
                 mounted() {
                     this.ChangeStoreModal = new UIModal(window, "#changeStoreModal", this.selectStore, this);
-                    self.eventHub.subscribe(SelectedStoreEvents[SelectedStoreEvents.StoreSelected],  e => this.onStoreSelected(e.data));
-                    self.eventHub.subscribe(SelectedStoreEvents[SelectedStoreEvents.StoreUpdating], e => this.onStoreUpdating(e.data));
-                    self.eventHub.subscribe(SelectedStoreEvents[SelectedStoreEvents.TimeSlotSelected],  e => this.onSlotSelected(e.data));
-                    self.eventHub.subscribe(SelectedStoreEvents[SelectedStoreEvents.TimeSlotUpdating], e => this.onSlotUpdating(e.data));
-                    self.eventHub.subscribe(SelectedStoreEvents[SelectedStoreEvents.TimeSlotSelectionFailed], e => this.onSlotFailed(e.data));
+                    self.eventHub.subscribe(SelectedStoreEvents.StoreSelected,  e => this.onStoreSelected(e.data));
+                    self.eventHub.subscribe(SelectedStoreEvents.StoreUpdating, e => this.onStoreUpdating(e.data));
+                    self.eventHub.subscribe(SelectedStoreEvents.TimeSlotSelected,  e => this.onSlotSelected(e.data));
+                    self.eventHub.subscribe(SelectedStoreEvents.TimeSlotUpdating, e => this.onSlotUpdating(e.data));
+                    self.eventHub.subscribe(SelectedStoreEvents.TimeSlotSelectionFailed, e => this.onSlotFailed(e.data));
                 },
                 computed: {
                     Store() {
@@ -84,7 +84,9 @@ module Orckestra.Composer {
                         this.Errors.TimeSlotSelectionError = TimeSlotsHelper.getTimeSlotReservationError(data);
                     }
                 }
-            });
+            };
+
+            this.cartStateService.VueCartMixins.push(storeSummaryMixins);
         }
     }
 }

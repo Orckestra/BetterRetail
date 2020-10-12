@@ -93,6 +93,7 @@ without specifying overwrite = true in the registerActionOptions.`);
                 elementContext: this.context.container,
                 containerContext: this.context.container,
                 loadingIndicatorSelector: '.loading-indicator',
+                disableInputs: true,
                 msDelay: 0
             }, options);
 

@@ -1,0 +1,96 @@
+﻿@inherits RazorFunction
+@using Orckestra.Composer.Cart
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Cart Coupons"; }
+    }
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
+<head>
+</head>
+<body>
+    <div data-oc-controller="Cart.Coupons">
+        <div v-if="Cart &amp;&amp; !Cart.IsCartEmpty" class="card bg-light">
+            <h3 class="card-header" data-qa="order-summary-title">
+                @Html.Localize("ShoppingCart", "F_PromoCode")
+            </h3>
+            <div class="card-body">
+                <form name="addCoupon" v-on:submit.prevent="applyCoupon">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <input data-qa="coupons-input"
+                                   type="text" class="form-control"
+                                   id="CouponCode"
+                                   name="CouponCode"
+                                   v-model="CouponCode"
+                                   placeholder=" @Html.Localize("ShoppingCart", "F_PromoCodeWatermark")" />
+                            <span class="input-group-append">
+                                <button data-qa="coupons-submit" type="submit"
+                                        class="btn   btn-outline-secondary">
+                                    @Html.Localize("ShoppingCart", "B_ApplyPromoCode")
+                                    <span v-if="Mode.ApplyingCoupon" class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </form>
+
+                @Coupons()
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+@helper Coupons()
+{
+    <div v-if="Coupons">
+        <div v-for="msg in Coupons.Messages" >
+            <div v-bind:class="'alert  alert-' + msg.Level + ' alert-dismissible'">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span class="fa  fa-times"></span>
+                </button>
+                <div class="multiline-message">
+                    <span v-if="msg.Level == 'danger'" class="fa  fa-exclamation-triangle  multiline-message-icon"></span>
+                    <span v-if="msg.Level == 'warning'" class="fa  fa-info-circle  multiline-message-icon"></span>
+                    <span v-if="msg.Level == 'success'" class="fa  fa-check-circle  multiline-message-icon"></span>
+                    {{msg.Message}}
+                </div>
+            </div>
+        </div>
+        <div v-if="Coupons.ApplicableCoupons.length">
+            <hr />
+            <div v-for="coupon in Coupons.ApplicableCoupons">
+                @Coupon()
+            </div>
+        </div>
+        <div v-else="else">
+            <div class="multiline-message">
+                <span class="fa  fa-comment-o  fa-lg  multiline-message-icon"></span>&#32;
+                <span>@Html.Localize("ShoppingCart", "F_PromoCodeIndication")</span>
+            </div>
+        </div>
+    </div>
+}
+
+@helper Coupon()
+{
+    <div class="form-group">
+        <div class="row">
+            <div class="col-9  col-md-10  col-lg-9  col-xl-10">
+                <strong class="text-info  text-uppercase">{{coupon.CouponCode}}</strong>
+                {{coupon.DisplayText}}
+            </div>
+            <div class="col-3  col-md-2  col-lg-3  col-xl-2">
+                <button data-qa="coupons-delete"
+                        class="btn  btn-outline-secondary  float-right"
+                        v-on:click.prevent="removeCoupon(coupon.CouponCode)">
+                    <span class="fa  fa-times"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+}

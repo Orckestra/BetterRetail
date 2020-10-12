@@ -4,13 +4,13 @@
 module Orckestra.Composer {
 
     export enum SelectedStoreEvents {
-        LocationSelected,
-        CheckAvailability,
-        SubscribeForAvailability,
-        StoreUpdating,
-        StoreSelected,
-        TimeSlotSelected,
-        TimeSlotUpdating,
-        TimeSlotSelectionFailed
+        LocationSelected = 'locationSelected',
+        CheckAvailability = 'checkAvailability',
+        SubscribeForAvailability = 'subscribeForAvailability',
+        StoreUpdating = 'storeUpdating',
+        StoreSelected = 'storeSelected',
+        TimeSlotSelected = 'timeSlotSelected',
+        TimeSlotUpdating = 'timeSlotUpdating',
+        TimeSlotSelectionFailed = 'timeSlotSelectionFailed'
     }
 }

@@ -24,22 +24,15 @@
                 <a class="nav-link" data-toggle="dropdown">
                     @StoreIcon()
                 </a>
-                <div class="dropdown-menu selected-store p-2">
-                    @Forms.Validations.ShowError("Errors.TimeSlotReservationAlreadyBookedForThisCart", "L_TimeSlotReservationAlreadyBookedForThisCart")
-                    @Forms.Validations.ShowError("Errors.TimeSlotSelectionError", "L_TimeSlotError")
+                <div class="dropdown-menu selected-store p-3">
+                    @Forms.Validations.ShowError("Errors.TimeSlotSelectionError")
                     <div v-if="Store">
-                        <div class="row">
-                            <div class="col-12">
-                                @StoreHelpers.SelectedStorePreview("SelectedStore")
-                            </div>
-                            <div class="col-12">
-                                @StoreHelpers.SelectedTimeSlotPreview("SelectedStore")
-                            </div>
-                        </div>
+                        @StoreHelpers.SelectedStorePreview("SelectedStore")
+                        <hr />
+                        @StoreHelpers.SelectedTimeSlotPreview("SelectedStore")
                     </div>
                 </div>
             </li>
-            <li class="px-1 px-md-3"><span class="vertical-division nav-icon-lg"></span></li>
         </ul>
     </div>
 </body>
@@ -55,14 +48,14 @@
                 {{Store.LocalizedDisplayName}}<span v-if="TimeSlotReservationTentative">&nbsp;|&nbsp;{{TimeSlotReservationDisplay}}</span>
             </span>
             <span class="d-lg-none">
-                @Html.Localize("Grocery", "B_BookSlot")
+                @Html.Localize("Grocery", "B_BookStore")
             </span>
         </span>
-        <span v-else="v-else">@Html.Localize("Grocery", "B_BookSlot")</span>
+        <span v-else="v-else">@Html.Localize("Grocery", "B_BookStore")</span>
     </span>
 
     <span class="d-flex flex-column align-items-center d-lg-none text-uppercase">
         <i class="fa fa-store mr-2"></i>
-        @Html.Localize("Grocery", "B_BookSlot")
+        @Html.Localize("Grocery", "B_BookStore")
     </span>
 }

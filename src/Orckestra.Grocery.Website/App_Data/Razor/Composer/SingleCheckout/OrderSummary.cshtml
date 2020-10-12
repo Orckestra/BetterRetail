@@ -16,29 +16,29 @@
          v-bind:class="{'loading': Mode.CompleteCheckoutLoading}">
 
         <div class="card  mb-4 w-100 sps-order-summary sps  sps--abv" data-sps-offset="100">
-            @LoadingSpinner()
+            @GeneralHelpers.LoadingSpinner()
 
-            <h3 class="card-header bg-primary border-primary  text-white">
+            <h3 class="card-header bg-gray text-white">
                 @Html.Localize("ShoppingCart", "T_OrderSummary")
             </h3>
             <div class="card-body  bg-light" v-cloak="true">
-                @Rewards()
+                @OrderSummaryHelpers.Rewards()
 
-                @SubTotal()
+                @OrderSummaryHelpers.SubTotal()
 
-                @TaxableShipmentAdditionalFeeSummary()
+                @OrderSummaryHelpers.TaxableShipmentAdditionalFeeSummary()
 
-                @TaxableAdditionalFeeSummary()
+                @OrderSummaryHelpers.TaxableAdditionalFeeSummary()
 
                 <div v-if="OrderSummary.IsShippingTaxable">
                     @Shipping()
                 </div>
 
-                @Taxes()
+                @OrderSummaryHelpers.Taxes()
 
-                @NotTaxableShipmentAdditionalFeeSummary()
+                @OrderSummaryHelpers.NotTaxableShipmentAdditionalFeeSummary()
 
-                @NotTaxableAdditionalFeeSummary()
+                @OrderSummaryHelpers.NotTaxableAdditionalFeeSummary()
 
                 <div v-if="!OrderSummary.IsShippingTaxable">
                     @Shipping()
@@ -46,9 +46,9 @@
 
                 @Totals()
 
-                @SavingsTotal()
+                @OrderSummaryHelpers.SavingsTotal()
 
-                @AdditionalFeesMessage()
+                @OrderSummaryHelpers.AdditionalFeesMessage()
 
                 @PalceOrderBtn()
             </div>
@@ -88,63 +88,13 @@
         </div>
         <div class="col-6  col-md-5  text-right">
             <div v-if="IsLoading &amp;&amp; !Mode.CompleteCheckoutLoading">
-                @CheckoutHelpers.LoadingSpinner()
+                @GeneralHelpers.LoadingSpinner()
             </div>
             <h4 v-else="v-else" v-text="OrderSummary.Total" data-qa="checkout-order-summary-total"></h4>
         </div>
     </div>
 }
 
-@helper SavingsTotal()
-{
-    <div v-if="OrderSummary.SavingsTotal" class="row  mb-2">
-        <div class=" col-12 ">
-            <div class="alert alert-success bg-white text-center text-success  m-0">
-                <span data-qa="checkout-order-summary-discount">
-                    @Html.Localize("MyAccount", "L_Savings")
-                    &#160;
-                    <span v-text="OrderSummary.SavingsTotal"></span>
-                </span>
-            </div>
-        </div>
-    </div>
-}
-
-@helper TaxableShipmentAdditionalFeeSummary()
-{
-    <div class="row  mb-2" data-qa="taxable-shipment-additional-fee-summary" v-if="feeSummary.Taxable" v-for="feeSummary in OrderSummary.ShipmentAdditionalFeeSummaryList">
-        @FeeSummary()
-    </div>
-}
-
-@helper NotTaxableShipmentAdditionalFeeSummary()
-{
-    <div class="row  mb-2" data-qa="nottaxable-shipment-additional-fee-summary" v-if="!feeSummary.Taxable" v-for="feeSummary in OrderSummary.ShipmentAdditionalFeeSummaryList">
-        @FeeSummary()
-    </div>
-}
-
-@helper TaxableAdditionalFeeSummary()
-{
-    <div class="row mb-2" data-qa="taxable-additional-fee-summary" v-if="feeSummary.Taxable" v-for="feeSummary in OrderSummary.AdditionalFeeSummaryList">
-        @FeeSummary()
-    </div>
-}
-
-@helper NotTaxableAdditionalFeeSummary()
-{
-    <div class="row  mb-2" data-qa="nottaxable-additional-fee-summary" v-if="!feeSummary.Taxable" v-for="feeSummary in OrderSummary.AdditionalFeeSummaryList">
-        @FeeSummary()
-    </div>
-}
-
-@helper FeeSummary()
-{
-    <div class="col-6  col-md-7"><p>{{feeSummary.GroupName}}</p></div>
-    <div class="col-6  col-md-5  text-right">
-        {{feeSummary.TotalAmount}}
-    </div>
-}
 
 @helper Shipping()
 {
@@ -162,32 +112,6 @@
     </div>
 }
 
-@helper Taxes()
-{
-    <div class="row  mb-2" v-for="(tax, index) in OrderSummary.Taxes" v-bind:data-qa="'tax-' + index">
-        <div class="col-7">
-            {{tax.DisplayName}}
-            <span v-if="tax.Percentage">({{tax.Percentage}})</span>
-        </div>
-        <div class="col-5  text-right">
-            {{tax.DisplayTaxTotal}}
-        </div>
-    </div>
-}
-
-@helper AdditionalFeesMessage()
-{
-    <div class="row  mb-2">
-        <div class="col-12">
-            <div class="additional-info">
-                <div class="multiline-message">
-                    <span class="fa  fa-comment-o  fa-lg  multiline-message-icon"></span>
-                    <p>@Html.Localize("ShoppingCart", "L_AdditionalFeesGenericMessage")</p>
-                </div>
-            </div>
-        </div>
-    </div>
-}
 
 @helper PalceOrderBtn()
 {
@@ -200,14 +124,5 @@
                 @Html.Localize("CheckoutProcess", "F_PlaceOrder")
             </button>
         </div>
-    </div>
-}
-
-@helper LoadingSpinner()
-{
-    <div class="loading-spinner">
-        <span class="spinner-border text-info" role="status">
-            &#160;
-        </span>
     </div>
 }

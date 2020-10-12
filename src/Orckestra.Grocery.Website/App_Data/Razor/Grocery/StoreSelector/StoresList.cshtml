@@ -19,7 +19,7 @@
                 @StoreHelpers.StoreListRow("SelectedStore")
             </div>
             <div v-else="else" class="col-12">
-                @StoreHelpers.StoreListRow("NearestStore")
+                @StoreHelpers.StoreListRow("NearestStore", true)
             </div>
             <div v-if="Stores.length > 1" class="col-12  mt-2  text-right">
                 <a href="#" class="cta  text-lowercase" v-on:click.prevent="seeMoreStores()">
@@ -29,7 +29,7 @@
         </div>
         <div v-else="else" class="row">
             <div v-for="(store, index) in Stores" class="col-12 mb-2">
-                @StoreHelpers.StoreListRow("store")
+                @StoreHelpers.StoreListRow("store", true)
             </div>
             <div v-if="Stores.length > 1" class="col-12  text-right">
                 <a href="#" class="cta  text-lowercase" v-on:click.prevent="seeLessStores()">

@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="B_BookStore" xml:space="preserve">
+    <value>Book Store</value>
+  </data>
   <data name="B_BookYourSlot" xml:space="preserve">
     <value>Book your slot</value>
   </data>
@@ -223,6 +226,12 @@ available for you.</value>
   </data>
   <data name="T_PickTimeSlot" xml:space="preserve">
     <value>Pick a timeslot</value>
+  </data>
+  <data name="T_SelectedTimeSlot" xml:space="preserve">
+    <value>Selected timeslot:</value>
+  </data>
+  <data name="T_ShippingMethodTitle" xml:space="preserve">
+    <value>Delivery</value>
   </data>
   <data name="T_Step_CheckServiceNear" xml:space="preserve">
     <value>Check service availability near you</value>

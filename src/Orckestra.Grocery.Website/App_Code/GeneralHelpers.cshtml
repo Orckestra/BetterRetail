@@ -19,3 +19,11 @@
     </span>
 }
 
+@helper ButtonLoadingSpinner()
+{
+    <span class="loading-indicator spinner-border spinner-border-sm text-info d-none"
+          role="status">
+        <span class="sr-only">@Html.Localize("General", "L_Loading")</span>&#160;
+    </span>
+}
+
