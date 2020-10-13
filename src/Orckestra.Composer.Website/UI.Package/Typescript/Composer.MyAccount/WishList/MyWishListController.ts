@@ -14,7 +14,7 @@ module Orckestra.Composer {
         }
 
         protected registerSubscriptions(): void {
-            this.eventHub.subscribe('wishListUpdated', (e: IEventInformation) => this.onWishListUpdated(e));
+            this.eventHub.subscribe(ProductEvents.WishListUpdated, (e: IEventInformation) => this.onWishListUpdated(e));
         }
 
 
