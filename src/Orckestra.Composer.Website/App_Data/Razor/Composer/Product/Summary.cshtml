@@ -29,16 +29,21 @@
     </script>
 </head>
 <body>
-    <div data-oc-controller="Product.ProductDetail" data-productid="@Model.ProductId" data-context-var="productDetailContext">
+    <div data-oc-controller="Product.ProductDetail"
+         data-productid="@Model.ProductId"
+         data-context-var="productDetailContext"
+         class="product-details">
         <div class="row">
             <div class="col-lg-6  col-md-6">
+                @ProductHelpers.AddToWishList()
                 @Partial("Product", "Images", Model)
             </div>
             <div class="col-md-6">
+                @BrandName()
 
                 @DisplayName()
 
-                @BrandName()
+                @Description()
 
                 @Sku()
 
@@ -46,19 +51,12 @@
 
                 @Html.LazyFunction("Composer.Product.RecurringFrequency")
 
-                <div class="row  mb-4">
-                    <div class="col-6  col-md-5  col-lg-4  col-xl-3">
-                        @Partial("ProductQuantity", Model)
-                    </div>
-                </div>
-
                 <div class="mb-4" property="offers" typeof="Offer">
                     @Partial("PriceDiscount", Model)
                 </div>
 
                 <div class="mb-4">
-                    @Partial("AddToCartProductDetail", Model)
-                    @Partial("AddToWishList", Model)
+                    @ProductHelpers.AddToCartWithQuantity(true)
                 </div>
             </div>
         </div>
@@ -96,6 +94,13 @@
     }
 }
 
+@helper Description()
+{
+    <div class="mb-4" property="description">
+        @Html.Raw(Model.Description)
+    </div>
+}
+
 @helper Sku()
 {
     <span class="d-none" property="sku">@Model.Sku</span>
@@ -103,7 +108,7 @@
 
 @helper BrandName()
 {
-    <h2 class="h5  mb-4" property="brand" data-qa="product-brand">@Model.Brand</h2>
+    <h2 class="h5  mb-1" property="brand" data-qa="product-brand">@Model.Brand</h2>
 }
 
 @helper StoreInventoryLink()

@@ -20,7 +20,7 @@ module Orckestra.Composer {
 
         protected inventoryService = new InventoryService();
         protected productService: ProductService = new ProductService(this.eventHub, this.context);
-        protected cartService: ICartService =  CartService.getInstance();
+        protected cartService: ICartService = CartService.getInstance();
         protected _wishListService: WishListService = new WishListService(new WishListRepository(), this.eventHub);
         protected _membershipService: IMembershipService = new MembershipService(new MembershipRepository());
 
@@ -209,9 +209,9 @@ module Orckestra.Composer {
         }
 
         public addLineItem(actionContext: IControllerActionContext,
-                           recurringOrderFrequencyName?: string,
-                           recurringOrderProgramName?: string) {
-            let busy = this.asyncBusy({elementContext: actionContext.elementContext}),
+            recurringOrderFrequencyName?: string,
+            recurringOrderProgramName?: string) {
+            let busy = this.asyncBusy({ elementContext: actionContext.elementContext }),
                 quantity = this.getCurrentQuantity(),
                 vm = this.context.viewModel,
                 variant: any = _.find(vm.allVariants, (v: any) => v.Id === vm.selectedVariantId),
@@ -244,7 +244,7 @@ module Orckestra.Composer {
                 .fin(() => busy.done());
         }
 
-        protected onAddLineItemSuccess(data: any): void {
+        protected onAddLineItemSuccess(data: any = undefined): void {
             ErrorHandler.instance().removeErrors();
         }
 
@@ -264,7 +264,7 @@ module Orckestra.Composer {
         }
 
         protected addLineItemImpl(productId: string, price: string, variantId: string, quantity: any,
-                                            recurringOrderFrequencyName?: string, recurringOrderProgramName?: string): Q.Promise<any> {
+            recurringOrderFrequencyName?: string, recurringOrderProgramName?: string): Q.Promise<any> {
             return this.cartService.addLineItem(productId, price, variantId, quantity.Value, recurringOrderFrequencyName, recurringOrderProgramName);
         }
 
@@ -329,6 +329,20 @@ module Orckestra.Composer {
             throw new Error('ListName not defined for this controller');
         }
 
+
+        protected publishProductDataForAnalytics(vm: any, eventName: string): void {
+            var data = this.getProductDataForAnalytics(vm);
+
+            var variant: any = _.find(vm.allVariants, (v: any) => v.Id === vm.selectedVariantId);
+            if (variant) {
+                var variantData: any = this.getVariantDataForAnalytics(variant);
+                _.extend(data, variantData);
+            }
+
+            this.eventHub.publish(eventName, { data });
+        }
+
+
         protected getVariantDataForAnalytics(variant: any): any {
             var variantName: string = this.buildVariantName(variant.Kvas);
 
@@ -354,5 +368,7 @@ module Orckestra.Composer {
 
             return nameParts.join(' ');
         }
+
+
     }
 }

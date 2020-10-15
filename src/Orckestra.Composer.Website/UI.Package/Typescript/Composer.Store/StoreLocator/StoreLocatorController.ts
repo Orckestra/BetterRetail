@@ -25,8 +25,8 @@ module Orckestra.Composer {
         protected cache = CacheProvider.instance().defaultCache;
         protected VueStoreList: any;
 
-        private _searchBox: google.maps.places.SearchBox;
-        private _searchBoxJQ: JQuery;
+        private _autoCompleteBox:  google.maps.places.Autocomplete;
+        private _autoCompleteJQ: JQuery;
         private _searchPoint: google.maps.LatLng;
         private _searchPointMarker: google.maps.Marker;
         private _isSearch: boolean = false;
@@ -170,25 +170,27 @@ module Orckestra.Composer {
         }
 
         private initSearchBox() {
-            this._searchBoxJQ = this.findElement('input[name="storeLocatorSearchInput"]');
-            this._searchBox = new google.maps.places.SearchBox(<HTMLInputElement>this._searchBoxJQ[0]);
-
+            this._autoCompleteJQ = this.findElement('input[name="storeLocatorAutocompleteInput"]');
+            let opt: google.maps.places.AutocompleteOptions = { fields: ['geometry'] };
+            this._autoCompleteBox = new google.maps.places.Autocomplete(<HTMLInputElement>this._autoCompleteJQ[0], opt);
+                
             this.searchBoxOnPlacesChanged();
             this.searchBoxOnEnterPressed();
         }
 
         private searchBoxOnPlacesChanged() {
-            this._searchBox.addListener('places_changed', () => {
+
+            this._autoCompleteBox.addListener('place_changed', () => {
                 clearTimeout(this._enterPressedTimer);
-                var places = this._searchBox.getPlaces();
-                if (places && places.length && places[0].geometry) {
-                    this.eventHub.publish('searchPointChanged', { data: places[0].geometry.location });
+                var place = this._autoCompleteBox.getPlace();
+                if (place && place.geometry) {
+                    this.eventHub.publish('searchPointChanged', { data: place.geometry.location });
                 }
             });
         }
 
         private searchBoxOnEnterPressed() {
-            this._searchBoxJQ.on('keypress', (e) => {
+            this._autoCompleteJQ.on('keypress', (e) => {
                 var key = e.which || e.keyCode;
                 if (key === 13) {
                     this._enterPressedTimer = setTimeout(() => {
@@ -244,11 +246,11 @@ module Orckestra.Composer {
         }
 
         protected getPostedAddress(): string {
-            return this._searchBoxJQ.val();
+            return this._autoCompleteJQ.val();
         }
 
         protected setPostedAddress(address: string) {
-            this._searchBoxJQ.val(address);
+            this._autoCompleteJQ.val(address);
         }
 
         protected findElement(selector: string): JQuery {
@@ -268,7 +270,7 @@ module Orckestra.Composer {
             var northEast = new google.maps.LatLng(bounds.NorthEast.Lat, bounds.NorthEast.Lng);
             bounds = new google.maps.LatLngBounds(southWest, northEast);
 
-            this._searchBox.setBounds(bounds);
+            this._autoCompleteBox.setBounds(bounds);
         }
 
         protected onMapBoundsUpdated(data?: any, isSearch?: boolean): void {

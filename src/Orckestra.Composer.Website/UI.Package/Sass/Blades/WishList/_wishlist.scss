@@ -44,13 +44,18 @@
    display: inline-block;
    height: 45px;
    vertical-align: middle;
+   color: #C4C4C4;
    
     &:hover {
         text-decoration: none;
+        color: #C4C4C4;
     }
     
     &.active {
         color: #FF0137;
+        &:hover {
+            color: #FF0137;
+        }
     }
 }
 
