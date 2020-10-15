@@ -89,15 +89,16 @@ module Orckestra.Composer {
                 },
                 methods: {
                     initPostalCodeSearchBox() {
-                        this.postalCodeSearchBox = new google.maps.places.SearchBox(this.$refs.postalCodeInput);
+                        let opt: google.maps.places.AutocompleteOptions = { fields: ['geometry'] };
+                        this.postalCodeSearchBox = new google.maps.places.Autocomplete(this.$refs.postalCodeInput, opt);
 
-                        this.postalCodeSearchBox.addListener('places_changed', () => {
+                        this.postalCodeSearchBox.addListener('place_changed', () => {
 
-                            let places = this.postalCodeSearchBox.getPlaces();
-                            if (places && places.length && places[0].geometry) {
-                                this.Location = places[0].geometry.location;
+                            let place = this.postalCodeSearchBox.getPlace();
+                            if (place && place.geometry) {
+                                this.Location = place.geometry.location;
                                 this.PostalCode = this.$refs.postalCodeInput.value;
-                                self.eventHub.publish(SelectedStoreEvents.LocationSelected, { data: this.Location });
+                                self.eventHub.publish(SelectedStoreEvents[SelectedStoreEvents.LocationSelected], { data: this.Location });
                             } else {
                                 this.Location = undefined;
                                 this.Stores = [];

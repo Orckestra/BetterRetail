@@ -89,12 +89,12 @@ module Orckestra.Composer {
                 Quantity: quantity
             };
 
-            this.eventHub.publish('wishListUpdating', { data: data });
+            this.eventHub.publish(ProductEvents.WishListUpdating, { data: data });
 
             return this.wishListRepository.addLineItem(productId, variantId, quantity, recurringOrderFrequencyName, recurringOrderProgramName)
                 .then(wishList => this.setWishListToCache(wishList))
                 .then(wishList => {
-                    this.eventHub.publish('wishListUpdated', { data: wishList });
+                    this.eventHub.publish(ProductEvents.WishListUpdated, { data: wishList });
                     return wishList;
                 })
                 .fail(reason => {
@@ -108,12 +108,12 @@ module Orckestra.Composer {
                 LineItemId: lineItemId
             };
 
-            this.eventHub.publish('wishListUpdating', { data: data });
+            this.eventHub.publish(ProductEvents.WishListUpdating, { data: data });
 
             return this.wishListRepository.deleteLineItem(lineItemId)
                 .then(wishList => this.setWishListToCache(wishList))
                 .then(wishList => {
-                    this.eventHub.publish('wishListUpdated', { data: wishList });
+                    this.eventHub.publish(ProductEvents.WishListUpdated, { data: wishList });
                     return wishList;
                 })
                 .fail(reason => {
