@@ -29,8 +29,8 @@
     </script>
 </head>
 <body>
-    <div data-oc-controller="Product.ProductDetail" 
-         data-productid="@Model.ProductId" 
+    <div data-oc-controller="Product.ProductDetail"
+         data-productid="@Model.ProductId"
          data-context-var="productDetailContext"
          class="product-details">
         <div class="row">
@@ -39,10 +39,11 @@
                 @Partial("Product", "Images", Model)
             </div>
             <div class="col-md-6">
+                @BrandName()
 
                 @DisplayName()
 
-                @BrandName()
+                @Description()
 
                 @Sku()
 
@@ -93,6 +94,13 @@
     }
 }
 
+@helper Description()
+{
+    <div class="mb-4" property="description">
+        @Html.Raw(Model.Description)
+    </div>
+}
+
 @helper Sku()
 {
     <span class="d-none" property="sku">@Model.Sku</span>
@@ -100,7 +108,7 @@
 
 @helper BrandName()
 {
-    <h2 class="h5  mb-4" property="brand" data-qa="product-brand">@Model.Brand</h2>
+    <h2 class="h5  mb-1" property="brand" data-qa="product-brand">@Model.Brand</h2>
 }
 
 @helper StoreInventoryLink()
