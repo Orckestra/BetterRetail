@@ -420,7 +420,8 @@ namespace Orckestra.Composer.Product.Factory
             }
 
             //Some additionnal Context Required by JS
-
+            productViewModel.Context["Brand"] = productViewModel.Brand;
+            productViewModel.Context["DisplayName"] = productViewModel.DisplayName;
             productViewModel.Context["CategoryId"] = productViewModel.CategoryId;
             productViewModel.Context["Sku"] = productViewModel.Sku;
             productViewModel.Context["keyVariantAttributeItems"] = productViewModel.KeyVariantAttributeItems;
