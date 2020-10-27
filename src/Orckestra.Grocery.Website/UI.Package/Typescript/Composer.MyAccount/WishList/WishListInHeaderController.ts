@@ -42,7 +42,7 @@ module Orckestra.Composer {
             var loggedInScheduler = EventScheduler.instance(MyAccountEvents[MyAccountEvents.LoggedIn]);
             var loggedOutScheduler = EventScheduler.instance(MyAccountEvents[MyAccountEvents.LoggedOut]);
 
-            this.eventHub.subscribe('wishListUpdated', (e: IEventInformation) => this.onWishListUpdated(e));
+            this.eventHub.subscribe(ProductEvents.WishListUpdated, (e: IEventInformation) => this.onWishListUpdated(e));
 
             loggedOutScheduler.subscribe((e: IEventInformation) => this.onRefreshUser(e));
             loggedInScheduler.subscribe((e: IEventInformation) => this.onRefreshUser(e));

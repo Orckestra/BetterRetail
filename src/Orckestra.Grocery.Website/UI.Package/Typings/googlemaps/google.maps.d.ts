@@ -1815,6 +1815,7 @@ declare module google.maps {
             bounds?: LatLngBounds;
             componentRestrictions?: ComponentRestrictions;
             types?: string[];
+            fields?: string[];
         }
 
         export interface AutocompletePrediction {
