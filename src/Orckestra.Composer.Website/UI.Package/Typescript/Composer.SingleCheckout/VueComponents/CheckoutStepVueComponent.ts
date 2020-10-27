@@ -69,7 +69,7 @@ module Orckestra.Composer {
                             isLastStep: this.$parent.isLastStep,
                             id: this.id,
                             active: this.active,
-                            displayContinueButton: (!this.checked && (this.nextStepId() === this.id)),
+                            displayContinueButton: (((this.checked && !this.fulfilled) || !this.checked) && (this.nextStepId() === this.id)),
                             selectStep: function () {
                                 this.$parent.navigateToStep(this.id);
                             },
