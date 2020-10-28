@@ -61,7 +61,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
 
             var languageSwitchViewModel = LanguageSwitchService.GetViewModel(cultureInfo => BuildUrl(
                 cultureInfo,
-                productViewModel.LocalizedDisplayNames[cultureInfo.Name],
+                productViewModel.LocalizedDisplayNames.ContainsKey(cultureInfo.Name ) ? productViewModel.LocalizedDisplayNames[cultureInfo.Name]: string.Empty,
                 productViewModel.ProductId,
                 productViewModel.SelectedVariantId, productViewModel.Sku),
                 ComposerContext.CultureInfo);

@@ -7,6 +7,7 @@ module Orckestra.Composer {
         LineItemRemoving = 'lineItemRemoving',
         LineItemUpdated = 'lineItemUpdated',
         WishListUpdating = 'wishListUpdating',
-        WishListUpdated = 'wishListUpdated'
+        WishListUpdated = 'wishListUpdated',
+        ProductClick = 'productClick'
     }
 }

@@ -101,10 +101,12 @@ namespace Orckestra.Composer.Search.Services
             };
 
             // TODO: Needed for some JS context - move to data-context-var where needed
+            viewModel.Context["SearchResults"] = viewModel.ProductSearchResults.SearchResults;
             viewModel.Context["TotalCount"] = viewModel.ProductSearchResults.TotalCount;
             viewModel.Context["Keywords"] = viewModel.ProductSearchResults.Keywords;
             viewModel.Context["CorrectedSearchTerms"] = viewModel.ProductSearchResults.CorrectedSearchTerms;
             viewModel.Context["ListName"] = "Search Results";
+            viewModel.Context["PaginationCurrentPage"] = viewModel.ProductSearchResults.Pagination?.CurrentPage;
 
             return viewModel;
         }

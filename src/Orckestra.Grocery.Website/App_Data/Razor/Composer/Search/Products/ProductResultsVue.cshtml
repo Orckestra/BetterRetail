@@ -1,0 +1,53 @@
+@inherits Composer.Razor.ComposerRazorFunction
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Search product results for Vue implementation"; }
+    }
+
+    [FunctionParameter(Label = "ViewModel for JS", DefaultValue = null)]
+    public string JsonContext { get; set; }
+
+    [FunctionParameter(Label = "FallbackImageUrl", DefaultValue = null)]
+    public string FallbackImageUrl { get; set; }
+
+}
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0"
+      xmlns:v-bind="v-bind" xmlns:v-on="v-on">
+<head>
+    <script>
+        function imgError(el) {
+           this.onerror = null;
+           @if (!string.IsNullOrWhiteSpace(FallbackImageUrl) && FallbackImageUrl.Contains("/"))
+            {
+                <text>
+                if (!el.src.includes('@FallbackImageUrl')) {
+                    el.src = '@FallbackImageUrl';
+                }
+                </text>
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="products-search-results"
+         data-oc-controller="Product.SearchResults"
+         data-context="@JsonContext">
+        <!-- Search results -->
+        <div id="vueSearchResults" v-cloak="true">
+
+            <div class="busy-container" v-bind:class="{'busy' : IsBusy }" style="min-height: 300px">
+                @GeneralHelpers.LoadingSpinner()
+                <div class="row">
+                    <div v-for="(Product, index) in ExtendedSearchResults" v-bind:key="Product.ProductId"
+                         class="col-6  col-md-4  mb-4" data-qa="search-results">
+                        @Function("Composer.Search.Products.ProductTileVue")
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

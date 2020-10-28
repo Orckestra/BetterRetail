@@ -14,11 +14,14 @@ module Orckestra.Composer {
     export class SearchResultsController extends Orckestra.Composer.Controller {
         protected cartService: ICartService = CartService.getInstance();
         protected productService: ProductService = new ProductService(this.eventHub, this.context);
+        protected wishListService: WishListService = new WishListService(new WishListRepository(), this.eventHub);
         protected currentPage: any;
+        protected VueSearchResults: Vue;
 
         public initialize() {
 
             super.initialize();
+            this.initializeVueComponent();
 
             this.currentPage = this.getCurrentPage();
 
@@ -40,6 +43,142 @@ module Orckestra.Composer {
                 }
             }
             );
+        }
+
+        private initializeVueComponent() {
+            const { SearchResults } = this.context.viewModel;
+            let self = this;
+
+            this.VueSearchResults = new Vue({
+                el: '#vueSearchResults',
+                components: {},
+                mounted() {
+                    self.eventHub.subscribe(CartEvents.CartUpdated, this.onCartUpdated);
+                    self.cartService.getCart()
+                        .then(cart => this.Cart = cart)
+                        .fin(() => this.IsBusy = false);
+
+                    self.wishListService.getWishListSummary()
+                        .then(wishList => this.WishList = wishList);
+                },
+                data: {
+                    SearchResults,
+                    Cart: undefined,
+                    WishList: undefined,
+                    UpdatingProductId: undefined,
+                    Loading: false,
+                    IsBusy: true
+                },
+                computed: {
+
+                    ExtendedSearchResults() {
+                        var results = _.map(this.SearchResults, (product: any) => {
+                            let cartItem = !this.Cart ? undefined :
+                                _.find(this.Cart.LineItemDetailViewModels, (i: any) =>
+                                    i.ProductId === product.ProductId && i.VariantId == product.VariantId);
+                            product.InCart = !!cartItem;
+                            product.LineItemId = cartItem ? cartItem.Id : undefined;
+                            product.Quantity = cartItem ? cartItem.Quantity : 0;
+
+                            var wishListItem = !this.WishList ? undefined : _.find(this.WishList.Items, (i: any) =>
+                                i.ProductId === product.ProductId && i.VariantId == product.VariantId);
+                            product.InWishList = !!wishListItem;
+                            product.WishListItemId = wishListItem ? wishListItem.Id : undefined;
+                            //product.UnitPriceAvailable = product.UnitPrice != null && product.UnitPriceDeclaration != null;
+                            return product;
+
+                        });
+                        return results;
+                    },
+                    UpdatingProduct() {
+                        return _.find(this.Cart.LineItemDetailViewModels, (i: any) => i.ProductId == this.UpdatingProductId);
+                    }
+                },
+                methods: {
+                    productClick(product, index) {
+                        self.eventHub.publish(ProductEvents.ProductClick, {
+                            data: {
+                                Product: product,
+                                ListName: self.context.viewModel.ListName,
+                                Index: index,
+                                PageNumber: self.currentPage.DisplayName,
+                                MaxItemsPerPage: self.context.viewModel.MaxItemsPerPage
+                            }
+                        });
+                    },
+                    onCartUpdated(result) {
+                        this.Cart = result.data;
+                    },
+                    updateItemQuantity(item: any, quantity: number) {
+                        let cartItem = _.find(this.Cart.LineItemDetailViewModels, (i: any) => i.Id === item.LineItemId);
+
+                        if (this.Loading || !cartItem) return;
+
+                        if (this.Cart.QuantityRange) {
+                            const { Min, Max } = this.Cart.QuantityRange;
+                            quantity = Math.min(Math.max(Min, quantity), Max);
+                        }
+
+                        if (quantity == cartItem.Quantity) {
+                            //force update vue component
+                            this.Cart = { ...this.Cart };
+                            return;
+                        }
+
+                        let analyticEventName = quantity > cartItem.Quantity ? ProductEvents.LineItemAdding : ProductEvents.LineItemRemoving;
+                        cartItem.Quantity = quantity;
+
+                        if (cartItem.Quantity < 1) {
+                            this.Loading = true; // disabling UI immediately when a line item is removed
+                        }
+
+                        let { ProductId, VariantId } = cartItem;
+
+                        self.publishProductDataForAnalytics(ProductId, cartItem.Quantity, analyticEventName);
+
+                        if (!this.debounceUpdateItem) {
+                            this.debounceUpdateItem = _.debounce(({ Id, Quantity, ProductId }) => {
+                                this.Loading = true;
+                                this.UpdatingProductId = ProductId;
+                                let updatePromise = Quantity > 0 ?
+                                    self.cartService.updateLineItem(Id, Quantity, ProductId) :
+                                    self.cartService.deleteLineItem(Id, ProductId);
+
+                                updatePromise
+                                    .then(() => {
+                                        ErrorHandler.instance().removeErrors();
+                                    }, (reason: any) => {
+                                        self.onAddToCartFailed(reason);
+                                        throw reason;
+                                    })
+                                    .fin(() => this.Loading = false);
+
+                            }, 400);
+                        }
+
+                        this.debounceUpdateItem(cartItem);
+                    },
+                    addLineItemToWishList(item, event: JQueryEventObject) {
+                        let { DisplayName, ProductId, VariantId, ListPrice, RecurringOrderProgramName } = item;
+                        self.eventHub.publish('wishListLineItemAdding', {
+                            data: { DisplayName, ListPrice: ListPrice }
+                        });
+                        self.wishListService.addLineItem(ProductId, VariantId, 1, null, RecurringOrderProgramName)
+                            .then(wishList => this.WishList = wishList).fail(self.onAddToWishFailed);
+                    },
+
+                    removeLineItemFromWishList(item, event: JQueryEventObject) {
+                        self.wishListService.removeLineItem(item.WishListItemId)
+                            .then(wishList => this.WishList = wishList).fail(self.onAddToWishFailed);
+                    }
+                }
+            });
+        }
+
+        protected onAddToWishFailed(reason: any): void {
+            console.error('Error on adding item to wishList', reason);
+            this.wishListService.clearCache();
+            ErrorHandler.instance().outputErrorFromCode('AddToWishListFailed');
         }
 
         private getCurrentPage(): any {
@@ -79,8 +218,7 @@ module Orckestra.Composer {
                     .fin(() => busy.done());
 
             } else {
-                var productData: any = this.getProductDataForAnalytics(productId, price);
-                this.eventHub.publish('lineItemAdding', { data: productData });
+                this.publishProductDataForAnalytics(productId, 1, ProductEvents.LineItemAdding);
 
                 this.cartService.addLineItem(productId, '' + price, null, 1, null, recurringOrderProgramName)
                     .then((data: any) => {
@@ -97,23 +235,13 @@ module Orckestra.Composer {
             ErrorHandler.instance().outputErrorFromCode('AddToCartFailed');
         }
 
-        public searchProductClick(actionContext: IControllerActionContext) {
-            var index: number = <any>actionContext.elementContext.data('index');
-            var productId: string = actionContext.elementContext.data('productid').toString();
-            var product: any = _.find(this.context.viewModel.SearchResults, { ProductId: productId });
+        protected publishProductDataForAnalytics(productId: string, quantity: number, eventName: string): void {
+            const data = this.getProductDataForAnalytics(productId, quantity);
 
-            this.eventHub.publish('productClick', {
-                data: {
-                    Product: product,
-                    ListName: this.context.viewModel.ListName,
-                    Index: index,
-                    PageNumber: this.currentPage.DisplayName,
-                    MaxItemsPerPage: this.context.viewModel.MaxItemsPerPage
-                }
-            });
+            this.eventHub.publish(eventName, { data });
         }
 
-        protected getProductDataForAnalytics(productId: string, price: any): any {
+        protected getProductDataForAnalytics(productId: string, quantity: number): any {
             var results = this.context.viewModel.SearchResults;
             var vm = _.find(results, (r: any) => r.ProductId === productId);
 
@@ -125,10 +253,10 @@ module Orckestra.Composer {
                 List: this.context.viewModel.ListName,
                 ProductId: vm.ProductId,
                 DisplayName: vm.DisplayName,
-                ListPrice: price,
+                ListPrice: vm.IsOnSale ? vm.Price : vm.ListPrice,
                 Brand: vm.Brand,
                 CategoryId: vm.CategoryId,
-                Quantity: 1
+                Quantity: quantity
             };
 
             return data;

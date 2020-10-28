@@ -135,7 +135,7 @@ module Orckestra.Composer {
                             if (place &&  place.geometry) {
                                 this.Location = place.geometry.location;
                                 this.PostalCode = this.$refs.postalCodeInput.value;
-                                self.eventHub.publish(SelectedStoreEvents[SelectedStoreEvents.LocationSelected], {data: this.Location});
+                                self.eventHub.publish(SelectedStoreEvents.LocationSelected, {data: this.Location});
                             } else {
                                 this.Location = undefined;
                             }
@@ -162,7 +162,7 @@ module Orckestra.Composer {
                         if (!this.IsLocationFilled)
                             return Q.resolve(false);
 
-                        self.eventHub.publish(SelectedStoreEvents[SelectedStoreEvents.CheckAvailability], {data: this.Location});
+                        self.eventHub.publish(SelectedStoreEvents.CheckAvailability, {data: this.Location});
                         return self.storeService.getStoresByLocation(this.Location)
                             .then(stores => {
                                 this.AllStores = stores;
@@ -185,7 +185,7 @@ module Orckestra.Composer {
                             .then(() => self.selectedStoreService.setStore(store.Id))
                             .then((storeResult) => {
                                 if (storeResult) {
-                                    self.eventHub.publish(SelectedStoreEvents[SelectedStoreEvents.StoreUpdating], { data: store });
+                                    self.eventHub.publish(SelectedStoreEvents.StoreUpdating, { data: store });
                                     this.SelectedStoreId = store.Id;
                                     this.Mode.SeeMoreStores = false;
                                     step.nextStep();
@@ -200,8 +200,8 @@ module Orckestra.Composer {
                             .fin(() => { 
                                 this.Mode.Loading = false;
                                 busy.done();
-                                self.eventHub.publish(SelectedStoreEvents[SelectedStoreEvents.StoreSelected], { data: store });
-                                self.eventHub.publish(SelectedStoreEvents[SelectedStoreEvents.TimeSlotSelected], {
+                                self.eventHub.publish(SelectedStoreEvents.StoreSelected, { data: store });
+                                self.eventHub.publish(SelectedStoreEvents.TimeSlotSelected, {
                                     data: { TimeSlot: undefined, TimeSlotReservation: undefined }
                                 });
                             });
@@ -240,12 +240,12 @@ module Orckestra.Composer {
                     },
                     selectTimeSlot(timeSlot, day) {
                         this.Errors.TimeSlotSelectionError = false;
-                        self.eventHub.publish(SelectedStoreEvents[SelectedStoreEvents.TimeSlotUpdating], {data: timeSlot});
+                        self.eventHub.publish(SelectedStoreEvents.TimeSlotUpdating, {data: timeSlot});
                         self.selectedStoreService.setTimeSlotId(this.SelectedStoreId, this.CurrentShipmentId, timeSlot.Id, day.Date)
                             .then(cart => {
                                 const {TimeSlotReservation} = cart;
                                 this.ReservedSlotData = {TimeSlot: {...timeSlot}, TimeSlotReservation};
-                                self.eventHub.publish(SelectedStoreEvents[SelectedStoreEvents.TimeSlotSelected], {data: this.ReservedSlotData});
+                                self.eventHub.publish(SelectedStoreEvents.TimeSlotSelected, {data: this.ReservedSlotData});
                                 self.eventHub.publish('cartUpdated', {data: cart});
                                 this.nextStep();
                                 setTimeout(() => this.$refs.startShoppingButton.scrollIntoView({behavior: "smooth", block: "nearest"}));
@@ -255,10 +255,10 @@ module Orckestra.Composer {
                                 this.findTimeSlots(); //try to reload slots
                                 this.ReservedSlotData = {TimeSlot: undefined, TimeSlotReservation: undefined };
                                 this.Errors.TimeSlotSelectionError = TimeSlotsHelper.getTimeSlotReservationError(reason.Errors);
-                                self.eventHub.publish(SelectedStoreEvents[SelectedStoreEvents.TimeSlotSelected], {
+                                self.eventHub.publish(SelectedStoreEvents.TimeSlotSelected, {
                                     data: {TimeSlot: undefined, TimeSlotReservation: undefined}
                                 });
-                                self.eventHub.publish(SelectedStoreEvents[SelectedStoreEvents.TimeSlotSelectionFailed], {data: reason.Errors});
+                                self.eventHub.publish(SelectedStoreEvents.TimeSlotSelectionFailed, {data: reason.Errors});
                             });
                     },
                     nextStep() {

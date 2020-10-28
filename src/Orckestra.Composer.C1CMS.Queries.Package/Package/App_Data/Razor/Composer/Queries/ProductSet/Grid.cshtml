@@ -3,7 +3,7 @@
 @functions {
     public override string FunctionDescription
     {
-        get { return "Display Search Query"; }
+        get { return "Display product set in grid"; }
     }
 
     [FunctionParameter(Label = "Query Name", Help = "Query Name", WidgetMarkup = Orckestra.ExperienceManagement.SearchQueryBuilder.Widgets.ProductSetQuerySelector)]
@@ -14,44 +14,34 @@
 <head>
 </head>
 <body>
-    <f:function name="Composer.Grids.FullGrid" xmlns:f="http://www.composite.net/ns/function/1.0">
-        <f:param name="Full">
+    <f:function name="Composer.Grids.SearchGrid">
+        <f:param name="LeftPart">
             <html>
             <head>
             </head>
             <body>
-                <f:function name="Composer.Grids.SearchGrid">
-                    <f:param name="LeftPart">
-                        <html>
-                        <head>
-                        </head>
-                        <body>
-                            <f:function name="Composer.Queries.ProductSet.SelectedFacets">
-                                <f:param name="QueryName" value="@QueryName" />
-                            </f:function>
-                            <f:function name="Composer.Queries.ProductSet.ChildCategories">
-                                <f:param name="QueryName" value="@QueryName" />
-                            </f:function>
-                            <f:function name="Composer.Queries.ProductSet.Facets">
-                                <f:param name="QueryName" value="@QueryName" />
-                            </f:function>
-                        </body>
-                    </html>
-                </f:param>
-                <f:param name="RightPart">
-                    <html>
-                    <head>
-                    </head>
-                    <body>
-                        <f:function name="Composer.Queries.ProductSet.Results">
-                            <f:param name="QueryName" value="@QueryName" />
-                        </f:function>
-                    </body>
-                </html>
-            </f:param>
-        </f:function>
-    </body>
-</html>
+                <f:function name="Composer.Queries.ProductSet.SelectedFacets">
+                    <f:param name="QueryName" value="@QueryName" />
+                </f:function>
+                <f:function name="Composer.Queries.ProductSet.ChildCategories">
+                    <f:param name="QueryName" value="@QueryName" />
+                </f:function>
+                <f:function name="Composer.Queries.ProductSet.Facets">
+                    <f:param name="QueryName" value="@QueryName" />
+                </f:function>
+            </body>
+        </html>
+    </f:param>
+    <f:param name="RightPart">
+        <html>
+        <head>
+        </head>
+        <body>
+            <f:function name="Composer.Queries.ProductSet.Results">
+                <f:param name="QueryName" value="@QueryName" />
+            </f:function>
+        </body>
+    </html>
 </f:param>
 </f:function>
 </body>

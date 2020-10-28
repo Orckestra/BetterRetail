@@ -375,6 +375,11 @@
     <Content Include="App_Data\Razor\Composer\Cart\OrderSummary.cshtml" />
     <Content Include="App_Data\Razor\Composer\Cart\FullCart.cshtml" />
     <Content Include="App_Data\Razor\Composer\Cart\Coupons.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Search\Products\ProductResultsVue.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Search\Products\ProductTileVue.cshtml" />
+    <Content Include="App_Data\Razor\Composer\BrowsingCategories\Results.cshtml" />
+    <Content Include="App_Data\Razor\Composer\BrowsingCategories\Summary.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Product\Instant\RelatedProducts.cshtml" />
     <None Include="Properties\PublishProfiles\Website - CD.pubxml" />
     <None Include="Properties\PublishProfiles\Website.pubxml" />
     <Content Include="Views\web.config" />

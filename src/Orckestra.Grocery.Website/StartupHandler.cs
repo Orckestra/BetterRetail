@@ -81,54 +81,12 @@ namespace Orckestra.Composer.Grocery.Website
             functions.RegisterAction<SearchController>("SelectedSearchFacets", "Composer.Search.SelectedSearchFacets");
 
             functions.RegisterAction<BrowsingCategoriesController>("LanguageSwitch", "Composer.BrowsingCategories.LanguageSwitch");
-            functions.RegisterAction<BrowsingCategoriesController>("Summary", "Composer.BrowsingCategories.Summary");
-            functions.RegisterAction<BrowsingCategoriesController>("Index", "Composer.BrowsingCategories.Results");
             functions.RegisterAction<BrowsingCategoriesController>("Facets", "Composer.BrowsingCategories.Facets");
             functions.RegisterAction<BrowsingCategoriesController>("SelectedSearchFacets", "Composer.BrowsingCategories.SelectedFacets");
             functions.RegisterAction<BrowsingCategoriesController>("ChildCategories", "Composer.BrowsingCategories.ChildCategories");
 
             functions.RegisterAction<ProductController>("LanguageSwitch", "Composer.Product.LanguageSwitch");
             functions.RegisterAction<ProductController>("Breadcrumb", "Composer.Product.Breadcrumb");
-            functions.RegisterAction<ProductController>("RelatedProducts", "Composer.Product.Instant.RelatedProducts", "Displays products/variants related to the product displayed on the current product/variant details page.  First products which are related via merchandising relationship will be displayed and if none are available then displays product in the same default category")
-                .AddParameter("merchandiseTypes",
-                    typeof(string),
-                    label: "Products Merchandise Relationship Types to include",
-                    helpText: "Specify the Merchandise Types ")
-                .AddParameter(
-                    "headingText",
-                    typeof(string),
-                    defaultValueProvider: new ConstantValueProvider("You may also like"),
-                    label: "Heading",
-                    helpText: "Displays the header of the related products block. The header must be short. Use text like \"You might also like\".")
-                .AddParameter(
-                    "displaySameCategoryProducts",
-                    typeof(bool),
-                    defaultValueProvider: new ConstantValueProvider(true),
-                    label: "Display products in the same category",
-                    helpText: "Specify if this block should display products in the same default category if no products are displayed based on specified relationship types.")
-                .AddParameter(
-                    "maxItems",
-                    typeof(int),
-                    defaultValueProvider: new ConstantValueProvider(5),
-                    label: "Number of maximum displayed products/variants",
-                    helpText: "Specify the number of products/items displayed in this block. The maximum should be 15.")
-                .AddParameter(
-                    "displayPrices",
-                    typeof(bool),
-                    defaultValueProvider: new ConstantValueProvider(true),
-                    label: "Display price on products",
-                    helpText: "Show the price on the products in this block.")
-                .AddParameter(
-                    "displayAddToCart",
-                    typeof(bool),
-                    defaultValueProvider: new ConstantValueProvider(true),
-                    label: "Display \"Add to cart\" on products",
-                    helpText: "Show the \"Add to cart\" link on the products in this block.")
-                .AddParameter(
-                    "backgroundStyle",
-                    typeof(DataReference<CssStyle>),
-                    label: "Background style",
-                    helpText: "Specify the style of this block background");
   
             functions.RegisterAction<CartController>("Minicart", "Composer.Cart.Minicart").AddParameter(
                 "notificationTimeInSeconds",

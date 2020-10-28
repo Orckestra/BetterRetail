@@ -119,6 +119,45 @@ module Orckestra.Composer {
             this.eventHub.subscribe('sortingChanged', (eventInfo: IEventInformation) => {
                 this.onSortingChanged(eventInfo);
             });
+
+            // Grocery Events
+            this.eventHub.subscribe(SelectedStoreEvents.StoreSelected, (eventInfo: IEventInformation) => {
+                this.onStoreSelected(eventInfo);
+            });
+
+            this.eventHub.subscribe(SelectedStoreEvents.TimeSlotSelected, (eventInfo: IEventInformation) => {
+                this.onTimeSlotSelected(eventInfo);
+            });
+
+            this.eventHub.subscribe(SelectedStoreEvents.LocationSelected, (eventInfo: IEventInformation) => {
+                this.onLocationSelected(eventInfo);
+            });
+
+            this.eventHub.subscribe(SelectedStoreEvents.CheckAvailability, (eventInfo: IEventInformation) => {
+                this.onCheckAvailability(eventInfo);
+            });
+
+            this.eventHub.subscribe('categorySuggestionClicked', (eventInfo: IEventInformation) => {
+                this.onSuggestionTypeClicked(eventInfo.data.suggestion, 'Category');
+            });
+
+            this.eventHub.subscribe('brandSuggestionClicked', (eventInfo: IEventInformation) => {
+                this.onSuggestionTypeClicked(eventInfo.data.suggestion, 'Brand');
+            });
+
+            this.eventHub.subscribe('searchTermSuggestionClicked', (eventInfo: IEventInformation) => {
+                this.onSuggestionTypeClicked(eventInfo.data.suggestion, 'SearchTerm');
+            });
+
+            this.eventHub.subscribe('productSuggestionClicked', (eventInfo: IEventInformation) => {
+                eventInfo.data.Product = eventInfo.data.suggestion;
+                this.onProductClick(eventInfo);
+                this.onSuggestionTypeClicked(eventInfo.data.suggestion.DisplayName, 'Product');
+            });
+
+            this.eventHub.subscribe('suggestionSearchTermEntered', (eventInfo: IEventInformation) => {
+                this.sendEvent('AutoTermEntered', 'Search - Autosuggest', 'Type', eventInfo.data);
+            });
         }
 
         /**
@@ -583,7 +622,7 @@ module Orckestra.Composer {
                     currencyCode: billingCurrency,
                     promotionName: coupon.PromotionName
                 };
-                return  analyticsCoupon;
+                return analyticsCoupon;
             });
 
             return coupons;
@@ -593,7 +632,7 @@ module Orckestra.Composer {
             let checkoutOrigin = AnalyticsPlugin.getCheckoutOrigin();
             let analyticsTransaction: IAnalyticsTransaction = {
                 shippingType: data.ShippingOptions,
-                checkoutOrigin : checkoutOrigin
+                checkoutOrigin: checkoutOrigin
             };
 
             return analyticsTransaction;
@@ -674,6 +713,28 @@ module Orckestra.Composer {
 
         public noResultsFound(keywordNotFound: string) {
             console.error('Not implemented Exception');
+        }
+
+        public onStoreSelected(eventInfo: IEventInformation) {
+            this.sendEvent('StoreSelected', 'Store', 'Select', 'StoreNumber', eventInfo.data.Number);
+        }
+
+        public onTimeSlotSelected(eventInfo: IEventInformation) {
+            if (eventInfo.data.TimeSlot) {
+                this.sendEvent('TimeSlotSelected', 'Store', 'Select', 'TimeSlot', eventInfo.data.TimeSlot);
+            }
+        }
+
+        public onLocationSelected(eventInfo: IEventInformation) {
+            this.sendEvent('LocationSelected', 'Store', 'Select', 'Location', eventInfo.data);
+        }
+
+        public onCheckAvailability(eventInfo: IEventInformation) {
+            this.sendEvent('PostCodeSubmitted', 'Store', 'Submit', eventInfo.data, eventInfo.data);
+        }
+
+        protected onSuggestionTypeClicked(typeEntity: any, type: any) {
+            this.sendEvent('AutoType', 'Search - Autosuggest', 'Click', typeEntity, type);
         }
 
         /**

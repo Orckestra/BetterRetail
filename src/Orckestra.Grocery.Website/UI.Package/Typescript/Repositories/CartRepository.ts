@@ -7,6 +7,8 @@ module Orckestra.Composer {
 
     export class CartRepository implements ICartRepository {
 
+        protected UpdateLineItemQueue: Q.Promise<any> = Q.resolve(null);
+
         public getCart(): Q.Promise<any> {
 
             return ComposerClient.get('/api/cart/getcart');
@@ -32,7 +34,8 @@ module Orckestra.Composer {
                 RecurringOrderProgramName: recurringOrderProgramName
             };
 
-            return ComposerClient.post('/api/cart/lineitem', data);
+            this.UpdateLineItemQueue = this.UpdateLineItemQueue.then(() => ComposerClient.post('/api/cart/lineitem', data));
+            return this.UpdateLineItemQueue;
         }
 
         public updateLineItem(lineItemId: string, quantity: number,
@@ -54,7 +57,8 @@ module Orckestra.Composer {
                 RecurringOrderProgramName: recurringOrderProgramName
             };
 
-            return ComposerClient.put('/api/cart/lineitem', data);
+            this.UpdateLineItemQueue = this.UpdateLineItemQueue.then(() =>  ComposerClient.put('/api/cart/lineitem', data));
+            return this.UpdateLineItemQueue;
         }
 
         public deleteLineItem(lineItemId: string): Q.Promise<any> {

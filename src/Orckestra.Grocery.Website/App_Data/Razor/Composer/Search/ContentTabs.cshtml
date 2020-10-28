@@ -81,8 +81,6 @@
         currentTabPathInfo = productTab != null ? productTab.UrlTitle : contentSearchVm.Tabs.First()?.UrlTitle;
     }
 
-
-
     if (productTab != null)
     {
         var productTabVm = new ContentSearchTabViewModel
@@ -279,7 +277,7 @@
         @foreach (var tab in tabs)
         {
             var resutls = tab.SearchResults?.Entries?.Take(teaserItemsCount);
-            if(resutls == null) { continue; }
+            if (resutls == null) { continue; }
             <div class="header">
                 <h3 class="title d-inline-flex  mt-3">@Html.Localized("List-Search", "T_SearchResultsFoundIn", tab.Title, tab.Total)</h3>
                 @if (tab.Total > teaserItemsCount)
@@ -305,35 +303,52 @@
     {
         return;
     }
-    <div class="row">
-        <div class="col-12 col-lg-10 offset-lg-2">
-            <div class="row filters-row">
-                <div class="col-6 d-lg-none">
-                    @ShowFacetsCollapseBtn()
-                </div>
-                <div class="col-6">
-                    @Partial("SearchSortBy", ProductSearchResults)
-                </div>
-                <div class="col-6 d-none d-lg-block">
-                    @Partial("PaginationDropDown", ProductSearchResults)
-                </div>
-            </div>
+
+    <f:function name="Composer.Grids.SearchGrid">
+        <f:param name="LeftPart">
+            <html>
+            <head>
+            </head>
+            <body>
+                @Function("Composer.Search.SelectedSearchFacets")
+                @Function("Composer.Search.Facets")
+            </body>
+        </html>
+    </f:param>
+    <f:param name="RightPart">
+        <html>
+        <head>
+        </head>
+        <body>
+            @ProductResultsRightPart()
+        </body>
+    </html>
+</f:param>
+</f:function>
+
+}
+
+@helper ProductResultsRightPart()
+{
+    var FallbackImageUrl = ProductSearchResults.SearchResults.FirstOrDefault()?.FallbackImageUrl;
+    <div class="row filters-row mb-2">
+        <div class="col-6 d-lg-none">
+            @SearchHelpers.FacetsCollapseBtn()
         </div>
+        <div class="col-6">
+            @Partial("SearchSortBy", ProductSearchResults)
+        </div>
+        <div class="col-6 d-none d-lg-block">
+            @Partial("PaginationDropDown", ProductSearchResults)
+        </div>
+    </div>
+
+    @Function("Composer.Search.Products.ProductResultsVue",
+     new { JsonContext = SearchRequestContext.ProductsSearchViewModel.JsonContext, FallbackImageUrl = FallbackImageUrl })
+
+    <div class="row  d-block pt-2">
         <div class="col-12">
-            <div class="row">
-                <div id="leftCol" class="col-12 col-lg-2  facets-col collapse">
-                    @Function("Composer.Search.SelectedSearchFacets")
-                    @Function("Composer.Search.Facets")
-                </div>
-                <div class="col-12 col-lg-10">
-                    @Function("Composer.Search.Index")
-                    <div class="row">
-                        <div class="col-12">
-                            @Partial("Pager", ProductSearchResults)
-                        </div>
-                    </div>
-                </div>
-            </div>
+            @Partial("Pager", ProductSearchResults)
         </div>
     </div>
 }

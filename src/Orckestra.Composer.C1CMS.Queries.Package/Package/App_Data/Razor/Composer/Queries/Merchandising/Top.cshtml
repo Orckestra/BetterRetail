@@ -1,0 +1,37 @@
+@inherits Composer.Razor.ComposerRazorFunction
+@using Orckestra.Composer.SearchQuery.Context
+@using Orckestra.Overture.ServiceModel.SearchQueries
+@using Orckestra.Composer.SearchQuery.ViewModels
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Display dynamic product highlight"; }
+    }
+    public ISearchQueryContext SearchQueryContext { get; set; }
+
+    [FunctionParameter(Label = "Query Name", Help = "Query Name", WidgetMarkup = Orckestra.ExperienceManagement.SearchQueryBuilder.Widgets.MerchandisingQuerySelector)]
+    public string QueryName { get; set; }
+
+    [FunctionParameter(Label = "Number", Help = "", DefaultValue = 3)]
+    public int Number { get; set; }
+}
+
+@{
+    var queryViewModel = SearchQueryContext.GetTopSearchQueryViewModelAsync(SearchQueryType.Merchandising, QueryName, Number).Result;
+    if (queryViewModel.ProductSearchResults.TotalCount <= 0)
+    {
+        return;
+    }
+    var FallbackImageUrl = queryViewModel.ProductSearchResults.SearchResults.FirstOrDefault()?.FallbackImageUrl;
+}
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
+<head>
+</head>
+<body>
+    @Function("Composer.Search.Products.ProductResultsVue", new { JsonContext = queryViewModel.JsonContext, FallbackImageUrl = FallbackImageUrl })
+</body>
+</html>
+

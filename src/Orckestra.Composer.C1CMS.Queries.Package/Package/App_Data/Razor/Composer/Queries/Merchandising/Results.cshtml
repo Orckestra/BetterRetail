@@ -1,0 +1,51 @@
+@inherits Composer.Razor.ComposerRazorFunction
+@using Orckestra.Composer.SearchQuery.Context
+@using Orckestra.Overture.ServiceModel.SearchQueries
+@using Orckestra.Composer.SearchQuery.ViewModels
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Display search query results"; }
+    }
+    public ISearchQueryContext SearchQueryContext { get; set; }
+
+    [FunctionParameter(Label = "Query Name", Help = "Query Name", WidgetMarkup = Orckestra.ExperienceManagement.SearchQueryBuilder.Widgets.MerchandisingQuerySelector)]
+    public string QueryName { get; set; }
+}
+
+@{
+    var queryViewModel = SearchQueryContext.GetSearchQueryViewModelAsync(SearchQueryType.Merchandising, QueryName).Result;
+    if (queryViewModel.ProductSearchResults.TotalCount <= 0)
+    {
+        return;
+    }
+    var FallbackImageUrl = queryViewModel.ProductSearchResults.SearchResults.FirstOrDefault()?.FallbackImageUrl;
+}
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
+<head>
+</head>
+<body>
+    <div class="row filters-row mb-4">
+        <div class="col-6 d-lg-none">
+            @SearchHelpers.FacetsCollapseBtn()
+        </div>
+        <div class="col-6">
+            @Partial("SearchSortBy", queryViewModel.ProductSearchResults)
+        </div>
+        <div class="col-6 d-none d-lg-block">
+            @Partial("PaginationDropDown", queryViewModel.ProductSearchResults)
+        </div>
+    </div>
+
+    @Function("Composer.Search.Products.ProductResultsVue", new { JsonContext = queryViewModel.JsonContext, FallbackImageUrl = FallbackImageUrl })
+
+    <div>
+        @Partial("Pager", queryViewModel.ProductSearchResults)
+    </div>
+
+</body>
+</html>
+

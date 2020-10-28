@@ -12,23 +12,21 @@
 
 .product-tile {
     $lines-of-text: 3;
+    background-color: $light;
+    border: solid 1px #C4C4C4;
+
+    .add-to-wishlist {
+        position: absolute;
+        top: 5px;
+        right: 15px;
+    }
 
     .product-tile-text {
-        border-top: solid 1px lighten(gray("400"), 7%);
-        // 3 lines of text + half a line of spacing
+         // 3 lines of text + half a line of spacing
         height: ($line-height-base * $font-size-base) * 3;
         padding-top: 3px;
         position: relative;
         overflow: hidden;
-
-        // gradient on first line and last line
-        &:before {
-            @include tile-gradient-right(0);
-        }
-
-        &:after {
-            @include tile-gradient-right(($line-height-base * $font-size-base) * ($lines-of-text - 1));
-        }
     }
 
     .product-tile-brand {
@@ -49,10 +47,10 @@
     }
 
     .product-tile-media {
-        // http://alistapart.com/article/creating-intrinsic-ratios-for-video
-        display: block;
+        display: flex;
+        background-color: #fff;
         height: 0;
-        padding-bottom: $product-image-ratio * 100%;
+        padding-bottom: 100%;
         position: relative;
     }
 

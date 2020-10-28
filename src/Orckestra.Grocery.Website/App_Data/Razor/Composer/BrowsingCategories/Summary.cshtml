@@ -1,0 +1,36 @@
+﻿@inherits RazorFunction
+@using Orckestra.Composer.Search.Context;
+@using Orckestra.Composer.Search.ViewModels
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "BrowsingCategories Summary"; }
+    }
+
+    public IBrowseCategoryRequestContext BrowsingRequestContext { get; set; }
+
+}
+@{
+    var categoryBrowsingViewModel = BrowsingRequestContext.GetViewModelAsync().Result;
+}
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<head>
+</head>
+<body>
+    @if (categoryBrowsingViewModel.ProductSearchResults.TotalCount == 0)
+    {
+        <h1>
+            @Html.Localize("List-Search", "L_NoResultsForCategory")
+            <strong>@categoryBrowsingViewModel.CategoryName</strong>
+        </h1>
+    }
+    else
+    {
+        <h1>
+            <strong>@categoryBrowsingViewModel.ProductSearchResults.TotalCount</strong>
+            @Html.Localize("List-Search", "L_CategoryResults") <strong>@categoryBrowsingViewModel.CategoryName</strong>
+        </h1>
+    }
+</body>
+</html>

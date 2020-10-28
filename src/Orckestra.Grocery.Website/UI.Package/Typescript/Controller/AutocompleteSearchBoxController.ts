@@ -10,6 +10,8 @@ module Orckestra.Composer {
         private renderedSuggestions;
         private searchService: AutocompleteSearchService;
         private searchTerm: string;
+        private source: string = 'Autosuggest Products';
+        private suggestions: any;
 
         public initialize() {
             super.initialize();
@@ -25,7 +27,18 @@ module Orckestra.Composer {
             let datasetList = [];
             let rightSuggestionCount = 0;
 
-            let products = this.getBloodhoundInstance('products', searchBox.data('autocomplete-limit'), '/api/search/autocomplete');
+            const products = this.getBloodhoundInstance(
+                'products',
+                searchBox.data('autocomplete-limit'),
+                '/api/search/autocomplete',
+                (response) => {
+                    let {Suggestions} = response;
+                    this.suggestions = Suggestions;
+                    EventHub.instance().publish('suggestionSearchTermEntered', {data: this.searchTerm});
+                    return Suggestions && Suggestions.length ? {Suggestions} : {};
+                }
+            );
+
             products.initialize();
             datasetList.push(this.getDataSetInst('Products', products, 'SearchSuggestions', 'SearchSuggestionsEmpty'));
 
@@ -79,17 +92,19 @@ module Orckestra.Composer {
             $('.tt-menu .tt-dataset:not(:first)').wrapAll('<div class="suggestion-right-col"></div>');
         }
 
-        private getBloodhoundInstance (name, limit, url, collectionName = 'Suggestions'): Bloodhound<any> {
+        private getBloodhoundInstance(name, limit, url, transform?): Bloodhound<any> {
+            const collectionName = 'Suggestions';
             return new Bloodhound({
                 name,
                 limit,
                 remote: {
                     url: `${url}?limit=${limit}`,
                     prepare: ComposerClient.prepareBloodhound,
-                    transform: (response) => {
+                    transform: transform || ((response) => {
                         const suggestions = response[collectionName];
-                        return Array.isArray(suggestions) && suggestions.length > 0 ? { suggestions } : {};
-                    }
+                        return suggestions && suggestions.length ? {suggestions} : {};
+                    }),
+                    rateLimitWait: 0
                 },
                 datumTokenizer: (datum) => Bloodhound.tokenizers.obj.whitespace((<any>datum).val),
                 queryTokenizer: Bloodhound.tokenizers.whitespace
@@ -112,21 +127,10 @@ module Orckestra.Composer {
             let element: any = evt.currentTarget;
         }
 
-        public selectedProduct(actionContext: Orckestra.Composer.IControllerActionContext) {
-            let suggestionIndex;
-            let selectedSuggestion: Object;
-
-            //sort the object to retrieve the matching sku
-            $.each(this.renderedSuggestions, function (index, obj) {
-                if (obj.Sku === actionContext.elementContext.data('sku').toString()) {
-                    suggestionIndex = index;
-                    selectedSuggestion = obj;
-                }
-            });
-        }
 
         public selectedSearchTermsSuggestion(actionContext: Orckestra.Composer.IControllerActionContext) {
             let suggestion = actionContext.elementContext.data('suggestion').toString();
+            EventHub.instance().publish('searchTermSuggestionClicked', { data: { suggestion } });
             $('#search-box #search-input').val(suggestion);
             $('#search-box form').submit();
         }
@@ -154,6 +158,21 @@ module Orckestra.Composer {
         public showMoreResults() {
             $('#search-box #search-input').val(this.searchTerm);
             $('#frm-search-box').submit();
+        }
+
+        public suggestedProductClick(actionContext: Orckestra.Composer.IControllerActionContext) {
+            const productContext: JQuery = actionContext.elementContext.closest('[data-product-id]');
+            let productId = productContext.attr('data-product-id');
+            let index = productContext.attr('data-index');
+            let suggestion: any = _.find(this.suggestions, {ProductId: productId});
+            //for Analytics
+            this.eventHub.publish('productSuggestionClicked', {
+                data: {
+                    suggestion,
+                    Index: index,
+                    ListName: this.source
+                }
+            });
         }
     }
 }

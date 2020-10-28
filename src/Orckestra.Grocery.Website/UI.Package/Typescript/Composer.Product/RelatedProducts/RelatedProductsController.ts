@@ -1,35 +1,122 @@
 /// <reference path='../Product/ProductController.ts' />
 ///<reference path='../../Plugins/SlickCarouselPlugin.ts' />
+///<reference path='../ProductEvents.ts' />
 module Orckestra.Composer {
     export class RelatedProductController extends Orckestra.Composer.ProductController  {
 
         protected concern: string = 'relatedProduct';
         private source: string = 'Related Products';
+        protected VueRelatedProducts: Vue;
 
         private products: any[];
 
         public initialize() {
 
             super.initialize();
-            this.getRelatedProducts();
-        }
+            let self: RelatedProductController = this;
+            let vm = self.context.viewModel;
+            let relatedProductsPromise = self.getRelatedProducts();
+            let getCartPromise = self.cartService.getCart();
+            Q.all([relatedProductsPromise, getCartPromise])
+            .spread((relatedproducts, cart) => {
+                self.VueRelatedProducts = new Vue({
+                    el: '#vueRelatedProducts',
+                    data: {
+                        RelatedProducts: self.products,
+                        ProductIdentifiers: vm.ProductIdentifiers,
+                        Loading: false,
+                        Cart: cart,
+                    },
+                    mounted() {
+                        self.eventHub.subscribe(CartEvents.CartUpdated, this.onCartUpdated);
+                        self.eventHub.publish('iniCarousel', null);
+                    },
+                    computed: {
+                        ExtendedRelatedProducts() {
+                            var results = _.map(this.RelatedProducts, (product: any) => {
+                                var cartItem = this.Cart ? _.find(this.Cart.LineItemDetailViewModels, (i: any) =>
+                                    i.ProductId === product.ProductId && i.VariantId == product.VariantId): undefined;               
+                               
+                                product.InCart = !!cartItem;
+                                product.Quantity = cartItem ? cartItem.Quantity : 0;
+                                product.LineItemId = cartItem ? cartItem.Id : undefined;
+                               
+                                return product;
+                            });
+                            return results;
+                        }
+                    },
+                    methods: {
+                        onCartUpdated(cart) {
+                            this.Cart = cart.data;
+                        },
+                        productClick(product, index) {
+                            self.eventHub.publish(ProductEvents.ProductClick, {
+                                data: {
+                                    Product: product,
+                                    ListName: self.getListNameForAnalytics(),
+                                    Index: index
+                                }
+                            });
+                        },
+                        updateItemQuantity(item: any, quantity: number) {
+                            let cartItem = _.find(this.Cart.LineItemDetailViewModels, (i: any) => i.Id === item.LineItemId); 
+                            if (this.Loading || !cartItem) return;
+    
+                            if(this.Cart.QuantityRange) {
+                                const {Min, Max} = this.Cart.QuantityRange;
+                                quantity = Math.min(Math.max(Min, quantity), Max);
+                            }
+    
+                            if(quantity == cartItem.Quantity) {
+                                //force update vue component
+                                this.Cart = { ...this.Cart };
+                                return;
+                            }
+                            item.Quantity = quantity;
+                        
+                            let analyticEventName = quantity > cartItem.Quantity ? ProductEvents.LineItemAdding : ProductEvents.LineItemRemoving;
+                            cartItem.Quantity = quantity;
+    
+                            if (cartItem.Quantity < 1) {
+                                this.Loading = true; // disabling UI immediately when a line item is removed
+                            }
+    
+                            let {ProductId, VariantId} = cartItem;
+                            self.publishDataForAnalytics(ProductId, quantity, analyticEventName);
 
-        private getRelatedProducts() {
+                            if (!this.debounceUpdateItem) {
+                                this.debounceUpdateItem = _.debounce(({Id, Quantity, ProductId}) => {
+                                    this.Loading = true;
+                                    let updatePromise = Quantity > 0 ?
+                                        self.cartService.updateLineItem(Id, Quantity, ProductId) :
+                                        self.cartService.deleteLineItem(Id, ProductId);
+    
+                                    updatePromise
+                                        .then(() => {
+                                             self.onAddLineItemSuccess();
+                                        }, (reason: any) => {
+                                            self.onAddLineItemFailed(reason);
+                                            throw reason;
+                                        })
+                                        .fin(() => this.Loading = false);
+    
+                                }, 400);
+                            }
+                            this.debounceUpdateItem(cartItem);
+                        }
+                    }
+                });
+            })
+         }
+
+        private getRelatedProducts(): Q.Promise<any> {
             let vm = this.context.viewModel;
             let identifiers = vm.ProductIdentifiers;
-            this.productService.getRelatedProducts(identifiers)
-                .then(data => {
-                    this.products = data.Products;
-                    //Need to map parent items to child item since handlebar doesnt seem to support
-                    //partial parameters or path properly while it suppose to. Maybe an update of handlebar could solve the issue
-                    //(3.01 right now).
-                    vm.Products = _.each(data.Products, (lineItem: any) => {
-                        lineItem.DisplayAddToCart = vm.DisplayAddToCart;
-                        lineItem.DisplayPrices = vm.DisplayPrices;
-                    });
-
-                    this.render('RelatedProducts', vm);
-                    this.eventHub.publish('iniCarousel', vm);
+            return this.productService.getRelatedProducts(identifiers)
+                .then(relatedProductsVm => {
+                    this.products = relatedProductsVm.Products;
+                    vm.Products = relatedProductsVm.Products;
                     return vm;
                 })
                 .then(vm => {
@@ -37,7 +124,7 @@ module Orckestra.Composer {
                         this.eventHub.publish('relatedProductsLoaded',
                             {
                                 data: {
-                                    ListName: this.getPageSource(),
+                                    ListName: this.getListNameForAnalytics(),
                                     Products: vm.Products
                                 }
                             });
@@ -104,23 +191,22 @@ module Orckestra.Composer {
          * Occurs when adding a product to the cart that has no variant.
          */
         protected addNonVariantProductToCart(productId: string, price: string, recurringProgramName: string): Q.Promise<any> {
-            var vm = this.getProductViewModel(productId);
-            if (vm) {
-                var quantity = this.getCurrentQuantity();
-                var data: any = this.getProductDataForAnalytics(vm);
-                data.Quantity = quantity.Value ? quantity.Value : 1;
-
-                this.eventHub.publish('lineItemAdding',
-                {
-                    data: data
-                });
-            }
-
+          
+            this.publishDataForAnalytics(productId, 1, ProductEvents.LineItemAdding);
             var promise = this.cartService.addLineItem(productId, price, null, 1, null, recurringProgramName)
                 .then((vm: any) => this.onAddLineItemSuccess(vm),
                     (reason: any) => this.onAddLineItemFailed(reason));
 
             return promise;
+        }
+
+        protected publishDataForAnalytics(productId, quantity: number, eventName: string) {
+            var vm = this.getProductViewModel(productId);
+            if (vm) {
+                var data: any = this.getProductDataForAnalytics(vm);
+                data.Quantity = quantity;
+                this.eventHub.publish(eventName,  {data});
+            }
         }
 
         protected getProductViewModel(productId: string): any {
@@ -136,25 +222,6 @@ module Orckestra.Composer {
             return productVM;
         }
 
-        protected getCurrentQuantity(): any {
-            return {
-                Min: 1,
-                Max: 1,
-                Value: 1
-            };
-        }
 
-        public relatedProductsClick(actionContext: IControllerActionContext) {
-
-            var index: number = <any>actionContext.elementContext.data('index');
-            var productId: string = actionContext.elementContext.data('productid').toString();
-            var product: any = _.find(this.products, {ProductId : productId});
-
-            this.eventHub.publish('productClick', { data : {
-                Product : product,
-                ListName : 'Related Products',
-                Index : index
-            }});
-        }
     }
 }

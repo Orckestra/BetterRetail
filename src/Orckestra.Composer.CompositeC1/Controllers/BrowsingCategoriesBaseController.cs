@@ -51,14 +51,6 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             CategoryMetaContext = categoryMetaContext;
         }
 
-        public virtual ActionResult Summary(
-            [Bind(Prefix = SearchRequestParams.Page)]int page = 1,
-            [Bind(Prefix = SearchRequestParams.SortBy)]string sortBy = null,
-            [Bind(Prefix = SearchRequestParams.SortDirection)]string sortDirection = null)
-        {
-            return ExecuteBrowsing("CategoryBrowsingSummaryEmpty", "CategoryBrowsingSummary", c => c, null, page, sortBy, sortDirection);
-        }
-
         public virtual ActionResult Index(
             [Bind(Prefix = SearchRequestParams.Page)]int page = 1,
             [Bind(Prefix = SearchRequestParams.SortBy)]string sortBy = null,
