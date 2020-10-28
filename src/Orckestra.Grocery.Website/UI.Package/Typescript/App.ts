@@ -70,6 +70,7 @@
 ///<reference path='./Composer.Grocery/StoreSelector/SelectedStoreInHeaderController.ts' />
 ///<reference path='./Composer.Grocery/StoreSelector/SelectedStoreInCartController.ts' />
 ///<reference path='./Composer.Grocery/StoreSelector/ChangeStoreModalController.ts' />
+///<reference path='./Composer.Grocery/TimeSlotBannerController.ts' />
 
 (() => {
     'use strict';
@@ -164,6 +165,7 @@
                 { name: 'Grocery.SelectedStoreInHeader', controller: Orckestra.Composer.SelectedStoreInHeaderController },
                 { name: 'Grocery.SelectedStoreInCart', controller: Orckestra.Composer.SelectedStoreInCartController },
                 { name: 'Grocery.ChangeStoreModal', controller: Orckestra.Composer.ChangeStoreModalController },
+                { name: 'Grocery.TimeSlotBanner', controller: Orckestra.Composer.TimeSlotBannerController },
                 
                 { name: 'PageNotFound.Analytics', controller: Orckestra.Composer.PageNotFoundAnalyticsController }
             ]

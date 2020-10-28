@@ -380,6 +380,7 @@
     <Content Include="App_Data\Razor\Composer\BrowsingCategories\Results.cshtml" />
     <Content Include="App_Data\Razor\Composer\BrowsingCategories\Summary.cshtml" />
     <Content Include="App_Data\Razor\Composer\Product\Instant\RelatedProducts.cshtml" />
+    <Content Include="App_Data\Razor\Grocery\TimeSlotBanner.cshtml" />
     <None Include="Properties\PublishProfiles\Website - CD.pubxml" />
     <None Include="Properties\PublishProfiles\Website.pubxml" />
     <Content Include="Views\web.config" />

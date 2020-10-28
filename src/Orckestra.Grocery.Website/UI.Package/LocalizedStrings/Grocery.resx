@@ -153,6 +153,9 @@
   <data name="L_ChangeStoreWarning" xml:space="preserve">
     <value>Some items may not be available at all collection stores. If you change your collection store your basket will be updated.</value>
   </data>
+  <data name="L_ClickHere" xml:space="preserve">
+    <value>Click here</value>
+  </data>
   <data name="L_CollectOrder" xml:space="preserve">
     <value>Collect your order at:</value>
   </data>
@@ -205,6 +208,9 @@ available for you.</value>
   </data>
   <data name="L_Tomorrow" xml:space="preserve">
     <value>tomorrow</value>
+  </data>
+  <data name="L_ToReserveNewTimeSlot" xml:space="preserve">
+    <value>to book a new slot.</value>
   </data>
   <data name="L_UnavailableSlot" xml:space="preserve">
     <value>NA</value>

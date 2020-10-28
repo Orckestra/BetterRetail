@@ -28,7 +28,7 @@ module Orckestra.Composer {
                 },
 				mounted() {
                     this.ChangeStoreModal = new UIModal(window, "#changeStoreModal", () => {}, this);
-                    self.eventHub.subscribe(SelectedStoreEvents[SelectedStoreEvents.TimeSlotSelected],  e => this.onSlotSelected(e.data));
+                    self.eventHub.subscribe(SelectedStoreEvents.TimeSlotSelected,  e => this.onSlotSelected(e.data));
 				},
                 computed: {
                     ...commonTimeSlotReservationOptions.computed

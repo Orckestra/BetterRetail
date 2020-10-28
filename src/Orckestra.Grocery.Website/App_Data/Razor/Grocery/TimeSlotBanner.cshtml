@@ -1,0 +1,29 @@
+@inherits RazorFunction
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
+<head>
+</head>
+<body>
+    <div data-oc-controller="Grocery.TimeSlotBanner">
+        <div id="vueTimeSlotBanner" v-cloak="true" 
+             v-if="TimeSlotReservationTentative || TimeSlotReservationExpired"
+             class="alert alert-warning m-0 p-2 reserved-slot-baller text-center">
+            <div v-if="TimeSlotReservationTentative">
+                @Html.Localized("Grocery", "L_ReservedUntil", " {{TimeSlotReservationExpireTime}} ")
+                <span v-if="TimeSlotReservationExpireRelativeDayIndex === 0">@Html.Localize("Grocery", "L_Today")</span>
+                <span v-else-if="TimeSlotReservationExpireRelativeDayIndex === 1">@Html.Localize("Grocery", "L_Tomorrow")</span>
+                <span v-else-if="TimeSlotReservationExpireRelativeDayIndex === -1">{{TimeSlotReservationExpireDate}}</span>
+            </div>
+            <div v-if="TimeSlotReservationExpired">
+                @Html.Localize("Grocery", "L_ReservationExpired")
+                <a href="#" v-on:click.prevent="changeStoreModal($event, false)">
+                    <b><u>@Html.Localize("Grocery", "L_ClickHere")</u></b>
+                </a>
+                <span>
+                    @Html.Localize("Grocery", "L_ToReserveNewTimeSlot")
+                </span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
