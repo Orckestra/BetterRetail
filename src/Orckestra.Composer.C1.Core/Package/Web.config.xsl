@@ -9,14 +9,30 @@
     </sectionGroup>
   </xsl:variable>
 
+  <xsl:variable name="ConfigBuildersSection" xml:space="preserve">
+    <section name="configBuilders" type="System.Configuration.ConfigurationBuildersSection, System.Configuration, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
+             restartOnExternalChanges="false" requirePermission="false" />
+  </xsl:variable>
+
   <xsl:variable name="ComposerSection" xml:space="preserve">
   <composer>
     <caching configSource="App_Config\Caching.config" />
   </composer>
   </xsl:variable>
 
+  <xsl:variable name="ConfigBuilders" xml:space="preserve">
+  <configBuilders>
+    <builders>
+      <add name="EnvAppSettings" mode="Greedy" prefix="AppSettings_"  stripPrefix="true"
+             type="Orckestra.Composer.Configuration.EnvironmentVariablesKeyValueConfigurationBuilder,Orckestra.Composer" />
+      <add name="EnvExpManSettings" mode="Greedy" prefix="ExperienceManagement_" stripPrefix="true"
+             type="Orckestra.Composer.Configuration.EnvironmentVariablesKeyValueConfigurationBuilder,Orckestra.Composer" />
+    </builders>
+  </configBuilders>
+  </xsl:variable>
+
   <xsl:variable name="AppSettings" xml:space="preserve">
-<appSettings>
+<appSettings configBuilders="EnvAppSettings">
   <xsl:comment> Required for SqlSink </xsl:comment>
   <add key="Environment" value="dev" />
   <add key="Hostname" value="composer-c1-cm-dev.orckestra.local" />
@@ -42,12 +58,14 @@
     <xsl:apply-templates select="@*" />
     <xsl:if test="count(configSections)=0">
   <configSections>
+    <xsl:copy-of select="$ConfigBuildersSection"/>
 		<xsl:copy-of select="$ComposerSectionGroup"/>
 		<sectionGroup name="experienceManagement" type="System.Configuration.ConfigurationSectionGroup, System.Configuration">
 			<section name="settings" type="System.Configuration.NameValueFileSectionHandler" />
 		</sectionGroup>
   </configSections>
-    <xsl:comment>Composer configuration</xsl:comment>
+      <xsl:copy-of select="$ConfigBuilders"/>
+      <xsl:comment>Composer configuration</xsl:comment>
       <xsl:copy-of select="$ComposerSection"/>
       <xsl:copy-of select="$AppSettings"/>
     </xsl:if>
@@ -63,6 +81,7 @@
   <xsl:template match="configuration/configSections" xml:space="preserve">
     <xsl:copy>
       <xsl:apply-templates select="@*" />
+        <xsl:copy-of select="$ConfigBuildersSection"/>
         <xsl:copy-of select="$ComposerSectionGroup"/>
         <xsl:apply-templates select="node()" />
 	      <xsl:if test="count(sectionGroup[@name='experienceManagement'])=0">
@@ -71,6 +90,7 @@
 				  </sectionGroup>
 			  </xsl:if>
    </xsl:copy>
+    <xsl:copy-of select="$ConfigBuilders"/>
     <xsl:comment>Composer configuration</xsl:comment>
     <xsl:copy-of select="$ComposerSection"/>
     <xsl:copy-of select="$AppSettings"/>
