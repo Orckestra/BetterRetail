@@ -43,6 +43,7 @@ namespace Orckestra.Composer.Store.ViewModels
 
         public double DestinationToSearchPoint { get; set; }
 
+        public string LengthMeasureUnit { get; set; }
         public int SearchIndex { get; set; }
 
         public string GoogleDirectionsLink { get; set; }

@@ -1,7 +1,10 @@
-﻿namespace Orckestra.Composer.Store.Providers
+﻿using Orckestra.Composer.Configuration;
+
+namespace Orckestra.Composer.Store.Providers
 {
     public interface IGoogleMapsUrlProvider
     {
-       string GetStaticMapImgUrl(string[] addressParams, string mapType = "roadmap");
+        IGoogleSettings GoogleMapsSettings { get; set; }
+        string GetStaticMapImgUrl(string[] addressParams, string mapType = "roadmap");
     }
 }

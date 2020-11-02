@@ -6,7 +6,7 @@ namespace Orckestra.Composer.Store.Providers
     public class GoogleMapsUrlProvider: IGoogleMapsUrlProvider
     {
 
-        public IGoogleSettings GoogleMapsSettings;
+        public IGoogleSettings GoogleMapsSettings { get; set; }
         public GoogleMapsUrlProvider(IGoogleSettings googleMapsSettings)
         {
             GoogleMapsSettings = googleMapsSettings;
