@@ -63,9 +63,12 @@ namespace Orckestra.Composer.Store.Factory
             if (param.SearchPoint != null && storeViewModel.Address.Latitude != null &&
                 storeViewModel.Address.Longitude != null)
             {
+                double earthRadius = GoogleMaps.GoogleMapsSettings.LengthMeasureUnit == Enums.LengthMeasureUnitEnum.km ? EarthRadiusMeasurement.Kilometers : EarthRadiusMeasurement.Miles;
                 storeViewModel.DestinationToSearchPoint = Math.Round(GeoCodeCalculator.CalcDistance(
                     storeViewModel.Address.Latitude.Value, storeViewModel.Address.Longitude.Value,
-                    param.SearchPoint.Lat, param.SearchPoint.Lng, EarthRadiusMeasurement.Kilometers), 2);
+                    param.SearchPoint.Lat, param.SearchPoint.Lng, earthRadius), 2);
+
+                storeViewModel.LengthMeasureUnit = GoogleMaps.GoogleMapsSettings.LengthMeasureUnit.ToString();
             }
 
             storeViewModel.Schedule = CreateStoreScheduleViewModel(param);
