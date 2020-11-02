@@ -247,9 +247,9 @@ namespace Orckestra.Composer.Cart.Services
             return operationsToExecute;
         }
 
-        private static void SetCustomerType(bool isGuest, Overture.ServiceModel.Orders.Cart cart)
+        protected virtual void SetCustomerType(bool isGuest, Overture.ServiceModel.Orders.Cart cart)
         {
-            if (cart.Customer == null || !isGuest) { cart.Customer = new CustomerSummary(); }
+            if (cart.Customer == null) cart.Customer = new CustomerSummary();
             cart.Customer.Type = isGuest ? CustomerType.Guest : CustomerType.Registered;
         }
 
