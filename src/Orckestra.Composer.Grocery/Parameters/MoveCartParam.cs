@@ -1,3 +1,4 @@
+using Orckestra.Overture.ServiceModel.Orders;
 using System;
 using System.Globalization;
 using StoreServiceModel = Orckestra.Overture.ServiceModel.Customers.Stores.Store;
@@ -32,5 +33,10 @@ namespace Orckestra.Composer.Grocery.Parameters
 		/// Inventory location ID of destination place
 		/// </summary>
 		public string InventoryLocationId { get; set; }
+
+        /// <summary>
+        /// Fulfillment method type
+        /// </summary>
+        public FulfillmentMethodType? FulfillementMethodType { get; set; }
 	}
 }

@@ -43,12 +43,12 @@ namespace Orckestra.Composer.Grocery.Api
         /// In the third line, in Grocery settings of Commerce Settings of a website.
         /// </summary>
         /// <returns></returns>
-        [ActionName("getSelectedStore")]
+        [ActionName("getSelectedFulfillment")]
         [HttpGet]
         [ValidateModelState]
-        public virtual async Task<IHttpActionResult> GetSelectedStore()
+        public virtual async Task<IHttpActionResult> GetSelectedFulfillment()
         {
-            var viewService = await StoreAndFulfillmentSelectionViewService.GetSelectedStoreAsync(new GetSelectedStoreParam
+            var viewService = await StoreAndFulfillmentSelectionViewService.GetSelectedFulfillmentAsync(new GetSelectedFulfillmentParam
             {
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
                 CultureInfo = ComposerContext.CultureInfo,
@@ -185,9 +185,9 @@ namespace Orckestra.Composer.Grocery.Api
         [ValidateModelState]
         public virtual IHttpActionResult SetSelectedFulfilledMethodType(SetSelectedFulfillmentMethodTypeRequest request)
         {
-            if (!Enum.TryParse(request.FulfillmentMethodTypeString, out FulfillmentMethodType fulfillmentMethodType))
+            if (!Enum.TryParse(request.FulfillmentMethodType, out FulfillmentMethodType fulfillmentMethodType))
             {
-                throw new ArgumentException($"Cannot parse {nameof(request.FulfillmentMethodTypeString)} with value '{request.FulfillmentMethodTypeString}'", nameof(request));
+                throw new ArgumentException($"Cannot parse {nameof(request.FulfillmentMethodType)} with value '{request.FulfillmentMethodType}'", nameof(request));
             }
 
             StoreAndFulfillmentSelectionViewService.SetSelectedFulfilledMethodTypeAsync(new SetSelectedFulfillmentMethodTypeParam

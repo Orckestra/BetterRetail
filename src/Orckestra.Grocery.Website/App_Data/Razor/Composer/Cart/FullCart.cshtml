@@ -7,7 +7,7 @@
         get { return "Cart Page"; }
     }
 
-    [FunctionParameter(Label = "Group cart items by primary category", DefaultValue = false)]
+    [FunctionParameter(Label = "Group cart items by primary category", DefaultValue = true)]
     public bool GroupCartItemsByPrimaryCategory { get; set; }
 }
 
@@ -34,7 +34,7 @@
                     </div>
                     <div class="col-md-6  col-md-pull-6  col-lg-pull-0  col-lg-12 order-4 order-sm-2">
                         <div class="mt-3">
-                            @Function("Composer.Cart.SelectedStore")
+                            @Function("Composer.Cart.SelectedFulfillment")
                         </div>
                     </div>
                     <div class="col-md-6  col-md-pull-6  col-lg-pull-0  col-lg-12 order-4 order-sm-2">

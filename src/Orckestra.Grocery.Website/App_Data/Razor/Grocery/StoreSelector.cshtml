@@ -28,12 +28,10 @@
                         <div v-if="DefaultStore" class="row justify-content-center text-center">
                             <div class="col-12 col-sm-10 col-lg-8">
                                 <strong>{{DefaultStore.LocalizedDisplayName}}</strong><br />
-                                <a class="cta" href="#" v-on:click.prevent="DefaultStore = undefined">
+                                @StoreHelpers.StoreAddress("DefaultStore", false)
+                                <a class="btn btn-primary mt-4" href="#" v-on:click.prevent="DefaultStore = undefined">
                                     @Html.Localize("Grocery", "B_ChangeStore")
                                 </a>
-                                <div class="mt-4">
-                                    @StartShoppingButton()
-                                </div>
                             </div>
                         </div>
                         <div v-show="!DefaultStore">

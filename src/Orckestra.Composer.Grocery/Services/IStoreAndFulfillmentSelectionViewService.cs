@@ -17,7 +17,7 @@ namespace Orckestra.Composer.Grocery.Services
         /// </summary>
         /// <param name="param"></param>
         /// <returns></returns>
-        Task<StoreAndFulfillmentSelectionViewModel> GetSelectedStoreAsync(GetSelectedStoreParam param);
+        Task<StoreAndFulfillmentSelectionViewModel> GetSelectedFulfillmentAsync(GetSelectedFulfillmentParam param);
 
         /// <summary>
         /// Sets the selected store for the given customer.

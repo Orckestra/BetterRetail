@@ -314,10 +314,11 @@ Enter your credit card information</value>
     <value>Edit</value>
   </data>
   <data name="F_ShippingStepTitle" xml:space="preserve">
-    <value>Shipping</value>
+    <value>Fulfillment Method</value>
   </data>
   <data name="F_ShippingStepDescription" xml:space="preserve">
-    <value>We ship to any valid address, except A.P.O./F.P.O and P.O. Boxes.</value>
+    <value>We ship to any valid address, except A.P.O./F.P.O and P.O. Boxes. 
+If you change your collection store your cart will be updated and prices can be changed.</value>
   </data>
   <data name="T_ShippingMethodType" xml:space="preserve">
     <value>Ship to Home</value>

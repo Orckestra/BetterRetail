@@ -36,6 +36,7 @@ namespace Orckestra.Composer.Grocery.Services
             {
                 CustomerId = loginViewModel.CustomerId,
                 CultureInfo = ComposerContext.CultureInfo,
+                IsAuthenticated = ComposerContext.IsAuthenticated,
                 CartName = CartConfiguration.ShoppingCartName
             }).ConfigureAwait(false);
 

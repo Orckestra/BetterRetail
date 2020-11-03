@@ -179,7 +179,11 @@ module Orckestra.Composer {
         public updateCart(param: any): Q.Promise<IUpdateCartResult> {
 
             return this.cartRepository.updateCart(param)
-                 .then((result: IUpdateCartResult) => this.setCartToCache(result.Cart).then(() => result));
+                .then((result: IUpdateCartResult) => {
+                    this.setCartToCache(result.Cart);
+                    this.eventHub.publish(CartEvents.CartUpdated, { data: result.Cart });
+                    return result;
+                });
         }
 
         public completeCheckout(currentStep: number = null): Q.Promise<ICompleteCheckoutResult> {

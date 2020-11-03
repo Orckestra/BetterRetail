@@ -1,0 +1,47 @@
+@inherits Composer.Razor.ComposerRazorFunction
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Selected Store"; }
+    }
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://www.composite.net/ns/function/1.0"
+      xmlns:v-bind="v-bind" xmlns:v-on="v-on">
+<head>
+</head>
+<body>
+    <div data-oc-controller="Grocery.SelectedStoreInCart">
+        <div v-if="Cart" class="card bg-light">
+            <div v-if="FulfillmentMethodType" class="card-header">
+                <a class="cta float-right" href="#" v-on:click.prevent="changeStoreModal($event, 'method')">
+                    @Html.Localize("Grocery", "B_ChangeFulfillmentMethod")
+                </a>
+                <h3 class="float-left m-0">
+                    <span v-if="FulfillmentMethodType == 1">@Html.Localize("Grocery", "T_FulfillmentMethodTitle_PickUp")</span>
+                    <span v-else="else">@Html.Localize("Grocery", "T_FulfillmentMethodTitle_Shipping")</span>
+                </h3>
+            </div>
+            <button v-else="else" class="btn btn-primary"
+                    v-on:click.prevent="changeStoreModal($event, 'method')">
+                @Html.Localize("Grocery", "B_SelectFulfillmentMethod")
+            </button>
+            <div class="card-body" v-if="FulfillmentMethodType">
+                @Forms.Validations.ShowError("Errors.TimeSlotSelectionError")
+                <div v-if="Store">
+                    @StoreHelpers.SelectedStorePreview("SelectedFulfillment")
+                    <hr />
+                    @StoreHelpers.SelectedTimeSlotPreview("SelectedFulfillment")
+                </div>
+                <div v-else="else">
+                    <button class="btn btn-primary"
+                            v-on:click.prevent="changeStoreModal($event, 'store')">
+                        @Html.Localize("Grocery", "B_BookStore")
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

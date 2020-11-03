@@ -81,6 +81,7 @@
     <div class="row  mb-2">
         <div class="col-12">
             <button class="btn btn-success  w-100  text-uppercase"
+                    v-bind:disabled="CheckoutButtonDisabled"
                     data-qa="order-summary-checkout-btn"
                     v-on:click="proceedToCheckout()">
                 @Html.Localize("ShoppingCart", "B_Checkout")

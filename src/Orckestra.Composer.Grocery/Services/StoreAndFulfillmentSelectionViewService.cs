@@ -34,7 +34,7 @@ namespace Orckestra.Composer.Grocery.Services
         public IStoreViewModelFactory StoreViewModelFactory { get; }
         public ITimeSlotViewModelFactory TimeSlotViewModelFactory { get; }
 
-        public virtual async Task<StoreAndFulfillmentSelectionViewModel> GetSelectedStoreAsync(GetSelectedStoreParam param)
+        public virtual async Task<StoreAndFulfillmentSelectionViewModel> GetSelectedFulfillmentAsync(GetSelectedFulfillmentParam param)
         {
             var store = await StoreAndFulfillmentSelectionProvider.GetSelectedStoreAsync(param);
 

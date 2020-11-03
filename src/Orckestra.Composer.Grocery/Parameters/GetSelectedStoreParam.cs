@@ -6,7 +6,7 @@ namespace Orckestra.Composer.Grocery.Parameters
     /// <summary>
     /// Parameters container to get default store
     /// </summary>
-    public class GetSelectedStoreParam
+    public class GetSelectedFulfillmentParam
     {
         /// <summary>
         /// Base URL of an incoming request

@@ -92,7 +92,7 @@ module Orckestra.Composer {
                 this.initialize();
             });
             this.eventHub.subscribe(CartEvents.CartUpdated, e => this.onCartUpdated(e.data));
-            this.eventHub.subscribe(SelectedStoreEvents.StoreUpdating, e => this.onStoreUpdating(e.data));
+            this.eventHub.subscribe(FulfillmentEvents.StoreUpdating, e => this.onStoreUpdating(e.data));
         }
 
         public static getInstance(): ICartStateService {

@@ -1,0 +1,128 @@
+﻿@inherits Composer.Razor.ComposerRazorFunction
+@using Orckestra.Composer.Services
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Shipping"; }
+    }
+
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on" xmlns:v-slot="v-slot">
+<head>
+</head>
+<body>
+    <div data-oc-controller="SingleCheckout.Shipping">
+        <div class="card  mt-4">
+            <div class="card-header">
+                <h3 class="float-left">
+                    @Html.Localize("CheckoutProcess", "F_ShippingStepTitle")
+                </h3>
+
+                <div v-if="UserExistsMode">@CheckoutHelpers.StepContinueButton("shipping", "F_ContinueAsGuest")</div>
+                <div v-else-if="SigningInMode">@CheckoutHelpers.StepContinueButton("shipping", "F_SignInAndContinue")</div>
+                <div v-else="v-else">@CheckoutHelpers.StepContinueButton("shipping")</div>
+
+                @CheckoutHelpers.StepEditButton("shipping")
+            </div>
+            <transition-collapse>
+                <div class="card-body  bg-light" v-show="step.active" v-cloak="true" data-qa="shipping-active-state" key="active">
+
+                    @Forms.Validations.SelectStoreError("Errors.StoreNotSelectedError")
+                    <p>@Html.Localize("CheckoutProcess", "F_ShippingStepDescription")</p>
+
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="border  rounded bg-white  p-3 clearfix">
+                                <a class="cta float-right" href="#" v-on:click.prevent="changeStoreModal($event, 'method')">
+                                    @Html.Localize("Grocery", "B_ChangeFulfillmentMethod")
+                                </a>
+                                @ShippingTypeSelectedView()
+                                @PickUpTypeSelectedView()
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="border  rounded bg-white  p-3">
+                                @TimeSlotView()
+                            </div>
+                        </div>
+                    </div>
+
+                    <div v-if="IsShippingMethodType">
+                        <hr />
+                        @Function("Composer.SingleCheckout.Steps.ShippingAddress")
+                    </div>
+                </div>
+
+                <div class="card-body bg-light" v-show="step.preview" v-cloak="true" data-qa="shipping-preview-state" key="preview">
+                    <div v-if="Cart.ShippingMethod">
+                        <div class="row">
+                            <div class="col-12 col-sm-6">
+                                <h4>{{SelectedMethodType.DisplayName}}</h4>
+
+                                @CheckoutHelpers.AddressPreview("ShippingAddress")
+
+                                <span v-if="Cart.ShippingMethod.ExpectedDaysBeforeDelivery"
+                                      data-qa="shippingmethod-expecteddays-info" class="clearfix">
+                                    <strong>
+                                        @Html.Localize("CheckoutProcess", "F_ShipTimeTitle")
+                                    </strong>
+                                    {{Cart.ShippingMethod.ExpectedDaysBeforeDelivery}}
+                                    @Html.Localize("CheckoutProcess", "L_DeliveryDaysNumber")
+                                </span>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                @TimeSlotView()
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </transition-collapse>
+        </div>
+    </div>
+</body>
+</html>
+
+@helper ShippingTypeSelectedView()
+{
+    <div v-if="IsShippingMethodType">
+        <h3>@Html.Localize("Grocery", "T_FulfillmentMethodTitle_Shipping")</h3>
+        @SelectedStorePreview()
+    </div>
+}
+
+@helper PickUpTypeSelectedView()
+{
+    <div v-if="IsPickUpMethodType" data-oc-controller="SingleCheckout.PickUpStoreAddress" >
+        <h3>@Html.Localize("Grocery", "T_FulfillmentMethodTitle_PickUp")</h3>
+        @SelectedStorePreview()
+    </div>
+}
+
+@helper SelectedStorePreview()
+{
+    <div v-if="IsStoreSelected">
+        <a class="cta float-right" href="#" v-on:click.prevent="changeStoreModal($event, 'store')">
+            @Html.Localize("Grocery", "B_ChangeStore")
+        </a>
+        <strong>{{Store.LocalizedDisplayName}}</strong>
+        @StoreHelpers.StoreAddress("SelectedFulfillment.Store", false)
+    </div>
+    <div v-else="else">
+        <button class="btn btn-primary btn-block"
+                v-on:click.prevent="changeStoreModal($event, 'store')">
+            @Html.Localize("Grocery", "B_BookStore")
+        </button>
+    </div>
+}
+
+@helper TimeSlotView()
+{
+    <div class="clearfix">
+        <h3 class="float-left">@Html.Localize("Grocery", "T_TimeSlot")</h3>
+    </div>
+    <div v-if="IsStoreSelected">
+        @StoreHelpers.SelectedTimeSlotPreview("SelectedFulfillment")
+    </div>
+}

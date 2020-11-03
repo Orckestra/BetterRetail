@@ -20,11 +20,18 @@ module Orckestra.Composer {
             let self: OrderSummaryController = this;
 
             let cartOrderSummaryMixins = {
+                mounted() {
+                },
                 data: {
                     EstimateShippingPostalCode: undefined,
                     PostalCodeEmpty: false,
                     PostalCodeMalformed: false
                 },
+                computed: {
+                    CheckoutButtonDisabled() {
+                        return !this.IsStoreSelected;
+                    }
+                }, 
                 methods: {
                     openEstimateShippingModal() {
                         this.postalCodeModal = $('#postalCodeModal');

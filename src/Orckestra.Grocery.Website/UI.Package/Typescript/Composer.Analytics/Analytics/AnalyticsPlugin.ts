@@ -121,19 +121,19 @@ module Orckestra.Composer {
             });
 
             // Grocery Events
-            this.eventHub.subscribe(SelectedStoreEvents.StoreSelected, (eventInfo: IEventInformation) => {
+            this.eventHub.subscribe(FulfillmentEvents.StoreSelected, (eventInfo: IEventInformation) => {
                 this.onStoreSelected(eventInfo);
             });
 
-            this.eventHub.subscribe(SelectedStoreEvents.TimeSlotSelected, (eventInfo: IEventInformation) => {
+            this.eventHub.subscribe(FulfillmentEvents.TimeSlotSelected, (eventInfo: IEventInformation) => {
                 this.onTimeSlotSelected(eventInfo);
             });
 
-            this.eventHub.subscribe(SelectedStoreEvents.LocationSelected, (eventInfo: IEventInformation) => {
+            this.eventHub.subscribe(FulfillmentEvents.LocationSelected, (eventInfo: IEventInformation) => {
                 this.onLocationSelected(eventInfo);
             });
 
-            this.eventHub.subscribe(SelectedStoreEvents.CheckAvailability, (eventInfo: IEventInformation) => {
+            this.eventHub.subscribe(FulfillmentEvents.CheckAvailability, (eventInfo: IEventInformation) => {
                 this.onCheckAvailability(eventInfo);
             });
 
@@ -716,7 +716,9 @@ module Orckestra.Composer {
         }
 
         public onStoreSelected(eventInfo: IEventInformation) {
-            this.sendEvent('StoreSelected', 'Store', 'Select', 'StoreNumber', eventInfo.data.Number);
+            if (eventInfo.data) {
+                this.sendEvent('StoreSelected', 'Store', 'Select', 'StoreNumber', eventInfo.data.Number);
+            }
         }
 
         public onTimeSlotSelected(eventInfo: IEventInformation) {

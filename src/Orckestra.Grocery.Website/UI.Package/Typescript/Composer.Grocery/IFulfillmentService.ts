@@ -2,12 +2,12 @@
 ///<reference path='../Composer.SingleCheckout/Enums/FulfillmentMethodTypes.ts' />
 
 module Orckestra.Composer {
-    export interface ISelectedStoreService {
+    export interface IFulfillmentService {
         setStore(id: any): Q.Promise<any>;
 
-        getStore(): Q.Promise<any>;
+        getSelectedFulfillment(): Q.Promise<any>;
 
-		getFreshStore(): Q.Promise<any>;
+		getFreshSelectedFulfillment(): Q.Promise<any>;
 
 		disableForcingToSelectStore(): Q.Promise<any>;
 

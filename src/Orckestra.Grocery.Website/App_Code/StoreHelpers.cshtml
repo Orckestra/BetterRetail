@@ -34,7 +34,7 @@
         <strong>@Html.Localize("Grocery", "T_SelectedTimeSlot")</strong>
         @if (showChangeLink)
         {
-            <a class="cta my-1 float-right" href="#" v-on:click.prevent="changeStoreModal($event, false)">
+            <a class="cta my-1 float-right" href="#" v-on:click.prevent="changeStoreModal($event, 'slot')">
                 @Html.Localize("Grocery", "B_ChangeSlot")
             </a>
         }
@@ -48,11 +48,14 @@
     </div>
     @if (showChangeLink)
     {
-        <div v-else="v-else">
-            <button v-on:click.prevent="changeStoreModal($event, false)" class="btn btn-block btn-primary">
-                @Html.Localize("Grocery", "B_BookYourSlot")
-            </button>
-        </div>
+        
+<div v-else="v-else">
+    <button v-on:click.prevent="changeStoreModal($event, 'slot')"
+            v-bind:disabled="!IsStoreSelected"
+            class="btn btn-block btn-primary">
+        @Html.Localize("Grocery", "B_BookYourSlot")
+    </button>
+</div>
     }
     <div v-if="TimeSlotReservationTentative" v-cloak="true" class="text-danger mt-2">
         @Html.Localized("Grocery", "L_ReservedUntil", " {{TimeSlotReservationExpireTime}} ")
@@ -77,13 +80,13 @@
         <div class="position-relative busy-container" v-bind:class="{ 'busy': @(vueBinding).StoreLoading }">
             @GeneralHelpers.LoadingSpinner()
             <div class="mb-2">
-                <strong>{{@(vueBinding).Store.LocalizedDisplayName}}</strong>
                 @if (showChangeLink)
                 {
-                    <a class="cta my-1 float-right" href="#" v-on:click.prevent="changeStoreModal($event, true)">
+                    <a class="cta float-right" href="#" v-on:click.prevent="changeStoreModal($event, 'store')">
                         @Html.Localize("Grocery", "B_ChangeStore")
                     </a>
                 }
+                <strong>{{@(vueBinding).Store.LocalizedDisplayName}}</strong>
                 @StoreAddress(vueBinding + ".Store", false)
             </div>
             <div class="mb-2 text-nowrap">
@@ -97,30 +100,25 @@
             </div>
         </div>
     </div>
-    @if (showChangeLink)
-    {
-        <div v-else="v-else">
-            <a class="cta" href="#" v-on:click.prevent="changeStoreModal($event, true)">
-                @Html.Localize("Grocery", "B_SelectStore")
-            </a>
-        </div>
-    }
 </div>
 }
 
-@helper StoreListRow(string vueBinding, bool isStep = false)
+@helper StoreListRow(string vueBinding, bool isStep = false, bool showMap = true)
 {
     <div class="card bg-light store-row">
         <div class="row">
-            <div class="col-3 col-sm-2">
-                <div class="store-row-map" v-bind:style="{ 'background-image': 'url(' + @(vueBinding).GoogleStaticMapUrl + '&amp;size=200x200)' } ">
-                    <a v-bind:href="@(vueBinding).Url" target="_blank"
-                       class="d-block position-relative  w-100  h-100">
-                        <div class="static-map-pin"></div>
-                    </a>
+            @if (showMap)
+            {
+                <div class="col-3 col-sm-2">
+                    <div class="store-row-map" v-bind:style="{ 'background-image': 'url(' + @(vueBinding).GoogleStaticMapUrl + '&amp;size=200x200)' } ">
+                        <a v-bind:href="@(vueBinding).Url" target="_blank"
+                           class="d-block position-relative  w-100  h-100">
+                            <div class="static-map-pin"></div>
+                        </a>
+                    </div>
                 </div>
-            </div>
-            <div class="col-6 col-sm-7">
+            }
+            <div class="@(showMap ? "col-6 col-sm-7" : "col-9")">
                 <div class="p-2 text-left">
                     <strong>{{@(vueBinding).LocalizedDisplayName}}</strong>
                     <div class="mt-1">
@@ -129,7 +127,6 @@
                         </small>
                     </div>
                 </div>
-
             </div>
             <div class="col-3">
                 <div class="p-2  h-100 position-relative">

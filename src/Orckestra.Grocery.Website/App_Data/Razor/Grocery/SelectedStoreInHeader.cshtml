@@ -16,7 +16,7 @@
          v-cloak="v-cloak" class="pull-left">
         <ul class="navbar-nav p-0">
             <li class="nav-item" v-if="!Store">
-                <a class="nav-link" href="#" v-on:click.prevent="changeStoreModal($event, true)">
+                <a class="nav-link" href="#" v-on:click.prevent="changeStoreModal($event, 'store')">
                     @StoreIcon()
                 </a>
             </li>
@@ -27,9 +27,9 @@
                 <div class="dropdown-menu selected-store p-3">
                     @Forms.Validations.ShowError("Errors.TimeSlotSelectionError")
                     <div v-if="Store">
-                        @StoreHelpers.SelectedStorePreview("SelectedStore")
+                        @StoreHelpers.SelectedStorePreview("SelectedFulfillment")
                         <hr />
-                        @StoreHelpers.SelectedTimeSlotPreview("SelectedStore")
+                        @StoreHelpers.SelectedTimeSlotPreview("SelectedFulfillment")
                     </div>
                 </div>
             </li>

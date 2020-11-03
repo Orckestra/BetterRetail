@@ -31,7 +31,7 @@ namespace OOrckestra.Composer.Grocery.Services
             {
                 if (_scope == null)
                 {
-                    var store = StoreAndFulfillmentSelectionProvider.GetSelectedStoreAsync(new GetSelectedStoreParam
+                    var store = StoreAndFulfillmentSelectionProvider.GetSelectedStoreAsync(new GetSelectedFulfillmentParam
                     {
                         CustomerId = CustomerId,
                         IsAuthenticated = IsAuthenticated,

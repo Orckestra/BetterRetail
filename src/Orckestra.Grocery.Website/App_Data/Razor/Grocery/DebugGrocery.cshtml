@@ -1,0 +1,26 @@
+@inherits RazorFunction
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Debug Grocery"; }
+    }
+
+    public IComposerContext ComposerContext { get; set; }
+
+    public override bool PreventFunctionOutputCaching { get { return true; } }
+}
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
+<head>
+</head>
+<body>
+    @if (HttpContext.Current.IsDebuggingEnabled)
+    {
+        <ul>
+            <li>CustomerId:  @ComposerContext.CustomerId</li>
+            <li>IsGuest: @ComposerContext.IsGuest</li>
+            <li>Scope: @ComposerContext.Scope</li>
+        </ul>
+    }
+</body>
+</html>

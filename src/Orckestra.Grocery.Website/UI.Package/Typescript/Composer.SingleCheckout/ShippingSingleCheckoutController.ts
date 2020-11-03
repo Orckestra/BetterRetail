@@ -2,6 +2,7 @@
 ///<reference path='./BaseSingleCheckoutController.ts' />
 ///<reference path='../Composer.MyAccount/Common/CustomerService.ts' />
 ///<reference path='./Services/ShippingAddressRegisteredService.ts' />
+///<reference path='../Composer.Grocery/FulfillmentEvents.ts' />
 
 module Orckestra.Composer {
     'use strict';
@@ -9,7 +10,7 @@ module Orckestra.Composer {
     export class ShippingSingleCheckoutController extends Orckestra.Composer.BaseSingleCheckoutController {
 
         protected customerService: ICustomerService = new CustomerService(new CustomerRepository());
-
+        protected fulfillmentService: IFulfillmentService = FulfillmentService.instance();
 
         public initialize() {
             super.initialize();
@@ -17,51 +18,59 @@ module Orckestra.Composer {
             self.viewModelName = 'ShippingMethod';
 
             let vueShippingMixin = {
+                data: {
+
+                },
                 mounted() {
-                    this.calculateSelectedMethod();
+                    self.eventHub.subscribe(FulfillmentEvents.FulfillmentMethodSelected, e => this.onFulfillmentMethodSelected(e.data));
+                    self.eventHub.subscribe(FulfillmentEvents.StoreSelected, e => this.onStoreSelected(e.data));
+                    self.eventHub.subscribe(FulfillmentEvents.StoreUpdating, e => this.onStoreUpdating(e.data));
+                    self.eventHub.subscribe(FulfillmentEvents.TimeSlotSelected, e => this.onSlotSelected(e.data));
+                    self.eventHub.subscribe(FulfillmentEvents.TimeSlotUpdating, e => this.onSlotUpdating(e.data));
+                    self.eventHub.subscribe(FulfillmentEvents.TimeSlotSelectionFailed, e => this.onSlotFailed(e.data));
                     this.prepareShipping();
                 },
                 computed: {
                     FulfilledShipping() {
-                        return self.checkoutService.shippingFulfilled(this.Cart, this.IsAuthenticated);
+                        return self.checkoutService.shippingFulfilled(this.Cart, this.IsAuthenticated) &&
+                            this.IsStoreSelected;
                     },
                     SelectedMethodTypeString() {
                         return this.Cart.ShippingMethod ? this.Cart.ShippingMethod.FulfillmentMethodTypeString : '';
                     },
                     SelectedMethodType() {
                         return this.Cart.ShippingMethod &&
-                        this.ShippingMethodTypes.find(
-                            type => type.FulfillmentMethodTypeString === this.Cart.ShippingMethod.FulfillmentMethodTypeString
-                        );
+                            this.ShippingMethodTypes.find(
+                                type => type.FulfillmentMethodTypeString === this.Cart.ShippingMethod.FulfillmentMethodTypeString
+                            );
                     },
                     IsShippingMethodType() {
                         return this.Cart.ShippingMethod &&
-                            this.Cart.ShippingMethod.FulfillmentMethodTypeString === FulfillmentMethodTypes.Shipping;
+                            this.Cart.ShippingMethod.FulfillmentMethodType === FulfillmentMethodTypes.Shipping;
                     },
                     IsPickUpMethodType() {
                         return this.Cart.ShippingMethod &&
-                            this.Cart.ShippingMethod.FulfillmentMethodTypeString === FulfillmentMethodTypes.PickUp;
-                    },
+                            this.Cart.ShippingMethod.FulfillmentMethodType === FulfillmentMethodTypes.PickUp;
+                    }
 
                 },
                 methods: {
                     prepareShipping() {
                         if (!this.Cart.ShippingAddress.FirstName && !this.Cart.ShippingAddress.LastName) {
-                            this.Cart.ShippingAddress.FirstName = this.Customer.FirstName;
-                            this.Cart.ShippingAddress.LastName = this.Customer.LastName;
+                            // this.Cart.ShippingAddress.FirstName = this.Customer.FirstName;
+                            // this.Cart.ShippingAddress.LastName = this.Customer.LastName;
                         }
 
                         this.Mode.AddingLine2Address = !this.Cart.ShippingAddress.Line2;
                         this.Mode.AddingNewAddress = false;
 
                         this.ShippingMethodTypes.forEach(methodType => {
-                            if (this.IsPickUpMethodType && methodType.FulfillmentMethodTypeString === FulfillmentMethodTypes.Shipping) {
+                            if (this.IsPickUpMethodType && methodType.FulfillmentMethodType === FulfillmentMethodTypes.Shipping) {
                                 methodType.OldAddress = this.clearShippingAddress();
                             } else {
                                 methodType.OldAddress = this.Cart.ShippingAddress;
                             }
                         });
-
                         this.preparePickUpAddress();
                     },
                     processShipping(): Q.Promise<boolean> {
@@ -86,41 +95,8 @@ module Orckestra.Composer {
                             return this.processBillingAddress();
                         }
                     },
-                    selectShippingMethod(methodEntity: any) {
-                        this.ShippingMethodTypes = this.ShippingMethodTypes.map(x =>
-                            x.FulfillmentMethodTypeString === methodEntity.FulfillmentMethodTypeString ? { ...x, SelectedMethod: methodEntity } : x
-                        );
-
-                        this.changeMethodsCollapseState(methodEntity.FulfillmentMethodTypeString, 'hide');
-                        this.updateShippingMethodProcess(methodEntity);
-                    },
-                    changeShippingMethodType(e: any) {
-                        const { value } = e.target;
-                        let shippingMethodType = this.ShippingMethodTypes.find(method =>
-                            method.FulfillmentMethodTypeString === value
-                        );
-
-                        if (this.Cart.ShippingMethod) {
-                            this.changeMethodsCollapseState(this.Cart.ShippingMethod.FulfillmentMethodTypeString, 'hide');
-                        }
-
-                        if (!this.debounceUpdateShippingMethod) {
-                            this.debounceUpdateShippingMethod = _.debounce(methodType => {
-                                this.updateShippingMethodProcess(methodType.SelectedMethod)
-                                    .then(() => {
-                                        if (this.IsPickUpMethodType) { this.onSelectPickUpMethod(); }
-                                    });
-                            }, 800);
-                        }
-
-                        this.debounceUpdateShippingMethod(shippingMethodType);
-                    },
-
-                    changeMethodsCollapseState(shippingMethodType: string, command: string) {
-                        let shippingMethodCollapse = $(`#ShippingMethod${shippingMethodType}`);
-                        if (shippingMethodCollapse) {
-                            shippingMethodCollapse.collapse(command);
-                        }
+                    onFulfillmentMethodSelected(method) {
+                        this.Cart.ShippingMethod.FulfillmentMethodType = method;
                     },
                     updateShippingMethodProcess(methodEntity: any): Q.Promise<any> {
                         let oldShippingMethod = { ...this.Cart.ShippingMethod };
@@ -153,16 +129,8 @@ module Orckestra.Composer {
                             PostalCodeRegexPattern,
                             CountryCode
                         };
-                    },
-                    calculateSelectedMethod() {
-                        let selectedProviderId = this.Cart.ShippingMethod ? this.Cart.ShippingMethod.ShippingProviderId : undefined;
-                        this.ShippingMethodTypes.forEach(type => {
-                            type.IsModified = type.ShippingMethods.length > 1;
-
-                            let selectedInCart = type.ShippingMethods.find(method => method.ShippingProviderId === selectedProviderId);
-                            type.SelectedMethod = selectedInCart || type.ShippingMethods.find(method => method.IsSelected);
-                        });
                     }
+
                 }
             };
 
@@ -172,7 +140,7 @@ module Orckestra.Composer {
         public getUpdateModelPromise(): Q.Promise<any> {
             return Q.fcall(() => {
                 let { Name, ShippingProviderId } = this.checkoutService.VueCheckout.Cart.ShippingMethod;
-                return {[this.viewModelName]: JSON.stringify({ Name, ShippingProviderId })};
+                return { [this.viewModelName]: JSON.stringify({ Name, ShippingProviderId }) };
             });
         }
     }

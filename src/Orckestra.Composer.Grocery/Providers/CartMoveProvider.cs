@@ -103,8 +103,14 @@ namespace Orckestra.Composer.Grocery.Providers
                     Scope = param.ScopeTo
                 }).ConfigureAwait(false);
 
-                // Selecting "PickUp" fulfillment method, if it is available
-                fulfillmentMethod = fulfillmentMethods.FirstOrDefault(method => method.FulfillmentMethodType == FulfillmentMethodType.PickUp);
+                // Selecting fulfillment method selected by customer, if it is available
+                fulfillmentMethod = fulfillmentMethods.FirstOrDefault(method => method.FulfillmentMethodType == param.FulfillementMethodType);
+
+                // Selecting 'Pickup' fulfillment method, if it is available
+                if (fulfillmentMethod == null)
+                {
+                    fulfillmentMethod = fulfillmentMethods.FirstOrDefault(method => method.FulfillmentMethodType == FulfillmentMethodType.PickUp);
+                }
             }
 
             if (Guid.TryParse(oldShipment.FulfillmentScheduleReservationNumber, out Guid reservationNumber))

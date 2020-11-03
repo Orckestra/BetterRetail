@@ -1,46 +1,40 @@
 ///<reference path='../../Typings/tsd.d.ts' />
 ///<reference path='../Mvc/Controller.ts' />
-///<reference path='./SelectedStoreService.ts' />
-///<reference path='./SelectedStoreEvents.ts' />
+///<reference path='./FulfillmentService.ts' />
+///<reference path='./FulfillmentEvents.ts' />
 ///<reference path='../../Typings/moment/moment.d.ts' />
 ///<reference path='../Composer.SingleCheckout/BaseSingleCheckoutController.ts' />
-/// <reference path='./TimeSlotsHelper.ts' />
 
 module Orckestra.Composer {
     export class TimeSlotBannerController extends Controller {
-		protected storeService: ISelectedStoreService = SelectedStoreService.instance();
+        protected fulfillmentService: IFulfillmentService = FulfillmentService.instance();
         protected VueTimeSlotBanner: Vue;
 
         public initialize() {
             super.initialize();
 
-            this.storeService.getStore()
-                .then(( selectedStore ) => this.initializeVueComponent(selectedStore));
+            this.fulfillmentService.getSelectedFulfillment()
+                .then((fulfillment) => this.initializeVueComponent(fulfillment));
         }
 
-        private initializeVueComponent(selectedStore) {
+        private initializeVueComponent(fulfillment) {
             let self: TimeSlotBannerController = this;
-            let commonTimeSlotReservationOptions =  TimeSlotsHelper.getCommonTimeSlotReservationVueConfig();
+            let commonFulfillmentOptions = FulfillmentHelper.getCommonSelectedFulfillmentStateOptions();
+            commonFulfillmentOptions.data.SelectedFulfillment = fulfillment;
             this.VueTimeSlotBanner = new Vue({
                 el: '#vueTimeSlotBanner',
                 data: {
-                    SelectedStore: selectedStore
+                    ...commonFulfillmentOptions.data
                 },
-				mounted() {
-                    this.ChangeStoreModal = new UIModal(window, "#changeStoreModal", () => {}, this);
-                    self.eventHub.subscribe(SelectedStoreEvents.TimeSlotSelected,  e => this.onSlotSelected(e.data));
-				},
+                mounted() {
+                    self.eventHub.subscribe(FulfillmentEvents.TimeSlotSelected, e => this.onSlotSelected(e.data));
+                },
                 computed: {
-                    ...commonTimeSlotReservationOptions.computed
+                    ...commonFulfillmentOptions.computed
                 },
-				methods: {
-					onSlotSelected({ TimeSlotReservation }) {
-                        this.SelectedStore.TimeSlotReservation = TimeSlotReservation;
-                    },
-                    changeStoreModal(event: JQueryEventObject, changeStore: boolean) {
-                        this.ChangeStoreModal.openModal(event, {ChangeStore: changeStore});
-                    }
-				}
+                methods: {
+                    ...commonFulfillmentOptions.methods
+                }
             });
         }
     }

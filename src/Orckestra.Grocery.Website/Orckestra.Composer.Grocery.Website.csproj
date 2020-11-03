@@ -338,7 +338,7 @@
     <Content Include="App_Data\Razor\Composer\Product\Specifications.cshtml" />
     <Content Include="App_Data\Razor\Composer\DatePicker\DatePicker.Includes.cshtml" />
     <Content Include="App_Data\Razor\Composer\Footer\SocialLinks.cshtml" />
-    <Content Include="App_Data\Razor\Composer\SingleCheckout\Steps\Shipping.cshtml" />
+    <Content Include="App_Data\Razor\Composer\SingleCheckout\Steps\FulfillmentMethod.cshtml" />
     <Content Include="App_Data\Razor\Composer\SingleCheckout\Steps\UserInformation.cshtml" />
     <Content Include="App_Data\Razor\Composer\SingleCheckout\OrderSummary.cshtml" />
     <Content Include="App_Data\PageTemplates\SingleCheckoutPageLayout.cshtml" />
@@ -351,7 +351,6 @@
     <Content Include="App_Code\CheckoutHelpers.cshtml" />
     <Content Include="App_Data\Razor\Composer\Layout\Includes\Javascript.cshtml" />
     <Content Include="App_Data\Razor\Composer\SingleCheckout\Steps\BillingAddress.cshtml" />
-    <Content Include="App_Data\Razor\Composer\SingleCheckout\Steps\PickUpAddress.cshtml" />
     <Content Include="App_Data\Razor\Composer\Store\Locator.cshtml" />
     <Content Include="App_Data\Razor\Composer\Store\List.cshtml" />
     <Content Include="App_Data\Razor\Composer\SingleCheckout\Confirmation.cshtml" />
@@ -371,7 +370,7 @@
     <Content Include="App_Data\Razor\Grocery\StoreSelector.cshtml" />
     <Content Include="App_Data\Media\d2404f63-d5bf-406f-99fa-538c25130f60" />
     <Content Include="App_Data\Razor\Composer\Cart\CartSummary.cshtml" />
-    <Content Include="App_Data\Razor\Composer\Cart\SelectedStore.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Cart\SelectedFulfillment.cshtml" />
     <Content Include="App_Data\Razor\Composer\Cart\OrderSummary.cshtml" />
     <Content Include="App_Data\Razor\Composer\Cart\FullCart.cshtml" />
     <Content Include="App_Data\Razor\Composer\Cart\Coupons.cshtml" />
@@ -381,6 +380,7 @@
     <Content Include="App_Data\Razor\Composer\BrowsingCategories\Summary.cshtml" />
     <Content Include="App_Data\Razor\Composer\Product\Instant\RelatedProducts.cshtml" />
     <Content Include="App_Data\Razor\Grocery\TimeSlotBanner.cshtml" />
+    <Content Include="App_Data\Razor\Grocery\DebugGrocery.cshtml" />
     <None Include="Properties\PublishProfiles\Website - CD.pubxml" />
     <None Include="Properties\PublishProfiles\Website.pubxml" />
     <Content Include="Views\web.config" />

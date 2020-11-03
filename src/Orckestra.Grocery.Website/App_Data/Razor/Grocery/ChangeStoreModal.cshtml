@@ -1,4 +1,5 @@
 @inherits Composer.Razor.ComposerRazorFunction
+@using Orckestra.Overture.ServiceModel.Orders;
 @functions {
     public override string FunctionDescription
     {
@@ -12,76 +13,29 @@
 <head>
 </head>
 <body>
-    <div class="modal store-selector" data-oc-controller="Grocery.ChangeStoreModal" 
-         id="changeStoreModal" tabindex="-1" role="dialog">
+    <div id="changeStoreModal" data-oc-controller="Grocery.ChangeStoreModal" class="modal store-selector" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content px-3 pt-3">
                 <div class="modal-header border-0 py-1">
                     <h4 class="modal-title font-weight-bold">
-                        {{Mode.ChangeStore ? '@Html.Localize("Grocery", "H_ChangeStoreModal")' : '@Html.Localize("Grocery", "H_ChangeTimeSlotModal")'}}
+                        <span v-if="Mode.ChangeMode == 'method'">@Html.Localize("Grocery", "H_ChangeMethodModal")</span>
+                        <span v-if="Mode.ChangeMode == 'store'">@Html.Localize("Grocery", "H_ChangeStoreModal")</span>
+                        <span v-if="Mode.ChangeMode == 'slot'">@Html.Localize("Grocery", "H_ChangeTimeSlotModal")</span>
                     </h4>
                     <div class="btn-close close" data-dismiss="modal" aria-label="Close">
                         <span class="fa fa-times-circle"></span>
                         <span class="sr-only">@Html.Localize("General", "B_Close")</span>
                     </div>
                 </div>
-                <div class="border-bottom pt-2 row "></div>
                 <div class="modal-body">
-                    <div class="d-flex w-100">
-                        <div v-show="Mode.ChangeStore" class="position-relative mb-2 flex-grow-1">
-                            <input id="changeStoreInput" class="form-control" type="text"
-                                   placeholder="@Html.Localize("Store", "I_Placeholder")"
-                                   v-model="PostalCode"
-                                   ref="postalCodeInput"
-                                   xmlns:v-bind="v-bind" />
-                            <button v-if="PostalCode" class="btn bg-transparent input-icon" v-on:click="clearPostalCodeInput();">
-                                <i class="fa fa-times" />
-                            </button>
-                        </div>
-                        <div class="pl-md-2 pl-1" v-show="Mode.ChangeStore">
-                            <button class="btn btn-primary text-uppercase"
-                                    v-on:click="findStores"
-                                    xmlns:v-bind="v-bind" xmlns:v-on="v-on">
-                                @Html.Localize("Grocery", "B_Check")
-                            </button>
-                        </div>
+                    <div v-if="Mode.ChangeMode == 'method'">
+                        @ChangeFulfillmentMethodView()
                     </div>
-
-                    <div v-if="ShowStoreList" class="thin-scrollbar vertical" style="max-height: 250px">
-                        <div class="row">
-                            <div class="col-12">
-                                <h5 class="mt-3">@Html.Localize("Grocery", "L_CollectOrder")</h5>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div v-for="(store, index) in Stores" class="col-12 mb-2">
-                                @StoreHelpers.StoreListRow("store")
-                            </div>
-                        </div>
+                    <div v-show="Mode.ChangeMode == 'store'">
+                        @ChangeStoreView()
                     </div>
-                    <div v-else="v-else">
-                        <div v-if="DefaultStore" class="border p-2 rounded">
-                            @StoreDetails("DefaultStore")
-                        </div>
-                    </div>
-
-                    <div v-if="!Mode.ChangeStore" class="clearfix">
-                            <a class="cta dark-blue float-right py-2" href="#" v-on:click.prevent="changeStore">
-                                @Html.Localize("Grocery", "B_ChangeStore")
-                            </a>
-                    </div>
-
-                    <div v-if="!Mode.ChangeStore">
-                        <div v-if="ReservedSlotData" class="border p-2 rounded">
-                            <strong>{{ReservedSlotData.TimeSlot.DayOfWeekString}}, {{ReservedSlotData.TimeSlotReservation.Day}} {{ReservedSlotData.TimeSlotReservation.DisplayMonth}}</strong>
-                            <p class="m-0">{{ReservedSlotData.TimeSlot.DisplayBeginTime}} to {{ReservedSlotData.TimeSlot.DisplayEndTime}}</p>
-                        </div>
-
-                        @Function("Grocery.StoreSelector.TimeSlotCalendar", new { ContainerHeight = 250 })
-
-                        <button class="btn btn-outline-primary btn-block text-uppercase  mt-3 modal--cancel" v-on:click="onClickNotNow">
-                            @Html.Localize("Grocery", "B_NotNow")
-                        </button>
+                    <div v-if="Mode.ChangeMode == 'slot'">
+                        @ChangeTimeSlotView()
                     </div>
                 </div>
                 <div class="modal-footer border-0 pt-0">
@@ -95,19 +49,108 @@
 </body>
 </html>
 
-
-@helper StoreRowTile(string vueBinding, bool showSelectButton = true)
+@helper ChangeFulfillmentMethodView()
 {
-
-    <div class="pt-3 pb-2 border-bottom store-row">
-        <div class="row justify-content-between">
-            <div class="col-12 pr-1 d-flex justify-content-start">
-                @StoreSelectButton(vueBinding)
-            </div>
+    <div class="form-row">
+        <div class="col-md-6 pb-3 d-flex" v-for="shippingMethod in ShippingMethodTypes">
+            @ShippingMethodTypeOption()
         </div>
     </div>
 }
 
+@helper ChangeStoreView()
+{
+    <div class="input-group">
+        <input id="changeStoreInput" class="form-control border-right-0" type="text"
+               placeholder="@Html.Localize("Store", "I_Placeholder")"
+               v-model="PostalCode"
+               ref="postalCodeInput"
+               xmlns:v-bind="v-bind" />
+
+        <div class="input-group-append">
+            <button v-if="PostalCode" class="btn bg-transparent border-top border-bottom" v-on:click="clearPostalCodeInput();">
+                <i class="fa fa-times" />
+            </button>
+            <button class="btn btn-primary text-uppercase"
+                    v-on:click="findStores"
+                    xmlns:v-bind="v-bind" xmlns:v-on="v-on">
+                @Html.Localize("Grocery", "B_Find")
+            </button>
+        </div>
+    </div>
+
+    <div v-if="ShowStoreList">
+        <p class="my-3 pb-2 border-bottom">@Html.Localized("Grocery", "T_StoresFound", "{{Stores.length}}")</p>
+        <div class="thin-scrollbar vertical" style="max-height: 250px">
+            <div class="row">
+                <div v-for="(store, index) in Stores" class="col-12 mb-2">
+                    @StoreHelpers.StoreListRow("store", false, false)
+                </div>
+            </div>
+        </div>
+    </div>
+    <div v-if="NoStores" class="alert bg-light mt-4">
+        @Html.Localize("Grocery", "L_StoresNotAvailableMessage")
+    </div>
+}
+
+@helper ChangeTimeSlotView()
+{
+    <div v-if="SelectedStore.Store" class="border p-2 rounded">
+        @StoreDetails("SelectedStore.Store")
+    </div>
+    <div class="clearfix">
+        <a class="cta dark-blue float-right py-1" href="#" v-on:click.prevent="changeStore">
+            @Html.Localize("Grocery", "B_ChangeStore")
+        </a>
+    </div>
+    <div v-if="SelectedStore.TimeSlotReservation" class="border p-2 rounded">
+        <strong>{{SelectedStore.TimeSlot.DayOfWeekString}}, {{SelectedStore.TimeSlotReservation.Day}} {{SelectedStore.TimeSlotReservation.DisplayMonth}}</strong>
+        <p class="m-0">{{SelectedStore.TimeSlot.DisplayBeginTime}} to {{SelectedStore.TimeSlot.DisplayEndTime}}</p>
+    </div>
+
+    @Function("Grocery.StoreSelector.TimeSlotCalendar", new { ContainerHeight = 250 })
+
+    <button class="btn btn-outline-primary btn-block text-uppercase  mt-3 modal--cancel" v-on:click="onClickNotNow">
+        @Html.Localize("Grocery", "B_NotNow")
+    </button>
+}
+
+@helper ShippingMethodTypeOption()
+{
+    <div class="border rounded bg-white p-3 flex-grow-1 shipping-methods"
+         v-bind:class="{'selected-method-type bg-selected': SelectedStore.FulfillmentMethodType === shippingMethod.FulfillmentMethodType}">
+        <div class="form-check">
+            <input class="form-check-input" type="radio"
+                   v-bind:value="shippingMethod.FulfillmentMethodType"
+                   name="ShippingMethod"
+                   v-bind:Id="shippingMethod.FulfillmentMethodTypeString + '-radio'"
+                   v-model="SelectedStore.FulfillmentMethodType"
+                   xmlns:v-bind="v-bind"
+                   xmlns:v-on="v-on"
+                   v-on:change="selectFulfillmentMethod" />
+            <label class="form-check-label d-block"
+                   v-bind:for="shippingMethod.FulfillmentMethodTypeString + '-radio'">
+                <strong>
+                    <i class="fa mr-1"
+                       v-bind:class="[
+                           shippingMethod.FulfillmentMethodTypeString === '@(FulfillmentMethodType.PickUp)' ? 'fa-home' : ''
+                           || 'fa-truck'
+                       ]" />
+                    <span> {{shippingMethod.DisplayName}}</span>
+                </strong>
+                <p class="mb-0 text-height-0">
+                    <small v-if="shippingMethod.FulfillmentMethodTypeString === '@(FulfillmentMethodType.Shipping)'">
+                        @Html.Localize("Grocery", "L_ShippingMethodDescriptionShipping")
+                    </small>
+                    <small v-if="shippingMethod.FulfillmentMethodTypeString === '@(FulfillmentMethodType.PickUp)'">
+                        @Html.Localize("Grocery", "L_ShippingMethodDescriptionPickUp")
+                    </small>
+                </p>
+            </label>
+        </div>
+    </div>
+}
 
 @helper StoreDetails(string vueBinding)
 {
@@ -122,27 +165,3 @@
         </div>
     </div>
 }
-
-@helper StoreSelectButton(string vueBinding)
-{
-    <div class="form-check">
-        <input class="form-check-input" type="radio"
-               v-bind:value="@(vueBinding).Id"
-               name="StoreSelection"
-               id="@(vueBinding).Id"
-               v-bind:Id="@(vueBinding).Id"
-               xmlns:v-bind="v-bind"
-               xmlns:v-on="v-on"
-               v-on:click="selectStore(@(vueBinding))"
-               v-bind:checked="SelectedStoreId === @(vueBinding).Id" />
-        <label v-bind:for="@(vueBinding).Id" class="form-check-label d-block pl-3">
-            <strong>{{@(vueBinding).LocalizedDisplayName}}</strong>
-            <span class="mt-1 d-block">
-                <small>
-                    @StoreHelpers.StoreAddress(vueBinding)
-                </small>
-            </span>
-        </label>
-    </div>
-}
-

@@ -19,5 +19,7 @@ namespace Orckestra.Composer.Grocery.Parameters
         /// The cart customer id associated with the reservation
         /// </summary>
         public Guid CustomerId { get; set; }
+
+        public bool IsAuthenticated { get; set; }
     }
 }

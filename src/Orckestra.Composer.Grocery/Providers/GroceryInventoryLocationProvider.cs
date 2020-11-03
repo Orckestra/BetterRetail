@@ -28,7 +28,7 @@ namespace Orckestra.Composer.Grocery.Providers
         internal IStoreAndFulfillmentSelectionProvider StoreAndFulfillmentSelectionProvider { get; }
         public override async Task<string> GetDefaultInventoryLocationIdAsync()
         {
-            var store = await StoreAndFulfillmentSelectionProvider.GetSelectedStoreAsync(new GetSelectedStoreParam
+            var store = await StoreAndFulfillmentSelectionProvider.GetSelectedStoreAsync(new GetSelectedFulfillmentParam
             {
                 TryGetFromDefaultSettings = true,
                 CustomerId = ComposerContext.CustomerId,

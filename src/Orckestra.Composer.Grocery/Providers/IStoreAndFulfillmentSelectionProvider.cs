@@ -18,7 +18,7 @@ namespace Orckestra.Composer.Grocery.Providers
         /// </summary>
         /// <param name="param"></param>
         /// <returns>Store object</returns>
-        Task<Orckestra.Overture.ServiceModel.Customers.Stores.Store> GetSelectedStoreAsync(GetSelectedStoreParam param);
+        Task<Orckestra.Overture.ServiceModel.Customers.Stores.Store> GetSelectedStoreAsync(GetSelectedFulfillmentParam param);
 
         /// <summary>
         /// Set an active store of a certain customer
@@ -60,7 +60,7 @@ namespace Orckestra.Composer.Grocery.Providers
         /// </summary>
         /// <param name="param"></param>
         /// <returns></returns>
-        Task<bool> CustomerShouldSelectStore(GetSelectedStoreParam param);
+        Task<bool> CustomerShouldSelectStore(GetSelectedFulfillmentParam param);
 
         /// <summary>
         /// Switches the session into "browsing without a specified store" mode.

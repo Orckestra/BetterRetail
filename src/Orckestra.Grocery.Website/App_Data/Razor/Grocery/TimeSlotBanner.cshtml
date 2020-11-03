@@ -16,7 +16,7 @@
             </div>
             <div v-if="TimeSlotReservationExpired">
                 @Html.Localize("Grocery", "L_ReservationExpired")
-                <a href="#" v-on:click.prevent="changeStoreModal($event, false)">
+                <a href="#" v-on:click.prevent="changeStoreModal($event, 'slot')">
                     <b><u>@Html.Localize("Grocery", "L_ClickHere")</u></b>
                 </a>
                 <span>

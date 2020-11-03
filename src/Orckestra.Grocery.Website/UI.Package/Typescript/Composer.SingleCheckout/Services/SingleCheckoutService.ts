@@ -65,6 +65,7 @@ module Orckestra.Composer {
         protected shippingMethodService: ShippingMethodService;
         protected paymentService: IPaymentService;
         protected paymentProviderFactory: CheckoutPaymentProviderFactory;
+        protected fulfillmentService: IFulfillmentService = FulfillmentService.instance();
 
         public static getInstance(): ISingleCheckoutService {
 
@@ -92,6 +93,7 @@ module Orckestra.Composer {
             this.shippingMethodService = new ShippingMethodService();
             this.paymentService = new PaymentService(this.eventHub, new PaymentRepository());
             this.paymentProviderFactory = new CheckoutPaymentProviderFactory(this.window, this.eventHub);
+            
             this.registerAllControllersInitialized();
 
             SingleCheckoutService.instance = this;
@@ -102,6 +104,7 @@ module Orckestra.Composer {
             this.eventHub.subscribe('allControllersInitialized', () => {
                 this.initialize();
             });
+            this.eventHub.subscribe(CartEvents.CartUpdated, e => this.onCartUpdated(e.data));
         }
 
         private initialize() {
@@ -110,9 +113,10 @@ module Orckestra.Composer {
             let getCartPromise = this.getCart();
             let regionsPromise: Q.Promise<any> = this.regionService.getRegions();
             let shippingMethodTypesPromise: Q.Promise<any> = this.shippingMethodService.getShippingMethodTypes();
+            let getFulfillmentPromise = this.fulfillmentService.getFreshSelectedFulfillment();
 
-            Q.all([authenticatedPromise, getCartPromise, regionsPromise, shippingMethodTypesPromise])
-                .spread((authVm, cartVm, regionsVm, shippingMethodTypesVm) => {
+            Q.all([authenticatedPromise, getCartPromise, regionsPromise, shippingMethodTypesPromise, getFulfillmentPromise])
+                .spread((authVm, cartVm, regionsVm, shippingMethodTypesVm, fulfillment) => {
 
                     if (!cartVm.Customer) {
                         cartVm.Customer = {};
@@ -128,7 +132,7 @@ module Orckestra.Composer {
 
                     this.handleCheckoutSecurity(cartVm);
 
-                    this.initializeVueComponent(results);
+                    this.initializeVueComponent(results, fulfillment);
                 })
                 .then(() => {
                     this.allControllersReady.resolve(true);
@@ -146,9 +150,10 @@ module Orckestra.Composer {
             }
         }
 
-        private initializeVueComponent(checkoutContext: ISingleCheckoutContext) {
+        private initializeVueComponent(checkoutContext: ISingleCheckoutContext, fulfillment: any) {
             let deleteModalElementSelector: string = '#deleteAddressModal';
-
+            let commonFulfillmentOptions =  FulfillmentHelper.getCommonSelectedFulfillmentStateOptions();
+            commonFulfillmentOptions.data.SelectedFulfillment = {...fulfillment};
             this.VueCheckout = new Vue({
                 el: '#vueSingleCheckout',
                 components: {
@@ -198,7 +203,8 @@ module Orckestra.Composer {
                     },
                     Modal: {
                         deleteAddressModal: null,
-                    }
+                    },
+                    ...commonFulfillmentOptions.data
                 },
                 mixins: this.VueCheckoutMixins,
                 mounted() {
@@ -232,7 +238,8 @@ module Orckestra.Composer {
                     },
                     CheckoutPageComponent() {
                         return this.$children[0];
-                    }
+                    },
+                    ...commonFulfillmentOptions.computed
                 },
                 methods: {
 
@@ -266,7 +273,8 @@ module Orckestra.Composer {
                         let addressId = $addressListItem.data('address-id');
 
                         return SingleCheckoutService.instance.deleteAddress(addressId);
-                    }
+                    },
+                    ...commonFulfillmentOptions.methods
                 }
             });
 
@@ -306,8 +314,8 @@ module Orckestra.Composer {
                 cart.ShippingAddress.PostalCode &&
                 cart.ShippingAddress.PhoneNumber;
 
-            let isShipToHome = cart.ShippingMethod.FulfillmentMethodTypeString === FulfillmentMethodTypes.Shipping;
-            let isPickUp = cart.ShippingMethod.FulfillmentMethodTypeString === FulfillmentMethodTypes.PickUp;
+            let isShipToHome = cart.ShippingMethod.FulfillmentMethodType === FulfillmentMethodTypes.Shipping;
+            let isPickUp = cart.ShippingMethod.FulfillmentMethodType === FulfillmentMethodTypes.PickUp;
 
             if (isAuthenticated && isShipToHome) {
                 return (!this.isAddressBookIdEmpty(cart.ShippingAddress.AddressBookId));
@@ -408,10 +416,6 @@ module Orckestra.Composer {
 
             return this.invalidateCache().
                 then(() => this.cartService.updateLineItem(id, quantity, productId, recurringOrderFrequencyName, recurringOrderProgramName))
-                .then(Cart => {
-                    this.updateVueState(vue, Cart);
-                    return Cart;
-                })
                 .fail(reason => {
                     this.handleError(reason);
                 })
@@ -429,17 +433,13 @@ module Orckestra.Composer {
 
             return this.buildCartUpdateViewModel(emptyVm, controllerNames)
                 .then(vm => this.cartService.updateCart(vm))
-                .then(result => {
-                    let { Cart } = result;
-                    this.updateVueState(vue, Cart);
-                    return result;
-                })
                 .finally(() => {
                     vue.Mode.Loading = false;
                 });
         }
 
-        protected updateVueState(vue: any, Cart: any) {
+        protected onCartUpdated(Cart: any) {
+            let vue: any = this.VueCheckout;
             vue.customerBeforeEdit = { ...Cart.Customer };
             vue.adressBeforeEdit = { ...Cart.ShippingAddress };
             vue.billingAddressBeforeEdit = { ...Cart.Payment.BillingAddress };
@@ -619,7 +619,7 @@ module Orckestra.Composer {
                 .then(result => this.onLoginFulfilled(result, vue))
                 .then(() => this.cartService.getFreshCart(true))
                 .then((cart) => {
-                    this.updateVueState(vue, cart);
+                    this.onCartUpdated(cart);
                     vue.Mode.Authenticated = true;
                     vue.Mode.SignIn = SignInModes.Base;
                     vue.Steps.Information.Loading = false;

@@ -118,10 +118,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="B_BookStore" xml:space="preserve">
-    <value>Book Store</value>
+    <value>Book Your Store</value>
   </data>
   <data name="B_BookYourSlot" xml:space="preserve">
-    <value>Book your slot</value>
+    <value>Book Your Slot</value>
+  </data>
+  <data name="B_ChangeFulfillmentMethod" xml:space="preserve">
+    <value>Change fulfillment method</value>
   </data>
   <data name="B_ChangeSlot" xml:space="preserve">
     <value>Change slot</value>
@@ -129,20 +132,26 @@
   <data name="B_ChangeStore" xml:space="preserve">
     <value>Change store</value>
   </data>
-  <data name="B_Check" xml:space="preserve">
-    <value>Check</value>
-  </data>
   <data name="B_CheckServiceAvailability" xml:space="preserve">
     <value>Check service availability</value>
+  </data>
+  <data name="B_Find" xml:space="preserve">
+    <value>Find</value>
   </data>
   <data name="B_NotNow" xml:space="preserve">
     <value>Not now</value>
   </data>
+  <data name="B_SelectFulfillmentMethod" xml:space="preserve">
+    <value>Select Fulfillment Method</value>
+  </data>
   <data name="B_StartShopping" xml:space="preserve">
     <value>Start Shopping</value>
   </data>
+  <data name="H_ChangeMethodModal" xml:space="preserve">
+    <value>Your Fulfillment Method</value>
+  </data>
   <data name="H_ChangeStoreModal" xml:space="preserve">
-    <value>Your collection store</value>
+    <value>Find a Store</value>
   </data>
   <data name="H_ChangeTimeSlotModal" xml:space="preserve">
     <value>Choose Date &amp; Time Slot</value>
@@ -151,7 +160,7 @@
     <value>Available</value>
   </data>
   <data name="L_ChangeStoreWarning" xml:space="preserve">
-    <value>Some items may not be available at all collection stores. If you change your collection store your basket will be updated.</value>
+    <value>Some items may not be available at all collection stores. If you change your collection store your cart will be updated.</value>
   </data>
   <data name="L_ClickHere" xml:space="preserve">
     <value>Click here</value>
@@ -186,7 +195,7 @@ near you offering this service.</value>
 available for you.</value>
   </data>
   <data name="L_StoresNotAvailableMessage" xml:space="preserve">
-    <value>Sorry, no service is available in this area.</value>
+    <value>Sorry, no store is available in this area. Try another location.</value>
   </data>
   <data name="L_TimeSlotLoadingError" xml:space="preserve">
     <value>An error occurred while loading time slots. Please try again later.</value>
@@ -227,6 +236,12 @@ available for you.</value>
   <data name="TM_Step_SelectStore" xml:space="preserve">
     <value>Select Store</value>
   </data>
+  <data name="T_FulfillmentMethodTitle_PickUp" xml:space="preserve">
+    <value>Pickup</value>
+  </data>
+  <data name="T_FulfillmentMethodTitle_Shipping" xml:space="preserve">
+    <value>Delivery</value>
+  </data>
   <data name="T_PickStore" xml:space="preserve">
     <value>Pick your store</value>
   </data>
@@ -250,5 +265,11 @@ available for you.</value>
   </data>
   <data name="T_Step_SelectStore" xml:space="preserve">
     <value>Select the default store to fulfill your order</value>
+  </data>
+  <data name="T_StoresFound" xml:space="preserve">
+    <value>{0} store(s) found</value>
+  </data>
+  <data name="T_TimeSlot" xml:space="preserve">
+    <value>Timeslot</value>
   </data>
 </root>

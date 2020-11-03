@@ -6,6 +6,6 @@ namespace Orckestra.Composer.Grocery.Requests
     {
         [Required]
         [MinLength(1)]
-        public string FulfillmentMethodTypeString { get; set; }
+        public string FulfillmentMethodType { get; set; }
     }
 }

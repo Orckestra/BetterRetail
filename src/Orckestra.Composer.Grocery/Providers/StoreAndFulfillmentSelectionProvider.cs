@@ -12,6 +12,7 @@ using Orckestra.Composer.Services;
 using Orckestra.Composer.Services.Cookie;
 using Orckestra.Composer.Store.Parameters;
 using Orckestra.Composer.Store.Repositories;
+using Orckestra.ExperienceManagement.Configuration;
 using Orckestra.Overture.ServiceModel.Orders;
 using System;
 using System.Collections.Generic;
@@ -35,7 +36,9 @@ namespace Orckestra.Composer.Grocery.Providers
             IFulfillmentLocationsRepository fulfillmentLocationsRepository,
             IFulfillmentMethodRepository fulfillmentMethodRepository,
             ICartRepository cartRepository,
-            ITimeSlotRepository timeSlotRepository)
+            ITimeSlotRepository timeSlotRepository,
+            ISiteConfiguration siteConfiguration,
+            IWebsiteContext websiteContext)
         {
             CookieAccessor = cookieAccessor ?? throw new ArgumentNullException(nameof(cookieAccessor));
             CustomerRepository = customerRepository ?? throw new ArgumentNullException(nameof(customerRepository));
@@ -47,6 +50,8 @@ namespace Orckestra.Composer.Grocery.Providers
             FulfillmentMethodRepository = fulfillmentMethodRepository ?? throw new ArgumentNullException(nameof(fulfillmentMethodRepository));
             CartRepository = cartRepository ?? throw new ArgumentNullException(nameof(cartRepository));
             TimeSlotRepository = timeSlotRepository ?? throw new ArgumentNullException(nameof(timeSlotRepository));
+            SiteConfiguration = siteConfiguration ?? throw new ArgumentNullException(nameof(siteConfiguration));
+            WebsiteContext = websiteContext ?? throw new ArgumentNullException(nameof(websiteContext));
         }
         protected ICookieAccessor<ComposerCookieDto> CookieAccessor { get; private set; }
         protected ICustomerRepository CustomerRepository { get; private set; }
@@ -58,6 +63,8 @@ namespace Orckestra.Composer.Grocery.Providers
         public ICartRepository CartRepository { get; private set; }
         public ITimeSlotRepository TimeSlotRepository { get; }
         public IFulfillmentMethodRepository FulfillmentMethodRepository { get; private set; }
+        public ISiteConfiguration SiteConfiguration { get; set; }
+        public IWebsiteContext WebsiteContext { get; set; }
 
         /// <summary>
         ///  Enables browsing without a store if a store isn't selected yet.
@@ -72,7 +79,7 @@ namespace Orckestra.Composer.Grocery.Providers
             };
         }
 
-        public async Task<bool> CustomerShouldSelectStore(GetSelectedStoreParam param)
+        public async Task<bool> CustomerShouldSelectStore(GetSelectedFulfillmentParam param)
         {
             if (param.CultureInfo == null) throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)));
             if (param.IsAuthenticated && param.CustomerId == Guid.Empty)
@@ -108,7 +115,7 @@ namespace Orckestra.Composer.Grocery.Providers
             return true;
         }
 
-        public async Task<StoreServiceModel> GetSelectedStoreAsync(GetSelectedStoreParam param)
+        public async Task<StoreServiceModel> GetSelectedStoreAsync(GetSelectedFulfillmentParam param)
         {
             if (param == null) throw new ArgumentNullException(nameof(param));
             if (param.CultureInfo == null) throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)));
@@ -185,7 +192,7 @@ namespace Orckestra.Composer.Grocery.Providers
                 if (param.CustomerId == Guid.Empty) throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)));
             }
 
-            Task<StoreServiceModel> currentStoreTask = GetSelectedStoreAsync(new GetSelectedStoreParam
+            Task<StoreServiceModel> currentStoreTask = GetSelectedStoreAsync(new GetSelectedFulfillmentParam
             {
                 TryGetFromDefaultSettings = true,
                 CultureInfo = param.CultureInfo,
@@ -224,7 +231,8 @@ namespace Orckestra.Composer.Grocery.Providers
                 NewStore = newStore,
                 ScopeFrom = currentStore?.ScopeId ?? ScopeProvider.DefaultScope,
                 ScopeTo = newStore.ScopeId,
-                InventoryLocationId = newStore.FulfillmentLocation.InventoryLocationId
+                InventoryLocationId = newStore.FulfillmentLocation.InventoryLocationId,
+                FulfillementMethodType = cookieData.FulfillmentMethodType
             }).ConfigureAwait(false);
 
             if (processedCart != null)
@@ -361,6 +369,21 @@ namespace Orckestra.Composer.Grocery.Providers
                 CartName = param.CartName
             }).ConfigureAwait(false);
 
+            var shipment = cart.Shipments.FirstOrDefault();
+            if (param.FulfillmentMethodType == shipment?.FulfillmentMethod?.FulfillmentMethodType)
+            {
+                return;
+            }
+
+            if (Guid.TryParse(shipment?.FulfillmentScheduleReservationNumber, out Guid timeSlotReservationId)) {
+                await TimeSlotRepository.DeleteFulfillmentLocationTimeSlotReservationByIdAsync(new BaseFulfillmentLocationTimeSlotReservationParam()
+                {
+                    SlotReservationId = timeSlotReservationId,
+                    Scope = param.Scope,
+                    FulfillmentLocationId = shipment.FulfillmentLocationId
+                }).ConfigureAwait(false);
+            };
+
             var fulfillmentMethods = await FulfillmentMethodRepository.GetCalculatedFulfillmentMethods(new GetShippingMethodsParam
             {
                 CartName = cart.Name,
@@ -369,30 +392,35 @@ namespace Orckestra.Composer.Grocery.Providers
                 Scope = cart.ScopeId
             }).ConfigureAwait(false);
 
-            var shipment = cart.Shipments.FirstOrDefault();
-            shipment.FulfillmentMethod = fulfillmentMethods.FirstOrDefault(method => method.FulfillmentMethodType == param.FulfillmentMethodType);
+            var newMethod = fulfillmentMethods.FirstOrDefault(method => method.FulfillmentMethodType == param.FulfillmentMethodType);
 
-            await CartRepository.UpdateShipmentAsync(new UpdateShipmentParam
+            var updateShippinParam = new UpdateShipmentParam
             {
                 CartName = cart.Name,
                 CultureInfo = new CultureInfo(cart.CultureName),
                 FulfillmentLocationId = shipment.FulfillmentLocationId,
                 CustomerId = cart.CustomerId,
-                FulfillmentMethodName = shipment.FulfillmentMethod?.Name,
+                FulfillmentMethodName = newMethod?.Name,
                 FulfillmentScheduleMode = shipment.FulfillmentScheduleMode,
-                FulfillmentScheduledTimeBeginDate = shipment.FulfillmentScheduledTimeBeginDate,
-                FulfillmentScheduledTimeEndDate = shipment.FulfillmentScheduledTimeEndDate,
+                FulfillmentScheduledTimeBeginDate = null,
+                FulfillmentScheduledTimeEndDate = null,
                 PropertyBag = shipment.PropertyBag,
                 Id = shipment.Id,
                 ScopeId = cart.ScopeId,
-                ShippingAddress = shipment.Address,
-                ShippingProviderId = shipment.FulfillmentMethod?.ShippingProviderId ?? default
-            }).ConfigureAwait(false);
+                PickUpLocationId = null,
+                ShippingAddress = null,
+                ShippingProviderId = newMethod?.ShippingProviderId ?? default
+            };
+
+            var updatedCart = await CartRepository.UpdateShipmentAsync(updateShippinParam).ConfigureAwait(false);
 
             var cookieData = new ExtendedCookieData(CookieAccessor.Read())
             {
-                FulfillmentMethodType = param.FulfillmentMethodType
-            };
+                FulfillmentMethodType = param.FulfillmentMethodType,
+                SelectedStoreNumber = default,
+                TimeSlotReservationId = default,
+                SelectedDay = default
+             };
 
             CookieAccessor.Write(cookieData.Cookie);
         }
@@ -508,7 +536,7 @@ namespace Orckestra.Composer.Grocery.Providers
                         CultureInfo = param.CultureInfo,
                         CustomerId = param.CustomerId,
                         StoreId = preferredStore.Id,
-                        IsAuthenticated = true,
+                        IsAuthenticated = param.IsAuthenticated,
                         UpdatePreferredStore = false
                     }).ConfigureAwait(false);
                 }
@@ -536,12 +564,12 @@ namespace Orckestra.Composer.Grocery.Providers
             if (param.CustomerId == Guid.Empty) throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)));
 
             var cookieData = new ExtendedCookieData(CookieAccessor.Read());
-            var currentStore = await GetSelectedStoreAsync(new GetSelectedStoreParam
+            var currentStore = await GetSelectedStoreAsync(new GetSelectedFulfillmentParam
             {
                 TryGetFromDefaultSettings = true,
                 CultureInfo = param.CultureInfo,
                 CustomerId = param.CustomerId,
-                IsAuthenticated = true
+                IsAuthenticated = param.IsAuthenticated
             }).ConfigureAwait(false);
 
             //Get current reserved timeslot to set later for new recovered cart
@@ -566,7 +594,7 @@ namespace Orckestra.Composer.Grocery.Providers
                 CultureInfo = param.CultureInfo,
                 CustomerId = param.CustomerId,
                 StoreId = currentStore.Id,
-                IsAuthenticated = true
+                IsAuthenticated = param.IsAuthenticated
             }).ConfigureAwait(false);
 
             //For the new Сart set current reservation
