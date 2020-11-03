@@ -49,20 +49,15 @@ module Orckestra.Composer {
 
                         this.debounceUpdateItem(id);
                     },
-                    removeCartItem(index) {
-                        var item = this.Cart.LineItemDetailViewModels[index];
+                    removeCartItem(id) {
+                        let item = _.find(this.Cart.LineItemDetailViewModels, (i: any) => i.Id === id);
                         this.Mode.Loading = true;
                         self.checkoutService.removeCartItem(item.Id, item.ProductId)
-                            .then(cart => {
-                                if (cart) {
-                                    this.Cart = cart;
-                                }
-                            })
                             .finally(() => {
                                 this.Mode.Loading = false;
                             });
 
-                        this.Cart.LineItemDetailViewModels.splice(index, 1);
+                        this.Cart.LineItemDetailViewModels = _.filter(this.Cart.LineItemDetailViewModels, (i: any) => i.Id != id);
                     },
                     updateBeforeEditLineItemList() {
                         this.beforeEditLineItemList = this.Cart.LineItemDetailViewModels.map(x => ({ ...x}));
