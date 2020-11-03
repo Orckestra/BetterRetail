@@ -2,9 +2,11 @@
 ///<reference path='../../Mvc/Controller.ts' />
 ///<reference path='../FulfillmentService.ts' />
 /// <reference path='../../Composer.Cart/CartSummary/CartService.ts' />
+/// <reference path='../../Composer.Cart/CartSummary/CartStateService.ts' />
 /// <reference path='../../Composer.Cart/CartSummary/ICartStateService.ts' />
 ///<reference path='../../UI/UIModal.ts' />
 ///<reference path='../FulfillmentEvents.ts' />
+///<reference path='../FulfillmentHelper.ts' />
 
 module Orckestra.Composer {
     'use strict';
@@ -20,7 +22,7 @@ module Orckestra.Composer {
 
 			this.storeService.getFreshSelectedFulfillment().then((fulfillment) => {
                 let vueData: any = this.cartStateService.VueFullCart;
-				vueData.SelectedFulfillment = {...fulfillment, StoreLoading: false, TimeSlotLoading: false };
+                vueData.onFulfillmentLoaded(fulfillment);
 			}); 
         }
 
@@ -28,7 +30,7 @@ module Orckestra.Composer {
             let self: SelectedStoreInCartController = this;
             let commonFulfillmentOptions =  FulfillmentHelper.getCommonSelectedFulfillmentStateOptions();
             let fulfillmentSummaryMixins = {
-            
+          
                 data: {
                     ...commonFulfillmentOptions.data
                 },

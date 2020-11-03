@@ -21,7 +21,6 @@ module Orckestra.Composer {
         private initializeVueComponent(fulfillment: any) {
             let self: SelectedStoreInHeaderController = this;
             let commonFulfillmentOptions =  FulfillmentHelper.getCommonSelectedFulfillmentStateOptions();
-            commonFulfillmentOptions.data.SelectedFulfillment = fulfillment;
             this.SelectedStoreInHeader = new Vue({
                 el: '#vueSelectedStoreInHeader',
                 data: {
@@ -33,6 +32,7 @@ module Orckestra.Composer {
                     self.eventHub.subscribe(FulfillmentEvents.TimeSlotSelected,  e => this.onSlotSelected(e.data));
                     self.eventHub.subscribe(FulfillmentEvents.TimeSlotUpdating, e => this.onSlotUpdating(e.data));
                     self.eventHub.subscribe(FulfillmentEvents.TimeSlotSelectionFailed, e => this.onSlotFailed(e.data));
+                    this.onFulfillmentLoaded(fulfillment);
                 },
                 computed: {
                     TimeSlotReservationDisplay() {

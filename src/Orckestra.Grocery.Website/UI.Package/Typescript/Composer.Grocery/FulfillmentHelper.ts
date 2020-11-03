@@ -62,6 +62,14 @@ module Orckestra.Composer {
                     onMethodSelected(methodType: any) {
                         this.SelectedFulfillment.FulfillmentMethodType = methodType;
                     },
+                    onFulfillmentLoaded({ FulfillmentMethodType, Store, TimeSlot, TimeSlotReservation }: any) {
+                        this.SelectedFulfillment.FulfillmentMethodType = FulfillmentMethodType;
+                        this.SelectedFulfillment.Store = Store;
+                        this.SelectedFulfillment.TimeSlot = TimeSlot;
+                        this.SelectedFulfillment.TimeSlotReservation = TimeSlotReservation;
+                        this.SelectedFulfillment.TimeSlotLoading = false;
+                        this.SelectedFulfillment.StoreLoading = false;
+                    },
                     onStoreUpdating(data) {
                         this.SelectedFulfillment.StoreLoading = true;
                     },
