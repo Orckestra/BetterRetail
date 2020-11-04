@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Orckestra.Composer.Cart.Factory;
 using Orckestra.Composer.Cart.Factory.Order;
+using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Parameters.Order;
 using Orckestra.Composer.Cart.Repositories.Order;
+using Orckestra.Composer.Cart.ViewModels;
 using Orckestra.Composer.Cart.ViewModels.Order;
 using Orckestra.Composer.Enums;
 using Orckestra.Composer.Parameters;
@@ -13,6 +17,7 @@ using Orckestra.Composer.Providers.Dam;
 using Orckestra.Composer.Repositories;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Services.Lookup;
+using Orckestra.Composer.Utils;
 using Orckestra.Overture.ServiceModel.Orders;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
@@ -20,6 +25,13 @@ namespace Orckestra.Composer.Cart.Services.Order
 {
     public class OrderHistoryViewService : IOrderHistoryViewService
     {
+        public enum PickingResult
+        {
+            Substituted,
+            NotAvailable,
+            Available
+        }
+
         protected virtual IOrderHistoryViewModelFactory OrderHistoryViewModelFactory { get; private set; }
         protected virtual IOrderUrlProvider OrderUrlProvider { get; private set; }
         protected virtual ILookupService LookupService { get; private set; }
@@ -28,6 +40,8 @@ namespace Orckestra.Composer.Cart.Services.Order
         protected virtual IImageService ImageService { get; private set; }
         protected virtual IShippingTrackingProviderFactory ShippingTrackingProviderFactory { get; private set; }
         protected virtual ICustomerRepository CustomerRepository { get; private set; }
+        protected IComposerJsonSerializer ComposerJsonSerializer { get; }
+        public ILineItemViewModelFactory LineItemViewModelFactory { get; }
 
         public OrderHistoryViewService(
             IOrderHistoryViewModelFactory orderHistoryViewModelFactory,
@@ -37,7 +51,9 @@ namespace Orckestra.Composer.Cart.Services.Order
             IOrderDetailsViewModelFactory orderDetailsViewModelFactory,
             IImageService imageService,
             IShippingTrackingProviderFactory shippingTrackingProviderFactory,
-            ICustomerRepository customerRepository)
+            ICustomerRepository customerRepository,
+            IComposerJsonSerializer composerJsonSerializer,
+            ILineItemViewModelFactory lineItemViewModelFactory)
         {
             OrderHistoryViewModelFactory = orderHistoryViewModelFactory ?? throw new ArgumentNullException(nameof(orderHistoryViewModelFactory));
             OrderUrlProvider = orderUrlProvider ?? throw new ArgumentNullException(nameof(orderUrlProvider));
@@ -47,6 +63,8 @@ namespace Orckestra.Composer.Cart.Services.Order
             ImageService = imageService ?? throw new ArgumentNullException(nameof(imageService));
             ShippingTrackingProviderFactory = shippingTrackingProviderFactory ?? throw new ArgumentNullException(nameof(shippingTrackingProviderFactory));
             CustomerRepository = customerRepository ?? throw new ArgumentNullException(nameof(customerRepository));
+            ComposerJsonSerializer = composerJsonSerializer ?? throw new ArgumentNullException(nameof(composerJsonSerializer));
+            LineItemViewModelFactory = lineItemViewModelFactory ?? throw new ArgumentNullException(nameof(lineItemViewModelFactory));
         }
 
         /// <summary>
@@ -255,7 +273,107 @@ namespace Orckestra.Composer.Cart.Services.Order
                 ShipmentsNotes = shipmentsNotes
             });
 
+            if (order.Cart.PropertyBag.TryGetValue("PickedItems", out var pickedItemsObject))
+            {
+                var pickedItemsList = ComposerJsonSerializer.Deserialize<List<PickedItemViewModel>>(pickedItemsObject.ToString());
+                var shipment = viewModel.Shipments.First();
+                shipment.LineItems = await ProcessPickedLineItems(pickedItemsList, shipment.LineItems, getOrderParam.CultureInfo).ConfigureAwait(false);
+            };
+
             return viewModel;
+        }
+
+        protected virtual async Task<List<LineItemDetailViewModel>> ProcessPickedLineItems(List<PickedItemViewModel> pickedItemsList,
+            List<LineItemDetailViewModel> lineItemsList,
+            CultureInfo culture)
+        {
+            var itemsToProcess = pickedItemsList
+               .Where(x => x.PickingResult == PickingResult.Substituted.ToString() || x.PickingResult == PickingResult.NotAvailable.ToString())
+               .Select(x => (x.ProductId, x.VariantId)).ToList();
+
+            if (!itemsToProcess.Any()) return lineItemsList;
+
+            var result = new List<LineItemDetailViewModel>();
+            var imgDictionary = await CreateImageDictionary(itemsToProcess).ConfigureAwait(false);
+            foreach (var pickedItem in pickedItemsList)
+            {
+                var itemPickingStatus = (PickingResult)Enum.Parse(typeof(PickingResult), pickedItem.PickingResult, true);
+                LineItemDetailViewModel toAddVM = null;
+
+                if (itemPickingStatus == PickingResult.Available)
+                {
+                    foreach (var lineItem in lineItemsList)
+                    {
+                        if (lineItem.ProductId != pickedItem.ProductId || lineItem.VariantId != pickedItem.VariantId) continue;
+                        if (lineItem.Quantity == pickedItem.Quantity)
+                        {
+                            toAddVM = lineItem;
+                        }
+                        else
+                        {
+                            var createdLineItem = CreateLineItemFromPickedItem(pickedItem);
+                            toAddVM = LineItemViewModelFactory.GetLineItemDetailViewModel(new CreateLineItemDetailViewModelParam
+                            {
+                                LineItem = createdLineItem,
+                                CultureInfo = culture
+                            });
+                            toAddVM.ImageUrl = lineItem.ImageUrl;
+                            toAddVM.FallbackImageUrl = lineItem.FallbackImageUrl;
+                        }
+                        break;
+                    }
+                }
+                else if (itemPickingStatus == PickingResult.NotAvailable || itemPickingStatus == PickingResult.Substituted)
+                {
+                    LineItem toAddLineItem = CreateLineItemFromPickedItem(pickedItem);
+
+                    toAddVM = LineItemViewModelFactory.GetLineItemDetailViewModel(new CreateLineItemDetailViewModelParam
+                    {
+                        LineItem = toAddLineItem,
+                        CultureInfo = culture,
+                        ImageDictionary = imgDictionary
+                    });
+
+                    if (itemPickingStatus == PickingResult.Substituted)
+                    {
+                        toAddVM.IsSubstituted = true;
+                    }
+                    else if (itemPickingStatus == PickingResult.NotAvailable)
+                    {
+                        toAddVM.IsUnavailable = true;
+                    }
+                }
+                result.Add(toAddVM);
+            }
+
+            return result;
+        }
+
+        private async Task<IDictionary<Tuple<string, string>, ProductMainImage>> CreateImageDictionary(List<(string ProductId, string VariantId)> itemsToProcess)
+        {
+            var productImageInfo = new ProductImageInfo
+            {
+                ImageUrls = await ImageService.GetImageUrlsAsync(itemsToProcess).ConfigureAwait(false)
+            };
+            var imgDictionary = LineItemHelper.BuildImageDictionaryFor(productImageInfo.ImageUrls);
+            return imgDictionary;
+        }
+
+        protected virtual LineItem CreateLineItemFromPickedItem(PickedItemViewModel pickedItem)
+        {
+            return new LineItem
+            {
+                ProductId = pickedItem.ProductId,
+                Quantity = pickedItem.DisplayQuantity,
+                CurrentPrice = pickedItem.DisplayPrice,
+                DefaultPrice = pickedItem.DisplayPrice,
+                Total = pickedItem.DisplayTotalPrice,
+                VariantId = pickedItem.VariantId,
+                ProductSummary = new CartProductSummary
+                {
+                    DisplayName = pickedItem.ProductTitle
+                }
+            };
         }
 
         protected virtual async Task<Dictionary<Guid, List<string>>> GetShipmentsNotes(List<Shipment> shipments, string scope)

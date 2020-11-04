@@ -21,5 +21,13 @@ namespace Orckestra.Composer.Cart.Factory
         /// Gets a list of LineItemDetailViewModel from a list of overture LineItem objects.
         /// </summary>
         IEnumerable<LightLineItemDetailViewModel> CreateLightViewModel(CreateLightListOfLineItemDetailViewModelParam param);
+
+        /// <summary>
+        /// Gets a line item detail view model from a line item
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        LineItemDetailViewModel GetLineItemDetailViewModel(CreateLineItemDetailViewModelParam param);
+
     }
 }
