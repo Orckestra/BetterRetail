@@ -277,13 +277,13 @@ namespace Orckestra.Composer.Cart.Services.Order
             {
                 var pickedItemsList = ComposerJsonSerializer.Deserialize<List<PickedItemViewModel>>(pickedItemsObject.ToString());
                 var shipment = viewModel.Shipments.First();
-                shipment.LineItems = await ProcessPickedLineItems(pickedItemsList, shipment.LineItems, getOrderParam.CultureInfo).ConfigureAwait(false);
+                shipment.LineItems = await ProcessPickedLineItemsAsync(pickedItemsList, shipment.LineItems, getOrderParam.CultureInfo).ConfigureAwait(false);
             };
 
             return viewModel;
         }
 
-        protected virtual async Task<List<LineItemDetailViewModel>> ProcessPickedLineItems(List<PickedItemViewModel> pickedItemsList,
+        protected virtual async Task<List<LineItemDetailViewModel>> ProcessPickedLineItemsAsync(List<PickedItemViewModel> pickedItemsList,
             List<LineItemDetailViewModel> lineItemsList,
             CultureInfo culture)
         {
