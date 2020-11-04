@@ -241,6 +241,7 @@
     <Compile Include="ViewModels\CartViewModel.cs" />
     <Compile Include="ViewModels\CheckoutNavigationViewModel.cs" />
     <Compile Include="ViewModels\GroupedLineItemDetailViewModel.cs" />
+    <Compile Include="ViewModels\PickedItemViewModel.cs" />
     <Compile Include="ViewModels\PickUpAddressViewModel.cs" />
     <Compile Include="ViewModels\SingleCheckoutPaymentViewModel.cs" />
     <Compile Include="ViewModels\CheckoutPaymentViewModel.cs" />

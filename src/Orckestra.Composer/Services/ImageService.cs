@@ -41,7 +41,7 @@ namespace Orckestra.Composer.Services
             return GetImageUrlsAsync(new[] { (lineItem.ProductId, lineItem.VariantId) });
         }
 
-        protected virtual async Task<List<ProductMainImage>> GetImageUrlsAsync(ICollection<(string productId, string variantId)> products)
+        public virtual async Task<List<ProductMainImage>> GetImageUrlsAsync(ICollection<(string productId, string variantId)> products)
         {
             var imageUrls = await GetMediaImageUrlsForProducts(products).ConfigureAwait(false);
             var getImageParam = new GetProductMainImagesParam

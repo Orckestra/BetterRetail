@@ -33,7 +33,7 @@ namespace Orckestra.Composer.Cart.Factory
         protected IComposerContext ComposerContext { get; private set; }
         protected IRecurringOrderProgramViewModelFactory RecurringOrderProgramViewModelFactory { get; private set; }
         protected IRecurringOrdersSettings RecurringOrdersSettings { get; private set; }
-
+ 
         public LineItemViewModelFactory(IViewModelMapper viewModelMapper,
             ILocalizationProvider localizationProvider,
             IProductUrlProvider productUrlProvider,
@@ -61,7 +61,6 @@ namespace Orckestra.Composer.Cart.Factory
         public virtual IEnumerable<LineItemDetailViewModel> CreateViewModel(CreateListOfLineItemDetailViewModelParam param)
         {
             if (param.LineItems == null) { yield break; }
-
             var imgDictionary = LineItemHelper.BuildImageDictionaryFor(param.ImageInfo.ImageUrls);
 
             var preMapAction = !(param.Cart is ProcessedCart processedCart)
@@ -83,9 +82,13 @@ namespace Orckestra.Composer.Cart.Factory
             }
         }
 
-        protected virtual LineItemDetailViewModel GetLineItemDetailViewModel(CreateLineItemDetailViewModelParam param)
+        public virtual LineItemDetailViewModel GetLineItemDetailViewModel(CreateLineItemDetailViewModelParam param)
         {
-            param.PreMapAction.Invoke(param.LineItem);
+            if (param.PreMapAction != null)
+            {
+                param.PreMapAction.Invoke(param.LineItem);
+            }
+
             var lineItem = param.LineItem;
 
             var vm = ViewModelMapper.MapTo<LineItemDetailViewModel>(lineItem, param.CultureInfo);
