@@ -205,7 +205,7 @@
             @foreach (var item in shipment.LineItems)
             {
                 index++;
-                <div class="row  pt-3  @(index != shipment.LineItems.Count ? "border-bottom pb-2" : "")">
+                <div class="row  pt-3  @(index != shipment.LineItems.Count ? "border-bottom pb-2" : "")  @(item.IsUnavailable || item.IsSubstituted ? "disabled" : "")">
                     @if (item.Rewards != null && item.Rewards.Count > 0)
                     {
                         <div class="col-12 order-1  text-center">
@@ -309,6 +309,26 @@
                         </div>
                     }
                 </div>
+                if (item.IsSubstituted)
+                {
+                    <div class="row alert-danger small">
+                        <div class="col-12">
+                            <div class="text-center p-1">
+                                @Html.Localize("MyAccount", "L_SubstituteOrderItem")
+                            </div>
+                        </div>
+                    </div>
+                }
+                if (item.IsUnavailable)
+                {
+                    <div class="row alert-danger small ">
+                        <div class="col-12">
+                            <div class="text-center p-1">
+                                @Html.Localize("MyAccount", "L_UnavailableOrderItem")
+                            </div>
+                        </div>
+                    </div>
+                }
             }
         </div>
     </div>

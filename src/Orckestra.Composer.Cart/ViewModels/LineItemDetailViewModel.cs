@@ -132,6 +132,14 @@ namespace Orckestra.Composer.Cart.ViewModels
         /// </summary>
         public List<RecurringOrderProgramFrequencyViewModel> RecurringOrderProgramFrequencies { get; set; }
 
+        /// <summary>
+        /// The item was replaced by another item
+        /// </summary>
+        public bool IsSubstituted { get; set; }
+        /// <summary>
+        /// The item is not available and cannot be replaced
+        /// </summary>
+        public bool IsUnavailable { get; set; }
 
         public LineItemDetailViewModel()
         {

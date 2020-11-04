@@ -10,4 +10,8 @@
         margin-left: 0px;
         margin-right: 0px;
     }
+
+    &.disabled {
+        opacity: 0.5;
+    }
 }
