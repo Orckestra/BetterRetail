@@ -13,7 +13,7 @@
                 {{/if}}
                 <a data-qa="search-product-title" href="{{Url}}" title="{{FullDisplayName}}" data-productId="{{ProductId}}" data-index='{{@index}}' data-oc-click='searchProductClick'>{{DisplayName}}</a>
             </div>
-            {{#if IsEligibleForRecurring}}
+            {{#if IsRecurringOrderEligible}}
                 <div class="col-3 col-md-2 product-tile-recurring">
                     <img src="/UI.Package/Images/recurring.svg" class="recurring-icon" alt="{{localize 'General' 'L_RecurringProduct'}}" title="{{localize 'General' 'L_RecurringProduct'}}" />
                 </div>
@@ -21,9 +21,7 @@
         </div>
     </div>
 
-    {{#with Pricing}}
-
-        {{#if HasPriceRange}}
+       {{#if HasPriceRange}}
             {{#if IsOnSale}}
                 <div class="product-tile-special-price">
                     <small class="text-danger">{{localize 'List-Search' 'L_PriceFrom'}}</small>
@@ -36,13 +34,13 @@
                     <small>{{localize 'List-Search' 'L_PriceFrom'}}</small>
                 </div>
                 <div class="product-tile-price">
-                    <span class="h4" data-qa="search-product-price">{{DisplayPrice}}</span>
+                    <span class="h4" data-qa="search-product-price">{{DisplayListPrice}}</span>
                 </div>
             {{/if}}
         {{else}}
             {{#if IsOnSale}}
                 <div class="product-tile-special-price">
-                    <del>{{DisplayPrice}}</del>
+                    <del>{{DisplayListPrice}}</del>
                 </div>
                 <div class="product-tile-price">
                     <span class="h4  text-danger">{{DisplaySpecialPrice}}</span>
@@ -52,12 +50,11 @@
                     <!--only used for proper spacing-->
                 </div>
                 <div class="product-tile-price">
-                    <span class="h4" data-qa="search-product-price">{{DisplayPrice}}</span>
+                    <span class="h4" data-qa="search-product-price">{{DisplayListPrice}}</span>
                 </div>
             {{/if}}
         {{/if}}
 
-    {{/with}}
 
     {{> AddToCartSearch}}
 </div>

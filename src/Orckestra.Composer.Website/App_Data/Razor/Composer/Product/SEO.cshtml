@@ -11,7 +11,7 @@
 }
 
 @{
-	var productUrl = string.Format("{0}{1}", Request.Url.GetLeftPart(UriPartial.Authority), Model.ProductDetailUrl);
+	var productUrl = string.Format("{0}{1}", Request.Url.GetLeftPart(UriPartial.Authority), Model.Url);
 	var productPrice = Model.Price.HasValue ? Model.Price.Value.ToString("n2", CultureInfo.InvariantCulture) : null;
 }
 

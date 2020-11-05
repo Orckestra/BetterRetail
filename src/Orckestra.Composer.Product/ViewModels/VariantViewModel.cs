@@ -18,7 +18,7 @@ namespace Orckestra.Composer.Product.ViewModels
         public string Sku { get; set; }
 
         [Formatting("General", "PriceFormat")]
-        public string ListPrice { get; set; }
+        public string DisplayListPrice { get; set; }
 
         public bool IsOnSale { get; set; }
 

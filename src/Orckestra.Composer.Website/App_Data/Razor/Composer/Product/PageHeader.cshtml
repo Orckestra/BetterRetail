@@ -14,7 +14,7 @@
     {
         PageTitle = ProductContext.ViewModel.DisplayName,
         MetaDescription = ProductContext.ViewModel.Description,
-        CanonicalUrl = string.Format("{0}{1}", Request.Url.GetLeftPart(UriPartial.Authority), ProductContext.ViewModel.ProductDetailUrl)
+        CanonicalUrl = string.Format("{0}{1}", Request.Url.GetLeftPart(UriPartial.Authority), ProductContext.ViewModel.Url)
     };
 }
 

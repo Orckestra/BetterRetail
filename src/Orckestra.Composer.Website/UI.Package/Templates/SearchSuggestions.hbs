@@ -24,15 +24,15 @@
 								<a data-qa="search-product-title" data-oc-click="selectedProduct" data-sku="{{Sku}}" data-index="@index" class="suggestion-title" href="{{Url}}" title="{{FullDisplayName}}">{{DisplayName}}</a>
 							</div>
 							<div class="product-tile-special-price">
-								{{#if Pricing.IsOnSale }}
-								<del>{{Pricing.DisplayPrice}}</del>
+								{{#if IsOnSale }}
+								<del>{{DisplayListPrice}}</del>
 								{{/if}}
 							</div>
 							<div class="product-tile-price">
-								{{#if Pricing.IsOnSale }}
-								<span class="h4  text-danger" data-qa="search-product-price">{{Pricing.DisplaySpecialPrice}}</span>
+								{{#if IsOnSale }}
+								<span class="h4  text-danger" data-qa="search-product-price">{{DisplaySpecialPrice}}</span>
 								{{else}}
-								<span class="h4" data-qa="search-product-price">{{Pricing.DisplayPrice}}</span>
+								<span class="h4" data-qa="search-product-price">{{DisplayListPrice}}</span>
 								{{/if}}
 							</div>
 						</div>
