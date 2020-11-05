@@ -96,6 +96,14 @@ namespace Orckestra.Composer.ViewModels
         /// </summary>
         public string DisplaySpecialPrice { get; set; }
 
+        /// <summary>
+        ///     Gets or sets a value indicating whether this instance is on sale.
+        /// </summary>
+        /// <remarks>
+        ///     If true Price/DisplaySpecialPrice will contains the discount price and ListPrice/DisplayPrice will contains the regular price
+        ///     If false Price/DisplaySpecialPrice will be set to null and List/DisplayPrice will contains the regular Price
+        /// </remarks>
+        public bool IsOnSale { get; set; }
 
         /// <summary>
         ///     Gets or sets a value indicating wether this instance has a range of price.

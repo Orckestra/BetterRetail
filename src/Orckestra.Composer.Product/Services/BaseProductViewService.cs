@@ -221,6 +221,7 @@ namespace Orckestra.Composer.Product.Services
             vm.Price = GetCurrentPrice(prices, productVariant.Product, productVariant.Variant);
             vm.ProductId = productId;
             vm.VariantId = variantId;
+            vm.IsOnSale = vm.Price < vm.ListPrice;
             vm.HasVariants = productVariant.Product.Variants != null && productVariant.Product.Variants.Count > 0;
             //For now all the related products add to cart button is enable to add to cart
             vm.IsAvailableToSell = true;

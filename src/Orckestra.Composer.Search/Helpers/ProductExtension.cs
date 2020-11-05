@@ -10,7 +10,7 @@ namespace Orckestra.Composer.Search.Helpers
         {
         }
 
-        public static bool IsEligibleForRecurring(this PropertyBag bag)
+        public static bool IsRecurringOrderEligible(this PropertyBag bag)
         {        
             var program = GetAttribute(bag, Constants.ProductAttributes.RecurringOrderProgramName);
             return !string.IsNullOrWhiteSpace(program);
