@@ -143,10 +143,5 @@ namespace Orckestra.Composer.ViewModels
             }
         }
 
-        public decimal? Weight { get; set; }
-
-        public string WeightUOM { get; set; }
-
-        public decimal ItemFormat { get; set; }
     }
 }
