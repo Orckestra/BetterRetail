@@ -48,6 +48,12 @@ namespace Orckestra.Composer.Product.ViewModels
 
         public SpecificationsViewModel Specifications { get; set; }
 
+        public decimal? Weight { get; set; }
+
+        public string WeightUOM { get; set; }
+
+        public decimal ItemFormat { get; set; }
+
         public ProductViewModel()
         {
             KeyVariantAttributeItems = new List<KeyVariantAttributeItem>();
