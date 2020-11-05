@@ -225,16 +225,17 @@ namespace Orckestra.Composer.Search.Services
             }
 
             var productSearchVm = ViewModelMapper.MapTo<ProductSearchViewModel>(productDocument, cultureInfo);
+            productSearchVm.ProductId = productDocument.ProductId;
             productSearchVm.BrandId = ExtractLookupId("Brand_Facet", productDocument.PropertyBag);
-
             MapProductSearchViewModelInfos(productSearchVm, productDocument, cultureInfo);
             MapProductSearchViewModelUrl(productSearchVm, variantId, cultureInfo, createSearchViewModelParam.SearchParam.Criteria.BaseUrl);
             MapProductSearchViewModelImage(productSearchVm, imgDictionary);
             productSearchVm.IsAvailableToSell = await GetProductSearchViewModelAvailableForSell(productSearchVm, productDocument).ConfigureAwait(false);
-            productSearchVm.Pricing = await PriceProvider.GetPriceAsync(productSearchVm.HasVariants, productDocument).ConfigureAwait(false);
-            productSearchVm.IsEligibleForRecurring = RecurringOrdersSettings.Enabled && productDocument.PropertyBag.IsEligibleForRecurring();
+            var pricing = await PriceProvider.GetPriceAsync(productSearchVm.HasVariants, productDocument).ConfigureAwait(false);
+            MapProductSearchViewModelPricing(productSearchVm, pricing);
+            productSearchVm.IsRecurringOrderEligible = RecurringOrdersSettings.Enabled && productDocument.PropertyBag.IsRecurringOrderEligible();
 
-            productSearchVm.Context["IsEligibleForRecurring "] = productSearchVm.IsEligibleForRecurring;
+            productSearchVm.Context["IsRecurringOrderEligible "] = productSearchVm.IsRecurringOrderEligible;
 
             return productSearchVm;
         }
@@ -446,6 +447,16 @@ namespace Orckestra.Composer.Search.Services
             return result > 0;
         }
 
+        protected virtual void MapProductSearchViewModelPricing(ProductSearchViewModel productSearchVm, ProductPriceSearchViewModel pricing)
+        {
+            productSearchVm.DisplayListPrice = pricing.DisplayPrice;
+            productSearchVm.DisplaySpecialPrice = pricing.DisplaySpecialPrice;
+            productSearchVm.HasPriceRange = pricing.HasPriceRange;
+            productSearchVm.ListPrice = pricing.ListPrice;
+            productSearchVm.Price = pricing.Price;
+            productSearchVm.IsOnSale = pricing.IsOnSale;
+            productSearchVm.PriceListId = pricing.PriceListId;
+        }
         protected virtual void MapProductSearchViewModelImage(
             ProductSearchViewModel productSearchVm,
             IDictionary<Tuple<string, string>,

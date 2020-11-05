@@ -65,7 +65,7 @@ module Orckestra.Composer {
                     return product.ProductId === productId && product.VariantId === variantId;
                 }
             });
-            var price: number = product.Pricing.IsOnSale ? product.Pricing.Price : product.Pricing.ListPrice;
+            var price: number = product.IsOnSale ? product.Price : product.ListPrice;
 
             var busy = this.asyncBusy({ elementContext: actionContext.elementContext, containerContext: productContext });
 

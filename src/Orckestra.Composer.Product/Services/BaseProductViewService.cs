@@ -219,13 +219,15 @@ namespace Orckestra.Composer.Product.Services
             vm.Quantity = GetQuantity();
             vm.ListPrice = GetProductBasePrice(prices, productVariant.Product, productVariant.Variant);
             vm.Price = GetCurrentPrice(prices, productVariant.Product, productVariant.Variant);
-            vm.ProductId = productVariant.Product.Id;
+            vm.ProductId = productId;
+            vm.VariantId = variantId;
+            vm.IsOnSale = vm.Price < vm.ListPrice;
             vm.HasVariants = productVariant.Product.Variants != null && productVariant.Product.Variants.Count > 0;
             //For now all the related products add to cart button is enable to add to cart
             vm.IsAvailableToSell = true;
 
             vm.DisplaySpecialPrice = GetDisplayPrice(vm.Price, cultureInfo);
-            vm.DisplayPrice = GetDisplayPrice(vm.ListPrice, cultureInfo);
+            vm.DisplayListPrice = GetDisplayPrice(vm.ListPrice, cultureInfo);
 
             var recurringOrdersEnabled = RecurringOrdersSettings.Enabled;
             var recurringOrderProgramName = productVariant.Product.PropertyBag.GetValueOrDefault<string>(Constants.ProductAttributes.RecurringOrderProgramName);
