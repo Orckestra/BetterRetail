@@ -23,7 +23,7 @@ namespace Orckestra.Composer.ViewModels
         /// Bag holding properties that will be added dynamically to the view model.
         /// </summary>
         [MetadataIgnore]
-        public Dictionary<string, object> Bag { get; set; }
+        public Dictionary<string, object> Bag { get; private set; }
 
         /// <summary>
         /// Bag holding properties that will be added dynamically to the Json Context
