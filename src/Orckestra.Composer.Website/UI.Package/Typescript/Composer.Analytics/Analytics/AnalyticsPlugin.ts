@@ -424,7 +424,7 @@ module Orckestra.Composer {
                     var analyticsProduct: IAnalyticsProduct = {
                         id: product.ProductId,
                         name: product.DisplayName,
-                        price: this.trimPriceAndUnlocalize(product.Pricing.IsOnSale ? product.Pricing.Price : product.Pricing.ListPrice),
+                        price: this.trimPriceAndUnlocalize(product.IsOnSale ? product.Price : product.ListPrice),
                         brand: product.Brand,
                         category: product.CategoryId,
                         list: data.ListName,

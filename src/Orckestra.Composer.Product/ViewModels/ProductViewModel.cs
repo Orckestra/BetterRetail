@@ -1,43 +1,22 @@
-﻿using System.Collections.Generic;
-using Orckestra.Composer.Enums;
-using Orckestra.Composer.ViewModels;
+﻿using Orckestra.Composer.ViewModels;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Orckestra.Composer.Product.ViewModels
 {
-    public sealed class ProductViewModel : BaseViewModel
+    public sealed class ProductViewModel : BaseProductViewModel
     {
-        [MapTo("Id")]
-        public string ProductId { get; set; }
-
-        public string Sku { get; set; }
-
-        public string Description { get; set; }
-
-        [Lookup(LookupType.Product, "Brand")]
-        public string Brand { get; set; }
-
-        [MapTo("Brand")]
-        public string BrandId { get; set; }
-
-        [MapTo("PrimaryParentCategoryId")]
-        public string CategoryId { get; set; }
-
-        //TODO move the the Context when available
         public string SelectedVariantId { get; set; }
 
-        public string DisplayName { get; set; }
-
-        [Formatting("General", "PriceFormat")]
-        public string ListPrice { get; set; }
-
+        /// <summary>
+        /// The base price for the product
+        /// </summary>
+        public decimal? ListPrice { get; set; }
+        /// <summary>
+        /// The current price of the product. This will usually be the same as <see cref="ListPrice"/>,
+        /// but could be less if the product is discounted.
+        /// </summary>
         public decimal? Price { get; set; }
-
-        public string DefinitionName { get; set; }
-
-        public string ProductDetailUrl { get; set; }
-
-        public string FallbackImageUrl { get; set; }
 
         public CurrencyViewModel Currency { get; set; }
 
@@ -60,14 +39,6 @@ namespace Orckestra.Composer.Product.ViewModels
         [MapTo("DisplayName")]
         public Dictionary<string, string> LocalizedDisplayNames { get; set; }
 
-        /// <summary>
-        /// Is eligible if RecurringOrderProgramName is not null or empty and if recurring orders flag is enabled
-        /// </summary>
-        public bool IsRecurringOrderEligible { get; set; }
-        /// <summary>
-        /// Name of the recurring order program associated to the product
-        /// </summary>
-        public string RecurringOrderProgramName { get; set; }
         /// <summary>
         /// List of frequencies available based on the program
         /// </summary>

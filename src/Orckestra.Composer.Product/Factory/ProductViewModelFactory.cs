@@ -199,7 +199,7 @@ namespace Orckestra.Composer.Product.Factory
 
             productDetailViewModel.Price = param.Product.ListPrice;
 
-            productDetailViewModel.ProductDetailUrl = ProductUrlProvider.GetProductUrl(new GetProductUrlParam
+            productDetailViewModel.Url = ProductUrlProvider.GetProductUrl(new GetProductUrlParam
             {
                 CultureInfo = param.CultureInfo,
                 ProductId = param.Product.Id,
@@ -211,7 +211,7 @@ namespace Orckestra.Composer.Product.Factory
             productDetailViewModel.CreateAccountUrl = MyAccountUrlProvider.GetCreateAccountUrl(new BaseUrlParameter
             {
                 CultureInfo = param.CultureInfo,
-                ReturnUrl = productDetailViewModel.ProductDetailUrl
+                ReturnUrl = productDetailViewModel.Url
             });
 
             SetViewModelContext(productDetailViewModel, selectedVariantVm, allVariantsVm);
@@ -397,7 +397,7 @@ namespace Orckestra.Composer.Product.Factory
                 productViewModel.SelectedVariantId = selectedVariantVm.Id;
                 productViewModel.Sku = selectedVariantVm.Sku;
                 productViewModel.DisplayName = selectedVariantVm.DisplayName;
-                productViewModel.ListPrice = selectedVariantVm.ListPrice;
+                productViewModel.DisplayListPrice = selectedVariantVm.DisplayListPrice;
                 productViewModel.Images = selectedVariantVm.Images;
                 productViewModel.SelectedImage = selectedVariantVm.SelectedImage;
                 productViewModel.FallbackImageUrl = selectedVariantVm.FallbackImageUrl;
@@ -414,7 +414,7 @@ namespace Orckestra.Composer.Product.Factory
 
             if (selectedVariantVm != null)
             {
-                productViewModel.Context["allVariants"] = allVariantsVm.Select(v => new { v.ListPrice, v.Id, v.Kvas, v.Sku });
+                productViewModel.Context["allVariants"] = allVariantsVm.Select(v => new { v.DisplayListPrice, v.Id, v.Kvas, v.Sku });
                 productViewModel.Context["selectedVariantId"] = selectedVariantVm.Id;
                 productViewModel.Context["displayedVariantId"] = selectedVariantVm.Id;
             }
@@ -426,6 +426,14 @@ namespace Orckestra.Composer.Product.Factory
             productViewModel.Context["Sku"] = productViewModel.Sku;
             productViewModel.Context["keyVariantAttributeItems"] = productViewModel.KeyVariantAttributeItems;
             productViewModel.Context["CreateAccountUrl"] = productViewModel.CreateAccountUrl;
+            productViewModel.Context["Weight"] = productViewModel.Weight;
+            productViewModel.Context["WeightUOM"] = productViewModel.WeightUOM;
+            productViewModel.Context["ItemFormat"] = productViewModel.ItemFormat;
+            productViewModel.Context["SellingMethod"] = productViewModel.SellingMethod;
+            productViewModel.Context["UnitOfMeasure"] = productViewModel.UnitOfMeasure;
+            productViewModel.Context["IsUnit"] = productViewModel.IsUnit;
+            productViewModel.Context["IsUnitMeasure"] = productViewModel.IsUnitMeasure;
+            productViewModel.Context["IsApproxUnit"] = productViewModel.IsApproxUnit;
 
             // Transfer custom properties that might have been added
             foreach (var property in productViewModel.Bag)

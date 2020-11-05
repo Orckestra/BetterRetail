@@ -333,6 +333,7 @@
     <Compile Include="Utils\RecurringOrderTemplateHelper.cs" />
     <Compile Include="ViewEngine\HandleBarsHelpers\FormatValueHelper.cs" />
     <Compile Include="ViewEngine\HandleBarsHelpers\LookupHelper.cs" />
+    <Compile Include="ViewModels\BaseProductViewModel.cs" />
     <Compile Include="ViewModels\CategoryViewModel.cs" />
     <Compile Include="ViewModels\CurrencyViewModel.cs" />
     <Compile Include="ViewModels\EnumLocalizationAttribute.cs" />
