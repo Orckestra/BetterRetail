@@ -66,6 +66,7 @@ module Orckestra.Composer {
 
                     this.eventHub.publish(concern + 'PricesChanged', { data: details });
                     this.eventHub.publish(concern + 'PriceCalculated', { data: details });
+                    return result;
                 });
         }
 

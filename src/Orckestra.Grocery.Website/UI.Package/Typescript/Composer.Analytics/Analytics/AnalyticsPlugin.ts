@@ -462,7 +462,7 @@ module Orckestra.Composer {
                     var analyticsProduct: IAnalyticsProduct = {
                         id: product.ProductId,
                         name: product.DisplayName,
-                        price: this.trimPriceAndUnlocalize(product.Pricing.IsOnSale ? product.Pricing.Price : product.Pricing.ListPrice),
+                        price: this.trimPriceAndUnlocalize(product.IsOnSale ? product.Price : product.ListPrice),
                         brand: product.Brand,
                         category: product.CategoryId,
                         list: data.ListName,
@@ -526,7 +526,7 @@ module Orckestra.Composer {
             var product: IAnalyticsProduct = {
                 id: data.Product.ProductId,
                 name: data.Product.DisplayName,
-                price: this.trimPriceAndUnlocalize(data.Product.Price || data.Product.Pricing.Price),
+                price: this.trimPriceAndUnlocalize(data.Product.Price || data.Product.ListPrice),
                 brand: data.Product.Brand,
                 category: data.Product.CategoryId,
                 position: position

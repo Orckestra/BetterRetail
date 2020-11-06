@@ -291,4 +291,7 @@
   <data name="F_RemoveItem" xml:space="preserve">
     <value>Remove Product</value>
   </data>
+  <data name="L_ShippingFee" xml:space="preserve">
+    <value>Shipping fee</value>
+  </data>
 </root>

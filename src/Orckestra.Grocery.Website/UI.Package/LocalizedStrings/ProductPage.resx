@@ -168,4 +168,19 @@
   <data name="L_StoreInventory" xml:space="preserve">
     <value>Inventory</value>
   </data>
+  <data name="L_Approx" xml:space="preserve">
+    <value>approx.</value>
+  </data>
+  <data name="L_Each" xml:space="preserve">
+    <value>each</value>
+  </data>
+  <data name="L_Unit" xml:space="preserve">
+    <value>unit</value>
+  </data>
+  <data name="L_UnitMeasure" xml:space="preserve">
+    <value>1 unit ({0} {1})</value>
+  </data>
+  <data name="L_UnitMeasureApprox" xml:space="preserve">
+    <value>1 unit (approx {0} {1})</value>
+  </data>
 </root>

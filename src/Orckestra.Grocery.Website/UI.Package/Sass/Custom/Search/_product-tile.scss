@@ -27,6 +27,7 @@
         padding-top: 3px;
         position: relative;
         overflow: hidden;
+        background-color: $light;
     }
 
     .product-tile-brand {
@@ -36,6 +37,7 @@
     }
 
     .product-tile-price {
+        background-color: $light;
         height: ceil($h4-font-size * $line-height-base);
     }
 
@@ -52,8 +54,9 @@
         display: flex;
         background-color: #fff;
         height: 0;
-        padding-bottom: 100%;
+        padding-bottom: $product-image-ratio * 100%;
         position: relative;
+        overflow: hidden;
     }
 
     .product-tile-recurring {

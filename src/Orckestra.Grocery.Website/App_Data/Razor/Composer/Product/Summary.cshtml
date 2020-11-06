@@ -51,7 +51,7 @@
                 @Html.LazyFunction("Composer.Product.RecurringFrequency")
 
                 <div class="mb-4" property="offers" typeof="Offer">
-                    @Partial("PriceDiscount", Model)
+                    @ProductPrice()
                 </div>
 
                 <div class="mb-4">
@@ -110,6 +110,31 @@
                 <i class="fa  fa-file-text-o"></i>&#160;
                 @Html.Localize("Store", "H_StoreAvailability")
             </a>
+        </div>
+    </div>
+}
+
+@helper ProductPrice()
+{
+    <div id="vueProductPrice" v-cloak="true" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
+        <div v-if="!IsUnavailableVariant">
+            <p v-if="Product.IsApproxUnit">
+                @Html.Localized("ProductPage", "L_UnitMeasureApprox", "{{Product.ItemFormat}}", "{{Product.UnitOfMeasure}}")
+            </p>
+            <p v-else="v-else">@Html.Localized("ProductPage", "L_UnitMeasure", "{{Product.ItemFormat}}", "{{Product.UnitOfMeasure}}")</p>
+            <p class="m-0" v-if="Product.DefaultListPrice">
+                <del v-if="Product.IsPriceDiscounted">{{Product.DefaultListPrice}}</del>&nbsp;
+                <small property="price" data-qa="product-price" class="mr-1" v-bind:class="{'text-danger': Product.IsPriceDiscounted}">
+                    <span v-if="Product.IsApproxUnit">@Html.Localize("ProductPage", "L_Approx")</span>
+                    <span class="h4 font-weight-bold">{{Product.ListPrice}}</span>
+                    /{{Product.IsUnit ?
+                    Product.IsUnitMeasure ? '@Html.Localize("ProductPage", "L_Each")' : '@Html.Localize("ProductPage", "L_Unit")'
+                    :
+                    Product.ItemFormat + ' ' + Product.UnitOfMeasure}}
+                </small>
+
+            </p>
+            <span v-else="else" property="price" data-qa="product-price" class="h3 invisible">0</span>
         </div>
     </div>
 }

@@ -55,7 +55,7 @@
         </a>
     </div>
 
-    @ProductPrice()
+    @PriceBasedOnUnitMeasure()
 
     @if (ShowAddToCartButton)
     {
@@ -65,6 +65,52 @@
     }
 
 </div>
+
+@helper PriceBasedOnUnitMeasure()
+{
+<div class="px-3">
+    <p class="mb-1">
+        <span v-if="Product.IsApproxUnit">
+            @Html.Localized("ProductPage", "L_UnitMeasureApprox", "{{Product.ItemFormat}}", "{{Product.UnitOfMeasure}}")
+        </span>
+        <span v-else="else">
+            @Html.Localized("ProductPage", "L_UnitMeasure", "{{Product.ItemFormat}}", "{{Product.UnitOfMeasure}}")
+        </span>
+    </p>
+    <div class="product-tile-price">
+        <span v-if="Product.IsOnSale">
+            <del>{{Product.DisplayListPrice}}</del>&nbsp;
+        </span>
+        <small class="mr-1" v-bind:class="{'text-danger' : Product.IsOnSale}">
+            <span v-if="Product.HasPriceRange">
+                @Html.Localize("List-Search", "L_PriceFrom")
+            </span>
+            <span v-if="Product.IsApproxUnit">
+                @Html.Localize("List-Search", "L_Approx")
+            </span>
+            <span class="h5 font-weight-bold">
+                <span v-if="Product.IsOnSale">
+                    {{Product.DisplaySpecialPrice}}
+                </span>
+                <span v-else="else">
+                    {{Product.DisplayListPrice}}
+                </span>
+            </span>
+            /<span v-if="Product.IsUnit">
+                <span v-if="Product.IsUnitMeasure">
+                    @Html.Localize("ProductPage", "L_Each")
+                </span>
+                <span v-else="else">
+                    @Html.Localize("ProductPage", "L_Unit")
+                </span>
+            </span>
+            <span v-else="else">
+                {{Product.ItemFormat}} {{Product.UnitOfMeasure}}
+            </span>
+        </small>
+    </div>
+</div>
+}
 
 @helper ProductPrice()
 {
@@ -78,13 +124,13 @@
                 {{Product.DisplaySpecialPrice}}
             </span>
             <span v-else="else">
-                {{Product.DisplayPrice}}
+                {{Product.DisplayListPrice}}
             </span>
         </div>
         <div v-else="else">
             <div v-if="Product.IsOnSale">
                 <div class="product-tile-special-price">
-                    <del>{{Product.DisplayPrice}}</del>
+                    <del>{{Product.DisplayListPrice}}</del>
                 </div>
                 <div class="h4 product-tile-price">
                     <span class="text-danger">{{Product.DisplaySpecialPrice}}</span>
@@ -95,7 +141,7 @@
                     <!--only used for proper spacing-->
                 </div>
                 <div class="h4 product-tile-price">
-                    <span>{{Product.DisplayPrice}}</span>
+                    <span>{{Product.DisplayListPrice}}</span>
                 </div>
             </div>
         </div>

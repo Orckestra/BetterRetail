@@ -10,9 +10,13 @@
 @using Orckestra.Composer.Cart.Utils;
 @using Orckestra.Composer.Providers;
 @using System.Collections.Specialized;
+@using Orckestra.Overture.ServiceModel.Orders;
+@using Orckestra.Composer.Grocery.ViewModels
 
 @functions {
     public OrderDetailViewModel Order { get; set; }
+
+    public OrderShipmentDetailViewModel Shipment => Order.Shipments.FirstOrDefault();
 }
 @{
     if (Order == null)
@@ -29,11 +33,11 @@
 
         @OrderShipments(Order)
 
-        @OrderAddress(Order)
-
-        @OrderCartDetails(Order)
+        @OrderBillingAddress(Order)
 
         @OrderPayment(Order)
+
+        @OrderCartDetails(Order)
 
         <div class="row">
             <div class="col-12 col-sm-6 offset-sm-6">
@@ -52,9 +56,9 @@
         </h3>
         <div class="card-body">
             <div class="card">
-                <h4 class="card-header">
-                    @Html.Localized("MyAccount", "L_OrderedOn", order.OrderInfos.OrderDate)
-                </h4>
+                <div class="card-header">
+                    <strong>@Html.Localized("MyAccount", "L_OrderedOn", order.OrderInfos.OrderDate)</strong>
+                </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-8">
@@ -67,6 +71,18 @@
                                     status == "Canceled" ? "text-danger" : "text-success";
                             }
                             <p class="@statusCss  m-0"><strong>@order.OrderInfos.OrderStatus</strong></p>
+                            <div class="row mt-3">
+                                @foreach (var item in Shipment.LineItems)
+                                {
+                                    <div class="col-2">
+                                        <img src="@item.ImageUrl"
+                                             class="img-fluid"
+                                             alt="thumbnail"
+                                             onerror="this.onerror=null; this.src='@item.FallbackImageUrl'" />
+                                        <div class="text-center small">@("x" + item.Quantity)</div>
+                                    </div>
+                                }
+                            </div>
                         </div>
                         <div class="col-4 text-right">
                             @Html.Localize("MyAccount", "L_Total"):
@@ -83,50 +99,67 @@
 {
     foreach (var shipping in order.Shipments)
     {
-        var status = shipping.ShipmentStatusName;
-        <div class="card  bg-light  mt-4">
-            <h3 class="card-header">
-                @Html.Localize("MyAccount", "L_Shipping")
-            </h3>
-            <div class="card-body">
-                <h4>@shipping.ShippingMethod.DisplayName</h4>
-                <p>@shipping.ShippingMethod.Cost</p>
-                <div class="text-success">
-                    @if (status == "Fulfilled")
-                    {
-                        @Html.Localize("MyAccount", "L_OrderDelivered") @shipping.ShipmentStatusDate
-                    }
-                    else if (status == "Canceled")
-                    {
-                        @Html.Localize("MyAccount", "L_OrderCancel") @shipping.ShipmentStatusDate
-                    }
-                    else
-                    {
-                        @Html.Raw(Html.Localize("MyAccount", "L_OrderInProgress"))
-                    }
+        var type = shipping.ShippingMethod.FulfillmentMethodType;
+        var extendedShipping = shipping.AsExtensionModel<IGroceryOrderShipmentDetailViewModel>();
+        <div class="row mt-4">
+            <div class="col-12 col-sm-6">
+                <div class="card bg-light h-100">
+                    <h3 class="card-header">
+                        @Html.Localize("Grocery", type == FulfillmentMethodType.PickUp ? "T_FulfillmentMethodTitle_PickUp": "T_FulfillmentMethodTitle_Shipping")
+                    </h3>
+                    <div class="card-body">
+                        @ShippingStatus(shipping)
+                        @AddressPreview(shipping.ShippingAddress)
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6">
+                <div class="card bg-light h-100">
+                    <h3 class="card-header">
+                        @Html.Localize("Grocery", "T_TimeSlot")
+                       
+                    </h3>
+                    <div class="card-body">
+                        @if (extendedShipping.TimeSlotReservation != null && extendedShipping.TimeSlot != null)
+                        {
+                            <strong>@extendedShipping.TimeSlot.DayOfWeekString, @extendedShipping.TimeSlotReservation.Day @extendedShipping.TimeSlotReservation.DisplayMonth</strong>
+                            <p class="m-0">@extendedShipping.TimeSlot.DisplayBeginTime to @extendedShipping.TimeSlot.DisplayEndTime</p>
+                        }
+                    </div>
                 </div>
             </div>
         </div>
     }
 }
 
-@helper OrderAddress(OrderDetailViewModel order)
+@helper ShippingStatus(OrderShipmentDetailViewModel shipping)
+{
+    var status = shipping.ShipmentStatusName;
+    <div class="mb-3">
+        @if (status == "Fulfilled")
+        {
+            @Html.Localize("MyAccount", "L_OrderDelivered") @shipping.ShipmentStatusDate
+        }
+        else if (status == "Canceled")
+        {
+            @Html.Localize("MyAccount", "L_OrderCancel") @shipping.ShipmentStatusDate
+        }
+        else
+        {
+            @Html.Raw(Html.Localize("MyAccount", "L_OrderInProgress"))
+        }
+    </div>
+}
+
+@helper OrderBillingAddress(OrderDetailViewModel order)
 {
     <div class="card  bg-light  mt-4">
         <h3 class="card-header">
-            @Html.Localize("MyAccount", "T_Addresses")
+            @Html.Localize("MyAccount", "T_BillingAddress")
         </h3>
         <div class="card-body">
             <div class="row">
                 <div class="col-12 col-sm-6">
-                    <h4>@Html.Localize("MyAccount", "T_ShippingAddress")</h4>
-                    @foreach (var shipping in order.Shipments)
-                    {
-                        @AddressPreview(shipping.ShippingAddress)
-                    }
-                </div>
-                <div class="col-12 col-sm-6">
-                    <h4>@Html.Localize("MyAccount", "T_BillingAddress")</h4>
                     @foreach (var payment in order.Payments)
                     {
                         var billingAddress = payment.BillingAddress;
@@ -205,7 +238,7 @@
             @foreach (var item in shipment.LineItems)
             {
                 index++;
-                <div class="row  pt-3  @(index != shipment.LineItems.Count ? "border-bottom pb-2" : "")">
+                <div class="row  pt-2  @(index != shipment.LineItems.Count ? "border-bottom pb-2" : "")">
                     @if (item.Rewards != null && item.Rewards.Count > 0)
                     {
                         <div class="col-12 order-1  text-center">
@@ -217,7 +250,7 @@
                             </div>
                         </div>
                     }
-                    <div class="col-2 col-sm-1  order-2">
+                    <div class="col-2 col-sm-1  @(item.IsUnavailable || item.IsSubstituted ? "disabled" : "")">
                         <a href="@item.ProductUrl">
                             <img src="@item.ImageUrl"
                                  class="img-fluid"
@@ -225,93 +258,121 @@
                                  onerror="this.onerror=null; this.src='@item.FallbackImageUrl'" />
                         </a>
                     </div>
-                    <div class="col-8 col-sm-4  order-3">
-                        <div>
-                            <strong>@item.ProductSummary.Brand</strong>
-                            <p class="mb-2">@item.ProductSummary.DisplayName</p>
-                            @if (!string.IsNullOrEmpty(item.VariantId))
-                            {
-                                <p class="mb-2 mb-sm-0">
-                                    @String.Join(" | ", item.KeyVariantAttributesList.Select(i => i.Value).ToArray())
-                                </p>
-                            }
-                        </div>
-                    </div>
-                    <div class="col-sm-2  text-center d-none d-sm-block order-4">
-                        @if (item.IsOnSale)
-                        {
-                            <p>
-                                <del>@item.DefaultListPrice</del><br />
-                                <strong class="text-danger">@item.ListPrice</strong>
-                            </p>
-                        }
-                        else
-                        {
-                            <p>@item.DefaultListPrice</p>
-                        }
-                    </div>
-                    <div class="offset-2 offset-sm-0 2 col-sm-3  text-left text-sm-center  order-6">
-                        <span class="d-inline d-sm-none">
-                            @Html.Localize("CheckoutProcess", "L_QuantityMobile")
-                        </span>  @item.Quantity
-                    </div>
-                    <div class="offset-2 offset-sm-0 col-sm-2  text-left text-sm-center  order-7">
-                        @if (item.IsPriceDiscounted)
-                        {
-                            <del>@item.TotalWithoutDiscount</del><br />
-                            <strong class="text-danger">@item.Total</strong>
-                        }
-                        else
-                        {
-                            <strong>@item.Total</strong>
-                        }
-                        @if (!string.IsNullOrEmpty(item.SavingsTotal))
-                        {
-                            <br />
-                            <small>
-                                <span class="text-success">@Html.Localize("ShoppingCart", "L_LineItemSavings") </span>
-                                <span class="text-success">@item.SavingsTotal</span>
-                            </small>
-                        }
-                        <em class="additional-fees d-block small">
-                            @foreach (var fee in item.AdditionalFees)
-                            {
-                                <span class="block">
-                                    + @fee.DisplayName @fee.Amount
-                                    @if (fee.Taxable)
-                                    {
-                                        @Html.Localize("ShoppingCart", "L_PlusTaxes")
-                                    }
-                                    @fee.CalculationRule}}
-                                </span>
-                            }
-                        </em>
-                    </div>
-                    @if (string.IsNullOrEmpty(item.RecurringOrderProgramName)
-                        && item.RecurringOrderProgramFrequencies != null &&
-                        item.RecurringOrderProgramFrequencies.Count > 0)
-                    {
-                        <div class="col-12  offset-2 offset-sm-1  order-8  mt-2">
-                            <div class="cart-recurring-cta js-cartRecurringCta">
-                                <img src="~/UI.Package/Images/recurring.svg"
-                                     class="recurring-icon"
-                                     alt="@Html.Localize("General", "L_RecurringProduct")"
-                                     title="@Html.Localize("General", "L_RecurringProduct")" />
-                                @if (!string.IsNullOrEmpty(item.RecurringOrderFrequencyName))
+                    <div class="col-10 col-sm-11">
+                        <div class="row  @(item.IsUnavailable || item.IsSubstituted ? "disabled" : "")">
+                            <div class="col-12 col-sm-5">
+                                <strong>@item.ProductSummary.Brand</strong>
+                                <p class="mb-2">@item.ProductSummary.DisplayName</p>
+                                @if (!string.IsNullOrEmpty(item.VariantId))
                                 {
-                                    <span>@item.RecurringOrderFrequencyDisplayName</span>
+                                    <p class="mb-2 mb-sm-0">
+                                        @String.Join(" | ", item.KeyVariantAttributesList.Select(i => i.Value).ToArray())
+                                    </p>
+                                }
+                            </div>
+                            <div class="col-sm-2  text-center d-none d-sm-block">
+                                @if (item.IsOnSale)
+                                {
+                                    <p>
+                                        <del>@item.DefaultListPrice</del><br />
+                                        <strong class="text-danger">@item.ListPrice</strong>
+                                    </p>
                                 }
                                 else
                                 {
-                                    @Html.Localize("ProductPage", "L_RecurringFrequencyOnce")
+                                    <p>@item.DefaultListPrice</p>
                                 }
                             </div>
+                            <div class="col-sm-3  text-left text-sm-center">
+                                <span class="d-inline d-sm-none">
+                                    @Html.Localize("CheckoutProcess", "L_QuantityMobile")
+                                </span>  @item.Quantity
+                            </div>
+                            <div class="col-sm-2  text-left text-sm-center">
+                                @if (item.IsPriceDiscounted)
+                                {
+                                    <del>@item.TotalWithoutDiscount</del><br />
+                                    <strong class="text-danger">@item.Total</strong>
+                                }
+                                else
+                                {
+                                    <strong>@item.Total</strong>
+                                }
+                                @if (!string.IsNullOrEmpty(item.SavingsTotal))
+                                {
+                                    <br />
+                                    <small>
+                                        <span class="text-success">@Html.Localize("ShoppingCart", "L_LineItemSavings") </span>
+                                        <span class="text-success">@item.SavingsTotal</span>
+                                    </small>
+                                }
+                                <em class="additional-fees d-block small">
+                                    @foreach (var fee in item.AdditionalFees)
+                                    {
+                                        <span class="block">
+                                            + @fee.DisplayName @fee.Amount
+                                            @if (fee.Taxable)
+                                            {
+                                                @Html.Localize("ShoppingCart", "L_PlusTaxes")
+                                            }
+                                            @fee.CalculationRule}}
+                                        </span>
+                                    }
+                                </em>
+                            </div>
+                            @if (string.IsNullOrEmpty(item.RecurringOrderProgramName)
+                                && item.RecurringOrderProgramFrequencies != null &&
+                                item.RecurringOrderProgramFrequencies.Count > 0)
+                            {
+                                <div class="col-12 mt-2">
+                                    <div class="cart-recurring-cta js-cartRecurringCta">
+                                        <img src="~/UI.Package/Images/recurring.svg"
+                                             class="recurring-icon"
+                                             alt="@Html.Localize("General", "L_RecurringProduct")"
+                                             title="@Html.Localize("General", "L_RecurringProduct")" />
+                                        @if (!string.IsNullOrEmpty(item.RecurringOrderFrequencyName))
+                                        {
+                                            <span>@item.RecurringOrderFrequencyDisplayName</span>
+                                        }
+                                        else
+                                        {
+                                            @Html.Localize("ProductPage", "L_RecurringFrequencyOnce")
+                                        }
+                                    </div>
+                                </div>
+                            }
+
                         </div>
-                    }
+                        @if (item.IsSubstituted || item.IsUnavailable)
+                        {
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="border-top pt-2">
+                                        @SubstitutedMessage(item)
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                 
                 </div>
             }
         </div>
     </div>
+}
+
+@helper SubstitutedMessage(LineItemDetailViewModel item)
+{
+    <strong class="text-danger">
+        @if (item.IsSubstituted)
+        {
+            @Html.Localize("MyAccount", "L_SubstituteOrderItem")
+        }
+        @if (item.IsUnavailable)
+        {
+            @Html.Localize("MyAccount", "L_UnavailableOrderItem")
+        }
+    </strong>
 }
 
 @helper OrderSummary(OrderDetailViewModel order)
@@ -322,7 +383,7 @@
     var taxableAddFeeSummary = order.OrderSummary.AdditionalFeeSummaryList.Where(t => t.Taxable).ToList();
 
     <div class="card bg-light mt-4">
-        <h3 class="card-header  bg-primary border-primary  text-white">
+        <h3 class="card-header  bg-gray text-white">
             @Html.Localize("ShoppingCart", "T_OrderSummary")
         </h3>
         <div class="card-body">
@@ -429,20 +490,24 @@
 
 @helper AddressPreview(AddressViewModel address)
 {
-    <div>
-        <span data-qa="order-address-fullname">
+<div>
+    @if (!string.IsNullOrEmpty(address.FirstName))
+    {
+        <strong data-qa="order-address-fullname">
             @address.FirstName @address.LastName
-        </span>
-        @if (!string.IsNullOrEmpty(address.Line2))
-        {
-            <span data-qa="order-address-line2">@address.Line2</span><br />
-        }
-        <span data-qa="order-address-line1">@address.Line1</span><br />
-        <span data-qa="order-address-city">@address.City</span>,
-        <span data-qa="order-address-region">@address.RegionName</span>,
-        <span data-qa="order-address-postalcode">@address.PostalCode</span><br />
-        <span data-qa="order-address-phone">@address.PhoneNumber</span>
-    </div>
+        </strong><br />
+    }
+
+    @if (!string.IsNullOrEmpty(address.Line2))
+    {
+        <span data-qa="order-address-line2">@address.Line2</span><br />
+    }
+    <span data-qa="order-address-line1">@address.Line1</span><br />
+    <span data-qa="order-address-city">@address.City</span>,
+    <span data-qa="order-address-region">@address.RegionName</span>,
+    <span data-qa="order-address-postalcode">@address.PostalCode</span><br />
+    <span data-qa="order-address-phone">@address.PhoneNumber</span>
+</div>
 }
 
 @helper FeeSummary(AdditionalFeeSummaryViewModel fee)
@@ -458,7 +523,7 @@
     <div class="row  mb-2">
         <div class="col-6  col-md-7">
             <span>
-                @Html.Localized("ShoppingCart", "L_ShippingBasedOn", order.ShippingAddress.PostalCode)
+                @Html.Localize("ShoppingCart", "L_ShippingFee")
             </span>
         </div>
         <div class="col-6  col-md-5  text-right">

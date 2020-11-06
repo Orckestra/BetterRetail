@@ -4,7 +4,7 @@
 
 module Orckestra.Composer {
 
-    enum RecurringMode  {
+    enum RecurringMode {
         Single = 'Single',
         Recurring = 'Recurring'
     }
@@ -22,16 +22,6 @@ module Orckestra.Composer {
 
             this.productService.updateSelectedKvasWith(this.context.viewModel.selectedKvas, this.concern);
 
-            var priceDisplayBusy: UIBusyHandle = this.asyncBusy({
-                msDelay: 300,
-                loadingIndicatorSelector: '.loading-indicator-pricediscount'
-            });
-
-            Q.when(this.calculatePrice()).done(() => {
-                priceDisplayBusy.done();
-                this.notifyAnalyticsOfProductDetailsImpression();
-            });
-
             let $recurringOrderContainer = this.context.container.find('[data-recurring-mode]');
             this.recurringMode = $recurringOrderContainer.data('recurring-mode');
             this.selectedRecurringOrderFrequencyName = $recurringOrderContainer.data('recurring-order-frequency');
@@ -41,11 +31,18 @@ module Orckestra.Composer {
             let getCartPromise = this.cartService.getFreshCart();
             let authenticatedPromise = this._membershipService.isAuthenticated();
             let getWishListPromise = this._wishListService.getWishListSummary();
-            Q.all([availableToSellPromise, getCartPromise, authenticatedPromise, getWishListPromise])
-                .spread((isAvailableToSell, cartVm, authVm, wishListVm) => {
+            let getPricePromise = this.calculatePrice();
+            Q.all([availableToSellPromise, getCartPromise, authenticatedPromise, getWishListPromise, getPricePromise])
+                .spread((isAvailableToSell, cartVm, authVm, wishListVm, priceVm) => {
+                    //As KvaItems rendering for now Handelbar based, we can't have one Vue Component for the whole Product Page
+                    // as Hanelbar rendering does not work inside Vue Component
+                    //Need to rewrite KvaItems rendering, then we can have one Vue component
+                    // For now we initialize separate components for each element 
                     this.initAddToCartWithQtyInCartVueComponent(isAvailableToSell, cartVm, authVm);
                     this.initAddToCartWithQtyVueComponent(isAvailableToSell, cartVm, authVm);
                     this.initAddToWishListVueComponent(authVm, wishListVm);
+                    this.initProductPriceVueComponent();
+                    this.notifyAnalyticsOfProductDetailsImpression();
                 })
 
         }
@@ -53,7 +50,7 @@ module Orckestra.Composer {
         protected initAddToCartWithQtyInCartVueComponent(isAvailableToSell, cartVm, authVm) {
             let elId = 'vueAddToCartWithQuantityInCart';
             let el = document.getElementById(elId);
-            if(!el) return;
+            if (!el) return;
             let product = this.context.viewModel;
             let self: ProductDetailController = this;
             let addToCartWithQuantity = new Vue({
@@ -120,7 +117,7 @@ module Orckestra.Composer {
                             FrequencyName, RecurringProgramName)
                             .then(() => {
                                 self.onAddLineItemSuccess();
-                                }, (reason: any) => {
+                            }, (reason: any) => {
                                 self.onAddLineItemFailed(reason);
                                 throw reason;
                             })
@@ -130,12 +127,12 @@ module Orckestra.Composer {
                     updateItemQuantity(quantity: number) {
                         if (this.Loading || !this.CartItem) return;
 
-                        if(this.Cart.QuantityRange) {
-                            const {Min, Max} = this.Cart.QuantityRange;
+                        if (this.Cart.QuantityRange) {
+                            const { Min, Max } = this.Cart.QuantityRange;
                             quantity = Math.min(Math.max(Min, quantity), Max);
                         }
 
-                        if(quantity == this.Quantity) {
+                        if (quantity == this.Quantity) {
                             //force update vue component
                             this.Cart = { ...this.Cart };
                             return;
@@ -183,7 +180,7 @@ module Orckestra.Composer {
         protected initAddToCartWithQtyVueComponent(isAvailableToSell, cartVm, authVm) {
             let elId = 'vueAddToCartWithQuantity';
             let el = document.getElementById(elId);
-            if(!el) return;
+            if (!el) return;
             let product = this.context.viewModel;
             let self: ProductDetailController = this;
             let addToCartWithQuantity = new Vue({
@@ -242,7 +239,7 @@ module Orckestra.Composer {
                                 throw reason;
                             })
                             .fin(() => {
-                                this.Loading = false; 
+                                this.Loading = false;
                                 this.Quantity = this.Cart.QuantityRange.Min;
                             });
 
@@ -260,7 +257,7 @@ module Orckestra.Composer {
         protected initAddToWishListVueComponent(authVm, wishListVm) {
             let elId = 'vueAddProductToWishList';
             let el = document.getElementById(elId);
-            if(!el) return;
+            if (!el) return;
             let product = this.context.viewModel;
             let self: ProductDetailController = this;
             let vueWishList = new Vue({
@@ -319,6 +316,27 @@ module Orckestra.Composer {
             })
         }
 
+        protected initProductPriceVueComponent() {
+            let elId = 'vueProductPrice';
+            let el = document.getElementById(elId);
+            if (!el) return;
+            let product = this.context.viewModel;
+            let self: ProductDetailController = this;
+            let vueProductPrice = new Vue({
+                el: '#' + elId,
+                data: {
+                    Product: product
+                },
+                computed: {
+                    IsUnavailableVariant() {
+                        return $.isArray(this.Product.allVariants) && !this.Product.selectedVariantId;
+                    }
+                },
+                methods: {
+                }
+            })
+        }
+
         protected getListNameForAnalytics(): string {
             return 'Detail';
         }
@@ -368,12 +386,7 @@ module Orckestra.Composer {
 
         protected onSelectedKvasChanged(e: IEventInformation) {
 
-            this.render('KvaItems', {KeyVariantAttributeItems: e.data});
-        }
-
-        protected onPricesChanged(e: IEventInformation) {
-            let vm = this.isProductWithVariants() && this.isSelectedVariantUnavailable() ? null : e.data;
-            this.render('PriceDiscount', vm);
+            this.render('KvaItems', { KeyVariantAttributeItems: e.data });
         }
 
         public selectKva(actionContext: IControllerActionContext) {
@@ -402,7 +415,7 @@ module Orckestra.Composer {
                 if (prevVariantIdIndex !== -1) {
                     pathArray.splice(prevVariantIdIndex, 1);
                 }
-            } else  if (prevVariantIdIndex === -1) {
+            } else if (prevVariantIdIndex === -1) {
                 //We couldn't find the variant id in the path, which means the PDP was accessed without a variant in the URL.
                 //In that case, we add it right after the product id in the URL. If for some aweful reason the product id is not found,
                 //add the variant id at the end.
@@ -413,10 +426,10 @@ module Orckestra.Composer {
                 pathArray[prevVariantIdIndex] = variantId;
             }
 
-            let {protocol, host} = window.location;
+            let { protocol, host } = window.location;
             let builtPath = `${protocol}//${host}${this.productService.buildUrlPath(pathArray)}`;
 
-            history.replaceState( {} , null, builtPath);
+            history.replaceState({}, null, builtPath);
         }
 
         public onRecurringOrderFrequencySelectChanged(actionContext: IControllerActionContext) {

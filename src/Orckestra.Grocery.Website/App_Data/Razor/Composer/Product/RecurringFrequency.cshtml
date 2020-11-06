@@ -105,7 +105,7 @@
                     else
                     {
                         <div data-oc-controller="Product.RecurringOrderSignInForm"
-                             data-product-url="@($"{Model.ProductDetailUrl}?recurringmode={RecurringMode.Recurring.ToString()}")">
+                             data-product-url="@($"{Model.Url}?recurringmode={RecurringMode.Recurring.ToString()}")">
                             <form name="login" data-oc-submit="login" method="post" autocomplete="on" action="#">
                                 @Partial("ReturningCustomerFormsServerValidations", null)
                                 <div class="row">
