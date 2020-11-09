@@ -42,7 +42,7 @@
 @helper StoreIcon()
 {
     <span class="d-none d-lg-inline">
-        <i class="fa fa-home fa-lg mr-2"></i>
+        <i class="fa fa-store-alt mr-2"></i>
         <span v-if="Store">
             <span class="d-none d-lg-inline">
                 {{Store.LocalizedDisplayName}}<span v-if="TimeSlotReservationTentative">&nbsp;|&nbsp;{{TimeSlotReservationDisplay}}</span>
@@ -55,7 +55,7 @@
     </span>
 
     <span class="d-flex flex-column align-items-center d-lg-none text-uppercase">
-        <i class="fa fa-home fa-lg mr-2"></i>
+        <i class="fa fa-store-alt mr-2"></i>
         <span class="d-none d-lg-inline">
             @Html.Localize("Grocery", "B_BookStore")
         </span>

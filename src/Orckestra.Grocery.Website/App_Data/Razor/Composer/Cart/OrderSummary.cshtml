@@ -84,7 +84,8 @@
                     v-bind:disabled="CheckoutButtonDisabled"
                     data-qa="order-summary-checkout-btn"
                     v-on:click="proceedToCheckout()">
-                @Html.Localize("ShoppingCart", "B_Checkout")
+                <i class="fa fa-lock pr-1"></i>
+                @Html.Localize("ShoppingCart", "B_SecuredCheckout")
             </button>
         </div>
     </div>

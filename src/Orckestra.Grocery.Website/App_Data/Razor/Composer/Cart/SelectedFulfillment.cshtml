@@ -19,6 +19,8 @@
                     @Html.Localize("Grocery", "B_ChangeFulfillmentMethod")
                 </a>
                 <h3 class="float-left m-0">
+                    <i class="fa fa-sm mr-1"
+                       v-bind:class="[FulfillmentMethodType == 1 ? 'fa-store-alt' : 'fa-truck']" />
                     <span v-if="FulfillmentMethodType == 1">@Html.Localize("Grocery", "T_FulfillmentMethodTitle_PickUp")</span>
                     <span v-else="else">@Html.Localize("Grocery", "T_FulfillmentMethodTitle_Shipping")</span>
                 </h3>

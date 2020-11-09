@@ -87,7 +87,10 @@
 @helper ShippingTypeSelectedView()
 {
     <div v-if="IsShippingMethodType">
-        <h3>@Html.Localize("Grocery", "T_FulfillmentMethodTitle_Shipping")</h3>
+        <h3>
+            <i class="fa fa-truck fa-sm mr-1" />
+            @Html.Localize("Grocery", "T_FulfillmentMethodTitle_Shipping")
+        </h3>
         @SelectedStorePreview()
     </div>
 }
@@ -95,7 +98,10 @@
 @helper PickUpTypeSelectedView()
 {
     <div v-if="IsPickUpMethodType" data-oc-controller="SingleCheckout.PickUpStoreAddress" >
-        <h3>@Html.Localize("Grocery", "T_FulfillmentMethodTitle_PickUp")</h3>
+        <h3>
+            <i class="fa fa-store-alt fa-sm mr-1" />
+            @Html.Localize("Grocery", "T_FulfillmentMethodTitle_PickUp")
+        </h3>
         @SelectedStorePreview()
     </div>
 }
@@ -120,7 +126,10 @@
 @helper TimeSlotView()
 {
     <div class="clearfix">
-        <h3 class="float-left">@Html.Localize("Grocery", "T_TimeSlot")</h3>
+        <h3 class="float-left">
+            <i class="far fa-clock fa-sm mr-1" />
+            @Html.Localize("Grocery", "T_TimeSlot")
+        </h3>
     </div>
     <div v-if="IsStoreSelected">
         @StoreHelpers.SelectedTimeSlotPreview("SelectedFulfillment")

@@ -294,4 +294,7 @@
   <data name="L_ShippingFee" xml:space="preserve">
     <value>Shipping fee</value>
   </data>
+  <data name="B_SecuredCheckout" xml:space="preserve">
+    <value>Secured Checkout</value>
+  </data>
 </root>

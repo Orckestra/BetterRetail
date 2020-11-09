@@ -34,7 +34,7 @@ namespace Composite.AspNet.Razor
             return new HtmlString(string.Format(@"data-toggle=""popover""
             data-container=""body""
             data-trigger=""focus""
-            data-content=""&lt;div class='multiline-message'&gt;&lt;span class='multiline-message-icon  fa  fa-comment-o  fa-lg'&gt;&lt;/span&gt;{0}&lt;/div&gt;""", helpText));
+            data-content=""&lt;div class='multiline-message'&gt;&lt;span class='multiline-message-icon  fa  fa-comment'&gt;&lt;/span&gt;{0}&lt;/div&gt;""", helpText));
         }
 
         public static IHtmlString ParsleyMessage(this System.Web.WebPages.Html.HtmlHelper htmlHelper, string category, string key, string dataParsleyKey, params object[] args)
