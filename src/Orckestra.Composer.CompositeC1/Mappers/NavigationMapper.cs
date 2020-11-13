@@ -33,6 +33,7 @@ namespace Orckestra.Composer.CompositeC1.Mappers
                     Url = _analyticsNavigationUrlHelper.BuildUrl(li, mainMenuItems, GoogleAnalyticsNavigationUrlProvider.MenuOrigin.Dropdown),
                     Image = MapNavigationImage(GetNavigationImage(li.Id, new CultureInfo(li.SourceCultureName))),
                     CssClass = C1Helper.GetCssStyleValue(li.CssStyle),
+                    CssClassName = li.CssClassName,
                     UrlTarget = C1Helper.GetUrlTargetValue(li.Target), 
                     Children = MapMainMenuItems(mainMenuItems, li.Id),
                     MenuType = MenuTypeEnum.Principal
