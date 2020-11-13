@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Options>
+  <Option  CssClassKey="bg-none" Label="None"></Option>
+  <Option  CssClassKey="bg-primary" Label="Primary"></Option>
+  <Option  CssClassKey="bg-secondary" Label="Secondary"></Option>
+  <Option  CssClassKey="bg-success" Label="Success"></Option>
+  <Option  CssClassKey="bg-info" Label="Info"></Option>
+  <Option  CssClassKey="bg-warning" Label="Warning"></Option>
+  <Option  CssClassKey="bg-danger" Label="Danger"></Option>
+  <Option  CssClassKey="bg-light" Label="Light"></Option>
+  <Option  CssClassKey="bg-gray" Label="Gray"></Option>
+  <Option  CssClassKey="bg-light-gray" Label="Light Gray"></Option>
+  <Option  CssClassKey="bg-white" Label="White"></Option>
+  <Option  CssClassKey="bg-dark" Label="Dark"></Option>
+</Options>

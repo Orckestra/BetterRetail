@@ -27,6 +27,7 @@ module Orckestra.Composer {
                      ...commonFulfillmentOptions.data
                 },
                 mounted() {
+                    self.eventHub.subscribe(FulfillmentEvents.FulfillmentMethodSelected,  e => this.onMethodSelected(e.data));
                     self.eventHub.subscribe(FulfillmentEvents.StoreSelected,  e => this.onStoreSelected(e.data));
                     self.eventHub.subscribe(FulfillmentEvents.StoreUpdating, e => this.onStoreUpdating(e.data));
                     self.eventHub.subscribe(FulfillmentEvents.TimeSlotSelected,  e => this.onSlotSelected(e.data));
@@ -45,7 +46,12 @@ module Orckestra.Composer {
                     ...commonFulfillmentOptions.computed
                 },
                 methods: {
-                    ...commonFulfillmentOptions.methods
+                    ...commonFulfillmentOptions.methods,
+                    navigateToStoreSelector() {
+                        $('html, body').animate({
+                            scrollTop: ($('#vueStoreSelector').offset().top - 50)
+                        }, 500);
+                    }
                 }
             });
         }

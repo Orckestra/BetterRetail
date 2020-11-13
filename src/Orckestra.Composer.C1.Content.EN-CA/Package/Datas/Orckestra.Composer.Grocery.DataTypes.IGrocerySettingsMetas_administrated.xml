@@ -1,4 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Data>
-  <Add DefaultStore="E1232" TimeSlotsDaysAmount="7" ReservationExpirationTime="120" ReservationExpirationWarningTime="60" FieldName="Grocery Settings" Id="e2d8883d-56fe-4eec-a07f-b5b0620ade6e" PageId="f3dbd28d-365f-4d3e-91c3-7b730b39b294" PublicationStatus="published"  SourceCultureName="en-GB" />
+  <Add DefaultStore="Montreal_West_Store" TimeSlotsDaysAmount="7" ReservationExpirationTime="120" ReservationExpirationWarningTime="60" FieldName="Grocery Settings" Id="e2d8883d-56fe-4eec-a07f-b5b0620ade6e" PageId="f3dbd28d-365f-4d3e-91c3-7b730b39b294" PublicationStatus="published"  SourceCultureName="en-GB" />
 </Data>

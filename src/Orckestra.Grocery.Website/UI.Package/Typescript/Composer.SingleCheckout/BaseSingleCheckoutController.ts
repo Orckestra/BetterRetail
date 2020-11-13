@@ -13,6 +13,7 @@ module Orckestra.Composer {
         protected formInstances: IParsley[];
         protected formSelector: string = 'form';
         protected checkoutService: ISingleCheckoutService;
+        protected fulfillmentService: IFulfillmentService = FulfillmentService.instance();
 
         public viewModelName: string;
 

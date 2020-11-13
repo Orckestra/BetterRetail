@@ -92,7 +92,7 @@
             </tr>
         </table>
         <div v-else="v-else">
-            <div class="alert alert-danger ml-10" v-if="!Errors.TimeSlotLoadingError">
+            <div class="alert alert-danger ml-10" v-if="!Errors.TimeSlotLoadingError &amp;&amp; !IsLoading">
                 @Html.Localize("Grocery", "L_NoSlotsForStoreWarning")
             </div>
             @Forms.Validations.ShowError("Errors.TimeSlotLoadingError", "L_TimeSlotLoadingError")

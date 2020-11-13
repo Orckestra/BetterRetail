@@ -126,8 +126,14 @@
   <data name="B_ChangeFulfillmentMethod" xml:space="preserve">
     <value>Change fulfillment method</value>
   </data>
+  <data name="B_ChangeFulfillmentMethodToPickup" xml:space="preserve">
+    <value>Change to Pick Up</value>
+  </data>
+  <data name="B_ChangeFulfillmentMethodToShipping" xml:space="preserve">
+    <value>Change to Delivery</value>
+  </data>
   <data name="B_ChangeSlot" xml:space="preserve">
-    <value>Change slot</value>
+    <value>Change time slot</value>
   </data>
   <data name="B_ChangeStore" xml:space="preserve">
     <value>Change store</value>
@@ -236,6 +242,9 @@ available for you.</value>
   <data name="TM_Step_SelectStore" xml:space="preserve">
     <value>Select Store</value>
   </data>
+  <data name="T_FulfillmentMethod" xml:space="preserve">
+    <value>Fulfillment method</value>
+  </data>
   <data name="T_FulfillmentMethodTitle_PickUp" xml:space="preserve">
     <value>Pickup</value>
   </data>
@@ -266,10 +275,16 @@ available for you.</value>
   <data name="T_Step_SelectStore" xml:space="preserve">
     <value>Select the default store to fulfill your order</value>
   </data>
+  <data name="T_Store" xml:space="preserve">
+    <value>Store</value>
+  </data>
   <data name="T_StoresFound" xml:space="preserve">
     <value>{0} store(s) found</value>
   </data>
   <data name="T_TimeSlot" xml:space="preserve">
     <value>Timeslot</value>
+  </data>
+  <data name="T_YourSelection" xml:space="preserve">
+    <value>Your selection</value>
   </data>
 </root>

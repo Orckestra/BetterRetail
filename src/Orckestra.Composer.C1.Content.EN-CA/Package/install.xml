@@ -54,6 +54,12 @@
           <Data dataScopeIdentifier="public" locale="?" dataFilename="~\Datas\Composite.Data.Types.Navigation.NavigationElements.Footer_public.xml" />
           <Data dataScopeIdentifier="administrated" locale="?" dataFilename="~\Datas\Composite.Data.Types.Navigation.NavigationElements.Footer_public.xml" />
         </Type>
+        <Type type="Orckestra.Composer.CompositeC1.DataTypes.Navigation.NavigationImage,Orckestra.Composer.CompositeC1.DataTypes">
+          <Data dataScopeIdentifier="administrated" locale="?" dataFilename="~\Datas\Orckestra.Composer.CompositeC1.DataTypes.Navigation.NavigationImages_administrated.xml" />
+        </Type>
+        <Type type="Orckestra.Composer.CompositeC1.DataTypes.Navigation.NavigationImage,Orckestra.Composer.CompositeC1.DataTypes">
+          <Data dataScopeIdentifier="public" locale="?" dataFilename="~\Datas\Orckestra.Composer.CompositeC1.DataTypes.Navigation.NavigationImages_public.xml" />
+        </Type>
 
         <Type type="Orckestra.ExperienceManagement.Configuration.DataTypes.ISiteConfigurationMeta,Orckestra.ExperienceManagement.Configuration">
           <Data dataScopeIdentifier="administrated" locale="?" dataFilename="~\Datas\Orckestra.ExperienceManagement.Configuration.DataTypes.ISiteConfigurationMetas_administrated.xml" />

@@ -22,7 +22,5 @@ module Orckestra.Composer {
         setTimeSlotId(StoreId: any, shipmentId: any, slotId: any, date: any): Q.Promise<any>;
 
         invalidateCache(): Q.Promise<void>;
-
-        validateTimeSlotExpiration(timeSlotReservation): boolean;
     }
 }

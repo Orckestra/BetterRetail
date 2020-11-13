@@ -150,7 +150,7 @@ namespace Orckestra.Composer.Store.Services
             var getStoresTasks = overtureInventoryItems.Results.Select(inventoryItem =>
                 StoreRepository.GetStoreByNumberAsync(new GetStoreByNumberParam
                 {
-                    Scope = viewModelParam.Scope,
+                    Scope = inventoryItem.Scope,
                     CultureInfo = viewModelParam.CultureInfo,
                     StoreNumber = inventoryItem.FulfillmentLocationNumber,
                     IncludeSchedules = true,

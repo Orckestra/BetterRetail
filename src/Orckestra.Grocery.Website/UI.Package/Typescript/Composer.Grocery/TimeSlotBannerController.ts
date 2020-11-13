@@ -19,8 +19,7 @@ module Orckestra.Composer {
 
         private initializeVueComponent(fulfillment) {
             let self: TimeSlotBannerController = this;
-            let commonFulfillmentOptions = FulfillmentHelper.getCommonSelectedFulfillmentStateOptions();
-            commonFulfillmentOptions.data.SelectedFulfillment = fulfillment;
+            let commonFulfillmentOptions = FulfillmentHelper.getCommonSelectedFulfillmentStateOptions(fulfillment);
             this.VueTimeSlotBanner = new Vue({
                 el: '#vueTimeSlotBanner',
                 data: {

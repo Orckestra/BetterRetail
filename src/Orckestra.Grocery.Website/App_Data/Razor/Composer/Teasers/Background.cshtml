@@ -1,0 +1,48 @@
+﻿@inherits RazorFunction
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Container with a background-color. Can be made full-width."; }
+    }
+
+    private const string teaserTextStyleWidgetMarkup = @"<f:widgetfunction xmlns:f='http://www.composite.net/ns/function/1.0' name='Composite.Widgets.String.Selector'>
+        <f:param name='Options'>
+            <f:function name='Orckestra.Web.Html.GetStyleOptionsFromFile'>
+                <f:param name='OptionsXMLFilePath' value='UI.Package/GetStyleOptionsFromFile/TextColorOptions.xml' />
+            </f:function>
+        </f:param>
+        <f:param name='Required' value='False' />
+    </f:widgetfunction>";
+    [FunctionParameter(Label = "Teaser text Color", Help = "", DefaultValue = "text-white", WidgetMarkup = teaserTextStyleWidgetMarkup)]
+    public string TeaserTextColor { get; set; }
+
+    private const string backgroundStyleWidgetMarkup = @"<f:widgetfunction xmlns:f='http://www.composite.net/ns/function/1.0' name='Composite.Widgets.String.Selector'>
+        <f:param name='Options'>
+            <f:function name='Orckestra.Web.Html.GetStyleOptionsFromFile'>
+                <f:param name='OptionsXMLFilePath' value='UI.Package/GetStyleOptionsFromFile/BackgroundOptions.xml' />
+            </f:function>
+        </f:param>
+        <f:param name='Required' value='False' />
+    </f:widgetfunction>";
+    [FunctionParameter(Label = "Background Color", Help = "", DefaultValue = "bg-light-blue", WidgetMarkup = backgroundStyleWidgetMarkup)]
+    public string BackgroundStyle { get; set; }
+
+    [FunctionParameter(Label = "Content")]
+    public XhtmlDocument Content { get; set; }
+
+    [FunctionParameter(Label = "Make the background full width (read help for more info)", DefaultValue = false, Help = "Do not use this option inside another grid. If you want a full-width background, this function must be the parent of your content.")]
+    public bool isFullWidth { get; set; }
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<head>
+</head>
+<body>
+    <div class="@(isFullWidth ? "container-fluid" : "") component-background-color @BackgroundStyle">
+        <div class="@(isFullWidth ? "container-md" : "") @TeaserTextColor">
+            @Html.Raw(@Content)
+        </div>
+    </div>
+</body>
+</html>

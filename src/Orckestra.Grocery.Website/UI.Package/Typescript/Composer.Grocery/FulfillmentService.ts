@@ -38,7 +38,7 @@ module Orckestra.Composer {
                 .then((store) => {
                     let { TimeSlotReservation } = store;
 
-                    if (TimeSlotReservation && !this.validateTimeSlotExpiration(TimeSlotReservation)) {
+                    if (TimeSlotReservation && !TimeSlotsHelper.validateTimeSlotExpiration(TimeSlotReservation)) {
                         return this.getFreshSelectedFulfillment();
                     }
                    
@@ -98,10 +98,5 @@ module Orckestra.Composer {
 			]).then(([, reservedSlot]) => reservedSlot);
         }
 
-        public validateTimeSlotExpiration(timeSlotReservation): boolean {
-            let slotTime = new Date(Date.parse(timeSlotReservation.ExpiryDateTime));
-            let now = new Date();
-            return !(slotTime < now)
-        }
     }
 }

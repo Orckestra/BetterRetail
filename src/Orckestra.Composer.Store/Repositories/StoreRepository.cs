@@ -124,7 +124,7 @@ namespace Orckestra.Composer.Store.Repositories
                 ScopeId = param.Scope,
                 Number = param.StoreNumber,
                 IncludeAddresses = param.IncludeAddresses,
-                IncludeSchedules = param.IncludeSchedules
+                IncludeSchedules = param.IncludeSchedules,
             };
 
             return await CacheProvider.GetOrAddAsync(cacheKey, () => OvertureClient.SendAsync(request)).ConfigureAwait(false);

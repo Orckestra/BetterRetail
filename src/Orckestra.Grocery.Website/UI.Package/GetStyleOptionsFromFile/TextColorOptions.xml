@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Options>
+  <Option  CssClassKey="text-none" Label="None"></Option>
+  <Option  CssClassKey="text-primary" Label="Primary"></Option>
+  <Option  CssClassKey="text-secondary" Label="Secondary"></Option>
+  <Option  CssClassKey="text-success" Label="Success"></Option>
+  <Option  CssClassKey="text-info" Label="Info"></Option>
+  <Option  CssClassKey="text-warning" Label="Warning"></Option>
+  <Option  CssClassKey="text-danger" Label="Danger"></Option>
+  <Option  CssClassKey="text-light" Label="Light"></Option>
+  <Option  CssClassKey="text-gray" Label="Gray"></Option>
+  <Option  CssClassKey="text-light-gray" Label="Light Gray"></Option>
+  <Option  CssClassKey="text-white" Label="White"></Option>
+  <Option  CssClassKey="text-dark" Label="Dark"></Option>
+  <Option  CssClassKey="text-light-blue" Label="Light Blue"></Option>
+</Options>

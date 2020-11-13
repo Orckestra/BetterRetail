@@ -97,7 +97,9 @@ namespace Orckestra.Composer.Cart.Services
 
         public virtual bool FilterShippingMethodView(ShippingMethodViewModel sippingMethod)
         {
-            return sippingMethod.FulfillmentMethodType == FulfillmentMethodType.Shipping || sippingMethod.FulfillmentMethodType == FulfillmentMethodType.PickUp;
+            return sippingMethod.FulfillmentMethodType == FulfillmentMethodType.Shipping ||
+                sippingMethod.FulfillmentMethodType == FulfillmentMethodType.Delivery ||
+                sippingMethod.FulfillmentMethodType == FulfillmentMethodType.PickUp;
         }
 
         public virtual int OrderShippingMethodTypeView(ShippingMethodTypeViewModel sippingMethodType)
@@ -105,8 +107,9 @@ namespace Orckestra.Composer.Cart.Services
             switch(sippingMethodType.FulfillmentMethodType)
             {
                 case FulfillmentMethodType.Shipping: return 0;
-                case FulfillmentMethodType.PickUp: return 1;
-                default: return 2;
+                case FulfillmentMethodType.Delivery: return 1;
+                case FulfillmentMethodType.PickUp: return 2;
+                default: return 3;
             }
         }
 

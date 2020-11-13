@@ -139,6 +139,9 @@
     <Compile Include="Parameters\ReserveTimeSlotParam.cs" />
     <Compile Include="Providers\GroceryInventoryLocationProvider.cs" />
     <Compile Include="Repositories\ITimeSlotRepository.cs" />
+    <Compile Include="Repositories\SalesScopeFulfillmentMethodRepository.cs" />
+    <Compile Include="Repositories\SalesScopeInventoryRepository.cs" />
+    <Compile Include="Repositories\SalesScopePaymentRepository.cs" />
     <Compile Include="Repositories\TimeSlotRepository.cs" />
     <Compile Include="Services\GroceryComposerContext.cs" />
     <Compile Include="Services\GroceryMembershipViewService.cs" />

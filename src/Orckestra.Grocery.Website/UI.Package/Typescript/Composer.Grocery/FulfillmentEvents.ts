@@ -10,6 +10,7 @@ module Orckestra.Composer {
         FulfillmentMethodSelected = 'fulfillmentMethodSelected',
         StoreUpdating = 'storeUpdating',
         StoreSelected = 'storeSelected',
+        StoreSelectionFailed = 'storeSelectionFailed',
         TimeSlotSelected = 'timeSlotSelected',
         TimeSlotUpdating = 'timeSlotUpdating',
         TimeSlotSelectionFailed = 'timeSlotSelectionFailed'

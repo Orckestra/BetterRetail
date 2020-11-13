@@ -15,6 +15,9 @@
 
     [FunctionParameter(Label = "Number", Help = "", DefaultValue = 3)]
     public int Number { get; set; }
+
+    [FunctionParameter(Label = "ColumnsStyle", DefaultValue = "col-6  col-sm-3")]
+    public string ColumnsStyle { get; set; }
 }
 
 @{
@@ -31,7 +34,7 @@
 <head>
 </head>
 <body>
-    @Function("Composer.Search.Products.ProductResultsVue", new { JsonContext = queryViewModel.JsonContext, FallbackImageUrl = FallbackImageUrl })
+    @Function("Composer.Search.Products.ProductResultsVue", new { JsonContext = queryViewModel.JsonContext, FallbackImageUrl = FallbackImageUrl, ColumnsStyle })
 </body>
 </html>
 

@@ -6,19 +6,21 @@ module Orckestra.Composer {
     export class FulfillmentHelper {
 
         //get common Vue State for Selected Fulfillment
-        public static getCommonSelectedFulfillmentStateOptions(): any {
+        public static getCommonSelectedFulfillmentStateOptions(fulfillment: any = undefined): any {
             return {
                 data: {
                     ChangeStoreModal: new UIModal(window, "#changeStoreModal", null, this),
                     SelectedFulfillment: {
-                        TimeSlot: undefined,
-                        TimeSlotReservation: undefined,
-                        Store: undefined,
-                        FulfillmentMethodType: undefined,
+                        TimeSlot: fulfillment ? fulfillment.TimeSlot : undefined,
+                        TimeSlotReservation: fulfillment ? fulfillment.TimeSlotReservation : undefined,
+                        Store: fulfillment ? fulfillment.Store : undefined,
+                        FulfillmentMethodType: fulfillment ? fulfillment.FulfillmentMethodType : undefined,
                         StoreLoading: false,
                         TimeSlotLoading: false
                     },
                     Errors: {
+                        StoreSelectionError: false,
+                        TimeSlotLoadingError: false,
                         TimeSlotSelectionError: false
                     }
                 },
@@ -37,6 +39,9 @@ module Orckestra.Composer {
                     },
                     TimeSlot() {
                         return this.SelectedFulfillment.TimeSlot;
+                    },
+                    IsTimeSlotReserved() {
+                        return !!(this.SelectedFulfillment && this.SelectedFulfillment.TimeSlotReservation);
                     },
                     TimeSlotReservationExpireTime() {
                         return this.SelectedFulfillment && TimeSlotsHelper.getTimeSlotReservationExpireTime(this.SelectedFulfillment.TimeSlotReservation);
@@ -81,6 +86,7 @@ module Orckestra.Composer {
                         this.SelectedFulfillment.TimeSlot = TimeSlot;
                         this.SelectedFulfillment.TimeSlotReservation = TimeSlotReservation;
                         this.SelectedFulfillment.TimeSlotLoading = false;
+                        this.SelectedFulfillment.StoreLoading = false;
                     },
                     onSlotUpdating(data) {
                         this.SelectedFulfillment.TimeSlotLoading = true;

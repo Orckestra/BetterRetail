@@ -29,7 +29,9 @@ module Orckestra.Composer {
                 },
                 computed: {
                     CheckoutButtonDisabled() {
-                        return !this.IsStoreSelected;
+                        return !this.IsStoreSelected || 
+                        !this.IsTimeSlotReserved ||
+                        this.TimeSlotReservationExpired;
                     }
                 }, 
                 methods: {

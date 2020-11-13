@@ -258,4 +258,7 @@
   <data name="L_TimeSlotLoadingError" xml:space="preserve">
     <value>An error occurred while loading time slots. Please try again later.</value>
   </data>
+  <data name="L_StoreSelectionFailed" xml:space="preserve">
+    <value>An error occurred while selecting this store. Please try another one.</value>
+  </data>
 </root>

@@ -152,8 +152,7 @@ module Orckestra.Composer {
 
         private initializeVueComponent(checkoutContext: ISingleCheckoutContext, fulfillment: any) {
             let deleteModalElementSelector: string = '#deleteAddressModal';
-            let commonFulfillmentOptions =  FulfillmentHelper.getCommonSelectedFulfillmentStateOptions();
-            commonFulfillmentOptions.data.SelectedFulfillment = {...fulfillment};
+            let commonFulfillmentOptions =  FulfillmentHelper.getCommonSelectedFulfillmentStateOptions(fulfillment);
             this.VueCheckout = new Vue({
                 el: '#vueSingleCheckout',
                 components: {
@@ -314,8 +313,10 @@ module Orckestra.Composer {
                 cart.ShippingAddress.PostalCode &&
                 cart.ShippingAddress.PhoneNumber;
 
-            let isShipToHome = cart.ShippingMethod.FulfillmentMethodType === FulfillmentMethodTypes.Shipping;
-            let isPickUp = cart.ShippingMethod.FulfillmentMethodType === FulfillmentMethodTypes.PickUp;
+            let methodType = cart.ShippingMethod.FulfillmentMethodType;
+            let isShipToHome = methodType === FulfillmentMethodTypes.Shipping ||
+                methodType === FulfillmentMethodTypes.Delivery;
+            let isPickUp = methodType === FulfillmentMethodTypes.PickUp;
 
             if (isAuthenticated && isShipToHome) {
                 return (!this.isAddressBookIdEmpty(cart.ShippingAddress.AddressBookId));
@@ -453,11 +454,12 @@ module Orckestra.Composer {
 
         public updatePaymentMethod(param: any): Q.Promise<IActivePaymentViewModel> {
             let vue: any = this.VueCheckout;
-
+            vue.Mode.Loading = true;
             vue.Steps.Payment.Loading = true;
             return this.paymentService.updatePaymentMethod(param)
                 .finally(() => {
                     vue.Steps.Payment.Loading = false;
+                    vue.Mode.Loading = false;
                 });
         }
 

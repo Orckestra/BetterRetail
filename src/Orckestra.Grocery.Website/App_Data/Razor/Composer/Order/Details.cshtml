@@ -123,7 +123,7 @@
                         @if (extendedShipping.TimeSlotReservation != null && extendedShipping.TimeSlot != null)
                         {
                             <strong>@extendedShipping.TimeSlot.DayOfWeekString, @extendedShipping.TimeSlotReservation.Day @extendedShipping.TimeSlotReservation.DisplayMonth</strong>
-                            <p class="m-0">@extendedShipping.TimeSlot.DisplayBeginTime to @extendedShipping.TimeSlot.DisplayEndTime</p>
+                            <p class="m-0" title="@extendedShipping.TimeSlotReservation.ReservationStatusDisplay">@extendedShipping.TimeSlot.DisplayBeginTime to @extendedShipping.TimeSlot.DisplayEndTime</p>
                         }
                     </div>
                 </div>

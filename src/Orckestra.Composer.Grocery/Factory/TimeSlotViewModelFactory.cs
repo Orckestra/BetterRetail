@@ -125,6 +125,7 @@ namespace Orckestra.Composer.Grocery.Factory
         public virtual TimeSlotReservationViewModel CreateTimeSlotReservationViewModel(TimeSlotReservation timeSlotReservation, CultureInfo cultureInfo)
         {
             var vm = ViewModelMapper.MapTo<TimeSlotReservationViewModel>(timeSlotReservation, cultureInfo);
+            vm.ReservationStatusDisplay = vm.ReservationStatus.ToString();
             return vm;
         }
 

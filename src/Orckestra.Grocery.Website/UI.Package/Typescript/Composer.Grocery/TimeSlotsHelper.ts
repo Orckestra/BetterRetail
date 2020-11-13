@@ -37,6 +37,12 @@ module Orckestra.Composer {
 			return timeSlotReservation && timeSlotReservation.ReservationStatus == 1;
 		}
 
+		public static validateTimeSlotExpiration(timeSlotReservation): boolean {
+			let slotTime = new Date(Date.parse(timeSlotReservation.ExpiryDateTime));
+			let now = new Date();
+			return !(slotTime < now)
+		}
+
 		public static getCommonTimeSlotReservationVueConfig(): any {
 			return {
 				computed: {

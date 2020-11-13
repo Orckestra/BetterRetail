@@ -67,6 +67,8 @@
     <Content Include="Package\Datas\Orckestra.Composer.CompositeC1.DataTypes.GoogleSettingss_public.xml" />
     <Content Include="Package\Datas\Orckestra.Composer.CompositeC1.DataTypes.IWebsiteStyleThemes_administrated.xml" />
     <Content Include="Package\Datas\Orckestra.Composer.CompositeC1.DataTypes.IWebsiteStyleThemes_public.xml" />
+    <Content Include="Package\Datas\Orckestra.Composer.CompositeC1.DataTypes.Navigation.NavigationImages_administrated.xml" />
+    <Content Include="Package\Datas\Orckestra.Composer.CompositeC1.DataTypes.Navigation.NavigationImages_public.xml" />
     <Content Include="Package\Datas\Orckestra.Composer.CompositeC1.DataTypes.Navigation.OptionalLink_Unpublished_en-CA.xml" />
     <Content Include="Package\Datas\Orckestra.Composer.CompositeC1.DataTypes.RecurringOrdersSettingss_administrated.xml" />
     <Content Include="Package\Datas\Orckestra.Composer.CompositeC1.DataTypes.RecurringOrdersSettingss_public.xml" />

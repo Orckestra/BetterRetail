@@ -26,6 +26,8 @@ namespace Orckestra.Composer.Grocery.ViewModels
         /// </summary>
         public TimeslotReservationStatus ReservationStatus { get; set; }
 
+        public string ReservationStatusDisplay { get; set; }
+
         /// <summary>
         /// Gets or sets the unique identifier of a fulfillment location.
         /// </summary>

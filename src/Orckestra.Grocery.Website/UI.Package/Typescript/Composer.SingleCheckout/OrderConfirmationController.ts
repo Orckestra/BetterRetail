@@ -20,6 +20,7 @@ module Orckestra.Composer {
         private findOrderService: IFindOrderService;
         private membershipService: IMembershipService;
         private passwordCheckService: PasswordCheckService;
+        protected fulfillmentService: IFulfillmentService = FulfillmentService.instance();
 
         private orderConfirmationCacheKey = 'orderConfirmationCacheKey';
         private orderCacheKey = 'orderCacheKey';
@@ -36,6 +37,8 @@ module Orckestra.Composer {
                 passwordPattern: RegExp(form.data('password-pattern')),
                 minimumLength: form.data('password-length')
             });
+            
+            this.fulfillmentService.invalidateCache();
 
             this.cacheProvider.defaultCache.get<any>(this.orderCacheKey)
                 .then((result: ICompleteCheckoutResult) => {

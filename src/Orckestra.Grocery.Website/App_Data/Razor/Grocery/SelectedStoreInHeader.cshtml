@@ -16,17 +16,27 @@
          v-cloak="v-cloak" class="pull-left">
         <ul class="navbar-nav p-0">
             <li class="nav-item" v-if="!Store">
-                <a class="nav-link" href="#" v-on:click.prevent="changeStoreModal($event, 'store')">
-                    @StoreIcon()
-                </a>
+                @if (CurrentPageNode.Id != HomePageNode.Id)
+                {
+                    <a class="nav-link" href="#" v-on:click.prevent="changeStoreModal($event, 'store')">
+                        @StoreIcon()
+                    </a>
+                }
+                else
+                {
+                    <a class="nav-link" href="#" v-on:click.prevent="navigateToStoreSelector">
+                        @StoreIcon()
+                    </a>
+                }
             </li>
             <li class="nav-item dropdown" v-else="v-else">
                 <a class="nav-link" data-toggle="dropdown">
                     @StoreIcon()
                 </a>
-                <div class="dropdown-menu selected-store p-3">
+                <div class="dropdown-menu selected-store-header p-3">
                     @Forms.Validations.ShowError("Errors.TimeSlotSelectionError")
                     <div v-if="Store">
+                        @SelectedFulfillmentMethod()
                         @StoreHelpers.SelectedStorePreview("SelectedFulfillment")
                         <hr />
                         @StoreHelpers.SelectedTimeSlotPreview("SelectedFulfillment")
@@ -41,23 +51,45 @@
 
 @helper StoreIcon()
 {
-    <span class="d-none d-lg-inline">
-        <i class="fa fa-store-alt mr-2"></i>
-        <span v-if="Store">
-            <span class="d-none d-lg-inline">
-                {{Store.LocalizedDisplayName}}<span v-if="TimeSlotReservationTentative">&nbsp;|&nbsp;{{TimeSlotReservationDisplay}}</span>
-            </span>
-            <span class="d-lg-none">
-                @Html.Localize("Grocery", "B_BookStore")
-            </span>
+<span class="d-none d-lg-inline">
+    <i class="fa fa-sm mr-1" v-bind:class="[FulfillmentMethodType == 1 ? 'fa-store-alt' : 'fa-truck']" />
+    <span v-if="Store">
+        <span class="d-none d-lg-inline">
+            {{Store.LocalizedDisplayName}}
+            <span v-if="SelectedFulfillment.TimeSlotLoading">@GeneralHelpers.LoadingSpinner(true)</span>
+            <span v-else-if="TimeSlotReservationTentative">&nbsp;|&nbsp;{{TimeSlotReservationDisplay}}</span>
         </span>
-        <span v-else="v-else">@Html.Localize("Grocery", "B_BookStore")</span>
+        <span class="d-lg-none">
+            @Html.Localize("Grocery", "B_BookStore")
+        </span>
     </span>
+    <span v-else="v-else">@Html.Localize("Grocery", "B_BookStore")</span>
+</span>
 
     <span class="d-flex flex-column align-items-center d-lg-none text-uppercase">
-        <i class="fa fa-store-alt mr-2"></i>
+        <i class="fa fa-sm mr-1"
+           v-bind:class="[FulfillmentMethodType == 1 ? 'fa-store-alt' : 'fa-truck']" />
         <span class="d-none d-lg-inline">
             @Html.Localize("Grocery", "B_BookStore")
         </span>
     </span>
+}
+
+
+@helper SelectedFulfillmentMethod()
+{
+    <div v-if="SelectedFulfillment.FulfillmentMethodType" class="mb-2">
+        <div class="border-bottom bg-light p-3  mx-n3 mt-n3">
+            <a class="cta dark-blue float-right" href="#" v-on:click.prevent="changeStoreModal($event, 'method')">
+                <i class="fa fa-edit d-inline d-sm-none"></i>
+                <span class="d-none d-sm-inline">@Html.Localize("Grocery", "B_ChangeFulfillmentMethod")</span>
+            </a>
+            <h5 class="m-0">
+                <i class="fa mr-1" v-bind:class="SelectedFulfillment.FulfillmentMethodType === 1 ? 'fa-store-alt' : 'fa-truck'" />
+                <span v-if="SelectedFulfillment.FulfillmentMethodType == 1">@Html.Localize("Grocery", "T_FulfillmentMethodTitle_PickUp")</span>
+                <span v-else="else">@Html.Localize("Grocery", "T_FulfillmentMethodTitle_Shipping")</span>
+            </h5>
+
+        </div>
+    </div>
 }

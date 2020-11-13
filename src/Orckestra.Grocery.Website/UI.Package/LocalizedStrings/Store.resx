@@ -124,7 +124,7 @@
     <value>Previous</value>
   </data>
   <data name="B_ShowMore" xml:space="preserve">
-    <value>See More Stores</value>
+    <value>See more stores</value>
   </data>
   <data name="B_UseMyLocation" xml:space="preserve">
     <value>Use My Location</value>
@@ -209,5 +209,8 @@
   </data>
   <data name="T_Phone" xml:space="preserve">
     <value>Pnone</value>
+  </data>
+  <data name="B_ShowLess" xml:space="preserve">
+    <value>See fewer stores</value>
   </data>
 </root>

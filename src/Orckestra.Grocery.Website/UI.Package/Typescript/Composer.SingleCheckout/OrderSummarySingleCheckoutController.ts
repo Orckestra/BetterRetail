@@ -16,10 +16,16 @@ module Orckestra.Composer {
                     OrderCanBePlaced() {
                         return !this.Mode.Loading
                             && !this.Mode.CompleteCheckoutLoading
-                            && !this.CartEmpty
-                            && this.FulfilledShipping
-                            && this.FulfilledBillingAddress
-                            && this.Payment;
+                            && this.IsValidOrder
+                    },
+                    IsValidOrder() {
+                        return !this.CartEmpty
+                        && this.Cart.InvalidLineItemCount <= 0 
+                        && this.FulfilledShipping
+                        && this.FulfilledBillingAddress
+                        && this.IsTimeSlotReserved
+                        && !this.TimeSlotReservationExpired
+                        && this.Payment;
                     },
                     IsShippingEstimatedOrSelected() {
                         return this.OrderSummary.IsShippingEstimatedOrSelected && !this.IsPickUpMethodType
@@ -28,9 +34,17 @@ module Orckestra.Composer {
                 methods: {
                     processCompleteCheckout(): Q.Promise<any> {
                         this.Mode.CompleteCheckoutLoading = true;
-                        return self.checkoutService.collectViewModelNamesForUpdateCart().
-                            then(viewModels => {
+                        self.fulfillmentService.invalidateCache();
+                        return self.fulfillmentService.getFreshSelectedFulfillment()
+                            .then(fulfillment => this.SelectedFulfillment = fulfillment)
+                            .then(() => self.checkoutService.collectViewModelNamesForUpdateCart())
+                            .then(viewModels => {
                                 return self.checkoutService.updateCart(viewModels);
+                            })
+                            .then(() => {
+                                if (this.IsValidOrder) { 
+                                    return Q.resolve(true)
+                                } else return Q.reject("Order can't be placed")
                             })
                             .then(() => this.submitPayment())
                             .then(() => self.checkoutService.completeCheckout())
@@ -38,7 +52,10 @@ module Orckestra.Composer {
                                 console.error('An error occurred while completing the checkout.', reason);
                                 ErrorHandler.instance().outputErrorFromCode('CompleteCheckoutFailed');
                             })
-                            .finally(() => this.Mode.CompleteCheckoutLoading = false);
+                            .finally(() => {
+                                this.Mode.CompleteCheckoutLoading = false;
+                                self.fulfillmentService.invalidateCache();// it is important to clear cache at the end, so confirmation page will load fresh data
+                            });
                     }
                 }
             };

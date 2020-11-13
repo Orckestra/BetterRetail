@@ -15,7 +15,7 @@
 <body>
     <div id="changeStoreModal" data-oc-controller="Grocery.ChangeStoreModal" class="modal store-selector" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
-            <div class="modal-content px-3 pt-3">
+            <div class="modal-content px-sm-3 pt-sm-3">
                 <div class="modal-header border-0 py-1">
                     <h4 class="modal-title font-weight-bold">
                         <span v-if="Mode.ChangeMode == 'method'">@Html.Localize("Grocery", "H_ChangeMethodModal")</span>
@@ -58,8 +58,28 @@
     </div>
 }
 
+@helper SelectedFulfillmentMethod()
+{
+    <div v-if="SelectedFulfillment.FulfillmentMethodType" class="mb-2">
+        <div class="border p-2">
+            <h5 class="m-0">
+                <i class="fa mr-1" v-bind:class="SelectedFulfillment.FulfillmentMethodType === 1 ? 'fa-store-alt' : 'fa-truck'" />
+                <span v-if="SelectedFulfillment.FulfillmentMethodType == 1">@Html.Localize("Grocery", "T_FulfillmentMethodTitle_PickUp")</span>
+                <span v-else="else">@Html.Localize("Grocery", "T_FulfillmentMethodTitle_Shipping")</span>
+            </h5>
+        </div>
+        <div class="clearfix">
+            <a class="cta dark-blue float-right py-1" href="#" v-on:click.prevent="changeMethod">
+                @Html.Localize("Grocery", "B_ChangeFulfillmentMethod")
+            </a>
+        </div>
+    </div>
+}
+
 @helper ChangeStoreView()
 {
+    @SelectedFulfillmentMethod()
+
     <div class="input-group">
         <input id="changeStoreInput" class="form-control border-right-0" type="text"
                placeholder="@Html.Localize("Store", "I_Placeholder")"
@@ -92,21 +112,31 @@
     <div v-if="NoStores" class="alert bg-light mt-4">
         @Html.Localize("Grocery", "L_StoresNotAvailableMessage")
     </div>
+    @Forms.Validations.ShowError("Errors.StoreSelectionError", "L_StoreSelectionFailed")
+}
+
+@helper SelectedStore()
+{
+    <div v-if="SelectedFulfillment.Store">
+        <div class="border p-2 rounded">
+            @StoreDetails("SelectedFulfillment.Store")
+        </div>
+        <div class="clearfix">
+            <a class="cta dark-blue float-right py-1" href="#" v-on:click.prevent="changeStore">
+                @Html.Localize("Grocery", "B_ChangeStore")
+            </a>
+        </div>
+    </div>
 }
 
 @helper ChangeTimeSlotView()
 {
-    <div v-if="SelectedStore.Store" class="border p-2 rounded">
-        @StoreDetails("SelectedStore.Store")
-    </div>
-    <div class="clearfix">
-        <a class="cta dark-blue float-right py-1" href="#" v-on:click.prevent="changeStore">
-            @Html.Localize("Grocery", "B_ChangeStore")
-        </a>
-    </div>
-    <div v-if="SelectedStore.TimeSlotReservation" class="border p-2 rounded">
-        <strong>{{SelectedStore.TimeSlot.DayOfWeekString}}, {{SelectedStore.TimeSlotReservation.Day}} {{SelectedStore.TimeSlotReservation.DisplayMonth}}</strong>
-        <p class="m-0">{{SelectedStore.TimeSlot.DisplayBeginTime}} to {{SelectedStore.TimeSlot.DisplayEndTime}}</p>
+    @SelectedFulfillmentMethod()
+    @SelectedStore()
+
+    <div v-if="SelectedFulfillment.TimeSlotReservation &amp;&amp; SelectedFulfillment.TimeSlot" class="border p-2 rounded">
+        <strong>{{SelectedFulfillment.TimeSlot.DayOfWeekString}}, {{SelectedFulfillment.TimeSlotReservation.Day}} {{SelectedFulfillment.TimeSlotReservation.DisplayMonth}}</strong>
+        <p class="m-0">{{SelectedFulfillment.TimeSlot.DisplayBeginTime}} to {{SelectedFulfillment.TimeSlot.DisplayEndTime}}</p>
     </div>
 
     @Function("Grocery.StoreSelector.TimeSlotCalendar", new { ContainerHeight = 250 })
@@ -119,13 +149,13 @@
 @helper ShippingMethodTypeOption()
 {
     <div class="border rounded bg-white p-3 flex-grow-1 shipping-methods"
-         v-bind:class="{'selected-method-type bg-selected': SelectedStore.FulfillmentMethodType === shippingMethod.FulfillmentMethodType}">
+         v-bind:class="{'selected-method-type bg-selected': SelectedFulfillment.FulfillmentMethodType === shippingMethod.FulfillmentMethodType}">
         <div class="form-check">
             <input class="form-check-input" type="radio"
                    v-bind:value="shippingMethod.FulfillmentMethodType"
                    name="ShippingMethod"
                    v-bind:Id="shippingMethod.FulfillmentMethodTypeString + '-radio'"
-                   v-model="SelectedStore.FulfillmentMethodType"
+                   v-model="SelectedFulfillment.FulfillmentMethodType"
                    xmlns:v-bind="v-bind"
                    xmlns:v-on="v-on"
                    v-on:change="selectFulfillmentMethod" />
@@ -133,18 +163,16 @@
                    v-bind:for="shippingMethod.FulfillmentMethodTypeString + '-radio'">
                 <strong>
                     <i class="fa mr-1"
-                       v-bind:class="[
-                           shippingMethod.FulfillmentMethodTypeString === '@(FulfillmentMethodType.PickUp)' ? 'fa-store-alt' : ''
-                           || 'fa-truck'
-                       ]" />
-                    <span> {{shippingMethod.DisplayName}}</span>
+                       v-bind:class="shippingMethod.FulfillmentMethodTypeString === '@(FulfillmentMethodType.PickUp)' ? 'fa-store-alt' : 'fa-truck'" />
+                    <span v-if="shippingMethod.FulfillmentMethodType == 1">@Html.Localize("Grocery", "T_FulfillmentMethodTitle_PickUp")</span>
+                    <span v-else="else">@Html.Localize("Grocery", "T_FulfillmentMethodTitle_Shipping")</span>
                 </strong>
                 <p class="mb-0 text-height-0">
-                    <small v-if="shippingMethod.FulfillmentMethodTypeString === '@(FulfillmentMethodType.Shipping)'">
-                        @Html.Localize("Grocery", "L_ShippingMethodDescriptionShipping")
-                    </small>
                     <small v-if="shippingMethod.FulfillmentMethodTypeString === '@(FulfillmentMethodType.PickUp)'">
                         @Html.Localize("Grocery", "L_ShippingMethodDescriptionPickUp")
+                    </small>
+                    <small v-else="else">
+                        @Html.Localize("Grocery", "L_ShippingMethodDescriptionShipping")
                     </small>
                 </p>
             </label>

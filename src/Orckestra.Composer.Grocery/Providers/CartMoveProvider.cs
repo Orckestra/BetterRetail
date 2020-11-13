@@ -134,7 +134,7 @@ namespace Orckestra.Composer.Grocery.Providers
                 PropertyBag = oldShipment.PropertyBag,
                 Id = newShipmentId,
                 ScopeId = param.ScopeTo,
-                ShippingAddress = oldShipment.Address,
+                ShippingAddress = string.IsNullOrEmpty(oldShipment.Address?.City) ? null : oldShipment.Address,
                 ShippingProviderId = fulfillmentMethod?.ShippingProviderId ?? Guid.Empty
             };
 

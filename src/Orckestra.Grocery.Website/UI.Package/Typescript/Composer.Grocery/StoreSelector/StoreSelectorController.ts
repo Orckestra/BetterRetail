@@ -15,18 +15,18 @@ module Orckestra.Composer {
         public StoreSelector: Vue;
         protected GeoService: GeoLocationService = new GeoLocationService();
         protected storeService: IStoreService = StoreService.instance();
-        protected selectedStoreService: IFulfillmentService = FulfillmentService.instance();
+        protected selectedFulfillmentService: IFulfillmentService = FulfillmentService.instance();
         protected shippingMethodService: ShippingMethodService = new ShippingMethodService();
         protected cartService = CartService.getInstance();
 
         public initialize() {
             super.initialize();
 
-            let getDefaultStorePromise = this.selectedStoreService.getSelectedFulfillment();
+            let getFulfillmentPromise = this.selectedFulfillmentService.getSelectedFulfillment();
             let getShippingMethodTypesPromise = this.shippingMethodService.getShippingMethodTypes();
-            Q.all([getDefaultStorePromise, getShippingMethodTypesPromise])
-                .spread((defaultStore, shippingMethodTypes) => {
-                    this.initializeVueComponent(defaultStore, shippingMethodTypes);
+            Q.all([getFulfillmentPromise, getShippingMethodTypesPromise])
+                .spread((fulfillment, shippingMethodTypes) => {
+                    this.initializeVueComponent(fulfillment, shippingMethodTypes);
                 })
                 .fail((reason: any) => {
                     console.error('Error while initializing StoreSelectorController.', reason);
@@ -41,9 +41,9 @@ module Orckestra.Composer {
             }
         }
 
-        private initializeVueComponent({Store, TimeSlot}, shippingMethodTypesVm: any) {
+        private initializeVueComponent(fulfillment, shippingMethodTypesVm: any) {
             let self: StoreSelectorController = this;
-
+            let commonFulfillmentOptions = FulfillmentHelper.getCommonSelectedFulfillmentStateOptions(fulfillment);
             this.StoreSelector = new Vue({
                 el: '#vueStoreSelector',
                 components: {
@@ -51,7 +51,7 @@ module Orckestra.Composer {
                     [StepperStepVueComponent.componentMame]: StepperStepVueComponent.getComponent(),
                 },
                 data: {
-                    DefaultStore: Store,
+                    ...commonFulfillmentOptions.data,
                     AllStores: undefined,
                     Stores: [],
                     SelectedStoreId: undefined,
@@ -69,15 +69,18 @@ module Orckestra.Composer {
                     CurrentShipmentId: undefined,
                     Mode: {
                         Loading: false,
-                        SeeMoreStores: false
-                    },
-                    Errors: {
-                        TimeSlotLoadingError: false,
-                        TimeSlotSelectionError: false
+                        SeeMoreStores: false,
+                        Stepper: !(fulfillment.Store)
                     }
                 },
                 mounted() {
                     this.initPostalCodeSearchBox();
+                    self.eventHub.subscribe(FulfillmentEvents.FulfillmentMethodSelected,  e => this.onMethodSelected(e.data));
+                    self.eventHub.subscribe(FulfillmentEvents.StoreSelected,  e => this.onStoreSelected(e.data));
+                    self.eventHub.subscribe(FulfillmentEvents.StoreUpdating, e => this.onStoreUpdating(e.data));
+                    self.eventHub.subscribe(FulfillmentEvents.TimeSlotSelected,  e => this.onSlotSelected(e.data));
+                    self.eventHub.subscribe(FulfillmentEvents.TimeSlotUpdating, e => this.onSlotUpdating(e.data));
+                    self.eventHub.subscribe(FulfillmentEvents.TimeSlotSelectionFailed, e => this.onSlotFailed(e.data));
                 },
                 computed: {
                     IsLocationFilled() {
@@ -121,9 +124,10 @@ module Orckestra.Composer {
                     },
                     ReservedSlotId() {
                         if (!this.ReservedSlotData || !this.ReservedSlotData.TimeSlotReservation) return '';
-                        let {ReservationDate: date, FulfillmentLocationTimeSlotId: id} = this.ReservedSlotData.TimeSlotReservation;
+                        let { ReservationDate: date, FulfillmentLocationTimeSlotId: id } = this.ReservedSlotData.TimeSlotReservation;
                         return date + id;
-                    }
+                    },
+                    ...commonFulfillmentOptions.computed
                 },
                 methods: {
                     initPostalCodeSearchBox() {
@@ -132,10 +136,10 @@ module Orckestra.Composer {
 
                         this.postalCodeSearchBox.addListener('place_changed', () => {
                             let place = this.postalCodeSearchBox.getPlace();
-                            if (place &&  place.geometry) {
+                            if (place && place.geometry) {
                                 this.Location = place.geometry.location;
                                 this.PostalCode = this.$refs.postalCodeInput.value;
-                                self.eventHub.publish(FulfillmentEvents.LocationSelected, {data: this.Location});
+                                self.eventHub.publish(FulfillmentEvents.LocationSelected, { data: this.Location });
                             } else {
                                 this.Location = undefined;
                             }
@@ -162,7 +166,7 @@ module Orckestra.Composer {
                         if (!this.IsLocationFilled)
                             return Q.resolve(false);
 
-                        self.eventHub.publish(FulfillmentEvents.CheckAvailability, {data: this.Location});
+                        self.eventHub.publish(FulfillmentEvents.CheckAvailability, { data: this.Location });
                         return self.storeService.getStoresByLocation(this.Location)
                             .then(stores => {
                                 this.AllStores = stores;
@@ -176,29 +180,32 @@ module Orckestra.Composer {
                     selectStore(event, store: any, step: any): Q.Promise<boolean> {
                         this.Mode.Loading = true;
                         this.Errors.TimeSlotSelectionError = false;
+                        this.Errors.StoreSelectionError = false;
 
-                        var busy = self.asyncBusy({elementContext: $(event.target)});
- 
+                        var busy = self.asyncBusy({ elementContext: $(event.target) });
+
                         step.selectStep(); //Select store step for erase next steps
                         self.cartService.invalidateCache();
-                        return self.selectedStoreService.setFulFilledMethodType(this.ShippingMethodType)
-                            .then(() => self.selectedStoreService.setStore(store.Id))
+                        return self.selectedFulfillmentService.setFulFilledMethodType(this.ShippingMethodType)
+                            .then(() => self.selectedFulfillmentService.setStore(store.Id))
                             .then((storeResult) => {
                                 if (storeResult) {
                                     this.SelectedStoreId = store.Id;
                                     this.Mode.SeeMoreStores = false;
+                                    self.eventHub.publish(FulfillmentEvents.StoreSelected, { data: store });
                                 }
                                 step.nextStep();
                                 return storeResult;
                             })
                             .fail((reason) => {
                                 console.log(reason);
+                                this.Errors.StoreSelectionError = true;
+                                self.eventHub.publish(FulfillmentEvents.StoreSelectionFailed, { data: store });
                                 return false;
                             })
-                            .fin(() => { 
+                            .fin(() => {
                                 this.Mode.Loading = false;
                                 busy.done();
-                                self.eventHub.publish(FulfillmentEvents.StoreSelected, { data: store });
                                 self.eventHub.publish(FulfillmentEvents.TimeSlotSelected, {
                                     data: { TimeSlot: undefined, TimeSlotReservation: undefined }
                                 });
@@ -221,12 +228,13 @@ module Orckestra.Composer {
                     findTimeSlots(): Q.Promise<boolean> {
                         if (!this.SelectedStoreId) return Q.resolve(false);
                         this.Errors.TimeSlotLoadingError = false;
+                        this.Mode.Loading = true;
 
-                        return self.selectedStoreService.getTimeSlots(this.ShippingMethodType, this.SelectedStoreId, this.CurrentShipmentId)
+                        return self.selectedFulfillmentService.getTimeSlots(this.ShippingMethodType, this.SelectedStoreId, this.CurrentShipmentId)
                             .then(result => {
                                 if (!result) return false;
 
-                                let {DayAvailabilityList, StartHour, EndHour, RowLabelList} = result;
+                                let { DayAvailabilityList, StartHour, EndHour, RowLabelList } = result;
 
                                 this.DayAvailabilityList = DayAvailabilityList;
                                 this.TimeSlotRows = RowLabelList;
@@ -238,28 +246,29 @@ module Orckestra.Composer {
                                 this.Errors.TimeSlotLoadingError = true;
                                 return false;
                             })
+                            .fin(() => this.Mode.Loading = false)
                     },
                     selectTimeSlot(timeSlot, day) {
                         this.Errors.TimeSlotSelectionError = false;
-                        self.eventHub.publish(FulfillmentEvents.TimeSlotUpdating, {data: timeSlot});
-                        self.selectedStoreService.setTimeSlotId(this.SelectedStoreId, this.CurrentShipmentId, timeSlot.Id, day.Date)
+                        self.eventHub.publish(FulfillmentEvents.TimeSlotUpdating, { data: timeSlot });
+                        self.selectedFulfillmentService.setTimeSlotId(this.SelectedStoreId, this.CurrentShipmentId, timeSlot.Id, day.Date)
                             .then(cart => {
-                                const {TimeSlotReservation} = cart;
-                                this.ReservedSlotData = {TimeSlot: {...timeSlot}, TimeSlotReservation};
-                                self.eventHub.publish(FulfillmentEvents.TimeSlotSelected, {data: this.ReservedSlotData});
-                                self.eventHub.publish('cartUpdated', {data: cart});
+                                const { TimeSlotReservation } = cart;
+                                this.ReservedSlotData = { TimeSlot: { ...timeSlot }, TimeSlotReservation };
+                                self.eventHub.publish(FulfillmentEvents.TimeSlotSelected, { data: this.ReservedSlotData });
+                                self.eventHub.publish('cartUpdated', { data: cart });
                                 this.nextStep();
-                                setTimeout(() => this.$refs.startShoppingButton.scrollIntoView({behavior: "smooth", block: "nearest"}));
-                                
+                                setTimeout(() => this.$refs.startShoppingButton.scrollIntoView({ behavior: "smooth", block: "nearest" }));
+
                             })
                             .fail(reason => {
                                 this.findTimeSlots(); //try to reload slots
-                                this.ReservedSlotData = {TimeSlot: undefined, TimeSlotReservation: undefined };
+                                this.ReservedSlotData = { TimeSlot: undefined, TimeSlotReservation: undefined };
                                 this.Errors.TimeSlotSelectionError = TimeSlotsHelper.getTimeSlotReservationError(reason.Errors);
                                 self.eventHub.publish(FulfillmentEvents.TimeSlotSelected, {
-                                    data: {TimeSlot: undefined, TimeSlotReservation: undefined}
+                                    data: { TimeSlot: undefined, TimeSlotReservation: undefined }
                                 });
-                                self.eventHub.publish(FulfillmentEvents.TimeSlotSelectionFailed, {data: reason.Errors});
+                                self.eventHub.publish(FulfillmentEvents.TimeSlotSelectionFailed, { data: reason.Errors });
                             });
                     },
                     nextStep() {
@@ -271,12 +280,9 @@ module Orckestra.Composer {
                     prevDay() {
                         this.StartIndex--;
                     },
+                    ...commonFulfillmentOptions.methods
                 }
             });
-        }
-
-        private getAddressFromLocation(location: google.maps.LatLng): Q.Promise<string> {
-            return this.GeoService.getAddressByLocation(location)
         }
     }
 }

@@ -27,35 +27,42 @@
     </span>
 }
 
-@helper SelectedTimeSlotPreview(string vueBinding, bool showChangeLink = true)
+@helper SelectedTimeSlotPreview(string vueBinding, bool showChangeLink = true, bool showTitle = true)
 {
 <div>
     <div v-if="@(vueBinding).TimeSlot">
-        <strong>@Html.Localize("Grocery", "T_SelectedTimeSlot")</strong>
-        @if (showChangeLink)
+        @if (showTitle)
         {
-            <a class="cta my-1 float-right" href="#" v-on:click.prevent="changeStoreModal($event, 'slot')">
-                @Html.Localize("Grocery", "B_ChangeSlot")
-            </a>
+            <strong>@Html.Localize("Grocery", "T_SelectedTimeSlot")</strong>
         }
+
         <div class="position-relative busy-container" v-bind:class="{ 'busy': @(vueBinding).TimeSlotLoading }">
             @GeneralHelpers.LoadingSpinner()
             <span>{{@(vueBinding).TimeSlot.DayOfWeekString}}, {{@(vueBinding).TimeSlotReservation.Day}} {{@(vueBinding).TimeSlotReservation.DisplayMonth}}</span>
-            <p class="m-0">
+            <p class="m-0" v-bind:title="TimeSlotReservation.ReservationStatusDisplay">
                 {{@(vueBinding).TimeSlot.DisplayBeginTime}} to {{@(vueBinding).TimeSlot.DisplayEndTime}}
             </p>
         </div>
+        @if (showChangeLink)
+        {
+            <div class="clearfix">
+                <a class="cta float-right" href="#" v-on:click.prevent="changeStoreModal($event, 'slot')">
+                    <i class="fa fa-edit d-inline d-sm-none"></i>
+                    <span class="d-none d-sm-inline"> @Html.Localize("Grocery", "B_ChangeSlot")</span>
+                </a>
+            </div>
+        }
     </div>
     @if (showChangeLink)
     {
-        
-<div v-else="v-else">
-    <button v-on:click.prevent="changeStoreModal($event, 'slot')"
-            v-bind:disabled="!IsStoreSelected"
-            class="btn btn-block btn-primary">
-        @Html.Localize("Grocery", "B_BookYourSlot")
-    </button>
-</div>
+        <div v-else="v-else">
+            <button v-on:click.prevent="changeStoreModal($event, 'slot')"
+                    v-bind:disabled="!IsStoreSelected || @(vueBinding).TimeSlotLoading"
+                    class="btn btn-block btn-primary">
+                @Html.Localize("Grocery", "B_BookYourSlot")
+                @GeneralHelpers.ButtonLoadingSpinner(vueBinding + ".TimeSlotLoading")
+            </button>
+        </div>
     }
     <div v-if="TimeSlotReservationTentative" v-cloak="true" class="text-danger mt-2">
         @Html.Localized("Grocery", "L_ReservedUntil", " {{TimeSlotReservationExpireTime}} ")
@@ -80,14 +87,9 @@
         <div class="position-relative busy-container" v-bind:class="{ 'busy': @(vueBinding).StoreLoading }">
             @GeneralHelpers.LoadingSpinner()
             <div class="mb-2">
-                @if (showChangeLink)
-                {
-                    <a class="cta float-right" href="#" v-on:click.prevent="changeStoreModal($event, 'store')">
-                        @Html.Localize("Grocery", "B_ChangeStore")
-                    </a>
-                }
                 <strong>{{@(vueBinding).Store.LocalizedDisplayName}}</strong>
                 @StoreAddress(vueBinding + ".Store", false)
+
             </div>
             <div class="mb-2 text-nowrap">
                 <strong>@Html.Localize("Store", "T_OpenHours")</strong><br />
@@ -98,6 +100,15 @@
                 <span v-if="@(vueBinding).Store.PhoneNumber">{{@(vueBinding).Store.PhoneNumber}}</span>
                 <span v-else="else">{{@(vueBinding).Store.Address.PhoneNumber}}</span>
             </div>
+            @if (showChangeLink)
+            {
+                <div class="clearfix">
+                    <a class="cta float-right" href="#" v-on:click.prevent="changeStoreModal($event, 'store')">
+                        <i class="fa fa-edit d-inline d-sm-none"></i>
+                        <span class="d-none d-sm-inline"> @Html.Localize("Grocery", "B_ChangeStore")</span>
+                    </a>
+                </div>
+            }
         </div>
     </div>
 </div>
@@ -109,7 +120,7 @@
         <div class="row">
             @if (showMap)
             {
-                <div class="col-3 col-sm-2">
+                <div class="col-2 col-sm-2">
                     <div class="store-row-map" v-bind:style="{ 'background-image': 'url(' + @(vueBinding).GoogleStaticMapUrl + '&amp;size=200x200)' } ">
                         <a v-bind:href="@(vueBinding).Url" target="_blank"
                            class="d-block position-relative  w-100  h-100">
@@ -118,7 +129,7 @@
                     </div>
                 </div>
             }
-            <div class="@(showMap ? "col-6 col-sm-7" : "col-9")">
+            <div class="@(showMap ? "col-6 col-sm-7" : "col-8 col-sm-9")">
                 <div class="p-2 text-left">
                     <strong>{{@(vueBinding).LocalizedDisplayName}}</strong>
                     <div class="mt-1">
@@ -128,9 +139,9 @@
                     </div>
                 </div>
             </div>
-            <div class="col-3">
+            <div class="col-4 col-sm-3">
                 <div class="p-2  h-100 position-relative">
-                    <div class="text-right"
+                    <div class="text-right small"
                          v-if="@(vueBinding).DestinationToSearchPoint">
                         at {{@(vueBinding).DestinationToSearchPoint}} {{@(vueBinding).LengthMeasureUnit}}
                     </div>

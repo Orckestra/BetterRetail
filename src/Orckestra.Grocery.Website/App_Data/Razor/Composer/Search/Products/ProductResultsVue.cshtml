@@ -12,6 +12,9 @@
     [FunctionParameter(Label = "FallbackImageUrl", DefaultValue = null)]
     public string FallbackImageUrl { get; set; }
 
+    [FunctionParameter(Label = "ColumnsStyle", DefaultValue = "col-6  col-md-4")]
+    public string ColumnsStyle { get; set; }
+
 }
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0"
       xmlns:v-bind="v-bind" xmlns:v-on="v-on">
@@ -41,7 +44,7 @@
                 @GeneralHelpers.LoadingSpinner()
                 <div class="row">
                     <div v-for="(Product, index) in ExtendedSearchResults" v-bind:key="Product.ProductId"
-                         class="col-6  col-md-4  mb-4" data-qa="search-results">
+                         class="@ColumnsStyle  mb-4" data-qa="search-results">
                         @Function("Composer.Search.Products.ProductTileVue")
                     </div>
                 </div>

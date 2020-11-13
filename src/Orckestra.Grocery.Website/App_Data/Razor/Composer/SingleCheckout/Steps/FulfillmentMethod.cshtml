@@ -38,13 +38,13 @@
                                 <a class="cta float-right" href="#" v-on:click.prevent="changeStoreModal($event, 'method')">
                                     @Html.Localize("Grocery", "B_ChangeFulfillmentMethod")
                                 </a>
-                                @ShippingTypeSelectedView()
-                                @PickUpTypeSelectedView()
+                                @ShippingTypeSelected_ActiveView()
+                                @PickUpTypeSelected_ActiveView()
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="border  rounded bg-white  p-3">
-                                @TimeSlotView()
+                                @TimeSlot_ActiveView()
                             </div>
                         </div>
                     </div>
@@ -59,10 +59,11 @@
                     <div v-if="Cart.ShippingMethod">
                         <div class="row">
                             <div class="col-12 col-sm-6">
-                                <h4>{{SelectedMethodType.DisplayName}}</h4>
-
+                                <strong v-if="IsShippingMethodType">
+                                    @Html.Localize("Grocery", "T_FulfillmentMethodTitle_Shipping")
+                                </strong>
+                                <strong v-else="else">@Html.Localize("Grocery", "T_FulfillmentMethodTitle_PickUp")</strong>
                                 @CheckoutHelpers.AddressPreview("ShippingAddress")
-
                                 <span v-if="Cart.ShippingMethod.ExpectedDaysBeforeDelivery"
                                       data-qa="shippingmethod-expecteddays-info" class="clearfix">
                                     <strong>
@@ -73,7 +74,10 @@
                                 </span>
                             </div>
                             <div class="col-12 col-sm-6">
-                                @TimeSlotView()
+                                <strong> @Html.Localize("Grocery", "T_TimeSlot")</strong>
+                                <div v-if="IsStoreSelected">
+                                    @StoreHelpers.SelectedTimeSlotPreview("SelectedFulfillment", false, false)
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -84,24 +88,24 @@
 </body>
 </html>
 
-@helper ShippingTypeSelectedView()
+@helper ShippingTypeSelected_ActiveView()
 {
     <div v-if="IsShippingMethodType">
-        <h3>
+        <h4 v-if="IsShippingMethodType">
             <i class="fa fa-truck fa-sm mr-1" />
             @Html.Localize("Grocery", "T_FulfillmentMethodTitle_Shipping")
-        </h3>
+        </h4>
         @SelectedStorePreview()
     </div>
 }
 
-@helper PickUpTypeSelectedView()
+@helper PickUpTypeSelected_ActiveView()
 {
-    <div v-if="IsPickUpMethodType" data-oc-controller="SingleCheckout.PickUpStoreAddress" >
-        <h3>
+    <div v-if="IsPickUpMethodType" data-oc-controller="SingleCheckout.PickUpStoreAddress">
+        <h4 v-if="IsPickUpMethodType">
             <i class="fa fa-store-alt fa-sm mr-1" />
             @Html.Localize("Grocery", "T_FulfillmentMethodTitle_PickUp")
-        </h3>
+        </h4>
         @SelectedStorePreview()
     </div>
 }
@@ -123,7 +127,7 @@
     </div>
 }
 
-@helper TimeSlotView()
+@helper TimeSlot_ActiveView(bool showChangeLink = true)
 {
     <div class="clearfix">
         <h3 class="float-left">
@@ -132,6 +136,7 @@
         </h3>
     </div>
     <div v-if="IsStoreSelected">
-        @StoreHelpers.SelectedTimeSlotPreview("SelectedFulfillment")
+        @StoreHelpers.SelectedTimeSlotPreview("SelectedFulfillment", showChangeLink, false)
     </div>
+    @Forms.Validations.ShowError("Errors.TimeSlotSelectionError")
 }

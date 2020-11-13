@@ -1,9 +1,12 @@
 using OOrckestra.Composer.Grocery.Services;
 using Orckestra.Composer.Cart;
 using Orckestra.Composer.Cart.Providers.Payment;
+using Orckestra.Composer.Cart.Repositories;
 using Orckestra.Composer.Cart.Services;
 using Orckestra.Composer.ExceptionFilters;
+using Orckestra.Composer.Grocery.Repositories;
 using Orckestra.Composer.Grocery.Services;
+using Orckestra.Composer.Repositories;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Store.Services;
 
@@ -17,8 +20,11 @@ namespace Orckestra.Composer.Grocery.Website
             host.Register<GroceryComposerContext, IComposerContext>();
             host.Register<SalesScopeStoreLocatorViewService, IStoreLocatorViewService>();
             host.Register<SalesScopeStoreViewService, IStoreViewService>();
+            host.Register<SalesScopeInventoryRepository, IInventoryRepository>();
             host.Register<SalesScopeWishListViewService, IWishListViewService>();
             host.Register<CookieBasedFulfillmentContext, IFulfillmentContext>();
+            host.Register<SalesScopeFulfillmentMethodRepository, IFulfillmentMethodRepository>();
+            host.Register<SalesScopePaymentRepository, IPaymentRepository>();
             host.RegisterControllers(GetType().Assembly);
             host.RegisterApiControllers(GetType().Assembly);
             host.RegisterExceptionFiltersForApiControllers(typeof(AggregatedComposerExceptionFilter), typeof(ComposerExceptionFilter));
@@ -29,7 +35,7 @@ namespace Orckestra.Composer.Grocery.Website
         private void RegisterPaymentProviders()
         {
             CartConfiguration.PaymentProviderRegistry.RegisterProvider<OnSitePOSPaymentProvider>("Onsite payment");
-            //CartConfiguration.PaymentProviderRegistry.RegisterProvider<MonerisCanadaPaymentProvider>("Moneris");
+            CartConfiguration.PaymentProviderRegistry.RegisterProvider<MonerisCanadaPaymentProvider>("Moneris");
         }
     }
 }

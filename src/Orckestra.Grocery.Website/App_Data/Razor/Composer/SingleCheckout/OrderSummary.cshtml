@@ -50,6 +50,8 @@
 
                 @OrderSummaryHelpers.AdditionalFeesMessage()
 
+                @ErrorMessages()
+
                 @PalceOrderBtn()
             </div>
         </div>
@@ -61,7 +63,7 @@
 {
     <div v-if="OrderSummary.Rewards.length" class="text-center">
         <p class="promotion  mb-2">
-            <em v-for="(reward, index) in OrderSummary.Rewards" v-bind:data-qa="'reward-' +  index">{{reward.Description || reward.PromotionName}}<br/></em>
+            <em v-for="(reward, index) in OrderSummary.Rewards" v-bind:data-qa="'reward-' +  index">{{reward.Description || reward.PromotionName}}<br /></em>
         </p>
     </div>
 }
@@ -98,10 +100,10 @@
 
 @helper Shipping()
 {
-    <div v-if="IsShippingEstimatedOrSelected" class="row  mb-2">
+    <div class="row  mb-2">
         <div class="col-6  col-md-7">
             <span v-if="ShippingAddress">
-                @Html.Localized("ShoppingCart", "L_ShippingBasedOn", "{{ShippingAddress.PostalCode}}")
+                @Html.Localize("ShoppingCart", "L_ShippingFee")
             </span>
         </div>
         <div class="col-6  col-md-5  text-right">
@@ -112,6 +114,12 @@
     </div>
 }
 
+@helper ErrorMessages()
+{
+    <div v-if="TimeSlotReservationExpired" class="alert alert-danger my-2">
+        @Html.Localize("Grocery", "L_ReservationExpired")
+    </div>
+}
 
 @helper PalceOrderBtn()
 {

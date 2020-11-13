@@ -283,7 +283,7 @@ module Orckestra.Composer {
                         let stepId = this.steps[stepIndex].stepId;
                         setTimeout(function () {
                             $('html, body').animate({
-                                scrollTop: $('#' + stepId).offset().top
+                                scrollTop: ($('#' + stepId).offset().top - 150)
                             }, 500);
                         }, 500);
                     },

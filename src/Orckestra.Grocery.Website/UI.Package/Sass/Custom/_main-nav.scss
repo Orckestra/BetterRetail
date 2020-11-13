@@ -39,6 +39,12 @@
         padding: 4px 10px;
     }
 
+    .nav-item {
+        &.highlight {
+            background: $light;
+            font-weight: bold;
+        }
+    }
 
     .nav-link  {
         position: relative;
