@@ -5,7 +5,7 @@ module Orckestra.Composer {
     export interface ICacheProvider {
 
         defaultCache: ICache;
-        customCache: ICache;
+        sessionCache: ICache;
 
         localStorage: Storage;
         sessionStorage: Storage;

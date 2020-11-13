@@ -311,15 +311,15 @@ namespace Orckestra.Composer.MyAccount.Api
         }
 
         /// <summary>
-        /// Get the mini sign-in viewmodel in the header
+        /// Get the mini user metadata viewmodel in the header
         /// </summary>
         /// <returns></returns>
         [AllowAnonymous]
         [HttpGet]
-        [ActionName("signin")]
-        public virtual async Task<IHttpActionResult> SignIn()
+        [ActionName("usermetadata")]
+        public virtual async Task<IHttpActionResult> UserMetadata()
         {
-            var getSignInHeaderParam = new GetSignInHeaderParam
+            var getParam = new GetUserMetadataParam
             {
                 CustomerId = ComposerContext.CustomerId,
                 CultureInfo = ComposerContext.CultureInfo,
@@ -328,9 +328,9 @@ namespace Orckestra.Composer.MyAccount.Api
                 EncryptedCustomerId = ComposerContext.GetEncryptedCustomerId()
             };
 
-            var signInHeaderViewModel = await MembershipViewService.GetSignInHeaderModel(getSignInHeaderParam);
+            var vm = await MembershipViewService.GetUserMetadataModel(getParam);
 
-            return Ok(signInHeaderViewModel);
+            return Ok(vm);
         }
 
         /// <summary>

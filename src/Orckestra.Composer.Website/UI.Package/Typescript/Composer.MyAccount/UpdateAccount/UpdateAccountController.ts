@@ -3,7 +3,7 @@
 ///<reference path='../../Mvc/IControllerActionContext.ts' />
 ///<reference path='../../Utils/UrlHelper.ts' />
 ///<reference path='../Common/CustomerService.ts' />
-///<reference path='../SignInHeader/SignInHeaderService.ts' />
+///<reference path='../../Services/UserMetadataService.ts' />
 ///<reference path='../Common/MyAccountEvents.ts' />
 ///<reference path='../MyAccount/MyAccountController.ts' />
 
@@ -12,7 +12,7 @@ module Orckestra.Composer {
     export class UpdateAccountController extends Orckestra.Composer.MyAccountController {
 
         protected customerService: ICustomerService = new CustomerService(new CustomerRepository());
-        protected signInHeaderService: SignInHeaderService = new SignInHeaderService(new SignInHeaderRepository());
+        protected userService: UserMetadataService = new UserMetadataService(new MembershipRepository());
 
         public initialize() {
 
@@ -62,7 +62,7 @@ module Orckestra.Composer {
 
             this.customerService.updateAccount(formData, returnUrl)
                 .then((result) => {
-                    this.signInHeaderService.invalidateCache();
+                    this.userService.invalidateCache();
                     return result;
                 })
                 .then(result => this.onUpdateAccountFulfilled(result))

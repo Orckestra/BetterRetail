@@ -19,7 +19,7 @@ using System.Threading.Tasks;
 
 namespace Orckestra.Composer.MyAccount.Tests.Services
 {
-    class MembershipViewService_GetSignInHeaderModel
+    class MembershipViewService_GetUserMetadataModel
     {
         private AutoMocker _container;
 
@@ -72,7 +72,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             var membershipViewService = _container.CreateInstance<MembershipViewService>();
             membershipViewService.Membership = _container.Get<IMembershipProxy>();
 
-            var getSignInHeaderParam = new GetSignInHeaderParam
+            var getParam = new GetUserMetadataParam
             {
                 Scope = GetRandom.String(32),
                 CustomerId = GetRandom.Guid(),
@@ -82,11 +82,11 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             };
 
             //Act
-            var viewModel = await membershipViewService.GetSignInHeaderModel(getSignInHeaderParam);
+            var viewModel = await membershipViewService.GetUserMetadataModel(getParam);
 
             //Assert
             viewModel.Should().NotBeNull("This view model should never be null");
-            viewModel.IsLoggedIn.Should().Be(isAuthenticated);
+            viewModel.IsAuthenticated.Should().Be(isAuthenticated);
 
             if (isAuthenticated)
             {
@@ -121,7 +121,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             var membershipViewService = _container.CreateInstance<MembershipViewService>();
             membershipViewService.Membership = _container.Get<IMembershipProxy>();
 
-            var getSignInHeaderParam = new GetSignInHeaderParam
+            var getParam = new GetUserMetadataParam
             {
                 Scope = GetRandom.String(32),
                 CustomerId = GetRandom.Guid(),
@@ -131,11 +131,11 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             };
 
             //Act
-            var viewModel = await membershipViewService.GetSignInHeaderModel(getSignInHeaderParam);
+            var viewModel = await membershipViewService.GetUserMetadataModel(getParam);
 
             //Assert
             viewModel.Should().NotBeNull("This view model should never be null");
-            viewModel.IsLoggedIn.Should().Be(isAuthenticated);
+            viewModel.IsAuthenticated.Should().Be(isAuthenticated);
             if (isAuthenticated)
             {
                 viewModel.Url.Should().Be(expectedMyAccountUrl, "Because logged in user are invited to their account");

@@ -185,7 +185,7 @@
     <Compile Include="Services\CustomerViewService_UpdateAccountAsync.cs" />
     <Compile Include="Services\MembershipViewService_GetChangePasswordViewModelAsync.cs" />
     <Compile Include="Services\MembershipViewService_GetCreateAccountViewModel.cs" />
-    <Compile Include="Services\MembershipViewService_GetSignInHeaderModel.cs" />
+    <Compile Include="Services\MembershipViewService_GetUserMetadataModel.cs" />
     <Compile Include="Services\MembershipViewService_GetLoginViewModel.cs" />
     <Compile Include="Services\MembershipViewService_ChangePasswordAsync.cs" />
     <Compile Include="Services\MembershipViewService_ResetPasswordAsync.cs" />
