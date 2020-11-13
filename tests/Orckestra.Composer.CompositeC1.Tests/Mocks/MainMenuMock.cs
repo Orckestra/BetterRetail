@@ -18,5 +18,6 @@ namespace Orckestra.Composer.CompositeC1.Tests.Mocks
         public Guid Target { get; set; }
         public int Order { get; set; }
         public Guid? CssStyle { get; set; }
+        public string CssClassName { get; set; }
     }
 }
