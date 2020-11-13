@@ -25,124 +25,130 @@
 <body>
     <div class="main-nav nav-tabs">
         <div class="container-md">
-                <nav class="navbar navbar-expand-md megamenu p-0">
-                    <div id="main-nav-collapse" class="collapse navbar-collapse" >
-                        <ul class="nav navbar-nav w-100" role="menubar">
-                            @foreach (var mainMenuEntry in mainMenu)
-                            {
-                                <li class="nav-item dropdown main-nav-fw">
+            <nav class="navbar navbar-expand-md megamenu p-0">
+                <div id="main-nav-collapse" class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav w-100" role="menubar">
+                        @foreach (var mainMenuEntry in mainMenu)
+                        {
+                            <li class="nav-item dropdown main-nav-fw  @mainMenuEntry.CssClassName">
 
-                                    @if (@mainMenuEntry.HasChildren)
-                                    {
-                                        <a href="@mainMenuEntry.Url"
-                                           data-qa="main-menu-category"
-                                           role="button"
-                                           class="dropdown-toggle nav-link d-none d-md-block"
-                                           style="@mainMenuEntry.CssClass" aria-haspopup="true">
-                                            @mainMenuEntry.DisplayName
-                                        </a>
+                                @if (mainMenuEntry.HasChildren)
+                                {
+                                    <a href="@mainMenuEntry.Url"
+                                       data-qa="main-menu-category"
+                                       role="button"
+                                       class="dropdown-toggle nav-link d-none d-md-block"
+                                       style="@mainMenuEntry.CssClass" aria-haspopup="true">
+                                        @mainMenuEntry.DisplayName
+                                    </a>
 
-                                        <a href="@mainMenuEntry.Url"
-                                           data-qa="main-menu-category"
-                                           role="button"
-                                           data-toggle="dropdown"
-                                           class="dropdown-toggle nav-link d-block d-md-none"
-                                           style="@mainMenuEntry.CssClass" aria-haspopup="true" aria-expanded="false">
-                                            @mainMenuEntry.DisplayName
-                                            <span class="fa fa-chevron-down" aria-hidden="true"></span>
-                                            <span class="fa fa-chevron-up" aria-hidden="true"></span>
-                                        </a>
+                                    <a href="@mainMenuEntry.Url"
+                                       data-qa="main-menu-category"
+                                       role="button"
+                                       data-toggle="dropdown"
+                                       class="dropdown-toggle nav-link d-block d-md-none"
+                                       style="@mainMenuEntry.CssClass" aria-haspopup="true" aria-expanded="false">
+                                        @mainMenuEntry.DisplayName
+                                        <span class="fa fa-chevron-down" aria-hidden="true"></span>
+                                        <span class="fa fa-chevron-up" aria-hidden="true"></span>
+                                    </a>
 
-                                        <ul class="dropdown-menu">
-                                            <li>
-                                                <!-- Content container to add padding -->
-                                                <div class="main-nav-content">
-                                                    <div class="row">
-                                                        <div class="col-xl-8">
-                                                            <div class="row">
-                                                                @foreach (var subMenuEntry in @mainMenuEntry.Children as IEnumerable<HomeMainMenuEntryViewModel>)
-                                                                {
-                                                                    <ul class="col-lg-3 list-unstyled">
-                                                                        <li>
-                                                                            <p>
-                                                                                <strong>
-                                                                                    <a data-qa="main-menu-section"
-                                                                                       href="@subMenuEntry.Url"
-                                                                                       target="@subMenuEntry.UrlTarget"
-                                                                                       style="@subMenuEntry.CssClass">
-                                                                                        @subMenuEntry.DisplayName
-                                                                                    </a>
-                                                                                </strong>
-                                                                            </p>
-                                                                        </li>
-                                                                        <li>
-                                                                            <span class="d-none d-lg-inline">
-                                                                                @if (!string.IsNullOrEmpty(@subMenuEntry.Image.ImageSource))
-                                                                                {
-                                                                                    if (!string.IsNullOrEmpty(@subMenuEntry.Image.ImageUrl))
-                                                                                    {
-                                                                                        <a href="@subMenuEntry.Image.ImageUrl" target="@subMenuEntry.Image.ImageUrlTarget"><img src="@subMenuEntry.Image.ImageSource" class="img-responsive img-menu" /></a>
-                                                                                    }
-                                                                                    else
-                                                                                    {
-                                                                                        <img src="@subMenuEntry.Image.ImageSource" class="img-fluid img-menu" />
-                                                                                    }
-                                                                                }
-                                                                            </span>
-                                                                        </li>
-                                                                        @foreach (var subSubMenuEntry in @subMenuEntry.Children as IEnumerable<HomeMainMenuEntryViewModel>)
-                                                                        {
-                                                                            <li><a data-qa="main-menu-link" href="@subSubMenuEntry.Url" target="@subSubMenuEntry.UrlTarget" class="d-none d-md-block" style="@subSubMenuEntry.CssClass">@subSubMenuEntry.DisplayName</a></li>
-                                                                        }
-                                                                    </ul>
-                                                                }
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-4">
-                                                            <span class="menu-image d-none d-lg-inline">
-                                                                @if (!string.IsNullOrEmpty(@mainMenuEntry.Image.ImageSource))
-                                                                {
-                                                                    if (!string.IsNullOrEmpty(@mainMenuEntry.Image.ImageUrl))
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <!-- Content container to add padding -->
+                                            <div class="main-nav-content">
+                                                <div class="row">
+                                                    <div class="col-xl-8">
+                                                        <div class="row">
+                                                            @foreach (var subMenuEntry in @mainMenuEntry.Children as IEnumerable<HomeMainMenuEntryViewModel>)
+                                                            {
+                                                                <ul class="col-lg-3 list-unstyled">
+                                                                    <li class="@subMenuEntry.CssClassName">
+                                                                        <p>
+                                                                            <strong>
+                                                                                <a data-qa="main-menu-section"
+                                                                                   href="@subMenuEntry.Url"
+                                                                                   target="@subMenuEntry.UrlTarget"
+                                                                                   style="@subMenuEntry.CssClass">
+                                                                                    @subMenuEntry.DisplayName
+                                                                                </a>
+                                                                            </strong>
+                                                                        </p>
+                                                                    </li>
+                                                                    <li>
+                                                                        <span class="d-none d-lg-inline">
+                                                                            @Image(@subMenuEntry)
+                                                                        </span>
+                                                                    </li>
+                                                                    @foreach (var subSubMenuEntry in @subMenuEntry.Children as IEnumerable<HomeMainMenuEntryViewModel>)
                                                                     {
-                                                                        <a href="@mainMenuEntry.Image.ImageUrl" target="@mainMenuEntry.Image.ImageUrlTarget">
-                                                                            <img src="@mainMenuEntry.Image.ImageSource" class="img-fluid" /></a>
+                                                                        <li class="@subSubMenuEntry.CssClassName">
+                                                                            <a data-qa="main-menu-link"
+                                                                               href="@subSubMenuEntry.Url"
+                                                                               target="@subSubMenuEntry.UrlTarget"
+                                                                               class="d-none d-md-block"
+                                                                               style="@subSubMenuEntry.CssClass">
+                                                                                @subSubMenuEntry.DisplayName
+                                                                            </a>
+                                                                        </li>
                                                                     }
-                                                                    else
-                                                                    {
-                                                                        <img src="@mainMenuEntry.Image.ImageSource" class="img-fluid" />
-                                                                    }
-                                                                    <span class="caption">
-                                                                        <span>@mainMenuEntry.Image.ImageLabel</span>
-                                                                    </span>
-                                                                }
-                                                            </span>
+                                                                </ul>
+                                                            }
                                                         </div>
                                                     </div>
+                                                    <div class="col-lg-4">
+                                                        <span class="menu-image d-none d-lg-inline">
+                                                            @Image(@mainMenuEntry)
+                                                        </span>
+                                                    </div>
                                                 </div>
-                                            </li>
-                                        </ul>
-                                    }
-                                    else
-                                    {
-                                        <a href="@mainMenuEntry.Url" data-qa="main-menu-category-link"
-                                            target="@mainMenuEntry.UrlTarget" style="@mainMenuEntry.CssClass" class="nav-link">
-                                            @mainMenuEntry.DisplayName
-                                        </a>
-                                    }
-                                </li>
-                            }
+                                            </div>
+                                        </li>
+                                    </ul>
+                                }
+                                else
+                                {
+                                    <a href="@mainMenuEntry.Url" data-qa="main-menu-category-link"
+                                       target="@mainMenuEntry.UrlTarget" style="@mainMenuEntry.CssClass" class="nav-link">
+                                        @mainMenuEntry.DisplayName
+                                    </a>
+                                }
+                            </li>
+                        }
 
-                            @foreach (var optionalMenuEntry in optionalLinks)
-                            {
-                                <li class="dropdown main-nav-fw d-block d-md-none">
-                                    <a class="nav-link" href="@optionalMenuEntry.Url" data-qa="main-menu-category-link" target="@optionalMenuEntry.UrlTarget" style="@optionalMenuEntry.CssClass">@optionalMenuEntry.DisplayName</a>
-                                </li>
-                            }
-                        </ul>
-
-                    </div>
-                </nav>
+                        @foreach (var optionalMenuEntry in optionalLinks)
+                        {
+                            <li class="dropdown main-nav-fw d-block d-md-none">
+                                <a class="nav-link" href="@optionalMenuEntry.Url" data-qa="main-menu-category-link" target="@optionalMenuEntry.UrlTarget" style="@optionalMenuEntry.CssClass">@optionalMenuEntry.DisplayName</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </nav>
         </div>
     </div>
 </body>
 </html>
+
+@helper Image(HomeMainMenuEntryViewModel vm)
+{
+    if (!string.IsNullOrEmpty(vm.Image.ImageSource))
+    {
+        if (!string.IsNullOrEmpty(vm.Image.ImageUrl))
+        {
+            <a href="@vm.Image.ImageUrl" target="@vm.Image.ImageUrlTarget">
+                <img src="@vm.Image.ImageSource" class="img-responsive img-menu" />
+            </a>
+        }
+        else
+        {
+            <img src="@vm.Image.ImageSource" class="img-fluid img-menu" />
+        }
+        if (!string.IsNullOrEmpty(vm.Image.ImageLabel))
+        {
+            <span class="caption">
+                <span>@vm.Image.ImageLabel</span>
+            </span>
+        }
+    }
+}
