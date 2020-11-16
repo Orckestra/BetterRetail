@@ -20,12 +20,12 @@ namespace Orckestra.Composer.MyAccount.Services
         CreateAccountViewModel GetCreateAccountViewModel(GetCreateAccountViewModelParam param);
 
         /// <summary>
-        /// Get the view Model to display the Sign In Header
+        /// Get the view Model to display the User information in the Header
         /// </summary>
         /// <returns>
-        /// The view model to display the Sign In Header
+        /// The view model to display the User information in the Header
         /// </returns>
-        Task<SignInHeaderViewModel> GetSignInHeaderModel(GetSignInHeaderParam param);
+        Task<UserMetadataViewModel> GetUserMetadataModel(GetUserMetadataParam param);
 
         /// <summary>
         /// Get the view Model to display a Reset Password Form and Form result

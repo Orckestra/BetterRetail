@@ -55,7 +55,7 @@
     <Compile Include="Parameters\GetAddressesForCustomerParam.cs" />
     <Compile Include="Parameters\GetAddressListViewModelParam.cs" />
     <Compile Include="Parameters\GetResetPasswordByTicketViewModelParam.cs" />
-    <Compile Include="Parameters\GetSignInHeaderParam.cs" />
+    <Compile Include="Parameters\GetUserMetadataParam.cs" />
     <Compile Include="Parameters\GetUpdateAccountViewModelParam.cs" />
     <Compile Include="Parameters\GetAccountHeaderViewModelParam.cs" />
     <Compile Include="Parameters\CustomerAndStatus.cs" />
@@ -118,6 +118,7 @@
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\ResetPasswordViewModel.cs" />
     <Compile Include="ViewModels\SignInHeaderViewModel.cs" />
+    <Compile Include="ViewModels\UserMetadataViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Orckestra.Composer.Cart\Orckestra.Composer.Cart.csproj">

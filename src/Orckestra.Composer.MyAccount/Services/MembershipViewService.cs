@@ -223,22 +223,14 @@ namespace Orckestra.Composer.MyAccount.Services
         }
 
         /// <summary>
-        /// Get the view Model to display the Sign In Header
+        /// Get the view Model to display User information
         /// </summary>
         /// <returns>
-        /// The view model to display the Sign In Header
+        /// The view model to display the User information
         /// </returns>
-        public virtual async Task<SignInHeaderViewModel> GetSignInHeaderModel(GetSignInHeaderParam param)
+        public virtual async Task<UserMetadataViewModel> GetUserMetadataModel(GetUserMetadataParam param)
         {
-            var myAccountUrl = MyAccountUrlProvider.GetMyAccountUrl(new BaseUrlParameter
-            {
-                CultureInfo = param.CultureInfo
-            });
-
-            var loginUrl = MyAccountUrlProvider.GetLoginUrl(new BaseUrlParameter
-            {
-                CultureInfo = param.CultureInfo
-            });
+            var urlParam = new BaseUrlParameter { CultureInfo = param.CultureInfo };
 
             var customer = await CustomerRepository.GetCustomerByIdAsync(new GetCustomerByIdParam
             {
@@ -247,14 +239,11 @@ namespace Orckestra.Composer.MyAccount.Services
                 Scope = param.Scope
             }).ConfigureAwait(false);
 
-            var viewModel = ViewModelMapper.MapTo<SignInHeaderViewModel>(customer, param.CultureInfo) ?? new SignInHeaderViewModel();
-
-            viewModel.IsLoggedIn = param.IsAuthenticated;
-
+            var viewModel = ViewModelMapper.MapTo<UserMetadataViewModel>(customer, param.CultureInfo) ?? new UserMetadataViewModel();
+            viewModel.IsAuthenticated = param.IsAuthenticated;
             viewModel.EncryptedCustomerId = param.EncryptedCustomerId;
-
-            viewModel.Url = viewModel.IsLoggedIn ? myAccountUrl : loginUrl;
-
+            viewModel.Url = viewModel.IsAuthenticated ? MyAccountUrlProvider.GetMyAccountUrl(urlParam) : MyAccountUrlProvider.GetLoginUrl(urlParam);
+            viewModel.RegisterUrl = MyAccountUrlProvider.GetCreateAccountUrl(urlParam);
             return viewModel;
         }
 

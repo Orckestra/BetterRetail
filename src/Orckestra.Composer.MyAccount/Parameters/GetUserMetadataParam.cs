@@ -3,7 +3,7 @@ using System.Globalization;
 
 namespace Orckestra.Composer.MyAccount.Parameters
 {
-    public class GetSignInHeaderParam
+    public class GetUserMetadataParam
     {
         public Guid CustomerId { get; set; }
         public CultureInfo CultureInfo { get; set; }

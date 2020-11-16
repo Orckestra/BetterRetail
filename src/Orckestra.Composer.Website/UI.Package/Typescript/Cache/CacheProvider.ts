@@ -12,12 +12,12 @@ module Orckestra.Composer {
     export class CacheProvider implements ICacheProvider {
 
         private static defaultCacheKey : string = 'oc-cache';
-        private static customCacheKey : string = 'composer-signInHeaderCache';
+        private static sessionCacheKey : string = 'oc-cache-session';
         private static _instance: Orckestra.Composer.ICacheProvider = new CacheProvider();
 
         public window: Window = window;
         public defaultCache: ICache;
-        public customCache: ICache;
+        public sessionCache: ICache;
         public localStorage: Storage;
         public sessionStorage: Storage;
 
@@ -31,7 +31,7 @@ module Orckestra.Composer {
             }
 
             this.defaultCache = this.getDefaultCache();
-            this.customCache = this.getCustomCache();
+            this.sessionCache = this.getSessionCache();
 
             this.localStorage = this.getLocalStorage();
             this.sessionStorage = this.getSessionStorage();
@@ -48,8 +48,9 @@ module Orckestra.Composer {
             return this.getCache(CacheProvider.defaultCacheKey);
         }
 
-        public getCustomCache(): ICache {
-            return this.getCache(CacheProvider.customCacheKey);
+        public getSessionCache(): ICache {
+            var backingStorage = this.getSessionStorage();
+			return new StorageBasedCache(new BackingStorage(backingStorage), CacheProvider.sessionCacheKey);
         }
 
         private getLocalStorage(): Storage {
