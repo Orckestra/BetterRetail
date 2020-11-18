@@ -56,13 +56,13 @@ stages:
         workingFolder: Orckestra.StarterSite/CF/Source
         failOnStandardError: false
 
-    - task: PowerShell@1
-      displayName: Package
-      inputs:
-        scriptName: Build/build.ps1
-        arguments: '-t Package'
-        workingFolder: Orckestra.StarterSite/CF/Source
-        failOnStandardError: false
+    #- task: PowerShell@1
+    #  displayName: Package
+    #  inputs:
+    #    scriptName: Build/build.ps1
+    #    arguments: '-t Package'
+    #   workingFolder: Orckestra.StarterSite/CF/Source
+    #   failOnStandardError: false
 
     - task: CopyFiles@2
       displayName: 'Copy Packages to artifacts'
