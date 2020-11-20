@@ -75,19 +75,9 @@ namespace Orckestra.Composer.Store.Services
             return storeViewModel;
         }
 
-        public virtual async Task<PageHeaderViewModel> GetPageHeaderViewModelAsync(GetStorePageHeaderViewModelParam param)
+        public virtual PageHeaderViewModel GetPageHeaderViewModel(StoreViewModel store, GetStorePageHeaderViewModelParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param));}
-
-            var store = await GetStoreViewModelAsync(new GetStoreByNumberParam
-            {
-                StoreNumber = param.StoreNumber,
-                CultureInfo = param.CultureInfo,
-                Scope = param.Scope,
-                BaseUrl = param.BaseUrl
-
-            }).ConfigureAwait(false);
-
             if (store == null) { return null; }
 
             var vm = new PageHeaderViewModel

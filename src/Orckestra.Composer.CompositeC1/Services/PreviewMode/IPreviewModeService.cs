@@ -3,5 +3,7 @@
     public interface IPreviewModeService
     {
         string GetProductId();
+
+        string GetStoreNumber();
     };
 }

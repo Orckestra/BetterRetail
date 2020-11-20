@@ -19,6 +19,7 @@ using Orckestra.Composer.Repositories;
 using Orckestra.Composer.Search;
 using Orckestra.Composer.Search.Repositories;
 using Orckestra.Composer.Services;
+using Orckestra.Composer.Store.Repositories;
 using Orckestra.Overture.ServiceModel.Search;
 
 // ReSharper disable InconsistentNaming
@@ -36,6 +37,7 @@ namespace Orckestra.Composer.CompositeC1.Tests.Services.FacetConfigurationContex
         private Mock<ICacheStore<Guid, string>> _cacheMoq;
         private Mock<IProductRepository> _productRepoMoq;
         private Mock<ISearchRepository> _searchRepoMoq;
+        private Mock<IStoreRepository> _storeRepoMoq;
         private Mock<IComposerContext> _composerContextMoq;
 
         // storage
@@ -70,6 +72,9 @@ namespace Orckestra.Composer.CompositeC1.Tests.Services.FacetConfigurationContex
             // ISearchRepository
             _searchRepoMoq = new Mock<ISearchRepository>();
 
+            // ISearchRepository
+            _storeRepoMoq = new Mock<IStoreRepository>();
+
             // IComposerContext
             _composerContextMoq = new Mock<IComposerContext>();
             _composerContextMoq.Setup(q => q.CultureInfo).Returns(CultureInfo.InvariantCulture);
@@ -92,7 +97,7 @@ namespace Orckestra.Composer.CompositeC1.Tests.Services.FacetConfigurationContex
 
             // test target
             _target = new PreviewModeService(_httpContextMoq.Object, cacheServiceMoq.Object, _dataQueryMoq.Object,
-                _productRepoMoq.Object, _searchRepoMoq.Object, _composerContextMoq.Object);
+                _productRepoMoq.Object, _storeRepoMoq.Object, _searchRepoMoq.Object, _composerContextMoq.Object);
         }
 
         [Test]

@@ -11,12 +11,14 @@ using Orckestra.Composer.Store.Parameters;
 using Orckestra.Composer.Utils;
 using Orckestra.Composer.Store;
 using Orckestra.Composer.Store.ViewModels;
+using Orckestra.Composer.CompositeC1.Context;
 
 namespace Orckestra.Composer.CompositeC1.Controllers
 {
     public abstract class StoreLocatorBaseController :Controller
     {
         protected IComposerContext ComposerContext { get; private set; }
+        protected IStoreContext StoreContext { get; private set; }
         protected IStoreViewService StoreViewService { get; set; }
         protected IStoreDirectoryViewService StoreDirectoryViewService { get; set; }
         protected IStoreUrlProvider StoreUrlProvider { get; private set; }
@@ -29,8 +31,8 @@ namespace Orckestra.Composer.CompositeC1.Controllers
            IStoreDirectoryViewService storeDirectoryViewService,
            IStoreUrlProvider storeUrlProvider,
            IBreadcrumbViewService breadcrumbViewService,
-           ILanguageSwitchService languageSwitchService
-            )
+           ILanguageSwitchService languageSwitchService,
+           IStoreContext storeContext)
         {
             ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
             StoreViewService = storeViewService ?? throw new ArgumentNullException(nameof(storeViewService));
@@ -38,6 +40,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             StoreUrlProvider = storeUrlProvider ?? throw new ArgumentNullException(nameof(storeUrlProvider));
             BreadcrumbViewService = breadcrumbViewService ?? throw new ArgumentNullException(nameof(breadcrumbViewService));
             LanguageSwitchService = languageSwitchService ?? throw new ArgumentNullException(nameof(languageSwitchService));
+            StoreContext = storeContext ?? throw new ArgumentNullException(nameof(storeContext));
         }
 
         public virtual ActionResult StoreDirectory(int page = 1)
@@ -64,17 +67,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
 
         public virtual ActionResult StoreDetails(string storeNumber, int zoom = 14)
         {
-            if (string.IsNullOrEmpty(storeNumber))
-            {
-                return View();
-            }
-            var baseUrl = RequestUtils.GetBaseUrl(Request).ToString();
-
-            var model = StoreViewService.GetStoreViewModelAsync(new GetStoreByNumberParam {
-                Scope = ComposerContext.Scope,
-                CultureInfo = ComposerContext.CultureInfo,
-                StoreNumber = storeNumber,
-                BaseUrl = baseUrl}).Result;
+            var model = StoreContext.ViewModel;
 
             if (model == null)
             {
@@ -125,28 +118,17 @@ namespace Orckestra.Composer.CompositeC1.Controllers
 
         public virtual ActionResult Breadcrumb(string storeNumber)
         {
-            if (string.IsNullOrEmpty(storeNumber))
+            var model = StoreContext.ViewModel;
+            if (model == null)
             {
-                return View();
+                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
             }
+
             var breadcrumbViewModel = BreadcrumbViewService.CreateBreadcrumbViewModel(new GetBreadcrumbParam
             {
                 CurrentPageId = SitemapNavigator.CurrentPageId.ToString(),
                 CultureInfo = ComposerContext.CultureInfo
             });
-            var model = StoreViewService.GetStoreViewModelAsync(new GetStoreByNumberParam
-            {
-                Scope = ComposerContext.Scope,
-                CultureInfo = ComposerContext.CultureInfo,
-                StoreNumber = storeNumber,
-                BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
-                
-            }).Result;
-
-            if (model == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
-            }
 
             if (!string.IsNullOrEmpty(model.LocalizedDisplayName))
             {
@@ -158,46 +140,29 @@ namespace Orckestra.Composer.CompositeC1.Controllers
 
         public virtual ActionResult PageHeader(string storeNumber)
         {
-            if (string.IsNullOrEmpty(storeNumber))
-            {
-                return View();
-            }
-
-            var vm = StoreViewService.GetPageHeaderViewModelAsync(new GetStorePageHeaderViewModelParam
-            {
-                Scope = ComposerContext.Scope,
-                CultureInfo = ComposerContext.CultureInfo,
-                StoreNumber = storeNumber,
-                BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
-            }).Result;
-
-            if (vm == null)
+            var model = StoreContext.ViewModel;
+            if (model == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.NotFound);
             }
+
+            var vm = StoreViewService.GetPageHeaderViewModel(model, new GetStorePageHeaderViewModelParam
+            {
+                Scope = ComposerContext.Scope,
+                CultureInfo = ComposerContext.CultureInfo,
+                StoreNumber = model.Number,
+                BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
+            });
+
             return View(vm);
         }
 
         public virtual ActionResult LanguageSwitch(string storeNumber)
         {
+            var model = StoreContext.ViewModel;
             var baseUrl = RequestUtils.GetBaseUrl(Request).ToString();
 
-            if (storeNumber == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
-            }
-
-            var storeViewModel = StoreViewService.GetStoreViewModelAsync(new GetStoreByNumberParam
-            {
-                BaseUrl = baseUrl,
-                CultureInfo = ComposerContext.CultureInfo,
-                Scope = ComposerContext.Scope,
-                IncludeAddresses = false,
-                IncludeSchedules = false,
-                StoreNumber = storeNumber
-            }).Result;
-
-            if (storeViewModel == null)
+            if (model == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.NotFound);
             }
@@ -205,8 +170,8 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             var languageSwitchViewModel = LanguageSwitchService.GetViewModel(cultureInfo => BuildUrl(
                 baseUrl,
                 cultureInfo,
-                storeViewModel.LocalizedDisplayNames[cultureInfo.Name],
-                storeViewModel.Number),
+                model.LocalizedDisplayNames[cultureInfo.Name],
+                model.Number),
                 ComposerContext.CultureInfo);
 
             return View("LanguageSwitch", languageSwitchViewModel);

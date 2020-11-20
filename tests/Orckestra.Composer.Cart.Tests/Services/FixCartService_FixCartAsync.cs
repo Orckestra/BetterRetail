@@ -68,7 +68,8 @@ namespace Orckestra.Composer.Cart.Tests.Services
                     {
                       new Shipment()
                     }
-                }
+                },
+                ScopeId = GetRandom.String(10)
             });
 
             //Assert
@@ -98,7 +99,8 @@ namespace Orckestra.Composer.Cart.Tests.Services
                           FulfillmentLocationId = Guid.NewGuid()
                       }
                     }
-                }
+                },
+                ScopeId = GetRandom.String(10)
             });
 
             //Assert
@@ -147,7 +149,8 @@ namespace Orckestra.Composer.Cart.Tests.Services
                             FulfillmentLocationId = GetRandom.Guid()
                         }
                     }
-                }
+                },
+                ScopeId = GetRandom.String(10)
             });
 
             //Assert
@@ -176,7 +179,8 @@ namespace Orckestra.Composer.Cart.Tests.Services
                         {
                             FulfillmentLocationId = GetRandom.Guid()
                         }
-                    }
+                    },
+                    ScopeId = GetRandom.String(10)
                 })
                 .Verifiable("No payment was added.");
 
@@ -190,7 +194,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
                     CultureName = "en-US",
                     Name = "No payment cart",
                     Payments = new List<Payment>
-                    { 
+                    {
                         new Payment
                         {
                             PaymentStatus = PaymentStatus.Voided
@@ -203,7 +207,8 @@ namespace Orckestra.Composer.Cart.Tests.Services
                           FulfillmentLocationId = Guid.NewGuid()
                       }
                     }
-                }
+                },
+                ScopeId = GetRandom.String(10)
             });
 
             //Assert
@@ -243,7 +248,8 @@ namespace Orckestra.Composer.Cart.Tests.Services
                             FulfillmentLocationId = GetRandom.Guid()
                         }
                     }
-                }
+                },
+                ScopeId = GetRandom.String(10)
             });
 
             //Assert

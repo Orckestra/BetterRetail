@@ -45,6 +45,12 @@ namespace Orckestra.Composer.Cart.Parameters
         /// Required
         /// </summary>
         public string CartName { get; set; }
+
+        public RemoveLineItemParam Clone()
+        {
+            var param = (RemoveLineItemParam)MemberwiseClone();
+            return param;
+        }
     }
 }
 

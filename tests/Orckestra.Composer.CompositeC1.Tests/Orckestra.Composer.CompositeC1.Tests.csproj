@@ -278,6 +278,10 @@
       <Project>{CE6AD95E-0EBB-4E38-BF0B-27A67915FA68}</Project>
       <Name>Orckestra.Composer.Search</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\src\Orckestra.Composer.Store\Orckestra.Composer.Store.csproj">
+      <Project>{1407AF7B-A1FE-4B52-906B-7503B6DB0F2B}</Project>
+      <Name>Orckestra.Composer.Store</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\Orckestra.Composer\Orckestra.Composer.csproj">
       <Project>{D00BD58B-93FE-4F3D-BBC8-6F7873CA6830}</Project>
       <Name>Orckestra.Composer</Name>

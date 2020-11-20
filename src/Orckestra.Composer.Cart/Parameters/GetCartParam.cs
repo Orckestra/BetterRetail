@@ -51,6 +51,10 @@ namespace Orckestra.Composer.Cart.Parameters
         /// Optional
         /// </summary>
         public string WorkflowToExecute { get; set; }
-        
+        public GetCartParam Clone()
+        {
+            var param = (GetCartParam)MemberwiseClone();
+            return param;
+        }
     }
 }

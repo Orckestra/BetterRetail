@@ -64,5 +64,11 @@ namespace Orckestra.Composer.Cart.Parameters
         /// The name of the recurring order program.
         /// </summary>
         public string RecurringOrderProgramName { get; set; }
+
+        public AddLineItemParam Clone()
+        {
+            var param = (AddLineItemParam)MemberwiseClone();
+            return param;
+        }
     }
 }

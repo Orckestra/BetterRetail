@@ -1,3 +1,4 @@
+using Orckestra.Composer.CompositeC1.Context;
 using Orckestra.Composer.CompositeC1.Controllers;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Services.Breadcrumb;
@@ -13,8 +14,9 @@ namespace Orckestra.Composer.Website.Controllers
             IStoreDirectoryViewService storeDirectoryViewService,
             IStoreUrlProvider storeUrlProvider,
             IBreadcrumbViewService breadcrumbViewService,
-            ILanguageSwitchService languageSwitchViewService) :
-            base(composerContext, storeViewService, storeDirectoryViewService, storeUrlProvider, breadcrumbViewService, languageSwitchViewService)
+            ILanguageSwitchService languageSwitchViewService,
+            IStoreContext storeContex) :
+            base(composerContext, storeViewService, storeDirectoryViewService, storeUrlProvider, breadcrumbViewService, languageSwitchViewService, storeContex)
         {
         }
     }
