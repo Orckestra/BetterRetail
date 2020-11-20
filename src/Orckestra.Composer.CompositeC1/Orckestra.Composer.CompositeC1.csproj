@@ -247,7 +247,9 @@
     <Compile Include="CategoriesNamespaces.cs" />
     <Compile Include="ContextPreservationHttpModule.cs" />
     <Compile Include="Context\ContextHelper.cs" />
+    <Compile Include="Context\IStoreContext.cs" />
     <Compile Include="Context\IProductContext.cs" />
+    <Compile Include="Context\StoreContext.cs" />
     <Compile Include="Context\ProductContext.cs" />
     <Compile Include="Controllers\BrowsingCategoriesBaseController.cs" />
     <Compile Include="Controllers\CartBaseController.cs" />

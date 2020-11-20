@@ -9,7 +9,7 @@ namespace Orckestra.Composer.Store.Services
     public interface IStoreViewService
     {
         Task<StoreViewModel> GetStoreViewModelAsync(GetStoreByNumberParam viewModelParam);
-        Task<PageHeaderViewModel> GetPageHeaderViewModelAsync(GetStorePageHeaderViewModelParam param);
+        PageHeaderViewModel GetPageHeaderViewModel(StoreViewModel store, GetStorePageHeaderViewModelParam param);
         Task<List<StoreViewModel>> GetStoresForInStorePickupViewModelAsync(GetStoresForInStorePickupViewModelParam param);
         Task<List<StoreViewModel>> GetAllStoresViewModelAsync(GetStoresParam param);
     }

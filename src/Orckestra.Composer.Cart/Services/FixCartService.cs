@@ -69,7 +69,7 @@ namespace Orckestra.Composer.Cart.Services
                 var fulfillmentLocation =
                     await InventoryLocationProvider.GetFulfillmentLocationAsync(new GetFulfillmentLocationParam
                     {
-                        Scope = cart.ScopeId
+                        Scope = param.ScopeId
                     }).ConfigureAwait(false);
 
                 var shipment = cart.Shipments.FirstOrDefault() ?? new Shipment();
