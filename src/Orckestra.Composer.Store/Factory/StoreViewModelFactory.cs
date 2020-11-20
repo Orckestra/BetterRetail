@@ -89,6 +89,7 @@ namespace Orckestra.Composer.Store.Factory
             var model = new StoreStructuredDataViewModel
             {
                 Name = store.Name,
+                Number = store.Number,
                 Telephone = store.PhoneNumber,
                 Url = StoreUrlProvider.GetStoreUrl(new GetStoreUrlParam()
                 {
@@ -187,8 +188,8 @@ namespace Orckestra.Composer.Store.Factory
                 storeNowTime = TimeZoneInfo.ConvertTime(DateTime.UtcNow, storeTimeInfo);
             }
 
-            model.OpeningHours = GetOpeningHours(param, storeNowTime);
-            model.OpeningHourExceptions = GetOpeningHourExceptions(param, storeNowTime);
+            model.OpeningHours = GetOpeningHours(param.Store.StoreSchedule, param.CultureInfo, storeNowTime);
+            model.OpeningHourExceptions = GetOpeningHourExceptions(param.Store.StoreSchedule, param.CultureInfo, storeNowTime);
 
             var todayOpeningTimes = StoreScheduleProvider.GetOpeningTimes(param.Store.StoreSchedule, storeNowTime).ToList();
             model.TodayOpeningTimes = todayOpeningTimes.Select(ot => GetScheduleIntervalViewModel(ot, param.CultureInfo)).ToList();
@@ -198,9 +199,9 @@ namespace Orckestra.Composer.Store.Factory
             return model;
         }
 
-        protected virtual List<DailyScheduleExceptionViewModel> GetOpeningHourExceptions(CreateStoreViewModelParam param, DateTime today)
+        protected virtual List<DailyScheduleExceptionViewModel> GetOpeningHourExceptions(FulfillmentSchedule schedule, CultureInfo cultureInfo, DateTime today)
         {
-            var exceptions = StoreScheduleProvider.GetOpeningHourExceptions(param.Store.StoreSchedule, today, 1);
+            var exceptions = StoreScheduleProvider.GetOpeningHourExceptions(schedule, today, 1);
 
             return exceptions.Select(
                 ex => ViewModelMapper.MapTo<DailyScheduleExceptionViewModel>(new
@@ -208,21 +209,21 @@ namespace Orckestra.Composer.Store.Factory
                     ex.StartDate,
                     ex.EndDate,
                     ex.IsClosed,
-                    OpeningTime = GetScheduleIntervalViewModel(ex.OpeningTime, param.CultureInfo)
-                }, param.CultureInfo))
+                    OpeningTime = GetScheduleIntervalViewModel(ex.OpeningTime, cultureInfo)
+                }, cultureInfo))
                 .ToList();
         }
 
-        protected virtual List<DailyScheduleViewModel> GetOpeningHours(CreateStoreViewModelParam param, DateTime today)
+        protected virtual List<DailyScheduleViewModel> GetOpeningHours(FulfillmentSchedule schedule, CultureInfo cultureInfo, DateTime today)
         {
-            return param.Store.StoreSchedule.OpeningHours.Select(oh =>
+            return schedule.OpeningHours.Select(oh =>
                 new DailyScheduleViewModel
                 {
-                    LocalizedDay = GetStoreOpenHoursLocalizedDayName(oh.Day, param.CultureInfo),
+                    LocalizedDay = GetStoreOpenHoursLocalizedDayName(oh.Day, cultureInfo),
                     IsDayToday = oh.Day == today.DayOfWeek,
                     IsClosed = oh.IsClosed,
                     IsOpenedAllDay = oh.IsOpenedAllDay,
-                    OpeningTimes = oh.OpeningTimes.Select(ot => GetScheduleIntervalViewModel(ot, param.CultureInfo)).ToList()
+                    OpeningTimes = oh.OpeningTimes.Select(ot => GetScheduleIntervalViewModel(ot, cultureInfo)).ToList()
                 }
                 ).ToList();
         }

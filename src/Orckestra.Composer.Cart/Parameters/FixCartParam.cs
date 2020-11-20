@@ -9,5 +9,7 @@ namespace Orckestra.Composer.Cart.Parameters
         /// The cart to fix
         /// </summary>
         public ProcessedCart Cart { get; set; }
+
+        public string ScopeId { get; set; }
     }
 }
