@@ -34,7 +34,6 @@ namespace Orckestra.Composer.CompositeC1.Context
 
         public virtual StoreViewModel ViewModel => _viewModel.Value;
 
-
         protected virtual Task<StoreViewModel> GetStoreViewModelAsync()
         {
             string storeNumber = Request[nameof(storeNumber)];

@@ -118,22 +118,17 @@ namespace Orckestra.Composer.CompositeC1.Controllers
 
         public virtual ActionResult Breadcrumb(string storeNumber)
         {
-            if (string.IsNullOrEmpty(storeNumber))
+            var model = StoreContext.ViewModel;
+            if (model == null)
             {
-                return View();
+                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
             }
 
-            var model = StoreContext.ViewModel;
             var breadcrumbViewModel = BreadcrumbViewService.CreateBreadcrumbViewModel(new GetBreadcrumbParam
             {
                 CurrentPageId = SitemapNavigator.CurrentPageId.ToString(),
                 CultureInfo = ComposerContext.CultureInfo
             });
-          
-            if (model == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
-            }
 
             if (!string.IsNullOrEmpty(model.LocalizedDisplayName))
             {
@@ -145,12 +140,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
 
         public virtual ActionResult PageHeader(string storeNumber)
         {
-            if (string.IsNullOrEmpty(storeNumber))
-            {
-                return View();
-            }
             var model = StoreContext.ViewModel;
-
             if (model == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.NotFound);
@@ -160,7 +150,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             {
                 Scope = ComposerContext.Scope,
                 CultureInfo = ComposerContext.CultureInfo,
-                StoreNumber = storeNumber,
+                StoreNumber = model.Number,
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
             });
 
@@ -171,11 +161,6 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         {
             var model = StoreContext.ViewModel;
             var baseUrl = RequestUtils.GetBaseUrl(Request).ToString();
-
-            if (storeNumber == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
-            }
 
             if (model == null)
             {
