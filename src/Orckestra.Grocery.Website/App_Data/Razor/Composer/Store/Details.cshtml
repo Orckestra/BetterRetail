@@ -1,0 +1,248 @@
+@inherits Composer.Razor.ComposerRazorFunction
+@using Orckestra.Composer.Store.Services;
+@using Orckestra.Composer.CompositeC1.Context;
+@using Orckestra.Composer.Utils;
+@using Orckestra.Composer.Grocery.ViewModels;
+@using Orckestra.Composer.Store.ViewModels;
+
+@functions {
+    public IStoreLocatorViewService StoreLocatorViewService { get; set; }
+    public IComposerContext ComposerContext { get; set; }
+    public IStoreContext StoreContext { get; set; }
+
+
+    public override string FunctionDescription
+    {
+        get { return "Store Details"; }
+    }
+
+    [FunctionParameter(Label = "Map Zoom Level", Help = "Define the resolution of the map view. Zoom levels between 0 and 21+. Default is 14 (streets).", DefaultValue = 14)]
+    public int zoom { get; set; }
+
+}
+@{
+    var storeNumber = Request["storeNumber"];
+    if (string.IsNullOrEmpty(storeNumber)) { return; }
+    var baseurl = RequestUtils.GetBaseUrl(Request.Url, Request.ApplicationPath);
+
+    var model = StoreContext.ViewModel;
+
+    if (model == null) { return; }
+
+     var url = new Uri(baseurl, model.Url);
+
+    model.Context.Add("zoom", zoom);
+
+    var extendedModel = model.AsExtensionModel<IGroceryStoreViewModel>();
+}
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
+<head>
+</head>
+<body>
+    <div data-oc-controller="Store.Details" class="store-details" data-context="@model.JsonContext">
+        <h1>@model.LocalizedDisplayName</h1>
+        <div class="row">
+            <div class="col-12 col-sm-4">
+                <div class="store-info  card">
+                    <div class="card-body">
+                        @StoreAddress(model.Address)
+                        <hr />
+                        <a href="@model.GoogleDirectionsLink" target="_blank" class="cta  ctaGoogleDir">
+                            @Html.Localize("Store", "H_Itinerary")
+                        </a>
+                        <hr />
+                        @StoreHours(model.Schedule, Html.Localize("Store", "T_OpenHours"))
+                        @StoreOpenHourExceptions(model)
+                        @StoreHours(extendedModel.PickUpSchedule, Html.Localize("Grocery", "T_StorePickUpHours"), false)
+                        @StoreHours(extendedModel.DeliverySchedule, Html.Localize("Grocery", "T_StoreDeliveryHours"), false)
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-8">
+                @Map()
+            </div>
+        </div>
+        @if (model.StructuredData != null)
+        {
+            @StoreGoogleStructuredDataTags(model.StructuredData, url.ToString())
+        }
+    </div>
+</body>
+</html>
+
+@helper StoreAddress(StoreAddressViewModel address)
+{
+    <address class="store-address">
+        @address.Line1<br />
+        @if (!string.IsNullOrEmpty(address.Line2))
+        {
+            @address.Line2<br />
+        }
+
+        @address.City, @address.RegionName, @address.PostalCode, @address.CountryName<br />
+        <span class="store-phone">@address.PhoneNumber</span>
+    </address>
+}
+
+@helper StoreHours(StoreScheduleViewModel schedule, string title, bool highlightToday = true)
+{
+    if (schedule?.OpeningHours == null || schedule.OpeningHours.Count == 0) { return; }
+    <h3 class="mt-3">@title</h3>
+    foreach (var oh in schedule.OpeningHours)
+    {
+        <div class="row  store-open-hour @(oh.IsDayToday && schedule.IsOpenNow && highlightToday ? "is-today bg-success": "")
+              @(oh.IsDayToday && !schedule.IsOpenNow && highlightToday ? "is-today bg-danger": "")">
+            <div class="col-3  col-lg-4">@oh.LocalizedDay</div>
+            <div class="col-6  col-lg-6">
+                @if (oh.IsClosed)
+                {
+                    <small class="store-open-hour">@Html.Localize("Store", "L_OpenHours_Closed")</small>
+                }
+                else
+                {
+                    if (oh.IsOpenedAllDay)
+                    {
+                        <small>@Html.Localize("Store", "L_OpenHours_OpenAllDay")</small>
+                    }
+                    else
+                    {
+                        foreach (var ot in oh.OpeningTimes)
+                        {
+                            <div class="open-times">@ot.BeginTime - @ot.EndTime</div>
+                        }
+                    }
+                }
+            </div>
+            @if (oh.IsDayToday && highlightToday)
+            {
+                <div class="col-3 col-lg-2">
+                    <div class="schedule-status  text-uppercase">
+                        @if (schedule.IsOpenNow)
+                        {
+                            @Html.Localize("Store", "L_StoreOpen")
+                        }
+                        else
+                        {
+                            @Html.Localize("Store", "L_StoreClosed")
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    }
+}
+
+@helper StoreOpenHourExceptions(StoreViewModel store)
+{
+    if (store.Schedule?.OpeningHourExceptions == null || store.Schedule.OpeningHourExceptions.Count == 0) { return; }
+
+    <h3 class="mt-3">@Html.Localize("Store", "T_OpenHourExceptions")</h3>
+    foreach (var ohe in store.Schedule.OpeningHourExceptions)
+    {
+        <div class="row  store-open-hour-exc">
+            <div class="col-6  col-lg-7">
+                @if (ohe.StartDate == ohe.EndDate)
+                {
+                    @ohe.StartDate
+                }
+                else
+                {
+                    @(ohe.StartDate + "-" + ohe.EndDate)
+                }
+            </div>
+            <div class="col-6  col-lg-5">
+                @if (ohe.IsClosed)
+                {
+                    @Html.Localize("Store", "L_OpenHours_Closed")
+                }
+                else
+                {
+                    <small>@(ohe.OpeningTime.BeginTime + "-" + ohe.OpeningTime.EndTime)</small>
+                }
+            </div>
+        </div>
+    }
+}
+
+@helper StoreGoogleStructuredDataTags(StoreStructuredDataViewModel data, string url)
+{
+    <div data-templateid="StoreGoogleStructuredDataTags">
+        <script type="application/ld+json">
+            {
+            "@@context" : "http://schema.org",
+            "@@type" : "Store",
+            "@@id" : "@data.Number",
+            "name" : "@data.Name",
+            "telephone" : "@data.Telephone",
+            "address": {
+            "@@type": "PostalAddress",
+            "streetAddress": "@data.StreetAddress",
+            "addressLocality": "@data.AddressLocality",
+            "addressRegion": "@data.AddressRegion",
+            "postalCode": "@data.PostalCode",
+            "addressCountry": "@data.AddressCountry"
+            },
+            @if (data.Latitude != null && data.Longitude != null)
+            {
+                <text>
+                    "geo": {
+                    "@@type": "GeoCoordinates",
+                    "latitude": @data.Latitude.Value.ToString("0:0.00000"),
+                    "longitude": @data.Longitude.Value.ToString("0:0.00000")
+                    },
+                </text>
+            }
+
+            "openingHoursSpecification": [
+            @foreach (var oh in data.OpeningHoursSpecifications)
+            {
+                var index = 0;
+                <text>
+                    {
+                    "@@type": "OpeningHoursSpecification",
+                    "opens": "@oh.Opens",
+                    "closes": "@oh.Closes"
+                    }
+                </text>
+                if (index == data.OpeningHoursSpecifications.Count)
+                {
+                    <text>,</text>
+                }
+                index++;
+            }
+            ],
+            "url" : "@url"
+            }
+        </script>
+    </div>
+}
+
+@helper SearchStoreInput(string postedAddress)
+{
+    <div v-if="StoreLocatorLocationError" class="text-danger mb-2">@Html.Localize("Store", "L_MyLocationError")</div>
+    <div class="form-group form-row align-items-center">
+        <div class="col-12 col-md-6 col-lg-4 mb-2 mb-md-0">
+            <input id="storeLocatorAutocompleteInput"
+                   name="storeLocatorAutocompleteInput"
+                   class="form-control" type="text"
+                   placeholder="@Html.Localize("Store", "I_Placeholder")"
+                   value="@postedAddress" />
+            <i class="fa fa-search text-muted store-locator-search-icon" />
+        </div>
+        <span class="col-auto">- @Html.Localize("Store", "L_OrUseMyLocation") -</span>
+        <div class="col-auto">
+            <button v-on:click.prevent="currentLocationAction"
+                    class="btn btn-primary geolocate-btn">
+                <i class="fa fa-crosshairs" />
+                @Html.Localize("Store", "B_UseMyLocation")
+            </button>
+        </div>
+    </div>
+}
+
+@helper Map()
+{
+    <div id="map" class="map"></div>
+}

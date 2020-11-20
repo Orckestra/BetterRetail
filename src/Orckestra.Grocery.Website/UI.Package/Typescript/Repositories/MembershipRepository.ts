@@ -74,7 +74,7 @@ module Orckestra.Composer {
         /**
          * If the current user is authenticated or not
          */
-         public isAuthenticated(): Q.Promise<any> {
+        public isAuthenticated(): Q.Promise<any> {
 
             return ComposerClient.get('/api/membership/isAuthenticated');
         }
@@ -86,6 +86,14 @@ module Orckestra.Composer {
         public isUserExist(email: string): Q.Promise<any> {
 
             return ComposerClient.get('/api/membership/isExist?email=' + email);
+        }
+
+        /**
+        * Get user meta data to dispay status/name and urls
+        */
+        public userMetadata(): Q.Promise<any> {
+
+            return ComposerClient.get('/api/membership/usermetadata');
         }
     }
 }

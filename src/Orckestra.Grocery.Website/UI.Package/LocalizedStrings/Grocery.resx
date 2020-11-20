@@ -278,6 +278,12 @@ available for you.</value>
   <data name="T_Store" xml:space="preserve">
     <value>Store</value>
   </data>
+  <data name="T_StoreDeliveryHours" xml:space="preserve">
+    <value>Delivery hours</value>
+  </data>
+  <data name="T_StorePickUpHours" xml:space="preserve">
+    <value>Pickup hours</value>
+  </data>
   <data name="T_StoresFound" xml:space="preserve">
     <value>{0} store(s) found</value>
   </data>

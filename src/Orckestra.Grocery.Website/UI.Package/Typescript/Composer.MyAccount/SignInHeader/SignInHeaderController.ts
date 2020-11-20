@@ -2,14 +2,14 @@
 ///<reference path='../../Mvc/Controller.ts' />
 ///<reference path='../../Events/EventScheduler.ts' />
 ///<reference path='../Common/MyAccountEvents.ts' />
-///<reference path='./SignInHeaderService.ts' />
+///<reference path='../../Services/UserMetadataService.ts' />
 
 module Orckestra.Composer {
     'use strict';
 
     export class SignInHeaderController extends Orckestra.Composer.Controller {
 
-        protected signInHeaderService: SignInHeaderService = new SignInHeaderService(new SignInHeaderRepository());
+        protected userMetadataService: UserMetadataService = new UserMetadataService(new MembershipRepository());
 
         public initialize() {
 
@@ -24,8 +24,13 @@ module Orckestra.Composer {
             var websiteId = $('html').data('website');
             var param = { cultureInfo, websiteId };
 
-            this.signInHeaderService.getSignInHeader(param)
-                .then(signInHeader => this.render('SignInHeader', signInHeader));
+            this.userMetadataService.getUserMetadata(param)
+                .then(vm => {
+                    new Vue({
+                        el: '#vueSignInHeader',
+                        data: vm
+                    });
+                });
         }
 
         protected registerSubscriptions() {
@@ -37,11 +42,11 @@ module Orckestra.Composer {
         }
 
         protected onLoggedOut(e: IEventInformation): Q.Promise<any> {
-            return this.signInHeaderService.invalidateCache();
+            return this.userMetadataService.invalidateCache();
         }
 
         protected onLoggedIn(e: IEventInformation): Q.Promise<any> {
-             return this.signInHeaderService.invalidateCache();
+             return this.userMetadataService.invalidateCache();
         }
     }
 }

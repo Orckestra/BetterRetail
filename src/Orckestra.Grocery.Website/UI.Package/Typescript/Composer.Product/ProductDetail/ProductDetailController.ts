@@ -65,6 +65,7 @@ module Orckestra.Composer {
                 },
                 mounted() {
                     self.eventHub.subscribe(CartEvents.CartUpdated, this.onCartUpdated);
+                    self.eventHub.subscribe(FulfillmentEvents.StoreSelected, this.onStoreSelected);
                     self.eventHub.subscribe(self.concern + 'SelectedVariantIdChanged', this.onSelectedVariantIdChanged);
                 },
                 computed: {
@@ -98,6 +99,12 @@ module Orckestra.Composer {
                 methods: {
                     onCartUpdated(result) {
                         this.Cart = result.data;
+                    },
+                    onStoreSelected() {
+                        self.inventoryService.clearCache();
+                        self.inventoryService.isAvailableToSell(this.Product.Sku).then(result => {
+                            this.IsAvailableToSell = result;
+                        });
                     },
                     onSelectedVariantIdChanged(result) {
                         let { selectedSku } = result.data;

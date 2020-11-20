@@ -1,4 +1,5 @@
 using Orckestra.Composer.Grocery.Parameters;
+using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Product.Providers;
 using Orckestra.Composer.Repositories;
 using Orckestra.Composer.Services;
@@ -43,6 +44,13 @@ namespace Orckestra.Composer.Grocery.Providers
         {
             var fulfillmentLocation = await GetDefaultInventoryLocationIdAsync().ConfigureAwait(false);
             return new List<string>() { fulfillmentLocation };
+        }
+
+        protected override GetFulfillmentLocationsByScopeParam GetFulfillmentLocationsByScopeParam(GetFulfillmentLocationParam param)
+        {
+            var newParam = base.GetFulfillmentLocationsByScopeParam(param);
+            newParam.IncludeChildScopes = true;
+            return newParam;
         }
     }
 }

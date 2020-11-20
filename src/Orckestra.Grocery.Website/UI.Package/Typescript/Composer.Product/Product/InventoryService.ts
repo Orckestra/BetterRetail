@@ -23,6 +23,10 @@ module Orckestra.Composer {
             return this._memoizeIsAvailableToSell(sku);
         }
 
+        public clearCache() {
+            this._memoizeIsAvailableToSell = undefined;
+        }
+
         private isAvailableToSellImpl(sku: string): Q.Promise<boolean> {
 
             var data = { skus: [sku] };
@@ -30,5 +34,6 @@ module Orckestra.Composer {
             return ComposerClient.post('/api/inventory/findInventoryItems', data)
                                  .then(availableSkus => _.contains(availableSkus, sku));
         }
+
     }
 }

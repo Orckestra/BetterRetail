@@ -1,0 +1,32 @@
+@inherits RazorFunction
+@using Orckestra.Composer.CompositeC1.Mappers;
+@using Orckestra.Composer.CompositeC1.DataTypes.Navigation;
+
+
+@functions {
+
+}
+
+@{
+
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
+<head>
+</head>
+<body>
+    <span data-oc-controller="MyAccount.SignInHeader">
+        <span id="vueSignInHeader" >
+            <a v-bind:href="Url"
+               class="nav-link"
+               v-bind:title="IsAuthenticated ? '@Html.Localize("MyAccount", "L_MyAccount")' : '@Html.Localize("MyAccount", "L_SignIn")'">
+                <span class="fa  fa-user  sps--blw-show-inline-block"></span>&#160;
+                <span v-cloak="true">
+                    <span class="d-none d-xl-inline sps--blw-hidden" v-if="IsAuthenticated">@Html.Localize("MyAccount", "L_MyAccount")</span>
+                    <span class="d-none d-xl-inline sps--blw-hidden" v-else="else">@Html.Localize("MyAccount", "L_SignIn")</span>
+                </span>
+            </a>
+        </span>
+    </span>
+</body>
+</html>

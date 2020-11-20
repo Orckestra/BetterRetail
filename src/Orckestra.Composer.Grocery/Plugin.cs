@@ -7,6 +7,7 @@ using Orckestra.Composer.Grocery.Services;
 using Orckestra.Composer.Grocery.Settings;
 using Orckestra.Composer.MyAccount.Services;
 using Orckestra.Composer.Providers;
+using Orckestra.Composer.Store.Factory;
 using Orckestra.Overture;
 
 namespace Orckestra.Composer.Grocery
@@ -22,6 +23,7 @@ namespace Orckestra.Composer.Grocery
             host.Register<GroceryInventoryLocationProvider, IInventoryLocationProvider>();
             host.Register<CartMoveProvider, ICartMoveProvider>();
             host.Register<GroceryCartViewModelFactory, ICartViewModelFactory>();
+            host.Register<GroceryStoreViewModelFactory, IStoreViewModelFactory>();
             host.Register<TimeSlotViewModelFactory, ITimeSlotViewModelFactory>();
             host.Register<TimeSlotRepository, ITimeSlotRepository>();
             host.Register<GrocerySettings, IGrocerySettings>(ComponentLifestyle.PerRequest);

@@ -128,6 +128,7 @@
     <Compile Include="DataTypes\IGrocerySettingsMeta.cs" />
     <Compile Include="Api\StoreAndFulfillmentSelectionController.cs" />
     <Compile Include="Factory\GroceryCartViewModelFactory.cs" />
+    <Compile Include="Factory\GroceryStoreViewModelFactory.cs" />
     <Compile Include="Factory\ITimeSlotViewModelFactory.cs" />
     <Compile Include="Factory\TimeSlotViewModelFactory.cs" />
     <Compile Include="GroceryConfiguration.cs" />
@@ -142,6 +143,7 @@
     <Compile Include="Repositories\SalesScopeFulfillmentMethodRepository.cs" />
     <Compile Include="Repositories\SalesScopeInventoryRepository.cs" />
     <Compile Include="Repositories\SalesScopePaymentRepository.cs" />
+    <Compile Include="Repositories\SalesScopeWishListRepository.cs" />
     <Compile Include="Repositories\TimeSlotRepository.cs" />
     <Compile Include="Services\GroceryComposerContext.cs" />
     <Compile Include="Services\GroceryMembershipViewService.cs" />
@@ -179,6 +181,7 @@
     <Compile Include="ViewModels\IGroceryCartViewModel.cs" />
     <Compile Include="ViewModels\IGroceryOrderShipmentDetailViewModel.cs" />
     <Compile Include="ViewModels\StoreAndFulfillmentSelectionViewModel.cs" />
+    <Compile Include="ViewModels\IGroceryStoreViewModel.cs" />
     <Compile Include="ViewModels\TimeSlotCalendarViewModel.cs" />
     <Compile Include="ViewModels\TimeSlotReservationViewModel.cs" />
     <Compile Include="ViewModels\TimeSlotViewModel.cs" />

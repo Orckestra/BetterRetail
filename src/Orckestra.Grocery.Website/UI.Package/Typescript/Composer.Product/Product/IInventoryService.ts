@@ -5,5 +5,7 @@ module Orckestra.Composer {
     export interface IInventoryService {
 
         isAvailableToSell(sku: string): Q.Promise<boolean>;
+
+        clearCache(): void;
     }
 }

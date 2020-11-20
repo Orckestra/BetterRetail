@@ -49,5 +49,8 @@ module Orckestra.Composer {
         * If user with this username exist
         */
         isUserExist(email: string): Q.Promise<any>;
+
+        // Get user meta data to dispay status/name and urls
+        userMetadata(): Q.Promise<any>
     }
 }

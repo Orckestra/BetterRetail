@@ -1,4 +1,6 @@
 ﻿@inherits RazorFunction
+@using Orckestra.ExperienceManagement.Configuration
+@using System.Globalization
 
 @functions {
     public override string FunctionDescription
@@ -8,6 +10,12 @@
 
     [FunctionParameter(Label = "LanguageSwitch Component")]
     public XhtmlDocument LanguageSwitch { get; set; }
+
+    public ISiteConfiguration SiteConfiguration { get; set; }
+}
+
+@{
+    var pages = SiteConfiguration.GetPagesConfiguration(CultureInfo.CurrentCulture, HomePageNode.Id);
 }
 
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
@@ -18,19 +26,38 @@
         <div class="header">
             <nav class="navbar fixed-top navbar-expand  navbar-dark bg-gray p-0">
                 <div class="container-md px-lg-2">
-                    <button class="navbar-toggler d-block d-md-none main-nav-toggle" aria-label="Menu" type="button" data-toggle="collapse" data-target="#main-nav-collapse" aria-expanded="false">
+
+                    <button class="navbar-toggler d-block d-md-none main-nav-toggle" 
+                            aria-label="Menu" aria-expanded="false"
+                            type="button" 
+                            data-toggle="collapse" 
+                            data-target="#main-nav-collapse">
                         <span class="navbar-toggler-icon"></span>
                     </button>
+
                     @Markup(LanguageSwitch)
-                    <f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.Header.StickyLinks" />
+
+                    @Function("Composer.Header.StickyLinks")
+
                     @Function("Grocery.SelectedStoreInHeader")
+
                     <ul class="navbar-nav ml-auto">
-                        <li class="nav-item"><f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.Store.LocatorInHeader" /></li>
-                        <f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.Membership.SignInHeader" />
-                        <li class="nav-item"><f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.WishList.WishListInHeader" /></li>
-                        <li class="nav-item sps--blw-show-block">
-                            <a class="nav-link" href="#" title="@Html.Localize("General", "Search")" data-focus-element="#search-input"><span class="fa  fa-search"></span></a>
+                        <li class="nav-item">
+                            @StoreLocatorLink(pages)
                         </li>
+
+                        <li class="nav-item">
+                            @Function("Composer.Membership.SignInHeader")
+                        </li>
+
+                        <li class="nav-item">
+                            @Function("Composer.WishList.WishListInHeader")
+                        </li>
+
+                        <li class="nav-item sps--blw-show-block">
+                            @SearchIcon()
+                        </li>
+
                         <li class="nav-item position-relative">
                             <f:function name="Composite.Web.Html.Template.PageTemplateFeature" xmlns:f="http://www.composite.net/ns/function/1.0">
                                 <f:param name="FeatureName" value="Minicart" />
@@ -42,19 +69,17 @@
             </nav>
         </div>
 
-        <f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.Header.MainMenu" />
+        @Function("Composer.Header.MainMenu")
 
         <div class="container-fluid bg-light  py-2  shadow-sm">
             <div class="container-md">
                 <div class="row justify-content-between ">
                     <div class="col-10 col-xl-6 mx-auto mx-lg-0 justify-content-center align-self-center">
-                        <a href="@HomePageNode.Url" class="logo">
-                            <img src="~/UI.Package/Images/logo.svg" alt="logo" />
-                        </a>
+                        @Logo()
                     </div>
                     <div class="col-12 col-xl-6  justify-content-center align-self-center">
                         <div class="d-none d-md-block clearfix">
-                            <f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.Header.OptionalLinks" />
+                            @Function("Composer.Header.OptionalLinks")
                         </div>
                         <div>
                             <f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.SearchBox">
@@ -66,7 +91,30 @@
                 </div>
             </div>
         </div>
+
         @Function("Grocery.TimeSlotBanner")
     </header>
 </body>
 </html>
+
+@helper Logo()
+{
+    <a href="@HomePageNode.Url" class="logo">
+        <img src="~/UI.Package/Images/logo.svg" alt="logo" />
+    </a>
+}
+
+@helper SearchIcon()
+{
+    <a class="nav-link" href="#" title="@Html.Localize("General", "Search")" data-focus-element="#search-input">
+        <span class="fa  fa-search"></span>
+    </a>
+}
+
+@helper StoreLocatorLink(PagesConfiguration pages)
+{
+    <a class="nav-link" href="~/page(@pages.StoreListPageId)" title="@Html.Localize("Store", "L_StoreLocator")">
+        <span class="fas  fa-map-marker-alt"></span>&#160;
+        <span class="d-none d-xl-inline sps--blw-hidden">@Html.Localize("Store", "L_StoreLocator")</span>
+    </a>
+}

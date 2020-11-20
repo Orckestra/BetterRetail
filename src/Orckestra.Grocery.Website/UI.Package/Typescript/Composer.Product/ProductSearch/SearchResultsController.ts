@@ -54,6 +54,7 @@ module Orckestra.Composer {
                 components: {},
                 mounted() {
                     self.eventHub.subscribe(CartEvents.CartUpdated, this.onCartUpdated);
+                    self.eventHub.subscribe(FulfillmentEvents.StoreSelected, this.onStoreSelected);
                     self.cartService.getCart()
                         .then(cart => this.Cart = cart)
                         .fin(() => this.IsBusy = false);
@@ -108,6 +109,9 @@ module Orckestra.Composer {
                     },
                     onCartUpdated(result) {
                         this.Cart = result.data;
+                    },
+                    onStoreSelected() {
+                        //window.location.reload(); TODO the best approach to reload search results
                     },
                     updateItemQuantity(item: any, quantity: number) {
                         let cartItem = _.find(this.Cart.LineItemDetailViewModels, (i: any) => i.Id === item.LineItemId);

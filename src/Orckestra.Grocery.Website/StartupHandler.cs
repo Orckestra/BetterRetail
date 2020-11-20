@@ -103,7 +103,6 @@ namespace Orckestra.Composer.Grocery.Website
             functions.RegisterAction<CheckoutController>("ConfirmationBreadcrumb", "Composer.Checkout.ConfirmationBreadcrumb");
             functions.RegisterAction<CheckoutController>("LanguageSwitch", "Composer.Checkout.LanguageSwitch");
 
-            functions.RegisterAction<MembershipController>("SignInHeaderBlade", "Composer.Membership.SignInHeader");
             functions.RegisterAction<MembershipController>("ReturningCustomerBlade", "Composer.Membership.ReturningCustomer");
             functions.RegisterAction<MembershipController>("NewCustomerBlade", "Composer.Membership.NewCustomer");
             functions.RegisterAction<MembershipController>("CreateAccountBlade", "Composer.Membership.CreateAccount");
@@ -129,12 +128,8 @@ namespace Orckestra.Composer.Grocery.Website
 
             functions.RegisterAction<OrderController>("FindMyOrder", "Composer.Order.FindMyOrder");
 
-            functions.RegisterAction<StoreLocatorController>("StoreDetails", "Composer.Store.Details", "Store Details")
-                .AddParameter("zoom", typeof(int), false, label: "Map Zoom Level", helpText: "Define the resolution of the map view. Zoom levels between 0 and 21+. Default is 14 (streets).");
             functions.RegisterAction<StoreLocatorController>("Breadcrumb", "Composer.Store.Breadcrumb");
-            functions.RegisterAction<StoreLocatorController>("PageHeader", "Composer.Store.PageHeader");
             functions.RegisterAction<StoreLocatorController>("StoreDirectory", "Composer.Store.Directory");
-            functions.RegisterAction<StoreLocatorController>("StoreLocatorInHeader", "Composer.Store.LocatorInHeader");
             functions.RegisterAction<StoreLocatorController>("StoreInventory", "Composer.Store.Inventory")
                 .AddParameter("pagesize", typeof(int), false, label: "Page Size", helpText: "The max count of the items to show in the list.");
             functions.RegisterAction<StoreLocatorController>("LanguageSwitch", "Composer.StoreLocator.LanguageSwitch");

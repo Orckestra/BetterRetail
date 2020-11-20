@@ -1,4 +1,5 @@
 using Composite.Plugins.PageTemplates.MasterPages.Controls.Functions;
+using Orckestra.Composer.Cart;
 using Orckestra.Composer.Cart.Factory;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Repositories;
@@ -36,6 +37,7 @@ namespace Orckestra.Composer.Grocery.Providers
             IFulfillmentLocationsRepository fulfillmentLocationsRepository,
             IFulfillmentMethodRepository fulfillmentMethodRepository,
             ICartRepository cartRepository,
+            IWishListRepository wishlistRepository,
             ITimeSlotRepository timeSlotRepository,
             ISiteConfiguration siteConfiguration,
             IWebsiteContext websiteContext)
@@ -49,6 +51,7 @@ namespace Orckestra.Composer.Grocery.Providers
             FulfillmentLocationsRepository = fulfillmentLocationsRepository ?? throw new ArgumentNullException(nameof(fulfillmentLocationsRepository));
             FulfillmentMethodRepository = fulfillmentMethodRepository ?? throw new ArgumentNullException(nameof(fulfillmentMethodRepository));
             CartRepository = cartRepository ?? throw new ArgumentNullException(nameof(cartRepository));
+            WishlistRepository = wishlistRepository ?? throw new ArgumentNullException(nameof(wishlistRepository));
             TimeSlotRepository = timeSlotRepository ?? throw new ArgumentNullException(nameof(timeSlotRepository));
             SiteConfiguration = siteConfiguration ?? throw new ArgumentNullException(nameof(siteConfiguration));
             WebsiteContext = websiteContext ?? throw new ArgumentNullException(nameof(websiteContext));
@@ -61,6 +64,8 @@ namespace Orckestra.Composer.Grocery.Providers
         public IScopeProvider ScopeProvider { get; private set; }
         public IFulfillmentLocationsRepository FulfillmentLocationsRepository { get; private set; }
         public ICartRepository CartRepository { get; private set; }
+
+        public IWishListRepository WishlistRepository { get; set; }
         public ITimeSlotRepository TimeSlotRepository { get; }
         public IFulfillmentMethodRepository FulfillmentMethodRepository { get; private set; }
         public ISiteConfiguration SiteConfiguration { get; set; }
@@ -231,7 +236,7 @@ namespace Orckestra.Composer.Grocery.Providers
                 NewStore = newStore,
                 ScopeFrom = currentStore?.ScopeId ?? ScopeProvider.DefaultScope,
                 ScopeTo = newStore.ScopeId,
-                InventoryLocationId = newStore.FulfillmentLocation.InventoryLocationId,
+                InventoryLocationId = newStore.FulfillmentLocation?.InventoryLocationId,
                 FulfillementMethodType = cookieData.FulfillmentMethodType
             }).ConfigureAwait(false);
 
@@ -247,7 +252,46 @@ namespace Orckestra.Composer.Grocery.Providers
 
             CookieAccessor.Write(cookieData.Cookie);
 
+            if (param.IsAuthenticated && newStore.FulfillmentLocation != null)
+            {
+                await UpdateWishListWithNewFulfillmentLocation(newStore.FulfillmentLocation.Id, param).ConfigureAwait(false);
+            }
+
             return processedCart;
+        }
+
+        protected virtual async Task UpdateWishListWithNewFulfillmentLocation(Guid fulfillmentLocationId, SetSelectedStoreParam param)
+        {
+            var wishList = await WishlistRepository.GetWishListAsync(new GetCartParam
+            {
+                Scope = ScopeProvider.DefaultScope,
+                CultureInfo = param.CultureInfo,
+                CustomerId = param.CustomerId,
+                CartName = CartConfiguration.WishlistCartName,
+                ExecuteWorkflow = false
+            }).ConfigureAwait(false);
+
+            var wishListShipment = wishList?.Shipments?.FirstOrDefault();
+
+            if (wishListShipment != null && wishListShipment.FulfillmentLocationId != fulfillmentLocationId)
+            {
+                await CartRepository.UpdateShipmentAsync(new UpdateShipmentParam
+                {
+                    CartName = CartConfiguration.WishlistCartName,
+                    CultureInfo = param.CultureInfo,
+                    FulfillmentLocationId = fulfillmentLocationId,
+                    CustomerId = wishList.CustomerId,
+                    FulfillmentMethodName = wishListShipment.FulfillmentMethod?.Name,
+                    FulfillmentScheduleMode = wishListShipment.FulfillmentScheduleMode,
+                    FulfillmentScheduledTimeBeginDate = wishListShipment.FulfillmentScheduledTimeBeginDate,
+                    FulfillmentScheduledTimeEndDate = wishListShipment.FulfillmentScheduledTimeEndDate,
+                    PropertyBag = wishListShipment.PropertyBag,
+                    Id = wishListShipment.Id,
+                    ScopeId = wishList.ScopeId,
+                    ShippingAddress = wishListShipment.Address,
+                    ShippingProviderId = wishListShipment.FulfillmentMethod == null ? Guid.Empty : wishListShipment.FulfillmentMethod.ShippingProviderId
+                }).ConfigureAwait(false);
+            }
         }
 
         public virtual async Task<ProcessedCart> SetSelectedTimeSlotAsync(SetSelectedTimeSlotParam param)
