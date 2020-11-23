@@ -245,6 +245,7 @@
     <Compile Include="Cache\QueryValueCache.cs" />
     <Compile Include="Cache\SearchPageExclusion.cs" />
     <Compile Include="CategoriesNamespaces.cs" />
+    <Compile Include="ComposerPclExportClient.cs" />
     <Compile Include="ContextPreservationHttpModule.cs" />
     <Compile Include="Context\ContextHelper.cs" />
     <Compile Include="Context\IStoreContext.cs" />
