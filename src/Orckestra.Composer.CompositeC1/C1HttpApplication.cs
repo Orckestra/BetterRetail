@@ -4,6 +4,7 @@ using System.Web.Routing;
 using Composite.Core.Routing;
 using Composite.Core.WebClient;
 using Orckestra.Composer.Providers;
+using ServiceStack;
 
 namespace Orckestra.Composer.CompositeC1
 {
@@ -17,6 +18,8 @@ namespace Orckestra.Composer.CompositeC1
             ApplicationLevelEventHandlers.Application_Start(sender, e);
 
             RegisterRoutes(RouteTable.Routes);
+
+            PclExport.Instance = new ComposerPclExport();
         }
 
         protected virtual void RegisterRoutes(RouteCollection routes)
