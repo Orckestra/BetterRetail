@@ -95,7 +95,7 @@
                 <strong>@Html.Localize("Store", "T_OpenHours")</strong><br />
                 @StoreAvailability(vueBinding + ".Store")
             </div>
-            <div>
+            <div v-if="@(vueBinding).Store.PhoneNumber">
                 <strong>@Html.Localize("Store", "T_Phone"):</strong><br />
                 <span v-if="@(vueBinding).Store.PhoneNumber">{{@(vueBinding).Store.PhoneNumber}}</span>
                 <span v-else="else">{{@(vueBinding).Store.Address.PhoneNumber}}</span>
@@ -107,6 +107,7 @@
                         <i class="fa fa-edit d-inline d-sm-none"></i>
                         <span class="d-none d-sm-inline"> @Html.Localize("Grocery", "B_ChangeStore")</span>
                     </a>
+                    <a class="cta float-left" v-bind:href="@(vueBinding).Store.Url">@Html.Localize("Store", "B_ViewStoreDetails")</a>
                 </div>
             }
         </div>

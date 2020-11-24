@@ -65,9 +65,23 @@ namespace Orckestra.Composer.Grocery.Services
             };
         }
 
-        public virtual Task SetSelectedStoreAsync(SetSelectedStoreParam param)
+        public virtual async Task<StoreAndFulfillmentSelectionViewModel> SetSelectedStoreAsync(SetSelectedStoreParam param)
         {
-            return StoreAndFulfillmentSelectionProvider.SetSelectedStoreAsync(param);
+            var store = await StoreAndFulfillmentSelectionProvider.SetSelectedStoreAsync(param).ConfigureAwait(false);
+            var storeVMParams = new CreateStoreViewModelParam
+            {
+                Store = store,
+                CultureInfo = param.CultureInfo,
+                BaseUrl = param.BaseUrl
+            };
+
+            return new StoreAndFulfillmentSelectionViewModel
+            {
+                Store = StoreViewModelFactory.CreateStoreViewModel(storeVMParams),
+                TimeSlotReservation = null,
+                TimeSlot = null,
+                FulfillmentMethodType = await StoreAndFulfillmentSelectionProvider.GetSelectedFulfillmentMethodTypeAsync().ConfigureAwait(false)
+            };
         }
 
         public virtual async Task<CartViewModel> SetSelectedTimeSlotAsync(SetSelectedTimeSlotParam param)

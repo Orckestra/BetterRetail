@@ -213,4 +213,7 @@
   <data name="B_ShowLess" xml:space="preserve">
     <value>See fewer stores</value>
   </data>
+  <data name="B_ViewStoreDetails" xml:space="preserve">
+    <value>View store details</value>
+  </data>
 </root>

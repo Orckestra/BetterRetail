@@ -25,6 +25,7 @@ module Orckestra.Composer {
             switch (method) {
                 case FulfillmentMethodTypes.PickUp:
                     return stores.filter(store => store.SupportPickUp);
+                case FulfillmentMethodTypes.Delivery:
                 case FulfillmentMethodTypes.Shipping:
                     return stores.filter(store => store.SupportDelivery);
                 default:

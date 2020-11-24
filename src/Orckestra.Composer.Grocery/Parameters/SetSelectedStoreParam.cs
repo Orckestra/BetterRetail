@@ -12,6 +12,8 @@ namespace Orckestra.Composer.Grocery.Parameters
         /// Culture info for retrieving localized data
         /// </summary>
         public CultureInfo CultureInfo { get; set; }
+
+        public string BaseUrl { get; set; }
         /// <summary>
         /// Unique identifier of a customer, who owns a cart
         /// </summary>

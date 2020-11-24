@@ -6,6 +6,7 @@ using Orckestra.Composer.Cart.Repositories;
 using Orckestra.Composer.Grocery.Parameters;
 using Orckestra.Composer.Grocery.Repositories;
 using Orckestra.Composer.Grocery.Settings;
+using Orckestra.Composer.Grocery.ViewModels;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Repositories;
@@ -186,7 +187,7 @@ namespace Orckestra.Composer.Grocery.Providers
             return store;
         }
 
-        public async Task SetSelectedStoreAsync(SetSelectedStoreParam param)
+        public async Task<StoreServiceModel> SetSelectedStoreAsync(SetSelectedStoreParam param)
         {
             if (param == null) throw new ArgumentNullException(nameof(param));
             if (param.StoreId == Guid.Empty) throw new ArgumentException(GetMessageOfEmpty(nameof(param.StoreId)));
@@ -216,6 +217,8 @@ namespace Orckestra.Composer.Grocery.Providers
             StoreServiceModel currentStore = storesResult[0], newStore = storesResult[1];
 
             await ChangeSelectedStoreAsync(currentStore, newStore, param);
+
+            return newStore;
         }
 
         protected virtual async Task<ProcessedCart> ChangeSelectedStoreAsync(StoreServiceModel currentStore, StoreServiceModel newStore, SetSelectedStoreParam param)

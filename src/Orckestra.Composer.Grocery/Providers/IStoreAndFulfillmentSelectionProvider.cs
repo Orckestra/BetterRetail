@@ -25,7 +25,7 @@ namespace Orckestra.Composer.Grocery.Providers
         /// </summary>
         /// <param name="param"></param>
         /// <returns></returns>
-        Task SetSelectedStoreAsync(SetSelectedStoreParam param);
+        Task<Orckestra.Overture.ServiceModel.Customers.Stores.Store> SetSelectedStoreAsync(SetSelectedStoreParam param);
 
         /// <summary>
         /// Sets the selected times slot.

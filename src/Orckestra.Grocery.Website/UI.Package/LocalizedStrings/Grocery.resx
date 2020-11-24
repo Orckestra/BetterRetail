@@ -150,6 +150,9 @@
   <data name="B_SelectFulfillmentMethod" xml:space="preserve">
     <value>Select Fulfillment Method</value>
   </data>
+  <data name="B_SelectThisStore" xml:space="preserve">
+    <value>Select this store</value>
+  </data>
   <data name="B_StartShopping" xml:space="preserve">
     <value>Start Shopping</value>
   </data>
@@ -280,6 +283,9 @@ available for you.</value>
   </data>
   <data name="T_StoreDeliveryHours" xml:space="preserve">
     <value>Delivery hours</value>
+  </data>
+  <data name="T_StoreDoNotSupportSelectedFulfillmentMethod" xml:space="preserve">
+    <value>This store doesn't support selected fulfillment method.</value>
   </data>
   <data name="T_StorePickUpHours" xml:space="preserve">
     <value>Pickup hours</value>

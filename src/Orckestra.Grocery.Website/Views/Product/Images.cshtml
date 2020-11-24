@@ -15,8 +15,14 @@
 <head>
     <script>
         function imgError(el) {
-            if (!el.src.includes('@Model.FallbackImageUrl')) {
-                el.src = '@Model.FallbackImageUrl';
+            this.onerror = null;
+           @if (!string.IsNullOrWhiteSpace(Model.FallbackImageUrl) && Model.FallbackImageUrl.Contains("/"))
+            {
+                <text>
+                if (!el.src.includes('@Model.FallbackImageUrl')) {
+                    el.src = '@Model.FallbackImageUrl';
+                }
+                </text>
             }
         }
         function imgLoaded(el) {

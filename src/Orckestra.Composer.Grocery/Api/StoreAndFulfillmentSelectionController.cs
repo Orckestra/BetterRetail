@@ -79,15 +79,16 @@ namespace Orckestra.Composer.Grocery.Api
                 throw new ArgumentException($"Cannot parse {nameof(request.StoreId)} with value '{request.StoreId}'", nameof(request));
             }
 
-            await StoreAndFulfillmentSelectionViewService.SetSelectedStoreAsync(new SetSelectedStoreParam
+            var fulfilment = await StoreAndFulfillmentSelectionViewService.SetSelectedStoreAsync(new SetSelectedStoreParam
             {
                 CultureInfo = ComposerContext.CultureInfo,
                 CustomerId = ComposerContext.CustomerId,
                 IsAuthenticated = ComposerContext.IsAuthenticated,
-                StoreId = guidId
+                StoreId = guidId,
+                BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
             });
 
-            return Ok(true);
+            return Ok(fulfilment);
         }
 
         /// <summary>

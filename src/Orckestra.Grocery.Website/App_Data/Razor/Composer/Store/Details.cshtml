@@ -32,6 +32,9 @@
      var url = new Uri(baseurl, model.Url);
 
     model.Context.Add("zoom", zoom);
+    model.Context.Add("id", model.Id);
+    model.Context.Add("SupportPickUp", model.SupportPickUp);
+     model.Context.Add("SupportDelivery", model.SupportDelivery);
 
     var extendedModel = model.AsExtensionModel<IGroceryStoreViewModel>();
 }
@@ -43,7 +46,7 @@
 <body>
     <div data-oc-controller="Store.Details" class="store-details" data-context="@model.JsonContext">
         <h1>@model.LocalizedDisplayName</h1>
-        <div class="row">
+        <div id="vueStoreDetails" class="row">
             <div class="col-12 col-sm-4">
                 <div class="store-info  card">
                     <div class="card-body">
@@ -52,6 +55,33 @@
                         <a href="@model.GoogleDirectionsLink" target="_blank" class="cta  ctaGoogleDir">
                             @Html.Localize("Store", "H_Itinerary")
                         </a>
+                        <hr />
+                        <div v-cloak="true">
+                            <button v-if="!IsCurrentStoreSelected" v-bind:disabled="!IsSupportSelectedFulfillmentMethod || SelectedFulfillment.StoreLoading" 
+                                    v-on:click.prevent="selectStore()"
+                                    class="btn btn-primary btn-block">
+                                @Html.Localize("Grocery", "B_SelectThisStore")
+                                @GeneralHelpers.ButtonLoadingSpinner("SelectedFulfillment.StoreLoading")
+                            </button>
+                            <div v-else="else" >
+                                <div class="bg-success border border-success text-center p-1">
+                                    <span class="text-white">
+                                        <i class="fa fa-check fa-lg"></i>
+                                        @Html.Localize("CheckoutProcess", "L_Selected")
+                                    </span>
+                                </div>
+                                <a class="btn btn-outline-secondary btn-block mt-2" href="#" v-on:click.prevent="changeStoreModal($event, 'store')">
+                                    @Html.Localize("Grocery", "B_ChangeStore")
+                                </a>
+                            </div>
+                            <div v-if="!IsSupportSelectedFulfillmentMethod" class="alert alert-warning text-center mt-1">
+                                @Html.Localize("Grocery", "T_StoreDoNotSupportSelectedFulfillmentMethod")
+                            </div>
+                            <div v-if="IsCurrentStoreSelected">
+                                <hr />
+                                @StoreHelpers.SelectedTimeSlotPreview("SelectedFulfillment")
+                            </div>
+                        </div>
                         <hr />
                         @StoreHours(model.Schedule, Html.Localize("Store", "T_OpenHours"))
                         @StoreOpenHourExceptions(model)
@@ -92,8 +122,8 @@
     <h3 class="mt-3">@title</h3>
     foreach (var oh in schedule.OpeningHours)
     {
-        <div class="row  store-open-hour @(oh.IsDayToday && schedule.IsOpenNow && highlightToday ? "is-today bg-success": "")
-              @(oh.IsDayToday && !schedule.IsOpenNow && highlightToday ? "is-today bg-danger": "")">
+        <div class="row  store-open-hour @(oh.IsDayToday && schedule.IsOpenNow && highlightToday ? "is-today alert-success": "")
+              @(oh.IsDayToday && !schedule.IsOpenNow && highlightToday ? "is-today alert-danger": "")">
             <div class="col-3  col-lg-4">@oh.LocalizedDay</div>
             <div class="col-6  col-lg-6">
                 @if (oh.IsClosed)

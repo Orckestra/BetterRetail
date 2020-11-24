@@ -24,7 +24,7 @@ namespace Orckestra.Composer.Grocery.Services
         /// </summary>
         /// <param name="param"></param>
         /// <returns></returns>
-        Task SetSelectedStoreAsync(SetSelectedStoreParam param);
+        Task<StoreAndFulfillmentSelectionViewModel> SetSelectedStoreAsync(SetSelectedStoreParam param);
 
         /// <summary>
         /// Sets the selected fulfillment day and TimeSlot for a given customer.

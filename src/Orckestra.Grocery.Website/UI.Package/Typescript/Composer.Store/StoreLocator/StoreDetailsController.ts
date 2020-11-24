@@ -1,18 +1,25 @@
 ///<reference path='../../../Typings/tsd.d.ts' />
 ///<reference path='../../Mvc/Controller.ts' />
 ///<reference path='./Services/GeoLocationService.ts' />
+///<reference path='../../Composer.Grocery/FulfillmentService.ts' />
+///<reference path='../../Composer.Grocery/FulfillmentHelper.ts' />
+///<reference path='../../Composer.Grocery/FulfillmentEvents.ts' />
 
 module Orckestra.Composer {
 
     export class StoreDetailsController extends Controller {
 
         protected _geoService: GeoLocationService = new GeoLocationService();
+        protected fulfillmentService: IFulfillmentService = FulfillmentService.instance();
 
         private _map: google.maps.Map;
         private _marker: google.maps.Marker;
 
         public initialize() {
             super.initialize();
+
+            this.fulfillmentService.getSelectedFulfillment()
+                .then(fulfillment => this.initializeVueComponent(fulfillment));
 
             var center = new google.maps.LatLng(this.context.viewModel.latitude, this.context.viewModel.longitude);
             var mapOptions: google.maps.MapOptions = {
@@ -42,6 +49,47 @@ module Orckestra.Composer {
 
 
             this.setGoogleDirectionLink();
+        }
+
+        protected initializeVueComponent(fulfillment) {
+            let self: StoreDetailsController = this;
+            let commonFulfillmentOptions = FulfillmentHelper.getCommonSelectedFulfillmentStateOptions(fulfillment);
+            let data = self.context.viewModel;
+            new Vue({
+                el: "#vueStoreDetails",
+                data: {
+                    ...data,
+                    ...commonFulfillmentOptions.data
+                },
+                mounted() {
+                    self.eventHub.subscribe(FulfillmentEvents.StoreUpdating, e => this.onStoreUpdating(e.data));
+                    self.eventHub.subscribe(FulfillmentEvents.StoreSelected, e => this.onStoreSelected(e.data));
+                    self.eventHub.subscribe(FulfillmentEvents.TimeSlotUpdating, e => this.onSlotUpdating(e.data));
+                    self.eventHub.subscribe(FulfillmentEvents.TimeSlotSelected, e => this.onSlotSelected(e.data));
+                },
+                computed: {
+                    ...commonFulfillmentOptions.computed,
+                    IsCurrentStoreSelected() {
+                        return this.SelectedFulfillment.Store.Id === data.id;
+                    },
+                    IsSupportSelectedFulfillmentMethod() {
+                        let type = this.SelectedFulfillment.FulfillmentMethodType;
+                        return (this.SupportPickUp && type === FulfillmentMethodTypes.PickUp) ||
+                            (this.SupportDelivery && type === FulfillmentMethodTypes.Delivery) ||
+                            (this.SupportDelivery && type === FulfillmentMethodTypes.Shipping);
+                    }
+                },
+                methods: {
+                    selectStore() {
+                        this.SelectedFulfillment.StoreLoading = true;
+                        self.fulfillmentService.setStore(data.id)
+                            .then(fulfillment => {
+                                self.eventHub.publish(FulfillmentEvents.StoreSelected, { data: fulfillment.Store });
+                            });
+                    },
+                    ...commonFulfillmentOptions.methods
+                }
+            })
         }
 
         protected setGoogleDirectionLink() {

@@ -55,7 +55,7 @@
 <body>
     <div class="@(isFullWidth ? "c1-wide" : "") @(isFullWidthBottomCaption ? "full-width-caption" : "") @(isFullWidthBottomCaption && isIndicators ? "mb-5" : "")">
         <div id="bootstrapcarousel" data-interval="@(hasSliderFullWidth ? @SliderSpeed : "false")"
-             class="carousel slide" data-ride="carousel">
+             class="carousel slide" data-ride="true">
             <!-- Indicators -->
             @if (isIndicators)
             {
