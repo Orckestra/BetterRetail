@@ -35,7 +35,7 @@ namespace Orckestra.Composer.Grocery.Parameters
 		public string InventoryLocationId { get; set; }
 
         /// <summary>
-        /// Fulfillment method type
+        /// Fulfillment method type need to set up for the new Cart
         /// </summary>
         public FulfillmentMethodType? FulfillementMethodType { get; set; }
 	}

@@ -3,7 +3,7 @@
 
 module Orckestra.Composer {
     export interface IFulfillmentService {
-        setStore(id: any): Q.Promise<any>;
+        setFulfillment(storeId: any, methodType: any): Q.Promise<any>;
 
         getSelectedFulfillment(): Q.Promise<any>;
 
@@ -16,8 +16,6 @@ module Orckestra.Composer {
         isForcingToSelectTimeSlotDisabled(): Q.Promise<boolean>;
 
         getTimeSlots(fulfillmentMethodTypeString: string, id: any, shipmentId: any): Q.Promise<any>;
-
-        setFulFilledMethodType(fulfillmentMethodType: FulfillmentMethodTypes);
 
         setTimeSlotId(StoreId: any, shipmentId: any, slotId: any, date: any): Q.Promise<any>;
 

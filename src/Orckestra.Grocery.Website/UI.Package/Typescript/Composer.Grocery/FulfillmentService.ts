@@ -77,9 +77,9 @@ module Orckestra.Composer {
 			return this.cacheProvider.sessionCache.clear(this.cacheKeySelectedFulfillment);
         }
 
-        public setStore(id: any) {
+        public setFulfillment(storeId: any, methodType: any) {
             this.invalidateCache();
-            return ComposerClient.post('/api/storeandfulfillmentselection/setSelectedStore', { StoreId: id });
+            return ComposerClient.post('/api/storeandfulfillmentselection/setFulfillment', { StoreId: storeId, FulfillmentMethodType: methodType });
         }
 
         public getTimeSlots(FulfillmentMethodTypeString: string, id: any, ShipmentId: any): Q.Promise<any> {

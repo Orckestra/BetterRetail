@@ -39,6 +39,7 @@ namespace Orckestra.Composer.Grocery.Providers
                     Scope = param.ScopeFrom,
                     CultureInfo = param.CultureInfo
                 }).ConfigureAwait(false);
+
                 var shipment = cart.Shipments?.FirstOrDefault();
 
                 return await UpdateShipment(param, shipment.Id, shipment).ConfigureAwait(false);
@@ -93,7 +94,8 @@ namespace Orckestra.Composer.Grocery.Providers
             if (oldShipment == null) return null;
 
             var fulfillmentMethod = oldShipment.FulfillmentMethod;
-            if (fulfillmentMethod == null)
+            var isFulFillmentMethodChanged = fulfillmentMethod?.FulfillmentMethodType != param.FulfillementMethodType;
+            if (fulfillmentMethod == null || isFulFillmentMethodChanged)
             {
                 var fulfillmentMethods = await FulfillmentMethodRepository.GetCalculatedFulfillmentMethods(new GetShippingMethodsParam
                 {
@@ -134,7 +136,7 @@ namespace Orckestra.Composer.Grocery.Providers
                 PropertyBag = oldShipment.PropertyBag,
                 Id = newShipmentId,
                 ScopeId = param.ScopeTo,
-                ShippingAddress = string.IsNullOrEmpty(oldShipment.Address?.City) ? null : oldShipment.Address,
+                ShippingAddress = string.IsNullOrEmpty(oldShipment.Address?.City) || isFulFillmentMethodChanged ? null : oldShipment.Address,
                 ShippingProviderId = fulfillmentMethod?.ShippingProviderId ?? Guid.Empty
             };
 

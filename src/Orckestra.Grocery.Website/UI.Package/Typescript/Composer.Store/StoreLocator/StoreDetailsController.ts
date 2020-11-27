@@ -70,7 +70,7 @@ module Orckestra.Composer {
                 computed: {
                     ...commonFulfillmentOptions.computed,
                     IsCurrentStoreSelected() {
-                        return this.SelectedFulfillment.Store.Id === data.id;
+                        return !!(this.SelectedFulfillment.Store && this.SelectedFulfillment.Store.Id === data.id);
                     },
                     IsSupportSelectedFulfillmentMethod() {
                         let type = this.SelectedFulfillment.FulfillmentMethodType;
@@ -82,7 +82,7 @@ module Orckestra.Composer {
                 methods: {
                     selectStore() {
                         this.SelectedFulfillment.StoreLoading = true;
-                        self.fulfillmentService.setStore(data.id)
+                        self.fulfillmentService.setFulfillment(data.id, this.SelectedFulfillment.FulfillmentMethodType)
                             .then(fulfillment => {
                                 self.eventHub.publish(FulfillmentEvents.StoreSelected, { data: fulfillment.Store });
                             });

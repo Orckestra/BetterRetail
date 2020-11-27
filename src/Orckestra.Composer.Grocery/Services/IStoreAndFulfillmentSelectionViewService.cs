@@ -20,11 +20,11 @@ namespace Orckestra.Composer.Grocery.Services
         Task<StoreAndFulfillmentSelectionViewModel> GetSelectedFulfillmentAsync(GetSelectedFulfillmentParam param);
 
         /// <summary>
-        /// Sets the selected store for the given customer.
+        /// Sets the selected store and fulfillment method for the given customer.
         /// </summary>
         /// <param name="param"></param>
         /// <returns></returns>
-        Task<StoreAndFulfillmentSelectionViewModel> SetSelectedStoreAsync(SetSelectedStoreParam param);
+        Task<StoreAndFulfillmentSelectionViewModel> SetSelectedFulfillmentAsync(SetSelectedFulfillmentParam param);
 
         /// <summary>
         /// Sets the selected fulfillment day and TimeSlot for a given customer.
@@ -40,11 +40,5 @@ namespace Orckestra.Composer.Grocery.Services
         /// <returns></returns>
         Task<TimeSlotCalendarViewModel> CalculateScheduleAvailabilitySlotsAsync(CalculateScheduleAvailabilitySlotsParam param);
 
-        /// <summary>
-        /// Set default fulfilled method type
-        /// </summary>
-        /// <param name="param"></param>
-        /// <returns></returns>
-        Task SetSelectedFulfilledMethodTypeAsync(SetSelectedFulfillmentMethodTypeParam param);
     }
 }

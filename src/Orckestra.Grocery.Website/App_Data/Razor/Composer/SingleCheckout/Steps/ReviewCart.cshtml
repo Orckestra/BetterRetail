@@ -75,7 +75,7 @@
     </div>
     <div v-if="!CartEmpty" is="transition-group" name="items-list">
         <div class="row pt-3"
-             v-bind:class="{'border-bottom pb-2': index != Cart.LineItemDetailViewModels.length - 1, 'bg-danger': !item.IsValid}"
+             v-bind:class="{'border-bottom pb-2': index != Cart.LineItemDetailViewModels.length - 1, 'alert-danger': !item.IsValid}"
              v-for="(item, index) in Cart.LineItemDetailViewModels"
              v-bind:key="item.Id"
              v-bind:data-qa="'cart-item-' + index">

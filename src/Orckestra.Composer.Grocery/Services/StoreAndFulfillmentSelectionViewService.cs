@@ -1,6 +1,3 @@
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Services;
 using Orckestra.Composer.Cart.ViewModels;
@@ -8,10 +5,12 @@ using Orckestra.Composer.Grocery.Factory;
 using Orckestra.Composer.Grocery.Parameters;
 using Orckestra.Composer.Grocery.Providers;
 using Orckestra.Composer.Grocery.ViewModels;
-using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Store.Factory;
 using Orckestra.Composer.Store.Parameters;
 using Orckestra.Overture.ServiceModel.Orders;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Orckestra.Composer.Grocery.Services
 {
@@ -37,10 +36,11 @@ namespace Orckestra.Composer.Grocery.Services
         public virtual async Task<StoreAndFulfillmentSelectionViewModel> GetSelectedFulfillmentAsync(GetSelectedFulfillmentParam param)
         {
             var store = await StoreAndFulfillmentSelectionProvider.GetSelectedStoreAsync(param);
+            var fulfillmentMethodType = await StoreAndFulfillmentSelectionProvider.GetSelectedFulfillmentMethodTypeAsync().ConfigureAwait(false);
 
             if (store == null) return new StoreAndFulfillmentSelectionViewModel
             {
-                FulfillmentMethodType = await StoreAndFulfillmentSelectionProvider.GetSelectedFulfillmentMethodTypeAsync().ConfigureAwait(false)
+                FulfillmentMethodType = fulfillmentMethodType
             };
 
             var selectedTimeslot = await StoreAndFulfillmentSelectionProvider.GetSelectedTimeSlotAsync(new GetSelectedTimeSlotParam
@@ -61,13 +61,13 @@ namespace Orckestra.Composer.Grocery.Services
                 Store = StoreViewModelFactory.CreateStoreViewModel(storeVMParams),
                 TimeSlotReservation = selectedTimeslot?.TimeSlotReservation != null ? TimeSlotViewModelFactory.CreateTimeSlotReservationViewModel(selectedTimeslot.Value.TimeSlotReservation, param.CultureInfo) : null,
                 TimeSlot = selectedTimeslot?.TimeSlot != null ? TimeSlotViewModelFactory.CreateTimeSlotViewModel(new SlotInstance { Slot = selectedTimeslot.Value.TimeSlot }, param.CultureInfo) : null,
-                FulfillmentMethodType = await StoreAndFulfillmentSelectionProvider.GetSelectedFulfillmentMethodTypeAsync().ConfigureAwait(false)
+                FulfillmentMethodType = fulfillmentMethodType
             };
         }
 
-        public virtual async Task<StoreAndFulfillmentSelectionViewModel> SetSelectedStoreAsync(SetSelectedStoreParam param)
+        public virtual async Task<StoreAndFulfillmentSelectionViewModel> SetSelectedFulfillmentAsync(SetSelectedFulfillmentParam param)
         {
-            var store = await StoreAndFulfillmentSelectionProvider.SetSelectedStoreAsync(param).ConfigureAwait(false);
+            var store = await StoreAndFulfillmentSelectionProvider.SetSelectedStoreAndFulfillmentMethodTypeAsync(param).ConfigureAwait(false);
             var storeVMParams = new CreateStoreViewModelParam
             {
                 Store = store,
@@ -118,9 +118,5 @@ namespace Orckestra.Composer.Grocery.Services
             return TimeSlotViewModelFactory.CreateTimeSlotCalendarViewModel(dayAvailabilityList, param.CultureInfo);
         }
 
-        public virtual Task SetSelectedFulfilledMethodTypeAsync(SetSelectedFulfillmentMethodTypeParam param)
-        {
-            return StoreAndFulfillmentSelectionProvider.SetSelectedFulfillmentMethodTypeAsync(param);
-        }
     }
 }

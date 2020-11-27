@@ -25,7 +25,7 @@ namespace Orckestra.Composer.Grocery.Providers
         /// </summary>
         /// <param name="param"></param>
         /// <returns></returns>
-        Task<Orckestra.Overture.ServiceModel.Customers.Stores.Store> SetSelectedStoreAsync(SetSelectedStoreParam param);
+        Task<Orckestra.Overture.ServiceModel.Customers.Stores.Store> SetSelectedStoreAndFulfillmentMethodTypeAsync(SetSelectedFulfillmentParam param);
 
         /// <summary>
         /// Sets the selected times slot.
@@ -66,13 +66,6 @@ namespace Orckestra.Composer.Grocery.Providers
         /// Switches the session into "browsing without a specified store" mode.
         /// </summary>
         void EnableBrowsingWithoutStoreSelection();
-
-        /// <summary>
-        /// Set the selected fulfillment method type.
-        /// </summary>
-        /// <param name="param"></param>
-        /// <returns></returns>
-        Task SetSelectedFulfillmentMethodTypeAsync(SetSelectedFulfillmentMethodTypeParam param);
 
         /// <summary>
         /// Get default fulfilled method type

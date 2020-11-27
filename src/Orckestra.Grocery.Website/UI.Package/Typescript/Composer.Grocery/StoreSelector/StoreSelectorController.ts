@@ -186,16 +186,15 @@ module Orckestra.Composer {
 
                         step.selectStep(); //Select store step for erase next steps
                         self.cartService.invalidateCache();
-                        return self.selectedFulfillmentService.setFulFilledMethodType(this.ShippingMethodType)
-                            .then(() => self.selectedFulfillmentService.setStore(store.Id))
-                            .then((storeResult) => {
-                                if (storeResult) {
-                                    this.SelectedStoreId = store.Id;
+                        return self.selectedFulfillmentService.setFulfillment(store.Id, this.ShippingMethodType)
+                            .then((fulfillment) => {
+                                if (fulfillment) {
+                                    this.SelectedStoreId = fulfillment.Store.Id;
                                     this.Mode.SeeMoreStores = false;
-                                    self.eventHub.publish(FulfillmentEvents.StoreSelected, { data: store });
+                                    self.eventHub.publish(FulfillmentEvents.StoreSelected, { data: fulfillment.Store });
                                 }
                                 step.nextStep();
-                                return storeResult;
+                                return fulfillment;
                             })
                             .fail((reason) => {
                                 console.log(reason);

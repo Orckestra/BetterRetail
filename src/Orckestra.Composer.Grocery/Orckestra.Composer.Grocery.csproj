@@ -138,13 +138,16 @@
     <Compile Include="Parameters\GetFulfillmentLocationTimeSlotByIdParam.cs" />
     <Compile Include="Parameters\RecoverSelectionDataParam.cs" />
     <Compile Include="Parameters\ReserveTimeSlotParam.cs" />
+    <Compile Include="Parameters\SetSelectedFulfillmentMethodTypeParam.cs" />
     <Compile Include="Providers\GroceryInventoryLocationProvider.cs" />
     <Compile Include="Repositories\ITimeSlotRepository.cs" />
     <Compile Include="Repositories\SalesScopeFulfillmentMethodRepository.cs" />
     <Compile Include="Repositories\SalesScopeInventoryRepository.cs" />
+    <Compile Include="Repositories\SalesScopeOrderRepository.cs" />
     <Compile Include="Repositories\SalesScopePaymentRepository.cs" />
     <Compile Include="Repositories\SalesScopeWishListRepository.cs" />
     <Compile Include="Repositories\TimeSlotRepository.cs" />
+    <Compile Include="Requests\SetSelectedFulfillmentRequest.cs" />
     <Compile Include="Services\GroceryComposerContext.cs" />
     <Compile Include="Services\GroceryMembershipViewService.cs" />
     <Compile Include="Requests\GetTimeSlotsAvailabilityRequest.cs" />
@@ -159,7 +162,7 @@
     <Compile Include="Parameters\GetSelectedTimeSlotParam.cs" />
     <Compile Include="Parameters\MoveCartParam.cs" />
     <Compile Include="Parameters\RecoverUserFromCookieDataParam.cs" />
-    <Compile Include="Parameters\SetSelectedFulfillmentMethodTypeParam.cs" />
+    <Compile Include="Parameters\SetSelectedFulfillmentParam.cs" />
     <Compile Include="Parameters\SetSelectedStoreParam.cs" />
     <Compile Include="Parameters\RecoverCookieDataParam.cs" />
     <Compile Include="Parameters\SetSelectedTimeSlotParam.cs" />

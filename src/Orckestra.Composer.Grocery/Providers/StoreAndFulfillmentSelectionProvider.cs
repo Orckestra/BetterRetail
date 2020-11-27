@@ -187,7 +187,7 @@ namespace Orckestra.Composer.Grocery.Providers
             return store;
         }
 
-        public async Task<StoreServiceModel> SetSelectedStoreAsync(SetSelectedStoreParam param)
+        public async Task<StoreServiceModel> SetSelectedStoreAndFulfillmentMethodTypeAsync(SetSelectedFulfillmentParam param)
         {
             if (param == null) throw new ArgumentNullException(nameof(param));
             if (param.StoreId == Guid.Empty) throw new ArgumentException(GetMessageOfEmpty(nameof(param.StoreId)));
@@ -221,7 +221,7 @@ namespace Orckestra.Composer.Grocery.Providers
             return newStore;
         }
 
-        protected virtual async Task<ProcessedCart> ChangeSelectedStoreAsync(StoreServiceModel currentStore, StoreServiceModel newStore, SetSelectedStoreParam param)
+        protected virtual async Task<ProcessedCart> ChangeSelectedStoreAsync(StoreServiceModel currentStore, StoreServiceModel newStore, SetSelectedFulfillmentParam param)
         {
             var cookie = CookieAccessor.Read();
             cookie.Scope = newStore.ScopeId;
@@ -231,7 +231,7 @@ namespace Orckestra.Composer.Grocery.Providers
             {
                 await UpdatePreferredStoreAsync(param.CustomerId, newStore.Number).ConfigureAwait(false);
             }
-
+          
             var processedCart = await CartMoveProvider.MoveCart(new MoveCartParam
             {
                 CultureInfo = param.CultureInfo,
@@ -240,7 +240,7 @@ namespace Orckestra.Composer.Grocery.Providers
                 ScopeFrom = currentStore?.ScopeId ?? ScopeProvider.DefaultScope,
                 ScopeTo = newStore.ScopeId,
                 InventoryLocationId = newStore.FulfillmentLocation?.InventoryLocationId,
-                FulfillementMethodType = cookieData.FulfillmentMethodType
+                FulfillementMethodType = param.FulfillmentMethodType.HasValue ? param.FulfillmentMethodType : cookieData.FulfillmentMethodType
             }).ConfigureAwait(false);
 
             if (processedCart != null)
@@ -404,81 +404,12 @@ namespace Orckestra.Composer.Grocery.Providers
             return result.ScheduleResults;
         }
 
-        public virtual async Task SetSelectedFulfillmentMethodTypeAsync(SetSelectedFulfillmentMethodTypeParam param)
-        {
-            if (param == null) throw new ArgumentNullException(nameof(param));
-
-            var cart = await CartRepository.GetCartAsync(new GetCartParam
-            {
-                CultureInfo = param.CultureInfo,
-                CustomerId = param.CustomerId,
-                Scope = param.Scope,
-                CartName = param.CartName
-            }).ConfigureAwait(false);
-
-            var shipment = cart.Shipments.FirstOrDefault();
-            if (param.FulfillmentMethodType == shipment?.FulfillmentMethod?.FulfillmentMethodType)
-            {
-                return;
-            }
-
-            if (Guid.TryParse(shipment?.FulfillmentScheduleReservationNumber, out Guid timeSlotReservationId)) {
-                await TimeSlotRepository.DeleteFulfillmentLocationTimeSlotReservationByIdAsync(new BaseFulfillmentLocationTimeSlotReservationParam()
-                {
-                    SlotReservationId = timeSlotReservationId,
-                    Scope = param.Scope,
-                    FulfillmentLocationId = shipment.FulfillmentLocationId
-                }).ConfigureAwait(false);
-            };
-
-            var fulfillmentMethods = await FulfillmentMethodRepository.GetCalculatedFulfillmentMethods(new GetShippingMethodsParam
-            {
-                CartName = cart.Name,
-                CustomerId = cart.CustomerId,
-                CultureInfo = new CultureInfo(cart.CultureName),
-                Scope = cart.ScopeId
-            }).ConfigureAwait(false);
-
-            var newMethod = fulfillmentMethods.FirstOrDefault(method => method.FulfillmentMethodType == param.FulfillmentMethodType);
-
-            var updateShippinParam = new UpdateShipmentParam
-            {
-                CartName = cart.Name,
-                CultureInfo = new CultureInfo(cart.CultureName),
-                FulfillmentLocationId = shipment.FulfillmentLocationId,
-                CustomerId = cart.CustomerId,
-                FulfillmentMethodName = newMethod?.Name,
-                FulfillmentScheduleMode = shipment.FulfillmentScheduleMode,
-                FulfillmentScheduledTimeBeginDate = null,
-                FulfillmentScheduledTimeEndDate = null,
-                PropertyBag = shipment.PropertyBag,
-                Id = shipment.Id,
-                ScopeId = cart.ScopeId,
-                PickUpLocationId = null,
-                ShippingAddress = null,
-                ShippingProviderId = newMethod?.ShippingProviderId ?? default
-            };
-
-            var updatedCart = await CartRepository.UpdateShipmentAsync(updateShippinParam).ConfigureAwait(false);
-
-            var cookieData = new ExtendedCookieData(CookieAccessor.Read())
-            {
-                FulfillmentMethodType = param.FulfillmentMethodType,
-                SelectedStoreNumber = default,
-                TimeSlotReservationId = default,
-                SelectedDay = default
-             };
-
-            CookieAccessor.Write(cookieData.Cookie);
-        }
-
         public virtual Task<FulfillmentMethodType> GetSelectedFulfillmentMethodTypeAsync()
         {
             var cookieData = new ExtendedCookieData(CookieAccessor.Read());
 
             return Task.FromResult(cookieData.FulfillmentMethodType ?? FulfillmentMethodType.PickUp);
         }
-
 
         public virtual Task UpdatePreferredStoreAsync(Guid customerId, string storeNumber)
         {
@@ -578,7 +509,7 @@ namespace Orckestra.Composer.Grocery.Providers
 
                 if (shipment.FulfillmentLocationId == Guid.Empty)
                 {
-                    await ChangeSelectedStoreAsync(preferredStore, preferredStore, new SetSelectedStoreParam()
+                    await ChangeSelectedStoreAsync(preferredStore, preferredStore, new SetSelectedFulfillmentParam()
                     {
                         CultureInfo = param.CultureInfo,
                         CustomerId = param.CustomerId,
@@ -636,7 +567,7 @@ namespace Orckestra.Composer.Grocery.Providers
             }
 
             //Update selected store and recover cart from cookies
-            var processedCart = await ChangeSelectedStoreAsync(currentStore, currentStore, new SetSelectedStoreParam()
+            var processedCart = await ChangeSelectedStoreAsync(currentStore, currentStore, new SetSelectedFulfillmentParam()
             {
                 CultureInfo = param.CultureInfo,
                 CustomerId = param.CustomerId,

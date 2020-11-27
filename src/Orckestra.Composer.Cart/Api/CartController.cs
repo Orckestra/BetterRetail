@@ -80,6 +80,11 @@ namespace Orckestra.Composer.Cart.Api
                         {
                             cartViewModel.OrderSummary.CheckoutRedirectAction.RedirectUrl = GetCheckoutSignInUrl();
                         }
+
+                        if(cartViewModel.ShippingMethod == null)
+                        {
+                            cartViewModel.OrderSummary.CheckoutRedirectAction.RedirectUrl = GetCartUrl();
+                        }
                     }
                 }
                 catch (ArgumentException e) {

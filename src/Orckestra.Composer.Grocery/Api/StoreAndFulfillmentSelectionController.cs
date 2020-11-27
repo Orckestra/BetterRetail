@@ -61,34 +61,42 @@ namespace Orckestra.Composer.Grocery.Api
         }
 
         /// <summary>
-        /// Set up an active store for a certain customer. 
+        /// Set up an active store and fulfilment method type for a certain customer.
         /// This store will be used during an interaction of the customer with a website.
         /// For example, adding products to a cart or searching for products.
         /// During changing of current active store current cart of the customer will be moved to 
         /// the scope of a new store
         /// </summary>
-        /// <param name="request">Container with parameters, contains store GUID</param>
+        /// <param name="request">Container with parameters, contains FulfillmentMethodType string and store GUID</param>
         /// <returns>Http action result of processing operation</returns>
-        [ActionName("setSelectedStore")]
+        [ActionName("setFulfillment")]
         [HttpPost]
         [ValidateModelState]
-        public virtual async Task<IHttpActionResult> SetSelectedStore(SetSelectedStoreRequest request)
+        public virtual IHttpActionResult SetSelectedFulfillment(SetSelectedFulfillmentRequest request)
         {
-            if (!Guid.TryParse(request.StoreId, out Guid guidId))
+            if (!Enum.TryParse(request.FulfillmentMethodType, out FulfillmentMethodType fulfillmentMethodType))
+            {
+                throw new ArgumentException($"Cannot parse {nameof(request.FulfillmentMethodType)} with value '{request.FulfillmentMethodType}'", nameof(request));
+            }
+
+            if (!Guid.TryParse(request.StoreId, out Guid storeGuidId))
             {
                 throw new ArgumentException($"Cannot parse {nameof(request.StoreId)} with value '{request.StoreId}'", nameof(request));
             }
 
-            var fulfilment = await StoreAndFulfillmentSelectionViewService.SetSelectedStoreAsync(new SetSelectedStoreParam
+            var fulfillment = StoreAndFulfillmentSelectionViewService.SetSelectedFulfillmentAsync(new SetSelectedFulfillmentParam
             {
+                FulfillmentMethodType = fulfillmentMethodType,
+                StoreId = storeGuidId,
+                Scope = ComposerContext.Scope,
                 CultureInfo = ComposerContext.CultureInfo,
                 CustomerId = ComposerContext.CustomerId,
+                CartName = CartConfiguration.ShoppingCartName,
                 IsAuthenticated = ComposerContext.IsAuthenticated,
-                StoreId = guidId,
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
-            });
+            }).GetAwaiter().GetResult();
 
-            return Ok(fulfilment);
+            return Ok(fulfillment);
         }
 
         /// <summary>
@@ -174,33 +182,6 @@ namespace Orckestra.Composer.Grocery.Api
             var result = await StoreAndFulfillmentSelectionViewService.CalculateScheduleAvailabilitySlotsAsync(param);
 
             return Ok(result);
-        }
-
-        /// <summary>
-        /// Set selected fulfilled method type 
-        /// </summary>
-        /// <param name="request">Container with parameters, contains FulfillmentMethodType string</param>
-        /// <returns>Http action result of processing operation</returns>
-        [ActionName("setselectedfulfilledmethod")]
-        [HttpPost]
-        [ValidateModelState]
-        public virtual IHttpActionResult SetSelectedFulfilledMethodType(SetSelectedFulfillmentMethodTypeRequest request)
-        {
-            if (!Enum.TryParse(request.FulfillmentMethodType, out FulfillmentMethodType fulfillmentMethodType))
-            {
-                throw new ArgumentException($"Cannot parse {nameof(request.FulfillmentMethodType)} with value '{request.FulfillmentMethodType}'", nameof(request));
-            }
-
-            StoreAndFulfillmentSelectionViewService.SetSelectedFulfilledMethodTypeAsync(new SetSelectedFulfillmentMethodTypeParam
-            {
-                FulfillmentMethodType = fulfillmentMethodType,
-                Scope = ComposerContext.Scope,
-                CultureInfo = ComposerContext.CultureInfo,
-                CustomerId = ComposerContext.CustomerId,
-                CartName = CartConfiguration.ShoppingCartName,
-            }).GetAwaiter().GetResult();
-
-            return Ok(true);
         }
 
         /// <summary>
