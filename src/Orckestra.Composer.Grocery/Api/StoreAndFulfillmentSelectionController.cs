@@ -72,7 +72,7 @@ namespace Orckestra.Composer.Grocery.Api
         [ActionName("setFulfillment")]
         [HttpPost]
         [ValidateModelState]
-        public virtual IHttpActionResult SetSelectedFulfillment(SetSelectedFulfillmentRequest request)
+        public virtual async Task<IHttpActionResult> SetSelectedFulfillment(SetSelectedFulfillmentRequest request)
         {
             if (!Enum.TryParse(request.FulfillmentMethodType, out FulfillmentMethodType fulfillmentMethodType))
             {
@@ -84,7 +84,7 @@ namespace Orckestra.Composer.Grocery.Api
                 throw new ArgumentException($"Cannot parse {nameof(request.StoreId)} with value '{request.StoreId}'", nameof(request));
             }
 
-            var fulfillment = StoreAndFulfillmentSelectionViewService.SetSelectedFulfillmentAsync(new SetSelectedFulfillmentParam
+            var fulfillment = await StoreAndFulfillmentSelectionViewService.SetSelectedFulfillmentAsync(new SetSelectedFulfillmentParam
             {
                 FulfillmentMethodType = fulfillmentMethodType,
                 StoreId = storeGuidId,
@@ -94,7 +94,7 @@ namespace Orckestra.Composer.Grocery.Api
                 CartName = CartConfiguration.ShoppingCartName,
                 IsAuthenticated = ComposerContext.IsAuthenticated,
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
-            }).GetAwaiter().GetResult();
+            });
 
             return Ok(fulfillment);
         }

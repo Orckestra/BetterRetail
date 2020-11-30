@@ -5,6 +5,7 @@
 ///<reference path='../../Composer.SingleCheckout/Enums/FulfillmentMethodTypes.ts' />
 /// <reference path='../../Composer.Cart/CartSummary/CartService.ts' />
 ///<reference path='../FulfillmentEvents.ts' />
+///<reference path='../FulfillmentHelper.ts' />
 
 module Orckestra.Composer {
     'use strict';
@@ -40,7 +41,6 @@ module Orckestra.Composer {
                     PostalCode: undefined,
                     Location: undefined,
                     Stores: undefined,
-                    SelectedStoreId: undefined,
                     CurrentShipmentId: undefined,
                     Mode: {
                         ChangeMode: 'store',
@@ -84,6 +84,9 @@ module Orckestra.Composer {
                         if (!this.SelectedFulfillment.TimeSlotReservation) return '';
                         let { ReservationDate: date, FulfillmentLocationTimeSlotId: id } = this.SelectedFulfillment.TimeSlotReservation;
                         return date + id;
+                    },
+                    SelectedStoreId() {
+                        return this.SelectedFulfillment.Store ? this.SelectedFulfillment.Store.Id : undefined;
                     }
                 },
                 methods: {
@@ -121,7 +124,7 @@ module Orckestra.Composer {
                     },
 
                     selectFulfillmentMethod() {
-                        this.SelectedStoreId = undefined;
+                        this.SelectedFulfillment.Store = undefined;
                         this.Stores = undefined;
                         this.Mode.ChangeMode = 'store';
                         this.findStores();
@@ -151,8 +154,7 @@ module Orckestra.Composer {
                         return self.selectedStoreService.getSelectedFulfillment()
                             .then(fulfillment => {
                                 this.SelectedFulfillment = { ...fulfillment }
-                                this.SelectedStoreId = this.SelectedFulfillment.Store ? this.SelectedFulfillment.Store.Id : undefined;
-                            })
+                             })
                     },
                     selectStore(event, store: any): Q.Promise<boolean> {
                         this.Mode.Loading = true;
@@ -160,16 +162,13 @@ module Orckestra.Composer {
                         var busy = self.asyncBusy({ elementContext: $(event.target) });
                         self.eventHub.publish(FulfillmentEvents.StoreUpdating, { data: store });
                         return self.selectedStoreService.setFulfillment(store.Id, this.SelectedFulfillment.FulfillmentMethodType)
-                            .then(fulfillment => {
-                                this.SelectedFulfillment = fulfillment;
-                                this.SelectedStoreId = fulfillment.Store.Id;
+                            .then(result => {
+                                this.SelectedFulfillment = {...result};
                                 self.eventHub.publish(FulfillmentEvents.FulfillmentMethodSelected, {
                                     data: this.SelectedFulfillment.FulfillmentMethodType
                                 });
-                                self.eventHub.publish(FulfillmentEvents.StoreSelected, { data: fulfillment.Store });
+                                self.eventHub.publish(FulfillmentEvents.StoreSelected, { data: this.SelectedFulfillment.Store });
                                 this.Mode.ChangeMode = 'slot';
-                                //this.SelectedFulfillment.TimeSlotReservation = undefined;
-                                return fulfillment;
                             })
                             .then(() => self.cartService.invalidateCache())
                             .then(() => Q.all([self.cartService.getCart(), this.findTimeSlots()]))

@@ -16,6 +16,8 @@ module Orckestra.Composer {
                     OrderCanBePlaced() {
                         return !this.Mode.Loading
                             && !this.Mode.CompleteCheckoutLoading
+                            && !this.SelectedFulfillment.TimeSlotLoading
+                            && !this.SelectedFulfillment.StoreLoading
                             && this.IsValidOrder
                     },
                     IsValidOrder() {

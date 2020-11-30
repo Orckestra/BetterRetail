@@ -18,6 +18,7 @@ module Orckestra.Composer {
                     if (this.FulfilledBillingAddress) {
                         this.preparePayment();
                     }
+                    self.eventHub.subscribe(FulfillmentEvents.StoreSelected, e => this.refreshPayment());
                 },
                 computed: {
                     FulfilledPayment() {
@@ -133,15 +134,18 @@ module Orckestra.Composer {
                     preparePayment(): Q.Promise<boolean> {
                         if (!this.Payment) {
                             this.Steps.Payment.Loading = true;
-                            return self.checkoutService.getPaymentCheckout()
-                                .then(paymentVm => {
-                                    this.Payment = paymentVm;
-                                    this.Steps.Payment.Loading = false;
-                                    return true;
-                                });
+                            return this.refreshPayment()
                         } else {
                             return Q.resolve(true);
                         }
+                    }, 
+                    refreshPayment() {
+                        return self.checkoutService.getPaymentCheckout()
+                        .then(paymentVm => {
+                            this.Payment = paymentVm;
+                            this.Steps.Payment.Loading = false;
+                            return true;
+                        });
                     }
                 }
             };

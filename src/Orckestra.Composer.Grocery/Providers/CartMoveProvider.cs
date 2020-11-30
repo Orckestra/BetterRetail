@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Orckestra.Composer.Cart;
 using Orckestra.Composer.Cart.Extensions;
+using Orckestra.Composer.Cart.Factory;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Repositories;
 using Orckestra.Composer.Grocery.Parameters;
@@ -73,10 +74,18 @@ namespace Orckestra.Composer.Grocery.Providers
                 await AddPayment(param, oldPayment?.BillingAddress);
             }
 
+            
+
             var oldShipment = currentCart.Shipments?.FirstOrDefault();
             var newShipment = newCart.Shipments?.FirstOrDefault()
                 ?? throw new InvalidOperationException("No shipment in a cart.");
             var processedCart = await UpdateShipment(param, newShipment.Id, oldShipment).ConfigureAwait(false);
+
+            if (currentCart.Customer != null && !string.IsNullOrEmpty(currentCart.Customer.Email))
+            {
+                processedCart.Customer = currentCart.Customer;
+                processedCart = await CartRepository.UpdateCartAsync(UpdateCartParamFactory.Build(processedCart)).ConfigureAwait(false);
+            }
 
             await CartRepository.DeleteCartAsync(new DeleteCartParam
             {
@@ -91,9 +100,7 @@ namespace Orckestra.Composer.Grocery.Providers
 
         private async Task<ProcessedCart> UpdateShipment(MoveCartParam param, Guid newShipmentId, Shipment oldShipment)
         {
-            if (oldShipment == null) return null;
-
-            var fulfillmentMethod = oldShipment.FulfillmentMethod;
+            var fulfillmentMethod = oldShipment?.FulfillmentMethod;
             var isFulFillmentMethodChanged = fulfillmentMethod?.FulfillmentMethodType != param.FulfillementMethodType;
             if (fulfillmentMethod == null || isFulFillmentMethodChanged)
             {
@@ -115,7 +122,7 @@ namespace Orckestra.Composer.Grocery.Providers
                 }
             }
 
-            if (Guid.TryParse(oldShipment.FulfillmentScheduleReservationNumber, out Guid reservationNumber))
+            if (oldShipment!= null && Guid.TryParse(oldShipment.FulfillmentScheduleReservationNumber, out Guid reservationNumber))
             {
                 await TimeSlotRepository.DeleteFulfillmentLocationTimeSlotReservationByIdAsync(new BaseFulfillmentLocationTimeSlotReservationParam()
                 {
@@ -130,13 +137,12 @@ namespace Orckestra.Composer.Grocery.Providers
                 CultureInfo = param.CultureInfo,
                 CustomerId = param.CustomerId,
                 FulfillmentMethodName = fulfillmentMethod?.Name,
-                FulfillmentScheduleMode = oldShipment.FulfillmentScheduleMode,
-                FulfillmentScheduledTimeBeginDate = oldShipment.FulfillmentScheduledTimeBeginDate,
-                FulfillmentScheduledTimeEndDate = oldShipment.FulfillmentScheduledTimeEndDate,
-                PropertyBag = oldShipment.PropertyBag,
+                FulfillmentScheduledTimeBeginDate = oldShipment?.FulfillmentScheduledTimeBeginDate,
+                FulfillmentScheduledTimeEndDate = oldShipment?.FulfillmentScheduledTimeEndDate,
+                PropertyBag = oldShipment?.PropertyBag,
                 Id = newShipmentId,
                 ScopeId = param.ScopeTo,
-                ShippingAddress = string.IsNullOrEmpty(oldShipment.Address?.City) || isFulFillmentMethodChanged ? null : oldShipment.Address,
+                ShippingAddress = string.IsNullOrEmpty(oldShipment?.Address?.City) || isFulFillmentMethodChanged ? null : oldShipment.Address,
                 ShippingProviderId = fulfillmentMethod?.ShippingProviderId ?? Guid.Empty
             };
 
