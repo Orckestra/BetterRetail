@@ -2,8 +2,8 @@
 <Data>
   <Add Id="94b61513-fd75-4917-ac13-ac5eb09ec468"
        FieldName="SiteConfiguration"
-       Scope="BetterRetailCanada"
-       InventoryAndFulfillmentLocationId="BRC-5000"
+       Scope="BetterGroceryCanada"
+       InventoryAndFulfillmentLocationId="BGCAMontrealST01"
        CountryCode="CA"
        CreditCardsTrustIconId="MediaArchive:40d9ba8b-4afe-45b6-b161-6b619973a4c1"
        ProductDetailsPage="b3aba631-f426-4026-b2c2-b3197fcf3140"

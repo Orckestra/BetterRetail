@@ -74,6 +74,14 @@
           <Data dataScopeIdentifier="public" locale="fr-CA" dataFilename="~\Datas\Orckestra.Composer.CompositeC1.DataTypes.GoogleSettingss_public.xml" />
         </Type>
 
+        <!-- Grocery Settings -->
+        <Type type="Orckestra.Composer.Grocery.DataTypes.IGrocerySettingsMeta,Orckestra.Composer.Grocery">
+          <Data dataScopeIdentifier="administrated" locale="fr-CA" dataFilename="~\Datas\Orckestra.Composer.Grocery.DataTypes.IGrocerySettingsMetas_administrated.xml" />
+        </Type>
+        <Type type="Orckestra.Composer.Grocery.DataTypes.IGrocerySettingsMeta,Orckestra.Composer.Grocery">
+          <Data dataScopeIdentifier="public" locale="fr-CA" dataFilename="~\Datas\Orckestra.Composer.Grocery.DataTypes.IGrocerySettingsMetas_public.xml" />
+        </Type>
+
         <!-- Content Search -->
         <Type type="Orckestra.Composer.ContentSearch.DataTypes.ISortOption,Orckestra.Composer.ContentSearch">
           <Data dataScopeIdentifier="public" locale="fr-CA" dataFilename="~\Datas\Orckestra.Composer.ContentSearch.DataTypes.ISortOptions_public.xml" />
@@ -84,7 +92,10 @@
         <Type type="Orckestra.Composer.ContentSearch.DataTypes.IContentTab,Orckestra.Composer.ContentSearch">
           <Data dataScopeIdentifier="public" locale="fr-CA" dataFilename="~\Datas\Orckestra.Composer.ContentSearch.DataTypes.IContentTabs_public.xml" />
         </Type>
-        
+        <!--BootstrapCarousel -->
+        <Type type="Orckestra.Web.Html.BootstrapCarousel">
+          <Data dataScopeIdentifier="public" locale="fr-CA" dataFilename="~\Datas\Orckestra.Web.Html.BootstrapCarousels_public.xml" />
+        </Type>
       </Types>
     </mi:Add>
   </mi:PackageFragmentInstallers>
