@@ -15,8 +15,12 @@
 				<File sourceFilename="~\App_Data\Razor\Composer\Components\Queries\Merchandising\Generic\Top.cshtml" targetFilename="~\App_Data\Razor\Composer\Components\Queries\Merchandising\Generic\Top.cshtml" allowOverwrite="true" />
 				<File sourceFilename="~\App_Data\Razor\Composer\Components\Queries\ProductSet\Generic\Top.cshtml" targetFilename="~\App_Data\Razor\Composer\Components\Queries\ProductSet\Generic\Top.cshtml" allowOverwrite="true" />
 				<File sourceFilename="~\App_Data\Razor\Composer\Queries\Merchandising\Grid.cshtml" targetFilename="~\App_Data\Razor\Composer\Queries\Merchandising\Grid.cshtml" allowOverwrite="true" />
-				<File sourceFilename="~\App_Data\Razor\Composer\Queries\ProductSet\Grid.cshtml" targetFilename="~\App_Data\Razor\Composer\Queries\ProductSet\Grid.cshtml" allowOverwrite="true" />
-				<File sourceFilename="~\App_Data\Components\Product Sets\Grid.xml" targetFilename="~\App_Data\Components\Product Sets\Grid.xml" allowOverwrite="true" />
+        <File sourceFilename="~\App_Data\Razor\Composer\Queries\Merchandising\Results.cshtml" targetFilename="~\App_Data\Razor\Composer\Queries\Merchandising\Results.cshtml" allowOverwrite="true" />
+        <File sourceFilename="~\App_Data\Razor\Composer\Queries\Merchandising\Top.cshtml" targetFilename="~\App_Data\Razor\Composer\Queries\Merchandising\Top.cshtml" allowOverwrite="true" />
+        <File sourceFilename="~\App_Data\Razor\Composer\Queries\ProductSet\Grid.cshtml" targetFilename="~\App_Data\Razor\Composer\Queries\ProductSet\Grid.cshtml" allowOverwrite="true" />
+        <File sourceFilename="~\App_Data\Razor\Composer\Queries\ProductSet\Top.cshtml" targetFilename="~\App_Data\Razor\Composer\Queries\ProductSet\Top.cshtml" allowOverwrite="true" />
+        <File sourceFilename="~\App_Data\Razor\Composer\Queries\ProductSet\Results.cshtml" targetFilename="~\App_Data\Razor\Composer\Queries\ProductSet\Results.cshtml" allowOverwrite="true" />
+        <File sourceFilename="~\App_Data\Components\Product Sets\Grid.xml" targetFilename="~\App_Data\Components\Product Sets\Grid.xml" allowOverwrite="true" />
 				<File sourceFilename="~\App_Data\Components\Product Sets\Top.xml" targetFilename="~\App_Data\Components\Product Sets\Top.xml" allowOverwrite="true" />
 				<File sourceFilename="~\Bin\Orckestra.Composer.C1CMS.Queries.dll" targetFilename="~\Bin\Orckestra.Composer.C1CMS.Queries.dll" allowOverwrite="true" />
  		</Files>
