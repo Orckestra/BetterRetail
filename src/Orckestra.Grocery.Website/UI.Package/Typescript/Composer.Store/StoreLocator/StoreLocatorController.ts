@@ -21,7 +21,6 @@ module Orckestra.Composer {
         protected _storeLocatorOptions: IStoreLocatorInitializationOptions;
         protected _historyState: StoreLocatorHistoryState = new StoreLocatorHistoryState();
         protected _isRestoreListPaging: boolean = false;
-        protected _searchPointAddressCacheKey: string = 'StoreLocatorSearchAddress';
         protected cache = CacheProvider.instance().defaultCache;
         protected VueStoreList: any;
 
@@ -212,7 +211,7 @@ module Orckestra.Composer {
             this._historyState.parseHistoryState();
 
             // then if any entered address saved in local storage
-            return this.cache.get<any>(this._searchPointAddressCacheKey)
+            return this.cache.get<any>(StoreLocatorService.SearchPointAddressCacheKey)
                 .then(cachedAddr => {
                     this.setPostedAddress(cachedAddr);
                     return cachedAddr;
@@ -352,7 +351,8 @@ module Orckestra.Composer {
             let title = this.getPostedAddress();
             this.createSearchPointMarker(point, title);
             this._isSearch = true;
-            this.cache.set(this._searchPointAddressCacheKey, title);
+            this.cache.set(StoreLocatorService.SearchPointLocationCacheKey, point);
+            this.cache.set(StoreLocatorService.SearchPointAddressCacheKey, title);
             this._mapService.setLocationInMap(point, zoomLevel);
         }
 

@@ -7,6 +7,7 @@
 ///<reference path='../FulfillmentEvents.ts' />
 ///<reference path='../FulfillmentHelper.ts' />
 
+
 module Orckestra.Composer {
     'use strict';
 
@@ -17,6 +18,7 @@ module Orckestra.Composer {
         protected storeService: IStoreService = StoreService.instance();
         protected cartService = CartService.getInstance();
         protected shippingMethodService: ShippingMethodService = new ShippingMethodService();
+        protected cache = CacheProvider.instance().defaultCache;
 
         public initialize() {
             super.initialize();
@@ -53,6 +55,7 @@ module Orckestra.Composer {
                         this.ShippingMethod = cart.ShippingMethod;
                     });
                     this.initPostalCodeSearchBox();
+                    this.getCachedAddressAndLocation();
 
                     self.eventHub.subscribe('modal-opened', e => this.getCartPromise().then(() => this.onModalOpened(e.data)));
                 },
@@ -101,11 +104,24 @@ module Orckestra.Composer {
                                 this.Location = place.geometry.location;
                                 this.PostalCode = this.$refs.postalCodeInput.value;
                                 self.eventHub.publish(FulfillmentEvents.LocationSelected, { data: this.Location });
+                                self.cache.set(StoreLocatorService.SearchPointLocationCacheKey, this.Location);
+                                self.cache.set(StoreLocatorService.SearchPointAddressCacheKey, this.PostalCode);
                             } else {
                                 this.Location = undefined;
                                 this.Stores = undefined;
                             }
                         });
+                    },
+                    getCachedAddressAndLocation() {
+                        self.cache.get<any>(StoreLocatorService.SearchPointAddressCacheKey)
+                            .then(cachedAddr => {
+                                this.PostalCode = cachedAddr;
+                                return self.cache.get<any>(StoreLocatorService.SearchPointLocationCacheKey);
+                            })
+                            .then(location => { 
+                                this.Location = location; 
+                            })
+                            .fail(() => this.PostalCode = '');
                     },
                     onModalOpened(data) {
                         this.getSelectedStoreInfo().then(() => {

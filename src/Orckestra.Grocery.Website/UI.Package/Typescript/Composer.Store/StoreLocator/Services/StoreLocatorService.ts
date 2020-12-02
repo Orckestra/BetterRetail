@@ -10,7 +10,9 @@ module Orckestra.Composer {
     'use strict';
 
     export class StoreLocatorService implements IStoreLocatorService {
-
+        public static SearchPointAddressCacheKey = 'SearchAddress';
+        public static SearchPointLocationCacheKey = 'SearchLocation';
+        
         private memoizeStore: Function;
 
         public getStore(storeNumber: string): Q.Promise<any> {

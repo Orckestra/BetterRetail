@@ -4,6 +4,7 @@
 ///<reference path='./Services/StoreInventoryService.ts' />
 ///<reference path='../StoreLocator/Services/GeoLocationService.ts' />
 ///<reference path='../../Cache/CacheProvider.ts' />
+///<reference path='../StoreLocator/Services/StoreLocatorService.ts' />
 
 module Orckestra.Composer {
 
@@ -12,10 +13,9 @@ module Orckestra.Composer {
         protected _concern: string = 'StoreInventory_';
         protected _service: IStoreInventoryService = new StoreInventoryService();
         protected _geoService: GeoLocationService = new GeoLocationService();
-        protected _searchPointAddressCacheKey: string = 'StoreLocatorSearchAddress';
         protected cache = CacheProvider.instance().defaultCache;
-        private _searchBox: google.maps.places.SearchBox;
-        private _searchBoxJQ: JQuery;
+        private _autoCompleteBox: google.maps.places.Autocomplete;
+        private _autoCompleteJQ: JQuery;
         private _searchPoint: google.maps.LatLng;
         private _selectedSku: string;
         private _isAuthenticated: boolean;
@@ -68,19 +68,22 @@ module Orckestra.Composer {
         }
 
         protected initSearchBox() {
-            this._searchBoxJQ = this.context.container.find('input[name="storeInventorySearchInput"]');
-            this._searchBox = new google.maps.places.SearchBox(<HTMLInputElement>this._searchBoxJQ[0]);
-            this._searchBox.addListener('places_changed', () => {
-                var places = this._searchBox.getPlaces();
-                if (places && places.length && places[0].geometry) {
-                    this.eventHub.publish('inventorySearchPointChanged', { data: places[0].geometry.location });
+            this._autoCompleteJQ = this.context.container.find('input[name="storeInventorySearchInput"]');
+            let opt: google.maps.places.AutocompleteOptions = { fields: ['geometry'] };
+            this._autoCompleteBox = new google.maps.places.Autocomplete(<HTMLInputElement>this._autoCompleteJQ[0], opt);
+
+            this._autoCompleteBox.addListener('place_changed', () => {
+                var place = this._autoCompleteBox.getPlace();
+                if (place && place.geometry) {
+                    this.eventHub.publish('inventorySearchPointChanged', { data: place.geometry.location });
                 }
             });
         }
 
         protected searchPointChanged(e: IEventInformation) {
             this._searchPoint = e.data;
-            this.cache.set(this._searchPointAddressCacheKey, this._searchBoxJQ.val());
+            this.cache.set(StoreLocatorService.SearchPointLocationCacheKey, e.data);
+            this.cache.set(StoreLocatorService.SearchPointAddressCacheKey, this._autoCompleteJQ.val());
             this.getStoresInventory();
         }
 
@@ -97,8 +100,8 @@ module Orckestra.Composer {
                             this._searchPoint = currentLocation;
                             this.getStoresInventory();
                             this._geoService.getAddressByLocation(currentLocation).then(result => {
-                                this.cache.set(this._searchPointAddressCacheKey, result);
-                                this._searchBoxJQ.val(result);
+                                this.cache.set(StoreLocatorService.SearchPointAddressCacheKey, result);
+                                this._autoCompleteJQ.val(result);
                             });
                         }
                     });
@@ -160,24 +163,30 @@ module Orckestra.Composer {
 
         protected getDefaultAddress(): Q.Promise<any> {
             // try get address from local storage
-            return this.cache.get<any>(this._searchPointAddressCacheKey)
+            return this.cache.get<any>(StoreLocatorService.SearchPointAddressCacheKey)
                 .then(cachedAddr => {
-                    this._searchBoxJQ.val(cachedAddr);
-                    return this._geoService.getLocationByAddress(cachedAddr);
-                }, (reason) => {
+                    this._autoCompleteJQ.val(cachedAddr);
+
+                    return this.cache.get<any>(StoreLocatorService.SearchPointLocationCacheKey)
+                        .fail(() => this._geoService.getLocationByAddress(cachedAddr));
+                })
+                .then(cachedLocation => {
+                    this._searchPoint = cachedLocation;
+                    return cachedLocation;
+                })
+                .fail(reason => {
                     // try get customer default delivery address
                     if (this._isAuthenticated) {
                         return this._service.getDefaultAddress()
                             .then(defaultAddr => {
-                                var formattedAddress
-                                    = `${defaultAddr.City}, ${defaultAddr.RegionCode} ${defaultAddr.PostalCode}, ${defaultAddr.CountryCode}`;
-                                this._searchBoxJQ.val(formattedAddress);
-                                return this._geoService.getLocationByAddress(formattedAddress);
+                                if (defaultAddr) {
+                                    var formattedAddress
+                                        = `${defaultAddr.City}, ${defaultAddr.RegionCode} ${defaultAddr.PostalCode}, ${defaultAddr.CountryCode}`;
+                                    this._autoCompleteJQ.val(formattedAddress);
+                                    return this._geoService.getLocationByAddress(formattedAddress);
+                                }
                             });
                     }
-                })
-                .then(locationByAddress => {
-                    this._searchPoint = locationByAddress;
                 });
         }
     }

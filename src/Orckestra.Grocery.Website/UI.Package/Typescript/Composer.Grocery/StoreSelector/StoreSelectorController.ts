@@ -18,6 +18,7 @@ module Orckestra.Composer {
         protected selectedFulfillmentService: IFulfillmentService = FulfillmentService.instance();
         protected shippingMethodService: ShippingMethodService = new ShippingMethodService();
         protected cartService = CartService.getInstance();
+        protected cache = CacheProvider.instance().defaultCache;
 
         public initialize() {
             super.initialize();
@@ -140,6 +141,8 @@ module Orckestra.Composer {
                                 this.Location = place.geometry.location;
                                 this.PostalCode = this.$refs.postalCodeInput.value;
                                 self.eventHub.publish(FulfillmentEvents.LocationSelected, { data: this.Location });
+                                self.cache.set(StoreLocatorService.SearchPointLocationCacheKey, this.Location);
+                                self.cache.set(StoreLocatorService.SearchPointAddressCacheKey, this.PostalCode);
                             } else {
                                 this.Location = undefined;
                             }
