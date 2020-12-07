@@ -384,6 +384,7 @@
     <Content Include="App_Data\Razor\Composer\Teasers\Background.cshtml" />
     <Content Include="App_Data\Razor\Composer\Membership\SignInHeader.cshtml" />
     <Content Include="App_Data\Razor\Composer\Store\Details.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Cart\Minicart.cshtml" />
     <None Include="Properties\PublishProfiles\Website - CD.pubxml" />
     <None Include="Properties\PublishProfiles\Website.pubxml" />
     <Content Include="Views\web.config" />

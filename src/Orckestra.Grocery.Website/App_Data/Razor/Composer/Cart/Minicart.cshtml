@@ -1,0 +1,204 @@
+﻿@inherits RazorFunction
+@using Orckestra.Composer.Cart
+@using Orckestra.ExperienceManagement.Configuration;
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "MiniCart"; }
+    }
+
+    public ISiteConfiguration SiteConfiguration { get; set; }
+    public IComposerContext ComposerContext { get; set; }
+
+    [FunctionParameter(Label = "Minicart notification time", Help = "Notification time of the minicart when an item is added/updated in cart (in seconds).", DefaultValue = 5)]
+    public int notificationTimeInSeconds { get; set; }
+
+    [FunctionParameter(Label = "Show AddToCart Notofication Modal", DefaultValue = false)]
+    public bool ShowAddToCartNotificationModal { get; set; }
+}
+
+@{
+    var pages = SiteConfiguration.GetPagesConfiguration(ComposerContext.CultureInfo, HomePageNode.Id);
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
+<head>
+    <script>
+        function imgError(el) {
+            this.onerror = null;
+            var fallback = el.dataset.fallback;
+            if (fallback) {
+                if (!el.src.includes(fallback)) {
+                    el.src = fallback;
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+    <li id="vueMiniCart" data-oc-controller="Cart.MiniCart" v-cloak="true" class="nav-item position-relative">
+        <a href="~/page(@pages.CartPageId)"
+           data-qa="minicart-header"
+           class="nav-link minicart-header"
+           title="@Html.Localize("MiniCart", "H_MinicartTitle")">
+            <span class="fa  fa-shopping-cart"></span>&#160;
+            <span class="d-none d-xl-inline sps--blw-hidden">
+                @Html.Localize("MiniCart", "H_MinicartTitle")&#160;
+            </span>
+            <strong>
+                <span v-if="!Cart.IsCartEmpty" class="navbar-count" data-qa="minicart-count">
+                    {{Cart.TotalQuantity}}
+                </span>
+            </strong>
+        </a>
+        @MinicartSummary()
+        @if (ShowAddToCartNotificationModal)
+        {
+            @AddToCartNotificationModal()
+        }
+    </li>
+</body>
+</html>
+
+@helper MinicartSummary()
+{
+    <div id="minicart-summary" class="minicart-summary"
+         data-notification-time="@(notificationTimeInSeconds * 1000)">
+        <div class="minicart-summary-products">
+            <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  d-none"></span>
+            <div v-if="Cart.IsCartEmpty" class="minicart-empty text-center">
+                <i>@Html.Localize("MiniCart", "L_EmptyMiniCart")</i>
+            </div>
+            <div v-else="else">
+                <div v-for="item in Cart.LineItemDetailViewModels">
+                    @MiniCartItem()
+                </div>
+            </div>
+        </div>
+        <div class="minicart-summary-footer">
+
+            <div v-if="!Cart.IsCartEmpty" class="minicart-summary-summary">
+                <div class="row">
+                    <div class="col-md-6">
+                        <span>
+                            {{Cart.TotalQuantity}}  @Html.Localize("MiniCart", "L_Items") |
+                            <a v-bind:href="Cart.OrderSummary.EditCartUrlTarget" class="cta">
+                                @Html.Localize("MiniCart", "L_ViewCart")
+                            </a>
+                        </span>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="text-right">
+                            <span>@Html.Localize("MiniCart", "L_Subtotal") <strong>{{Cart.OrderSummary.SubTotal}}</strong></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="minicart-summary-controls">
+                <div v-if="Cart.IsCartEmpty">
+                    <a v-if="!Cart.IsAuthenticated" 
+                       v-bind:data-order-subtotal="Cart.OrderSummary.SubTotal"
+                       v-bind:href="Cart.OrderSummary.CheckoutUrlTarget"
+                       class="btn btn-primary btn-block">
+                        @Html.Localize("MiniCart", "B_Login")
+                    </a>
+                    <button class="btn btn-outline-secondary btn-block" v-on:click="onCloseMiniCart">
+                        @Html.Localize("MiniCart", "B_StartShopping")
+                    </button>
+                </div>
+                <div v-else="else" class="row">
+                    <div class="col-md-6">
+                        <button class="btn btn-outline-secondary" v-on:click="onCloseMiniCart">
+                            @Html.Localize("MiniCart", "B_ContinueShopping")
+                        </button>
+                    </div>
+                    <div class="col-md-6">
+                        <button v-on:click="proceedToCheckout" 
+                           v-bind:data-order-subtotal="Cart.OrderSummary.SubTotal"
+                           class="btn btn-success"
+                           v-bind:disabled="CheckoutButtonDisabled">
+                            @Html.Localize("MiniCart", "B_Checkout")
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@helper MiniCartItem()
+{
+    <div class="minicart-line-item" data-qa="minicart-result" v-bind:data-lineitem-id="item.ProductId + '-' + item.VariantId">
+        <div class="row">
+            <div class="col-md-4">
+                <a class="minicart-line-item-media" v-bind:href="item.ProductUrl">
+                    <img class="img-fluid" v-bind:src="item.ImageUrl"
+                         v-bind:alt="item.ProductSummary.DisplayName"
+                         v-bind:data-fallback="item.FallbackImageUrl"
+                         onerror="imgError(this)"/>
+                </a>
+            </div>
+            <div class="col-md-8">
+                <div class="minicart-line-item-text">
+                    <strong v-if="item.ProductSummary.Brand"
+                            class="text-uppercase  product-tile-brand"
+                            data-qa="minicart-product-brand">{{item.ProductSummary.Brand}}</strong>
+                    <br v-if="item.ProductSummary.Brand" />
+                    <a data-qa="minicart-product-title"
+                       v-bind:href="item.ProductUrl"
+                       v-bind:title="item.ProductSummary.DisplayName">
+                        {{item.ProductSummary.DisplayName}}
+                    </a>
+                </div>
+                <div class="minicart-line-item-variants">
+                    <div v-for="keyV in item.KeyVariantAttributesList">
+                        <span>{{keyV.Value}}<br /></span>
+                    </div>
+                    <span v-if="item.IsValid"> @Html.Localize("MiniCart", "L_Quantity") {{item.Quantity}}</span>
+                    <div v-else="else" class="row push-top">
+                        <div class="col-md-12 col-12 text-left">
+                            <span class="fa  fa-exclamation-triangle"></span>
+                            <strong class="text-danger">@Html.Localized("MiniCart", "L_ProductOutOfStock", "{{item.Quantity}}")</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div v-if="item.IsValid" class="minicart-line-item-price">
+                    <span v-if="item.IsOnSale" class="h4  text-danger" data-qa="search-product-price">{{item.Total}}</span>
+                    <span v-else="else" class="h4" data-qa="search-product-price">{{item.Total}}</span>
+                </div>
+
+            </div>
+        </div>
+    </div>
+}
+
+@helper AddToCartNotificationModal()
+{
+    <div data-notification-time="@(notificationTimeInSeconds * 1000)"
+         class="d-none">
+        <div class="notification-modal">
+            <div class="notification-modal-overlay" data-oc-click="onClose"></div>
+            <div class="notification-modal-dialog">
+                <div class="notification-modal-content">
+                    <div class="notification-modal-body">
+                        <p>
+                            @Html.Localize("MiniCart", "L_ItemAddedToCart")
+                        </p>
+                    </div>
+                    <div class="notification-modal-footer">
+                        <a v-bind:href="Cart.OrderSummary.EditCartUrlTarget"
+                           class="btn btn-success btn-block">
+                            @Html.Localize("MiniCart", "L_ViewCart")
+                        </a>
+                        <button type="button" class="btn  btn-outline-secondary btn-block"
+                                data-oc-click="onClose">
+                            @Html.Localize("MiniCart", "B_ContinueShopping")
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

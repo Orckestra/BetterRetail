@@ -88,15 +88,6 @@ namespace Orckestra.Composer.Grocery.Website
             functions.RegisterAction<ProductController>("LanguageSwitch", "Composer.Product.LanguageSwitch");
             functions.RegisterAction<ProductController>("Breadcrumb", "Composer.Product.Breadcrumb");
   
-            functions.RegisterAction<CartController>("Minicart", "Composer.Cart.Minicart").AddParameter(
-                "notificationTimeInSeconds",
-                typeof(int),
-                isRequired: true,
-                defaultValueProvider: new ConstantValueProvider(5),
-                label: "Minicart notification time",
-                helpText: "Notification time of the minicart when an item is added/updated in cart (in seconds)."
-            );
-
             functions.RegisterAction<CheckoutController>("CheckoutSignInAsGuest", "Composer.Checkout.CheckoutSignInAsGuest");
             functions.RegisterAction<CheckoutController>("CheckoutSignInAsCustomer", "Composer.Checkout.CheckoutSignInAsCustomer");
             functions.RegisterAction<CheckoutController>("Breadcrumb", "Composer.Checkout.Breadcrumb");

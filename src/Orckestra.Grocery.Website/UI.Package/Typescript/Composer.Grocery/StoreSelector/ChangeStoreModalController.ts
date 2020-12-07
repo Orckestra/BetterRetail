@@ -84,13 +84,14 @@ module Orckestra.Composer {
                         return this.StartIndex <= 0;
                     },
                     ReservedSlotId() {
-                        if (!this.SelectedFulfillment.TimeSlotReservation) return '';
+                        if (!this.SelectedFulfillment.TimeSlotReservation || this.TimeSlotReservationExpired) return '';
                         let { ReservationDate: date, FulfillmentLocationTimeSlotId: id } = this.SelectedFulfillment.TimeSlotReservation;
                         return date + id;
                     },
                     SelectedStoreId() {
                         return this.SelectedFulfillment.Store ? this.SelectedFulfillment.Store.Id : undefined;
-                    }
+                    },
+                    ...commonFulfillmentOptions.computed,
                 },
                 methods: {
                     initPostalCodeSearchBox() {

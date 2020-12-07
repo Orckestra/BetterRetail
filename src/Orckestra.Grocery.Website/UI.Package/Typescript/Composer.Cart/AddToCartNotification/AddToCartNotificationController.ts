@@ -23,7 +23,7 @@ module Orckestra.Composer {
             if (notificationTime > 0) {
                 this.render('AddToCartNotificationModal', cart);
 
-                notificationContainer.removeClass('hidden');
+                notificationContainer.removeClass('hide');
 
                 setTimeout(() => {
                     this.closeNotification();
@@ -37,7 +37,7 @@ module Orckestra.Composer {
         }
 
         private closeNotification(): void {
-            $(this.context.container).addClass('hidden');
+            $(this.context.container).addClass('hide');
         }
     }
 }

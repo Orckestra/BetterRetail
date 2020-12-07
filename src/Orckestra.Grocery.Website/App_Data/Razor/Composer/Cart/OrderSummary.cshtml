@@ -27,10 +27,8 @@
 
                 @OrderSummaryHelpers.TaxableAdditionalFeeSummary()
 
-                <div>
-                    <div v-if="OrderSummary.IsShippingTaxable">
-                        @OrderSummaryHelpers.Shipping()
-                    </div>
+                <div v-if="OrderSummary.IsShippingTaxable">
+                   @OrderSummaryHelpers.Shipping()
                 </div>
 
                 @OrderSummaryHelpers.Taxes()
@@ -39,13 +37,8 @@
 
                 @OrderSummaryHelpers.NotTaxableAdditionalFeeSummary()
 
-                <div>
-                    <div v-if="!OrderSummary.IsShippingTaxable">
-                        @OrderSummaryHelpers.Shipping()
-                    </div>
-                </div>
-                <div v-else="else">
-                    @EstimateShipping()
+                <div v-if="!OrderSummary.IsShippingTaxable">
+                     @OrderSummaryHelpers.Shipping()
                 </div>
 
                 @OrderSummaryHelpers.Totals()

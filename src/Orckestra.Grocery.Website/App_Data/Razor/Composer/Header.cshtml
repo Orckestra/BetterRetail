@@ -58,11 +58,8 @@
                             @SearchIcon()
                         </li>
 
-                        <li class="nav-item position-relative">
-                            <f:function name="Composite.Web.Html.Template.PageTemplateFeature" xmlns:f="http://www.composite.net/ns/function/1.0">
-                                <f:param name="FeatureName" value="Minicart" />
-                            </f:function>
-                        </li>
+                        @Function("Composer.Cart.Minicart")
+
                     </ul>
 
                 </div>
