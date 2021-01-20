@@ -10,7 +10,7 @@ namespace Orckestra.Composer.HandlebarsCompiler.Config
     public class HandlebarsCompileConfig
     {
         public const string Namespace = "Orckestra.Composer.Templates";
-        public const string HandlebarsLibraryPath = "~/UI.Package/JavaScript/handlebars-v3.0.3.js";
+        public const string HandlebarsLibraryPath = "~/UI.Package/JavaScript/handlebars-v4.7.6.js";
         public const string TemplatesPath = "~/UI.Package/Templates/";
         public const string CompiledFilePath = "~/UI.Package/JavaScript/composer-templates.min.js";
         public static bool IsEnabled => ConfigurationManager.AppSettings["HandelbarsCompiler"] == "true";
