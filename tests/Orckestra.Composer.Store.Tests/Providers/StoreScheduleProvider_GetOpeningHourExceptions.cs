@@ -25,7 +25,7 @@ namespace Orckestra.Composer.Store.Tests.Providers
        public void WHEN_farfuture_openhourexception_exists_SHOULD_skip_it()
         {
             //Arrange
-            var today = new DateTime(2020, 01, 01);
+            var today = new DateTime(DateTime.Now.Year, 01, 01);
             var holidayStart = today.AddDays(5);
             var holidayEnds = holidayStart;
             var schedule = BuildSchedule(holidayStart, holidayEnds, true, true);
@@ -52,7 +52,7 @@ namespace Orckestra.Composer.Store.Tests.Providers
         public void WHEN_openhourexception_is_recurrent_SHOULD_be_exception()
         {
             //Arrange
-            var today = new DateTime(2020, 01, 01);
+            var today = new DateTime(DateTime.Now.Year, 01, 01);
             var holidayStart = new DateTime(today.Year - 1, today.AddDays(5).Month, today.AddDays(5).Day);
             var holidayEnds = holidayStart;
             var schedule = BuildSchedule(holidayStart, holidayEnds, true, true);
@@ -67,7 +67,7 @@ namespace Orckestra.Composer.Store.Tests.Providers
         public void WHEN_openhourexception_is_not_recurrent_SHOULD_Be_no_exceptions()
         {
             //Arrange
-            var today = new DateTime(2020, 01, 01);
+            var today = new DateTime(DateTime.Now.Year, 01, 01);
             var holidayStart = new DateTime(today.Year - 1, today.AddDays(5).Month, today.AddDays(5).Day);
             var holidayEnds = holidayStart;
             var schedule = BuildSchedule(holidayStart, holidayEnds, false, true);
@@ -82,7 +82,7 @@ namespace Orckestra.Composer.Store.Tests.Providers
         public void WHEN_openhourexception_is_today_SHOULD_be_returned(bool isRecurrent)
         {
             //Arrange
-            var today = new DateTime(2020, 01, 01);
+            var today = new DateTime(DateTime.Now.Year, 01, 01);
             var schedule = BuildSchedule(today, today, isRecurrent, true);
             //Act
             var exceptions = StoreScheduleProvider.GetOpeningHourExceptions(schedule, today, 1).ToList();
