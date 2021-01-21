@@ -28,7 +28,7 @@ module Orckestra.Composer {
             var data = { skus: [sku] };
 
             return ComposerClient.post('/api/inventory/findInventoryItems', data)
-                                 .then(availableSkus => _.contains(availableSkus, sku));
+                                 .then(availableSkus => _.includes(availableSkus, sku));
         }
     }
 }

@@ -197,13 +197,13 @@ module Orckestra.Composer {
 
             return ComposerClient.post('/api/inventory/findInventoryItems', data)
                 .then((skusAvailableToSell) => {
-                    var isAvailableToSell = _.include(skusAvailableToSell, selectedSku) && viewModel.IsAvailableToSell;
+                    var isAvailableToSell = _.includes(skusAvailableToSell, selectedSku) && viewModel.IsAvailableToSell;
                     this.eventHub.publish(concern + 'InventoryRetrieved', { data: isAvailableToSell });
                 });
         }
 
          public productAvailableToSell(selectedSku: string, productAvailableToSell: string[], productIsAvailableToSell: boolean) : boolean {
-            return _.include(productAvailableToSell, selectedSku) && productIsAvailableToSell;
+            return _.includes(productAvailableToSell, selectedSku) && productIsAvailableToSell;
         }
 
         private buildKeyVariantAttributeItems(concern: string) {
