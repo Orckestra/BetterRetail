@@ -517,7 +517,7 @@
             });
 
             it('SHOULD return empty objects', () => {
-                var areAllEmpty = _.all(values, v => _.isEmpty(v));
+                var areAllEmpty = _.every(values, v => _.isEmpty(v));
 
                 expect(areAllEmpty).toBeTruthy();
             });
