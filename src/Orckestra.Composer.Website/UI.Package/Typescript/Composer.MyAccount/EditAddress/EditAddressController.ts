@@ -62,7 +62,7 @@ module Orckestra.Composer {
         public adjustPostalCode(actionContext: IControllerActionContext): void {
 
             actionContext.elementContext.val(actionContext.elementContext.val().toUpperCase());
-            _.all(this._formInstances, formInstance => formInstance.validate('shipping-based-on', true));
+            _.every(this._formInstances, formInstance => formInstance.validate('shipping-based-on', true));
         }
 
         public createAddress(actionContext: IControllerActionContext): void {

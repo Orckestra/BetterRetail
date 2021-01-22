@@ -67,7 +67,7 @@ module Orckestra.Composer {
                 return false;
             }
 
-            return _.any(addressList.Addresses, (address: AddressDto) => address.Id === cart.Payment.BillingAddress.Id);
+            return _.some(addressList.Addresses, (address: AddressDto) => address.Id === cart.Payment.BillingAddress.Id);
         }
 
         public getPreferredBillingAddressId(addressList: any) : string {

@@ -241,10 +241,10 @@ Task("Prepare-Karma-Tests")
 
 Task("Build")
     .IsDependentOn("Clean-Solution")
-    .IsDependentOn("Restore-NuGet-Packages")
-    .IsDependentOn("Compile-Solution")
     .IsDependentOn("Restore-NPM-Packages")
-    .IsDependentOn("Compile-Typescripts-Default");
+    .IsDependentOn("Compile-Typescripts-Default")
+    .IsDependentOn("Restore-NuGet-Packages")
+    .IsDependentOn("Compile-Solution");
 
 //////////////////////////////////////////////////////////////////////
 // TASK TARGETS
@@ -291,10 +291,10 @@ Task("All")
 
 Task("Dev")
     .Description("Should be used on dev machine only. Triggered before local install")
-    .IsDependentOn("Restore-NuGet-Packages")
-    .IsDependentOn("Compile-Solution")
     .IsDependentOn("Restore-NPM-Packages")
     .IsDependentOn("Compile-Typescripts-Default")
+    .IsDependentOn("Restore-NuGet-Packages")
+    .IsDependentOn("Compile-Solution")
     .IsDependentOn("Artifacts");
 
 //////////////////////////////////////////////////////////////////////
