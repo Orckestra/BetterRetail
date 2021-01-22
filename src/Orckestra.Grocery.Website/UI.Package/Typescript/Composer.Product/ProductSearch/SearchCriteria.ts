@@ -140,7 +140,7 @@ module Orckestra.Composer {
         private getSelectedFacetsArray(facetFieldName: string) : ISelectedFacet {
             var isSelectedFacetArray: boolean;
             var selectedFacet: any = this.selectedFacets[facetFieldName];
-            var selectedFacetArray: Array<string>;
+            var selectedFacetArray: Array<any>;
 
             if (_.isArray(selectedFacet)) {
                 isSelectedFacetArray = true;
