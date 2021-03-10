@@ -30,7 +30,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.Integrat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.ForTests", "tests\Orckestra.ForTests\Orckestra.ForTests.csproj", "{B2BE051E-82D7-4643-BB56-98F161833E30}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4 - C1 CMS Packages", "4 - C1 CMS Packages", "{303355EE-E2EF-46D5-8B56-BE44E9F3D93D}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3 - C1 CMS Packages", "3 - C1 CMS Packages", "{303355EE-E2EF-46D5-8B56-BE44E9F3D93D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.CompositeC1", "src\Orckestra.Composer.CompositeC1\Orckestra.Composer.CompositeC1.csproj", "{3E42C35E-B19C-4ABE-80F8-FD268D44E11F}"
 EndProject
@@ -106,11 +106,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1 - Website", "1 - Website"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2 - Backend", "2 - Backend", "{B770DD6A-41C2-4576-80D9-58023319B204}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3 - Frontend", "3 - Frontend", "{B2EB548A-B668-42D3-A646-C43E59D8BFCE}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4 - Tests", "4 - Tests", "{832CD4F4-EF5A-44B0-92FF-D159B6276AF7}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5 - Tests", "5 - Tests", "{832CD4F4-EF5A-44B0-92FF-D159B6276AF7}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1- Core", "1- Core", "{2290CF95-EF97-4E7A-ADD6-D902AD8DAAAC}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{2290CF95-EF97-4E7A-ADD6-D902AD8DAAAC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.HandlebarsCompiler", "src\Orckestra.Composer.HandlebarsCompiler\Orckestra.Composer.HandlebarsCompiler.csproj", "{3508A92E-CB4B-431D-BBDC-0AD5FABEC20C}"
 EndProject

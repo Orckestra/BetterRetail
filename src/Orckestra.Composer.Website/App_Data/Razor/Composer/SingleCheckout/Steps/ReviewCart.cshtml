@@ -74,35 +74,39 @@
         </div>
     </div>
     <div v-if="!CartEmpty" is="transition-group" name="items-list">
-        <div class="row pt-3"
-             v-bind:class="{'border-bottom pb-2': index != Cart.LineItemDetailViewModels.length - 1, 'bg-danger': !item.IsValid}"
+        <div v-bind:class="{'border-bottom pb-2': index != Cart.LineItemDetailViewModels.length - 1, 'bg-danger': !item.IsValid}"
              v-for="(item, index) in Cart.LineItemDetailViewModels"
              v-bind:key="item.Id"
              v-bind:data-qa="'cart-item-' + index">
-            <div v-if="item.Rewards &amp;&amp; item.Rewards.length" class="col-12 order-1  text-center">
-                @CartSummaryHelpers.CartItemRewardsCell()
+            <div v-if="item.IsGiftItem" class="row pt-0 giftitem">
+                <i class="fa fa-gift" /><p>@Html.Localize("ShoppingCart", "L_GiftItem")</p>
             </div>
-            <div class="col-2 col-sm-1  order-2">
-                @CartSummaryHelpers.CartItemImageCell()
-            </div>
-            <div class="col-8 col-sm-4  order-3">
-                @CartSummaryHelpers.CartItemSummaryCell()
-            </div>
-            <div class="col-sm-2  text-center d-none d-sm-block order-4">
-                @CartSummaryHelpers.CartItemDefaultPriceCell()
-            </div>
-            <div class="offset-2 offset-sm-0 2 col-sm-3  text-left text-sm-center  order-6">
-                @CartItemQuantityCell()
-            </div>
-            <div class="offset-2 offset-sm-0 col-sm-2  text-left text-sm-center  order-7">
-                @CartItemTotalCell()
-            </div>
-            <div class="col-2 d-block d-sm-none order-5">
-                @RemoveCartItemMobileBtn()
-            </div>
-            <div v-if="item.RecurringOrderProgramName" class="col-11  offset-2 offset-sm-1  order-8" 
-                 data-oc-controller="SingleCheckout.ChangeRecurringFrequency">
-                @RecurringOrderHelpers.CartItemRecurringOrderProgram("item")
+            <div class="row pt-3">
+                <div v-if="item.Rewards &amp;&amp; item.Rewards.length" class="col-12 order-1  text-center">
+                    @CartSummaryHelpers.CartItemRewardsCell()
+                </div>
+                <div class="col-2 col-sm-1  order-2">
+                    @CartSummaryHelpers.CartItemImageCell()
+                </div>
+                <div class="col-8 col-sm-4  order-3">
+                    @CartSummaryHelpers.CartItemSummaryCell()
+                </div>
+                <div class="col-sm-2  text-center d-none d-sm-block order-4">
+                    @CartSummaryHelpers.CartItemDefaultPriceCell()
+                </div>
+                <div class="offset-2 offset-sm-0 2 col-sm-3  text-left text-sm-center  order-6">
+                    @CartItemQuantityCell()
+                </div>
+                <div class="offset-2 offset-sm-0 col-sm-2  text-left text-sm-center  order-7">
+                    @CartItemTotalCell()
+                </div>
+                <div class="col-2 d-block d-sm-none order-5">
+                    @RemoveCartItemMobileBtn()
+                </div>
+                <div v-if="item.RecurringOrderProgramName" class="col-11  offset-2 offset-sm-1  order-8"
+                     data-oc-controller="SingleCheckout.ChangeRecurringFrequency">
+                    @RecurringOrderHelpers.CartItemRecurringOrderProgram("item")
+                </div>
             </div>
         </div>
     </div>
@@ -137,7 +141,10 @@
 
 @helper CartItemQuantityCell()
 {
-    <div v-if="item.IsValid" class="btn-group mb-2" role="group">
+    <div v-if="item.IsGiftItem" class="text-center">
+        <p v-text="item.Quantity" v-bind:data-qa="'cart-item-quantity-' + index"> </p>
+    </div>
+    <div v-else-if="item.IsValid" class="btn-group mb-2" role="group">
 
         <button class="btn btn-sm btn-outline-secondary"
                 v-bind:disabled="DecrementDisabled(item)"
@@ -155,7 +162,7 @@
         </button>
 
     </div>
-    <div class="d-none d-sm-block">@CartSummaryHelpers.RemoveCartItemLink()</div>
+    <div v-if="!item.IsGiftItem" class="d-none d-sm-block">@RemoveCartItemLink()</div>
 }
 
 @helper CartItemTotalCell()

@@ -84,6 +84,8 @@
     foreach (var shipping in order.Shipments)
     {
         var status = shipping.ShipmentStatusName;
+        var statusCss = status == "Fulfilled" ? "text-success" :
+        status == "Canceled" ? "text-danger" : "text-warning";
         <div class="card  bg-light  mt-4">
             <h3 class="card-header">
                 @Html.Localize("MyAccount", "L_Shipping")
@@ -91,18 +93,18 @@
             <div class="card-body">
                 <h4>@shipping.ShippingMethod.DisplayName</h4>
                 <p>@shipping.ShippingMethod.Cost</p>
-                <div class="text-success">
+                <div class="@statusCss">
                     @if (status == "Fulfilled")
                     {
-                        @Html.Localize("MyAccount", "L_OrderDelivered") @shipping.ShipmentStatusDate
+                        <span class="fa fa-check-circle"> @Html.Localized("MyAccount", "L_OrderDelivered", @shipping.ShipmentStatusDate) </span>
                     }
                     else if (status == "Canceled")
                     {
-                        @Html.Localize("MyAccount", "L_OrderCancel") @shipping.ShipmentStatusDate
+                        <span class="fa fa-times-circle"> @Html.Localized("MyAccount", "L_OrderCancel", @shipping.ShipmentStatusDate)</span>
                     }
                     else
                     {
-                        @Html.Raw(Html.Localize("MyAccount", "L_OrderInProgress"))
+                        <span class="fa fa-clock-o"> @Html.Localize("MyAccount", "L_OrderInProgress")</span>
                     }
                 </div>
             </div>
@@ -205,6 +207,12 @@
             @foreach (var item in shipment.LineItems)
             {
                 index++;
+                if (item.IsGiftItem)
+                {
+                    <div class="row pt-0 giftitem">
+                        <i class="fa fa-gift" /><p>@Html.Localize("ShoppingCart", "L_GiftItem")</p>
+                    </div>
+                }
                 <div class="row  pt-3  @(index != shipment.LineItems.Count ? "border-bottom pb-2" : "")  @(item.IsUnavailable || item.IsSubstituted ? "disabled" : "")">
                     @if (item.Rewards != null && item.Rewards.Count > 0)
                     {
@@ -241,13 +249,13 @@
                         @if (item.IsOnSale)
                         {
                             <p>
-                                <del>@item.DefaultListPrice</del><br />
-                                <strong class="text-danger">@item.ListPrice</strong>
+                                <del>@item.DefaultPrice</del><br />
+                                <strong class="text-danger">@item.CurrentPrice</strong>
                             </p>
                         }
                         else
                         {
-                            <p>@item.DefaultListPrice</p>
+                            <p>@item.DefaultPrice</p>
                         }
                     </div>
                     <div class="offset-2 offset-sm-0 2 col-sm-3  text-left text-sm-center  order-6">

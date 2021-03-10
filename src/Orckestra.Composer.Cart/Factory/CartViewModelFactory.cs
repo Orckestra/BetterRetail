@@ -76,6 +76,8 @@ namespace Orckestra.Composer.Cart.Factory
             if (param.ProductImageInfo.ImageUrls == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.ProductImageInfo.ImageUrls)), nameof(param)); }
             if (string.IsNullOrWhiteSpace(param.BaseUrl)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.BaseUrl)), nameof(param)); }
 
+            Helper.LineItemsHelper.PrepareGiftLineItems(param.Cart);
+
             var vm = ViewModelMapper.MapTo<CartViewModel>(param.Cart, param.CultureInfo);
             if (vm == null) { return null; }
 

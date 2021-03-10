@@ -289,6 +289,9 @@
     <value>Cart was not found</value>
   </data>
   <data name="F_RemoveItem" xml:space="preserve">
-    <value>Remove Product</value>
+    <value>Remove Item</value>
+  </data>
+  <data name="L_GiftItem" xml:space="preserve">
+    <value>Your free gift</value>
   </data>
 </root>
