@@ -39,16 +39,19 @@
 @helper CartItemDefaultPriceCell()
 {
     <p v-if="item.IsOnSale">
-        <del v-bind:data-qa="'cart-item-defaultprice-del-' + index">{{item.DefaultListPrice}}</del><br />
-        <strong class="text-danger" v-bind:data-qa="'cart-item-salesprice-' + index">{{item.ListPrice}}</strong>
+        <del v-bind:data-qa="'cart-item-defaultprice-del-' + index">{{item.DefaultPrice}}</del><br />
+        <strong class="text-danger" v-bind:data-qa="'cart-item-salesprice-' + index">{{item.CurrentPrice}}</strong>
     </p>
-    <p v-else="v-else" v-bind:data-qa="'cart-item-defaultprice-' + index">{{item.DefaultListPrice}}</p>
+    <p v-else="v-else" v-bind:data-qa="'cart-item-defaultprice-' + index">{{item.DefaultPrice}}</p>
 }
 
 
 @helper CartItemQuantityCell()
 {
-    <div v-if="item.IsValid" class="input-group mb-2" role="group">
+    <div v-if="item.IsGiftItem" class="text-center">
+        <p v-bind:data-qa="'cart-item-quantity-' + index">{{item.Quantity}}</p>
+    </div>
+    <div v-else-if="item.IsValid" class="input-group mb-2" role="group">
         <div class="input-group-prepend">
             <button class="btn btn-remove btn-sm btn-outline-secondary"
                     v-bind:disabled="DecrementDisabled(item)"
@@ -72,13 +75,16 @@
             </button>
         </div>
     </div>
-    <div class="d-none d-sm-block">@CartSummaryHelpers.RemoveCartItemLink()</div>
+    <div v-if="!item.IsGiftItem" class="d-none d-sm-block">@CartSummaryHelpers.RemoveCartItemLink()</div>
     <div v-if="!item.IsValid" class="text-danger">@Html.Localize("General", "B_AddToCartProductDetailOOS")</div>
 }
 
 @helper CartItemTotalCell()
 {
-    <div>
+    <div v-if="item.IsGiftItem">
+        <strong v-bind:data-qa="'cart-item-subtotal-' + index">{{item.Total}}</strong>
+    </div>
+    <div v-else="v-else">
         <div v-if="item.IsPriceDiscounted">
             <del v-bind:data-qa="'cart-item-subtotal-del-'+ index">{{item.TotalWithoutDiscount}}</del><br />
             <strong v-bind:data-qa="'cart-subtotal-sales-'+ index" class="text-danger">{{item.Total}}</strong>
@@ -106,7 +112,7 @@
             v-bind:disabled="IsLoading"
             class="btn btn-link"
             v-bind:data-qa="'cart-item-remove-btn-' + index">
-        <span class="h6 remove-item"> @Html.Localize("ShoppingCart", "F_RemoveItem")</span>
+       <span class="h6 remove-item"> @Html.Localize("ShoppingCart", "F_RemoveItem")</span>
     </button>
 }
 

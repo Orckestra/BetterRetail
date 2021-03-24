@@ -233,6 +233,8 @@ namespace Orckestra.Composer.Cart.Services.Order
             Overture.ServiceModel.Orders.Order order,
             GetOrderParam getOrderParam)
         {
+            Helper.LineItemsHelper.PrepareGiftLineItems(order.Cart);
+
             var shipmentsNotes = await GetShipmentsNotes(order.Cart.Shipments, getOrderParam.Scope).ConfigureAwait(false);
 
             var orderChanges = await OrderRepository.GetOrderChangesAsync(new GetOrderChangesParam
