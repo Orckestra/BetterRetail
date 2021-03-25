@@ -182,7 +182,7 @@ namespace Orckestra.Composer
             string description = "OCS API Call: ";
             if (request is IEnumerable)
             {
-                description += ((IEnumerable)request).Cast<object>().Select(r => r.GetType().FullName).Join(", ");
+                description += string.Join(", ", ((IEnumerable)request).Cast<object>().Select(r => r.GetType().FullName));
             }
             else
             {

@@ -85,6 +85,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="Package\Views\Footer\FollowUs.cshtml" />
     <None Include="Package\Views\Product\ProductSEO.cshtml" />
     <None Include="Package\Views\Shared\LanguageSwitch.cshtml" />
