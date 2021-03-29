@@ -262,16 +262,16 @@
     <value>Commande</value>
   </data>
   <data name="L_OrderCancel" xml:space="preserve">
-    <value>&lt;span class="text-danger"&gt;&lt;span class="fa fa-times-circle"&gt;&lt;/span&gt; Annulé &lt;/span&gt; le</value>
+    <value>Annulé le {0}</value>
   </data>
   <data name="L_OrderDelivered" xml:space="preserve">
-    <value>&lt;span class="text-success"&gt;&lt;span class="fa fa-check-circle"&gt;&lt;/span&gt; Expédié &lt;/span&gt; le</value>
+    <value>Livré le {0}</value>
   </data>
   <data name="L_OrderedOn" xml:space="preserve">
     <value>Commandé le {0}</value>
   </data>
   <data name="L_OrderInProgress" xml:space="preserve">
-    <value>&lt;span class="text-warning"&gt;&lt;span class="fa fa-clock-o"&gt;&lt;/span&gt; En cours &lt;/span&gt;</value>
+    <value>En cours</value>
   </data>
   <data name="L_OrderLineItemProductsTitle" xml:space="preserve">
     <value>Articles</value>

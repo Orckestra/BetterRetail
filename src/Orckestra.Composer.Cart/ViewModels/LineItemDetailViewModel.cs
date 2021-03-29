@@ -48,13 +48,13 @@ namespace Orckestra.Composer.Cart.ViewModels
         /// The price for one instance of the item (quantity = 1), at the moment that the item is to be processed by the workflow
         /// </summary>
         [Formatting("General", "PriceFormat")]
-        public string ListPrice { get; set; }
+        public string CurrentPrice { get; set; }
 
         /// <summary>
         /// The default price for one instance of the item (quantity = 1), at the moment that the item is to be processed by the workflow
         /// </summary>
         [Formatting("General", "PriceFormat")]
-        public string DefaultListPrice { get; set; }
+        public string DefaultPrice { get; set; }
 
         /// <summary>
         /// Quantity ordered of a product
@@ -140,6 +140,11 @@ namespace Orckestra.Composer.Cart.ViewModels
         /// The item is not available and cannot be replaced
         /// </summary>
         public bool IsUnavailable { get; set; }
+
+        /// <summary>
+        /// The item is a gift (free) item
+        /// </summary>
+        public bool IsGiftItem { get; set; }
 
         public LineItemDetailViewModel()
         {

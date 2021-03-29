@@ -289,10 +289,13 @@
     <value>Cart was not found</value>
   </data>
   <data name="F_RemoveItem" xml:space="preserve">
-    <value>Remove Product</value>
+    <value>Remove Item</value>
   </data>
   <data name="L_ShippingFee" xml:space="preserve">
     <value>Shipping fee</value>
+  </data>
+   <data name="L_GiftItem" xml:space="preserve">
+    <value>Your free gift</value>
   </data>
   <data name="B_SecureCheckout" xml:space="preserve">
     <value>Secure Checkout</value>

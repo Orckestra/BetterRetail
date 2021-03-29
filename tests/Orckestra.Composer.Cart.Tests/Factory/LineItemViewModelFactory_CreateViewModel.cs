@@ -30,7 +30,7 @@ namespace Orckestra.Composer.Cart.Tests.Factory
             Container = new AutoMocker();
             var mapper = Container.GetMock<IViewModelMapper>();
             mapper.Setup(m => m.MapTo<LineItemDetailViewModel>(It.IsAny<LineItem>(), It.IsAny<CultureInfo>())).Returns<LineItem, CultureInfo>(
-                (li, ci) => new LineItemDetailViewModel { ListPrice = li.CurrentPrice.GetValueOrDefault().ToString(CultureInfo.InvariantCulture), DefaultListPrice = li.DefaultPrice.GetValueOrDefault().ToString(CultureInfo.InvariantCulture) });
+                (li, ci) => new LineItemDetailViewModel { CurrentPrice = li.CurrentPrice.GetValueOrDefault().ToString(CultureInfo.InvariantCulture), DefaultPrice = li.DefaultPrice.GetValueOrDefault().ToString(CultureInfo.InvariantCulture) });
             Container.GetMock<ILocalizationProvider>()
                 .Setup(m => m.GetLocalizedString(It.IsAny<GetLocalizedParam>()))
                 .Returns("{0:C}");
@@ -97,7 +97,7 @@ namespace Orckestra.Composer.Cart.Tests.Factory
         }
 
         [Test]
-        public void WHEN_ListPrice_Is_Less_Than_DefaultListPrice_IsOnSale_SHOULD_Be_True()
+        public void WHEN_ListPrice_Is_Less_Than_DefaultPrice_IsOnSale_SHOULD_Be_True()
         {
             var factory = Container.CreateInstance<LineItemViewModelFactory>();
             var param = new CreateListOfLineItemDetailViewModelParam()
@@ -116,7 +116,7 @@ namespace Orckestra.Composer.Cart.Tests.Factory
         }
 
         [Test]
-        public void WHEN_ListPrice_Is_Greater_Than_DefaultListPrice_IsOnSale_SHOULD_Be_False()
+        public void WHEN_ListPrice_Is_Greater_Than_DefaultPrice_IsOnSale_SHOULD_Be_False()
         {
 
             var factory = Container.CreateInstance<LineItemViewModelFactory>();
@@ -183,8 +183,8 @@ namespace Orckestra.Composer.Cart.Tests.Factory
                 liVm.Id.Should().Be(lineItem.Id);
                 liVm.ProductId.Should().Be(lineItem.ProductId);
                 liVm.VariantId.Should().Be(lineItem.VariantId);
-                liVm.ListPrice.Should().NotBeNullOrWhiteSpace();
-                liVm.DefaultListPrice.Should().NotBeNullOrWhiteSpace();
+                liVm.CurrentPrice.Should().NotBeNullOrWhiteSpace();
+                liVm.DefaultPrice.Should().NotBeNullOrWhiteSpace();
                 liVm.Quantity.Should().Be(lineItem.Quantity);
                 liVm.Total.Should().NotBeNullOrWhiteSpace();
 

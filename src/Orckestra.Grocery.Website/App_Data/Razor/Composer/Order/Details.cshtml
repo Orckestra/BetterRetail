@@ -135,18 +135,20 @@
 @helper ShippingStatus(OrderShipmentDetailViewModel shipping)
 {
     var status = shipping.ShipmentStatusName;
-    <div class="mb-3">
+    var statusCss = status == "Fulfilled" ? "text-success" :
+        status == "Canceled" ? "text-danger" : "text-warning";
+    <div class="mb-3 @statusCss">
         @if (status == "Fulfilled")
         {
-            @Html.Localize("MyAccount", "L_OrderDelivered") @shipping.ShipmentStatusDate
+            <span class="fa fa-check-circle"> @Html.Localized("MyAccount", "L_OrderDelivered", @shipping.ShipmentStatusDate) </span>
         }
         else if (status == "Canceled")
         {
-            @Html.Localize("MyAccount", "L_OrderCancel") @shipping.ShipmentStatusDate
+            <span class="fa fa-times-circle"> @Html.Localized("MyAccount", "L_OrderCancel", @shipping.ShipmentStatusDate)</span>
         }
         else
         {
-            @Html.Raw(Html.Localize("MyAccount", "L_OrderInProgress"))
+            <span class="fa fa-clock-o"> @Html.Localize("MyAccount", "L_OrderInProgress")</span>
         }
     </div>
 }
@@ -238,6 +240,12 @@
             @foreach (var item in shipment.LineItems)
             {
                 index++;
+                if (item.IsGiftItem)
+                {
+                    <div class="row pt-0 giftitem">
+                        <i class="fa fa-gift" /><p>@Html.Localize("ShoppingCart", "L_GiftItem")</p>
+                    </div>
+                }
                 <div class="row  pt-2  @(index != shipment.LineItems.Count ? "border-bottom pb-2" : "")">
                     @if (item.Rewards != null && item.Rewards.Count > 0)
                     {
@@ -274,13 +282,13 @@
                                 @if (item.IsOnSale)
                                 {
                                     <p>
-                                        <del>@item.DefaultListPrice</del><br />
-                                        <strong class="text-danger">@item.ListPrice</strong>
+                                <del>@item.DefaultPrice</del><br />
+                                <strong class="text-danger">@item.CurrentPrice</strong>
                                     </p>
                                 }
                                 else
                                 {
-                                    <p>@item.DefaultListPrice</p>
+                            <p>@item.DefaultPrice</p>
                                 }
                             </div>
                             <div class="col-sm-3  text-left text-sm-center">
