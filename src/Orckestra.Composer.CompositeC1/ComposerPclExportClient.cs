@@ -5,7 +5,7 @@ using ServiceStack;
 namespace Orckestra.Composer.CompositeC1
 {
     /// <exclude />
-    public class ComposerPclExport : Net40PclExport
+    public class ComposerPclExport : Net45PclExport
     {
         public override void Config(HttpWebRequest req, bool? allowAutoRedirect, TimeSpan? timeout,
             TimeSpan? readWriteTimeout, string userAgent, bool? preAuthenticate)
