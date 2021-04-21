@@ -45,7 +45,8 @@
                       <AddDataAction Type="Orckestra.Composer.CompositeC1.DataTypes.Navigation.NavigationImage" Label="Add Image"/>
                     </Actions>
                     <Children>
-                      <DataElements Type="Orckestra.Composer.CompositeC1.DataTypes.Navigation.NavigationImage" Icon="pagetype-pagetype">
+                      <DataElements Type="Orckestra.Composer.CompositeC1.DataTypes.Navigation.NavigationImage" Icon="image" 
+							BrowserImage="~/Renderers/ShowMedia.ashx?src=${C1:Data:Orckestra.Composer.CompositeC1.DataTypes.Navigation.NavigationImage:ImageSource}&amp;mw=500">
                         <Actions>
                           <EditDataAction/>
                           <DeleteDataAction/>
@@ -76,7 +77,8 @@
                           <AddDataAction Type="Orckestra.Composer.CompositeC1.DataTypes.Navigation.NavigationImage" Label="Add Image"/>
                         </Actions>
                         <Children>
-                          <DataElements Type="Orckestra.Composer.CompositeC1.DataTypes.Navigation.NavigationImage" Icon="pagetype-pagetype">
+                          <DataElements Type="Orckestra.Composer.CompositeC1.DataTypes.Navigation.NavigationImage" Icon="image" 
+							BrowserImage="~/Renderers/ShowMedia.ashx?src=${C1:Data:Orckestra.Composer.CompositeC1.DataTypes.Navigation.NavigationImage:ImageSource}&amp;mw=500">
                             <Actions>
                               <EditDataAction/>
                               <DeleteDataAction/>
