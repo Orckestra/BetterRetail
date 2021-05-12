@@ -31,6 +31,7 @@
         <File sourceFilename="~\Bin\ServiceStack.Client.dll" targetFilename="~\Bin\ServiceStack.Client.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\ServiceStack.Interfaces.dll" targetFilename="~\Bin\ServiceStack.Interfaces.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\ServiceStack.Text.dll" targetFilename="~\Bin\ServiceStack.Text.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\System.Memory.dll" targetFilename="~\Bin\System.Memory.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\System.Net.Http.Formatting.dll" targetFilename="~\Bin\System.Net.Http.Formatting.dll" allowOverwrite="true" addAssemblyBinding="true"/>
         <File sourceFilename="~\Bin\System.Web.Http.dll" targetFilename="~\Bin\System.Web.Http.dll" allowOverwrite="true" addAssemblyBinding="true"/>
         <File sourceFilename="~\Bin\System.Web.Http.WebHost.dll" targetFilename="~\Bin\System.Web.Http.WebHost.dll" allowOverwrite="true" />
