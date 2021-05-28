@@ -37,6 +37,8 @@
         <File sourceFilename="~\Bin\System.Web.Http.WebHost.dll" targetFilename="~\Bin\System.Web.Http.WebHost.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\System.Web.Helpers.dll" targetFilename="~\Bin\System.Web.Helpers.dll" allowOverwrite="true" addAssemblyBinding="true"/>
         <File sourceFilename="~\Bin\System.Runtime.CompilerServices.Unsafe.dll" targetFilename="~\Bin\System.Runtime.CompilerServices.Unsafe.dll" allowOverwrite="true" addAssemblyBinding="true"/>
+        <File sourceFilename="~\Bin\System.Numerics.Vectors.dll" targetFilename="~\Bin\System.Numerics.Vectors.dll" allowOverwrite="true" addAssemblyBinding="true"/>
+        <File sourceFilename="~\Bin\System.Buffers.dll" targetFilename="~\Bin\System.Buffers.dll" allowOverwrite="true" addAssemblyBinding="true"/>
         <File sourceFilename="~\Bin\Microsoft.Practices.EnterpriseLibrary.SemanticLogging.dll" targetFilename="~\Bin\Microsoft.Practices.EnterpriseLibrary.SemanticLogging.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Microsoft.Configuration.ConfigurationBuilders.Base.dll" targetFilename="~\Bin\Microsoft.Configuration.ConfigurationBuilders.Base.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Orckestra.Composer.dll" targetFilename="~\Bin\Orckestra.Composer.dll" allowOverwrite="true" />
