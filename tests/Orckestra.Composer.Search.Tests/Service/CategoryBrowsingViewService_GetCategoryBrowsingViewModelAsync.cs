@@ -25,7 +25,6 @@ using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel;
 using Orckestra.Overture.ServiceModel.Products;
 using Orckestra.Overture.ServiceModel.Search;
-using ServiceStack.Text;
 using Facet = Orckestra.Overture.ServiceModel.Search.Facet;
 using FacetType = Orckestra.Composer.Search.Facets.FacetType;
 using SearchFilter = Orckestra.Composer.Parameters.SearchFilter;
