@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms:formdefinition xmlns="http://www.composite.net/ns/management/bindingforms/std.ui.controls.lib/1.0" xmlns:f="http://www.composite.net/ns/management/bindingforms/std.function.lib/1.0" xmlns:cms="http://www.composite.net/ns/management/bindingforms/1.0">
+	<cms:bindings>
+		<cms:binding name="NewUser" type="Composite.Data.Types.IUser" />
+    <cms:binding name="UserFormLogin" type="Composite.Data.Types.IUserFormLogin" />
+    <cms:binding name="CultureName" type="System.String" />
+    <cms:binding name="C1ConsoleUiLanguageName" type="System.String" />
+    <cms:binding name="C1ConsoleUiCultures" type="System.Collections.IEnumerable" />
+    <cms:binding name="AllCultures" type="System.Collections.IEnumerable" />
+    <cms:binding name="Password" type="System.String" optional="true"/>
+  </cms:bindings>
+	<cms:layout iconhandle="users-adduser" label="${Composite.Management, Website.Forms.Administrative.AddNewUserStep1.LabelFieldGroup}">
+		<FieldGroup>
+			<TextBox Label="${Composite.Management, Website.Forms.Administrative.AddNewUserStep1.UserNameLabel}" Help="${Composite.Management, Website.Forms.Administrative.AddNewUserStep1.UserNameHelp}" SpellCheck="false">
+				<TextBox.Text>
+					<cms:bind source="NewUser.Username" />
+				</TextBox.Text>
+			</TextBox>
+			<TextBox Type="Password" Label="${Composite.Management, Website.Forms.Administrative.AddNewUserStep1.PasswordLabel}" Help="${Composite.Management, Website.Forms.Administrative.AddNewUserStep1.PasswordHelp}" Required="true">
+				<TextBox.Text>
+					<cms:bind source="Password" />
+				</TextBox.Text>
+			</TextBox>
+      <TextBox Label="${Composite.Management, Website.Forms.Administrative.AddNewUserStep1.NameLabel}" Help="${Composite.Management, Website.Forms.Administrative.AddNewUserStep1.NameHelp}">
+        <TextBox.Text>
+          <cms:bind source="NewUser.Name" />
+        </TextBox.Text>
+      </TextBox>
+      <TextBox Label="${Composite.Management, Website.Forms.Administrative.AddNewUserStep1.EmailLabel}" Help="${Composite.Management, Website.Forms.Administrative.AddNewUserStep1.EmailHelp}">
+        <TextBox.Text>
+          <cms:bind source="NewUser.Email" />
+        </TextBox.Text>
+      </TextBox>
+      <TextBox Label="${Composite.Management, Website.Forms.Administrative.AddNewUserStep1.GroupLabel}" Help="${Composite.Management, Website.Forms.Administrative.AddNewUserStep1.GroupHelp}">
+				<TextBox.Text>
+					<cms:bind source="UserFormLogin.Folder" />
+				</TextBox.Text>
+			</TextBox>
+      <KeySelector OptionsKeyField="Key" OptionsLabelField="Value" Label="${Composite.Management, Website.Forms.Administrative.AddNewUserStep1.CultureLabel}" Help="${Composite.Management, Website.Forms.Administrative.AddNewUserStep1.CultureHelp}">
+        <KeySelector.Options>
+          <cms:read source="AllCultures"/>
+        </KeySelector.Options>
+        <KeySelector.Selected>
+          <cms:bind source="CultureName" />
+        </KeySelector.Selected>
+      </KeySelector>
+      <KeySelector OptionsKeyField="Key" OptionsLabelField="Value" Label="${Composite.Management, Website.Forms.Administrative.AddNewUserStep1.C1ConsoleLanguageLabel}" Help="${Composite.Management, Website.Forms.Administrative.AddNewUserStep1.C1ConsoleLanguageHelp}">
+        <KeySelector.Options>
+          <cms:read source="C1ConsoleUiCultures"/>
+        </KeySelector.Options>
+        <KeySelector.Selected>
+          <cms:bind source="C1ConsoleUiLanguageName" />
+        </KeySelector.Selected>
+      </KeySelector>
+
+    </FieldGroup>
+	</cms:layout>
+</cms:formdefinition>

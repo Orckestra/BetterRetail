@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<strings>
+	<string key="WebsiteFilesRootElement.Label" value="/" />
+	<string key="LayoutResourcesRootElement.Label" value="/" /> <!-- Layout Resources -->
+	<string key="LayoutResourcesKeyNameLabel" value="Layout" />
+	
+	<string key="DeleteFile.LabelFieldGroup" value="Delete File?" />
+	<string key="DeleteFile.Text" value="Delete file?" />
+	<string key="DeleteFolder.LabelFieldGroup" value="Delete Folder?" />
+	<string key="DeleteFolder.Text" value="Delete folder?" />
+	<string key="AddNewFolder.LabelFieldGroup" value="Add New Folder" />
+	<string key="AddNewFolder.Text" value="Folder name" />
+	<string key="AddNewFolder.Help" value="Enter the name of the new folder" />
+	<string key="AddNewFolder.Error.FolderExist" value="A folder with the same name already exists" />
+	<string key="AddNewFile.LabelFieldGroup" value="Add New File" />
+	<string key="AddNewFile.Text" value="File name" />
+	<string key="AddNewFile.Help" value="Enter the name of the new file" />
+	<string key="AddNewFile.Error.FileExist" value="A file with the same name already exists" />
+	<string key="UploadNewWebsiteFile.LabelFieldGroup" value="Upload File" />
+	<string key="UploadNewWebsiteFile.LabelFile" value="Select file" />
+	<string key="UploadNewWebsiteFile.HelpFile" value="Select file to upload" />
+  <string key="UploadNewWebsiteFile.ConfirmOverwriteTitle" value="Overwrite existing file" />
+  <string key="UploadNewWebsiteFile.ConfirmOverwriteDescription" value="A file with the same name already exists, overwrite?" />
+	<string key="UploadFile.Error.WrongTypeTitle" value="Wrong File Type" />
+	<string key="UploadFile.Error.WrongTypeMessage" value="Wrong file type" />
+
+  <string key="UploadAndExtractZipFileTitle" value="Upload and Extract Zip" />
+  <string key="UploadAndExtractZipFileToolTip" value="Upload multiple files and folders by providing a Zip file" />
+  <string key="UploadAndExtractZipFile.DialogLabel" value="Upload and Extract Zip File" />
+  <string key="UploadAndExtractZipFile.FileLabel" value="Zip file" />
+  <string key="UploadAndExtractZipFile.FileHelp" value="The file/folder structure of the zip file you select will be extracted and copied to the website" />
+  <string key="UploadAndExtractZipFile.OverwriteExistingLabel" value="Overwrite existing" />
+  <string key="UploadAndExtractZipFile.OverwriteExistingHelp" value="If you select this option, existing files will be overwritten" />
+  <string key="UploadAndExtractZipFile.OverwriteExistingItemLabel" value="Overwrite existing files" />
+
+  <string key="UploadAndExtractZipFile.FileExistsError" value="File '{0}' exists both in the zip and on the website. Choose to overwrite files to complete this action" />
+  <string key="UploadAndExtractZipFile.FileNotUploaded" value="No file was uploaded" />
+  <string key="UploadAndExtractZipFile.NotZip" value="The uploaded file is not a valid Zip archive" />
+  <string key="UploadAndExtractZipFile.ErrorDialogLabel" value="Zip upload could not be completed" />
+  <string key="UploadAndExtractZipFile.UnexpectedError" value="Upload failed unexpectedly. Please see log for details" />
+  <string key="UploadAndExtractZipFile.ExistingFileReadOnly" value="Existing file '{0}' is marked as read only. No files were uploaded" />
+
+
+  <string key="AddWebsiteFolderTitle" value="New Folder" />
+	<string key="AddWebsiteFolderToolTip" value="Add new folder" />
+	<string key="AddWebsiteFileTitle" value="New File" />
+	<string key="AddWebsiteFileToolTip" value="Create new file" />
+	<string key="DeleteWebsiteFileTitle" value="Delete File" />
+	<string key="DeleteWebsiteFileToolTip" value="Delete file" />
+  <string key="DownloadFileTitle" value="Download" />
+  <string key="DownloadFileToolTip" value="Download file" />
+  <string key="DeleteWebsiteFolderTitle" value="Delete Folder" />
+	<string key="DeleteWebsiteFolderToolTip" value="Delete folder" />
+	<string key="EditWebsiteFileTitle" value="Edit File" />
+	<string key="EditWebsiteFileToolTip" value="Edit file" />
+	<string key="UploadWebsiteFileTitle" value="Upload File" />
+	<string key="UploadWebsiteFileToolTip" value="Upload file" />
+	<string key="AddFolderToWhiteListTitle" value="Show in &quot;{0}&quot;" />
+	<string key="AddFolderToWhiteListToolTip" value="Control if this folder should be visible in &quot;{0}&quot;" />
+	<string key="RemoveFolderFromWhiteListTitle" value="Show in &quot;{0}&quot;" />
+	<string key="RemoveFolderFromWhiteListToolTip" value="Control if this folder should be visible in &quot;{0}&quot;" />
+
+	<string key="DeleteWebsiteFileWorkflow.DeleteErrorTitle" value="Error" />
+	<string key="DeleteWebsiteFileWorkflow.DeleteErrorMessage" value="Could not delete the file" />
+	<string key="DeleteWebsiteFolderWorkflow.DeleteErrorTitle" value="Error" />
+	<string key="DeleteWebsiteFolderWorkflow.DeleteErrorMessage" value="Could not delete the folder" />
+</strings>

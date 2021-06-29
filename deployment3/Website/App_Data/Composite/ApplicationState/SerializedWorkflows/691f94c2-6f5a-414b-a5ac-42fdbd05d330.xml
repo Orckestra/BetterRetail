@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FormData>
+  <ContainerLabel />
+  <FormDefinition value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;&#xD;&#xA;&lt;cms:formdefinition xmlns=&quot;http://www.composite.net/ns/management/bindingforms/std.ui.controls.lib/1.0&quot; xmlns:internal=&quot;http://www.composite.net/ns/management/bindingforms/internal.ui.controls.lib/1.0&quot; xmlns:f=&quot;http://www.composite.net/ns/management/bindingforms/std.function.lib/1.0&quot; xmlns:cms=&quot;http://www.composite.net/ns/management/bindingforms/1.0&quot;&gt;&#xD;&#xA;  &lt;cms:bindings&gt;&#xD;&#xA;    &lt;cms:binding name=&quot;DocumentTitle&quot; type=&quot;System.String&quot; /&gt;&#xD;&#xA;    &lt;cms:binding name=&quot;InstalledPackageInformation&quot; type=&quot;Composite.Core.PackageSystem.InstalledPackageInformation&quot; /&gt;&#xD;&#xA;    &lt;cms:binding name=&quot;InstallDate&quot; type=&quot;System.String&quot; /&gt;&#xD;&#xA;    &lt;cms:binding name=&quot;IsTrial&quot; type=&quot;System.Boolean&quot; /&gt;&#xD;&#xA;&#x9;&#x9;&lt;cms:binding name=&quot;IsSubscription&quot; type=&quot;System.Boolean&quot; /&gt;&#xD;&#xA;&#x9;&#x9;&lt;cms:binding name=&quot;SubscriptionName&quot; type=&quot;System.String&quot; optional=&quot;true&quot; /&gt;&#xD;&#xA;&#x9;&#x9;&lt;cms:binding name=&quot;LicenseExpirationDate&quot; type=&quot;System.String&quot; optional=&quot;true&quot; /&gt;&#xD;&#xA;  &lt;/cms:bindings&gt;&#xD;&#xA;  &lt;cms:layout iconhandle=&quot;package-view-installedinfo&quot;&gt;&#xD;&#xA;    &lt;cms:layout.label&gt;&#xD;&#xA;      &lt;cms:read source=&quot;DocumentTitle&quot; /&gt;&#xD;&#xA;    &lt;/cms:layout.label&gt;&#xD;&#xA;    &lt;PlaceHolder&gt;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;      &lt;FieldGroup Label=&quot;${Composite.Plugins.PackageElementProvider, ViewInstalledInformation.FieldGroupLabel}&quot;&gt;&#xD;&#xA;        &lt;TextBox Type=&quot;ReadOnly&quot; Label=&quot;${Composite.Plugins.PackageElementProvider, ViewInstalledInformation.NameTextLabel}&quot;&gt;&#xD;&#xA;          &lt;TextBox.Text&gt;&#xD;&#xA;            &lt;cms:read source=&quot;InstalledPackageInformation.Name&quot; /&gt;&#xD;&#xA;          &lt;/TextBox.Text&gt;&#xD;&#xA;        &lt;/TextBox&gt;&#xD;&#xA;        &lt;TextBox Type=&quot;ReadOnly&quot; Label=&quot;${Composite.Plugins.PackageElementProvider, ViewInstalledInformation.VersionTextLabel}&quot;&gt;&#xD;&#xA;          &lt;TextBox.Text&gt;&#xD;&#xA;            &lt;cms:read source=&quot;InstalledPackageInformation.Version&quot; /&gt;&#xD;&#xA;          &lt;/TextBox.Text&gt;&#xD;&#xA;        &lt;/TextBox&gt;&#xD;&#xA;        &lt;TextBox Type=&quot;ReadOnly&quot; Label=&quot;${Composite.Plugins.PackageElementProvider, ViewInstalledInformation.AuthorTextLabel}&quot;&gt;&#xD;&#xA;          &lt;TextBox.Text&gt;&#xD;&#xA;            &lt;cms:read source=&quot;InstalledPackageInformation.Author&quot; /&gt;&#xD;&#xA;          &lt;/TextBox.Text&gt;&#xD;&#xA;        &lt;/TextBox&gt;&#xD;&#xA;        &lt;TextBox Type=&quot;ReadOnly&quot; Label=&quot;${Composite.Plugins.PackageElementProvider, ViewInstalledInformation.DateTextLabel}&quot;&gt;&#xD;&#xA;          &lt;TextBox.Text&gt;&#xD;&#xA;            &lt;cms:read source=&quot;InstallDate&quot; /&gt;&#xD;&#xA;          &lt;/TextBox.Text&gt;&#xD;&#xA;        &lt;/TextBox&gt;&#xD;&#xA;        &lt;TextBox Type=&quot;ReadOnly&quot; Label=&quot;${Composite.Plugins.PackageElementProvider, ViewInstalledInformation.UserTextLabel}&quot;&gt;&#xD;&#xA;          &lt;TextBox.Text&gt;&#xD;&#xA;            &lt;cms:read source=&quot;InstalledPackageInformation.InstalledBy&quot; /&gt;&#xD;&#xA;          &lt;/TextBox.Text&gt;&#xD;&#xA;        &lt;/TextBox&gt;&#xD;&#xA;      &lt;/FieldGroup&gt;&#xD;&#xA;      &#xD;&#xA;      &#xD;&#xA;      &lt;f:BooleanCheck&gt;&#xD;&#xA;        &lt;f:BooleanCheck.CheckValue&gt;&#xD;&#xA;          &lt;cms:read source=&quot;IsTrial&quot; /&gt;&#xD;&#xA;        &lt;/f:BooleanCheck.CheckValue&gt;&#xD;&#xA;        &lt;f:BooleanCheck.WhenTrue&gt;&#xD;&#xA;&#xD;&#xA;          &lt;FieldGroup Label=&quot;${Composite.Plugins.PackageElementProvider, ViewInstalledInformation.TrialInfoFieldGroupLabel}&quot;&gt;&#xD;&#xA;            &lt;TextArea Type=&quot;ReadOnly&quot; Label=&quot;${Composite.Plugins.PackageElementProvider, ViewInstalledInformation.TrialInformationLabel}&quot; Text=&quot;${Composite.Plugins.PackageElementProvider, ViewInstalledInformation.TrialInformationText}&quot; /&gt;&#xD;&#xA;            &lt;TextBox Type=&quot;ReadOnly&quot; Label=&quot;${Composite.Plugins.PackageElementProvider, ViewInstalledInformation.TrialExpireLabel}&quot;&gt;&#xD;&#xA;              &lt;TextBox.Text&gt;&#xD;&#xA;                &lt;cms:read source=&quot;LicenseExpirationDate&quot; /&gt;&#xD;&#xA;              &lt;/TextBox.Text&gt;&#xD;&#xA;            &lt;/TextBox&gt;&#xD;&#xA;          &lt;/FieldGroup&gt;&#xD;&#xA;        &lt;/f:BooleanCheck.WhenTrue&gt;&#xD;&#xA;      &lt;/f:BooleanCheck&gt;&#xD;&#xA;&#xD;&#xA;&#x9;&#x9;&#x9;&lt;f:BooleanCheck&gt;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&lt;f:BooleanCheck.CheckValue&gt;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;cms:read source=&quot;IsSubscription&quot; /&gt;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&lt;/f:BooleanCheck.CheckValue&gt;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&lt;f:BooleanCheck.WhenTrue&gt;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;FieldGroup Label=&quot;${Composite.Plugins.PackageElementProvider, ViewInstalledInformation.LicenseInformationGroupLabel}&quot;&gt;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;TextBox Type=&quot;ReadOnly&quot; Label=&quot;${Composite.Plugins.PackageElementProvider, ViewInstalledInformation.SubscriptionNameLabel}&quot;&gt;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;TextBox.Text&gt;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;cms:read source=&quot;SubscriptionName&quot; /&gt;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;/TextBox.Text&gt;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;/TextBox&gt;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;TextBox Type=&quot;ReadOnly&quot; Label=&quot;${Composite.Plugins.PackageElementProvider, ViewInstalledInformation.LicenseExpirationDateLabel}&quot;&gt;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;TextBox.Text&gt;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;cms:read source=&quot;LicenseExpirationDate&quot; /&gt;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;/TextBox.Text&gt;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;/TextBox&gt;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;/FieldGroup&gt;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&lt;/f:BooleanCheck.WhenTrue&gt;&#xD;&#xA;&#x9;&#x9;&#x9;&lt;/f:BooleanCheck&gt;&#xD;&#xA;&#xD;&#xA;&#x9;&#x9;&lt;/PlaceHolder&gt;&#xD;&#xA;  &lt;/cms:layout&gt;&#xD;&#xA;&lt;/cms:formdefinition&gt;" />
+  <CustomToolbarItems>
+    <item id="default" markup="&lt;cms:formdefinition xmlns=&quot;http://www.composite.net/ns/management/bindingforms/std.ui.controls.lib/1.0&quot; xmlns:cms=&quot;http://www.composite.net/ns/management/bindingforms/1.0&quot; xmlns:f=&quot;http://www.composite.net/ns/management/bindingforms/std.function.lib/1.0&quot;&gt;&#xD;&#xA;  &lt;cms:bindings&gt;&#xD;&#xA;    &lt;cms:binding name=&quot;CustomEvent01Handler&quot; type=&quot;System.EventHandler&quot; /&gt;&#xD;&#xA;    &lt;cms:binding name=&quot;ShowPurchaseThisButton&quot; type=&quot;System.Boolean&quot; /&gt;&#xD;&#xA;    &lt;cms:binding name=&quot;TrialPurchaseUrl&quot; type=&quot;System.String&quot; optional=&quot;true&quot; /&gt;&#xD;&#xA;    &lt;cms:binding name=&quot;ReadMoreUrl&quot; type=&quot;System.String&quot; optional=&quot;true&quot; /&gt;&#xD;&#xA;  &lt;/cms:bindings&gt;&#xD;&#xA;  &lt;cms:layout&gt;&#xD;&#xA;    &lt;PlaceHolder&gt;&#xD;&#xA;      &lt;ToolbarButton Label=&quot;${Composite.Plugins.PackageElementProvider, ViewInstalledInformation.Toolbar.UninstallLabel}&quot; IconHandle=&quot;package-installer-uninstall&quot;&gt;&#xD;&#xA;        &lt;ToolbarButton.ClickEventHandler&gt;&#xD;&#xA;          &lt;cms:read source=&quot;CustomEvent01Handler&quot; /&gt;&#xD;&#xA;        &lt;/ToolbarButton.ClickEventHandler&gt;&#xD;&#xA;      &lt;/ToolbarButton&gt;&#xD;&#xA;      &lt;f:BooleanCheck&gt;&#xD;&#xA;        &lt;f:BooleanCheck.CheckValue&gt;&#xD;&#xA;          &lt;cms:read source=&quot;ShowPurchaseThisButton&quot; /&gt;&#xD;&#xA;        &lt;/f:BooleanCheck.CheckValue&gt;&#xD;&#xA;        &lt;f:BooleanCheck.WhenTrue&gt;&#xD;&#xA;          &lt;ToolbarButton Label=&quot;${Composite.Plugins.PackageElementProvider, ViewInstalledInformation.Toolbar.PurchaseLabel}&quot; IconHandle=&quot;cart&quot;&gt;&#xD;&#xA;            &lt;ToolbarButton.LaunchUrl&gt;&#xD;&#xA;              &lt;cms:read source=&quot;TrialPurchaseUrl&quot; /&gt;&#xD;&#xA;            &lt;/ToolbarButton.LaunchUrl&gt;&#xD;&#xA;          &lt;/ToolbarButton&gt;&#xD;&#xA;        &lt;/f:BooleanCheck.WhenTrue&gt;&#xD;&#xA;      &lt;/f:BooleanCheck&gt;&#xD;&#xA;      &lt;f:NullCheck&gt;&#xD;&#xA;        &lt;f:NullCheck.CheckValue&gt;&#xD;&#xA;          &lt;cms:read source=&quot;ReadMoreUrl&quot; /&gt;&#xD;&#xA;        &lt;/f:NullCheck.CheckValue&gt;&#xD;&#xA;        &lt;f:NullCheck.WhenNotNull&gt;&#xD;&#xA;          &lt;ToolbarButton Label=&quot;${Composite.Plugins.PackageElementProvider, ViewAvailableInformation.Toolbar.ReadMoreLabel}&quot; IconHandle=&quot;package-installer-readmore&quot;&gt;&#xD;&#xA;            &lt;ToolbarButton.LaunchUrl&gt;&#xD;&#xA;              &lt;cms:read source=&quot;ReadMoreUrl&quot; /&gt;&#xD;&#xA;            &lt;/ToolbarButton.LaunchUrl&gt;&#xD;&#xA;          &lt;/ToolbarButton&gt;&#xD;&#xA;        &lt;/f:NullCheck.WhenNotNull&gt;&#xD;&#xA;      &lt;/f:NullCheck&gt;&#xD;&#xA;    &lt;/PlaceHolder&gt;&#xD;&#xA;  &lt;/cms:layout&gt;&#xD;&#xA;&lt;/cms:formdefinition&gt;" priority="11" />
+  </CustomToolbarItems>
+  <ContainerType>
+    <SerializerHandler value="SerializerHandlerType='Composite\.C1Console\.Actions\.StandardUiContainerTypesSerializerHandler,Composite'SerializedObject='Document'" />
+  </ContainerType>
+  <Bindings>
+    <Dictionary type="&lt;t n=&quot;System.Collections.Generic.Dictionary`2, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089&quot;&gt;&#xD;&#xA;  &lt;t n=&quot;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089&quot; /&gt;&#xD;&#xA;  &lt;t n=&quot;System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089&quot; /&gt;&#xD;&#xA;&lt;/t&gt;">
+      <KeyPair>
+        <Key>
+          <Value type="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" value="DocumentTitle" />
+        </Key>
+        <Value>
+          <Value type="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" value="Hotfix769 (Composite.Hotfixes)" />
+        </Value>
+      </KeyPair>
+      <KeyPair>
+        <Key>
+          <Value type="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" value="InstalledPackageInformation" />
+        </Key>
+        <Value>
+          <SerializerHandler value="SerializerHandlerType='Composite\.Core\.PackageSystem\.Foundation\.InstalledPackageInformationSerializerHandler,Composite'SerializedObject=''" />
+        </Value>
+      </KeyPair>
+      <KeyPair>
+        <Key>
+          <Value type="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" value="InstallDate" />
+        </Key>
+        <Value>
+          <Value type="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" value="6/23/2021 1:11:25 PM" />
+        </Value>
+      </KeyPair>
+      <KeyPair>
+        <Key>
+          <Value type="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" value="ReadMoreUrl" />
+        </Key>
+        <Value>
+          <Value type="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" value="https://github.com/Orckestra/C1-CMS-Foundation/issues/769" />
+        </Value>
+      </KeyPair>
+      <KeyPair>
+        <Key>
+          <Value type="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" value="IsTrial" />
+        </Key>
+        <Value>
+          <Value type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" value="false" />
+        </Value>
+      </KeyPair>
+      <KeyPair>
+        <Key>
+          <Value type="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" value="ShowPurchaseThisButton" />
+        </Key>
+        <Value>
+          <Value type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" value="false" />
+        </Value>
+      </KeyPair>
+      <KeyPair>
+        <Key>
+          <Value type="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" value="IsSubscription" />
+        </Key>
+        <Value>
+          <Value type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" value="false" />
+        </Value>
+      </KeyPair>
+    </Dictionary>
+  </Bindings>
+  <BindingsValidationRules>
+    <Dictionary type="&lt;t n=&quot;System.Collections.Generic.Dictionary`2, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089&quot;&gt;&#xD;&#xA;  &lt;t n=&quot;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089&quot; /&gt;&#xD;&#xA;  &lt;t n=&quot;System.Collections.Generic.List`1, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089&quot;&gt;&#xD;&#xA;    &lt;t n=&quot;Composite.Data.Validation.ClientValidationRules.ClientValidationRule,Composite&quot; /&gt;&#xD;&#xA;  &lt;/t&gt;&#xD;&#xA;&lt;/t&gt;" />
+  </BindingsValidationRules>
+  <ExcludedEvents>
+    <List type="&lt;t n=&quot;System.Collections.Generic.List`1, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089&quot;&gt;&#xD;&#xA;  &lt;t n=&quot;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089&quot; /&gt;&#xD;&#xA;&lt;/t&gt;" />
+  </ExcludedEvents>
+</FormData>

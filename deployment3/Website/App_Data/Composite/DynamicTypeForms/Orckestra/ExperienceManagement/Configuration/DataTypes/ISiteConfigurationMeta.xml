@@ -1,0 +1,447 @@
+﻿<cms:formdefinition xmlns:cms="http://www.composite.net/ns/management/bindingforms/1.0" xmlns="http://www.composite.net/ns/management/bindingforms/std.ui.controls.lib/1.0" xmlns:ff="http://www.composite.net/ns/management/bindingforms/std.function.lib/1.0" xmlns:f="http://www.composite.net/ns/function/1.0">
+  <cms:bindings>
+    <cms:binding name="Scope" type="System.String" />
+    <cms:binding name="CountryCode" type="System.String" />
+    <cms:binding name="InventoryAndFulfillmentLocationId" type="System.String" />
+    <cms:binding name="ProductDetailsPage" type="System.Nullable`1[System.Guid]" optional="true" />
+    <cms:binding name="LoginPage" type="System.Nullable`1[System.Guid]" optional="true" />
+    <cms:binding name="MyAccountPage" type="System.Nullable`1[System.Guid]" optional="true" />
+    <cms:binding name="CreateAccountPageId" type="System.Nullable`1[System.Guid]" optional="true" />
+    <cms:binding name="SearchPageId" type="System.Nullable`1[System.Guid]" optional="true" />
+    <cms:binding name="CartPageId" type="System.Nullable`1[System.Guid]" optional="true" />
+    <cms:binding name="StoreListPageId" type="System.Nullable`1[System.Guid]" optional="true" />
+    <cms:binding name="StorePageId" type="System.Nullable`1[System.Guid]" optional="true" />
+    <cms:binding name="MyWishListPageId" type="System.Nullable`1[System.Guid]" optional="true" />
+    <cms:binding name="SharedWishListPageId" type="System.Nullable`1[System.Guid]" optional="true" />
+    <cms:binding name="ForgotPasswordPageId" type="System.Nullable`1[System.Guid]" optional="true" />
+    <cms:binding name="ResetPasswordPageId" type="System.Nullable`1[System.Guid]" optional="true" />
+    <cms:binding name="ChangePasswordPageId" type="System.Nullable`1[System.Guid]" optional="true" />
+    <cms:binding name="PageNotFoundPageId" type="System.Nullable`1[System.Guid]" optional="true" />
+    <cms:binding name="TermsAndConditionsPageId" type="System.Nullable`1[System.Guid]" optional="true" />
+    <cms:binding name="AddressListPageId" type="System.Nullable`1[System.Guid]" optional="true" />
+    <cms:binding name="OrderHistoryPageId" type="System.Nullable`1[System.Guid]" optional="true" />
+    <cms:binding name="OrderDetailsPageId" type="System.Nullable`1[System.Guid]" optional="true" />
+    <cms:binding name="GuestOrderDetailsPageId" type="System.Nullable`1[System.Guid]" optional="true" />
+    <cms:binding name="FindMyOrderPageId" type="System.Nullable`1[System.Guid]" optional="true" />
+    <cms:binding name="AddAddressPageId" type="System.Nullable`1[System.Guid]" optional="true" />
+    <cms:binding name="UpdateAddressPageId" type="System.Nullable`1[System.Guid]" optional="true" />
+    <cms:binding name="StoreDirectoryPageId" type="System.Nullable`1[System.Guid]" optional="true" />
+    <cms:binding name="CreditCardsTrustIconId" type="System.String" optional="true" />
+    <cms:binding name="PublicationStatus" type="System.String" />
+    <cms:binding name="FieldName" type="System.String" />
+    <cms:binding name="Id" type="System.Guid" />
+    <cms:binding name="PageId" type="System.Guid" />
+    <cms:binding name="VersionId" type="System.Guid" />
+    <cms:binding name="SourceCultureName" type="System.String" />
+    <cms:binding name="CheckoutPageId" type="System.Nullable`1[System.Guid]" optional="true" />
+    <cms:binding name="CheckoutConfirmationPageId" type="System.Nullable`1[System.Guid]" optional="true" />
+    <cms:binding name="CheckoutSignInPageId" type="System.Nullable`1[System.Guid]" optional="true" />
+
+  </cms:bindings>
+  <cms:layout>
+    <cms:layout.label>
+      <cms:read source="Scope" />
+    </cms:layout.label>
+    <PlaceHolder>
+      <FieldGroup Label="General Configuration">
+        <KeySelector Label="Scope" Help="" OptionsKeyField="Key" OptionsLabelField="Label" Required="true">
+          <KeySelector.Selected>
+            <cms:bind source="Scope" />
+          </KeySelector.Selected>
+          <KeySelector.Options>
+            <f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Orckestra.ExperienceManagement.Functions.GetSaleScopes" />
+          </KeySelector.Options>
+        </KeySelector>
+        <TextBox Label="Inventory and Fulfillment Location ID" Help="" SpellCheck="true">
+          <TextBox.Text>
+            <cms:bind source="InventoryAndFulfillmentLocationId" />
+          </TextBox.Text>
+        </TextBox>
+				<KeySelector Label="Country" Help="" OptionsKeyField="Key" OptionsLabelField="Label" Required="true">
+					<KeySelector.Selected>
+						<cms:bind source="CountryCode" />
+					</KeySelector.Selected>
+					<KeySelector.Options>
+						<f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Orckestra.ExperienceManagement.Functions.GetCountries" />
+					</KeySelector.Options>
+				</KeySelector>
+      </FieldGroup>
+      <FieldGroup Label="Pages Configuration">
+        <DataReferenceTreeSelector Label="Product Details Page" Help="" Handle="Composite.Management.PageIdSelectorDialog" DataType="Composite.Data.Types.IPage,Composite" NullValueAllowed="true">
+          <DataReferenceTreeSelector.Selected>
+            <cms:bind source="ProductDetailsPage" />
+          </DataReferenceTreeSelector.Selected>
+          <DataReferenceTreeSelector.SearchToken>
+            <ff:StaticMethodCall Type="Composite.Plugins.Functions.WidgetFunctionProviders.StandardWidgetFunctionProvider.DataReference.PageReferenceSelectorWidgetFunctionBase" Method="GetPageSearchToken">
+              <ff:StaticMethodCall.Parameters>
+                <f:function name="Composite.Pages.GetPageId">
+                  <f:param name="SitemapScope" value="Level1" />
+                </f:function>
+              </ff:StaticMethodCall.Parameters>
+            </ff:StaticMethodCall>
+          </DataReferenceTreeSelector.SearchToken>
+        </DataReferenceTreeSelector>
+        <DataReferenceTreeSelector Label="Search Page" Help="" Handle="Composite.Management.PageIdSelectorDialog" DataType="Composite.Data.Types.IPage,Composite" NullValueAllowed="true">
+          <DataReferenceTreeSelector.Selected>
+            <cms:bind source="SearchPageId" />
+          </DataReferenceTreeSelector.Selected>
+          <DataReferenceTreeSelector.SearchToken>
+            <ff:StaticMethodCall Type="Composite.Plugins.Functions.WidgetFunctionProviders.StandardWidgetFunctionProvider.DataReference.PageReferenceSelectorWidgetFunctionBase" Method="GetPageSearchToken">
+              <ff:StaticMethodCall.Parameters>
+                <f:function name="Composite.Pages.GetPageId">
+                  <f:param name="SitemapScope" value="Level1" />
+                </f:function>
+              </ff:StaticMethodCall.Parameters>
+            </ff:StaticMethodCall>
+          </DataReferenceTreeSelector.SearchToken>
+        </DataReferenceTreeSelector>
+        <DataReferenceTreeSelector Label="Cart Page" Help="" Handle="Composite.Management.PageIdSelectorDialog" DataType="Composite.Data.Types.IPage,Composite" NullValueAllowed="true">
+          <DataReferenceTreeSelector.Selected>
+            <cms:bind source="CartPageId" />
+          </DataReferenceTreeSelector.Selected>
+          <DataReferenceTreeSelector.SearchToken>
+            <ff:StaticMethodCall Type="Composite.Plugins.Functions.WidgetFunctionProviders.StandardWidgetFunctionProvider.DataReference.PageReferenceSelectorWidgetFunctionBase" Method="GetPageSearchToken">
+              <ff:StaticMethodCall.Parameters>
+                <f:function name="Composite.Pages.GetPageId">
+                  <f:param name="SitemapScope" value="Level1" />
+                </f:function>
+              </ff:StaticMethodCall.Parameters>
+            </ff:StaticMethodCall>
+          </DataReferenceTreeSelector.SearchToken>
+        </DataReferenceTreeSelector>
+        <DataReferenceTreeSelector Label="Store Locator Page" Help="" Handle="Composite.Management.PageIdSelectorDialog" DataType="Composite.Data.Types.IPage,Composite" NullValueAllowed="true">
+          <DataReferenceTreeSelector.Selected>
+            <cms:bind source="StoreListPageId" />
+          </DataReferenceTreeSelector.Selected>
+          <DataReferenceTreeSelector.SearchToken>
+            <ff:StaticMethodCall Type="Composite.Plugins.Functions.WidgetFunctionProviders.StandardWidgetFunctionProvider.DataReference.PageReferenceSelectorWidgetFunctionBase" Method="GetPageSearchToken">
+              <ff:StaticMethodCall.Parameters>
+                <f:function name="Composite.Pages.GetPageId">
+                  <f:param name="SitemapScope" value="Level1" />
+                </f:function>
+              </ff:StaticMethodCall.Parameters>
+            </ff:StaticMethodCall>
+          </DataReferenceTreeSelector.SearchToken>
+        </DataReferenceTreeSelector>
+        <DataReferenceTreeSelector Label="Store Directory Page" Help="" Handle="Composite.Management.PageIdSelectorDialog" DataType="Composite.Data.Types.IPage,Composite" NullValueAllowed="true">
+          <DataReferenceTreeSelector.Selected>
+            <cms:bind source="StoreDirectoryPageId" />
+          </DataReferenceTreeSelector.Selected>
+          <DataReferenceTreeSelector.SearchToken>
+            <ff:StaticMethodCall Type="Composite.Plugins.Functions.WidgetFunctionProviders.StandardWidgetFunctionProvider.DataReference.PageReferenceSelectorWidgetFunctionBase" Method="GetPageSearchToken">
+              <ff:StaticMethodCall.Parameters>
+                <f:function name="Composite.Pages.GetPageId">
+                  <f:param name="SitemapScope" value="Level1" />
+                </f:function>
+              </ff:StaticMethodCall.Parameters>
+            </ff:StaticMethodCall>
+          </DataReferenceTreeSelector.SearchToken>
+        </DataReferenceTreeSelector>
+        <DataReferenceTreeSelector Label="Store Details Page" Help="" Handle="Composite.Management.PageIdSelectorDialog" DataType="Composite.Data.Types.IPage,Composite" NullValueAllowed="true">
+          <DataReferenceTreeSelector.Selected>
+            <cms:bind source="StorePageId" />
+          </DataReferenceTreeSelector.Selected>
+          <DataReferenceTreeSelector.SearchToken>
+            <ff:StaticMethodCall Type="Composite.Plugins.Functions.WidgetFunctionProviders.StandardWidgetFunctionProvider.DataReference.PageReferenceSelectorWidgetFunctionBase" Method="GetPageSearchToken">
+              <ff:StaticMethodCall.Parameters>
+                <f:function name="Composite.Pages.GetPageId">
+                  <f:param name="SitemapScope" value="Level1" />
+                </f:function>
+              </ff:StaticMethodCall.Parameters>
+            </ff:StaticMethodCall>
+          </DataReferenceTreeSelector.SearchToken>
+        </DataReferenceTreeSelector>
+        <DataReferenceTreeSelector Label="Guest Find Order Page" Help="" Handle="Composite.Management.PageIdSelectorDialog" DataType="Composite.Data.Types.IPage,Composite" NullValueAllowed="true">
+          <DataReferenceTreeSelector.Selected>
+            <cms:bind source="FindMyOrderPageId" />
+          </DataReferenceTreeSelector.Selected>
+          <DataReferenceTreeSelector.SearchToken>
+            <ff:StaticMethodCall Type="Composite.Plugins.Functions.WidgetFunctionProviders.StandardWidgetFunctionProvider.DataReference.PageReferenceSelectorWidgetFunctionBase" Method="GetPageSearchToken">
+              <ff:StaticMethodCall.Parameters>
+                <f:function name="Composite.Pages.GetPageId">
+                  <f:param name="SitemapScope" value="Level1" />
+                </f:function>
+              </ff:StaticMethodCall.Parameters>
+            </ff:StaticMethodCall>
+          </DataReferenceTreeSelector.SearchToken>
+        </DataReferenceTreeSelector>
+        <DataReferenceTreeSelector Label="Guest Order Details Page" Help="" Handle="Composite.Management.PageIdSelectorDialog" DataType="Composite.Data.Types.IPage,Composite" NullValueAllowed="true">
+          <DataReferenceTreeSelector.Selected>
+            <cms:bind source="GuestOrderDetailsPageId" />
+          </DataReferenceTreeSelector.Selected>
+          <DataReferenceTreeSelector.SearchToken>
+            <ff:StaticMethodCall Type="Composite.Plugins.Functions.WidgetFunctionProviders.StandardWidgetFunctionProvider.DataReference.PageReferenceSelectorWidgetFunctionBase" Method="GetPageSearchToken">
+              <ff:StaticMethodCall.Parameters>
+                <f:function name="Composite.Pages.GetPageId">
+                  <f:param name="SitemapScope" value="Level1" />
+                </f:function>
+              </ff:StaticMethodCall.Parameters>
+            </ff:StaticMethodCall>
+          </DataReferenceTreeSelector.SearchToken>
+        </DataReferenceTreeSelector>
+        <DataReferenceTreeSelector Label="404 Page" Help="" Handle="Composite.Management.PageIdSelectorDialog" DataType="Composite.Data.Types.IPage,Composite" NullValueAllowed="true">
+          <DataReferenceTreeSelector.Selected>
+            <cms:bind source="PageNotFoundPageId" />
+          </DataReferenceTreeSelector.Selected>
+          <DataReferenceTreeSelector.SearchToken>
+            <ff:StaticMethodCall Type="Composite.Plugins.Functions.WidgetFunctionProviders.StandardWidgetFunctionProvider.DataReference.PageReferenceSelectorWidgetFunctionBase" Method="GetPageSearchToken">
+              <ff:StaticMethodCall.Parameters>
+                <f:function name="Composite.Pages.GetPageId">
+                  <f:param name="SitemapScope" value="Level1" />
+                </f:function>
+              </ff:StaticMethodCall.Parameters>
+            </ff:StaticMethodCall>
+          </DataReferenceTreeSelector.SearchToken>
+        </DataReferenceTreeSelector>
+      </FieldGroup>
+      <FieldGroup Label="My Account Pages Configuration">
+        <DataReferenceTreeSelector Label="Login Page" Help="" Handle="Composite.Management.PageIdSelectorDialog" DataType="Composite.Data.Types.IPage,Composite" NullValueAllowed="true">
+          <DataReferenceTreeSelector.Selected>
+            <cms:bind source="LoginPage" />
+          </DataReferenceTreeSelector.Selected>
+          <DataReferenceTreeSelector.SearchToken>
+            <ff:StaticMethodCall Type="Composite.Plugins.Functions.WidgetFunctionProviders.StandardWidgetFunctionProvider.DataReference.PageReferenceSelectorWidgetFunctionBase" Method="GetPageSearchToken">
+              <ff:StaticMethodCall.Parameters>
+                <f:function name="Composite.Pages.GetPageId">
+                  <f:param name="SitemapScope" value="Level1" />
+                </f:function>
+              </ff:StaticMethodCall.Parameters>
+            </ff:StaticMethodCall>
+          </DataReferenceTreeSelector.SearchToken>
+        </DataReferenceTreeSelector>
+        <DataReferenceTreeSelector Label="My Account Page" Help="" Handle="Composite.Management.PageIdSelectorDialog" DataType="Composite.Data.Types.IPage,Composite" NullValueAllowed="true">
+          <DataReferenceTreeSelector.Selected>
+            <cms:bind source="MyAccountPage" />
+          </DataReferenceTreeSelector.Selected>
+          <DataReferenceTreeSelector.SearchToken>
+            <ff:StaticMethodCall Type="Composite.Plugins.Functions.WidgetFunctionProviders.StandardWidgetFunctionProvider.DataReference.PageReferenceSelectorWidgetFunctionBase" Method="GetPageSearchToken">
+              <ff:StaticMethodCall.Parameters>
+                <f:function name="Composite.Pages.GetPageId">
+                  <f:param name="SitemapScope" value="Level1" />
+                </f:function>
+              </ff:StaticMethodCall.Parameters>
+            </ff:StaticMethodCall>
+          </DataReferenceTreeSelector.SearchToken>
+        </DataReferenceTreeSelector>
+        <DataReferenceTreeSelector Label="Create Account Page" Help="" Handle="Composite.Management.PageIdSelectorDialog" DataType="Composite.Data.Types.IPage,Composite" NullValueAllowed="true">
+          <DataReferenceTreeSelector.Selected>
+            <cms:bind source="CreateAccountPageId" />
+          </DataReferenceTreeSelector.Selected>
+          <DataReferenceTreeSelector.SearchToken>
+            <ff:StaticMethodCall Type="Composite.Plugins.Functions.WidgetFunctionProviders.StandardWidgetFunctionProvider.DataReference.PageReferenceSelectorWidgetFunctionBase" Method="GetPageSearchToken">
+              <ff:StaticMethodCall.Parameters>
+                <f:function name="Composite.Pages.GetPageId">
+                  <f:param name="SitemapScope" value="Level1" />
+                </f:function>
+              </ff:StaticMethodCall.Parameters>
+            </ff:StaticMethodCall>
+          </DataReferenceTreeSelector.SearchToken>
+        </DataReferenceTreeSelector>
+        <DataReferenceTreeSelector Label="Forgot Password Page" Help="" Handle="Composite.Management.PageIdSelectorDialog" DataType="Composite.Data.Types.IPage,Composite" NullValueAllowed="true">
+          <DataReferenceTreeSelector.Selected>
+            <cms:bind source="ForgotPasswordPageId" />
+          </DataReferenceTreeSelector.Selected>
+          <DataReferenceTreeSelector.SearchToken>
+            <ff:StaticMethodCall Type="Composite.Plugins.Functions.WidgetFunctionProviders.StandardWidgetFunctionProvider.DataReference.PageReferenceSelectorWidgetFunctionBase" Method="GetPageSearchToken">
+              <ff:StaticMethodCall.Parameters>
+                <f:function name="Composite.Pages.GetPageId">
+                  <f:param name="SitemapScope" value="Level1" />
+                </f:function>
+              </ff:StaticMethodCall.Parameters>
+            </ff:StaticMethodCall>
+          </DataReferenceTreeSelector.SearchToken>
+        </DataReferenceTreeSelector>
+        <DataReferenceTreeSelector Label="Reset Password Page" Help="" Handle="Composite.Management.PageIdSelectorDialog" DataType="Composite.Data.Types.IPage,Composite" NullValueAllowed="true">
+          <DataReferenceTreeSelector.Selected>
+            <cms:bind source="ResetPasswordPageId" />
+          </DataReferenceTreeSelector.Selected>
+          <DataReferenceTreeSelector.SearchToken>
+            <ff:StaticMethodCall Type="Composite.Plugins.Functions.WidgetFunctionProviders.StandardWidgetFunctionProvider.DataReference.PageReferenceSelectorWidgetFunctionBase" Method="GetPageSearchToken">
+              <ff:StaticMethodCall.Parameters>
+                <f:function name="Composite.Pages.GetPageId">
+                  <f:param name="SitemapScope" value="Level1" />
+                </f:function>
+              </ff:StaticMethodCall.Parameters>
+            </ff:StaticMethodCall>
+          </DataReferenceTreeSelector.SearchToken>
+        </DataReferenceTreeSelector>
+        <DataReferenceTreeSelector Label="Change Password Page" Help="" Handle="Composite.Management.PageIdSelectorDialog" DataType="Composite.Data.Types.IPage,Composite" NullValueAllowed="true">
+          <DataReferenceTreeSelector.Selected>
+            <cms:bind source="ChangePasswordPageId" />
+          </DataReferenceTreeSelector.Selected>
+          <DataReferenceTreeSelector.SearchToken>
+            <ff:StaticMethodCall Type="Composite.Plugins.Functions.WidgetFunctionProviders.StandardWidgetFunctionProvider.DataReference.PageReferenceSelectorWidgetFunctionBase" Method="GetPageSearchToken">
+              <ff:StaticMethodCall.Parameters>
+                <f:function name="Composite.Pages.GetPageId">
+                  <f:param name="SitemapScope" value="Level1" />
+                </f:function>
+              </ff:StaticMethodCall.Parameters>
+            </ff:StaticMethodCall>
+          </DataReferenceTreeSelector.SearchToken>
+        </DataReferenceTreeSelector>
+        <DataReferenceTreeSelector Label="Address List Page" Help="" Handle="Composite.Management.PageIdSelectorDialog" DataType="Composite.Data.Types.IPage,Composite" NullValueAllowed="true">
+          <DataReferenceTreeSelector.Selected>
+            <cms:bind source="AddressListPageId" />
+          </DataReferenceTreeSelector.Selected>
+          <DataReferenceTreeSelector.SearchToken>
+            <ff:StaticMethodCall Type="Composite.Plugins.Functions.WidgetFunctionProviders.StandardWidgetFunctionProvider.DataReference.PageReferenceSelectorWidgetFunctionBase" Method="GetPageSearchToken">
+              <ff:StaticMethodCall.Parameters>
+                <f:function name="Composite.Pages.GetPageId">
+                  <f:param name="SitemapScope" value="Level1" />
+                </f:function>
+              </ff:StaticMethodCall.Parameters>
+            </ff:StaticMethodCall>
+          </DataReferenceTreeSelector.SearchToken>
+        </DataReferenceTreeSelector>
+        <DataReferenceTreeSelector Label="Add Address Page" Help="" Handle="Composite.Management.PageIdSelectorDialog" DataType="Composite.Data.Types.IPage,Composite" NullValueAllowed="true">
+          <DataReferenceTreeSelector.Selected>
+            <cms:bind source="AddAddressPageId" />
+          </DataReferenceTreeSelector.Selected>
+          <DataReferenceTreeSelector.SearchToken>
+            <ff:StaticMethodCall Type="Composite.Plugins.Functions.WidgetFunctionProviders.StandardWidgetFunctionProvider.DataReference.PageReferenceSelectorWidgetFunctionBase" Method="GetPageSearchToken">
+              <ff:StaticMethodCall.Parameters>
+                <f:function name="Composite.Pages.GetPageId">
+                  <f:param name="SitemapScope" value="Level1" />
+                </f:function>
+              </ff:StaticMethodCall.Parameters>
+            </ff:StaticMethodCall>
+          </DataReferenceTreeSelector.SearchToken>
+        </DataReferenceTreeSelector>
+        <DataReferenceTreeSelector Label="Update Address Page" Help="" Handle="Composite.Management.PageIdSelectorDialog" DataType="Composite.Data.Types.IPage,Composite" NullValueAllowed="true">
+          <DataReferenceTreeSelector.Selected>
+            <cms:bind source="UpdateAddressPageId" />
+          </DataReferenceTreeSelector.Selected>
+          <DataReferenceTreeSelector.SearchToken>
+            <ff:StaticMethodCall Type="Composite.Plugins.Functions.WidgetFunctionProviders.StandardWidgetFunctionProvider.DataReference.PageReferenceSelectorWidgetFunctionBase" Method="GetPageSearchToken">
+              <ff:StaticMethodCall.Parameters>
+                <f:function name="Composite.Pages.GetPageId">
+                  <f:param name="SitemapScope" value="Level1" />
+                </f:function>
+              </ff:StaticMethodCall.Parameters>
+            </ff:StaticMethodCall>
+          </DataReferenceTreeSelector.SearchToken>
+        </DataReferenceTreeSelector>
+        <DataReferenceTreeSelector Label="My Wish List Page" Help="" Handle="Composite.Management.PageIdSelectorDialog" DataType="Composite.Data.Types.IPage,Composite" NullValueAllowed="true">
+          <DataReferenceTreeSelector.Selected>
+            <cms:bind source="MyWishListPageId" />
+          </DataReferenceTreeSelector.Selected>
+          <DataReferenceTreeSelector.SearchToken>
+            <ff:StaticMethodCall Type="Composite.Plugins.Functions.WidgetFunctionProviders.StandardWidgetFunctionProvider.DataReference.PageReferenceSelectorWidgetFunctionBase" Method="GetPageSearchToken">
+              <ff:StaticMethodCall.Parameters>
+                <f:function name="Composite.Pages.GetPageId">
+                  <f:param name="SitemapScope" value="Level1" />
+                </f:function>
+              </ff:StaticMethodCall.Parameters>
+            </ff:StaticMethodCall>
+          </DataReferenceTreeSelector.SearchToken>
+        </DataReferenceTreeSelector>
+        <DataReferenceTreeSelector Label="Shared Wish List Page" Help="" Handle="Composite.Management.PageIdSelectorDialog" DataType="Composite.Data.Types.IPage,Composite" NullValueAllowed="true">
+          <DataReferenceTreeSelector.Selected>
+            <cms:bind source="SharedWishListPageId" />
+          </DataReferenceTreeSelector.Selected>
+          <DataReferenceTreeSelector.SearchToken>
+            <ff:StaticMethodCall Type="Composite.Plugins.Functions.WidgetFunctionProviders.StandardWidgetFunctionProvider.DataReference.PageReferenceSelectorWidgetFunctionBase" Method="GetPageSearchToken">
+              <ff:StaticMethodCall.Parameters>
+                <f:function name="Composite.Pages.GetPageId">
+                  <f:param name="SitemapScope" value="Level1" />
+                </f:function>
+              </ff:StaticMethodCall.Parameters>
+            </ff:StaticMethodCall>
+          </DataReferenceTreeSelector.SearchToken>
+        </DataReferenceTreeSelector>
+        <DataReferenceTreeSelector Label="My Orders Page" Help="" Handle="Composite.Management.PageIdSelectorDialog" DataType="Composite.Data.Types.IPage,Composite" NullValueAllowed="true">
+          <DataReferenceTreeSelector.Selected>
+            <cms:bind source="OrderHistoryPageId" />
+          </DataReferenceTreeSelector.Selected>
+          <DataReferenceTreeSelector.SearchToken>
+            <ff:StaticMethodCall Type="Composite.Plugins.Functions.WidgetFunctionProviders.StandardWidgetFunctionProvider.DataReference.PageReferenceSelectorWidgetFunctionBase" Method="GetPageSearchToken">
+              <ff:StaticMethodCall.Parameters>
+                <f:function name="Composite.Pages.GetPageId">
+                  <f:param name="SitemapScope" value="Level1" />
+                </f:function>
+              </ff:StaticMethodCall.Parameters>
+            </ff:StaticMethodCall>
+          </DataReferenceTreeSelector.SearchToken>
+        </DataReferenceTreeSelector>
+        <DataReferenceTreeSelector Label="Order Details Page" Help="" Handle="Composite.Management.PageIdSelectorDialog" DataType="Composite.Data.Types.IPage,Composite" NullValueAllowed="true">
+          <DataReferenceTreeSelector.Selected>
+            <cms:bind source="OrderDetailsPageId" />
+          </DataReferenceTreeSelector.Selected>
+          <DataReferenceTreeSelector.SearchToken>
+            <ff:StaticMethodCall Type="Composite.Plugins.Functions.WidgetFunctionProviders.StandardWidgetFunctionProvider.DataReference.PageReferenceSelectorWidgetFunctionBase" Method="GetPageSearchToken">
+              <ff:StaticMethodCall.Parameters>
+                <f:function name="Composite.Pages.GetPageId">
+                  <f:param name="SitemapScope" value="Level1" />
+                </f:function>
+              </ff:StaticMethodCall.Parameters>
+            </ff:StaticMethodCall>
+          </DataReferenceTreeSelector.SearchToken>
+        </DataReferenceTreeSelector>
+        <DataReferenceTreeSelector Label="Terms and Conditions Page" Help="" Handle="Composite.Management.PageIdSelectorDialog" DataType="Composite.Data.Types.IPage,Composite" NullValueAllowed="true">
+          <DataReferenceTreeSelector.Selected>
+            <cms:bind source="TermsAndConditionsPageId" />
+          </DataReferenceTreeSelector.Selected>
+          <DataReferenceTreeSelector.SearchToken>
+            <ff:StaticMethodCall Type="Composite.Plugins.Functions.WidgetFunctionProviders.StandardWidgetFunctionProvider.DataReference.PageReferenceSelectorWidgetFunctionBase" Method="GetPageSearchToken">
+              <ff:StaticMethodCall.Parameters>
+                <f:function name="Composite.Pages.GetPageId">
+                  <f:param name="SitemapScope" value="Level1" />
+                </f:function>
+              </ff:StaticMethodCall.Parameters>
+            </ff:StaticMethodCall>
+          </DataReferenceTreeSelector.SearchToken>
+        </DataReferenceTreeSelector>
+      </FieldGroup>
+      <FieldGroup Label="Checkout Pages Configuration">
+        <DataReferenceTreeSelector Label="Checkout Page" Help="" Handle="Composite.Management.PageIdSelectorDialog" DataType="Composite.Data.Types.IPage,Composite" NullValueAllowed="true">
+          <DataReferenceTreeSelector.Selected>
+            <cms:bind source="CheckoutPageId" />
+          </DataReferenceTreeSelector.Selected>
+          <DataReferenceTreeSelector.SearchToken>
+            <ff:StaticMethodCall Type="Composite.Plugins.Functions.WidgetFunctionProviders.StandardWidgetFunctionProvider.DataReference.PageReferenceSelectorWidgetFunctionBase" Method="GetPageSearchToken">
+              <ff:StaticMethodCall.Parameters>
+                <f:function name="Composite.Pages.GetPageId">
+                  <f:param name="SitemapScope" value="Level1" />
+                </f:function>
+              </ff:StaticMethodCall.Parameters>
+            </ff:StaticMethodCall>
+          </DataReferenceTreeSelector.SearchToken>
+        </DataReferenceTreeSelector>
+         <DataReferenceTreeSelector Label="Checkout Sign In Page" Help="" Handle="Composite.Management.PageIdSelectorDialog" DataType="Composite.Data.Types.IPage,Composite" NullValueAllowed="true">
+          <DataReferenceTreeSelector.Selected>
+            <cms:bind source="CheckoutSignInPageId" />
+          </DataReferenceTreeSelector.Selected>
+          <DataReferenceTreeSelector.SearchToken>
+            <ff:StaticMethodCall Type="Composite.Plugins.Functions.WidgetFunctionProviders.StandardWidgetFunctionProvider.DataReference.PageReferenceSelectorWidgetFunctionBase" Method="GetPageSearchToken">
+              <ff:StaticMethodCall.Parameters>
+                <f:function name="Composite.Pages.GetPageId">
+                  <f:param name="SitemapScope" value="Level1" />
+                </f:function>
+              </ff:StaticMethodCall.Parameters>
+            </ff:StaticMethodCall>
+          </DataReferenceTreeSelector.SearchToken>
+        </DataReferenceTreeSelector>
+        <DataReferenceTreeSelector Label="Checkout Confirmation Page" Help="" Handle="Composite.Management.PageIdSelectorDialog" DataType="Composite.Data.Types.IPage,Composite" NullValueAllowed="true">
+          <DataReferenceTreeSelector.Selected>
+            <cms:bind source="CheckoutConfirmationPageId" />
+          </DataReferenceTreeSelector.Selected>
+          <DataReferenceTreeSelector.SearchToken>
+            <ff:StaticMethodCall Type="Composite.Plugins.Functions.WidgetFunctionProviders.StandardWidgetFunctionProvider.DataReference.PageReferenceSelectorWidgetFunctionBase" Method="GetPageSearchToken">
+              <ff:StaticMethodCall.Parameters>
+                <f:function name="Composite.Pages.GetPageId">
+                  <f:param name="SitemapScope" value="Level1" />
+                </f:function>
+              </ff:StaticMethodCall.Parameters>
+            </ff:StaticMethodCall>
+          </DataReferenceTreeSelector.SearchToken>
+        </DataReferenceTreeSelector>
+
+        <DataReferenceTreeSelector Label="Credit Cards Trust Icon" Help="" Handle="Composite.Management.ImageSelectorDialog" SearchToken="{&quot;$type&quot;:&quot;Composite.Plugins.Elements.ElementProviders.MediaFileProviderElementProvider.MediaFileSearchToken, Composite&quot;,&quot;MimeTypes&quot;:[&quot;image/gif&quot;,&quot;image/jpeg&quot;,&quot;image/png&quot;,&quot;image/bmp&quot;,&quot;image/svg+xml&quot;],&quot;Extensions&quot;:null,&quot;Folder&quot;:null,&quot;HideSubfolders&quot;:false,&quot;Keyword&quot;:null}" DataType="Composite.Data.Types.IImageFile,Composite" NullValueAllowed="true">
+          <DataReferenceTreeSelector.Selected>
+            <cms:bind source="CreditCardsTrustIconId" />
+          </DataReferenceTreeSelector.Selected>
+        </DataReferenceTreeSelector>
+      </FieldGroup>
+    </PlaceHolder>
+  </cms:layout>
+</cms:formdefinition>

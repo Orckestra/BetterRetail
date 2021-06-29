@@ -1,0 +1,164 @@
+﻿/*
+    Consider NOT changing this file.
+
+    This is fallback styling, ensuring the visual editor content look ok.
+    Consider editing the configuration (../common.xml) and include your own stylesheets, targeting content.
+*/
+html,
+body {
+	margin: 0;
+	padding: 0;
+	border: none;
+	height: 100%; 
+	box-sizing: border-box;
+}
+body {
+	background-color: #FFF;
+	padding: 22px 26px 30px 26px;
+	line-height: 20px;
+}
+h1:first-child,
+h2:first-child,
+h3:first-child,
+h4:first-child,
+h5:first-child, 
+h6:first-child {
+	margin-top: 0;
+}
+ul,
+ol {
+	margin-top: 0;
+	margin-bottom: 20px;	
+}
+p,
+h1,
+table {
+	margin: 0 0 20px 0;
+}
+table {
+	cursor:default
+}
+table tr td, table tr th {
+	padding: 2px 5px 3px 5px;
+	vertical-align: top;
+    min-width:8px;
+    min-height:8px;
+	cursor:text
+}
+a {
+	color: blue;
+	text-decoration: underline;
+}
+
+img.mceC1Focused {
+	outline: 1px solid blue;
+}
+body.mceForceColors {
+	background:#FFF; color:#000;
+}
+
+img {
+	border:0;
+}
+ins {
+	border-bottom:1px solid green;
+	text-decoration: none;
+	color:green;
+}
+del {
+	color:red; 
+	text-decoration:line-through;
+}
+cite {
+	border-bottom:1px dashed blue;
+}
+acronym {
+	border-bottom:1px dotted #CCC; cursor:help;
+}
+abbr, html\:abbr {
+	border-bottom:1px dashed #CCC; cursor:help;
+}
+
+img.compositeFieldReferenceWysiwygRepresentation, img.compositeFunctionWysiwygRepresentation, img.compositeHtmlWysiwygRepresentation {
+  margin: 0px; padding: 0px;
+  outline: none;
+}
+
+img.compositeFieldReferenceWysiwygRepresentation.mceC1Focused {
+  outline: none;
+}
+img .compositeFunctionWysiwygRepresentation .mceC1Focused {
+    box-shadow: 0px 0px 15px black;
+}
+
+img.compositeFunctionWysiwygRepresentation {
+    margin-bottom: 40px;
+}
+
+img.compositeFunctionWysiwygRepresentation:hover {
+    cursor: pointer;
+	border: 1px solid #49AD6C;
+    margin: -1px -1px 39px -1px;
+    box-shadow: 0px 0px 8px rgba(73,173,108,0.5);
+    position:relative;
+    z-index: 999;
+}
+
+img.compositeFunctionWysiwygRepresentation {
+    display:block;
+    width: 100%;
+    min-height:250px; 
+    background-position: center center; 
+    background-repeat:no-repeat; 
+    background-size:68px 68px;
+    background-image:url('../../../../Composite/images/loading.svg.ashx'); 
+    background-color: #fafafa;
+    vertical-align: top;
+    opacity: 0.5;
+    cursor: wait;
+}
+
+
+img.compositeFunctionWysiwygRepresentation.loaded{
+    background-image:url('../../../../Composite/images/functionheaderbackground.png');
+    background-size: 8000px 60px;
+    background-repeat: no-repeat;
+    background-position: top right;
+    background-color: none;
+    width: auto; 
+    min-height: 0;
+    opacity: 1;
+    cursor: default;
+}
+
+img.compositeFunctionWysiwygRepresentation.loaded:hover {
+    background-position: right -3900px top;
+}
+
+img.compositeFunctionWysiwygRepresentation.loaded.editHover {
+    background-position: top left;
+    cursor: pointer;
+}
+
+img.compositeFunctionWysiwygRepresentation.mceC1Focused::selection {
+    background-color: transparent;
+    color: #000;
+}
+
+::-webkit-scrollbar {
+	width: 13px;
+	height: 13px;
+	background: #FAFAFA;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #CACACA;
+  border: 3px solid #FAFAFA;
+  border-radius: 7px;
+}
+
+
+::-webkit-scrollbar-thumb:hover {
+  background: #22B980;
+}
+

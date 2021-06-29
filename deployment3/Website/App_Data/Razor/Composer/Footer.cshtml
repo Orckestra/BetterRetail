@@ -1,0 +1,31 @@
+﻿@inherits Composite.AspNet.Razor.RazorFunction
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Footer of the page."; }
+    }
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<head>
+</head>
+<body>
+    <footer class="footer">
+        <div class="bg-light border-top p-2">
+            @Function("Composer.Footer.SocialLinks")
+        </div>
+        <div class="container-md">
+            @Function("Composer.Footer.MainFooter")
+            <div class="row justify-between no-gutter">
+                <div class="col-xl-8 order-lg-12">
+                    @Function("Composer.Footer.OptionalLinks")
+                </div>
+                <div class="col-xl-4 order-lg-1">
+                    @Function("Composer.Footer.Copyright")
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

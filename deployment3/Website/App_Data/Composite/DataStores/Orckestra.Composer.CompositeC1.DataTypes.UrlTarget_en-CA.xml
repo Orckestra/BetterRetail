@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<UrlTargetElements>
+  <UrlTarget Id="af376149-073a-41d9-8f24-8c0b6b1ce4d8" Label="New Window or Tab" Value="_blank" PublicationStatus="published" SourceCultureName="en-CA" />
+  <UrlTarget Id="d5203756-52fe-413e-a8ea-1ddacbf6549b" Label="Same Window" Value="_self" PublicationStatus="published" SourceCultureName="en-CA" />
+</UrlTargetElements>

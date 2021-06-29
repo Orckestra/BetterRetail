@@ -1,0 +1,128 @@
+﻿@namespace url("http://www.w3.org/1999/xhtml");
+@namespace ui url("http://www.w3.org/1999/xhtml");
+
+.seoresult {
+	display: block;
+	float: left;
+	position: relative;
+	margin-right: 8px;
+	border: 1px solid #ddd;
+
+}
+
+.seoresult span {
+	width: 7px;
+	height: 8px;
+	display: block;
+	float: left;		
+}
+.seoresult span.true {
+	background-color: #22D32A;
+}
+.seoresult span.false {
+	background-color: #fff;
+}
+
+/* message ........................................................ */
+
+#message {
+	padding: 22px;
+}
+#icon {
+	width: 32px;
+	height: 32px;
+	float: left;
+	position: relative;
+	top: 2px;
+	color: #5FC0DC;
+}
+#text {
+	padding-left: 44px;
+	-moz-user-select: none;
+}
+#desc {
+	clear: both;
+	padding-top: 10px;
+	color: graytext;
+}
+#warning {
+	padding-right: 3px;	
+}
+
+
+/* result table*/
+.resulttable {
+	background: #EFEFEF;
+	border: 1px solid #D4D4D4;
+}
+
+.resulttable ui|toolbarbutton {
+    margin-left: 10px;
+}
+
+
+.resulttable ui|datainput {
+	float: left;
+}
+
+.resulttable thead th {
+	height: 50px;
+	white-space: nowrap;
+	padding: 10px 35px 10px 10px;
+	text-align: left;
+	background: #F7F7F7;
+	font-weight: normal;
+	font-size: 14px;
+	color: #000;
+
+}
+
+.seoform {
+	width: 250px;
+
+}
+
+.resulttable thead th:last-child {
+	width: 100%;
+}
+.resulttable tbody td {
+	position: relative;
+	height: 30px;
+	border-top: 1px solid #ccc;
+	font-size: 14px;
+	color: #000;
+}
+
+.resulttable tbody td.true:after {
+	position: absolute;
+	content: "";
+	top: 5px;
+	left: 12px;
+	width: 14px;
+	height: 7px;
+	border: 1px solid #22D32A;
+	border-width: 0 0 1px 1px;
+    -ms-transform: rotate(-40deg); /* IE 9 */
+    -webkit-transform: rotate(-40deg); /* Chrome, Safari, Opera */
+	transform:rotate(-40deg);
+}
+
+
+.resulttable tbody td.false:after {
+	position: absolute;
+	content: '×';
+	top: 4px;
+	left: 10px;
+	width: 15px;
+	height: 15px;
+	color: #EA6458;
+	line-height: 15px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.resulttable tbody td.score {
+	padding-left: 30px;
+	width: 90px;
+}
+

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cms:formdefinition xmlns="http://www.composite.net/ns/management/bindingforms/std.ui.controls.lib/1.0" xmlns:internal="http://www.composite.net/ns/management/bindingforms/internal.ui.controls.lib/1.0" xmlns:f="http://www.composite.net/ns/management/bindingforms/std.function.lib/1.0" xmlns:cms="http://www.composite.net/ns/management/bindingforms/1.0">
+	<cms:bindings>
+		<cms:binding name="SelectedKeys" type="System.Object"/>
+		<cms:binding name="TreeSelectorData" type="System.Object"/>
+	</cms:bindings>
+	<cms:layout iconhandle="page-add-page" label="${Orckestra.ExperienceManagement.CategoryMerchandising,AddCategoryPage.DialogLabel}">
+		<HierarchicalSelector Required="true" AutoSelectChildren="true">
+			<HierarchicalSelector.SelectedKeys>
+				<cms:bind source="SelectedKeys" />
+			</HierarchicalSelector.SelectedKeys>
+			<HierarchicalSelector.TreeNodes>
+				<cms:read source="TreeSelectorData" />
+			</HierarchicalSelector.TreeNodes>
+		</HierarchicalSelector>
+	</cms:layout>
+</cms:formdefinition>

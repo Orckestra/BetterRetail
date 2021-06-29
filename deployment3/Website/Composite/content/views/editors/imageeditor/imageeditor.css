@@ -1,0 +1,118 @@
+@namespace url("http://www.w3.org/1999/xhtml");
+@namespace ui url("http://www.w3.org/1999/xhtml");
+ 
+ui|flexbox#imagestagecontainer {
+ 	background-color: $(color:appworkspace);
+ 	position: relative;
+}
+ui|flexbox#imagestage {
+ 	position: relative;
+}
+
+ui|menubar {
+    position: absolute;
+    top: 15px;
+    right: 0;
+}
+
+ui|imageboxsystem {
+	display: block;
+ 	width: 0;
+ 	height: 0;
+ 	top: 50%;
+ 	left: 50%;
+ 	position: absolute;
+}
+
+ui|imagebox {
+	display: block;
+	position: absolute;
+	overflow: visible;
+}
+
+ui|imagebox img {
+ 	display: block;
+ 	position: absolute;
+ 	top: 0;
+ 	left: 0;
+ 	width: auto;
+ 	height: auto;
+ 	visibility: hidden; /* flipped by script, see ImageBoxBinding */
+}
+
+ui|imagebox.initialized img {
+ 	width: 100%;
+ 	height: 100%;
+ 	visibility: visible;
+}
+
+ui|imagecover {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	background-color: red;
+	opacity: 0;
+}
+
+ui|flexbox#imagestage.move {
+	cursor: move;	
+}
+
+ui|flexbox#imagestage.select  {
+	cursor: crosshair;	
+}
+ui|flexbox#imagestage.zoomin,
+ui|flexbox#imagestage.zoomout {
+	cursor: default;
+}
+ui|imageselection {
+	display: block;
+	position: absolute;
+	overflow: hidden;
+	border: 1px dashed blue;
+	width: 0;
+	height: 0;
+}
+ui|imagetoolbox {
+	position: absolute;
+	z-index: 6; /* above shadow (huh - 3 should be enough!) */
+	overflow: hidden;
+	top: 20px;
+	left: 20px;
+	width: 50px;
+	background-color: #fff;
+	border: 1px solid #ccc;
+    padding: 2px;
+}
+ui|imagetoolbox ui|toolbar {
+	padding: 0;
+    box-shadow: none;
+}
+
+ui|imagetoolbox ui|toolbarbutton {
+    height: 32px;
+}
+
+ui|imagetoolboxdragger {
+    display: block;
+	height: 20px;
+    margin-bottom: 3px;
+	background-color: ActiveCaption;
+
+}
+
+ui|imagetoolbox ui|toolbarbutton {
+	margin: 0 0 3px 0;
+	float: none !important;
+}
+
+ui|labelbox#coordstext {
+	padding-top: 3px;
+	padding-right: 8px;	
+}
+
+ui|labelbox#statustext {
+    padding: 3px 0 0 8px;
+}

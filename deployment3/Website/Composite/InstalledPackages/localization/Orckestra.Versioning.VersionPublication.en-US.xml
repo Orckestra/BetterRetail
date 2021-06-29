@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<strings>
+  <string key="EditPageToolbar.AddNewVersionLabel" value="Add Version" />
+  <string key="AddNewPageVersion.DialogLabel" value="Add Version" />
+  <string key="AddNewPageVersion.VersionSelector.Label" value="Enter new version name or select an existing version name" />
+  <string key="AddNewPageVersion.VersionSelector.Help" value="By selecting an existing version name, the dates are automatically set to match the dates of all other page versions with the same name." />
+  <string key="AddNewPageVersion.PublishTime.Label" value="Publish Date" />
+  <string key="AddNewPageVersion.UnpublishTime.Label" value="Unpublish Date" />
+  <string key="AddNewPageVersion.Validation.AlertTitle" value="Cannot add page version" />
+  <string key="AddNewPageVersion.Validation.VersionExistsWithDifferentDates" value="There is already a page with the same version name and different publish/unpublish dates. Please update the version name or dates." />
+  <string key="AddNewPageVersion.Validation.FutureUnpublishDateRequired" value="The unpublish date cannot be set in the past. Please select a future date." />
+  <string key="AddNewPageVersion.Validation.VersionAlreadyExists" value="A version of the current page with this name already exists." />
+  <string key="AddNewPageVersion.Validation.ReservedVersionName" value="This version name is reserved." />
+  <string key="AddNewPageVersion.Validation.UnpublicationDateBeforePublication" value="The unpublish date must occur after the publish date." />
+  <string key="AddNewPageVersion.Validation.PublishTimeConflict" value="Publication date conflicts with an existing version '{0}' which starts from the same date." />
+  <string key="EditVersion.DialogLabel" value="Edit Version" />
+  <string key="EditVersion.VersionName.Label" value="Version Name" />
+  <string key="EditVersion.PublishTime.Label" value="Publish Date" />
+  <string key="EditVersion.UnpublishTime.Label" value="Unpublish Date" />
+  <string key="EditVersion.UpdateAllLinkedVersionsOption" value="Update dates of all page versions named &quot;{0}&quot;" />
+  <string key="EditVersion.UpdateCurrentVersionOption" value="Update dates for this page version only" />
+  <string key="EditVersion.Validation.UnpublicationDateBeforePublication" value="The unpublish date must occur after the publish date." />
+  <string key="EditVersion.Validation.PublishTimeConflict" value="Publication date conflicts with an existing version '{0}' which starts from the same date." />
+  <string key="EditVersion.Validation.VersionRenameRequired" value="Please select another version name as this version name is used across multiple pages." />
+  <string key="EditVersion.Validation.VersionNameConflict" value="This page already has another version named '{0}'." />
+  <string key="EditVersion.Validation.VersionExistsWithDifferentDates" value="There is already a page with the same version name and different publish/unpublish dates." />
+  <string key="PublishPageWorkflow.GeneratedVersionName" value="{0} (Published {1:yyyy-MM-dd hh:mm})" />
+  <string key="ConfirmPagePublish.DialogLabel" value="Publish Pages" />
+  <string key="ConfirmPagePublish.FuturePublishDateSet" value="You have set a future publish date for this page." />
+  <string key="ConfirmPagePublish.PastUnpublishDateSet" value="You have set a past publish date for this page." />
+  <string key="ConfirmPagePublish.ConfirmationText" value="Are you sure you want to publish the page now?" />
+  <string key="ConfirmPageDelete.DialogLabel" value="Delete Page Version" />
+  <string key="ConfirmPageDelete.Text" value="This will delete current version only." />
+  <string key="ConfirmPageDelete.ConfirmationText" value="Are you sure you want to delete this page version now?" />
+  <string key="UnpublishPageWorkflow.GeneratedVersionName" value="{0} (Unpublished {1:yyyy-MM-dd hh:mm})" />
+  <string key="ConfirmPageUnpublish.DialogLabel" value="Unpublish Pages" />
+  <string key="ConfirmPageUnpublish.FutureUnpublishDateSet" value="You have set a future unpublish date for this page." />
+  <string key="ConfirmPageUnpublish.ConfirmationText" value="Are you sure you want to unpublish the page now?" />
+  <string key="SaveAndPublishAsScheduledAction.Label" value="Save and Publish as Scheduled" />
+  <string key="PublishAsScheduledAction.Label" value="Publish as Scheduled" />
+  <string key="PublishAsScheduledAction.ToolTip" value="" />
+  <string key="PublicationScheduleAction.Label" value="Publication Schedule" />
+  <string key="PublicationScheduleAction.ToolTip" value="" />
+  <string key="PublicationSchedule.PageTitle" value="Publication Schedule" />
+  <string key="PublicationSchedule.Version.Label" value="Version" />
+  <string key="PublicationSchedule.Past.Label" value="Past" />
+  <string key="PublicationSchedule.Active.Label" value="Active" />
+  <string key="PublicationSchedule.Status.ScheduledforPublication" value="Scheduled for Publication" />
+  <string key="PublicationSchedule.Status.Published" value="Published" />
+  <string key="PublicationSchedule.Status.Live" value="Live" />
+  <string key="PublicationSchedule.Columns.Version" value="Version" />
+  <string key="PublicationSchedule.Columns.Status" value="Status" />
+  <string key="PublicationSchedule.Columns.DateCreated" value="Date Created" />
+  <string key="PublicationSchedule.Columns.DateModified" value="Date Modified" />
+  <string key="PublicationSchedule.Columns.Author" value="Author" />
+  <string key="PublicationSchedule.Columns.PublishDate" value="Publish Date" />
+  <string key="PublicationSchedule.Columns.PublishDate.Help" value="Specify at which date and time you want the page to be published automatically." />
+  <string key="PublicationSchedule.Columns.UnpublishDate" value="Unpublish Date" />
+  <string key="PublicationSchedule.Columns.UnpublishDate.Help" value="Specify at which date and time you want the page to be unpublished automatically." />
+  <string key="PublicationSchedule.NoActiveVersionsText" value="There are no active versions" />
+  <string key="PublicationSchedule.NoPastVersionsText" value="There are no past versions" />
+</strings>

@@ -1,0 +1,34 @@
+@inherits RazorFunction
+@using Orckestra.Composer.CompositeC1.Mappers;
+@using Orckestra.Composer.CompositeC1.DataTypes.Navigation;
+
+
+@functions {
+    public INavigationMapper HomeNavigationMapper { get; set; }
+}
+
+@{
+    var currentPageId = SitemapNavigator.CurrentHomePageId;
+    var stickyMenuData = Data.Get<StickyHeader>().Where(x => x.PageId == currentPageId).ToList();
+    var stickyMenu = HomeNavigationMapper.MapStickyMainMenuItems(stickyMenuData);
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<head>
+</head>
+<body>
+    <ul class="nav navbar-nav main-nav-sticky">
+        @foreach (var sticyMenuEntity in @stickyMenu)
+        {
+            <li class="nav-item">
+                <a data-qa="main-menu-sticky-link"
+                   class="nav-link"
+                   href="@sticyMenuEntity.Url"
+                   target="@sticyMenuEntity.UrlTarget">
+                    @sticyMenuEntity.DisplayName
+                </a>
+            </li>
+        }
+    </ul>
+</body>
+</html>

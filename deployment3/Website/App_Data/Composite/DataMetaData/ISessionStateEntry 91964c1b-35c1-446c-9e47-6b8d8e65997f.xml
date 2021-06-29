@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DataTypeDescriptor dataTypeId="91964c1b-35c1-446c-9e47-6b8d8e65997f" name="ISessionStateEntry" namespace="Composite.Plugins.WebClient.SessionStateProviders.DefaultSessionStateProvider" title="Session State Entry" isCodeGenerated="false" cachable="false" searchable="false" typeManagerTypeName="Composite.Plugins.WebClient.SessionStateProviders.DefaultSessionStateProvider.ISessionStateEntry,Composite">
+  <DataAssociations />
+  <DataScopes>
+    <DataScopeIdentifier name="administrated" />
+  </DataScopes>
+  <KeyPropertyNames>
+    <KeyPropertyName name="Id" />
+  </KeyPropertyNames>
+  <SuperInterfaces />
+  <Fields>
+    <DataFieldDescriptor id="8e0f00dc-a364-4bdc-bed4-0fa771cce148" name="Id" isNullable="false" position="1000" groupByPriority="0" inherited="false" instanceType="System.Guid, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" storeType="PhysicalStoreType='Guid'" isReadOnly="false">
+      <FormRenderingProfile />
+    </DataFieldDescriptor>
+    <DataFieldDescriptor id="f2ba2a81-cd6a-4e48-8f12-a4446a1df046" name="ExpirationDate" isNullable="false" position="1000" groupByPriority="0" inherited="false" instanceType="System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" storeType="PhysicalStoreType='DateTime'" isReadOnly="false">
+      <FormRenderingProfile />
+    </DataFieldDescriptor>
+    <DataFieldDescriptor id="174b9f86-c45b-434a-a3a1-083f78fcfa93" name="SerializedValue" isNullable="false" position="1000" groupByPriority="0" inherited="false" instanceType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" storeType="PhysicalStoreType='LargeString'" isReadOnly="false">
+      <FormRenderingProfile />
+    </DataFieldDescriptor>
+  </Fields>
+</DataTypeDescriptor>

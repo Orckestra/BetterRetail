@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+@{
+      
+    Composite.Core.WebClient.Presentation.ViewServices.RegisterCommonTransformations();
+    Composite.Core.WebClient.Presentation.ViewServices.RegisterMimeType();
+
+    dynamic state;
+    
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Composite.Management.ServerLog</title>
+
+    @Html.Raw(Composite.Core.WebClient.ScriptLoader.Render("sub"))
+    @Html.Raw(Composite.Core.WebClient.StyleLoader.Render())
+
+	<script type="text/javascript">
+	    DocumentManager.isDocumentSelectable = true;
+	</script>
+    <script type="text/javascript">
+        //
+        function __doPostBack(eventTarget, eventArgument) {
+            var theForm = document.forms['Form1'];
+            if (!theForm) {
+                theForm = document.Form1;
+            }
+            if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+                theForm.__EVENTTARGET.value = eventTarget;
+                theForm.__EVENTARGUMENT.value = eventArgument;
+                theForm.submit();
+            }
+        }
+        //
+	</script>
+
+
+    @RenderSection("HtmlHead", false)
+
+</head>
+    <body>
+        <form name="Form1" id="Form1" class="updateform updatezone" method="POST"> <!-- simulate dot net --> 
+           <input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" />
+           <input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT"  />
+          @if(PageData.TryGetValue("__STATE", out state)){ <input type="hidden" name="__STATE" id="__STATE"  value="@state.Serialize()" /> } @* If used it should implement Serialize*@
+
+                @RenderSection("BodyHead", false)
+
+                @RenderBody()
+
+                @RenderSection("BodyFoot", false)
+        </form>
+    </body>
+</html>

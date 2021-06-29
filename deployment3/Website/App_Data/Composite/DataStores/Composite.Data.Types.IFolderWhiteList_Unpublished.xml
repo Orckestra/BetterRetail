@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FolderWhiteListElementsElements>
+  <FolderWhiteListElements KeyName="LayoutFiles" TildeBasedPath="~\Frontend" />
+  <FolderWhiteListElements KeyName="LayoutFiles" TildeBasedPath="~\UI.Package" />
+</FolderWhiteListElementsElements>

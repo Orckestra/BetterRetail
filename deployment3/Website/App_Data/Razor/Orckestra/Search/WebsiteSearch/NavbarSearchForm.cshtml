@@ -1,0 +1,37 @@
+﻿@inherits RazorFunction
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Shows a search icon button and a dropdown search box."; }
+    }
+
+    [FunctionParameter(Label = "${Orckestra.Search.WebsiteSearch,NavbarSearchForm.SearchResultPage.Label}", 
+		Help = " ${Orckestra.Search.WebsiteSearch,NavbarSearchForm.SearchResultPage.Help}")]
+    public DataReference<Composite.Data.Types.IPage> SearchResultPage { get; set; }
+
+}
+@{
+    var pageNode = Data.SitemapNavigator.GetPageNodeById((Guid)SearchResultPage.KeyValue);
+
+    if (pageNode == null)
+    {
+        return;
+    }
+}
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<head>
+</head>
+<body>
+    <div class="navbar-search-form dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="icon glyphicon glyphicon-search"></span></a>
+        <div class="dropdown-menu dropdown-menu-right">
+            <form action="@pageNode.Url" method="get" role="search">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="@Resources.WebsiteSearch.NavbarSearchForm_InputPlaceholder" id="searchText" name="q" value="@Request.QueryString["q"]" />
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

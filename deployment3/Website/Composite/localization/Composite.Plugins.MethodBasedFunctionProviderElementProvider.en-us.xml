@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<strings>
+  <string key="RootFolderLabel" value="C# Functions" />
+  <string key="RootFolderToolTip" value="Method functions" />
+  <string key="DeleteFunction.LabelFieldGroup" value="Delete This Function" />
+  <string key="DeleteFunction.Text" value="Delete this function" />
+  <string key="Add" value="Add External C# function" />
+  <string key="AddToolTip" value="Add an external C# method based function." />
+  <string key="Create" value="Add Inline C# function" />
+  <string key="CreateToolTip" value="Add an inline C# method based function." />
+  <string key="Edit" value="Edit" />
+  <string key="EditToolTip" value="Edit Function." />
+  <string key="Delete" value="Delete" />
+  <string key="DeleteToolTip" value="Delete Function." />
+  <string key="AddNewMethodBasedFunctionStep1.LabelType" value="Type" />
+  <string key="AddNewMethodBasedFunctionStep1.LabelTypeHelp" value="The type that contains the method in question" />
+  <string key="AddNewMethodBasedFunctionStep2.LabelMethodName" value="Method name" />
+  <string key="AddNewMethodBasedFunctionStep2.HelpMethodName" value="" />
+  <string key="AddNewMethodBasedFunctionStep3.LabelMethodName" value="Method Name" />
+  <string key="AddNewMethodBasedFunctionStep3.HelpMethodName" value="" />
+  <string key="AddNewMethodBasedFunctionStep3.LabelNamespaceName" value="Namespace Name" />
+  <string key="AddNewMethodBasedFunctionStep3.HelpNamespaceName" value="" />
+  <string key="AddNewMethodBasedFunctionStep3.LabelError" value="Error" />
+  <string key="CascadeDeleteErrorTitle" value="Cascade delete error" />
+  <string key="CascadeDeleteErrorMessage" value="The type is referenced by another type that does not allow cascade deletes. This operation is halted" />
+  <string key="AddFunction.CouldNotFindType" value="Could not find type" />
+  <string key="AddFunction.TypeHasNoValidMethod" value="The type does not contain any valid method" />
+  <string key="AddFunction.TypeIsAbstractOrStatic" value="The type is marked as either abstract or static. Calling methods on abstract or static types is not supported." />
+  <string key="AddFunction.TypeMustNotHaveOverloads" value="The type must not have overloads" />
+  <string key="AddFunction.MethodNameIsEmpty" value="Method name must be non-empty" />
+  <string key="AddFunction.InvalidNamespace" value="Namespace must be like A.B.C - not start and end with ." />
+  <string key="AddFunction.NameAlreadyUsed" value="The function name '{0}' is already used" />
+  <string key="EditMethodBasedFunction.LabelFieldGroup" value="Edit Method Based Query" />
+  <string key="EditMethodBasedFunction.LabelMethodName" value="Method Name" />
+  <string key="EditMethodBasedFunction.LabelMethodNameHelp" value="The name that the function should be know under." />
+  <string key="EditMethodBasedFunction.LabelNamespaceName" value="Namespace Name" />
+  <string key="EditMethodBasedFunction.LabelNamespaceNameHelp" value="The namespace to place the method under." />
+  <string key="EditMethodBasedFunction.LabelType" value="Type" />
+  <string key="EditMethodBasedFunction.LabelTypeHelp" value="The type that contains the method in question." />
+  <string key="EditMethodBasedFunction.LabelMethod" value="Method" />
+  <string key="EditMethodBasedFunction.LabelMethodHelp" value="The method to invoke on the type." />
+  <string key="EditMethodBasedFunction.LabelError" value="Error" />
+  <string key="EditFunction.MethodNameEmpty" value="Method name must be non-empty" />
+  <string key="EditFunction.InvalidNamespace" value="Namespace must not start and end with . - example A.B.C" />
+  <string key="EditFunction.TypeNotFound" value="Could not find type" />
+  <string key="EditFunction.MethodNotInType" value="The type does not contain the method" />
+  <string key="EditFunction.NoValidMethod" value="The type does not contain any valid method" />
+  <string key="EditFunction.MethodOverloadsNotAllowed" value="The type must not have overloads" />
+  <string key="AddInlineFunctionWorkflow.FieldGroup.Label" value="Settings" />
+  <string key="AddInlineFunctionWorkflow.MethodName.Label" value="Name" />
+  <string key="AddInlineFunctionWorkflow.MethodName.Help" value="The name of the method you want to create" />
+  <string key="AddInlineFunctionWorkflow.MethodNamespace.Label" value="Namespace" />
+  <string key="AddInlineFunctionWorkflow.MethodNamespace.Help" value="The namespace of the method you want to create" />
+  <string key="AddInlineFunctionWorkflow.MethodDescription.Label" value="Description" />
+  <string key="AddInlineFunctionWorkflow.MethodDescription.Help" value="A short description of the function" />
+  <string key="AddInlineFunctionWorkflow.InlineFunctionMethodTemplate.Label" value="Template" />
+  <string key="AddInlineFunctionWorkflow.InlineFunctionMethodTemplate.Help" value="Select the template that you want to use for the new method." />
+  <string key="EditInlineFunctionWorkflow.FieldGroup.Label" value="Settings" />
+  <string key="EditInlineFunctionWorkflow.MethodName.Label" value="Name" />
+  <string key="EditInlineFunctionWorkflow.MethodName.Help" value="The name of the method you want to create" />
+  <string key="EditInlineFunctionWorkflow.MethodNamespace.Label" value="Namespace" />
+  <string key="EditInlineFunctionWorkflow.MethodNamespace.Help" value="The namespace of the method you want to create" />
+  <string key="EditInlineFunctionWorkflow.MethodDescription.Label" value="Description" />
+  <string key="EditInlineFunctionWorkflow.MethodDescription.Help" value="A short description of the function" />
+  <string key="EditInlineFunctionWorkflow.DebugFieldGroup.Label" value="Debug" />
+  <string key="EditInlineFunctionWorkflow.DebugPage.Label" value="Page" />
+  <string key="EditInlineFunctionWorkflow.DebugPage.Help" value="When debugging, this page is used as current page" />
+  <string key="EditInlineFunctionWorkflow.DebugPageDataScope.Label" value="Data scope" />
+  <string key="EditInlineFunctionWorkflow.DebugPageDataScope.Help" value="When debugging, this is used as current data scope" />
+  <string key="EditInlineFunctionWorkflow.DebugActiveLocale.Label" value="Language" />
+  <string key="EditInlineFunctionWorkflow.DebugActiveLocale.Help" value="When debugging, this is used as the current language" />
+  <string key="EditInlineFunctionWorkflow.Code.Label" value="Source" />
+  <string key="EditInlineFunctionWorkflow.AssembliesFieldGroup.Label" value="Assembly References" />
+  <string key="EditInlineFunctionWorkflow.Preview.Label" value="Preview" />
+  <string key="EditInlineFunctionWorkflow.ParameterFieldGroup.Label" value="Input Parameters" />
+  <string key="EditInlineFunctionWorkflow.AdminitrativeScope.Label" value="Administrative" />
+  <string key="EditInlineFunctionWorkflow.PublicScope.Label" value="Public" />
+  <string key="InlineFunctionMethodTemplate.Clean" value="Empty method" />
+  <string key="InlineFunctionMethodTemplate.WithParameters" value="Method with parameters" />
+  <string key="InlineFunctionMethodTemplate.DataConnection" value="Method using data connection" />
+  <string key="CSharpInlineFunction.OnMissingContainerType" value="A public static class named {0} is missing from the code. This class should contain the function method." />
+  <string key="CSharpInlineFunction.OnNamespaceMismatch" value="The namespace in the code '{0}' does not match the given function namespace '{1}'." />
+  <string key="CSharpInlineFunction.OnMissionMethod" value="The given function name '{0}' was not found or not public static in the class '{1}'." />
+  <string key="CSharpInlineFunction.MissingParameterDefinition" value="The parameter '{0}' has not been added to 'Input Parameters' - to call your function you need to add the parameter and give it either a test or default value." />
+  <string key="CSharpInlineFunction.WrongParameterTestValueType" value="The parameter '{0}' is expecting test value of type '{1}', got value of type '{2}'." />
+  <string key="CSharpInlineFunction.MissingParameterTestOrDefaultValue" value="The parameter '{0}' defined on 'Input Parameters' must have a test or default value before your function can be evaluated." />
+</strings>

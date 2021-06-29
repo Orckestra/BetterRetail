@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DataTypeDescriptor dataTypeId="119c7df0-0454-481b-b9be-a93b8a3bb01f" name="NavigationImage" namespace="Orckestra.Composer.CompositeC1.DataTypes.Navigation" title="Image of menu's item" isCodeGenerated="false" cachable="false" searchable="false" labelFieldName="ImageSource" typeManagerTypeName="Orckestra.Composer.CompositeC1.DataTypes.Navigation.NavigationImage,Orckestra.Composer.CompositeC1.DataTypes">
+  <DataAssociations />
+  <DataScopes>
+    <DataScopeIdentifier name="public" />
+    <DataScopeIdentifier name="administrated" />
+  </DataScopes>
+  <KeyPropertyNames>
+    <KeyPropertyName name="Id" />
+  </KeyPropertyNames>
+  <SuperInterfaces>
+    <SuperInterface type="Composite.Data.ProcessControlled.IProcessControlled,Composite" />
+    <SuperInterface type="Composite.Data.IPageDataFolder,Composite" />
+    <SuperInterface type="Composite.Data.IPageRelatedData,Composite" />
+    <SuperInterface type="Composite.Data.ProcessControlled.IPublishControlled,Composite" />
+    <SuperInterface type="Composite.Data.ProcessControlled.ILocalizedControlled,Composite" />
+  </SuperInterfaces>
+  <Fields>
+    <DataFieldDescriptor id="7884ea1a-eb36-4de1-a462-edf79cbd9d9b" name="Id" isNullable="false" position="0" groupByPriority="0" inherited="false" instanceType="System.Guid, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" storeType="PhysicalStoreType='Guid'" isReadOnly="false" newInstanceDefaultFieldValue="&lt;f:function name=&quot;Composite.Utils.Guid.NewGuid&quot; xmlns:f=&quot;http://www.composite.net/ns/function/1.0&quot; /&gt;">
+      <FormRenderingProfile />
+    </DataFieldDescriptor>
+    <DataFieldDescriptor id="ff350431-65df-490e-a36c-42d66ac0d63d" name="ImageSource" isNullable="false" position="1" groupByPriority="0" inherited="false" instanceType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" storeType="PhysicalStoreType='String'Length='2048'" isReadOnly="false" foreignKeyReferenceTypeName="Composite.Data.Types.IImageFile,Composite">
+      <FormRenderingProfile label="Image Source" helpText=" Specifies the image displayed. Image size must match the recommended size required by the website design. Image is never displayed on mobile and on tablet image is resized to fist the tablet view." widgetFunctionMarkup="&lt;f:widgetfunction xmlns:f=&quot;http://www.composite.net/ns/function/1.0&quot; name=&quot;Composite.Widgets.ImageSelector&quot;&gt;&lt;f:param name=&quot;Required&quot; value=&quot;False&quot; /&gt;&lt;/f:widgetfunction&gt;" />
+    </DataFieldDescriptor>
+    <DataFieldDescriptor id="f3a4afc6-2ceb-4b29-a8fd-5d0cf9e24255" name="MenuItemParentId" isNullable="false" position="2" groupByPriority="0" inherited="false" instanceType="System.Guid, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" storeType="PhysicalStoreType='Guid'" isReadOnly="false" defaultValue="ValueType='Guid'Value='00000000-0000-0000-0000-000000000000'" foreignKeyReferenceTypeName="Orckestra.Composer.CompositeC1.DataTypes.Navigation.MainMenu,Orckestra.Composer.CompositeC1.DataTypes">
+      <FormRenderingProfile label="Display On" helpText="Specifies the menu item the image is displayed. For example, select 'Men' to display this image when the 'Men' level one menu item is displayed.  Select 'Men &gt; Shoes' to display this image when the 'Men &gt; Shoes' level two menu item is displayed." />
+    </DataFieldDescriptor>
+    <DataFieldDescriptor id="c9b4589f-4813-48ee-902a-e116b3474e8d" name="ImageUrl" isNullable="true" position="3" groupByPriority="0" inherited="false" instanceType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" storeType="PhysicalStoreType='String'Length='256'" isReadOnly="false">
+      <FormRenderingProfile label="Image Url" helpText="Specifies the URL used to redirect the user when he clicks on the image. The link can be a page in your website (internal link) or any external page." widgetFunctionMarkup="&lt;f:widgetfunction xmlns:f=&quot;http://www.composite.net/ns/function/1.0&quot; name=&quot;Composite.Widgets.String.UrlComboBox&quot; /&gt;" />
+    </DataFieldDescriptor>
+    <DataFieldDescriptor id="760cecaf-9bb0-4cb4-972c-b12574d2df49" name="Target" isNullable="false" position="4" groupByPriority="0" inherited="false" instanceType="System.Guid, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" storeType="PhysicalStoreType='Guid'" isReadOnly="false" newInstanceDefaultFieldValue="&lt;f:function xmlns:f=&quot;http://www.composite.net/ns/function/1.0&quot; name=&quot;Orckestra.Composer.CompositeC1.DataTypes.UrlTarget.GetDataReference&quot;&gt;&lt;f:param name=&quot;KeyValue&quot; value=&quot;d5203756-52fe-413e-a8ea-1ddacbf6549b&quot; /&gt;&lt;/f:function&gt;" defaultValue="ValueType='Guid'Value='00000000-0000-0000-0000-000000000000'" foreignKeyReferenceTypeName="Orckestra.Composer.CompositeC1.DataTypes.UrlTarget,Orckestra.Composer.CompositeC1.DataTypes">
+      <FormRenderingProfile label="Open In" helpText="Specifies how the page is displayed. For example, open in the current window." />
+    </DataFieldDescriptor>
+    <DataFieldDescriptor id="59155f27-59f5-4920-b26d-37b04ae9fe8c" name="ImageLabel" isNullable="true" position="5" groupByPriority="0" inherited="false" instanceType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" storeType="PhysicalStoreType='String'Length='128'" isReadOnly="false">
+      <FormRenderingProfile label="Image Caption" helpText="Specifies the image caption that will be shown when you have a mouse over the image." />
+    </DataFieldDescriptor>
+    <DataFieldDescriptor id="fab1cf0c-66b0-11dc-a47e-cf6356d89593" name="PublicationStatus" isNullable="false" position="50" groupByPriority="0" inherited="true" instanceType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" storeType="PhysicalStoreType='String'Length='64'" isReadOnly="false" defaultValue="ValueType='String'Value=''">
+      <FormRenderingProfile />
+    </DataFieldDescriptor>
+    <DataFieldDescriptor id="f641ec01-75bb-49ec-b02a-969d6be59a5f" name="PageId" isNullable="false" position="1000" groupByPriority="0" inherited="true" instanceType="System.Guid, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" storeType="PhysicalStoreType='Guid'" isReadOnly="false" foreignKeyReferenceTypeName="Composite.Data.Types.IPage,Composite">
+      <FormRenderingProfile />
+    </DataFieldDescriptor>
+    <DataFieldDescriptor id="0456ebb0-7fb1-46cd-9a23-4ae9aa3337fa" name="SourceCultureName" isNullable="false" position="1000" groupByPriority="0" inherited="true" instanceType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" storeType="PhysicalStoreType='String'Length='16'" isReadOnly="false" defaultValue="ValueType='String'Value=''">
+      <FormRenderingProfile />
+    </DataFieldDescriptor>
+  </Fields>
+</DataTypeDescriptor>

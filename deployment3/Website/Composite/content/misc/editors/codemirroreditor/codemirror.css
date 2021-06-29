@@ -1,0 +1,19 @@
+html, body {
+	margin: 0;
+	padding: 0;
+	background-color: white;
+	overflow: hidden;
+	max-width: 2000px;
+}
+
+.CodeMirror {
+	line-height: 16px;
+	font-size: 13px;
+	font-family: monospace;
+}
+
+.CodeMirror-scroll {
+	overflow: auto;
+	height: 100%; /* This is needed to prevent an IE[67] bug where the scrolled content      is visible outside of the scrolling box. */
+	position: relative;
+}

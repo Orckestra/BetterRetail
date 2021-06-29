@@ -1,0 +1,27 @@
+@namespace url("http://www.w3.org/1999/xhtml");
+@namespace ui url("http://www.w3.org/1999/xhtml");
+
+ui|fieldgroup {
+    padding-bottom: 20px;
+}
+
+ui|field a {
+	display: block;
+	float: left;
+	padding: 3px 0 2px 0;
+	text-align: center;
+	width: 22px;
+	height: 22px;
+	overflow: hidden;
+	font-family: Arial, sans-serif;
+	font-size: 16px;
+}
+ui|field a:hover {
+	background-color: Highlight;
+	color: HighlightText;
+}
+div#selection {
+	padding-top: 0;
+	padding-bottom: 18px;
+	font-weight: bold;
+}

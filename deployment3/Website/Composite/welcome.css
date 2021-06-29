@@ -1,0 +1,189 @@
+@namespace ui url("http://www.w3.org/1999/xhtml");
+
+html, body {
+    overflow: auto;
+    height: auto;
+}
+
+.welcomepage #introcover {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+}
+
+.welcomepage .splash {
+    width: 500px;
+}
+
+
+.welcomepage .crumbs {
+    font-weight: bold;
+}
+
+    .welcomepage .crumbs em {
+        font-family: Arial, sans-serif;
+        font-size: 10px;
+    }
+
+   .welcomepage .intro {
+       min-height: 380px;
+   }
+
+.welcomepage ui|dialogtoolbar {
+    padding: 20px 0 0 0;
+    margin-top: 10px;
+	background: #fff;
+}
+
+.welcomepage .navdecks ui|toolbargroup {
+    display: none;
+}
+
+.welcomepage .licensetext {
+    padding: 10px;
+    height: 245px;
+    overflow: auto;
+    border: 1px solid #E1E1E1;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.welcomepage .simple-h1 {
+    border: 0;
+    padding: 0;
+}
+
+.welcomepage .setupfields {
+    max-height: 400px;
+    height: 45vh;
+    overflow: auto;
+    border: 1px solid #E1E1E1;
+    background: #F7F9FA;
+    font-size: 14px;
+    padding-right: 10px;
+}
+
+.loading-cover .welcomepage  .crumbs {
+	display: none;
+}
+
+.loading-cover .welcomepage .splash {
+	width: 312px;
+}
+
+.loading-cover .welcomepage  .intro {
+	min-height: 260px;
+}
+
+.loading-deck {
+	overflow: visible !important;
+}
+
+.loading-deck .progressbar-msg {
+	padding-bottom: 35px;
+}
+
+p#introtestsuccess,
+ui|clickbutton#introtestsuccessbutton {
+    visibility: hidden;
+}
+
+
+#introtest {
+    list-style: none;
+    margin: 0 0 1em 0;
+    padding: 0;
+    line-height: 1.5em;
+}
+
+    #introtest li {
+        padding-left: 30px;
+        background-repeat: no-repeat;
+        color: #B2B2B2;
+    }
+
+        #introtest li.on {
+            color: #333;
+        }
+
+        #introtest li.ok {
+            background-image: url("${root}/images/welcome/accept-green.svg");
+            -moz-background-position-y: -2px;
+            -o-background-position-y: -2px;
+            background-position-y: -2px;
+        }
+
+        #introtest li.bad {
+            background-image: url("${root}/images/welcome/cancel.svg");
+        }
+
+
+
+.welcomepage ui|radio,
+.welcomepage ui|checkbox {
+    font-weight: bold !important;
+}
+
+    .welcomepage ui|radio ui|datalabeltext {
+        margin-left: 21px;
+    }
+
+.welcomepage ui|radiodatagroup p,
+.welcomepage ui|checkboxgroup p {
+    padding-left: 25px;
+    margin: 4px 0 20px 0;
+}
+
+.welcomepage ui|checkboxgroup {
+    padding-left: 2px;
+    margin-top: -11px;
+}
+
+.welcomepage ui|checkbutton {
+    position: relative;
+    left: -1px;
+}
+
+.welcomepage div.options {
+    padding-left: 25px;
+    display: none;
+}
+
+    .welcomepage div.options.visible {
+        display: block;
+    }
+
+.form .field-group {
+    margin-top: 10px;
+}
+
+    .form .field-group:after {
+        clear: both;
+        content: " ";
+        display: table;
+    }
+
+
+    .form .field-group label {
+        float: left;
+        display: block;
+        width: 50%;
+    }
+
+.form .form-control {
+    float: left;
+    padding: 5px 10px;
+    border: solid 1px #ddd;
+    width: 50%;
+    font-size: 14px;
+}
+
+#languageform {
+	margin-top: 40px;
+}
+
+p#loginok {
+    visibility: hidden;
+}

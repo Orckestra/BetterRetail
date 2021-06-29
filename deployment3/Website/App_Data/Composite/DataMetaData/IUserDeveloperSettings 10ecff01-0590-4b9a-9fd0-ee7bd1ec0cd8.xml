@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DataTypeDescriptor dataTypeId="10ecff01-0590-4b9a-9fd0-ee7bd1ec0cd8" name="IUserDeveloperSettings" namespace="Composite.Data.Types" isCodeGenerated="false" cachable="false" searchable="false" labelFieldName="Username" typeManagerTypeName="Composite.Data.Types.IUserDeveloperSettings,Composite">
+  <DataAssociations />
+  <DataScopes>
+    <DataScopeIdentifier name="public" />
+  </DataScopes>
+  <KeyPropertyNames>
+    <KeyPropertyName name="Username" />
+  </KeyPropertyNames>
+  <SuperInterfaces />
+  <Fields>
+    <DataFieldDescriptor id="f2425f85-5b41-4f73-8f9a-54caaae266fc" name="Username" isNullable="false" position="1000" groupByPriority="0" inherited="false" instanceType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" storeType="PhysicalStoreType='String'Length='64'" isReadOnly="false" foreignKeyReferenceTypeName="Composite.Data.Types.IUser,Composite">
+      <FormRenderingProfile />
+    </DataFieldDescriptor>
+    <DataFieldDescriptor id="303f58c7-5f51-4b53-bdef-ed8025e6ea1a" name="LastSpecifiedNamespace" isNullable="false" position="1000" groupByPriority="0" inherited="false" instanceType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" storeType="PhysicalStoreType='String'Length='256'" isReadOnly="false">
+      <FormRenderingProfile />
+    </DataFieldDescriptor>
+  </Fields>
+</DataTypeDescriptor>

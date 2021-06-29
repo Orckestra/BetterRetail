@@ -1,0 +1,15 @@
+﻿@model IEnumerable<Orckestra.ExperienceManagement.AppSelector.ViewModels.ApplicationViewModel>
+
+<div class="applications-wrapper">
+	@foreach (var app in Model)
+	{
+		<a href="@app.ApplicationUrl" target="_blank" class="application @(app.IsCurrent ? "current" : "")">
+			<img alt="icon" src="@app.IconUrl" />
+			<span class="text">
+				@app.Label
+			</span>
+		</a>
+	}
+</div>
+
+	

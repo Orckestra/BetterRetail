@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<strings>
+  <string key="EditPageToolbar.AddNewVersionLabel" value="Ajouter une version" />
+  <string key="AddNewPageVersion.DialogLabel" value="Ajouter une version" />
+  <string key="AddNewPageVersion.VersionSelector.Label" value="Entrer un nouveau nom de version ou sélectionner le nom d'une version existante" />
+  <string key="AddNewPageVersion.VersionSelector.Help" value="En sélectionnant le nom d'une version existante&#xD;, les dates seront automatiquement mises à jour pour correspondre aux dates de toutes les versions de page qui ont le même nom." />
+  <string key="AddNewPageVersion.PublishTime.Label" value="Date de publication" />
+  <string key="AddNewPageVersion.UnpublishTime.Label" value="Date du retrait de la publication" />
+  <string key="AddNewPageVersion.Validation.AlertTitle" value="Impossible d'ajouter une version de page" />
+  <string key="AddNewPageVersion.Validation.VersionExistsWithDifferentDates" value="Il y a déja une version de page identique avec des dates de publication différentes. Veuillez modifier le nom de la version ou les dates." />
+  <string key="AddNewPageVersion.Validation.FutureUnpublishDateRequired" value="La date du retrait de la publication est configurée dans le passé. Veuillez sélectionner une date future." />
+  <string key="AddNewPageVersion.Validation.VersionAlreadyExists" value="Le nom utilisé pour la version de cette page existe déjà." />
+  <string key="AddNewPageVersion.Validation.ReservedVersionName" value="Ce nom de version est réservé." />
+  <string key="AddNewPageVersion.Validation.UnpublicationDateBeforePublication" value="La date du retrait de la publication doit être supérieure à la date de la publication." />
+  <string key="AddNewPageVersion.Validation.PublishTimeConflict" value="La date de publication entre en conflit avec la version existante &quot;{0}&quot; qui débute à la même date." />
+  <string key="EditVersion.DialogLabel" value="Modifier la version" />
+  <string key="EditVersion.VersionName.Label" value="Nom de la version" />
+  <string key="EditVersion.PublishTime.Label" value="Date de publication" />
+  <string key="EditVersion.UnpublishTime.Label" value="Date du retrait de la publication" />
+  <string key="EditVersion.UpdateAllLinkedVersionsOption" value="Mettre à jour les dates de toutes les versions de pages dont le nom est   &quot;{0}&quot;." />
+  <string key="EditVersion.UpdateCurrentVersionOption" value="Mettre à jour les dates seulement pour cette version de page" />
+  <string key="EditVersion.Validation.UnpublicationDateBeforePublication" value="La date du retrait de la publication doit être supérieure à la date de la publication." />
+  <string key="EditVersion.Validation.PublishTimeConflict" value="La date de publication entre en conflit avec la version existante &quot;{0}&quot; qui débute à la même date." />
+  <string key="EditVersion.Validation.VersionRenameRequired" value="Veuillez selectionner un autre nom de version puisque ce nom est déjà utilisé par plusieurs pages." />
+  <string key="EditVersion.Validation.VersionNameConflict" value="Cette page a déjà une autre version nommée &quot;{0}&quot;" />
+  <string key="EditVersion.Validation.VersionExistsWithDifferentDates" value="Il y a déjà une page qui existe avec ce nom de version. Cette page a des dates de publication différentes." />
+  <string key="PublishPageWorkflow.GeneratedVersionName" value="{0} (Publié le {1:dd-MM-yyyy hh:mm})" />
+  <string key="ConfirmPagePublish.DialogLabel" value="Publier les pages" />
+  <string key="ConfirmPagePublish.FuturePublishDateSet" value="Vous avez configuré une date de publication future pour cette page." />
+  <string key="ConfirmPagePublish.PastUnpublishDateSet" value="Vous avez configuré une date de publication dans le passé pour cette page." />
+  <string key="ConfirmPagePublish.ConfirmationText" value="Voulez-vous vraiment publier cette page maintenant?" />
+  <string key="ConfirmPageDelete.DialogLabel" value="Supprimer cette version de page" />
+  <string key="ConfirmPageDelete.Text" value="Cette action supprime la version actuelle de cette page." />
+  <string key="ConfirmPageDelete.ConfirmationText" value="Voulez-vous vraiment supprimer la version de cette page maintenant?" />
+  <string key="UnpublishPageWorkflow.GeneratedVersionName" value="{0} (Retrait de la publication le {1:dd-MM-yyyy hh:mm})" />
+  <string key="ConfirmPageUnpublish.DialogLabel" value="Retrait de la publication des pages" />
+  <string key="ConfirmPageUnpublish.FutureUnpublishDateSet" value="Vous avez configuré une date future pour le retrait de la publication de cette page." />
+  <string key="ConfirmPageUnpublish.ConfirmationText" value="Voulez-vous vraiment retirer cette page maintenant?" />
+  <string key="SaveAndPublishAsScheduledAction.Label" value="Sauvegarder et publier tel que planifié" />
+  <string key="PublishAsScheduledAction.Label" value="Publier tel que planifié" />
+  <string key="PublishAsScheduledAction.ToolTip" value="" />
+  <string key="PublicationScheduleAction.Label" value="Horaire de publication" />
+  <string key="PublicationScheduleAction.ToolTip" value="" />
+  <string key="PublicationSchedule.PageTitle" value="Horaire de publication" />
+  <string key="PublicationSchedule.Version.Label" value="Version" />
+  <string key="PublicationSchedule.Past.Label" value="Passée" />
+  <string key="PublicationSchedule.Active.Label" value="Active" />
+  <string key="PublicationSchedule.Status.ScheduledforPublication" value="Prévue pour publication" />
+  <string key="PublicationSchedule.Status.Published" value="Publiée" />
+  <string key="PublicationSchedule.Status.Live" value="En ligne" />
+  <string key="PublicationSchedule.Columns.Version" value="Version" />
+  <string key="PublicationSchedule.Columns.Status" value="Statut" />
+  <string key="PublicationSchedule.Columns.DateCreated" value="Date de création" />
+  <string key="PublicationSchedule.Columns.DateModified" value="Date de modification" />
+  <string key="PublicationSchedule.Columns.Author" value="Auteur" />
+  <string key="PublicationSchedule.Columns.PublishDate" value="Date de publication" />
+  <string key="PublicationSchedule.Columns.PublishDate.Help" value="Préciser la date et l'heure de publication automatique pour cette page." />
+  <string key="PublicationSchedule.Columns.UnpublishDate" value="Date du retrait de la publication" />
+  <string key="PublicationSchedule.Columns.UnpublishDate.Help" value="Préciser la date et l'heure du retrait de publication automatique de la page." />
+  <string key="PublicationSchedule.NoActiveVersionsText" value="Il n'y a pas de version active." />
+  <string key="PublicationSchedule.NoPastVersionsText" value="Il n'y a pas de version précédente." />
+</strings>

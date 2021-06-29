@@ -1,0 +1,28 @@
+@namespace ui url("http://www.w3.org/1999/xhtml");
+
+
+ui|box {
+	position: relative;
+}
+
+ui|cover#toolbarscover {
+	border-top: 1px solid #fff;
+	border-bottom: 1px solid #ddd;
+}
+ui|flexbox#tinyflexbox {
+	position: relative; /* contain the cover */	
+}
+ui|splitpanel#editorsplitpanel {
+	border-right: 1px solid #ddd;	
+}
+
+input#focusableinput { /* synchronize with sourcecodeeditor.css */
+	background-color: transparent;
+	border: none;
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	display: none;
+	cursor: help;
+}
+

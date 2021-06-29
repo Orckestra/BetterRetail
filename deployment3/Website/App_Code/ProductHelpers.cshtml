@@ -1,0 +1,135 @@
+﻿@using Composite.AspNet.Razor
+
+@* If DisplayCurrentQuantityInCart = True, the current product QTY in the Cart  will be displayed in QTY input.
+      If product not yet in the Cart,  the 'Add' button will be displayed and when pressed, it will be changed to QTY input with  +/-.
+      QTY input is used to update current QTY in the Cart;
+      --------------------------------------------------------------------------------------------------------
+    If DisplayCurrentQuantityInCart = False, the current QTY input and Add button will be presented together.
+      First need to specify how many QTY need to add to the Cart, then press 'Add' button.
+      After the QTY value will be changed to 1 - minimum value wich can be added;
+      QTY input is used to add specified QTY to the Cart;
+*@
+@helper AddToCartWithQuantity(bool displayCurrentQuantityInCart = true)
+{
+    if (displayCurrentQuantityInCart)
+    {
+        <div class="row">
+            <div class="col-lg-4">
+                <div id="vueAddToCartWithQuantityInCart" v-cloak="true" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
+                    <div v-if="Quantity > 0 &amp;&amp; IsAvailableToSell">
+                        <div class="input-group text-center">
+                            <div class="input-group-prepend">
+                                <button class="btn   btn-outline-secondary"
+                                        v-bind:disabled="DecrementDisabled"
+                                        v-on:click="updateItemQuantity(Quantity - 1)"
+                                        data-qa="product-quantity-decrease">
+                                    <span class="fa  fa-minus"></span>
+                                </button>
+                            </div>
+
+                            <input class="form-control  text-center" type="number"
+                                   min="0" max="99"
+                                   v-bind:value="Quantity"
+                                   v-bind:disabled="Loading"
+                                   v-on:keyup="$event.target.value = $event.target.value.replace(/\D/g,'')"
+                                   v-on:change="updateItemQuantity($event.target.value)"
+                                   xmlns:v-on="v-on"
+                                   xmlns:v-bind="v-bind" />
+
+                            <div class="input-group-append">
+                                <button class="btn   btn-outline-secondary"
+                                        v-bind:disabled="IncrementDisabled"
+                                        v-on:click="updateItemQuantity(Quantity + 1)"
+                                        data-qa="product-quantity-increase">
+                                    <span class="fa  fa-plus"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div v-else="v-else">
+                        @AddToCartButton()
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    }
+    else
+    {
+        <div id="vueAddToCartWithQuantity" v-cloak="true" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
+            <div class="row">
+                <div class="col-sm-6 col-lg-4">
+                    <div class="input-group text-center">
+                        <div class="input-group-prepend">
+                            <button class="btn   btn-outline-secondary"
+                                    v-bind:disabled="DecrementDisabled"
+                                    v-on:click="updateQuantity(Quantity - 1)"
+                                    data-qa="product-quantity-decrease">
+                                <span class="fa  fa-minus"></span>
+                            </button>
+                        </div>
+
+                        <input class="form-control  text-center" type="number"
+                               min="0" max="99"
+                               v-bind:value="Quantity"
+                               v-bind:disabled="AddToCartDisabled"
+                               v-on:keyup="$event.target.value = $event.target.value.replace(/\D/g,'')"
+                               v-on:change="updateQuantity($event.target.value)"
+                               xmlns:v-on="v-on"
+                               xmlns:v-bind="v-bind" />
+
+                        <div class="input-group-append">
+                            <button class="btn   btn-outline-secondary"
+                                    v-bind:disabled="IncrementDisabled"
+                                    v-on:click="updateQuantity(Quantity + 1)"
+                                    data-qa="product-quantity-increase">
+                                <span class="fa  fa-plus"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-4 mt-3 mt-sm-0">  @AddToCartButton()</div>
+            </div>
+        </div>
+    }
+}
+
+@helper AddToCartButton()
+{
+    <button class="btn btn-success btn-block text-uppercase"
+            v-bind:disabled="AddToCartDisabled"
+            title="@Html.Localize("General", "B_AddToCartProductDetail")"
+            v-on:click="addItemToCart">
+        <span class="fa  fa-shopping-cart"></span>&#160;
+
+        <span v-if="IsUnavailableVariant">@Html.Localize("General", "B_AddToCartProductDetailUnavailable")</span>
+        <span v-else="else">
+            <span v-if="IsAvailableToSell">@Html.Localize("General", "B_AddToCartProductDetail")</span>
+            <span v-if="!IsAvailableToSell">@Html.Localize("General", "B_AddToCartProductDetailOOS")</span>
+        </span>
+
+    </button>
+}
+
+@helper AddToWishList()
+{
+    <div id="vueAddProductToWishList"
+         v-cloak="true" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
+        <div v-if="!IsUnavailableVariant" class="add-to-wishlist">
+            <a v-if="WishListItem"
+               data-qa="product-remove-from-wishlist"
+               v-on:click="removeLineItemFromWishList"
+               title="@Html.Localize("MyAccount", "H_RemoveFromTheWishList")"
+               class="add-to-wishlist  active">
+                <i class="fa  fa-2x  fa-heart"></i>
+            </a>
+            <a v-else="else"
+               data-qa="product-add-to-wishlist"
+               v-on:click="addLineItemToWishList"
+               title="@Html.Localize("MyAccount", "H_AddToWishList")"
+               class="add-to-wishlist">
+                <i class="fa  fa-2x  fa-heart"></i>
+            </a>
+        </div>
+    </div>
+}

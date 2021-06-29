@@ -1,0 +1,23 @@
+html body,
+html body * {
+	cursor: pointer !important;	
+}
+.message {
+	padding: 22px;
+}
+.icon {
+	width: 32px;
+	height: 32px;
+	float: left;
+}
+
+.icon svg{
+    width: 32px;
+    height: 32px;
+    color: red;
+}
+.text {
+	padding-left: 44px;
+	-moz-user-select: none;
+	padding-top: 8px;
+}

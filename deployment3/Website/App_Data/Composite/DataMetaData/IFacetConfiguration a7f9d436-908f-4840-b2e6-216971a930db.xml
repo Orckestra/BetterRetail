@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DataTypeDescriptor dataTypeId="a7f9d436-908f-4840-b2e6-216971a930db" name="IFacetConfiguration" namespace="Orckestra.Composer.CompositeC1.DataTypes.Facets" title="Facet Configuration" isCodeGenerated="false" cachable="false" searchable="false" labelFieldName="Name" typeManagerTypeName="Orckestra.Composer.CompositeC1.DataTypes.Facets.IFacetConfiguration,Orckestra.Composer.CompositeC1.DataTypes">
+  <DataAssociations />
+  <DataScopes>
+    <DataScopeIdentifier name="public" />
+  </DataScopes>
+  <KeyPropertyNames>
+    <KeyPropertyName name="Id" />
+  </KeyPropertyNames>
+  <SuperInterfaces />
+  <Fields>
+    <DataFieldDescriptor id="c4c4b1c7-c57f-4eab-9f87-8691e8539ea0" name="Id" isNullable="false" position="0" groupByPriority="0" inherited="false" instanceType="System.Guid, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" storeType="PhysicalStoreType='Guid'" isReadOnly="false" newInstanceDefaultFieldValue="&lt;f:function name=&quot;Composite.Utils.Guid.NewGuid&quot; xmlns:f=&quot;http://www.composite.net/ns/function/1.0&quot; /&gt;">
+      <FormRenderingProfile />
+    </DataFieldDescriptor>
+    <DataFieldDescriptor id="59ae7846-d2f6-45d3-b49e-749769a565a5" name="Name" isNullable="false" position="0" groupByPriority="0" inherited="false" instanceType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" storeType="PhysicalStoreType='String'Length='64'" isReadOnly="false" defaultValue="ValueType='String'Value=''">
+      <FormRenderingProfile label="Name" />
+    </DataFieldDescriptor>
+    <DataFieldDescriptor id="2261093d-ae92-41fd-a367-bea978a1f4f0" name="Facets" isNullable="false" position="1" groupByPriority="0" inherited="false" instanceType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" storeType="PhysicalStoreType='LargeString'" isReadOnly="false" defaultValue="ValueType='String'Value=''">
+      <FormRenderingProfile label="Facets" widgetFunctionMarkup="&lt;f:widgetfunction xmlns:f=&quot;http://www.composite.net/ns/function/1.0&quot; name=&quot;Composite.Widgets.String.DataIdMultiSelector&quot;&gt;&lt;f:param name=&quot;OptionsType&quot; value=&quot;Orckestra.Composer.CompositeC1.DataTypes.Facets.IFacet&quot; /&gt;&lt;f:param name=&quot;CompactMode&quot; value=&quot;True&quot; /&gt;&lt;/f:widgetfunction&gt;" />
+    </DataFieldDescriptor>
+    <DataFieldDescriptor id="4ef0be77-ce76-4698-b069-7458ef289ec5" name="IsDefault" isNullable="false" position="2" groupByPriority="0" inherited="false" instanceType="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" storeType="PhysicalStoreType='Boolean'" isReadOnly="false" newInstanceDefaultFieldValue="&lt;f:function xmlns:f=&quot;http://www.composite.net/ns/function/1.0&quot; name=&quot;Composite.Constant.Boolean&quot;&gt;&lt;f:param name=&quot;Constant&quot; value=&quot;False&quot; /&gt;&lt;/f:function&gt;" defaultValue="ValueType='Boolean'Value='False'">
+      <FormRenderingProfile label="Is Default" helpText="Determines if this Facet Category will be used as default" />
+    </DataFieldDescriptor>
+  </Fields>
+</DataTypeDescriptor>

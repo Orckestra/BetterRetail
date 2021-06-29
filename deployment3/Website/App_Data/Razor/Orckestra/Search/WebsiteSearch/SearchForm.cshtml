@@ -1,0 +1,53 @@
+﻿@inherits RazorFunction
+
+@functions {
+	public override string FunctionDescription
+	{
+		get { return "${Orckestra.Search.WebsiteSearch,Component.SearchForm.Destription}"; }
+	}
+
+	[FunctionParameter(Label = "${Orckestra.Search.WebsiteSearch,SearchForm.SearchResultPage.Label}", 
+		Help = "${Orckestra.Search.WebsiteSearch,SearchForm.SearchResultPage.Help}")]
+	public DataReference<Composite.Data.Types.IPage> SearchResultPage { get; set; }
+
+	[FunctionParameter(Label = "${Orckestra.Search.WebsiteSearch,SearchForm.SearchFieldTeaserText.Label}", 
+		Help = "${Orckestra.Search.WebsiteSearch,SearchForm.SearchFieldTeaserText.Help}", 
+		DefaultValue = "Search")]
+	public string SearchFieldTeaserText { get; set; }
+
+	[FunctionParameter(Label = "${Orckestra.Search.WebsiteSearch,SearchForm.SearchButtonLabel.Label}", 
+		Help = "${Orckestra.Search.WebsiteSearch,SearchForm.SearchButtonLabel.Help}", 
+		DefaultValue = "")]
+	public string SearchButtonLabel { get; set; }
+}
+@{
+    var pageNode = Data.SitemapNavigator.GetPageNodeById((Guid)SearchResultPage.KeyValue);
+
+    if (pageNode == null)
+    {
+        return;
+    }
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<head>
+</head>
+<body>
+    <form id="SearchForm" action="@pageNode.Url" class="search-form form-inline"  method="get" role="search">
+        <div class="form-group">
+             <input type="text" class="form-control" placeholder="@SearchFieldTeaserText" 
+                    id="searchText" name="q" value="@Request.QueryString["q"]" />
+        </div>
+        <button type="submit" class="btn btn-default">
+			@if(string.IsNullOrEmpty(@SearchButtonLabel))
+			{
+				<span class="glyphicon glyphicon-search"></span>
+			}
+			else
+			{
+				@SearchButtonLabel			
+			}
+		</button>
+    </form>
+</body>
+</html>

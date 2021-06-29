@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<strings>
+
+	<!-- preload precaution -->
+	<string key="Preload.Key" value="Retrieved on SourceEditorBinding startup to make sure strings are loaded :)"/>
+	
+	<!-- validation messages -->
+	<string key="Invalid.HTML.DialogTitle" value="Invalid XHTML" />
+	<string key="Invalid.HTML.MissingHtml" value="The root &lt;html&gt; tag is missing." />
+	<string key="Invalid.HTML.MissingHead" value="The &lt;head&gt; tag is missing." />
+	<string key="Invalid.HTML.MissingBody" value="The &lt;body&gt; tag is missing." />
+	<string key="Invalid.HTML.HeadBodyIndex" value="The &lt;head&gt; tag must precede &lt;body&gt;." />
+	<string key="Invalid.HTML.NamespaceURI" value="The root namespace is wrong." />
+	<string key="Invalid.HTML.MultipleBody" value="Only one &lt;body&gt; tag allowed."/>
+	<string key="Invalid.HTML.MultipleHead" value="Only one &lt;head&gt; tag allowed."/>
+  <string key="Invalid.HTML.NotAllowedHtmlChild" value="The root &lt;html&gt; tag can only have &lt;head&gt; and &lt;body&gt; tags as children."/>
+  
+
+  <string key="Format.XML.ErrorDialog.Title" value="Source format aborted"/> 
+	<string key="Format.XML.ErrorDialog.Text" value="XML source formatting requires a well-formed document structure."/>
+	
+	<!-- plain/colored switch button -->
+	<string key="Switch.PlainEdit.Label" value="Plain Edit"/>
+	<string key="Switch.PlainEdit.ToolTip" value="No syntax highlight, faster performance"/>
+	<string key="Switch.ColoredEdit.Label" value="Colored Edit"/>
+	<string key="Switch.ColoredEdit.ToolTip" value="Syntax highlight, slower performance"/>
+
+  <!-- toolbar menus -->
+  <string key="Toolbar.Insert.Label" value="Insert"/>
+  <string key="Toolbar.Format.Label" value="Format"/>
+  <string key="Toolbar.Format.ToolTip" value="Format XML source"/>
+  <string key="Toolbar.ToggleWordWrap.Label" value="Toggle word wrap"/>
+  <string key="Toolbar.FindAndReplace.Label" value="Find and replace"/>
+  
+  <!-- insert dropdown -->
+	<string key="Insert.PageURL.Label" value="Page URL"/>
+	<string key="Insert.ImageURL.Label" value="Image URL"/>
+	<string key="Insert.MediaURL.Label" value="Media URL"/>
+	<string key="Insert.FrontendURL.Label" value="Frontend URL"/>
+	<string key="Insert.FunctionMarkup.Label" value="Function Markup"/>
+	
+  <!--Resx editor strings-->
+	<string key="ResxEditor.TranslateTo.Label" value="Translate To {0}"/>
+	<string key="ResxEditor.TranslateTo.Tooltip" value="Translate To {0}"/>
+	<string key="ResxEditor.Label" value="Label"/>
+	<string key="ResxEditor.OriginalText" value="Original Text"/>
+	<string key="ResxEditor.TranslatedText" value="Translated Text"/>
+	<string key="ResxEditor.Save" value="Save"/>
+
+  <!-- find and replace -->
+  <string key="FindAndReplace.LabelTitle" value="Find and replace" />
+  <string key="FindAndReplace.LabelFind" value="Find" />
+  <string key="FindAndReplace.LabelReplaceWith" value="Replace with" />
+  <string key="FindAndReplace.LabelMatchCase" value="Match case" />
+  <string key="FindAndReplace.LabelWholeWords" value="Whole words" />
+  <string key="FindAndReplace.ButtonFind" value="Find Next" />
+  <string key="FindAndReplace.ButtonReplace" value="Replace" />
+  <string key="FindAndReplace.ButtonReplaceAll" value="Replace all" />
+  <string key="FindAndReplace.LaunchButton.Label" value="Find and Replace" />
+
+</strings>

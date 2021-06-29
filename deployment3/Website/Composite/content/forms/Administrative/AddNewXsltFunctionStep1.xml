@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms:formdefinition xmlns="http://www.composite.net/ns/management/bindingforms/std.ui.controls.lib/1.0" xmlns:f="http://www.composite.net/ns/management/bindingforms/std.function.lib/1.0" xmlns:cms="http://www.composite.net/ns/management/bindingforms/1.0">
+  <cms:bindings>
+    <cms:binding name="NewXslt" type="Composite.Data.Types.IXsltFunction, Composite" />
+    <cms:binding name="CopyFromFunctionId" type="System.Guid" />
+    <cms:binding name="CopyFromOptions" type="System.Object" />
+  </cms:bindings>
+  <cms:layout label="${Composite.Plugins.XsltBasedFunction, AddNewXsltFunctionStep1.LabelDialog}" iconhandle="xslt-based-function">
+    <FieldGroup>
+      <TextBox Label="${Composite.Plugins.XsltBasedFunction, AddNewXsltFunctionStep1.LabelName}" Help="${Composite.Plugins.XsltBasedFunction, AddNewXsltFunctionStep1.HelpName}" Type="ProgrammingIdentifier">
+        <TextBox.Text>
+          <cms:bind source="NewXslt.Name" />
+        </TextBox.Text>
+      </TextBox>
+      <TextBox Label="${Composite.Plugins.XsltBasedFunction, AddNewXsltFunctionStep1.LabelNamespace}" Help="${Composite.Plugins.XsltBasedFunction, AddNewXsltFunctionStep1.HelpNamespace}" Type="ProgrammingNamespace">
+        <TextBox.Text>
+          <cms:bind source="NewXslt.Namespace" />
+        </TextBox.Text>
+      </TextBox>
+      <EnumSelector EnumType="Composite.Plugins.Functions.FunctionProviders.XsltBasedFunctionProvider.OutputXmlSubType" Label="${Composite.Plugins.XsltBasedFunction, AddNewXsltFunctionStep1.LabelOutputType}">
+        <EnumSelector.Selected>
+          <cms:bind source="NewXslt.OutputXmlSubType" />
+        </EnumSelector.Selected>
+      </EnumSelector>
+      <KeySelector OptionsKeyField="Key" OptionsLabelField="Value"
+            Label="${Composite.Plugins.XsltBasedFunction, AddNewXsltFunctionStep1.LabelCopyFrom}">
+        <KeySelector.Selected>
+          <cms:bind source="CopyFromFunctionId" />
+        </KeySelector.Selected>
+        <KeySelector.Options>
+          <cms:read source="CopyFromOptions" />
+        </KeySelector.Options>
+      </KeySelector>   
+    </FieldGroup>
+  </cms:layout>
+</cms:formdefinition>

@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms:formdefinition xmlns="http://www.composite.net/ns/management/bindingforms/std.ui.controls.lib/1.0" xmlns:internal="http://www.composite.net/ns/management/bindingforms/internal.ui.controls.lib/1.0" xmlns:f="http://www.composite.net/ns/management/bindingforms/std.function.lib/1.0" xmlns:cms="http://www.composite.net/ns/management/bindingforms/1.0">
+  <cms:bindings>
+    <cms:binding name="FeaturedProductsPath" type="System.String" />
+  </cms:bindings>
+  <cms:layout>
+    <PlaceHolder>
+      <FeaturedProductsToolbar xmlns="http://www.orckestra.com/ns/management/bindingforms/featured.products/1.0">
+        <FeaturedProductsToolbar.Path>
+          <cms:read source="FeaturedProductsPath" />
+        </FeaturedProductsToolbar.Path>
+      </FeaturedProductsToolbar>
+    </PlaceHolder>
+  </cms:layout>
+</cms:formdefinition>

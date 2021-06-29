@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DataTypeDescriptor dataTypeId="1423b4f2-e7f4-48f0-a423-90d9046bd2ae" name="IPromotedFacetValueSetting" namespace="Orckestra.Composer.CompositeC1.DataTypes.Facets" title="Promoted Facet Value" isCodeGenerated="false" cachable="false" searchable="false" labelFieldName="Title" typeManagerTypeName="Orckestra.Composer.CompositeC1.DataTypes.Facets.IPromotedFacetValueSetting,Orckestra.Composer.CompositeC1.DataTypes">
+  <DataAssociations />
+  <DataScopes>
+    <DataScopeIdentifier name="public" />
+  </DataScopes>
+  <KeyPropertyNames>
+    <KeyPropertyName name="Id" />
+  </KeyPropertyNames>
+  <SuperInterfaces />
+  <Fields>
+    <DataFieldDescriptor id="c991cf0e-df89-4bfa-8a4a-47158eb5a4d1" name="Id" isNullable="false" position="0" groupByPriority="0" inherited="false" instanceType="System.Guid, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" storeType="PhysicalStoreType='Guid'" isReadOnly="false" newInstanceDefaultFieldValue="&lt;f:function name=&quot;Composite.Utils.Guid.NewGuid&quot; xmlns:f=&quot;http://www.composite.net/ns/function/1.0&quot; /&gt;">
+      <FormRenderingProfile />
+    </DataFieldDescriptor>
+    <DataFieldDescriptor id="28c8f8ec-afda-4658-9c59-e821e5068755" name="Title" isNullable="false" position="0" groupByPriority="0" inherited="false" instanceType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" storeType="PhysicalStoreType='String'Length='64'" isReadOnly="false" defaultValue="ValueType='String'Value=''">
+      <FormRenderingProfile label="Title" />
+    </DataFieldDescriptor>
+    <DataFieldDescriptor id="7f3ccc78-33d0-4567-a14f-715f3fdeb9a0" name="SortWeight" isNullable="false" position="1" groupByPriority="0" inherited="false" instanceType="System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" storeType="PhysicalStoreType='Decimal'Precision='28'Scale='2'" isReadOnly="false" newInstanceDefaultFieldValue="&lt;f:function xmlns:f=&quot;http://www.composite.net/ns/function/1.0&quot; name=&quot;Composite.Constant.Decimal&quot;&gt;&lt;f:param name=&quot;Constant&quot; value=&quot;0&quot; /&gt;&lt;/f:function&gt;" defaultValue="ValueType='Decimal'Value='0'">
+      <FormRenderingProfile label="Sort Weight" />
+      <TreeOrderingProfile orderPriority="1" orderDescending="false" />
+    </DataFieldDescriptor>
+  </Fields>
+</DataTypeDescriptor>

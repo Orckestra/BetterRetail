@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DataItemTreeAttachmentPointElementsElements>
+  <DataItemTreeAttachmentPointElements Id="0ab8651d-d6ad-4743-b04c-fad73e0cab35" TreeId="Articles.xml" Position="Top" InterfaceType="Composite.Data.Types.IPage,Composite" KeyValue="5225f84a-2c27-4edd-9578-44a229de4974" />
+  <DataItemTreeAttachmentPointElements Id="57f28899-a64b-4a1a-b8b6-3178980d9f12" TreeId="NavigationElement.xml" Position="Top" InterfaceType="Composite.Data.Types.IPage,Composite" KeyValue="f3dbd28d-365f-4d3e-91c3-7b730b39b294" />
+</DataItemTreeAttachmentPointElementsElements>

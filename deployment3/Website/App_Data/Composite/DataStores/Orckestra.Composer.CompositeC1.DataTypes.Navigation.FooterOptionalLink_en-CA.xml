@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FooterOptionalLinkElements>
+  <FooterOptionalLink Id="597a7394-db9a-4662-b771-d6b4af2efadd" DisplayName="Privacy policy" Url="~/page(200eb67f-65fe-4dc1-92f1-1628efacaa54)" Target="d5203756-52fe-413e-a8ea-1ddacbf6549b" Order="1" PublicationStatus="published" PageId="f3dbd28d-365f-4d3e-91c3-7b730b39b294" SourceCultureName="en-CA" />
+  <FooterOptionalLink Id="b1ea4774-1be5-4f95-8c03-13c108b60355" DisplayName="Terms of use" Url="~/page(200eb67f-65fe-4dc1-92f1-1628efacaa54)" Target="d5203756-52fe-413e-a8ea-1ddacbf6549b" Order="1" PublicationStatus="published" PageId="f3dbd28d-365f-4d3e-91c3-7b730b39b294" SourceCultureName="en-CA" />
+</FooterOptionalLinkElements>

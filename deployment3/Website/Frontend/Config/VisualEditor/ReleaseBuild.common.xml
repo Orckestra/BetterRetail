@@ -1,0 +1,133 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<visualeditor>
+
+  <!-- stylesheets to import (tip: you can also use @import inside the CSS) -->
+  <styles>
+    <style file="styles/core.css" />
+    <style file="../../styles/visualeditor.common.css" />
+  </styles>
+
+  <!-- 
+    These format-id's will overwrite or overload TinyMCE built-in formats:
+    alignleft, aligncenter, alignright, alignfull, bold, italic, underline, 
+    strikethrough, forecolor, hilitecolor, fontname, fontsize, blockquote, 
+    removeformat, p, h1, h2, h3, h4, h5, h6, div, address, pre, div, code, 
+    dt, dd, samp. 
+  -->
+  <formats>
+    <group>
+      <format id="bold" label="Strong" image="" notes="Strong text" inline="strong">
+        <!-- Add button: you can overwrite the label, image and notes attributes -->
+        <button image="${icon:bold}" label="" />
+      </format>
+      <format id="italic" label="Emphasis" image="" notes="Emphasized text" inline="em">
+        <button image="${icon:italic}" label="" />
+      </format>
+      <format id="code" label="Inline Code" image="" notes="Inline Code" inline="code">
+        <button label="CODE" />
+      </format>
+      <!-- example: Button to surround selection with u - note this isn't propper xhtml. Consider using a class for this 
+      <format id="underline" label="Underline" image="" notes="Underlined text" inline="u">
+        <button image="Images/underline.png" label="" />
+      </format>
+      -->
+      <!-- example: Button to surround selection with span.myclass
+        <format id="example" label="Example" image="" notes="" inline="span" classes="myclass">
+          <button label=":)"/>
+        </format>
+      -->
+      <!-- example2: Button to surround selection with html CODE tag
+        <format id="example2" label="Example2" image="" notes="" inline="code">
+          <button label=";)"/>
+        </format>
+      -->
+    </group>
+    <radiogroup>
+      <format id="h1" label="Heading H1" image="" notes="Big heading" block="h1">
+        <select />
+      </format>
+      <format id="h2" label="Heading H2" image="" notes="Small heading" block="h2">
+        <select />
+      </format>
+      <format id="h3" label="Heading H3" image="" notes="Very Small heading" block="h3">
+        <select />
+      </format>
+      <format id="p" label="Paragraph" image="" notes="Paragraph" block="p">
+        <select />
+      </format>
+      <!-- example! Selection and button to insert H1.nice -->
+      <!-- NOTE the "priority" attribute to resolve this before H1 with NO class! 
+        <format id="h1.test" label="" image="" notes="Big heading with classname" block="h1" priority="1" classes="nice">
+          <select label="Heading H1.nice"/>
+          <button label="H1.nice"/>
+        </format>
+      -->
+    </radiogroup>
+
+    <radiogroup>
+      <format id="textalignleft" label="Left align text" image="" notes="" classes="textalignleft" selector="p, h1, h2, h3">
+        <button label="" image="${icon:text-align-left}" />
+      </format>
+      <format id="textaligncenter" label="Center text" image="" notes="" classes="textaligncenter" selector="p, h1, h2, h3">
+        <button label="" image="${icon:text-align-center}" />
+      </format>
+      <format id="textalignright" label="Right align text" image="" notes="" classes="textalignright" selector="p, h1, h2, h3">
+        <button label="" image="${icon:text-align-right}" />
+      </format>
+    </radiogroup>
+
+   <!--<radiogroup>
+      <format id="alignleft" label="Left" image="" notes="Align left" classes="pull-left" selector="img,table">
+        <button label="" image="${icon:image-left}" />
+      </format>
+      <format id="alignright" label="Right" image="" notes="Align right" classes="pull-right" selector="img,table">
+        <button label="" image="${icon:image-right}" />
+      </format>
+    </radiogroup>-->
+
+    <radiogroup>
+      <!-- Sample classes that show up in the visual editor style selector -->
+      <format id="note" label="Note" image="" notes="" classes="note" selector="p">
+        <select />
+      </format>
+      <format id="framed" label="Framed" image="" notes="" classes="framed" selector="img">
+        <select />
+      </format>
+      <format id="heavyframed" label="Framed (heavy)" image="" notes="" classes="heavyframed" selector="img">
+        <select />
+      </format>
+      <format id="heavy" label="Heavy" image="" notes="" classes="heavy" selector="table">
+        <select />
+      </format>
+      <format id="light" label="Light" image="" notes="" classes="light" selector="table">
+        <select />
+      </format>
+      <format id="sum" label="Sum row" image="" notes="" classes="sum" selector="tr">
+        <select />
+      </format>
+      <format id="total" label="Total" image="" notes="" classes="total" selector="tr.sum td">
+        <select />
+      </format>
+    </radiogroup>
+
+
+		<radiogroup>
+			<format id="well" label="Well" image="" notes="" block="div" classes="well" wrapper="1">
+				<select />
+			</format>
+			<!--<format id="two-columns" label="2 columns" image="" notes="" block="div" classes="two-columns" wrapper="1">
+				<select />
+			</format>
+			<format id="three-columns" label="3 columns" image="" notes="" block="div" classes="three-columns" wrapper="1">
+				<select />
+			</format>-->
+			<format id="blockquote" label="Quote" image="" notes="" block="blockquote" wrapper="1">
+				<select />
+			</format>
+			<format id="fancy-note" label="Fancy note" image="" notes="" block="aside" classes="fancy" wrapper="1">
+				<select />
+			</format>
+		</radiogroup>
+    
+  </formats>
+</visualeditor>

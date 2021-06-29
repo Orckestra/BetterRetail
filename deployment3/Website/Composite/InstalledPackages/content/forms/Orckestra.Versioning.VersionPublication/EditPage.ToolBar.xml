@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms:formdefinition xmlns="http://www.composite.net/ns/management/bindingforms/std.ui.controls.lib/1.0" xmlns:internal="http://www.composite.net/ns/management/bindingforms/internal.ui.controls.lib/1.0" xmlns:f="http://www.composite.net/ns/management/bindingforms/std.function.lib/1.0" xmlns:cms="http://www.composite.net/ns/management/bindingforms/1.0">
+  <cms:bindings>
+    <cms:binding name="PageVersionId" type="System.Guid" />
+    <cms:binding name="PageVersions" type="System.Collections.IEnumerable" />
+    <cms:binding name="CustomEvent02Handler" type="System.EventHandler" />
+    <cms:binding name="PageIdStatus" type="System.Guid" />
+    <cms:binding name="ShowPublishAsScheduled" type="System.Boolean" />
+  </cms:bindings>
+  <cms:layout>
+    <PlaceHolder>
+      <VersionSelector OptionsKeyField="Key" OptionsLabelField="Value" Label="" Help="" xmlns="http://www.orckestra.com/ns/management/bindingforms/versioning.versionpublishing/1.0">
+        <VersionSelector.SelectedIndexChangedEventHandler>
+          <cms:read source="CustomEvent02Handler"/>
+        </VersionSelector.SelectedIndexChangedEventHandler>
+        <VersionSelector.Options>
+          <cms:read source="PageVersions"/>
+        </VersionSelector.Options>
+        <VersionSelector.Selected>
+          <cms:bind source="PageVersionId" />
+        </VersionSelector.Selected>
+      </VersionSelector>
+
+      <PublicationStatusToolbar xmlns="http://www.orckestra.com/ns/management/bindingforms/versioning.versionpublishing/1.0">
+        <PublicationStatusToolbar.PageIdStatus>
+          <cms:read source="PageIdStatus" />
+        </PublicationStatusToolbar.PageIdStatus>
+        <PublicationStatusToolbar.PageVersionId>
+          <cms:read source="PageVersionId" />
+        </PublicationStatusToolbar.PageVersionId>
+				<PublicationStatusToolbar.ShowPublishAsScheduled>
+          <cms:read source="ShowPublishAsScheduled" />
+        </PublicationStatusToolbar.ShowPublishAsScheduled>
+      </PublicationStatusToolbar>
+    </PlaceHolder>
+  </cms:layout>
+</cms:formdefinition>

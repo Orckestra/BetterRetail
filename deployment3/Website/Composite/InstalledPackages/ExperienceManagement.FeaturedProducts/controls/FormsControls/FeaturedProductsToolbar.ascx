@@ -1,0 +1,2 @@
+﻿<%@ Control Language="C#" AutoEventWireup="true" CodeFile="FeaturedProductsToolbar.ascx.cs" Inherits="Composite_Plugins_Forms_WebChannel_UiControlFactories_ToolbarButtonTemplateUserControlBase" %>
+<ui:toolbarbutton id="featuredproducts" label="${string:Orckestra.ExperienceManagement.FeaturedProducts:EditPage.ProductButton.Label" tooltip="${string:Orckestra.ExperienceManagement.FeaturedProducts:EditPage.ProductButton.Tooltip" class="btn-secondary" binding="SlideInButtonBinding" url="<%= Path %>" />

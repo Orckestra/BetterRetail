@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FormData>
+  <ContainerLabel />
+  <FormDefinition value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;&#xD;&#xA;&lt;cms:formdefinition xmlns=&quot;http://www.composite.net/ns/management/bindingforms/std.ui.controls.lib/1.0&quot; xmlns:f=&quot;http://www.composite.net/ns/management/bindingforms/std.function.lib/1.0&quot; xmlns:cms=&quot;http://www.composite.net/ns/management/bindingforms/1.0&quot;&gt;&#xD;&#xA;  &lt;cms:bindings&gt;&#xD;&#xA;    &lt;cms:binding name=&quot;FileContent&quot; type=&quot;System.String&quot; /&gt;&#xD;&#xA;    &lt;cms:binding name=&quot;FileName&quot; type=&quot;System.String&quot; /&gt;&#xD;&#xA;    &lt;cms:binding name=&quot;FileMimeType&quot; type=&quot;System.String&quot; /&gt;&#xD;&#xA;  &lt;/cms:bindings&gt;&#xD;&#xA;  &lt;cms:layout&gt;&#xD;&#xA;    &lt;TextEditor&gt;&#xD;&#xA;      &lt;TextEditor.MimeType&gt;&#xD;&#xA;        &lt;cms:read source=&quot;FileMimeType&quot; /&gt;&#xD;&#xA;      &lt;/TextEditor.MimeType&gt;&#xD;&#xA;      &lt;TextEditor.Label&gt;&#xD;&#xA;        &lt;cms:read source=&quot;FileName&quot; /&gt;&#xD;&#xA;      &lt;/TextEditor.Label&gt;&#xD;&#xA;      &lt;cms:bind source=&quot;FileContent&quot; /&gt;&#xD;&#xA;    &lt;/TextEditor&gt;&#xD;&#xA;  &lt;/cms:layout&gt;&#xD;&#xA;&lt;/cms:formdefinition&gt;" />
+  <ContainerType>
+    <SerializerHandler value="SerializerHandlerType='Composite\.C1Console\.Actions\.StandardUiContainerTypesSerializerHandler,Composite'SerializedObject='Document'" />
+  </ContainerType>
+  <Bindings>
+    <Dictionary type="&lt;t n=&quot;System.Collections.Generic.Dictionary`2, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089&quot;&gt;&#xD;&#xA;  &lt;t n=&quot;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089&quot; /&gt;&#xD;&#xA;  &lt;t n=&quot;System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089&quot; /&gt;&#xD;&#xA;&lt;/t&gt;">
+      <KeyPair>
+        <Key>
+          <Value type="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" value="Composite.C1Console.Workflow.Activities.FormsWorkflow:EntityToken" />
+        </Key>
+        <Value>
+          <SerializerHandler value="SerializerHandlerType='Composite\.C1Console\.Security\.EntityTokenSerializerHandler,Composite'SerializedObject='\{&quot;ProviderName&quot;:&quot;WebsiteFileElementProvider&quot;,&quot;Type&quot;:&quot;&quot;,&quot;Source&quot;:&quot;WebsiteFileElementProvider&quot;,&quot;Id&quot;:&quot;\\\\App_Config\\\\ExperienceManagement\.config&quot;,&quot;Path&quot;:&quot;E:\\\\Orckestra\\\\BetterRetail\\\\deployment\\\\Website\\\\App_Config\\\\ExperienceManagement\.config&quot;,&quot;RootPath&quot;:&quot;E:\\\\Orckestra\\\\BetterRetail\\\\deployment\\\\Website&quot;,&quot;meta:type&quot;:&quot;Composite\.Plugins\.Elements\.ElementProviders\.WebsiteFileElementProvider\.WebsiteFileElementProviderEntityToken,\ Composite&quot;}'" />
+        </Value>
+      </KeyPair>
+      <KeyPair>
+        <Key>
+          <Value type="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" value="FileContent" />
+        </Key>
+        <Value>
+          <Value type="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;&#xD;&#xA;&lt;settings configBuilders=&quot;EnvExpManSettings&quot;&gt;&#xD;&#xA;  &lt;add key=&quot;OrchestrationServicesHostname&quot; value=&quot;&quot; /&gt;&#xD;&#xA;  &lt;add key=&quot;Overture.Url&quot; value=&quot;https://orc-dev-ocs-cd.develop.orckestra.cloud/api&quot; /&gt;&#xD;&#xA;  &lt;add key=&quot;Overture.AuthToken&quot; value=&quot;mBTOMa98OOAtQ+dKqUJT50oGuqNoW87tbPPdLQf9KDkMxpx6ZCj7L99QlTRMbyCRNG2Vd6mVL7IO3VROWFxgnZonqtMKwM8alWrjvcnjRAg=&quot; /&gt;&#xD;&#xA;  &lt;!--CookieAccesser  --&gt;&#xD;&#xA;  &lt;add key=&quot;CookieAccesser.Name&quot; value=&quot;.CUST&quot; /&gt;&#xD;&#xA;  &lt;add key=&quot;CookieAccesser.TimeoutInMinutes&quot; value=&quot;131760&quot; /&gt;&#xD;&#xA;  &lt;add key=&quot;CookieAccesser.RequireSsl&quot; value=&quot;true&quot; /&gt;&#xD;&#xA;  &lt;add key=&quot;CookieAccesser.Domain&quot; value=&quot;&quot; /&gt;&#xD;&#xA;  &lt;add key=&quot;AppSelector.ApplicationName&quot; value=&quot;ExperienceManagement&quot; /&gt;&#xD;&#xA;  &lt;add key=&quot;CategoryTopicPageTemplateId&quot; value=&quot;2efe394b-cce7-4119-9b41-4801cc9b31e8&quot; /&gt;&#xD;&#xA;  &lt;add key=&quot;CategoryAllProductsPageTemplateId&quot; value=&quot;f953fa1e-31fe-4f15-8967-9827caffb68b&quot; /&gt;&#xD;&#xA;  &lt;add key=&quot;CategoryPageTypeId&quot; value=&quot;ab50b336-ee78-4c53-9fb6-022407c0d3ef&quot; /&gt;&#xD;&#xA;  &lt;add key=&quot;CategoryLandingPageTypeId&quot; value=&quot;8132f659-418b-4c39-b450-9c8c53a86bd4&quot; /&gt;&#xD;&#xA;  &lt;add key=&quot;CategoryPageMetaDataFieldName&quot; value=&quot;ComposerCategoryPage&quot; /&gt;&#xD;&#xA;  &lt;add key=&quot;CategoryLandingPageMetaDataFieldName&quot; value=&quot;ComposerCategoryLandingPage&quot; /&gt;&#xD;&#xA;  &lt;add key=&quot;ServiceBus.Hostname&quot; value=&quot;occ-dev-localdeployment.servicebus.windows.net&quot; /&gt;&#xD;&#xA;  &lt;add key=&quot;ServiceBus.KeyName&quot; value=&quot;RootManageSharedAccessKey&quot; /&gt;&#xD;&#xA;  &lt;add key=&quot;ServiceBus.Key&quot; value=&quot;&quot; /&gt;&#xD;&#xA;  &lt;add key=&quot;ServiceBus.TopicPrefix&quot; value=&quot;&quot; /&gt;&#xD;&#xA;  &lt;add key=&quot;ServiceBus.SubscriptionPrefix&quot; value=&quot;Orckestra.ExperienceManagement_&quot; /&gt;&#xD;&#xA;  &lt;add key=&quot;CdnDamProvider.ServerUrl&quot; value=&quot;https://refapp.azureedge.net&quot; /&gt;&#xD;&#xA;  &lt;add key=&quot;CdnDamProvider.ImageFolderName&quot; value=&quot;images&quot; /&gt;&#xD;&#xA;  &lt;add key=&quot;CdnDamProvider.FallbackImage&quot; value=&quot;image_not_found.jpg&quot; /&gt;&#xD;&#xA;&lt;/settings&gt;" />
+        </Value>
+      </KeyPair>
+      <KeyPair>
+        <Key>
+          <Value type="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" value="FileName" />
+        </Key>
+        <Value>
+          <Value type="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" value="ExperienceManagement.config" />
+        </Value>
+      </KeyPair>
+      <KeyPair>
+        <Key>
+          <Value type="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" value="FileMimeType" />
+        </Key>
+        <Value>
+          <Value type="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" value="text/xml" />
+        </Value>
+      </KeyPair>
+    </Dictionary>
+  </Bindings>
+  <BindingsValidationRules>
+    <Dictionary type="&lt;t n=&quot;System.Collections.Generic.Dictionary`2, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089&quot;&gt;&#xD;&#xA;  &lt;t n=&quot;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089&quot; /&gt;&#xD;&#xA;  &lt;t n=&quot;System.Collections.Generic.List`1, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089&quot;&gt;&#xD;&#xA;    &lt;t n=&quot;Composite.Data.Validation.ClientValidationRules.ClientValidationRule,Composite&quot; /&gt;&#xD;&#xA;  &lt;/t&gt;&#xD;&#xA;&lt;/t&gt;" />
+  </BindingsValidationRules>
+  <ExcludedEvents>
+    <List type="&lt;t n=&quot;System.Collections.Generic.List`1, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089&quot;&gt;&#xD;&#xA;  &lt;t n=&quot;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089&quot; /&gt;&#xD;&#xA;&lt;/t&gt;" />
+  </ExcludedEvents>
+</FormData>

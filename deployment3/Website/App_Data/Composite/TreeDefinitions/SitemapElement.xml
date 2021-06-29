@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ElementStructure xmlns="http://www.composite.net/ns/management/trees/treemarkup/1.0" xmlns:f="http://www.composite.net/ns/function/1.0">
+  <ElementStructure.AutoAttachments>
+    <NamedParent Name="PerspectivesRoot" Position="Bottom" />
+  </ElementStructure.AutoAttachments>
+  <ElementRoot ShareRootElementById="true">
+    <Children>
+      <Element Id="SitemapElement" Label="Sitemap Management">
+        <Children>
+          <Element Id="SitemapStatus" Label="Sitemap Status">
+            <Actions>
+              <CustomUrlAction Label="Sitemap Management" Url="~/Composite/content/sitemap/SitemapManagement.aspx"/>
+            </Actions>
+          </Element>
+        </Children>
+      </Element>
+    </Children>
+  </ElementRoot>
+</ElementStructure>

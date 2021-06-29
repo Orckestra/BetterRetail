@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<strings>
+  <string key="QueryPerpspective" value="Merchandising " />
+  <string key="ElementProvider.CategoryLabel" value="Category" />
+  <string key="ElementProvider.CategoryTooltip" value="Category" />
+  <string key="ElementProvider.RootQueryLabel" value="Queries" />
+  <string key="ElementProvider.RootQueryTooltip" value="Queries" />
+  <string key="ElementProvider.AddQueryLabel" value="Add Query" />
+  <string key="ElementProvider.AddQueryTooltip" value="Add Query" />
+  <string key="ElementProvider.EditQueryLabel" value="Edit Query" />
+  <string key="ElementProvider.EditQueryTooltip" value="Edit Query" />
+  <string key="ElementProvider.DeleteQueryLabel" value="Delete Query" />
+  <string key="ElementProvider.DeleteQueryTooltip" value="Delete Query" />
+  <string key="Messages.EntityAlreadyExists" value="A query with this name already exists" />
+  <string key="AddNewQuery.DialogLabel" value="Add New Query" />
+  <string key="AddNewQuery.QueryNameLabel" value="Query Name" />
+  <string key="AddNewQuery.QueryNameHelp" value="Query Name" />
+  <string key="DeleteQuery.DialogLabel" value="Delete Query?" />
+  <string key="DeleteQuery.DialogText" value="Delete the selected query?" />
+  <string key="SearchQuery.SaveButton" value="Save" />
+  <string key="SearchQuery.NameLabel" value="New Query Name" />
+  <string key="SearchQuery.CategoryLabel" value="Category" />
+  <string key="SearchQuery.SortLabel" value="Sort by" />
+  <string key="Component.Grid.Title" value="Display the full query results as a page" />
+  <string key="Parameters.QueryNameLabel" value="Search Query Name" />
+  <string key="Parameters.QueryNameHelp" value="" />
+  <string key="Parameters.NumberLabel" value="Number" />
+  <string key="Parameters.NumberHelp" value="" />
+  <string key="Parameters.PageLabel" value="Page" />
+  <string key="Parameters.PagerHelp" value="" />
+  <string key="ProductSets.RootLabel" value="Product Sets" />
+  <string key="ProductSets.RootTooltip" value="Product Sets" />
+  <string key="ProductSets.AddLabel" value="Add Product Set" />
+  <string key="ProductSets.EditLabel" value="Edit Product Set" />
+  <string key="ProductSets.DeleteLabel" value="Delete Product Set" />
+  <string key="AddNewProductSet.DialogLabel" value="Add Product Set" />
+  <string key="AddNewProductSet.ProductSetNameLabel" value="Product Set Name" />
+  <string key="AddNewProductSet.ProductSetNameHelp" value="Product Set Name" />
+  <string key="DeleteProductSet.DialogLabel" value="Delete Product Set?" />
+  <string key="DeleteProductSet.DialogText" value="Delete the selected Product Set?" />
+  <string key="ProductSets.SetTitle" value="Product Set" />
+  <string key="ProductSets.SelectedTitle" value="{0} selected" />
+  <string key="ProductSets.AddedProductsTitle" value="Product List ({0})" />
+  <string key="ProductSets.AddProductButton" value="Add" />
+  <string key="ProductSets.SaveButton" value="Save" />
+  <string key="ProductSets.UnselectButton" value="Unselect All" />
+  <string key="ProductSets.ImportButton" value="Import SKUs" />
+  <string key="ProductSets.RemoveAllButton" value="Remove All" />
+  <string key="ProductSets.ImportForm.ModalTitle" value="Import SKUs" />
+  <string key="ProductSets.ImportForm.ListOfSkusLabel" value="List of SKUs" />
+  <string key="ProductSets.ImportForm.ListOfSkusHelpText" value="Add one SKU per line" />
+  <string key="ProductSets.ImportForm.ImportBehaviorLabel" value="Import Behavior" />
+  <string key="ProductSets.ImportForm.AppendOptionLabel" value="Append to existing list" />
+  <string key="ProductSets.ImportForm.ReplaceoptionLabel" value="Replace existing list" />
+  <string key="ProductSets.ImportForm.SubmitButtonLabel" value="Import SKUs" />
+  <string key="ProductSets.NameLabel" value="Name" />
+  <string key="ProductSets.CategoryLabel" value="Category" />
+  <string key="ProductSets.SortLabel" value="Sort by" />
+  <string key="Inactive" value="Inactive" />
+  <string key="Invalid" value="Invalid" />
+  <string key="Search.F_Relevance_Option" value="Relevance" />
+  <string key="Search.F_PriceLowHigh_Option" value="Price: Low to High" />
+  <string key="Search.F_PriceHighLow_Option" value="Price: High to low" />
+  <string key="Search.F_NameAZ_Option" value="Name: A to Z" />
+  <string key="Search.F_NameZA_Option" value="Name: Z to A" />
+
+  <string key="Featured.Filter.Placeholder" value="Filter..." />
+  <string key="Featured.Products.UnSelectAll.Label" value="Unselect All" />
+  <string key="Featured.Products.UnSelectAll.Tooltip" value="Unselect All" />
+  <string key="Featured.Products.AddToFeatured.Label" value="Add" />
+  <string key="Featured.Products.AddToFeatured.Tooltip" value="Add to featured" />
+  <string key="Featured.Products.LoadMore.Label" value="Load more" />
+  <string key="Featured.Products.LoadMore.Tooltip" value="Load more" />
+  <string key="Featured.Products.CountSelected.Label" value="{0} selected" />
+  <string key="Featured.Featured.AddNew.Label" value="Add a product" />
+  <string key="Featured.Featured.AddNew.Tooltip" value="Add a product" />
+  <string key="Featured.Featured.SubHeader.Label" value="Featured" />
+  <string key="Featured.Header.Label" value="Products" />
+  <string key="Featured.Apply.Label" value="Apply" />
+  <string key="Featured.Apply.Tooltip" value="Apply" />
+  <string key="Featured.EditPage.ProductButton.Label" value="Products" />
+  <string key="Featured.EditPage.ProductButton.Tooltip" value="Products" />
+  <string key="Featured.Inactive" value="Inactive" />
+  <string key="Featured.Invalid" value="Invalid" />
+</strings>

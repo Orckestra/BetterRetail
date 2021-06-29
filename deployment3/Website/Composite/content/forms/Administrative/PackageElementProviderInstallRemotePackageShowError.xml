@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cms:formdefinition xmlns="http://www.composite.net/ns/management/bindingforms/std.ui.controls.lib/1.0" xmlns:f="http://www.composite.net/ns/management/bindingforms/std.function.lib/1.0" xmlns:cms="http://www.composite.net/ns/management/bindingforms/1.0">
+  <cms:bindings>
+    <cms:binding name="ErrorHeader" type="System.Object" />
+    <cms:binding name="Errors" type="System.Object" />
+    <cms:binding name="LayoutLabel" type="System.String" />
+    <cms:binding name="TableCaption" type="System.String" />
+  </cms:bindings>
+ 
+  <cms:layout iconhandle="package-install-package">
+    <cms:layout.label>
+      <cms:read source="LayoutLabel"/>
+    </cms:layout.label>
+    <PlaceHolder>      
+      <InfoBox>
+        <InfoBox.Label>
+          <cms:read source="TableCaption"/>
+        </InfoBox.Label>
+        <InfoTable>
+          <InfoTable.Headers>
+            <cms:read source="ErrorHeader" />
+          </InfoTable.Headers>
+          <InfoTable.Rows>
+            <cms:read source="Errors" />
+          </InfoTable.Rows>
+        </InfoTable>
+      </InfoBox>
+    </PlaceHolder>
+  </cms:layout>
+</cms:formdefinition>
