@@ -1,3 +1,0 @@
-Composite.Core.Xml.XhtmlDocument,Composite
-False
-Displays products/variants related to the product displayed on the current product/variant details page.  First products which are related via merchandising relationship will be displayed and if none are available then displays product in the same default category

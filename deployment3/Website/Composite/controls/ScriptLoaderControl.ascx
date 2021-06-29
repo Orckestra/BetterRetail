@@ -1,1 +1,0 @@
-<%@ Control Language="C#" AutoEventWireup="true" CodeFile="ScriptLoaderControl.ascx.cs" Inherits="ScriptLoaderControl" %>

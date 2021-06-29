@@ -1,7 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<GeneratedTypeWhiteListElementsElements>
-  <GeneratedTypeWhiteListElements TypeManagerTypeName="Orckestra.Composer.CompositeC1.DataTypes.Facets.IFacet,Orckestra.Composer.CompositeC1.DataTypes" />
-  <GeneratedTypeWhiteListElements TypeManagerTypeName="Orckestra.Composer.CompositeC1.DataTypes.Facets.IFacetConfiguration,Orckestra.Composer.CompositeC1.DataTypes" />
-  <GeneratedTypeWhiteListElements TypeManagerTypeName="Orckestra.Composer.CompositeC1.DataTypes.Facets.IPromotedFacetValueSetting,Orckestra.Composer.CompositeC1.DataTypes" />
-  <GeneratedTypeWhiteListElements TypeManagerTypeName="Orckestra.Composer.CompositeC1.DataTypes.ISearchTerm,Orckestra.Composer.CompositeC1.DataTypes" />
-</GeneratedTypeWhiteListElementsElements>

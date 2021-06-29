@@ -1,5 +1,0 @@
-menuitem#menuitem_print,
-menuitem#menuitem_pageSetup,
-menuitem#menuitem_pageSetup + menuseparator {
-	display: none;
-}

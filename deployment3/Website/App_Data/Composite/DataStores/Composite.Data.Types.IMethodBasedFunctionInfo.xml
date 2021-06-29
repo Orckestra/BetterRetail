@@ -1,8 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<MethodBasedFunctionInfoElementsElements>
-  <MethodBasedFunctionInfoElements Id="47317fdd-fd67-4958-addc-2e72b486b455" Type="Orckestra.Composer.ContentSearch.Functions.WebsiteSearch, Orckestra.Composer.ContentSearch" MethodName="GetSearchablePageTypesOptions" Namespace="Orckestra.Composer.ContentSearch.Functions.WebsiteSearch" UserMethodName="GetSearchablePageTypesOptions" />
-  <MethodBasedFunctionInfoElements Id="5b201c90-af5e-4d9e-b18b-e71c87c6f781" Type="Orckestra.Composer.C1CMS.Queries.QueryFacade, Orckestra.Composer.C1CMS.Queries" MethodName="GetSearchQueryList" Namespace="Composer.SearchQuery.Functions" UserMethodName="GetSearchQueryList" />
-  <MethodBasedFunctionInfoElements Id="7a8cecf3-d345-4869-b955-272aee117c06" Type="Orckestra.Search.WebsiteSearch.WebsiteSearchFacade, Orckestra.Search.WebsiteSearch" MethodName="GetFacetOptions" Namespace="Orckestra.Search.WebsiteSearch.WebsiteSearchFacade" UserMethodName="GetFacetOptions" />
-  <MethodBasedFunctionInfoElements Id="f096e317-7994-4479-ad42-a313a1a88bd1" Type="Orckestra.Search.WebsiteSearch.WebsiteSearchFacade, Orckestra.Search.WebsiteSearch" MethodName="GetSearchableDataTypeOptions" Namespace="Orckestra.Search.WebsiteSearch.WebsiteSearchFacade" UserMethodName="GetSearchableDataTypeOptions" />
-  <MethodBasedFunctionInfoElements Id="f204d929-7193-4621-a11a-f5109a3444a4" Type="Orckestra.Composer.CompositeC1.Widgets.WidgetFunctions, Orckestra.Composer.CompositeC1" MethodName="GetWebsiteThemeOptions" Namespace="Orckestra.Composer.CompositeC1.Widgets.WidgetFunctions" UserMethodName="GetWebsiteThemeOptions" />
-</MethodBasedFunctionInfoElementsElements>

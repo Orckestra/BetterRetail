@@ -1,2 +1,0 @@
-﻿20210629 09:55:04.0047 6 185 Warning ConsoleFacade  The console 'key5671414886808235' owned by the user 'admin' timed out, closing it
-20210629 09:55:04.3668 6 185 Error WorkflowFacade  Workflow aborted, Id = a2bf1ca8-1a92-4f08-b1dc-2dcbb4725082

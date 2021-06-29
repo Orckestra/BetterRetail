@@ -1,6 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<ContentTabElementsElements>
-  <ContentTabElements Id="32a0a9c7-a813-4ac6-be17-d9bf2dab1436" Title="Articles" UrlTitle="Articles" IsProductTab="false" DataTypes="Orckestra.Composer.Articles.DataTypes.IArticle" Facets="IArticle.Tags,IArticle.Category" Order="2" PublicationStatus="published" SourceCultureName="en-CA" />
-  <ContentTabElements Id="39bb04af-899e-411b-a107-b1c6c643f421" Title="Resources" UrlTitle="Resources" IsProductTab="false" DataTypes="Composite.Data.Types.IMediaFile" Facets="IMediaFile.MimeType" MediaFolders="MediaArchive:da211d4c-ecaa-4d94-8ac2-1691d49e000e" Order="3" PublicationStatus="published" SourceCultureName="en-CA" />
-  <ContentTabElements Id="44717a7d-9f4b-43e1-9260-0ee204813c38" Title="Products" UrlTitle="Products" IsProductTab="true" DataTypes="" Facets="" MediaFolders="" Order="1" PublicationStatus="published" SourceCultureName="en-CA" />
-</ContentTabElementsElements>

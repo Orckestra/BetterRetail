@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<strings>
-	<string key="AddCategoryPage.DialogLabel" value="S&#233;lectionner une ou plusieurs cat&#233;gories" />
-	<string key="ConvertToLandingPageAction.Label" value="Convertir en page d'entrée" />
-	<string key="ConvertToLandingPageAction.Tooltip" value="" />
-	<string key="ConvertToLandingPageAction.AllProductsPage.Title" value="Tous les produits" />
-	<string key="ConvertToLandingPageAction.AllProductsPage.UrlTitle" value="tous" />	
-</strings>

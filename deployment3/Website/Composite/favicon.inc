@@ -1,1 +1,0 @@
-<link rel="shortcut icon" type="image/x-icon" href="images/branding/favicon.ico" />

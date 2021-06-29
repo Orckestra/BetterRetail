@@ -1,1 +1,0 @@
-<%@ Control Language="C#" AutoEventWireup="true" CodeFile="FieldGroupControl.ascx.cs" Inherits="FieldGroupControl" %>

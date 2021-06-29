@@ -1,2 +1,0 @@
-<%@ Control Language="C#" AutoEventWireup="true" CodeFile="FunctionParameterDesigner.ascx.cs" Inherits="CompositeFunctionParameterDesigner.FunctionParameterDesigner" %>
-<ui:parametereditor stateprovider="<%= SessionStateProvider %>" handle="<%= SessionStateId.ToString() %>"/>

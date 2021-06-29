@@ -1,3 +1,0 @@
-Composite.Core.Xml.XhtmlDocument,Composite
-False
-Transforms a document by injecting container elements where missing. Given a XhtmlDocument this function ensure than elements in the body either have a class name in the specified 'Don't apply when these class names exists' or a container element (div class='container') will be injected around the elements.
