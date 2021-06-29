@@ -198,6 +198,9 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data" />
+    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\Composite\DynamicTypeForms\Orckestra\Composer\CompositeC1\DataTypes\GoogleSettings.xml" />
@@ -369,6 +372,10 @@
     <ProjectReference Include="..\Orckestra.Composer.Product\Orckestra.Composer.Product.csproj">
       <Project>{1f767098-1fbf-4cb9-8637-6529e1cc0b24}</Project>
       <Name>Orckestra.Composer.Product</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Orckestra.Composer.SearchQuery\Orckestra.Composer.SearchQuery.csproj">
+      <Project>{6dee1972-e64b-43f0-bbaf-04d0aa64dd60}</Project>
+      <Name>Orckestra.Composer.SearchQuery</Name>
     </ProjectReference>
     <ProjectReference Include="..\Orckestra.Composer.Search\Orckestra.Composer.Search.csproj">
       <Project>{ce6ad95e-0ebb-4e38-bf0b-27a67915fa68}</Project>

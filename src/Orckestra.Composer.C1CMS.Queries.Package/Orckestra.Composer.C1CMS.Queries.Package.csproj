@@ -76,6 +76,12 @@
     <Folder Include="Package\Bin\" />
     <Folder Include="Release\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Orckestra.Composer.C1CMS.Queries\Orckestra.Composer.C1CMS.Queries.csproj">
+      <Project>{8f9ad96b-47b6-4bbd-ad4e-0155b49d2bfd}</Project>
+      <Name>Orckestra.Composer.C1CMS.Queries</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

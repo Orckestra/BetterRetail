@@ -59,6 +59,12 @@
   <ItemGroup>
     <Folder Include="Release\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Orckestra.Composer.SEO.Organization.Content\Orckestra.Composer.SEO.Organization.Content.csproj">
+      <Project>{a8b2d94c-8c2e-4ac5-875a-6e3540b56add}</Project>
+      <Name>Orckestra.Composer.SEO.Organization.Content</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
