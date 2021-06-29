@@ -91,6 +91,10 @@
       <HintPath>..\..\packages\C1CMS.Assemblies.6.10.7583.21856\lib\net471\Microsoft.Practices.EnterpriseLibrary.Validation.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.SemanticLogging, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\EnterpriseLibrary.SemanticLogging.2.0.1406.1\lib\net45\Microsoft.Practices.EnterpriseLibrary.SemanticLogging.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.Practices.ObjectBuilder, Version=1.0.51206.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\C1CMS.Assemblies.6.10.7583.21856\lib\net471\Microsoft.Practices.ObjectBuilder.dll</HintPath>
       <Private>False</Private>
@@ -353,6 +357,10 @@
     <ProjectReference Include="..\Orckestra.Composer.Cart\Orckestra.Composer.Cart.csproj">
       <Project>{08f6fcb8-6065-4d31-b7df-67fe67ee67e5}</Project>
       <Name>Orckestra.Composer.Cart</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Orckestra.Composer.HandlebarsCompiler\Orckestra.Composer.HandlebarsCompiler.csproj">
+      <Project>{3508a92e-cb4b-431d-bbdc-0ad5fabec20c}</Project>
+      <Name>Orckestra.Composer.HandlebarsCompiler</Name>
     </ProjectReference>
     <ProjectReference Include="..\Orckestra.Composer.MyAccount\Orckestra.Composer.MyAccount.csproj">
       <Project>{0a2628f0-3e30-4da6-852f-b2cbec9b968d}</Project>
