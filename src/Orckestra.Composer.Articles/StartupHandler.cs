@@ -1,5 +1,4 @@
-﻿using Composite.AspNet.MvcFunctions;
-using Composite.Core.Application;
+﻿using Composite.Core.Application;
 using Composite.Data.DynamicTypes;
 using Composite.Search.Crawling;
 using Microsoft.Extensions.DependencyInjection;

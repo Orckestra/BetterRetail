@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Moq;
-using Orckestra.Caching;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Localization;
 using Orckestra.Composer.ViewEngine;
