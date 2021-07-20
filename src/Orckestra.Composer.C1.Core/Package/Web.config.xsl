@@ -117,24 +117,6 @@
           <add name="C1Page" enabled="true" duration="900" varyByCustom="C1Page" varyByParam="*" location="Any" />
 	</xsl:template>
 
-  <xsl:template match="configuration/system.webServer">
-    <xsl:copy xml:space="preserve">
-      <xsl:apply-templates select="@*"/>
-    <rewrite>
-      <rules>
-        <rule name="HTTP/S to HTTPS Redirect" enabled="true" stopProcessing="true">
-          <match url="(.*)" />
-          <conditions>
-            <add input="{HTTPS}" pattern="off" />
-          </conditions>
-          <action type="Redirect" url="https://{HTTP_HOST}{REQUEST_URI}" redirectType="Found" />
-        </rule>
-      </rules>
-    </rewrite>
-
-<xsl:apply-templates select="node()"/></xsl:copy>
-  </xsl:template>
-
   <xsl:template match="configuration/system.webServer/modules/add[@name='UrlRoutingModule']" xml:space="preserve">
         <add name="UrlRewriteModule" type="Orckestra.Composer.CompositeC1.UrlRewriteModule, Orckestra.Composer.CompositeC1" />
        <add name="AntiCookieTamperingModule" type="Orckestra.Composer.HttpModules.AntiCookieTamperingModule, Orckestra.Composer" />    
@@ -159,7 +141,27 @@
         <add name="X-UA-Compatible" value="IE=edge" />
         <add name="X-Frame-Options" value="SAMEORIGIN" />
       </customHeaders>
-    </httpProtocol></xsl:copy>
+    </httpProtocol>
+    <rewrite>
+      <rules>
+        <rule name="HTTP/S to HTTPS Redirect" enabled="true" stopProcessing="true">
+          <match url="(.*)" />
+          <conditions>
+            <add input="{{HTTPS}}" pattern="off" />
+          </conditions>
+          <action type="Redirect" url="https://{{HTTP_HOST}}{{REQUEST_URI}}" redirectType="Found" />
+        </rule>
+      </rules>
+      <outboundRules>
+        <rule name="Add Strict-Transport-Security when HTTPS" enabled="true">
+          <match serverVariable="RESPONSE_Strict_Transport_Security" pattern=".*" />
+          <conditions>
+            <add input="{{HTTPS}}" pattern="on" ignoreCase="true" />
+          </conditions>
+          <action type="Rewrite" value="max-age=31536000" />
+        </rule>
+      </outboundRules>
+    </rewrite></xsl:copy>
   </xsl:template>
 
   <xsl:template match="/configuration/system.webServer/modules">
