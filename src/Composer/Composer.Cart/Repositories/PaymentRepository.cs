@@ -294,7 +294,7 @@ namespace Orckestra.Composer.Cart.Repositories
         /// </summary>
         /// <param name="scopeId">Scope used to make the request.</param>
         /// <returns>List of providers</returns>
-        public virtual async Task<IList<PaymentProviderInfo>> GetPaymentProviders(string scopeId)
+        public virtual async Task<IList<PaymentProvider>> GetPaymentProviders(string scopeId)
         {
             if (scopeId == null) { throw new ArgumentNullException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(scopeId))); }
 

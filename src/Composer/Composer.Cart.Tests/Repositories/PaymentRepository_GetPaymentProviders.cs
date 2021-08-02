@@ -28,11 +28,11 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             cacheProvider
                 .Setup(provider => provider.GetOrAddAsync(
                     It.IsNotNull<CacheKey>(),
-                    It.IsNotNull<Func<Task<PaymentProviderInfos>>>(),
-                    It.IsAny<Func<PaymentProviderInfos, Task>>(),
+                    It.IsNotNull<Func<Task<GetPaymentProvidersResponse>>>(),
+                    It.IsAny<Func<GetPaymentProvidersResponse, Task>>(),
                     It.IsAny<CacheKey>()))
-                .Returns<CacheKey, Func<Task<PaymentProviderInfos>>,
-                        Func<PaymentProviderInfos, Task>, CacheKey>(
+                .Returns<CacheKey, Func<Task<GetPaymentProvidersResponse>>,
+                        Func<GetPaymentProvidersResponse, Task>, CacheKey>(
                     (key, func, arg3, arg4) => func())
                 .Verifiable();
         }
@@ -41,11 +41,11 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
         public async Task When_Passing_Valid_ScopeId_SHOULD_Return_PaymentProviders()
         {
             //Arrange
-            var paymentProviderInfos = new PaymentProviderInfos
+            var paymentProviderInfos = new GetPaymentProvidersResponse
             {
-                PaymentProviders = new List<PaymentProviderInfo>
+                PaymentProviders = new List<PaymentProvider>
                 {
-                    new PaymentProviderInfo(),
+                    new PaymentProvider(),
                 }
             };
             MockPaymentProvidersRequest(paymentProviderInfos);
@@ -63,11 +63,11 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
         public void When_Passing_Empty_ScopeId_SHOULD_throw_ArgumentNullException()
         {
             //Arrange
-            var paymentProviderInfos = new PaymentProviderInfos
+            var paymentProviderInfos = new GetPaymentProvidersResponse
             {
-                PaymentProviders = new List<PaymentProviderInfo>
+                PaymentProviders = new List<PaymentProvider>
                 {
-                    new PaymentProviderInfo(),
+                    new PaymentProvider(),
                 }
             };
             MockPaymentProvidersRequest(paymentProviderInfos);
@@ -77,7 +77,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             Assert.ThrowsAsync<ArgumentNullException>(() => repository.GetPaymentProviders(null));
         }
 
-        private void MockPaymentProvidersRequest(PaymentProviderInfos paymentProviderInfos)
+        private void MockPaymentProvidersRequest(GetPaymentProvidersResponse paymentProviderInfos)
         {
             var overtureClient = _container.GetMock<IOvertureClient>();
             overtureClient.Setup(client => client.SendAsync(It.IsNotNull<GetPaymentProvidersRequest>()))

@@ -169,10 +169,10 @@ namespace Orckestra.Composer.Cart.Tests.Services
         private void ConfigureEmptyProviders()
         {
             _paymentProviderMoq.Setup(q => q.ResolveAllProviders()).Returns(new List<IPaymentProvider>());
-            _paymentRepoMoq.Setup(q => q.GetPaymentProviders(It.IsAny<string>())).ReturnsAsync(new List<PaymentProviderInfo>());
+            _paymentRepoMoq.Setup(q => q.GetPaymentProviders(It.IsAny<string>())).ReturnsAsync(new List<PaymentProvider>());
         }
 
-        private (Provider provider, PaymentProviderInfo paymentProvider) ConfigureDefaultProviders(GetPaymentProvidersParam param)
+        private (Provider provider, PaymentProvider paymentProvider) ConfigureDefaultProviders(GetPaymentProvidersParam param)
         {
             var localPaymentProvider = new FakePaymentProvider();
 
@@ -189,7 +189,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
                 IsActive = true,
             };
 
-            var paymentProvider = new PaymentProviderInfo
+            var paymentProvider = new PaymentProvider
             {
                 Id = id,
                 SupportedCultureIds = param.CultureInfo.Name,
@@ -205,7 +205,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
 
             _paymentRepoMoq
                 .Setup(q => q.GetPaymentProviders(It.IsAny<string>()))
-                .ReturnsAsync(new List<PaymentProviderInfo>
+                .ReturnsAsync(new List<PaymentProvider>
                 {
                     paymentProvider,
                 });

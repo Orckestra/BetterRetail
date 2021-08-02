@@ -84,7 +84,7 @@ namespace Orckestra.Composer.Cart.Repositories
         /// Get a available payment providers by scope
         /// </summary>
         /// <returns></returns>
-        Task<IList<PaymentProviderInfo>> GetPaymentProviders(string scopeId);
+        Task<IList<PaymentProvider>> GetPaymentProviders(string scopeId);
 
         /// <summary>
         /// Get a available providers of type by scope
