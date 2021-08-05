@@ -333,6 +333,7 @@
     <Compile Include="Services\ScopeViewService.cs" />
     <Compile Include="Utils\Constants.cs" />
     <Compile Include="Utils\ExpressionUtility.cs" />
+    <Compile Include="Utils\FileWriteLock.cs" />
     <Compile Include="Utils\LineItemHelper.cs" />
     <Compile Include="Utils\MessagesHelper.cs" />
     <Compile Include="Utils\MvcFilterRedirectUtil.cs" />
