@@ -1,16 +1,16 @@
-﻿using Composite.Core;
+﻿using Composite.C1Console.Events;
+using Composite.Core;
 using Composite.Data;
 using Composite.Data.Types;
 using Orckestra.Composer.CompositeC1.Sitemap;
 using Orckestra.Composer.Sitemap.Services;
+using Orckestra.Composer.Utils;
 using Orckestra.ExperienceManagement.Configuration.ServiceBus;
 using Orckestra.ExperienceManagement.Configuration.Settings;
 using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Composite.C1Console.Events;
-using Orckestra.Composer.Utils;
 
 namespace Orckestra.Composer.Sitemap.EventHandlers
 {
@@ -19,6 +19,9 @@ namespace Orckestra.Composer.Sitemap.EventHandlers
         private static readonly ISitemapGeneratorScheduler SitemapGeneratorScheduler;
         private static readonly ServiceBusListener ServiceBusListener;
         private static IEnumerable<string> _dataTypesToIncludeFromConfig = C1ContentSitemapProviderConfig.DataTypesToInclude;
+
+        private const int WaitingForCancellationTimeInMs = 5000;
+        private const int WaitingTimeForCancellationToFinishInMs = 5000;
 
         static SitemapEventRegistrator()
         {
@@ -39,7 +42,7 @@ namespace Orckestra.Composer.Sitemap.EventHandlers
                 try
                 {
                     cts.Cancel();
-                    task.Wait(5000);
+                    task.Wait(WaitingTimeForCancellationToFinishInMs);
                 }
                 catch (Exception ex)
                 {
@@ -63,7 +66,7 @@ namespace Orckestra.Composer.Sitemap.EventHandlers
 
                 try
                 {
-                    await Task.Delay(5000, cancellationToken);
+                    await Task.Delay(WaitingForCancellationTimeInMs, cancellationToken);
                 }
                 catch (TaskCanceledException) {}
             }
@@ -80,7 +83,7 @@ namespace Orckestra.Composer.Sitemap.EventHandlers
             {
                 try
                 {
-                    await Task.Delay(5000, cancellationToken);
+                    await Task.Delay(WaitingForCancellationTimeInMs, cancellationToken);
                 }
                 catch (TaskCanceledException) { }
             }
