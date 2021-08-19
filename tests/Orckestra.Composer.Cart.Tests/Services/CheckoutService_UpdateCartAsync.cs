@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.Globalization;
 using System.Linq;
-using System.Net.Http.Formatting;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using FizzWare.NBuilder.Generators;

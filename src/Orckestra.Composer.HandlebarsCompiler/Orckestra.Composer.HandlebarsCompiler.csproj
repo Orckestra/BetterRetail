@@ -80,7 +80,6 @@
     <Reference Include="Jurassic, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Jurassic.3.0.0\lib\net45\Jurassic.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Extensions.DependencyInjection, Version=1.1.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\..\packages\C1CMS.Assemblies.6.10.7583.21856\lib\net471\Microsoft.Extensions.DependencyInjection.dll</HintPath>
       <Private>False</Private>
@@ -130,7 +129,6 @@
     <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.1">
@@ -148,10 +146,6 @@
     <ProjectReference Include="..\Orckestra.Composer\Orckestra.Composer.csproj">
       <Project>{d00bd58b-93fe-4f3d-bbc8-6f7873ca6830}</Project>
       <Name>Orckestra.Composer</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Orckestra.Composer.CompositeC1\Orckestra.Composer.CompositeC1.csproj">
-      <Project>{3E42C35E-B19C-4ABE-80F8-FD268D44E11F}</Project>
-      <Name>Orckestra.Composer.CompositeC1</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
