@@ -1,14 +1,13 @@
-﻿using System;
+﻿using Composite.Data;
+using Orckestra.Composer.CompositeC1.Services;
+using Orckestra.Composer.CompositeC1.Utils;
+using Orckestra.Composer.Services;
+using Orckestra.Composer.Utils;
+using Orckestra.Composer.ViewModels;
+using System;
 using System.Globalization;
 using System.Net.Http;
 using System.Web.Mvc;
-using Composite.Data;
-using Orckestra.Composer.CompositeC1.Services;
-using Orckestra.Composer.Services;
-using Orckestra.Composer.Services.Breadcrumb;
-using Orckestra.Composer.Utils;
-using Orckestra.Composer.ViewModels;
-using Orckestra.Composer.CompositeC1.Utils;
 
 namespace Orckestra.Composer.CompositeC1.Controllers
 {
@@ -17,19 +16,16 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         protected IPageService PageService { get; private set; }
         protected IComposerContext ComposerContext { get; private set; }
         protected ILanguageSwitchService LanguageSwitchService { get; private set; }
-        protected IBreadcrumbViewService BreadcrumbViewService { get; private set; }
 
         protected HeaderBaseController(
             IPageService pageService,
             IComposerContext composerContext,
-            ILanguageSwitchService languageSwitchService,
-            IBreadcrumbViewService breadcrumbViewService
+            ILanguageSwitchService languageSwitchService
             )
         {
             PageService = pageService ?? throw new ArgumentNullException(nameof(pageService));
             ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
             LanguageSwitchService = languageSwitchService ?? throw new ArgumentNullException(nameof(languageSwitchService));
-            BreadcrumbViewService = breadcrumbViewService ?? throw new ArgumentNullException(nameof(breadcrumbViewService));
         }
 
         public virtual ActionResult LanguageSwitch()
@@ -48,18 +44,6 @@ namespace Orckestra.Composer.CompositeC1.Controllers
 
             var url = UrlFormatter.AppendQueryString(pageUrl, Request.Url.ParseQueryString());
             return url;
-        }
-
-
-        public virtual ActionResult Breadcrumb()
-        {
-            var breadcrumbVm = BreadcrumbViewService.CreateBreadcrumbViewModel(new GetBreadcrumbParam
-            {
-                CurrentPageId = SitemapNavigator.CurrentPageId.ToString(),
-                CultureInfo = ComposerContext.CultureInfo
-            });
-
-            return View(breadcrumbVm);
         }
 
         public virtual ActionResult PageHeader()

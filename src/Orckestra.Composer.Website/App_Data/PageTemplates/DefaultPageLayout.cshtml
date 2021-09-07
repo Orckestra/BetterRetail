@@ -15,9 +15,6 @@
 	[Placeholder(Id="languageSwitch", Title="Language Switch")]
 	public XhtmlDocument LanguageSwitch { get; set; }
 
-	[Placeholder(Id="breadcrumb", Title="Breadcrumb")]
-	public XhtmlDocument Breadcrumb { get; set; }
-
 	[Placeholder(Id="body", Title="Body", IsDefault=true)]
 	public XhtmlDocument Body { get; set; }
 }
@@ -36,9 +33,9 @@
 			</html>
 		  </f:param>
 		</f:function>
-	    <div class="container-md">
-	        @Markup(Breadcrumb)
-	    </div>
+        <div class="container-md">
+            @this.Function("Composer.Header.Breadcrumb")
+        </div>
 	<f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.Header.GeneralErrors"/>
 		@this.Function("Composer.Layout.Helpers.InjectContainerElements",
                 new { Document = Body, InjectedContainerClassName = "container-md", DontApplyClassNameList = "container-fluid,c1-wide" })

@@ -1,20 +1,17 @@
-using System;
 using Orckestra.Composer.CompositeC1.Context;
 using Orckestra.Composer.CompositeC1.Controllers;
-using Orckestra.Composer.CompositeC1.Services;
 using Orckestra.Composer.CompositeC1.Services.PreviewMode;
 using Orckestra.Composer.Product.Services;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Services;
+using System;
 
 namespace Orckestra.Composer.Website.Controllers
 {
     public class ProductController : ProductBaseController
     {
         public ProductController(
-            IPageService pageService, 
-            IComposerContext composerContext, 
-            IProductBreadcrumbService productBreadcrumbService, 
+            IComposerContext composerContext,
             ILanguageSwitchService languageSwitchService, 
             IProductUrlProvider productUrlProvider, 
             IRelatedProductViewService relatedProductViewService,
@@ -22,9 +19,7 @@ namespace Orckestra.Composer.Website.Controllers
             IProductContext productContext) 
             
             : base(
-            pageService, 
-            composerContext, 
-            productBreadcrumbService, 
+            composerContext,
             languageSwitchService, 
             productUrlProvider, 
             relatedProductViewService,

@@ -116,28 +116,6 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             return View("StoreLocatorInHeader", model);
         }
 
-        public virtual ActionResult Breadcrumb(string storeNumber)
-        {
-            var model = StoreContext.ViewModel;
-            if (model == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
-            }
-
-            var breadcrumbViewModel = BreadcrumbViewService.CreateBreadcrumbViewModel(new GetBreadcrumbParam
-            {
-                CurrentPageId = SitemapNavigator.CurrentPageId.ToString(),
-                CultureInfo = ComposerContext.CultureInfo
-            });
-
-            if (!string.IsNullOrEmpty(model.LocalizedDisplayName))
-            {
-                breadcrumbViewModel.ActivePageName = model.LocalizedDisplayName;
-            }
-
-            return View(breadcrumbViewModel);
-        }
-
         public virtual ActionResult PageHeader(string storeNumber)
         {
             var model = StoreContext.ViewModel;

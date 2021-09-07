@@ -21,9 +21,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
 {
     public abstract class ProductBaseController : Controller
     {
-        protected IPageService PageService { get; private set; }
         protected IComposerContext ComposerContext { get; private set; }
-        protected IProductBreadcrumbService ProductBreadcrumbService { get; private set; }
         protected ILanguageSwitchService LanguageSwitchService { get; private set; }
         protected IProductUrlProvider ProductUrlProvider { get; private set; }
         protected IRelatedProductViewService RelatedProductViewService { get; private set; }
@@ -31,18 +29,14 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         protected IProductContext ProductContext { get; private set; }
 
         protected ProductBaseController(
-            IPageService pageService,
             IComposerContext composerContext,
-            IProductBreadcrumbService productBreadcrumbService,
             ILanguageSwitchService languageSwitchService,
             IProductUrlProvider productUrlProvider,
             IRelatedProductViewService relatedProductViewService,
             Lazy<IPreviewModeService> previewModeService,
             IProductContext productContext)
         {
-            PageService = pageService ?? throw new ArgumentNullException(nameof(pageService));
             ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
-            ProductBreadcrumbService = productBreadcrumbService ?? throw new ArgumentNullException(nameof(productBreadcrumbService));
             LanguageSwitchService = languageSwitchService ?? throw new ArgumentNullException(nameof(languageSwitchService));
             ProductUrlProvider = productUrlProvider ?? throw new ArgumentNullException(nameof(productUrlProvider));
             RelatedProductViewService = relatedProductViewService ?? throw new ArgumentNullException(nameof(relatedProductViewService));
@@ -81,30 +75,6 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             });
 
             return productUrl;
-        }
-
-        public virtual ActionResult Breadcrumb()
-        {
-            var productViewModel = ProductContext.ViewModel;
-
-            if (productViewModel == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
-            }
-
-            var parameters = new GetProductBreadcrumbParam
-            {
-                CategoryId = productViewModel.CategoryId,
-                CultureInfo = ComposerContext.CultureInfo,
-                HomeUrl = PageService.GetRendererPageUrl(SitemapNavigator.CurrentHomePageId, ComposerContext.CultureInfo),
-                ProductName = productViewModel.DisplayName,
-                Scope = ComposerContext.Scope,
-                BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
-            };
-
-            var breadcrumbViewModel = ProductBreadcrumbService.CreateBreadcrumbAsync(parameters).Result;
-
-            return View(breadcrumbViewModel);
         }
 
         public virtual ActionResult RelatedProducts(string id, string merchandiseTypes, string headingText, int maxItems, bool displaySameCategoryProducts, bool displayPrices, bool displayAddToCart, DataReference<CssStyle> backgroundStyle = null)

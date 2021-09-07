@@ -70,7 +70,6 @@ namespace Orckestra.Composer.Website
 
             functions.RegisterAction<HeaderController>("GeneralErrors", "Composer.Header.GeneralErrors");
             functions.RegisterAction<HeaderController>("LanguageSwitch", "Composer.Header.LanguageSwitch");
-            functions.RegisterAction<HeaderController>("Breadcrumb", "Composer.General.Breadcrumb");
             functions.RegisterAction<HeaderController>("PageHeader", "Composer.Header.PageHeader");
 
             functions.RegisterAction<SearchController>("PageHeader", "Composer.Search.PageHeader");
@@ -88,7 +87,6 @@ namespace Orckestra.Composer.Website
             functions.RegisterAction<BrowsingCategoriesController>("ChildCategories", "Composer.BrowsingCategories.ChildCategories");
 
             functions.RegisterAction<ProductController>("LanguageSwitch", "Composer.Product.LanguageSwitch");
-            functions.RegisterAction<ProductController>("Breadcrumb", "Composer.Product.Breadcrumb");
             functions.RegisterAction<ProductController>("RelatedProducts", "Composer.Product.Instant.RelatedProducts", "Displays products/variants related to the product displayed on the current product/variant details page.  First products which are related via merchandising relationship will be displayed and if none are available then displays product in the same default category")
                 .AddParameter("merchandiseTypes",
                     typeof(string),
@@ -141,8 +139,6 @@ namespace Orckestra.Composer.Website
 
             functions.RegisterAction<CheckoutController>("CheckoutSignInAsGuest", "Composer.Checkout.CheckoutSignInAsGuest");
             functions.RegisterAction<CheckoutController>("CheckoutSignInAsCustomer", "Composer.Checkout.CheckoutSignInAsCustomer");
-            functions.RegisterAction<CheckoutController>("Breadcrumb", "Composer.Checkout.Breadcrumb");
-            functions.RegisterAction<CheckoutController>("ConfirmationBreadcrumb", "Composer.Checkout.ConfirmationBreadcrumb");
             functions.RegisterAction<CheckoutController>("LanguageSwitch", "Composer.Checkout.LanguageSwitch");
 
             functions.RegisterAction<MembershipController>("SignInHeaderBlade", "Composer.Membership.SignInHeader");
@@ -173,7 +169,6 @@ namespace Orckestra.Composer.Website
 
             functions.RegisterAction<StoreLocatorController>("StoreDetails", "Composer.Store.Details", "Store Details")
                 .AddParameter("zoom", typeof(int), false, label: "Map Zoom Level", helpText: "Define the resolution of the map view. Zoom levels between 0 and 21+. Default is 14 (streets).");
-            functions.RegisterAction<StoreLocatorController>("Breadcrumb", "Composer.Store.Breadcrumb");
             functions.RegisterAction<StoreLocatorController>("PageHeader", "Composer.Store.PageHeader");
             functions.RegisterAction<StoreLocatorController>("StoreDirectory", "Composer.Store.Directory");
             functions.RegisterAction<StoreLocatorController>("StoreLocatorInHeader", "Composer.Store.LocatorInHeader");

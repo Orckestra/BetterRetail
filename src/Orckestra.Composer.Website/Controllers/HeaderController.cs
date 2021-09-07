@@ -1,7 +1,6 @@
 using Orckestra.Composer.CompositeC1.Controllers;
 using Orckestra.Composer.CompositeC1.Services;
 using Orckestra.Composer.Services;
-using Orckestra.Composer.Services.Breadcrumb;
 
 namespace Orckestra.Composer.Website.Controllers
 {
@@ -9,14 +8,12 @@ namespace Orckestra.Composer.Website.Controllers
     {
         public HeaderController(IPageService pageService, 
             IComposerContext composerContext, 
-            ILanguageSwitchService languageSwitchService, 
-            IBreadcrumbViewService breadcrumbViewService) 
+            ILanguageSwitchService languageSwitchService) 
 
             : base(
             pageService, 
             composerContext, 
-            languageSwitchService, 
-            breadcrumbViewService)
+            languageSwitchService)
         {
         }
     }
