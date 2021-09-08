@@ -12,7 +12,7 @@ namespace Orckestra.Composer.Sitemap.EventHandlers
 
         public Action Action { set; get; }
 
-        public async Task ProcessMessageAsync(BrokeredMessage message, CancellationToken cancellationToken)
+        public Task ProcessMessageAsync(BrokeredMessage message, CancellationToken cancellationToken)
         {
             if (EventName == null) throw new ArgumentException(nameof(EventName));
             if (Action == null) throw new ArgumentException(nameof(Action));
@@ -21,6 +21,8 @@ namespace Orckestra.Composer.Sitemap.EventHandlers
             {
                 Action();
             }
+
+            return Task.CompletedTask;
         }
     }
 }
