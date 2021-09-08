@@ -1,5 +1,4 @@
-﻿using Composite.Data;
-using Orckestra.Composer.Cart;
+﻿using Orckestra.Composer.Cart;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Services;
 using Orckestra.Composer.Cart.ViewModels;
@@ -19,7 +18,6 @@ namespace Orckestra.Composer.CompositeC1.Controllers
     {
         protected IPageService PageService { get; private set; }
         protected IComposerContext ComposerContext { get; private set; }
-        protected ILanguageSwitchService LanguageSwitchService { get; private set; }
         protected ICartUrlProvider UrlProvider { get; private set; }
         protected IMyAccountUrlProvider MyAccountUrlProvider { get; private set; }
         protected IWebsiteContext WebsiteContext { get; private set; }
@@ -28,7 +26,6 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         protected CheckoutBaseController(
             IPageService pageService,
             IComposerContext composerContext,
-            ILanguageSwitchService languageSwitchService,
             ICartUrlProvider urlProvider,
             IMyAccountUrlProvider myAccountUrlProvider,
             ICartService cartService,
@@ -37,20 +34,10 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         {
             PageService = pageService ?? throw new ArgumentNullException(nameof(pageService));
             ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
-            LanguageSwitchService = languageSwitchService ?? throw new ArgumentNullException(nameof(languageSwitchService));
             UrlProvider = urlProvider ?? throw new ArgumentNullException(nameof(urlProvider));
             MyAccountUrlProvider = myAccountUrlProvider ?? throw new ArgumentNullException(nameof(myAccountUrlProvider));
             WebsiteContext = websiteContext;
             CartService = cartService ?? throw new ArgumentNullException(nameof(cartService));
-        }
-
-        public virtual ActionResult LanguageSwitch()
-        {
-            var pageId = SitemapNavigator.CurrentPageId;
-
-            var languageSwitchViewModel = LanguageSwitchService.GetViewModel(ci => PageService.GetRendererPageUrl(pageId, ci), ComposerContext.CultureInfo);
-
-            return View("LanguageSwitch", languageSwitchViewModel);
         }
 
         [MustBeAnonymous(MustBeAnonymousAttribute.CartDestination)]

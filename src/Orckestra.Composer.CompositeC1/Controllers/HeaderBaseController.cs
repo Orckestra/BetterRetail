@@ -15,35 +15,13 @@ namespace Orckestra.Composer.CompositeC1.Controllers
     {
         protected IPageService PageService { get; private set; }
         protected IComposerContext ComposerContext { get; private set; }
-        protected ILanguageSwitchService LanguageSwitchService { get; private set; }
 
         protected HeaderBaseController(
             IPageService pageService,
-            IComposerContext composerContext,
-            ILanguageSwitchService languageSwitchService
-            )
+            IComposerContext composerContext)
         {
             PageService = pageService ?? throw new ArgumentNullException(nameof(pageService));
             ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
-            LanguageSwitchService = languageSwitchService ?? throw new ArgumentNullException(nameof(languageSwitchService));
-        }
-
-        public virtual ActionResult LanguageSwitch()
-        {
-            var languageSwitchViewModel = LanguageSwitchService.GetViewModel(BuildUrl, ComposerContext.CultureInfo);
-
-            return View("LanguageSwitch", languageSwitchViewModel);
-        }
-
-        private string BuildUrl(CultureInfo culture)
-        {
-            var pageId = SitemapNavigator.CurrentPageId;
-            var pageUrl = PageService.GetPageUrl(pageId, culture);
-
-            if (pageUrl == null) { return null; }
-
-            var url = UrlFormatter.AppendQueryString(pageUrl, Request.Url.ParseQueryString());
-            return url;
         }
 
         public virtual ActionResult PageHeader()

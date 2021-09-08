@@ -5,9 +5,6 @@
     {
         get { return "Header of the page."; }
     }
-
-    [FunctionParameter(Label = "LanguageSwitch Component")]
-    public XhtmlDocument LanguageSwitch { get; set; }
 }
 
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
@@ -21,13 +18,16 @@
                     <button class="navbar-toggler d-block d-md-none main-nav-toggle" aria-label="Menu" type="button" data-toggle="collapse" data-target="#main-nav-collapse" aria-expanded="false">
                         <span class="navbar-toggler-icon"></span>
                     </button>
-                    @Markup(LanguageSwitch)
-                    <f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.Header.StickyLinks" />
-
+                    @Function("Composer.Header.LanguageSwitсh")
+                    @Function("Composer.Header.StickyLinks")
                     <ul class="navbar-nav ml-auto">
-                        <li class="nav-item"><f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.Store.LocatorInHeader" /></li>
-                        <f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.Membership.SignInHeader" />
-                        <li class="nav-item"><f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.WishList.WishListInHeader" /></li>
+                        <li class="nav-item">
+                            @Function("Composer.Store.LocatorInHeader")
+                        </li>
+                        @Function("Composer.Membership.SignInHeader")
+                        <li class="nav-item">
+                            @Function("Composer.WishList.WishListInHeader")
+                        </li>
                         <li class="nav-item sps--blw-show-block">
                             <a class="nav-link" href="#" title="@Html.Localize("General", "Search")" data-focus-element="#search-input"><span class="fa  fa-search"></span></a>
                         </li>
@@ -37,12 +37,11 @@
                             </f:function>
                         </li>
                     </ul>
-
                 </div>
             </nav>
         </div>
 
-        <f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.Header.MainMenu" />
+        @Function("Composer.Header.MainMenu")
 
         <div class="container-fluid bg-light  py-2  shadow-sm">
             <div class="container-md">
@@ -54,7 +53,7 @@
                     </div>
                     <div class="col-12 col-xl-6  justify-content-center align-self-center">
                         <div class="d-none d-md-block clearfix">
-                            <f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.Header.OptionalLinks" />
+                            @Function("Composer.Header.OptionalLinks")
                         </div>
                         <div>
                             <f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.SearchBox">
@@ -66,7 +65,6 @@
                 </div>
             </div>
         </div>
-
     </header>
 </body>
 </html>

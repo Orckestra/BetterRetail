@@ -23,6 +23,7 @@ using Orckestra.ExperienceManagement.Configuration;
 using Orckestra.ExperienceManagement.Configuration.Settings;
 using Orckestra.Composer.CompositeC1.Services.PreviewMode;
 using Orckestra.Composer.CompositeC1.Providers.Breadcrumb;
+using Orckestra.Composer.CompositeC1.Providers.LanguageSwitch;
 
 namespace Orckestra.Composer.CompositeC1
 {
@@ -84,6 +85,7 @@ namespace Orckestra.Composer.CompositeC1
             host.Register<StoreContext, IStoreContext>(ComponentLifestyle.PerRequest);
             host.Register<LazyFunctionCallDataProvider, ILazyFunctionCallDataProvider>();
             RegisterBreadcrumProviders(host);
+            RegisterLanguageSwitchProviders(host);
 
             host.RegisterApiControllers(typeof(Plugin).Assembly);
         }
@@ -96,6 +98,14 @@ namespace Orckestra.Composer.CompositeC1
             host.Register<StoreBreadcrumbProvider, IBreadcrumbProvider>();
             host.Register<ChekoutBreadcrumbProvider, IBreadcrumbProvider>();
             host.Register<SearchBreadcrumbProvider, IBreadcrumbProvider>();
+        }
+
+        private static void RegisterLanguageSwitchProviders(IComposerHost host)
+        {
+            host.Register<LanguageSwitchContext, ILanguageSwitchContext>(ComponentLifestyle.PerRequest);
+            host.Register<LanguageSwitchProvider, ILanguageSwitchProvider>();
+            host.Register<ProductLanguageSwitchProvider, ILanguageSwitchProvider>();
+            host.Register<StoreLanguageSwitchProvider, ILanguageSwitchProvider>();
         }
     }
 }

@@ -304,6 +304,7 @@
     <Content Include="App_Data\Razor\Composer\Cart\OrderSummary.cshtml" />
     <Content Include="App_Data\Razor\Composer\Cart\Coupons.cshtml" />
     <Content Include="App_Data\Razor\Composer\Header\Breadcrumb.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Header\LanguageSwitсh.cshtml" />
     <None Include="Properties\PublishProfiles\Website - CD.pubxml" />
     <None Include="Properties\PublishProfiles\Website.pubxml" />
     <Content Include="ViewModelAsExtensionModelTemplate.tt">

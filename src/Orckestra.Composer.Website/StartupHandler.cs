@@ -69,24 +69,19 @@ namespace Orckestra.Composer.Website
             functions.AutoDiscoverFunctions(typeof(StartupHandler).Assembly);
 
             functions.RegisterAction<HeaderController>("GeneralErrors", "Composer.Header.GeneralErrors");
-            functions.RegisterAction<HeaderController>("LanguageSwitch", "Composer.Header.LanguageSwitch");
             functions.RegisterAction<HeaderController>("PageHeader", "Composer.Header.PageHeader");
 
             functions.RegisterAction<SearchController>("PageHeader", "Composer.Search.PageHeader");
             functions.RegisterAction<SearchController>("Index", "Composer.Search.Index");
             functions.RegisterAction<SearchController>("SearchFacets", "Composer.Search.Facets");
-            functions.RegisterAction<SearchController>("Breadcrumb", "Composer.Search.Breadcrumb");
-            functions.RegisterAction<SearchController>("LanguageSwitch", "Composer.Search.LanguageSwitch");
             functions.RegisterAction<SearchController>("SelectedSearchFacets", "Composer.Search.SelectedSearchFacets");
 
-            functions.RegisterAction<BrowsingCategoriesController>("LanguageSwitch", "Composer.BrowsingCategories.LanguageSwitch");
             functions.RegisterAction<BrowsingCategoriesController>("Summary", "Composer.BrowsingCategories.Summary");
             functions.RegisterAction<BrowsingCategoriesController>("Index", "Composer.BrowsingCategories.Results");
             functions.RegisterAction<BrowsingCategoriesController>("Facets", "Composer.BrowsingCategories.Facets");
             functions.RegisterAction<BrowsingCategoriesController>("SelectedSearchFacets", "Composer.BrowsingCategories.SelectedFacets");
             functions.RegisterAction<BrowsingCategoriesController>("ChildCategories", "Composer.BrowsingCategories.ChildCategories");
 
-            functions.RegisterAction<ProductController>("LanguageSwitch", "Composer.Product.LanguageSwitch");
             functions.RegisterAction<ProductController>("RelatedProducts", "Composer.Product.Instant.RelatedProducts", "Displays products/variants related to the product displayed on the current product/variant details page.  First products which are related via merchandising relationship will be displayed and if none are available then displays product in the same default category")
                 .AddParameter("merchandiseTypes",
                     typeof(string),
@@ -139,8 +134,7 @@ namespace Orckestra.Composer.Website
 
             functions.RegisterAction<CheckoutController>("CheckoutSignInAsGuest", "Composer.Checkout.CheckoutSignInAsGuest");
             functions.RegisterAction<CheckoutController>("CheckoutSignInAsCustomer", "Composer.Checkout.CheckoutSignInAsCustomer");
-            functions.RegisterAction<CheckoutController>("LanguageSwitch", "Composer.Checkout.LanguageSwitch");
-
+  
             functions.RegisterAction<MembershipController>("SignInHeaderBlade", "Composer.Membership.SignInHeader");
             functions.RegisterAction<MembershipController>("ReturningCustomerBlade", "Composer.Membership.ReturningCustomer");
             functions.RegisterAction<MembershipController>("NewCustomerBlade", "Composer.Membership.NewCustomer");
@@ -174,7 +168,6 @@ namespace Orckestra.Composer.Website
             functions.RegisterAction<StoreLocatorController>("StoreLocatorInHeader", "Composer.Store.LocatorInHeader");
             functions.RegisterAction<StoreLocatorController>("StoreInventory", "Composer.Store.Inventory")
                 .AddParameter("pagesize", typeof(int), false, label: "Page Size", helpText: "The max count of the items to show in the list.");
-            functions.RegisterAction<StoreLocatorController>("LanguageSwitch", "Composer.StoreLocator.LanguageSwitch");
             functions.RegisterAction<PageNotFoundController>("PageNotFoundAnalytics", "Composer.PageNotFound.Analytics");
         }
 

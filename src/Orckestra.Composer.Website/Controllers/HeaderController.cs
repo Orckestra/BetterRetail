@@ -7,13 +7,11 @@ namespace Orckestra.Composer.Website.Controllers
     public class HeaderController : HeaderBaseController
     {
         public HeaderController(IPageService pageService, 
-            IComposerContext composerContext, 
-            ILanguageSwitchService languageSwitchService) 
+            IComposerContext composerContext) 
 
             : base(
             pageService, 
-            composerContext, 
-            languageSwitchService)
+            composerContext)
         {
         }
     }

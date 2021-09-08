@@ -168,6 +168,8 @@
     <Compile Include="CategoriesNamespaces.cs" />
     <Compile Include="ComposerPclExportClient.cs" />
     <Compile Include="ContextPreservationHttpModule.cs" />
+    <Compile Include="Context\ILanguageSwitchContext.cs" />
+    <Compile Include="Context\LanguageSwitchContext.cs" />
     <Compile Include="Context\BreadcrumbContext.cs" />
     <Compile Include="Context\ContextHelper.cs" />
     <Compile Include="Context\IBreadcrumbContext.cs" />
@@ -211,6 +213,10 @@
     <Compile Include="Providers\AutocompleteProvider.cs" />
     <Compile Include="Providers\Breadcrum\BreadcrumbProvider.cs" />
     <Compile Include="Providers\ILazyFunctionCallDataProvider.cs" />
+    <Compile Include="Providers\LanguageSwitch\LanguageSwitchProvider.cs" />
+    <Compile Include="Providers\LanguageSwitch\ILanguageSwitchProvider.cs" />
+    <Compile Include="Providers\LanguageSwitch\ProductLanguageSwitchProvider.cs" />
+    <Compile Include="Providers\LanguageSwitch\StoreLanguageSwitchProvider.cs" />
     <Compile Include="Providers\LazyFunctionCallDataProvider.cs" />
     <Compile Include="Providers\MyAccountUrlProvider.cs" />
     <Compile Include="Providers\OrderUrlProvider.cs" />

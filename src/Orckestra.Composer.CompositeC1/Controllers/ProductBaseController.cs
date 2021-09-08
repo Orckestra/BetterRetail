@@ -44,39 +44,6 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             ProductContext = productContext ?? throw new ArgumentNullException(nameof(productContext)); ;
         }
 
-        public virtual ActionResult LanguageSwitch()
-        {
-            var productViewModel = ProductContext.ViewModel;
-
-            if (productViewModel == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
-            }
-
-            var languageSwitchViewModel = LanguageSwitchService.GetViewModel(cultureInfo => BuildUrl(
-                cultureInfo,
-                productViewModel.LocalizedDisplayNames[cultureInfo.Name],
-                productViewModel.ProductId,
-                productViewModel.SelectedVariantId, productViewModel.Sku),
-                ComposerContext.CultureInfo);
-
-            return View("LanguageSwitch", languageSwitchViewModel);
-        }
-
-        private string BuildUrl(CultureInfo cultureInfo, string productName, string productId, string variantId, string sku)
-        {
-            var productUrl = ProductUrlProvider.GetProductUrl(new GetProductUrlParam
-            {                
-                CultureInfo = cultureInfo,
-                ProductId = productId,
-                ProductName = productName,
-                VariantId = variantId,
-                SKU = sku
-            });
-
-            return productUrl;
-        }
-
         public virtual ActionResult RelatedProducts(string id, string merchandiseTypes, string headingText, int maxItems, bool displaySameCategoryProducts, bool displayPrices, bool displayAddToCart, DataReference<CssStyle> backgroundStyle = null)
         {
             if (string.IsNullOrEmpty(id))

@@ -11,14 +11,12 @@ namespace Orckestra.Composer.Website.Controllers
         public CheckoutController(
             IPageService pageService,
             IComposerContext composerContext,
-            ILanguageSwitchService languageSwitchService,
             ICartUrlProvider urlProvider,
             IMyAccountUrlProvider myAccountUrlProvider,
             ICartService cartService,
             IWebsiteContext websiteContext) :
             base(pageService,
                 composerContext,
-                languageSwitchService,
                 urlProvider,
                 myAccountUrlProvider,
                 cartService,
