@@ -1,64 +1,62 @@
 .store-selector {
-  
     .bs-stepper-header {
-      display: none;
+        display: none;
     }
-  
+    &-container {
+        border-radius: 20px;
+        background-color: $gray-200;
+    }
     .store-row {
-      .store-row-map {
-        position: relative;
-        background-position: center;
-        width: 130%;
-        height: 100%;
-  
-        .static-map-pin {
-          position: absolute;
-          top: 50%;
-          left: 50%;
+        .store-row-map {
+            position: relative;
+            background-position: center;
+            width: 130%;
+            height: 100%;
+            .static-map-pin {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+            }
         }
-      }
-  
-      .select-btn-container {
-        position: absolute;
-        bottom: 10px;
-        right: 10px;
-      }
+        .select-btn-container {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+        }
     }
-  
     .footnote {
-      color: $gray-500;
-      font-size: 11px;
-      text-align: left;
-  
-      a {
         color: $gray-500;
-        font-weight: 400;
-        white-space: nowrap;
-      }
+        font-size: 11px;
+        text-align: left;
+        a {
+            color: $gray-500;
+            font-weight: 400;
+            white-space: nowrap;
+        }
     }
-  
-    .shipping-methods .form-check-input {
-      left: 0;
-      margin-left: 0;
+    .shipping-methods {
+        .form-check-input {
+            left: 0;
+            margin-left: 0;
+        }
     }
-  }
+}
 
-  .store-selector-selection {
+.store-selector-selection {
     .selection-column {
-      padding-bottom: 50px;
+        padding-bottom: 50px;
     }
     .action {
-      position: absolute;
-      bottom: 0;
-      left:0;
-      width: 100%;
-      text-align: center;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        text-align: center;
     }
-  }
-
-  @include media-breakpoint-up(sm) {
-  .selected-store-header {
-    min-width: 300px;
-  }
 }
-  
+
+@include media-breakpoint-up(sm) {
+    .selected-store-header {
+        min-width: 300px;
+    }
+}

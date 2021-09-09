@@ -1,56 +1,88 @@
-.nav .show > a,
-.nav .show > a:hover,
-.nav .show > a:focus {
+.nav .show>a,
+.nav .show>a:hover,
+.nav .show>a:focus {
     background-color: gray("200") !important;
     border-color: gray("400");
 }
 
 .nav-pills {
-	list-style: none;
-	> li {
-	    float: left;
-	    + li {
-			margin-left: 2px;
-	    }
-	}
+    list-style: none;
+    >li {
+        float: left;
+        +li {
+            margin-left: 2px;
+        }
+    }
 }
 
 .nav.nav-pills {
-	list-style: none;
-	> li {
-	    float: left;
-	    &:first-child:not(:last-child) {
-	    	> a {
-	    		border-bottom-right-radius: 0;
-	    		border-top-right-radius: 0;
-	    	}
-	    }
-	    &:not(:first-child):not(:last-child) {
-	    	> a {
-	    		border-radius: 0;
-	    	}
-	    }
-		&:last-child:not(:first-child) {
-			> a {
-				border-bottom-left-radius: 0;
-				border-top-left-radius: 0;
-			}
-		}
-	    > a {
-			border-radius: 3px;
-			border: 1px solid gray("400");
-	    }
-	    + li {
-			margin-left: 0px;
-	    }
-	    &.active {
-	    	a {
-	    		&, &:hover, &:focus {
-	    			color: #fff;
-	    			background-color: theme-color("primary");
-	    			border: 1px solid darken(theme-color("primary"), 10%);
-	    		}
-	    	}
-	    }
-	}
+    list-style: none;
+    >li {
+        float: left;
+        &:first-child:not(:last-child) {
+            >a {
+                border-bottom-right-radius: 0;
+                border-top-right-radius: 0;
+            }
+        }
+        &:not(:first-child):not(:last-child) {
+            >a {
+                border-radius: 0;
+            }
+        }
+        &:last-child:not(:first-child) {
+            >a {
+                border-bottom-left-radius: 0;
+                border-top-left-radius: 0;
+            }
+        }
+        >a {
+            border-radius: 3px;
+            border: 1px solid gray("400");
+        }
+        +li {
+            margin-left: 0px;
+        }
+        &.active {
+            a {
+                &,
+                &:hover,
+                &:focus {
+                    color: #fff;
+                    background-color: theme-color("primary");
+                    border: 1px solid darken(theme-color("primary"), 10%);
+                }
+            }
+        }
+    }
+}
+
+.nav-tabs {
+    border-bottom: none;
+    .nav-item {}
+    .nav-link {
+        border: none;
+        @include border-top-radius(0);
+        @include hover-focus() {
+            background-color: darken($light, 5%);
+            border-color: transparent;
+        }
+        &.disabled {
+            color: $nav-link-disabled-color;
+            background-color: transparent;
+            border-color: transparent;
+        }
+    }
+    .nav-link.active,
+    .nav-item.show .nav-link {
+        color: $nav-tabs-link-active-color;
+        background-color: $nav-tabs-link-active-bg;
+        border-color: transparent;
+    }
+    .dropdown-menu {
+        // Make dropdown border overlap tab border
+        margin-top: -$nav-tabs-border-width;
+        // Remove the top rounded corners here since there is a hard edge above the menu
+        @include border-top-radius(0);
+    }
 }

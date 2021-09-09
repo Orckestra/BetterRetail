@@ -1,17 +1,5 @@
-.btn {
-    &.disabled,
-    &:disabled,
-    fieldset[disabled] & {
-        opacity: 0.5;
-    }
-    white-space: normal;
-
-    &.btn-primary {
-        text-transform: uppercase;
-    }
-}
-
-button, a {
+﻿button,
+a {
     &[aria-expanded="true"] {
         .fa-caret-up {
             display: inline;
@@ -25,22 +13,32 @@ button, a {
             display: none;
         }
         .fa-caret-down {
-          display: inline;  
+            display: inline;
         }
     }
-}
-
-.btn {
-    &.btn-dashed-block {
-        width: 100%;
-        border: dashed 2px  $gray-400;
-        background: #fff;
-        font-weight: bold;
-        color: $primary;
-
-        &:hover, &:focus {
-            border: dashed 2px  $gray-600;
+    &.btn {
+        &.disabled,
+        &:disabled,
+        fieldset[disabled] & {
+            opacity: 0.5;
+        }
+		font-family: "Roboto Condensed";
+		font-weight: bold;
+        white-space: normal;
+        text-transform: uppercase;
+        border-radius: $btn-border-radius;
+        &.btn-primary {}
+        &.btn-dashed-block {
+            width: 100%;
+            border: dashed 2px $gray-400;
+            background: #fff;
+            font-weight: bold;
             color: $primary;
+            &:hover,
+            &:focus {
+                border: dashed 2px $gray-600;
+                color: $primary;
+            }
         }
     }
 }
