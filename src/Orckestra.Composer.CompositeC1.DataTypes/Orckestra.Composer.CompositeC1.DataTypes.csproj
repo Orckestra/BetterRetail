@@ -81,6 +81,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ICategoryPageSummaryMeta.cs" />
     <Compile Include="DataTypesEventRegistrator.cs" />
     <Compile Include="Facets\IFacetConfigurationMeta.cs" />
     <Compile Include="IPreviewModeMeta.cs" />

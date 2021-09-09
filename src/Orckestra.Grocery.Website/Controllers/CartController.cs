@@ -11,13 +11,11 @@ namespace Orckestra.Composer.Grocery.Website.Controllers
         public CartController(
             IComposerContext composerContext, 
             ICartUrlProvider cartUrlProvider, 
-            IPageService pageService,
-            IBreadcrumbViewService breadcrumbViewService) 
+            IPageService pageService) 
 
             : base(
             composerContext, 
             cartUrlProvider, 
-            pageService,
-            breadcrumbViewService) { }
+            pageService) { }
     }
 }

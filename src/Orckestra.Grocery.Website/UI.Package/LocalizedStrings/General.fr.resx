@@ -255,4 +255,10 @@
   <data name="L_OrderStatus_PendingProcess" xml:space="preserve">
     <value>En cours</value>
   </data>
+  <data name="B_ViewLess" xml:space="preserve">
+    <value>En voir moins</value>
+  </data>
+  <data name="B_ViewMore" xml:space="preserve">
+    <value>En voir plus</value>
+  </data>
 </root>

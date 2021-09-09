@@ -2,7 +2,6 @@ using Orckestra.Composer.CompositeC1.Controllers;
 using Orckestra.Composer.CompositeC1.Services;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Services;
-using Orckestra.Composer.Services.Breadcrumb;
 
 namespace Orckestra.Composer.Website.Controllers
 {
@@ -11,13 +10,11 @@ namespace Orckestra.Composer.Website.Controllers
         public CartController(
             IComposerContext composerContext, 
             ICartUrlProvider cartUrlProvider, 
-            IPageService pageService,
-            IBreadcrumbViewService breadcrumbViewService) 
+            IPageService pageService) 
 
             : base(
             composerContext, 
             cartUrlProvider, 
-            pageService,
-            breadcrumbViewService) { }
+            pageService) { }
     }
 }

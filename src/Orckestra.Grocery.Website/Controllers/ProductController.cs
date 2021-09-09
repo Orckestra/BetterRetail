@@ -12,9 +12,7 @@ namespace Orckestra.Composer.Grocery.Website.Controllers
     public class ProductController : ProductBaseController
     {
         public ProductController(
-            IPageService pageService, 
             IComposerContext composerContext, 
-            IProductBreadcrumbService productBreadcrumbService, 
             ILanguageSwitchService languageSwitchService, 
             IProductUrlProvider productUrlProvider, 
             IRelatedProductViewService relatedProductViewService,
@@ -22,9 +20,7 @@ namespace Orckestra.Composer.Grocery.Website.Controllers
             IProductContext productContext) 
             
             : base(
-            pageService, 
             composerContext, 
-            productBreadcrumbService, 
             languageSwitchService, 
             productUrlProvider, 
             relatedProductViewService,

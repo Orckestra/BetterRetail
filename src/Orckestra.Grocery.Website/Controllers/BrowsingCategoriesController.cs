@@ -10,10 +10,9 @@ namespace Orckestra.Composer.Grocery.Website.Controllers
         public BrowsingCategoriesController(
             IComposerContext composerContext, 
             IBrowseCategoryRequestContext requestContext, 
-            ILanguageSwitchService languageSwitchService, 
             IPageService pageService, 
             ICategoryMetaContext categoryMetaContext) 
-            : base(composerContext, requestContext, languageSwitchService, pageService, categoryMetaContext)
+            : base(composerContext, requestContext, pageService, categoryMetaContext)
         {
         }
     }

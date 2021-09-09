@@ -12,36 +12,21 @@
     [Placeholder(Id="pageHeader", Title="Page Header")]
     public XhtmlDocument PageHeader { get; set; }
 
-	[Placeholder(Id="languageSwitch", Title="Language Switch")]
-	public XhtmlDocument LanguageSwitch { get; set; }
-
-	[Placeholder(Id="breadcrumb", Title="Breadcrumb")]
-	public XhtmlDocument Breadcrumb { get; set; }
-
 	[Placeholder(Id="body", Title="Body", IsDefault=true)]
 	public XhtmlDocument Body { get; set; }
 }
-<html xmlns="http://www.w3.org/1999/xhtml">
-	<head>
-		@Markup(PageHeader)
-	</head>
-	<body>
-		<f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.Header">
-		  <f:param name="LanguageSwitch">
-			<html xmlns="http://www.w3.org/1999/xhtml">
-			  <head></head>
-			  <body>
-				@Markup(LanguageSwitch)
-			  </body>
-			</html>
-		  </f:param>
-		</f:function>
-	    <div class="container-md">
-	        @Markup(Breadcrumb)
-	    </div>
-	<f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.Header.GeneralErrors"/>
-		@this.Function("Composer.Layout.Helpers.InjectContainerElements",
+    <html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        @Markup(PageHeader)
+    </head>
+    <body>
+        @Function("Composer.Header")
+        <div class="container-md">
+            @Function("Composer.Header.Breadcrumb")
+        </div>
+        @Function("Composer.Header.GeneralErrors")
+        @Function("Composer.Layout.Helpers.InjectContainerElements",
                 new { Document = Body, InjectedContainerClassName = "container-md", DontApplyClassNameList = "container-fluid,c1-wide" })
-	<f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.Footer"/>
+        @Function("Composer.Footer")
     </body>
-</html>
+    </html>

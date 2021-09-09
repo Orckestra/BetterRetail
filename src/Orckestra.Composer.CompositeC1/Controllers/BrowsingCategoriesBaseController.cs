@@ -1,19 +1,14 @@
-﻿using Composite.Data;
-using Orckestra.Composer.CompositeC1.Pages;
-using Orckestra.Composer.CompositeC1.Services;
+﻿using Orckestra.Composer.CompositeC1.Services;
+using Orckestra.Composer.Search;
 using Orckestra.Composer.Search.Context;
 using Orckestra.Composer.Search.Facets;
+using Orckestra.Composer.Search.RequestConstants;
 using Orckestra.Composer.Search.ViewModels;
 using Orckestra.Composer.Services;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
-using Orckestra.Composer.Search;
-using Orckestra.Composer.Search.Parameters;
-using Orckestra.Composer.Search.RequestConstants;
-using System.Threading.Tasks;
 
 namespace Orckestra.Composer.CompositeC1.Controllers
 {
@@ -21,7 +16,6 @@ namespace Orckestra.Composer.CompositeC1.Controllers
     {
         protected IComposerContext ComposerContext { get; private set; }
         protected IBrowseCategoryRequestContext RequestContext { get; private set; }
-        protected ILanguageSwitchService LanguageSwitchService { get; private set; }
         protected IPageService PageService { get; private set; }
         protected ICategoryMetaContext CategoryMetaContext { get; }
 
@@ -40,13 +34,11 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         public BrowsingCategoriesBaseController(
             IComposerContext composerContext,
             IBrowseCategoryRequestContext requestContext,
-            ILanguageSwitchService languageSwitchService,
             IPageService pageService,
             ICategoryMetaContext categoryMetaContext)
         {
             ComposerContext = composerContext;
             RequestContext = requestContext;
-            LanguageSwitchService = languageSwitchService;
             PageService = pageService;
             CategoryMetaContext = categoryMetaContext;
         }
@@ -107,18 +99,6 @@ namespace Orckestra.Composer.CompositeC1.Controllers
                 model.Context["ListName"] = "Category Browsing";
                 model.Context["PaginationCurrentPage"] = model.ProductSearchResults.Pagination.Pages.FirstOrDefault(p => p.IsCurrentPage);
             }
-        }
-
-        public ActionResult LanguageSwitch()
-        {
-            var languageSwitchViewModel = LanguageSwitchService.GetViewModel(BuildUrl, ComposerContext.CultureInfo);
-
-            return View("LanguageSwitch", languageSwitchViewModel);
-        }
-
-        protected virtual string BuildUrl(CultureInfo ci)
-        {
-            return PageService.GetRendererPageUrl(SitemapNavigator.CurrentPageId, ci);
         }
     }
 }

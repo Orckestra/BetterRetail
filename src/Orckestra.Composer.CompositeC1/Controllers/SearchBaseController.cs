@@ -104,45 +104,6 @@ namespace Orckestra.Composer.CompositeC1.Controllers
                 return SearchRequestContext.ProductsSearchViewModel;
         }
 
-        public virtual ActionResult Breadcrumb(string keywords)
-        {
-            var breadcrumbViewModel = SearchBreadcrumbViewService.CreateBreadcrumbViewModel(new GetSearchBreadcrumbParam
-            {
-                CultureInfo = ComposerContext.CultureInfo,
-                HomeUrl = PageService.GetRendererPageUrl(SitemapNavigator.CurrentHomePageId, ComposerContext.CultureInfo),
-                Keywords = keywords
-            });
-
-            return View("Breadcrumb", breadcrumbViewModel);
-        }
-
-        public virtual ActionResult LanguageSwitch(string keywords, int page = 1, string sortBy = null, string sortDirection = null)
-        {
-            var languageSwitchViewModel = LanguageSwitchService.GetViewModel(cultureInfo =>
-                BuildUrl(cultureInfo, keywords, page, sortBy, sortDirection), ComposerContext.CultureInfo);
-
-            return View("LanguageSwitch", languageSwitchViewModel);
-        }
-
-        private string BuildUrl(CultureInfo cultureInfo, string keywords, int page, string sortBy, string sortDirection)
-        {
-            var searchUrl = SearchUrlProvider.BuildSearchUrl(new BuildSearchUrlParam
-            {
-                SearchCriteria = new SearchCriteria
-                {
-                BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
-                CultureInfo = cultureInfo,
-                Keywords = keywords,
-                //We have to return to page 1 because the number of results can be different from a language to another
-                Page = 1,
-                SortBy = sortBy,
-                SortDirection = sortDirection
-                }
-            });
-
-            return searchUrl;
-        }
-
         public virtual ActionResult PageHeader(string keywords)
         {
             var pageHeaderViewModel = SearchRequestContext.GetPageHeaderViewModelAsync(new GetPageHeaderParam

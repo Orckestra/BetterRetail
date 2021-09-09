@@ -261,4 +261,10 @@
   <data name="mi" xml:space="preserve">
     <value>Mile</value>
   </data>
+  <data name="B_ViewLess" xml:space="preserve">
+    <value>View Less</value>
+  </data>
+  <data name="B_ViewMore" xml:space="preserve">
+    <value>View More</value>
+  </data>
 </root>

@@ -8,15 +8,10 @@ namespace Orckestra.Composer.Grocery.Website.Controllers
     public class HeaderController : HeaderBaseController
     {
         public HeaderController(IPageService pageService, 
-            IComposerContext composerContext, 
-            ILanguageSwitchService languageSwitchService, 
-            IBreadcrumbViewService breadcrumbViewService) 
-
+            IComposerContext composerContext) 
             : base(
             pageService, 
-            composerContext, 
-            languageSwitchService, 
-            breadcrumbViewService)
+            composerContext)
         {
         }
     }

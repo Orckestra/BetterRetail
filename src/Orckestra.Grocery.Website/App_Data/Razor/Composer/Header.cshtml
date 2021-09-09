@@ -1,4 +1,4 @@
-@inherits RazorFunction
+﻿@inherits RazorFunction
 @using Orckestra.ExperienceManagement.Configuration
 @using System.Globalization
 
@@ -7,9 +7,6 @@
     {
         get { return "Header of the page."; }
     }
-
-    [FunctionParameter(Label = "LanguageSwitch Component")]
-    public XhtmlDocument LanguageSwitch { get; set; }
 
     public ISiteConfiguration SiteConfiguration { get; set; }
 }
@@ -26,11 +23,11 @@
         <div class="header">
             <nav class="navbar navbar-expand  navbar-dark p-0">
                 <div class="container-md">
-					<div class="mobile-logo d-lg-none">
-						<a href="@HomePageNode.Url">
-							<img src="~/UI.Package/Images/BetterGrocery-White.svg" alt="logo" class="d-block w-100" />
-						</a>
-					</div>
+                    <div class="mobile-logo d-lg-none">
+                        <a href="@HomePageNode.Url">
+                            <img src="~/UI.Package/Images/BetterGrocery-White.svg" alt="logo" class="d-block w-100" />
+                        </a>
+                    </div>
                     <button class="navbar-toggler d-block d-lg-none main-nav-toggle"
                             aria-label="Menu" aria-expanded="false"
                             type="button"
@@ -39,7 +36,7 @@
                         <span class="navbar-toggler-icon"></span>
                     </button>
 
-                    @Markup(LanguageSwitch)
+                    @Function("Composer.Header.LanguageSwitсh")
 
                     @Function("Composer.Header.StickyLinks")
 
@@ -49,19 +46,13 @@
                         <li class="nav-item">
                             @StoreLocatorLink(pages)
                         </li>
-
                         <li class="nav-item d-none d-md-block">
                             @Function("Composer.Membership.SignInHeader")
                         </li>
-
                         <li class="nav-item d-none d-md-block">
                             @Function("Composer.WishList.WishListInHeader")
                         </li>
-
-
                         @Function("Composer.Cart.Minicart")
-
-
                     </ul>
 
                 </div>
@@ -87,7 +78,6 @@
                 </div>
             </div>
         </div>
-
         @Function("Grocery.TimeSlotBanner")
     </header>
 </body>

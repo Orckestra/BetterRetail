@@ -69,30 +69,19 @@ namespace Orckestra.Composer.Grocery.Website
             functions.AutoDiscoverFunctions(typeof(StartupHandler).Assembly);
 
             functions.RegisterAction<HeaderController>("GeneralErrors", "Composer.Header.GeneralErrors");
-            functions.RegisterAction<HeaderController>("LanguageSwitch", "Composer.Header.LanguageSwitch");
-            functions.RegisterAction<HeaderController>("Breadcrumb", "Composer.General.Breadcrumb");
             functions.RegisterAction<HeaderController>("PageHeader", "Composer.Header.PageHeader");
 
             functions.RegisterAction<SearchController>("PageHeader", "Composer.Search.PageHeader");
             functions.RegisterAction<SearchController>("Index", "Composer.Search.Index");
             functions.RegisterAction<SearchController>("SearchFacets", "Composer.Search.Facets");
-            functions.RegisterAction<SearchController>("Breadcrumb", "Composer.Search.Breadcrumb");
-            functions.RegisterAction<SearchController>("LanguageSwitch", "Composer.Search.LanguageSwitch");
             functions.RegisterAction<SearchController>("SelectedSearchFacets", "Composer.Search.SelectedSearchFacets");
 
-            functions.RegisterAction<BrowsingCategoriesController>("LanguageSwitch", "Composer.BrowsingCategories.LanguageSwitch");
             functions.RegisterAction<BrowsingCategoriesController>("Facets", "Composer.BrowsingCategories.Facets");
             functions.RegisterAction<BrowsingCategoriesController>("SelectedSearchFacets", "Composer.BrowsingCategories.SelectedFacets");
             functions.RegisterAction<BrowsingCategoriesController>("ChildCategories", "Composer.BrowsingCategories.ChildCategories");
-
-            functions.RegisterAction<ProductController>("LanguageSwitch", "Composer.Product.LanguageSwitch");
-            functions.RegisterAction<ProductController>("Breadcrumb", "Composer.Product.Breadcrumb");
   
             functions.RegisterAction<CheckoutController>("CheckoutSignInAsGuest", "Composer.Checkout.CheckoutSignInAsGuest");
             functions.RegisterAction<CheckoutController>("CheckoutSignInAsCustomer", "Composer.Checkout.CheckoutSignInAsCustomer");
-            functions.RegisterAction<CheckoutController>("Breadcrumb", "Composer.Checkout.Breadcrumb");
-            functions.RegisterAction<CheckoutController>("ConfirmationBreadcrumb", "Composer.Checkout.ConfirmationBreadcrumb");
-            functions.RegisterAction<CheckoutController>("LanguageSwitch", "Composer.Checkout.LanguageSwitch");
 
             functions.RegisterAction<MembershipController>("ReturningCustomerBlade", "Composer.Membership.ReturningCustomer");
             functions.RegisterAction<MembershipController>("NewCustomerBlade", "Composer.Membership.NewCustomer");
@@ -119,11 +108,9 @@ namespace Orckestra.Composer.Grocery.Website
 
             functions.RegisterAction<OrderController>("FindMyOrder", "Composer.Order.FindMyOrder");
 
-            functions.RegisterAction<StoreLocatorController>("Breadcrumb", "Composer.Store.Breadcrumb");
             functions.RegisterAction<StoreLocatorController>("StoreDirectory", "Composer.Store.Directory");
             functions.RegisterAction<StoreLocatorController>("StoreInventory", "Composer.Store.Inventory")
                 .AddParameter("pagesize", typeof(int), false, label: "Page Size", helpText: "The max count of the items to show in the list.");
-            functions.RegisterAction<StoreLocatorController>("LanguageSwitch", "Composer.StoreLocator.LanguageSwitch");
             functions.RegisterAction<PageNotFoundController>("PageNotFoundAnalytics", "Composer.PageNotFound.Analytics");
         }
 

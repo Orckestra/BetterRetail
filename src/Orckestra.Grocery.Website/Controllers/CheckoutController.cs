@@ -12,18 +12,12 @@ namespace Orckestra.Composer.Grocery.Website.Controllers
         public CheckoutController(
             IPageService pageService, 
             IComposerContext composerContext, 
-            ICheckoutBreadcrumbViewService confirmationBreadcrumbViewService, 
-            IBreadcrumbViewService breadcrumbViewService, 
-            ILanguageSwitchService languageSwitchService, 
             ICartUrlProvider urlProvider, 
             IMyAccountUrlProvider myAccountUrlProvider, 
             ICartService cartService,
 			IWebsiteContext websiteContext) : 
             base(pageService, 
                 composerContext, 
-                confirmationBreadcrumbViewService, 
-                breadcrumbViewService, 
-                languageSwitchService, 
                 urlProvider, 
                 myAccountUrlProvider,
                 cartService,
