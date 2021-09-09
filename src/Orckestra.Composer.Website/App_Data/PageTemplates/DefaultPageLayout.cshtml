@@ -20,13 +20,13 @@
         @Markup(PageHeader)
     </head>
     <body>
-        @this.Function("Composer.Header")
+        @Function("Composer.Header")
         <div class="container-md">
-            @this.Function("Composer.Header.Breadcrumb")
+            @Function("Composer.Header.Breadcrumb")
         </div>
-        <f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.Header.GeneralErrors" />
-        @this.Function("Composer.Layout.Helpers.InjectContainerElements",
+        @Function("Composer.Header.GeneralErrors")
+        @Function("Composer.Layout.Helpers.InjectContainerElements",
                 new { Document = Body, InjectedContainerClassName = "container-md", DontApplyClassNameList = "container-fluid,c1-wide" })
-        <f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.Footer" />
+        @Function("Composer.Footer")
     </body>
     </html>

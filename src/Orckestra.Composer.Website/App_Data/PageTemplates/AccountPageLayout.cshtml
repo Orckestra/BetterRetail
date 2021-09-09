@@ -21,11 +21,11 @@
 		@Markup(PageHeader)
     </head>
     <body>
-        @this.Function("Composer.Header")
+        @Function("Composer.Header")
         <div class="container-md">
-            @this.Function("Composer.Header.Breadcrumb")
+            @Function("Composer.Header.Breadcrumb")
             @Markup(Body)
         </div>
-        <f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.Footer" />
+        @Function("Composer.Footer")
     </body>
 </html> 
