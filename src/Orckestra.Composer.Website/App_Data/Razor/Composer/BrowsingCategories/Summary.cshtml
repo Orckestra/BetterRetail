@@ -1,0 +1,89 @@
+﻿@inherits Composite.AspNet.Razor.RazorFunction
+@using Orckestra.Composer.CompositeC1.DataTypes
+@using Orckestra.Composer.Search.Context
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Category PageSummary"; }
+    }
+
+    public IBrowseCategoryRequestContext BrowseCategoryRequestContext { get; set; }
+
+    [FunctionParameter(Label = "Full Width", DefaultValue = true)]
+    public bool FullWidth { get; set; }
+
+    [FunctionParameter(Label = "Hide Long Description", Help = "If true, the description will be collapsable", DefaultValue = true)]
+    public bool HideDescription { get; set; }
+
+    private string BgInlineStyle(string backgroundImage)
+    {
+        return (backgroundImage != null ? "background-image:url('/media(" + backgroundImage + ")');" : "");
+    }
+}
+
+@{
+    var summary = Data.Get<ICategoryPageSummaryMeta>().FirstOrDefault(i => i.PageId == CurrentPageNode.Id);
+    var model = BrowseCategoryRequestContext.GetViewModelAsync().GetAwaiter().GetResult();
+    if (summary == null)
+    {
+        <div class="@(FullWidth ? "container-fluid": "")  page-summary">
+            <div class="container-md mb-3">
+                <div class="row">
+                    <div class="col-12">
+                        <h1>
+                            @CurrentPageNode.Title (@model.ProductSearchResults.TotalCount)
+                        </h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        return;
+    }
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<head>
+</head>
+<body>
+    <div class="@(FullWidth ? "container-fluid": "") page-summary  mb-2  bg-cover" style="@BgInlineStyle(summary.BackgroundImage)">
+        <div class="container-md">
+            <div class="row">
+                <div class="col-12 py-2 ">
+                    <h1>
+                        @(string.IsNullOrWhiteSpace(summary.Title) ? CurrentPageNode.Title: summary.Title) (@model.ProductSearchResults.TotalCount)
+                    </h1>
+                    @if (!string.IsNullOrWhiteSpace(summary.ShortDescription))
+                    {
+                        <p class="mb-1">@summary.ShortDescription</p>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(summary.LongDescription) && !HideDescription)
+                    {
+                        <div>@Html.Raw(summary.LongDescription)</div>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(summary.LongDescription) && HideDescription)
+                    {
+                        <div class="pb-1">
+                            <a class="more collapsed small font-weight-bold"
+                               data-toggle="collapse"
+                               href="#collapseDescription" role="button" aria-expanded="false" aria-controls="collapseDescription">
+                                @Html.Localize("General", "B_ViewMore") <i class="fa fa-angle-down" />
+                            </a>
+
+                            <div class="collapse" id="collapseDescription">
+                                @Html.Raw(summary.LongDescription)
+                            </div>
+                            <a class="less collapsed small font-weight-bold"
+                               data-toggle="collapse"
+                               href="#collapseDescription" role="button" aria-expanded="true" aria-controls="collapseDescription">
+                                @Html.Localize("General", "B_ViewLess") <i class="fa fa-angle-up" />
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

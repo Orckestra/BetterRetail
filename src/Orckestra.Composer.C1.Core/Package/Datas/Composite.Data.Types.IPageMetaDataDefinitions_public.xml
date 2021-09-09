@@ -12,6 +12,7 @@
 
   <Add Id="3e23489b-0890-4683-a415-c3ad8b8b5368" DefiningItemId="8132f659-418b-4c39-b450-9c8c53a86bd4" Name="ComposerCategoryLandingPage" Label="Composer Category Landing Page" MetaDataContainerId="eb210a75-be25-401f-b0d4-b3787bce36fa" MetaDataTypeId="864704b8-2ff5-40e4-a332-c1875b358eb8" StartLevel="0" Levels="100000" />
   <Add Id="9dd8f330-4bb3-4a0e-96db-79d332f3dd4e" DefiningItemId="ab50b336-ee78-4c53-9fb6-022407c0d3ef" Name="ComposerCategoryPage" Label="Composer Category Page" MetaDataContainerId="eb210a75-be25-401f-b0d4-b3787bce36fa" MetaDataTypeId="864704b8-2ff5-40e4-a332-c1875b358eb8" StartLevel="0" Levels="100000" />
-
+  <Add Id="4435865d-ab1b-4c9d-8d34-8b5fefc247ec" DefiningItemId="ab50b336-ee78-4c53-9fb6-022407c0d3ef" Name="CategoryPageSummary" Label="Category Page Summary" MetaDataContainerId="eb210a75-be25-401f-b0d4-b3787bce36fa" MetaDataTypeId="856daf78-4637-4c81-b2e7-5c8be8ccf7b0" StartLevel="0" Levels="100000" />
+  
   <Add Id="d7556156-df78-4bc3-b4ec-2d7010e225c7" DefiningItemId="f64fe76f-bb5a-4b6d-9499-e81762f25db6" Name="ProductPreviewMode" Label="Product Preview Mode" MetaDataContainerId="eb210a75-be25-401f-b0d4-b3787bce36fa" MetaDataTypeId="3ea8c217-614f-4397-831e-7d6b314ff558" StartLevel="0" Levels="100000" />
 </Data>

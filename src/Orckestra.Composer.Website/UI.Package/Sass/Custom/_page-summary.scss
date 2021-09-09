@@ -1,0 +1,22 @@
+﻿.page-summary {
+
+    .less.collapsed {
+        display: none;
+    }
+
+    .more {
+        display: none;
+    }
+
+    .more.collapsed {
+        display: inline-block;
+    }
+
+    &.bg-cover {
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+        background-position: center center;
+        background-repeat: no-repeat;
+    }
+}

@@ -76,7 +76,6 @@ namespace Orckestra.Composer.Website
             functions.RegisterAction<SearchController>("SearchFacets", "Composer.Search.Facets");
             functions.RegisterAction<SearchController>("SelectedSearchFacets", "Composer.Search.SelectedSearchFacets");
 
-            functions.RegisterAction<BrowsingCategoriesController>("Summary", "Composer.BrowsingCategories.Summary");
             functions.RegisterAction<BrowsingCategoriesController>("Index", "Composer.BrowsingCategories.Results");
             functions.RegisterAction<BrowsingCategoriesController>("Facets", "Composer.BrowsingCategories.Facets");
             functions.RegisterAction<BrowsingCategoriesController>("SelectedSearchFacets", "Composer.BrowsingCategories.SelectedFacets");

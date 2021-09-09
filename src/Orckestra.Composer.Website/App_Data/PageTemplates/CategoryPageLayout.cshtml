@@ -22,7 +22,10 @@
     <body>
         @Function("Composer.Header")
         <div class="container-md">
-            @Function("Composer.Header.Breadcrumb")
+            @this.Function("Composer.Header.Breadcrumb")
+        </div>
+        @Function("Composer.BrowsingCategories.Summary")
+        <div class="container-md">
             @Markup(Body)
         </div>
         @Function("Composer.Footer")
