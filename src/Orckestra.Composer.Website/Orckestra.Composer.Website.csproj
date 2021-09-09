@@ -303,6 +303,8 @@
     <Content Include="App_Data\Razor\Composer\Cart\CartSummary.cshtml" />
     <Content Include="App_Data\Razor\Composer\Cart\OrderSummary.cshtml" />
     <Content Include="App_Data\Razor\Composer\Cart\Coupons.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Header\Breadcrumb.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Header\LanguageSwitсh.cshtml" />
     <None Include="Properties\PublishProfiles\Website - CD.pubxml" />
     <None Include="Properties\PublishProfiles\Website.pubxml" />
     <Content Include="ViewModelAsExtensionModelTemplate.tt">
@@ -315,7 +317,6 @@
     <None Include="web.config" />
     <Content Include="Views\Product\Images.cshtml" />
     <Content Include="Views\Product\Zoom.cshtml" />
-    <Content Include="Views\Shared\Breadcrumb.cshtml" />
     <Content Include="Views\ContentSearch\Facets.cshtml" />
     <Content Include="Views\ContentSearch\SearchEntryItem.cshtml" />
     <Content Include="Views\ContentSearch\SelectedFacets.cshtml" />

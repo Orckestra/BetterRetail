@@ -3,31 +3,24 @@ using Orckestra.Composer.CompositeC1.Controllers;
 using Orckestra.Composer.CompositeC1.Services;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Services;
-using Orckestra.Composer.Services.Breadcrumb;
 
 namespace Orckestra.Composer.Website.Controllers
 {
     public class CheckoutController : CheckoutBaseController
     {
         public CheckoutController(
-            IPageService pageService, 
-            IComposerContext composerContext, 
-            ICheckoutBreadcrumbViewService confirmationBreadcrumbViewService, 
-            IBreadcrumbViewService breadcrumbViewService, 
-            ILanguageSwitchService languageSwitchService, 
-            ICartUrlProvider urlProvider, 
-            IMyAccountUrlProvider myAccountUrlProvider, 
+            IPageService pageService,
+            IComposerContext composerContext,
+            ICartUrlProvider urlProvider,
+            IMyAccountUrlProvider myAccountUrlProvider,
             ICartService cartService,
-			IWebsiteContext websiteContext) : 
-            base(pageService, 
-                composerContext, 
-                confirmationBreadcrumbViewService, 
-                breadcrumbViewService, 
-                languageSwitchService, 
-                urlProvider, 
+            IWebsiteContext websiteContext) :
+            base(pageService,
+                composerContext,
+                urlProvider,
                 myAccountUrlProvider,
                 cartService,
-				websiteContext)
+                websiteContext)
         {
         }
     }
