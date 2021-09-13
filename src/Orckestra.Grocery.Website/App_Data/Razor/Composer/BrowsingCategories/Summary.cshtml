@@ -66,7 +66,7 @@
                     @if (!string.IsNullOrWhiteSpace(summary.LongDescription) && HideDescription)
                     {
                         var xmlDescription = XhtmlDocument.Parse(summary.LongDescription);
-                        if (xmlDescription != null && !xmlDescription.Body.IsEmpty)
+                        if (xmlDescription != null && xmlDescription.Body != null && !string.IsNullOrWhiteSpace(xmlDescription.Body.Value))
                         {
                             <div class="page-summary-links pb-1">
                                 <a class="more collapsed"
