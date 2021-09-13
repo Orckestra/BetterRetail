@@ -1,6 +1,8 @@
 ﻿@inherits Composite.AspNet.Razor.RazorFunction
 @using Orckestra.Composer.CompositeC1.DataTypes
 @using Orckestra.Composer.Search.Context
+@using Composite.Core.Xml
+@using System.Xml.Linq
 
 @functions {
     public override string FunctionDescription
@@ -46,12 +48,12 @@
 <head>
 </head>
 <body>
-    <div class="@(FullWidth ? "container-fluid": "") page-summary  mb-2  bg-cover" style="@BgInlineStyle(summary.BackgroundImage)">
+    <div class="@(FullWidth ? "container-fluid": "") page-summary bg-cover" style="@BgInlineStyle(summary.BackgroundImage)">
         <div class="container-md">
             <div class="row">
                 <div class="col-12 py-2 ">
                     <h1>
-                        @(string.IsNullOrWhiteSpace(summary.Title) ? CurrentPageNode.Title: summary.Title) (@model.ProductSearchResults.TotalCount)
+                        @(string.IsNullOrWhiteSpace(summary.Title) ? CurrentPageNode.Title : summary.Title) (@model.ProductSearchResults.TotalCount)
                     </h1>
                     @if (!string.IsNullOrWhiteSpace(summary.ShortDescription))
                     {
@@ -63,22 +65,25 @@
                     }
                     @if (!string.IsNullOrWhiteSpace(summary.LongDescription) && HideDescription)
                     {
-                        <div class="pb-1">
-                            <a class="more collapsed small font-weight-bold"
-                               data-toggle="collapse"
-                               href="#collapseDescription" role="button" aria-expanded="false" aria-controls="collapseDescription">
-                                @Html.Localize("General", "B_ViewMore") <i class="fa fa-angle-down" />
-                            </a>
-
-                            <div class="collapse" id="collapseDescription">
-                                @Html.Raw(summary.LongDescription)
+                        var xmlDescription = XhtmlDocument.Parse(summary.LongDescription);
+                        if (xmlDescription != null && !xmlDescription.Body.IsEmpty)
+                        {
+                            <div class="page-summary-links pb-1">
+                                <a class="more collapsed"
+                                   data-toggle="collapse"
+                                   href="#collapseDescription" role="button" aria-expanded="false" aria-controls="collapseDescription">
+                                    @Html.Localize("General", "B_ViewMore") <i class="fa fa-angle-down" />
+                                </a>
+                                <div class="collapse" id="collapseDescription">
+                                    @Html.Raw(summary.LongDescription)
+                                </div>
+                                <a class="less collapsed"
+                                   data-toggle="collapse"
+                                   href="#collapseDescription" role="button" aria-expanded="true" aria-controls="collapseDescription">
+                                    @Html.Localize("General", "B_ViewLess") <i class="fa fa-angle-up" />
+                                </a>
                             </div>
-                            <a class="less collapsed small font-weight-bold"
-                               data-toggle="collapse"
-                               href="#collapseDescription" role="button" aria-expanded="true" aria-controls="collapseDescription">
-                                @Html.Localize("General", "B_ViewLess") <i class="fa fa-angle-up" />
-                            </a>
-                        </div>
+                        }
                     }
                 </div>
             </div>

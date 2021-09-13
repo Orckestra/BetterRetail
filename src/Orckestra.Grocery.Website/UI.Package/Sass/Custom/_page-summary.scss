@@ -1,4 +1,12 @@
 ﻿.page-summary {
+    text-align: center;
+
+    &-links {
+        .more, .less {
+            font-size: small;
+            font-weight: bold;
+        }
+    }
 
     .less.collapsed {
         display: none;
