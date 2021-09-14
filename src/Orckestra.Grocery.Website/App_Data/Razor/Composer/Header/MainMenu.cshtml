@@ -36,68 +36,61 @@
                                        data-qa="main-menu-category"
                                        role="button"
                                        class="dropdown-toggle nav-link d-none d-md-block"
-                                       style="@mainMenuEntry.CssClass" aria-haspopup="true">
+                                       aria-haspopup="true"
+                                       target="@mainMenuEntry.UrlTarget"
+                                       style="@mainMenuEntry.CssClass">
                                         @mainMenuEntry.DisplayName
                                     </a>
 
-                                    <a href="@mainMenuEntry.Url"
+                                    <a data-target="#menu-@(mainMenuEntry.GetHashCode())"
                                        data-qa="main-menu-category"
                                        role="button"
-                                       data-toggle="dropdown"
+                                       data-toggle="collapse"
                                        class="dropdown-toggle nav-link d-block d-md-none"
-                                       style="@mainMenuEntry.CssClass" aria-haspopup="true" aria-expanded="false">
+                                       aria-haspopup="true" aria-expanded="false" aria-controls="menu-@(mainMenuEntry.GetHashCode())" style="@mainMenuEntry.CssClass">
                                         @mainMenuEntry.DisplayName
                                         <span class="fa fa-chevron-down" aria-hidden="true"></span>
                                         <span class="fa fa-chevron-up" aria-hidden="true"></span>
                                     </a>
 
-                                    <ul class="dropdown-menu">
+                                    <ul id="menu-@(mainMenuEntry.GetHashCode())" class="dropdown-menu">
                                         <li>
-                                            <!-- Content container to add padding -->
+                                            @*Content container to add padding*@
                                             <div class="main-nav-content">
                                                 <div class="row">
                                                     <div class="col-xl-8">
-                                                        <div class="row">
+                                                        <ul class="nav-section list-unstyled flex-col">
+                                                            <li class="main-nav-section d-lg-none">
+                                                                <a data-qa="main-menu-link"
+                                                                   href="@(mainMenuEntry.Url)"
+                                                                   target="@mainMenuEntry.UrlTarget"
+                                                                   class="d-md-block">
+                                                                    View All @mainMenuEntry.DisplayName
+                                                                </a>
+                                                            </li>
                                                             @foreach (var subMenuEntry in @mainMenuEntry.Children as IEnumerable<HomeMainMenuEntryViewModel>)
                                                             {
-                                                                <ul class="col-lg-3 list-unstyled">
-                                                                    <li class="@subMenuEntry.CssClassName">
-                                                                        <p>
-                                                                            <strong>
-                                                                                <a data-qa="main-menu-section"
-                                                                                   href="@subMenuEntry.Url"
-                                                                                   target="@subMenuEntry.UrlTarget"
-                                                                                   style="@subMenuEntry.CssClass">
-                                                                                    @subMenuEntry.DisplayName
-                                                                                </a>
-                                                                            </strong>
-                                                                        </p>
-                                                                    </li>
-                                                                    <li>
-                                                                        <span class="d-none d-lg-inline">
-                                                                            @Image(@subMenuEntry)
-                                                                        </span>
-                                                                    </li>
-                                                                    @foreach (var subSubMenuEntry in @subMenuEntry.Children as IEnumerable<HomeMainMenuEntryViewModel>)
-                                                                    {
-                                                                        <li class="@subSubMenuEntry.CssClassName">
-                                                                            <a data-qa="main-menu-link"
-                                                                               href="@subSubMenuEntry.Url"
-                                                                               target="@subSubMenuEntry.UrlTarget"
-                                                                               class="d-none d-md-block"
-                                                                               style="@subSubMenuEntry.CssClass">
-                                                                                @subSubMenuEntry.DisplayName
-                                                                            </a>
-                                                                        </li>
-                                                                    }
-                                                                </ul>
+                                                                @NavigationTree(subMenuEntry)
                                                             }
-                                                        </div>
+                                                        </ul>
+
                                                     </div>
-                                                    <div class="col-lg-4">
-                                                        <span class="menu-image d-none d-lg-inline">
+                                                    <div class="col-xl-4 d-none d-lg-block">
+                                                        <div class="main-image">
                                                             @Image(@mainMenuEntry)
-                                                        </span>
+                                                        </div>
+                                                        @foreach (var subMenuEntry in @mainMenuEntry.Children as IEnumerable<HomeMainMenuEntryViewModel>)
+                                                        {
+                                                            <div id="menu-image-@(subMenuEntry.GetHashCode())" class="menu-image">
+                                                                @Image(@subMenuEntry)
+                                                            </div>
+                                                            foreach (var subSubMenuEntry in @subMenuEntry.Children as IEnumerable<HomeMainMenuEntryViewModel>)
+                                                            {
+                                                                <div id="menu-image-@subSubMenuEntry.GetHashCode()" class="menu-image">
+                                                                    @Image(@subSubMenuEntry)
+                                                                </div>
+                                                            }
+                                                        }
                                                     </div>
                                                 </div>
                                             </div>
@@ -106,18 +99,14 @@
                                 }
                                 else
                                 {
-                                    <a href="@mainMenuEntry.Url" data-qa="main-menu-category-link"
-                                       target="@mainMenuEntry.UrlTarget" style="@mainMenuEntry.CssClass" class="nav-link">
+                                    <a href="@mainMenuEntry.Url"
+                                       data-qa="main-menu-category-link"
+                                       target="@mainMenuEntry.UrlTarget"
+                                       style="@mainMenuEntry.CssClass"
+                                       class="nav-link">
                                         @mainMenuEntry.DisplayName
                                     </a>
                                 }
-                            </li>
-                        }
-
-                        @foreach (var optionalMenuEntry in optionalLinks)
-                        {
-                            <li class="dropdown main-nav-fw d-block d-md-none">
-                                <a class="nav-link" href="@optionalMenuEntry.Url" data-qa="main-menu-category-link" target="@optionalMenuEntry.UrlTarget" style="@optionalMenuEntry.CssClass">@optionalMenuEntry.DisplayName</a>
                             </li>
                         }
                     </ul>
@@ -129,6 +118,79 @@
     </div>
 </body>
 </html>
+
+@helper NavigationTree(HomeMainMenuEntryViewModel parentMenuEntry)
+{
+    var menuItems = parentMenuEntry.Children as IEnumerable<HomeMainMenuEntryViewModel>;
+
+    <li class="main-nav-section @parentMenuEntry.CssClassName">
+
+        @if (menuItems.Any())
+        {
+            <a data-qa="main-menu-section"
+               href="@(parentMenuEntry.Url)"
+               target="_self"
+               class="main-nav-section-title d-none d-md-block"
+               style="font-weight:bold; @parentMenuEntry.CssClass"
+               data-image="@parentMenuEntry.GetHashCode()">
+                @parentMenuEntry.DisplayName
+            </a>
+            <a data-qa="main-menu-section"
+               data-target="#subMenu-@(parentMenuEntry.GetHashCode())"
+               data-toggle="collapse"
+               aria-expanded="false"
+               aria-controls="subMenu-@(parentMenuEntry.GetHashCode())"
+               role="button"
+               class="main-nav-section-title d-block d-md-none"
+               style="font-weight:bold;">
+                @parentMenuEntry.DisplayName
+                <span class="fa fa-chevron-down" aria-hidden="true"></span>
+                <span class="fa fa-chevron-up" aria-hidden="true"></span>
+            </a>
+        }
+        else
+        {
+            <a data-qa="main-menu-section"
+               href="@(parentMenuEntry.Url)"
+               target="_self"
+               class="main-nav-section-title"
+               style="font-weight:bold; @parentMenuEntry.CssClass"
+               data-image="@parentMenuEntry.GetHashCode()">
+                @parentMenuEntry.DisplayName
+            </a>
+        }
+       @*SubNavigation Start If Any*@
+        @if (menuItems.Any())
+        {
+
+            <ul class="list-unstyled sub-collapse collapse" id="subMenu-@(parentMenuEntry.GetHashCode())">
+                <li class="main-nav-subsection d-lg-none">
+                    <a data-qa="main-menu-link"
+                       href="@(parentMenuEntry.Url)"
+                       target="_self"
+                       class="d-md-block d-lg-none">
+                        View All @parentMenuEntry.DisplayName
+                    </a>
+                </li>
+                @foreach (var menuItem in menuItems)
+                {
+                    if (!String.IsNullOrWhiteSpace(menuItem.DisplayName))
+                    {
+                        <li class="main-nav-subsection @menuItem.CssClassName">
+                            <a data-qa="main-menu-link"
+                               href="@(menuItem.Url)"
+                               target="_self"
+                               class="d-md-block  @menuItem.CssClass"
+                               data-image="@menuItem.GetHashCode()">
+                                @menuItem.DisplayName
+                            </a>
+                        </li>
+                    }
+                }
+            </ul>
+        }
+    </li>
+}
 
 @helper Image(HomeMainMenuEntryViewModel vm)
 {

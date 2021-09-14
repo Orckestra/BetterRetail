@@ -44,5 +44,21 @@
     {
         <script id="vuejs" src="~/UI.Package/JavaScript/vue.min.js"></script>
     }
+    <script type="text/javascript">
+		/*****************************************
+		**
+		**  MainMenu Image display code
+		**
+		*****************************************/
+		$('main-nav [data-image]').hover(
+			function(e){
+				var data = $(this).data("image");
+				$('#menu-image-'+ data).addClass('selected');
+			},
+			function(e) {
+				$('.menu-image').removeClass('selected');
+			}
+		);
+	</script>
 </body>
 </html>
