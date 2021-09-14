@@ -175,7 +175,7 @@
     <value>Forgot your password?</value>
   </data>
   <data name="H_Logout" xml:space="preserve">
-    <value>Sign Out</value>
+    <value>Sign out</value>
   </data>
   <data name="H_OrderDetail" xml:space="preserve">
     <value>See details</value>
@@ -247,7 +247,7 @@
     <value>(default address)</value>
   </data>
   <data name="L_MyAccount" xml:space="preserve">
-    <value>My Account</value>
+    <value>My account</value>
   </data>
   <data name="L_NewCustomer" xml:space="preserve">
     <value>Get started now. It's fast and easy!</value>
@@ -337,7 +337,7 @@
     <value>Shipping</value>
   </data>
   <data name="L_SignIn" xml:space="preserve">
-    <value>Sign In</value>
+    <value>Sign in</value>
   </data>
   <data name="L_SignInError" xml:space="preserve">
     <value>An error occured while logging in, please check your username or password.</value>
