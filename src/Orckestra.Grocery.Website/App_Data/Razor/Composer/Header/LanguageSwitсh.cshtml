@@ -9,29 +9,33 @@
     var Model = LanguageSwitchContext.ViewModel;
 }
 
-    <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
-    <head>
-        @* SEO Alternate Hreflang Tags *@
-        @if (Model.IsMultiLanguage)
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0"  
+      xmlns:v-bind="v-bind" 
+      xmlns:v-on="v-on">
+<head>
+    @* SEO Alternate Hreflang Tags *@
+    @if (Model.IsMultiLanguage)
+    {
+        foreach (var item in Model.Entries)
         {
-            foreach (var item in Model.Entries)
+            if (!item.IsCurrent)
             {
-                if (!item.IsCurrent)
-                {
-                    <link rel="alternate" hreflang="@item.CultureName.ToLower()" href="@(string.Format("{0}{1}", HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority), item.Url))" />
-                }
+                <link rel="alternate" hreflang="@item.CultureName.ToLower()" href="@(string.Format("{0}{1}", HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority), item.Url))" />
             }
         }
-    </head>
-    <body>
-        @if (Model.IsMultiLanguage)
-        {
-            <ul class="navbar-nav  float-md-left">
-                <li class="nav-item dropdown" data-oc-controller="General.LanguageSwitch" role="region" aria-label="Language selector">
-                    <a href="@Model.CurrentLanguage.Url"
-                       data-qa="language-selector"
-                       class="nav-link dropdown-toggle text-uppercase" data-toggle="dropdown">
-                        @Model.CurrentLanguage.ShortDisplayName
+    }
+</head>
+<body>
+    @if (Model.IsMultiLanguage)
+    {
+        <ul id="vueLanguageSwitch"
+            data-oc-controller="General.LanguageSwitch"
+            class="navbar-nav  float-md-left  d-none d-md-block">
+            <li class="nav-item dropdown" role="region" aria-label="Language selector">
+                <a href="@Model.CurrentLanguage.Url"
+                   data-qa="language-selector"
+                   class="nav-link dropdown-toggle text-uppercase" data-toggle="dropdown">
+                    @Model.CurrentLanguage.ShortDisplayName
                     <span class="sr-only">@Model.CurrentLanguage.DisplayName</span>
                 </a>
                 <div class="dropdown-menu">
@@ -39,7 +43,7 @@
                         foreach (var item in Model.Entries)
                         {
                             <a class="dropdown-item @(item.IsCurrent ? "active" : null)"
-                               data-oc-click="onLanguageSwitch"
+                               v-on:click="onLanguageSwitch"
                                href="@item.Url"
                                data-qa="language-value-@index"
                                aria-selected="@(item.IsCurrent ? "true" : null)">@item.DisplayName</a>
@@ -50,5 +54,5 @@
             </li>
         </ul>
     }
-    </body>
-    </html>
+</body>
+</html>

@@ -48,8 +48,8 @@
 <head>
 </head>
 <body>
-    <div class="@(FullWidth ? "container-fluid": "") page-summary bg-cover" style="@BgInlineStyle(summary.BackgroundImage)">
-        <div class="container-md">
+    <div class="@(FullWidth ? "container-fluid": "") page-summary bg-cover" style="@(FullWidth ? BgInlineStyle(summary.BackgroundImage): "")">
+        <div class="container-md bg-cover" style="@(!FullWidth ? BgInlineStyle(summary.BackgroundImage): "")">
             <div class="row">
                 <div class="col-12 py-2 ">
                     <h1>
@@ -66,7 +66,7 @@
                     @if (!string.IsNullOrWhiteSpace(summary.LongDescription) && HideDescription)
                     {
                         var xmlDescription = XhtmlDocument.Parse(summary.LongDescription);
-                        if (xmlDescription != null && xmlDescription.Body != null && !string.IsNullOrWhiteSpace(xmlDescription.Body.Value))
+                        if(xmlDescription != null && xmlDescription.Body != null && (!string.IsNullOrWhiteSpace(xmlDescription.Body.Value) || xmlDescription.Body.HasElements))
                         {
                             <div class="page-summary-links pb-1">
                                 <a class="more collapsed"

@@ -1,9 +1,8 @@
-@inherits RazorFunction
+﻿@inherits RazorFunction
 @using Orckestra.Composer.ViewModels.MenuNavigation
 @using Orckestra.Composer.ViewModels.Home;
 @using Orckestra.Composer.CompositeC1.Mappers;
 @using Orckestra.Composer.CompositeC1.DataTypes.Navigation;
-
 
 @functions {
     public INavigationMapper HomeNavigationMapper { get; set; }
@@ -17,7 +16,6 @@
     var mainMenu = HomeNavigationMapper.MapMainMenuItems(mainMenuData) as IEnumerable<HomeMainMenuEntryViewModel>;
     var optionalLinks = HomeNavigationMapper.MapHeaderOptionalLinksItems(optionalLinksData) as IEnumerable<OptionalLinkEntryViewModel>;
 }
-
 
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
 <head>
@@ -123,6 +121,8 @@
                             </li>
                         }
                     </ul>
+                    @Function("Composer.Membership.SignInHeaderMobile")
+                    @Function("Composer.Header.LanguageSwitсhMobile")
                 </div>
             </nav>
         </div>

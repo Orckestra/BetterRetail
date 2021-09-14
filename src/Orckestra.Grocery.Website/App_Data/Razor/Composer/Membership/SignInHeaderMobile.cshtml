@@ -1,0 +1,46 @@
+﻿@inherits RazorFunction
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Sign In and Log Out links in Mobile Header Funtion"; }
+    }
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
+<head>
+</head>
+<body>
+    <ul id="vueSignInHeaderMobile"
+        class="d-md-none nav my-account-links border-bottom"  
+        v-cloak="true">
+        <li v-if="IsAuthenticated"
+            v-cloak="true"
+            class="nav-item">
+            <a class="nav-link d-inline-block"
+               data-qa="my-account-in-header"
+               v-bind:href="Url"
+               title="@Html.Localize("MyAccount", "L_MyAccount")">
+                <i class="fa fa-user"></i>&#160;
+                {{FirstName}} {{LastName}}
+            </a> -
+            <a data-qa="login-out"
+               href="#"
+               class="nav-link d-inline-block"
+               v-on:click.prevent="fullLogout"
+               title="@Html.Localize("MyAccount", "H_Logout")">
+                @Html.Localize("MyAccount", "H_Logout")
+            </a>
+        </li>
+        <li v-else="else" class="nav-item" v-cloak="true">
+            <a class="nav-link"
+               data-qa="login-in"
+               v-bind:href="Url"
+               title="@Html.Localize("MyAccount", "L_SignIn")">
+                <i class="fa fa-user"></i>&#160;
+                @Html.Localize("MyAccount", "L_SignIn")
+            </a>
+        </li>
+    </ul>
+</body>
+</html>

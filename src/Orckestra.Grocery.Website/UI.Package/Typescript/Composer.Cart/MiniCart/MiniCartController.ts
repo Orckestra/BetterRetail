@@ -9,6 +9,7 @@
 ///<reference path='../../Composer.Grocery/FulfillmentHelper.ts' />
 ///<reference path='../../Composer.Grocery/FulfillmentService.ts' />
 ///<reference path='../../Composer.Grocery/FulfillmentEvents.ts' />
+///<reference path='../../GeneralEvents.ts' />
 
 module Orckestra.Composer {
     'use strict';
@@ -28,6 +29,7 @@ module Orckestra.Composer {
                 .spread((cart, fulfillment) => {
                     this.initializeMiniCartQuantity(cart, fulfillment);
                 });
+            this.eventHub.subscribe(GeneralEvents.LanguageSwitched, (e: IEventInformation) => this.cartService.invalidateCache());
         }
 
         protected initializeMiniCartQuantity(cart, fulfillment): void {
@@ -52,9 +54,7 @@ module Orckestra.Composer {
                     self.eventHub.subscribe('cartUpdated', (e: IEventInformation) => this.onCartUpdated(e));
                     loggedOutScheduler.subscribe((e: IEventInformation) => self.cartService.invalidateCache());
                     loggedInScheduler.subscribe((e: IEventInformation) => self.cartService.invalidateCache());
-
                     self.eventHub.subscribe('lineItemAddedToCart', (e: IEventInformation) => this.AddedCartItem = e.data.ProductId + '-' + (e.data.VariantId || 'null'));
-                    self.eventHub.subscribe('languageSwitched', (e: IEventInformation) => self.cartService.invalidateCache());
                     self.eventHub.subscribe(FulfillmentEvents.StoreSelected, e => this.onStoreSelected(e.data));
                 },
                 updated() {

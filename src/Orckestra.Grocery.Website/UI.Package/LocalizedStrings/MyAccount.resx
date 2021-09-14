@@ -175,7 +175,7 @@
     <value>Forgot your password?</value>
   </data>
   <data name="H_Logout" xml:space="preserve">
-    <value>logout</value>
+    <value>Sign out</value>
   </data>
   <data name="H_OrderDetail" xml:space="preserve">
     <value>See details</value>

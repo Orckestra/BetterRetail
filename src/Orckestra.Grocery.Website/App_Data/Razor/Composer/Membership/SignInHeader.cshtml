@@ -1,32 +1,60 @@
-@inherits RazorFunction
-@using Orckestra.Composer.CompositeC1.Mappers;
-@using Orckestra.Composer.CompositeC1.DataTypes.Navigation;
-
+﻿@inherits RazorFunction
 
 @functions {
-
+    public override string FunctionDescription
+    {
+        get { return "Sign In and Log Out links in Header Funtion"; }
+    }
 }
 
-@{
 
-}
-
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" 
+      xmlns:v-bind="v-bind" 
+      xmlns:v-on="v-on">
 <head>
 </head>
 <body>
-    <span data-oc-controller="MyAccount.SignInHeader">
-        <span id="vueSignInHeader" >
-            <a v-bind:href="Url"
-               class="nav-link"
-               v-bind:title="IsAuthenticated ? '@Html.Localize("MyAccount", "L_MyAccount")' : '@Html.Localize("MyAccount", "L_SignIn")'">
-                <span class="fa  fa-user  sps--blw-show-inline-block"></span>&#160;
-                <span v-cloak="true">
-                    <span class="d-none d-xl-inline sps--blw-hidden" v-if="IsAuthenticated">@Html.Localize("MyAccount", "L_MyAccount")</span>
-                    <span class="d-none d-xl-inline sps--blw-hidden" v-else="else">@Html.Localize("MyAccount", "L_SignIn")</span>
-                </span>
-            </a>
-        </span>
-    </span>
+    <section data-oc-controller="MyAccount.SignInHeader"
+             id="vueSignInHeader" v-cloak="true"
+             class="ml-auto d-none d-md-block">
+            <li v-if="IsAuthenticated"
+                class="nav-item dropdown"
+                v-cloak="true">
+                <a class="nav-link"
+                   data-qa="my-account-in-header"
+                   data-toggle="dropdown"
+                   v-bind:href="Url"
+                   title="@Html.Localize("MyAccount", "L_MyAccount")">
+                    <i class="fa fa-user"></i>&#160;
+                    <span class="d-none d-xl-inline">
+                        {{FirstName}} {{LastName}}
+                    </span>
+                </a>
+                <div class="dropdown-menu">
+                        <a v-bind:href="Url"
+                           class="dropdown-item"
+                           title="@Html.Localize("MyAccount", "L_MyAccount")">
+                            @Html.Localize("MyAccount", "L_MyAccount")
+                        </a>
+                        <a v-if="IsAuthenticated"
+                           data-qa="login-out"
+                           href="#"
+                           class="dropdown-item"
+                           v-on:click.prevent="fullLogout"
+                           title="@Html.Localize("MyAccount", "H_Logout")">
+                            @Html.Localize("MyAccount", "H_Logout")
+                        </a>
+                </div>
+            </li>
+            <li v-else="else" class="nav-item" v-cloak="true">
+                <a class="nav-link"
+                   data-qa="login-in"
+                   v-bind:href="Url"
+                   title="@Html.Localize("MyAccount", "L_SignIn")">
+                    <i class="fa fa-user"></i>&#160;
+                    @Html.Localize("MyAccount", "L_SignIn")
+                </a>
+            </li>
+    </section>
 </body>
 </html>

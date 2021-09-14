@@ -11,6 +11,7 @@
 ///<reference path='./Mvc/IControllerConfiguration.ts' />
 ///<reference path='./Plugins/IPlugin.ts' />
 ///<reference path='./Events/EventHub.ts' />
+///<reference path='./GeneralEvents.ts' />
 
 module Orckestra.Composer {
 
@@ -41,7 +42,7 @@ module Orckestra.Composer {
     function raiseLanguageSwitchEventIfNeeded(cacheProvider: ICacheProvider, eventHub: IEventHub) {
         let cacheKey = 'languageSwitchEvent';
         return cacheProvider.defaultCache.get(cacheKey).then(function (value) {
-            eventHub.publish('languageSwitched', null);
+            eventHub.publish(GeneralEvents.LanguageSwitched, null);
             cacheProvider.defaultCache.clear(cacheKey);
         });
     }

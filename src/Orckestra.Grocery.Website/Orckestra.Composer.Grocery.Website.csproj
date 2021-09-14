@@ -401,6 +401,8 @@
     <Content Include="App_Data\Razor\Composer\Cart\Minicart.cshtml" />
     <Content Include="App_Data\Razor\Composer\Header\Breadcrumb.cshtml" />
     <Content Include="App_Data\Razor\Composer\Header\LanguageSwitсh.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Membership\SignInHeaderMobile.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Header\LanguageSwitсhMobile.cshtml" />
     <None Include="Properties\PublishProfiles\Website - CD.pubxml" />
     <None Include="Properties\PublishProfiles\Website.pubxml" />
     <Content Include="Views\web.config" />

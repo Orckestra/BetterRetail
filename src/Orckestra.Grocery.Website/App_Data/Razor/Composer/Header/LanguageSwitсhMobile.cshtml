@@ -1,0 +1,31 @@
+@inherits RazorFunction
+@using Orckestra.Composer.CompositeC1.Context
+
+@functions {
+    public ILanguageSwitchContext LanguageSwitchContext { get; set; }
+}
+
+@{
+    var Model = LanguageSwitchContext.ViewModel;
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0"
+      xmlns:v-bind="v-bind"
+      xmlns:v-on="v-on">
+<head>
+</head>
+<body>
+    @if (Model.IsMultiLanguage)
+    {
+        <nav id="vueLanguageSwitchMobile" class="nav language-switch-links d-md-none border-bottom">
+            @foreach (var item in Model.Entries)
+            {
+                <a class="nav-link d-inline @(item.IsCurrent ? "active" : null)"
+                   v-on:click="onLanguageSwitch"
+                   href="@item.Url"
+                   aria-selected="@(item.IsCurrent ? "true" : null)">@item.ShortDisplayName</a>
+            }
+        </nav>
+    }
+</body>
+</html>

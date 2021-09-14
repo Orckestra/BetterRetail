@@ -66,13 +66,14 @@
     }
     .bs-stepper-header {
         display: flex;
+        background: #fff;
 
         .store-selector-container & {
             background: $gray-200;
         }
 
         &.sticky-top {
-            top: 160px;
+            top: 112px;
             padding-top: $spacer;
         }
     }

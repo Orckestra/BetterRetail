@@ -150,7 +150,7 @@ module Orckestra.Composer {
                                 if (index < this.stepCount ) {
                                     this.beforeStepEnter(index);
                                     this.changeStep(this.activeStepIndex, index);
-                                    this.scrollToStep(index);
+                                    //this.scrollToStep(index);
                                     this.afterStepChange(this.activeStepIndex);
                                 } else {
                                     this.completed = true;

@@ -441,3 +441,20 @@ ul.main-nav-sticky {
         }
     }
 }
+
+.my-account-links {
+    .fa {
+        position: relative;
+        top: 0;
+        right: 0;
+    }
+}
+
+.language-switch-links {
+    .nav-link {
+        &.active {
+            background: $primary;
+            color: #fff;
+        }
+    }
+}
