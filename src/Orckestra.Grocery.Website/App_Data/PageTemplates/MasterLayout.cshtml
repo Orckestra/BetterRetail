@@ -9,6 +9,7 @@
     var themeMeta = Data.Get<Orckestra.Composer.CompositeC1.DataTypes.IWebsiteStyleTheme>().FirstOrDefault(i => i.PageId == HomePageNode.Id);
     var theme = !string.IsNullOrEmpty(themeMeta?.Theme) ? themeMeta.Theme : "default";
     var isPreview = PageRenderer.RenderingReason == RenderingReason.C1ConsoleBrowserPageView;
+    var iconsFolder = "~/UI.Package/Images/favicons";
 }
 <!DOCTYPE html>
 <html lang="@CultureInfo.CurrentCulture.Name" data-website="@HomePageNode.Id" data-console-preview="@isPreview"
@@ -28,22 +29,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <link rel="stylesheet" href="/UI.Package/Sass/@(theme).scss" />
 
-    <link rel="apple-touch-icon" sizes="57x57" href="/UI.Package/Images/favicons/apple-touch-icon-57x57.png" />
-    <link rel="apple-touch-icon" sizes="60x60" href="/UI.Package/Images/favicons/apple-touch-icon-60x60.png" />
-    <link rel="apple-touch-icon" sizes="72x72" href="/UI.Package/Images/favicons/apple-touch-icon-72x72.png" />
-    <link rel="apple-touch-icon" sizes="76x76" href="/UI.Package/Images/favicons/apple-touch-icon-76x76.png" />
-    <link rel="apple-touch-icon" sizes="114x114" href="/UI.Package/Images/favicons/apple-touch-icon-114x114.png" />
-    <link rel="apple-touch-icon" sizes="120x120" href="/UI.Package/Images/favicons/apple-touch-icon-120x120.png" />
-    <link rel="apple-touch-icon" sizes="144x144" href="/UI.Package/Images/favicons/apple-touch-icon-144x144.png" />
-    <link rel="apple-touch-icon" sizes="152x152" href="/UI.Package/Images/favicons/apple-touch-icon-152x152.png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/UI.Package/Images/favicons/apple-touch-icon-180x180.png" />
-    <link rel="icon" type="image/png" href="/UI.Package/Images/favicons/favicon-32x32.png" sizes="32x32" />
-    <link rel="icon" type="image/png" href="/UI.Package/Images/favicons/android-chrome-192x192.png" sizes="192x192" />
-    <link rel="icon" type="image/png" href="/UI.Package/Images/favicons/favicon-96x96.png" sizes="96x96" />
-    <link rel="icon" type="image/png" href="/UI.Package/Images/favicons/favicon-16x16.png" sizes="16x16" />
-    <meta name="msapplication-TileColor" content="#000000" />
-    <meta name="msapplication-TileImage" content="/UI.Package/Images/favicons/mstile-144x144.png" />
-    <meta name="theme-color" content="#ffffff" />
+    <link rel="apple-touch-icon" sizes="180x180" href="@Href(iconsFolder)/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="@Href(iconsFolder)/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="@Href(iconsFolder)/favicon-16x16.png">
+    <link rel="manifest" href="@Href(iconsFolder)/site.webmanifest">
+    <link rel="mask-icon" href="@Href(iconsFolder)/safari-pinned-tab.svg" color="#1f632b">
+    <meta name="msapplication-TileColor" content="#1f632b">
+    <meta name="theme-color" content="#ffffff">
 
     <script src="/UI.Package/JavaScript/respond.js"></script>
     <script src="/UI.Package/JavaScript/html5shiv.js"></script>
