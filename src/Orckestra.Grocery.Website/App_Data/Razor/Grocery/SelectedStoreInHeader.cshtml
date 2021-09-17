@@ -66,11 +66,16 @@
     <span v-else="v-else">@Html.Localize("Grocery", "B_BookStore")</span>
 </span>
 
-    <span class="d-flex flex-column align-items-center d-lg-none text-uppercase">
+    <span class="d-lg-none">
         <i class="fa fa-sm mr-1"
            v-bind:class="[FulfillmentMethodType == 1 ? 'fa-store-alt' : 'fa-truck']" />
-        <span class="d-none d-lg-inline">
-            @Html.Localize("Grocery", "B_BookStore")
+        <span class="d-none d-sm-inline">
+            <span v-if="Store">
+				{{Store.LocalizedDisplayName}}
+			</span>
+			<span v-else="v-else">
+				@Html.Localize("Grocery", "B_BookStore")
+			</span>
         </span>
     </span>
 }
