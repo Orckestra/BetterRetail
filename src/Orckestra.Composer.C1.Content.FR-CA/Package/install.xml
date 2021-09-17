@@ -93,7 +93,7 @@
           <Data dataScopeIdentifier="public" locale="fr-CA" dataFilename="~\Datas\Orckestra.Composer.ContentSearch.DataTypes.IContentTabs_public.xml" />
         </Type>
         <!--BootstrapCarousel -->
-        <Type type="Orckestra.Web.Html.BootstrapCarousel">
+        <Type type="Orckestra.Composer.Grocery.DataTypes.IBootstrapCarousel,Orckestra.Composer.Grocery">
           <Data dataScopeIdentifier="public" locale="fr-CA" dataFilename="~\Datas\Orckestra.Web.Html.BootstrapCarousels_public.xml" />
         </Type>
       </Types>

@@ -71,6 +71,7 @@
         <File sourceFilename="~\Frontend\Config\VisualEditor\common.xml" targetFilename="~\Frontend\Config\VisualEditor\common.xml" allowOverwrite="true" />
       </Files>
       <Directories>
+        <Directory sourceDirectory="~\UI.Package\GetStyleOptionsFromFile\" targetDirectory="~\UI.Package\GetStyleOptionsFromFile\" allowOverwrite="true" deleteTargetDirectory="false" />
         <Directory sourceDirectory="~\UI.Package\Images\" targetDirectory="~\UI.Package\Images\" allowOverwrite="true" deleteTargetDirectory="false" />
         <Directory sourceDirectory="~\UI.Package\JavaScript\" targetDirectory="~\UI.Package\JavaScript\" allowOverwrite="true" deleteTargetDirectory="false" />
         <Directory sourceDirectory="~\UI.Package\LocalizedStrings\" targetDirectory="~\UI.Package\LocalizedStrings\" allowOverwrite="true" deleteTargetDirectory="false" />

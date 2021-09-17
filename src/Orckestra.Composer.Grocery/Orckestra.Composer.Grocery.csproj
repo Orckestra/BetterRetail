@@ -125,6 +125,7 @@
     <Compile Include="..\Solution Items\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="DataTypes\IBootstrapCarousel.cs" />
     <Compile Include="DataTypes\IGrocerySettingsMeta.cs" />
     <Compile Include="Api\StoreAndFulfillmentSelectionController.cs" />
     <Compile Include="Factory\GroceryCartViewModelFactory.cs" />

@@ -5,6 +5,9 @@
 
     .carousel-item {
         max-height: 360px;
+        @include media-breakpoint-up(sm) {
+            min-height: 360px;
+        }
         img {
             margin-top: -25%;
         }

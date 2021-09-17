@@ -1,4 +1,4 @@
-@using Orckestra.Web.Html
+﻿@using Orckestra.Composer.Grocery.DataTypes
 @inherits RazorFunction
 
 @functions {
@@ -33,14 +33,10 @@
 
     [FunctionParameter(Label = "Slider Speed", Help = "Millisecond before slide change", DefaultValue = "5000")]
     public string SliderSpeed { get; set; }
-
-    [FunctionParameter(Label = "Full width bottom aligned caption", Help = "Caption is taking the full slide width and is aligned at the bottom.", DefaultValue = false)]
-    public bool isFullWidthBottomCaption { get; set; }
-
 }
 
 @{
-    var slides = Data.Get<BootstrapCarousel>().Where(s => s.PageId == CurrentPageNode.Id).OrderBy(s => s.Order).ToList();
+    var slides = Data.Get<IBootstrapCarousel>().Where(s => s.PageId == CurrentPageNode.Id).OrderBy(s => s.Order).ToList();
     if (!slides.Any()) { return; }
 
     var isIndicators = Options.Contains("Indicators");
@@ -49,50 +45,50 @@
     var hasSliderFullWidth = SliderOptions.Contains("Slider");
 
 }
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
-<head>
-</head>
-<body>
-    <div class="@(isFullWidth ? "c1-wide" : "") @(isFullWidthBottomCaption ? "full-width-caption" : "") @(isFullWidthBottomCaption && isIndicators ? "mb-5" : "")">
-        <div id="bootstrapcarousel" data-interval="@(hasSliderFullWidth ? @SliderSpeed : "false")"
-             class="carousel slide" data-ride="true">
-            <!-- Indicators -->
-            @if (isIndicators)
-            {
-                <ol class="carousel-indicators">
+    <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+    <head>
+    </head>
+    <body>
+        <div class="@(isFullWidth ? "c1-wide" : "")  @(isIndicators ? "mb-5" : "")">
+            <div id="bootstrapcarousel" data-interval="@(hasSliderFullWidth ? @SliderSpeed : "false")"
+                 class="carousel slide" data-ride="true">
+                <!-- Indicators -->
+                @if (isIndicators)
+                {
+                    <ol class="carousel-indicators">
+                        @for (var i = 0; i < slides.Count(); i++)
+                        {
+                            <li data-target="#bootstrapcarousel" data-slide-to="@i"
+                                class="@(i == 0 ? "active btn-dots" : " btn-dots")"></li>
+                        }
+                    </ol>
+                }
+                <div class="carousel-inner">
                     @for (var i = 0; i < slides.Count(); i++)
                     {
-                        <li data-target="#bootstrapcarousel" data-slide-to="@i"
-                            class="@(i == 0 ? "active btn-dots" : " btn-dots")"></li>
-                    }
-                </ol>
-            }
-            <div class="carousel-inner">
-                @for (var i = 0; i < slides.Count(); i++)
-                {
-                    var slide = slides[i];
-                    <div class="carousel-item @(i == 0 ? "active" : "")">
-                        <img class="d-block w-100" src="~/media(@slide.Image)" alt="slide" />
-                        <h1 class="carousel-title">@slide.Name</h1>
-                        <div class="carousel-caption d-none d-md-block">
-                            @Html.Raw(slide.Caption)
+                        var slide = slides[i];
+                        <div class="carousel-item @slide.BackgroundColor @(i == 0 ? "active" : "")">
+                            <img class="d-block w-100" src="~/media(@slide.Image)" alt="slide" />
+                            <h1 class="carousel-title @slide.HeadingColor @slide.HeadingPosition">@slide.Heading</h1>
+                            <div class="carousel-caption d-none d-md-block @(String.IsNullOrEmpty(slide.CaptionBgRGBAColor) ? slide.CaptionBgColor: "")" style="background-color: @(slide.CaptionBgRGBAColor);">
+                                @Html.Raw(slide.Caption)
+                            </div>
                         </div>
-                    </div>
+                    }
+                </div>
+                <!-- Controls -->
+                @if (isControls)
+                {
+                    <a class="carousel-control-prev" href="#bootstrapcarousel" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Prev</span>
+                    </a>
+                    <a class="carousel-control-next" href="#bootstrapcarousel" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
                 }
             </div>
-            <!-- Controls -->
-            @if (isControls)
-            {
-                <a class="carousel-control-prev" href="#bootstrapcarousel" role="button" data-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Prev</span>
-                </a>
-                <a class="carousel-control-next" href="#bootstrapcarousel" role="button" data-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Next</span>
-                </a>
-            }
         </div>
-    </div>
-</body>
-</html>
+    </body>
+    </html>

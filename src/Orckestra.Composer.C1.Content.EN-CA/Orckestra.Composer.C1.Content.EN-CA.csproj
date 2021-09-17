@@ -74,7 +74,7 @@
     <Content Include="Package\Datas\Orckestra.Composer.Grocery.DataTypes.IGrocerySettingsMetas_public.xml" />
     <Content Include="Package\Datas\Orckestra.ExperienceManagement.Configuration.DataTypes.ISiteConfigurationMetas_administrated.xml" />
     <Content Include="Package\Datas\Orckestra.ExperienceManagement.Configuration.DataTypes.ISiteConfigurationMetas_public.xml" />
-    <Content Include="Package\Datas\Orckestra.Web.Html.BootstrapCarousels_public.xml" />
+    <Content Include="Package\Datas\Orckestra.Composer.Grocery.DataTypes.IBootstrapCarousels_public.xml" />
     <Content Include="Package\install.xml" />
   </ItemGroup>
   <ItemGroup />
