@@ -76,19 +76,19 @@
 
                                                     </div>
                                                     <div class="col-xl-4 d-none d-lg-block">
-                                                        <div class="main-image">
-                                                            @Image(@mainMenuEntry)
-                                                        </div>
+
+														@Image(@mainMenuEntry, 0, false)
+
                                                         @foreach (var subMenuEntry in @mainMenuEntry.Children as IEnumerable<HomeMainMenuEntryViewModel>)
                                                         {
-                                                            <div id="menu-image-@(subMenuEntry.GetHashCode())" class="menu-image">
-                                                                @Image(@subMenuEntry)
-                                                            </div>
+
+                                                            @Image(@subMenuEntry, @subMenuEntry.GetHashCode(), true)
+
                                                             foreach (var subSubMenuEntry in @subMenuEntry.Children as IEnumerable<HomeMainMenuEntryViewModel>)
                                                             {
-                                                                <div id="menu-image-@subSubMenuEntry.GetHashCode()" class="menu-image">
-                                                                    @Image(@subSubMenuEntry)
-                                                                </div>
+
+                                                               @Image(@subSubMenuEntry, @subSubMenuEntry.GetHashCode(), true)
+
                                                             }
                                                         }
                                                     </div>
@@ -128,8 +128,8 @@
         @if (menuItems.Any())
         {
             <a data-qa="main-menu-section"
-               href="@(parentMenuEntry.Url)"
-               target="_self"
+               href="@parentMenuEntry.Url"
+               target="@parentMenuEntry.UrlTarget"
                class="main-nav-section-title d-none d-md-block"
                style="font-weight:bold; @parentMenuEntry.CssClass"
                data-image="@parentMenuEntry.GetHashCode()">
@@ -151,8 +151,8 @@
         else
         {
             <a data-qa="main-menu-section"
-               href="@(parentMenuEntry.Url)"
-               target="_self"
+               href="@parentMenuEntry.Url"
+               target="@parentMenuEntry.UrlTarget"
                class="main-nav-section-title"
                style="font-weight:bold; @parentMenuEntry.CssClass"
                data-image="@parentMenuEntry.GetHashCode()">
@@ -166,8 +166,8 @@
             <ul class="list-unstyled sub-collapse collapse" id="subMenu-@(parentMenuEntry.GetHashCode())">
                 <li class="main-nav-subsection d-lg-none">
                     <a data-qa="main-menu-link"
-                       href="@(parentMenuEntry.Url)"
-                       target="_self"
+                       href="@parentMenuEntry.Url"
+                        target="@parentMenuEntry.UrlTarget"
                        class="d-md-block d-lg-none">
                         View All @parentMenuEntry.DisplayName
                     </a>
@@ -178,8 +178,8 @@
                     {
                         <li class="main-nav-subsection @menuItem.CssClassName">
                             <a data-qa="main-menu-link"
-                               href="@(menuItem.Url)"
-                               target="_self"
+                               href="@menuItem.Url"
+                               target="@menuItem.UrlTarget"
                                class="d-md-block  @menuItem.CssClass"
                                data-image="@menuItem.GetHashCode()">
                                 @menuItem.DisplayName
@@ -192,11 +192,14 @@
     </li>
 }
 
-@helper Image(HomeMainMenuEntryViewModel vm)
+@helper Image(HomeMainMenuEntryViewModel vm, int id, bool isSubMenu)
 {
+	var imgId = "menu-image-"+id;
+	var className = isSubMenu ? "menu-image" : "main-image";
     if (!string.IsNullOrEmpty(vm.Image.ImageSource))
     {
-        if (!string.IsNullOrEmpty(vm.Image.ImageUrl))
+		<div id="@imgId" class="@className">
+        @if (!string.IsNullOrEmpty(vm.Image.ImageUrl))
         {
             <a href="@vm.Image.ImageUrl" target="@vm.Image.ImageUrlTarget">
                 <img src="@vm.Image.ImageSource" class="img-responsive img-menu" />
@@ -206,11 +209,12 @@
         {
             <img src="@vm.Image.ImageSource" class="img-fluid img-menu" />
         }
-        if (!string.IsNullOrEmpty(vm.Image.ImageLabel))
+        @if (!string.IsNullOrEmpty(vm.Image.ImageLabel))
         {
             <span class="caption">
                 <span>@vm.Image.ImageLabel</span>
             </span>
         }
+		</div>
     }
 }
