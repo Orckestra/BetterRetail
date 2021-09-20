@@ -10,7 +10,7 @@
   .text-copy {
     margin-top: 10px;
     text-align: center;
-   
+
     @include media-breakpoint-up(md) {
       margin-top: 0;
       text-align: left;
@@ -22,39 +22,43 @@
     margin: 0 -10px;
     > li {
       margin-bottom: 0;
-      h5 {
-        margin: 0;
-        > a {
-          border-bottom: 1px solid gray("200");
-          border-top: 1px solid gray("200");
-          display: block;
-          padding: 20px 10px;
+	}
+	h5[role="tab"]  {
+		margin: 0px;
+		padding: 20px 10px;
+		> a {
+		  border-bottom: 1px solid gray("200");
+		  border-top: 1px solid gray("200");
+		  display: block;
 
-          .collapsed-icon {
-            display: none;
-          }
-          .expanded-icon {
-            display: block;
-          }
-          &.collapsed {
-            .collapsed-icon {
-              display: block;
-            }
-            .expanded-icon {
-              display: none;
-            }
-          }
-         @include media-breakpoint-up(md) {
-            border: 0;
-     
-            .collapsed-icon,
-            .expanded-icon {
-              display: none !important;
-            }
-          }
-        }
-      }
+		  .collapsed-icon {
+			display: none;
+		  }
+		  .expanded-icon {
+			display: block;
+		  }
+		  &.collapsed {
+			.collapsed-icon {
+			  display: block;
+			}
+			.expanded-icon {
+			  display: none;
+			}
+		  }
+		 @include media-breakpoint-up(md) {
+			border: 0;
+
+			.collapsed-icon,
+			.expanded-icon {
+			  display: none !important;
+			}
+		  }
+		}
     }
+	.nav-social {
+		margin-left: 10px;
+	}
+
    @include media-breakpoint-up(md) {
       margin-bottom: 20px;
     }

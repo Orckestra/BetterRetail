@@ -3,6 +3,7 @@ $light-color: #333;
 $dark-bg-color: #333;
 $dark-color: #fafafa;
 
+$tiktok-color: #000000;
 $twitter-color: #55acee;
 $skype-color: #00aff0;
 $linkedin-color: #0976b4;
@@ -46,6 +47,10 @@ $mailto-color: #666;
         &.linkedin a:hover {
             color: $linkedin-color;
         }
+
+		&.tiktok a:hover {
+			color: $tiktok-color;
+		}
 
         &.googleplus a:hover {
             color: $googleplus-color;
@@ -252,6 +257,10 @@ $mailto-color: #666;
 
         .flickr a {
             @include icon-variant($flickr-color);
+        }
+
+        .tiktok a {
+            @include icon-variant($tiktok-color);
         }
 
         .facebook a {
