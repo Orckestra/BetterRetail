@@ -65,6 +65,7 @@
     <Content Include="Package\Datas\Orckestra.Composer.ContentSearch.DataTypes.IContentTabs_administrated.xml" />
     <Content Include="Package\Datas\Orckestra.Composer.ContentSearch.DataTypes.IContentTabs_public.xml" />
     <Content Include="Package\Datas\Orckestra.Composer.ContentSearch.DataTypes.ISortOptions_public.xml" />
+    <Content Include="Package\Datas\Orckestra.Composer.Grocery.DataTypes.IBootstrapCarousels_public.xml" />
     <Content Include="Package\Datas\Orckestra.Composer.Grocery.DataTypes.IGrocerySettingsMetas_administrated.xml" />
     <Content Include="Package\Datas\Orckestra.Composer.Grocery.DataTypes.IGrocerySettingsMetas_public.xml" />
     <Content Include="Package\Datas\Orckestra.ExperienceManagement.Configuration.DataTypes.ISiteConfigurations_administrated.xml" />

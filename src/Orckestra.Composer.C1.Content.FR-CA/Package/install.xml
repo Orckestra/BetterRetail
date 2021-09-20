@@ -94,7 +94,7 @@
         </Type>
         <!--BootstrapCarousel -->
         <Type type="Orckestra.Composer.Grocery.DataTypes.IBootstrapCarousel,Orckestra.Composer.Grocery">
-          <Data dataScopeIdentifier="public" locale="fr-CA" dataFilename="~\Datas\Orckestra.Web.Html.BootstrapCarousels_public.xml" />
+          <Data dataScopeIdentifier="public" locale="fr-CA" dataFilename="~\Datas\Orckestra.Composer.Grocery.DataTypes.IBootstrapCarousels_public.xml" />
         </Type>
       </Types>
     </mi:Add>
