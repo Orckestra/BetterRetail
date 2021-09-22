@@ -154,6 +154,8 @@ namespace Orckestra.Composer.SearchQuery.Services
 
             viewModel = new SearchQueryViewModel
             {
+                QueryName = param.QueryName,
+                QueryType = param.QueryType,
                 SelectedFacets =
                     await GetSelectedFacetsAsync(createSearchViewModelParam.SearchParam).ConfigureAwait(false),
                 ProductSearchResults =

@@ -39,84 +39,41 @@ namespace Orckestra.Composer.C1CMS.Queries.Controllers
         public virtual ActionResult Top(string queryName = "", int number = 0)
         {
             var searchQueryViewModel =
-                SearchQueryContext.GetSearchQueryViewModelAsync(BuildParameters(queryName, 1, null, null, number)).Result;
-
-            if (searchQueryViewModel.ProductSearchResults.Pagination != null)
-            {
-                searchQueryViewModel.ProductSearchResults.Pagination.TotalNumberOfPages = 1;
-                searchQueryViewModel.ProductSearchResults.Pagination.NextPage = null;
-            }
+                SearchQueryContext.GetTopSearchQueryViewModelAsync(QueryType, queryName, number).Result;
 
             return View("SearchQueryTopResults", searchQueryViewModel);
         }
 
-        public virtual ActionResult Index(string queryName = "", int page = 1, string sortBy = null, string sortDirection = null)
+        public virtual ActionResult Index(string queryName = "")
         {
-            return ExecuteSearchQuery("SearchResults", "SearchResults", c => c, queryName, page, sortBy, sortDirection);
+            return ExecuteSearchQuery("SearchResults", "SearchResults", c => c, queryName);
         }
 
-        public virtual ActionResult SelectedSearchFacets(string queryName = "", int page = 1, string sortBy = null, string sortDirection = null)
+        public virtual ActionResult SelectedSearchFacets(string queryName = "")
         {
-            return ExecuteSearchQuery("SelectedSearchFacets", "SelectedSearchFacets", c => c, queryName, page, sortBy, sortDirection);
+            return ExecuteSearchQuery("SelectedSearchFacets", "SelectedSearchFacets", c => c, queryName);
         }
 
-        public virtual ActionResult Facets(string queryName = "", int page = 1, string sortBy = null, string sortDirection = null)
+        public virtual ActionResult Facets(string queryName = "")
         {
-            return ExecuteSearchQuery("SearchFacetsEmpty", "SearchFacets", c => c.ProductSearchResults, queryName, page, sortBy, sortDirection);
+            return ExecuteSearchQuery("SearchFacetsEmpty", "SearchFacets", c => c.ProductSearchResults, queryName);
         }
 
-        public virtual ActionResult ChildCategories(string queryName = "", int page = 1, string sortBy = null, string sortDirection = null)
+        public virtual ActionResult ChildCategories(string queryName = "")
         {
-            return ExecuteSearchQuery("ChildCategories", "ChildCategories", c => c, queryName, page, sortBy, sortDirection);
+            return ExecuteSearchQuery("ChildCategories", "ChildCategories", c => c, queryName);
         }
 
         protected ActionResult ExecuteSearchQuery(string emptyView, string filledView,
-            Func<SearchQueryViewModel, object> viewModelSelector, string queryName, int page,
-            string sortBy = null, string sortDirection = null)
+            Func<SearchQueryViewModel, object> viewModelSelector, string queryName)
         {
-            var param = BuildParameters(queryName, page, sortBy, sortDirection, SearchConfiguration.MaxItemsPerPage);
             var container =
-               SearchQueryContext.GetSearchQueryViewModelAsync(param).Result;
+               SearchQueryContext.GetSearchQueryViewModelAsync(QueryType, queryName).Result;
 
             var viewName = container.ProductSearchResults.TotalCount <= 0 ? emptyView : filledView;
 
             var model = viewModelSelector.Invoke(container);
             return View(viewName, model);
-        }
-
-        protected virtual GetSearchQueryViewModelParams BuildParameters(string queryName, int page, string sortBy, string sortDirection, int maxItemsPerPage)
-        {
-            var searchCriteria = new SearchCriteria
-            {
-                NumberOfItemsPerPage = maxItemsPerPage,
-                IncludeFacets = true,
-                StartingIndex = (page - 1) * maxItemsPerPage,
-                SortBy = sortBy,
-                SortDirection = sortDirection,
-                Page = page,
-                BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
-                CultureInfo = ComposerContext.CultureInfo,
-                Scope = ComposerContext.Scope,
-                InventoryLocationIds = GetInventoryLocationIds()
-            };
-
-            searchCriteria.SelectedFacets.AddRange(SearchUrlProvider.BuildSelectedFacets(Request.QueryString));
-
-            var param = new GetSearchQueryViewModelParams
-            {
-                Criteria = searchCriteria,
-                QueryName = queryName,
-                QueryType = QueryType,
-                InventoryLocationIds = GetInventoryLocationIds(),
-            };
-
-            return param;
-        }
-
-        protected virtual List<string> GetInventoryLocationIds()
-        {
-            var ids = InventoryLocationProvider.GetInventoryLocationIdsForSearchAsync().Result;
-            return ids;
         }
     }
 }
