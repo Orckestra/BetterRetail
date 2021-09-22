@@ -1,4 +1,4 @@
 <f:function name="Composer.Components.Queries.ProductSet.Generic.Top" xmlns:f="http://www.composite.net/ns/function/1.0"  xmlns:pal="http://www.composite.net/ns/components/1.0"
-            pal:title="Dynamic Product Highlight"
+            pal:title="Products Set Highlights"
             pal:description=""
             pal:icon="query" />

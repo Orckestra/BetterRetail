@@ -3,23 +3,48 @@
 @functions {
     public override string FunctionDescription
     {
-        get  { return ""; }
+        get { return "Products Set Highlights"; }
     }
 
+    [FunctionParameter(Label = "Heading", DefaultValue = null)]
+    public string Heading { get; set; }
+
+    [FunctionParameter(Label = "Description", DefaultValue = null, WidgetMarkup = @"<f:widgetfunction xmlns:f='http://www.composite.net/ns/function/1.0' name='Composite.Widgets.String.TextArea' />")]
+    public string Description { get; set; }
     [FunctionParameter(Label = "Query Name", Help = "Query Name", WidgetMarkup = Orckestra.ExperienceManagement.SearchQueryBuilder.Widgets.ProductSetQuerySelector)]
     public string QueryName { get; set; }
 
-    [FunctionParameter(Label = "Number", Help = "", DefaultValue = "3")]
+    [FunctionParameter(Label = "Total number of products", Help = "", DefaultValue = "3")]
     public string Number { get; set; }
+
+    [FunctionParameter(Label = "Show More Button Text", DefaultValue = "Show More")]
+    public string PageTitle { get; set; }
+
+    [FunctionParameter(Label = "Show More Button Url", WidgetMarkup = @"<f:widgetfunction xmlns:f='http://www.composite.net/ns/function/1.0' name='Composite.Widgets.DataReference.OptionalPageSelector' />", DefaultValue = null)]
+    public Guid? Page { get; set; }
 }
 
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
 <head>
 </head>
 <body>
-<f:function name="Composer.Queries.ProductSet.Top" xmlns:f="http://www.composite.net/ns/function/1.0">
-    <f:param name="QueryName" value="@QueryName" />
-    <f:param name="Number" value="@Number" />
-</f:function>
+    @if (Heading != null)
+    {
+        <h1>@Heading</h1>
+    }
+    @if (Description != null)
+    {
+        <p>@Description</p>
+    }
+    <f:function name="Composer.Queries.ProductSet.Top" xmlns:f="http://www.composite.net/ns/function/1.0">
+        <f:param name="QueryName" value="@QueryName" />
+        <f:param name="Number" value="@Number" />
+    </f:function>
+    @if (Page != null)
+    {
+        <div class="text-center my-2">
+            <a href="~/page(@Page)" class="btn btn-primary">@PageTitle</a>
+        </div>
+    }
 </body>
 </html>
