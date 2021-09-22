@@ -1,6 +1,7 @@
 ﻿using System;
 using Orckestra.Composer.CompositeC1.Mappers;
 using Orckestra.Composer.Cart.Providers.WishList;
+using Orckestra.Composer.CompositeC1.Builders;
 using Orckestra.Composer.CompositeC1.Context;
 using Orckestra.Composer.CompositeC1.Providers;
 using Orckestra.Composer.CompositeC1.Services;
@@ -86,6 +87,8 @@ namespace Orckestra.Composer.CompositeC1
             host.Register<LazyFunctionCallDataProvider, ILazyFunctionCallDataProvider>();
             RegisterBreadcrumProviders(host);
             RegisterLanguageSwitchProviders(host);
+
+            host.Register<CategoryAndNavigationBuilder, ICategoryAndNavigationBuilder>();
 
             host.RegisterApiControllers(typeof(Plugin).Assembly);
         }

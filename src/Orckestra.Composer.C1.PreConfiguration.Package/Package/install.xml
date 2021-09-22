@@ -1,0 +1,19 @@
+<?xml version="1.0" standalone="yes"?>
+<mi:PackageInstaller xmlns:mi="http://www.composite.net/ns/management/packageinstaller/1.0">
+	<mi:PackageRequirements minimumCompositeVersion="6.10.7583.21856" maximumCompositeVersion="9.9999.9999.9999" />
+	<mi:PackageInformation name="Orckestra.Composer.C1.PreConfiguration" groupName="Orckestra.Composer.C1" version="1.0.0" author="Orckestra" website="http://orckestra.com/" readMoreUrl="http://orckestra.com/" id="bf69b0fa-67c6-4c83-9341-fad58a8ab42b" canBeUninstalled="true" systemLocking="soft" flushOnCompletion="true" allowOverwrite="false">
+		<TechnicalDetails>-</TechnicalDetails>
+		<Description>-</Description>
+	</mi:PackageInformation>
+	<mi:PackageFragmentInstallerBinaries>
+		<mi:Add path="~\Bin\Orckestra.Composer.C1.PreConfiguration.dll" />
+	</mi:PackageFragmentInstallerBinaries>
+	<mi:PackageFragmentInstallers>
+		<mi:Add installerType="Orckestra.Composer.CompositeC1.Installers.PreConfigurationInstaller, Orckestra.Composer.C1.PreConfiguration" uninstallerType="Orckestra.Composer.CompositeC1.Installers.PreConfigurationUninstaller, Orckestra.Composer.C1.PreConfiguration" >
+			<MainMenuDisplayNames>
+				<add locale="en-CA">Grocery</add>
+				<add locale="fr-CA">L'épicerie</add>
+			</MainMenuDisplayNames>
+		</mi:Add>
+	</mi:PackageFragmentInstallers>
+</mi:PackageInstaller>
