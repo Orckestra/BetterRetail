@@ -54,7 +54,7 @@ namespace Orckestra.Composer.SearchQuery.Context
 
         public async Task<SearchQueryViewModel> GetSearchQueryViewModelAsync(SearchQueryType queryType, string queryName)
         {
-            if (_viewModel != null) { return _viewModel; }
+            if (_viewModel != null && _viewModel.QueryName == queryName && _viewModel.QueryType == queryType) { return _viewModel; }
             var criteria = BuildProductsSearchCriteria();
             var param = new GetSearchQueryViewModelParams
             {
@@ -73,7 +73,7 @@ namespace Orckestra.Composer.SearchQuery.Context
 
         public async Task<SearchQueryViewModel> GetTopSearchQueryViewModelAsync(SearchQueryType queryType, string queryName, int pageSize)
         {
-            if (_topResultsViewModel != null) { return _topResultsViewModel; }
+            if (_topResultsViewModel != null && _topResultsViewModel.QueryName == queryName && _topResultsViewModel.QueryType == queryType) { return _topResultsViewModel; }
 
             var criteria = BuildProductsSearchCriteria();
             criteria.NumberOfItemsPerPage = pageSize;
