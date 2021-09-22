@@ -65,5 +65,3 @@ blockquote {
         margin-bottom: map_get($spacers, 2);
     }
 }
-
-@include text-emphasis-variant('.text-gray', $gray-800);

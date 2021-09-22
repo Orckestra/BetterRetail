@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Options>
-  <Option  CssClassKey="bg-none" Label="None"></Option>
+  <Option  CssClassKey="bg-none" Label="NONE"></Option>
   <Option  CssClassKey="bg-white" Label="White"></Option>
   <Option  CssClassKey="bg-light" Label="Light"></Option>
   <Option  CssClassKey="bg-gray" Label="Gray"></Option>

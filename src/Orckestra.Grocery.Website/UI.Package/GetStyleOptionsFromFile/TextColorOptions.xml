@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Options>
-  <Option  CssClassKey="text-none" Label="None"></Option>
+  <Option  CssClassKey="text-none" Label="NONE"></Option>
   <Option  CssClassKey="text-white" Label="White"></Option>
   <Option  CssClassKey="text-primary" Label="Primary"></Option>
   <Option  CssClassKey="text-secondary" Label="Secondary"></Option>
