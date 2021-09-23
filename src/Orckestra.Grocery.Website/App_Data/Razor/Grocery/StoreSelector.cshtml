@@ -1,4 +1,4 @@
-@inherits RazorFunction
+﻿@inherits RazorFunction
 @using Orckestra.Overture.ServiceModel.Orders;
 @using Orckestra.ExperienceManagement.Configuration
 
@@ -12,7 +12,37 @@
 
     [FunctionParameter(Label = "Stepper Title", DefaultValue = "Shop better in these easy steps")]
     public string StepperTitle { get; set; }
+	
+	[FunctionParameter(Label = "Location Selection Step Summary", DefaultValue = "Check service availability near you")]
+    public string LocationStepSummary { get; set; }
 
+    [FunctionParameter(Label = "Location Selection Step Short Summary", DefaultValue = "Check availability")]
+    public string LocationStepShortSummary { get; set; }
+	
+	[FunctionParameter(Label = "Shipping Method Selection Step Summary", DefaultValue = "Select to pick up your order or get it delivered")]
+    public string ShippingMethodStepSummary { get; set; }
+
+    [FunctionParameter(Label = "Shipping Method Selection Step Short Summary", DefaultValue = "Pickup or Delivery?")]
+    public string ShippingMethodStepShortSummary { get; set; }
+	
+	[FunctionParameter(Label = "Store Selection Step Summary", DefaultValue = "Select the default store to fulfill your order")]
+    public string StoresStepSummary { get; set; }
+
+    [FunctionParameter(Label = "Store Selection Step Short Summary", DefaultValue = "Select Store")]
+    public string StoresStepShortSummary { get; set; }
+	
+	[FunctionParameter(Label = "Date And Time Selection Step Summary", DefaultValue = "Pick a date and time to fulfillment")]
+    public string TimeslotsStepSummary { get; set; }
+	
+	[FunctionParameter(Label = "Date And Time Selection Step Short Summary", DefaultValue = "Select timeslot")]
+    public string TimeslotsStepShortSummary { get; set; }
+	
+	private const string urlSelectorWidgetMarkup = @" <f:widgetfunction xmlns:f='http://www.composite.net/ns/function/1.0' name='Composite.Widgets.String.UrlComboBox'></f:widgetfunction>";
+    [FunctionParameter(Label = "Start Shopping Button URL", WidgetMarkup = urlSelectorWidgetMarkup, DefaultValue = null)]
+    public string StartShoppingButtonURL { get; set; }
+
+    [FunctionParameter(Label = "Start Shopping Button Text", DefaultValue = "Start Shopping")]
+    public string StartShoppingButtonText { get; set; }
 }
 
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0"
@@ -97,8 +127,8 @@
                   v-bind:before-change="processLocation"
                   v-bind:fulfilled="IsLocationFilled"
                   v-bind:loading="false"
-                  title="@Html.Localize("Grocery", "T_Step_CheckServiceNear")"
-                  mobile-title="@Html.Localize("Grocery", "TM_Step_CheckServiceNear")">
+                  title="@LocationStepSummary"
+                  mobile-title="@LocationStepShortSummary">
 
         <p class="text-center mt-1 mt-sm-5"><strong>@Html.Localize("Grocery", "L_EnterPostalCode")</strong></p>
         <div class="form-row justify-content-center">
@@ -132,8 +162,8 @@
                   v-bind:before-change="processShippingMethodType"
                   v-bind:reset-changes="clearShippingMethodType"
                   v-bind:fulfilled="IsShippingMethodTypeFilled"
-                  title="@Html.Localize("Grocery", "T_Step_SelectDeliveryMethod")"
-                  mobile-title="@Html.Localize("Grocery", "TM_Step_SelectDeliveryMethod")">
+                  title="@ShippingMethodStepSummary"
+                  mobile-title="@ShippingMethodStepShortSummary">
         <h2 class="pt-4 text-center">@Html.Localize("Grocery", "L_ServicesNear")</h2>
         <div class="form-row">
             <div class="col-md-6 pb-3 d-flex" v-for="shippingMethod in ShippingMethodTypes">
@@ -190,8 +220,8 @@
                   v-bind:reset-changes="clearSelectedStore"
                   v-bind:fulfilled="IsStoreIdFilled"
                   v-bind:before-change="processStore"
-                  title="@Html.Localize("Grocery", "T_Step_SelectStore")"
-                  mobile-title="@Html.Localize("Grocery", "TM_Step_SelectStore")">
+                  title="@StoresStepSummary"
+                  mobile-title="@StoresStepShortSummary">
         <hr />
         <h2 class="text-center">@Html.Localize("Grocery", "T_PickStore")</h2>
         @Function("Grocery.StoreSelector.StoresList")
@@ -211,8 +241,8 @@
     <stepper-step v-slot="step"
                   v-bind:reset-changes="clearSelectedTimeSlot"
                   v-bind:fulfilled="IsTimeSlotFilled"
-                  title="@Html.Localize("Grocery", "T_Step_SelectDate")"
-                  mobile-title="@Html.Localize("Grocery", "TM_Step_SelectDate")">
+                  title="@TimeslotsStepSummary"
+                  mobile-title="@TimeslotsStepShortSummary">
         <hr />
         <h2 class="text-center">@Html.Localize("Grocery", "T_PickTimeSlot")</h2>
         <div class="mb-3">
@@ -227,8 +257,11 @@
 
 @helper StartShoppingButton()
 {
-    <a ref="startShoppingButton" class="btn btn-primary btn-block  text-uppercase"
-       href="@HomePageNode.Url">
-        @Html.Localize("Grocery", "B_StartShopping")
-    </a>
+    @if (!String.IsNullOrWhiteSpace(StartShoppingButtonURL))
+     {
+        <a ref="startShoppingButton" class="btn btn-primary btn-block  text-uppercase"
+            href="@StartShoppingButtonURL">
+            @StartShoppingButtonText
+        </a>
+     }
 }

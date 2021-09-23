@@ -153,9 +153,6 @@
   <data name="B_SelectThisStore" xml:space="preserve">
     <value>Select this store</value>
   </data>
-  <data name="B_StartShopping" xml:space="preserve">
-    <value>Start Shopping</value>
-  </data>
   <data name="H_ChangeMethodModal" xml:space="preserve">
     <value>Your Fulfillment Method</value>
   </data>
@@ -233,18 +230,6 @@ available for you.</value>
   <data name="L_UnavailableSlot" xml:space="preserve">
     <value>NA</value>
   </data>
-  <data name="TM_Step_CheckServiceNear" xml:space="preserve">
-    <value>Check availability</value>
-  </data>
-  <data name="TM_Step_SelectDate" xml:space="preserve">
-    <value>Select timeslot</value>
-  </data>
-  <data name="TM_Step_SelectDeliveryMethod" xml:space="preserve">
-    <value>Pickup or Delivery?</value>
-  </data>
-  <data name="TM_Step_SelectStore" xml:space="preserve">
-    <value>Select Store</value>
-  </data>
   <data name="T_FulfillmentMethod" xml:space="preserve">
     <value>Fulfillment method</value>
   </data>
@@ -265,18 +250,6 @@ available for you.</value>
   </data>
   <data name="T_ShippingMethodTitle" xml:space="preserve">
     <value>Delivery</value>
-  </data>
-  <data name="T_Step_CheckServiceNear" xml:space="preserve">
-    <value>Check service availability near you</value>
-  </data>
-  <data name="T_Step_SelectDate" xml:space="preserve">
-    <value>Pick a date and time of fulfillment</value>
-  </data>
-  <data name="T_Step_SelectDeliveryMethod" xml:space="preserve">
-    <value>Select to pick up your order or get it delivered</value>
-  </data>
-  <data name="T_Step_SelectStore" xml:space="preserve">
-    <value>Select the default store to fulfill your order</value>
   </data>
   <data name="T_Store" xml:space="preserve">
     <value>Store</value>
