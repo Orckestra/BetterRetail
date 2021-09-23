@@ -11,6 +11,7 @@ using Orckestra.Composer.Services.Cookie;
 using Orckestra.Composer.Services.Lookup;
 using Orckestra.Composer.ViewEngine.HandleBarsBlockHelpers;
 using Orckestra.Composer.ViewEngine.HandleBarsHelpers;
+using Orckestra.Composer.ViewModels;
 using Orckestra.Overture;
 
 namespace Orckestra.Composer

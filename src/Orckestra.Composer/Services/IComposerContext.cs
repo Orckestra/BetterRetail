@@ -11,6 +11,7 @@ namespace Orckestra.Composer.Services
         bool IsGuest { get; set; }
         string CountryCode { get; }
         bool IsAuthenticated { get; }
+        string CurrencyIso { get; }
         string GetEncryptedCustomerId();
     }
 }

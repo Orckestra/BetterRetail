@@ -331,11 +331,11 @@ namespace Orckestra.Composer.Product.Tests.Factories
         {
             Mock<IViewModelMapper> mapperMock = new Mock<IViewModelMapper>();
             
-            mapperMock.Setup(mapper => mapper.MapTo<ProductViewModel>(It.Is<Overture.ServiceModel.Products.Product>(r => r != null), It.Is<CultureInfo>(c => c.Name == culture.Name)))
+            mapperMock.Setup(mapper => mapper.MapTo<ProductViewModel>(It.Is<Overture.ServiceModel.Products.Product>(r => r != null), It.Is<CultureInfo>(c => c.Name == culture.Name), "CAD"))
                       .Returns(new ProductViewModel())
                       .Verifiable();
 
-            mapperMock.Setup(mapper => mapper.MapTo<VariantViewModel>(It.IsNotNull<Variant>(), It.Is<CultureInfo>(c => c.Name == culture.Name)))
+            mapperMock.Setup(mapper => mapper.MapTo<VariantViewModel>(It.IsNotNull<Variant>(), It.Is<CultureInfo>(c => c.Name == culture.Name), "CAD"))
                       .Returns(new VariantViewModel())
                       .Verifiable();
 

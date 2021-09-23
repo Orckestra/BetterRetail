@@ -103,11 +103,11 @@ namespace Orckestra.Composer.Product.Tests.Services
         {
             var mapperMock = new Mock<IViewModelMapper>();
 
-            mapperMock.Setup(repo => repo.MapTo<CategoryViewModel>(It.Is<Category>(c => c.Id == "A"), It.IsAny<CultureInfo>()))
+            mapperMock.Setup(repo => repo.MapTo<CategoryViewModel>(It.Is<Category>(c => c.Id == "A"), It.IsAny<CultureInfo>(), "CAD"))
                 .Returns(new CategoryViewModel { Id = "A" })
                 .Verifiable();
 
-            mapperMock.Setup(repo => repo.MapTo<CategoryViewModel>(It.Is<Category>(c => c.Id == "B"), It.IsAny<CultureInfo>()))
+            mapperMock.Setup(repo => repo.MapTo<CategoryViewModel>(It.Is<Category>(c => c.Id == "B"), It.IsAny<CultureInfo>(), "CAD"))
                 .Returns(new CategoryViewModel { Id = "B" })
                 .Verifiable();
 

@@ -14,6 +14,6 @@ namespace Orckestra.Composer.ViewModels
         /// <param name="cultureInfo">The culture the formatting belongs to.
         /// This will determine which format the resouce will come from.</param>
         /// <returns></returns>
-        string Format(object value, IPropertyMetadata propertyMetadata, CultureInfo cultureInfo);
+        string Format(object value, IPropertyMetadata propertyMetadata, CultureInfo cultureInfo, string currencyIso = default);
     }
 }

@@ -2,19 +2,22 @@
 using System.Globalization;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Localization;
+using Orckestra.Composer.Services;
 
 namespace Orckestra.Composer.ViewModels
 {
     public class ResxViewModelPropertyFormatter : IViewModelPropertyFormatter
     {
         private readonly ILocalizationProvider _localizationProvider;
+        
+
 
         public ResxViewModelPropertyFormatter(ILocalizationProvider localizationProvider)
         {
             _localizationProvider = localizationProvider;
         }
 
-        public string Format(object value, IPropertyMetadata propertyMetadata, CultureInfo cultureInfo)
+        public string Format(object value, IPropertyMetadata propertyMetadata, CultureInfo cultureInfo, string currencyIso = default)
         {
             if (propertyMetadata == null) { throw new ArgumentNullException(nameof(propertyMetadata)); }
             if (cultureInfo == null) { throw new ArgumentNullException(nameof(cultureInfo)); }
@@ -28,9 +31,16 @@ namespace Orckestra.Composer.ViewModels
                 CultureInfo = cultureInfo
             });
 
+            if (currencyIso != default && !string.IsNullOrEmpty(currencyIso))
+            {
+                cultureInfo = _localizationProvider.GetCultureByCurrencyIso(currencyIso);
+            }
+
             return localFormattingString == null
                 ? value.ToString()
                 : string.Format(cultureInfo, localFormattingString, value);
         }
+
+        
     }
 }

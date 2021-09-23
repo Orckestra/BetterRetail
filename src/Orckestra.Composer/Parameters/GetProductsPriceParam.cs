@@ -11,6 +11,7 @@ namespace Orckestra.Composer.Parameters
         public List<string> ProductIds { get; set; }
         public string Scope { get; set; }
         public CultureInfo CultureInfo { get; set; }
+        public string CurrencyIso { get; set; }
 
         public GetProductsPriceParam()
         {

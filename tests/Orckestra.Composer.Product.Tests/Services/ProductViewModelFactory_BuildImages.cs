@@ -36,7 +36,7 @@ namespace Orckestra.Composer.Product.Tests.Services
         {
             Container.GetMock<IViewModelMapper>()
                 .Setup(
-                    m => m.MapTo<ProductDetailImageViewModel>(It.IsAny<AllProductImages>(), It.IsAny<CultureInfo>()))
+                    m => m.MapTo<ProductDetailImageViewModel>(It.IsAny<AllProductImages>(), It.IsAny<CultureInfo>(), "CAD"))
                 .Returns(() => new ProductDetailImageViewModel());
 
             var service = Container.CreateInstance<ProductViewModelFactoryProxy>();

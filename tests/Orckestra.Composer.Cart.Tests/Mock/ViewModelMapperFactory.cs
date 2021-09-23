@@ -76,29 +76,29 @@ namespace Orckestra.Composer.Cart.Tests.Mock
             viewModelMapper.Setup(
                 mapper =>
                     mapper.MapTo<CartProductSummaryViewModel>(It.IsNotNull<CartProductSummary>(),
-                        It.IsNotNull<CultureInfo>()))
+                        It.IsNotNull<CultureInfo>(), "CAD"))
                 .Returns(dummyCartProduct)
             .Verifiable();
 
-            viewModelMapper.Setup(mapper => mapper.MapTo<CartViewModel>(It.IsNotNull<Overture.ServiceModel.Orders.Cart>(), It.IsNotNull<CultureInfo>()))
+            viewModelMapper.Setup(mapper => mapper.MapTo<CartViewModel>(It.IsNotNull<Overture.ServiceModel.Orders.Cart>(), It.IsNotNull<CultureInfo>(), "CAD"))
                           .Returns(dummyCart)
                           .Verifiable();
 
             viewModelMapper.Setup(
-                mapper => mapper.MapTo<LineItemDetailViewModel>(It.IsNotNull<LineItem>(), It.IsNotNull<CultureInfo>()))
+                mapper => mapper.MapTo<LineItemDetailViewModel>(It.IsNotNull<LineItem>(), It.IsNotNull<CultureInfo>(), "CAD"))
                 .Returns(dummyLineItem)
             .Verifiable();
 
-            viewModelMapper.Setup(mapper => mapper.MapTo<TaxViewModel>(It.IsNotNull<Tax>(), It.IsNotNull<CultureInfo>()))
+            viewModelMapper.Setup(mapper => mapper.MapTo<TaxViewModel>(It.IsNotNull<Tax>(), It.IsNotNull<CultureInfo>(), "CAD"))
                 .Returns(dummyTaxViewModel)
             .Verifiable();
 
-            viewModelMapper.Setup(mapper=>mapper.MapTo<RewardViewModel>(It.IsNotNull<Reward>(), It.IsNotNull<CultureInfo>()))
+            viewModelMapper.Setup(mapper=>mapper.MapTo<RewardViewModel>(It.IsNotNull<Reward>(), It.IsNotNull<CultureInfo>(), "CAD"))
                 .Returns(rewardViewModel)
                 .Verifiable();
 
             viewModelMapper.Setup(
-                mapper => mapper.MapTo<CouponViewModel>(It.IsNotNull<Coupon>(), It.IsNotNull<CultureInfo>()))
+                mapper => mapper.MapTo<CouponViewModel>(It.IsNotNull<Coupon>(), It.IsNotNull<CultureInfo>(), "CAD"))
                 .Returns(couponViewModel)
             .Verifiable();
 
@@ -168,38 +168,38 @@ namespace Orckestra.Composer.Cart.Tests.Mock
             viewModelMapper.Setup(
                 mapper =>
                     mapper.MapTo<CartProductSummaryViewModel>(It.IsNotNull<CartProductSummary>(),
-                        It.IsNotNull<CultureInfo>()))
+                        It.IsNotNull<CultureInfo>(), "CAD"))
                 .Returns(dummyCartProduct)
                             .Verifiable();
 
             viewModelMapper.Setup(
                 mapper =>
                     mapper.MapTo<CartViewModel>(It.IsNotNull<Overture.ServiceModel.Orders.Cart>(),
-                        It.IsNotNull<CultureInfo>()))
+                        It.IsNotNull<CultureInfo>(), "CAD"))
                 .Returns(dummyCart)
                          .Verifiable();
 
             viewModelMapper.Setup(
-                mapper => mapper.MapTo<LineItemDetailViewModel>(It.IsNotNull<LineItem>(), It.IsNotNull<CultureInfo>()))
+                mapper => mapper.MapTo<LineItemDetailViewModel>(It.IsNotNull<LineItem>(), It.IsNotNull<CultureInfo>(), "CAD"))
                 .Returns(dummyLineItem)
                           .Verifiable();
 
             viewModelMapper.Setup(
                 mapper =>
                     mapper.MapTo<OrderSummaryViewModel>(It.IsNotNull<Overture.ServiceModel.Orders.Cart>(),
-                        It.IsNotNull<CultureInfo>()))
+                        It.IsNotNull<CultureInfo>(), "CAD"))
                 .Returns(dummyOrderSummary)
                           .Verifiable();
 
-            viewModelMapper.Setup(mapper => mapper.MapTo<TaxViewModel>(It.IsNotNull<Tax>(), It.IsNotNull<CultureInfo>()))
+            viewModelMapper.Setup(mapper => mapper.MapTo<TaxViewModel>(It.IsNotNull<Tax>(), It.IsNotNull<CultureInfo>(), "CAD"))
                 .Returns(dummyTaxViewModel)
                           .Verifiable();
 
-            viewModelMapper.Setup(mapper => mapper.MapTo<RewardViewModel>(It.IsNotNull<Reward>(), It.IsNotNull<CultureInfo>()))
+            viewModelMapper.Setup(mapper => mapper.MapTo<RewardViewModel>(It.IsNotNull<Reward>(), It.IsNotNull<CultureInfo>(), "CAD"))
                 .Returns(dummyReward)
                 .Verifiable();
 
-            viewModelMapper.Setup(mapper=>mapper.MapTo<CouponViewModel>(It.IsNotNull<Coupon>(), It.IsNotNull<CultureInfo>()))
+            viewModelMapper.Setup(mapper=>mapper.MapTo<CouponViewModel>(It.IsNotNull<Coupon>(), It.IsNotNull<CultureInfo>(), "CAD"))
                 .Returns(dummyCoupons)
                 .Verifiable();
 
@@ -216,8 +216,8 @@ namespace Orckestra.Composer.Cart.Tests.Mock
             }
 
             var formatterMock = new Mock<IViewModelPropertyFormatter>();
-            formatterMock.Setup(m => m.Format(It.IsAny<object>(), It.IsNotNull<IPropertyMetadata>(), It.IsAny<CultureInfo>()))
-                .Returns((object value, IPropertyMetadata meta, CultureInfo culture) => value?.ToString());
+            formatterMock.Setup(m => m.Format(It.IsAny<object>(), It.IsNotNull<IPropertyMetadata>(), It.IsAny<CultureInfo>(), "CAD"))
+                .Returns((object value, IPropertyMetadata meta, CultureInfo culture, string currencyIso) => value?.ToString());
 
             var lookupServiceMock = new Mock<ILookupService>();
             var localizationProviderMock = new Mock<ILocalizationProvider>();

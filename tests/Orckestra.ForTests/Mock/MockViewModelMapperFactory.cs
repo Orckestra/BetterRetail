@@ -20,7 +20,7 @@ namespace Orckestra.ForTests.Mock
             }
 
             var formatterMock = new Mock<IViewModelPropertyFormatter>();
-            formatterMock.Setup(m => m.Format(It.IsAny<object>(), It.IsNotNull<IPropertyMetadata>(), It.IsAny<CultureInfo>()))
+            formatterMock.Setup(m => m.Format(It.IsAny<object>(), It.IsNotNull<IPropertyMetadata>(), It.IsAny<CultureInfo>(), "CAD"))
                 .Returns((object value, IPropertyMetadata meta, CultureInfo culture) => value?.ToString());
 
             var lookupServiceMock = new Mock<ILookupService>();

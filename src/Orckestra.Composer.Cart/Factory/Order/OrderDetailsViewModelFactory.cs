@@ -11,6 +11,7 @@ using Orckestra.Composer.Cart.ViewModels.Order;
 using Orckestra.Composer.Country;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Localization;
+using Orckestra.Composer.Services;
 using Orckestra.Composer.Utils;
 using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel.Orders;
@@ -34,7 +35,7 @@ namespace Orckestra.Composer.Cart.Factory.Order
         protected virtual ITaxViewModelFactory TaxViewModelFactory { get; private set; }
         protected virtual ILineItemViewModelFactory LineItemViewModelFactory { get; private set; }
         protected virtual IRewardViewModelFactory RewardViewModelFactory { get; private set; }
-
+        protected virtual IComposerContext ComposerContext { get; private set; }
         public OrderDetailsViewModelFactory(
             ILocalizationProvider localizationProvider,
             IViewModelMapper viewModelMapper,
@@ -45,7 +46,8 @@ namespace Orckestra.Composer.Cart.Factory.Order
             IShippingTrackingProviderFactory shippingTrackingProviderFactory,
             ITaxViewModelFactory taxViewModelFactory,
             ILineItemViewModelFactory lineItemViewModelFactory,
-            IRewardViewModelFactory rewardViewModelFactory)
+            IRewardViewModelFactory rewardViewModelFactory,
+            IComposerContext composerContext)
         {
             LocalizationProvider = localizationProvider ?? throw new ArgumentNullException(nameof(localizationProvider));
             ViewModelMapper = viewModelMapper ?? throw new ArgumentNullException(nameof(viewModelMapper));
@@ -57,6 +59,7 @@ namespace Orckestra.Composer.Cart.Factory.Order
             TaxViewModelFactory = taxViewModelFactory ?? throw new ArgumentNullException(nameof(taxViewModelFactory));
             LineItemViewModelFactory = lineItemViewModelFactory ?? throw new ArgumentNullException(nameof(lineItemViewModelFactory));
             RewardViewModelFactory = rewardViewModelFactory ?? throw new ArgumentNullException(nameof(rewardViewModelFactory));
+            ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
         }
 
         /// <summary>
@@ -305,7 +308,7 @@ namespace Orckestra.Composer.Cart.Factory.Order
 
             if (shipment == null) { return new OrderShippingMethodViewModel(); }
 
-            var shippingMethodVm = ViewModelMapper.MapTo<OrderShippingMethodViewModel>(shipment.FulfillmentMethod, param.CultureInfo);
+            var shippingMethodVm = ViewModelMapper.MapTo<OrderShippingMethodViewModel>(shipment.FulfillmentMethod, param.CultureInfo, ComposerContext.CurrencyIso);
 
             if (param.Order.Cart.FulfillmentCost == 0)
             {

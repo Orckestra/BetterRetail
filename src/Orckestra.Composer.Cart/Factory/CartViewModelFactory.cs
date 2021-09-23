@@ -78,7 +78,7 @@ namespace Orckestra.Composer.Cart.Factory
 
             Helper.LineItemsHelper.PrepareGiftLineItems(param.Cart);
 
-            var vm = ViewModelMapper.MapTo<CartViewModel>(param.Cart, param.CultureInfo);
+            var vm = ViewModelMapper.MapTo<CartViewModel>(param.Cart, param.CultureInfo, ComposerContext.CurrencyIso);
             if (vm == null) { return null; }
 
             vm.OrderSummary = GetOrderSummaryViewModel(param.Cart, param.CultureInfo);
@@ -306,7 +306,7 @@ namespace Orckestra.Composer.Cart.Factory
             Overture.ServiceModel.Orders.Cart cart,
             CultureInfo cultureInfo)
         {
-            var orderSummary = ViewModelMapper.MapTo<OrderSummaryViewModel>(cart, cultureInfo);
+            var orderSummary = ViewModelMapper.MapTo<OrderSummaryViewModel>(cart, cultureInfo, ComposerContext.CurrencyIso);
             var activeShipments = cart.GetActiveShipments();
             orderSummary.Shippings = GetShippingsViewModel(cart, cultureInfo);
             orderSummary.Shipping = GetShippingFee(cart, cultureInfo);
@@ -329,7 +329,7 @@ namespace Orckestra.Composer.Cart.Factory
                     l => decimal.Multiply(decimal.Subtract(l.CurrentPrice.GetValueOrDefault(0), l.DefaultPrice.GetValueOrDefault(0)), Convert.ToDecimal(l.Quantity))));
 
             decimal savingsTotal = decimal.Add(cart.DiscountTotal.GetValueOrDefault(0), sumAllLineItemsSavings);
-            orderSummary.SavingsTotal = savingsTotal.Equals(0) ? string.Empty : LocalizationProvider.FormatPrice(savingsTotal, cultureInfo);
+            orderSummary.SavingsTotal = savingsTotal.Equals(0) ? string.Empty : LocalizationProvider.FormatPrice(savingsTotal, cultureInfo, ComposerContext.CurrencyIso);
 
             return orderSummary;
         }
@@ -425,7 +425,7 @@ namespace Orckestra.Composer.Cart.Factory
         {
             if (customer == null) { return; }
 
-            var customerViewModel = ViewModelMapper.MapTo<CustomerSummaryViewModel>(customer, cultureInfo);
+            var customerViewModel = ViewModelMapper.MapTo<CustomerSummaryViewModel>(customer, cultureInfo, ComposerContext.CurrencyIso);
             cartVm.Customer = customerViewModel;
         }
 
@@ -465,7 +465,7 @@ namespace Orckestra.Composer.Cart.Factory
 
         protected virtual IEnumerable<ShipmentAdditionalFeeViewModel> GetShipmentAdditionalFees(IEnumerable<ShipmentAdditionalFee> additionalFees, CultureInfo cultureInfo)
         {
-            return additionalFees.Select(shipmentAdditionalFee => ViewModelMapper.MapTo<ShipmentAdditionalFeeViewModel>(shipmentAdditionalFee, cultureInfo));
+            return additionalFees.Select(shipmentAdditionalFee => ViewModelMapper.MapTo<ShipmentAdditionalFeeViewModel>(shipmentAdditionalFee, cultureInfo, ComposerContext.CurrencyIso));
         }
 
         public virtual List<AdditionalFeeSummaryViewModel> GetShipmentAdditionalFeeSummary(
@@ -511,7 +511,7 @@ namespace Orckestra.Composer.Cart.Factory
         {
             if (fulfillmentMethod == null) { return null; }
 
-            var shippingMethodViewModel = ViewModelMapper.MapTo<ShippingMethodViewModel>(fulfillmentMethod, cultureInfo);
+            var shippingMethodViewModel = ViewModelMapper.MapTo<ShippingMethodViewModel>(fulfillmentMethod, cultureInfo, ComposerContext.CurrencyIso);
 
             if(string.IsNullOrWhiteSpace(shippingMethodViewModel.DisplayName))
             {

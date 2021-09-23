@@ -108,7 +108,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
 
             var vmMapperMock = _container.GetMock<IViewModelMapper>();
             vmMapperMock.Setup(
-                vmm => vmm.MapTo<ActivePaymentViewModel>(It.IsNotNull<Payment>(), It.IsNotNull<CultureInfo>()))
+                vmm => vmm.MapTo<ActivePaymentViewModel>(It.IsNotNull<Payment>(), It.IsNotNull<CultureInfo>(), "CAD"))
                 .Returns((Payment p, CultureInfo ci) =>
                 {
                     var vm = new ActivePaymentViewModel

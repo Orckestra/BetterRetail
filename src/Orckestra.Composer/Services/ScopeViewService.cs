@@ -19,11 +19,17 @@ namespace Orckestra.Composer.Services
 
         protected ICacheProvider CacheProvider { get; }
 
-        public ScopeViewService(IScopeRepository scopeRepository, IViewModelMapper viewModelMapper, ICacheProvider cacheProvider)
+        protected IComposerContext ComposerContext { get; }
+
+        public ScopeViewService(IScopeRepository scopeRepository,
+            IViewModelMapper viewModelMapper,
+            ICacheProvider cacheProvider,
+            IComposerContext composerContext)
         {
             ScopeRepository = scopeRepository;
             ViewModelMapper = viewModelMapper;
             CacheProvider = cacheProvider;
+            ComposerContext = composerContext;
         }
 
         public virtual async Task<CurrencyViewModel> GetScopeCurrencyAsync(GetScopeCurrencyParam param)
@@ -42,10 +48,20 @@ namespace Orckestra.Composer.Services
             CurrencyViewModel vm = null;
             if (scope?.Currency != null)
             {
-                vm = ViewModelMapper.MapTo<CurrencyViewModel>(scope.Currency, param.CultureInfo);
+                vm = ViewModelMapper.MapTo<CurrencyViewModel>(scope.Currency, param.CultureInfo, ComposerContext.CurrencyIso);
             }
 
             return vm;
+        }
+
+        public async Task<Scope> GetScopeAsync(string scopeId)
+        {
+            var p = new GetScopeParam
+            {
+                Scope = scopeId
+            };
+            var scope = await ScopeRepository.GetScopeAsync(p).ConfigureAwait(false);
+            return scope;
         }
 
         public virtual async Task<string> GetSaleScopeAsync(string scope)

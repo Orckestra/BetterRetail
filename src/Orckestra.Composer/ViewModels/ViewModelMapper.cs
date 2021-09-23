@@ -53,7 +53,7 @@ namespace Orckestra.Composer.ViewModels
         /// <param name="source">Source object to map</param>
         /// <param name="culture">Culture when translating text.</param>
         /// <returns>ViewModel with mapped values.</returns>
-        public TViewModel MapTo<TViewModel>(object source, string culture)
+        public TViewModel MapTo<TViewModel>(object source, string culture, string currencyIso = default)
             where TViewModel : IBaseViewModel, new()
         {
             if (string.IsNullOrWhiteSpace(culture))
@@ -69,7 +69,7 @@ namespace Orckestra.Composer.ViewModels
             try
             {
                 var cultureInfo = CultureInfo.GetCultureInfo(culture);
-                return MapTo<TViewModel>(source, cultureInfo);
+                return MapTo<TViewModel>(source, cultureInfo, currencyIso);
             }
             catch (CultureNotFoundException ex)
             {
@@ -89,13 +89,13 @@ namespace Orckestra.Composer.ViewModels
         /// <returns>ViewModel with mapped values.</returns>
         /// <exception cref="ArgumentException"></exception>
         /// <exception cref="InvalidOperationException"></exception>
-        public TViewModel MapTo<TViewModel>(object source, CultureInfo culture)
+        public TViewModel MapTo<TViewModel>(object source, CultureInfo culture, string currencyIso = default)
             where TViewModel : IBaseViewModel, new()
         {
-            return  (TViewModel) MapTo(typeof(TViewModel), source, culture);
+            return  (TViewModel) MapTo(typeof(TViewModel), source, culture, currencyIso);
         }
 
-        private object MapTo(Type viewModelType, object source, CultureInfo culture)
+        private object MapTo(Type viewModelType, object source, CultureInfo culture, string currencyIso = default)
         {
             if (source == null)
             {
@@ -112,9 +112,11 @@ namespace Orckestra.Composer.ViewModels
             var sourcePropertyBag = GetPropertyBagFromObject(source, sourceTypeProperties);
             var viewModelProperties = _metadataRegistry.GetViewModelMetadata(viewModelType);
             var viewModel = (BaseViewModel)Activator.CreateInstance(viewModelType);
-
+            
             foreach (var viewModelProperty in viewModelProperties)
             {
+                
+
                 var sourceProperty = sourceTypeProperties.FirstOrDefault(p => p.Name == viewModelProperty.SourcePropertyName);
                 var sourcePropertyMatches = sourceProperty != null;
 
@@ -123,11 +125,11 @@ namespace Orckestra.Composer.ViewModels
                     object viewModelPropertyValue = null;
                     if (sourcePropertyMatches)
                     {
-                        viewModelPropertyValue = MapPropertyFromObject(source, sourceProperty, viewModelProperty, culture);
+                        viewModelPropertyValue = MapPropertyFromObject(source, sourceProperty, viewModelProperty, culture, currencyIso);
                     }
                     else if (IsViewModelPropertyInSourcePropertyBag(sourcePropertyBag, viewModelProperty))
                     {
-                        viewModelPropertyValue = MapPropertyFromPropertyBag(sourcePropertyBag, viewModelProperty, culture);
+                        viewModelPropertyValue = MapPropertyFromPropertyBag(sourcePropertyBag, viewModelProperty, culture, currencyIso);
                     }
 
                     if (viewModelProperty.LookupProperty && viewModelPropertyValue != null)
@@ -144,7 +146,12 @@ namespace Orckestra.Composer.ViewModels
                         viewModelPropertyValue = _lookupService.GetLookupDisplayNameAsync(param).Result; 
                     }
                     var formattedViewModelPropertyValue = LocalizeValue(viewModelPropertyValue, viewModelProperty, culture);
-                    formattedViewModelPropertyValue = FormatValue(formattedViewModelPropertyValue, viewModelProperty, culture);
+
+                    if (viewModelProperty.SourcePropertyName == "AdditionalFeeTotal")
+                    {
+                        Console.WriteLine("e");
+                           }
+                    formattedViewModelPropertyValue = FormatValue(formattedViewModelPropertyValue, viewModelProperty, culture, currencyIso);
                     viewModelProperty.SetValue(viewModel, formattedViewModelPropertyValue);
                 }
                 else
@@ -158,13 +165,14 @@ namespace Orckestra.Composer.ViewModels
             return viewModel;
         }
 
-        private object FormatValue(object value, IPropertyMetadata propertyMetadata, CultureInfo cultureInfo)
+        private object FormatValue(object value, IPropertyMetadata propertyMetadata, CultureInfo cultureInfo, string currencyIso = default)
         {
             // check if VM propery can be formatted. If not, pass through
             if (propertyMetadata != null && propertyMetadata.FormattableProperty)
             {
                 // format value
-                return _viewModelPropertyFormatter.Format(value, propertyMetadata, cultureInfo);
+                var t = _viewModelPropertyFormatter.Format(value, propertyMetadata, cultureInfo, currencyIso);
+                return t;
             }
             return value;
         }
@@ -192,7 +200,7 @@ namespace Orckestra.Composer.ViewModels
         }
 
         private object MapPropertyFromObject(object source, PropertyInfo sourceProperty, IPropertyMetadata viewModelProperty,
-            CultureInfo culture)
+            CultureInfo culture, string currencyIso)
         {
             return MapProperty(
                 sourceProperty.Get(source), 
@@ -200,11 +208,11 @@ namespace Orckestra.Composer.ViewModels
                 viewModelProperty.PropertyType, 
                 viewModelProperty.SourcePropertyName, 
                 viewModelProperty.FormattableProperty || viewModelProperty.LocalizableEnumProperty, 
-                culture);
+                culture, currencyIso);
         }
 
         private object MapPropertyFromPropertyBag(PropertyBag sourcePropertyBag, IPropertyMetadata viewModelProperty,
-            CultureInfo culture)
+            CultureInfo culture, string currencyIso)
         {
             var sourcePropertyBagValue = sourcePropertyBag[viewModelProperty.SourcePropertyName];
 
@@ -219,7 +227,8 @@ namespace Orckestra.Composer.ViewModels
                 viewModelProperty.PropertyType, 
                 viewModelProperty.SourcePropertyName, 
                 viewModelProperty.FormattableProperty || viewModelProperty.LocalizableEnumProperty, 
-                culture);
+                culture,
+                currencyIso);
         }
 
         private object MapProperty(
@@ -228,7 +237,8 @@ namespace Orckestra.Composer.ViewModels
             Type viewModelPropertyType, 
             string viewModelPropertyName,
             bool isFormattable,
-            CultureInfo culture)
+            CultureInfo culture,
+            string currencyIso)
         {
             if (sourceValue == null)
             {
@@ -242,15 +252,15 @@ namespace Orckestra.Composer.ViewModels
             }
             else if (PropertiesAreList(sourceType, viewModelPropertyType))
             {
-                viewModelPropertyValue = GetEnumerablePropertyValue((IEnumerable)sourceValue, viewModelPropertyType, viewModelPropertyName, culture);
+                viewModelPropertyValue = GetEnumerablePropertyValue((IEnumerable)sourceValue, viewModelPropertyType, viewModelPropertyName, culture, currencyIso);
             }
             else if (PropertiesAreArrays(sourceType, viewModelPropertyType))
             {
-                viewModelPropertyValue = GetArrayPropertyValue((Array)sourceValue, viewModelPropertyType, viewModelPropertyName, culture);
+                viewModelPropertyValue = GetArrayPropertyValue((Array)sourceValue, viewModelPropertyType, viewModelPropertyName, culture, currencyIso);
             }
             else if (PropertyIsAViewModel(viewModelPropertyType))
             {
-                viewModelPropertyValue = MapTo(viewModelPropertyType, sourceValue, culture);
+                viewModelPropertyValue = MapTo(viewModelPropertyType, sourceValue, culture, currencyIso);
             }
             else if (PropertiesAreCompatible(sourceType, viewModelPropertyType))
             {
@@ -274,19 +284,19 @@ namespace Orckestra.Composer.ViewModels
             return viewModelPropertyValue;
         }
 
-        private object GetEnumerablePropertyValue(IEnumerable sourceEnumerable, Type viewModelPropertyType, string viewModelPropertyName, CultureInfo culture)
+        private object GetEnumerablePropertyValue(IEnumerable sourceEnumerable, Type viewModelPropertyType, string viewModelPropertyName, CultureInfo culture, string currencyIso)
         {
             var viewModelItemType = viewModelPropertyType.GenericTypeArguments.First();
 
             var viewModelList = (IList)Activator.CreateInstance(typeof(List<>).MakeGenericType(viewModelItemType));
             foreach (var sourceItem in sourceEnumerable)
             {
-                viewModelList.Add(MapProperty(sourceItem, sourceItem.GetType(), viewModelItemType, viewModelPropertyName, false, culture));
+                viewModelList.Add(MapProperty(sourceItem, sourceItem.GetType(), viewModelItemType, viewModelPropertyName, false, culture, currencyIso));
             }
             return viewModelList;
         }
 
-        private object GetArrayPropertyValue(Array sourceArray, Type viewModelPropertyType, string viewModelPropertyName, CultureInfo culture)
+        private object GetArrayPropertyValue(Array sourceArray, Type viewModelPropertyType, string viewModelPropertyName, CultureInfo culture, string currencyIso)
         {
             var viewModelItemType = viewModelPropertyType.GetElementType();
 
@@ -294,7 +304,7 @@ namespace Orckestra.Composer.ViewModels
             for (int i = 0; i < sourceArray.Length; i++)
             {
                 var sourceItem = sourceArray.GetElement(i);
-                viewModelArray.SetValue(MapProperty(sourceItem, sourceItem.GetType(), viewModelItemType, viewModelPropertyName, false, culture), i);
+                viewModelArray.SetValue(MapProperty(sourceItem, sourceItem.GetType(), viewModelItemType, viewModelPropertyName, false, culture, currencyIso), i);
             }
             return viewModelArray;
         }

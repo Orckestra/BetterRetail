@@ -5,6 +5,7 @@ using System.Web;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Services.Cookie;
 using Orckestra.Composer.Utils;
+using Orckestra.Overture.ServiceModel;
 
 namespace Orckestra.Composer.Services
 {
@@ -17,13 +18,15 @@ namespace Orckestra.Composer.Services
         protected ICountryCodeProvider CountryCodeProvider { get; }
         protected IWebsiteContext WebsiteContext { get; }
         protected EncryptionUtility EncryptionUtility { get; }
+        protected IScopeViewService ScopeViewService { get; }
 
         public ComposerContext(
             ICookieAccessor<ComposerCookieDto> cookieAccessor,
             IScopeProvider scopeProvider,
             HttpContextBase httpContextBase,
             ICountryCodeProvider countryCodeProvider,
-            IWebsiteContext websiteContext)
+            IWebsiteContext websiteContext,
+            IScopeViewService scopeViewService)
         {
             CookieAccessor = cookieAccessor ?? throw new ArgumentNullException(nameof(cookieAccessor));
             ScopeProvider = scopeProvider ?? throw new ArgumentNullException(nameof(scopeProvider));
@@ -31,6 +34,7 @@ namespace Orckestra.Composer.Services
             CountryCodeProvider = countryCodeProvider ?? throw new ArgumentNullException(nameof(countryCodeProvider));
             WebsiteContext = websiteContext ?? throw new ArgumentNullException(nameof(websiteContext));
             EncryptionUtility = new EncryptionUtility();
+            ScopeViewService = scopeViewService;
 
             SetAuthenticated();
         }
@@ -178,6 +182,25 @@ namespace Orckestra.Composer.Services
                 return _isAuthenticatedLazy.Value;
             }
         }
+
+        private Scope _scopeItem = null;
+        public  Scope ScopeItem
+        {
+            get
+            {
+                InitializeScopeItem();
+                return _scopeItem;
+            }
+            set
+            {
+                _scopeItem = value;
+            }
+        }
+        public string CurrencyIso
+        {
+            get { return ScopeItem.CurrencyIso;}
+        }
+
         private Lazy<bool> _isAuthenticatedLazy;
 
 
@@ -193,10 +216,22 @@ namespace Orckestra.Composer.Services
             return dto.EncryptedCustomerId;
         }
 
+
         /// <summary>
-        /// Initializes the customer identifier.
+        /// Initializes the scope item.
         /// </summary>
-        private void InitializeCustomerId()
+        private void InitializeScopeItem()
+        {
+            if (_scopeItem == null)
+            {
+                _scopeItem = ScopeViewService.GetScopeAsync(ScopeProvider.DefaultScope).Result;
+            }
+        }
+
+        /// <summary>
+            /// Initializes the customer identifier.
+            /// </summary>
+            private void InitializeCustomerId()
         {
             if (!_customerId.HasValue)
             {

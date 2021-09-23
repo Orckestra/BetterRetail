@@ -244,7 +244,7 @@ namespace Orckestra.Composer
             Register(_environment);
 
             Register<AutofacDependancyResolver, IDependencyResolver>();
-            Register<ResxViewModelPropertyFormatter, IViewModelPropertyFormatter>(ComponentLifestyle.Singleton);
+            Register<ResxViewModelPropertyFormatter, IViewModelPropertyFormatter>(ComponentLifestyle.PerRequest);
             
             Register<ResourceLocalizationProvider, ILocalizationProvider>(ComponentLifestyle.Singleton);
 

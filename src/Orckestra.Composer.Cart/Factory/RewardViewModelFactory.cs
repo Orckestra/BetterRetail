@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using Orckestra.Composer.Cart.ViewModels;
 using Orckestra.Composer.Providers;
+using Orckestra.Composer.Services;
 using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel.Orders;
 
@@ -13,11 +14,13 @@ namespace Orckestra.Composer.Cart.Factory
     {
         protected IViewModelMapper ViewModelMapper { get; private set; }
         protected ILocalizationProvider LocalizationProvider { get; private set; }
-
-        public RewardViewModelFactory(IViewModelMapper viewModelMapper, ILocalizationProvider localizationProvider)
+        protected IComposerContext ComposerContext { get; private set; }
+        public RewardViewModelFactory(IViewModelMapper viewModelMapper, ILocalizationProvider localizationProvider,
+            IComposerContext composerContext)
         {
             ViewModelMapper = viewModelMapper ?? throw new ArgumentNullException(nameof(viewModelMapper));
             LocalizationProvider = localizationProvider ?? throw new ArgumentNullException(nameof(localizationProvider));
+            ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
         }
 
         /// <summary>
@@ -41,7 +44,7 @@ namespace Orckestra.Composer.Cart.Factory
                 
             var comparer = new RewardEqualityComparer();
 
-            foreach (var vm in eligibleRewards.Distinct(comparer).Select(d => ViewModelMapper.MapTo<RewardViewModel>(d, cultureInfo)))
+            foreach (var vm in eligibleRewards.Distinct(comparer).Select(d => ViewModelMapper.MapTo<RewardViewModel>(d, cultureInfo, ComposerContext.CurrencyIso)))
             {
                 yield return vm;
             }

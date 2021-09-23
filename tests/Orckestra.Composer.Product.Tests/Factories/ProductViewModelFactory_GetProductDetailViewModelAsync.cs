@@ -399,7 +399,7 @@ namespace Orckestra.Composer.Product.Tests.Factories
         {
             Mock<IViewModelMapper> mapperMock = new Mock<IViewModelMapper>(MockBehavior.Strict);
 
-            mapperMock.Setup(mapper => mapper.MapTo<ProductViewModel>(It.IsAny<Overture.ServiceModel.Products.Product>(), It.IsAny<CultureInfo>()))
+            mapperMock.Setup(mapper => mapper.MapTo<ProductViewModel>(It.IsAny<Overture.ServiceModel.Products.Product>(), It.IsAny<CultureInfo>(), "CAD"))
                       .Returns(new ProductViewModel())
                       .Verifiable();
 
@@ -418,7 +418,7 @@ namespace Orckestra.Composer.Product.Tests.Factories
                 .SetValue(fakeProductDetailViewModel, new Dictionary<string, object> { { "Lookup1", "LookupValue1" }, { "Size", "Medium|Small" } }, null);*/
 
             mapperMock
-                .Setup(mapper => mapper.MapTo<ProductViewModel>(It.IsAny<Overture.ServiceModel.Products.Product>(), It.IsAny<CultureInfo>()))
+                .Setup(mapper => mapper.MapTo<ProductViewModel>(It.IsAny<Overture.ServiceModel.Products.Product>(), It.IsAny<CultureInfo>(), "CAD"))
                 .Returns(fakeProductDetailViewModel)
                 .Verifiable();
 

@@ -48,6 +48,7 @@ namespace Orckestra.Composer.Product.Api
                     ProductIds = request.Products.ToList(),
                     CultureInfo = ComposerContext.CultureInfo,
                     Scope = ComposerContext.Scope,
+                    CurrencyIso = ComposerContext.CurrencyIso
                 }
             );
 
@@ -89,7 +90,8 @@ namespace Orckestra.Composer.Product.Api
                 ProductIds = relatedProductIdentifiers,
                 CultureInfo = ComposerContext.CultureInfo,
                 Scope = ComposerContext.Scope,
-                BaseUrl = RequestUtils.GetBaseUrl(Request)
+                BaseUrl = RequestUtils.GetBaseUrl(Request),
+                CurrencyIso = ComposerContext.CurrencyIso
             };
 
             var vm = await RelatedProductViewService.GetRelatedProductsAsync(param);

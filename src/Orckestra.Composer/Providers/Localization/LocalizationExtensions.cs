@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 
 namespace Orckestra.Composer.Providers.Localization
 {
@@ -36,7 +38,7 @@ namespace Orckestra.Composer.Providers.Localization
         /// <param name="price">The price.</param>
         /// <param name="cultureInfo">The culture information.</param>
         /// <returns></returns>
-        public static string FormatPrice(this ILocalizationProvider localizationProvider, decimal price, CultureInfo cultureInfo)
+        public static string FormatPrice(this ILocalizationProvider localizationProvider, decimal price, CultureInfo cultureInfo, string currencyCode = default)
         {
             if (localizationProvider == null) { throw new ArgumentNullException(nameof(localizationProvider)); }
             if (cultureInfo == null) { throw new ArgumentNullException(nameof(cultureInfo)); }
@@ -47,9 +49,43 @@ namespace Orckestra.Composer.Providers.Localization
                 Key         = "PriceFormat",
                 CultureInfo = cultureInfo
             });
+            
+            if(currencyCode != default)
+                ISOCurrenciesToACultureMap.TryGetValue(currencyCode, out cultureInfo);
 
             return string.Format(cultureInfo, format, price);
         }
+
+
+        private static readonly Dictionary<string, CultureInfo> ISOCurrenciesToACultureMap =
+            CultureInfo.GetCultures(CultureTypes.SpecificCultures)
+                .Select(c => new { c, new RegionInfo(c.LCID).ISOCurrencySymbol })
+                .GroupBy(x => x.ISOCurrencySymbol)
+                .ToDictionary(g => g.Key, g => g.First().c, StringComparer.OrdinalIgnoreCase);
+
+        public static CultureInfo GetCultureByCurrencyIso(this ILocalizationProvider localizationProvider, string currencyCode)
+        {
+            ISOCurrenciesToACultureMap.TryGetValue(currencyCode, out CultureInfo cultureInfo);
+            return cultureInfo;
+        }
+
+        public static string FormatPrice(this ILocalizationProvider localizationProvider, decimal price, string currencyCode)
+        {
+            if (localizationProvider == null) { throw new ArgumentNullException(nameof(localizationProvider)); }
+            if (currencyCode == null) { throw new ArgumentNullException(nameof(currencyCode)); }
+
+            ISOCurrenciesToACultureMap.TryGetValue(currencyCode, out CultureInfo cultureInfo);
+
+            var format = localizationProvider.GetLocalizedString(new GetLocalizedParam
+            {
+                Category = "General",
+                Key = "PriceFormat",
+                CultureInfo = cultureInfo
+            });
+
+            return string.Format(cultureInfo, format, price);
+        }
+
 
         public static string FormatPhoneNumber(this ILocalizationProvider localizationProvider, string phoneNumber, CultureInfo cultureInfo)
         {

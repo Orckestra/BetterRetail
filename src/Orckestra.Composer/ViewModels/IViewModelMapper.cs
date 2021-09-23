@@ -15,10 +15,10 @@ namespace Orckestra.Composer.ViewModels
         /// <returns>Dictionnary of key-value pairs based on the metadata of the given <see cref="vm"/>'s type.</returns>
         IDictionary<string, object> ToDictionary(IBaseViewModel vm);
 
-        T MapTo<T>(object source, string culture)
+        T MapTo<T>(object source, string culture, string currencyIso = default)
             where T : IBaseViewModel, new();
 
-        T MapTo<T>(object source, CultureInfo culture)
+        T MapTo<T>(object source, CultureInfo culture, string currencyIso = default)
             where T : IBaseViewModel, new();
     }
 }
