@@ -171,8 +171,7 @@ namespace Orckestra.Composer.ViewModels
             if (propertyMetadata != null && propertyMetadata.FormattableProperty)
             {
                 // format value
-                var t = _viewModelPropertyFormatter.Format(value, propertyMetadata, cultureInfo, currencyIso);
-                return t;
+                return _viewModelPropertyFormatter.Format(value, propertyMetadata, cultureInfo, currencyIso);
             }
             return value;
         }
