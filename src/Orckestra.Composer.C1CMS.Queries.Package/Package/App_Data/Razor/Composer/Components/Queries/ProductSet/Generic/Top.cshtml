@@ -11,11 +11,17 @@
 
     [FunctionParameter(Label = "Description", DefaultValue = null, WidgetMarkup = @"<f:widgetfunction xmlns:f='http://www.composite.net/ns/function/1.0' name='Composite.Widgets.String.TextArea' />")]
     public string Description { get; set; }
-    [FunctionParameter(Label = "Query Name", Help = "Query Name", WidgetMarkup = Orckestra.ExperienceManagement.SearchQueryBuilder.Widgets.ProductSetQuerySelector)]
+    [FunctionParameter(Label = "Products Set Name", Help = "Products Set Name", WidgetMarkup = Orckestra.ExperienceManagement.SearchQueryBuilder.Widgets.ProductSetQuerySelector)]
     public string QueryName { get; set; }
 
-    [FunctionParameter(Label = "Total number of products", Help = "", DefaultValue = "3")]
+    [FunctionParameter(Label = "Total number of products", Help = "", DefaultValue = "8")]
     public string Number { get; set; }
+
+    [FunctionParameter(Label = "Number of products to display per row", Help = "For Carousel View this is a number of visible slides. For Grid View the valid numbers are 1,2,3,4 and 6. Others will be ignored and default is used.", DefaultValue = 4)]
+    public int NumberPerRow { get; set; }
+
+    [FunctionParameter(Label = "Is Carousel View", DefaultValue = true)]
+    public Boolean IsCarouselView { get; set; }
 
     [FunctionParameter(Label = "Show More Button Text", DefaultValue = "Show More")]
     public string PageTitle { get; set; }
@@ -39,12 +45,10 @@
     <f:function name="Composer.Queries.ProductSet.Top" xmlns:f="http://www.composite.net/ns/function/1.0">
         <f:param name="QueryName" value="@QueryName" />
         <f:param name="Number" value="@Number" />
+        <f:param name="NumberPerRow" value="@NumberPerRow" />
+        <f:param name="IsCarouselView" value="@IsCarouselView.ToString()" />
+        <f:param name="Page" value="@Page" />
+        <f:param name="PageTitle" value="@PageTitle" />
     </f:function>
-    @if (Page != null)
-    {
-        <div class="text-center my-2">
-            <a href="~/page(@Page)" class="btn btn-primary">@PageTitle</a>
-        </div>
-    }
 </body>
 </html>

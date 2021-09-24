@@ -257,7 +257,7 @@
 
 @helper StartShoppingButton()
 {
-    @if (!String.IsNullOrWhiteSpace(StartShoppingButtonURL))
+    if (!String.IsNullOrWhiteSpace(StartShoppingButtonURL))
      {
         <a ref="startShoppingButton" class="btn btn-primary btn-block  text-uppercase"
             href="@StartShoppingButtonURL">

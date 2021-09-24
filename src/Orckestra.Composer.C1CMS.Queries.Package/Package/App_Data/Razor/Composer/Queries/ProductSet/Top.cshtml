@@ -10,14 +10,28 @@
     }
     public ISearchQueryContext SearchQueryContext { get; set; }
 
-    [FunctionParameter(Label = "Query Name", Help = "Query Name", WidgetMarkup = Orckestra.ExperienceManagement.SearchQueryBuilder.Widgets.MerchandisingQuerySelector)]
+    [FunctionParameter(Label = "Products Set Name", Help = "Products Set Name", WidgetMarkup = Orckestra.ExperienceManagement.SearchQueryBuilder.Widgets.MerchandisingQuerySelector)]
     public string QueryName { get; set; }
 
-    [FunctionParameter(Label = "Number", Help = "", DefaultValue = 3)]
+    [FunctionParameter(Label = "Total number of products", Help = "", DefaultValue = 8)]
     public int Number { get; set; }
 
-    [FunctionParameter(Label = "ColumnsStyle", DefaultValue = "col-6  col-sm-3")]
-    public string ColumnsStyle { get; set; }
+    [FunctionParameter(Label = "Number of products to display per row", Help = "For Carousel View this is a number of visible slides. For Grid View the valid numbers are 1,2,3,4 and 6. Others will be ignored and default is used.", DefaultValue = 4)]
+    public int NumberPerRow { get; set; }
+
+    [FunctionParameter(Label = "Is Carousel View", DefaultValue = true)]
+    public Boolean IsCarouselView { get; set; }
+
+    [FunctionParameter(Label = "Show More Button Text", DefaultValue = "Show More")]
+    public string PageTitle { get; set; }
+
+    [FunctionParameter(Label = "Show More Button Url", WidgetMarkup = @"<f:widgetfunction xmlns:f='http://www.composite.net/ns/function/1.0' name='Composite.Widgets.DataReference.OptionalPageSelector' />", DefaultValue=null)]
+    public Guid? Page { get; set; }
+
+	private string getVueId()
+    {
+        return $"vue{QueryName.GetHashCode()}";
+    }
 }
 
 @{
@@ -27,14 +41,41 @@
         return;
     }
     var FallbackImageUrl = queryViewModel.ProductSearchResults.SearchResults.FirstOrDefault()?.FallbackImageUrl;
+    int[] validNumbersPerGridRaw = new int[] { 1, 2, 3, 4, 6 };
+    NumberPerRow = IsCarouselView ? NumberPerRow : (Array.IndexOf(validNumbersPerGridRaw, NumberPerRow) > 0 ? NumberPerRow : 4);
 }
 
 
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
 <head>
+    @GeneralHelpers.RenderFallbackImageScript(FallbackImageUrl)
 </head>
 <body>
-    @Function("Composer.Search.Products.ProductResultsVue", new { JsonContext = queryViewModel.JsonContext, FallbackImageUrl = FallbackImageUrl, ColumnsStyle })
+    @if (IsCarouselView)
+    {
+        @Html.LazyFunction("Composer.Queries.Instant.TopCarousel", new
+        {
+            JsonContext = queryViewModel.JsonContext,
+            VueId = getVueId(),
+            SlidesToShow = NumberPerRow
+        })
+    }
+    else
+    {
+        @Function("Composer.Search.Products.ProductResultsVue", new
+        {
+           VueId = getVueId(),
+           JsonContext = queryViewModel.JsonContext,
+           FallbackImageUrl = FallbackImageUrl,
+           ColumnsStyle = "col-6  col-sm-" + 12 / NumberPerRow
+        })
+    }
+    @if (Page != null)
+    {
+        <div class="text-center my-2">
+            <a href="~/page(@Page)" class="btn btn-primary">@PageTitle</a>
+        </div>
+    }
 </body>
 </html>
 

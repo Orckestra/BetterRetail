@@ -2,27 +2,43 @@
 
 @helper LoadingSpinner(bool isSmall = false)
 {
-    <span class="loading-spinner">
-        <span class="spinner-border @(isSmall ? "spinner-border-sm" : "") text-info" role="status">
-            <span class="sr-only">@Html.Localize("General", "L_Loading")</span>
-        </span>
+<span class="loading-spinner">
+    <span class="spinner-border @(isSmall ? "spinner-border-sm" : "") text-info" role="status">
+        <span class="sr-only">@Html.Localize("General", "L_Loading")</span>
     </span>
+</span>
 }
 
 @helper ButtonLoadingSpinner(string vueBinding)
 {
-    <span v-if="@vueBinding" v-cloak="true"
-          class="spinner-border spinner-border-sm text-info" role="status">
-        <span class="sr-only">@Html.Localize("General", "L_Loading")</span>
-        &#160;
-    </span>
+<span v-if="@vueBinding" v-cloak="true"
+      class="spinner-border spinner-border-sm text-info" role="status">
+    <span class="sr-only">@Html.Localize("General", "L_Loading")</span>
+    &#160;
+</span>
 }
 
 @helper ButtonLoadingSpinner()
 {
-    <span class="loading-indicator spinner-border spinner-border-sm text-info d-none"
-          role="status">
-        <span class="sr-only">@Html.Localize("General", "L_Loading")</span>&#160;
-    </span>
+<span class="loading-indicator spinner-border spinner-border-sm text-info d-none"
+      role="status">
+    <span class="sr-only">@Html.Localize("General", "L_Loading")</span>&#160;
+</span>
+}
+
+@helper RenderFallbackImageScript(string FallbackImageUrl) {
+    <script id="fallbackImage">
+            function imgError(el) {
+            this.onerror = null;
+            @if (!string.IsNullOrWhiteSpace(FallbackImageUrl) && FallbackImageUrl.Contains("/"))
+                {
+                    <text>
+                    if (!el.src.includes('@FallbackImageUrl')) {
+                    el.src = '@FallbackImageUrl';
+                }
+                    </text>
+                }
+        }
+    </script>
 }
 

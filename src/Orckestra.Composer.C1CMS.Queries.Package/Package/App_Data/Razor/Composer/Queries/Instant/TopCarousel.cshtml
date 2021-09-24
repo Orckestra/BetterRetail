@@ -1,0 +1,38 @@
+@inherits Composer.Razor.ComposerRazorFunction
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Product highlights is Carousel View"; }
+    }
+    [FunctionParameter(Label = "ViewModel for JS", DefaultValue = null)]
+    public string JsonContext { get; set; }
+
+    [FunctionParameter(Label = "Vue Id", DefaultValue = "vueSearchResults")]
+    public string VueId { get; set; }
+
+    [FunctionParameter(Label = "Slides to Show", DefaultValue = 4)]
+    public int SlidesToShow { get; set; }
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
+<head>
+</head>
+<body>
+    <div class="products-search-results"
+         data-oc-controller="Product.SearchResults"
+         data-context="@JsonContext"
+         data-vueid="@VueId">
+        <div id="@VueId" v-cloak="true">
+            <div class="slick-carousel">
+                <div class="js-slick-carousel" data-slick='{"slidesToShow": @SlidesToShow, "slidesToScroll": 1, "mobileCarousel": true}'>
+                    <div v-for="(Product, index) in ExtendedSearchResults" v-bind:key="Product.ProductId">
+                        @Function("Composer.Search.Products.ProductTileVue")
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

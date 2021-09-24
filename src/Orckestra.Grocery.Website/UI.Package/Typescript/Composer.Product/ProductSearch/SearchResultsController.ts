@@ -47,10 +47,11 @@ module Orckestra.Composer {
 
         private initializeVueComponent() {
             const { SearchResults } = this.context.viewModel;
+            const vueId = this.context.container.data("vueid");
             let self = this;
 
             this.VueSearchResults = new Vue({
-                el: '#vueSearchResults',
+                el: '#' + vueId,
                 components: {},
                 mounted() {
                     self.eventHub.subscribe(CartEvents.CartUpdated, this.onCartUpdated);
@@ -61,6 +62,7 @@ module Orckestra.Composer {
 
                     self.wishListService.getWishListSummary()
                         .then(wishList => this.WishList = wishList);
+                    self.eventHub.publish('iniCarousel', null);
                 },
                 data: {
                     SearchResults,
