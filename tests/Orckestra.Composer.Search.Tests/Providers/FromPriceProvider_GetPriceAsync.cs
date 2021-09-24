@@ -1,9 +1,13 @@
-﻿using System.Globalization;
+﻿using System.ComponentModel;
+using System.Globalization;
 using System.Threading.Tasks;
+using FizzWare.NBuilder.Generators;
 using FluentAssertions;
 using Moq;
 using Moq.AutoMock;
 using NUnit.Framework;
+using Orckestra.Composer.Providers;
+using Orckestra.Composer.Providers.Localization;
 using Orckestra.Composer.Search.Providers;
 using Orckestra.Composer.Services;
 using Orckestra.ForTests;
@@ -17,9 +21,9 @@ namespace Orckestra.Composer.Search.Tests.Providers
     public class FromPriceProvider_GetPriceAsync
     {
         private AutoMocker _container;
-        private readonly CultureInfo _cultureInfo = TestingExtensions.GetRandomCulture();
+        private readonly CultureInfo _cultureInfo = CultureInfo.GetCultureInfo("en-CA");
         private const string Scope = "global";
-
+        private const string CurrencyIso = "CAD";
         [SetUp]
         public void SetUp()
         {
@@ -28,7 +32,14 @@ namespace Orckestra.Composer.Search.Tests.Providers
             var composerContext = new Mock<IComposerContext>();
             composerContext.Setup(context => context.CultureInfo).Returns(_cultureInfo);
             composerContext.Setup(context => context.Scope).Returns(Scope);
-            
+            composerContext.Setup(context => context.CurrencyIso).Returns(CurrencyIso);
+
+            var localizationProviderMock = _container.GetMock<ILocalizationProvider>();
+            localizationProviderMock.Setup(m => m.GetLocalizedString(It.IsNotNull<GetLocalizedParam>()))
+                .Returns<GetLocalizedParam>(param => GetRandom.String(10))
+                .Verifiable();
+
+            _container.Use(localizationProviderMock);
             _container.Use(composerContext);
         }
 

@@ -77,29 +77,29 @@ namespace Orckestra.Composer.Cart.Tests.Mock
             viewModelMapper.Setup(
                 mapper =>
                     mapper.MapTo<CartProductSummaryViewModel>(It.IsNotNull<CartProductSummary>(),
-                        It.IsNotNull<CultureInfo>(), "CAD"))
+                        It.IsNotNull<CultureInfo>(), null))
                 .Returns(dummyCartProduct)
             .Verifiable();
 
-            viewModelMapper.Setup(mapper => mapper.MapTo<CartViewModel>(It.IsNotNull<Overture.ServiceModel.Orders.Cart>(), It.IsNotNull<CultureInfo>(), "CAD"))
+            viewModelMapper.Setup(mapper => mapper.MapTo<CartViewModel>(It.IsNotNull<Overture.ServiceModel.Orders.Cart>(), It.IsNotNull<CultureInfo>(), null))
                           .Returns(dummyCart)
                           .Verifiable();
 
             viewModelMapper.Setup(
-                mapper => mapper.MapTo<LineItemDetailViewModel>(It.IsNotNull<LineItem>(), It.IsNotNull<CultureInfo>(), "CAD"))
+                mapper => mapper.MapTo<LineItemDetailViewModel>(It.IsNotNull<LineItem>(), It.IsNotNull<CultureInfo>(), null))
                 .Returns(dummyLineItem)
             .Verifiable();
 
-            viewModelMapper.Setup(mapper => mapper.MapTo<TaxViewModel>(It.IsNotNull<Tax>(), It.IsNotNull<CultureInfo>(), "CAD"))
+            viewModelMapper.Setup(mapper => mapper.MapTo<TaxViewModel>(It.IsNotNull<Tax>(), It.IsNotNull<CultureInfo>(), null))
                 .Returns(dummyTaxViewModel)
             .Verifiable();
 
-            viewModelMapper.Setup(mapper=>mapper.MapTo<RewardViewModel>(It.IsNotNull<Reward>(), It.IsNotNull<CultureInfo>(), "CAD"))
+            viewModelMapper.Setup(mapper=>mapper.MapTo<RewardViewModel>(It.IsNotNull<Reward>(), It.IsNotNull<CultureInfo>(), null))
                 .Returns(rewardViewModel)
                 .Verifiable();
 
             viewModelMapper.Setup(
-                mapper => mapper.MapTo<CouponViewModel>(It.IsNotNull<Coupon>(), It.IsNotNull<CultureInfo>(), "CAD"))
+                mapper => mapper.MapTo<CouponViewModel>(It.IsNotNull<Coupon>(), It.IsNotNull<CultureInfo>(), null))
                 .Returns(couponViewModel)
             .Verifiable();
 
