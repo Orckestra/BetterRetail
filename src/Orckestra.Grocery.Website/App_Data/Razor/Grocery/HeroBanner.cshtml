@@ -20,7 +20,7 @@
     [FunctionParameter(Label = "Background Color", Help = "Gray color is by default.", DefaultValue = "bg-gray", WidgetMarkup = backgroundStyleWidgetMarkup)]
     public string BackgroundColor { get; set; }
 
-    [FunctionParameter(Label = "Banner Heading")]
+    [FunctionParameter(Label = "Banner Heading", WidgetMarkup = @"<f:widgetfunction xmlns:f='http://www.composite.net/ns/function/1.0' name='Composite.Widgets.String.TextArea' />")]
     public string Heading { get; set; }
 
     private const string textPositionWidgetMarkup = @"<f:widgetfunction xmlns:f='http://www.composite.net/ns/function/1.0' name='Composite.Widgets.String.Selector'>
@@ -86,7 +86,7 @@
         @if (BackgroundImage != null)
         {<img src="~/media(@BackgroundImage)" class="d-block w-100" alt="img" />}
         <div class="container">
-            <h1 class="@HeadingPosition @HeadingColor">@Heading</h1>
+            <h1 class="@HeadingPosition @HeadingColor">@Html.Raw(@Heading.Replace(System.Environment.NewLine, "<br/>"))</h1>
             @if (Content != null && Content.Body != null && (!string.IsNullOrWhiteSpace(Content.Body.Value) || Content.Body.HasElements))
             {
                 <div class="d-none d-md-block jumbotron-caption bottom @ContentTextColor @(String.IsNullOrEmpty(ContentBackgroundColorRGB) ? ContentBackgroundColor: "")" style="background-color: @(ContentBackgroundColorRGB);">

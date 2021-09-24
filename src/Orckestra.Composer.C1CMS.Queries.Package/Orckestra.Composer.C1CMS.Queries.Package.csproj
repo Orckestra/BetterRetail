@@ -55,6 +55,7 @@
     <Content Include="Package\App_Data\Razor\Composer\Queries\Merchandising\Top.cshtml" />
     <Content Include="Package\App_Data\Razor\Composer\Queries\ProductSet\Results.cshtml" />
     <Content Include="Package\App_Data\Razor\Composer\Queries\ProductSet\Top.cshtml" />
+    <Content Include="Package\App_Data\Razor\Composer\Queries\Instant\TopCarousel.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
