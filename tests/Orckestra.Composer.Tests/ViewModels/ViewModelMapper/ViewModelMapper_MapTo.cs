@@ -323,12 +323,12 @@ namespace Orckestra.Composer.Tests.ViewModels.ViewModelMapper
             var viewModelPropertyFormatterMock = Container.GetMock<IViewModelPropertyFormatter>();
             
             // Act
-            ViewModelMapper.MapTo<TestProductViewModel>(product, validEnglishCulture, "CAD");
+            ViewModelMapper.MapTo<TestProductViewModel>(product, validEnglishCulture, null);
 
             // Assert
             viewModelPropertyFormatterMock.Verify(m => m.Format(It.IsAny<DateTime>(),
                 It.Is<IPropertyMetadata>(md => md.PropertyFormattingCategory=="TestCategory" && md.PropertyFormattingKey=="Date"),
-                It.IsAny<CultureInfo>(), "CAD"));
+                It.IsAny<CultureInfo>(), null));
         }
 
         [Test]
