@@ -9,6 +9,7 @@ using Orckestra.Composer.Logging;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Localization;
+using Orckestra.Composer.Services;
 using Orckestra.Composer.Services.Lookup;
 using Orckestra.Overture.ServiceModel;
 
@@ -146,11 +147,6 @@ namespace Orckestra.Composer.ViewModels
                         viewModelPropertyValue = _lookupService.GetLookupDisplayNameAsync(param).Result; 
                     }
                     var formattedViewModelPropertyValue = LocalizeValue(viewModelPropertyValue, viewModelProperty, culture);
-
-                    if (viewModelProperty.SourcePropertyName == "AdditionalFeeTotal")
-                    {
-                        Console.WriteLine("e");
-                           }
                     formattedViewModelPropertyValue = FormatValue(formattedViewModelPropertyValue, viewModelProperty, culture, currencyIso);
                     viewModelProperty.SetValue(viewModel, formattedViewModelPropertyValue);
                 }
@@ -171,7 +167,7 @@ namespace Orckestra.Composer.ViewModels
             if (propertyMetadata != null && propertyMetadata.FormattableProperty)
             {
                 // format value
-                return _viewModelPropertyFormatter.Format(value, propertyMetadata, cultureInfo, currencyIso);
+                return _viewModelPropertyFormatter.Format(value, propertyMetadata, cultureInfo, string.CompareOrdinal(propertyMetadata.PropertyFormattingKey, "PriceFormat") == 0 ? currencyIso : default);
             }
             return value;
         }
