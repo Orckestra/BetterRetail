@@ -102,14 +102,14 @@ namespace Orckestra.Composer.Store.Tests.Factory
             mapperMock.Setup(
                 mapper =>
                     mapper.MapTo<StoreViewModel>(It.IsAny<Orckestra.Overture.ServiceModel.Customers.Stores.Store>(),
-                        It.IsAny<CultureInfo>(), "CAD"))
+                        It.IsAny<CultureInfo>(), null))
                 .Returns(new StoreViewModel())
                 .Verifiable();
 
             mapperMock.Setup(
               mapper =>
                   mapper.MapTo<StoreAddressViewModel>(It.IsAny<Orckestra.Overture.ServiceModel.Address>(),
-                      It.IsAny<CultureInfo>(), "CAD"))
+                      It.IsAny<CultureInfo>(), null))
               .Returns(new StoreAddressViewModel())
               .Verifiable();
 

@@ -25,7 +25,7 @@ namespace Orckestra.Composer.Tests.Mock
                 mapper =>
                     mapper.MapTo<Composer.Country.CountryViewModel>(
                         It.IsNotNull<Overture.ServiceModel.Country>(),
-                        It.IsNotNull<CultureInfo>(), "CAD"))
+                        It.IsNotNull<CultureInfo>(), null))
                 .Returns(dummyCountry);
 
             var dummyRegions = new RegionViewModel();
@@ -56,7 +56,7 @@ namespace Orckestra.Composer.Tests.Mock
                 mapper =>
                     mapper.MapTo<Composer.Country.CountryViewModel>(
                         It.IsNotNull<Overture.ServiceModel.Country>(),
-                        It.IsNotNull<CultureInfo>(), "CAD"))
+                        It.IsNotNull<CultureInfo>(), null))
                 .Returns(dummyCountry);
           
             return viewModelMapper;

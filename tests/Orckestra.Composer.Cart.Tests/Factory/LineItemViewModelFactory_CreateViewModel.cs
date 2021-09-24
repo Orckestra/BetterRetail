@@ -29,8 +29,8 @@ namespace Orckestra.Composer.Cart.Tests.Factory
         {
             Container = new AutoMocker();
             var mapper = Container.GetMock<IViewModelMapper>();
-            mapper.Setup(m => m.MapTo<LineItemDetailViewModel>(It.IsAny<LineItem>(), It.IsAny<CultureInfo>(), "CAD")).Returns<LineItem, CultureInfo>(
-                (li, ci) => new LineItemDetailViewModel { CurrentPrice = li.CurrentPrice.GetValueOrDefault().ToString(CultureInfo.InvariantCulture), DefaultPrice = li.DefaultPrice.GetValueOrDefault().ToString(CultureInfo.InvariantCulture) });
+            mapper.Setup(m => m.MapTo<LineItemDetailViewModel>(It.IsAny<LineItem>(), It.IsAny<CultureInfo>(), null)).Returns<LineItem, CultureInfo, string>(
+                (li, ci, currencyIso) => new LineItemDetailViewModel { CurrentPrice = li.CurrentPrice.GetValueOrDefault().ToString(CultureInfo.InvariantCulture), DefaultPrice = li.DefaultPrice.GetValueOrDefault().ToString(CultureInfo.InvariantCulture) });
             Container.GetMock<ILocalizationProvider>()
                 .Setup(m => m.GetLocalizedString(It.IsAny<GetLocalizedParam>()))
                 .Returns("{0:C}");

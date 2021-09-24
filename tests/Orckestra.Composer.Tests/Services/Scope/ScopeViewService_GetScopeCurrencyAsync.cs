@@ -138,7 +138,7 @@ namespace Orckestra.Composer.Tests.Services.Scope
             };
 
             _container.GetMock<IViewModelMapper>()
-                .Setup(vmm => vmm.MapTo<CurrencyViewModel>(It.IsAny<object>(), It.IsNotNull<CultureInfo>(), "CAD"))
+                .Setup(vmm => vmm.MapTo<CurrencyViewModel>(It.IsAny<object>(), It.IsNotNull<CultureInfo>(), null))
                 .Verifiable();
 
             MockScopeRepository();
@@ -202,7 +202,7 @@ namespace Orckestra.Composer.Tests.Services.Scope
 
             MockScopeRepository();
             _container.GetMock<IViewModelMapper>()
-                .Setup(vmm => vmm.MapTo<CurrencyViewModel>(It.IsAny<object>(), It.IsNotNull<CultureInfo>(), "CAD"))
+                .Setup(vmm => vmm.MapTo<CurrencyViewModel>(It.IsAny<object>(), It.IsNotNull<CultureInfo>(), null))
                 .Returns(result);
 
             var sut = _container.CreateInstance<ScopeViewService>();

@@ -21,7 +21,7 @@ namespace Orckestra.Composer.Product.Tests.Services
         {
             var vmMapper = Container.GetMock<IViewModelMapper>();
             vmMapper.Setup(
-                m => m.MapTo<RelatedProductViewModel>(It.IsAny<Overture.ServiceModel.Products.Product>(), It.IsAny<CultureInfo>(), "CAD")).Returns(new RelatedProductViewModel());
+                m => m.MapTo<RelatedProductViewModel>(It.IsAny<Overture.ServiceModel.Products.Product>(), It.IsAny<CultureInfo>(), null)).Returns(new RelatedProductViewModel());
             var service = Container.CreateInstance<RelatedProductViewServiceProxy>();
 
             var result = service.CreateRelatedProductsViewModelProxy(CreateParam());
