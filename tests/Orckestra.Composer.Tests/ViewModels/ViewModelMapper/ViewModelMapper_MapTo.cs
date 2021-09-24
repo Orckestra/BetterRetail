@@ -328,7 +328,7 @@ namespace Orckestra.Composer.Tests.ViewModels.ViewModelMapper
             // Assert
             viewModelPropertyFormatterMock.Verify(m => m.Format(It.IsAny<DateTime>(),
                 It.Is<IPropertyMetadata>(md => md.PropertyFormattingCategory=="TestCategory" && md.PropertyFormattingKey=="Date"),
-                It.IsAny<CultureInfo>(), null));
+                It.IsAny<CultureInfo>()));
         }
 
         [Test]

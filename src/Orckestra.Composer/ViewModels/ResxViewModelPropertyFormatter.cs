@@ -17,7 +17,7 @@ namespace Orckestra.Composer.ViewModels
             _localizationProvider = localizationProvider;
         }
 
-        public string Format(object value, IPropertyMetadata propertyMetadata, CultureInfo cultureInfo, string currencyIso = default)
+        public string Format(object value, IPropertyMetadata propertyMetadata, CultureInfo cultureInfo)
         {
             if (propertyMetadata == null) { throw new ArgumentNullException(nameof(propertyMetadata)); }
             if (cultureInfo == null) { throw new ArgumentNullException(nameof(cultureInfo)); }
@@ -30,11 +30,6 @@ namespace Orckestra.Composer.ViewModels
                 Key         = propertyMetadata.PropertyFormattingKey,
                 CultureInfo = cultureInfo
             });
-
-            if (currencyIso != default && !string.IsNullOrEmpty(currencyIso))
-            {
-                cultureInfo = _localizationProvider.GetCultureByCurrencyIso(currencyIso);
-            }
 
             return localFormattingString == null
                 ? value.ToString()

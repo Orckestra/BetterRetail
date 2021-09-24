@@ -167,7 +167,13 @@ namespace Orckestra.Composer.ViewModels
             if (propertyMetadata != null && propertyMetadata.FormattableProperty)
             {
                 // format value
-                return _viewModelPropertyFormatter.Format(value, propertyMetadata, cultureInfo, string.CompareOrdinal(propertyMetadata.PropertyFormattingKey, "PriceFormat") == 0 ? currencyIso : default);
+
+                if (string.CompareOrdinal(propertyMetadata.PropertyFormattingKey, "PriceFormat") == 0 && currencyIso != default && !string.IsNullOrEmpty(currencyIso))
+                {
+                    cultureInfo = _localizationProvider.GetCultureByCurrencyIso(currencyIso);
+                }
+
+                return _viewModelPropertyFormatter.Format(value, propertyMetadata, cultureInfo);
             }
             return value;
         }
