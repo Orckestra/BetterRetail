@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Overture.Providers;
@@ -84,7 +83,7 @@ namespace Orckestra.Composer.Cart.Repositories
         /// Get a available payment providers by scope
         /// </summary>
         /// <returns></returns>
-        Task<IList<PaymentProviderInfo>> GetPaymentProviders(string scopeId);
+        Task<IList<PaymentProvider>> GetPaymentProviders(string scopeId);
 
         /// <summary>
         /// Get a available providers of type by scope
