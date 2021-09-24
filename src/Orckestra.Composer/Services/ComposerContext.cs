@@ -18,15 +18,13 @@ namespace Orckestra.Composer.Services
         protected ICountryCodeProvider CountryCodeProvider { get; }
         protected IWebsiteContext WebsiteContext { get; }
         protected EncryptionUtility EncryptionUtility { get; }
-        protected IScopeViewService ScopeViewService { get; }
 
         public ComposerContext(
             ICookieAccessor<ComposerCookieDto> cookieAccessor,
             IScopeProvider scopeProvider,
             HttpContextBase httpContextBase,
             ICountryCodeProvider countryCodeProvider,
-            IWebsiteContext websiteContext,
-            IScopeViewService scopeViewService)
+            IWebsiteContext websiteContext)
         {
             CookieAccessor = cookieAccessor ?? throw new ArgumentNullException(nameof(cookieAccessor));
             ScopeProvider = scopeProvider ?? throw new ArgumentNullException(nameof(scopeProvider));
@@ -34,7 +32,6 @@ namespace Orckestra.Composer.Services
             CountryCodeProvider = countryCodeProvider ?? throw new ArgumentNullException(nameof(countryCodeProvider));
             WebsiteContext = websiteContext ?? throw new ArgumentNullException(nameof(websiteContext));
             EncryptionUtility = new EncryptionUtility();
-            ScopeViewService = scopeViewService;
 
             SetAuthenticated();
         }
@@ -224,7 +221,7 @@ namespace Orckestra.Composer.Services
         {
             if (_scopeItem == null)
             {
-                _scopeItem = ScopeViewService.GetScopeAsync(ScopeProvider.DefaultScope).Result;
+                _scopeItem = ScopeProvider.GetScopeById(ScopeProvider.DefaultScope);
             }
         }
 
