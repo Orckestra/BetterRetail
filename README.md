@@ -68,6 +68,12 @@ Typescripts compile into javascript during the build process, but for developmen
 ### SASS
 The Grocery Application uses SASS by default. For dynamic Saas compilation into CSS designed [Orckestra.Web.Css.Sass](https://github.com/Orckestra/CMS-Packages/tree/master/Composite.Web.Css.Sass) package.
 
+### Restore-NPM-Packages
+If you are not authenticated to azure artifacts feed then run the command, and put your username or provided username and token (for password prompt) 
+```
+nuget restore
+```
+
 ## Configuring
 ### Reference application
 Before deploy, you have to configure the settings of a deploying website. Configurations stored in **{solution_dir_path}\build\configuration** folder:
