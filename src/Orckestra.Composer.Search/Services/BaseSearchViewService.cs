@@ -224,7 +224,7 @@ namespace Orckestra.Composer.Search.Services
                 variantId = productDocument.PropertyBag[VariantPropertyBagKey] as string;
             }
 
-            var productSearchVm = ViewModelMapper.MapTo<ProductSearchViewModel>(productDocument, cultureInfo);
+            var productSearchVm = ViewModelMapper.MapTo<ProductSearchViewModel>(productDocument, cultureInfo, ComposerContext.CurrencyIso);
             productSearchVm.ProductId = productDocument.ProductId;
             productSearchVm.BrandId = ExtractLookupId("Brand_Facet", productDocument.PropertyBag);
             MapProductSearchViewModelInfos(productSearchVm, productDocument, cultureInfo);

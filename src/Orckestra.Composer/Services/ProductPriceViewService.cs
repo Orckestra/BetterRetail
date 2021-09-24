@@ -119,7 +119,7 @@ namespace Orckestra.Composer.Services
             var vm = ViewModelMapper.MapTo<ProductPriceViewModel>(productPrice, cultureInfo, ComposerContext.CurrencyIso);
 
             vm.IsPriceDiscounted = IsPriceDiscounted(productPrice.Pricing.Price, productPrice.DefaultPrice);
-            vm.ListPrice = LocalizationProvider.FormatPrice(productPrice.Pricing.Price, cultureInfo);
+            vm.ListPrice = LocalizationProvider.FormatPrice(productPrice.Pricing.Price, cultureInfo, ComposerContext.CurrencyIso);
             vm.VariantPrices = new List<VariantPriceViewModel>();
 
             return vm;
@@ -136,7 +136,7 @@ namespace Orckestra.Composer.Services
             var vm = ViewModelMapper.MapTo<VariantPriceViewModel>(variantPriceEntry, cultureInfo, ComposerContext.CurrencyIso);
 
             vm.IsPriceDiscounted = IsPriceDiscounted(variantPriceEntry.Pricing.Price, variantPriceEntry.DefaultPrice);
-            vm.ListPrice = LocalizationProvider.FormatPrice(variantPriceEntry.Pricing.Price, cultureInfo);
+            vm.ListPrice = LocalizationProvider.FormatPrice(variantPriceEntry.Pricing.Price, cultureInfo, ComposerContext.CurrencyIso);
 
             return vm;
         }

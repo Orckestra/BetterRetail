@@ -91,7 +91,7 @@ namespace Orckestra.Composer.Cart.Factory
 
             var lineItem = param.LineItem;
 
-            var vm = ViewModelMapper.MapTo<LineItemDetailViewModel>(lineItem, param.CultureInfo);
+            var vm = ViewModelMapper.MapTo<LineItemDetailViewModel>(lineItem, param.CultureInfo, ComposerContext.CurrencyIso);
 
             if (vm.IsValid == null)
             {
@@ -111,7 +111,7 @@ namespace Orckestra.Composer.Cart.Factory
 
             decimal lineItemsSavingTotal = decimal.Add(lineItem.DiscountAmount.GetValueOrDefault(0), lineItemsSavingSale);
 
-            vm.SavingsTotal = lineItemsSavingTotal.Equals(0) ? string.Empty : LocalizationProvider.FormatPrice(lineItemsSavingTotal, param.CultureInfo);
+            vm.SavingsTotal = lineItemsSavingTotal.Equals(0) ? string.Empty : LocalizationProvider.FormatPrice(lineItemsSavingTotal, param.CultureInfo, ComposerContext.CurrencyIso);
 
             vm.KeyVariantAttributesList = GetKeyVariantAttributes(new GetKeyVariantAttributesParam {
                 KvaValues = lineItem.KvaValues,

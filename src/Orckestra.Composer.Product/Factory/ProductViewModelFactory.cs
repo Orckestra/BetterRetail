@@ -38,6 +38,7 @@ namespace Orckestra.Composer.Product.Factory
         protected IRecurringOrdersSettings RecurringOrdersSettings { get; private set; }
         protected IProductSpecificationsViewService ProductSpecificationsViewService { get; private set; }
         protected IMyAccountUrlProvider MyAccountUrlProvider { get; private set; }
+        protected IComposerContext ComposerContext { get; private set; }
 
         public ProductViewModelFactory(
             IViewModelMapper viewModelMapper,
@@ -51,7 +52,9 @@ namespace Orckestra.Composer.Product.Factory
             IRecurringOrderProgramViewModelFactory recurringOrderProgramViewModelFactory,
             IRecurringOrdersSettings recurringOrdersSettings,
             IProductSpecificationsViewService productSpecificationsViewService,
-            IMyAccountUrlProvider myAccountUrlProvider)
+            IMyAccountUrlProvider myAccountUrlProvider,
+            IComposerContext composerContext
+            )
         {
             ViewModelMapper = viewModelMapper ?? throw new ArgumentNullException(nameof(viewModelMapper));
             ProductRepository = productRepository ?? throw new ArgumentNullException(nameof(productRepository));
@@ -65,6 +68,7 @@ namespace Orckestra.Composer.Product.Factory
             RecurringOrdersSettings = recurringOrdersSettings;
             ProductSpecificationsViewService = productSpecificationsViewService ?? throw new ArgumentNullException(nameof(productSpecificationsViewService));
             MyAccountUrlProvider = myAccountUrlProvider ?? throw new ArgumentNullException(nameof(myAccountUrlProvider));
+            ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
         }
 
         public virtual async Task<ProductViewModel> GetProductViewModel(GetProductParam param)
@@ -161,7 +165,7 @@ namespace Orckestra.Composer.Product.Factory
             if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
             if (string.IsNullOrEmpty(param.BaseUrl)) { throw new ArgumentException(GetMessageOfNullEmpty(nameof(param.BaseUrl)), nameof(param)); }
 
-            var productDetailViewModel = ViewModelMapper.MapTo<ProductViewModel>(param.Product, param.CultureInfo);
+            var productDetailViewModel = ViewModelMapper.MapTo<ProductViewModel>(param.Product, param.CultureInfo, ComposerContext.CurrencyIso);
 
             InitializeProductImages(param.Product.Id, param.ProductDetailImages, param.CultureInfo, productDetailViewModel);
 
