@@ -36,7 +36,7 @@
     <script src="/UI.Package/JavaScript/composer-templates.min.js"></script>
     <script src="/UI.Package/JavaScript/moment.min.js"></script>
     <f:function name="Composer.DatePicker.DatePicker.Includes" />
-    @if (HttpContext.Current.IsDebuggingEnabled)
+    @if (!HttpContext.Current.IsDebuggingEnabled)
     {
         <script id="vuejs" src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     }
@@ -46,17 +46,22 @@
     }
     <script type="text/javascript">
 		/*****************************************
-		**
-		**  MainMenu Image display code
-		**
-		*****************************************/
+		 **
+		 **  MainMenu Image display code
+		 **
+		 *****************************************/
+		var prevImage = "";
 		$('.main-nav [data-image]').hover(
-			function(e){
-				var data = $(this).data("image");
-				$('#menu-image-'+ data).addClass('selected');
-			},
 			function(e) {
-				$('.menu-image').removeClass('selected');
+				var data = $(this).data("image");
+				var hasImage = ($('#menu-image-' + data).length == 1);
+				if (hasImage) {
+					if (data != prevImage) {
+						$('.menu-image').removeClass('selected');
+						$('#menu-image-' + data).addClass('selected');
+					}
+				}
+				prevImage = data;
 			}
 		);
 	</script>

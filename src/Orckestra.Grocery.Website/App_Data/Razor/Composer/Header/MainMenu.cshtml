@@ -38,7 +38,8 @@
                                        class="dropdown-toggle nav-link d-none d-md-block"
                                        aria-haspopup="true"
                                        target="@mainMenuEntry.UrlTarget"
-                                       style="@mainMenuEntry.CssClass">
+                                       style="@mainMenuEntry.CssClass"
+                                       data-image="@mainMenuEntry.GetHashCode()">
                                         @mainMenuEntry.DisplayName
                                     </a>
 
@@ -68,26 +69,26 @@
                                                                     View All @mainMenuEntry.DisplayName
                                                                 </a>
                                                             </li>
-                                                            @foreach (var subMenuEntry in @mainMenuEntry.Children as IEnumerable<HomeMainMenuEntryViewModel>)
+                                                            @foreach (var subMenuEntry in mainMenuEntry.Children as IEnumerable<HomeMainMenuEntryViewModel>)
                                                             {
-                                                                @NavigationTree(subMenuEntry)
+                                                                @NavigationTree(subMenuEntry, mainMenuEntry)
                                                             }
                                                         </ul>
 
                                                     </div>
                                                     <div class="col-xl-4 d-none d-lg-block">
 
-														@Image(@mainMenuEntry, 0, false)
+														@Image(mainMenuEntry, mainMenuEntry.GetHashCode(), false)
 
-                                                        @foreach (var subMenuEntry in @mainMenuEntry.Children as IEnumerable<HomeMainMenuEntryViewModel>)
+                                                        @foreach (var subMenuEntry in mainMenuEntry.Children as IEnumerable<HomeMainMenuEntryViewModel>)
                                                         {
 
-                                                            @Image(@subMenuEntry, @subMenuEntry.GetHashCode(), true)
+                                                            @Image(subMenuEntry, subMenuEntry.GetHashCode(), true)
 
-                                                            foreach (var subSubMenuEntry in @subMenuEntry.Children as IEnumerable<HomeMainMenuEntryViewModel>)
+                                                            foreach (var subSubMenuEntry in subMenuEntry.Children as IEnumerable<HomeMainMenuEntryViewModel>)
                                                             {
 
-                                                               @Image(@subSubMenuEntry, @subSubMenuEntry.GetHashCode(), true)
+                                                               @Image(subSubMenuEntry, subSubMenuEntry.GetHashCode(), true)
 
                                                             }
                                                         }
@@ -119,31 +120,32 @@
 </body>
 </html>
 
-@helper NavigationTree(HomeMainMenuEntryViewModel parentMenuEntry)
+@helper NavigationTree(HomeMainMenuEntryViewModel menuEntry, HomeMainMenuEntryViewModel parentMenuEntry)
 {
-    var menuItems = parentMenuEntry.Children as IEnumerable<HomeMainMenuEntryViewModel>;
+    var childItems = menuEntry.Children as IEnumerable<HomeMainMenuEntryViewModel>;
+	var curImgId = !string.IsNullOrEmpty(menuEntry.Image.ImageSource) ? menuEntry.GetHashCode() : parentMenuEntry.GetHashCode();
 
-    <li class="main-nav-section @parentMenuEntry.CssClassName">
+    <li class="main-nav-section @menuEntry.CssClassName">
 
-        @if (menuItems.Any())
+        @if (childItems.Any())
         {
             <a data-qa="main-menu-section"
-               href="@parentMenuEntry.Url"
-               target="@parentMenuEntry.UrlTarget"
+               href="@menuEntry.Url"
+               target="@menuEntry.UrlTarget"
                class="main-nav-section-title d-none d-md-block"
-               style="font-weight:bold; @parentMenuEntry.CssClass"
-               data-image="@parentMenuEntry.GetHashCode()">
-                @parentMenuEntry.DisplayName
+               style="font-weight:bold; @menuEntry.CssClass"
+               data-image="@curImgId">
+                @menuEntry.DisplayName
             </a>
             <a data-qa="main-menu-section"
-               data-target="#subMenu-@(parentMenuEntry.GetHashCode())"
+               data-target="#subMenu-@(menuEntry.GetHashCode())"
                data-toggle="collapse"
                aria-expanded="false"
-               aria-controls="subMenu-@(parentMenuEntry.GetHashCode())"
+               aria-controls="subMenu-@(menuEntry.GetHashCode())"
                role="button"
                class="main-nav-section-title d-block d-md-none"
                style="font-weight:bold;">
-                @parentMenuEntry.DisplayName
+                @menuEntry.DisplayName
                 <span class="fa fa-chevron-down" aria-hidden="true"></span>
                 <span class="fa fa-chevron-up" aria-hidden="true"></span>
             </a>
@@ -151,38 +153,40 @@
         else
         {
             <a data-qa="main-menu-section"
-               href="@parentMenuEntry.Url"
-               target="@parentMenuEntry.UrlTarget"
+               href="@menuEntry.Url"
+               target="@menuEntry.UrlTarget"
                class="main-nav-section-title"
-               style="font-weight:bold; @parentMenuEntry.CssClass"
-               data-image="@parentMenuEntry.GetHashCode()">
-                @parentMenuEntry.DisplayName
+               style="font-weight:bold; @menuEntry.CssClass"
+               data-image="@curImgId">
+                @menuEntry.DisplayName
             </a>
         }
        @*SubNavigation Start If Any*@
-        @if (menuItems.Any())
+        @if (childItems.Any())
         {
 
-            <ul class="list-unstyled sub-collapse collapse" id="subMenu-@(parentMenuEntry.GetHashCode())">
+            <ul class="list-unstyled sub-collapse collapse" id="subMenu-@(menuEntry.GetHashCode())">
                 <li class="main-nav-subsection d-lg-none">
                     <a data-qa="main-menu-link"
-                       href="@parentMenuEntry.Url"
-                        target="@parentMenuEntry.UrlTarget"
+                       href="@menuEntry.Url"
+                        target="@menuEntry.UrlTarget"
                        class="d-md-block d-lg-none">
-                        View All @parentMenuEntry.DisplayName
+                        View All @menuEntry.DisplayName
                     </a>
                 </li>
-                @foreach (var menuItem in menuItems)
+                @foreach (var childItem in childItems)
                 {
-                    if (!String.IsNullOrWhiteSpace(menuItem.DisplayName))
+					var curChildImgId = !string.IsNullOrEmpty(childItem.Image.ImageSource) ? childItem.GetHashCode() : curImgId;
+				
+                    if (!String.IsNullOrWhiteSpace(childItem.DisplayName))
                     {
-                        <li class="main-nav-subsection @menuItem.CssClassName">
+                        <li class="main-nav-subsection @childItem.CssClassName">
                             <a data-qa="main-menu-link"
-                               href="@menuItem.Url"
-                               target="@menuItem.UrlTarget"
-                               class="d-md-block  @menuItem.CssClass"
-                               data-image="@menuItem.GetHashCode()">
-                                @menuItem.DisplayName
+                               href="@childItem.Url"
+                               target="@childItem.UrlTarget"
+                               class="d-md-block  @childItem.CssClass"
+                               data-image="@curChildImgId">
+                                @childItem.DisplayName
                             </a>
                         </li>
                     }
@@ -198,11 +202,11 @@
 	var className = isSubMenu ? "menu-image" : "main-image";
     if (!string.IsNullOrEmpty(vm.Image.ImageSource))
     {
-		<div id="@imgId" class="@className">
+		<div id="@imgId" class="menu-image">
         @if (!string.IsNullOrEmpty(vm.Image.ImageUrl))
         {
             <a href="@vm.Image.ImageUrl" target="@vm.Image.ImageUrlTarget">
-                <img src="@vm.Image.ImageSource" class="img-responsive img-menu" />
+                <img src="@vm.Image.ImageSource" class="img-fluid img-menu" />
             </a>
         }
         else
