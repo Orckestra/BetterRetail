@@ -288,7 +288,7 @@ namespace Orckestra.Composer.Cart.Repositories
 		/// </summary>
 		/// <param name="scopeId">Scope used to make the request.</param>
 		/// <returns>List of providers</returns>
-		public virtual async Task<IList<PaymentProviderInfo>> GetPaymentProviders(string scopeId)
+		public virtual async Task<IList<PaymentProvider>> GetPaymentProviders(string scopeId)
 		{
 			if (scopeId == null) { throw new ArgumentNullException(nameof(scopeId)); }
 
@@ -299,8 +299,8 @@ namespace Orckestra.Composer.Cart.Repositories
 				ScopeId = scopeId,
 			};
 
-			var paymentProviderInfos = await CacheProvider.GetOrAddAsync(cacheKey, () => OvertureClient.SendAsync(request)).ConfigureAwait(false);
-			return paymentProviderInfos.PaymentProviders;
+			var paymentProviders = await CacheProvider.GetOrAddAsync(cacheKey, () => OvertureClient.SendAsync(request)).ConfigureAwait(false);
+			return paymentProviders.PaymentProviders;
 		}
 
 
@@ -322,8 +322,8 @@ namespace Orckestra.Composer.Cart.Repositories
 				ProviderType = providerType,
 			};
 
-			var paymentProviderInfos = await CacheProvider.GetOrAddAsync(cacheKey, () => OvertureClient.SendAsync(request)).ConfigureAwait(false);
-			return paymentProviderInfos.Providers;
+			var paymentProviders = await CacheProvider.GetOrAddAsync(cacheKey, () => OvertureClient.SendAsync(request)).ConfigureAwait(false);
+			return paymentProviders.Providers;
 		}
 
 		/// <summary>
