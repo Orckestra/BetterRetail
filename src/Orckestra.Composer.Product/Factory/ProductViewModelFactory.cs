@@ -99,7 +99,7 @@ namespace Orckestra.Composer.Product.Factory
             {
                 CultureInfo = param.CultureInfo,
                 Scope = param.Scope
-            });
+            }).ConfigureAwait(false);
 
             var productViewModel = CreateViewModel(new CreateProductDetailViewModelParam
             {
@@ -165,7 +165,7 @@ namespace Orckestra.Composer.Product.Factory
             if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
             if (string.IsNullOrEmpty(param.BaseUrl)) { throw new ArgumentException(GetMessageOfNullEmpty(nameof(param.BaseUrl)), nameof(param)); }
 
-            var productDetailViewModel = ViewModelMapper.MapTo<ProductViewModel>(param.Product, param.CultureInfo, ComposerContext.CurrencyIso);
+            var productDetailViewModel = ViewModelMapper.MapTo<ProductViewModel>(param.Product, param.CultureInfo, param.Currency?.IsoCode);
 
             InitializeProductImages(param.Product.Id, param.ProductDetailImages, param.CultureInfo, productDetailViewModel);
 
