@@ -228,7 +228,7 @@ namespace Orckestra.Composer.Services
             {
                 var p = new GetScopeParam
                     {
-                        Scope = ScopeProvider.DefaultScope
+                        Scope = Scope
                 };
                 _scopeItem = ScopeRepository.GetScopeAsync(p).ConfigureAwait(false).GetAwaiter().GetResult();
                     
