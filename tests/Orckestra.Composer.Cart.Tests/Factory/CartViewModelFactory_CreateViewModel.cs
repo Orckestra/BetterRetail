@@ -15,6 +15,7 @@ using Orckestra.Composer.Country;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Dam;
 using Orckestra.Composer.Providers.Localization;
+using Orckestra.Composer.Services;
 using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel;
 using Orckestra.Overture.ServiceModel.Marketing;
@@ -345,7 +346,11 @@ namespace Orckestra.Composer.Cart.Tests.Factory
                 .Setup(l => l.GetLocalizedString(It.IsAny<GetLocalizedParam>()))
                 .Returns(GetRandom.String(32))
                 .Verifiable();
+            var _composerContextMoq = new Mock<IComposerContext>();
+            _composerContextMoq.Setup(q => q.CultureInfo).Returns(CultureInfo.InvariantCulture);
+            _composerContextMoq.Setup(q => q.CurrencyIso).Returns("CAD");
 
+            Container.Use(_composerContextMoq);
             Container.Use(localizationProvider);
 
             var p = new CreateCartViewModelParam()

@@ -14,6 +14,7 @@ using Orckestra.Composer.Cart.ViewModels;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Dam;
 using Orckestra.Composer.Providers.Localization;
+using Orckestra.Composer.Services;
 using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel.Orders;
 
@@ -60,7 +61,11 @@ namespace Orckestra.Composer.Cart.Tests.Factory
         [Test]
         public void WHEN_DiscountAmount_Is_Positive_IsPriceDiscounted_SHOULD_Be_True()
         {
-            var factory = Container.CreateInstance<LineItemViewModelFactory>();
+            Container.Use(ViewModelMapperFactory.CreateFake(typeof(LineItemDetailViewModel).Assembly));
+            var _composerContextMoq = new Mock<IComposerContext>();
+            _composerContextMoq.Setup(q => q.CultureInfo).Returns(CultureInfo.InvariantCulture);
+            _composerContextMoq.Setup(q => q.CurrencyIso).Returns("CAD");
+            Container.Use(_composerContextMoq);
 
             var param = new CreateListOfLineItemDetailViewModelParam()
             {
@@ -70,6 +75,9 @@ namespace Orckestra.Composer.Cart.Tests.Factory
                 ImageInfo = new ProductImageInfo { ImageUrls = new List<ProductMainImage>() },
                 BaseUrl = "http://orckestra.com/"
             };
+
+            var factory = Container.CreateInstance<LineItemViewModelFactory>();
+
             var viewModels = factory.CreateViewModel(param);
 
             var firstVm = viewModels.First();
@@ -99,7 +107,13 @@ namespace Orckestra.Composer.Cart.Tests.Factory
         [Test]
         public void WHEN_ListPrice_Is_Less_Than_DefaultPrice_IsOnSale_SHOULD_Be_True()
         {
+            Container.Use(ViewModelMapperFactory.CreateFake(typeof(LineItemDetailViewModel).Assembly));
+            var _composerContextMoq = new Mock<IComposerContext>();
+            _composerContextMoq.Setup(q => q.CultureInfo).Returns(CultureInfo.InvariantCulture);
+            _composerContextMoq.Setup(q => q.CurrencyIso).Returns("CAD");
+            Container.Use(_composerContextMoq);
             var factory = Container.CreateInstance<LineItemViewModelFactory>();
+            
             var param = new CreateListOfLineItemDetailViewModelParam()
             {
                 Cart = new ProcessedCart(),
@@ -142,7 +156,10 @@ namespace Orckestra.Composer.Cart.Tests.Factory
 
             //Arrange
             Container.Use(ViewModelMapperFactory.CreateFake(typeof(LineItemDetailViewModel).Assembly));
-
+            var _composerContextMoq = new Mock<IComposerContext>();
+            _composerContextMoq.Setup(q => q.CultureInfo).Returns(CultureInfo.InvariantCulture);
+            _composerContextMoq.Setup(q => q.CurrencyIso).Returns("CAD");
+            Container.Use(_composerContextMoq);
 
             var lineItem = new LineItem
             {

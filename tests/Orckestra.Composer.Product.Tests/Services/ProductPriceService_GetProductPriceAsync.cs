@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
@@ -34,6 +35,10 @@ namespace Orckestra.Composer.Product.Tests.Services
             _container.Use(CreateDamProvider());
             _container.Use(FakeViewModelMapper.CreateFake(typeof(ProductPriceViewService).Assembly));
             _container.Use(CreateLocalizationProvider());
+            var _composerContextMoq = new Mock<IComposerContext>();
+            _composerContextMoq.Setup(q => q.CultureInfo).Returns(CultureInfo.InvariantCulture);
+            _composerContextMoq.Setup(q => q.CurrencyIso).Returns("CAD");
+            _container.Use(_composerContextMoq);
         }
 
         [Test]

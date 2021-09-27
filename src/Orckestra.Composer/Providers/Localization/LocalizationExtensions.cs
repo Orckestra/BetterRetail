@@ -38,7 +38,7 @@ namespace Orckestra.Composer.Providers.Localization
         /// <param name="price">The price.</param>
         /// <param name="cultureInfo">The culture information.</param>
         /// <returns></returns>
-        public static string FormatPrice(this ILocalizationProvider localizationProvider, decimal price, CultureInfo cultureInfo, string currencyCode = default)
+        public static string FormatPrice(this ILocalizationProvider localizationProvider, decimal price, CultureInfo cultureInfo)
         {
             if (localizationProvider == null) { throw new ArgumentNullException(nameof(localizationProvider)); }
             if (cultureInfo == null) { throw new ArgumentNullException(nameof(cultureInfo)); }
@@ -50,13 +50,9 @@ namespace Orckestra.Composer.Providers.Localization
                 CultureInfo = cultureInfo
             });
             
-            if(currencyCode != default)
-                ISOCurrenciesToACultureMap.TryGetValue(currencyCode, out cultureInfo);
-
             return string.Format(cultureInfo, format, price);
         }
-
-
+        
         private static readonly Dictionary<string, CultureInfo> ISOCurrenciesToACultureMap =
             CultureInfo.GetCultures(CultureTypes.SpecificCultures)
                 .Select(c => new { c, new RegionInfo(c.LCID).ISOCurrencySymbol })
@@ -76,17 +72,9 @@ namespace Orckestra.Composer.Providers.Localization
 
             ISOCurrenciesToACultureMap.TryGetValue(currencyCode, out CultureInfo cultureInfo);
 
-            var format = localizationProvider.GetLocalizedString(new GetLocalizedParam
-            {
-                Category = "General",
-                Key = "PriceFormat",
-                CultureInfo = cultureInfo
-            });
-
-            return string.Format(cultureInfo, format, price);
+            return localizationProvider.FormatPrice(price, cultureInfo);
         }
-
-
+        
         public static string FormatPhoneNumber(this ILocalizationProvider localizationProvider, string phoneNumber, CultureInfo cultureInfo)
         {
             if (localizationProvider == null) { throw new ArgumentNullException(nameof(localizationProvider)); }

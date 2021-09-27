@@ -176,8 +176,7 @@ namespace Orckestra.Composer.Search.Providers
             if (price.HasValue)
             {
                 decimal.TryParse(price.Value.ToString(CultureInfo.InvariantCulture), out var priceVal);
-                return LocalizationProvider.FormatPrice(priceVal, ComposerContext.CultureInfo,
-                    ComposerContext.CurrencyIso);
+                return LocalizationProvider.FormatPrice(priceVal, ComposerContext.CurrencyIso);
             }
 
             return null;
