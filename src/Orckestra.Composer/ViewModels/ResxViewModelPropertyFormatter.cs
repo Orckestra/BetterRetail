@@ -36,6 +36,5 @@ namespace Orckestra.Composer.ViewModels
                 : string.Format(cultureInfo, localFormattingString, value);
         }
 
-        
     }
 }

@@ -56,6 +56,7 @@ namespace Orckestra.Composer.Search.Api
         {
             var originalSearchTerms = request.Query.Trim();
             var searchTerms = SearchTermsTransformationProvider.TransformSearchTerm(originalSearchTerms, ComposerContext.CultureInfo.Name); ;
+            
             var searchCriteria = new SearchCriteria
             {
                 Keywords = searchTerms,

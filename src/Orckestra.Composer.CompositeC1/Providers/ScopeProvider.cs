@@ -2,6 +2,9 @@
 using Orckestra.Composer.Services;
 using Orckestra.ExperienceManagement.Configuration;
 using System;
+using System.Threading.Tasks;
+using Orckestra.Composer.Parameters;
+using Orckestra.Composer.Repositories;
 using Orckestra.Overture.ServiceModel;
 
 namespace Orckestra.Composer.CompositeC1.Providers
@@ -11,27 +14,19 @@ namespace Orckestra.Composer.CompositeC1.Providers
         private readonly Lazy<string> _lazyDefaultScope;
         public IWebsiteContext WebsiteContext;
         public ISiteConfiguration SiteConfiguration;
-        protected IScopeViewService ScopeViewService { get; }
 
         public ScopeProvider(IWebsiteContext websiteContext, 
-            ISiteConfiguration siteConfiguration,
-            IScopeViewService scopeViewService
+            ISiteConfiguration siteConfiguration
             )
         {
             _lazyDefaultScope = new Lazy<string>(GetDefaultScopeFromConfiguration, true);
             WebsiteContext = websiteContext;
             SiteConfiguration = siteConfiguration;
-            ScopeViewService = scopeViewService;
         }
 
         private string GetDefaultScopeFromConfiguration()
         {
             return SiteConfiguration.GetScopeId(WebsiteContext.WebsiteId);
-        }
-
-        public Scope GetScopeById(string scopeId)
-        {
-            return ScopeViewService.GetScopeAsync(scopeId).Result;
         }
 
         public virtual string DefaultScope

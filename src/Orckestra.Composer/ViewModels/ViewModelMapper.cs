@@ -116,8 +116,6 @@ namespace Orckestra.Composer.ViewModels
             
             foreach (var viewModelProperty in viewModelProperties)
             {
-                
-
                 var sourceProperty = sourceTypeProperties.FirstOrDefault(p => p.Name == viewModelProperty.SourcePropertyName);
                 var sourcePropertyMatches = sourceProperty != null;
 

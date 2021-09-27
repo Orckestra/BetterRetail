@@ -47,8 +47,7 @@ namespace Orckestra.Composer.Product.Api
                 {
                     ProductIds = request.Products.ToList(),
                     CultureInfo = ComposerContext.CultureInfo,
-                    Scope = ComposerContext.Scope,
-                    CurrencyIso = ComposerContext.CurrencyIso
+                    Scope = ComposerContext.Scope
                 }
             );
 

@@ -2,7 +2,9 @@ using System;
 using System.Globalization;
 using System.Threading;
 using System.Web;
+using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
+using Orckestra.Composer.Repositories;
 using Orckestra.Composer.Services.Cookie;
 using Orckestra.Composer.Utils;
 using Orckestra.Overture.ServiceModel;
@@ -18,13 +20,15 @@ namespace Orckestra.Composer.Services
         protected ICountryCodeProvider CountryCodeProvider { get; }
         protected IWebsiteContext WebsiteContext { get; }
         protected EncryptionUtility EncryptionUtility { get; }
+        protected IScopeRepository ScopeRepository { get; }
 
         public ComposerContext(
             ICookieAccessor<ComposerCookieDto> cookieAccessor,
             IScopeProvider scopeProvider,
             HttpContextBase httpContextBase,
             ICountryCodeProvider countryCodeProvider,
-            IWebsiteContext websiteContext)
+            IWebsiteContext websiteContext,
+            IScopeRepository scopeRepository)
         {
             CookieAccessor = cookieAccessor ?? throw new ArgumentNullException(nameof(cookieAccessor));
             ScopeProvider = scopeProvider ?? throw new ArgumentNullException(nameof(scopeProvider));
@@ -32,6 +36,7 @@ namespace Orckestra.Composer.Services
             CountryCodeProvider = countryCodeProvider ?? throw new ArgumentNullException(nameof(countryCodeProvider));
             WebsiteContext = websiteContext ?? throw new ArgumentNullException(nameof(websiteContext));
             EncryptionUtility = new EncryptionUtility();
+            ScopeRepository = scopeRepository ?? throw new ArgumentNullException(nameof(scopeRepository));
 
             SetAuthenticated();
         }
@@ -221,7 +226,12 @@ namespace Orckestra.Composer.Services
         {
             if (_scopeItem == null)
             {
-                _scopeItem = ScopeProvider.GetScopeById(ScopeProvider.DefaultScope);
+                var p = new GetScopeParam
+                    {
+                        Scope = ScopeProvider.DefaultScope
+                };
+                _scopeItem = ScopeRepository.GetScopeAsync(p).ConfigureAwait(false).GetAwaiter().GetResult();
+                    
             }
         }
 

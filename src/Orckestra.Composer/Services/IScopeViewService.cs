@@ -19,7 +19,5 @@ namespace Orckestra.Composer.Services
         /// <param name="scope">Scope, from which to get a sale scope</param>
         /// <returns>Sale scope from dependent scope. If not exists, returns passed scope</returns>
         Task<string> GetSaleScopeAsync(string scope);
-
-        Task<Scope> GetScopeAsync(string scopeId);
     }
 }

@@ -50,16 +50,6 @@ namespace Orckestra.Composer.Services
             return vm;
         }
 
-        public async Task<Scope> GetScopeAsync(string scopeId)
-        {
-            var p = new GetScopeParam
-            {
-                Scope = scopeId
-            };
-            var scope = await ScopeRepository.GetScopeAsync(p).ConfigureAwait(false);
-            return scope;
-        }
-
         public virtual async Task<string> GetSaleScopeAsync(string scope)
         {
             if (string.IsNullOrWhiteSpace(scope)) throw new System.ArgumentException(GetMessageOfNullWhiteSpace(nameof(scope)));
