@@ -18,7 +18,7 @@ namespace Orckestra.Composer.Grocery.Repositories
             _scopeService = scopeService ?? throw new ArgumentNullException(nameof(scopeService));
         }
 
-        public override async Task<IList<PaymentProviderInfo>> GetPaymentProviders(string scopeId)
+        public override async Task<IList<PaymentProvider>> GetPaymentProviders(string scopeId)
         {
             var salesScope = await _scopeService.GetSaleScopeAsync(scopeId).ConfigureAwait(false);
             return await base.GetPaymentProviders(salesScope);

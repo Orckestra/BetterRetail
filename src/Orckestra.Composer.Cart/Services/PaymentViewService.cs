@@ -99,7 +99,7 @@ namespace Orckestra.Composer.Cart.Services
                 availableProvidersDic.Add(el.ImplementationTypeName, el);
             }
 
-            var availablePaymentProvidersDic = new Dictionary<Guid, Overture.ServiceModel.Providers.PaymentProviderInfo>();
+            var availablePaymentProvidersDic = new Dictionary<Guid, Overture.ServiceModel.Providers.PaymentProvider>();
             foreach (var el in availablePaymentProviders)
             {
                 if (availablePaymentProvidersDic.ContainsKey(el.Id)) { continue; } 
