@@ -155,8 +155,6 @@
     <Compile Include="AntiCookieTamperingExcluder.cs" />
     <Compile Include="Api\PartialController.cs" />
     <Compile Include="AuthorizeAndRedirectAttribute.cs" />
-    <Compile Include="Builders\CategoryAndNavigationBuilder.cs" />
-    <Compile Include="Builders\ICategoryAndNavigationBuilder.cs" />
     <Compile Include="C1HttpApplication.cs" />
     <Compile Include="C1PerformanceDataCollector.cs" />
     <Compile Include="Cache\CacheExclusion.cs" />

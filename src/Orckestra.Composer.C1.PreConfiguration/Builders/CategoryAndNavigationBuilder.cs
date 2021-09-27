@@ -55,37 +55,48 @@ namespace Orckestra.Composer.CompositeC1.Builders
         }
 
 
+        private void DeleteCategoriesAndMenu(DataConnection connection, CultureInfo culture)
+        {
+            var currentPages = from p in DataFacade.GetData<IPage>()
+                join catPAge in DataFacade.GetData<CategoryPage>() on p.Id equals catPAge.PageId
+                select p;
+
+            DataFacade.Delete(currentPages.ToList(), CascadeDeleteType.Allow);
+
+            DataFacade.Delete<NavigationImage>(d => true);
+
+            Func<List<MainMenu>> getMainMenuWithoutRefs = () =>
+                connection.Get<MainMenu>().Where(d => d.GetReferees(typeof(MainMenu), null, false).Count == 0).ToList();
+
+            var mainMenuWithoutRefs = getMainMenuWithoutRefs();
+            // sometimes optional refs is broken and updating optional link throw error on republish
+            while (mainMenuWithoutRefs.Any())
+            {
+                mainMenuWithoutRefs.ForEach(d =>
+                {
+                    connection.Delete(d);
+                });
+                mainMenuWithoutRefs = getMainMenuWithoutRefs();
+            }
+
+            connection.Delete(connection.Get<MainMenu>());//.Delete<MainMenu>(d => true);
+
+            using (var connection2 = new DataConnection(PublicationScope.Published, culture))
+            {
+                connection2.Delete(connection2.Get<MainMenu>().ToList());
+            }
+        }
+
+
         public void ReBuildCategoriesAndMenu(Dictionary<string, string> localizedDisplayNames)
         {
             foreach (var culture in DataLocalizationFacade.ActiveLocalizationCultures)
             {
-                using (var data = new DataConnection(PublicationScope.Unpublished, culture))
+                using (var connection = new DataConnection(PublicationScope.Unpublished, culture))
                 {
-                    var currentPages = from p in DataFacade.GetData<IPage>()
-                                       join catPAge in DataFacade.GetData<CategoryPage>() on p.Id equals catPAge.PageId
-                                       select p;
+                    DeleteCategoriesAndMenu(connection, culture);
 
-                    DataFacade.Delete(currentPages.ToList(), CascadeDeleteType.Allow);
-
-                    DataFacade.Delete<NavigationImage>(d => true);
-
-                    Func<List<MainMenu>> getMainMenuWithoutRefs = () =>
-                        DataFacade.GetData<MainMenu>().Where(d => d.GetReferees(typeof(MainMenu), null, false).Count == 0).ToList();
-
-                    var mainMenuWithoutRefs = getMainMenuWithoutRefs();
-                    // sometimes optional refs is broken and updating optional link throw error on republish
-                    while (mainMenuWithoutRefs.Any())
-                    {
-                        mainMenuWithoutRefs.ForEach(d =>
-                        {
-                            DataFacade.Delete(d, true);
-                        });
-                        mainMenuWithoutRefs = getMainMenuWithoutRefs();
-                    }
-
-                    DataFacade.Delete<MainMenu>(d => true);
-
-                    foreach (var websiteId in data.SitemapNavigator.HomePageIds)
+                    foreach (var websiteId in connection.SitemapNavigator.HomePageIds)
                     {
                         string scope = null;
                         try
@@ -125,19 +136,27 @@ namespace Orckestra.Composer.CompositeC1.Builders
                                                                join cp in DataFacade.GetData<CategoryPage>() on p equals cp.PageId
                                                                select new { cp.PageId, cp.CategoryId }).ToDictionary(d => d.CategoryId, d => d.PageId);
 
+                        var parentMenuId = default(Guid?);
+                        if(localizedDisplayNames != null) 
+                        {
+                            var mainMenu = DataFacade.BuildNew<MainMenu>();
+                            parentMenuId = mainMenu.Id = GuidUtility.Create(NavigationNamespaces.MainMenuNamespaceId, "Root");
+                            mainMenu.PageId = websiteId;
+                            mainMenu.DisplayName = (localizedDisplayNames?.ContainsKey(culture.Name) ?? false)
+                                ? localizedDisplayNames[culture.Name]
+                                : string.Empty;
+                            mainMenu.CssClassName = string.Empty;
+                            mainMenu.ParentId = null;
+                            mainMenu.Url = $"~/page({websiteId})";
+                            mainMenu.PublicationStatus = GenericPublishProcessController.Draft;
+                            mainMenu = DataFacade.AddNew(mainMenu);
 
-                        var mainMenu = DataFacade.BuildNew<MainMenu>();
-                        mainMenu.Id = GuidUtility.Create(NavigationNamespaces.MainMenuNamespaceId, "Root");
-                        mainMenu.PageId = websiteId;
-                        mainMenu.DisplayName = (localizedDisplayNames?.ContainsKey(culture.Name) ?? false) ? localizedDisplayNames[culture.Name] : string.Empty;
-                        mainMenu.CssClassName = string.Empty;
-                        mainMenu.ParentId = null;
-                        mainMenu.Url = $"~/page({websiteId})";
-                        mainMenu.PublicationStatus = GenericPublishProcessController.Published;
-                        mainMenu = DataFacade.AddNew(mainMenu);
+                            mainMenu.PublicationStatus = GenericPublishProcessController.Published;
+                            DataFacade.Update(mainMenu);
+                        }
 
-                        new MenuBuilder(categories, catPageIds, culture.Name, websiteId).CreateMainMenu("Root", mainMenu.Id, 2);
-
+                        new MenuBuilder(categories, catPageIds, culture.Name, websiteId).CreateMainMenu("Root",
+                            parentMenuId, 2);
                     }
 
                 }
@@ -180,8 +199,12 @@ namespace Orckestra.Composer.CompositeC1.Builders
                         mainMenu.CssClassName = string.Empty;
                         mainMenu.ParentId = parentMainMenuId;
                         mainMenu.Url = $"~/page({pageId})";
-                        mainMenu.PublicationStatus = GenericPublishProcessController.Published;
+                        mainMenu.PublicationStatus = GenericPublishProcessController.Draft;
+
                         mainMenu = DataFacade.AddNew(mainMenu);
+
+                        mainMenu.PublicationStatus = GenericPublishProcessController.Published;
+                        DataFacade.Update(mainMenu);
 
                         CreateMainMenu(cat.Id, mainMenu.Id, depth - 1);
 

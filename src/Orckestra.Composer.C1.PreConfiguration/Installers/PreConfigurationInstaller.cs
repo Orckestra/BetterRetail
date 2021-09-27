@@ -34,19 +34,25 @@ namespace Orckestra.Composer.CompositeC1.Installers
 
             var categoryAndNavigationBuilder = container.Resolve<ICategoryAndNavigationBuilder>();
 
-            var displayNames = new Dictionary<string, string>();
+            Dictionary<string, string> displayNames = null;
 
-            Configuration.SingleOrDefault(f => f.Name == "MainMenuDisplayNames")?.Elements("add").ToList()
-                .ForEach(d =>
+            var mainMenuDisplayNames = Configuration.SingleOrDefault(f => f.Name == "MainMenuDisplayNames");
+
+            if (mainMenuDisplayNames != null)
             {
-                var locale = d.Attributes("locale").Select(a => a.Value).FirstOrDefault();
-                var displayName = d.Value;
-                if (!string.IsNullOrWhiteSpace(locale))
-                {
-                    displayNames[locale] = displayName;
-                    Log.LogInformation("PreConfigurationInstaller", $"{locale}: '{displayName}'");
-                }
-            });
+                displayNames = new Dictionary<string, string>();
+                mainMenuDisplayNames.Elements("add").ToList()
+                    .ForEach(d =>
+                    {
+                        var locale = d.Attributes("locale").Select(a => a.Value).FirstOrDefault();
+                        var displayName = d.Value;
+                        if (!string.IsNullOrWhiteSpace(locale))
+                        {
+                            displayNames[locale] = displayName;
+                            Log.LogInformation("PreConfigurationInstaller", $"{locale}: '{displayName}'");
+                        }
+                    });
+            }
 
             categoryAndNavigationBuilder.ReBuildCategoriesAndMenu(displayNames);
 
