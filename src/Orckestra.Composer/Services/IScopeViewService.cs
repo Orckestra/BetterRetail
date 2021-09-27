@@ -1,7 +1,6 @@
-﻿using System.Threading.Tasks;
-using Orckestra.Composer.Parameters;
+﻿using Orckestra.Composer.Parameters;
 using Orckestra.Composer.ViewModels;
-using Orckestra.Overture.ServiceModel;
+using System.Threading.Tasks;
 
 namespace Orckestra.Composer.Services
 {
