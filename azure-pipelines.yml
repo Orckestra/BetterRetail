@@ -31,7 +31,14 @@ stages:
         configFilePath: 'GitVersionConfig.yaml'
         updateAssemblyInfo: true
         updateAssemblyInfoFilename: 'src/Solution Items/SharedAssemblyInfo.cs'
-        
+
+    - task: NuGetCommand@2
+      displayName: "Nuget Restore"
+      inputs:
+        command: 'restore'
+        restoreSolution: '**/*.sln'
+        feedsToUse: 'config'
+
     - task: PowerShell@1
       displayName: Build
       inputs:
