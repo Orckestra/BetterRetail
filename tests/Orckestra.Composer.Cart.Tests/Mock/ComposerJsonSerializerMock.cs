@@ -13,7 +13,7 @@ namespace Orckestra.Composer.Cart.Tests.Mock
 
         public ComposerJsonSerializerMock(IViewModelMetadataRegistry registry, IViewModelMapper modelMapper)
         {
-            _vmSerialization = new ViewModelSerialization(modelMapper, registry);
+            _vmSerialization = new ViewModelSerialization(registry);
         }
 
         /// <summary>

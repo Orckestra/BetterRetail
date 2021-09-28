@@ -169,10 +169,14 @@ namespace Orckestra.Composer.ViewModels
             // check if VM propery can be formatted. If not, pass through
             if (propertyMetadata != null && propertyMetadata.FormattableProperty)
             {
-                var scopeCurrency = CurrencyConversionSettings.GetScopeCurrency();
-                if (string.CompareOrdinal(propertyMetadata.PropertyFormattingKey, "PriceFormat") == 0 && !string.IsNullOrEmpty(scopeCurrency))
+                
+                if (string.CompareOrdinal(propertyMetadata.PropertyFormattingKey, "PriceFormat") == 0)
                 {
-                    cultureInfo = _localizationProvider.GetCultureByCurrencyIso(scopeCurrency);
+                    var scopeCurrency = CurrencyConversionSettings.GetScopeCurrency();
+                    if (!string.IsNullOrEmpty(scopeCurrency))
+                    {
+                        cultureInfo = _localizationProvider.GetCultureByCurrencyIso(scopeCurrency);
+                    }
                 }
 
                 // format value

@@ -50,7 +50,7 @@ namespace Orckestra.Composer.Tests.ViewModels.ViewModelSerialization
         [Test]
         public void WHEN_deserializing_using_custom_composer_json_converter_all_properties_SHOULD_be_the_same_as_in_source_object()
         {
-            DeserializedTestViewModelForSerialization = JsonConvert.DeserializeObject<TestViewModelForSerialization>(JsonFromStandardSerializer, new Composer.ViewModels.ViewModelSerialization(ViewModelMapper, MetadataRegistry.Object));
+            DeserializedTestViewModelForSerialization = JsonConvert.DeserializeObject<TestViewModelForSerialization>(JsonFromStandardSerializer, new Composer.ViewModels.ViewModelSerialization(MetadataRegistry.Object));
 
             ViewModelForSerialization.ShouldBeEquivalentTo(DeserializedTestViewModelForSerialization);
             ViewModelForSerialization.TestNested.ShouldBeEquivalentTo(DeserializedTestViewModelForSerialization.TestNested);

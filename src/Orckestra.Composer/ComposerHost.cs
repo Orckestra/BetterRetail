@@ -248,7 +248,7 @@ namespace Orckestra.Composer
             
             Register<ResourceLocalizationProvider, ILocalizationProvider>(ComponentLifestyle.Singleton);
 
-            Register<ViewModelMapper, IViewModelMapper>(ComponentLifestyle.Singleton);
+            Register<ViewModelMapper, IViewModelMapper>(ComponentLifestyle.PerRequest);
 
             //Register mappings to commonly referenced contextual application properties such as HttpContextBase, HttpRequestBase, HttpResponseBase
             RegisterModule(new AutofacWebTypesModule());
@@ -282,7 +282,6 @@ namespace Orckestra.Composer
         private void ConfigureAsp()
         {
             var jsonFormatter = new JsonMediaTypeFormatter();
-            var viewModelMapper = Resolve<IViewModelMapper>();
 
             JsonSettings = jsonFormatter.SerializerSettings;
 
@@ -290,7 +289,7 @@ namespace Orckestra.Composer
             JsonSettings.MissingMemberHandling = MissingMemberHandling.Ignore;
 
             JsonSettings.Converters
-                .Add(new ViewModelSerialization(viewModelMapper, MetadataRegistry));
+                .Add(new ViewModelSerialization(MetadataRegistry));
 
             ViewEngine = new HandlebarsViewEngine(Resolve<ICacheProvider>());
 
