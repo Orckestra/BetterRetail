@@ -27,7 +27,7 @@ namespace Orckestra.Composer
             host.Register<CountryService, ICountryService>();
             host.Register<CategoryRepository, ICategoryRepository>();
             host.Register<LookupRepositoryFactory, ILookupRepositoryFactory>();
-            host.Register<LookupService, ILookupService>(ComponentLifestyle.PerRequest);
+            host.Register<LookupService, ILookupService>();
             host.Register<AddressRepository, IAddressRepository>();
             host.Register<FulfillmentLocationsRepository, IFulfillmentLocationsRepository>();
             host.Register<ProductSettingsRepository, IProductSettingsRepository>();
