@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Orckestra.Composer.Enums;
+using Orckestra.Composer.Logging;
 using Orckestra.Composer.MyAccount.Parameters;
 using Orckestra.Composer.MyAccount.ViewModels;
 using Orckestra.Composer.Repositories;
@@ -23,6 +24,7 @@ namespace Orckestra.Composer.MyAccount.Services
     /// </summary>
     public class CustomerViewService : ICustomerViewService
     {
+        private static ILog Log = LogProvider.GetCurrentClassLogger();
         protected IViewModelMapper ViewModelMapper { get; private set; }
         protected ICustomerRepository CustomerRepository { get; private set; }
         protected ICultureService CultureService { get; private set; }
@@ -88,7 +90,7 @@ namespace Orckestra.Composer.MyAccount.Services
 
             var vm = new AccountStatusViewModel
             {
-                Status  = GetAccountStatus(customer.AccountStatus)
+                Status = GetAccountStatus(customer.AccountStatus)
             };
 
             return vm;
@@ -185,20 +187,46 @@ namespace Orckestra.Composer.MyAccount.Services
         protected virtual List<PreferredLanguageViewModel> GetPreferredLanguageViewModel(CultureInfo currentCulture, string customerLanguage)
         {
             var allcultures = CultureService.GetAllSupportedCultures();
+            CultureInfo customerCultureInfo = null;
 
-            return (from culture in allcultures
-                    let displayName = LocalizationProvider.GetLocalizedString(new GetLocalizedParam
-                    {
-                        CultureInfo = currentCulture,
-                        Category = "General",
-                        Key = culture.DisplayName
-                    })
-                    select new PreferredLanguageViewModel
-                    {
-                        DisplayName = displayName,
-                        IsoCode = culture.Name,
-                        IsSelected = customerLanguage == culture.Name
-                    }).ToList();
+            var languages = (from culture in allcultures
+                             let displayName = LocalizationProvider.GetLocalizedString(new GetLocalizedParam
+                             {
+                                 CultureInfo = currentCulture,
+                                 Category = "General",
+                                 Key = culture.DisplayName
+                             })
+                             select new PreferredLanguageViewModel
+                             {
+                                 DisplayName = displayName,
+                                 IsoCode = culture.Name,
+                                 IsSelected = customerLanguage == culture.Name
+                             }).ToList();
+
+            if (!languages.Any(item => item.IsSelected))
+            {
+                try
+                {
+                    customerCultureInfo = CultureInfo.GetCultureInfo(customerLanguage);
+                }
+                catch (Exception ex)
+                {
+                    var errorMessage = string.Format("Culture not found: {0}", customerLanguage);
+                    Log.ErrorException(errorMessage, ex);
+                }
+
+                if (customerCultureInfo != null)
+                {
+                    var affinityCultureName = CultureService.GetAffinityCulture(customerCultureInfo)?.Name;
+                    if (string.IsNullOrEmpty(affinityCultureName)) return languages;
+
+                    var affinityLanguage = languages.FirstOrDefault(item => affinityCultureName == item.IsoCode);
+
+                    if (affinityLanguage != null)
+                        affinityLanguage.IsSelected = true;
+                }
+            }
+            return languages;
         }
 
         protected virtual AccountStatusEnum GetAccountStatus(AccountStatus status)
