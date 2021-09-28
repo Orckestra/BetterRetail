@@ -185,7 +185,15 @@ namespace Orckestra.Composer.MyAccount.Services
         protected virtual List<PreferredLanguageViewModel> GetPreferredLanguageViewModel(CultureInfo currentCulture, string customerLanguage)
         {
             var allcultures = CultureService.GetAllSupportedCultures();
-            var customerCultureInfo = CultureInfo.GetCultureInfo(customerLanguage);
+            CultureInfo customerCultureInfo = null;
+
+            try
+            {
+                customerCultureInfo = CultureInfo.GetCultureInfo(customerLanguage);
+            }
+            catch
+            {
+            }
 
             var languages = (from culture in allcultures
                     let displayName = LocalizationProvider.GetLocalizedString(new GetLocalizedParam
@@ -201,14 +209,17 @@ namespace Orckestra.Composer.MyAccount.Services
                         IsSelected = customerLanguage == culture.Name 
                     }).ToList();
 
-            var affinityCultureName = CultureService.GetAffinityCulture(customerCultureInfo)?.Name;
-            if (!languages.Any(item => item.IsSelected) && !string.IsNullOrEmpty(affinityCultureName))
+            if (customerCultureInfo != null)
             {
-                var affinityLanguage = languages.FirstOrDefault(item =>
-                    affinityCultureName == item.IsoCode);
-                
-                if (affinityLanguage != null)
-                    affinityLanguage.IsSelected = true;
+                var affinityCultureName = CultureService.GetAffinityCulture(customerCultureInfo)?.Name;
+                if (!languages.Any(item => item.IsSelected) && !string.IsNullOrEmpty(affinityCultureName))
+                {
+                    var affinityLanguage = languages.FirstOrDefault(item =>
+                        affinityCultureName == item.IsoCode);
+
+                    if (affinityLanguage != null)
+                        affinityLanguage.IsSelected = true;
+                }
             }
 
             return languages;
