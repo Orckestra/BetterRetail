@@ -23,16 +23,16 @@
     [FunctionParameter(Label = "Banner Heading", WidgetMarkup = @"<f:widgetfunction xmlns:f='http://www.composite.net/ns/function/1.0' name='Composite.Widgets.String.TextArea' />")]
     public string Heading { get; set; }
 
-    private const string textPositionWidgetMarkup = @"<f:widgetfunction xmlns:f='http://www.composite.net/ns/function/1.0' name='Composite.Widgets.String.Selector'>
+    private const string textAligmentWidgetMarkup = @"<f:widgetfunction xmlns:f='http://www.composite.net/ns/function/1.0' name='Composite.Widgets.String.Selector'>
     <f:param name='Options'>
         <f:function name='Orckestra.Web.Html.GetStyleOptionsFromFile'>
-            <f:param name='OptionsXMLFilePath' value='UI.Package/GetStyleOptionsFromFile/TextPositionOptions.xml' />
+            <f:param name='OptionsXMLFilePath' value='UI.Package/GetStyleOptionsFromFile/TextAligmentOptions.xml' />
         </f:function>
     </f:param>
     <f:param name='Required' value='True' />
     </f:widgetfunction>";
-    [FunctionParameter(Label = "Banner Heading Position", Help = "Text is centered by default.", DefaultValue = "text-center", WidgetMarkup = textPositionWidgetMarkup)]
-    public string HeadingPosition { get; set; }
+    [FunctionParameter(Label = "Banner Heading Aligment", Help = "Text is centered by default.", DefaultValue = "text-center", WidgetMarkup = textAligmentWidgetMarkup)]
+    public string HeadingAligment { get; set; }
 
     private const string headingColorWidgetMarkup = @"<f:widgetfunction xmlns:f='http://www.composite.net/ns/function/1.0' name='Composite.Widgets.String.Selector'>
     <f:param name='Options'>
@@ -86,7 +86,7 @@
         @if (BackgroundImage != null)
         {<img src="~/media(@BackgroundImage)" class="d-block w-100" alt="img" />}
         <div class="container">
-            <h1 class="@HeadingPosition @HeadingColor">@Html.Raw(@Heading.Replace(System.Environment.NewLine, "<br/>"))</h1>
+            <h1 class="@HeadingAligment @HeadingColor">@Html.Raw(@Heading.Replace(System.Environment.NewLine, "<br/>"))</h1>
             @if (Content != null && Content.Body != null && (!string.IsNullOrWhiteSpace(Content.Body.Value) || Content.Body.HasElements))
             {
                 <div class="d-none d-md-block jumbotron-caption bottom @ContentTextColor @(String.IsNullOrEmpty(ContentBackgroundColorRGB) ? ContentBackgroundColor: "")" style="background-color: @(ContentBackgroundColorRGB);">

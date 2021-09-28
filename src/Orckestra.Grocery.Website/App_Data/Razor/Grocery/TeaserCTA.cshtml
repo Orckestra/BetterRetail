@@ -1,0 +1,116 @@
+@inherits RazorFunction
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Teaser (text and image) with CTA"; }
+    }
+
+    [FunctionParameter(Label = "Teaser Image")]
+    public NullableDataReference<IImageFile> BackgroundImage { get; set; }
+
+    [FunctionParameter(Label = "Teaser Heading Text")]
+    public string Heading { get; set; }
+
+    [FunctionParameter(Label = "Teaser Sub-Heading Text", Help = "The teaser sub-heading content")]
+    public XhtmlDocument Content { get; set; }
+
+    private const string textAligmentWidgetMarkup = @"<f:widgetfunction xmlns:f='http://www.composite.net/ns/function/1.0' name='Composite.Widgets.String.Selector'>
+    <f:param name='Options'>
+    <f:function name='Orckestra.Web.Html.GetStyleOptionsFromFile'>
+        <f:param name='OptionsXMLFilePath' value='UI.Package/GetStyleOptionsFromFile/TextAligmentOptions.xml' />
+    </f:function>
+    </f:param>
+    <f:param name='Required' value='True' />
+    </f:widgetfunction>";
+    [FunctionParameter(Label = "Teaser Text Aligment", DefaultValue = "text-left", WidgetMarkup = textAligmentWidgetMarkup)]
+    public string TeaserContentTextAligment { get; set; }
+
+    private const string textPositionWidgetMarkup = @"<f:widgetfunction xmlns:f='http://www.composite.net/ns/function/1.0' name='Composite.Widgets.String.Selector'>
+    <f:param name='Options'>
+    <f:function name='Composite.Utils.String.Split'>
+        <f:param name='String' value='Left,Right,Bottom' />
+            <f:param name='Separator' value=',' />
+    </f:function>
+    </f:param>
+    <f:param name='Required' value='True' />
+    </f:widgetfunction>";
+    [FunctionParameter(Label = "Teaser Text Position", DefaultValue = "Left", WidgetMarkup = textPositionWidgetMarkup)]
+    public string TeaserContentTextPosition { get; set; }
+
+    private const string contentBackgroundStyleWidgetMarkup = @"<f:widgetfunction xmlns:f='http://www.composite.net/ns/function/1.0' name='Composite.Widgets.String.Selector'>
+    <f:param name='Options'>
+    <f:function name='Orckestra.Web.Html.GetStyleOptionsFromFile'>
+        <f:param name='OptionsXMLFilePath' value='UI.Package/GetStyleOptionsFromFile/BackgroundOptions.xml' />
+    </f:function>
+    </f:param>
+    <f:param name='Required' value='True' />
+    </f:widgetfunction>";
+    [FunctionParameter(Label = "Teaser Text Background Color", Help = "Dark is by default. If RGBA background color is provided, then this will be ignored.", DefaultValue = "bg-dark", WidgetMarkup = contentBackgroundStyleWidgetMarkup)]
+    public string ContentBackgroundColor { get; set; }
+
+    [FunctionParameter(Label = "Teaser Text Background Color as RGBA", DefaultValue = null,
+        Help = "Provide any background color in RGBA or # format. If you need color with transparency, use RGBA format, for example: rgba(0,0,0,0.5)")]
+    public string ContentBackgroundColorRGB { get; set; }
+
+    private const string contentTextColorWidgetMarkup = @"<f:widgetfunction xmlns:f='http://www.composite.net/ns/function/1.0' name='Composite.Widgets.String.Selector'>
+    <f:param name='Options'>
+    <f:function name='Orckestra.Web.Html.GetStyleOptionsFromFile'>
+        <f:param name='OptionsXMLFilePath' value='UI.Package/GetStyleOptionsFromFile/TextColorOptions.xml' />
+    </f:function>
+    </f:param>
+    <f:param name='Required' value='True' />
+    </f:widgetfunction>";
+    [FunctionParameter(Label = "Teaser Text Color", DefaultValue = "text-white", WidgetMarkup = contentTextColorWidgetMarkup)]
+    public string ContentTextColor { get; set; }
+
+    [FunctionParameter(Label = "Button Link", WidgetFunctionName = "Composite.Widgets.String.UrlComboBox", DefaultValue = "")]
+    public string ButtonLink { get; set; }
+
+    [FunctionParameter(Label = "Button Label", DefaultValue = "Read More", Help = "Label of the button")]
+    public string ButtonLabel { get; set; }
+
+    private const string buttonStyleWidgetMarkup = @"<f:widgetfunction xmlns:f='http://www.composite.net/ns/function/1.0' name='Composite.Widgets.String.Selector'>
+    <f:param name='Options'>
+    <f:function name='Orckestra.Web.Html.GetStyleOptionsFromFile'>
+        <f:param name='OptionsXMLFilePath' value='UI.Package/GetStyleOptionsFromFile/ButtonStyleOptions.xml' />
+    </f:function>
+    </f:param>
+    <f:param name='Required' value='True' />
+    </f:widgetfunction>";
+    [FunctionParameter(Label = "Button Style", DefaultValue = "btn-primary", WidgetMarkup = buttonStyleWidgetMarkup)]
+    public string ButtonStyle { get; set; }
+
+    [FunctionParameter(Label = "Teaser Bottom Margin", DefaultValue = "0", Help = "Bottom margin of the teaser. Use to space out multiple teasers in the same column. Any CSS valid value will work, like '30px'")]
+    public string MarginBottom { get; set; }
+
+    [FunctionParameter(Label = "Teaser Minimun Height", DefaultValue = "150px", Help = "By default the teaser height grows with teaser content, but it can be changed and custom min height can be specified to have small content but big image background. Any CSS valid value will work, like '300px'")]
+    public string MinHeight { get; set; }
+}
+@{
+    var isBottom = TeaserContentTextPosition == "Bottom";
+    var minHeightStyle = !string.IsNullOrEmpty(MinHeight) ? "min-height:" + @MinHeight : "";
+}
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<head>
+</head>
+<body>
+    <div class="teaser-cta shadow position-@TeaserContentTextPosition.ToLower() h-100 bg-cover" 
+         style="margin-bottom:@MarginBottom; background-image: url('/media(@BackgroundImage)');">
+        <div class="row no-gutters  h-100  align-items-end" style="@(isBottom ? minHeightStyle: "")">
+            <div class="col-12  empty-cell  @(isBottom ? "": "col-sm-6")"></div>
+            <div class="content-cell  col-12  p-2  @TeaserContentTextAligment  @(isBottom ? "": "col-sm-6")  @(String.IsNullOrEmpty(ContentBackgroundColorRGB) ? ContentBackgroundColor: "")" 
+                 style="background-color: @(ContentBackgroundColorRGB); @(!isBottom ? minHeightStyle: ""); ">
+                <h3 class="mt-0  @ContentTextColor">@Heading</h3>
+                <div class="@ContentTextColor">@Html.Raw(Content)</div>
+                @if (!String.IsNullOrWhiteSpace(ButtonLink))
+                {
+                    <div class="mt-1">
+                        <a href="@ButtonLink" class="btn @ButtonStyle">@ButtonLabel</a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</body>
+</html>

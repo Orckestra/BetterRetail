@@ -15,7 +15,8 @@
       <package id="d665fbe2-3ca1-4c3a-b25b-79e4760e0c16" url="http://package.composite.net/Download.ashx?package=Orckestra.Web.Css.Sass&amp;c1version=$(version)"/>
       <package id="4c9310fe-f87b-4272-ba66-9fc4479e3697" url="http://package.composite.net/Download.ashx?package=Orckestra.Widgets.FilteredSelector&amp;c1version=$(version)"/>
 	  <package id="47cd15a3-10ee-4940-b4d0-9791381004bd" url="http://package.composite.net/Download.ashx?package=Orckestra.Web.Html.GetStyleOptionsFromFile&amp;c1version=$(version)"/>	
-		  
+	  <package id="38fefd63-5db7-41aa-b0cd-2bdf13452aea" url="http://package.composite.net/Download.ashx?package=Orckestra.Web.Html.Grid.Columns&amp;c1version=$(version)"/>	
+	  		  
       <!-- Exp Man -->
       <package id="43e544ae-bc8b-484f-bff3-176d4fcd35f1" url="http://experience-management-packages.c1preprod02.composite.net/Setup/branches/$(branch)/Packages/Orckestra.ExperienceManagement.Branding.zip"/>
       <package id="93b0e3b2-0cbf-482b-8231-a38d81043683" url="http://experience-management-packages.c1preprod02.composite.net/Setup/branches/$(branch)/Packages/Orckestra.ExperienceManagement.zip"/>
