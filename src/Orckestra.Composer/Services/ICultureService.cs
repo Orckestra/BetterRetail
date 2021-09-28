@@ -31,7 +31,7 @@ namespace Orckestra.Composer.Services
         bool IsCultureSupported(CultureInfo cultureToCheck);
 
         /// <summary>
-        /// Gets first affinity culture by the application.
+        /// Gets first affinity culture by the cultureToCheck.
         /// </summary>
         /// <param name="cultureToCheck"></param>
         /// <returns></returns>
