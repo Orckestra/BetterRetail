@@ -18,27 +18,27 @@ module Orckestra.Composer {
 
         public static post(url: string, data: any) : Q.Promise<any> {
 
-            return this.sendRequest('POST', url, data);
+            return this.sendRequest('POST', url, data ? JSON.stringify(data) : null);
         }
 
         public static put(url: string, data: any) : Q.Promise<any> {
 
-            return this.sendRequest('PUT', url, data);
+            return this.sendRequest('PUT', url, data ? JSON.stringify(data) : null);
         }
 
         public static remove(url: string, data: any) : Q.Promise<any> {
 
-            return this.sendRequest('DELETE', url, data);
+            return this.sendRequest('DELETE', url, data ? JSON.stringify(data) : null);
         }
 
         private static sendRequest(method: string, url: string, data?: any) : Q.Promise<any> {
 
-            var settings: EnhancedJQueryAjaxSettings = {
+            const settings: EnhancedJQueryAjaxSettings = {
                 contentType: 'application/json',
                 dataType: 'json',
-                data: data ? JSON.stringify(data) : null,
-                method: method,
-                url: url,
+                data,
+                method,
+                url,
                 headers: {
                     'Accept-Language': this.getPageCulture(),
                     'WebsiteId': this.getWebsiteId()

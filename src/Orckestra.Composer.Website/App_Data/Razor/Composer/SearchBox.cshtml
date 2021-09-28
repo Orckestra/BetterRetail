@@ -1,4 +1,4 @@
-@inherits RazorFunction
+﻿@inherits RazorFunction
 @using Orckestra.Composer.CompositeC1.Services;
 @using Orckestra.Composer.Services;
 @using Orckestra.ExperienceManagement.Configuration;
@@ -40,13 +40,15 @@
 
     var keywords = Request.QueryString["keywords"] ?? string.Empty;
     var actionTarget = PageService.GetRendererPageUrl(searchPageId, cultureInfo);
-    var dataController = Autocomplete ? "General.AutocompleteSearchBox" : "General.SearchBox";
+    var dataController = Autocomplete ? "General.AutocompleteSearchBoxVue" : "General.SearchBox";
 }
 
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on" xmlns:v-slot="v-slot">
 <head>
 </head>
 <body>
+    
+
     <div id="search-box" class="search-box" data-oc-controller="@dataController"
          data-categories-enable="@Categories"
          data-brands-enable="@Brands"
@@ -55,13 +57,90 @@
          data-search-terms-limit="@MaxSearchTermsSuggestionsCount"
          data-categories-limit="@MaxCategoriesSuggestionsCount"
          data-brand-limit="@MaxBrandSuggestionsCount">
+       
+        <div id="vueAutocomplete">
+            <div class="container">
+
+                <vue-autosuggest xmlns:v-on="v-on"
+                                 xmlns:v-bind="v-bind"
+                                 ref="autosuggest"
+                                 v-model="query"
+                                 v-on:input="fetchResults"
+                                 v-bind:input-props="inputProps"
+                                 v-bind:suggestions="suggestions"
+                                 v-bind:section-configs="sectionConfigs"
+                                 v-bind:get-suggestion-value="getSuggestionValue">
+
+                    <template v-slot:before-section-autocomplete="{ section }">
+                        <div class="card-header col-12">@Html.Localize("General", "L_Suggest_PossibleMatches")</div>
+                    </template>
+
+                    <template v-slot:before-section-suggestbrands="{ section }">
+                        <div class="card-header col-12">@Html.Localize("General", "L_Suggest_Brands")</div>
+                    </template>
+
+                    <template slot-scope="{ suggestion, index }">
+                        <div v-if="suggestion.name === 'autocomplete'" class="product-tile">
+                            <div class="row">
+                                <div class="col-5">
+                                    <a class="product-tile-media"
+                                       data-oc-click="selectedProduct"
+                                       v-bind:data-sku="suggestion.item.Sku"
+                                       v-bind:data-index="index"
+                                       v-bind:href="suggestion.item.Url">
+                                        <img class="img-fluid"
+                                             v-bind:src="suggestion.item.ImageUrl"
+                                             v-bind:alt="suggestion.item.FullDisplayName"
+                                             @*  onerror="this.onerror=null; this.src='{{FallbackImageUrl}}'" *@ />
+                                    </a>
+                                </div>
+                                <div class="col-7">
+                                    <div class="product-tile-text">
+                                        <span data-qa="search-product-brand" v-if="suggestion.item.BrandDisplayName">{{suggestion.item.BrandDisplayName}}<br /></span>
+                                        <span data-qa="search-product-brand" v-else-if="suggestion.item.Brand">{{suggestion.item.Brand}}</span>
+                                        <a data-qa="search-product-title"
+                                           data-oc-click="selectedProduct"
+                                           class="suggestion-title"
+                                           v-bind:data-sku="suggestion.item.Sku"
+                                           v-bind:data-index="index"
+                                           v-bind:href="suggestion.item.Url"
+                                           v-bind:title="suggestion.item.FullDisplayName">
+                                            {{suggestion.item.DisplayName}}
+                                        </a>
+                                    </div>
+                                    <div class="product-tile-special-price">
+                                        <del v-if="suggestion.item.IsOnSale">{{suggestion.item.DisplayListPrice}}</del>
+                                    </div>
+                                    <div class="product-tile-price">
+                                        <span v-if="suggestion.item.IsOnSale" class="h4  text-danger" data-qa="search-product-price">{{suggestion.item.DisplaySpecialPrice}}</span>
+                                        <span v-else="v-else" class="h4" data-qa="search-product-price">{{suggestion.item.DisplayListPrice}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div v-else-if="suggestion.name === 'suggestbrands'">
+                            <a data-oc-click="selectedBrandSuggestion" v-bind:data-suggestion="suggestion.item.DisplayName" role="link" tabindex="0">{{ suggestion.item.DisplayName }}</a>
+                        </div>
+
+                        <div v-else="v-else">
+                            <img v-bind:class="{ avatar: true }" v-bind:src="suggestion.item.thumbnailUrl" />
+                            {{suggestion.item.title}}
+                        </div>
+
+                    </template>
+
+                </vue-autosuggest>
+            </div>
+        </div>
+
         <form method="GET" action="@actionTarget" id="frm-search-box">
-  
+
 
             <div class="form-row">
                 <div class="col-12  col-xl-9 offset-xl-3">
                     <div class="input-group input-group-sm">
-                        <input id="search-input" 
+                        <input id="search-input"
                                data-qa="search-input"
                                class="form-control form-control-sm js-typeahead" type="search" name="keywords"
                                placeholder="@Html.Localize("List-Search", "F_SearchWaterMark")" value="@keywords"
