@@ -9,6 +9,7 @@ using Orckestra.Composer.Logging;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Localization;
+using Orckestra.Composer.Services;
 using Orckestra.Composer.Services.Lookup;
 using Orckestra.Overture.ServiceModel;
 
@@ -22,15 +23,20 @@ namespace Orckestra.Composer.ViewModels
         private readonly IViewModelPropertyFormatter _viewModelPropertyFormatter;
         private readonly ILookupService _lookupService;
         private readonly ILocalizationProvider _localizationProvider;
+        private ICurrencyConversionSettingsService CurrencyConversionSettings { get; set; }
 
         //todo: dependency on the lookup service?
-        public ViewModelMapper(IViewModelMetadataRegistry metadataRegistry, IViewModelPropertyFormatter viewModelPropertyFormatter, 
-            ILookupService lookupService, ILocalizationProvider localizationProvider)
+        public ViewModelMapper(IViewModelMetadataRegistry metadataRegistry, 
+            IViewModelPropertyFormatter viewModelPropertyFormatter, 
+            ILookupService lookupService, 
+            ILocalizationProvider localizationProvider,
+            ICurrencyConversionSettingsService currencyConversionSettings)
         {
             _metadataRegistry = metadataRegistry ?? throw new ArgumentNullException(nameof(metadataRegistry));
             _viewModelPropertyFormatter = viewModelPropertyFormatter ?? throw new ArgumentNullException(nameof(viewModelPropertyFormatter));
             _lookupService = lookupService ?? throw new ArgumentNullException(nameof(lookupService));
             _localizationProvider = localizationProvider ?? throw new ArgumentNullException(nameof(localizationProvider));
+            CurrencyConversionSettings = currencyConversionSettings ?? throw new ArgumentNullException(nameof(currencyConversionSettings));
         }
 
 
@@ -163,6 +169,12 @@ namespace Orckestra.Composer.ViewModels
             // check if VM propery can be formatted. If not, pass through
             if (propertyMetadata != null && propertyMetadata.FormattableProperty)
             {
+                var scopeCurrency = CurrencyConversionSettings.GetScopeCurrency();
+                if (string.CompareOrdinal(propertyMetadata.PropertyFormattingKey, "PriceFormat") == 0 && !string.IsNullOrEmpty(scopeCurrency))
+                {
+                    cultureInfo = _localizationProvider.GetCultureByCurrencyIso(scopeCurrency);
+                }
+
                 // format value
                 return _viewModelPropertyFormatter.Format(value, propertyMetadata, cultureInfo);
             }

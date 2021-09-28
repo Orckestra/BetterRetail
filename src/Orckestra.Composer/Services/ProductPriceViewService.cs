@@ -21,15 +21,21 @@ namespace Orckestra.Composer.Services
         protected IScopeViewService ScopeViewService { get; }
 
         protected IFulfillmentContext FulfillmentContext { get; }
+        protected IComposerContext ComposerContext { get; private set; }
 
-        public ProductPriceViewService(IProductRepository productRepository, ILocalizationProvider localizationProvider, IViewModelMapper viewModelMapper,
-            IScopeViewService scopeViewService, IFulfillmentContext fulfillmentContext)
+        public ProductPriceViewService(IProductRepository productRepository, 
+            ILocalizationProvider localizationProvider,
+            IViewModelMapper viewModelMapper,
+            IScopeViewService scopeViewService, 
+            IFulfillmentContext fulfillmentContext,
+            IComposerContext composerContext)
         {
             ProductRepository = productRepository ?? throw new ArgumentNullException(nameof(productRepository));
             LocalizationProvider = localizationProvider ?? throw new ArgumentNullException(nameof(localizationProvider));
             ViewModelMapper = viewModelMapper ?? throw new ArgumentNullException(nameof(viewModelMapper));
             ScopeViewService = scopeViewService ?? throw new ArgumentNullException(nameof(scopeViewService));
             FulfillmentContext = fulfillmentContext ?? throw new ArgumentNullException(nameof(fulfillmentContext));
+            ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
         }
 
         /// <summary>
@@ -114,7 +120,7 @@ namespace Orckestra.Composer.Services
             var vm = ViewModelMapper.MapTo<ProductPriceViewModel>(productPrice, cultureInfo);
 
             vm.IsPriceDiscounted = IsPriceDiscounted(productPrice.Pricing.Price, productPrice.DefaultPrice);
-            vm.ListPrice = LocalizationProvider.FormatPrice(productPrice.Pricing.Price, cultureInfo);
+            vm.ListPrice = LocalizationProvider.FormatPrice(productPrice.Pricing.Price, ComposerContext.CurrencyIso);
             vm.VariantPrices = new List<VariantPriceViewModel>();
 
             return vm;
@@ -131,7 +137,7 @@ namespace Orckestra.Composer.Services
             var vm = ViewModelMapper.MapTo<VariantPriceViewModel>(variantPriceEntry, cultureInfo);
 
             vm.IsPriceDiscounted = IsPriceDiscounted(variantPriceEntry.Pricing.Price, variantPriceEntry.DefaultPrice);
-            vm.ListPrice = LocalizationProvider.FormatPrice(variantPriceEntry.Pricing.Price, cultureInfo);
+            vm.ListPrice = LocalizationProvider.FormatPrice(variantPriceEntry.Pricing.Price, ComposerContext.CurrencyIso);
 
             return vm;
         }

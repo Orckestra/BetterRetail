@@ -4,6 +4,8 @@ using FluentAssertions;
 using Moq;
 using Moq.AutoMock;
 using NUnit.Framework;
+using Orckestra.Composer.Providers;
+using Orckestra.Composer.Providers.Localization;
 using Orckestra.Composer.Search.Providers;
 using Orckestra.Composer.Services;
 using Orckestra.ForTests;
@@ -28,8 +30,12 @@ namespace Orckestra.Composer.Search.Tests.Providers
             var composerContext = new Mock<IComposerContext>();
             composerContext.Setup(context => context.CultureInfo).Returns(_cultureInfo);
             composerContext.Setup(context => context.Scope).Returns(Scope);
-            
+            composerContext.SetupGet(mock => mock.CurrencyIso).Returns("CAD");
             _container.Use(composerContext);
+
+            var localizationProvider = new Mock<ILocalizationProvider>();
+            localizationProvider.Setup(c => c.GetLocalizedString(It.IsAny<GetLocalizedParam>())).Returns("{0:C}").Verifiable();
+            _container.Use(localizationProvider);
         }
 
         [Test]

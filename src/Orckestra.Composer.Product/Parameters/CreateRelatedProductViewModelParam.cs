@@ -15,6 +15,7 @@ namespace Orckestra.Composer.Product.Parameters
         public string Scope { get; set; }
         public List<ProductPrice> Prices { get; set; }
         public List<ProductMainImage> Images { get; set; }
+        public string CurrencyIso { get; set; }
 
         public CreateRelatedProductViewModelParam()
         {

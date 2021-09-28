@@ -4,6 +4,7 @@ using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using Orckestra.Composer.Providers;
+using Orckestra.Composer.Services;
 using Orckestra.Composer.Services.Lookup;
 using Orckestra.Composer.ViewModels;
 using Orckestra.ForTests;
@@ -38,8 +39,8 @@ namespace Orckestra.Composer.Tests.ViewModels.ViewModelSerialization
 
             var lookupService = Container.GetMock<ILookupService>();
             var localizationProviderMock = Container.GetMock<ILocalizationProvider>();
-
-            ViewModelMapper = new Composer.ViewModels.ViewModelMapper(MetadataRegistry.Object, Dependency<IViewModelPropertyFormatter>().Object, lookupService.Object, localizationProviderMock.Object);
+            var currencyConversionSettingsMock = Container.GetMock<ICurrencyConversionSettingsService>();
+            ViewModelMapper = new Composer.ViewModels.ViewModelMapper(MetadataRegistry.Object, Dependency<IViewModelPropertyFormatter>().Object, lookupService.Object, localizationProviderMock.Object, currencyConversionSettingsMock.Object);
 
             JsonFromStandardSerializer = JsonConvert.SerializeObject(ViewModelForSerialization, Formatting.Indented);
         }
