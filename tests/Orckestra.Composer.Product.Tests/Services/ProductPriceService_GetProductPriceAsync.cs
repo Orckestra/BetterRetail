@@ -41,7 +41,7 @@ namespace Orckestra.Composer.Product.Tests.Services
         {
             //Arrange
             var contextStub = new Mock<IComposerContext>();
-            contextStub.SetupGet(mock => mock.CurrencyIso).Returns("CAD");
+            contextStub.SetupGet(mock => mock.ScopeCurrencyIso).Returns("CAD");
             _container.Use(contextStub);
             var currencyProvider = new Mock<ICurrencyProvider>();
             currencyProvider.Setup(c => c.GetCurrency()).Returns("CAD").Verifiable();
@@ -96,7 +96,7 @@ namespace Orckestra.Composer.Product.Tests.Services
         {
             //Arrange
             var contextStub = new Mock<IComposerContext>();
-            contextStub.SetupGet(mock => mock.CurrencyIso).Returns("CAD");
+            contextStub.SetupGet(mock => mock.ScopeCurrencyIso).Returns("CAD");
             _container.Use(contextStub);
             var currencyProvider = new Mock<ICurrencyProvider>();
             currencyProvider.Setup(c => c.GetCurrency()).Returns("CAD").Verifiable();

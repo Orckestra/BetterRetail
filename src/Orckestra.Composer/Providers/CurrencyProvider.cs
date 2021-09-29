@@ -14,7 +14,7 @@ namespace Orckestra.Composer.Providers
 
         public virtual string GetCurrency()
         {
-            return ComposerContext.CurrencyIso;
+            return ComposerContext.ScopeCurrencyIso;
         }
     }
 }

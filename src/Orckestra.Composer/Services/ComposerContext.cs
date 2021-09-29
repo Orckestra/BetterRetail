@@ -54,7 +54,7 @@ namespace Orckestra.Composer.Services
             }
         }
 
-        public string CurrencyIso
+        public string ScopeCurrencyIso
         {
             get { return ScopeItem.CurrencyIso; }
         }

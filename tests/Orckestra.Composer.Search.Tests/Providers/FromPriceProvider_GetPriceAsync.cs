@@ -30,7 +30,7 @@ namespace Orckestra.Composer.Search.Tests.Providers
             var composerContext = new Mock<IComposerContext>();
             composerContext.Setup(context => context.CultureInfo).Returns(_cultureInfo);
             composerContext.Setup(context => context.Scope).Returns(Scope);
-            composerContext.SetupGet(mock => mock.CurrencyIso).Returns("CAD");
+            composerContext.SetupGet(mock => mock.ScopeCurrencyIso).Returns("CAD");
             _container.Use(composerContext);
             var currencyProvider = new Mock<ICurrencyProvider>();
             currencyProvider.Setup(c => c.GetCurrency()).Returns("CAD").Verifiable();
