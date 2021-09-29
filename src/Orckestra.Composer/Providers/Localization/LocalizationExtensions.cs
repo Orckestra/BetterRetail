@@ -61,7 +61,10 @@ namespace Orckestra.Composer.Providers.Localization
 
         public static CultureInfo GetCultureByCurrencyIso(this ILocalizationProvider localizationProvider, string currencyCode)
         {
-            ISOCurrenciesToACultureMap.TryGetValue(currencyCode, out CultureInfo cultureInfo);
+            if (!ISOCurrenciesToACultureMap.TryGetValue(currencyCode, out CultureInfo cultureInfo))
+            {
+                throw new InvalidOperationException($"Not supported currency code: '{currencyCode}'");
+            }
             return cultureInfo;
         }
 
@@ -70,7 +73,11 @@ namespace Orckestra.Composer.Providers.Localization
             if (localizationProvider == null) { throw new ArgumentNullException(nameof(localizationProvider)); }
             if (currencyCode == null) { throw new ArgumentNullException(nameof(currencyCode)); }
 
-            ISOCurrenciesToACultureMap.TryGetValue(currencyCode, out CultureInfo cultureInfo);
+            
+            if (!ISOCurrenciesToACultureMap.TryGetValue(currencyCode, out CultureInfo cultureInfo))
+            {
+                throw new InvalidOperationException($"Not supported currency code: '{currencyCode}'");
+            }
 
             return localizationProvider.FormatPrice(price, cultureInfo);
         }

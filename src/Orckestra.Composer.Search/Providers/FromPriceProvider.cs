@@ -17,15 +17,12 @@ namespace Orckestra.Composer.Search.Providers
         public static readonly string GroupRegularPriceFromProperty = "GroupRegularPriceFrom";
         public static readonly string GroupRegularPriceToProperty = "GroupRegularPriceTo";
         public static readonly string CurrentPricePriceListIdProperty = "CurrentPricePriceListId";
-
-        //TODO: To be refactored. Composer Context should NEVER be referenced from here.
-        private IComposerContext ComposerContext { get; }
+        
         private ILocalizationProvider LocalizationProvider { get; }
         private ICurrencyProvider CurrencyProvider { get; }
 
-        public FromPriceProvider(IComposerContext composerContext, ILocalizationProvider localizationProvider, ICurrencyProvider currencyProvider)
+        public FromPriceProvider( ILocalizationProvider localizationProvider, ICurrencyProvider currencyProvider)
         {
-            ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
             LocalizationProvider = localizationProvider ?? throw new ArgumentNullException(nameof(localizationProvider));
             CurrencyProvider = currencyProvider ?? throw new ArgumentNullException(nameof(currencyProvider));
         }
@@ -175,13 +172,7 @@ namespace Orckestra.Composer.Search.Providers
 
         private string GetDisplayPrice(double? price)
         {
-            if (price.HasValue)
-            {
-                decimal.TryParse(price.Value.ToString(CultureInfo.InvariantCulture), out var priceVal);
-                return LocalizationProvider.FormatPrice(priceVal, CurrencyProvider.GetCurrency());
-            }
-
-            return null;
+            return price.HasValue ? LocalizationProvider.FormatPrice((decimal)price.Value, CurrencyProvider.GetCurrency()) : null;
         }
 
         private static int GetPriceForComparison(double price)
