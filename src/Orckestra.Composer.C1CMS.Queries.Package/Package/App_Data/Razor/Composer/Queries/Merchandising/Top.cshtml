@@ -31,7 +31,7 @@
 
 	private string getVueId()
     {
-        return $"vue{QueryName.GetHashCode()}";
+        return $"vue{Guid.NewGuid().GetHashCode()}";
     }
 }
 

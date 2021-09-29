@@ -8,26 +8,27 @@ using Orckestra.Overture.ServiceModel.Requests.Orders;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Orckestra.Composer.Repositories;
 
 namespace Orckestra.Composer.Grocery.Repositories
 {
     public class SalesScopeFulfillmentMethodRepository : FulfillmentMethodRepository
     {
 
-        private readonly IScopeViewService _scopeService;
-        public SalesScopeFulfillmentMethodRepository(IOvertureClient overtureClient, ICacheProvider cacheProvider, IScopeViewService scopeService) : base(overtureClient, cacheProvider)
+        private readonly IScopeRepository _scopeRepository;
+        public SalesScopeFulfillmentMethodRepository(IOvertureClient overtureClient, ICacheProvider cacheProvider, IScopeRepository scopeRepository) : base(overtureClient, cacheProvider)
         {
-            _scopeService = scopeService ?? throw new ArgumentNullException(nameof(scopeService));
+            _scopeRepository = scopeRepository ?? throw new ArgumentNullException(nameof(scopeRepository));
         }
         public override async Task<List<FulfillmentMethod>> GetCalculatedFulfillmentMethods(GetShippingMethodsParam param)
         {
-            param.Scope = await _scopeService.GetSaleScopeAsync(param.Scope).ConfigureAwait(false);
+            param.Scope = await _scopeRepository.GetSaleScopeAsync(param.Scope).ConfigureAwait(false);
             return await base.GetCalculatedFulfillmentMethods(param);
         }
 
         public override async Task<GetFulfillmentMethodsResponse> GetFulfillmentMethods(string scopeId)
         {
-            var saleScopeId = await _scopeService.GetSaleScopeAsync(scopeId).ConfigureAwait(false);
+            var saleScopeId = await _scopeRepository.GetSaleScopeAsync(scopeId).ConfigureAwait(false);
             return await base.GetFulfillmentMethods(saleScopeId);
         }
     }

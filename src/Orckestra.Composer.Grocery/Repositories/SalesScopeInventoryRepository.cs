@@ -11,15 +11,15 @@ namespace Orckestra.Composer.Grocery.Repositories
 {
     public class SalesScopeInventoryRepository: InventoryRepository
     {
-        private readonly IScopeViewService _scopeService;
-        public SalesScopeInventoryRepository(IOvertureClient overtureClient, ICacheProvider cacheProvider, IScopeViewService scopeService) : base(overtureClient, cacheProvider)
+        private readonly IScopeRepository _scopeRepository;
+        public SalesScopeInventoryRepository(IOvertureClient overtureClient, ICacheProvider cacheProvider, IScopeRepository scopeRepository) : base(overtureClient, cacheProvider)
         {
-            _scopeService = scopeService ?? throw new ArgumentNullException(nameof(scopeService));
+            _scopeRepository = scopeRepository ?? throw new ArgumentNullException(nameof(scopeRepository));
         }
 
         public override async Task<InventoryItemStatusDetailsQueryResult> GetInventoryItemsBySkuAsync(GetInventoryItemsBySkuParam param)
         {
-            param.Scope = await _scopeService.GetSaleScopeAsync(param.Scope).ConfigureAwait(false);
+            param.Scope = await _scopeRepository.GetSaleScopeAsync(param.Scope).ConfigureAwait(false);
             return await base.GetInventoryItemsBySkuAsync(param);
         }
     }

@@ -10,7 +10,7 @@
     }
     public ISearchQueryContext SearchQueryContext { get; set; }
 
-    [FunctionParameter(Label = "Products Set Name", Help = "Products Set Name", WidgetMarkup = Orckestra.ExperienceManagement.SearchQueryBuilder.Widgets.MerchandisingQuerySelector)]
+    [FunctionParameter(Label = "Products Set Name", Help = "Products Set Name", WidgetMarkup = Orckestra.ExperienceManagement.SearchQueryBuilder.Widgets.ProductSetQuerySelector)]
     public string QueryName { get; set; }
 
     [FunctionParameter(Label = "Total number of products", Help = "", DefaultValue = 8)]
@@ -30,7 +30,7 @@
 
 	private string getVueId()
     {
-        return $"vue{QueryName.GetHashCode()}";
+        return $"vue{Guid.NewGuid().GetHashCode()}";
     }
 }
 

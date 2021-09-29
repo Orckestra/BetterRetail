@@ -60,8 +60,11 @@
         }
     }
     .nav {
-        @include media-breakpoint-down(sm) {
-            li {
+        @include media-breakpoint-down(xs) {
+			&.nav-legal {
+				padding: 20px 0;
+			}
+            &.nav-text li {
                 margin: 0;
                 +li {
                     border-top: 1px solid #fff;
@@ -147,7 +150,13 @@
     }
 }
 
-@include media-breakpoint-up(md) {
+.collapse-mobile {
+	.nav-footer-list.collapsing {
+		flex-wrap: nowrap !important;
+	}
+}
+
+@include media-breakpoint-up(sm) {
     .collapse-mobile {
         .collapse {
             display: block;
@@ -156,6 +165,7 @@
         .nav-footer-list.collapsing {
             display: block;
             height: auto !important;
+			flex-wrap: inherit;
         }
     }
 }

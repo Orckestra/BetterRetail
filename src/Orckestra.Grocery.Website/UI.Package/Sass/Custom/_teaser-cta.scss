@@ -1,0 +1,24 @@
+  .teaser-cta {
+    &.position-left {
+        .empty-cell { 
+            order: 2; 
+            @include media-breakpoint-down(xs) { 
+                order: 0;
+            }
+        }
+    }
+
+    @include media-breakpoint-down(xs) {
+        .empty-cell { 
+            min-height: 150px; 
+         }
+         .content-cell {
+             min-height: auto !important;
+         }
+    }
+  }
+
+  .grid-columns > .row > .col-xs-12 {
+      display: flex;
+      flex-direction: column;
+  }
