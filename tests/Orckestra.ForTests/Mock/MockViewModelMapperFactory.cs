@@ -2,6 +2,7 @@
 using System.Reflection;
 using Moq;
 using Orckestra.Composer.Providers;
+using Orckestra.Composer.Services;
 using Orckestra.Composer.Services.Lookup;
 using Orckestra.Composer.ViewModels;
 
@@ -25,8 +26,9 @@ namespace Orckestra.ForTests.Mock
 
             var lookupServiceMock = new Mock<ILookupService>();
             var localizationProviderMock = new Mock<ILocalizationProvider>();
+            var currencyProviderMock = new Mock<ICurrencyProvider>();
 
-            var mapper = new ViewModelMapper(registry, formatterMock.Object, lookupServiceMock.Object, localizationProviderMock.Object);
+            var mapper = new ViewModelMapper(registry, formatterMock.Object, lookupServiceMock.Object, localizationProviderMock.Object, currencyProviderMock.Object);
             return mapper;
         }
     }
