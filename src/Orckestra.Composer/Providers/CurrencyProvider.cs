@@ -12,7 +12,7 @@ namespace Orckestra.Composer.Providers
             ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
         }
 
-        public virtual string GetCurrency()
+        public string GetCurrency()
         {
             return ComposerContext.ScopeCurrencyIso;
         }
