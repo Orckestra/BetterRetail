@@ -23,14 +23,14 @@ namespace Orckestra.Composer.ViewModels
         private readonly IViewModelPropertyFormatter _viewModelPropertyFormatter;
         private readonly ILookupService _lookupService;
         private readonly ILocalizationProvider _localizationProvider;
-        private ICurrencyConversionSettingsService CurrencyConversionSettings { get; set; }
+        private ICurrencyProvider CurrencyConversionSettings { get; set; }
 
         //todo: dependency on the lookup service?
         public ViewModelMapper(IViewModelMetadataRegistry metadataRegistry, 
             IViewModelPropertyFormatter viewModelPropertyFormatter, 
             ILookupService lookupService, 
             ILocalizationProvider localizationProvider,
-            ICurrencyConversionSettingsService currencyConversionSettings)
+            ICurrencyProvider currencyConversionSettings)
         {
             _metadataRegistry = metadataRegistry ?? throw new ArgumentNullException(nameof(metadataRegistry));
             _viewModelPropertyFormatter = viewModelPropertyFormatter ?? throw new ArgumentNullException(nameof(viewModelPropertyFormatter));
@@ -172,7 +172,7 @@ namespace Orckestra.Composer.ViewModels
                 
                 if (string.CompareOrdinal(propertyMetadata.PropertyFormattingKey, "PriceFormat") == 0)
                 {
-                    var scopeCurrency = CurrencyConversionSettings.GetScopeCurrency();
+                    var scopeCurrency = CurrencyConversionSettings.GetCurrency();
                     if (!string.IsNullOrEmpty(scopeCurrency))
                     {
                         cultureInfo = _localizationProvider.GetCultureByCurrencyIso(scopeCurrency);

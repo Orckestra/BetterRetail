@@ -43,7 +43,9 @@ namespace Orckestra.Composer.Product.Tests.Services
             var contextStub = new Mock<IComposerContext>();
             contextStub.SetupGet(mock => mock.CurrencyIso).Returns("CAD");
             _container.Use(contextStub);
-            
+            var currencyProvider = new Mock<ICurrencyProvider>();
+            currencyProvider.Setup(c => c.GetCurrency()).Returns("CAD").Verifiable();
+            _container.Use(currencyProvider);
             _container.Use(CreateProductRepositoryWithProductAndVariantPrices());
             var productService = _container.CreateInstance<ProductPriceViewService>();
 
@@ -96,6 +98,9 @@ namespace Orckestra.Composer.Product.Tests.Services
             var contextStub = new Mock<IComposerContext>();
             contextStub.SetupGet(mock => mock.CurrencyIso).Returns("CAD");
             _container.Use(contextStub);
+            var currencyProvider = new Mock<ICurrencyProvider>();
+            currencyProvider.Setup(c => c.GetCurrency()).Returns("CAD").Verifiable();
+            _container.Use(currencyProvider);
             _container.Use(CreateProductRepositoryWithProductPriceNoVariant());
             var productService = _container.CreateInstance<ProductPriceViewService>();
 

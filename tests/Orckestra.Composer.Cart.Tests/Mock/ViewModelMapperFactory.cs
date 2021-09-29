@@ -222,7 +222,7 @@ namespace Orckestra.Composer.Cart.Tests.Mock
 
             var lookupServiceMock = new Mock<ILookupService>();
             var localizationProviderMock = new Mock<ILocalizationProvider>();
-            var currencyConversionSettings = new Mock<ICurrencyConversionSettingsService>();
+            var currencyConversionSettings = new Mock<ICurrencyProvider>();
             var mapper = new ViewModelMapper(registry, formatterMock.Object, lookupServiceMock.Object, localizationProviderMock.Object, currencyConversionSettings.Object);
             return mapper;
         }

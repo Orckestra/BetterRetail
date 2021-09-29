@@ -36,7 +36,7 @@ namespace Orckestra.Composer
             host.Register<ScopeViewService, IScopeViewService>();
             host.Register<InventoryRepository, IInventoryRepository>();
             host.Register<ImageService, IImageService>();
-            host.Register<CurrencyConversionSettingsService, ICurrencyConversionSettingsService>();
+            host.Register<CurrencyProvider, ICurrencyProvider>();
             host.Register<RecurringOrdersRepository, IRecurringOrdersRepository>();
             host.Register<RecurringOrderTemplatesViewService, IRecurringOrderTemplatesViewService>();
             host.Register<RecurringOrderTemplateViewModelFactory, IRecurringOrderTemplateViewModelFactory>();

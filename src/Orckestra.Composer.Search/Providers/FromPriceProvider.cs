@@ -21,11 +21,13 @@ namespace Orckestra.Composer.Search.Providers
         //TODO: To be refactored. Composer Context should NEVER be referenced from here.
         private IComposerContext ComposerContext { get; }
         private ILocalizationProvider LocalizationProvider { get; }
+        private ICurrencyProvider CurrencyProvider { get; }
 
-        public FromPriceProvider(IComposerContext composerContext, ILocalizationProvider localizationProvider)
+        public FromPriceProvider(IComposerContext composerContext, ILocalizationProvider localizationProvider, ICurrencyProvider currencyProvider)
         {
             ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
             LocalizationProvider = localizationProvider ?? throw new ArgumentNullException(nameof(localizationProvider));
+            CurrencyProvider = currencyProvider ?? throw new ArgumentNullException(nameof(currencyProvider));
         }
 
         // https://tfs12.orckestra.com/overture%20solutions/WorkItemTracking/v1.0/AttachFileHandler.ashx?FileID=5412&FileName=SearchItemPrice.pdf
@@ -176,7 +178,7 @@ namespace Orckestra.Composer.Search.Providers
             if (price.HasValue)
             {
                 decimal.TryParse(price.Value.ToString(CultureInfo.InvariantCulture), out var priceVal);
-                return LocalizationProvider.FormatPrice(priceVal, ComposerContext.CurrencyIso);
+                return LocalizationProvider.FormatPrice(priceVal, CurrencyProvider.GetCurrency());
             }
 
             return null;

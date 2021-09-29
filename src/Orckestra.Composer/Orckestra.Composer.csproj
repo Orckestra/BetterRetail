@@ -295,7 +295,9 @@
     <Compile Include="Parameters\UpdateRecurringOrderTemplateLineItemQuantityParam.cs" />
     <Compile Include="Parameters\UpdateUserParam.cs" />
     <Compile Include="Parameters\UpdateUserPreferredStoreParam.cs" />
+    <Compile Include="Providers\CurrencyProvider.cs" />
     <Compile Include="Providers\Dam\ProductImageInfo.cs" />
+    <Compile Include="Providers\ICurrencyProvider.cs" />
     <Compile Include="Providers\IPageNotFoundUrlProvider.cs" />
     <Compile Include="Providers\ICountryCodeProvider.cs" />
     <Compile Include="Providers\IRegexRulesProvider.cs" />
@@ -320,9 +322,7 @@
     <Compile Include="Request\RemoveRecurringOrderTemplateLineItemsRequest.cs" />
     <Compile Include="Request\UpdateRecurringOrderLineItemQuantityRequest.cs" />
     <Compile Include="Request\UpdateRecurringOrderTemplateLineItemRequest.cs" />
-    <Compile Include="Services\CurrencyConversionSettingsService.cs" />
     <Compile Include="Services\ICategoryViewService.cs" />
-    <Compile Include="Services\ICurrencyConversionSettingsService.cs" />
     <Compile Include="Services\IFulfillmentContext.cs" />
     <Compile Include="Services\IImageService.cs" />
     <Compile Include="Services\ImageService.cs" />

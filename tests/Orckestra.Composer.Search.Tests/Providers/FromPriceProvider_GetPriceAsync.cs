@@ -32,7 +32,9 @@ namespace Orckestra.Composer.Search.Tests.Providers
             composerContext.Setup(context => context.Scope).Returns(Scope);
             composerContext.SetupGet(mock => mock.CurrencyIso).Returns("CAD");
             _container.Use(composerContext);
-
+            var currencyProvider = new Mock<ICurrencyProvider>();
+            currencyProvider.Setup(c => c.GetCurrency()).Returns("CAD").Verifiable();
+            _container.Use(currencyProvider);
             var localizationProvider = new Mock<ILocalizationProvider>();
             localizationProvider.Setup(c => c.GetLocalizedString(It.IsAny<GetLocalizedParam>())).Returns("{0:C}").Verifiable();
             _container.Use(localizationProvider);

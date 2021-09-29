@@ -26,7 +26,7 @@ namespace Orckestra.ForTests.Mock
 
             var lookupServiceMock = new Mock<ILookupService>();
             var localizationProviderMock = new Mock<ILocalizationProvider>();
-            var currencyConversionSettingsMock = new Mock<ICurrencyConversionSettingsService>();
+            var currencyConversionSettingsMock = new Mock<ICurrencyProvider>();
 
             var mapper = new ViewModelMapper(registry, formatterMock.Object, lookupServiceMock.Object, localizationProviderMock.Object, currencyConversionSettingsMock.Object);
             return mapper;

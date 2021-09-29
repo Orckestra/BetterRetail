@@ -1,17 +1,18 @@
-﻿using System;
+﻿using Orckestra.Composer.Services;
+using System;
 
-namespace Orckestra.Composer.Services
+namespace Orckestra.Composer.Providers
 {
-    public class CurrencyConversionSettingsService: ICurrencyConversionSettingsService
+    public class CurrencyProvider: ICurrencyProvider
     {
         protected IComposerContext ComposerContext { get; private set; }
 
-        public CurrencyConversionSettingsService(IComposerContext composerContext)
+        public CurrencyProvider(IComposerContext composerContext)
         {
             ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
         }
 
-        public virtual string GetScopeCurrency()
+        public virtual string GetCurrency()
         {
             return ComposerContext.CurrencyIso;
         }

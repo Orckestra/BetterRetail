@@ -39,7 +39,7 @@ namespace Orckestra.Composer.Tests.ViewModels.ViewModelSerialization
 
             var lookupService = Container.GetMock<ILookupService>();
             var localizationProviderMock = Container.GetMock<ILocalizationProvider>();
-            var currencyConversionSettingsMock = Container.GetMock<ICurrencyConversionSettingsService>();
+            var currencyConversionSettingsMock = Container.GetMock<ICurrencyProvider>();
             ViewModelMapper = new Composer.ViewModels.ViewModelMapper(MetadataRegistry.Object, Dependency<IViewModelPropertyFormatter>().Object, lookupService.Object, localizationProviderMock.Object, currencyConversionSettingsMock.Object);
 
             JsonFromStandardSerializer = JsonConvert.SerializeObject(ViewModelForSerialization, Formatting.Indented);

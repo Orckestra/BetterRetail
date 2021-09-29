@@ -92,7 +92,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
             ViewModelMetadataRegistry.Current = MetadataRegistry.Object;
             ViewModelMapper = new ViewModelMapper(MetadataRegistry.Object,
                 _container.GetMock<IViewModelPropertyFormatter>().Object, _container.GetMock<ILookupService>().Object, _container.GetMock<ILocalizationProvider>().Object,
-                _container.GetMock<ICurrencyConversionSettingsService>().Object);
+                _container.GetMock<ICurrencyProvider>().Object);
         }
 
         private void ConfigureViewModelMetadata(Type viewModelType, Type extendedModelType = null)
