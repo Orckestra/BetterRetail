@@ -61,8 +61,8 @@ namespace Orckestra.Composer.Tests.ComposerHost
             //Add some additional dependencies expected to be set by a plugin (what?!)
             var lookupService = new Mock<ILookupService>(MockBehavior.Strict);
             _composerHost.Register<ILookupService>(lookupService.Object);
-            var currencySettingService = new Mock<ICurrencyProvider>(MockBehavior.Strict);
-            _composerHost.Register<ICurrencyProvider>(currencySettingService.Object);
+            var currencyProviderMock = new Mock<ICurrencyProvider>(MockBehavior.Strict);
+            _composerHost.Register<ICurrencyProvider>(currencyProviderMock.Object);
             _serviceLocatorMoq = new ServiceLocatorMoq();
         }
 
