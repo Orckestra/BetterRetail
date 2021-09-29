@@ -4,7 +4,10 @@ using Orckestra.Composer.Providers;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Services.Cookie;
 using System;
+using System.Globalization;
 using System.Web;
+using Orckestra.Composer.CompositeC1.Providers;
+using Orckestra.Composer.Repositories;
 
 namespace OOrckestra.Composer.Grocery.Services
 {
@@ -17,7 +20,8 @@ namespace OOrckestra.Composer.Grocery.Services
             HttpContextBase httpContextBase,
             ICountryCodeProvider countryCodeProvider,
             IWebsiteContext websiteContext,
-            IStoreAndFulfillmentSelectionProvider storeAndFulfillmentSelectionProvider) : base(cookieAccessor, scopeProvider, httpContextBase, countryCodeProvider, websiteContext)
+            IStoreAndFulfillmentSelectionProvider storeAndFulfillmentSelectionProvider,
+            IScopeRepository scopeRepository) : base(cookieAccessor, scopeProvider, httpContextBase, countryCodeProvider, websiteContext, scopeRepository)
         {
             StoreAndFulfillmentSelectionProvider = storeAndFulfillmentSelectionProvider ?? throw new ArgumentNullException(nameof(storeAndFulfillmentSelectionProvider));
         }

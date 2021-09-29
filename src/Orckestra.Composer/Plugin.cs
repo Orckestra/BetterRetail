@@ -20,7 +20,6 @@ namespace Orckestra.Composer
         public void Register(IComposerHost host)
         {
             host.Register<ComposerCookieAccessor, ICookieAccessor<ComposerCookieDto>>(ComponentLifestyle.PerRequest);
-
             host.Register<ComposerContext, IComposerContext>(ComponentLifestyle.PerRequest);
             host.Register<RegionCodeProvider, IRegionCodeProvider>();
             //host.Register<ScopeProvider, IScopeProvider>();
@@ -36,7 +35,8 @@ namespace Orckestra.Composer
             host.Register<ScopeRepository, IScopeRepository>();
             host.Register<ScopeViewService, IScopeViewService>();
             host.Register<InventoryRepository, IInventoryRepository>();
-            host.Register<ImageService, IImageService>();            
+            host.Register<ImageService, IImageService>();
+            host.Register<CurrencyProvider, ICurrencyProvider>();
             host.Register<RecurringOrdersRepository, IRecurringOrdersRepository>();
             host.Register<RecurringOrderTemplatesViewService, IRecurringOrderTemplatesViewService>();
             host.Register<RecurringOrderTemplateViewModelFactory, IRecurringOrderTemplateViewModelFactory>();

@@ -40,6 +40,12 @@ namespace Orckestra.Composer.Product.Tests.Services
         public async Task WHEN_ProductId_Is_Valid_With_Variants_SHOULD_Return_List_Of_Products_Prices_With_Variants()
         {
             //Arrange
+            var contextStub = new Mock<IComposerContext>();
+            contextStub.SetupGet(mock => mock.ScopeCurrencyIso).Returns("CAD");
+            _container.Use(contextStub);
+            var currencyProvider = new Mock<ICurrencyProvider>();
+            currencyProvider.Setup(c => c.GetCurrency()).Returns("CAD").Verifiable();
+            _container.Use(currencyProvider);
             _container.Use(CreateProductRepositoryWithProductAndVariantPrices());
             var productService = _container.CreateInstance<ProductPriceViewService>();
 
@@ -89,6 +95,12 @@ namespace Orckestra.Composer.Product.Tests.Services
         public async Task WHEN_ProductId_With_NoVariant_Is_Valid_SHOULD_Return_List_Of_One_Products_Prices_With_No_Variant()
         {
             //Arrange
+            var contextStub = new Mock<IComposerContext>();
+            contextStub.SetupGet(mock => mock.ScopeCurrencyIso).Returns("CAD");
+            _container.Use(contextStub);
+            var currencyProvider = new Mock<ICurrencyProvider>();
+            currencyProvider.Setup(c => c.GetCurrency()).Returns("CAD").Verifiable();
+            _container.Use(currencyProvider);
             _container.Use(CreateProductRepositoryWithProductPriceNoVariant());
             var productService = _container.CreateInstance<ProductPriceViewService>();
 

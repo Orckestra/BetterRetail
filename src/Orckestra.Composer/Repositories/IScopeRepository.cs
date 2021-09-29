@@ -19,5 +19,13 @@ namespace Orckestra.Composer.Repositories
         /// </summary>
         /// <returns>Global scope object with children elements</returns>
         Task<Scope> GetAllScopesAsync();
+
+
+        /// <summary>
+        /// Get sale scope
+        /// </summary>
+        /// <param name="scope">Scope, from which to get a sale scope</param>
+        /// <returns>Sale scope from dependent scope. If not exists, returns passed scope</returns>
+        Task<string> GetSaleScopeAsync(string scope);
     }
 }

@@ -49,5 +49,10 @@ namespace Orckestra.Composer.CompositeC1.Services
         {
             return AllSupportedCultures.Contains(cultureToCheck);
         }
+
+        public CultureInfo GetAffinityCulture(CultureInfo cultureToCheck)
+        {
+            return AllSupportedCultures.FirstOrDefault(item => item.TwoLetterISOLanguageName == cultureToCheck.TwoLetterISOLanguageName);
+        }
     }
 }
