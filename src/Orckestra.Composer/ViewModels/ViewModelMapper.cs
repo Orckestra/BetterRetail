@@ -23,20 +23,20 @@ namespace Orckestra.Composer.ViewModels
         private readonly IViewModelPropertyFormatter _viewModelPropertyFormatter;
         private readonly ILookupService _lookupService;
         private readonly ILocalizationProvider _localizationProvider;
-        private ICurrencyProvider CurrencyConversionSettings { get; set; }
+        private ICurrencyProvider CurrencyProvider { get; set; }
 
         //todo: dependency on the lookup service?
         public ViewModelMapper(IViewModelMetadataRegistry metadataRegistry, 
             IViewModelPropertyFormatter viewModelPropertyFormatter, 
             ILookupService lookupService, 
             ILocalizationProvider localizationProvider,
-            ICurrencyProvider currencyConversionSettings)
+            ICurrencyProvider currencyProvider)
         {
             _metadataRegistry = metadataRegistry ?? throw new ArgumentNullException(nameof(metadataRegistry));
             _viewModelPropertyFormatter = viewModelPropertyFormatter ?? throw new ArgumentNullException(nameof(viewModelPropertyFormatter));
             _lookupService = lookupService ?? throw new ArgumentNullException(nameof(lookupService));
             _localizationProvider = localizationProvider ?? throw new ArgumentNullException(nameof(localizationProvider));
-            CurrencyConversionSettings = currencyConversionSettings ?? throw new ArgumentNullException(nameof(currencyConversionSettings));
+            CurrencyProvider = currencyProvider ?? throw new ArgumentNullException(nameof(currencyProvider));
         }
 
 
@@ -172,7 +172,7 @@ namespace Orckestra.Composer.ViewModels
                 
                 if (string.CompareOrdinal(propertyMetadata.PropertyFormattingKey, "PriceFormat") == 0)
                 {
-                    var scopeCurrency = CurrencyConversionSettings.GetCurrency();
+                    var scopeCurrency = CurrencyProvider.GetCurrency();
                     if (!string.IsNullOrEmpty(scopeCurrency))
                     {
                         cultureInfo = _localizationProvider.GetCultureByCurrencyIso(scopeCurrency);
