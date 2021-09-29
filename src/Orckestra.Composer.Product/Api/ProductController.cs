@@ -8,6 +8,7 @@ using Orckestra.Composer.Product.Parameters;
 using Orckestra.Composer.Product.Requests;
 using Orckestra.Composer.Product.Services;
 using Orckestra.Composer.Product.ViewModels;
+using Orckestra.Composer.Providers;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Utils;
 using Orckestra.Composer.WebAPIFilters;
@@ -22,17 +23,20 @@ namespace Orckestra.Composer.Product.Api
         protected IProductPriceViewService ProductPriceViewService { get; private set; }
         protected IComposerContext ComposerContext { get; private set; }
         protected IProductViewService ProductViewService { get; private set; }
+        protected ICurrencyProvider CurrencyProvider { get; private set; }
 
         public ProductController(
             IProductPriceViewService productPriceViewService, 
             IComposerContext composerContext,
             IProductViewService productViewService,
-            IRelatedProductViewService relatedProductViewService)
+            IRelatedProductViewService relatedProductViewService,
+            ICurrencyProvider currencyProvider)
         {
             ProductPriceViewService = productPriceViewService ?? throw new ArgumentNullException(nameof(productPriceViewService));
             ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
             ProductViewService = productViewService ?? throw new ArgumentNullException(nameof(productViewService));
             RelatedProductViewService = relatedProductViewService ?? throw new ArgumentNullException(nameof(relatedProductViewService));
+            CurrencyProvider = currencyProvider ?? throw new ArgumentNullException(nameof(currencyProvider));
         }
 
         [ActionName("calculatePrices")]
@@ -89,7 +93,8 @@ namespace Orckestra.Composer.Product.Api
                 ProductIds = relatedProductIdentifiers,
                 CultureInfo = ComposerContext.CultureInfo,
                 Scope = ComposerContext.Scope,
-                BaseUrl = RequestUtils.GetBaseUrl(Request)
+                BaseUrl = RequestUtils.GetBaseUrl(Request),
+                CurrencyIso = CurrencyProvider.GetCurrency()
             };
 
             var vm = await RelatedProductViewService.GetRelatedProductsAsync(param);

@@ -8,6 +8,8 @@ using Autofac;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using Orckestra.Composer.Providers;
+using Orckestra.Composer.Services;
 using Orckestra.Composer.Services.Lookup;
 using Orckestra.Composer.Tests.Mock;
 using Orckestra.ExperienceManagement.Configuration;
@@ -59,7 +61,8 @@ namespace Orckestra.Composer.Tests.ComposerHost
             //Add some additional dependencies expected to be set by a plugin (what?!)
             var lookupService = new Mock<ILookupService>(MockBehavior.Strict);
             _composerHost.Register<ILookupService>(lookupService.Object);
-
+            var currencyProviderMock = new Mock<ICurrencyProvider>(MockBehavior.Strict);
+            _composerHost.Register<ICurrencyProvider>(currencyProviderMock.Object);
             _serviceLocatorMoq = new ServiceLocatorMoq();
         }
 

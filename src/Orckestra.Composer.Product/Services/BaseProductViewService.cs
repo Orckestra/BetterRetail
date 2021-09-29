@@ -105,7 +105,8 @@ namespace Orckestra.Composer.Product.Services
                 ProductsWithVariant = products,
                 Scope = param.Scope,
                 Prices = await prices,
-                Images = await images
+                Images = await images,
+                CurrencyIso = param.CurrencyIso
             };
 
             var vm = CreateRelatedProductsViewModel(createVmParam);
@@ -124,7 +125,7 @@ namespace Orckestra.Composer.Product.Services
             foreach (var productVariant in param.ProductsWithVariant)
             {
                 // call the method that actually does the mapping for an individual product
-                var productVm = CreateRelatedProductsViewModel(param.BaseUrl, param.CultureInfo, productVariant, param.Prices, param.Images);
+                var productVm = CreateRelatedProductsViewModel(param.BaseUrl, param.CultureInfo, productVariant, param.Prices, param.Images, param.CurrencyIso);
                 relatedProductsViewModel.Products.Add(productVm);
             }
 
@@ -200,7 +201,8 @@ namespace Orckestra.Composer.Product.Services
             CultureInfo cultureInfo,
             ProductWithVariant productVariant,
             List<ProductPrice> prices,
-            IEnumerable<ProductMainImage> images)
+            IEnumerable<ProductMainImage> images,
+            string currencyIso)
         {
             var productId = productVariant.Product.Id;
             var variantId = productVariant.Variant?.Id;
@@ -226,8 +228,8 @@ namespace Orckestra.Composer.Product.Services
             //For now all the related products add to cart button is enable to add to cart
             vm.IsAvailableToSell = true;
 
-            vm.DisplaySpecialPrice = GetDisplayPrice(vm.Price, cultureInfo);
-            vm.DisplayListPrice = GetDisplayPrice(vm.ListPrice, cultureInfo);
+            vm.DisplaySpecialPrice = GetDisplayPrice(vm.Price, currencyIso);
+            vm.DisplayListPrice = GetDisplayPrice(vm.ListPrice, currencyIso);
 
             var recurringOrdersEnabled = RecurringOrdersSettings.Enabled;
             var recurringOrderProgramName = productVariant.Product.PropertyBag.GetValueOrDefault<string>(Constants.ProductAttributes.RecurringOrderProgramName);
@@ -238,9 +240,9 @@ namespace Orckestra.Composer.Product.Services
             return vm;
         }
 
-        protected virtual string GetDisplayPrice(decimal? price, CultureInfo cultureInfo)
+        protected virtual string GetDisplayPrice(decimal? price, string currencyIso)
         {
-            return price != null ? LocalizationProvider.FormatPrice((decimal)price, cultureInfo) : null;
+            return price != null ? LocalizationProvider.FormatPrice((decimal)price, currencyIso) : null;
         }
 
         protected virtual ProductQuantityViewModel GetQuantity()

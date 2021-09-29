@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Globalization;
 using System.Threading.Tasks;
+using Orckestra.Composer.Providers;
+using Orckestra.Composer.Providers.Localization;
 using Orckestra.Composer.Search.ViewModels;
 using Orckestra.Composer.Services;
 using Orckestra.Overture.ServiceModel.Search;
@@ -14,13 +17,14 @@ namespace Orckestra.Composer.Search.Providers
         public static readonly string GroupRegularPriceFromProperty = "GroupRegularPriceFrom";
         public static readonly string GroupRegularPriceToProperty = "GroupRegularPriceTo";
         public static readonly string CurrentPricePriceListIdProperty = "CurrentPricePriceListId";
+        
+        private ILocalizationProvider LocalizationProvider { get; }
+        private ICurrencyProvider CurrencyProvider { get; }
 
-        //TODO: To be refactored. Composer Context should NEVER be referenced from here.
-        private IComposerContext ComposerContext { get; }
-
-        public FromPriceProvider(IComposerContext composerContext)
+        public FromPriceProvider( ILocalizationProvider localizationProvider, ICurrencyProvider currencyProvider)
         {
-            ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
+            LocalizationProvider = localizationProvider ?? throw new ArgumentNullException(nameof(localizationProvider));
+            CurrencyProvider = currencyProvider ?? throw new ArgumentNullException(nameof(currencyProvider));
         }
 
         // https://tfs12.orckestra.com/overture%20solutions/WorkItemTracking/v1.0/AttachFileHandler.ashx?FileID=5412&FileName=SearchItemPrice.pdf
@@ -168,7 +172,7 @@ namespace Orckestra.Composer.Search.Providers
 
         private string GetDisplayPrice(double? price)
         {
-            return !price.HasValue ? null : price.Value.ToString("C2", ComposerContext.CultureInfo);
+            return price.HasValue ? LocalizationProvider.FormatPrice((decimal)price.Value, CurrencyProvider.GetCurrency()) : null;
         }
 
         private static int GetPriceForComparison(double price)

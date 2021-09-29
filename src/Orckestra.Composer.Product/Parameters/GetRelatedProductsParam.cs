@@ -11,5 +11,6 @@ namespace Orckestra.Composer.Product.Parameters
         public IEnumerable<ProductIdentifier> ProductIds { get; set; }
         public string Scope { get; set; }
         public Uri BaseUrl { get; set; }
+        public string CurrencyIso { get; set; }
     }
 }

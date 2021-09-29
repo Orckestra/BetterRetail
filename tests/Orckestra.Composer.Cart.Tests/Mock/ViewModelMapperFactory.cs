@@ -5,6 +5,7 @@ using FizzWare.NBuilder.Generators;
 using Moq;
 using Orckestra.Composer.Cart.ViewModels;
 using Orckestra.Composer.Providers;
+using Orckestra.Composer.Services;
 using Orckestra.Composer.Services.Lookup;
 using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel.Marketing;
@@ -221,8 +222,8 @@ namespace Orckestra.Composer.Cart.Tests.Mock
 
             var lookupServiceMock = new Mock<ILookupService>();
             var localizationProviderMock = new Mock<ILocalizationProvider>();
-
-            var mapper = new ViewModelMapper(registry, formatterMock.Object, lookupServiceMock.Object, localizationProviderMock.Object);
+            var currencyConversionSettings = new Mock<ICurrencyProvider>();
+            var mapper = new ViewModelMapper(registry, formatterMock.Object, lookupServiceMock.Object, localizationProviderMock.Object, currencyConversionSettings.Object);
             return mapper;
         }
     }

@@ -8,12 +8,10 @@ namespace Orckestra.Composer.ViewModels
 {
     public class ViewModelSerialization : JsonConverter
     {
-        private readonly IViewModelMapper _viewModelMapper;
         private readonly IViewModelMetadataRegistry _metadataRegistry;
 
-        public ViewModelSerialization(IViewModelMapper viewModelMapper, IViewModelMetadataRegistry metadataRegistry)
+        public ViewModelSerialization(IViewModelMetadataRegistry metadataRegistry)
         {
-            _viewModelMapper = viewModelMapper;
             _metadataRegistry = metadataRegistry;
         }
 
@@ -79,7 +77,7 @@ namespace Orckestra.Composer.ViewModels
             }
             else
             {
-                var viewModel = _viewModelMapper.ToDictionary(value as BaseViewModel);
+                var viewModel = ((BaseViewModel)value).ToDictionary();
 
                 writer.WriteStartObject();
 
