@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 
 namespace Orckestra.Composer.Providers.Localization
 {
@@ -51,6 +53,27 @@ namespace Orckestra.Composer.Providers.Localization
             return string.Format(cultureInfo, format, price);
         }
 
+        private static readonly Dictionary<string, CultureInfo> ISOCurrenciesToACultureMap =
+            CultureInfo.GetCultures(CultureTypes.SpecificCultures)
+                .Select(c => new { c, new RegionInfo(c.LCID).ISOCurrencySymbol })
+                .GroupBy(x => x.ISOCurrencySymbol)
+                .ToDictionary(g => g.Key, g => g.First().c, StringComparer.OrdinalIgnoreCase);
+
+        public static CultureInfo GetCultureByCurrencyIso(this ILocalizationProvider localizationProvider, string currencyCode)
+        {
+            ISOCurrenciesToACultureMap.TryGetValue(currencyCode, out CultureInfo cultureInfo);
+            return cultureInfo;
+        }
+
+        public static string FormatPrice(this ILocalizationProvider localizationProvider, decimal price, string currencyCode)
+        {
+            if (localizationProvider == null) { throw new ArgumentNullException(nameof(localizationProvider)); }
+            if (currencyCode == null) { throw new ArgumentNullException(nameof(currencyCode)); }
+
+            ISOCurrenciesToACultureMap.TryGetValue(currencyCode, out CultureInfo cultureInfo);
+
+            return localizationProvider.FormatPrice(price, cultureInfo);
+        }
         public static string FormatPhoneNumber(this ILocalizationProvider localizationProvider, string phoneNumber, CultureInfo cultureInfo)
         {
             if (localizationProvider == null) { throw new ArgumentNullException(nameof(localizationProvider)); }

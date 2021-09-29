@@ -295,7 +295,9 @@
     <Compile Include="Parameters\UpdateRecurringOrderTemplateLineItemQuantityParam.cs" />
     <Compile Include="Parameters\UpdateUserParam.cs" />
     <Compile Include="Parameters\UpdateUserPreferredStoreParam.cs" />
+    <Compile Include="Providers\CurrencyProvider.cs" />
     <Compile Include="Providers\Dam\ProductImageInfo.cs" />
+    <Compile Include="Providers\ICurrencyProvider.cs" />
     <Compile Include="Providers\IPageNotFoundUrlProvider.cs" />
     <Compile Include="Providers\ICountryCodeProvider.cs" />
     <Compile Include="Providers\IRegexRulesProvider.cs" />

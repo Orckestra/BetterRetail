@@ -40,7 +40,6 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             mockedCustomerRepository.Setup(r => r.UpdateUserAsync(It.IsAny<UpdateUserParam>())).ReturnsAsync(customer);
 
             _container.Use(mockedCustomerRepository);
-
             var customerViewService = _container.CreateInstance<CustomerViewService>();
 
             //Act
@@ -53,7 +52,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
                 Email = GetRandom.String(32),
                 FirstName = GetRandom.String(32),
                 LastName = GetRandom.String(32),
-                PreferredLanguage = GetRandom.String(4),
+                PreferredLanguage = "en-US",
             });
 
             //Assert
