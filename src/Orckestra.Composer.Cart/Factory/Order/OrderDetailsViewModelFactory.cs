@@ -34,6 +34,7 @@ namespace Orckestra.Composer.Cart.Factory.Order
         protected virtual ITaxViewModelFactory TaxViewModelFactory { get; private set; }
         protected virtual ILineItemViewModelFactory LineItemViewModelFactory { get; private set; }
         protected virtual IRewardViewModelFactory RewardViewModelFactory { get; private set; }
+        protected virtual ICurrencyProvider CurrencyProvider { get; private set; }
 
         public OrderDetailsViewModelFactory(
             ILocalizationProvider localizationProvider,
@@ -45,7 +46,8 @@ namespace Orckestra.Composer.Cart.Factory.Order
             IShippingTrackingProviderFactory shippingTrackingProviderFactory,
             ITaxViewModelFactory taxViewModelFactory,
             ILineItemViewModelFactory lineItemViewModelFactory,
-            IRewardViewModelFactory rewardViewModelFactory)
+            IRewardViewModelFactory rewardViewModelFactory,
+            ICurrencyProvider currencyProvider)
         {
             LocalizationProvider = localizationProvider ?? throw new ArgumentNullException(nameof(localizationProvider));
             ViewModelMapper = viewModelMapper ?? throw new ArgumentNullException(nameof(viewModelMapper));
@@ -57,6 +59,8 @@ namespace Orckestra.Composer.Cart.Factory.Order
             TaxViewModelFactory = taxViewModelFactory ?? throw new ArgumentNullException(nameof(taxViewModelFactory));
             LineItemViewModelFactory = lineItemViewModelFactory ?? throw new ArgumentNullException(nameof(lineItemViewModelFactory));
             RewardViewModelFactory = rewardViewModelFactory ?? throw new ArgumentNullException(nameof(rewardViewModelFactory));
+            CurrencyProvider = currencyProvider ?? throw new ArgumentNullException(nameof(currencyProvider));
+
         }
 
         /// <summary>
@@ -133,7 +137,7 @@ namespace Orckestra.Composer.Cart.Factory.Order
             orderInfos.OrderStatus = GetOrderStatusDisplayName(param);
             orderInfos.OrderStatusRaw = param.Order.OrderStatus;
             orderInfos.BillingCurrency = param.Order.Cart.BillingCurrency;
-            orderInfos.PricePaid = LocalizationProvider.FormatPrice((decimal)param.Order.Cart.Total, param.CultureInfo);
+            orderInfos.PricePaid = LocalizationProvider.FormatPrice((decimal)param.Order.Cart.Total, CurrencyProvider.GetCurrency());
 
             return orderInfos;
         }

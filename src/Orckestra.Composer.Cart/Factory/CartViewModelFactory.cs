@@ -45,6 +45,7 @@ namespace Orckestra.Composer.Cart.Factory
         protected ILineItemViewModelFactory LineItemViewModelFactory { get; private set; }
         protected IRewardViewModelFactory RewardViewModelFactory { get; private set; }
         protected ICartUrlProvider CartUrlProvider { get; private set; }
+        protected ICurrencyProvider CurrencyProvider { get; private set; }
 
         public CartViewModelFactory(
             ILocalizationProvider localizationProvider,
@@ -55,7 +56,8 @@ namespace Orckestra.Composer.Cart.Factory
             ITaxViewModelFactory taxViewModelFactory,
             ILineItemViewModelFactory lineItemViewModelFactory,
             IRewardViewModelFactory rewardViewModelFactory,
-            ICartUrlProvider cartUrlProvider)
+            ICartUrlProvider cartUrlProvider,
+            ICurrencyProvider currencyProvider)
         {
             LocalizationProvider = localizationProvider ?? throw new ArgumentNullException(nameof(localizationProvider));
             ViewModelMapper = viewModelMapper ?? throw new ArgumentNullException(nameof(viewModelMapper));
@@ -66,6 +68,7 @@ namespace Orckestra.Composer.Cart.Factory
             LineItemViewModelFactory = lineItemViewModelFactory ?? throw new ArgumentNullException(nameof(lineItemViewModelFactory));
             RewardViewModelFactory = rewardViewModelFactory ?? throw new ArgumentNullException(nameof(rewardViewModelFactory));
             CartUrlProvider = cartUrlProvider ?? throw new ArgumentNullException(nameof(cartUrlProvider));
+            CurrencyProvider = currencyProvider ?? throw new ArgumentNullException(nameof(currencyProvider));
         }
 
         public virtual CartViewModel CreateCartViewModel(CreateCartViewModelParam param)
@@ -244,7 +247,7 @@ namespace Orckestra.Composer.Cart.Factory
             {
                 GroupName = x.Key.Item1,
                 Taxable = x.Key.Item2,
-                TotalAmount = LocalizationProvider.FormatPrice(x.Value, cultureInfo),
+                TotalAmount = LocalizationProvider.FormatPrice(x.Value, CurrencyProvider.GetCurrency()),
             }).ToList();
         }
 
@@ -252,7 +255,7 @@ namespace Orckestra.Composer.Cart.Factory
         {
             var price = cost == 0
                 ? GetFreeShippingPriceLabel(cultureInfo)
-                : LocalizationProvider.FormatPrice(cost, cultureInfo);
+                : LocalizationProvider.FormatPrice(cost, CurrencyProvider.GetCurrency());
             return price;
         }
 
@@ -309,6 +312,7 @@ namespace Orckestra.Composer.Cart.Factory
             var orderSummary = ViewModelMapper.MapTo<OrderSummaryViewModel>(cart, cultureInfo);
             var activeShipments = cart.GetActiveShipments();
             orderSummary.Shippings = GetShippingsViewModel(cart, cultureInfo);
+
             orderSummary.Shipping = GetShippingFee(cart, cultureInfo);
             orderSummary.IsShippingTaxable = activeShipments.FirstOrDefault().IsShippingTaxable(); //used in the cart/checkout
             orderSummary.HasReward = cart.DiscountTotal.HasValue && cart.DiscountTotal.Value > 0;
@@ -329,7 +333,7 @@ namespace Orckestra.Composer.Cart.Factory
                     l => decimal.Multiply(decimal.Subtract(l.CurrentPrice.GetValueOrDefault(0), l.DefaultPrice.GetValueOrDefault(0)), Convert.ToDecimal(l.Quantity))));
 
             decimal savingsTotal = decimal.Add(cart.DiscountTotal.GetValueOrDefault(0), sumAllLineItemsSavings);
-            orderSummary.SavingsTotal = savingsTotal.Equals(0) ? string.Empty : LocalizationProvider.FormatPrice(savingsTotal, cultureInfo);
+            orderSummary.SavingsTotal = savingsTotal.Equals(0) ? string.Empty : LocalizationProvider.FormatPrice(savingsTotal, CurrencyProvider.GetCurrency());
 
             return orderSummary;
         }
@@ -492,7 +496,7 @@ namespace Orckestra.Composer.Cart.Factory
             {
                 GroupName = x.Key.Item1,
                 Taxable = x.Key.Item2,
-                TotalAmount = LocalizationProvider.FormatPrice(x.Value, cultureInfo),
+                TotalAmount = LocalizationProvider.FormatPrice(x.Value, CurrencyProvider.GetCurrency()),
             }).ToList();
         }
 

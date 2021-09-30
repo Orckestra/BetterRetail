@@ -14,12 +14,15 @@ namespace Orckestra.Composer.Cart.Factory
     {
         protected IViewModelMapper ViewModelMapper { get; private set; }
         protected ILocalizationProvider LocalizationProvider { get; private set; }
+        protected ICurrencyProvider CurrencyProvider { get; private set; }
 
         public TaxViewModelFactory(IViewModelMapper viewModelMapper,
-            ILocalizationProvider localizationProvider)
+            ILocalizationProvider localizationProvider,
+            ICurrencyProvider currencyProvider)
         {
             ViewModelMapper = viewModelMapper ?? throw new ArgumentNullException(nameof(viewModelMapper));
             LocalizationProvider = localizationProvider ?? throw new ArgumentNullException(nameof(localizationProvider));
+            CurrencyProvider = currencyProvider ?? throw new ArgumentNullException(nameof(currencyProvider));
         }
 
         public virtual IEnumerable<TaxViewModel> CreateTaxViewModels(IEnumerable<Tax> taxes, CultureInfo cultureInfo)
@@ -34,7 +37,7 @@ namespace Orckestra.Composer.Cart.Factory
 
                 vm.TaxTotal = codeTaxes.Sum(t => t.TaxTotal);
                 vm.DisplayTaxTotal = vm.TaxTotal.HasValue
-                    ? LocalizationProvider.FormatPrice(vm.TaxTotal.Value, cultureInfo)
+                    ? LocalizationProvider.FormatPrice(vm.TaxTotal.Value, CurrencyProvider.GetCurrency())
                     : string.Empty;
 
                 yield return vm;

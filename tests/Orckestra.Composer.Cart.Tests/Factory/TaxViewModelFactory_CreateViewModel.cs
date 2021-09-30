@@ -9,6 +9,9 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Moq;
+using Orckestra.Composer.Providers;
+using Orckestra.Composer.Services;
 
 namespace Orckestra.Composer.Cart.Tests.Factory
 {
@@ -31,6 +34,13 @@ namespace Orckestra.Composer.Cart.Tests.Factory
         {
             Container = new AutoMocker();
             Container.Use(_mapper);
+            var contextStub = new Mock<IComposerContext>();
+            contextStub.SetupGet(mock => mock.ScopeCurrencyIso).Returns("CAD");
+            Container.Use(contextStub);
+
+            var currencyProvider = new Mock<ICurrencyProvider>();
+            currencyProvider.Setup(c => c.GetCurrency()).Returns("CAD").Verifiable();
+            Container.Use(currencyProvider);
             Container.Use(LocalizationProviderFactory.Create());
         }
 

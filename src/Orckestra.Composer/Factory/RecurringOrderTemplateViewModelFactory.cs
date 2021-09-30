@@ -54,6 +54,7 @@ namespace Orckestra.Composer.Factory
         protected IRecurringScheduleUrlProvider RecurringScheduleUrlProvider { get; private set; }
         protected IRecurringOrderProgramViewModelFactory RecurringOrderProgramViewModelFactory { get; private set; }
         protected IRecurringOrdersRepository RecurringOrderRepository { get; private set; }
+        protected ICurrencyProvider CurrencyProvider { get; private set; }
 
 
         public RecurringOrderTemplateViewModelFactory(
@@ -68,7 +69,8 @@ namespace Orckestra.Composer.Factory
             IProductPriceViewService productPriceViewService,
             IRecurringScheduleUrlProvider recurringScheduleUrlProvider,
             IRecurringOrderProgramViewModelFactory recurringOrderProgramViewModelFactory,
-            IRecurringOrdersRepository recurringOrderRepository)
+            IRecurringOrdersRepository recurringOrderRepository,
+            ICurrencyProvider currencyProvider)
         {
             LocalizationProvider = localizationProvider ?? throw new ArgumentNullException(nameof(localizationProvider));
             ViewModelMapper = viewModelMapper ?? throw new ArgumentNullException(nameof(viewModelMapper));
@@ -82,6 +84,7 @@ namespace Orckestra.Composer.Factory
             RecurringScheduleUrlProvider = recurringScheduleUrlProvider ?? throw new ArgumentNullException(nameof(recurringScheduleUrlProvider));
             RecurringOrderProgramViewModelFactory = recurringOrderProgramViewModelFactory ?? throw new ArgumentNullException(nameof(recurringOrderProgramViewModelFactory));
             RecurringOrderRepository = recurringOrderRepository ?? throw new ArgumentNullException(nameof(recurringOrderRepository));
+            CurrencyProvider = currencyProvider ?? throw new ArgumentNullException(nameof(currencyProvider));
         }
 
         public virtual async Task<RecurringOrderTemplatesViewModel> CreateRecurringOrderTemplatesViewModel(CreateRecurringOrderTemplatesViewModelParam param)
@@ -290,9 +293,9 @@ namespace Orckestra.Composer.Factory
             var conv = decimal.TryParse(vm.ListPrice, NumberStyles.Currency, param.CultureInfo.NumberFormat, out decimal price);
             if (conv)
             {
-                vm.TotalWithoutDiscount = LocalizationProvider.FormatPrice((decimal)vm.Quantity * price, param.CultureInfo);
+                vm.TotalWithoutDiscount = LocalizationProvider.FormatPrice((decimal)vm.Quantity * price, CurrencyProvider.GetCurrency());
 
-                vm.Total = LocalizationProvider.FormatPrice((decimal)vm.Quantity * price, param.CultureInfo);
+                vm.Total = LocalizationProvider.FormatPrice((decimal)vm.Quantity * price, CurrencyProvider.GetCurrency());
             }
 
             //Adding brand display name
@@ -341,8 +344,8 @@ namespace Orckestra.Composer.Factory
         protected virtual string GetProductOrVariantListPrice(Orckestra.Overture.ServiceModel.Products.Product product, Variant variant, CultureInfo culture)
         {
             return variant != null
-                ? LocalizationProvider.FormatPrice(variant.ListPrice.Value, culture)
-                : LocalizationProvider.FormatPrice(product.ListPrice.Value, culture);
+                ? LocalizationProvider.FormatPrice(variant.ListPrice.Value, CurrencyProvider.GetCurrency())
+                : LocalizationProvider.FormatPrice(product.ListPrice.Value, CurrencyProvider.GetCurrency());
         }
 
         //TODO: rename to MapShippingAddressAsync if used
