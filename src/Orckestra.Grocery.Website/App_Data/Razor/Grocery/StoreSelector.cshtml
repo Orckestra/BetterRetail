@@ -16,7 +16,7 @@
 	[FunctionParameter(Label = "Location Selection Step Summary", DefaultValue = "Check service availability near you")]
     public string LocationStepSummary { get; set; }
 
-    [FunctionParameter(Label = "Location Selection Step Short Summary", DefaultValue = "Check availability")]
+    [FunctionParameter(Label = "Location Selection Step Short Summary", DefaultValue = "Check Availability")]
     public string LocationStepShortSummary { get; set; }
 	
 	[FunctionParameter(Label = "Shipping Method Selection Step Summary", DefaultValue = "Select to pick up your order or get it delivered")]
@@ -31,10 +31,10 @@
     [FunctionParameter(Label = "Store Selection Step Short Summary", DefaultValue = "Select Store")]
     public string StoresStepShortSummary { get; set; }
 	
-	[FunctionParameter(Label = "Date And Time Selection Step Summary", DefaultValue = "Pick a date and time to fulfillment")]
+	[FunctionParameter(Label = "Date And Time Selection Step Summary", DefaultValue = "Pick a date and time of fulfillment")]
     public string TimeslotsStepSummary { get; set; }
 	
-	[FunctionParameter(Label = "Date And Time Selection Step Short Summary", DefaultValue = "Select timeslot")]
+	[FunctionParameter(Label = "Date And Time Selection Step Short Summary", DefaultValue = "Select Timeslot")]
     public string TimeslotsStepShortSummary { get; set; }
 	
 	private const string urlSelectorWidgetMarkup = @" <f:widgetfunction xmlns:f='http://www.composite.net/ns/function/1.0' name='Composite.Widgets.String.UrlComboBox'></f:widgetfunction>";
