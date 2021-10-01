@@ -104,9 +104,8 @@
                                            v-bind:data-sku="suggestion.item.Sku"
                                            v-bind:data-index="index"
                                            v-bind:href="suggestion.item.Url"
-                                           v-bind:title="suggestion.item.FullDisplayName">
-                                            {{suggestion.item.DisplayName}}
-                                        </a>
+                                           v-bind:title="suggestion.item.FullDisplayName"
+                                           v-html="suggestion.item.mappedDisplayName"></a>
                                     </div>
                                     <div class="product-tile-special-price">
                                         <del v-if="suggestion.item.IsOnSale">{{suggestion.item.DisplayListPrice}}</del>
@@ -120,7 +119,11 @@
                         </div>
 
                         <div v-else-if="suggestion.name === 'suggestbrands'">
-                            <a data-oc-click="selectedBrandSuggestion" v-bind:data-suggestion="suggestion.item.DisplayName" role="link" tabindex="0">{{ suggestion.item.DisplayName }}</a>
+                            <a data-oc-click="selectedBrandSuggestion" 
+                               v-bind:data-suggestion="suggestion.item.DisplayName" 
+                               v-html="suggestion.item.mappedDisplayName"
+                               role="link" 
+                               tabindex="0"></a>
                         </div>
 
                         <div v-else="v-else">

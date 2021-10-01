@@ -90,8 +90,9 @@ module Orckestra.Composer {
 
                         clearTimeout(this.timeout);
                         this.timeout = setTimeout(() => {
+                            const sectionNames = Object.keys(this.sectionConfigs);
 
-                            const results = Object.keys(this.sectionConfigs).map(sectionName => {
+                            const results = sectionNames.map(sectionName => {
                                 const limit = this.sectionConfigs[sectionName].limit;
                                 return ComposerClient.post(`/api/search/${sectionName}?limit=${limit}`, { Query: query })
                             });
@@ -99,14 +100,30 @@ module Orckestra.Composer {
                             Q.all(results).then(values => {
                                 this.selected = null;
 
-                                this.suggestions = Object.keys(this.sectionConfigs)
-                                    .map((sectionName, index) => ({
-                                        name: sectionName,
-                                        data: values[index].Suggestions
-                                    }))
+                                this.suggestions = sectionNames
+                                    .map((sectionName, index) => {
+                                        const data = (values[index].Suggestions || []).map(({DisplayName, ...suggest}) => ({
+                                            ...suggest,
+                                            DisplayName,
+                                            mappedDisplayName: this.highlightSuggestion(DisplayName, query)
+                                        }));
+
+                                        return ({ name: sectionName, data})
+                                    })
                                     .filter(section => section.data.length);
                             });
                         }, this.debounceMilliseconds);
+                    },
+                    highlightSuggestion(value, query) {
+                        const start = value.toLowerCase().indexOf(query.toLowerCase());
+                        const end = start + query.length;
+                        if(start < 0) return value;
+
+                        return [
+                            value.slice(0, start),
+                            `<strong>${value.slice(start, end)}</strong>`,
+                            value.slice(end),
+                        ].join('');
                     },
                     getSuggestionValue(suggestion) {
                         let { name, item } = suggestion;
