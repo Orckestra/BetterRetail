@@ -17,6 +17,7 @@ using Orckestra.Composer.Cart.ViewModels.Order;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Dam;
 using Orckestra.Composer.Providers.Localization;
+using Orckestra.Composer.Services;
 using Orckestra.ForTests.Mock;
 using Orckestra.Overture.ServiceModel;
 using Orckestra.Overture.ServiceModel.Orders;
@@ -53,6 +54,14 @@ namespace Orckestra.Composer.Cart.Tests.Factory.Order
             _container.GetMock<IPaymentProviderFactory>()
             .Setup(r => r.ResolveProvider(It.IsAny<string>()))
             .Returns(new FakePaymentProvider());
+
+            var contextStub = new Mock<IComposerContext>();
+            contextStub.SetupGet(mock => mock.ScopeCurrencyIso).Returns("CAD");
+            _container.Use(contextStub);
+
+            var currencyProvider = new Mock<ICurrencyProvider>();
+            currencyProvider.Setup(c => c.GetCurrency()).Returns("CAD").Verifiable();
+            _container.Use(currencyProvider);
 
             _container.GetMock<IShippingTrackingProviderFactory>()
               .Setup(r => r.ResolveProvider(It.IsAny<string>()))

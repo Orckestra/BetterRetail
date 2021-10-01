@@ -38,6 +38,7 @@ namespace Orckestra.Composer.Cart.Providers.Payment
         protected IPaymentRepository PaymentRepository { get; private set; }
         protected virtual ICartViewModelFactory CartViewModelFactory { get; private set; }
         protected virtual ILocalizationProvider LocalizationProvider { get; private set; }
+        protected ICurrencyProvider CurrencyProvider { get; private set; }
 
         /// <summary>
         /// Type of Overture Payment Provider.
@@ -50,11 +51,12 @@ namespace Orckestra.Composer.Cart.Providers.Payment
         public string ProviderName { get; set; }
 
         public MonerisCanadaPaymentProvider(IPaymentRepository paymentRepository, ICartViewModelFactory cartViewModelFactory, 
-            ILocalizationProvider localizationProvider)
+            ILocalizationProvider localizationProvider, ICurrencyProvider currencyProvider)
         {
             PaymentRepository = paymentRepository ?? throw new ArgumentNullException(nameof(paymentRepository));
             CartViewModelFactory = cartViewModelFactory ?? throw new ArgumentNullException(nameof(cartViewModelFactory));
             LocalizationProvider = localizationProvider ?? throw new ArgumentNullException(nameof(localizationProvider));
+            CurrencyProvider = currencyProvider ?? throw new ArgumentNullException(nameof(currencyProvider));
         }
 
         /// <summary>
@@ -194,7 +196,7 @@ namespace Orckestra.Composer.Cart.Providers.Payment
             };
 
             paymentVm.BillingAddress = CartViewModelFactory.GetAddressViewModel(payment.BillingAddress, cultureInfo);
-            paymentVm.Amount = LocalizationProvider.FormatPrice(payment.Amount, cultureInfo);
+            paymentVm.Amount = LocalizationProvider.FormatPrice(payment.Amount, CurrencyProvider.GetCurrency());
 
             return paymentVm;
         }

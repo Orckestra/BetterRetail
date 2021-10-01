@@ -8,9 +8,12 @@ namespace Orckestra.Composer.Search.Providers
 {
     public class FacetLocalizationProvider : IFacetLocalizationProvider
     {
-        public FacetLocalizationProvider(ILocalizationProvider localizationProvider)
+        private ICurrencyProvider CurrencyProvider { get; set; }
+        public FacetLocalizationProvider(ILocalizationProvider localizationProvider,
+            ICurrencyProvider currencyProvider)
         {
             LocalizationProvider = localizationProvider ?? throw new ArgumentNullException(nameof(localizationProvider));
+            CurrencyProvider = currencyProvider ?? throw new ArgumentNullException(nameof(currencyProvider));
         }
 
         private ILocalizationProvider LocalizationProvider { get; set; }
@@ -113,6 +116,13 @@ namespace Orckestra.Composer.Search.Providers
             {
                 try
                 {
+                    var scopeCurrency = CurrencyProvider.GetCurrency();
+                    if (!string.IsNullOrEmpty(scopeCurrency))
+                    {
+                        cultureInfo = LocalizationProvider.GetCultureByCurrencyIso(scopeCurrency);
+                        return string.Format(cultureInfo, localizedFormat, formatParams.ToArray());
+                    }
+                   
                     return string.Format(localizedFormat, formatParams.ToArray());
                 }
                 catch (FormatException)

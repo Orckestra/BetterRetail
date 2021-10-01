@@ -14,6 +14,7 @@ using Orckestra.Composer.Cart.ViewModels;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Dam;
 using Orckestra.Composer.Providers.Localization;
+using Orckestra.Composer.Services;
 using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel.Orders;
 
@@ -34,6 +35,13 @@ namespace Orckestra.Composer.Cart.Tests.Factory
             Container.GetMock<ILocalizationProvider>()
                 .Setup(m => m.GetLocalizedString(It.IsAny<GetLocalizedParam>()))
                 .Returns("{0:C}");
+            var contextStub = new Mock<IComposerContext>();
+            contextStub.SetupGet(mock => mock.ScopeCurrencyIso).Returns("CAD");
+            Container.Use(contextStub);
+
+            var currencyProvider = new Mock<ICurrencyProvider>();
+            currencyProvider.Setup(c => c.GetCurrency()).Returns("CAD").Verifiable();
+            Container.Use(currencyProvider);
         }
 
         [Test]

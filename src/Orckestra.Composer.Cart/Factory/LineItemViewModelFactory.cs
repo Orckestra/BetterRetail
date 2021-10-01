@@ -33,7 +33,8 @@ namespace Orckestra.Composer.Cart.Factory
         protected IComposerContext ComposerContext { get; private set; }
         protected IRecurringOrderProgramViewModelFactory RecurringOrderProgramViewModelFactory { get; private set; }
         protected IRecurringOrdersSettings RecurringOrdersSettings { get; private set; }
- 
+        protected ICurrencyProvider CurrencyProvider { get; private set; }
+
         public LineItemViewModelFactory(IViewModelMapper viewModelMapper,
             ILocalizationProvider localizationProvider,
             IProductUrlProvider productUrlProvider,
@@ -42,7 +43,8 @@ namespace Orckestra.Composer.Cart.Factory
             IRecurringOrdersRepository recurringOrderRepository,
             IComposerContext composerContext,
             IRecurringOrderProgramViewModelFactory recurringOrderProgramViewModelFactory,
-            IRecurringOrdersSettings recurringOrdersSettings)
+            IRecurringOrdersSettings recurringOrdersSettings,
+            ICurrencyProvider currencyProvider)
         {
             ViewModelMapper = viewModelMapper ?? throw new ArgumentNullException(nameof(viewModelMapper));
             LocalizationProvider = localizationProvider ?? throw new ArgumentNullException(nameof(localizationProvider));
@@ -53,6 +55,7 @@ namespace Orckestra.Composer.Cart.Factory
             ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
             RecurringOrderProgramViewModelFactory = recurringOrderProgramViewModelFactory ?? throw new ArgumentNullException(nameof(recurringOrderProgramViewModelFactory));
             RecurringOrdersSettings = recurringOrdersSettings ?? throw new ArgumentNullException(nameof(recurringOrdersSettings));
+            CurrencyProvider = currencyProvider ?? throw new ArgumentNullException(nameof(currencyProvider));
         }
 
         /// <summary>
@@ -111,7 +114,7 @@ namespace Orckestra.Composer.Cart.Factory
 
             decimal lineItemsSavingTotal = decimal.Add(lineItem.DiscountAmount.GetValueOrDefault(0), lineItemsSavingSale);
 
-            vm.SavingsTotal = lineItemsSavingTotal.Equals(0) ? string.Empty : LocalizationProvider.FormatPrice(lineItemsSavingTotal, param.CultureInfo);
+            vm.SavingsTotal = lineItemsSavingTotal.Equals(0) ? string.Empty : LocalizationProvider.FormatPrice(lineItemsSavingTotal, CurrencyProvider.GetCurrency());
 
             vm.KeyVariantAttributesList = GetKeyVariantAttributes(new GetKeyVariantAttributesParam {
                 KvaValues = lineItem.KvaValues,

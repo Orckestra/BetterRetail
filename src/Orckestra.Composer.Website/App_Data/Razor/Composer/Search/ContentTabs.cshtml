@@ -228,7 +228,7 @@
     if (IsProductsCorrected() && isProductTab)
     {
         <h2>
-            @($"{Html.Localize("List-Search", "L_NoResultsFor")} \"{SearchRequestContext.SearchQuery }\"")
+            @($"{Html.Localize("List-Search", "L_NoResultsFor")} “{SearchRequestContext.SearchQuery }”")
         </h2>
         <p class="m-0">@Html.Localized("List-Search", "WeAreSorry", SearchRequestContext.SearchQuery, tabTitle)</p>
         @ShowButWeFindIn(vm.SuggestedTabs)
@@ -238,12 +238,12 @@
     {
         if (vm.Total > 0)
         {
-            <h1><strong>@vm.Total</strong>@($" {Html.Localize("List-Search", "L_SearchResults")} \"{SearchRequestContext.SearchQuery }\"")</h1>
+            <h1><strong>@vm.Total</strong>@($" {Html.Localize("List-Search", "L_SearchResults")} “{SearchRequestContext.SearchQuery }”")</h1>
         }
         else
         {
             <h1>
-                @($"{Html.Localize("List-Search", "L_NoResultsFor")} \"{SearchRequestContext.SearchQuery }\"")
+                @($"{Html.Localize("List-Search", "L_NoResultsFor")} “{SearchRequestContext.SearchQuery }”")
             </h1>
         }
 
