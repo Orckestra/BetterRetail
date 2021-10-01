@@ -15,6 +15,7 @@
 
   "setupDescription": "{{$\"{rootPath}/build/configuration/SetupDescription.xml\"}}",
   "setupDescriptionSecondary": "{{$\"{rootPath}/build/configuration/SetupDescriptionSecondary.xml\"}}",
+  "autoInstallPackages": "{{$\"{rootPath}/build/configuration/AutoInstallPackages.xml\"}}",
   "baseCulture": "en-CA",
   "occ-hostName": "occ-dev-localdeployment",
   "serviceBus-keyName": "RootManageSharedAccessKey",
