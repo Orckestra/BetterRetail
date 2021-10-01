@@ -306,6 +306,34 @@ Task("Install-Secondary-Packages").Does(() =>
 
 #endregion
 
+
+Task("Copy-Autoinstall-Packages").Does(() => 
+{
+    if(!string.IsNullOrWhiteSpace(Parameters["autoInstallPackages"])) {
+        try {
+            Information("Exist the configuration file for auto install packages");
+            var configFileXml = XElement.Load(Parameters["autoInstallPackages"]);
+            var packages = configFileXml.DescendantsAndSelf().Where(d => d.Name.LocalName == "package");
+
+            foreach (var packageUrl in packages.Select(d => d.Attribute("url")?.Value)
+                                .Where(d => !string.IsNullOrWhiteSpace(d)))
+            {
+                var uri = new Uri(new Uri(Parameters["autoInstallPackages"]), packageUrl);
+                var autoInstallDir = $"{websiteDir}/App_Data/Composite/AutoInstallPackages";
+                var filename = System.IO.Path.GetFileName(uri.LocalPath);
+                CreateDirectory(autoInstallDir);
+                Information($"Copying file '{filename}'");
+                CopyFile(uri.OriginalString, System.IO.Path.Combine(autoInstallDir, filename));
+            }
+        
+        }
+        catch(Exception e) {
+            Warning(e.Message);
+        }
+    }
+});
+
+
 #region Configure-Local-Debug
 
 Task("Patch-csproj.user").Does(() =>
@@ -392,7 +420,8 @@ Task("Install-RefApp")
     .IsDependentOn("Load-CakeConfig")
     .IsDependentOn("Install-Packages")
     .IsDependentOn("Patch-ExperienceManagement-Config")
-    .IsDependentOn("Install-Secondary-Packages");
+    .IsDependentOn("Install-Secondary-Packages")
+    .IsDependentOn("Copy-Autoinstall-Packages");
 
 Task("Install")
     .IsDependentOn("Install-C1")
