@@ -9,7 +9,11 @@
 		<mi:Add path="~\Bin\Orckestra.Composer.C1.PreConfiguration.dll" />
 	</mi:PackageFragmentInstallerBinaries>
 	<mi:PackageFragmentInstallers>
-		<mi:Add installerType="Orckestra.Composer.CompositeC1.Installers.PreConfigurationInstaller, Orckestra.Composer.C1.PreConfiguration" uninstallerType="Orckestra.Composer.CompositeC1.Installers.PreConfigurationUninstaller, Orckestra.Composer.C1.PreConfiguration" >
+		<mi:Add installerType="Orckestra.Composer.CompositeC1.Installers.PreConfigurationInstaller, Orckestra.Composer.C1.PreConfiguration" uninstallerType="Orckestra.Composer.CompositeC1.Installers.PreConfigurationUninstaller, Orckestra.Composer.C1.PreConfiguration">
+			<MainMenuDisplayNames>
+				<add locale="en-CA">Grocery</add>
+				<add locale="fr-CA">L'épicerie</add>
+			</MainMenuDisplayNames>
 		</mi:Add>
 	</mi:PackageFragmentInstallers>
 </mi:PackageInstaller>

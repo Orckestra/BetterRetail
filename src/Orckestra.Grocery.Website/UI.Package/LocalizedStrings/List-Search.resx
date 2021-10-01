@@ -283,7 +283,7 @@
     <value>But we did find</value>
   </data>
   <data name="ButWeFind_Part2" xml:space="preserve">
-    <value>matching your query "{0}"</value>
+    <value>matching your query “{0}”</value>
   </data>
   <data name="ButWeFind_Separator" xml:space="preserve">
     <value>and</value>
@@ -292,7 +292,7 @@
     <value>We are sorry, we could not find any matches for  “{0}”  in  {1}.</value>
   </data>
   <data name="L_SearchResultsCorrected" xml:space="preserve">
-    <value>Showing {0} search results for "{1}"</value>
+    <value>Showing {0} search results for “{1}”</value>
   </data>
   <data name="L_SearchResultsSeeAll" xml:space="preserve">
     <value>See all {0}</value>
