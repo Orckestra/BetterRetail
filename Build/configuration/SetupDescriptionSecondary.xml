@@ -5,7 +5,6 @@
       <!-- Reff App  -->
       <package id="93141e5a-bdfe-459f-a4b6-f2652a1fe4c4" url="../../output/artifacts/Orckestra.Composer.SEO.Organization.Content.zip"/>
       <package id="f77d9b8c-2990-4965-902d-ee4db85bcbe" url="../../output/artifacts/Orckestra.Composer.C1.Content.FR-CA.zip"/>
-      <package id="bf69b0fa-67c6-4c83-9341-fad58a8ab42b" url="../../output/artifacts/Orckestra.Composer.C1.PreConfiguration.zip"/>
     </packages>
   </radio>
 </setup>
