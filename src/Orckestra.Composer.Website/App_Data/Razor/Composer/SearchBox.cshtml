@@ -1,4 +1,4 @@
-﻿@inherits RazorFunction
+@inherits RazorFunction
 @using Orckestra.Composer.CompositeC1.Services;
 @using Orckestra.Composer.Services;
 @using Orckestra.ExperienceManagement.Configuration;
@@ -133,6 +133,10 @@
 
                     </template>
 
+                    <template v-slot:after-section-autocomplete="{ section }">
+                        <p v-if="section.data.length" style="width: 100%">Show more results...</p>
+                        <p v-else="v-else" style="text-align: center;">No results found</p>
+                    </template>
                 </vue-autosuggest>
             </div>
         </div>

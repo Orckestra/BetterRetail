@@ -110,7 +110,7 @@ module Orckestra.Composer {
 
                                         return ({ name: sectionName, data})
                                     })
-                                    .filter(section => section.data.length);
+                                    .filter(section => section.data.length || section.name === 'autocomplete');
                             });
                         }, this.debounceMilliseconds);
                     },
