@@ -168,4 +168,7 @@
   <data name="L_RecurringSignInPitch" xml:space="preserve">
     <value>Connectez-vous pour convertir cette commande en commande récurrente et obtenez {0}% de rabais.</value>
   </data>
+  <data name="L_Per" xml:space="preserve">
+    <value>par</value>
+  </data>
 </root>

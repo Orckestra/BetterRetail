@@ -1,5 +1,6 @@
 ﻿@inherits Composer.Razor.ComposerRazorFunction
 @using Orckestra.Composer.CompositeC1.Context
+@using Orckestra.Composer.Grocery.ViewModels
 @using Orckestra.Composer.Product.ViewModels
 
 @functions {
@@ -41,6 +42,7 @@
             <div class="col-md-6">
 
                 @DisplayName()
+                @DisplayFormat()
 
                 @BrandName()
 
@@ -118,23 +120,22 @@
 {
     <div id="vueProductPrice" v-cloak="true" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
         <div v-if="!IsUnavailableVariant">
-            <p v-if="Product.IsApproxUnit">
-                @Html.Localized("ProductPage", "L_UnitMeasureApprox", "{{Product.ItemFormat}}", "{{Product.UnitOfMeasure}}")
-            </p>
             <p v-else="v-else">@Html.Localized("ProductPage", "L_UnitMeasure", "{{Product.ItemFormat}}", "{{Product.UnitOfMeasure}}")</p>
             <p class="m-0" v-if="Product.DefaultListPrice">
-                <del v-if="Product.IsPriceDiscounted">{{Product.DefaultListPrice}}</del>&nbsp;
                 <small property="price" data-qa="product-price" class="mr-1" v-bind:class="{'text-danger': Product.IsPriceDiscounted}">
-                    <span v-if="Product.IsApproxUnit">@Html.Localize("ProductPage", "L_Approx")</span>
                     <span class="h4 font-weight-bold">{{Product.ListPrice}}</span>
-                    /{{Product.IsUnit ?
-                    Product.IsUnitMeasure ? '@Html.Localize("ProductPage", "L_Each")' : '@Html.Localize("ProductPage", "L_Unit")'
-                    :
-                    Product.ItemFormat + ' ' + Product.UnitOfMeasure}}
                 </small>
-
+                <del v-if="Product.IsPriceDiscounted">{{Product.DefaultListPrice}}</del>&nbsp;
+                <div v-if="PricePerUnit">
+                    <br />&nbsp; <span>{{PricePerUnit}}</span> @Html.Localize("ProductPage", "L_Per") {{Product.BaseProductSize}} {{Product.BaseProductMeasure}}
+                </div>
             </p>
             <span v-else="else" property="price" data-qa="product-price" class="h3 invisible">0</span>
         </div>
     </div>
+}
+
+@helper DisplayFormat() {
+ var extendedVM = Model.AsExtensionModel<IGroceryProductViewModel>();
+<p>@extendedVM.ProductUnitQuantity x @extendedVM.ProductUnitSize @extendedVM.ProductUnitMeasure</p>
 }
