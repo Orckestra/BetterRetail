@@ -335,6 +335,19 @@ module Orckestra.Composer {
                     Product: product
                 },
                 computed: {
+                    PricePerUnit(){
+                        
+                        if(this.Product.ProductUnitQuantity == null || this.Product.ProductUnitSize == null)
+                        {
+                            return 0;
+                        }
+                        let priceNum = parseFloat(this.Product.ListPrice.replace(/[^0-9\.-]+/g,""));
+                        let stepOne = priceNum / parseFloat(this.Product.ProductUnitQuantity);
+                        let stepTwo = stepOne / parseFloat(this.Product.ProductUnitSize);
+                        let pricePerUnit = stepTwo * parseFloat(this.Product.ConvertedVolumeMeasurement);
+                        let formatedPrice = this.Product.ListPrice.replace(priceNum, pricePerUnit.toFixed(2));
+                        return  formatedPrice;
+                    },
                     IsUnavailableVariant() {
                         return $.isArray(this.Product.allVariants) && !this.Product.selectedVariantId;
                     }

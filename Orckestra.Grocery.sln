@@ -108,6 +108,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.Grocery.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.Grocery", "src\Orckestra.Composer.Grocery\Orckestra.Composer.Grocery.csproj", "{ECC87B80-7C56-40B3-9961-6BD04B5DAF22}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.Grocery.Tests", "tests\Orckestra.Composer.Grocery.Tests\Orckestra.Composer.Grocery.Tests.csproj", "{A006CC7C-3290-4BE2-AC06-B2B8F694D4D0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -266,6 +268,10 @@ Global
 		{ECC87B80-7C56-40B3-9961-6BD04B5DAF22}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ECC87B80-7C56-40B3-9961-6BD04B5DAF22}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ECC87B80-7C56-40B3-9961-6BD04B5DAF22}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A006CC7C-3290-4BE2-AC06-B2B8F694D4D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A006CC7C-3290-4BE2-AC06-B2B8F694D4D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A006CC7C-3290-4BE2-AC06-B2B8F694D4D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A006CC7C-3290-4BE2-AC06-B2B8F694D4D0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -315,6 +321,7 @@ Global
 		{485808CC-75B2-4BF6-9B57-470D30B562D4} = {2290CF95-EF97-4E7A-ADD6-D902AD8DAAAC}
 		{7E75D550-3C78-46D0-A124-065A5FFFA0B2} = {4C9DCD77-1564-4C86-AD89-DCC674C54879}
 		{ECC87B80-7C56-40B3-9961-6BD04B5DAF22} = {B770DD6A-41C2-4576-80D9-58023319B204}
+		{A006CC7C-3290-4BE2-AC06-B2B8F694D4D0} = {832CD4F4-EF5A-44B0-92FF-D159B6276AF7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.TransientFaultHandling.6.0.1304.0\lib\portable-net45+win+wp8;packages\EnterpriseLibrary.TransientFaultHandling.Data.6.0.1304.1\lib\NET45

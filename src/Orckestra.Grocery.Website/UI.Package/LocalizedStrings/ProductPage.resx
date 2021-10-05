@@ -183,4 +183,7 @@
   <data name="L_UnitMeasureApprox" xml:space="preserve">
     <value>1 unit (approx {0} {1})</value>
   </data>
+   <data name="L_Per" xml:space="preserve">
+    <value>per</value>
+  </data>
 </root>
