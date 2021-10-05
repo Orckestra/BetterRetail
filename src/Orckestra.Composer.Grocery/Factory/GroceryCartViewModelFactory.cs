@@ -25,7 +25,8 @@ namespace Orckestra.Composer.Grocery.Factory
             ILineItemViewModelFactory lineItemViewModelFactory,
             IRewardViewModelFactory rewardViewModelFactory,
             ICartUrlProvider cartUrlProvider,
-            ITimeSlotViewModelFactory timeSlotViewModelFactory)
+            ITimeSlotViewModelFactory timeSlotViewModelFactory,
+            ICurrencyProvider currencyProvider)
             :
             base(
                 localizationProvider,
@@ -36,7 +37,8 @@ namespace Orckestra.Composer.Grocery.Factory
                 taxViewModelFactory,
                 lineItemViewModelFactory,
                 rewardViewModelFactory,
-                cartUrlProvider)
+                cartUrlProvider,
+                currencyProvider)
         {
             TimeSlotViewModelFactory = timeSlotViewModelFactory ?? throw new ArgumentNullException(nameof(timeSlotViewModelFactory));
         }

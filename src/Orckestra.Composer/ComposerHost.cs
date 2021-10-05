@@ -69,6 +69,7 @@ namespace Orckestra.Composer
         public event EventHandler Initialized;
 
         public JsonSerializerSettings JsonSettings { get; set; }
+        public bool IsInitialized { get; private set; }
 
         public ComposerHost()
             : this(true)
@@ -115,6 +116,8 @@ namespace Orckestra.Composer
             {
                 Initialized(this, EventArgs.Empty);
             }
+
+            IsInitialized = true;
         }
 
         public void LoadPlugins()
