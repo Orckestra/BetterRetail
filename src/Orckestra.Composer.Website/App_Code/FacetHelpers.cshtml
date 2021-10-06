@@ -124,7 +124,6 @@
     <ul id="onDemandFacets-@facet.FieldName" class="list-unstyled  collapse">
         @if (facet.FacetType == FacetType.MultiSelect)
         {
-
             foreach (var facetValue in facet.OnDemandFacetValues)
             {
                 @MultiSelectFacet(facetValue, facet)
@@ -154,29 +153,21 @@
 
 @helper RenderFacet(Facet facet)
 {
-    if (facet.FacetType == FacetType.Range)
+    switch (facet.FacetType)
     {
-        @RangeFacet(facet)
-    }
-
-    if (facet.FacetType == FacetType.MultiSelect)
-    {
-        foreach (var facetValue in facet.FacetValues)
-        {
-            @MultiSelectFacet(facetValue, facet)
-        }
-    }
-
-    if (facet.FacetType == FacetType.SingleSelect)
-    {
+        case FacetType.Range:@RangeFacet(facet); break;
+        case FacetType.SingleSelect:
         foreach (var facetValue in facet.FacetValues)
         {
             @SingleFacet(facetValue, facet);
         }
-    }
-
-    if (facet.FacetType != FacetType.Range && facet.OnDemandFacetValues != null && facet.OnDemandFacetValues.Count > 0)
-    {
-        @ShowMoreLessFacets(facet)
+        break;
+        case FacetType.MultiSelect:
+        foreach (var facetValue in facet.FacetValues)
+        {
+            @MultiSelectFacet(facetValue, facet)
+        }
+        break;
+        default: break;
     }
 }
