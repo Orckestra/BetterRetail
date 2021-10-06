@@ -1,0 +1,42 @@
+﻿@inherits Composer.Razor.ComposerRazorFunction
+@using Orckestra.Composer.Search.Context;
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Category Browsing Page Results"; }
+    }
+    public IBrowseCategoryRequestContext BrowsingRequestContext { get; set; }
+}
+
+@{
+    var categoryBrowsingViewModel = BrowsingRequestContext.GetViewModelAsync().Result;
+    if (categoryBrowsingViewModel == null)
+    {
+        return;
+    }
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<head>
+</head>
+<body>
+    <div class="row filters-row mb-4">
+        <div class="col-6 d-lg-none">
+            @SearchHelpers.FacetsCollapseBtn()
+        </div>
+        <div class="col-6">
+            @Partial("SearchSortBy", categoryBrowsingViewModel.ProductSearchResults)
+        </div>
+        <div class="col-6 d-none d-lg-block">
+            @Partial("PaginationDropDown", categoryBrowsingViewModel.ProductSearchResults)
+        </div>
+    </div>
+
+    @Function("Composer.BrowsingCategories.Index")
+
+    <div class="row d-block pt-2">
+        @Partial("Pager", categoryBrowsingViewModel.ProductSearchResults)
+    </div>
+</body>
+</html>

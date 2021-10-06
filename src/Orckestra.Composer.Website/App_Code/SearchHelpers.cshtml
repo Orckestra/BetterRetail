@@ -1,4 +1,6 @@
-﻿@helper Pagination(int pageCurrent, int pageCount, int groupsize, string baseUrl, string pageQueryKey = "page")
+﻿@using Composite.AspNet.Razor
+
+@helper Pagination(int pageCurrent, int pageCount, int groupsize, string baseUrl, string pageQueryKey = "page")
 {
     var queryString = baseUrl.IndexOf("?") > 0 ? baseUrl.Split('?')[1] : string.Empty;
 
@@ -30,7 +32,7 @@
         @if (pageCurrent > 1)
         {
             <li class="page-item">
-                <a class="page-link"  href="@PageLink(pageCurrent - 1)">&lt;</a>
+                <a class="page-link" href="@PageLink(pageCurrent - 1)">&lt;</a>
             </li>
         }
 
@@ -56,7 +58,7 @@
         }
         @if (pageCurrent + 1 <= pageCount)
         {
-            <li class="page-item"><a  class="page-link" href="@PageLink(pageCurrent + 1)">&gt;</a></li>
+            <li class="page-item"><a class="page-link" href="@PageLink(pageCurrent + 1)">&gt;</a></li>
         }
         @if (grouppage < (pageCount - 1) / groupsize)
         {
@@ -65,3 +67,12 @@
     </ul>
 }
 
+@helper FacetsCollapseBtn()
+{
+    <button type="button"
+            class="btn btn-outline-secondary btn-block dropdown-toggle"
+            data-toggle="collapse"
+            data-target="#leftCol" aria-expanded="false">
+        @Html.Localize("List-Search", "B_Refine")
+    </button>
+}
