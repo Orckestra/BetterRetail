@@ -59,6 +59,11 @@
 
             cursor: pointer;
 
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding: 3px !important;
+
+
             .time-slot-label {
                 top: 50%;
                 position: relative;
@@ -99,5 +104,5 @@
         @media (max-device-width: 320px) {
             font-size: 55% !important;
         }
-    } 
+    }
 }

@@ -327,15 +327,15 @@ module Orckestra.Composer {
                 <div class="bs-stepper linear row justify-content-center" >
                   <div class="bs-stepper-header col-12 sps sps--abv sticky-top" role="tablist">
                     <template  v-for="(step, index) in steps">
-                        <div class="bs-stepper-tab" 
+                        <div class="bs-stepper-tab"
                              :class="[{active: step.active, passed: step.slotProps.passed}]">
-                          <button :disabled="!step.slotProps.passed" 
-                                  type="button" 
-                                  class="step-trigger p-0" 
+                          <button :disabled="!step.slotProps.passed"
+                                  type="button"
+                                  class="step-trigger p-0"
                                   @click="navigateToStep(index)">
                             <div class="bs-stepper-circle"><span class="fa fa-2x " :class="{'fa-check': step.slotProps.passed}"></span></div>
                             <p class="d-none d-sm-block m-2 bs-stepper-title">{{step.title}}</p>
-                            <p class="d-block d-sm-none m-2 bs-stepper-mobiletitle">{{step.mobileTitle}}</p>
+                            <p class="d-block d-sm-none m-mb-2 mt-2 bs-stepper-mobiletitle">{{step.mobileTitle}}</p>
                           </button>
                         </div>
                     </template>
@@ -344,7 +344,7 @@ module Orckestra.Composer {
                     <slot v-bind="slotProps">
                     </slot>
                   </div>
-                </div> 
+                </div>
                 `
             };
         }

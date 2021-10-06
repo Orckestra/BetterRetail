@@ -12,31 +12,31 @@
 
     [FunctionParameter(Label = "Stepper Title", DefaultValue = "Shop better in these easy steps")]
     public string StepperTitle { get; set; }
-	
+
 	[FunctionParameter(Label = "Location Selection Step Summary", DefaultValue = "Check service availability near you")]
     public string LocationStepSummary { get; set; }
 
     [FunctionParameter(Label = "Location Selection Step Short Summary", DefaultValue = "Check Availability")]
     public string LocationStepShortSummary { get; set; }
-	
+
 	[FunctionParameter(Label = "Shipping Method Selection Step Summary", DefaultValue = "Select to pick up your order or get it delivered")]
     public string ShippingMethodStepSummary { get; set; }
 
     [FunctionParameter(Label = "Shipping Method Selection Step Short Summary", DefaultValue = "Pickup or Delivery?")]
     public string ShippingMethodStepShortSummary { get; set; }
-	
+
 	[FunctionParameter(Label = "Store Selection Step Summary", DefaultValue = "Select the default store to fulfill your order")]
     public string StoresStepSummary { get; set; }
 
     [FunctionParameter(Label = "Store Selection Step Short Summary", DefaultValue = "Select Store")]
     public string StoresStepShortSummary { get; set; }
-	
+
 	[FunctionParameter(Label = "Date And Time Selection Step Summary", DefaultValue = "Pick a date and time of fulfillment")]
     public string TimeslotsStepSummary { get; set; }
-	
+
 	[FunctionParameter(Label = "Date And Time Selection Step Short Summary", DefaultValue = "Select Timeslot")]
     public string TimeslotsStepShortSummary { get; set; }
-	
+
 	private const string urlSelectorWidgetMarkup = @" <f:widgetfunction xmlns:f='http://www.composite.net/ns/function/1.0' name='Composite.Widgets.String.UrlComboBox'></f:widgetfunction>";
     [FunctionParameter(Label = "Start Shopping Button URL", WidgetMarkup = urlSelectorWidgetMarkup, DefaultValue = null)]
     public string StartShoppingButtonURL { get; set; }
@@ -52,7 +52,7 @@
 <body>
     <div data-oc-controller="Grocery.StoreSelector" class="container-md store-selector mb-5">
         <div class="row">
-            <div class="col-12 col-sm-10 offset-sm-1 border p-4 store-selector-container">
+            <div class="col-12 col-sm-10 offset-sm-1 border py-4 px-1 px-md-4 store-selector-container">
                 <div id="vueStoreSelector"
                      v-cloak="v-cloak">
                     <div v-if="!Mode.Stepper">
