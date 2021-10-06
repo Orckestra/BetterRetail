@@ -4,6 +4,10 @@
 
 @helper PromotedFacetValues(IList<PromotedFacetValue> promotedFacets)
 {
+    if (promotedFacets == null || promotedFacets.Count == 0)
+    {
+        return;
+    }
     <div class="card mb-3 facets-card">
         <div class="card-body">
             @foreach (var pf in promotedFacets)
@@ -146,4 +150,33 @@
             data-oc-click="toggleFacetList">
         @Html.Localize("List-Search", "B_ShowMore")
     </button>
+}
+
+@helper RenderFacet(Facet facet)
+{
+    if (facet.FacetType == FacetType.Range)
+    {
+        @RangeFacet(facet)
+    }
+
+    if (facet.FacetType == FacetType.MultiSelect)
+    {
+        foreach (var facetValue in facet.FacetValues)
+        {
+            @MultiSelectFacet(facetValue, facet)
+        }
+    }
+
+    if (facet.FacetType == FacetType.SingleSelect)
+    {
+        foreach (var facetValue in facet.FacetValues)
+        {
+            @SingleFacet(facetValue, facet);
+        }
+    }
+
+    if (facet.FacetType != FacetType.Range && facet.OnDemandFacetValues != null && facet.OnDemandFacetValues.Count > 0)
+    {
+        @ShowMoreLessFacets(facet)
+    }
 }

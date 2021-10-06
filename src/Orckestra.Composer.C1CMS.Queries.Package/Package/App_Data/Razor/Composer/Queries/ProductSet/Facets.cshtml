@@ -1,6 +1,5 @@
 ﻿@inherits RazorFunction
 @using Orckestra.Composer.SearchQuery.Context
-@using Orckestra.Composer.Search.Facets
 @using Orckestra.Overture.ServiceModel.SearchQueries
 
 @functions {
@@ -9,12 +8,10 @@
         get { return "Facets for Product Set Page"; }
     }
 
-
     [FunctionParameter(Label = "Query Name", Help = "Query Name", WidgetMarkup = Orckestra.ExperienceManagement.SearchQueryBuilder.Widgets.ProductSetQuerySelector)]
     public string QueryName { get; set; }
 
     public ISearchQueryContext RequestContext { get; set; }
-
 }
 @{
     var browsingViewModel = RequestContext.GetSearchQueryViewModelAsync(SearchQueryType.ProductSet, QueryName).Result;
@@ -24,12 +21,10 @@
     }
 
     var facets = browsingViewModel.ProductSearchResults.Facets;
-
     if (facets == null || facets.Count == 0)
     {
         return;
     };
-
 }
 
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
@@ -38,11 +33,7 @@
 <body>
     <div data-oc-controller="Product.FacetSearch" data-corrected-search-term="@browsingViewModel.ProductSearchResults.CorrectedSearchTerms">
         <form name="searchFacets">
-            @if (browsingViewModel.ProductSearchResults.PromotedFacetValues != null &&
-                browsingViewModel.ProductSearchResults.PromotedFacetValues.Count > 0)
-            {
-                @FacetHelpers.PromotedFacetValues(browsingViewModel.ProductSearchResults.PromotedFacetValues)
-            }
+            @FacetHelpers.PromotedFacetValues(browsingViewModel.ProductSearchResults.PromotedFacetValues)
 
             @foreach (var facet in facets)
             {
@@ -61,32 +52,7 @@
                     <div class="card-body"
                          data-qa="search-refiner">
                         <h5>@facet.Title</h5>
-                        @if (facet.FacetType == FacetType.Range)
-                        {
-                            @FacetHelpers.RangeFacet(facet)
-                        }
-
-                        @if (facet.FacetType == FacetType.MultiSelect)
-                        {
-
-                            foreach (var facetValue in facet.FacetValues)
-                            {
-                                @FacetHelpers.MultiSelectFacet(facetValue, facet)
-                            }
-                        }
-
-                        @if (facet.FacetType == FacetType.SingleSelect)
-                        {
-                            foreach (var facetValue in facet.FacetValues)
-                            {
-                                @FacetHelpers.SingleFacet(facetValue, facet);
-                            }
-                        }
-
-                        @if (facet.FacetType != FacetType.Range && facet.OnDemandFacetValues != null && facet.OnDemandFacetValues.Count > 0)
-                        {
-                            @FacetHelpers.ShowMoreLessFacets(facet)
-                        }
+                        @FacetHelpers.RenderFacet(facet)
                     </div>
                 </div>
             }
