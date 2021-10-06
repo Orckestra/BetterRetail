@@ -1,0 +1,173 @@
+﻿@using Composite.AspNet.Razor
+@using System.Web.Mvc
+@using Orckestra.Composer.Search.Facets
+
+@helper PromotedFacetValues(IList<PromotedFacetValue> promotedFacets)
+{
+    if (promotedFacets == null || promotedFacets.Count == 0)
+    {
+        return;
+    }
+    <div class="card mb-3 facets-card">
+        <div class="card-body">
+            @foreach (var pf in promotedFacets)
+            {
+                if (pf.FacetType == FacetType.MultiSelect)
+                {
+                    @MultiSelectPromotedFacet(pf)
+                }
+
+                if (pf.FacetType == FacetType.SingleSelect)
+                {
+                    @SinglePromotedFacet(pf)
+                }
+            }
+        </div>
+    </div>
+}
+
+@helper SinglePromotedFacet(PromotedFacetValue facetValue)
+{
+    if (facetValue.Quantity > 0)
+    {
+        <div class="mb-1" data-facetfieldname="@facetValue.FieldName"
+             data-facettype="@facetValue.FacetType">
+            <a href="#" data-facetfieldname="@facetValue.FieldName"
+               data-facetvalue="@facetValue.Value"
+               title="@facetValue.Title"
+               data-oc-click="singleFacetChanged">@facetValue.Title&#160;(@facetValue.Quantity)</a>
+        </div>
+    }
+}
+
+@helper MultiSelectPromotedFacet(PromotedFacetValue facetValue)
+{
+    if (facetValue.Quantity > 0)
+    {
+        <div class="form-check mb-1"
+             data-facetfieldname="@facetValue.FieldName"
+             data-facettype="@facetValue.FacetType">
+            <label class="m-0">
+                <input type="checkbox"
+                       class="form-check-input"
+                       name="@(facetValue.FieldName)[]"
+                       value="@facetValue.Value"
+                       data-oc-click="multiFacetChanged"
+                       checked="@facetValue.IsSelected" />
+                @facetValue.Title&#160;(@facetValue.Quantity)
+            </label>
+        </div>
+
+    }
+}
+
+@helper FacetValueTitle(FacetValue facetValue)
+{
+    <span>@facetValue.Title (@facetValue.Quantity)</span>
+}
+
+@helper SingleFacet(FacetValue facetVaue, Facet facet)
+{
+    if (facetVaue.Quantity > 0)
+    {
+        <div class="mb-1">
+            <a href="#"
+               data-facetfieldname="@facet.FieldName"
+               data-facetvalue="@facetVaue.Value"
+               title="@facetVaue.Title"
+               data-oc-click="singleFacetChanged">@FacetValueTitle(facetVaue)</a>
+        </div>
+    }
+}
+
+@helper MultiSelectFacet(FacetValue facetVaue, Facet facet)
+{
+    <div class="form-check mb-1">
+        <label class="m-0">
+            <input id="id@(facet.FieldName)"
+                   class="form-check-input"
+                   type="checkbox"
+                   name="@(facet.FieldName)[]"
+                   value="@facetVaue.Value"
+                   data-oc-click="multiFacetChanged"
+                   checked="@facetVaue.IsSelected" />
+            @FacetValueTitle(facetVaue)
+        </label>
+    </div>
+}
+
+@helper RangeFacet(Facet facet)
+{
+    <div class="form-group">
+        <div class="range"></div>
+    </div>
+
+    <div class="form-group">
+        <div class="row">
+            <div class="col-6">
+                <input class="form-control  js-lowerValue" type="text" />
+            </div>
+            <div class="col-6">
+                <input class="form-control  js-higherValue" type="text" />
+            </div>
+        </div>
+    </div>
+
+    <button type="submit" data-oc-click="refineByRange" class="btn  btn-outline-secondary btn-block"
+            disabled="disabled">
+        @Html.Localize("List-Search", "B_Apply")
+    </button>
+}
+
+@helper ShowMoreLessFacets(Facet facet)
+{
+    <ul id="onDemandFacets-@facet.FieldName" class="list-unstyled  collapse">
+        @if (facet.FacetType == FacetType.MultiSelect)
+        {
+            foreach (var facetValue in facet.OnDemandFacetValues)
+            {
+                @MultiSelectFacet(facetValue, facet)
+            }
+        }
+
+        @if (facet.FacetType == FacetType.SingleSelect)
+        {
+            foreach (var facetValue in facet.OnDemandFacetValues)
+            {
+                @SingleFacet(facetValue, facet);
+            }
+        }
+    </ul>
+    @ShowMoreLessButton(facet.FieldName)
+}
+
+@helper ShowMoreLessButton(string fieldName)
+{
+    <button class="btn  btn-link" data-toggle="collapse" data-target="#onDemandFacets-@fieldName"
+            data-label-showmore=" @Html.Localize("List-Search", "B_ShowMore")"
+            data-label-showless=" @Html.Localize("List-Search", "B_ShowLess")"
+            data-oc-click="toggleFacetList">
+        @Html.Localize("List-Search", "B_ShowMore")
+    </button>
+}
+
+@helper RenderFacet(Facet facet)
+{
+    switch (facet.FacetType)
+    {
+        case FacetType.Range:@RangeFacet(facet); break;
+        case FacetType.SingleSelect:
+        foreach (var facetValue in facet.FacetValues)
+        {
+            @SingleFacet(facetValue, facet);
+        }
+        break;
+        case FacetType.MultiSelect:
+        foreach (var facetValue in facet.FacetValues)
+        {
+            @MultiSelectFacet(facetValue, facet)
+        }
+        break;
+        default: break;
+    }
+}

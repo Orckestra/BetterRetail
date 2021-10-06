@@ -51,6 +51,12 @@
     <Content Include="Package\App_Data\Razor\Composer\Queries\ProductSet\Grid.cshtml" />
     <Content Include="packages.config" />
     <Content Include="Package\App_Data\Razor\Composer\Components\Queries\ProductSet\Generic\Top.cshtml" />
+    <Content Include="Package\App_Data\Razor\Composer\Queries\Merchandising\Facets.cshtml" />
+    <Content Include="Package\App_Data\Razor\Composer\Queries\Merchandising\SelectedFacets.cshtml" />
+    <Content Include="Package\App_Data\Razor\Composer\Queries\ProductSet\Facets.cshtml" />
+    <Content Include="Package\App_Data\Razor\Composer\Queries\ProductSet\SelectedFacets.cshtml" />
+    <Content Include="Package\App_Data\Razor\Composer\Queries\Merchandising\Results.cshtml" />
+    <Content Include="Package\App_Data\Razor\Composer\Queries\ProductSet\Results.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

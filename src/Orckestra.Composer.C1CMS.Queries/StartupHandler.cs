@@ -59,7 +59,7 @@ namespace Orckestra.Composer.C1CMS.Queries
                 </f:param>
             </f:widgetfunction>"));
 
-            functions.RegisterAction<T>("Index", $"Composer.Queries.{searchQueryType}.Results")
+            functions.RegisterAction<T>("Index", $"Composer.Queries.{searchQueryType}.Index")
                 .AddParameter("QueryName",
                     typeof(string),
                     label:
@@ -88,31 +88,6 @@ namespace Orckestra.Composer.C1CMS.Queries
                     typeof(string),
                     label: StringResourceSystemFacade.GetString("Orckestra.ExperienceManagement.SearchQueryBuilder", "Parameters.NumberLabel"),
                     helpText: StringResourceSystemFacade.GetString("Orckestra.ExperienceManagement.SearchQueryBuilder", "Parameters.NumberHelp")
-                );
-            functions.RegisterAction<T>("SelectedSearchFacets",
-                $"Composer.Queries.{searchQueryType}.SelectedFacets")
-                .AddParameter("QueryName",
-                    typeof(string),
-                    label:
-                        StringResourceSystemFacade.GetString("Orckestra.ExperienceManagement.SearchQueryBuilder",
-                            "Parameters.QueryNameLabel"),
-                    helpText:
-                        StringResourceSystemFacade.GetString("Orckestra.ExperienceManagement.SearchQueryBuilder",
-                            "Parameters.QueryNameHelp"),
-                    isRequired: true,
-                    widgetFunctionProvider: searhQueryListWidgetFunctionProvider
-                );
-            functions.RegisterAction<T>("Facets", $"Composer.Queries.{searchQueryType}.Facets")
-                .AddParameter("QueryName",
-                    typeof(string),
-                    label:
-                        StringResourceSystemFacade.GetString("Orckestra.ExperienceManagement.SearchQueryBuilder",
-                            "Parameters.QueryNameLabel"),
-                    helpText:
-                        StringResourceSystemFacade.GetString("Orckestra.ExperienceManagement.SearchQueryBuilder",
-                            "Parameters.QueryNameHelp"),
-                    isRequired: true,
-                    widgetFunctionProvider: searhQueryListWidgetFunctionProvider
                 );
             functions.RegisterAction<T>("ChildCategories",
                 $"Composer.Queries.{searchQueryType}.ChildCategories")

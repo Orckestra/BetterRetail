@@ -64,44 +64,10 @@ namespace Orckestra.Composer.CompositeC1.Controllers
 
             return View("ProductsSearchResults", searchViewModel);
         }
-
-        public virtual ActionResult SelectedSearchFacets(
-            [Bind(Prefix = SearchRequestParams.Keywords)]string keywords, 
-            [Bind(Prefix = SearchRequestParams.Page)]int page = 1, 
-            [Bind(Prefix = SearchRequestParams.SortBy)]string sortBy = null, 
-            [Bind(Prefix = SearchRequestParams.SortDirection)]string sortDirection = SearchRequestParams.DefaultSortDirection)
-        {
-            var searchViewModel = GetSearchViewModel();
-            
-            return View("SelectedSearchFacets", searchViewModel);
-        }
-
-        public virtual ActionResult SearchFacets(
-			[Bind(Prefix = SearchRequestParams.Keywords)]string keywords, 
-            [Bind(Prefix = SearchRequestParams.Page)]int page = 1, 
-            [Bind(Prefix = SearchRequestParams.SortBy)]string sortBy = null, 
-            [Bind(Prefix = SearchRequestParams.SortDirection)]string sortDirection = SearchRequestParams.DefaultSortDirection)
-        {
-            if (!AreKeywordsValid(keywords))
-            {
-                return View("SearchFacetsEmpty");
-            }
-
-            var searchViewModel = GetSearchViewModel();
-
-            return searchViewModel.ProductSearchResults.TotalCount == 0
-                ? View("SearchFacetsEmpty")
-                : View("SearchFacets", searchViewModel.ProductSearchResults);
-        }
  
         protected virtual bool AreKeywordsValid(string keywords)
         {
             return SearchControllerHelper.AreKeywordsValid(keywords);
-        }
-
-        protected virtual SearchViewModel GetSearchViewModel()
-        {
-                return SearchRequestContext.ProductsSearchViewModel;
         }
 
         public virtual ActionResult PageHeader(string keywords)
