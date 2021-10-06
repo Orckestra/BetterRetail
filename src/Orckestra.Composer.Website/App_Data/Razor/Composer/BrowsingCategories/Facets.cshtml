@@ -1,0 +1,91 @@
+﻿@inherits RazorFunction
+@using Orckestra.Composer.Search.Context;
+@using Orckestra.Composer.Search.Facets
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Search Facets for Category Page"; }
+    }
+
+    public IBrowseCategoryRequestContext BrowsingRequestContext { get; set; }
+
+}
+@{
+    var categoryBrowsingViewModel = BrowsingRequestContext.GetViewModelAsync().Result;
+    if (categoryBrowsingViewModel == null)
+    {
+        return;
+    }
+
+    var facets = categoryBrowsingViewModel.ProductSearchResults.Facets;
+
+    if (facets == null || facets.Count == 0)
+    {
+        return;
+    };
+
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<head>
+</head>
+<body>
+    <div data-oc-controller="Product.FacetSearch" data-corrected-search-term="@categoryBrowsingViewModel.ProductSearchResults.CorrectedSearchTerms">
+        <form name="searchFacets">
+            @if (categoryBrowsingViewModel.ProductSearchResults.PromotedFacetValues != null &&
+                categoryBrowsingViewModel.ProductSearchResults.PromotedFacetValues.Count > 0)
+            {
+                @FacetHelpers.PromotedFacetValues(categoryBrowsingViewModel.ProductSearchResults.PromotedFacetValues)
+            }
+
+            @foreach (var facet in facets)
+            {
+                if (!facet.IsDisplayed)
+                {
+                    continue;
+                }
+
+                <div class="card  bg-light  mb-3  facets-card"
+                     data-facetfieldname="@facet.FieldName"
+                     data-facettype="@facet.FacetType"
+                     data-min="@facet.StartValue"
+                     data-max="@facet.EndValue"
+                     data-step="@facet.GapSize"
+                     data-max-label="@Html.Localize("List-Search", "L_RangeAll")">
+                    <div class="card-body"
+                         data-qa="search-refiner">
+                        <h5>@facet.Title</h5>
+                        @if (facet.FacetType == FacetType.Range)
+                        {
+                            @FacetHelpers.RangeFacet(facet)
+                        }
+
+                        @if (facet.FacetType == FacetType.MultiSelect)
+                        {
+
+                            foreach (var facetValue in facet.FacetValues)
+                            {
+                                @FacetHelpers.MultiSelectFacet(facetValue, facet)
+                            }
+                        }
+
+                        @if (facet.FacetType == FacetType.SingleSelect)
+                        {
+                            foreach (var facetValue in facet.FacetValues)
+                            {
+                                @FacetHelpers.SingleFacet(facetValue, facet);
+                            }
+                        }
+
+                        @if (facet.FacetType != FacetType.Range && facet.OnDemandFacetValues != null && facet.OnDemandFacetValues.Count > 0)
+                        {
+                            @FacetHelpers.ShowMoreLessFacets(facet)
+                        }
+                    </div>
+                </div>
+            }
+        </form>
+    </div>
+</body>
+</html>

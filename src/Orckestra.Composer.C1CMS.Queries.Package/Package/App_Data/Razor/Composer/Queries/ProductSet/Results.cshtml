@@ -1,0 +1,47 @@
+﻿@inherits Composer.Razor.ComposerRazorFunction
+@using Orckestra.Overture.ServiceModel.SearchQueries
+@using Orckestra.Composer.SearchQuery.Context
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Product Set Browsing Page Results"; }
+    }
+
+    [FunctionParameter(Label = "Query Name", Help = "Query Name", WidgetMarkup = Orckestra.ExperienceManagement.SearchQueryBuilder.Widgets.ProductSetQuerySelector)]
+    public string QueryName { get; set; }
+
+    public ISearchQueryContext RequestContext { get; set; }
+}
+
+@{
+    var browsingViewModel = RequestContext.GetSearchQueryViewModelAsync(SearchQueryType.ProductSet, QueryName).Result;
+    if (browsingViewModel == null)
+    {
+        return;
+    }
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<head>
+</head>
+<body>
+    <div class="row filters-row mb-4">
+        <div class="col-6 d-lg-none">
+            @SearchHelpers.FacetsCollapseBtn()
+        </div>
+        <div class="col-6">
+            @Partial("SearchSortBy", browsingViewModel.ProductSearchResults)
+        </div>
+        <div class="col-6 d-none d-lg-block">
+            @Partial("PaginationDropDown", browsingViewModel.ProductSearchResults)
+        </div>
+    </div>
+
+    @Function("Composer.Queries.ProductSet.Index", new { QueryName })
+
+    <div class="row d-block pt-2">
+        @Partial("Pager", browsingViewModel.ProductSearchResults)
+    </div>
+</body>
+</html>
