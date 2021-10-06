@@ -135,7 +135,12 @@
     </div>
 }
 
-@helper DisplayFormat() {
- var extendedVM = Model.AsExtensionModel<IGroceryProductViewModel>();
-<p>@extendedVM.ProductUnitQuantity x @extendedVM.ProductUnitSize @extendedVM.ProductUnitMeasure</p>
+@helper DisplayFormat()
+{
+var extendedVM = Model.AsExtensionModel<IGroceryProductViewModel>();
+var hasUnitValues =extendedVM.ProductUnitQuantity > 0 && extendedVM.ProductUnitSize > 0 && !string.IsNullOrWhiteSpace(extendedVM.ProductUnitMeasure);
+
+if(hasUnitValues){
+        <p>@extendedVM.ProductUnitQuantity x @extendedVM.ProductUnitSize @extendedVM.ProductUnitMeasure</p>
+    }
 }

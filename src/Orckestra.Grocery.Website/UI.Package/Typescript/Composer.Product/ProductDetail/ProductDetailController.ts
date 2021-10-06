@@ -345,7 +345,7 @@ module Orckestra.Composer {
                         let stepOne = priceNum / parseFloat(this.Product.ProductUnitQuantity);
                         let stepTwo = stepOne / parseFloat(this.Product.ProductUnitSize);
                         let pricePerUnit = stepTwo * parseFloat(this.Product.ConvertedVolumeMeasurement);
-                        let formatedPrice = this.Product.ListPrice.replace(priceNum, pricePerUnit.toFixed(2));
+                        let formatedPrice = this.Product.ListPrice.replace(priceNum.toFixed(2), pricePerUnit.toFixed(2));
                         return  formatedPrice;
                     },
                     IsUnavailableVariant() {
