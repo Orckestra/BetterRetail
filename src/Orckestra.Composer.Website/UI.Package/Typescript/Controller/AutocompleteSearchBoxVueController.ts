@@ -8,7 +8,6 @@ module Orckestra.Composer {
     interface VueAutocompleteData {
         sectionConfigs: any;
         debounceMilliseconds: number;
-        inputProps: { name: string; id: string; placeholder: string; class: string };
         query: string; suggestions: any[];
         results: any[];
         timeout: null;
@@ -35,16 +34,10 @@ module Orckestra.Composer {
                         timeout: null,
                         selected: null,
                         debounceMilliseconds: 250,
-                        inputProps: {
-                            id: "autosuggest__input",
-                            placeholder: "You search here...",
-                            class: "form-control",
-                            name: "hello"
-                        },
                         suggestions: [],
                         sectionConfigs: {
                             autocomplete: {
-                                limit: 5,
+                                active: true,
                                 onSelected: function (selected) {
                                     this.selected = selected.item;
                                 }.bind(this),
@@ -54,35 +47,52 @@ module Orckestra.Composer {
                                     "col-md-6": true,
                                 }
                             },
-                            suggestterms: {
-                                limit: 5,
-                                onSelected: function (selected) {
-                                    this.selected = selected.item;
-                                }.bind(this),
-                                ulClass: "autosuggest-top-results"
-                            },
                             suggestcategories: {
-                                limit: 5,
                                 onSelected: function (selected) {
+                                    this.selectedCategorySuggestion(selected);
                                     this.selected = selected.item;
                                 }.bind(this),
-                                ulClass: "autosuggest-top-results"
                             },
                             suggestbrands: {
-                                type: "default-section",
                                 //label: "suggestbrands",
-                                limit: 5,
                                 onSelected: function (selected) {
+                                    this.selectedBrandSuggestion(selected);
                                     this.selected = selected.item;
                                 }.bind(this),
-                                ulClass: "autosuggest-brands"
                             },
+                            suggestterms: {
+                                onSelected: function (selected) {
+                                    this.selected = selected.item;
+                                    this.selectedSearchTermsSuggestion(selected);
+                                }.bind(this),
+                            },
+                            default: {
+                                onSelected: () => { },
+                            }
                         }
                     };
                 },
                 mounted() {
+                    this.query = this.$el.attributes.keywords.value;
+                    this.sectionConfigs.autocomplete.limit = +this.$el.attributes['autocomplete-limit'].value;
+                    this.sectionConfigs.suggestcategories.limit = +this.$el.attributes['categories-limit'].value;
+                    this.sectionConfigs.suggestbrands.limit = +this.$el.attributes['brand-limit'].value;
+                    this.sectionConfigs.suggestterms.limit = +this.$el.attributes['search-terms-limit'].value;
+
+                    this.sectionConfigs.suggestcategories.active = !!this.$el.attributes['categories-enable'];
+                    this.sectionConfigs.suggestbrands.active = !!this.$el.attributes['brands-enable'];
+                    this.sectionConfigs.suggestterms.active = !!this.$el.attributes['search-terms-enable'];
+
+                    if(this.query) {
+                        this.fetchResults(this.query);
+                    }
+                },
+                updated() {
                 },
                 computed: {
+                    isEmptyRight () {
+                        return this.suggestions.length === 1;
+                    }
                 },
                 methods: {
                     fetchResults(result) {
@@ -90,7 +100,7 @@ module Orckestra.Composer {
 
                         clearTimeout(this.timeout);
                         this.timeout = setTimeout(() => {
-                            const sectionNames = Object.keys(this.sectionConfigs);
+                            const sectionNames = Object.keys(this.sectionConfigs).filter(name => this.sectionConfigs[name].active);
 
                             const results = sectionNames.map(sectionName => {
                                 const limit = this.sectionConfigs[sectionName].limit;
@@ -102,13 +112,8 @@ module Orckestra.Composer {
 
                                 this.suggestions = sectionNames
                                     .map((sectionName, index) => {
-                                        const data = (values[index].Suggestions || []).map(({DisplayName, ...suggest}) => ({
-                                            ...suggest,
-                                            DisplayName,
-                                            mappedDisplayName: this.highlightSuggestion(DisplayName, query)
-                                        }));
-
-                                        return ({ name: sectionName, data})
+                                        const data = this.mapSuggestions(values[index].Suggestions, sectionName, query);
+                                        return ({ name: sectionName, data })
                                     })
                                     .filter(section => section.data.length || section.name === 'autocomplete');
                             });
@@ -125,9 +130,39 @@ module Orckestra.Composer {
                             value.slice(end),
                         ].join('');
                     },
+                    mapSuggestions(suggestions = [], sectionName, query) {
+                        return suggestions.map((suggest) => {
+                            const title = sectionName === 'suggestcategories' ? [...suggest.Parents, suggest.DisplayName].join(' > ')  : suggest.DisplayName;
+                            return ({ ...suggest, mappedDisplayName: this.highlightSuggestion(title, query) })
+                        })
+                    },
                     getSuggestionValue(suggestion) {
                         let { name, item } = suggestion;
                         return item.DisplayName;
+                    },
+                    shouldRenderSuggestions(size, loading) {
+                        return this.query.length > 2 && !loading
+                    },
+                    searchMore() {
+                        const elem = document.getElementById("frm-search-box") as HTMLFormElement;
+                        elem.submit();
+                    },
+                    selectedSearchTermsSuggestion(suggestion) {
+                        //this.query = suggestion.item.DisplayName;
+                        this.searchMore();
+                    },
+                    selectedCategorySuggestion(suggestion) {
+                        EventHub.instance().publish('categorySuggestionClicked', {
+                            data: {
+                                suggestion: suggestion.item.DisplayName,
+                                parents: suggestion.item.Parents
+                            }
+                        });
+                    },
+                    selectedBrandSuggestion(suggestion) {
+                        EventHub.instance().publish('brandSuggestionClicked', {
+                            data: { suggestion: suggestion.item.DisplayName }
+                        });
                     }
                 }
             });
@@ -259,6 +294,8 @@ module Orckestra.Composer {
         public selectedCategorySuggestion(actionContext: Orckestra.Composer.IControllerActionContext) {
             let suggestion = actionContext.elementContext.data('suggestion').toString();
             let parents = actionContext.elementContext.data('parents').toString().split(',').filter((parent) => parent);
+
+            console.log(parents, suggestion);
             EventHub.instance().publish('categorySuggestionClicked', {
                 data: {
                     suggestion,

@@ -47,8 +47,6 @@
 <head>
 </head>
 <body>
-    
-
     <div id="search-box" class="search-box" data-oc-controller="@dataController"
          data-categories-enable="@Categories"
          data-brands-enable="@Brands"
@@ -57,106 +55,104 @@
          data-search-terms-limit="@MaxSearchTermsSuggestionsCount"
          data-categories-limit="@MaxCategoriesSuggestionsCount"
          data-brand-limit="@MaxBrandSuggestionsCount">
-       
-        <div id="vueAutocomplete">
-            <div class="container">
-
-                <vue-autosuggest xmlns:v-on="v-on"
-                                 xmlns:v-bind="v-bind"
-                                 ref="autosuggest"
-                                 v-model="query"
-                                 v-on:input="fetchResults"
-                                 v-bind:input-props="inputProps"
-                                 v-bind:suggestions="suggestions"
-                                 v-bind:section-configs="sectionConfigs"
-                                 v-bind:get-suggestion-value="getSuggestionValue">
-
-                    <template v-slot:before-section-autocomplete="{ section }">
-                        <div class="card-header col-12">@Html.Localize("General", "L_Suggest_PossibleMatches")</div>
-                    </template>
-
-                    <template v-slot:before-section-suggestbrands="{ section }">
-                        <div class="card-header col-12">@Html.Localize("General", "L_Suggest_Brands")</div>
-                    </template>
-
-                    <template slot-scope="{ suggestion, index }">
-                        <div v-if="suggestion.name === 'autocomplete'" class="product-tile">
-                            <div class="row">
-                                <div class="col-5">
-                                    <a class="product-tile-media"
-                                       data-oc-click="selectedProduct"
-                                       v-bind:data-sku="suggestion.item.Sku"
-                                       v-bind:data-index="index"
-                                       v-bind:href="suggestion.item.Url">
-                                        <img class="img-fluid"
-                                             v-bind:src="suggestion.item.ImageUrl"
-                                             v-bind:alt="suggestion.item.FullDisplayName"
-                                             @*  onerror="this.onerror=null; this.src='{{FallbackImageUrl}}'" *@ />
-                                    </a>
-                                </div>
-                                <div class="col-7">
-                                    <div class="product-tile-text">
-                                        <span data-qa="search-product-brand" v-if="suggestion.item.BrandDisplayName">{{suggestion.item.BrandDisplayName}}<br /></span>
-                                        <span data-qa="search-product-brand" v-else-if="suggestion.item.Brand">{{suggestion.item.Brand}}</span>
-                                        <a data-qa="search-product-title"
-                                           data-oc-click="selectedProduct"
-                                           class="suggestion-title"
-                                           v-bind:data-sku="suggestion.item.Sku"
-                                           v-bind:data-index="index"
-                                           v-bind:href="suggestion.item.Url"
-                                           v-bind:title="suggestion.item.FullDisplayName"
-                                           v-html="suggestion.item.mappedDisplayName"></a>
-                                    </div>
-                                    <div class="product-tile-special-price">
-                                        <del v-if="suggestion.item.IsOnSale">{{suggestion.item.DisplayListPrice}}</del>
-                                    </div>
-                                    <div class="product-tile-price">
-                                        <span v-if="suggestion.item.IsOnSale" class="h4  text-danger" data-qa="search-product-price">{{suggestion.item.DisplaySpecialPrice}}</span>
-                                        <span v-else="v-else" class="h4" data-qa="search-product-price">{{suggestion.item.DisplayListPrice}}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div v-else-if="suggestion.name === 'suggestbrands'">
-                            <a data-oc-click="selectedBrandSuggestion" 
-                               v-bind:data-suggestion="suggestion.item.DisplayName" 
-                               v-html="suggestion.item.mappedDisplayName"
-                               role="link" 
-                               tabindex="0"></a>
-                        </div>
-
-                        <div v-else="v-else">
-                            <img v-bind:class="{ avatar: true }" v-bind:src="suggestion.item.thumbnailUrl" />
-                            {{suggestion.item.title}}
-                        </div>
-
-                    </template>
-
-                    <template v-slot:after-section-autocomplete="{ section }">
-                        <p v-if="section.data.length" style="width: 100%">Show more results...</p>
-                        <p v-else="v-else" style="text-align: center;">No results found</p>
-                    </template>
-                </vue-autosuggest>
-            </div>
-        </div>
 
         <form method="GET" action="@actionTarget" id="frm-search-box">
+            <div id="vueAutocomplete"
+                 keywords="@keywords"
+                 categories-enable="@Categories"
+                 brands-enable="@Brands"
+                 search-terms-enable="@SearchTerms"
+                 autocomplete-limit="@MaxProductsAutocompleteCount"
+                 search-terms-limit="@MaxSearchTermsSuggestionsCount"
+                 categories-limit="@MaxCategoriesSuggestionsCount"
+                 brand-limit="@MaxBrandSuggestionsCount"
+                 class="form-row">
 
-
-            <div class="form-row">
-                <div class="col-12  col-xl-9 offset-xl-3">
+                <div class="col-12 col-xl-9 offset-xl-3">
                     <div class="input-group input-group-sm">
-                        <input id="search-input"
-                               data-qa="search-input"
-                               class="form-control form-control-sm js-typeahead" type="search" name="keywords"
-                               placeholder="@Html.Localize("List-Search", "F_SearchWaterMark")" value="@keywords"
-                               required="required"
-                               data-parsley-required-message=""
-                               data-parsley-antixss="true"
-                               data-parsley-antixss-message="@Html.Localize("Errors", "L_InvalidCharsInSearchBox")"
-                               data-parsley-class-handler-selector="form"
-                               data-parsley-errors-container="#search-errors" />
+                        <vue-autosuggest xmlns:v-on="v-on"
+                                         xmlns:v-bind="v-bind"
+                                         ref="autosuggest"
+                                         v-model="query"
+                                         v-on:input="fetchResults"
+                                         v-bind:input-props="{
+                                            id: 'autosuggest__input',
+                                            placeholder: '@Html.Localize("List-Search", "F_SearchWaterMark")',
+                                            class: 'form-control form-control-sm',
+                                            name: 'keywords'
+                                         }"
+                                         v-bind:suggestions="suggestions"
+                                         v-bind:section-configs="sectionConfigs"
+                                         v-bind:get-suggestion-value="getSuggestionValue"
+@*                                         v-bind:should-render-suggestions="shouldRenderSuggestions"*@
+                                         v-bind:component-attr-class-autosuggest-results="'autosuggest__results ' + (isEmptyRight ? 'empty-right' : '')">
+
+                            <template v-slot:before-section-autocomplete="{ section }">
+                                <div class="card-header col-12">@Html.Localize("General", "L_Suggest_PossibleMatches")</div>
+                            </template>
+
+                            <template v-slot:before-section-suggestbrands="{ section }">
+                                <div v-if="section.data.length" class="card-header col-12">@Html.Localize("General", "L_Suggest_Brands")</div>
+                            </template>
+
+                            <template v-slot:before-section-suggestcategories="{ section }">
+                                <div v-if="section.data.length" class="card-header col-12">@Html.Localize("General", "L_Suggest_Categories")</div>
+                            </template>
+
+                            <template v-slot:before-section-suggestterms="{ section }">
+                                <div v-if="section.data.length" class="card-header col-12">@Html.Localize("General", "L_Suggest_Suggestions")</div>
+                            </template>
+
+                            <template slot-scope="{ suggestion, index }">
+                                <div v-if="suggestion.name === 'autocomplete'" class="product-tile">
+                                    <div class="row">
+                                        <div class="col-5">
+                                            <a class="product-tile-media"
+                                               v-bind:data-sku="suggestion.item.Sku"
+                                               v-bind:data-index="index"
+                                               v-on:mouseup.stop=""
+                                               v-bind:href="suggestion.item.Url">
+                                                <img class="img-fluid"
+                                                     v-bind:src="suggestion.item.ImageUrl"
+                                                     v-bind:alt="suggestion.item.FullDisplayName"
+                                                     @*  onerror="this.onerror=null; this.src='{{FallbackImageUrl}}'" *@ />
+                                            </a>
+                                        </div>
+                                        <div class="col-7">
+                                            <div class="product-tile-text">
+                                                <span data-qa="search-product-brand" v-if="suggestion.item.BrandDisplayName">{{suggestion.item.BrandDisplayName}}<br /></span>
+                                                <span data-qa="search-product-brand" v-else-if="suggestion.item.Brand">{{suggestion.item.Brand}}</span>
+                                                <a data-qa="search-product-title"
+                                                   class="suggestion-title"
+                                                   v-on:mouseup.stop=""
+                                                   v-bind:data-sku="suggestion.item.Sku"
+                                                   v-bind:data-index="index"
+                                                   v-bind:href="suggestion.item.Url"
+                                                   v-bind:title="suggestion.item.FullDisplayName"
+                                                   v-html="suggestion.item.mappedDisplayName"></a>
+                                            </div>
+                                            <div class="product-tile-special-price">
+                                                <del v-if="suggestion.item.IsOnSale">{{suggestion.item.DisplayListPrice}}</del>
+                                            </div>
+                                            <div class="product-tile-price">
+                                                <span v-if="suggestion.item.IsOnSale" class="h4  text-danger" data-qa="search-product-price">{{suggestion.item.DisplaySpecialPrice}}</span>
+                                                <span v-else="v-else" class="h4" data-qa="search-product-price">{{suggestion.item.DisplayListPrice}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div v-else="v-else">
+                                    <a v-html="suggestion.item.mappedDisplayName" role="link"></a>
+                                </div>
+
+                            </template>
+
+                            <template v-slot:after-section-autocomplete="{ section }">
+                                <p v-if="section.data.length" style="width: 100%" xmlns:v-on="v-on" v-on:mouseup.stop="searchMore">@Html.Localize("List-Search", "ShowMoreResults")</p>
+                                <p v-else="v-else" style="text-align: center;">@Html.Localize("List-Search", "NoResultAutoSuggest")</p>
+                            </template>
+                        </vue-autosuggest>
                         <div class="input-group-append input-group-append-sm">
                             <button data-qa="search-button"
                                     class="btn btn-outline-secondary  border-0"
@@ -166,11 +162,40 @@
                             </button>
                         </div>
                     </div>
-                    <div id="search-errors" class="invalid-feedback">
-                    </div>
                 </div>
             </div>
         </form>
+
+            <form method="GET" action="@actionTarget" id="frm-search-box">
+
+
+                <div class="form-row">
+                    <div class="col-12  col-xl-9 offset-xl-3">
+                        <div class="input-group input-group-sm">
+                            <input id="search-input"
+                                   data-qa="search-input"
+                                   class="form-control form-control-sm js-typeahead" type="search" name="keywords"
+                                   placeholder="@Html.Localize("List-Search", "F_SearchWaterMark")" value="@keywords"
+                                   required="required"
+                                   data-parsley-required-message=""
+                                   data-parsley-antixss="true"
+                                   data-parsley-antixss-message="@Html.Localize("Errors", "L_InvalidCharsInSearchBox")"
+                                   data-parsley-class-handler-selector="form"
+                                   data-parsley-errors-container="#search-errors" />
+                            <div class="input-group-append input-group-append-sm">
+                                <button data-qa="search-button"
+                                        class="btn btn-outline-secondary  border-0"
+                                        title="@Html.Localize("List-Search", "B_Search")"
+                                        type="submit">
+                                    <span class="fa  fa-search"></span>
+                                </button>
+                            </div>
+                        </div>
+                        <div id="search-errors" class="invalid-feedback">
+                        </div>
+                    </div>
+                </div>
+            </form>
     </div>
 </body>
 </html>
