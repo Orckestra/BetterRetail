@@ -31,6 +31,9 @@ namespace Orckestra.Composer.CompositeC1.Services.Cache
                 
                 if (dependentEntry.Operations.HasFlag(CacheDependentOperations.Deleted))
                     DataEventSystemFacade.SubscribeToDataDeleted(dependentEntry.EntityType, ResetCache, true);
+
+                if (dependentEntry.Operations > 0)
+                    DataEventSystemFacade.SubscribeToStoreChanged(dependentEntry.EntityType, ResetCacheOnUnhandledChange, true);
             }
         }
 
@@ -43,9 +46,12 @@ namespace Orckestra.Composer.CompositeC1.Services.Cache
 
                 if (dependentEntry.Operations.HasFlag(CacheDependentOperations.Update))
                     DataEventSystemFacade.UnsubscribeToDataAfterUpdate(dependentEntry.EntityType, ResetCache);
-                
+
                 if (dependentEntry.Operations.HasFlag(CacheDependentOperations.Deleted))
                     DataEventSystemFacade.UnsubscribeToDataDeleted(dependentEntry.EntityType, ResetCache);
+
+                if (dependentEntry.Operations > 0)
+                    DataEventSystemFacade.UnsubscribeToStoreChanged(dependentEntry.EntityType, ResetCacheOnUnhandledChange);
             }
         }
 
@@ -53,7 +59,15 @@ namespace Orckestra.Composer.CompositeC1.Services.Cache
         {
             Clear();
         }
-        
+
+        private void ResetCacheOnUnhandledChange(object sender, StoreEventArgs storeEventArgs)
+        {
+            if (!storeEventArgs.DataEventsFired)
+            {
+                ResetCache(sender, null);
+            }
+        }
+
         public override void Dispose()
         {
             UnsubscribeFromEvents(DependentEntities);
