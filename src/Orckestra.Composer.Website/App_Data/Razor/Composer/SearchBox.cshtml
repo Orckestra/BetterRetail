@@ -81,19 +81,19 @@
                                          v-bind:component-attr-class-autosuggest-results="'autosuggest__results ' + (isEmptyRight ? 'empty-right' : '')">
 
                             <template v-slot:before-section-autocomplete="{ section }">
-                                <div class="card-header col-12">@Html.Localize("General", "L_Suggest_PossibleMatches")</div>
+                                <div class="card-header col-12 mb-3">@Html.Localize("General", "L_Suggest_PossibleMatches")</div>
                             </template>
 
                             <template v-slot:before-section-suggestbrands="{ section }">
-                                <div v-if="section.data.length" class="card-header col-12">@Html.Localize("General", "L_Suggest_Brands")</div>
+                                <div v-if="section.data.length" class="card-header col-12 mb-2">@Html.Localize("General", "L_Suggest_Brands")</div>
                             </template>
 
                             <template v-slot:before-section-suggestcategories="{ section }">
-                                <div v-if="section.data.length" class="card-header col-12">@Html.Localize("General", "L_Suggest_Categories")</div>
+                                <div v-if="section.data.length" class="card-header col-12 mb-2">@Html.Localize("General", "L_Suggest_Categories")</div>
                             </template>
 
                             <template v-slot:before-section-suggestterms="{ section }">
-                                <div v-if="section.data.length" class="card-header col-12">@Html.Localize("General", "L_Suggest_Suggestions")</div>
+                                <div v-if="section.data.length" class="card-header col-12 mb-2">@Html.Localize("General", "L_Suggest_Suggestions")</div>
                             </template>
 
                             <template slot-scope="{ suggestion, index }">
@@ -132,14 +132,21 @@
                                 </div>
 
                                 <div v-else="v-else">
-                                    <a v-html="suggestion.item.mappedDisplayName" role="link"></a>
+                                    <a class="p-2" v-html="suggestion.item.mappedDisplayName" role="link"></a>
                                 </div>
 
                             </template>
 
                             <template v-slot:after-section-autocomplete="{ section }">
-                                <p v-if="section.data.length" style="width: 100%" xmlns:v-on="v-on" v-on:mouseup.stop="searchMore">@Html.Localize("List-Search", "ShowMoreResults")</p>
-                                <p v-else="v-else" style="text-align: center;">@Html.Localize("List-Search", "NoResultAutoSuggest")</p>
+                                <p v-if="section.data.length" class="w-100 m-3" xmlns:v-on="v-on" v-on:mouseup.stop="searchMore">@Html.Localize("List-Search", "ShowMoreResults")</p>
+
+                                <div v-else="v-else" class="card-body h-100">
+                                    <div class="row">                                   
+                                        <div class=" col-12 text-center">
+                                            <em>@Html.Localize("List-Search", "NoResultAutoSuggest")</em>
+                                        </div>                                  
+                                    </div>
+                                </div>                             
                             </template>
                         </vue-autosuggest>
                         <div class="input-group-append input-group-append-sm">
