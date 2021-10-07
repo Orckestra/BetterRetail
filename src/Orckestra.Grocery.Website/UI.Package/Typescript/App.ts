@@ -17,6 +17,7 @@
 ///<reference path='./Composer.Cart/CartSummary/CartSummaryController.ts' />
 ///<reference path='./Composer.Cart/CartSummary/CartChangeRecurringFrequencyController.ts' />
 ///<reference path='./Composer.Cart/MiniCart/MiniCartController.ts' />
+///<reference path='./Composer.Cart/MiniCartButton/MiniCartButtonController.ts' />
 ///<reference path='./Composer.Cart/Coupons/CouponController.ts' />
 ///<reference path='./Composer.Product/ProductDetail/ProductDetailController.ts' />
 ///<reference path='./Composer.Product/RelatedProducts/RelatedProductsController.ts' />
@@ -100,6 +101,7 @@
                 { name: 'Cart.CartSummary', controller: Orckestra.Composer.CartSummaryController },
                 { name: 'Cart.OrderSummary', controller: Orckestra.Composer.OrderSummaryController },
                 { name: 'Cart.MiniCart', controller: Orckestra.Composer.MiniCartController },
+                { name: 'Cart.MiniCartButton', controller: Orckestra.Composer.MiniCartButtonController },
                 { name: 'Cart.Coupons', controller: Orckestra.Composer.CouponController },
                 { name: 'Cart.AddToCartNotification', controller: Orckestra.Composer.AddToCartNotificationController },
                 { name: 'Cart.ChangeRecurringFrequency', controller: Orckestra.Composer.CartChangeRecurringFrequencyController },
@@ -164,7 +166,6 @@
                 { name: 'Grocery.SelectedStoreInCart', controller: Orckestra.Composer.SelectedStoreInCartController },
                 { name: 'Grocery.ChangeStoreModal', controller: Orckestra.Composer.ChangeStoreModalController },
                 { name: 'Grocery.TimeSlotBanner', controller: Orckestra.Composer.TimeSlotBannerController },
-                
                 { name: 'PageNotFound.Analytics', controller: Orckestra.Composer.PageNotFoundAnalyticsController }
             ]
         };

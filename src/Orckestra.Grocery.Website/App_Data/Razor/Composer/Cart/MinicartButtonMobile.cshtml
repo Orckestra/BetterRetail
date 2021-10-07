@@ -1,0 +1,31 @@
+﻿@inherits RazorFunction
+@using Orckestra.Composer.Cart
+@using Orckestra.ExperienceManagement.Configuration;
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Mini Cart Button Mobile"; }
+    }
+
+    public ISiteConfiguration SiteConfiguration { get; set; }
+    public IComposerContext ComposerContext { get; set; }
+}
+
+@{
+    var pages = SiteConfiguration.GetPagesConfiguration(ComposerContext.CultureInfo, HomePageNode.Id);
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
+    <head>
+    </head>
+    <body>
+        <div id="vueMiniCartButtonMobile" v-cloak="true" >
+            <a href="~/page(@pages.CartPageId)" class="d-block d-md-none nav-link"
+               title="@Html.Localize("MiniCart", "H_MinicartTitle")">
+                <i class="fa fa-shopping-cart"></i>
+                <span v-if="!Cart.IsCartEmpty" class="badge badge-top-right badge-pill badge-danger">{{Cart.TotalQuantity}}</span>
+            </a>
+        </div>
+    </body>
+</html>

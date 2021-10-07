@@ -412,6 +412,8 @@
     <Content Include="App_Data\Razor\Composer\BrowsingCategories\SelectedFacets.cshtml" />
     <Content Include="App_Data\Razor\Composer\Search\Facets.cshtml" />
     <Content Include="App_Data\Razor\Composer\Search\SelectedSearchFacets.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Cart\MinicartButton.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Cart\MinicartButtonMobile.cshtml" />
     <None Include="Properties\PublishProfiles\Website - CD.pubxml" />
     <None Include="Properties\PublishProfiles\Website.pubxml" />
     <Content Include="Views\web.config" />
