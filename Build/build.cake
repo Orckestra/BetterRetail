@@ -122,7 +122,7 @@ Task("Run-NUnit-Tests").Does(() =>
 
 Task("Clean-Typescripts-Unit-Tests").Does(() => 
 {
-    var filesToDelete = GetFiles($"{srcDir}/Orckestra.Composer.Website/UI.Package/**/orckestra.composer.tests.*");
+    var filesToDelete = GetFiles($"{srcDir}/Orckestra.Grocery.Website/UI.Package/**/orckestra.composer.tests.*");
     DeleteFiles(filesToDelete);
     DeleteDirectories($"{buildDir}/.temp");
 });
@@ -131,9 +131,9 @@ Task("Prepare-Typescripts-Unit-Tests").Does(() =>
 {
     var destPath = $"{buildDir}/.temp";
     DeleteDirectories(destPath);
-    CopyDirectory($"{srcDir}/Orckestra.Composer.Website/UI.Package/Tests", $"{destPath}/Tests");
-    CopyDirectory($"{srcDir}/Orckestra.Composer.Website/UI.Package/Typescript", $"{destPath}/Typescript");
-    CopyDirectory($"{srcDir}/Orckestra.Composer.Website/UI.Package/Typings", $"{destPath}/Typings");
+    CopyDirectory($"{srcDir}/Orckestra.Grocery.Website/UI.Package/Tests", $"{destPath}/Tests");
+    CopyDirectory($"{srcDir}/Orckestra.Grocery.Website/UI.Package/Typescript", $"{destPath}/Typescript");
+    CopyDirectory($"{srcDir}/Orckestra.Grocery.Website/UI.Package/Typings", $"{destPath}/Typings");
 });
 
 

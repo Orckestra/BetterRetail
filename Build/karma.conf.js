@@ -1,6 +1,6 @@
 ﻿module.exports = function(config) {
     var path = require('path'),
-        thirdPartyJavaScriptPath = '../src/Orckestra.Composer.Website/UI.Package/JavaScript/',
+        thirdPartyJavaScriptPath = '../src/Orckestra.Grocery.Website/UI.Package/JavaScript/',
         testsOutputFolder = './.temp/Tests';
     
     //TODO: add ESLint and Coverage
@@ -18,9 +18,9 @@
             path.join(thirdPartyJavaScriptPath, 'q-1.2.0.js'),
             path.join(thirdPartyJavaScriptPath, 'jquery.serialize-object.js'),
             path.join(thirdPartyJavaScriptPath, 'typeahead.js'),
-            '../src/Orckestra.Composer.Website/UI.Package/Javascript/orckestra.composer.tests.js',
+            '../src/Orckestra.Grocery.Website/UI.Package/Javascript/orckestra.composer.tests.js',
             path.join(testsOutputFolder, '/**/*.js')],
-        filesToBuild: ['../src/Orckestra.Composer.Website/UI.Package/Tests/**/*.ts'],
+        filesToBuild: ['../src/Orckestra.Grocery.Website/UI.Package/Tests/**/*.ts'],
         reporters: 
         [
             'spec',

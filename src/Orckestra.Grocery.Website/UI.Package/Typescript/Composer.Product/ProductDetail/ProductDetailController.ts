@@ -1,6 +1,8 @@
 ///<reference path='../Product/ProductController.ts' />
 ///<reference path='../ProductEvents.ts' />
 ///<reference path='../../Composer.Cart/RecurringOrder/Repositories/RecurringOrderRepository.ts' />
+///<reference path='../../Utils/PriceHelper.ts' />
+///<reference path='../../Composer.Grocery/FulfillmentEvents.ts' />
 
 module Orckestra.Composer {
 
@@ -336,17 +338,12 @@ module Orckestra.Composer {
                 },
                 computed: {
                     PricePerUnit(){
-                        
-                        if(this.Product.ProductUnitQuantity == null || this.Product.ProductUnitSize == null)
-                        {
-                            return 0;
-                        }
-                        let priceNum = parseFloat(this.Product.ListPrice.replace(/[^0-9\.-]+/g,""));
-                        let stepOne = priceNum / parseFloat(this.Product.ProductUnitQuantity);
-                        let stepTwo = stepOne / parseFloat(this.Product.ProductUnitSize);
-                        let pricePerUnit = stepTwo * parseFloat(this.Product.ConvertedVolumeMeasurement);
-                        let formatedPrice = this.Product.ListPrice.replace(priceNum.toFixed(2), pricePerUnit.toFixed(2));
-                        return  formatedPrice;
+                        let pricePerUnit = PriceHelper.PricePerUnit(this.Product.ListPrice,
+                            this.Product.ProductUnitQuantity,
+                            this.Product.ProductUnitSize,
+                            this.Product.ConvertedVolumeMeasurement
+                        );
+                        return  pricePerUnit;
                     },
                     IsUnavailableVariant() {
                         return $.isArray(this.Product.allVariants) && !this.Product.selectedVariantId;
