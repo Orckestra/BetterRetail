@@ -44,7 +44,6 @@ module Orckestra.Composer {
                                 return this.changeRegisteredBillingAddress(address.Id);
                             })
                             .fail((reason) => {
-                                console.log(reason);
                                 if (reason.Errors && _.find(reason.Errors, (e: any) => e.ErrorCode === 'NameAlreadyUsed')) {
                                     this.Errors.AddressNameAlreadyInUseError = true;
                                 }
