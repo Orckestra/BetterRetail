@@ -55,7 +55,7 @@ module Orckestra.Composer {
                                 type: "default-section",
                                 ulClass: "row autosuggest-top-results",
                                 liClass: {
-                                    "col-md-6": true,
+                                    "col-12": true,
                                 }
                             },
                             suggestcategories: {

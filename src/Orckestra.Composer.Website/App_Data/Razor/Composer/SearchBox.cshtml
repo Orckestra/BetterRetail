@@ -21,7 +21,7 @@
     [FunctionParameter(Label = "SearchTerms", Help = "Enable search terms suggestions", DefaultValue = true)]
     public bool SearchTerms { get; set; }
 
-    [FunctionParameter(Label = "MaxProductsAutocompleteCount", Help = "Maximum autocomplete result count", DefaultValue = 8)]
+    [FunctionParameter(Label = "MaxProductsAutocompleteCount", Help = "Maximum autocomplete result count", DefaultValue = 5)]
     public int MaxProductsAutocompleteCount { get; set; }
 
     [FunctionParameter(Label = "MaxSearchTermsSuggestionsCount", Help = "Maximum search terms suggestions count", DefaultValue = 5)]
@@ -101,42 +101,40 @@
                             </template>
 
                             <template slot-scope="{ suggestion, index }">
-                                <div v-if="suggestion.name === 'autocomplete'" class="product-tile">
-                                    <div class="row">
-                                        <div class="col-5">
-                                            <a class="product-tile-media"                                            
-                                               v-on:mouseup.stop=""
-                                               v-bind:href="suggestion.item.Url">
-                                                <img class="img-fluid"
-                                                     v-bind:src="suggestion.item.ImageUrl"
-                                                     v-bind:alt="suggestion.item.FullDisplayName"
-                                                     @*  onerror="this.onerror=null; this.src='{{FallbackImageUrl}}'" *@ />
-                                            </a>
-                                        </div>
-                                        <div class="col-7">
-                                            <div class="product-tile-text">
-                                                <span data-qa="search-product-brand" v-if="suggestion.item.BrandDisplayName">{{suggestion.item.BrandDisplayName}}<br /></span>
-                                                <span data-qa="search-product-brand" v-else-if="suggestion.item.Brand">{{suggestion.item.Brand}}</span>
-                                                <a data-qa="search-product-title"
-                                                   class="suggestion-title"
-                                                   v-on:mouseup.stop=""                                                 
-                                                   v-bind:href="suggestion.item.Url"
-                                                   v-bind:title="suggestion.item.FullDisplayName"
-                                                   v-html="suggestion.item.mappedDisplayName"></a>
-                                            </div>
-                                            <div class="product-tile-special-price">
-                                                <del v-if="suggestion.item.IsOnSale">{{suggestion.item.DisplayListPrice}}</del>
-                                            </div>
-                                            <div class="product-tile-price">
-                                                <span v-if="suggestion.item.IsOnSale" class="h4  text-danger" data-qa="search-product-price">{{suggestion.item.DisplaySpecialPrice}}</span>
-                                                <span v-else="v-else" class="h4" data-qa="search-product-price">{{suggestion.item.DisplayListPrice}}</span>
-                                            </div>
-                                        </div>
+                                <div v-if="suggestion.name === 'autocomplete'" class="d-flex border-bottom">
+                                    <div class="col-2">
+                                        <a class="product-tile-media"                                            
+                                            v-on:mouseup.stop=""
+                                            v-bind:href="suggestion.item.Url">
+                                            <img class="img-fluid"
+                                                    v-bind:src="suggestion.item.ImageUrl"
+                                                    v-bind:alt="suggestion.item.FullDisplayName"
+                                                    @*  onerror="this.onerror=null; this.src='{{FallbackImageUrl}}'" *@ />
+                                        </a>
                                     </div>
+                                    <div class="col-10">
+                                        <div class="product-tile-text mt-2">
+                                            <span data-qa="search-product-brand" v-if="suggestion.item.BrandDisplayName">{{suggestion.item.BrandDisplayName}}<br /></span>
+                                            <span data-qa="search-product-brand" v-else-if="suggestion.item.Brand">{{suggestion.item.Brand}}</span>
+                                            <a data-qa="search-product-title"
+                                                class="suggestion-title"
+                                                v-on:mouseup.stop=""                                                 
+                                                v-bind:href="suggestion.item.Url"
+                                                v-bind:title="suggestion.item.FullDisplayName"
+                                                v-html="suggestion.item.mappedDisplayName"></a>
+                                        </div>
+                                        <div class="product-tile-special-price">
+                                            <del v-if="suggestion.item.IsOnSale">{{suggestion.item.DisplayListPrice}}</del>
+                                        </div>
+                                        <div class="product-tile-price">
+                                            <span v-if="suggestion.item.IsOnSale" class="h4  text-danger" data-qa="search-product-price">{{suggestion.item.DisplaySpecialPrice}}</span>
+                                            <span v-else="v-else" class="h4" data-qa="search-product-price">{{suggestion.item.DisplayListPrice}}</span>
+                                        </div>
+                                    </div>                                 
                                 </div>
 
-                                <div v-else="v-else">
-                                    <a class="p-2" v-html="suggestion.item.mappedDisplayName" role="link"></a>
+                                <div v-else="v-else" class="m-2">
+                                    <a v-html="suggestion.item.mappedDisplayName" role="link"></a>
                                 </div>
 
                             </template>
