@@ -33,8 +33,8 @@
     [FunctionParameter(Label = "MaxBrandSuggestionsCount", Help = "Maximum brand suggestions count", DefaultValue = 3)]
     public int MaxBrandSuggestionsCount { get; set; }
 
-    [FunctionParameter(Label = "MinSearchSize", Help = "Minimum search query size", DefaultValue = 3)]
-    public int MinSearchSize { get; set; }
+    [FunctionParameter(Label = "MinimumCharactersNumber", Help = "Number of characters before showing suggestions", DefaultValue = 3)]
+    public int MinimumCharactersNumber { get; set; }
 }
 
 @{
@@ -62,7 +62,7 @@
                  search-terms-limit="@MaxSearchTermsSuggestionsCount"
                  categories-limit="@MaxCategoriesSuggestionsCount"
                  brand-limit="@MaxBrandSuggestionsCount"
-                 min-search-size="@MinSearchSize"
+                 min-search-size="@MinimumCharactersNumber"
                  class="form-row">
 
                 <div class="col-12 col-xl-9 offset-xl-3">
