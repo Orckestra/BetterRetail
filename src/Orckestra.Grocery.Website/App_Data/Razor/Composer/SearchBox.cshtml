@@ -56,14 +56,13 @@
          data-categories-limit="@MaxCategoriesSuggestionsCount"
          data-brand-limit="@MaxBrandSuggestionsCount">
         <form method="GET" action="@actionTarget" id="frm-search-box">
-  
+
 
             <div class="form-row">
-                <div class="col-12  col-xl-9 offset-xl-3">
-                    <div class="input-group input-group-sm">
-                        <input id="search-input" 
+                    <div class="input-group">
+                        <input id="search-input"
                                data-qa="search-input"
-                               class="form-control form-control-sm js-typeahead" type="search" name="keywords"
+                               class="form-control js-typeahead" type="search" name="keywords"
                                placeholder="@Html.Localize("List-Search", "F_SearchWaterMark")" value="@keywords"
                                required="required"
                                data-parsley-required-message=""
@@ -71,9 +70,9 @@
                                data-parsley-antixss-message="@Html.Localize("Errors", "L_InvalidCharsInSearchBox")"
                                data-parsley-class-handler-selector="form"
                                data-parsley-errors-container="#search-errors" />
-                        <div class="input-group-append input-group-append-sm">
+                        <div class="input-group-append">
                             <button data-qa="search-button"
-                                    class="btn btn-outline-secondary  border-0"
+                                    class="btn btn-default"
                                     title="@Html.Localize("List-Search", "B_Search")"
                                     type="submit">
                                 <span class="fa  fa-search"></span>
@@ -82,7 +81,6 @@
                     </div>
                     <div id="search-errors" class="invalid-feedback">
                     </div>
-                </div>
             </div>
         </form>
     </div>

@@ -28,6 +28,10 @@ a {
         text-transform: uppercase;
         border-radius: $btn-border-radius;
         &.btn-primary {}
+		&.btn-default {
+			border-color: $gray-400;
+			background-color: $gray-100;
+		}
         &.btn-dashed-block {
             width: 100%;
             border: dashed 2px $gray-400;
