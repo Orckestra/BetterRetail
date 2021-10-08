@@ -27,6 +27,8 @@ module Orckestra.Composer {
                 correctedSearchTerm: '',
                 facetRegistry: {}
             });
+
+            this.searchService['_baseSearchUrl'] = document.getElementById("frm-search-box").getAttribute('action');
         }
 
         public initializeVue () {
@@ -41,7 +43,7 @@ module Orckestra.Composer {
                         results: [],
                         timeout: null,
                         selected: null,
-                        debounceMilliseconds: 250,
+                        debounceMilliseconds: 500,
                         suggestions: [],
                         sectionConfigs: {
                             autocomplete: {
@@ -49,6 +51,7 @@ module Orckestra.Composer {
                                 onSelected: function (selected) {
                                     this.selected = selected.item;
                                 }.bind(this),
+                                //label: "suggestbrands",
                                 type: "default-section",
                                 ulClass: "row autosuggest-top-results",
                                 liClass: {
@@ -62,7 +65,6 @@ module Orckestra.Composer {
                                 }.bind(this),
                             },
                             suggestbrands: {
-                                //label: "suggestbrands",
                                 onSelected: function (selected) {
                                     this.selectedBrandSuggestion(selected);
                                     this.selected = selected.item;
@@ -91,9 +93,18 @@ module Orckestra.Composer {
                     this.sectionConfigs.suggestbrands.active = !!this.$el.attributes['brands-enable'];
                     this.sectionConfigs.suggestterms.active = !!this.$el.attributes['search-terms-enable'];
 
+                    this.minSearchSize = +this.$el.attributes['min-search-size'].value;
+
                     if(this.query) {
                         this.fetchResults(this.query);
                     }
+
+                    const input = document.getElementById('autosuggest__input');
+                    input.addEventListener('keydown', (event) => {
+                        if (event.code === 'Enter') {
+                            this.searchMore()
+                        }
+                    });
                 },
                 updated() {
                 },
@@ -119,11 +130,8 @@ module Orckestra.Composer {
                                 this.selected = null;
 
                                 this.suggestions = sectionNames
-                                    .map((sectionName, index) => {
-                                        const data = this.mapSuggestions(values[index].Suggestions, sectionName, query);
-                                        return ({ name: sectionName, data })
-                                    })
-                                    .filter(section => section.data.length || section.name === 'autocomplete');
+                                    .map(this.mapSections(values, query))
+                                    .filter(({ data, name }) => data.length || name === 'autocomplete');
                             });
                         }, this.debounceMilliseconds);
                     },
@@ -138,6 +146,12 @@ module Orckestra.Composer {
                             value.slice(end),
                         ].join('');
                     },
+                    mapSections(values, query) {
+                        return (sectionName, index) => ({
+                            name: sectionName,
+                            data: this.mapSuggestions(values[index].Suggestions, sectionName, query)
+                        });
+                    },
                     mapSuggestions(suggestions = [], sectionName, query) {
                         return suggestions.map((suggest) => {
                             const title = sectionName === 'suggestcategories' ? [...suggest.Parents, suggest.DisplayName].join(' > ')  : suggest.DisplayName;
@@ -149,7 +163,7 @@ module Orckestra.Composer {
                         return item.DisplayName;
                     },
                     shouldRenderSuggestions(size, loading) {
-                        return this.query.length > 2 && !loading
+                        return this.query.length >= this.minSearchSize && !loading
                     },
                     searchMore() {
                         const elem = document.getElementById("frm-search-box") as HTMLFormElement;
