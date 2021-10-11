@@ -36,13 +36,10 @@ module Orckestra.Composer {
         }
 
         private startBusy(msDelay: number) {
-
+            this._isLoading = true;
             this.timeoutHandle = setTimeout(() => {
-
                 this.containerContext.find(':input:enabled').addClass('async-busy').prop('disabled', true);
                 this.loadingIndicatorContext.removeClass('d-none');
-                this._isLoading = true;
-
             }, msDelay);
         }
 
