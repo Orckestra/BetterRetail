@@ -46,9 +46,10 @@ module Orckestra.Composer {
         public changePassword(actionContext: IControllerActionContext): void {
 
             actionContext.event.preventDefault();
-            this.busyHandler = this.asyncBusy({elementContext: actionContext.elementContext});
             if(this.busyHandler && this.busyHandler.isLoading())  return;
             
+            this.busyHandler = this.asyncBusy({elementContext: actionContext.elementContext});
+
             var formData: any = this.getFormData(actionContext);
             var returnUrlQueryString: string = 'ReturnUrl=';
             var returnUrl: string = '';
