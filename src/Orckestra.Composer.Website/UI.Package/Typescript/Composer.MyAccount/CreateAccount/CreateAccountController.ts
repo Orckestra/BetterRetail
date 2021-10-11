@@ -12,6 +12,7 @@ module Orckestra.Composer {
     export class CreateAccountController extends Orckestra.Composer.MyAccountController {
 
         protected membershipService: IMembershipService = new MembershipService(new MembershipRepository());
+        protected busyHandler;
 
         public initialize() {
 
@@ -39,7 +40,11 @@ module Orckestra.Composer {
         public createAccount(actionContext: IControllerActionContext) {
 
             actionContext.event.preventDefault();
+     
+            if(this.busyHandler && this.busyHandler.isLoading())  return;
 
+            this.busyHandler = this.asyncBusy({ elementContext: actionContext.elementContext });
+ 
             var formData: any = this.getFormData(actionContext);
             var returnUrlQueryString: string = 'ReturnUrl=';
             var returnUrl: string = '';
@@ -47,12 +52,9 @@ module Orckestra.Composer {
             if (window.location.href.indexOf(returnUrlQueryString) > -1) {
                 returnUrl = urlHelper.getURLParameter(location.search, 'ReturnUrl');
             }
-
-            var busy = this.asyncBusy({ elementContext: actionContext.elementContext });
-
             this.membershipService.register(formData, returnUrl)
                 .then(result => this.onRegisterFulfilled(result), reason => this.renderFormErrorMessages(reason))
-                .fin(() => busy.done())
+                .fin(() => this.busyHandler.done())
                 .done();
         }
 
