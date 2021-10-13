@@ -76,6 +76,17 @@ module Orckestra.Composer {
             this.search();
         }
 
+        public removeFacets(eventInformation: IEventInformation) {
+            var faces: [] = eventInformation.data;
+
+            faces.forEach(f => {
+                var facet: IFacet = <IFacet>f;
+                this._searchCriteria.removeFacet(facet);
+            })
+
+            this.search();
+        }
+
         public addSingleSelectCategory(eventInformation: IEventInformation) {
             var singleSelectCategory: ISingleSelectCategory = <ISingleSelectCategory>eventInformation.data;
 
@@ -90,6 +101,7 @@ module Orckestra.Composer {
             this._eventHub.subscribe('multiFacetChanged', this.multiFacetChanged.bind(this));
             this._eventHub.subscribe('facetsCleared', this.clearFacets.bind(this));
             this._eventHub.subscribe('facetRemoved', this.removeFacet.bind(this));
+            this._eventHub.subscribe('facetsRemoved', this.removeFacets.bind(this));
             this._eventHub.subscribe('singleCategoryAdded', this.addSingleSelectCategory.bind(this));
         }
 

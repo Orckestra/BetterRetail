@@ -27,8 +27,6 @@ namespace Orckestra.Composer.Search.Services
     public class CategoryBrowsingViewService : BaseSearchViewService<BrowsingSearchParam>, ICategoryBrowsingViewService
     {
         public override SearchType SearchType => SearchType.Browsing;
-
-        protected ICategoryRepository CategoryRepository { get; }
         protected ICategoryBrowsingUrlProvider CategoryBrowsingUrlProvider { get; }
         protected IFulfillmentContext FulfillmentContext { get; }
 
@@ -63,9 +61,9 @@ namespace Orckestra.Composer.Search.Services
             composerContext,
             productSettings,
             scopeViewService,
-            recurringOrdersSettings)
+            recurringOrdersSettings,
+            categoryRepository)
         {
-            CategoryRepository = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository));
             CategoryBrowsingUrlProvider = categoryBrowsingUrlProvider ?? throw new ArgumentNullException(nameof(categoryBrowsingUrlProvider));
             FulfillmentContext = fulfillmentContext ?? throw new ArgumentNullException(nameof(fulfillmentContext));
         }
@@ -85,11 +83,40 @@ namespace Orckestra.Composer.Search.Services
                 CategoryName = param.CategoryName,
                 SelectedFacets = await GetSelectedFacetsAsync(param).ConfigureAwait(false),
                 ProductSearchResults = await GetProductSearchResultsAsync(param).ConfigureAwait(false),
-                ChildCategories = await GetChildCategoriesAsync(param).ConfigureAwait(false),
                 LandingPageUrls = landingPageUrls
             };
 
+            viewModel.CategoryFacetValuesTree = BuildCategoryFacetValuesTree(viewModel.ProductSearchResults.Facets,
+                viewModel.SelectedFacets,
+                viewModel.ProductSearchResults.CategoryFacetCounts);
+
+            foreach (var item in viewModel.CategoryFacetValuesTree.Items)
+            {
+                BuildCategoryUrlsForTreeItem(param, item);
+            }
+
             return viewModel;
+        }
+
+        private void BuildCategoryUrlsForTreeItem(GetCategoryBrowsingViewModelParam param, CategoryFacetValuesTreeItem item)
+        {
+            item.CategoryUrl = GetCategoryUrl(item.CategoryId, param);
+            if (item.Items != null)
+            {
+                foreach (var subItem in item.Items)
+                {
+                    BuildCategoryUrlsForTreeItem(param, subItem);
+                }
+
+            }
+
+            if (item.OnDemandItems != null)
+            {
+                foreach (var subItem in item.OnDemandItems)
+                {
+                    BuildCategoryUrlsForTreeItem(param, subItem);
+                }
+            }
         }
 
         protected virtual List<string> GetLandingPageUrls(TreeNode<Category> startNode, GetCategoryBrowsingViewModelParam param)
@@ -195,7 +222,6 @@ namespace Orckestra.Composer.Search.Services
             };
 
             ProductSearchResultsViewModel model = await SearchAsync(searchParam).ConfigureAwait(false);
-            model.Facets = GetFacetsWithoutCategoryFacets(model.Facets);
 
             return model;
         }
@@ -227,46 +253,6 @@ namespace Orckestra.Composer.Search.Services
             criteria.SelectedFacets.AddRange(selectedFacets);
 
             return criteria;
-        }
-
-        protected virtual List<Facet> GetFacetsWithoutCategoryFacets(IList<Facet> facets)
-        {
-            return facets.Where(facet => !IsCategoryFacet(facet)).ToList();
-        }
-
-        protected virtual bool IsCategoryFacet(Facet facet)
-        {
-            return facet.FieldName != null && facet.FieldName.StartsWith("CategoryLevel");
-        }
-
-        protected virtual async Task<List<ChildCategoryViewModel>> GetChildCategoriesAsync(GetCategoryBrowsingViewModelParam param)
-        {
-            List<TreeNode<Category>> children = await GetCategoryChildrenAsync(param).ConfigureAwait(false);
-
-            //If the category has no URL, it probably means there is no item for it in the CMS yet...
-            var childCategories = children
-                .Select(childCategory => CreateChildCategoryViewModel(childCategory.Value, param))
-                .Where(childCategory => !string.IsNullOrWhiteSpace(childCategory.Url)).ToList();
-
-            return childCategories;
-        }
-
-        protected virtual async Task<List<TreeNode<Category>>> GetCategoryChildrenAsync(GetCategoryBrowsingViewModelParam param)
-        {
-            Tree<Category, string> tree = await CategoryRepository.GetCategoriesTreeAsync(new GetCategoriesParam
-            {
-                Scope = ComposerContext.Scope
-            }).ConfigureAwait(false);
-
-            return tree[param.CategoryId].Children;
-        }
-
-        protected virtual ChildCategoryViewModel CreateChildCategoryViewModel(Category category, GetCategoryBrowsingViewModelParam param)
-        {
-            string title = category.DisplayName.GetLocalizedValue(ComposerContext.CultureInfo.Name);
-            var url = GetCategoryUrl(category.Id, param);
-
-            return new ChildCategoryViewModel { Title = title, Url = url};
         }
 
         protected virtual string GetCategoryUrl(string categoryId, GetCategoryBrowsingViewModelParam param, bool isAllProductsPage = false)

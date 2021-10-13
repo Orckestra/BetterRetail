@@ -6,11 +6,6 @@ namespace Orckestra.Composer.Search.ViewModels
 {
     public sealed class CategoryBrowsingViewModel : BaseViewModel
     {
-        public CategoryBrowsingViewModel()
-        {
-            ChildCategories = new List<ChildCategoryViewModel>();
-        }
-
         public string CategoryId { get; set; }
 
         public string CategoryName { get; set; }
@@ -19,7 +14,10 @@ namespace Orckestra.Composer.Search.ViewModels
 
         public ProductSearchResultsViewModel ProductSearchResults { get; set; }
 
-        public List<ChildCategoryViewModel> ChildCategories { get; set; }
+        /// <summary>
+        /// Category facet values in tree structure
+        /// </summary>
+        public CategoryFacetValuesTree CategoryFacetValuesTree { get; set; }
 
         public List<string> LandingPageUrls { get; set; }
     }

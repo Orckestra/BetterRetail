@@ -16,5 +16,10 @@ namespace Orckestra.Composer.Search.ViewModels
         public SelectedFacets SelectedFacets { get; set; }
 
         public ProductSearchResultsViewModel ProductSearchResults { get; set; }
+
+        /// <summary>
+        /// Category facet values in tree structure
+        /// </summary>
+        public CategoryFacetValuesTree CategoryFacetValuesTree { get; set; }
     }
 }

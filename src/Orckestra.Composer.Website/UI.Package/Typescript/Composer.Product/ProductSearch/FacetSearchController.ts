@@ -34,18 +34,11 @@ module Orckestra.Composer {
             }
 
             var anchorContext = actionContext.elementContext,
-                facetFieldName = anchorContext.attr('name'),
+                facetKey = anchorContext.attr('name'),
                 facetValue = anchorContext.attr('value');
 
             this._debounceHandle = _.debounce(() => {
-                this.eventHub.publish('multiFacetChanged', {
-                    data: {
-                        facetKey: facetFieldName,
-                        facetValue: facetValue,
-                        pageType: UrlHelper.resolvePageType(),
-                        filter: (<ISerializeObjectJqueryPlugin>$('form[name="searchFacets"]', this.context.container)).serializeObject()
-                    }
-                });
+                this.publishMultiFacetChanged(facetKey,facetValue, UrlHelper.resolvePageType() )
             }, 250);
 
             this._debounceHandle();
@@ -58,31 +51,97 @@ module Orckestra.Composer {
 
         public singleFacetChanged(actionContext: IControllerActionContext) {
             var anchorContext = actionContext.elementContext,
-                facetFieldName = anchorContext.data('facetfieldname'),
-                facetValue = anchorContext.data('facetvalue'),
-                facets = {};
+                facetKey = anchorContext.data('facetfieldname'),
+                facetValue = anchorContext.data('facetvalue');
 
             actionContext.event.preventDefault();
             actionContext.event.stopPropagation();
 
+            this.publishSingleFacetsChanged(facetKey, facetValue, UrlHelper.resolvePageType());
+        }
+
+        public categoryFacetChanged(actionContext: IControllerActionContext) {
+
+            var element = actionContext.elementContext,
+                facetKey = element.attr('name'),
+                facetValue = element.attr('value'),
+                type = element.data('type'),
+                categoryurl = element.data('categoryurl'),
+                parentcategoryurl = element.data('parentcategoryurl'),
+                pageType = UrlHelper.resolvePageType(),
+                checked = element.attr('checked'),
+                checkedCategories = element.parent().find('input:checked');
+
+            if (checked) {
+                //unselect all sub-categories
+                checkedCategories.each(index => {
+                    var elem: any = checkedCategories[index];
+                    elem.checked = false;
+                })
+            }
+
+            if (categoryurl) {
+                //if browse category - redirect to category page
+                this.eventHub.publish('singleCategoryAdded', {
+                    data: {
+                        categoryUrl: checked ? parentcategoryurl : categoryurl,
+                        facetKey: 'category',
+                        facetValue: facetValue,
+                        pageType
+                    }
+                });
+
+                return;
+            }
+
+
+            if (type === 'SingleSelect') {
+                if (checked) {
+                    var data = [];
+                    checkedCategories.each(index => {
+                        data.push({
+                            facetFieldName: $(checkedCategories[index]).attr('name').replace('[]', ''),
+                            facetValue: $(checkedCategories[index]).attr('value'),
+                            facetType: $(checkedCategories[index]).attr('type'),
+                        })
+                    });
+                    this.eventHub.publish('facetsRemoved', { data });
+                } else {
+                    this.publishSingleFacetsChanged(facetKey, facetValue, pageType);
+                }
+            }
+
+            if (type === 'MultiSelect') {
+                if (!_.isEmpty(this._debounceHandle)) {
+                    this._debounceHandle.cancel();
+                }
+                this._debounceHandle = _.debounce(() => {
+                    this.publishMultiFacetChanged(facetKey, facetValue, pageType);
+                }, 350);
+
+                this._debounceHandle();
+            }
+        }
+
+        protected publishSingleFacetsChanged(facetKey, facetValue, pageType) {
             this.eventHub.publish('singleFacetsChanged', {
                 data: {
-                    facetKey: facetFieldName,
-                    facetValue: facetValue,
-                    pageType: UrlHelper.resolvePageType()
+                    facetKey,
+                    facetValue,
+                    pageType
                 }
             });
         }
 
-        public toggleFacetList(actionContext: IControllerActionContext) {
-            actionContext.event.preventDefault();
-
-            var buttonContext = actionContext.elementContext,
-                label: string = buttonContext.html(),
-                showMoreLabel: string = buttonContext.data('label-showmore'),
-                showLessLabel: string = buttonContext.data('label-showless');
-
-            buttonContext.html(label === showMoreLabel ? showLessLabel : showMoreLabel);
+        protected publishMultiFacetChanged(facetKey, facetValue, pageType) {
+            this.eventHub.publish('multiFacetChanged', {
+                data: {
+                    facetKey,
+                    facetValue,
+                    pageType,
+                    filter: (<ISerializeObjectJqueryPlugin>$('form[name="searchFacets"]', this.context.container)).serializeObject() 
+                }
+            });
         }
 
         public refineByRange(actionContext: IControllerActionContext) {
@@ -93,12 +152,7 @@ module Orckestra.Composer {
             var values = sliderServiceInstance.getValues();
             var key = sliderServiceInstance.getKey();
 
-            this.eventHub.publish('singleFacetsChanged', {
-                data: {
-                    facetKey: key,
-                    facetValue: values.join('|')
-                }
-            });
+            this.publishSingleFacetsChanged(key, values.join('|'), UrlHelper.resolvePageType());
         }
 
         private initializeServices() {

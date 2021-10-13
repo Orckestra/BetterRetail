@@ -1,5 +1,6 @@
 ﻿@inherits RazorFunction
 @using Orckestra.Composer.Search.Context;
+@using Orckestra.Composer.Search
 @using Orckestra.Composer.Search.Facets
 
 @functions {
@@ -22,6 +23,10 @@
     {
         return;
     };
+
+    var categoryFacetValuesTree = categoryBrowsingViewModel.CategoryFacetValuesTree;
+    var isCategoryTreeView = categoryFacetValuesTree != null;
+
 }
 
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
@@ -31,10 +36,22 @@
     <div data-oc-controller="Product.FacetSearch" data-corrected-search-term="@categoryBrowsingViewModel.ProductSearchResults.CorrectedSearchTerms">
         <form name="searchFacets">
             @FacetHelpers.PromotedFacetValues(categoryBrowsingViewModel.ProductSearchResults.PromotedFacetValues)
-
+            @if (isCategoryTreeView && categoryFacetValuesTree.Items.Count > 0)
+            {
+                var rootCategoryTreeItem = categoryFacetValuesTree.Items[0];
+                <div class="card bg-light  mb-3  facets-card">
+                    <div class="card-header">@Html.Localize("List-Search", "L_RefinerCategories")</div>
+                    <div class="card-body">
+                        <div class="mb-1">
+                            <strong>@Html.Localize("General", "L_All") @rootCategoryTreeItem.SelectedValue (@rootCategoryTreeItem.SelectedTotalCount)</strong>
+                        </div>
+                        @RenderCategoryTreeItems(rootCategoryTreeItem)
+                    </div>
+                </div>
+            }
             @foreach (var facet in facets)
             {
-                if (!facet.IsDisplayed)
+                if (!facet.IsDisplayed || facet.FieldName.StartsWith(SearchConfiguration.CategoryFacetFiledNamePrefix))
                 {
                     continue;
                 }
@@ -45,9 +62,9 @@
                      data-max="@facet.EndValue"
                      data-step="@facet.GapSize"
                      data-max-label="@Html.Localize("List-Search", "L_RangeAll")">
+                    <div class="card-header">@facet.Title</div>
                     <div class="card-body"
                          data-qa="search-refiner">
-                        <h5>@facet.Title</h5>
                         @FacetHelpers.RenderFacet(facet)
                     </div>
                 </div>
@@ -56,3 +73,63 @@
     </div>
 </body>
 </html>
+
+@helper RenderCategoryTreeItem(CategoryFacetValuesTreeItem item, CategoryFacetValuesTreeItem parentItem)
+{
+    if (string.IsNullOrWhiteSpace(item.CategoryUrl))
+    {
+        return;
+    }
+
+    var inputValue = item.FacetValue != null ? item.FacetValue.Value : item.SelectedValue;
+ 
+    <div class="form-check mb-1">
+        <input class="form-check-input"
+               type="radio"
+               id="id@(inputValue.GetHashCode())"
+               value="@inputValue"
+               checked="@(item.IsSelected)"
+               data-type="@FacetType.SingleSelect"
+               data-parentcategoryurl="@parentItem.CategoryUrl"
+               data-categoryurl="@item.CategoryUrl"
+               data-oc-click="categoryFacetChanged"
+               disabled="@(!item.IsRemovable)" />
+        <label class="form-check-label @(item.IsSelected ? "font-weight-bold": "")"
+               for="id@(inputValue.GetHashCode())">
+            @if (item.FacetValue != null)
+            {
+                @FacetHelpers.FacetValueTitle(item.FacetValue)
+            }
+            else
+            {
+                @item.SelectedValue <span>(@item.SelectedTotalCount)</span>
+            }
+        </label>
+
+        @RenderCategoryTreeItems(item)
+
+    </div>
+}
+
+@helper RenderCategoryTreeItems(CategoryFacetValuesTreeItem item)
+{
+    if (item.Items != null)
+    {
+        foreach (var subItem in item.Items)
+        {
+            @RenderCategoryTreeItem(subItem, item)
+        }
+    }
+
+    if (item.OnDemandItems != null && item.OnDemandItems.Count > 0)
+    {
+        <div id="onDemandFacets-@item.FieldName" class="collapse">
+            @foreach (var subItem in item.OnDemandItems)
+            {
+                @RenderCategoryTreeItem(subItem, item)
+            }
+        </div>
+
+        @FacetHelpers.ShowMoreLessButton(item.FieldName)
+    }
+}

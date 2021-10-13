@@ -179,5 +179,38 @@ namespace Orckestra.Composer.Search.Repositories
                 PropertyName = criteria.SortBy
             };
         }
+
+        public virtual async Task<ProductSearchResult> GetCategoryFacetCountsAsync(SearchCriteria criteria)
+        {
+            if (criteria == null) { throw new ArgumentNullException(nameof(criteria)); }
+            if (criteria.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(criteria.CultureInfo)), nameof(criteria)); }
+            if (string.IsNullOrWhiteSpace(criteria.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(criteria.Scope)), nameof(criteria)); }
+
+            var request = ProductRequestFactory.CreateProductRequest(criteria);
+            request.Query.IncludeTotalCount = true;
+            request.Query.MaximumItems = 1; // 0 or null will return 100 documents
+            request.Query.StartingIndex = 0;
+            request.CultureName = criteria.CultureInfo.Name;
+            request.SearchTerms = criteria.Keywords;
+            request.ScopeId = criteria.Scope;
+            request.IncludeFacets = criteria.IncludeFacets;
+            request.Facets = FacetConfigContext.GetFacetSettings()
+                .Where(fs => fs.FieldName.StartsWith(SearchConfiguration.CategoryFacetFiledNamePrefix))
+                .Select(f => f.FieldName.Replace("_Facet", "")).ToList();
+            if (criteria.SelectedFacets != null)
+            {
+                request.FacetPredicates = criteria.SelectedFacets
+                        .Where(sf => !sf.Name.StartsWith(SearchConfiguration.CategoryFacetFiledNamePrefix))
+                        .Select(FacetPredicateFactory.CreateFacetPredicate)
+                        .Where(fp => fp != null).ToList();
+            }
+            request.InventoryLocationIds = criteria.InventoryLocationIds;
+            request.AutoCorrect = criteria.AutoCorrect;
+            request.AvailabilityDate = criteria.AvailabilityDate;
+
+            var results = await ExecuteProductSearchRequestAsync(request).ConfigureAwait(false);
+
+            return results;
+        }
     }
 }

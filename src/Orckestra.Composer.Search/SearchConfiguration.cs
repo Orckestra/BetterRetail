@@ -194,5 +194,10 @@ namespace Orckestra.Composer.Search
         /// Whether search term should be automatically corrected
         /// </summary>
         public static bool AutoCorrectSearchTerms { get; set; } = true;
+
+        /// <summary>
+        /// The prefix for the the category facet field name to indentify what facets are for categories
+        /// </summary>
+        public static string CategoryFacetFiledNamePrefix { get; set; } = "CategoryLevel";
     }
 }

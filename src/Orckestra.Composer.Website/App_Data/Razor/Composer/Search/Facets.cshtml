@@ -2,6 +2,7 @@
 @using Orckestra.Composer.Search.Context;
 @using Orckestra.Composer.Search.ViewModels
 @using Orckestra.Composer.Search.Facets
+@using Orckestra.Composer.Search
 
 @functions {
     public override string FunctionDescription
@@ -28,10 +29,8 @@
     }
 }
 @{
-    if (Facets == null || Facets.Count == 0)
-    {
-        return;
-    };
+    var categoryFacetValuesTree = SearchRequestContext.ProductsSearchViewModel?.CategoryFacetValuesTree;
+    var isCategoryTreeView = categoryFacetValuesTree != null;
 }
 
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
@@ -42,27 +41,90 @@
         <form name="searchFacets">
             @FacetHelpers.PromotedFacetValues(ProductSearchResults.PromotedFacetValues)
 
+            @if (isCategoryTreeView)
+            {
+                <div class="card bg-light  mb-3  facets-card">
+                    <div class="card-header">@Html.Localize("List-Search", "L_RefinerCategories")</div>
+                    <div class="card-body">
+                        <div class="mb-1"><strong>@Html.Localize("General", "L_All") @SearchRequestContext.SearchQuery (@categoryFacetValuesTree.RootTotalCount)</strong></div>
+                        @foreach (var item in categoryFacetValuesTree.Items)
+                        {
+                            @RenderCategoryTreeItem(item)
+                        }
+                    </div>
+                </div>
+            }
+
             @foreach (var facet in Facets)
             {
-                if (!facet.IsDisplayed)
+                if (!facet.IsDisplayed || (isCategoryTreeView && facet.FieldName.StartsWith(SearchConfiguration.CategoryFacetFiledNamePrefix)))
                 {
                     continue;
                 }
-                <div class="card  bg-light  mb-3  facets-card"
-                     data-facetfieldname="@facet.FieldName"
-                     data-facettype="@facet.FacetType"
-                     data-min="@facet.StartValue"
-                     data-max="@facet.EndValue"
-                     data-step="@facet.GapSize"
-                     data-max-label="@Html.Localize("List-Search", "L_RangeAll")">
-                    <div class="card-body"
-                         data-qa="search-refiner">
-                        <h5>@facet.Title</h5>
-                        @FacetHelpers.RenderFacet(facet)
-                    </div>
-                </div>
+        <div class="card  bg-light  mb-3  facets-card"
+             data-facetfieldname="@facet.FieldName"
+             data-facettype="@facet.FacetType"
+             data-min="@facet.StartValue"
+             data-max="@facet.EndValue"
+             data-step="@facet.GapSize"
+             data-max-label="@Html.Localize("List-Search", "L_RangeAll")">
+            <div class="card-header">@facet.Title</div>
+            <div class="card-body"
+                 data-qa="search-refiner">
+                @FacetHelpers.RenderFacet(facet)
+            </div>
+        </div>
             }
         </form>
     </div>
 </body>
 </html>
+
+@helper RenderCategoryTreeItem(CategoryFacetValuesTreeItem item)
+{
+    var type = item.FacetType == FacetType.SingleSelect ? "radio" : "checkbox";
+    var name = item.FacetType == FacetType.SingleSelect ? item.FieldName : item.FieldName + "[]";
+    var inputValue = item.FacetValue != null ? item.FacetValue.Value : item.SelectedValue;
+
+    <div class="form-check mb-1"
+         data-facetfieldname="@item.FieldName"
+         data-facettype="@item.FacetType">
+        <input class="form-check-input"
+               type="@type"
+               name="@name"
+               id="id@(inputValue.GetHashCode())"
+               value="@inputValue" 
+               checked="@item.IsSelected"
+               data-type="@item.FacetType"
+               data-oc-click="categoryFacetChanged" />
+        <label class="form-check-label @(item.IsSelected ? "font-weight-bold": "")" 
+               for="id@(inputValue.GetHashCode())">
+            @if (item.FacetValue != null)
+            {
+                @FacetHelpers.FacetValueTitle(item.FacetValue)
+            }
+            else
+            {
+                @item.SelectedValue <span>(@item.SelectedTotalCount)</span>
+            }
+        </label>
+        @if (item.Items != null)
+        {
+            foreach (var subItem in item.Items)
+            {
+                @RenderCategoryTreeItem(subItem)
+            }
+        }
+        @if (item.OnDemandItems != null && item.OnDemandItems.Count > 0)
+        {
+            <div id="onDemandFacets-@item.FieldName" class="collapse">
+                @foreach (var subItem in item.OnDemandItems)
+                {
+                    @RenderCategoryTreeItem(subItem)
+                }
+            </div>
+
+            @FacetHelpers.ShowMoreLessButton(item.FieldName)
+        }
+    </div>
+}

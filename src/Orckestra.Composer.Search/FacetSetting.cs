@@ -20,9 +20,10 @@ namespace Orckestra.Composer.Search
             StartValue = null;
             EndValue = null;
             GapSize = null;
-            FacetValueType = typeof (string);
+            FacetValueType = typeof(string);
             IsDisplayed = true;
             PromotedValues = new List<PromotedFacetValueSetting>();
+            IsCategoryTreeViewFacet = false;
         }
 
         /// <summary>
@@ -44,7 +45,7 @@ namespace Orckestra.Composer.Search
         /// Maximum number of values to display when this facet is collapsed
         /// </summary>
         public int MaxCollapsedValueCount { get; set; }
-        
+
         /// <summary>
         /// Maximum number of values to display when this facet is expended
         /// </summary>
@@ -88,6 +89,8 @@ namespace Orckestra.Composer.Search
         /// Get or sets a list of facet values which should be promoted in the list of facets in the search results page
         /// </summary>
         public IList<PromotedFacetValueSetting> PromotedValues { get; set; }
+
+        public bool IsCategoryTreeViewFacet { get; set; }
 
     }
 }

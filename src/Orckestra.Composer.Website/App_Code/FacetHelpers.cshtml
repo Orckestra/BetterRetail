@@ -143,12 +143,10 @@
 
 @helper ShowMoreLessButton(string fieldName)
 {
-    <button class="btn  btn-link" data-toggle="collapse" data-target="#onDemandFacets-@fieldName"
-            data-label-showmore=" @Html.Localize("List-Search", "B_ShowMore")"
-            data-label-showless=" @Html.Localize("List-Search", "B_ShowLess")"
-            data-oc-click="toggleFacetList">
-        @Html.Localize("List-Search", "B_ShowMore")
-    </button>
+    <a class="btn  btn-link  collapsed  font-weight-bold" data-toggle="collapse" data-target="#onDemandFacets-@fieldName">
+        <span class="more">@Html.Localize("List-Search", "B_ShowMore") <i class="fa fa-angle-down" /></span>
+        <span class="less">@Html.Localize("List-Search", "B_ShowLess") <i class="fa fa-angle-up" /></span>
+    </a>
 }
 
 @helper RenderFacet(Facet facet)
@@ -156,18 +154,18 @@
     switch (facet.FacetType)
     {
         case FacetType.Range:@RangeFacet(facet); break;
-        case FacetType.SingleSelect:
+    case FacetType.SingleSelect:
         foreach (var facetValue in facet.FacetValues)
         {
             @SingleFacet(facetValue, facet);
         }
         break;
-        case FacetType.MultiSelect:
+    case FacetType.MultiSelect:
         foreach (var facetValue in facet.FacetValues)
         {
             @MultiSelectFacet(facetValue, facet)
         }
         break;
-        default: break;
-    }
+    default: break;
+}
 }

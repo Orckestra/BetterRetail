@@ -23,18 +23,34 @@ module Orckestra.Composer {
 
         public removeSelectedFacet(actionContext: IControllerActionContext) {
             var removeFacetButton = actionContext.elementContext;
+            var categoryTreeId = removeFacetButton.data('categorytreeid');
 
             actionContext.event.preventDefault();
             actionContext.event.stopPropagation();
 
-            this.eventHub.publish('facetRemoved', {
-                data: {
-                    facetFieldName: removeFacetButton.data('facetfieldname'),
-                    facetValue: removeFacetButton.data('facetvalue'),
-                    facetType: removeFacetButton.data('facettype'),
-                    facetLandingPageUrl: removeFacetButton.data('facetlandingpageurl')
-                }
-            });
+            if (categoryTreeId) {
+                //remove also all child categories
+                var parentCategoryElement = $('#' + categoryTreeId);
+                var checkedInputs = parentCategoryElement.parent().find('input:checked');
+                var data = [];
+                checkedInputs.each(index => {
+                    data.push({
+                        facetFieldName: $(checkedInputs[index]).attr('name').replace('[]',''),
+                        facetValue: $(checkedInputs[index]).attr('value'),
+                        facetType: $(checkedInputs[index]).attr('type'),
+                    })
+                });
+                this.eventHub.publish('facetsRemoved', { data });
+            } else {
+                this.eventHub.publish('facetRemoved', {
+                    data: {
+                        facetFieldName: removeFacetButton.data('facetfieldname'),
+                        facetValue: removeFacetButton.data('facetvalue'),
+                        facetType: removeFacetButton.data('facettype'),
+                        facetLandingPageUrl: removeFacetButton.data('facetlandingpageurl')
+                    }
+                });
+            }          
         }
 
         public clearSelectedFacets(actionContext: IControllerActionContext) {

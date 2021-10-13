@@ -41,6 +41,7 @@ namespace Orckestra.Composer.SearchQuery.Services
         protected IProductSettingsRepository ProductSettingsRepository { get; private set; }
 
         public SearchQueryViewService(
+         ICategoryRepository categoryRepository,
          ISearchRepository searchRepository,
          IViewModelMapper viewModelMapper,
          IDamProvider damProvider,
@@ -73,7 +74,8 @@ namespace Orckestra.Composer.SearchQuery.Services
              composerContext,
              productSettings,
              scopeViewService,
-             recurringOrdersSettings)
+             recurringOrdersSettings,
+             categoryRepository)
         {
             SearchQueryRepository = searchQueryRepository ?? throw new ArgumentNullException(nameof(searchQueryRepository));
             SearchQueryUrlProvider = searchQueryUrlProvider ?? throw new ArgumentNullException(nameof(searchQueryUrlProvider));

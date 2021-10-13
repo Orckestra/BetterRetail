@@ -21,8 +21,6 @@ namespace Orckestra.Composer.Search.Services
 {
     public class SearchViewService : BaseSearchViewService<SearchParam>, ISearchViewService
     {
-        protected ICategoryRepository CategoryRepository { get; }
-
         public SearchViewService(
             ICategoryRepository categoryRepository,
             ISearchRepository searchRepository,
@@ -51,9 +49,10 @@ namespace Orckestra.Composer.Search.Services
             composerContext,
             productSettings,
             scopeViewService,
-            recurringOrdersSettings)
+            recurringOrdersSettings,
+            categoryRepository)
         {
-            CategoryRepository = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository));
+            
         }
 
         public virtual Task<PageHeaderViewModel> GetPageHeaderViewModelAsync(GetPageHeaderParam param)
@@ -99,6 +98,11 @@ namespace Orckestra.Composer.Search.Services
                 SelectedFacets = await GetSelectedFacetsAsync(criteria).ConfigureAwait(false),
                 ProductSearchResults = await GetProductSearchResultsAsync(criteria).ConfigureAwait(false)
             };
+
+            viewModel.CategoryFacetValuesTree = BuildCategoryFacetValuesTree(
+                viewModel.ProductSearchResults.Facets, 
+                viewModel.SelectedFacets,
+                viewModel.ProductSearchResults.CategoryFacetCounts);
 
             // TODO: Needed for some JS context - move to data-context-var where needed
             viewModel.Context["TotalCount"] = viewModel.ProductSearchResults.TotalCount;
