@@ -1,32 +1,26 @@
-﻿using Orckestra.Composer.Search.Facets;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Orckestra.Composer.Search.Facets
 {
     /// <summary>
-    /// Independent product counts for each category and total count for the search results wihtout categories apllied
+    /// Independent product counts for each category and total count for the search results wihtout category facets apllied
     /// </summary>
     public sealed class CategoryFacetCounts
     {
-        public CategoryFacetCounts()
-        {
-        }
-
         /// <summary>
-        /// Gets or sets the facet groups.
+        /// Gets or sets the facets.
         /// </summary>
         /// <value>
-        /// The facet groups.
+        /// The facets.
         /// </value>
         public IList<Facet> Facets { get; set; }
 
         /// <summary>
-        /// Gets or sets the total count for the search results without categories applied
+        /// Gets or sets the total count.
         /// </summary>
         /// <value>
-        /// The total count.
+        /// The total count for the search results without category facets apllied.
         /// </value>
         public long TotalCount { get; set; }
-
     }
 }
