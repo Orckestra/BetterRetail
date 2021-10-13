@@ -23,7 +23,6 @@ namespace Orckestra.Composer.Search
             FacetValueType = typeof(string);
             IsDisplayed = true;
             PromotedValues = new List<PromotedFacetValueSetting>();
-            IsCategoryTreeViewFacet = false;
         }
 
         /// <summary>
@@ -90,7 +89,7 @@ namespace Orckestra.Composer.Search
         /// </summary>
         public IList<PromotedFacetValueSetting> PromotedValues { get; set; }
 
-        public bool IsCategoryTreeViewFacet { get; set; }
+        public bool IsCategoryFacet { get; set; }
 
     }
 }

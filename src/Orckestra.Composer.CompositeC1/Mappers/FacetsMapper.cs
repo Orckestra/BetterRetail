@@ -28,7 +28,7 @@ namespace Orckestra.Composer.CompositeC1.Mappers
                 // GapSize = facet.GapSize,
                 IsDisplayed = facet.IsDisplayed,
                 PromotedValues = promotedFacetValueSettings.Select(ConvertToPromotedFacetValueSetting).ToList(),
-                IsCategoryTreeViewFacet = facet.FieldName.StartsWith(SearchConfiguration.CategoryFacetFiledNamePrefix)
+                IsCategoryFacet = facet.FieldName.StartsWith(SearchConfiguration.CategoryFacetFiledNamePrefix)
             };
 
             return facetSetting;

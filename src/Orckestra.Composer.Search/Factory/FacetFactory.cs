@@ -51,9 +51,9 @@ namespace Orckestra.Composer.Search.Factory
             CategoryFacetCounts counts,
             CultureInfo culture)
         {
-            var categoryTreeViewFacets = FacetConfigContext.GetFacetSettings()
-              .Where(s => s.IsCategoryTreeViewFacet)?.ToList();
-            if (categoryTreeViewFacets == null || categoryTreeViewFacets.Count == 0)
+            var categoryFacetSettings = FacetConfigContext.GetFacetSettings()
+              .Where(s => s.IsCategoryFacet)?.ToList();
+            if (categoryFacetSettings == null || categoryFacetSettings.Count == 0)
             {
                 return null;
             }
@@ -61,19 +61,21 @@ namespace Orckestra.Composer.Search.Factory
             categoriesTree.TryGetValue("Root", out TreeNode<Overture.ServiceModel.Products.Category> categoriesRoot);
             var tree = new CategoryFacetValuesTree() { RootTotalCount = counts.TotalCount };
 
-            var rootFacetSetting = categoryTreeViewFacets.FirstOrDefault(c => c.DependsOn == null || c.DependsOn.Count == 0);
+            var rootFacetSetting = categoryFacetSettings.FirstOrDefault(c => c.DependsOn == null || c.DependsOn.Count == 0);
             if (rootFacetSetting != null)
             {
                 tree.Items = GetTreeItems(rootFacetSetting, facets, selectedFacets, categoriesRoot, culture, counts);
-                BuildTreeItems(categoryTreeViewFacets, rootFacetSetting.FieldName, facets, selectedFacets, tree.Items, categoriesTree, counts, culture);
+                BuildTreeItems(categoryFacetSettings, rootFacetSetting.FieldName, facets, selectedFacets, tree.Items, categoriesTree, counts, culture);
             }
 
             return tree;
         }
 
         protected void BuildTreeItems(List<FacetSetting> categoryFacetSettings, 
-            string nextFieldName, IList<Facet> facets, 
-            SelectedFacets selectedFacets, List<CategoryFacetValuesTreeItem> items,
+            string nextFacetFieldName, 
+            IList<Facet> facets, 
+            SelectedFacets selectedFacets, 
+            List<CategoryFacetValuesTreeItem> items,
             Tree<Overture.ServiceModel.Products.Category, string> categoriesTree,
             CategoryFacetCounts counts,
             CultureInfo culture)
@@ -83,7 +85,7 @@ namespace Orckestra.Composer.Search.Factory
                 return;
             }
 
-            var facetSetting = categoryFacetSettings.FirstOrDefault(c => c.DependsOn != null && c.DependsOn.Contains(nextFieldName));
+            var facetSetting = categoryFacetSettings.FirstOrDefault(c => c.DependsOn != null && c.DependsOn.Contains(nextFacetFieldName));
   
             if (facetSetting != null)
             {
