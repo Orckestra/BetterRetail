@@ -90,9 +90,12 @@ namespace Orckestra.Composer.Search.Services
                 viewModel.SelectedFacets,
                 viewModel.ProductSearchResults.CategoryFacetCounts);
 
-            foreach (var item in viewModel.CategoryFacetValuesTree.Items)
+            if (viewModel.CategoryFacetValuesTree != null)
             {
-                BuildCategoryUrlsForTreeItem(param, item);
+                foreach (var item in viewModel.CategoryFacetValuesTree.Items)
+                {
+                    BuildCategoryUrlsForTreeItem(param, item);
+                }
             }
 
             return viewModel;

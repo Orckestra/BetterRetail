@@ -585,7 +585,7 @@ namespace Orckestra.Composer.Search.Services
             };
 
             if (param.Criteria.SelectedFacets != null && 
-                param.Criteria.SelectedFacets.Any(s=> s.Name.StartsWith(SearchConfiguration.CategoryFacetFiledNamePrefix)))
+                param.Criteria.SelectedFacets.Any(s => !string.IsNullOrWhiteSpace(s.Name) && s.Name.StartsWith(SearchConfiguration.CategoryFacetFiledNamePrefix)))
             {
                 createSearchViewModelParam.CategoryFacetCountsResult = await SearchRepository.GetCategoryFacetCountsAsync(param.Criteria).ConfigureAwait(false);
             }
