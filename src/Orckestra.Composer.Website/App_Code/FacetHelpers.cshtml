@@ -154,18 +154,18 @@
     switch (facet.FacetType)
     {
         case FacetType.Range:@RangeFacet(facet); break;
-    case FacetType.SingleSelect:
+        case FacetType.SingleSelect:
         foreach (var facetValue in facet.FacetValues)
         {
             @SingleFacet(facetValue, facet);
         }
         break;
-    case FacetType.MultiSelect:
+        case FacetType.MultiSelect:
         foreach (var facetValue in facet.FacetValues)
         {
             @MultiSelectFacet(facetValue, facet)
         }
         break;
-    default: break;
+        default: break;
 }
 }

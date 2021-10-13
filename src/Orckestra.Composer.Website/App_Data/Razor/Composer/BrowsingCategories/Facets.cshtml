@@ -43,7 +43,7 @@
                     <div class="card-header">@Html.Localize("List-Search", "L_RefinerCategories")</div>
                     <div class="card-body">
                         <div class="mb-1">
-                            <strong>@Html.Localize("General", "L_All") @rootCategoryTreeItem.SelectedValue (@rootCategoryTreeItem.SelectedTotalCount)</strong>
+                            <strong>@Html.Localize("General", "L_All") @rootCategoryTreeItem.Title (@rootCategoryTreeItem.Quantity)</strong>
                         </div>
                         @RenderCategoryTreeItems(rootCategoryTreeItem)
                     </div>
@@ -81,7 +81,7 @@
         return;
     }
 
-    var inputValue = item.FacetValue != null ? item.FacetValue.Value : item.SelectedValue;
+    var inputValue = item.Value;
  
     <div class="form-check mb-1">
         <input class="form-check-input"
@@ -96,14 +96,7 @@
                disabled="@(!item.IsRemovable)" />
         <label class="form-check-label @(item.IsSelected ? "font-weight-bold": "")"
                for="id@(inputValue.GetHashCode())">
-            @if (item.FacetValue != null)
-            {
-                @FacetHelpers.FacetValueTitle(item.FacetValue)
-            }
-            else
-            {
-                @item.SelectedValue <span>(@item.SelectedTotalCount)</span>
-            }
+            @item.Title <span>(@item.Quantity)</span>
         </label>
 
         @RenderCategoryTreeItems(item)

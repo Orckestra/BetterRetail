@@ -117,8 +117,10 @@ namespace Orckestra.Composer.Search.Factory
                         .OrderByDescending(fv => fv.Quantity)
                         .Select(fv =>
                         {
-                            var item = new CategoryFacetValuesTreeItem(fv, facetSetting.FacetType, facetSetting.FieldName);
-                            item.CategoryId = categoryChildren.FirstOrDefault(dn => dn.Value.DisplayName.GetLocalizedValue(culture.Name) == fv.Value).Value.Id;
+                            var item = new CategoryFacetValuesTreeItem(fv.Title, fv.Value, fv.Quantity, facetSetting.FacetType, facetSetting.FieldName, false, true)
+                            {
+                                CategoryId = categoryChildren.FirstOrDefault(dn => dn.Value.DisplayName.GetLocalizedValue(culture.Name) == fv.Value).Value.Id
+                            };
                             return item;
                         })
                         .ToList();
@@ -132,8 +134,10 @@ namespace Orckestra.Composer.Search.Factory
                     var catId = categoryChildren.FirstOrDefault(dn => dn.Value.DisplayName.GetLocalizedValue(culture.Name) == fv.Value).Value.Id;
                     var totalCount = counts.Facets.FirstOrDefault(fc => facetSetting.FieldName.StartsWith(fc.FieldName))?
                     .FacetValues.FirstOrDefault(fcv => fcv.Value.Equals(catId, StringComparison.OrdinalIgnoreCase))?.Quantity;
-                    var item = new CategoryFacetValuesTreeItem(fv.Value, totalCount, fv.IsRemovable, facetSetting.FacetType, facetSetting.FieldName);
-                    item.CategoryId = catId;
+                    var item = new CategoryFacetValuesTreeItem(fv.DisplayName, fv.Value, totalCount != null ? totalCount.Value : 0, facetSetting.FacetType, facetSetting.FieldName, true, fv.IsRemovable)
+                    {
+                        CategoryId = catId
+                    };
                     return item;
                 }).ToList();
             }

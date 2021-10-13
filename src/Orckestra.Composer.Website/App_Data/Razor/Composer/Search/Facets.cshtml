@@ -84,7 +84,7 @@
 {
     var type = item.FacetType == FacetType.SingleSelect ? "radio" : "checkbox";
     var name = item.FacetType == FacetType.SingleSelect ? item.FieldName : item.FieldName + "[]";
-    var inputValue = item.FacetValue != null ? item.FacetValue.Value : item.SelectedValue;
+    var inputValue = item.Value;
 
     <div class="form-check mb-1"
          data-facetfieldname="@item.FieldName"
@@ -97,16 +97,9 @@
                checked="@item.IsSelected"
                data-type="@item.FacetType"
                data-oc-click="categoryFacetChanged" />
-        <label class="form-check-label @(item.IsSelected ? "font-weight-bold": "")" 
+        <label class="form-check-label @(item.IsSelected ? "font-weight-bold": "")"
                for="id@(inputValue.GetHashCode())">
-            @if (item.FacetValue != null)
-            {
-                @FacetHelpers.FacetValueTitle(item.FacetValue)
-            }
-            else
-            {
-                @item.SelectedValue <span>(@item.SelectedTotalCount)</span>
-            }
+            @item.Title <span>(@item.Quantity)</span>
         </label>
         @if (item.Items != null)
         {

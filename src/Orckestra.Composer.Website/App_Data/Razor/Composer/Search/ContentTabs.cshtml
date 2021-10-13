@@ -30,8 +30,8 @@
 
     public IContentSearchViewService ContentSearchViewService { get; set; }
 
-    public ProductSearchResultsViewModel ProductSearchResults => SearchRequestContext.ProductsSearchViewModel.ProductSearchResults;
-    public SelectedFacets ProductSearchResultsSelectedFacets => SearchRequestContext.ProductsSearchViewModel.SelectedFacets;
+    public SearchViewModel ProductsSearchViewModel => SearchRequestContext.ProductsSearchViewModel;
+    public ProductSearchResultsViewModel ProductSearchResults => ProductsSearchViewModel.ProductSearchResults;
 
     private bool IsProductsCorrected()
     {
@@ -40,7 +40,8 @@
 
     private bool IsProductFacetsSelected()
     {
-        return ProductSearchResultsSelectedFacets != null && ProductSearchResultsSelectedFacets.Facets != null && ProductSearchResultsSelectedFacets.Facets.Count > 0;
+        return ProductsSearchViewModel != null && ProductsSearchViewModel.SelectedFacets != null
+            && ProductsSearchViewModel.SelectedFacets.Facets.Count > 0;
     }
 }
 
@@ -85,8 +86,6 @@
     {
         currentTabPathInfo = productTab != null ? productTab.UrlTitle : contentSearchVm.Tabs.First()?.UrlTitle;
     }
-
-
 
     if (productTab != null)
     {

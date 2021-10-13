@@ -10,37 +10,35 @@ namespace Orckestra.Composer.Search.Facets
 
     public class CategoryFacetValuesTreeItem
     {
-        public CategoryFacetValuesTreeItem(FacetValue facetValue, FacetType facetType, string fieldName)
+        public CategoryFacetValuesTreeItem(string title, string value, int quantity, FacetType facetType, string fieldName, bool isSelected, bool isRemovable)
         {
-            FacetValue = facetValue;
+            Title = title;
+            Value = value;
+            Quantity = quantity;
             FacetType = facetType;
             FieldName = fieldName;
-            IsSelected = facetValue.IsSelected;
-            IsRemovable = true;
+            IsSelected = isSelected;
+            IsRemovable = isRemovable;
         }
 
-        public CategoryFacetValuesTreeItem(string selectedValue, int? selectedCount, bool isRemovable, FacetType facetType, string fieldName)
-        {
-            SelectedValue = selectedValue;
-            SelectedTotalCount = selectedCount;
-            IsRemovable = isRemovable;
-            FacetType = facetType;
-            FieldName = fieldName;
-            IsSelected = true;
-        }
+        public string Title { get; set; }
+
+        public string Value { get; set; }
+
+        public int Quantity { get; set; }
 
         public string CategoryId { get; set; }
+
         public string CategoryUrl { get; set; }
+
         public FacetType FacetType { get; set; }
 
         public string FieldName { get; set; }
 
         public bool IsSelected { get; set; }
-        public bool IsRemovable { get; set; }
-        public string SelectedValue { get; set; }
-        public int? SelectedTotalCount { get; set; }
 
-        public FacetValue FacetValue { get; set; }
+        public bool IsRemovable { get; set; }
+
         public List<CategoryFacetValuesTreeItem> Items { get; set; }
 
         public List<CategoryFacetValuesTreeItem> OnDemandItems { get; set; }
