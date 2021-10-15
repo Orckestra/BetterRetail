@@ -109,7 +109,7 @@
                                             <img class="img-fluid"
                                                     v-bind:src="suggestion.item.ImageUrl"
                                                     v-bind:alt="suggestion.item.FullDisplayName"
-                                                    @*  onerror="this.onerror=null; this.src='{{FallbackImageUrl}}'" *@ />
+                                                    v-on:error="onImageError($event, suggestion)" />
                                         </a>
                                     </div>
                                     <div class="col-10">
@@ -140,7 +140,7 @@
                             </template>
 
                             <template v-slot:after-section-autocomplete="{ section }">
-                                <p v-if="section.data.length" class="w-100 m-3" xmlns:v-on="v-on" v-on:mouseup.stop="searchMore">@Html.Localize("List-Search", "ShowMoreResults")</p>
+                                <a v-if="section.data.length" class="w-100 m-3" xmlns:v-on="v-on" v-on:mouseup.stop="searchMore">@Html.Localize("List-Search", "ShowMoreResults")</a>
 
                                 <div v-else="v-else" class="card-body h-100">
                                     <div class="row">                                   
