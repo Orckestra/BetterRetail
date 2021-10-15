@@ -185,6 +185,13 @@ module Orckestra.Composer {
                         EventHub.instance().publish('brandSuggestionClicked', {
                             data: { suggestion: suggestion.item.DisplayName }
                         });
+                    },
+                    onImageError(e, suggestion) {
+                        const img = suggestion.item.FallbackImageUrl;
+                        if(img) {
+                            e.target.onerror = null;
+                            e.target.src = img;
+                        }
                     }
                 }
             });
