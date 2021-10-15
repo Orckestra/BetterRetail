@@ -116,7 +116,7 @@
     var passwordPatternViewModel = new PasswordPatternViewModel();
     MembershipViewService.SetPasswordValidationRules(passwordPatternViewModel);
 
-    <form v-if="ShowCreateAccountForm" class="mt-4" id="formCreateAccount"
+    <form v-if="ShowCreateAccountForm" method="post" class="mt-4" id="formCreateAccount"
           data-password-pattern="@passwordPatternViewModel.PasswordRegexPattern"
           data-password-length="@passwordPatternViewModel.MinRequiredPasswordLength">
         <h3>@Html.Localize("CheckoutProcess", "T_SaveInformation")</h3>

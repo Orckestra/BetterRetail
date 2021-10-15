@@ -14,6 +14,7 @@ module Orckestra.Composer {
 
         protected membershipService: IMembershipService = new MembershipService(new MembershipRepository());
         protected cacheProvider: ICacheProvider = CacheProvider.instance();
+        protected busyHandler;
 
         public initialize() {
 
@@ -53,12 +54,12 @@ module Orckestra.Composer {
         public login(actionContext: IControllerActionContext) {
 
             actionContext.event.preventDefault();
-
-            var busy: UIBusyHandle = this.asyncBusy();
-
+            if(this.busyHandler && this.busyHandler.isLoading())  return;
+            this.busyHandler = this.asyncBusy();
+          
             this.loginImpl(actionContext)
-                .then(result => this.onLoginFulfilled(result, busy))
-                .fail(reason => this.onLoginRejected(reason, busy))
+                .then(result => this.onLoginFulfilled(result))
+                .fail(reason => this.onLoginRejected(reason))
                 .done();
         }
 
@@ -72,24 +73,24 @@ module Orckestra.Composer {
             return this.membershipService.login(formData, returnUrl);
         }
 
-        private onLoginFulfilled(result: any, busy: UIBusyHandle) {
+        private onLoginFulfilled(result: any) {
 
             if (result.Status === MyAccountStatus[MyAccountStatus.Success]) {
                 this.eventHub.publish(MyAccountEvents[MyAccountEvents.LoggedIn], { data: result });
                 this.cacheProvider.defaultCache.set('customerId', null).done();
             } else {
                 this.renderFailedForm(result.Status);
-                busy.done();
+                this.busyHandler.done();
             }
         }
 
-        private onLoginRejected(reason: any, busy: UIBusyHandle) {
+        private onLoginRejected(reason: any) {
             let errorCode = MyAccountStatus[MyAccountStatus.AjaxFailed];
             if (reason && reason.Errors && reason.Errors[0] && reason.Errors[0].ErrorCode) {
                 errorCode = reason.Errors[0].ErrorCode;
             }
             this.renderFailedForm(errorCode);
-            busy.done();
+            this.busyHandler.done();
         }
 
         /**
