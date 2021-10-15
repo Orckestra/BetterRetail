@@ -17,6 +17,11 @@ module Orckestra.Composer {
                         FulfillmentMethodType: fulfillment ? fulfillment.FulfillmentMethodType : undefined,
                         StoreLoading: false,
                         TimeSlotLoading: false
+                    },
+                    Errors: {
+                        StoreSelectionError: false,
+                        TimeSlotLoadingError: false,
+                        TimeSlotSelectionError: false
                     }
                 },
                 computed: {

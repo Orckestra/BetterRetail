@@ -199,9 +199,6 @@ module Orckestra.Composer {
                         AddressNameAlreadyInUseError: false,
                         StoreLocatorLocationError: false,
                         StoreNotSelectedError: false,
-                        StoreSelectionError: false,
-                        TimeSlotLoadingError: false,
-                        TimeSlotSelectionError: false,
                         SignIn: false
                     },
                     Modal: {
