@@ -46,10 +46,10 @@
                 <div class="card bg-light  mb-3  facets-card">
                     <div class="card-header">@Html.Localize("List-Search", "L_RefinerCategories")</div>
                     <div class="card-body">
-                        <div class="mb-1"><strong>@Html.Localize("General", "L_All") @SearchRequestContext.SearchQuery (@categoryFacetValuesTree.RootTotalCount)</strong></div>
-                        @foreach (var item in categoryFacetValuesTree.Items)
+                        <div class="mb-1"><strong>@Html.Localize("General", "L_All") @SearchRequestContext.SearchQuery (@categoryFacetValuesTree.TotalCount)</strong></div>
+                        @foreach (var node in categoryFacetValuesTree.ChildNodes)
                         {
-                            @RenderCategoryTreeItem(item)
+                            @RenderCategoryTreeItem(node)
                         }
                     </div>
                 </div>
@@ -80,38 +80,43 @@
 </body>
 </html>
 
-@helper RenderCategoryTreeItem(CategoryFacetValuesTreeItem item)
+@helper RenderCategoryTreeItem(CategoryFacetValuesTreeNode item)
 {
     var type = item.FacetType == FacetType.SingleSelect ? "radio" : "checkbox";
     var name = item.FacetType == FacetType.SingleSelect ? item.FieldName : item.FieldName + "[]";
     var inputValue = item.Value;
 
-    <div class="form-check mb-1"
-         data-facetfieldname="@item.FieldName"
-         data-facettype="@item.FacetType">
-        <input class="form-check-input"
-               type="@type"
-               name="@name"
-               id="id@(inputValue.GetHashCode())"
-               value="@inputValue" 
-               checked="@item.IsSelected"
-               data-type="@item.FacetType"
-               data-oc-click="categoryFacetChanged" />
-        <label class="form-check-label @(item.IsSelected ? "font-weight-bold": "")"
-               for="id@(inputValue.GetHashCode())">
-            @item.Title <span>(@item.Quantity)</span>
-        </label>
-        @if (item.Items != null)
+<div class="form-check mb-1"
+     data-facetfieldname="@item.FieldName"
+     data-facettype="@item.FacetType">
+    <input class="form-check-input"
+           type="@type"
+           name="@name"
+           id="id@(inputValue.GetHashCode())"
+           value="@inputValue"
+           checked="@item.IsSelected"
+           data-type="@item.FacetType"
+           data-oc-click="categoryFacetChanged" />
+    <label class="form-check-label @(item.IsSelected ? "font-weight-bold": "")"
+           for="id@(inputValue.GetHashCode())">
+        @item.Title <span>(@item.Quantity)</span>
+    </label>
+    @if (item.ChildNodes != null)
+    {
+        var items = item.ChildNodes.Take(item.MaxCollapsedCount).ToList();
+        var collapsedItems = item.ChildNodes
+                      .Skip(item.MaxCollapsedCount)
+                      .Take(item.MaxExpandedCount - item.MaxCollapsedCount)
+                      .ToList();
+        foreach (var subItem in items)
         {
-            foreach (var subItem in item.Items)
-            {
-                @RenderCategoryTreeItem(subItem)
-            }
+            @RenderCategoryTreeItem(subItem)
         }
-        @if (item.OnDemandItems != null && item.OnDemandItems.Count > 0)
+
+        if (collapsedItems != null && collapsedItems.Count > 0)
         {
             <div id="onDemandFacets-@item.FieldName" class="collapse">
-                @foreach (var subItem in item.OnDemandItems)
+                @foreach (var subItem in collapsedItems)
                 {
                     @RenderCategoryTreeItem(subItem)
                 }
@@ -119,5 +124,7 @@
 
             @FacetHelpers.ShowMoreLessButton(item.FieldName)
         }
-    </div>
+    }
+
+</div>
 }

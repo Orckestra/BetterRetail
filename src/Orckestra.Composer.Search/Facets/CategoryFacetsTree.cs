@@ -4,13 +4,13 @@ namespace Orckestra.Composer.Search.Facets
 {
     public class CategoryFacetValuesTree
     {
-        public long RootTotalCount { get; set; }
-        public List<CategoryFacetValuesTreeItem> Items { get; set; }
+        public long TotalCount { get; set; }
+        public List<CategoryFacetValuesTreeNode> ChildNodes { get; set; }
     }
 
-    public class CategoryFacetValuesTreeItem
+    public class CategoryFacetValuesTreeNode
     {
-        public CategoryFacetValuesTreeItem(string title, string value, int quantity, FacetType facetType, string fieldName, bool isSelected, bool isRemovable)
+        public CategoryFacetValuesTreeNode(string title, string value, int quantity, FacetType facetType, string fieldName, bool isSelected, bool isRemovable)
         {
             Title = title;
             Value = value;
@@ -39,8 +39,11 @@ namespace Orckestra.Composer.Search.Facets
 
         public bool IsRemovable { get; set; }
 
-        public List<CategoryFacetValuesTreeItem> Items { get; set; }
+        public int MaxCollapsedCount { get; set; }
 
-        public List<CategoryFacetValuesTreeItem> OnDemandItems { get; set; }
+        public int MaxExpandedCount { get; set; }
+
+        public List<CategoryFacetValuesTreeNode> ChildNodes { get; set; }
+
     }
 }

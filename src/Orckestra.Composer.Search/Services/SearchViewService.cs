@@ -99,10 +99,10 @@ namespace Orckestra.Composer.Search.Services
                 ProductSearchResults = await GetProductSearchResultsAsync(criteria).ConfigureAwait(false)
             };
 
-            viewModel.CategoryFacetValuesTree = BuildCategoryFacetValuesTree(
+            viewModel.CategoryFacetValuesTree = await BuildCategoryFacetValuesTree(
                 viewModel.ProductSearchResults.Facets, 
                 viewModel.SelectedFacets,
-                viewModel.ProductSearchResults.CategoryFacetCounts);
+                viewModel.ProductSearchResults.CategoryFacetCounts).ConfigureAwait(false);
 
             // TODO: Needed for some JS context - move to data-context-var where needed
             viewModel.Context["TotalCount"] = viewModel.ProductSearchResults.TotalCount;

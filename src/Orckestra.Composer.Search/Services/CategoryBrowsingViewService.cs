@@ -86,40 +86,19 @@ namespace Orckestra.Composer.Search.Services
                 LandingPageUrls = landingPageUrls
             };
 
-            viewModel.CategoryFacetValuesTree = BuildCategoryFacetValuesTree(viewModel.ProductSearchResults.Facets,
+            viewModel.CategoryFacetValuesTree = await BuildCategoryFacetValuesTree(viewModel.ProductSearchResults.Facets,
                 viewModel.SelectedFacets,
-                viewModel.ProductSearchResults.CategoryFacetCounts);
+                viewModel.ProductSearchResults.CategoryFacetCounts).ConfigureAwait(false);
 
-            if (viewModel.CategoryFacetValuesTree != null)
-            {
-                foreach (var item in viewModel.CategoryFacetValuesTree.Items)
-                {
-                    BuildCategoryUrlsForTreeItem(param, item);
-                }
-            }
+            viewModel.CategoryFacetValuesTree?.ChildNodes?.ForEach(childNode => BuildCategoryUrlsForTreeNode(param, childNode));
 
             return viewModel;
         }
 
-        private void BuildCategoryUrlsForTreeItem(GetCategoryBrowsingViewModelParam param, CategoryFacetValuesTreeItem item)
+        private void BuildCategoryUrlsForTreeNode(GetCategoryBrowsingViewModelParam param, CategoryFacetValuesTreeNode node)
         {
-            item.CategoryUrl = GetCategoryUrl(item.CategoryId, param);
-            if (item.Items != null)
-            {
-                foreach (var subItem in item.Items)
-                {
-                    BuildCategoryUrlsForTreeItem(param, subItem);
-                }
-
-            }
-
-            if (item.OnDemandItems != null)
-            {
-                foreach (var subItem in item.OnDemandItems)
-                {
-                    BuildCategoryUrlsForTreeItem(param, subItem);
-                }
-            }
+            node.CategoryUrl = GetCategoryUrl(node.CategoryId, param);
+            node.ChildNodes?.ForEach(childNode => BuildCategoryUrlsForTreeNode(param, childNode));
         }
 
         protected virtual List<string> GetLandingPageUrls(TreeNode<Category> startNode, GetCategoryBrowsingViewModelParam param)

@@ -196,7 +196,7 @@ namespace Orckestra.Composer.Search
         public static bool AutoCorrectSearchTerms { get; set; } = true;
 
         /// <summary>
-        /// The prefix for the the category facet field name to indentify what facets are for categories
+        /// The prefix for the the category facet field name to indentify which facets are for categories
         /// </summary>
         public static string CategoryFacetFiledNamePrefix { get; set; } = "CategoryLevel";
     }

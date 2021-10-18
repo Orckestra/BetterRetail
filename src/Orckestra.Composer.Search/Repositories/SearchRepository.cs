@@ -180,7 +180,7 @@ namespace Orckestra.Composer.Search.Repositories
             };
         }
 
-        public virtual async Task<ProductSearchResult> GetCategoryFacetCountsAsync(SearchCriteria criteria)
+        public virtual Task<ProductSearchResult> GetCategoryFacetCountsAsync(SearchCriteria criteria)
         {
             if (criteria == null) { throw new ArgumentNullException(nameof(criteria)); }
             if (criteria.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(criteria.CultureInfo)), nameof(criteria)); }
@@ -208,9 +208,7 @@ namespace Orckestra.Composer.Search.Repositories
             request.AutoCorrect = criteria.AutoCorrect;
             request.AvailabilityDate = criteria.AvailabilityDate;
 
-            var results = await ExecuteProductSearchRequestAsync(request).ConfigureAwait(false);
-
-            return results;
+            return ExecuteProductSearchRequestAsync(request);
         }
     }
 }

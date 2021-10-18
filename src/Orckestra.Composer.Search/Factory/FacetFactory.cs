@@ -47,40 +47,40 @@ namespace Orckestra.Composer.Search.Factory
 
         public CategoryFacetValuesTree BuildCategoryFacetValuesTree(IList<Facet> facets,
             SelectedFacets selectedFacets,
-            Tree<Overture.ServiceModel.Products.Category, string> categoriesTree,
+            Tree<Overture.ServiceModel.Products.Category, string> categoryTree,
             CategoryFacetCounts counts,
             CultureInfo culture)
         {
             var categoryFacetSettings = FacetConfigContext.GetFacetSettings()
               .Where(s => s.IsCategoryFacet)?.ToList();
-            if (categoryFacetSettings == null || categoryFacetSettings.Count == 0)
+            if ((categoryFacetSettings?.Count ?? 0) == 0)
             {
                 return null;
             }
 
-            categoriesTree.TryGetValue("Root", out TreeNode<Overture.ServiceModel.Products.Category> categoriesRoot);
-            var tree = new CategoryFacetValuesTree() { RootTotalCount = counts.TotalCount };
+            categoryTree.TryGetValue("Root", out TreeNode<Overture.ServiceModel.Products.Category> categoriesRoot);
+            var tree = new CategoryFacetValuesTree() { TotalCount = counts.TotalCount };
 
-            var rootFacetSetting = categoryFacetSettings.FirstOrDefault(c => c.DependsOn == null || c.DependsOn.Count == 0);
+            var rootFacetSetting = categoryFacetSettings.FirstOrDefault(c => (c.DependsOn?.Count ?? 0) == 0);
             if (rootFacetSetting != null)
             {
-                tree.Items = GetTreeItems(rootFacetSetting, facets, selectedFacets, categoriesRoot, culture, counts);
-                BuildTreeItems(categoryFacetSettings, rootFacetSetting.FieldName, facets, selectedFacets, tree.Items, categoriesTree, counts, culture);
+                tree.ChildNodes = GetTreeNodes(rootFacetSetting, facets, selectedFacets, categoriesRoot, culture, counts);
+                BuildTreeNodes(categoryFacetSettings, rootFacetSetting.FieldName, facets, selectedFacets, tree.ChildNodes, categoryTree, counts, culture);
             }
 
             return tree;
         }
 
-        protected void BuildTreeItems(List<FacetSetting> categoryFacetSettings, 
+        protected void BuildTreeNodes(List<FacetSetting> categoryFacetSettings, 
             string nextFacetFieldName, 
             IList<Facet> facets, 
             SelectedFacets selectedFacets, 
-            List<CategoryFacetValuesTreeItem> items,
-            Tree<Overture.ServiceModel.Products.Category, string> categoriesTree,
+            List<CategoryFacetValuesTreeNode> nodes,
+            Tree<Overture.ServiceModel.Products.Category, string> categoryTree,
             CategoryFacetCounts counts,
             CultureInfo culture)
         {
-            if(items == null || items.Count == 0)
+            if((nodes?.Count ?? 0) == 0)
             {
                 return;
             }
@@ -89,61 +89,58 @@ namespace Orckestra.Composer.Search.Factory
   
             if (facetSetting != null)
             {
-                foreach (var item in items)
+                foreach (var node in nodes)
                 {
-                    categoriesTree.TryGetValue(item.CategoryId, out TreeNode<Overture.ServiceModel.Products.Category> categoriesRoot);
-                    var allItems = GetTreeItems(facetSetting, facets, selectedFacets, categoriesRoot, culture, counts);
+                    categoryTree.TryGetValue(node.CategoryId, out TreeNode<Overture.ServiceModel.Products.Category> categoriesRoot);
+                    node.ChildNodes  = GetTreeNodes(facetSetting, facets, selectedFacets, categoriesRoot, culture, counts);
+                    node.MaxCollapsedCount = facetSetting.MaxCollapsedValueCount;
+                    node.MaxExpandedCount = facetSetting.MaxExpendedValueCount;
 
-                    item.Items = allItems.Take(facetSetting.MaxCollapsedValueCount).ToList();
-                    item.OnDemandItems = allItems
-                        .Skip(facetSetting.MaxCollapsedValueCount)
-                        .Take(facetSetting.MaxExpendedValueCount - facetSetting.MaxCollapsedValueCount)
-                        .ToList();
-
-                    BuildTreeItems(categoryFacetSettings, facetSetting.FieldName, facets, selectedFacets, item.Items, categoriesTree, counts, culture);
-                    BuildTreeItems(categoryFacetSettings, facetSetting.FieldName, facets, selectedFacets, item.OnDemandItems, categoriesTree, counts, culture);
+                    BuildTreeNodes(categoryFacetSettings, facetSetting.FieldName, facets, selectedFacets, node.ChildNodes, categoryTree, counts, culture);
                 }
             }
         }
-        
-        protected List<CategoryFacetValuesTreeItem> GetTreeItems(FacetSetting facetSetting, IList<Facet> facets, SelectedFacets selectedFacets,
-             TreeNode<Overture.ServiceModel.Products.Category> categoriesTree, CultureInfo culture, CategoryFacetCounts counts)
+
+        protected List<CategoryFacetValuesTreeNode> GetTreeNodes(FacetSetting facetSetting, IList<Facet> facets, SelectedFacets selectedFacets,
+             TreeNode<Overture.ServiceModel.Products.Category> categoryTree, CultureInfo culture, CategoryFacetCounts counts)
         {
-            var categoryChildren = categoriesTree.Children;
+            var categoryChildren = categoryTree.Children;
+            var categoryChildrenLookup = categoryChildren.ToLookup(_ => _.Value.DisplayName.GetLocalizedValue(culture.Name));
             var facet = facets.FirstOrDefault(f => f.FieldName == facetSetting.FieldName);
+            List<CategoryFacetValuesTreeNode> nodes = null;
 
             var facetValues = facet?.FacetValues.Concat(facet.OnDemandFacetValues);
-            var items = facetValues?
-                        .Where(fv => categoryChildren.FirstOrDefault(dn => dn.Value.DisplayName.GetLocalizedValue(culture.Name) == fv.Value) != null)
-                        .OrderByDescending(fv => fv.Quantity)
-                        .Select(fv =>
-                        {
-                            var item = new CategoryFacetValuesTreeItem(fv.Title, fv.Value, fv.Quantity, facetSetting.FacetType, facetSetting.FieldName, false, true)
-                            {
-                                CategoryId = categoryChildren.FirstOrDefault(dn => dn.Value.DisplayName.GetLocalizedValue(culture.Name) == fv.Value).Value.Id
-                            };
-                            return item;
-                        })
-                        .ToList();
-
-            if (items == null || items.Count == 0)
+            if (facetValues != null)
             {
-                items = selectedFacets.Facets.Where(f => f.FieldName == facetSetting.FieldName)
-                 .Where(fv => categoryChildren.FirstOrDefault(c => c.Value.DisplayName.GetLocalizedValue(culture.Name) == fv.Value) != null)
-                .Select(fv =>
-                {
-                    var catId = categoryChildren.FirstOrDefault(dn => dn.Value.DisplayName.GetLocalizedValue(culture.Name) == fv.Value).Value.Id;
-                    var totalCount = counts.Facets.FirstOrDefault(fc => facetSetting.FieldName.StartsWith(fc.FieldName))?
-                    .FacetValues.FirstOrDefault(fcv => fcv.Value.Equals(catId, StringComparison.OrdinalIgnoreCase))?.Quantity;
-                    var item = new CategoryFacetValuesTreeItem(fv.DisplayName, fv.Value, totalCount != null ? totalCount.Value : 0, facetSetting.FacetType, facetSetting.FieldName, true, fv.IsRemovable)
-                    {
-                        CategoryId = catId
-                    };
-                    return item;
-                }).ToList();
+                nodes = (from fv in facetValues
+                         let category = categoryChildrenLookup[fv.Value].FirstOrDefault()
+                         where category != null
+                         select new CategoryFacetValuesTreeNode(fv.Title, fv.Value, fv.Quantity, facetSetting.FacetType, facetSetting.FieldName, false, true)
+                         {
+                             CategoryId = category.Value.Id
+                         }).ToList();
+
             }
 
-            return items;
+            if (nodes == null || nodes.Count == 0)
+            {
+                var selected = selectedFacets.Facets.Where(f => f.FieldName == facetSetting.FieldName);
+                if (selected != null && selected.Count() > 0)
+                {
+                    var countFacets = counts.Facets.FirstOrDefault(fc => facetSetting.FieldName.StartsWith(fc.FieldName))?.FacetValues;
+
+                    nodes = (from fv in selected
+                             let category = categoryChildrenLookup[fv.Value].FirstOrDefault()
+                             where category != null
+                             let totalCount = countFacets.FirstOrDefault(fcv => fcv.Value.Equals(category.Value.Id, StringComparison.OrdinalIgnoreCase))?.Quantity
+                             select new CategoryFacetValuesTreeNode(fv.DisplayName, fv.Value, totalCount != null ? totalCount.Value : 0, facetSetting.FacetType, facetSetting.FieldName, true, fv.IsRemovable)
+                             {
+                                 CategoryId = category.Value.Id
+                             }).ToList();
+                }
+            }
+
+            return nodes;
         }
     }
 }

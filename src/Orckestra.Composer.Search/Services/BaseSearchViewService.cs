@@ -240,14 +240,14 @@ namespace Orckestra.Composer.Search.Services
             };
         }
 
-        protected virtual CategoryFacetValuesTree BuildCategoryFacetValuesTree(IList<Facet> facets, 
-            SelectedFacets selectedFacets, 
+        protected virtual async Task<CategoryFacetValuesTree> BuildCategoryFacetValuesTree(IList<Facet> facets,
+            SelectedFacets selectedFacets,
             CategoryFacetCounts categoryCounts)
         {
-            var categories = CategoryRepository.GetCategoriesTreeAsync(new GetCategoriesParam
+            var categories = await CategoryRepository.GetCategoriesTreeAsync(new GetCategoriesParam
             {
                 Scope = ComposerContext.Scope
-            }).ConfigureAwait(false).GetAwaiter().GetResult();
+            }).ConfigureAwait(false);
 
             return FacetFactory.BuildCategoryFacetValuesTree(facets, selectedFacets, categories, categoryCounts, ComposerContext.CultureInfo);
         }
@@ -585,7 +585,7 @@ namespace Orckestra.Composer.Search.Services
             };
 
             if (param.Criteria.SelectedFacets != null && 
-                param.Criteria.SelectedFacets.Any(s => !string.IsNullOrWhiteSpace(s.Name) && s.Name.StartsWith(SearchConfiguration.CategoryFacetFiledNamePrefix)))
+                param.Criteria.SelectedFacets.Any(s => s.Name?.StartsWith(SearchConfiguration.CategoryFacetFiledNamePrefix) ?? false))
             {
                 createSearchViewModelParam.CategoryFacetCountsResult = await SearchRepository.GetCategoryFacetCountsAsync(param.Criteria).ConfigureAwait(false);
             }
