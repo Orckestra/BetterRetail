@@ -21,7 +21,8 @@
 ///<reference path='../../Composer.MyAccount/Common/MyAccountStatus.ts' />
 ///<reference path='../Services/ShippingAddressRegisteredService.ts' />
 ///<reference path='../../UI/UIModal.ts' />
-
+///<reference path='../../Composer.Grocery/FulfillmentService.ts' />
+///<reference path='../../Composer.Grocery/FulfillmentHelper.ts' />
 
 module Orckestra.Composer {
     'use strict';
@@ -313,7 +314,7 @@ module Orckestra.Composer {
                 cart.ShippingAddress.PostalCode &&
                 cart.ShippingAddress.PhoneNumber;
 
-            let methodType = cart.ShippingMethod.FulfillmentMethodType;
+            let methodType = cart.ShippingMethod.FulfillmentMethodTypeString;
             let isShipToHome = methodType === FulfillmentMethodTypes.Shipping ||
                 methodType === FulfillmentMethodTypes.Delivery;
             let isPickUp = methodType === FulfillmentMethodTypes.PickUp;

@@ -73,12 +73,8 @@ namespace Orckestra.Composer.Website
 
             functions.RegisterAction<SearchController>("PageHeader", "Composer.Search.PageHeader");
             functions.RegisterAction<SearchController>("Index", "Composer.Search.Index");
-            functions.RegisterAction<SearchController>("SearchFacets", "Composer.Search.Facets");
-            functions.RegisterAction<SearchController>("SelectedSearchFacets", "Composer.Search.SelectedSearchFacets");
 
-            functions.RegisterAction<BrowsingCategoriesController>("Index", "Composer.BrowsingCategories.Results");
-            functions.RegisterAction<BrowsingCategoriesController>("Facets", "Composer.BrowsingCategories.Facets");
-            functions.RegisterAction<BrowsingCategoriesController>("SelectedSearchFacets", "Composer.BrowsingCategories.SelectedFacets");
+            functions.RegisterAction<BrowsingCategoriesController>("Index", "Composer.BrowsingCategories.Index");
             functions.RegisterAction<BrowsingCategoriesController>("ChildCategories", "Composer.BrowsingCategories.ChildCategories");
 
             functions.RegisterAction<ProductController>("RelatedProducts", "Composer.Product.Instant.RelatedProducts", "Displays products/variants related to the product displayed on the current product/variant details page.  First products which are related via merchandising relationship will be displayed and if none are available then displays product in the same default category")

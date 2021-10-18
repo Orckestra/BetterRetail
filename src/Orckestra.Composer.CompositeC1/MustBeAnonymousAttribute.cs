@@ -3,6 +3,7 @@ using System.Collections.Specialized;
 using System.Globalization;
 using System.Web;
 using System.Web.Mvc;
+using Composite.Core;
 using Composite.Data;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
@@ -18,7 +19,7 @@ namespace Orckestra.Composer.CompositeC1
         public const string MyAccountDestination = "MyAccount";
         public const string CartDestination = "Cart";
 
-        protected Func<HttpContextBase, string> GetRedirectUrl { get; private set; } 
+        protected Func<HttpContextBase, string> GetRedirectUrl { get; private set; }
 
         public MustBeAnonymousAttribute(string destination)
         {
@@ -58,7 +59,7 @@ namespace Orckestra.Composer.CompositeC1
 
         private string GetRedirectUrlForMyAccount(HttpContextBase httpContext)
         {
-            var urlProvider = ComposerHost.Current.Resolve<IMyAccountUrlProvider>();
+            var urlProvider = ServiceLocator.GetService<IMyAccountUrlProvider>();
 
             var url = urlProvider.GetMyAccountUrl(new BaseUrlParameter
             {
@@ -69,7 +70,7 @@ namespace Orckestra.Composer.CompositeC1
 
         private string GetRedirectUrlForCart(HttpContextBase httpContext)
         {
-            var urlProvider = ComposerHost.Current.Resolve<ICartUrlProvider>();
+            var urlProvider = ServiceLocator.GetService<ICartUrlProvider>();
 
             var url = urlProvider.GetCartUrl(new BaseUrlParameter
             {                

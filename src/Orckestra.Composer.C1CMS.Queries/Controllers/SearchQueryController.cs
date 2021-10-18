@@ -46,7 +46,7 @@ namespace Orckestra.Composer.C1CMS.Queries.Controllers
 
         public virtual ActionResult Index(string queryName = "")
         {
-            return ExecuteSearchQuery("SearchResults", "SearchResults", c => c, queryName);
+            return ExecuteSearchQuery("ProductsSearchResults", "ProductsSearchResults", c => c, queryName);
         }
 
         public virtual ActionResult SelectedSearchFacets(string queryName = "")

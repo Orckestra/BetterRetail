@@ -11,6 +11,7 @@ module Orckestra.Composer {
     export class NewPasswordController extends Orckestra.Composer.MyAccountController {
 
         protected membershipService: IMembershipService = new MembershipService(new MembershipRepository());
+        protected busyHandler;
 
         public initialize() {
 
@@ -42,6 +43,8 @@ module Orckestra.Composer {
         public newPassword(actionContext: IControllerActionContext): void {
 
             actionContext.event.preventDefault();
+            if (this.busyHandler && this.busyHandler.isLoading()) return;
+            this.busyHandler = this.asyncBusy({ elementContext: actionContext.elementContext });
 
             var formData: any = this.getFormData(actionContext);
             var returnUrlQueryString: string = 'ReturnUrl=';
@@ -59,11 +62,9 @@ module Orckestra.Composer {
                     + ticketQueryString.length);
             }
 
-            var busy = this.asyncBusy({elementContext: actionContext.elementContext});
-
             this.membershipService.resetPassword(formData, ticket, returnUrl)
                 .then(result => this.onResetPasswordFulfilled(result), reason => this.renderFormErrorMessages(reason))
-                .fin(() => busy.done())
+                .fin(() => this.busyHandler.done())
                 .done();
         }
 

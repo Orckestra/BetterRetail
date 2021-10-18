@@ -48,10 +48,12 @@
                         </li>
 
                          @Function("Composer.Membership.SignInHeader")
-                         <li class="nav-item d-none d-md-block">
+                        <li class="nav-item d-none d-md-block">
                             @Function("Composer.WishList.WishListInHeader")
                         </li>
-                        @Function("Composer.Cart.Minicart")
+                        <li class="nav-item d-block d-md-none">
+                            @Function("Composer.Cart.MinicartButtonMobile")
+                        </li>
                     </ul>
 
                 </div>
@@ -67,13 +69,13 @@
                         @Logo()
                     </div>
                     <div class="col-12 col-md-9 col-lg-6  justify-content-center align-self-center">
-                        <div>
-                            <f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.SearchBox">
-                                <f:param name="Autocomplete" value="true" />
-                                <f:param name="MaxProductsAutocompleteCount" value="6" />
-                            </f:function>
-                        </div>
+						<f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.SearchBox">
+							<f:param name="Autocomplete" value="true" />
+						</f:function>
                     </div>
+					<div class="col-3 col-lg-2 justify-content-center align-self-center">
+						@Function("Composer.Cart.MinicartButton")
+					</div>
                 </div>
             </div>
         </div>
@@ -100,6 +102,6 @@
 {
     <a class="nav-link" href="~/page(@pages.StoreListPageId)" title="@Html.Localize("Store", "L_StoreLocator")">
         <span class="fas  fa-map-marker-alt"></span>&#160;
-        <span class="d-none d-sm-inline sps--blw-hidden">@Html.Localize("Store", "L_StoreLocator")</span>
+        <span class="d-none d-md-inline sps--blw-hidden">@Html.Localize("Store", "L_StoreLocator")</span>
     </a>
 }

@@ -126,8 +126,12 @@
                     <span class="h4 font-weight-bold">{{Product.ListPrice}}</span>
                 </small>
                 <del v-if="Product.IsPriceDiscounted">{{Product.DefaultListPrice}}</del>&nbsp;
-                <div v-if="PricePerUnit">
-                    <br />&nbsp; <span>{{PricePerUnit}}</span> @Html.Localize("ProductPage", "L_Per") {{Product.BaseProductSize}} {{Product.BaseProductMeasure}}
+
+                <div v-if="PricePerUnit" class="mt-1" >
+                    <span>{{PricePerUnit}}</span> @Html.Localize("ProductPage", "L_Per") {{Product.BaseProductSize}} {{Product.BaseProductMeasure}}
+                </div>
+                <div v-else="v-else" class="mt-1" >
+                    <span>N/A</span>
                 </div>
             </p>
             <span v-else="else" property="price" data-qa="product-price" class="h3 invisible">0</span>
@@ -135,7 +139,12 @@
     </div>
 }
 
-@helper DisplayFormat() {
- var extendedVM = Model.AsExtensionModel<IGroceryProductViewModel>();
-<p>@extendedVM.ProductUnitQuantity x @extendedVM.ProductUnitSize @extendedVM.ProductUnitMeasure</p>
+@helper DisplayFormat()
+{
+var extendedVM = Model.AsExtensionModel<IGroceryProductViewModel>();
+var hasUnitValues =extendedVM.ProductUnitQuantity > 0 && extendedVM.ProductUnitSize > 0 && !string.IsNullOrWhiteSpace(extendedVM.ProductUnitMeasure);
+
+if(hasUnitValues){
+        <p>@extendedVM.ProductUnitQuantity x @extendedVM.ProductUnitSize @extendedVM.ProductUnitMeasure</p>
+    }
 }

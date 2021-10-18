@@ -11,6 +11,7 @@ module Orckestra.Composer {
     export class ForgotPasswordController extends Orckestra.Composer.MyAccountController {
 
         protected membershipService: IMembershipService = new MembershipService(new MembershipRepository());
+        protected busyHandler;
 
         public initialize() {
 
@@ -42,13 +43,13 @@ module Orckestra.Composer {
         public forgotPassword(actionContext: IControllerActionContext): void {
 
             actionContext.event.preventDefault();
+            if(this.busyHandler && this.busyHandler.isLoading())  return;
+            this.busyHandler = this.asyncBusy({elementContext: actionContext.elementContext});
 
             var formData: any = this.getFormData(actionContext);
-            var busy = this.asyncBusy({elementContext: actionContext.elementContext});
-
-            this.membershipService.forgotPassword(formData)
+               this.membershipService.forgotPassword(formData)
                 .then(result => this.onForgotPasswordFulfilled(result), reason => this.renderFormErrorMessages(reason))
-                .fin(() => busy.done())
+                .fin(() => this.busyHandler.done())
                 .done();
         }
 

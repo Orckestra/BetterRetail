@@ -315,6 +315,7 @@
     <Content Include="App_Code\OrderSummaryHelpers.cshtml" />
     <Content Include="App_Code\CartSummaryHelpers.cshtml" />
     <Content Include="App_Code\ProductHelpers.cshtml" />
+    <Content Include="App_Code\FacetHelpers.cshtml" />
     <None Include="App_Config\Caching.config" />
     <Content Include="App_Data\Razor\Composer\Grids\OneThirdTwoThirds.cshtml" />
     <Content Include="App_Data\Razor\Composer\Grids\AccountGrid.cshtml" />
@@ -407,6 +408,12 @@
     <Content Include="App_Data\Razor\Composer\Header\LanguageSwitсhMobile.cshtml" />
     <Content Include="App_Data\Razor\Grocery\HeroBanner.cshtml" />
     <Content Include="App_Data\Razor\Grocery\TeaserCTA.cshtml" />
+    <Content Include="App_Data\Razor\Composer\BrowsingCategories\Facets.cshtml" />
+    <Content Include="App_Data\Razor\Composer\BrowsingCategories\SelectedFacets.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Search\Facets.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Search\SelectedSearchFacets.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Cart\MinicartButton.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Cart\MinicartButtonMobile.cshtml" />
     <None Include="Properties\PublishProfiles\Website - CD.pubxml" />
     <None Include="Properties\PublishProfiles\Website.pubxml" />
     <Content Include="Views\web.config" />

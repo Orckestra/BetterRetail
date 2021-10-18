@@ -1,11 +1,11 @@
 {
   "compilerOptions": {
     "target": "ES5",
-    "outFile": "../../src/Orckestra.Composer.Website/UI.Package/JavaScript/orckestra.composer.tests.js",
+    "outFile": "../../src/Orckestra.Grocery.Website/UI.Package/JavaScript/orckestra.composer.tests.js",
     "sourceMap": true,
     "removeComments": false,
     "declaration": true
   },
-  "include": ["../../src/Orckestra.Composer.Website/UI.Package/Typescript/**/*.ts"],
-  "exclude": ["../../src/Orckestra.Composer.Website/UI.Package/Typescript/App.ts"]
+  "include": ["../../src/Orckestra.Grocery.Website/UI.Package/Typescript/**/*.ts"],
+  "exclude": ["../../src/Orckestra.Grocery.Website/UI.Package/Typescript/App.ts"]
 }

@@ -7,6 +7,7 @@ module Orckestra.Composer {
         protected loadingIndicatorContext: JQuery;
         protected containerContext: JQuery;
         protected timeoutHandle;
+        protected _isLoading = false;
 
         /*
          * Start the busy state, to be called before the async call
@@ -30,20 +31,22 @@ module Orckestra.Composer {
             this.endBusy();
         }
 
+        public isLoading() {
+            return this._isLoading;
+        }
+
         private startBusy(msDelay: number) {
-
+            this._isLoading = true;
             this.timeoutHandle = setTimeout(() => {
-
                 this.containerContext.find(':input:enabled').addClass('async-busy').prop('disabled', true);
                 this.loadingIndicatorContext.removeClass('d-none');
-
             }, msDelay);
         }
 
         private endBusy() {
 
             clearTimeout(this.timeoutHandle);
-
+            this._isLoading = false;
             this.loadingIndicatorContext.addClass('d-none');
             this.containerContext.find(':input.async-busy').removeClass('async-busy').prop('disabled', false);
         }

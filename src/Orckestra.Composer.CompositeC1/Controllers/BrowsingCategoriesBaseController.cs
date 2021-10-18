@@ -48,22 +48,13 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             [Bind(Prefix = SearchRequestParams.SortBy)]string sortBy = null,
             [Bind(Prefix = SearchRequestParams.SortDirection)]string sortDirection = null)
         {
-            return ExecuteBrowsing("SearchResults", "SearchResults", c => c, EmptyCategoryBrowsingContainer, page, sortBy, sortDirection);
+            return ExecuteBrowsing("ProductsSearchResults", "ProductsSearchResults", c => c, EmptyCategoryBrowsingContainer, page, sortBy, sortDirection);
         }
 
-        public virtual ActionResult Facets(int page = 1, string sortBy = null, string sortDirection = null)
-        {
-            return ExecuteBrowsing("SearchFacetsEmpty", "SearchFacets", c => c.ProductSearchResults, EmptyCategoryBrowsingContainer.ProductSearchResults, page, sortBy, sortDirection);
-        }
 
         public virtual ActionResult ChildCategories(int page = 1, string sortBy = null, string sortDirection = null)
         {
             return ExecuteBrowsing("ChildCategories", "ChildCategories", c => c, EmptyCategoryBrowsingContainer, page, sortBy, sortDirection);
-        }
-
-        public virtual ActionResult SelectedSearchFacets(int page = 1, string sortBy = null, string sortDirection = null)
-        {
-            return ExecuteBrowsing("SelectedSearchFacets", "SelectedSearchFacets", c => c, EmptyCategoryBrowsingContainer.SelectedFacets, page, sortBy, sortDirection);
         }
 
         protected ActionResult ExecuteBrowsing(string emptyView, string filledView, Func<CategoryBrowsingViewModel, object> viewModelSelector, object emptyViewModel, int page, string sortBy = null, string sortDirection = null)
@@ -90,7 +81,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         protected virtual void ExtendSpecificViewsWithContext(string viewName, CategoryBrowsingViewModel model)
         {
             //Add additional viewModel.Context for specific views
-            if (viewName == "SearchResults")
+            if (viewName == "ProductsSearchResults")
             {
                 model.Context["SearchResults"] = model.ProductSearchResults.SearchResults;
                 model.Context["Keywords"] = model.ProductSearchResults.Keywords;

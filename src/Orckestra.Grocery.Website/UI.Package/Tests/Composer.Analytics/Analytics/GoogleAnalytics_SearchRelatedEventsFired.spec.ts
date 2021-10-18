@@ -27,10 +27,10 @@ module Orckestra.Composer {
                             Url : 'https://localhost:44300/en-CA/p-polo-ralph-lauren-mesh-polo-mini-shirtdress/3883909',
                             ImageUrl : 'https://az743273.vo.msecnd.net/images/3883909_0_M.jpg',
                             FallbackImageUrl : 'https://az743273.vo.msecnd.net/images/image_not_found.jpg',
-                            Pricing : pricing,
                             IsAvailableToSell : true,
                             CategoryId : 'womens_dresses',
-                            JsonContext : '{}'
+                            JsonContext : '{}',
+                            ...pricing
                         }
                     ]
             };

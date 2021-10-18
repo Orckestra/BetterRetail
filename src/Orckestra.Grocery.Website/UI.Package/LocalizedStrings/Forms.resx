@@ -154,7 +154,7 @@
     <value />
   </data>
   <data name="F_AddressWaterMark" xml:space="preserve">
-    <value>ex: Home</value>
+    <value>ex: 1640 Riverside Drive</value>
   </data>
   <data name="F_AtLeast" xml:space="preserve">
     <value>You must select at least %s choices.</value>

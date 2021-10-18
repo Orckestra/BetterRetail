@@ -6,6 +6,7 @@
 /// <reference path='./IAnalyticsSearchFilters.ts' />
 /// <reference path='../../Plugins/IPlugin.ts' />
 /// <reference path='../../Composer.MyAccount/Common/MyAccountEvents.ts' />
+/// <reference path='../../Composer.Grocery/FulfillmentEvents.ts' />
 
 module Orckestra.Composer {
     export class AnalyticsPlugin implements IAnalyticsPlugin, IPlugin {

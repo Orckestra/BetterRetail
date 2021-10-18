@@ -73,11 +73,6 @@ namespace Orckestra.Composer.Grocery.Website
 
             functions.RegisterAction<SearchController>("PageHeader", "Composer.Search.PageHeader");
             functions.RegisterAction<SearchController>("Index", "Composer.Search.Index");
-            functions.RegisterAction<SearchController>("SearchFacets", "Composer.Search.Facets");
-            functions.RegisterAction<SearchController>("SelectedSearchFacets", "Composer.Search.SelectedSearchFacets");
-
-            functions.RegisterAction<BrowsingCategoriesController>("Facets", "Composer.BrowsingCategories.Facets");
-            functions.RegisterAction<BrowsingCategoriesController>("SelectedSearchFacets", "Composer.BrowsingCategories.SelectedFacets");
             functions.RegisterAction<BrowsingCategoriesController>("ChildCategories", "Composer.BrowsingCategories.ChildCategories");
   
             functions.RegisterAction<CheckoutController>("CheckoutSignInAsGuest", "Composer.Checkout.CheckoutSignInAsGuest");

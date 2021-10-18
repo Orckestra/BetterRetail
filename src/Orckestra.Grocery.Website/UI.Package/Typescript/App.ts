@@ -3,7 +3,7 @@
 ///<reference path='./JQueryPlugins/IPopOverJqueryPlugin.ts' />
 ///<reference path='./IComposerConfiguration.ts' />
 ///<reference path='./Controller/SearchBoxController.ts' />
-///<reference path='./Controller/AutocompleteSearchBoxController.ts' />
+///<reference path='./Controller/AutocompleteSearchBoxVueController.ts' />
 ///<reference path='./Controller/PageNotFoundAnalyticsController.ts' />
 ///<reference path='./Controller/LanguageSwitchController.ts' />
 ///<reference path='./Controller/LazyController.ts' />
@@ -17,6 +17,7 @@
 ///<reference path='./Composer.Cart/CartSummary/CartSummaryController.ts' />
 ///<reference path='./Composer.Cart/CartSummary/CartChangeRecurringFrequencyController.ts' />
 ///<reference path='./Composer.Cart/MiniCart/MiniCartController.ts' />
+///<reference path='./Composer.Cart/MiniCartButton/MiniCartButtonController.ts' />
 ///<reference path='./Composer.Cart/Coupons/CouponController.ts' />
 ///<reference path='./Composer.Product/ProductDetail/ProductDetailController.ts' />
 ///<reference path='./Composer.Product/RelatedProducts/RelatedProductsController.ts' />
@@ -94,12 +95,13 @@
                 { name: 'General.ErrorController', controller: Orckestra.Composer.ErrorController },
                 { name: 'General.SearchBox', controller: Orckestra.Composer.SearchBoxController },
                 { name: 'General.LanguageSwitch', controller: Orckestra.Composer.LanguageSwitchController },
-                { name: 'General.AutocompleteSearchBox', controller: Orckestra.Composer.AutocompleteSearchBoxController },
+                { name: 'General.AutocompleteSearchBoxVue', controller: Orckestra.Composer.AutocompleteSearchBoxVueController },
                 { name: 'General.Lazy', controller: Orckestra.Composer.LazyController },
 
                 { name: 'Cart.CartSummary', controller: Orckestra.Composer.CartSummaryController },
                 { name: 'Cart.OrderSummary', controller: Orckestra.Composer.OrderSummaryController },
                 { name: 'Cart.MiniCart', controller: Orckestra.Composer.MiniCartController },
+                { name: 'Cart.MiniCartButton', controller: Orckestra.Composer.MiniCartButtonController },
                 { name: 'Cart.Coupons', controller: Orckestra.Composer.CouponController },
                 { name: 'Cart.AddToCartNotification', controller: Orckestra.Composer.AddToCartNotificationController },
                 { name: 'Cart.ChangeRecurringFrequency', controller: Orckestra.Composer.CartChangeRecurringFrequencyController },
@@ -164,7 +166,6 @@
                 { name: 'Grocery.SelectedStoreInCart', controller: Orckestra.Composer.SelectedStoreInCartController },
                 { name: 'Grocery.ChangeStoreModal', controller: Orckestra.Composer.ChangeStoreModalController },
                 { name: 'Grocery.TimeSlotBanner', controller: Orckestra.Composer.TimeSlotBannerController },
-                
                 { name: 'PageNotFound.Analytics', controller: Orckestra.Composer.PageNotFoundAnalyticsController }
             ]
         };
