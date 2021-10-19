@@ -120,7 +120,6 @@
 {
     <div id="vueProductPrice" v-cloak="true" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
         <div v-if="!IsUnavailableVariant">
-            <p v-else="v-else">@Html.Localized("ProductPage", "L_UnitMeasure", "{{Product.ItemFormat}}", "{{Product.UnitOfMeasure}}")</p>
             <p class="m-0" v-if="Product.DefaultListPrice">
                 <small property="price" data-qa="product-price" class="mr-1" v-bind:class="{'text-danger': Product.IsPriceDiscounted}">
                     <span class="h4 font-weight-bold">{{Product.ListPrice}}</span>
@@ -142,10 +141,10 @@
 
 @helper DisplayFormat()
 {
-var extendedVM = Model.AsExtensionModel<IGroceryProductViewModel>();
-var hasUnitValues =extendedVM.ProductUnitQuantity > 0 && extendedVM.ProductUnitSize > 0 && !string.IsNullOrWhiteSpace(extendedVM.ProductUnitMeasure);
+    var extendedVM = Model.AsExtensionModel<IGroceryProductViewModel>();
+    var hasUnitValues =extendedVM.ProductUnitQuantity > 0 && extendedVM.ProductUnitSize > 0 && !string.IsNullOrWhiteSpace(extendedVM.ProductUnitMeasure);
 
-if(hasUnitValues){
+    if(hasUnitValues){
         <p>@extendedVM.ProductUnitQuantity x @extendedVM.ProductUnitSize @extendedVM.ProductUnitMeasure</p>
     }
 }
