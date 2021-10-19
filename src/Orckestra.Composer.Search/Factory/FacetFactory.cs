@@ -107,6 +107,8 @@ namespace Orckestra.Composer.Search.Factory
             var categoryChildren = categoryTree.Children;
             var categoryChildrenLookup = categoryChildren.ToLookup(_ => _.Value.DisplayName.GetLocalizedValue(culture.Name));
             var facet = facets.FirstOrDefault(f => f.FieldName == facetSetting.FieldName);
+            var countsForFacetValues = counts?.Facets?.FirstOrDefault(fc => facetSetting.FieldName.StartsWith(fc.FieldName))?.FacetValues;
+
             List<CategoryFacetValuesTreeNode> nodes = null;
 
             var facetValues = facet?.FacetValues.Concat(facet.OnDemandFacetValues);
@@ -115,11 +117,11 @@ namespace Orckestra.Composer.Search.Factory
                 nodes = (from fv in facetValues
                          let category = categoryChildrenLookup[fv.Value].FirstOrDefault()
                          where category != null
-                         select new CategoryFacetValuesTreeNode(fv.Title, fv.Value, fv.Quantity, facetSetting.FacetType, facetSetting.FieldName, false, true)
+                         let totalCount = countsForFacetValues?.FirstOrDefault(fcv => fcv.Value.Equals(category.Value.Id, StringComparison.OrdinalIgnoreCase))?.Quantity
+                         select new CategoryFacetValuesTreeNode(fv.Title, fv.Value, totalCount != null ? totalCount.Value : fv.Quantity, facetSetting.FacetType, facetSetting.FieldName, fv.IsSelected, true)
                          {
                              CategoryId = category.Value.Id
                          }).ToList();
-
             }
 
             if (nodes == null || nodes.Count == 0)
@@ -127,12 +129,10 @@ namespace Orckestra.Composer.Search.Factory
                 var selected = selectedFacets.Facets.Where(f => f.FieldName == facetSetting.FieldName);
                 if (selected != null && selected.Count() > 0)
                 {
-                    var countFacets = counts.Facets.FirstOrDefault(fc => facetSetting.FieldName.StartsWith(fc.FieldName))?.FacetValues;
-
                     nodes = (from fv in selected
                              let category = categoryChildrenLookup[fv.Value].FirstOrDefault()
                              where category != null
-                             let totalCount = countFacets.FirstOrDefault(fcv => fcv.Value.Equals(category.Value.Id, StringComparison.OrdinalIgnoreCase))?.Quantity
+                             let totalCount = countsForFacetValues.FirstOrDefault(fcv => fcv.Value.Equals(category.Value.Id, StringComparison.OrdinalIgnoreCase))?.Quantity
                              select new CategoryFacetValuesTreeNode(fv.DisplayName, fv.Value, totalCount != null ? totalCount.Value : 0, facetSetting.FacetType, facetSetting.FieldName, true, fv.IsRemovable)
                              {
                                  CategoryId = category.Value.Id
@@ -140,7 +140,7 @@ namespace Orckestra.Composer.Search.Factory
                 }
             }
 
-            return nodes;
+            return nodes?.OrderByDescending(n => n.Quantity).ToList();
         }
     }
 }

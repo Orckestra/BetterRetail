@@ -20,6 +20,7 @@
         return;
     }
 
+    var facetSettings = browsingViewModel.FacetSettings;
     var facets = browsingViewModel.ProductSearchResults.Facets;
     if (facets == null || facets.Count == 0)
     {
@@ -31,31 +32,25 @@
 <head>
 </head>
 <body>
-    <div data-oc-controller="Product.FacetSearch" data-corrected-search-term="@browsingViewModel.ProductSearchResults.CorrectedSearchTerms">
-        <form name="searchFacets">
-            @FacetHelpers.PromotedFacetValues(browsingViewModel.ProductSearchResults.PromotedFacetValues)
+    <div data-oc-controller="Product.FacetSearch" 
+         data-context="@facetSettings.JsonContext" 
+         data-corrected-search-term="@browsingViewModel.ProductSearchResults.CorrectedSearchTerms">
+        <form id="vueSearchFacets" name="searchFacets" v-cloak="true">
+            @FacetHelpers.PromotedFacetValues()
 
-            @foreach (var facet in facets)
-            {
-                if (!facet.IsDisplayed)
-                {
-                    continue;
-                }
-
-                <div class="card  bg-light  mb-3  facets-card"
-                     data-facetfieldname="@facet.FieldName"
-                     data-facettype="@facet.FacetType"
-                     data-min="@facet.StartValue"
-                     data-max="@facet.EndValue"
-                     data-step="@facet.GapSize"
-                     data-max-label="@Html.Localize("List-Search", "L_RangeAll")">
-                    <div class="card-body"
-                         data-qa="search-refiner">
-                        <h5>@facet.Title</h5>
-                        @FacetHelpers.RenderFacet(facet)
-                    </div>
+            <div v-for="facet in Facets" v-if="facet.IsDisplayed"
+                 class="card  bg-light  mb-3  facets-card"
+                 v-bind:data-facetfieldname="facet.FieldName"
+                 v-bind:data-facettype="facet.FacetType"
+                 v-bind:data-min="facet.StartValue"
+                 v-bind:data-max="facet.EndValue"
+                 v-bind:data-step="facet.GapSize"
+                 data-max-label="@Html.Localize("List-Search", "L_RangeAll")">
+                <div class="card-header">{{facet.Title}}</div>
+                <div class="card-body">
+                    @FacetHelpers.RenderFacet()
                 </div>
-            }
+            </div>
         </form>
     </div>
 </body>

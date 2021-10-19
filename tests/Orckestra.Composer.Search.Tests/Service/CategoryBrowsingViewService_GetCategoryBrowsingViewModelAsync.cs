@@ -305,7 +305,7 @@ namespace Orckestra.Composer.Search.Tests.Service
             });
 
             // Assert
-            model.SelectedFacets.Facets.First().FacetType.Should().Be(FacetType.SingleSelect);
+            model.FacetSettings.SelectedFacets.Facets.First().FacetType.Should().Be(FacetType.SingleSelect);
         }
 
         [Test]
@@ -334,7 +334,7 @@ namespace Orckestra.Composer.Search.Tests.Service
             });
 
             // Assert
-            model.SelectedFacets.Facets.Count.Should().Be(1);
+            model.FacetSettings.SelectedFacets.Facets.Count.Should().Be(1);
         }
 
         [Test]
@@ -379,7 +379,7 @@ namespace Orckestra.Composer.Search.Tests.Service
             });
 
             // Assert
-            model.SelectedFacets.Facets.Count.Should().Be(3);
+            model.FacetSettings.SelectedFacets.Facets.Count.Should().Be(3);
         }
 
         [Test]
@@ -408,8 +408,8 @@ namespace Orckestra.Composer.Search.Tests.Service
             });
 
             // Assert
-            model.SelectedFacets.Facets.First().IsRemovable.Should().BeFalse();
-            model.SelectedFacets.IsAllRemovable.Should().BeFalse();
+            model.FacetSettings.SelectedFacets.Facets.First().IsRemovable.Should().BeFalse();
+            model.FacetSettings.SelectedFacets.IsAllRemovable.Should().BeFalse();
         }
 
         [Test]
@@ -454,11 +454,11 @@ namespace Orckestra.Composer.Search.Tests.Service
             });
 
             // Assert
-            model.SelectedFacets.Facets[0].IsRemovable.Should().BeFalse();
-            model.SelectedFacets.Facets[1].IsRemovable.Should().BeFalse();
-            model.SelectedFacets.Facets[2].IsRemovable.Should().BeFalse();
+            model.FacetSettings.SelectedFacets.Facets[0].IsRemovable.Should().BeFalse();
+            model.FacetSettings.SelectedFacets.Facets[1].IsRemovable.Should().BeFalse();
+            model.FacetSettings.SelectedFacets.Facets[2].IsRemovable.Should().BeFalse();
 
-            model.SelectedFacets.IsAllRemovable.Should().BeFalse();
+            model.FacetSettings.SelectedFacets.IsAllRemovable.Should().BeFalse();
         }
 
         [Test]
@@ -503,7 +503,7 @@ namespace Orckestra.Composer.Search.Tests.Service
             });
 
             // Assert
-            model.SelectedFacets.Facets.Should().OnlyContain(facet => facet.FieldName.StartsWith("CategoryLevel"));
+            model.FacetSettings.SelectedFacets.Facets.Should().OnlyContain(facet => facet.FieldName.StartsWith("CategoryLevel"));
         }
 
         [Test]
@@ -548,7 +548,7 @@ namespace Orckestra.Composer.Search.Tests.Service
             });
 
             // Assert
-            model.SelectedFacets.Facets.Should().OnlyContain(facet => facet.FieldName.EndsWith("_Facet"));
+            model.FacetSettings.SelectedFacets.Facets.Should().OnlyContain(facet => facet.FieldName.EndsWith("_Facet"));
         }
 
         [Test]
@@ -586,7 +586,7 @@ namespace Orckestra.Composer.Search.Tests.Service
             });
 
             // Assert
-            model.SelectedFacets.Facets.First(facet => facet.FieldName == expectedFacet.Name).IsRemovable.Should().BeFalse();
+            model.FacetSettings.SelectedFacets.Facets.First(facet => facet.FieldName == expectedFacet.Name).IsRemovable.Should().BeFalse();
         }
 
         [Test]

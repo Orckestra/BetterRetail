@@ -81,16 +81,25 @@ namespace Orckestra.Composer.Search.Services
             {
                 CategoryId = param.CategoryId,
                 CategoryName = param.CategoryName,
-                SelectedFacets = await GetSelectedFacetsAsync(param).ConfigureAwait(false),
+                FacetSettings = new FacetSettingsViewModel()
+                {
+                    SelectedFacets = await GetSelectedFacetsAsync(param).ConfigureAwait(false),
+                },
                 ProductSearchResults = await GetProductSearchResultsAsync(param).ConfigureAwait(false),
                 LandingPageUrls = landingPageUrls
             };
 
-            viewModel.CategoryFacetValuesTree = await BuildCategoryFacetValuesTree(viewModel.ProductSearchResults.Facets,
-                viewModel.SelectedFacets,
+            viewModel.FacetSettings.CategoryFacetValuesTree = await BuildCategoryFacetValuesTree(viewModel.ProductSearchResults.Facets,
+                viewModel.FacetSettings.SelectedFacets,
                 viewModel.ProductSearchResults.CategoryFacetCounts).ConfigureAwait(false);
 
-            viewModel.CategoryFacetValuesTree?.ChildNodes?.ForEach(childNode => BuildCategoryUrlsForTreeNode(param, childNode));
+            viewModel.FacetSettings.CategoryFacetValuesTree?.ChildNodes?.ForEach(childNode => BuildCategoryUrlsForTreeNode(param, childNode));
+
+            // Json context for Facets
+            viewModel.FacetSettings.Context["CategoryFacetValuesTree"] = viewModel.FacetSettings.CategoryFacetValuesTree;
+            viewModel.FacetSettings.Context["SelectedFacets"] = viewModel.FacetSettings.SelectedFacets;
+            viewModel.FacetSettings.Context["Facets"] = viewModel.ProductSearchResults.Facets.Where(f => !f.FieldName.StartsWith(SearchConfiguration.CategoryFacetFiledNamePrefix));
+            viewModel.FacetSettings.Context["PromotedFacetValues"] = viewModel.ProductSearchResults.PromotedFacetValues;
 
             return viewModel;
         }

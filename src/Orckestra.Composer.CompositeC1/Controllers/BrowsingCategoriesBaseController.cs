@@ -25,7 +25,6 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         {
             EmptyCategoryBrowsingContainer = new CategoryBrowsingViewModel
             {
-                SelectedFacets = new SelectedFacets { Facets = new List<SelectedFacet>() },
                 ProductSearchResults = new ProductSearchResultsViewModel { Keywords = string.Empty }
             };
         }

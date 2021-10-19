@@ -157,6 +157,7 @@
     <Compile Include="ViewModels\SearchBoxViewModel.cs" />
     <Compile Include="ViewModels\SearchTermsSuggestionsViewModel.cs" />
     <Compile Include="ViewModels\SearchTermsSuggestionViewModel.cs" />
+    <Compile Include="ViewModels\FacetSettingsViewModel.cs" />
     <Compile Include="ViewModels\SearchViewModel.cs" />
     <Compile Include="ViewModels\InventoryItemIdentifierViewModel.cs" />
     <Compile Include="ViewModels\InventoryItemStatusViewModel.cs" />
@@ -185,7 +186,9 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Request\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

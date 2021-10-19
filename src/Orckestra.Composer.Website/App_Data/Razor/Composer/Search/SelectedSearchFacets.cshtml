@@ -24,7 +24,7 @@
     {
         get
         {
-            return SearchRequestContext.ProductsSearchViewModel?.SelectedFacets;
+            return ProductsSearchViewModel?.FacetSettings.SelectedFacets;
         }
     }
 }
@@ -70,7 +70,7 @@
                                        @if(facet.FieldName.StartsWith(SearchConfiguration.CategoryFacetFiledNamePrefix))
                                        {
                                            <text>
-                                       data-categorytreeid="id@(facet.Value.GetHashCode())"
+                                       data-categorytree="@(facet.FieldName)"
                                            </text>
                                        }
                                        title="@facet.DisplayName"

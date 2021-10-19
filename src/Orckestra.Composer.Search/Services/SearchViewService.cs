@@ -16,6 +16,7 @@ using Orckestra.Composer.Repositories;
 using System.Collections.Generic;
 using Orckestra.Overture.ServiceModel.Products;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
+using System.Linq;
 
 namespace Orckestra.Composer.Search.Services
 {
@@ -95,14 +96,26 @@ namespace Orckestra.Composer.Search.Services
             var viewModel = new SearchViewModel
             {
                 Keywords = criteria.Keywords,
-                SelectedFacets = await GetSelectedFacetsAsync(criteria).ConfigureAwait(false),
+                FacetSettings = new FacetSettingsViewModel()
+                {
+                    SelectedFacets = await GetSelectedFacetsAsync(criteria).ConfigureAwait(false),
+                },
                 ProductSearchResults = await GetProductSearchResultsAsync(criteria).ConfigureAwait(false)
             };
 
-            viewModel.CategoryFacetValuesTree = await BuildCategoryFacetValuesTree(
-                viewModel.ProductSearchResults.Facets, 
-                viewModel.SelectedFacets,
-                viewModel.ProductSearchResults.CategoryFacetCounts).ConfigureAwait(false);
+            if (criteria.IncludeFacets)
+            {
+                viewModel.FacetSettings.CategoryFacetValuesTree = await BuildCategoryFacetValuesTree(
+                    viewModel.ProductSearchResults.Facets,
+                    viewModel.FacetSettings.SelectedFacets,
+                    viewModel.ProductSearchResults.CategoryFacetCounts).ConfigureAwait(false);
+
+                // Json context for Facets
+                viewModel.FacetSettings.Context["CategoryFacetValuesTree"] = viewModel.FacetSettings.CategoryFacetValuesTree;
+                viewModel.FacetSettings.Context["SelectedFacets"] = viewModel.FacetSettings.SelectedFacets;
+                viewModel.FacetSettings.Context["Facets"] = viewModel.ProductSearchResults.Facets.Where(f => !f.FieldName.StartsWith(SearchConfiguration.CategoryFacetFiledNamePrefix));
+                viewModel.FacetSettings.Context["PromotedFacetValues"] = viewModel.ProductSearchResults.PromotedFacetValues;
+            }
 
             // TODO: Needed for some JS context - move to data-context-var where needed
             viewModel.Context["TotalCount"] = viewModel.ProductSearchResults.TotalCount;

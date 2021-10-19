@@ -8,6 +8,7 @@
 /// <reference path='./Services/SliderService.ts' />
 ///<reference path='../../Mvc/IControllerActionContext.ts' />
 /// <reference path='./UrlHelper.ts' />
+/// <reference path='./Facets/FacetTreeVueComponent.ts' />
 
 module Orckestra.Composer {
     'use strict';
@@ -17,6 +18,7 @@ module Orckestra.Composer {
     }
 
     export class FacetSearchController extends Orckestra.Composer.Controller {
+        private VueFacets: Vue;
         private _debounceHandle; // need to see how to fix the any for this.
         private _debounceTimeout: number = 500;
         private _searchService: ISearchService; // TODO: DI this, constructor injection via controller factory?
@@ -25,7 +27,36 @@ module Orckestra.Composer {
 
         public initialize() {
             super.initialize();
-            this.initializeServices();
+            this.initializeVueComponent();
+        }
+
+        private initializeVueComponent() {
+            var { CategoryFacetValuesTree, Facets, PromotedFacetValues } = this.context.viewModel;
+            let self = this;
+            this.VueFacets = new Vue({
+                el: '#vueSearchFacets',
+                components: {
+                    [FacetTreeVueComponent.componentName]: FacetTreeVueComponent.getComponent()
+                },
+                data: {
+                    CategoryFacetValuesTree,
+                    Facets,
+                    PromotedFacetValues,
+                    Mode: {
+                        Loading: false
+                    }
+                },
+                mounted() {
+                    self.initializeServices();
+                },
+                methods: {
+                    categoryFacetClicked(event, isSelected) {
+                        this.Mode.Loading = true;
+                        self.categoryFacetChanged(event, isSelected); 
+                    }
+                }
+            
+            });
         }
 
         public multiFacetChanged(actionContext: IControllerActionContext) {
@@ -60,17 +91,17 @@ module Orckestra.Composer {
             this.publishSingleFacetsChanged(facetKey, facetValue, UrlHelper.resolvePageType());
         }
 
-        public categoryFacetChanged(actionContext: IControllerActionContext) {
+        public categoryFacetChanged(event, isSelected) {
 
-            var element = actionContext.elementContext,
+            var element = $(event.target),
                 facetKey = element.attr('name'),
                 facetValue = element.attr('value'),
                 type = element.data('type'),
                 categoryurl = element.data('categoryurl'),
                 parentcategoryurl = element.data('parentcategoryurl'),
                 pageType = UrlHelper.resolvePageType(),
-                checked = element.attr('checked'),
-                checkedCategories = element.parent().find('input:checked');
+                checked = isSelected,
+                checkedCategories = element.parent().parent().find('input:checked');
 
             if (checked) {
                 //unselect all sub-categories

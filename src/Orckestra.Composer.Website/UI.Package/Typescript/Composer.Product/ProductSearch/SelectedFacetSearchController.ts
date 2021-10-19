@@ -23,15 +23,15 @@ module Orckestra.Composer {
 
         public removeSelectedFacet(actionContext: IControllerActionContext) {
             var removeFacetButton = actionContext.elementContext;
-            var categoryTreeId = removeFacetButton.data('categorytreeid');
+            var categoryTreeRef = removeFacetButton.data('categorytree');
 
             actionContext.event.preventDefault();
             actionContext.event.stopPropagation();
 
-            if (categoryTreeId) {
+            if (categoryTreeRef) {
                 //remove also all child categories
-                var parentCategoryElement = $('#' + categoryTreeId);
-                var checkedInputs = parentCategoryElement.parent().find('input:checked');
+                var parentCategoryElement = $('#categoriesTree').find('[data-facetfieldname="' + categoryTreeRef + '"]');
+                var checkedInputs = parentCategoryElement.find('input:checked');
                 var data = [];
                 checkedInputs.each(index => {
                     data.push({

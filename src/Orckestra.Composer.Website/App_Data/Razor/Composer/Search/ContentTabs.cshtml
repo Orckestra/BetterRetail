@@ -40,8 +40,8 @@
 
     private bool IsProductFacetsSelected()
     {
-        return ProductsSearchViewModel != null && ProductsSearchViewModel.SelectedFacets != null
-            && ProductsSearchViewModel.SelectedFacets.Facets.Count > 0;
+        return ProductsSearchViewModel != null && ProductsSearchViewModel.FacetSettings.SelectedFacets != null
+            && ProductsSearchViewModel.FacetSettings.SelectedFacets.Facets.Count > 0;
     }
 }
 
