@@ -40,6 +40,7 @@
   <add key="HandelbarsCompiler" value="true" />
   <add key="Composer.DefaultScope" value="Canada" />
   <add key="CC1.DeploymentToken" value="***REMOVED***" />
+  <add key="UrlAlias::UseCountEnabled" value="false" />
 
   <xsl:comment> OWIN </xsl:comment>
   <add key="owin:AutomaticAppStartup" value="false" />
