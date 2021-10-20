@@ -126,7 +126,7 @@
                 </small>
                 <del v-if="Product.IsPriceDiscounted" class="mt-1">{{Product.DefaultListPrice}}</del>
                 <div v-if="PricePerUnit" class="mt-1">
-                    <span v-if="IsPricePerUnitZero">@Html.Localize("ProductPage", "L_LessThen") {{PricePerUnit.replace('0.00', '0.01')}}</span>
+                    <span v-if="IsPricePerUnitZero">@Html.Localize("ProductPage", "L_LessThan") {{PricePerUnit.replace('0.00', '0.01')}}</span>
                     <span v-else="v-else">{{PricePerUnit}}</span>
                     @Html.Localize("ProductPage", "L_Per")
                     <span v-if="Product.BaseProductSize != 1 ">{{Product.BaseProductSize}} </span>{{Product.BaseProductMeasure}}
