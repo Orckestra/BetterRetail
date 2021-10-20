@@ -171,4 +171,7 @@
   <data name="L_Per" xml:space="preserve">
     <value>par</value>
   </data>
+  <data name="L_LessThen" xml:space="preserve">
+    <value>moins que</value>
+  </data>
 </root>

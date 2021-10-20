@@ -345,6 +345,9 @@ module Orckestra.Composer {
                         );
                         return  pricePerUnit;
                     },
+                    IsPricePerUnitZero(){
+                        return parseFloat(this.PricePerUnit.replace(/[^0-9\.-]+/g,'')) == 0.00;
+                    },
                     IsUnavailableVariant() {
                         return $.isArray(this.Product.allVariants) && !this.Product.selectedVariantId;
                     }
@@ -353,7 +356,7 @@ module Orckestra.Composer {
                 }
             })
         }
-
+        
         protected getListNameForAnalytics(): string {
             return 'Detail';
         }
