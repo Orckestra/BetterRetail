@@ -163,7 +163,7 @@ module Orckestra.Composer {
                         return item.DisplayName;
                     },
                     shouldRenderSuggestions(size, loading) {
-                        return this.query.length >= this.minSearchSize && !loading
+                        return this.query.length >= this.minSearchSize && !loading && this.suggestions.length
                     },
                     searchMore() {
                         const elem = document.getElementById("frm-search-box") as HTMLFormElement;
@@ -192,6 +192,12 @@ module Orckestra.Composer {
                             e.target.onerror = null;
                             e.target.src = img;
                         }
+                    },
+                    onOpened() {
+                        document.body.classList.add("modal-open");
+                    },
+                    onClosed() {
+                        document.body.classList.remove("modal-open");
                     }
                 }
             });
