@@ -125,10 +125,6 @@
   }
 
   &.empty-right {
-    @include media-breakpoint-down(sm) {
-      display: none !important;
-    }
-
     @include media-breakpoint-up(md) {
       right: -10px;
       width: 500px;

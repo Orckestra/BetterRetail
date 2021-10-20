@@ -101,7 +101,7 @@
 
                             <template slot-scope="{ suggestion, index }">
                                 <div v-if="suggestion.name === 'autocomplete'" class="d-flex border-bottom">
-                                    <div class="col-2">
+                                    <div class="col-3 col-sm-2">
                                         <a class="product-tile-media"
                                            v-on:mouseup.stop=""
                                            v-bind:href="suggestion.item.Url">
@@ -111,7 +111,7 @@
                                                  v-on:error="onImageError($event, suggestion)" />
                                         </a>
                                     </div>
-                                    <div class="col-10">
+                                    <div class="col-9 col-sm-10">
                                         <div class="product-tile-text mt-2">
                                             <span data-qa="search-product-brand" v-if="suggestion.item.BrandDisplayName">{{suggestion.item.BrandDisplayName}}<br /></span>
                                             <span data-qa="search-product-brand" v-else-if="suggestion.item.Brand">{{suggestion.item.Brand}}</span>
@@ -136,7 +136,7 @@
                                                 <button class="btn btn-primary btn-block text-uppercase"
                                                         v-bind:disabled="suggestion.item.Loading"
                                                         type="button"
-                                                        v-on:mouseup.stop="addToCart(suggestion.item)">
+                                                        v-on:mouseup.stop="addToCart($event, suggestion.item)">
                                                     @Html.Localize("List-Search", "B_Add")
                                                 </button>
                                             </div>
