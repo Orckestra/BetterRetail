@@ -89,7 +89,9 @@ namespace Orckestra.Composer.Search.Repositories
             {
                 var facetSetting = facetSettings.FirstOrDefault(setting => setting.FieldName == facet.FieldName);
 
-                if (facetSetting?.FacetType == Facets.FacetType.MultiSelect || selectedFacets.Find(selectedFacet => selectedFacet.Name == facet.FieldName) == null)
+                if (facetSetting?.FacetType == Facets.FacetType.MultiSelect || 
+                    selectedFacets.Find(selectedFacet => selectedFacet.Name == facet.FieldName) == null ||
+                    facet.FieldName.StartsWith(SearchConfiguration.CategoryFacetFiledNamePrefix))
                 {
                     strippedFacets.Add(facet);
                 }
