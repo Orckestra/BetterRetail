@@ -71,6 +71,8 @@
                                          ref="autosuggest"
                                          v-model="query"
                                          v-on:input="fetchResults"
+                                         v-on:opened="onOpened"
+                                         v-on:closed="onClosed"
                                          v-bind:input-props="{
                                             id: 'autosuggest__input',
                                             placeholder: '@Html.Localize("List-Search", "F_SearchWaterMark")',

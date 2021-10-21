@@ -202,6 +202,12 @@ module Orckestra.Composer {
                             e.target.src = img;
                         }
                     },
+                    onOpened() {
+                        document.body.classList.add("modal-open");
+                    },
+                    onClosed() {
+                        document.body.classList.remove("modal-open");
+                    },
                     addToCart: this.addToCart.bind(this),
                 }
             });
