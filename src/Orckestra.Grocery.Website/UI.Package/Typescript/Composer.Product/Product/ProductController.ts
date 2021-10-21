@@ -202,10 +202,7 @@ module Orckestra.Composer {
         }
 
         protected redirectToSignInBeforeAddToWishList() {
-            this._wishListService.getSignInUrl().then(signInUrl => {
-                this._wishListService.clearCache();
-                this.context.window.location.href = signInUrl + '?ReturnUrl=' + this.context.window.location.href;
-            });
+            this._wishListService.redirectToSignIn();
         }
 
         public addLineItem(actionContext: IControllerActionContext,

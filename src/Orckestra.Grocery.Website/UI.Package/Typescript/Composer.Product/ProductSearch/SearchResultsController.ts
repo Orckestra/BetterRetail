@@ -7,6 +7,11 @@
 /// <reference path='../../Repositories/CartRepository.ts' />
 /// <reference path='../../Composer.Cart/CartSummary/CartService.ts' />
 /// <reference path='../Product/ProductService.ts' />
+///<reference path='../../Composer.Cart/WishList/Services/WishListService.ts' />
+///<reference path='../../Composer.Cart/WishList/WishListRepository.ts' />
+///<reference path='../../Composer.MyAccount/Common/IMembershipService.ts' />
+///<reference path='../../Composer.MyAccount/Common/MembershipService.ts' />
+
 
 module Orckestra.Composer {
     'use strict';
@@ -15,13 +20,15 @@ module Orckestra.Composer {
         protected cartService: ICartService = CartService.getInstance();
         protected productService: ProductService = new ProductService(this.eventHub, this.context);
         protected wishListService: WishListService = new WishListService(new WishListRepository(), this.eventHub);
+        protected membershipService: IMembershipService = new MembershipService(new MembershipRepository());
         protected currentPage: any;
         protected VueSearchResults: Vue;
 
         public initialize() {
 
             super.initialize();
-            this.initializeVueComponent();
+            let authenticatedPromise = this.membershipService.isAuthenticated();
+            Q.all([authenticatedPromise]).spread((authVm) => this.initializeVueComponent(authVm));
 
             this.currentPage = this.getCurrentPage();
 
@@ -41,11 +48,10 @@ module Orckestra.Composer {
                     PageNumber: pageDisplayName,
                     MaxItemsPerPage: this.context.viewModel.MaxItemsPerPage
                 }
-            }
-            );
+            });
         }
 
-        private initializeVueComponent() {
+        private initializeVueComponent(authVm) {
             const { SearchResults } = this.context.viewModel;
             const vueId = this.context.container.data("vueid");
             let self = this;
@@ -70,10 +76,10 @@ module Orckestra.Composer {
                     WishList: undefined,
                     UpdatingProductId: undefined,
                     Loading: false,
-                    IsBusy: true
+                    IsBusy: true,
+                    IsAuthenticated: authVm.IsAuthenticated,
                 },
                 computed: {
-
                     ExtendedSearchResults() {
                         var results = _.map(this.SearchResults, (product: any) => {
                             let cartItem = !this.Cart ? undefined :
@@ -165,6 +171,10 @@ module Orckestra.Composer {
                         this.debounceUpdateItem(cartItem);
                     },
                     addLineItemToWishList(item, event: JQueryEventObject) {
+                        if (!this.IsAuthenticated) {
+                            return self.wishListService.redirectToSignIn();
+                        }
+
                         let { DisplayName, ProductId, VariantId, ListPrice, RecurringOrderProgramName } = item;
                         self.eventHub.publish('wishListLineItemAdding', {
                             data: { DisplayName, ListPrice: ListPrice }
@@ -174,6 +184,10 @@ module Orckestra.Composer {
                     },
 
                     removeLineItemFromWishList(item, event: JQueryEventObject) {
+                        if (!this.IsAuthenticated) {
+                            return self.wishListService.redirectToSignIn();
+                        }
+
                         self.wishListService.removeLineItem(item.WishListItemId)
                             .then(wishList => this.WishList = wishList).fail(self.onAddToWishFailed);
                     }
