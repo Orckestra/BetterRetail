@@ -5,16 +5,22 @@
 /// <reference path='./ISearchService.ts' />
 /// <reference path='../IFacet.ts' />
 /// <reference path='../ISingleSelectCategory.ts' />
+///<reference path='../../../Repositories/ISearchRepository.ts' />
 ///
 module Orckestra.Composer {
     'use strict';
 
+    const FacetsModalId = '#facetsModal';
+
     // TODO: Decouple window object from search service.
     export class SearchService implements ISearchService {
+        protected _searchRepository: ISearchRepository;
         private _searchCriteria: SearchCriteria;
+        private _searchCriteriaBackup: any;
         private _baseSearchUrl: string = window.location.href.replace(window.location.search, '');
         private _baseUrl: string = this._baseSearchUrl.replace(window.location.pathname, '');
         private _facetRegistry: IHashTable<string> = {};
+        public IsFacetsModalMode: Boolean = false;
 
         constructor(private _eventHub: IEventHub, private _window: Window) {
              this._searchCriteria = new SearchCriteria(_eventHub, _window);
@@ -28,6 +34,13 @@ module Orckestra.Composer {
         public initialize(options: ISearchCriteriaOptions) {
             this.registerSubscriptions();
             this._searchCriteria.initialize(options);
+            this._searchRepository = new SearchRepository();
+            $(FacetsModalId).on('show.bs.modal', (event) => {
+                this.facetsModalOpened();
+            });
+            $(FacetsModalId).on('hide.bs.modal', (event) => {
+                this.facetsModalClosed();
+            });
         }
 
         public singleFacetsChanged(eventInformation: IEventInformation) {
@@ -95,6 +108,20 @@ module Orckestra.Composer {
             this.search();
         }
 
+        public facetsModalOpened() {
+            this.IsFacetsModalMode = true;
+            this._searchCriteriaBackup = { ...this._searchCriteria};
+            //TODO
+        }
+
+        public facetsModalClosed() {
+            this.IsFacetsModalMode = false;
+        }
+
+        public facetsModalApply() {
+            ///
+        }
+
         private registerSubscriptions() {
             this._eventHub.subscribe('sortingChanged', this.sortingChanged.bind(this));
             this._eventHub.subscribe('singleFacetsChanged', this.singleFacetsChanged.bind(this));
@@ -103,10 +130,22 @@ module Orckestra.Composer {
             this._eventHub.subscribe('facetRemoved', this.removeFacet.bind(this));
             this._eventHub.subscribe('facetsRemoved', this.removeFacets.bind(this));
             this._eventHub.subscribe('singleCategoryAdded', this.addSingleSelectCategory.bind(this));
+            this._eventHub.subscribe('facetsModalOpened', this.facetsModalOpened.bind(this));
+            this._eventHub.subscribe('facetsModalClosed', this.facetsModalClosed.bind(this));
         }
 
         private search() {
-            this._window.location.href = this._baseSearchUrl + this._searchCriteria.toQuerystring();
+            if (this.IsFacetsModalMode) {
+                if ($(FacetsModalId).hasClass('loading')) return;
+                $(FacetsModalId).addClass('loading');
+                this._searchRepository.getFacets(this._searchCriteria.toQuerystring()).then(result => {
+                    this._eventHub.publish('facetsLoaded', { data: result })
+                })
+                    .fail(reason => console.log(reason))
+                    .finally(() => $(FacetsModalId).removeClass('loading'));
+            } else {
+                this._window.location.href = this._baseSearchUrl + this._searchCriteria.toQuerystring();
+            }
         }
     }
 }

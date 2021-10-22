@@ -38,8 +38,17 @@
             @FacetHelpers.PromotedFacetValues()
 
             <div id="categoriesTree" class="card bg-light  mb-3  facets-card">
-                <div class="card-header">@Html.Localize("List-Search", "L_RefinerCategories")</div>
-                <div class="card-body">
+                <div class="card-header">
+                    <a data-toggle="collapse"
+                       data-target="#categoryFacets"
+                       aria-expanded="true"
+                       aria-controls="categoryFacets">
+                        @Html.Localize("List-Search", "L_RefinerCategories")
+                        <span class="down"><i class="fa fa-angle-down" /></span>
+                        <span class="up"><i class="fa fa-angle-up" /></span>
+                    </a>
+                </div>
+                <div id="categoryFacets" class="card-body collapse show">
                     <div class="mb-1">
                         <strong>@Html.Localize("General", "L_All") @SearchRequestContext.SearchQuery (@categoryFacetValuesTree.TotalCount)</strong>
                     </div>
@@ -59,8 +68,17 @@
                  v-bind:data-max="facet.EndValue"
                  v-bind:data-step="facet.GapSize"
                  data-max-label="@Html.Localize("List-Search", "L_RangeAll")">
-                <div class="card-header">{{facet.Title}}</div>
-                <div class="card-body">
+                <div class="card-header">
+                    <a data-toggle="collapse"
+                       v-bind:data-target="'#' + facet.FieldName"
+                       aria-expanded="true"
+                       v-bind:aria-controls="facet.FieldName">
+                        {{facet.Title}}
+                        <span class="down"><i class="fa fa-angle-down" /></span>
+                        <span class="up"><i class="fa fa-angle-up" /></span>
+                    </a>
+                </div>
+                <div v-bind:id="facet.FieldName" class="card-body collapse show">
                     @FacetHelpers.RenderFacet()
                 </div>
             </div>

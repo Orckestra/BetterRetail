@@ -24,11 +24,12 @@ module Orckestra.Composer {
         private _searchService: ISearchService; // TODO: DI this, constructor injection via controller factory?
         private sliderService: SliderService; // TODO: DI this, constructor injection via controller factory?
         private sliderServicesInstances: IHashTable<SliderService> = {};
+               
 
         public initialize() {
             super.initialize();
             this.initializeVueComponent();
-        }
+         }
 
         private initializeVueComponent() {
             var { CategoryFacetValuesTree, Facets, PromotedFacetValues } = this.context.viewModel;
@@ -48,10 +49,13 @@ module Orckestra.Composer {
                 },
                 mounted() {
                     self.initializeServices();
+                    self.eventHub.subscribe('facetsLoaded', (e) => { 
+                        this.CategoryFacetValuesTree = e.data.FacetSettings.CategoryFacetValuesTree; 
+                        this.Facets = e.data.ProductSearchResults.Facets; 
+                    });
                 },
                 methods: {
                     categoryFacetClicked(event, isSelected) {
-                        this.Mode.Loading = true;
                         self.categoryFacetChanged(event, isSelected); 
                     }
                 }
@@ -69,7 +73,7 @@ module Orckestra.Composer {
                 facetValue = anchorContext.attr('value');
 
             this._debounceHandle = _.debounce(() => {
-                this.publishMultiFacetChanged(facetKey,facetValue, UrlHelper.resolvePageType() )
+                this.publishMultiFacetChanged(facetKey, facetValue, UrlHelper.resolvePageType())
             }, 250);
 
             this._debounceHandle();

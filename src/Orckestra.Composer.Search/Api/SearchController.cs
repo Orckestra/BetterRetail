@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Search.Providers;
+using Orckestra.Composer.Search.Request;
 using Orckestra.Composer.Search.Services;
 using Orckestra.Composer.Search.ViewModels;
 using Orckestra.Composer.Services;
@@ -33,13 +35,16 @@ namespace Orckestra.Composer.Search.Api
         protected IAutocompleteProvider AutocompleteProvider { get; private set; }
         protected IFulfillmentContext FulfillmentContext { get; }
 
+        protected ISearchUrlProvider SearchUrlProvider { get; set; }
+
         public SearchController(
             IComposerContext composerContext, 
             ISearchViewService searchViewService, 
             IInventoryLocationProvider inventoryLocationProvider, 
             ISearchTermsTransformationProvider searchTermsTransformationProvider,
             IAutocompleteProvider autocompleteProvider,
-            IFulfillmentContext fulfillmentContext)
+            IFulfillmentContext fulfillmentContext,
+            ISearchUrlProvider searchUrlProvider)
         {
             ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
             SearchViewService = searchViewService ?? throw new ArgumentNullException(nameof(searchViewService));
@@ -47,9 +52,41 @@ namespace Orckestra.Composer.Search.Api
             SearchTermsTransformationProvider = searchTermsTransformationProvider ?? throw new ArgumentNullException(nameof(searchTermsTransformationProvider));
             AutocompleteProvider = autocompleteProvider ?? throw new ArgumentNullException(nameof(autocompleteProvider));
             FulfillmentContext = fulfillmentContext ?? throw new ArgumentNullException(nameof(fulfillmentContext));
+            SearchUrlProvider = searchUrlProvider ?? throw new ArgumentNullException(nameof(searchUrlProvider));
         }
 
-     
+
+        [ActionName("getfacets")]
+        [HttpPost]
+        [ValidateModelState]
+        public virtual async Task<IHttpActionResult> GetFacets(GetFacetsRequest request)
+        {
+            var queryString = HttpUtility.ParseQueryString(request.QueryString);
+
+            var searchCriteria = new SearchCriteria
+            {
+                Keywords = queryString["keywords"],
+                NumberOfItemsPerPage = 1,
+                IncludeFacets = true,
+                StartingIndex = 0,
+                SortBy = "score",
+                SortDirection = "desc",
+                Page = 1,
+                BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
+                Scope = ComposerContext.Scope,
+                CultureInfo = ComposerContext.CultureInfo,
+                InventoryLocationIds = await InventoryLocationProvider.GetInventoryLocationIdsForSearchAsync().ConfigureAwait(false),
+                AvailabilityDate = FulfillmentContext.AvailabilityAndPriceDate
+            };
+
+            searchCriteria.SelectedFacets.AddRange(SearchUrlProvider.BuildSelectedFacets(queryString));
+
+            var searchResultsViewModel = await SearchViewService.GetSearchViewModelAsync(searchCriteria).ConfigureAwait(false);
+            searchResultsViewModel.ProductSearchResults.Facets = searchResultsViewModel.ProductSearchResults.Facets.Where(f => !f.FieldName.StartsWith(SearchConfiguration.CategoryFacetFiledNamePrefix)).ToList();
+
+            return Ok(searchResultsViewModel);
+        }
+
         [ActionName("autocomplete")]
         [HttpPost]
         public virtual async Task<IHttpActionResult> AutoComplete(AutoCompleteSearchViewModel request, int limit = MAXIMUM_AUTOCOMPLETE_RESULT)
