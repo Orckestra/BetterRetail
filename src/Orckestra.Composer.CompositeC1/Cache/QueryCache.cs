@@ -17,7 +17,7 @@ namespace Orckestra.Composer.CompositeC1.Cache
 		private readonly object _locker = new object();
 
 		public QueryCache(Expression<Func<TDataType, TPropertyType>> propertyGetter) :
-			this("Unnamed cache", propertyGetter, 1000) { }
+			this("QueryCache_" + typeof(TDataType).Name, propertyGetter, 10000) { }
 
 		public QueryCache(string name, Expression<Func<TDataType, TPropertyType>> propertyGetter, int size)
 		{
