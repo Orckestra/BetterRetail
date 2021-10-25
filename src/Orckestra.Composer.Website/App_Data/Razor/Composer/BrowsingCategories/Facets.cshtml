@@ -1,6 +1,7 @@
-﻿@inherits RazorFunction
+﻿@inherits AsyncRazorFunction
+@using System.Threading.Tasks
 @using Orckestra.Composer.Search.Context;
-@using Orckestra.Composer.Search.Facets
+@using Orckestra.Composer.Search.ViewModels
 
 @functions {
     public override string FunctionDescription
@@ -9,15 +10,22 @@
     }
 
     public IBrowseCategoryRequestContext BrowsingRequestContext { get; set; }
+
+    public override async Task InitializeAsync()
+    {
+        _categoryBrowsingViewModel = await BrowsingRequestContext.GetViewModelAsync();
+    }
+
+    private CategoryBrowsingViewModel _categoryBrowsingViewModel;
 }
+
 @{
-    var categoryBrowsingViewModel = BrowsingRequestContext.GetViewModelAsync().Result;
-    if (categoryBrowsingViewModel == null)
+    if (_categoryBrowsingViewModel == null)
     {
         return;
     }
 
-    var facets = categoryBrowsingViewModel.ProductSearchResults.Facets;
+    var facets = _categoryBrowsingViewModel.ProductSearchResults.Facets;
     if (facets == null || facets.Count == 0)
     {
         return;
@@ -28,9 +36,9 @@
 <head>
 </head>
 <body>
-    <div data-oc-controller="Product.FacetSearch" data-corrected-search-term="@categoryBrowsingViewModel.ProductSearchResults.CorrectedSearchTerms">
+    <div data-oc-controller="Product.FacetSearch" data-corrected-search-term="@_categoryBrowsingViewModel.ProductSearchResults.CorrectedSearchTerms">
         <form name="searchFacets">
-            @FacetHelpers.PromotedFacetValues(categoryBrowsingViewModel.ProductSearchResults.PromotedFacetValues)
+            @FacetHelpers.PromotedFacetValues(_categoryBrowsingViewModel.ProductSearchResults.PromotedFacetValues)
 
             @foreach (var facet in facets)
             {

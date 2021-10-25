@@ -1,22 +1,31 @@
-﻿@inherits RazorFunction
+﻿@inherits AsyncRazorFunction
+@using System.Threading.Tasks
 @using Orckestra.Composer.Search.Context;
+@using Orckestra.Composer.Search.ViewModels
 
 @functions {
     public override string FunctionDescription
     {
         get { return "Category Browsing Selected Facets"; }
     }
+
     public IBrowseCategoryRequestContext BrowsingRequestContext { get; set; }
+
+    public override async Task InitializeAsync()
+    {
+        _categoryBrowsingViewModel = await BrowsingRequestContext.GetViewModelAsync();
+    }
+
+    private CategoryBrowsingViewModel _categoryBrowsingViewModel;
 }
 
 @{
-    var categoryBrowsingViewModel = BrowsingRequestContext.GetViewModelAsync().Result;
-    if (categoryBrowsingViewModel == null)
+    if (_categoryBrowsingViewModel == null)
     {
         return;
     }
 
-    var selectedFacets = categoryBrowsingViewModel.SelectedFacets;
+    var selectedFacets = _categoryBrowsingViewModel.SelectedFacets;
 
     if (selectedFacets == null ||
         selectedFacets.Facets == null ||
@@ -39,7 +48,7 @@
                     <p class="clearfix">
                         <a class="float-right  small" data-qa="search-refiners-clear-all" href="#"
                            data-oc-click="clearSelectedFacets"
-                           data-landingpageurl="@categoryBrowsingViewModel.LandingPageUrls[0]">
+                           data-landingpageurl="@_categoryBrowsingViewModel.LandingPageUrls[0]">
                             @Html.Localize("List-Search", "B_ClearAll")
                         </a>
                     </p>
@@ -59,7 +68,7 @@
                                        data-facetfieldname="@facet.FieldName"
                                        data-facettype="@facet.FacetType"
                                        data-facetvalue="@facet.Value"
-                                       @if (facet.FieldName.StartsWith("CategoryLevel")) { <text> data-facetlandingpageurl="@categoryBrowsingViewModel.LandingPageUrls[index]" </text> }
+                                       @if (facet.FieldName.StartsWith("CategoryLevel")) { <text> data-facetlandingpageurl="@_categoryBrowsingViewModel.LandingPageUrls[index]" </text> }
                                        title="@facet.DisplayName" data-oc-click="removeSelectedFacet">
 
                                         <span class="fa  fa-times  fa-lg"></span>
