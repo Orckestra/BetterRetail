@@ -7,7 +7,6 @@ module Orckestra.Composer {
             productUnitQuantity: string,
             productUnitSize: string,
             convertedVolumeMeasurement: string) : any  {
-        
             if(!convertedVolumeMeasurement || convertedVolumeMeasurement === '0' || 
                 !productUnitQuantity || productUnitQuantity === '0' ||
                 !productUnitSize || productUnitSize === '0' ) return;
@@ -17,6 +16,7 @@ module Orckestra.Composer {
             let stepTwo = stepOne / parseFloat(productUnitSize);
             let pricePerUnit = stepTwo * parseFloat(convertedVolumeMeasurement);
             let pricePerUnitRounded = (Math.round( pricePerUnit * 100 ) / 100).toFixed(2);
+            
             let formatedPrice = price.replace(priceNum.toFixed(2), pricePerUnitRounded);
             return  formatedPrice;
         }

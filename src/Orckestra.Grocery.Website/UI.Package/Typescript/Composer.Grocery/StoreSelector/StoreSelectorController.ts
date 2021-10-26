@@ -152,9 +152,10 @@ module Orckestra.Composer {
                         this.Location = undefined;
                         step.selectStep();
                     },
-                    clearPostalCodeInput() {
+                    clearPostalCodeInput(step) {
                         this.PostalCode = undefined;
                         this.Location = undefined;
+                        step.selectStep();
                     },
                     clearShippingMethodType() {
                         this.ShippingMethodType = undefined;

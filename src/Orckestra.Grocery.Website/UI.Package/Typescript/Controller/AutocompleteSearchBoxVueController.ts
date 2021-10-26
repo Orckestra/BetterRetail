@@ -3,6 +3,10 @@
 /// <reference path='../Events/EventHub.ts' />
 /// <reference path='./SearchBoxController.ts' />
 ///<reference path='../Mvc/ComposerClient.ts' />
+///<reference path='../Composer.Cart/CartSummary/CartService.ts' />
+///<reference path='../Composer.Product/Product/ProductService.ts' />
+///<reference path='../Composer.Product/ProductEvents.ts' />
+///<reference path='../ErrorHandling/ErrorHandler.ts' />
 
 module Orckestra.Composer {
     interface VueAutocompleteData {
@@ -168,7 +172,7 @@ module Orckestra.Composer {
                         return item.DisplayName;
                     },
                     shouldRenderSuggestions(size, loading) {
-                        return this.query.length >= this.minSearchSize && !loading
+                        return this.query.length >= this.minSearchSize && !loading && this.suggestions.length
                     },
                     searchMore() {
                         const elem = document.getElementById("frm-search-box") as HTMLFormElement;
@@ -198,6 +202,12 @@ module Orckestra.Composer {
                             e.target.src = img;
                         }
                     },
+                    onOpened() {
+                        document.body.classList.add("modal-open");
+                    },
+                    onClosed() {
+                        document.body.classList.remove("modal-open");
+                    },
                     addToCart: this.addToCart.bind(this),
                 }
             });
@@ -209,11 +219,12 @@ module Orckestra.Composer {
             ErrorHandler.instance().outputErrorFromCode('AddToCartFailed');
         }
 
-        public addToCart(product) {
+        public addToCart(event, product) {
             const {HasVariants, ProductId, VariantId, Price, RecurringOrderProgramName} = product;
 
             let promise: Q.Promise<any>;
             product.Loading = true;
+            event.target.disabled = true;
 
             if (HasVariants) {
                 promise = this.addVariantProductToCart(ProductId, VariantId);
@@ -222,7 +233,10 @@ module Orckestra.Composer {
                 promise = this.addNonVariantProductToCart(ProductId, Price, RecurringOrderProgramName);
             }
 
-            promise.fin(() => product.Loading = false);
+            promise.fin(() =>{
+                event.target.disabled = false;
+                product.Loading = false;
+            } );
         }
 
         /**

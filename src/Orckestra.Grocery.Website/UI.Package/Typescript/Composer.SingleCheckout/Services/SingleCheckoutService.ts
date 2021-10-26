@@ -94,7 +94,7 @@ module Orckestra.Composer {
             this.shippingMethodService = new ShippingMethodService();
             this.paymentService = new PaymentService(this.eventHub, new PaymentRepository());
             this.paymentProviderFactory = new CheckoutPaymentProviderFactory(this.window, this.eventHub);
-            
+
             this.registerAllControllersInitialized();
 
             SingleCheckoutService.instance = this;
@@ -162,6 +162,7 @@ module Orckestra.Composer {
                     [TransitionCollapseVueComponent.componentMame]: TransitionCollapseVueComponent.getComponent(),
                 },
                 data: {
+                    ...commonFulfillmentOptions.data,
                     Cart: checkoutContext.Cart,
                     Regions: checkoutContext.Regions,
                     ShippingMethodTypes: checkoutContext.ShippingMethodTypes,
@@ -199,12 +200,12 @@ module Orckestra.Composer {
                         AddressNameAlreadyInUseError: false,
                         StoreLocatorLocationError: false,
                         StoreNotSelectedError: false,
-                        SignIn: false
+                        SignIn: false,
+                        ...commonFulfillmentOptions.data.Errors
                     },
                     Modal: {
                         deleteAddressModal: null,
                     },
-                    ...commonFulfillmentOptions.data
                 },
                 mixins: this.VueCheckoutMixins,
                 mounted() {
