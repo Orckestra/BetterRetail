@@ -15,7 +15,9 @@ module Orckestra.Composer {
         query: string; suggestions: any[];
         results: any[];
         timeout: null;
-        selected: any
+        selected: any;
+        Cart: object;
+        Loading: boolean;
     }
 
     export class AutocompleteSearchBoxVueController extends SearchBoxController {
@@ -41,6 +43,7 @@ module Orckestra.Composer {
         }
 
         public initializeVue () {
+            const self = this;
             this.VueAutocomplete = new Vue({
                 el: '#vueAutocomplete',
                 components: {
@@ -88,7 +91,9 @@ module Orckestra.Composer {
                             default: {
                                 onSelected: () => { },
                             }
-                        }
+                        },
+                        Cart: undefined,
+                        Loading: false
                     };
                 },
                 mounted() {
@@ -114,6 +119,9 @@ module Orckestra.Composer {
                             this.searchMore()
                         }
                     });
+
+                    self.eventHub.subscribe(CartEvents.CartUpdated, (result) => this.onCartUpdated(result.data));
+                    self.cartService.getCart().then(this.onCartUpdated)
                 },
                 updated() {
                 },
@@ -125,6 +133,8 @@ module Orckestra.Composer {
                 methods: {
                     fetchResults(result) {
                         const query = this.query;
+                        if(query.length < this.minSearchSize)
+                            return;
 
                         clearTimeout(this.timeout);
                         this.timeout = setTimeout(() => {
@@ -132,7 +142,7 @@ module Orckestra.Composer {
 
                             const results = sectionNames.map(sectionName => {
                                 const limit = this.sectionConfigs[sectionName].limit;
-                                return ComposerClient.post(`/api/search/${sectionName}?limit=${limit}`, { Query: query })
+                                return ComposerClient.post(`/api/search/${sectionName}?limit=${limit}`, { Query: query }).catch(() => []);
                             });
 
                             Q.all(results).then(values => {
@@ -164,7 +174,9 @@ module Orckestra.Composer {
                     mapSuggestions(suggestions = [], sectionName, query) {
                         return suggestions.map((suggest) => {
                             const title = sectionName === 'suggestcategories' ? [...suggest.Parents, suggest.DisplayName].join(' > ')  : suggest.DisplayName;
-                            return ({ ...suggest, mappedDisplayName: this.highlightSuggestion(title, query) })
+                            const data = sectionName === 'autocomplete' ? this.extendProductItem(suggest) : suggest;
+
+                            return ({ ...data, mappedDisplayName: this.highlightSuggestion(title, query) })
                         })
                     },
                     getSuggestionValue(suggestion) {
@@ -209,6 +221,72 @@ module Orckestra.Composer {
                         document.body.classList.remove("modal-open");
                     },
                     addToCart: this.addToCart.bind(this),
+                    onCartUpdated(result) {
+                        this.Cart = result;
+                        const section = this.suggestions.find(section => section.name === 'autocomplete');
+                        if(section) {
+                            section.data = section.data.map(this.extendProductItem)
+                        }
+                    },
+                    extendProductItem(product) {
+                        let cartItem = this.Cart && this.Cart.LineItemDetailViewModels &&
+                        this.Cart.LineItemDetailViewModels.find((i: any) => i.ProductId === product.ProductId && i.VariantId == product.VariantId);
+                        product.InCart = !!cartItem;
+                        product.LineItemId = cartItem && cartItem.Id;
+                        product.Quantity = cartItem && cartItem.Quantity || 0;
+
+                        return product;
+                    },
+                    updateItemQuantity(item: any, quantity: number) {
+                        let cartItem = this.Cart.LineItemDetailViewModels && this.Cart.LineItemDetailViewModels.find((i: any) => i.Id === item.LineItemId);
+
+                        if (this.Loading || !cartItem) return;
+
+                        if (this.Cart.QuantityRange) {
+                            const { Min, Max } = this.Cart.QuantityRange;
+                            quantity = Math.min(Math.max(Min, quantity), Max);
+                        }
+
+                        if (quantity == cartItem.Quantity) {
+                            //force update vue component
+                            this.Cart = { ...this.Cart };
+                            return;
+                        }
+
+                        let analyticEventName = quantity > cartItem.Quantity ? ProductEvents.LineItemAdding : ProductEvents.LineItemRemoving;
+                        cartItem.Quantity = quantity;
+
+                        if (cartItem.Quantity < 1) {
+                            this.Loading = true; // disabling UI immediately when a line item is removed
+                        }
+
+                        let { ProductId, VariantId } = cartItem;
+
+                        //TODO: add publish
+                    //    self.publishProductDataForAnalytics(ProductId, cartItem.Quantity, analyticEventName);
+
+                        if (!this.debounceUpdateItem) {
+                            this.debounceUpdateItem = _.debounce(({ Id, Quantity, ProductId }) => {
+                                this.Loading = true;
+                                this.UpdatingProductId = ProductId;
+                                let updatePromise = Quantity > 0 ?
+                                    self.cartService.updateLineItem(Id, Quantity, ProductId) :
+                                    self.cartService.deleteLineItem(Id, ProductId);
+
+                                updatePromise
+                                    .then(() => {
+                                        ErrorHandler.instance().removeErrors();
+                                    }, (reason: any) => {
+                                        self.onAddToCartFailed(reason);
+                                        throw reason;
+                                    })
+                                    .fin(() => this.Loading = false);
+
+                            }, 400);
+                        }
+
+                        this.debounceUpdateItem(cartItem);
+                    },
                 }
             });
         }

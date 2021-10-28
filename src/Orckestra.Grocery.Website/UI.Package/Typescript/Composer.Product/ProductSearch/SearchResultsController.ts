@@ -190,7 +190,8 @@ module Orckestra.Composer {
 
                         self.wishListService.removeLineItem(item.WishListItemId)
                             .then(wishList => this.WishList = wishList).fail(self.onAddToWishFailed);
-                    }
+                    },
+                    addToCart: this.addToCart.bind(this),
                 }
             });
         }
@@ -206,47 +207,33 @@ module Orckestra.Composer {
             return <any>this.context.viewModel.PaginationCurrentPage;
         }
 
-        public addToCart(actionContext: IControllerActionContext) {
+        public addToCart(event, product) {
+            const {HasVariants, ProductId, VariantId, Price, RecurringOrderProgramName} = product;
 
-            var productContext: JQuery = $(actionContext.elementContext).closest('[data-product-id]');
+            let promise: Q.Promise<any>;
+            product.Loading = true;
+            event.target.disabled = true;
 
-            var hasVariants: string = <any>productContext.data('hasVariants');
-
-            //Do not use .data since it may parse the id as a number.
-            var productId: string = productContext.attr('data-product-id');
-            var variantId: string = productContext.attr('data-product-variant-id');
-            var recurringOrderProgramName: string = productContext.attr('data-recurring-order-program-name');
-
-            var product = _.find(this.context.viewModel.SearchResults, function (product: any) {
-                if (_.isEmpty(variantId)) {
-                    return product.ProductId === productId;
-                } else {
-                    return product.ProductId === productId && product.VariantId === variantId;
-                }
-            });
-            var price: number = product.IsOnSale ? product.Price : product.ListPrice;
-
-            var busy = this.asyncBusy({ elementContext: actionContext.elementContext, containerContext: productContext });
-
-            if (hasVariants === 'True') {
-
-                this.productService.loadQuickBuyProduct(productId, variantId, 'productSearch', this.context.viewModel.ListName)
+            if (HasVariants) {
+                promise = this.productService.loadQuickBuyProduct(ProductId, VariantId, 'productSearch', this.context.viewModel.ListName)
                     .then((data: any) => {
                         ErrorHandler.instance().removeErrors();
                         return data;
-                    }, (reason: any) => this.onAddToCartFailed(reason))
-                    .fin(() => busy.done());
-
+                    }, (reason: any) => this.onAddToCartFailed(reason));
             } else {
-                this.publishProductDataForAnalytics(productId, 1, ProductEvents.LineItemAdding);
+                this.publishProductDataForAnalytics(ProductId, 1, ProductEvents.LineItemAdding);
 
-                this.cartService.addLineItem(productId, '' + price, null, 1, null, recurringOrderProgramName)
+                promise = this.cartService.addLineItem(ProductId, '' + Price, null, 1, null, RecurringOrderProgramName)
                     .then((data: any) => {
                         ErrorHandler.instance().removeErrors();
                         return data;
-                    }, (reason: any) => this.onAddToCartFailed(reason))
-                    .fin(() => busy.done());
+                    }, (reason: any) => this.onAddToCartFailed(reason));
             }
+
+            promise.fin(() =>{
+                event.target.disabled = false;
+                product.Loading = false;
+            } );
         }
 
         protected onAddToCartFailed(reason: any): void {
