@@ -36,12 +36,10 @@ module Orckestra.Composer {
             this.registerSubscriptions();
             this._searchCriteria.initialize(options);
             this._searchRepository = new SearchRepository();
-            $(FacetsModalId).on('show.bs.modal', (event) => {
-                this.facetsModalOpened();
-            });
-            $(FacetsModalId).on('hide.bs.modal', (event) => {
-                this.facetsModalClosed();
-            });
+            $(FacetsModalId).on('show.bs.modal', (event) => this.facetsModalOpened());
+            $(FacetsModalId).on('hide.bs.modal', (event) => this.facetsModalClosed());
+            $(FacetsModalId).on('click', '.modal--confirm',  this.facetsModalApply.bind(this));
+            $(FacetsModalId).on('click', '.modal--cancel',  this.facetsModalCancel.bind(this));
         }
 
         public singleFacetsChanged(eventInformation: IEventInformation) {
@@ -111,8 +109,7 @@ module Orckestra.Composer {
 
         public facetsModalOpened() {
             this.IsFacetsModalMode = true;
-            this._searchCriteriaBackup = { ...this._searchCriteria};
-            //TODO
+            this._searchCriteriaBackup = this._searchCriteria.toQuerystring();
         }
 
         public facetsModalClosed() {
@@ -120,7 +117,12 @@ module Orckestra.Composer {
         }
 
         public facetsModalApply() {
-            ///
+            $(FacetsModalId).modal('hide');
+            this.search();
+        }
+
+        public facetsModalCancel() {
+            this._searchCriteria.loadFromQuerystring(this._searchCriteriaBackup)
         }
 
         private registerSubscriptions() {
