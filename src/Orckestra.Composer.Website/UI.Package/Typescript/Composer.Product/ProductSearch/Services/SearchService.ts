@@ -6,7 +6,8 @@
 /// <reference path='../IFacet.ts' />
 /// <reference path='../ISingleSelectCategory.ts' />
 ///<reference path='../../../Repositories/ISearchRepository.ts' />
-///
+///<reference path='../../../Repositories/SearchRepository.ts' />
+
 module Orckestra.Composer {
     'use strict';
 
@@ -15,14 +16,14 @@ module Orckestra.Composer {
     // TODO: Decouple window object from search service.
     export class SearchService implements ISearchService {
         protected _searchRepository: ISearchRepository;
-        private _searchCriteria: SearchCriteria;
+        protected _searchCriteria: SearchCriteria;
         private _searchCriteriaBackup: any;
         private _baseSearchUrl: string = window.location.href.replace(window.location.search, '');
         private _baseUrl: string = this._baseSearchUrl.replace(window.location.pathname, '');
         private _facetRegistry: IHashTable<string> = {};
         public IsFacetsModalMode: Boolean = false;
 
-        constructor(private _eventHub: IEventHub, private _window: Window) {
+        constructor(protected _eventHub: IEventHub, private _window: Window) {
              this._searchCriteria = new SearchCriteria(_eventHub, _window);
         }
 
@@ -134,7 +135,7 @@ module Orckestra.Composer {
             this._eventHub.subscribe('facetsModalClosed', this.facetsModalClosed.bind(this));
         }
 
-        private search() {
+        protected search() {
             if (this.IsFacetsModalMode) {
                 if ($(FacetsModalId).hasClass('loading')) return;
                 $(FacetsModalId).addClass('loading');

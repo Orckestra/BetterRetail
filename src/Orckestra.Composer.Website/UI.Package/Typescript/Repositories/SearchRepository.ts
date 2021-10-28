@@ -1,6 +1,6 @@
 /// <reference path='../../Typings/tsd.d.ts' />
 /// <reference path='../Mvc/ComposerClient.ts' />
-/// <reference path='./ICartRepository.ts' />
+/// <reference path='./ISearchRepository.ts' />
 
 module Orckestra.Composer {
     'use strict';
