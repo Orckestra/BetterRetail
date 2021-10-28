@@ -128,5 +128,46 @@ namespace Orckestra.Composer.Cart.Api
 
             return Ok(viewModel);
         }
+
+        [HttpPost]
+        [ActionName("orderbynumber")]
+        [ValidateModelState]
+        public virtual async Task<IHttpActionResult> GetOrderByNumber(GetCustomerOrderParam param)
+        {
+            if (param == null) { return BadRequest("No request found."); }
+
+            var viewModel = await OrderHistoryViewService.GetOrderDetailViewModelAsync(new GetCustomerOrderParam
+            {
+                OrderNumber = param.OrderNumber,
+                Scope = ComposerContext.Scope,
+                CultureInfo = ComposerContext.CultureInfo,
+                CountryCode = ComposerContext.CountryCode,
+                BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
+                CustomerId = ComposerContext.CustomerId
+            });
+
+            return Ok(viewModel);
+        }
+
+        [HttpPost]
+        [ActionName("guestorderbynumber")]
+        [ValidateModelState]
+        [AllowAnonymous]
+        public virtual async Task<IHttpActionResult> GetGuestOrderByNumber(GetGuestOrderViewModel param)
+        {
+            if (param == null) { return BadRequest("No request found."); }
+
+            var viewModel = await OrderHistoryViewService.GetOrderDetailViewModelForGuestAsync(new GetOrderForGuestParam
+            {
+                OrderNumber = param.OrderNumber,
+                Scope = ComposerContext.Scope,
+                CultureInfo = ComposerContext.CultureInfo,
+                CountryCode = ComposerContext.CountryCode,
+                BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
+                Email = param.Email
+            });
+
+            return Ok(viewModel);
+        }
     }
 }
