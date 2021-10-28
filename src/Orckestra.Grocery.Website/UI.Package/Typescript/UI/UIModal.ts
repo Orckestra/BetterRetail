@@ -65,7 +65,7 @@ module Orckestra.Composer {
                     this.unregisterDomEvents();
                     this.modalContext.modal('hide');
 
-                    if (value) {
+                    if (value && this.confirmAction) {
                         return this.confirmAction.call(this.sender, event);
                     }
                 })

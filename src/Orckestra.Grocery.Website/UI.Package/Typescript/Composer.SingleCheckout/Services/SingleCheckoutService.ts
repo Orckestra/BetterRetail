@@ -321,7 +321,7 @@ module Orckestra.Composer {
             let isPickUp = methodType === FulfillmentMethodTypes.PickUp;
 
             if (isAuthenticated && isShipToHome) {
-                return (!this.isAddressBookIdEmpty(cart.ShippingAddress.AddressBookId));
+                return !(this.isAddressBookIdEmpty(cart.ShippingAddress.AddressBookId) && this.isAddressBookIdEmpty(cart.ShippingAddress.Id));
             }
 
             if (!isAuthenticated && isShipToHome) {
