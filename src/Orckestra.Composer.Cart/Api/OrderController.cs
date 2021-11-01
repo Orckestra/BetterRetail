@@ -154,7 +154,7 @@ namespace Orckestra.Composer.Cart.Api
         [ActionName("guestorderbynumber")]
         [ValidateModelState]
         [AllowAnonymous]
-        public virtual async Task<IHttpActionResult> GetGuestOrderByNumber(GetGuestOrderViewModel param)
+        public virtual async Task<IHttpActionResult> GetGuestOrderByNumber(GetGuestOrderRequest param)
         {
             if (param == null) { return BadRequest("No request found."); }
 
