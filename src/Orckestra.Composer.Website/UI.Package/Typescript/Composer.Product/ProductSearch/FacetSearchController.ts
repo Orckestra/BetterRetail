@@ -24,7 +24,7 @@ module Orckestra.Composer {
         private _searchService: ISearchService; // TODO: DI this, constructor injection via controller factory?
         private sliderService: SliderService; // TODO: DI this, constructor injection via controller factory?
         private sliderServicesInstances: IHashTable<SliderService> = {};
-               
+
 
         public initialize() {
             super.initialize();
@@ -49,17 +49,17 @@ module Orckestra.Composer {
                 },
                 mounted() {
                     self.initializeServices();
-                    self.eventHub.subscribe('facetsLoaded', (e) => { 
-                        this.CategoryFacetValuesTree = e.data.FacetSettings.CategoryFacetValuesTree; 
-                        this.Facets = e.data.ProductSearchResults.Facets; 
+                    self.eventHub.subscribe('facetsLoaded', ({data}) => {
+                        this.CategoryFacetValuesTree = data.FacetSettings.CategoryFacetValuesTree;
+                        this.Facets = data.ProductSearchResults.Facets;
                     });
                 },
                 methods: {
                     categoryFacetClicked(event, isSelected) {
-                        self.categoryFacetChanged(event, isSelected); 
+                        self.categoryFacetChanged(event, isSelected);
                     }
                 }
-            
+
             });
         }
 
@@ -174,7 +174,7 @@ module Orckestra.Composer {
                     facetKey,
                     facetValue,
                     pageType,
-                    filter: (<ISerializeObjectJqueryPlugin>$('form[name="searchFacets"]', this.context.container)).serializeObject() 
+                    filter: (<ISerializeObjectJqueryPlugin>$('form[name="searchFacets"]', this.context.container)).serializeObject()
                 }
             });
         }

@@ -6,7 +6,8 @@
 /// <reference path='../IFacet.ts' />
 /// <reference path='../ISingleSelectCategory.ts' />
 ///<reference path='../../../Repositories/ISearchRepository.ts' />
-///
+///<reference path='../../../Repositories/SearchRepository.ts' />
+
 module Orckestra.Composer {
     'use strict';
 
@@ -15,14 +16,14 @@ module Orckestra.Composer {
     // TODO: Decouple window object from search service.
     export class SearchService implements ISearchService {
         protected _searchRepository: ISearchRepository;
-        private _searchCriteria: SearchCriteria;
+        protected _searchCriteria: SearchCriteria;
         private _searchCriteriaBackup: any;
         private _baseSearchUrl: string = window.location.href.replace(window.location.search, '');
         private _baseUrl: string = this._baseSearchUrl.replace(window.location.pathname, '');
         private _facetRegistry: IHashTable<string> = {};
         public IsFacetsModalMode: Boolean = false;
 
-        constructor(private _eventHub: IEventHub, private _window: Window) {
+        constructor(protected _eventHub: IEventHub, private _window: Window) {
              this._searchCriteria = new SearchCriteria(_eventHub, _window);
         }
 
@@ -35,12 +36,10 @@ module Orckestra.Composer {
             this.registerSubscriptions();
             this._searchCriteria.initialize(options);
             this._searchRepository = new SearchRepository();
-            $(FacetsModalId).on('show.bs.modal', (event) => {
-                this.facetsModalOpened();
-            });
-            $(FacetsModalId).on('hide.bs.modal', (event) => {
-                this.facetsModalClosed();
-            });
+            $(FacetsModalId).on('show.bs.modal', (event) => this.facetsModalOpened());
+            $(FacetsModalId).on('hide.bs.modal', (event) => this.facetsModalClosed());
+            $(FacetsModalId).on('click', '.modal--confirm',  this.facetsModalApply.bind(this));
+            $(FacetsModalId).on('click', '.modal--cancel',  this.facetsModalCancel.bind(this));
         }
 
         public singleFacetsChanged(eventInformation: IEventInformation) {
@@ -90,12 +89,8 @@ module Orckestra.Composer {
         }
 
         public removeFacets(eventInformation: IEventInformation) {
-            var faces: [] = eventInformation.data;
-
-            faces.forEach(f => {
-                var facet: IFacet = <IFacet>f;
-                this._searchCriteria.removeFacet(facet);
-            })
+            const faces: [] = eventInformation.data;
+            faces.forEach(f => this._searchCriteria.removeFacet(f as IFacet));
 
             this.search();
         }
@@ -110,8 +105,7 @@ module Orckestra.Composer {
 
         public facetsModalOpened() {
             this.IsFacetsModalMode = true;
-            this._searchCriteriaBackup = { ...this._searchCriteria};
-            //TODO
+            this._searchCriteriaBackup = this._searchCriteria.toQuerystring();
         }
 
         public facetsModalClosed() {
@@ -119,7 +113,12 @@ module Orckestra.Composer {
         }
 
         public facetsModalApply() {
-            ///
+            $(FacetsModalId).modal('hide');
+            this.search();
+        }
+
+        public facetsModalCancel() {
+            this.clearFacets({ data: {} })
         }
 
         private registerSubscriptions() {
@@ -134,12 +133,20 @@ module Orckestra.Composer {
             this._eventHub.subscribe('facetsModalClosed', this.facetsModalClosed.bind(this));
         }
 
-        private search() {
+        protected search() {
             if (this.IsFacetsModalMode) {
+                const clearAllButton = $(`${FacetsModalId} .modal--cancel`);
+
                 if ($(FacetsModalId).hasClass('loading')) return;
                 $(FacetsModalId).addClass('loading');
                 this._searchRepository.getFacets(this._searchCriteria.toQuerystring()).then(result => {
-                    this._eventHub.publish('facetsLoaded', { data: result })
+                    this._eventHub.publish('facetsLoaded', { data: result });
+
+                    if(!result.FacetSettings.SelectedFacets.Facets.length) {
+                        clearAllButton.addClass('d-none')
+                    } else {
+                        clearAllButton.removeClass('d-none')
+                    }
                 })
                     .fail(reason => console.log(reason))
                     .finally(() => $(FacetsModalId).removeClass('loading'));
