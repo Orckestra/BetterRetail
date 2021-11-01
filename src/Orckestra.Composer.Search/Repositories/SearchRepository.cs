@@ -196,9 +196,13 @@ namespace Orckestra.Composer.Search.Repositories
             request.SearchTerms = criteria.Keywords;
             request.ScopeId = criteria.Scope;
             request.IncludeFacets = criteria.IncludeFacets;
-            request.Facets = FacetConfigContext.GetFacetSettings()
+          
+            var facetsForCounts = FacetConfigContext.GetFacetSettings()
                 .Where(fs => fs.FieldName.StartsWith(SearchConfiguration.CategoryFacetFiledNamePrefix))
-                .Select(f => f.FieldName.Replace("_Facet", "")).ToList();
+                .Select(f => f.FieldName.Replace("_Facet", ""));
+            var facets = GetFacetFieldNameToQuery(criteria);
+            facets.AddRange(facetsForCounts);
+            request.Facets = facets;
             if (criteria.SelectedFacets != null)
             {
                 request.FacetPredicates = criteria.SelectedFacets
