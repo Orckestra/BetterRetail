@@ -106,19 +106,33 @@ module Orckestra.Composer {
         public facetsModalOpened() {
             this.IsFacetsModalMode = true;
             this._searchCriteriaBackup = this._searchCriteria.toQuerystring();
+
+            this.updateClearButtonState();
         }
 
         public facetsModalClosed() {
+            this.facetsModalCancel();
             this.IsFacetsModalMode = false;
         }
 
         public facetsModalApply() {
-            $(FacetsModalId).modal('hide');
+            this.IsFacetsModalMode = false;
             this.search();
         }
 
         public facetsModalCancel() {
-            this.clearFacets({ data: {} })
+            this._searchCriteria.clearFacets();
+            this._searchCriteria.loadFromQuerystring(this._searchCriteriaBackup);
+            this.search();
+        }
+
+        private updateClearButtonState() {
+            const clearAllButton = $(`${FacetsModalId} .modal--cancel`);
+            if(this._searchCriteria.toQuerystring() === this._searchCriteriaBackup) {
+                clearAllButton.addClass('d-none')
+            } else {
+                clearAllButton.removeClass('d-none')
+            }
         }
 
         private registerSubscriptions() {
@@ -135,18 +149,12 @@ module Orckestra.Composer {
 
         protected search() {
             if (this.IsFacetsModalMode) {
-                const clearAllButton = $(`${FacetsModalId} .modal--cancel`);
+                this.updateClearButtonState();
 
                 if ($(FacetsModalId).hasClass('loading')) return;
                 $(FacetsModalId).addClass('loading');
                 this._searchRepository.getFacets(this._searchCriteria.toQuerystring()).then(result => {
                     this._eventHub.publish('facetsLoaded', { data: result });
-
-                    if(!result.FacetSettings.SelectedFacets.Facets.length) {
-                        clearAllButton.addClass('d-none')
-                    } else {
-                        clearAllButton.removeClass('d-none')
-                    }
                 })
                     .fail(reason => console.log(reason))
                     .finally(() => $(FacetsModalId).removeClass('loading'));
