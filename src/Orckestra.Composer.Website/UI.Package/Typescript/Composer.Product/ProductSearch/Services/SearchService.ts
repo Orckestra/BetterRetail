@@ -122,8 +122,7 @@ module Orckestra.Composer {
         }
 
         public facetsModalCancel() {
-            this._searchCriteria.clearFacets();
-            this._searchCriteria.loadFromQuerystring(this._searchCriteriaBackup);
+            this.clearFacets({ data: {} })
         }
 
         private registerSubscriptions() {
