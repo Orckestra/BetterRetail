@@ -348,7 +348,11 @@
                                 </div>
                                 <div class="facets-modal-footer">
                                     <div class="row w-100">
-                                        <div class="col"><button class="btn btn-block btn-secondary modal--cancel">@Html.Localize("List-Search", "B_ClearAll")</button></div>
+                                        <div class="col">
+                                            <button class="btn btn-block btn-secondary modal--cancel @(IsProductFacetsSelected() ? "" : "d-none")">
+                                                @Html.Localize("List-Search", "B_ClearAll")
+                                            </button>
+                                        </div>
                                         <div class="col"><button class="btn btn-block btn-primary modal--confirm">@Html.Localize("List-Search", "B_ApplyFilters")</button></div>
                                     </div>
                                 </div>

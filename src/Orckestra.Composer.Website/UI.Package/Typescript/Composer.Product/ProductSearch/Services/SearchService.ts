@@ -89,12 +89,8 @@ module Orckestra.Composer {
         }
 
         public removeFacets(eventInformation: IEventInformation) {
-            var faces: [] = eventInformation.data;
-
-            faces.forEach(f => {
-                var facet: IFacet = <IFacet>f;
-                this._searchCriteria.removeFacet(facet);
-            })
+            const faces: [] = eventInformation.data;
+            faces.forEach(f => this._searchCriteria.removeFacet(f as IFacet));
 
             this.search();
         }
@@ -139,10 +135,18 @@ module Orckestra.Composer {
 
         protected search() {
             if (this.IsFacetsModalMode) {
+                const clearAllButton = $(`${FacetsModalId} .modal--cancel`);
+
                 if ($(FacetsModalId).hasClass('loading')) return;
                 $(FacetsModalId).addClass('loading');
                 this._searchRepository.getFacets(this._searchCriteria.toQuerystring()).then(result => {
-                    this._eventHub.publish('facetsLoaded', { data: result })
+                    this._eventHub.publish('facetsLoaded', { data: result });
+
+                    if(!result.FacetSettings.SelectedFacets.Facets.length) {
+                        clearAllButton.addClass('d-none')
+                    } else {
+                        clearAllButton.removeClass('d-none')
+                    }
                 })
                     .fail(reason => console.log(reason))
                     .finally(() => $(FacetsModalId).removeClass('loading'));
