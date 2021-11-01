@@ -3,6 +3,7 @@ using System.Collections.Specialized;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Orckestra.Composer.Cart.Parameters.Order;
+using Orckestra.Composer.Cart.Requests;
 using Orckestra.Composer.Cart.Services.Order;
 using Orckestra.Composer.Cart.Utils;
 using Orckestra.Composer.Cart.ViewModels;
@@ -132,7 +133,7 @@ namespace Orckestra.Composer.Cart.Api
         [HttpPost]
         [ActionName("orderbynumber")]
         [ValidateModelState]
-        public virtual async Task<IHttpActionResult> GetOrderByNumber(GetCustomerOrderParam param)
+        public virtual async Task<IHttpActionResult> GetOrderByNumber(GetOrderRequest param)
         {
             if (param == null) { return BadRequest("No request found."); }
 
