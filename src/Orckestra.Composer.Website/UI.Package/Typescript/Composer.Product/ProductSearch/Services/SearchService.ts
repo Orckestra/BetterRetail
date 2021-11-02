@@ -129,6 +129,7 @@ module Orckestra.Composer {
 
         private updateClearButtonState() {
             const clearAllButton = $(`${FacetsModalId} .modal--cancel`);
+            const applyButton = $(`${FacetsModalId} .modal--confirm`);
             const selected = Object.keys(this.getSelectedFacets());
 
             if(selected.length === 0) {
@@ -136,6 +137,8 @@ module Orckestra.Composer {
             } else {
                 clearAllButton.removeClass('d-none')
             }
+
+            applyButton.prop('disabled', this._searchCriteria.toQuerystring() === this._searchCriteriaBackup);
         }
 
         private registerSubscriptions() {
