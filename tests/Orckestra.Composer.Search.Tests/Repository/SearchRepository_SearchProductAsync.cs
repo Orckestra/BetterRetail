@@ -186,7 +186,7 @@ namespace Orckestra.Composer.Search.Tests.Repository
         }
 
         [Test]
-        public async Task WHEN_request_has_singlevalue_selectedfacet_SHOULD_remove_facet_from_result()
+        public async Task WHEN_request_has_singlevalue_selectedfacet_SHOULD_not_remove_facet_from_result()
         {
             // Arrange
             var param = new SearchCriteria()
@@ -207,7 +207,7 @@ namespace Orckestra.Composer.Search.Tests.Repository
             var result = await _sut.SearchProductAsync(param);
 
             // Assert
-            result.Facets.Should().NotContain(facet => facet.FieldName == "ExpectedName");
+            result.Facets.Should().Contain(facet => facet.FieldName == "ExpectedName");
         }
 
         private Mock<IFacetPredicateFactory> MockFacetPredicateFactory()

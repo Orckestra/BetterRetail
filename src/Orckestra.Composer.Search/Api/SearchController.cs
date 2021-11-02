@@ -66,7 +66,7 @@ namespace Orckestra.Composer.Search.Api
             var searchCriteria = new SearchCriteria
             {
                 Keywords = queryString["keywords"],
-                NumberOfItemsPerPage = 1,
+                NumberOfItemsPerPage = 0,
                 IncludeFacets = true,
                 StartingIndex = 0,
                 SortBy = "score",
