@@ -88,7 +88,7 @@ module Orckestra.Composer {
             var anchorContext = actionContext.elementContext,
                 facetKey = anchorContext.data('facetfieldname'),
                 facetValue = anchorContext.data('facetvalue'),
-                isSelected = anchorContext.data('selected');
+                isSelected = anchorContext.hasClass('selected');
 
             actionContext.event.preventDefault();
             actionContext.event.stopPropagation();

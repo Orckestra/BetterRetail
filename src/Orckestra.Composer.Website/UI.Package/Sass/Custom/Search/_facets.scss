@@ -11,7 +11,9 @@
 
     .facet-link {
         &.selected {
-            font-weight: bold;
+            &.highlighted {
+                font-weight: bold;
+            }
             .fa-check {
                 display: inline;
             }
