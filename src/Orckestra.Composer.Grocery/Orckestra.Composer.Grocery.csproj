@@ -213,6 +213,7 @@
     <Compile Include="ViewModels\DayAvailabilityViewModel.cs" />
     <Compile Include="ViewModels\IGroceryCartViewModel.cs" />
     <Compile Include="ViewModels\IGroceryOrderShipmentDetailViewModel.cs" />
+    <Compile Include="ViewModels\IGroceryProductSearchViewModel.cs" />
     <Compile Include="ViewModels\IGroceryProductViewModel.cs" />
     <Compile Include="ViewModels\StoreAndFulfillmentSelectionViewModel.cs" />
     <Compile Include="ViewModels\IGroceryStoreViewModel.cs" />
@@ -236,6 +237,10 @@
     <ProjectReference Include="..\Orckestra.Composer.Product\Orckestra.Composer.Product.csproj">
       <Project>{1F767098-1FBF-4CB9-8637-6529E1CC0B24}</Project>
       <Name>Orckestra.Composer.Product</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Orckestra.Composer.Search\Orckestra.Composer.Search.csproj">
+      <Project>{CE6AD95E-0EBB-4E38-BF0B-27A67915FA68}</Project>
+      <Name>Orckestra.Composer.Search</Name>
     </ProjectReference>
     <ProjectReference Include="..\Orckestra.Composer.Store\Orckestra.Composer.Store.csproj">
       <Project>{1407AF7B-A1FE-4B52-906B-7503B6DB0F2B}</Project>

@@ -26,11 +26,14 @@
        v-on:click="productClick(Product, index)">
         <img class="img-fluid m-auto" xmlns:v-bind="v-bind" v-bind:src="Product.ImageUrl"
              v-bind:alt="Product.FullDisplayName"
-             onerror="imgError(this)" />
+             onerror="imgError(this)"/>
     </a>
     <div v-if="'InWishList' in Product" class="product-tile-wishlist">
         @AddToWishList()
     </div>
+    <ul v-if="Product.ProductBadges" class="product-tile-badges list-unstyled">
+        <li v-for="item in Product.ProductBadges"><img v-bind:src="`/UI.Package/Images/badge/${item}.svg`" alt="{{item}}" /></li>
+    </ul>
 
 
     <div class="product-tile-text px-3 pt-3">
@@ -41,8 +44,8 @@
         <div v-if="Product.IsEligibleForRecurring" class="product-tile-recurring">
             <img src="~/UI.Package/Images/recurring.svg"
                  class="recurring-icon"
-                 alt="@Html.Localize("General",  "L_RecurringProduct")"
-                 title="@Html.Localize("General",  "L_RecurringProduct")" />
+                 alt="@Html.Localize("General", "L_RecurringProduct")"
+                 title="@Html.Localize("General", "L_RecurringProduct")"/>
         </div>
 
         <a data-qa="search-product-title"
