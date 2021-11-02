@@ -3,6 +3,21 @@
         padding-left: $card-spacer-x / 1.5;
         padding-right: $card-spacer-x / 1.5;
     }
+    .fa-check {
+        display: none;
+        position: absolute;
+        left: 0;
+    }
+
+    .facet-link {
+        &.selected {
+            font-weight: bold;
+            .fa-check {
+                display: inline;
+            }
+        }
+    }
+
 }
 
 .search-results {

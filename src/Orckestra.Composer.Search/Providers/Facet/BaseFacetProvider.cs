@@ -151,7 +151,7 @@ namespace Orckestra.Composer.Search.Providers.Facet
                 })
                 .ToList();
 
-            facetValues = facetValues.OrderByDescending(x => x.IsSelected).ToList();
+            facetValues = facetValues.OrderByDescending(x => x.IsSelected).ThenByDescending(x => x.Quantity).ToList();
             return facetValues;
         }
     }

@@ -60,9 +60,13 @@
                                        data-facetfieldname="@facet.FieldName"
                                        data-facettype="@facet.FacetType"
                                        data-facetvalue="@facet.Value"
-                                       @if (facet.FieldName.StartsWith(SearchConfiguration.CategoryFacetFiledNamePrefix)) { <text> data-facetlandingpageurl="@categoryBrowsingViewModel.LandingPageUrls[index]" </text> }
-                                       title="@facet.DisplayName" data-oc-click="removeSelectedFacet">
-
+                                       title="@facet.DisplayName" data-oc-click="removeSelectedFacet"
+                                        @if(facet.FieldName.StartsWith(SearchConfiguration.CategoryFacetFiledNamePrefix))
+                                       {
+                                           <text>
+                                       data-categorytree="@(facet.FieldName)"
+                                           </text>
+                                       }>
                                         <span class="fa  fa-times  fa-lg"></span>
                                     </a>
                                 }

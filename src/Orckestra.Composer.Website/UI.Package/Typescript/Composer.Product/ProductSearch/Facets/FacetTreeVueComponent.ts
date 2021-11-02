@@ -78,42 +78,19 @@ module Orckestra.Composer {
                 <div class="form-check mb-1"
                     :data-facetfieldname="node?.FieldName"
                     :data-facettype="node?.FacetType">
-                    <label v-if="node" class="form-check-label" v-bind:class="{'font-weight-bold': node.IsSelected}">
-                        <input v-if="categorypage"
-                            class="form-check-input"
-                            type="radio"
-                            :value="node.Value"
-                            :checked="node.IsSelected"
-                            :data-selected="node.IsSelected"
-                            :data-type="node.FacetType"
-                            :data-parentcategoryurl="parentnode?.CategoryUrl"
-                            :data-categoryurl="node.CategoryUrl"
-                            v-on:click="(e) => nodeсlicked(e, node.IsSelected)" />
-
-                        <input v-else-if="node.FacetType == 'SingleSelect'"
-                            class="form-check-input"
-                            type="radio"
-                            :name="node.FieldName"
-                            :value="node.Value"
-                            :checked="node.IsSelected"
-                            :data-selected="node.IsSelected"
-                            :data-type="node.FacetType"
-                            v-on:click="(e) => nodeсlicked(e, node.IsSelected)" />
-
-                        <input v-else-if="node.FacetType == 'MultiSelect'"
-                            class="form-check-input"
-                            type="checkbox"
-                            :name="node.FieldName + '[]'"
-                            :value="node.Value"
-                            :data-selected="node.IsSelected"
-                            :checked="node.IsSelected"
-                            :data-type="node.FacetType"
-                            v-on:click="(e) => nodeсlicked(e, node.IsSelected)" />
-
-                        {{node.Title}} <span>({{node.Quantity}})</span>
-
-                    </label>
   
+                    <a v-if="node?.FacetType == 'SingleSelect'" href="#" class="facet-link"
+                            :data-facetfieldname="node.FieldName"
+                            :data-facetvalue="node.Value"
+                            :title="node.Title"
+                            :data-type="node.FacetType"
+                            :data-selected="node.IsSelected"
+                            :class="{'selected': node.IsSelected}"
+                            data-oc-click="singleFacetChanged">
+                        <i class="fa fa-check"></i>
+                        <span>{{node.Title}} ({{node.Quantity}})</span>
+                    </a>
+
                 <div v-if="hasChildren">
                   <facets-tree
                      v-for="childNode in visibleNodes"

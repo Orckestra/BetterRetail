@@ -87,12 +87,30 @@ module Orckestra.Composer {
         public singleFacetChanged(actionContext: IControllerActionContext) {
             var anchorContext = actionContext.elementContext,
                 facetKey = anchorContext.data('facetfieldname'),
-                facetValue = anchorContext.data('facetvalue');
+                facetValue = anchorContext.data('facetvalue'),
+                isSelected = anchorContext.data('selected');
 
             actionContext.event.preventDefault();
             actionContext.event.stopPropagation();
 
-            this.publishSingleFacetsChanged(facetKey, facetValue, UrlHelper.resolvePageType());
+            if(isSelected) {
+                var checkedItems = anchorContext.parent().find('[data-selected=true]');
+                var data = [];
+                checkedItems.each(index => {
+                    let el = $(checkedItems[index]);
+                    el.removeClass('selected');
+                    data.push({
+                        facetFieldName: el.data('facetfieldname'),
+                        facetValue: el.data('facetvalue'),
+                        facetType: el.data('type'),
+                    })
+                });
+                this.eventHub.publish('facetsRemoved', { data });
+            } else {
+                anchorContext.parent().parent().find('a').removeClass('selected');
+                anchorContext.addClass('selected');
+                this.publishSingleFacetsChanged(facetKey, facetValue, UrlHelper.resolvePageType());
+            }
         }
 
         public categoryFacetChanged(event, isSelected) {

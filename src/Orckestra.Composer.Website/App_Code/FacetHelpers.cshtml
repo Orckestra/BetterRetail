@@ -55,13 +55,19 @@
 
 @helper SingleFacet()
 {
-    <div class="mb-1" v-for="facetValue in facet.FacetValues" v-if="facetValue.Quantity">
+<div class="form-check mb-1" v-for="facetValue in facet.FacetValues" v-if="facetValue.Quantity">
         <a href="#"
+           class="facet-link"
            v-bind:data-facetfieldname="facet.FieldName"
            v-bind:data-facetvalue="facetValue.Value"
            v-bind:title="facetValue.Title"
-           data-oc-click="singleFacetChanged"><span>{{facetValue.Title}} ({{facetValue.Quantity}})</span></a>
-    </div>
+           v-bind:data-selected="facetValue.IsSelected"
+           v-bind:data-type="facetValue.FacetType"
+           v-bind:class="{'selected': facetValue.IsSelected}"
+           data-oc-click="singleFacetChanged">
+        <i class="fa fa-check"></i>
+       <span>{{facetValue.Title}} ({{facetValue.Quantity}})</span></a>
+</div>
 }
 
 @helper MultiSelectFacet()

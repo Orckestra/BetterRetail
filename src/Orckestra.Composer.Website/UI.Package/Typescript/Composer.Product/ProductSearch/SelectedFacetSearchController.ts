@@ -31,13 +31,14 @@ module Orckestra.Composer {
             if (categoryTreeRef) {
                 //remove also all child categories
                 var parentCategoryElement = $('#categoriesTree').find('[data-facetfieldname="' + categoryTreeRef + '"]');
-                var checkedInputs = parentCategoryElement.find('input:checked');
+                var checkedItems = parentCategoryElement.find('.selected');
                 var data = [];
-                checkedInputs.each(index => {
+                checkedItems.each(index => {
+                    let el = $(checkedItems[index]);
                     data.push({
-                        facetFieldName: $(checkedInputs[index]).attr('name').replace('[]',''),
-                        facetValue: $(checkedInputs[index]).attr('value'),
-                        facetType: $(checkedInputs[index]).attr('type'),
+                        facetFieldName: el.data('facetfieldname'),
+                        facetValue: el.data('facetvalue'),
+                        facetType: el.data('type'),
                     })
                 });
                 this.eventHub.publish('facetsRemoved', { data });
