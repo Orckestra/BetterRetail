@@ -111,7 +111,9 @@ module Orckestra.Composer {
         }
 
         public facetsModalClosed() {
-            this.facetsModalCancel();
+            this._searchCriteria.clearFacets();
+            this._searchCriteria.loadFromQuerystring(this._searchCriteriaBackup);
+            this.search();
             this.IsFacetsModalMode = false;
         }
 
@@ -122,13 +124,14 @@ module Orckestra.Composer {
 
         public facetsModalCancel() {
             this._searchCriteria.clearFacets();
-            this._searchCriteria.loadFromQuerystring(this._searchCriteriaBackup);
             this.search();
         }
 
         private updateClearButtonState() {
             const clearAllButton = $(`${FacetsModalId} .modal--cancel`);
-            if(this._searchCriteria.toQuerystring() === this._searchCriteriaBackup) {
+            const selected = Object.keys(this.getSelectedFacets());
+
+            if(selected.length === 0) {
                 clearAllButton.addClass('d-none')
             } else {
                 clearAllButton.removeClass('d-none')
