@@ -68,7 +68,9 @@ module Orckestra.Composer {
                     }
                 },
                 methods: {
-
+                    isSelected(facet) {
+                        return facet.IsSelected && (!facet.ChildNodes || facet.ChildNodes.every(child => !child.IsSelected));
+                    }
                 },
                 mounted() {
 
@@ -85,7 +87,7 @@ module Orckestra.Composer {
                             :title="node.Title"
                             :data-type="node.FacetType"
                             :data-selected="node.IsSelected"
-                            :class="{'selected': node.IsSelected}"
+                            :class="{'selected': isSelected(node)}"
                             data-oc-click="singleFacetChanged">
                         <i class="fa fa-check"></i>
                         <span>{{node.Title}} ({{node.Quantity}})</span>
