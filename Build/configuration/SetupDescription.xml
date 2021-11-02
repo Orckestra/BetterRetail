@@ -35,6 +35,12 @@
 	  <!-- Tools -->
 	  <package id="7d27b88a-f79e-4ec1-919a-24ffbd457384" url="http://package.composite.net/Download.ashx?package=Orckestra.Web.Typescript&amp;c1version=$(version)"/>
 
+    <!-- PersonalizedContent -->
+    <package id="a7f946d8-aab6-445e-a26b-30203b3ea2f6" url="http://experience-management-packages.c1preprod02.composite.net/Setup/branches/yaml-51383-as-a-merchandiser-i-want-to-show-custom-content-per-profile-attribute/Packages/Orckestra.ExperienceManagement.Api.zip"/>
+    <package id="bf6787e3-8d2d-46e8-a9f3-c6b30ba790a0" url="http://experience-management-packages.c1preprod02.composite.net/Setup/branches/yaml-51383-as-a-merchandiser-i-want-to-show-custom-content-per-profile-attribute/Packages/Orckestra.ExperienceManagement.WebComponentsV1.zip"/>
+    <package id="efdbb1a7-144c-47f5-91ca-183eafdd4206" url="http://experience-management-packages.c1preprod02.composite.net/Setup/branches/yaml-51383-as-a-merchandiser-i-want-to-show-custom-content-per-profile-attribute/Packages/Orckestra.ExperienceManagement.PersonalizedContent.zip"/>
+
+
     </packages>
   </radio>
 </setup>
