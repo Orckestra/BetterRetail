@@ -19,7 +19,7 @@
                     <div v-if="Quantity > 0 &amp;&amp; IsAvailableToSell">
                         <div class="input-group text-center">
                             <div class="input-group-prepend">
-                                <button class="btn   btn-outline-secondary"
+                                <button class="btn   btn-secondary"
                                         v-bind:disabled="DecrementDisabled"
                                         v-on:click="updateItemQuantity(Quantity - 1)"
                                         data-qa="product-quantity-decrease">
@@ -37,7 +37,7 @@
                                    xmlns:v-bind="v-bind" />
 
                             <div class="input-group-append">
-                                <button class="btn   btn-outline-secondary"
+                                <button class="btn   btn-secondary"
                                         v-bind:disabled="IncrementDisabled"
                                         v-on:click="updateItemQuantity(Quantity + 1)"
                                         data-qa="product-quantity-increase">
@@ -61,7 +61,7 @@
                 <div class="col-sm-6 col-lg-4">
                     <div class="input-group text-center">
                         <div class="input-group-prepend">
-                            <button class="btn   btn-outline-secondary"
+                            <button class="btn   btn-secondary"
                                     v-bind:disabled="DecrementDisabled"
                                     v-on:click="updateQuantity(Quantity - 1)"
                                     data-qa="product-quantity-decrease">
@@ -79,7 +79,7 @@
                                xmlns:v-bind="v-bind" />
 
                         <div class="input-group-append">
-                            <button class="btn   btn-outline-secondary"
+                            <button class="btn   btn-secondary"
                                     v-bind:disabled="IncrementDisabled"
                                     v-on:click="updateQuantity(Quantity + 1)"
                                     data-qa="product-quantity-increase">
@@ -96,7 +96,7 @@
 
 @helper AddToCartButton()
 {
-    <button class="btn btn-success btn-block text-uppercase"
+    <button class="btn btn-primary btn-block text-uppercase"
             v-bind:disabled="AddToCartDisabled"
             title="@Html.Localize("General", "B_AddToCartProductDetail")"
             v-on:click="addItemToCart">
@@ -120,7 +120,7 @@
                data-qa="product-remove-from-wishlist"
                v-on:click="removeLineItemFromWishList"
                title="@Html.Localize("MyAccount", "H_RemoveFromTheWishList")"
-               class="add-to-wishlist  active">
+               class="add-to-wishlist  text-danger">
                 <i class="fa  fa-2x  fa-heart"></i>
             </a>
             <a v-else="else"
@@ -128,7 +128,7 @@
                v-on:click="addLineItemToWishList"
                title="@Html.Localize("MyAccount", "H_AddToWishList")"
                class="add-to-wishlist">
-                <i class="fa  fa-2x  fa-heart"></i>
+                <i class="fa  fa-2x  fa-heart-o"></i>
             </a>
         </div>
     </div>
@@ -139,7 +139,7 @@
     <div v-if="(@itemName).IsAvailableToSell">
         <div v-if="(@itemName).InCart &amp;&amp; (@itemName).Quantity > 0" class="input-group text-center">
             <div class="input-group-prepend">
-                <button class="btn btn-outline-secondary"
+                <button class="btn btn-secondary"
                         v-bind:disabled="Loading"
                         v-on:mouseup.stop="updateItemQuantity((@itemName), (@itemName).Quantity - 1)"
                         data-qa="product-quantity-decrease"
@@ -158,7 +158,7 @@
                    xmlns:v-bind="v-bind" />
 
             <div class="input-group-append">
-                <button class="btn btn-outline-secondary"
+                <button class="btn btn-secondary"
                         v-bind:disabled="Loading"
                         v-on:mouseup.stop="updateItemQuantity((@itemName), (@itemName).Quantity + 1)"
                         data-qa="product-quantity-increase"
