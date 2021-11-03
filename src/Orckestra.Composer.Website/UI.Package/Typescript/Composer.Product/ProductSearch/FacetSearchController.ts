@@ -211,11 +211,13 @@ module Orckestra.Composer {
         private initializeServices() {
             var selectedFacets: IHashTable<string|string[]>;
             var correctedSearchTerm: string = this.context.container.attr('data-corrected-search-term');
+            var categoryId: string = this.context.container.attr('data-categoryId');
 
             this._searchService = new SearchService(this.eventHub, window);
             this._searchService.initialize({
                 facetRegistry: this.buildFacetRegistry(),
-                correctedSearchTerm: correctedSearchTerm
+                correctedSearchTerm: correctedSearchTerm,
+                categoryId
             });
             selectedFacets = this._searchService.getSelectedFacets();
 

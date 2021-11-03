@@ -1,5 +1,6 @@
 ﻿@using Composite.AspNet.Razor
 @using System.Web.Mvc
+@using System.Web.WebPages.Html
 @using Orckestra.Composer.Search.Facets
 
 @helper PromotedFacetValues()
@@ -55,7 +56,7 @@
 
 @helper SingleFacet()
 {
-<div class="form-check mb-1" v-for="facetValue in facet.FacetValues" v-if="facetValue.Quantity">
+    <div class="form-check mb-1" v-for="facetValue in facet.FacetValues" v-if="facetValue.Quantity">
         <a href="#"
            class="facet-link"
            v-bind:data-facetfieldname="facet.FieldName"
@@ -65,9 +66,10 @@
            v-bind:data-type="facetValue.FacetType"
            v-bind:class="{'selected': facetValue.IsSelected}"
            data-oc-click="singleFacetChanged">
-        <i class="fa fa-check"></i>
-       <span>{{facetValue.Title}} ({{facetValue.Quantity}})</span></a>
-</div>
+            <i class="fa fa-check"></i>
+            <span>{{facetValue.Title}} ({{facetValue.Quantity}})</span>
+        </a>
+    </div>
 }
 
 @helper MultiSelectFacet()
@@ -118,5 +120,25 @@
     </div>
     <div v-if="facet.FacetType == '@(FacetType.Range)'">
         @RangeFacet()
+    </div>
+}
+
+@helper FacetsModalHeader()
+{
+    <div class="facets-modal-header">
+        <h5 class="modal-title">@Html.Localize("List-Search", "B_FilterBy")</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+}
+
+@helper FacetsModalFooter()
+{
+    <div class="facets-modal-footer">
+        <div class="row w-100">
+            <div class="col"><button class="btn btn-block btn-outline-secondary modal--cancel">@Html.Localize("List-Search", "B_ClearAll")</button></div>
+            <div class="col"><button class="btn btn-block btn-primary modal--confirm">@Html.Localize("List-Search", "B_ApplyFilters")</button></div>
+        </div>
     </div>
 }

@@ -41,26 +41,26 @@
 </head>
 <body>
     <div data-oc-controller="Product.SelectedSearchFacets">
-        <div id="selectedFacets" class="card facets-card mb-3 d-none d-lg-flex">
+        <div id="selectedFacets" class="card facets-card mb-3">
             <div class="card-header">
                 @Html.Localize("List-Search", "L_Selection")
                 @if (SelectedFacets.IsAllRemovable)
                 {
-                    <a class="float-right  small d-none d-lg-inline" 
+                    <a class="float-right  small" 
                        data-qa="search-refiners-clear-all" 
                        href="#"
                        data-oc-click="clearSelectedFacets">
-                        @Html.Localize("List-Search", "B_ClearAll")
+                       @Html.Localize("List-Search", "B_ClearAll")
                     </a>
                 }
             </div>
             <div class="card-body">
-                <ul class="list-group m-0">
+                <ul class="selected-facets list-group">
                     @foreach (var facet in SelectedFacets.Facets)
                     {
-                        <li class="list-group-item d-flex justify-content-between align-items-center p-0 mb-1 border-0">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
                             @facet.DisplayName
-                            <span class="badge">
+                            <span class="badge badge-light">
                                 @if (facet.IsRemovable)
                                 {
                                     <a href="#" class="float-right" data-qa="search-refiner-remove"
@@ -69,9 +69,7 @@
                                        data-facetvalue="@facet.Value"
                                        @if(facet.FieldName.StartsWith(SearchConfiguration.CategoryFacetFiledNamePrefix))
                                        {
-                                           <text>
-                                       data-categorytree="@(facet.FieldName)"
-                                           </text>
+                                         <text>data-categorytree="@(facet.FieldName)"</text>
                                        }
                                        title="@facet.DisplayName"
                                        data-oc-click="removeSelectedFacet">

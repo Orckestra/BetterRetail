@@ -332,29 +332,22 @@
         <div class="col-12">
             <div class="row">
                 <div id="leftCol" class="col-12 col-lg-3  facets-col">
+
+                    @Function("Composer.Search.SelectedFacets")
+
                     <div id="facetsModal" class="facets-modal">
                         <div class="facets-modal-dialog">
                             <div class="facets-modal-content">
-                                <div class="facets-modal-header">
-                                    <h5 class="modal-title">@Html.Localize("List-Search", "B_FilterBy")</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">×</span>
-                                    </button>
-                                </div>
+                                @FacetHelpers.FacetsModalHeader()
                                 <div class="facets-modal-body">
                                     <div class="overlay"></div>
-                                    @Function("Composer.Search.SelectedSearchFacets")
                                     @Function("Composer.Search.Facets")
                                 </div>
-                                <div class="facets-modal-footer">
-                                    <div class="row w-100">
-                                        <div class="col"><button class="btn btn-block btn-outline-secondary modal--cancel">@Html.Localize("List-Search", "B_ClearAll")</button></div>
-                                        <div class="col"><button class="btn btn-block btn-primary modal--confirm">@Html.Localize("List-Search", "B_ApplyFilters")</button></div>
-                                    </div>
-                                </div>
+                                @FacetHelpers.FacetsModalFooter()
                             </div>
                         </div>
                     </div>
+
                 </div>
                 @if (ProductSearchResults.TotalCount > 0)
                 {

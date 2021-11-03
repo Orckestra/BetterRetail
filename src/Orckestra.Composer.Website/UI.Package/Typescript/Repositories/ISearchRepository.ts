@@ -9,5 +9,10 @@ module Orckestra.Composer {
          */
         getFacets(searchCriteria): Q.Promise<any>;
 
+        /**
+         * Get the facets for the category page and current search criteria.
+         */
+        getCategoryFacets(categoryId, searchCriteria): Q.Promise<any>;
+
     }
 }

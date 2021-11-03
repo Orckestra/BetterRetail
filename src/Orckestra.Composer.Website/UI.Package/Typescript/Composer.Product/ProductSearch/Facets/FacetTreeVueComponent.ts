@@ -48,7 +48,7 @@ module Orckestra.Composer {
 
                 computed: {
                     currentNode() {
-                        return this.node ?  this.node: this.parentnode;
+                        return this.node ? this.node: this.parentnode;
                     },
                     hasChildren() {
                         const { ChildNodes } = this.currentNode;
@@ -77,7 +77,8 @@ module Orckestra.Composer {
                 },
                 template: `
                  
-                <div class="form-check mb-1"
+                <div class="mb-1"
+                    :class="{'form-check': !!node }"
                     :data-facetfieldname="node?.FieldName"
                     :data-facettype="node?.FacetType">
   

@@ -307,7 +307,7 @@
     <Content Include="App_Data\Razor\Composer\Header\Breadcrumb.cshtml" />
     <Content Include="App_Data\Razor\Composer\Header\LanguageSwitсh.cshtml" />
     <Content Include="App_Data\Razor\Composer\BrowsingCategories\Summary.cshtml" />
-    <Content Include="App_Data\Razor\Composer\Search\SelectedSearchFacets.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Search\SelectedFacets.cshtml" />
     <Content Include="App_Data\Razor\Composer\BrowsingCategories\Facets.cshtml" />
     <Content Include="App_Data\Razor\Composer\BrowsingCategories\SelectedFacets.cshtml" />
     <Content Include="App_Data\Razor\Composer\BrowsingCategories\Results.cshtml" />

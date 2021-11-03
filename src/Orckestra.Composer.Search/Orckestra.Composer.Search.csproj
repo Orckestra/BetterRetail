@@ -131,6 +131,7 @@
     <Compile Include="Repositories\ProductRequestFactory.cs" />
     <Compile Include="Parameters\RemoveSelectedFacetsFromFacetsParam.cs" />
     <Compile Include="RequestConstants\SearchRequestParams.cs" />
+    <Compile Include="Request\GetCategoryFacetsRequest.cs" />
     <Compile Include="Request\GetFacetsRequest.cs" />
     <Compile Include="SearchConfiguration.cs" />
     <Compile Include="Context\SearchRequestContext.cs" />

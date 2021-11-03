@@ -159,11 +159,15 @@ module Orckestra.Composer {
 
                 if ($(FacetsModalId).hasClass('loading')) return;
                 $(FacetsModalId).addClass('loading');
-                this._searchRepository.getFacets(this._searchCriteria.toQuerystring()).then(result => {
-                    this._eventHub.publish('facetsLoaded', { data: result });
-                })
+
+                var queryString = this._searchCriteria.toQuerystring();
+                var catId = this._searchCriteria.categoryId;
+                var getFacetsPromise = catId ? this._searchRepository.getCategoryFacets(catId, queryString) : this._searchRepository.getFacets(queryString);
+
+                getFacetsPromise.then(result => this._eventHub.publish('facetsLoaded', { data: result }))
                     .fail(reason => console.log(reason))
                     .finally(() => $(FacetsModalId).removeClass('loading'));
+
             } else {
                 this._window.location.href = this._baseSearchUrl + this._searchCriteria.toQuerystring();
             }

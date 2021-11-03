@@ -94,6 +94,7 @@ namespace Orckestra.Composer.Search.Services
                 viewModel.ProductSearchResults.CategoryFacetCounts).ConfigureAwait(false);
 
             viewModel.FacetSettings.CategoryFacetValuesTree?.ChildNodes?.ForEach(childNode => BuildCategoryUrlsForTreeNode(param, childNode));
+            viewModel.FacetSettings.CategoryFacetValuesTree?.ChildNodes?.ForEach(childNode => CleanSiblingFacets(param, childNode));
 
             // Json context for Facets
             viewModel.FacetSettings.Context["CategoryFacetValuesTree"] = viewModel.FacetSettings.CategoryFacetValuesTree;
@@ -108,6 +109,20 @@ namespace Orckestra.Composer.Search.Services
         {
             node.CategoryUrl = GetCategoryUrl(node.CategoryId, param);
             node.ChildNodes?.ForEach(childNode => BuildCategoryUrlsForTreeNode(param, childNode));
+        }
+
+        /// <summary>
+        /// Category Browse page allows filter by facets but we can't filter by sibling category facets.
+        /// </summary>
+        /// <param name="param"></param>
+        /// <param name="node"></param>
+        private void CleanSiblingFacets(GetCategoryBrowsingViewModelParam param, CategoryFacetValuesTreeNode node)
+        {
+            var selected = node.ChildNodes?.FirstOrDefault(c => c.IsSelected && c.CategoryId == param.CategoryId);
+            if(selected != null)
+            {
+                node.ChildNodes = node.ChildNodes.Where(c => c.CategoryId == param.CategoryId).ToList();
+            }
         }
 
         protected virtual List<string> GetLandingPageUrls(TreeNode<Category> startNode, GetCategoryBrowsingViewModelParam param)
@@ -221,7 +236,7 @@ namespace Orckestra.Composer.Search.Services
         {
             var criteria = new CategorySearchCriteria
             {
-                NumberOfItemsPerPage = SearchConfiguration.MaxItemsPerPage,
+                NumberOfItemsPerPage = param.NumberOfItemsPerPage,
                 IncludeFacets = true,
                 InventoryLocationIds = param.InventoryLocationIds,
                 AvailabilityDate = FulfillmentContext.AvailabilityAndPriceDate,

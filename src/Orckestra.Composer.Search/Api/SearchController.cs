@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Http;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
+using Orckestra.Composer.Search.Parameters;
 using Orckestra.Composer.Search.Providers;
 using Orckestra.Composer.Search.Request;
 using Orckestra.Composer.Search.Services;
@@ -30,6 +31,7 @@ namespace Orckestra.Composer.Search.Api
 
         protected IComposerContext ComposerContext { get; private set; }
         protected ISearchViewService SearchViewService { get; private set; }
+        protected ICategoryBrowsingViewService CategoryBrowsingViewService { get; private set; }
         protected IInventoryLocationProvider InventoryLocationProvider { get; private set; }
         protected ISearchTermsTransformationProvider SearchTermsTransformationProvider { get; private set; }
         protected IAutocompleteProvider AutocompleteProvider { get; private set; }
@@ -44,10 +46,12 @@ namespace Orckestra.Composer.Search.Api
             ISearchTermsTransformationProvider searchTermsTransformationProvider,
             IAutocompleteProvider autocompleteProvider,
             IFulfillmentContext fulfillmentContext,
-            ISearchUrlProvider searchUrlProvider)
+            ISearchUrlProvider searchUrlProvider,
+            ICategoryBrowsingViewService categoryBrowsingViewService)
         {
             ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
             SearchViewService = searchViewService ?? throw new ArgumentNullException(nameof(searchViewService));
+            CategoryBrowsingViewService = categoryBrowsingViewService ?? throw new ArgumentNullException(nameof(categoryBrowsingViewService));
             InventoryLocationProvider = inventoryLocationProvider ?? throw new ArgumentNullException(nameof(inventoryLocationProvider));
             SearchTermsTransformationProvider = searchTermsTransformationProvider ?? throw new ArgumentNullException(nameof(searchTermsTransformationProvider));
             AutocompleteProvider = autocompleteProvider ?? throw new ArgumentNullException(nameof(autocompleteProvider));
@@ -85,6 +89,38 @@ namespace Orckestra.Composer.Search.Api
             searchResultsViewModel.ProductSearchResults.Facets = searchResultsViewModel.ProductSearchResults.Facets.Where(f => !f.FieldName.StartsWith(SearchConfiguration.CategoryFacetFiledNamePrefix)).ToList();
 
             return Ok(searchResultsViewModel);
+        }
+
+        [ActionName("getcategoryfacets")]
+        [HttpPost]
+        [ValidateModelState]
+        public virtual async Task<IHttpActionResult> GetCategoryFacets(GetCategoryFacetsRequest request)
+        {
+
+            var param = new GetCategoryBrowsingViewModelParam
+            {
+                CategoryId = request.CategoryId,
+                CategoryName = string.Empty,
+                BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
+                IsAllProducts = false,
+                NumberOfItemsPerPage = 0,
+                Page = 1,
+                SortBy = "score",
+                SortDirection = "desc",
+                InventoryLocationIds = await InventoryLocationProvider.GetInventoryLocationIdsForSearchAsync().ConfigureAwait(false),
+                CultureInfo = ComposerContext.CultureInfo
+            };
+
+            if (!string.IsNullOrEmpty(request.QueryString))
+            {
+                var queryString = HttpUtility.ParseQueryString(request.QueryString);
+                param.SelectedFacets = SearchUrlProvider.BuildSelectedFacets(queryString).ToList();
+            }
+
+            var viewModel = await CategoryBrowsingViewService.GetCategoryBrowsingViewModelAsync(param).ConfigureAwait(false);
+            viewModel.ProductSearchResults.Facets = viewModel.ProductSearchResults.Facets.Where(f => !f.FieldName.StartsWith(SearchConfiguration.CategoryFacetFiledNamePrefix)).ToList();
+
+            return Ok(viewModel);
         }
 
         [ActionName("autocomplete")]

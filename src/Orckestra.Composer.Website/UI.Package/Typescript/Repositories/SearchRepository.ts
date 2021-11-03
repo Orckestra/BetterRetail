@@ -7,8 +7,12 @@ module Orckestra.Composer {
 
     export class SearchRepository implements ISearchRepository {
 
-        public getFacets(queryString): Q.Promise<any> {
-            return ComposerClient.post('/api/search/getfacets', { QueryString: queryString });
+        public getFacets(QueryString): Q.Promise<any> {
+            return ComposerClient.post('/api/search/getfacets', { QueryString });
+        }
+
+        public getCategoryFacets(CategoryId, QueryString): Q.Promise<any> {
+            return ComposerClient.post('/api/search/getcategoryfacets', { QueryString, CategoryId });
         }
     }
 }
