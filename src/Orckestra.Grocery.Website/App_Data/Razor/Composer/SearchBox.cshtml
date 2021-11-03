@@ -126,7 +126,7 @@
                                            v-html="suggestion.item.mappedDisplayName"></a>
                                     </div>
                                     <div class="row">
-                                        <div class="col-9">
+                                        <div class="col col-sm-8">
                                             <div class="product-tile-special-price">
                                                 <del v-if="suggestion.item.IsOnSale">{{suggestion.item.DisplayListPrice}}</del>
                                             </div>
@@ -135,8 +135,8 @@
                                                 <span v-else="v-else" class="h4" data-qa="search-product-price">{{suggestion.item.DisplayListPrice}}</span>
                                             </div>
                                         </div>
-                                        <div class="col-3">
-                                            @ProductHelpers.AddToCartButtonWithQuantity("suggestion.item")
+                                        <div class="col-12 col-sm-4">
+                                            @ProductHelpers.AddToCartButtonWithQuantity("suggestion.item", "true")
                                         </div>
                                     </div>
                                 </div>

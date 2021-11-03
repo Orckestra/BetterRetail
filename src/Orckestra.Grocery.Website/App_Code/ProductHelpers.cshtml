@@ -134,7 +134,7 @@
     </div>
 }
 
-@helper AddToCartButtonWithQuantity(string itemName = "Product")
+@helper AddToCartButtonWithQuantity(string itemName = "Product", string disabledInput = "Loading")
 {
     <div v-if="(@itemName).IsAvailableToSell">
         <div v-if="(@itemName).InCart &amp;&amp; (@itemName).Quantity > 0" class="input-group text-center">
@@ -151,7 +151,7 @@
             <input class="form-control  text-center btn-quantity" type="number"
                    min="0" max="99"
                    v-bind:value="(@itemName).Quantity"
-                   v-bind:disabled="Loading"
+                   v-bind:disabled="@disabledInput"
                    v-on:keyup="$event.target.value = $event.target.value.replace(/\D/g,'')"
                    v-on:change="updateItemQuantity((@itemName), $event.target.value)"
                    xmlns:v-on="v-on"
