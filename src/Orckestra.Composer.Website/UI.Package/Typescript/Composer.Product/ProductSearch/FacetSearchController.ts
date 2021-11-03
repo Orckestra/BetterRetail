@@ -53,11 +53,6 @@ module Orckestra.Composer {
                         this.CategoryFacetValuesTree = data.FacetSettings.CategoryFacetValuesTree;
                         this.Facets = data.ProductSearchResults.Facets;
                     });
-                },
-                methods: {
-                    categoryFacetClicked(event, isSelected) {
-                        self.categoryFacetChanged(event, isSelected);
-                    }
                 }
 
             });
@@ -88,7 +83,8 @@ module Orckestra.Composer {
             var anchorContext = actionContext.elementContext,
                 facetKey = anchorContext.data('facetfieldname'),
                 facetValue = anchorContext.data('facetvalue'),
-                isSelected = anchorContext.hasClass('selected');
+                isSelected = anchorContext.hasClass('selected'),
+                categoryId = anchorContext.data('categoryId');
 
             actionContext.event.preventDefault();
             actionContext.event.stopPropagation();
@@ -110,69 +106,6 @@ module Orckestra.Composer {
                 anchorContext.parent().parent().find('a').removeClass('selected');
                 anchorContext.addClass('selected');
                 this.publishSingleFacetsChanged(facetKey, facetValue, UrlHelper.resolvePageType());
-            }
-        }
-
-        public categoryFacetChanged(event, isSelected) {
-
-            var element = $(event.target),
-                facetKey = element.attr('name'),
-                facetValue = element.attr('value'),
-                type = element.data('type'),
-                categoryurl = element.data('categoryurl'),
-                parentcategoryurl = element.data('parentcategoryurl'),
-                pageType = UrlHelper.resolvePageType(),
-                checked = isSelected,
-                checkedCategories = element.parent().parent().find('input:checked');
-
-            if (checked) {
-                //unselect all sub-categories
-                checkedCategories.each(index => {
-                    var elem: any = checkedCategories[index];
-                    elem.checked = false;
-                })
-            }
-
-            if (categoryurl) {
-                //if browse category - redirect to category page
-                this.eventHub.publish('singleCategoryAdded', {
-                    data: {
-                        categoryUrl: checked ? parentcategoryurl : categoryurl,
-                        facetKey: 'category',
-                        facetValue: facetValue,
-                        pageType
-                    }
-                });
-
-                return;
-            }
-
-
-            if (type === 'SingleSelect') {
-                if (checked) {
-                    var data = [];
-                    checkedCategories.each(index => {
-                        data.push({
-                            facetFieldName: $(checkedCategories[index]).attr('name').replace('[]', ''),
-                            facetValue: $(checkedCategories[index]).attr('value'),
-                            facetType: $(checkedCategories[index]).attr('type'),
-                        })
-                    });
-                    this.eventHub.publish('facetsRemoved', { data });
-                } else {
-                    this.publishSingleFacetsChanged(facetKey, facetValue, pageType);
-                }
-            }
-
-            if (type === 'MultiSelect') {
-                if (!_.isEmpty(this._debounceHandle)) {
-                    this._debounceHandle.cancel();
-                }
-                this._debounceHandle = _.debounce(() => {
-                    this.publishMultiFacetChanged(facetKey, facetValue, pageType);
-                }, 350);
-
-                this._debounceHandle();
             }
         }
 

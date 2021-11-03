@@ -40,8 +40,8 @@ module Orckestra.Composer {
                         type: String,
                         required: false
                     },
-                    categorypage: {
-                        type: Boolean,
+                    categoryid: {
+                        type: String,
                         required: false
                     }
                 },
@@ -81,13 +81,18 @@ module Orckestra.Composer {
                     :class="{'form-check': !!node }"
                     :data-facetfieldname="node?.FieldName"
                     :data-facettype="node?.FacetType">
-  
-                    <a v-if="node?.FacetType == 'SingleSelect'" href="#" class="facet-link"
+                    <a v-if="node && node.CategoryId === categoryid" class="facet-link"
+                        :class="{'selected': node.IsSelected, 'highlighted': isHighlighted(node)}">
+                        <i class="fa fa-check"></i><span>{{node.Title}} ({{node.Quantity}})</span>
+                    </a>
+                    <a v-else-if="node?.FacetType == 'SingleSelect'" href="#" 
+                            class="facet-link"
                             :data-facetfieldname="node.FieldName"
                             :data-facetvalue="node.Value"
                             :title="node.Title"
                             :data-type="node.FacetType"
                             :data-selected="node.IsSelected"
+                            :data-categoryid="node.CategoryId"
                             :class="{'selected': node.IsSelected, 'highlighted': isHighlighted(node)}"
                             data-oc-click="singleFacetChanged">
                         <i class="fa fa-check"></i>
@@ -103,7 +108,7 @@ module Orckestra.Composer {
                         :nodeсlicked="nodeсlicked"
                         :showmoretext="showmoretext"
                         :showlesstext="showlesstext"
-                        :categorypage="categorypage"   />              
+                        :categoryid="categoryid"   />              
                   <div v-if="collapsedNodes.length" >
                   <div class="collapse" :id="'onDemandFacets-' + currentNode.FieldName">
                     <facets-tree
@@ -114,7 +119,7 @@ module Orckestra.Composer {
                         :nodeсlicked="nodeсlicked"
                         :showmoretext="showmoretext"
                         :showlesstext="showlesstext"
-                        :categorypage="categorypage"                  
+                        :categoryid="categoryid"                  
                     />
                     </div>
                     <a class="btn  btn-link  collapsed  font-weight-bold" 

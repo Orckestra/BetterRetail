@@ -54,7 +54,7 @@
                                             <strong>@Html.Localize("General", "L_All") @rootCategoryTreeItem.Title ({{CategoryFacetValuesTree.ChildNodes[0].Quantity}})</strong>
                                         </div>
                                         <facets-tree v-bind:parentnode="CategoryFacetValuesTree.ChildNodes[0]"
-                                                     v-bind:categoryPage="true"
+                                                     categoryId="@categoryBrowsingViewModel.CategoryId"
                                                      showMoreText="@Html.Localize("List-Search", "B_ShowMore")"
                                                      showLessText="@Html.Localize("List-Search", "B_ShowLess")">
                                         </facets-tree>
