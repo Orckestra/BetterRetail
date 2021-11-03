@@ -32,12 +32,12 @@
 </head>
 <body>
     <div data-oc-controller="Product.SelectedSearchFacets">
-        <div id="selectedFacets" class="card facets-card  mb-3">
+        <div id="selectedFacets" class="selected-facets card facets-card  mb-3">
             <div class="card-header">
                 @Html.Localize("List-Search", "L_Selection")
                 @if (selectedFacets.IsAllRemovable)
                 {
-                    <a class="float-right  small" data-qa="search-refiners-clear-all" href="#"
+                    <a class="float-right" data-qa="search-refiners-clear-all" href="#"
                        data-oc-click="clearSelectedFacets"
                        data-landingpageurl="@categoryBrowsingViewModel.LandingPageUrls[0]">
                         @Html.Localize("List-Search", "B_ClearAll")
@@ -45,7 +45,7 @@
                 }
             </div>
             <div class="card-body">
-                <ul class="selected-facets list-group">
+                <ul class="list-group">
                     @{
                         var index = 0;
                     }

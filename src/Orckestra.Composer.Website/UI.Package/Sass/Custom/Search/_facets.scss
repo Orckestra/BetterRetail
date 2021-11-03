@@ -1,28 +1,35 @@
 .selected-facets {
-   li { 
-       border: none;
-       padding: 0 0 2px 0;
+    .list-group {
+        li { 
+            border: none;
+            padding: 0 0 2px 0;
+        }
     }
 
     @include media-breakpoint-down(md) { 
+        .list-group {
+            display: inline-flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            padding: 0;
 
-        display: inline-flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        padding: 0;
-
-        li {
-            margin: 2px 3px 2px 3px;
-            padding: 2px;
-            background: $dark;
-            color: #fff;
-            font-size: 85%;
-            white-space: nowrap;
-            @include border-radius($badge-border-radius);
-            padding: $badge-padding-y $badge-padding-x;
-            .badge {
-                margin-left: 5px;
+            li {
+                margin: 2px 3px 2px 3px;
+                padding: 2px;
+                background: $dark;
+                color: #fff;
+                white-space: nowrap;
+                @include border-radius($badge-border-radius);
+                padding: $badge-padding-y $badge-padding-x;
+                .badge {
+                    margin-left: 5px;
+                }
             }
+        }
+
+        .card-header, .card-body {
+            padding: 0.5rem;
+            font-size: 85%;
         }
     }
 }

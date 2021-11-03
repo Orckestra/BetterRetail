@@ -41,12 +41,12 @@
 </head>
 <body>
     <div data-oc-controller="Product.SelectedSearchFacets">
-        <div id="selectedFacets" class="card facets-card mb-3">
+        <div id="selectedFacets" class="card facets-card mb-3 selected-facets">
             <div class="card-header">
                 @Html.Localize("List-Search", "L_Selection")
                 @if (SelectedFacets.IsAllRemovable)
                 {
-                    <a class="float-right  small" 
+                    <a class="float-right" 
                        data-qa="search-refiners-clear-all" 
                        href="#"
                        data-oc-click="clearSelectedFacets">
@@ -55,7 +55,7 @@
                 }
             </div>
             <div class="card-body">
-                <ul class="selected-facets list-group">
+                <ul class="list-group">
                     @foreach (var facet in SelectedFacets.Facets)
                     {
                         <li class="list-group-item d-flex justify-content-between align-items-center">
