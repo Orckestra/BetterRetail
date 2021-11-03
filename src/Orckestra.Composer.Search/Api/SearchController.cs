@@ -96,7 +96,6 @@ namespace Orckestra.Composer.Search.Api
         [ValidateModelState]
         public virtual async Task<IHttpActionResult> GetCategoryFacets(GetCategoryFacetsRequest request)
         {
-
             var param = new GetCategoryBrowsingViewModelParam
             {
                 CategoryId = request.CategoryId,
