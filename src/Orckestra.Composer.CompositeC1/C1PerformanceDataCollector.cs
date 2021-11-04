@@ -12,10 +12,23 @@ namespace Orckestra.Composer.CompositeC1
 
             if (context == null)
             {
-                HttpContext.Current = ContextPreservationHttpModule.PreservedHttpContext.Value;
+                var preservedValue = ContextPreservationHttpModule.PreservedHttpContext.Value;
+
+                if (preservedValue == null) return EmptyDisposable.Instance;
+
+                HttpContext.Current = preservedValue;
             }
 
             return Profiler.Measure(routineDescription);
+        }
+
+        private class EmptyDisposable : IDisposable
+        {
+            public static readonly EmptyDisposable Instance = new EmptyDisposable();
+
+            public void Dispose()
+            {
+            }
         }
     }
 }
