@@ -58,8 +58,6 @@ namespace Orckestra.Composer.Search.Repositories
                 FacetSettings = FacetConfigContext.GetFacetSettings()
             };
 
-            results.Facets = RemoveSelectedFacetsFromFacets(param);
-
             return results;
         }
 
@@ -76,29 +74,6 @@ namespace Orckestra.Composer.Search.Repositories
                 return await OvertureClient.SendAsync(returnSearchAvailableProductsByCategoryResponse).ConfigureAwait(false);
             }
             return null;
-        }
-
-        protected virtual List<Facet> RemoveSelectedFacetsFromFacets(RemoveSelectedFacetsFromFacetsParam param)
-        {
-            var strippedFacets = new List<Facet>();
-            var facets = param.Facets;
-            var selectedFacets = param.SelectedFacets;
-            var facetSettings = param.FacetSettings;
-
-            foreach (var facet in facets)
-            {
-                var facetSetting = facetSettings.FirstOrDefault(setting => setting.FieldName == facet.FieldName);
-
-                if (facetSetting?.FacetType == Facets.FacetType.MultiSelect ||
-                    facetSetting?.FacetType == Facets.FacetType.SingleSelect ||
-                    selectedFacets.Find(selectedFacet => selectedFacet.Name == facet.FieldName) == null ||
-                    facet.FieldName.StartsWith(SearchConfiguration.CategoryFacetFiledNamePrefix))
-                {
-                    strippedFacets.Add(facet);
-                }
-            }
-
-            return strippedFacets;
         }
 
         protected virtual SearchAvailableProductsBaseRequest CreateSearchRequest(SearchCriteria criteria)
