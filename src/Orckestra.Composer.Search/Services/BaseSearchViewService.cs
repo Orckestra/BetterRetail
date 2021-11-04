@@ -192,7 +192,6 @@ namespace Orckestra.Composer.Search.Services
 
             var imgDictionary = LineItemHelper.BuildImageDictionaryFor(param.ImageUrls);
 
-
             // Populate search results
             foreach (var resultItem in param.SearchResult.Documents)
             {

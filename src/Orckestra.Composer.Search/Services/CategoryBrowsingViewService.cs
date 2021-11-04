@@ -123,6 +123,8 @@ namespace Orckestra.Composer.Search.Services
             {
                 node.ChildNodes = node.ChildNodes.Where(c => c.CategoryId == param.CategoryId).ToList();
             }
+
+            node.ChildNodes?.ForEach(childNode => CleanSiblingFacets(param, childNode));
         }
 
         protected virtual List<string> GetLandingPageUrls(TreeNode<Category> startNode, GetCategoryBrowsingViewModelParam param)

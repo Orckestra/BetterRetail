@@ -191,7 +191,7 @@ namespace Orckestra.Composer.Search.Repositories
 
             var request = ProductRequestFactory.CreateProductRequest(criteria);
             request.Query.IncludeTotalCount = true;
-            request.Query.MaximumItems = 1; // 0 or null will return 100 documents
+            request.Query.MaximumItems = 0;
             request.Query.StartingIndex = 0;
             request.CultureName = criteria.CultureInfo.Name;
             request.SearchTerms = criteria.Keywords;

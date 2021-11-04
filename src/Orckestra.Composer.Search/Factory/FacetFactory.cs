@@ -140,7 +140,7 @@ namespace Orckestra.Composer.Search.Factory
                 }
             }
 
-            return nodes?.OrderByDescending(n => n.IsSelected).ThenByDescending(n => n.Quantity).ToList();
+            return nodes?.OrderByDescending(n => n.Quantity).ToList();
         }
     }
 }
