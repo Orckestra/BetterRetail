@@ -54,9 +54,9 @@
     <span>@facetValue.Title (@facetValue.Quantity)</span>
 }
 
-@helper SingleFacet()
+@helper SingleFacet(string valueBinding = "FacetValues")
 {
-    <div class="form-check mb-1" v-for="facetValue in facet.FacetValues" v-if="facetValue.Quantity">
+    <div class="form-check mb-1" v-for="facetValue in facet.@(valueBinding)" v-if="facetValue.Quantity">
         <a href="#"
            class="facet-link"
            v-bind:data-facetfieldname="facet.FieldName"
@@ -72,9 +72,9 @@
     </div>
 }
 
-@helper MultiSelectFacet()
+@helper MultiSelectFacet(string valueBinding = "FacetValues")
 {
-    <div v-for="facetValue in facet.FacetValues" v-bind:key="facetValue.Value" class="form-check mb-1">
+    <div v-for="facetValue in facet.@(valueBinding)" v-bind:key="facetValue.Value" class="form-check mb-1">
         <label class="m-0">
             <input class="form-check-input"
                    type="checkbox"
@@ -121,6 +121,30 @@
     <div v-if="facet.FacetType == '@(FacetType.Range)'">
         @RangeFacet()
     </div>
+    @ShowMoreLessFacets()
+}
+
+@helper ShowMoreLessFacets()
+{
+    <div v-if="facet.OnDemandFacetValues.length" v-bind:id="'onDemandFacets-' + facet.FieldName" class="collapse">
+        <div v-if="facet.FacetType == '@(FacetType.SingleSelect)'">
+            @SingleFacet("OnDemandFacetValues")
+        </div>
+        <div v-if="facet.FacetType == '@(FacetType.MultiSelect)'">
+            @MultiSelectFacet("OnDemandFacetValues")
+        </div>
+    </div>
+    @ShowMoreLessButton()
+}
+
+@helper ShowMoreLessButton()
+{
+    <a v-if="facet.OnDemandFacetValues.length" class="btn  btn-link  collapsed  font-weight-bold"
+       data-toggle="collapse"
+       v-bind:data-target="'#onDemandFacets-' + facet.FieldName">
+        <span class="more">@Html.Localize("List-Search", "B_ShowMore") <i class="fa fa-angle-down" /></span>
+        <span class="less">@Html.Localize("List-Search", "B_ShowLess") <i class="fa fa-angle-up" /></span>
+    </a>
 }
 
 @helper FacetsModalHeader()
