@@ -10,6 +10,8 @@
 ///<reference path='../Composer.MyAccount/Common/MyAccountStatus.ts' />
 ///<reference path='../Utils/PasswordCheckService.ts' />
 ///<reference path='../ErrorHandling/ErrorHandler.ts' />
+///<reference path='../Composer.Cart/OrderHistory/Services/OrderService.ts' />
+///<reference path='../Composer.Grocery/TimeSlotsHelper.ts' />
 
 module Orckestra.Composer {
     'use strict';
@@ -20,6 +22,7 @@ module Orckestra.Composer {
         private findOrderService: IFindOrderService;
         private membershipService: IMembershipService;
         private passwordCheckService: PasswordCheckService;
+        protected orderService: OrderService;
         protected fulfillmentService: IFulfillmentService = FulfillmentService.instance();
 
         private orderConfirmationCacheKey = 'orderConfirmationCacheKey';
@@ -28,16 +31,18 @@ module Orckestra.Composer {
 
         public initialize() {
             let self: OrderConfirmationController = this;
+            var culture: string = $('html').attr('lang');
             super.initialize();
             this.cacheProvider = CacheProvider.instance();
             this.findOrderService = new FindOrderService(this.eventHub);
+            this.orderService = new OrderService();
             this.membershipService = new MembershipService(new MembershipRepository());
             let form = this.context.container.find('form');
             this.passwordCheckService = new PasswordCheckService({
                 passwordPattern: RegExp(form.data('password-pattern')),
                 minimumLength: form.data('password-length')
             });
-            
+
             this.fulfillmentService.invalidateCache();
 
             this.cacheProvider.defaultCache.get<any>(this.orderCacheKey)
@@ -67,6 +72,10 @@ module Orckestra.Composer {
                             IsAuthenticated: false,
                             PasswordStrength: '',
                             ShowPassword: false,
+                            OrderDetails: null,
+                            OrderSummary: null,
+                            Fulfillment: null,
+                            TimeslotInfo: null,
                             ...result
                         },
                         mounted() {
@@ -76,6 +85,20 @@ module Orckestra.Composer {
 
                             self.IsAuthenticated().then(isAuthenticated => {
                                 this.IsAuthenticated = isAuthenticated;
+                            });
+
+                            let request = this.IsUserExist && this.IsAuthenticated ? self.orderService.getOrderByNumber(result.OrderNumber) :
+                                self.orderService.getGuestOrderByNumber(result.OrderNumber, result.CustomerEmail);
+
+                            request.then(orderData => {
+                                this.OrderDetails = orderData;
+                                this.OrderSummary = orderData.OrderSummary;
+                                this.TimeslotInfo = TimeSlotsHelper.getTimeSlotLocalizations(orderData.Shipments[0].TimeSlotReservation.ReservationDate,
+                                    orderData.Shipments[0].TimeSlot.SlotBeginTime, orderData.Shipments[0].TimeSlot.SlotEndTime, culture);
+                            });
+
+                            self.fulfillmentService.getFreshSelectedFulfillment().then(fulfillment => {
+                                this.Fulfillment = fulfillment;
                             });
                         },
                         computed: {
@@ -153,15 +176,15 @@ module Orckestra.Composer {
         }
 
         private createCustomer(FirstName: string, LastName: string, Email: string, Password: string): Q.Promise<any> {
-            let formData = {FirstName, LastName, Email, Password};
+            let formData = { FirstName, LastName, Email, Password };
             return this.membershipService.register(formData, null).then(result => {
                 this.eventHub.publish(MyAccountEvents[MyAccountEvents.AccountCreated], { data: result });
                 if (result.Status === MyAccountStatus[MyAccountStatus.Success]) {
                     this.eventHub.publish(MyAccountEvents[MyAccountEvents.LoggedIn], { data: result });
                 }
 
-               return result;
-            }).fail(({Errors: [error]}) => {
+                return result;
+            }).fail(({ Errors: [error] }) => {
                 ErrorHandler.instance().outputErrorFromCode(error.ErrorCode);
                 throw error;
             });

@@ -3,6 +3,7 @@ using System.Collections.Specialized;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Orckestra.Composer.Cart.Parameters.Order;
+using Orckestra.Composer.Cart.Requests;
 using Orckestra.Composer.Cart.Services.Order;
 using Orckestra.Composer.Cart.Utils;
 using Orckestra.Composer.Cart.ViewModels;
@@ -124,6 +125,47 @@ namespace Orckestra.Composer.Cart.Api
                 CustomerId = ComposerContext.CustomerId,
                 Scope = ComposerContext.Scope,
                 OrderNumber = id
+            });
+
+            return Ok(viewModel);
+        }
+
+        [HttpPost]
+        [ActionName("orderbynumber")]
+        [ValidateModelState]
+        public virtual async Task<IHttpActionResult> GetOrderByNumber(GetOrderRequest param)
+        {
+            if (param == null) { return BadRequest("No request found."); }
+
+            var viewModel = await OrderHistoryViewService.GetOrderDetailViewModelAsync(new GetCustomerOrderParam
+            {
+                OrderNumber = param.OrderNumber,
+                Scope = ComposerContext.Scope,
+                CultureInfo = ComposerContext.CultureInfo,
+                CountryCode = ComposerContext.CountryCode,
+                BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
+                CustomerId = ComposerContext.CustomerId
+            });
+
+            return Ok(viewModel);
+        }
+
+        [HttpPost]
+        [ActionName("guestorderbynumber")]
+        [ValidateModelState]
+        [AllowAnonymous]
+        public virtual async Task<IHttpActionResult> GetGuestOrderByNumber(GetGuestOrderRequest param)
+        {
+            if (param == null) { return BadRequest("No request found."); }
+
+            var viewModel = await OrderHistoryViewService.GetOrderDetailViewModelForGuestAsync(new GetOrderForGuestParam
+            {
+                OrderNumber = param.OrderNumber,
+                Scope = ComposerContext.Scope,
+                CultureInfo = ComposerContext.CultureInfo,
+                CountryCode = ComposerContext.CountryCode,
+                BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
+                Email = param.Email
             });
 
             return Ok(viewModel);

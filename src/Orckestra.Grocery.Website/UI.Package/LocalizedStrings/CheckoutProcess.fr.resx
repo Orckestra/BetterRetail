@@ -207,9 +207,6 @@
   <data name="L_Selected" xml:space="preserve">
     <value>CHOISI</value>
   </data>
-  <data name="L_EmailConfirmation" xml:space="preserve">
-    <value>Le courriel de confirmation sera envoyé à l'adresse courriel</value>
-  </data>
   <data name="L_ExpirationDate" xml:space="preserve">
     <value>Date d’expiration</value>
   </data>
@@ -252,9 +249,6 @@
   <data name="L_VerificationNumber" xml:space="preserve">
     <value>CVV</value>
   </data>
-  <data name="L_YourOrderNumber" xml:space="preserve">
-    <value>Votre commande #{0} est passée.</value>
-  </data>
   <data name="Quantity" xml:space="preserve">
     <value>Quantité</value>
   </data>
@@ -284,9 +278,6 @@
   </data>
   <data name="T_SignInCheckout" xml:space="preserve">
     <value>Se connecter</value>
-  </data>
-  <data name="T_ThankYou" xml:space="preserve">
-    <value>Merci</value>
   </data>
   <data name="T_SelectCreditCart" xml:space="preserve">
     <value>Sélectionner une carte de crédit</value>
