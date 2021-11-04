@@ -13,6 +13,7 @@ module Orckestra.Composer {
         protected membershipService: IMembershipService = new MembershipService(new MembershipRepository());
         public VueSignInHeader: Vue;
         public vueSignInHeaderMobile: Vue;
+        public VueSignInSticky: Vue;
 
         public initialize() {
 
@@ -41,6 +42,15 @@ module Orckestra.Composer {
                     });
                     this.vueSignInHeaderMobile = new Vue({
                         el: '#vueSignInHeaderMobile',
+                        data: vm,
+                        methods: {
+                            fullLogout() {
+                                self.fullLogout();
+                            }
+                        }
+                    });
+                    this.VueSignInSticky = new Vue({
+                        el: '#vueSignInSticky',
                         data: vm,
                         methods: {
                             fullLogout() {

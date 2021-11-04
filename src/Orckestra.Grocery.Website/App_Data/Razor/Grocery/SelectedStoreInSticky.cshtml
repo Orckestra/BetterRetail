@@ -2,7 +2,7 @@
 @functions {
     public override string FunctionDescription
     {
-        get { return "Selected Store In Header"; }
+        get { return "Selected Store In Sticky Menu"; }
     }
 }
 
@@ -12,9 +12,8 @@
 <head>
 </head>
 <body>
-    <div id="vueSelectedStoreInHeader" data-oc-controller="Grocery.SelectedStoreInHeader"
-         v-cloak="v-cloak" class="pull-left">
-        <ul class="navbar-nav p-0">
+    <section id="vueSelectedStoreInSticky"
+         v-cloak="v-cloak" class="ml-auto d-none d-lg-inline sticky-show">
             <li class="nav-item" v-if="!Store">
                 @if (CurrentPageNode.Id != HomePageNode.Id)
                 {
@@ -43,7 +42,6 @@
                     </div>
                 </div>
             </li>
-        </ul>
-    </div>
+    </section>
 </body>
 </html>
