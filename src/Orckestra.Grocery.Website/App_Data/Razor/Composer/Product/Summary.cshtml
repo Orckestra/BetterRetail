@@ -40,7 +40,7 @@
 
                 @ProductHelpers.AddToWishList()
                 @Partial("Product", "Images", Model)
-                @ProductBadges()
+                
             </div>
             <div class="col-md-6">
 
@@ -81,43 +81,26 @@
 </body>
 </html>
 
-@helper ProductBadges()
-{
-    var extendedVM = Model.AsExtensionModel<IGroceryProductViewModel>();
-
-    if (string.IsNullOrWhiteSpace(extendedVM.ProductBadges)) { return; }
-    var productBadges = extendedVM.ProductBadges.Split('|').ToList();
-
-    <ul class="product-details-badges list-unstyled">
-
-
-        @foreach (var item in productBadges)
-        {
-            var imageUrl = $"/UI.Package/Images/badge/{item}.svg";
-            <li><img src="@imageUrl" alt="@item" /></li>
-        }
-    </ul>
-}
-
 @helper DisplayName()
 {
-    if (IsWithoutVariants())
-    {
-        <h1>@Model.DisplayName</h1>
-    }
-    else
-    {
-        var displayNames = Model.Variants.GroupBy(v => v.DisplayName).ToList();
+  if (IsWithoutVariants())
+  {
+    <h1>@Model.DisplayName</h1>
+  }
+  else
+  {
+    var displayNames = Model.Variants.GroupBy(v => v.DisplayName).ToList();
 
-        foreach (var group in displayNames)
-        {
-            var ids = group.Select(v => v.Id).ToArray();
-            <h1 data-variant="@(String.Join(",", ids))" class="@SelectedVariantClass(ids)">@group.Key</h1>
-        }
-        <h1 data-variant="unavailable" class="d-none">@Model.DisplayName</h1>
+    foreach (var group in displayNames)
+    {
+      var ids = group.Select(v => v.Id).ToArray();
+      <h1 data-variant="@(String.Join(",", ids))" class="@SelectedVariantClass(ids)">@group.Key</h1>
     }
-}
+    <h1 data-variant="unavailable" class="d-none">@Model.DisplayName</h1>
+   }
+ }
 
+        
 @helper Sku()
 {
     <span class="d-none" property="sku">@Model.Sku</span>

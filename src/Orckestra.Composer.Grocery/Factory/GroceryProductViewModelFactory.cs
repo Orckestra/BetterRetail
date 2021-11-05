@@ -11,6 +11,8 @@ using Orckestra.Composer.Services;
 using Orckestra.Composer.Services.Lookup;
 using Orckestra.Composer.ViewModels;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Orckestra.Composer.Grocery.ViewModels;
 
 namespace Orckestra.Composer.Grocery.Factory
@@ -55,6 +57,8 @@ namespace Orckestra.Composer.Grocery.Factory
             var baseProductMeasure = param.Product.PropertyBag.ContainsKey("BaseProductMeasure") ?  param.Product.PropertyBag["BaseProductMeasure"].ToString() : string.Empty;
             var weightVolumeQuantityMeasure = param.Product.PropertyBag.ContainsKey("ProductUnitMeasure") ?  param.Product.PropertyBag["ProductUnitMeasure"].ToString(): string.Empty;
 
+            BuildProductBadgeValues(param, extendedVM, productViewModel);
+
             if (string.IsNullOrEmpty(baseProductMeasure) || string.IsNullOrEmpty(weightVolumeQuantityMeasure))
                 return productViewModel;
 
@@ -64,6 +68,22 @@ namespace Orckestra.Composer.Grocery.Factory
             productViewModel.Context["ConvertedVolumeMeasurement"] = convertedVolumeMeasurment;
             productViewModel.Context["BaseProductMeasure"] = extendedVM.BaseProductMeasure;
             return productViewModel;
+        }
+
+        protected virtual void BuildProductBadgeValues(CreateProductDetailViewModelParam param, IGroceryProductViewModel extendedVM, ProductViewModel productViewModel)
+        {
+            var propertyBagProductBadges = param.Product.PropertyBag.ContainsKey("ProductBadges") ? param.Product.PropertyBag["ProductBadges"].ToString().Split('|').ToList() : new List<string>();
+            if (propertyBagProductBadges.Any())
+            {
+                var extendVMProductBadges = extendedVM.ProductBadges.Split('|').ToList();
+                extendedVM.ProductBadgeValues = new Dictionary<string, string>();
+                var extendVMProductBadgesList = extendVMProductBadges.ToList();
+                for (var i = 0; i < propertyBagProductBadges.Count; i++)
+                {
+                    if (!extendedVM.ProductBadgeValues.ContainsKey(propertyBagProductBadges[i]))
+                        extendedVM.ProductBadgeValues.Add(propertyBagProductBadges[i], extendVMProductBadgesList[i]);
+                }
+            }
         }
     }
 }

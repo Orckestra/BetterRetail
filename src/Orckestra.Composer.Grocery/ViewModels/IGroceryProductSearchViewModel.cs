@@ -1,4 +1,5 @@
-﻿using Orckestra.Composer.Search.ViewModels;
+﻿using System.Collections.Generic;
+using Orckestra.Composer.Search.ViewModels;
 using Orckestra.Composer.ViewModels;
 
 namespace Orckestra.Composer.Grocery.ViewModels
@@ -9,5 +10,6 @@ namespace Orckestra.Composer.Grocery.ViewModels
         /// Gets or sets the product Badges
         /// </summary>
         string[] ProductBadges { get; set; }
+        Dictionary<string, string> ProductBadgeValues { get; set; }
     }
 }

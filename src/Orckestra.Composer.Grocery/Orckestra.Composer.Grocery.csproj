@@ -184,6 +184,7 @@
     <Compile Include="Requests\SetSelectedFulfillmentMethodTypeRequest.cs" />
     <Compile Include="Requests\SetSelectedStoreRequest.cs" />
     <Compile Include="Requests\SetSelectedTimeSlotRequest.cs" />
+    <Compile Include="Services\GrocerySearchViewService.cs" />
     <Compile Include="Services\SalesScopeStoreLocatorViewService.cs" />
     <Compile Include="Services\SalesScopeStoreViewService.cs" />
     <Compile Include="Services\GroceryOrderHistoryViewService.cs" />

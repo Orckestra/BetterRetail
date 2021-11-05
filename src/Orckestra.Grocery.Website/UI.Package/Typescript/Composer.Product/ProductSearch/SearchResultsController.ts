@@ -94,6 +94,10 @@ module Orckestra.Composer {
                             product.InWishList = !!wishListItem;
                             product.WishListItemId = wishListItem ? wishListItem.Id : undefined;
                             //product.UnitPriceAvailable = product.UnitPrice != null && product.UnitPriceDeclaration != null;
+                            
+                            product.ProductBadgeMap = Object.keys(product.ProductBadgeValues).map((key) =>
+                            {return {Key: key, Value: product.ProductBadgeValues[key]}; });
+                           
                             return product;
 
                         });

@@ -31,8 +31,8 @@
     <div v-if="'InWishList' in Product" class="product-tile-wishlist">
         @AddToWishList()
     </div>
-    <ul v-if="Product.ProductBadges" class="product-tile-badges list-unstyled">
-        <li v-for="item in Product.ProductBadges"><img v-bind:src="`/UI.Package/Images/badge/${item}.svg`" alt="{{item}}" /></li>
+    <ul v-if="Product.ProductBadgeMap" class="product-tile-badges list-unstyled">
+        <li v-for="item in Product.ProductBadgeMap"><img v-bind:src="`/UI.Package/Images/badge/${item.Key}.svg`"   v-bind:alt="item.Value"/></li>
     </ul>
 
 
