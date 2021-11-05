@@ -5,13 +5,13 @@
 
 @helper PromotedFacetValues()
 {
-    <div v-if="PromotedFacetValues.Count" class="card mb-3 facets-card">
+    <div v-if="PromotedFacetValues.length" class="card mb-3 facets-card">
         <div class="card-body">
-            <div v-for="facetValue in PromotedFacetValues" v-if="facet.Quantity">
-                <div v-if="facet.FacetType == @(FacetType.SingleSelect)">
+            <div v-for="facetValue in PromotedFacetValues" v-if="facetValue.Quantity">
+                <div v-if="facetValue.FacetType == '@(FacetType.SingleSelect)'">
                     @SinglePromotedFacet()
                 </div>
-                <div v-if="facet.FacetType == @(FacetType.MultiSelect)">
+                <div v-if="facetValue.FacetType == '@(FacetType.MultiSelect)'">
                     @MultiSelectPromotedFacet()
                 </div>
             </div>
