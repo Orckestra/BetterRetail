@@ -53,8 +53,11 @@ module Orckestra.Composer {
                         this.CategoryFacetValuesTree = data.FacetSettings.CategoryFacetValuesTree;
                         this.Facets = data.ProductSearchResults.Facets;
                     });
+                },
+                updated() {
+                    self.disposeRangeSlider();
+                    self.initializeRangeSlider();
                 }
-
             });
         }
 
@@ -76,6 +79,10 @@ module Orckestra.Composer {
 
         public dispose() {
             super.dispose();
+            this.disposeRangeSlider();
+        }
+
+        private disposeRangeSlider() {
             Object.keys(this.sliderServicesInstances).forEach(sliderServiceKey => this.sliderServicesInstances[sliderServiceKey].dispose());
         }
 
@@ -142,7 +149,6 @@ module Orckestra.Composer {
         }
 
         private initializeServices() {
-            var selectedFacets: IHashTable<string|string[]>;
             var correctedSearchTerm: string = this.context.container.attr('data-corrected-search-term');
             var categoryId: string = this.context.container.attr('data-categoryId');
 
@@ -152,11 +158,15 @@ module Orckestra.Composer {
                 correctedSearchTerm: correctedSearchTerm,
                 categoryId
             });
-            selectedFacets = this._searchService.getSelectedFacets();
 
+            this.initializeRangeSlider();
+        }
+
+        private initializeRangeSlider() {
+            const selectedFacets: IHashTable<string|string[]> = this._searchService.getSelectedFacets();
             this.context.container.find('[data-facettype="Range"]').each((index, element) => {
-                var facetFieldName = $(element).data('facetfieldname');
-                var serviceInstance = new SliderService($(element), this.eventHub);
+                const facetFieldName = $(element).data('facetfieldname');
+                const serviceInstance = new SliderService($(element), this.eventHub);
 
                 serviceInstance.initialize(selectedFacets[facetFieldName]);
                 this.sliderServicesInstances[facetFieldName] = serviceInstance;
