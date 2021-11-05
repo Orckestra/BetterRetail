@@ -121,7 +121,9 @@
     <div v-if="facet.FacetType == '@(FacetType.Range)'">
         @RangeFacet()
     </div>
-    @ShowMoreLessFacets()
+    <div v-if="facet.FacetType != '@(FacetType.Range)'">
+        @ShowMoreLessFacets()
+    </div>
 }
 
 @helper ShowMoreLessFacets()

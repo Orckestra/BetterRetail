@@ -69,7 +69,7 @@ module Orckestra.Composer {
 
             this._debounceHandle = _.debounce(() => {
                 this.publishMultiFacetChanged(facetKey, facetValue, UrlHelper.resolvePageType())
-            }, 250);
+            }, 800);
 
             this._debounceHandle();
         }
