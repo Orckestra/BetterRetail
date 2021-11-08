@@ -52,9 +52,7 @@
                     <div class="mb-1">
                         <strong>@Html.Localize("General", "L_All") @SearchRequestContext.SearchQuery ({{CategoryFacetValuesTree.TotalCount}})</strong>
                     </div>
-                    <facets-tree v-for="node in CategoryFacetValuesTree.ChildNodes" 
-                                 v-bind:key="node.CategoryId" 
-                                 v-bind:node="node"
+                    <facets-tree v-bind:parentnode="CategoryFacetValuesTree" 
                                  showMoreText="@Html.Localize("List-Search", "B_ShowMore")"
                                  showLessText="@Html.Localize("List-Search", "B_ShowLess")">
                     </facets-tree>

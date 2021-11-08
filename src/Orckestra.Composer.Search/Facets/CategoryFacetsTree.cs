@@ -5,6 +5,11 @@ namespace Orckestra.Composer.Search.Facets
     public class CategoryFacetValuesTree
     {
         public long TotalCount { get; set; }
+
+        public int MaxCollapsedCount { get; set; }
+
+        public int MaxExpandedCount { get; set; }
+
         public List<CategoryFacetValuesTreeNode> ChildNodes { get; set; }
     }
 

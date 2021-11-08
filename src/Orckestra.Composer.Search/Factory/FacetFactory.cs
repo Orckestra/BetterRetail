@@ -65,6 +65,8 @@ namespace Orckestra.Composer.Search.Factory
             if (rootFacetSetting != null)
             {
                 tree.ChildNodes = GetTreeNodes(rootFacetSetting, facets, selectedFacets, categoriesRoot, culture, counts);
+                tree.MaxCollapsedCount = rootFacetSetting.MaxCollapsedValueCount;
+                tree.MaxExpandedCount = rootFacetSetting.MaxExpendedValueCount;
                 BuildTreeNodes(categoryFacetSettings, rootFacetSetting.FieldName, facets, selectedFacets, tree.ChildNodes, categoryTree, counts, culture);
             }
 
