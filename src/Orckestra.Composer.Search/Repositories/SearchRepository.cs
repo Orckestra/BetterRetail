@@ -58,8 +58,6 @@ namespace Orckestra.Composer.Search.Repositories
                 FacetSettings = FacetConfigContext.GetFacetSettings()
             };
 
-            results.Facets = RemoveSelectedFacetsFromFacets(param);
-
             return results;
         }
 
@@ -76,28 +74,6 @@ namespace Orckestra.Composer.Search.Repositories
                 return await OvertureClient.SendAsync(returnSearchAvailableProductsByCategoryResponse).ConfigureAwait(false);
             }
             return null;
-        }
-
-        protected virtual List<Facet> RemoveSelectedFacetsFromFacets(RemoveSelectedFacetsFromFacetsParam param)
-        {
-            var strippedFacets = new List<Facet>();
-            var facets = param.Facets;
-            var selectedFacets = param.SelectedFacets;
-            var facetSettings = param.FacetSettings;
-
-            foreach (var facet in facets)
-            {
-                var facetSetting = facetSettings.FirstOrDefault(setting => setting.FieldName == facet.FieldName);
-
-                if (facetSetting?.FacetType == Facets.FacetType.MultiSelect || 
-                    selectedFacets.Find(selectedFacet => selectedFacet.Name == facet.FieldName) == null ||
-                    facet.FieldName.StartsWith(SearchConfiguration.CategoryFacetFiledNamePrefix))
-                {
-                    strippedFacets.Add(facet);
-                }
-            }
-
-            return strippedFacets;
         }
 
         protected virtual SearchAvailableProductsBaseRequest CreateSearchRequest(SearchCriteria criteria)
@@ -190,15 +166,19 @@ namespace Orckestra.Composer.Search.Repositories
 
             var request = ProductRequestFactory.CreateProductRequest(criteria);
             request.Query.IncludeTotalCount = true;
-            request.Query.MaximumItems = 1; // 0 or null will return 100 documents
+            request.Query.MaximumItems = 0;
             request.Query.StartingIndex = 0;
             request.CultureName = criteria.CultureInfo.Name;
             request.SearchTerms = criteria.Keywords;
             request.ScopeId = criteria.Scope;
             request.IncludeFacets = criteria.IncludeFacets;
-            request.Facets = FacetConfigContext.GetFacetSettings()
+          
+            var facetsForCounts = FacetConfigContext.GetFacetSettings()
                 .Where(fs => fs.FieldName.StartsWith(SearchConfiguration.CategoryFacetFiledNamePrefix))
-                .Select(f => f.FieldName.Replace("_Facet", "")).ToList();
+                .Select(f => f.FieldName.Replace("_Facet", ""));
+            var facets = GetFacetFieldNameToQuery(criteria);
+            facets.AddRange(facetsForCounts);
+            request.Facets = facets;
             if (criteria.SelectedFacets != null)
             {
                 request.FacetPredicates = criteria.SelectedFacets

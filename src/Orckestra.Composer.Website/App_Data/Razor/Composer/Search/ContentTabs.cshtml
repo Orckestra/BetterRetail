@@ -331,9 +331,23 @@
         </div>
         <div class="col-12">
             <div class="row">
-                <div id="leftCol" class="col-12 col-lg-3  facets-col collapse">
-                    @Function("Composer.Search.SelectedSearchFacets")
-                    @Function("Composer.Search.Facets")
+                <div id="leftCol" class="col-12 col-lg-3  facets-col">
+
+                    @Function("Composer.Search.SelectedFacets")
+
+                    <div id="facetsModal" class="facets-modal">
+                        <div class="facets-modal-dialog">
+                            <div class="facets-modal-content">
+                                @FacetHelpers.FacetsModalHeader()
+                                <div class="facets-modal-body">
+                                    <div class="overlay"></div>
+                                    @Function("Composer.Search.Facets")
+                                </div>
+                                @FacetHelpers.FacetsModalFooter()
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
                 @if (ProductSearchResults.TotalCount > 0)
                 {
@@ -397,9 +411,9 @@
 {
     <button type="button"
             class="btn  btn-outline-secondary btn-dropdown  w-100"
-            data-toggle="collapse"
-            data-target="#leftCol" aria-expanded="false">
-        @Html.Localize("List-Search", "B_Refine")
+            data-toggle="modal"
+            data-target="#facetsModal" aria-expanded="false">
+        @Html.Localize("List-Search", "B_FilterBy")
         <span class="fa  fa-angle-down"></span>
     </button>
 }

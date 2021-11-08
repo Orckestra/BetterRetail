@@ -1,8 +1,84 @@
+.selected-facets {
+    .list-group {
+        li { 
+            border: none;
+            padding: 0 0 2px 0;
+        }
+    }
+
+    @include media-breakpoint-down(md) { 
+        .list-group {
+            display: inline-flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            padding: 0;
+
+            li {
+                margin: 2px 3px 2px 3px;
+                padding: 2px;
+                background: $dark;
+                color: #fff;
+                white-space: nowrap;
+                @include border-radius($badge-border-radius);
+                padding: $badge-padding-y $badge-padding-x;
+                .badge {
+                    margin-left: 5px;
+                }
+            }
+        }
+
+        .card-header, .card-body {
+            padding: 0.5rem;
+            font-size: 85%;
+        }
+    }
+}
+
 .facets-card {
+    
+    .card-header a {
+        display: block;
+        i { float: right; }
+        .down {
+            display: inline;;
+        }
+        .up {
+            display: none;
+        }
+
+        &.collapsed {
+            .down {
+                display: none;
+            }
+
+            .up {
+                display: inline;;
+            }
+        }
+    }
+
     .card-body {
         padding-left: $card-spacer-x / 1.5;
         padding-right: $card-spacer-x / 1.5;
     }
+
+    .fa-check {
+        display: none;
+        position: absolute;
+        left: 0;
+    }
+
+    .facet-link {
+        &.selected {
+            &.highlighted {
+                font-weight: bold;
+            }
+            .fa-check {
+                display: inline;
+            }
+        }
+    }
+
 }
 
 .search-results {
@@ -32,3 +108,99 @@
     }
 }
 
+.facets-modal {
+
+    .facets-modal-header, 
+    .facets-modal-footer  {
+        display: none;
+    }
+
+    @include media-breakpoint-down(md) { 
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        z-index: 1031;
+        background: #fff;
+        outline:0;
+        width: 100%;
+        height: 100%;
+        z-index: 1041;
+        &.show {
+            display: block;
+        }
+
+        .facets-modal-dialog {
+            position: relative;
+            pointer-events: none;
+            width: auto;
+            flex-direction: column;
+            height: 100%;
+            display: flex;
+            max-height: subtract(100%, $modal-dialog-margin * 2);
+        }
+
+        .facets-modal-content {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            width: 100%;
+            pointer-events: auto;
+            max-height: subtract(100vh, $modal-dialog-margin * 2);
+        }
+
+        .facets-modal-header {
+            flex-shrink: 0;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            padding: 10px;
+
+            .close {
+                padding: 20px;
+            }
+        }
+
+        .facets-modal-body {
+            position: relative;
+            overflow-y: auto;
+            flex: 1 1 auto;
+           //TODO min-height: subtract(100vh, 120px);
+
+            .overlay {
+                display: none;
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background: #fff;
+                opacity: 0.5; 
+                z-index: 1042;
+            }
+
+            .card {
+                margin-bottom: 0 !important;
+                border-bottom: 0;
+            }
+
+        }
+
+        .facets-modal-footer {
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+    }
+
+    &.loading {
+        .overlay {
+            display: block;
+        }
+    }
+}

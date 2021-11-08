@@ -40,15 +40,15 @@ module Orckestra.Composer {
                         type: String,
                         required: false
                     },
-                    categorypage: {
-                        type: Boolean,
+                    categoryid: {
+                        type: String,
                         required: false
                     }
                 },
 
                 computed: {
                     currentNode() {
-                        return this.node ?  this.node: this.parentnode;
+                        return this.node ? this.node: this.parentnode;
                     },
                     hasChildren() {
                         const { ChildNodes } = this.currentNode;
@@ -64,56 +64,41 @@ module Orckestra.Composer {
                     },
                     isSelectedInColapsed() {
                         const { ChildNodes, MaxCollapsedCount } = this.currentNode;
-                        return ChildNodes.findIndex((n:any) => n.IsSelected) > MaxCollapsedCount;
+                        return ChildNodes.findIndex((n:any) => n.IsSelected) >= MaxCollapsedCount;
                     }
                 },
                 methods: {
-
+                    isHighlighted(facet) {
+                        return facet.IsSelected && (!facet.ChildNodes || facet.ChildNodes.every(child => !child.IsSelected));
+                    }
                 },
                 mounted() {
 
                 },
                 template: `
                  
-                <div class="form-check mb-1"
+                <div class="mb-1"
+                    :class="{'form-check': !!node }"
                     :data-facetfieldname="node?.FieldName"
                     :data-facettype="node?.FacetType">
-                    <label v-if="node" class="form-check-label" v-bind:class="{'font-weight-bold': node.IsSelected}">
-                        <input v-if="categorypage"
-                            class="form-check-input"
-                            type="radio"
-                            :value="node.Value"
-                            :checked="node.IsSelected"
-                            :data-selected="node.IsSelected"
+                    <a v-if="node && node.CategoryId === categoryid" class="facet-link"
+                        :class="{'selected': node.IsSelected, 'highlighted': isHighlighted(node)}">
+                        <i class="fa fa-check"></i><span>{{node.Title}} ({{node.Quantity}})</span>
+                    </a>
+                    <a v-else-if="node?.FacetType == 'SingleSelect'" href="#" 
+                            class="facet-link"
+                            :data-facetfieldname="node.FieldName"
+                            :data-facetvalue="node.Value"
+                            :title="node.Title"
                             :data-type="node.FacetType"
-                            :data-parentcategoryurl="parentnode?.CategoryUrl"
-                            :data-categoryurl="node.CategoryUrl"
-                            v-on:click="(e) => nodeсlicked(e, node.IsSelected)" />
-
-                        <input v-else-if="node.FacetType == 'SingleSelect'"
-                            class="form-check-input"
-                            type="radio"
-                            :name="node.FieldName"
-                            :value="node.Value"
-                            :checked="node.IsSelected"
                             :data-selected="node.IsSelected"
-                            :data-type="node.FacetType"
-                            v-on:click="(e) => nodeсlicked(e, node.IsSelected)" />
+                            :data-categoryid="node.CategoryId"
+                            :class="{'selected': node.IsSelected, 'highlighted': isHighlighted(node)}"
+                            data-oc-click="singleFacetChanged">
+                        <i class="fa fa-check"></i>
+                        <span>{{node.Title}} ({{node.Quantity}})</span>
+                    </a>
 
-                        <input v-else-if="node.FacetType == 'MultiSelect'"
-                            class="form-check-input"
-                            type="checkbox"
-                            :name="node.FieldName + '[]'"
-                            :value="node.Value"
-                            :data-selected="node.IsSelected"
-                            :checked="node.IsSelected"
-                            :data-type="node.FacetType"
-                            v-on:click="(e) => nodeсlicked(e, node.IsSelected)" />
-
-                        {{node.Title}} <span>({{node.Quantity}})</span>
-
-                    </label>
-  
                 <div v-if="hasChildren">
                   <facets-tree
                      v-for="childNode in visibleNodes"
@@ -123,7 +108,7 @@ module Orckestra.Composer {
                         :nodeсlicked="nodeсlicked"
                         :showmoretext="showmoretext"
                         :showlesstext="showlesstext"
-                        :categorypage="categorypage"   />              
+                        :categoryid="categoryid"   />              
                   <div v-if="collapsedNodes.length" >
                   <div class="collapse" :id="'onDemandFacets-' + currentNode.FieldName">
                     <facets-tree
@@ -134,7 +119,7 @@ module Orckestra.Composer {
                         :nodeсlicked="nodeсlicked"
                         :showmoretext="showmoretext"
                         :showlesstext="showlesstext"
-                        :categorypage="categorypage"                  
+                        :categoryid="categoryid"                  
                     />
                     </div>
                     <a class="btn  btn-link  collapsed  font-weight-bold" 

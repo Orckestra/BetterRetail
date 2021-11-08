@@ -24,33 +24,37 @@ module Orckestra.Composer {
         public removeSelectedFacet(actionContext: IControllerActionContext) {
             var removeFacetButton = actionContext.elementContext;
             var categoryTreeRef = removeFacetButton.data('categorytree');
+            var facetLandingPageUrl = removeFacetButton.data('facetlandingpageurl');
 
             actionContext.event.preventDefault();
             actionContext.event.stopPropagation();
 
-            if (categoryTreeRef) {
-                //remove also all child categories
-                var parentCategoryElement = $('#categoriesTree').find('[data-facetfieldname="' + categoryTreeRef + '"]');
-                var checkedInputs = parentCategoryElement.find('input:checked');
-                var data = [];
-                checkedInputs.each(index => {
-                    data.push({
-                        facetFieldName: $(checkedInputs[index]).attr('name').replace('[]',''),
-                        facetValue: $(checkedInputs[index]).attr('value'),
-                        facetType: $(checkedInputs[index]).attr('type'),
-                    })
-                });
-                this.eventHub.publish('facetsRemoved', { data });
-            } else {
+            if(facetLandingPageUrl || !categoryTreeRef) {
                 this.eventHub.publish('facetRemoved', {
                     data: {
                         facetFieldName: removeFacetButton.data('facetfieldname'),
                         facetValue: removeFacetButton.data('facetvalue'),
                         facetType: removeFacetButton.data('facettype'),
-                        facetLandingPageUrl: removeFacetButton.data('facetlandingpageurl')
+                        facetLandingPageUrl: facetLandingPageUrl
                     }
                 });
-            }          
+            } else {
+                if (categoryTreeRef) {
+                    //remove also all child categories
+                    var parentCategoryElement = $('#categoriesTree').find('[data-facetfieldname="' + categoryTreeRef + '"]');
+                    var checkedItems = parentCategoryElement.find('.selected');
+                    var data = [];
+                    checkedItems.each(index => {
+                        let el = $(checkedItems[index]);
+                        data.push({
+                            facetFieldName: el.data('facetfieldname'),
+                            facetValue: el.data('facetvalue'),
+                            facetType: el.data('type'),
+                        })
+                    });
+                    this.eventHub.publish('facetsRemoved', { data });
+                }
+            }
         }
 
         public clearSelectedFacets(actionContext: IControllerActionContext) {
