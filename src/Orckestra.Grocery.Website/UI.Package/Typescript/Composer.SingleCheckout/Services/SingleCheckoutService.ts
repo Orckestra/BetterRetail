@@ -315,7 +315,7 @@ module Orckestra.Composer {
                 cart.ShippingAddress.PostalCode &&
                 cart.ShippingAddress.PhoneNumber;
 
-            let methodType = cart.ShippingMethod.FulfillmentMethodTypeString;
+            let methodType = cart.ShippingMethod.FulfillmentMethodType;
             let isShipToHome = methodType === FulfillmentMethodTypes.Shipping ||
                 methodType === FulfillmentMethodTypes.Delivery;
             let isPickUp = methodType === FulfillmentMethodTypes.PickUp;

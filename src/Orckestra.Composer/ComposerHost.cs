@@ -294,6 +294,8 @@ namespace Orckestra.Composer
             JsonSettings.Converters
                 .Add(new ViewModelSerialization(MetadataRegistry));
 
+            JsonSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
+
             ViewEngine = new HandlebarsViewEngine(Resolve<ICacheProvider>());
 
             _aspNetConfigurationManager.Configure(

@@ -10,7 +10,7 @@ module Orckestra.Composer {
     export class ShippingSingleCheckoutController extends Orckestra.Composer.BaseSingleCheckoutController {
 
         protected customerService: ICustomerService = new CustomerService(new CustomerRepository());
-       
+
 
         public initialize() {
             super.initialize();
@@ -36,12 +36,12 @@ module Orckestra.Composer {
                             this.IsStoreSelected && this.IsTimeSlotReserved;
                     },
                     SelectedMethodTypeString() {
-                        return this.Cart.ShippingMethod ? this.Cart.ShippingMethod.FulfillmentMethodTypeString : '';
+                        return this.Cart.ShippingMethod ? this.Cart.ShippingMethod.FulfillmentMethodType : '';
                     },
                     SelectedMethodType() {
                         return this.Cart.ShippingMethod &&
                             this.ShippingMethodTypes.find(
-                                type => type.FulfillmentMethodTypeString === this.Cart.ShippingMethod.FulfillmentMethodTypeString
+                                type => type.FulfillmentMethodType === this.Cart.ShippingMethod.FulfillmentMethodType
                             );
                     },
                     IsShippingMethodType() {

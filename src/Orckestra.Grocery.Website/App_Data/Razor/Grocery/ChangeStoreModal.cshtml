@@ -63,8 +63,8 @@
     <div v-if="SelectedFulfillment.FulfillmentMethodType" class="mb-2">
         <div class="border p-2">
             <h5 class="m-0">
-                <i class="fa mr-1" v-bind:class="SelectedFulfillment.FulfillmentMethodType === 1 ? 'fa-store-alt' : 'fa-truck'" />
-                <span v-if="SelectedFulfillment.FulfillmentMethodType == 1">@Html.Localize("Grocery", "T_FulfillmentMethodTitle_PickUp")</span>
+                <i class="fa mr-1" v-bind:class="SelectedFulfillment.FulfillmentMethodType === '@(FulfillmentMethodType.PickUp)' ? 'fa-store-alt' : 'fa-truck'" />
+                <span v-if="SelectedFulfillment.FulfillmentMethodType == '@(FulfillmentMethodType.PickUp)'">@Html.Localize("Grocery", "T_FulfillmentMethodTitle_PickUp")</span>
                 <span v-else="else">@Html.Localize("Grocery", "T_FulfillmentMethodTitle_Shipping")</span>
             </h5>
         </div>
@@ -154,21 +154,21 @@
             <input class="form-check-input" type="radio"
                    v-bind:value="shippingMethod.FulfillmentMethodType"
                    name="ShippingMethod"
-                   v-bind:Id="shippingMethod.FulfillmentMethodTypeString + '-radio'"
+                   v-bind:Id="shippingMethod.FulfillmentMethodType + '-radio'"
                    v-model="SelectedFulfillment.FulfillmentMethodType"
                    xmlns:v-bind="v-bind"
                    xmlns:v-on="v-on"
                    v-on:change="selectFulfillmentMethod" />
             <label class="form-check-label d-block"
-                   v-bind:for="shippingMethod.FulfillmentMethodTypeString + '-radio'">
+                   v-bind:for="shippingMethod.FulfillmentMethodType + '-radio'">
                 <strong>
                     <i class="fa mr-1"
-                       v-bind:class="shippingMethod.FulfillmentMethodTypeString === '@(FulfillmentMethodType.PickUp)' ? 'fa-store-alt' : 'fa-truck'" />
-                    <span v-if="shippingMethod.FulfillmentMethodType == 1">@Html.Localize("Grocery", "T_FulfillmentMethodTitle_PickUp")</span>
+                       v-bind:class="shippingMethod.FulfillmentMethodType === '@(FulfillmentMethodType.PickUp)' ? 'fa-store-alt' : 'fa-truck'" />
+                    <span v-if="shippingMethod.FulfillmentMethodType == '@(FulfillmentMethodType.PickUp)'">@Html.Localize("Grocery", "T_FulfillmentMethodTitle_PickUp")</span>
                     <span v-else="else">@Html.Localize("Grocery", "T_FulfillmentMethodTitle_Shipping")</span>
                 </strong>
                 <p class="mb-0 text-height-0">
-                    <small v-if="shippingMethod.FulfillmentMethodTypeString === '@(FulfillmentMethodType.PickUp)'">
+                    <small v-if="shippingMethod.FulfillmentMethodType === '@(FulfillmentMethodType.PickUp)'">
                         @Html.Localize("Grocery", "L_ShippingMethodDescriptionPickUp")
                     </small>
                     <small v-else="else">
