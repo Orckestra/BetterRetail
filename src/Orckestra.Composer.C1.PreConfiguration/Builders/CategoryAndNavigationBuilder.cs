@@ -7,6 +7,7 @@ using Composite.Core;
 using Composite.Data;
 using Composite.Data.ProcessControlled.ProcessControllers.GenericPublishProcessController;
 using Composite.Data.Types;
+using Composite.Data.Validation.Validators;
 using Orckestra.Composer.CompositeC1.DataTypes.Navigation;
 using Orckestra.Composer.CompositeC1.Pages;
 using Orckestra.Composer.CompositeC1.Services;
@@ -15,6 +16,7 @@ using Orckestra.Composer.Repositories;
 using Orckestra.Composer.Utils;
 using Orckestra.ExperienceManagement.Configuration;
 using Orckestra.ExperienceManagement.Configuration.DataTypes;
+using Orckestra.Overture.ServiceModel;
 using Orckestra.Overture.ServiceModel.Products;
 
 namespace Orckestra.Composer.CompositeC1.Builders
@@ -137,18 +139,21 @@ namespace Orckestra.Composer.CompositeC1.Builders
                                                                select new { cp.PageId, cp.CategoryId }).ToDictionary(d => d.CategoryId, d => d.PageId);
 
                         var parentMenuId = default(Guid?);
-                        if(localizedDisplayNames != null) 
+                        if(localizedDisplayNames != null)
                         {
+                            var displayNames = new LocalizedString(localizedDisplayNames);
+
                             var mainMenu = DataFacade.BuildNew<MainMenu>();
                             parentMenuId = mainMenu.Id = GuidUtility.Create(NavigationNamespaces.MainMenuNamespaceId, "Root");
                             mainMenu.PageId = websiteId;
-                            mainMenu.DisplayName = (localizedDisplayNames?.ContainsKey(culture.Name) ?? false)
-                                ? localizedDisplayNames[culture.Name]
-                                : string.Empty;
+                            mainMenu.DisplayName = GetLocalizedDisplayName("Root", displayNames, culture.Name);
                             mainMenu.CssClassName = string.Empty;
                             mainMenu.ParentId = null;
                             mainMenu.Url = $"~/page({websiteId})";
                             mainMenu.PublicationStatus = GenericPublishProcessController.Draft;
+
+                            TruncateStrings("Root", mainMenu);
+
                             mainMenu = DataFacade.AddNew(mainMenu);
 
                             mainMenu.PublicationStatus = GenericPublishProcessController.Published;
@@ -162,6 +167,46 @@ namespace Orckestra.Composer.CompositeC1.Builders
                 }
             }
         }
+
+        private static void TruncateStrings(string categoryId, MainMenu mainMenu)
+        {
+            var propertyInfo = mainMenu.GetType().GetProperty(nameof(mainMenu.DisplayName));
+            propertyInfo?.GetCustomAttributes<StringSizeValidatorAttribute>()?.ToList().ForEach(customAttribute =>
+            {
+                if (customAttribute.UpperBound < mainMenu.DisplayName?.Length)
+                {
+                    Log.LogWarning(nameof(CategoryAndNavigationBuilder), 
+                        $"The Property '{propertyInfo.Name}' in category '{categoryId}' has been truncated because it exceeds the maximum length allowed ({customAttribute.UpperBound})");
+                }
+            });
+        }
+
+
+        private static readonly Func<string, LocalizedString, string, string> GetLocalizedDisplayName = (categoryId, displayName, culture) =>
+        {
+            var value = displayName.GetLocalizedValue(culture);
+            if (value != null) return value;
+
+            var locale = displayName.FirstOrDefault();
+            if (locale.Value != null)
+            {
+                Log.LogWarning(nameof(CategoryAndNavigationBuilder),
+                    $"Category '{categoryId}' does not have a translation for DisplayName in '{culture}' culture. The translation from locale '{locale.Key}' was returned");
+                return locale.Value;
+            }
+            if (categoryId != null)
+            {
+                Log.LogWarning(nameof(CategoryAndNavigationBuilder),
+                    $"Category '{categoryId}' does not have a translation for DisplayName. CategoryId was returned");
+
+                return categoryId;
+            }
+
+            Log.LogWarning(nameof(CategoryAndNavigationBuilder),
+                $"Category 'null' does not have a translation for DisplayName. An empty string was returned.");
+
+            return string.Empty;
+        };
 
 
         internal class MenuBuilder
@@ -195,11 +240,13 @@ namespace Orckestra.Composer.CompositeC1.Builders
                         var mainMenu = DataFacade.BuildNew<MainMenu>();
                         mainMenu.Id = GuidUtility.Create(NavigationNamespaces.MainMenuNamespaceId, cat.Id);
                         mainMenu.PageId = WebsiteId;
-                        mainMenu.DisplayName = cat.DisplayName.GetLocalizedValue(Culture);
+                        mainMenu.DisplayName = GetLocalizedDisplayName(cat.Id, cat.DisplayName, Culture);
                         mainMenu.CssClassName = string.Empty;
                         mainMenu.ParentId = parentMainMenuId;
                         mainMenu.Url = $"~/page({pageId})";
                         mainMenu.PublicationStatus = GenericPublishProcessController.Draft;
+
+                        TruncateStrings(cat.Id, mainMenu);
 
                         mainMenu = DataFacade.AddNew(mainMenu);
 
