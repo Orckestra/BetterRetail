@@ -43,7 +43,8 @@ module Orckestra.Composer {
                         return this.Mode.SignIn === SignInModes.SigningIn;
                     },
                     ShowSignInButton() {
-                        return this.FulfilledShipping && this.SigningInMode;
+                        let fulfilled = self.checkoutService.customerFulfilled(this.Cart);
+                        return this.FulfilledShipping && this.SigningInMode && fulfilled;
                     }
                 },
                 methods: {

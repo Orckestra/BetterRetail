@@ -25,14 +25,11 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
 <head>
-    <script type="text/javascript">
-        var productDetailContext = '@Model.JsonContext';
-    </script>
 </head>
 <body>
     <div data-oc-controller="Product.ProductDetail"
          data-productid="@Model.ProductId"
-         data-context-var="productDetailContext"
+         data-context="@Model.JsonContext"
          class="product-details mt-6">
         <div class="row">
 
@@ -47,11 +44,12 @@
                 @BrandName()
                 @DisplayName()
 
-				@if(!string.IsNullOrWhiteSpace(Model.Description)) {
-					<div property="description" class="description mb-2">
-						@Html.Raw(Model.Description)
-					</div>
-				}
+                @if (!string.IsNullOrWhiteSpace(Model.Description))
+                {
+                    <div property="description" class="description mb-2">
+                        @Html.Raw(Model.Description)
+                    </div>
+                }
 
                 @DisplayFormat()
 

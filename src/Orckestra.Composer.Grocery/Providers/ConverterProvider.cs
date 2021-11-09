@@ -23,11 +23,12 @@
             switch (fromMeasurement)
             {
                 case "Millilitre":
+                case "Milliliter":
                     mL = number;
                     flOz = number * 0.033814;
                     cl = number * 0.1;
-                    l = number * 0.001; 
-                    gallon  = number * 0.000264172;
+                    l = number * 0.001;
+                    gallon = number * 0.000264172;
                     pt = number * 0.00175975;
                     break;
 
@@ -40,6 +41,7 @@
                     break;
 
                 case "Centilitre":
+                case "Centiliter":
                     mL = number * 10;
                     flOz = number * 0.33814;
                     cl = number;
@@ -49,6 +51,7 @@
                     break;
 
                 case "Litre":
+                case "Liter":
                     mL = number * 1000;
                     flOz = number * 33.814;
                     cl = number * 100;
@@ -57,7 +60,9 @@
                     gallon = number * 0.264172;
                     break;
 
+
                 case "Metre":
+                case "Meter":
                     m = number;
                     break;
 
@@ -125,6 +130,7 @@
                     pt = number * 0.0520421;
                     break;
                 case "Pounds":
+                case "Pound":
                     oz = number * 16;
                     lb = number;
                     g = number * 453.592;
@@ -136,14 +142,18 @@
             switch (toMeasurement)
             {
                 case "Millilitre":
+                case "Milliliter":
                     return mL;
                 case "Ounce":
                     return oz;
                 case "Centilitre":
+                case "Centiliter":
                     return cl;
                 case "Litre":
+                case "Liter":
                     return l;
                 case "Metre":
+                case "Meter":
                     return m;
                 case "Pint":
                     return pt;
@@ -164,6 +174,7 @@
                 case "FluidOunce":
                     return flOz;
                 case "Pounds":
+                case "Pound":
                     return lb;
                 default:
                     return 1;

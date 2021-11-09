@@ -105,7 +105,7 @@
                             Email: 'email@domain.com',
                         },
                         ShippingMethod: {
-                            FulfillmentMethodTypeString: Orckestra.Composer.FulfillmentMethodTypes.Shipping
+                            FulfillmentMethodType: Orckestra.Composer.FulfillmentMethodTypes.Shipping
                         },
                         ShippingAddress: {
                             Line1: 'Line1',
@@ -136,7 +136,7 @@
                             Email: 'email@domain.com',
                         },
                         ShippingMethod: {
-                            FulfillmentMethodTypeString: Orckestra.Composer.FulfillmentMethodTypes.Shipping
+                            FulfillmentMethodType: Orckestra.Composer.FulfillmentMethodTypes.Shipping
                         },
                         ShippingAddress: {
                             Line1: 'Line1',
@@ -162,7 +162,7 @@
                             Email: 'email@domain.com',
                         },
                         ShippingMethod: {
-                            FulfillmentMethodTypeString: Orckestra.Composer.FulfillmentMethodTypes.PickUp
+                            FulfillmentMethodType: Orckestra.Composer.FulfillmentMethodTypes.PickUp
                         },
                         ShippingAddress: {
                             AddressName: '',
@@ -188,7 +188,7 @@
                             Email: 'email@domain.com',
                         },
                         ShippingMethod: {
-                            FulfillmentMethodTypeString: Orckestra.Composer.FulfillmentMethodTypes.PickUp
+                            FulfillmentMethodType: Orckestra.Composer.FulfillmentMethodTypes.PickUp
                         },
                         PickUpLocationId: '123',
                         ShippingAddress: {
@@ -290,7 +290,7 @@
                             Email: 'email@domain.com',
                         },
                         ShippingMethod: {
-                            FulfillmentMethodTypeString: Orckestra.Composer.FulfillmentMethodTypes.Shipping
+                            FulfillmentMethodType: Orckestra.Composer.FulfillmentMethodTypes.Shipping
                         },
                         ShippingAddress: {
                             AddressBookId: '',
@@ -322,7 +322,7 @@
                             Email: 'email@domain.com',
                         },
                         ShippingMethod: {
-                            FulfillmentMethodTypeString: Orckestra.Composer.FulfillmentMethodTypes.Shipping
+                            FulfillmentMethodType: Orckestra.Composer.FulfillmentMethodTypes.Shipping
                         },
                         ShippingAddress: {
                             AddressBookId: '123456',
@@ -349,7 +349,7 @@
                             Email: 'email@domain.com',
                         },
                         ShippingMethod: {
-                            FulfillmentMethodTypeString: Orckestra.Composer.FulfillmentMethodTypes.PickUp
+                            FulfillmentMethodType: Orckestra.Composer.FulfillmentMethodTypes.PickUp
                         },
                         ShippingAddress: {
                             AddressName: 'Some',
@@ -375,7 +375,7 @@
                             Email: 'email@domain.com',
                         },
                         ShippingMethod: {
-                            FulfillmentMethodTypeString: Orckestra.Composer.FulfillmentMethodTypes.PickUp
+                            FulfillmentMethodType: Orckestra.Composer.FulfillmentMethodTypes.PickUp
                         },
                         PickUpLocationId: '123',
                         ShippingAddress: {
