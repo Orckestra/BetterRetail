@@ -177,7 +177,8 @@ namespace Orckestra.Composer.CompositeC1.Builders
                 {
                     Log.LogWarning(nameof(CategoryAndNavigationBuilder), 
                         $"The Property '{propertyInfo.Name}' in category '{categoryId}' has been truncated because it exceeds the maximum length allowed ({customAttribute.UpperBound})");
-                }
+                    mainMenu.DisplayName = mainMenu.DisplayName?.Substring(0, customAttribute.UpperBound);
+                }   
             });
         }
 
