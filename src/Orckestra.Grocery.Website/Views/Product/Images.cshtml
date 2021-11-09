@@ -1,5 +1,6 @@
 ﻿@using System.Web;
 @using System.Globalization;
+@using Orckestra.Composer.Grocery.ViewModels
 @using Orckestra.Composer.Product.ViewModels;
 @model Orckestra.Composer.Product.ViewModels.ProductViewModel
 
@@ -16,12 +17,12 @@
     <script>
         function imgError(el) {
             this.onerror = null;
-           @if (!string.IsNullOrWhiteSpace(Model.FallbackImageUrl) && Model.FallbackImageUrl.Contains("/"))
+            @if (!string.IsNullOrWhiteSpace(Model.FallbackImageUrl) && Model.FallbackImageUrl.Contains("/"))
             {
                 <text>
-                if (!el.src.includes('@Model.FallbackImageUrl')) {
-                    el.src = '@Model.FallbackImageUrl';
-                }
+                    if (!el.src.includes('@Model.FallbackImageUrl')) {
+                        el.src = '@Model.FallbackImageUrl';
+                    }
                 </text>
             }
         }
@@ -36,7 +37,7 @@
 <body>
     <div class="row">
         <!-- Thumbnails -->
-        <div class="col-lg-2 order-2 order-md-1" >
+        <div class="col-lg-2 order-2 order-md-1">
             @if (Model.Variants == null || Model.Variants.Count == 0)
             {
                 <div class="row" data-oc-click="selectImage">
@@ -64,49 +65,66 @@
         <div class="col-lg-10 order-1 order-md-2">
             @if (Model.SelectedImage != null)
             {
-            <div class="product-details-media">
+                <div class="product-details-media">
 
-                @if (Model.Variants == null || Model.Variants.Count == 0)
-                {
-                    <img class="product-main-img img-fluid"
-                         property="image"
-                         src="@Model.SelectedImage.ImageUrl"
-                         alt="@Model.SelectedImage.Alt"
-                         onerror="imgError(this)" />
-                }
-                else
-                {
-                    var mainImages = Model.Variants.GroupBy(v => v.SelectedImage.ImageUrl).ToList();
-                    foreach (var imageGroup in mainImages)
+                    @if (Model.Variants == null || Model.Variants.Count == 0)
                     {
-                        var ids = imageGroup.Select(v => v.Id).ToArray();
-                        var image = imageGroup.First().SelectedImage;
-                        <img class="product-main-img img-fluid @SelectedVariantClass(ids)"
-                             data-variant="@(String.Join(",", ids))"
+                        <img class="product-main-img img-fluid"
                              property="image"
-                             src="@image.ImageUrl"
-                             alt="@image.Alt"
+                             src="@Model.SelectedImage.ImageUrl"
+                             alt="@Model.SelectedImage.Alt"
                              onerror="imgError(this)" />
                     }
-                    <img data-variant="unavailable"
-                         class="product-main-img img-fluid d-none"
-                         property="image"
-                         src="@Model.FallbackImageUrl" />
-                }
+                    else
+                    {
+                        var mainImages = Model.Variants.GroupBy(v => v.SelectedImage.ImageUrl).ToList();
+                        foreach (var imageGroup in mainImages)
+                        {
+                            var ids = imageGroup.Select(v => v.Id).ToArray();
+                            var image = imageGroup.First().SelectedImage;
+                            <img class="product-main-img img-fluid @SelectedVariantClass(ids)"
+                                 data-variant="@(String.Join(",", ids))"
+                                 property="image"
+                                 src="@image.ImageUrl"
+                                 alt="@image.Alt"
+                                 onerror="imgError(this)" />
+                        }
+                        <img data-variant="unavailable"
+                             class="product-main-img img-fluid d-none"
+                             property="image"
+                             src="@Model.FallbackImageUrl" />
+                    }
 
-                @if (Model.IsProductZoomEnabled)
-                {
-                    <a href="" class="product-details-zoom-trigger js-zoom d-none d-md-block">
-                        <i class="fa fa-search-plus"></i>
-                    </a>
-                }
+                    @if (Model.IsProductZoomEnabled)
+                    {
+                        <a href="" class="product-details-zoom-trigger js-zoom d-none d-md-block">
+                            <i class="fa fa-search-plus"></i>
+                        </a>
+                    }
 
-            </div>
+                </div>
+                @ProductBadges()
             }
-         </div>
+        </div>
     </div>
 </body>
 </html>
+
+@helper ProductBadges()
+{
+    var extendedVM = Model.AsExtensionModel<IGroceryProductViewModel>();
+
+    if (string.IsNullOrWhiteSpace(extendedVM.ProductBadges)) { return; }
+
+    <ul class="product-details-badges list-unstyled">
+
+        @foreach (var item in extendedVM.ProductBadgeValues)
+        {
+            var imageUrl = $"/UI.Package/Images/badge/{item.Key}.svg";
+            <li><img src="@imageUrl" alt="@item.Value" /></li>
+        }
+    </ul>
+}
 
 @helper RenderThumbnailImg(ProductDetailImageViewModel image, bool isHidden)
 {

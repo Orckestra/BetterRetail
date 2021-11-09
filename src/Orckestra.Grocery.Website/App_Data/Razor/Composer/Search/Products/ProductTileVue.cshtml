@@ -26,11 +26,14 @@
        v-on:click="productClick(Product, index)">
         <img class="img-fluid m-auto" xmlns:v-bind="v-bind" v-bind:src="Product.ImageUrl"
              v-bind:alt="Product.FullDisplayName"
-             onerror="imgError(this)" />
+             onerror="imgError(this)"/>
     </a>
     <div v-if="'InWishList' in Product" class="product-tile-wishlist">
         @AddToWishList()
     </div>
+    <ul v-if="Product.ProductBadgeMap" class="product-tile-badges list-unstyled">
+        <li v-for="item in Product.ProductBadgeMap"><img v-bind:src="`/UI.Package/Images/badge/${item.Key}.svg`"   v-bind:alt="item.Value"/></li>
+    </ul>
 
 
     <div class="product-tile-text px-3 pt-3">
@@ -41,8 +44,8 @@
         <div v-if="Product.IsEligibleForRecurring" class="product-tile-recurring">
             <img src="~/UI.Package/Images/recurring.svg"
                  class="recurring-icon"
-                 alt="@Html.Localize("General",  "L_RecurringProduct")"
-                 title="@Html.Localize("General",  "L_RecurringProduct")" />
+                 alt="@Html.Localize("General", "L_RecurringProduct")"
+                 title="@Html.Localize("General", "L_RecurringProduct")"/>
         </div>
 
         <a data-qa="search-product-title"
@@ -60,7 +63,7 @@
     @if (ShowAddToCartButton)
     {
         <div class="product-tile-button-container px-3 mb-3">
-            @AddToCartButton()
+            @ProductHelpers.AddToCartButtonWithQuantity()
         </div>
     }
 
@@ -146,54 +149,6 @@
             </div>
         </div>
 
-    </div>
-}
-
-@helper AddToCartButton()
-{
-    <div v-if="Product.IsAvailableToSell">
-        <div v-if="Product.InCart &amp;&amp; Product.Quantity > 0" class="input-group text-center">
-            <div class="input-group-prepend">
-                <button class="btn btn-outline-secondary"
-                        v-bind:disabled="Loading"
-                        v-on:click="updateItemQuantity(Product, Product.Quantity - 1)"
-                        data-qa="product-quantity-decrease">
-                    <span class="fa fa-minus"></span>
-                </button>
-            </div>
-
-            <input class="form-control  text-center btn-quantity" type="number"
-                   min="0" max="99"
-                   v-bind:value="Product.Quantity"
-                   v-bind:disabled="Loading"
-                   v-on:keyup="$event.target.value = $event.target.value.replace(/\D/g,'')"
-                   v-on:change="updateItemQuantity(Product, $event.target.value)"
-                   xmlns:v-on="v-on"
-                   xmlns:v-bind="v-bind" />
-
-            <div class="input-group-append">
-                <button class="btn btn-outline-secondary"
-                        v-bind:disabled="Loading"
-                        v-on:click="updateItemQuantity(Product, Product.Quantity + 1)"
-                        data-qa="product-quantity-increase">
-                    <span class="fa fa-plus"></span>
-                </button>
-            </div>
-        </div>
-        <button v-else="else"
-                class="btn btn-primary btn-block text-uppercase"
-                v-bind:disabled="Loading"
-                data-qa="search-buy-now"
-                data-oc-click="addToCart">
-            @Html.Localize("General", "B_AddToCartProductList")
-        </button>
-    </div>
-    <div v-else="else">
-        <button class="btn btn-primary btn-block text-uppercase"
-                data-qa="search-buy-now"
-                disabled="disabled">
-            @Html.Localize("General", "B_AddToCartProductDetailOOS")
-        </button>
     </div>
 }
 

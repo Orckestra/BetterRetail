@@ -445,6 +445,14 @@ ul.main-nav-sticky {
     }
 }
 
+//Sticky Menu
+
+.sticky-show {
+	.sps--abv & {
+		display: none !important;
+	}
+}
+
 .my-account-links {
     .fa {
         position: relative;

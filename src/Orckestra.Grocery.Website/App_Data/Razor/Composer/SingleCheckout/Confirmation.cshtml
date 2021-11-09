@@ -8,7 +8,7 @@
 @using Orckestra.Composer.Grocery.Providers;
 @using Orckestra.Composer.Cart;
 @using Orckestra.Composer.Grocery.Parameters;
-
+@using Orckestra.Overture.ServiceModel.Orders
 
 @functions {
     public override string FunctionDescription
@@ -25,6 +25,9 @@
     public override bool PreventFunctionOutputCaching { get { return true; } }
 
     public IStoreAndFulfillmentSelectionProvider StoreAndFulfillmentSelectionProvider { get; set; }
+
+    [FunctionParameter(Label = "Confirmation Top Message")]
+    public XhtmlDocument confirmationTopMessage { get; set; }
 }
 
 @{
@@ -52,24 +55,170 @@
 <body>
     @*CompleteCheckoutViewModel is used as model to render data with Vue Js *@
     <div class="row">
-        <div class="col-lg-8">
-            <div id="vueCheckoutOrderConfirmation" v-if="Order"
+        <div class="col-lg-12">
+            <div id="vueCheckoutOrderConfirmation" v-if="OrderDetails"
                  @if (!isPreview) { <text> v-cloak="true" </text> }
                  data-oc-controller="SingleCheckout.OrderConfirmation"
                  data-redirectUrl="@redirectUrl">
 
-                <h1 data-qa="confirmation-thankyou">@Html.Localize("CheckoutProcess", "T_ThankYou") {{CustomerFirstName}} {{CustomerLastName}}!</h1>
-                <p data-qa="confirmation-order-number">@Html.Raw(@Html.Localized("CheckoutProcess", "L_YourOrderNumber", "<strong>{{OrderNumber}}</strong>"))</p>
-                <p>@Html.Raw(@Html.Localized("CheckoutProcess", "L_EmailConfirmation", "<strong>{{CustomerEmail}}</strong>"))</p>
+                @Html.Raw(@confirmationTopMessage)
 
-                @DisplayOrderDetails()
+                @DisplayOrderInformation()
 
-                @CreateAccountForm()
+                <div class="row">
+                    <div class="col-lg-8">
+                        @DisplayOrderDetails()
+                    </div>
+                    <div class="col-lg-4">
+                        @DisplayOrderSummary()
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    @CreateAccountForm()
+                </div>
             </div>
         </div>
     </div>
 </body>
 </html>
+
+@helper DisplayOrderInformation()
+{
+    <div class="card-deck">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="m-0"><i class="fa fa-user fa-sm mr-2"></i>@Html.Localize("Grocery", "T_CustomerDetails")</h3>
+            </div>
+            <div class="card-body">
+                <h6 class="mb-0">{{CustomerFirstName}} {{CustomerLastName}}</h6>
+                <p class="card-text mb-0">{{CustomerEmail}}</p>
+                <hr class="mb-2" />
+                <h6 class="mb-1">@Html.Localize("MyAccount", "T_BillingAddress")</h6>
+                @DisplayAddress("OrderDetails.BillingAddress")
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <h3 class="m-0" v-if="OrderDetails.Shipments[0].ShippingMethod.FulfillmentMethodType == '@(FulfillmentMethodType.PickUp)'"><i class="fa fa-store-alt fa-sm mr-2"></i>@Html.Localize("Grocery", "T_FulfillmentMethodTitle_PickUp")</h3>
+                <h3 class="m-0" v-else="else"><i class="fa fa-truck fa-sm mr-2"></i>@Html.Localize("Grocery", "T_FulfillmentMethodTitle_Shipping")</h3>
+            </div>
+            <div class="card-body">
+                <div v-if="OrderDetails.Shipments[0].ShippingMethod.FulfillmentMethodType == '@(FulfillmentMethodType.PickUp)'">
+                    <h6 class="mb-2">{{Fulfillment.Store.LocalizedDisplayName}}</h6>
+                    @DisplayAddress("Fulfillment.Store.Address", false, false)
+                </div>
+                <div v-else="else">
+                    @DisplayAddress("OrderDetails.Shipments[0].ShippingAddress")
+                </div>
+                <hr />
+                <h6 class="font-weight-bold">@Html.Localize("Grocery", "T_SelectedTimeSlot")</h6>
+                <p class="card-text mb-3">
+                    {{TimeslotInfo.LocalizedSlotDate}}<br />
+                    @Html.Localized("Grocery", "L_TimeSlotRow", "{{TimeslotInfo.LocalizedSlotBeginTime}}", "{{TimeslotInfo.LocalizedSlotEndTime}}")
+                </p>
+            </div>
+        </div>
+        <div class="card" v-if="OrderDetails.Shipments[0].ShippingMethod.FulfillmentMethodType != 1">
+            <div class="card-header">
+                <h3 class="m-0"><i class="fa fa-store-alt fa-sm mr-2"></i>@Html.Localize("Grocery", "T_StoreInformation")</h3>
+            </div>
+            <div class="card-body">
+                <h6 class="mb-2">{{Fulfillment.Store.LocalizedDisplayName}}</h6>
+                @DisplayAddress("Fulfillment.Store.Address", false, false)
+            </div>
+        </div>
+    </div>
+
+}
+
+@helper DisplayAddress(string vueBinding, bool showAddressName = true, bool showName = true)
+{
+    <div>
+        @if (showAddressName)
+        {
+            <h6 class="mb-1">{{@(vueBinding).AddressName}}</h6>
+
+        }
+        @if (showName)
+        {
+            <h6 v-if="@(vueBinding).FirstName != CustomerFirstName || @(vueBinding).LastName != CustomerLastName">{{@(vueBinding).FirstName}} {{@(vueBinding).LastName}}</h6>
+
+        }
+        <p class="card-text mb-2">
+            {{@(vueBinding).Line1}}<br />
+            {{@(vueBinding).Line2}}<br v-if="@(vueBinding).Line2" />
+            {{@(vueBinding).City}}, {{@(vueBinding).RegionName}}<br />
+            {{@(vueBinding).PostalCode}}<br />
+            {{@(vueBinding).CountryCode}}
+        </p>
+        <p class="card-text">{{@(vueBinding).PhoneNumber}}</p>
+    </div>
+
+}
+
+@helper DisplayOrderSummary()
+{
+    <div v-if="OrderSummary" class="card mt-4">
+        <div class="card-header">
+            <h3 class="m-0">
+                @Html.Localize("ShoppingCart", "T_OrderSummary")
+            </h3>
+        </div>
+        <div class="card-body">
+            @OrderSummaryHelpers.Totals()
+            <hr class="mb-2" />
+
+            @OrderSummaryHelpers.SubTotal()
+
+            @OrderSummaryHelpers.Rewards()
+
+            @OrderSummaryHelpers.TaxableShipmentAdditionalFeeSummary()
+
+            @OrderSummaryHelpers.TaxableAdditionalFeeSummary()
+
+            <div v-if="OrderSummary.IsShippingTaxable">
+                @ShippingFee()
+            </div>
+
+            @OrderSummaryHelpers.Taxes()
+
+            @OrderSummaryHelpers.NotTaxableShipmentAdditionalFeeSummary()
+
+            @OrderSummaryHelpers.NotTaxableAdditionalFeeSummary()
+
+            <div v-if="!OrderSummary.IsShippingTaxable">
+                @ShippingFee()
+            </div>
+
+            <hr />
+            <h6>@Html.Localize("CheckoutProcess", "PaymentDetails")</h6>
+            <p class="card-text">
+                @Html.Localize("MyAccount", "L_PaymentMethod"): {{OrderDetails.Payments[0].PaymentMethodName}}
+            </p>
+            <p class="card-text" v-if="OrderDetails.Payments[0].CreditCardNumber">
+                @Html.Localize("MyAccount", "L_CreditCardNumber") {{OrderDetails.Payments[0].CreditCardNumber}}
+                <br />
+                @Html.Localize("MyAccount", "L_CreditCardExpires") {{OrderDetails.Payments[0].ExpiryDate}}
+            </p>
+        </div>
+    </div>
+}
+
+@helper ShippingFee()
+{
+    <div class="row  mb-2">
+        <div class="col-6  col-md-7">
+            <span>
+                @Html.Localize("ShoppingCart", "L_ShippingFee")
+            </span>
+        </div>
+        <div class="col-6  col-md-5  text-right">
+            <span>
+                {{OrderSummary.Shipping}}
+            </span>
+        </div>
+    </div>
+}
 
 @helper DisplayOrderDetails()
 {
@@ -77,7 +226,7 @@
         <div class="card-header">
             <div class="row">
                 <div class="col-sm-8">
-                    <h3 class="m-0">@Html.Localize("MyAccount", "T_OrderSummary")</h3>
+                    <h3 class="m-0">@Html.Localize("MyAccount", "T_OrderDetails")</h3>
                 </div>
                 <div class="col-sm-4 text-sm-right">
                     <a v-if="IsAuthenticated" data-qa="confirmation-order-details-link" v-bind:href="Order.Url" class="cta">@Html.Localize("CheckoutProcess", "H_OrderDetail")</a>
@@ -86,25 +235,33 @@
             </div>
         </div>
         <div class="card-body">
-            <div class="row">
-                <div class="col-sm-8">
-                    <p class="m-0" data-qa="confirmation-order-number">@Html.Localized("MyAccount", "L_OrderNumber", "{{Order.OrderInfos.OrderNumber}}")</p>
-                    <p data-qa="confirmation-order-status">
-                        <span class="text-warning font-weight-bold">{{Order.OrderInfos.OrderStatus}}</span>
-                    </p>
-                    <div class="row">
-                        <div class="col-4  col-sm-2" v-bind:key="item.id" v-for="(item, index) in LineItems">
-                            <img v-bind:src="item.ImageUrl" class="img-fluid" alt="thumbnail" xmlns:v-bind="v-bind"
-                                 v-bind:data-qa="'confirmation-item-preview-img-' + index"
-                                 v-bind:onerror="'this.onerror=null; this.src=\'' + item.FallbackImageUrl + '\''" />
-                            <p class="text-center m-0">
-                                <strong v-bind:data-qa="'confirmation-item-preview-quantity-' + index">x{{item.Quantity}}</strong>
-                            </p>
+            <div v-for="(item, index) in LineItems"
+                 v-bind:key="item.Id"
+                 v-bind:class="{'border-bottom pb-2': index != LineItems.length - 1, 'pt-3': index != 0, 'pt-1': index == 0}">
+                <div v-if="item.IsGiftItem" class="row pt-0 giftitem">
+                    <i class="fa fa-gift" /><p>@Html.Localize("ShoppingCart", "L_GiftItem")</p>
+                </div>
+                <div class="row">
+                    <div v-if="item.Rewards &amp;&amp; item.Rewards.length" class="col-12 order-1  text-center">
+                        @CartSummaryHelpers.CartItemRewardsCell()
+                    </div>
+                    <div class="col-2 col-sm-1  order-2">
+                        @CartSummaryHelpers.CartItemImageCell()
+                    </div>
+                    <div class="col-8 col-sm-4  order-3">
+                        @CartSummaryHelpers.CartItemSummaryCell()
+                    </div>
+                    <div class="col-sm-2  text-center d-none d-sm-block order-4">
+                        @CartSummaryHelpers.CartItemDefaultPriceCell()
+                    </div>
+                    <div class="offset-2 offset-sm-0 2 col-sm-3 col-7  text-center text-sm-center order-6">
+                        <div class="text-center">
+                            <p>{{item.Quantity}}</p>
                         </div>
                     </div>
-                </div>
-                <div class="col-sm-4 text-sm-right">
-                    @Html.Localize("MyAccount", "L_Total"): <strong class="h5" data-qa="confirmation-order-total">{{Order.OrderInfos.PricePaid}}</strong>
+                    <div class="offset-2 offset-sm-0 col-sm-2 text-left text-sm-center order-7">
+                        @CartSummaryHelpers.CartItemTotalCell()
+                    </div>
                 </div>
             </div>
         </div>

@@ -210,9 +210,6 @@
   <data name="L_Selected" xml:space="preserve">
     <value>SELECTED</value>
   </data>
-  <data name="L_EmailConfirmation" xml:space="preserve">
-    <value>Your order confirmation and receipt will be sent to {0}. If you did not receive the email, check your spam folder.</value>
-  </data>
   <data name="L_ExpirationDate" xml:space="preserve">
     <value>Expires on:</value>
   </data>
@@ -258,9 +255,6 @@
   <data name="L_VerificationNumber" xml:space="preserve">
     <value>CVV</value>
   </data>
-  <data name="L_YourOrderNumber" xml:space="preserve">
-    <value>Your order  #{0} has been placed.</value>
-  </data>
   <data name="Quantity" xml:space="preserve">
     <value>Quantity</value>
   </data>
@@ -291,9 +285,6 @@ Enter your credit card information</value>
   </data>
   <data name="T_SignInCheckout" xml:space="preserve">
     <value>Sign in</value>
-  </data>
-  <data name="T_ThankYou" xml:space="preserve">
-    <value>Thank you</value>
   </data>
   <data name="T_SelectCreditCart" xml:space="preserve">
     <value>Select a credit card</value>
@@ -379,5 +370,8 @@ If you change your collection store your cart will be updated and prices can be 
   </data>
   <data name="L_UndefinedLineItemCategory" xml:space="preserve">
     <value>No Category</value>
+  </data>
+  <data name="PaymentDetails" xml:space="preserve">
+    <value>Payment Details</value>
   </data>
 </root>

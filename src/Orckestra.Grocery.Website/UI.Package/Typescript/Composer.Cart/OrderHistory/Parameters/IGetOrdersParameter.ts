@@ -1,5 +1,5 @@
 module Orckestra.Composer {
-    export interface IGetOrderParameters {
+    export interface IGetOrdersParameter {
         page: number;
     }
 }

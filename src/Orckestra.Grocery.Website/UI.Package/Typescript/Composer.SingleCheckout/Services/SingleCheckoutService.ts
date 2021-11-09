@@ -315,13 +315,13 @@ module Orckestra.Composer {
                 cart.ShippingAddress.PostalCode &&
                 cart.ShippingAddress.PhoneNumber;
 
-            let methodType = cart.ShippingMethod.FulfillmentMethodTypeString;
+            let methodType = cart.ShippingMethod.FulfillmentMethodType;
             let isShipToHome = methodType === FulfillmentMethodTypes.Shipping ||
                 methodType === FulfillmentMethodTypes.Delivery;
             let isPickUp = methodType === FulfillmentMethodTypes.PickUp;
 
             if (isAuthenticated && isShipToHome) {
-                return (!this.isAddressBookIdEmpty(cart.ShippingAddress.AddressBookId));
+                return !(this.isAddressBookIdEmpty(cart.ShippingAddress.AddressBookId) && this.isAddressBookIdEmpty(cart.ShippingAddress.Id));
             }
 
             if (!isAuthenticated && isShipToHome) {

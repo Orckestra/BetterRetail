@@ -116,6 +116,8 @@
     grid-row-start: 1;
     grid-row-end: 3;
     border-right: 1px solid gray;
+    max-height: calc(100vh - 120px);
+    overflow: auto;
 
     @include media-breakpoint-down(sm) {
       grid-column-end: 4;

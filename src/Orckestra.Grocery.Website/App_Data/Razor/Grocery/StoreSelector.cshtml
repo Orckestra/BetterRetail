@@ -88,11 +88,11 @@
             <div class="row">
                 <div class="col-sm mb-4 mb-sm-0 selection-column">
                     <h3>@Html.Localize("Grocery", "T_FulfillmentMethod")</h3>
-                    <span v-if="SelectedFulfillment.FulfillmentMethodType == 1">@Html.Localize("Grocery", "T_FulfillmentMethodTitle_PickUp")</span>
+                    <span v-if="SelectedFulfillment.FulfillmentMethodType == '@(FulfillmentMethodType.PickUp)'">@Html.Localize("Grocery", "T_FulfillmentMethodTitle_PickUp")</span>
                     <span v-else="else">@Html.Localize("Grocery", "T_FulfillmentMethodTitle_Shipping")</span>
                     <div class="action">
                         <a class="btn btn-primary" href="#" v-on:click.prevent="changeStoreModal($event, 'method')">
-                            <span v-if="SelectedFulfillment.FulfillmentMethodType == 1">@Html.Localize("Grocery", "B_ChangeFulfillmentMethodToShipping")</span>
+                            <span v-if="SelectedFulfillment.FulfillmentMethodType == '@(FulfillmentMethodType.PickUp)'">@Html.Localize("Grocery", "B_ChangeFulfillmentMethodToShipping")</span>
                             <span v-else="else">@Html.Localize("Grocery", "B_ChangeFulfillmentMethodToPickup")</span>
                         </a>
                     </div>
@@ -134,7 +134,7 @@
         <div class="form-row justify-content-center">
             <div class="col-12 col-sm-5">
                 <div class="input-group">
-                    <input class="form-control" type="text"
+                    <input class="form-control pr-3" type="text"
                            placeholder="@Html.Localize("Store", "I_Placeholder")"
                            v-model="PostalCode"
                            ref="postalCodeInput"

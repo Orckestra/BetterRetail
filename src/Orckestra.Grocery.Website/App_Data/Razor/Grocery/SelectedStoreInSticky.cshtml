@@ -2,7 +2,7 @@
 @functions {
     public override string FunctionDescription
     {
-        get { return "Selected Store In Header"; }
+        get { return "Selected Store In Sticky Menu"; }
     }
 }
 
@@ -12,11 +12,9 @@
 <head>
 </head>
 <body>
-    <div id="vueSelectedStoreInHeader" 
-         data-oc-controller="Grocery.SelectedStoreInHeader"
-         v-cloak="v-cloak" class="pull-left">
-        <ul class="navbar-nav p-0">
-            <li class="nav-item" v-if="!Store">
+    <section id="vueSelectedStoreInSticky"
+          class="ml-auto d-none d-lg-inline sticky-show">
+            <li class="nav-item" v-if="!Store" v-cloak="v-cloak">
                 @if (CurrentPageNode.Id != HomePageNode.Id)
                 {
                     <a class="nav-link" href="#" v-on:click.prevent="changeStoreModal($event, 'store')">
@@ -30,7 +28,7 @@
                     </a>
                 }
             </li>
-            <li class="nav-item dropdown" v-else="v-else">
+            <li class="nav-item dropdown" v-else="v-else" v-cloak="v-cloak">
                 <a class="nav-link" data-toggle="dropdown">
                     @StoreHelpers.StoreIcon()
                 </a>
@@ -44,7 +42,6 @@
                     </div>
                 </div>
             </li>
-        </ul>
-    </div>
+    </section>
 </body>
 </html>

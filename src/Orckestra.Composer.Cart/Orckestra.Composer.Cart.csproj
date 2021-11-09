@@ -113,6 +113,8 @@
     <Compile Include="Parameters\WishList\GetShareWishListUrlParam.cs" />
     <Compile Include="Parameters\WishList\GetWishListUrlParam.cs" />
     <Compile Include="Providers\WishList\IWishListUrlProvider.cs" />
+    <Compile Include="Requests\GetGuestOrderRequest.cs" />
+    <Compile Include="Requests\GetOrderRequest.cs" />
     <Compile Include="Requests\GetLineItemRequest.cs" />
     <Compile Include="Parameters\AddPaymentParam.cs" />
     <Compile Include="Parameters\AddVaultProfileViewModel.cs" />

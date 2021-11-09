@@ -230,6 +230,12 @@ available for you.</value>
   <data name="L_UnavailableSlot" xml:space="preserve">
     <value>NA</value>
   </data>
+  <data name="T_CustomerDetails" xml:space="preserve">
+    <value>Customer Details</value>
+  </data>
+  <data name="T_Fulfillment" xml:space="preserve">
+    <value>Fulfillment</value>
+  </data>
   <data name="T_FulfillmentMethod" xml:space="preserve">
     <value>Fulfillment method</value>
   </data>
@@ -259,6 +265,9 @@ available for you.</value>
   </data>
   <data name="T_StoreDoNotSupportSelectedFulfillmentMethod" xml:space="preserve">
     <value>This store doesn't support selected fulfillment method.</value>
+  </data>
+  <data name="T_StoreInformation" xml:space="preserve">
+    <value>Store Information</value>
   </data>
   <data name="T_StorePickUpHours" xml:space="preserve">
     <value>Pickup hours</value>

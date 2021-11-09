@@ -35,5 +35,12 @@ namespace Orckestra.Composer.Grocery.ViewModels
         /// Gets or sets the product Converted Volume Measurements
         /// </summary>
         decimal ConvertedVolumeMeasurement { get; set; }
+
+        /// <summary>
+        /// Gets or sets the product Badges
+        /// </summary>
+        string ProductBadges { get; set; }
+        Dictionary<string, string> ProductBadgeValues { get; set; }
+
     }
 }

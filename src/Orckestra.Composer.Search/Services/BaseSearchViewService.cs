@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Enums;
 using Orckestra.Composer.Parameters;
@@ -243,7 +244,9 @@ namespace Orckestra.Composer.Search.Services
         protected virtual string ExtractLookupId(string fieldName, PropertyBag propertyBag)
         {
             if (propertyBag == null) { return null; }
-            var fieldValue = propertyBag.ContainsKey(fieldName) ? propertyBag[fieldName] as string : null;
+            var fieldValue = propertyBag.ContainsKey(fieldName) 
+                ? (propertyBag[fieldName] as string ?? (propertyBag[fieldName] as string[])[0])
+                : null;
             if (string.IsNullOrWhiteSpace(fieldValue)) { return null; }
 
             var extractedValues = fieldValue.Split(new[] { "::" }, StringSplitOptions.None);

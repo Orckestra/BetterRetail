@@ -1,4 +1,5 @@
 @inherits Composer.Razor.ComposerRazorFunction
+@using Orckestra.Overture.ServiceModel.Orders
 @functions {
     public override string FunctionDescription
     {
@@ -20,8 +21,8 @@
                 </a>
                 <h3 class="float-left m-0">
                     <i class="fa fa-sm mr-1"
-                       v-bind:class="[FulfillmentMethodType == 1 ? 'fa-store-alt' : 'fa-truck']" />
-                    <span v-if="FulfillmentMethodType == 1">@Html.Localize("Grocery", "T_FulfillmentMethodTitle_PickUp")</span>
+                       v-bind:class="[FulfillmentMethodType == '@(FulfillmentMethodType.PickUp)' ? 'fa-store-alt' : 'fa-truck']" />
+                    <span v-if="FulfillmentMethodType == '@(FulfillmentMethodType.PickUp)'">@Html.Localize("Grocery", "T_FulfillmentMethodTitle_PickUp")</span>
                     <span v-else="else">@Html.Localize("Grocery", "T_FulfillmentMethodTitle_Shipping")</span>
                 </h3>
             </div>
@@ -34,7 +35,7 @@
                 <div v-if="Store">
                     @StoreHelpers.SelectedStorePreview("SelectedFulfillment")
                     <hr />
-                     @StoreHelpers.SelectedTimeSlotPreview("SelectedFulfillment")
+                    @StoreHelpers.SelectedTimeSlotPreview("SelectedFulfillment")
                 </div>
                 <div v-else="else">
                     <button class="btn btn-primary"

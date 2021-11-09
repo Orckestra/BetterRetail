@@ -34,6 +34,12 @@
         font-weight: bold;
         text-transform: uppercase;
     }
+    .product-tile-badges{ 
+        position: absolute;
+        top: 1.25rem;
+        left: 1.25rem;
+    }
+
     .product-tile-price {
         height: ceil($h4-font-size * $line-height-base);
     }

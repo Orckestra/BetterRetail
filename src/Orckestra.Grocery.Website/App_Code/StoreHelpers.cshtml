@@ -1,4 +1,5 @@
 @using Composite.AspNet.Razor
+@using Orckestra.Overture.ServiceModel.Orders
 
 @helper StoreAddress(string vueBinding, bool displayPhone = true)
 {
@@ -29,51 +30,51 @@
 
 @helper SelectedTimeSlotPreview(string vueBinding, bool showChangeLink = true, bool showTitle = true)
 {
-<div>
-    <div v-if="@(vueBinding).TimeSlot">
-        @if (showTitle)
-        {
-            <strong>@Html.Localize("Grocery", "T_SelectedTimeSlot")</strong>
-        }
+    <div>
+        <div v-if="@(vueBinding).TimeSlot">
+            @if (showTitle)
+            {
+                <strong>@Html.Localize("Grocery", "T_SelectedTimeSlot")</strong>
+            }
 
-        <div class="position-relative busy-container" v-bind:class="{ 'busy': @(vueBinding).TimeSlotLoading }">
-            @GeneralHelpers.LoadingSpinner()
-            <span>{{@(vueBinding).TimeSlot.DayOfWeekString}}, {{@(vueBinding).TimeSlotReservation.Day}} {{@(vueBinding).TimeSlotReservation.DisplayMonth}}</span>
-            <p class="m-0" v-bind:title="TimeSlotReservation.ReservationStatusDisplay">
-                {{@(vueBinding).TimeSlot.DisplayBeginTime}} to {{@(vueBinding).TimeSlot.DisplayEndTime}}
-            </p>
+            <div class="position-relative busy-container" v-bind:class="{ 'busy': @(vueBinding).TimeSlotLoading }">
+                @GeneralHelpers.LoadingSpinner()
+                <span>{{@(vueBinding).TimeSlot.DayOfWeekString}}, {{@(vueBinding).TimeSlotReservation.Day}} {{@(vueBinding).TimeSlotReservation.DisplayMonth}}</span>
+                <p class="m-0" v-bind:title="TimeSlotReservation.ReservationStatusDisplay">
+                    {{@(vueBinding).TimeSlot.DisplayBeginTime}} to {{@(vueBinding).TimeSlot.DisplayEndTime}}
+                </p>
+            </div>
+            @if (showChangeLink)
+            {
+                <div class="clearfix">
+                    <a class="cta float-right" href="#" v-on:click.prevent="changeStoreModal($event, 'slot')">
+                        <i class="fa fa-edit d-inline d-sm-none"></i>
+                        <span class="d-none d-sm-inline"> @Html.Localize("Grocery", "B_ChangeSlot")</span>
+                    </a>
+                </div>
+            }
         </div>
         @if (showChangeLink)
         {
-            <div class="clearfix">
-                <a class="cta float-right" href="#" v-on:click.prevent="changeStoreModal($event, 'slot')">
-                    <i class="fa fa-edit d-inline d-sm-none"></i>
-                    <span class="d-none d-sm-inline"> @Html.Localize("Grocery", "B_ChangeSlot")</span>
-                </a>
+            <div v-else="v-else">
+                <button v-on:click.prevent="changeStoreModal($event, 'slot')"
+                        v-bind:disabled="!IsStoreSelected || @(vueBinding).TimeSlotLoading"
+                        class="btn btn-block btn-primary">
+                    @Html.Localize("Grocery", "B_BookYourSlot")
+                    @GeneralHelpers.ButtonLoadingSpinner(vueBinding + ".TimeSlotLoading")
+                </button>
             </div>
         }
-    </div>
-    @if (showChangeLink)
-    {
-        <div v-else="v-else">
-            <button v-on:click.prevent="changeStoreModal($event, 'slot')"
-                    v-bind:disabled="!IsStoreSelected || @(vueBinding).TimeSlotLoading"
-                    class="btn btn-block btn-primary">
-                @Html.Localize("Grocery", "B_BookYourSlot")
-                @GeneralHelpers.ButtonLoadingSpinner(vueBinding + ".TimeSlotLoading")
-            </button>
+        <div v-if="TimeSlotReservationTentative" v-cloak="true" class="text-danger mt-2">
+            @Html.Localized("Grocery", "L_ReservedUntil", " {{TimeSlotReservationExpireTime}} ")
+            <span v-if="TimeSlotReservationExpireRelativeDayIndex === 0"> @Html.Localize("Grocery", "L_Today")</span>
+            <span v-else-if="TimeSlotReservationExpireRelativeDayIndex === 1"> @Html.Localize("Grocery", "L_Tomorrow")</span>
+            <span v-else-if="TimeSlotReservationExpireRelativeDayIndex === -1"> {{TimeSlotReservationExpireDate}}</span>
         </div>
-    }
-    <div v-if="TimeSlotReservationTentative" v-cloak="true" class="text-danger mt-2">
-        @Html.Localized("Grocery", "L_ReservedUntil", " {{TimeSlotReservationExpireTime}} ")
-        <span v-if="TimeSlotReservationExpireRelativeDayIndex === 0"> @Html.Localize("Grocery", "L_Today")</span>
-        <span v-else-if="TimeSlotReservationExpireRelativeDayIndex === 1"> @Html.Localize("Grocery", "L_Tomorrow")</span>
-        <span v-else-if="TimeSlotReservationExpireRelativeDayIndex === -1"> {{TimeSlotReservationExpireDate}}</span>
+        <div v-if="TimeSlotReservationExpired" v-cloak="true" class="text-danger mt-2">
+            @Html.Localize("Grocery", "L_ReservationExpired")
+        </div>
     </div>
-    <div v-if="TimeSlotReservationExpired" v-cloak="true" class="text-danger mt-2">
-        @Html.Localize("Grocery", "L_ReservationExpired")
-    </div>
-</div>
 }
 
 @helper SelectedStorePreview(string vueBinding, bool showChangeLink = true, string isStoreExist = "")
@@ -82,37 +83,37 @@
     {
         isStoreExist = $"{vueBinding}.Store";
     }
-<div>
-    <div v-if="@(isStoreExist)">
-        <div class="position-relative busy-container" v-bind:class="{ 'busy': @(vueBinding).StoreLoading }">
-            @GeneralHelpers.LoadingSpinner()
-            <div class="mb-2">
-                <strong>{{@(vueBinding).Store.LocalizedDisplayName}}</strong>
-                @StoreAddress(vueBinding + ".Store", false)
+    <div>
+        <div v-if="@(isStoreExist)">
+            <div class="position-relative busy-container" v-bind:class="{ 'busy': @(vueBinding).StoreLoading }">
+                @GeneralHelpers.LoadingSpinner()
+                <div class="mb-2">
+                    <strong>{{@(vueBinding).Store.LocalizedDisplayName}}</strong>
+                    @StoreAddress(vueBinding + ".Store", false)
 
-            </div>
-            <div class="mb-2 text-nowrap">
-                <strong>@Html.Localize("Store", "T_OpenHours")</strong><br />
-                @StoreAvailability(vueBinding + ".Store")
-            </div>
-            <div v-if="@(vueBinding).Store.PhoneNumber">
-                <strong>@Html.Localize("Store", "T_Phone"):</strong><br />
-                <span v-if="@(vueBinding).Store.PhoneNumber">{{@(vueBinding).Store.PhoneNumber}}</span>
-                <span v-else="else">{{@(vueBinding).Store.Address.PhoneNumber}}</span>
-            </div>
-            @if (showChangeLink)
-            {
-                <div class="clearfix">
-                    <a class="cta float-right" href="#" v-on:click.prevent="changeStoreModal($event, 'store')">
-                        <i class="fa fa-edit d-inline d-sm-none"></i>
-                        <span class="d-none d-sm-inline"> @Html.Localize("Grocery", "B_ChangeStore")</span>
-                    </a>
-                    <a class="cta float-left" v-bind:href="@(vueBinding).Store.Url">@Html.Localize("Store", "B_ViewStoreDetails")</a>
                 </div>
-            }
+                <div class="mb-2 text-nowrap">
+                    <strong>@Html.Localize("Store", "T_OpenHours")</strong><br />
+                    @StoreAvailability(vueBinding + ".Store")
+                </div>
+                <div v-if="@(vueBinding).Store.PhoneNumber">
+                    <strong>@Html.Localize("Store", "T_Phone"):</strong><br />
+                    <span v-if="@(vueBinding).Store.PhoneNumber">{{@(vueBinding).Store.PhoneNumber}}</span>
+                    <span v-else="else">{{@(vueBinding).Store.Address.PhoneNumber}}</span>
+                </div>
+                @if (showChangeLink)
+                {
+                    <div class="clearfix">
+                        <a class="cta float-right" href="#" v-on:click.prevent="changeStoreModal($event, 'store')">
+                            <i class="fa fa-edit d-inline d-sm-none"></i>
+                            <span class="d-none d-sm-inline"> @Html.Localize("Grocery", "B_ChangeStore")</span>
+                        </a>
+                        <a class="cta float-left" v-bind:href="@(vueBinding).Store.Url">@Html.Localize("Store", "B_ViewStoreDetails")</a>
+                    </div>
+                }
+            </div>
         </div>
     </div>
-</div>
 }
 
 @helper StoreListRow(string vueBinding, bool isStep = false, bool showMap = true)
@@ -155,19 +156,67 @@
 
 @helper StoreSelectButton(string vueBinding, bool isStep = false)
 {
-<div class="select-btn-container">
-    <div v-if="SelectedStoreId === @(vueBinding).Id"
-         class="bg-success btn-sm border border-success">
-        <span class="text-white text-nowrap">
-            <i class="fa fa-check fa-lg"></i>
-            @Html.Localize("CheckoutProcess", "L_Selected")
-        </span>
+    <div class="select-btn-container">
+        <div v-if="SelectedStoreId === @(vueBinding).Id"
+             class="bg-success btn-sm border border-success">
+            <span class="text-white text-nowrap">
+                <i class="fa fa-check fa-lg"></i>
+                @Html.Localize("CheckoutProcess", "L_Selected")
+            </span>
+        </div>
+        <button v-else="v-else"
+                class="btn btn-sm btn-outline-secondary text-uppercase float-right"
+                v-on:click='selectStore($event, @(vueBinding), @(isStep ? "step" : "undefined"))'>
+            @Html.Localize("CheckoutProcess", "F_SelectShippingMethod")
+            @GeneralHelpers.ButtonLoadingSpinner()
+        </button>
     </div>
-    <button v-else="v-else"
-            class="btn btn-sm btn-outline-secondary text-uppercase float-right"
-            v-on:click='selectStore($event, @(vueBinding), @(isStep ? "step" : "undefined"))'>
-        @Html.Localize("CheckoutProcess", "F_SelectShippingMethod")
-        @GeneralHelpers.ButtonLoadingSpinner()
-    </button>
-</div>
+}
+
+@helper StoreIcon()
+{
+    <span class="d-none d-lg-inline">
+        <i class="fa fa-sm mr-1" v-bind:class="[FulfillmentMethodType == '@(FulfillmentMethodType.PickUp)' ? 'fa-store-alt' : 'fa-truck']" />
+        <span v-if="Store">
+            <span class="d-none d-lg-inline">
+                {{Store.LocalizedDisplayName}}
+                <span v-if="SelectedFulfillment.TimeSlotLoading">@GeneralHelpers.LoadingSpinner(true)</span>
+                <span v-else-if="TimeSlotReservationTentative">&#160;|&#160;{{TimeSlotReservationDisplay}}</span>
+            </span>
+            <span class="d-lg-none">
+                @Html.Localize("Grocery", "B_BookStore")
+            </span>
+        </span>
+        <span v-else="v-else">@Html.Localize("Grocery", "B_BookStore")</span>
+    </span>
+
+    <span class="d-lg-none">
+        <i class="fa fa-sm mr-1"
+           v-bind:class="[FulfillmentMethodType == '@(FulfillmentMethodType.PickUp)' ? 'fa-store-alt' : 'fa-truck']" />
+        <span class="d-none d-sm-inline">
+            <span v-if="Store">
+                {{Store.LocalizedDisplayName}}
+            </span>
+            <span v-else="v-else">
+                @Html.Localize("Grocery", "B_BookStore")
+            </span>
+        </span>
+    </span>
+}
+@helper SelectedFulfillmentMethod()
+{
+    <div v-if="SelectedFulfillment.FulfillmentMethodType" class="mb-2">
+        <div class="border-bottom bg-light p-3  mx-n3 mt-n3">
+            <a class="cta dark-blue float-right" href="#" v-on:click.prevent="changeStoreModal($event, 'method')">
+                <i class="fa fa-edit d-inline d-sm-none"></i>
+                <span class="d-none d-sm-inline">@Html.Localize("Grocery", "B_ChangeFulfillmentMethod")</span>
+            </a>
+            <h5 class="m-0">
+                <i class="fa mr-1" v-bind:class="SelectedFulfillment.FulfillmentMethodType === '@(FulfillmentMethodType.PickUp)' ? 'fa-store-alt' : 'fa-truck'" />
+                <span v-if="SelectedFulfillment.FulfillmentMethodType == '@(FulfillmentMethodType.PickUp)'">@Html.Localize("Grocery", "T_FulfillmentMethodTitle_PickUp")</span>
+                <span v-else="else">@Html.Localize("Grocery", "T_FulfillmentMethodTitle_Shipping")</span>
+            </h5>
+
+        </div>
+    </div>
 }

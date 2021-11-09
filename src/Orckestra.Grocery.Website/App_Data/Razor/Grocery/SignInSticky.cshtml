@@ -1,0 +1,59 @@
+﻿@inherits RazorFunction
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Sign In and Log Out links in Sticky Menu"; }
+    }
+}
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0"
+      xmlns:v-bind="v-bind"
+      xmlns:v-on="v-on">
+<head>
+</head>
+<body>
+    <section id="vueSignInSticky" v-cloak="true"
+             class="d-none d-lg-inline sticky-show">
+            <li v-if="IsAuthenticated"
+                class="nav-item dropdown"
+                v-cloak="true">
+                <a class="nav-link"
+                   data-qa="my-account-in-header"
+                   data-toggle="dropdown"
+                   v-bind:href="Url"
+                   title="@Html.Localize("MyAccount", "L_MyAccount")">
+                    <i class="fa fa-user"></i>&#160;
+                    <span class="d-none d-lg-inline">
+                        {{FirstName}} {{LastName}}
+                    </span>
+                </a>
+                <div class="dropdown-menu">
+                        <a v-bind:href="Url"
+                           class="dropdown-item"
+                           title="@Html.Localize("MyAccount", "L_MyAccount")">
+                            @Html.Localize("MyAccount", "L_MyAccount")
+                        </a>
+                        <a v-if="IsAuthenticated"
+                           data-qa="login-out"
+                           href="#"
+                           class="dropdown-item"
+                           v-on:click.prevent="fullLogout"
+                           title="@Html.Localize("MyAccount", "H_Logout")">
+                            @Html.Localize("MyAccount", "H_Logout")
+                        </a>
+                </div>
+            </li>
+            <li v-else="else" class="nav-item" v-cloak="true">
+                <a class="nav-link"
+                   data-qa="login-in"
+                   v-bind:href="Url"
+                   title="@Html.Localize("MyAccount", "L_SignIn")">
+                    <i class="fa fa-user"></i>&#160;
+                    @Html.Localize("MyAccount", "L_SignIn")
+                </a>
+            </li>
+    </section>
+</body>
+</html>
