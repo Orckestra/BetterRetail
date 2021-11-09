@@ -61,7 +61,7 @@ namespace Orckestra.Composer.Grocery.Services
         {
             var productSearchViewModel =
                 await base.CreateProductSearchViewModelAsync(productDocument, createSearchViewModelParam, imgDictionary);
-           
+
             await BuildProductBadgeValues(productSearchViewModel, createSearchViewModelParam);
             return productSearchViewModel;
         }
@@ -69,6 +69,9 @@ namespace Orckestra.Composer.Grocery.Services
         protected virtual async Task BuildProductBadgeValues(ProductSearchViewModel productSearchViewModel, CreateProductSearchResultsViewModelParam<SearchParam> createSearchViewModelParam)
         {
             var extendedVM = productSearchViewModel.AsExtensionModel<IGroceryProductSearchViewModel>();
+            if (extendedVM.ProductBadges == null)
+            { return; }
+
             IDictionary<string, string> productBadgesLookupValueDictionary = new Dictionary<string, string>();
 
             var productLookups = await LookupService.GetLookupsAsync(LookupType.Product);
@@ -76,7 +79,7 @@ namespace Orckestra.Composer.Grocery.Services
                 .FirstOrDefault(item => item.LookupName == "ProductBadges")
                 .Values
                 .ForEach(item => productBadgesLookupValueDictionary.Add(item.DisplayName.GetLocalizedValue(createSearchViewModelParam.SearchParam.Criteria.CultureInfo.Name), item.Value));
-           
+
             extendedVM.ProductBadgeValues = new Dictionary<string, string>();
             foreach (var extendedVmProductBadge in extendedVM.ProductBadges)
             {
