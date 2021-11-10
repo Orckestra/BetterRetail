@@ -249,7 +249,7 @@ module Orckestra.Composer {
 
                         if (quantity == cartItem.Quantity) {
                             //force update vue component
-                            this.Cart = { ...this.Cart };
+                            this.onCartUpdated({ ...this.Cart });
                             return;
                         }
 
@@ -260,10 +260,9 @@ module Orckestra.Composer {
                             this.Loading = true; // disabling UI immediately when a line item is removed
                         }
 
-                        let { ProductId, VariantId } = cartItem;
+                        self.publishDataForAnalytics(item, cartItem.Quantity, analyticEventName);
 
-                        //TODO: add publish
-                    //    self.publishProductDataForAnalytics(ProductId, cartItem.Quantity, analyticEventName);
+                        this.onCartUpdated(this.Cart);
 
                         if (!this.debounceUpdateItem) {
                             this.debounceUpdateItem = _.debounce(({ Id, Quantity, ProductId }) => {
