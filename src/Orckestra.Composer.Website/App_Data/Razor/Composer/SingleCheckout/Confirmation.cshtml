@@ -115,6 +115,7 @@
                        data-qa="information-password-input"
                        v-bind:disabled="IsLoading"
                        v-on:input="onChangePassword"
+                       autocomplete="off"
                        v-bind:type="ShowPassword ? 'text' : 'password'"
                        class="form-control"
                        required="required"
