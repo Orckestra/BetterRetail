@@ -3,6 +3,13 @@
 module Orckestra.Composer {
 	'use strict';
 
+	const enum TimeslotReservationStatus {
+		Tentative = 'Tentative',
+		Confirmed = 'Confirmed',
+		Expired = 'Expired',
+		Voided = 'Voided'
+	}
+
 	export class TimeSlotsHelper {
 
 		public static getTimeSlotReservationExpireDayIndex(timeSlotReservation: any) {
@@ -30,11 +37,11 @@ module Orckestra.Composer {
 		}
 
 		public static isTimeSlotReservationExpired(timeSlotReservation: any) {
-			return timeSlotReservation && timeSlotReservation.ReservationStatus == 3;
+			return timeSlotReservation && timeSlotReservation.ReservationStatus == TimeslotReservationStatus.Expired;
 		}
 
 		public static isTimeSlotReservationTentative(timeSlotReservation: any) {
-			return timeSlotReservation && timeSlotReservation.ReservationStatus == 1;
+			return timeSlotReservation && timeSlotReservation.ReservationStatus == TimeslotReservationStatus.Tentative;
 		}
 
 		public static validateTimeSlotExpiration(timeSlotReservation): boolean {
@@ -42,28 +49,6 @@ module Orckestra.Composer {
 			let now = new Date();
 			return !(slotTime < now)
 		}
-
-		public static getCommonTimeSlotReservationVueConfig(): any {
-			return {
-				computed: {
-					TimeSlotReservationExpireTime() {
-						return this.SelectedStore && TimeSlotsHelper.getTimeSlotReservationExpireTime(this.SelectedStore.TimeSlotReservation);
-					},
-					TimeSlotReservationExpireDate() {
-						return this.SelectedStore && TimeSlotsHelper.getTimeSlotReservationExpireDate(this.SelectedStore.TimeSlotReservation);
-					},
-					TimeSlotReservationExpireRelativeDayIndex() {
-						return this.SelectedStore && TimeSlotsHelper.getTimeSlotReservationExpireDayIndex(this.SelectedStore.TimeSlotReservation);
-					},
-					TimeSlotReservationExpired() {
-						return this.SelectedStore && TimeSlotsHelper.isTimeSlotReservationExpired(this.SelectedStore.TimeSlotReservation);
-					},
-					TimeSlotReservationTentative() {
-						return this.SelectedStore && TimeSlotsHelper.isTimeSlotReservationTentative(this.SelectedStore.TimeSlotReservation);
-					}
-				}
-			}
-		};
 
 		public static getTimeSlotReservationError(errorCode) {
 			let error = LocalizationProvider.instance().getLocalizedString('Grocery', 'L_' + errorCode);
