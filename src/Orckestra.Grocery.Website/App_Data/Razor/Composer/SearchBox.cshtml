@@ -103,7 +103,7 @@
                         </template>
 
                         <template slot-scope="{ suggestion, index }">
-                            <div v-if="suggestion.name === 'autocomplete'" class="d-flex border-bottom">
+                            <div v-if="suggestion.name === 'autocomplete'" class="d-flex border-bottom py-2">
                                 <div class="col-3 col-sm-2">
                                     <a class="product-tile-media"
                                        v-on:mouseup.stop=""
@@ -115,18 +115,19 @@
                                     </a>
                                 </div>
                                 <div class="col-9 col-sm-10">
-                                    <div class="product-tile-text mt-2">
-                                        <span data-qa="search-product-brand" v-if="suggestion.item.BrandDisplayName">{{suggestion.item.BrandDisplayName}}<br /></span>
-                                        <span data-qa="search-product-brand" v-else-if="suggestion.item.Brand">{{suggestion.item.Brand}}</span>
-                                        <a data-qa="search-product-title"
-                                           class="suggestion-title"
-                                           v-on:mouseup.stop=""
-                                           v-bind:href="suggestion.item.Url"
-                                           v-bind:title="suggestion.item.FullDisplayName"
-                                           v-html="suggestion.item.mappedDisplayName"></a>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col col-sm-8">
+                                    <div class="row h-100 align-items-center">
+                                        <div class="col-6 col-sm-8">
+
+                                            <div class="product-tile-text">
+                                                <span data-qa="search-product-brand" v-if="suggestion.item.BrandDisplayName">{{suggestion.item.BrandDisplayName}}<br /></span>
+                                                <span data-qa="search-product-brand" v-else-if="suggestion.item.Brand">{{suggestion.item.Brand}}</span>
+                                                <a data-qa="search-product-title"
+                                                class="suggestion-title"
+                                                v-on:mouseup.stop=""
+                                                v-bind:href="suggestion.item.Url"
+                                                v-bind:title="suggestion.item.FullDisplayName"
+                                                v-html="suggestion.item.mappedDisplayName"></a>
+                                            </div>
                                             <div class="product-tile-special-price">
                                                 <del v-if="suggestion.item.IsOnSale">{{suggestion.item.DisplayListPrice}}</del>
                                             </div>
@@ -135,8 +136,8 @@
                                                 <span v-else="v-else" class="h4" data-qa="search-product-price">{{suggestion.item.DisplayListPrice}}</span>
                                             </div>
                                         </div>
-                                        <div class="col-12 col-sm-4">
-                                            @ProductHelpers.AddToCartButtonWithQuantity("suggestion.item", "true")
+                                        <div class="col-6 col-sm-4">
+                                            @ProductHelpers.AddToCartButtonWithQuantity("suggestion.item", "true", @Html.Localize("General", "B_AddToCartProductSuggestion"))
                                         </div>
                                     </div>
                                 </div>

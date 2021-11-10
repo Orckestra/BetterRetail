@@ -135,6 +135,9 @@
   <data name="B_AddToCartProductListOOS" xml:space="preserve">
     <value>Rupture de stock </value>
   </data>
+  <data name="B_AddToCartProductSuggestion" xml:space="preserve">
+    <value>Ajouter</value>
+  </data>
   <data name="B_Back" xml:space="preserve">
     <value>Retour</value>
   </data>
