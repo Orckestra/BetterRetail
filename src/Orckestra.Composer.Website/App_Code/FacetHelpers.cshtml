@@ -128,7 +128,9 @@
 
 @helper ShowMoreLessFacets()
 {
-    <div v-if="facet.OnDemandFacetValues.length" v-bind:id="'onDemandFacets-' + facet.FieldName" class="collapse">
+    <div v-if="facet.OnDemandFacetValues.length" v-bind:id="'onDemandFacets-' + facet.FieldName" 
+         class="collapse"
+         v-bind:class="{'show': !IsValuesCollapsed(facet)}">
         <div v-if="facet.FacetType == '@(FacetType.SingleSelect)'">
             @SingleFacet("OnDemandFacetValues")
         </div>
@@ -141,7 +143,8 @@
 
 @helper ShowMoreLessButton()
 {
-    <a v-if="facet.OnDemandFacetValues.length" class="btn  btn-link  collapsed  font-weight-bold"
+    <a v-if="facet.OnDemandFacetValues.length" class="btn  btn-link  font-weight-bold"
+       v-bind:class="{'collapsed': IsValuesCollapsed(facet)}"
        data-toggle="collapse"
        v-bind:data-target="'#onDemandFacets-' + facet.FieldName">
         <span class="more">@Html.Localize("List-Search", "B_ShowMore") <i class="fa fa-angle-down" /></span>
