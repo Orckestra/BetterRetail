@@ -154,6 +154,7 @@
     <Compile Include="DataTypes\IBootstrapCarousel.cs" />
     <Compile Include="DataTypes\IGrocerySettingsMeta.cs" />
     <Compile Include="Api\StoreAndFulfillmentSelectionController.cs" />
+    <Compile Include="Extensions\ProductSearchResultsExtension.cs" />
     <Compile Include="Factory\GroceryCartViewModelFactory.cs" />
     <Compile Include="Factory\GroceryProductViewModelFactory.cs" />
     <Compile Include="Factory\GroceryStoreViewModelFactory.cs" />
@@ -178,12 +179,14 @@
     <Compile Include="Repositories\SalesScopeWishListRepository.cs" />
     <Compile Include="Repositories\TimeSlotRepository.cs" />
     <Compile Include="Requests\SetSelectedFulfillmentRequest.cs" />
+    <Compile Include="Services\GroceryCategoryBrowsingViewService.cs" />
     <Compile Include="Services\GroceryComposerContext.cs" />
     <Compile Include="Services\GroceryMembershipViewService.cs" />
     <Compile Include="Requests\GetTimeSlotsAvailabilityRequest.cs" />
     <Compile Include="Requests\SetSelectedFulfillmentMethodTypeRequest.cs" />
     <Compile Include="Requests\SetSelectedStoreRequest.cs" />
     <Compile Include="Requests\SetSelectedTimeSlotRequest.cs" />
+    <Compile Include="Services\GrocerySearchQueryViewService.cs" />
     <Compile Include="Services\GrocerySearchViewService.cs" />
     <Compile Include="Services\SalesScopeStoreLocatorViewService.cs" />
     <Compile Include="Services\SalesScopeStoreViewService.cs" />
@@ -238,6 +241,10 @@
     <ProjectReference Include="..\Orckestra.Composer.Product\Orckestra.Composer.Product.csproj">
       <Project>{1F767098-1FBF-4CB9-8637-6529E1CC0B24}</Project>
       <Name>Orckestra.Composer.Product</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Orckestra.Composer.SearchQuery\Orckestra.Composer.SearchQuery.csproj">
+      <Project>{6DEE1972-E64B-43F0-BBAF-04D0AA64DD60}</Project>
+      <Name>Orckestra.Composer.SearchQuery</Name>
     </ProjectReference>
     <ProjectReference Include="..\Orckestra.Composer.Search\Orckestra.Composer.Search.csproj">
       <Project>{CE6AD95E-0EBB-4E38-BF0B-27A67915FA68}</Project>

@@ -19,16 +19,18 @@ using System.Threading.Tasks;
 
 namespace Orckestra.Composer.Grocery.Services
 {
-    public class GrocerySearchViewService : SearchViewService
+    public class GroceryCategoryBrowsingViewService : CategoryBrowsingViewService
     {
         protected ILookupService LookupService { get; }
-        public GrocerySearchViewService(ICategoryRepository categoryRepository,
+        public GroceryCategoryBrowsingViewService(
             ISearchRepository searchRepository,
             IViewModelMapper viewModelMapper,
             IDamProvider damProvider,
             ILocalizationProvider localizationProvider,
             IProductUrlProvider productUrlProvider,
             ISearchUrlProvider searchUrlProvider,
+            ICategoryRepository categoryRepository,
+            ICategoryBrowsingUrlProvider categoryBrowsingUrlProvider,
             IFacetFactory facetFactory,
             ISelectedFacetFactory selectedFacetFactory,
             IPriceProvider priceProvider,
@@ -36,31 +38,34 @@ namespace Orckestra.Composer.Grocery.Services
             IProductSettingsViewService productSettings,
             IScopeViewService scopeViewService,
             IRecurringOrdersSettings recurringOrdersSettings,
+            IFulfillmentContext fulfillmentContext,
             ILookupService lookupService)
-            : base(categoryRepository,
-                searchRepository,
+            : base(searchRepository,
                 viewModelMapper,
                 damProvider,
                 localizationProvider,
                 productUrlProvider,
                 searchUrlProvider,
+                categoryRepository,
+                categoryBrowsingUrlProvider,
                 facetFactory,
                 selectedFacetFactory,
                 priceProvider,
                 composerContext,
                 productSettings,
                 scopeViewService,
-                recurringOrdersSettings)
+                recurringOrdersSettings,
+                fulfillmentContext)
         {
             LookupService = lookupService ?? throw new ArgumentNullException(nameof(lookupService));
         }
 
-        protected override async Task<ProductSearchViewModel> CreateProductSearchViewModelAsync(ProductDocument productDocument, CreateProductSearchResultsViewModelParam<SearchParam> createSearchViewModelParam, IDictionary<Tuple<string, string>, ProductMainImage> imgDictionary)
+        protected override async Task<ProductSearchViewModel> CreateProductSearchViewModelAsync(ProductDocument productDocument, CreateProductSearchResultsViewModelParam<BrowsingSearchParam> createSearchViewModelParam, IDictionary<Tuple<string, string>, ProductMainImage> imgDictionary)
         {
             var productSearchViewModel =
                 await base.CreateProductSearchViewModelAsync(productDocument, createSearchViewModelParam, imgDictionary);
 
-            await productSearchViewModel.BuildProductBadgeValues<SearchParam>(createSearchViewModelParam, LookupService, createSearchViewModelParam.SearchParam.Criteria.CultureInfo.Name);
+            await productSearchViewModel.BuildProductBadgeValues<BrowsingSearchParam>(createSearchViewModelParam, LookupService, createSearchViewModelParam.SearchParam.Criteria.CultureInfo.Name);
             return productSearchViewModel;
         }
     }

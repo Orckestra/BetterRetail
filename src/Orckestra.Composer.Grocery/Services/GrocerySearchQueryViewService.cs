@@ -9,6 +9,9 @@ using Orckestra.Composer.Search.Providers;
 using Orckestra.Composer.Search.Repositories;
 using Orckestra.Composer.Search.Services;
 using Orckestra.Composer.Search.ViewModels;
+using Orckestra.Composer.SearchQuery.Providers;
+using Orckestra.Composer.SearchQuery.Repositories;
+using Orckestra.Composer.SearchQuery.Services;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Services.Lookup;
 using Orckestra.Composer.ViewModels;
@@ -16,13 +19,14 @@ using Orckestra.Overture.ServiceModel.Search;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using IInventoryRepository = Orckestra.Composer.SearchQuery.Repositories.IInventoryRepository;
 
 namespace Orckestra.Composer.Grocery.Services
 {
-    public class GrocerySearchViewService : SearchViewService
+    public class GrocerySearchQueryViewService : SearchQueryViewService
     {
         protected ILookupService LookupService { get; }
-        public GrocerySearchViewService(ICategoryRepository categoryRepository,
+        public GrocerySearchQueryViewService(
             ISearchRepository searchRepository,
             IViewModelMapper viewModelMapper,
             IDamProvider damProvider,
@@ -35,10 +39,13 @@ namespace Orckestra.Composer.Grocery.Services
             IComposerContext composerContext,
             IProductSettingsViewService productSettings,
             IScopeViewService scopeViewService,
+            ISearchQueryRepository searchQueryRepository,
+            ISearchQueryUrlProvider searchQueryUrlProvider,
+            IProductSettingsRepository productSettingsRepository,
+            IInventoryRepository inventoryRepository,
             IRecurringOrdersSettings recurringOrdersSettings,
             ILookupService lookupService)
-            : base(categoryRepository,
-                searchRepository,
+            : base(searchRepository,
                 viewModelMapper,
                 damProvider,
                 localizationProvider,
@@ -50,6 +57,10 @@ namespace Orckestra.Composer.Grocery.Services
                 composerContext,
                 productSettings,
                 scopeViewService,
+                searchQueryRepository,
+                searchQueryUrlProvider,
+                productSettingsRepository,
+                inventoryRepository,
                 recurringOrdersSettings)
         {
             LookupService = lookupService ?? throw new ArgumentNullException(nameof(lookupService));
