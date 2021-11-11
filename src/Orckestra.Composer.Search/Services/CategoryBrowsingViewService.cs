@@ -116,6 +116,7 @@ namespace Orckestra.Composer.Search.Services
 
         private int CategoryNodeIndex(CategoryFacetValuesTreeNode node, string categoryId)
         {
+            if (node.ChildNodes == null) return -1;
             return node.ChildNodes.FindIndex(c => c.CategoryId == categoryId || CategoryNodeIndex(c, categoryId) >= 0);
         }
 
