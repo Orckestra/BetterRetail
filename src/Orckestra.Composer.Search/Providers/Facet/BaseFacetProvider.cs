@@ -73,15 +73,15 @@ namespace Orckestra.Composer.Search.Providers.Facet
             };
 
             //In order to always see selected facet values
-            var selectedValueCount = facetValues.Count(x => x.IsSelected);
-            var maxCollapsedValueCount = selectedValueCount > setting.MaxCollapsedValueCount
-                ? selectedValueCount
-                : setting.MaxCollapsedValueCount;
+            var selectedValueIndex= facetValues.FindIndex(x => x.IsSelected);
+            var maxExpendedValueCount = selectedValueIndex > setting.MaxExpendedValueCount
+                ? selectedValueIndex
+                : (setting.MaxExpendedValueCount - setting.MaxCollapsedValueCount);
 
-            facet.FacetValues = facetValues.Take(maxCollapsedValueCount).ToList();
+            facet.FacetValues = facetValues.Take(setting.MaxCollapsedValueCount).ToList();
             facet.OnDemandFacetValues = facetValues
-                .Skip(maxCollapsedValueCount)
-                .Take(setting.MaxExpendedValueCount - setting.MaxCollapsedValueCount)
+                .Skip(setting.MaxCollapsedValueCount)
+                .Take(maxExpendedValueCount)
                 .ToList();
 
             return facet;

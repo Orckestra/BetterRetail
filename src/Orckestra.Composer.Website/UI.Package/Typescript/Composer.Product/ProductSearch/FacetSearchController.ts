@@ -56,7 +56,7 @@ module Orckestra.Composer {
                 },
                 methods: {
                     IsValuesCollapsed(facet) {
-                        return facet.OnDemandFacetValues.findIndex((n:any) => n.IsSelected) < facet.FacetValues.length;
+                        return facet.OnDemandFacetValues.findIndex((n:any) => n.IsSelected) < 0;
                     }
                 },
                 updated() {
