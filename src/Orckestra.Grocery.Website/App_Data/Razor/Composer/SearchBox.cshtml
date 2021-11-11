@@ -104,7 +104,7 @@
 
                         <template slot-scope="{ suggestion, index }">
                             <div v-if="suggestion.name === 'autocomplete'" class="d-flex border-bottom py-2">
-                                <div class="col-3 col-sm-2">
+                                <div class="col-2 p-0 col-sm-2 px-sm-1">
                                     <a class="product-tile-media"
                                        v-on:mouseup.stop=""
                                        v-bind:href="suggestion.item.Url">
@@ -114,7 +114,7 @@
                                              v-on:error="onImageError($event, suggestion)" />
                                     </a>
                                 </div>
-                                <div class="col-9 col-sm-10">
+                                <div class="col-10 col-sm-10">
                                     <div class="row h-100 align-items-center">
                                         <div class="col-6 col-sm-8">
 
@@ -136,7 +136,7 @@
                                                 <span v-else="v-else" class="h4" data-qa="search-product-price">{{suggestion.item.DisplayListPrice}}</span>
                                             </div>
                                         </div>
-                                        <div class="col-6 col-sm-4">
+                                        <div class="col-6 p-0 col-sm-4 px-sm-1">
                                             @ProductHelpers.AddToCartButtonWithQuantity("suggestion.item", "true", @Html.Localize("General", "B_AddToCartProductSuggestion"))
                                         </div>
                                     </div>

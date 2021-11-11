@@ -173,15 +173,17 @@
     </div>
 }
 
-@helper StoreIcon()
+@helper StoreIcon(bool showTimeslotInformation = true)
 {
     <span class="d-none d-lg-inline">
         <i class="fa fa-sm mr-1" v-bind:class="[FulfillmentMethodType == '@(FulfillmentMethodType.PickUp)' ? 'fa-store-alt' : 'fa-truck']" />
         <span v-if="Store">
             <span class="d-none d-lg-inline">
                 {{Store.LocalizedDisplayName}}
+                @if (showTimeslotInformation) {
                 <span v-if="SelectedFulfillment.TimeSlotLoading">@GeneralHelpers.LoadingSpinner(true)</span>
                 <span v-else-if="TimeSlotReservationTentative">&#160;|&#160;{{TimeSlotReservationDisplay}}</span>
+                }
             </span>
             <span class="d-lg-none">
                 @Html.Localize("Grocery", "B_BookStore")
@@ -203,6 +205,7 @@
         </span>
     </span>
 }
+
 @helper SelectedFulfillmentMethod()
 {
     <div v-if="SelectedFulfillment.FulfillmentMethodType" class="mb-2">
