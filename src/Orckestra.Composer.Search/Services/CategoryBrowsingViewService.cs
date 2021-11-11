@@ -92,17 +92,31 @@ namespace Orckestra.Composer.Search.Services
             viewModel.FacetSettings.CategoryFacetValuesTree = await BuildCategoryFacetValuesTree(viewModel.ProductSearchResults.Facets,
                 viewModel.FacetSettings.SelectedFacets,
                 viewModel.ProductSearchResults.CategoryFacetCounts).ConfigureAwait(false);
-
-            viewModel.FacetSettings.CategoryFacetValuesTree?.ChildNodes?.ForEach(childNode => BuildCategoryUrlsForTreeNode(param, childNode));
-            viewModel.FacetSettings.CategoryFacetValuesTree?.ChildNodes?.ForEach(childNode => CleanSiblingFacets(param, childNode));
+            if (viewModel.FacetSettings.CategoryFacetValuesTree != null)
+            {
+                var categoryRoot = CategoryRootNode(viewModel.FacetSettings.CategoryFacetValuesTree, param.CategoryId);
+                viewModel.FacetSettings.CategoryFacetValuesTree.ChildNodes = new List<CategoryFacetValuesTreeNode>() { categoryRoot };
+                viewModel.FacetSettings.CategoryFacetValuesTree.ChildNodes?.ForEach(childNode => BuildCategoryUrlsForTreeNode(param, childNode));
+                viewModel.FacetSettings.CategoryFacetValuesTree.ChildNodes?.ForEach(childNode => CleanSiblingFacets(param, childNode));
+                viewModel.FacetSettings.Context["CategoryFacetValuesTree"] = viewModel.FacetSettings.CategoryFacetValuesTree;
+            }
 
             // Json context for Facets
-            viewModel.FacetSettings.Context["CategoryFacetValuesTree"] = viewModel.FacetSettings.CategoryFacetValuesTree;
             viewModel.FacetSettings.Context["SelectedFacets"] = viewModel.FacetSettings.SelectedFacets;
             viewModel.FacetSettings.Context["Facets"] = viewModel.ProductSearchResults.Facets.Where(f => !f.FieldName.StartsWith(SearchConfiguration.CategoryFacetFiledNamePrefix));
             viewModel.FacetSettings.Context["PromotedFacetValues"] = viewModel.ProductSearchResults.PromotedFacetValues;
 
             return viewModel;
+        }
+
+        private CategoryFacetValuesTreeNode CategoryRootNode(CategoryFacetValuesTree node, string categoryId)
+        {
+            return node.ChildNodes.FirstOrDefault(c => c.CategoryId == categoryId || CategoryNodeIndex(c, categoryId) >= 0);
+        }
+
+        private int CategoryNodeIndex(CategoryFacetValuesTreeNode node, string categoryId)
+        {
+            return node.ChildNodes.FindIndex(c => c.CategoryId == categoryId || CategoryNodeIndex(c, categoryId) >= 0);
         }
 
         private void BuildCategoryUrlsForTreeNode(GetCategoryBrowsingViewModelParam param, CategoryFacetValuesTreeNode node)
@@ -116,6 +130,7 @@ namespace Orckestra.Composer.Search.Services
         /// </summary>
         /// <param name="param"></param>
         /// <param name="node"></param>
+        /// 
         private void CleanSiblingFacets(GetCategoryBrowsingViewModelParam param, CategoryFacetValuesTreeNode node)
         {
             var selected = node.ChildNodes?.FirstOrDefault(c => c.IsSelected && c.CategoryId == param.CategoryId);

@@ -10,15 +10,6 @@
 
     public IBrowseCategoryRequestContext BrowsingRequestContext { get; set; }
 
-    private int CategoryRootIndex(CategoryFacetValuesTree node, string categoryId)
-    {
-        return node.ChildNodes.FindIndex(c => c.CategoryId == categoryId || CategoryNodeIndex(c, categoryId) >= 0);
-    }
-
-    private int CategoryNodeIndex(CategoryFacetValuesTreeNode node, string categoryId)
-    {
-        return node.ChildNodes.FindIndex(c => c.CategoryId == categoryId || CategoryNodeIndex(c, categoryId) >= 0);
-    }
 }
 @{
     var categoryBrowsingViewModel = BrowsingRequestContext.GetViewModelAsync().Result;
@@ -57,15 +48,13 @@
                             @FacetHelpers.PromotedFacetValues()
                             @if (isCategoryTreeView && categoryFacetValuesTree.ChildNodes.Count > 0)
                             {
-                                var rootIndex = CategoryRootIndex(categoryFacetValuesTree, categoryBrowsingViewModel.CategoryId);
-                                var rootCategoryTreeItem = categoryFacetValuesTree.ChildNodes[rootIndex];
                                 <div id="categoriesTree" class="card bg-light  mb-3  facets-card category-page">
                                     <div class="card-header">@Html.Localize("List-Search", "L_RefinerCategories")</div>
                                     <div class="card-body">
                                         <div class="mb-1">
-                                            <strong>@Html.Localize("General", "L_All") @rootCategoryTreeItem.Title ({{CategoryFacetValuesTree.ChildNodes[@(rootIndex)].Quantity}})</strong>
+                                            <strong>@Html.Localize("General", "L_All") @categoryFacetValuesTree.ChildNodes[0].Title ({{CategoryFacetValuesTree.ChildNodes[0].Quantity}})</strong>
                                         </div>
-                                        <facets-tree v-bind:parentnode="CategoryFacetValuesTree.ChildNodes[@(rootIndex)]"
+                                        <facets-tree v-bind:parentnode="CategoryFacetValuesTree.ChildNodes[0]"
                                                      categoryId="@categoryBrowsingViewModel.CategoryId"
                                                      showMoreText="@Html.Localize("List-Search", "B_ShowMore")"
                                                      showLessText="@Html.Localize("List-Search", "B_ShowLess")">
