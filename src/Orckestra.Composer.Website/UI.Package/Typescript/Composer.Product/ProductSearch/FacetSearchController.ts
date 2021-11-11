@@ -116,7 +116,7 @@ module Orckestra.Composer {
                 this.eventHub.publish('facetsRemoved', { data });
             } else {
                 anchorContext.parent().parent().find('a').removeClass('selected');
-                anchorContext.addClass('selected');
+                anchorContext.addClass('selected').addClass('highlighted');
                 this.publishSingleFacetsChanged(facetKey, facetValue, UrlHelper.resolvePageType());
             }
         }
