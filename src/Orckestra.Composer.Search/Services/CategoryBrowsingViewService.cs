@@ -34,10 +34,8 @@ namespace Orckestra.Composer.Search.Services
 
         public CategoryBrowsingViewService(
             ISearchRepository searchRepository,
-            IViewModelMapper viewModelMapper,
             IDamProvider damProvider,
             ILocalizationProvider localizationProvider,
-            IProductUrlProvider productUrlProvider,
             ISearchUrlProvider searchUrlProvider,
             ICategoryRepository categoryRepository,
             ICategoryBrowsingUrlProvider categoryBrowsingUrlProvider,
@@ -46,24 +44,20 @@ namespace Orckestra.Composer.Search.Services
             IPriceProvider priceProvider,
             IComposerContext composerContext,
             IProductSettingsViewService productSettings,
-            IScopeViewService scopeViewService,
-            IRecurringOrdersSettings recurringOrdersSettings,
-            IFulfillmentContext fulfillmentContext)
+            IFulfillmentContext fulfillmentContext,
+            IProductSearchViewModelFactory productSearchViewModelFactory)
 
             : base(
             searchRepository,
-            viewModelMapper,
             damProvider,
             localizationProvider,
-            productUrlProvider,
             searchUrlProvider,
             facetFactory,
             selectedFacetFactory,
             priceProvider,
             composerContext,
             productSettings,
-            scopeViewService,
-            recurringOrdersSettings)
+            productSearchViewModelFactory)
         {
             CategoryRepository = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository));
             CategoryBrowsingUrlProvider = categoryBrowsingUrlProvider ?? throw new ArgumentNullException(nameof(categoryBrowsingUrlProvider));
