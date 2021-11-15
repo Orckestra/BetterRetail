@@ -34,7 +34,7 @@ namespace Orckestra.Composer.Search.Factory
             RecurringOrdersSettings = recurringOrdersSettings ?? throw new ArgumentNullException(nameof(recurringOrdersSettings));
         }
 
-        public virtual ProductSearchViewModel GetProductSearchViewModel(ProductDocument productDocument, SearchCriteria criteria, IDictionary<Tuple<string, string>, ProductMainImage> imgDictionary)
+        public virtual ProductSearchViewModel GetProductSearchViewModel(ProductDocument productDocument, SearchCriteria criteria, IDictionary<(string, string), ProductMainImage> imgDictionary)
         {
             var cultureInfo = criteria.CultureInfo;
 
@@ -62,8 +62,8 @@ namespace Orckestra.Composer.Search.Factory
         protected virtual string ExtractLookupId(string fieldName, PropertyBag propertyBag)
         {
             if (propertyBag == null) { return null; }
-            var fieldValue = propertyBag.ContainsKey(fieldName)
-                ? (propertyBag[fieldName] as string ?? (propertyBag[fieldName] as string[])[0])
+            var fieldValue = propertyBag.TryGetValue(fieldName, out object value)
+                ? (value as string ?? ((string[])value).First())
                 : null;
             if (string.IsNullOrWhiteSpace(fieldValue)) { return null; }
 
@@ -132,7 +132,7 @@ namespace Orckestra.Composer.Search.Factory
 
         protected virtual void MapProductSearchViewModelImage(
           ProductSearchViewModel productSearchVm,
-          IDictionary<Tuple<string, string>, ProductMainImage> imgDictionary)
+          IDictionary<(string, string), ProductMainImage> imgDictionary)
         {
             string productVariantId = null;
             if (!string.IsNullOrWhiteSpace(productSearchVm.VariantId))
@@ -140,7 +140,7 @@ namespace Orckestra.Composer.Search.Factory
                 productVariantId = productSearchVm.VariantId;
             }
 
-            var imageKey = Tuple.Create(productSearchVm.ProductId, productVariantId);
+            var imageKey = (productSearchVm.ProductId, productVariantId);
             var imageExists = imgDictionary.TryGetValue(imageKey, out ProductMainImage mainImage);
 
             if (imageExists)

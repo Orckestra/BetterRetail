@@ -121,7 +121,7 @@ namespace Orckestra.Composer.Cart.Factory
                 KvaDisplayValues = lineItem.KvaDisplayValues
             }).ToList();
 
-            if (param.ImageDictionary.TryGetValue(Tuple.Create(lineItem.ProductId, lineItem.VariantId), out ProductMainImage mainImage))
+            if (param.ImageDictionary.TryGetValue((lineItem.ProductId, lineItem.VariantId), out ProductMainImage mainImage))
             {
                 vm.ImageUrl = mainImage.ImageUrl;
                 vm.FallbackImageUrl = mainImage.FallbackImageUrl;
@@ -261,7 +261,7 @@ namespace Orckestra.Composer.Cart.Factory
                 vm.IsValid = true;
             }
 
-            if (param.ImageDictionary.TryGetValue(Tuple.Create(lineItem.ProductId, lineItem.VariantId), out ProductMainImage mainImage))
+            if (param.ImageDictionary.TryGetValue((lineItem.ProductId, lineItem.VariantId), out ProductMainImage mainImage))
             {
                 vm.ImageUrl = mainImage.ImageUrl;
                 vm.FallbackImageUrl = mainImage.FallbackImageUrl;

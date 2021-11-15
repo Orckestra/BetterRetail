@@ -24,7 +24,7 @@ namespace Orckestra.Composer.Parameters
         /// <summary>
         /// Image dictionnary for the lineitem
         /// </summary>
-        public IDictionary<Tuple<string, string>, ProductMainImage> ImageDictionnary { get; set; }
+        public IDictionary<(string, string), ProductMainImage> ImageDictionnary { get; set; }
 
         /// <summary>
         /// The Request Base Url

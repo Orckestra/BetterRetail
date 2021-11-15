@@ -12,7 +12,7 @@ namespace Orckestra.Composer.Cart.Parameters
 
         public LineItem LineItem { get; set; }
 
-        public IDictionary<Tuple<string, string>, ProductMainImage> ImageDictionary { get; set; }
+        public IDictionary<(string, string), ProductMainImage> ImageDictionary { get; set; }
 
         public CultureInfo CultureInfo { get; set; }
 
