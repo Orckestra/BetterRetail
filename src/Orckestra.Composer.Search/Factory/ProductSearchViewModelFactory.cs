@@ -34,7 +34,7 @@ namespace Orckestra.Composer.Search.Factory
             RecurringOrdersSettings = recurringOrdersSettings ?? throw new ArgumentNullException(nameof(recurringOrdersSettings));
         }
 
-        public virtual ProductSearchViewModel GetProductSearchViewModel(ProductDocument productDocument, SearchCriteria criteria, IDictionary<(string, string), ProductMainImage> imgDictionary)
+        public virtual ProductSearchViewModel GetProductSearchViewModel(ProductDocument productDocument, SearchCriteria criteria, IDictionary<(string ProductId, string VariantId), ProductMainImage> imgDictionary)
         {
             var cultureInfo = criteria.CultureInfo;
 
@@ -131,7 +131,7 @@ namespace Orckestra.Composer.Search.Factory
 
         protected virtual void MapProductSearchViewModelImage(
           ProductSearchViewModel productSearchVm,
-          IDictionary<(string, string), ProductMainImage> imgDictionary)
+          IDictionary<(string ProductId, string VariantId), ProductMainImage> imgDictionary)
         {
             string productVariantId = null;
             if (!string.IsNullOrWhiteSpace(productSearchVm.VariantId))

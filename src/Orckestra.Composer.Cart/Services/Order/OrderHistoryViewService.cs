@@ -351,7 +351,7 @@ namespace Orckestra.Composer.Cart.Services.Order
             return result;
         }
 
-        private async Task<IDictionary<(string, string), ProductMainImage>> CreateImageDictionary(List<(string ProductId, string VariantId)> itemsToProcess)
+        private async Task<IDictionary<(string ProductId, string VariantId), ProductMainImage>> CreateImageDictionary(List<(string ProductId, string VariantId)> itemsToProcess)
         {
             var productImageInfo = new ProductImageInfo
             {
