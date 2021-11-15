@@ -211,7 +211,7 @@ namespace Orckestra.Composer.Search.Services
 
             foreach (var (productSearchVm, productDocument) in productSearchResultList)
             {
-                ProductSearchViewModelFactory.MapProductSearchViewModelAvailableForSell(productSearchVm, productDocument, _productSettings.IsInventoryEnabled);
+                ProductSearchViewModelFactory.MapProductSearchViewModelAvailableForSell(productSearchVm, productDocument, _productSettings);
                 var pricing = await PriceProvider.GetPriceAsync(productSearchVm.HasVariants, productDocument).ConfigureAwait(false);
                 ProductSearchViewModelFactory.MapProductSearchViewModelPricing(productSearchVm, pricing);
             }

@@ -149,9 +149,9 @@ namespace Orckestra.Composer.Search.Factory
             }
         }
 
-        public virtual void MapProductSearchViewModelAvailableForSell(ProductSearchViewModel productSearchViewModel, ProductDocument productDocument, bool IsInventoryEnabled)
+        public virtual void MapProductSearchViewModelAvailableForSell(ProductSearchViewModel productSearchViewModel, ProductDocument productDocument, ProductSettingsViewModel productSettings)
         {
-            if (!IsInventoryEnabled) { 
+            if (!productSettings.IsInventoryEnabled) { 
                 productSearchViewModel.IsAvailableToSell = true;
                 return;
             }
