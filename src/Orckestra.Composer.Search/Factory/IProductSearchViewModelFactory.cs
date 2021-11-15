@@ -10,5 +10,7 @@ namespace Orckestra.Composer.Search.Factory
     public interface IProductSearchViewModelFactory
     {
         ProductSearchViewModel GetProductSearchViewModel(ProductDocument productDocument, SearchCriteria criteria, IDictionary<(string, string), ProductMainImage> imgDictionary);
+        void MapProductSearchViewModelPricing(ProductSearchViewModel productSearchVm, ProductPriceSearchViewModel pricing);
+        void MapProductSearchViewModelAvailableForSell(ProductSearchViewModel productSearchViewModel, ProductDocument productDocument, bool IsInventoryEnabled);
     }
 }

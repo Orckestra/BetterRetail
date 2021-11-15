@@ -50,7 +50,6 @@ namespace Orckestra.Composer.Search.Factory
             MapProductSearchViewModelInfos(productSearchVm, productDocument, cultureInfo);
             MapProductSearchViewModelUrl(productSearchVm, variantId, cultureInfo, criteria.BaseUrl);
             MapProductSearchViewModelImage(productSearchVm, imgDictionary);
-            MapProductSearchViewModelAvailableForSell(productSearchVm, productDocument);
 
             productSearchVm.IsRecurringOrderEligible = RecurringOrdersSettings.Enabled && productDocument.PropertyBag.IsRecurringOrderEligible();
             productSearchVm.Context["IsRecurringOrderEligible "] = productSearchVm.IsRecurringOrderEligible;
@@ -150,9 +149,13 @@ namespace Orckestra.Composer.Search.Factory
             }
         }
 
-
-        protected virtual void MapProductSearchViewModelAvailableForSell(ProductSearchViewModel productSearchViewModel, ProductDocument productDocument)
+        public virtual void MapProductSearchViewModelAvailableForSell(ProductSearchViewModel productSearchViewModel, ProductDocument productDocument, bool IsInventoryEnabled)
         {
+            if (!IsInventoryEnabled) { 
+                productSearchViewModel.IsAvailableToSell = true;
+                return;
+            }
+
             if (productSearchViewModel.HasVariants) {
                 productSearchViewModel.IsAvailableToSell = true;
                 return;
@@ -181,6 +184,17 @@ namespace Orckestra.Composer.Search.Factory
                 default:
                     return InventoryStatusEnum.Unspecified;
             }
+        }
+
+        public virtual void MapProductSearchViewModelPricing(ProductSearchViewModel productSearchVm, ProductPriceSearchViewModel pricing)
+        {
+            productSearchVm.DisplayListPrice = pricing.DisplayPrice;
+            productSearchVm.DisplaySpecialPrice = pricing.DisplaySpecialPrice;
+            productSearchVm.HasPriceRange = pricing.HasPriceRange;
+            productSearchVm.ListPrice = pricing.ListPrice;
+            productSearchVm.Price = pricing.Price;
+            productSearchVm.IsOnSale = pricing.IsOnSale;
+            productSearchVm.PriceListId = pricing.PriceListId;
         }
     }
 }

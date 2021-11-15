@@ -181,7 +181,7 @@ namespace Orckestra.Composer.Search.Services
                 searchResultsList.Add((ProductSearchViewModelFactory.GetProductSearchViewModel(resultItem, param.SearchParam.Criteria, imgDictionary), resultItem));
             }
             
-            searchResultViewModel.SearchResults = await AppendProductSearchViewModels(searchResultsList).ConfigureAwait(false);
+            searchResultViewModel.SearchResults = await EnrichAppendProductSearchViewModels(searchResultsList).ConfigureAwait(false);
 
             var facets = BuildFacets(param.SearchParam.Criteria, param.SearchResult);
             searchResultViewModel.Facets = facets;
@@ -205,16 +205,15 @@ namespace Orckestra.Composer.Search.Services
 
         // NOTE: when fetching data for products from OCC APIs, make sure to query data in batches for optimal performance
         // https://docs.orckestra.com/developer-documentation/platform-performance/batch-api-requests
-        protected virtual async Task<IList<ProductSearchViewModel>> AppendProductSearchViewModels(IList<(ProductSearchViewModel, ProductDocument)> productSearchResultList)
+        protected virtual async Task<IList<ProductSearchViewModel>> EnrichAppendProductSearchViewModels(IList<(ProductSearchViewModel, ProductDocument)> productSearchResultList)
         {
             _productSettings = await ProductSettings.GetProductSettings(ComposerContext.Scope, ComposerContext.CultureInfo).ConfigureAwait(false);
 
             foreach (var (productSearchVm, productDocument) in productSearchResultList)
             {
-                if (!_productSettings.IsInventoryEnabled) { productSearchVm.IsAvailableToSell = true; }
-
+                ProductSearchViewModelFactory.MapProductSearchViewModelAvailableForSell(productSearchVm, productDocument, _productSettings.IsInventoryEnabled);
                 var pricing = await PriceProvider.GetPriceAsync(productSearchVm.HasVariants, productDocument).ConfigureAwait(false);
-                MapProductSearchViewModelPricing(productSearchVm, pricing);
+                ProductSearchViewModelFactory.MapProductSearchViewModelPricing(productSearchVm, pricing);
             }
 
             return productSearchResultList.Select((resultItem) => resultItem.Item1).ToList();
@@ -356,17 +355,6 @@ namespace Orckestra.Composer.Search.Services
             }
 
             return previousPage;
-        }
-
-        protected virtual void MapProductSearchViewModelPricing(ProductSearchViewModel productSearchVm, ProductPriceSearchViewModel pricing)
-        {
-            productSearchVm.DisplayListPrice = pricing.DisplayPrice;
-            productSearchVm.DisplaySpecialPrice = pricing.DisplaySpecialPrice;
-            productSearchVm.HasPriceRange = pricing.HasPriceRange;
-            productSearchVm.ListPrice = pricing.ListPrice;
-            productSearchVm.Price = pricing.Price;
-            productSearchVm.IsOnSale = pricing.IsOnSale;
-            productSearchVm.PriceListId = pricing.PriceListId;
         }
       
 
