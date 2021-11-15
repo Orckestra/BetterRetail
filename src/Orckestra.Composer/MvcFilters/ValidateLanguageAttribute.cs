@@ -55,7 +55,7 @@ namespace Orckestra.Composer.MvcFilters
         /// </summary>
         /// <param name="couple"></param>
         /// <returns></returns>
-        private (decimal, string) GetQuantifiedValue(string couple)
+        private (decimal quantity, string value) GetQuantifiedValue(string couple)
         {
             decimal quantity = 1.0m;
             string value = string.Empty;

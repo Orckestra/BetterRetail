@@ -17,7 +17,7 @@ namespace Orckestra.Composer.ContentSearch.Functions
             "a014b691-fc87-42c1-b664-84e0b951e4ed" //Search Page
         };
 
-        public static (string, string)[] GetSearchablePageTypesOptions()
+        public static (string Name, string Id)[] GetSearchablePageTypesOptions()
         {
             var pageTypes = DataFacade.GetData<IPageType>().Where(p => p.Available && !PageTypesToExclude.Contains(p.Id.ToString()));
 
