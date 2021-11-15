@@ -181,7 +181,7 @@ namespace Orckestra.Composer.Search.Services
                 searchResultsList.Add((ProductSearchViewModelFactory.GetProductSearchViewModel(resultItem, param.SearchParam.Criteria, imgDictionary), resultItem));
             }
             
-            searchResultViewModel.SearchResults = await AppendProductSearchViewModels(searchResultsList);
+            searchResultViewModel.SearchResults = await AppendProductSearchViewModels(searchResultsList).ConfigureAwait(false);
 
             var facets = BuildFacets(param.SearchParam.Criteria, param.SearchResult);
             searchResultViewModel.Facets = facets;

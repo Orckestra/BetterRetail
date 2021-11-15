@@ -160,13 +160,9 @@ namespace Orckestra.Composer.Search.Factory
 
             var availableStatusesForSell = ComposerConfiguration.AvailableStatusForSell;
 
-            productSearchViewModel.IsAvailableToSell = (from inventoryItemAvailability
-                        in productDocument.InventoryLocationStatuses
-                    from inventoryItemStatuse
-                        in inventoryItemAvailability.Statuses
-                    select GetInventoryItemStatus(inventoryItemStatuse.Status))
-                    .Any(inventoryItemStatus => availableStatusesForSell
-                        .Any(availableStatusForSell => availableStatusForSell == inventoryItemStatus));
+            productSearchViewModel.IsAvailableToSell = productDocument.InventoryLocationStatuses.SelectMany(_ => _.Statuses)
+                .Select(status => GetInventoryItemStatus(status.Status))
+                .Any(availableStatusesForSell.Contains);
         }
 
 
