@@ -99,7 +99,7 @@ namespace Orckestra.Composer.Cart.Providers.CartMerge
 
 		protected virtual List<LineItem> MergeLineItems(List<LineItem> guestLineItems, List<LineItem> loggedLineItems)
 		{
-			var dictionary = new Dictionary<(string, string), LineItem>();
+			var dictionary = new Dictionary<(string ProductId, string VariantId), LineItem>();
 
 			if (guestLineItems != null)
 			{

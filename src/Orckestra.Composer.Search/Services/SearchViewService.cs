@@ -26,32 +26,26 @@ namespace Orckestra.Composer.Search.Services
         public SearchViewService(
             ICategoryRepository categoryRepository,
             ISearchRepository searchRepository,
-            IViewModelMapper viewModelMapper,
             IDamProvider damProvider,
             ILocalizationProvider localizationProvider,
-            IProductUrlProvider productUrlProvider,
             ISearchUrlProvider searchUrlProvider,
             IFacetFactory facetFactory,
             ISelectedFacetFactory selectedFacetFactory,
             IPriceProvider priceProvider,
             IComposerContext composerContext,
             IProductSettingsViewService productSettings,
-            IScopeViewService scopeViewService,
-            IRecurringOrdersSettings recurringOrdersSettings)
+            IProductSearchViewModelFactory productSearchViewModelFactory)
             : base(
             searchRepository,
-            viewModelMapper,
             damProvider,
             localizationProvider,
-            productUrlProvider,
             searchUrlProvider,
             facetFactory,
             selectedFacetFactory,
             priceProvider,
             composerContext,
             productSettings,
-            scopeViewService,
-            recurringOrdersSettings)
+            productSearchViewModelFactory)
         {
             CategoryRepository = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository));
         }
