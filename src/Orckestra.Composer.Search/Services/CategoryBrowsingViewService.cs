@@ -41,9 +41,7 @@ namespace Orckestra.Composer.Search.Services
             ICategoryBrowsingUrlProvider categoryBrowsingUrlProvider,
             IFacetFactory facetFactory,
             ISelectedFacetFactory selectedFacetFactory,
-            IPriceProvider priceProvider,
             IComposerContext composerContext,
-            IProductSettingsViewService productSettings,
             IFulfillmentContext fulfillmentContext,
             IProductSearchViewModelFactory productSearchViewModelFactory)
 
@@ -54,9 +52,7 @@ namespace Orckestra.Composer.Search.Services
             searchUrlProvider,
             facetFactory,
             selectedFacetFactory,
-            priceProvider,
             composerContext,
-            productSettings,
             productSearchViewModelFactory)
         {
             CategoryRepository = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository));
