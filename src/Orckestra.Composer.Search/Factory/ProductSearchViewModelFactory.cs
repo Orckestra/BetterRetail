@@ -210,15 +210,17 @@ namespace Orckestra.Composer.Search.Factory
             productSearchVm.PriceListId = pricing.PriceListId;
         }
 
-        // NOTE: when fetching data for products from OCC APIs, make sure to query data in batches for optimal performance
-        // https://docs.orckestra.com/developer-documentation/platform-performance/batch-api-requests
+        /// <remarks>
+        /// NOTE: when fetching data for products from OCC APIs, make sure to query data in batches for optimal performance
+        /// https://docs.orckestra.com/developer-documentation/platform-performance/batch-api-requests
+        /// </remarks>
         public virtual async Task<IList<ProductSearchViewModel>> EnrichAppendProductSearchViewModels(IList<(ProductSearchViewModel, ProductDocument)> productSearchResultList, SearchCriteria criteria)
         {
-            var _productSettings = await ProductSettings.GetProductSettings(ComposerContext.Scope, ComposerContext.CultureInfo).ConfigureAwait(false);
+            var productSettings = await ProductSettings.GetProductSettings(criteria.Scope, criteria.CultureInfo).ConfigureAwait(false);
 
             foreach (var (productSearchVm, productDocument) in productSearchResultList)
             {
-                MapProductSearchViewModelAvailableForSell(productSearchVm, productDocument, _productSettings);
+                MapProductSearchViewModelAvailableForSell(productSearchVm, productDocument, productSettings);
                 var pricing = await PriceProvider.GetPriceAsync(productSearchVm.HasVariants, productDocument).ConfigureAwait(false);
                 MapProductSearchViewModelPricing(productSearchVm, pricing);
             }
