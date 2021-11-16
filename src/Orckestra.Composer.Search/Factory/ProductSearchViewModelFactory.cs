@@ -4,15 +4,19 @@ using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Dam;
 using Orckestra.Composer.Search.Helpers;
+using Orckestra.Composer.Search.Providers;
 using Orckestra.Composer.Search.ViewModels;
+using Orckestra.Composer.Services;
 using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel;
+using Orckestra.Overture.ServiceModel.Products;
 using Orckestra.Overture.ServiceModel.Products.Inventory;
 using Orckestra.Overture.ServiceModel.Search;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Orckestra.Composer.Search.Factory
 {
@@ -23,15 +27,24 @@ namespace Orckestra.Composer.Search.Factory
         protected IViewModelMapper ViewModelMapper { get; }
         protected IProductUrlProvider ProductUrlProvider { get; }
         protected IRecurringOrdersSettings RecurringOrdersSettings { get; private set; }
+        protected IProductSettingsViewService ProductSettings { get; }
+        protected IComposerContext ComposerContext { get; }
+        protected IPriceProvider PriceProvider { get; }
 
-        protected ProductSearchViewModelFactory(
+        public ProductSearchViewModelFactory(
             IViewModelMapper viewModelMapper, 
             IProductUrlProvider productUrlProvider, 
-            IRecurringOrdersSettings recurringOrdersSettings)
+            IRecurringOrdersSettings recurringOrdersSettings,
+            IComposerContext composerContext,
+            IProductSettingsViewService productSettings,
+            IPriceProvider priceProvider)
         {
             ViewModelMapper = viewModelMapper ?? throw new ArgumentNullException(nameof(viewModelMapper));
             ProductUrlProvider = productUrlProvider ?? throw new ArgumentNullException(nameof(productUrlProvider));
             RecurringOrdersSettings = recurringOrdersSettings ?? throw new ArgumentNullException(nameof(recurringOrdersSettings));
+            ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
+            ProductSettings = productSettings ?? throw new ArgumentNullException(nameof(productSettings));
+            PriceProvider = priceProvider ?? throw new ArgumentNullException(nameof(priceProvider));
         }
 
         public virtual ProductSearchViewModel GetProductSearchViewModel(ProductDocument productDocument, SearchCriteria criteria, IDictionary<(string ProductId, string VariantId), ProductMainImage> imgDictionary)
@@ -149,7 +162,7 @@ namespace Orckestra.Composer.Search.Factory
             }
         }
 
-        public virtual void MapProductSearchViewModelAvailableForSell(ProductSearchViewModel productSearchViewModel, ProductDocument productDocument, ProductSettingsViewModel productSettings)
+        protected virtual void MapProductSearchViewModelAvailableForSell(ProductSearchViewModel productSearchViewModel, ProductDocument productDocument, ProductSettingsViewModel productSettings)
         {
             if (!productSettings.IsInventoryEnabled) { 
                 productSearchViewModel.IsAvailableToSell = true;
@@ -186,7 +199,7 @@ namespace Orckestra.Composer.Search.Factory
             }
         }
 
-        public virtual void MapProductSearchViewModelPricing(ProductSearchViewModel productSearchVm, ProductPriceSearchViewModel pricing)
+        protected virtual void MapProductSearchViewModelPricing(ProductSearchViewModel productSearchVm, ProductPriceSearchViewModel pricing)
         {
             productSearchVm.DisplayListPrice = pricing.DisplayPrice;
             productSearchVm.DisplaySpecialPrice = pricing.DisplaySpecialPrice;
@@ -195,6 +208,22 @@ namespace Orckestra.Composer.Search.Factory
             productSearchVm.Price = pricing.Price;
             productSearchVm.IsOnSale = pricing.IsOnSale;
             productSearchVm.PriceListId = pricing.PriceListId;
+        }
+
+        // NOTE: when fetching data for products from OCC APIs, make sure to query data in batches for optimal performance
+        // https://docs.orckestra.com/developer-documentation/platform-performance/batch-api-requests
+        public virtual async Task<IList<ProductSearchViewModel>> EnrichAppendProductSearchViewModels(IList<(ProductSearchViewModel, ProductDocument)> productSearchResultList)
+        {
+            var _productSettings = await ProductSettings.GetProductSettings(ComposerContext.Scope, ComposerContext.CultureInfo).ConfigureAwait(false);
+
+            foreach (var (productSearchVm, productDocument) in productSearchResultList)
+            {
+                MapProductSearchViewModelAvailableForSell(productSearchVm, productDocument, _productSettings);
+                var pricing = await PriceProvider.GetPriceAsync(productSearchVm.HasVariants, productDocument).ConfigureAwait(false);
+                MapProductSearchViewModelPricing(productSearchVm, pricing);
+            }
+
+            return productSearchResultList.Select((resultItem) => resultItem.Item1).ToList();
         }
     }
 }
