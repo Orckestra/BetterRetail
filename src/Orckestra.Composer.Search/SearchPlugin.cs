@@ -25,6 +25,7 @@ namespace Orckestra.Composer.Search
             host.Register<FacetLocalizationProvider, IFacetLocalizationProvider>();
             host.Register<FromPriceProvider, IPriceProvider>();
             host.Register<SearchTermsTransformationProvider, ISearchTermsTransformationProvider>();
+            host.Register<ProductSearchViewModelFactory, IProductSearchViewModelFactory>(ComponentLifestyle.Transient);
 
             host.MetadataRegistry.LoadViewModelMetadataInAssemblyOf(typeof (SearchPlugin).Assembly);
 

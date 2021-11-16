@@ -30,12 +30,9 @@ namespace Orckestra.Composer.Search.Services
         protected ICategoryBrowsingUrlProvider CategoryBrowsingUrlProvider { get; }
         protected IFulfillmentContext FulfillmentContext { get; }
 
-        public CategoryBrowsingViewService(
-            ISearchRepository searchRepository,
-            IViewModelMapper viewModelMapper,
+        public CategoryBrowsingViewService(ISearchRepository searchRepository,
             IDamProvider damProvider,
             ILocalizationProvider localizationProvider,
-            IProductUrlProvider productUrlProvider,
             ISearchUrlProvider searchUrlProvider,
             ICategoryRepository categoryRepository,
             ICategoryBrowsingUrlProvider categoryBrowsingUrlProvider,
@@ -44,26 +41,23 @@ namespace Orckestra.Composer.Search.Services
             IPriceProvider priceProvider,
             IComposerContext composerContext,
             IProductSettingsViewService productSettings,
-            IScopeViewService scopeViewService,
-            IRecurringOrdersSettings recurringOrdersSettings,
-            IFulfillmentContext fulfillmentContext)
+            IFulfillmentContext fulfillmentContext,
+            IProductSearchViewModelFactory productSearchViewModelFactory)
 
-            : base(
-            searchRepository,
-            viewModelMapper,
+            : base(searchRepository,
             damProvider,
             localizationProvider,
-            productUrlProvider,
             searchUrlProvider,
             facetFactory,
             selectedFacetFactory,
             priceProvider,
             composerContext,
             productSettings,
-            scopeViewService,
-            recurringOrdersSettings,
+            productSearchViewModelFactory,
             categoryRepository)
+
         {
+            CategoryRepository = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository));
             CategoryBrowsingUrlProvider = categoryBrowsingUrlProvider ?? throw new ArgumentNullException(nameof(categoryBrowsingUrlProvider));
             FulfillmentContext = fulfillmentContext ?? throw new ArgumentNullException(nameof(fulfillmentContext));
         }

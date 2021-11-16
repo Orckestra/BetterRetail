@@ -3,7 +3,7 @@
 ///<reference path='./JQueryPlugins/IPopOverJqueryPlugin.ts' />
 ///<reference path='./IComposerConfiguration.ts' />
 ///<reference path='./Controller/SearchBoxController.ts' />
-///<reference path='./Controller/AutocompleteSearchBoxController.ts' />
+///<reference path='./Controller/AutocompleteSearchBoxVueController.ts' />
 ///<reference path='./Controller/PageNotFoundAnalyticsController.ts' />
 ///<reference path='./Controller/LanguageSwitchController.ts' />
 ///<reference path='./Controller/LazyController.ts' />
@@ -89,7 +89,7 @@
                 { name: 'General.ErrorController', controller: Orckestra.Composer.ErrorController },
                 { name: 'General.SearchBox', controller: Orckestra.Composer.SearchBoxController },
                 { name: 'General.LanguageSwitch', controller: Orckestra.Composer.LanguageSwitchController },
-                { name: 'General.AutocompleteSearchBox', controller: Orckestra.Composer.AutocompleteSearchBoxController },
+                { name: 'General.AutocompleteSearchBoxVue', controller: Orckestra.Composer.AutocompleteSearchBoxVueController },
                 { name: 'General.Lazy', controller: Orckestra.Composer.LazyController },
 
                 { name: 'Cart.CartSummary', controller: Orckestra.Composer.CartSummaryController },

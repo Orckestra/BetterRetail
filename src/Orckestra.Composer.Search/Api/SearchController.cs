@@ -131,7 +131,7 @@ namespace Orckestra.Composer.Search.Api
 
             var searchCriteria = new SearchCriteria
             {
-                Keywords = searchTerms,
+                Keywords = searchTerms + "*",
                 NumberOfItemsPerPage = limit,
                 IncludeFacets = false,
                 StartingIndex = 0,

@@ -217,7 +217,7 @@ namespace Orckestra.Composer.Factory
                 vm.IsValid = true;
             }
 
-            if (param.ImageDictionnary.TryGetValue(Tuple.Create(recrurringLineItem.ProductId, recrurringLineItem.VariantId), out ProductMainImage mainImage))
+            if (param.ImageDictionnary.TryGetValue((recrurringLineItem.ProductId, recrurringLineItem.VariantId), out ProductMainImage mainImage))
             {
                 vm.ImageUrl = mainImage.ImageUrl;
                 vm.FallbackImageUrl = mainImage.FallbackImageUrl;
