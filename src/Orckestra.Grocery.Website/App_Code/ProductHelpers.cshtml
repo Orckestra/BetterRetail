@@ -100,7 +100,8 @@
             v-bind:disabled="AddToCartDisabled"
             title="@Html.Localize("General", "B_AddToCartProductDetail")"
             v-on:click="addItemToCart">
-        <span class="fa  fa-shopping-cart"></span>&#160;
+        <span v-if="IsAvailableToSell" class="fa  fa-shopping-cart"></span>&#160;
+        <span v-if="!IsAvailableToSell" class="fa  fa-times"></span>&#160;
 
         <span v-if="IsUnavailableVariant">@Html.Localize("General", "B_AddToCartProductDetailUnavailable")</span>
         <span v-else="else">

@@ -42,5 +42,10 @@ namespace Orckestra.Composer.Grocery.ViewModels
         string ProductBadges { get; set; }
         Dictionary<string, string> ProductBadgeValues { get; set; }
 
+        /// <summary>
+        /// Gets or sets the product IsWeightedProduct
+        /// </summary>
+        bool IsWeightedProduct { get; set; }
+
     }
 }

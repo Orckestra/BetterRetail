@@ -279,4 +279,10 @@
   <data name="Details" xml:space="preserve">
     <value>Details</value>
   </data>
+  <data name="L_Each" xml:space="preserve">
+    <value>each</value>
+  </data>
+  <data name="L_EachAbbrev" xml:space="preserve">
+    <value>ea.</value>
+  </data>
 </root>

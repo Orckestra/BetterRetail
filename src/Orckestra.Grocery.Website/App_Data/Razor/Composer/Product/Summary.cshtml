@@ -37,7 +37,7 @@
 
                 @ProductHelpers.AddToWishList()
                 @Partial("Product", "Images", Model)
-                
+
             </div>
             <div class="col-md-6">
 
@@ -98,7 +98,7 @@
    }
  }
 
-        
+
 @helper Sku()
 {
     <span class="d-none" property="sku">@Model.Sku</span>
@@ -106,9 +106,9 @@
 
 @helper BrandName()
 {
-	if(!string.IsNullOrWhiteSpace(Model.Brand)) {
+    if(!string.IsNullOrWhiteSpace(Model.Brand)) {
     <div class="h5 brand mb-1" property="brand" data-qa="product-brand">@Model.Brand</div>
-	}
+    }
 }
 
 @helper StoreInventoryLink()
@@ -128,16 +128,16 @@
     <div id="vueProductPrice" v-cloak="true" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
         <div v-if="!IsUnavailableVariant">
             <div class="m-0" v-if="Product.DefaultListPrice">
-                <small property="price" data-qa="product-price" class="mr-1" v-bind:class="{'text-danger': Product.IsPriceDiscounted}">
-                    <span class="product-price">{{Product.ListPrice}}</span>
-                </small>
-                <del v-if="Product.IsPriceDiscounted" class="mt-1">{{Product.DefaultListPrice}}</del>
-                <div v-if="PricePerUnit" class="mt-1 unit-price">
+				<div v-if="PricePerUnit" class="mt-1 unit-price">
                     <span v-if="IsPricePerUnitZero">@Html.Localize("ProductPage", "L_LessThan") {{PricePerUnit.replace('0.00', '0.01')}}</span>
                     <span v-else="v-else">{{PricePerUnit}}</span>
                     @Html.Localize("ProductPage", "L_Per")
                     <span v-if="Product.BaseProductSize != 1 ">{{Product.BaseProductSize}} </span>{{Product.BaseProductMeasure}}
                 </div>
+                <small property="price" data-qa="product-price" class="mr-1" v-bind:class="{'text-danger': Product.IsPriceDiscounted}">
+                    <span class="product-price">{{Product.ListPrice}}</span>
+                </small>
+                <del v-if="Product.IsPriceDiscounted" class="mt-1">{{Product.DefaultListPrice}}</del>
             </div>
             <span v-else="else" property="price" data-qa="product-price" class="product-price invisible">0</span>
         </div>
@@ -146,10 +146,14 @@
 
 @helper DisplayFormat()
 {
-	var extendedVM = Model.AsExtensionModel<IGroceryProductViewModel>();
-	var hasUnitValues =extendedVM.ProductUnitQuantity > 0 && extendedVM.ProductUnitSize > 0 && !string.IsNullOrWhiteSpace(extendedVM.ProductUnitMeasure);
+    var extendedVM = Model.AsExtensionModel<IGroceryProductViewModel>();
+    var hasUnitValues = extendedVM.ProductUnitQuantity > 0 && extendedVM.ProductUnitSize > 0 && !string.IsNullOrWhiteSpace(extendedVM.ProductUnitMeasure);
 
-	if(hasUnitValues){
-        <p class="unit-weight mb-2">@extendedVM.ProductUnitQuantity @Html.Localize("ProductPage", "L_Unit") (s) (@Html.Localize("ProductPage", "L_Approx") @extendedVM.ProductUnitSize @extendedVM.ProductUnitMeasure)</p>
+    if(hasUnitValues){
+        var isSingleUnit = (extendedVM.ProductUnitQuantity == 1);
+        var unitQuantity = (isSingleUnit) ? "" : extendedVM.ProductUnitQuantity +" x ";
+        var unitQuantitySuffix = (isSingleUnit && extendedVM.IsWeightedProduct) ? Html.Localize("General", "L_EachAbbrev") : "";
+        var unitSize = (extendedVM.IsWeightedProduct) ? Html.Localize("ProductPage", "L_Approx") + " " + extendedVM.ProductUnitSize + " " + extendedVM.ProductUnitMeasure : extendedVM.ProductUnitSize + " " + extendedVM.ProductUnitMeasure;
+        <p class="unit-weight mb-2">@unitQuantity @unitSize @unitQuantitySuffix</p>
     }
 }

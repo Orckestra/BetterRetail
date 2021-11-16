@@ -270,4 +270,13 @@
   <data name="B_ViewMore" xml:space="preserve">
     <value>En voir plus</value>
   </data>
+  <data name="Details" xml:space="preserve">
+    <value>Détails</value>
+  </data>
+  <data name="L_Each" xml:space="preserve">
+    <value>chaque</value>
+  </data>
+  <data name="L_EachAbbrev" xml:space="preserve">
+    <value>chq</value>
+  </data>
 </root>
