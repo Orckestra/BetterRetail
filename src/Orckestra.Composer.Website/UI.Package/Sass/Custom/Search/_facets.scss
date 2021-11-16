@@ -68,8 +68,8 @@
         left: 0;
     }
 
-    .facet-link {
-        &.selected {
+    .form-check {
+        .selected {
             &.highlighted {
                 font-weight: bold;
             }
@@ -78,7 +78,6 @@
             }
         }
     }
-
 }
 
 .search-results {

@@ -88,8 +88,9 @@ namespace Orckestra.Composer.Search.Services
                 viewModel.ProductSearchResults.CategoryFacetCounts).ConfigureAwait(false);
             if (viewModel.FacetSettings.CategoryFacetValuesTree != null)
             {
-                var categoryRoot = CategoryRootNode(viewModel.FacetSettings.CategoryFacetValuesTree, param.CategoryId);
-                viewModel.FacetSettings.CategoryFacetValuesTree.ChildNodes = new List<CategoryFacetValuesTreeNode>() { categoryRoot };
+                var categoryRoot = CategoryRootNode(viewModel.FacetSettings.CategoryFacetValuesTree.ChildNodes, param.CategoryId);
+                viewModel.FacetSettings.CategoryFacetValuesTree.TotalCount = categoryRoot.Quantity;
+                viewModel.FacetSettings.CategoryFacetValuesTree.ChildNodes = categoryRoot.ChildNodes;
                 viewModel.FacetSettings.CategoryFacetValuesTree.ChildNodes?.ForEach(childNode => BuildCategoryUrlsForTreeNode(param, childNode));
                 viewModel.FacetSettings.CategoryFacetValuesTree.ChildNodes?.ForEach(childNode => CleanSiblingFacets(param, childNode));
                 viewModel.FacetSettings.Context["CategoryFacetValuesTree"] = viewModel.FacetSettings.CategoryFacetValuesTree;
@@ -103,15 +104,18 @@ namespace Orckestra.Composer.Search.Services
             return viewModel;
         }
 
-        private CategoryFacetValuesTreeNode CategoryRootNode(CategoryFacetValuesTree node, string categoryId)
+        private CategoryFacetValuesTreeNode CategoryRootNode(List<CategoryFacetValuesTreeNode> nodes, string categoryId)
         {
-            return node.ChildNodes.FirstOrDefault(c => c.CategoryId == categoryId || CategoryNodeIndex(c, categoryId) >= 0);
-        }
-
-        private int CategoryNodeIndex(CategoryFacetValuesTreeNode node, string categoryId)
-        {
-            if (node.ChildNodes == null) return -1;
-            return node.ChildNodes.FindIndex(c => c.CategoryId == categoryId || CategoryNodeIndex(c, categoryId) >= 0);
+            if (nodes == null) return null;
+            var rootCategory = nodes.FirstOrDefault(c => c.CategoryId == categoryId);
+            if (rootCategory == null)
+            {
+                foreach (var childNode in nodes)
+                {
+                    rootCategory = CategoryRootNode(childNode.ChildNodes, categoryId);
+                }
+            }
+            return rootCategory;
         }
 
         private void BuildCategoryUrlsForTreeNode(GetCategoryBrowsingViewModelParam param, CategoryFacetValuesTreeNode node)

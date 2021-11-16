@@ -306,4 +306,7 @@
   <data name="B_FilterBy" xml:space="preserve">
     <value>Filter by</value>
   </data>
+  <data name="B_FiltersApplied" xml:space="preserve">
+    <value>Filters apllied</value>
+  </data>
 </root>

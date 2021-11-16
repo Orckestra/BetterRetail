@@ -41,15 +41,15 @@ module Orckestra.Composer {
             } else {
                 if (categoryTreeRef) {
                     //remove also all child categories
-                    var parentCategoryElement = $('#categoriesTree').find('[data-facetfieldname="' + categoryTreeRef + '"]');
-                    var checkedItems = parentCategoryElement.find('.selected');
+                    var parentCategoryElement = $('#categoriesTree').find('div[data-facetfieldname="' + categoryTreeRef + '"]');
+                    var checkedItems = parentCategoryElement.find('input:checked');
                     var data = [];
                     checkedItems.each(index => {
                         let el = $(checkedItems[index]);
                         data.push({
-                            facetFieldName: el.data('facetfieldname'),
-                            facetValue: el.data('facetvalue'),
-                            facetType: el.data('type'),
+                            facetFieldName: el.attr('name'),
+                            facetValue: el.attr('value'),
+                            facetType: el.data('type')
                         })
                     });
                     this.eventHub.publish('facetsRemoved', { data });

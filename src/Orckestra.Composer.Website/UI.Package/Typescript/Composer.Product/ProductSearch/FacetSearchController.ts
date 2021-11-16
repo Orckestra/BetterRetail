@@ -32,7 +32,7 @@ module Orckestra.Composer {
          }
 
         private initializeVueComponent() {
-            var { CategoryFacetValuesTree, Facets, PromotedFacetValues } = this.context.viewModel;
+            var { CategoryFacetValuesTree, Facets, PromotedFacetValues, SelectedFacets } = this.context.viewModel;
             let self = this;
             this.VueFacets = new Vue({
                 el: '#vueSearchFacets',
@@ -55,6 +55,9 @@ module Orckestra.Composer {
                     });
                 },
                 methods: {
+                    categoryFacetChanged(event, isSelected) {
+                        self.categoryFacetChanged(event, isSelected);
+                    },
                     IsValuesCollapsed(facet) {
                         return facet.OnDemandFacetValues.findIndex((n:any) => n.IsSelected) < 0;
                     }
@@ -64,6 +67,21 @@ module Orckestra.Composer {
                     self.initializeRangeSlider();
                 }
             });
+
+            new Vue({
+                el: '#vueFacetsFilterBy',
+                data: {
+                    SelectedFacets
+                },
+                computed: {
+                    FiltersCount() {
+                        let factes = self._searchService.getSelectedFacets();
+                        let facetKeys = Object.keys(factes);
+                        const getCount = (prev, next) => prev + (Array.isArray(factes[next]) ? factes[next].length : 1);
+                        return facetKeys.reduce(getCount, 0);
+                    }
+                }
+            })
         }
 
         public multiFacetChanged(actionContext: IControllerActionContext) {
@@ -91,32 +109,73 @@ module Orckestra.Composer {
             Object.keys(this.sliderServicesInstances).forEach(sliderServiceKey => this.sliderServicesInstances[sliderServiceKey].dispose());
         }
 
+        public categoryFacetChanged(event, isSelected) {
+            var el = event.target,
+                facetKey = el.dataset.facetfieldname,
+                facetType = el.dataset.type,
+                facetValue = el.dataset.facetvalue;
+
+            if (facetType === 'SingleSelect') {
+                if (isSelected) {
+                    var checkedItems = $(el).parent().parent().find('[data-selected=true]');
+                    var data = [];
+                    checkedItems.each(index => {
+                        let el = $(checkedItems[index]);
+                        el[0]['checked'] = false;
+                        data.push({
+                            facetFieldName: el.data('facetfieldname'),
+                            facetValue: el.data('facetvalue'),
+                            facetType: el.data('type'),
+                        })
+                    });
+                    this.eventHub.publish('facetsRemoved', { data });
+                } else {
+                    var parentDiv = $(el).parent().parent();
+                    parentDiv.parent().find('input:checked').each((index, el: any) => {
+                        if (el.dataset.selected) {
+                            el['checked'] = false;
+                        }
+                    })
+                    this.publishSingleFacetsChanged(facetKey, facetValue, UrlHelper.resolvePageType());
+                }
+            }
+
+            if (facetType === 'MultiSelect') {
+                if (!_.isEmpty(this._debounceHandle)) {
+                    this._debounceHandle.cancel();
+                }
+
+                this._debounceHandle = _.debounce(() => {
+                    this.publishMultiFacetChanged(facetKey, facetValue, UrlHelper.resolvePageType())
+                }, 800);
+
+                this._debounceHandle();
+            }
+        }
+
         public singleFacetChanged(actionContext: IControllerActionContext) {
             var anchorContext = actionContext.elementContext,
                 facetKey = anchorContext.data('facetfieldname'),
                 facetValue = anchorContext.data('facetvalue'),
-                isSelected = anchorContext.hasClass('selected'),
-                categoryId = anchorContext.data('categoryId');
+                facetType = anchorContext.data('type'),
+                isSelected = anchorContext.data('selected');
 
             actionContext.event.preventDefault();
             actionContext.event.stopPropagation();
 
-            if(isSelected) {
-                var checkedItems = anchorContext.parent().find('[data-selected=true]');
-                var data = [];
-                checkedItems.each(index => {
-                    let el = $(checkedItems[index]);
-                    el.removeClass('selected');
-                    data.push({
-                        facetFieldName: el.data('facetfieldname'),
-                        facetValue: el.data('facetvalue'),
-                        facetType: el.data('type'),
-                    })
-                });
-                this.eventHub.publish('facetsRemoved', { data });
+
+            if (isSelected) {
+                anchorContext.removeClass('selected');
+                var data = {
+                    facetFieldName: facetKey,
+                    facetValue,
+                    facetType
+                }
+                this.eventHub.publish('facetRemoved', { data });
             } else {
-                anchorContext.parent().parent().find('a').removeClass('selected');
-                anchorContext.addClass('selected').addClass('highlighted');
+                var parentDiv = anchorContext.parent().parent();
+                parentDiv.find('a').removeClass('selected');
+                anchorContext.addClass('selected');
                 this.publishSingleFacetsChanged(facetKey, facetValue, UrlHelper.resolvePageType());
             }
         }

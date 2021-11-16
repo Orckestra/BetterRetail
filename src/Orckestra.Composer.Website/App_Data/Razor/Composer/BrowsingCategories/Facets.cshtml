@@ -46,15 +46,16 @@
                          data-corrected-search-term="@categoryBrowsingViewModel.ProductSearchResults.CorrectedSearchTerms">
                         <form name="searchFacets" id="vueSearchFacets" v-cloak="true">
                             @FacetHelpers.PromotedFacetValues()
-                            @if (isCategoryTreeView && categoryFacetValuesTree.ChildNodes.Count > 0)
+                            @if (isCategoryTreeView != null)
                             {
                                 <div id="categoriesTree" class="card bg-light  mb-3  facets-card category-page">
                                     <div class="card-header">@Html.Localize("List-Search", "L_RefinerCategories")</div>
                                     <div class="card-body">
                                         <div class="mb-1">
-                                            <strong>@Html.Localize("General", "L_All") @categoryFacetValuesTree.ChildNodes[0].Title ({{CategoryFacetValuesTree.ChildNodes[0].Quantity}})</strong>
+                                            <strong>@categoryBrowsingViewModel.CategoryName ({{CategoryFacetValuesTree.TotalCount}})</strong>
                                         </div>
-                                        <facets-tree v-bind:parentnode="CategoryFacetValuesTree.ChildNodes[0]"
+                                        <facets-tree v-bind:parentnode="CategoryFacetValuesTree"
+                                                     v-bind:nodeсlicked="categoryFacetChanged"
                                                      categoryId="@categoryBrowsingViewModel.CategoryId"
                                                      showMoreText="@Html.Localize("List-Search", "B_ShowMore")"
                                                      showLessText="@Html.Localize("List-Search", "B_ShowLess")">

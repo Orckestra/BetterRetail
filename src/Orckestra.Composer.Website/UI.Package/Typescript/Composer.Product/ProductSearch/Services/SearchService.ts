@@ -133,9 +133,9 @@ module Orckestra.Composer {
             const selected = Object.keys(this.getSelectedFacets());
 
             if(selected.length === 0) {
-                clearAllButton.addClass('d-none')
+                clearAllButton.attr('disabled', 'true')
             } else {
-                clearAllButton.removeClass('d-none')
+                clearAllButton.removeAttr('disabled')
             }
 
             applyButton.prop('disabled', this._searchCriteria.toQuerystring() === this._searchCriteriaBackup);
