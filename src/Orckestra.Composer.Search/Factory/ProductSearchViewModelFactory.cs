@@ -212,7 +212,7 @@ namespace Orckestra.Composer.Search.Factory
 
         // NOTE: when fetching data for products from OCC APIs, make sure to query data in batches for optimal performance
         // https://docs.orckestra.com/developer-documentation/platform-performance/batch-api-requests
-        public virtual async Task<IList<ProductSearchViewModel>> EnrichAppendProductSearchViewModels(IList<(ProductSearchViewModel, ProductDocument)> productSearchResultList)
+        public virtual async Task<IList<ProductSearchViewModel>> EnrichAppendProductSearchViewModels(IList<(ProductSearchViewModel, ProductDocument)> productSearchResultList, SearchCriteria criteria)
         {
             var _productSettings = await ProductSettings.GetProductSettings(ComposerContext.Scope, ComposerContext.CultureInfo).ConfigureAwait(false);
 
