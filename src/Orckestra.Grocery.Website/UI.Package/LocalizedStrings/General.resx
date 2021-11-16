@@ -267,6 +267,9 @@
   <data name="mi" xml:space="preserve">
     <value>Mile</value>
   </data>
+  <data name="B_ViewAll" xml:space="preserve">
+    <value>View All</value>
+  </data>
   <data name="B_ViewLess" xml:space="preserve">
     <value>View Less</value>
   </data>

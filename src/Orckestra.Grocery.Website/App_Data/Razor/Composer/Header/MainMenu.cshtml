@@ -66,7 +66,7 @@
                                                                    href="@(mainMenuEntry.Url)"
                                                                    target="@mainMenuEntry.UrlTarget"
                                                                    class="d-md-block">
-                                                                    View All @mainMenuEntry.DisplayName
+                                                                    @Html.Localize("General", "B_ViewAll") @mainMenuEntry.DisplayName
                                                                 </a>
                                                             </li>
                                                             @foreach (var subMenuEntry in mainMenuEntry.Children as IEnumerable<HomeMainMenuEntryViewModel>)
@@ -173,7 +173,7 @@
                        href="@menuEntry.Url"
                         target="@menuEntry.UrlTarget"
                        class="d-md-block d-lg-none">
-                        View All @menuEntry.DisplayName
+                        @Html.Localize("General", "B_ViewAll") @menuEntry.DisplayName
                     </a>
                 </li>
                 @foreach (var childItem in childItems)

@@ -416,6 +416,7 @@
     <Content Include="App_Data\Razor\Composer\Cart\MinicartButtonMobile.cshtml" />
     <Content Include="App_Data\Razor\Grocery\SignInSticky.cshtml" />
     <Content Include="App_Data\Razor\Grocery\SelectedStoreInSticky.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Header\MultiLevelMainMenu.cshtml" />
     <None Include="Properties\PublishProfiles\Website - CD.pubxml" />
     <None Include="Properties\PublishProfiles\Website.pubxml" />
     <Content Include="Views\web.config" />

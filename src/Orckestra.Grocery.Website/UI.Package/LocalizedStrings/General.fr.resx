@@ -261,6 +261,9 @@
   <data name="L_OrderStatus_PendingProcess" xml:space="preserve">
     <value>En cours</value>
   </data>
+  <data name="B_ViewAll" xml:space="preserve">
+    <value>Voir tout dans</value>
+  </data>
   <data name="B_ViewLess" xml:space="preserve">
     <value>En voir moins</value>
   </data>

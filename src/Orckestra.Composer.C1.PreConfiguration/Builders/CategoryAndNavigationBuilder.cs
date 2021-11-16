@@ -161,7 +161,7 @@ namespace Orckestra.Composer.CompositeC1.Builders
                         }
 
                         new MenuBuilder(categories, catPageIds, culture.Name, websiteId).CreateMainMenu("Root",
-                            parentMenuId, 2);
+                            parentMenuId, 3);
                     }
 
                 }
