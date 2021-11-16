@@ -11,12 +11,10 @@ using Orckestra.Composer.Search.Facets;
 using Orckestra.Composer.Search.Factory;
 using Orckestra.Composer.Search.Helpers;
 using Orckestra.Composer.Search.Parameters;
-using Orckestra.Composer.Search.Providers;
 using Orckestra.Composer.Search.Repositories;
 using Orckestra.Composer.Search.ViewModels;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Utils;
-using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel.Search;
 using Facet = Orckestra.Composer.Search.Facets.Facet;
 using SearchFilter = Orckestra.Composer.Parameters.SearchFilter;
@@ -30,8 +28,6 @@ namespace Orckestra.Composer.Search.Services
     {
         private const string VariantPropertyBagKey = "VariantId";
 
-        private ProductSettingsViewModel _productSettings;
-
         public virtual SearchType SearchType => SearchType.Searching;
 
         protected IDamProvider DamProvider { get; }
@@ -40,9 +36,7 @@ namespace Orckestra.Composer.Search.Services
         protected ISearchRepository SearchRepository { get; }
         protected ISearchUrlProvider SearchUrlProvider { get; }
         protected ISelectedFacetFactory SelectedFacetFactory { get; }
-        protected IPriceProvider PriceProvider { get; }
         protected IComposerContext ComposerContext { get; }
-        protected IProductSettingsViewService ProductSettings { get; }
         protected IProductSearchViewModelFactory ProductSearchViewModelFactory { get; private set; }
         protected ICategoryRepository CategoryRepository { get; set; }
 
@@ -52,9 +46,7 @@ namespace Orckestra.Composer.Search.Services
             ISearchUrlProvider searchUrlProvider,
             IFacetFactory facetFactory,
             ISelectedFacetFactory selectedFacetFactory,
-            IPriceProvider priceProvider,
             IComposerContext composerContext,
-            IProductSettingsViewService productSettings,
             IProductSearchViewModelFactory productSearchViewModelFactory,
             ICategoryRepository categoryRepository)
         {
@@ -64,9 +56,7 @@ namespace Orckestra.Composer.Search.Services
             SearchUrlProvider = searchUrlProvider ?? throw new ArgumentNullException(nameof(searchUrlProvider));
             SelectedFacetFactory = selectedFacetFactory ?? throw new ArgumentNullException(nameof(selectedFacetFactory));
             FacetFactory = facetFactory ?? throw new ArgumentNullException(nameof(facetFactory));
-            PriceProvider = priceProvider ?? throw new ArgumentNullException(nameof(priceProvider));
             ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
-            ProductSettings = productSettings ?? throw new ArgumentNullException(nameof(productSettings));
             ProductSearchViewModelFactory = productSearchViewModelFactory ?? throw new ArgumentNullException(nameof(productSearchViewModelFactory));
             CategoryRepository = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository));
         }
@@ -185,7 +175,7 @@ namespace Orckestra.Composer.Search.Services
                 searchResultsList.Add((ProductSearchViewModelFactory.GetProductSearchViewModel(resultItem, param.SearchParam.Criteria, imgDictionary), resultItem));
             }
             
-            searchResultViewModel.SearchResults = await EnrichAppendProductSearchViewModels(searchResultsList).ConfigureAwait(false);
+            searchResultViewModel.SearchResults = await ProductSearchViewModelFactory.EnrichAppendProductSearchViewModels(searchResultsList, param.SearchParam.Criteria).ConfigureAwait(false);
 
             var facets = BuildFacets(param.SearchParam.Criteria, param.SearchResult);
             searchResultViewModel.Facets = facets;
@@ -242,23 +232,6 @@ namespace Orckestra.Composer.Search.Services
         private IList<SearchSortBy> GetSearchSortByList(SearchType searchType)
         {
             return SearchConfiguration.SearchSortBy.Where(d => !d.SearchType.HasValue || d.SearchType.Value == searchType).ToList();
-        }
-
-
-        // NOTE: when fetching data for products from OCC APIs, make sure to query data in batches for optimal performance
-        // https://docs.orckestra.com/developer-documentation/platform-performance/batch-api-requests
-        protected virtual async Task<IList<ProductSearchViewModel>> EnrichAppendProductSearchViewModels(IList<(ProductSearchViewModel, ProductDocument)> productSearchResultList)
-        {
-            _productSettings = await ProductSettings.GetProductSettings(ComposerContext.Scope, ComposerContext.CultureInfo).ConfigureAwait(false);
-
-            foreach (var (productSearchVm, productDocument) in productSearchResultList)
-            {
-                ProductSearchViewModelFactory.MapProductSearchViewModelAvailableForSell(productSearchVm, productDocument, _productSettings);
-                var pricing = await PriceProvider.GetPriceAsync(productSearchVm.HasVariants, productDocument).ConfigureAwait(false);
-                ProductSearchViewModelFactory.MapProductSearchViewModelPricing(productSearchVm, pricing);
-            }
-
-            return productSearchResultList.Select((resultItem) => resultItem.Item1).ToList();
         }
 
         protected virtual SelectedFacets FlattenFilterList(IList<SearchFilter> filters, CultureInfo cultureInfo)

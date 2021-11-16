@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Orckestra.Composer.Parameters;
@@ -11,10 +10,8 @@ using Orckestra.Composer.Search;
 using Orckestra.Composer.Search.Facets;
 using Orckestra.Composer.Search.Factory;
 using Orckestra.Composer.Search.Parameters;
-using Orckestra.Composer.Search.Providers;
 using Orckestra.Composer.Search.Repositories;
 using Orckestra.Composer.Search.Services;
-using Orckestra.Composer.Search.ViewModels;
 using Orckestra.Composer.SearchQuery.Extensions;
 using Orckestra.Composer.SearchQuery.Parameters;
 using Orckestra.Composer.SearchQuery.Providers;
@@ -45,9 +42,7 @@ namespace Orckestra.Composer.SearchQuery.Services
             ISearchUrlProvider searchUrlProvider,
             IFacetFactory facetFactory,
             ISelectedFacetFactory selectedFacetFactory,
-            IPriceProvider priceProvider,
             IComposerContext composerContext,
-            IProductSettingsViewService productSettings,
             ISearchQueryRepository searchQueryRepository,
             ISearchQueryUrlProvider searchQueryUrlProvider,
             IProductSettingsRepository productSettingsRepository,
@@ -60,9 +55,7 @@ namespace Orckestra.Composer.SearchQuery.Services
             searchUrlProvider,
             facetFactory,
             selectedFacetFactory,
-            priceProvider,
             composerContext,
-            productSettings,
             productSearchViewModelFactory,
             categoryRepository)
         {
