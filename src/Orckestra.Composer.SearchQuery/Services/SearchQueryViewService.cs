@@ -12,6 +12,7 @@ using Orckestra.Composer.Search.Factory;
 using Orckestra.Composer.Search.Parameters;
 using Orckestra.Composer.Search.Repositories;
 using Orckestra.Composer.Search.Services;
+using Orckestra.Composer.Search.ViewModels;
 using Orckestra.Composer.SearchQuery.Extensions;
 using Orckestra.Composer.SearchQuery.Parameters;
 using Orckestra.Composer.SearchQuery.Providers;
