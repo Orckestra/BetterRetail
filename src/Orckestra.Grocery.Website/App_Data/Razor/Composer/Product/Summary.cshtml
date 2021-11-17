@@ -30,16 +30,16 @@
     <div data-oc-controller="Product.ProductDetail"
          data-productid="@Model.ProductId"
          data-context="@Model.JsonContext"
-         class="product-details mt-6">
+         class="product-details mt-2 mt-sm-4 mb-4">
         <div class="row">
 
-            <div class="col-lg-6  col-md-6">
+            <div class="mb-2 mb-sm-0 col-lg-6 col-sm-6">
 
                 @ProductHelpers.AddToWishList()
                 @Partial("Product", "Images", Model)
 
             </div>
-            <div class="col-md-6">
+            <div class="col-sm-6">
 
                 @BrandName()
                 @DisplayName()
@@ -63,10 +63,8 @@
                 <div class="mb-1" property="offers" typeof="Offer">
                     @ProductPrice()
                 </div>
-
-                <div class="mb-4">
-                    @ProductHelpers.AddToCartWithQuantity(true)
-                </div>
+                
+                @ProductHelpers.AddToCartWithQuantity(true)
             </div>
         </div>
     </div>
