@@ -11,6 +11,7 @@
 ///<reference path='../../Composer.Cart/WishList/WishListRepository.ts' />
 ///<reference path='../../Composer.MyAccount/Common/IMembershipService.ts' />
 ///<reference path='../../Composer.MyAccount/Common/MembershipService.ts' />
+///<reference path='../../Utils/PriceHelper.ts' />
 
 
 module Orckestra.Composer {
@@ -100,7 +101,16 @@ module Orckestra.Composer {
                                 product.ProductBadgeMap = Object.keys(product.ProductBadgeValues).map((key) =>
                                     {return {Key: key, Value: product.ProductBadgeValues[key]}; });
                             }
-                           
+                            
+                            product.PricePerUnit = PriceHelper.PricePerUnit(product.DisplayListPrice,
+                                product.ProductUnitQuantity,
+                                product.ProductUnitSize,
+                                product.ConvertedVolumeMeasurement
+                            );
+                            
+                            if(product.PricePerUnit){
+                                product.IsPricePerUnitZero = parseFloat(product.PricePerUnit.replace(/[^0-9\.-]+/g,'')) == 0.00;
+                            }
                             return product;
 
                         });

@@ -154,7 +154,6 @@
     <Compile Include="DataTypes\IBootstrapCarousel.cs" />
     <Compile Include="DataTypes\IGrocerySettingsMeta.cs" />
     <Compile Include="Api\StoreAndFulfillmentSelectionController.cs" />
-    <Compile Include="Extensions\ProductSearchResultsExtension.cs" />
     <Compile Include="Factory\GroceryCartViewModelFactory.cs" />
     <Compile Include="Factory\GroceryProductViewModelFactory.cs" />
     <Compile Include="Factory\GroceryStoreViewModelFactory.cs" />
@@ -179,15 +178,13 @@
     <Compile Include="Repositories\SalesScopeWishListRepository.cs" />
     <Compile Include="Repositories\TimeSlotRepository.cs" />
     <Compile Include="Requests\SetSelectedFulfillmentRequest.cs" />
-    <Compile Include="Services\GroceryCategoryBrowsingViewService.cs" />
     <Compile Include="Services\GroceryComposerContext.cs" />
     <Compile Include="Services\GroceryMembershipViewService.cs" />
     <Compile Include="Requests\GetTimeSlotsAvailabilityRequest.cs" />
     <Compile Include="Requests\SetSelectedFulfillmentMethodTypeRequest.cs" />
     <Compile Include="Requests\SetSelectedStoreRequest.cs" />
     <Compile Include="Requests\SetSelectedTimeSlotRequest.cs" />
-    <Compile Include="Services\GrocerySearchQueryViewService.cs" />
-    <Compile Include="Services\GrocerySearchViewService.cs" />
+    <Compile Include="Factory\GroceryProductSearchViewModelFactory.cs" />
     <Compile Include="Services\SalesScopeStoreLocatorViewService.cs" />
     <Compile Include="Services\SalesScopeStoreViewService.cs" />
     <Compile Include="Services\GroceryOrderHistoryViewService.cs" />

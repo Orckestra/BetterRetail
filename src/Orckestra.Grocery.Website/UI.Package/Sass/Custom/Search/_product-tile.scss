@@ -39,7 +39,9 @@
         top: 1.25rem;
         left: 1.25rem;
     }
-
+    .product-tile-price-per-unit{
+        float: right;
+    }
     .product-tile-price {
         height: ceil($h4-font-size * $line-height-base);
     }

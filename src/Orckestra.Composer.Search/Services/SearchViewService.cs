@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Localization;
 using Orckestra.Composer.Search.Facets;
 using Orckestra.Composer.Search.Factory;
 using Orckestra.Composer.Search.Parameters;
-using Orckestra.Composer.Search.Providers;
 using Orckestra.Composer.Search.Repositories;
 using Orckestra.Composer.Search.ViewModels;
 using Orckestra.Composer.Services;
@@ -26,32 +24,22 @@ namespace Orckestra.Composer.Search.Services
         public SearchViewService(
             ICategoryRepository categoryRepository,
             ISearchRepository searchRepository,
-            IViewModelMapper viewModelMapper,
             IDamProvider damProvider,
             ILocalizationProvider localizationProvider,
-            IProductUrlProvider productUrlProvider,
             ISearchUrlProvider searchUrlProvider,
             IFacetFactory facetFactory,
             ISelectedFacetFactory selectedFacetFactory,
-            IPriceProvider priceProvider,
             IComposerContext composerContext,
-            IProductSettingsViewService productSettings,
-            IScopeViewService scopeViewService,
-            IRecurringOrdersSettings recurringOrdersSettings)
+            IProductSearchViewModelFactory productSearchViewModelFactory)
             : base(
             searchRepository,
-            viewModelMapper,
             damProvider,
             localizationProvider,
-            productUrlProvider,
             searchUrlProvider,
             facetFactory,
             selectedFacetFactory,
-            priceProvider,
             composerContext,
-            productSettings,
-            scopeViewService,
-            recurringOrdersSettings)
+            productSearchViewModelFactory)
         {
             CategoryRepository = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository));
         }

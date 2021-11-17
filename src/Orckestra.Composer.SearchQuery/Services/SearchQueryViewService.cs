@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Dam;
@@ -13,10 +10,8 @@ using Orckestra.Composer.Search;
 using Orckestra.Composer.Search.Facets;
 using Orckestra.Composer.Search.Factory;
 using Orckestra.Composer.Search.Parameters;
-using Orckestra.Composer.Search.Providers;
 using Orckestra.Composer.Search.Repositories;
 using Orckestra.Composer.Search.Services;
-using Orckestra.Composer.Search.ViewModels;
 using Orckestra.Composer.SearchQuery.Extensions;
 using Orckestra.Composer.SearchQuery.Parameters;
 using Orckestra.Composer.SearchQuery.Providers;
@@ -24,7 +19,6 @@ using Orckestra.Composer.SearchQuery.Repositories;
 using Orckestra.Composer.SearchQuery.ViewModels;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Utils;
-using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel;
 using Orckestra.Overture.ServiceModel.Products.Inventory;
 using Orckestra.Overture.ServiceModel.Search;
@@ -41,39 +35,27 @@ namespace Orckestra.Composer.SearchQuery.Services
         protected IProductSettingsRepository ProductSettingsRepository { get; private set; }
 
         public SearchQueryViewService(
-         ISearchRepository searchRepository,
-         IViewModelMapper viewModelMapper,
-         IDamProvider damProvider,
-         ILocalizationProvider localizationProvider,
-         IProductUrlProvider productUrlProvider,
-         ISearchUrlProvider searchUrlProvider,
-         IFacetFactory facetFactory,
-         ISelectedFacetFactory selectedFacetFactory,
-         IPriceProvider priceProvider,
-         IComposerContext composerContext,
-         IProductSettingsViewService productSettings,
-         IScopeViewService scopeViewService,
-         ISearchQueryRepository searchQueryRepository,
-         ISearchQueryUrlProvider searchQueryUrlProvider,
-         IProductSettingsRepository productSettingsRepository,
-         Repositories.IInventoryRepository inventoryRepository,
-         IRecurringOrdersSettings recurringOrdersSettings
-         )
-
+            ISearchRepository searchRepository,
+            IDamProvider damProvider,
+            ILocalizationProvider localizationProvider,
+            ISearchUrlProvider searchUrlProvider,
+            IFacetFactory facetFactory,
+            ISelectedFacetFactory selectedFacetFactory,
+            IComposerContext composerContext,
+            ISearchQueryRepository searchQueryRepository,
+            ISearchQueryUrlProvider searchQueryUrlProvider,
+            IProductSettingsRepository productSettingsRepository,
+            Repositories.IInventoryRepository inventoryRepository,
+            IProductSearchViewModelFactory productSearchViewModelFactory)
          : base(
-             searchRepository,
-             viewModelMapper,
-             damProvider,
-             localizationProvider,
-             productUrlProvider,
-             searchUrlProvider,
-             facetFactory,
-             selectedFacetFactory,
-             priceProvider,
-             composerContext,
-             productSettings,
-             scopeViewService,
-             recurringOrdersSettings)
+              searchRepository,
+            damProvider,
+            localizationProvider,
+            searchUrlProvider,
+            facetFactory,
+            selectedFacetFactory,
+            composerContext,
+            productSearchViewModelFactory)
         {
             SearchQueryRepository = searchQueryRepository ?? throw new ArgumentNullException(nameof(searchQueryRepository));
             SearchQueryUrlProvider = searchQueryUrlProvider ?? throw new ArgumentNullException(nameof(searchQueryUrlProvider));
@@ -312,29 +294,6 @@ namespace Orckestra.Composer.SearchQuery.Services
             });
 
             return UrlFormatter.ToUrlString(nameValueCollection);
-        }
-
-        //Can be removed when issue #17648 is fixed in Reference Application
-        protected override void MapProductSearchViewModelInfos(ProductSearchViewModel productSearchVm, ProductDocument productDocument, CultureInfo cultureInfo)
-        {
-            base.MapProductSearchViewModelInfos(productSearchVm, productDocument, cultureInfo);
-
-            productSearchVm.HasVariants = HasVariants(productDocument);
-        }
-
-        private static bool HasVariants(ProductDocument resultItem)
-        {
-            if (resultItem?.PropertyBag == null) { return false; }
-
-            if (!resultItem.PropertyBag.TryGetValue("GroupCount", out object variantCountObject)) { return false; }
-
-            if (variantCountObject == null) { return false; }
-
-            var variantCountString = variantCountObject.ToString();
-
-            int.TryParse(variantCountString, out int result);
-
-            return result > 1; // If the document has only one variant then server returns EntityPrice instead of GroupPrice
         }
     }
 }

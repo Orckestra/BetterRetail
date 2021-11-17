@@ -57,9 +57,8 @@
             {{Product.DisplayName}}
         </a>
     </div>
-
+   
     @PriceBasedOnUnitMeasure()
-
     @if (ShowAddToCartButton)
     {
         <div class="product-tile-button-container px-3 mb-3">
@@ -81,9 +80,6 @@
         </span>
     </p>
     <div class="product-tile-price">
-        <span v-if="Product.IsOnSale">
-            <del>{{Product.DisplayListPrice}}</del>&nbsp;
-        </span>
         <small class="mr-1" v-bind:class="{'text-danger' : Product.IsOnSale}">
             <span v-if="Product.HasPriceRange">
                 @Html.Localize("List-Search", "L_PriceFrom")
@@ -99,18 +95,17 @@
                     {{Product.DisplayListPrice}}
                 </span>
             </span>
-            /<span v-if="Product.IsUnit">
-                <span v-if="Product.IsUnitMeasure">
-                    @Html.Localize("ProductPage", "L_Each")
-                </span>
-                <span v-else="else">
-                    @Html.Localize("ProductPage", "L_Unit")
-                </span>
-            </span>
-            <span v-else="else">
-                {{Product.ItemFormat}} {{Product.UnitOfMeasure}}
-            </span>
         </small>
+        <span v-if="Product.IsOnSale">
+            <del>{{Product.DisplayListPrice}}</del>&nbsp;
+        </span>
+        
+        <span v-if="Product.PricePerUnit" class="product-tile-price-per-unit">
+            <small v-if="Product.IsPricePerUnitZero">@Html.Localize("ProductPage", "L_LessThan") {{Product.PricePerUnit.replace('0.00', '0.01')}}</small>
+            <small v-else="v-else">{{Product.PricePerUnit}}</small>
+            @Html.Localize("ProductPage", "L_Per")
+            <small v-if="Product.BaseProductSize != 1 ">{{Product.BaseProductSize}}  </small> {{Product.BaseProductMeasure}}
+        </span>
     </div>
 </div>
 }
@@ -169,3 +164,4 @@
         </a>
     </span>
 }
+
