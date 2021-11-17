@@ -88,7 +88,7 @@ namespace Orckestra.Composer.CompositeC1.DataTypes.Navigation
         Nullable<Guid> CssStyle { get; set; }
 
         [ImmutableFieldId("775447a2-4009-4631-811d-71ce4ef85f1a")]
-        [FormRenderingProfile(Label = "Css Class Name", HelpText = "Specify the css class name to apply to this item.")]
+        [FormRenderingProfile(Label = "Css Class Name", HelpText = "Specify the css class name to apply to this item. Next predefined class names can be used: highlight, hide-on-scroll")]
         [StoreFieldType(PhysicalStoreFieldType.String, 64, IsNullable = true)]
         [FieldPosition(7)]
         [StringSizeValidator(0, 64)]

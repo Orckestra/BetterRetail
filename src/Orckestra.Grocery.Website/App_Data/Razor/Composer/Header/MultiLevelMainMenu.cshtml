@@ -32,8 +32,7 @@
                             {
                                 var hasImage = !string.IsNullOrEmpty(mainMenuEntry.Image.ImageSource);
 
-
-                                <li class="nav-item dropdown main-nav-fw">
+                                <li class="nav-item dropdown main-nav-fw @mainMenuEntry.CssClassName">
 
                                     @if (mainMenuEntry.HasChildren)
                                     {

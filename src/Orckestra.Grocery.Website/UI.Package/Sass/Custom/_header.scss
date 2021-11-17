@@ -139,6 +139,12 @@
         }
     }
     &.sps--blw {
+        .hide-on-scroll {
+            @include media-breakpoint-up(md) {
+                display: none;
+            }
+        }
+
         @include media-breakpoint-up(lg) {
             .main-nav-sticky {
                 display: block;
