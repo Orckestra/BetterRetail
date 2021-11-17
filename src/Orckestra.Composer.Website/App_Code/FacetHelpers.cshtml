@@ -185,3 +185,29 @@
         </button>
     </section>
 }
+
+@helper CategoryFactesTree(string rootTitle)
+{
+    <div id="categoriesTree" class="card bg-light  mb-3  facets-card">
+        <div class="card-header">
+            <a data-toggle="collapse"
+               data-target="#categoryFacets"
+               aria-expanded="true"
+               aria-controls="categoryFacets">
+                @Html.Localize("List-Search", "L_RefinerCategories")
+                <span class="down"><i class="fa fa-angle-down" /></span>
+                <span class="up"><i class="fa fa-angle-up" /></span>
+            </a>
+        </div>
+        <div id="categoryFacets" class="card-body collapse show">
+            <div class="mb-1">
+                <strong>@rootTitle ({{CategoryFacetValuesTree.TotalCount}})</strong>
+            </div>
+            <facets-tree v-bind:parentnode="CategoryFacetValuesTree"
+                         v-bind:nodeсlicked="categoryFacetChanged"
+                         showMoreText="@Html.Localize("List-Search", "B_ShowMore")"
+                         showLessText="@Html.Localize("List-Search", "B_ShowLess")">
+            </facets-tree>
+        </div>
+    </div>
+}

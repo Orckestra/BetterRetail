@@ -48,20 +48,7 @@
                             @FacetHelpers.PromotedFacetValues()
                             @if (isCategoryTreeView != null)
                             {
-                                <div id="categoriesTree" class="card bg-light  mb-3  facets-card category-page">
-                                    <div class="card-header">@Html.Localize("List-Search", "L_RefinerCategories")</div>
-                                    <div class="card-body">
-                                        <div class="mb-1">
-                                            <strong>@categoryBrowsingViewModel.CategoryName ({{CategoryFacetValuesTree.TotalCount}})</strong>
-                                        </div>
-                                        <facets-tree v-bind:parentnode="CategoryFacetValuesTree"
-                                                     v-bind:nodeсlicked="categoryFacetChanged"
-                                                     categoryId="@categoryBrowsingViewModel.CategoryId"
-                                                     showMoreText="@Html.Localize("List-Search", "B_ShowMore")"
-                                                     showLessText="@Html.Localize("List-Search", "B_ShowLess")">
-                                        </facets-tree>
-                                    </div>
-                                </div>
+                                @FacetHelpers.CategoryFactesTree(categoryBrowsingViewModel.CategoryName)
                             }
                             <div v-for="facet in Facets" v-if="facet.IsDisplayed"
                                  class="card  bg-light  mb-3  facets-card"

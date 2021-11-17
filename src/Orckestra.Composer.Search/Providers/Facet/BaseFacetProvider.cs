@@ -73,7 +73,7 @@ namespace Orckestra.Composer.Search.Providers.Facet
             };
 
             //In order to always see selected facet values
-            var selectedValueIndex= facetValues.FindIndex(x => x.IsSelected);
+            var selectedValueIndex= facetValues.FindLastIndex(x => x.IsSelected);
             var maxExpendedValueCount = selectedValueIndex > setting.MaxExpendedValueCount
                 ? selectedValueIndex
                 : (setting.MaxExpendedValueCount - setting.MaxCollapsedValueCount);

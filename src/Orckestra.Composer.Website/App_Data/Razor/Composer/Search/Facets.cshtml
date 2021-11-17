@@ -37,30 +37,9 @@
 
             @FacetHelpers.PromotedFacetValues()
 
-            <div id="categoriesTree" class="card bg-light  mb-3  facets-card">
-                <div class="card-header">
-                    <a data-toggle="collapse"
-                       data-target="#categoryFacets"
-                       aria-expanded="true"
-                       aria-controls="categoryFacets">
-                        @Html.Localize("List-Search", "L_RefinerCategories")
-                        <span class="down"><i class="fa fa-angle-down" /></span>
-                        <span class="up"><i class="fa fa-angle-up" /></span>
-                    </a>
-                </div>
-                <div id="categoryFacets" class="card-body collapse show">
-                    <div class="mb-1">
-                        <strong>@Html.Localize("General", "L_All") @SearchRequestContext.SearchQuery ({{CategoryFacetValuesTree.TotalCount}})</strong>
-                    </div>
-                    <facets-tree v-bind:parentnode="CategoryFacetValuesTree"
-                                 v-bind:nodeсlicked="categoryFacetChanged"
-                                 showMoreText="@Html.Localize("List-Search", "B_ShowMore")"
-                                 showLessText="@Html.Localize("List-Search", "B_ShowLess")">
-                    </facets-tree>
-                </div>
-                </div>
+            @FacetHelpers.CategoryFactesTree($"{Html.Localize("General", "L_All")}  {SearchRequestContext.SearchQuery}")
 
-            <div v-for="facet in Facets" v-if="facet.IsDisplayed" 
+           <div v-for="facet in Facets" v-if="facet.IsDisplayed"
                  class="card  bg-light  mb-3  facets-card"
                  v-bind:data-facetfieldname="facet.FieldName"
                  v-bind:data-facettype="facet.FacetType"
