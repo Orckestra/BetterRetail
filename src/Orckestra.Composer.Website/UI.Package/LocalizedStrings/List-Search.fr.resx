@@ -144,6 +144,9 @@
   <data name="B_Close" xml:space="preserve">
     <value>Fermer</value>
   </data>
+  <data name="B_FilterBy" xml:space="preserve">
+    <value>Filtrer par</value>
+  </data>
   <data name="B_FiltersApplied" xml:space="preserve">
     <value>Filtres appliqués</value>
   </data>
