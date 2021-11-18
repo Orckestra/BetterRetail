@@ -58,8 +58,6 @@ namespace Orckestra.Composer.Search.Repositories
                 FacetSettings = FacetConfigContext.GetFacetSettings()
             };
 
-            results.Facets = RemoveSelectedFacetsFromFacets(param);
-
             return results;
         }
 
@@ -76,26 +74,6 @@ namespace Orckestra.Composer.Search.Repositories
                 return await OvertureClient.SendAsync(returnSearchAvailableProductsByCategoryResponse).ConfigureAwait(false);
             }
             return null;
-        }
-
-        protected virtual List<Facet> RemoveSelectedFacetsFromFacets(RemoveSelectedFacetsFromFacetsParam param)
-        {
-            var strippedFacets = new List<Facet>();
-            var facets = param.Facets;
-            var selectedFacets = param.SelectedFacets;
-            var facetSettings = param.FacetSettings;
-
-            foreach (var facet in facets)
-            {
-                var facetSetting = facetSettings.FirstOrDefault(setting => setting.FieldName == facet.FieldName);
-
-                if (facetSetting?.FacetType == Facets.FacetType.MultiSelect || selectedFacets.Find(selectedFacet => selectedFacet.Name == facet.FieldName) == null)
-                {
-                    strippedFacets.Add(facet);
-                }
-            }
-
-            return strippedFacets;
         }
 
         protected virtual SearchAvailableProductsBaseRequest CreateSearchRequest(SearchCriteria criteria)
@@ -178,6 +156,41 @@ namespace Orckestra.Composer.Search.Repositories
                 Direction = sortDirection,
                 PropertyName = criteria.SortBy
             };
+        }
+
+        public virtual Task<ProductSearchResult> GetCategoryFacetCountsAsync(SearchCriteria criteria)
+        {
+            if (criteria == null) { throw new ArgumentNullException(nameof(criteria)); }
+            if (criteria.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(criteria.CultureInfo)), nameof(criteria)); }
+            if (string.IsNullOrWhiteSpace(criteria.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(criteria.Scope)), nameof(criteria)); }
+
+            var request = ProductRequestFactory.CreateProductRequest(criteria);
+            request.Query.IncludeTotalCount = true;
+            request.Query.MaximumItems = 0;
+            request.Query.StartingIndex = 0;
+            request.CultureName = criteria.CultureInfo.Name;
+            request.SearchTerms = criteria.Keywords;
+            request.ScopeId = criteria.Scope;
+            request.IncludeFacets = criteria.IncludeFacets;
+          
+            var facetsForCounts = FacetConfigContext.GetFacetSettings()
+                .Where(fs => fs.FieldName.StartsWith(SearchConfiguration.CategoryFacetFiledNamePrefix))
+                .Select(f => f.FieldName.Replace("_Facet", ""));
+            var facets = GetFacetFieldNameToQuery(criteria);
+            facets.AddRange(facetsForCounts);
+            request.Facets = facets;
+            if (criteria.SelectedFacets != null)
+            {
+                request.FacetPredicates = criteria.SelectedFacets
+                        .Where(sf => !sf.Name.StartsWith(SearchConfiguration.CategoryFacetFiledNamePrefix))
+                        .Select(FacetPredicateFactory.CreateFacetPredicate)
+                        .Where(fp => fp != null).ToList();
+            }
+            request.InventoryLocationIds = criteria.InventoryLocationIds;
+            request.AutoCorrect = criteria.AutoCorrect;
+            request.AvailabilityDate = criteria.AvailabilityDate;
+
+            return ExecuteProductSearchRequestAsync(request);
         }
     }
 }

@@ -724,7 +724,9 @@
 
         // Prevent scrolling and panning on touch events, while
         // attempting to slide. The tap event also depends on this.
-        e.preventDefault();
+        if(e.cancelable) {
+            e.preventDefault();
+        }
 
         // Filter the event to register the type, which can be
         // touch, mouse or pointer. Offset changes need to be
@@ -1136,7 +1138,7 @@ function closure ( target, options ){
 
         // Bind a closure on the target for every event type.
         events.split(' ').forEach(function( eventName ){
-            element.addEventListener(eventName, method, false);
+            element.addEventListener(eventName, method, {passive: false});
             methods.push([eventName, method]);
         });
 

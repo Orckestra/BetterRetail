@@ -20,6 +20,7 @@ using Facet = Orckestra.Composer.Search.Facets.Facet;
 using SearchFilter = Orckestra.Composer.Parameters.SearchFilter;
 using Suggestion = Orckestra.Composer.Search.ViewModels.Suggestion;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
+using Orckestra.Composer.Repositories;
 
 namespace Orckestra.Composer.Search.Services
 {
@@ -36,17 +37,18 @@ namespace Orckestra.Composer.Search.Services
         protected ISearchUrlProvider SearchUrlProvider { get; }
         protected ISelectedFacetFactory SelectedFacetFactory { get; }
         protected IComposerContext ComposerContext { get; }
-        protected IProductSearchViewModelFactory ProductSearchViewModelFactory { get; private set;  }
+        protected IProductSearchViewModelFactory ProductSearchViewModelFactory { get; private set; }
+        protected ICategoryRepository CategoryRepository { get; set; }
 
-        protected BaseSearchViewService(
-            ISearchRepository searchRepository,
+        protected BaseSearchViewService(ISearchRepository searchRepository,
             IDamProvider damProvider,
             ILocalizationProvider localizationProvider,
             ISearchUrlProvider searchUrlProvider,
             IFacetFactory facetFactory,
             ISelectedFacetFactory selectedFacetFactory,
             IComposerContext composerContext,
-            IProductSearchViewModelFactory productSearchViewModelFactory)
+            IProductSearchViewModelFactory productSearchViewModelFactory,
+            ICategoryRepository categoryRepository)
         {
             SearchRepository = searchRepository ?? throw new ArgumentNullException(nameof(searchRepository));
             DamProvider = damProvider ?? throw new ArgumentNullException(nameof(damProvider));
@@ -56,6 +58,7 @@ namespace Orckestra.Composer.Search.Services
             FacetFactory = facetFactory ?? throw new ArgumentNullException(nameof(facetFactory));
             ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
             ProductSearchViewModelFactory = productSearchViewModelFactory ?? throw new ArgumentNullException(nameof(productSearchViewModelFactory));
+            CategoryRepository = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository));
         }
 
         protected virtual IList<Facet> BuildFacets(SearchCriteria criteria, ProductSearchResult searchResult)
@@ -138,6 +141,7 @@ namespace Orckestra.Composer.Search.Services
             var searchResultViewModel = new ProductSearchResultsViewModel
             {
                 SearchResults = new List<ProductSearchViewModel>(),
+                CategoryFacetCounts = BuildCategoryFacetCounts(param),
                 Keywords = param.SearchParam.Criteria.Keywords,
                 TotalCount = param.SearchResult.TotalCount,
                 CorrectedSearchTerms = param.SearchResult.CorrectedSearchTerms,
@@ -185,6 +189,44 @@ namespace Orckestra.Composer.Search.Services
             searchResultViewModel.BaseUrl = param.SearchParam.Criteria.BaseUrl;
 
             return searchResultViewModel;
+        }
+
+        protected virtual CategoryFacetCounts BuildCategoryFacetCounts(CreateProductSearchResultsViewModelParam<TParam> param)
+        {
+            if (param.CategoryFacetCountsResult == null)
+            {
+                return new CategoryFacetCounts()
+                {
+                    TotalCount = param.SearchResult.TotalCount
+                };
+            }
+
+            return new CategoryFacetCounts
+            {
+                TotalCount = param.CategoryFacetCountsResult.TotalCount,
+                Facets = param.CategoryFacetCountsResult.Facets.Select(f =>
+                     new Facet
+                     {
+                         FieldName = f.FieldName,
+                         FacetValues = f.Values.Select(fv => new Facets.FacetValue()
+                         {
+                             Value = fv.Value,
+                             Quantity = fv.Count
+                         }).ToList()
+                     }).ToList()
+            };
+        }
+
+        protected virtual async Task<CategoryFacetValuesTree> BuildCategoryFacetValuesTree(IList<Facet> facets,
+            SelectedFacets selectedFacets,
+            CategoryFacetCounts categoryCounts)
+        {
+            var categories = await CategoryRepository.GetCategoriesTreeAsync(new GetCategoriesParam
+            {
+                Scope = ComposerContext.Scope
+            }).ConfigureAwait(false);
+
+            return FacetFactory.BuildCategoryFacetValuesTree(facets, selectedFacets, categories, categoryCounts, ComposerContext.CultureInfo);
         }
 
         private IList<SearchSortBy> GetSearchSortByList(SearchType searchType)
@@ -346,6 +388,7 @@ namespace Orckestra.Composer.Search.Services
             if (string.IsNullOrWhiteSpace(param.Criteria.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Criteria.Scope)), nameof(param)); }
 
             var searchResult = await SearchRepository.SearchProductAsync(param.Criteria).ConfigureAwait(false);
+
             var cloneParam = (TParam)param.Clone();
 
             if (searchResult == null) { return null; }
@@ -358,6 +401,13 @@ namespace Orckestra.Composer.Search.Services
                 ImageUrls = imageUrls,
                 SearchResult = searchResult
             };
+
+            if (param.Criteria.IncludeFacets &&
+                param.Criteria.SelectedFacets != null && 
+                param.Criteria.SelectedFacets.Any(s => s.Name?.StartsWith(SearchConfiguration.CategoryFacetFiledNamePrefix) ?? false))
+            {
+                createSearchViewModelParam.CategoryFacetCountsResult = await SearchRepository.GetCategoryFacetCountsAsync(param.Criteria).ConfigureAwait(false);
+            }
 
             return await CreateProductSearchResultsViewModelAsync(createSearchViewModelParam).ConfigureAwait(false);
         }

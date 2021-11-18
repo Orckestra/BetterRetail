@@ -300,4 +300,13 @@
   <data name="T_SearchResultsFoundIn" xml:space="preserve">
     <value>{0} Found ({1})</value>
   </data>
+  <data name="B_ApplyFilters" xml:space="preserve">
+    <value>Apply Filters</value>
+  </data>
+  <data name="B_FilterBy" xml:space="preserve">
+    <value>Filter by</value>
+  </data>
+  <data name="B_FiltersApplied" xml:space="preserve">
+    <value>Filters apllied</value>
+  </data>
 </root>

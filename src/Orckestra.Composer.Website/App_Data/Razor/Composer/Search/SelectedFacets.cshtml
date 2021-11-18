@@ -2,6 +2,7 @@
 @using Orckestra.Composer.Search.Context;
 @using Orckestra.Composer.Search.ViewModels
 @using Orckestra.Composer.Search.Facets
+@using Orckestra.Composer.Search
 
 @functions {
     public override string FunctionDescription
@@ -23,7 +24,7 @@
     {
         get
         {
-            return SearchRequestContext.ProductsSearchViewModel?.SelectedFacets;
+            return ProductsSearchViewModel?.FacetSettings.SelectedFacets;
         }
     }
 }
@@ -40,32 +41,39 @@
 </head>
 <body>
     <div data-oc-controller="Product.SelectedSearchFacets">
-        <div id="selectedFacets" class="card facets-card  mb-3">
-            <div class="card-body">
-                <h5>@Html.Localize("List-Search", "L_Selection")</h5>
+        <div id="selectedFacets" class="card facets-card mb-3 selected-facets">
+            <div class="card-header">
+                @Html.Localize("List-Search", "L_Selection")
                 @if (SelectedFacets.IsAllRemovable)
                 {
-                    <p class="clearfix">
-                        <a class="float-right  small" data-qa="search-refiners-clear-all" href="#"
-                           data-oc-click="clearSelectedFacets">
-                            @Html.Localize("List-Search", "B_ClearAll")
-                        </a>
-                    </p>
+                    <a class="float-right" 
+                       data-qa="search-refiners-clear-all" 
+                       href="#"
+                       data-oc-click="clearSelectedFacets">
+                       @Html.Localize("List-Search", "B_ClearAll")
+                    </a>
                 }
-                <ul class="list-group m-0">
+            </div>
+            <div class="card-body">
+                <ul class="list-group">
                     @foreach (var facet in SelectedFacets.Facets)
                     {
-                        <li class="list-group-item d-flex justify-content-between align-items-center p-0 mb-1 border-0">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
                             @facet.DisplayName
-                            <span class="badge">
+                            <span class="badge badge-light">
                                 @if (facet.IsRemovable)
                                 {
                                     <a href="#" class="float-right" data-qa="search-refiner-remove"
                                        data-facetfieldname="@facet.FieldName"
                                        data-facettype="@facet.FacetType"
                                        data-facetvalue="@facet.Value"
-                                       title="@facet.DisplayName" data-oc-click="removeSelectedFacet">
-                                        <span class="fa  fa-times  fa-lg"></span>
+                                       @if(facet.FieldName.StartsWith(SearchConfiguration.CategoryFacetFiledNamePrefix))
+                                       {
+                                         <text>data-categorytree="@(facet.FieldName)"</text>
+                                       }
+                                       title="@facet.DisplayName"
+                                       data-oc-click="removeSelectedFacet">
+                                       <span class="fa  fa-times  fa-lg"></span>
                                     </a>
                                 }
                                 else
