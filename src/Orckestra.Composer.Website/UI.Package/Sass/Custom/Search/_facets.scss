@@ -167,7 +167,8 @@
             position: relative;
             overflow-y: auto;
             flex: 1 1 auto;
-           //TODO min-height: subtract(100vh, 120px);
+            //TODO: class below make modal body full height, but for some reason it doesn't work on iPhone xS Safari, need to investigate 
+            //min-height: subtract(100vh, 120px);
 
             .overlay {
                 display: none;
