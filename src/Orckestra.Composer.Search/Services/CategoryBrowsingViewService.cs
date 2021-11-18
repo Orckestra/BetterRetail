@@ -109,6 +109,10 @@ namespace Orckestra.Composer.Search.Services
                 foreach (var childNode in nodes)
                 {
                     rootCategory = CategoryRootNode(childNode.ChildNodes, categoryId);
+                    if (rootCategory != null)
+                    {
+                        break;
+                    }
                 }
             }
             return rootCategory;
