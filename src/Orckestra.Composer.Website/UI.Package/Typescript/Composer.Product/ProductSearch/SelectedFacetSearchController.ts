@@ -47,7 +47,7 @@ module Orckestra.Composer {
                     checkedItems.each(index => {
                         let el = $(checkedItems[index]);
                         data.push({
-                            facetFieldName: el.attr('name'),
+                            facetFieldName: el.attr('name').replace('[]',''),
                             facetValue: el.attr('value'),
                             facetType: el.data('type')
                         })
