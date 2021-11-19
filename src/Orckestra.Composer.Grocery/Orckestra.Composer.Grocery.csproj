@@ -185,6 +185,7 @@
     <Compile Include="Requests\SetSelectedStoreRequest.cs" />
     <Compile Include="Requests\SetSelectedTimeSlotRequest.cs" />
     <Compile Include="Factory\GroceryProductSearchViewModelFactory.cs" />
+    <Compile Include="Services\GroceryRelatedProductViewService.cs" />
     <Compile Include="Services\SalesScopeStoreLocatorViewService.cs" />
     <Compile Include="Services\SalesScopeStoreViewService.cs" />
     <Compile Include="Services\GroceryOrderHistoryViewService.cs" />
@@ -215,6 +216,7 @@
     <Compile Include="ViewModels\IGroceryCartViewModel.cs" />
     <Compile Include="ViewModels\IGroceryOrderShipmentDetailViewModel.cs" />
     <Compile Include="ViewModels\IGroceryProductSearchViewModel.cs" />
+    <Compile Include="ViewModels\IGroceryRelatedProductViewModel.cs" />
     <Compile Include="ViewModels\IGroceryProductViewModel.cs" />
     <Compile Include="ViewModels\StoreAndFulfillmentSelectionViewModel.cs" />
     <Compile Include="ViewModels\IGroceryStoreViewModel.cs" />

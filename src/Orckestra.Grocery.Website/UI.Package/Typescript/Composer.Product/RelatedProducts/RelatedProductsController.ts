@@ -33,14 +33,20 @@ module Orckestra.Composer {
                     },
                     computed: {
                         ExtendedRelatedProducts() {
-                            var results = _.map(this.RelatedProducts, (product: any) => {
-                                var cartItem = this.Cart ? _.find(this.Cart.LineItemDetailViewModels, (i: any) =>
-                                    i.ProductId === product.ProductId && i.VariantId == product.VariantId): undefined;               
-                               
+                            const results = _.map(this.RelatedProducts, (product: any) => {
+                                const isSameProduct = (i: any) => i.ProductId === product.ProductId && i.VariantId == product.VariantId;
+                                let cartItem = this.Cart && this.Cart.LineItemDetailViewModels.find(isSameProduct);
+
                                 product.InCart = !!cartItem;
                                 product.Quantity = cartItem ? cartItem.Quantity : 0;
                                 product.LineItemId = cartItem ? cartItem.Id : undefined;
-                               
+
+                                if(product.ProductBadgeValues)
+                                {
+                                    product.ProductBadgeMap = Object.keys(product.ProductBadgeValues)
+                                        .map((key) => ({Key: key, Value: product.ProductBadgeValues[key]}));
+                                }
+
                                 return product;
                             });
                             return results;
@@ -60,28 +66,28 @@ module Orckestra.Composer {
                             });
                         },
                         updateItemQuantity(item: any, quantity: number) {
-                            let cartItem = _.find(this.Cart.LineItemDetailViewModels, (i: any) => i.Id === item.LineItemId); 
+                            let cartItem = _.find(this.Cart.LineItemDetailViewModels, (i: any) => i.Id === item.LineItemId);
                             if (this.Loading || !cartItem) return;
-    
+
                             if(this.Cart.QuantityRange) {
                                 const {Min, Max} = this.Cart.QuantityRange;
                                 quantity = Math.min(Math.max(Min, quantity), Max);
                             }
-    
+
                             if(quantity == cartItem.Quantity) {
                                 //force update vue component
                                 this.Cart = { ...this.Cart };
                                 return;
                             }
                             item.Quantity = quantity;
-                        
+
                             let analyticEventName = quantity > cartItem.Quantity ? ProductEvents.LineItemAdding : ProductEvents.LineItemRemoving;
                             cartItem.Quantity = quantity;
-    
+
                             if (cartItem.Quantity < 1) {
                                 this.Loading = true; // disabling UI immediately when a line item is removed
                             }
-    
+
                             let {ProductId, VariantId} = cartItem;
                             self.publishDataForAnalytics(ProductId, quantity, analyticEventName);
 
@@ -91,7 +97,7 @@ module Orckestra.Composer {
                                     let updatePromise = Quantity > 0 ?
                                         self.cartService.updateLineItem(Id, Quantity, ProductId) :
                                         self.cartService.deleteLineItem(Id, ProductId);
-    
+
                                     updatePromise
                                         .then(() => {
                                              self.onAddLineItemSuccess();
@@ -100,7 +106,7 @@ module Orckestra.Composer {
                                             throw reason;
                                         })
                                         .fin(() => this.Loading = false);
-    
+
                                 }, 400);
                             }
                             this.debounceUpdateItem(cartItem);
@@ -191,7 +197,7 @@ module Orckestra.Composer {
          * Occurs when adding a product to the cart that has no variant.
          */
         protected addNonVariantProductToCart(productId: string, price: string, recurringProgramName: string): Q.Promise<any> {
-          
+
             this.publishDataForAnalytics(productId, 1, ProductEvents.LineItemAdding);
             var promise = this.cartService.addLineItem(productId, price, null, 1, null, recurringProgramName)
                 .then((vm: any) => this.onAddLineItemSuccess(vm),

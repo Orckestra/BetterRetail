@@ -82,32 +82,30 @@ module Orckestra.Composer {
                 },
                 computed: {
                     ExtendedSearchResults() {
-                        var results = _.map(this.SearchResults, (product: any) => {
-                            let cartItem = !this.Cart ? undefined :
-                                _.find(this.Cart.LineItemDetailViewModels, (i: any) =>
-                                    i.ProductId === product.ProductId && i.VariantId == product.VariantId);
+                        const results = _.map(this.SearchResults, (product: any) => {
+                            const isSameProduct = (i: any) => i.ProductId === product.ProductId && i.VariantId == product.VariantId;
+                            let cartItem = this.Cart && this.Cart.LineItemDetailViewModels.find(isSameProduct);
                             product.InCart = !!cartItem;
                             product.LineItemId = cartItem ? cartItem.Id : undefined;
                             product.Quantity = cartItem ? cartItem.Quantity : 0;
 
-                            var wishListItem = !this.WishList ? undefined : _.find(this.WishList.Items, (i: any) =>
-                                i.ProductId === product.ProductId && i.VariantId == product.VariantId);
+                            const wishListItem = this.WishList && this.WishList.Items.find(isSameProduct);
                             product.InWishList = !!wishListItem;
                             product.WishListItemId = wishListItem ? wishListItem.Id : undefined;
                             //product.UnitPriceAvailable = product.UnitPrice != null && product.UnitPriceDeclaration != null;
-                            
+
                             if(product.ProductBadgeValues)
-                            { 
-                                product.ProductBadgeMap = Object.keys(product.ProductBadgeValues).map((key) =>
-                                    {return {Key: key, Value: product.ProductBadgeValues[key]}; });
+                            {
+                                product.ProductBadgeMap = Object.keys(product.ProductBadgeValues)
+                                    .map((key) => ({Key: key, Value: product.ProductBadgeValues[key]}));
                             }
-                            
+
                             product.PricePerUnit = PriceHelper.PricePerUnit(product.DisplayListPrice,
                                 product.ProductUnitQuantity,
                                 product.ProductUnitSize,
                                 product.ConvertedVolumeMeasurement
                             );
-                            
+
                             if(product.PricePerUnit){
                                 product.IsPricePerUnitZero = parseFloat(product.PricePerUnit.replace(/[^0-9\.-]+/g,'')) == 0.00;
                             }
