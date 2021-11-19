@@ -50,5 +50,10 @@
         /// Sort Order Weight, lowest comes first
         /// </summary>
         public double PromotionSortWeight { get; set; }
+
+        /// <summary>
+        /// Gets or sets the value indicating if the facet value can be removed. Used for Query pages
+        /// </summary>
+        public bool IsRemovable { get; set; } = true;
     }
 }

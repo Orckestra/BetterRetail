@@ -22,6 +22,8 @@
     }
 
     var facetSettings = browsingViewModel.FacetSettings;
+    var categoryFacetValuesTree = facetSettings?.CategoryFacetValuesTree;
+    var isCategoryTreeView = categoryFacetValuesTree != null;
     var facets = browsingViewModel.ProductSearchResults.Facets;
     if (facets == null || facets.Count == 0)
     {
@@ -33,26 +35,44 @@
 <head>
 </head>
 <body>
-    <div data-oc-controller="Product.FacetSearch"
-         data-context="@facetSettings.JsonContext" 
-         data-corrected-search-term="@browsingViewModel.ProductSearchResults.CorrectedSearchTerms">
-        <form name="searchFacets" id="vueSearchFacets" v-cloak="true">
-            @FacetHelpers.PromotedFacetValues()
+    <div id="facetsModal" class="facets-modal">
+        <div class="facets-modal-dialog">
+            <div class="facets-modal-content">
+                @FacetHelpers.FacetsModalHeader()
+                <div class="facets-modal-body">
+                    <div class="overlay"></div>
 
-            <div v-for="facet in Facets" v-if="facet.IsDisplayed"
-                 class="card  bg-light  mb-3  facets-card"
-                 v-bind:data-facetfieldname="facet.FieldName"
-                 v-bind:data-facettype="facet.FacetType"
-                 v-bind:data-min="facet.StartValue"
-                 v-bind:data-max="facet.EndValue"
-                 v-bind:data-step="facet.GapSize"
-                 data-max-label="@Html.Localize("List-Search", "L_RangeAll")">
-                <div class="card-header">{{facet.Title}}</div>
-                <div class="card-body">
-                    @FacetHelpers.RenderFacet()
+                    <div data-oc-controller="Product.FacetSearch"
+                         data-context="@facetSettings.JsonContext"
+                         data-corrected-search-term="@browsingViewModel.ProductSearchResults.CorrectedSearchTerms">
+                        <form name="searchFacets" id="vueSearchFacets" v-cloak="true">
+
+                            @FacetHelpers.PromotedFacetValues()
+
+                            @if (isCategoryTreeView)
+                            {
+                                @FacetHelpers.CategoryFactesTree(browsingViewModel.QueryName)
+                            }
+
+                            <div v-for="facet in Facets" v-if="facet.IsDisplayed"
+                                 class="card  bg-light  mb-3  facets-card"
+                                 v-bind:data-facetfieldname="facet.FieldName"
+                                 v-bind:data-facettype="facet.FacetType"
+                                 v-bind:data-min="facet.StartValue"
+                                 v-bind:data-max="facet.EndValue"
+                                 v-bind:data-step="facet.GapSize"
+                                 data-max-label="@Html.Localize("List-Search", "L_RangeAll")">
+                                <div class="card-header">{{facet.Title}}</div>
+                                <div class="card-body">
+                                    @FacetHelpers.RenderFacet()
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
+                @FacetHelpers.FacetsModalFooter()
             </div>
-        </form>
+        </div>
     </div>
 </body>
 </html>

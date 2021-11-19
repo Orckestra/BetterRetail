@@ -77,13 +77,13 @@ namespace Orckestra.Composer.SearchQuery.Services
             if (param.Criteria == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.Criteria)), nameof(param)); }
 
             var searchQueryProducts = await SearchQueryRepository.SearchQueryProductAsync(new SearchQueryProductParams
-                {
-                    CultureName = param.CultureInfo.Name,
-                    QueryName = param.QueryName,
-                    QueryType = param.QueryType,
-                    ScopeId = param.Scope,
-                    Criteria = param.Criteria
-                }).ConfigureAwait(false);
+            {
+                CultureName = param.CultureInfo.Name,
+                QueryName = param.QueryName,
+                QueryType = param.QueryType,
+                ScopeId = param.Scope,
+                Criteria = param.Criteria
+            }).ConfigureAwait(false);
 
             var documents = searchQueryProducts.Result.Documents.Select(ToProductDocument).ToList();
 
@@ -118,8 +118,6 @@ namespace Orckestra.Composer.SearchQuery.Services
 
             var imageUrls = await DamProvider.GetProductMainImagesAsync(getImageParam).ConfigureAwait(false);
 
-            
-
             var newCriteria = param.Criteria.Clone();
 
             var createSearchViewModelParam = new CreateProductSearchResultsViewModelParam<SearchParam>
@@ -150,35 +148,15 @@ namespace Orckestra.Composer.SearchQuery.Services
                     await CreateProductSearchResultsViewModelAsync(createSearchViewModelParam).ConfigureAwait(false),
             };
 
-            if (searchQueryProducts.SelectedFacets != null)
-            {
-                foreach (var facet in searchQueryProducts.SelectedFacets)
-                {
-                    foreach (var value in facet.Values)
-                    {
-                        if (viewModel.FacetSettings.SelectedFacets.Facets.All(f => f.Value != value))
-                        {
-                            viewModel.FacetSettings.SelectedFacets.Facets.Add(new SelectedFacet()
-                            {
-                                Value = value,
-                                FieldName = facet.FacetName,
-                                DisplayName = value,
-                                IsRemovable = false
-                            });
-                        }
-                    }
-                }
+            ProcessFacets(viewModel, searchQueryProducts);
 
-                foreach (var selectedFacet in searchQueryProducts.SelectedFacets)
-                {
-                    foreach (var facet in viewModel.ProductSearchResults.Facets.Where(d => d.FieldName == selectedFacet.FacetName))
-                    {
-                        foreach (var facetValue in selectedFacet.Values.Select(value => facet.FacetValues.FirstOrDefault(f => f.Value == value)).Where(facetValue => facetValue != null))
-                        {
-                            facetValue.IsSelected = true;
-                        }
-                    }
-                }
+            viewModel.FacetSettings.CategoryFacetValuesTree = await BuildCategoryFacetValuesTree(viewModel.ProductSearchResults.Facets,
+              viewModel.FacetSettings.SelectedFacets,
+              viewModel.ProductSearchResults.CategoryFacetCounts).ConfigureAwait(false);
+
+            if (viewModel.FacetSettings.CategoryFacetValuesTree != null)
+            {
+                viewModel.FacetSettings.Context["CategoryFacetValuesTree"] = viewModel.FacetSettings.CategoryFacetValuesTree;
             }
 
             // Json context for Facets
@@ -191,6 +169,56 @@ namespace Orckestra.Composer.SearchQuery.Services
             viewModel.Context["ListName"] = "Search Query";
 
             return viewModel;
+        }
+
+        protected virtual void ProcessFacets(SearchQueryViewModel viewModel, Overture.ServiceModel.SearchQueries.SearchQueryResult searchQueryProducts)
+        {
+            if (searchQueryProducts.SelectedFacets == null) return;
+
+            foreach (var selectedFacet in searchQueryProducts.SelectedFacets)
+            {
+                foreach (var value in selectedFacet.Values)
+                {
+                    var isQuerySelectedFacet = viewModel.FacetSettings.SelectedFacets.Facets.All(f => f.Value != value);
+                    if (isQuerySelectedFacet)
+                    {
+                        viewModel.FacetSettings.SelectedFacets.Facets.Add(new SelectedFacet()
+                        {
+                            Value = value,
+                            FieldName = selectedFacet.FacetName,
+                            DisplayName = value,
+                            IsRemovable = false
+                        });
+                    }
+                }
+
+                var querySelectedFacets = viewModel.FacetSettings.SelectedFacets.Facets.Where(f => !f.IsRemovable).ToList();
+
+                var modelFacets = viewModel.ProductSearchResults.Facets.Where(d => d.FieldName == selectedFacet.FacetName);
+                foreach (var facet in modelFacets)
+                {
+                    var facetValues = facet?.FacetValues.Concat(facet.OnDemandFacetValues);
+                    var selectedFacetValues = selectedFacet.Values.Select(value => facetValues.FirstOrDefault(f => f.Value == value)).Where(facetValue => facetValue != null);
+                    foreach (var facetValue in selectedFacetValues)
+                    {
+                        facetValue.IsSelected = true;
+                        var isQuerySelected = querySelectedFacets.FirstOrDefault(f => f.Value == facetValue.Value);
+                        if (isQuerySelected != null)
+                        {
+                            facetValue.IsRemovable = false;
+                        }
+                    }
+
+                    var isFacetFieldSelectedInQuery = querySelectedFacets.Any(qf => qf.FieldName == facet.FieldName);
+                    if(isFacetFieldSelectedInQuery && facet.FacetType == Search.Facets.FacetType.SingleSelect)
+                    {
+                        //need to clean other facet values for this facet field to not allow multiselect
+                        facet.FacetValues = facet.FacetValues.Where(fv => querySelectedFacets.Any(qf => qf.Value == fv.Value && qf.FieldName == facet.FieldName)).ToList();
+                        facet.OnDemandFacetValues = facet.OnDemandFacetValues.Where(fv => querySelectedFacets.Any(qf => qf.Value == fv.Value && qf.FieldName == facet.FieldName)).ToList();
+
+                    }
+                }
+            }
         }
 
         private void FixInventories(List<ProductDocument> documents, List<InventoryItemAvailability> inventoryLocations)

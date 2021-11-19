@@ -85,6 +85,7 @@ module Orckestra.Composer {
                         class="m-0" :class="{'selected': node.IsSelected, 'highlighted': isHighlighted(node)}">
                         <input v-if="node.FacetType == 'MultiSelect'"
                             type="checkbox"
+                            :disabled="!node.IsRemovable"
                             class="form-check-input"
                             :name="node.FieldName + '[]'"
                             :value="node.Value"
@@ -98,6 +99,7 @@ module Orckestra.Composer {
                         />
                         <input v-else-if="node.FacetType == 'SingleSelect'"
                             type="checkbox"
+                            :disabled="!node.IsRemovable"
                             class="form-check-input"
                             :name="node.FieldName"
                             :data-facetfieldname="node.FieldName"
