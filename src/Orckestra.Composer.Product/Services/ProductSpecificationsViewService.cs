@@ -64,7 +64,8 @@ namespace Orckestra.Composer.Product.Services
                 .Select(group => new SpecificationsGroupViewModel
                 {
                     Title = GetLocalizedTitle(@group.DisplayName),
-                    Attributes = GetSpecificationsAttributes(@group, param)
+                    Attributes = GetSpecificationsAttributes(@group, param),
+                    GroupName = group.Name
                 })
                 .Where(group => @group.Attributes.Any())
                 .ToList();
