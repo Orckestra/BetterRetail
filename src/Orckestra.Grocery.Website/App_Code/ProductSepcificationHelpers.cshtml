@@ -1,0 +1,99 @@
+﻿@using Composite.AspNet.Razor
+
+@helper NutritionFactsDailyValues()
+{
+    <p class="small-info">@Html.Localize("ProductPage", "L_SpecificationPercentDailyValuesText")</p>
+
+    <table class="performance-facts__table--small small-info">
+        <thead>
+            <tr>
+                <td colspan="2"></td>
+                <th>@Html.Localize("ProductPage", "L_Calories"):</th>
+                <th>2,000</th>
+                <th>2,500</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th colspan="2">@Html.Localize("ProductPage", "L_TotalFat")</th>
+                <td> @Html.Localize("ProductPage", "L_LessThan") </td>
+                <td>65g</td>
+                <td>80g</td>
+            </tr>
+            <tr>
+                <td class="blank-cell"></td>
+                <th>@Html.Localize("ProductPage", "L_SaturatedFat")</th>
+                <td> @Html.Localize("ProductPage", "L_LessThan") </td>
+                <td>20g</td>
+                <td>25g</td>
+            </tr>
+            <tr>
+                <th colspan="2">@Html.Localize("ProductPage", "L_Cholesterol")</th>
+                <td> @Html.Localize("ProductPage", "L_LessThan") </td>
+                <td>300mg</td>
+                <td>300 mg</td>
+            </tr>
+            <tr>
+                <th colspan="2">@Html.Localize("ProductPage", "L_Sodium")</th>
+                <td> @Html.Localize("ProductPage", "L_LessThan") </td>
+                <td>2,400mg</td>
+                <td>2,400mg</td>
+            </tr>
+            <tr>
+                <th colspan="3">@Html.Localize("ProductPage", "L_TotalCarbohydrate")</th>
+                <td>300g</td>
+                <td>375g</td>
+            </tr>
+            <tr>
+                <td class="blank-cell"></td>
+                <th colspan="2">@Html.Localize("ProductPage", "L_DietaryFiber")</th>
+                <td>25g</td>
+                <td>30g</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p class="small-info">
+        @Html.Localize("ProductPage", "L_CaloriesPerGram"):
+    </p>
+    <p class="small-info text-center">
+        @Html.Localize("ProductPage", "L_Fat") 9
+        &bull;
+        @Html.Localize("ProductPage", "L_Carbohydrate") 4
+        &bull;
+        @Html.Localize("ProductPage", "L_Protein") 4
+    </p>
+}
+
+@helper NutritionFactsAttributeRowVal(string val, string title)
+{
+    if (string.IsNullOrEmpty(val) && string.IsNullOrEmpty(title)) { return; }
+
+    <tr class="thick-end">
+        <th colspan="2">
+            <b>@title</b>
+            @val
+        </th>
+        <td>
+        </td>
+    </tr>
+}
+
+@helper NutritionFactsAttributeRowValPercent(string val, string percent, string title, bool isRoot = false)
+{
+    if (string.IsNullOrEmpty(val) && string.IsNullOrEmpty(percent) && string.IsNullOrEmpty(title)) { return; }
+    <tr>
+        @if (!isRoot)
+        {
+            <td class="blank-cell">
+            </td>
+        }
+        <th colspan="@(isRoot ? 2 : 0)">
+            <span class="@(isRoot ? "font-weight-bold": "")">@title</span>
+            @val
+        </th>
+        <td>
+            <b>@percent</b>
+        </td>
+    </tr>
+}
