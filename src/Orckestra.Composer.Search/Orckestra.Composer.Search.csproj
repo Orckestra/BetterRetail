@@ -75,6 +75,7 @@
     <Compile Include="Context\ICategoryMetaContext.cs" />
     <Compile Include="Context\IFacetConfigurationContext.cs" />
     <Compile Include="FacetSetting.cs" />
+    <Compile Include="Facets\CategoryFacetsTree.cs" />
     <Compile Include="Facets\PromotedFacetValue.cs" />
     <Compile Include="Facets\PromotedFacetValueSetting.cs" />
     <Compile Include="Facets\FacetValue.cs" />
@@ -132,6 +133,8 @@
     <Compile Include="Repositories\ProductRequestFactory.cs" />
     <Compile Include="Parameters\RemoveSelectedFacetsFromFacetsParam.cs" />
     <Compile Include="RequestConstants\SearchRequestParams.cs" />
+    <Compile Include="Request\GetCategoryFacetsRequest.cs" />
+    <Compile Include="Request\GetFacetsRequest.cs" />
     <Compile Include="SearchConfiguration.cs" />
     <Compile Include="Context\SearchRequestContext.cs" />
     <Compile Include="Helpers\SearchSortBy.cs" />
@@ -154,9 +157,11 @@
     <Compile Include="ViewModels\CategorySuggestionsViewModel.cs" />
     <Compile Include="ViewModels\CategorySuggestionViewModel.cs" />
     <Compile Include="ViewModels\ProductPriceSearchViewModel.cs" />
+    <Compile Include="Facets\CategoryFacetCounts.cs" />
     <Compile Include="ViewModels\SearchBoxViewModel.cs" />
     <Compile Include="ViewModels\SearchTermsSuggestionsViewModel.cs" />
     <Compile Include="ViewModels\SearchTermsSuggestionViewModel.cs" />
+    <Compile Include="ViewModels\FacetSettingsViewModel.cs" />
     <Compile Include="ViewModels\SearchViewModel.cs" />
     <Compile Include="ViewModels\InventoryItemIdentifierViewModel.cs" />
     <Compile Include="ViewModels\InventoryItemStatusViewModel.cs" />
@@ -185,9 +190,7 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Extensions\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

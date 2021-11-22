@@ -40,3 +40,19 @@ button, a {
         }
     }
 }
+
+.btn-link {
+    .more {
+        display: none;
+    }
+
+    &.collapsed {
+        .less {
+            display: none;
+        }
+
+        .more {
+            display: inline-block;
+        }
+    }
+}

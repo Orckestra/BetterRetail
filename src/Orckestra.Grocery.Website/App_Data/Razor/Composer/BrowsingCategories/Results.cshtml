@@ -17,7 +17,7 @@
 
     var categoryBrowsingViewModel = BrowsingRequestContext.GetViewModelAsync().Result;
 
-    if (categoryBrowsingViewModel == null || categoryBrowsingViewModel.ProductSearchResults.TotalCount <= 0)
+    if (categoryBrowsingViewModel == null)
     {
         return;
     }
@@ -39,7 +39,7 @@
 <body>
     <div class="row filters-row mb-4">
         <div class="col-6 d-lg-none">
-            @SearchHelpers.FacetsCollapseBtn()
+            @FacetHelpers.FacetsModalCollapseBtn()
         </div>
         <div class="col-6">
             @Partial("SearchSortBy", categoryBrowsingViewModel.ProductSearchResults)
@@ -57,4 +57,3 @@
 
 </body>
 </html>
-

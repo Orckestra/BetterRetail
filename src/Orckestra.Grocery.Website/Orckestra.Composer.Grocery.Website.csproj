@@ -411,12 +411,12 @@
     <Content Include="App_Data\Razor\Composer\BrowsingCategories\Facets.cshtml" />
     <Content Include="App_Data\Razor\Composer\BrowsingCategories\SelectedFacets.cshtml" />
     <Content Include="App_Data\Razor\Composer\Search\Facets.cshtml" />
-    <Content Include="App_Data\Razor\Composer\Search\SelectedSearchFacets.cshtml" />
     <Content Include="App_Data\Razor\Composer\Cart\MinicartButton.cshtml" />
     <Content Include="App_Data\Razor\Composer\Cart\MinicartButtonMobile.cshtml" />
     <Content Include="App_Data\Razor\Grocery\SignInSticky.cshtml" />
     <Content Include="App_Data\Razor\Grocery\SelectedStoreInSticky.cshtml" />
     <Content Include="App_Data\Razor\Composer\Header\MultiLevelMainMenu.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Search\SelectedFacets.cshtml" />
     <None Include="Properties\PublishProfiles\Website - CD.pubxml" />
     <None Include="Properties\PublishProfiles\Website.pubxml" />
     <Content Include="Views\web.config" />

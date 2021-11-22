@@ -12,6 +12,7 @@ using Orckestra.Composer.Search.Factory;
 using Orckestra.Composer.Search.Parameters;
 using Orckestra.Composer.Search.Repositories;
 using Orckestra.Composer.Search.Services;
+using Orckestra.Composer.Search.ViewModels;
 using Orckestra.Composer.SearchQuery.Extensions;
 using Orckestra.Composer.SearchQuery.Parameters;
 using Orckestra.Composer.SearchQuery.Providers;
@@ -35,7 +36,8 @@ namespace Orckestra.Composer.SearchQuery.Services
         protected IProductSettingsRepository ProductSettingsRepository { get; private set; }
 
         public SearchQueryViewService(
-            ISearchRepository searchRepository,
+         ICategoryRepository categoryRepository,
+         ISearchRepository searchRepository,
             IDamProvider damProvider,
             ILocalizationProvider localizationProvider,
             ISearchUrlProvider searchUrlProvider,
@@ -48,14 +50,15 @@ namespace Orckestra.Composer.SearchQuery.Services
             Repositories.IInventoryRepository inventoryRepository,
             IProductSearchViewModelFactory productSearchViewModelFactory)
          : base(
-              searchRepository,
+            searchRepository,
             damProvider,
             localizationProvider,
             searchUrlProvider,
             facetFactory,
             selectedFacetFactory,
             composerContext,
-            productSearchViewModelFactory)
+            productSearchViewModelFactory,
+            categoryRepository)
         {
             SearchQueryRepository = searchQueryRepository ?? throw new ArgumentNullException(nameof(searchQueryRepository));
             SearchQueryUrlProvider = searchQueryUrlProvider ?? throw new ArgumentNullException(nameof(searchQueryUrlProvider));
@@ -138,8 +141,11 @@ namespace Orckestra.Composer.SearchQuery.Services
             {
                 QueryName = param.QueryName,
                 QueryType = param.QueryType,
-                SelectedFacets =
+                FacetSettings = new FacetSettingsViewModel()
+                {
+                    SelectedFacets =
                     await GetSelectedFacetsAsync(createSearchViewModelParam.SearchParam).ConfigureAwait(false),
+                },
                 ProductSearchResults =
                     await CreateProductSearchResultsViewModelAsync(createSearchViewModelParam).ConfigureAwait(false),
             };
@@ -150,9 +156,9 @@ namespace Orckestra.Composer.SearchQuery.Services
                 {
                     foreach (var value in facet.Values)
                     {
-                        if (viewModel.SelectedFacets.Facets.All(f => f.Value != value))
+                        if (viewModel.FacetSettings.SelectedFacets.Facets.All(f => f.Value != value))
                         {
-                            viewModel.SelectedFacets.Facets.Add(new SelectedFacet()
+                            viewModel.FacetSettings.SelectedFacets.Facets.Add(new SelectedFacet()
                             {
                                 Value = value,
                                 FieldName = facet.FacetName,
@@ -174,6 +180,11 @@ namespace Orckestra.Composer.SearchQuery.Services
                     }
                 }
             }
+
+            // Json context for Facets
+            viewModel.FacetSettings.Context["SelectedFacets"] = viewModel.FacetSettings.SelectedFacets;
+            viewModel.FacetSettings.Context["Facets"] = viewModel.ProductSearchResults.Facets;
+            viewModel.FacetSettings.Context["PromotedFacetValues"] = viewModel.ProductSearchResults.PromotedFacetValues;
 
             viewModel.Context[nameof(viewModel.ProductSearchResults.SearchResults)] = viewModel.ProductSearchResults.SearchResults;
             viewModel.Context[nameof(SearchConfiguration.MaxItemsPerPage)] = SearchConfiguration.MaxItemsPerPage;

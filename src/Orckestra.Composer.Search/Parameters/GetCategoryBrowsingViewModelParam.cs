@@ -16,6 +16,8 @@ namespace Orckestra.Composer.Search.Parameters
 
         public string SortDirection { get; set; }
 
+        public int NumberOfItemsPerPage { get; set; }
+
         public List<SearchFilter> SelectedFacets { get; set; }
 
         public bool IsAllProducts { get; set; }

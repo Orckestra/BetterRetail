@@ -279,6 +279,9 @@
   <data name="Details" xml:space="preserve">
     <value>Details</value>
   </data>
+  <data name="L_All" xml:space="preserve">
+    <value>All</value>
+  </data>
   <data name="L_Each" xml:space="preserve">
     <value>each</value>
   </data>
