@@ -1,4 +1,4 @@
-.wishlist-header-count {
+﻿.wishlist-header-count {
     min-width: $spacer;
     display: inline-block;
 }
@@ -38,7 +38,8 @@
     text-decoration: none;
     padding: $spacer;
     display: inline-block;
-    height: 45px;
+    font-size: 20px;
+    line-height: 20px;
     vertical-align: middle;
     color: $gray-800;
     &:hover {

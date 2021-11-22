@@ -12,6 +12,7 @@ namespace Orckestra.Composer.Search.ViewModels
         public string FullDisplayName { get; set; }
         public double? Price { get; set; }
         public double? ListPrice { get; set; }
+        public bool IsWeightedProduct { get; set; }
         /// <summary>
         /// Gets or sets the search term
         /// </summary>

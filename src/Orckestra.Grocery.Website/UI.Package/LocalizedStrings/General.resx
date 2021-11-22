@@ -130,7 +130,7 @@
     <value>Unavailable</value>
   </data>
   <data name="B_AddToCartProductList" xml:space="preserve">
-    <value>Buy now</value>
+    <value>Add to cart</value>
   </data>
   <data name="B_AddToCartProductListOOS" xml:space="preserve">
     <value>Out of stock</value>

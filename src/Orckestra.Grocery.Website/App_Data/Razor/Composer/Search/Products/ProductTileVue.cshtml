@@ -1,5 +1,8 @@
 @inherits Composer.Razor.ComposerRazorFunction
+
+@using Orckestra.Composer.CompositeC1.Context
 @using Orckestra.Composer.Search.ViewModels
+@using Orckestra.Composer.Grocery.ViewModels
 
 @functions {
     public override string FunctionDescription
@@ -35,84 +38,91 @@
         <li v-for="item in Product.ProductBadgeMap"><img v-bind:src="`/UI.Package/Images/badge/${item.Key}.svg`"   v-bind:alt="item.Value"/></li>
     </ul>
 
+    <div class="product-tile-information">
+        <div class="product-tile-text">
+            <p v-if="Product.Brand" class="product-tile-brand m-0"
+            data-qa="search-product-brand">
+                {{Product.Brand}}
+            </p>
+            <div v-if="Product.IsEligibleForRecurring" class="product-tile-recurring">
+                <img src="~/UI.Package/Images/recurring.svg"
+                    class="recurring-icon"
+                    alt="@Html.Localize("General", "L_RecurringProduct")"
+                    title="@Html.Localize("General", "L_RecurringProduct")"/>
+            </div>
 
-    <div class="product-tile-text px-3 pt-3">
-        <p v-if="Product.Brand" class="product-tile-brand m-0"
-           data-qa="search-product-brand">
-            {{Product.Brand}}
-        </p>
-        <div v-if="Product.IsEligibleForRecurring" class="product-tile-recurring">
-            <img src="~/UI.Package/Images/recurring.svg"
-                 class="recurring-icon"
-                 alt="@Html.Localize("General", "L_RecurringProduct")"
-                 title="@Html.Localize("General", "L_RecurringProduct")"/>
+            <a data-qa="search-product-title"
+            v-bind:href="Product.Url"
+            v-bind:title="Product.FullDisplayName"
+            v-bind:data-productId="Product.ProductId"
+            v-on:click="productClick(Product, index)"
+            class="p text-default-font">
+                {{Product.DisplayName}}
+            </a>
+            
+            @DisplayFormat()
         </div>
-
-        <a data-qa="search-product-title"
-           v-bind:href="Product.Url"
-           v-bind:title="Product.FullDisplayName"
-           v-bind:data-productId="Product.ProductId"
-           v-on:click="productClick(Product, index)"
-           class="p text-default-font">
-            {{Product.DisplayName}}
-        </a>
+        @PriceBasedOnUnitMeasure()
+        @if (ShowAddToCartButton)
+        {
+            <div class="product-tile-button-container">
+                @ProductHelpers.AddToCartButtonWithQuantity()
+            </div>
+        }
     </div>
-   
-    @PriceBasedOnUnitMeasure()
-    @if (ShowAddToCartButton)
-    {
-        <div class="product-tile-button-container px-3 mb-3">
-            @ProductHelpers.AddToCartButtonWithQuantity()
-        </div>
-    }
+    
 
 </div>
 
+@helper DisplayFormat()
+{
+   <div class="product-tile-format" v-if="Product.HasUnitValues">
+       <span v-if="Product.IsUnit &amp;&amp; Product.IsWeightedProduct">
+           @Html.Localize("ProductPage", "L_Approx") {{Product.ProductUnitSize}}{{Product.ProductUnitMeasure}} @Html.Localize("General", "L_EachAbbrev")
+       </span>
+       <span v-if="Product.IsUnit &amp;&amp; !Product.IsWeightedProduct">
+           {{Product.ProductUnitSize}}{{Product.ProductUnitMeasure}}
+       </span>
+       <span v-if="!Product.IsUnit &amp;&amp; Product.IsWeightedProduct">
+           {{Product.ProductUnitQuantity}} x @Html.Localize("ProductPage", "L_Approx") {{Product.ProductUnitSize}}{{Product.ProductUnitMeasure}}
+       </span>
+       <span v-if="!Product.IsUnit &amp;&amp; !Product.IsWeightedProduct">
+           {{Product.ProductUnitQuantity}} x {{Product.ProductUnitSize}}{{Product.ProductUnitMeasure}}
+       </span>
+   </div> 
+}
+
 @helper PriceBasedOnUnitMeasure()
 {
-<div class="px-3">
-    <p class="mb-1">
-        <span v-if="Product.IsApproxUnit">
-            @Html.Localized("ProductPage", "L_UnitMeasureApprox", "{{Product.ItemFormat}}", "{{Product.UnitOfMeasure}}")
+<div class="product-tile-price">
+    <small class="display-price" v-bind:class="{'text-danger order-2' : Product.IsOnSale}">
+        <span v-if="Product.HasPriceRange">
+           @Html.Localize("List-Search", "L_PriceFrom")
         </span>
-        <span v-else="else">
-            @Html.Localized("ProductPage", "L_UnitMeasure", "{{Product.ItemFormat}}", "{{Product.UnitOfMeasure}}")
+        <span class="h4" v-if="Product.IsOnSale">
+            {{Product.DisplaySpecialPrice}}
         </span>
-    </p>
-    <div class="product-tile-price">
-        <small class="mr-1" v-bind:class="{'text-danger' : Product.IsOnSale}">
-            <span v-if="Product.HasPriceRange">
-                @Html.Localize("List-Search", "L_PriceFrom")
-            </span>
-            <span v-if="Product.IsApproxUnit">
-                @Html.Localize("List-Search", "L_Approx")
-            </span>
-            <span class="h5 font-weight-bold">
-                <span v-if="Product.IsOnSale">
-                    {{Product.DisplaySpecialPrice}}
-                </span>
-                <span v-else="else">
-                    {{Product.DisplayListPrice}}
-                </span>
-            </span>
-        </small>
-        <span v-if="Product.IsOnSale">
-            <del>{{Product.DisplayListPrice}}</del>&nbsp;
+        <span class="h4" v-else="else">
+            {{Product.DisplayListPrice}}
         </span>
-        
-        <span v-if="Product.PricePerUnit" class="product-tile-price-per-unit">
-            <small v-if="Product.IsPricePerUnitZero">@Html.Localize("ProductPage", "L_LessThan") {{Product.PricePerUnit.replace('0.00', '0.01')}}</small>
-            <small v-else="v-else">{{Product.PricePerUnit}}</small>
-            @Html.Localize("ProductPage", "L_Per")
-            <small v-if="Product.BaseProductSize != 1 ">{{Product.BaseProductSize}}  </small> {{Product.BaseProductMeasure}}
-        </span>
-    </div>
+        <span v-if="Product.IsWeightedProduct">@Html.Localize("ProductPage", "L_Per"){{Product.ProductUnitSize}}{{Product.ProductUnitMeasure}}</span>
+    </small>
+    <span v-if="Product.IsOnSale" class="original-price" v-bind:class="{'order-1 d-block' : Product.IsOnSale}">
+        &nbsp;<del>{{Product.DisplayListPrice}}</del>
+    </span>
+    
+    <span v-if="Product.PricePerUnit" class="product-tile-price-per-unit" v-bind:class="{'order-3' : Product.IsOnSale}">
+        <span v-if="Product.IsPricePerUnitZero">@Html.Localize("ProductPage", "L_LessThan") {{Product.PricePerUnit.replace('0.00', '0.01')}}</span>
+        <span v-else="v-else">{{Product.PricePerUnit}}</span>
+        @Html.Localize("ProductPage", "L_Per")
+        <span v-if="Product.BaseProductSize != 1 ">{{Product.BaseProductSize}}&nbsp;</span>{{Product.BaseProductMeasure}}
+    </span>
 </div>
 }
 
 @helper ProductPrice()
 {
-    <div class="d-flex  flex-column  flex-grow-1  justify-content-end px-3">
+    <div class="d-flex  flex-column  flex-grow-1  justify-content-end">
 
         <div v-if="Product.HasPriceRange">
             <span class="small" v-bind:class="{'text-danger': Product.IsOnSale}">
@@ -153,14 +163,14 @@
         <a v-if="Product.InWishList" data-qa="product-remove-from-wishlist"
            v-on:click="removeLineItemFromWishList(Product, $event)"
            title="@Html.Localize("MyAccount", "H_RemoveFromTheWishList")"
-           class="add-to-wishlist p-0 active">
+           class="add-to-wishlist p-0 text-danger">
             <i class="fa  fa-heart"></i>
         </a>
         <a v-else="else" data-qa="product-add-to-wishlist"
            v-on:click="addLineItemToWishList(Product, $event)"
            title="@Html.Localize("MyAccount", "H_AddToWishList")"
            class="add-to-wishlist  p-0 ">
-            <i class="fa  fa-heart"></i>
+            <i class="fa  fa-heart-o"></i>
         </a>
     </span>
 }

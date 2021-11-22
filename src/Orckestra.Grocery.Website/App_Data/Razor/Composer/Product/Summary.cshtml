@@ -60,7 +60,7 @@
 
                 @Html.LazyFunction("Composer.Product.RecurringFrequency")
 
-                <div class="mb-1" property="offers" typeof="Offer">
+                <div class="mb-1 w-50" property="offers" typeof="Offer">
                     @ProductPrice()
                 </div>
                 
@@ -123,19 +123,21 @@
 
 @helper ProductPrice()
 {
+    var extendedVM = Model.AsExtensionModel<IGroceryProductViewModel>();
     <div id="vueProductPrice" v-cloak="true" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
         <div v-if="!IsUnavailableVariant">
-            <div class="m-0" v-if="Product.DefaultListPrice">
-				<div v-if="PricePerUnit" class="mt-1 unit-price">
+            <div class="m-0 d-flex flex-wrap flex-row align-items-baseline" v-if="Product.DefaultListPrice">
+                <small property="price" data-qa="product-price" class="mr-1" v-bind:class="{'text-danger order-2': Product.IsPriceDiscounted}">
+                    <span class="product-price">{{Product.ListPrice}}</span><span v-if="Product.IsWeightedProduct">@Html.Localize("ProductPage", "L_Per"){{Product.ProductUnitSize}}@extendedVM.ProductUnitMeasure</span>
+                </small>
+                <del v-if="Product.IsPriceDiscounted" class="mt-1" v-bind:class="{'order-1 d-block w-100' : Product.IsPriceDiscounted}">{{Product.DefaultListPrice}}</del>
+                
+                <div v-if="PricePerUnit" class="mt-1 unit-price" v-bind:class="{'order-3 ml-auto' : Product.IsPriceDiscounted}">
                     <span v-if="IsPricePerUnitZero">@Html.Localize("ProductPage", "L_LessThan") {{PricePerUnit.replace('0.00', '0.01')}}</span>
                     <span v-else="v-else">{{PricePerUnit}}</span>
                     @Html.Localize("ProductPage", "L_Per")
                     <span v-if="Product.BaseProductSize != 1 ">{{Product.BaseProductSize}} </span>{{Product.BaseProductMeasure}}
                 </div>
-                <small property="price" data-qa="product-price" class="mr-1" v-bind:class="{'text-danger': Product.IsPriceDiscounted}">
-                    <span class="product-price">{{Product.ListPrice}}</span>
-                </small>
-                <del v-if="Product.IsPriceDiscounted" class="mt-1">{{Product.DefaultListPrice}}</del>
             </div>
             <span v-else="else" property="price" data-qa="product-price" class="product-price invisible">0</span>
         </div>
@@ -151,7 +153,7 @@
         var isSingleUnit = (extendedVM.ProductUnitQuantity == 1);
         var unitQuantity = (isSingleUnit) ? "" : extendedVM.ProductUnitQuantity +" x ";
         var unitQuantitySuffix = (isSingleUnit && extendedVM.IsWeightedProduct) ? Html.Localize("General", "L_EachAbbrev") : "";
-        var unitSize = (extendedVM.IsWeightedProduct) ? Html.Localize("ProductPage", "L_Approx") + " " + extendedVM.ProductUnitSize + " " + extendedVM.ProductUnitMeasure : extendedVM.ProductUnitSize + " " + extendedVM.ProductUnitMeasure;
+        var unitSize = (extendedVM.IsWeightedProduct) ? Html.Localize("ProductPage", "L_Approx") + " " + extendedVM.ProductUnitSize + extendedVM.ProductUnitMeasure : extendedVM.ProductUnitSize + extendedVM.ProductUnitMeasure;
         <p class="unit-weight mb-2">@unitQuantity @unitSize @unitQuantitySuffix</p>
     }
 }

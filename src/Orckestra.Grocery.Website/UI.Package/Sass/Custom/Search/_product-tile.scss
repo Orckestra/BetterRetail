@@ -1,4 +1,4 @@
-@mixin tile-gradient-right($top) {
+﻿@mixin tile-gradient-right($top) {
     content: '';
     position: absolute;
     top: $top;
@@ -16,38 +16,75 @@
     position: relative;
     &-wishlist {
         position: absolute;
-        top: map-get($spacers, 2);
-        right: map-get($spacers, 2);
+        top: 0;
+        right: 0;
+    }
+    .product-tile-information {
+        padding: map-get($spacers, 2);
+        @include media-breakpoint-down(xs) {
+            padding: $spacer;
+        }
     }
     .product-tile-text {
-        // 3 lines of text + half a line of spacing
-        height: ($line-height-base * $font-size-base) * 3;
-        padding-top: map-get($spacers, 2);
+        // 3 lines of text + half a line of spacing + Brand Name
+        height: ($line-height-base * 18px) * 4;
         position: relative;
         overflow: hidden;
         a {
+            font-size: 18px;
+            font-family: "im_fell_english_pro";
+            line-height: $line-height-base;
             color: $gray-800;
         }
     }
     .product-tile-brand {
         white-space: nowrap;
-        font-weight: bold;
-        text-transform: uppercase;
+        font-size: 14px;
+        font-family: "Roboto Condensed", sans-serif;
+        color: $gray-700;
     }
-    .product-tile-badges{ 
+    .product-tile-format {
+        padding-top: 5px;
+    }
+    .product-tile-badges {
         position: absolute;
-        top: 1.25rem;
-        left: 1.25rem;
-    }
-    .product-tile-price-per-unit{
-        float: right;
+        top: $spacer;
+        left: $spacer;
+        &.list-unstyled li {
+            margin-bottom: $spacer;
+        }
     }
     .product-tile-price {
-        height: ceil($h4-font-size * $line-height-base);
+        font-family: "Roboto Condensed", sans-serif;
+        height: ceil(44px * $line-height-base);
+        display: flex;
+        align-items: flex-end;
+        flex-wrap: wrap;
+        margin-bottom: $spacer;
+        .display-price {
+            .h4 {
+                font-size: 30px;
+                font-weight: 700;
+                letter-spacing: -0.14rem;
+                line-height: 1;
+            }
+            letter-spacing: -0.05rem;
+            font-size: 12px;
+        }
+        &-per-unit {
+            margin-left: auto;
+            letter-spacing: -0.05rem;
+        }
+        .original-price {
+            letter-spacing: -0.05rem;
+            flex: 1 0 100%;
+        }
     }
     .product-tile-special-price {
+        font-family: "Roboto Condensed", sans-serif;
         position: relative;
-        height: ceil(($line-height-base * $font-size-sm));
+        height: ceil(($line-height-base * 20px));
+        font-size: 20px;
         del {
             position: absolute;
             bottom: 0;
@@ -60,6 +97,10 @@
         padding-bottom: $product-image-ratio * 100%;
         position: relative;
         overflow: hidden;
+        >img.img-fluid {
+            margin-top: $spacer*2 !important;
+            max-width: calc(100% - 40px);
+        }
     }
     .product-tile-recurring {
         float: left;

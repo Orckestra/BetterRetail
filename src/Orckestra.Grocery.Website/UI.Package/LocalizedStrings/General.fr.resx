@@ -130,7 +130,7 @@
     <value>Indisponible</value>
   </data>
   <data name="B_AddToCartProductList" xml:space="preserve">
-    <value>Acheter</value>
+    <value>Ajouter au panier</value>
   </data>
   <data name="B_AddToCartProductListOOS" xml:space="preserve">
     <value>Rupture de stock </value>
