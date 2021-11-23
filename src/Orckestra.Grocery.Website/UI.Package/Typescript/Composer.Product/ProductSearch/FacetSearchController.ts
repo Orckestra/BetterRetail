@@ -204,7 +204,7 @@ module Orckestra.Composer {
 
         public refineByRange(actionContext: IControllerActionContext) {
             actionContext.event.preventDefault();
-            var container = actionContext.elementContext.closest('[data-facetfieldname]');
+            var container = actionContext.elementContext;
             var sliderServiceInstance = this.sliderServicesInstances[container.data('facetfieldname')];
 
             var values = sliderServiceInstance.getValues();
