@@ -21,7 +21,7 @@ namespace Orckestra.Composer.CompositeC1
 
         public void ProcessRequest(HttpContext context)
         {
-            throw new InvalidOperationException("This code should not be reachable");
+            throw new InvalidOperationException("This website doesn't have 404 page configured");
         }
     }
 }

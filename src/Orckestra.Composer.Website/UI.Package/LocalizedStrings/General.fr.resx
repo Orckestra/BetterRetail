@@ -261,4 +261,7 @@
   <data name="B_ViewMore" xml:space="preserve">
     <value>En voir plus</value>
   </data>
+  <data name="L_All" xml:space="preserve">
+    <value>Toute</value>
+  </data>
 </root>

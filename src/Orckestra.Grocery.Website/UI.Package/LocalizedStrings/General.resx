@@ -130,10 +130,13 @@
     <value>Unavailable</value>
   </data>
   <data name="B_AddToCartProductList" xml:space="preserve">
-    <value>Buy now</value>
+    <value>Add to cart</value>
   </data>
   <data name="B_AddToCartProductListOOS" xml:space="preserve">
     <value>Out of stock</value>
+  </data>
+  <data name="B_AddToCartProductSuggestion" xml:space="preserve">
+    <value>Add</value>
   </data>
   <data name="B_Back" xml:space="preserve">
     <value>Back</value>
@@ -264,6 +267,9 @@
   <data name="mi" xml:space="preserve">
     <value>Mile</value>
   </data>
+  <data name="B_ViewAll" xml:space="preserve">
+    <value>View All</value>
+  </data>
   <data name="B_ViewLess" xml:space="preserve">
     <value>View Less</value>
   </data>
@@ -272,5 +278,14 @@
   </data>
   <data name="Details" xml:space="preserve">
     <value>Details</value>
+  </data>
+  <data name="L_All" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="L_Each" xml:space="preserve">
+    <value>each</value>
+  </data>
+  <data name="L_EachAbbrev" xml:space="preserve">
+    <value>ea.</value>
   </data>
 </root>

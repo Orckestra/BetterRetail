@@ -116,6 +116,7 @@
                            name="Password"
                            data-qa="information-password-input"
                            v-bind:disabled="IsLoading"
+                           autocomplete="off"
                            v-bind:type="SigningInMode ? 'password' : 'hidden'"
                            class="form-control"
                            required="required"

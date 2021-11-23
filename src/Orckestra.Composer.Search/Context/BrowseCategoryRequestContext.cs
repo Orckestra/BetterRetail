@@ -68,6 +68,7 @@ namespace Orckestra.Composer.Search.Context
                 CategoryName = await GetCategoryNameAsync(categoryId).ConfigureAwait(false),
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
                 IsAllProducts = CategoryMetaContext.GetIsAllProductPage(),
+                NumberOfItemsPerPage = SearchConfiguration.MaxItemsPerPage,
                 Page = CurrentPage,
                 SortBy = SortBy,
                 SortDirection = SortDirection,

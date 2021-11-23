@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Orckestra.Composer.Enums;
@@ -24,7 +25,13 @@ namespace Orckestra.Composer.ViewModels.Home
         public MenuTypeEnum MenuType { get; set; }
 
         public string CssClass { get; set; }
-        public string CssClassName { get; set; }
+
+        private string _cssClassName;
+        public string CssClassName
+        {
+            get => _cssClassName;
+            set => _cssClassName = string.Join(" ", value.Split(','));
+        }
 
         public IEnumerable<IMenuEntryViewModel> Children { get; set; }
 

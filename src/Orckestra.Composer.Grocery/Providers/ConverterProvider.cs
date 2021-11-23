@@ -2,7 +2,7 @@
 {
     public class ConverterProvider: IConverterProvider
     {
-        public double ConvertMeasurements(double number, string fromMeasurement, string toMeasurement)
+        public virtual double ConvertMeasurements(double number, string fromMeasurement, string toMeasurement)
         {
             double mL = 0;
             double oz = 0;

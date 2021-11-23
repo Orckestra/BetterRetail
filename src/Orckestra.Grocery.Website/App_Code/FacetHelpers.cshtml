@@ -1,64 +1,52 @@
 ﻿@using Composite.AspNet.Razor
 @using System.Web.Mvc
+@using System.Web.WebPages.Html
 @using Orckestra.Composer.Search.Facets
 
-@helper PromotedFacetValues(IList<PromotedFacetValue> promotedFacets)
+@helper PromotedFacetValues()
 {
-    if (promotedFacets == null || promotedFacets.Count == 0)
-    {
-        return;
-    }
-    <div class="card mb-3 facets-card">
+    <div v-if="PromotedFacetValues.length" class="card mb-3 facets-card">
         <div class="card-body">
-            @foreach (var pf in promotedFacets)
-            {
-                if (pf.FacetType == FacetType.MultiSelect)
-                {
-                    @MultiSelectPromotedFacet(pf)
-                }
-
-                if (pf.FacetType == FacetType.SingleSelect)
-                {
-                    @SinglePromotedFacet(pf)
-                }
-            }
+            <div v-for="facetValue in PromotedFacetValues" v-if="facetValue.Quantity">
+                <div v-if="facetValue.FacetType == '@(FacetType.SingleSelect)'">
+                    @SinglePromotedFacet()
+                </div>
+                <div v-if="facetValue.FacetType == '@(FacetType.MultiSelect)'">
+                    @MultiSelectPromotedFacet()
+                </div>
+            </div>
         </div>
     </div>
 }
 
-@helper SinglePromotedFacet(PromotedFacetValue facetValue)
+@helper SinglePromotedFacet()
 {
-    if (facetValue.Quantity > 0)
-    {
-        <div class="mb-1" data-facetfieldname="@facetValue.FieldName"
-             data-facettype="@facetValue.FacetType">
-            <a href="#" data-facetfieldname="@facetValue.FieldName"
-               data-facetvalue="@facetValue.Value"
-               title="@facetValue.Title"
-               data-oc-click="singleFacetChanged">@facetValue.Title&#160;(@facetValue.Quantity)</a>
-        </div>
-    }
+    <div class="mb-1"
+         v-bind:data-facetfieldname="facetValue.FieldName"
+         v-bind:data-facettype="facetValue.FacetType">
+        <a href="#"
+           v-bind:data-facetfieldname="facetValue.FieldName"
+           v-bind:data-facetvalue="facetValue.Value"
+           v-bind:title="facetValue.Title"
+           data-oc-click="singleFacetChanged">{{facetValue.Title}}&#160;({{facetValue.Quantity}})</a>
+    </div>
 }
 
-@helper MultiSelectPromotedFacet(PromotedFacetValue facetValue)
+@helper MultiSelectPromotedFacet()
 {
-    if (facetValue.Quantity > 0)
-    {
-        <div class="form-check mb-1"
-             data-facetfieldname="@facetValue.FieldName"
-             data-facettype="@facetValue.FacetType">
-            <label class="m-0">
-                <input type="checkbox"
-                       class="form-check-input"
-                       name="@(facetValue.FieldName)[]"
-                       value="@facetValue.Value"
-                       data-oc-click="multiFacetChanged"
-                       checked="@facetValue.IsSelected" />
-                @facetValue.Title&#160;(@facetValue.Quantity)
-            </label>
-        </div>
-
-    }
+    <div class="form-check mb-1"
+         v-bind:data-facetfieldname="facetValue.FieldName"
+         v-bind:data-facettype="facetValue.FacetType">
+        <label class="m-0">
+            <input type="checkbox"
+                   class="form-check-input"
+                   v-bind:name="facetValue.FieldName + '[]'"
+                   v-bind:value="facetValue.Value"
+                   data-oc-click="multiFacetChanged"
+                   v-bind:checked="facetValue.IsSelected" />
+            {{facetValue.Title}}&#160;({{facetValue.Quantity}})
+        </label>
+    </div>
 }
 
 @helper FacetValueTitle(FacetValue facetValue)
@@ -66,37 +54,40 @@
     <span>@facetValue.Title (@facetValue.Quantity)</span>
 }
 
-@helper SingleFacet(FacetValue facetVaue, Facet facet)
+@helper SingleFacet(string valueBinding = "FacetValues")
 {
-    if (facetVaue.Quantity > 0)
-    {
-        <div class="mb-1">
-            <a href="#"
-               data-facetfieldname="@facet.FieldName"
-               data-facetvalue="@facetVaue.Value"
-               title="@facetVaue.Title"
-               data-oc-click="singleFacetChanged">@FacetValueTitle(facetVaue)</a>
-        </div>
-    }
+    <div class="form-check mb-1" v-for="facetValue in facet.@(valueBinding)" v-if="facetValue.Quantity">
+        <a href="#"
+           class="facet-link"
+           v-bind:data-facetfieldname="facet.FieldName"
+           v-bind:data-facetvalue="facetValue.Value"
+           v-bind:title="facetValue.Title"
+           v-bind:data-selected="facetValue.IsSelected"
+           v-bind:data-type="facet.FacetType"
+           v-bind:class="{'selected': facetValue.IsSelected}"
+           data-oc-click="singleFacetChanged">
+            <i class="fa fa-check"></i>
+            <span>{{facetValue.Title}} ({{facetValue.Quantity}})</span>
+        </a>
+    </div>
 }
 
-@helper MultiSelectFacet(FacetValue facetVaue, Facet facet)
+@helper MultiSelectFacet(string valueBinding = "FacetValues")
 {
-    <div class="form-check mb-1">
+    <div v-for="facetValue in facet.@(valueBinding)" v-bind:key="facetValue.Value" class="form-check mb-1">
         <label class="m-0">
-            <input id="id@(facet.FieldName)"
-                   class="form-check-input"
+            <input class="form-check-input"
                    type="checkbox"
-                   name="@(facet.FieldName)[]"
-                   value="@facetVaue.Value"
+                   v-bind:name="facet.FieldName + '[]'"
+                   v-bind:value="facetValue.Value"
                    data-oc-click="multiFacetChanged"
-                   checked="@facetVaue.IsSelected" />
-            @FacetValueTitle(facetVaue)
+                   v-bind:checked="facetValue.IsSelected" />
+            <span>{{facetValue.Title}} ({{facetValue.Quantity}})</span>
         </label>
     </div>
 }
 
-@helper RangeFacet(Facet facet)
+@helper RangeFacet()
 {
     <div class="form-group">
         <div class="range"></div>
@@ -119,55 +110,104 @@
     </button>
 }
 
-@helper ShowMoreLessFacets(Facet facet)
+@helper RenderFacet()
 {
-    <ul id="onDemandFacets-@facet.FieldName" class="list-unstyled  collapse">
-        @if (facet.FacetType == FacetType.MultiSelect)
-        {
-            foreach (var facetValue in facet.OnDemandFacetValues)
-            {
-                @MultiSelectFacet(facetValue, facet)
-            }
-        }
-
-        @if (facet.FacetType == FacetType.SingleSelect)
-        {
-            foreach (var facetValue in facet.OnDemandFacetValues)
-            {
-                @SingleFacet(facetValue, facet);
-            }
-        }
-    </ul>
-    @ShowMoreLessButton(facet.FieldName)
+    <div v-if="facet.FacetType == '@(FacetType.SingleSelect)'">
+        @SingleFacet()
+    </div>
+    <div v-if="facet.FacetType == '@(FacetType.MultiSelect)'">
+        @MultiSelectFacet()
+    </div>
+    <div v-if="facet.FacetType == '@(FacetType.Range)'">
+        @RangeFacet()
+    </div>
+    <div v-if="facet.FacetType != '@(FacetType.Range)'">
+        @ShowMoreLessFacets()
+    </div>
 }
 
-@helper ShowMoreLessButton(string fieldName)
+@helper ShowMoreLessFacets()
 {
-    <button class="btn  btn-link" data-toggle="collapse" data-target="#onDemandFacets-@fieldName"
-            data-label-showmore=" @Html.Localize("List-Search", "B_ShowMore")"
-            data-label-showless=" @Html.Localize("List-Search", "B_ShowLess")"
-            data-oc-click="toggleFacetList">
-        @Html.Localize("List-Search", "B_ShowMore")
-    </button>
+    <div v-if="facet.OnDemandFacetValues.length" v-bind:id="'onDemandFacets-' + facet.FieldName"
+         class="collapse"
+         v-bind:class="{'show': !IsValuesCollapsed(facet)}">
+        <div v-if="facet.FacetType == '@(FacetType.SingleSelect)'">
+            @SingleFacet("OnDemandFacetValues")
+        </div>
+        <div v-if="facet.FacetType == '@(FacetType.MultiSelect)'">
+            @MultiSelectFacet("OnDemandFacetValues")
+        </div>
+    </div>
+    @ShowMoreLessButton()
 }
 
-@helper RenderFacet(Facet facet)
+@helper ShowMoreLessButton()
 {
-    switch (facet.FacetType)
-    {
-        case FacetType.Range:@RangeFacet(facet); break;
-        case FacetType.SingleSelect:
-        foreach (var facetValue in facet.FacetValues)
-        {
-            @SingleFacet(facetValue, facet);
-        }
-        break;
-        case FacetType.MultiSelect:
-        foreach (var facetValue in facet.FacetValues)
-        {
-            @MultiSelectFacet(facetValue, facet)
-        }
-        break;
-        default: break;
-    }
+    <a v-if="facet.OnDemandFacetValues.length" class="btn  btn-link  font-weight-bold"
+       v-bind:class="{'collapsed': IsValuesCollapsed(facet)}"
+       data-toggle="collapse"
+       v-bind:data-target="'#onDemandFacets-' + facet.FieldName">
+        <span class="more">@Html.Localize("List-Search", "B_ShowMore") <i class="fa fa-angle-down" /></span>
+        <span class="less">@Html.Localize("List-Search", "B_ShowLess") <i class="fa fa-angle-up" /></span>
+    </a>
+}
+
+@helper FacetsModalHeader()
+{
+    <div class="facets-modal-header">
+        <h5 class="modal-title">@Html.Localize("List-Search", "B_FilterBy")</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+}
+
+@helper FacetsModalFooter()
+{
+    <div class="facets-modal-footer">
+        <div class="row w-100">
+            <div class="col"><button class="btn btn-block btn-outline-secondary modal--cancel">@Html.Localize("List-Search", "B_ClearAll")</button></div>
+            <div class="col"><button class="btn btn-block btn-primary modal--confirm">@Html.Localize("List-Search", "B_ApplyFilters")</button></div>
+        </div>
+    </div>
+}
+
+@helper FacetsModalCollapseBtn()
+{
+    <section id="vueFacetsFilterBy" v-cloak="true">
+        <button type="button"
+                class="btn  btn-outline-secondary btn-dropdown  w-100"
+                data-toggle="modal"
+                data-target="#facetsModal" aria-expanded="false">
+            <span v-if="FiltersCount">@Html.Localize("List-Search", "B_FiltersApplied") <span class="badge badge-dark">{{FiltersCount}}</span></span>
+            <span v-else="FiltersCount">@Html.Localize("List-Search", "B_FilterBy")</span>
+            <span class="fa  fa-angle-down"></span>
+        </button>
+    </section>
+}
+
+@helper CategoryFactesTree(string rootTitle)
+{
+    <div id="categoriesTree" class="card bg-light  mb-3  facets-card">
+        <div class="card-header">
+            <a data-toggle="collapse"
+               data-target="#categoryFacets"
+               aria-expanded="true"
+               aria-controls="categoryFacets">
+                @Html.Localize("List-Search", "L_RefinerCategories")
+                <span class="down"><i class="fa fa-angle-down" /></span>
+                <span class="up"><i class="fa fa-angle-up" /></span>
+            </a>
+        </div>
+        <div id="categoryFacets" class="card-body collapse show">
+            <div class="mb-1">
+                <strong>@rootTitle ({{CategoryFacetValuesTree.TotalCount}})</strong>
+            </div>
+            <facets-tree v-bind:parentnode="CategoryFacetValuesTree"
+                         v-bind:nodeсlicked="categoryFacetChanged"
+                         showMoreText="@Html.Localize("List-Search", "B_ShowMore")"
+                         showLessText="@Html.Localize("List-Search", "B_ShowLess")">
+            </facets-tree>
+        </div>
+    </div>
 }

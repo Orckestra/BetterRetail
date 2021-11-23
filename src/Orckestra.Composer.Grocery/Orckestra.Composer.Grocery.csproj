@@ -184,7 +184,8 @@
     <Compile Include="Requests\SetSelectedFulfillmentMethodTypeRequest.cs" />
     <Compile Include="Requests\SetSelectedStoreRequest.cs" />
     <Compile Include="Requests\SetSelectedTimeSlotRequest.cs" />
-    <Compile Include="Services\GrocerySearchViewService.cs" />
+    <Compile Include="Factory\GroceryProductSearchViewModelFactory.cs" />
+    <Compile Include="Services\GroceryRelatedProductViewService.cs" />
     <Compile Include="Services\SalesScopeStoreLocatorViewService.cs" />
     <Compile Include="Services\SalesScopeStoreViewService.cs" />
     <Compile Include="Services\GroceryOrderHistoryViewService.cs" />
@@ -215,6 +216,7 @@
     <Compile Include="ViewModels\IGroceryCartViewModel.cs" />
     <Compile Include="ViewModels\IGroceryOrderShipmentDetailViewModel.cs" />
     <Compile Include="ViewModels\IGroceryProductSearchViewModel.cs" />
+    <Compile Include="ViewModels\IGroceryRelatedProductViewModel.cs" />
     <Compile Include="ViewModels\IGroceryProductViewModel.cs" />
     <Compile Include="ViewModels\StoreAndFulfillmentSelectionViewModel.cs" />
     <Compile Include="ViewModels\IGroceryStoreViewModel.cs" />
@@ -238,6 +240,10 @@
     <ProjectReference Include="..\Orckestra.Composer.Product\Orckestra.Composer.Product.csproj">
       <Project>{1F767098-1FBF-4CB9-8637-6529E1CC0B24}</Project>
       <Name>Orckestra.Composer.Product</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Orckestra.Composer.SearchQuery\Orckestra.Composer.SearchQuery.csproj">
+      <Project>{6DEE1972-E64B-43F0-BBAF-04D0AA64DD60}</Project>
+      <Name>Orckestra.Composer.SearchQuery</Name>
     </ProjectReference>
     <ProjectReference Include="..\Orckestra.Composer.Search\Orckestra.Composer.Search.csproj">
       <Project>{CE6AD95E-0EBB-4E38-BF0B-27A67915FA68}</Project>

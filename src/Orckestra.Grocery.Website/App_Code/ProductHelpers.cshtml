@@ -14,7 +14,7 @@
     if (displayCurrentQuantityInCart)
     {
         <div class="row">
-            <div class="col-lg-4">
+            <div class="col-sm-6 col-lg-4">
                 <div id="vueAddToCartWithQuantityInCart" v-cloak="true" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
                     <div v-if="Quantity > 0 &amp;&amp; IsAvailableToSell">
                         <div class="input-group text-center">
@@ -88,7 +88,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-6 col-lg-4 mt-3 mt-sm-0">@AddToCartButton()</div>
+                <div class="col-sm-6 col-lg-4 mt-2 mt-sm-0">@AddToCartButton()</div>
             </div>
         </div>
     }
@@ -100,7 +100,8 @@
             v-bind:disabled="AddToCartDisabled"
             title="@Html.Localize("General", "B_AddToCartProductDetail")"
             v-on:click="addItemToCart">
-        <span class="fa  fa-shopping-cart"></span>&#160;
+        <span v-if="IsAvailableToSell" class="fa  fa-shopping-cart"></span>&#160;
+        <span v-if="!IsAvailableToSell" class="fa  fa-times"></span>&#160;
 
         <span v-if="IsUnavailableVariant">@Html.Localize("General", "B_AddToCartProductDetailUnavailable")</span>
         <span v-else="else">
@@ -134,8 +135,10 @@
     </div>
 }
 
-@helper AddToCartButtonWithQuantity(string itemName = "Product", string disabledInput = "Loading")
+@helper AddToCartButtonWithQuantity(string itemName = "Product", string disabledInput = "Loading", string addToCartString = "")
 {
+    addToCartString = String.IsNullOrEmpty(addToCartString) ? @Html.Localize("General", "B_AddToCartProductList") : addToCartString;
+
     <div v-if="(@itemName).IsAvailableToSell">
         <div v-if="(@itemName).InCart &amp;&amp; (@itemName).Quantity > 0" class="input-group text-center">
             <div class="input-group-prepend">
@@ -172,13 +175,15 @@
                 v-bind:disabled="Loading"
                 data-qa="search-buy-now"
                 v-on:mouseup.stop="addToCart($event, (@itemName))">
-            @Html.Localize("General", "B_AddToCartProductList")
+            <span class="fa  fa-shopping-cart"></span>&#160;
+            @addToCartString
         </button>
     </div>
     <div v-else="else">
         <button class="btn btn-primary btn-block text-uppercase"
                 data-qa="search-buy-now"
                 disabled="disabled">
+            <span class="fa  fa-times"></span>&#160;
             @Html.Localize("General", "B_AddToCartProductDetailOOS")
         </button>
     </div>

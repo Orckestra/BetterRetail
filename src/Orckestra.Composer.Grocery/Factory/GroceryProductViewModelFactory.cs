@@ -57,7 +57,7 @@ namespace Orckestra.Composer.Grocery.Factory
             var baseProductMeasure = param.Product.PropertyBag.ContainsKey("BaseProductMeasure") ?  param.Product.PropertyBag["BaseProductMeasure"].ToString() : string.Empty;
             var weightVolumeQuantityMeasure = param.Product.PropertyBag.ContainsKey("ProductUnitMeasure") ?  param.Product.PropertyBag["ProductUnitMeasure"].ToString(): string.Empty;
 
-            BuildProductBadgeValues(param, extendedVM, productViewModel);
+            extendedVM.ProductBadgeValues = BuildProductBadgeValues(param.Product, productViewModel);
 
             if (string.IsNullOrEmpty(baseProductMeasure) || string.IsNullOrEmpty(weightVolumeQuantityMeasure))
                 return productViewModel;
@@ -70,20 +70,25 @@ namespace Orckestra.Composer.Grocery.Factory
             return productViewModel;
         }
 
-        protected virtual void BuildProductBadgeValues(CreateProductDetailViewModelParam param, IGroceryProductViewModel extendedVM, ProductViewModel productViewModel)
+        public virtual Dictionary<string, string> BuildProductBadgeValues(Overture.ServiceModel.Products.Product product, BaseProductViewModel productViewModel)
         {
-            var propertyBagProductBadges = param.Product.PropertyBag.ContainsKey("ProductBadges") ? param.Product.PropertyBag["ProductBadges"].ToString().Split('|').ToList() : new List<string>();
-            if (propertyBagProductBadges.Any())
+            var productBadges = productViewModel.Bag.TryGetValue("ProductBadges", out var badges) && badges != null ? badges.ToString().Split('|').ToList() : new List<string>();
+            var productBadgeKeys = product.PropertyBag.TryGetValue("ProductBadges", out var badgekeys) && badgekeys != null ? badgekeys.ToString().Split('|').ToList() : new List<string>();
+
+            if (!productBadgeKeys.Any())
             {
-                var extendVMProductBadges = extendedVM.ProductBadges.Split('|').ToList();
-                extendedVM.ProductBadgeValues = new Dictionary<string, string>();
-                var extendVMProductBadgesList = extendVMProductBadges.ToList();
-                for (var i = 0; i < propertyBagProductBadges.Count; i++)
-                {
-                    if (!extendedVM.ProductBadgeValues.ContainsKey(propertyBagProductBadges[i]))
-                        extendedVM.ProductBadgeValues.Add(propertyBagProductBadges[i], extendVMProductBadgesList[i]);
-                }
+                return null;
             }
+
+            var productBadgeValues = new Dictionary<string, string>();
+
+            for (var i = 0; i < productBadgeKeys.Count; i++)
+            {
+                if (!productBadgeValues.ContainsValue(productBadgeKeys[i]))
+                    productBadgeValues.Add(productBadgeKeys[i], productBadges[i]);
+            }
+
+            return productBadgeValues;
         }
     }
 }

@@ -87,8 +87,8 @@ namespace Orckestra.Composer.CompositeC1.DataTypes.Navigation
         [ForeignKey(typeof(CssStyle), nameof(DataTypes.CssStyle.Id), AllowCascadeDeletes = true)]
         Nullable<Guid> CssStyle { get; set; }
 
-        [ImmutableFieldId("775447a2-4009-4631-811d-71ce4ef85f1a")]
-        [FormRenderingProfile(Label = "Css Class Name", HelpText = "Specify the css class name to apply to this item.")]
+        [ImmutableFieldId("67dc02d2-a224-4317-8204-c9a9a71e986d")]
+        [FormRenderingProfile(Label = "Css Class Name", HelpText = "Specify the css class name to apply to this item.", WidgetFunctionMarkup = @"<f:widgetfunction xmlns:f=""http://www.composite.net/ns/function/1.0"" name=""Composite.Widgets.String.Selector""><f:param xmlns:f=""http://www.composite.net/ns/function/1.0"" name=""Options""><f:function xmlns:f=""http://www.composite.net/ns/function/1.0"" name=""Composite.Utils.String.Split""><f:param name=""String"" value=""highlight,hide-on-scroll"" /></f:function></f:param><f:param name=""Multiple"" value=""True"" /><f:param name=""Required"" value=""False"" /></f:widgetfunction>")]
         [StoreFieldType(PhysicalStoreFieldType.String, 64, IsNullable = true)]
         [FieldPosition(7)]
         [StringSizeValidator(0, 64)]

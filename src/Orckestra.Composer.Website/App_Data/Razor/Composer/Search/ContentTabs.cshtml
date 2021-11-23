@@ -3,7 +3,7 @@
 @using Orckestra.Composer.Search.ViewModels
 @using Orckestra.Search.WebsiteSearch;
 @using Composite.Core.Routing.Pages;
-@using Composite.Search
+@using Orckestra.Composer.Search.Facets
 @using Orckestra.Composer.ContentSearch.DataTypes
 @using Orckestra.Composer.Search.RequestConstants
 @using Orckestra.Composer.Search
@@ -30,13 +30,19 @@
 
     public IContentSearchViewService ContentSearchViewService { get; set; }
 
-    public ProductSearchResultsViewModel ProductSearchResults => SearchRequestContext.ProductsSearchViewModel.ProductSearchResults;
+    public SearchViewModel ProductsSearchViewModel => SearchRequestContext.ProductsSearchViewModel;
+    public ProductSearchResultsViewModel ProductSearchResults => ProductsSearchViewModel.ProductSearchResults;
 
     private bool IsProductsCorrected()
     {
         return !string.IsNullOrEmpty(ProductSearchResults.CorrectedSearchTerms) && ProductSearchResults.TotalCount > 0;
     }
 
+    private bool IsProductFacetsSelected()
+    {
+        return ProductsSearchViewModel != null && ProductsSearchViewModel.FacetSettings.SelectedFacets != null
+            && ProductsSearchViewModel.FacetSettings.SelectedFacets.Facets.Count > 0;
+    }
 }
 
 @{
@@ -80,8 +86,6 @@
     {
         currentTabPathInfo = productTab != null ? productTab.UrlTitle : contentSearchVm.Tabs.First()?.UrlTitle;
     }
-
-
 
     if (productTab != null)
     {
@@ -159,11 +163,14 @@
                 if (currentTab.Total == 0)
                 {
                     var tabsWithResults = contentSearchVm.Tabs.Where(t => t.Total > 0).ToList();
-                    <p class="m-0">@Html.Localized("List-Search", "WeAreSorry", SearchRequestContext.SearchQuery, currentTab.Title)</p>
+                    <p>@Html.Localized("List-Search", "WeAreSorry", SearchRequestContext.SearchQuery, currentTab.Title)</p>
                     if (tabsWithResults.Any())
                     {
-                        @ShowButWeFindIn(tabsWithResults)
-                        @ShowButWeFindInTeaser(tabsWithResults)
+                        if (!(isProductTab && IsProductFacetsSelected()))
+                        {
+                            @ShowButWeFindIn(tabsWithResults)
+                            @ShowButWeFindInTeaser(tabsWithResults)
+                        }
                     }
                 }
 
@@ -301,38 +308,58 @@
 
 @helper ShowProductsSearchResults()
 {
-    if (ProductSearchResults.TotalCount == 0)
+    if (ProductSearchResults.TotalCount == 0 && !IsProductFacetsSelected())
     {
         return;
     }
     <div class="row">
-        <div class="col-12 col-lg-10 offset-lg-2">
+        <div class="col-12 col-lg-10 offset-lg-3">
             <div class="row filters-row">
                 <div class="col-6 d-lg-none">
-                    @ShowFacetsCollapseBtn()
+                    @FacetHelpers.FacetsModalCollapseBtn()
                 </div>
-                <div class="col-6">
-                    @Partial("SearchSortBy", ProductSearchResults)
-                </div>
-                <div class="col-6 d-none d-lg-block">
-                    @Partial("PaginationDropDown", ProductSearchResults)
-                </div>
+                @if (ProductSearchResults.TotalCount > 0)
+                {
+                    <div class="col-6">
+                        @Partial("SearchSortBy", ProductSearchResults)
+                    </div>
+                    <div class="col-6 d-none d-lg-block">
+                        @Partial("PaginationDropDown", ProductSearchResults)
+                    </div>
+                }
             </div>
         </div>
         <div class="col-12">
             <div class="row">
-                <div id="leftCol" class="col-12 col-lg-2  facets-col collapse">
-                    @Function("Composer.Search.SelectedSearchFacets")
-                    @Function("Composer.Search.Facets")
-                </div>
-                <div class="col-12 col-lg-10">
-                    @Function("Composer.Search.Index")
-                    <div class="row">
-                        <div class="col-12">
-                            @Partial("Pager", ProductSearchResults)
+                <div id="leftCol" class="col-12 col-lg-3  facets-col">
+
+                    @Function("Composer.Search.SelectedFacets")
+
+                    <div id="facetsModal" class="facets-modal">
+                        <div class="facets-modal-dialog">
+                            <div class="facets-modal-content">
+                                @FacetHelpers.FacetsModalHeader()
+                                <div class="facets-modal-body">
+                                    <div class="overlay"></div>
+                                    @Function("Composer.Search.Facets")
+                                </div>
+                                @FacetHelpers.FacetsModalFooter()
+                            </div>
                         </div>
                     </div>
+
                 </div>
+                @if (ProductSearchResults.TotalCount > 0)
+                {
+                    <div class="col-12 col-lg-9">
+                        @Function("Composer.Search.Index")
+                        <div class="row">
+                            <div class="col-12">
+                                @Partial("Pager", ProductSearchResults)
+                            </div>
+                        </div>
+                    </div>
+                }
             </div>
         </div>
     </div>
@@ -386,7 +413,7 @@
             class="btn  btn-outline-secondary btn-dropdown  w-100"
             data-toggle="collapse"
             data-target="#leftCol" aria-expanded="false">
-        @Html.Localize("List-Search", "B_Refine")
+        @Html.Localize("List-Search", "B_FilterBy")
         <span class="fa  fa-angle-down"></span>
     </button>
 }

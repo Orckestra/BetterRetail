@@ -1,0 +1,248 @@
+﻿@inherits RazorFunction
+@using Orckestra.Composer.ViewModels.MenuNavigation
+@using Orckestra.Composer.ViewModels.Home;
+@using Orckestra.Composer.CompositeC1.Mappers;
+@using Orckestra.Composer.CompositeC1.DataTypes.Navigation;
+
+@functions {
+    public INavigationMapper HomeNavigationMapper { get; set; }
+}
+
+@{
+    var websiteId = SitemapNavigator.CurrentHomePageId;
+    var mainMenuData = Data.Get<MainMenu>().Where(x => x.PageId == websiteId).ToList();
+    var optionalLinksData = Data.Get<HeaderOptionalLink>().Where(x => x.PageId == websiteId).ToList();
+
+    var mainMenu = HomeNavigationMapper.MapMainMenuItems(mainMenuData) as IEnumerable<HomeMainMenuEntryViewModel>;
+    var optionalLinks = HomeNavigationMapper.MapHeaderOptionalLinksItems(optionalLinksData) as IEnumerable<OptionalLinkEntryViewModel>;
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<head>
+</head>
+<body>
+    <div class="main-nav multi-level nav-tabs">
+        <div class="container-lg">
+            <nav class="navbar navbar-expand-lg megamenu">
+                <div id="main-nav-collapse" class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav w-100" role="menubar">
+                        @foreach (var mainMenuEntry in mainMenu)
+                        {
+                            if (!string.IsNullOrEmpty(mainMenuEntry.DisplayName))
+                            {
+                                var hasImage = !string.IsNullOrEmpty(mainMenuEntry.Image.ImageSource);
+
+                                <li class="nav-item dropdown main-nav-fw @mainMenuEntry.CssClassName">
+
+                                    @if (mainMenuEntry.HasChildren)
+                                    {
+                                        <a href="@mainMenuEntry.Url"
+                                           data-qa="main-menu-category"
+                                           target="@mainMenuEntry.UrlTarget"
+                                           role="button"
+                                           class="dropdown-toggle nav-link d-none d-lg-block"
+                                           aria-haspopup="true"
+                                           style="@mainMenuEntry.CssClass"
+                                           @{ if (hasImage) { <text> data-imageid="@mainMenuEntry.GetHashCode()" </text>  }}>
+                                            @mainMenuEntry.DisplayName
+                                        </a>
+
+                                        <a data-target="#menu-@(mainMenuEntry.GetHashCode())"
+                                           href="@mainMenuEntry.Url"
+                                           target="@mainMenuEntry.UrlTarget"
+                                           data-qa="main-menu-category"
+                                           role="button"
+                                           data-toggle="collapse"
+                                           class="dropdown-toggle nav-link d-block d-lg-none"
+                                           aria-haspopup="true" aria-expanded="false" aria-controls="menu-@(mainMenuEntry.GetHashCode())" style="@mainMenuEntry.CssClass">
+                                            @mainMenuEntry.DisplayName
+                                            <span class="fa fa-chevron-down" aria-hidden="true"></span>
+                                            <span class="fa fa-chevron-up" aria-hidden="true"></span>
+                                        </a>
+
+
+                                        <ul id="menu-@(mainMenuEntry.GetHashCode())" class="dropdown-menu">
+                                            <li>
+                                                @* Content container to add padding *@
+                                                <div class="main-nav-content row no-gutters">
+                                                    <ul class="nav-section list-unstyled col-submenu">
+                                                        <li class="multi-nav-section">
+                                                            <a data-qa="main-menu-link"
+                                                               href="@(mainMenuEntry.Url)"
+                                                               target="@mainMenuEntry.UrlTarget"
+                                                               class="d-md-block d-lg-none main-nav-section-title font-weight-bold">
+                                                                @Html.Localize("General", "B_ViewAll") @mainMenuEntry.DisplayName
+                                                            </a>
+                                                        </li>
+                                                        @foreach (var subMenuEntry in mainMenuEntry.Children as IEnumerable<HomeMainMenuEntryViewModel>)
+                                                        {
+                                                            @NavigationTree(subMenuEntry, mainMenuEntry)
+                                                        }
+                                                    </ul>
+
+                                                    @Image(mainMenuEntry, mainMenuEntry.GetHashCode(), false, "multimenu-image col")
+
+
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    }
+                                    else
+                                    {
+                                        <a href="@mainMenuEntry.Url"
+                                           data-qa="main-menu-category-link"
+                                           target="@mainMenuEntry.UrlTarget"
+                                           style="@mainMenuEntry.CssClass"
+                                           class="nav-link">
+                                            @mainMenuEntry.DisplayName
+                                        </a>
+
+                                        @Image(mainMenuEntry, mainMenuEntry.GetHashCode(), false, "multimenu-image")
+                                    }
+                                </li>
+                            }
+                        }
+                        @Function("Grocery.SelectedStoreInSticky")
+                        @Function("Grocery.SignInSticky")
+                    </ul>
+                    @Function("Composer.Membership.SignInHeaderMobile")
+                    @Function("Composer.Header.LanguageSwitсhMobile")
+                </div>
+            </nav>
+        </div>
+    </div>
+</body>
+</html>
+
+@helper NavigationTree(HomeMainMenuEntryViewModel menuEntry, HomeMainMenuEntryViewModel parentMenuEntry, int pageLevel = 1)
+{
+    int maxLevel = 3;
+    int subLevel = pageLevel + 1;
+    var childItems = menuEntry.Children as IEnumerable<HomeMainMenuEntryViewModel>;
+    var hasImage = !string.IsNullOrEmpty(menuEntry.Image.ImageSource);
+    var curEntry = (hasImage) ? menuEntry : parentMenuEntry;
+
+    var collapseClass = (pageLevel == (maxLevel-1)) ? "collapse" : "";
+
+    <li class="multi-nav-section @menuEntry.CssClassName">
+
+        @if (childItems.Any())
+        {
+            <a data-qa="main-menu-section"
+               href="@menuEntry.Url"
+               target="@menuEntry.UrlTarget"
+               class="main-nav-section-title d-none d-lg-block"
+               style="@menuEntry.CssClass"
+               @{ if (hasImage) { <text> data-imageid="@menuEntry.GetHashCode()" </text> }}>
+                @menuEntry.DisplayName
+                <span class="fa fa-chevron-right" aria-hidden="true"></span>
+            </a>
+            <a data-qa="main-menu-section"
+               data-target="#subMenu-@(menuEntry.GetHashCode())"
+               data-toggle="@collapseClass"
+               aria-expanded="false"
+               aria-controls="subMenu-@(menuEntry.GetHashCode())"
+               href="#"
+               role="button"
+               class="main-nav-section-title d-block d-lg-none"
+               data-imageid="@curEntry.GetHashCode()">
+                @menuEntry.DisplayName
+                @if (pageLevel == (maxLevel-1))
+                {
+                    <span class="fa fa-chevron-down" aria-hidden="true"></span>
+                    <span class="fa fa-chevron-up" aria-hidden="true"></span>
+                }
+                else
+                {
+                    <span class="fa fa-chevron-right" aria-hidden="true"></span>
+                }
+            </a>
+        }
+        else
+        {
+            <a data-qa="main-menu-section"
+               href="@menuEntry.Url"
+               target="@menuEntry.UrlTarget"
+               class="main-nav-section-title"
+               style="@menuEntry.CssClass"
+               data-imageid="@curEntry.GetHashCode()">
+                @menuEntry.DisplayName
+            </a>
+            if (hasImage)
+            {
+                @Image(menuEntry, menuEntry.GetHashCode(), false, "multimenu-image")
+            }
+
+        }
+        @* SubNavigation Start If Any *@
+        @if (childItems.Any() && pageLevel <= maxLevel)
+        {
+            <div class="sub-nav dropdown-menu @collapseClass" id="subMenu-@(menuEntry.GetHashCode())">
+                <div class="sub-nav-content row no-gutters">
+                    <ul class="list-unstyled sub-collapse col-submenu">
+                        @if (pageLevel < (maxLevel - 1))
+                        {
+                        <li class="multi-nav-section">
+                            <a data-qa="main-menu-link"
+                               href="@menuEntry.Url"
+                               target="@menuEntry.UrlTarget"
+                               class="d-md-block d-lg-none main-nav-section-title font-weight-bold">
+                                @Html.Localize("General", "B_ViewAll") @menuEntry.DisplayName
+                            </a>
+                        </li>
+                        }
+                        @if (pageLevel <= maxLevel)
+                        {
+                            foreach (var childItem in childItems)
+                            {
+                                @NavigationTree(childItem, menuEntry, subLevel)
+                            }
+                        }
+                        @if (pageLevel < (maxLevel - 1))
+                        {
+                            <li class="mobile-menu-back-item multi-nav-section d-lg-none" data-pageLevel="@pageLevel">
+                                <a href="javascript:void(0);" class="menu-link mobile-menu-back-link">
+                                    <span class="fa fa-chevron-left" aria-hidden="true"></span> @Html.Localize("General", "B_Back")
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                    @if (hasImage)
+                    {
+                        @Image(menuEntry, menuEntry.GetHashCode(), false, "multimenu-image col")
+                    }
+                </div>
+            </div>
+
+        }
+
+    </li>
+}
+
+@helper Image(HomeMainMenuEntryViewModel vm, int id, bool isSubMenu = false, string clsName = "")
+{
+    var imgId = "menu-image-" + id;
+    var className = isSubMenu ? "menu-image" : "main-image";
+
+    if (!string.IsNullOrEmpty(vm.Image.ImageSource))
+    {
+        <div id="@imgId" class="menu-image @clsName">
+            @if (!string.IsNullOrEmpty(vm.Image.ImageUrl))
+            {
+                <a href="@vm.Image.ImageUrl" target="@vm.Image.ImageUrlTarget">
+                    <img src="@vm.Image.ImageSource" class="img-fluid img-menu" />
+                </a>
+            }
+            else
+            {
+                <img src="@vm.Image.ImageSource" class="img-fluid img-menu" />
+            }
+            @if (!string.IsNullOrEmpty(vm.Image.ImageLabel))
+            {
+                <span class="caption">
+                    <span>@vm.Image.ImageLabel</span>
+                </span>
+            }
+        </div>
+    }
+}

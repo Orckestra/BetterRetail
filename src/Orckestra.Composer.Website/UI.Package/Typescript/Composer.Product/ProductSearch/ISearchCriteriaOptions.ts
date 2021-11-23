@@ -4,5 +4,6 @@ module Orckestra.Composer {
     export interface ISearchCriteriaOptions {
         facetRegistry: IHashTable<string>;
         correctedSearchTerm?: string;
+        categoryId?: string;
     }
 }

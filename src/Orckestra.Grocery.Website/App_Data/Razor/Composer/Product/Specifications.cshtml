@@ -1,7 +1,7 @@
+﻿@inherits Composer.Razor.ComposerRazorFunction
 @using Orckestra.Composer.CompositeC1.Context
 @using Orckestra.Composer.Product.ViewModels
-@using System.Linq;
-@inherits RazorFunction
+
 
 @functions {
     public IProductContext ProductContext { get; set; }
@@ -17,55 +17,187 @@
     {
         return Model.Variants == null || Model.Variants.Count == 0;
     }
+
+    public (string val, string percent, string title) GetAttributeValuePercent(List<SpecificationsAttributeViewModel> attributes, string propertyName)
+    {
+        var attribute = attributes.FirstOrDefault(item => item.PropertyName == propertyName);
+        if (attribute == null || string.IsNullOrEmpty(attribute.Value)) return (string.Empty, string.Empty, string.Empty);
+
+        var splittedAttributeVal = attribute.Value.Split('|');
+        var attributeVal =  splittedAttributeVal[0];
+        var attributePerсent = splittedAttributeVal.Count() == 2 ? splittedAttributeVal[1] : string.Empty;
+        var title = attribute.Title;
+
+        return (attributeVal, attributePerсent, title);
+    }
+
+    public (string val, string title) GetAttributeValue(List<SpecificationsAttributeViewModel> attributes, string propertyName)
+    {
+        var attribute = attributes.FirstOrDefault(item => item.PropertyName == propertyName);
+        if (attribute == null || string.IsNullOrEmpty(attribute.Value)) return (string.Empty, string.Empty);
+
+        var attributeVal = attribute.Value;
+        var title = attribute.Title;
+
+        return (attributeVal, title);
+    }
 }
 
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
 <head>
 </head>
 <body>
-    <h2>@Html.Localize("ProductPage", "L_ProductSpecifications")</h2>
-    @Attributes()
+    <div class="container product-specification">
+        <div class="row">
+            <div class="col-12 col-sm-8">
+                @AttributesByGroup(Model.Specifications, "ProductInformation")
+                @AttributesByGroup(Model.Specifications, "NutritionalInformation")
+            </div>
+            @ProductNutritionFactsTable(Model.Specifications, "NutritionFacts")
+        </div>
+    </div>
 </body>
 </html>
 
-@helper Attributes()
+@helper AttributesByGroup(SpecificationsViewModel specifications, string groupName)
 {
-    if (IsWithoutVariants())
-    {
-        @AttributesTable(Model.Specifications)
-    }
-    else
-    {
-        var variantsWithSpecs = Model.Variants.Where(v => v.Specifications != null);
-        foreach (var variant in variantsWithSpecs)
-        {
-            <div data-variant="@variant.Id" class="@SelectedVariantClass(variant.Id)">
-                @AttributesTable(variant.Specifications)
-            </div>
-        }
 
-        var inheritedVariantIds = Model.Variants.Where(v => v.Specifications == null).Select(v => v.Id).ToArray();
-        if (inheritedVariantIds.Any())
-        {
-            <div data-variant="@(String.Join(",", inheritedVariantIds))" class="@SelectedVariantClass(inheritedVariantIds)">
-                @AttributesTable(Model.Specifications)
-            </div>
-        }
-    }
-}
+    var group = specifications.Groups.FirstOrDefault(item => item.GroupName == groupName);
 
-@helper AttributesTable(SpecificationsViewModel specifications)
-{
-    <table class="table table-striped">
-        @foreach (var group in specifications.Groups)
-        {
-            foreach (var attribute in group.Attributes)
+    if (group != null)
+    {
+        <div class="mb-3">
+            <h2>@group.Title</h2>
+
+            @foreach (var attribute in group.Attributes)
             {
-                <tr>
-                    <th>@attribute.Title</th>
-                    <td>@attribute.Value</td>
-                </tr>
+                if (!string.IsNullOrEmpty(attribute.Value))
+                {
+                    <div class="mb-2">
+                        <h4>@attribute.Title</h4>
+                        <p>@attribute.Value</p>
+                    </div>
+                }
             }
-        }
-    </table>
+        </div>
+    }
 }
+
+@helper ProductNutritionFactsTable(SpecificationsViewModel specifications, string groupName)
+{
+    var group = specifications.Groups.FirstOrDefault(item => item.GroupName == groupName);
+
+    if (group != null)
+    {
+        <div class="col-4">
+            @{
+                var totalFat = GetAttributeValuePercent(group.Attributes, "TotalFat");
+                var saturatedFat = GetAttributeValuePercent(group.Attributes, "SaturatedFat");
+                var cholesterol = GetAttributeValuePercent(group.Attributes, "Cholesterol");
+                var sodium = GetAttributeValuePercent(group.Attributes, "Sodium");
+                var totalCarbohydrate = GetAttributeValuePercent(group.Attributes, "TotalCarbohydrate");
+                var dietaryFiber = GetAttributeValuePercent(group.Attributes, "DietaryFiber");
+                var servingSize = GetAttributeValue(group.Attributes, "ServingSize");
+                var servingPerContainer = GetAttributeValue(group.Attributes, "ServingPerContainer");
+                var calories = GetAttributeValue(group.Attributes, "CaloriesFromFat");
+                var caloriesFromFat = GetAttributeValue(group.Attributes, "CaloriesFromFat");
+                var transFat = GetAttributeValue(group.Attributes, "TransFat");
+                var sugars = GetAttributeValue(group.Attributes, "Sugars");
+                var protein = GetAttributeValue(group.Attributes, "Protein");
+                var vitamins = GetAttributeValue(group.Attributes, "Vitamins");
+                var minerals = GetAttributeValue(group.Attributes, "Minerals");
+
+                <section class="performance-facts">
+                    <header class="performance-facts__header">
+                        <h1 class="performance-facts__title"> @group.Title</h1>
+                        @if (!string.IsNullOrEmpty(servingSize.Item2) && !string.IsNullOrEmpty(servingSize.Item1))
+                        {
+                            <p>@servingSize.Item2 @servingSize.Item1</p>
+                        }
+                        @if (!string.IsNullOrEmpty(servingPerContainer.Item2) && !string.IsNullOrEmpty(servingPerContainer.Item1))
+                        {
+                            <p>@servingPerContainer.Item2 @servingPerContainer.Item1</p>
+                        }
+                    </header>
+                    <table class="performance-facts__table">
+                        <thead>
+                            <tr>
+                                <th colspan="3" class="small-info">
+                                    @Html.Localize("ProductPage", "L_AmountPerServing")
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (!string.IsNullOrEmpty(calories.Item1) && !string.IsNullOrEmpty(calories.Item2)
+                                 || !string.IsNullOrEmpty(caloriesFromFat.Item1) && !string.IsNullOrEmpty(caloriesFromFat.Item2))
+                            {
+                                <tr>
+                                    @if (!string.IsNullOrEmpty(calories.Item1) && !string.IsNullOrEmpty(calories.Item2))
+                                    {
+                                        <th colspan="2">
+                                            <b>@calories.Item2</b>
+                                            @calories.Item1
+                                        </th>
+                                    }
+                                    @if (!string.IsNullOrEmpty(caloriesFromFat.Item1) && !string.IsNullOrEmpty(caloriesFromFat.Item2))
+                                    {
+                                        <td>
+                                            @caloriesFromFat.Item2
+                                            @caloriesFromFat.Item1
+                                        </td>
+                                    }
+                                </tr>
+                            }
+                            <tr class="thick-row">
+                                <td colspan="3" class="small-info">
+                                    <b>% @Html.Localize("ProductPage", "L_DailyValue")*</b>
+                                </td>
+                            </tr>
+
+                            @ProductSepcificationHelpers.NutritionFactsAttributeRowValPercent(totalFat.Item1, totalFat.Item2, totalFat.Item3, true)
+
+                            @ProductSepcificationHelpers.NutritionFactsAttributeRowValPercent(saturatedFat.Item1, saturatedFat.Item2, saturatedFat.Item3)
+
+                            @ProductSepcificationHelpers.NutritionFactsAttributeRowVal(transFat.Item1, transFat.Item2)
+
+                            @ProductSepcificationHelpers.NutritionFactsAttributeRowValPercent(cholesterol.Item1, cholesterol.Item2, cholesterol.Item3, true)
+
+                            @ProductSepcificationHelpers.NutritionFactsAttributeRowValPercent(sodium.Item1, sodium.Item2, sodium.Item3, true)
+
+                            @ProductSepcificationHelpers.NutritionFactsAttributeRowValPercent(totalCarbohydrate.Item1, totalCarbohydrate.Item2, totalCarbohydrate.Item3, true)
+
+                            @ProductSepcificationHelpers.NutritionFactsAttributeRowValPercent(dietaryFiber.Item1, dietaryFiber.Item2, dietaryFiber.Item3)
+
+                            @ProductSepcificationHelpers.NutritionFactsAttributeRowVal(sugars.Item1, sugars.Item2)
+
+                            @ProductSepcificationHelpers.NutritionFactsAttributeRowVal(protein.Item1, protein.Item2)
+                        </tbody>
+                    </table>
+
+                    <table class="performance-facts__table--grid">
+                        <tbody>
+                            <tr>
+                                @foreach (var vitamin in vitamins.Item1.Split('|')?.ToList())
+                                {
+                                    <td colspan="2">
+                                        @vitamin
+                                    </td>
+                                }
+                            </tr>
+                            <tr class="thin-end">
+                                @foreach (var mineral in minerals.Item1.Split('|')?.ToList())
+                                {
+                                    <td colspan="2">
+                                        @mineral
+                                    </td>
+                                }
+                            </tr>
+                        </tbody>
+                    </table>
+                    @ProductSepcificationHelpers.NutritionFactsDailyValues()
+                </section>
+            }
+        </div>
+    }
+}
+

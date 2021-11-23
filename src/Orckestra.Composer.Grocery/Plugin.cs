@@ -7,8 +7,11 @@ using Orckestra.Composer.Grocery.Services;
 using Orckestra.Composer.Grocery.Settings;
 using Orckestra.Composer.MyAccount.Services;
 using Orckestra.Composer.Product.Factory;
+using Orckestra.Composer.Product.Services;
 using Orckestra.Composer.Providers;
+using Orckestra.Composer.Search.Factory;
 using Orckestra.Composer.Search.Services;
+using Orckestra.Composer.SearchQuery.Services;
 using Orckestra.Composer.Store.Factory;
 using Orckestra.Overture;
 
@@ -31,7 +34,8 @@ namespace Orckestra.Composer.Grocery
             host.Register<GrocerySettings, IGrocerySettings>(ComponentLifestyle.PerRequest);
             host.Register<ConverterProvider, IConverterProvider>();
             host.Register<GroceryProductViewModelFactory, IProductViewModelFactory>();
-            host.Register<GrocerySearchViewService, ISearchViewService>();
+            host.Register<GroceryProductSearchViewModelFactory, IProductSearchViewModelFactory>();
+            host.Register<GroceryRelatedProductViewService, IRelatedProductViewService>();
             host.MetadataRegistry.LoadViewModelMetadataInAssemblyOf(typeof(Plugin).Assembly);
             host.RegisterApiControllers(typeof(Plugin).Assembly);
         }

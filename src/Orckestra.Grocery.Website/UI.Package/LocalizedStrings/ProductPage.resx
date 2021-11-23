@@ -189,4 +189,46 @@
   <data name="L_LessThan" xml:space="preserve">
     <value>less than</value>
   </data>
+  <data name="L_AmountPerServing" xml:space="preserve">
+    <value>Amount Per Serving</value>
+  </data> 
+  <data name="L_SpecificationPercentDailyValuesText" xml:space="preserve">
+    <value>* Percent Daily Values are based on a 2,000 calorie diet. Your daily values may be higher or lower depending on your calorie needs:</value>
+  </data>  
+  <data name="L_Calories" xml:space="preserve">
+    <value>Calories</value>
+  </data>
+  <data name="L_TotalFat" xml:space="preserve">
+    <value>Total Fat</value>
+  </data>
+  <data name="L_SaturatedFat" xml:space="preserve">
+    <value>Saturated Fat</value>
+  </data>
+  <data name="L_Cholesterol" xml:space="preserve">
+    <value>Cholesterol</value>
+  </data>
+  <data name="L_Sodium" xml:space="preserve">
+    <value>Sodium</value>
+  </data>
+  <data name="L_TotalCarbohydrate" xml:space="preserve">
+    <value>Total Carbohydrate</value>
+  </data>
+  <data name="L_DietaryFiber" xml:space="preserve">
+    <value>Dietary Fiber</value>
+  </data>
+  <data name="L_CaloriesPerGram" xml:space="preserve">
+    <value>Calories per gramme</value>
+  </data>
+  <data name="L_Fat" xml:space="preserve">
+    <value>Fat</value>
+  </data>
+  <data name="L_Carbohydrate" xml:space="preserve">
+    <value>Carbohydrate</value>
+  </data>
+  <data name="L_Protein" xml:space="preserve">
+    <value>Protein</value>
+  </data>
+  <data name="L_DailyValue" xml:space="preserve">
+    <value>Daily Value</value>
+  </data>
 </root>

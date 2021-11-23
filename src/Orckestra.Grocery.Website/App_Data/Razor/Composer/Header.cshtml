@@ -22,7 +22,7 @@
     <header class="masthead masthead-with-mega-menu shadow-sm sps sticky-top">
         <div class="header">
             <nav class="navbar navbar-expand  navbar-dark p-0">
-                <div class="container-md">
+                <div class="container-lg">
                     <div class="mobile-logo d-lg-none">
                         <a href="@HomePageNode.Url">
                             <img src="~/UI.Package/Images/BetterGrocery-White.svg" alt="logo" class="d-block w-100" />
@@ -48,10 +48,10 @@
                         </li>
 
                          @Function("Composer.Membership.SignInHeader")
-                        <li class="nav-item d-none d-md-block">
+                        <li class="nav-item d-none d-lg-block">
                             @Function("Composer.WishList.WishListInHeader")
                         </li>
-                        <li class="nav-item d-block d-md-none">
+                        <li class="nav-item d-block d-lg-none">
                             @Function("Composer.Cart.MinicartButtonMobile")
                         </li>
                     </ul>
@@ -60,7 +60,7 @@
             </nav>
         </div>
 
-        @Function("Composer.Header.MainMenu")
+        @Function("Composer.Header.MultiLevelMainMenu")
 
         <div class="search-bar container-fluid bg-light shadow-sm">
             <div class="container-md">
