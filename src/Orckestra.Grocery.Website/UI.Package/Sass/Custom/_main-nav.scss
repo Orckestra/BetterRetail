@@ -289,9 +289,13 @@
             .dropdown:hover {
                 >.dropdown-menu {
                     display: block;
-                    min-height: 280px;
-                    max-height: 73vh;
-                    overflow-y: auto;
+                }
+                &.main-nav-fw {
+                    >.dropdown-menu {
+                        min-height: 280px;
+                        max-height: 73vh;
+                        overflow-y: auto;
+                    }
                 }
             }
             .dropdown-menu,
