@@ -52,7 +52,7 @@ module Orckestra.Composer {
                     self.eventHub.subscribe('facetsLoaded', ({data}) => {
                         self._searchService.refreshFacetRegistry(self.buildFacetRegistry());
                         this.CategoryFacetValuesTree = data.FacetSettings.CategoryFacetValuesTree;
-                        this.Facets = data.ProductSearchResults.Facets; 
+                        this.Facets = data.ProductSearchResults.Facets;
                     });
                 },
                 methods: {
@@ -229,8 +229,8 @@ module Orckestra.Composer {
 
         private initializeRangeSlider() {
             const selectedFacets: IHashTable<string|string[]> = this._searchService.getSelectedFacets();
-            this.context.container.find('[data-facettype="Range"]').each((index, element) => {
-                const facetFieldName = $(element).data('facetfieldname');
+            this.context.container.find('[data-facettype="Range"]').each((index, element: any) => {
+                const facetFieldName = element.dataset.facetfieldname;
                 const serviceInstance = new SliderService($(element), this.eventHub);
 
                 serviceInstance.initialize(selectedFacets[facetFieldName]);
