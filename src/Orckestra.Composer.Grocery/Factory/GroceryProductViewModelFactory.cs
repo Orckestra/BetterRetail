@@ -53,20 +53,16 @@ namespace Orckestra.Composer.Grocery.Factory
         {
             var productViewModel = base.CreateViewModel(param);
             var extendedVM = productViewModel.AsExtensionModel<IGroceryProductViewModel>();
-            var baseProductSize = param.Product.PropertyBag.ContainsKey("BaseProductSize") ? double.Parse(param.Product.PropertyBag["BaseProductSize"].ToString()) : 0;
-            var baseProductMeasure = param.Product.PropertyBag.ContainsKey("BaseProductMeasure") ?  param.Product.PropertyBag["BaseProductMeasure"].ToString() : string.Empty;
-            var weightVolumeQuantityMeasure = param.Product.PropertyBag.ContainsKey("ProductUnitMeasure") ?  param.Product.PropertyBag["ProductUnitMeasure"].ToString(): string.Empty;
-
+         
             extendedVM.ProductBadgeValues = BuildProductBadgeValues(param.Product, productViewModel);
 
-            if (string.IsNullOrEmpty(baseProductMeasure) || string.IsNullOrEmpty(weightVolumeQuantityMeasure))
-                return productViewModel;
+            var convertedVolumeMeasurment = BuildConvertedVolumeMeasurement(param.Product);
+            if (convertedVolumeMeasurment.HasValue) {
+                extendedVM.ConvertedVolumeMeasurement = convertedVolumeMeasurment.Value;
+                productViewModel.Context["ConvertedVolumeMeasurement"] = convertedVolumeMeasurment.Value;
+                productViewModel.Context["BaseProductMeasure"] = extendedVM.BaseProductMeasure;
+            }
 
-            var convertedVolumeMeasurment = (decimal)ConverterProvider.ConvertMeasurements(baseProductSize, baseProductMeasure, weightVolumeQuantityMeasure);
-
-            extendedVM.ConvertedVolumeMeasurement = convertedVolumeMeasurment;
-            productViewModel.Context["ConvertedVolumeMeasurement"] = convertedVolumeMeasurment;
-            productViewModel.Context["BaseProductMeasure"] = extendedVM.BaseProductMeasure;
             return productViewModel;
         }
 
@@ -90,5 +86,19 @@ namespace Orckestra.Composer.Grocery.Factory
 
             return productBadgeValues;
         }
+
+        public virtual decimal? BuildConvertedVolumeMeasurement(Overture.ServiceModel.Products.Product product)
+        {
+            var baseProductSize = product.PropertyBag.TryGetValue("BaseProductSize", out var sizeValue) ? double.Parse(sizeValue.ToString()) : 0;
+            var baseProductMeasure = product.PropertyBag.TryGetValue("BaseProductMeasure", out var measureValue) ? measureValue.ToString() : string.Empty;
+            var productUnitMeasure = product.PropertyBag.TryGetValue("ProductUnitMeasure", out var unitMeasureValue) ? unitMeasureValue.ToString() : string.Empty;
+            if (string.IsNullOrEmpty(baseProductMeasure) || string.IsNullOrEmpty(productUnitMeasure))
+            {
+                return null;
+            }
+
+            return (decimal)ConverterProvider.ConvertMeasurements(baseProductSize, baseProductMeasure, productUnitMeasure);
+        }
+
     }
 }
