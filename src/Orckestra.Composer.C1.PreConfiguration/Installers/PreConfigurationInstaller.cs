@@ -2,8 +2,8 @@
 using Composite.Core;
 using Composite.Core.PackageSystem;
 using Composite.Core.PackageSystem.PackageFragmentInstallers;
+using Orckestra.Caching;
 using Orckestra.Composer.CompositeC1.Builders;
-using Orckestra.Composer.OutputCache;
 using Orckestra.Composer.Repositories;
 using Orckestra.Overture;
 using Orckestra.Overture.Caching;
