@@ -17,7 +17,7 @@
 <body>
     @if (Model.IsMultiLanguage)
     {
-        <nav id="vueLanguageSwitchMobile" class="nav language-switch-links d-md-none border-bottom">
+        <nav id="vueLanguageSwitchMobile" class="nav language-switch-links d-lg-none border-bottom">
             @foreach (var item in Model.Entries)
             {
                 if (!item.IsCurrent) {

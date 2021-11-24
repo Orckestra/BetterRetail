@@ -316,6 +316,7 @@
     <Content Include="App_Code\CartSummaryHelpers.cshtml" />
     <Content Include="App_Code\ProductHelpers.cshtml" />
     <Content Include="App_Code\FacetHelpers.cshtml" />
+    <Content Include="App_Code\ProductSepcificationHelpers.cshtml" />
     <None Include="App_Config\Caching.config" />
     <Content Include="App_Data\Razor\Composer\Grids\OneThirdTwoThirds.cshtml" />
     <Content Include="App_Data\Razor\Composer\Grids\AccountGrid.cshtml" />

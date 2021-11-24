@@ -32,6 +32,11 @@ module Orckestra.Composer {
                         let nbSlideToScroll = slickInstance.data('slick').mobileSlidesToScroll;
                         nbSlideToScroll = ( nbSlideToScroll ) ? nbSlideToScroll : 2;
 
+                        let scSlideToShow = slickInstance.data('slick').smallScreenSlidesToShow;
+                        scSlideToShow = (scSlideToShow) ? scSlideToShow : 1;
+                        let scSlideToScroll = slickInstance.data('slick').smallScreenSlidesToScroll;
+                        scSlideToScroll = (scSlideToScroll) ? scSlideToScroll : 1;
+
                         slickOptions.responsive.push({
                             breakpoint: 768,
                             arrows: false,
@@ -42,11 +47,28 @@ module Orckestra.Composer {
                                 infinite: true
                             }
                         });
+
+                        slickOptions.responsive.push({
+                            breakpoint: 576,
+                            arrows: false,
+                            settings: {
+                                slidesToShow: scSlideToShow,
+                                slidesToScroll: scSlideToScroll,
+                                dots: true,
+                                infinite: true
+                            }
+                        });
                     } else {
                         slickOptions.responsive.push({
                             breakpoint: 768,
                             arrows: false,
                             settings: 'unslick' // destroys slick
+                        });
+
+                        slickOptions.responsive.push({
+                            breakpoint: 576,
+                            arrows: false,
+                            settings: 'unslick'
                         });
                     }
 

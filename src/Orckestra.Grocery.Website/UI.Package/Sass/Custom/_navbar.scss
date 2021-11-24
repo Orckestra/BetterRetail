@@ -16,4 +16,14 @@
     .nav-link {
         border: 0;
     }
+    @include media-breakpoint-up(lg) {
+        &.megamenu {
+            padding: 3px 0 0;
+        }
+    }
+    @include media-breakpoint-down(md) {
+        &.megamenu {
+            padding: 0;
+        }
+    }
 }

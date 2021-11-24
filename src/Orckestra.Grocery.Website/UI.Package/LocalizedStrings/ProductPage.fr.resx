@@ -174,4 +174,46 @@
   <data name="L_LessThan" xml:space="preserve">
     <value>moins que</value>
   </data>
+  <data name="L_AmountPerServing" xml:space="preserve">
+    <value>Quantité par portion</value>
+  </data>
+  <data name="L_SpecificationPercentDailyValuesText" xml:space="preserve">
+    <value>* Les valeurs quotidiennes en pourcentage sont basées sur un régime de 2 000 calories. Vos valeurs quotidiennes peuvent être supérieures ou inférieures en fonction de vos besoins en calories :</value>
+  </data>
+  <data name="L_Calories" xml:space="preserve">
+    <value>Calories</value>
+  </data>
+  <data name="L_TotalFat" xml:space="preserve">
+    <value>Graisse totale</value>
+  </data>
+  <data name="L_SaturatedFat" xml:space="preserve">
+    <value>Gras saturé</value>
+  </data>
+  <data name="L_Cholesterol" xml:space="preserve">
+    <value>Cholestérol</value>
+  </data>
+  <data name="L_Sodium" xml:space="preserve">
+    <value>Sodium</value>
+  </data>
+  <data name="L_TotalCarbohydrate" xml:space="preserve">
+    <value>Glucides totaux</value>
+  </data>
+  <data name="L_DietaryFiber" xml:space="preserve">
+    <value>Fibre alimentaire</value>
+  </data>
+  <data name="L_CaloriesPerGram" xml:space="preserve">
+    <value>Calories par gramme</value>
+  </data>
+  <data name="L_Fat" xml:space="preserve">
+    <value>Graisse</value>
+  </data>
+  <data name="L_Carbohydrate" xml:space="preserve">
+    <value>Glucides</value>
+  </data>
+  <data name="L_Protein" xml:space="preserve">
+    <value>Protéine</value>
+  </data>
+  <data name="L_DailyValue" xml:space="preserve">
+    <value>Valeur quotidienne</value>
+  </data>
 </root>

@@ -21,6 +21,7 @@
     .product-price {
         font-size: 40px;
         font-weight: 700;
+        font-family: 'Roboto Condensed', sans-serif;
     }
     .product-regular-price {
         font-size: 20px;
@@ -50,8 +51,14 @@
 
 .product-details-badges {
     position: absolute;
-    top: $spacer;
-    left: $spacer;
+    right: 10px;
+    top: 10px;
+}
+
+.product-details-badges {
+    position: absolute;
+    top: 0.625rem;
+    left: 0.625rem;
 }
 
 .product-details-zoom {
