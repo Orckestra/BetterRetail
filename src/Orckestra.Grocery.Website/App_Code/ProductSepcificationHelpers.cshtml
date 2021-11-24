@@ -65,15 +65,22 @@
     </p>
 }
 
-@helper NutritionFactsAttributeRowVal(string val, string title)
+@helper NutritionFactsAttributeRowVal(string val, string title, bool isThickEnd = false )
 {
     if (string.IsNullOrEmpty(val) && string.IsNullOrEmpty(title)) { return; }
 
-    <tr class="thick-end">
-        <th colspan="2">
-            <b>@title</b>
-            @val
-        </th>
+    var rowClass = isThickEnd ? "thick-end" : string.Empty;
+
+    <tr class="@rowClass">
+        @if (!isThickEnd)
+        {
+            <td class="blank-cell">
+            </td>
+        }
+    <th colspan="@(isThickEnd ? 2 : 0)">
+        <span class="@(isThickEnd ? "font-weight-bold": "")">@title</span>
+        @val
+    </th>
         <td>
         </td>
     </tr>
