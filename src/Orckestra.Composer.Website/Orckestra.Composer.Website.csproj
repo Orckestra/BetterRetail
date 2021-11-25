@@ -414,6 +414,10 @@
       <Project>{460eaca2-1edb-46bc-a508-f784e4a4da97}</Project>
       <Name>Orckestra.Composer.ContentSearch</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Orckestra.Media.AutoImageResizing\Orckestra.Media.AutoImageResizing.csproj">
+      <Project>{1c67610a-44c0-49be-a75a-4482413e063a}</Project>
+      <Name>Orckestra.Media.AutoImageResizing</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\Composite\DynamicTypeForms\Orckestra\List\" />
