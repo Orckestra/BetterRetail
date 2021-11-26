@@ -34,7 +34,7 @@
     </picture>
 }
 
-@helper ResponsiveBackgroundImage(DataReference<IImageFile> Image, string cssClass, int[] widthBreakpoints, int maxWidthLimit, IHtmlString divContent)
+@helper ResponsiveBackgroundImage(DataReference<IImageFile> Image, string cssClass, int[] widthBreakpoints, int maxWidthLimit, IHtmlString divContent = null)
 {
     <head>
         @{
@@ -65,7 +65,7 @@
         }
     </head>
     <body>
-        <div class="@cssClass}" id="@imageId">@divContent</div>";
+        <div class="@cssClass" id="@imageId">@divContent</div>
     </body>
 }
 
