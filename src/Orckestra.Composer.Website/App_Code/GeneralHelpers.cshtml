@@ -18,7 +18,7 @@
     var imageSupportFormats = ConfigurationManager.AppSettings["ImageSupportFormats"].Split(',').Select(item => item.Trim());
 
     <picture>
-        @foreach (var widthBreakpoint in widthBreakpoints)
+        @foreach (var widthBreakpoint in widthBreakpoints.OrderBy(item => item))
         {
             var minWidth = $"(max-width: {widthBreakpoint}px)";
             foreach (var imageSupportFormat in imageSupportFormats)
@@ -53,7 +53,7 @@
             var imageSupportFormats = ConfigurationManager.AppSettings["ImageSupportFormats"].Split(',').Select(item => item.Trim());
         }
 
-        @foreach (var widthBreakpoint in widthBreakpoints)
+        @foreach (var widthBreakpoint in widthBreakpoints.OrderByDescending(item => item))
         {
             foreach (var imageSupportFormat in imageSupportFormats)
             {

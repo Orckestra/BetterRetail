@@ -11,16 +11,16 @@ namespace Orckestra.Media.AutoImageResizing
 {
     public class ImageResizer : IPageContentFilter
     {
-        private static IReadOnlyCollection<string> WidthBreakpoints;
-        private static string MaxWidthLimit;
+        private static IReadOnlyCollection<int> WidthBreakpoints;
+        private static int MaxWidthLimit;
         private static IReadOnlyCollection<string> ImageSupportFormats;
 
         static ImageResizer()
         {
             WidthBreakpoints = ConfigurationManager.AppSettings["ImageWidthBreakpoints"]
                 .Split(',')
-                .Select(item => item.Trim()).ToList();
-            MaxWidthLimit = ConfigurationManager.AppSettings["ImageMaxWidthLimit"].Trim();
+                .Select(item => int.Parse(item.Trim())).ToList();
+            MaxWidthLimit = int.Parse(ConfigurationManager.AppSettings["ImageMaxWidthLimit"].Trim());
             ImageSupportFormats = ConfigurationManager.AppSettings["ImageSupportFormats"]
                 .Split(',')
                 .Select(item => item.Trim()).ToList();
@@ -46,7 +46,7 @@ namespace Orckestra.Media.AutoImageResizing
 
             imageSrc = string.Concat(imageSrc, imageSrc.Contains("?") ? "&amp;" : "?");
             var pictureElement = new XElement("picture");
-            foreach (var widthBreakpoint in WidthBreakpoints)
+            foreach (var widthBreakpoint in WidthBreakpoints.OrderBy(item => item))
             {
                 var minWidth = $"(max-width: {widthBreakpoint}px)";
                 foreach (var imageSupportFormat in ImageSupportFormats)
