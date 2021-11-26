@@ -15,8 +15,8 @@
 
 @helper PictureTag(DataReference<IImageFile> Image, int[] widthBreakpoints, int maxWidthLimit)
 {
-    var imageSupportFormats = ConfigurationManager.AppSettings["ImageSupportFormats"].Split(',').Select(item => item.Trim()); 
-    
+    var imageSupportFormats = ConfigurationManager.AppSettings["ImageSupportFormats"].Split(',').Select(item => item.Trim());
+
     <picture>
         @foreach (var widthBreakpoint in widthBreakpoints)
         {
@@ -25,7 +25,7 @@
             {
                 if (ImageFormatSupportHelper.IsSupported(imageSupportFormat))
                 {
-                    <source srcset="/media(@(Image.KeyValue))?mw=@widthBreakpoint&amp;ResizingAction=3&amp;mt=@imageSupportFormat" media="@minWidth" type="@imageSupportFormat"/>
+                    <source srcset="/media(@(Image.KeyValue))?mw=@widthBreakpoint&amp;ResizingAction=3&amp;mt=@imageSupportFormat" media="@minWidth" type="@imageSupportFormat" />
                 }
             }
         }
@@ -36,6 +36,7 @@
 
 @helper ResponsiveBackgroundImage(DataReference<IImageFile> Image, string cssClass, int[] widthBreakpoints, int maxWidthLimit, IHtmlString divContent = null)
 {
+    <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
     <head>
         @{
             var imageId = Guid.NewGuid();
@@ -49,7 +50,7 @@
                 background-repeat: no-repeat;}
         </style>
         @{
-            var imageSupportFormats = ConfigurationManager.AppSettings["ImageSupportFormats"].Split(',').Select(item => item.Trim()); 
+            var imageSupportFormats = ConfigurationManager.AppSettings["ImageSupportFormats"].Split(',').Select(item => item.Trim());
         }
 
         @foreach (var widthBreakpoint in widthBreakpoints)
@@ -67,6 +68,7 @@
     <body>
         <div class="@cssClass" id="@imageId">@divContent</div>
     </body>
+</html>
 }
 
 @helper GenerateMediaItem(int widthBreakpoint, string imageUrl, Guid imageId)
