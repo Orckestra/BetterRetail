@@ -1,8 +1,4 @@
-﻿@using System.Configuration
-@using Composite.AspNet.Razor
-@using Composite.Data
-@using Composite.Data.Types
-@using Orckestra.Media.AutoImageResizing
+﻿@using Composite.AspNet.Razor
 
 @helper LoadingSpinner()
 {
@@ -11,69 +7,4 @@
             <span class="sr-only">@Html.Localize("General", "L_Loading")</span>
         </div>
     </div>
-}
-
-@helper PictureTag(DataReference<IImageFile> Image, int[] widthBreakpoints, int maxWidthLimit)
-{
-    var imageSupportFormats = ConfigurationManager.AppSettings["ImageSupportFormats"].Split(',').Select(item => item.Trim());
-
-    <picture>
-        @foreach (var widthBreakpoint in widthBreakpoints.OrderBy(item => item))
-        {
-            var minWidth = $"(max-width: {widthBreakpoint}px)";
-            foreach (var imageSupportFormat in imageSupportFormats)
-            {
-                if (ImageFormatSupportHelper.IsSupported(imageSupportFormat))
-                {
-                    <source srcset="/media(@(Image.KeyValue))?mw=@widthBreakpoint&amp;ResizingAction=3&amp;mt=@imageSupportFormat" media="@minWidth" type="@imageSupportFormat" />
-                }
-            }
-        }
-        @{string maxImageWidth = maxWidthLimit > 0 ? "mw=" + maxWidthLimit : string.Empty;}
-        <img src="/media(@(Image.KeyValue))?@maxImageWidth" alt="@Image.Data.Title" loading="lazy" />
-    </picture>
-}
-
-@helper ResponsiveBackgroundImage(DataReference<IImageFile> Image, string cssClass, int[] widthBreakpoints, int maxWidthLimit, IHtmlString divContent = null)
-{
-    <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
-    <head>
-        @{
-            var imageId = Guid.NewGuid();
-            var maxImageWidth = maxWidthLimit > 0 ? "mw=" + maxWidthLimit : string.Empty;
-        }
-
-        <style type="text/css">
-            #@imageId {
-                background-image: url('/media(@Image.KeyValue)?@maxImageWidth');
-                height: 1000px;
-                background-repeat: no-repeat;}
-        </style>
-        @{
-            var imageSupportFormats = ConfigurationManager.AppSettings["ImageSupportFormats"].Split(',').Select(item => item.Trim());
-        }
-
-        @foreach (var widthBreakpoint in widthBreakpoints.OrderByDescending(item => item))
-        {
-            foreach (var imageSupportFormat in imageSupportFormats)
-            {
-                if (ImageFormatSupportHelper.IsSupported(imageSupportFormat))
-                {
-                    var imageUrl = $"/media({Image.KeyValue})?mw={widthBreakpoint}&amp;ResizingAction=3&amp;mt={imageSupportFormat}";
-                    @GenerateMediaItem(widthBreakpoint, imageUrl, imageId)
-                }
-            }
-        }
-    </head>
-    <body>
-        <div class="@cssClass" id="@imageId">@divContent</div>
-    </body>
-</html>
-}
-
-@helper GenerateMediaItem(int widthBreakpoint, string imageUrl, Guid imageId)
-{
-    <style type="text/css">
-        @@media (max-width: @(widthBreakpoint)px) { #@imageId { background-image: url('@imageUrl');}}
-    </style>
 }

@@ -31,9 +31,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Composite, Version=6.11.7982.26191, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Composite">
       <HintPath>..\..\packages\C1CMS.Assemblies.6.11.7982.26191\lib\net471\Composite.dll</HintPath>
-      <Private>False</Private>
     </Reference>
     <Reference Include="Composite.Workflows, Version=6.11.7982.26195, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\C1CMS.Assemblies.6.11.7982.26191\lib\net471\Composite.Workflows.dll</HintPath>
@@ -66,12 +65,6 @@
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Overture.Interfaces, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\OrckestraCommerce.Interfaces.5.0.0\lib\net461\Orckestra.Overture.Interfaces.dll</HintPath>
-    </Reference>
-    <Reference Include="ServiceStack.Interfaces, Version=5.0.0.0, Culture=neutral, PublicKeyToken=02c12cbda47e6587, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\ServiceStack.Interfaces.5.9.0\lib\net45\ServiceStack.Interfaces.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -99,9 +92,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AutoImageResizingConfiguration.cs" />
+    <Compile Include="Helpers\AutoImageResizingHelper.cs" />
     <Compile Include="ImageResizer.cs" />
-    <Compile Include="ImageFormatSupportHelper.cs" />
-    <Compile Include="Plugin.cs" />
+    <Compile Include="Helpers\ImageFormatSupportHelper.cs" />
+    <Compile Include="Startup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -114,5 +109,6 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

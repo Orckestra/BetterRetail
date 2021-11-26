@@ -3,7 +3,7 @@ using Composite.Core.WebClient.Media;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Orckestra.Media.AutoImageResizing
+namespace Orckestra.Media.AutoImageResizing.Helpers
 {
     public static class ImageFormatSupportHelper
     {

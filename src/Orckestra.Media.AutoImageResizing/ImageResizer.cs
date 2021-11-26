@@ -3,9 +3,9 @@ using Composite.Core.Xml;
 using Composite.Data.Types;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using System.Xml.Linq;
+using Orckestra.Media.AutoImageResizing.Helpers;
 
 namespace Orckestra.Media.AutoImageResizing
 {
@@ -17,18 +17,16 @@ namespace Orckestra.Media.AutoImageResizing
 
         static ImageResizer()
         {
-            WidthBreakpoints = ConfigurationManager.AppSettings["ImageWidthBreakpoints"]
-                .Split(',')
-                .Select(item => int.Parse(item.Trim())).ToList();
-            MaxWidthLimit = int.Parse(ConfigurationManager.AppSettings["ImageMaxWidthLimit"].Trim());
-            ImageSupportFormats = ConfigurationManager.AppSettings["ImageSupportFormats"]
-                .Split(',')
-                .Select(item => item.Trim()).ToList();
+            WidthBreakpoints = AutoImageResizingConfiguration.WidthBreakpoints;
+            MaxWidthLimit = AutoImageResizingConfiguration.MaxWidth;
+            ImageSupportFormats = AutoImageResizingConfiguration.ImageFormats;
         }
+
         public void Filter(XhtmlDocument document, IPage page)
         {
             ConvertImagesToPictureTags(document.Body);
         }
+
         private static void ConvertImagesToPictureTags(XElement root)
         {
             var imgTags = root.Descendants()
@@ -44,30 +42,31 @@ namespace Orckestra.Media.AutoImageResizing
             var imageSrc = imgElement.Attribute("src")?.Value;
             if (imageSrc == null) return;
 
-            imageSrc = string.Concat(imageSrc, imageSrc.Contains("?") ? "&amp;" : "?");
-            var pictureElement = new XElement("picture");
-            foreach (var widthBreakpoint in WidthBreakpoints.OrderBy(item => item))
+            if (AutoImageResizingHelper.IsLocalC1MediaWithoutResizingOptions(imageSrc))
             {
-                var minWidth = $"(max-width: {widthBreakpoint}px)";
-                foreach (var imageSupportFormat in ImageSupportFormats)
+                var pictureElement = new XElement("picture");
+                foreach (var widthBreakpoint in WidthBreakpoints.OrderBy(item => item))
                 {
-                    if (ImageFormatSupportHelper.IsSupported(imageSupportFormat))
+                    var minWidth = $"(max-width: {widthBreakpoint}px)";
+                    foreach (var imageSupportFormat in ImageSupportFormats)
                     {
-                        pictureElement.Add(new XElement("source",
-                            new XAttribute("srcset",
-                                $"{imageSrc}mw={widthBreakpoint}&amp;ResizingAction=3&amp;mt={imageSupportFormat}"),
-                            new XAttribute("media", minWidth),
-                            new XAttribute("type", imageSupportFormat)));
+                        if (ImageFormatSupportHelper.IsSupported(imageSupportFormat))
+                        {
+                            pictureElement.Add(new XElement("source",
+                                new XAttribute("srcset", AutoImageResizingHelper.GetResizedImageUrl(imageSrc, widthBreakpoint, imageSupportFormat)),
+                                new XAttribute("media", minWidth),
+                                new XAttribute("type", imageSupportFormat)));
+                        }
                     }
                 }
-            }
+                var altText = imgElement.Attributes().FirstOrDefault(item => item.Name.LocalName == "alt")?.ToString();
 
-            pictureElement.Add(new XElement("img",
-                new XAttribute("src",
-                    $"{imageSrc}?mw={MaxWidthLimit}"),
-                new XAttribute("alt", imgElement.Attributes().FirstOrDefault(item => item.Name.LocalName == "alt")?.ToString() ?? string.Empty),
-                new XAttribute("loading", "lazy")));
-            imgElement.ReplaceWith(pictureElement);
+                pictureElement.Add(new XElement("img",
+                    new XAttribute("src", AutoImageResizingHelper.GetResizedImageUrl(imageSrc, MaxWidthLimit)),
+                    string.IsNullOrWhiteSpace(altText) ? null : new XAttribute("alt", altText),
+                    new XAttribute("loading", "lazy")));
+                imgElement.ReplaceWith(pictureElement);
+            }
         }
 
         public int Order { get; }

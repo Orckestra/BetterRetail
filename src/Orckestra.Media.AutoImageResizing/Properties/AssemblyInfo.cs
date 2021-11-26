@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Orckestra.Media.AutoImageResizing")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("HP Inc.")]
+[assembly: AssemblyCompany("Orckestra A/S")]
 [assembly: AssemblyProduct("Orckestra.Media.AutoImageResizing")]
-[assembly: AssemblyCopyright("Copyright © HP Inc. 2021")]
+[assembly: AssemblyCopyright("Orckestra A/S")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

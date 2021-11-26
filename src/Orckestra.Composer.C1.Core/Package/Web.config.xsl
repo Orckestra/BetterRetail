@@ -41,9 +41,9 @@
   <add key="Composer.DefaultScope" value="Canada" />
   <add key="CC1.DeploymentToken" value="***REMOVED***" />
   <add key="UrlAlias::UseCountEnabled" value="false" />
-  <add key="ImageWidthBreakpoints" value="375, 767, 1096"/>
-  <add key="ImageMaxWidthLimit" value="2000"/>
-  <add key="ImageSupportFormats" value="image/webp, image/jpeg"/>
+  <add key="AutoImageResizing.ImageWidthBreakpoints" value="280, 560, 1130"/>
+  <add key="AutoImageResizing.MaxWidth" value="1600" />
+  <add key="AutoImageResizing.ImageFormats" value="image/webp, image/jpeg"/>
   <xsl:comment> OWIN </xsl:comment>
   <add key="owin:AutomaticAppStartup" value="false" />
 </appSettings>
