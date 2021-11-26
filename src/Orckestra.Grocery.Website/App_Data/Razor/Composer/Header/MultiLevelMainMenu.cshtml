@@ -32,7 +32,7 @@
                             {
                                 var hasImage = !string.IsNullOrEmpty(mainMenuEntry.Image.ImageSource);
 
-                                <li class="nav-item dropdown main-nav-fw @mainMenuEntry.CssClassName">
+                                <li class="nav-item dropdown main-nav-fw @mainMenuEntry.CssClassName" tabindex="0">
 
                                     @if (mainMenuEntry.HasChildren)
                                     {
@@ -124,7 +124,7 @@
 
     var collapseClass = (pageLevel == (maxLevel-1)) ? "collapse" : "";
 
-    <li class="multi-nav-section @menuEntry.CssClassName">
+    <li class="multi-nav-section @menuEntry.CssClassName" tabindex="0">
 
         @if (childItems.Any())
         {
@@ -142,7 +142,6 @@
                data-toggle="@collapseClass"
                aria-expanded="false"
                aria-controls="subMenu-@(menuEntry.GetHashCode())"
-               href="#"
                role="button"
                class="main-nav-section-title d-block d-lg-none"
                data-imageid="@curEntry.GetHashCode()">
@@ -201,7 +200,7 @@
                         @if (pageLevel < (maxLevel - 1))
                         {
                             <li class="mobile-menu-back-item multi-nav-section d-lg-none" data-pageLevel="@pageLevel">
-                                <a href="javascript:void(0);" class="menu-link mobile-menu-back-link">
+                                <a class="menu-link mobile-menu-back-link" tabindex="0">
                                     <span class="fa fa-chevron-left" aria-hidden="true"></span> @Html.Localize("General", "B_Back")
                                 </a>
                             </li>
