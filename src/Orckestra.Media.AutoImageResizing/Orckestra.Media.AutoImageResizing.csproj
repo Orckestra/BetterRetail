@@ -98,7 +98,7 @@
   <ItemGroup>
     <Compile Include="ImageResizer.cs" />
     <Compile Include="ImageFormatSupportHelper.cs" />
-    <Compile Include="Plagin.cs" />
+    <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

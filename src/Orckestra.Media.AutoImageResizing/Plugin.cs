@@ -3,7 +3,7 @@ using Orckestra.Composer;
 
 namespace Orckestra.Media.AutoImageResizing
 {
-    public class Plagin : IComposerPlugin
+    public class Plugin : IComposerPlugin
     {
         /// <summary>
         /// Autowireup this plugin
