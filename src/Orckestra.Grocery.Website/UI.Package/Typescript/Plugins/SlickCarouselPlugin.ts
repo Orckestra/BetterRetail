@@ -16,6 +16,8 @@ module Orckestra.Composer {
                 let slickInstance = $(element);
                 let slickOptions: any = {
                     arrows: true,
+                    centerMode: true,
+                    centerPadding: "0px",
                     responsive: [{
                         dots: false,
                         breakpoint: 1024,
@@ -30,7 +32,7 @@ module Orckestra.Composer {
                         let nbSlideToShow = slickInstance.data('slick').mobileSlidesToShow;
                         nbSlideToShow = ( nbSlideToShow ) ? nbSlideToShow : 2;
                         let nbSlideToScroll = slickInstance.data('slick').mobileSlidesToScroll;
-                        nbSlideToScroll = ( nbSlideToScroll ) ? nbSlideToScroll : 2;
+                        nbSlideToScroll = ( nbSlideToScroll ) ? nbSlideToScroll : 1;
 
                         let scSlideToShow = slickInstance.data('slick').smallScreenSlidesToShow;
                         scSlideToShow = (scSlideToShow) ? scSlideToShow : 1;

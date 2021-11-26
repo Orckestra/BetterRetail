@@ -14,6 +14,16 @@
     background-color: $light;
     border: solid 1px $gray-400;
     position: relative;
+    flex-direction: row;
+    *:not(.slick) & {
+        flex-direction: row;
+    }
+    @include media-breakpoint-up(sm) {
+        flex-direction: column;
+        *:not(.slick) & {
+            flex-direction: column;
+        }
+    }
     &-wishlist {
         position: absolute;
         top: 0;
@@ -23,6 +33,9 @@
         padding: map-get($spacers, 2);
         @include media-breakpoint-down(xs) {
             padding: $spacer;
+            *:not(.slick) & {
+                flex: 1 1 0;
+            }
         }
     }
     .product-tile-text {
@@ -94,9 +107,14 @@
         display: flex;
         background-color: #fff;
         height: 0;
-        padding-bottom: $product-image-ratio * 100%;
         position: relative;
         overflow: hidden;
+        width: 5/12 * 100%;
+        padding-bottom: 5/12 * 100%;
+        @include media-breakpoint-up(sm) {
+            width: 100%;
+            padding-bottom: $product-image-ratio * 100%;
+        }
         >img.img-fluid {
             margin-top: $spacer*2 !important;
             max-width: calc(100% - 40px);
