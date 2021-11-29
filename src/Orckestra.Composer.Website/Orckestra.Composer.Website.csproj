@@ -242,6 +242,7 @@
     <Content Include="App_Code\OrderSummaryHelpers.cshtml" />
     <Content Include="App_Code\ProductHelpers.cshtml" />
     <Content Include="App_Code\FacetHelpers.cshtml" />
+    <Content Include="App_Code\ImageHelpers.cshtml" />
     <None Include="App_Config\Caching.config" />
     <Content Include="App_Data\Razor\Composer\Grids\OneThirdTwoThirds.cshtml" />
     <Content Include="App_Data\Razor\Composer\Grids\AccountGrid.cshtml" />
@@ -413,6 +414,10 @@
     <ProjectReference Include="..\Orckestra.Composer.ContentSearch\Orckestra.Composer.ContentSearch.csproj">
       <Project>{460eaca2-1edb-46bc-a508-f784e4a4da97}</Project>
       <Name>Orckestra.Composer.ContentSearch</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Orckestra.Media.AutoImageResizing\Orckestra.Media.AutoImageResizing.csproj">
+      <Project>{1c67610a-44c0-49be-a75a-4482413e063a}</Project>
+      <Name>Orckestra.Media.AutoImageResizing</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

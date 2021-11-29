@@ -1,0 +1,78 @@
+﻿@using System.Collections
+@using Composite.Data
+@using Composite.Data.Types
+@using Orckestra.Media.AutoImageResizing
+@using Orckestra.Media.AutoImageResizing.Helpers
+
+
+@helper PictureTag(DataReference<IImageFile> Image)
+{
+    var widthBreakpoints = AutoImageResizingConfiguration.WidthBreakpoints;
+    var maxWidthLimit = AutoImageResizingConfiguration.MaxWidth;
+
+    @PictureTag(Image, widthBreakpoints, maxWidthLimit)
+}
+
+@helper PictureTag(DataReference<IImageFile> Image, IEnumerable<int> widthBreakpoints, int maxWidth)
+{
+    var imageSupportFormats = AutoImageResizingConfiguration.ImageFormats;
+
+    <picture>
+        @foreach (var widthBreakpoint in widthBreakpoints.OrderBy(item => item))
+        {
+            var mediaRule = $"(max-width: {widthBreakpoint}px)";
+            foreach (var mediaType in imageSupportFormats)
+            {
+                if (ImageFormatSupportHelper.IsSupported(mediaType))
+                {
+                    var imageUrl = AutoImageResizingHelper.GetResizedImageUrl(Image, widthBreakpoint, mediaType);
+                    <source srcset="@imageUrl" media="@mediaRule" type="@mediaType" />
+                }
+            }
+        }
+        <img src="@AutoImageResizingHelper.GetResizedImageUrl(Image, maxWidth > 0 ? (int?)maxWidth : null)" alt="@Image.Data.Title" loading="lazy" />
+    </picture>
+}
+
+@helper ResponsiveBackgroundImage(DataReference<IImageFile> Image, string cssClass, IHtmlString divContent = null)
+{
+    var widthBreakpoints = AutoImageResizingConfiguration.WidthBreakpoints;
+    var maxWidth = AutoImageResizingConfiguration.MaxWidth;
+    @ResponsiveBackgroundImage(Image, cssClass, widthBreakpoints, maxWidth, divContent)
+}
+
+@helper ResponsiveBackgroundImage(DataReference<IImageFile> Image, string cssClass, IEnumerable<int> widthBreakpoints, int maxWidth, IHtmlString divContent = null)
+{
+    <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+    <head>
+        @{
+            var imageId = Guid.NewGuid();
+        }
+
+        <style type="text/css">
+            #@imageId {
+                background-image: url('@AutoImageResizingHelper.GetResizedImageUrl(Image, maxWidth > 0 ? (int?)maxWidth : null)');
+                background-repeat: no-repeat;}
+
+        @{
+            var imageSupportFormats = AutoImageResizingConfiguration.ImageFormats;
+        }
+
+        @foreach (var widthBreakpoint in widthBreakpoints.OrderByDescending(item => item))
+        {
+            foreach (var mediaType in imageSupportFormats)
+            {
+                if (ImageFormatSupportHelper.IsSupported(mediaType))
+                {
+                    @: @@media (max-width: @(widthBreakpoint)px) { #@imageId { background-image: url('@AutoImageResizingHelper.GetResizedImageUrl(Image, widthBreakpoint, mediaType)');}}
+                }
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="@cssClass" id="@imageId">@divContent</div>
+    </body>
+</html>
+}
+
