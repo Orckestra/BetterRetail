@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Orckestra A/S")]
 [assembly: AssemblyProduct("Orckestra.Media.AutoImageResizing")]
-[assembly: AssemblyCopyright("Orckestra A/S")]
+[assembly: AssemblyCopyright("Copyright © Orckestra A/S 2021")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
