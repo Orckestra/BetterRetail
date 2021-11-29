@@ -13,7 +13,7 @@
     @PictureTag(Image, widthBreakpoints, maxWidthLimit)
 }
 
-@helper PictureTag(DataReference<IImageFile> Image, IEnumerable<int> widthBreakpoints, int maxWidthLimit)
+@helper PictureTag(DataReference<IImageFile> Image, IEnumerable<int> widthBreakpoints, int maxWidth)
 {
     var imageSupportFormats = AutoImageResizingConfiguration.ImageFormats;
 
@@ -30,7 +30,7 @@
                 }
             }
         }
-        <img src="@AutoImageResizingHelper.GetResizedImageUrl(Image, maxWidthLimit > 0 ? (int?)maxWidthLimit : null)" alt="@Image.Data.Title" loading="lazy" />
+        <img src="@AutoImageResizingHelper.GetResizedImageUrl(Image, maxWidth > 0 ? (int?)maxWidth : null)" alt="@Image.Data.Title" loading="lazy" />
     </picture>
 }
 
