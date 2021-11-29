@@ -9,20 +9,22 @@ namespace Orckestra.Media.AutoImageResizing.Helpers
 {
     public static class AutoImageResizingHelper
     {
+        private static readonly string MediaUrlUnprocessedInternalPrefix = UrlUtils.PublicRootPath + "~/media(";
+        private static readonly string MediaUrlInternalPrefix = UrlUtils.PublicRootPath + "/media(";
+        private static readonly string MediaUrlPublicPrefix = UrlUtils.PublicRootPath + "/media/";
+
         public static bool IsLocalC1MediaWithoutResizingOptions(string relativeUrl)
         {
-            var mediaUrlUnprocessedInternalPrefix = "~/media(";
-            var mediaUrlInternalPrefix = UrlUtils.PublicRootPath + "/media(";
-            var mediaUrlPublicPrefix = UrlUtils.PublicRootPath + "/media/";
+            if (!relativeUrl.StartsWith(MediaUrlUnprocessedInternalPrefix)
+                && !relativeUrl.StartsWith(MediaUrlInternalPrefix)
+                && !relativeUrl.StartsWith(MediaUrlPublicPrefix))
+            {
+                return false;
+            }
 
             var parsedUrl = new UrlBuilder(relativeUrl);
             var queryParameters = parsedUrl.GetQueryParameters();
-            var isEmptyResizingQueryParameters = ResizingOptions.Parse(queryParameters).IsEmpty;
-
-            return (relativeUrl.Contains(mediaUrlUnprocessedInternalPrefix)
-                    || relativeUrl.Contains(mediaUrlInternalPrefix)
-                    || relativeUrl.Contains(mediaUrlPublicPrefix))
-                   && isEmptyResizingQueryParameters;
+            return ResizingOptions.Parse(queryParameters).IsEmpty;
         }
 
         public static string GetResizedImageUrl(DataReference<IImageFile> image, int? maxWidth = null, string mediaType = null)
@@ -43,6 +45,7 @@ namespace Orckestra.Media.AutoImageResizing.Helpers
             }
             return ConvertToPublicUrl(baseImageUrl);
         }
+
         private static string AddQueryParameter(string baseUrl, string param)
         {
             return baseUrl + (baseUrl.Contains("?") ? "&" : "?") + param;
@@ -57,5 +60,5 @@ namespace Orckestra.Media.AutoImageResizing.Helpers
             }
             return imageUrl;
         }
-}
+    }
 }

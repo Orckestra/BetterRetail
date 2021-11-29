@@ -47,18 +47,19 @@ namespace Orckestra.Media.AutoImageResizing
                 var pictureElement = new XElement("picture");
                 foreach (var widthBreakpoint in WidthBreakpoints.OrderBy(item => item))
                 {
-                    var minWidth = $"(max-width: {widthBreakpoint}px)";
+                    var mediaRule = $"(max-width: {widthBreakpoint}px)";
                     foreach (var imageSupportFormat in ImageSupportFormats)
                     {
                         if (ImageFormatSupportHelper.IsSupported(imageSupportFormat))
                         {
                             pictureElement.Add(new XElement("source",
                                 new XAttribute("srcset", AutoImageResizingHelper.GetResizedImageUrl(imageSrc, widthBreakpoint, imageSupportFormat)),
-                                new XAttribute("media", minWidth),
+                                new XAttribute("media", mediaRule),
                                 new XAttribute("type", imageSupportFormat)));
                         }
                     }
                 }
+
                 var altText = imgElement.Attributes().FirstOrDefault(item => item.Name.LocalName == "alt")?.ToString();
 
                 pictureElement.Add(new XElement("img",

@@ -1,4 +1,5 @@
-﻿@using Composite.Data
+﻿@using System.Collections
+@using Composite.Data
 @using Composite.Data.Types
 @using Orckestra.Media.AutoImageResizing
 @using Orckestra.Media.AutoImageResizing.Helpers
@@ -9,10 +10,10 @@
     var widthBreakpoints = AutoImageResizingConfiguration.WidthBreakpoints;
     var maxWidthLimit = AutoImageResizingConfiguration.MaxWidth;
 
-    @PictureTag(Image, widthBreakpoints.ToArray(), maxWidthLimit)
+    @PictureTag(Image, widthBreakpoints, maxWidthLimit)
 }
 
-@helper PictureTag(DataReference<IImageFile> Image, int[] widthBreakpoints, int maxWidthLimit)
+@helper PictureTag(DataReference<IImageFile> Image, IEnumerable<int> widthBreakpoints, int maxWidthLimit)
 {
     var imageSupportFormats = AutoImageResizingConfiguration.ImageFormats;
 
@@ -29,32 +30,30 @@
                 }
             }
         }
-        @{string maxImageWidth = maxWidthLimit > 0 ? "mw=" + maxWidthLimit : string.Empty;}
-        <img src="/media(@(Image.KeyValue))?@maxImageWidth" alt="@Image.Data.Title" loading="lazy" />
+        <img src="@AutoImageResizingHelper.GetResizedImageUrl(Image, maxWidthLimit > 0 ? (int?)maxWidthLimit : null)" alt="@Image.Data.Title" loading="lazy" />
     </picture>
 }
 
 @helper ResponsiveBackgroundImage(DataReference<IImageFile> Image, string cssClass, IHtmlString divContent = null)
 {
     var widthBreakpoints = AutoImageResizingConfiguration.WidthBreakpoints;
-    var maxWidthLimit = AutoImageResizingConfiguration.MaxWidth;
-    @ResponsiveBackgroundImage(Image, cssClass, widthBreakpoints.ToArray(), maxWidthLimit, divContent)
+    var maxWidth = AutoImageResizingConfiguration.MaxWidth;
+    @ResponsiveBackgroundImage(Image, cssClass, widthBreakpoints, maxWidth, divContent)
 }
 
-@helper ResponsiveBackgroundImage(DataReference<IImageFile> Image, string cssClass, int[] widthBreakpoints, int maxWidthLimit, IHtmlString divContent = null)
+@helper ResponsiveBackgroundImage(DataReference<IImageFile> Image, string cssClass, IEnumerable<int> widthBreakpoints, int maxWidth, IHtmlString divContent = null)
 {
     <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
     <head>
         @{
             var imageId = Guid.NewGuid();
-            var maxImageWidth = maxWidthLimit > 0 ? "mw=" + maxWidthLimit : string.Empty;
         }
 
         <style type="text/css">
             #@imageId {
-                background-image: url('/media(@Image.KeyValue)?@maxImageWidth');
+                background-image: url('@AutoImageResizingHelper.GetResizedImageUrl(Image, maxWidth > 0 ? (int?)maxWidth : null)');
                 background-repeat: no-repeat;}
-        </style>
+
         @{
             var imageSupportFormats = AutoImageResizingConfiguration.ImageFormats;
         }
@@ -65,15 +64,15 @@
             {
                 if (ImageFormatSupportHelper.IsSupported(mediaType))
                 {
-                    var imageUrl = $"/media({Image.KeyValue})?mw={widthBreakpoint}&amp;mt={mediaType}";
-                    @:  <style type="text/css"> @@media (max-width: @(widthBreakpoint)px) { #@imageId { background-image: url('@imageUrl');}} </style>
-                    }
+                    @: @@media (max-width: @(widthBreakpoint)px) { #@imageId { background-image: url('@AutoImageResizingHelper.GetResizedImageUrl(Image, widthBreakpoint, mediaType)');}}
+                }
                 }
             }
-        </head>
-        <body>
-            <div class="@cssClass" id="@imageId">@divContent</div>
-        </body>
-    </html>
-    }
+        </style>
+    </head>
+    <body>
+        <div class="@cssClass" id="@imageId">@divContent</div>
+    </body>
+</html>
+}
 
