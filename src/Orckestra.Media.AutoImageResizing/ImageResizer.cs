@@ -12,13 +12,12 @@ namespace Orckestra.Media.AutoImageResizing
     public class ImageResizer : IPageContentFilter
     {
         private static IReadOnlyCollection<int> WidthBreakpoints;
-        private static int MaxWidthLimit;
+        private static int MaxWidth;
         private static IReadOnlyCollection<string> ImageSupportFormats;
-
         static ImageResizer()
         {
             WidthBreakpoints = AutoImageResizingConfiguration.WidthBreakpoints;
-            MaxWidthLimit = AutoImageResizingConfiguration.MaxWidth;
+            MaxWidth = AutoImageResizingConfiguration.MaxWidth;
             ImageSupportFormats = AutoImageResizingConfiguration.ImageFormats;
         }
 
@@ -44,7 +43,9 @@ namespace Orckestra.Media.AutoImageResizing
 
             if (AutoImageResizingHelper.IsLocalC1MediaWithoutResizingOptions(imageSrc))
             {
-                var pictureElement = new XElement("picture");
+                var imageNamespace = imgElement.GetDefaultNamespace();
+                var pictureElement = new XElement(imageNamespace + "picture");
+
                 foreach (var widthBreakpoint in WidthBreakpoints.OrderBy(item => item))
                 {
                     var mediaRule = $"(max-width: {widthBreakpoint}px)";
@@ -60,12 +61,17 @@ namespace Orckestra.Media.AutoImageResizing
                     }
                 }
 
-                var altText = imgElement.Attributes().FirstOrDefault(item => item.Name.LocalName == "alt")?.ToString();
+                var altText = imgElement.Attributes().FirstOrDefault(item => item.Name.LocalName == "alt")?.Value;
+                var title = imgElement.Attributes().FirstOrDefault(item => item.Name.LocalName == "title")?.Value;
+                var id = imgElement.Attributes().FirstOrDefault(item => item.Name.LocalName == "id")?.Value;
 
                 pictureElement.Add(new XElement("img",
-                    new XAttribute("src", AutoImageResizingHelper.GetResizedImageUrl(imageSrc, MaxWidthLimit)),
+                    new XAttribute("src", AutoImageResizingHelper.GetResizedImageUrl(imageSrc, MaxWidth)),
                     string.IsNullOrWhiteSpace(altText) ? null : new XAttribute("alt", altText),
+                    string.IsNullOrWhiteSpace(title) ? null : new XAttribute("title", title),
+                    string.IsNullOrWhiteSpace(id) ? null : new XAttribute("id", id),
                     new XAttribute("loading", "lazy")));
+
                 imgElement.ReplaceWith(pictureElement);
             }
         }
