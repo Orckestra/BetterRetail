@@ -96,16 +96,15 @@ namespace Orckestra.Composer.Search.Context
 
         protected virtual SearchCriteria BuildProductsSearchCriteria()
         {
-            var criteria = BaseSearchCriteriaProvider.GetSearchCriteria(
+            var criteria = BaseSearchCriteriaProvider.GetSearchCriteriaAsync(
                 SearchQuery, 
                 SearchConfiguration.MaxItemsPerPage, 
                 (CurrentPage - 1) * SearchConfiguration.MaxItemsPerPage, 
                 RequestUtils.GetBaseUrl(Request).ToString(), 
-                true).Result;
-
-            criteria.SortBy = IsProductsSearchActive ? SortBy : null;
-            criteria.SortDirection = IsProductsSearchActive ? SortDirection : null;
-            criteria.Page = CurrentPage;
+                true,
+                CurrentPage,
+                IsProductsSearchActive ? SortBy : null,
+                IsProductsSearchActive ? SortDirection : null).Result;
            
             criteria.SelectedFacets.AddRange(SearchUrlProvider.BuildSelectedFacets(Request.QueryString));
             return criteria;
