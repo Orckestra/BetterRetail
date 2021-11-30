@@ -14,6 +14,10 @@ namespace Orckestra.Media.AutoImageResizing
         private static IReadOnlyCollection<int> WidthBreakpoints;
         private static int MaxWidth;
         private static IReadOnlyCollection<string> ImageSupportFormats;
+        private static readonly XName PictureTagXName = Namespaces.Xhtml + "picture";
+        private static readonly XName SourceTagXName = Namespaces.Xhtml + "source";
+        private static readonly XName ImgTagXName = Namespaces.Xhtml + "img";
+
         static ImageResizer()
         {
             WidthBreakpoints = AutoImageResizingConfiguration.WidthBreakpoints;
@@ -43,8 +47,7 @@ namespace Orckestra.Media.AutoImageResizing
 
             if (AutoImageResizingHelper.IsLocalC1MediaWithoutResizingOptions(imageSrc))
             {
-                var imageNamespace = imgElement.GetDefaultNamespace();
-                var pictureElement = new XElement(imageNamespace + "picture");
+                var pictureElement = new XElement(PictureTagXName);
 
                 foreach (var widthBreakpoint in WidthBreakpoints.OrderBy(item => item))
                 {
@@ -53,7 +56,7 @@ namespace Orckestra.Media.AutoImageResizing
                     {
                         if (ImageFormatSupportHelper.IsSupported(imageSupportFormat))
                         {
-                            pictureElement.Add(new XElement("source",
+                            pictureElement.Add(new XElement(SourceTagXName,
                                 new XAttribute("srcset", AutoImageResizingHelper.GetResizedImageUrl(imageSrc, widthBreakpoint, imageSupportFormat)),
                                 new XAttribute("media", mediaRule),
                                 new XAttribute("type", imageSupportFormat)));
@@ -61,17 +64,16 @@ namespace Orckestra.Media.AutoImageResizing
                     }
                 }
 
-                var altText = imgElement.Attributes().FirstOrDefault(item => item.Name.LocalName == "alt")?.Value;
-                var title = imgElement.Attributes().FirstOrDefault(item => item.Name.LocalName == "title")?.Value;
-                var id = imgElement.Attributes().FirstOrDefault(item => item.Name.LocalName == "id")?.Value;
+                var attributesToCopy = imgElement.Attributes()
+                    .Where(_ => _.Name.LocalName != "src"
+                                && _.Name.LocalName != "loading");
 
-                pictureElement.Add(new XElement("img",
+                var newImgElement =  new XElement(ImgTagXName,
                     new XAttribute("src", AutoImageResizingHelper.GetResizedImageUrl(imageSrc, MaxWidth)),
-                    string.IsNullOrWhiteSpace(altText) ? null : new XAttribute("alt", altText),
-                    string.IsNullOrWhiteSpace(title) ? null : new XAttribute("title", title),
-                    string.IsNullOrWhiteSpace(id) ? null : new XAttribute("id", id),
-                    new XAttribute("loading", "lazy")));
+                    new XAttribute("loading", "lazy"));
+                newImgElement.Add(attributesToCopy.Select(a => new XAttribute(a.Name, a.Value)));
 
+                pictureElement.Add(newImgElement);
                 imgElement.ReplaceWith(pictureElement);
             }
         }

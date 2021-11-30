@@ -5,17 +5,21 @@
 @using Orckestra.Media.AutoImageResizing.Helpers
 
 
-@helper PictureTag(DataReference<IImageFile> Image)
+@helper PictureTag(DataReference<IImageFile> Image, IEnumerable<int> widthBreakpoints = null, int maxWidth = default(int))
 {
-    var widthBreakpoints = AutoImageResizingConfiguration.WidthBreakpoints;
-    var maxWidthLimit = AutoImageResizingConfiguration.MaxWidth;
+    if (widthBreakpoints == null)
+    {
+        widthBreakpoints = AutoImageResizingConfiguration.WidthBreakpoints;
+    }
 
-    @PictureTag(Image, widthBreakpoints, maxWidthLimit)
-}
+    if (maxWidth == default(int))
+    {
+        maxWidth = AutoImageResizingConfiguration.MaxWidth;
+    }
 
-@helper PictureTag(DataReference<IImageFile> Image, IEnumerable<int> widthBreakpoints, int maxWidth)
-{
     var imageSupportFormats = AutoImageResizingConfiguration.ImageFormats;
+
+
 
     <picture>
         @foreach (var widthBreakpoint in widthBreakpoints.OrderBy(item => item))
@@ -30,19 +34,17 @@
                 }
             }
         }
-        <img src="@AutoImageResizingHelper.GetResizedImageUrl(Image, maxWidth > 0 ? (int?)maxWidth : null)" alt="@Image.Data.Title" loading="lazy" />
+        @{ var title = string.Empty; if (string.IsNullOrEmpty(Image.Data.Title)) { title = string.Format("title='{0}'", Image.Data.Title); }
+            var alt = string.Empty; if (string.IsNullOrEmpty(Image.Data.Description)) { alt = string.Format("alt='{0}'", Image.Data.Description); } }
+
+        <img src="@AutoImageResizingHelper.GetResizedImageUrl(Image, maxWidth > 0 ? (int?)maxWidth : null)" @title @alt loading="lazy" />
     </picture>
 }
 
-@helper ResponsiveBackgroundImage(DataReference<IImageFile> Image, string cssClass, IHtmlString divContent = null)
-{
-    var widthBreakpoints = AutoImageResizingConfiguration.WidthBreakpoints;
-    var maxWidth = AutoImageResizingConfiguration.MaxWidth;
-    @ResponsiveBackgroundImage(Image, cssClass, widthBreakpoints, maxWidth, divContent)
-}
+@helper ResponsiveBackgroundImage(DataReference<IImageFile> Image, string cssClass = null, IEnumerable<int> widthBreakpoints = null, int maxWidth = default(int), IHtmlString divContent = null)
+{if (widthBreakpoints == null) { widthBreakpoints = AutoImageResizingConfiguration.WidthBreakpoints; }
+    if (maxWidth == default(int)) { maxWidth = AutoImageResizingConfiguration.MaxWidth; }
 
-@helper ResponsiveBackgroundImage(DataReference<IImageFile> Image, string cssClass, IEnumerable<int> widthBreakpoints, int maxWidth, IHtmlString divContent = null)
-{
     <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
     <head>
         @{
