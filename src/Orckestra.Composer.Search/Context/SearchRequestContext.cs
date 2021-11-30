@@ -4,6 +4,7 @@ using System.Web;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Search.Parameters;
+using Orckestra.Composer.Search.Providers;
 using Orckestra.Composer.Search.RequestConstants;
 using Orckestra.Composer.Search.Services;
 using Orckestra.Composer.Search.ViewModels;
@@ -24,13 +25,15 @@ namespace Orckestra.Composer.Search.Context
         public IInventoryLocationProvider InventoryLocationProvider { get; set; }
         protected IFulfillmentContext FulfillmentContext { get; }
         protected ISearchUrlProvider SearchUrlProvider { get; private set; }
+        protected IBaseSearchCriteriaProvider BaseSearchCriteriaProvider { get; private set; }
 
         public SearchRequestContext(IComposerContext composerContext,
             ISearchViewService searchViewService,
             IInventoryLocationProvider inventoryLocationProvider,
             ISearchUrlProvider searchUrlProvider,
             IFulfillmentContext fulfillmentContext,
-            HttpRequestBase request)
+            HttpRequestBase request,
+            IBaseSearchCriteriaProvider baseSearchCriteriaProvider)
         {
 
             ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
@@ -39,6 +42,7 @@ namespace Orckestra.Composer.Search.Context
             SearchUrlProvider = searchUrlProvider ?? throw new ArgumentNullException(nameof(searchUrlProvider));
             FulfillmentContext = fulfillmentContext ?? throw new ArgumentNullException(nameof(fulfillmentContext));
             Request = request;
+            BaseSearchCriteriaProvider = baseSearchCriteriaProvider ?? throw new ArgumentNullException(nameof(baseSearchCriteriaProvider));
 
             _viewModel = new Lazy<SearchViewModel>(() =>
             {
@@ -92,22 +96,17 @@ namespace Orckestra.Composer.Search.Context
 
         protected virtual SearchCriteria BuildProductsSearchCriteria()
         {
-            var criteria = new SearchCriteria
-            {
-                Keywords = SearchQuery,
-                NumberOfItemsPerPage = SearchConfiguration.MaxItemsPerPage,
-                IncludeFacets = true,
-                StartingIndex = (CurrentPage - 1) * SearchConfiguration.MaxItemsPerPage,
-                SortBy = IsProductsSearchActive ?  SortBy: null,
-                SortDirection = IsProductsSearchActive ?  SortDirection: null,
-                Page = CurrentPage,
-                BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
-                CultureInfo = ComposerContext.CultureInfo,
-                Scope = ComposerContext.Scope,
-                InventoryLocationIds = InventoryLocationProvider.GetInventoryLocationIdsForSearchAsync().Result,
-                AvailabilityDate = FulfillmentContext.AvailabilityAndPriceDate,
-                AutoCorrect = SearchConfiguration.AutoCorrectSearchTerms
-            };
+            var criteria = BaseSearchCriteriaProvider.GetSearchCriteria(
+                SearchQuery, 
+                SearchConfiguration.MaxItemsPerPage, 
+                (CurrentPage - 1) * SearchConfiguration.MaxItemsPerPage, 
+                RequestUtils.GetBaseUrl(Request).ToString(), 
+                true).Result;
+
+            criteria.SortBy = IsProductsSearchActive ? SortBy : null;
+            criteria.SortDirection = IsProductsSearchActive ? SortDirection : null;
+            criteria.Page = CurrentPage;
+           
             criteria.SelectedFacets.AddRange(SearchUrlProvider.BuildSelectedFacets(Request.QueryString));
             return criteria;
         }
