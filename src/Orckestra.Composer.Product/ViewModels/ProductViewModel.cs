@@ -1,4 +1,5 @@
-﻿using Orckestra.Composer.ViewModels;
+﻿using Orckestra.Composer.Enums;
+using Orckestra.Composer.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,6 +7,15 @@ namespace Orckestra.Composer.Product.ViewModels
 {
     public sealed class ProductViewModel : BaseProductViewModel
     {
+        ///The output from OCC contains lookup value, to get display name 
+        ///is used <see cref="Lookup{TKey, TElement}"></see> attribute
+        [Lookup(LookupType.Product, "Brand")]
+        public string Brand { get; set; }
+
+        //Must be parsed from Overture's output.
+        [MapTo("Brand")]
+        public string BrandId { get; set; }
+
         public string SelectedVariantId { get; set; }
 
         /// <summary>
