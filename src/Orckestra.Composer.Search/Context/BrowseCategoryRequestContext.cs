@@ -26,8 +26,8 @@ namespace Orckestra.Composer.Search.Context
 
         protected HttpRequestBase Request { get; private set; }
 
-        public virtual string SortBy => Request[SearchRequestParams.SortBy];
-        public virtual string SortDirection => Request[SearchRequestParams.SortDirection] ?? SearchRequestParams.DefaultSortDirection;
+        public virtual string SortBy => Request[SearchRequestParams.SortBy] ?? SearchConfiguration.DefaultSortBy;
+        public virtual string SortDirection => Request[SearchRequestParams.SortDirection] ?? SearchConfiguration.DefaultSortDirection;
 
         public virtual int CurrentPage
         {

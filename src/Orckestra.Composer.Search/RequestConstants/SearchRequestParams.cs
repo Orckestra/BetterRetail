@@ -6,7 +6,6 @@
         public const string Page = "page";
         public const string SortBy = "sortBy";
         public const string SortDirection = "sortDirection";
-        public const string DefaultSortDirection = "asc";
     };
 
 }

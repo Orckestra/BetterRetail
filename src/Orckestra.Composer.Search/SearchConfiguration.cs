@@ -199,5 +199,15 @@ namespace Orckestra.Composer.Search
         /// The prefix for the the category facet field name to indentify which facets are for categories
         /// </summary>
         public static string CategoryFacetFiledNamePrefix { get; set; } = "CategoryLevel";
+
+        /// <summary>
+        /// Default selected Sort By
+        /// </summary>
+        public const string DefaultSortBy = "score";
+
+        /// <summary>
+        /// Default selected Sort Direction
+        /// </summary>
+        public const string DefaultSortDirection = "desc";
     }
 }

@@ -45,8 +45,8 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         public virtual ActionResult Index(
             [Bind(Prefix = SearchRequestParams.Keywords)]string keywords, 
             [Bind(Prefix = SearchRequestParams.Page)]int page = 1, 
-            [Bind(Prefix = SearchRequestParams.SortBy)]string sortBy = null, 
-            [Bind(Prefix = SearchRequestParams.SortDirection)]string sortDirection = SearchRequestParams.DefaultSortDirection)
+            [Bind(Prefix = SearchRequestParams.SortBy)]string sortBy = SearchConfiguration.DefaultSortBy, 
+            [Bind(Prefix = SearchRequestParams.SortDirection)]string sortDirection = SearchConfiguration.DefaultSortDirection)
         {
             if (!AreKeywordsValid(keywords))
             {
