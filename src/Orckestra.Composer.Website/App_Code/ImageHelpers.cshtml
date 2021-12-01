@@ -57,10 +57,7 @@
     <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
     <head>
         @{
-            var guidImageId = Guid.NewGuid();
-            var rnd = new Random();
-            var randomChar = (char)rnd.Next('a', 'z');
-            var imageId = randomChar + guidImageId.ToString();
+            var imageId = "img" + Guid.NewGuid().ToString().Substring(0, 8);
         }
 
         <style type="text/css">
