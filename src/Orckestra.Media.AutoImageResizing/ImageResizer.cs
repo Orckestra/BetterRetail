@@ -12,13 +12,16 @@ namespace Orckestra.Media.AutoImageResizing
     public class ImageResizer : IPageContentFilter
     {
         private static IReadOnlyCollection<int> WidthBreakpoints;
-        private static int MaxWidthLimit;
+        private static int MaxWidth;
         private static IReadOnlyCollection<string> ImageSupportFormats;
+        private static readonly XName PictureTagXName = Namespaces.Xhtml + "picture";
+        private static readonly XName SourceTagXName = Namespaces.Xhtml + "source";
+        private static readonly XName ImgTagXName = Namespaces.Xhtml + "img";
 
         static ImageResizer()
         {
             WidthBreakpoints = AutoImageResizingConfiguration.WidthBreakpoints;
-            MaxWidthLimit = AutoImageResizingConfiguration.MaxWidth;
+            MaxWidth = AutoImageResizingConfiguration.MaxWidth;
             ImageSupportFormats = AutoImageResizingConfiguration.ImageFormats;
         }
 
@@ -44,7 +47,8 @@ namespace Orckestra.Media.AutoImageResizing
 
             if (AutoImageResizingHelper.IsLocalC1MediaWithoutResizingOptions(imageSrc))
             {
-                var pictureElement = new XElement("picture");
+                var pictureElement = new XElement(PictureTagXName);
+
                 foreach (var widthBreakpoint in WidthBreakpoints.OrderBy(item => item))
                 {
                     var mediaRule = $"(max-width: {widthBreakpoint}px)";
@@ -52,7 +56,7 @@ namespace Orckestra.Media.AutoImageResizing
                     {
                         if (ImageFormatSupportHelper.IsSupported(imageSupportFormat))
                         {
-                            pictureElement.Add(new XElement("source",
+                            pictureElement.Add(new XElement(SourceTagXName,
                                 new XAttribute("srcset", AutoImageResizingHelper.GetResizedImageUrl(imageSrc, widthBreakpoint, imageSupportFormat)),
                                 new XAttribute("media", mediaRule),
                                 new XAttribute("type", imageSupportFormat)));
@@ -60,12 +64,16 @@ namespace Orckestra.Media.AutoImageResizing
                     }
                 }
 
-                var altText = imgElement.Attributes().FirstOrDefault(item => item.Name.LocalName == "alt")?.ToString();
+                var attributesToCopy = imgElement.Attributes()
+                    .Where(_ => _.Name.LocalName != "src"
+                                && _.Name.LocalName != "loading");
 
-                pictureElement.Add(new XElement("img",
-                    new XAttribute("src", AutoImageResizingHelper.GetResizedImageUrl(imageSrc, MaxWidthLimit)),
-                    string.IsNullOrWhiteSpace(altText) ? null : new XAttribute("alt", altText),
-                    new XAttribute("loading", "lazy")));
+                var newImgElement =  new XElement(ImgTagXName,
+                    new XAttribute("src", AutoImageResizingHelper.GetResizedImageUrl(imageSrc, MaxWidth)),
+                    new XAttribute("loading", "lazy"));
+                newImgElement.Add(attributesToCopy.Select(a => new XAttribute(a.Name, a.Value)));
+
+                pictureElement.Add(newImgElement);
                 imgElement.ReplaceWith(pictureElement);
             }
         }
