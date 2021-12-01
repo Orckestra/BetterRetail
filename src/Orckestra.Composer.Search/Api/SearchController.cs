@@ -5,7 +5,6 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
-using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Search.Parameters;
 using Orckestra.Composer.Search.Providers;
@@ -35,7 +34,6 @@ namespace Orckestra.Composer.Search.Api
         protected IInventoryLocationProvider InventoryLocationProvider { get; private set; }
         protected ISearchTermsTransformationProvider SearchTermsTransformationProvider { get; private set; }
         protected IAutocompleteProvider AutocompleteProvider { get; private set; }
-        protected IFulfillmentContext FulfillmentContext { get; }
         protected ISearchUrlProvider SearchUrlProvider { get; set; }
         protected IBaseSearchCriteriaProvider BaseSearchCriteriaProvider { get; private set; }
 
@@ -45,7 +43,6 @@ namespace Orckestra.Composer.Search.Api
             IInventoryLocationProvider inventoryLocationProvider,
             ISearchTermsTransformationProvider searchTermsTransformationProvider,
             IAutocompleteProvider autocompleteProvider,
-            IFulfillmentContext fulfillmentContext,
             ISearchUrlProvider searchUrlProvider,
             ICategoryBrowsingViewService categoryBrowsingViewService,
             IBaseSearchCriteriaProvider baseSearchCriteriaProvider)
@@ -56,7 +53,6 @@ namespace Orckestra.Composer.Search.Api
             InventoryLocationProvider = inventoryLocationProvider ?? throw new ArgumentNullException(nameof(inventoryLocationProvider));
             SearchTermsTransformationProvider = searchTermsTransformationProvider ?? throw new ArgumentNullException(nameof(searchTermsTransformationProvider));
             AutocompleteProvider = autocompleteProvider ?? throw new ArgumentNullException(nameof(autocompleteProvider));
-            FulfillmentContext = fulfillmentContext ?? throw new ArgumentNullException(nameof(fulfillmentContext));
             SearchUrlProvider = searchUrlProvider ?? throw new ArgumentNullException(nameof(searchUrlProvider));
             BaseSearchCriteriaProvider = baseSearchCriteriaProvider ?? throw new ArgumentNullException(nameof(baseSearchCriteriaProvider));
         }
