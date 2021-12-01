@@ -5,7 +5,7 @@
 @using Orckestra.Media.AutoImageResizing.Helpers
 
 
-@helper PictureTag(DataReference<IImageFile> Image, IEnumerable<int> widthBreakpoints = null, int maxWidth = 0)
+@helper PictureTag(DataReference<IImageFile> Image, string cssClass = null, IEnumerable<int> widthBreakpoints = null, int maxWidth = 0)
 {
     if (widthBreakpoints == null)
     {
@@ -40,6 +40,7 @@
         <img src="@AutoImageResizingHelper.GetResizedImageUrl(Image, maxWidth > 0 ? (int?)maxWidth : null)"
              @if (!string.IsNullOrWhiteSpace(title)) { <text> title="@title" </text> }
              @if (!string.IsNullOrWhiteSpace(altText)) { <text> alt="@altText" </text> }
+             @if (!string.IsNullOrWhiteSpace(cssClass)) { <text> class="@cssClass" </text> }
              loading="lazy" />
     </picture>
 }
