@@ -6,6 +6,8 @@
         public const string Page = "page";
         public const string SortBy = "sortBy";
         public const string SortDirection = "sortDirection";
+        public const string DefaultSortBy = "score";
+        public const string DefaultSortDirection = "desc";
     };
 
 }

@@ -61,7 +61,7 @@ namespace Orckestra.Composer.Search.Context
         {
             get
             {
-                return Request[SearchRequestParams.SortBy] ?? SearchConfiguration.DefaultSortBy;
+                return Request[SearchRequestParams.SortBy] ?? SearchRequestParams.DefaultSortBy;
             }
         }
 
@@ -69,7 +69,7 @@ namespace Orckestra.Composer.Search.Context
         {
             get
             {
-                return Request[SearchRequestParams.SortDirection] ?? SearchConfiguration.DefaultSortDirection;
+                return Request[SearchRequestParams.SortDirection] ?? SearchRequestParams.DefaultSortDirection;
             }
         }
 

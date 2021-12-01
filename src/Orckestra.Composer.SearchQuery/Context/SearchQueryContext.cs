@@ -25,8 +25,8 @@ namespace Orckestra.Composer.SearchQuery.Context
         private SearchQueryViewModel _viewModel { get; set; }
         private SearchQueryViewModel _topResultsViewModel { get; set; }
         protected HttpRequestBase Request { get; private set; }
-        public virtual string SortBy => Request[SearchRequestParams.SortBy] ?? SearchConfiguration.DefaultSortBy;
-        public virtual string SortDirection => Request[SearchRequestParams.SortDirection] ?? SearchConfiguration.DefaultSortDirection;
+        public virtual string SortBy => Request[SearchRequestParams.SortBy] ?? SearchRequestParams.DefaultSortBy;
+        public virtual string SortDirection => Request[SearchRequestParams.SortDirection] ?? SearchRequestParams.DefaultSortDirection;
 
         public virtual int CurrentPage
         {

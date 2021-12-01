@@ -8,6 +8,6 @@ namespace Orckestra.Composer.Search.Providers
 {
     public interface IBaseSearchCriteriaProvider
     {
-        Task<SearchCriteria> GetSearchCriteriaAsync(string searchTerms, int limit, int offset, string baseURL, bool includeFacets, int page = 1, string sortBy = SearchConfiguration.DefaultSortBy, string sortDirection = SearchConfiguration.DefaultSortDirection);
+        Task<SearchCriteria> GetSearchCriteriaAsync(string searchTerms, int limit, int offset, string baseURL, bool includeFacets, int page = 1, string sortBy = SearchRequestParams.DefaultSortBy, string sortDirection = SearchRequestParams.DefaultSortDirection);
     }
 }
