@@ -31,17 +31,22 @@
                 }
             }
         }
-        @{ 
+        @{
             var imageData = Image.Data;
             var title = imageData.Title;
             var altText = imageData.Description;
         }
 
-        <img src="@AutoImageResizingHelper.GetResizedImageUrl(Image, maxWidth > 0 ? (int?)maxWidth : null)" 
-             @if (!string.IsNullOrWhiteSpace(title)) {<text> title="@title" </text>}
-             @if (!string.IsNullOrWhiteSpace(altText)) {<text> alt="@altText" </text>}
+        <img src="@AutoImageResizingHelper.GetResizedImageUrl(Image, maxWidth > 0 ? (int?)maxWidth : null)"
+             @if (!string.IsNullOrWhiteSpace(title)) { <text> title="@title" </text> }
+             @if (!string.IsNullOrWhiteSpace(altText)) { <text> alt="@altText" </text> }
              loading="lazy" />
     </picture>
+}
+
+@helper ResponsiveBackgroundImage(DataReference<IImageFile> Image, string cssClass = null, IHtmlString divContent = null)
+{
+    @ResponsiveBackgroundImage(Image, cssClass, null, 0, divContent)
 }
 
 @helper ResponsiveBackgroundImage(DataReference<IImageFile> Image, string cssClass = null, IEnumerable<int> widthBreakpoints = null, int maxWidth = 0, IHtmlString divContent = null)
@@ -54,7 +59,7 @@
         @{
             var guidImageId = Guid.NewGuid();
             var rnd = new Random();
-            var randomChar = (char)rnd.Next('a','z');
+            var randomChar = (char)rnd.Next('a', 'z');
             var imageId = randomChar + guidImageId.ToString();
         }
 
