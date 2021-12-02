@@ -45,11 +45,6 @@
     </picture>
 }
 
-@helper ResponsiveBackgroundImage(DataReference<IImageFile> Image, string cssClass = null, IHtmlString divContent = null)
-{
-    @ResponsiveBackgroundImage(Image, cssClass, null, 0, divContent)
-}
-
 @helper ResponsiveBackgroundImage(DataReference<IImageFile> Image, string cssClass = null, IEnumerable<int> widthBreakpoints = null, int maxWidth = 0, IHtmlString divContent = null)
 {
     if (widthBreakpoints == null) { widthBreakpoints = AutoImageResizingConfiguration.WidthBreakpoints; }
