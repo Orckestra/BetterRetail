@@ -65,7 +65,8 @@ namespace Orckestra.Composer.Search.Api
         {
             var queryString = HttpUtility.ParseQueryString(request.QueryString);
 
-            var searchCriteria = await BaseSearchCriteriaProvider.GetSearchCriteriaAsync(queryString["keywords"], 0, 0, RequestUtils.GetBaseUrl(Request).ToString(), true).ConfigureAwait(false);
+            var searchCriteria = await BaseSearchCriteriaProvider.GetSearchCriteriaAsync(queryString["keywords"], RequestUtils.GetBaseUrl(Request).ToString(), true).ConfigureAwait(false);
+            searchCriteria.NumberOfItemsPerPage = 0;
 
             searchCriteria.SelectedFacets.AddRange(SearchUrlProvider.BuildSelectedFacets(queryString));
 
@@ -113,7 +114,8 @@ namespace Orckestra.Composer.Search.Api
             var originalSearchTerms = request.Query.Trim();
             var searchTerms = SearchTermsTransformationProvider.TransformSearchTerm(originalSearchTerms, ComposerContext.CultureInfo.Name);
 
-            var searchCriteria = await BaseSearchCriteriaProvider.GetSearchCriteriaAsync(searchTerms, limit, 0, RequestUtils.GetBaseUrl(Request).ToString(), false).ConfigureAwait(false);
+            var searchCriteria = await BaseSearchCriteriaProvider.GetSearchCriteriaAsync(searchTerms, RequestUtils.GetBaseUrl(Request).ToString(), false).ConfigureAwait(false);
+            searchCriteria.NumberOfItemsPerPage = limit;
 
             var searchResultsViewModel = await SearchViewService.GetSearchViewModelAsync(searchCriteria).ConfigureAwait(false);
             if (searchResultsViewModel.ProductSearchResults?.TotalCount == 0 && originalSearchTerms != searchTerms)

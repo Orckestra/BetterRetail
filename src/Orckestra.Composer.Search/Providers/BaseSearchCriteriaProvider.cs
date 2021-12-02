@@ -22,17 +22,17 @@ namespace Orckestra.Composer.Search.Providers
             FulfillmentContext = fulfillmentContext ?? throw new ArgumentNullException(nameof(fulfillmentContext));
         }
 
-        public virtual async Task<SearchCriteria> GetSearchCriteriaAsync(string searchTerms, int limit, int offset, string baseURL, bool includeFacets, int page, string sortBy, string sortDirection)
+        public virtual async Task<SearchCriteria> GetSearchCriteriaAsync(string searchTerms, string baseURL, bool includeFacets, int page)
         {
             return new SearchCriteria
             {
                 Keywords = searchTerms,
-                NumberOfItemsPerPage = limit,
+                NumberOfItemsPerPage = SearchConfiguration.MaxItemsPerPage,
                 IncludeFacets = includeFacets,
-                StartingIndex = offset,
+                StartingIndex = (page - 1) * SearchConfiguration.MaxItemsPerPage,
                 Page = page,
-                SortBy = sortBy,
-                SortDirection = sortDirection,
+                SortBy = SearchRequestParams.DefaultSortBy,
+                SortDirection = SearchRequestParams.DefaultSortDirection,
                 BaseUrl = baseURL,
                 Scope = ComposerContext.Scope,
                 CultureInfo = ComposerContext.CultureInfo,
