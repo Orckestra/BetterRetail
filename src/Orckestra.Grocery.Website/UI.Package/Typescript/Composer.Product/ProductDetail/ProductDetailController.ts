@@ -346,7 +346,7 @@ module Orckestra.Composer {
                         return  pricePerUnit;
                     },
                     IsPricePerUnitZero(){
-                        return parseFloat(this.PricePerUnit.replace(/[^0-9\.-]+/g,'')) == 0.00;
+                        return PriceHelper.IsPricePerUnitZero(this.PricePerUnit);
                     },
                     IsUnavailableVariant() {
                         return $.isArray(this.Product.allVariants) && !this.Product.selectedVariantId;

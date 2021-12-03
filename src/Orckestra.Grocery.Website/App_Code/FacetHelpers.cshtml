@@ -104,7 +104,10 @@
         </div>
     </div>
 
-    <button type="submit" data-oc-click="refineByRange" class="btn  btn-outline-secondary btn-block"
+    <button type="submit"
+            v-bind:data-facetfieldname="facet.FieldName"
+            data-oc-click="refineByRange" 
+            class="btn  btn-outline-secondary btn-block"
             disabled="disabled">
         @Html.Localize("List-Search", "B_Apply")
     </button>

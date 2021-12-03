@@ -47,6 +47,17 @@ module Orckestra.Composer {
                                         .map((key) => ({Key: key, Value: product.ProductBadgeValues[key]}));
                                 }
 
+                                product.HasUnitValues = PriceHelper.HasUnitValues(product);
+                                product.PricePerUnit = PriceHelper.PricePerUnit(product.DisplayListPrice,
+                                    product.ProductUnitQuantity,
+                                    product.ProductUnitSize,
+                                    product.ConvertedVolumeMeasurement
+                                );
+    
+                                if(product.PricePerUnit){
+                                    product.IsPricePerUnitZero = PriceHelper.IsPricePerUnitZero(product.PricePerUnit);
+                                }
+
                                 return product;
                             });
                             return results;

@@ -16,6 +16,8 @@ module Orckestra.Composer {
                 let slickInstance = $(element);
                 let slickOptions: any = {
                     arrows: true,
+                    centerMode: true,
+                    centerPadding: "0px",
                     responsive: [{
                         dots: false,
                         breakpoint: 1024,
@@ -30,7 +32,12 @@ module Orckestra.Composer {
                         let nbSlideToShow = slickInstance.data('slick').mobileSlidesToShow;
                         nbSlideToShow = ( nbSlideToShow ) ? nbSlideToShow : 2;
                         let nbSlideToScroll = slickInstance.data('slick').mobileSlidesToScroll;
-                        nbSlideToScroll = ( nbSlideToScroll ) ? nbSlideToScroll : 2;
+                        nbSlideToScroll = ( nbSlideToScroll ) ? nbSlideToScroll : 1;
+
+                        let scSlideToShow = slickInstance.data('slick').smallScreenSlidesToShow;
+                        scSlideToShow = (scSlideToShow) ? scSlideToShow : 1;
+                        let scSlideToScroll = slickInstance.data('slick').smallScreenSlidesToScroll;
+                        scSlideToScroll = (scSlideToScroll) ? scSlideToScroll : 1;
 
                         slickOptions.responsive.push({
                             breakpoint: 768,
@@ -42,11 +49,28 @@ module Orckestra.Composer {
                                 infinite: true
                             }
                         });
+
+                        slickOptions.responsive.push({
+                            breakpoint: 576,
+                            arrows: false,
+                            settings: {
+                                slidesToShow: scSlideToShow,
+                                slidesToScroll: scSlideToScroll,
+                                dots: true,
+                                infinite: true
+                            }
+                        });
                     } else {
                         slickOptions.responsive.push({
                             breakpoint: 768,
                             arrows: false,
                             settings: 'unslick' // destroys slick
+                        });
+
+                        slickOptions.responsive.push({
+                            breakpoint: 576,
+                            arrows: false,
+                            settings: 'unslick'
                         });
                     }
 

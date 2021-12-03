@@ -92,9 +92,6 @@ module Orckestra.Composer {
                             const wishListItem = this.WishList && this.WishList.Items.find(isSameProduct);
                             product.InWishList = !!wishListItem;
                             product.WishListItemId = wishListItem ? wishListItem.Id : undefined;
-                            //product.UnitPriceAvailable = product.UnitPrice != null && product.UnitPriceDeclaration != null;
-
-                            product.HasUnitValues = (product.ProductUnitQuantity > 0) && (product.ProductUnitSize > 0) && (product.ProductUnitMeasure != null);
                             
                             if(product.ProductBadgeValues)
                             {
@@ -102,6 +99,7 @@ module Orckestra.Composer {
                                     .map((key) => ({Key: key, Value: product.ProductBadgeValues[key]}));
                             }
 
+                            product.HasUnitValues = PriceHelper.HasUnitValues(product);
                             product.PricePerUnit = PriceHelper.PricePerUnit(product.DisplayListPrice,
                                 product.ProductUnitQuantity,
                                 product.ProductUnitSize,
@@ -109,7 +107,7 @@ module Orckestra.Composer {
                             );
 
                             if(product.PricePerUnit){
-                                product.IsPricePerUnitZero = parseFloat(product.PricePerUnit.replace(/[^0-9\.-]+/g,'')) == 0.00;
+                                product.IsPricePerUnitZero = PriceHelper.IsPricePerUnitZero(product.PricePerUnit);
                             }
                             return product;
 

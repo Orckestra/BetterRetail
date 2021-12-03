@@ -20,5 +20,14 @@ module Orckestra.Composer {
             let formatedPrice = price.replace(priceNum.toFixed(2), pricePerUnitRounded);
             return  formatedPrice;
         }
+
+        public static HasUnitValues(product: any) {
+            return (product.ProductUnitQuantity > 0) && (product.ProductUnitSize > 0) && (product.ProductUnitMeasure != null);
+        }
+
+        public static IsPricePerUnitZero(price: any) {
+            return parseFloat(price.replace(/[^0-9\.-]+/g,'')) == 0.00;
+        }
+                              
     };
 }

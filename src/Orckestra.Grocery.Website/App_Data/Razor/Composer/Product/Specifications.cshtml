@@ -99,7 +99,7 @@
                 var dietaryFiber = GetAttributeValuePercent(group.Attributes, "DietaryFiber");
                 var servingSize = GetAttributeValue(group.Attributes, "ServingSize");
                 var servingPerContainer = GetAttributeValue(group.Attributes, "ServingPerContainer");
-                var calories = GetAttributeValue(group.Attributes, "CaloriesFromFat");
+                var calories = GetAttributeValue(group.Attributes, "Calories");
                 var caloriesFromFat = GetAttributeValue(group.Attributes, "CaloriesFromFat");
                 var transFat = GetAttributeValue(group.Attributes, "TransFat");
                 var sugars = GetAttributeValue(group.Attributes, "Sugars");
@@ -170,7 +170,7 @@
 
                             @ProductSepcificationHelpers.NutritionFactsAttributeRowVal(sugars.Item1, sugars.Item2)
 
-                            @ProductSepcificationHelpers.NutritionFactsAttributeRowVal(protein.Item1, protein.Item2)
+                            @ProductSepcificationHelpers.NutritionFactsAttributeRowVal(protein.Item1, protein.Item2, true)
                         </tbody>
                     </table>
 
