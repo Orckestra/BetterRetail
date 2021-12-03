@@ -90,6 +90,8 @@
     <Compile Include="Factory\IFacetPredicateFactory.cs" />
     <Compile Include="Factory\ProductSearchViewModelFactory.cs" />
     <Compile Include="Factory\SelectedFacetFactory.cs" />
+    <Compile Include="Providers\BaseSearchCriteriaProvider.cs" />
+    <Compile Include="Providers\IBaseSearchCriteriaProvider.cs" />
     <Compile Include="Providers\IAutocompleteProvider.cs" />
     <Compile Include="Providers\ISearchTermsTransformationProvider.cs" />
     <Compile Include="Providers\SearchTermsTransformationProvider.cs" />
