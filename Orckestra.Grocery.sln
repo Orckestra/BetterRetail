@@ -110,6 +110,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.Grocery"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.Grocery.Tests", "tests\Orckestra.Composer.Grocery.Tests\Orckestra.Composer.Grocery.Tests.csproj", "{A006CC7C-3290-4BE2-AC06-B2B8F694D4D0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Media.AutoImageResizing", "src\Orckestra.Media.AutoImageResizing\Orckestra.Media.AutoImageResizing.csproj", "{1C67610A-44C0-49BE-A75A-4482413E063A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -272,6 +274,10 @@ Global
 		{A006CC7C-3290-4BE2-AC06-B2B8F694D4D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A006CC7C-3290-4BE2-AC06-B2B8F694D4D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A006CC7C-3290-4BE2-AC06-B2B8F694D4D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C67610A-44C0-49BE-A75A-4482413E063A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C67610A-44C0-49BE-A75A-4482413E063A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C67610A-44C0-49BE-A75A-4482413E063A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C67610A-44C0-49BE-A75A-4482413E063A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -322,9 +328,10 @@ Global
 		{7E75D550-3C78-46D0-A124-065A5FFFA0B2} = {4C9DCD77-1564-4C86-AD89-DCC674C54879}
 		{ECC87B80-7C56-40B3-9961-6BD04B5DAF22} = {B770DD6A-41C2-4576-80D9-58023319B204}
 		{A006CC7C-3290-4BE2-AC06-B2B8F694D4D0} = {832CD4F4-EF5A-44B0-92FF-D159B6276AF7}
+		{1C67610A-44C0-49BE-A75A-4482413E063A} = {B770DD6A-41C2-4576-80D9-58023319B204}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.TransientFaultHandling.6.0.1304.0\lib\portable-net45+win+wp8;packages\EnterpriseLibrary.TransientFaultHandling.Data.6.0.1304.1\lib\NET45
 		SolutionGuid = {31789445-A48E-4454-9EC2-4B738A35383C}
+		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.TransientFaultHandling.6.0.1304.0\lib\portable-net45+win+wp8;packages\EnterpriseLibrary.TransientFaultHandling.Data.6.0.1304.1\lib\NET45
 	EndGlobalSection
 EndGlobal
