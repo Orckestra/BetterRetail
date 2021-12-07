@@ -49,6 +49,10 @@
             line-height: $line-height-base;
             color: $gray-800;
         }
+        padding-right: 25px;
+        @include media-breakpoint-up(sm) {
+            padding-right: 0;
+        }
     }
     .product-tile-brand {
         white-space: nowrap;
