@@ -5,7 +5,6 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
-using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Search.Parameters;
 using Orckestra.Composer.Search.Providers;
@@ -35,19 +34,18 @@ namespace Orckestra.Composer.Search.Api
         protected IInventoryLocationProvider InventoryLocationProvider { get; private set; }
         protected ISearchTermsTransformationProvider SearchTermsTransformationProvider { get; private set; }
         protected IAutocompleteProvider AutocompleteProvider { get; private set; }
-        protected IFulfillmentContext FulfillmentContext { get; }
-
         protected ISearchUrlProvider SearchUrlProvider { get; set; }
+        protected IBaseSearchCriteriaProvider BaseSearchCriteriaProvider { get; private set; }
 
         public SearchController(
-            IComposerContext composerContext, 
-            ISearchViewService searchViewService, 
-            IInventoryLocationProvider inventoryLocationProvider, 
+            IComposerContext composerContext,
+            ISearchViewService searchViewService,
+            IInventoryLocationProvider inventoryLocationProvider,
             ISearchTermsTransformationProvider searchTermsTransformationProvider,
             IAutocompleteProvider autocompleteProvider,
-            IFulfillmentContext fulfillmentContext,
             ISearchUrlProvider searchUrlProvider,
-            ICategoryBrowsingViewService categoryBrowsingViewService)
+            ICategoryBrowsingViewService categoryBrowsingViewService,
+            IBaseSearchCriteriaProvider baseSearchCriteriaProvider)
         {
             ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
             SearchViewService = searchViewService ?? throw new ArgumentNullException(nameof(searchViewService));
@@ -55,8 +53,8 @@ namespace Orckestra.Composer.Search.Api
             InventoryLocationProvider = inventoryLocationProvider ?? throw new ArgumentNullException(nameof(inventoryLocationProvider));
             SearchTermsTransformationProvider = searchTermsTransformationProvider ?? throw new ArgumentNullException(nameof(searchTermsTransformationProvider));
             AutocompleteProvider = autocompleteProvider ?? throw new ArgumentNullException(nameof(autocompleteProvider));
-            FulfillmentContext = fulfillmentContext ?? throw new ArgumentNullException(nameof(fulfillmentContext));
             SearchUrlProvider = searchUrlProvider ?? throw new ArgumentNullException(nameof(searchUrlProvider));
+            BaseSearchCriteriaProvider = baseSearchCriteriaProvider ?? throw new ArgumentNullException(nameof(baseSearchCriteriaProvider));
         }
 
 
@@ -67,21 +65,8 @@ namespace Orckestra.Composer.Search.Api
         {
             var queryString = HttpUtility.ParseQueryString(request.QueryString);
 
-            var searchCriteria = new SearchCriteria
-            {
-                Keywords = queryString["keywords"],
-                NumberOfItemsPerPage = 0,
-                IncludeFacets = true,
-                StartingIndex = 0,
-                SortBy = "score",
-                SortDirection = "desc",
-                Page = 1,
-                BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
-                Scope = ComposerContext.Scope,
-                CultureInfo = ComposerContext.CultureInfo,
-                InventoryLocationIds = await InventoryLocationProvider.GetInventoryLocationIdsForSearchAsync().ConfigureAwait(false),
-                AvailabilityDate = FulfillmentContext.AvailabilityAndPriceDate
-            };
+            var searchCriteria = await BaseSearchCriteriaProvider.GetSearchCriteriaAsync(queryString["keywords"], RequestUtils.GetBaseUrl(Request).ToString(), true).ConfigureAwait(false);
+            searchCriteria.NumberOfItemsPerPage = 0;
 
             searchCriteria.SelectedFacets.AddRange(SearchUrlProvider.BuildSelectedFacets(queryString));
 
@@ -127,23 +112,10 @@ namespace Orckestra.Composer.Search.Api
         public virtual async Task<IHttpActionResult> AutoComplete(AutoCompleteSearchViewModel request, int limit = MAXIMUM_AUTOCOMPLETE_RESULT)
         {
             var originalSearchTerms = request.Query.Trim();
-            var searchTerms = SearchTermsTransformationProvider.TransformSearchTerm(originalSearchTerms, ComposerContext.CultureInfo.Name); ;
+            var searchTerms = SearchTermsTransformationProvider.TransformSearchTerm(originalSearchTerms, ComposerContext.CultureInfo.Name);
 
-            var searchCriteria = new SearchCriteria
-            {
-                Keywords = searchTerms + "*",
-                NumberOfItemsPerPage = limit,
-                IncludeFacets = false,
-                StartingIndex = 0,
-                SortBy = "score",
-                SortDirection = "desc",
-                Page = 1,
-                BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
-                Scope = ComposerContext.Scope,
-                CultureInfo = ComposerContext.CultureInfo,
-                InventoryLocationIds = await InventoryLocationProvider.GetInventoryLocationIdsForSearchAsync().ConfigureAwait(false),
-                AvailabilityDate = FulfillmentContext.AvailabilityAndPriceDate
-            };
+            var searchCriteria = await BaseSearchCriteriaProvider.GetSearchCriteriaAsync(searchTerms, RequestUtils.GetBaseUrl(Request).ToString(), false).ConfigureAwait(false);
+            searchCriteria.NumberOfItemsPerPage = limit;
 
             var searchResultsViewModel = await SearchViewService.GetSearchViewModelAsync(searchCriteria).ConfigureAwait(false);
             if (searchResultsViewModel.ProductSearchResults?.TotalCount == 0 && originalSearchTerms != searchTerms)
@@ -198,7 +170,7 @@ namespace Orckestra.Composer.Search.Api
                         .FirstOrDefault()?
                         .Values
                         .Where((facetValue) => facetValue.Value == category.DisplayName[language]).SingleOrDefault();
-                
+
                 if (categoryCount != null)
                 {
                     categorySuggestionList.Add(new CategorySuggestionViewModel
@@ -223,7 +195,7 @@ namespace Orckestra.Composer.Search.Api
 
             return Ok(vm);
         }
-      
+
         [ActionName("suggestBrands")]
         [HttpPost]
         public virtual async Task<IHttpActionResult> SuggestBrands(AutoCompleteSearchViewModel request, int limit = MAXIMUM_BRAND_SUGGESTIONS)
@@ -245,7 +217,7 @@ namespace Orckestra.Composer.Search.Api
             };
             return Ok(vm);
         }
-       
+
         [ActionName("suggestTerms")]
         [HttpPost]
         public virtual async Task<IHttpActionResult> SuggestTerms(AutoCompleteSearchViewModel request, int limit = MAXIMUM_SEARCH_TERMS_SUGGESTIONS)

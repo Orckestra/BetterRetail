@@ -9,7 +9,6 @@ using Orckestra.Composer.Search.ViewModels;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel;
-using Orckestra.Overture.ServiceModel.Products;
 using Orckestra.Overture.ServiceModel.Products.Inventory;
 using Orckestra.Overture.ServiceModel.Search;
 using System;
@@ -59,7 +58,6 @@ namespace Orckestra.Composer.Search.Factory
 
             var productSearchVm = ViewModelMapper.MapTo<ProductSearchViewModel>(productDocument, cultureInfo);
             productSearchVm.ProductId = productDocument.ProductId;
-            productSearchVm.BrandId = ExtractLookupId("Brand_Facet", productDocument.PropertyBag);
             MapProductSearchViewModelInfos(productSearchVm, productDocument, cultureInfo);
             MapProductSearchViewModelUrl(productSearchVm, variantId, cultureInfo, criteria.BaseUrl);
             MapProductSearchViewModelImage(productSearchVm, imgDictionary);
