@@ -70,6 +70,10 @@
         &.list-unstyled li {
             margin-bottom: $spacer;
         }
+        @include media-breakpoint-down(xs) {
+            top: unset;
+            bottom: -17px;
+        }
     }
     .product-tile-price {
         font-family: "Roboto Condensed", sans-serif;
