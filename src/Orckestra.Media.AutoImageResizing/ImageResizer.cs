@@ -69,8 +69,7 @@ namespace Orckestra.Media.AutoImageResizing
                                 && _.Name.LocalName != "loading");
 
                 var newImgElement =  new XElement(ImgTagXName,
-                    new XAttribute("src", AutoImageResizingHelper.GetResizedImageUrl(imageSrc, MaxWidth)),
-                    new XAttribute("loading", "lazy"));
+                    new XAttribute("src", AutoImageResizingHelper.GetResizedImageUrl(imageSrc, MaxWidth)));
                 newImgElement.Add(attributesToCopy.Select(a => new XAttribute(a.Name, a.Value)));
 
                 pictureElement.Add(newImgElement);
