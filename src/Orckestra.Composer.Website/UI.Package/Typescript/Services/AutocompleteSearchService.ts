@@ -40,19 +40,19 @@ module Orckestra.Composer {
         }
 
         public categorySuggestionClicked(eventInformation: Orckestra.Composer.IEventInformation) {
-            if (eventInformation.data.url != null) {
+            if (eventInformation.data.url) {
                 window.location.href = eventInformation.data.url;
             } else {
-                this['_searchCriteria'].clearFacets();
+                this._searchCriteria.clearFacets();
                 var suggestion = eventInformation.data.suggestion;
                 var parents = eventInformation.data.parents;
                 for (let i = 0; i < parents.length; ++i) {
-                    this['_searchCriteria'].addSingleFacet(`CategoryLevel${i + 1}_Facet`, parents[i]);
+                    this._searchCriteria.addSingleFacet(`CategoryLevel${i + 1}_Facet`, parents[i]);
                 }
-                this['_searchCriteria'].addSingleFacet(`CategoryLevel${parents.length + 1}_Facet`, suggestion);
-                this['_searchCriteria'].keywords = '*';
-                this['_searchCriteria'].correctedSearchTerm = '*';
-                this['search']();
+                this._searchCriteria.addSingleFacet(`CategoryLevel${parents.length + 1}_Facet`, suggestion);
+                this._searchCriteria.keywords = '*';
+                this._searchCriteria.correctedSearchTerm = '*';
+                this.search();
             }
         }
 

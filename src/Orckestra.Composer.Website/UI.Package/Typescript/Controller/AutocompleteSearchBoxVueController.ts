@@ -93,7 +93,7 @@ module Orckestra.Composer {
                     this.sectionConfigs.suggestbrands.active = !!this.$el.attributes['brands-enable'];
                     this.sectionConfigs.suggestterms.active = !!this.$el.attributes['search-terms-enable'];
 
-                    this.sectionConfigs.suggestcategories.displayCategoryPage = !!this.$el.attributes['category-suggestions-category-page'];
+                    this.sectionConfigs.suggestcategories.displayCategoryPage = !!this.$el.attributes['category-suggestions-as-pages'];
 
                     this.minSearchSize = +this.$el.attributes['min-search-size'].value;
 
@@ -127,7 +127,7 @@ module Orckestra.Composer {
                                 const limit = this.sectionConfigs[sectionName].limit;
                                 let apiPath = `/api/search/${sectionName}?limit=${limit}`;
                                 if (sectionName === 'suggestcategories' && this.sectionConfigs.suggestcategories.displayCategoryPage) {
-                                    apiPath = apiPath + `&withCategoriesUrl=${this.sectionConfigs.suggestcategories.displayCategoryPage}`;
+                                    apiPath = `${apiPath}&withCategoriesUrl=${this.sectionConfigs.suggestcategories.displayCategoryPage}`;
                                 }
                                 return ComposerClient.post(apiPath, { Query: query })
                             });
