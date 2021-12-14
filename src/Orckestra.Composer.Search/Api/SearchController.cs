@@ -143,7 +143,7 @@ namespace Orckestra.Composer.Search.Api
 
         [ActionName("suggestCategories")]
         [HttpPost]
-        public virtual async Task<IHttpActionResult> SuggestCategories(AutoCompleteSearchViewModel request, int limit = MAXIMUM_CATEGORIES_SUGGESTIONS)
+        public virtual async Task<IHttpActionResult> SuggestCategories(AutoCompleteSearchViewModel request, int limit = MAXIMUM_CATEGORIES_SUGGESTIONS, bool withCategoriesUrl = false)
         {
             string language = ComposerContext.CultureInfo.Name;
             string searchTerm = request.Query.Trim().ToLower();
@@ -192,17 +192,19 @@ namespace Orckestra.Composer.Search.Api
                 .Take(limit)
                 .ToList();
 
-
-            foreach (var category in finalSuggestions)
+            if (withCategoriesUrl)
             {
-                string url = CategoryBrowsingUrlProvider.BuildCategoryBrowsingUrl(new BuildCategoryBrowsingUrlParam
+                foreach (var category in finalSuggestions)
                 {
-                    CategoryId = category.Id,
-                    BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
-                    CultureInfo = ComposerContext.CultureInfo,
-                    IsAllProductsPage = false
-                });
-                category.Url = url;
+                    string url = CategoryBrowsingUrlProvider.BuildCategoryBrowsingUrl(new BuildCategoryBrowsingUrlParam
+                    {
+                        CategoryId = category.Id,
+                        BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
+                        CultureInfo = ComposerContext.CultureInfo,
+                        IsAllProductsPage = false
+                    });
+                    category.Url = url;
+                }
             }
 
             CategorySuggestionsViewModel vm = new CategorySuggestionsViewModel

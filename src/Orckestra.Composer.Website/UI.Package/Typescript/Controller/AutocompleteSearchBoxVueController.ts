@@ -125,7 +125,11 @@ module Orckestra.Composer {
 
                             const results = sectionNames.map(sectionName => {
                                 const limit = this.sectionConfigs[sectionName].limit;
-                                return ComposerClient.post(`/api/search/${sectionName}?limit=${limit}`, { Query: query })
+                                let apiPath = `/api/search/${sectionName}?limit=${limit}`;
+                                if (sectionName === 'suggestcategories' && this.sectionConfigs.suggestcategories.displayCategoryPage) {
+                                    apiPath = apiPath + `&withCategoriesUrl=${this.sectionConfigs.suggestcategories.displayCategoryPage}`;
+                                }
+                                return ComposerClient.post(apiPath, { Query: query })
                             });
 
                             Q.all(results).then(values => {
@@ -176,17 +180,13 @@ module Orckestra.Composer {
                         this.searchMore();
                     },
                     selectedCategorySuggestion(suggestion) {
-                        if (this.sectionConfigs.suggestcategories.displayCategoryPage) {
-                            window.location.href = suggestion.item.Url;
-                        }
-                        else {
-                            EventHub.instance().publish('categorySuggestionClicked', {
-                                data: {
-                                    suggestion: suggestion.item.DisplayName,
-                                    parents: suggestion.item.Parents
-                                }
-                            });
-                        }
+                        EventHub.instance().publish('categorySuggestionClicked', {
+                            data: {
+                                suggestion: suggestion.item.DisplayName,
+                                parents: suggestion.item.Parents,
+                                url: suggestion.item.Url
+                            }
+                        });
                     },
                     selectedBrandSuggestion(suggestion) {
                         EventHub.instance().publish('brandSuggestionClicked', {
