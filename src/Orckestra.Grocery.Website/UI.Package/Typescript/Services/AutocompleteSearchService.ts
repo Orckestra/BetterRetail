@@ -40,16 +40,20 @@ module Orckestra.Composer {
         }
 
         public categorySuggestionClicked(eventInformation: Orckestra.Composer.IEventInformation) {
-            this._searchCriteria.clearFacets();
-            var suggestion = eventInformation.data.suggestion;
-            var parents = eventInformation.data.parents;
-            for (let i = 0; i < parents.length; ++i) {
-                this._searchCriteria.addSingleFacet(`CategoryLevel${i + 1}_Facet`, parents[i]);
+            if (eventInformation.data.url) {
+                window.location.href = eventInformation.data.url;
+            } else {
+                this._searchCriteria.clearFacets();
+                var suggestion = eventInformation.data.suggestion;
+                var parents = eventInformation.data.parents;
+                for (let i = 0; i < parents.length; ++i) {
+                    this._searchCriteria.addSingleFacet(`CategoryLevel${i + 1}_Facet`, parents[i]);
+                }
+                this._searchCriteria.addSingleFacet(`CategoryLevel${parents.length + 1}_Facet`, suggestion);
+                this._searchCriteria.keywords = '*';
+                this._searchCriteria.correctedSearchTerm = '*';
+                this.search();
             }
-            this._searchCriteria.addSingleFacet(`CategoryLevel${parents.length + 1}_Facet`, suggestion);
-            this._searchCriteria.keywords = '*';
-            this._searchCriteria.correctedSearchTerm = '*';
-            this.search();
         }
 
         public brandSuggestionClicked(eventInformation: Orckestra.Composer.IEventInformation) {
