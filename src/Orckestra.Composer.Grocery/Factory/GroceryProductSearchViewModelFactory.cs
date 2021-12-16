@@ -1,88 +1,84 @@
 ﻿using Orckestra.Composer.Configuration;
-using Orckestra.Composer.Enums;
 using Orckestra.Composer.Grocery.Providers;
 using Orckestra.Composer.Grocery.ViewModels;
+using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
+using Orckestra.Composer.Providers.Dam;
 using Orckestra.Composer.Search.Factory;
+using Orckestra.Composer.Search.Providers;
 using Orckestra.Composer.Search.ViewModels;
-using Orckestra.Composer.Services.Lookup;
+using Orckestra.Composer.Services;
 using Orckestra.Composer.ViewModels;
-using Orckestra.Overture.ServiceModel.Metadata;
 using Orckestra.Overture.ServiceModel.Search;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Orckestra.Composer.Parameters;
-using Orckestra.Composer.Search.Providers;
-using Orckestra.Composer.Services;
 
 namespace Orckestra.Composer.Grocery.Services
 {
     public class GroceryProductSearchViewModelFactory : ProductSearchViewModelFactory
     {
-        protected ILookupService LookupService { get; }
         public IConverterProvider ConverterProvider { get; }
 
         public GroceryProductSearchViewModelFactory(
             IViewModelMapper viewModelMapper,
             IProductUrlProvider productUrlProvider,
             IRecurringOrdersSettings recurringOrdersSettings,
-            IComposerContext composerContext, 
-            IProductSettingsViewService productSettings, 
+            IComposerContext composerContext,
+            IProductSettingsViewService productSettings,
             IPriceProvider priceProvider,
-            ILookupService lookupService,
-            IConverterProvider converterProvider) 
+            IConverterProvider converterProvider)
             : base(
                 viewModelMapper,
                 productUrlProvider,
-                recurringOrdersSettings, 
+                recurringOrdersSettings,
                 composerContext,
-                productSettings, 
+                productSettings,
                 priceProvider)
         {
-            LookupService = lookupService ?? throw new ArgumentNullException(nameof(lookupService));
             ConverterProvider = converterProvider ?? throw new ArgumentNullException(nameof(converterProvider));
         }
-        
-        public override async Task<IList<ProductSearchViewModel>> EnrichAppendProductSearchViewModels(IList<(ProductSearchViewModel, ProductDocument)> productSearchResultList, SearchCriteria criteria)
+
+        public override ProductSearchViewModel GetProductSearchViewModel(ProductDocument productDocument, SearchCriteria criteria,
+            IDictionary<(string ProductId, string VariantId), ProductMainImage> imgDictionary)
         {
-            var productSearchViewModels = await base.EnrichAppendProductSearchViewModels(productSearchResultList, criteria);
-            var productLookups = await LookupService.GetLookupsAsync(LookupType.Product);
-            var productBadgesLookupValues = GetLookupValuesByDisplayNameKeys(productLookups, criteria.CultureInfo.Name, "ProductBadges");
-            var unitOfMeasureLookupValues = GetLookupValuesByDisplayNameKeys(productLookups, criteria.CultureInfo.Name, "UnitOfMeasure");
-
-            foreach (var productSearchViewModel in productSearchViewModels)
-            {
-                BuildProductBadgeValues(productBadgesLookupValues, productSearchViewModel);
-                BuildPricePerUnit(unitOfMeasureLookupValues, productSearchViewModel);
-            }
-
-            return productSearchViewModels;
+            var productSearchViewModel =  base.GetProductSearchViewModel(productDocument, criteria, imgDictionary);
+            BuildProductBadgeValues(productDocument, productSearchViewModel);
+            BuildPricePerUnit(productDocument, productSearchViewModel);
+            return productSearchViewModel;
         }
 
-        public virtual void BuildProductBadgeValues(ILookup<string, LookupValue> productBadgesLookupValues, ProductSearchViewModel productSearchViewModel)
+        public virtual void BuildProductBadgeValues(ProductDocument productDocument, ProductSearchViewModel productSearchViewModel)
         {
             var extendedVM = productSearchViewModel.AsExtensionModel<IGroceryProductSearchViewModel>();
-            if (extendedVM.ProductBadges == null)
+            if (extendedVM.ProductBadges == null || !extendedVM.ProductBadges.Any())
+            {
+                return;
+            }
+
+            var productBadgesValuesFromFacet = base.ExtractLookupId("ProductBadges_Facet", productDocument.PropertyBag)
+                ?.Split('|');
+
+            if (productBadgesValuesFromFacet == null || !productBadgesValuesFromFacet.Any())
             {
                 return;
             }
 
             extendedVM.ProductBadgeValues = new Dictionary<string, string>();
-            foreach (var extendedVmProductBadge in extendedVM.ProductBadges)
+            for (var i = 0; i < extendedVM.ProductBadges.Length; i++)
             {
-                if (!productBadgesLookupValues.Contains(extendedVmProductBadge)) continue;
-
-                var value = productBadgesLookupValues[extendedVmProductBadge].FirstOrDefault()?.Value;
-                if (value != null)
+                var extendedVmProductBadge = extendedVM.ProductBadges[i];
+                var value = productBadgesValuesFromFacet[i];
+                if (!extendedVM.ProductBadgeValues.ContainsKey(value))
+                {
                     extendedVM.ProductBadgeValues.Add(value, extendedVmProductBadge);
+                }
             }
 
             productSearchViewModel.Context["ProductBadgeValues"] = extendedVM.ProductBadgeValues;
         }
 
-        public virtual void BuildPricePerUnit(ILookup<string, LookupValue>  unitOfMeasureLookupValues, ProductSearchViewModel productSearchViewModel)
+        public virtual void BuildPricePerUnit(ProductDocument productDocument, ProductSearchViewModel productSearchViewModel)
         {
             var extendedVM = productSearchViewModel.AsExtensionModel<IGroceryProductSearchViewModel>();
 
@@ -90,14 +86,8 @@ namespace Orckestra.Composer.Grocery.Services
                 string.IsNullOrEmpty(extendedVM.ProductUnitMeasure))
                 return;
 
-            var baseProductMeasureValue = unitOfMeasureLookupValues.Contains(extendedVM.BaseProductMeasure)
-                ? unitOfMeasureLookupValues[extendedVM.BaseProductMeasure].FirstOrDefault()?.Value
-                : extendedVM.BaseProductMeasure;
-
-            var weightVolumeQuantityMeasureValue =
-                unitOfMeasureLookupValues.Contains(extendedVM.ProductUnitMeasure)
-                    ? unitOfMeasureLookupValues[extendedVM.ProductUnitMeasure].FirstOrDefault()?.Value
-                    : extendedVM.BaseProductMeasure;
+            var baseProductMeasureValue = base.ExtractLookupId("BaseProductMeasure_Facet", productDocument.PropertyBag);
+            var weightVolumeQuantityMeasureValue = base.ExtractLookupId("ProductUnitMeasure_Facet", productDocument.PropertyBag);
 
             var convertedVolumeMeasurment = (decimal)ConverterProvider.ConvertMeasurements(extendedVM.BaseProductSize,
                 baseProductMeasureValue, weightVolumeQuantityMeasureValue);
@@ -105,21 +95,6 @@ namespace Orckestra.Composer.Grocery.Services
             extendedVM.ConvertedVolumeMeasurement = convertedVolumeMeasurment;
             productSearchViewModel.Context["ConvertedVolumeMeasurement"] = convertedVolumeMeasurment;
             productSearchViewModel.Context["BaseProductMeasure"] = extendedVM.BaseProductMeasure;
-        }
-
-        private ILookup<string, LookupValue> GetLookupValuesByDisplayNameKeys(List<Lookup> lookups, string cultureName, string lookupName)
-        {
-            return lookups
-                ?.FirstOrDefault(item => item.LookupName == lookupName)
-                ?.Values
-                .ToLookup(_ =>
-                {
-                    var localizedDisplayName = _.DisplayName.GetLocalizedValue(cultureName);
-                    
-                    if (!string.IsNullOrEmpty(localizedDisplayName)) return localizedDisplayName;
-
-                    return _.Value; 
-                });
         }
     }
 }
