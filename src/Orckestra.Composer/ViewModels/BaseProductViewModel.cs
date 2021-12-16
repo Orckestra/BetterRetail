@@ -1,5 +1,4 @@
-﻿using Orckestra.Composer.Enums;
-
+﻿
 namespace Orckestra.Composer.ViewModels
 {
     public class BaseProductViewModel : BaseViewModel
@@ -34,14 +33,6 @@ namespace Orckestra.Composer.ViewModels
         /// Gets or sets the display name. May be truncated.
         /// </summary>
         public string DisplayName { get; set; }
-
-        //Not a lookup in this case.
-        [Lookup(LookupType.Product, "Brand")]
-        public string Brand { get; set; }
-
-        //Must be parsed from Overture's output.
-        [MapTo("Brand")]
-        public string BrandId { get; set; }
 
         /// <summary>
         /// Gets or sets the description.

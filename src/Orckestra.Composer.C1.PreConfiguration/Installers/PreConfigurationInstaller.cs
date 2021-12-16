@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-using Autofac;
-using Autofac.Integration.Mvc;
+﻿using Autofac;
 using Composite.Core;
 using Composite.Core.PackageSystem;
 using Composite.Core.PackageSystem.PackageFragmentInstallers;
@@ -14,6 +7,10 @@ using Orckestra.Composer.CompositeC1.Builders;
 using Orckestra.Composer.Repositories;
 using Orckestra.Overture;
 using Orckestra.Overture.Caching;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Xml.Linq;
 
 namespace Orckestra.Composer.CompositeC1.Installers
 {

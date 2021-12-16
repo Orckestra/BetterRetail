@@ -95,7 +95,7 @@ namespace Orckestra.Composer.Product.Services
             // make a single request to get all product prices at once, instead of making a request for each product
             var productIds = param.ProductIds.Select(p => p.ProductId).ToList();
             var prices = ProductRepository.CalculatePricesAsync(productIds, param.Scope, FulfillmentContext.AvailabilityAndPriceDate);
-            var images = GetImagesAsync(products);
+            var images = DamProvider.GetProductMainImagesAsync(GetImagesParam(products));
             await Task.WhenAll(prices, images);
 
             var createVmParam = new CreateRelatedProductViewModelParam
@@ -162,7 +162,7 @@ namespace Orckestra.Composer.Product.Services
             return results;
         }
 
-        protected virtual async Task<List<ProductMainImage>> GetImagesAsync(IEnumerable<ProductWithVariant> products)
+        protected virtual GetProductMainImagesParam GetImagesParam(IEnumerable<ProductWithVariant> products)
         {
             var imageRequests = products.Select(identifier =>
             {
@@ -177,7 +177,9 @@ namespace Orckestra.Composer.Product.Services
                     ProductDefinitionName = identifier.Product.DefinitionName
                 };
 
-                var imageUrl = DamProvider.GetMediaImageUrl(identifier.Product, identifier.Variant?.Id);
+                identifier.Product.PropertyBag.TryGetValue("ImageUrl", out var imageUrlProperty);
+                var imageUrl = imageUrlProperty?.ToString() ?? DamProvider.GetMediaImageUrl(identifier.Product, identifier.Variant?.Id);
+
                 if (imageUrl != null)
                 {
                     imageRequest.PropertyBag = new Dictionary<string, object> { ["ImageUrl"] = imageUrl };
@@ -185,15 +187,11 @@ namespace Orckestra.Composer.Product.Services
                 return imageRequest;
             }).ToList();
 
-            var imageRequestParam = new GetProductMainImagesParam
+            return new GetProductMainImagesParam
             {
-                ImageSize = ProductConfiguration.ProductSummaryImageSize,
+                ImageSize = ProductConfiguration.ThumbnailImageSize,
                 ProductImageRequests = imageRequests
             };
-
-            var mainImages = await DamProvider.GetProductMainImagesAsync(imageRequestParam).ConfigureAwait(false);
-
-            return mainImages;
         }
 
         protected virtual RelatedProductViewModel CreateRelatedProductsViewModel(
