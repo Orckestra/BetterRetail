@@ -143,7 +143,6 @@
 
   <xsl:template match="configuration/system.webServer">
     <xsl:copy xml:space="preserve"><xsl:apply-templates select="@* | node()"/>
-    <validation validateIntegratedModeConfiguration="false" />
     <httpProtocol>
       <customHeaders>
         <add name="X-UA-Compatible" value="IE=edge" />

@@ -66,7 +66,6 @@ namespace Orckestra.Composer.Website.App_Insights.AppInsightsListener
                     "Win32 ThreadId"
                 };
 
-
                 foreach (var el in propertiesToProcess)
                 {
                     AddTelemetryExceptionProperty(message, el, telemetryExceptionProperties);
