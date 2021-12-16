@@ -53,6 +53,7 @@
         <File sourceFilename="~\Bin\Orckestra.Composer.CompositeC1.DataTypes.dll" targetFilename="~\Bin\Orckestra.Composer.CompositeC1.DataTypes.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Orckestra.Composer.ContentSearch.dll" targetFilename="~\Bin\Orckestra.Composer.ContentSearch.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Orckestra.ExperienceManagement.Configuration.dll" targetFilename="~\Bin\Orckestra.ExperienceManagement.Configuration.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Orckestra.Media.AutoImageResizing.dll" targetFilename="~\Bin\Orckestra.Media.AutoImageResizing.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Newtonsoft.Json.dll" targetFilename="~\Bin\Newtonsoft.Json.dll" allowOverwrite="true" addAssemblyBinding="true"/>
         <File sourceFilename="~\Bin\Microsoft.ServiceBus.dll" targetFilename="~\Bin\Microsoft.ServiceBus.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Orckestra.Composer.HandlebarsCompiler.dll" targetFilename="~\Bin\Orckestra.Composer.HandlebarsCompiler.dll" allowOverwrite="true" />

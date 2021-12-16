@@ -38,7 +38,7 @@
         <form id="vueSearchFacets" name="searchFacets" v-cloak="true">
             @FacetHelpers.PromotedFacetValues()
 
-            <div v-for="facet in Facets" v-if="facet.IsDisplayed"
+            <div v-for="facet in Facets" v-if="facet.IsDisplayed" v-bind:key="facet.FieldName + facet.FacetType"
                  class="card  bg-light  mb-3  facets-card"
                  v-bind:data-facetfieldname="facet.FieldName"
                  v-bind:data-facettype="facet.FacetType"

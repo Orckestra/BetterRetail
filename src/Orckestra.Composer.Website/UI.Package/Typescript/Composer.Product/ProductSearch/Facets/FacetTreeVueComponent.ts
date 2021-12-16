@@ -64,7 +64,7 @@ module Orckestra.Composer {
                     },
                     isSelectedInColapsed() {
                         const { ChildNodes, MaxCollapsedCount } = this.currentNode;
-                        return ChildNodes.findIndex((n:any) => n.IsSelected) >= MaxCollapsedCount;
+                        return ChildNodes.map(e => e.IsSelected).lastIndexOf(true) >= MaxCollapsedCount;
                     }
                 },
                 methods: {
