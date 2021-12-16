@@ -36,6 +36,10 @@
 
     [FunctionParameter(Label = "MinimumCharactersNumber", Help = "Number of characters before showing suggestions", DefaultValue = 3)]
     public int MinimumCharactersNumber { get; set; }
+
+    [FunctionParameter(Label = "CategorySuggestionsAsCategoryPages", Help = "If False, category suggestions reference the the Search page with pre-selected category facets. Otherwise, they reference to the Category Page if exists. If there are no category page, then suggestion will be absent.", DefaultValue = true)]
+    public bool CategorySuggestionsAsCategoryPages { get; set; }
+
 }
 
 @{
@@ -64,6 +68,7 @@
                  categories-limit="@MaxCategoriesSuggestionsCount"
                  brand-limit="@MaxBrandSuggestionsCount"
                  min-search-size="@MinimumCharactersNumber"
+                 category-suggestions-as-pages="@CategorySuggestionsAsCategoryPages"
                  class="form-row">
 
                 <div class="input-group">
@@ -122,11 +127,11 @@
                                                 <span data-qa="search-product-brand" v-if="suggestion.item.BrandDisplayName">{{suggestion.item.BrandDisplayName}}<br /></span>
                                                 <span data-qa="search-product-brand" v-else-if="suggestion.item.Brand">{{suggestion.item.Brand}}</span>
                                                 <a data-qa="search-product-title"
-                                                class="suggestion-title"
-                                                v-on:mouseup.stop=""
-                                                v-bind:href="suggestion.item.Url"
-                                                v-bind:title="suggestion.item.FullDisplayName"
-                                                v-html="suggestion.item.mappedDisplayName"></a>
+                                                   class="suggestion-title"
+                                                   v-on:mouseup.stop=""
+                                                   v-bind:href="suggestion.item.Url"
+                                                   v-bind:title="suggestion.item.FullDisplayName"
+                                                   v-html="suggestion.item.mappedDisplayName"></a>
                                             </div>
                                             <div class="product-tile-special-price">
                                                 <del v-if="suggestion.item.IsOnSale">{{suggestion.item.DisplayListPrice}}</del>

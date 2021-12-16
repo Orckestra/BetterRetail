@@ -42,7 +42,7 @@ module Orckestra.Composer {
             this.searchService['_baseSearchUrl'] = document.getElementById("frm-search-box").getAttribute('action');
         }
 
-        public initializeVue () {
+        public initializeVue() {
             const self = this;
             this.VueAutocomplete = new Vue({
                 el: '#vueAutocomplete',
@@ -107,9 +107,11 @@ module Orckestra.Composer {
                     this.sectionConfigs.suggestbrands.active = !!this.$el.attributes['brands-enable'];
                     this.sectionConfigs.suggestterms.active = !!this.$el.attributes['search-terms-enable'];
 
+                    this.sectionConfigs.suggestcategories.displayCategoryPage = !!this.$el.attributes['category-suggestions-as-pages'];
+
                     this.minSearchSize = +this.$el.attributes['min-search-size'].value;
 
-                    if(this.query) {
+                    if (this.query) {
                         this.fetchResults(this.query);
                     }
 
@@ -126,14 +128,14 @@ module Orckestra.Composer {
                 updated() {
                 },
                 computed: {
-                    isEmptyRight () {
+                    isEmptyRight() {
                         return this.suggestions.length === 1;
                     }
                 },
                 methods: {
                     fetchResults(result) {
                         const query = this.query;
-                        if(query.length < this.minSearchSize)
+                        if (query.length < this.minSearchSize)
                             return;
 
                         clearTimeout(this.timeout);
@@ -142,7 +144,11 @@ module Orckestra.Composer {
 
                             const results = sectionNames.map(sectionName => {
                                 const limit = this.sectionConfigs[sectionName].limit;
-                                return ComposerClient.post(`/api/search/${sectionName}?limit=${limit}`, { Query: query }).catch(() => []);
+                                let apiPath = `/api/search/${sectionName}?limit=${limit}`;
+                                if (sectionName === 'suggestcategories' && this.sectionConfigs.suggestcategories.displayCategoryPage) {
+                                    apiPath = `${apiPath}&withCategoriesUrl=${this.sectionConfigs.suggestcategories.displayCategoryPage}`;
+                                }
+                                return ComposerClient.post(apiPath, { Query: query }).catch(() => []);
                             });
 
                             Q.all(results).then(values => {
@@ -157,7 +163,7 @@ module Orckestra.Composer {
                     highlightSuggestion(value, query) {
                         const start = value.toLowerCase().indexOf(query.toLowerCase());
                         const end = start + query.length;
-                        if(start < 0) return value;
+                        if (start < 0) return value;
 
                         return [
                             value.slice(0, start),
@@ -173,7 +179,7 @@ module Orckestra.Composer {
                     },
                     mapSuggestions(suggestions = [], sectionName, query) {
                         return suggestions.map((suggest) => {
-                            const title = sectionName === 'suggestcategories' ? [...suggest.Parents, suggest.DisplayName].join(' > ')  : suggest.DisplayName;
+                            const title = sectionName === 'suggestcategories' ? [...suggest.Parents, suggest.DisplayName].join(' > ') : suggest.DisplayName;
                             const data = sectionName === 'autocomplete' ? this.extendProductItem(suggest) : suggest;
 
                             return ({ ...data, mappedDisplayName: this.highlightSuggestion(title, query) })
@@ -198,7 +204,8 @@ module Orckestra.Composer {
                         EventHub.instance().publish('categorySuggestionClicked', {
                             data: {
                                 suggestion: suggestion.item.DisplayName,
-                                parents: suggestion.item.Parents
+                                parents: suggestion.item.Parents,
+                                url: suggestion.item.Url
                             }
                         });
                     },
@@ -209,7 +216,7 @@ module Orckestra.Composer {
                     },
                     onImageError(e, suggestion) {
                         const img = suggestion.item.FallbackImageUrl;
-                        if(img) {
+                        if (img) {
                             e.target.onerror = null;
                             e.target.src = img;
                         }
@@ -224,13 +231,13 @@ module Orckestra.Composer {
                     onCartUpdated(result) {
                         this.Cart = result;
                         const section = this.suggestions.find(section => section.name === 'autocomplete');
-                        if(section) {
+                        if (section) {
                             section.data = section.data.map(this.extendProductItem)
                         }
                     },
                     extendProductItem(product) {
                         let cartItem = this.Cart && this.Cart.LineItemDetailViewModels &&
-                        this.Cart.LineItemDetailViewModels.find((i: any) => i.ProductId === product.ProductId && i.VariantId == product.VariantId);
+                            this.Cart.LineItemDetailViewModels.find((i: any) => i.ProductId === product.ProductId && i.VariantId == product.VariantId);
                         product.InCart = !!cartItem;
                         product.LineItemId = cartItem && cartItem.Id;
                         product.Quantity = cartItem && cartItem.Quantity || 0;
@@ -297,7 +304,7 @@ module Orckestra.Composer {
         }
 
         public addToCart(event, product) {
-            const {HasVariants, ProductId, VariantId, Price, RecurringOrderProgramName} = product;
+            const { HasVariants, ProductId, VariantId, Price, RecurringOrderProgramName } = product;
 
             let promise: Q.Promise<any>;
             product.Loading = true;
@@ -310,10 +317,10 @@ module Orckestra.Composer {
                 promise = this.addNonVariantProductToCart(ProductId, Price, RecurringOrderProgramName);
             }
 
-            promise.fin(() =>{
+            promise.fin(() => {
                 event.target.disabled = false;
                 product.Loading = false;
-            } );
+            });
         }
 
         /**
@@ -338,7 +345,7 @@ module Orckestra.Composer {
 
         protected publishDataForAnalytics(product, quantity: number, eventName: string) {
             const data: any = this.getProductDataForAnalytics(product, quantity);
-            this.eventHub.publish(eventName,  { data });
+            this.eventHub.publish(eventName, { data });
         }
 
         protected getProductDataForAnalytics(vm: any, quantity: number): any {

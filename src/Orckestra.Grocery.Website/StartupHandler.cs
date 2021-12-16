@@ -122,6 +122,7 @@ namespace Orckestra.Composer.Grocery.Website
         private static void SetUpSearchConfiguration()
         {
             SearchConfiguration.ShowAllPages = true;
+            SearchConfiguration.MaxItemsPerPage = 20;
         }
 
         public static void ConfigureServices(IServiceCollection collection)

@@ -36,6 +36,7 @@ namespace Orckestra.Composer.Search.Api
         protected IAutocompleteProvider AutocompleteProvider { get; private set; }
         protected ISearchUrlProvider SearchUrlProvider { get; set; }
         protected IBaseSearchCriteriaProvider BaseSearchCriteriaProvider { get; private set; }
+        protected ICategoryBrowsingUrlProvider CategoryBrowsingUrlProvider { get; }
 
         public SearchController(
             IComposerContext composerContext,
@@ -45,7 +46,8 @@ namespace Orckestra.Composer.Search.Api
             IAutocompleteProvider autocompleteProvider,
             ISearchUrlProvider searchUrlProvider,
             ICategoryBrowsingViewService categoryBrowsingViewService,
-            IBaseSearchCriteriaProvider baseSearchCriteriaProvider)
+            IBaseSearchCriteriaProvider baseSearchCriteriaProvider,
+            ICategoryBrowsingUrlProvider categoryBrowsingUrlProvider)
         {
             ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
             SearchViewService = searchViewService ?? throw new ArgumentNullException(nameof(searchViewService));
@@ -55,6 +57,7 @@ namespace Orckestra.Composer.Search.Api
             AutocompleteProvider = autocompleteProvider ?? throw new ArgumentNullException(nameof(autocompleteProvider));
             SearchUrlProvider = searchUrlProvider ?? throw new ArgumentNullException(nameof(searchUrlProvider));
             BaseSearchCriteriaProvider = baseSearchCriteriaProvider ?? throw new ArgumentNullException(nameof(baseSearchCriteriaProvider));
+            CategoryBrowsingUrlProvider = categoryBrowsingUrlProvider ?? throw new ArgumentNullException(nameof(categoryBrowsingUrlProvider));
         }
 
 
@@ -140,7 +143,7 @@ namespace Orckestra.Composer.Search.Api
 
         [ActionName("suggestCategories")]
         [HttpPost]
-        public virtual async Task<IHttpActionResult> SuggestCategories(AutoCompleteSearchViewModel request, int limit = MAXIMUM_CATEGORIES_SUGGESTIONS)
+        public virtual async Task<IHttpActionResult> SuggestCategories(AutoCompleteSearchViewModel request, int limit = MAXIMUM_CATEGORIES_SUGGESTIONS, bool withCategoriesUrl = false)
         {
             string language = ComposerContext.CultureInfo.Name;
             string searchTerm = request.Query.Trim().ToLower();
@@ -177,7 +180,8 @@ namespace Orckestra.Composer.Search.Api
                     {
                         DisplayName = displayName,
                         Parents = parents.Select((parent) => parent.DisplayName[language]).ToList(),
-                        Quantity = categoryCount.Count
+                        Quantity = categoryCount.Count,
+                        Id = category.Id
                     });
                 }
             };
@@ -187,6 +191,21 @@ namespace Orckestra.Composer.Search.Api
                 .OrderByDescending((category) => category.Quantity)
                 .Take(limit)
                 .ToList();
+
+            if (withCategoriesUrl)
+            {
+                foreach (var category in finalSuggestions)
+                {
+                    string url = CategoryBrowsingUrlProvider.BuildCategoryBrowsingUrl(new BuildCategoryBrowsingUrlParam
+                    {
+                        CategoryId = category.Id,
+                        BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
+                        CultureInfo = ComposerContext.CultureInfo,
+                        IsAllProductsPage = false
+                    });
+                    category.Url = url;
+                }
+            }
 
             CategorySuggestionsViewModel vm = new CategorySuggestionsViewModel
             {
