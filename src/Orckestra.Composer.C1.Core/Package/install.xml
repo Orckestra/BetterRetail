@@ -67,6 +67,7 @@
         <File sourceFilename="~\robots.prd.txt" targetFilename="~\robots.prd.txt" allowOverwrite="true" />
         <File sourceFilename="~\Global.asax" targetFilename="~\Global.asax" allowOverwrite="true" />
         <File sourceFilename="~\error.html" targetFilename="~\error.html" allowOverwrite="true" />
+        <File sourceFilename="~\ApplicationInsights.config" targetFilename="~\ApplicationInsights.config" allowOverwrite="true" />
       </Files>
       <Directories>
         <Directory sourceDirectory="~\UI.Package\Images\" targetDirectory="~\UI.Package\Images\" allowOverwrite="true" deleteTargetDirectory="false" />

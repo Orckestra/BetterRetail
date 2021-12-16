@@ -57,7 +57,7 @@
   <xsl:template match="configuration">
     <xsl:copy xml:space="preserve">
     <xsl:apply-templates select="@*" />
-    <xsl:if test="count(configSections)=0">
+    <xsl:if test="not(configSections)">
   <configSections>
     <xsl:copy-of select="$ConfigBuildersSection"/>
 		<xsl:copy-of select="$ComposerSectionGroup"/>
@@ -71,7 +71,7 @@
       <xsl:copy-of select="$AppSettings"/>
     </xsl:if>
     <xsl:apply-templates select="node()" />
-		<xsl:if test="count(experienceManagement)=0" xml:space="preserve">
+		<xsl:if test="not(experienceManagement)" xml:space="preserve">
 				<experienceManagement>
 					<settings configSource="App_Config\ExperienceManagement.config" />
 				</experienceManagement>
@@ -85,7 +85,7 @@
         <xsl:copy-of select="$ConfigBuildersSection"/>
         <xsl:copy-of select="$ComposerSectionGroup"/>
         <xsl:apply-templates select="node()" />
-	      <xsl:if test="count(sectionGroup[@name='experienceManagement'])=0">
+	      <xsl:if test="not(sectionGroup[@name='experienceManagement'])">
 				  <sectionGroup name="experienceManagement" type="System.Configuration.ConfigurationSectionGroup, System.Configuration">
 					  <section name="settings" type="System.Configuration.NameValueFileSectionHandler" />
 				  </sectionGroup>
@@ -109,6 +109,10 @@
         <add name="composer" type="Orckestra.Composer.Providers.Membership.OvertureMembershipProvider, Orckestra.Composer" />
       </providers>
     </membership>
+    <httpModules>
+      <add name="TelemetryCorrelationHttpModule" type="Microsoft.AspNet.TelemetryCorrelation.TelemetryCorrelationHttpModule, Microsoft.AspNet.TelemetryCorrelation" />
+      <add name="ApplicationInsightsWebTracking" type="Microsoft.ApplicationInsights.Web.ApplicationInsightsHttpModule, Microsoft.AI.Web" />
+    </httpModules>
 <xsl:apply-templates select="node()" /></xsl:copy>
 	</xsl:template>
 
@@ -137,6 +141,7 @@
 
   <xsl:template match="configuration/system.webServer">
     <xsl:copy xml:space="preserve"><xsl:apply-templates select="@* | node()"/>
+    <validation validateIntegratedModeConfiguration="false" />
     <httpProtocol>
       <customHeaders>
         <add name="X-UA-Compatible" value="IE=edge" />
@@ -169,14 +174,30 @@
     <xsl:copy>
       <xsl:apply-templates select="@*" />
 
-      <xsl:if test="count(add[@name='ContextPreservationHttpModule'])=0">
+      <xsl:if test="not(add[@name='ContextPreservationHttpModule'])">
         <add name="ContextPreservationHttpModule" type="Orckestra.Composer.CompositeC1.ContextPreservationHttpModule, Orckestra.Composer.CompositeC1" />
       </xsl:if>
 
       <xsl:apply-templates select="node()" />
 
-      <xsl:if test="count(add[@name='ComposerRequestInterceptor'])=0">
+      <xsl:if test="not(add[@name='ComposerRequestInterceptor'])">
         <add name="ComposerRequestInterceptor" type="Orckestra.Composer.CompositeC1.RequestInterceptorHttpModule, Orckestra.Composer.CompositeC1" />
+      </xsl:if>
+
+      <xsl:if test="not(remove[@name='TelemetryCorrelationHttpModule'])">
+        <remove name="TelemetryCorrelationHttpModule" />
+      </xsl:if>
+
+      <xsl:if test="not(add[@name='TelemetryCorrelationHttpModule'])">
+        <add name="TelemetryCorrelationHttpModule" type="Microsoft.AspNet.TelemetryCorrelation.TelemetryCorrelationHttpModule, Microsoft.AspNet.TelemetryCorrelation" preCondition="managedHandler" />
+      </xsl:if>
+
+      <xsl:if test="not(remove[@name='ApplicationInsightsWebTracking'])">
+        <remove name="ApplicationInsightsWebTracking" />
+      </xsl:if>
+
+      <xsl:if test="not(add[@name='ApplicationInsightsWebTracking'])">
+        <add name="ApplicationInsightsWebTracking" type="Microsoft.ApplicationInsights.Web.ApplicationInsightsHttpModule, Microsoft.AI.Web" preCondition="managedHandler" />
       </xsl:if>
 
     </xsl:copy>
