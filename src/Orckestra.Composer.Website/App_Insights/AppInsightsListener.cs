@@ -27,7 +27,6 @@ namespace Orckestra.Composer.Website.App_Insights.AppInsightsListener
             {
                 Type = TelemetryInitializer.C1Function,
                 Success = false
-                
             };
 
             if (!string.IsNullOrWhiteSpace(functionName))

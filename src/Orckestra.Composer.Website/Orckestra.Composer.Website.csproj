@@ -458,7 +458,6 @@
   <ItemGroup>
     <Folder Include="App_Data\Composite\DynamicTypeForms\Orckestra\List\" />
     <Folder Include="App_Data\Razor\Orckestra\Lists\" />
-    <Folder Include="App_Insights\AppInsightsListener\" />
     <Folder Include="Views\ProductSet\" />
     <Folder Include="Views\SearchQuery\" />
   </ItemGroup>
