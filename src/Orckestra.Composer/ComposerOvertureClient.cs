@@ -17,7 +17,6 @@ namespace Orckestra.Composer
 {
     public sealed class ComposerOvertureClient : IOvertureClient
     {
-
         private static readonly ILog Log = LogProvider.GetCurrentClassLogger();
 
         private readonly IOvertureClient _client;
@@ -204,6 +203,5 @@ namespace Orckestra.Composer
 
             return clientConfig;
         }
-
     }
 }

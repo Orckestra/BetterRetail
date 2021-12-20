@@ -6,8 +6,8 @@ namespace Orckestra.Composer.ActionFilters
 {
     public class AppInsightsActionFilter : IAutofacActionFilter
     {
-        public static string AIAFControllerKey = nameof(AIAFControllerKey);
-        public static string AIAFActionKey = nameof(AIAFActionKey);
+        public const string AIAFControllerKey = nameof(AIAFControllerKey);
+        public const string AIAFActionKey = nameof(AIAFActionKey);
 
         public void OnActionExecuted(HttpActionExecutedContext actionExecutedContext) { }
 

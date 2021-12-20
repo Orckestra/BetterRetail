@@ -8,6 +8,9 @@ namespace Orckestra.Composer.Website.App_Insights
 {
     public class TelemetryInitializer : ITelemetryInitializer
     {
+        private static readonly string _operationPrefix 
+            = $"WFE{(ConfigurationManager.AppSettings["Variation"] ?? "").ToUpperInvariant()}";
+
         static TelemetryInitializer()
         {
             string aiKeyFromAppSettings = ConfigurationManager.AppSettings["InstrumentationKey"];
@@ -20,16 +23,14 @@ namespace Orckestra.Composer.Website.App_Insights
         public void Initialize(ITelemetry telemetry)
         {
             if (!(telemetry is OperationTelemetry operationTelemetry)) return;
-            var variation = (ConfigurationManager.AppSettings["Variation"] ?? "").ToUpperInvariant();
-            var operationPrefix = $"WFE{variation}";
 
             if (string.IsNullOrEmpty(telemetry.Context.Cloud.RoleName))
             {
-                telemetry.Context.Cloud.RoleName = operationPrefix;
+                telemetry.Context.Cloud.RoleName = _operationPrefix;
             }
 
             var operationName = telemetry.Context.Operation.Name;
-            if (operationName.StartsWith(operationPrefix)) return;
+            if (operationName.StartsWith(_operationPrefix)) return;
 
             if (operationTelemetry.Properties.ContainsKey(AppInsightsListener.AppInsightsListener.C1Function))
             {
@@ -42,8 +43,8 @@ namespace Orckestra.Composer.Website.App_Insights
                 var actionName = context.Items[AIAFActionKey]?.ToString();
 
                 operationName = !string.IsNullOrWhiteSpace(controllerName) && !string.IsNullOrWhiteSpace(actionName)
-                    ? $"{operationPrefix} {controllerName}.{actionName}"
-                    : $"{operationPrefix} {operationName}";
+                    ? $"{_operationPrefix} {controllerName}.{actionName}"
+                    : $"{_operationPrefix} {operationName}";
             }
 
             operationTelemetry.Name = operationName;
