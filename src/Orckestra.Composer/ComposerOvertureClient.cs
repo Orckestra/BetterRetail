@@ -17,7 +17,6 @@ namespace Orckestra.Composer
 {
     public sealed class ComposerOvertureClient : IOvertureClient
     {
-        public const string RefAppRequestTypeKey = "RefAppRequestTypeKey";
 
         private static readonly ILog Log = LogProvider.GetCurrentClassLogger();
 
@@ -30,73 +29,61 @@ namespace Orckestra.Composer
 
         public TResponse Send<TResponse>(IReturn<TResponse> request)
         {
-            PreserveRequestType(request.GetType());
             return Intercept(() => _client.Send(request), request);
         }
 
         public void Send(IReturnVoid requestDto)
         {
-            PreserveRequestType(requestDto.GetType());
             Intercept(() => _client.Send(requestDto), requestDto);
         }
 
         public Task<TResponse> SendAsync<TResponse>(IReturn<TResponse> requestDto)
         {
-            PreserveRequestType(requestDto.GetType());
             return InterceptAsync(() => _client.SendAsync(requestDto), requestDto);
         }
 
         public Task<HttpWebResponse> SendAsync(IReturnVoid requestDto)
         {
-            PreserveRequestType(requestDto.GetType());
             return InterceptAsync(() => _client.SendAsync(requestDto), requestDto);
         }
 
         public TResponse Send<TResponse>(IReturn<TResponse> request, string httpMethod)
         {
-            PreserveRequestType(request.GetType());
             return Intercept(() => _client.Send(request, httpMethod), request);
         }
 
         public void Send(IReturnVoid requestDto, string httpMethod)
         {
-            PreserveRequestType(requestDto.GetType());
             Intercept(() => _client.Send(requestDto, httpMethod), requestDto);
         }
 
         public Task<TResponse> SendAsync<TResponse>(IReturn<TResponse> requestDto, string httpMethod)
         {
-            PreserveRequestType(requestDto.GetType());
             return InterceptAsync(() => _client.SendAsync(requestDto, httpMethod), requestDto);
         }
 
         public Task<HttpWebResponse> SendAsync(IReturnVoid requestDto, string httpMethod)
         {
-            PreserveRequestType(requestDto.GetType());
             return InterceptAsync(() => _client.SendAsync(requestDto, httpMethod), requestDto);
         }
 
         public void SendAllOneWay(IEnumerable<IReturnVoid> request)
         {
-            PreserveRequestType(request.GetType());
             Intercept(() => _client.SendAllOneWay(request), request);
         }
 
         public List<TResponse> SendAll<TResponse>(IEnumerable<IReturn<TResponse>> request)
         {
-            PreserveRequestType(request.GetType());
             return Intercept(() => _client.SendAll(request), request);
         }
 
         public Task<List<TResponse>> SendAllAsync<TResponse>(IEnumerable<IReturn<TResponse>> request)
         {
-            PreserveRequestType(request.GetType());
             return InterceptAsync(() => _client.SendAllAsync(request), request);
         }
 
         public Task<HttpWebResponse> SendAllOneWayAsync<TResponse>(IEnumerable<TResponse> requestDto) where TResponse : IReturnVoid
         {
-            PreserveRequestType(requestDto.GetType());
             return InterceptAsync(() => _client.SendAllOneWayAsync(requestDto), requestDto);
         }
 
@@ -216,16 +203,6 @@ namespace Orckestra.Composer
             };
 
             return clientConfig;
-        }
-
-        private void PreserveRequestType(Type requestType)
-        {
-            var context = System.Web.HttpContext.Current;
-
-            if (context != null && !context.Items.Contains(RefAppRequestTypeKey))
-            {
-                context.Items[RefAppRequestTypeKey] = requestType;
-            }
         }
 
     }

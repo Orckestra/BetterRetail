@@ -1,19 +1,24 @@
-﻿using System;
-using System.Configuration;
+﻿using System.Configuration;
 using Microsoft.ApplicationInsights.Channel;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.ApplicationInsights.Extensibility.Implementation;
+using static Orckestra.Composer.ActionFilters.AppInsightsActionFilter;
 
 namespace Orckestra.Composer.Website.App_Insights
 {
     public class TelemetryInitializer : ITelemetryInitializer
     {
-        public const string C1Function = nameof(C1Function);
+        static TelemetryInitializer()
+        {
+            string aiKeyFromAppSettings = ConfigurationManager.AppSettings["InstrumentationKey"];
+            if (!string.IsNullOrWhiteSpace(aiKeyFromAppSettings))
+            {
+                TelemetryConfiguration.Active.InstrumentationKey = aiKeyFromAppSettings;
+            }
+        }
 
         public void Initialize(ITelemetry telemetry)
         {
-            TelemetryConfiguration.Active.InstrumentationKey = ConfigurationManager.AppSettings["InstrumentationKey"];
-
             if (!(telemetry is OperationTelemetry operationTelemetry)) return;
             var variation = (ConfigurationManager.AppSettings["Variation"] ?? "").ToUpperInvariant();
             var operationPrefix = $"WFE{variation}";
@@ -26,17 +31,19 @@ namespace Orckestra.Composer.Website.App_Insights
             var operationName = telemetry.Context.Operation.Name;
             if (operationName.StartsWith(operationPrefix)) return;
 
-            var context = System.Web.HttpContext.Current;
-            var requestTypeKey = ComposerOvertureClient.RefAppRequestTypeKey;
-
-            if (operationTelemetry.Properties.ContainsKey(C1Function))
+            if (operationTelemetry.Properties.ContainsKey(AppInsightsListener.AppInsightsListener.C1Function))
             {
-                operationName = operationTelemetry.Properties[C1Function];
+                operationName = operationTelemetry.Properties[AppInsightsListener.AppInsightsListener.C1Function];
             }
-            else if (context != null && context.Items.Contains(requestTypeKey))
+            else
             {
-                var requestType = (Type)context.Items[requestTypeKey];
-                operationName = $"{operationPrefix} {requestType.Name}";
+                var context = System.Web.HttpContext.Current;
+                var controllerName = context.Items[AIAFControllerKey]?.ToString();
+                var actionName = context.Items[AIAFActionKey]?.ToString();
+
+                operationName = !string.IsNullOrWhiteSpace(controllerName) && !string.IsNullOrWhiteSpace(actionName)
+                    ? $"{operationPrefix} {controllerName}.{actionName}"
+                    : $"{operationPrefix} {operationName}";
             }
 
             operationTelemetry.Name = operationName;

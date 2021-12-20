@@ -186,19 +186,13 @@
         <add name="ComposerRequestInterceptor" type="Orckestra.Composer.CompositeC1.RequestInterceptorHttpModule, Orckestra.Composer.CompositeC1" />
       </xsl:if>
 
-      <xsl:if test="not(remove[@name='TelemetryCorrelationHttpModule'])">
-        <remove name="TelemetryCorrelationHttpModule" />
-      </xsl:if>
-
       <xsl:if test="not(add[@name='TelemetryCorrelationHttpModule'])">
+        <remove name="TelemetryCorrelationHttpModule" />
         <add name="TelemetryCorrelationHttpModule" type="Microsoft.AspNet.TelemetryCorrelation.TelemetryCorrelationHttpModule, Microsoft.AspNet.TelemetryCorrelation" preCondition="managedHandler" />
       </xsl:if>
 
-      <xsl:if test="not(remove[@name='ApplicationInsightsWebTracking'])">
-        <remove name="ApplicationInsightsWebTracking" />
-      </xsl:if>
-
       <xsl:if test="not(add[@name='ApplicationInsightsWebTracking'])">
+        <remove name="ApplicationInsightsWebTracking" />
         <add name="ApplicationInsightsWebTracking" type="Microsoft.ApplicationInsights.Web.ApplicationInsightsHttpModule, Microsoft.AI.Web" preCondition="managedHandler" />
       </xsl:if>
 
