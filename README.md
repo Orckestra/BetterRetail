@@ -21,16 +21,16 @@ Get the latest source code from the [dev](https://github.com/Orckestra/BetterRet
 ## Prerequisites
 A development environment  has to include:
 - [Node.js with NPM](https://nodejs.org/en/download/releases/)
-	- Recommended to use Node.js with the version 10.10 or higher and NPM with the version 6.4.1 or higher. If NPM already installed, run in a command line the command `npm -v` to check the current version
+	- Recommended to use Node.js with version 10.10 or higher and NPM with version 6.4.1 or higher. If NPM already installed, run in a command line the command `npm -v` to check the current version
 	- Be sure, that NPM registry uses default [https://registry.npmjs.org](https://registry.npmjs.org) URL
-		- To check current NPM registry URL run in a command line the command `npm config get registry`
+		- To check the current NPM registry URL run in a command line the command `npm config get registry`
 		- To set default NPM registry URL run in a command line the command
 		`npm config set registry https://registry.npmjs.org/`
 - [IIS](https://www.iis.net/) with [URL Rewrite Module](https://www.iis.net/downloads/microsoft/url-rewrite)
-- For debugging purposes recommended to use [Visual Studio 2019](https://visualstudio.microsoft.com/) 
+- For debugging purposes recommended using [Visual Studio 2019](https://visualstudio.microsoft.com/) 
 	
 ## Certificate
-To deploy a website and to use it via https protocol you have to install **.develop.orckestra.local** certificate.
+To deploy a website and to use it via HTTPS protocol you have to install **.develop.orckestra.local** certificate.
 
 ## Build
 To provide a full release build with passing unit tests and providing additional release operations run in Powershell the script by the path **{solution_dir_path}\build\build.ps1**.
@@ -47,13 +47,13 @@ In general, the full build process includes the following steps:
 It is also available to run a specific (separate) task of a build if to pass `-Target` param and to specify a task name. For example, to run again all tests execute in Powershell `{solution_dir_path}\build\build.ps1 -Target Tests` command. In the table below is the list of build tasks.
 | Task name | Description |
 |--|--|
-| All| Default task, includes full build process with unit tests and additional release operations |
-|Dev|Restores NuGet packages, compiles solution, restores NPM packages, compiles typescripts and creates artifacts|
+| All| Default task includes full build process with unit tests and additional release operations |
+|Dev|Restores NuGet packages, compiles solution, restores NPM packages, compiles typescripts, and creates artifacts|
 |Restore-NuGet-Packages| To restore NuGet packages|
 |Compile-Solution| To compile solution source code|
 |Restore-NPM-Packages|To restore NPM packages|
 |Compile-Typescripts|To compile typescripts into javascript|
-|NUnit-Tests|To run NUnit unit tests to check projects source code. Solution source code will be recompiled|
+|NUnit-Tests|To run NUnit unit tests to check the projects source code. Solution source code will be recompiled|
 |Karma-Tests|To run Karma unit tests to check typescripts. Test related typescripts will be recompiled|
 |Karma-Debug|To debug Karma unit tests. Be sure you have installed Google Chrome|
 |Tests|To run all tests (both NUnit and Karma)
@@ -79,10 +79,10 @@ nuget restore
 ### Reference application
 Before deploy, you have to configure the settings of a deploying website. Configurations stored in **{solution_dir_path}\build\configuration** folder:
 
-- **parameters.json** - default configuration file, contains a template of settings structure, but can be used for configuring itself. Not Git ignored.
-- **parameters.local.json** - this file to be used for local deploy purposes and has a higher priority than parameters.json. Create  it manually based on parameters.json. Git ignored.
+- **parameters.json** - default configuration file, contains a template of settings structure but can be used for configuring itself. Not Git ignored.
+- **parameters.local.json** - this file to be used for local deploy purposes and has a higher priority than parameters.json. Create it manually based on parameters.json. Git ignored.
 
-In the same solution you can have a set of settings to use them for different environments and different websites on demand. To have the ability to use a variety of configurations, you have to add a pre-pointed keyword in a file name after the word "parameters" as below:
+In the same solution, you can have a set of settings to use for different environments and different websites on demand. To have the ability to use a variety of configurations, you have to add a pre-pointed keyword in a file name after the word "parameters" as below:
 - parameters.{keyword}.json
 - parameters.{keyword}.local.json
 
