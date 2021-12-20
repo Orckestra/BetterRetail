@@ -116,6 +116,9 @@ module Orckestra.Composer {
                     }
                 },
                 methods: {
+                    selectCategory(suggestion) {
+                        this.sectionConfigs.suggestcategories.onSelected({ item: suggestion })
+                    },
                     fetchResults(result) {
                         const query = this.query;
 
@@ -160,8 +163,17 @@ module Orckestra.Composer {
                     },
                     mapSuggestions(suggestions = [], sectionName, query) {
                         return suggestions.map((suggest) => {
-                            const title = sectionName === 'suggestcategories' ? [...suggest.Parents, suggest.DisplayName].join(' > ') : suggest.DisplayName;
-                            return ({ ...suggest, mappedDisplayName: this.highlightSuggestion(title, query) })
+                            let mappedDisplayName = this.highlightSuggestion(suggest.DisplayName, query);
+
+                            if (sectionName === 'suggestcategories') {
+                                suggest.ParentsFullInfo.forEach(el => {
+                                    let displayName = this.highlightSuggestion(el.DisplayName, query);
+                                    el.mappedDisplayName = `${displayName} (${el.Quantity}) >`;
+                                });
+                                mappedDisplayName = `${mappedDisplayName} (${suggest.Quantity})`;
+                            }
+
+                            return ({ ...suggest, mappedDisplayName: mappedDisplayName })
                         })
                     },
                     getSuggestionValue(suggestion) {

@@ -139,6 +139,18 @@
                                     </div>
                                 </div>
 
+                                <div v-else-if="suggestion.name === 'suggestcategories'" class="m-2">
+                                    <a v-for="item in suggestion.item.ParentsFullInfo"
+                                       v-on:mouseup.stop=""
+                                       v-html="item.mappedDisplayName"
+                                       v-on:click="selectCategory(item)">
+                                    </a>
+                                    <a v-on:mouseup.stop=""
+                                       v-html="suggestion.item.mappedDisplayName"
+                                       v-on:click="selectCategory(suggestion.item)">
+                                    </a>
+                                </div>
+
                                 <div v-else="v-else" class="m-2">
                                     <a v-html="suggestion.item.mappedDisplayName" role="link"></a>
                                 </div>
