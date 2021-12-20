@@ -44,25 +44,18 @@
     </picture>
 }
 
-@helper ResponsiveBackgroundImage(DataReference<IImageFile> Image, string cssClass = null, IEnumerable<int> widthBreakpoints = null, int maxWidth = 0, IHtmlString divContent = null)
+@helper ResponsiveBackgroundImageStyles(string containerId, DataReference<IImageFile> Image, IEnumerable<int> widthBreakpoints = null, int maxWidth = 0)
 {
     if (widthBreakpoints == null) { widthBreakpoints = AutoImageResizingConfiguration.WidthBreakpoints; }
     if (maxWidth == 0) { maxWidth = AutoImageResizingConfiguration.MaxWidth; }
+     var imageSupportFormats = AutoImageResizingConfiguration.ImageFormats;
 
     <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
     <head>
-        @{
-            var imageId = "img" + Guid.NewGuid().ToString().Substring(0, 8);
-        }
-
         <style type="text/css">
-            #@imageId {
+            #@containerId {
                 background-image: url('@AutoImageResizingHelper.GetResizedImageUrl(Image, maxWidth > 0 ? (int?)maxWidth : null)');
                 background-repeat: no-repeat;}
-
-        @{
-            var imageSupportFormats = AutoImageResizingConfiguration.ImageFormats;
-        }
 
         @foreach (var widthBreakpoint in widthBreakpoints.OrderByDescending(item => item))
         {
@@ -70,14 +63,13 @@
             {
                 if (ImageFormatSupportHelper.IsSupported(mediaType))
                 {
-                    @: @@media (max-width: @(widthBreakpoint)px) { #@imageId { background-image: url('@AutoImageResizingHelper.GetResizedImageUrl(Image, widthBreakpoint, mediaType)');}}
+                    @: @@media (max-width: @(widthBreakpoint)px) { #@containerId { background-image: url('@AutoImageResizingHelper.GetResizedImageUrl(Image, widthBreakpoint, mediaType)');}}
                 }
                 }
             }
         </style>
     </head>
     <body>
-        <div class="@cssClass" id="@imageId">@divContent</div>
     </body>
 </html>
 }
