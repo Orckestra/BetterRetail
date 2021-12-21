@@ -4,7 +4,11 @@ namespace Orckestra.Composer.Search.ViewModels
 {
     public class ProductSearchViewModel : BaseProductViewModel
     {
-       
+        /// <summary>
+        /// Gets or sets the brand
+        /// </summary>
+        public string Brand { get; set; }
+
         /// <summary>
         /// Gets or sets the full display name.
         /// </summary>

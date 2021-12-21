@@ -204,7 +204,7 @@ namespace Orckestra.Composer.Search.Services
             return new CategoryFacetCounts
             {
                 TotalCount = param.CategoryFacetCountsResult.TotalCount,
-                Facets = param.CategoryFacetCountsResult.Facets.Select(f =>
+                Facets = param.CategoryFacetCountsResult.Facets.Where(f => !f.FieldName.EndsWith("_Facet")).Select(f =>
                      new Facet
                      {
                          FieldName = f.FieldName,

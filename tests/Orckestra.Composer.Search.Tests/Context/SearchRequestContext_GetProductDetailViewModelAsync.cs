@@ -13,6 +13,7 @@ using Orckestra.Composer.Services;
 using System.Threading.Tasks;
 using System.Web;
 using Orckestra.Composer.Search.Parameters;
+using Orckestra.Composer.Search.Providers;
 
 namespace Orckestra.Composer.Search.Tests.Context
 {
@@ -51,6 +52,7 @@ namespace Orckestra.Composer.Search.Tests.Context
             container.GetMock<IComposerContext>().Setup(m => m.CultureInfo).Returns(_cultureInfo);
             container.GetMock<IComposerContext>().Setup(m => m.Scope).Returns(_scope);
             container.GetMock<ISearchViewService>().Setup(m => m.GetSearchViewModelAsync(It.IsAny<SearchCriteria>())).ReturnsAsync(_viewModel);
+            container.GetMock<IBaseSearchCriteriaProvider>().Setup(m => m.GetSearchCriteriaAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<int>())).ReturnsAsync(new SearchCriteria { });
             var mock = container.GetMock<ISearchViewService>();
 
             //Act

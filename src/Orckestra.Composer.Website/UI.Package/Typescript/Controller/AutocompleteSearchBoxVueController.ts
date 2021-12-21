@@ -31,7 +31,7 @@ module Orckestra.Composer {
             this.searchService['_baseSearchUrl'] = document.getElementById("frm-search-box").getAttribute('action');
         }
 
-        public initializeVue () {
+        public initializeVue() {
             this.VueAutocomplete = new Vue({
                 el: '#vueAutocomplete',
                 components: {
@@ -93,9 +93,11 @@ module Orckestra.Composer {
                     this.sectionConfigs.suggestbrands.active = !!this.$el.attributes['brands-enable'];
                     this.sectionConfigs.suggestterms.active = !!this.$el.attributes['search-terms-enable'];
 
+                    this.sectionConfigs.suggestcategories.displayCategoryPage = !!this.$el.attributes['category-suggestions-as-pages'];
+
                     this.minSearchSize = +this.$el.attributes['min-search-size'].value;
 
-                    if(this.query) {
+                    if (this.query) {
                         this.fetchResults(this.query);
                     }
 
@@ -109,11 +111,14 @@ module Orckestra.Composer {
                 updated() {
                 },
                 computed: {
-                    isEmptyRight () {
+                    isEmptyRight() {
                         return this.suggestions.length === 1;
                     }
                 },
                 methods: {
+                    selectCategory(suggestion) {
+                        this.sectionConfigs.suggestcategories.onSelected({ item: suggestion })
+                    },
                     fetchResults(result) {
                         const query = this.query;
 
@@ -123,7 +128,11 @@ module Orckestra.Composer {
 
                             const results = sectionNames.map(sectionName => {
                                 const limit = this.sectionConfigs[sectionName].limit;
-                                return ComposerClient.post(`/api/search/${sectionName}?limit=${limit}`, { Query: query })
+                                let apiPath = `/api/search/${sectionName}?limit=${limit}`;
+                                if (sectionName === 'suggestcategories' && this.sectionConfigs.suggestcategories.displayCategoryPage) {
+                                    apiPath = `${apiPath}&withCategoriesUrl=${this.sectionConfigs.suggestcategories.displayCategoryPage}`;
+                                }
+                                return ComposerClient.post(apiPath, { Query: query })
                             });
 
                             Q.all(results).then(values => {
@@ -138,7 +147,7 @@ module Orckestra.Composer {
                     highlightSuggestion(value, query) {
                         const start = value.toLowerCase().indexOf(query.toLowerCase());
                         const end = start + query.length;
-                        if(start < 0) return value;
+                        if (start < 0) return value;
 
                         return [
                             value.slice(0, start),
@@ -154,8 +163,17 @@ module Orckestra.Composer {
                     },
                     mapSuggestions(suggestions = [], sectionName, query) {
                         return suggestions.map((suggest) => {
-                            const title = sectionName === 'suggestcategories' ? [...suggest.Parents, suggest.DisplayName].join(' > ')  : suggest.DisplayName;
-                            return ({ ...suggest, mappedDisplayName: this.highlightSuggestion(title, query) })
+                            let mappedDisplayName = this.highlightSuggestion(suggest.DisplayName, query);
+
+                            if (sectionName === 'suggestcategories') {
+                                suggest.ParentsFullInfo.forEach(el => {
+                                    let displayName = this.highlightSuggestion(el.DisplayName, query);
+                                    el.mappedDisplayName = `${displayName} (${el.Quantity}) >`;
+                                });
+                                mappedDisplayName = `${mappedDisplayName} (${suggest.Quantity})`;
+                            }
+
+                            return ({ ...suggest, mappedDisplayName: mappedDisplayName })
                         })
                     },
                     getSuggestionValue(suggestion) {
@@ -177,7 +195,8 @@ module Orckestra.Composer {
                         EventHub.instance().publish('categorySuggestionClicked', {
                             data: {
                                 suggestion: suggestion.item.DisplayName,
-                                parents: suggestion.item.Parents
+                                parents: suggestion.item.Parents,
+                                url: suggestion.item.Url
                             }
                         });
                     },
@@ -188,7 +207,7 @@ module Orckestra.Composer {
                     },
                     onImageError(e, suggestion) {
                         const img = suggestion.item.FallbackImageUrl;
-                        if(img) {
+                        if (img) {
                             e.target.onerror = null;
                             e.target.src = img;
                         }

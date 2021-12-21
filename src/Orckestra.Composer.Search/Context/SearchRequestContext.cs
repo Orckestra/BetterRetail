@@ -4,10 +4,10 @@ using System.Web;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Search.Parameters;
+using Orckestra.Composer.Search.Providers;
 using Orckestra.Composer.Search.RequestConstants;
 using Orckestra.Composer.Search.Services;
 using Orckestra.Composer.Search.ViewModels;
-using Orckestra.Composer.Services;
 using Orckestra.Composer.Utils;
 using Orckestra.Composer.ViewModels;
 
@@ -17,28 +17,21 @@ namespace Orckestra.Composer.Search.Context
     {
         private readonly Lazy<SearchViewModel> _viewModel;
 
-        protected IComposerContext ComposerContext { get; private set; }
         protected HttpRequestBase Request { get; private set; }
         protected ISearchViewService SearchViewService { get; private set; }
-        protected SearchViewModel SearchViewModel { get; private set; }
-        public IInventoryLocationProvider InventoryLocationProvider { get; set; }
-        protected IFulfillmentContext FulfillmentContext { get; }
         protected ISearchUrlProvider SearchUrlProvider { get; private set; }
+        protected IBaseSearchCriteriaProvider BaseSearchCriteriaProvider { get; private set; }
 
-        public SearchRequestContext(IComposerContext composerContext,
+        public SearchRequestContext(
             ISearchViewService searchViewService,
-            IInventoryLocationProvider inventoryLocationProvider,
             ISearchUrlProvider searchUrlProvider,
-            IFulfillmentContext fulfillmentContext,
-            HttpRequestBase request)
+            HttpRequestBase request,
+            IBaseSearchCriteriaProvider baseSearchCriteriaProvider)
         {
-
-            ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
             SearchViewService = searchViewService ?? throw new ArgumentNullException(nameof(searchViewService));
-            InventoryLocationProvider = inventoryLocationProvider ?? throw new ArgumentNullException(nameof(inventoryLocationProvider));
             SearchUrlProvider = searchUrlProvider ?? throw new ArgumentNullException(nameof(searchUrlProvider));
-            FulfillmentContext = fulfillmentContext ?? throw new ArgumentNullException(nameof(fulfillmentContext));
             Request = request;
+            BaseSearchCriteriaProvider = baseSearchCriteriaProvider ?? throw new ArgumentNullException(nameof(baseSearchCriteriaProvider));
 
             _viewModel = new Lazy<SearchViewModel>(() =>
             {
@@ -46,7 +39,6 @@ namespace Orckestra.Composer.Search.Context
                 return SearchViewService.GetSearchViewModelAsync(criteria).Result;
             });
         }
-
 
         public bool IsProductsSearchActive { get; set; }
         public virtual int CurrentPage
@@ -69,7 +61,7 @@ namespace Orckestra.Composer.Search.Context
         {
             get
             {
-                return Request[SearchRequestParams.SortBy];
+                return Request[SearchRequestParams.SortBy] ?? SearchRequestParams.DefaultSortBy;
             }
         }
 
@@ -92,22 +84,10 @@ namespace Orckestra.Composer.Search.Context
 
         protected virtual SearchCriteria BuildProductsSearchCriteria()
         {
-            var criteria = new SearchCriteria
-            {
-                Keywords = SearchQuery,
-                NumberOfItemsPerPage = SearchConfiguration.MaxItemsPerPage,
-                IncludeFacets = true,
-                StartingIndex = (CurrentPage - 1) * SearchConfiguration.MaxItemsPerPage,
-                SortBy = IsProductsSearchActive ?  SortBy: null,
-                SortDirection = IsProductsSearchActive ?  SortDirection: null,
-                Page = CurrentPage,
-                BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
-                CultureInfo = ComposerContext.CultureInfo,
-                Scope = ComposerContext.Scope,
-                InventoryLocationIds = InventoryLocationProvider.GetInventoryLocationIdsForSearchAsync().Result,
-                AvailabilityDate = FulfillmentContext.AvailabilityAndPriceDate,
-                AutoCorrect = SearchConfiguration.AutoCorrectSearchTerms
-            };
+            var criteria = BaseSearchCriteriaProvider.GetSearchCriteriaAsync(SearchQuery, RequestUtils.GetBaseUrl(Request).ToString(), true, CurrentPage).Result;
+            criteria.SortBy = IsProductsSearchActive ? SortBy : null;
+            criteria.SortDirection = IsProductsSearchActive ? SortDirection : null;
+
             criteria.SelectedFacets.AddRange(SearchUrlProvider.BuildSelectedFacets(Request.QueryString));
             return criteria;
         }
