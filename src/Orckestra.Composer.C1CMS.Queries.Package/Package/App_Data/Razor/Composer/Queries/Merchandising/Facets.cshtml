@@ -44,6 +44,8 @@
 
                     <div data-oc-controller="Product.FacetSearch"
                          data-context="@facetSettings.JsonContext"
+                         data-queryName="@browsingViewModel.QueryName"
+                         data-queryType="@browsingViewModel.QueryType"
                          data-corrected-search-term="@browsingViewModel.ProductSearchResults.CorrectedSearchTerms">
                         <form name="searchFacets" id="vueSearchFacets" v-cloak="true">
 
@@ -51,7 +53,7 @@
 
                             @if (isCategoryTreeView)
                             {
-                                @FacetHelpers.CategoryFactesTree(browsingViewModel.QueryName)
+                                @FacetHelpers.CategoryFactesTree(CurrentPageNode.Title)
                             }
 
                             <div v-for="facet in Facets" v-if="facet.IsDisplayed" v-bind:key="facet.FieldName + facet.FacetType"
