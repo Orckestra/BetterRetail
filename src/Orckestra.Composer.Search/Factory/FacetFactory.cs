@@ -120,7 +120,7 @@ namespace Orckestra.Composer.Search.Factory
                          let category = categoryChildrenLookup[fv.Value].FirstOrDefault()
                          where category != null
                          let totalCount = countsForFacetValues?.FirstOrDefault(fcv => fcv.Value.Equals(category.Value.Id, StringComparison.OrdinalIgnoreCase))?.Quantity
-                         select new CategoryFacetValuesTreeNode(fv.Title, fv.Value, totalCount != null ? totalCount.Value : fv.Quantity, facetSetting.FacetType, facetSetting.FieldName, fv.IsSelected, true)
+                         select new CategoryFacetValuesTreeNode(fv.Title, fv.Value, totalCount != null ? totalCount.Value : fv.Quantity, facetSetting.FacetType, facetSetting.FieldName, fv.IsSelected, fv.IsRemovable)
                          {
                              CategoryId = category.Value.Id
                          }).ToList();

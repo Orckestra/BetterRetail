@@ -4,7 +4,7 @@ using Orckestra.Composer.SearchQuery.Services;
 
 namespace Orckestra.Composer.SearchQuery
 {
-    public class SearchPlugin : IComposerPlugin
+    public class SearchQueryPlugin : IComposerPlugin
     {
         public void Register(IComposerHost host)
         {
@@ -12,8 +12,8 @@ namespace Orckestra.Composer.SearchQuery
             host.Register<SearchQueryRepository, ISearchQueryRepository>();
             host.Register<InventoryRepository, IInventoryRepository>();
             host.Register<SearchQueryViewService, ISearchQueryViewService>();
-
-            host.MetadataRegistry.LoadViewModelMetadataInAssemblyOf(typeof(SearchPlugin).Assembly);
+            host.RegisterApiControllers(typeof(SearchQueryPlugin).Assembly);
+            host.MetadataRegistry.LoadViewModelMetadataInAssemblyOf(typeof(SearchQueryPlugin).Assembly);
         }
     }
 }
