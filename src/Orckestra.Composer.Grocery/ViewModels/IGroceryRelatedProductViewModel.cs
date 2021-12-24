@@ -49,5 +49,21 @@ namespace Orckestra.Composer.Grocery.ViewModels
         /// </summary>
         string ProductBadges { get; set; }
         Dictionary<string, string> ProductBadgeValues { get; set; }
+
+        /// <summary>
+        /// Gets or sets the product Promotional Ribbon
+        /// </summary>
+        [Lookup(LookupType.Product, "PromotionalRibbon")]
+        string PromotionalRibbon { get; set; }
+
+        /// <summary>
+        /// Gets or sets the product Promotional Ribbon Background Color
+        /// </summary>
+        string PromotionalRibbonBackgroundColor { get; set; }
+
+        // <summary>
+        /// Gets or sets the product Promotional Ribbon Text Color
+        /// </summary>
+        string PromotionalRibbonTextColor { get; set; }
     }
 }

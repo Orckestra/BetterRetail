@@ -29,37 +29,38 @@
        v-on:click="productClick(Product, index)">
         <img class="img-fluid m-auto" xmlns:v-bind="v-bind" v-bind:src="Product.ImageUrl"
              v-bind:alt="Product.FullDisplayName"
-             onerror="imgError(this)"/>
+             onerror="imgError(this)" />
     </a>
+    @BuildRibbon()
     <div v-if="'InWishList' in Product" class="product-tile-wishlist">
         @AddToWishList()
     </div>
     <ul v-if="Product.ProductBadgeMap" class="product-tile-badges list-unstyled">
-        <li v-for="item in Product.ProductBadgeMap"><img v-bind:src="`/UI.Package/Images/badge/${item.Key}.svg`"   v-bind:alt="item.Value"/></li>
+        <li v-for="item in Product.ProductBadgeMap"><img v-bind:src="`/UI.Package/Images/badge/${item.Key}.svg`" v-bind:alt="item.Value" /></li>
     </ul>
 
     <div class="product-tile-information">
         <div class="product-tile-text">
             <p v-if="Product.Brand" class="product-tile-brand m-0"
-            data-qa="search-product-brand">
+               data-qa="search-product-brand">
                 {{Product.Brand}}
             </p>
             <div v-if="Product.IsEligibleForRecurring" class="product-tile-recurring">
                 <img src="~/UI.Package/Images/recurring.svg"
-                    class="recurring-icon"
-                    alt="@Html.Localize("General", "L_RecurringProduct")"
-                    title="@Html.Localize("General", "L_RecurringProduct")"/>
+                     class="recurring-icon"
+                     alt="@Html.Localize("General", "L_RecurringProduct")"
+                     title="@Html.Localize("General", "L_RecurringProduct")" />
             </div>
 
             <a data-qa="search-product-title"
-            v-bind:href="Product.Url"
-            v-bind:title="Product.FullDisplayName"
-            v-bind:data-productId="Product.ProductId"
-            v-on:click="productClick(Product, index)"
-            class="p text-default-font">
+               v-bind:href="Product.Url"
+               v-bind:title="Product.FullDisplayName"
+               v-bind:data-productId="Product.ProductId"
+               v-on:click="productClick(Product, index)"
+               class="p text-default-font">
                 {{Product.DisplayName}}
             </a>
-            
+
             @DisplayFormat()
         </div>
         @PriceBasedOnUnitMeasure()
@@ -70,9 +71,14 @@
             </div>
         }
     </div>
-    
+
 
 </div>
+
+@helper BuildRibbon()
+{
+    <div v-if="Product.PromotionalRibbon" class="product-tile-ribbon ribbon-top-right" ><span  v-bind:class="[Product.PromotionalRibbonDefaultBackgroundColor, Product.PromotionalRibbonDefaultTextColor]">{{Product.PromotionalRibbon}}</span></div>
+}
 
 @helper DisplayFormat()
 {

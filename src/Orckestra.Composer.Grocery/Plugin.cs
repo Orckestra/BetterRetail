@@ -1,5 +1,6 @@
 using Orckestra.Composer.Cart.Factory;
 using Orckestra.Composer.Cart.Services.Order;
+using Orckestra.Composer.Grocery.Context;
 using Orckestra.Composer.Grocery.Factory;
 using Orckestra.Composer.Grocery.Providers;
 using Orckestra.Composer.Grocery.Repositories;
@@ -21,6 +22,7 @@ namespace Orckestra.Composer.Grocery
     {
         public void Register(IComposerHost host)
         {
+            host.Register<ProductTileConfigurationContext, IProductTileConfigurationContext>();
             host.Register<StoreAndFulfillmentSelectionViewService, IStoreAndFulfillmentSelectionViewService>();
             host.Register<StoreAndFulfillmentSelectionProvider, IStoreAndFulfillmentSelectionProvider>();
             host.Register<GroceryOrderHistoryViewService, IOrderHistoryViewService>();
