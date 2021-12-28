@@ -8,7 +8,7 @@ using Microsoft.Practices.EnterpriseLibrary.Logging.Configuration;
 using Microsoft.Practices.EnterpriseLibrary.Logging.TraceListeners;
 using System.Text;
 
-namespace Orckestra.Composer.Website.App_Insights.AppInsightsListener
+namespace Orckestra.Composer.Website.App_Insights
 {
     [ConfigurationElementType(typeof(CustomTraceListenerData))]
     internal sealed class AppInsightsListener : CustomTraceListener
