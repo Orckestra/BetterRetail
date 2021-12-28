@@ -15,7 +15,7 @@
     <xsl:copy>
         <xsl:apply-templates select="@* | node()" />
       <xsl:if test="not(add[@name='AppInsightsListener'])">
-        <add name="AppInsightsListener" listenerDataType="Microsoft.Practices.EnterpriseLibrary.Logging.Configuration.CustomTraceListenerData, Microsoft.Practices.EnterpriseLibrary.Logging, Version=3.0.0.0" traceOutputOptions="None" type="Orckestra.Composer.Website.App_Insights.AppInsightsListener.AppInsightsListener, Orckestra.Composer.Website" initializeData="" formatter="Text Formatter" />
+        <add name="AppInsightsListener" listenerDataType="Microsoft.Practices.EnterpriseLibrary.Logging.Configuration.CustomTraceListenerData, Microsoft.Practices.EnterpriseLibrary.Logging, Version=3.0.0.0" traceOutputOptions="None" type="Orckestra.Composer.Website.App_Insights.AppInsightsListener, Orckestra.Composer.Website" initializeData="" formatter="Text Formatter" />
       </xsl:if>
     </xsl:copy>
   </xsl:template>
