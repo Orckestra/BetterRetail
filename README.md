@@ -10,6 +10,7 @@
 - [Deploy](#deploy)
 - [Development](#development)
 - [Debug](#debug)
+- [Analysis](#analysis)
 - [Related projects](#related-projects)
 - [FAQ](#faq)
 
@@ -173,6 +174,43 @@ To lint check typescripts
 - Make shure you have installed [TSLint] (https://www.npmjs.com/package/tslint)
 - Run in Powershell a command: `{solution_dir_path}\build\build.ps1 -Target Tslint-Tests`.
 - Run in Powershell a command: `{solution_dir_path}\build\build.ps1 -Target Tslint-Fix`. for fixes linting errors for select rules (this may overwrite linted files) 
+	
+## Analysis
+In addition to the Windows Event viewer, you can use 2 additional tools to track and to analyse different issues or situ
+### C1 Logs
+	
+### App insights logs
+To see the logs of RefApp application you can use the App insights functionality. More about AppInsights you can read here https://docs.microsoft.com/en-us/azure/azure-monitor/app/app-insights-overview
+
+	
+<edit section>
+Short steps on how to check the functionality:
+1 ) After build - deploy, it's required to specify the AI key, can be done in 2 places: 
+- directly in web config (AppSettings - InstrumentationKey, set up the GUID value) or
+- in environment variables (use the AppSettings_InstrumentationKey variable name since we need the prefix because of config builders). In this case, IIS reset
+
+Can be used any AI, was tested with this one:
+https://portal.azure.com/#@ORCKESTRA2COM.onmicrosoft.com/resource/subscriptions/b9933262-77d6-43a9-947e-6b3212de61a3/resourceGroups/occ.dev/providers/microsoft.insights/components/RefAppInsights/overview
+![image](https://user-images.githubusercontent.com/57723696/146314861-ac0d5160-050d-4ef3-854e-4eaf56f18bb4.png)
+
+2) It's required to modify some existing BR C1 function, to throw an exception or to use the one that throws
+3) To navigate to the BR web page with the problematic C1 function page. We need to generate some amount of transactions, then the data will appear faster in AI
+4) THen
+
+![image](https://user-images.githubusercontent.com/57723696/146315511-d8a022a2-449a-4b0d-9611-ff42c90f7819.png)
+![image](https://user-images.githubusercontent.com/57723696/146315556-7a332ac1-e36c-4002-836a-f11f1ebab87b.png)
+![image](https://user-images.githubusercontent.com/57723696/146317254-61434761-7426-4652-a6a0-fa395fbf4706.png)
+![image](https://user-images.githubusercontent.com/57723696/146315614-15fa8340-3714-4d50-8742-16242f237ad5.png)
+![image](https://user-images.githubusercontent.com/57723696/146315680-f6c4153d-e9a1-47ea-8aa0-9069745d09ec.png)
+
+or 
+![image](https://user-images.githubusercontent.com/57723696/146317565-aaef28f0-0330-412a-add3-3e62792f5db8.png)
+
+Requests display change: 
+![image](https://user-images.githubusercontent.com/57723696/146318093-bedf4a5e-fc58-4096-90b9-031605f0a325.png)
+
+<edit section/>
+
 
 ## Related projects
 Reference Application is dependent on [C1 CMS Foundation](https://github.com/Orckestra/C1-CMS-Foundation) and can use [C1 CMS packages](https://github.com/Orckestra/CMS-Packages)
