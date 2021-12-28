@@ -77,7 +77,7 @@
 
 @helper BuildRibbon()
 {
-    <div v-if="Product.PromotionalRibbon" class="product-tile-ribbon ribbon-top-right" ><span  v-bind:class="[Product.PromotionalRibbonDefaultBackgroundColor, Product.PromotionalRibbonDefaultTextColor]">{{Product.PromotionalRibbon}}</span></div>
+    <div v-if="Product.PromotionalRibbon" class="product-tile-ribbon ribbon-top-right" ><span  v-bind:class="[Product.PromotionalRibbonBackgroundColor, Product.PromotionalRibbonTextColor]">{{Product.PromotionalRibbon}}</span></div>
 }
 
 @helper DisplayFormat()
