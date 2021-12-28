@@ -5,5 +5,7 @@ module Orckestra.Composer {
         facetRegistry: IHashTable<string>;
         correctedSearchTerm?: string;
         categoryId?: string;
+        queryName?: string;
+        queryType?: string;
     }
 }

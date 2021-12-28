@@ -215,12 +215,16 @@ module Orckestra.Composer {
         private initializeServices() {
             var correctedSearchTerm: string = this.context.container.attr('data-corrected-search-term');
             var categoryId: string = this.context.container.attr('data-categoryId');
+            var queryName: string = this.context.container.attr('data-queryName');
+            var queryType: string = this.context.container.attr('data-queryType');
 
             this._searchService = new SearchService(this.eventHub, window);
             this._searchService.initialize({
                 facetRegistry: this.buildFacetRegistry(),
                 correctedSearchTerm: correctedSearchTerm,
-                categoryId
+                categoryId,
+                queryName,
+                queryType
             });
 
             this.initializeRangeSlider();

@@ -14,6 +14,8 @@ module Orckestra.Composer {
         public correctedSearchTerm: string;
         public categoryId: string;
         public page: number = 1;
+        public queryName: string;
+        public queryType: string;
         public sortBy: string = '';
         public sortDirection: string = '';
         public selectedFacets: IHashTable<string|string[]> = {};
@@ -25,7 +27,8 @@ module Orckestra.Composer {
             this._facetRegistry = options.facetRegistry;
             this.correctedSearchTerm = options.correctedSearchTerm;
             this.categoryId = options.categoryId;
-
+            this.queryName = options.queryName;
+            this.queryType = options.queryType;
             this.loadFromQuerystring(this._window.location.search);
         }
 
