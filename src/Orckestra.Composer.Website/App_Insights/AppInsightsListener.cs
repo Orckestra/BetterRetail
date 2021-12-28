@@ -59,7 +59,7 @@ namespace Orckestra.Composer.Website.App_Insights.AppInsightsListener
             if (!telemetryClient.IsEnabled()) return;
 
             var c1Severity = GetPropertyValue(message, _rd[C1MessageProps.C1Severity]);
-            var aiSeveriry = GetAISeverity(c1Severity);
+            var aiSeverity = GetAISeverity(c1Severity);
 
             var callStackContent = GetCallStackContent(message);
 
@@ -73,7 +73,7 @@ namespace Orckestra.Composer.Website.App_Insights.AppInsightsListener
             DependencyTelemetry dependencyTelemetry = new DependencyTelemetry()
             {
                 Type = "C1 Function",
-                Success = aiSeveriry == SeverityLevel.Information
+                Success = aiSeverity == SeverityLevel.Information
             };
 
             dependencyTelemetry.Properties.Add(C1Function, functionName);
@@ -93,14 +93,14 @@ namespace Orckestra.Composer.Website.App_Insights.AppInsightsListener
                     0,
                     0,
                     exceptionType,
-                    $"{aiSeveriry}: {functionName}",
+                    $"{aiSeverity}: {functionName}",
                     !string.IsNullOrWhiteSpace(callStackContent),
                     callStackContent,
                     new List<StackFrame>());
 
                 var exception = new ExceptionTelemetry(
                     new List<ExceptionDetailsInfo>() { exceptionDetailsInfo },
-                    aiSeveriry, 
+                    aiSeverity, 
                     null,
                     telemetryExceptionProperties, 
                     new Dictionary<string, double>());
@@ -154,9 +154,9 @@ namespace Orckestra.Composer.Website.App_Insights.AppInsightsListener
             StringBuilder sb = new StringBuilder();
             foreach(string line in message.Split('\n'))
             {
-                var lineTrimed = line.Trim();
-                if (_callStackLinesToIgnore.Contains(lineTrimed)) continue;
-                sb.AppendLine(lineTrimed);
+                var lineTrimmed = line.Trim();
+                if (_callStackLinesToIgnore.Contains(lineTrimmed)) continue;
+                sb.AppendLine(lineTrimmed);
             }
             return sb.ToString();
         }

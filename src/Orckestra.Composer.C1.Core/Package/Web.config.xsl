@@ -37,7 +37,7 @@
   <add key="Environment" value="dev" />
   <add key="Hostname" value="composer-c1-cm-dev.orckestra.local" />
   <add key="Variation" value="" />
-  <add key="InstrumentationKey" value="" />
+  <add key="APPINSIGHTS_INSTRUMENTATIONKEY" value="" />
   <add key="HandelbarsCompiler" value="true" />
   <add key="Composer.DefaultScope" value="Canada" />
   <add key="CC1.DeploymentToken" value="***REMOVED***" />

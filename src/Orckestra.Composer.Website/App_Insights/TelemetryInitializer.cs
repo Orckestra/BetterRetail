@@ -13,7 +13,7 @@ namespace Orckestra.Composer.Website.App_Insights
 
         static TelemetryInitializer()
         {
-            string aiKeyFromAppSettings = ConfigurationManager.AppSettings["InstrumentationKey"];
+            string aiKeyFromAppSettings = ConfigurationManager.AppSettings["APPINSIGHTS_INSTRUMENTATIONKEY"];
             if (!string.IsNullOrWhiteSpace(aiKeyFromAppSettings))
             {
                 TelemetryConfiguration.Active.InstrumentationKey = aiKeyFromAppSettings;
