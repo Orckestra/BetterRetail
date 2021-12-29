@@ -38,7 +38,7 @@ namespace Orckestra.Composer.Grocery.DataTypes
         string LookupValue { get; set; }
 
         [ImmutableFieldId("52129127-4367-4751-a86c-465db9f09419")]
-        [FormRenderingProfile(Label = "Background Color", WidgetFunctionMarkup = @"<f:widgetfunction xmlns:f=""http://www.composite.net/ns/function/1.0"" name=""Composite.Widgets.String.Selector""><f:param xmlns:f=""http://www.composite.net/ns/function/1.0"" name=""Options""><f:function xmlns:f=""http://www.composite.net/ns/function/1.0"" name=""Orckestra.Web.Html.GetStyleOptionsFromFile""><f:param name=""OptionsXMLFilePath"" value=""UI.Package/GetStyleOptionsFromFile/BackgroundOptions.xml"" /></f:function></f:param></f:widgetfunction>")]
+        [FormRenderingProfile(Label = "Background Color", HelpText = "If none is selected, then default Dark backgroud is used.", WidgetFunctionMarkup = @"<f:widgetfunction xmlns:f=""http://www.composite.net/ns/function/1.0"" name=""Composite.Widgets.String.Selector""><f:param xmlns:f=""http://www.composite.net/ns/function/1.0"" name=""Options""><f:function xmlns:f=""http://www.composite.net/ns/function/1.0"" name=""Orckestra.Web.Html.GetStyleOptionsFromFile""><f:param name=""OptionsXMLFilePath"" value=""UI.Package/GetStyleOptionsFromFile/BackgroundOptions.xml"" /></f:function></f:param></f:widgetfunction>")]
         [StoreFieldType(PhysicalStoreFieldType.String, 64)]
         [NotNullValidator]
         [FieldPosition(1)]
@@ -47,7 +47,7 @@ namespace Orckestra.Composer.Grocery.DataTypes
         string BackgroundColor { get; set; }
 
         [ImmutableFieldId("db08774b-e6c4-4042-a2a3-c70cb2d31591")]
-        [FormRenderingProfile(Label = "Text Color", WidgetFunctionMarkup = @"<f:widgetfunction xmlns:f=""http://www.composite.net/ns/function/1.0"" name=""Composite.Widgets.String.Selector""><f:param xmlns:f=""http://www.composite.net/ns/function/1.0"" name=""Options""><f:function xmlns:f=""http://www.composite.net/ns/function/1.0"" name=""Orckestra.Web.Html.GetStyleOptionsFromFile""><f:param name=""OptionsXMLFilePath"" value=""UI.Package/GetStyleOptionsFromFile/TextColorOptions.xml"" /></f:function></f:param></f:widgetfunction>")]
+        [FormRenderingProfile(Label = "Text Color", HelpText = "If none is selected, then default White color is used.", WidgetFunctionMarkup = @"<f:widgetfunction xmlns:f=""http://www.composite.net/ns/function/1.0"" name=""Composite.Widgets.String.Selector""><f:param xmlns:f=""http://www.composite.net/ns/function/1.0"" name=""Options""><f:function xmlns:f=""http://www.composite.net/ns/function/1.0"" name=""Orckestra.Web.Html.GetStyleOptionsFromFile""><f:param name=""OptionsXMLFilePath"" value=""UI.Package/GetStyleOptionsFromFile/TextColorOptions.xml"" /></f:function></f:param></f:widgetfunction>")]
         [StoreFieldType(PhysicalStoreFieldType.String, 64)]
         [NotNullValidator]
         [FieldPosition(2)]

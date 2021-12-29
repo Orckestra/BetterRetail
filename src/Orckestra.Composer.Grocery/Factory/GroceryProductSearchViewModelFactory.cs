@@ -109,10 +109,10 @@ namespace Orckestra.Composer.Grocery.Services
             var promotionalRibbonPropertyValue = base.ExtractLookupId("PromotionalRibbon_Facet", productDocument.PropertyBag);
 
             var promotionalRibbonSettings = ProductTileConfigurationContext.GetPromotionalRibbonConfigurations().FirstOrDefault(item => item.LookupValue == promotionalRibbonPropertyValue);
-            extendedVM.PromotionalRibbonBackgroundColor = promotionalRibbonSettings != null
+            extendedVM.PromotionalRibbonBackgroundColor = promotionalRibbonSettings?.BackgroundColor != null && promotionalRibbonSettings.BackgroundColor != "bg-none"
                 ? promotionalRibbonSettings.BackgroundColor
                 : ProductTileConfigurationContext.PromotionalRibbonDefaultBackgroundColor;
-            extendedVM.PromotionalRibbonTextColor = promotionalRibbonSettings != null
+            extendedVM.PromotionalRibbonTextColor = promotionalRibbonSettings?.TextColor != null && promotionalRibbonSettings?.TextColor != "text-none"
                 ? promotionalRibbonSettings.TextColor
                 : ProductTileConfigurationContext.PromotionalRibbonDefaultTextColor;
 
