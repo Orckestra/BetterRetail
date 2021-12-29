@@ -82,7 +82,7 @@ namespace Orckestra.Composer.SearchQuery.Repositories
             return result;
         }
 
-        private static SearchBySearchQueryRequest GerSearchQueryRequest(SearchQueryProductParams param)
+        private  SearchBySearchQueryRequest GerSearchQueryRequest(SearchQueryProductParams param)
         {
             return new SearchBySearchQueryRequest()
             {
