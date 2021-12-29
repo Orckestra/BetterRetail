@@ -2,7 +2,7 @@
 ///<reference path='../../Plugins/SlickCarouselPlugin.ts' />
 ///<reference path='../ProductEvents.ts' />
 module Orckestra.Composer {
-    export class RelatedProductController extends Orckestra.Composer.ProductController  {
+    export class RelatedProductController extends Orckestra.Composer.ProductController {
 
         protected concern: string = 'relatedProduct';
         private source: string = 'Related Products';
@@ -18,114 +18,132 @@ module Orckestra.Composer {
             let relatedProductsPromise = self.getRelatedProducts();
             let getCartPromise = self.cartService.getCart();
             Q.all([relatedProductsPromise, getCartPromise])
-            .spread((relatedproducts, cart) => {
-                self.VueRelatedProducts = new Vue({
-                    el: '#vueRelatedProducts',
-                    data: {
-                        RelatedProducts: self.products,
-                        ProductIdentifiers: vm.ProductIdentifiers,
-                        Loading: false,
-                        Cart: cart,
-                    },
-                    mounted() {
-                        self.eventHub.subscribe(CartEvents.CartUpdated, this.onCartUpdated);
-                        self.eventHub.publish('iniCarousel', null);
-                    },
-                    computed: {
-                        ExtendedRelatedProducts() {
-                            const results = _.map(this.RelatedProducts, (product: any) => {
-                                const isSameProduct = (i: any) => i.ProductId === product.ProductId && i.VariantId == product.VariantId;
-                                let cartItem = this.Cart && this.Cart.LineItemDetailViewModels.find(isSameProduct);
-
-                                product.InCart = !!cartItem;
-                                product.Quantity = cartItem ? cartItem.Quantity : 0;
-                                product.LineItemId = cartItem ? cartItem.Id : undefined;
-
-                                if(product.ProductBadgeValues)
-                                {
-                                    product.ProductBadgeMap = Object.keys(product.ProductBadgeValues)
-                                        .map((key) => ({Key: key, Value: product.ProductBadgeValues[key]}));
-                                }
-
-                                product.HasUnitValues = PriceHelper.HasUnitValues(product);
-                                product.PricePerUnit = PriceHelper.PricePerUnit(product.DisplayListPrice,
-                                    product.ProductUnitQuantity,
-                                    product.ProductUnitSize,
-                                    product.ConvertedVolumeMeasurement
-                                );
-    
-                                if(product.PricePerUnit){
-                                    product.IsPricePerUnitZero = PriceHelper.IsPricePerUnitZero(product.PricePerUnit);
-                                }
-
-                                return product;
-                            });
-                            return results;
-                        }
-                    },
-                    methods: {
-                        onCartUpdated(cart) {
-                            this.Cart = cart.data;
+                .spread((relatedproducts, cart) => {
+                    self.VueRelatedProducts = new Vue({
+                        el: '#vueRelatedProducts',
+                        data: {
+                            RelatedProducts: self.products,
+                            ProductIdentifiers: vm.ProductIdentifiers,
+                            Loading: false,
+                            Cart: cart,
                         },
-                        productClick(product, index) {
-                            self.eventHub.publish(ProductEvents.ProductClick, {
-                                data: {
-                                    Product: product,
-                                    ListName: self.getListNameForAnalytics(),
-                                    Index: index
-                                }
-                            });
+                        mounted() {
+                            self.eventHub.subscribe(CartEvents.CartUpdated, this.onCartUpdated);
+                            self.eventHub.publish('iniCarousel', null);
                         },
-                        updateItemQuantity(item: any, quantity: number) {
-                            let cartItem = _.find(this.Cart.LineItemDetailViewModels, (i: any) => i.Id === item.LineItemId);
-                            if (this.Loading || !cartItem) return;
+                        computed: {
+                            ExtendedRelatedProducts() {
+                                const results = _.map(this.RelatedProducts, (product: any) => {
+                                    const isSameProduct = (i: any) => i.ProductId === product.ProductId && i.VariantId == product.VariantId;
+                                    let cartItem = this.Cart && this.Cart.LineItemDetailViewModels.find(isSameProduct);
 
-                            if(this.Cart.QuantityRange) {
-                                const {Min, Max} = this.Cart.QuantityRange;
-                                quantity = Math.min(Math.max(Min, quantity), Max);
+                                    product.InCart = !!cartItem;
+                                    product.Quantity = cartItem ? cartItem.Quantity : 0;
+                                    product.LineItemId = cartItem ? cartItem.Id : undefined;
+
+                                    if (product.ProductBadgeValues) {
+                                        product.ProductBadgeMap = Object.keys(product.ProductBadgeValues)
+                                            .map((key) => ({ Key: key, Value: product.ProductBadgeValues[key] }));
+                                    }
+
+                                    product.HasUnitValues = PriceHelper.HasUnitValues(product);
+                                    product.PricePerUnit = PriceHelper.PricePerUnit(product.DisplayListPrice,
+                                        product.ProductUnitQuantity,
+                                        product.ProductUnitSize,
+                                        product.ConvertedVolumeMeasurement
+                                    );
+
+                                    if (product.PricePerUnit) {
+                                        product.IsPricePerUnitZero = PriceHelper.IsPricePerUnitZero(product.PricePerUnit);
+                                    }
+
+                                    return product;
+                                });
+                                return results;
                             }
+                        },
+                        methods: {
+                            onCartUpdated(cart) {
+                                this.Cart = cart.data;
+                            },
+                            productClick(product, index) {
+                                self.eventHub.publish(ProductEvents.ProductClick, {
+                                    data: {
+                                        Product: product,
+                                        ListName: self.getListNameForAnalytics(),
+                                        Index: index
+                                    }
+                                });
+                            },
+                            updateItemQuantity(item: any, quantity: number) {
+                                let cartItem = _.find(this.Cart.LineItemDetailViewModels, (i: any) => i.Id === item.LineItemId);
+                                if (this.Loading || !cartItem) return;
 
-                            if(quantity == cartItem.Quantity) {
-                                //force update vue component
-                                this.Cart = { ...this.Cart };
-                                return;
+                                if (this.Cart.QuantityRange) {
+                                    const { Min, Max } = this.Cart.QuantityRange;
+                                    quantity = Math.min(Math.max(Min, quantity), Max);
+                                }
+
+                                if (quantity == cartItem.Quantity) {
+                                    //force update vue component
+                                    this.Cart = { ...this.Cart };
+                                    return;
+                                }
+                                item.Quantity = quantity;
+
+                                let analyticEventName = quantity > cartItem.Quantity ? ProductEvents.LineItemAdding : ProductEvents.LineItemRemoving;
+                                cartItem.Quantity = quantity;
+
+                                if (cartItem.Quantity < 1) {
+                                    this.Loading = true; // disabling UI immediately when a line item is removed
+                                }
+
+                                let { ProductId, VariantId } = cartItem;
+                                self.publishDataForAnalytics(ProductId, quantity, analyticEventName);
+
+                                if (!this.debounceUpdateItem) {
+                                    this.debounceUpdateItem = _.debounce(({ Id, Quantity, ProductId }) => {
+                                        this.Loading = true;
+                                        let updatePromise = Quantity > 0 ?
+                                            self.cartService.updateLineItem(Id, Quantity, ProductId) :
+                                            self.cartService.deleteLineItem(Id, ProductId);
+
+                                        updatePromise
+                                            .then(() => {
+                                                self.onAddLineItemSuccess();
+                                            }, (reason: any) => {
+                                                self.onAddLineItemFailed(reason);
+                                                throw reason;
+                                            })
+                                            .fin(() => this.Loading = false);
+
+                                    }, 400);
+                                }
+                                this.debounceUpdateItem(cartItem);
+                            },
+                            addToCart(event, product) {
+                                const { HasVariants, ProductId, VariantId, Price, RecurringOrderProgramName } = product;
+
+                                this.Loading = true;
+                                event.target.disabled = true;
+
+                                var promise: Q.Promise<any>;
+
+                                if (HasVariants) {
+                                    promise = self.addVariantProductToCart(ProductId, VariantId, Price);
+                                } else {
+                                    promise = self.addNonVariantProductToCart(ProductId, Price, RecurringOrderProgramName);
+                                }
+
+                                promise.fin(() => {
+                                    event.target.disabled = false;
+                                    this.Loading = false;
+                                });
                             }
-                            item.Quantity = quantity;
-
-                            let analyticEventName = quantity > cartItem.Quantity ? ProductEvents.LineItemAdding : ProductEvents.LineItemRemoving;
-                            cartItem.Quantity = quantity;
-
-                            if (cartItem.Quantity < 1) {
-                                this.Loading = true; // disabling UI immediately when a line item is removed
-                            }
-
-                            let {ProductId, VariantId} = cartItem;
-                            self.publishDataForAnalytics(ProductId, quantity, analyticEventName);
-
-                            if (!this.debounceUpdateItem) {
-                                this.debounceUpdateItem = _.debounce(({Id, Quantity, ProductId}) => {
-                                    this.Loading = true;
-                                    let updatePromise = Quantity > 0 ?
-                                        self.cartService.updateLineItem(Id, Quantity, ProductId) :
-                                        self.cartService.deleteLineItem(Id, ProductId);
-
-                                    updatePromise
-                                        .then(() => {
-                                             self.onAddLineItemSuccess();
-                                        }, (reason: any) => {
-                                            self.onAddLineItemFailed(reason);
-                                            throw reason;
-                                        })
-                                        .fin(() => this.Loading = false);
-
-                                }, 400);
-                            }
-                            this.debounceUpdateItem(cartItem);
                         }
-                    }
-                });
-            })
-         }
+                    });
+                })
+        }
 
         private getRelatedProducts(): Q.Promise<any> {
             let vm = this.context.viewModel;
@@ -173,27 +191,6 @@ module Orckestra.Composer {
             ErrorHandler.instance().outputErrorFromCode('RelatedProductLoadFailed');
         }
 
-         public addToCart(actionContext: IControllerActionContext) {
-            var productContext: JQuery = $(actionContext.elementContext).closest('[data-product-id]');
-
-            var hasVariants: boolean = productContext.data('hasVariants');
-            var productId: string = productContext.attr('data-product-id');
-            var variantId: string = productContext.attr('data-product-variant-id');
-            var price: string = productContext.data('price');
-            var recurringProgramName: string = productContext.data('recurringorderprogramname');
-
-            var busy = this.asyncBusy({ elementContext: actionContext.elementContext, containerContext: productContext });
-            var promise: Q.Promise<any>;
-
-            if (hasVariants) {
-                promise = this.addVariantProductToCart(productId, variantId, price);
-            } else {
-                promise = this.addNonVariantProductToCart(productId, price, recurringProgramName);
-            }
-
-            promise.fin(() => busy.done());
-        }
-
         /**
          * Occurs when adding a product to the cart that happens to have variants.
          */
@@ -222,7 +219,7 @@ module Orckestra.Composer {
             if (vm) {
                 var data: any = this.getProductDataForAnalytics(vm);
                 data.Quantity = quantity;
-                this.eventHub.publish(eventName,  {data});
+                this.eventHub.publish(eventName, { data });
             }
         }
 

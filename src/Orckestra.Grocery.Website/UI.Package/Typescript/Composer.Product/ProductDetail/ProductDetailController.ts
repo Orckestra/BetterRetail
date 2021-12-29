@@ -337,15 +337,15 @@ module Orckestra.Composer {
                     Product: product
                 },
                 computed: {
-                    PricePerUnit(){
+                    PricePerUnit() {
                         let pricePerUnit = PriceHelper.PricePerUnit(this.Product.ListPrice,
                             this.Product.ProductUnitQuantity,
                             this.Product.ProductUnitSize,
                             this.Product.ConvertedVolumeMeasurement
                         );
-                        return  pricePerUnit;
+                        return pricePerUnit;
                     },
-                    IsPricePerUnitZero(){
+                    IsPricePerUnitZero() {
                         return PriceHelper.IsPricePerUnitZero(this.PricePerUnit);
                     },
                     IsUnavailableVariant() {
@@ -356,7 +356,7 @@ module Orckestra.Composer {
                 }
             })
         }
-        
+
         protected getListNameForAnalytics(): string {
             return 'Detail';
         }

@@ -13,6 +13,7 @@ using Orckestra.Composer.Grocery.Website.Controllers;
 using Orckestra.Composer.HttpModules;
 using Orckestra.Composer.Logging;
 using Orckestra.Composer.Search;
+using Orckestra.Composer.Configuration;
 using Orckestra.ExperienceManagement.Configuration.DataTypes;
 using System.Web.Hosting;
 using System.Web.Http;
@@ -31,6 +32,7 @@ namespace Orckestra.Composer.Grocery.Website
 
             DynamicModuleUtility.RegisterModule(typeof(SecurityModule));
             SetUpSearchConfiguration();
+            SetUpQuantityConfiguration();
         }
 
         public static void OnBeforeInitialize()
@@ -123,6 +125,11 @@ namespace Orckestra.Composer.Grocery.Website
         {
             SearchConfiguration.ShowAllPages = true;
             SearchConfiguration.MaxItemsPerPage = 20;
+        }
+
+        private static void SetUpQuantityConfiguration()
+        {
+            QuantityConfiguration.MinQuantity = 0;
         }
 
         public static void ConfigureServices(IServiceCollection collection)

@@ -21,7 +21,7 @@ module Orckestra.Composer {
                         return true;
                     },
                     DecrementDisabled(item) {
-                        return item.Quantity < 2 || this.Mode.Loading;
+                        return this.Mode.Loading;
                     },
                     IncrementDisabled(item) {
                         return item.Quantity >= 99 || this.Mode.Loading;
@@ -39,11 +39,16 @@ module Orckestra.Composer {
                         if (!this.debounceUpdateItem) {
                             this.debounceUpdateItem = _.debounce(id => {
                                 let itemToUpdate = _.find(this.Cart.LineItemDetailViewModels, (i: any) => i.Id === id);
-                                self.checkoutService.updateCartItem(itemToUpdate.Id,
-                                    itemToUpdate.Quantity,
-                                    itemToUpdate.ProductId,
-                                    itemToUpdate.RecurringOrderFrequencyName ? itemToUpdate.RecurringOrderFrequencyName : null,
-                                    itemToUpdate.RecurringOrderProgramName)
+
+                                if (itemToUpdate.Quantity > 0) {
+                                    self.checkoutService.updateCartItem(itemToUpdate.Id,
+                                        itemToUpdate.Quantity,
+                                        itemToUpdate.ProductId,
+                                        itemToUpdate.RecurringOrderFrequencyName ? itemToUpdate.RecurringOrderFrequencyName : null,
+                                        itemToUpdate.RecurringOrderProgramName)
+                                } else {
+                                    this.removeCartItem(itemToUpdate.Id);
+                                }
                             }, 400);
                         }
 
@@ -60,7 +65,7 @@ module Orckestra.Composer {
                         this.Cart.LineItemDetailViewModels = _.filter(this.Cart.LineItemDetailViewModels, (i: any) => i.Id != id);
                     },
                     updateBeforeEditLineItemList() {
-                        this.beforeEditLineItemList = this.Cart.LineItemDetailViewModels.map(x => ({ ...x}));
+                        this.beforeEditLineItemList = this.Cart.LineItemDetailViewModels.map(x => ({ ...x }));
                     }
                 }
             };

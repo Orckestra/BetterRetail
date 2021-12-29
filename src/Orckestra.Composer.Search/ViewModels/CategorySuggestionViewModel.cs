@@ -14,7 +14,7 @@ namespace Orckestra.Composer.Search.ViewModels
         public string Url { get; set; }
 
         public string Id { get; set; }
-
+        
         public List<CategorySuggestionViewModel> ParentsFullInfo { get; set; }
     }
 }
