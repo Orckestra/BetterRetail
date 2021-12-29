@@ -197,6 +197,7 @@ To use the RefApp AppInsights logger, you need the AppInsights Instrumentation k
 After you have the AppInsights Instrumentation Key (guid value), you have to set it up for RefApp. You can choose any of the possible options:
 - to specify it in `web.config` of the deployed website. Go to the RefApp deployment folder, open the web.config file, open the path **configuration/appSettings** and for the key `APPINSIGHTS_INSTRUMENTATIONKEY` set up the guid of the Instrumentation key.
 - to specify it for the environment if it is expected to use this AppInsights Instrumentation key all the time. To do this on the developer station, run the cmd with administrator rights, and execute the command `rundll32.exe sysdm.cpl,EditEnvironmentVariables`. The window with current environment variables will open. In this window, add a new system variable with the name `AppSettings_APPINSIGHTS_INSTRUMENTATIONKEY` and a value of the Instrumentation key. ![image](https://user-images.githubusercontent.com/57723696/147671460-7469ef57-48a7-49d1-b487-1c6de95e7052.png) 
+	
 After this, go back to the cmd window and run the command `iisreset` to affect the changes. The IIS service will be restarted.
 	
 Right after this, it is already possible to use the extended RefApp Appinsights logs. When some amount of operations with RefApp will be provided, go to the Azure Portal to the AppInsights service, the Instrumentation key of which was specified before.
