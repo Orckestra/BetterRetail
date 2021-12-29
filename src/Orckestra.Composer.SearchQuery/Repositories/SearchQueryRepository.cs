@@ -150,13 +150,7 @@ namespace Orckestra.Composer.SearchQuery.Repositories
                     {
                         if (criteria.SelectedFacets.FirstOrDefault(s => s.Value == queryFacetValue && s.Name == queryFacet.FacetName) == null)
                         {
-                            var searchFilter = new SearchFilter()
-                            {
-                                Name = queryFacet.FacetName,
-                                Value = queryFacetValue
-                            };
-
-                            var facetPredicate = FacetPredicateFactory.CreateFacetPredicate(searchFilter);
+                            var facetPredicate = FacetPredicateFactory.CreateFacetPredicate(queryFacet.FacetName, queryFacetValue);
                             if (facetPredicate != null)
                             {
                                 request.FacetPredicates.Add(facetPredicate);
