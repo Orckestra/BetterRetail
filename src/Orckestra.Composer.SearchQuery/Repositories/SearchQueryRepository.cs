@@ -52,7 +52,7 @@ namespace Orckestra.Composer.SearchQuery.Repositories
             return result;
         }
 
-        public async Task<SearchQueryResult> SearchQueryProductAsync(SearchQueryProductParams param)
+        public virtual async Task<SearchQueryResult> SearchQueryProductAsync(SearchQueryProductParams param)
         {
             var criteria = param.Criteria;
 

@@ -332,7 +332,7 @@ namespace Orckestra.Composer.SearchQuery.Services
                 SearchCriteria = cloneParam.Criteria
             });
 
-            return UrlFormatter.ToUrlString(nameValueCollection);
+            return nameValueCollection != null ? UrlFormatter.ToUrlString(nameValueCollection): null;
         }
     }
 }
