@@ -44,6 +44,29 @@
     </picture>
 }
 
+@helper BackgroundImageStyle(DataReference<IImageFile> Image, int maxWidth)
+{
+    var defaultImageUrl = AutoImageResizingHelper.GetResizedImageUrl(Image, maxWidth > 0 ? (int?)maxWidth : null);
+
+    <text>background-image: url('@defaultImageUrl');</text>
+
+    if (maxWidth > 0)
+    {
+        var supportedImageFormats = AutoImageResizingConfiguration.ImageFormats.Where(ImageFormatSupportHelper.IsSupported);
+
+        var urls = supportedImageFormats.ToDictionary(
+            mediaType => mediaType,
+            mediaType => AutoImageResizingHelper.GetResizedImageUrl(Image, maxWidth, mediaType));
+        var urlSet = string.Join(", ", supportedImageFormats.Select(mediaType =>
+             $"url(\"{urls[mediaType]}\") type(\"{mediaType}\")"));
+
+        <text>
+            background-image: -webkit-image-set(@urlSet);
+            background-image: image-set(@urlSet);
+        </text>
+    }
+}
+
 @helper ResponsiveBackgroundImage(DataReference<IImageFile> Image, string cssClass = null, IEnumerable<int> widthBreakpoints = null, int maxWidth = 0, IHtmlString divContent = null)
 {
     if (widthBreakpoints == null) { widthBreakpoints = AutoImageResizingConfiguration.WidthBreakpoints; }
@@ -57,23 +80,21 @@
 
         <style type="text/css">
             #@imageId {
-                background-image: url('@AutoImageResizingHelper.GetResizedImageUrl(Image, maxWidth > 0 ? (int?)maxWidth : null)');
+                @BackgroundImageStyle(Image, maxWidth)
                 background-repeat: no-repeat;}
 
         @{
-            var imageSupportFormats = AutoImageResizingConfiguration.ImageFormats;
-        }
+            var breakpoints =  widthBreakpoints.OrderByDescending(item => item).ToList();
 
-        @foreach (var widthBreakpoint in widthBreakpoints.OrderByDescending(item => item))
-        {
-            foreach (var mediaType in imageSupportFormats)
+            if (breakpoints.Any() && !(breakpoints.Count == 1 && breakpoints[0] == maxWidth))
             {
-                if (ImageFormatSupportHelper.IsSupported(mediaType))
+                foreach (var widthBreakpoint in breakpoints)
                 {
-                    @: @@media (max-width: @(widthBreakpoint)px) { #@imageId { background-image: url('@AutoImageResizingHelper.GetResizedImageUrl(Image, widthBreakpoint, mediaType)');}}
-                }
+                    @: @@media (max-width: @(widthBreakpoint)px) { #@imageId { @BackgroundImageStyle(Image, widthBreakpoint) }}
                 }
             }
+        }
+
         </style>
     </head>
     <body>
@@ -81,4 +102,3 @@
     </body>
 </html>
 }
-
