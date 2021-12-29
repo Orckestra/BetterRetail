@@ -187,7 +187,7 @@ To reach the C1 logs, provide the following steps:
 ### AppInsights logs
 To see the logs of the RefApp application, you can use the Azure AppInsights functionality. General information about AppInsights you can read [here.](https://docs.microsoft.com/en-us/azure/azure-monitor/app/app-insights-overview)
 
-If the web site deployed using Azure App Service, you could turn on AppInsights directly inside the service. But to have extended RefApp logs or use AppInsights (if you have deployed the application locally) you can use an out-of-box RefApp AppInsights logger.
+If the web site deployed using Azure App Service, you could turn on AppInsights directly inside the service. But to have extended RefApp logs or use AppInsights if you have deployed the application locally you can use an out-of-box RefApp AppInsights logger.
 RefApp AppInsights logger, together with expected logs provides additional statistics about failed C1 Functions and displays the operations and dependencies in a way that simplifies analytic queries building, especially in case of grouping. The name of operations will contain the controller name and a method which was called (if they are). For example, if called controller name is `ControllerA`, and the API method name is `MethodX`, and it was called on the RefApp website with the CM variation, the operation name is going to be `WFE{Variation} {ControllerName}.{MethodName}` and in result will be displayed as `WFECM ControllerA.MethodX`.
 
 To use the RefApp AppInsights logger, you need the AppInsights Instrumentation key. Go to the [Azure Portal](https://portal.azure.com/), reach out to your certain AppInsights service, and check the key on the main Overview Page of such service.
