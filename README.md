@@ -176,7 +176,7 @@ To lint check typescripts
 - Run in Powershell a command: `{solution_dir_path}\build\build.ps1 -Target Tslint-Fix`. for fixes linting errors for select rules (this may overwrite linted files) 
 	
 ## Analysis
-In addition to the Windows Event viewer, you can use 2 additional tools to track and to analyse different issues or situations, or to create your own logger to direct the events to the needed source.
+In addition to the Windows Event viewer, you can use 2 additional tools to track and to analyse different issues or situations.
 ### C1 Logs
 To reach the C1 logs provide the following steps:
 - Go to the admin section of the web site: https://{your web site host}/Composite/top.aspx
@@ -188,17 +188,17 @@ To reach the C1 logs provide the following steps:
 To see the logs of RefApp application you can use the Azure AppInsights functionality. General information about AppInsights you can read [here.](https://docs.microsoft.com/en-us/azure/azure-monitor/app/app-insights-overview)
 
 If the web site deployed using Azure App Service, you can turn on Azure AppInsights directly there. But in order to have extended RefApp logs or to be able to use AppInsights if you have deployed the application locally, you can use out-of-box RefApp AppInsights logger.
-RefApp AppInsights logger provides additional statistic about failed C1 Functions and displays the operations and dependencies in a way that simplifies analytic queries building, especially in case of grouping. The name of operations will contain the controller name and a method which was called (if they are). For example, if the controller name is `ControllerA`, and the API method name is `MethodX`, and it was called on the RefApp website with the CM variation, the operation name is going to be `WFE{Variation} {ControllerName}.{MethodName} and in result will be displayed as `WFECM ControllerA.MethodX`.
+RefApp AppInsights logger together with expected logs provides additional statistic about failed C1 Functions and displays the operations and dependencies in a way that simplifies analytic queries building, especially in case of grouping. The name of operations will contain the controller name and a method which was called (if they are). For example, if the controller name is `ControllerA`, and the API method name is `MethodX`, and it was called on the RefApp website with the CM variation, the operation name is going to be `WFE{Variation} {ControllerName}.{MethodName}` and in result will be displayed as `WFECM ControllerA.MethodX`.
 
-To use RefApp AppInsights logger, you need the AppInsights Instrumentation key. Go to the [Azure Portal](https://portal.azure.com/), reach out your certain AppInsights service, and check the key on the main Overview Page.
+To use RefApp AppInsights logger, you need the AppInsights Instrumentation key. Go to the [Azure Portal](https://portal.azure.com/), reach out your certain AppInsights service, and check the key on the main Overview Page of such service.
 	
 After you have the AppInsights Instrumentation Key, you have to configure it for the RefApp. You can choose any of possible options:
-- to specify it in `web.config` of the deployed web site. Go to  the deployment folder, open the web.config file, open the path **configuration/appSettings** and for the key `APPINSIGHTS_INSTRUMENTATIONKEY` set up the guid 
-- to specify it for the enviroment if it is expected to use this AppInsights Instrumentation key all the time. On developer station to specify the AppInsights Instrumentation key, run the cmd with administrator rights, and execute the command `rundll32.exe sysdm.cpl,EditEnvironmentVariables`. The window with current enviroment variables will open. In this window, a new system variable with a name `AppSettings_APPINSIGHTS_INSTRUMENTATIONKEY` and a value of your instrumentation key. After this go back to the cmd window and run the command `iisreset` to affect the changes.
+- to specify it in `web.config` of the deployed web site. Go to the RefApp deployment folder, open the web.config file, open the path **configuration/appSettings** and for the key `APPINSIGHTS_INSTRUMENTATIONKEY` set up the guid of the Instrumentation key.
+- to specify it for the enviroment if it is expected to use this AppInsights Instrumentation key all the time. To do this on developer station, run the cmd with administrator rights, and execute the command `rundll32.exe sysdm.cpl,EditEnvironmentVariables`. The window with current enviroment variables will open. In this window, add a new system variable with a name `AppSettings_APPINSIGHTS_INSTRUMENTATIONKEY` and a value of your instrumentation key. After this go back to the cmd window and run the command `iisreset` to affect the changes. Wait until the service will be restarted.
 	
-When AppInsights key is configured for a RefApp (in web config or for the enviroment), you are ready to use the extended RefApp Appinsights logs. Provide some web-serfing on the deployed web site. Then go to the Azure Portal to the AppInsights service, the Instrumentation Key of which was specified.
-In `Performance` section of the AppInsights service on `Operations` tab you can see the operations with new formatting. On `Dependencies` tab you can see now C1 functions executions. 
-In `Failures` section on `Dependencies` tab it is possible to see the failed C1 Function and to see, where exactly the failure happened, and to check the exception with detailed information
+When AppInsights key is configured for a RefApp (in web config or for the enviroment), it is possible to use the extended RefApp Appinsights logs. To check AppInsights, it is required to provide some web-serfing on the deployed web site. Then to go to the Azure Portal to the AppInsights service, the Instrumentation Key of which was specified.
+In `Performance` section of the AppInsights service on `Operations` tab it will be possible to see the operations with new formatting. On `Dependencies` tab it will appear the information about C1 functions executions. 
+In `Failures` section on `Dependencies` tab it will be possible to see the failed C1 Function and to see, where exactly the failure happened, and to check the exception with detailed information
 
 ## Related projects
 Reference Application is dependent on [C1 CMS Foundation](https://github.com/Orckestra/C1-CMS-Foundation) and can use [C1 CMS packages](https://github.com/Orckestra/CMS-Packages)
