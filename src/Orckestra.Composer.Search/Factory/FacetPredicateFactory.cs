@@ -31,7 +31,7 @@ namespace Orckestra.Composer.Search.Factory
 
             var setting = FacetConfigContext.GetFacetSettings().Find(s => s.FieldName.Equals(filter.Name, StringComparison.OrdinalIgnoreCase));
 
-            if (setting == null) return null;
+            if (setting == null) { return null; }
 
             Type factoryType = FacetPredicateProviderRegistry.ResolveProviderType(setting.FacetType.ToString());
 
@@ -44,7 +44,7 @@ namespace Orckestra.Composer.Search.Factory
         {
             if (string.IsNullOrWhiteSpace(facetName)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(facetName))); }
             if (string.IsNullOrWhiteSpace(facetValue)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(facetValue))); }
-           
+
             var setting = FacetConfigContext.GetFacetSettings().Find(s => s.FieldName.Equals(facetName, StringComparison.OrdinalIgnoreCase));
 
             var facetType = setting == null ? Orckestra.Composer.Search.Facets.FacetType.MultiSelect.ToString() : setting.FacetType.ToString();
@@ -53,7 +53,7 @@ namespace Orckestra.Composer.Search.Factory
 
             var instance = GetProviderInstance(factoryType);
 
-            return instance.CreateFacetPredicate(new SearchFilter() { Name = facetName, Value = facetValue});
+            return instance.CreateFacetPredicate(new SearchFilter() { Name = facetName, Value = facetValue });
         }
     }
 }
