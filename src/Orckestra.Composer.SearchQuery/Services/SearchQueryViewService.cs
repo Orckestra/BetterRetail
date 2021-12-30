@@ -135,7 +135,8 @@ namespace Orckestra.Composer.SearchQuery.Services
                 },
             };
 
-            if (param.Criteria.IncludeFacets &&
+            if (param.QueryType != Overture.ServiceModel.SearchQueries.SearchQueryType.ProductSet &&
+                param.Criteria.IncludeFacets &&
                param.Criteria.SelectedFacets != null &&
                param.Criteria.SelectedFacets.Any(s => s.Name?.StartsWith(SearchConfiguration.CategoryFacetFiledNamePrefix) ?? false))
             {

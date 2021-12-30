@@ -47,13 +47,24 @@ stages:
         workingFolder: Orckestra.StarterSite/CF/Source
         failOnStandardError: false
 
-    # - task: PowerShell@1
-    #   displayName: Tests
-    #   inputs:
-    #     scriptName: Build/build.ps1
-    #     arguments: '-t Tests'
-    #     workingFolder: Orckestra.StarterSite/CF/Source
-    #     failOnStandardError: false
+    - task: PowerShell@1
+      displayName: Tests
+      inputs:
+        scriptName: Build/build.ps1
+        arguments: '-t Tests'
+        failOnStandardError: false
+
+    - task: PublishTestResults@2
+      displayName: 'Publish NUnit Tests'
+      inputs:
+        testResultsFormat: 'NUnit'
+        testResultsFiles: '**/TestResult.xml'
+    
+    - task: PublishTestResults@2
+      displayName: 'Publish JUnit Tests'
+      inputs:
+        testResultsFormat: 'JUnit'
+        testResultsFiles: '**/karma.junit.xml'
 
     - task: PowerShell@1
       displayName: Artifacts
