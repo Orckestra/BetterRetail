@@ -10,6 +10,7 @@
 - [Deploy](#deploy)
 - [Development](#development)
 - [Debug](#debug)
+- [Analysis](#analysis)
 - [Related projects](#related-projects)
 - [FAQ](#faq)
 
@@ -178,6 +179,40 @@ To lint check typescripts
 - Make shure you have installed [TSLint] (https://www.npmjs.com/package/tslint)
 - Run in Powershell a command: `{solution_dir_path}\build\build.ps1 -Target Tslint-Tests`.
 - Run in Powershell a command: `{solution_dir_path}\build\build.ps1 -Target Tslint-Fix`. for fixes linting errors for select rules (this may overwrite linted files) 
+	
+## Analysis
+In addition to the Windows Event viewer, you can use two additional tools to track and analyze different issues or situations.
+### C1 Logs
+To reach the C1 logs, provide the following steps:
+- Go to the admin section of the web site: https://{your web site host}/Composite/top.aspx
+- Login with your admin username and password
+- On the left side panel, click on the `System` icon <img src="https://user-images.githubusercontent.com/57723696/147662749-9933346c-bb25-49cd-9595-feccb7e19fbf.png" style="width:20px;"/>
+- Click on the `Server Log` menu
+	
+### AppInsights logs
+To see the logs of the RefApp application, you can use the Azure AppInsights functionality. General information about AppInsights you can read [here.](https://docs.microsoft.com/en-us/azure/azure-monitor/app/app-insights-overview)
+
+If the web site deployed using Azure App Service, you could turn on AppInsights directly inside the service. But to have extended RefApp logs or use AppInsights if you have deployed the application locally you can use an out-of-box RefApp AppInsights logger.
+RefApp AppInsights logger, together with expected logs provides additional statistics about failed C1 Functions and displays the operations and dependencies in a way that simplifies analytic queries building, especially in case of grouping. The name of operations will contain the controller name and a method which was called (if they are). For example, if called controller name is `ControllerA`, and the API method name is `MethodX`, and it was called on the RefApp website with the CM variation, the operation name is going to be `WFE{Variation} {ControllerName}.{MethodName}` and in result will be displayed as `WFECM ControllerA.MethodX`.
+
+To use the RefApp AppInsights logger, you need the AppInsights Instrumentation key. Go to the [Azure Portal](https://portal.azure.com/), reach out to your certain AppInsights service, and check the key on the main Overview Page of such service.
+![image](https://user-images.githubusercontent.com/57723696/147671292-1940a612-b3a8-49a7-a1a1-cb196e9d3bd1.png)
+
+	
+After you have the AppInsights Instrumentation Key (guid value), you have to set it up for RefApp. You can choose any of the possible options:
+- to specify it in `web.config` of the deployed website. Go to the RefApp deployment folder, open the web.config file, open the path **configuration/appSettings** and for the key `APPINSIGHTS_INSTRUMENTATIONKEY` set up the guid of the Instrumentation key.
+- to specify it for the environment if it is expected to use this AppInsights Instrumentation key all the time. To do this on the developer station, run the cmd with administrator rights, and execute the command `rundll32.exe sysdm.cpl,EditEnvironmentVariables`. The window with current environment variables will open. In this window, add a new system variable with the name `AppSettings_APPINSIGHTS_INSTRUMENTATIONKEY` and a value of the Instrumentation key. ![image](https://user-images.githubusercontent.com/57723696/147671460-7469ef57-48a7-49d1-b487-1c6de95e7052.png) 
+	
+After this, go back to the cmd window and run the command `iisreset` to affect the changes. The IIS service will be restarted.
+	
+Right after this, it is already possible to use the extended RefApp Appinsights logs. When some amount of operations with RefApp will be provided, go to the Azure Portal to the AppInsights service, the Instrumentation key of which was specified before.
+In the `Performance` section of the AppInsights service, on `Operations` tab, it will be possible to see the operations with new formatting. 
+Also, it is possible to filter by the `WFE` role to see only the RefApp logs. ![image](https://user-images.githubusercontent.com/57723696/147671714-5374c65b-a03d-49b9-9444-27e9aebdf57e.png) On the `Dependencies` tab, it will appear the information about C1 functions executions. 
+In the `Failures` section, on `Dependencies` tab, it will be possible to see the failed C1 Functions 
+![image](https://user-images.githubusercontent.com/57723696/147672007-69a6a6e2-5f4a-4caa-abbd-6e82099d6d3d.png)
+If to drill into samples and open some, it is possible to see a very detailed log with information, where the function failed, what exception appeared and the details of this exception.
+![image](https://user-images.githubusercontent.com/57723696/147672113-79f80d94-b66f-48ce-a052-9eff8b25d8ad.png)
+
 
 ## Related projects
 Grocery Application is dependent on [Better Retail Application](https://github.com/Orckestra/BetterRetail). It was initialized from dev branch of Better Retail repo, but has its own solution and website project. So any core changes in Better Retail can be synchronized here with git pull action.
