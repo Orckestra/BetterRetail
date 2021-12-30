@@ -47,13 +47,12 @@ stages:
         workingFolder: Orckestra.StarterSite/CF/Source
         failOnStandardError: false
 
-    # - task: PowerShell@1
-    #   displayName: Tests
-    #   inputs:
-    #     scriptName: Build/build.ps1
-    #     arguments: '-t Tests'
-    #     workingFolder: Orckestra.StarterSite/CF/Source
-    #     failOnStandardError: false
+    - task: PowerShell@1
+      displayName: Tests
+      inputs:
+        scriptName: Build/build.ps1
+        arguments: '-t Tests'
+        failOnStandardError: false
 
     - task: PowerShell@1
       displayName: Artifacts
