@@ -54,6 +54,12 @@ stages:
         arguments: '-t Tests'
         failOnStandardError: false
 
+    - task: PublishTestResults@2
+      inputs:
+        testResultsFormat: 'NUnit'
+        testResultsFiles: '**/TestResult.xml'
+        testRunTitle: 'Publish NUnit Tests'
+
     - task: PowerShell@1
       displayName: Artifacts
       inputs:
