@@ -55,10 +55,16 @@ stages:
         failOnStandardError: false
 
     - task: PublishTestResults@2
+      displayName: 'Publish NUnit Tests'
       inputs:
         testResultsFormat: 'NUnit'
         testResultsFiles: '**/TestResult.xml'
-        testRunTitle: 'Publish NUnit Tests'
+    
+    - task: PublishTestResults@2
+      displayName: 'Publish JUnit Tests'
+      inputs:
+        testResultsFormat: 'JUnit'
+        testResultsFiles: '**/karma.junit.xml'
 
     - task: PowerShell@1
       displayName: Artifacts
