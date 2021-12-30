@@ -39,5 +39,21 @@ namespace Orckestra.Composer.Search.Factory
 
             return instance.CreateFacetPredicate(filter);
         }
+
+        public virtual FacetPredicate CreateFacetPredicate(string facetName, string facetValue)
+        {
+            if (string.IsNullOrWhiteSpace(facetName)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(facetName))); }
+            if (string.IsNullOrWhiteSpace(facetValue)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(facetValue))); }
+
+            var setting = FacetConfigContext.GetFacetSettings().Find(s => s.FieldName.Equals(facetName, StringComparison.OrdinalIgnoreCase));
+
+            var facetType = setting == null ? Orckestra.Composer.Search.Facets.FacetType.MultiSelect.ToString() : setting.FacetType.ToString();
+
+            Type factoryType = FacetPredicateProviderRegistry.ResolveProviderType(facetType);
+
+            var instance = GetProviderInstance(factoryType);
+
+            return instance.CreateFacetPredicate(new SearchFilter() { Name = facetName, Value = facetValue });
+        }
     }
 }
