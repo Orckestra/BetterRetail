@@ -19,9 +19,9 @@ Get the latest source code from the [dev](https://github.com/Orckestra/BetterRet
 - with a direct download [here](https://github.com/Orckestra/BetterRetail/archive/dev.zip)
 
 ## Prerequisites
-A development environment  has to include:
+A development environment has to include:
 - [Node.js with NPM](https://nodejs.org/en/download/releases/)
-	- We recommend using Node.js with the version 10.10 or higher and NPM with the version 6.4.1 or higher. If NPM already installed, run in a command line the command `npm -v` to check the current version
+	- We recommend using Node.js with the version 10.10 or higher and NPM with the version 6.4.1 or higher. If NPM is already installed, run the command `npm -v` in the command line to check the current version.
 	- Be sure that the NPM registry uses the URL [https://registry.npmjs.org](https://registry.npmjs.org) as a default
 		- To check the current NPM registry URL run in a command line the command `npm config get registry`
 		- To set the default NPM registry URL run in a command line the command
@@ -44,7 +44,7 @@ In general, the full build process includes the following steps:
 - Creating artifacts;
 - Creating a package
 
-It is also possible to run a specific (separate) task of a build if you pass `-Target` param and specify a task name. For example, to run all tests again, execute in Powershell `{solution_dir_path}\build\build.ps1 -Target Tests` command. In the table below is the list of build tasks:
+It is also possible to run a specific (separate) task of a build if you pass `-Target` param and specify a task name. For example, to run all tests again, execute in Powershell this `{solution_dir_path}\build\build.ps1 -Target Tests` command. In the table below is the list of build tasks:
 | Task name | Description |
 |--|--|
 | All| Default task, includes full build process with unit tests and additional release operations |
@@ -62,7 +62,7 @@ It is also possible to run a specific (separate) task of a build if you pass `-T
 
 ### Typescripts
 Typescripts compile into javascript during the build process, but for development purposes (fast to recompile typescripts changes) there are 2 possible ways to (re)compile typescripts into javascript:
-- to run in PowerShell the command:
+- run, in PowerShell, the command:
 `{solution_dir_path}\build\build.ps1 -Target Compile-Typescripts`
 - to use the [Orckestra.Web.Typescript](https://github.com/Orckestra/CMS-Packages/tree/master/Orckestra.Web.Typescript) package, so any typescript changes can be automatically recompiled into javascript as defined in this package's settings.
 
@@ -70,7 +70,7 @@ Typescripts compile into javascript during the build process, but for developmen
 The Reference Application uses SASS by default. For dynamic SASS compilation into CSS [Orckestra.Web.Css.Sass](https://github.com/Orckestra/CMS-Packages/tree/master/Composite.Web.Css.Sass) package.
 
 ### Restore-NPM-Packages
-If you are not authorized for the azure artifacts feed, run the command and put your username or provided username and token (for password prompt) 
+If you are not authorized for the azure artifacts feed, run the command and put your username or provided username and token (for password prompt). 
 ```
 nuget restore
 ```
@@ -98,8 +98,8 @@ The typical configuration file has the following params:
   - `adminName` - admin name of a deploying website
   - `adminPassword` - admin password, no less than 6 symbols
   - `adminEmail` - admin email
-  - `C1Url` - URL to download C1 CMS since the Reference Application based on it and requires it during the deploy process. If the URL includes the **orckestra.local** hostname, be sure that the Orckestra VPN connection during a deployment is active .
-  - `baseCulture` - a culture to be used for a deploying website.
+  - `C1Url` - URL to download C1 CMS since the Reference Application based on it and requires it during the deploy process. If the URL includes the **orckestra.local** hostname, be sure that the Orckestra VPN connection during a deployment is active.
+  - `baseCulture` - a culture to be used for a deploying website
   
   Other settings usually do not have to be changed but still can be.
 
@@ -109,7 +109,7 @@ Settings for specific environments can be set in any json file as {"environments
 During a deployment a set of additional packages can be installed. Additional packages to be installed must be defined in the **{solution_dir_path}\build\configuration\SetupDescription.xml** file. 
 
 ## Renaming the web site project
-In order to make it easier for developers to have a custom name for the web application project we have supplied an easy to user renamer.ps1 script. If for example, you would like to have you website called MySuperStore.Website, simply run <em>./renamer.ps1 MySuperstore.Website</em>
+In order to make it easier for developers to have a custom name for the web application project we have supplied an easy to user renamer.ps1 script. If for example, you would like to have you website called MySuperStore.Website, simply run <em>./renamer.ps1 MySuperstore.Website</em>.
 
 ## Deploy
 To deploy the Reference Application, run in Administrator mode the Powershell script from the path `{solution_dir_path}\build\install.ps1`. 
@@ -119,7 +119,7 @@ In general, the full deployment process includes the following steps:
 - Creating https binding of the configured domain to the localhost;
 - Installing the Reference Application itself and additional packages to C1 CMS
 
-If you need to deploy using a configuration from a specific file, use `-env={keyword}` param and argument. For example, if you want to use the configuration from the **parameters.int2.json** file, then run in Powershell the deploying command `{solution_dir}\build\install.ps1 -env=int2`. The configuration file parameters.int2.json have the highest priority in this case. 
+If you need to deploy using a configuration from a specific file, use the `-env={keyword}` param and argument. For example, if you want to use the configuration from the **parameters.int2.json** file, then run in Powershell the deploying command `{solution_dir}\build\install.ps1 -env=int2`. The configuration file parameters.int2.json has the highest priority in this case. 
 
 The file **{solution_dir_path}\build\configuration\SetupDescription.xml** includes packages to be installed during deploy. These packages install from the **develop** branch by default. To install packages from a specific Experience Management branch, set "em-branch" : "{branch_name}" in parameters.
 
@@ -164,15 +164,15 @@ To debug typescripts, they should be compiled into javascript with a source map.
 ### Typescripts unit tests
 To debug typescript unit tests:
 - Make sure you have installed [Chrome Internet browser](https://www.google.com/chrome) 
-- Run in Powershell the command:
+- Run this command in Powershell:
 `{solution_dir_path}\build\build.ps1 -Target Karma-Tests`. After execution, a Chrome window opens
 - To run or re-run unit tests just update opened page in Chrome
 - To debug typescript unit tests click on the **Debug** button in the website content area, then in the new opened tab press the **F12** key and navigate to the **Sources** tab where, in the tree, expand the **"base"** folder. Select the needed typescript unit test and set up a breakpoint.
 
 To lint check typescripts 
 - Make shure you have installed [TSLint] (https://www.npmjs.com/package/tslint)
-- Run, in Powershell, the command: `{solution_dir_path}\build\build.ps1 -Target Tslint-Tests`.
-- Run, in Powershell, the command: `{solution_dir_path}\build\build.ps1 -Target Tslint-Fix`. for fixes linting errors for select rules (this may overwrite linted files) 
+- Run this command in Powershell: `{solution_dir_path}\build\build.ps1 -Target Tslint-Tests`.
+- Run this command in Powershell: `{solution_dir_path}\build\build.ps1 -Target Tslint-Fix`. for fixes linting errors for select rules (this may overwrite linted files) 
 	
 ## Troubleshooting with logs
 
@@ -182,7 +182,7 @@ There are a few tools available to view and analyze executions logs of the websi
 
 When a website is deployed on an a physical or virtual Windows machine, Windows Event Viewer will show the following types of errors:
 - Website startup exceptions
-- Unhandled exceptions that led to a website shutdown or a restart.
+- Unhandled exceptions that led to a website shutdown or a restart
 
 
 ### C1 CMS Logs
@@ -232,20 +232,20 @@ In the `Failures` section, on `Dependencies` tab, it will be possible to see the
 If you look into samples and open some, it is possible to see a very detailed log with information, where the function failed, what exception appeared, and the details of this exception.
 ![image](https://user-images.githubusercontent.com/57723696/147672113-79f80d94-b66f-48ce-a052-9eff8b25d8ad.png)
 
-- For better readability on the statistics, the HTTP calls to API controls have their "operation name" in App Insights changed. The overridden operation name has format "`WFE{Variation} {ControllerName}.{MethodName}`". For example, if controller name is `ControllerA` is called, and the API method name is `MethodX`, and it was called on the RefApp website with the CM variation, the operation name will be displayed as "`WFECM ControllerA.MethodX`".
+- To improve the readability of the statistics, the HTTP calls to API controls have their "operation name" in App Insights changed. The overridden operation name has format "`WFE{Variation} {ControllerName}.{MethodName}`". For example, if a controller named `ControllerA` is called by the API method named `MethodX` on the RefApp website with the CM variation, the operation name will be displayed as "`WFECM ControllerA.MethodX`".
 
 	
-  In the `Performance` section of the AppInsights service, on the `Operations` tab, it will be possible to see the operations with new formatting. 
+  In the `Performance` section of the AppInsights service, on the `Operations` tab, it will be possible to see the operations with the new formatting. 
 Also, it is possible to filter by the `WFE` role to see only the RefApp logs. ![image](https://user-images.githubusercontent.com/57723696/147671714-5374c65b-a03d-49b9-9444-27e9aebdf57e.png) 
 
 
 ## Related projects
-Reference Application is dependent on [C1 CMS Foundation](https://github.com/Orckestra/C1-CMS-Foundation) and can use [C1 CMS packages](https://github.com/Orckestra/CMS-Packages)
+The Reference Application is dependent on [C1 CMS Foundation](https://github.com/Orckestra/C1-CMS-Foundation) and can use [C1 CMS packages](https://github.com/Orckestra/CMS-Packages)
 
 ## FAQ
 Q: Cannot execute PowerShell scripts because of PowerShell execution policy {TODO: set here specific error}
 
-A: In a Powershell console in Administrator mode run a command:
+A: In a Powershell console in Administrator mode run the command:
 `Set-ExecutionPolicy unrestricted -scope CurrentUser`
 
 
