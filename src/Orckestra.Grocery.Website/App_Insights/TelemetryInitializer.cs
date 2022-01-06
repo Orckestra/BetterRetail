@@ -23,22 +23,26 @@ namespace Orckestra.Composer.Grocery.Website.App_Insights
         public void Initialize(ITelemetry telemetry)
         {
             if (!(telemetry is OperationTelemetry operationTelemetry)) return;
+            if (operationTelemetry.Context?.Operation == null) return;
 
-            if (string.IsNullOrEmpty(telemetry.Context.Cloud.RoleName))
+            if (telemetry.Context?.Cloud != null && string.IsNullOrEmpty(telemetry.Context.Cloud.RoleName))
             {
                 telemetry.Context.Cloud.RoleName = _operationPrefix;
             }
 
-            var operationName = telemetry.Context.Operation.Name;
-            if (operationName.StartsWith(_operationPrefix)) return;
+            var operationName = telemetry.Context?.Operation?.Name;
+            if (operationName != null && operationName.StartsWith(_operationPrefix)) return;
 
-            if (operationTelemetry.Properties.ContainsKey(AppInsightsListener.C1Function))
+            if (operationTelemetry.Properties != null 
+                    && operationTelemetry.Properties.TryGetValue(AppInsightsListener.C1Function, out string c1Function))
             {
-                operationName = operationTelemetry.Properties[AppInsightsListener.C1Function];
+                operationName = c1Function;
             }
             else
             {
                 var context = System.Web.HttpContext.Current;
+                if (context?.Items == null) return;
+
                 var controllerName = context.Items[AIAFControllerKey]?.ToString();
                 var actionName = context.Items[AIAFActionKey]?.ToString();
 
