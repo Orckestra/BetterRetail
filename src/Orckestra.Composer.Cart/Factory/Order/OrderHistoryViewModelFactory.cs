@@ -233,7 +233,9 @@ namespace Orckestra.Composer.Cart.Factory.Order
 
             orderInfo.OrderStatus = GetOrderStatusDisplayName(rawOrder, param);
             orderInfo.OrderStatusRaw = rawOrder.OrderStatus;
-
+            orderInfo.IsOrderInEditableShipmentStatus =
+                param.EditableShipmentStatusSettings.Contains(orderInfo.OrderStatus);
+            
             var orderDetailUrl = UrlFormatter.AppendQueryString(param.OrderDetailBaseUrl, new NameValueCollection
                 {
                     {"id", rawOrder.OrderNumber}
@@ -241,8 +243,7 @@ namespace Orckestra.Composer.Cart.Factory.Order
             lightOrderVm.Url = orderDetailUrl;
             
             lightOrderVm.OrderInfos = orderInfo;
-
-            lightOrderVm.ShipmentSummaries = new List<OrderShipmentSummaryViewModel>();
+             lightOrderVm.ShipmentSummaries = new List<OrderShipmentSummaryViewModel>();
             if (rawOrder.ShipmentItems.Count > 0)
             {
                 foreach (var shipment in rawOrder.ShipmentItems)

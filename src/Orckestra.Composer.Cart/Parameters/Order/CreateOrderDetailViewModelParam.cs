@@ -55,6 +55,8 @@ namespace Orckestra.Composer.Cart.Parameters.Order
 
         public string OrderDetailBaseUrl { get; set; }
 
+        public List<string> EditableShipmentStatusSettings { get; set; }
+
         public CreateOrderDetailViewModelParam()
         {
             OrderStatuses = new Dictionary<string, string>();

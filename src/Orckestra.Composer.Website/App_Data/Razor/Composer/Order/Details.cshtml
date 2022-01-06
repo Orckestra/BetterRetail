@@ -67,6 +67,12 @@
                                     status == "Canceled" ? "text-danger" : "text-success";
                             }
                             <p class="@statusCss  m-0"><strong>@order.OrderInfos.OrderStatus</strong></p>
+
+                            @if (order.OrderInfos.IsOrderInEditableShipmentStatus)
+                            {
+                                <button>@Html.Localize("MyAccount", "H_EditOrder")</button>
+                            }
+
                         </div>
                         <div class="col-4 text-right">
                             @Html.Localize("MyAccount", "L_Total"):

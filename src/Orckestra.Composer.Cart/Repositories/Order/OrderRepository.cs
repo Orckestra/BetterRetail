@@ -125,5 +125,10 @@ namespace Orckestra.Composer.Cart.Repositories.Order
 
             return OvertureClient.SendAsync(request);
         }
+
+        public async Task<OrderSettings> GetOrderSettings()
+        {
+            return await OvertureClient.SendAsync(new GetOrderSettingsRequest());
+        }
     }
 }

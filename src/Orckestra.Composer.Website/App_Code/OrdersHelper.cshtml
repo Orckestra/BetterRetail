@@ -40,6 +40,8 @@
                           'text-success': order.OrderInfos.OrderStatusRaw == 'Completed'}">
                         {{ order.OrderInfos.OrderStatus }}
                     </span>
+                    
+                    <button v-if="order.OrderInfos.IsOrderInEditableShipmentStatus">@Html.Localize("MyAccount", "H_EditOrder")</button>
                 </div>
                 <div class="col-sm-4 text-sm-right">Total: <h5>{{order.OrderInfos.PricePaid}}</h5></div>
             </div>

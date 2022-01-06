@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Threading.Tasks;
-using Orckestra.Composer.Cart.Factory;
+﻿using Orckestra.Composer.Cart.Factory;
 using Orckestra.Composer.Cart.Factory.Order;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Parameters.Order;
@@ -19,6 +14,11 @@ using Orckestra.Composer.Services;
 using Orckestra.Composer.Services.Lookup;
 using Orckestra.Composer.Utils;
 using Orckestra.Overture.ServiceModel.Orders;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Threading.Tasks;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Cart.Services.Order
@@ -80,7 +80,6 @@ namespace Orckestra.Composer.Cart.Services.Order
             if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
 
             var orderDetailBaseUrl = OrderUrlProvider.GetOrderDetailsBaseUrl(param.CultureInfo);
-
             var orderStatuses = await LookupService.GetLookupDisplayNamesAsync(new GetLookupDisplayNamesParam
             {
                 CultureInfo = param.CultureInfo,
@@ -95,6 +94,7 @@ namespace Orckestra.Composer.Cart.Services.Order
             {
                 shipmentsTrackingInfos = await GetShipmentsTrackingInfoViewModels(orderQueryResult, param).ConfigureAwait(false);
             }
+            var editableShipmentStatesSettings = await GetEditableShipmentStatesSettings();
 
             var getOrderHistoryViewModelParam = new GetOrderHistoryViewModelParam
             {
@@ -103,12 +103,20 @@ namespace Orckestra.Composer.Cart.Services.Order
                 OrderStatuses = orderStatuses,
                 Page = param.Page,
                 OrderDetailBaseUrl = orderDetailBaseUrl,
-                ShipmentsTrackingInfos = shipmentsTrackingInfos
+                ShipmentsTrackingInfos = shipmentsTrackingInfos,
+                EditableShipmentStatusSettings = editableShipmentStatesSettings
             };
 
             var viewModel = OrderHistoryViewModelFactory.CreateViewModel(getOrderHistoryViewModelParam);
-
+            
             return viewModel;
+        }
+
+        private async Task<List<string>> GetEditableShipmentStatesSettings()
+        {
+            var orderSettings = await OrderRepository.GetOrderSettings();
+            var editableShipmentStatusSettings = orderSettings.EditableShipmentStates?.Split('|').ToList();
+            return editableShipmentStatusSettings;
         }
 
         protected virtual async Task<Dictionary<Guid, TrackingInfoViewModel>> GetShipmentsTrackingInfoViewModels(
@@ -154,16 +162,16 @@ namespace Orckestra.Composer.Cart.Services.Order
             if (string.IsNullOrWhiteSpace(param.BaseUrl)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.BaseUrl)), nameof(param)); }
 
             var order = await OrderRepository.GetOrderAsync(param).ConfigureAwait(false);
-
+            
             //Check if order is one of the current customer.
             if (order == null || Guid.Parse(order.CustomerId) != param.CustomerId) { return null; }
 
             var viewModel = await BuildOrderDetailViewModelAsync(order, param).ConfigureAwait(false);
-
+            
             return viewModel;
         }
 
-        /// <summary>
+         /// <summary>
         /// Gets an OrderDetailViewModel for a guest customer, containing all information about an order and his shipments.
         /// </summary>
         /// <param name="param"></param>
@@ -262,6 +270,7 @@ namespace Orckestra.Composer.Cart.Services.Order
                 ImageUrls = await ImageService.GetImageUrlsAsync(order.Cart.GetLineItems()).ConfigureAwait(false)
             };
 
+            var editableShipmentStatesSettings = await GetEditableShipmentStatesSettings();
             var viewModel = OrderDetailsViewModelFactory.CreateViewModel(new CreateOrderDetailViewModelParam
             {
                 Order = order,
@@ -272,7 +281,8 @@ namespace Orckestra.Composer.Cart.Services.Order
                 CountryCode = getOrderParam.CountryCode,
                 ProductImageInfo = productImageInfo,
                 BaseUrl = getOrderParam.BaseUrl,
-                ShipmentsNotes = shipmentsNotes
+                ShipmentsNotes = shipmentsNotes,
+                EditableShipmentStatusSettings = editableShipmentStatesSettings
             });
 
             if (order.Cart.PropertyBag.TryGetValue("PickedItems", out var pickedItemsObject))

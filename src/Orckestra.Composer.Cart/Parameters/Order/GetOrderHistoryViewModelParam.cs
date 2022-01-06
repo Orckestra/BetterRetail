@@ -43,6 +43,11 @@ namespace Orckestra.Composer.Cart.Parameters.Order
         /// <summary>
         /// Gets or sets the TrackingInfoViewModel for each shipment of the order.
         /// </summary>
-        public Dictionary<Guid, TrackingInfoViewModel> ShipmentsTrackingInfos { get; set; } 
+        public Dictionary<Guid, TrackingInfoViewModel> ShipmentsTrackingInfos { get; set; }
+
+        /// <summary>
+        /// The Order In Editable Shipment Status.
+        /// </summary>
+        public List<string> EditableShipmentStatusSettings { get; set; }
     }
 }
