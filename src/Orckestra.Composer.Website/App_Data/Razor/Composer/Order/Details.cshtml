@@ -68,9 +68,9 @@
                             }
                             <p class="@statusCss  m-0"><strong>@order.OrderInfos.OrderStatus</strong></p>
 
-                            @if (order.OrderInfos.IsOrderInEditableShipmentStatus)
+                            @if (order.OrderInfos.IsOrderEditable)
                             {
-                                <button>@Html.Localize("MyAccount", "H_EditOrder")</button>
+                                <button class="btn btn-default">@Html.Localize("MyAccount", "B_EditOrder")</button>
                             }
 
                         </div>

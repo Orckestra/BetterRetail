@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
+using System.Linq;
 using Orckestra.Composer.Cart.Parameters.Order;
 using Orckestra.Composer.Cart.ViewModels.Order;
 using Orckestra.Composer.Providers;
@@ -233,17 +234,16 @@ namespace Orckestra.Composer.Cart.Factory.Order
 
             orderInfo.OrderStatus = GetOrderStatusDisplayName(rawOrder, param);
             orderInfo.OrderStatusRaw = rawOrder.OrderStatus;
-            orderInfo.IsOrderInEditableShipmentStatus =
-                param.EditableShipmentStatusSettings.Contains(orderInfo.OrderStatus);
-            
+            orderInfo.IsOrderEditable = IsOrderEditable(param, rawOrder);
+
             var orderDetailUrl = UrlFormatter.AppendQueryString(param.OrderDetailBaseUrl, new NameValueCollection
                 {
                     {"id", rawOrder.OrderNumber}
                 });
             lightOrderVm.Url = orderDetailUrl;
-            
+
             lightOrderVm.OrderInfos = orderInfo;
-             lightOrderVm.ShipmentSummaries = new List<OrderShipmentSummaryViewModel>();
+            lightOrderVm.ShipmentSummaries = new List<OrderShipmentSummaryViewModel>();
             if (rawOrder.ShipmentItems.Count > 0)
             {
                 foreach (var shipment in rawOrder.ShipmentItems)
@@ -266,6 +266,18 @@ namespace Orckestra.Composer.Cart.Factory.Order
             }
 
             return lightOrderVm;
+        }
+
+        protected virtual bool IsOrderEditable(GetOrderHistoryViewModelParam param, OrderItem rawOrder)
+        {
+            var isOrderEditable = param
+                    .OrderSettings
+                    .EditableShipmentStates
+                    ?.Split('|')
+                    .Any(item => item == rawOrder.OrderStatus)
+                                  ?? false;
+
+            return isOrderEditable;
         }
 
         protected virtual string GetOrderStatusDisplayName(OrderItem rawOrder, GetOrderHistoryViewModelParam param)

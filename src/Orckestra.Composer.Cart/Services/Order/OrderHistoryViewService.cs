@@ -94,7 +94,7 @@ namespace Orckestra.Composer.Cart.Services.Order
             {
                 shipmentsTrackingInfos = await GetShipmentsTrackingInfoViewModels(orderQueryResult, param).ConfigureAwait(false);
             }
-            var editableShipmentStatesSettings = await GetEditableShipmentStatesSettings();
+            var orderSettings = await GetOrderSettings(param.Scope);
 
             var getOrderHistoryViewModelParam = new GetOrderHistoryViewModelParam
             {
@@ -104,7 +104,7 @@ namespace Orckestra.Composer.Cart.Services.Order
                 Page = param.Page,
                 OrderDetailBaseUrl = orderDetailBaseUrl,
                 ShipmentsTrackingInfos = shipmentsTrackingInfos,
-                EditableShipmentStatusSettings = editableShipmentStatesSettings
+                OrderSettings = orderSettings
             };
 
             var viewModel = OrderHistoryViewModelFactory.CreateViewModel(getOrderHistoryViewModelParam);
@@ -112,11 +112,9 @@ namespace Orckestra.Composer.Cart.Services.Order
             return viewModel;
         }
 
-        private async Task<List<string>> GetEditableShipmentStatesSettings()
+        private async Task<OrderSettings> GetOrderSettings(string scope)
         {
-            var orderSettings = await OrderRepository.GetOrderSettings();
-            var editableShipmentStatusSettings = orderSettings.EditableShipmentStates?.Split('|').ToList();
-            return editableShipmentStatusSettings;
+            return await OrderRepository.GetOrderSettings(scope);
         }
 
         protected virtual async Task<Dictionary<Guid, TrackingInfoViewModel>> GetShipmentsTrackingInfoViewModels(
@@ -270,7 +268,7 @@ namespace Orckestra.Composer.Cart.Services.Order
                 ImageUrls = await ImageService.GetImageUrlsAsync(order.Cart.GetLineItems()).ConfigureAwait(false)
             };
 
-            var editableShipmentStatesSettings = await GetEditableShipmentStatesSettings();
+            var orderSettings = await GetOrderSettings(order.ScopeId);
             var viewModel = OrderDetailsViewModelFactory.CreateViewModel(new CreateOrderDetailViewModelParam
             {
                 Order = order,
@@ -282,7 +280,7 @@ namespace Orckestra.Composer.Cart.Services.Order
                 ProductImageInfo = productImageInfo,
                 BaseUrl = getOrderParam.BaseUrl,
                 ShipmentsNotes = shipmentsNotes,
-                EditableShipmentStatusSettings = editableShipmentStatesSettings
+                OrderSettings = orderSettings
             });
 
             if (order.Cart.PropertyBag.TryGetValue("PickedItems", out var pickedItemsObject))

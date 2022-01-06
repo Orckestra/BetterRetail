@@ -84,7 +84,7 @@ namespace Orckestra.Composer.Cart.Factory.Order
             var viewModel = new OrderDetailViewModel();
             var shipments = GetActiveShipments(param.Order);
 
-            #pragma warning disable 618
+#pragma warning disable 618
             viewModel.OrderInfos = GetOrderInfosViewModel(param);
             viewModel.History = GetOrderChangesViewModel(param.OrderChanges, param.CultureInfo, _orderStatus);
             viewModel.BillingAddress = GetBillingAddressViewModel(param);
@@ -95,7 +95,7 @@ namespace Orckestra.Composer.Cart.Factory.Order
             viewModel.OrderSummary = CartViewModelFactory.GetOrderSummaryViewModel(param.Order.Cart, param.CultureInfo);
             viewModel.OrderSummary.Taxes = TaxViewModelFactory.CreateTaxViewModels(shipments.SelectMany(s => s.Taxes).ToList(), param.CultureInfo).ToList();
             MapAdditionalFees(viewModel, param);
-            #pragma warning restore 618
+#pragma warning restore 618
 
             // Reverse the items order in the Cart so the last added item will be the first in the list
             if (viewModel.Shipments != null && viewModel.Shipments.Any())
@@ -138,9 +138,20 @@ namespace Orckestra.Composer.Cart.Factory.Order
             orderInfos.OrderStatusRaw = param.Order.OrderStatus;
             orderInfos.BillingCurrency = param.Order.Cart.BillingCurrency;
             orderInfos.PricePaid = LocalizationProvider.FormatPrice((decimal)param.Order.Cart.Total, CurrencyProvider.GetCurrency());
-            orderInfos.IsOrderInEditableShipmentStatus =
-                param.EditableShipmentStatusSettings?.Contains(param.Order.OrderStatus) ?? false;
+            orderInfos.IsOrderEditable = IsOrderEditable(param);
             return orderInfos;
+        }
+
+        protected virtual bool IsOrderEditable(CreateOrderDetailViewModelParam param)
+        {
+            var isOrderEditable = param
+                                      .OrderSettings
+                                      .EditableShipmentStates
+                                      ?.Split('|')
+                                      .Any(item => item == param.Order.OrderStatus)
+                                  ?? false;
+
+            return isOrderEditable;
         }
 
         protected virtual string GetOrderStatusDisplayName(CreateOrderDetailViewModelParam param)
@@ -221,7 +232,7 @@ namespace Orckestra.Composer.Cart.Factory.Order
 
             if (shipment.FulfillmentScheduledTimeBeginDate.HasValue)
             {
-                shipmentVm.ScheduledShipDate = 
+                shipmentVm.ScheduledShipDate =
                     LocalizationHelper.LocalizedFormat("General", "ShortDateFormat", shipment.FulfillmentScheduledTimeBeginDate.Value, param.CultureInfo);
             }
 
@@ -257,7 +268,7 @@ namespace Orckestra.Composer.Cart.Factory.Order
                 }
 
                 string shipmentStatusDate = null;
-                foreach(var el in shipmentVm.History)
+                foreach (var el in shipmentVm.History)
                 {
                     if (!el.NewValue.Equals(shipment.Status)) { continue; }
 

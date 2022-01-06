@@ -87,6 +87,6 @@ namespace Orckestra.Composer.Cart.ViewModels.Order
         /// <value>
         /// The source of the order.
         /// </value>
-        public bool IsOrderInEditableShipmentStatus { get; set; }
+        public bool IsOrderEditable { get; set; }
     }
 }
