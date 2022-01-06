@@ -232,7 +232,7 @@ In the `Failures` section, on `Dependencies` tab, it will be possible to see the
 If you look into samples and open some, it is possible to see a very detailed log with information, where the function failed, what exception appeared, and the details of this exception.
 ![image](https://user-images.githubusercontent.com/57723696/147672113-79f80d94-b66f-48ce-a052-9eff8b25d8ad.png)
 
-- To improve the readability of the statistics, the HTTP calls to API controls have their "operation name" in App Insights changed. The overridden operation name has format "`WFE{Variation} {ControllerName}.{MethodName}`". For example, if a controller named `ControllerA` is called by the API method named `MethodX` on the RefApp website with the CM variation, the operation name will be displayed as "`WFECM ControllerA.MethodX`".
+- To improve the readability of the statistics, the HTTP calls to API controls have their "operation name" in App Insights changed. The overridden operation name has format "`WFE{Variation} {ControllerName}.{MethodName}`". For example, if a controller named `ControllerA` is called to use the API method named `MethodX` on the RefApp website with the CM variation, the operation name will be displayed as "`WFECM ControllerA.MethodX`".
 
 	
   In the `Performance` section of the AppInsights service, on the `Operations` tab, it will be possible to see the operations with the new formatting. 
