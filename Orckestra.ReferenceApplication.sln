@@ -118,6 +118,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.C1.PreCo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Media.AutoImageResizing", "src\Orckestra.Media.AutoImageResizing\Orckestra.Media.AutoImageResizing.csproj", "{1C67610A-44C0-49BE-A75A-4482413E063A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.SearchQuery.Tests", "tests\Orckestra.Composer.SearchQuery.Tests\Orckestra.Composer.SearchQuery.Tests.csproj", "{D63C2FD6-1BBB-400C-B17C-BD6AE254DBD2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -276,6 +278,10 @@ Global
 		{1C67610A-44C0-49BE-A75A-4482413E063A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1C67610A-44C0-49BE-A75A-4482413E063A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1C67610A-44C0-49BE-A75A-4482413E063A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D63C2FD6-1BBB-400C-B17C-BD6AE254DBD2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D63C2FD6-1BBB-400C-B17C-BD6AE254DBD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D63C2FD6-1BBB-400C-B17C-BD6AE254DBD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D63C2FD6-1BBB-400C-B17C-BD6AE254DBD2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -325,6 +331,7 @@ Global
 		{7BF11F55-B19D-4EE2-8B22-E533C6BBC861} = {2290CF95-EF97-4E7A-ADD6-D902AD8DAAAC}
 		{485808CC-75B2-4BF6-9B57-470D30B562D4} = {2290CF95-EF97-4E7A-ADD6-D902AD8DAAAC}
 		{1C67610A-44C0-49BE-A75A-4482413E063A} = {B770DD6A-41C2-4576-80D9-58023319B204}
+		{D63C2FD6-1BBB-400C-B17C-BD6AE254DBD2} = {832CD4F4-EF5A-44B0-92FF-D159B6276AF7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {31789445-A48E-4454-9EC2-4B738A35383C}

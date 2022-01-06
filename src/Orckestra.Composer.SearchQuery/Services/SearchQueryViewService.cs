@@ -131,9 +131,17 @@ namespace Orckestra.Composer.SearchQuery.Services
                 {
                     Documents = documents,
                     TotalCount = searchQueryProducts.Result.TotalCount,
-                    Facets = searchQueryProducts.Result.Facets
-                }
+                    Facets = searchQueryProducts.Result.Facets,
+                },
             };
+
+            if (param.QueryType != Overture.ServiceModel.SearchQueries.SearchQueryType.ProductSet &&
+                param.Criteria.IncludeFacets &&
+               param.Criteria.SelectedFacets != null &&
+               param.Criteria.SelectedFacets.Any(s => s.Name?.StartsWith(SearchConfiguration.CategoryFacetFiledNamePrefix) ?? false))
+            {
+                createSearchViewModelParam.CategoryFacetCountsResult = await SearchQueryRepository.GetCategoryFacetCountsAsync(param.Criteria, searchQueryProducts).ConfigureAwait(false);
+            }
 
             viewModel = new SearchQueryViewModel
             {
@@ -156,6 +164,7 @@ namespace Orckestra.Composer.SearchQuery.Services
 
             if (viewModel.FacetSettings.CategoryFacetValuesTree != null)
             {
+                viewModel.FacetSettings.CategoryFacetValuesTree.TotalCount = createSearchViewModelParam.CategoryFacetCountsResult != null ? createSearchViewModelParam.CategoryFacetCountsResult.TotalCount : viewModel.ProductSearchResults.TotalCount;
                 viewModel.FacetSettings.Context["CategoryFacetValuesTree"] = viewModel.FacetSettings.CategoryFacetValuesTree;
             }
 
@@ -332,7 +341,7 @@ namespace Orckestra.Composer.SearchQuery.Services
                 SearchCriteria = cloneParam.Criteria
             });
 
-            return UrlFormatter.ToUrlString(nameValueCollection);
+            return nameValueCollection != null ? UrlFormatter.ToUrlString(nameValueCollection): null;
         }
     }
 }
