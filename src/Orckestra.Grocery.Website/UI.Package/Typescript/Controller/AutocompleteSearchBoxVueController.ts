@@ -187,7 +187,7 @@ module Orckestra.Composer {
                             if (sectionName === 'suggestcategories') {
                                 suggest.ParentsFullInfo.forEach(el => {
                                     let displayName = this.highlightSuggestion(el.DisplayName, query);
-                                    el.mappedDisplayName = `${displayName} (${el.Quantity}) >`;
+                                    el.mappedDisplayName = `${displayName} (${el.Quantity}) > `;
                                 });
                                 mappedDisplayName = `${mappedDisplayName} (${suggest.Quantity})`;
                             }

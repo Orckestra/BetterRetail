@@ -96,15 +96,15 @@
                         </template>
 
                         <template v-slot:before-section-suggestbrands="{ section }">
-                            <div v-if="section.data.length" class="card-header col-12 mb-2">@Html.Localize("General", "L_Suggest_Brands")</div>
+                            <div v-if="section.data.length" class="card-header col-12 mb-2 d-none d-md-block">@Html.Localize("General", "L_Suggest_Brands")</div>
                         </template>
 
                         <template v-slot:before-section-suggestcategories="{ section }">
-                            <div v-if="section.data.length" class="card-header col-12 mb-2">@Html.Localize("General", "L_Suggest_Categories")</div>
+                            <div v-if="section.data.length" class="card-header col-12 mb-2 d-none d-md-block">@Html.Localize("General", "L_Suggest_Categories")</div>
                         </template>
 
                         <template v-slot:before-section-suggestterms="{ section }">
-                            <div v-if="section.data.length" class="card-header col-12 mb-2">@Html.Localize("General", "L_Suggest_Suggestions")</div>
+                            <div v-if="section.data.length" class="card-header col-12 mb-2 d-none d-md-block">@Html.Localize("General", "L_Suggest_Suggestions")</div>
                         </template>
 
                         <template slot-scope="{ suggestion, index }">
@@ -148,7 +148,7 @@
                                 </div>
                             </div>
 
-                            <div v-else-if="suggestion.name === 'suggestcategories'" class="m-2">
+                            <div v-else-if="suggestion.name === 'suggestcategories'" class="m-2 d-none d-md-block">
                                 <a v-for="item in suggestion.item.ParentsFullInfo"
                                    v-on:mouseup.stop=""
                                    v-html="item.mappedDisplayName"
@@ -160,7 +160,7 @@
                                 </a>
                             </div>
 
-                            <div v-else="v-else" class="m-2">
+                            <div v-else="v-else" class="m-2 d-none d-md-block">
                                 <a v-html="suggestion.item.mappedDisplayName" role="link"></a>
                             </div>
 
