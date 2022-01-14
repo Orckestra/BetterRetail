@@ -1,4 +1,5 @@
 /// <reference path='../../../Typings/tsd.d.ts' />
+/// <reference path='../../../Typings/vue/index.d.ts' />
 /// <reference path='../../JQueryPlugins/ISerializeObjectJqueryPlugin.ts' />
 /// <reference path='../../Mvc/Controller.ts' />
 /// <reference path='../../ErrorHandling/ErrorHandler.ts' />
@@ -7,6 +8,12 @@
 /// <reference path='../../Repositories/CartRepository.ts' />
 /// <reference path='../../Composer.Cart/CartSummary/CartService.ts' />
 /// <reference path='../Product/ProductService.ts' />
+/// <reference path='../../Composer.Product/ProductSearch/SearchCriteria.ts' />
+///<reference path='../../Repositories/ISearchRepository.ts' />
+///<reference path='../../Repositories/SearchRepository.ts' />
+/// <reference path='./UrlHelper.ts' />
+/// <reference path='../ProductEvents.ts' />
+/// <reference path='./Constants/SearchEvents.ts' />
 
 module Orckestra.Composer {
     'use strict';
@@ -15,40 +22,112 @@ module Orckestra.Composer {
         protected cartService: ICartService = CartService.getInstance();
         protected productService: ProductService = new ProductService(this.eventHub, this.context);
         protected currentPage: any;
+        protected vueSearchResults: Vue;
+        protected searchRepository: ISearchRepository = new SearchRepository();
+        protected searchCriteria = new SearchCriteria(this.eventHub, window);
 
-        public initialize() {
+        protected initializeSearchCriteria() {
+            const facetRegistry = this.context.viewModel.FacetSettings.Context.Facets
+                .reduce((accum, facet) => {accum[facet.FieldName] = facet.FacetTypeString; return accum;}, {});
+            const categoryId = this.context.viewModel.CategoryId;
+            const correctedSearchTerm = this.context.viewModel.ProductSearchResults.CorrectedSearchTerms;
+            const options = { facetRegistry, correctedSearchTerm, categoryId, queryName: undefined, queryType: undefined };
 
-            super.initialize();
-
-            this.currentPage = this.getCurrentPage();
-
-            let pageDisplayName;
-            if (!this.currentPage || _.isUndefined(this.currentPage) || this.currentPage === null) {
-                pageDisplayName = '';
-            } else {
-                pageDisplayName = this.currentPage.DisplayName;
-            }
-
-            this.eventHub.publish('searchResultRendered', {
-                data: {
-                    ProductSearchResults: this.context.viewModel.SearchResults,
-                    Keywords: this.context.viewModel.Keywords,
-                    TotalCount: this.context.viewModel.TotalCount,
-                    ListName: this.context.viewModel.ListName,
-                    PageNumber: pageDisplayName,
-                    MaxItemsPerPage: this.context.viewModel.MaxItemsPerPage
-                }
-            }
-            );
+            this.searchCriteria.initialize(options);
+            console.log(options);
         }
 
-        private getCurrentPage(): any {
 
-            return <any>this.context.viewModel.PaginationCurrentPage;
+
+        public initialize() {
+            super.initialize();
+
+            this.sendSearchResultsForAnalytics(this.context.viewModel.ProductSearchResults);
+
+            console.log(this.context.viewModel);
+            console.log(this.context.viewModel.ListName);
+
+            this.initializeSearchCriteria();
+
+            const queryString = this.searchCriteria.toQuerystring();
+            const { categoryId, queryName, queryType } = this.searchCriteria;
+            console.log({queryString, categoryId, queryName, queryType});
+
+            const self = this;
+            this.vueSearchResults = new Vue({
+                el: '#vueSearchResults',
+                components: {
+                },
+                data: {
+                    ...this.context.viewModel.ProductSearchResults
+                },
+                mounted() {
+                    this.registerSubscriptions();
+                },
+                computed: {
+                },
+                methods: {
+                    sortingChanged(sortingType: string, url: string): void {
+                        self.eventHub.publish(SearchEvents.SortingChanged, {
+                            data: {sortingType, pageType: UrlHelper.resolvePageType(), url}
+                        });
+                    },
+                    addToCart(product: any): void {
+                        const {
+                            HasVariants: hasVariants,
+                            ProductId: productId,
+                            VariantId: variantId,
+                            RecurringOrderProgramName: recurringOrderProgramName
+                        } = product;
+
+                        console.log(product);
+                        console.log(product.hasVariants);
+
+                        const price: number = product.IsOnSale ? product.Price : product.ListPrice;
+
+                      //  var busy = this.asyncBusy({ elementContext: actionContext.elementContext, containerContext: productContext });
+
+                        if (hasVariants) {
+                            self.productService.loadQuickBuyProduct(productId, variantId, 'productSearch', this.ListName)
+                                .then(this.addToCartSuccess, this.onAddToCartFailed)
+                              //  .fin(() => busy.done());
+
+                        } else {
+                            self.sendProductDataForAnalytics(product, price, this.ListName);
+
+                            self.cartService.addLineItem(productId, '' + price, null, 1, null, recurringOrderProgramName)
+                                .then(this.addToCartSuccess, this.onAddToCartFailed)
+                              //  .fin(() => busy.done());
+                        }
+                    },
+                    onAddToCartFailed(reason: any): void {
+                        console.error('Error on adding item to cart', reason);
+
+                        ErrorHandler.instance().outputErrorFromCode('AddToCartFailed');
+                    },
+                    addToCartSuccess(data: any): void {
+                        ErrorHandler.instance().removeErrors();
+                        return data;
+                    },
+                    registerSubscriptions(): void {
+                        self.eventHub.subscribe(SearchEvents.SearchRequested, this.onSearchRequested.bind(this));
+                    },
+                    onSearchRequested({data}): void {
+                        self.searchRepository.getSearchResults(data.queryString, data.categoryId, data.queryName, data.queryType)
+                            .then(result => {
+                                console.log(result);
+                                Object.keys(result.ProductSearchResults).forEach(key => this[key] = result.ProductSearchResults[key]);
+
+                                self.eventHub.publish(SearchEvents.FacetsLoaded, { data: result });
+                            });
+                        console.log(data);
+                    }
+                }
+            });
         }
 
         public addToCart(actionContext: IControllerActionContext) {
-
+            console.log(actionContext);
             var productContext: JQuery = $(actionContext.elementContext).closest('[data-product-id]');
 
             var hasVariants: string = <any>productContext.data('hasVariants');
@@ -79,8 +158,8 @@ module Orckestra.Composer {
                     .fin(() => busy.done());
 
             } else {
-                var productData: any = this.getProductDataForAnalytics(productId, price);
-                this.eventHub.publish('lineItemAdding', { data: productData });
+             //   var productData: any = this.getProductDataForAnalytics(productId, price);
+            //    this.eventHub.publish('lineItemAdding', { data: productData });
 
                 this.cartService.addLineItem(productId, '' + price, null, 1, null, recurringOrderProgramName)
                     .then((data: any) => {
@@ -113,25 +192,33 @@ module Orckestra.Composer {
             });
         }
 
-        protected getProductDataForAnalytics(productId: string, price: any): any {
-            var results = this.context.viewModel.SearchResults;
-            var vm = _.find(results, (r: any) => r.ProductId === productId);
-
-            if (!vm) {
-                throw new Error(`Could not find a product with the ID '${productId}'.`);
-            }
-
-            var data = {
-                List: this.context.viewModel.ListName,
-                ProductId: vm.ProductId,
-                DisplayName: vm.DisplayName,
+        protected sendProductDataForAnalytics(product: any, price: any, list: string): void {
+            const productData = {
+                List: list,
+                ProductId: product.ProductId,
+                DisplayName: product.DisplayName,
                 ListPrice: price,
-                Brand: vm.Brand,
-                CategoryId: vm.CategoryId,
+                Brand: product.Brand,
+                CategoryId: product.CategoryId,
                 Quantity: 1
             };
 
-            return data;
+            this.eventHub.publish(ProductEvents.LineItemAdding, { data: productData });
+        }
+
+        protected sendSearchResultsForAnalytics(data: any): void {
+            const { Pagination: {CurrentPage}, SearchResults, Keywords, TotalCount, ListName, MaxItemsPerPage } = data;
+
+            const searchResultsData = {
+                ProductSearchResults: SearchResults,
+                Keywords,
+                TotalCount,
+                ListName,
+                PageNumber: CurrentPage && CurrentPage.DisplayName || '',
+                MaxItemsPerPage
+            };
+
+            this.eventHub.publish('searchResultRendered', { data: searchResultsData });
         }
     }
 }
