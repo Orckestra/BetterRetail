@@ -101,6 +101,13 @@ module Orckestra.Composer {
             this.selectedFacets = {};
         }
 
+        public clearAll() {
+            this.sortBy = '';
+            this.sortDirection = '';
+            this.resetPaging();
+            this.selectedFacets = {};
+        }
+
         public addSingleFacet(facetKey: string, facetValue: string) {
             this.selectedFacets[facetKey] = facetValue;
         }

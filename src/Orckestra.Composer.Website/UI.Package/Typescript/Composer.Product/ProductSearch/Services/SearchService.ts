@@ -45,8 +45,9 @@ module Orckestra.Composer {
         }
 
         public sortingChanged(eventInformation: IEventInformation) {
-            var dataUrl = eventInformation.data.url;
-            this._window.location.href = dataUrl;
+            this._searchCriteria.clearAll();
+            this._searchCriteria.loadFromQuerystring(eventInformation.data.url);
+            this.search();
         }
 
         public getSelectedFacets(): IHashTable<string|string[]> {
@@ -176,7 +177,7 @@ module Orckestra.Composer {
 
                 this._eventHub.publish(SearchEvents.SearchRequested, { data: { categoryId, queryName, queryType, queryString } });
 
-                this._window.history.pushState(this._window.history.state, "", this._baseSearchUrl + this._searchCriteria.toQuerystring());
+                this._window.history.pushState(this._window.history.state, "", this._baseSearchUrl + queryString);
               //  this._window.location.href = this._baseSearchUrl + this._searchCriteria.toQuerystring();
             }
         }
