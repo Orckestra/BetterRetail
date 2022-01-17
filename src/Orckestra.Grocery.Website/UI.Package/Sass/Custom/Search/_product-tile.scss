@@ -9,6 +9,12 @@
     pointer-events: none;
 }
 
+@mixin banner-bg($parent, $color) {
+    #{$parent} {
+        background-color: transparentize($color, 0.2) !important;
+    }
+}
+
 .product-tile {
     $lines-of-text: 3;
     background-color: $light;
@@ -178,4 +184,23 @@
         transform: rotate(45deg);
         box-shadow: 0 1px 2px  #ccc;
       }
+
+    .product-tile-banner {
+        width: 100%;
+        position: absolute;
+        bottom: 0;
+       font-size: 14px;
+       font-family: "Roboto Condensed", sans-serif;
+       text-align: center;
+      }
+      
+    .product-tile-banner span {
+        display: inline-block;
+    }
+
+    .product-tile-banner {
+        @each $color, $value in $theme-colors {
+            @include banner-bg(".bg-#{$color}", $value);
+        }
+    }
 }

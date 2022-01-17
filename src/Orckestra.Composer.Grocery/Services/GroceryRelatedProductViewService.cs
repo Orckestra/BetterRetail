@@ -64,7 +64,11 @@ namespace Orckestra.Composer.Grocery.Services
             var ribbonStyles = GroceryProductViewModelFactory.BuildPromotionalRibbonStyles(productVariant.Product);
             extendedVM.PromotionalRibbonBackgroundColor = ribbonStyles.BackgroundColor;
             extendedVM.PromotionalRibbonTextColor = ribbonStyles.TextColor;
-            
+
+            var bannerStyles = GroceryProductViewModelFactory.BuildPromotionalBannerStyles(productVariant.Product);
+            extendedVM.PromotionalBannerBackgroundColor = bannerStyles.BackgroundColor;
+            extendedVM.PromotionalBannerTextColor = bannerStyles.TextColor;
+
             return relatedProductViewModel;
         }
     }

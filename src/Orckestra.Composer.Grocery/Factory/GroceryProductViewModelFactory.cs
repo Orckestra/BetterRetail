@@ -116,7 +116,7 @@ namespace Orckestra.Composer.Grocery.Factory
             {
                 var promotionalRibbonSettings = ProductTileConfigurationContext.GetPromotionalRibbonConfigurations()
                     .FirstOrDefault(item => item.LookupValue == promotionalRibbonValue.ToString());
-                var backgroundColor = promotionalRibbonSettings != null
+                var backgroundColor = promotionalRibbonSettings != null 
                     ? promotionalRibbonSettings.BackgroundColor
                     : defaultBackgroundColor;
 
@@ -129,5 +129,26 @@ namespace Orckestra.Composer.Grocery.Factory
             return (defaultBackgroundColor, defaultTextColor);
         }
 
+        public virtual (string BackgroundColor, string TextColor) BuildPromotionalBannerStyles(Overture.ServiceModel.Products.Product product)
+        {
+            var defaultBackgroundColor = ProductTileConfigurationContext.PromotionalBannerDefaultBackgroundColor;
+            var defaultTextColor = ProductTileConfigurationContext.PromotionalBannerDefaultTextColor;
+
+            if(product.PropertyBag.TryGetValue("PromotionalBanner", out var promotionalBannerValue))
+            {
+                var promotionalBannerSettings = ProductTileConfigurationContext.GetPromotionalBannerConfigurations()
+                    .FirstOrDefault(item => item.LookupValue == promotionalBannerValue.ToString());
+                var backgroundColor = promotionalBannerSettings != null && promotionalBannerSettings.BackgroundColor != "bg-none"
+                    ? promotionalBannerSettings.BackgroundColor
+                    : defaultBackgroundColor;
+
+                var textColor = promotionalBannerSettings != null && promotionalBannerSettings?.TextColor != "text-none"
+                    ? promotionalBannerSettings.TextColor
+                    : defaultTextColor;
+                return (backgroundColor, textColor);
+            }
+
+            return (defaultBackgroundColor, defaultTextColor);
+        }
     }
 }

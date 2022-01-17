@@ -152,6 +152,9 @@
 	    <Type type="Orckestra.Composer.Grocery.DataTypes.IPromotionalRibbonConfiguration,Orckestra.Composer.Grocery">
 		  <Data dataScopeIdentifier="public" dataFilename="~\Datas\Orckestra.Composer.Grocery.DataTypes.IPromotionalRibbonConfiguration_public.xml" />
 	    </Type>
+	      <Type type="Orckestra.Composer.Grocery.DataTypes.IPromotionalBannerConfiguration,Orckestra.Composer.Grocery">
+		      <Data dataScopeIdentifier="public" dataFilename="~\Datas\Orckestra.Composer.Grocery.DataTypes.IPromotionalBannerConfiguration_public.xml" />
+	      </Type>
       </Types>
     </mi:Add>
     <mi:Add installerType="Orckestra.Composer.CompositeC1.Installers.ComposerFragmentInstaller, Orckestra.Composer.CompositeC1" uninstallerType="Orckestra.Composer.CompositeC1.Installers.ComposerFragmentUninstaller, Orckestra.Composer.CompositeC1" />

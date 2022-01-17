@@ -22,7 +22,20 @@
 					  </DataElements>
 				  </Children>
 			  </Element>
-		  </Children>
+		      <Element Label="Promotional Banners" Id="PromotionalBanners">
+			      <Actions>
+				      <AddDataAction Label="Add" Type="Orckestra.Composer.Grocery.DataTypes.IPromotionalBannerConfiguration" />
+			      </Actions>
+			      <Children>
+				      <DataElements Type="Orckestra.Composer.Grocery.DataTypes.IPromotionalBannerConfiguration">
+					      <Actions>
+						      <EditDataAction Label="Edit" />
+						      <DeleteDataAction Label="Delete" />
+					      </Actions>
+				      </DataElements>
+			      </Children>
+		      </Element>
+	      </Children>
       </Element>
     </Children>
   </ElementRoot>

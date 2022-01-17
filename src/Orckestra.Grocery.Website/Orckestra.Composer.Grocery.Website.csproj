@@ -317,7 +317,7 @@
     <Content Include="App_Data\Composite\DynamicTypeForms\Orckestra\Composer\CompositeC1\DataTypes\GoogleSettings.xml" />
     <Content Include="App_Data\Composite\DynamicTypeForms\Orckestra\Composer\CompositeC1\DataTypes\ISearchTerm.xml" />
     <Content Include="App_Data\Composite\DynamicTypeForms\Orckestra\Composer\CompositeC1\DataTypes\RecurringOrdersSettings.xml" />
-    <Content Include="App_Data\Composite\TreeDefinitions\PromotionalRibbon.xml" />
+    <Content Include="App_Data\Composite\TreeDefinitions\ProductTile.xml" />
     <Content Include="App_Data\Composite\TreeDefinitions\ContentSearch.xml" />
     <Content Include="App_Data\Composite\TreeDefinitions\NavigationElement.xml">
       <SubType>Designer</SubType>

@@ -154,6 +154,7 @@
     </Compile>
     <Compile Include="Context\IProductTileConfigurationContext.cs" />
     <Compile Include="DataTypes\IBootstrapCarousel.cs" />
+    <Compile Include="DataTypes\IPromotionalBannerConfiguration.cs" />
     <Compile Include="DataTypes\IPromotionalRibbonConfiguration.cs" />
     <Compile Include="DataTypes\IGrocerySettingsMeta.cs" />
     <Compile Include="Api\StoreAndFulfillmentSelectionController.cs" />

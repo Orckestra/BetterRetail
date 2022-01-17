@@ -7,6 +7,9 @@ namespace Orckestra.Composer.Grocery.Context
     {
         string PromotionalRibbonDefaultBackgroundColor { get; }
         string PromotionalRibbonDefaultTextColor { get; }
+        string PromotionalBannerDefaultBackgroundColor { get; }
+        string PromotionalBannerDefaultTextColor { get; }
         List<IPromotionalRibbonConfiguration> GetPromotionalRibbonConfigurations();
+        List<IPromotionalBannerConfiguration> GetPromotionalBannerConfigurations();
     }
 }
