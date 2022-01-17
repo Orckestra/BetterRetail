@@ -94,8 +94,8 @@ namespace Orckestra.Composer.Cart.Services.Order
             {
                 shipmentsTrackingInfos = await GetShipmentsTrackingInfoViewModels(orderQueryResult, param).ConfigureAwait(false);
             }
-            var orderSettings = await GetOrderSettings(param.Scope);
-
+            var orderSettings = await GetOrderSettings(param.Scope).ConfigureAwait(false);
+            
             var getOrderHistoryViewModelParam = new GetOrderHistoryViewModelParam
             {
                 CultureInfo = param.CultureInfo,
@@ -112,9 +112,9 @@ namespace Orckestra.Composer.Cart.Services.Order
             return viewModel;
         }
 
-        private async Task<OrderSettings> GetOrderSettings(string scope)
+        private Task<OrderSettings> GetOrderSettings(string scope)
         {
-            return await OrderRepository.GetOrderSettings(scope);
+            return  OrderRepository.GetOrderSettings(scope);
         }
 
         protected virtual async Task<Dictionary<Guid, TrackingInfoViewModel>> GetShipmentsTrackingInfoViewModels(
@@ -268,7 +268,7 @@ namespace Orckestra.Composer.Cart.Services.Order
                 ImageUrls = await ImageService.GetImageUrlsAsync(order.Cart.GetLineItems()).ConfigureAwait(false)
             };
 
-            var orderSettings = await GetOrderSettings(order.ScopeId);
+            var orderSettings = await GetOrderSettings(order.ScopeId).ConfigureAwait(false);
             var viewModel = OrderDetailsViewModelFactory.CreateViewModel(new CreateOrderDetailViewModelParam
             {
                 Order = order,

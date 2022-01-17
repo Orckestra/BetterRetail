@@ -270,14 +270,14 @@ namespace Orckestra.Composer.Cart.Factory.Order
 
         protected virtual bool IsOrderEditable(GetOrderHistoryViewModelParam param, OrderItem rawOrder)
         {
-            var isOrderEditable = param
-                    ?.OrderSettings
-                    ?.EditableShipmentStates
-                    ?.Split('|')
-                    .Any(item => item == rawOrder.OrderStatus)
-                                  ?? false;
+            //var isOrderEditable = param
+            //        ?.OrderSettings
+            //        ?.EditableShipmentStates
+            //        ?.Split('|')
+            //        .Any(item => item == rawOrder.OrderStatus)
+            //                   ?? false;
 
-            return isOrderEditable;
+            return false;
         }
 
         protected virtual string GetOrderStatusDisplayName(OrderItem rawOrder, GetOrderHistoryViewModelParam param)

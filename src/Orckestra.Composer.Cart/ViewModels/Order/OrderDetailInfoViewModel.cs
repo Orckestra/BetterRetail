@@ -82,7 +82,7 @@ namespace Orckestra.Composer.Cart.ViewModels.Order
 
 
         /// <summary>
-        /// Gets or sets the Is Order In Editable Shipment Status of Order
+        /// Gets or sets the is Order editable or not
         /// </summary>
         /// <value>
         /// The source of the order.

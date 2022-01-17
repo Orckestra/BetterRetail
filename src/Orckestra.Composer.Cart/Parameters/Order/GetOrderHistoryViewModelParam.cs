@@ -46,11 +46,6 @@ namespace Orckestra.Composer.Cart.Parameters.Order
         public Dictionary<Guid, TrackingInfoViewModel> ShipmentsTrackingInfos { get; set; }
 
         /// <summary>
-        /// The Order In Editable Shipment Status.
-        /// </summary>
-        public List<string> EditableShipmentStatusSettings { get; set; }
-
-        /// <summary>
         /// The Order Settings.
         /// </summary>
         public OrderSettings OrderSettings { get; set; }

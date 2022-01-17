@@ -139,6 +139,7 @@ namespace Orckestra.Composer.Cart.Factory.Order
             orderInfos.BillingCurrency = param.Order.Cart.BillingCurrency;
             orderInfos.PricePaid = LocalizationProvider.FormatPrice((decimal)param.Order.Cart.Total, CurrencyProvider.GetCurrency());
             orderInfos.IsOrderEditable = IsOrderEditable(param);
+            
             return orderInfos;
         }
 
@@ -148,7 +149,8 @@ namespace Orckestra.Composer.Cart.Factory.Order
                                       ?.OrderSettings
                                       ?.EditableShipmentStates
                                       ?.Split('|')
-                                      .Any(item => item == param.Order.OrderStatus)
+                                      .Intersect(param.Order.Cart.GetAllShipmentStatuses())
+                                      .Any()
                                   ?? false;
 
             return isOrderEditable;
