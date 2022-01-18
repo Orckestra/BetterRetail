@@ -90,15 +90,13 @@ namespace Orckestra.Composer.Cart.Services.Order
             var orderQueryResult = await OrderRepository.GetCustomerOrdersAsync(param).ConfigureAwait(false);
 
             var shipmentsTrackingInfos = new Dictionary<Guid, TrackingInfoViewModel>();
+            var fulfillmentOrdersList = new List<FulfillmentOrderQueryResult>();
+            var orderSettings = await GetOrderSettings(param.Scope).ConfigureAwait(false);
+
             if (orderQueryResult != null && orderQueryResult.Results != null && param.OrderTense == OrderTense.CurrentOrders)
             {
                 shipmentsTrackingInfos = await GetShipmentsTrackingInfoViewModels(orderQueryResult, param).ConfigureAwait(false);
-            }
-            var orderSettings = await GetOrderSettings(param.Scope).ConfigureAwait(false);
-            
-            var fulfillmentOrdersList = new List<FulfillmentOrderQueryResult>();
-            if (param.OrderTense == OrderTense.CurrentOrders)
-            {
+
                 var fulfillmentLocationsToOrder = orderQueryResult.Results
                     .Select(item => new
                     {
@@ -107,16 +105,15 @@ namespace Orckestra.Composer.Cart.Services.Order
                     }).ToList();
 
                 var fulfillmentLocationToOrder = fulfillmentLocationsToOrder
-                    .SelectMany(el => el.fulfillmentLocationIds.Select(item => new {orderId = el.orderId, fulfillmentLocationId = item}))
-                    .Distinct().ToList();
-                fulfillmentLocationToOrder
+                    .SelectMany(el => el.fulfillmentLocationIds.Select(item => new { orderId = el.orderId, fulfillmentLocationId = item }))
+                    .ToList();
+
+                fulfillmentOrdersList = (await Task.WhenAll(fulfillmentLocationToOrder
                     .GroupBy(item => item.fulfillmentLocationId)
-                    .ToList()
-                    .ForEach(item => 
-                        fulfillmentOrdersList.Add(OrderRepository.FindFulfillmentOrders(param.Scope, item.Select(el => Guid.Parse(el.orderId)).ToList(), item.Key).Result));
-                
-                //var orderIds = orderQueryResult.Results.Select(item => Guid.Parse(item.Id)).ToList();
-                //fulfillmentOrders = await OrderRepository.FindFulfillmentOrders(param.Scope, orderIds);
+                    .Select(async item =>
+                        await OrderRepository.FindFulfillmentOrders(param.Scope, item.Select(el => Guid.Parse(el.orderId)).ToList(), item.Key).ConfigureAwait(false)))
+                        .ConfigureAwait(false))
+                    .ToList();
             }
 
             var getOrderHistoryViewModelParam = new GetOrderHistoryViewModelParam
@@ -130,17 +127,17 @@ namespace Orckestra.Composer.Cart.Services.Order
                 OrderSettings = orderSettings,
                 FulfillmentOrders = fulfillmentOrdersList?.SelectMany(el => el.Results.Select(item => item)).ToList()
             };
-            
+
             var viewModel = OrderHistoryViewModelFactory.CreateViewModel(getOrderHistoryViewModelParam);
-            
+
             return viewModel;
         }
 
-        
+
 
         private Task<OrderSettings> GetOrderSettings(string scope)
         {
-            return  OrderRepository.GetOrderSettings(scope);
+            return OrderRepository.GetOrderSettings(scope);
         }
 
         protected virtual async Task<Dictionary<Guid, TrackingInfoViewModel>> GetShipmentsTrackingInfoViewModels(
@@ -186,16 +183,16 @@ namespace Orckestra.Composer.Cart.Services.Order
             if (string.IsNullOrWhiteSpace(param.BaseUrl)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.BaseUrl)), nameof(param)); }
 
             var order = await OrderRepository.GetOrderAsync(param).ConfigureAwait(false);
-            
+
             //Check if order is one of the current customer.
             if (order == null || Guid.Parse(order.CustomerId) != param.CustomerId) { return null; }
 
             var viewModel = await BuildOrderDetailViewModelAsync(order, param).ConfigureAwait(false);
-            
+
             return viewModel;
         }
 
-         /// <summary>
+        /// <summary>
         /// Gets an OrderDetailViewModel for a guest customer, containing all information about an order and his shipments.
         /// </summary>
         /// <param name="param"></param>
