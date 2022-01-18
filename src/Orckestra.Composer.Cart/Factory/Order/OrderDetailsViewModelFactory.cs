@@ -139,19 +139,18 @@ namespace Orckestra.Composer.Cart.Factory.Order
             orderInfos.BillingCurrency = param.Order.Cart.BillingCurrency;
             orderInfos.PricePaid = LocalizationProvider.FormatPrice((decimal)param.Order.Cart.Total, CurrencyProvider.GetCurrency());
             orderInfos.IsOrderEditable = IsOrderEditable(param);
-            
+
             return orderInfos;
         }
 
         protected virtual bool IsOrderEditable(CreateOrderDetailViewModelParam param)
         {
-            var isOrderEditable =// param
-                                 //  ?.OrderSettings
-                                 //  ?.EditableShipmentStates
-                                     "UnableToRoute"?.Split('|')
-                                      .Intersect(param.Order.Cart.GetAllShipmentStatuses())
-                                      .Any()
-                                  ?? false;
+            var isOrderEditable = param
+                    ?.OrderSettings
+                    ?.EditableShipmentStates
+                    ?.Split('|')
+                    .Intersect(param.Order.Cart.GetAllShipmentStatuses())
+                    .Any() ?? false;
 
             return isOrderEditable;
         }
