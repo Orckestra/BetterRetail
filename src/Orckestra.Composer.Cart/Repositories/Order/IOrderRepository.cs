@@ -39,6 +39,18 @@ namespace Orckestra.Composer.Cart.Repositories.Order
         /// <returns></returns>
         Task<Overture.ServiceModel.Orders.Order> UpdateOrderAsync(UpdateOrderParam param);
 
+        /// <summary>
+        /// Get Order Settings.
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
         Task<OrderSettings> GetOrderSettings(string scope);
+
+        /// <summary>
+        /// Find FulfillmentOrders.
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        Task<FulfillmentOrderQueryResult> FindFulfillmentOrders(string scope, List<Guid> orderIds);
     }
 }

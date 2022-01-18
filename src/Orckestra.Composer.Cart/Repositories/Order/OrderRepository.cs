@@ -10,6 +10,7 @@ using Orckestra.Overture.ServiceModel.Customers;
 using Orckestra.Overture.ServiceModel.Orders;
 using Orckestra.Overture.ServiceModel.Requests.Customers;
 using Orckestra.Overture.ServiceModel.Requests.Orders;
+using Orckestra.Overture.ServiceModel.Requests.Orders.Fulfillment;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Cart.Repositories.Order
@@ -146,6 +147,16 @@ namespace Orckestra.Composer.Cart.Repositories.Order
             };
 
             return cacheKey;
+        }
+
+        public virtual async Task<FulfillmentOrderQueryResult> FindFulfillmentOrders(string scope, List<Guid> orderIds)
+        {
+            var request = new FindFulfillmentOrdersRequest
+            {
+                ScopeId = scope,
+                OrderIds = orderIds
+            };
+            return await OvertureClient.SendAsync(request).ConfigureAwait(false);
         }
     }
 }

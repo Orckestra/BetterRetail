@@ -49,5 +49,7 @@ namespace Orckestra.Composer.Cart.Parameters.Order
         /// The Order Settings.
         /// </summary>
         public OrderSettings OrderSettings { get; set; }
+
+        public List<FulfillmentOrder> FulfillmentOrders { get; set; }
     }
 }

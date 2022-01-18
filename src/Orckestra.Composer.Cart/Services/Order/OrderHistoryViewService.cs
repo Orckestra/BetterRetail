@@ -95,7 +95,10 @@ namespace Orckestra.Composer.Cart.Services.Order
                 shipmentsTrackingInfos = await GetShipmentsTrackingInfoViewModels(orderQueryResult, param).ConfigureAwait(false);
             }
             var orderSettings = await GetOrderSettings(param.Scope).ConfigureAwait(false);
-            
+
+            var orderIds = orderQueryResult.Results.Select(item => Guid.Parse(item.Id)).ToList();
+            var fulfillmentOrders = await OrderRepository.FindFulfillmentOrders(param.Scope, orderIds);
+
             var getOrderHistoryViewModelParam = new GetOrderHistoryViewModelParam
             {
                 CultureInfo = param.CultureInfo,
@@ -104,13 +107,16 @@ namespace Orckestra.Composer.Cart.Services.Order
                 Page = param.Page,
                 OrderDetailBaseUrl = orderDetailBaseUrl,
                 ShipmentsTrackingInfos = shipmentsTrackingInfos,
-                OrderSettings = orderSettings
+                OrderSettings = orderSettings,
+                FulfillmentOrders = fulfillmentOrders.Results.Select(item => item).ToList()
             };
-
+            
             var viewModel = OrderHistoryViewModelFactory.CreateViewModel(getOrderHistoryViewModelParam);
             
             return viewModel;
         }
+
+        
 
         private Task<OrderSettings> GetOrderSettings(string scope)
         {
