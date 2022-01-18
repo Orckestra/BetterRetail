@@ -145,10 +145,10 @@ namespace Orckestra.Composer.Cart.Factory.Order
 
         protected virtual bool IsOrderEditable(CreateOrderDetailViewModelParam param)
         {
-            var isOrderEditable = param
-                                      ?.OrderSettings
-                                      ?.EditableShipmentStates
-                                      ?.Split('|')
+            var isOrderEditable =// param
+                                 //  ?.OrderSettings
+                                 //  ?.EditableShipmentStates
+                                     "UnableToRoute"?.Split('|')
                                       .Intersect(param.Order.Cart.GetAllShipmentStatuses())
                                       .Any()
                                   ?? false;

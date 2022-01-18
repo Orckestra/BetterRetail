@@ -95,9 +95,29 @@ namespace Orckestra.Composer.Cart.Services.Order
                 shipmentsTrackingInfos = await GetShipmentsTrackingInfoViewModels(orderQueryResult, param).ConfigureAwait(false);
             }
             var orderSettings = await GetOrderSettings(param.Scope).ConfigureAwait(false);
+            
+            var fulfillmentOrdersList = new List<FulfillmentOrderQueryResult>();
+            if (param.OrderTense == OrderTense.CurrentOrders)
+            {
+                var fulfillmentLocationsToOrder = orderQueryResult.Results
+                    .Select(item => new
+                    {
+                        fulfillmentLocationIds = item.ShipmentItems.Select(el => el.FulfillmentLocationId).ToList(),
+                        orderId = item.Id
+                    }).ToList();
 
-            var orderIds = orderQueryResult.Results.Select(item => Guid.Parse(item.Id)).ToList();
-            var fulfillmentOrders = await OrderRepository.FindFulfillmentOrders(param.Scope, orderIds);
+                var fulfillmentLocationToOrder = fulfillmentLocationsToOrder
+                    .SelectMany(el => el.fulfillmentLocationIds.Select(item => new {orderId = el.orderId, fulfillmentLocationId = item}))
+                    .Distinct().ToList();
+                fulfillmentLocationToOrder
+                    .GroupBy(item => item.fulfillmentLocationId)
+                    .ToList()
+                    .ForEach(item => 
+                        fulfillmentOrdersList.Add(OrderRepository.FindFulfillmentOrders(param.Scope, item.Select(el => Guid.Parse(el.orderId)).ToList(), item.Key).Result));
+                
+                //var orderIds = orderQueryResult.Results.Select(item => Guid.Parse(item.Id)).ToList();
+                //fulfillmentOrders = await OrderRepository.FindFulfillmentOrders(param.Scope, orderIds);
+            }
 
             var getOrderHistoryViewModelParam = new GetOrderHistoryViewModelParam
             {
@@ -108,7 +128,7 @@ namespace Orckestra.Composer.Cart.Services.Order
                 OrderDetailBaseUrl = orderDetailBaseUrl,
                 ShipmentsTrackingInfos = shipmentsTrackingInfos,
                 OrderSettings = orderSettings,
-                FulfillmentOrders = fulfillmentOrders.Results.Select(item => item).ToList()
+                FulfillmentOrders = fulfillmentOrdersList?.SelectMany(el => el.Results.Select(item => item)).ToList()
             };
             
             var viewModel = OrderHistoryViewModelFactory.CreateViewModel(getOrderHistoryViewModelParam);
