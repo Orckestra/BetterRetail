@@ -42,10 +42,8 @@ module Orckestra.Composer {
                 computed: {
                 },
                 methods: {
-                    sortingChanged(sortingType: string, url: string): void {
-                        self.eventHub.publish(SearchEvents.SortingChanged, {
-                            data: {sortingType, pageType: UrlHelper.resolvePageType(), url}
-                        });
+                    sortingChanged(url: string): void {
+                        self.eventHub.publish(SearchEvents.SortingChanged, {data: {url}});
                     },
                     addToCart(product: any): void {
                         const {

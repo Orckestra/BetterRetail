@@ -69,7 +69,7 @@ module Orckestra.Composer {
                 queryBuilder.push(this.encodeQuerystringValue(this.sortDirection));
             }
 
-            if (!_.isEmpty(this.page) && this.page > 1) {
+            if (this.page > 1) {
                 queryBuilder.push('&page=');
                 queryBuilder.push(this.page.toString());
             }
