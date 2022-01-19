@@ -202,6 +202,8 @@ namespace Orckestra.Composer.Cart.Tests.Factory.Order
         [TestCase("New|Pending", new string[] { "New", "Pending" }, true)]
         [TestCase("New|Pending", new string[] { "Canceled" }, false)]
         [TestCase("New|Pending", new string[] { "New,Canceled" }, false)]
+        [TestCase(null, new string[] { "New", "Canceled" }, false)]
+        [TestCase("New|Pending", null, false)]
         public void WHEN_valid_request_EditableShipmentStates_SHOULD_return_TRUE(string editableShipmentStates,
             string[] cartShipmentStatuses,
             bool expectedIsOrderEditable)
@@ -211,7 +213,7 @@ namespace Orckestra.Composer.Cart.Tests.Factory.Order
 
             //Act
             var shipmentList = new List<Shipment>();
-            cartShipmentStatuses.ToList().ForEach(
+            cartShipmentStatuses?.ToList().ForEach(
                 item => shipmentList.Add(new Shipment()
                 {
                     Status = item ,

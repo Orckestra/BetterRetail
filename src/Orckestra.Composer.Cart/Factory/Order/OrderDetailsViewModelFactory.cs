@@ -143,8 +143,13 @@ namespace Orckestra.Composer.Cart.Factory.Order
             return orderInfos;
         }
 
-        public virtual bool IsOrderEditable(CreateOrderDetailViewModelParam param)
+        protected virtual bool IsOrderEditable(CreateOrderDetailViewModelParam param)
         {
+            if (!param.Order.Cart.GetAllShipmentStatuses().Any())
+            {
+                return false;
+            }
+
             var isOrderEditable = param.Order.Cart.GetAllShipmentStatuses()
                 .All(item => param
                     ?.OrderSettings
