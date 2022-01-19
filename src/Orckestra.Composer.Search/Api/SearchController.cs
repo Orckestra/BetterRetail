@@ -114,32 +114,47 @@ namespace Orckestra.Composer.Search.Api
         [ActionName("searchresults")]
         [HttpPost]
         [ValidateModelState]
-        public virtual async Task<IHttpActionResult> GetSearchResults(GetCategoryFacetsRequest request)
+        public virtual async Task<IHttpActionResult> GetSearchResults(GetSearchResultsRequest request)
         {
             var queryString = HttpUtility.ParseQueryString(request.QueryString ?? "");
             var SelectedFacets = SearchUrlProvider.BuildSelectedFacets(queryString).ToList();
             var CurrentPage = int.TryParse(queryString[SearchRequestParams.Page], out int page) && page > 0 ? page : 1;
             var SortDirection = queryString[SearchRequestParams.SortDirection] ?? SearchRequestParams.DefaultSortDirection;
             var SortBy = queryString[SearchRequestParams.SortBy] ?? SearchRequestParams.DefaultSortBy;
+            var BaseUrl = RequestUtils.GetBaseUrl(Request).ToString();
+            var Keywords = queryString[SearchRequestParams.Keywords];
+            BaseSearchViewModel viewModel;
 
-            var param = new GetCategoryBrowsingViewModelParam
+            if (!string.IsNullOrEmpty(request.CategoryId))
             {
-                CategoryId = request.CategoryId,
-                CategoryName = string.Empty,//await GetCategoryNameAsync(categoryId).ConfigureAwait(false),
-                BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
-                IsAllProducts = false, //CategoryMetaContext.GetIsAllProductPage(),
-                NumberOfItemsPerPage = SearchConfiguration.MaxItemsPerPage,
-                Page = CurrentPage,
-                SortBy = SortBy,
-                SortDirection = SortDirection,
-                InventoryLocationIds = await InventoryLocationProvider.GetInventoryLocationIdsForSearchAsync().ConfigureAwait(false),
-                SelectedFacets = SelectedFacets,
-                CultureInfo = ComposerContext.CultureInfo,
-            };
+                var param = new GetCategoryBrowsingViewModelParam
+                {
+                    CategoryId = request.CategoryId,
+                    CategoryName = string.Empty,//await GetCategoryNameAsync(categoryId).ConfigureAwait(false),
+                    BaseUrl = BaseUrl,
+                    IsAllProducts = false, //CategoryMetaContext.GetIsAllProductPage(),
+                    NumberOfItemsPerPage = SearchConfiguration.MaxItemsPerPage,
+                    Page = CurrentPage,
+                    SortBy = SortBy,
+                    SortDirection = SortDirection,
+                    InventoryLocationIds = await InventoryLocationProvider.GetInventoryLocationIdsForSearchAsync().ConfigureAwait(false),
+                    SelectedFacets = SelectedFacets,
+                    CultureInfo = ComposerContext.CultureInfo,
+                };
 
-            var viewModel = await CategoryBrowsingViewService.GetCategoryBrowsingViewModelAsync(param).ConfigureAwait(false);
+                viewModel = await CategoryBrowsingViewService.GetCategoryBrowsingViewModelAsync(param).ConfigureAwait(false);
+            }
+            else
+            {
+                var searchCriteria = await BaseSearchCriteriaProvider.GetSearchCriteriaAsync(Keywords, BaseUrl, true, CurrentPage).ConfigureAwait(false);
+                searchCriteria.SortBy = SortBy;
+                searchCriteria.SortDirection = SortDirection;
+                searchCriteria.SelectedFacets.AddRange(SelectedFacets);
+
+                viewModel = await SearchViewService.GetSearchViewModelAsync(searchCriteria).ConfigureAwait(false);
+            }
+
             viewModel.ProductSearchResults.Facets = viewModel.ProductSearchResults.Facets.Where(f => !f.FieldName.StartsWith(SearchConfiguration.CategoryFacetFiledNamePrefix)).ToList();
-
             return Ok(viewModel);
         }
 

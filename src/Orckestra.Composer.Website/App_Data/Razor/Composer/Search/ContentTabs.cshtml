@@ -1,4 +1,4 @@
-﻿@inherits Composer.Razor.ComposerRazorFunction
+@inherits Composer.Razor.ComposerRazorFunction
 @using Orckestra.Composer.Search.Context
 @using Orckestra.Composer.Search.ViewModels
 @using Orckestra.Search.WebsiteSearch;
@@ -312,57 +312,20 @@
     {
         return;
     }
-    <div class="row">
-        <div class="col-12 col-lg-10 offset-lg-3">
-            <div class="row filters-row">
-                <div class="col-6 d-lg-none">
-                    @FacetHelpers.FacetsModalCollapseBtn()
-                </div>
-                @if (ProductSearchResults.TotalCount > 0)
-                {
-                    <div class="col-6">
-                        @Partial("SearchSortBy", ProductSearchResults)
-                    </div>
-                    <div class="col-6 d-none d-lg-block">
-                        @Partial("PaginationDropDown", ProductSearchResults)
-                    </div>
-                }
-            </div>
-        </div>
-        <div class="col-12">
-            <div class="row">
-                <div id="leftCol" class="col-12 col-lg-3  facets-col">
-
-                    @Function("Composer.Search.SelectedFacets")
-
-                    <div id="facetsModal" class="facets-modal">
-                        <div class="facets-modal-dialog">
-                            <div class="facets-modal-content">
-                                @FacetHelpers.FacetsModalHeader()
-                                <div class="facets-modal-body">
-                                    <div class="overlay"></div>
-                                    @Function("Composer.Search.Facets")
-                                </div>
-                                @FacetHelpers.FacetsModalFooter()
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-                @if (ProductSearchResults.TotalCount > 0)
-                {
-                    <div class="col-12 col-lg-9">
-                        @Function("Composer.Search.Index")
-                        <div class="row">
-                            <div class="col-12">
-                                @Partial("Pager", ProductSearchResults)
-                            </div>
-                        </div>
-                    </div>
-                }
-            </div>
-        </div>
-    </div>
+    <f:function name="Composer.Grids.SearchGrid">
+        <f:param name="LeftPart">
+            <html>
+                <head></head>
+                <body>
+                    <f:function name="Composer.Search.SelectedFacets"></f:function>
+                    <f:function name="Composer.Search.Facets"></f:function>
+                </body>
+            </html>
+        </f:param>
+        <f:param name="RightPart">
+            @Function("Composer.Search.BaseSearchResults", new { Results = ProductsSearchViewModel })
+        </f:param>
+    </f:function>
 }
 
 @helper ShowSortBy()
