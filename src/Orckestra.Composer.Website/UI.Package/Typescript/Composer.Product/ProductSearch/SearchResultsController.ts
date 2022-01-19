@@ -8,7 +8,6 @@
 /// <reference path='../../Repositories/CartRepository.ts' />
 /// <reference path='../../Composer.Cart/CartSummary/CartService.ts' />
 /// <reference path='../Product/ProductService.ts' />
-/// <reference path='../../Composer.Product/ProductSearch/SearchCriteria.ts' />
 ///<reference path='../../Repositories/ISearchRepository.ts' />
 ///<reference path='../../Repositories/SearchRepository.ts' />
 /// <reference path='./UrlHelper.ts' />
@@ -24,34 +23,10 @@ module Orckestra.Composer {
         protected currentPage: any;
         protected vueSearchResults: Vue;
         protected searchRepository: ISearchRepository = new SearchRepository();
-        protected searchCriteria = new SearchCriteria(this.eventHub, window);
-
-        protected initializeSearchCriteria() {
-            const facetRegistry = this.context.viewModel.FacetSettings.Context.Facets
-                .reduce((accum, facet) => {accum[facet.FieldName] = facet.FacetTypeString; return accum;}, {});
-            const categoryId = this.context.viewModel.CategoryId;
-            const correctedSearchTerm = this.context.viewModel.ProductSearchResults.CorrectedSearchTerms;
-            const options = { facetRegistry, correctedSearchTerm, categoryId, queryName: undefined, queryType: undefined };
-
-            this.searchCriteria.initialize(options);
-            console.log(options);
-        }
-
-
 
         public initialize() {
             super.initialize();
-
             this.sendSearchResultsForAnalytics(this.context.viewModel.ProductSearchResults);
-
-            console.log(this.context.viewModel);
-            console.log(this.context.viewModel.ListName);
-
-            this.initializeSearchCriteria();
-
-            const queryString = this.searchCriteria.toQuerystring();
-            const { categoryId, queryName, queryType } = this.searchCriteria;
-            console.log({queryString, categoryId, queryName, queryType});
 
             const self = this;
             this.vueSearchResults = new Vue({
@@ -79,9 +54,6 @@ module Orckestra.Composer {
                             VariantId: variantId,
                             RecurringOrderProgramName: recurringOrderProgramName
                         } = product;
-
-                        console.log(product);
-                        console.log(product.hasVariants);
 
                         const price: number = product.IsOnSale ? product.Price : product.ListPrice;
 
@@ -115,12 +87,10 @@ module Orckestra.Composer {
                     onSearchRequested({data}): void {
                         self.searchRepository.getSearchResults(data.queryString, data.categoryId, data.queryName, data.queryType)
                             .then(result => {
-                                console.log(result);
                                 Object.keys(result.ProductSearchResults).forEach(key => this[key] = result.ProductSearchResults[key]);
 
                                 self.eventHub.publish(SearchEvents.FacetsLoaded, { data: result });
                             });
-                        console.log(data);
                     }
                 }
             });
