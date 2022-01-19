@@ -45,12 +45,5 @@ namespace Orckestra.Composer.Cart.Repositories.Order
         /// <param name="param"></param>
         /// <returns></returns>
         Task<OrderSettings> GetOrderSettings(string scope);
-
-        /// <summary>
-        /// Find FulfillmentOrders.
-        /// </summary>
-        /// <param name="param"></param>
-        /// <returns></returns>
-        Task<FulfillmentOrderQueryResult> FindFulfillmentOrders(string scope, List<Guid> orderIds, Guid fulfillmentLocationId);
     }
 }

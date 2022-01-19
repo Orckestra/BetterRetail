@@ -63,7 +63,7 @@ namespace Orckestra.Composer.Cart.Factory.Order
                     })
                 };
 
-                foreach (var rawOrder in param.Orders)
+                foreach (var rawOrder in param.OrderResult.Results)
                 {
                     var order = BuildLightOrderDetailViewModel(rawOrder, param);
                     viewModel.Orders.Add(order);
@@ -227,27 +227,27 @@ namespace Orckestra.Composer.Cart.Factory.Order
         /// <param name="rawOrder">The raw order.</param>
         /// <param name="param"></param>
         /// <returns></returns>
-        protected virtual LightOrderDetailViewModel BuildLightOrderDetailViewModel(OrderCartViewModel rawOrder,
+        protected virtual LightOrderDetailViewModel BuildLightOrderDetailViewModel(OrderItem rawOrder,
            GetOrderHistoryViewModelParam param)
         {
             var lightOrderVm = new LightOrderDetailViewModel();
-            var orderInfo = ViewModelMapper.MapTo<OrderDetailInfoViewModel>(rawOrder.OrderItem, param.CultureInfo);
+            var orderInfo = ViewModelMapper.MapTo<OrderDetailInfoViewModel>(rawOrder, param.CultureInfo);
 
             orderInfo.OrderStatus = GetOrderStatusDisplayName(rawOrder, param);
-            orderInfo.OrderStatusRaw = rawOrder.OrderItem.OrderStatus;
+            orderInfo.OrderStatusRaw = rawOrder.OrderStatus;
             orderInfo.IsOrderEditable = IsOrderEditable(param, rawOrder);
 
             var orderDetailUrl = UrlFormatter.AppendQueryString(param.OrderDetailBaseUrl, new NameValueCollection
                 {
-                    {"id", rawOrder.OrderItem.OrderNumber}
+                    {"id", rawOrder.OrderNumber}
                 });
             lightOrderVm.Url = orderDetailUrl;
 
             lightOrderVm.OrderInfos = orderInfo;
             lightOrderVm.ShipmentSummaries = new List<OrderShipmentSummaryViewModel>();
-            if (rawOrder.OrderItem.ShipmentItems.Count > 0)
+            if (rawOrder.ShipmentItems.Count > 0)
             {
-                foreach (var shipment in rawOrder.OrderItem.ShipmentItems)
+                foreach (var shipment in rawOrder.ShipmentItems)
                 {
                     var shipmentSummary = new OrderShipmentSummaryViewModel();
 
@@ -269,9 +269,10 @@ namespace Orckestra.Composer.Cart.Factory.Order
             return lightOrderVm;
         }
 
-        protected virtual bool IsOrderEditable(GetOrderHistoryViewModelParam param, OrderCartViewModel rawOrder)
+        protected virtual bool IsOrderEditable(GetOrderHistoryViewModelParam param, OrderItem rawOrder)
         {
-            var shipmentStatuses = rawOrder.Cart.GetAllShipmentStatuses();
+            var order = param.Orders.FirstOrDefault(item => Guid.Parse(item.Id) == Guid.Parse(rawOrder.Id));
+            var shipmentStatuses = order.Cart.GetAllShipmentStatuses();
             if (!shipmentStatuses.Any()
                 || param.OrderSettings == null
                 || string.IsNullOrWhiteSpace(param.OrderSettings.EditableShipmentStates))
@@ -289,12 +290,12 @@ namespace Orckestra.Composer.Cart.Factory.Order
             return isOrderEditable;
         }
 
-        protected virtual string GetOrderStatusDisplayName(OrderCartViewModel rawOrder, GetOrderHistoryViewModelParam param)
+        protected virtual string GetOrderStatusDisplayName(OrderItem rawOrder, GetOrderHistoryViewModelParam param)
         {
             return LocalizationProvider.GetLocalizedString(new GetLocalizedParam
             {
                 Category = "General",
-                Key = $"L_OrderStatus_{rawOrder.OrderItem.OrderStatus}",
+                Key = $"L_OrderStatus_{rawOrder.OrderStatus}",
                 CultureInfo = param.CultureInfo
             });
         }

@@ -92,9 +92,10 @@ namespace Orckestra.Composer.Cart.Services.Order
             var shipmentsTrackingInfos = new Dictionary<Guid, TrackingInfoViewModel>();
             var orderSettings = await GetOrderSettings(param.Scope).ConfigureAwait(false);
             var orderCartDetails = new List<OrderCartViewModel>();
+            var ordersDetails = await GetOrders(orderQueryResult, param);
             if (orderQueryResult != null && orderQueryResult.Results != null && param.OrderTense == OrderTense.CurrentOrders)
             {
-                var ordersDetails = GetOrdersDetails(orderQueryResult, param);
+                
 
                 shipmentsTrackingInfos = GetShipmentsTrackingInfoViewModels(ordersDetails, param);
                 orderCartDetails.AddRange(orderQueryResult.Results.Select(item =>
@@ -118,7 +119,7 @@ namespace Orckestra.Composer.Cart.Services.Order
                 OrderDetailBaseUrl = orderDetailBaseUrl,
                 ShipmentsTrackingInfos = shipmentsTrackingInfos,
                 OrderSettings = orderSettings,
-                Orders = orderCartDetails
+                Orders = ordersDetails
             };
 
             var viewModel = OrderHistoryViewModelFactory.CreateViewModel(getOrderHistoryViewModelParam);
@@ -133,7 +134,7 @@ namespace Orckestra.Composer.Cart.Services.Order
             return OrderRepository.GetOrderSettings(scope);
         }
 
-        protected virtual  List<Overture.ServiceModel.Orders.Order> GetOrdersDetails(OrderQueryResult orderQueryResult,
+        protected virtual async Task<List<Overture.ServiceModel.Orders.Order>> GetOrders(OrderQueryResult orderQueryResult,
             GetCustomerOrdersParam param)
         {
             var getOrderTasks = orderQueryResult.Results.Select(order => OrderRepository.GetOrderAsync(new GetCustomerOrderParam
@@ -142,7 +143,7 @@ namespace Orckestra.Composer.Cart.Services.Order
                 Scope = param.Scope
             }));
 
-            var orders = Task.WhenAll(getOrderTasks).Result;
+            var orders =await Task.WhenAll(getOrderTasks).ConfigureAwait(false);
             return orders.ToList();
         }
 

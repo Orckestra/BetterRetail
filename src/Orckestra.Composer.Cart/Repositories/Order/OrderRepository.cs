@@ -148,16 +148,5 @@ namespace Orckestra.Composer.Cart.Repositories.Order
 
             return cacheKey;
         }
-
-        public virtual Task<FulfillmentOrderQueryResult> FindFulfillmentOrders(string scope, List<Guid> orderIds, Guid fulfillmentLocationId)
-        {
-            var request = new FindFulfillmentOrdersRequest
-            {
-                ScopeId = scope,
-                OrderIds = orderIds,
-                FulfillmentLocationId = fulfillmentLocationId
-            };
-            return OvertureClient.SendAsync(request);
-        }
     }
 }

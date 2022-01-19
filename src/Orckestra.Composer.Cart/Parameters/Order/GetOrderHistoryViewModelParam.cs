@@ -32,7 +32,7 @@ namespace Orckestra.Composer.Cart.Parameters.Order
         /// <summary>
         /// Gets or sets the Orders
         /// </summary>
-        public List<OrderCartViewModel> Orders { get; set; }
+        public List<Overture.ServiceModel.Orders.Order> Orders { get; set; }
 
         /// <summary>
         /// Gets or sets the Order Statuses
