@@ -91,23 +91,11 @@ namespace Orckestra.Composer.Cart.Services.Order
 
             var shipmentsTrackingInfos = new Dictionary<Guid, TrackingInfoViewModel>();
             var orderSettings = await GetOrderSettings(param.Scope).ConfigureAwait(false);
-            var orderCartDetails = new List<OrderCartViewModel>();
             var ordersDetails = await GetOrders(orderQueryResult, param);
+
             if (orderQueryResult != null && orderQueryResult.Results != null && param.OrderTense == OrderTense.CurrentOrders)
             {
-                
-
                 shipmentsTrackingInfos = GetShipmentsTrackingInfoViewModels(ordersDetails, param);
-                orderCartDetails.AddRange(orderQueryResult.Results.Select(item =>
-                {
-                    var orderDetails = ordersDetails.FirstOrDefault(_ => Guid.Parse(_.Id) == Guid.Parse(item.Id));
-
-                    return new OrderCartViewModel
-                    {
-                        Cart = orderDetails?.Cart,
-                        OrderItem = item
-                    };
-                }));
             }
             
             var getOrderHistoryViewModelParam = new GetOrderHistoryViewModelParam
