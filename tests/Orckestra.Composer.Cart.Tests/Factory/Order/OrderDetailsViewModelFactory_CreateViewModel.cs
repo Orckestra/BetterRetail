@@ -212,18 +212,16 @@ namespace Orckestra.Composer.Cart.Tests.Factory.Order
             var factory = _container.CreateInstance<OrderDetailsViewModelFactory>();
 
             //Act
-            var shipmentList = new List<Shipment>();
-            cartShipmentStatuses?.ToList().ForEach(
-                item => shipmentList.Add(new Shipment()
+            var shipmentList = cartShipmentStatuses?.Select(status => new Shipment()
                 {
-                    Status = item ,
+                    Status = status ,
                     Address = new Address(),
                     FulfillmentMethod = new FulfillmentMethod
                     {
                         Cost = GetRandom.Double()
                     },
                     Taxes = new List<Tax>()
-                }));
+                }).ToList();
 
             var order = CreateOrderWithShipments(shipmentList);
             var result = factory.CreateViewModel(CreateOrderDetailViewModelParam(order, editableShipmentStates));
