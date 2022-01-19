@@ -203,6 +203,7 @@ namespace Orckestra.Composer.Cart.Tests.Factory.Order
         [TestCase("New|Pending", new string[] { "Canceled" }, false)]
         [TestCase("New|Pending", new string[] { "New,Canceled" }, false)]
         [TestCase(null, new string[] { "New", "Canceled" }, false)]
+        [TestCase(null, null, false)]
         [TestCase("New|Pending", null, false)]
         public void WHEN_order_with_provided_shipment_statuses_SHOULD_return_correct_IsOrderEditable(string editableShipmentStates,
             string[] cartShipmentStatuses,
