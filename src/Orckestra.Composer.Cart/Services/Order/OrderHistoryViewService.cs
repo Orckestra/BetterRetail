@@ -90,32 +90,25 @@ namespace Orckestra.Composer.Cart.Services.Order
             var orderQueryResult = await OrderRepository.GetCustomerOrdersAsync(param).ConfigureAwait(false);
 
             var shipmentsTrackingInfos = new Dictionary<Guid, TrackingInfoViewModel>();
-            var fulfillmentOrdersList = new List<FulfillmentOrderQueryResult>();
             var orderSettings = await GetOrderSettings(param.Scope).ConfigureAwait(false);
-
+            var orderCartDetails = new List<OrderCartViewModel>();
             if (orderQueryResult != null && orderQueryResult.Results != null && param.OrderTense == OrderTense.CurrentOrders)
             {
-                shipmentsTrackingInfos = await GetShipmentsTrackingInfoViewModels(orderQueryResult, param).ConfigureAwait(false);
+                var ordersDetails = GetOrdersDetails(orderQueryResult, param);
 
-                var fulfillmentLocationsToOrder = orderQueryResult.Results
-                    .Select(item => new
+                shipmentsTrackingInfos = GetShipmentsTrackingInfoViewModels(ordersDetails, param);
+                orderCartDetails.AddRange(orderQueryResult.Results.Select(item =>
+                {
+                    var orderDetails = ordersDetails.FirstOrDefault(_ => Guid.Parse(_.Id) == Guid.Parse(item.Id));
+
+                    return new OrderCartViewModel
                     {
-                        fulfillmentLocationIds = item.ShipmentItems.Select(el => el.FulfillmentLocationId).ToList(),
-                        orderId = item.Id
-                    }).ToList();
-
-                var fulfillmentLocationToOrder = fulfillmentLocationsToOrder
-                    .SelectMany(el => el.fulfillmentLocationIds.Select(item => new { orderId = el.orderId, fulfillmentLocationId = item }))
-                    .ToList();
-
-                fulfillmentOrdersList = (await Task.WhenAll(fulfillmentLocationToOrder
-                    .GroupBy(item => item.fulfillmentLocationId)
-                    .Select(async item =>
-                        await OrderRepository.FindFulfillmentOrders(param.Scope, item.Select(el => Guid.Parse(el.orderId)).ToList(), item.Key).ConfigureAwait(false)))
-                        .ConfigureAwait(false))
-                    .ToList();
+                        Cart = orderDetails?.Cart,
+                        OrderItem = item
+                    };
+                }));
             }
-
+            
             var getOrderHistoryViewModelParam = new GetOrderHistoryViewModelParam
             {
                 CultureInfo = param.CultureInfo,
@@ -125,7 +118,7 @@ namespace Orckestra.Composer.Cart.Services.Order
                 OrderDetailBaseUrl = orderDetailBaseUrl,
                 ShipmentsTrackingInfos = shipmentsTrackingInfos,
                 OrderSettings = orderSettings,
-                FulfillmentOrders = fulfillmentOrdersList?.SelectMany(el => el.Results.Select(item => item)).ToList()
+                Orders = orderCartDetails
             };
 
             var viewModel = OrderHistoryViewModelFactory.CreateViewModel(getOrderHistoryViewModelParam);
@@ -140,19 +133,24 @@ namespace Orckestra.Composer.Cart.Services.Order
             return OrderRepository.GetOrderSettings(scope);
         }
 
-        protected virtual async Task<Dictionary<Guid, TrackingInfoViewModel>> GetShipmentsTrackingInfoViewModels(
-            OrderQueryResult orderQueryResult,
+        protected virtual  List<Overture.ServiceModel.Orders.Order> GetOrdersDetails(OrderQueryResult orderQueryResult,
             GetCustomerOrdersParam param)
         {
-            var shipmentsTrackingInfos = new Dictionary<Guid, TrackingInfoViewModel>();
-
             var getOrderTasks = orderQueryResult.Results.Select(order => OrderRepository.GetOrderAsync(new GetCustomerOrderParam
             {
                 OrderNumber = order.OrderNumber,
                 Scope = param.Scope
             }));
 
-            var orders = await Task.WhenAll(getOrderTasks).ConfigureAwait(false);
+            var orders = Task.WhenAll(getOrderTasks).Result;
+            return orders.ToList();
+        }
+
+        protected virtual Dictionary<Guid, TrackingInfoViewModel> GetShipmentsTrackingInfoViewModels(
+            List<Overture.ServiceModel.Orders.Order> orders,
+            GetCustomerOrdersParam param)
+        {
+            var shipmentsTrackingInfos = new Dictionary<Guid, TrackingInfoViewModel>();
 
             foreach (var order in orders)
             {

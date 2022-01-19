@@ -110,7 +110,23 @@ namespace Orckestra.Composer.Cart.Tests.Factory.Order
                 {
                     {"InProgress", "In Progress"}
                 },
-                OrderDetailBaseUrl = GetRandom.String(32)
+                OrderDetailBaseUrl = GetRandom.String(32),
+                Orders = new List<OrderCartViewModel>()
+                {
+                    new OrderCartViewModel()
+                    {
+                        OrderItem = new OrderItem
+                        {
+                            ShipmentItems = new List<ShipmentItem>
+                            {
+                                new ShipmentItem()
+                            },
+                            CustomerId = customerId,
+                            Id = orderId,
+                            OrderStatus = "InProgress"
+                        }
+                    }
+                }
             };
             var vm = factory.CreateViewModel(param);
 
@@ -157,7 +173,19 @@ namespace Orckestra.Composer.Cart.Tests.Factory.Order
                 {
                     {"test", "test"}
                 },
-                OrderDetailBaseUrl = GetRandom.String(32)
+                OrderDetailBaseUrl = GetRandom.String(32),
+                Orders = new List<OrderCartViewModel>()
+                {
+                    new OrderCartViewModel(){
+                    OrderItem = new OrderItem
+                        {
+                            ShipmentItems = new List<ShipmentItem>(),
+                            CustomerId = customerId,
+                            OrderStatus = "test"
+                        }
+                    }
+                    
+                }
             };
             var vm = factory.CreateViewModel(param);
 

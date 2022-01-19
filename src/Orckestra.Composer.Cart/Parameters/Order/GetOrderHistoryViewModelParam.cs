@@ -30,6 +30,11 @@ namespace Orckestra.Composer.Cart.Parameters.Order
         public OrderQueryResult OrderResult { get; set; }
 
         /// <summary>
+        /// Gets or sets the Orders
+        /// </summary>
+        public List<OrderCartViewModel> Orders { get; set; }
+
+        /// <summary>
         /// Gets or sets the Order Statuses
         /// </summary>
         public Dictionary<string, string> OrderStatuses { get; set; }
@@ -49,7 +54,5 @@ namespace Orckestra.Composer.Cart.Parameters.Order
         /// The Order Settings.
         /// </summary>
         public OrderSettings OrderSettings { get; set; }
-
-        public List<FulfillmentOrder> FulfillmentOrders { get; set; }
     }
 }
