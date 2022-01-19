@@ -18,5 +18,12 @@ namespace Orckestra.Composer.Cart.Factory.Order
         /// <param name="param"></param>
         /// <returns></returns>
         LightOrderDetailViewModel CreateLightViewModel(CreateOrderDetailViewModelParam param);
+
+        /// <summary>
+        /// Check is order editable
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        bool IsOrderEditable(CreateOrderDetailViewModelParam param);
     }
 }

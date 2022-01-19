@@ -285,11 +285,7 @@ namespace Orckestra.Composer.Cart.Factory.Order
                         ?.Select(fulfillmentShipment => fulfillmentShipment.Status));
 
             var isOrderEditable = fulfillmentStatuses.All(item =>
-                param
-                    .OrderSettings
-                    ?.EditableShipmentStates
-                    ?.Split('|')
-                    .Contains(item) ?? false);
+                param.OrderSettings?.EditableShipmentStates?.Split('|').Contains(item) ?? false);
 
             return isOrderEditable;
         }

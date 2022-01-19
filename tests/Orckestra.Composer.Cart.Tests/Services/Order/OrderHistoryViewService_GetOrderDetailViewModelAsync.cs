@@ -20,6 +20,10 @@ using Orckestra.Overture.ServiceModel.Customers;
 using Orckestra.Overture.ServiceModel.Orders;
 using System.Threading.Tasks;
 using Orckestra.Composer.Cart.Extensions;
+using Orckestra.Composer.Cart.Factory;
+using Orckestra.Composer.Country;
+using Orckestra.Composer.Providers.Dam;
+using Orckestra.Composer.ViewModels;
 
 namespace Orckestra.Composer.Cart.Tests.Services.Order
 {
@@ -128,142 +132,6 @@ namespace Orckestra.Composer.Cart.Tests.Services.Order
 
             //Assert
             result.Should().BeNull();
-        }
-
-        [Test]
-        [TestCase("New|Pending", new string[] { "New" })]
-        [TestCase("New|Pending", new string[] { "Pending" })]
-        [TestCase("New|Pending", new string[] { "New", "Pending" })]
-        public async Task WHEN_valid_request_EditableShipmentStates_SHOULD_return_TRUE(string editableShipmentStates, string[] cartShipmentStatuses)
-        {
-            //Arrange
-            var customerId = Guid.NewGuid();
-
-            var orderHistoryViewModelService = _container.CreateInstance<OrderHistoryViewService>();
-            _container.GetMock<IOrderRepository>()
-                .Setup(r => r.GetOrderAsync(It.IsAny<GetCustomerOrderParam>()))
-                .ReturnsAsync(new Overture.ServiceModel.Orders.Order
-                {
-                    CustomerId = customerId.ToString()
-                });
-            
-            _container.GetMock<IOrderRepository>()
-                .Setup(r => r.GetOrderSettings(It.IsAny<string>()))
-                .ReturnsAsync(new OrderSettings()
-                {
-                    EditableShipmentStates = editableShipmentStates
-
-                });
-
-            var shipmentList = new List<Shipment>();
-            cartShipmentStatuses.ToList().ForEach(
-                item => shipmentList.Add(new Shipment(){Status = item}));
-            
-            _container.GetMock<IOrderRepository>()
-                .Setup(r => r.GetOrderAsync(It.IsAny<GetOrderParam>()))
-                .ReturnsAsync(new Overture.ServiceModel.Orders.Order()
-                {
-                    Cart = new Overture.ServiceModel.Orders.Cart {
-                        Shipments = shipmentList,
-                        Total = 3
-                    },
-                    CustomerId = customerId.ToString()
-                });
-            
-            _container.GetMock<IOrderDetailsViewModelFactory>()
-                .Setup(r => r.CreateViewModel(It.IsAny<CreateOrderDetailViewModelParam>()))
-                .Returns(new OrderDetailViewModel()
-                {
-                    OrderInfos = new OrderDetailInfoViewModel()
-                    {
-                        IsOrderEditable = true
-                    }
-                });
-
-            //Act
-            var param = new GetCustomerOrderParam
-            {
-                BaseUrl = GetRandom.String(32),
-                CountryCode = GetRandom.String(32),
-                CultureInfo = new CultureInfo("en-US"),
-                Scope = GetRandom.String(32),
-                CustomerId = customerId,
-                OrderNumber = GetRandom.String(32),
-            };
-
-            var result =
-                await orderHistoryViewModelService.GetOrderDetailViewModelAsync(param).ConfigureAwait(false);
-
-            //Assert
-            result.OrderInfos.IsOrderEditable.Should().BeTrue();
-        }
-
-        [Test]
-        [TestCase("New|Pending", new string[] { "Canceled" })]
-        [TestCase("New|Pending", new string[] { "New,Canceled" })]
-        public async Task WHEN_valid_request_EditableShipmentStates_SHOULD_return_FALSE(string editableShipmentStates, string[] cartShipmentStatuses)
-        {
-            //Arrange
-            var customerId = Guid.NewGuid();
-
-            var orderHistoryViewModelService = _container.CreateInstance<OrderHistoryViewService>();
-            _container.GetMock<IOrderRepository>()
-                .Setup(r => r.GetOrderAsync(It.IsAny<GetCustomerOrderParam>()))
-                .ReturnsAsync(new Overture.ServiceModel.Orders.Order
-                {
-                    CustomerId = customerId.ToString()
-                });
-
-            _container.GetMock<IOrderRepository>()
-                .Setup(r => r.GetOrderSettings(It.IsAny<string>()))
-                .ReturnsAsync(new OrderSettings()
-                {
-                    EditableShipmentStates = editableShipmentStates
-
-                });
-
-            var shipmentList = new List<Shipment>();
-            cartShipmentStatuses.ToList().ForEach(
-                item => shipmentList.Add(new Shipment() { Status = item }));
-
-            _container.GetMock<IOrderRepository>()
-                .Setup(r => r.GetOrderAsync(It.IsAny<GetOrderParam>()))
-                .ReturnsAsync(new Overture.ServiceModel.Orders.Order()
-                {
-                    Cart = new Overture.ServiceModel.Orders.Cart
-                    {
-                        Shipments = shipmentList,
-                        Total = 3
-                    },
-                    CustomerId = customerId.ToString()
-                });
-
-            _container.GetMock<IOrderDetailsViewModelFactory>()
-                .Setup(r => r.CreateViewModel(It.IsAny<CreateOrderDetailViewModelParam>()))
-                .Returns(new OrderDetailViewModel()
-                {
-                    OrderInfos = new OrderDetailInfoViewModel()
-                    {
-                        IsOrderEditable = false
-                    }
-                });
-
-            //Act
-            var param = new GetCustomerOrderParam
-            {
-                BaseUrl = GetRandom.String(32),
-                CountryCode = GetRandom.String(32),
-                CultureInfo = new CultureInfo("en-US"),
-                Scope = GetRandom.String(32),
-                CustomerId = customerId,
-                OrderNumber = GetRandom.String(32),
-            };
-
-            var result =
-                await orderHistoryViewModelService.GetOrderDetailViewModelAsync(param).ConfigureAwait(false);
-
-            //Assert
-            result.OrderInfos.IsOrderEditable.Should().BeFalse();
         }
     }
 }
