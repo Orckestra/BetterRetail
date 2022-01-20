@@ -60,6 +60,14 @@ namespace Orckestra.Composer.Cart.Tests.Services.Order
                .Setup(r => r.GetOrderDetailsBaseUrl(It.IsAny<CultureInfo>()))
                .Returns(GetRandom.String(32));
 
+            _container.GetMock<IOrderRepository>()
+                .Setup(r => r.GetOrderSettings(It.IsAny<string>()))
+                .ReturnsAsync(new OrderSettings()
+                {
+                    EditableShipmentStates = "new"
+
+                });
+
             //Act
             var result =
                 await orderHistoryViewModelService.GetOrderHistoryViewModelAsync(BuildGetCustomerOrdersParam()).ConfigureAwait(false);

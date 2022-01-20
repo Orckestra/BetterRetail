@@ -32,5 +32,14 @@ namespace Orckestra.Composer.Cart.Extensions
         {
             return cart.GetActiveShipments().SelectMany(s => s.LineItems);
         }
+
+        public static List<string> GetAllShipmentStatuses(this Overture.ServiceModel.Orders.Cart cart)
+        {
+            if (cart == null || cart.Shipments == null)
+            {
+                return new List<string>();
+            }
+            return cart.Shipments.Select(item => item.Status).ToList();
+        }
     }
 }
