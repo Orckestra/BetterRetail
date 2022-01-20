@@ -23,9 +23,15 @@ module Orckestra.Composer {
          * Get search results
          * @param QueryString
          * @param CategoryId
+         */
+        getSearchResults(QueryString, CategoryId): Q.Promise<any>;
+
+        /**
+         * Get query search results
+         * @param QueryString
          * @param QueryName
          * @param QueryType
          */
-        getSearchResults(QueryString, CategoryId, QueryName, QueryType): Q.Promise<any>;
+        getQuerySearchResults(QueryString, QueryName, QueryType): Q.Promise<any>;
     }
 }

@@ -111,7 +111,7 @@ namespace Orckestra.Composer.Search.Api
             return Ok(viewModel);
         }
 
-        [ActionName("searchresults")]
+        [ActionName("search")]
         [HttpPost]
         [ValidateModelState]
         public virtual async Task<IHttpActionResult> GetSearchResults(GetSearchResultsRequest request)

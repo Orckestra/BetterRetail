@@ -83,12 +83,15 @@ module Orckestra.Composer {
                         self.eventHub.subscribe(SearchEvents.SearchRequested, this.onSearchRequested.bind(this));
                     },
                     onSearchRequested({data}): void {
-                        self.searchRepository.getSearchResults(data.queryString, data.categoryId, data.queryName, data.queryType)
-                            .then(result => {
-                                Object.keys(result.ProductSearchResults).forEach(key => this[key] = result.ProductSearchResults[key]);
+                        const searchRequest = (!data.categoryId && data.queryName) ?
+                            self.searchRepository.getQuerySearchResults(data.queryString, data.queryName, data.queryType) :
+                            self.searchRepository.getSearchResults(data.queryString, data.categoryId);
 
-                                self.eventHub.publish(SearchEvents.FacetsLoaded, { data: result });
-                            });
+                        searchRequest.then(result => {
+                            Object.keys(result.ProductSearchResults).forEach(key => this[key] = result.ProductSearchResults[key]);
+
+                            self.eventHub.publish(SearchEvents.FacetsLoaded, { data: result });
+                        });
                     }
                 }
             });
