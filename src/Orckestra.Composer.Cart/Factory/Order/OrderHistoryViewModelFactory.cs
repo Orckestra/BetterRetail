@@ -272,6 +272,11 @@ namespace Orckestra.Composer.Cart.Factory.Order
         protected virtual bool IsOrderEditable(GetOrderHistoryViewModelParam param, OrderItem rawOrder)
         {
             var order = param.Orders.FirstOrDefault(item => Guid.Parse(item.Id) == Guid.Parse(rawOrder.Id));
+            if (order == null)
+            {
+                return false;
+            }
+
             var shipmentStatuses = order.Cart.GetAllShipmentStatuses();
             if (!shipmentStatuses.Any()
                 || param.OrderSettings == null

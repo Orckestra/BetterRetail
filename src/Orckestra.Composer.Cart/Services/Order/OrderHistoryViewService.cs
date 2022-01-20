@@ -91,7 +91,7 @@ namespace Orckestra.Composer.Cart.Services.Order
 
             var shipmentsTrackingInfos = new Dictionary<Guid, TrackingInfoViewModel>();
             var orderSettings = await GetOrderSettings(param.Scope).ConfigureAwait(false);
-            var ordersDetails = await GetOrders(orderQueryResult, param);
+            var ordersDetails = await GetOrders(orderQueryResult, param).ConfigureAwait(false);
 
             if (orderQueryResult != null && orderQueryResult.Results != null && param.OrderTense == OrderTense.CurrentOrders)
             {
