@@ -86,5 +86,7 @@ namespace Orckestra.Composer.Configuration
         public static string PaymentProviders = "PaymentProviders";
 
         public static string Providers = "Providers";
+
+        public static string OrderSettings = "OrderSettings";
     }
 }

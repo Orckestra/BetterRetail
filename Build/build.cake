@@ -115,7 +115,7 @@ Task("Run-NUnit-Tests").Does(() =>
 
     NUnit3(testAssemblies, new NUnit3Settings 
     { 
-        NoResults = true, 
+        NoResults = false, 
         SkipNonTestAssemblies = true,
     });
 });

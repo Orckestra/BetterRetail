@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Threading.Tasks;
-using Orckestra.Composer.Cart.Factory;
+﻿using Orckestra.Composer.Cart.Factory;
 using Orckestra.Composer.Cart.Factory.Order;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Parameters.Order;
@@ -19,6 +14,11 @@ using Orckestra.Composer.Services;
 using Orckestra.Composer.Services.Lookup;
 using Orckestra.Composer.Utils;
 using Orckestra.Overture.ServiceModel.Orders;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Threading.Tasks;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Cart.Services.Order
@@ -80,7 +80,6 @@ namespace Orckestra.Composer.Cart.Services.Order
             if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
 
             var orderDetailBaseUrl = OrderUrlProvider.GetOrderDetailsBaseUrl(param.CultureInfo);
-
             var orderStatuses = await LookupService.GetLookupDisplayNamesAsync(new GetLookupDisplayNamesParam
             {
                 CultureInfo = param.CultureInfo,
@@ -91,11 +90,14 @@ namespace Orckestra.Composer.Cart.Services.Order
             var orderQueryResult = await OrderRepository.GetCustomerOrdersAsync(param).ConfigureAwait(false);
 
             var shipmentsTrackingInfos = new Dictionary<Guid, TrackingInfoViewModel>();
+            var orderSettings = await GetOrderSettings(param.Scope).ConfigureAwait(false);
+            var ordersDetails = await GetOrders(orderQueryResult, param).ConfigureAwait(false);
+
             if (orderQueryResult != null && orderQueryResult.Results != null && param.OrderTense == OrderTense.CurrentOrders)
             {
-                shipmentsTrackingInfos = await GetShipmentsTrackingInfoViewModels(orderQueryResult, param).ConfigureAwait(false);
+                shipmentsTrackingInfos = GetShipmentsTrackingInfoViewModels(ordersDetails, param);
             }
-
+            
             var getOrderHistoryViewModelParam = new GetOrderHistoryViewModelParam
             {
                 CultureInfo = param.CultureInfo,
@@ -103,7 +105,9 @@ namespace Orckestra.Composer.Cart.Services.Order
                 OrderStatuses = orderStatuses,
                 Page = param.Page,
                 OrderDetailBaseUrl = orderDetailBaseUrl,
-                ShipmentsTrackingInfos = shipmentsTrackingInfos
+                ShipmentsTrackingInfos = shipmentsTrackingInfos,
+                OrderSettings = orderSettings,
+                Orders = ordersDetails
             };
 
             var viewModel = OrderHistoryViewModelFactory.CreateViewModel(getOrderHistoryViewModelParam);
@@ -111,19 +115,31 @@ namespace Orckestra.Composer.Cart.Services.Order
             return viewModel;
         }
 
-        protected virtual async Task<Dictionary<Guid, TrackingInfoViewModel>> GetShipmentsTrackingInfoViewModels(
-            OrderQueryResult orderQueryResult,
+
+
+        private Task<OrderSettings> GetOrderSettings(string scope)
+        {
+            return OrderRepository.GetOrderSettings(scope);
+        }
+
+        protected virtual async Task<List<Overture.ServiceModel.Orders.Order>> GetOrders(OrderQueryResult orderQueryResult,
             GetCustomerOrdersParam param)
         {
-            var shipmentsTrackingInfos = new Dictionary<Guid, TrackingInfoViewModel>();
-
             var getOrderTasks = orderQueryResult.Results.Select(order => OrderRepository.GetOrderAsync(new GetCustomerOrderParam
             {
                 OrderNumber = order.OrderNumber,
                 Scope = param.Scope
             }));
 
-            var orders = await Task.WhenAll(getOrderTasks).ConfigureAwait(false);
+            var orders =await Task.WhenAll(getOrderTasks).ConfigureAwait(false);
+            return orders.ToList();
+        }
+
+        protected virtual Dictionary<Guid, TrackingInfoViewModel> GetShipmentsTrackingInfoViewModels(
+            List<Overture.ServiceModel.Orders.Order> orders,
+            GetCustomerOrdersParam param)
+        {
+            var shipmentsTrackingInfos = new Dictionary<Guid, TrackingInfoViewModel>();
 
             foreach (var order in orders)
             {
@@ -262,6 +278,7 @@ namespace Orckestra.Composer.Cart.Services.Order
                 ImageUrls = await ImageService.GetImageUrlsAsync(order.Cart.GetLineItems()).ConfigureAwait(false)
             };
 
+            var orderSettings = await GetOrderSettings(order.ScopeId).ConfigureAwait(false);
             var viewModel = OrderDetailsViewModelFactory.CreateViewModel(new CreateOrderDetailViewModelParam
             {
                 Order = order,
@@ -272,7 +289,8 @@ namespace Orckestra.Composer.Cart.Services.Order
                 CountryCode = getOrderParam.CountryCode,
                 ProductImageInfo = productImageInfo,
                 BaseUrl = getOrderParam.BaseUrl,
-                ShipmentsNotes = shipmentsNotes
+                ShipmentsNotes = shipmentsNotes,
+                OrderSettings = orderSettings
             });
 
             if (order.Cart.PropertyBag.TryGetValue("PickedItems", out var pickedItemsObject))

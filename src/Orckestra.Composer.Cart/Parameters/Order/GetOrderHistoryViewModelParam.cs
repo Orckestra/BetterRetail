@@ -30,6 +30,11 @@ namespace Orckestra.Composer.Cart.Parameters.Order
         public OrderQueryResult OrderResult { get; set; }
 
         /// <summary>
+        /// Gets or sets the Orders
+        /// </summary>
+        public List<Overture.ServiceModel.Orders.Order> Orders { get; set; }
+
+        /// <summary>
         /// Gets or sets the Order Statuses
         /// </summary>
         public Dictionary<string, string> OrderStatuses { get; set; }
@@ -43,6 +48,11 @@ namespace Orckestra.Composer.Cart.Parameters.Order
         /// <summary>
         /// Gets or sets the TrackingInfoViewModel for each shipment of the order.
         /// </summary>
-        public Dictionary<Guid, TrackingInfoViewModel> ShipmentsTrackingInfos { get; set; } 
+        public Dictionary<Guid, TrackingInfoViewModel> ShipmentsTrackingInfos { get; set; }
+
+        /// <summary>
+        /// The Order Settings.
+        /// </summary>
+        public OrderSettings OrderSettings { get; set; }
     }
 }
