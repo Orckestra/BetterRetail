@@ -15,5 +15,11 @@ namespace Orckestra.Composer.Parameters
         /// The scope in which the User will be updated
         /// </summary>
         public string Scope { get; set; }
+
+        public UpdateUserParam Clone()
+        {
+            var param = (UpdateUserParam)MemberwiseClone();
+            return param;
+        }
     }
 }

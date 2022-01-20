@@ -22,6 +22,7 @@ namespace Orckestra.Composer.Grocery.Website
             host.Register<SalesScopeStoreViewService, IStoreViewService>();
             host.Register<SalesScopeInventoryRepository, IInventoryRepository>();
             host.Register<SalesScopeOrderRepository, IOrderRepository>();
+            host.Register<SalesScopeCustomerRepository, ICustomerRepository>();
             host.Register<SalesScopeWishListRepository, IWishListRepository>();
             host.Register<CookieBasedFulfillmentContext, IFulfillmentContext>();
             host.Register<SalesScopeFulfillmentMethodRepository, IFulfillmentMethodRepository>();

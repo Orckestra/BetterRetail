@@ -23,5 +23,11 @@ namespace Orckestra.Composer.Parameters
 		/// Number of a preferred store
 		/// </summary>
 		public string StoreNumber { get; set; }
-	}
+
+        public UpdateUserPreferredStoreParam Clone()
+        {
+            var param = (UpdateUserPreferredStoreParam)MemberwiseClone();
+            return param;
+        }
+    }
 }
