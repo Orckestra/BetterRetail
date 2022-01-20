@@ -48,29 +48,52 @@
 {
     if (widthBreakpoints == null) { widthBreakpoints = AutoImageResizingConfiguration.WidthBreakpoints; }
     if (maxWidth == 0) { maxWidth = AutoImageResizingConfiguration.MaxWidth; }
-     var imageSupportFormats = AutoImageResizingConfiguration.ImageFormats;
+    var imageSupportFormats = AutoImageResizingConfiguration.ImageFormats;
 
     <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
     <head>
         <style type="text/css">
             #@containerId {
-                background-image: url('@AutoImageResizingHelper.GetResizedImageUrl(Image, maxWidth > 0 ? (int?)maxWidth : null)');
+                @BackgroundImageStyle(Image, maxWidth)
                 background-repeat: no-repeat;}
+        @{
+            var breakpoints =  widthBreakpoints.OrderByDescending(item => item).ToList();
 
-        @foreach (var widthBreakpoint in widthBreakpoints.OrderByDescending(item => item))
-        {
-            foreach (var mediaType in imageSupportFormats)
+            if (breakpoints.Any() && !(breakpoints.Count == 1 && breakpoints[0] == maxWidth))
             {
-                if (ImageFormatSupportHelper.IsSupported(mediaType))
+                foreach (var widthBreakpoint in breakpoints)
                 {
-                    @: @@media (max-width: @(widthBreakpoint)px) { #@containerId { background-image: url('@AutoImageResizingHelper.GetResizedImageUrl(Image, widthBreakpoint, mediaType)');}}
-                }
+                    @: @@media (max-width: @(widthBreakpoint)px) { #@containerId { @BackgroundImageStyle(Image, widthBreakpoint) }}
                 }
             }
+        }
         </style>
     </head>
     <body>
     </body>
 </html>
+}
+
+@helper BackgroundImageStyle(DataReference<IImageFile> Image, int maxWidth)
+{
+    var defaultImageUrl = AutoImageResizingHelper.GetResizedImageUrl(Image, maxWidth > 0 ? (int?)maxWidth : null);
+
+    <text>background-image: url('@defaultImageUrl');</text>
+
+    if (maxWidth > 0)
+    {
+        var supportedImageFormats = AutoImageResizingConfiguration.ImageFormats.Where(ImageFormatSupportHelper.IsSupported);
+
+        var urls = supportedImageFormats.ToDictionary(
+            mediaType => mediaType,
+            mediaType => AutoImageResizingHelper.GetResizedImageUrl(Image, maxWidth, mediaType));
+        var urlSet = string.Join(", ", supportedImageFormats.Select(mediaType =>
+             $"url(\"{urls[mediaType]}\") type(\"{mediaType}\")"));
+
+        <text>
+            background-image: -webkit-image-set(@urlSet);
+            background-image: image-set(@urlSet);
+        </text>
+    }
 }
 
