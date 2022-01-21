@@ -99,8 +99,8 @@ namespace Orckestra.Composer.Cart.Services.Order
 
             if (orderQueryResult != null && orderQueryResult.Results != null && param.OrderTense == OrderTense.CurrentOrders)
             {
-                shipmentsTrackingInfos = GetShipmentsTrackingInfoViewModels(ordersDetails, param);
                 ordersDetails = await GetOrders(orderQueryResult, param).ConfigureAwait(false);
+                shipmentsTrackingInfos = GetShipmentsTrackingInfoViewModels(ordersDetails, param);
             }
             
             var getOrderHistoryViewModelParam = new GetOrderHistoryViewModelParam
