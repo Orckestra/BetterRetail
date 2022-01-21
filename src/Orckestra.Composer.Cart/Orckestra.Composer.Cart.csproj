@@ -98,6 +98,7 @@
     <Compile Include="Parameters\GetRecurringOrderCartsViewModelParam.cs" />
     <Compile Include="Parameters\GetRecurringOrderCartViewModelParam.cs" />
     <Compile Include="Parameters\GetShippingMethodsScopeParam.cs" />
+    <Compile Include="Parameters\Order\EditOrderParam.cs" />
     <Compile Include="Parameters\Order\GetOrderChangesParam.cs" />
     <Compile Include="Parameters\Order\UpdateOrderParam.cs" />
     <Compile Include="Parameters\Order\UpdateOrderCustomerParam.cs" />
@@ -245,6 +246,7 @@
     <Compile Include="ViewModels\CartViewModel.cs" />
     <Compile Include="ViewModels\CheckoutNavigationViewModel.cs" />
     <Compile Include="ViewModels\GroupedLineItemDetailViewModel.cs" />
+    <Compile Include="ViewModels\Order\EditingOrderViewModel.cs" />
     <Compile Include="ViewModels\PickedItemViewModel.cs" />
     <Compile Include="ViewModels\PickUpAddressViewModel.cs" />
     <Compile Include="ViewModels\SingleCheckoutPaymentViewModel.cs" />

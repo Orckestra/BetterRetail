@@ -26,5 +26,26 @@ namespace Orckestra.Composer.Services.Cookie
         /// This property can be used for custom cookie properties
         /// </summary>
         public Dictionary<string, string> PropertyBag { get; set; }
+
+        public string GetValue(string key)
+        {
+            string value = null;
+            if (PropertyBag?.TryGetValue(key, out value) == true)
+                return value;
+            return null;
+        }
+
+        public void SetOrRemove(string key, string value)
+        {
+            if (value == null)
+            {
+                PropertyBag?.Remove(key);
+                return;
+            }
+
+            PropertyBag = PropertyBag ?? new Dictionary<string, string>();
+            PropertyBag[key] = value;
+        }
+
     }
 }

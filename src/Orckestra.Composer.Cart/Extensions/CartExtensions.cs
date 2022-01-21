@@ -33,13 +33,44 @@ namespace Orckestra.Composer.Cart.Extensions
             return cart.GetActiveShipments().SelectMany(s => s.LineItems);
         }
 
-        public static List<string> GetAllShipmentStatuses(this Overture.ServiceModel.Orders.Cart cart)
+        public static DateTime GetOrderEditableUntilDate(this Overture.ServiceModel.Orders.Cart cart)
         {
-            if (cart == null || cart.Shipments == null)
-            {
-                return new List<string>();
-            }
-            return cart.Shipments.Select(item => item.Status).ToList();
+            DateTime convertedDate = cart.GetLocalFulfillmentDate();
+            return convertedDate.Subtract(new TimeSpan(24, 0, 0));
+        }
+
+        public static DateTime GetLocalFulfillmentDate(this Overture.ServiceModel.Orders.Cart cart)
+        {
+            var adjustedFulfillmentDate = GetLocalFulfillmentDateTime(cart);
+            var convertedDate = new DateTime(adjustedFulfillmentDate.Year, adjustedFulfillmentDate.Month, adjustedFulfillmentDate.Day, 0, 0, 0);
+
+            return convertedDate;
+        }
+
+        public static DateTime GetLocalFulfillmentDateTime(this Overture.ServiceModel.Orders.Cart cart)
+        {
+            DateTime? fulfillmentDate = cart.Shipments.FirstOrDefault()?.FulfillmentScheduledTimeBeginDate;
+            if (fulfillmentDate == null)
+                return DateTime.MinValue;
+
+            var timeZoneId = cart.PropertyBag[CartConfiguration.TimeZoneId].ToString();
+            var timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
+            var adjustedFulfillmentDate = TimeZoneInfo.ConvertTimeFromUtc(fulfillmentDate.Value, timeZoneInfo);
+
+            return adjustedFulfillmentDate;
+        }
+
+        public static DateTime GetOrderReleaseDate(this Overture.ServiceModel.Orders.Cart cart)
+        {
+            var fulfillmentDate = cart.Shipments.FirstOrDefault()?.FulfillmentScheduledTimeBeginDate;
+            if (fulfillmentDate == null)
+                throw new InvalidOperationException("Fulfillment date must be specified.");
+
+            var timeZoneId = cart.PropertyBag[CartConfiguration.TimeZoneId].ToString();
+            var timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
+            var adjustedFulfillmentDate = TimeZoneInfo.ConvertTimeFromUtc(fulfillmentDate.Value, timeZoneInfo);
+
+            return TimeZoneInfo.ConvertTimeFromUtc(new DateTime(adjustedFulfillmentDate.Year, adjustedFulfillmentDate.Month, adjustedFulfillmentDate.Day, 0, 0, 0), timeZoneInfo);
         }
     }
 }

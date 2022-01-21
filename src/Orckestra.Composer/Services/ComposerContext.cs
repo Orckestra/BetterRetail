@@ -278,5 +278,116 @@ namespace Orckestra.Composer.Services
                 });
             }
         }
+
+        public string EditingOrderScope
+        {
+            get
+            {
+                ComposerCookieDto dto = CookieAccessor.Read();
+                return dto.GetValue(nameof(EditingOrderScope));
+            }
+            set
+            {
+                ComposerCookieDto dto = CookieAccessor.Read();
+                dto.SetOrRemove(nameof(EditingOrderScope), value);
+                CookieAccessor.Write(dto);
+            }
+        }
+
+        public string EditingOrderNumber
+        {
+            get
+            {
+                ComposerCookieDto dto = CookieAccessor.Read();
+                return dto.GetValue(nameof(EditingOrderNumber));
+            }
+            set
+            {
+                ComposerCookieDto dto = CookieAccessor.Read();
+                dto.SetOrRemove(nameof(EditingOrderNumber), value);
+                CookieAccessor.Write(dto);
+            }
+        }
+
+        public string EditingOrderId
+        {
+            get
+            {
+                ComposerCookieDto dto = CookieAccessor.Read();
+                return dto.GetValue(nameof(EditingOrderId));
+            }
+            set
+            {
+                ComposerCookieDto dto = CookieAccessor.Read();
+                dto.SetOrRemove(nameof(EditingOrderId), value);
+                CookieAccessor.Write(dto);
+            }
+        }
+
+        public DateTime? EditingOrderUntil
+        {
+            get
+            {
+                ComposerCookieDto dto = CookieAccessor.Read();
+                var value = dto.GetValue(nameof(EditingOrderUntil));
+                if (string.IsNullOrEmpty(value))
+                    return null;
+
+                return DateTime.Parse(value);
+            }
+            set
+            {
+                ComposerCookieDto dto = CookieAccessor.Read();
+                dto.SetOrRemove(nameof(EditingOrderUntil), value?.ToString());
+                CookieAccessor.Write(dto);
+            }
+        }
+
+        public DateTime? EditingFulfillmentDate
+        {
+            get
+            {
+                ComposerCookieDto dto = CookieAccessor.Read();
+                var value = dto.GetValue(nameof(EditingFulfillmentDate));
+                if (string.IsNullOrEmpty(value))
+                    return null;
+
+                return DateTime.Parse(value);
+            }
+            set
+            {
+                ComposerCookieDto dto = CookieAccessor.Read();
+                dto.SetOrRemove(nameof(EditingFulfillmentDate), value?.ToString());
+                CookieAccessor.Write(dto);
+            }
+        }
+
+        public bool IsEditingOrder
+        {
+            get
+            {
+                ComposerCookieDto dto = CookieAccessor.Read();
+                var value = dto.GetValue(nameof(EditingOrderId));
+                return !string.IsNullOrEmpty(value);
+            }
+        }
+
+        public string GetDefaultScope()
+        {
+            return ScopeProvider.DefaultScope;
+        }
+
+        public void ClearEditingOrder()
+        {
+            EditingOrderScope = null;
+            EditingOrderNumber = null;
+            EditingOrderId = null;
+            EditingFulfillmentDate = null;
+            EditingOrderUntil = null;
+        }
+
+
+
+
     }
 }

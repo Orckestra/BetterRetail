@@ -3,14 +3,20 @@ using System.Collections.Specialized;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Orckestra.Composer.Cart.Parameters.Order;
+using Orckestra.Composer.Cart.Repositories.Order;
 using Orckestra.Composer.Cart.Requests;
 using Orckestra.Composer.Cart.Services.Order;
 using Orckestra.Composer.Cart.Utils;
 using Orckestra.Composer.Cart.ViewModels;
+using Orckestra.Composer.Cart.ViewModels.Order;
+using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Utils;
 using Orckestra.Composer.WebAPIFilters;
+using static Orckestra.Composer.Constants.General;
+using static Orckestra.Composer.Cart.Extensions.CartExtensions;
+using System.Linq;
 
 namespace Orckestra.Composer.Cart.Api
 {
@@ -20,17 +26,23 @@ namespace Orckestra.Composer.Cart.Api
     public class OrderController : ApiController
     {
         protected IComposerContext ComposerContext { get; private set; }
+        protected IOrderRepository OrderRepository;
         protected IOrderHistoryViewService OrderHistoryViewService { get; private set; }
         protected IOrderUrlProvider OrderUrlProvider { get; private set; }
+        protected ICartUrlProvider CartUrlProvider { get; private set; }
+
 
         public OrderController(
             IComposerContext composerContext,
             IOrderHistoryViewService orderHistoryViewService,
-            IOrderUrlProvider orderUrlProvider)
+            IOrderUrlProvider orderUrlProvider,
+            ICartUrlProvider cartUrlProvider
+            )
         {
             OrderHistoryViewService = orderHistoryViewService ?? throw new ArgumentNullException(nameof(orderHistoryViewService));
             OrderUrlProvider = orderUrlProvider;
             ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
+            CartUrlProvider = cartUrlProvider ?? throw new ArgumentNullException(nameof(cartUrlProvider));
         }
 
         [HttpPost]
@@ -169,6 +181,102 @@ namespace Orckestra.Composer.Cart.Api
             });
 
             return Ok(viewModel);
+        }
+
+        /// <summary>
+        /// Set an order in edit mode
+        /// </summary>
+        /// <param name="request">Parameters container</param>
+        [HttpPost]
+        [ActionName("edit-order")]
+        public virtual async Task<IHttpActionResult> EditOrder(EditOrderParam request)
+        {
+            var editedCart = await OrderRepository.CreateEditOrder(GlobalScopeName, request.OrderId);
+
+            ComposerContext.EditingOrderScope = editedCart.ScopeId;
+            ComposerContext.EditingOrderNumber = request.OrderNumber;
+            ComposerContext.EditingOrderId = request.OrderId;
+            ComposerContext.EditingFulfillmentDate = editedCart.Shipments.FirstOrDefault()?.FulfillmentScheduledTimeBeginDate;
+            ComposerContext.EditingOrderUntil = editedCart.GetOrderEditableUntilDate();
+
+            return Ok(GetEditingOrderViewModel());
+        }
+
+        /// <summary>
+        /// Save edited order
+        /// </summary>
+        /// <param name="request">Parameters container</param>
+        [HttpPost]
+        [ActionName("save-edited-order")]
+        public virtual async Task<IHttpActionResult> SaveEditedOrder()
+        {
+            if (!ComposerContext.IsEditingOrder)
+                return Ok();
+
+            if (DateTime.UtcNow > ComposerContext.EditingOrderUntil)
+            {
+                await OrderRepository.CancelEditOrder(ComposerContext.EditingOrderScope, ComposerContext.EditingOrderId);
+                ComposerContext.ClearEditingOrder();
+
+                throw new InvalidOperationException("The order is no longer editable.");
+            }
+
+            await OrderRepository.SaveEditedOrder(ComposerContext.EditingOrderScope, ComposerContext.EditingOrderId);
+
+            var editingOrderNumber = ComposerContext.EditingOrderNumber;
+            ComposerContext.ClearEditingOrder();
+
+            var redirectUrl = CartUrlProvider.GetCheckoutConfirmationPageUrl(new BaseUrlParameter
+            {
+                CultureInfo = ComposerContext.CultureInfo
+            });
+            var vm = new { RedirectUrl = $"{redirectUrl}?id={editingOrderNumber}" };
+
+            return Ok(vm);
+        }
+
+        /// <summary>
+        /// Cancels editing of an order
+        /// </summary>
+        /// <param name="request">Parameters container</param>
+        [HttpPost]
+        [ActionName("cancel-edit-order")]
+        public virtual async Task<IHttpActionResult> CancelEditOrder()
+        {
+            if (ComposerContext.IsEditingOrder)
+            {
+                await OrderRepository.CancelEditOrder(ComposerContext.EditingOrderScope, ComposerContext.EditingOrderId);
+                ComposerContext.ClearEditingOrder();
+            }
+
+            var redirectUrl = OrderUrlProvider.GetOrderHistoryUrl(new GetOrderUrlParameter
+            {
+                CultureInfo = ComposerContext.CultureInfo
+            });
+            var vm = new { RedirectUrl = redirectUrl };
+
+            return Ok(vm);
+        }
+
+        [HttpPost]
+        [ActionName("get-edited-order")]
+        public virtual IHttpActionResult GetEditOrder()
+        {
+            return Ok(GetEditingOrderViewModel());
+        }
+
+        private EditingOrderViewModel GetEditingOrderViewModel()
+        {
+            return new EditingOrderViewModel
+            {
+                Scope = ComposerContext.EditingOrderScope,
+                OrderNumber = ComposerContext.EditingOrderNumber,
+                CartUrl = CartUrlProvider.GetCartUrl(new BaseUrlParameter
+                {
+                    CultureInfo = ComposerContext.CultureInfo
+                }),
+                EditableUntil = ComposerContext.EditingOrderUntil
+            };
         }
     }
 }

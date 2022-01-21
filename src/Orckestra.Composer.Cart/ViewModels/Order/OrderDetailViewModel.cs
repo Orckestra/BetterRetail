@@ -18,7 +18,7 @@ namespace Orckestra.Composer.Cart.ViewModels.Order
         /// <summary>
         /// Gets or sets the list of shipments viewmodel.
         /// </summary>
-        public List<OrderShipmentDetailViewModel> Shipments { get; set; } 
+        public List<OrderShipmentDetailViewModel> Shipments { get; set; }
 
         /// <summary>
         /// Gets or sets the history of the order category
@@ -44,6 +44,11 @@ namespace Orckestra.Composer.Cart.ViewModels.Order
         /// Gets or sets the list of payments viewmodel.
         /// </summary>
         public List<OrderSummaryPaymentViewModel> Payments { get; set; }
+
+        /// <summary>
+        /// The flag indicating whether is an updated order or not
+        /// </summary>
+        bool IsOrderUpdated { get; set; }
 
         public OrderDetailViewModel()
         {

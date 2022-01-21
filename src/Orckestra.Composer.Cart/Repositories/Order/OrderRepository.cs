@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Orckestra.Composer.Cart.Factory.Order;
 using Orckestra.Composer.Cart.Parameters.Order;
-using Orckestra.Composer.Configuration;
+using Orckestra.Composer.Services;
 using Orckestra.Overture;
-using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel.Customers;
 using Orckestra.Overture.ServiceModel.Orders;
 using Orckestra.Overture.ServiceModel.Requests.Customers;
 using Orckestra.Overture.ServiceModel.Requests.Orders;
-using Orckestra.Overture.ServiceModel.Requests.Orders.Fulfillment;
+using Orckestra.Overture.ServiceModel.Requests.Orders.Shopping;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Cart.Repositories.Order
@@ -19,15 +19,14 @@ namespace Orckestra.Composer.Cart.Repositories.Order
     {
         protected virtual IOvertureClient OvertureClient { get; private set; }
         protected virtual IFindOrdersRequestFactory FindOrdersRequestFactory { get; private set; }
-        protected ICacheProvider CacheProvider { get; private set; }
+        public IComposerContext ComposerContext { get; private set; }
 
-        public OrderRepository(IOvertureClient overtureClient, 
-            IFindOrdersRequestFactory findOrdersRequestFactory,
-            ICacheProvider cacheProvider)
+        public OrderRepository(IOvertureClient overtureClient, IFindOrdersRequestFactory findOrdersRequestFactory,
+        IComposerContext composerContext)
         {
             OvertureClient = overtureClient ?? throw new ArgumentNullException(nameof(overtureClient));
             FindOrdersRequestFactory = findOrdersRequestFactory ?? throw new ArgumentNullException(nameof(findOrdersRequestFactory));
-            CacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));
+            ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(findOrdersRequestFactory));
         }
 
         /// <summary>
@@ -133,20 +132,128 @@ namespace Orckestra.Composer.Cart.Repositories.Order
             return OvertureClient.SendAsync(request);
         }
 
-        public virtual async Task<OrderSettings> GetOrderSettings(string scope)
+        //VG
+        public Task<List<Overture.ServiceModel.Orders.Order>> GetOrdersByNumbers(string scopeId, List<string> orderNumbers)
         {
-            var cacheKey = BuildOrderSettingsCacheKey(scope);
-            return await CacheProvider.GetOrAddAsync(cacheKey, async () => await OvertureClient.SendAsync(new GetOrderSettingsRequest())).ConfigureAwait(false);
+            var requests = orderNumbers.Select(orderNumber => new GetOrderByNumberRequest
+            {
+                ScopeId = scopeId,
+                OrderNumber = orderNumber,
+                IncludeShipment = true,
+                IncludeLineItems = false,
+                IncludePayment = false
+            }).ToList();
+
+            return OvertureClient.SendAllAsync(requests);
         }
 
-        protected virtual CacheKey BuildOrderSettingsCacheKey(string scope)
+        public async Task<Overture.ServiceModel.Orders.Cart> CreateEditOrder(string scopeId, string orderId)
         {
-            var cacheKey = new CacheKey(CacheConfigurationCategoryNames.OrderSettings)
+            var order = await OvertureClient.SendAsync(new GetOrderByIdRequest
             {
-                Scope = scope
+                ScopeId = scopeId,
+                OrderId = orderId.ToGuid(),
+                IncludeShipment = true,
+                IncludeLineItems = true,
+                IncludePayment = true
+            }).ConfigureAwait(false);
+
+            if (order.Cart.Shipments == null || order.Cart.Shipments.Count == 0 ||
+                order.Cart.Shipments[0].Status != CartConfiguration.ShipmentStatuses.PendingRelease)
+                throw new InvalidOperationException("Cannot edit this order");
+
+            var createCartDraftRequest = new CreateCartOrderDraftRequest()
+            {
+                CopyFromOrderId = Guid.Parse(orderId),
+                CultureName = ComposerContext.CultureInfo?.Name,
+                CustomerId = Guid.Parse(order.CustomerId),
+                OrderId = Guid.Parse(orderId),
+                ScopeId = scopeId
             };
 
-            return cacheKey;
+            var cart = await OvertureClient.SendAsync(createCartDraftRequest);
+            return cart;
+        }
+
+        public async Task SaveEditedOrder(string scopeId, string orderId)
+        {
+            var orderRequest = new GetOrderByIdRequest
+            {
+                OrderId = Guid.Parse(orderId),
+                ScopeId = scopeId,
+                IncludeShipment = true
+            };
+
+            var order = await OvertureClient.SendAsync(orderRequest).ConfigureAwait(false);
+            var shipment = order.Cart.Shipments.FirstOrDefault();
+
+            if (shipment == null ||
+                shipment.Status != CartConfiguration.ShipmentStatuses.PendingRelease)
+            {
+                await OvertureClient.SendAsync(new DeleteCartRequest
+                {
+                    CartName = CartConfiguration.EditOrderCartName,
+                    CustomerId = new Guid(order.CustomerId),
+                    ScopeId = scopeId
+                }).ConfigureAwait(false);
+
+                throw new InvalidOperationException("Editing period has passed, cannot edit this order anymore");
+            }
+
+            var editedCartRequest = new GetCartRequest
+            {
+                CartName = CartConfiguration.EditOrderCartName,
+                ScopeId = scopeId,
+                CustomerId = new Guid(order.CustomerId),
+                CultureName = order.Cart.CultureName,
+                ExecuteWorkflow = true
+            };
+            var editedCart = await OvertureClient.SendAsync(editedCartRequest).ConfigureAwait(false);
+
+            editedCart.Id = order.Cart.Id;
+            editedCart.Name = CartConfiguration.ShoppingCartName;
+
+            // Last order edited date will used by front-end to detect update
+            editedCart.PropertyBag["LastOrderEdited"] = DateTime.UtcNow;
+
+            order.Cart = editedCart;
+
+            var saveOrderRequest = new SaveOrderRequest
+            {
+                OrderId = Guid.Parse(orderId),
+                ScopeId = scopeId,
+                Order = order
+            };
+            await OvertureClient.SendAsync(saveOrderRequest).ConfigureAwait(false);
+
+            var deleteCartRequest = new DeleteCartRequest
+            {
+                CartName = CartConfiguration.EditOrderCartName,
+                CustomerId = new Guid(order.CustomerId),
+                ScopeId = scopeId
+            };
+            await OvertureClient.SendAsync(deleteCartRequest).ConfigureAwait(false);
+        }
+
+        public async Task CancelEditOrder(string scopeId, string orderId)
+        {
+            var orderRequest = new GetOrderByIdRequest
+            {
+                OrderId = Guid.Parse(orderId),
+                ScopeId = scopeId,
+                IncludeLineItems = true,
+                IncludeShipment = true
+            };
+
+            var order = await OvertureClient.SendAsync(orderRequest).ConfigureAwait(false);
+
+            var deleteCartRequest = new DeleteCartRequest
+            {
+                CartName = CartConfiguration.EditOrderCartName,
+                CustomerId = new Guid(order.CustomerId),
+                ScopeId = scopeId
+            };
+            await OvertureClient.SendAsync(deleteCartRequest).ConfigureAwait(false);
         }
     }
 }
