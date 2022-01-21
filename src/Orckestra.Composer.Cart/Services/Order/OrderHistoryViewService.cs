@@ -97,7 +97,7 @@ namespace Orckestra.Composer.Cart.Services.Order
             var orderSettings = await GetOrderSettings(param.Scope).ConfigureAwait(false);
             var ordersDetails = new List<Overture.ServiceModel.Orders.Order>();
 
-            if (orderQueryResult != null && orderQueryResult.Results != null && param.OrderTense == OrderTense.CurrentOrders)
+            if (orderQueryResult.Results != null && param.OrderTense == OrderTense.CurrentOrders)
             {
                 ordersDetails = await GetOrders(orderQueryResult, param).ConfigureAwait(false);
                 shipmentsTrackingInfos = GetShipmentsTrackingInfoViewModels(ordersDetails, param);
