@@ -1,4 +1,6 @@
-﻿@inherits RazorFunction
+﻿@inherits Composer.Razor.ComposerRazorFunction
+@using Orckestra.Overture.ServiceModel.SearchQueries
+@using Orckestra.Composer.SearchQuery.Context
 
 @functions {
     public override string FunctionDescription
@@ -11,6 +13,7 @@
 
     [FunctionParameter(Label = "Description", DefaultValue = null, WidgetMarkup = @"<f:widgetfunction xmlns:f='http://www.composite.net/ns/function/1.0' name='Composite.Widgets.String.TextArea' />")]
     public string Description { get; set; }
+
     [FunctionParameter(Label = "Query Name", Help = "Query Name", WidgetMarkup = Orckestra.ExperienceManagement.SearchQueryBuilder.Widgets.ProductSetQuerySelector)]
     public string QueryName { get; set; }
 
@@ -22,6 +25,16 @@
 
     [FunctionParameter(Label = "Show More Button Url", WidgetMarkup = @"<f:widgetfunction xmlns:f='http://www.composite.net/ns/function/1.0' name='Composite.Widgets.DataReference.OptionalPageSelector' />", DefaultValue = null)]
     public Guid? Page { get; set; }
+
+    public ISearchQueryContext RequestContext { get; set; }
+}
+
+@{
+    var searchQueryViewModel = RequestContext.GetTopSearchQueryViewModelAsync(SearchQueryType.ProductSet, QueryName, int.Parse(Number)).Result;
+    if (searchQueryViewModel == null)
+    {
+        return;
+    }
 }
 
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
@@ -36,10 +49,12 @@
     {
         <p>@Description</p>
     }
-    <f:function name="Composer.Queries.ProductSet.Top" xmlns:f="http://www.composite.net/ns/function/1.0">
-        <f:param name="QueryName" value="@QueryName" />
-        <f:param name="Number" value="@Number" />
-    </f:function>
+
+    @Function("Composer.Search.BaseSearchResults", new { Results = searchQueryViewModel })
+    @*  <f:function name="Composer.Queries.ProductSet.Top" xmlns:f="http://www.composite.net/ns/function/1.0">
+            <f:param name="QueryName" value="@QueryName" />
+            <f:param name="Number" value="@Number" />
+        </f:function>*@
     @if (Page != null)
     {
         <div class="text-center my-2">
