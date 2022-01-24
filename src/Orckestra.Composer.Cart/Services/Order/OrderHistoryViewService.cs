@@ -82,7 +82,7 @@ namespace Orckestra.Composer.Cart.Services.Order
             var orderQueryResult = await OrderRepository.GetCustomerOrdersAsync(param).ConfigureAwait(false);
             if (orderQueryResult == null)
             {
-                return new OrderHistoryViewModel();
+                return null;
             }
 
             var orderDetailBaseUrl = OrderUrlProvider.GetOrderDetailsBaseUrl(param.CultureInfo);
