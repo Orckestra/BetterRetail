@@ -9,14 +9,20 @@
                     <h5 class="m-0"> @Html.Localized("MyAccount", "L_OrderedOn", "{{order.OrderInfos.OrderDate}}")</h5>
                 </div>
 
-                <ul class="col-sm-4 text-sm-right nav-pills">
-                    <li><a v-if="order.OrderInfos.IsOrderEditable" class="cta text-dark font-weight-normal nav-pills" href="#">
-                        @Html.Localize("MyAccount", "B_EditOrder")
-                    </a></li>
-                    <li><a v-bind:href="order.Url" class="cta text-dark font-weight-normal">
-                        @Html.Localize("MyAccount", "H_OrderDetail")
-                    </a></li>
-                </ul>
+                <div class="col-sm-4 text-sm-right">
+                    <ul class="nav-pills">
+                        <li>
+                            <a v-if="order.OrderInfos.IsOrderEditable" class="cta text-dark font-weight-normal nav-pills" href="#">
+                                @Html.Localize("MyAccount", "B_EditOrder")
+                            </a>
+                        </li>
+                        <li>
+                            <a v-bind:href="order.Url" class="cta text-dark font-weight-normal">
+                                @Html.Localize("MyAccount", "H_OrderDetail")
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
         <div class="card-body">
