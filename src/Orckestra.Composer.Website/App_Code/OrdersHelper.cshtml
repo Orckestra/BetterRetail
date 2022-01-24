@@ -9,8 +9,8 @@
                     <h5 class="m-0"> @Html.Localized("MyAccount", "L_OrderedOn", "{{order.OrderInfos.OrderDate}}")</h5>
                 </div>
 
-                <div v-if="order.OrderInfos.IsOrderEditable" class="col-sm-4 text-sm-right">
-                    <a class="cta text-dark font-weight-normal" href="#">
+                <div class="col-sm-4 text-sm-right">
+                    <a v-if="order.OrderInfos.IsOrderEditable" class="cta text-dark font-weight-normal" href="#">
                         @Html.Localize("MyAccount", "B_EditOrder")
                     </a> |
                     <a v-bind:href="order.Url" class="cta text-dark font-weight-normal">
