@@ -7,8 +7,8 @@
 [assembly: AssemblyCopyright("Copyright © Orckestra A/S 2020")]
 [assembly: AssemblyTrademark("Orckestra Technologies Inc. 2019")]
 
-[assembly: AssemblyVersion("4.9.1")]
-[assembly: AssemblyFileVersion("4.9.1")]
+[assembly: AssemblyVersion("5.0.0")]
+[assembly: AssemblyFileVersion("5.0.0")]
 
 #if DEBUG
 [assembly: AssemblyConfiguration("Debug")]
