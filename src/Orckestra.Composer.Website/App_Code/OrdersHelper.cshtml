@@ -11,8 +11,8 @@
 
                 <div class="col-sm-4 text-sm-right">
                     <ul class="nav-pills">
-                        <li>
-                            <a v-if="order.OrderInfos.IsOrderEditable" class="cta text-dark font-weight-normal nav-pills" href="#">
+                        <li v-if="order.OrderInfos.IsOrderEditable" >
+                            <a class="cta text-dark font-weight-normal nav-pills" href="#">
                                 @Html.Localize("MyAccount", "B_EditOrder")
                             </a>
                         </li>
