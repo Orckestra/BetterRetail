@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Orckestra.Composer.Cart.Factory.Order;
 using Orckestra.Composer.Cart.Parameters.Order;
@@ -10,9 +9,7 @@ using Orckestra.Overture;
 using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel.Customers;
 using Orckestra.Overture.ServiceModel.Orders;
-using Orckestra.Overture.ServiceModel.Requests.Customers;
 using Orckestra.Overture.ServiceModel.Requests.Orders;
-using Orckestra.Overture.ServiceModel.Requests.Orders.Shopping;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 using static Orckestra.Composer.Constants.General;
 
@@ -33,7 +30,7 @@ namespace Orckestra.Composer.Cart.Repositories.Order
         {
             OvertureClient = overtureClient ?? throw new ArgumentNullException(nameof(overtureClient));
             FindOrdersRequestFactory = findOrdersRequestFactory ?? throw new ArgumentNullException(nameof(findOrdersRequestFactory));
-            ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(findOrdersRequestFactory));
+            ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
             CacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));
         }
 
@@ -157,7 +154,7 @@ namespace Orckestra.Composer.Cart.Repositories.Order
         }
 
         /// <summary>
-        /// Create a draft of a cart by order id
+        /// Create a cart draft of some order
         /// </summary>
         /// <param name="orderId">Id of the order</param>
         /// <returns>Cart draft</returns>
@@ -165,14 +162,14 @@ namespace Orckestra.Composer.Cart.Repositories.Order
         {
             if (string.IsNullOrWhiteSpace(orderId)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(orderId))); }
 
-            var order = await OvertureClient.SendAsync(new GetOrderByIdRequest
+            var order = await OvertureClient.SendAsync(new GetOrderByIdRequest()
             {
                 ScopeId = GlobalScopeName,
                 OrderId = orderId.ToGuid(),
-                IncludeShipment = true,
+                IncludeShipment = true
             }).ConfigureAwait(false);
 
-            if (order.Cart.Shipments == null || order.Cart.Shipments.Count == 0)
+            if (order?.Cart?.Shipments == null || order.Cart.Shipments.Count == 0)
                 throw new InvalidOperationException("Cannot edit this order");
 
             var createCartDraftRequest = new CreateCartOrderDraftRequest()

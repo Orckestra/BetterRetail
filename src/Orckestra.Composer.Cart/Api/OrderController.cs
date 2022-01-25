@@ -14,8 +14,6 @@ using Orckestra.Composer.Providers;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Utils;
 using Orckestra.Composer.WebAPIFilters;
-using static Orckestra.Composer.Constants.General;
-using static Orckestra.Composer.Cart.Extensions.CartExtensions;
 
 namespace Orckestra.Composer.Cart.Api
 {
@@ -193,9 +191,15 @@ namespace Orckestra.Composer.Cart.Api
         [ValidateModelState]
         public virtual async Task<IHttpActionResult> EditOrder(EditOrderParam param)
         {
-            if (param == null) { return BadRequest("No request found."); }
+            if (param == null) return BadRequest("No request found.");
+            if (string.IsNullOrWhiteSpace(param.OrderId)) return BadRequest($"{nameof(param.OrderId)} cannot be null or whitespace");
+            if (string.IsNullOrWhiteSpace(param.OrderNumber)) return BadRequest($"{nameof(param.OrderNumber)} cannot be null or whitespace");
 
-            var editedCart = await OrderRepository.CreateEditOrder(param.OrderId);
+            var editedCart = await OrderRepository.CreateEditOrder(param.OrderId).ConfigureAwait(false);
+            if (editedCart == null)
+            {
+                throw new InvalidOperationException($"Cannot create a draft for the order with {nameof(param.OrderId)} {param.OrderId}");
+            }
 
             ComposerContext.EditingOrderNumber = param.OrderNumber;
             ComposerContext.EditingOrderId = param.OrderId;
@@ -203,7 +207,9 @@ namespace Orckestra.Composer.Cart.Api
 
             var vm = new EditingOrderViewModel
             {
+                
                 Scope = editedCart.ScopeId,
+                OrderId = param.OrderId,
                 OrderNumber = param.OrderNumber,
                 CartUrl = CartUrlProvider.GetCartUrl(new BaseUrlParameter
                 {

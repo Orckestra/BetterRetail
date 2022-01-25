@@ -48,7 +48,7 @@ namespace Orckestra.Composer.Cart.Repositories.Order
         Task<OrderSettings> GetOrderSettings(string scope);
 
         /// <summary>
-        /// Create a draft for order editing
+        /// Create a cart draft to edit an order
         /// </summary>
         /// <param name="orderId">the id of the order to edit</param>
         /// <returns>Cart draft</returns>
