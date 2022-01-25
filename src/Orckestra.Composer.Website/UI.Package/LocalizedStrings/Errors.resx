@@ -255,4 +255,7 @@
   <data name="L_SelectAStore" xml:space="preserve">
     <value>Please select a store.</value>
   </data>
+  <data name="L_EditingOrderFailed" xml:space="preserve">
+    <value>An error occurred while editing your order. Please try again or contact us.</value>
+  </data>
 </root>

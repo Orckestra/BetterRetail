@@ -4,6 +4,7 @@
 /// <reference path='../../Mvc/IControllerContext.ts' />
 /// <reference path='../../Mvc/IControllerActionContext.ts' />
 ///<reference path='./Services/OrderService.ts' />
+/// <reference path='../../ErrorHandling/ErrorHandler.ts' />
 
 module Orckestra.Composer {
     'use strict';
@@ -34,7 +35,26 @@ module Orckestra.Composer {
                                 })
                                 .fail(reason => console.log(reason))
                                 .fin(() => this.Loading = false);
-                        }
+                        },
+                        editOrder(orderNumber: string, orderId: string) {
+                            if(this.Loading) return;
+                            this.Loading = true;
+                            self.eventHub.publish(MyAccountEvents.StartEditOrder, { data: orderId });
+                            self.orderService.editOrder(orderNumber, orderId)
+                                .then(result => {
+                                    if(result.IsEditingOrder) {
+                                        let data =  { redirectUrl: result.CartUrl };
+                                        self.eventHub.publish(MyAccountEvents.EditOrderChanged, { data: data });
+                                    }
+                                })
+                                .fail(reason => {
+                                    console.log(reason);
+                                    ErrorHandler.instance().outputErrorFromCode('EditingOrderFailed');
+                                })
+                                .fin(() => {
+                                    this.Loading = false;
+                                });
+                        }	
                     }
                 })
             });

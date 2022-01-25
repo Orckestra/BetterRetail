@@ -21,11 +21,11 @@
         return;
     }
 }
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
 <head>
 </head>
 <body>
-<div class="order-details">
+<div id="vueOrderDetails" class="order-details">
     @OrderDetails(Order)
 
     @OrderShipments(Order)
@@ -63,7 +63,7 @@
                         @if (order.OrderInfos.IsOrderEditable)
                         {
                             <div class="col-sm-4 text-sm-right">
-                                <a class="cta text-dark font-weight-normal">
+                                <a href="#" v-bind:disabled="Loading" class="cta" v-on:click.prevent="editOrder('@Order.OrderInfos.OrderNumber', '@Order.OrderInfos.Id')">
                                     @Html.Localize("MyAccount", "B_EditOrder")
                                 </a>
                             </div>
