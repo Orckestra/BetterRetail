@@ -15,10 +15,7 @@ namespace Orckestra.Composer.Services
         string ScopeCurrencyIso { get; }
         string EditingOrderScope { get; set; }
         string EditingOrderId { get; set; }
-        bool IsEditingOrder { get; }
         string EditingOrderNumber { get; set; }
-        DateTime? EditingOrderUntil { get; set; }
-
-        void ClearEditingOrder();
+        bool IsEditingOrder { get; }
     }
 }

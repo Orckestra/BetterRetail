@@ -72,8 +72,9 @@ namespace Orckestra.Composer.Cart.ViewModels.Order
         /// </value>
         public string BillingCurrency { get; set; }
 
-        public string ShipmentStatus { get; set; }
-        public bool IsOrderEditable { get; set; }
+        /// <summary>
+        /// Gets or sets is order is editing or not
+        /// </summary>
         public bool IsOrderEditing { get; set; }
 
         /// <summary>
@@ -84,6 +85,12 @@ namespace Orckestra.Composer.Cart.ViewModels.Order
         /// </value>
         public string Source { get; set; }
 
-
+        /// <summary>
+        /// Gets or sets the is Order editable or not
+        /// </summary>
+        /// <value>
+        /// The source of the order.
+        /// </value>
+        public bool IsOrderEditable { get; set; }
     }
 }

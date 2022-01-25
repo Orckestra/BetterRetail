@@ -23,10 +23,13 @@ namespace Orckestra.Composer.Cart.Repositories.Order
         protected virtual IOvertureClient OvertureClient { get; private set; }
         protected virtual IFindOrdersRequestFactory FindOrdersRequestFactory { get; private set; }
         protected ICacheProvider CacheProvider { get; private set; }
-        public IComposerContext ComposerContext { get; private set; }
+        protected virtual IComposerContext ComposerContext { get; private set; }
 
-        public OrderRepository(IOvertureClient overtureClient, IFindOrdersRequestFactory findOrdersRequestFactory, ICacheProvider cacheProvider,
-        IComposerContext composerContext)
+        public OrderRepository(
+            IOvertureClient overtureClient, 
+            IFindOrdersRequestFactory findOrdersRequestFactory, 
+            ICacheProvider cacheProvider,
+            IComposerContext composerContext)
         {
             OvertureClient = overtureClient ?? throw new ArgumentNullException(nameof(overtureClient));
             FindOrdersRequestFactory = findOrdersRequestFactory ?? throw new ArgumentNullException(nameof(findOrdersRequestFactory));
@@ -153,8 +156,15 @@ namespace Orckestra.Composer.Cart.Repositories.Order
             return cacheKey;
         }
 
+        /// <summary>
+        /// Create a draft of a cart by order id
+        /// </summary>
+        /// <param name="orderId">Id of the order</param>
+        /// <returns>Cart draft</returns>
         public async Task<Overture.ServiceModel.Orders.Cart> CreateEditOrder(string orderId)
         {
+            if (string.IsNullOrWhiteSpace(orderId)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(orderId))); }
+
             var order = await OvertureClient.SendAsync(new GetOrderByIdRequest
             {
                 ScopeId = GlobalScopeName,
@@ -175,85 +185,6 @@ namespace Orckestra.Composer.Cart.Repositories.Order
 
             var cart = await OvertureClient.SendAsync(createCartDraftRequest);
             return cart;
-        }
-
-        public async Task SaveEditedOrder(string scopeId, string orderId)
-        {
-            var orderRequest = new GetOrderByIdRequest
-            {
-                OrderId = Guid.Parse(orderId),
-                ScopeId = scopeId,
-                IncludeShipment = true
-            };
-
-            var order = await OvertureClient.SendAsync(orderRequest).ConfigureAwait(false);
-            var shipment = order.Cart.Shipments.FirstOrDefault();
-
-            if (shipment == null)
-            {
-                await OvertureClient.SendAsync(new DeleteCartRequest
-                {
-                    CartName = CartConfiguration.EditOrderCartName,
-                    CustomerId = new Guid(order.CustomerId),
-                    ScopeId = scopeId
-                }).ConfigureAwait(false);
-
-                throw new InvalidOperationException("Editing period has passed, cannot edit this order anymore");
-            }
-
-            var editedCartRequest = new GetCartRequest
-            {
-                CartName = CartConfiguration.EditOrderCartName,
-                ScopeId = scopeId,
-                CustomerId = new Guid(order.CustomerId),
-                CultureName = order.Cart.CultureName,
-                ExecuteWorkflow = true
-            };
-            var editedCart = await OvertureClient.SendAsync(editedCartRequest).ConfigureAwait(false);
-
-            editedCart.Id = order.Cart.Id;
-            editedCart.Name = CartConfiguration.ShoppingCartName;
-
-            editedCart.PropertyBag["LastOrderEdited"] = DateTime.UtcNow;
-
-            order.Cart = editedCart;
-
-            var saveOrderRequest = new SaveOrderRequest
-            {
-                OrderId = Guid.Parse(orderId),
-                ScopeId = scopeId,
-                Order = order
-            };
-            await OvertureClient.SendAsync(saveOrderRequest).ConfigureAwait(false);
-
-            var deleteCartRequest = new DeleteCartRequest
-            {
-                CartName = CartConfiguration.EditOrderCartName,
-                CustomerId = new Guid(order.CustomerId),
-                ScopeId = scopeId
-            };
-            await OvertureClient.SendAsync(deleteCartRequest).ConfigureAwait(false);
-        }
-
-        public async Task CancelEditOrder(string scopeId, string orderId)
-        {
-            var orderRequest = new GetOrderByIdRequest
-            {
-                OrderId = Guid.Parse(orderId),
-                ScopeId = scopeId,
-                IncludeLineItems = true,
-                IncludeShipment = true
-            };
-
-            var order = await OvertureClient.SendAsync(orderRequest).ConfigureAwait(false);
-
-            var deleteCartRequest = new DeleteCartRequest
-            {
-                CartName = CartConfiguration.EditOrderCartName,
-                CustomerId = new Guid(order.CustomerId),
-                ScopeId = scopeId
-            };
-            await OvertureClient.SendAsync(deleteCartRequest).ConfigureAwait(false);
         }
     }
 }

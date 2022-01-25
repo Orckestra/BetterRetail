@@ -47,8 +47,11 @@ namespace Orckestra.Composer.Cart.Repositories.Order
         /// <returns></returns>
         Task<OrderSettings> GetOrderSettings(string scope);
 
+        /// <summary>
+        /// Create a draft for order editing
+        /// </summary>
+        /// <param name="orderId">the id of the order to edit</param>
+        /// <returns>Cart draft</returns>
         Task<Overture.ServiceModel.Orders.Cart> CreateEditOrder(string orderId);
-        Task SaveEditedOrder(string scopeId, string orderId);
-        Task CancelEditOrder(string scopeId, string orderId);
     }
 }

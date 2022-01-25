@@ -324,44 +324,6 @@ namespace Orckestra.Composer.Services
             }
         }
 
-        public DateTime? EditingOrderUntil
-        {
-            get
-            {
-                ComposerCookieDto dto = CookieAccessor.Read();
-                var value = dto.GetValue(nameof(EditingOrderUntil));
-                if (string.IsNullOrEmpty(value))
-                    return null;
-
-                return DateTime.Parse(value);
-            }
-            set
-            {
-                ComposerCookieDto dto = CookieAccessor.Read();
-                dto.SetOrRemove(nameof(EditingOrderUntil), value?.ToString());
-                CookieAccessor.Write(dto);
-            }
-        }
-
-        public DateTime? EditingFulfillmentDate
-        {
-            get
-            {
-                ComposerCookieDto dto = CookieAccessor.Read();
-                var value = dto.GetValue(nameof(EditingFulfillmentDate));
-                if (string.IsNullOrEmpty(value))
-                    return null;
-
-                return DateTime.Parse(value);
-            }
-            set
-            {
-                ComposerCookieDto dto = CookieAccessor.Read();
-                dto.SetOrRemove(nameof(EditingFulfillmentDate), value?.ToString());
-                CookieAccessor.Write(dto);
-            }
-        }
-
         public bool IsEditingOrder
         {
             get
@@ -375,15 +337,6 @@ namespace Orckestra.Composer.Services
         public string GetDefaultScope()
         {
             return ScopeProvider.DefaultScope;
-        }
-
-        public void ClearEditingOrder()
-        {
-            EditingOrderScope = null;
-            EditingOrderNumber = null;
-            EditingOrderId = null;
-            EditingFulfillmentDate = null;
-            EditingOrderUntil = null;
         }
     }
 }

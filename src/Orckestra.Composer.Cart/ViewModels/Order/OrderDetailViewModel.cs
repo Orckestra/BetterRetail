@@ -18,7 +18,7 @@ namespace Orckestra.Composer.Cart.ViewModels.Order
         /// <summary>
         /// Gets or sets the list of shipments viewmodel.
         /// </summary>
-        public List<OrderShipmentDetailViewModel> Shipments { get; set; }
+        public List<OrderShipmentDetailViewModel> Shipments { get; set; } 
 
         /// <summary>
         /// Gets or sets the history of the order category
