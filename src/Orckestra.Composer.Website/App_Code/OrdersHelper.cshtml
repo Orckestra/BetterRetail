@@ -8,10 +8,20 @@
                 <div class="col-sm-8">
                     <h5 class="m-0"> @Html.Localized("MyAccount", "L_OrderedOn", "{{order.OrderInfos.OrderDate}}")</h5>
                 </div>
+
                 <div class="col-sm-4 text-sm-right">
-                    <a v-bind:href="order.Url" class="cta text-dark font-weight-normal">
-                        @Html.Localize("MyAccount", "H_OrderDetail")
-                    </a>
+                    <ul class="nav-pills">
+                        <li v-if="order.OrderInfos.IsOrderEditable" >
+                            <a class="cta text-dark font-weight-normal" href="#">
+                                @Html.Localize("MyAccount", "B_EditOrder")
+                            </a>
+                        </li>
+                        <li>
+                            <a v-bind:href="order.Url" class="cta text-dark font-weight-normal">
+                                @Html.Localize("MyAccount", "H_OrderDetail")
+                            </a>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -40,6 +50,7 @@
                           'text-success': order.OrderInfos.OrderStatusRaw == 'Completed'}">
                         {{ order.OrderInfos.OrderStatus }}
                     </span>
+
                 </div>
                 <div class="col-sm-4 text-sm-right">Total: <h5>{{order.OrderInfos.PricePaid}}</h5></div>
             </div>

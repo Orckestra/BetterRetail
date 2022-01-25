@@ -31,6 +31,7 @@ namespace Orckestra.Composer.Website.App_Insights
             }
 
             var operationName = telemetry.Context?.Operation?.Name;
+
             if (operationName != null && operationName.StartsWith(_operationPrefix)) return;
 
             if (operationTelemetry.Properties != null 

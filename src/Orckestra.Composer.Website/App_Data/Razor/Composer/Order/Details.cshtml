@@ -14,6 +14,7 @@
 @functions {
     public OrderDetailViewModel Order { get; set; }
 }
+
 @{
     if (Order == null)
     {
@@ -24,23 +25,23 @@
 <head>
 </head>
 <body>
-    <div class="order-details">
-        @OrderDetails(Order)
+<div class="order-details">
+    @OrderDetails(Order)
 
-        @OrderShipments(Order)
+    @OrderShipments(Order)
 
-        @OrderAddress(Order)
+    @OrderAddress(Order)
 
-        @OrderCartDetails(Order)
+    @OrderCartDetails(Order)
 
-        @OrderPayment(Order)
+    @OrderPayment(Order)
 
-        <div class="row">
-            <div class="col-12 col-sm-6 offset-sm-6">
-                @OrderSummary(Order)
-            </div>
+    <div class="row">
+        <div class="col-12 col-sm-6 offset-sm-6">
+            @OrderSummary(Order)
         </div>
     </div>
+</div>
 </body>
 </html>
 
@@ -52,9 +53,23 @@
         </h3>
         <div class="card-body">
             <div class="card">
-                <h4 class="card-header">
-                    @Html.Localized("MyAccount", "L_OrderedOn", order.OrderInfos.OrderDate)
-                </h4>
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <h4 class="m-0">
+                                @Html.Localized("MyAccount", "L_OrderedOn", order.OrderInfos.OrderDate)
+                            </h4>
+                        </div>
+                        @if (order.OrderInfos.IsOrderEditable)
+                        {
+                            <div class="col-sm-4 text-sm-right">
+                                <a class="cta text-dark font-weight-normal">
+                                    @Html.Localize("MyAccount", "B_EditOrder")
+                                </a>
+                            </div>
+                        }
+                    </div>
+                </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-8">
@@ -66,7 +81,9 @@
                                 var statusCss = status == "InProgress" ? "text-warning" :
                                     status == "Canceled" ? "text-danger" : "text-success";
                             }
-                            <p class="@statusCss  m-0"><strong>@order.OrderInfos.OrderStatus</strong></p>
+                            <p class="@statusCss  m-0">
+                                <strong>@order.OrderInfos.OrderStatus</strong>
+                            </p>
                         </div>
                         <div class="col-4 text-right">
                             @Html.Localize("MyAccount", "L_Total"):
@@ -85,7 +102,7 @@
     {
         var status = shipping.ShipmentStatusName;
         var statusCss = status == "Fulfilled" ? "text-success" :
-        status == "Canceled" ? "text-danger" : "text-warning";
+            status == "Canceled" ? "text-danger" : "text-warning";
         <div class="card  bg-light  mt-4">
             <h3 class="card-header">
                 @Html.Localize("MyAccount", "L_Shipping")
@@ -156,11 +173,11 @@
                             @if (!string.IsNullOrEmpty(payment.CreditCardNumber))
                             {
                                 <img src="~/UI.Package/Images/creditcards/@(payment.PaymentMethodName).png"
-                                     alt="@payment.PaymentMethodName" class="img-fluid" />
+                                     alt="@payment.PaymentMethodName" class="img-fluid"/>
                             }
                             else
                             {
-                                <img src="~/UI.Package/Images/payments/cash.png" alt="Cash" class="img-fluid" />
+                                <img src="~/UI.Package/Images/payments/cash.png" alt="Cash" class="img-fluid"/>
                             }
                         </div>
                         <div class="col-8  col-md-8  col-lg-8">
@@ -170,9 +187,11 @@
                             <p>
                                 @if (!string.IsNullOrEmpty(payment.CreditCardNumber))
                                 {
-                                    @Html.Localize("MyAccount", "L_CreditCardNumber") @payment.CreditCardNumber
-                                    <br />
-                                    @Html.Localize("MyAccount", "L_CreditCardExpires") @payment.ExpiryDate
+                                    @Html.Localize("MyAccount", "L_CreditCardNumber")
+                                    @payment.CreditCardNumber
+                                    <br/>
+                                    @Html.Localize("MyAccount", "L_CreditCardExpires")
+                                    @payment.ExpiryDate
                                 }
                                 else
                                 {
@@ -197,7 +216,10 @@
 @helper OrderCartDetails(OrderDetailViewModel order)
 {
     var shipment = order.Shipments.FirstOrDefault();
-    if (shipment == null) { return; }
+    if (shipment == null)
+    {
+        return;
+    }
     var index = 0;
     <div class="card bg-light mt-4">
         <h3 class="card-header">
@@ -210,7 +232,8 @@
                 if (item.IsGiftItem)
                 {
                     <div class="row pt-0 giftitem">
-                        <i class="fa fa-gift" /><p>@Html.Localize("ShoppingCart", "L_GiftItem")</p>
+                        <i class="fa fa-gift"/>
+                        <p>@Html.Localize("ShoppingCart", "L_GiftItem")</p>
                     </div>
                 }
                 <div class="row  pt-3  @(index != shipment.LineItems.Count ? "border-bottom pb-2" : "")  @(item.IsUnavailable || item.IsSubstituted ? "disabled" : "")">
@@ -220,7 +243,9 @@
                             <div class="promotion">
                                 @foreach (var reward in item.Rewards)
                                 {
-                                    <em>@reward.Description<br /></em>
+                                    <em>
+                                        @reward.Description<br/>
+                                    </em>
                                 }
                             </div>
                         </div>
@@ -230,7 +255,7 @@
                             <img src="@item.ImageUrl"
                                  class="img-fluid"
                                  alt="Thumbnail"
-                                 onerror="this.onerror=null; this.src='@item.FallbackImageUrl'" />
+                                 onerror="this.onerror = null;this.src = '@item.FallbackImageUrl';"/>
                         </a>
                     </div>
                     <div class="col-8 col-sm-4  order-3">
@@ -240,7 +265,7 @@
                             @if (!string.IsNullOrEmpty(item.VariantId))
                             {
                                 <p class="mb-2 mb-sm-0">
-                                    @String.Join(" | ", item.KeyVariantAttributesList.Select(i => i.Value).ToArray())
+                                    @string.Join(" | ", item.KeyVariantAttributesList.Select(i => i.Value).ToArray())
                                 </p>
                             }
                         </div>
@@ -249,7 +274,7 @@
                         @if (item.IsOnSale)
                         {
                             <p>
-                                <del>@item.DefaultPrice</del><br />
+                                <del>@item.DefaultPrice</del><br/>
                                 <strong class="text-danger">@item.CurrentPrice</strong>
                             </p>
                         }
@@ -261,12 +286,12 @@
                     <div class="offset-2 offset-sm-0 2 col-sm-3  text-left text-sm-center  order-6">
                         <span class="d-inline d-sm-none">
                             @Html.Localize("CheckoutProcess", "L_QuantityMobile")
-                        </span>  @item.Quantity
+                        </span> @item.Quantity
                     </div>
                     <div class="offset-2 offset-sm-0 col-sm-2  text-left text-sm-center  order-7">
                         @if (item.IsPriceDiscounted)
                         {
-                            <del>@item.TotalWithoutDiscount</del><br />
+                            <del>@item.TotalWithoutDiscount</del><br/>
                             <strong class="text-danger">@item.Total</strong>
                         }
                         else
@@ -275,7 +300,7 @@
                         }
                         @if (!string.IsNullOrEmpty(item.SavingsTotal))
                         {
-                            <br />
+                            <br/>
                             <small>
                                 <span class="text-success">@Html.Localize("ShoppingCart", "L_LineItemSavings") </span>
                                 <span class="text-success">@item.SavingsTotal</span>
@@ -296,15 +321,15 @@
                         </em>
                     </div>
                     @if (string.IsNullOrEmpty(item.RecurringOrderProgramName)
-                        && item.RecurringOrderProgramFrequencies != null &&
-                        item.RecurringOrderProgramFrequencies.Count > 0)
+                         && item.RecurringOrderProgramFrequencies != null &&
+                         item.RecurringOrderProgramFrequencies.Count > 0)
                     {
                         <div class="col-12  offset-2 offset-sm-1  order-8  mt-2">
                             <div class="cart-recurring-cta js-cartRecurringCta">
                                 <img src="~/UI.Package/Images/recurring.svg"
                                      class="recurring-icon"
                                      alt="@Html.Localize("General", "L_RecurringProduct")"
-                                     title="@Html.Localize("General", "L_RecurringProduct")" />
+                                     title="@Html.Localize("General", "L_RecurringProduct")"/>
                                 @if (!string.IsNullOrEmpty(item.RecurringOrderFrequencyName))
                                 {
                                     <span>@item.RecurringOrderFrequencyDisplayName</span>
@@ -355,12 +380,12 @@
         </h3>
         <div class="card-body">
             @if (order.OrderSummary.Rewards != null &&
-                order.OrderSummary.Rewards.Count > 0)
+                 order.OrderSummary.Rewards.Count > 0)
             {
                 <p class="promotion  mb-2  text-center  d-block">
                     @foreach (var reward in order.OrderSummary.Rewards)
                     {
-                        <em>@(!string.IsNullOrEmpty(reward.Description) ? reward.Description : reward.PromotionName)</em><br />
+                        <em>@(!string.IsNullOrEmpty(reward.Description) ? reward.Description : reward.PromotionName)</em><br/>
                     }
                 </p>
             }
@@ -463,19 +488,21 @@
         </span>
         @if (!string.IsNullOrEmpty(address.Line2))
         {
-            <span data-qa="order-address-line2">@address.Line2</span><br />
+            <span data-qa="order-address-line2">@address.Line2</span><br/>
         }
-        <span data-qa="order-address-line1">@address.Line1</span><br />
+        <span data-qa="order-address-line1">@address.Line1</span><br/>
         <span data-qa="order-address-city">@address.City</span>,
         <span data-qa="order-address-region">@address.RegionName</span>,
-        <span data-qa="order-address-postalcode">@address.PostalCode</span><br />
+        <span data-qa="order-address-postalcode">@address.PostalCode</span><br/>
         <span data-qa="order-address-phone">@address.PhoneNumber</span>
     </div>
 }
 
 @helper FeeSummary(AdditionalFeeSummaryViewModel fee)
 {
-    <div class="col-6  col-md-7"><p>@fee.GroupName</p></div>
+    <div class="col-6  col-md-7">
+        <p>@fee.GroupName</p>
+    </div>
     <div class="col-6  col-md-5  text-right">
         @fee.TotalAmount
     </div>

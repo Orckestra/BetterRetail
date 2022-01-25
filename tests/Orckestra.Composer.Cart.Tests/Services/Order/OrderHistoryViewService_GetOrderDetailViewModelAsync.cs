@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using FizzWare.NBuilder.Generators;
 using FluentAssertions;
 using Moq;
@@ -18,6 +19,11 @@ using Orckestra.Composer.Services.Lookup;
 using Orckestra.Overture.ServiceModel.Customers;
 using Orckestra.Overture.ServiceModel.Orders;
 using System.Threading.Tasks;
+using Orckestra.Composer.Cart.Extensions;
+using Orckestra.Composer.Cart.Factory;
+using Orckestra.Composer.Country;
+using Orckestra.Composer.Providers.Dam;
+using Orckestra.Composer.ViewModels;
 
 namespace Orckestra.Composer.Cart.Tests.Services.Order
 {
@@ -72,6 +78,13 @@ namespace Orckestra.Composer.Cart.Tests.Services.Order
                     CustomerId = customerId.ToString()
                 });
 
+            _container.GetMock<IOrderRepository>()
+                .Setup(r => r.GetOrderSettings(It.IsAny<string>()))
+                .ReturnsAsync(new OrderSettings()
+                {
+                    EditableShipmentStates = "new"
+
+                });
             //Act
             var param = new GetCustomerOrderParam
             {
