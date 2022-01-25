@@ -15,8 +15,7 @@
     <div class="product-tile island-xl" data-qa="search-result">
         <a class="product-tile-media"
            v-bind:href="@(entity).Url"
-           v-bind:data-productId="@(entity).ProductId"
-           v-bind:data-index="index" data-oc-click='searchProductClick'>
+           v-on:click="searchProductClick(@entity, index)">
             <img class="img-fluid"
                  v-bind:src="@(entity).ImageUrl" v-bind:alt="@(entity).FullDisplayName"
                  v-bind:onerror="'this.onerror=null; this.src=`${@(entity).FallbackImageUrl}`'" />
@@ -29,8 +28,7 @@
                             v-bind:title="@(entity).Brand">{{@(entity).Brand}}<br /></strong>
                     <a data-qa="search-product-title"
                        v-bind:href="@(entity).Url" v-bind:title="@(entity).FullDisplayName"
-                       v-bind:data-productId="@(entity).ProductId"
-                       v-bind:data-index='index' data-oc-click='searchProductClick'>{{@(entity).DisplayName}}</a>
+                       v-on:click="searchProductClick(@entity, index)">{{@(entity).DisplayName}}</a>
                 </div>
                 <div v-if="@(entity).IsRecurringOrderEligible" class="col-3 col-md-2 product-tile-recurring">
                     <img src="/UI.Package/Images/recurring.svg" class="recurring-icon"
