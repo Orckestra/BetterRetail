@@ -152,20 +152,6 @@ namespace Orckestra.Composer.Cart.Repositories.Order
             return cacheKey;
         }
 
-        public Task<List<Overture.ServiceModel.Orders.Order>> GetOrdersByNumbers(string scopeId, List<string> orderNumbers)
-        {
-            var requests = orderNumbers.Select(orderNumber => new GetOrderByNumberRequest
-            {
-                ScopeId = scopeId,
-                OrderNumber = orderNumber,
-                IncludeShipment = true,
-                IncludeLineItems = false,
-                IncludePayment = false
-            }).ToList();
-
-            return OvertureClient.SendAllAsync(requests);
-        }
-
         public async Task<Overture.ServiceModel.Orders.Cart> CreateEditOrder(string scopeId, string orderId)
         {
             var order = await OvertureClient.SendAsync(new GetOrderByIdRequest

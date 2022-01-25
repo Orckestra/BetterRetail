@@ -46,8 +46,8 @@ namespace Orckestra.Composer.Cart.Repositories.Order
         /// <param name="param"></param>
         /// <returns></returns>
         Task<OrderSettings> GetOrderSettings(string scope);
-        Task<List<Orckestra.Overture.ServiceModel.Orders.Order>> GetOrdersByNumbers(string scopeId, List<string> orderNumbers);
-        Task<Orckestra.Overture.ServiceModel.Orders.Cart> CreateEditOrder(string scopeId, string orderId);
+
+        Task<Overture.ServiceModel.Orders.Cart> CreateEditOrder(string scopeId, string orderId);
         Task SaveEditedOrder(string scopeId, string orderId);
         Task CancelEditOrder(string scopeId, string orderId);
     }

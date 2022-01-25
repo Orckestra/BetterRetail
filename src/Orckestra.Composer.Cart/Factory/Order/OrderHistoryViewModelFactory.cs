@@ -240,7 +240,7 @@ namespace Orckestra.Composer.Cart.Factory.Order
 
             orderInfo.OrderStatus = GetOrderStatusDisplayName(rawOrder, param);
             orderInfo.OrderStatusRaw = rawOrder.OrderStatus;
-
+            orderInfo.IsOrderEditable = IsOrderEditable(param, rawOrder);
             var orderDetailUrl = UrlFormatter.AppendQueryString(param.OrderDetailBaseUrl, new NameValueCollection
                 {
                     {"id", rawOrder.OrderNumber}
@@ -277,7 +277,7 @@ namespace Orckestra.Composer.Cart.Factory.Order
 
             lightOrderVm.OrderInfos.ShipmentStatus = shipmentStatus;
             lightOrderVm.OrderInfos.IsOrderEditing = string.Equals(ComposerContext.EditingOrderNumber == rawOrder.OrderNumber, StringComparison.OrdinalIgnoreCase);
-            lightOrderVm.OrderInfos.IsOrderEditable = !ComposerContext.IsEditingOrder;
+            lightOrderVm.OrderInfos.IsOrderEditable = !ComposerContext.IsEditingOrder;//add rules here
             lightOrderVm.OrderInfos.Source = string.Empty;
 
             return lightOrderVm;
