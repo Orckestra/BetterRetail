@@ -216,7 +216,6 @@ namespace Orckestra.Composer.Cart.Repositories.Order
             editedCart.Id = order.Cart.Id;
             editedCart.Name = CartConfiguration.ShoppingCartName;
 
-            // Last order edited date will used by front-end to detect update
             editedCart.PropertyBag["LastOrderEdited"] = DateTime.UtcNow;
 
             order.Cart = editedCart;

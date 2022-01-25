@@ -255,13 +255,6 @@ namespace Orckestra.Composer.Cart.Api
             return Ok(vm);
         }
 
-        [HttpPost]
-        [ActionName("get-edited-order")]
-        public virtual IHttpActionResult GetEditOrder()
-        {
-            return Ok(GetEditingOrderViewModel());
-        }
-
         private EditingOrderViewModel GetEditingOrderViewModel()
         {
             return new EditingOrderViewModel
