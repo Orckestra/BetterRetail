@@ -178,7 +178,7 @@
     <value>logout</value>
   </data>
   <data name="H_OrderDetail" xml:space="preserve">
-    <value>See details</value>
+    <value>See Details</value>
   </data>
   <data name="H_OrderTracking" xml:space="preserve">
     <value>Track your order</value>
