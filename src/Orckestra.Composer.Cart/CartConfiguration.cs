@@ -20,7 +20,7 @@ namespace Orckestra.Composer.Cart
         public static string ShoppingCartName { get; set; } = "Default";
 
         /// <summary>
-        ///     Get/Set the Edit CartName to use for storing an edited order in Overture
+        ///     Get/Set the Edit CartName to use for storing an edited order
         /// </summary>
         public static string EditOrderCartName { get; set; } = "EditOrder";
 
@@ -66,7 +66,5 @@ namespace Orckestra.Composer.Cart
         /// If true, cart items will be grouped by product primary category
         /// </summary>
         public static bool GroupCartItemsByPrimaryCategory { get; set; }
-
-        public const string TimeZoneId = nameof(TimeZoneId);
     }
 }
