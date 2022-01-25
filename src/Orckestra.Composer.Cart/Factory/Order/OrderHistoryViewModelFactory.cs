@@ -275,11 +275,9 @@ namespace Orckestra.Composer.Cart.Factory.Order
             var values = rawOrder.Source.Split('|');
             var shipmentStatus = values[0];
 
-            var isShipmentPendingRelease = string.Equals(shipmentStatus, CartConfiguration.ShipmentStatuses.PendingRelease);
-
             lightOrderVm.OrderInfos.ShipmentStatus = shipmentStatus;
             lightOrderVm.OrderInfos.IsOrderEditing = string.Equals(ComposerContext.EditingOrderNumber == rawOrder.OrderNumber, StringComparison.OrdinalIgnoreCase);
-            lightOrderVm.OrderInfos.IsOrderEditable = !ComposerContext.IsEditingOrder && isShipmentPendingRelease;
+            lightOrderVm.OrderInfos.IsOrderEditable = !ComposerContext.IsEditingOrder;
             lightOrderVm.OrderInfos.Source = string.Empty;
 
             return lightOrderVm;

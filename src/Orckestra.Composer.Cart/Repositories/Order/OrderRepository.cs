@@ -152,7 +152,6 @@ namespace Orckestra.Composer.Cart.Repositories.Order
             return cacheKey;
         }
 
-        //VG
         public Task<List<Overture.ServiceModel.Orders.Order>> GetOrdersByNumbers(string scopeId, List<string> orderNumbers)
         {
             var requests = orderNumbers.Select(orderNumber => new GetOrderByNumberRequest
@@ -178,8 +177,7 @@ namespace Orckestra.Composer.Cart.Repositories.Order
                 IncludePayment = true
             }).ConfigureAwait(false);
 
-            if (order.Cart.Shipments == null || order.Cart.Shipments.Count == 0 ||
-                order.Cart.Shipments[0].Status != CartConfiguration.ShipmentStatuses.PendingRelease)
+            if (order.Cart.Shipments == null || order.Cart.Shipments.Count == 0)
                 throw new InvalidOperationException("Cannot edit this order");
 
             var createCartDraftRequest = new CreateCartOrderDraftRequest()
@@ -207,8 +205,7 @@ namespace Orckestra.Composer.Cart.Repositories.Order
             var order = await OvertureClient.SendAsync(orderRequest).ConfigureAwait(false);
             var shipment = order.Cart.Shipments.FirstOrDefault();
 
-            if (shipment == null ||
-                shipment.Status != CartConfiguration.ShipmentStatuses.PendingRelease)
+            if (shipment == null)
             {
                 await OvertureClient.SendAsync(new DeleteCartRequest
                 {

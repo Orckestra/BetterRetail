@@ -20,7 +20,7 @@ namespace Orckestra.Composer.Cart
         public static string ShoppingCartName { get; set; } = "Default";
 
         /// <summary>
-        ///     Get/Set the Shopiing CartName to use for storing an edited order in Overture
+        ///     Get/Set the Edit CartName to use for storing an edited order in Overture
         /// </summary>
         public static string EditOrderCartName { get; set; } = "EditOrder";
 
@@ -61,13 +61,6 @@ namespace Orckestra.Composer.Cart
             PaymentMethodType.CreditCard,
             PaymentMethodType.SavedCreditCard
         };
-
-        public static class ShipmentStatuses
-        {
-            public const string PendingRelease = "PendingRelease";
-            public const string CompletedInStore = "CompletedInStore";
-            public const string New = nameof(New);
-        }
 
         /// <summary>
         /// If true, cart items will be grouped by product primary category

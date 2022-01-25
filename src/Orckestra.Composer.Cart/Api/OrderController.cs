@@ -16,7 +16,6 @@ using Orckestra.Composer.Utils;
 using Orckestra.Composer.WebAPIFilters;
 using static Orckestra.Composer.Constants.General;
 using static Orckestra.Composer.Cart.Extensions.CartExtensions;
-using System.Linq;
 
 namespace Orckestra.Composer.Cart.Api
 {
@@ -26,7 +25,7 @@ namespace Orckestra.Composer.Cart.Api
     public class OrderController : ApiController
     {
         protected IComposerContext ComposerContext { get; private set; }
-        protected IOrderRepository OrderRepository;
+        protected IOrderRepository OrderRepository { get; private set; }
         protected IOrderHistoryViewService OrderHistoryViewService { get; private set; }
         protected IOrderUrlProvider OrderUrlProvider { get; private set; }
         protected ICartUrlProvider CartUrlProvider { get; private set; }
@@ -40,7 +39,7 @@ namespace Orckestra.Composer.Cart.Api
             )
         {
             OrderHistoryViewService = orderHistoryViewService ?? throw new ArgumentNullException(nameof(orderHistoryViewService));
-            OrderUrlProvider = orderUrlProvider;
+            OrderUrlProvider = orderUrlProvider ?? throw new ArgumentNullException(nameof(orderUrlProvider));
             ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
             CartUrlProvider = cartUrlProvider ?? throw new ArgumentNullException(nameof(cartUrlProvider));
         }
@@ -209,18 +208,17 @@ namespace Orckestra.Composer.Cart.Api
         [ActionName("save-edited-order")]
         public virtual async Task<IHttpActionResult> SaveEditedOrder()
         {
-            if (!ComposerContext.IsEditingOrder)
-                return Ok();
+            if (!ComposerContext.IsEditingOrder) return Ok();
 
             if (DateTime.UtcNow > ComposerContext.EditingOrderUntil)
             {
-                await OrderRepository.CancelEditOrder(ComposerContext.EditingOrderScope, ComposerContext.EditingOrderId);
+                await OrderRepository.CancelEditOrder(ComposerContext.EditingOrderScope, ComposerContext.EditingOrderId).ConfigureAwait(false);
                 ComposerContext.ClearEditingOrder();
 
                 throw new InvalidOperationException("The order is no longer editable.");
             }
 
-            await OrderRepository.SaveEditedOrder(ComposerContext.EditingOrderScope, ComposerContext.EditingOrderId);
+            await OrderRepository.SaveEditedOrder(ComposerContext.EditingOrderScope, ComposerContext.EditingOrderId).ConfigureAwait(false);
 
             var editingOrderNumber = ComposerContext.EditingOrderNumber;
             ComposerContext.ClearEditingOrder();
