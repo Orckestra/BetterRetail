@@ -176,6 +176,7 @@
     <Compile Include="Providers\GroceryInventoryLocationProvider.cs" />
     <Compile Include="Providers\IConverterProvider.cs" />
     <Compile Include="Repositories\ITimeSlotRepository.cs" />
+    <Compile Include="Repositories\SalesScopeCustomerAddressesRepository.cs" />
     <Compile Include="Repositories\SalesScopeFulfillmentMethodRepository.cs" />
     <Compile Include="Repositories\SalesScopeInventoryRepository.cs" />
     <Compile Include="Repositories\SalesScopeCustomerRepository.cs" />
