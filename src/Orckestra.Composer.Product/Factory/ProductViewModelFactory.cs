@@ -467,7 +467,7 @@ namespace Orckestra.Composer.Product.Factory
 
                 var productLookup = productDefinition.PropertyGroups
                     .SelectMany(pg => pg.Properties)
-                    .Where(pp => pp.PropertyName == propertyName && pp.DataType == Utils.PropertyDataType.Lookup)
+                    .Where(pp => pp.PropertyName == propertyName && pp.DataType == PropertyDataType.Lookup)
                     .Join(productLookups, ppd => ppd.LookupDefinition.LookupName, pl => pl.LookupName, (ppd, pl) => pl)
                     .FirstOrDefault();
 
