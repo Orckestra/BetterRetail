@@ -57,8 +57,6 @@ namespace Orckestra.Composer.Cart.Parameters.Order
         
         public OrderSettings OrderSettings { get; set; }
 
-        public bool IsOrderUpdated { get; set; }
-
         public CreateOrderDetailViewModelParam()
         {
             OrderStatuses = new Dictionary<string, string>();

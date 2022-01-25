@@ -8,7 +8,6 @@ using Orckestra.Composer.Cart.Parameters.Order;
 using Orckestra.Composer.Cart.ViewModels.Order;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Localization;
-using Orckestra.Composer.Services;
 using Orckestra.Composer.Utils;
 using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel.Orders;
@@ -21,7 +20,6 @@ namespace Orckestra.Composer.Cart.Factory.Order
         protected virtual ILocalizationProvider LocalizationProvider { get; private set; }
         protected virtual IViewModelMapper ViewModelMapper { get; private set; }
         protected virtual IShippingTrackingProviderFactory ShippingTrackingProviderFactory { get; private set; }
-        protected virtual IComposerContext ComposerContext { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OrderHistoryViewModelFactory" /> class.
@@ -31,13 +29,11 @@ namespace Orckestra.Composer.Cart.Factory.Order
         /// <param name="shippingTrackingProviderFactory"></param>
         public OrderHistoryViewModelFactory(ILocalizationProvider localizationProvider,
             IViewModelMapper viewModelMapper,
-            IShippingTrackingProviderFactory shippingTrackingProviderFactory,
-            IComposerContext composerContext)
+            IShippingTrackingProviderFactory shippingTrackingProviderFactory)
         {
             LocalizationProvider = localizationProvider ?? throw new ArgumentNullException(nameof(localizationProvider));
             ViewModelMapper = viewModelMapper ?? throw new ArgumentNullException(nameof(viewModelMapper));
             ShippingTrackingProviderFactory = shippingTrackingProviderFactory ?? throw new ArgumentNullException(nameof(shippingTrackingProviderFactory));
-            ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
         }
 
         /// <summary>
@@ -234,13 +230,13 @@ namespace Orckestra.Composer.Cart.Factory.Order
         protected virtual LightOrderDetailViewModel BuildLightOrderDetailViewModel(OrderItem rawOrder,
            GetOrderHistoryViewModelParam param)
         {
-
             var lightOrderVm = new LightOrderDetailViewModel();
             var orderInfo = ViewModelMapper.MapTo<OrderDetailInfoViewModel>(rawOrder, param.CultureInfo);
 
             orderInfo.OrderStatus = GetOrderStatusDisplayName(rawOrder, param);
             orderInfo.OrderStatusRaw = rawOrder.OrderStatus;
             orderInfo.IsOrderEditable = IsOrderEditable(param, rawOrder);
+
             var orderDetailUrl = UrlFormatter.AppendQueryString(param.OrderDetailBaseUrl, new NameValueCollection
                 {
                     {"id", rawOrder.OrderNumber}
@@ -248,7 +244,6 @@ namespace Orckestra.Composer.Cart.Factory.Order
             lightOrderVm.Url = orderDetailUrl;
 
             lightOrderVm.OrderInfos = orderInfo;
-
             lightOrderVm.ShipmentSummaries = new List<OrderShipmentSummaryViewModel>();
             if (rawOrder.ShipmentItems.Count > 0)
             {
@@ -270,15 +265,6 @@ namespace Orckestra.Composer.Cart.Factory.Order
                     lightOrderVm.ShipmentSummaries.Add(shipmentSummary);
                 }
             }
-
-            if (string.IsNullOrEmpty(rawOrder.Source)) return lightOrderVm;
-            var values = rawOrder.Source.Split('|');
-            var shipmentStatus = values[0];
-
-            lightOrderVm.OrderInfos.ShipmentStatus = shipmentStatus;
-            lightOrderVm.OrderInfos.IsOrderEditing = string.Equals(ComposerContext.EditingOrderNumber == rawOrder.OrderNumber, StringComparison.OrdinalIgnoreCase);
-            lightOrderVm.OrderInfos.IsOrderEditable = !ComposerContext.IsEditingOrder;//add rules here
-            lightOrderVm.OrderInfos.Source = string.Empty;
 
             return lightOrderVm;
         }
@@ -308,7 +294,6 @@ namespace Orckestra.Composer.Cart.Factory.Order
 
             return isOrderEditable;
         }
-
 
         protected virtual string GetOrderStatusDisplayName(OrderItem rawOrder, GetOrderHistoryViewModelParam param)
         {
