@@ -3,13 +3,10 @@ using System.Collections.Specialized;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Orckestra.Composer.Cart.Parameters.Order;
-using Orckestra.Composer.Cart.Repositories.Order;
 using Orckestra.Composer.Cart.Requests;
 using Orckestra.Composer.Cart.Services.Order;
 using Orckestra.Composer.Cart.Utils;
 using Orckestra.Composer.Cart.ViewModels;
-using Orckestra.Composer.Cart.ViewModels.Order;
-using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Utils;
@@ -23,7 +20,7 @@ namespace Orckestra.Composer.Cart.Api
     public class OrderController : ApiController
     {
         protected IComposerContext ComposerContext { get; private set; }
-        protected IOrderRepository OrderRepository { get; private set; }
+        protected IOrderService OrderService { get; }
         protected IOrderHistoryViewService OrderHistoryViewService { get; private set; }
         protected IOrderUrlProvider OrderUrlProvider { get; private set; }
         protected ICartUrlProvider CartUrlProvider { get; private set; }
@@ -34,14 +31,14 @@ namespace Orckestra.Composer.Cart.Api
             IOrderHistoryViewService orderHistoryViewService,
             IOrderUrlProvider orderUrlProvider,
             ICartUrlProvider cartUrlProvider,
-            IOrderRepository orderRepository
+            IOrderService orderService
             )
         {
             OrderHistoryViewService = orderHistoryViewService ?? throw new ArgumentNullException(nameof(orderHistoryViewService));
             OrderUrlProvider = orderUrlProvider ?? throw new ArgumentNullException(nameof(orderUrlProvider));
             ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
             CartUrlProvider = cartUrlProvider ?? throw new ArgumentNullException(nameof(cartUrlProvider));
-            OrderRepository = orderRepository ?? throw new ArgumentNullException(nameof(orderRepository));
+            OrderService = orderService ?? throw new ArgumentNullException(nameof(orderService));
         }
 
         [HttpPost]
@@ -192,28 +189,11 @@ namespace Orckestra.Composer.Cart.Api
         public virtual async Task<IHttpActionResult> EditOrder(EditOrderParam param)
         {
             if (param == null) return BadRequest("No request found.");
-            if (string.IsNullOrWhiteSpace(param.OrderId)) return BadRequest($"{nameof(param.OrderId)} cannot be null or whitespace");
-            if (string.IsNullOrWhiteSpace(param.OrderNumber)) return BadRequest($"{nameof(param.OrderNumber)} cannot be null or whitespace");
+            if (param.OrderId == Guid.Empty) return BadRequest($"{nameof(param.OrderId)} cannot be empty");
 
-            var editedCart = await OrderRepository.CreateEditOrder(param.OrderId).ConfigureAwait(false);
-            if (editedCart == null)
-            {
-                throw new InvalidOperationException($"Cannot create a draft for the order with {nameof(param.OrderId)} {param.OrderId}");
-            }
+            var vm = await OrderService.CreateEditOrder(param.OrderId).ConfigureAwait(false);
 
             ComposerContext.EditingOrderId = param.OrderId;
-
-            var vm = new EditingOrderViewModel
-            {
-                
-                Scope = editedCart.ScopeId,
-                OrderId = param.OrderId,
-                OrderNumber = param.OrderNumber,
-                CartUrl = CartUrlProvider.GetCartUrl(new BaseUrlParameter
-                {
-                    CultureInfo = ComposerContext.CultureInfo
-                })
-            };
 
             return Ok(vm);
         }

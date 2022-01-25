@@ -46,7 +46,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories.Order
                 Scope = GetRandom.String(32),
             };
 
-            var result = await orderRepository.GetOrderAsync(param).ConfigureAwait(false);
+            var result = await orderRepository.GetOrderByNumberAsync(param).ConfigureAwait(false);
 
             //Assert
             result.Should().NotBeNull();

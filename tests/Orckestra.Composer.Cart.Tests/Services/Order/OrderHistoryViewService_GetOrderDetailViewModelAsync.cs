@@ -72,7 +72,7 @@ namespace Orckestra.Composer.Cart.Tests.Services.Order
             var orderHistoryViewModelService = _container.CreateInstance<OrderHistoryViewService>();
 
             _container.GetMock<IOrderRepository>()
-                .Setup(r => r.GetOrderAsync(It.IsAny<GetCustomerOrderParam>()))
+                .Setup(r => r.GetOrderByNumberAsync(It.IsAny<GetCustomerOrderParam>()))
                 .ReturnsAsync(new Overture.ServiceModel.Orders.Order
                 {
                     CustomerId = customerId.ToString()
@@ -111,7 +111,7 @@ namespace Orckestra.Composer.Cart.Tests.Services.Order
             var orderHistoryViewModelService = _container.CreateInstance<OrderHistoryViewService>();
 
             _container.GetMock<IOrderRepository>()
-                .Setup(r => r.GetOrderAsync(It.IsAny<GetCustomerOrderParam>()))
+                .Setup(r => r.GetOrderByNumberAsync(It.IsAny<GetCustomerOrderParam>()))
                 .ReturnsAsync(new Overture.ServiceModel.Orders.Order
                 {
                     CustomerId = Guid.NewGuid().ToString()

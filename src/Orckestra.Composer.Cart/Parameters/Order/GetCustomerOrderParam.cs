@@ -2,7 +2,7 @@
 
 namespace Orckestra.Composer.Cart.Parameters.Order
 {
-    public class GetCustomerOrderParam : GetOrderParam
+    public class GetCustomerOrderParam : GetOrderByNumberParam
     {
         /// <summary>
         /// Gets or sets the customer identifier.

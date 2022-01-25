@@ -99,7 +99,10 @@
     <Compile Include="Parameters\GetRecurringOrderCartViewModelParam.cs" />
     <Compile Include="Parameters\GetShippingMethodsScopeParam.cs" />
     <Compile Include="Parameters\Order\EditOrderParam.cs" />
+    <Compile Include="Parameters\Order\GetOrderByNumberParam.cs" />
+    <Compile Include="Parameters\Order\GetOrderByIdParam.cs" />
     <Compile Include="Parameters\Order\GetOrderChangesParam.cs" />
+    <Compile Include="Parameters\Order\CreateOrderDraftParam.cs" />
     <Compile Include="Parameters\Order\UpdateOrderParam.cs" />
     <Compile Include="Parameters\Order\UpdateOrderCustomerParam.cs" />
     <Compile Include="Parameters\RemoveRecurringCartLineItemParam.cs" />
@@ -222,7 +225,9 @@
     <Compile Include="Services\Order\IOrderHistoryViewService.cs" />
     <Compile Include="Services\IPaymentViewService.cs" />
     <Compile Include="Services\IVaultProfileViewService.cs" />
+    <Compile Include="Services\Order\IOrderService.cs" />
     <Compile Include="Services\Order\OrderHistoryViewService.cs" />
+    <Compile Include="Services\Order\OrderService.cs" />
     <Compile Include="Services\PaymentViewService.cs" />
     <Compile Include="Services\RecurringOrderCartsViewService.cs" />
     <Compile Include="Services\ShippingMethodViewService.cs" />

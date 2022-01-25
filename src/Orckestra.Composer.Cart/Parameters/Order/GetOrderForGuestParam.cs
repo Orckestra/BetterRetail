@@ -1,6 +1,6 @@
 ﻿namespace Orckestra.Composer.Cart.Parameters.Order
 {
-    public class GetOrderForGuestParam : GetOrderParam
+    public class GetOrderForGuestParam : GetOrderByNumberParam
     {
         /// <summary>
         /// The email used to identify the order owner.

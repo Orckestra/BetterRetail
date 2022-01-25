@@ -13,14 +13,6 @@ namespace Orckestra.Composer.Cart.Parameters.Order
         public string Scope { get; set; }
 
         /// <summary>
-        /// Gets or sets the Number of the order to retrieve.
-        /// </summary>
-        /// <value>
-        /// The Order Number.
-        /// </value>
-        public string OrderNumber { get; set; }
-
-        /// <summary>
         /// The Country iso code of the order.
         /// </summary>
         public string CountryCode { get; set; }
@@ -34,5 +26,10 @@ namespace Orckestra.Composer.Cart.Parameters.Order
         /// The culture information.
         /// </summary>
         public CultureInfo CultureInfo { get; set; }
+
+        /// <summary>
+        /// To include shipments or not
+        /// </summary>
+        public bool IncludeShipment { get; set; }
     }
 }

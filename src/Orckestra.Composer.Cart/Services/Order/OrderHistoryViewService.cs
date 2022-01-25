@@ -130,7 +130,7 @@ namespace Orckestra.Composer.Cart.Services.Order
         protected virtual async Task<List<Overture.ServiceModel.Orders.Order>> GetOrders(OrderQueryResult orderQueryResult,
             GetCustomerOrdersParam param)
         {
-            var getOrderTasks = orderQueryResult.Results.Select(order => OrderRepository.GetOrderAsync(new GetCustomerOrderParam
+            var getOrderTasks = orderQueryResult.Results.Select(order => OrderRepository.GetOrderByNumberAsync(new GetCustomerOrderParam
             {
                 OrderNumber = order.OrderNumber,
                 Scope = param.Scope
@@ -174,7 +174,7 @@ namespace Orckestra.Composer.Cart.Services.Order
             if (string.IsNullOrWhiteSpace(param.CountryCode)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CountryCode)), nameof(param)); }
             if (string.IsNullOrWhiteSpace(param.BaseUrl)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.BaseUrl)), nameof(param)); }
 
-            var order = await OrderRepository.GetOrderAsync(param).ConfigureAwait(false);
+            var order = await OrderRepository.GetOrderByNumberAsync(param).ConfigureAwait(false);
 
             //Check if order is one of the current customer.
             if (order == null || Guid.Parse(order.CustomerId) != param.CustomerId) { return null; }
@@ -199,7 +199,7 @@ namespace Orckestra.Composer.Cart.Services.Order
             if (string.IsNullOrWhiteSpace(param.BaseUrl)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.BaseUrl)), nameof(param)); }
             if (string.IsNullOrWhiteSpace(param.Email)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Email)), nameof(param)); }
 
-            var order = await OrderRepository.GetOrderAsync(param).ConfigureAwait(false);
+            var order = await OrderRepository.GetOrderByNumberAsync(param).ConfigureAwait(false);
 
             if (order == null || order.Cart.Customer.Email != param.Email) { return null; }
 
@@ -221,7 +221,7 @@ namespace Orckestra.Composer.Cart.Services.Order
             if (string.IsNullOrWhiteSpace(param.OrderNumber)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.OrderNumber))); }
             if (param.CustomerId == default) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId))); }
 
-            var order = await OrderRepository.GetOrderAsync(param).ConfigureAwait(false);
+            var order = await OrderRepository.GetOrderByNumberAsync(param).ConfigureAwait(false);
             if (order == null)
             {
                 return null;
@@ -252,7 +252,7 @@ namespace Orckestra.Composer.Cart.Services.Order
 
         protected virtual async Task<OrderDetailViewModel> BuildOrderDetailViewModelAsync(
             Overture.ServiceModel.Orders.Order order,
-            GetOrderParam getOrderParam)
+            GetOrderByNumberParam getOrderParam)
         {
             Helper.LineItemsHelper.PrepareGiftLineItems(order.Cart);
 

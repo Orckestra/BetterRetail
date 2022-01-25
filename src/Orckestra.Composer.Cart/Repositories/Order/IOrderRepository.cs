@@ -16,14 +16,22 @@ namespace Orckestra.Composer.Cart.Repositories.Order
         /// </summary>
         /// <param name="param">The get order parameter.</param>
         /// <returns></returns>
-        Task<Overture.ServiceModel.Orders.Order> GetOrderAsync(GetOrderParam param);
+        Task<Overture.ServiceModel.Orders.Order> GetOrderByNumberAsync(GetOrderByNumberParam param);
+
+        /// <summary>
+        /// Gets an Order by id.
+        /// </summary>
+        /// <param name="param">The get order parameter.</param>
+        /// <returns></returns>
+        Task<Overture.ServiceModel.Orders.Order> GetOrderByIdAsync(GetOrderByIdParam param);
+
 
         /// <summary>
         /// Get history items related to specified order
         /// </summary>
         /// <param name="param"></param>
         /// <returns></returns>
-        Task<List<Overture.ServiceModel.Orders.OrderHistoryItem>> GetOrderChangesAsync(GetOrderChangesParam param);
+        Task<List<OrderHistoryItem>> GetOrderChangesAsync(GetOrderChangesParam param);
 
         /// <summary>
         /// Returns the notes of a specified shipment.
@@ -50,8 +58,8 @@ namespace Orckestra.Composer.Cart.Repositories.Order
         /// <summary>
         /// Create a cart draft to edit an order
         /// </summary>
-        /// <param name="orderId">the id of the order to edit</param>
+        /// <param name="param"></param>
         /// <returns>Cart draft</returns>
-        Task<Overture.ServiceModel.Orders.Cart> CreateEditOrder(string orderId);
+        Task<ProcessedCart> CreateOrderCartDraft(CreateOrderDraftParam param);
     }
 }
