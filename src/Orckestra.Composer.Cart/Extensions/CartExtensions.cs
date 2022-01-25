@@ -33,12 +33,6 @@ namespace Orckestra.Composer.Cart.Extensions
             return cart.GetActiveShipments().SelectMany(s => s.LineItems);
         }
 
-        public static DateTime GetOrderEditableUntilDate(this Overture.ServiceModel.Orders.Cart cart)
-        {
-            DateTime convertedDate = cart.GetLocalFulfillmentDate();
-            return convertedDate.Subtract(new TimeSpan(24, 0, 0));
-        }
-
         public static DateTime GetLocalFulfillmentDate(this Overture.ServiceModel.Orders.Cart cart)
         {
             var adjustedFulfillmentDate = GetLocalFulfillmentDateTime(cart);
@@ -60,7 +54,7 @@ namespace Orckestra.Composer.Cart.Extensions
             return adjustedFulfillmentDate;
         }
 
-        public static DateTime GetOrderReleaseDate(this Overture.ServiceModel.Orders.Cart cart)
+        public static DateTime GetOrderEditableUntilDate(this Overture.ServiceModel.Orders.Cart cart)
         {
             var fulfillmentDate = cart.Shipments.FirstOrDefault()?.FulfillmentScheduledTimeBeginDate;
             if (fulfillmentDate == null)
@@ -70,7 +64,8 @@ namespace Orckestra.Composer.Cart.Extensions
             var timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
             var adjustedFulfillmentDate = TimeZoneInfo.ConvertTimeFromUtc(fulfillmentDate.Value, timeZoneInfo);
 
-            return TimeZoneInfo.ConvertTimeFromUtc(new DateTime(adjustedFulfillmentDate.Year, adjustedFulfillmentDate.Month, adjustedFulfillmentDate.Day, 0, 0, 0), timeZoneInfo);
+            var convertedDate = TimeZoneInfo.ConvertTimeFromUtc(new DateTime(adjustedFulfillmentDate.Year, adjustedFulfillmentDate.Month, adjustedFulfillmentDate.Day, 0, 0, 0), timeZoneInfo);
+            return convertedDate.Subtract(new TimeSpan(0, 1, 0));
         }
     }
 }

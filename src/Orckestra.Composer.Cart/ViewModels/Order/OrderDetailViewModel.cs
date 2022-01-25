@@ -48,7 +48,7 @@ namespace Orckestra.Composer.Cart.ViewModels.Order
         /// <summary>
         /// The flag indicating whether is an updated order or not
         /// </summary>
-        bool IsOrderUpdated { get; set; }
+        public bool IsOrderUpdated { get; set; }
 
         public OrderDetailViewModel()
         {

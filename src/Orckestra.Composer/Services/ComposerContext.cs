@@ -385,9 +385,5 @@ namespace Orckestra.Composer.Services
             EditingFulfillmentDate = null;
             EditingOrderUntil = null;
         }
-
-
-
-
     }
 }

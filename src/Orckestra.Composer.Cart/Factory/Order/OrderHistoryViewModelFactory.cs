@@ -19,7 +19,7 @@ namespace Orckestra.Composer.Cart.Factory.Order
         protected virtual ILocalizationProvider LocalizationProvider { get; private set; }
         protected virtual IViewModelMapper ViewModelMapper { get; private set; }
         protected virtual IShippingTrackingProviderFactory ShippingTrackingProviderFactory { get; private set; }
-        public IComposerContext ComposerContext { get; private set; }
+        protected virtual IComposerContext ComposerContext { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OrderHistoryViewModelFactory" /> class.

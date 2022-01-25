@@ -94,7 +94,6 @@ namespace Orckestra.Composer.Cart.Services.Order
             }).ConfigureAwait(false);
             
             var shipmentsTrackingInfos = new Dictionary<Guid, TrackingInfoViewModel>();
-            var orderSettings = await GetOrderSettings(param.Scope).ConfigureAwait(false);
             var ordersDetails = new List<Overture.ServiceModel.Orders.Order>();
 
             if (orderQueryResult.Results != null && param.OrderTense == OrderTense.CurrentOrders)
@@ -111,7 +110,6 @@ namespace Orckestra.Composer.Cart.Services.Order
                 Page = param.Page,
                 OrderDetailBaseUrl = orderDetailBaseUrl,
                 ShipmentsTrackingInfos = shipmentsTrackingInfos,
-                OrderSettings = orderSettings,
                 Orders = ordersDetails
             };
 
@@ -295,14 +293,16 @@ namespace Orckestra.Composer.Cart.Services.Order
                 ProductImageInfo = productImageInfo,
                 BaseUrl = getOrderParam.BaseUrl,
                 ShipmentsNotes = shipmentsNotes,
-                OrderSettings = orderSettings
-            });
+                OrderSettings = orderSettings,
+                IsOrderUpdated = order.Cart.PropertyBag.GetValueOrDefault<DateTime?>("LastOrderEdited") != null
+        });
 
             if (order.Cart.PropertyBag.TryGetValue("PickedItems", out var pickedItemsObject))
             {
                 var pickedItemsList = ComposerJsonSerializer.Deserialize<List<PickedItemViewModel>>(pickedItemsObject.ToString());
                 var shipment = viewModel.Shipments.First();
                 shipment.LineItems = await ProcessPickedLineItemsAsync(pickedItemsList, shipment.LineItems, getOrderParam.CultureInfo).ConfigureAwait(false);
+                
             };
 
             return viewModel;

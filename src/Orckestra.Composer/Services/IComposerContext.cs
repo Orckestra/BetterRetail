@@ -17,9 +17,9 @@ namespace Orckestra.Composer.Services
         string EditingOrderId { get; set; }
         bool IsEditingOrder { get; }
         string EditingOrderNumber { get; set; }
-        DateTime? EditingFulfillmentDate { get; set; }
         DateTime? EditingOrderUntil { get; set; }
+
         void ClearEditingOrder();
-        string GetDefaultScope();
+        string GetWorkflowToExecute();
     }
 }
