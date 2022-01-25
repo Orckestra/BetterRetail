@@ -1,6 +1,4 @@
-﻿@inherits Composer.Razor.ComposerRazorFunction
-@using Orckestra.Overture.ServiceModel.SearchQueries
-@using Orckestra.Composer.SearchQuery.Context
+﻿@inherits RazorFunction
 
 @functions {
     public override string FunctionDescription
@@ -25,16 +23,6 @@
 
     [FunctionParameter(Label = "Show More Button Url", WidgetMarkup = @"<f:widgetfunction xmlns:f='http://www.composite.net/ns/function/1.0' name='Composite.Widgets.DataReference.OptionalPageSelector' />", DefaultValue = null)]
     public Guid? Page { get; set; }
-
-    public ISearchQueryContext RequestContext { get; set; }
-}
-
-@{
-    var searchQueryViewModel = RequestContext.GetTopSearchQueryViewModelAsync(SearchQueryType.Merchandising, QueryName, int.Parse(Number)).Result;
-    if (searchQueryViewModel == null)
-    {
-        return;
-    }
 }
 
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
@@ -49,12 +37,11 @@
     {
         <p>@Description</p>
     }
-    @Function("Composer.Search.BaseSearchResults", new { Results = searchQueryViewModel })
-    @if (Page != null)
-    {
-        <div class="text-center my-2">
-            <a href="~/page(@Page)" class="btn btn-primary">@PageTitle</a>
-        </div>
-    }
+    <f:function name="Composer.Queries.Merchandising.Top" xmlns:f="http://www.composite.net/ns/function/1.0">
+        <f:param name="QueryName" value="@QueryName" />
+        <f:param name="Number" value="@Number" />
+        <f:param name="Page" value="@Page" />
+        <f:param name="PageTitle" value="@PageTitle" />
+    </f:function>
 </body>
 </html>
