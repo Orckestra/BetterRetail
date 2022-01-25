@@ -196,7 +196,6 @@ namespace Orckestra.Composer.Cart.Api
             ComposerContext.EditingOrderScope = editedCart.ScopeId;
             ComposerContext.EditingOrderNumber = request.OrderNumber;
             ComposerContext.EditingOrderId = request.OrderId;
-            ComposerContext.EditingFulfillmentDate = editedCart.Shipments.FirstOrDefault()?.FulfillmentScheduledTimeBeginDate;
             ComposerContext.EditingOrderUntil = editedCart.GetOrderEditableUntilDate();
 
             return Ok(GetEditingOrderViewModel());

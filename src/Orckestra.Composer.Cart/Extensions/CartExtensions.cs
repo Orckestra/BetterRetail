@@ -67,5 +67,14 @@ namespace Orckestra.Composer.Cart.Extensions
             var convertedDate = TimeZoneInfo.ConvertTimeFromUtc(new DateTime(adjustedFulfillmentDate.Year, adjustedFulfillmentDate.Month, adjustedFulfillmentDate.Day, 0, 0, 0), timeZoneInfo);
             return convertedDate.Subtract(new TimeSpan(0, 1, 0));
         }
-    }
+
+        public static List<string> GetAllShipmentStatuses(this Overture.ServiceModel.Orders.Cart cart)
+        {
+            if (cart == null || cart.Shipments == null)
+            {
+                return new List<string>();
+            }
+            return cart.Shipments.Select(item => item.Status).ToList();
+        }
+        }
 }

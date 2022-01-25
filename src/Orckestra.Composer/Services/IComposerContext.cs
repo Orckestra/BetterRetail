@@ -20,6 +20,5 @@ namespace Orckestra.Composer.Services
         DateTime? EditingOrderUntil { get; set; }
 
         void ClearEditingOrder();
-        string GetWorkflowToExecute();
     }
 }

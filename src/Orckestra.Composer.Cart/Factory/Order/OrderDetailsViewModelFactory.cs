@@ -143,6 +143,26 @@ namespace Orckestra.Composer.Cart.Factory.Order
             return orderInfos;
         }
 
+        protected virtual bool IsOrderEditable(CreateOrderDetailViewModelParam param)
+        {
+            var shipmentStatuses = param.Order.Cart.GetAllShipmentStatuses();
+            if (!shipmentStatuses.Any()
+                || param.OrderSettings == null
+                || string.IsNullOrWhiteSpace(param.OrderSettings.EditableShipmentStates))
+            {
+                return false;
+            }
+
+            var isOrderEditable = shipmentStatuses
+                .All(item => param
+                    ?.OrderSettings
+                    ?.EditableShipmentStates
+                    ?.Split('|')
+                    .Contains(item) ?? false);
+
+            return isOrderEditable;
+        }
+
 
         protected virtual string GetOrderStatusDisplayName(CreateOrderDetailViewModelParam param)
         {

@@ -4,8 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Orckestra.Composer.Cart.Factory.Order;
 using Orckestra.Composer.Cart.Parameters.Order;
+using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Services;
 using Orckestra.Overture;
+using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel.Customers;
 using Orckestra.Overture.ServiceModel.Orders;
 using Orckestra.Overture.ServiceModel.Requests.Customers;
@@ -19,14 +21,16 @@ namespace Orckestra.Composer.Cart.Repositories.Order
     {
         protected virtual IOvertureClient OvertureClient { get; private set; }
         protected virtual IFindOrdersRequestFactory FindOrdersRequestFactory { get; private set; }
+        protected ICacheProvider CacheProvider { get; private set; }
         public IComposerContext ComposerContext { get; private set; }
 
-        public OrderRepository(IOvertureClient overtureClient, IFindOrdersRequestFactory findOrdersRequestFactory,
+        public OrderRepository(IOvertureClient overtureClient, IFindOrdersRequestFactory findOrdersRequestFactory, ICacheProvider cacheProvider,
         IComposerContext composerContext)
         {
             OvertureClient = overtureClient ?? throw new ArgumentNullException(nameof(overtureClient));
             FindOrdersRequestFactory = findOrdersRequestFactory ?? throw new ArgumentNullException(nameof(findOrdersRequestFactory));
             ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(findOrdersRequestFactory));
+            CacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));
         }
 
         /// <summary>
@@ -130,6 +134,22 @@ namespace Orckestra.Composer.Cart.Repositories.Order
             };
 
             return OvertureClient.SendAsync(request);
+        }
+
+        public virtual async Task<OrderSettings> GetOrderSettings(string scope)
+        {
+            var cacheKey = BuildOrderSettingsCacheKey(scope);
+            return await CacheProvider.GetOrAddAsync(cacheKey, async () => await OvertureClient.SendAsync(new GetOrderSettingsRequest())).ConfigureAwait(false);
+        }
+
+        protected virtual CacheKey BuildOrderSettingsCacheKey(string scope)
+        {
+            var cacheKey = new CacheKey(CacheConfigurationCategoryNames.OrderSettings)
+            {
+                Scope = scope
+            };
+
+            return cacheKey;
         }
 
         //VG
