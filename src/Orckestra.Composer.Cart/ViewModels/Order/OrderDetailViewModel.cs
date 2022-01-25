@@ -45,11 +45,6 @@ namespace Orckestra.Composer.Cart.ViewModels.Order
         /// </summary>
         public List<OrderSummaryPaymentViewModel> Payments { get; set; }
 
-        /// <summary>
-        /// The flag indicating whether is an updated order or not
-        /// </summary>
-        public bool IsOrderUpdated { get; set; }
-
         public OrderDetailViewModel()
         {
             Shipments = new List<OrderShipmentDetailViewModel>();

@@ -33,12 +33,6 @@ namespace Orckestra.Composer.Cart.Extensions
             return cart.GetActiveShipments().SelectMany(s => s.LineItems);
         }
 
-        public static DateTime GetOrderEditableUntilDate(this Overture.ServiceModel.Orders.Cart cart)
-        {
-            //TODO: read from custom profiles
-            return DateTime.Now.AddHours(1);
-        }
-
         public static List<string> GetAllShipmentStatuses(this Overture.ServiceModel.Orders.Cart cart)
         {
             if (cart == null || cart.Shipments == null)
@@ -47,5 +41,5 @@ namespace Orckestra.Composer.Cart.Extensions
             }
             return cart.Shipments.Select(item => item.Status).ToList();
         }
-        }
+    }
 }

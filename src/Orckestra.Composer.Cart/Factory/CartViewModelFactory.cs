@@ -421,9 +421,9 @@ namespace Orckestra.Composer.Cart.Factory
             cartVm.OrderSummary.IsShippingEstimatedOrSelected = IsShippingEstimatedOrSelected(shipment);
             cartVm.ShippingMethod = GetShippingMethodViewModel(shipment.FulfillmentMethod, cultureInfo);
 
-#pragma warning disable 618
+            #pragma warning disable 618
             MapShipmentAdditionalFees(shipment, cartVm.OrderSummary, cultureInfo);
-#pragma warning restore 618
+            #pragma warning restore 618
         }
 
         protected virtual void MapCustomer(CustomerSummary customer, CultureInfo cultureInfo, CartViewModel cartVm)

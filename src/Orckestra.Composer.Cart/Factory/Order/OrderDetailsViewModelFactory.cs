@@ -94,7 +94,6 @@ namespace Orckestra.Composer.Cart.Factory.Order
             viewModel.Payments = GetPaymentViewModels(param);
             viewModel.OrderSummary = CartViewModelFactory.GetOrderSummaryViewModel(param.Order.Cart, param.CultureInfo);
             viewModel.OrderSummary.Taxes = TaxViewModelFactory.CreateTaxViewModels(shipments.SelectMany(s => s.Taxes).ToList(), param.CultureInfo).ToList();
-            viewModel.IsOrderUpdated = param.IsOrderUpdated;
             MapAdditionalFees(viewModel, param);
 #pragma warning restore 618
 
@@ -140,13 +139,14 @@ namespace Orckestra.Composer.Cart.Factory.Order
             orderInfos.BillingCurrency = param.Order.Cart.BillingCurrency;
             orderInfos.PricePaid = LocalizationProvider.FormatPrice((decimal)param.Order.Cart.Total, CurrencyProvider.GetCurrency());
             orderInfos.IsOrderEditable = IsOrderEditable(param);
+
             return orderInfos;
         }
 
         protected virtual bool IsOrderEditable(CreateOrderDetailViewModelParam param)
         {
             var shipmentStatuses = param.Order.Cart.GetAllShipmentStatuses();
-            if (!shipmentStatuses.Any()
+            if (!shipmentStatuses.Any() 
                 || param.OrderSettings == null
                 || string.IsNullOrWhiteSpace(param.OrderSettings.EditableShipmentStates))
             {
@@ -162,7 +162,6 @@ namespace Orckestra.Composer.Cart.Factory.Order
 
             return isOrderEditable;
         }
-
 
         protected virtual string GetOrderStatusDisplayName(CreateOrderDetailViewModelParam param)
         {
