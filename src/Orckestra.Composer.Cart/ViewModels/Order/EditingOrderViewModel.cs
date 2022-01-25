@@ -8,10 +8,6 @@ namespace Orckestra.Composer.Cart.ViewModels.Order
 
         public string OrderNumber { get; set; }
 
-        public DateTime? EditableUntil { get; set; }
-
-        public bool IsEditingOrder => !string.IsNullOrEmpty(OrderNumber);
-
         public string CartUrl { get; set; }
     }
 }

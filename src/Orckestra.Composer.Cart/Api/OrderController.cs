@@ -35,13 +35,15 @@ namespace Orckestra.Composer.Cart.Api
             IComposerContext composerContext,
             IOrderHistoryViewService orderHistoryViewService,
             IOrderUrlProvider orderUrlProvider,
-            ICartUrlProvider cartUrlProvider
+            ICartUrlProvider cartUrlProvider,
+            IOrderRepository orderRepository
             )
         {
             OrderHistoryViewService = orderHistoryViewService ?? throw new ArgumentNullException(nameof(orderHistoryViewService));
             OrderUrlProvider = orderUrlProvider ?? throw new ArgumentNullException(nameof(orderUrlProvider));
             ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
             CartUrlProvider = cartUrlProvider ?? throw new ArgumentNullException(nameof(cartUrlProvider));
+            OrderRepository = orderRepository ?? throw new ArgumentNullException(nameof(orderRepository));
         }
 
         [HttpPost]
@@ -185,88 +187,55 @@ namespace Orckestra.Composer.Cart.Api
         /// <summary>
         /// Set an order in edit mode
         /// </summary>
-        /// <param name="request">Parameters container</param>
+        /// <param name="param">Parameters container</param>
         [HttpPost]
         [ActionName("edit-order")]
-        public virtual async Task<IHttpActionResult> EditOrder(EditOrderParam request)
+        [ValidateModelState]
+        public virtual async Task<IHttpActionResult> EditOrder(EditOrderParam param)
         {
-            var editedCart = await OrderRepository.CreateEditOrder(GlobalScopeName, request.OrderId);
+            if (param == null) { return BadRequest("No request found."); }
 
+            var editedCart = await OrderRepository.CreateEditOrder(param.OrderId);
+
+            ComposerContext.EditingOrderNumber = param.OrderNumber;
+            ComposerContext.EditingOrderId = param.OrderId;
             ComposerContext.EditingOrderScope = editedCart.ScopeId;
-            ComposerContext.EditingOrderNumber = request.OrderNumber;
-            ComposerContext.EditingOrderId = request.OrderId;
-            ComposerContext.EditingOrderUntil = editedCart.GetOrderEditableUntilDate();
 
-            return Ok(GetEditingOrderViewModel());
+            var vm = new EditingOrderViewModel
+            {
+                Scope = editedCart.ScopeId,
+                OrderNumber = param.OrderNumber,
+                CartUrl = CartUrlProvider.GetCartUrl(new BaseUrlParameter
+                {
+                    CultureInfo = ComposerContext.CultureInfo
+                })
+            };
+
+            return Ok(vm);
         }
 
         /// <summary>
         /// Save edited order
         /// </summary>
-        /// <param name="request">Parameters container</param>
         [HttpPost]
         [ActionName("save-edited-order")]
-        public virtual async Task<IHttpActionResult> SaveEditedOrder()
+        [ValidateModelState]
+        public virtual Task<IHttpActionResult> SaveEditedOrder()
         {
-            if (!ComposerContext.IsEditingOrder) return Ok();
-
-            if (DateTime.UtcNow > ComposerContext.EditingOrderUntil)
-            {
-                await OrderRepository.CancelEditOrder(ComposerContext.EditingOrderScope, ComposerContext.EditingOrderId).ConfigureAwait(false);
-                ComposerContext.ClearEditingOrder();
-
-                throw new InvalidOperationException("The order is no longer editable.");
-            }
-
-            await OrderRepository.SaveEditedOrder(ComposerContext.EditingOrderScope, ComposerContext.EditingOrderId).ConfigureAwait(false);
-
-            var editingOrderNumber = ComposerContext.EditingOrderNumber;
-            ComposerContext.ClearEditingOrder();
-
-            var redirectUrl = CartUrlProvider.GetCheckoutConfirmationPageUrl(new BaseUrlParameter
-            {
-                CultureInfo = ComposerContext.CultureInfo
-            });
-            var vm = new { RedirectUrl = $"{redirectUrl}?id={editingOrderNumber}" };
-
-            return Ok(vm);
+            //TODO
+            throw new NotImplementedException();
         }
 
         /// <summary>
         /// Cancels editing of an order
         /// </summary>
-        /// <param name="request">Parameters container</param>
         [HttpPost]
         [ActionName("cancel-edit-order")]
-        public virtual async Task<IHttpActionResult> CancelEditOrder()
+        [ValidateModelState]
+        public virtual Task<IHttpActionResult> CancelEditOrder()
         {
-            if (ComposerContext.IsEditingOrder)
-            {
-                await OrderRepository.CancelEditOrder(ComposerContext.EditingOrderScope, ComposerContext.EditingOrderId);
-                ComposerContext.ClearEditingOrder();
-            }
-
-            var redirectUrl = OrderUrlProvider.GetOrderHistoryUrl(new GetOrderUrlParameter
-            {
-                CultureInfo = ComposerContext.CultureInfo
-            });
-            var vm = new { RedirectUrl = redirectUrl };
-
-            return Ok(vm);
-        }
-
-        private EditingOrderViewModel GetEditingOrderViewModel()
-        {
-            return new EditingOrderViewModel
-            {
-                Scope = ComposerContext.EditingOrderScope,
-                OrderNumber = ComposerContext.EditingOrderNumber,
-                CartUrl = CartUrlProvider.GetCartUrl(new BaseUrlParameter
-                {
-                    CultureInfo = ComposerContext.CultureInfo
-                }),
-                EditableUntil = ComposerContext.EditingOrderUntil
-            };
+            //TODO
+            throw new NotImplementedException();
         }
     }
 }

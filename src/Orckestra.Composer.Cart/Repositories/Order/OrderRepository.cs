@@ -14,6 +14,7 @@ using Orckestra.Overture.ServiceModel.Requests.Customers;
 using Orckestra.Overture.ServiceModel.Requests.Orders;
 using Orckestra.Overture.ServiceModel.Requests.Orders.Shopping;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
+using static Orckestra.Composer.Constants.General;
 
 namespace Orckestra.Composer.Cart.Repositories.Order
 {
@@ -152,15 +153,13 @@ namespace Orckestra.Composer.Cart.Repositories.Order
             return cacheKey;
         }
 
-        public async Task<Overture.ServiceModel.Orders.Cart> CreateEditOrder(string scopeId, string orderId)
+        public async Task<Overture.ServiceModel.Orders.Cart> CreateEditOrder(string orderId)
         {
             var order = await OvertureClient.SendAsync(new GetOrderByIdRequest
             {
-                ScopeId = scopeId,
+                ScopeId = GlobalScopeName,
                 OrderId = orderId.ToGuid(),
                 IncludeShipment = true,
-                IncludeLineItems = true,
-                IncludePayment = true
             }).ConfigureAwait(false);
 
             if (order.Cart.Shipments == null || order.Cart.Shipments.Count == 0)
@@ -168,11 +167,10 @@ namespace Orckestra.Composer.Cart.Repositories.Order
 
             var createCartDraftRequest = new CreateCartOrderDraftRequest()
             {
-                CopyFromOrderId = Guid.Parse(orderId),
                 CultureName = ComposerContext.CultureInfo?.Name,
                 CustomerId = Guid.Parse(order.CustomerId),
                 OrderId = Guid.Parse(orderId),
-                ScopeId = scopeId
+                ScopeId = order.ScopeId
             };
 
             var cart = await OvertureClient.SendAsync(createCartDraftRequest);

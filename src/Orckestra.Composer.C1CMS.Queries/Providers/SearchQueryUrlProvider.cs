@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Orckestra.Composer.C1CMS.Queries.Providers
 {
-    public class SearchQueryUrlProvider : BaseSearchUrlProvider, ISearchQueryUrlProvider
+    public class SearchQueryUrlProvider: BaseSearchUrlProvider, ISearchQueryUrlProvider
     {
         public ICacheProvider CacheProvider { get; set; }
         public IPageService PageService { get; set; }
