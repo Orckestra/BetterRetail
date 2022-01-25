@@ -179,7 +179,8 @@ namespace Orckestra.Composer.Cart.Services
                 Scope = param.Scope,
                 CultureInfo = param.CultureInfo,
                 BaseUrl = param.BaseUrl,
-                CustomerId = param.CustomerId
+                CustomerId = param.CustomerId,
+                CartType = CartConfiguration.RecurringOrderCartType
             }).ConfigureAwait(false);
 
             var tasks = carts.Select(pc => CreateLightCartViewModelAsync(new CreateLightRecurringOrderCartViewModelParam
@@ -250,7 +251,7 @@ namespace Orckestra.Composer.Cart.Services
             var cart = await CartRepository.GetCartAsync(new GetCartParam
             {
                 BaseUrl = param.BaseUrl,
-                Scope = param.ScopeId,
+                Scope = param.Scope,
                 CultureInfo = param.CultureInfo,
                 CustomerId = param.CustomerId,
                 CartName = param.CartName
@@ -300,7 +301,7 @@ namespace Orckestra.Composer.Cart.Services
             var cart = await CartRepository.GetCartAsync(new GetCartParam
             {
                 BaseUrl = param.BaseUrl,
-                Scope = param.ScopeId,
+                Scope = param.Scope,
                 CultureInfo = param.CultureInfo,
                 CustomerId = param.CustomerId,
                 CartName = param.CartName
@@ -401,7 +402,8 @@ namespace Orckestra.Composer.Cart.Services
                 BaseUrl = param.BaseUrl,
                 Scope = param.Scope,
                 CustomerId = param.CustomerId,
-                CultureInfo = param.CultureInfo
+                CultureInfo = param.CultureInfo,
+                CartType = CartConfiguration.RecurringOrderCartType
             });
 
             vm.RescheduledCartHasMerged = !carts.Any(rc => string.Equals(rc.Name, param.CartName, StringComparison.OrdinalIgnoreCase));
@@ -453,7 +455,7 @@ namespace Orckestra.Composer.Cart.Services
 
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
             if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartName)), nameof(param)); }
-            if (string.IsNullOrWhiteSpace(param.ScopeId)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.ScopeId)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
             if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
             if (param.LineItemId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.LineItemId)), nameof(param)); }
             if (param.CustomerId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param)); }
@@ -467,7 +469,7 @@ namespace Orckestra.Composer.Cart.Services
                 CartName = param.CartName,
                 CouponCodes = CouponViewService.GetInvalidCouponsCode(cart.Coupons).ToList(),
                 CustomerId = param.CustomerId,
-                Scope = param.ScopeId
+                Scope = param.Scope
             });
 
             var vmParam = new CreateRecurringOrderCartViewModelParam
@@ -492,7 +494,8 @@ namespace Orckestra.Composer.Cart.Services
                 BaseUrl = param.BaseUrl,
                 CultureInfo = param.CultureInfo,
                 CustomerId = param.CustomerId,
-                Scope = param.ScopeId
+                Scope = param.Scope,
+                CartType = CartConfiguration.RecurringOrderCartType
             }).ConfigureAwait(false);
 
             var tasks = new List<Task>();
@@ -525,7 +528,7 @@ namespace Orckestra.Composer.Cart.Services
                         CartName = roc.Name,
                         CultureInfo = param.CultureInfo,
                         CustomerId = param.CustomerId,
-                        ScopeId = param.ScopeId,
+                        Scope = param.Scope,
                         ShippingAddressId = addressId,
                         UseSameForShippingAndBilling = updateBillingAddress
                     }));
@@ -538,7 +541,7 @@ namespace Orckestra.Composer.Cart.Services
                         CartName = roc.Name,
                         CultureInfo = param.CultureInfo,
                         CustomerId = param.CustomerId,
-                        ScopeId = param.ScopeId,
+                        Scope = param.Scope,
                         BillingAddressId = addressId,
                         UseSameForShippingAndBilling = false
                     }));

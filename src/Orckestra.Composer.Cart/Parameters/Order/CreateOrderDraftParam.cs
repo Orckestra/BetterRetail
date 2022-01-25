@@ -16,7 +16,7 @@ namespace Orckestra.Composer.Cart.Parameters.Order
         /// <value>
         /// The scope.
         /// </value>
-        public string ScopeId { get; set; }
+        public string Scope { get; set; }
 
         /// <summary>
         /// The culture information.

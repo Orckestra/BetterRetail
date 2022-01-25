@@ -191,8 +191,8 @@ namespace Orckestra.Composer.Cart.Api
                 PaymentProviderName = request.PaymentProviderName,
                 PaymentMethodId = request.PaymentMethodId,
                 CustomerId = ComposerContext.CustomerId,
-                ScopeId = ComposerContext.Scope,
-                Culture = ComposerContext.CultureInfo
+                Scope = ComposerContext.Scope,
+                CultureInfo = ComposerContext.CultureInfo
             });
 
             return Ok(paymentMethod);
@@ -301,7 +301,7 @@ namespace Orckestra.Composer.Cart.Api
 
             var vm = await CartService.UpdateLineItemAsync(new UpdateLineItemParam
             {
-                ScopeId = ComposerContext.Scope,
+                Scope = ComposerContext.Scope,
                 CultureInfo = ComposerContext.CultureInfo,
                 CustomerId = ComposerContext.CustomerId,
                 LineItemId = new Guid(request.LineItemId),

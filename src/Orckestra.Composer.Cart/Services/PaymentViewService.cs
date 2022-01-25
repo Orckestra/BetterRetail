@@ -602,7 +602,7 @@ namespace Orckestra.Composer.Cart.Services
             var tasks = param.ProviderNames.Select(pName => PaymentRepository.GetCustomerPaymentMethodForProviderAsync(new GetCustomerPaymentMethodsForProviderParam
             {
                 CustomerId = param.CustomerId,
-                ScopeId = param.ScopeId,
+                ScopeId = param.Scope,
                 ProviderName = pName
             }));
 
@@ -623,7 +623,7 @@ namespace Orckestra.Composer.Cart.Services
             List<Task> taskList = new List<Task>();
             foreach (var vm in savedCreditCardVm)
             {
-                taskList.Add(IsSavedCardUsedInRecurringOrders(vm, param.CultureInfo, param.CustomerId, param.ScopeId));
+                taskList.Add(IsSavedCardUsedInRecurringOrders(vm, param.CultureInfo, param.CustomerId, param.Scope));
             }
 
             await Task.WhenAll(taskList).ConfigureAwait(false);

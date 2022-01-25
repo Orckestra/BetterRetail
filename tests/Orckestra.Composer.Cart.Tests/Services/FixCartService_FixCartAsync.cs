@@ -69,7 +69,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
                       new Shipment()
                     }
                 },
-                ScopeId = GetRandom.String(10)
+                Scope = GetRandom.String(10)
             });
 
             //Assert
@@ -100,7 +100,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
                       }
                     }
                 },
-                ScopeId = GetRandom.String(10)
+                Scope = GetRandom.String(10)
             });
 
             //Assert
@@ -150,7 +150,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
                         }
                     }
                 },
-                ScopeId = GetRandom.String(10)
+                Scope = GetRandom.String(10)
             });
 
             //Assert
@@ -208,7 +208,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
                       }
                     }
                 },
-                ScopeId = GetRandom.String(10)
+                Scope = GetRandom.String(10)
             });
 
             //Assert
@@ -249,7 +249,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
                         }
                     }
                 },
-                ScopeId = GetRandom.String(10)
+                Scope = GetRandom.String(10)
             });
 
             //Assert

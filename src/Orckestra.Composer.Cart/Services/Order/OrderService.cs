@@ -52,7 +52,7 @@ namespace Orckestra.Composer.Cart.Services.Order
             {
                 CultureInfo = ComposerContext.CultureInfo,
                 OrderId = orderId,
-                ScopeId = order.ScopeId,
+                Scope = order.ScopeId,
                 CustomerId = Guid.Parse(order.CustomerId)
             };
 

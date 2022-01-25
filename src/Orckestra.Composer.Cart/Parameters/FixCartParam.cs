@@ -1,15 +1,12 @@
-﻿using System;
-using Orckestra.Overture.ServiceModel.Orders;
+﻿using Orckestra.Overture.ServiceModel.Orders;
 
 namespace Orckestra.Composer.Cart.Parameters
 {
-    public class FixCartParam
+    public class FixCartParam : BaseCartParam
     {
         /// <summary>
         /// The cart to fix
         /// </summary>
         public ProcessedCart Cart { get; set; }
-
-        public string ScopeId { get; set; }
     }
 }

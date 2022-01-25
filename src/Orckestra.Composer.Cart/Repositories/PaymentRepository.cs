@@ -218,15 +218,15 @@ namespace Orckestra.Composer.Cart.Repositories
 			if (param == null) throw new ArgumentNullException(nameof(param));
 			if (param.PaymentMethodId == Guid.Empty) throw new ArgumentException(GetMessageOfEmpty(nameof(param.PaymentMethodId)), nameof(param));
 			if (param.CustomerId == Guid.Empty) throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param));
-			if (string.IsNullOrWhiteSpace(param.ScopeId)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.ScopeId)), nameof(param));
+			if (string.IsNullOrWhiteSpace(param.Scope)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param));
 			if (string.IsNullOrWhiteSpace(param.CartName)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartName)), nameof(param));
 			if (string.IsNullOrWhiteSpace(param.PaymentProviderName)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.PaymentProviderName)), nameof(param));
 
-			await CacheProvider.RemoveAsync(BuildPaymentMethodCacheKey(param.ScopeId, param.CartName, param.CustomerId, param.PaymentProviderName)).ConfigureAwait(false);
+			await CacheProvider.RemoveAsync(BuildPaymentMethodCacheKey(param.Scope, param.CartName, param.CustomerId, param.PaymentProviderName)).ConfigureAwait(false);
 
 			await OvertureClient.SendAsync(new DeleteCustomerPaymentMethodRequest
 			{
-				ScopeId = param.ScopeId,
+				ScopeId = param.Scope,
 				CustomerId = param.CustomerId,
 				PaymentMethodId = param.PaymentMethodId,
 				PaymentProviderName = param.PaymentProviderName

@@ -77,7 +77,7 @@ namespace Orckestra.Composer.Cart.Providers.CartMerge
 			await FixCartService.FixCartAsync(new FixCartParam
 			{
 				Cart = cart,
-                ScopeId = param.Scope
+                Scope = param.Scope
 			});
 		}
 

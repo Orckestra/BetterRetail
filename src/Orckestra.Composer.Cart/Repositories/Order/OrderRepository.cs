@@ -184,7 +184,7 @@ namespace Orckestra.Composer.Cart.Repositories.Order
         {
             if (param == null) throw new ArgumentNullException(nameof(param));
             if (param.OrderId == default) throw new ArgumentException(GetMessageOfEmpty(nameof(param.OrderId)));
-            if (string.IsNullOrWhiteSpace(param.ScopeId)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.ScopeId)));
+            if (string.IsNullOrWhiteSpace(param.Scope)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)));
             if (param.CustomerId == null) throw new ArgumentException(GetMessageOfNull(nameof(param.CustomerId)));
 
             var request = new CreateCartOrderDraftRequest
@@ -192,7 +192,7 @@ namespace Orckestra.Composer.Cart.Repositories.Order
                 CultureName = param.CultureInfo.Name,
                 CustomerId = param.CustomerId,
                 OrderId = param.OrderId,
-                ScopeId = param.ScopeId
+                ScopeId = param.Scope
             };
 
             return OvertureClient.SendAsync(request);

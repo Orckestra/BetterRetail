@@ -91,7 +91,7 @@ namespace Orckestra.Composer.Cart.Services
             var fixedWishlist = await FixCartService.SetFulfillmentLocationIfRequired(new FixCartParam
             {
                 Cart = wishList,
-                ScopeId = param.Scope
+                Scope = param.Scope
             }).ConfigureAwait(false);
 
             if (wishList == null) { return null; }

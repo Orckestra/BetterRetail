@@ -1,36 +1,14 @@
 ﻿using System;
-using System.Globalization;
 using Orckestra.Overture.ServiceModel;
 
 namespace Orckestra.Composer.Cart.Parameters
 {
-    public class UpdateLineItemParam
+    public class UpdateLineItemParam : BaseCartParam
     {
         /// <summary>
         /// The Request Base Url
         /// </summary>
         public string BaseUrl { get; set; }
-
-        /// <summary>
-        /// The name associated to the requested cart
-        /// Required
-        /// </summary>
-        public string CartName { get; set; }
-       
-        /// <summary>
-        /// The culture name in which language the data will be returned
-        /// </summary>
-        public CultureInfo CultureInfo { get; set; }
-       
-        /// <summary>
-        /// The unique identifier of the Customer owning the cart
-        /// </summary>
-        public Guid CustomerId { get; set; }
-
-        /// <summary>
-        /// The id of the requested scope
-        /// </summary>
-        public string ScopeId { get; set; }
 
         /// <summary>
         /// If the product is to be wrapped as a gift, a message to be written on that

@@ -1,36 +1,15 @@
 ﻿using System;
-using System.Globalization;
 using Orckestra.Overture.ServiceModel;
 using Orckestra.Overture.ServiceModel.Orders;
 
 namespace Orckestra.Composer.Cart.Parameters
 {
-    public class UpdateShipmentParam
+    public class UpdateShipmentParam : BaseCartParam
     {
         /// <summary>
         /// The Request Base Url
         /// </summary>
         public string BaseUrl { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public string ScopeId { get; set; }
-
-        /// <summary>
-        /// The culture name in which language the data will be returned.
-        /// </summary>
-        public CultureInfo CultureInfo { get; set; }
-
-        /// <summary>
-        /// The name associated to the requested cart", IsRequired = true
-        /// </summary>
-        public string CartName { get; set; }
-
-        /// <summary>
-        /// The unique identifier of the Customer owning the cart", IsRequired = true
-        /// </summary>
-        public Guid CustomerId { get; set; }
 
         /// <summary>
         /// The unique identifier of the Shipment to update.", IsRequired = true

@@ -1,47 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Collections.Generic;
 using Orckestra.Overture.ServiceModel;
 using Orckestra.Overture.ServiceModel.Marketing;
 using Orckestra.Overture.ServiceModel.Orders;
 
 namespace Orckestra.Composer.Cart.Parameters
 {
-    public class UpdateCartParam
+    public class UpdateCartParam : BaseCartParam
     {
-        /// <summary>
-        /// The ScopeId where to find the cart
-        /// Required
-        /// </summary>
-        public string Scope { get; set; }
-
-        /// <summary>
-        /// The unique identifier of the Customer owning the cart
-        /// Required
-        /// </summary>
-        public Guid CustomerId { get; set; }
-
-        /// <summary>
-        /// The name associated to the requested cart
-        /// Required
-        /// </summary>
-        public string CartName { get; set; }
-
-        /// <summary>
-        /// The culture info in which language the data will be returned
-        /// Optional
-        /// </summary>
-        public CultureInfo CultureInfo { get; set; }
-
         /// <summary>
         /// The currency ISO code under which the items are sold 'Currency.IsoCode'
         /// </summary>
         public string BillingCurrency { get; set; }
-
-        /// <summary>
-        /// The cart type, according to the CartType lookup
-        /// </summary>
-        public string CartType { get; set; }
 
         /// <summary>
         /// The collection of coupon codes included in the order

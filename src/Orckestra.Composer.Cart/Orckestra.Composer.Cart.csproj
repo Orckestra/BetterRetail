@@ -57,6 +57,7 @@
     <Compile Include="Factory\CartViewModelFactory.cs" />
     <Compile Include="Helper\LineItemsHelper.cs" />
     <Compile Include="Parameters\AddLineItemsParam.cs" />
+    <Compile Include="Parameters\BaseCartParam.cs" />
     <Compile Include="Parameters\CreateLightListOfLineItemDetailViewModelParam.cs" />
     <Compile Include="Factory\IRecurringOrderCartViewModelFactory.cs" />
     <Compile Include="Factory\RecurringOrderCartViewModelFactory.cs" />
@@ -98,7 +99,6 @@
     <Compile Include="Parameters\GetRecurringOrderCartsViewModelParam.cs" />
     <Compile Include="Parameters\GetRecurringOrderCartViewModelParam.cs" />
     <Compile Include="Parameters\GetShippingMethodsScopeParam.cs" />
-    <Compile Include="Parameters\Order\EditOrderParam.cs" />
     <Compile Include="Parameters\Order\GetOrderByNumberParam.cs" />
     <Compile Include="Parameters\Order\GetOrderByIdParam.cs" />
     <Compile Include="Parameters\Order\GetOrderChangesParam.cs" />
