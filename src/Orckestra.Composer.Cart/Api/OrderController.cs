@@ -201,9 +201,7 @@ namespace Orckestra.Composer.Cart.Api
                 throw new InvalidOperationException($"Cannot create a draft for the order with {nameof(param.OrderId)} {param.OrderId}");
             }
 
-            ComposerContext.EditingOrderNumber = param.OrderNumber;
             ComposerContext.EditingOrderId = param.OrderId;
-            ComposerContext.EditingOrderScope = editedCart.ScopeId;
 
             var vm = new EditingOrderViewModel
             {

@@ -279,47 +279,29 @@ namespace Orckestra.Composer.Services
             }
         }
 
-        public string EditingOrderScope
-        {
-            get
-            {
-                ComposerCookieDto dto = CookieAccessor.Read();
-                return dto.GetValue(nameof(EditingOrderScope));
-            }
-            set
-            {
-                ComposerCookieDto dto = CookieAccessor.Read();
-                dto.SetOrRemove(nameof(EditingOrderScope), value);
-                CookieAccessor.Write(dto);
-            }
-        }
+        private Guid? _editingOrderId;
 
-        public string EditingOrderNumber
+        public Guid? EditingOrderId
         {
             get
             {
-                ComposerCookieDto dto = CookieAccessor.Read();
-                return dto.GetValue(nameof(EditingOrderNumber));
+                if (!_editingOrderId.HasValue)
+                {
+                    var dto = CookieAccessor.Read();
+                    if (dto.EncryptedEditingOrderId != null)
+                    {
+                        _editingOrderId = new Guid(EncryptionUtility.Decrypt(dto.EncryptedEditingOrderId));
+                    }
+                }
+                
+                return _editingOrderId.Value;
             }
             set
             {
+                if (value == Guid.Empty) return;
+                _editingOrderId = value;
                 ComposerCookieDto dto = CookieAccessor.Read();
-                dto.SetOrRemove(nameof(EditingOrderNumber), value);
-                CookieAccessor.Write(dto);
-            }
-        }
-
-        public string EditingOrderId
-        {
-            get
-            {
-                ComposerCookieDto dto = CookieAccessor.Read();
-                return dto.GetValue(nameof(EditingOrderId));
-            }
-            set
-            {
-                ComposerCookieDto dto = CookieAccessor.Read();
-                dto.SetOrRemove(nameof(EditingOrderId), value);
+                dto.EncryptedEditingOrderId = EncryptionUtility.Encrypt(_editingOrderId.ToString());
                 CookieAccessor.Write(dto);
             }
         }
@@ -328,15 +310,8 @@ namespace Orckestra.Composer.Services
         {
             get
             {
-                ComposerCookieDto dto = CookieAccessor.Read();
-                var value = dto.GetValue(nameof(EditingOrderId));
-                return !string.IsNullOrEmpty(value);
+                return EditingOrderId != null;
             }
-        }
-
-        public string GetDefaultScope()
-        {
-            return ScopeProvider.DefaultScope;
         }
     }
 }
