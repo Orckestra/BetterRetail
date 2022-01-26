@@ -73,17 +73,13 @@ namespace Orckestra.Composer.Cart.ViewModels.Order
         public string BillingCurrency { get; set; }
 
         /// <summary>
-        /// Gets or sets is order is editing or not
-        /// </summary>
-        public bool IsOrderEditing { get; set; }
-
-        /// <summary>
         /// Gets or sets the source of the order.
         /// </summary>
         /// <value>
         /// The source of the order.
         /// </value>
         public string Source { get; set; }
+
 
         /// <summary>
         /// Gets or sets the is Order editable or not
