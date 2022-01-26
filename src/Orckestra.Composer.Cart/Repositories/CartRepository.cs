@@ -53,6 +53,7 @@ namespace Orckestra.Composer.Cart.Repositories
                 CustomerId = param.CustomerId,
                 ScopeId = param.Scope,
                 IncludeChildScopes = param.IncludeChildScopes,
+                CartType = param.CartType
             };
 
             return OvertureClient.SendAsync(request);
@@ -80,7 +81,7 @@ namespace Orckestra.Composer.Cart.Repositories
                 CustomerId = param.CustomerId,
                 ScopeId = param.Scope,
                 CartName = param.CartName,
-                CartType = param.CartName,
+                CartType = param.CartType,
                 //Reexecute price engine and promotion engine is automatically done at each request
                 ExecuteWorkflow = param.ExecuteWorkflow,
                 WorkflowToExecute = param.WorkflowToExecute
