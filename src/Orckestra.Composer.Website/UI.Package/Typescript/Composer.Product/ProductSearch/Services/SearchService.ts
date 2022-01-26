@@ -78,6 +78,9 @@ module Orckestra.Composer {
 
             if (facet.facetLandingPageUrl && facet.facetType === 'SingleSelect') {
                 this._baseSearchUrl = facet.facetLandingPageUrl;
+
+                //TODO: detect new categoryId
+                this._window.location.href = this._baseSearchUrl + this._searchCriteria.toQuerystring();
             }
 
             this.search();

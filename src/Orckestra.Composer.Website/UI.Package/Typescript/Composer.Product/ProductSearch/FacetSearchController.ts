@@ -49,7 +49,7 @@ module Orckestra.Composer {
                 },
                 mounted() {
                     self.initializeServices();
-                    self.eventHub.subscribe('facetsLoaded', ({data}) => {
+                    self.eventHub.subscribe(SearchEvents.FacetsLoaded, ({data}) => {
                         this.CategoryFacetValuesTree = data.FacetSettings.CategoryFacetValuesTree;
                         this.Facets = data.ProductSearchResults.Facets;
                     });
@@ -166,12 +166,12 @@ module Orckestra.Composer {
 
             if (isSelected) {
                 anchorContext.removeClass('selected');
-                var data = {
+                const data = {
                     facetFieldName: facetKey,
                     facetValue,
                     facetType
-                }
-                this.eventHub.publish('facetRemoved', { data });
+                };
+                this.eventHub.publish(SearchEvents.FacetRemoved, { data });
             } else {
                 var parentDiv = anchorContext.parent().parent();
                 parentDiv.find('a').removeClass('selected');
