@@ -1,8 +1,19 @@
-﻿namespace Orckestra.Composer.Cart.Parameters
+﻿using System;
+using System.Globalization;
+
+namespace Orckestra.Composer.Cart.Parameters
 {
-    public class UpdateShippingAddressPostalCodeParam : BaseCartParam
+    public class UpdateShippingAddressPostalCodeParam
     {
         public string BaseUrl { get; set; }
+
+        public string Scope { get; set; }
+
+        public CultureInfo CultureInfo { get; set; }
+
+        public Guid CustomerId { get; set; }
+
+        public string CartName { get; set; }
 
         public string PostalCode { get; set; }
 

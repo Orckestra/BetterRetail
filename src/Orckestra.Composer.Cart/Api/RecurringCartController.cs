@@ -97,7 +97,7 @@ namespace Orckestra.Composer.Cart.Api
             var param = new UpdateRecurringOrderCartShippingAddressParam()
             {
                 CultureInfo = ComposerContext.CultureInfo,
-                Scope = ComposerContext.Scope,
+                ScopeId = ComposerContext.Scope,
                 CartName = request.cartName,
                 CustomerId = ComposerContext.CustomerId,
                 ShippingAddressId = request.ShippingAddressId.ToGuid(),
@@ -223,7 +223,7 @@ namespace Orckestra.Composer.Cart.Api
             
             var vm = await RecurringOrderCartsService.UpdateLineItemAsync(new UpdateLineItemParam
             {
-                Scope = ComposerContext.Scope,
+                ScopeId = ComposerContext.Scope,
                 CultureInfo = ComposerContext.CultureInfo,
                 CustomerId = ComposerContext.CustomerId,
                 LineItemId = new Guid(request.LineItemId),

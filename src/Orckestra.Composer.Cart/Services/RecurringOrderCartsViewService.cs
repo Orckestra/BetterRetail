@@ -250,7 +250,7 @@ namespace Orckestra.Composer.Cart.Services
             var cart = await CartRepository.GetCartAsync(new GetCartParam
             {
                 BaseUrl = param.BaseUrl,
-                Scope = param.Scope,
+                Scope = param.ScopeId,
                 CultureInfo = param.CultureInfo,
                 CustomerId = param.CustomerId,
                 CartName = param.CartName
@@ -300,7 +300,7 @@ namespace Orckestra.Composer.Cart.Services
             var cart = await CartRepository.GetCartAsync(new GetCartParam
             {
                 BaseUrl = param.BaseUrl,
-                Scope = param.Scope,
+                Scope = param.ScopeId,
                 CultureInfo = param.CultureInfo,
                 CustomerId = param.CustomerId,
                 CartName = param.CartName
@@ -453,7 +453,7 @@ namespace Orckestra.Composer.Cart.Services
 
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
             if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartName)), nameof(param)); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.ScopeId)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.ScopeId)), nameof(param)); }
             if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
             if (param.LineItemId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.LineItemId)), nameof(param)); }
             if (param.CustomerId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param)); }
@@ -467,7 +467,7 @@ namespace Orckestra.Composer.Cart.Services
                 CartName = param.CartName,
                 CouponCodes = CouponViewService.GetInvalidCouponsCode(cart.Coupons).ToList(),
                 CustomerId = param.CustomerId,
-                Scope = param.Scope
+                Scope = param.ScopeId
             });
 
             var vmParam = new CreateRecurringOrderCartViewModelParam
@@ -492,7 +492,7 @@ namespace Orckestra.Composer.Cart.Services
                 BaseUrl = param.BaseUrl,
                 CultureInfo = param.CultureInfo,
                 CustomerId = param.CustomerId,
-                Scope = param.Scope
+                Scope = param.ScopeId
             }).ConfigureAwait(false);
 
             var tasks = new List<Task>();
@@ -525,7 +525,7 @@ namespace Orckestra.Composer.Cart.Services
                         CartName = roc.Name,
                         CultureInfo = param.CultureInfo,
                         CustomerId = param.CustomerId,
-                        Scope = param.Scope,
+                        ScopeId = param.ScopeId,
                         ShippingAddressId = addressId,
                         UseSameForShippingAndBilling = updateBillingAddress
                     }));
@@ -538,7 +538,7 @@ namespace Orckestra.Composer.Cart.Services
                         CartName = roc.Name,
                         CultureInfo = param.CultureInfo,
                         CustomerId = param.CustomerId,
-                        Scope = param.Scope,
+                        ScopeId = param.ScopeId,
                         BillingAddressId = addressId,
                         UseSameForShippingAndBilling = false
                     }));

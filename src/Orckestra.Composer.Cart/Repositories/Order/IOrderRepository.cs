@@ -16,15 +16,7 @@ namespace Orckestra.Composer.Cart.Repositories.Order
         /// </summary>
         /// <param name="param">The get order parameter.</param>
         /// <returns></returns>
-        Task<Overture.ServiceModel.Orders.Order> GetOrderByNumberAsync(GetOrderByNumberParam param);
-
-        /// <summary>
-        /// Gets an Order by id.
-        /// </summary>
-        /// <param name="param">The get order parameter.</param>
-        /// <returns></returns>
-        Task<Overture.ServiceModel.Orders.Order> GetOrderByIdAsync(GetOrderByIdParam param);
-
+        Task<Overture.ServiceModel.Orders.Order> GetOrderAsync(GetOrderParam param);
 
         /// <summary>
         /// Get history items related to specified order

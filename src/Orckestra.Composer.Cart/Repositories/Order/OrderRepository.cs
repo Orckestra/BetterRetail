@@ -49,34 +49,11 @@ namespace Orckestra.Composer.Cart.Repositories.Order
         }
 
         /// <summary>
-        /// Gets an Order by id.
-        /// </summary>
-        /// <param name="param">The get order parameter.</param>
-        /// <returns></returns>
-        public virtual Task<Overture.ServiceModel.Orders.Order> GetOrderByIdAsync(GetOrderByIdParam param)
-        {
-            if (param == null) { throw new ArgumentNullException(nameof(param)); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
-            if (param.OrderId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.OrderId)), nameof(param)); }
-
-            var request = new GetOrderByIdRequest
-            {
-                ScopeId = param.Scope,
-                OrderId = param.OrderId,
-                IncludeShipment = true,
-                IncludeLineItems = true,
-                IncludePayment = true
-            };
-
-            return OvertureClient.SendAsync(request);
-        }
-
-        /// <summary>
         /// Gets an Order by number.
         /// </summary>
         /// <param name="param">The get order parameter.</param>
         /// <returns></returns>
-        public virtual Task<Overture.ServiceModel.Orders.Order> GetOrderByNumberAsync(GetOrderByNumberParam param)
+        public virtual Task<Overture.ServiceModel.Orders.Order> GetOrderAsync(GetOrderParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
             if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }

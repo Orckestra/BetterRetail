@@ -20,7 +20,6 @@ namespace Orckestra.Composer.Cart.Api
     public class OrderController : ApiController
     {
         protected IComposerContext ComposerContext { get; private set; }
-        protected IOrderService OrderService { get; }
         protected IOrderHistoryViewService OrderHistoryViewService { get; private set; }
         protected IOrderUrlProvider OrderUrlProvider { get; private set; }
         protected ICartUrlProvider CartUrlProvider { get; private set; }
@@ -30,15 +29,13 @@ namespace Orckestra.Composer.Cart.Api
             IComposerContext composerContext,
             IOrderHistoryViewService orderHistoryViewService,
             IOrderUrlProvider orderUrlProvider,
-            ICartUrlProvider cartUrlProvider,
-            IOrderService orderService
+            ICartUrlProvider cartUrlProvider
             )
         {
             OrderHistoryViewService = orderHistoryViewService ?? throw new ArgumentNullException(nameof(orderHistoryViewService));
             OrderUrlProvider = orderUrlProvider ?? throw new ArgumentNullException(nameof(orderUrlProvider));
             ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
             CartUrlProvider = cartUrlProvider ?? throw new ArgumentNullException(nameof(cartUrlProvider));
-            OrderService = orderService ?? throw new ArgumentNullException(nameof(orderService));
         }
 
         [HttpPost]
@@ -190,7 +187,7 @@ namespace Orckestra.Composer.Cart.Api
         {
             if (id == Guid.Empty) return BadRequest($"{nameof(id)} cannot be empty");
 
-            var vm = await OrderService.CreateEditOrder(id).ConfigureAwait(false);
+            var vm = await OrderHistoryViewService.CreateEditOrder(id).ConfigureAwait(false);
 
             ComposerContext.EditingOrderId = id;
 

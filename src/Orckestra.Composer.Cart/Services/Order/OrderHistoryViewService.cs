@@ -20,6 +20,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
+using static Orckestra.Composer.Constants.General;
 
 namespace Orckestra.Composer.Cart.Services.Order
 {
@@ -40,6 +41,8 @@ namespace Orckestra.Composer.Cart.Services.Order
         protected virtual IImageService ImageService { get; private set; }
         protected virtual IShippingTrackingProviderFactory ShippingTrackingProviderFactory { get; private set; }
         protected virtual ICustomerRepository CustomerRepository { get; private set; }
+        protected virtual IComposerContext ComposerContext { get; private set; }
+        protected virtual ICartUrlProvider CartUrlProvider { get; private set; }
         protected IComposerJsonSerializer ComposerJsonSerializer { get; }
         public ILineItemViewModelFactory LineItemViewModelFactory { get; }
 
@@ -53,7 +56,9 @@ namespace Orckestra.Composer.Cart.Services.Order
             IShippingTrackingProviderFactory shippingTrackingProviderFactory,
             ICustomerRepository customerRepository,
             IComposerJsonSerializer composerJsonSerializer,
-            ILineItemViewModelFactory lineItemViewModelFactory)
+            ILineItemViewModelFactory lineItemViewModelFactory,
+            IComposerContext composerContext, 
+            ICartUrlProvider cartUrlProvider)
         {
             OrderHistoryViewModelFactory = orderHistoryViewModelFactory ?? throw new ArgumentNullException(nameof(orderHistoryViewModelFactory));
             OrderUrlProvider = orderUrlProvider ?? throw new ArgumentNullException(nameof(orderUrlProvider));
@@ -65,6 +70,8 @@ namespace Orckestra.Composer.Cart.Services.Order
             CustomerRepository = customerRepository ?? throw new ArgumentNullException(nameof(customerRepository));
             ComposerJsonSerializer = composerJsonSerializer ?? throw new ArgumentNullException(nameof(composerJsonSerializer));
             LineItemViewModelFactory = lineItemViewModelFactory ?? throw new ArgumentNullException(nameof(lineItemViewModelFactory));
+            ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
+            CartUrlProvider = cartUrlProvider ?? throw new ArgumentNullException(nameof(cartUrlProvider));
         }
 
         /// <summary>
@@ -130,7 +137,7 @@ namespace Orckestra.Composer.Cart.Services.Order
         protected virtual async Task<List<Overture.ServiceModel.Orders.Order>> GetOrders(OrderQueryResult orderQueryResult,
             GetCustomerOrdersParam param)
         {
-            var getOrderTasks = orderQueryResult.Results.Select(order => OrderRepository.GetOrderByNumberAsync(new GetCustomerOrderParam
+            var getOrderTasks = orderQueryResult.Results.Select(order => OrderRepository.GetOrderAsync(new GetCustomerOrderParam
             {
                 OrderNumber = order.OrderNumber,
                 Scope = param.Scope
@@ -174,7 +181,7 @@ namespace Orckestra.Composer.Cart.Services.Order
             if (string.IsNullOrWhiteSpace(param.CountryCode)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CountryCode)), nameof(param)); }
             if (string.IsNullOrWhiteSpace(param.BaseUrl)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.BaseUrl)), nameof(param)); }
 
-            var order = await OrderRepository.GetOrderByNumberAsync(param).ConfigureAwait(false);
+            var order = await OrderRepository.GetOrderAsync(param).ConfigureAwait(false);
 
             //Check if order is one of the current customer.
             if (order == null || Guid.Parse(order.CustomerId) != param.CustomerId) { return null; }
@@ -199,7 +206,7 @@ namespace Orckestra.Composer.Cart.Services.Order
             if (string.IsNullOrWhiteSpace(param.BaseUrl)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.BaseUrl)), nameof(param)); }
             if (string.IsNullOrWhiteSpace(param.Email)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Email)), nameof(param)); }
 
-            var order = await OrderRepository.GetOrderByNumberAsync(param).ConfigureAwait(false);
+            var order = await OrderRepository.GetOrderAsync(param).ConfigureAwait(false);
 
             if (order == null || order.Cart.Customer.Email != param.Email) { return null; }
 
@@ -221,7 +228,7 @@ namespace Orckestra.Composer.Cart.Services.Order
             if (string.IsNullOrWhiteSpace(param.OrderNumber)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.OrderNumber))); }
             if (param.CustomerId == default) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId))); }
 
-            var order = await OrderRepository.GetOrderByNumberAsync(param).ConfigureAwait(false);
+            var order = await OrderRepository.GetOrderAsync(param).ConfigureAwait(false);
             if (order == null)
             {
                 return null;
@@ -252,7 +259,7 @@ namespace Orckestra.Composer.Cart.Services.Order
 
         protected virtual async Task<OrderDetailViewModel> BuildOrderDetailViewModelAsync(
             Overture.ServiceModel.Orders.Order order,
-            GetOrderByNumberParam getOrderParam)
+            GetOrderParam getOrderParam)
         {
             Helper.LineItemsHelper.PrepareGiftLineItems(order.Cart);
 
@@ -419,6 +426,49 @@ namespace Orckestra.Composer.Cart.Services.Order
                 }
             }
             return shipmentsNotes;
+        }
+
+        public async Task<EditingOrderViewModel> CreateEditOrder(string orderNumber)
+        {
+            if (string.IsNullOrWhiteSpace(orderNumber)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(orderNumber)));
+
+            var getOrderParam = new GetCustomerOrderParam()
+            {
+                CultureInfo = ComposerContext.CultureInfo,
+                OrderNumber = orderNumber,
+                Scope = GlobalScopeName
+            };
+
+            var order = await OrderRepository.GetOrderAsync(getOrderParam).ConfigureAwait(false);
+
+            if (order?.Cart == null) throw new InvalidOperationException("Cannot edit this order");
+            Guid orderId = Guid.Parse(order.Id);
+
+            var createOrderDraftParam = new CreateCartOrderDraftParam
+            {
+                CultureInfo = ComposerContext.CultureInfo,
+                OrderId = orderId,
+                Scope = order.ScopeId,
+                CustomerId = Guid.Parse(order.CustomerId)
+            };
+
+            var editCart = await OrderRepository.CreateCartOrderDraft(createOrderDraftParam).ConfigureAwait(false);
+            if (editCart == null)
+            {
+                throw new InvalidOperationException("Expected draft cart, but received null.");
+            }
+
+            var viewModel = new EditingOrderViewModel
+            {
+                Scope = editCart.ScopeId,
+                OrderId = orderId,
+                CartUrl = CartUrlProvider.GetCartUrl(new BaseUrlParameter
+                {
+                    CultureInfo = ComposerContext.CultureInfo
+                })
+            };
+
+            return viewModel;
         }
     }
 }

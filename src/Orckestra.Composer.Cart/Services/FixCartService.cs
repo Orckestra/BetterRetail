@@ -33,7 +33,7 @@ namespace Orckestra.Composer.Cart.Services
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
             if (param.Cart == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.Cart)), nameof(param)); }
-            if (param.Scope == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.Scope)), nameof(param)); }
+            if (param.ScopeId == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.ScopeId)), nameof(param)); }
 
             param.Cart = await AddPaymentIfRequired(param).ConfigureAwait(false);
             param.Cart = await SetFulfillmentLocationIfRequired(param);
@@ -69,7 +69,7 @@ namespace Orckestra.Composer.Cart.Services
                 var fulfillmentLocation =
                     await InventoryLocationProvider.GetFulfillmentLocationAsync(new GetFulfillmentLocationParam
                     {
-                        Scope = param.Scope
+                        Scope = param.ScopeId
                     }).ConfigureAwait(false);
 
                 var shipment = cart.Shipments.FirstOrDefault() ?? new Shipment();
@@ -86,7 +86,7 @@ namespace Orckestra.Composer.Cart.Services
                     FulfillmentScheduledTimeEndDate = shipment.FulfillmentScheduledTimeEndDate,
                     PropertyBag = shipment.PropertyBag,
                     Id = shipment.Id,
-                    Scope = cart.ScopeId,
+                    ScopeId = cart.ScopeId,
                     ShippingAddress = shipment.Address,
                     ShippingProviderId = shipment.FulfillmentMethod == null ? Guid.Empty : shipment.FulfillmentMethod.ShippingProviderId
                 }).ConfigureAwait(false);

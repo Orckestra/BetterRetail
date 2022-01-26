@@ -191,8 +191,8 @@ namespace Orckestra.Composer.Cart.Api
                 PaymentProviderName = request.PaymentProviderName,
                 PaymentMethodId = request.PaymentMethodId,
                 CustomerId = ComposerContext.CustomerId,
-                Scope = ComposerContext.Scope,
-                CultureInfo = ComposerContext.CultureInfo
+                ScopeId = ComposerContext.Scope,
+                Culture = ComposerContext.CultureInfo
             });
 
             return Ok(paymentMethod);
@@ -301,7 +301,7 @@ namespace Orckestra.Composer.Cart.Api
 
             var vm = await CartService.UpdateLineItemAsync(new UpdateLineItemParam
             {
-                Scope = ComposerContext.Scope,
+                ScopeId = ComposerContext.Scope,
                 CultureInfo = ComposerContext.CultureInfo,
                 CustomerId = ComposerContext.CustomerId,
                 LineItemId = new Guid(request.LineItemId),
@@ -484,6 +484,13 @@ namespace Orckestra.Composer.Cart.Api
             }).ConfigureAwait(false);
 
             return Ok(shippingMethodsViewModel);
+        }
+
+        private string GetCurrentCartType()
+        {
+            return !ComposerContext.IsEditingOrder
+                        ? CartConfiguration.DefaultCartType
+                        : CartConfiguration.EditingCartType;
         }
     }
 }

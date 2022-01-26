@@ -111,14 +111,12 @@ namespace Orckestra.Composer.Cart.Services
             if (param.Quantity < 1) { throw new ArgumentOutOfRangeException(nameof(param), param.Quantity, GetMessageOfZeroNegative(nameof(param.Quantity))); }
             if (string.IsNullOrWhiteSpace(param.BaseUrl)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.BaseUrl)), nameof(param)); }
 
-            param.CartType = GetCurrentCartType();
-
             var cart = await CartRepository.AddLineItemAsync(param).ConfigureAwait(false);
 
             var fixedCart = await FixCartService.FixCartAsync(new FixCartParam
             {
                 Cart = cart,
-                Scope = param.Scope
+                ScopeId = param.Scope
             }).ConfigureAwait(false);
 
             var vmParam = new CreateCartViewModelParam
@@ -149,7 +147,6 @@ namespace Orckestra.Composer.Cart.Services
             if (param.CustomerId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param)); }
             if (string.IsNullOrWhiteSpace(param.BaseUrl)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.BaseUrl)), nameof(param)); }
 
-            param.CartType = GetCurrentCartType();
             var cart = await CartRepository.RemoveLineItemAsync(param).ConfigureAwait(false);
 
             await CartRepository.RemoveCouponsAsync(new RemoveCouponsParam
@@ -182,7 +179,7 @@ namespace Orckestra.Composer.Cart.Services
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
             if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartName)), nameof(param)); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.ScopeId)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.ScopeId)), nameof(param)); }
             if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
             if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartName)), nameof(param)); }
             if (param.LineItemId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.LineItemId)), nameof(param)); }
@@ -190,7 +187,6 @@ namespace Orckestra.Composer.Cart.Services
             if (param.Quantity < 1) { throw new ArgumentOutOfRangeException(nameof(param), param.Quantity, GetMessageOfZeroNegative(nameof(param.Quantity))); }
             if (string.IsNullOrWhiteSpace(param.BaseUrl)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.BaseUrl)), nameof(param)); }
 
-            param.CartType = GetCurrentCartType();
             var cart = await CartRepository.UpdateLineItemAsync(param).ConfigureAwait(false);
 
             await CartRepository.RemoveCouponsAsync(new RemoveCouponsParam
@@ -198,7 +194,7 @@ namespace Orckestra.Composer.Cart.Services
                 CartName = param.CartName,
                 CouponCodes = CouponViewService.GetInvalidCouponsCode(cart.Coupons).ToList(),
                 CustomerId = param.CustomerId,
-                Scope = param.Scope
+                Scope = param.ScopeId
             }).ConfigureAwait(false);
 
             var vmParam = new CreateCartViewModelParam
@@ -269,7 +265,6 @@ namespace Orckestra.Composer.Cart.Services
             if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartName)), nameof(param)); }
             if (param.CustomerId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param)); }
 
-            param.CartType = GetCurrentCartType();
             var cart = await CartRepository.GetCartAsync(param).ConfigureAwait(false);
 
             if (!ComposerContext.IsEditingOrder) // Don't FixCart while editing order
@@ -377,7 +372,6 @@ namespace Orckestra.Composer.Cart.Services
         public virtual async Task<CartViewModel> RemoveInvalidLineItemsAsync(RemoveInvalidLineItemsParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
-            param.CartType = GetCurrentCartType();
 
             var cart = await CartRepository.GetCartAsync(new GetCartParam
             {
@@ -425,7 +419,6 @@ namespace Orckestra.Composer.Cart.Services
         public virtual async Task<CartViewModel> UpdateShippingAddressPostalCodeAsync(UpdateShippingAddressPostalCodeParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
-            param.CartType = GetCurrentCartType();
 
             ProcessedCart cart = await CartRepository.GetCartAsync(new GetCartParam
             {
@@ -490,7 +483,6 @@ namespace Orckestra.Composer.Cart.Services
         public virtual async Task<CartViewModel> UpdateBillingAddressPostalCodeAsync(UpdateBillingAddressPostalCodeParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
-            param.CartType = GetCurrentCartType();
 
             ProcessedCart cart = await CartRepository.GetCartAsync(new GetCartParam
             {
@@ -498,8 +490,7 @@ namespace Orckestra.Composer.Cart.Services
                 Scope = param.Scope,
                 CultureInfo = param.CultureInfo,
                 CustomerId = param.CustomerId,
-                CartName = param.CartName,
-                CartType = param.CartType
+                CartName = param.CartName
 
             }).ConfigureAwait(false);
 
@@ -542,7 +533,7 @@ namespace Orckestra.Composer.Cart.Services
 
             var paymentMethod = await CartRepository.SetDefaultCustomerPaymentMethod(param).ConfigureAwait(false);
 
-            return await MapPaymentMethodToViewModel(paymentMethod, param.CultureInfo);
+            return await MapPaymentMethodToViewModel(paymentMethod, param.Culture);
         }
 
         protected virtual async Task<IPaymentMethodViewModel> MapPaymentMethodToViewModel(PaymentMethod paymentMethod, CultureInfo culture)

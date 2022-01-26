@@ -54,8 +54,7 @@ namespace Orckestra.Composer.Cart.Repositories
                 CultureName = param.CultureInfo.Name,
                 CustomerId = param.CustomerId,
                 ScopeId = param.Scope,
-                IncludeChildScopes = param.IncludeChildScopes,
-                CartType = param.CartType
+                IncludeChildScopes = param.IncludeChildScopes
             };
 
             return OvertureClient.SendAsync(request);
@@ -75,7 +74,7 @@ namespace Orckestra.Composer.Cart.Repositories
             if (string.IsNullOrWhiteSpace(param.CartName)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartName)), nameof(param));
             if (param.CustomerId == Guid.Empty) throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param));
 
-            var cacheKey = BuildCartCacheKey(param.Scope, param.CustomerId, param.CartName, param.CartType);
+            var cacheKey = BuildCartCacheKey(param.Scope, param.CustomerId, param.CartName);
 
             var request = new GetCartRequest
             {
@@ -85,8 +84,7 @@ namespace Orckestra.Composer.Cart.Repositories
                 CartName = param.CartName,
                 //Reexecute price engine and promotion engine is automatically done at each request
                 ExecuteWorkflow = param.ExecuteWorkflow,
-                WorkflowToExecute = param.WorkflowToExecute,
-                CartType = param.CartType
+                WorkflowToExecute = param.WorkflowToExecute
             };
 
             return CacheProvider.GetOrAddAsync(cacheKey, () => OvertureClient.SendAsync(request));
@@ -113,7 +111,7 @@ namespace Orckestra.Composer.Cart.Repositories
                 ScopeId = param.Scope
                 
             };
-            CacheKey cacheKey = BuildCartCacheKey(param.Scope, param.CustomerId, param.CartName, param.CartType);
+            CacheKey cacheKey = BuildCartCacheKey(param.Scope, param.CustomerId, param.CartName);
             await CacheProvider.RemoveAsync(cacheKey);
 
             return await OvertureClient.SendAsync(request);
@@ -125,7 +123,7 @@ namespace Orckestra.Composer.Cart.Repositories
             if (param.CustomerId == Guid.Empty) throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param));
             if (param.PaymentMethodId == Guid.Empty) throw new ArgumentException(GetMessageOfEmpty(nameof(param.PaymentMethodId)), nameof(param));
             if (string.IsNullOrWhiteSpace(param.PaymentProviderName)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.PaymentProviderName)), nameof(param));
-            if (string.IsNullOrWhiteSpace(param.Scope)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param));
+            if (string.IsNullOrWhiteSpace(param.ScopeId)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.ScopeId)), nameof(param));
 
             var request = new SetDefaultCustomerPaymentMethodRequest
             {
@@ -133,7 +131,7 @@ namespace Orckestra.Composer.Cart.Repositories
                 Default = true,
                 PaymentMethodId = param.PaymentMethodId,
                 PaymentProviderName = param.PaymentProviderName,
-                ScopeId = param.Scope
+                ScopeId = param.ScopeId
             };
 
             return OvertureClient.SendAsync(request);
@@ -163,7 +161,7 @@ namespace Orckestra.Composer.Cart.Repositories
             if (param.Quantity < 1) throw new ArgumentOutOfRangeException(nameof(param), param.Quantity, GetMessageOfZeroNegative(nameof(param.Quantity)));
 
             var request = BuildAddLineItemRequestFromParam(param);
-            var cacheKey = BuildCartCacheKey(param.Scope, param.CustomerId, param.CartName, param.CartType);
+            var cacheKey = BuildCartCacheKey(param.Scope, param.CustomerId, param.CartName);
 
             return CacheProvider.ExecuteAndSetAsync(cacheKey, () => OvertureClient.SendAsync(request));
         }
@@ -180,8 +178,7 @@ namespace Orckestra.Composer.Cart.Repositories
                 Quantity = param.Quantity,
                 VariantId = param.VariantId,
                 RecurringOrderFrequencyName = param.RecurringOrderFrequencyName,
-                RecurringOrderProgramName = param.RecurringOrderProgramName,
-                CartType = param.CartType
+                RecurringOrderProgramName = param.RecurringOrderProgramName
             };
         }
 
@@ -207,11 +204,10 @@ namespace Orckestra.Composer.Cart.Repositories
                 CultureName = param.CultureInfo.Name,
                 CustomerId = param.CustomerId,
                 LineItems = param.LineItems,
-                ScopeId = param.Scope,
-                CartType = param.CartType
+                ScopeId = param.Scope
             };
 
-            CacheKey cacheKey = BuildCartCacheKey(param.Scope, param.CustomerId, param.CartName, param.CartType);
+            CacheKey cacheKey = BuildCartCacheKey(param.Scope, param.CustomerId, param.CartName);
 
             return CacheProvider.ExecuteAndSetAsync(cacheKey, () => OvertureClient.SendAsync(request));
         }
@@ -259,8 +255,7 @@ namespace Orckestra.Composer.Cart.Repositories
                 CartName = param.CartName,
                 CultureName = param.CultureInfo.Name,
                 CustomerId = param.CustomerId,
-                ScopeId = param.Scope,
-                CartType = param.CartType
+                ScopeId = param.Scope
             };
         }
 
@@ -284,11 +279,10 @@ namespace Orckestra.Composer.Cart.Repositories
                 CultureName = param.CultureInfo.Name,
                 CartName = param.CartName,
                 Id = param.LineItemId,
-                CustomerId = param.CustomerId,
-                CartType = param.CartType
+                CustomerId = param.CustomerId
             };
 
-            var cacheKey = BuildCartCacheKey(param.Scope, param.CustomerId, param.CartName, param.CartType);
+            var cacheKey = BuildCartCacheKey(param.Scope, param.CustomerId, param.CartName);
             return CacheProvider.ExecuteAndSetAsync(cacheKey, () => OvertureClient.SendAsync(request));
         }
 
@@ -335,11 +329,10 @@ namespace Orckestra.Composer.Cart.Repositories
                 CultureName = param.CultureInfo.Name,
                 CustomerId = param.CustomerId,
                 ScopeId = param.Scope,
-                LineItems = list,
-                CartType = param.CartType
+                LineItems = list
             };
 
-            var cacheKey = BuildCartCacheKey(param.Scope, param.CustomerId, param.CartName, param.CartType);
+            var cacheKey = BuildCartCacheKey(param.Scope, param.CustomerId, param.CartName);
             return CacheProvider.ExecuteAndSetAsync(cacheKey, () => OvertureClient.SendAsync(request));
         }
 
@@ -351,7 +344,7 @@ namespace Orckestra.Composer.Cart.Repositories
         public virtual Task<ProcessedCart> UpdateLineItemAsync(UpdateLineItemParam param)
         {
             if (param == null) throw new ArgumentNullException(nameof(param));
-            if (string.IsNullOrWhiteSpace(param.Scope)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param));
+            if (string.IsNullOrWhiteSpace(param.ScopeId)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.ScopeId)), nameof(param));
             if (param.CultureInfo == null) throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param));
             if (string.IsNullOrWhiteSpace(param.CartName)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartName)), nameof(param));
             if (param.LineItemId == Guid.Empty) throw new ArgumentException(GetMessageOfEmpty(nameof(param.LineItemId)), nameof(param));
@@ -368,13 +361,12 @@ namespace Orckestra.Composer.Cart.Repositories
                 Id = param.LineItemId,
                 PropertyBag = param.PropertyBag,
                 Quantity = param.Quantity,
-                ScopeId = param.Scope,      
+                ScopeId = param.ScopeId,      
                 RecurringOrderFrequencyName = param.RecurringOrderFrequencyName,
-                RecurringOrderProgramName = param.RecurringOrderProgramName,
-                CartType = param.CartType
+                RecurringOrderProgramName = param.RecurringOrderProgramName
             };
 
-            var cacheKey = BuildCartCacheKey(param.Scope, param.CustomerId, param.CartName, param.CartType);
+            var cacheKey = BuildCartCacheKey(param.ScopeId, param.CustomerId, param.CartName);
             return CacheProvider.ExecuteAndSetAsync(cacheKey, () => OvertureClient.SendAsync(request));
         }
 
@@ -396,8 +388,7 @@ namespace Orckestra.Composer.Cart.Repositories
                 CultureName = param.CultureInfo.Name,
                 CustomerId = param.CustomerId,
                 ScopeId = param.Scope,
-                CartName = param.CartName,
-                CartType = param.CartType
+                CartName = param.CartName
             };
 
             //Avoid caching because of returning with type of line items
@@ -424,11 +415,10 @@ namespace Orckestra.Composer.Cart.Repositories
                 CouponCode = param.CouponCode,
                 CultureName = param.CultureInfo.Name,
                 CustomerId = param.CustomerId,
-                ScopeId = param.Scope,
-                CartType = param.CartType
+                ScopeId = param.Scope
             };
 
-            var cacheKey = BuildCartCacheKey(param.Scope, param.CustomerId, param.CartName, param.CartType);
+            var cacheKey = BuildCartCacheKey(param.Scope, param.CustomerId, param.CartName);
             return CacheProvider.ExecuteAndSetAsync(cacheKey, () => OvertureClient.SendAsync(request));
         }
 
@@ -452,8 +442,7 @@ namespace Orckestra.Composer.Cart.Repositories
                     CouponCode = couponCode,
                     CartName = param.CartName,
                     CustomerId = param.CustomerId,
-                    ScopeId = param.Scope,
-                    CartType = param.CartType
+                    ScopeId = param.Scope
                 };
 
                 // Do not remove coupons in parallel, because otherwise it could corrupt your cart.
@@ -485,7 +474,7 @@ namespace Orckestra.Composer.Cart.Repositories
                 Payments = param.Payments
             };
 
-            var cacheKey = BuildCartCacheKey(param.Scope, param.CustomerId, param.CartName, param.CartType);
+            var cacheKey = BuildCartCacheKey(param.Scope, param.CustomerId, param.CartName);
             return CacheProvider.ExecuteAndSetAsync(cacheKey, () => OvertureClient.SendAsync(request));
         }
 
@@ -496,14 +485,14 @@ namespace Orckestra.Composer.Cart.Repositories
         /// <param name="customerId"></param>
         /// <param name="cartName"></param>
         /// <returns></returns>
-        protected virtual CacheKey BuildCartCacheKey(string scope, Guid customerId, string cartName, string cartType)
+        protected virtual CacheKey BuildCartCacheKey(string scope, Guid customerId, string cartName)
         {
             var key = new CacheKey(CacheConfigurationCategoryNames.Cart)
             {
                 Scope = scope
             };
 
-            key.AppendKeyParts(customerId, cartName, cartType);
+            key.AppendKeyParts(customerId, cartName);
             return key;
         }
 
@@ -517,7 +506,7 @@ namespace Orckestra.Composer.Cart.Repositories
             var request = new UpdateShipmentRequest
             {
                 CartName = param.CartName,
-                ScopeId = param.Scope,
+                ScopeId = param.ScopeId,
                 CustomerId = param.CustomerId,
                 Id = param.Id,
                 CultureName = param.CultureInfo.Name,
@@ -529,8 +518,7 @@ namespace Orckestra.Composer.Cart.Repositories
                 FulfillmentScheduledTimeEndDate = param.FulfillmentScheduledTimeEndDate,
                 PropertyBag = param.PropertyBag,
                 ShippingAddress = param.ShippingAddress,
-                ShippingProviderId = param.ShippingProviderId,
-                CartType = param.CartType
+                ShippingProviderId = param.ShippingProviderId
             };
 
             return OvertureClient.SendAsync(request);
@@ -567,7 +555,7 @@ namespace Orckestra.Composer.Cart.Repositories
                 CustomerId = param.CustomerId,
                 ScopeId = param.Scope,
                 CultureName = param.CultureInfo.Name,
-                CartType = param.CartType
+                CartType = CartConfiguration.RecurringOrderCartType
             };
 
             var cartSummaries = await OvertureClient.SendAsync(request).ConfigureAwait(false);
@@ -581,8 +569,7 @@ namespace Orckestra.Composer.Cart.Repositories
                     CustomerId = param.CustomerId,
                     CartName = cart.Name,
                     BaseUrl = param.BaseUrl,
-                    ExecuteWorkflow = true,
-                    CartType = CartConfiguration.RecurringOrderCartType
+                    ExecuteWorkflow = true
                 };
                 return GetCartAsync(getCartParam);
             });
