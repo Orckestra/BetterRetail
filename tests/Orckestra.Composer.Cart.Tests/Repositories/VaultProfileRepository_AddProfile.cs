@@ -43,7 +43,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
                 CartName = GetRandom.String(10),                
                 CustomerId = GetRandom.Guid(),
                 PaymentId = GetRandom.Guid(),
-                Scope = GetRandom.String(32),
+                ScopeId = GetRandom.String(32),
                 VaultTokenId = GetRandom.String(32),
                 IpAddress = "127.0.0.1"
             };
@@ -67,7 +67,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
                 CartName = null,
                 CustomerId = GetRandom.Guid(),
                 PaymentId = GetRandom.Guid(),
-                Scope = GetRandom.String(32),
+                ScopeId = GetRandom.String(32),
                 VaultTokenId = GetRandom.String(32),
                 IpAddress = "127.0.0.1"
             };
@@ -89,7 +89,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
                 CardHolderName = GetRandom.String(10),
                 CartName = GetRandom.String(10),
                 PaymentId = GetRandom.Guid(),
-                Scope = GetRandom.String(32),
+                ScopeId = GetRandom.String(32),
                 VaultTokenId = GetRandom.String(32),
                 IpAddress = "127.0.0.1"
             };
@@ -111,7 +111,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
                 CardHolderName = GetRandom.String(10),
                 CartName = GetRandom.String(10),
                 CustomerId = GetRandom.Guid(),
-                Scope = GetRandom.String(32),
+                ScopeId = GetRandom.String(32),
                 VaultTokenId = GetRandom.String(32),
                 IpAddress = "127.0.0.1"
             };
@@ -134,7 +134,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
                 CartName = GetRandom.String(10),
                 CustomerId = GetRandom.Guid(),
                 PaymentId = GetRandom.Guid(),
-                Scope = null,
+                ScopeId = null,
                 VaultTokenId = GetRandom.String(32),
                 IpAddress = "127.0.0.1"
             };
@@ -157,7 +157,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
                 CartName = GetRandom.String(10),
                 CustomerId = GetRandom.Guid(),
                 PaymentId = GetRandom.Guid(),
-                Scope = GetRandom.String(32),
+                ScopeId = GetRandom.String(32),
                 VaultTokenId = null,
                 IpAddress = "127.0.0.1"
             };
@@ -179,7 +179,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
                 CartName = GetRandom.String(10),
                 CustomerId = GetRandom.Guid(),
                 PaymentId = GetRandom.Guid(),
-                Scope = GetRandom.String(32),
+                ScopeId = GetRandom.String(32),
                 VaultTokenId = GetRandom.String(32),
                 IpAddress = null
             };

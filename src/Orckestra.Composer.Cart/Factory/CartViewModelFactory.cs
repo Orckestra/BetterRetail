@@ -113,7 +113,6 @@ namespace Orckestra.Composer.Cart.Factory
 
             vm.IsAuthenticated = ComposerContext.IsAuthenticated;
             vm.IsEditingOrder = ComposerContext.IsEditingOrder;
-
             return vm;
         }
 
@@ -231,7 +230,7 @@ namespace Orckestra.Composer.Cart.Factory
             {
                 if (el.AdditionalFees == null) { continue; }
 
-                foreach (var l in el.AdditionalFees)
+                foreach(var l in el.AdditionalFees)
                 {
                     if (dictionary.ContainsKey((l.DisplayName, l.Taxable)))
                     {
@@ -458,7 +457,7 @@ namespace Orckestra.Composer.Cart.Factory
         {
             var allShipmentAdditionalFees = new List<ShipmentAdditionalFee>();
             decimal totalFeeAmount = 0;
-            foreach (var el in shipments)
+            foreach(var el in shipments)
             {
                 allShipmentAdditionalFees.AddRange(el.AdditionalFees);
                 totalFeeAmount += el.AdditionalFeeAmount ?? 0;
@@ -474,14 +473,14 @@ namespace Orckestra.Composer.Cart.Factory
         }
 
         public virtual List<AdditionalFeeSummaryViewModel> GetShipmentAdditionalFeeSummary(
-            IEnumerable<ShipmentAdditionalFeeViewModel> shipmentAdditionalFeeViewModels,
+            IEnumerable<ShipmentAdditionalFeeViewModel> shipmentAdditionalFeeViewModels, 
             CultureInfo cultureInfo)
         {
             if (shipmentAdditionalFeeViewModels == null) { return new List<AdditionalFeeSummaryViewModel>(); }
 
             var dictionary = new Dictionary<(string, bool), decimal>();
 
-            foreach (var el in shipmentAdditionalFeeViewModels)
+            foreach(var el in shipmentAdditionalFeeViewModels)
             {
                 if (dictionary.ContainsKey((el.DisplayName, el.Taxable)))
                 {
@@ -518,13 +517,12 @@ namespace Orckestra.Composer.Cart.Factory
 
             var shippingMethodViewModel = ViewModelMapper.MapTo<ShippingMethodViewModel>(fulfillmentMethod, cultureInfo);
 
-            if (string.IsNullOrWhiteSpace(shippingMethodViewModel.DisplayName))
+            if(string.IsNullOrWhiteSpace(shippingMethodViewModel.DisplayName))
             {
                 shippingMethodViewModel.DisplayName = shippingMethodViewModel.Name;
             }
 
-            if (fulfillmentMethod.ExpectedDeliveryDate.HasValue)
-            {
+            if (fulfillmentMethod.ExpectedDeliveryDate.HasValue) { 
                 var totalDays = (int)Math.Ceiling((fulfillmentMethod.ExpectedDeliveryDate.Value - DateTime.UtcNow).TotalDays);
                 shippingMethodViewModel.ExpectedDaysBeforeDelivery = totalDays.ToString();
             }
@@ -613,7 +611,7 @@ namespace Orckestra.Composer.Cart.Factory
         }
 
         public virtual SavedCreditCardPaymentMethodViewModel MapSavedCreditCard(PaymentMethod payment, CultureInfo cultureInfo)
-        {
+        {            
             var savedCreditCard = ViewModelMapper.MapTo<SavedCreditCardPaymentMethodViewModel>(payment, cultureInfo);
 
             if (!string.IsNullOrWhiteSpace(savedCreditCard.ExpiryDate))
@@ -772,14 +770,14 @@ namespace Orckestra.Composer.Cart.Factory
             {
                 List<Reward> rewards = new List<Reward>();
 
-                foreach (var el in orderShipment)
+                foreach(var el in orderShipment)
                 {
                     rewards.AddRange(el.Rewards);
                     if (el.LineItems == null)
                     {
                         continue;
                     }
-                    foreach (var l in el.LineItems)
+                    foreach(var l in el.LineItems)
                     {
                         rewards.AddRange(l.Rewards);
                     }

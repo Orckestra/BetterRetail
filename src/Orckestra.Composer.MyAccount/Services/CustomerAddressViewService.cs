@@ -140,7 +140,7 @@ namespace Orckestra.Composer.MyAccount.Services
                 BaseUrl = "Empty", //Dont need but can't allow empty
                 CultureInfo = editAddressParam.CultureInfo,
                 CustomerId = editAddressParam.CustomerId,
-                Scope = editAddressParam.Scope,
+                ScopeId = editAddressParam.Scope,
                 AddressId = updatedAddress.Id,
             }).ConfigureAwait(false);
 

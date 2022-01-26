@@ -41,7 +41,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
             // Act
             var result = service.UpdateLineItemAsync(new UpdateLineItemParam
             {
-                Scope = GetRandom.String(32),
+                ScopeId = GetRandom.String(32),
                 CultureInfo = TestingExtensions.GetRandomCulture(),
                 CustomerId = GetRandom.Guid(),
                 CartName = GetRandom.String(32),
@@ -65,7 +65,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
             // Act
             var result = service.UpdateLineItemAsync(new UpdateLineItemParam
             {
-                Scope = GetRandom.String(32),
+                ScopeId = GetRandom.String(32),
                 CultureInfo = TestingExtensions.GetRandomCulture(),
                 CustomerId = GetRandom.Guid(),
                 CartName = GetRandom.String(32),
@@ -90,7 +90,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
 
             var param = new UpdateLineItemParam
             {
-                Scope = scope,
+                ScopeId = scope,
                 CultureInfo = TestingExtensions.GetRandomCulture(),
                 CustomerId = GetRandom.Guid(),
                 CartName = GetRandom.String(32),
@@ -107,7 +107,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
 
             //Assert
             exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
-            exception.Message.Should().StartWith(GetMessageOfNullWhiteSpace(nameof(param.Scope)));
+            exception.Message.Should().StartWith(GetMessageOfNullWhiteSpace(nameof(param.ScopeId)));
         }
 
         [Test]
@@ -116,7 +116,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
             var service = _container.CreateInstance<CartService>();
             var param = new UpdateLineItemParam
             {
-                Scope = GetRandom.String(32),
+                ScopeId = GetRandom.String(32),
                 CultureInfo = null,
                 CustomerId = GetRandom.Guid(),
                 CartName = GetRandom.String(32),
@@ -143,7 +143,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
 
             var param = new UpdateLineItemParam
             {
-                Scope = GetRandom.String(32),
+                ScopeId = GetRandom.String(32),
                 CultureInfo = TestingExtensions.GetRandomCulture(),
                 CustomerId = Guid.Empty,
                 CartName = GetRandom.String(32),
@@ -171,7 +171,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
         {
             var param = new UpdateLineItemParam
             {
-                Scope = GetRandom.String(32),
+                ScopeId = GetRandom.String(32),
                 CultureInfo = TestingExtensions.GetRandomCulture(),
                 CustomerId = GetRandom.Guid(),
                 CartName = cartName,
@@ -200,7 +200,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
 
             var param = new UpdateLineItemParam
             {
-                Scope = GetRandom.String(32),
+                ScopeId = GetRandom.String(32),
                 CultureInfo = TestingExtensions.GetRandomCulture(),
                 CustomerId = GetRandom.Guid(),
                 CartName = GetRandom.String(32),
@@ -229,7 +229,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
 
             var param = new UpdateLineItemParam
             {
-                Scope = GetRandom.String(32),
+                ScopeId = GetRandom.String(32),
                 CultureInfo = TestingExtensions.GetRandomCulture(),
                 CustomerId = GetRandom.Guid(),
                 CartName = GetRandom.String(32),
