@@ -29,7 +29,7 @@ namespace Orckestra.Composer.Cart.Api
             IOrderUrlProvider orderUrlProvider)
         {
             OrderHistoryViewService = orderHistoryViewService ?? throw new ArgumentNullException(nameof(orderHistoryViewService));
-            OrderUrlProvider = orderUrlProvider;
+            OrderUrlProvider = orderUrlProvider ?? throw new ArgumentNullException(nameof(orderUrlProvider));
             ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
         }
 
@@ -169,6 +169,22 @@ namespace Orckestra.Composer.Cart.Api
             });
 
             return Ok(viewModel);
+        }
+
+        /// <summary>
+        /// Set an order in edit mode
+        /// </summary>
+        /// <param name="param">Parameters container</param>
+        [HttpPost]
+        [ActionName("edit-order")]
+        [ValidateModelState]
+        public virtual async Task<IHttpActionResult> EditOrder(string orderNumber)
+        {
+            if (string.IsNullOrWhiteSpace(orderNumber)) return BadRequest($"{nameof(orderNumber)} cannot be empty");
+
+            var vm = await OrderHistoryViewService.CreateEditingOrderViewModel(orderNumber).ConfigureAwait(false);
+
+            return Ok(vm);
         }
     }
 }

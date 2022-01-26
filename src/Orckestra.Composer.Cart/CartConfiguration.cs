@@ -19,6 +19,8 @@ namespace Orckestra.Composer.Cart
         /// </summary>
         public static string ShoppingCartName { get; set; } = "Default";
 
+        public const string OrderDraftCartType = "OrderDraft";
+
         /// <summary>
         ///     Get/Set the RecurringOrder CartName to use for storing a RecurringOrder Cart in Overture
         /// </summary>

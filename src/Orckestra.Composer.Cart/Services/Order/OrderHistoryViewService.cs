@@ -20,6 +20,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
+using static Orckestra.Composer.Constants.General;
 
 namespace Orckestra.Composer.Cart.Services.Order
 {
@@ -40,6 +41,8 @@ namespace Orckestra.Composer.Cart.Services.Order
         protected virtual IImageService ImageService { get; private set; }
         protected virtual IShippingTrackingProviderFactory ShippingTrackingProviderFactory { get; private set; }
         protected virtual ICustomerRepository CustomerRepository { get; private set; }
+        protected virtual IComposerContext ComposerContext { get; private set; }
+        protected virtual ICartUrlProvider CartUrlProvider { get; private set; }
         protected IComposerJsonSerializer ComposerJsonSerializer { get; }
         public ILineItemViewModelFactory LineItemViewModelFactory { get; }
 
@@ -53,7 +56,9 @@ namespace Orckestra.Composer.Cart.Services.Order
             IShippingTrackingProviderFactory shippingTrackingProviderFactory,
             ICustomerRepository customerRepository,
             IComposerJsonSerializer composerJsonSerializer,
-            ILineItemViewModelFactory lineItemViewModelFactory)
+            ILineItemViewModelFactory lineItemViewModelFactory,
+            IComposerContext composerContext, 
+            ICartUrlProvider cartUrlProvider)
         {
             OrderHistoryViewModelFactory = orderHistoryViewModelFactory ?? throw new ArgumentNullException(nameof(orderHistoryViewModelFactory));
             OrderUrlProvider = orderUrlProvider ?? throw new ArgumentNullException(nameof(orderUrlProvider));
@@ -65,6 +70,8 @@ namespace Orckestra.Composer.Cart.Services.Order
             CustomerRepository = customerRepository ?? throw new ArgumentNullException(nameof(customerRepository));
             ComposerJsonSerializer = composerJsonSerializer ?? throw new ArgumentNullException(nameof(composerJsonSerializer));
             LineItemViewModelFactory = lineItemViewModelFactory ?? throw new ArgumentNullException(nameof(lineItemViewModelFactory));
+            ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
+            CartUrlProvider = cartUrlProvider ?? throw new ArgumentNullException(nameof(cartUrlProvider));
         }
 
         /// <summary>
@@ -419,6 +426,51 @@ namespace Orckestra.Composer.Cart.Services.Order
                 }
             }
             return shipmentsNotes;
+        }
+
+        public async Task<EditingOrderViewModel> CreateEditingOrderViewModel(string orderNumber)
+        {
+            if (string.IsNullOrWhiteSpace(orderNumber)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(orderNumber)));
+
+            var getOrderParam = new GetCustomerOrderParam()
+            {
+                CultureInfo = ComposerContext.CultureInfo,
+                OrderNumber = orderNumber,
+                Scope = GlobalScopeName
+            };
+
+            var order = await OrderRepository.GetOrderAsync(getOrderParam).ConfigureAwait(false);
+
+            if (order?.Cart == null) throw new InvalidOperationException("Cannot edit this order");
+            Guid orderId = Guid.Parse(order.Id);
+
+            var createOrderDraftParam = new CreateCartOrderDraftParam
+            {
+                CultureInfo = ComposerContext.CultureInfo,
+                OrderId = orderId,
+                Scope = order.ScopeId,
+                CustomerId = Guid.Parse(order.CustomerId)
+            };
+
+            var editCart = await OrderRepository.CreateCartOrderDraft(createOrderDraftParam).ConfigureAwait(false);
+            if (editCart == null)
+            {
+                throw new InvalidOperationException("Expected draft cart, but received null.");
+            }
+
+            ComposerContext.EditingCartName = editCart.Name;
+
+            var viewModel = new EditingOrderViewModel
+            {
+                Scope = editCart.ScopeId,
+                OrderId = orderId,
+                CartUrl = CartUrlProvider.GetCartUrl(new BaseUrlParameter
+                {
+                    CultureInfo = ComposerContext.CultureInfo
+                })
+            };
+
+            return viewModel;
         }
     }
 }

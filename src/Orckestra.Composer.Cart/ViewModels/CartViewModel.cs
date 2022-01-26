@@ -115,9 +115,15 @@ namespace Orckestra.Composer.Cart.ViewModels
         public bool IsLoading { get; set; }
 
         /// <summary>
+        /// Whether the order is editing or not
+        /// </summary>
+        public bool IsEditingOrder { get; set; }
+
+        /// <summary>
         /// Indicates if the cart contains recurring lineitems
         /// </summary>
-        public bool HasRecurringLineitems {
+        public bool HasRecurringLineitems
+        {
             get
             {
                 return RecurringOrderCartHelper.IsCartContainsRecurringOrderItems(LineItemDetailViewModels);
