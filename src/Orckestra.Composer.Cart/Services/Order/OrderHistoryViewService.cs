@@ -516,7 +516,7 @@ namespace Orckestra.Composer.Cart.Services.Order
 
                 } else
                 {
-                    throw (ex);
+                    throw;
                 }
             }
 

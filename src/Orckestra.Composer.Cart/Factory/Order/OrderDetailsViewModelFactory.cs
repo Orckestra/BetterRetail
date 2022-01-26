@@ -150,7 +150,7 @@ namespace Orckestra.Composer.Cart.Factory.Order
             if (orderDraft != null)
             {
                 orderDraft.PropertyBag.TryGetValue(Constants.OrderDart.OwnershipPropertyBagKey, out object orderDraftOwnershipUserName);
-                if (orderDraftOwnershipUserName != null && Constants.OrderDart.OwnershipByWebsite == orderDraftOwnershipUserName.ToString())
+                if (orderDraftOwnershipUserName?.ToString() == Constants.OrderDart.OwnershipByWebsite)
                 {
                     return true;
                 }
