@@ -428,7 +428,7 @@ namespace Orckestra.Composer.Cart.Services.Order
             return shipmentsNotes;
         }
 
-        public async Task<EditingOrderViewModel> CreateEditOrder(string orderNumber)
+        public async Task<EditingOrderViewModel> CreateEditingOrderViewModel(string orderNumber)
         {
             if (string.IsNullOrWhiteSpace(orderNumber)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(orderNumber)));
 

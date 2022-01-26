@@ -182,7 +182,7 @@ namespace Orckestra.Composer.Cart.Api
         {
             if (string.IsNullOrWhiteSpace(orderNumber)) return BadRequest($"{nameof(orderNumber)} cannot be empty");
 
-            var vm = await OrderHistoryViewService.CreateEditOrder(orderNumber).ConfigureAwait(false);
+            var vm = await OrderHistoryViewService.CreateEditingOrderViewModel(orderNumber).ConfigureAwait(false);
 
             return Ok(vm);
         }
