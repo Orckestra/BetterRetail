@@ -53,6 +53,7 @@ namespace Orckestra.Composer.Cart.Repositories
                 CustomerId = param.CustomerId,
                 ScopeId = param.Scope,
                 IncludeChildScopes = param.IncludeChildScopes,
+                CartType = param.CartType
             };
 
             return OvertureClient.SendAsync(request);

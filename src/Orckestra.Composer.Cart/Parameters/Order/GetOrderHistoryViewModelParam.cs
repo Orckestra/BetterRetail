@@ -35,6 +35,11 @@ namespace Orckestra.Composer.Cart.Parameters.Order
         public List<Overture.ServiceModel.Orders.Order> Orders { get; set; }
 
         /// <summary>
+        /// Get or sets the Order Cart Drafts
+        /// </summary>
+        public List<CartSummary> OrderCartDrafts { get; set; }
+
+        /// <summary>
         /// Gets or sets the Order Statuses
         /// </summary>
         public Dictionary<string, string> OrderStatuses { get; set; }

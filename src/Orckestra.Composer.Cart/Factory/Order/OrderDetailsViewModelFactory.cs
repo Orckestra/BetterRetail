@@ -139,8 +139,24 @@ namespace Orckestra.Composer.Cart.Factory.Order
             orderInfos.BillingCurrency = param.Order.Cart.BillingCurrency;
             orderInfos.PricePaid = LocalizationProvider.FormatPrice((decimal)param.Order.Cart.Total, CurrencyProvider.GetCurrency());
             orderInfos.IsOrderEditable = IsOrderEditable(param);
+            orderInfos.HasOwnDraft = HasOwnDraft(param, param.Order);
 
             return orderInfos;
+        }
+
+        protected virtual bool HasOwnDraft(CreateOrderDetailViewModelParam param, Overture.ServiceModel.Orders.Order rawOrder)
+        {
+            var orderDraft = param.OrderCartDrafts?.FirstOrDefault(d => Guid.Parse(d.Name) == Guid.Parse(rawOrder.Id));
+            if (orderDraft != null)
+            {
+                orderDraft.PropertyBag.TryGetValue("OrderDraftOwnership", out object orderDraftOwnershipUserName);
+                if (orderDraftOwnershipUserName != null && rawOrder.Cart.Customer.Email == orderDraftOwnershipUserName.ToString())
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         protected virtual bool IsOrderEditable(CreateOrderDetailViewModelParam param)

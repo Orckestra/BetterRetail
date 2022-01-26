@@ -236,6 +236,7 @@ namespace Orckestra.Composer.Cart.Factory.Order
             orderInfo.OrderStatus = GetOrderStatusDisplayName(rawOrder, param);
             orderInfo.OrderStatusRaw = rawOrder.OrderStatus;
             orderInfo.IsOrderEditable = IsOrderEditable(param, rawOrder);
+            orderInfo.HasOwnDraft = HasOwnDraft(param, rawOrder);
 
             var orderDetailUrl = UrlFormatter.AppendQueryString(param.OrderDetailBaseUrl, new NameValueCollection
                 {
@@ -267,6 +268,21 @@ namespace Orckestra.Composer.Cart.Factory.Order
             }
 
             return lightOrderVm;
+        }
+
+        protected virtual bool HasOwnDraft(GetOrderHistoryViewModelParam param, OrderItem rawOrder)
+        {
+            var orderDraft = param.OrderCartDrafts?.FirstOrDefault(d => Guid.Parse(d.Name) == Guid.Parse(rawOrder.Id));
+            if(orderDraft != null)
+            {
+                orderDraft.PropertyBag.TryGetValue("OrderDraftOwnership", out object orderDraftOwnershipUserName);
+                if (orderDraftOwnershipUserName != null && rawOrder.CustomerEmail == orderDraftOwnershipUserName.ToString())
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         protected virtual bool IsOrderEditable(GetOrderHistoryViewModelParam param, OrderItem rawOrder)

@@ -45,5 +45,11 @@ namespace Orckestra.Composer.Cart.Repositories.Order
         /// <param name="param"></param>
         /// <returns></returns>
         Task<OrderSettings> GetOrderSettings(string scope);
+
+        /// <summary>
+        /// Change Order Draft ownership
+        /// </summary>
+        /// <returns></returns>
+        Task<ProcessedCart> ChangeOwnership(ChangeOrderDraftOwnershipParam param);
     }
 }

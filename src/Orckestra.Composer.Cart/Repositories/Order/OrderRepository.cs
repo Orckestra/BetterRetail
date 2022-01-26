@@ -148,5 +148,29 @@ namespace Orckestra.Composer.Cart.Repositories.Order
 
             return cacheKey;
         }
+
+        /// <summary>
+        /// Change ownership of an order draft to the requested user and revert pending changes to the original order cart when required.
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        public virtual Task<ProcessedCart> ChangeOwnership(ChangeOrderDraftOwnershipParam param)
+        {
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (param.OrderId == default) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.OrderId))); }
+            if (param.CustomerId == default) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId))); }
+            if (param.Scope == default) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.Scope))); }
+
+            var request = new ChangeOwnershipCartOrderDraftRequest()
+            {
+                ScopeId = param.Scope,
+                CustomerId = param.CustomerId,
+                OrderId = param.OrderId,
+                RevertPendingChanges = param.RevertPendingChanges,
+                CultureName = param.CultureName
+            };
+
+            return OvertureClient.SendAsync(request);
+        }
     }
 }

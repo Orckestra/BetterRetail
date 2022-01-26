@@ -98,6 +98,7 @@
     <Compile Include="Parameters\GetRecurringOrderCartsViewModelParam.cs" />
     <Compile Include="Parameters\GetRecurringOrderCartViewModelParam.cs" />
     <Compile Include="Parameters\GetShippingMethodsScopeParam.cs" />
+    <Compile Include="Parameters\Order\ChangeOrderDraftOwnershipParam.cs" />
     <Compile Include="Parameters\Order\GetOrderChangesParam.cs" />
     <Compile Include="Parameters\Order\UpdateOrderParam.cs" />
     <Compile Include="Parameters\Order\UpdateOrderCustomerParam.cs" />
