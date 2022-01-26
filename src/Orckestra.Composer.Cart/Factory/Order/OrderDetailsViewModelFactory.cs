@@ -15,7 +15,6 @@ using Orckestra.Composer.Utils;
 using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel.Orders;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
-using Orckestra.Composer.Constants;
 
 namespace Orckestra.Composer.Cart.Factory.Order
 {
@@ -140,18 +139,18 @@ namespace Orckestra.Composer.Cart.Factory.Order
             orderInfos.BillingCurrency = param.Order.Cart.BillingCurrency;
             orderInfos.PricePaid = LocalizationProvider.FormatPrice((decimal)param.Order.Cart.Total, CurrencyProvider.GetCurrency());
             orderInfos.IsOrderEditable = IsOrderEditable(param);
-            orderInfos.HasOwnDraft = HasOwnDraft(param, param.Order);
+            orderInfos.HasOwnDraft = HasOwnDraft(param);
 
             return orderInfos;
         }
 
-        protected virtual bool HasOwnDraft(CreateOrderDetailViewModelParam param, Overture.ServiceModel.Orders.Order rawOrder)
+        protected virtual bool HasOwnDraft(CreateOrderDetailViewModelParam param)
         {
-            var orderDraft = param.OrderCartDrafts?.FirstOrDefault(d => Guid.Parse(d.Name) == Guid.Parse(rawOrder.Id));
+            var orderDraft = param.OrderCartDrafts?.FirstOrDefault(d => Guid.Parse(d.Name) == Guid.Parse(param.Order.Id));
             if (orderDraft != null)
             {
-                orderDraft.PropertyBag.TryGetValue(General.OrderDraftOwnershipPropertyBagKey, out object orderDraftOwnershipUserName);
-                if (orderDraftOwnershipUserName != null && General.OrderDraftOwnershipByWebsite == orderDraftOwnershipUserName.ToString())
+                orderDraft.PropertyBag.TryGetValue(Constants.OrderDart.OwnershipPropertyBagKey, out object orderDraftOwnershipUserName);
+                if (orderDraftOwnershipUserName != null && Constants.OrderDart.OwnershipByWebsite == orderDraftOwnershipUserName.ToString())
                 {
                     return true;
                 }

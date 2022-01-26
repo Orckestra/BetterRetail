@@ -230,7 +230,7 @@ namespace Orckestra.Composer.Product.Services
             vm.DisplayListPrice = GetDisplayPrice(vm.ListPrice, currencyIso);
 
             var recurringOrdersEnabled = RecurringOrdersSettings.Enabled;
-            var recurringOrderProgramName = productVariant.Product.PropertyBag.GetValueOrDefault<string>(Utils.Constants.ProductAttributes.RecurringOrderProgramName);
+            var recurringOrderProgramName = productVariant.Product.PropertyBag.GetValueOrDefault<string>(Constants.ProductAttributes.RecurringOrderProgramName);
 
             vm.RecurringOrderProgramName = recurringOrderProgramName;
             vm.IsRecurringOrderEligible = recurringOrdersEnabled && !string.IsNullOrWhiteSpace(recurringOrderProgramName);

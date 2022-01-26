@@ -121,7 +121,7 @@ namespace Orckestra.Composer.Product.Factory
 
             var recurringOrdersEnabled = RecurringOrdersSettings.Enabled;
 
-            var recurringOrderProgramName = product.PropertyBag.GetValueOrDefault<string>(Utils.Constants.ProductAttributes.RecurringOrderProgramName);
+            var recurringOrderProgramName = product.PropertyBag.GetValueOrDefault<string>(Constants.ProductAttributes.RecurringOrderProgramName);
 
             if (string.IsNullOrWhiteSpace(recurringOrderProgramName))
             {

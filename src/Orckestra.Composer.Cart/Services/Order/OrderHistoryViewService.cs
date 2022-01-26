@@ -21,7 +21,6 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
-using static Orckestra.Composer.Constants.General;
 using Orckestra.Composer.Exceptions;
 
 namespace Orckestra.Composer.Cart.Services.Order
@@ -457,7 +456,7 @@ namespace Orckestra.Composer.Cart.Services.Order
             {
                 CultureInfo = ComposerContext.CultureInfo,
                 OrderNumber = orderNumber,
-                Scope = GlobalScopeName
+                Scope = Constants.GlobalScopeName
             };
 
             var order = await OrderRepository.GetOrderAsync(getOrderParam).ConfigureAwait(false);
