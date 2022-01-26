@@ -15,6 +15,7 @@ using Orckestra.Composer.Utils;
 using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel.Orders;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
+using Orckestra.Composer.Constants;
 
 namespace Orckestra.Composer.Cart.Factory.Order
 {
@@ -149,8 +150,8 @@ namespace Orckestra.Composer.Cart.Factory.Order
             var orderDraft = param.OrderCartDrafts?.FirstOrDefault(d => Guid.Parse(d.Name) == Guid.Parse(rawOrder.Id));
             if (orderDraft != null)
             {
-                orderDraft.PropertyBag.TryGetValue("OrderDraftOwnership", out object orderDraftOwnershipUserName);
-                if (orderDraftOwnershipUserName != null && rawOrder.Cart.Customer.Email == orderDraftOwnershipUserName.ToString())
+                orderDraft.PropertyBag.TryGetValue(General.OrderDraftOwnershipPropertyBagKey, out object orderDraftOwnershipUserName);
+                if (orderDraftOwnershipUserName != null && General.OrderDraftOwnershipByWebsite == orderDraftOwnershipUserName.ToString())
                 {
                     return true;
                 }

@@ -22,6 +22,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 using static Orckestra.Composer.Constants.General;
+using Orckestra.Composer.Exceptions;
 
 namespace Orckestra.Composer.Cart.Services.Order
 {
@@ -463,6 +464,8 @@ namespace Orckestra.Composer.Cart.Services.Order
 
             if (order?.Cart == null) throw new InvalidOperationException("Cannot edit this order");
             Guid orderId = Guid.Parse(order.Id);
+            ProcessedCart draftCart = null;
+            CartSummary cartSummary = null;
 
             var createOrderDraftParam = new CreateCartOrderDraftParam
             {
@@ -472,25 +475,71 @@ namespace Orckestra.Composer.Cart.Services.Order
                 CustomerId = Guid.Parse(order.CustomerId)
             };
 
-            var editCart = await OrderRepository.CreateCartOrderDraft(createOrderDraftParam).ConfigureAwait(false);
-            if (editCart == null)
+            try
             {
-                throw new InvalidOperationException("Expected draft cart, but received null.");
+                draftCart = await OrderRepository.CreateCartOrderDraft(createOrderDraftParam).ConfigureAwait(false);
+                if (draftCart == null)
+                {
+                    throw new InvalidOperationException("Expected draft cart, but received null.");
+                }
+            }
+            catch (ComposerException ex)
+            {
+                var ownedBySomeoneElseError = ex.Errors?.FirstOrDefault(e => e.ErrorCode == "IsOwnedBySomeoneElse");
+                var ownedByRequestedUserError = ex.Errors?.FirstOrDefault(e => e.ErrorCode == "IsOwnedByRequestedUser");
+                if (ownedBySomeoneElseError != null)
+                {
+                    draftCart = await OrderRepository.ChangeOwnership(new ChangeOrderDraftOwnershipParam()
+                    {
+                        CultureName = ComposerContext.CultureInfo.Name,
+                        RevertPendingChanges = true,
+                        OrderId = orderId,
+                        Scope = order.ScopeId,
+                        CustomerId = Guid.Parse(order.CustomerId)
+                    }).ConfigureAwait(false);
+                }
+                else if(ownedByRequestedUserError != null)
+                {
+                    var draftCarts = await CartRepository.GetCartsByCustomerIdAsync(new GetCartsByCustomerIdParam()
+                    {
+                        CultureInfo = ComposerContext.CultureInfo,
+                        Scope = order.ScopeId,
+                        CartType = CartConfiguration.OrderDraftCartType,
+                        CustomerId = Guid.Parse(order.CustomerId),
+                        IncludeChildScopes = true
+                    }).ConfigureAwait(false);
+
+                    cartSummary = draftCarts?.FirstOrDefault(d => Guid.Parse(d.Name) == orderId);
+                    if (cartSummary == null)
+                    {
+                        throw new InvalidOperationException("Expected draft cart, but received null.");
+                    }
+
+                } else
+                {
+                    throw (ex);
+                }
             }
 
-            ComposerContext.EditingCartName = editCart.Name;
+            var viewModel = GetEditingOrderViewModel(orderId, order.ScopeId);
 
-            var viewModel = new EditingOrderViewModel
+            //Set Edit Mode
+            ComposerContext.EditingCartName = draftCart?.Name ?? cartSummary.Name;
+
+            return viewModel;
+        }
+
+        private EditingOrderViewModel GetEditingOrderViewModel(Guid orderId, string scope)
+        {
+            return new EditingOrderViewModel
             {
-                Scope = editCart.ScopeId,
+                Scope = scope,
                 OrderId = orderId,
                 CartUrl = CartUrlProvider.GetCartUrl(new BaseUrlParameter
                 {
                     CultureInfo = ComposerContext.CultureInfo
                 })
             };
-
-            return viewModel;
         }
     }
 }

@@ -6,6 +6,7 @@ using System.Linq;
 using Orckestra.Composer.Cart.Extensions;
 using Orckestra.Composer.Cart.Parameters.Order;
 using Orckestra.Composer.Cart.ViewModels.Order;
+using Orckestra.Composer.Constants;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Localization;
 using Orckestra.Composer.Utils;
@@ -275,8 +276,8 @@ namespace Orckestra.Composer.Cart.Factory.Order
             var orderDraft = param.OrderCartDrafts?.FirstOrDefault(d => Guid.Parse(d.Name) == Guid.Parse(rawOrder.Id));
             if(orderDraft != null)
             {
-                orderDraft.PropertyBag.TryGetValue("OrderDraftOwnership", out object orderDraftOwnershipUserName);
-                if (orderDraftOwnershipUserName != null && rawOrder.CustomerEmail == orderDraftOwnershipUserName.ToString())
+                orderDraft.PropertyBag.TryGetValue(General.OrderDraftOwnershipPropertyBagKey, out object orderDraftOwnershipUserName);
+                if (orderDraftOwnershipUserName != null && General.OrderDraftOwnershipByWebsite == orderDraftOwnershipUserName.ToString())
                 {
                     return true;
                 }
