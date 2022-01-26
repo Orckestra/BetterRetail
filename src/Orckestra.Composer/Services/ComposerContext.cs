@@ -294,11 +294,11 @@ namespace Orckestra.Composer.Services
                     }
                 }
                 
-                return _editingOrderId.Value;
+                return _editingOrderId;
             }
             set
             {
-                if (value == Guid.Empty) return;
+                if (value == null || value == Guid.Empty) return;
                 _editingOrderId = value;
                 ComposerCookieDto dto = CookieAccessor.Read();
                 dto.EncryptedEditingOrderId = EncryptionUtility.Encrypt(_editingOrderId.ToString());
