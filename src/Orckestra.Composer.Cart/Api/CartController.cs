@@ -283,7 +283,7 @@ namespace Orckestra.Composer.Cart.Api
                 CustomerId = ComposerContext.CustomerId,
                 LineItemId = new Guid(request.LineItemId),
                 CartName = ComposerContext.IsEditingOrder ? ComposerContext.EditingCartName : CartConfiguration.ShoppingCartName,
-                CartType = ComposerContext.IsEditingOrder ? CartConfiguration.OrderDraftCartType : CartConfiguration.DefaultCartType,
+                CartType = ComposerContext.IsEditingOrder ? CartConfiguration.OrderDraftCartType : null,
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
             });
 

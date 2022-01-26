@@ -19,7 +19,6 @@ namespace Orckestra.Composer.Cart
         /// </summary>
         public static string ShoppingCartName { get; set; } = "Default";
 
-        public const string DefaultCartType = "Cart";
         public const string OrderDraftCartType = "OrderDraft";
 
         /// <summary>
