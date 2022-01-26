@@ -279,29 +279,32 @@ namespace Orckestra.Composer.Services
             }
         }
 
-        private Guid? _editingOrderId;
+        private string _editingCartName;
 
-        public Guid? EditingOrderId
+        /// <summary>
+        /// Edititing cart has the name as the id of the order
+        /// </summary>
+        public string EditingCartName
         {
             get
             {
-                if (!_editingOrderId.HasValue)
+                if (string.IsNullOrWhiteSpace(_editingCartName))
                 {
                     var dto = CookieAccessor.Read();
                     if (dto.EncryptedEditingOrderId != null)
                     {
-                        _editingOrderId = new Guid(EncryptionUtility.Decrypt(dto.EncryptedEditingOrderId));
+                        _editingCartName = EncryptionUtility.Decrypt(dto.EncryptedEditingOrderId);
                     }
                 }
                 
-                return _editingOrderId;
+                return _editingCartName;
             }
             set
             {
-                if (value == null || value == Guid.Empty) return;
-                _editingOrderId = value;
+                if (string.IsNullOrWhiteSpace(value)) return;
+                _editingCartName = value;
                 ComposerCookieDto dto = CookieAccessor.Read();
-                dto.EncryptedEditingOrderId = EncryptionUtility.Encrypt(_editingOrderId.ToString());
+                dto.EncryptedEditingOrderId = EncryptionUtility.Encrypt(_editingCartName);
                 CookieAccessor.Write(dto);
             }
         }
@@ -310,7 +313,7 @@ namespace Orckestra.Composer.Services
         {
             get
             {
-                return EditingOrderId != null;
+                return !string.IsNullOrWhiteSpace(EditingCartName);
             }
         }
     }

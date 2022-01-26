@@ -189,8 +189,6 @@ namespace Orckestra.Composer.Cart.Api
 
             var vm = await OrderHistoryViewService.CreateEditOrder(orderNumber).ConfigureAwait(false);
 
-            ComposerContext.EditingOrderId = vm.OrderId;
-
             return Ok(vm);
         }
 

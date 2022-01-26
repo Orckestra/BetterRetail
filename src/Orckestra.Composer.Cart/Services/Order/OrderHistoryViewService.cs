@@ -458,6 +458,8 @@ namespace Orckestra.Composer.Cart.Services.Order
                 throw new InvalidOperationException("Expected draft cart, but received null.");
             }
 
+            ComposerContext.EditingCartName = editCart.Name;
+
             var viewModel = new EditingOrderViewModel
             {
                 Scope = editCart.ScopeId,
