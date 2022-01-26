@@ -70,7 +70,7 @@ namespace Orckestra.Composer.Cart.Providers.CartMerge
             await FixCartService.FixCartAsync(new FixCartParam
             {
                 Cart = cart,
-                Scope = param.Scope
+                ScopeId = param.Scope
             });
         }
     }

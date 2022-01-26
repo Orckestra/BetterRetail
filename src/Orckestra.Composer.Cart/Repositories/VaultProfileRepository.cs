@@ -74,7 +74,7 @@ namespace Orckestra.Composer.Cart.Repositories
             if (param.PaymentId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.PaymentId)), nameof(param)); }
             if (string.IsNullOrWhiteSpace(param.VaultTokenId)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.VaultTokenId)), nameof(param)); }
             if (string.IsNullOrWhiteSpace(param.IpAddress)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.IpAddress)), nameof(param)); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.ScopeId)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.ScopeId)), nameof(param)); }
 
             var request = new CreateCartPaymentVaultProfileRequest
             {
@@ -84,11 +84,11 @@ namespace Orckestra.Composer.Cart.Repositories
                 PaymentId = param.PaymentId,
                 TemporaryToken = param.VaultTokenId,
                 IP = param.IpAddress,
-                ScopeId = param.Scope,
+                ScopeId = param.ScopeId,
                 CreatePaymentProfile = param.CreatePaymentProfile
             };
 
-            await CacheProvider.RemoveAsync(BuildPaymentMethodCacheKey(param.Scope, param.CartName, param.CustomerId, param.PaymentProviderName)).ConfigureAwait(false);
+            await CacheProvider.RemoveAsync(BuildPaymentMethodCacheKey(param.ScopeId, param.CartName, param.CustomerId, param.PaymentProviderName)).ConfigureAwait(false);
 
             return await OvertureClient.SendAsync(request);
         }

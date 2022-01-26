@@ -183,13 +183,13 @@ namespace Orckestra.Composer.Cart.Api
         [HttpPost]
         [ActionName("edit-order")]
         [ValidateModelState]
-        public virtual async Task<IHttpActionResult> EditOrder(Guid id)
+        public virtual async Task<IHttpActionResult> EditOrder(string orderNumber)
         {
-            if (id == Guid.Empty) return BadRequest($"{nameof(id)} cannot be empty");
+            if (string.IsNullOrWhiteSpace(orderNumber)) return BadRequest($"{nameof(orderNumber)} cannot be empty");
 
-            var vm = await OrderHistoryViewService.CreateEditOrder(id).ConfigureAwait(false);
+            var vm = await OrderHistoryViewService.CreateEditOrder(orderNumber).ConfigureAwait(false);
 
-            ComposerContext.EditingOrderId = id;
+            ComposerContext.EditingOrderId = vm.OrderId;
 
             return Ok(vm);
         }

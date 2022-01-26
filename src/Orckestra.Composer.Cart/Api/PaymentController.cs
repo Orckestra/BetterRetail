@@ -143,7 +143,7 @@ namespace Orckestra.Composer.Cart.Api
                 PaymentMethodId = request.PaymentMethodId,
                 CustomerId = ComposerContext.CustomerId,
                 PaymentProviderName = request.PaymentProviderName,
-                Scope = ComposerContext.Scope,
+                ScopeId = ComposerContext.Scope,
                 CartName = CartConfiguration.ShoppingCartName
             }).ConfigureAwait(false);
 
@@ -161,7 +161,7 @@ namespace Orckestra.Composer.Cart.Api
                 PaymentMethodId = request.PaymentMethodId,
                 CustomerId = ComposerContext.CustomerId,
                 PaymentProviderName = request.PaymentProviderName,
-                Scope = ComposerContext.Scope,
+                ScopeId = ComposerContext.Scope,
                 CartName = request.CartName
             }).ConfigureAwait(false);
 
@@ -223,7 +223,7 @@ namespace Orckestra.Composer.Cart.Api
             var results = await PaymentViewService.GetCustomerPaymentMethodListViewModelAsync(new GetCustomerPaymentMethodListViewModelParam
             {
                 CustomerId = ComposerContext.CustomerId,
-                Scope = ComposerContext.Scope,
+                ScopeId = ComposerContext.Scope,
                 CultureInfo = ComposerContext.CultureInfo,
                 ProviderNames = providers.Select(p => p.ProviderName).ToList(),
                 //walletUrls

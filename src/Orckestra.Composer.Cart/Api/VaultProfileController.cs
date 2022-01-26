@@ -37,7 +37,7 @@ namespace Orckestra.Composer.Cart.Api
                 CardHolderName = request.CardHolderName,
                 CartName = CartConfiguration.ShoppingCartName,
                 CustomerId = ComposerContext.CustomerId,
-                Scope = ComposerContext.Scope,
+                ScopeId = ComposerContext.Scope,
                 PaymentId = request.PaymentId.GetValueOrDefault(),
                 VaultTokenId = request.VaultTokenId,
                 IpAddress = Request.GetClientIp(),
