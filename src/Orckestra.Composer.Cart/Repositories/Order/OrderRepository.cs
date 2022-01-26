@@ -19,17 +19,14 @@ namespace Orckestra.Composer.Cart.Repositories.Order
         protected virtual IOvertureClient OvertureClient { get; private set; }
         protected virtual IFindOrdersRequestFactory FindOrdersRequestFactory { get; private set; }
         protected ICacheProvider CacheProvider { get; private set; }
-        protected virtual IComposerContext ComposerContext { get; private set; }
 
         public OrderRepository(
             IOvertureClient overtureClient, 
             IFindOrdersRequestFactory findOrdersRequestFactory, 
-            ICacheProvider cacheProvider,
-            IComposerContext composerContext)
+            ICacheProvider cacheProvider)
         {
             OvertureClient = overtureClient ?? throw new ArgumentNullException(nameof(overtureClient));
             FindOrdersRequestFactory = findOrdersRequestFactory ?? throw new ArgumentNullException(nameof(findOrdersRequestFactory));
-            ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
             CacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));
         }
 
