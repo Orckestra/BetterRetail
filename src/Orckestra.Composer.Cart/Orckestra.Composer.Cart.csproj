@@ -57,6 +57,7 @@
     <Compile Include="Factory\CartViewModelFactory.cs" />
     <Compile Include="Helper\LineItemsHelper.cs" />
     <Compile Include="Parameters\AddLineItemsParam.cs" />
+    <Compile Include="Parameters\BaseCartParam.cs" />
     <Compile Include="Parameters\CreateLightListOfLineItemDetailViewModelParam.cs" />
     <Compile Include="Factory\IRecurringOrderCartViewModelFactory.cs" />
     <Compile Include="Factory\RecurringOrderCartViewModelFactory.cs" />
@@ -100,6 +101,7 @@
     <Compile Include="Parameters\GetShippingMethodsScopeParam.cs" />
     <Compile Include="Parameters\Order\ChangeOrderDraftOwnershipParam.cs" />
     <Compile Include="Parameters\Order\GetOrderChangesParam.cs" />
+    <Compile Include="Parameters\Order\CreateCartOrderDraftParam.cs" />
     <Compile Include="Parameters\Order\UpdateOrderParam.cs" />
     <Compile Include="Parameters\Order\UpdateOrderCustomerParam.cs" />
     <Compile Include="Parameters\RemoveRecurringCartLineItemParam.cs" />
@@ -246,6 +248,7 @@
     <Compile Include="ViewModels\CartViewModel.cs" />
     <Compile Include="ViewModels\CheckoutNavigationViewModel.cs" />
     <Compile Include="ViewModels\GroupedLineItemDetailViewModel.cs" />
+    <Compile Include="ViewModels\Order\EditingOrderViewModel.cs" />
     <Compile Include="ViewModels\PickedItemViewModel.cs" />
     <Compile Include="ViewModels\PickUpAddressViewModel.cs" />
     <Compile Include="ViewModels\SingleCheckoutPaymentViewModel.cs" />

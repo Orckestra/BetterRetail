@@ -13,5 +13,7 @@ namespace Orckestra.Composer.Services
         bool IsAuthenticated { get; }
         string GetEncryptedCustomerId();
         string ScopeCurrencyIso { get; }
+        string EditingCartName { get; set; }
+        bool IsEditingOrder { get; }
     }
 }

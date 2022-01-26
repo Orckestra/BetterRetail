@@ -149,6 +149,7 @@ namespace Orckestra.Composer.Cart.Services
             await CartRepository.RemoveCouponsAsync(new RemoveCouponsParam
             {
                 CartName = param.CartName,
+                CartType = param.CartType,
                 CouponCodes = CouponViewService.GetInvalidCouponsCode(cart.Coupons).ToList(),
                 CustomerId = param.CustomerId,
                 Scope = param.Scope,
@@ -189,6 +190,7 @@ namespace Orckestra.Composer.Cart.Services
             await CartRepository.RemoveCouponsAsync(new RemoveCouponsParam
             {
                 CartName = param.CartName,
+                CartType = param.CartType,
                 CouponCodes = CouponViewService.GetInvalidCouponsCode(cart.Coupons).ToList(),
                 CustomerId = param.CustomerId,
                 Scope = param.ScopeId
@@ -262,11 +264,12 @@ namespace Orckestra.Composer.Cart.Services
             if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartName)), nameof(param)); }
             if (param.CustomerId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param)); }
 
-            var cart = await CartRepository.GetCartAsync(param).ConfigureAwait(false);            
+            var cart = await CartRepository.GetCartAsync(param).ConfigureAwait(false);
 
             await CartRepository.RemoveCouponsAsync(new RemoveCouponsParam
             {
                 CartName = param.CartName,
+                CartType = param.CartType,
                 CustomerId = param.CustomerId,
                 Scope = param.Scope,
                 CouponCodes = CouponViewService.GetInvalidCouponsCode(cart.Coupons).ToList()

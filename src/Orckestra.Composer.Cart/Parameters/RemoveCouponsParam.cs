@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Orckestra.Composer.Cart.Parameters
 {
-    public class RemoveCouponsParam
+    public class RemoveCouponsParam : BaseCartParam
     {
         /// <summary>
         /// Scope in which the cart resides.

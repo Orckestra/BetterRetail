@@ -278,5 +278,43 @@ namespace Orckestra.Composer.Services
                 });
             }
         }
+
+        private string _editingCartName;
+
+        /// <summary>
+        /// Edititing cart has the name as the id of the order
+        /// </summary>
+        public string EditingCartName
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(_editingCartName))
+                {
+                    var dto = CookieAccessor.Read();
+                    if (dto.EncryptedEditingOrderId != null)
+                    {
+                        _editingCartName = EncryptionUtility.Decrypt(dto.EncryptedEditingOrderId);
+                    }
+                }
+                
+                return _editingCartName;
+            }
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value)) return;
+                _editingCartName = value;
+                ComposerCookieDto dto = CookieAccessor.Read();
+                dto.EncryptedEditingOrderId = EncryptionUtility.Encrypt(_editingCartName);
+                CookieAccessor.Write(dto);
+            }
+        }
+
+        public bool IsEditingOrder
+        {
+            get
+            {
+                return !string.IsNullOrWhiteSpace(EditingCartName);
+            }
+        }
     }
 }

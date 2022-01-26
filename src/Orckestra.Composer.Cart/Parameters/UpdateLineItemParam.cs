@@ -4,7 +4,7 @@ using Orckestra.Overture.ServiceModel;
 
 namespace Orckestra.Composer.Cart.Parameters
 {
-    public class UpdateLineItemParam
+    public class UpdateLineItemParam : BaseCartParam
     {
         /// <summary>
         /// The Request Base Url

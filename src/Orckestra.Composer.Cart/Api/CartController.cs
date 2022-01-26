@@ -61,7 +61,8 @@ namespace Orckestra.Composer.Cart.Api
                 Scope = ComposerContext.Scope,
                 CultureInfo = ComposerContext.CultureInfo,
                 CustomerId = ComposerContext.CustomerId,
-                CartName = CartConfiguration.ShoppingCartName,
+                CartName = ComposerContext.IsEditingOrder ? ComposerContext.EditingCartName : CartConfiguration.ShoppingCartName,
+                CartType = ComposerContext.IsEditingOrder ? CartConfiguration.OrderDraftCartType : null,
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
             });
 
@@ -250,7 +251,8 @@ namespace Orckestra.Composer.Cart.Api
                 Scope = ComposerContext.Scope,
                 CultureInfo = ComposerContext.CultureInfo,
                 CustomerId = ComposerContext.CustomerId,
-                CartName = CartConfiguration.ShoppingCartName,
+                CartName = ComposerContext.IsEditingOrder ? ComposerContext.EditingCartName : CartConfiguration.ShoppingCartName,
+                CartType = ComposerContext.IsEditingOrder ? CartConfiguration.OrderDraftCartType : null,
                 ProductId = request.ProductId,
                 VariantId = request.VariantId,
                 Quantity = request.Quantity.GetValueOrDefault(),
@@ -280,7 +282,8 @@ namespace Orckestra.Composer.Cart.Api
                 CultureInfo = ComposerContext.CultureInfo,
                 CustomerId = ComposerContext.CustomerId,
                 LineItemId = new Guid(request.LineItemId),
-                CartName = CartConfiguration.ShoppingCartName,
+                CartName = ComposerContext.IsEditingOrder ? ComposerContext.EditingCartName : CartConfiguration.ShoppingCartName,
+                CartType = ComposerContext.IsEditingOrder ? CartConfiguration.OrderDraftCartType : null,
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
             });
 
@@ -305,7 +308,8 @@ namespace Orckestra.Composer.Cart.Api
                 CultureInfo = ComposerContext.CultureInfo,
                 CustomerId = ComposerContext.CustomerId,
                 LineItemId = new Guid(request.LineItemId),
-                CartName = CartConfiguration.ShoppingCartName,
+                CartName = ComposerContext.IsEditingOrder ? ComposerContext.EditingCartName : CartConfiguration.ShoppingCartName,
+                CartType = ComposerContext.IsEditingOrder ? CartConfiguration.OrderDraftCartType : null,
                 Quantity = request.Quantity.GetValueOrDefault(),
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
                 RecurringOrderFrequencyName = request.RecurringOrderFrequencyName,
