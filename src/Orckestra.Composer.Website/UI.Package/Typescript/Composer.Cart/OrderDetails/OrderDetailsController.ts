@@ -27,7 +27,7 @@ module Orckestra.Composer {
                         self.eventHub.publish(MyAccountEvents.StartEditOrder, { data: orderId });
                         self.orderService.editOrder(orderNumber, orderId)
                             .then(result => {
-                                if (result.IsEditingOrder) {
+                                if (result.OrderId) {
                                     let data = { redirectUrl: result.CartUrl };
                                     self.eventHub.publish(MyAccountEvents.EditOrderChanged, { data: data });
                                 }

@@ -231,7 +231,6 @@
     <Compile Include="Configuration\IGoogleSettings.cs" />
     <Compile Include="Configuration\ImageConfiguration.cs" />
     <Compile Include="Configuration\QuantityConfiguration.cs" />
-    <Compile Include="Constants\General.cs" />
     <Compile Include="Country\CountryRepository.cs" />
     <Compile Include="Country\CountryService.cs" />
     <Compile Include="Country\CountryViewModel.cs" />

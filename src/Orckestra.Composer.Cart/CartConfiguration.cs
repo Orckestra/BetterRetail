@@ -19,13 +19,15 @@ namespace Orckestra.Composer.Cart
         /// </summary>
         public static string ShoppingCartName { get; set; } = "Default";
 
-        [IgnoreCheck]
-        public const string OrderDraftCartType = "OrderDraft";
-
         /// <summary>
         ///     Get/Set the RecurringOrder CartName to use for storing a RecurringOrder Cart in Overture
         /// </summary>
         public static string RecurringOrderCartType { get; set; } = "RecurringOrderCart";
+
+        /// <summary>
+        ///     Get/Set the Order Draft Cart Type
+        /// </summary>
+        public static string OrderDraftCartType { get; set; } = "OrderDraft";
 
         /// <summary>
         ///     Get/Set the Wishlist CartName to use for storing a Wishlist Cart in Overture

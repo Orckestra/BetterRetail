@@ -88,5 +88,13 @@ namespace Orckestra.Composer.Cart.ViewModels.Order
         /// The source of the order.
         /// </value>
         public bool IsOrderEditable { get; set; }
+
+        /// <summary>
+        /// Gets or sets the is Order has draft creaded by user
+        /// </summary>
+        /// <value>
+        /// The source of the order.
+        /// </value>
+        public bool HasOwnDraft { get; set; }
     }
 }
