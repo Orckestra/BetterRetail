@@ -67,24 +67,5 @@ module Orckestra.Composer {
                data: { landingPageUrl: clearFacetsButton.data('landingpageurl') }
             });
         }
-
-        public addSingleSelectCategory(actionContext: IControllerActionContext) {
-            var singleSelectCategory = actionContext.elementContext,
-                anchorContext = actionContext.elementContext,
-                facetFieldName = anchorContext.data('facetfieldname'),
-                facetValue = anchorContext.data('facetvalue');
-
-            actionContext.event.preventDefault();
-            actionContext.event.stopPropagation();
-
-            this.eventHub.publish('singleCategoryAdded', {
-                data: {
-                    categoryUrl: singleSelectCategory.data('categoryurl'),
-                    facetKey: facetFieldName,
-                    facetValue: facetValue,
-                    pageType: UrlHelper.resolvePageType()
-                }
-            });
-        }
     }
 }
