@@ -61,7 +61,7 @@ namespace Orckestra.Composer.Cart.Api
                 Scope = ComposerContext.Scope,
                 CultureInfo = ComposerContext.CultureInfo,
                 CustomerId = ComposerContext.CustomerId,
-                CartName = CartConfiguration.ShoppingCartName,
+                CartName = ComposerContext.IsEditingOrder ? ComposerContext.EditingCartName : CartConfiguration.ShoppingCartName,
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
             });
 
@@ -137,7 +137,7 @@ namespace Orckestra.Composer.Cart.Api
                 Scope = ComposerContext.Scope,
                 CultureInfo = ComposerContext.CultureInfo,
                 CustomerId = ComposerContext.CustomerId,
-                CartName = CartConfiguration.ShoppingCartName
+                CartName = CartConfiguration.ShoppingCartName,
             });
 
             return Ok(shippingMethodsViewModel);
@@ -157,7 +157,7 @@ namespace Orckestra.Composer.Cart.Api
                 Scope = ComposerContext.Scope,
                 CultureInfo = ComposerContext.CultureInfo,
                 CustomerId = ComposerContext.CustomerId,
-                CartName = CartConfiguration.ShoppingCartName
+                CartName = CartConfiguration.ShoppingCartName,
             });
 
             return Ok(shippingMethodTypesViewModel);
@@ -250,7 +250,7 @@ namespace Orckestra.Composer.Cart.Api
                 Scope = ComposerContext.Scope,
                 CultureInfo = ComposerContext.CultureInfo,
                 CustomerId = ComposerContext.CustomerId,
-                CartName = CartConfiguration.ShoppingCartName,
+                CartName = ComposerContext.IsEditingOrder ? ComposerContext.EditingCartName : CartConfiguration.ShoppingCartName,
                 ProductId = request.ProductId,
                 VariantId = request.VariantId,
                 Quantity = request.Quantity.GetValueOrDefault(),
@@ -280,7 +280,7 @@ namespace Orckestra.Composer.Cart.Api
                 CultureInfo = ComposerContext.CultureInfo,
                 CustomerId = ComposerContext.CustomerId,
                 LineItemId = new Guid(request.LineItemId),
-                CartName = CartConfiguration.ShoppingCartName,
+                CartName = ComposerContext.IsEditingOrder ? ComposerContext.EditingCartName : CartConfiguration.ShoppingCartName,
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
             });
 
@@ -305,7 +305,7 @@ namespace Orckestra.Composer.Cart.Api
                 CultureInfo = ComposerContext.CultureInfo,
                 CustomerId = ComposerContext.CustomerId,
                 LineItemId = new Guid(request.LineItemId),
-                CartName = CartConfiguration.ShoppingCartName,
+                CartName = ComposerContext.IsEditingOrder ? ComposerContext.EditingCartName : CartConfiguration.ShoppingCartName,
                 Quantity = request.Quantity.GetValueOrDefault(),
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
                 RecurringOrderFrequencyName = request.RecurringOrderFrequencyName,
@@ -376,7 +376,7 @@ namespace Orckestra.Composer.Cart.Api
 
             var vm = await CouponViewService.AddCouponAsync(new CouponParam
             {
-                CartName = CartConfiguration.ShoppingCartName,
+                CartName = ComposerContext.IsEditingOrder ? ComposerContext.EditingCartName : CartConfiguration.ShoppingCartName,
                 Scope = ComposerContext.Scope,
                 CouponCode = request.CouponCode,
                 CultureInfo = ComposerContext.CultureInfo,
@@ -396,7 +396,7 @@ namespace Orckestra.Composer.Cart.Api
 
             var vm = await CouponViewService.RemoveCouponAsync(new CouponParam
             {
-                CartName = CartConfiguration.ShoppingCartName,
+                CartName = ComposerContext.IsEditingOrder ? ComposerContext.EditingCartName : CartConfiguration.ShoppingCartName,
                 Scope = ComposerContext.Scope,
                 CouponCode = request.CouponCode,
                 CultureInfo = ComposerContext.CultureInfo,
@@ -414,7 +414,7 @@ namespace Orckestra.Composer.Cart.Api
         {
             var param = new RemoveInvalidLineItemsParam
             {
-                CartName = CartConfiguration.ShoppingCartName,
+                CartName = ComposerContext.IsEditingOrder ? ComposerContext.EditingCartName : CartConfiguration.ShoppingCartName,
                 CultureInfo = ComposerContext.CultureInfo,
                 CustomerId = ComposerContext.CustomerId,
                 Scope = ComposerContext.Scope,
@@ -484,13 +484,6 @@ namespace Orckestra.Composer.Cart.Api
             }).ConfigureAwait(false);
 
             return Ok(shippingMethodsViewModel);
-        }
-
-        private string GetCurrentCartType()
-        {
-            return !ComposerContext.IsEditingOrder
-                        ? CartConfiguration.DefaultCartType
-                        : CartConfiguration.EditingCartType;
         }
     }
 }
