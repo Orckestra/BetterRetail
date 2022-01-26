@@ -22,20 +22,15 @@ namespace Orckestra.Composer.Cart.Api
         protected IComposerContext ComposerContext { get; private set; }
         protected IOrderHistoryViewService OrderHistoryViewService { get; private set; }
         protected IOrderUrlProvider OrderUrlProvider { get; private set; }
-        protected ICartUrlProvider CartUrlProvider { get; private set; }
-
 
         public OrderController(
             IComposerContext composerContext,
             IOrderHistoryViewService orderHistoryViewService,
-            IOrderUrlProvider orderUrlProvider,
-            ICartUrlProvider cartUrlProvider
-            )
+            IOrderUrlProvider orderUrlProvider)
         {
             OrderHistoryViewService = orderHistoryViewService ?? throw new ArgumentNullException(nameof(orderHistoryViewService));
             OrderUrlProvider = orderUrlProvider ?? throw new ArgumentNullException(nameof(orderUrlProvider));
             ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
-            CartUrlProvider = cartUrlProvider ?? throw new ArgumentNullException(nameof(cartUrlProvider));
         }
 
         [HttpPost]
@@ -190,30 +185,6 @@ namespace Orckestra.Composer.Cart.Api
             var vm = await OrderHistoryViewService.CreateEditOrder(orderNumber).ConfigureAwait(false);
 
             return Ok(vm);
-        }
-
-        /// <summary>
-        /// Save edited order
-        /// </summary>
-        [HttpPost]
-        [ActionName("save-edited-order")]
-        [ValidateModelState]
-        public virtual Task<IHttpActionResult> SaveEditedOrder()
-        {
-            //TODO
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Cancels editing of an order
-        /// </summary>
-        [HttpPost]
-        [ActionName("cancel-edit-order")]
-        [ValidateModelState]
-        public virtual Task<IHttpActionResult> CancelEditOrder()
-        {
-            //TODO
-            throw new NotImplementedException();
         }
     }
 }

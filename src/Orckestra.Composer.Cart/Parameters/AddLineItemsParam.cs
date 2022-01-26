@@ -9,7 +9,7 @@ namespace Orckestra.Composer.Cart.Parameters
     /// <summary>
     /// Parameters to add a list of items to a cart
     /// </summary>
-    public class AddLineItemsParam
+    public class AddLineItemsParam : BaseCartParam
     {
         /// <summary>
         /// Name of a cart
