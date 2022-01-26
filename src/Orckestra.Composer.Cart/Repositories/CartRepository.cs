@@ -32,13 +32,15 @@ namespace Orckestra.Composer.Cart.Repositories
             CacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));
         }
 
+
+
+
         /// <summary>
         /// Retrieves the list of carts belonging to a customer
-        ///
-        /// param.IncludeChildScopes is optional
-        /// A value indicating whether to include carts found in child scopes.
         /// </summary>
-        /// <param name="param"></param>
+        /// <param name="param">Parameters container</param>
+        /// <param name="param.CartType">Optional. If specified, only the carts of this specific cart type will be returned.</param>
+        /// <param name="param.param.IncludeChildScopes ">Optional. A value indicating whether to include carts found in child scopes.</param>
         /// <returns>List of Cart Summaries</returns>
         public virtual Task<List<CartSummary>> GetCartsByCustomerIdAsync(GetCartsByCustomerIdParam param)
         {
@@ -46,7 +48,6 @@ namespace Orckestra.Composer.Cart.Repositories
             if (string.IsNullOrWhiteSpace(param.Scope)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param));
             if (param.CultureInfo == null) throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param));
             if (param.CustomerId == Guid.Empty) throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param));
-            if (string.IsNullOrWhiteSpace(param.CartType)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartType)), nameof(param));
 
             var request = new GetCartsByCustomerIdRequest
             {
@@ -73,7 +74,6 @@ namespace Orckestra.Composer.Cart.Repositories
             if (param.CultureInfo == null) throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param));
             if (string.IsNullOrWhiteSpace(param.CartName)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartName)), nameof(param));
             if (param.CustomerId == Guid.Empty) throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param));
-            if (string.IsNullOrWhiteSpace(param.CartType)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartType)), nameof(param));
 
             var cacheKey = BuildCartCacheKey(param.Scope, param.CustomerId, param.CartName, param.CartType);
 
@@ -104,7 +104,6 @@ namespace Orckestra.Composer.Cart.Repositories
             if (param.CultureInfo == null) throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param));
             if (string.IsNullOrWhiteSpace(param.CartName)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartName)), nameof(param));
             if (param.CustomerId == Guid.Empty) throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param));
-            if (string.IsNullOrWhiteSpace(param.CartType)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartType)), nameof(param));
 
             DeleteCartRequest request = new DeleteCartRequest
             {
@@ -127,7 +126,6 @@ namespace Orckestra.Composer.Cart.Repositories
             if (param.PaymentMethodId == Guid.Empty) throw new ArgumentException(GetMessageOfEmpty(nameof(param.PaymentMethodId)), nameof(param));
             if (string.IsNullOrWhiteSpace(param.PaymentProviderName)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.PaymentProviderName)), nameof(param));
             if (string.IsNullOrWhiteSpace(param.Scope)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param));
-            if (string.IsNullOrWhiteSpace(param.CartType)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartType)), nameof(param));
 
             var request = new SetDefaultCustomerPaymentMethodRequest
             {
@@ -163,7 +161,6 @@ namespace Orckestra.Composer.Cart.Repositories
             if (param.CustomerId == Guid.Empty) throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param));
             if (string.IsNullOrWhiteSpace(param.ProductId)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.ProductId)), nameof(param));
             if (param.Quantity < 1) throw new ArgumentOutOfRangeException(nameof(param), param.Quantity, GetMessageOfZeroNegative(nameof(param.Quantity)));
-            if (string.IsNullOrWhiteSpace(param.CartType)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartType)), nameof(param));
 
             var request = BuildAddLineItemRequestFromParam(param);
             var cacheKey = BuildCartCacheKey(param.Scope, param.CustomerId, param.CartName, param.CartType);
@@ -203,7 +200,6 @@ namespace Orckestra.Composer.Cart.Repositories
             if (param.CultureInfo == null) throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param));
             if (param.CustomerId == Guid.Empty) throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param));
             if (param.LineItems == null || param.LineItems.Count == 0) throw new ArgumentException(GetMessageOfNullEmpty(nameof(param.LineItems)), nameof(param));
-            if (string.IsNullOrWhiteSpace(param.CartType)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartType)), nameof(param));
 
             AddOrUpdateLineItemsRequest request = new AddOrUpdateLineItemsRequest
             {
@@ -232,7 +228,6 @@ namespace Orckestra.Composer.Cart.Repositories
             if (string.IsNullOrWhiteSpace(param.Scope)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param));
             if (param.CultureInfo == null) throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param));
             if (param.CustomerId == Guid.Empty) throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param));
-            if (string.IsNullOrWhiteSpace(param.CartType)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartType)), nameof(param));
 
             var request = BuildAddPaymentRequest(param);
 
@@ -282,7 +277,6 @@ namespace Orckestra.Composer.Cart.Repositories
             if (string.IsNullOrWhiteSpace(param.CartName)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartName)), nameof(param));
             if (param.LineItemId == Guid.Empty) throw new ArgumentException(GetMessageOfEmpty(nameof(param.LineItemId)), nameof(param));
             if (param.CustomerId == Guid.Empty) throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param));
-            if (string.IsNullOrWhiteSpace(param.CartType)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartType)), nameof(param));
 
             var request = new RemoveLineItemRequest
             {
@@ -311,7 +305,6 @@ namespace Orckestra.Composer.Cart.Repositories
             if (param.CultureInfo == null) throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param));
             if (param.CustomerId == Guid.Empty) throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param));
             if (param.LineItems == null) throw new ArgumentException(GetMessageOfNull(nameof(param.LineItems)), nameof(param));
-            if (string.IsNullOrWhiteSpace(param.CartType)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartType)), nameof(param));
 
             var list = new List<LineItemInfo>();
             for(int i = 0; i < param.LineItems.Count; i++)
@@ -364,7 +357,6 @@ namespace Orckestra.Composer.Cart.Repositories
             if (param.LineItemId == Guid.Empty) throw new ArgumentException(GetMessageOfEmpty(nameof(param.LineItemId)), nameof(param));
             if (param.CustomerId == Guid.Empty) throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param));
             if (param.Quantity < 1) throw new ArgumentOutOfRangeException(nameof(param), param.Quantity, GetMessageOfZeroNegative(nameof(param.Quantity)));
-            if (string.IsNullOrWhiteSpace(param.CartType)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartType)), nameof(param));
 
             var request = new UpdateLineItemRequest
             {
@@ -398,7 +390,6 @@ namespace Orckestra.Composer.Cart.Repositories
             if (param.CultureInfo == null) throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param));
             if (string.IsNullOrWhiteSpace(param.CartName)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartName)), nameof(param));
             if (param.CustomerId == Guid.Empty) throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param));
-            if (string.IsNullOrWhiteSpace(param.CartType)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartType)), nameof(param));
 
             GetLineItemsInCartRequest request = new GetLineItemsInCartRequest
             {
@@ -426,7 +417,6 @@ namespace Orckestra.Composer.Cart.Repositories
             if (string.IsNullOrWhiteSpace(param.CartName)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartName)), nameof(param));
             if (param.CultureInfo == null) throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param));
             if (string.IsNullOrWhiteSpace(param.CouponCode)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CouponCode)), nameof(param));
-            if (string.IsNullOrWhiteSpace(param.CartType)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartType)), nameof(param));
 
             var request = new AddCouponRequest
             {
@@ -454,7 +444,6 @@ namespace Orckestra.Composer.Cart.Repositories
             if (string.IsNullOrWhiteSpace(param.Scope)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param));
             if (param.CustomerId == Guid.Empty) throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param));
             if (param.CouponCodes == null) throw new ArgumentException(GetMessageOfNull(nameof(param.CouponCodes)), nameof(param));
-            if (string.IsNullOrWhiteSpace(param.CartType)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartType)), nameof(param));
 
             foreach (var couponCode in param.CouponCodes)
             {

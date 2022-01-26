@@ -32,6 +32,6 @@ namespace Orckestra.Composer.Cart.Parameters
         /// <summary>
         /// The cart type
         /// </summary>
-        public string CartType { get; set; } = CartConfiguration.DefaultCartType;
+        public string CartType { get; set; }
     }
 }
