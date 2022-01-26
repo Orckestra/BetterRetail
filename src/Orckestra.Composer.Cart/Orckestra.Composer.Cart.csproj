@@ -102,7 +102,7 @@
     <Compile Include="Parameters\Order\GetOrderByNumberParam.cs" />
     <Compile Include="Parameters\Order\GetOrderByIdParam.cs" />
     <Compile Include="Parameters\Order\GetOrderChangesParam.cs" />
-    <Compile Include="Parameters\Order\CreateOrderDraftParam.cs" />
+    <Compile Include="Parameters\Order\CreateCartOrderDraftParam.cs" />
     <Compile Include="Parameters\Order\UpdateOrderParam.cs" />
     <Compile Include="Parameters\Order\UpdateOrderCustomerParam.cs" />
     <Compile Include="Parameters\RemoveRecurringCartLineItemParam.cs" />

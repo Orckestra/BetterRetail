@@ -180,7 +180,7 @@ namespace Orckestra.Composer.Cart.Repositories.Order
         /// </summary>
         /// <param name="orderId">Id of the order</param>
         /// <returns>Cart draft</returns>
-        public Task<ProcessedCart> CreateOrderCartDraft(CreateOrderDraftParam param)
+        public Task<ProcessedCart> CreateCartOrderDraft(CreateCartOrderDraftParam param)
         {
             if (param == null) throw new ArgumentNullException(nameof(param));
             if (param.OrderId == default) throw new ArgumentException(GetMessageOfEmpty(nameof(param.OrderId)));

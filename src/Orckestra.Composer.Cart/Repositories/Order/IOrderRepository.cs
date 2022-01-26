@@ -60,6 +60,6 @@ namespace Orckestra.Composer.Cart.Repositories.Order
         /// </summary>
         /// <param name="param"></param>
         /// <returns>Cart draft</returns>
-        Task<ProcessedCart> CreateOrderCartDraft(CreateOrderDraftParam param);
+        Task<ProcessedCart> CreateCartOrderDraft(CreateCartOrderDraftParam param);
     }
 }

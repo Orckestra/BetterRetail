@@ -3,7 +3,7 @@ using System.Globalization;
 
 namespace Orckestra.Composer.Cart.Parameters.Order
 {
-    public class CreateOrderDraftParam
+    public class CreateCartOrderDraftParam
     {
         /// <summary>
         /// Gets or sets the order id

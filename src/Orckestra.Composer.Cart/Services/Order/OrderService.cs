@@ -48,7 +48,7 @@ namespace Orckestra.Composer.Cart.Services.Order
             if (order?.Cart?.Shipments == null || order.Cart.Shipments.Count == 0)
                 throw new InvalidOperationException("Cannot edit this order");
 
-            var createOrderDraftParam = new CreateOrderDraftParam()
+            var createOrderDraftParam = new CreateCartOrderDraftParam()
             {
                 CultureInfo = ComposerContext.CultureInfo,
                 OrderId = orderId,
@@ -56,7 +56,7 @@ namespace Orckestra.Composer.Cart.Services.Order
                 CustomerId = Guid.Parse(order.CustomerId)
             };
 
-            var editCart = await OrderRepository.CreateOrderCartDraft(createOrderDraftParam).ConfigureAwait(false);
+            var editCart = await OrderRepository.CreateCartOrderDraft(createOrderDraftParam).ConfigureAwait(false);
             if (editCart == null)
             {
                 throw new InvalidOperationException("Expected draft cart, but received null.");
