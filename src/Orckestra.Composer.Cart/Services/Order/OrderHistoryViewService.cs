@@ -484,8 +484,8 @@ namespace Orckestra.Composer.Cart.Services.Order
             }
             catch (ComposerException ex)
             {
-                var ownedBySomeoneElseError = ex.Errors?.FirstOrDefault(e => e.ErrorCode == "IsOwnedBySomeoneElse");
-                var ownedByRequestedUserError = ex.Errors?.FirstOrDefault(e => e.ErrorCode == "IsOwnedByRequestedUser");
+                var ownedBySomeoneElseError = ex.Errors?.FirstOrDefault(e => e.ErrorCode == Constants.ErrorCodes.IsOwnedBySomeoneElse);
+                var ownedByRequestedUserError = ex.Errors?.FirstOrDefault(e => e.ErrorCode == Constants.ErrorCodes.IsOwnedByRequestedUser);
                 if (ownedBySomeoneElseError != null)
                 {
                     draftCart = await OrderRepository.ChangeOwnership(new ChangeOrderDraftOwnershipParam()
