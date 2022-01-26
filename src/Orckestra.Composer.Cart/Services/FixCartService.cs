@@ -51,8 +51,7 @@ namespace Orckestra.Composer.Cart.Services
                     CartName = cart.Name,
                     CultureInfo = new CultureInfo(cart.CultureName),
                     CustomerId = cart.CustomerId,
-                    Scope = cart.ScopeId,
-                    CartType = param.
+                    Scope = cart.ScopeId
                 });
 
                 return task;

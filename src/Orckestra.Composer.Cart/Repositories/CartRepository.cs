@@ -582,7 +582,7 @@ namespace Orckestra.Composer.Cart.Repositories
                     CartName = cart.Name,
                     BaseUrl = param.BaseUrl,
                     ExecuteWorkflow = true,
-                    CartType = param.CartType
+                    CartType = CartConfiguration.RecurringOrderCartType
                 };
                 return GetCartAsync(getCartParam);
             });

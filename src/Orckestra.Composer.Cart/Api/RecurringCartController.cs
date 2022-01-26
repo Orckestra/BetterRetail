@@ -64,8 +64,7 @@ namespace Orckestra.Composer.Cart.Api
                 Scope = ComposerContext.Scope,
                 CustomerId = ComposerContext.CustomerId,
                 CultureInfo = ComposerContext.CultureInfo,
-                BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
-                CartType = CartConfiguration.RecurringOrderCartType
+                BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
             }).ConfigureAwait(false);
 
             return Ok(results);

@@ -179,8 +179,7 @@ namespace Orckestra.Composer.Cart.Services
                 Scope = param.Scope,
                 CultureInfo = param.CultureInfo,
                 BaseUrl = param.BaseUrl,
-                CustomerId = param.CustomerId,
-                CartType = CartConfiguration.RecurringOrderCartType
+                CustomerId = param.CustomerId
             }).ConfigureAwait(false);
 
             var tasks = carts.Select(pc => CreateLightCartViewModelAsync(new CreateLightRecurringOrderCartViewModelParam
@@ -402,8 +401,7 @@ namespace Orckestra.Composer.Cart.Services
                 BaseUrl = param.BaseUrl,
                 Scope = param.Scope,
                 CustomerId = param.CustomerId,
-                CultureInfo = param.CultureInfo,
-                CartType = CartConfiguration.RecurringOrderCartType
+                CultureInfo = param.CultureInfo
             });
 
             vm.RescheduledCartHasMerged = !carts.Any(rc => string.Equals(rc.Name, param.CartName, StringComparison.OrdinalIgnoreCase));
@@ -494,8 +492,7 @@ namespace Orckestra.Composer.Cart.Services
                 BaseUrl = param.BaseUrl,
                 CultureInfo = param.CultureInfo,
                 CustomerId = param.CustomerId,
-                Scope = param.Scope,
-                CartType = CartConfiguration.RecurringOrderCartType
+                Scope = param.Scope
             }).ConfigureAwait(false);
 
             var tasks = new List<Task>();
