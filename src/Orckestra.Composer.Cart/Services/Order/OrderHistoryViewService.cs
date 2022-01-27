@@ -146,10 +146,7 @@ namespace Orckestra.Composer.Cart.Services.Order
 
             foreach (var order in orders)
             {
-                foreach (var shipment in order.Cart.Shipments)
-                {
-                    orderEdititngInfos.Add(Guid.Parse(order.Id), await EditingOrderProvider.IsOrderEditable(order).ConfigureAwait(false));
-                }
+                orderEdititngInfos.Add(Guid.Parse(order.Id), await EditingOrderProvider.IsOrderEditable(order).ConfigureAwait(false));
             }
 
             return orderEdititngInfos;
