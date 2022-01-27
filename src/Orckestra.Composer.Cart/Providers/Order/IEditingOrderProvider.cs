@@ -11,6 +11,15 @@ namespace Orckestra.Composer.Cart.Providers.Order
 
         bool IsEditMode();
 
+        void ClearEditMode();
+
+        string GetCurrentEditingCartName();
+
+        /// <summary>
+        /// Create Cart Order Draft and set edit mode
+        /// </summary>
+        /// <param name="order"></param>
+        /// <returns></returns>
         Task<ProcessedCart> StartEditOrderModeAsync(Overture.ServiceModel.Orders.Order order);
     }
 }

@@ -21,13 +21,13 @@ module Orckestra.Composer {
                     Loading: false
                 },
                 methods: {
-                    editOrder(orderNumber: string, orderId: string) {
+                    editOrder(orderNumber: string) {
                         if(this.Loading) return;
                         this.Loading = true;
-                        self.eventHub.publish(MyAccountEvents.StartEditOrder, { data: orderId });
-                        self.orderService.editOrder(orderNumber, orderId)
+                        self.eventHub.publish(MyAccountEvents.StartEditOrder, { data: orderNumber });
+                        self.orderService.editOrder(orderNumber)
                             .then(result => {
-                                if (result.OrderId) {
+                                if (result.CartUrl) {
                                     let data = { redirectUrl: result.CartUrl };
                                     self.eventHub.publish(MyAccountEvents.EditOrderChanged, { data: data });
                                 }

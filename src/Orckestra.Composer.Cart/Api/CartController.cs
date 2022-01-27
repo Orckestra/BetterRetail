@@ -1,4 +1,5 @@
 ﻿using Orckestra.Composer.Cart.Parameters;
+using Orckestra.Composer.Cart.Providers.Order;
 using Orckestra.Composer.Cart.Requests;
 using Orckestra.Composer.Cart.Services;
 using Orckestra.Composer.Cart.ViewModels;
@@ -29,6 +30,7 @@ namespace Orckestra.Composer.Cart.Api
         protected IShippingMethodViewService ShippingMethodService { get; private set; }
         protected ICartUrlProvider CartUrlProvider { get; private set; }
         protected IRecurringOrdersSettings RecurringOrdersSettings { get; private set; }
+        protected virtual IEditingOrderProvider EditingOrderProvider { get; private set; }
 
         public CartController(
             ICartService cartService,
@@ -37,7 +39,8 @@ namespace Orckestra.Composer.Cart.Api
             ICouponViewService couponViewService,
             IShippingMethodViewService shippingMethodService,
             ICartUrlProvider cartUrlProvider,
-            IRecurringOrdersSettings recurringOrdersSettings)
+            IRecurringOrdersSettings recurringOrdersSettings,
+            IEditingOrderProvider editingOrderProvider)
         {
             CartService = cartService ?? throw new ArgumentNullException(nameof(cartService));
             ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
@@ -46,6 +49,7 @@ namespace Orckestra.Composer.Cart.Api
             ShippingMethodService = shippingMethodService ?? throw new ArgumentNullException(nameof(shippingMethodService));
             CartUrlProvider = cartUrlProvider ?? throw new ArgumentNullException(nameof(cartUrlProvider));
             RecurringOrdersSettings = recurringOrdersSettings ?? throw new ArgumentNullException(nameof(recurringOrdersSettings));
+            EditingOrderProvider = editingOrderProvider ?? throw new ArgumentNullException(nameof(editingOrderProvider));
         }
 
         /// <summary>
@@ -61,8 +65,8 @@ namespace Orckestra.Composer.Cart.Api
                 Scope = ComposerContext.Scope,
                 CultureInfo = ComposerContext.CultureInfo,
                 CustomerId = ComposerContext.CustomerId,
-                CartName = ComposerContext.IsEditingOrder ? ComposerContext.EditingCartName : CartConfiguration.ShoppingCartName,
-                CartType = ComposerContext.IsEditingOrder ? CartConfiguration.OrderDraftCartType : null,
+                CartName = EditingOrderProvider.IsEditMode() ? EditingOrderProvider.GetCurrentEditingCartName() : CartConfiguration.ShoppingCartName,
+                CartType = EditingOrderProvider.IsEditMode() ? CartConfiguration.OrderDraftCartType : null,
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
             });
 
@@ -70,7 +74,7 @@ namespace Orckestra.Composer.Cart.Api
             {
                 try
                 {
-                    if (cartViewModel.IsCartEmpty)
+                    if (cartViewModel.IsCartEmpty || EditingOrderProvider.IsEditMode())
                     {
                         cartViewModel.OrderSummary.CheckoutRedirectAction.RedirectUrl = GetCartUrl();
                     }
@@ -251,8 +255,8 @@ namespace Orckestra.Composer.Cart.Api
                 Scope = ComposerContext.Scope,
                 CultureInfo = ComposerContext.CultureInfo,
                 CustomerId = ComposerContext.CustomerId,
-                CartName = ComposerContext.IsEditingOrder ? ComposerContext.EditingCartName : CartConfiguration.ShoppingCartName,
-                CartType = ComposerContext.IsEditingOrder ? CartConfiguration.OrderDraftCartType : null,
+                CartName = EditingOrderProvider.IsEditMode() ? EditingOrderProvider.GetCurrentEditingCartName() : CartConfiguration.ShoppingCartName,
+                CartType = EditingOrderProvider.IsEditMode() ? CartConfiguration.OrderDraftCartType : null,
                 ProductId = request.ProductId,
                 VariantId = request.VariantId,
                 Quantity = request.Quantity.GetValueOrDefault(),
@@ -282,8 +286,8 @@ namespace Orckestra.Composer.Cart.Api
                 CultureInfo = ComposerContext.CultureInfo,
                 CustomerId = ComposerContext.CustomerId,
                 LineItemId = new Guid(request.LineItemId),
-                CartName = ComposerContext.IsEditingOrder ? ComposerContext.EditingCartName : CartConfiguration.ShoppingCartName,
-                CartType = ComposerContext.IsEditingOrder ? CartConfiguration.OrderDraftCartType : null,
+                CartName = EditingOrderProvider.IsEditMode() ? EditingOrderProvider.GetCurrentEditingCartName() : CartConfiguration.ShoppingCartName,
+                CartType = EditingOrderProvider.IsEditMode() ? CartConfiguration.OrderDraftCartType : null,
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
             });
 
@@ -308,8 +312,8 @@ namespace Orckestra.Composer.Cart.Api
                 CultureInfo = ComposerContext.CultureInfo,
                 CustomerId = ComposerContext.CustomerId,
                 LineItemId = new Guid(request.LineItemId),
-                CartName = ComposerContext.IsEditingOrder ? ComposerContext.EditingCartName : CartConfiguration.ShoppingCartName,
-                CartType = ComposerContext.IsEditingOrder ? CartConfiguration.OrderDraftCartType : null,
+                CartName = EditingOrderProvider.IsEditMode() ? EditingOrderProvider.GetCurrentEditingCartName() : CartConfiguration.ShoppingCartName,
+                CartType = EditingOrderProvider.IsEditMode() ? CartConfiguration.OrderDraftCartType : null,
                 Quantity = request.Quantity.GetValueOrDefault(),
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
                 RecurringOrderFrequencyName = request.RecurringOrderFrequencyName,

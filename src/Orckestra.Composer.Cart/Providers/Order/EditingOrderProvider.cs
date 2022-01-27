@@ -30,7 +30,7 @@ namespace Orckestra.Composer.Cart.Providers.Order
         {
             if (order?.Cart?.Shipments == null)
             {
-                return await Task.FromResult(false);
+                return false;
             }
 
             var orderSettings = await OrderRepository.GetOrderSettings(ComposerContext.Scope).ConfigureAwait(false);
@@ -40,7 +40,7 @@ namespace Orckestra.Composer.Cart.Providers.Order
                 || orderSettings == null
                 || string.IsNullOrWhiteSpace(orderSettings.EditableShipmentStates))
             {
-                return await Task.FromResult(false);
+                return false;
             }
 
             var isOrderEditable = shipmentStatuses
@@ -49,13 +49,13 @@ namespace Orckestra.Composer.Cart.Providers.Order
                     ?.Split('|')
                     .Contains(item) ?? false);
 
-            return await Task.FromResult(isOrderEditable);
+            return isOrderEditable;
         }
 
         public virtual bool IsCurrentEditingOrder(Overture.ServiceModel.Orders.Order order)
         {
             var guidOrderId = Guid.Parse(order.Id);
-            return ComposerContext.IsEditingOrder && ComposerContext.EditingCartName == guidOrderId.ToString("N");
+            return IsEditMode() & ComposerContext.EditingCartName == guidOrderId.ToString("N");
         }
 
         public virtual async Task<ProcessedCart> StartEditOrderModeAsync(Overture.ServiceModel.Orders.Order order)
@@ -121,6 +121,11 @@ namespace Orckestra.Composer.Cart.Providers.Order
         public virtual void ClearEditMode()
         {
             ComposerContext.EditingCartName = default;
+        }
+
+        public virtual string GetCurrentEditingCartName()
+        {
+            return ComposerContext.EditingCartName;
         }
 
         public bool IsEditMode()

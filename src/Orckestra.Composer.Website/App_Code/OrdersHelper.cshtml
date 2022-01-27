@@ -11,7 +11,7 @@
                 <div class="col-sm-5">
                     <ul class="nav-pills m-0 float-right">
                         <li v-if="order.OrderInfos.IsOrderEditable">
-                            <a v-on:click.prevent="editOrder(order.OrderInfos.OrderNumber, order.OrderInfos.Id)" class="cta" href="#">
+                            <a v-on:click.prevent="editOrder(order.OrderInfos.OrderNumber)" class="cta" href="#">
                                 <span v-if="order.OrderInfos.HasOwnDraft">@Html.Localize("MyAccount", "B_ContinueEditing")</span>
                                 <span v-else="else">@Html.Localize("MyAccount", "B_EditOrder")</span>
                             </a>

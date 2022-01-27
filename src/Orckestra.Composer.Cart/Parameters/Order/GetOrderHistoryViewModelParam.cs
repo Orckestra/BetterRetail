@@ -58,6 +58,6 @@ namespace Orckestra.Composer.Cart.Parameters.Order
         /// <summary>
         /// The Order Editing Infos.
         /// </summary>
-        public Dictionary<Guid, bool> OrderEdititngInfos { get; set; }
+        public Dictionary<Guid, bool> OrderEditingInfos { get; set; }
     }
 }
