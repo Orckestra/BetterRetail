@@ -253,10 +253,6 @@ namespace Orckestra.Composer.Cart.Tests.Factory.Order
                 {
                     {"InProgress", "In Progress"},
                     {"Canceled" , "Canceled"}
-                },
-                OrderSettings = new OrderSettings()
-                {
-                    EditableShipmentStates = editableShipmentStates
                 }
             };
         }

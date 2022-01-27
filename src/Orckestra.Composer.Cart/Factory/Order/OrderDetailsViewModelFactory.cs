@@ -138,7 +138,6 @@ namespace Orckestra.Composer.Cart.Factory.Order
             orderInfos.OrderStatusRaw = param.Order.OrderStatus;
             orderInfos.BillingCurrency = param.Order.Cart.BillingCurrency;
             orderInfos.PricePaid = LocalizationProvider.FormatPrice((decimal)param.Order.Cart.Total, CurrencyProvider.GetCurrency());
-            orderInfos.IsOrderEditable = IsOrderEditable(param);
             orderInfos.HasOwnDraft = HasOwnDraft(param);
 
             return orderInfos;
@@ -159,27 +158,7 @@ namespace Orckestra.Composer.Cart.Factory.Order
             return false;
         }
 
-        protected virtual bool IsOrderEditable(CreateOrderDetailViewModelParam param)
-        {
-            var shipmentStatuses = param.Order.Cart.GetAllShipmentStatuses();
-            if (!shipmentStatuses.Any() 
-                || param.OrderSettings == null
-                || string.IsNullOrWhiteSpace(param.OrderSettings.EditableShipmentStates))
-            {
-                return false;
-            }
-
-            var isOrderEditable = shipmentStatuses
-                .All(item => param
-                    ?.OrderSettings
-                    ?.EditableShipmentStates
-                    ?.Split('|')
-                    .Contains(item) ?? false);
-
-            return isOrderEditable;
-        }
-
-        protected virtual string GetOrderStatusDisplayName(CreateOrderDetailViewModelParam param)
+         protected virtual string GetOrderStatusDisplayName(CreateOrderDetailViewModelParam param)
         {
             return LocalizationProvider.GetLocalizedString(new GetLocalizedParam
             {

@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using Orckestra.Composer.Cart.Extensions;
 using Orckestra.Composer.Cart.Parameters.Order;
+using Orckestra.Composer.Cart.Providers.Order;
 using Orckestra.Composer.Cart.ViewModels.Order;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Localization;
@@ -235,7 +236,7 @@ namespace Orckestra.Composer.Cart.Factory.Order
 
             orderInfo.OrderStatus = GetOrderStatusDisplayName(rawOrder, param);
             orderInfo.OrderStatusRaw = rawOrder.OrderStatus;
-            orderInfo.IsOrderEditable = IsOrderEditable(param, rawOrder);
+            orderInfo.IsOrderEditable = param.OrderEditingInfos.ContainsKey(Guid.Parse(rawOrder.Id)) && param.OrderEditingInfos[Guid.Parse(rawOrder.Id)];
             orderInfo.HasOwnDraft = HasOwnDraft(param, rawOrder);
 
             var orderDetailUrl = UrlFormatter.AppendQueryString(param.OrderDetailBaseUrl, new NameValueCollection
@@ -285,31 +286,6 @@ namespace Orckestra.Composer.Cart.Factory.Order
             return false;
         }
 
-        protected virtual bool IsOrderEditable(GetOrderHistoryViewModelParam param, OrderItem rawOrder)
-        {
-            var order = param.Orders.FirstOrDefault(item => Guid.Parse(item.Id) == Guid.Parse(rawOrder.Id));
-            if (order == null)
-            {
-                return false;
-            }
-
-            var shipmentStatuses = order.Cart.GetAllShipmentStatuses();
-            if (!shipmentStatuses.Any()
-                || param.OrderSettings == null
-                || string.IsNullOrWhiteSpace(param.OrderSettings.EditableShipmentStates))
-            {
-                return false;
-            }
-
-            var isOrderEditable = shipmentStatuses
-                .All(item => param
-                    ?.OrderSettings
-                    ?.EditableShipmentStates
-                    ?.Split('|')
-                    .Contains(item) ?? false);
-
-            return isOrderEditable;
-        }
 
         protected virtual string GetOrderStatusDisplayName(OrderItem rawOrder, GetOrderHistoryViewModelParam param)
         {
