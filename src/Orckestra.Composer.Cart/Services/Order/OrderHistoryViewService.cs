@@ -2,6 +2,7 @@
 using Orckestra.Composer.Cart.Factory.Order;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Parameters.Order;
+using Orckestra.Composer.Cart.Providers.Order;
 using Orckestra.Composer.Cart.Repositories;
 using Orckestra.Composer.Cart.Repositories.Order;
 using Orckestra.Composer.Cart.ViewModels;
@@ -21,8 +22,6 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
-using Orckestra.Composer.Exceptions;
-using Orckestra.Composer.Cart.Providers.Order;
 
 namespace Orckestra.Composer.Cart.Services.Order
 {
@@ -113,12 +112,12 @@ namespace Orckestra.Composer.Cart.Services.Order
             var orderSettings = await GetOrderSettings(param.Scope).ConfigureAwait(false);
             var ordersDetails = new List<Overture.ServiceModel.Orders.Order>();
             var orderCartDrafts = new List<CartSummary>();
-            var orderEdititngInfos = new Dictionary<Guid, bool>();
+            var orderEditingInfos = new Dictionary<Guid, bool>();
             if (orderQueryResult.Results != null && param.OrderTense == OrderTense.CurrentOrders)
             {
                 ordersDetails = await GetOrders(orderQueryResult, param).ConfigureAwait(false);
                 orderCartDrafts = await GetOrderCartDrafts(param.Scope, param.CustomerId, param.CultureInfo).ConfigureAwait(false);
-                orderEdititngInfos = await GetOrderEdititngInfos(ordersDetails).ConfigureAwait(false);
+                orderEditingInfos = await GetOrderEditingInfos(ordersDetails).ConfigureAwait(false);
                 shipmentsTrackingInfos = GetShipmentsTrackingInfoViewModels(ordersDetails, param);
             }
 
@@ -131,7 +130,7 @@ namespace Orckestra.Composer.Cart.Services.Order
                 Page = param.Page,
                 OrderDetailBaseUrl = orderDetailBaseUrl,
                 ShipmentsTrackingInfos = shipmentsTrackingInfos,
-                OrderEdititngInfos = orderEdititngInfos,
+                OrderEditingInfos = orderEditingInfos,
                 Orders = ordersDetails
             };
 
@@ -140,16 +139,16 @@ namespace Orckestra.Composer.Cart.Services.Order
             return viewModel;
         }
 
-        private async Task<Dictionary<Guid, bool>> GetOrderEdititngInfos(List<Overture.ServiceModel.Orders.Order> orders)
+        private async Task<Dictionary<Guid, bool>> GetOrderEditingInfos(List<Overture.ServiceModel.Orders.Order> orders)
         {
-            var orderEdititngInfos = new Dictionary<Guid, bool>();
+            var orderEditingInfos = new Dictionary<Guid, bool>();
 
             foreach (var order in orders)
             {
-                orderEdititngInfos.Add(Guid.Parse(order.Id), await EditingOrderProvider.IsOrderEditable(order).ConfigureAwait(false));
+                orderEditingInfos.Add(Guid.Parse(order.Id), await EditingOrderProvider.IsOrderEditable(order).ConfigureAwait(false));
             }
 
-            return orderEdititngInfos;
+            return orderEditingInfos;
         }
 
         protected virtual Task<List<CartSummary>> GetOrderCartDrafts(string scope, Guid customerId, CultureInfo cultureInfo)
