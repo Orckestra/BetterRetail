@@ -24,6 +24,8 @@ using Orckestra.Composer.Cart.Factory;
 using Orckestra.Composer.Country;
 using Orckestra.Composer.Providers.Dam;
 using Orckestra.Composer.ViewModels;
+using Orckestra.Composer.Cart.Repositories;
+using Orckestra.Composer.Cart.Parameters;
 
 namespace Orckestra.Composer.Cart.Tests.Services.Order
 {
@@ -51,6 +53,10 @@ namespace Orckestra.Composer.Cart.Tests.Services.Order
             _container.GetMock<IOrderRepository>()
              .Setup(r => r.GetOrderChangesAsync(It.IsAny<GetOrderChangesParam>()))
              .ReturnsAsync(new List<OrderHistoryItem>());
+
+            _container.GetMock<ICartRepository>()
+                .Setup(r => r.GetCartsByCustomerIdAsync(It.IsAny<GetCartsByCustomerIdParam>()))
+                .ReturnsAsync(new List<CartSummary>());
 
             _container.GetMock<IOrderDetailsViewModelFactory>()
             .Setup(r => r.CreateViewModel(It.IsAny<CreateOrderDetailViewModelParam>()))

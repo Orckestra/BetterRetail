@@ -56,8 +56,8 @@ namespace Orckestra.Composer.Cart.Parameters.Order
         public Dictionary<Guid, TrackingInfoViewModel> ShipmentsTrackingInfos { get; set; }
 
         /// <summary>
-        /// The Order Settings.
+        /// The Order Editing Infos.
         /// </summary>
-        public OrderSettings OrderSettings { get; set; }
+        public Dictionary<Guid, bool> OrderEdititngInfos { get; set; }
     }
 }
