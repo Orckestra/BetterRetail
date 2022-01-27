@@ -112,7 +112,7 @@ namespace Orckestra.Composer.Cart.Factory
             }
 
             vm.IsAuthenticated = ComposerContext.IsAuthenticated;
-            vm.IsEditingOrder = ComposerContext.IsEditingOrder;
+            //vm.IsEditingOrder = ComposerContext.IsEditingOrder;
             return vm;
         }
 

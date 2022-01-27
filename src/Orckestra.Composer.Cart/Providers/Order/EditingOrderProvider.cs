@@ -55,7 +55,7 @@ namespace Orckestra.Composer.Cart.Providers.Order
         public virtual bool IsCurrentEditingOrder(Overture.ServiceModel.Orders.Order order)
         {
             var guidOrderId = Guid.Parse(order.Id);
-            return ComposerContext.IsEditingOrder && ComposerContext.EditingCartName == guidOrderId.ToString("N");
+            return IsEditMode() & ComposerContext.EditingCartName == guidOrderId.ToString("N");
         }
 
         public virtual async Task<ProcessedCart> StartEditOrderModeAsync(Overture.ServiceModel.Orders.Order order)
@@ -121,6 +121,11 @@ namespace Orckestra.Composer.Cart.Providers.Order
         public virtual void ClearEditMode()
         {
             ComposerContext.EditingCartName = default;
+        }
+
+        public virtual string GetCurrentEditingCartName()
+        {
+            return ComposerContext.EditingCartName;
         }
 
         public bool IsEditMode()
