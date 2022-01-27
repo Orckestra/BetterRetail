@@ -110,15 +110,18 @@ namespace Orckestra.Composer.Cart.Services
 
             var cart = await CartRepository.AddLineItemAsync(param).ConfigureAwait(false);
 
-            var fixedCart = await FixCartService.FixCartAsync(new FixCartParam
+            if (cart.CartType != CartConfiguration.OrderDraftCartType)
             {
-                Cart = cart,
-                ScopeId = param.Scope
-            }).ConfigureAwait(false);
+                cart = await FixCartService.FixCartAsync(new FixCartParam
+                {
+                    Cart = cart,
+                    ScopeId = param.Scope
+                }).ConfigureAwait(false);
+            }
 
             var vmParam = new CreateCartViewModelParam
             {
-                Cart = fixedCart,
+                Cart = cart,
                 CultureInfo = param.CultureInfo,
                 IncludeInvalidCouponsMessages = false,
                 BaseUrl = param.BaseUrl
