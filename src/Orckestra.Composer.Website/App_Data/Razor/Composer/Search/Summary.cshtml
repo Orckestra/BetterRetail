@@ -46,14 +46,12 @@
             }
             else
             {
-                <h1><strong>@total</strong>@($" {Html.Localize("List-Search", "L_SearchResults")} \"{SearchRequestContext.SearchQuery }\"")</h1>
+                <h1><strong>@total</strong> @Html.Localized("List-Search", "L_SearchResults", SearchRequestContext.SearchQuery)</h1>
             }
         }
         else
         {
-            <h1>
-                @($"{Html.Localize("List-Search", "L_NoResultsFor")} \"{SearchRequestContext.SearchQuery }\"")
-            </h1>
+            <h1>@Html.Localized("List-Search", "L_NoResultsFor", SearchRequestContext.SearchQuery)</h1>
         }
 
         @Function("Composer.Search.Suggestions")

@@ -32,20 +32,16 @@
         }
     }
 }
-@{
-
-    if (SelectedFacets == null || SelectedFacets.Facets == null || SelectedFacets.Facets.Count == 0)
-    {
-        return;
-    };
-}
 
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
 <head>
 </head>
 <body>
-    <div data-oc-controller="Product.SelectedSearchFacets" data-context="@JsonConvert.SerializeObject(SelectedFacets, new Newtonsoft.Json.Converters.StringEnumConverter())" data-landingpageurls="@JsonConvert.SerializeObject(LandingPageUrls)">
-        <div id="vueSelectedSearchFacets" v-cloak="true" class="card facets-card mb-3 selected-facets">
+    <div data-oc-controller="Product.SelectedSearchFacets" 
+         data-context="@JsonConvert.SerializeObject(SelectedFacets, new Newtonsoft.Json.Converters.StringEnumConverter())" 
+         data-landingpageurls="@JsonConvert.SerializeObject(LandingPageUrls)"
+         id="vueSelectedSearchFacets">
+        <div v-if="Facets.length" v-cloak="true" class="card facets-card mb-3 selected-facets">
             <div class="card-header">
                 @Html.Localize("List-Search", "L_Selection")
                 <a v-if="IsAllRemovable" 

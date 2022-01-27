@@ -234,9 +234,7 @@
 {
     if (IsProductsCorrected() && isProductTab)
     {
-        <h2>
-            @($"{Html.Localize("List-Search", "L_NoResultsFor")} “{SearchRequestContext.SearchQuery }”")
-        </h2>
+        <h2>@Html.Localized("List-Search", "L_NoResultsFor", SearchRequestContext.SearchQuery)</h2>
         <p class="m-0">@Html.Localized("List-Search", "WeAreSorry", SearchRequestContext.SearchQuery, tabTitle)</p>
         @ShowButWeFindIn(vm.SuggestedTabs)
         <h1 class="mt-4">@(Html.Localized("List-Search", "L_SearchResultsCorrected", vm.Total, ProductSearchResults.CorrectedSearchTerms))</h1>
@@ -245,13 +243,11 @@
     {
         if (vm.Total > 0)
         {
-            <h1><strong>@vm.Total</strong>@($" {Html.Localize("List-Search", "L_SearchResults")} “{SearchRequestContext.SearchQuery }”")</h1>
+            <h1><strong>@vm.Total</strong> @Html.Localized("List-Search", "L_SearchResults", SearchRequestContext.SearchQuery)</h1>
         }
         else
         {
-            <h1>
-                @($"{Html.Localize("List-Search", "L_NoResultsFor")} “{SearchRequestContext.SearchQuery }”")
-            </h1>
+            <h1>@Html.Localized("List-Search", "L_NoResultsFor", SearchRequestContext.SearchQuery)</h1>
         }
 
         @Function("Composer.Search.Suggestions")
@@ -315,17 +311,18 @@
     <f:function name="Composer.Grids.SearchGrid">
         <f:param name="LeftPart">
             <html>
-                <head></head>
-                <body>
-                    <f:function name="Composer.Search.SelectedFacets"></f:function>
-                    <f:function name="Composer.Search.Facets"></f:function>
-                </body>
-            </html>
-        </f:param>
-        <f:param name="RightPart">
-            @Function("Composer.Search.BaseSearchResults", new { Results = ProductsSearchViewModel })
-        </f:param>
-    </f:function>
+            <head>
+            </head>
+            <body>
+                <f:function name="Composer.Search.SelectedFacets"></f:function>
+                <f:function name="Composer.Search.Facets"></f:function>
+            </body>
+        </html>
+    </f:param>
+    <f:param name="RightPart">
+        @Function("Composer.Search.BaseSearchResults", new { Results = ProductsSearchViewModel })
+    </f:param>
+</f:function>
 }
 
 @helper ShowSortBy()
