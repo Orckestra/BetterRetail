@@ -63,18 +63,16 @@
                         @if (order.OrderInfos.IsOrderEditable)
                         {
                             <div class="col-sm-4 text-sm-right">
-                                @if (order.OrderInfos.HasOwnDraft)
-                                {
-                                    <a v-on:click.prevent="alert('TODO')" class="cta" href="#">
+                                <a href="#" v-bind:disabled="Loading" class="cta" v-on:click.prevent="editOrder('@Order.OrderInfos.OrderNumber', '@Order.OrderInfos.Id')">
+                                    @if (order.OrderInfos.HasOwnDraft)
+                                    {
                                         @Html.Localize("MyAccount", "B_ContinueEditing")
-                                    </a>
-                                }
-                                else
-                                {
-                                    <a href="#" v-bind:disabled="Loading" class="cta" v-on:click.prevent="editOrder('@Order.OrderInfos.OrderNumber', '@Order.OrderInfos.Id')">
+                                    }
+                                    else
+                                    {
                                         @Html.Localize("MyAccount", "B_EditOrder")
-                                    </a>
-                                }
+                                    }
+                                </a>
                             </div>
                         }
                     </div>
