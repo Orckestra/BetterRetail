@@ -58,7 +58,9 @@
                     @Html.Localize("ShoppingCart", "L_RemoveUnavailableItems")
                 </div>
 
-                @CheckoutBtn()
+                <div v-if="Cart.CartType != '@CartConfiguration.OrderDraftCartType'">
+                    @CheckoutBtn()
+                </div>
             </div>
         </div>
         @EstimateShippingModal()
