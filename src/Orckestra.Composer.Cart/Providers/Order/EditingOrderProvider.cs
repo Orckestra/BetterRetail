@@ -30,7 +30,7 @@ namespace Orckestra.Composer.Cart.Providers.Order
         {
             if (order?.Cart?.Shipments == null)
             {
-                return await Task.FromResult(false);
+                return false;
             }
 
             var orderSettings = await OrderRepository.GetOrderSettings(ComposerContext.Scope).ConfigureAwait(false);
@@ -40,7 +40,7 @@ namespace Orckestra.Composer.Cart.Providers.Order
                 || orderSettings == null
                 || string.IsNullOrWhiteSpace(orderSettings.EditableShipmentStates))
             {
-                return await Task.FromResult(false);
+                return false;
             }
 
             var isOrderEditable = shipmentStatuses
@@ -49,7 +49,7 @@ namespace Orckestra.Composer.Cart.Providers.Order
                     ?.Split('|')
                     .Contains(item) ?? false);
 
-            return await Task.FromResult(isOrderEditable);
+            return isOrderEditable;
         }
 
         public virtual bool IsCurrentEditingOrder(Overture.ServiceModel.Orders.Order order)
