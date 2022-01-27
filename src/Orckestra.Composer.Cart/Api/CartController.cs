@@ -74,7 +74,7 @@ namespace Orckestra.Composer.Cart.Api
             {
                 try
                 {
-                    if (cartViewModel.IsCartEmpty)
+                    if (cartViewModel.IsCartEmpty || EditingOrderProvider.IsEditMode())
                     {
                         cartViewModel.OrderSummary.CheckoutRedirectAction.RedirectUrl = GetCartUrl();
                     }
