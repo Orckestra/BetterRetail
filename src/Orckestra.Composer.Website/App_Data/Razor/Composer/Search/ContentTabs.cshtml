@@ -3,13 +3,12 @@
 @using Orckestra.Composer.Search.ViewModels
 @using Orckestra.Search.WebsiteSearch;
 @using Composite.Core.Routing.Pages;
-@using Orckestra.Composer.Search.Facets
-@using Orckestra.Composer.ContentSearch.DataTypes
 @using Orckestra.Composer.Search.RequestConstants
 @using Orckestra.Composer.Search
 @using Orckestra.Composer.ContentSearch.Services
 @using Orckestra.Composer.ContentSearch.Parameters
 @using Orckestra.Composer.ContentSearch.ViewModels
+@using Newtonsoft.Json
 
 @functions {
     public override string FunctionDescription
@@ -232,26 +231,21 @@
 
 @helper SearchSummary(ContentSearchViewModel vm, bool isProductTab, string tabTitle)
 {
-    if (IsProductsCorrected() && isProductTab)
-    {
-        <h2>@Html.Localized("List-Search", "L_NoResultsFor", SearchRequestContext.SearchQuery)</h2>
-        <p class="m-0">@Html.Localized("List-Search", "WeAreSorry", SearchRequestContext.SearchQuery, tabTitle)</p>
-        @ShowButWeFindIn(vm.SuggestedTabs)
-        <h1 class="mt-4">@(Html.Localized("List-Search", "L_SearchResultsCorrected", vm.Total, ProductSearchResults.CorrectedSearchTerms))</h1>
-    }
-    else
-    {
-        if (vm.Total > 0)
+    <div data-oc-controller="Product.SearchSummary" id="vueSearchSummary" data-context="@JsonConvert.SerializeObject(ProductSearchResults)" data-total="@vm.Total" v-cloak="true">
+        @if (IsProductsCorrected() && isProductTab)
         {
-            <h1><strong>@vm.Total</strong> @Html.Localized("List-Search", "L_SearchResults", SearchRequestContext.SearchQuery)</h1>
+            <h2>@Html.Localized("List-Search", "L_NoResultsFor", SearchRequestContext.SearchQuery)</h2>
+            <p class="m-0">@Html.Localized("List-Search", "WeAreSorry", SearchRequestContext.SearchQuery, tabTitle)</p>
+            @ShowButWeFindIn(vm.SuggestedTabs)
+            <h1 class="mt-4">@(Html.Localized("List-Search", "L_SearchResultsCorrected", "{{totalCount}}", ProductSearchResults.CorrectedSearchTerms))</h1>
         }
         else
         {
-            <h1>@Html.Localized("List-Search", "L_NoResultsFor", SearchRequestContext.SearchQuery)</h1>
+            <h1 v-if="totalCount > 0"><strong>{{totalCount}}</strong> @Html.Localized("List-Search", "L_SearchResults", SearchRequestContext.SearchQuery)</h1>
+            <h1 v-else="v-else">@Html.Localized("List-Search", "L_NoResultsFor", SearchRequestContext.SearchQuery)</h1>
+            @Function("Composer.Search.Suggestions")
         }
-
-        @Function("Composer.Search.Suggestions")
-    }
+    </div>
 }
 
 @helper ShowButWeFindIn(List<ContentSearchTabViewModel> tabs)
@@ -282,7 +276,7 @@
         @foreach (var tab in tabs)
         {
             var resutls = tab.SearchResults?.Entries?.Take(teaserItemsCount);
-            if(resutls == null) { continue; }
+            if (resutls == null) { continue; }
             <div class="header">
                 <h3 class="title d-inline-flex  mt-3">@Html.Localized("List-Search", "T_SearchResultsFoundIn", tab.Title, tab.Total)</h3>
                 @if (tab.Total > teaserItemsCount)
