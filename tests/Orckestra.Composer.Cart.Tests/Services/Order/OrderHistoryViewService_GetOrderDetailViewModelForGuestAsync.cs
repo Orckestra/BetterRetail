@@ -75,7 +75,8 @@ namespace Orckestra.Composer.Cart.Tests.Services.Order
                             Email = email
                         }
                     },
-                    ScopeId = "Global"
+                    ScopeId = "Global",
+                    CustomerId = Guid.NewGuid().ToString()
 
                 });
 
