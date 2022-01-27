@@ -11,10 +11,6 @@
 module Orckestra.Composer {
     'use strict';
 
-    interface SerializeObject extends JQuery {
-        serializeObject(): any;
-    }
-
     export class SelectedFacetSearchController extends Orckestra.Composer.Controller {
         protected vueSelectedSearchFacets: Vue;
 

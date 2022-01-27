@@ -89,7 +89,7 @@
 <head>
 </head>
 <body>
-    <div data-oc-controller="Product.SearchResults" data-context="@JsonConvert.SerializeObject(Results)" id="vueSearchResults" v-cloak="true">
+    <div data-oc-controller="Product.SearchResults" data-context="@JsonConvert.SerializeObject(Results, new Newtonsoft.Json.Converters.StringEnumConverter())" id="vueSearchResults" v-cloak="true">
         @if (ShowPagination)
         {
             <div class="row filters-row mb-4">

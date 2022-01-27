@@ -44,7 +44,7 @@
 <head>
 </head>
 <body>
-    <div data-oc-controller="Product.SelectedSearchFacets" data-context="@JsonConvert.SerializeObject(SelectedFacets)" data-landingpageurls="@JsonConvert.SerializeObject(LandingPageUrls)">
+    <div data-oc-controller="Product.SelectedSearchFacets" data-context="@JsonConvert.SerializeObject(SelectedFacets, new Newtonsoft.Json.Converters.StringEnumConverter())" data-landingpageurls="@JsonConvert.SerializeObject(LandingPageUrls)">
         <div id="vueSelectedSearchFacets" v-cloak="true" class="card facets-card mb-3 selected-facets">
             <div class="card-header">
                 @Html.Localize("List-Search", "L_Selection")
