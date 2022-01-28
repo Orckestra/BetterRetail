@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
+using static Orckestra.Composer.Utils.Constants.OrderDraft;
 
 namespace Orckestra.Composer.Cart.Factory
 {
@@ -309,6 +310,13 @@ namespace Orckestra.Composer.Cart.Factory
             CultureInfo cultureInfo)
         {
             var orderSummary = ViewModelMapper.MapTo<OrderSummaryViewModel>(cart, cultureInfo);
+
+            if (cart.CartType == CartConfiguration.OrderDraftCartType 
+                && cart.PropertyBag.TryGetValue(OrderNumberProbertyBagKey, out object orderNumberForOrderDraft))
+            {
+                orderSummary.OrderNumberForOrderDraft = orderNumberForOrderDraft.ToString();
+            }
+
             var activeShipments = cart.GetActiveShipments();
             orderSummary.Shippings = GetShippingsViewModel(cart, cultureInfo);
 
