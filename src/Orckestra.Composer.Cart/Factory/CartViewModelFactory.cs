@@ -325,7 +325,6 @@ namespace Orckestra.Composer.Cart.Factory
             orderSummary.HasReward = cart.DiscountTotal.HasValue && cart.DiscountTotal.Value > 0;
             orderSummary.CheckoutRedirectAction = GetCheckoutRedirectAction(cart);
 
-
             List<Reward> rewards = new List<Reward>();
             List<LineItem> lineItems = new List<LineItem>();
             foreach (var el in activeShipments)
