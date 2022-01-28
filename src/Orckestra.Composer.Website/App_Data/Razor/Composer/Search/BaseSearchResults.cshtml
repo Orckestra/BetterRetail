@@ -122,7 +122,7 @@
                             </li>
 
                             <li class="page-item mx-2">
-                                <div class="dropdown">
+                                <div class="dropdown" v-if="Pagination.CurrentPage">
                                     <button class="btn btn-outline-secondary  dropdown-toggle" type="button" data-qa="page-select-toggle"
                                             data-toggle="dropdown" aria-expanded="true">
                                         @Html.Localize("List-Search", "L_PageInDropDown")&#160;{{Pagination.CurrentPage.DisplayName}}
