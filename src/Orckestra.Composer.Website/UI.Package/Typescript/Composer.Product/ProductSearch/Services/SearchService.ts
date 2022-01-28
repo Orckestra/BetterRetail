@@ -151,7 +151,7 @@ module Orckestra.Composer {
             this._eventHub.subscribe(SearchEvents.FacetsModalClosed, this.facetsModalClosed.bind(this));
 
             $(FacetsModalId).on('show.bs.modal', (event) => this.facetsModalOpened());
-            $(FacetsModalId).on('hide.bs.modal', (event) => this.facetsModalClosed());
+            $(FacetsModalId).on('click', '.modal--close',  this.facetsModalClosed.bind(this));
             $(FacetsModalId).on('click', '.modal--confirm',  this.facetsModalApply.bind(this));
             $(FacetsModalId).on('click', '.modal--cancel',  this.facetsModalCancel.bind(this));
         }
