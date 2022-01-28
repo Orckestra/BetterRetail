@@ -9,8 +9,9 @@
 
         public const string GlobalScopeName = "Global";
 
-        public static class OrderDart
+        public static class OrderDraft
         {
+            public const string OrderNumberForOrderDraft = "OrderNumberForOrderDraft";
             public const string OwnershipPropertyBagKey = "OrderDraftOwnership";
             public const string OwnershipByWebsite = "oco";
         }

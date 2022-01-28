@@ -148,8 +148,8 @@ namespace Orckestra.Composer.Cart.Factory.Order
             var orderDraft = param.OrderCartDrafts?.FirstOrDefault(d => Guid.Parse(d.Name) == Guid.Parse(param.Order.Id));
             if (orderDraft != null)
             {
-                orderDraft.PropertyBag.TryGetValue(Constants.OrderDart.OwnershipPropertyBagKey, out object orderDraftOwnershipUserName);
-                if (orderDraftOwnershipUserName?.ToString() == Constants.OrderDart.OwnershipByWebsite)
+                orderDraft.PropertyBag.TryGetValue(Constants.OrderDraft.OwnershipPropertyBagKey, out object orderDraftOwnershipUserName);
+                if (orderDraftOwnershipUserName?.ToString() == Constants.OrderDraft.OwnershipByWebsite)
                 {
                     return true;
                 }

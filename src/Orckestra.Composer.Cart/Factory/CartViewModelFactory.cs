@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
+using static Orckestra.Composer.Utils.Constants.OrderDraft;
 
 namespace Orckestra.Composer.Cart.Factory
 {
@@ -309,6 +310,13 @@ namespace Orckestra.Composer.Cart.Factory
             CultureInfo cultureInfo)
         {
             var orderSummary = ViewModelMapper.MapTo<OrderSummaryViewModel>(cart, cultureInfo);
+
+            if (cart.CartType == CartConfiguration.OrderDraftCartType 
+                && cart.PropertyBag.TryGetValue(OrderNumberForOrderDraft, out object orderNumberForOrderDraft))
+            {
+                orderSummary.OrderNumberForOrderDraft = orderNumberForOrderDraft.ToString();
+            }
+
             var activeShipments = cart.GetActiveShipments();
             orderSummary.Shippings = GetShippingsViewModel(cart, cultureInfo);
 
@@ -316,6 +324,7 @@ namespace Orckestra.Composer.Cart.Factory
             orderSummary.IsShippingTaxable = activeShipments.FirstOrDefault().IsShippingTaxable(); //used in the cart/checkout
             orderSummary.HasReward = cart.DiscountTotal.HasValue && cart.DiscountTotal.Value > 0;
             orderSummary.CheckoutRedirectAction = GetCheckoutRedirectAction(cart);
+
 
             List<Reward> rewards = new List<Reward>();
             List<LineItem> lineItems = new List<LineItem>();
