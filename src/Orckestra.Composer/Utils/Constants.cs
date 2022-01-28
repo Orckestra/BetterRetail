@@ -11,7 +11,7 @@
 
         public static class OrderDraft
         {
-            public const string OrderNumberForOrderDraft = "OrderNumberForOrderDraft";
+            public const string OrderNumberProbertyBagKey = "OrderNumberForOrderDraft";
             public const string OwnershipPropertyBagKey = "OrderDraftOwnership";
             public const string OwnershipByWebsite = "oco";
         }

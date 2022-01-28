@@ -5,7 +5,7 @@
 module Orckestra.Composer {
     export class EditOrderBannerController extends Controller {
         protected cartService: ICartService = CartService.getInstance();
-        protected VueTimeSlotBanner: Vue;
+        protected VueEditOrderBanner: Vue;
         public initialize() {
             super.initialize();
             this.cartService.getCart()
@@ -13,7 +13,7 @@ module Orckestra.Composer {
         }
         private initializeVueComponent(currentCart) {
             let self: EditOrderBannerController = this;
-            this.VueTimeSlotBanner = new Vue({
+            this.VueEditOrderBanner = new Vue({
                 el: '#vueEditOrderBanner',
                 data: {
                     IsDraftCart: currentCart.CartType == "OrderDraft",

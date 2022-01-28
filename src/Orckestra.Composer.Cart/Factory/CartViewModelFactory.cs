@@ -312,7 +312,7 @@ namespace Orckestra.Composer.Cart.Factory
             var orderSummary = ViewModelMapper.MapTo<OrderSummaryViewModel>(cart, cultureInfo);
 
             if (cart.CartType == CartConfiguration.OrderDraftCartType 
-                && cart.PropertyBag.TryGetValue(OrderNumberForOrderDraft, out object orderNumberForOrderDraft))
+                && cart.PropertyBag.TryGetValue(OrderNumberProbertyBagKey, out object orderNumberForOrderDraft))
             {
                 orderSummary.OrderNumberForOrderDraft = orderNumberForOrderDraft.ToString();
             }
