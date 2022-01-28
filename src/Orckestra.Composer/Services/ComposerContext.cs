@@ -301,10 +301,9 @@ namespace Orckestra.Composer.Services
             }
             set
             {
-                if (string.IsNullOrWhiteSpace(value)) return;
                 _editingCartName = value;
                 ComposerCookieDto dto = CookieAccessor.Read();
-                dto.EncryptedEditingOrderId = EncryptionUtility.Encrypt(_editingCartName);
+                dto.EncryptedEditingOrderId = _editingCartName == default ? null : EncryptionUtility.Encrypt(_editingCartName);
                 CookieAccessor.Write(dto);
             }
         }

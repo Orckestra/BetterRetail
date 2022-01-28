@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 using Orckestra.Composer.Cart.Extensions;
 using Orckestra.Composer.Cart.Factory;
 using Orckestra.Composer.Cart.Parameters;
+using Orckestra.Composer.Cart.Providers.Order;
 using Orckestra.Composer.Cart.Repositories;
 using Orckestra.Composer.Cart.ViewModels;
 using Orckestra.Composer.Country;
 using Orckestra.Composer.Enums;
+using Orckestra.Composer.Exceptions;
 using Orckestra.Composer.Extensions;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
@@ -44,6 +46,8 @@ namespace Orckestra.Composer.Cart.Services
         protected ICategoryRepository CategoryRepository { get; private set; }
         protected ILocalizationProvider LocalizationProvider { get; private set; }
 
+        protected IEditingOrderProvider EditingOrderProvider { get; private set; }
+
         /// <summary>
         /// CartService constructor
         /// </summary>
@@ -69,7 +73,8 @@ namespace Orckestra.Composer.Cart.Services
             IRegionCodeProvider regionCodeProvider,
             IImageService imageService,
             ICategoryRepository categoryRepository,
-            ILocalizationProvider localizationProvider)
+            ILocalizationProvider localizationProvider,
+            IEditingOrderProvider editingOrderprovider)
         {
             CartRepository = cartRepository ?? throw new ArgumentNullException(nameof(cartRepository));
             CartViewModelFactory = cartViewModelFactory ?? throw new ArgumentNullException(nameof(cartViewModelFactory));
@@ -82,6 +87,7 @@ namespace Orckestra.Composer.Cart.Services
             ImageService = imageService ?? throw new ArgumentNullException(nameof(imageService));
             LocalizationProvider = localizationProvider ?? throw new ArgumentNullException(nameof(localizationProvider));
             CategoryRepository = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository));
+            EditingOrderProvider = editingOrderprovider ?? throw new ArgumentNullException(nameof(editingOrderprovider));
         }
 
         /// <summary>
@@ -107,8 +113,17 @@ namespace Orckestra.Composer.Cart.Services
             if (string.IsNullOrWhiteSpace(param.ProductId)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.ProductId)), nameof(param)); }
             if (param.Quantity < 1) { throw new ArgumentOutOfRangeException(nameof(param), param.Quantity, GetMessageOfZeroNegative(nameof(param.Quantity))); }
             if (string.IsNullOrWhiteSpace(param.BaseUrl)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.BaseUrl)), nameof(param)); }
+            ProcessedCart cart;
 
-            var cart = await CartRepository.AddLineItemAsync(param).ConfigureAwait(false);
+            try
+            {
+                cart = await CartRepository.AddLineItemAsync(param).ConfigureAwait(false);
+            }
+            catch (ComposerException ex)
+            {
+                ClearEditMode(param.CartType, ex);
+                throw;
+            }
 
             if (cart.CartType != CartConfiguration.OrderDraftCartType)
             {
@@ -146,8 +161,17 @@ namespace Orckestra.Composer.Cart.Services
             if (param.LineItemId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.LineItemId)), nameof(param)); }
             if (param.CustomerId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param)); }
             if (string.IsNullOrWhiteSpace(param.BaseUrl)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.BaseUrl)), nameof(param)); }
+            ProcessedCart cart;
 
-            var cart = await CartRepository.RemoveLineItemAsync(param).ConfigureAwait(false);
+            try
+            {
+                cart = await CartRepository.RemoveLineItemAsync(param).ConfigureAwait(false);
+            }
+            catch (ComposerException ex)
+            {
+                ClearEditMode(param.CartType, ex);
+                throw;
+            }
 
             await CartRepository.RemoveCouponsAsync(new RemoveCouponsParam
             {
@@ -188,7 +212,17 @@ namespace Orckestra.Composer.Cart.Services
             if (param.Quantity < 1) { throw new ArgumentOutOfRangeException(nameof(param), param.Quantity, GetMessageOfZeroNegative(nameof(param.Quantity))); }
             if (string.IsNullOrWhiteSpace(param.BaseUrl)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.BaseUrl)), nameof(param)); }
 
-            var cart = await CartRepository.UpdateLineItemAsync(param).ConfigureAwait(false);
+            ProcessedCart cart;
+
+            try
+            {
+                cart = await CartRepository.UpdateLineItemAsync(param).ConfigureAwait(false);
+            }
+            catch (ComposerException ex)
+            {
+                ClearEditMode(param.CartType, ex);
+                throw;
+            }
 
             await CartRepository.RemoveCouponsAsync(new RemoveCouponsParam
             {
@@ -266,8 +300,17 @@ namespace Orckestra.Composer.Cart.Services
             if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
             if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartName)), nameof(param)); }
             if (param.CustomerId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param)); }
+            ProcessedCart cart;
 
-            var cart = await CartRepository.GetCartAsync(param).ConfigureAwait(false);
+            try
+            {
+                cart = await CartRepository.GetCartAsync(param).ConfigureAwait(false);
+            }
+            catch (ComposerException ex)
+            {
+                ClearEditMode(param.CartType, ex);
+                throw;
+            }
 
             await CartRepository.RemoveCouponsAsync(new RemoveCouponsParam
             {
@@ -289,6 +332,16 @@ namespace Orckestra.Composer.Cart.Services
             var viewModel = await CreateCartViewModelAsync(vmParam).ConfigureAwait(false);
 
             return viewModel;
+        }
+
+        private void ClearEditMode(string cartType, ComposerException ex)
+        {
+            if (ex.Errors.FirstOrDefault(e => e.ErrorCode == "CartDoesNotExist") != null &&
+                cartType == CartConfiguration.OrderDraftCartType &&
+                EditingOrderProvider.IsEditMode())
+            {
+                EditingOrderProvider.ClearEditMode();
+            }
         }
 
         //TODO: Would it be possible to add cache here too without too much problem?
