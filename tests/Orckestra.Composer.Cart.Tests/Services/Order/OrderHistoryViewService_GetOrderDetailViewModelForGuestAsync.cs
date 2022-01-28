@@ -80,13 +80,6 @@ namespace Orckestra.Composer.Cart.Tests.Services.Order
 
                 });
 
-            _container.GetMock<IOrderRepository>()
-                .Setup(r => r.GetOrderSettings(It.IsAny<string>()))
-                .ReturnsAsync(new OrderSettings()
-                {
-                    EditableShipmentStates = "new"
-
-                });
             //Act
             var param = new GetOrderForGuestParam
             {

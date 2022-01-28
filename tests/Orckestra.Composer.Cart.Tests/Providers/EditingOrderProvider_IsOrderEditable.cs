@@ -25,8 +25,6 @@ namespace Orckestra.Composer.Cart.Tests.Providers
             var contextStub = new Mock<IComposerContext>();
             contextStub.SetupGet(mock => mock.Scope).Returns("Global");
             _container.Use(contextStub);
-
-
         }
 
         [Test]
@@ -45,11 +43,11 @@ namespace Orckestra.Composer.Cart.Tests.Providers
             //Arrange
             var provider = _container.CreateInstance<EditingOrderProvider>();
 
-           _container.GetMock<IOrderRepository>()
-           .Setup(r => r.GetOrderSettings(It.IsAny<string>())).ReturnsAsync(new OrderSettings()
-           {
-               EditableShipmentStates = editableShipmentStates
-           });
+            _container.GetMock<IOrderRepository>()
+            .Setup(r => r.GetOrderSettings(It.IsAny<string>())).ReturnsAsync(new OrderSettings()
+            {
+                EditableShipmentStates = editableShipmentStates
+            });
 
 
             //Act
@@ -70,9 +68,9 @@ namespace Orckestra.Composer.Cart.Tests.Providers
             result.Should().Be(expectedIsOrderEditable);
         }
 
-        protected Overture.ServiceModel.Orders.Order CreateOrderWithShipments(List<Shipment> shipments)
+        protected Order CreateOrderWithShipments(List<Shipment> shipments)
         {
-            return new Overture.ServiceModel.Orders.Order
+            return new Order
             {
                 OrderStatus = "InProgress",
                 Cart = new Overture.ServiceModel.Orders.Cart
@@ -82,6 +80,5 @@ namespace Orckestra.Composer.Cart.Tests.Providers
                 }
             };
         }
-
     }
 }
