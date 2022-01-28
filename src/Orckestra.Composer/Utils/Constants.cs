@@ -13,7 +13,7 @@
         {
             public const string OrderNumberProbertyBagKey = "OrderNumberForOrderDraft";
             public const string OwnershipPropertyBagKey = "OrderDraftOwnership";
-            public const string OwnershipByWebsite = "oco";
+            public const string OwnershipByWebsite = "oco,website";
         }
 
         public static class ErrorCodes

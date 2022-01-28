@@ -149,7 +149,7 @@ namespace Orckestra.Composer.Cart.Factory.Order
             if (orderDraft != null)
             {
                 orderDraft.PropertyBag.TryGetValue(Constants.OrderDraft.OwnershipPropertyBagKey, out object orderDraftOwnershipUserName);
-                if (orderDraftOwnershipUserName?.ToString() == Constants.OrderDraft.OwnershipByWebsite)
+                if (Constants.OrderDraft.OwnershipByWebsite.Split(',').Contains(orderDraftOwnershipUserName))
                 {
                     return true;
                 }
