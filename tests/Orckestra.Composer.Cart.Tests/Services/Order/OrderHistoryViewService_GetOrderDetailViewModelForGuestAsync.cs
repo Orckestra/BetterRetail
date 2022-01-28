@@ -48,7 +48,7 @@ namespace Orckestra.Composer.Cart.Tests.Services.Order
 
             _container.GetMock<IOrderDetailsViewModelFactory>()
             .Setup(r => r.CreateViewModel(It.IsAny<CreateOrderDetailViewModelParam>()))
-            .Returns(new OrderDetailViewModel());
+            .Returns(new OrderDetailViewModel() { OrderInfos = new OrderDetailInfoViewModel()});
 
             _container.GetMock<IOrderUrlProvider>()
               .Setup(r => r.GetOrderDetailsBaseUrl(It.IsAny<CultureInfo>()))
