@@ -11,6 +11,7 @@ using Orckestra.Composer.Cart.Factory;
 using Orckestra.Composer.Cart.Factory.Order;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Parameters.Order;
+using Orckestra.Composer.Cart.Providers.Order;
 using Orckestra.Composer.Cart.Tests.Mock;
 using Orckestra.Composer.Cart.ViewModels;
 using Orckestra.Composer.Cart.ViewModels.Order;
@@ -196,41 +197,7 @@ namespace Orckestra.Composer.Cart.Tests.Factory.Order
 
         }
 
-        [Test]
-        [TestCase("New|Pending", new string[] { "New" }, true)]
-        [TestCase("New|Pending", new string[] { "Pending" }, true)]
-        [TestCase("New|Pending", new string[] { "New", "Pending" }, true)]
-        [TestCase("New|Pending", new string[] { "Canceled" }, false)]
-        [TestCase("New|Pending", new string[] { "New,Canceled" }, false)]
-        [TestCase(null, new string[] { "New", "Canceled" }, false)]
-        [TestCase(null, null, false)]
-        [TestCase("New|Pending", null, false)]
-        public void WHEN_order_with_provided_shipment_statuses_SHOULD_return_correct_IsOrderEditable(string editableShipmentStates,
-            string[] cartShipmentStatuses,
-            bool expectedIsOrderEditable)
-        {
-            //Arrange
-            var factory = _container.CreateInstance<OrderDetailsViewModelFactory>();
-
-            //Act
-            var shipmentList = cartShipmentStatuses?.Select(status => new Shipment()
-                {
-                    Status = status ,
-                    Address = new Address(),
-                    FulfillmentMethod = new FulfillmentMethod
-                    {
-                        Cost = GetRandom.Double()
-                    },
-                    Taxes = new List<Tax>()
-                }).ToList();
-
-            var order = CreateOrderWithShipments(shipmentList);
-            var result = factory.CreateViewModel(CreateOrderDetailViewModelParam(order, editableShipmentStates));
-            //Assert
-            result.OrderInfos.IsOrderEditable.Should().Be(expectedIsOrderEditable);
-        }
-
-        protected CreateOrderDetailViewModelParam CreateOrderDetailViewModelParam(Overture.ServiceModel.Orders.Order order, string editableShipmentStates = default)
+        protected CreateOrderDetailViewModelParam CreateOrderDetailViewModelParam(Overture.ServiceModel.Orders.Order order)
         {
             return new CreateOrderDetailViewModelParam
             {
@@ -253,19 +220,6 @@ namespace Orckestra.Composer.Cart.Tests.Factory.Order
                 {
                     {"InProgress", "In Progress"},
                     {"Canceled" , "Canceled"}
-                }
-            };
-        }
-
-        protected Overture.ServiceModel.Orders.Order CreateOrderWithShipments(List<Shipment> shipments)
-        {
-            return new Overture.ServiceModel.Orders.Order
-            {
-                OrderStatus = "InProgress",
-                Cart = new Overture.ServiceModel.Orders.Cart
-                {
-                    Total = 100,
-                    Shipments = shipments
                 }
             };
         }
