@@ -270,4 +270,7 @@
   <data name="L_All" xml:space="preserve">
     <value>All</value>
   </data>
+  <data name="B_Update" xml:space="preserve">
+    <value>Update</value>
+  </data>
 </root>

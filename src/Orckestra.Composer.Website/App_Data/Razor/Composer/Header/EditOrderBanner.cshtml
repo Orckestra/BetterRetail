@@ -5,8 +5,14 @@
 </head>
 <body>
     <div data-oc-controller="Cart.EditOrderBanner">
-        <div id="vueEditOrderBanner" v-cloak="true" v-if="IsDraftCart=true" class="alert alert-success m-0 p-2 text-center">
-            @Html.Localized("ShoppingCart", "L_EditCartBannerMessage", "{{OrderNumberForOrderDraft}}")
+        <div id="vueEditOrderBanner" v-cloak="true" v-if="IsDraftCart" class="alert alert-success m-0 p-2 text-center">
+            <div class="container">
+                @Html.Localized("ShoppingCart", "L_EditCartBannerMessage", "{{OrderNumberForOrderDraft}}")
+                <ul class="nav-pills float-right">
+                    <li> <a class="cta" href="#"> @Html.Localized("General", "B_Cancel")</a></li>
+                    <li> <a class="cta" href="#"> @Html.Localized("General", "B_Update")</a></li>
+                </ul>
+            </div>
         </div>
     </div>
 </body>
