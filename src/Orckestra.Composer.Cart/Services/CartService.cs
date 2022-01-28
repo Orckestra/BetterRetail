@@ -336,7 +336,7 @@ namespace Orckestra.Composer.Cart.Services
 
         private void ClearEditMode(string cartType, ComposerException ex)
         {
-            if (ex.Errors.FirstOrDefault(e => e.ErrorCode == "CartDoesNotExist") != null &&
+            if (ex.Errors?.FirstOrDefault(e => e.ErrorCode == "CartDoesNotExist") != null &&
                 cartType == CartConfiguration.OrderDraftCartType &&
                 EditingOrderProvider.IsEditMode())
             {
