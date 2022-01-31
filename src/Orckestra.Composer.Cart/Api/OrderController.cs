@@ -189,7 +189,7 @@ namespace Orckestra.Composer.Cart.Api
 
 
         /// <summary>
-        /// Set an order in edit mode
+        /// Cancel edit mode for order
         /// </summary>
         /// <param name="param">Parameters container</param>
         [HttpPost]

@@ -120,7 +120,6 @@ namespace Orckestra.Composer.Cart.Providers.Order
 
         public virtual async Task CancelEditOrderAsync(Overture.ServiceModel.Orders.Order order)
         {
-
             await OrderRepository.DeleteCartOrderDraft(new DeleteCartOrderDraftParam
             {
                 CustomerId = Guid.Parse(order.CustomerId),
