@@ -506,7 +506,7 @@ namespace Orckestra.Composer.Cart.Services.Order
 
             if(order == null)
             {
-                throw new InvalidOperationException($"Cannot cancel edititng order #${orderNumber} as it doesn't exist.");
+                throw new InvalidOperationException($"Cannot cancel editing order #${orderNumber} as it doesn't exist.");
             }
 
             await EditingOrderProvider.CancelEditOrderAsync(order).ConfigureAwait(false);
