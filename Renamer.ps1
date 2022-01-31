@@ -145,11 +145,11 @@ function FixAssemblyName(){
 function FixAppInsightsConfig(){
 	$filePath = $directory.Path + "\src\Orckestra.Composer.C1.Core\Package\Composite.config.xsl"
 	$content = Get-Content -Path $filePath
-	$oldContent = 'type="' + $NewText + '.App_Insights.AppInsightsListener, ' + $NewText + '"'
-	Write-Host "Old content: $oldContent" -ForegroundColor White
-	$newContent = 'type="' + $NewText + '.App_Insights.AppInsightsListener, ' + $OldText + '"'
-	Write-Host "New content: $newContent" -ForegroundColor White
-	$content = $content -replace $oldContent, $newContent
+	$oldValue = 'type="' + $NewText + '.App_Insights.AppInsightsListener, ' + $NewText + '"'
+	Write-Host "Old value: $oldValue" -ForegroundColor White
+	$newValue = 'type="' + $NewText + '.App_Insights.AppInsightsListener, ' + $OldText + '"'
+	Write-Host "New value: $newValue" -ForegroundColor White
+	$content = $content -replace $oldValue, $newValue
 	Set-Content -Path $filePath -Value $content
 }
 #
