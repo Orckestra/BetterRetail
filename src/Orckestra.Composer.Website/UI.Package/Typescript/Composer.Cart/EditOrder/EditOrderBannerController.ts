@@ -1,10 +1,14 @@
 ///<reference path='../../../Typings/tsd.d.ts' />
 ///<reference path='../../Mvc/Controller.ts' />
 ///<reference path='../CartSummary/CartService.ts' />
+///<reference path='../OrderHistory/Services/OrderService.ts' />
+///<reference path='../CartSummary/CartEvents.ts' />
+
 
 module Orckestra.Composer {
     export class EditOrderBannerController extends Controller {
         protected cartService: ICartService = CartService.getInstance();
+        protected orderService = new OrderService();
         protected VueEditOrderBanner: Vue;
         public initialize() {
             super.initialize();
@@ -15,9 +19,20 @@ module Orckestra.Composer {
             let self: EditOrderBannerController = this;
             this.VueEditOrderBanner = new Vue({
                 el: '#vueEditOrderBanner',
+                mounted() {
+                    self.eventHub.subscribe(CartEvents.CartUpdated, e => this.Cart = e.data);
+                },
                 data: {
-                    IsDraftCart: currentCart.CartType == "OrderDraft",
-                    OrderNumberForOrderDraft: currentCart.OrderSummary.OrderNumberForOrderDraft
+                    Cart: currentCart
+                },
+                computed: {
+                    IsDraftCart() { return this.Cart.CartType == "OrderDraft" },
+                    OrderNumberForOrderDraft() { return this.Cart.OrderSummary.OrderNumberForOrderDraft; }
+                },
+                methods: {
+                    cancelEditOrder() {
+                        self.orderService.cancelEditOrder(this.OrderNumberForOrderDraft);
+                    }
                 }
             });
         }

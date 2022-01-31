@@ -65,7 +65,7 @@
                 <div v-if="Cart.CartType == '@CartConfiguration.OrderDraftCartType'">
                     <div class="row">
                         <div class="col-6">
-                            <button class="btn btn-secondary w-100  text-uppercase">
+                            <button v-on:click="cancelEditOrder" class="btn btn-secondary w-100  text-uppercase">
                                 @Html.Localize("General", "B_Cancel")
                             </button>
                         </div>

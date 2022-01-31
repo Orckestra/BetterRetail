@@ -37,20 +37,10 @@ module Orckestra.Composer {
                                 .fin(() => this.Loading = false);
                         },
                         editOrder(orderNumber: string) {
-                            if(this.Loading) return;
+                            if (this.Loading) return;
                             this.Loading = true;
                             self.eventHub.publish(MyAccountEvents.StartEditOrder, { data: orderNumber });
                             self.orderService.editOrder(orderNumber)
-                                .then(result => {
-                                    if(result.CartUrl) {
-                                        let data =  { redirectUrl: result.CartUrl };
-                                        self.eventHub.publish(MyAccountEvents.EditOrderChanged, { data: data });
-                                    }
-                                })
-                                .fail(reason => {
-                                    console.log(reason);
-                                    ErrorHandler.instance().outputErrorFromCode('EditingOrderFailed');
-                                })
                                 .fin(() => {
                                     this.Loading = false;
                                 });

@@ -55,24 +55,37 @@
             <div class="card">
                 <div class="card-header">
                     <div class="row">
-                        <div class="col-sm-8">
+                        <div class="col-sm-7">
                             <h4 class="m-0">
                                 @Html.Localized("MyAccount", "L_OrderedOn", order.OrderInfos.OrderDate)
                             </h4>
                         </div>
                         @if (order.OrderInfos.IsOrderEditable)
                         {
-                            <div class="col-sm-4 text-sm-right">
-                                <a href="#" v-bind:disabled="Loading" class="cta" v-on:click.prevent="editOrder('@Order.OrderInfos.OrderNumber')">
+                            <div class="col-sm-5 text-sm-right">
+                                <ul class="nav-pills float-right">
+                                    <li>
+                                        <a href="#" v-bind:disabled="Loading" class="cta" v-on:click.prevent="editOrder('@Order.OrderInfos.OrderNumber')">
+                                            @if (order.OrderInfos.HasOwnDraft)
+                                            {
+                                                @Html.Localize("MyAccount", "B_ContinueEditing")
+                                            }
+                                            else
+                                            {
+                                                @Html.Localize("MyAccount", "B_EditOrder")
+                                            }
+                                        </a>
+                                    </li>
                                     @if (order.OrderInfos.HasOwnDraft)
                                     {
-                                        @Html.Localize("MyAccount", "B_ContinueEditing")
+                                        <li>
+                                            <a href="#" class="cta" v-on:click.prevent="cancelEditingOrder('@Order.OrderInfos.OrderNumber')">
+                                                @Html.Localize("MyAccount", "B_CancelEditing")
+                                            </a>
+                                        </li>
                                     }
-                                    else
-                                    {
-                                        @Html.Localize("MyAccount", "B_EditOrder")
-                                    }
-                                </a>
+                                </ul>
+                              
                             </div>
                         }
                     </div>
