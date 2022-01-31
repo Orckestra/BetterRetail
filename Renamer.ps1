@@ -140,6 +140,19 @@ function FixAssemblyName(){
 	Set-Content -Path $filePath -Value $content
 }
 
+# Keeping the correct assembly name for AppInsights config
+function FixAppInsightsConfig(){
+	$filePath = $directory.Path + "\src\Orckestra.Composer.C1.Core\Package\Composite.config.xsl"
+	$content = Get-Content -Path $filePath
+	$oldContent = 'type="' + $NewText + '.App_Insights.AppInsightsListener, ' + $NewText + '"'
+	Write-Host "Old content: $oldContent" -ForegroundColor White
+	$newContent = 'type="' + $NewText + '.App_Insights.AppInsightsListener, ' + $OldText + '"'
+	Write-Host "New content: $newContent" -ForegroundColor White
+	$content = $content -replace $oldContent, $newContent
+	Set-Content -Path $filePath -Value $content
+}
+#
+
 #Start of process
 Write-Host "Start of process" -ForegroundColor Green
 
@@ -150,6 +163,8 @@ ProcessRecursiveRenaming($directory)
 FixUsings
 
 FixAssemblyName
+
+FixAppInsightsConfig
 
 #UpdateParametersAllXml
 
