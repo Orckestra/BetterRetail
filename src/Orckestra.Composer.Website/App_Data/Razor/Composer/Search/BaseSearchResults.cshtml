@@ -18,7 +18,7 @@
            v-on:click="searchProductClick(@entity, index)">
             <img class="img-fluid"
                  v-bind:src="@(entity).ImageUrl" v-bind:alt="@(entity).FullDisplayName"
-                 v-bind:onerror="'this.onerror=null; this.src=`${@(entity).FallbackImageUrl}`'" />
+                 v-bind:onerror="`this.onerror=null; this.src='${@(entity).FallbackImageUrl}'`" />
         </a>
 
         <div class="product-tile-text">
