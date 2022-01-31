@@ -23,7 +23,7 @@ namespace Orckestra.Composer.Cart.Repositories.Order
         /// </summary>
         /// <param name="param"></param>
         /// <returns></returns>
-        Task<List<Overture.ServiceModel.Orders.OrderHistoryItem>> GetOrderChangesAsync(GetOrderChangesParam param);
+        Task<List<OrderHistoryItem>> GetOrderChangesAsync(GetOrderChangesParam param);
 
         /// <summary>
         /// Returns the notes of a specified shipment.
@@ -39,11 +39,25 @@ namespace Orckestra.Composer.Cart.Repositories.Order
         /// <returns></returns>
         Task<Overture.ServiceModel.Orders.Order> UpdateOrderAsync(UpdateOrderParam param);
 
+
         /// <summary>
         /// Get Order Settings.
         /// </summary>
         /// <param name="param"></param>
         /// <returns></returns>
         Task<OrderSettings> GetOrderSettings(string scope);
+
+        /// <summary>
+        /// Create a cart draft to edit an order
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns>Cart draft</returns>
+        Task<ProcessedCart> CreateCartOrderDraft(CreateCartOrderDraftParam param);
+
+        /// <summary>
+        /// Change Order Draft ownership
+        /// </summary>
+        /// <returns></returns>
+        Task<ProcessedCart> ChangeOwnership(ChangeOrderDraftOwnershipParam param);
     }
 }

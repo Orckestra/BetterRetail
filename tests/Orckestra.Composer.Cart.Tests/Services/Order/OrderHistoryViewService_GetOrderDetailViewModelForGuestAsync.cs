@@ -48,7 +48,7 @@ namespace Orckestra.Composer.Cart.Tests.Services.Order
 
             _container.GetMock<IOrderDetailsViewModelFactory>()
             .Setup(r => r.CreateViewModel(It.IsAny<CreateOrderDetailViewModelParam>()))
-            .Returns(new OrderDetailViewModel());
+            .Returns(new OrderDetailViewModel() { OrderInfos = new OrderDetailInfoViewModel()});
 
             _container.GetMock<IOrderUrlProvider>()
               .Setup(r => r.GetOrderDetailsBaseUrl(It.IsAny<CultureInfo>()))
@@ -75,17 +75,11 @@ namespace Orckestra.Composer.Cart.Tests.Services.Order
                             Email = email
                         }
                     },
-                    ScopeId = "Global"
+                    ScopeId = "Global",
+                    CustomerId = Guid.NewGuid().ToString()
 
                 });
 
-            _container.GetMock<IOrderRepository>()
-                .Setup(r => r.GetOrderSettings(It.IsAny<string>()))
-                .ReturnsAsync(new OrderSettings()
-                {
-                    EditableShipmentStates = "new"
-
-                });
             //Act
             var param = new GetOrderForGuestParam
             {

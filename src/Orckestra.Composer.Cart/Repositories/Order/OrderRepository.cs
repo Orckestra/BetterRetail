@@ -4,13 +4,12 @@ using System.Threading.Tasks;
 using Orckestra.Composer.Cart.Factory.Order;
 using Orckestra.Composer.Cart.Parameters.Order;
 using Orckestra.Composer.Configuration;
+using Orckestra.Composer.Services;
 using Orckestra.Overture;
 using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel.Customers;
 using Orckestra.Overture.ServiceModel.Orders;
-using Orckestra.Overture.ServiceModel.Requests.Customers;
 using Orckestra.Overture.ServiceModel.Requests.Orders;
-using Orckestra.Overture.ServiceModel.Requests.Orders.Fulfillment;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Cart.Repositories.Order
@@ -21,8 +20,9 @@ namespace Orckestra.Composer.Cart.Repositories.Order
         protected virtual IFindOrdersRequestFactory FindOrdersRequestFactory { get; private set; }
         protected ICacheProvider CacheProvider { get; private set; }
 
-        public OrderRepository(IOvertureClient overtureClient, 
-            IFindOrdersRequestFactory findOrdersRequestFactory,
+        public OrderRepository(
+            IOvertureClient overtureClient, 
+            IFindOrdersRequestFactory findOrdersRequestFactory, 
             ICacheProvider cacheProvider)
         {
             OvertureClient = overtureClient ?? throw new ArgumentNullException(nameof(overtureClient));
@@ -76,7 +76,7 @@ namespace Orckestra.Composer.Cart.Repositories.Order
         /// </summary>
         /// <param name="param"></param>
         /// <returns></returns>
-        public virtual Task<List<Overture.ServiceModel.Orders.OrderHistoryItem>> GetOrderChangesAsync(GetOrderChangesParam param)
+        public virtual Task<List<OrderHistoryItem>> GetOrderChangesAsync(GetOrderChangesParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
             if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
@@ -147,6 +147,53 @@ namespace Orckestra.Composer.Cart.Repositories.Order
             };
 
             return cacheKey;
+        }
+
+        /// <summary>
+        /// Create a cart draft of some order
+        /// </summary>
+        /// <param name="orderId">Id of the order</param>
+        /// <returns>Cart draft</returns>
+        public Task<ProcessedCart> CreateCartOrderDraft(CreateCartOrderDraftParam param)
+        {
+            if (param == null) throw new ArgumentNullException(nameof(param));
+            if (param.OrderId == default) throw new ArgumentException(GetMessageOfEmpty(nameof(param.OrderId)));
+            if (string.IsNullOrWhiteSpace(param.Scope)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)));
+            if (param.CustomerId == null) throw new ArgumentException(GetMessageOfNull(nameof(param.CustomerId)));
+
+            var request = new CreateCartOrderDraftRequest
+            {
+                CultureName = param.CultureInfo.Name,
+                CustomerId = param.CustomerId,
+                OrderId = param.OrderId,
+                ScopeId = param.Scope
+            };
+
+            return OvertureClient.SendAsync(request);
+        }
+
+        /// <summary>
+        /// Change ownership of an order draft to the requested user and revert pending changes to the original order cart when required.
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        public virtual Task<ProcessedCart> ChangeOwnership(ChangeOrderDraftOwnershipParam param)
+        {
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (param.OrderId == default) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.OrderId))); }
+            if (param.CustomerId == default) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId))); }
+            if (param.Scope == default) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.Scope))); }
+
+            var request = new ChangeOwnershipCartOrderDraftRequest()
+            {
+                ScopeId = param.Scope,
+                CustomerId = param.CustomerId,
+                OrderId = param.OrderId,
+                RevertPendingChanges = param.RevertPendingChanges,
+                CultureName = param.CultureName
+            };
+
+            return OvertureClient.SendAsync(request);
         }
     }
 }

@@ -5,19 +5,19 @@
     <div v-for="order in Orders" class="card mb-2">
         <div class="card-header">
             <div class="row">
-                <div class="col-sm-8">
+                <div class="col-sm-7">
                     <h5 class="m-0"> @Html.Localized("MyAccount", "L_OrderedOn", "{{order.OrderInfos.OrderDate}}")</h5>
                 </div>
-
-                <div class="col-sm-4 text-sm-right">
-                    <ul class="nav-pills">
-                        <li v-if="order.OrderInfos.IsOrderEditable" >
-                            <a class="cta text-dark font-weight-normal" href="#">
-                                @Html.Localize("MyAccount", "B_EditOrder")
+                <div class="col-sm-5">
+                    <ul class="nav-pills m-0 float-right">
+                        <li v-if="order.OrderInfos.IsOrderEditable">
+                            <a v-on:click.prevent="editOrder(order.OrderInfos.OrderNumber)" class="cta" href="#">
+                                <span v-if="order.OrderInfos.HasOwnDraft">@Html.Localize("MyAccount", "B_ContinueEditing")</span>
+                                <span v-else="else">@Html.Localize("MyAccount", "B_EditOrder")</span>
                             </a>
                         </li>
                         <li>
-                            <a v-bind:href="order.Url" class="cta text-dark font-weight-normal">
+                            <a v-bind:href="order.Url" class="cta">
                                 @Html.Localize("MyAccount", "H_OrderDetail")
                             </a>
                         </li>

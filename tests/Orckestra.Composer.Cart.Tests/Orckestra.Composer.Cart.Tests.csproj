@@ -125,6 +125,7 @@
     <Compile Include="Mock\ComposerJsonSerializerMock.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\CartMergeProvider_MergeCartAsync.cs" />
+    <Compile Include="Providers\EditingOrderProvider_IsOrderEditable.cs" />
     <Compile Include="Providers\OverwriteCartMergeProvider_MergeCartAsync.cs" />
     <Compile Include="Providers\SurfacedErrorLineItemValidationProvider_IsLineItemValid.cs" />
     <Compile Include="Repositories\CartRepository_AddCouponAsync.cs" />

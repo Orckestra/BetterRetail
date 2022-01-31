@@ -138,32 +138,27 @@ namespace Orckestra.Composer.Cart.Factory.Order
             orderInfos.OrderStatusRaw = param.Order.OrderStatus;
             orderInfos.BillingCurrency = param.Order.Cart.BillingCurrency;
             orderInfos.PricePaid = LocalizationProvider.FormatPrice((decimal)param.Order.Cart.Total, CurrencyProvider.GetCurrency());
-            orderInfos.IsOrderEditable = IsOrderEditable(param);
+            orderInfos.HasOwnDraft = HasOwnDraft(param);
 
             return orderInfos;
         }
 
-        protected virtual bool IsOrderEditable(CreateOrderDetailViewModelParam param)
+        protected virtual bool HasOwnDraft(CreateOrderDetailViewModelParam param)
         {
-            var shipmentStatuses = param.Order.Cart.GetAllShipmentStatuses();
-            if (!shipmentStatuses.Any() 
-                || param.OrderSettings == null
-                || string.IsNullOrWhiteSpace(param.OrderSettings.EditableShipmentStates))
+            var orderDraft = param.OrderCartDrafts?.FirstOrDefault(d => Guid.Parse(d.Name) == Guid.Parse(param.Order.Id));
+            if (orderDraft != null)
             {
-                return false;
+                orderDraft.PropertyBag.TryGetValue(Constants.OrderDraft.OwnershipPropertyBagKey, out object orderDraftOwnershipUserName);
+                if (Constants.OrderDraft.OwnershipByWebsite.Split(',').Contains(orderDraftOwnershipUserName))
+                {
+                    return true;
+                }
             }
 
-            var isOrderEditable = shipmentStatuses
-                .All(item => param
-                    ?.OrderSettings
-                    ?.EditableShipmentStates
-                    ?.Split('|')
-                    .Contains(item) ?? false);
-
-            return isOrderEditable;
+            return false;
         }
 
-        protected virtual string GetOrderStatusDisplayName(CreateOrderDetailViewModelParam param)
+         protected virtual string GetOrderStatusDisplayName(CreateOrderDetailViewModelParam param)
         {
             return LocalizationProvider.GetLocalizedString(new GetLocalizedParam
             {

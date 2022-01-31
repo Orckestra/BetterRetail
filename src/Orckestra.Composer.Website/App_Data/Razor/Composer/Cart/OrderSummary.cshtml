@@ -58,7 +58,24 @@
                     @Html.Localize("ShoppingCart", "L_RemoveUnavailableItems")
                 </div>
 
-                @CheckoutBtn()
+                <div v-if="Cart.CartType != '@CartConfiguration.OrderDraftCartType'">
+                    @CheckoutBtn()
+                </div>
+
+                <div v-if="Cart.CartType == '@CartConfiguration.OrderDraftCartType'">
+                    <div class="row">
+                        <div class="col-6">
+                            <button class="btn btn-secondary w-100  text-uppercase">
+                                @Html.Localize("General", "B_Cancel")
+                            </button>
+                        </div>
+                        <div class="col-6">
+                            <button class="btn btn-success w-100 text-uppercase">
+                                @Html.Localize("General", "B_Update")
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         @EstimateShippingModal()

@@ -198,6 +198,9 @@
   <data name="L_AdditionalFeesGenericMessage" xml:space="preserve">
     <value>Des frais supplémentaires peuvent être facturés en cas de colis surdimensionnés.</value>
   </data>
+  <data name="L_EditCartBannerMessage" xml:space="preserve">
+    <value>Vous modifiez actuellement la commande « {0} »</value>
+  </data>
   <data name="L_EmptyShoppingCart" xml:space="preserve">
     <value>Il n'y a aucun produit dans votre panier d'achat</value>
   </data>

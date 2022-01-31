@@ -15,6 +15,8 @@ module Orckestra.Composer {
         LoggedIn,
         LoggedOut,
         PasswordChanged,
-        ForgotPasswordInstructionSent
+        ForgotPasswordInstructionSent,
+        StartEditOrder = 'startEditOrder',
+        EditOrderChanged = 'editOrderChanged'
     }
 }
