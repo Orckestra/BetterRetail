@@ -42,6 +42,10 @@ module Orckestra.Composer {
                 computed: {
                 },
                 methods: {
+                    loadingProduct(product, loading) {
+                        product.loading = loading;
+                        this.SearchResults = [...this.SearchResults];
+                    },
                     sortingChanged(url: string): void {
                         self.eventHub.publish(SearchEvents.SortingChanged, {data: {url}});
                     },
@@ -55,19 +59,19 @@ module Orckestra.Composer {
 
                         const price: number = product.IsOnSale ? product.Price : product.ListPrice;
 
-                      //  var busy = this.asyncBusy({ elementContext: actionContext.elementContext, containerContext: productContext });
+                        this.loadingProduct(product, true);
 
                         if (hasVariants) {
                             self.productService.loadQuickBuyProduct(productId, variantId, 'productSearch', this.ListName)
                                 .then(this.addToCartSuccess, this.onAddToCartFailed)
-                              //  .fin(() => busy.done());
+                                .fin(() => this.loadingProduct(product, false));
 
                         } else {
                             self.sendProductDataForAnalytics(product, price, this.ListName);
 
                             self.cartService.addLineItem(productId, '' + price, null, 1, null, recurringOrderProgramName)
                                 .then(this.addToCartSuccess, this.onAddToCartFailed)
-                              //  .fin(() => busy.done());
+                                .fin(() => this.loadingProduct(product, false));
                         }
                     },
                     onAddToCartFailed(reason: any): void {
