@@ -65,15 +65,7 @@ module Orckestra.Composer {
 
                     },
                     cancelEditOrder() {
-                        self.orderService.cancelEditOrder(this.Cart.OrderSummary.OrderNumberForOrderDraft)
-                            .then(() => {
-                                return self.cartService.getFreshCart(true);
-                            })
-                            .then(cart => {
-                                this.Cart = cart;
-                                self.eventHub.publish(CartEvents.CartUpdated, { data: cart });
-                            })
-                            .fail(reason => console.log(reason));
+                        self.orderService.cancelEditOrder(this.Cart.OrderSummary.OrderNumberForOrderDraft);
                     },
                     proceedToCheckout() {
                         let nextStepUrl = this.OrderSummary.CheckoutUrlTarget;

@@ -19,24 +19,19 @@ module Orckestra.Composer {
             let self: EditOrderBannerController = this;
             this.VueEditOrderBanner = new Vue({
                 el: '#vueEditOrderBanner',
+                mounted() {
+                    self.eventHub.subscribe(CartEvents.CartUpdated, e => this.Cart = e.data);
+                },
                 data: {
                     Cart: currentCart
-               },
-                computed:  {
+                },
+                computed: {
                     IsDraftCart() { return this.Cart.CartType == "OrderDraft" },
                     OrderNumberForOrderDraft() { return this.Cart.OrderSummary.OrderNumberForOrderDraft; }
                 },
                 methods: {
                     cancelEditOrder() {
-                        self.orderService.cancelEditOrder(this.OrderNumberForOrderDraft)
-                        .then(() => {
-                            return self.cartService.getFreshCart(true);
-                        })
-                            .then(cart => {
-                                this.Cart = cart;
-                                self.eventHub.publish(CartEvents.CartUpdated, { data: cart });
-                            })
-                        .fail(reason => console.log(reason));
+                        self.orderService.cancelEditOrder(this.OrderNumberForOrderDraft);
                     }
                 }
             });
