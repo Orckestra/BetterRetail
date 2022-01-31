@@ -202,7 +202,7 @@ namespace Orckestra.Composer.Cart.Repositories.Order
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
             if (param.OrderId == default) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.OrderId))); }
             if (param.CustomerId == default) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId))); }
-            if (param.Scope == default) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.Scope))); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope))); }
 
             var request = new DeleteCartOrderDraftRequest()
             {

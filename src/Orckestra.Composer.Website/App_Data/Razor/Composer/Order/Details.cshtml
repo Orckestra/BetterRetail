@@ -63,7 +63,7 @@
                         @if (order.OrderInfos.IsOrderEditable)
                         {
                             <div class="col-sm-5 text-sm-right">
-                                <ul class="nav-pills">
+                                <ul class="nav-pills float-right">
                                     <li>
                                         <a href="#" v-bind:disabled="Loading" class="cta" v-on:click.prevent="editOrder('@Order.OrderInfos.OrderNumber')">
                                             @if (order.OrderInfos.HasOwnDraft)
