@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using Orckestra.Composer.Cart.Parameters.Order;
 using Orckestra.Overture.ServiceModel.Customers;
@@ -59,5 +60,12 @@ namespace Orckestra.Composer.Cart.Repositories.Order
         /// </summary>
         /// <returns></returns>
         Task<ProcessedCart> ChangeOwnership(ChangeOrderDraftOwnershipParam param);
+
+        /// <summary>
+        /// Delete a cart of order draft type.
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        Task<HttpWebResponse> DeleteCartOrderDraft(DeleteCartOrderDraftParam param);
     }
 }

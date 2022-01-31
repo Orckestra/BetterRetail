@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using Orckestra.Composer.Cart.Factory.Order;
 using Orckestra.Composer.Cart.Parameters.Order;
@@ -191,6 +192,23 @@ namespace Orckestra.Composer.Cart.Repositories.Order
                 OrderId = param.OrderId,
                 RevertPendingChanges = param.RevertPendingChanges,
                 CultureName = param.CultureName
+            };
+
+            return OvertureClient.SendAsync(request);
+        }
+
+        public virtual Task<HttpWebResponse> DeleteCartOrderDraft(DeleteCartOrderDraftParam param)
+        {
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (param.OrderId == default) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.OrderId))); }
+            if (param.CustomerId == default) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId))); }
+            if (param.Scope == default) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.Scope))); }
+
+            var request = new DeleteCartOrderDraftRequest()
+            {
+                ScopeId = param.Scope,
+                CustomerId = param.CustomerId,
+                OrderId = param.OrderId
             };
 
             return OvertureClient.SendAsync(request);

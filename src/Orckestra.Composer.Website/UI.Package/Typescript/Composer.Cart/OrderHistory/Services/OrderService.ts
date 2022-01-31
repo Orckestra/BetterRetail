@@ -7,16 +7,16 @@ module Orckestra.Composer {
 
     export class OrderService {
 
-        public editOrder(orderNumber: string) {
-            return ComposerClient.post('/api/order/edit-order', { OrderNumber: orderNumber });
+        public editOrder(OrderNumber: string) {
+            return ComposerClient.post('/api/order/edit-order', { OrderNumber });
         }
 
         public saveEditOrder() {
             return ComposerClient.post('/api/order/save-edited-order', {});
         }
 
-        public cancelEditOrder() {
-            return ComposerClient.post('/api/order/cancel-edit-order', null);
+        public cancelEditOrder(OrderNumber: string) {
+            return ComposerClient.post('/api/order/cancel-edit-order', { OrderNumber });
         }
 
         public getEditedOrder() {

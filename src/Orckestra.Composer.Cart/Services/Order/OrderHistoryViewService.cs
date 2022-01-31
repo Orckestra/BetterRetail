@@ -491,6 +491,27 @@ namespace Orckestra.Composer.Cart.Services.Order
             return GetEditingOrderViewModel();
         }
 
+        public async Task CancelEditingOrderAsync(string orderNumber)
+        {
+            if (string.IsNullOrWhiteSpace(orderNumber)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(orderNumber)));
+
+            var getOrderParam = new GetCustomerOrderParam()
+            {
+                CultureInfo = ComposerContext.CultureInfo,
+                OrderNumber = orderNumber,
+                Scope = Constants.GlobalScopeName
+            };
+
+            var order = await OrderRepository.GetOrderAsync(getOrderParam).ConfigureAwait(false);
+
+            if(order == null)
+            {
+                throw new InvalidOperationException($"Cannot cancel order #${orderNumber} as it doesn't exist.");
+            }
+
+            await EditingOrderProvider.CancelEditOrderAsync(order).ConfigureAwait(false);
+        }
+
         private EditingOrderViewModel GetEditingOrderViewModel()
         {
             return new EditingOrderViewModel
