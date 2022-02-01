@@ -487,4 +487,7 @@ Don't worry, you can still find great products to offer!</value>
   <data name="L_UnavailableOrderItem" xml:space="preserve">
     <value>We’re sorry, this item was unavailable and we were unable to make a substitute.</value>
   </data>
+  <data name="B_EditOrder" xml:space="preserve">
+    <value>Edit Order</value>
+  </data>
 </root>

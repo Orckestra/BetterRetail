@@ -484,4 +484,7 @@ Pas de soucis, vous pouvez trouver d'excellentes suggestions de produits à offr
   <data name="T_ShippingAddress" xml:space="preserve">
     <value>Adresse de l'expédition:</value>
   </data>
+  <data name="B_EditOrder" xml:space="preserve">
+    <value>Modifier la commande</value>
+  </data>
 </root>

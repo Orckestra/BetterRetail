@@ -3,6 +3,7 @@ using Orckestra.Composer.Cart.Parameters.Order;
 using Orckestra.Composer.Cart.Repositories.Order;
 using Orckestra.Composer.Providers;
 using Orckestra.Overture;
+using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel.Orders;
 using System.Threading.Tasks;
 
@@ -14,7 +15,7 @@ namespace Orckestra.Composer.Grocery.Repositories
 
         public SalesScopeOrderRepository(IOvertureClient overtureClient,
             IFindOrdersRequestFactory findOrdersRequestFactory,
-            IScopeProvider scopeProvider) : base(overtureClient, findOrdersRequestFactory)
+            IScopeProvider scopeProvider, ICacheProvider cacheProvider) : base(overtureClient, findOrdersRequestFactory, cacheProvider)
         {
             ScopeProvider = scopeProvider;
         }

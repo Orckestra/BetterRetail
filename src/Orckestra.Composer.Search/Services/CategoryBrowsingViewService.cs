@@ -85,8 +85,8 @@ namespace Orckestra.Composer.Search.Services
             if (viewModel.FacetSettings.CategoryFacetValuesTree != null)
             {
                 var categoryRoot = CategoryRootNode(viewModel.FacetSettings.CategoryFacetValuesTree.ChildNodes, param.CategoryId);
-                viewModel.FacetSettings.CategoryFacetValuesTree.TotalCount = categoryRoot.Quantity;
-                viewModel.FacetSettings.CategoryFacetValuesTree.ChildNodes = categoryRoot.ChildNodes;
+                viewModel.FacetSettings.CategoryFacetValuesTree.TotalCount = categoryRoot != null ? categoryRoot.Quantity : 0;
+                viewModel.FacetSettings.CategoryFacetValuesTree.ChildNodes = categoryRoot?.ChildNodes;
                 viewModel.FacetSettings.CategoryFacetValuesTree.ChildNodes?.ForEach(childNode => BuildCategoryUrlsForTreeNode(param, childNode));
                 viewModel.FacetSettings.CategoryFacetValuesTree.ChildNodes?.ForEach(childNode => CleanSiblingFacets(param, childNode));
                 viewModel.FacetSettings.Context["CategoryFacetValuesTree"] = viewModel.FacetSettings.CategoryFacetValuesTree;
