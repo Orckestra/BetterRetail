@@ -28,7 +28,8 @@ namespace Orckestra.Composer.Cart.Providers.Order
 
         public virtual async Task<bool> IsOrderEditable(Overture.ServiceModel.Orders.Order order)
         {
-            if (order?.Cart?.Shipments == null)
+            if (order?.Cart?.Shipments == null ||
+                OrderHistoryConfiguration.CompletedOrderStatuses.Contains(order.OrderStatus))
             {
                 return false;
             }
@@ -116,6 +117,19 @@ namespace Orckestra.Composer.Cart.Providers.Order
             ComposerContext.EditingCartName = draftCart.Name;
 
             return draftCart;
+        }
+
+        public virtual async Task CancelEditOrderAsync(Overture.ServiceModel.Orders.Order order)
+        {
+            await OrderRepository.DeleteCartOrderDraft(new DeleteCartOrderDraftParam
+            {
+                CustomerId = Guid.Parse(order.CustomerId),
+                Scope = order.ScopeId,
+                OrderId = Guid.Parse(order.Id)
+            }).ConfigureAwait(false);
+
+
+            ClearEditMode();
         }
 
         public virtual void ClearEditMode()

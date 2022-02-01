@@ -17,6 +17,7 @@ module Orckestra.Composer {
         PasswordChanged,
         ForgotPasswordInstructionSent,
         StartEditOrder = 'startEditOrder',
-        EditOrderChanged = 'editOrderChanged'
+        EditOrderStarted = 'editOrderStarted',
+        EditOrderCanceled = 'editOrderCanceled'
     }
 }

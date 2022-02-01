@@ -2,20 +2,28 @@
 
 @helper CompactOrderDetails(bool IsPastOrders = false)
 {
-    <div v-for="order in Orders" class="card mb-2">
+    <div v-for="order in Orders" class="card mb-2" v-bind:key="order.Id">
         <div class="card-header">
             <div class="row">
-                <div class="col-sm-7">
+                <div class="col-sm-6">
                     <h5 class="m-0"> @Html.Localized("MyAccount", "L_OrderedOn", "{{order.OrderInfos.OrderDate}}")</h5>
                 </div>
-                <div class="col-sm-5">
+                <div class="col-sm-6">
                     <ul class="nav-pills m-0 float-right">
-                        <li v-if="order.OrderInfos.IsOrderEditable">
-                            <a v-on:click.prevent="editOrder(order.OrderInfos.OrderNumber)" class="cta" href="#">
-                                <span v-if="order.OrderInfos.HasOwnDraft">@Html.Localize("MyAccount", "B_ContinueEditing")</span>
-                                <span v-else="else">@Html.Localize("MyAccount", "B_EditOrder")</span>
-                            </a>
-                        </li>
+                        @if (!IsPastOrders)
+                        {
+                            <li v-if="order.OrderInfos.IsOrderEditable">
+                                <a v-on:click.prevent="editOrder(order.OrderInfos.OrderNumber)" v-bind:class="{'disabled': Loading}" class="cta" href="#">
+                                    <span v-if="order.OrderInfos.HasOwnDraft">@Html.Localize("MyAccount", "B_ContinueEditing")</span>
+                                    <span v-else="else">@Html.Localize("MyAccount", "B_EditOrder")</span>
+                                </a>
+                            </li>
+                            <li v-if="order.OrderInfos.IsOrderEditable &amp;&amp; order.OrderInfos.HasOwnDraft">
+                                <a v-on:click.prevent="cancelEditingOrder(order.OrderInfos.OrderNumber)" class="cta" href="#" v-bind:class="{'disabled': Loading}">
+                                    @Html.Localize("MyAccount", "B_CancelEditing")
+                                </a>
+                            </li>
+                        }
                         <li>
                             <a v-bind:href="order.Url" class="cta">
                                 @Html.Localize("MyAccount", "H_OrderDetail")

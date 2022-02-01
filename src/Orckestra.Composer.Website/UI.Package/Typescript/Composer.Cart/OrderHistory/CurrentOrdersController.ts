@@ -22,6 +22,7 @@ module Orckestra.Composer {
                     data: {
                         Orders: data ? data.Orders : null,
                         Pagination: data ? data.Pagination : null,
+                        Page: 1,
                         Loading: false
                     },
 
@@ -32,29 +33,29 @@ module Orckestra.Composer {
                                 .then(data => {
                                     this.Orders = data.Orders;
                                     this.Pagination = data.Pagination;
+                                    this.Page = page;
                                 })
                                 .fail(reason => console.log(reason))
                                 .fin(() => this.Loading = false);
                         },
                         editOrder(orderNumber: string) {
-                            if(this.Loading) return;
+                            if (this.Loading) return;
                             this.Loading = true;
                             self.eventHub.publish(MyAccountEvents.StartEditOrder, { data: orderNumber });
                             self.orderService.editOrder(orderNumber)
-                                .then(result => {
-                                    if(result.CartUrl) {
-                                        let data =  { redirectUrl: result.CartUrl };
-                                        self.eventHub.publish(MyAccountEvents.EditOrderChanged, { data: data });
-                                    }
-                                })
-                                .fail(reason => {
-                                    console.log(reason);
-                                    ErrorHandler.instance().outputErrorFromCode('EditingOrderFailed');
-                                })
                                 .fin(() => {
                                     this.Loading = false;
                                 });
-                        }	
+                        },
+                        cancelEditingOrder(orderNumber: string) {
+                            if (this.Loading) return;
+                            this.Loading = true;
+                            self.orderService.cancelEditOrder(orderNumber)
+                                .then(() => this.getOrders(this.Page))
+                                .fail(() => {
+                                    this.Loading = false;
+                                });
+                        } 	
                     }
                 })
             });

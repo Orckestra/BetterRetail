@@ -109,7 +109,6 @@ namespace Orckestra.Composer.Cart.Services.Order
 
            
             var shipmentsTrackingInfos = new Dictionary<Guid, TrackingInfoViewModel>();
-            var orderSettings = await GetOrderSettings(param.Scope).ConfigureAwait(false);
             var ordersDetails = new List<Overture.ServiceModel.Orders.Order>();
             var orderCartDrafts = new List<CartSummary>();
             var orderEditingInfos = new Dictionary<Guid, bool>();
@@ -478,7 +477,7 @@ namespace Orckestra.Composer.Cart.Services.Order
             var order = await OrderRepository.GetOrderAsync(getOrderParam).ConfigureAwait(false);
 
             var isOrderEditable = await EditingOrderProvider.IsOrderEditable(order).ConfigureAwait(false);
-            if (!isOrderEditable) throw new InvalidOperationException("Cannot edit this order");
+            if (!isOrderEditable) throw new InvalidOperationException($"Cannot edit this order #${orderNumber}");
 
  
             if (EditingOrderProvider.IsCurrentEditingOrder(order))
@@ -489,6 +488,27 @@ namespace Orckestra.Composer.Cart.Services.Order
             await EditingOrderProvider.StartEditOrderModeAsync(order).ConfigureAwait(false);
 
             return GetEditingOrderViewModel();
+        }
+
+        public async Task CancelEditingOrderAsync(string orderNumber)
+        {
+            if (string.IsNullOrWhiteSpace(orderNumber)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(orderNumber)));
+
+            var getOrderParam = new GetCustomerOrderParam()
+            {
+                CultureInfo = ComposerContext.CultureInfo,
+                OrderNumber = orderNumber,
+                Scope = Constants.GlobalScopeName
+            };
+
+            var order = await OrderRepository.GetOrderAsync(getOrderParam).ConfigureAwait(false);
+
+            if(order == null)
+            {
+                throw new InvalidOperationException($"Cannot cancel editing order #${orderNumber} as it doesn't exist.");
+            }
+
+            await EditingOrderProvider.CancelEditOrderAsync(order).ConfigureAwait(false);
         }
 
         private EditingOrderViewModel GetEditingOrderViewModel()

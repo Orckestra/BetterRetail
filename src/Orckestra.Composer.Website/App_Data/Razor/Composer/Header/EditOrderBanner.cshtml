@@ -9,7 +9,7 @@
             <div class="container">
                 @Html.Localized("ShoppingCart", "L_EditCartBannerMessage", "{{OrderNumberForOrderDraft}}")
                 <ul class="nav-pills float-right">
-                    <li> <a class="cta" href="#"> @Html.Localized("General", "B_Cancel")</a></li>
+                    <li> <a class="cta" href="#" v-on:click.prevent="cancelEditOrder"> @Html.Localized("General", "B_Cancel")</a></li>
                     <li> <a class="cta" href="#"> @Html.Localized("General", "B_Update")</a></li>
                 </ul>
             </div>

@@ -41,5 +41,12 @@ namespace Orckestra.Composer.Cart.Services.Order
         /// <param name="orderId">The Id of the order</param>
         /// <returns>View model of the editing order</returns>
         Task<EditingOrderViewModel> CreateEditingOrderViewModel(string orderNumber);
+
+        /// <summary>
+        /// Cancel edit order
+        /// </summary>
+        /// <param name="orderNumber"></param>
+        /// <returns></returns>
+        Task CancelEditingOrderAsync(string orderNumber);
     }
 }

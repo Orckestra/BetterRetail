@@ -9,6 +9,12 @@
 
         public const string GlobalScopeName = "Global";
 
+        public static class OrderStatus
+        {
+            public const string Canceled = "Canceled";
+            public const string Fulfilled = "Fulfilled";
+        }
+
         public static class OrderDraft
         {
             public const string OrderNumberProbertyBagKey = "OrderNumberForOrderDraft";
