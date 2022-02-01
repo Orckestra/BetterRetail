@@ -30,7 +30,7 @@ module Orckestra.Composer {
 
             const self = this;
             this.vueSearchResults = new Vue({
-                el: '#vueSearchResults',
+                el: `#${this.context.container.data('vueid')}`,
                 components: {
                 },
                 data: {
