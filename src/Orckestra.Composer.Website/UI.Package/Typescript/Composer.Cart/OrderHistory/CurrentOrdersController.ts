@@ -22,6 +22,7 @@ module Orckestra.Composer {
                     data: {
                         Orders: data ? data.Orders : null,
                         Pagination: data ? data.Pagination : null,
+                        Page: 1,
                         Loading: false
                     },
 
@@ -32,6 +33,7 @@ module Orckestra.Composer {
                                 .then(data => {
                                     this.Orders = data.Orders;
                                     this.Pagination = data.Pagination;
+                                    this.Page = page;
                                 })
                                 .fail(reason => console.log(reason))
                                 .fin(() => this.Loading = false);
@@ -44,7 +46,16 @@ module Orckestra.Composer {
                                 .fin(() => {
                                     this.Loading = false;
                                 });
-                        }	
+                        },
+                        cancelEditingOrder(orderNumber: string) {
+                            if (this.Loading) return;
+                            this.Loading = true;
+                            self.orderService.cancelEditOrder(orderNumber)
+                                .then(() => this.getOrders(this.Page))
+                                .fail(() => {
+                                    this.Loading = false;
+                                });
+                        } 	
                     }
                 })
             });

@@ -28,7 +28,8 @@ namespace Orckestra.Composer.Cart.Providers.Order
 
         public virtual async Task<bool> IsOrderEditable(Overture.ServiceModel.Orders.Order order)
         {
-            if (order?.Cart?.Shipments == null)
+            if (order?.Cart?.Shipments == null ||
+                OrderHistoryConfiguration.CompletedOrderStatuses.Contains(order.OrderStatus))
             {
                 return false;
             }

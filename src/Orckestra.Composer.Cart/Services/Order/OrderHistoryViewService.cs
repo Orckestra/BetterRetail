@@ -109,7 +109,6 @@ namespace Orckestra.Composer.Cart.Services.Order
 
            
             var shipmentsTrackingInfos = new Dictionary<Guid, TrackingInfoViewModel>();
-            var orderSettings = await GetOrderSettings(param.Scope).ConfigureAwait(false);
             var ordersDetails = new List<Overture.ServiceModel.Orders.Order>();
             var orderCartDrafts = new List<CartSummary>();
             var orderEditingInfos = new Dictionary<Guid, bool>();
@@ -478,7 +477,7 @@ namespace Orckestra.Composer.Cart.Services.Order
             var order = await OrderRepository.GetOrderAsync(getOrderParam).ConfigureAwait(false);
 
             var isOrderEditable = await EditingOrderProvider.IsOrderEditable(order).ConfigureAwait(false);
-            if (!isOrderEditable) throw new InvalidOperationException("Cannot edit this order");
+            if (!isOrderEditable) throw new InvalidOperationException($"Cannot edit this order #${orderNumber}");
 
  
             if (EditingOrderProvider.IsCurrentEditingOrder(order))

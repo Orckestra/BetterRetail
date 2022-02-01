@@ -63,9 +63,9 @@
                         @if (order.OrderInfos.IsOrderEditable)
                         {
                             <div class="col-sm-5 text-sm-right">
-                                <ul class="nav-pills float-right">
+                                <ul class="nav-pills float-right m-0">
                                     <li>
-                                        <a href="#" v-bind:disabled="Loading" class="cta" v-on:click.prevent="editOrder('@Order.OrderInfos.OrderNumber')">
+                                        <a href="#" v-bind:class="{'disabled': Loading}" class="cta" v-on:click.prevent="editOrder('@Order.OrderInfos.OrderNumber')">
                                             @if (order.OrderInfos.HasOwnDraft)
                                             {
                                                 @Html.Localize("MyAccount", "B_ContinueEditing")
@@ -79,13 +79,12 @@
                                     @if (order.OrderInfos.HasOwnDraft)
                                     {
                                         <li>
-                                            <a href="#" class="cta" v-on:click.prevent="cancelEditingOrder('@Order.OrderInfos.OrderNumber')">
+                                            <a href="#" class="cta" v-bind:class="{'disabled': Loading}" v-on:click.prevent="cancelEditingOrder('@Order.OrderInfos.OrderNumber')">
                                                 @Html.Localize("MyAccount", "B_CancelEditing")
                                             </a>
                                         </li>
                                     }
                                 </ul>
-                              
                             </div>
                         }
                     </div>
@@ -121,7 +120,7 @@
     foreach (var shipping in order.Shipments)
     {
         var status = shipping.ShipmentStatusName;
-        var statusCss = status == "Fulfilled" ? "text-success" :
+        var statusCss = status == Constants.OrderStatus.Fulfilled ? "text-success" :
             status == "Canceled" ? "text-danger" : "text-warning";
         <div class="card  bg-light  mt-4">
             <h3 class="card-header">
@@ -131,11 +130,11 @@
                 <h4>@shipping.ShippingMethod.DisplayName</h4>
                 <p>@shipping.ShippingMethod.Cost</p>
                 <div class="@statusCss">
-                    @if (status == "Fulfilled")
+                    @if (status == Constants.OrderStatus.Fulfilled)
                     {
                         <span class="fa fa-check-circle"> @Html.Localized("MyAccount", "L_OrderDelivered", @shipping.ShipmentStatusDate) </span>
                     }
-                    else if (status == "Canceled")
+                    else if (status == Constants.OrderStatus.Canceled)
                     {
                         <span class="fa fa-times-circle"> @Html.Localized("MyAccount", "L_OrderCancel", @shipping.ShipmentStatusDate)</span>
                     }

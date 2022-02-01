@@ -34,7 +34,8 @@ module Orckestra.Composer {
                         if (this.Loading) return;
                         this.Loading = true;
                         self.orderService.cancelEditOrder(orderNumber)
-                            .fin(() => {
+                            .then(() => window.location.reload())
+                            .fail(() => {
                                 this.Loading = false;
                             });
                     } 
