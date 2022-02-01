@@ -6,6 +6,7 @@
 ///<reference path='../CartSummary/CartService.ts' />
 ///<reference path='../CartSummary/CartStateService.ts' />
 ///<reference path='./OrderSummaryService.ts' />
+///<reference path='../OrderHistory/Services/OrderService.ts' />
 
 module Orckestra.Composer {
 
@@ -13,6 +14,7 @@ module Orckestra.Composer {
 
         private cartService: ICartService = CartService.getInstance();
         private cartStateService: ICartStateService = CartStateService.getInstance();
+        protected orderService = new OrderService();
         private orderSummaryService: OrderSummaryService = new OrderSummaryService(this.cartService, this.eventHub);
 
         public initialize() {
@@ -61,6 +63,9 @@ module Orckestra.Composer {
                             })
                             .fin(() => this.Mode.Loading = false);
 
+                    },
+                    cancelEditOrder() {
+                        self.orderService.cancelEditOrder(this.Cart.OrderSummary.OrderNumberForOrderDraft);
                     },
                     proceedToCheckout() {
                         let nextStepUrl = this.OrderSummary.CheckoutUrlTarget;

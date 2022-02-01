@@ -138,6 +138,19 @@ namespace Orckestra.Composer.Cart.Providers.Order
             return draftCart;
         }
 
+        public virtual async Task CancelEditOrderAsync(Overture.ServiceModel.Orders.Order order)
+        {
+            await OrderRepository.DeleteCartOrderDraft(new DeleteCartOrderDraftParam
+            {
+                CustomerId = Guid.Parse(order.CustomerId),
+                Scope = order.ScopeId,
+                OrderId = Guid.Parse(order.Id)
+            }).ConfigureAwait(false);
+
+
+            ClearEditMode();
+        }
+
         public virtual void ClearEditMode()
         {
             ComposerContext.EditingCartName = default;

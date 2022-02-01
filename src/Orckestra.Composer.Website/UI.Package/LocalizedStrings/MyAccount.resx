@@ -493,6 +493,9 @@ Don't worry, you can still find great products to offer!</value>
   <data name="B_ContinueEditing" xml:space="preserve">
     <value>Continue Editing</value>
   </data>
+  <data name="B_CancelEditing" xml:space="preserve">
+    <value>Cancel Editing</value>
+  </data>
   <data name="B_CancelOrder" xml:space="preserve">
     <value>Cancel Order</value>
   </data>

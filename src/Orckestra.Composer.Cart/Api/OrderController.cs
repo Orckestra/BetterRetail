@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Specialized;
-using System.Threading.Tasks;
-using System.Web.Http;
-using Orckestra.Composer.Cart.Parameters.Order;
+﻿using Orckestra.Composer.Cart.Parameters.Order;
 using Orckestra.Composer.Cart.Requests;
 using Orckestra.Composer.Cart.Services.Order;
 using Orckestra.Composer.Cart.Utils;
@@ -11,6 +7,10 @@ using Orckestra.Composer.Providers;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Utils;
 using Orckestra.Composer.WebAPIFilters;
+using System;
+using System.Collections.Specialized;
+using System.Threading.Tasks;
+using System.Web.Http;
 
 namespace Orckestra.Composer.Cart.Api
 {
@@ -185,6 +185,23 @@ namespace Orckestra.Composer.Cart.Api
             var vm = await OrderHistoryViewService.CreateEditingOrderViewModel(param.OrderNumber).ConfigureAwait(false);
 
             return Ok(vm);
+        }
+
+
+        /// <summary>
+        /// Cancel edit mode for order
+        /// </summary>
+        /// <param name="param">Parameters container</param>
+        [HttpPost]
+        [ActionName("cancel-edit-order")]
+        [ValidateModelState]
+        public virtual async Task<IHttpActionResult> CancelEditOrder(EditOrderParam param)
+        {
+            if (param == null) return BadRequest($"{nameof(param)} cannot be empty");
+
+            await OrderHistoryViewService.CancelEditingOrderAsync(param.OrderNumber).ConfigureAwait(false);
+
+            return Ok(true);
         }
 
         /// <summary>
