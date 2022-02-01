@@ -10,6 +10,7 @@ using Orckestra.Overture.ServiceModel.Orders;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Orckestra.Overture.ServiceModel.Orders.Fulfillment;
 
 namespace Orckestra.Composer.Cart.Providers.Order
 {
@@ -50,6 +51,25 @@ namespace Orckestra.Composer.Cart.Providers.Order
                     .Contains(item) ?? false);
 
             return isOrderEditable;
+        }
+
+        public virtual async Task<bool> IsOrderCancelable(Overture.ServiceModel.Orders.Order order)
+        {
+            if (!order.OrderStatus.Equals("Canceled", StringComparison.InvariantCultureIgnoreCase))
+            {
+                var orderFulfillmentState = await OrderRepository.GetOrderFulfillmentStateAsync(new GetOrderFulfillmentStateParam
+                {
+                    OrderId = order.Id,
+                    ScopeId = order.ScopeId
+                }).ConfigureAwait(false);
+
+                if (orderFulfillmentState.IsCancelable 
+                    && !orderFulfillmentState.Status.Equals("Canceled", StringComparison.InvariantCultureIgnoreCase)
+                    && !orderFulfillmentState.Status.Equals("Completed", StringComparison.InvariantCultureIgnoreCase))
+                    return true;
+            }
+
+            return false;
         }
 
         public virtual bool IsCurrentEditingOrder(Overture.ServiceModel.Orders.Order order)

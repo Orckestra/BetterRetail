@@ -12,9 +12,12 @@ module Orckestra.Composer {
     export class CurrentOrdersController extends Controller {
         protected orderService = new OrderService();
         protected VueCurrentOrderData: Vue;
+        private uiModal: UIModal;
 
         public initialize() {
             super.initialize();
+            var cancelModalElementSelector = '#cancelOrderModal';
+            
             let self: CurrentOrdersController = this;
             self.orderService.getCurrentOrders().then(data => {
                 this.VueCurrentOrderData = new Vue({
@@ -22,7 +25,12 @@ module Orckestra.Composer {
                     data: {
                         Orders: data ? data.Orders : null,
                         Pagination: data ? data.Pagination : null,
-                        Loading: false
+                        Loading: false,
+                        mounted: function () {
+                            if (this.Mode.Authenticated) {
+                                this.Modal.uiModal = new UIModal(window, cancelModalElementSelector, this.cancelOrder, this);
+                            }
+                        },
                     },
 
                     methods: {
@@ -54,7 +62,28 @@ module Orckestra.Composer {
                                 .fin(() => {
                                     this.Loading = false;
                                 });
-                        }	
+                        },
+                        cancelOrderConfirm: function (actionContext) {
+                            this.Modal.uiModal.openModal(actionContext.event);
+                        },
+                        cancelOrder(event){
+                            var element = $(event.target);
+                            var $orderItem = element.closest('[data-orderId]');
+                            var orderId = $orderItem.data('orderId');
+                            if(this.Loading) return;
+                            this.Loading = true;
+                            self.orderService.cancelOrder(orderId)
+                            .then(result => {
+                                console.log(result)
+                            })
+                            .fail(reason => {
+                                console.log(reason);
+                                ErrorHandler.instance().outputErrorFromCode('CancelingOrderFailed');
+                            })
+                            .fin(() => {
+                                this.Loading = false;
+                            });
+                        }
                     }
                 })
             });

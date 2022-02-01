@@ -9,7 +9,9 @@ using Orckestra.Overture;
 using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel.Customers;
 using Orckestra.Overture.ServiceModel.Orders;
+using Orckestra.Overture.ServiceModel.Orders.Fulfillment;
 using Orckestra.Overture.ServiceModel.Requests.Orders;
+using Orckestra.Overture.ServiceModel.Requests.Orders.Fulfillment;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Cart.Repositories.Order
@@ -194,6 +196,68 @@ namespace Orckestra.Composer.Cart.Repositories.Order
             };
 
             return OvertureClient.SendAsync(request);
+        }
+
+        /// <summary>
+        /// Get history items related to specified order
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        public virtual Task<OrderFulfillmentState> GetOrderFulfillmentStateAsync(GetOrderFulfillmentStateParam param)
+        {
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.ScopeId)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.ScopeId)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.OrderId)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.OrderId)), nameof(param)); }
+
+            var request = new GetOrderFulfillmentStateRequest()
+            {
+                ScopeId = param.ScopeId,
+                OrderId = Guid.Parse(param.OrderId)
+            };
+
+            return OvertureClient.SendAsync(request);
+        }
+
+        public virtual async Task<OrderFulfillmentState> ChangeShipmentStatusAsync(ChangeShipmentStatusParam param)
+        {
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.ScopeId)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.ScopeId)), nameof(param)); }
+            if (param.OrderId == default) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.OrderId)), nameof(param)); }
+
+            var request = new ChangeShipmentStatusRequest()
+            {
+                ScopeId = param.ScopeId,
+                OrderId = param.OrderId,
+                ShipmentId = param.ShipmentId,
+                Reason = "DefaultOrderCancellationReason",
+                RequestedStatus = "Canceled"
+            };
+
+            return await OvertureClient.SendAsync(request);
+        }
+
+        public virtual async Task<OrderFulfillmentState> AddShipmentFulfillmentMessagesAsync(AddShipmentFulfillmentMessagesParam param)
+        {
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.ScopeId)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.ScopeId)), nameof(param)); }
+            if (param.OrderId == default) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.OrderId)), nameof(param)); }
+
+            var request = new AddShipmentFulfillmentMessagesRequest()
+            {
+                ScopeId = param.ScopeId,
+                OrderId = param.OrderId,
+                ShipmentId = param.ShipmentId,
+                ExecutionMessages = new List<ExecutionMessage>()
+                {
+                    new ExecutionMessage()
+                    {
+                        Severity = ExecutionMessageSeverity.Info,
+                        MessageId = param.OrderId.ToString()
+                    }
+                }
+            };
+
+            return await OvertureClient.SendAsync(request);
         }
     }
 }

@@ -1,11 +1,14 @@
 ﻿using Orckestra.Overture.ServiceModel.Orders;
 using System.Threading.Tasks;
+using Orckestra.Overture.ServiceModel.Orders.Fulfillment;
 
 namespace Orckestra.Composer.Cart.Providers.Order
 {
     public interface IEditingOrderProvider
     {
         Task<bool> IsOrderEditable(Overture.ServiceModel.Orders.Order order);
+
+        Task<bool> IsOrderCancelable(Overture.ServiceModel.Orders.Order order);
 
         bool IsCurrentEditingOrder(Overture.ServiceModel.Orders.Order order);
 

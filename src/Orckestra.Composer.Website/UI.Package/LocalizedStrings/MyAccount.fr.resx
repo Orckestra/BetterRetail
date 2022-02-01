@@ -487,4 +487,10 @@ Pas de soucis, vous pouvez trouver d'excellentes suggestions de produits à offr
   <data name="B_EditOrder" xml:space="preserve">
     <value>Modifier la commande</value>
   </data>
+  <data name="B_CancelOrder" xml:space="preserve">
+    <value>Annuler la commande</value>
+  </data>
+  <data name="L_ConfirmCancelOrder" xml:space="preserve">
+    <value>Voulez-vous vraiment annuler cette commande {0}?</value>
+  </data>
 </root>

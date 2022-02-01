@@ -47,60 +47,69 @@
 
 @helper OrderDetails(OrderDetailViewModel order)
 {
-    <div class="card  bg-light">
-        <h3 class="card-header">
-            @Html.Localize("MyAccount", "T_OrderDetails")
-        </h3>
-        <div class="card-body">
-            <div class="card">
-                <div class="card-header">
-                    <div class="row">
-                        <div class="col-sm-8">
-                            <h4 class="m-0">
-                                @Html.Localized("MyAccount", "L_OrderedOn", order.OrderInfos.OrderDate)
-                            </h4>
-                        </div>
-                        @if (order.OrderInfos.IsOrderEditable)
-                        {
-                            <div class="col-sm-4 text-sm-right">
-                                <a href="#" v-bind:disabled="Loading" class="cta" v-on:click.prevent="editOrder('@Order.OrderInfos.OrderNumber')">
-                                    @if (order.OrderInfos.HasOwnDraft)
-                                    {
-                                        @Html.Localize("MyAccount", "B_ContinueEditing")
-                                    }
-                                    else
-                                    {
-                                        @Html.Localize("MyAccount", "B_EditOrder")
-                                    }
-                                </a>
-                            </div>
-                        }
+<div class="card  bg-light">
+    <h3 class="card-header">
+        @Html.Localize("MyAccount", "T_OrderDetails")
+    </h3>
+    <div class="card-body">
+        <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-sm-8">
+                        <h4 class="m-0">
+                            @Html.Localized("MyAccount", "L_OrderedOn", order.OrderInfos.OrderDate)
+                        </h4>
                     </div>
+                    @if (order.OrderInfos.IsOrderEditable)
+                    {
+                        <div class="col-sm-4 text-sm-right">
+                            <a href="#" v-bind:disabled="Loading" class="cta" v-on:click.prevent="editOrder('@Order.OrderInfos.OrderNumber')">
+                                @if (order.OrderInfos.HasOwnDraft)
+                                {
+                                    @Html.Localize("MyAccount", "B_ContinueEditing")
+                                }
+                                else
+                                {
+                                    @Html.Localize("MyAccount", "B_EditOrder")
+                                }
+                            </a>
+                        </div>
+                    }
+                    @if (order.OrderInfos.IsOrderEditable && order.OrderInfos.IsOrderCancelable)
+                    {
+                        <div class="col-sm-4 text-sm-right">
+                            <a href="#" v-bind:disabled="Loading" class="cta" data-orderId="order.OrderInfos.OrderNumber" data-oc-click="cancelOrderConfirm" >
+                                @Html.Localize("MyAccount", "B_CancelOrder")
+                            </a>
+                        </div>
+                    }
                 </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-8">
-                            <p class="mb-1">
-                                @Html.Localized("MyAccount", "L_OrderNumber", order.OrderInfos.OrderNumber)
-                            </p>
-                            @{
-                                var status = order.OrderInfos.OrderStatusRaw;
-                                var statusCss = status == "InProgress" ? "text-warning" :
-                                    status == "Canceled" ? "text-danger" : "text-success";
-                            }
-                            <p class="@statusCss  m-0">
-                                <strong>@order.OrderInfos.OrderStatus</strong>
-                            </p>
-                        </div>
-                        <div class="col-4 text-right">
-                            @Html.Localize("MyAccount", "L_Total"):
-                            <h5>@order.OrderInfos.PricePaid</h5>
-                        </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-8">
+                        <p class="mb-1">
+                            @Html.Localized("MyAccount", "L_OrderNumber", order.OrderInfos.OrderNumber)
+                        </p>
+                        @{
+                            var status = order.OrderInfos.OrderStatusRaw;
+                            var statusCss = status == "InProgress" ? "text-warning" :
+                                status == "Canceled" ? "text-danger" : "text-success";
+                        }
+                        <p class="@statusCss  m-0">
+                            <strong>@order.OrderInfos.OrderStatus</strong>
+                        </p>
+                    </div>
+                    <div class="col-4 text-right">
+                        @Html.Localize("MyAccount", "L_Total"):
+                        <h5>@order.OrderInfos.PricePaid</h5>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    @OrdersHelper.cancelOrderConfirmationModal();
+</div>
 }
 
 @helper OrderShipments(OrderDetailViewModel order)

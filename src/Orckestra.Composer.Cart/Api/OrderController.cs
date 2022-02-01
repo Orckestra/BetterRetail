@@ -186,5 +186,26 @@ namespace Orckestra.Composer.Cart.Api
 
             return Ok(vm);
         }
+
+        /// <summary>
+        /// Set an order status to cancel 
+        /// </summary>
+        /// <param name="param">Parameters container</param>
+        [HttpPost]
+        [ActionName("cancel-order")]
+        [ValidateModelState]
+        public virtual async Task<IHttpActionResult> CancelOrder(string orderId)
+        {
+            var param = new CancelOrderParam()
+            {
+                OrderId = orderId,
+                Scope = ComposerContext.Scope,
+                CultureInfo = ComposerContext.CultureInfo,
+                CustomerId = ComposerContext.CustomerId
+            };
+            var vm = await OrderHistoryViewService.CancelOrder(param).ConfigureAwait(false);
+
+            return Ok(vm);
+        }
     }
 }
