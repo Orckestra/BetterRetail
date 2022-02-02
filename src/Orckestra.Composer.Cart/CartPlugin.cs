@@ -70,6 +70,7 @@ namespace Orckestra.Composer.Cart
             host.Register<IPaymentProviderRegistry>(CartConfiguration.PaymentProviderRegistry);
             host.Register<PaymentProviderFactory, IPaymentProviderFactory>(ComponentLifestyle.Transient);
             host.Register<MonerisCanadaPaymentProvider>(ComponentLifestyle.Transient);
+            host.Register<BamboraPaymentProvider>(ComponentLifestyle.Transient);
             host.Register<OnSitePOSPaymentProvider>(ComponentLifestyle.Transient);
         }
 

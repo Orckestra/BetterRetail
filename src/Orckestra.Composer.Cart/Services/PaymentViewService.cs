@@ -117,9 +117,9 @@ namespace Orckestra.Composer.Cart.Services
                 availablePaymentProvidersDic.TryGetValue(availableProvider.Id, out var availablePaymentProvider);
                 if (availablePaymentProvider == null) { continue; }
 
-                var supportedCultureIds = availablePaymentProvider.SupportedCultureIds.Split(',').Select(c => c.Trim());
+                var supportedCultureIds = availablePaymentProvider.SupportedCultureIds?.Split(',').Select(c => c.Trim());
 
-                if (!supportedCultureIds.Any(c => c.Equals(param.CultureInfo.Name, StringComparison.OrdinalIgnoreCase))) { continue; }
+                //if (!supportedCultureIds.Any(c => c.Equals(param.CultureInfo.Name, StringComparison.OrdinalIgnoreCase))) { continue; }
 
                 result.Add(provider);
             }

@@ -120,6 +120,7 @@
     <Compile Include="Parameters\WishList\GetWishListUrlParam.cs" />
     <Compile Include="Providers\Order\IEditingOrderProvider.cs" />
     <Compile Include="Providers\Order\EditingOrderProvider.cs" />
+    <Compile Include="Providers\Payment\BamboraPaymentProvider.cs" />
     <Compile Include="Providers\WishList\IWishListUrlProvider.cs" />
     <Compile Include="Requests\GetGuestOrderRequest.cs" />
     <Compile Include="Requests\GetOrderRequest.cs" />
