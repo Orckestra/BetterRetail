@@ -27,15 +27,17 @@ module Orckestra.Composer {
                     LandingPageUrls: this.context.container.data('landingpageurls')
                 },
                 mounted() {
-                    self.eventHub.subscribe(SearchEvents.FacetsLoaded, ({data}) => {
-                        this.Facets = data.FacetSettings.SelectedFacets.Facets;
-                        this.IsAllRemovable = data.FacetSettings.SelectedFacets.IsAllRemovable;
-                        this.LandingPageUrls = data.LandingPageUrls;
-                    });
+                    self.eventHub.subscribe(SearchEvents.FacetsLoaded, this.onFacetsLoaded);
+                    self.eventHub.subscribe(SearchEvents.SearchResultsLoaded, this.onFacetsLoaded);
                 },
                 computed: {
                 },
                 methods: {
+                    onFacetsLoaded({data}) {
+                        this.Facets = data.FacetSettings.SelectedFacets.Facets;
+                        this.IsAllRemovable = data.FacetSettings.SelectedFacets.IsAllRemovable;
+                        this.LandingPageUrls = data.LandingPageUrls;
+                    },
                     clearSelectedFacets(landingPageUrl) {
                         self.eventHub.publish(SearchEvents.FacetsCleared, { data: { landingPageUrl } });
                     },

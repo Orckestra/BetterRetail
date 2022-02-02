@@ -26,7 +26,7 @@ module Orckestra.Composer {
                     OtherCount: TotalCount > ProductCount ? TotalCount - ProductCount : 0
                 },
                 mounted() {
-                    self.eventHub.subscribe(SearchEvents.FacetsLoaded, ({data}) => {
+                    self.eventHub.subscribe(SearchEvents.SearchResultsLoaded, ({data}) => {
                         this.ProductCount = data.ProductSearchResults.TotalCount;
                     });
                 },

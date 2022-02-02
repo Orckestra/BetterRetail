@@ -94,7 +94,7 @@ module Orckestra.Composer {
                         searchRequest.then(result => {
                             Object.keys(result.ProductSearchResults).forEach(key => this[key] = result.ProductSearchResults[key]);
 
-                            self.eventHub.publish(SearchEvents.FacetsLoaded, { data: result });
+                            self.eventHub.publish(SearchEvents.SearchResultsLoaded, { data: result });
                         });
                     },
                     searchProductClick(product, index): void {

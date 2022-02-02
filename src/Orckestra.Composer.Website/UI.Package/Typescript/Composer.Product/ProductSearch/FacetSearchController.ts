@@ -49,12 +49,14 @@ module Orckestra.Composer {
                 },
                 mounted() {
                     self.initializeServices();
-                    self.eventHub.subscribe(SearchEvents.FacetsLoaded, ({data}) => {
-                        this.CategoryFacetValuesTree = data.FacetSettings.CategoryFacetValuesTree;
-                        this.Facets = data.ProductSearchResults.Facets;
-                    });
+                    self.eventHub.subscribe(SearchEvents.FacetsLoaded, this.onFacetsLoaded);
+                    self.eventHub.subscribe(SearchEvents.SearchResultsLoaded, this.onFacetsLoaded);
                 },
                 methods: {
+                    onFacetsLoaded({data}) {
+                        this.CategoryFacetValuesTree = data.FacetSettings.CategoryFacetValuesTree;
+                        this.Facets = data.ProductSearchResults.Facets;
+                    },
                     categoryFacetChanged(event, isSelected) {
                         self.categoryFacetChanged(event, isSelected);
                     },
