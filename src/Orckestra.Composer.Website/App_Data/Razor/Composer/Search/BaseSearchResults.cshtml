@@ -100,7 +100,7 @@
          v-cloak="true">
         @if (ShowPagination)
         {
-            <div class="row filters-row mb-4">
+            <div class="row filters-row mb-4" v-if="TotalCount > 0">
                 <div class="col-6 d-lg-none">
                     @FacetHelpers.FacetsModalCollapseBtn()
                 </div>
@@ -172,7 +172,7 @@
 
         @if (ShowPagination)
         {
-            <div class="row d-block pt-2">
+            <div class="row d-block pt-2" v-if="TotalCount > 0">
                 <ul class="pager pagination" v-if="Pagination">
                     <li v-if="Pagination.PreviousPage" class="page-item previous mr-auto" v-bind:class="{ disabled: !Pagination.PreviousPage.Url }">
                         <a class="page-link" data-qa="search-pagination-previous" v-on:click="sortingChanged(Pagination.PreviousPage.Url)">
