@@ -19,7 +19,7 @@
         {
             public const string OrderNumberProbertyBagKey = "OrderNumberForOrderDraft";
             public const string OwnershipPropertyBagKey = "OrderDraftOwnership";
-            public const string OwnershipByWebsite = "oco,website";
+            public const string OwnershipByWebsite = "oco,orchestrator,website";
         }
 
         public static class ErrorCodes

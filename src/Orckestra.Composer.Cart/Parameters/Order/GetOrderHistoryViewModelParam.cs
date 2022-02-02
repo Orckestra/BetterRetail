@@ -59,5 +59,10 @@ namespace Orckestra.Composer.Cart.Parameters.Order
         /// The Order Editing Infos.
         /// </summary>
         public Dictionary<Guid, bool> OrderEditingInfos { get; set; }
+
+       /// <summary>
+       /// Get or Set the Id of the currently edited order
+       /// </summary>
+        public Guid CurrentlyEditedOrderId { get; set; }
     }
 }

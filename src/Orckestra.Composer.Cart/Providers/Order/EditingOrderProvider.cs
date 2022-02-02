@@ -82,14 +82,7 @@ namespace Orckestra.Composer.Cart.Providers.Order
                 var ownedByRequestedUserError = ex.Errors?.FirstOrDefault(e => e.ErrorCode == Constants.ErrorCodes.IsOwnedByRequestedUser);
                 if (ownedBySomeoneElseError != null)
                 {
-                    draftCart = await OrderRepository.ChangeOwnership(new ChangeOrderDraftOwnershipParam()
-                    {
-                        CultureName = ComposerContext.CultureInfo.Name,
-                        RevertPendingChanges = true,
-                        OrderId = orderId,
-                        Scope = order.ScopeId,
-                        CustomerId = Guid.Parse(order.CustomerId)
-                    }).ConfigureAwait(false);
+                    draftCart = await ChangeOwnership(order).ConfigureAwait(false);
                 }
                 else if (ownedByRequestedUserError != null)
                 {
@@ -121,15 +114,47 @@ namespace Orckestra.Composer.Cart.Providers.Order
 
         public virtual async Task CancelEditOrderAsync(Overture.ServiceModel.Orders.Order order)
         {
-            await OrderRepository.DeleteCartOrderDraft(new DeleteCartOrderDraftParam
+            try
+            {
+                await DeleteCartDraft(order).ConfigureAwait(false);
+            }
+            catch (ComposerException ex)
+            {
+                var ownedBySomeoneElseError = ex.Errors?.FirstOrDefault(e => e.ErrorCode == Constants.ErrorCodes.IsOwnedBySomeoneElse);
+                if (ownedBySomeoneElseError != null)
+                {
+                    await ChangeOwnership(order).ConfigureAwait(false);
+                    await DeleteCartDraft(order).ConfigureAwait(false);
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            ClearEditMode();
+        }
+
+        private Task DeleteCartDraft(Overture.ServiceModel.Orders.Order order)
+        {
+            return OrderRepository.DeleteCartOrderDraft(new DeleteCartOrderDraftParam
             {
                 CustomerId = Guid.Parse(order.CustomerId),
                 Scope = order.ScopeId,
                 OrderId = Guid.Parse(order.Id)
-            }).ConfigureAwait(false);
+            });
+        }
 
-
-            ClearEditMode();
+        private Task<ProcessedCart> ChangeOwnership(Overture.ServiceModel.Orders.Order order)
+        {
+            return OrderRepository.ChangeOwnership(new ChangeOrderDraftOwnershipParam()
+            {
+                CultureName = ComposerContext.CultureInfo.Name,
+                RevertPendingChanges = true,
+                OrderId = Guid.Parse(order.Id),
+                Scope = order.ScopeId,
+                CustomerId = Guid.Parse(order.CustomerId)
+            });
         }
 
         public virtual void ClearEditMode()
