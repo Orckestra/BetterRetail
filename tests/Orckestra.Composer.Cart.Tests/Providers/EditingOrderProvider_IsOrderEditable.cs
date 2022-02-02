@@ -6,6 +6,7 @@ using NUnit.Framework;
 using Orckestra.Composer.Cart.Providers.Order;
 using Orckestra.Composer.Cart.Repositories.Order;
 using Orckestra.Composer.Services;
+using Orckestra.Composer.Utils;
 using Orckestra.Overture.ServiceModel;
 using Orckestra.Overture.ServiceModel.Orders;
 using System.Collections.Generic;
@@ -25,6 +26,34 @@ namespace Orckestra.Composer.Cart.Tests.Providers
             var contextStub = new Mock<IComposerContext>();
             contextStub.SetupGet(mock => mock.Scope).Returns("Global");
             _container.Use(contextStub);
+        }
+
+        [Test]
+        public async Task WHEN_order_is_Canceled_SHOULD_return_False()
+        {
+            //Arrange
+            var provider = _container.CreateInstance<EditingOrderProvider>();
+
+            //Act
+            var cartShipmentStatuses = new string[] { "Pending" };
+            var shipmentList = cartShipmentStatuses?.Select(status => new Shipment()
+            {
+                Status = status,
+                Address = new Address(),
+                FulfillmentMethod = new FulfillmentMethod
+                {
+                    Cost = GetRandom.Double()
+                },
+                Taxes = new List<Tax>()
+            }).ToList();
+
+            var order = CreateOrderWithShipments(shipmentList);
+            order.OrderStatus = Constants.OrderStatus.Canceled;
+
+            var result = await provider.IsOrderEditable(order).ConfigureAwait(false);
+
+            //Assert
+            result.Should().Be(false);
         }
 
         [Test]
