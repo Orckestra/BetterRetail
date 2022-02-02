@@ -141,7 +141,7 @@ namespace Orckestra.Composer.Cart.Providers.Order
             {
                 CustomerId = Guid.Parse(order.CustomerId),
                 Scope = order.ScopeId,
-                OrderId = Guid.Parse(order.Id),
+                OrderId = Guid.Parse(order.Id)
             });
         }
 
