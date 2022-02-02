@@ -237,7 +237,7 @@ namespace Orckestra.Composer.Cart.Factory.Order
             orderInfo.OrderStatus = GetOrderStatusDisplayName(rawOrder, param);
             orderInfo.OrderStatusRaw = rawOrder.OrderStatus;
             orderInfo.IsOrderEditable = param.OrderEditingInfos != null  && param.OrderEditingInfos.ContainsKey(Guid.Parse(rawOrder.Id)) && param.OrderEditingInfos[Guid.Parse(rawOrder.Id)];
-            orderInfo.IsOrderEdited = param.CurrentlyEditedOrderId == Guid.Parse(rawOrder.Id);
+            orderInfo.IsBeingEdited = param.CurrentlyEditedOrderId == Guid.Parse(rawOrder.Id);
             orderInfo.HasOwnDraft = HasOwnDraft(param, rawOrder);
 
             var orderDetailUrl = UrlFormatter.AppendQueryString(param.OrderDetailBaseUrl, new NameValueCollection

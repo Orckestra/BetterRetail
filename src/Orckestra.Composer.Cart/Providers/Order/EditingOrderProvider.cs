@@ -26,7 +26,7 @@ namespace Orckestra.Composer.Cart.Providers.Order
             ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
         }
 
-        public virtual async Task<bool> IsOrderEditable(Overture.ServiceModel.Orders.Order order)
+        public virtual async Task<bool> CanEdit(Overture.ServiceModel.Orders.Order order)
         {
             if (order?.Cart?.Shipments == null ||
                 OrderHistoryConfiguration.CompletedOrderStatuses.Contains(order.OrderStatus))
@@ -53,7 +53,7 @@ namespace Orckestra.Composer.Cart.Providers.Order
             return isOrderEditable;
         }
 
-        public virtual bool IsCurrentEditingOrder(Overture.ServiceModel.Orders.Order order)
+        public virtual bool IsBeingEdited(Overture.ServiceModel.Orders.Order order)
         {
             var guidOrderId = Guid.Parse(order.Id);
             return IsEditMode() & ComposerContext.EditingCartName == guidOrderId.ToString("N");

@@ -90,12 +90,12 @@ namespace Orckestra.Composer.Cart.ViewModels.Order
         public bool IsOrderEditable { get; set; }
 
         /// <summary>
-        /// Gets or sets the is Order editaing now
+        /// Gets or sets the is Order being edited now
         /// </summary>
         /// <value>
         /// The source of the order.
         /// </value>
-        public bool IsOrderEdited{ get; set; }
+        public bool IsBeingEdited { get; set; }
 
         /// <summary>
         /// Gets or sets the is Order has draft creaded by user

@@ -146,7 +146,7 @@ namespace Orckestra.Composer.Cart.Services.Order
 
             foreach (var order in orders)
             {
-                orderEditingInfos.Add(Guid.Parse(order.Id), await EditingOrderProvider.IsOrderEditable(order).ConfigureAwait(false));
+                orderEditingInfos.Add(Guid.Parse(order.Id), await EditingOrderProvider.CanEdit(order).ConfigureAwait(false));
             }
 
             return orderEditingInfos;
@@ -340,8 +340,8 @@ namespace Orckestra.Composer.Cart.Services.Order
                 OrderCartDrafts = orderCartDrafts
             });
 
-            viewModel.OrderInfos.IsOrderEditable = await EditingOrderProvider.IsOrderEditable(order).ConfigureAwait(false);
-            viewModel.OrderInfos.IsOrderEdited= EditingOrderProvider.IsCurrentEditingOrder(order);
+            viewModel.OrderInfos.IsOrderEditable = await EditingOrderProvider.CanEdit(order).ConfigureAwait(false);
+            viewModel.OrderInfos.IsBeingEdited = EditingOrderProvider.IsBeingEdited(order);
 
             if (order.Cart.PropertyBag.TryGetValue("PickedItems", out var pickedItemsObject))
             {
@@ -479,11 +479,11 @@ namespace Orckestra.Composer.Cart.Services.Order
 
             var order = await OrderRepository.GetOrderAsync(getOrderParam).ConfigureAwait(false);
 
-            var isOrderEditable = await EditingOrderProvider.IsOrderEditable(order).ConfigureAwait(false);
+            var isOrderEditable = await EditingOrderProvider.CanEdit(order).ConfigureAwait(false);
             if (!isOrderEditable) throw new InvalidOperationException($"Cannot edit this order #${orderNumber}");
 
  
-            if (EditingOrderProvider.IsCurrentEditingOrder(order))
+            if (EditingOrderProvider.IsBeingEdited(order))
             {
                 return GetEditingOrderViewModel();
             }

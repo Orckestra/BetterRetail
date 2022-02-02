@@ -5,10 +5,24 @@ namespace Orckestra.Composer.Cart.Providers.Order
 {
     public interface IEditingOrderProvider
     {
-        Task<bool> IsOrderEditable(Overture.ServiceModel.Orders.Order order);
+        /// <summary>
+        /// Is Order can be edited
+        /// </summary>
+        /// <param name="order"></param>
+        /// <returns></returns>
+        Task<bool> CanEdit(Overture.ServiceModel.Orders.Order order);
 
-        bool IsCurrentEditingOrder(Overture.ServiceModel.Orders.Order order);
+        /// <summary>
+        /// Is Order being edited now
+        /// </summary>
+        /// <param name="order"></param>
+        /// <returns></returns>
+        bool IsBeingEdited(Overture.ServiceModel.Orders.Order order);
 
+        /// <summary>
+        /// Is Edit mode right now on the website
+        /// </summary>
+        /// <returns></returns>
         bool IsEditMode();
 
         void ClearEditMode();
