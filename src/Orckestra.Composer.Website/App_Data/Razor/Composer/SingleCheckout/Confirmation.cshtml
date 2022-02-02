@@ -20,6 +20,9 @@
     public IMembershipViewService MembershipViewService { get; set; }
 
     public override bool PreventFunctionOutputCaching { get { return true; } }
+    
+    [FunctionParameter(Label = "Confirmation Top Message")]
+    public XhtmlDocument confirmationTopMessage { get; set; }
 }
 
 @{
@@ -44,9 +47,7 @@
                  data-oc-controller="SingleCheckout.OrderConfirmation"
                  data-redirectUrl="@redirectUrl">
 
-                <h1 data-qa="confirmation-thankyou">@Html.Localize("CheckoutProcess", "T_ThankYou") {{CustomerFirstName}} {{CustomerLastName}}!</h1>
-                <p data-qa="confirmation-order-number">@Html.Raw(@Html.Localized("CheckoutProcess", "L_YourOrderNumber", "<strong>{{OrderNumber}}</strong>"))</p>
-                <p>@Html.Raw(@Html.Localized("CheckoutProcess", "L_EmailConfirmation", "<strong>{{CustomerEmail}}</strong>"))</p>
+                @Html.Raw(@confirmationTopMessage)
 
                 @DisplayOrderDetails()
 
