@@ -14,11 +14,11 @@
                         {
                             <li v-if="order.OrderInfos.IsOrderEditable">
                                 <a v-on:click.prevent="editOrder(order.OrderInfos.OrderNumber)" v-bind:class="{'disabled': Loading}" class="cta" href="#">
-                                    <span v-if="order.OrderInfos.HasOwnDraft">@Html.Localize("MyAccount", "B_ContinueEditing")</span>
+                                    <span v-if="order.OrderInfos.IsOrderEdited || order.OrderInfos.HasOwnDraft">@Html.Localize("MyAccount", "B_ContinueEditing")</span>
                                     <span v-else="else">@Html.Localize("MyAccount", "B_EditOrder")</span>
                                 </a>
                             </li>
-                            <li v-if="order.OrderInfos.IsOrderEditable &amp;&amp; order.OrderInfos.HasOwnDraft">
+                            <li v-if="order.OrderInfos.IsOrderEditable &amp;&amp; (order.OrderInfos.IsOrderEdited || order.OrderInfos.HasOwnDraft)">
                                 <a v-on:click.prevent="cancelEditingOrder(order.OrderInfos.OrderNumber)" class="cta" href="#" v-bind:class="{'disabled': Loading}">
                                     @Html.Localize("MyAccount", "B_CancelEditing")
                                 </a>

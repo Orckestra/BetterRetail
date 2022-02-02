@@ -120,6 +120,7 @@ namespace Orckestra.Composer.Cart.Services.Order
                 shipmentsTrackingInfos = GetShipmentsTrackingInfoViewModels(ordersDetails, param);
             }
 
+            Guid.TryParse(EditingOrderProvider.GetCurrentEditingCartName(), out Guid currentlyEditingOrder);
             var getOrderHistoryViewModelParam = new GetOrderHistoryViewModelParam
             {
                 CultureInfo = param.CultureInfo,
@@ -130,7 +131,8 @@ namespace Orckestra.Composer.Cart.Services.Order
                 OrderDetailBaseUrl = orderDetailBaseUrl,
                 ShipmentsTrackingInfos = shipmentsTrackingInfos,
                 OrderEditingInfos = orderEditingInfos,
-                Orders = ordersDetails
+                Orders = ordersDetails,
+                CurrentlyEditedOrderId = currentlyEditingOrder
             };
 
             var viewModel = OrderHistoryViewModelFactory.CreateViewModel(getOrderHistoryViewModelParam);
@@ -339,6 +341,7 @@ namespace Orckestra.Composer.Cart.Services.Order
             });
 
             viewModel.OrderInfos.IsOrderEditable = await EditingOrderProvider.IsOrderEditable(order).ConfigureAwait(false);
+            viewModel.OrderInfos.IsOrderEdited= EditingOrderProvider.IsCurrentEditingOrder(order);
 
             if (order.Cart.PropertyBag.TryGetValue("PickedItems", out var pickedItemsObject))
             {
