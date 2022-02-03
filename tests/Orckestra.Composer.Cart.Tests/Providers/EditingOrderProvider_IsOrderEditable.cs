@@ -50,7 +50,7 @@ namespace Orckestra.Composer.Cart.Tests.Providers
             var order = CreateOrderWithShipments(shipmentList);
             order.OrderStatus = Constants.OrderStatus.Canceled;
 
-            var result = await provider.IsOrderEditable(order).ConfigureAwait(false);
+            var result = await provider.CanEdit(order).ConfigureAwait(false);
 
             //Assert
             result.Should().Be(false);
@@ -92,7 +92,7 @@ namespace Orckestra.Composer.Cart.Tests.Providers
             }).ToList();
 
             var order = CreateOrderWithShipments(shipmentList);
-            var result = await provider.IsOrderEditable(order).ConfigureAwait(false);
+            var result = await provider.CanEdit(order).ConfigureAwait(false);
             //Assert
             result.Should().Be(expectedIsOrderEditable);
         }
