@@ -86,17 +86,17 @@
                                         </li>
 
                                     }
+                                    @if (order.OrderInfos.IsOrderCancelable && !order.OrderInfos.IsBeingEdited)
+{
+                                    <li >
+                                        <a href="#" v-bind:disabled="Loading" class="cta" data-orderId="@order.OrderInfos.OrderNumber" data-qa="cancel-order" data-oc-click="cancelOrderConfirm">
+                                            @Html.Localize("General", "B_CancelOrder")
+                                        </a>
+                                    </li>
+                                    @OrdersHelper.cancelOrderConfirmationModal("cancelOrderModal", order.OrderInfos.OrderNumber);
+                                    }
                                 </ul>
                             </div>
-                            if (order.OrderInfos.IsOrderCancelable)
-                            {
-                                <div class="col-sm-4 text-sm-right">
-                                    <a href="#" v-bind:disabled="Loading" class="cta" data-orderId="@order.OrderInfos.OrderNumber" data-qa="cancel-order" data-oc-click="cancelOrderConfirm">
-                                        @Html.Localize("General", "B_CancelOrder")
-                                    </a>
-                                </div>
-                                @OrdersHelper.cancelOrderConfirmationModal("cancelOrderModal", order.OrderInfos.OrderNumber);
-                            }
                         }
 
                     </div>

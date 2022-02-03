@@ -23,7 +23,7 @@
                                     @Html.Localize("MyAccount", "B_CancelEditing")
                                 </a>
                             </li>
-                        <li v-if="order.OrderInfos.IsOrderEditable &amp;&amp; order.OrderInfos.IsOrderCancelable">
+                        <li v-if="order.OrderInfos.IsOrderEditable &amp;&amp; order.OrderInfos.IsOrderCancelable &amp;&amp; !order.OrderInfos.IsBeingEdited">
                                 <a v-bind:data-orderid="order.OrderInfos.OrderNumber" data-qa="cancel-order" data-oc-click="cancelOrderConfirm" class="cta" href="#">
                                     <span>@Html.Localize("General", "B_CancelOrder")</span>
                                 </a>
