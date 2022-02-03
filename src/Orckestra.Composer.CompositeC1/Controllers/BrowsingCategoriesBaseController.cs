@@ -80,8 +80,8 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             model.Context["SearchResults"] = model.ProductSearchResults.SearchResults;
             model.Context["Keywords"] = model.ProductSearchResults.Keywords;
             model.Context["TotalCount"] = model.ProductSearchResults.TotalCount;
-            model.Context["MaxItemsPerPage"] = SearchConfiguration.MaxItemsPerPage;
-            model.Context["ListName"] = "Category Browsing";
+            model.Context["MaxItemsPerPage"] = model.MaxItemsPerPage;
+            model.Context["ListName"] = model.ListName;
             model.Context["PaginationCurrentPage"] = model.ProductSearchResults.Pagination.Pages.FirstOrDefault(p => p.IsCurrentPage);
         }
     }

@@ -26,7 +26,8 @@ module Orckestra.Composer {
 
         public initialize() {
             super.initialize();
-            this.sendSearchResultsForAnalytics(this.context.viewModel.ProductSearchResults);
+            const { ProductSearchResults, ListName, MaxItemsPerPage } = this.context.viewModel;
+            this.sendSearchResultsForAnalytics(ProductSearchResults, ListName, MaxItemsPerPage);
 
             const self = this;
             this.vueSearchResults = new Vue({
@@ -34,7 +35,9 @@ module Orckestra.Composer {
                 components: {
                 },
                 data: {
-                    ...this.context.viewModel.ProductSearchResults
+                    ...ProductSearchResults,
+                    ListName,
+                    MaxItemsPerPage
                 },
                 mounted() {
                     this.registerSubscriptions();
@@ -98,19 +101,19 @@ module Orckestra.Composer {
                         });
                     },
                     searchProductClick(product, index): void {
-                        self.sendProductClickForAnalytics(product, index, this.Pagination.CurrentPage)
+                        self.sendProductClickForAnalytics(product, index, this.Pagination.CurrentPage, this.ListName, this.MaxItemsPerPage)
                     }
                 }
             });
         }
 
-        protected sendProductClickForAnalytics(product, index, currentPage): void {
+        protected sendProductClickForAnalytics(product, index, currentPage, listName: string, maxItemsPerPage: any): void {
             const productData = {
                 Product: product,
-                ListName: this.context.viewModel.ListName,
+                ListName: listName,
                 Index: index,
                 PageNumber: currentPage.DisplayName,
-                MaxItemsPerPage: this.context.viewModel.MaxItemsPerPage
+                MaxItemsPerPage: maxItemsPerPage
             };
 
             this.eventHub.publish('productClick', { data: productData });
@@ -130,16 +133,16 @@ module Orckestra.Composer {
             this.eventHub.publish(ProductEvents.LineItemAdding, { data: productData });
         }
 
-        protected sendSearchResultsForAnalytics(data: any): void {
-            const { Pagination: {CurrentPage}, SearchResults, Keywords, TotalCount, ListName, MaxItemsPerPage } = data;
+        protected sendSearchResultsForAnalytics(productSearchResults: any, listName: string, maxItemsPerPage: any): void {
+            const { Pagination: {CurrentPage}, SearchResults, Keywords, TotalCount} = productSearchResults;
 
             const searchResultsData = {
                 ProductSearchResults: SearchResults,
                 Keywords,
                 TotalCount,
-                ListName,
+                ListName: listName,
                 PageNumber: CurrentPage && CurrentPage.DisplayName || '',
-                MaxItemsPerPage
+                MaxItemsPerPage: maxItemsPerPage
             };
 
             this.eventHub.publish('searchResultRendered', { data: searchResultsData });

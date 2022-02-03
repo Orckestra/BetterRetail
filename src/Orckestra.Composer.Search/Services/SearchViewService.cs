@@ -88,7 +88,8 @@ namespace Orckestra.Composer.Search.Services
                 {
                     SelectedFacets = await GetSelectedFacetsAsync(criteria).ConfigureAwait(false),
                 },
-                ProductSearchResults = await GetProductSearchResultsAsync(criteria).ConfigureAwait(false)
+                ProductSearchResults = await GetProductSearchResultsAsync(criteria).ConfigureAwait(false),
+                ListName = "Search Results",
             };
 
             if (criteria.IncludeFacets)
@@ -109,7 +110,7 @@ namespace Orckestra.Composer.Search.Services
             viewModel.Context["TotalCount"] = viewModel.ProductSearchResults.TotalCount;
             viewModel.Context["Keywords"] = viewModel.ProductSearchResults.Keywords;
             viewModel.Context["CorrectedSearchTerms"] = viewModel.ProductSearchResults.CorrectedSearchTerms;
-            viewModel.Context["ListName"] = "Search Results";
+            viewModel.Context["ListName"] = viewModel.ListName;
 
             return viewModel;
         }
