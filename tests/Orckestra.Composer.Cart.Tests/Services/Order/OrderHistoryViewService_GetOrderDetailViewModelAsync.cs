@@ -63,8 +63,16 @@ namespace Orckestra.Composer.Cart.Tests.Services.Order
                .Returns(GetRandom.String(32));
 
             _container.GetMock<IEditingOrderProvider>()
-            .Setup(r => r.IsOrderEditable(It.IsAny<Orckestra.Overture.ServiceModel.Orders.Order>()))
+            .Setup(r => r.CanEdit(It.IsAny<Orckestra.Overture.ServiceModel.Orders.Order>()))
              .ReturnsAsync(false);
+
+            _container.GetMock<IEditingOrderProvider>()
+           .Setup(r => r.GetCurrentEditingCartName())
+            .Returns(Guid.NewGuid().ToString());
+           
+            _container.GetMock<IEditingOrderProvider>()
+           .Setup(r => r.IsBeingEdited(It.IsAny<Orckestra.Overture.ServiceModel.Orders.Order>()))
+            .Returns(false);
 
             _container.GetMock<ILineItemService>();
         }

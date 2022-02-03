@@ -9,11 +9,16 @@
 
         public const string GlobalScopeName = "Global";
 
+        public static class OrderStatus
+        {
+            public const string Canceled = "Canceled";
+            public const string Fulfilled = "Fulfilled";
+        }
+
         public static class OrderDraft
         {
-            public const string OrderNumberProbertyBagKey = "OrderNumberForOrderDraft";
             public const string OwnershipPropertyBagKey = "OrderDraftOwnership";
-            public const string OwnershipByWebsite = "oco,website";
+            public const string OwnershipByWebsite = "oco,orchestrator,website,wfecm,wfecd";
         }
 
         public static class ErrorCodes

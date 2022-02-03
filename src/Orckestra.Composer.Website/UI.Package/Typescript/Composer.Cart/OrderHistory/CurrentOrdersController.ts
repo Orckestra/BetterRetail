@@ -26,6 +26,7 @@ module Orckestra.Composer {
                     data: {
                         Orders: data ? OrderHelper.MapOrders(data.Orders) : null,
                         Pagination: data ? data.Pagination : null,
+                        Page: 1,
                         Loading: false
                     },
 
@@ -36,6 +37,7 @@ module Orckestra.Composer {
                                 .then(data => {
                                     this.Orders = OrderHelper.MapOrders(this.data.Orders);
                                     this.Pagination = data.Pagination;
+                                    this.Page = page;
                                 })
                                 .fail(reason => console.log(reason))
                                 .fin(() => this.Loading = false);
@@ -46,6 +48,15 @@ module Orckestra.Composer {
                             self.eventHub.publish(MyAccountEvents.StartEditOrder, { data: orderNumber });
                             self.orderService.editOrder(orderNumber)
                                 .fin(() => {
+                                    this.Loading = false;
+                                });
+                        },
+                        cancelEditingOrder(orderNumber: string) {
+                            if (this.Loading) return;
+                            this.Loading = true;
+                            self.orderService.cancelEditOrder(orderNumber)
+                                .then(() => this.getOrders(this.Page))
+                                .fail(() => {
                                     this.Loading = false;
                                 });
                         },

@@ -110,7 +110,6 @@ namespace Orckestra.Composer.Cart.Services.Order
 
            
             var shipmentsTrackingInfos = new Dictionary<Guid, TrackingInfoViewModel>();
-            var orderSettings = await GetOrderSettings(param.Scope).ConfigureAwait(false);
             var ordersDetails = new List<Overture.ServiceModel.Orders.Order>();
             var orderCartDrafts = new List<CartSummary>();
             var orderEditingInfos = new Dictionary<Guid, bool>();
@@ -126,6 +125,7 @@ namespace Orckestra.Composer.Cart.Services.Order
                 shipmentsTrackingInfos = GetShipmentsTrackingInfoViewModels(ordersDetails, param);
             }
 
+            Guid.TryParse(EditingOrderProvider.GetCurrentEditingCartName(), out Guid currentlyEditingOrder);
             var getOrderHistoryViewModelParam = new GetOrderHistoryViewModelParam
             {
                 CultureInfo = param.CultureInfo,
@@ -138,7 +138,8 @@ namespace Orckestra.Composer.Cart.Services.Order
                 OrderEditingInfos = orderEditingInfos,
                 Orders = ordersDetails,
                 OrderCancelingInfos = orderCancelingInfos,
-                OrderCancelPendingInfos = orderCancelPendingInfos
+                OrderCancelPendingInfos = orderCancelPendingInfos,
+                CurrentlyEditedOrderId = currentlyEditingOrder
             };
 
             var viewModel = OrderHistoryViewModelFactory.CreateViewModel(getOrderHistoryViewModelParam);
@@ -152,7 +153,7 @@ namespace Orckestra.Composer.Cart.Services.Order
 
             foreach (var order in orders)
             {
-                orderEditingInfos.Add(Guid.Parse(order.Id), await EditingOrderProvider.IsOrderEditable(order).ConfigureAwait(false));
+                orderEditingInfos.Add(Guid.Parse(order.Id), await EditingOrderProvider.CanEdit(order).ConfigureAwait(false));
             }
 
             return orderEditingInfos;
@@ -370,7 +371,8 @@ namespace Orckestra.Composer.Cart.Services.Order
                 OrderCartDrafts = orderCartDrafts
             });
 
-            viewModel.OrderInfos.IsOrderEditable = await EditingOrderProvider.IsOrderEditable(order).ConfigureAwait(false);
+            viewModel.OrderInfos.IsOrderEditable = await EditingOrderProvider.CanEdit(order).ConfigureAwait(false);
+            viewModel.OrderInfos.IsBeingEdited = EditingOrderProvider.IsBeingEdited(order);
             viewModel.OrderInfos.IsOrderCancelable = await EditingOrderProvider.IsOrderCancelable(order).ConfigureAwait(false);
             viewModel.OrderInfos.IsOrderPendingCancel = await EditingOrderProvider.IsOrderPendingCancel(order).ConfigureAwait(false);
 
@@ -510,11 +512,11 @@ namespace Orckestra.Composer.Cart.Services.Order
 
             var order = await OrderRepository.GetOrderAsync(getOrderParam).ConfigureAwait(false);
 
-            var isOrderEditable = await EditingOrderProvider.IsOrderEditable(order).ConfigureAwait(false);
-            if (!isOrderEditable) throw new InvalidOperationException("Cannot edit this order");
+            var isOrderEditable = await EditingOrderProvider.CanEdit(order).ConfigureAwait(false);
+            if (!isOrderEditable) throw new InvalidOperationException($"Cannot edit this order #${orderNumber}");
 
  
-            if (EditingOrderProvider.IsCurrentEditingOrder(order))
+            if (EditingOrderProvider.IsBeingEdited(order))
             {
                 return GetEditingOrderViewModel();
             }
