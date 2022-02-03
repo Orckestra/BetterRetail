@@ -121,7 +121,7 @@ namespace Orckestra.Composer.Cart.Services
             }
             catch (ComposerException ex)
             {
-                ClearEditMode(param.CartType, ex);
+                ClearEditModeIfCartDraftDoesNotExist(param.CartType, ex);
                 throw;
             }
 
@@ -169,7 +169,7 @@ namespace Orckestra.Composer.Cart.Services
             }
             catch (ComposerException ex)
             {
-                ClearEditMode(param.CartType, ex);
+                ClearEditModeIfCartDraftDoesNotExist(param.CartType, ex);
                 throw;
             }
 
@@ -220,7 +220,7 @@ namespace Orckestra.Composer.Cart.Services
             }
             catch (ComposerException ex)
             {
-                ClearEditMode(param.CartType, ex);
+                ClearEditModeIfCartDraftDoesNotExist(param.CartType, ex);
                 throw;
             }
 
@@ -308,7 +308,7 @@ namespace Orckestra.Composer.Cart.Services
             }
             catch (ComposerException ex)
             {
-                ClearEditMode(param.CartType, ex);
+                ClearEditModeIfCartDraftDoesNotExist(param.CartType, ex);
                 throw;
             }
 
@@ -334,7 +334,7 @@ namespace Orckestra.Composer.Cart.Services
             return viewModel;
         }
 
-        private void ClearEditMode(string cartType, ComposerException ex)
+        private void ClearEditModeIfCartDraftDoesNotExist(string cartType, ComposerException ex)
         {
             if (ex.Errors?.FirstOrDefault(e => e.ErrorCode == "CartDoesNotExist") != null &&
                 cartType == CartConfiguration.OrderDraftCartType &&
