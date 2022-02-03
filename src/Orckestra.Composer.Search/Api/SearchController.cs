@@ -130,9 +130,9 @@ namespace Orckestra.Composer.Search.Api
                 var param = new GetCategoryBrowsingViewModelParam
                 {
                     CategoryId = request.CategoryId,
-                    CategoryName = string.Empty,//await GetCategoryNameAsync(categoryId).ConfigureAwait(false),
+                    CategoryName = string.Empty,
                     BaseUrl = BaseUrl,
-                    IsAllProducts = false, //CategoryMetaContext.GetIsAllProductPage(),
+                    IsAllProducts = false,
                     NumberOfItemsPerPage = SearchConfiguration.MaxItemsPerPage,
                     Page = CurrentPage,
                     SortBy = SortBy,
