@@ -310,7 +310,6 @@ namespace Orckestra.Composer.Cart.Factory
             CultureInfo cultureInfo)
         {
             var orderSummary = ViewModelMapper.MapTo<OrderSummaryViewModel>(cart, cultureInfo);
-
             var activeShipments = cart.GetActiveShipments();
             orderSummary.Shippings = GetShippingsViewModel(cart, cultureInfo);
 
