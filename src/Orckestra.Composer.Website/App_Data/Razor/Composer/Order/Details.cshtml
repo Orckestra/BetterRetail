@@ -66,7 +66,7 @@
                                 <ul class="nav-pills float-right m-0">
                                     <li>
                                         <a href="#" v-bind:class="{'disabled': Loading}" class="cta" v-on:click.prevent="editOrder('@Order.OrderInfos.OrderNumber')">
-                                            @if (order.OrderInfos.HasOwnDraft || order.OrderInfos.IsOrderEdited)
+                                            @if (order.OrderInfos.HasOwnDraft || order.OrderInfos.IsBeingEdited)
                                             {
                                                 @Html.Localize("MyAccount", "B_ContinueEditing")
                                             }
@@ -76,7 +76,7 @@
                                             }
                                         </a>
                                     </li>
-                                    @if (order.OrderInfos.HasOwnDraft || order.OrderInfos.IsOrderEdited)
+                                    @if (order.OrderInfos.HasOwnDraft || order.OrderInfos.IsBeingEdited)
                                     {
                                         <li>
                                             <a href="#" class="cta" v-bind:class="{'disabled': Loading}" v-on:click.prevent="cancelEditingOrder('@Order.OrderInfos.OrderNumber')">
