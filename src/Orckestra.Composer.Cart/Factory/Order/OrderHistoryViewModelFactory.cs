@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Globalization;
-using System.Linq;
-using Orckestra.Composer.Cart.Extensions;
-using Orckestra.Composer.Cart.Parameters.Order;
-using Orckestra.Composer.Cart.Providers.Order;
+﻿using Orckestra.Composer.Cart.Parameters.Order;
 using Orckestra.Composer.Cart.ViewModels.Order;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Localization;
 using Orckestra.Composer.Utils;
 using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel.Orders;
+using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Globalization;
+using System.Linq;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Cart.Factory.Order
