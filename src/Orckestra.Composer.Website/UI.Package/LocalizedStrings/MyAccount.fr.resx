@@ -493,4 +493,10 @@ Pas de soucis, vous pouvez trouver d'excellentes suggestions de produits à offr
   <data name="L_ConfirmCancelOrder" xml:space="preserve">
     <value>Voulez-vous vraiment annuler cette commande {0}?</value>
   </data>
+<data name="T_PendingCancel" xml:space="preserve">
+    <value>Annulation en cours</value>
+</data>
+<data name="T_ReloadOrderStatus" xml:space="preserve">
+  <value>Recharger la page pour vérifier l'état</value>
+</data>
 </root>

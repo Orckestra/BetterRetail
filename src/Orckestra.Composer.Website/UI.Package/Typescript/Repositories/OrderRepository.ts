@@ -30,5 +30,9 @@ module Orckestra.Composer {
         public getCurrentOrders(options: IGetOrderParameters = { page: 1 }) {
             return ComposerClient.post('/api/order/current-orders', options);
         }
+
+        public cancelOrder(OrderNumber: string) {
+            return ComposerClient.post('/api/order/cancel-order',  OrderNumber );
+        }
     }
 }

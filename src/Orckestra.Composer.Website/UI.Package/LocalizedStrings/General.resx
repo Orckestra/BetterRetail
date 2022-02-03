@@ -273,4 +273,7 @@
   <data name="B_Update" xml:space="preserve">
     <value>Update</value>
   </data>
+  <data name="B_Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
 </root>

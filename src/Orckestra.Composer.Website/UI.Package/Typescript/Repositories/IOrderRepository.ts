@@ -17,5 +17,7 @@ module Orckestra.Composer {
         getPastOrders(options: IGetOrderParameters): Q.Promise<any>;
 
         getCurrentOrders(options: IGetOrderParameters):  Q.Promise<any>;
+        
+        cancelOrder(OrderNumber: string):  Q.Promise<any>;
     }
 }

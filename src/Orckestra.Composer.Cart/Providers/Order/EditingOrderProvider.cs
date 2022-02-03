@@ -55,23 +55,37 @@ namespace Orckestra.Composer.Cart.Providers.Order
 
         public virtual async Task<bool> IsOrderCancelable(Overture.ServiceModel.Orders.Order order)
         {
-            if (!order.OrderStatus.Equals("Canceled", StringComparison.InvariantCultureIgnoreCase))
+            if (order.OrderStatus.Equals("Canceled", StringComparison.InvariantCultureIgnoreCase)) return false;
+
+            var orderFulfillmentState = await OrderRepository.GetOrderFulfillmentStateAsync(new GetOrderFulfillmentStateParam
             {
-                var orderFulfillmentState = await OrderRepository.GetOrderFulfillmentStateAsync(new GetOrderFulfillmentStateParam
+                OrderId = order.Id,
+                ScopeId = order.ScopeId
+            }).ConfigureAwait(false);
+
+            if (orderFulfillmentState.IsCancelable 
+                && !orderFulfillmentState.IsProcessing
+                && !orderFulfillmentState.Status.Equals("Canceled", StringComparison.InvariantCultureIgnoreCase)
+                && !orderFulfillmentState.Status.Equals("Completed", StringComparison.InvariantCultureIgnoreCase))
+                return true;
+
+            return false;
+        }
+
+        public virtual async Task<bool> IsOrderPendingCancel(Overture.ServiceModel.Orders.Order order)
+        {
+            if (order.OrderStatus.Equals("Canceled", StringComparison.InvariantCultureIgnoreCase)) return false;
+
+            var orderFulfillmentState = await OrderRepository.GetOrderFulfillmentStateAsync(
+                new GetOrderFulfillmentStateParam
                 {
                     OrderId = order.Id,
                     ScopeId = order.ScopeId
                 }).ConfigureAwait(false);
 
-                if (orderFulfillmentState.IsCancelable 
-                    && !orderFulfillmentState.Status.Equals("Canceled", StringComparison.InvariantCultureIgnoreCase)
-                    && !orderFulfillmentState.Status.Equals("Completed", StringComparison.InvariantCultureIgnoreCase))
-                    return true;
-            }
-
-            return false;
+            return !orderFulfillmentState.IsCancelable;
         }
-
+        
         public virtual bool IsCurrentEditingOrder(Overture.ServiceModel.Orders.Order order)
         {
             var guidOrderId = Guid.Parse(order.Id);

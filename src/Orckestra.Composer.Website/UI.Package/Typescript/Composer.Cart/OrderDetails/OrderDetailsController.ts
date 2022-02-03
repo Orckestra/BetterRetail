@@ -17,6 +17,7 @@ module Orckestra.Composer {
         public initialize() {
             super.initialize();
             var cancelModalElementSelector = '#cancelOrderModal';
+            this.uiModal = new UIModal(window, cancelModalElementSelector, this.cancelOrder, this);
             
             let self = this;
             this.VueOrderDetails = new Vue({
@@ -25,11 +26,6 @@ module Orckestra.Composer {
                     Loading: false,
                     Modal: {
                         cancelOrderModal: null,
-                    }
-                },
-                mounted: function () {
-                    if (this.Mode.Authenticated) {
-                        this.Modal.uiModal = new UIModal(window, cancelModalElementSelector, this.cancelOrder, this);
                     }
                 },
                 methods: {
@@ -49,31 +45,23 @@ module Orckestra.Composer {
                             .fin(() => {
                                 this.Loading = false;
                             });
-                    } 
                     },
-                    cancelOrderConfirm: function (actionContext) {
-                        this.Modal.uiModal.openModal(actionContext.event);
-                    },
-                    cancelOrder(event){
-                        var element = $(event.target);
-                        var $orderItem = element.closest('[data-orderId]');
-                        var orderId = $orderItem.data('orderId');
-                        if(this.Loading) return;
-                        this.Loading = true;
-                        self.orderService.cancelOrder(orderId)
-                        .then(result => {
-                            console.log(result)
-                        })
-                        .fail(reason => {
-                            console.log(reason);
-                            ErrorHandler.instance().outputErrorFromCode('CancelingOrderFailed');
-                        })
-                        .fin(() => {
-                            this.Loading = false;
-                        });
+                    reload(){
+                        window.location.reload()
                     }
                 }
             });
+        }
+
+        public cancelOrderConfirm(actionContext: IControllerActionContext) {
+            this.uiModal.openModal(actionContext.event);
+        }
+
+        public cancelOrder(event){
+            var element = $(event.target);
+            var $orderItem: JQuery = element.closest('[data-orderid]');
+            var orderId = $orderItem.data('orderid');
+            this.orderService.cancelOrder(orderId);            
         }
     }
 }

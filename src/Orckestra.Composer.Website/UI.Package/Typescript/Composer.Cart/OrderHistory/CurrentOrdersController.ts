@@ -5,6 +5,7 @@
 /// <reference path='../../Mvc/IControllerActionContext.ts' />
 ///<reference path='./Services/OrderService.ts' />
 /// <reference path='../../ErrorHandling/ErrorHandler.ts' />
+///<reference path='../../Utils/OrderHelper.ts' />
 
 module Orckestra.Composer {
     'use strict';
@@ -17,28 +18,23 @@ module Orckestra.Composer {
         public initialize() {
             super.initialize();
             var cancelModalElementSelector = '#cancelOrderModal';
-            
+            this.uiModal = new UIModal(window, cancelModalElementSelector, this.cancelOrder, this);
             let self: CurrentOrdersController = this;
             self.orderService.getCurrentOrders().then(data => {
                 this.VueCurrentOrderData = new Vue({
                     el: '#vueCurrentOrders',
                     data: {
-                        Orders: data ? data.Orders : null,
+                        Orders: data ? OrderHelper.MapOrders(data.Orders) : null,
                         Pagination: data ? data.Pagination : null,
-                        Loading: false,
-                        mounted: function () {
-                            if (this.Mode.Authenticated) {
-                                this.Modal.uiModal = new UIModal(window, cancelModalElementSelector, this.cancelOrder, this);
-                            }
-                        },
+                        Loading: false
                     },
 
                     methods: {
-                        getOrders(page: any) {
+                        getOrders(page: any) {                            
                             this.Loading = true;
                             self.orderService.getCurrentOrders({ page })
                                 .then(data => {
-                                    this.Orders = data.Orders;
+                                    this.Orders = OrderHelper.MapOrders(this.data.Orders);
                                     this.Pagination = data.Pagination;
                                 })
                                 .fail(reason => console.log(reason))
@@ -53,30 +49,23 @@ module Orckestra.Composer {
                                     this.Loading = false;
                                 });
                         },
-                        cancelOrderConfirm: function (actionContext) {
-                            this.Modal.uiModal.openModal(actionContext.event);
-                        },
-                        cancelOrder(event){
-                            var element = $(event.target);
-                            var $orderItem = element.closest('[data-orderId]');
-                            var orderId = $orderItem.data('orderId');
-                            if(this.Loading) return;
-                            this.Loading = true;
-                            self.orderService.cancelOrder(orderId)
-                            .then(result => {
-                                console.log(result)
-                            })
-                            .fail(reason => {
-                                console.log(reason);
-                                ErrorHandler.instance().outputErrorFromCode('CancelingOrderFailed');
-                            })
-                            .fin(() => {
-                                this.Loading = false;
-                            });
+                        reload(){
+                            window.location.reload()
                         }
                     }
                 })
             });
+        }
+
+        public cancelOrderConfirm(actionContext: IControllerActionContext) {
+            this.uiModal.openModal(actionContext.event);
+        }
+
+        public cancelOrder(event){
+            var element = $(event.target);
+            var $orderItem: JQuery = element.closest('[data-orderid]');
+            var orderId = $orderItem.data('orderid');
+            this.orderService.cancelOrder(orderId);            
         }
     }
 }

@@ -211,15 +211,16 @@ namespace Orckestra.Composer.Cart.Api
         [HttpPost]
         [ActionName("cancel-order")]
         [ValidateModelState]
-        public virtual async Task<IHttpActionResult> CancelOrder(string orderId)
+        public virtual async Task<IHttpActionResult> CancelOrder([FromBody]string orderNumber)
         {
             var param = new CancelOrderParam()
             {
-                OrderId = orderId,
                 Scope = ComposerContext.Scope,
                 CultureInfo = ComposerContext.CultureInfo,
-                CustomerId = ComposerContext.CustomerId
+                CustomerId = ComposerContext.CustomerId,
+                OrderNumber = orderNumber
             };
+
             var vm = await OrderHistoryViewService.CancelOrder(param).ConfigureAwait(false);
 
             return Ok(vm);

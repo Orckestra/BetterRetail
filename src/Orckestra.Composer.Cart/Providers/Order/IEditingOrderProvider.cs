@@ -10,6 +10,8 @@ namespace Orckestra.Composer.Cart.Providers.Order
 
         Task<bool> IsOrderCancelable(Overture.ServiceModel.Orders.Order order);
 
+        Task<bool> IsOrderPendingCancel(Overture.ServiceModel.Orders.Order order);
+
         bool IsCurrentEditingOrder(Overture.ServiceModel.Orders.Order order);
 
         bool IsEditMode();

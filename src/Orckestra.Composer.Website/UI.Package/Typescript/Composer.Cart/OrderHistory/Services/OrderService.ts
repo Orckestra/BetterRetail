@@ -28,7 +28,8 @@ module Orckestra.Composer {
         }
 
         public cancelOrder(orderNumber: string) {
-            return ComposerClient.post('/api/order/cancel-order', orderNumber );
+            this.orderRepository.cancelOrder(orderNumber).then(result => window.location.reload()) 
+            .fail(reason => console.log(reason));
         }
 
         public saveEditOrder() {

@@ -8,11 +8,14 @@ using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Services;
 using Orckestra.Overture;
 using Orckestra.Overture.Caching;
+using Orckestra.Overture.ServiceModel;
 using Orckestra.Overture.ServiceModel.Customers;
 using Orckestra.Overture.ServiceModel.Orders;
 using Orckestra.Overture.ServiceModel.Orders.Fulfillment;
+using Orckestra.Overture.ServiceModel.Products;
 using Orckestra.Overture.ServiceModel.Requests.Orders;
 using Orckestra.Overture.ServiceModel.Requests.Orders.Fulfillment;
+using Orckestra.Overture.ServiceModel.Validation;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Cart.Repositories.Order
@@ -24,12 +27,13 @@ namespace Orckestra.Composer.Cart.Repositories.Order
         protected ICacheProvider CacheProvider { get; private set; }
 
         public OrderRepository(
-            IOvertureClient overtureClient, 
-            IFindOrdersRequestFactory findOrdersRequestFactory, 
+            IOvertureClient overtureClient,
+            IFindOrdersRequestFactory findOrdersRequestFactory,
             ICacheProvider cacheProvider)
         {
             OvertureClient = overtureClient ?? throw new ArgumentNullException(nameof(overtureClient));
-            FindOrdersRequestFactory = findOrdersRequestFactory ?? throw new ArgumentNullException(nameof(findOrdersRequestFactory));
+            FindOrdersRequestFactory = findOrdersRequestFactory ??
+                                       throw new ArgumentNullException(nameof(findOrdersRequestFactory));
             CacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));
         }
 
@@ -40,10 +44,25 @@ namespace Orckestra.Composer.Cart.Repositories.Order
         /// <returns></returns>
         public virtual async Task<OrderQueryResult> GetCustomerOrdersAsync(GetCustomerOrdersParam param)
         {
-            if (param == null) { throw new ArgumentNullException(nameof(param)); }
-            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
-            if (param.CustomerId == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CustomerId)), nameof(param)); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
+            if (param == null)
+            {
+                throw new ArgumentNullException(nameof(param));
+            }
+
+            if (param.CultureInfo == null)
+            {
+                throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param));
+            }
+
+            if (param.CustomerId == null)
+            {
+                throw new ArgumentException(GetMessageOfNull(nameof(param.CustomerId)), nameof(param));
+            }
+
+            if (string.IsNullOrWhiteSpace(param.Scope))
+            {
+                throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param));
+            }
 
             var request = FindOrdersRequestFactory.Create(param);
             var result = await OvertureClient.SendAsync(request).ConfigureAwait(false);
@@ -58,9 +77,20 @@ namespace Orckestra.Composer.Cart.Repositories.Order
         /// <returns></returns>
         public virtual Task<Overture.ServiceModel.Orders.Order> GetOrderAsync(GetOrderParam param)
         {
-            if (param == null) { throw new ArgumentNullException(nameof(param)); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
-            if (string.IsNullOrWhiteSpace(param.OrderNumber)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.OrderNumber)), nameof(param)); }
+            if (param == null)
+            {
+                throw new ArgumentNullException(nameof(param));
+            }
+
+            if (string.IsNullOrWhiteSpace(param.Scope))
+            {
+                throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param));
+            }
+
+            if (string.IsNullOrWhiteSpace(param.OrderNumber))
+            {
+                throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.OrderNumber)), nameof(param));
+            }
 
             var request = new GetOrderByNumberRequest
             {
@@ -81,9 +111,20 @@ namespace Orckestra.Composer.Cart.Repositories.Order
         /// <returns></returns>
         public virtual Task<List<OrderHistoryItem>> GetOrderChangesAsync(GetOrderChangesParam param)
         {
-            if (param == null) { throw new ArgumentNullException(nameof(param)); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
-            if (string.IsNullOrWhiteSpace(param.OrderNumber)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.OrderNumber)), nameof(param)); }
+            if (param == null)
+            {
+                throw new ArgumentNullException(nameof(param));
+            }
+
+            if (string.IsNullOrWhiteSpace(param.Scope))
+            {
+                throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param));
+            }
+
+            if (string.IsNullOrWhiteSpace(param.OrderNumber))
+            {
+                throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.OrderNumber)), nameof(param));
+            }
 
             var request = new GetOrderHistoryRequest()
             {
@@ -101,9 +142,20 @@ namespace Orckestra.Composer.Cart.Repositories.Order
         /// <returns></returns>
         public virtual Task<List<Note>> GetShipmentNotesAsync(GetShipmentNotesParam param)
         {
-            if (param == null) { throw new ArgumentNullException(nameof(param)); }
-            if (param.ShipmentId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.ShipmentId)), nameof(param)); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
+            if (param == null)
+            {
+                throw new ArgumentNullException(nameof(param));
+            }
+
+            if (param.ShipmentId == Guid.Empty)
+            {
+                throw new ArgumentException(GetMessageOfEmpty(nameof(param.ShipmentId)), nameof(param));
+            }
+
+            if (string.IsNullOrWhiteSpace(param.Scope))
+            {
+                throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param));
+            }
 
             var request = new GetShipmentNotesRequest
             {
@@ -121,10 +173,25 @@ namespace Orckestra.Composer.Cart.Repositories.Order
         /// <returns></returns>
         public virtual Task<Overture.ServiceModel.Orders.Order> UpdateOrderAsync(UpdateOrderParam param)
         {
-            if (param == null) { throw new ArgumentNullException(nameof(param)); }
-            if (param.OrderId == default) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.OrderId))); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope))); }
-            if (param.Order == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.Order))); }
+            if (param == null)
+            {
+                throw new ArgumentNullException(nameof(param));
+            }
+
+            if (param.OrderId == default)
+            {
+                throw new ArgumentException(GetMessageOfEmpty(nameof(param.OrderId)));
+            }
+
+            if (string.IsNullOrWhiteSpace(param.Scope))
+            {
+                throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)));
+            }
+
+            if (param.Order == null)
+            {
+                throw new ArgumentException(GetMessageOfNull(nameof(param.Order)));
+            }
 
             var request = new SaveOrderRequest
             {
@@ -139,7 +206,9 @@ namespace Orckestra.Composer.Cart.Repositories.Order
         public virtual async Task<OrderSettings> GetOrderSettings(string scope)
         {
             var cacheKey = BuildOrderSettingsCacheKey(scope);
-            return await CacheProvider.GetOrAddAsync(cacheKey, async () => await OvertureClient.SendAsync(new GetOrderSettingsRequest())).ConfigureAwait(false);
+            return await CacheProvider
+                .GetOrAddAsync(cacheKey, async () => await OvertureClient.SendAsync(new GetOrderSettingsRequest()))
+                .ConfigureAwait(false);
         }
 
         protected virtual CacheKey BuildOrderSettingsCacheKey(string scope)
@@ -161,7 +230,8 @@ namespace Orckestra.Composer.Cart.Repositories.Order
         {
             if (param == null) throw new ArgumentNullException(nameof(param));
             if (param.OrderId == default) throw new ArgumentException(GetMessageOfEmpty(nameof(param.OrderId)));
-            if (string.IsNullOrWhiteSpace(param.Scope)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)));
+            if (string.IsNullOrWhiteSpace(param.Scope))
+                throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)));
             if (param.CustomerId == null) throw new ArgumentException(GetMessageOfNull(nameof(param.CustomerId)));
 
             var request = new CreateCartOrderDraftRequest
@@ -182,10 +252,25 @@ namespace Orckestra.Composer.Cart.Repositories.Order
         /// <returns></returns>
         public virtual Task<ProcessedCart> ChangeOwnership(ChangeOrderDraftOwnershipParam param)
         {
-            if (param == null) { throw new ArgumentNullException(nameof(param)); }
-            if (param.OrderId == default) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.OrderId))); }
-            if (param.CustomerId == default) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId))); }
-            if (param.Scope == default) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.Scope))); }
+            if (param == null)
+            {
+                throw new ArgumentNullException(nameof(param));
+            }
+
+            if (param.OrderId == default)
+            {
+                throw new ArgumentException(GetMessageOfEmpty(nameof(param.OrderId)));
+            }
+
+            if (param.CustomerId == default)
+            {
+                throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)));
+            }
+
+            if (param.Scope == default)
+            {
+                throw new ArgumentException(GetMessageOfEmpty(nameof(param.Scope)));
+            }
 
             var request = new ChangeOwnershipCartOrderDraftRequest()
             {
@@ -201,10 +286,25 @@ namespace Orckestra.Composer.Cart.Repositories.Order
 
         public virtual Task<HttpWebResponse> DeleteCartOrderDraft(DeleteCartOrderDraftParam param)
         {
-            if (param == null) { throw new ArgumentNullException(nameof(param)); }
-            if (param.OrderId == default) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.OrderId))); }
-            if (param.CustomerId == default) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId))); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope))); }
+            if (param == null)
+            {
+                throw new ArgumentNullException(nameof(param));
+            }
+
+            if (param.OrderId == default)
+            {
+                throw new ArgumentException(GetMessageOfEmpty(nameof(param.OrderId)));
+            }
+
+            if (param.CustomerId == default)
+            {
+                throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)));
+            }
+
+            if (string.IsNullOrWhiteSpace(param.Scope))
+            {
+                throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)));
+            }
 
             var request = new DeleteCartOrderDraftRequest()
             {
@@ -223,9 +323,20 @@ namespace Orckestra.Composer.Cart.Repositories.Order
         /// <returns></returns>
         public virtual Task<OrderFulfillmentState> GetOrderFulfillmentStateAsync(GetOrderFulfillmentStateParam param)
         {
-            if (param == null) { throw new ArgumentNullException(nameof(param)); }
-            if (string.IsNullOrWhiteSpace(param.ScopeId)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.ScopeId)), nameof(param)); }
-            if (string.IsNullOrWhiteSpace(param.OrderId)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.OrderId)), nameof(param)); }
+            if (param == null)
+            {
+                throw new ArgumentNullException(nameof(param));
+            }
+
+            if (string.IsNullOrWhiteSpace(param.ScopeId))
+            {
+                throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.ScopeId)), nameof(param));
+            }
+
+            if (string.IsNullOrWhiteSpace(param.OrderId))
+            {
+                throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.OrderId)), nameof(param));
+            }
 
             var request = new GetOrderFulfillmentStateRequest()
             {
@@ -238,9 +349,20 @@ namespace Orckestra.Composer.Cart.Repositories.Order
 
         public virtual async Task<OrderFulfillmentState> ChangeShipmentStatusAsync(ChangeShipmentStatusParam param)
         {
-            if (param == null) { throw new ArgumentNullException(nameof(param)); }
-            if (string.IsNullOrWhiteSpace(param.ScopeId)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.ScopeId)), nameof(param)); }
-            if (param.OrderId == default) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.OrderId)), nameof(param)); }
+            if (param == null)
+            {
+                throw new ArgumentNullException(nameof(param));
+            }
+
+            if (string.IsNullOrWhiteSpace(param.ScopeId))
+            {
+                throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.ScopeId)), nameof(param));
+            }
+
+            if (param.OrderId == default)
+            {
+                throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.OrderId)), nameof(param));
+            }
 
             var request = new ChangeShipmentStatusRequest()
             {
@@ -254,27 +376,32 @@ namespace Orckestra.Composer.Cart.Repositories.Order
             return await OvertureClient.SendAsync(request);
         }
 
-        public virtual async Task<OrderFulfillmentState> AddShipmentFulfillmentMessagesAsync(AddShipmentFulfillmentMessagesParam param)
+        public virtual async Task<OrderFulfillmentState> AddShipmentFulfillmentMessagesAsync(
+            AddShipmentFulfillmentMessagesParam param)
         {
-            if (param == null) { throw new ArgumentNullException(nameof(param)); }
-            if (string.IsNullOrWhiteSpace(param.ScopeId)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.ScopeId)), nameof(param)); }
-            if (param.OrderId == default) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.OrderId)), nameof(param)); }
+            if (param == null)
+            {
+                throw new ArgumentNullException(nameof(param));
+            }
 
+            if (string.IsNullOrWhiteSpace(param.ScopeId))
+            {
+                throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.ScopeId)), nameof(param));
+            }
+
+            if (param.OrderId == default)
+            {
+                throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.OrderId)), nameof(param));
+            }
+            
             var request = new AddShipmentFulfillmentMessagesRequest()
             {
                 ScopeId = param.ScopeId,
                 OrderId = param.OrderId,
                 ShipmentId = param.ShipmentId,
-                ExecutionMessages = new List<ExecutionMessage>()
-                {
-                    new ExecutionMessage()
-                    {
-                        Severity = ExecutionMessageSeverity.Info,
-                        MessageId = param.OrderId.ToString()
-                    }
-                }
+                ExecutionMessages = new List<ExecutionMessage>(),
+                ValidationResults = new List<ValidationResult>()
             };
-
             return await OvertureClient.SendAsync(request);
         }
     }

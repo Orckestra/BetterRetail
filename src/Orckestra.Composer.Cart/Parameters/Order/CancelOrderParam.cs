@@ -9,7 +9,7 @@ namespace Orckestra.Composer.Cart.Parameters.Order
         /// <summary>
         /// Gets or sets the order id
         /// </summary>
-        public string OrderId { get; set; }
+        public string OrderNumber { get; set; }
 
         /// <summary>
         /// Gets or sets the scope.

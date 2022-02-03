@@ -125,6 +125,7 @@
     <Compile Include="Providers\Order\IEditingOrderProvider.cs" />
     <Compile Include="Providers\Order\EditingOrderProvider.cs" />
     <Compile Include="Providers\WishList\IWishListUrlProvider.cs" />
+    <Compile Include="Requests\CancelOrderRequest.cs" />
     <Compile Include="Requests\GetGuestOrderRequest.cs" />
     <Compile Include="Requests\GetOrderRequest.cs" />
     <Compile Include="Requests\GetLineItemRequest.cs" />

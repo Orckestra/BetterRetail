@@ -64,5 +64,10 @@ namespace Orckestra.Composer.Cart.Parameters.Order
         /// The Order Canceling Infos.
         /// </summary>
         public Dictionary<Guid, bool> OrderCancelingInfos { get; set; }
+
+        /// <summary>
+        /// The Order Cancel Pending Infos.
+        /// </summary>
+        public Dictionary<Guid, bool> OrderCancelPendingInfos { get; set; }
     }
 }
