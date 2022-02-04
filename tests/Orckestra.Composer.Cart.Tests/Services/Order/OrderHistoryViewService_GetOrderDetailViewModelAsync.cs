@@ -75,10 +75,10 @@ namespace Orckestra.Composer.Cart.Tests.Services.Order
             .Returns(false);
             _container.GetMock<IEditingOrderProvider>()
                 .Setup(r => r.CanCancel(It.IsAny<Orckestra.Overture.ServiceModel.Orders.Order>()))
-                .Returns(new Task<bool>(() => false));
+                .ReturnsAsync(false);
             _container.GetMock<IEditingOrderProvider>()
                 .Setup(r => r.PendingCancel(It.IsAny<Orckestra.Overture.ServiceModel.Orders.Order>()))
-                .Returns(new Task<bool>(() => false));
+                .ReturnsAsync(false);
 
             _container.GetMock<ILineItemService>();
         }

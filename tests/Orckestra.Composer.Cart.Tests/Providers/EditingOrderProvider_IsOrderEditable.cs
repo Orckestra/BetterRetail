@@ -143,7 +143,7 @@ namespace Orckestra.Composer.Cart.Tests.Providers
 
             _container.GetMock<IOrderRepository>()
                 .Setup(r => r.GetOrderFulfillmentStateAsync(It.IsAny<GetOrderFulfillmentStateParam>()))
-                .Returns(new Task<OrderFulfillmentState>(() => orderFulfillmentState));
+                .ReturnsAsync(orderFulfillmentState);
 
             var result = await provider.CanCancel(order).ConfigureAwait(false);
 
