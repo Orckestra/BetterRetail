@@ -54,28 +54,34 @@ namespace Orckestra.Composer.Cart.Providers.Order
             return isOrderEditable;
         }
 
-        public virtual async Task<bool> IsOrderCancelable(Overture.ServiceModel.Orders.Order order)
+        public virtual async Task<bool> CanCancel(Overture.ServiceModel.Orders.Order order)
         {
-            if (order.OrderStatus.Equals("Canceled", StringComparison.InvariantCultureIgnoreCase)) return false;
-
+            if (order?.Cart?.Shipments == null ||
+                OrderHistoryConfiguration.CompletedOrderStatuses.Contains(order.OrderStatus))
+            {
+                return false;
+            }
             var orderFulfillmentState = await OrderRepository.GetOrderFulfillmentStateAsync(new GetOrderFulfillmentStateParam
             {
                 OrderId = order.Id,
                 ScopeId = order.ScopeId
             }).ConfigureAwait(false);
 
-            if (orderFulfillmentState.IsCancelable 
+            if (orderFulfillmentState.IsCancelable
                 && !orderFulfillmentState.IsProcessing
-                && !orderFulfillmentState.Status.Equals("Canceled", StringComparison.InvariantCultureIgnoreCase)
+                && !orderFulfillmentState.Status.Equals(Constants.OrderStatus.Canceled,
+                    StringComparison.InvariantCultureIgnoreCase)
                 && !orderFulfillmentState.Status.Equals("Completed", StringComparison.InvariantCultureIgnoreCase))
+            {
                 return true;
+            }
 
             return false;
         }
 
         public virtual async Task<bool> IsOrderPendingCancel(Overture.ServiceModel.Orders.Order order)
         {
-            if (order.OrderStatus.Equals("Canceled", StringComparison.InvariantCultureIgnoreCase)) return false;
+            if (order.OrderStatus.Equals(Constants.OrderStatus.Canceled, StringComparison.InvariantCultureIgnoreCase)) return false;
 
             var orderFulfillmentState = await OrderRepository.GetOrderFulfillmentStateAsync(
                 new GetOrderFulfillmentStateParam

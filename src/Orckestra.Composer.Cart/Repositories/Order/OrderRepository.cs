@@ -23,6 +23,8 @@ namespace Orckestra.Composer.Cart.Repositories.Order
         protected virtual IFindOrdersRequestFactory FindOrdersRequestFactory { get; private set; }
         protected ICacheProvider CacheProvider { get; private set; }
 
+        public const string DefaultOrderCancellationReason = "Cancelled at Customer request";
+
         public OrderRepository(
             IOvertureClient overtureClient,
             IFindOrdersRequestFactory findOrdersRequestFactory,
@@ -236,7 +238,7 @@ namespace Orckestra.Composer.Cart.Repositories.Order
             return OvertureClient.SendAsync(request);
         }
 
-        public virtual async Task<OrderFulfillmentState> ChangeShipmentStatusAsync(ChangeShipmentStatusParam param)
+        public virtual Task<OrderFulfillmentState> ChangeShipmentStatusAsync(ChangeShipmentStatusParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
             if (string.IsNullOrWhiteSpace(param.ScopeId)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.ScopeId)), nameof(param)); }
@@ -247,14 +249,14 @@ namespace Orckestra.Composer.Cart.Repositories.Order
                 ScopeId = param.ScopeId,
                 OrderId = param.OrderId,
                 ShipmentId = param.ShipmentId,
-                Reason = "DefaultOrderCancellationReason",
+                Reason = DefaultOrderCancellationReason,
                 RequestedStatus = "Canceled"
             };
 
-            return await OvertureClient.SendAsync(request);
+            return OvertureClient.SendAsync(request);
         }
 
-        public virtual async Task<OrderFulfillmentState> AddShipmentFulfillmentMessagesAsync(AddShipmentFulfillmentMessagesParam param)
+        public virtual Task<OrderFulfillmentState> AddShipmentFulfillmentMessagesAsync(AddShipmentFulfillmentMessagesParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
             if (string.IsNullOrWhiteSpace(param.ScopeId)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.ScopeId)), nameof(param)); }
@@ -265,10 +267,10 @@ namespace Orckestra.Composer.Cart.Repositories.Order
                 ScopeId = param.ScopeId,
                 OrderId = param.OrderId,
                 ShipmentId = param.ShipmentId,
-                ExecutionMessages = new List<ExecutionMessage>(),
-                ValidationResults = new List<ValidationResult>()
+                ExecutionMessages = param.ExecutionMessages ?? new List<ExecutionMessage>(),
+                ValidationResults = param.ValidationResults ?? new List<ValidationResult>()
             };
-            return await OvertureClient.SendAsync(request);
+            return OvertureClient.SendAsync(request);
         }
     }
 }

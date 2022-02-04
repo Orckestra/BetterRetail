@@ -145,7 +145,7 @@ namespace Orckestra.Composer.Cart.Tests.Providers
                 .Setup(r => r.GetOrderFulfillmentStateAsync(It.IsAny<GetOrderFulfillmentStateParam>()))
                 .Returns(new Task<OrderFulfillmentState>(() => orderFulfillmentState));
 
-            var result = await provider.IsOrderCancelable(order).ConfigureAwait(false);
+            var result = await provider.CanCancel(order).ConfigureAwait(false);
 
             //Assert
             result.Should().Be(isCancelable);

@@ -165,7 +165,7 @@ namespace Orckestra.Composer.Cart.Services.Order
 
             foreach (var order in orders)
             {
-                orderEditingInfos.Add(Guid.Parse(order.Id), await EditingOrderProvider.IsOrderCancelable(order).ConfigureAwait(false));
+                orderEditingInfos.Add(Guid.Parse(order.Id), await EditingOrderProvider.CanCancel(order).ConfigureAwait(false));
             }
 
             return orderEditingInfos;
@@ -373,7 +373,7 @@ namespace Orckestra.Composer.Cart.Services.Order
 
             viewModel.OrderInfos.IsOrderEditable = await EditingOrderProvider.CanEdit(order).ConfigureAwait(false);
             viewModel.OrderInfos.IsBeingEdited = EditingOrderProvider.IsBeingEdited(order);
-            viewModel.OrderInfos.IsOrderCancelable = await EditingOrderProvider.IsOrderCancelable(order).ConfigureAwait(false);
+            viewModel.OrderInfos.IsOrderCancelable = await EditingOrderProvider.CanCancel(order).ConfigureAwait(false);
             viewModel.OrderInfos.IsOrderPendingCancel = await EditingOrderProvider.IsOrderPendingCancel(order).ConfigureAwait(false);
 
             if (order.Cart.PropertyBag.TryGetValue("PickedItems", out var pickedItemsObject))
@@ -575,14 +575,13 @@ namespace Orckestra.Composer.Cart.Services.Order
             var orderId = Guid.Parse(order.Id);
             if (order == null) throw new InvalidOperationException($"Order {param.OrderNumber} cannot be received.");
 
-            var isOrderCancelable = await EditingOrderProvider.IsOrderCancelable(order).ConfigureAwait(false);
-            if(!isOrderCancelable) throw new InvalidOperationException($"For canceling order {param.OrderNumber} should be cancelable.");
+            var isOrderCancelable = await EditingOrderProvider.CanCancel(order).ConfigureAwait(false);
+            if(!isOrderCancelable) throw new InvalidOperationException($"Order {param.OrderNumber} cann't be canceled");
             
             if (string.IsNullOrWhiteSpace(order.OrderStatus)) throw new InvalidOperationException($"Order {param.OrderNumber} has no status.");
             
             var shipment = order.Cart?.Shipments?.FirstOrDefault();
-            if (shipment?.Id == null) throw new InvalidOperationException($"Shipment for the order {param.OrderNumber} is null.");
-
+            
             await OrderRepository.ChangeShipmentStatusAsync(new ChangeShipmentStatusParam
             {
                 OrderId = orderId,
@@ -590,12 +589,12 @@ namespace Orckestra.Composer.Cart.Services.Order
                 ShipmentId = shipment.Id
             }).ConfigureAwait(false);
 
-            await OrderRepository.AddShipmentFulfillmentMessagesAsync(new AddShipmentFulfillmentMessagesParam
-            {
-                OrderId = orderId,
-                ScopeId = param.Scope,
-                ShipmentId = shipment.Id
-            }).ConfigureAwait(false);
+            //await OrderRepository.AddShipmentFulfillmentMessagesAsync(new AddShipmentFulfillmentMessagesParam
+            //{
+            //    OrderId = orderId,
+            //    ScopeId = param.Scope,
+            //    ShipmentId = shipment.Id
+            //}).ConfigureAwait(false);
 
             var orderFulfillmentState = await OrderRepository.GetOrderFulfillmentStateAsync(new GetOrderFulfillmentStateParam
             {
