@@ -19,11 +19,28 @@ namespace Orckestra.Composer.Cart.Providers.Order
         /// <param name="order"></param>
         /// <returns></returns>
         bool IsBeingEdited(Overture.ServiceModel.Orders.Order order);
+
+        /// <summary>
+        /// Is Order can be canceled
+        /// </summary>
+        /// <param name="order"></param>
+        /// <returns></returns>
         Task<bool> CanCancel(Overture.ServiceModel.Orders.Order order);
 
-        Task<bool> IsOrderPendingCancel(Overture.ServiceModel.Orders.Order order);
+        /// <summary>
+        /// Is Order in pending cancel status
+        /// </summary>
+        /// <param name="order"></param>
+        /// <returns></returns>
+        Task<bool> PendingCancel(Overture.ServiceModel.Orders.Order order);
 
-        
+        /// <summary>
+        /// Cancel order
+        /// </summary>
+        /// <param name="order"></param>
+        /// <returns></returns>
+        Task CancelOrder(Overture.ServiceModel.Orders.Order order, string scope);
+
         /// <summary>
         /// Is Edit mode right now on the website
         /// </summary>

@@ -1,6 +1,7 @@
 ﻿using Orckestra.Composer.Cart.Factory.Order;
 using Orckestra.Composer.Cart.Parameters.Order;
 using Orckestra.Composer.Configuration;
+using Orckestra.Composer.Utils;
 using Orckestra.Overture;
 using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel.Customers;
@@ -8,7 +9,6 @@ using Orckestra.Overture.ServiceModel.Orders;
 using Orckestra.Overture.ServiceModel.Orders.Fulfillment;
 using Orckestra.Overture.ServiceModel.Requests.Orders;
 using Orckestra.Overture.ServiceModel.Requests.Orders.Fulfillment;
-using Orckestra.Overture.ServiceModel.Validation;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -22,8 +22,6 @@ namespace Orckestra.Composer.Cart.Repositories.Order
         protected virtual IOvertureClient OvertureClient { get; private set; }
         protected virtual IFindOrdersRequestFactory FindOrdersRequestFactory { get; private set; }
         protected ICacheProvider CacheProvider { get; private set; }
-
-        public const string DefaultOrderCancellationReason = "Cancelled at Customer request";
 
         public OrderRepository(
             IOvertureClient overtureClient,
@@ -249,27 +247,10 @@ namespace Orckestra.Composer.Cart.Repositories.Order
                 ScopeId = param.ScopeId,
                 OrderId = param.OrderId,
                 ShipmentId = param.ShipmentId,
-                Reason = DefaultOrderCancellationReason,
-                RequestedStatus = "Canceled"
+                Reason = param.Reason,
+                RequestedStatus = param.RequestedStatus
             };
 
-            return OvertureClient.SendAsync(request);
-        }
-
-        public virtual Task<OrderFulfillmentState> AddShipmentFulfillmentMessagesAsync(AddShipmentFulfillmentMessagesParam param)
-        {
-            if (param == null) { throw new ArgumentNullException(nameof(param)); }
-            if (string.IsNullOrWhiteSpace(param.ScopeId)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.ScopeId)), nameof(param)); }
-            if (param.OrderId == default) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.OrderId)), nameof(param)); }
-
-            var request = new AddShipmentFulfillmentMessagesRequest()
-            {
-                ScopeId = param.ScopeId,
-                OrderId = param.OrderId,
-                ShipmentId = param.ShipmentId,
-                ExecutionMessages = param.ExecutionMessages ?? new List<ExecutionMessage>(),
-                ValidationResults = param.ValidationResults ?? new List<ValidationResult>()
-            };
             return OvertureClient.SendAsync(request);
         }
     }

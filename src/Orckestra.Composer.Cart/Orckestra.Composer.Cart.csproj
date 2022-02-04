@@ -100,7 +100,6 @@
     <Compile Include="Parameters\GetRecurringOrderCartViewModelParam.cs" />
     <Compile Include="Parameters\GetShippingMethodsScopeParam.cs" />
     <Compile Include="Parameters\Order\DeleteCartOrderDraftParam.cs" />
-    <Compile Include="Parameters\Order\AddShipmentFulfillmentMessagesParam.cs" />
     <Compile Include="Parameters\Order\CancelOrderParam.cs" />
     <Compile Include="Parameters\Order\ChangeOrderDraftOwnershipParam.cs" />
     <Compile Include="Parameters\Order\ChangeShipmentStatusParam.cs" />

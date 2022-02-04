@@ -80,11 +80,5 @@ namespace Orckestra.Composer.Cart.Repositories.Order
         /// </summary>
         /// <returns></returns>
         Task<OrderFulfillmentState> ChangeShipmentStatusAsync(ChangeShipmentStatusParam param);
-
-        /// <summary>
-        /// Add Shipment Fulfillment Messages
-        /// </summary>
-        /// <returns></returns>
-        Task<OrderFulfillmentState> AddShipmentFulfillmentMessagesAsync(AddShipmentFulfillmentMessagesParam param);
     }
 }

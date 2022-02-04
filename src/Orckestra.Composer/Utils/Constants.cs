@@ -26,5 +26,7 @@
             public const string IsOwnedByRequestedUser = "IsOwnedByRequestedUser";
             public const string IsOwnedBySomeoneElse = "IsOwnedBySomeoneElse";
         }
+
+        public const string DefaultOrderCancellationReason = "Cancelled at Customer request";
     }
 }

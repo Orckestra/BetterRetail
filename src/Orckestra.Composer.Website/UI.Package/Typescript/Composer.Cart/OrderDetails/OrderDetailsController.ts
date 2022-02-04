@@ -57,8 +57,7 @@ module Orckestra.Composer {
                         this.Modal.cancelOrderModal.openModal(event);
                     },
                     cancelOrder(){
-console.log(this.OrderNumber);
-                       // this.orderService.cancelOrder(this.OrderNumber); 
+                        this.orderService.cancelOrder(this.OrderNumber); 
                     }
                 }
             });
