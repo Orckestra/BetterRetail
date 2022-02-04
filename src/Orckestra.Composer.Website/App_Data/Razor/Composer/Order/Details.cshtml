@@ -87,15 +87,16 @@
 
                                     }
                                     @if (order.OrderInfos.IsOrderCancelable && !order.OrderInfos.IsBeingEdited)
-{
-                                    <li >
-                                        <a href="#" v-bind:disabled="Loading" class="cta" data-orderId="@order.OrderInfos.OrderNumber" data-qa="cancel-order" data-oc-click="cancelOrderConfirm">
-                                            @Html.Localize("General", "B_CancelOrder")
-                                        </a>
-                                    </li>
-                                    @OrdersHelper.cancelOrderConfirmationModal("cancelOrderModal", order.OrderInfos.OrderNumber);
+                                    {
+                                        <li >
+                                            <a href="#" v-bind:class="{'disabled': Loading}" class="cta" data-orderId="@order.OrderInfos.OrderNumber" v-on:click.prevent="cancelOrderConfirm($event, @order.OrderInfos.OrderNumber)">
+                                                @Html.Localize("General", "B_CancelOrder")
+                                            </a>
+                                        </li>
+                                  
                                     }
                                 </ul>
+                                @OrdersHelper.cancelOrderConfirmationModal()
                             </div>
                         }
 

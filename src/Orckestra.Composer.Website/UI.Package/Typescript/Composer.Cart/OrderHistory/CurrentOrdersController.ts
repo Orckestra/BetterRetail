@@ -6,6 +6,7 @@
 ///<reference path='./Services/OrderService.ts' />
 /// <reference path='../../ErrorHandling/ErrorHandler.ts' />
 ///<reference path='../../Utils/OrderHelper.ts' />
+///<reference path='../../UI/UIModal.ts' />
 
 module Orckestra.Composer {
     'use strict';
@@ -13,12 +14,10 @@ module Orckestra.Composer {
     export class CurrentOrdersController extends Controller {
         protected orderService = new OrderService();
         protected VueCurrentOrderData: Vue;
-        private uiModal: UIModal;
 
         public initialize() {
             super.initialize();
             var cancelModalElementSelector = '#cancelOrderModal';
-            this.uiModal = new UIModal(window, cancelModalElementSelector, this.cancelOrder, this);
             let self: CurrentOrdersController = this;
             self.orderService.getCurrentOrders().then(data => {
                 this.VueCurrentOrderData = new Vue({
@@ -27,9 +26,15 @@ module Orckestra.Composer {
                         Orders: data ? OrderHelper.MapOrders(data.Orders) : null,
                         Pagination: data ? data.Pagination : null,
                         Page: 1,
-                        Loading: false
+                        Loading: false,
+                        Modal: {
+                            cancelOrderModal: null,
+                        },
+                        OrderNumber: null
                     },
-
+                    mounted() {
+                        this.Modal.cancelOrderModal = new Composer.UIModal(window, cancelModalElementSelector, this.cancelOrder, this)
+                    },
                     methods: {
                         getOrders(page: any) {                            
                             this.Loading = true;
@@ -62,21 +67,18 @@ module Orckestra.Composer {
                         },
                         reload(){
                             window.location.reload()
+                        },
+                        cancelOrderConfirm(event: JQueryEventObject, orderNumber: string) {
+                            this.OrderNumber = orderNumber;
+                            this.Modal.cancelOrderModal.openModal(event);
+                        },
+                        cancelOrder(){
+console.log(this.OrderNumber);
+                           // this.orderService.cancelOrder(this.OrderNumber); 
                         }
                     }
                 })
             });
-        }
-
-        public cancelOrderConfirm(actionContext: IControllerActionContext) {
-            this.uiModal.openModal(actionContext.event);
-        }
-
-        public cancelOrder(event){
-            var element = $(event.target);
-            var $orderItem: JQuery = element.closest('[data-orderid]');
-            var orderId = $orderItem.data('orderid');
-            this.orderService.cancelOrder(orderId);            
         }
     }
 }

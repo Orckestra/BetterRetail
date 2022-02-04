@@ -12,12 +12,10 @@ module Orckestra.Composer {
     export class OrderDetailsController extends Controller {
         protected orderService = new OrderService();
         protected VueOrderDetails: Vue;
-        private uiModal: UIModal;
 
         public initialize() {
             super.initialize();
             var cancelModalElementSelector = '#cancelOrderModal';
-            this.uiModal = new UIModal(window, cancelModalElementSelector, this.cancelOrder, this);
             
             let self = this;
             this.VueOrderDetails = new Vue({
@@ -26,7 +24,11 @@ module Orckestra.Composer {
                     Loading: false,
                     Modal: {
                         cancelOrderModal: null,
-                    }
+                    },
+                    OrderNumber: null
+                },
+                mounted() {
+                    this.Modal.cancelOrderModal = new Composer.UIModal(window, cancelModalElementSelector, this.cancelOrder, this)
                 },
                 methods: {
                     editOrder(orderNumber: string) {
@@ -49,20 +51,17 @@ module Orckestra.Composer {
                     },
                     reload(){
                         window.location.reload()
+                    },
+                    cancelOrderConfirm(event: JQueryEventObject, orderNumber: string) {
+                        this.OrderNumber = orderNumber;
+                        this.Modal.cancelOrderModal.openModal(event);
+                    },
+                    cancelOrder(){
+console.log(this.OrderNumber);
+                       // this.orderService.cancelOrder(this.OrderNumber); 
                     }
                 }
             });
-        }
-
-        public cancelOrderConfirm(actionContext: IControllerActionContext) {
-            this.uiModal.openModal(actionContext.event);
-        }
-
-        public cancelOrder(event){
-            var element = $(event.target);
-            var $orderItem: JQuery = element.closest('[data-orderid]');
-            var orderId = $orderItem.data('orderid');
-            this.orderService.cancelOrder(orderId);            
         }
     }
 }
