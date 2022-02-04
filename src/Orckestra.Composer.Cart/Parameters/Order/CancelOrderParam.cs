@@ -7,7 +7,7 @@ namespace Orckestra.Composer.Cart.Parameters.Order
     public class CancelOrderParam
     {
         /// <summary>
-        /// Gets or sets the order id
+        /// Gets or sets the order number
         /// </summary>
         public string OrderNumber { get; set; }
 

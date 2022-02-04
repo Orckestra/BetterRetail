@@ -56,8 +56,9 @@ namespace Orckestra.Composer.Cart.Providers.Order
 
         public virtual async Task<bool> CanCancel(Overture.ServiceModel.Orders.Order order)
         {
-            if (order?.Cart?.Shipments == null ||
-                OrderHistoryConfiguration.CompletedOrderStatuses.Contains(order.OrderStatus))
+            if (order?.Cart?.Shipments == null
+                || OrderHistoryConfiguration.CompletedOrderStatuses.Contains(order.OrderStatus)
+                || string.IsNullOrWhiteSpace(order.OrderStatus))
             {
                 return false;
             }
@@ -71,7 +72,8 @@ namespace Orckestra.Composer.Cart.Providers.Order
                 && !orderFulfillmentState.IsProcessing
                 && !orderFulfillmentState.Status.Equals(Constants.OrderStatus.Canceled,
                     StringComparison.InvariantCultureIgnoreCase)
-                && !orderFulfillmentState.Status.Equals("Completed", StringComparison.InvariantCultureIgnoreCase))
+                && !orderFulfillmentState.Status.Equals("Completed", StringComparison.InvariantCultureIgnoreCase)
+                && orderFulfillmentState.ShipmentFulfillmentStates.All(item => item.AllowedStatusChanges.Contains(Constants.OrderStatus.Canceled)))
             {
                 return true;
             }
@@ -90,26 +92,27 @@ namespace Orckestra.Composer.Cart.Providers.Order
                     ScopeId = order.ScopeId
                 }).ConfigureAwait(false);
 
-            return !orderFulfillmentState.IsCancelable && orderFulfillmentState.ShipmentFulfillmentStates.Any(item => item.AllowedStatusChanges.Contains(Constants.OrderStatus.Canceled));
+            return !orderFulfillmentState.IsCancelable;
         }
 
         public async Task CancelOrder(Overture.ServiceModel.Orders.Order order, string scope)
         {
             var isOrderCancelable = await CanCancel(order).ConfigureAwait(false);
             if (!isOrderCancelable) throw new InvalidOperationException($"Order {order.Id} cann't be canceled");
-
-            if (string.IsNullOrWhiteSpace(order.OrderStatus)) throw new InvalidOperationException($"Order {order.Id} has no status.");
-
-            var shipment = order.Cart?.Shipments?.FirstOrDefault();
-
-            await OrderRepository.ChangeShipmentStatusAsync(new ChangeShipmentStatusParam
+            
+            var shipments = order.Cart?.Shipments;
+            
+            foreach (var shipment in shipments)
             {
-                OrderId = Guid.Parse(order.Id),
-                ScopeId = scope,
-                ShipmentId = shipment.Id,
-                Reason = Constants.DefaultOrderCancellationReason,
-                RequestedStatus = Constants.OrderStatus.Canceled
-            }).ConfigureAwait(false);
+                await OrderRepository.ChangeShipmentStatusAsync(new ChangeShipmentStatusParam
+                {
+                    OrderId = Guid.Parse(order.Id),
+                    ScopeId = scope,
+                    ShipmentId = shipment.Id,
+                    Reason = Constants.DefaultOrderCancellationReason,
+                    RequestedStatus = Constants.OrderStatus.Canceled
+                }).ConfigureAwait(false);
+            }
         }
 
         public virtual bool IsBeingEdited(Overture.ServiceModel.Orders.Order order)

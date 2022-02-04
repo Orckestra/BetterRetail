@@ -241,6 +241,7 @@ namespace Orckestra.Composer.Cart.Repositories.Order
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
             if (string.IsNullOrWhiteSpace(param.ScopeId)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.ScopeId)), nameof(param)); }
             if (param.OrderId == default) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.OrderId)), nameof(param)); }
+            if (param.RequestedStatus == default) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.RequestedStatus)), nameof(param)); }
 
             var request = new ChangeShipmentStatusRequest()
             {
