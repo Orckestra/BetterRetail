@@ -39,6 +39,7 @@ module Orckestra.Composer {
 
                 this.eventHub.publish(MyAccountEvents.EditOrderFinished, { data: { orderNumber } });
 
+                this.cartService.invalidateCache();
                 this.cartService.getFreshCart(true);
 
                 if (result.NextStepUrl) {
@@ -46,7 +47,6 @@ module Orckestra.Composer {
                 }
 
             })
-                .then(cart => this.eventHub.publish(CartEvents.CartUpdated, { data: cart }))
                 .fail(reason => ErrorHandler.instance().outputError(reason));
         }
 
