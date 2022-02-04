@@ -24,7 +24,7 @@ module Orckestra.Composer {
                 },
                 data: {
                     ...this.context.viewModel,
-                    LandingPageUrls: this.context.container.data('landingpageurls')
+                    LandingPageUrls: this.context.container.data('landingpageurls') || []
                 },
                 mounted() {
                     self.eventHub.subscribe(SearchEvents.FacetsLoaded, this.onFacetsLoaded);
@@ -36,7 +36,7 @@ module Orckestra.Composer {
                     onFacetsLoaded({data}) {
                         this.Facets = data.FacetSettings.SelectedFacets.Facets;
                         this.IsAllRemovable = data.FacetSettings.SelectedFacets.IsAllRemovable;
-                        this.LandingPageUrls = data.LandingPageUrls;
+                        this.LandingPageUrls = data.LandingPageUrls || [];
                     },
                     clearSelectedFacets(landingPageUrl) {
                         self.eventHub.publish(SearchEvents.FacetsCleared, { data: { landingPageUrl } });
@@ -60,7 +60,7 @@ module Orckestra.Composer {
                                 //remove also all child categories
                                 const parentCategoryElement = $('#categoriesTree').find('div[data-facetfieldname="' + categoryTreeRef + '"]');
                                 const checkedItems = parentCategoryElement.find('input:checked');
-                                var data = [];
+                                const data = [];
                                 checkedItems.each(index => {
                                     let el = $(checkedItems[index]);
                                     data.push({
@@ -69,7 +69,7 @@ module Orckestra.Composer {
                                         facetType: el.data('type')
                                     })
                                 });
-                                self.eventHub.publish(SearchEvents.FacetRemoved, { data });
+                                self.eventHub.publish(SearchEvents.FacetsRemoved, { data });
                             }
                         }
                     }
