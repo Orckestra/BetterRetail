@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Orckestra.Composer.Cart.Parameters.Order;
+using Orckestra.Composer.Cart.ViewModels;
 using Orckestra.Composer.Cart.ViewModels.Order;
 
 namespace Orckestra.Composer.Cart.Services.Order
@@ -48,5 +49,12 @@ namespace Orckestra.Composer.Cart.Services.Order
         /// <param name="orderNumber"></param>
         /// <returns></returns>
         Task CancelEditingOrderAsync(string orderNumber);
+
+        /// <summary>
+        /// Submit edit order
+        /// </summary>
+        /// <param name="orderNumber"></param>
+        /// <returns></returns>
+        Task<CompleteCheckoutViewModel> SaveEditedOrderAsync(string orderNumber, string baseUrl);
     }
 }

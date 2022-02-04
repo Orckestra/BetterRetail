@@ -1,16 +1,31 @@
 @inherits RazorFunction
+@using Orckestra.Composer.Providers;
+@using Orckestra.Composer.Parameters;
+@using System.Threading;
+
+@functions {
+    public ICartUrlProvider CartUrlProvider { get; set; }
+}
+
+@{
+    var redirectUrl = CartUrlProvider.GetCartUrl(new BaseUrlParameter
+    {
+        CultureInfo = Thread.CurrentThread.CurrentCulture
+    });
+}
 
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
 <head>
 </head>
 <body>
     <div data-oc-controller="Cart.EditOrderBanner">
-        <div id="vueEditOrderBanner" v-cloak="true" v-if="IsDraftCart" class="alert alert-success m-0 p-2 text-center">
+        <div id="vueEditOrderBanner" v-cloak="true" v-if="IsDraftCart" class="alert alert-success m-0 p-2 text-center"
+             update-redirect-url="@redirectUrl">
             <div class="container">
                 @Html.Localized("ShoppingCart", "L_EditCartBannerMessage", "{{OrderNumberForOrderDraft}}")
                 <ul class="nav-pills float-right">
                     <li> <a class="cta" href="#" v-on:click.prevent="cancelEditOrder"> @Html.Localized("General", "B_Cancel")</a></li>
-                    <li> <a class="cta" href="#"> @Html.Localized("General", "B_Update")</a></li>
+                    <li> <a class="cta" href="#" v-on:click.prevent="updateEditOrder"> @Html.Localized("General", "B_Update")</a></li>
                 </ul>
             </div>
         </div>
