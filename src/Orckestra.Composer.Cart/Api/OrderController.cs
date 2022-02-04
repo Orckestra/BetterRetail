@@ -3,7 +3,6 @@ using Orckestra.Composer.Cart.Requests;
 using Orckestra.Composer.Cart.Services.Order;
 using Orckestra.Composer.Cart.Utils;
 using Orckestra.Composer.Cart.ViewModels;
-using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Utils;
@@ -23,18 +22,15 @@ namespace Orckestra.Composer.Cart.Api
         protected IComposerContext ComposerContext { get; private set; }
         protected IOrderHistoryViewService OrderHistoryViewService { get; private set; }
         protected IOrderUrlProvider OrderUrlProvider { get; private set; }
-        protected ICartUrlProvider CartUrlProvider { get; private set; }
 
         public OrderController(
             IComposerContext composerContext,
             IOrderHistoryViewService orderHistoryViewService,
-            IOrderUrlProvider orderUrlProvider,
-            ICartUrlProvider cartUrlProvider)
+            IOrderUrlProvider orderUrlProvider)
         {
             OrderHistoryViewService = orderHistoryViewService ?? throw new ArgumentNullException(nameof(orderHistoryViewService));
             OrderUrlProvider = orderUrlProvider ?? throw new ArgumentNullException(nameof(orderUrlProvider));
             ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
-            CartUrlProvider = cartUrlProvider ?? throw new ArgumentNullException(nameof(cartUrlProvider));
         }
 
         [HttpPost]
