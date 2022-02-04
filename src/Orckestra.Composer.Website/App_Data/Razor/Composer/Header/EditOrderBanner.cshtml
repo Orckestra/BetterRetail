@@ -8,7 +8,7 @@
 }
 
 @{
-    var redirectUrl = CartUrlProvider.GetCartUrl(new BaseUrlParameter
+    var cartPageUrl = CartUrlProvider.GetCartUrl(new BaseUrlParameter
     {
         CultureInfo = Thread.CurrentThread.CurrentCulture
     });
@@ -24,7 +24,7 @@
                 @Html.Localized("ShoppingCart", "L_EditCartBannerMessage", "{{OrderNumberForOrderDraft}}")
                 <ul class="nav-pills float-right">
                     <li> <a class="cta" href="#" v-on:click.prevent="cancelEditOrder"> @Html.Localized("General", "B_Cancel")</a></li>
-                    <li> <a class="cta" href="@redirectUrl"> @Html.Localized("General", "B_UpdateOrder")</a></li>
+                    <li> <a class="cta" href="@cartPageUrl"> @Html.Localized("General", "B_UpdateOrder")</a></li>
                 </ul>
             </div>
         </div>
