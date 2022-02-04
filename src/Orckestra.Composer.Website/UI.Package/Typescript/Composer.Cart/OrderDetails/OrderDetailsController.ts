@@ -11,10 +11,13 @@ module Orckestra.Composer {
     export class OrderDetailsController extends Controller {
         protected orderService = new OrderService();
         protected VueOrderDetails: Vue;
+        
 
         public initialize() {
             super.initialize();
+
             let self = this;
+            self.eventHub.subscribe(MyAccountEvents.EditOrderCanceled, () => window.location.reload());
             this.VueOrderDetails = new Vue({
                 el: '#vueOrderDetails',
                 data: {
@@ -34,7 +37,6 @@ module Orckestra.Composer {
                         if (this.Loading) return;
                         this.Loading = true;
                         self.orderService.cancelEditOrder(orderNumber)
-                            .then(() => window.location.reload())
                             .fail(() => {
                                 this.Loading = false;
                             });

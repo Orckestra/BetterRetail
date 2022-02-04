@@ -16,6 +16,7 @@ module Orckestra.Composer {
         public initialize() {
             super.initialize();
             let self: CurrentOrdersController = this;
+
             self.orderService.getCurrentOrders().then(data => {
                 this.VueCurrentOrderData = new Vue({
                     el: '#vueCurrentOrders',
@@ -25,7 +26,9 @@ module Orckestra.Composer {
                         Page: 1,
                         Loading: false
                     },
-
+                    mounted() {
+                        self.eventHub.subscribe(MyAccountEvents.EditOrderCanceled, () => this.getOrders(this.Page));
+                    },
                     methods: {
                         getOrders(page: any) {
                             this.Loading = true;
@@ -51,11 +54,10 @@ module Orckestra.Composer {
                             if (this.Loading) return;
                             this.Loading = true;
                             self.orderService.cancelEditOrder(orderNumber)
-                                .then(() => this.getOrders(this.Page))
                                 .fail(() => {
                                     this.Loading = false;
                                 });
-                        } 	
+                        }
                     }
                 })
             });
