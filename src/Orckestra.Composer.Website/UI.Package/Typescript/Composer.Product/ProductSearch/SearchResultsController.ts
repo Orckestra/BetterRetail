@@ -37,7 +37,8 @@ module Orckestra.Composer {
                 data: {
                     ...ProductSearchResults,
                     ListName,
-                    MaxItemsPerPage
+                    MaxItemsPerPage,
+                    isLoading: false
                 },
                 mounted() {
                     this.registerSubscriptions();
@@ -94,7 +95,9 @@ module Orckestra.Composer {
                             self.searchRepository.getQuerySearchResults(data.queryString, data.queryName, data.queryType) :
                             self.searchRepository.getSearchResults(data.queryString, data.categoryId);
 
+                        this.isLoading = true;
                         searchRequest.then(result => {
+                            this.isLoading = false;
                             Object.keys(result.ProductSearchResults).forEach(key => this[key] = result.ProductSearchResults[key]);
 
                             self.eventHub.publish(SearchEvents.SearchResultsLoaded, { data: result });

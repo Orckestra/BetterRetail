@@ -97,7 +97,9 @@
          data-context="@JsonConvert.SerializeObject(Results, new Newtonsoft.Json.Converters.StringEnumConverter())"
          data-vueid="@vueId"
          id="@vueId"
-         v-cloak="true">
+         v-cloak="true"
+         class="search-results">
+        <div class="overlay" v-if="isLoading"></div>
         @if (ShowPagination)
         {
             <div class="row filters-row mb-4" v-if="TotalCount > 0">
