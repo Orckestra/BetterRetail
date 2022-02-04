@@ -39,11 +39,12 @@ module Orckestra.Composer {
 
                 this.eventHub.publish(MyAccountEvents.EditOrderFinished, { data: { orderNumber } });
 
+                this.cartService.getFreshCart(true);
+
                 if (result.NextStepUrl) {
                     window.location.href = result.NextStepUrl;
                 }
 
-                this.cartService.getFreshCart(true);
             })
                 .then(cart => this.eventHub.publish(CartEvents.CartUpdated, { data: cart }))
                 .fail(reason => ErrorHandler.instance().outputError(reason));
