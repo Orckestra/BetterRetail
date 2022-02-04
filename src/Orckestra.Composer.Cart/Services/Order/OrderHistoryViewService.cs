@@ -554,6 +554,9 @@ namespace Orckestra.Composer.Cart.Services.Order
                 BaseUrl = baseUrl
             });
 
+            resultViewModel.NextStepUrl = CartUrlProvider.GetCheckoutConfirmationPageUrl(
+                new BaseUrlParameter { CultureInfo = ComposerContext.CultureInfo });
+
             return resultViewModel;
         }
     }

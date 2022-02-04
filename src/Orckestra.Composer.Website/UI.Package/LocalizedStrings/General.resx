@@ -273,4 +273,7 @@
   <data name="B_Update" xml:space="preserve">
     <value>Update</value>
   </data>
+  <data name="B_UpdateOrder" xml:space="preserve">
+    <value>Update Order</value>
+  </data>
 </root>

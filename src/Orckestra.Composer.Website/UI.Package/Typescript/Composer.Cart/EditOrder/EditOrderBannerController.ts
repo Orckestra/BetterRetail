@@ -32,15 +32,6 @@ module Orckestra.Composer {
                 methods: {
                     cancelEditOrder() {
                         self.orderService.cancelEditOrder(this.OrderNumberForOrderDraft);
-                    },
-                    updateEditOrder() {
-                        let redirectUrl: string = this.$el.attributes['update-redirect-url'].value;
-
-                        if (redirectUrl) {
-                            window.location.href = redirectUrl;
-                        } else {
-                            console.error('Redirect url was not detected.');
-                        }
                     }
                 }
             });

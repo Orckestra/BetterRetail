@@ -219,12 +219,9 @@ namespace Orckestra.Composer.Cart.Api
         {
             if (param == null) return BadRequest($"{nameof(param)} cannot be empty");
 
-            var orderResult = await OrderHistoryViewService.SaveEditedOrderAsync(param.OrderNumber, RequestUtils.GetBaseUrl(Request).ToString());
+            var vm = await OrderHistoryViewService.SaveEditedOrderAsync(param.OrderNumber, RequestUtils.GetBaseUrl(Request).ToString());
 
-            orderResult.NextStepUrl = CartUrlProvider.GetCheckoutConfirmationPageUrl(
-                new BaseUrlParameter { CultureInfo = ComposerContext.CultureInfo });
-            
-            return Ok(orderResult);
+            return Ok(vm);
         }
     }
 }
