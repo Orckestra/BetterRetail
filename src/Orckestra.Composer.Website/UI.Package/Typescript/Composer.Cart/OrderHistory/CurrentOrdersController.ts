@@ -19,6 +19,7 @@ module Orckestra.Composer {
             super.initialize();
             var cancelModalElementSelector = '#cancelOrderModal';
             let self: CurrentOrdersController = this;
+
             self.orderService.getCurrentOrders().then(data => {
                 this.VueCurrentOrderData = new Vue({
                     el: '#vueCurrentOrders',
@@ -33,7 +34,9 @@ module Orckestra.Composer {
                         OrderNumber: null
                     },
                     mounted() {
-                        this.Modal.cancelOrderModal = new Composer.UIModal(window, cancelModalElementSelector, this.cancelOrder, this)
+                        this.Modal.cancelOrderModal = new Composer.UIModal(window, cancelModalElementSelector, this.cancelOrder, this);
+                   
+                        self.eventHub.subscribe(MyAccountEvents.EditOrderCanceled, () => this.getOrders(this.Page));
                     },
                     methods: {
                         getOrders(page: any) {                            
@@ -60,7 +63,6 @@ module Orckestra.Composer {
                             if (this.Loading) return;
                             this.Loading = true;
                             self.orderService.cancelEditOrder(orderNumber)
-                                .then(() => this.getOrders(this.Page))
                                 .fail(() => {
                                     this.Loading = false;
                                 });

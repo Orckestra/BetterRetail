@@ -14,7 +14,7 @@
                         {
                             <li v-if="order.OrderInfos.IsOrderEditable">
                                 <a v-on:click.prevent="editOrder(order.OrderInfos.OrderNumber)" v-bind:class="{'disabled': Loading}" class="cta" href="#">
-                                    <span v-if="order.OrderInfos.IsOrderEdited || order.OrderInfos.HasOwnDraft">@Html.Localize("MyAccount", "B_ContinueEditing")</span>
+                                    <span v-if="order.OrderInfos.IsBeingEdited || order.OrderInfos.HasOwnDraft">@Html.Localize("MyAccount", "B_ContinueEditing")</span>
                                     <span v-else="else">@Html.Localize("MyAccount", "B_EditOrder")</span>
                                 </a>
                             </li>
