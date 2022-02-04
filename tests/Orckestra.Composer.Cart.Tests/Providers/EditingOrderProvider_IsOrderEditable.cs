@@ -138,7 +138,18 @@ namespace Orckestra.Composer.Cart.Tests.Providers
             {
                 IsCancelable = orderFulfillmentStateIsCancelable,
                 IsProcessing = orderFulfillmentStateIsProcessing,
-                Status = orderFulfillmentStateStatus
+                Status = orderFulfillmentStateStatus,
+                ShipmentFulfillmentStates = new List<ShipmentFulfillmentState>()
+                {
+                    new ShipmentFulfillmentState()
+                    {
+                        AllowedStatusChanges = new List<string>()
+                        {
+                            Constants.OrderStatus.Canceled
+                        }
+                    }
+                }
+
             };
 
             _container.GetMock<IOrderRepository>()
