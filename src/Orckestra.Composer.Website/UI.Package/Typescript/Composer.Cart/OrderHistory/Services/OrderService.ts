@@ -47,7 +47,7 @@ module Orckestra.Composer {
                 }
 
             })
-                .fail(reason => ErrorHandler.instance().outputError(reason));
+                .fail(reason => ErrorHandler.instance().outputErrorFromCode('UpdatingOrderFailed'));
         }
 
         public cancelEditOrder(orderNumber: string) {

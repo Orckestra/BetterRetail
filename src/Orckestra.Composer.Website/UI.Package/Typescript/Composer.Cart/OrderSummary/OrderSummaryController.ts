@@ -65,10 +65,14 @@ module Orckestra.Composer {
 
                     },
                     cancelEditOrder() {
-                        self.orderService.cancelEditOrder(this.Cart.OrderSummary.OrderNumberForOrderDraft);
+                        this.Mode.Loading = true;
+                        self.orderService.cancelEditOrder(this.Cart.OrderSummary.OrderNumberForOrderDraft)
+                            .fin(() => this.Mode.Loading = false);
                     },
                     saveEditOrder() {
-                        self.orderService.saveEditOrder(this.Cart.OrderSummary.OrderNumberForOrderDraft);
+                        this.Mode.Loading = true;
+                        self.orderService.saveEditOrder(this.Cart.OrderSummary.OrderNumberForOrderDraft)
+                            .fin(() => this.Mode.Loading = false);
                     },
                     proceedToCheckout() {
                         let nextStepUrl = this.OrderSummary.CheckoutUrlTarget;
