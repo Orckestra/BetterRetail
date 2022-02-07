@@ -120,8 +120,9 @@ namespace Orckestra.Composer.Cart.Services.Order
                 ordersDetails = await GetOrders(orderQueryResult, param).ConfigureAwait(false);
                 orderCartDrafts = await GetOrderCartDrafts(param.Scope, param.CustomerId, param.CultureInfo).ConfigureAwait(false);
                 orderEditingInfos = await GetOrderEditingInfos(ordersDetails).ConfigureAwait(false);
-                orderCancelingInfos = await GetOrderCancelingInfos(ordersDetails).ConfigureAwait(false);
-                orderCancelPendingInfos = await GetOrderPendingCancelInfos(ordersDetails).ConfigureAwait(false);
+                var cancellationStatusInfo = await GetCancellationStatus(ordersDetails).ConfigureAwait(false);
+                orderCancelingInfos = cancellationStatusInfo.CanCancelInfos;
+                orderCancelPendingInfos = cancellationStatusInfo.PendingCancelInfos; 
                 shipmentsTrackingInfos = GetShipmentsTrackingInfoViewModels(ordersDetails, param);
             }
 
@@ -159,28 +160,17 @@ namespace Orckestra.Composer.Cart.Services.Order
             return orderEditingInfos;
         }
 
-        private async Task<Dictionary<Guid, bool>> GetOrderCancelingInfos(List<Overture.ServiceModel.Orders.Order> orders)
+        private async Task<(Dictionary<Guid, bool> CanCancelInfos , Dictionary<Guid, bool> PendingCancelInfos )> GetCancellationStatus(List<Overture.ServiceModel.Orders.Order> orders)
         {
-            var orderEditingInfos = new Dictionary<Guid, bool>();
-
+            var canCancelInfos = new Dictionary<Guid, bool>();
+            var pendingCancelInfos = new Dictionary<Guid, bool>();
             foreach (var order in orders)
             {
-                orderEditingInfos.Add(Guid.Parse(order.Id), await EditingOrderProvider.CanCancel(order).ConfigureAwait(false));
+                canCancelInfos.Add(Guid.Parse(order.Id), await EditingOrderProvider.CanCancel(order).ConfigureAwait(false));
+                pendingCancelInfos.Add(Guid.Parse(order.Id), await EditingOrderProvider.PendingCancel(order).ConfigureAwait(false));
             }
 
-            return orderEditingInfos;
-        }
-
-        private async Task<Dictionary<Guid, bool>> GetOrderPendingCancelInfos(List<Overture.ServiceModel.Orders.Order> orders)
-        {
-            var orderEditingInfos = new Dictionary<Guid, bool>();
-
-            foreach (var order in orders)
-            {
-                orderEditingInfos.Add(Guid.Parse(order.Id), await EditingOrderProvider.PendingCancel(order).ConfigureAwait(false));
-            }
-
-            return orderEditingInfos;
+            return (canCancelInfos, pendingCancelInfos);
         }
 
         protected virtual Task<List<CartSummary>> GetOrderCartDrafts(string scope, Guid customerId, CultureInfo cultureInfo)
