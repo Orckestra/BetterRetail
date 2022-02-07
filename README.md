@@ -1,5 +1,5 @@
 # Orckestra Reference Application Starter Site
-[![Build Status](https://orckestra001.visualstudio.com/OrckestraCommerce/_apis/build/status/Product%20extension%20-%20RefApp?branchName=dev)](https://orckestra001.visualstudio.com/OrckestraCommerce/_build/latest?definitionId=68&branchName=dev)
+[![Build Status](https://dev.azure.com/orckestra001/OrckestraCommerce/_apis/build/status/Orckestra.BetterRetail?api-version=6.0-preview.1&branchName=dev)](https://orckestra001.visualstudio.com/OrckestraCommerce/_build/latest?definitionId=297&branchName=dev)
 ## Table of Contents
 - [Getting started](#getting-started)
 - [Prerequisites](#prerequisites)
@@ -15,7 +15,8 @@
 - [FAQ](#faq)
 
 ## Getting started
-Get the latest source code from the [dev](https://github.com/Orckestra/BetterRetail/tree/dev) branch using the git command `$git clone https://github.com/Orckestra/BetterRetail.git`
+Get the latest source code from the [dev](https://github.com/Orckestra/BetterRetail/tree/dev) branch 
+- using the git command `$git clone https://github.com/Orckestra/BetterRetail.git`
 - with a direct download [here](https://github.com/Orckestra/BetterRetail/archive/dev.zip)
 
 ## Prerequisites

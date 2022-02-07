@@ -79,6 +79,12 @@ namespace Orckestra.Composer.Cart.Services.Order
             if (param.CustomerId == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CustomerId)), nameof(param)); }
             if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
 
+            var orderQueryResult = await OrderRepository.GetCustomerOrdersAsync(param).ConfigureAwait(false);
+            if (orderQueryResult == null)
+            {
+                return null;
+            }
+
             var orderDetailBaseUrl = OrderUrlProvider.GetOrderDetailsBaseUrl(param.CultureInfo);
             var orderStatuses = await LookupService.GetLookupDisplayNamesAsync(new GetLookupDisplayNamesParam
             {
@@ -86,15 +92,14 @@ namespace Orckestra.Composer.Cart.Services.Order
                 LookupType = LookupType.Order,
                 LookupName = "OrderStatus",
             }).ConfigureAwait(false);
-
-            var orderQueryResult = await OrderRepository.GetCustomerOrdersAsync(param).ConfigureAwait(false);
-
+            
             var shipmentsTrackingInfos = new Dictionary<Guid, TrackingInfoViewModel>();
             var orderSettings = await GetOrderSettings(param.Scope).ConfigureAwait(false);
-            var ordersDetails = await GetOrders(orderQueryResult, param).ConfigureAwait(false);
+            var ordersDetails = new List<Overture.ServiceModel.Orders.Order>();
 
-            if (orderQueryResult != null && orderQueryResult.Results != null && param.OrderTense == OrderTense.CurrentOrders)
+            if (orderQueryResult.Results != null && param.OrderTense == OrderTense.CurrentOrders)
             {
+                ordersDetails = await GetOrders(orderQueryResult, param).ConfigureAwait(false);
                 shipmentsTrackingInfos = GetShipmentsTrackingInfoViewModels(ordersDetails, param);
             }
             
