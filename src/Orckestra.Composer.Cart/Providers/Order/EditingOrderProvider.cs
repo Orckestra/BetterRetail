@@ -96,7 +96,9 @@ namespace Orckestra.Composer.Cart.Providers.Order
                 }).ConfigureAwait(false);
 
             var cancelMessageExists = orderFulfillmentState.ShipmentFulfillmentStates.Any(item =>
-                item.Messages.Exists(el => el.MessageId == order.Id));
+                item.Messages.Exists(el => el.MessageId == order.Id 
+                && el.PropertyBag[Constants.DefaultOrderCancellationReason] is DateTime
+                && (DateTime)el.PropertyBag[Constants.DefaultOrderCancellationReason] > DateTime.UtcNow.AddMinutes(-10)));
 
             return !orderFulfillmentState.IsCancelable && orderFulfillmentState.IsProcessing && cancelMessageExists;
         }
