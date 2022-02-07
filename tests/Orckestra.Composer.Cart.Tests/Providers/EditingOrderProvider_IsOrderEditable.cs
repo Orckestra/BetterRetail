@@ -111,55 +111,5 @@ namespace Orckestra.Composer.Cart.Tests.Providers
                 }
             };
         }
-
-        [Test]
-        [TestCase("Canceled", false, false, null, false)]
-        [TestCase("InProgress", true, false, "New", true)]
-        [TestCase("InProgress", false, true, "New",false)]
-        [TestCase("InProgress", true, true, "New", false)]
-        [TestCase("InProgress", true, false, "Canceled", false)]
-        [TestCase("InProgress", true, false, "Completed", false)]
-        public async Task WHEN_order_is_SHOULD_return_Correct_CancelingStatus(string orderStatus,
-            bool orderFulfillmentStateIsCancelable, 
-            bool orderFulfillmentStateIsProcessing,
-            string orderFulfillmentStateStatus,
-            bool isCancelable)
-        {
-            //Arrange
-            var provider = _container.CreateInstance<EditingOrderProvider>();
-
-            //Act
-            var order = new Order
-            {
-                OrderStatus = orderStatus
-            };
-
-            var orderFulfillmentState = new OrderFulfillmentState()
-            {
-                IsCancelable = orderFulfillmentStateIsCancelable,
-                IsProcessing = orderFulfillmentStateIsProcessing,
-                Status = orderFulfillmentStateStatus,
-                ShipmentFulfillmentStates = new List<ShipmentFulfillmentState>()
-                {
-                    new ShipmentFulfillmentState()
-                    {
-                        AllowedStatusChanges = new List<string>()
-                        {
-                            Constants.OrderStatus.Canceled
-                        }
-                    }
-                }
-
-            };
-
-            _container.GetMock<IOrderRepository>()
-                .Setup(r => r.GetOrderFulfillmentStateAsync(It.IsAny<GetOrderFulfillmentStateParam>()))
-                .ReturnsAsync(orderFulfillmentState);
-
-            var result = await provider.CanCancel(order).ConfigureAwait(false);
-
-            //Assert
-            result.Should().Be(isCancelable);
-        }
     }
 }

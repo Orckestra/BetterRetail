@@ -20,6 +20,7 @@ module Orckestra.Composer {
             
             let self = this;
             self.eventHub.subscribe(MyAccountEvents.EditOrderCanceled, () => window.location.reload());
+            self.eventHub.subscribe(MyAccountEvents.OrderCanceled, () => window.location.reload());
             this.VueOrderDetails = new Vue({
                 el: '#vueOrderDetails',
                 data: {
@@ -58,7 +59,11 @@ module Orckestra.Composer {
                         this.Modal.cancelOrderModal.openModal(event);
                     },
                     cancelOrder(){
-                        self.orderService.cancelOrder(this.OrderNumber); 
+                        if(this.Loading) return;
+                        this.Loading = true;
+                        self.orderService.cancelOrder(this.OrderNumber).fail(() => {
+                            this.Loading = false;
+                        }); 
                     }
                 }
             });

@@ -276,4 +276,10 @@
   <data name="B_Yes" xml:space="preserve">
     <value>Yes</value>
   </data>
+  <data name="B_No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="T_Confirmation" xml:space="preserve">
+    <value>Confirmation</value>
+  </data>
 </root>

@@ -22,7 +22,7 @@ module Orckestra.Composer {
                 this.VuePastOrderData = new Vue({
                     el: '#vuePastOrders',
                     data: {
-                        Orders: data ? OrderHelper.MapOrders(data.Orders) : null,
+                        Orders: data ? data.Orders : null,
                         Pagination: data ? data.Pagination : null,
                         Loading: false
                     },
@@ -30,7 +30,7 @@ module Orckestra.Composer {
                         getOrders(page: any) {
                             this.Loading = true;
                             self.orderService.getPastOrders({ page }).then(data => {
-                                this.Orders = OrderHelper.MapOrders(data.Orders);
+                                this.Orders = data.Orders;
                                 this.Pagination = data.Pagination;
                             })
                                 .fail(reason => console.log(reason))

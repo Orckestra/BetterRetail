@@ -13,6 +13,7 @@
         {
             public const string Canceled = "Canceled";
             public const string Fulfilled = "Fulfilled";
+            public const string Completed = "Completed";
         }
 
         public static class OrderDraft

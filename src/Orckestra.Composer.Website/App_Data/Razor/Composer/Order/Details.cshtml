@@ -89,7 +89,7 @@
                                     @if (order.OrderInfos.IsOrderCancelable && !order.OrderInfos.IsBeingEdited)
                                     {
                                         <li >
-                                            <a href="#" v-bind:class="{'disabled': Loading}" class="cta" data-orderId="@order.OrderInfos.OrderNumber" v-on:click.prevent="cancelOrderConfirm($event, @order.OrderInfos.OrderNumber)">
+                                            <a href="#" v-bind:class="{'disabled': Loading}" class="cta" v-on:click.prevent="cancelOrderConfirm($event, @order.OrderInfos.OrderNumber)">
                                                 @Html.Localize("General", "B_CancelOrder")
                                             </a>
                                         </li>

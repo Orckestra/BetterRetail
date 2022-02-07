@@ -28,8 +28,8 @@ module Orckestra.Composer {
         }
 
         public cancelOrder(orderNumber: string) {
-            this.orderRepository.cancelOrder(orderNumber).then(result => window.location.reload()) 
-            .fail(reason => console.log(reason));
+            return this.orderRepository.cancelOrder(orderNumber).then(result => this.eventHub.publish(MyAccountEvents.OrderCanceled, { data: { orderNumber } })) 
+            .fail(reason => ErrorHandler.instance().outputErrorFromCode('CancelOrderFailed'));
         }
 
         public saveEditOrder() {
