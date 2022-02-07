@@ -95,10 +95,12 @@ namespace Orckestra.Composer.Cart.Providers.Order
                     ScopeId = order.ScopeId
                 }).ConfigureAwait(false);
 
+            if (orderFulfillmentState?.ShipmentFulfillmentStates == null) return false;
+
             var cancelMessageExists = orderFulfillmentState.ShipmentFulfillmentStates.Any(item =>
-                item.Messages.Exists(el => el.MessageId == order.Id 
+                item.Messages?.Exists(el => el.MessageId == order.Id 
                 && el.PropertyBag[Constants.DefaultOrderCancellationReason] is DateTime
-                && (DateTime)el.PropertyBag[Constants.DefaultOrderCancellationReason] > DateTime.UtcNow.AddMinutes(-10)));
+                && (DateTime)el.PropertyBag[Constants.DefaultOrderCancellationReason] > DateTime.UtcNow.AddMinutes(-10)) ?? false);
 
             return !orderFulfillmentState.IsCancelable && orderFulfillmentState.IsProcessing && cancelMessageExists;
         }
