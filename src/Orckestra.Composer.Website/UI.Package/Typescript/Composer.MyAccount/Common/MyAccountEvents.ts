@@ -19,6 +19,7 @@ module Orckestra.Composer {
         StartEditOrder = 'startEditOrder',
         EditOrderStarted = 'editOrderStarted',
         EditOrderCanceled = 'editOrderCanceled',
+        EditOrderFinished = 'editOrderFinished',
         OrderCanceled = 'orderCanceled'
     }
 }

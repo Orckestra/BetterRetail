@@ -8,7 +8,7 @@ module Orckestra.Composer {
 
         editOrder(OrderNumber: string): Q.Promise<any>;
 
-        saveEditOrder():  Q.Promise<any>;
+        saveEditOrder(OrderNumber: string):  Q.Promise<any>;
 
         cancelEditOrder(OrderNumber: string):  Q.Promise<any>;
 

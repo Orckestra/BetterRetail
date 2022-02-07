@@ -70,6 +70,13 @@ namespace Orckestra.Composer.Cart.Repositories.Order
         Task<HttpWebResponse> DeleteCartOrderDraft(DeleteCartOrderDraftParam param);
 
         /// <summary>
+        /// Process and convert the order draft cart into an actual order.
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        Task<Overture.ServiceModel.Orders.Order> SubmitCartOrderDraftAsync(SubmitCartOrderDraftParam param);
+
+        /// <summary>
         /// Get Order Fulfillment State
         /// </summary>
         /// <returns></returns>

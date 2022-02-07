@@ -345,6 +345,27 @@ namespace Orckestra.Composer.Cart.Repositories.Order
             return OvertureClient.SendAsync(request);
         }
 
+        /// <summary>
+        /// Process and convert the order draft cart into an actual order.
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        public virtual Task<Overture.ServiceModel.Orders.Order> SubmitCartOrderDraftAsync(SubmitCartOrderDraftParam param)
+        {
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (param.OrderId == default) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.OrderId))); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope))); }
+
+            var request = new SubmitCartOrderDraftRequest
+            {
+                ScopeId = param.Scope,
+                OrderId = param.OrderId,
+                CustomerId = param.CustomerId
+            };
+
+            return OvertureClient.SendAsync(request);
+        }
+
         public virtual Task<OrderFulfillmentState> ChangeShipmentStatusAsync(ChangeShipmentStatusParam param)
         {
             if (param == null)
@@ -406,8 +427,7 @@ namespace Orckestra.Composer.Cart.Repositories.Order
                 ValidationResults = param.ValidationResults ?? new List<ValidationResult>()
             };
 
-            var u = await OvertureClient.SendAsync(request);
-            return u;
+            return await OvertureClient.SendAsync(request);
         }
     }
 }

@@ -12,6 +12,9 @@ module Orckestra.Composer {
         protected eventHub: IEventHub = EventHub.instance();
         protected orderRepository: IOrderRepository = new OrderRepository;
         protected cartService: ICartService = CartService.getInstance();
+        private cacheProvider: ICacheProvider = CacheProvider.instance();;
+        private orderCacheKey = 'orderCacheKey';
+        private orderConfirmationCacheKey = 'orderConfirmationCacheKey';
 
         public editOrder(orderNumber: string) {
             return this.orderRepository.editOrder(orderNumber)
@@ -27,6 +30,24 @@ module Orckestra.Composer {
                 });
         }
 
+        public saveEditOrder(orderNumber: string) {
+            return this.orderRepository.saveEditOrder(orderNumber).then((result: ICompleteCheckoutResult) => {
+
+                result.IsUpdatedOrder = true;
+                this.cacheProvider.defaultCache.set(this.orderCacheKey, result).done();
+                this.cacheProvider.defaultCache.set(this.orderConfirmationCacheKey, result).done();
+
+                this.eventHub.publish(MyAccountEvents.EditOrderFinished, { data: { orderNumber } });
+
+                this.cartService.invalidateCache();
+                this.cartService.getFreshCart(true);
+
+                if (result.NextStepUrl) {
+                    window.location.href = result.NextStepUrl;
+                }
+
+            })
+                .fail(reason => ErrorHandler.instance().outputErrorFromCode('UpdatingOrderFailed'));
         public cancelOrder(orderNumber: string) {
             return this.orderRepository.cancelOrder(orderNumber).then(result => this.eventHub.publish(MyAccountEvents.OrderCanceled, { data: { orderNumber } })) 
             .fail(reason => ErrorHandler.instance().outputErrorFromCode('CancelOrderFailed'));

@@ -126,7 +126,7 @@
                            v-model="@(vueAddressBinding).City"
                            required="required"
                            @Html.ParsleyMessage("Forms", "F_CityRequiredError", "required-message")
-                           data-parsley-length="[3, 36]"
+                           data-parsley-length="[3, 64]"
                            @Html.ParsleyMessage("Forms", "F_CityLengthError", "length-message")
                            data-parsley-pattern="/^[a-zA-Z\u00E0-\u00FC\.\-\s\']+$/i"
                            @Html.ParsleyMessage("Forms", "F_CityPatternError", "pattern-message") />

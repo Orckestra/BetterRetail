@@ -23,6 +23,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Orckestra.Overture.ServiceModel.Orders.Fulfillment;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
+using System.Net;
 
 namespace Orckestra.Composer.Cart.Services.Order
 {
@@ -49,6 +50,8 @@ namespace Orckestra.Composer.Cart.Services.Order
         protected IComposerJsonSerializer ComposerJsonSerializer { get; }
         public ILineItemViewModelFactory LineItemViewModelFactory { get; }
         protected virtual IEditingOrderProvider EditingOrderProvider { get; private set; }
+        protected virtual ICheckoutService CheckoutService { get; private set; }
+
 
         public OrderHistoryViewService(
             IOrderHistoryViewModelFactory orderHistoryViewModelFactory,
@@ -64,7 +67,8 @@ namespace Orckestra.Composer.Cart.Services.Order
             ICartRepository cartRepository,
             IComposerContext composerContext, 
             ICartUrlProvider cartUrlProvider,
-            IEditingOrderProvider editingOrderProvider)
+            IEditingOrderProvider editingOrderProvider,
+            ICheckoutService checkoutService)
         {
             OrderHistoryViewModelFactory = orderHistoryViewModelFactory ?? throw new ArgumentNullException(nameof(orderHistoryViewModelFactory));
             OrderUrlProvider = orderUrlProvider ?? throw new ArgumentNullException(nameof(orderUrlProvider));
@@ -80,6 +84,8 @@ namespace Orckestra.Composer.Cart.Services.Order
             ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
             CartUrlProvider = cartUrlProvider ?? throw new ArgumentNullException(nameof(cartUrlProvider));
             EditingOrderProvider = editingOrderProvider ?? throw new ArgumentNullException(nameof(editingOrderProvider));
+            CheckoutService = checkoutService ?? throw new ArgumentNullException(nameof(checkoutService));
+
         }
 
         /// <summary>
@@ -546,6 +552,38 @@ namespace Orckestra.Composer.Cart.Services.Order
                     CultureInfo = ComposerContext.CultureInfo
                 })
             };
+        }
+
+        public async Task<CompleteCheckoutViewModel> SaveEditedOrderAsync(string orderNumber, string baseUrl)
+        {
+            if (string.IsNullOrWhiteSpace(orderNumber)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(orderNumber)));
+
+            var getOrderParam = new GetCustomerOrderParam()
+            {
+                CultureInfo = ComposerContext.CultureInfo,
+                OrderNumber = orderNumber,
+                Scope = Constants.GlobalScopeName
+            };
+
+            var order = await OrderRepository.GetOrderAsync(getOrderParam).ConfigureAwait(false);
+
+            if (order == null)
+            {
+                throw new InvalidOperationException($"Cannot save edited order #${orderNumber} as it doesn't exist.");
+            }
+
+            var orderResult = await EditingOrderProvider.SaveEditedOrderAsync(order).ConfigureAwait(false);
+
+            var resultViewModel = await CheckoutService.MapOrderToCompleteCheckoutViewModel(orderResult, new CompleteCheckoutParam()
+            {
+                CultureInfo = ComposerContext.CultureInfo,
+                BaseUrl = baseUrl
+            });
+
+            resultViewModel.NextStepUrl = CartUrlProvider.GetCheckoutConfirmationPageUrl(
+                new BaseUrlParameter { CultureInfo = ComposerContext.CultureInfo });
+
+            return resultViewModel;
         }
 
         public async Task<OrderFulfillmentState> CancelOrder(CancelOrderParam param)
