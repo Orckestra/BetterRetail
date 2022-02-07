@@ -41,5 +41,12 @@ namespace Orckestra.Composer.Cart.Providers.Order
         /// </summary>
         /// <param name="order"></param>
         Task CancelEditOrderAsync(Overture.ServiceModel.Orders.Order order);
+
+        /// <summary>
+        /// Submit Cart Order Draft to the order
+        /// </summary>
+        /// <param name="order"></param>
+        /// <returns></returns>
+        Task<Overture.ServiceModel.Orders.Order> SaveEditedOrderAsync(Overture.ServiceModel.Orders.Order order);
     }
 }

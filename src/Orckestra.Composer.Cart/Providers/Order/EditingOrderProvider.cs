@@ -157,6 +157,20 @@ namespace Orckestra.Composer.Cart.Providers.Order
             });
         }
 
+        public virtual async Task<Overture.ServiceModel.Orders.Order> SaveEditedOrderAsync(Overture.ServiceModel.Orders.Order order)
+        {
+            var updatedOrder = await OrderRepository.SubmitCartOrderDraftAsync(new SubmitCartOrderDraftParam
+            {
+                CustomerId = Guid.Parse(order.CustomerId),
+                Scope = order.ScopeId,
+                OrderId = Guid.Parse(order.Id)
+            }).ConfigureAwait(false);
+
+            ClearEditMode();
+
+            return updatedOrder;
+        }
+
         public virtual void ClearEditMode()
         {
             ComposerContext.EditingCartName = default;

@@ -203,5 +203,21 @@ namespace Orckestra.Composer.Cart.Api
 
             return Ok(true);
         }
+
+        /// <summary>
+        /// Save editing order
+        /// </summary>
+        /// <param name="param">Parameters container</param>
+        [HttpPost]
+        [ActionName("save-edited-order")]
+        [ValidateModelState]
+        public virtual async Task<IHttpActionResult> SaveEditedOrder(EditOrderParam param)
+        {
+            if (param == null) return BadRequest($"{nameof(param)} cannot be empty");
+
+            var vm = await OrderHistoryViewService.SaveEditedOrderAsync(param.OrderNumber, RequestUtils.GetBaseUrl(Request).ToString());
+
+            return Ok(vm);
+        }
     }
 }
