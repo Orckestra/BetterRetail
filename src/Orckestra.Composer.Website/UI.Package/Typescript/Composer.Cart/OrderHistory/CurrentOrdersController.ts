@@ -77,10 +77,7 @@ module Orckestra.Composer {
                         cancelOrder(){
                             if(this.Loading) return;
                             this.Loading = true;
-                            self.orderService.cancelOrder(this.OrderNumber)
-                            .fail(() => {
-                                this.Loading = false;
-                            });
+                            self.orderService.cancelOrder(this.OrderNumber).fail(() => this.Loading = false);
                         }
                     }
                 })
