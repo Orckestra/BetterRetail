@@ -26,14 +26,14 @@ namespace Orckestra.Composer.Cart.Providers.Order
         /// </summary>
         /// <param name="order"></param>
         /// <returns></returns>
-        Task<OrderCancellationStatusViewModel> GetCancellationStatus(Overture.ServiceModel.Orders.Order order);
+        Task<CancellationStatus> GetCancellationStatus(Overture.ServiceModel.Orders.Order order);
         
         /// <summary>
         /// Cancel order
         /// </summary>
         /// <param name="order"></param>
         /// <returns></returns>
-        Task CancelOrder(Overture.ServiceModel.Orders.Order order, string scope);
+        Task CancelOrder(Overture.ServiceModel.Orders.Order order);
 
         /// <summary>
         /// Is Edit mode right now on the website

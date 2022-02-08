@@ -115,7 +115,7 @@
                             }
                             <p class="@statusCss  m-0">
 
-                                @if (order.OrderInfos.IsOrderPendingCancel)
+                                @if (order.OrderInfos.IsOrderPendingCancellation)
                                 {
                                     <strong>@Html.Localize("MyAccount", "T_PendingCancel") ( <a href="#" v-on:click.prevent="reload">@Html.Localize("MyAccount", "T_ReloadOrderStatus") </a> )</strong>
                                 }

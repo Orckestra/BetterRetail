@@ -235,8 +235,8 @@ namespace Orckestra.Composer.Cart.Factory.Order
             orderInfo.OrderStatus = GetOrderStatusDisplayName(rawOrder, param);
             orderInfo.OrderStatusRaw = rawOrder.OrderStatus;
             orderInfo.IsOrderEditable = param.OrderEditingInfos != null  && param.OrderEditingInfos.ContainsKey(Guid.Parse(rawOrder.Id)) && param.OrderEditingInfos[Guid.Parse(rawOrder.Id)];
-            orderInfo.IsOrderCancelable = param.OrderCancelingInfos != null && param.OrderCancelingInfos.ContainsKey(Guid.Parse(rawOrder.Id)) && param.OrderCancelingInfos[Guid.Parse(rawOrder.Id)];
-            orderInfo.IsOrderPendingCancel = param.OrderCancelPendingInfos != null && param.OrderCancelPendingInfos.ContainsKey(Guid.Parse(rawOrder.Id)) && param.OrderCancelPendingInfos[Guid.Parse(rawOrder.Id)];
+            orderInfo.IsOrderCancelable = param.OrderCancellationStatusInfos != null && param.OrderCancellationStatusInfos.ContainsKey(Guid.Parse(rawOrder.Id)) && param.OrderCancellationStatusInfos[Guid.Parse(rawOrder.Id)].CanCancel;
+            orderInfo.IsOrderPendingCancellation = param.OrderCancellationStatusInfos != null && param.OrderCancellationStatusInfos.ContainsKey(Guid.Parse(rawOrder.Id)) && param.OrderCancellationStatusInfos[Guid.Parse(rawOrder.Id)].CancellationPending;
 
             orderInfo.IsBeingEdited = param.CurrentlyEditedOrderId == Guid.Parse(rawOrder.Id);
             orderInfo.HasOwnDraft = HasOwnDraft(param, rawOrder);

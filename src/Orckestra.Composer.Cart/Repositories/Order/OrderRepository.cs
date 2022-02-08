@@ -278,7 +278,7 @@ namespace Orckestra.Composer.Cart.Repositories.Order
             return OvertureClient.SendAsync(request);
         }
 
-        public virtual async Task<OrderFulfillmentState> AddShipmentFulfillmentMessagesAsync(AddShipmentFulfillmentMessagesParam param)
+        public virtual Task<OrderFulfillmentState> AddShipmentFulfillmentMessagesAsync(AddShipmentFulfillmentMessagesParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
             if (string.IsNullOrWhiteSpace(param.ScopeId)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.ScopeId)), nameof(param)); }
@@ -293,7 +293,7 @@ namespace Orckestra.Composer.Cart.Repositories.Order
                 ValidationResults = param.ValidationResults ?? new List<ValidationResult>()
             };
 
-            return await OvertureClient.SendAsync(request);
+            return OvertureClient.SendAsync(request);
         }
     }
 }

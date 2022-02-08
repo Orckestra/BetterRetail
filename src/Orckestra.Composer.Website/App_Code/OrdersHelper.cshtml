@@ -61,7 +61,7 @@
                           v-bind:class="{'text-warning' : order.OrderInfos.OrderStatusRaw == 'InProgress',
                           'text-danger': order.OrderInfos.OrderStatusRaw == 'Canceled',
                           'text-success': order.OrderInfos.OrderStatusRaw == 'Completed'}">
-                        <template  v-if="order.OrderInfos.IsOrderPendingCancel">
+                        <template  v-if="order.OrderInfos.IsOrderPendingCancellation">
                             @Html.Localize("MyAccount", "T_PendingCancel") ( <a href="#" v-on:click.prevent="reload">@Html.Localize("MyAccount", "T_ReloadOrderStatus") </a>)
                         </template>
                         <template  v-else="v-else">

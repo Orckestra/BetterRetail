@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using Orckestra.Composer.Cart.Providers.Order;
 using Orckestra.Composer.Cart.ViewModels.Order;
 using Orckestra.Overture.ServiceModel.Orders;
 
@@ -61,15 +62,10 @@ namespace Orckestra.Composer.Cart.Parameters.Order
         public Dictionary<Guid, bool> OrderEditingInfos { get; set; }
 
         /// <summary>
-        /// The Order Canceling Infos.
+        /// The Order Cancellation Status Infos.
         /// </summary>
-        public Dictionary<Guid, bool> OrderCancelingInfos { get; set; }
-
-        /// <summary>
-        /// The Order Cancel Pending Infos.
-        /// </summary>
-        public Dictionary<Guid, bool> OrderCancelPendingInfos { get; set; }
-
+        public Dictionary<Guid, CancellationStatus> OrderCancellationStatusInfos { get; set; }
+        
        /// <summary>
        /// Get or Set the Id of the currently edited order
        /// </summary>

@@ -57,7 +57,7 @@ namespace Orckestra.Composer.Cart.Tests.Services.Order
             _container.GetMock<ILineItemService>();
             _container.GetMock<IEditingOrderProvider>()
                 .Setup(r => r.GetCancellationStatus(It.IsAny<Orckestra.Overture.ServiceModel.Orders.Order>()))
-                .ReturnsAsync(new OrderCancellationStatusViewModel());
+                .ReturnsAsync(new CancellationStatus());
         }
 
         [Test]

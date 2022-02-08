@@ -36,7 +36,7 @@ module Orckestra.Composer {
                         this.Modal.cancelOrderModal = new Composer.UIModal(window, cancelModalElementSelector, this.cancelOrder, this);
                    
                         self.eventHub.subscribe(MyAccountEvents.EditOrderCanceled, () => this.getOrders(this.Page));
-                        self.eventHub.subscribe(MyAccountEvents.OrderCanceled, () => window.location.reload());
+                        self.eventHub.subscribe(MyAccountEvents.OrderCanceled, () => this.reload());
                     },
                     methods: {
                         getOrders(page: any) {                            

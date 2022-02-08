@@ -57,11 +57,11 @@ namespace Orckestra.Composer.Cart.Providers.Order
             return isOrderEditable;
         }
 
-        public virtual async Task<OrderCancellationStatusViewModel> GetCancellationStatus(Overture.ServiceModel.Orders.Order order)
+        public virtual async Task<CancellationStatus> GetCancellationStatus(Overture.ServiceModel.Orders.Order order)
         {
             if (!ValidateOrderForCancel(order))
             {
-                return new OrderCancellationStatusViewModel(){CanCancel = false, CancellationPending = false};
+                return new CancellationStatus();
             }
             var orderFulfillmentState = await OrderRepository.GetOrderFulfillmentStateAsync(new GetOrderFulfillmentStateParam
             {
@@ -69,39 +69,38 @@ namespace Orckestra.Composer.Cart.Providers.Order
                 ScopeId = order.ScopeId
             }).ConfigureAwait(false);
 
-            if (OrderHistoryConfiguration.CompletedOrderStatuses.Contains(orderFulfillmentState.Status))
+            if (orderFulfillmentState != null && OrderHistoryConfiguration.CompletedOrderStatuses.Contains(orderFulfillmentState.Status))
             {
-                return new OrderCancellationStatusViewModel() { CanCancel = false, CancellationPending = false };
+                return new CancellationStatus();
             }
 
             switch (orderFulfillmentState.IsCancelable)
             {
                 case true when !orderFulfillmentState.IsProcessing && orderFulfillmentState.ShipmentFulfillmentStates.All(item => item.AllowedStatusChanges?.Contains(Constants.OrderStatus.Canceled) ?? false):
-                    return new OrderCancellationStatusViewModel() { CanCancel = true, CancellationPending = false };
-                case false when orderFulfillmentState.IsProcessing && HasOrderShipmentFulfillmentStatesCancelMessage(orderFulfillmentState, order.Id):
-                    return new OrderCancellationStatusViewModel() { CanCancel = false, CancellationPending = true };
+                    return new CancellationStatus() { CanCancel = true, CancellationPending = false };
+                case false when orderFulfillmentState.IsProcessing && HasCancellationMessage(orderFulfillmentState):
+                    return new CancellationStatus() { CanCancel = false, CancellationPending = true };
                 default:
-                    return new OrderCancellationStatusViewModel();
+                    return new CancellationStatus();
             }
         }
 
-        private bool HasOrderShipmentFulfillmentStatesCancelMessage(OrderFulfillmentState orderFulfillmentState, string orderId)
+        private bool HasCancellationMessage(OrderFulfillmentState orderFulfillmentState)
         {
             if (orderFulfillmentState?.ShipmentFulfillmentStates == null) return false;
 
             return orderFulfillmentState.ShipmentFulfillmentStates.Any(item =>
-                item.Messages?.Exists(el => el.MessageId == orderId
-                                            && el.PropertyBag[Constants.DefaultOrderCancellationMessage] is DateTime
-                                            && (DateTime)el.PropertyBag[Constants.DefaultOrderCancellationMessage] >
+                item.Messages?.Exists(el => el.MessageId == orderFulfillmentState.OrderId.ToString()
+                                            && el.PropertyBag[Constants.RequestedOrderCancellationDatePropertyBagKey] is DateTime
+                                            && (DateTime)el.PropertyBag[Constants.RequestedOrderCancellationDatePropertyBagKey] >
                                             DateTime.UtcNow.AddMinutes(-10)) ?? false);
-
         }
 
         private bool ValidateOrderForCancel(Overture.ServiceModel.Orders.Order order)
         {
             if (order?.Cart?.Shipments == null
-                || OrderHistoryConfiguration.CompletedOrderStatuses.Contains(order.OrderStatus)
-                || string.IsNullOrWhiteSpace(order.OrderStatus))
+                || string.IsNullOrWhiteSpace(order.OrderStatus)
+                || OrderHistoryConfiguration.CompletedOrderStatuses.Contains(order.OrderStatus))
             {
                 return false;
             }
@@ -109,7 +108,7 @@ namespace Orckestra.Composer.Cart.Providers.Order
             return true;
         }
 
-        public async Task CancelOrder(Overture.ServiceModel.Orders.Order order, string scope)
+        public async Task CancelOrder(Overture.ServiceModel.Orders.Order order)
         {
             var isOrderCancelable = (await GetCancellationStatus(order).ConfigureAwait(false)).CanCancel;
             if (!isOrderCancelable) throw new InvalidOperationException($"Order {order.Id} cann't be canceled");
@@ -118,7 +117,7 @@ namespace Orckestra.Composer.Cart.Providers.Order
                 OrderRepository.ChangeShipmentStatusAsync(new ChangeShipmentStatusParam
                 {
                     OrderId = Guid.Parse(order.Id),
-                    ScopeId = scope,
+                    ScopeId = order.ScopeId,
                     ShipmentId = shipment.Id,
                     Reason = Constants.DefaultOrderCancellationReason,
                     RequestedStatus = Constants.OrderStatus.Canceled
@@ -126,14 +125,14 @@ namespace Orckestra.Composer.Cart.Providers.Order
             await Task.WhenAll(shipmentsTasks).ConfigureAwait(false);
 
             var propertyBagShipment = new Dictionary<string, object>();
-            propertyBagShipment.Add(Constants.DefaultOrderCancellationMessage, DateTime.UtcNow);
+            propertyBagShipment.Add(Constants.RequestedOrderCancellationDatePropertyBagKey, DateTime.UtcNow);
 
             var shipmentFulfillmentMessagesTasks = order.Cart?.Shipments?
                 .Select(shipment =>
                     OrderRepository.AddShipmentFulfillmentMessagesAsync(new AddShipmentFulfillmentMessagesParam
                     {
                         OrderId = Guid.Parse(order.Id),
-                        ScopeId = scope,
+                        ScopeId = order.ScopeId,
                         ShipmentId = shipment.Id,
                         ExecutionMessages = new List<ExecutionMessage>()
                         {

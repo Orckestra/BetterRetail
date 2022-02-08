@@ -251,7 +251,7 @@ namespace Orckestra.Composer.Cart.Tests.Providers
         private OrderFulfillmentState CreateOrderFulfillmentState(bool isCancelable, bool isProcessing, string orderId)
         {
             var propertyBag = new Dictionary<string, object>();
-            propertyBag.Add(Constants.DefaultOrderCancellationMessage, DateTime.UtcNow);
+            propertyBag.Add(Constants.RequestedOrderCancellationDatePropertyBagKey, DateTime.UtcNow);
 
             return new OrderFulfillmentState()
             {

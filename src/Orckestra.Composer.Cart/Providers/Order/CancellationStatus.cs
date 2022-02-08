@@ -1,6 +1,6 @@
-﻿namespace Orckestra.Composer.Cart.ViewModels.Order
+﻿namespace Orckestra.Composer.Cart.Providers.Order
 {
-    public class OrderCancellationStatusViewModel
+    public class CancellationStatus
     {
         public bool CanCancel { get; set; }
         public bool CancellationPending { get; set; }
