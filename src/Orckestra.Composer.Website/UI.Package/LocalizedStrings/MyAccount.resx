@@ -496,4 +496,13 @@ Don't worry, you can still find great products to offer!</value>
   <data name="B_CancelEditing" xml:space="preserve">
     <value>Cancel Editing</value>
   </data>
+  <data name="L_ConfirmCancelOrder" xml:space="preserve">
+    <value>Are you sure you want to cancel this order {0}?</value>
+  </data>
+  <data name="T_PendingCancel" xml:space="preserve">
+    <value>Canceling in progress</value>
+  </data>
+  <data name="T_ReloadOrderStatus" xml:space="preserve">
+    <value>Reload page to check status</value>
+  </data>
 </root>

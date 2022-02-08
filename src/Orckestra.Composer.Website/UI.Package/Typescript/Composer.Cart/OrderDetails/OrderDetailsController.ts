@@ -4,6 +4,7 @@
 /// <reference path='../../Mvc/IControllerContext.ts' />
 /// <reference path='../../Mvc/IControllerActionContext.ts' />
 ///<reference path='../OrderHistory/Services/OrderService.ts' />
+///<reference path='../../UI/UIModal.ts' />
 
 module Orckestra.Composer {
     'use strict';
@@ -15,13 +16,23 @@ module Orckestra.Composer {
 
         public initialize() {
             super.initialize();
-
+            var cancelModalElementSelector = '#cancelOrderModal';
+            
             let self = this;
             self.eventHub.subscribe(MyAccountEvents.EditOrderCanceled, () => window.location.reload());
+            
             this.VueOrderDetails = new Vue({
                 el: '#vueOrderDetails',
                 data: {
-                    Loading: false
+                    Loading: false,
+                    Modal: {
+                        cancelOrderModal: null,
+                    },
+                    OrderNumber: null
+                },
+                mounted() {
+                    this.Modal.cancelOrderModal = new Composer.UIModal(window, cancelModalElementSelector, this.cancelOrder, this);
+                    self.eventHub.subscribe(MyAccountEvents.OrderCanceled, () => this.reload());
                 },
                 methods: {
                     editOrder(orderNumber: string) {
@@ -40,7 +51,19 @@ module Orckestra.Composer {
                             .fail(() => {
                                 this.Loading = false;
                             });
-                    } 
+                    },
+                    reload(){
+                        window.location.reload()
+                    },
+                    cancelOrderConfirm(event: JQueryEventObject, orderNumber: string) {
+                        this.OrderNumber = orderNumber;
+                        this.Modal.cancelOrderModal.openModal(event);
+                    },
+                    cancelOrder(){
+                        if(this.Loading) return;
+                        this.Loading = true;
+                        self.orderService.cancelOrder(this.OrderNumber).fail(() => this.Loading = false);
+                    }
                 }
             });
         }

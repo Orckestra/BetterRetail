@@ -264,4 +264,13 @@
   <data name="L_All" xml:space="preserve">
     <value>Toute</value>
   </data>
+  <data name="B_Yes" xml:space="preserve">
+    <value>Oui</value>
+  </data>
+  <data name="B_No" xml:space="preserve">
+    <value>Non</value>
+  </data>
+  <data name="T_Confirmation" xml:space="preserve">
+    <value>Confirmation</value>
+  </data>
 </root>

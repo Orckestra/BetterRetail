@@ -5,6 +5,7 @@
 /// <reference path='../../Mvc/IControllerActionContext.ts' />
 ///<reference path='./Services/OrderService.ts' />
 /// <reference path='../../ErrorHandling/ErrorHandler.ts' />
+///<reference path='../../UI/UIModal.ts' />
 
 module Orckestra.Composer {
     'use strict';
@@ -15,6 +16,7 @@ module Orckestra.Composer {
 
         public initialize() {
             super.initialize();
+            var cancelModalElementSelector = '#cancelOrderModal';
             let self: CurrentOrdersController = this;
 
             self.orderService.getCurrentOrders().then(data => {
@@ -24,13 +26,20 @@ module Orckestra.Composer {
                         Orders: data ? data.Orders : null,
                         Pagination: data ? data.Pagination : null,
                         Page: 1,
-                        Loading: false
+                        Loading: false,
+                        Modal: {
+                            cancelOrderModal: null,
+                        },
+                        OrderNumber: null
                     },
                     mounted() {
+                        this.Modal.cancelOrderModal = new Composer.UIModal(window, cancelModalElementSelector, this.cancelOrder, this);
+                   
                         self.eventHub.subscribe(MyAccountEvents.EditOrderCanceled, () => this.getOrders(this.Page));
+                        self.eventHub.subscribe(MyAccountEvents.OrderCanceled, () => this.reload());
                     },
                     methods: {
-                        getOrders(page: any) {
+                        getOrders(page: any) {                            
                             this.Loading = true;
                             self.orderService.getCurrentOrders({ page })
                                 .then(data => {
@@ -57,6 +66,18 @@ module Orckestra.Composer {
                                 .fail(() => {
                                     this.Loading = false;
                                 });
+                        },
+                        reload(){
+                            window.location.reload()
+                        },
+                        cancelOrderConfirm(event: JQueryEventObject, orderNumber: string) {
+                            this.OrderNumber = orderNumber;
+                            this.Modal.cancelOrderModal.openModal(event);
+                        },
+                        cancelOrder(){
+                            if(this.Loading) return;
+                            this.Loading = true;
+                            self.orderService.cancelOrder(this.OrderNumber).fail(() => this.Loading = false);
                         }
                     }
                 })

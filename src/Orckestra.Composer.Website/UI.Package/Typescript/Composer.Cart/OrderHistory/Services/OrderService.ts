@@ -46,8 +46,12 @@ module Orckestra.Composer {
                     window.location.href = result.NextStepUrl;
                 }
 
-            })
-                .fail(reason => ErrorHandler.instance().outputErrorFromCode('UpdatingOrderFailed'));
+            }).fail(reason => ErrorHandler.instance().outputErrorFromCode('UpdatingOrderFailed'));
+        }
+        
+        public cancelOrder(orderNumber: string) {
+            return this.orderRepository.cancelOrder(orderNumber).then(result => this.eventHub.publish(MyAccountEvents.OrderCanceled, { data: { orderNumber } })) 
+            .fail(reason => ErrorHandler.instance().outputErrorFromCode('CancelOrderFailed'));
         }
 
         public cancelEditOrder(orderNumber: string) {

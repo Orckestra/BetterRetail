@@ -56,7 +56,7 @@ namespace Orckestra.Composer.Cart.Tests.Services.Order
 
             _container.GetMock<IOrderDetailsViewModelFactory>()
             .Setup(r => r.CreateViewModel(It.IsAny<CreateOrderDetailViewModelParam>()))
-            .Returns(new OrderDetailViewModel() { OrderInfos = new OrderDetailInfoViewModel()} );
+            .Returns(new OrderDetailViewModel() { OrderInfos = new OrderDetailInfoViewModel() });
 
             _container.GetMock<IOrderUrlProvider>()
               .Setup(r => r.GetOrderDetailsBaseUrl(It.IsAny<CultureInfo>()))
@@ -69,11 +69,14 @@ namespace Orckestra.Composer.Cart.Tests.Services.Order
             _container.GetMock<IEditingOrderProvider>()
            .Setup(r => r.GetCurrentEditingCartName())
             .Returns(Guid.NewGuid().ToString());
-           
+
             _container.GetMock<IEditingOrderProvider>()
            .Setup(r => r.IsBeingEdited(It.IsAny<Orckestra.Overture.ServiceModel.Orders.Order>()))
             .Returns(false);
-
+            _container.GetMock<IEditingOrderProvider>()
+                .Setup(r => r.GetCancellationStatus(It.IsAny<Orckestra.Overture.ServiceModel.Orders.Order>()))
+                .ReturnsAsync(new CancellationStatus());
+           
             _container.GetMock<ILineItemService>();
         }
 

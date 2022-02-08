@@ -258,4 +258,7 @@
   <data name="L_EditingOrderFailed" xml:space="preserve">
     <value>An error occurred while editing your order. Please try again or contact us.</value>
   </data>
+  <data name="L_CancelOrderFailed" xml:space="preserve">
+    <value>An error occurred while canceling your order. Please try again or contact us.</value>
+  </data>
 </root>

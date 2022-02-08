@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
+using Orckestra.Composer.Cart.Providers.Order;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Cart.Factory.Order
@@ -235,6 +236,16 @@ namespace Orckestra.Composer.Cart.Factory.Order
             orderInfo.OrderStatus = GetOrderStatusDisplayName(rawOrder, param);
             orderInfo.OrderStatusRaw = rawOrder.OrderStatus;
             orderInfo.IsOrderEditable = param.OrderEditingInfos != null  && param.OrderEditingInfos.ContainsKey(Guid.Parse(rawOrder.Id)) && param.OrderEditingInfos[Guid.Parse(rawOrder.Id)];
+
+            CancellationStatus orderCancellationStatusInfo = null;
+            if (param.OrderCancellationStatusInfos != null && param.OrderCancellationStatusInfos.ContainsKey(Guid.Parse(rawOrder.Id)))
+            {
+                orderCancellationStatusInfo = param.OrderCancellationStatusInfos[Guid.Parse(rawOrder.Id)];
+            }
+
+            orderInfo.IsOrderCancelable = orderCancellationStatusInfo?.CanCancel ?? false;
+            orderInfo.IsOrderPendingCancellation = orderCancellationStatusInfo?.CancellationPending ?? false;
+
             orderInfo.IsBeingEdited = param.CurrentlyEditedOrderId == Guid.Parse(rawOrder.Id);
             orderInfo.HasOwnDraft = HasOwnDraft(param, rawOrder);
 

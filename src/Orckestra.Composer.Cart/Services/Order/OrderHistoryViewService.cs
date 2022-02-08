@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Orckestra.Overture.ServiceModel.Orders.Fulfillment;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 using System.Net;
 
@@ -118,11 +119,13 @@ namespace Orckestra.Composer.Cart.Services.Order
             var ordersDetails = new List<Overture.ServiceModel.Orders.Order>();
             var orderCartDrafts = new List<CartSummary>();
             var orderEditingInfos = new Dictionary<Guid, bool>();
+            var orderCancellationInfos = new Dictionary<Guid, CancellationStatus>();
             if (orderQueryResult.Results != null && param.OrderTense == OrderTense.CurrentOrders)
             {
                 ordersDetails = await GetOrders(orderQueryResult, param).ConfigureAwait(false);
                 orderCartDrafts = await GetOrderCartDrafts(param.Scope, param.CustomerId, param.CultureInfo).ConfigureAwait(false);
                 orderEditingInfos = await GetOrderEditingInfos(ordersDetails).ConfigureAwait(false);
+                orderCancellationInfos = await GetCancellationStatus(ordersDetails).ConfigureAwait(false);
                 shipmentsTrackingInfos = GetShipmentsTrackingInfoViewModels(ordersDetails, param);
             }
 
@@ -138,6 +141,7 @@ namespace Orckestra.Composer.Cart.Services.Order
                 ShipmentsTrackingInfos = shipmentsTrackingInfos,
                 OrderEditingInfos = orderEditingInfos,
                 Orders = ordersDetails,
+                OrderCancellationStatusInfos = orderCancellationInfos,
                 CurrentlyEditedOrderId = currentlyEditingOrder
             };
 
@@ -156,6 +160,18 @@ namespace Orckestra.Composer.Cart.Services.Order
             }
 
             return orderEditingInfos;
+        }
+
+        private async Task<Dictionary<Guid, CancellationStatus>> GetCancellationStatus(List<Overture.ServiceModel.Orders.Order> orders)
+        {
+            var cancellationStatusInfo = new Dictionary<Guid, CancellationStatus>();
+
+            foreach (var order in orders)
+            {
+                cancellationStatusInfo.Add(Guid.Parse(order.Id), await EditingOrderProvider.GetCancellationStatus(order).ConfigureAwait(false));
+            }
+
+            return (cancellationStatusInfo);
         }
 
         protected virtual Task<List<CartSummary>> GetOrderCartDrafts(string scope, Guid customerId, CultureInfo cultureInfo)
@@ -348,6 +364,10 @@ namespace Orckestra.Composer.Cart.Services.Order
 
             viewModel.OrderInfos.IsOrderEditable = await EditingOrderProvider.CanEdit(order).ConfigureAwait(false);
             viewModel.OrderInfos.IsBeingEdited = EditingOrderProvider.IsBeingEdited(order);
+
+            var orderCancellationStatus = await EditingOrderProvider.GetCancellationStatus(order).ConfigureAwait(false);
+            viewModel.OrderInfos.IsOrderCancelable = orderCancellationStatus.CanCancel;
+            viewModel.OrderInfos.IsOrderPendingCancellation = orderCancellationStatus.CancellationPending;
 
             if (order.Cart.PropertyBag.TryGetValue("PickedItems", out var pickedItemsObject))
             {
@@ -561,6 +581,33 @@ namespace Orckestra.Composer.Cart.Services.Order
                 new BaseUrlParameter { CultureInfo = ComposerContext.CultureInfo });
 
             return resultViewModel;
+        }
+
+        public async Task<OrderFulfillmentState> CancelOrder(CancelOrderParam param)
+        {
+            if(param == null) throw new ArgumentNullException(nameof(param));
+            if (param.CultureInfo == null) throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)));
+            if (string.IsNullOrWhiteSpace(param.OrderNumber)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.OrderNumber)));
+            if (param.CustomerId == Guid.Empty) throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)));
+
+            var order = await OrderRepository.GetOrderAsync(new GetCustomerOrderParam
+            {
+                Scope = Constants.GlobalScopeName,
+                OrderNumber = param.OrderNumber,
+                CustomerId = param.CustomerId
+            }).ConfigureAwait(false);
+            
+            if (order == null) throw new InvalidOperationException($"Order {param.OrderNumber} cannot be received.");
+
+            await EditingOrderProvider.CancelOrder(order);
+
+            var orderFulfillmentState = await OrderRepository.GetOrderFulfillmentStateAsync(new GetOrderFulfillmentStateParam
+            {
+                OrderId = order.Id,
+                ScopeId = order.ScopeId
+            }).ConfigureAwait(false);
+
+            return orderFulfillmentState;
         }
     }
 }

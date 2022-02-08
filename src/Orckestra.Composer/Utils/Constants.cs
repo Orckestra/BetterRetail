@@ -13,6 +13,7 @@
         {
             public const string Canceled = "Canceled";
             public const string Fulfilled = "Fulfilled";
+            public const string Completed = "Completed";
         }
 
         public static class OrderDraft
@@ -26,5 +27,8 @@
             public const string IsOwnedByRequestedUser = "IsOwnedByRequestedUser";
             public const string IsOwnedBySomeoneElse = "IsOwnedBySomeoneElse";
         }
+
+        public const string DefaultOrderCancellationReason = "Cancelled at Customer request";
+        public const string RequestedOrderCancellationDatePropertyBagKey = "RequestedOrderCancellationDate";
     }
 }

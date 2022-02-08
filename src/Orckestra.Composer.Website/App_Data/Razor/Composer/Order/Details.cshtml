@@ -25,23 +25,23 @@
 <head>
 </head>
 <body>
-<div id="vueOrderDetails" class="order-details">
-    @OrderDetails(Order)
+    <div id="vueOrderDetails" class="order-details">
+        @OrderDetails(Order)
 
-    @OrderShipments(Order)
+        @OrderShipments(Order)
 
-    @OrderAddress(Order)
+        @OrderAddress(Order)
 
-    @OrderCartDetails(Order)
+        @OrderCartDetails(Order)
 
-    @OrderPayment(Order)
+        @OrderPayment(Order)
 
-    <div class="row">
-        <div class="col-12 col-sm-6 offset-sm-6">
-            @OrderSummary(Order)
+        <div class="row">
+            <div class="col-12 col-sm-6 offset-sm-6">
+                @OrderSummary(Order)
+            </div>
         </div>
     </div>
-</div>
 </body>
 </html>
 
@@ -75,6 +75,7 @@
                                                 @Html.Localize("MyAccount", "B_EditOrder")
                                             }
                                         </a>
+
                                     </li>
                                     @if (order.OrderInfos.HasOwnDraft || order.OrderInfos.IsBeingEdited)
                                     {
@@ -83,10 +84,22 @@
                                                 @Html.Localize("MyAccount", "B_CancelEditing")
                                             </a>
                                         </li>
+
+                                    }
+                                    @if (order.OrderInfos.IsOrderCancelable && !order.OrderInfos.IsBeingEdited)
+                                    {
+                                        <li >
+                                            <a href="#" v-bind:class="{'disabled': Loading}" class="cta" v-on:click.prevent="cancelOrderConfirm($event, @order.OrderInfos.OrderNumber)">
+                                                @Html.Localize("General", "B_CancelOrder")
+                                            </a>
+                                        </li>
+                                  
                                     }
                                 </ul>
+                                @OrdersHelper.cancelOrderConfirmationModal()
                             </div>
                         }
+
                     </div>
                 </div>
                 <div class="card-body">
@@ -101,7 +114,17 @@
                                     status == "Canceled" ? "text-danger" : "text-success";
                             }
                             <p class="@statusCss  m-0">
-                                <strong>@order.OrderInfos.OrderStatus</strong>
+
+                                @if (order.OrderInfos.IsOrderPendingCancellation)
+                                {
+                                    <strong>@Html.Localize("MyAccount", "T_PendingCancel") ( <a href="#" v-on:click.prevent="reload">@Html.Localize("MyAccount", "T_ReloadOrderStatus") </a> )</strong>
+                                }
+                                else
+                                {
+                                    <strong> @order.OrderInfos.OrderStatus</strong>
+                                }
+
+
                             </p>
                         </div>
                         <div class="col-4 text-right">
@@ -192,11 +215,11 @@
                             @if (!string.IsNullOrEmpty(payment.CreditCardNumber))
                             {
                                 <img src="~/UI.Package/Images/creditcards/@(payment.PaymentMethodName).png"
-                                     alt="@payment.PaymentMethodName" class="img-fluid"/>
+                                     alt="@payment.PaymentMethodName" class="img-fluid" />
                             }
                             else
                             {
-                                <img src="~/UI.Package/Images/payments/cash.png" alt="Cash" class="img-fluid"/>
+                                <img src="~/UI.Package/Images/payments/cash.png" alt="Cash" class="img-fluid" />
                             }
                         </div>
                         <div class="col-8  col-md-8  col-lg-8">
@@ -208,7 +231,7 @@
                                 {
                                     @Html.Localize("MyAccount", "L_CreditCardNumber")
                                     @payment.CreditCardNumber
-                                    <br/>
+                                    <br />
                                     @Html.Localize("MyAccount", "L_CreditCardExpires")
                                     @payment.ExpiryDate
                                 }
@@ -251,7 +274,7 @@
                 if (item.IsGiftItem)
                 {
                     <div class="row pt-0 giftitem">
-                        <i class="fa fa-gift"/>
+                        <i class="fa fa-gift" />
                         <p>@Html.Localize("ShoppingCart", "L_GiftItem")</p>
                     </div>
                 }
@@ -263,7 +286,7 @@
                                 @foreach (var reward in item.Rewards)
                                 {
                                     <em>
-                                        @reward.Description<br/>
+                                        @reward.Description<br />
                                     </em>
                                 }
                             </div>
@@ -274,7 +297,7 @@
                             <img src="@item.ImageUrl"
                                  class="img-fluid"
                                  alt="Thumbnail"
-                                 onerror="this.onerror = null;this.src = '@item.FallbackImageUrl';"/>
+                                 onerror="this.onerror = null;this.src = '@item.FallbackImageUrl';" />
                         </a>
                     </div>
                     <div class="col-8 col-sm-4  order-3">
@@ -293,7 +316,7 @@
                         @if (item.IsOnSale)
                         {
                             <p>
-                                <del>@item.DefaultPrice</del><br/>
+                                <del>@item.DefaultPrice</del><br />
                                 <strong class="text-danger">@item.CurrentPrice</strong>
                             </p>
                         }
@@ -310,7 +333,7 @@
                     <div class="offset-2 offset-sm-0 col-sm-2  text-left text-sm-center  order-7">
                         @if (item.IsPriceDiscounted)
                         {
-                            <del>@item.TotalWithoutDiscount</del><br/>
+                            <del>@item.TotalWithoutDiscount</del><br />
                             <strong class="text-danger">@item.Total</strong>
                         }
                         else
@@ -319,7 +342,7 @@
                         }
                         @if (!string.IsNullOrEmpty(item.SavingsTotal))
                         {
-                            <br/>
+                            <br />
                             <small>
                                 <span class="text-success">@Html.Localize("ShoppingCart", "L_LineItemSavings") </span>
                                 <span class="text-success">@item.SavingsTotal</span>
@@ -348,7 +371,7 @@
                                 <img src="~/UI.Package/Images/recurring.svg"
                                      class="recurring-icon"
                                      alt="@Html.Localize("General", "L_RecurringProduct")"
-                                     title="@Html.Localize("General", "L_RecurringProduct")"/>
+                                     title="@Html.Localize("General", "L_RecurringProduct")" />
                                 @if (!string.IsNullOrEmpty(item.RecurringOrderFrequencyName))
                                 {
                                     <span>@item.RecurringOrderFrequencyDisplayName</span>
@@ -404,7 +427,7 @@
                 <p class="promotion  mb-2  text-center  d-block">
                     @foreach (var reward in order.OrderSummary.Rewards)
                     {
-                        <em>@(!string.IsNullOrEmpty(reward.Description) ? reward.Description : reward.PromotionName)</em><br/>
+                        <em>@(!string.IsNullOrEmpty(reward.Description) ? reward.Description : reward.PromotionName)</em><br />
                     }
                 </p>
             }
@@ -507,12 +530,12 @@
         </span>
         @if (!string.IsNullOrEmpty(address.Line2))
         {
-            <span data-qa="order-address-line2">@address.Line2</span><br/>
+            <span data-qa="order-address-line2">@address.Line2</span><br />
         }
-        <span data-qa="order-address-line1">@address.Line1</span><br/>
+        <span data-qa="order-address-line1">@address.Line1</span><br />
         <span data-qa="order-address-city">@address.City</span>,
         <span data-qa="order-address-region">@address.RegionName</span>,
-        <span data-qa="order-address-postalcode">@address.PostalCode</span><br/>
+        <span data-qa="order-address-postalcode">@address.PostalCode</span><br />
         <span data-qa="order-address-phone">@address.PhoneNumber</span>
     </div>
 }

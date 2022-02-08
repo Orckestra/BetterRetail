@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Orckestra.Composer.Cart.Parameters.Order;
 using Orckestra.Overture.ServiceModel.Customers;
 using Orckestra.Overture.ServiceModel.Orders;
+using Orckestra.Overture.ServiceModel.Orders.Fulfillment;
 
 namespace Orckestra.Composer.Cart.Repositories.Order
 {
@@ -74,5 +75,23 @@ namespace Orckestra.Composer.Cart.Repositories.Order
         /// <param name="param"></param>
         /// <returns></returns>
         Task<Overture.ServiceModel.Orders.Order> SubmitCartOrderDraftAsync(SubmitCartOrderDraftParam param);
+
+        /// <summary>
+        /// Get Order Fulfillment State
+        /// </summary>
+        /// <returns></returns>
+        Task<OrderFulfillmentState> GetOrderFulfillmentStateAsync(GetOrderFulfillmentStateParam param);
+
+        /// <summary>
+        /// Change Shipment Status
+        /// </summary>
+        /// <returns></returns>
+        Task<OrderFulfillmentState> ChangeShipmentStatusAsync(ChangeShipmentStatusParam param);
+
+        /// <summary>
+        /// Add Shipment Fulfillment Messages
+        /// </summary>
+        /// <returns></returns>
+        Task<OrderFulfillmentState> AddShipmentFulfillmentMessagesAsync(AddShipmentFulfillmentMessagesParam param);
     }
 }

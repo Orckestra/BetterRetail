@@ -104,5 +104,21 @@ namespace Orckestra.Composer.Cart.ViewModels.Order
         /// The source of the order.
         /// </value>
         public bool HasOwnDraft { get; set; }
+
+        /// <summary>
+        /// Gets or sets the is Order cancelable or not
+        /// </summary>
+        /// <value>
+        /// The source of the order.
+        /// </value>
+        public bool IsOrderCancelable { get; set; }
+
+        /// <summary>
+        /// Gets or sets the is Order Pending Cancellation or not
+        /// </summary>
+        /// <value>
+        /// The source of the order.
+        /// </value>
+        public bool IsOrderPendingCancellation { get; set; }
     }
 }
