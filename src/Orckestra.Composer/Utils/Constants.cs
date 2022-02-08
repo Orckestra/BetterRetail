@@ -29,5 +29,6 @@
         }
 
         public const string DefaultOrderCancellationReason = "Cancelled at Customer request";
+        public const string DefaultOrderCancellationMessage = "CancelledOrder";
     }
 }

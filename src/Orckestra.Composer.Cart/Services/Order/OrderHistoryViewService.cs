@@ -166,14 +166,16 @@ namespace Orckestra.Composer.Cart.Services.Order
             return orderEditingInfos;
         }
 
-        private async Task<(Dictionary<Guid, bool> CanCancelInfos , Dictionary<Guid, bool> PendingCancelInfos )> GetCancellationStatus(List<Overture.ServiceModel.Orders.Order> orders)
+        private async Task<(Dictionary<Guid, bool> CanCancelInfos, Dictionary<Guid, bool> PendingCancelInfos)> GetCancellationStatus(List<Overture.ServiceModel.Orders.Order> orders)
         {
             var canCancelInfos = new Dictionary<Guid, bool>();
             var pendingCancelInfos = new Dictionary<Guid, bool>();
+
             foreach (var order in orders)
             {
-                canCancelInfos.Add(Guid.Parse(order.Id), await EditingOrderProvider.CanCancel(order).ConfigureAwait(false));
-                pendingCancelInfos.Add(Guid.Parse(order.Id), await EditingOrderProvider.PendingCancel(order).ConfigureAwait(false));
+                var cancellationStatus = await EditingOrderProvider.GetCancellationStatus(order).ConfigureAwait(false);
+                canCancelInfos.Add(Guid.Parse(order.Id), cancellationStatus.CanCancel);
+                pendingCancelInfos.Add(Guid.Parse(order.Id), cancellationStatus.CancellationPending);
             }
 
             return (canCancelInfos, pendingCancelInfos);
@@ -369,8 +371,10 @@ namespace Orckestra.Composer.Cart.Services.Order
 
             viewModel.OrderInfos.IsOrderEditable = await EditingOrderProvider.CanEdit(order).ConfigureAwait(false);
             viewModel.OrderInfos.IsBeingEdited = EditingOrderProvider.IsBeingEdited(order);
-            viewModel.OrderInfos.IsOrderCancelable = await EditingOrderProvider.CanCancel(order).ConfigureAwait(false);
-            viewModel.OrderInfos.IsOrderPendingCancel = await EditingOrderProvider.PendingCancel(order).ConfigureAwait(false);
+
+            var orderCancellationStatus = await EditingOrderProvider.GetCancellationStatus(order).ConfigureAwait(false);
+            viewModel.OrderInfos.IsOrderCancelable = orderCancellationStatus.CanCancel;
+            viewModel.OrderInfos.IsOrderPendingCancel = orderCancellationStatus.CancellationPending;
 
             if (order.Cart.PropertyBag.TryGetValue("PickedItems", out var pickedItemsObject))
             {

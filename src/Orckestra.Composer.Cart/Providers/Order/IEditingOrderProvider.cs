@@ -1,5 +1,6 @@
 ﻿using Orckestra.Overture.ServiceModel.Orders;
 using System.Threading.Tasks;
+using Orckestra.Composer.Cart.ViewModels.Order;
 using Orckestra.Overture.ServiceModel.Orders.Fulfillment;
 
 namespace Orckestra.Composer.Cart.Providers.Order
@@ -21,19 +22,12 @@ namespace Orckestra.Composer.Cart.Providers.Order
         bool IsBeingEdited(Overture.ServiceModel.Orders.Order order);
 
         /// <summary>
-        /// Is Order can be canceled
+        /// Get Order Cancellation Status
         /// </summary>
         /// <param name="order"></param>
         /// <returns></returns>
-        Task<bool> CanCancel(Overture.ServiceModel.Orders.Order order);
-
-        /// <summary>
-        /// Is Order in pending cancel status
-        /// </summary>
-        /// <param name="order"></param>
-        /// <returns></returns>
-        Task<bool> PendingCancel(Overture.ServiceModel.Orders.Order order);
-
+        Task<OrderCancellationStatusViewModel> GetCancellationStatus(Overture.ServiceModel.Orders.Order order);
+        
         /// <summary>
         /// Cancel order
         /// </summary>

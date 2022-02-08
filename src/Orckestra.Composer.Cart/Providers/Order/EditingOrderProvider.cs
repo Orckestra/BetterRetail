@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Orckestra.Composer.Cart.ViewModels.Order;
 using Orckestra.Overture.ServiceModel;
 using Orckestra.Overture.ServiceModel.Orders.Fulfillment;
 
@@ -56,11 +57,11 @@ namespace Orckestra.Composer.Cart.Providers.Order
             return isOrderEditable;
         }
 
-        public virtual async Task<bool> CanCancel(Overture.ServiceModel.Orders.Order order)
+        public virtual async Task<OrderCancellationStatusViewModel> GetCancellationStatus(Overture.ServiceModel.Orders.Order order)
         {
             if (!ValidateOrderForCancel(order))
             {
-                return false;
+                return new OrderCancellationStatusViewModel(){CanCancel = false, CancellationPending = false};
             }
             var orderFulfillmentState = await OrderRepository.GetOrderFulfillmentStateAsync(new GetOrderFulfillmentStateParam
             {
@@ -68,41 +69,32 @@ namespace Orckestra.Composer.Cart.Providers.Order
                 ScopeId = order.ScopeId
             }).ConfigureAwait(false);
 
-            if (orderFulfillmentState.IsCancelable
-                && !orderFulfillmentState.IsProcessing
-                && !orderFulfillmentState.Status.Equals(Constants.OrderStatus.Canceled,
-                    StringComparison.InvariantCultureIgnoreCase)
-                && !orderFulfillmentState.Status.Equals(Constants.OrderStatus.Completed, StringComparison.InvariantCultureIgnoreCase)
-                && orderFulfillmentState.ShipmentFulfillmentStates.All(item => item.AllowedStatusChanges.Contains(Constants.OrderStatus.Canceled)))
+            if (OrderHistoryConfiguration.CompletedOrderStatuses.Contains(orderFulfillmentState.Status))
             {
-                return true;
+                return new OrderCancellationStatusViewModel() { CanCancel = false, CancellationPending = false };
             }
 
-            return false;
+            switch (orderFulfillmentState.IsCancelable)
+            {
+                case true when !orderFulfillmentState.IsProcessing && orderFulfillmentState.ShipmentFulfillmentStates.All(item => item.AllowedStatusChanges?.Contains(Constants.OrderStatus.Canceled) ?? false):
+                    return new OrderCancellationStatusViewModel() { CanCancel = true, CancellationPending = false };
+                case false when orderFulfillmentState.IsProcessing && HasOrderShipmentFulfillmentStatesCancelMessage(orderFulfillmentState, order.Id):
+                    return new OrderCancellationStatusViewModel() { CanCancel = false, CancellationPending = true };
+                default:
+                    return new OrderCancellationStatusViewModel();
+            }
         }
 
-        public virtual async Task<bool> PendingCancel(Overture.ServiceModel.Orders.Order order)
+        private bool HasOrderShipmentFulfillmentStatesCancelMessage(OrderFulfillmentState orderFulfillmentState, string orderId)
         {
-            if (!ValidateOrderForCancel(order))
-            {
-                return false;
-            }
-
-            var orderFulfillmentState = await OrderRepository.GetOrderFulfillmentStateAsync(
-                new GetOrderFulfillmentStateParam
-                {
-                    OrderId = order.Id,
-                    ScopeId = order.ScopeId
-                }).ConfigureAwait(false);
-
             if (orderFulfillmentState?.ShipmentFulfillmentStates == null) return false;
 
-            var cancelMessageExists = orderFulfillmentState.ShipmentFulfillmentStates.Any(item =>
-                item.Messages?.Exists(el => el.MessageId == order.Id 
-                && el.PropertyBag[Constants.DefaultOrderCancellationReason] is DateTime
-                && (DateTime)el.PropertyBag[Constants.DefaultOrderCancellationReason] > DateTime.UtcNow.AddMinutes(-10)) ?? false);
+            return orderFulfillmentState.ShipmentFulfillmentStates.Any(item =>
+                item.Messages?.Exists(el => el.MessageId == orderId
+                                            && el.PropertyBag[Constants.DefaultOrderCancellationMessage] is DateTime
+                                            && (DateTime)el.PropertyBag[Constants.DefaultOrderCancellationMessage] >
+                                            DateTime.UtcNow.AddMinutes(-10)) ?? false);
 
-            return !orderFulfillmentState.IsCancelable && orderFulfillmentState.IsProcessing && cancelMessageExists;
         }
 
         private bool ValidateOrderForCancel(Overture.ServiceModel.Orders.Order order)
@@ -119,14 +111,11 @@ namespace Orckestra.Composer.Cart.Providers.Order
 
         public async Task CancelOrder(Overture.ServiceModel.Orders.Order order, string scope)
         {
-            var isOrderCancelable = await CanCancel(order).ConfigureAwait(false);
+            var isOrderCancelable = (await GetCancellationStatus(order).ConfigureAwait(false)).CanCancel;
             if (!isOrderCancelable) throw new InvalidOperationException($"Order {order.Id} cann't be canceled");
 
-            
-
-            
             var shipmentsTasks = order.Cart?.Shipments?.Select(shipment =>
-            OrderRepository.ChangeShipmentStatusAsync(new ChangeShipmentStatusParam
+                OrderRepository.ChangeShipmentStatusAsync(new ChangeShipmentStatusParam
                 {
                     OrderId = Guid.Parse(order.Id),
                     ScopeId = scope,
@@ -135,29 +124,28 @@ namespace Orckestra.Composer.Cart.Providers.Order
                     RequestedStatus = Constants.OrderStatus.Canceled
                 }));
             await Task.WhenAll(shipmentsTasks).ConfigureAwait(false);
-            var shipmentFulfillmentMessagesTasks = order.Cart?.Shipments?.Select(shipment =>
-            {
-                var propertyBagShipment = new Dictionary<string, object>();
-                propertyBagShipment.Add(Constants.DefaultOrderCancellationReason, DateTime.UtcNow);
 
-                return OrderRepository.AddShipmentFulfillmentMessagesAsync(new AddShipmentFulfillmentMessagesParam
-                {
-                    OrderId = Guid.Parse(order.Id),
-                    ScopeId = scope,
-                    ShipmentId = shipment.Id,
-                    ExecutionMessages = new List<ExecutionMessage>()
+            var propertyBagShipment = new Dictionary<string, object>();
+            propertyBagShipment.Add(Constants.DefaultOrderCancellationMessage, DateTime.UtcNow);
+
+            var shipmentFulfillmentMessagesTasks = order.Cart?.Shipments?
+                .Select(shipment =>
+                    OrderRepository.AddShipmentFulfillmentMessagesAsync(new AddShipmentFulfillmentMessagesParam
                     {
-                        new ExecutionMessage()
+                        OrderId = Guid.Parse(order.Id),
+                        ScopeId = scope,
+                        ShipmentId = shipment.Id,
+                        ExecutionMessages = new List<ExecutionMessage>()
                         {
-                            Severity = ExecutionMessageSeverity.Info,
-                            MessageId = order.Id,
-                            PropertyBag = new PropertyBag(propertyBagShipment)
+                            new ExecutionMessage()
+                            {
+                                Severity = ExecutionMessageSeverity.Info,
+                                MessageId = order.Id,
+                                PropertyBag = new PropertyBag(propertyBagShipment)
+                            }
                         }
-                    }
-                });
-            });
+                    }));
             await Task.WhenAll(shipmentFulfillmentMessagesTasks).ConfigureAwait(false);
-
         }
 
         public virtual bool IsBeingEdited(Overture.ServiceModel.Orders.Order order)

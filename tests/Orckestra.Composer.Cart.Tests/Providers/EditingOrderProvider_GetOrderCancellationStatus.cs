@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System;
+using FluentAssertions;
 using Moq;
 using Moq.AutoMock;
 using NUnit.Framework;
@@ -11,10 +12,11 @@ using Orckestra.Overture.ServiceModel.Orders;
 using Orckestra.Overture.ServiceModel.Orders.Fulfillment;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Orckestra.Overture.ServiceModel;
 
 namespace Orckestra.Composer.Cart.Tests.Providers
 {
-    public class EditingOrderProvider_CanCancelOrder
+    public class EditingOrderProvider_GetOrderCancellationStatus
     {
         private AutoMocker _container;
         [SetUp]
@@ -52,10 +54,10 @@ namespace Orckestra.Composer.Cart.Tests.Providers
                 .Setup(r => r.GetOrderFulfillmentStateAsync(It.IsAny<GetOrderFulfillmentStateParam>()))
                 .ReturnsAsync(orderFulfillmentState);
 
-            var result = await provider.CanCancel(order).ConfigureAwait(false);
+            var result = await provider.GetCancellationStatus(order).ConfigureAwait(false);
 
             //Assert
-            result.Should().Be(false);
+            result.CanCancel.Should().Be(false);
         }
 
         [Test]
@@ -83,10 +85,10 @@ namespace Orckestra.Composer.Cart.Tests.Providers
                 .Setup(r => r.GetOrderFulfillmentStateAsync(It.IsAny<GetOrderFulfillmentStateParam>()))
                 .ReturnsAsync(orderFulfillmentState);
 
-            var result = await provider.CanCancel(order).ConfigureAwait(false);
+            var result = await provider.GetCancellationStatus(order).ConfigureAwait(false);
 
             //Assert
-            result.Should().Be(canCancel);
+            result.CanCancel.Should().Be(canCancel);
         }
 
         [Test]
@@ -111,10 +113,10 @@ namespace Orckestra.Composer.Cart.Tests.Providers
                 .Setup(r => r.GetOrderFulfillmentStateAsync(It.IsAny<GetOrderFulfillmentStateParam>()))
                 .ReturnsAsync(orderFulfillmentState);
 
-            var result = await provider.CanCancel(order).ConfigureAwait(false);
+            var result = await provider.GetCancellationStatus(order).ConfigureAwait(false);
 
             //Assert
-            result.Should().Be(true);
+            result.CanCancel.Should().Be(true);
         }
 
         [Test]
@@ -135,10 +137,10 @@ namespace Orckestra.Composer.Cart.Tests.Providers
                 .Setup(r => r.GetOrderFulfillmentStateAsync(It.IsAny<GetOrderFulfillmentStateParam>()))
                 .ReturnsAsync(orderFulfillmentState);
 
-            var result = await provider.CanCancel(order).ConfigureAwait(false);
+            var result = await provider.GetCancellationStatus(order).ConfigureAwait(false);
 
             //Assert
-            result.Should().Be(false);
+            result.CanCancel.Should().Be(false);
         }
 
         [Test]
@@ -162,10 +164,10 @@ namespace Orckestra.Composer.Cart.Tests.Providers
                 .Setup(r => r.GetOrderFulfillmentStateAsync(It.IsAny<GetOrderFulfillmentStateParam>()))
                 .ReturnsAsync(orderFulfillmentState);
 
-            var result = await provider.CanCancel(order).ConfigureAwait(false);
+            var result = await provider.GetCancellationStatus(order).ConfigureAwait(false);
 
             //Assert
-            result.Should().Be(false);
+            result.CanCancel.Should().Be(false);
         }
 
         private OrderFulfillmentState CreateFulfillmentState(bool orderFulfillmentStateIsCancelable,
@@ -186,6 +188,121 @@ namespace Orckestra.Composer.Cart.Tests.Providers
                     }
                 }
             };
+        }
+
+        [Test]
+        [TestCase("Canceled", false)]
+        [TestCase("Completed", false)]
+        [TestCase("New", true)]
+        public async Task WHEN_order_is_InStatus_SHOULD__return_correct_PendingCancel(string orderStatus, bool pendingCancel)
+        {
+            //Arrange
+            var provider = _container.CreateInstance<EditingOrderProvider>();
+
+            //Act
+            var orderId = Guid.NewGuid().ToString();
+            var order = new Order
+            {
+                OrderStatus = orderStatus,
+                Id = orderId
+            };
+
+            var orderFulfillmentState = CreateOrderFulfillmentState(false, true, orderId);
+
+            _container.GetMock<IOrderRepository>()
+                    .Setup(r => r.GetOrderFulfillmentStateAsync(It.IsAny<GetOrderFulfillmentStateParam>()))
+                    .ReturnsAsync(orderFulfillmentState);
+
+            var result = await provider.GetCancellationStatus(order).ConfigureAwait(false);
+
+            //Assert
+            result.CancellationPending.Should().Be(pendingCancel);
+        }
+
+        [Test]
+        [TestCase(true, true, false)]
+        [TestCase(true, false, false)]
+        [TestCase(false, true, true)]
+        public async Task WHEN_orderStatus_is_New_and_orderFulfillmentState_is_InState_SHOULD__return_correct_PendingCancel(bool isCancelable, bool isProcessing, bool pendingCancel)
+        {
+            //Arrange
+            var provider = _container.CreateInstance<EditingOrderProvider>();
+
+            //Act
+            var orderId = Guid.NewGuid().ToString();
+            var order = new Order
+            {
+                OrderStatus = "New",
+                Id = orderId
+            };
+
+            var orderFulfillmentState = CreateOrderFulfillmentState(isCancelable, isProcessing, orderId);
+
+            _container.GetMock<IOrderRepository>()
+                .Setup(r => r.GetOrderFulfillmentStateAsync(It.IsAny<GetOrderFulfillmentStateParam>()))
+                .ReturnsAsync(orderFulfillmentState);
+
+            var result = await provider.GetCancellationStatus(order).ConfigureAwait(false);
+
+            //Assert
+            result.CancellationPending.Should().Be(pendingCancel);
+        }
+
+        private OrderFulfillmentState CreateOrderFulfillmentState(bool isCancelable, bool isProcessing, string orderId)
+        {
+            var propertyBag = new Dictionary<string, object>();
+            propertyBag.Add(Constants.DefaultOrderCancellationMessage, DateTime.UtcNow);
+
+            return new OrderFulfillmentState()
+            {
+                IsCancelable = isCancelable,
+                IsProcessing = isProcessing,
+                ShipmentFulfillmentStates = new List<ShipmentFulfillmentState>()
+                {
+                    new ShipmentFulfillmentState()
+                    {
+                        Messages = new List<ExecutionMessage>()
+                        {
+                            new ExecutionMessage()
+                            {
+                                MessageId = orderId,
+                                PropertyBag = new PropertyBag(propertyBag)
+                            }
+                        },
+                        AllowedStatusChanges = new List<string>()
+                    }
+                }
+            };
+        }
+
+        [Test]
+        public async Task WHEN_ShipmentFulfillmentStates_is_null_SHOULD_return_false_PendingCancel()
+        {
+            //Arrange
+            var provider = _container.CreateInstance<EditingOrderProvider>();
+
+            //Act
+            var orderId = Guid.NewGuid().ToString();
+            var order = new Order
+            {
+                OrderStatus = "New",
+                Id = orderId
+            };
+
+            var orderFulfillmentState = new OrderFulfillmentState()
+            {
+                IsCancelable = false,
+                IsProcessing = true
+            };
+
+            _container.GetMock<IOrderRepository>()
+                .Setup(r => r.GetOrderFulfillmentStateAsync(It.IsAny<GetOrderFulfillmentStateParam>()))
+                .ReturnsAsync(orderFulfillmentState);
+
+            var result = await provider.GetCancellationStatus(order).ConfigureAwait(false);
+
+            //Assert
+            result.CancellationPending.Should().Be(false);
         }
     }
 }

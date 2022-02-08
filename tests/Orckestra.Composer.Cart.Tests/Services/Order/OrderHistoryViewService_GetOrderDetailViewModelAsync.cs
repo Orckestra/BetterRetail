@@ -74,12 +74,9 @@ namespace Orckestra.Composer.Cart.Tests.Services.Order
            .Setup(r => r.IsBeingEdited(It.IsAny<Orckestra.Overture.ServiceModel.Orders.Order>()))
             .Returns(false);
             _container.GetMock<IEditingOrderProvider>()
-                .Setup(r => r.CanCancel(It.IsAny<Orckestra.Overture.ServiceModel.Orders.Order>()))
-                .ReturnsAsync(false);
-            _container.GetMock<IEditingOrderProvider>()
-                .Setup(r => r.PendingCancel(It.IsAny<Orckestra.Overture.ServiceModel.Orders.Order>()))
-                .ReturnsAsync(false);
-
+                .Setup(r => r.GetCancellationStatus(It.IsAny<Orckestra.Overture.ServiceModel.Orders.Order>()))
+                .ReturnsAsync(new OrderCancellationStatusViewModel());
+           
             _container.GetMock<ILineItemService>();
         }
 
