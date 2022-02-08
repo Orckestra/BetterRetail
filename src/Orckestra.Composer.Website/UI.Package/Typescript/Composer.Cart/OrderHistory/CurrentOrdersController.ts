@@ -43,7 +43,7 @@ module Orckestra.Composer {
                             this.Loading = true;
                             self.orderService.getCurrentOrders({ page })
                                 .then(data => {
-                                    this.Orders =this.data.Orders;
+                                    this.Orders = data.Orders;
                                     this.Pagination = data.Pagination;
                                     this.Page = page;
                                 })
