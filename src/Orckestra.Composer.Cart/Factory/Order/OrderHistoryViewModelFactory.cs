@@ -243,8 +243,8 @@ namespace Orckestra.Composer.Cart.Factory.Order
                 orderCancellationStatusInfo = param.OrderCancellationStatusInfos[Guid.Parse(rawOrder.Id)];
             }
 
-            orderInfo.IsOrderCancelable = orderCancellationStatusInfo != null && orderCancellationStatusInfo.CanCancel;
-            orderInfo.IsOrderPendingCancellation = orderCancellationStatusInfo != null && orderCancellationStatusInfo.CancellationPending;
+            orderInfo.IsOrderCancelable = orderCancellationStatusInfo?.CanCancel ?? false;
+            orderInfo.IsOrderPendingCancellation = orderCancellationStatusInfo?.CancellationPending ?? false;
 
             orderInfo.IsBeingEdited = param.CurrentlyEditedOrderId == Guid.Parse(rawOrder.Id);
             orderInfo.HasOwnDraft = HasOwnDraft(param, rawOrder);
