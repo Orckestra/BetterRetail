@@ -20,7 +20,7 @@ module Orckestra.Composer {
             
             let self = this;
             self.eventHub.subscribe(MyAccountEvents.EditOrderCanceled, () => window.location.reload());
-            self.eventHub.subscribe(MyAccountEvents.OrderCanceled, () => this.reload());
+            
             this.VueOrderDetails = new Vue({
                 el: '#vueOrderDetails',
                 data: {
@@ -31,7 +31,8 @@ module Orckestra.Composer {
                     OrderNumber: null
                 },
                 mounted() {
-                    this.Modal.cancelOrderModal = new Composer.UIModal(window, cancelModalElementSelector, this.cancelOrder, this)
+                    this.Modal.cancelOrderModal = new Composer.UIModal(window, cancelModalElementSelector, this.cancelOrder, this);
+                    self.eventHub.subscribe(MyAccountEvents.OrderCanceled, () => this.reload());
                 },
                 methods: {
                     editOrder(orderNumber: string) {
