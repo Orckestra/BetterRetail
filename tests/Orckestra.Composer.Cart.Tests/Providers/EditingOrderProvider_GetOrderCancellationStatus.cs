@@ -257,6 +257,7 @@ namespace Orckestra.Composer.Cart.Tests.Providers
             {
                 IsCancelable = isCancelable,
                 IsProcessing = isProcessing,
+                OrderId = Guid.Parse(orderId),
                 ShipmentFulfillmentStates = new List<ShipmentFulfillmentState>()
                 {
                     new ShipmentFulfillmentState()
