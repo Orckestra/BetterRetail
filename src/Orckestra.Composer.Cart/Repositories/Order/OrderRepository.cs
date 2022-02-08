@@ -1,7 +1,6 @@
 ﻿using Orckestra.Composer.Cart.Factory.Order;
 using Orckestra.Composer.Cart.Parameters.Order;
 using Orckestra.Composer.Configuration;
-using Orckestra.Composer.Utils;
 using Orckestra.Overture;
 using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel.Customers;
@@ -9,11 +8,11 @@ using Orckestra.Overture.ServiceModel.Orders;
 using Orckestra.Overture.ServiceModel.Orders.Fulfillment;
 using Orckestra.Overture.ServiceModel.Requests.Orders;
 using Orckestra.Overture.ServiceModel.Requests.Orders.Fulfillment;
+using Orckestra.Overture.ServiceModel.Validation;
 using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
-using Orckestra.Overture.ServiceModel.Validation;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Cart.Repositories.Order
@@ -30,8 +29,7 @@ namespace Orckestra.Composer.Cart.Repositories.Order
             ICacheProvider cacheProvider)
         {
             OvertureClient = overtureClient ?? throw new ArgumentNullException(nameof(overtureClient));
-            FindOrdersRequestFactory = findOrdersRequestFactory ??
-                                       throw new ArgumentNullException(nameof(findOrdersRequestFactory));
+            FindOrdersRequestFactory = findOrdersRequestFactory ?? throw new ArgumentNullException(nameof(findOrdersRequestFactory));
             CacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));
         }
 
