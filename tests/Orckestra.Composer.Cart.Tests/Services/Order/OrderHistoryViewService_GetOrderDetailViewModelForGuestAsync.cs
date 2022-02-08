@@ -18,6 +18,7 @@ using Orckestra.Composer.Services.Lookup;
 using Orckestra.Overture.ServiceModel.Customers;
 using Orckestra.Overture.ServiceModel.Orders;
 using System.Threading.Tasks;
+using Orckestra.Composer.Cart.Providers.Order;
 
 namespace Orckestra.Composer.Cart.Tests.Services.Order
 {
@@ -54,6 +55,9 @@ namespace Orckestra.Composer.Cart.Tests.Services.Order
               .Setup(r => r.GetOrderDetailsBaseUrl(It.IsAny<CultureInfo>()))
                .Returns(GetRandom.String(32));
             _container.GetMock<ILineItemService>();
+            _container.GetMock<IEditingOrderProvider>()
+                .Setup(r => r.GetCancellationStatus(It.IsAny<Orckestra.Overture.ServiceModel.Orders.Order>()))
+                .ReturnsAsync(new OrderCancellationStatusViewModel());
         }
 
         [Test]
