@@ -12,8 +12,6 @@ using Orckestra.Overture.ServiceModel.Orders;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Orckestra.Composer.Cart.Parameters.Order;
-using Orckestra.Overture.ServiceModel.Orders.Fulfillment;
 
 namespace Orckestra.Composer.Cart.Tests.Providers
 {
