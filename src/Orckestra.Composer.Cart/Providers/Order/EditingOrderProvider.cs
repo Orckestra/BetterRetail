@@ -69,7 +69,7 @@ namespace Orckestra.Composer.Cart.Providers.Order
                 ScopeId = order.ScopeId
             }).ConfigureAwait(false);
 
-            if (orderFulfillmentState != null && OrderHistoryConfiguration.CompletedOrderStatuses.Contains(orderFulfillmentState.Status))
+            if (orderFulfillmentState != null || OrderHistoryConfiguration.CompletedOrderStatuses.Contains(orderFulfillmentState.Status))
             {
                 return new CancellationStatus();
             }
