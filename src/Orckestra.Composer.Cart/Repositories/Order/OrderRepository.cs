@@ -165,8 +165,7 @@ namespace Orckestra.Composer.Cart.Repositories.Order
         {
             if (param == null) throw new ArgumentNullException(nameof(param));
             if (param.OrderId == default) throw new ArgumentException(GetMessageOfEmpty(nameof(param.OrderId)));
-            if (string.IsNullOrWhiteSpace(param.Scope))
-                throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)));
+            if (string.IsNullOrWhiteSpace(param.Scope)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)));
             if (param.CustomerId == null) throw new ArgumentException(GetMessageOfNull(nameof(param.CustomerId)));
 
             var request = new CreateCartOrderDraftRequest
