@@ -21,8 +21,10 @@
     <div data-oc-controller="Cart.EditOrderBanner">
         <div id="vueEditOrderBanner" v-cloak="true" v-if="IsDraftCart" class="alert alert-success m-0 p-2 text-center">
             <div class="container">
-                @Html.Localized("ShoppingCart", "L_EditCartBannerMessage", "{{OrderNumberForOrderDraft}}")
-                <ul class="nav-pills float-right">
+                <div class="d-block d-sm-inline-block ">
+                    @Html.Localized("ShoppingCart", "L_EditCartBannerMessage", "{{OrderNumberForOrderDraft}}")
+                </div>
+                <ul class="nav-pills d-inline-block d-sm-block mt-2 mb-0 p-0 m-sm-0 float-sm-right">
                     <li> <a class="cta" href="#" v-on:click.prevent="cancelEditOrder"> @Html.Localized("General", "B_Cancel")</a></li>
                     <li> <a class="cta" href="@cartPageUrl"> @Html.Localized("General", "B_UpdateOrder")</a></li>
                 </ul>
