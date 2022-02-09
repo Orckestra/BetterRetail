@@ -9,7 +9,7 @@
                     <h5 class="m-0"> @Html.Localized("MyAccount", "L_OrderedOn", "{{order.OrderInfos.OrderDate}}")</h5>
                 </div>
                 <div class="col-sm-6">
-                    <ul class="nav-pills m-0 float-right">
+                    <ul class="nav-pills mt-2 m-sm-0 p-0 float-sm-right">
                         @if (!IsPastOrders)
                         {
                             <li v-if="order.OrderInfos.IsOrderEditable">

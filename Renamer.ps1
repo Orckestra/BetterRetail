@@ -39,6 +39,7 @@ $StartTime = $(Get-Date)
 $directory = (Get-Location)
 $baseDir = $directory.Path + "\src\" + $NewText;
 $RenamerScriptName = $MyInvocation.MyCommand.Name
+$OldText = "Orckestra.Composer.Website"
 [string[]]$Excludes = @('node_modules', 'lib', 'Packages', 'obj', 'bin', $RenamerScriptName )
 
 # This function will check if this script is executed in a ClientName repos
@@ -53,7 +54,7 @@ function CheckIfScriptIsInClientNameGitRepos(){
 
 # This function will rename recursively Directories, Files and Files contents from "ClientName" to $NewText
 function ProcessRecursiveRenaming($subDirectory){	
-	$OldText = "Orckestra.Composer.Website"
+	
 	Get-ChildItem $subDirectory -Exclude $Excludes | 
 	Where-Object { $_.PSIsContainer -or ($_.Name -like -join("*",$OldText,"*")) -or (!$_.PSIsContainer -and (Get-Content($_) | Select-String -pattern $OldText)) } |
 	Sort-Object -Property Length -Descending |
@@ -140,6 +141,19 @@ function FixAssemblyName(){
 	Set-Content -Path $filePath -Value $content
 }
 
+# Keeping the correct assembly name for AppInsights config
+function FixAppInsightsConfig(){
+	$filePath = $directory.Path + "\src\Orckestra.Composer.C1.Core\Package\Composite.config.xsl"
+	$content = Get-Content -Path $filePath
+	$oldValue = 'type="' + $NewText + '.App_Insights.AppInsightsListener, ' + $NewText + '"'
+	Write-Host "Old value: $oldValue" -ForegroundColor White
+	$newValue = 'type="' + $NewText + '.App_Insights.AppInsightsListener, ' + $OldText + '"'
+	Write-Host "New value: $newValue" -ForegroundColor White
+	$content = $content -replace $oldValue, $newValue
+	Set-Content -Path $filePath -Value $content
+}
+#
+
 #Start of process
 Write-Host "Start of process" -ForegroundColor Green
 
@@ -150,6 +164,8 @@ ProcessRecursiveRenaming($directory)
 FixUsings
 
 FixAssemblyName
+
+FixAppInsightsConfig
 
 #UpdateParametersAllXml
 
