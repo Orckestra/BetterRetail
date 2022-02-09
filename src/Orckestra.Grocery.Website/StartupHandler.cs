@@ -105,6 +105,7 @@ namespace Orckestra.Composer.Grocery.Website
 
             functions.RegisterAction<OrderController>("FindMyOrder", "Composer.Order.FindMyOrder");
 
+            functions.RegisterAction<StoreLocatorController>("PageHeader", "Composer.Store.PageHeader");
             functions.RegisterAction<StoreLocatorController>("StoreDirectory", "Composer.Store.Directory");
             functions.RegisterAction<StoreLocatorController>("StoreInventory", "Composer.Store.Inventory")
                 .AddParameter("pagesize", typeof(int), false, label: "Page Size", helpText: "The max count of the items to show in the list.");
