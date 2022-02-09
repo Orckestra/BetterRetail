@@ -6,6 +6,7 @@ using Orckestra.Composer.Cart.Repositories.Order;
 using Orckestra.Composer.ExceptionFilters;
 using Orckestra.Composer.Grocery.Repositories;
 using Orckestra.Composer.Grocery.Services;
+using Orckestra.Composer.MyAccount.Repositories;
 using Orckestra.Composer.Repositories;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Store.Services;
@@ -22,6 +23,8 @@ namespace Orckestra.Composer.Grocery.Website
             host.Register<SalesScopeStoreViewService, IStoreViewService>();
             host.Register<SalesScopeInventoryRepository, IInventoryRepository>();
             host.Register<SalesScopeOrderRepository, IOrderRepository>();
+            host.Register<SalesScopeCustomerRepository, ICustomerRepository>();
+            host.Register<SalesScopeCustomerAddressesRepository, ICustomerAddressRepository>();
             host.Register<SalesScopeWishListRepository, IWishListRepository>();
             host.Register<CookieBasedFulfillmentContext, IFulfillmentContext>();
             host.Register<SalesScopeFulfillmentMethodRepository, IFulfillmentMethodRepository>();

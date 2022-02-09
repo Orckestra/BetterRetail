@@ -54,6 +54,8 @@ namespace Orckestra.Composer.Cart.Parameters.Order
         public string BaseUrl { get; set; }
 
         public string OrderDetailBaseUrl { get; set; }
+        
+        public OrderSettings OrderSettings { get; set; }
 
         public CreateOrderDetailViewModelParam()
         {

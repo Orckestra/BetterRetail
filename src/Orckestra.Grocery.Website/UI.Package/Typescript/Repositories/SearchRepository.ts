@@ -14,5 +14,9 @@ module Orckestra.Composer {
         public getCategoryFacets(CategoryId, QueryString): Q.Promise<any> {
             return ComposerClient.post('/api/search/getcategoryfacets', { QueryString, CategoryId });
         }
+
+        public getQueryFacets(QueryName, QueryType, QueryString): Q.Promise<any> {
+            return ComposerClient.post('/api/searchquery/getqueryfacets', { QueryString, QueryName, QueryType });
+        }
     }
 }

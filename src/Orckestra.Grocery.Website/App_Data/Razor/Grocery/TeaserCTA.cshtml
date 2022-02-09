@@ -90,13 +90,16 @@
 @{
     var isBottom = TeaserContentTextPosition == "Bottom";
     var minHeightStyle = !string.IsNullOrEmpty(MinHeight) ? "min-height:" + @MinHeight : "";
+
+    var containerWithImageBgId = "img" + Guid.NewGuid().ToString().Substring(0, 8);
 }
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
 <head>
+    @ImageHelpers.ResponsiveBackgroundImageStyles(containerWithImageBgId, BackgroundImage, null, 0)
 </head>
 <body>
-    <div class="teaser-cta shadow position-@TeaserContentTextPosition.ToLower() h-100 bg-cover" 
-         style="margin-bottom:@MarginBottom; background-image: url('/media(@BackgroundImage)');">
+    <div id="@containerWithImageBgId" class="teaser-cta shadow position-@TeaserContentTextPosition.ToLower() h-100 bg-cover" 
+         style="margin-bottom:@MarginBottom;">
         <div class="row no-gutters  h-100  align-items-end" style="@(isBottom ? minHeightStyle: "")">
             <div class="col-12  empty-cell  @(isBottom ? "": "col-sm-6")"></div>
             <div class="content-cell  col-12  p-2  @TeaserContentTextAligment  @(isBottom ? "": "col-sm-6")  @(String.IsNullOrEmpty(ContentBackgroundColorRGB) ? ContentBackgroundColor: "")" 

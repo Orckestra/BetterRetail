@@ -54,12 +54,20 @@ namespace Orckestra.Composer.Grocery.Services
 
             var extendedVM = relatedProductViewModel.AsExtensionModel<IGroceryRelatedProductViewModel>();
             extendedVM.ProductBadgeValues = GroceryProductViewModelFactory.BuildProductBadgeValues(productVariant.Product, relatedProductViewModel);
-
+            
             var convertedVolumeMeasurment = GroceryProductViewModelFactory.BuildConvertedVolumeMeasurement(productVariant.Product);
             if (convertedVolumeMeasurment.HasValue)
             {
                 extendedVM.ConvertedVolumeMeasurement = convertedVolumeMeasurment.Value;
             }
+
+            var ribbonStyles = GroceryProductViewModelFactory.BuildPromotionalRibbonStyles(productVariant.Product);
+            extendedVM.PromotionalRibbonBackgroundColor = ribbonStyles.BackgroundColor;
+            extendedVM.PromotionalRibbonTextColor = ribbonStyles.TextColor;
+
+            var bannerStyles = GroceryProductViewModelFactory.BuildPromotionalBannerStyles(productVariant.Product);
+            extendedVM.PromotionalBannerBackgroundColor = bannerStyles.BackgroundColor;
+            extendedVM.PromotionalBannerTextColor = bannerStyles.TextColor;
 
             return relatedProductViewModel;
         }

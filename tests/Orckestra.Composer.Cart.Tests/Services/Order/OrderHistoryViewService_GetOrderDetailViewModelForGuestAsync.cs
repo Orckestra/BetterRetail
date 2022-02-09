@@ -53,7 +53,6 @@ namespace Orckestra.Composer.Cart.Tests.Services.Order
             _container.GetMock<IOrderUrlProvider>()
               .Setup(r => r.GetOrderDetailsBaseUrl(It.IsAny<CultureInfo>()))
                .Returns(GetRandom.String(32));
-
             _container.GetMock<ILineItemService>();
         }
 
@@ -75,9 +74,18 @@ namespace Orckestra.Composer.Cart.Tests.Services.Order
                         {
                             Email = email
                         }
-                    }
+                    },
+                    ScopeId = "Global"
+
                 });
 
+            _container.GetMock<IOrderRepository>()
+                .Setup(r => r.GetOrderSettings(It.IsAny<string>()))
+                .ReturnsAsync(new OrderSettings()
+                {
+                    EditableShipmentStates = "new"
+
+                });
             //Act
             var param = new GetOrderForGuestParam
             {

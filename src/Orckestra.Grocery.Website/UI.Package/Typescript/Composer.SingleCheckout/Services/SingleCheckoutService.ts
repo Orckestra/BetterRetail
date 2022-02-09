@@ -153,7 +153,7 @@ module Orckestra.Composer {
 
         private initializeVueComponent(checkoutContext: ISingleCheckoutContext, fulfillment: any) {
             let deleteModalElementSelector: string = '#deleteAddressModal';
-            let commonFulfillmentOptions =  FulfillmentHelper.getCommonSelectedFulfillmentStateOptions(fulfillment);
+            let commonFulfillmentOptions = FulfillmentHelper.getCommonSelectedFulfillmentStateOptions(fulfillment);
             this.VueCheckout = new Vue({
                 el: '#vueSingleCheckout',
                 components: {
@@ -167,7 +167,7 @@ module Orckestra.Composer {
                     Regions: checkoutContext.Regions,
                     ShippingMethodTypes: checkoutContext.ShippingMethodTypes,
                     Payment: null,
-                    RegisteredAddresses: {},
+                    RegisteredAddresses: [],
                     Steps: {
                         StartStep: 0,
                         Information: {

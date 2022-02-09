@@ -83,7 +83,7 @@ namespace Orckestra.Composer.Cart.Tests.Factory.Order
             //Arrange
             var factory = _container.CreateInstance<OrderHistoryViewModelFactory>();
             var customerId = Guid.NewGuid().ToString();
-            var orderId = GetRandom.String(6);
+            var orderId = Guid.NewGuid().ToString();
             //Act
             var param = new GetOrderHistoryViewModelParam
             {
@@ -110,8 +110,17 @@ namespace Orckestra.Composer.Cart.Tests.Factory.Order
                 {
                     {"InProgress", "In Progress"}
                 },
-                OrderDetailBaseUrl = GetRandom.String(32)
-            };
+                OrderDetailBaseUrl = GetRandom.String(32),
+                Orders = new List<Overture.ServiceModel.Orders.Order>(){
+                    new Overture.ServiceModel.Orders.Order()
+                        {
+                            CustomerId = customerId,
+                            Id = orderId,
+                            OrderStatus = "InProgress"
+                        }
+                    }
+                };
+
             var vm = factory.CreateViewModel(param);
 
             //Assert
@@ -134,7 +143,7 @@ namespace Orckestra.Composer.Cart.Tests.Factory.Order
             //Arrange
             var factory = _container.CreateInstance<OrderHistoryViewModelFactory>();
             var customerId = Guid.NewGuid().ToString();
-
+            var orderId = Guid.NewGuid().ToString();
             //Act
             var param = new GetOrderHistoryViewModelParam
             {
@@ -146,6 +155,7 @@ namespace Orckestra.Composer.Cart.Tests.Factory.Order
                     {
                         new OrderItem
                         {
+                            Id = orderId,
                             ShipmentItems = new List<ShipmentItem>(),
                             CustomerId = customerId,
                             OrderStatus = "test"
@@ -157,8 +167,17 @@ namespace Orckestra.Composer.Cart.Tests.Factory.Order
                 {
                     {"test", "test"}
                 },
-                OrderDetailBaseUrl = GetRandom.String(32)
-            };
+                OrderDetailBaseUrl = GetRandom.String(32),
+                Orders =  new List<Overture.ServiceModel.Orders.Order>(){
+                    new Overture.ServiceModel.Orders.Order
+                        {
+                            Id = orderId,
+                            CustomerId = customerId,
+                            OrderStatus = "test"
+                        }
+                    }
+                };
+
             var vm = factory.CreateViewModel(param);
 
             //Assert

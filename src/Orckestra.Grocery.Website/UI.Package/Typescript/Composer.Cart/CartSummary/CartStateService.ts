@@ -18,20 +18,18 @@ module Orckestra.Composer {
         public VueCartMixins: any = [];
         protected cartService: ICartService;
         protected membershipService: IMembershipService;
-       
-       
 
         constructor() {
             this.eventHub = EventHub.instance();
             this.cartService = CartService.getInstance();
             this.membershipService = new MembershipService(new MembershipRepository());
 
-           this.registerSubscriptions();
-            
+            this.registerSubscriptions();
+
             CartStateService.instance = this;
         }
 
-        private initialize() { 
+        private initialize() {
 
             this.VueFullCart = new Vue({
                 el: '#vueFullCart',
@@ -43,7 +41,7 @@ module Orckestra.Composer {
                         Loading: false,
                         Busy: true
                     },
-                    Errors: {                     
+                    Errors: {
                     }
                 },
                 computed: {
@@ -59,7 +57,7 @@ module Orckestra.Composer {
                 },
                 methods: {
                     updateBeforeEditLineItemList() {
-                        this.beforeEditLineItemList = this.Cart.LineItemDetailViewModels.map(x => ({ ...x}));
+                        this.beforeEditLineItemList = this.Cart.LineItemDetailViewModels.map(x => ({ ...x }));
                     }
                 }
             });
@@ -73,7 +71,7 @@ module Orckestra.Composer {
                     let vueData: any = this.VueFullCart;
                     vueData.IsAuthenticated = authVm.IsAuthenticated;
                 });
-       }
+        }
 
         private publishToAnalytics(cartVm: any) {
             var e: IEventInformation = {

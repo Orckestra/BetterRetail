@@ -25,5 +25,11 @@ namespace Orckestra.Composer.Parameters
         /// The Culture for any displayable values
         /// </summary>
         public CultureInfo CultureInfo { get; set; }
+
+        public GetCustomerByUsernameParam Clone()
+        {
+            var param = (GetCustomerByUsernameParam)MemberwiseClone();
+            return param;
+        }
     }
 }

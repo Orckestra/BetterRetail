@@ -133,6 +133,9 @@ module Orckestra.Composer {
                     }
                 },
                 methods: {
+                    selectCategory(suggestion) {
+                        this.sectionConfigs.suggestcategories.onSelected({ item: suggestion })
+                    },
                     fetchResults(result) {
                         const query = this.query;
                         if (query.length < this.minSearchSize)
@@ -179,10 +182,19 @@ module Orckestra.Composer {
                     },
                     mapSuggestions(suggestions = [], sectionName, query) {
                         return suggestions.map((suggest) => {
-                            const title = sectionName === 'suggestcategories' ? [...suggest.Parents, suggest.DisplayName].join(' > ') : suggest.DisplayName;
+                            let mappedDisplayName = this.highlightSuggestion(suggest.DisplayName, query);
+
+                            if (sectionName === 'suggestcategories') {
+                                suggest.ParentsFullInfo.forEach(el => {
+                                    let displayName = this.highlightSuggestion(el.DisplayName, query);
+                                    el.mappedDisplayName = `${displayName} (${el.Quantity}) > `;
+                                });
+                                mappedDisplayName = `${mappedDisplayName} (${suggest.Quantity})`;
+                            }
+
                             const data = sectionName === 'autocomplete' ? this.extendProductItem(suggest) : suggest;
 
-                            return ({ ...data, mappedDisplayName: this.highlightSuggestion(title, query) })
+                            return ({ ...data, mappedDisplayName: mappedDisplayName })
                         })
                     },
                     getSuggestionValue(suggestion) {

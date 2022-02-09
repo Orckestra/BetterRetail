@@ -42,5 +42,35 @@ namespace Orckestra.Composer.Grocery.ViewModels
         /// Gets or sets the product Converted Volume Measurements
         /// </summary>
         decimal ConvertedVolumeMeasurement { get; set; }
+
+        /// <summary>
+        /// Gets or sets the product Promotional Ribbon
+        /// </summary>
+        string PromotionalRibbon { get; set; }
+        
+        /// <summary>
+        /// Gets or sets the product Promotional Ribbon Background Color
+        /// </summary>
+        string PromotionalRibbonBackgroundColor { get; set; }
+
+        // <summary>
+        /// Gets or sets the product Promotional Ribbon Text Color
+        /// </summary>
+        string PromotionalRibbonTextColor { get; set; }
+
+        /// <summary>
+        /// Gets or sets the product Promotional Banner
+        /// </summary>
+        string PromotionalBanner { get; set; }
+
+        /// <summary>
+        /// Gets or sets the product Promotional Banner Background Color
+        /// </summary>
+        string PromotionalBannerBackgroundColor { get; set; }
+
+        // <summary>
+        /// Gets or sets the product Promotional Banner Text Color
+        /// </summary>
+        string PromotionalBannerTextColor { get; set; }
     }
 }

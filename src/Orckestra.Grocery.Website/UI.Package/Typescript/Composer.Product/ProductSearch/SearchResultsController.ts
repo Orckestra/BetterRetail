@@ -92,11 +92,10 @@ module Orckestra.Composer {
                             const wishListItem = this.WishList && this.WishList.Items.find(isSameProduct);
                             product.InWishList = !!wishListItem;
                             product.WishListItemId = wishListItem ? wishListItem.Id : undefined;
-                            
-                            if(product.ProductBadgeValues)
-                            {
+
+                            if (product.ProductBadgeValues) {
                                 product.ProductBadgeMap = Object.keys(product.ProductBadgeValues)
-                                    .map((key) => ({Key: key, Value: product.ProductBadgeValues[key]}));
+                                    .map((key) => ({ Key: key, Value: product.ProductBadgeValues[key] }));
                             }
 
                             product.HasUnitValues = PriceHelper.HasUnitValues(product);
@@ -106,7 +105,7 @@ module Orckestra.Composer {
                                 product.ConvertedVolumeMeasurement
                             );
 
-                            if(product.PricePerUnit){
+                            if (product.PricePerUnit) {
                                 product.IsPricePerUnitZero = PriceHelper.IsPricePerUnitZero(product.PricePerUnit);
                             }
                             return product;
@@ -223,7 +222,7 @@ module Orckestra.Composer {
         }
 
         public addToCart(event, product) {
-            const {HasVariants, ProductId, VariantId, Price, RecurringOrderProgramName} = product;
+            const { HasVariants, ProductId, VariantId, Price, RecurringOrderProgramName } = product;
 
             let promise: Q.Promise<any>;
             product.Loading = true;
@@ -245,10 +244,10 @@ module Orckestra.Composer {
                     }, (reason: any) => this.onAddToCartFailed(reason));
             }
 
-            promise.fin(() =>{
+            promise.fin(() => {
                 event.target.disabled = false;
                 product.Loading = false;
-            } );
+            });
         }
 
         protected onAddToCartFailed(reason: any): void {

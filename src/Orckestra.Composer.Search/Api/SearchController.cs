@@ -192,18 +192,27 @@ namespace Orckestra.Composer.Search.Api
                 .Take(limit)
                 .ToList();
 
+            foreach (var suggestion in finalSuggestions)
+            {
+                List<CategorySuggestionViewModel> parents = new List<CategorySuggestionViewModel>();
+                foreach (var parent in suggestion.Parents)
+                {
+                    var parentInfo = categorySuggestionList.Find(x => x.DisplayName == parent);
+                    parents.Add(parentInfo);
+                }
+                suggestion.ParentsFullInfo = parents;
+            }
+
             if (withCategoriesUrl)
             {
                 foreach (var category in finalSuggestions)
                 {
-                    string url = CategoryBrowsingUrlProvider.BuildCategoryBrowsingUrl(new BuildCategoryBrowsingUrlParam
+                    category.Url = GetCategoryUrl(category.Id);
+
+                    foreach (var parent in category.ParentsFullInfo)
                     {
-                        CategoryId = category.Id,
-                        BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
-                        CultureInfo = ComposerContext.CultureInfo,
-                        IsAllProductsPage = false
-                    });
-                    category.Url = url;
+                        parent.Url = GetCategoryUrl(parent.Id);
+                    }
                 }
             }
 
@@ -213,6 +222,17 @@ namespace Orckestra.Composer.Search.Api
             };
 
             return Ok(vm);
+        }
+
+        private string GetCategoryUrl(string id)
+        {
+            return CategoryBrowsingUrlProvider.BuildCategoryBrowsingUrl(new BuildCategoryBrowsingUrlParam
+            {
+                CategoryId = id,
+                BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
+                CultureInfo = ComposerContext.CultureInfo,
+                IsAllProductsPage = false
+            });
         }
 
         [ActionName("suggestBrands")]

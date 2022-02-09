@@ -165,9 +165,12 @@ module Orckestra.Composer {
                 $(FacetsModalId).addClass('loading');
 
                 var queryString = this._searchCriteria.toQuerystring();
-                var catId = this._searchCriteria.categoryId;
-                var getFacetsPromise = catId ? this._searchRepository.getCategoryFacets(catId, queryString) : this._searchRepository.getFacets(queryString);
-
+ 
+                var { categoryId, queryName, queryType } = this._searchCriteria;
+                var getFacetsPromise = categoryId ? this._searchRepository.getCategoryFacets(categoryId, queryString) :
+                    (queryName ? this._searchRepository.getQueryFacets(queryName, queryType, queryString) :
+                        this._searchRepository.getFacets(queryString));
+                        
                 getFacetsPromise.then(result => this._eventHub.publish('facetsLoaded', { data: result }))
                     .fail(reason => console.log(reason))
                     .finally(() => $(FacetsModalId).removeClass('loading'));

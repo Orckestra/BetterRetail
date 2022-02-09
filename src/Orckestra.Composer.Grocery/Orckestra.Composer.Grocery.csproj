@@ -76,17 +76,17 @@
     <Reference Include="Orckestra.ExperienceManagement.Configuration, Version=4.9.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Orckestra.ExperienceManagement.Configuration.4.9.3\lib\net471\Orckestra.ExperienceManagement.Configuration.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Overture.Interfaces, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\OrckestraCommerce.Interfaces.5.0.0\lib\net461\Orckestra.Overture.Interfaces.dll</HintPath>
+    <Reference Include="Orckestra.Overture.Interfaces, Version=5.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\OrckestraCommerce.Interfaces.5.2.0-alpha0102\lib\net461\Orckestra.Overture.Interfaces.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Overture.RestClient, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\OrckestraCommerce.Client.5.0.0\lib\net461\Orckestra.Overture.RestClient.dll</HintPath>
+    <Reference Include="Orckestra.Overture.RestClient, Version=5.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\OrckestraCommerce.Client.5.2.0-alpha0102\lib\net461\Orckestra.Overture.RestClient.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Overture.ServiceModel, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\OrckestraCommerce.ServiceModel.5.0.0\lib\net461\Orckestra.Overture.ServiceModel.dll</HintPath>
+    <Reference Include="Orckestra.Overture.ServiceModel, Version=5.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\OrckestraCommerce.ServiceModel.5.2.0-alpha0102\lib\net461\Orckestra.Overture.ServiceModel.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Overture.ServiceModel.Requests, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\OrckestraCommerce.ServiceModel.Requests.5.0.0\lib\net461\Orckestra.Overture.ServiceModel.Requests.dll</HintPath>
+    <Reference Include="Orckestra.Overture.ServiceModel.Requests, Version=5.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\OrckestraCommerce.ServiceModel.Requests.5.2.0-alpha0102\lib\net461\Orckestra.Overture.ServiceModel.Requests.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack.Client, Version=5.0.0.0, Culture=neutral, PublicKeyToken=02c12cbda47e6587, processorArchitecture=MSIL">
       <HintPath>..\..\packages\ServiceStack.Client.5.9.0\lib\net45\ServiceStack.Client.dll</HintPath>
@@ -152,7 +152,10 @@
     <Compile Include="..\Solution Items\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Context\IProductTileConfigurationContext.cs" />
     <Compile Include="DataTypes\IBootstrapCarousel.cs" />
+    <Compile Include="DataTypes\IPromotionalBannerConfiguration.cs" />
+    <Compile Include="DataTypes\IPromotionalRibbonConfiguration.cs" />
     <Compile Include="DataTypes\IGrocerySettingsMeta.cs" />
     <Compile Include="Api\StoreAndFulfillmentSelectionController.cs" />
     <Compile Include="Factory\GroceryCartViewModelFactory.cs" />
@@ -168,12 +171,15 @@
     <Compile Include="Parameters\RecoverSelectionDataParam.cs" />
     <Compile Include="Parameters\ReserveTimeSlotParam.cs" />
     <Compile Include="Parameters\SetSelectedFulfillmentMethodTypeParam.cs" />
+    <Compile Include="Context\ProductTileConfigurationContext.cs" />
     <Compile Include="Providers\ConverterProvider.cs" />
     <Compile Include="Providers\GroceryInventoryLocationProvider.cs" />
     <Compile Include="Providers\IConverterProvider.cs" />
     <Compile Include="Repositories\ITimeSlotRepository.cs" />
+    <Compile Include="Repositories\SalesScopeCustomerAddressesRepository.cs" />
     <Compile Include="Repositories\SalesScopeFulfillmentMethodRepository.cs" />
     <Compile Include="Repositories\SalesScopeInventoryRepository.cs" />
+    <Compile Include="Repositories\SalesScopeCustomerRepository.cs" />
     <Compile Include="Repositories\SalesScopeOrderRepository.cs" />
     <Compile Include="Repositories\SalesScopePaymentRepository.cs" />
     <Compile Include="Repositories\SalesScopeWishListRepository.cs" />

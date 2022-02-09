@@ -8,6 +8,7 @@
   <mi:PackageFragmentInstallerBinaries>
     <mi:Add path="~\Bin\Orckestra.Composer.CompositeC1.dll" />
     <mi:Add path="~\Bin\Orckestra.Composer.CompositeC1.DataTypes.dll" />
+    <mi:Add path="~\Bin\Orckestra.Composer.Grocery.dll" />
   </mi:PackageFragmentInstallerBinaries>
 
   <mi:PackageFragmentInstallers>
@@ -60,6 +61,15 @@
         <File sourceFilename="~\Bin\Orckestra.Composer.HandlebarsCompiler.dll" targetFilename="~\Bin\Orckestra.Composer.HandlebarsCompiler.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Jurassic.dll" targetFilename="~\Bin\Jurassic.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\NUglify.dll" targetFilename="~\Bin\NUglify.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Microsoft.AI.Agent.Intercept.dll" targetFilename="~\Bin\Microsoft.AI.Agent.Intercept.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Microsoft.AI.DependencyCollector.dll" targetFilename="~\Bin\Microsoft.AI.DependencyCollector.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Microsoft.AI.PerfCounterCollector.dll" targetFilename="~\Bin\Microsoft.AI.PerfCounterCollector.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Microsoft.AI.ServerTelemetryChannel.dll" targetFilename="~\Bin\Microsoft.AI.ServerTelemetryChannel.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Microsoft.AI.Web.dll" targetFilename="~\Bin\Microsoft.AI.Web.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Microsoft.AI.WindowsServer.dll" targetFilename="~\Bin\Microsoft.AI.WindowsServer.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Microsoft.ApplicationInsights.dll" targetFilename="~\Bin\Microsoft.ApplicationInsights.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Microsoft.AspNet.TelemetryCorrelation.dll" targetFilename="~\Bin\Microsoft.AspNet.TelemetryCorrelation.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\System.Diagnostics.DiagnosticSource.dll" targetFilename="~\Bin\System.Diagnostics.DiagnosticSource.dll" allowOverwrite="true" />
       </Files>
     </mi:Add>
 
@@ -70,6 +80,7 @@
         <File sourceFilename="~\Global.asax" targetFilename="~\Global.asax" allowOverwrite="true" />
         <File sourceFilename="~\error.html" targetFilename="~\error.html" allowOverwrite="true" />
         <File sourceFilename="~\Frontend\Config\VisualEditor\common.xml" targetFilename="~\Frontend\Config\VisualEditor\common.xml" allowOverwrite="true" />
+        <File sourceFilename="~\ApplicationInsights.config" targetFilename="~\ApplicationInsights.config" allowOverwrite="true" />
       </Files>
       <Directories>
         <Directory sourceDirectory="~\UI.Package\GetStyleOptionsFromFile\" targetDirectory="~\UI.Package\GetStyleOptionsFromFile\" allowOverwrite="true" deleteTargetDirectory="false" />
@@ -138,6 +149,12 @@
         <Type type="Composite.Data.Types.IMethodBasedFunctionInfo,Composite">
           <Data dataScopeIdentifier="public" dataFilename="~\Datas\Composite.Data.Types.IMethodBasedFunctionInfos_public.xml" />
         </Type>
+	    <Type type="Orckestra.Composer.Grocery.DataTypes.IPromotionalRibbonConfiguration,Orckestra.Composer.Grocery">
+		  <Data dataScopeIdentifier="public" dataFilename="~\Datas\Orckestra.Composer.Grocery.DataTypes.IPromotionalRibbonConfiguration_public.xml" />
+	    </Type>
+	      <Type type="Orckestra.Composer.Grocery.DataTypes.IPromotionalBannerConfiguration,Orckestra.Composer.Grocery">
+		      <Data dataScopeIdentifier="public" dataFilename="~\Datas\Orckestra.Composer.Grocery.DataTypes.IPromotionalBannerConfiguration_public.xml" />
+	      </Type>
       </Types>
     </mi:Add>
     <mi:Add installerType="Orckestra.Composer.CompositeC1.Installers.ComposerFragmentInstaller, Orckestra.Composer.CompositeC1" uninstallerType="Orckestra.Composer.CompositeC1.Installers.ComposerFragmentUninstaller, Orckestra.Composer.CompositeC1" />

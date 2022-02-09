@@ -27,5 +27,11 @@ namespace Orckestra.Composer.Parameters
         public CultureInfo CultureInfo { get; set; }
 
         public bool IncludeAddresses { get; set; } = false;
+
+        public GetCustomerByIdParam Clone()
+        {
+            var param = (GetCustomerByIdParam)MemberwiseClone();
+            return param;
+        }
     }
 }

@@ -110,33 +110,6 @@ namespace Orckestra.Composer.Cart.Tests.Factory.Order
             vm.Payments.ForEach(payment => payment.BillingAddress.Should().NotBeNull());
         }
 
-        protected CreateOrderDetailViewModelParam CreateOrderDetailViewModelParam(Overture.ServiceModel.Orders.Order order)
-        {
-            return new CreateOrderDetailViewModelParam
-            {
-                CultureInfo = new CultureInfo("en-US"),
-                OrderStatuses = new Dictionary<string, string>
-                {
-                    {"InProgress", "In Progress"},
-                    {"Canceled" , "Canceled"}
-                },
-                CountryCode = GetRandom.String(32),
-                BaseUrl = GetRandom.String(32),
-                Order = order,
-                ProductImageInfo = new ProductImageInfo
-                {
-                    ImageUrls = new List<ProductMainImage>()
-                },
-                ShipmentsNotes = new Dictionary<Guid, List<string>>(),
-                OrderChanges = new List<OrderHistoryItem>(),
-                ShipmentStatuses = new Dictionary<string, string>
-                {
-                    {"InProgress", "In Progress"},
-                    {"Canceled" , "Canceled"}
-                }
-            };
-        }
-
         protected Overture.ServiceModel.Orders.Order CreateOrder(string orderStatus, string paymentStatus)
         {
             return new Overture.ServiceModel.Orders.Order
@@ -221,6 +194,84 @@ namespace Orckestra.Composer.Cart.Tests.Factory.Order
                 }
             };
 
+        }
+
+        [Test]
+        [TestCase("New|Pending", new string[] { "New" }, true)]
+        [TestCase("New|Pending", new string[] { "Pending" }, true)]
+        [TestCase("New|Pending", new string[] { "New", "Pending" }, true)]
+        [TestCase("New|Pending", new string[] { "Canceled" }, false)]
+        [TestCase("New|Pending", new string[] { "New,Canceled" }, false)]
+        [TestCase(null, new string[] { "New", "Canceled" }, false)]
+        [TestCase(null, null, false)]
+        [TestCase("New|Pending", null, false)]
+        public void WHEN_order_with_provided_shipment_statuses_SHOULD_return_correct_IsOrderEditable(string editableShipmentStates,
+            string[] cartShipmentStatuses,
+            bool expectedIsOrderEditable)
+        {
+            //Arrange
+            var factory = _container.CreateInstance<OrderDetailsViewModelFactory>();
+
+            //Act
+            var shipmentList = cartShipmentStatuses?.Select(status => new Shipment()
+                {
+                    Status = status ,
+                    Address = new Address(),
+                    FulfillmentMethod = new FulfillmentMethod
+                    {
+                        Cost = GetRandom.Double()
+                    },
+                    Taxes = new List<Tax>()
+                }).ToList();
+
+            var order = CreateOrderWithShipments(shipmentList);
+            var result = factory.CreateViewModel(CreateOrderDetailViewModelParam(order, editableShipmentStates));
+            //Assert
+            result.OrderInfos.IsOrderEditable.Should().Be(expectedIsOrderEditable);
+        }
+
+        protected CreateOrderDetailViewModelParam CreateOrderDetailViewModelParam(Overture.ServiceModel.Orders.Order order, string editableShipmentStates = default)
+        {
+            return new CreateOrderDetailViewModelParam
+            {
+                CultureInfo = new CultureInfo("en-US"),
+                OrderStatuses = new Dictionary<string, string>
+                {
+                    {"InProgress", "In Progress"},
+                    {"Canceled" , "Canceled"}
+                },
+                CountryCode = GetRandom.String(32),
+                BaseUrl = GetRandom.String(32),
+                Order = order,
+                ProductImageInfo = new ProductImageInfo
+                {
+                    ImageUrls = new List<ProductMainImage>()
+                },
+                ShipmentsNotes = new Dictionary<Guid, List<string>>(),
+                OrderChanges = new List<OrderHistoryItem>(),
+                ShipmentStatuses = new Dictionary<string, string>
+                {
+                    {"InProgress", "In Progress"},
+                    {"Canceled" , "Canceled"}
+                },
+                OrderSettings = new OrderSettings()
+                {
+                    EditableShipmentStates = editableShipmentStates
+                }
+            };
+        }
+
+        protected Overture.ServiceModel.Orders.Order CreateOrderWithShipments(List<Shipment> shipments)
+        {
+            return new Overture.ServiceModel.Orders.Order
+            {
+                OrderStatus = "InProgress",
+                Cart = new Overture.ServiceModel.Orders.Cart
+                {
+                    Total = 100,
+                    Shipments = shipments
+                }
+            };
         }
 
     }

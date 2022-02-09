@@ -29,37 +29,40 @@
        v-on:click="productClick(Product, index)">
         <img class="img-fluid m-auto" xmlns:v-bind="v-bind" v-bind:src="Product.ImageUrl"
              v-bind:alt="Product.FullDisplayName"
-             onerror="imgError(this)"/>
+             onerror="imgError(this)" />
+        @BuildBanner()
     </a>
+  
+    @BuildRibbon()
     <div v-if="'InWishList' in Product" class="product-tile-wishlist">
         @AddToWishList()
     </div>
     <ul v-if="Product.ProductBadgeMap" class="product-tile-badges list-unstyled">
-        <li v-for="item in Product.ProductBadgeMap"><img v-bind:src="`/UI.Package/Images/badge/${item.Key}.svg`"   v-bind:alt="item.Value"/></li>
+        <li v-for="item in Product.ProductBadgeMap"><img v-bind:src="`/UI.Package/Images/badge/${item.Key}.svg`" v-bind:alt="item.Value" /></li>
     </ul>
 
     <div class="product-tile-information">
         <div class="product-tile-text">
             <p v-if="Product.Brand" class="product-tile-brand m-0"
-            data-qa="search-product-brand">
+               data-qa="search-product-brand">
                 {{Product.Brand}}
             </p>
             <div v-if="Product.IsEligibleForRecurring" class="product-tile-recurring">
                 <img src="~/UI.Package/Images/recurring.svg"
-                    class="recurring-icon"
-                    alt="@Html.Localize("General", "L_RecurringProduct")"
-                    title="@Html.Localize("General", "L_RecurringProduct")"/>
+                     class="recurring-icon"
+                     alt="@Html.Localize("General", "L_RecurringProduct")"
+                     title="@Html.Localize("General", "L_RecurringProduct")" />
             </div>
 
             <a data-qa="search-product-title"
-            v-bind:href="Product.Url"
-            v-bind:title="Product.FullDisplayName"
-            v-bind:data-productId="Product.ProductId"
-            v-on:click="productClick(Product, index)"
-            class="p text-default-font">
+               v-bind:href="Product.Url"
+               v-bind:title="Product.FullDisplayName"
+               v-bind:data-productId="Product.ProductId"
+               v-on:click="productClick(Product, index)"
+               class="p text-default-font">
                 {{Product.DisplayName}}
             </a>
-            
+
             @DisplayFormat()
         </div>
         @PriceBasedOnUnitMeasure()
@@ -70,54 +73,64 @@
             </div>
         }
     </div>
-    
+
 
 </div>
 
+@helper BuildRibbon()
+{
+    <div v-if="Product.PromotionalRibbon" class="product-tile-ribbon ribbon-top-right"><span v-bind:class="[Product.PromotionalRibbonBackgroundColor, Product.PromotionalRibbonTextColor]">{{Product.PromotionalRibbon}}</span></div>
+}
+
+@helper BuildBanner()
+{
+    <div v-if="Product.PromotionalBanner" class="product-tile-banner"><span v-bind:class="[Product.PromotionalBannerBackgroundColor, Product.PromotionalBannerTextColor, 'w-100','p-1']">{{Product.PromotionalBanner}}</span></div>
+}
+
 @helper DisplayFormat()
 {
-   <div class="product-tile-format" v-if="Product.HasUnitValues">
-       <span v-if="Product.IsUnit &amp;&amp; Product.IsWeightedProduct">
-           @Html.Localize("ProductPage", "L_Approx") {{Product.ProductUnitSize}}{{Product.ProductUnitMeasure}} @Html.Localize("General", "L_EachAbbrev")
-       </span>
-       <span v-if="Product.IsUnit &amp;&amp; !Product.IsWeightedProduct">
-           {{Product.ProductUnitSize}}{{Product.ProductUnitMeasure}}
-       </span>
-       <span v-if="!Product.IsUnit &amp;&amp; Product.IsWeightedProduct">
-           {{Product.ProductUnitQuantity}} x @Html.Localize("ProductPage", "L_Approx") {{Product.ProductUnitSize}}{{Product.ProductUnitMeasure}}
-       </span>
-       <span v-if="!Product.IsUnit &amp;&amp; !Product.IsWeightedProduct">
-           {{Product.ProductUnitQuantity}} x {{Product.ProductUnitSize}}{{Product.ProductUnitMeasure}}
-       </span>
-   </div> 
+    <div class="product-tile-format" v-if="Product.HasUnitValues">
+        <span v-if="Product.IsUnit &amp;&amp; Product.IsWeightedProduct">
+            @Html.Localize("ProductPage", "L_Approx") {{Product.ProductUnitSize}}{{Product.ProductUnitMeasure}} @Html.Localize("General", "L_EachAbbrev")
+        </span>
+        <span v-if="Product.IsUnit &amp;&amp; !Product.IsWeightedProduct">
+            {{Product.ProductUnitSize}}{{Product.ProductUnitMeasure}}
+        </span>
+        <span v-if="!Product.IsUnit &amp;&amp; Product.IsWeightedProduct">
+            {{Product.ProductUnitQuantity}} x @Html.Localize("ProductPage", "L_Approx") {{Product.ProductUnitSize}}{{Product.ProductUnitMeasure}}
+        </span>
+        <span v-if="!Product.IsUnit &amp;&amp; !Product.IsWeightedProduct">
+            {{Product.ProductUnitQuantity}} x {{Product.ProductUnitSize}}{{Product.ProductUnitMeasure}}
+        </span>
+    </div>
 }
 
 @helper PriceBasedOnUnitMeasure()
 {
-<div class="product-tile-price">
-    <small class="display-price" v-bind:class="{'text-danger order-2' : Product.IsOnSale}">
-        <span v-if="Product.HasPriceRange">
-           @Html.Localize("List-Search", "L_PriceFrom")
+    <div class="product-tile-price">
+        <small class="display-price" v-bind:class="{'text-danger order-2' : Product.IsOnSale}">
+            <span v-if="Product.HasPriceRange">
+                @Html.Localize("List-Search", "L_PriceFrom")
+            </span>
+            <span class="h4" v-if="Product.IsOnSale">
+                {{Product.DisplaySpecialPrice}}
+            </span>
+            <span class="h4" v-else="else">
+                {{Product.DisplayListPrice}}
+            </span>
+            <span v-if="Product.IsWeightedProduct">@Html.Localize("ProductPage", "L_Per"){{Product.ProductUnitSize}}{{Product.ProductUnitMeasure}}</span>
+        </small>
+        <span v-if="Product.IsOnSale" class="original-price" v-bind:class="{'order-1 d-block' : Product.IsOnSale}">
+            &nbsp;<del>{{Product.DisplayListPrice}}</del>
         </span>
-        <span class="h4" v-if="Product.IsOnSale">
-            {{Product.DisplaySpecialPrice}}
+
+        <span v-if="Product.PricePerUnit" class="product-tile-price-per-unit" v-bind:class="{'order-3' : Product.IsOnSale}">
+            <span v-if="Product.IsPricePerUnitZero">@Html.Localize("ProductPage", "L_LessThan") {{Product.PricePerUnit.replace('0.00', '0.01')}}</span>
+            <span v-else="v-else">{{Product.PricePerUnit}}</span>
+            @Html.Localize("ProductPage", "L_Per")
+            <span v-if="Product.BaseProductSize != 1 ">{{Product.BaseProductSize}}&nbsp;</span>{{Product.BaseProductMeasure}}
         </span>
-        <span class="h4" v-else="else">
-            {{Product.DisplayListPrice}}
-        </span>
-        <span v-if="Product.IsWeightedProduct">@Html.Localize("ProductPage", "L_Per"){{Product.ProductUnitSize}}{{Product.ProductUnitMeasure}}</span>
-    </small>
-    <span v-if="Product.IsOnSale" class="original-price" v-bind:class="{'order-1 d-block' : Product.IsOnSale}">
-        &nbsp;<del>{{Product.DisplayListPrice}}</del>
-    </span>
-    
-    <span v-if="Product.PricePerUnit" class="product-tile-price-per-unit" v-bind:class="{'order-3' : Product.IsOnSale}">
-        <span v-if="Product.IsPricePerUnitZero">@Html.Localize("ProductPage", "L_LessThan") {{Product.PricePerUnit.replace('0.00', '0.01')}}</span>
-        <span v-else="v-else">{{Product.PricePerUnit}}</span>
-        @Html.Localize("ProductPage", "L_Per")
-        <span v-if="Product.BaseProductSize != 1 ">{{Product.BaseProductSize}}&nbsp;</span>{{Product.BaseProductMeasure}}
-    </span>
-</div>
+    </div>
 }
 
 @helper ProductPrice()
@@ -174,4 +187,5 @@
         </a>
     </span>
 }
+
 

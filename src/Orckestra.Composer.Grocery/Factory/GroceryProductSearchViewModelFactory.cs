@@ -13,12 +13,16 @@ using Orckestra.Overture.ServiceModel.Search;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Composite.Data;
+using Orckestra.Composer.Grocery.Context;
+using Orckestra.Composer.Grocery.Settings;
 
 namespace Orckestra.Composer.Grocery.Services
 {
     public class GroceryProductSearchViewModelFactory : ProductSearchViewModelFactory
     {
         public IConverterProvider ConverterProvider { get; }
+        public IProductTileConfigurationContext ProductTileConfigurationContext { get; }
 
         public GroceryProductSearchViewModelFactory(
             IViewModelMapper viewModelMapper,
@@ -27,7 +31,8 @@ namespace Orckestra.Composer.Grocery.Services
             IComposerContext composerContext,
             IProductSettingsViewService productSettings,
             IPriceProvider priceProvider,
-            IConverterProvider converterProvider)
+            IConverterProvider converterProvider,
+            IProductTileConfigurationContext productTileConfigurationContext)
             : base(
                 viewModelMapper,
                 productUrlProvider,
@@ -37,14 +42,17 @@ namespace Orckestra.Composer.Grocery.Services
                 priceProvider)
         {
             ConverterProvider = converterProvider ?? throw new ArgumentNullException(nameof(converterProvider));
+            ProductTileConfigurationContext = productTileConfigurationContext ?? throw new ArgumentNullException(nameof(productTileConfigurationContext));
         }
 
         public override ProductSearchViewModel GetProductSearchViewModel(ProductDocument productDocument, SearchCriteria criteria,
             IDictionary<(string ProductId, string VariantId), ProductMainImage> imgDictionary)
         {
-            var productSearchViewModel =  base.GetProductSearchViewModel(productDocument, criteria, imgDictionary);
+            var productSearchViewModel = base.GetProductSearchViewModel(productDocument, criteria, imgDictionary);
             BuildProductBadgeValues(productDocument, productSearchViewModel);
             BuildPricePerUnit(productDocument, productSearchViewModel);
+            BuildPromotionalRibbon(productDocument, productSearchViewModel);
+            BuildPromotionalBanner(productDocument, productSearchViewModel);
             return productSearchViewModel;
         }
 
@@ -95,6 +103,42 @@ namespace Orckestra.Composer.Grocery.Services
             extendedVM.ConvertedVolumeMeasurement = convertedVolumeMeasurment;
             productSearchViewModel.Context["ConvertedVolumeMeasurement"] = convertedVolumeMeasurment;
             productSearchViewModel.Context["BaseProductMeasure"] = extendedVM.BaseProductMeasure;
+        }
+
+        public virtual void BuildPromotionalRibbon(ProductDocument productDocument, ProductSearchViewModel productSearchViewModel)
+        {
+            var extendedVM = productSearchViewModel.AsExtensionModel<IGroceryProductSearchViewModel>();
+            var promotionalRibbonPropertyValue = base.ExtractLookupId("PromotionalRibbon_Facet", productDocument.PropertyBag);
+
+            var promotionalRibbonSettings = ProductTileConfigurationContext.GetPromotionalRibbonConfigurations().FirstOrDefault(item => item.LookupValue == promotionalRibbonPropertyValue);
+            extendedVM.PromotionalRibbonBackgroundColor = promotionalRibbonSettings?.BackgroundColor != null && promotionalRibbonSettings.BackgroundColor != "bg-none"
+                ? promotionalRibbonSettings.BackgroundColor
+                : ProductTileConfigurationContext.PromotionalRibbonDefaultBackgroundColor;
+            extendedVM.PromotionalRibbonTextColor = promotionalRibbonSettings?.TextColor != null && promotionalRibbonSettings?.TextColor != "text-none"
+                ? promotionalRibbonSettings.TextColor
+                : ProductTileConfigurationContext.PromotionalRibbonDefaultTextColor;
+
+            productSearchViewModel.Context["PromotionalRibbon"] = extendedVM.PromotionalRibbon;
+            productSearchViewModel.Context["PromotionalRibbonDefaultBackgroundColor"] = extendedVM.PromotionalRibbonBackgroundColor;
+            productSearchViewModel.Context["PromotionalRibbonDefaultTextColor"] = extendedVM.PromotionalRibbonTextColor;
+        }
+
+        public virtual void BuildPromotionalBanner(ProductDocument productDocument, ProductSearchViewModel productSearchViewModel)
+        {
+            var extendedVM = productSearchViewModel.AsExtensionModel<IGroceryProductSearchViewModel>();
+            var promotionalBannerPropertyValue = base.ExtractLookupId("PromotionalBanner_Facet", productDocument.PropertyBag);
+
+            var promotionalBannerSettings = ProductTileConfigurationContext.GetPromotionalBannerConfigurations().FirstOrDefault(item => item.LookupValue == promotionalBannerPropertyValue);
+            extendedVM.PromotionalBannerBackgroundColor = promotionalBannerSettings?.BackgroundColor != null && promotionalBannerSettings.BackgroundColor != "bg-none"
+                ? promotionalBannerSettings.BackgroundColor
+                : ProductTileConfigurationContext.PromotionalBannerDefaultBackgroundColor;
+            extendedVM.PromotionalBannerTextColor = promotionalBannerSettings?.TextColor != null && promotionalBannerSettings?.TextColor != "text-none"
+                ? promotionalBannerSettings.TextColor
+                : ProductTileConfigurationContext.PromotionalBannerDefaultTextColor;
+
+            productSearchViewModel.Context["PromotionalBanner"] = extendedVM.PromotionalBanner;
+            productSearchViewModel.Context["PromotionalBannerDefaultBackgroundColor"] = extendedVM.PromotionalBannerBackgroundColor;
+            productSearchViewModel.Context["PromotionalBannerDefaultTextColor"] = extendedVM.PromotionalBannerTextColor;
         }
     }
 }

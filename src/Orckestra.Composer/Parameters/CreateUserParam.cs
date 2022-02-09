@@ -86,5 +86,11 @@ namespace Orckestra.Composer.Parameters
         /// Guest customer id used to merge carts.
         /// </summary>
         public Guid GuestCustomerId { get; set; }
+
+        public CreateUserParam Clone()
+        {
+            var param = (CreateUserParam)MemberwiseClone();
+            return param;
+        }
     }
 }
