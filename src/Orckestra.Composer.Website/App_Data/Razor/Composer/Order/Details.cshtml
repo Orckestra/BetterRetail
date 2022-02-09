@@ -80,7 +80,7 @@
                                     @if (order.OrderInfos.HasOwnDraft || order.OrderInfos.IsBeingEdited)
                                     {
                                         <li>
-                                            <a href="#" class="cta"  v-bind:class="{'disabled': Loading}" v-on:click.prevent="cancelEditingOrder('@Order.OrderInfos.OrderNumber')">
+                                            <a href="#" class="cta" v-bind:class="{'disabled': Loading}" v-on:click.prevent="cancelEditingOrder('@Order.OrderInfos.OrderNumber')">
                                                 @Html.Localize("MyAccount", "B_CancelEditing")
                                             </a>
                                         </li>
@@ -89,7 +89,7 @@
                                     @if (order.OrderInfos.IsOrderCancelable && !order.OrderInfos.IsBeingEdited)
                                     {
                                         <li >
-                                            <a href="#" v-bind:class="{'disabled': Loading}"  class="cta" v-on:click.prevent="cancelOrderConfirm($event, @order.OrderInfos.OrderNumber)">
+                                            <a href="#" v-bind:class="{'disabled': Loading}" class="cta" v-on:click.prevent="cancelOrderConfirm($event, @order.OrderInfos.OrderNumber)">
                                                 @Html.Localize("General", "B_CancelOrder")
                                             </a>
                                         </li>

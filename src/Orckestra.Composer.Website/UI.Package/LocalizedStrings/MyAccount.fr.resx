@@ -374,7 +374,7 @@ Pas de soucis, vous pouvez trouver d'excellentes suggestions de produits à offr
     <value>Ajouter une adresse</value>
   </data>
   <data name="T_Addresses" xml:space="preserve">
-    <value>Adresse</value>
+    <value>Adresses</value>
   </data>
   <data name="T_BillingAddress" xml:space="preserve">
     <value>Adresse de facturation:</value>
@@ -459,15 +459,12 @@ Pas de soucis, vous pouvez trouver d'excellentes suggestions de produits à offr
   </data>
   <data name="T_WishListCount" xml:space="preserve">
     <value>produit(s)</value>
-  </data>  
+  </data>
   <data name="H_RecurringCartDetails" xml:space="preserve">
     <value>Voir les détails</value>
   </data>
   <data name="L_EstimatedTotal" xml:space="preserve">
     <value>Total estimé</value>
-  </data>
-  <data name="T_Addresses" xml:space="preserve">
-    <value>Adresses</value>
   </data>
   <data name="B_AddNewPayment" xml:space="preserve">
     <value>Ajouter une carte de crédit</value>
@@ -477,7 +474,7 @@ Pas de soucis, vous pouvez trouver d'excellentes suggestions de produits à offr
   </data>
   <data name="B_DeletePayment" xml:space="preserve">
     <value>Effacer la carte</value>
-  </data>  
+  </data>
   <data name="B_SaveChanges" xml:space="preserve">
     <value>Sauvegarder les changements</value>
   </data>
@@ -493,10 +490,16 @@ Pas de soucis, vous pouvez trouver d'excellentes suggestions de produits à offr
   <data name="L_ConfirmCancelOrder" xml:space="preserve">
     <value>Voulez-vous vraiment annuler cette commande {0}?</value>
   </data>
-<data name="T_PendingCancel" xml:space="preserve">
+  <data name="T_PendingCancel" xml:space="preserve">
     <value>Annulation en cours</value>
-</data>
-<data name="T_ReloadOrderStatus" xml:space="preserve">
-  <value>Recharger la page pour vérifier l'état</value>
-</data>
+  </data>
+  <data name="T_ReloadOrderStatus" xml:space="preserve">
+    <value>Recharger la page pour vérifier l'état</value>
+  </data>
+  <data name="B_CancelEditing" xml:space="preserve">
+    <value>Annuler l'édition</value>
+  </data>
+  <data name="B_ContinueEditing" xml:space="preserve">
+    <value>Continuer l'édition</value>
+  </data>
 </root>

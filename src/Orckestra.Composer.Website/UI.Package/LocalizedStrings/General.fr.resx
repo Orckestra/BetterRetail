@@ -273,4 +273,10 @@
   <data name="T_Confirmation" xml:space="preserve">
     <value>Confirmation</value>
   </data>
+  <data name="B_Update" xml:space="preserve">
+    <value>Mettre à jour</value>
+  </data>
+  <data name="B_UpdateOrder" xml:space="preserve">
+    <value>Mise à jour de la commande</value>
+  </data>
 </root>

@@ -24,7 +24,7 @@
                 <div class="d-block d-sm-inline-block ">
                     @Html.Localized("ShoppingCart", "L_EditCartBannerMessage", "{{OrderNumberForOrderDraft}}")
                 </div>
-                <ul class="nav-pills d-inline-block d-sm-block mt-2 mb-0 p-0 m-sm-0 float-sm-right">
+                <ul class="nav-pills full d-inline-block d-sm-block mt-2 mb-0 p-0 m-sm-0 float-sm-right">
                     <li> <a class="cta" href="#" v-on:click.prevent="cancelEditOrder"> @Html.Localized("General", "B_Cancel")</a></li>
                     <li> <a class="cta" href="@cartPageUrl"> @Html.Localized("General", "B_UpdateOrder")</a></li>
                 </ul>
