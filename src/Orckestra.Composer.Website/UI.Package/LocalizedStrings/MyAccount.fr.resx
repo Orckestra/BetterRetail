@@ -497,9 +497,9 @@ Pas de soucis, vous pouvez trouver d'excellentes suggestions de produits à offr
     <value>Recharger la page pour vérifier l'état</value>
   </data>
   <data name="B_CancelEditing" xml:space="preserve">
-    <value>Annuler l'édition</value>
+    <value>Annuler la modification</value>
   </data>
   <data name="B_ContinueEditing" xml:space="preserve">
-    <value>Continuer l'édition</value>
+    <value>Continuer la modification</value>
   </data>
 </root>
