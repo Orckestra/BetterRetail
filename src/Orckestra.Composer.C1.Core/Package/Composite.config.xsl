@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-<xsl:output method="xml" indent="yes"/>
+  <xsl:output method="xml" indent="yes"/>
   <xsl:template match="@* | node()">
     <xsl:copy>
       <xsl:apply-templates select="@* | node()" />
@@ -13,16 +13,16 @@
 
   <xsl:template match="configuration/loggingConfiguration/listeners">
     <xsl:copy>
-        <xsl:apply-templates select="@* | node()" />
+      <xsl:apply-templates select="@* | node()" />
       <xsl:if test="not(add[@name='AppInsightsListener'])">
         <add name="AppInsightsListener" listenerDataType="Microsoft.Practices.EnterpriseLibrary.Logging.Configuration.CustomTraceListenerData, Microsoft.Practices.EnterpriseLibrary.Logging, Version=3.0.0.0" traceOutputOptions="None" type="Orckestra.Composer.Website.App_Insights.AppInsightsListener, Orckestra.Composer.Website" initializeData="" formatter="Text Formatter" />
       </xsl:if>
     </xsl:copy>
   </xsl:template>
 
-    <xsl:template match="configuration/loggingConfiguration/specialSources/allEvents/listeners">
+  <xsl:template match="configuration/loggingConfiguration/specialSources/allEvents/listeners">
     <xsl:copy>
-    <xsl:apply-templates select="@* | node()" />
+      <xsl:apply-templates select="@* | node()" />
       <xsl:if test="not(add[@name='AppInsightsListener'])">
         <add name="AppInsightsListener" />
       </xsl:if>
