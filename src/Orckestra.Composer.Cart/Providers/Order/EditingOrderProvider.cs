@@ -253,10 +253,10 @@ namespace Orckestra.Composer.Cart.Providers.Order
 
         public virtual async Task<Overture.ServiceModel.Orders.Order> SaveEditedOrderAsync(Overture.ServiceModel.Orders.Order order)
         {
-            var updatedOrder = new Overture.ServiceModel.Orders.Order();
+            Overture.ServiceModel.Orders.Order updatedOrder;
             try
             {
-                updatedOrder = await SaveEditedOrder(order);
+                updatedOrder = await SaveEditedOrder(order).ConfigureAwait(false);
             }
             catch (ComposerException ex)
             {
@@ -264,7 +264,7 @@ namespace Orckestra.Composer.Cart.Providers.Order
                 if (ownedBySomeoneElseError != null)
                 {
                     await ChangeOwnership(order).ConfigureAwait(false);
-                    updatedOrder = await SaveEditedOrder(order);
+                    updatedOrder = await SaveEditedOrder(order).ConfigureAwait(false);
                 }
                 else
                 {
