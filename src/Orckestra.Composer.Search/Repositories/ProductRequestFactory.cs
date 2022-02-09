@@ -40,7 +40,7 @@ namespace Orckestra.Composer.Search.Repositories
             if (criteria == null) { throw new ArgumentNullException(nameof(criteria)); }
             if (string.IsNullOrWhiteSpace(criteria.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(criteria.Scope)), nameof(criteria)); }
 
-            if (criteria is CategorySearchCriteria categoryCriteria && !categoryCriteria.CategoryHasFacets)
+            if (criteria is CategorySearchCriteria categoryCriteria)
             {
                 return new SearchAvailableProductsByCategoryRequest()
                 {
@@ -48,6 +48,7 @@ namespace Orckestra.Composer.Search.Repositories
                     CategoryName = categoryCriteria.CategoryId
                 };
             }
+
             return CreateProductRequest(criteria.Scope);
         }
 
