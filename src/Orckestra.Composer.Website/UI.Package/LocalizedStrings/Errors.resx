@@ -261,4 +261,7 @@
   <data name="L_CancelOrderFailed" xml:space="preserve">
     <value>An error occurred while canceling your order. Please try again or contact us.</value>
   </data>
+  <data name="L_UpdatingOrderFailed" xml:space="preserve">
+    <value>An error occurred while updating your order. Please try again or contact us.</value>
+  </data>
 </root>

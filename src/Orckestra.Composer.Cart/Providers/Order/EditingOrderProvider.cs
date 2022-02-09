@@ -253,16 +253,38 @@ namespace Orckestra.Composer.Cart.Providers.Order
 
         public virtual async Task<Overture.ServiceModel.Orders.Order> SaveEditedOrderAsync(Overture.ServiceModel.Orders.Order order)
         {
-            var updatedOrder = await OrderRepository.SubmitCartOrderDraftAsync(new SubmitCartOrderDraftParam
+            var updatedOrder = new Overture.ServiceModel.Orders.Order();
+            try
             {
-                CustomerId = Guid.Parse(order.CustomerId),
-                Scope = order.ScopeId,
-                OrderId = Guid.Parse(order.Id)
-            }).ConfigureAwait(false);
+                updatedOrder = await SaveEditedOrder(order);
+            }
+            catch (ComposerException ex)
+            {
+                var ownedBySomeoneElseError = ex.Errors?.FirstOrDefault(e => e.ErrorCode == Constants.ErrorCodes.IsOwnedBySomeoneElse);
+                if (ownedBySomeoneElseError != null)
+                {
+                    await ChangeOwnership(order).ConfigureAwait(false);
+                    updatedOrder = await SaveEditedOrder(order);
+                }
+                else
+                {
+                    throw;
+                }
+            }
 
             ClearEditMode();
 
             return updatedOrder;
+        }
+
+        private Task<Overture.ServiceModel.Orders.Order> SaveEditedOrder(Overture.ServiceModel.Orders.Order order)
+        {
+            return OrderRepository.SubmitCartOrderDraftAsync(new SubmitCartOrderDraftParam
+            {
+                CustomerId = Guid.Parse(order.CustomerId),
+                Scope = order.ScopeId,
+                OrderId = Guid.Parse(order.Id)
+            });
         }
 
         public virtual void ClearEditMode()

@@ -276,9 +276,6 @@
   <data name="B_UpdateOrder" xml:space="preserve">
     <value>Update Order</value>
   </data>
-  <data name="L_UpdatingOrderFailed" xml:space="preserve">
-    <value>An error occurred while updating your order. Please try again or contact us.</value>
-  </data>
   <data name="B_Yes" xml:space="preserve">
     <value>Yes</value>
   </data>
