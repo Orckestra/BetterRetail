@@ -55,15 +55,15 @@
             <div class="card">
                 <div class="card-header">
                     <div class="row">
-                        <div class="col-sm-7">
+                        <div class="col-sm-6">
                             <h4 class="m-0">
                                 @Html.Localized("MyAccount", "L_OrderedOn", order.OrderInfos.OrderDate)
                             </h4>
                         </div>
                         @if (order.OrderInfos.IsOrderEditable)
                         {
-                            <div class="col-sm-5 text-sm-right">
-                                <ul class="nav-pills float-right m-0">
+                            <div class="col-sm-6 text-sm-right">
+                                <ul class="nav-pills full float-right m-0">
                                     <li>
                                         <a href="#" v-bind:class="{'disabled': Loading}" class="cta" v-on:click.prevent="editOrder('@Order.OrderInfos.OrderNumber')">
                                             @if (order.OrderInfos.HasOwnDraft || order.OrderInfos.IsBeingEdited)
