@@ -19,13 +19,16 @@ namespace Orckestra.Composer.Cart.Tests.Providers
     public class EditingOrderProvider_GetOrderCancellationStatus
     {
         private AutoMocker _container;
+        private Guid _currentCustomerId;
         [SetUp]
         public void SetUp()
         {
             _container = new AutoMocker();
+            _currentCustomerId = Guid.NewGuid();
 
             var contextStub = new Mock<IComposerContext>();
             contextStub.SetupGet(mock => mock.Scope).Returns("Global");
+            contextStub.SetupGet(mock => mock.CustomerId).Returns(_currentCustomerId);
             _container.Use(contextStub);
         }
 
@@ -72,7 +75,8 @@ namespace Orckestra.Composer.Cart.Tests.Providers
             //Act
             var order = new Order
             {
-                OrderStatus = orderStatus
+                OrderStatus = orderStatus,
+                CustomerId = _currentCustomerId.ToString()
             };
             var allowedStatusChanges = new List<string>()
             {
@@ -100,7 +104,8 @@ namespace Orckestra.Composer.Cart.Tests.Providers
             //Act
             var order = new Order
             {
-                OrderStatus = "InProgress"
+                OrderStatus = "InProgress",
+                CustomerId = _currentCustomerId.ToString()
             };
             var allowedStatusChanges = new List<string>()
             {
@@ -117,6 +122,35 @@ namespace Orckestra.Composer.Cart.Tests.Providers
 
             //Assert
             result.CanCancel.Should().Be(true);
+        }
+
+        [Test]
+        public async Task WHEN_order_customer_and_context_customer_are_different_SHOULD_return_False()
+        {
+            //Arrange
+            var provider = _container.CreateInstance<EditingOrderProvider>();
+
+            //Act
+            var order = new Order
+            {
+                OrderStatus = "InProgress",
+                CustomerId = Guid.NewGuid().ToString()
+            };
+            var allowedStatusChanges = new List<string>()
+            {
+                Constants.OrderStatus.Canceled
+            };
+
+            var orderFulfillmentState = CreateFulfillmentState(true, false, "New", allowedStatusChanges);
+
+            _container.GetMock<IOrderRepository>()
+                .Setup(r => r.GetOrderFulfillmentStateAsync(It.IsAny<GetOrderFulfillmentStateParam>()))
+                .ReturnsAsync(orderFulfillmentState);
+
+            var result = await provider.GetCancellationStatus(order).ConfigureAwait(false);
+
+            //Assert
+            result.CanCancel.Should().Be(false);
         }
 
         [Test]
@@ -204,7 +238,8 @@ namespace Orckestra.Composer.Cart.Tests.Providers
             var order = new Order
             {
                 OrderStatus = orderStatus,
-                Id = orderId
+                Id = orderId,
+                CustomerId = _currentCustomerId.ToString()
             };
 
             var orderFulfillmentState = CreateOrderFulfillmentState(false, true, orderId);
@@ -233,7 +268,8 @@ namespace Orckestra.Composer.Cart.Tests.Providers
             var order = new Order
             {
                 OrderStatus = "New",
-                Id = orderId
+                Id = orderId,
+                CustomerId = _currentCustomerId.ToString()
             };
 
             var orderFulfillmentState = CreateOrderFulfillmentState(isCancelable, isProcessing, orderId);

@@ -9,6 +9,7 @@ using Orckestra.Composer.Services;
 using Orckestra.Composer.Utils;
 using Orckestra.Overture.ServiceModel;
 using Orckestra.Overture.ServiceModel.Orders;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,13 +19,16 @@ namespace Orckestra.Composer.Cart.Tests.Providers
     public class EditingOrderProvider_IsOrderEditable
     {
         private AutoMocker _container;
+        private Guid _customerId;
         [SetUp]
         public void SetUp()
         {
             _container = new AutoMocker();
+            _customerId = Guid.NewGuid();
 
             var contextStub = new Mock<IComposerContext>();
             contextStub.SetupGet(mock => mock.Scope).Returns("Global");
+            contextStub.SetupGet(mock => mock.CustomerId).Returns(_customerId);
             _container.Use(contextStub);
         }
 
@@ -49,6 +53,34 @@ namespace Orckestra.Composer.Cart.Tests.Providers
 
             var order = CreateOrderWithShipments(shipmentList);
             order.OrderStatus = Constants.OrderStatus.Canceled;
+
+            var result = await provider.CanEdit(order).ConfigureAwait(false);
+
+            //Assert
+            result.Should().Be(false);
+        }
+
+        [Test]
+        public async Task WHEN_order_customer_and_context_customer_are_different_SHOULD_return_False()
+        {
+            //Arrange
+            var provider = _container.CreateInstance<EditingOrderProvider>();
+
+            //Act
+            var cartShipmentStatuses = new string[] { "Pending" };
+            var shipmentList = cartShipmentStatuses?.Select(status => new Shipment()
+            {
+                Status = status,
+                Address = new Address(),
+                FulfillmentMethod = new FulfillmentMethod
+                {
+                    Cost = GetRandom.Double()
+                },
+                Taxes = new List<Tax>()
+            }).ToList();
+
+            var order = CreateOrderWithShipments(shipmentList);
+            order.CustomerId = Guid.NewGuid().ToString();
 
             var result = await provider.CanEdit(order).ConfigureAwait(false);
 
@@ -102,6 +134,7 @@ namespace Orckestra.Composer.Cart.Tests.Providers
             return new Order
             {
                 OrderStatus = "InProgress",
+                CustomerId = _customerId.ToString(),
                 Cart = new Overture.ServiceModel.Orders.Cart
                 {
                     Total = 100,

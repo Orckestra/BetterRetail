@@ -11,7 +11,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Orckestra.Composer.Cart.ViewModels.Order;
 using Orckestra.Overture.ServiceModel;
 using Orckestra.Overture.ServiceModel.Orders.Fulfillment;
 
@@ -32,11 +31,7 @@ namespace Orckestra.Composer.Cart.Providers.Order
 
         public virtual async Task<bool> CanEdit(Overture.ServiceModel.Orders.Order order)
         {
-            if (order?.Cart?.Shipments == null ||
-                OrderHistoryConfiguration.CompletedOrderStatuses.Contains(order.OrderStatus))
-            {
-                return false;
-            }
+            if (!ValidateOrder(order)) return false;
 
             var orderSettings = await OrderRepository.GetOrderSettings(ComposerContext.Scope).ConfigureAwait(false);
 
@@ -59,7 +54,7 @@ namespace Orckestra.Composer.Cart.Providers.Order
 
         public virtual async Task<CancellationStatus> GetCancellationStatus(Overture.ServiceModel.Orders.Order order)
         {
-            if (!ValidateOrderForCancel(order))
+            if (!ValidateOrder(order))
             {
                 return new CancellationStatus();
             }
@@ -96,16 +91,14 @@ namespace Orckestra.Composer.Cart.Providers.Order
                                             DateTime.UtcNow.AddMinutes(-10)) ?? false);
         }
 
-        private bool ValidateOrderForCancel(Overture.ServiceModel.Orders.Order order)
+        private bool ValidateOrder(Overture.ServiceModel.Orders.Order order)
         {
-            if (order?.Cart?.Shipments == null
-                || string.IsNullOrWhiteSpace(order.OrderStatus)
-                || OrderHistoryConfiguration.CompletedOrderStatuses.Contains(order.OrderStatus))
-            {
-                return false;
-            }
-
-            return true;
+            return order?.Cart?.Shipments != null &&
+                   !string.IsNullOrWhiteSpace(order.OrderStatus) &&
+                   Guid.TryParse(order.CustomerId, out Guid orderCustomerId) &&
+                   orderCustomerId != Guid.Empty &&
+                   orderCustomerId == ComposerContext.CustomerId &&
+                   !OrderHistoryConfiguration.CompletedOrderStatuses.Contains(order.OrderStatus);
         }
 
         public async Task CancelOrder(Overture.ServiceModel.Orders.Order order)
