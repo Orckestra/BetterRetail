@@ -238,6 +238,7 @@ namespace Orckestra.Composer.Cart.Tests.Providers
             var order = new Order
             {
                 OrderStatus = orderStatus,
+                Id = orderId,
                 CustomerId = _currentCustomerId.ToString()
             };
 
