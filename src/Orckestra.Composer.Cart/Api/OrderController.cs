@@ -15,7 +15,6 @@ using System.Web.Http;
 namespace Orckestra.Composer.Cart.Api
 {
     [ValidateLanguage]
-    [Authorize]
     [JQueryOnlyFilter]
     public class OrderController : ApiController
     {
