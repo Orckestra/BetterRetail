@@ -6,6 +6,7 @@ module Orckestra.Composer {
 
     export class PaymentSingleCheckoutController extends Orckestra.Composer.BaseSingleCheckoutController {
         protected activePaymentProvider: BaseCheckoutPaymentProvider;
+        protected applePayService: ApplePayService = new ApplePayService();
 
         public initialize() {
             super.initialize();
@@ -63,6 +64,9 @@ module Orckestra.Composer {
                     },
                     Providers(): Array<BaseCheckoutPaymentProvider> {
                         return self.checkoutService.getPaymentProviders(this.Payment.PaymentProviders);
+                    },
+                    ApplePaySupportedByDevice() {
+                        return "ApplePaySession" in window;
                     }
                 },
                 methods: {
@@ -147,6 +151,10 @@ module Orckestra.Composer {
             };
 
             this.checkoutService.VueCheckoutMixins.push(vuePaymentMixin);
+
+            //if("ApplePaySession" in window) {
+                this.checkoutService.VueCheckoutMixins.push(this.applePayService.getVueMixin());
+           // }
         }
 
     }

@@ -122,6 +122,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.SearchQu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Bambora", "Orckestra.Bambora\Orckestra.Bambora.csproj", "{38CBCC2C-A9CB-40CA-8D38-11B74B57E946}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.ApplePay", "src\Orckestra.Composer.ApplePay\Orckestra.Composer.ApplePay.csproj", "{4E03ED32-6962-42A6-B8CE-CA505D4CA10F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -288,6 +290,10 @@ Global
 		{38CBCC2C-A9CB-40CA-8D38-11B74B57E946}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{38CBCC2C-A9CB-40CA-8D38-11B74B57E946}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{38CBCC2C-A9CB-40CA-8D38-11B74B57E946}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E03ED32-6962-42A6-B8CE-CA505D4CA10F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E03ED32-6962-42A6-B8CE-CA505D4CA10F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E03ED32-6962-42A6-B8CE-CA505D4CA10F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E03ED32-6962-42A6-B8CE-CA505D4CA10F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -339,6 +345,7 @@ Global
 		{1C67610A-44C0-49BE-A75A-4482413E063A} = {B770DD6A-41C2-4576-80D9-58023319B204}
 		{D63C2FD6-1BBB-400C-B17C-BD6AE254DBD2} = {832CD4F4-EF5A-44B0-92FF-D159B6276AF7}
 		{38CBCC2C-A9CB-40CA-8D38-11B74B57E946} = {B770DD6A-41C2-4576-80D9-58023319B204}
+		{4E03ED32-6962-42A6-B8CE-CA505D4CA10F} = {B770DD6A-41C2-4576-80D9-58023319B204}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {31789445-A48E-4454-9EC2-4B738A35383C}

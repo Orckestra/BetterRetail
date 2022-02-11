@@ -130,6 +130,8 @@
                                 </div>
                             </div>
                         </div>
+
+                        @ApplePay()
                     </form>
                 </div>
                 <div class="card-body bg-light" v-show="step.preview" v-cloak="true" key="preview">
@@ -183,4 +185,18 @@
         </div>
     </div>
 
+}
+
+@helper ApplePay()
+{
+    <div class="text-warning">{{response}}</div>
+    <button v-on:click.prevent="validateMerchant">Test validateMerchant</button>
+    <div v-if="ApplePaySupportedByDevice" v-cloak="true">
+        <button v-if="CanMakeApplePayPayments"
+                v-bind:disabled="loading"
+                v-on:click.prevent="createApplePaySession"
+                class="btn">
+            <img alt="Pay" src="~/UI.Package/Images/256px-Apple_Pay_logo.svg.png" width="100" />
+        </button>
+    </div>
 }
