@@ -47,7 +47,7 @@ module Orckestra.Composer {
                 },
                 methods: {
                     createApplePaySession() {
-                        if (!this.version) {
+                        if (!this.AppleApiVersion) {
                             this.response = 'not supported apple api version found on this client';
                             return;
                         };
