@@ -31,7 +31,7 @@ namespace Orckestra.Composer.Cart.Providers.Order
 
         public virtual async Task<bool> CanEdit(Overture.ServiceModel.Orders.Order order)
         {
-            if (!ValidateOrder(order)) return false;
+            if (!ComposerContext.IsAuthenticated || !ValidateOrder(order)) return false;
 
             var orderSettings = await OrderRepository.GetOrderSettings(ComposerContext.Scope).ConfigureAwait(false);
 
@@ -54,7 +54,7 @@ namespace Orckestra.Composer.Cart.Providers.Order
 
         public virtual async Task<CancellationStatus> GetCancellationStatus(Overture.ServiceModel.Orders.Order order)
         {
-            if (!ValidateOrder(order))
+            if (!ComposerContext.IsAuthenticated || !ValidateOrder(order))
             {
                 return new CancellationStatus();
             }
@@ -98,7 +98,6 @@ namespace Orckestra.Composer.Cart.Providers.Order
                    Guid.TryParse(order.CustomerId, out Guid orderCustomerId) &&
                    orderCustomerId != Guid.Empty &&
                    orderCustomerId == ComposerContext.CustomerId &&
-                   !ComposerContext.IsGuest &&
                    !OrderHistoryConfiguration.CompletedOrderStatuses.Contains(order.OrderStatus);
         }
 
