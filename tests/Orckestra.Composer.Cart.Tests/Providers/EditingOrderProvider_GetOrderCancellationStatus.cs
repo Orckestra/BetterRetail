@@ -29,6 +29,7 @@ namespace Orckestra.Composer.Cart.Tests.Providers
             var contextStub = new Mock<IComposerContext>();
             contextStub.SetupGet(mock => mock.Scope).Returns("Global");
             contextStub.SetupGet(mock => mock.CustomerId).Returns(_currentCustomerId);
+            contextStub.SetupGet(mock => mock.IsAuthenticated).Returns(true);
             _container.Use(contextStub);
         }
 
@@ -135,6 +136,38 @@ namespace Orckestra.Composer.Cart.Tests.Providers
             {
                 OrderStatus = "InProgress",
                 CustomerId = Guid.NewGuid().ToString()
+            };
+            var allowedStatusChanges = new List<string>()
+            {
+                Constants.OrderStatus.Canceled
+            };
+
+            var orderFulfillmentState = CreateFulfillmentState(true, false, "New", allowedStatusChanges);
+
+            _container.GetMock<IOrderRepository>()
+                .Setup(r => r.GetOrderFulfillmentStateAsync(It.IsAny<GetOrderFulfillmentStateParam>()))
+                .ReturnsAsync(orderFulfillmentState);
+
+            var result = await provider.GetCancellationStatus(order).ConfigureAwait(false);
+
+            //Assert
+            result.CanCancel.Should().Be(false);
+        }
+
+        [Test]
+        public async Task WHEN_customer_is_not_authenticated_SHOULD_return_False()
+        {
+            //Setup
+            _container.GetMock<IComposerContext>().SetupGet(mock => mock.IsAuthenticated).Returns(false);
+
+            //Arrange
+            var provider = _container.CreateInstance<EditingOrderProvider>();
+
+            //Act
+            var order = new Order
+            {
+                OrderStatus = "InProgress",
+                CustomerId = _currentCustomerId.ToString()
             };
             var allowedStatusChanges = new List<string>()
             {
