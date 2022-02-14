@@ -98,6 +98,7 @@ namespace Orckestra.Composer.Cart.Providers.Order
                    Guid.TryParse(order.CustomerId, out Guid orderCustomerId) &&
                    orderCustomerId != Guid.Empty &&
                    orderCustomerId == ComposerContext.CustomerId &&
+                   !ComposerContext.IsGuest &&
                    !OrderHistoryConfiguration.CompletedOrderStatuses.Contains(order.OrderStatus);
         }
 

@@ -29,6 +29,7 @@ namespace Orckestra.Composer.Cart.Tests.Providers
             var contextStub = new Mock<IComposerContext>();
             contextStub.SetupGet(mock => mock.Scope).Returns("Global");
             contextStub.SetupGet(mock => mock.CustomerId).Returns(_customerId);
+            contextStub.SetupGet(mock => mock.IsGuest).Returns(false);
             _container.Use(contextStub);
         }
 
@@ -81,6 +82,36 @@ namespace Orckestra.Composer.Cart.Tests.Providers
 
             var order = CreateOrderWithShipments(shipmentList);
             order.CustomerId = Guid.NewGuid().ToString();
+
+            var result = await provider.CanEdit(order).ConfigureAwait(false);
+
+            //Assert
+            result.Should().Be(false);
+        }
+
+        [Test]
+        public async Task WHEN_customer_is_guest_SHOULD_return_False()
+        {
+            //Setup
+            _container.GetMock<IComposerContext>().SetupGet(mock => mock.IsGuest).Returns(true);
+
+            //Arrange
+            var provider = _container.CreateInstance<EditingOrderProvider>();
+
+            //Act
+            var cartShipmentStatuses = new string[] { "Pending" };
+            var shipmentList = cartShipmentStatuses?.Select(status => new Shipment()
+            {
+                Status = status,
+                Address = new Address(),
+                FulfillmentMethod = new FulfillmentMethod
+                {
+                    Cost = GetRandom.Double()
+                },
+                Taxes = new List<Tax>()
+            }).ToList();
+
+            var order = CreateOrderWithShipments(shipmentList);
 
             var result = await provider.CanEdit(order).ConfigureAwait(false);
 
