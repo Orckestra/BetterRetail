@@ -29,7 +29,7 @@ namespace Orckestra.Composer.Cart.Tests.Providers
             var contextStub = new Mock<IComposerContext>();
             contextStub.SetupGet(mock => mock.Scope).Returns("Global");
             contextStub.SetupGet(mock => mock.CustomerId).Returns(_currentCustomerId);
-            contextStub.SetupGet(mock => mock.IsAuthenticated).Returns(false);
+            contextStub.SetupGet(mock => mock.IsAuthenticated).Returns(true);
             _container.Use(contextStub);
         }
 
@@ -155,10 +155,10 @@ namespace Orckestra.Composer.Cart.Tests.Providers
         }
 
         [Test]
-        public async Task WHEN_customer_is_guest_SHOULD_return_False()
+        public async Task WHEN_customer_is_not_authenticated_SHOULD_return_False()
         {
             //Setup
-            _container.GetMock<IComposerContext>().SetupGet(mock => mock.IsAuthenticated).Returns(true);
+            _container.GetMock<IComposerContext>().SetupGet(mock => mock.IsAuthenticated).Returns(false);
 
             //Arrange
             var provider = _container.CreateInstance<EditingOrderProvider>();
