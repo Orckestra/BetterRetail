@@ -145,10 +145,11 @@ namespace Orckestra.Composer.Cart.Factory.Order
 
         protected virtual bool HasOwnDraft(CreateOrderDetailViewModelParam param)
         {
-            //TODO - For now there is no nice way to identify if website user owns draft or not
-            // For now we use possible owner names we invetigated, which can be used in AuthToken
-            // need to wait platform fix, to have nice way to identify if user own the dtaft
-            var orderDraft = param.OrderCartDrafts?.FirstOrDefault(d => Guid.Parse(d.Name) == Guid.Parse(param.Order.Id));
+            //TODO - For now there is no way to identify if website user owns draft or not
+            // For now we use possible owner names we investigated, which can be used in AuthToken
+            // need to wait platform solution, to have a way to identify if user own the draft or not
+            var orderGuid = Guid.Parse(param.Order.Id);
+            var orderDraft = param.OrderCartDrafts?.FirstOrDefault(d => d.Name == orderGuid.ToString("N"));
             if (orderDraft != null)
             {
                 orderDraft.PropertyBag.TryGetValue(Constants.OrderDraft.OwnershipPropertyBagKey, out object orderDraftOwnershipUserName);

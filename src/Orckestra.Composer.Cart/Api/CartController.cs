@@ -65,8 +65,8 @@ namespace Orckestra.Composer.Cart.Api
                 Scope = ComposerContext.Scope,
                 CultureInfo = ComposerContext.CultureInfo,
                 CustomerId = ComposerContext.CustomerId,
-                CartName = EditingOrderProvider.IsEditMode() ? EditingOrderProvider.GetCurrentEditingCartName() : CartConfiguration.ShoppingCartName,
-                CartType = EditingOrderProvider.IsEditMode() ? CartConfiguration.OrderDraftCartType : null,
+                CartName = GetCartName(),
+                CartType = GetCartType(),
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
             });
 
@@ -255,8 +255,8 @@ namespace Orckestra.Composer.Cart.Api
                 Scope = ComposerContext.Scope,
                 CultureInfo = ComposerContext.CultureInfo,
                 CustomerId = ComposerContext.CustomerId,
-                CartName = EditingOrderProvider.IsEditMode() ? EditingOrderProvider.GetCurrentEditingCartName() : CartConfiguration.ShoppingCartName,
-                CartType = EditingOrderProvider.IsEditMode() ? CartConfiguration.OrderDraftCartType : null,
+                CartName = GetCartName(),
+                CartType = GetCartType(),
                 ProductId = request.ProductId,
                 VariantId = request.VariantId,
                 Quantity = request.Quantity.GetValueOrDefault(),
@@ -286,8 +286,8 @@ namespace Orckestra.Composer.Cart.Api
                 CultureInfo = ComposerContext.CultureInfo,
                 CustomerId = ComposerContext.CustomerId,
                 LineItemId = new Guid(request.LineItemId),
-                CartName = EditingOrderProvider.IsEditMode() ? EditingOrderProvider.GetCurrentEditingCartName() : CartConfiguration.ShoppingCartName,
-                CartType = EditingOrderProvider.IsEditMode() ? CartConfiguration.OrderDraftCartType : null,
+                CartName = GetCartName(),
+                CartType = GetCartType(),
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
             });
 
@@ -312,8 +312,8 @@ namespace Orckestra.Composer.Cart.Api
                 CultureInfo = ComposerContext.CultureInfo,
                 CustomerId = ComposerContext.CustomerId,
                 LineItemId = new Guid(request.LineItemId),
-                CartName = EditingOrderProvider.IsEditMode() ? EditingOrderProvider.GetCurrentEditingCartName() : CartConfiguration.ShoppingCartName,
-                CartType = EditingOrderProvider.IsEditMode() ? CartConfiguration.OrderDraftCartType : null,
+                CartName = GetCartName(),
+                CartType = GetCartType(),
                 Quantity = request.Quantity.GetValueOrDefault(),
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
                 RecurringOrderFrequencyName = request.RecurringOrderFrequencyName,
@@ -492,6 +492,16 @@ namespace Orckestra.Composer.Cart.Api
             }).ConfigureAwait(false);
 
             return Ok(shippingMethodsViewModel);
+        }
+
+        private string GetCartName()
+        {
+            return EditingOrderProvider.IsEditMode() ? EditingOrderProvider.GetCurrentEditingCartName() : CartConfiguration.ShoppingCartName;
+        }
+
+        private string GetCartType()
+        {
+            return EditingOrderProvider.IsEditMode() ? CartConfiguration.OrderDraftCartType : null;
         }
     }
 }

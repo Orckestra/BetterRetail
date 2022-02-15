@@ -100,47 +100,7 @@ namespace Orckestra.Composer.Cart.Providers.Order
                    orderCustomerId == ComposerContext.CustomerId &&
                    !OrderHistoryConfiguration.CompletedOrderStatuses.Contains(order.OrderStatus);
         }
-
-        public async Task CancelOrder(Overture.ServiceModel.Orders.Order order)
-        {
-            var isOrderCancelable = (await GetCancellationStatus(order).ConfigureAwait(false)).CanCancel;
-            if (!isOrderCancelable) throw new InvalidOperationException($"Order {order.Id} cann't be canceled");
-
-            var shipmentsTasks = order.Cart?.Shipments?.Select(shipment =>
-                OrderRepository.ChangeShipmentStatusAsync(new ChangeShipmentStatusParam
-                {
-                    OrderId = Guid.Parse(order.Id),
-                    ScopeId = order.ScopeId,
-                    ShipmentId = shipment.Id,
-                    Reason = Constants.DefaultOrderCancellationReason,
-                    RequestedStatus = Constants.OrderStatus.Canceled
-                }));
-            await Task.WhenAll(shipmentsTasks).ConfigureAwait(false);
-
-            var propertyBagShipment = new Dictionary<string, object>();
-            propertyBagShipment.Add(Constants.RequestedOrderCancellationDatePropertyBagKey, DateTime.UtcNow);
-
-            var shipmentFulfillmentMessagesTasks = order.Cart?.Shipments?
-                .Select(shipment =>
-                    OrderRepository.AddShipmentFulfillmentMessagesAsync(new AddShipmentFulfillmentMessagesParam
-                    {
-                        OrderId = Guid.Parse(order.Id),
-                        ScopeId = order.ScopeId,
-                        ShipmentId = shipment.Id,
-                        ExecutionMessages = new List<ExecutionMessage>()
-                        {
-                            new ExecutionMessage()
-                            {
-                                Severity = ExecutionMessageSeverity.Info,
-                                MessageId = order.Id,
-                                PropertyBag = new PropertyBag(propertyBagShipment)
-                            }
-                        }
-                    }));
-            await Task.WhenAll(shipmentFulfillmentMessagesTasks).ConfigureAwait(false);
-        }
-
-        public virtual bool IsBeingEdited(Overture.ServiceModel.Orders.Order order)
+         public virtual bool IsBeingEdited(Overture.ServiceModel.Orders.Order order)
         {
             var guidOrderId = Guid.Parse(order.Id);
             return IsEditMode() & ComposerContext.EditingCartName == guidOrderId.ToString("N");
@@ -246,6 +206,14 @@ namespace Orckestra.Composer.Cart.Providers.Order
 
         public virtual async Task<Overture.ServiceModel.Orders.Order> SaveEditedOrderAsync(Overture.ServiceModel.Orders.Order order)
         {
+            var isEditable = await CanEdit(order).ConfigureAwait(false);
+            
+            if(!isEditable)
+            {
+                await CancelEditOrderAsync(order).ConfigureAwait(false);
+                throw new InvalidOperationException($"Cannot update edited order #${order.OrderNumber} as it can't be edited now.");
+            }
+
             Overture.ServiceModel.Orders.Order updatedOrder;
             try
             {
@@ -293,6 +261,48 @@ namespace Orckestra.Composer.Cart.Providers.Order
         public bool IsEditMode()
         {
             return !String.IsNullOrEmpty(ComposerContext.EditingCartName);
+        }
+
+        public async Task CancelOrder(Overture.ServiceModel.Orders.Order order)
+        {
+            var isOrderCancelable = (await GetCancellationStatus(order).ConfigureAwait(false)).CanCancel;
+
+            if (!isOrderCancelable) throw new InvalidOperationException($"Order {order.Id} cann't be canceled");
+
+            var shipmentsTasks = order.Cart?.Shipments?.Select(shipment =>
+                OrderRepository.ChangeShipmentStatusAsync(new ChangeShipmentStatusParam
+                {
+                    OrderId = Guid.Parse(order.Id),
+                    ScopeId = order.ScopeId,
+                    ShipmentId = shipment.Id,
+                    Reason = Constants.DefaultOrderCancellationReason,
+                    RequestedStatus = Constants.OrderStatus.Canceled
+                }));
+
+            await Task.WhenAll(shipmentsTasks).ConfigureAwait(false);
+
+            var propertyBagShipment = new Dictionary<string, object>();
+            propertyBagShipment.Add(Constants.RequestedOrderCancellationDatePropertyBagKey, DateTime.UtcNow);
+
+            var shipmentFulfillmentMessagesTasks = order.Cart?.Shipments?
+                .Select(shipment =>
+                    OrderRepository.AddShipmentFulfillmentMessagesAsync(new AddShipmentFulfillmentMessagesParam
+                    {
+                        OrderId = Guid.Parse(order.Id),
+                        ScopeId = order.ScopeId,
+                        ShipmentId = shipment.Id,
+                        ExecutionMessages = new List<ExecutionMessage>()
+                        {
+                            new ExecutionMessage()
+                            {
+                                Severity = ExecutionMessageSeverity.Info,
+                                MessageId = order.Id,
+                                PropertyBag = new PropertyBag(propertyBagShipment)
+                            }
+                        }
+                    }));
+
+            await Task.WhenAll(shipmentFulfillmentMessagesTasks).ConfigureAwait(false);
         }
     }
 }
