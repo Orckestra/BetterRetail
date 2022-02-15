@@ -269,7 +269,7 @@ namespace Orckestra.Composer.Cart.Providers.Order
 
             if (!isOrderCancelable) throw new InvalidOperationException($"Order {order.Id} cann't be canceled");
 
-            var shipmentsTasks = order.Cart?.Shipments?.Select(shipment =>
+            var shipmentsTasks = order.Cart.Shipments.Select(shipment =>
                 OrderRepository.ChangeShipmentStatusAsync(new ChangeShipmentStatusParam
                 {
                     OrderId = Guid.Parse(order.Id),
@@ -284,7 +284,7 @@ namespace Orckestra.Composer.Cart.Providers.Order
             var propertyBagShipment = new Dictionary<string, object>();
             propertyBagShipment.Add(Constants.RequestedOrderCancellationDatePropertyBagKey, DateTime.UtcNow);
 
-            var shipmentFulfillmentMessagesTasks = order.Cart?.Shipments?
+            var shipmentFulfillmentMessagesTasks = order.Cart.Shipments
                 .Select(shipment =>
                     OrderRepository.AddShipmentFulfillmentMessagesAsync(new AddShipmentFulfillmentMessagesParam
                     {

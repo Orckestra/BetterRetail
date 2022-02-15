@@ -42,7 +42,6 @@ namespace Orckestra.Composer.Cart.Tests.Providers
             //Arrange
             var provider = _container.CreateInstance<EditingOrderProvider>();
 
-            //Act
             var order = new Order
             {
                 OrderStatus = "InProgress"
@@ -58,6 +57,7 @@ namespace Orckestra.Composer.Cart.Tests.Providers
                 .Setup(r => r.GetOrderFulfillmentStateAsync(It.IsAny<GetOrderFulfillmentStateParam>()))
                 .ReturnsAsync(orderFulfillmentState);
 
+            //Act
             var result = await provider.GetCancellationStatus(order).ConfigureAwait(false);
 
             //Assert
@@ -73,7 +73,6 @@ namespace Orckestra.Composer.Cart.Tests.Providers
             //Arrange
             var provider = _container.CreateInstance<EditingOrderProvider>();
 
-            //Act
             var order = new Order
             {
                 OrderStatus = orderStatus,
@@ -90,6 +89,7 @@ namespace Orckestra.Composer.Cart.Tests.Providers
                 .Setup(r => r.GetOrderFulfillmentStateAsync(It.IsAny<GetOrderFulfillmentStateParam>()))
                 .ReturnsAsync(orderFulfillmentState);
 
+            //Act
             var result = await provider.GetCancellationStatus(order).ConfigureAwait(false);
 
             //Assert
@@ -102,12 +102,12 @@ namespace Orckestra.Composer.Cart.Tests.Providers
             //Arrange
             var provider = _container.CreateInstance<EditingOrderProvider>();
 
-            //Act
             var order = new Order
             {
                 OrderStatus = "InProgress",
                 CustomerId = _currentCustomerId.ToString()
             };
+
             var allowedStatusChanges = new List<string>()
             {
                 Constants.OrderStatus.Canceled
@@ -119,6 +119,7 @@ namespace Orckestra.Composer.Cart.Tests.Providers
                 .Setup(r => r.GetOrderFulfillmentStateAsync(It.IsAny<GetOrderFulfillmentStateParam>()))
                 .ReturnsAsync(orderFulfillmentState);
 
+            //Act
             var result = await provider.GetCancellationStatus(order).ConfigureAwait(false);
 
             //Assert
@@ -131,7 +132,6 @@ namespace Orckestra.Composer.Cart.Tests.Providers
             //Arrange
             var provider = _container.CreateInstance<EditingOrderProvider>();
 
-            //Act
             var order = new Order
             {
                 OrderStatus = "InProgress",
@@ -148,6 +148,7 @@ namespace Orckestra.Composer.Cart.Tests.Providers
                 .Setup(r => r.GetOrderFulfillmentStateAsync(It.IsAny<GetOrderFulfillmentStateParam>()))
                 .ReturnsAsync(orderFulfillmentState);
 
+            //Act
             var result = await provider.GetCancellationStatus(order).ConfigureAwait(false);
 
             //Assert
@@ -163,7 +164,6 @@ namespace Orckestra.Composer.Cart.Tests.Providers
             //Arrange
             var provider = _container.CreateInstance<EditingOrderProvider>();
 
-            //Act
             var order = new Order
             {
                 OrderStatus = "InProgress",
@@ -180,6 +180,7 @@ namespace Orckestra.Composer.Cart.Tests.Providers
                 .Setup(r => r.GetOrderFulfillmentStateAsync(It.IsAny<GetOrderFulfillmentStateParam>()))
                 .ReturnsAsync(orderFulfillmentState);
 
+            //Act
             var result = await provider.GetCancellationStatus(order).ConfigureAwait(false);
 
             //Assert
@@ -192,7 +193,6 @@ namespace Orckestra.Composer.Cart.Tests.Providers
             //Arrange
             var provider = _container.CreateInstance<EditingOrderProvider>();
 
-            //Act
             var order = new Order
             {
                 OrderStatus = "InProgress"
@@ -204,6 +204,7 @@ namespace Orckestra.Composer.Cart.Tests.Providers
                 .Setup(r => r.GetOrderFulfillmentStateAsync(It.IsAny<GetOrderFulfillmentStateParam>()))
                 .ReturnsAsync(orderFulfillmentState);
 
+            //Act
             var result = await provider.GetCancellationStatus(order).ConfigureAwait(false);
 
             //Assert
@@ -216,7 +217,6 @@ namespace Orckestra.Composer.Cart.Tests.Providers
             //Arrange
             var provider = _container.CreateInstance<EditingOrderProvider>();
 
-            //Act
             var order = new Order
             {
                 OrderStatus = "InProgress"
@@ -231,6 +231,7 @@ namespace Orckestra.Composer.Cart.Tests.Providers
                 .Setup(r => r.GetOrderFulfillmentStateAsync(It.IsAny<GetOrderFulfillmentStateParam>()))
                 .ReturnsAsync(orderFulfillmentState);
 
+            //Act
             var result = await provider.GetCancellationStatus(order).ConfigureAwait(false);
 
             //Assert
@@ -266,7 +267,6 @@ namespace Orckestra.Composer.Cart.Tests.Providers
             //Arrange
             var provider = _container.CreateInstance<EditingOrderProvider>();
 
-            //Act
             var orderId = Guid.NewGuid().ToString();
             var order = new Order
             {
@@ -281,6 +281,7 @@ namespace Orckestra.Composer.Cart.Tests.Providers
                     .Setup(r => r.GetOrderFulfillmentStateAsync(It.IsAny<GetOrderFulfillmentStateParam>()))
                     .ReturnsAsync(orderFulfillmentState);
 
+            //Act
             var result = await provider.GetCancellationStatus(order).ConfigureAwait(false);
 
             //Assert
@@ -296,7 +297,6 @@ namespace Orckestra.Composer.Cart.Tests.Providers
             //Arrange
             var provider = _container.CreateInstance<EditingOrderProvider>();
 
-            //Act
             var orderId = Guid.NewGuid().ToString();
             var order = new Order
             {
@@ -311,6 +311,7 @@ namespace Orckestra.Composer.Cart.Tests.Providers
                 .Setup(r => r.GetOrderFulfillmentStateAsync(It.IsAny<GetOrderFulfillmentStateParam>()))
                 .ReturnsAsync(orderFulfillmentState);
 
+            //Act
             var result = await provider.GetCancellationStatus(order).ConfigureAwait(false);
 
             //Assert
@@ -351,7 +352,6 @@ namespace Orckestra.Composer.Cart.Tests.Providers
             //Arrange
             var provider = _container.CreateInstance<EditingOrderProvider>();
 
-            //Act
             var orderId = Guid.NewGuid().ToString();
             var order = new Order
             {
@@ -369,6 +369,7 @@ namespace Orckestra.Composer.Cart.Tests.Providers
                 .Setup(r => r.GetOrderFulfillmentStateAsync(It.IsAny<GetOrderFulfillmentStateParam>()))
                 .ReturnsAsync(orderFulfillmentState);
 
+            //Act
             var result = await provider.GetCancellationStatus(order).ConfigureAwait(false);
 
             //Assert

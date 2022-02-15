@@ -24,8 +24,7 @@ module Orckestra.Composer {
                         this.eventHub.publish(MyAccountEvents.EditOrderStarted, { data: data });
                     }
                 })
-                .fail(reason => {
-                    console.log(reason);
+                .fail(() => {
                     ErrorHandler.instance().outputErrorFromCode('EditingOrderFailed');
                 });
         }

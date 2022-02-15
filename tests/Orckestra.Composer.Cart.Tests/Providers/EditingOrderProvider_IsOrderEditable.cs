@@ -39,7 +39,6 @@ namespace Orckestra.Composer.Cart.Tests.Providers
             //Arrange
             var provider = _container.CreateInstance<EditingOrderProvider>();
 
-            //Act
             var cartShipmentStatuses = new string[] { "Pending" };
             var shipmentList = cartShipmentStatuses?.Select(status => new Shipment()
             {
@@ -55,6 +54,7 @@ namespace Orckestra.Composer.Cart.Tests.Providers
             var order = CreateOrderWithShipments(shipmentList);
             order.OrderStatus = Constants.OrderStatus.Canceled;
 
+            //Act
             var result = await provider.CanEdit(order).ConfigureAwait(false);
 
             //Assert
@@ -67,7 +67,6 @@ namespace Orckestra.Composer.Cart.Tests.Providers
             //Arrange
             var provider = _container.CreateInstance<EditingOrderProvider>();
 
-            //Act
             var cartShipmentStatuses = new string[] { "Pending" };
             var shipmentList = cartShipmentStatuses?.Select(status => new Shipment()
             {
@@ -83,6 +82,7 @@ namespace Orckestra.Composer.Cart.Tests.Providers
             var order = CreateOrderWithShipments(shipmentList);
             order.CustomerId = Guid.NewGuid().ToString();
 
+            //Act
             var result = await provider.CanEdit(order).ConfigureAwait(false);
 
             //Assert
@@ -98,7 +98,6 @@ namespace Orckestra.Composer.Cart.Tests.Providers
             //Arrange
             var provider = _container.CreateInstance<EditingOrderProvider>();
 
-            //Act
             var cartShipmentStatuses = new string[] { "Pending" };
             var shipmentList = cartShipmentStatuses?.Select(status => new Shipment()
             {
@@ -113,6 +112,7 @@ namespace Orckestra.Composer.Cart.Tests.Providers
 
             var order = CreateOrderWithShipments(shipmentList);
 
+            //Act
             var result = await provider.CanEdit(order).ConfigureAwait(false);
 
             //Assert
@@ -141,8 +141,6 @@ namespace Orckestra.Composer.Cart.Tests.Providers
                 EditableShipmentStates = editableShipmentStates
             });
 
-
-            //Act
             var shipmentList = cartShipmentStatuses?.Select(status => new Shipment()
             {
                 Status = status,
@@ -155,7 +153,10 @@ namespace Orckestra.Composer.Cart.Tests.Providers
             }).ToList();
 
             var order = CreateOrderWithShipments(shipmentList);
+
+            //Act
             var result = await provider.CanEdit(order).ConfigureAwait(false);
+
             //Assert
             result.Should().Be(expectedIsOrderEditable);
         }
