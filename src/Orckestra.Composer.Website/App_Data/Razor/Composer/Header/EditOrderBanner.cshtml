@@ -28,7 +28,7 @@
                     <li> <a class="cta" href="#" v-on:click.prevent="cancelEditOrder"> @Html.Localized("General", "B_Cancel")</a></li>
                     @if (CurrentPageNode.Id != pageConfiguration.CartPageId)
                     {
-                        <li> <a class="cta" href="~/page(@pageConfiguration.CartPageId)"> @Html.Localized("General", "B_UpdateOrder")</a></li>
+                        <li> <a class="cta" href="~/page(@pageConfiguration.CartPageId)"> @Html.Localized("MiniCart", "L_ViewCart")</a></li>
                     }
                 </ul>
             </div>
