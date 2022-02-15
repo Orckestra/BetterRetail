@@ -262,6 +262,6 @@
     <value>An error occurred while canceling your order. Please try again or contact us.</value>
   </data>
   <data name="L_UpdatingOrderFailed" xml:space="preserve">
-    <value>An error occurred while updating your order. Please try again or contact us.</value>
+    <value>An error occurred while updating your order. The order can be not editable anymore. Please &lt;a href="javascript:window.location.reload();"&gt;refresh the page&lt;/a&gt; and try again edit your order or contact us.</value>
   </data>
 </root>
