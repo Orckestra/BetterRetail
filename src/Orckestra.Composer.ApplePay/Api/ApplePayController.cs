@@ -3,15 +3,20 @@ using Orckestra.Composer.ApplePay.Requests;
 using System;
 using System.Threading.Tasks;
 using System.Web.Http;
+using Orckestra.Composer.Request;
+using Composite.Core;
 
 namespace Orckestra.Composer.ApplePay.Api
 {
     public class ApplePayController : ApiController
     {
         private readonly ApplePayClient _client;
+        private readonly MerchantCertificate _certificate;
+
         public ApplePayController()
         {
             _client = new ApplePayClient();
+            _certificate = new MerchantCertificate(new Options.ApplePayOptions());
         }
 
         /// <summary>
@@ -32,8 +37,8 @@ namespace Orckestra.Composer.ApplePay.Api
             var request = new ApplePaySessionRequest();
             request.DisplayName = "Pay for Better Retail Order";
             request.Initiative = "web";
-            request.InitiativeContext = "wfecm.int.platform.orckestra.cloud";
-            request.MerchantIdentifier = "merchant.wfecm.int.platform.orckestra.cloud";
+            request.InitiativeContext = Request.Headers.Host;
+            request.MerchantIdentifier = _certificate.GetMerchantIdentifier();
 
             var merchantSession = await _client.GetMerchantSessionAsync(requestUri, request);
 

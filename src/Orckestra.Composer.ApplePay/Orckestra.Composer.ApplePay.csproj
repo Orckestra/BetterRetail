@@ -43,6 +43,8 @@
     <Compile Include="Api\ApplePayController.cs" />
     <Compile Include="ApplePayClient.cs" />
     <Compile Include="ApplePayPlugin.cs" />
+    <Compile Include="MerchantCertificate.cs" />
+    <Compile Include="Options\ApplePayOptions.cs" />
     <Compile Include="Parameters\CreateApplePaySessionParam.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Requests\ApplePaySessionRequest.cs" />
