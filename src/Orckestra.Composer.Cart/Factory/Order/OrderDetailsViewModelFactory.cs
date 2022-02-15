@@ -148,21 +148,21 @@ namespace Orckestra.Composer.Cart.Factory.Order
             //TODO - For now there is no way to identify if website user owns draft or not
             // For now we use possible owner names we investigated, which can be used in AuthToken
             // need to wait platform solution, to have a way to identify if user own the draft or not
-            var orderGuid = Guid.Parse(param.Order.Id);
-            var orderDraft = param.OrderCartDrafts?.FirstOrDefault(d => d.Name == orderGuid.ToString("N"));
-            if (orderDraft != null)
-            {
-                orderDraft.PropertyBag.TryGetValue(Constants.OrderDraft.OwnershipPropertyBagKey, out object orderDraftOwnershipUserName);
-                if (Constants.OrderDraft.OwnershipByWebsite.Split(',').Contains(orderDraftOwnershipUserName?.ToString().ToLower()))
+            if (Guid.TryParse(param.Order.Id, out Guid orderGuid)) {
+                var orderDraft = param.OrderCartDrafts?.FirstOrDefault(d => d.Name == orderGuid.ToString("N"));
+                if (orderDraft != null)
                 {
-                    return true;
+                    orderDraft.PropertyBag.TryGetValue(Constants.OrderDraft.OwnershipPropertyBagKey, out object orderDraftOwnershipUserName);
+                    if (Constants.OrderDraft.OwnershipByWebsite.Split(',').Contains(orderDraftOwnershipUserName?.ToString().ToLower()))
+                    {
+                        return true;
+                    }
                 }
             }
-
             return false;
         }
 
-         protected virtual string GetOrderStatusDisplayName(CreateOrderDetailViewModelParam param)
+        protected virtual string GetOrderStatusDisplayName(CreateOrderDetailViewModelParam param)
         {
             return LocalizationProvider.GetLocalizedString(new GetLocalizedParam
             {
