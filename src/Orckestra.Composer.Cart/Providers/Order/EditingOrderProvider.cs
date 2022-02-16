@@ -267,7 +267,7 @@ namespace Orckestra.Composer.Cart.Providers.Order
         {
             var isOrderCancelable = (await GetCancellationStatus(order).ConfigureAwait(false)).CanCancel;
 
-            if (!isOrderCancelable) throw new InvalidOperationException($"Order {order.Id} cann't be canceled");
+            if (!isOrderCancelable) throw new InvalidOperationException($"Order {order.Id} can't be cancelled");
 
             var shipmentsTasks = order.Cart.Shipments.Select(shipment =>
                 OrderRepository.ChangeShipmentStatusAsync(new ChangeShipmentStatusParam
