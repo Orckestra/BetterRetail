@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Orckestra.Bambora.Requests
+namespace Orckestra.Composer.BamboraPayment.Requests
 {
     public class PaymentApplePayRequest
     {

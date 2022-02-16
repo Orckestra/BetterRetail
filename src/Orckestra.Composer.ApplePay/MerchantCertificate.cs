@@ -6,6 +6,7 @@ using System.IO;
 using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using Composite.Core;
 using Orckestra.Composer.ApplePay.Options;
 
 namespace Orckestra.Composer.ApplePay
@@ -82,7 +83,7 @@ namespace Orckestra.Composer.ApplePay
             var path = Directory.GetParent(new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath).Parent.FullName;
             try
             {
-                return new X509Certificate2(Path.Combine(path, fileName) ?? string.Empty, password, X509KeyStorageFlags.Exportable);
+                return new X509Certificate2(Path.Combine(path, fileName) ?? string.Empty, password, X509KeyStorageFlags.MachineKeySet);
             }
             catch (Exception ex)
             {
@@ -90,27 +91,40 @@ namespace Orckestra.Composer.ApplePay
             }
         }
 
-     /*   private static X509Certificate2 LoadCertificateFromStore(string? thumbprint)
+        /*
+       private static X509Certificate2 LoadCertificateFromStore(string thumbprint)
         {
             // Load the certificate from the current user's certificate store. This
             // is useful if you do not want to publish the merchant certificate with
             // your application, but it is also required to be able to use an X.509
             // certificate with a private key if the user profile is not available,
             // such as when using IIS hosting in an environment such as Microsoft Azure.
-            using var store = new X509Store(StoreName.My, StoreLocation.CurrentUser, OpenFlags.ReadOnly);
-
-            var certificates = store.Certificates.Find(
-                X509FindType.FindByThumbprint,
-                thumbprint?.Trim() ?? string.Empty,
-                validOnly: false);
-
-            if (certificates.Count < 1)
+            X509Store userCaStore = new X509Store(StoreName.My, StoreLocation.CurrentUser);
+            try
             {
-                throw new InvalidOperationException(
-                    $"Could not find Apple Pay merchant certificate with thumbprint '{thumbprint}' from store '{store.Name}' in location '{store.Location}'.");
+                userCaStore.Open(OpenFlags.ReadOnly);
+                X509Certificate2Collection certificatesInStore = userCaStore.Certificates;
+                X509Certificate2Collection findResult = certificatesInStore.Find(X509FindType.FindByThumbprint, thumbprint, false);
+                X509Certificate2 clientCertificate = null;
+                if (findResult.Count == 1)
+                {
+                    clientCertificate = findResult[0];
+                }
+                else
+                {
+                    throw new Exception("Unable to locate the correct client certificate.");
+                }
+                return clientCertificate;
             }
-
-            return certificates[0];
-        }*/
+            catch
+            {
+                throw;
+            }
+            finally
+            {
+                userCaStore.Close();
+            }
+        }
+        */
     }
 }

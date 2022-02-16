@@ -18,18 +18,26 @@ namespace Orckestra.Composer.ApplePay
 
         public ApplePayClient()
         {
-            _certificate = new MerchantCertificate(new Options.ApplePayOptions());
-            var certificate = _certificate.GetCertificate();
-
-            var handler = new HttpClientHandler
+            try
             {
-              //  ClientCertificateOptions = ClientCertificateOption.Manual,
-                SslProtocols = SslProtocols.Tls12
-            };
-            handler.ClientCertificates.Add(certificate);
-            handler.ServerCertificateCustomValidationCallback += (a, b, c, d) => true;
+                _certificate = new MerchantCertificate(new Options.ApplePayOptions());
+                var certificate = _certificate.GetCertificate();
 
-            _httpClient = new HttpClient(handler);
+                var handler = new HttpClientHandler
+                {
+                    //  ClientCertificateOptions = ClientCertificateOption.Manual,
+                    SslProtocols = SslProtocols.Tls12
+                };
+                handler.ClientCertificates.Add(certificate);
+                handler.ServerCertificateCustomValidationCallback += (a, b, c, d) => true;
+
+                _httpClient = new HttpClient(handler);
+            }
+            catch (Exception ex)
+            {
+                Log.LogError("Apple Pay Client", ex);
+                throw;
+            }
         }
 
         public async Task<object> GetMerchantSessionAsync(Uri requestUri, ApplePaySessionRequest request)
@@ -42,7 +50,6 @@ namespace Orckestra.Composer.ApplePay
 
             try
             {
-
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
               
                 var response = await _httpClient.PostAsync(requestUri, content);

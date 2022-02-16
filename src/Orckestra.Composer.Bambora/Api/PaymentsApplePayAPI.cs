@@ -2,18 +2,18 @@
 using Bambora.NA.SDK.Data;
 using Bambora.NA.SDK.Requests;
 using Newtonsoft.Json;
-using Orckestra.Bambora.Requests;
+using Orckestra.Composer.BamboraPayment.Requests;
 using System;
 
-namespace Orckestra.Bambora.API
+namespace Orckestra.Composer.BamboraPayment.Api
 {
     public class PaymentsApplePayAPI
     {
 
-        private Configuration _configuration;
+        private Bambora.NA.SDK.Configuration _configuration;
         private IWebCommandExecuter _webCommandExecuter = new WebCommandExecuter();
 
-        public Configuration Configuration
+        public Bambora.NA.SDK.Configuration Configuration
         {
             set { _configuration = value; }
         }

@@ -64,6 +64,7 @@ module Orckestra.Composer {
                         this.loading = true;
                         this.CurrentApplePaySession = new ApplePaySession(this.AppleApiVersion, request);
                         this.CurrentApplePaySession.onvalidatemerchant = (event) => this.validateMerchant(event);
+                        this.CurrentApplePaySession.onpaymentauthorized = (event) => this.paymentauthorized(event);
 
                         this.CurrentApplePaySession.begin();
                     },
@@ -74,12 +75,25 @@ module Orckestra.Composer {
 
                         ComposerClient.post('/api/applepay/create', { ValidationUrl: url })
                             .then(response => {
-                                this.CurrentApplePaySession.completeMerchantValidation(response);
                                 this.response = response;
                                 this.loading = false;
+                                this.CurrentApplePaySession.completeMerchantValidation(response);
+                               
                             })
                         //https://developer.apple.com/documentation/apple_pay_on_the_web/apple_pay_js_api/requesting_an_apple_pay_payment_session
 
+                    },
+                    paymentauthorized(event) {
+                        // Send payment for processing...
+                        const payment = event.payment;  
+                        this.response = payment.token;
+                        this.CurrentApplePaySession.completePayment(ApplePaySession.STATUS_SUCCESS);
+                        /*ComposerClient.post('/api/bambora/authorize', { Token: payment.token })
+                        .then(response => {
+                            this.response = response;
+                            this.loading = false;
+                            this.CurrentApplePaySession.completePayment(ApplePaySession.STATUS_SUCCESS);
+                        })*/
                     }
                 }
             };

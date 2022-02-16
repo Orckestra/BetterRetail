@@ -1,8 +1,7 @@
-﻿using Bambora.NA.SDK;
-using Bambora.NA.SDK.Data;
-using Orckestra.Bambora.API;
+﻿using Bambora.NA.SDK.Data;
+using Orckestra.Composer.BamboraPayment.Api;
 
-namespace Orckestra.Bambora
+namespace Orckestra.Composer.BamboraPayment
 {
     public class AppleGateway
     {
@@ -37,15 +36,15 @@ namespace Orckestra.Bambora
         public string ApiVersion { get; set; }
 
 
-        private Configuration _configuration { get; set; }
+        private Bambora.NA.SDK.Configuration _configuration { get; set; }
 
-        public Configuration Configuration
+        public Bambora.NA.SDK.Configuration Configuration
         {
             get
             {
                 if (_configuration == null)
                 {
-                    _configuration = new Configuration();
+                    _configuration = new Bambora.NA.SDK.Configuration();
                     _configuration.MerchantId = this.MerchantId;
                     _configuration.PaymentsApiPasscode = PaymentsApiKey;
                     _configuration.Version = ApiVersion;

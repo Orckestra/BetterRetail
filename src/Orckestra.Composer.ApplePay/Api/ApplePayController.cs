@@ -11,12 +11,12 @@ namespace Orckestra.Composer.ApplePay.Api
     public class ApplePayController : ApiController
     {
         private readonly ApplePayClient _client;
-        private readonly MerchantCertificate _certificate;
+       // private readonly MerchantCertificate _certificate;
 
         public ApplePayController()
         {
             _client = new ApplePayClient();
-            _certificate = new MerchantCertificate(new Options.ApplePayOptions());
+           // _certificate = new MerchantCertificate(new Options.ApplePayOptions());
         }
 
         /// <summary>
@@ -31,7 +31,9 @@ namespace Orckestra.Composer.ApplePay.Api
             string.IsNullOrWhiteSpace(param?.ValidationUrl) ||
             !Uri.TryCreate(param.ValidationUrl, UriKind.Absolute, out Uri requestUri))
             {
-                return BadRequest();
+                Log.LogError("Appl Pay Controller", "BadRequest");
+                return null;
+                //return BadRequest();
             }
             try
             {
@@ -51,6 +53,7 @@ namespace Orckestra.Composer.ApplePay.Api
             catch (Exception ex)
             {
                 Log.LogError("Appl Pay Controller", ex);
+                Log.LogError("Appl Pay Controller", ex.InnerException?.Message);
                 return Json(ex);
             }
         }

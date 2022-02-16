@@ -2,7 +2,7 @@
 using Bambora.NA.SDK.Exceptions;
 using System;
 
-namespace Orckestra.Bambora
+namespace Orckestra.Composer.BamboraPayment
 {
     public class BamboraGateway
     {
