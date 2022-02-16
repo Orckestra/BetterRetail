@@ -33,18 +33,26 @@ namespace Orckestra.Composer.ApplePay.Api
             {
                 return BadRequest();
             }
+            try
+            {
+                var request = new ApplePaySessionRequest();
+                request.DisplayName = "Pay for Better Retail Order";
+                request.Initiative = "web";
+                request.InitiativeContext = "wfecm.int.platform.orckestra.cloud";
+                request.MerchantIdentifier = "merchant.wfecm.int.platform.orckestra.cloud";
+                // request.InitiativeContext = Request.Headers.Host;
+                //request.MerchantIdentifier = _certificate.GetMerchantIdentifier();
 
-            var request = new ApplePaySessionRequest();
-            request.DisplayName = "Pay for Better Retail Order";
-            request.Initiative = "web";
-            request.InitiativeContext = "wfecm.int.platform.orckestra.cloud";
-            request.MerchantIdentifier = "merchant.wfecm.int.platform.orckestra.cloud";
-           // request.InitiativeContext = Request.Headers.Host;
-            //request.MerchantIdentifier = _certificate.GetMerchantIdentifier();
+                var merchantSession = await _client.GetMerchantSessionAsync(requestUri, request);
 
-            var merchantSession = await _client.GetMerchantSessionAsync(requestUri, request);
 
-            return Json(merchantSession);
+                return Json(merchantSession);
+            }
+            catch (Exception ex)
+            {
+                Log.LogError("Appl Pay Controller", ex);
+                return Json(ex);
+            }
         }
     }
 }
