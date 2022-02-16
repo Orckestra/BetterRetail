@@ -229,6 +229,8 @@ namespace Orckestra.Composer.Cart.Api
         [ValidateModelState]
         public virtual async Task<IHttpActionResult> CancelOrder([FromBody]string orderNumber)
         {
+            if (string.IsNullOrEmpty(orderNumber)) return BadRequest($"{nameof(orderNumber)} cannot be empty");
+
             var param = new CancelOrderParam()
             {
                 Scope = ComposerContext.Scope,
