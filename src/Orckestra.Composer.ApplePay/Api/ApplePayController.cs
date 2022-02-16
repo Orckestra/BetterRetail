@@ -37,8 +37,10 @@ namespace Orckestra.Composer.ApplePay.Api
             var request = new ApplePaySessionRequest();
             request.DisplayName = "Pay for Better Retail Order";
             request.Initiative = "web";
-            request.InitiativeContext = Request.Headers.Host;
-            request.MerchantIdentifier = _certificate.GetMerchantIdentifier();
+            request.InitiativeContext = "wfecm.int.platform.orckestra.cloud";
+            request.MerchantIdentifier = "merchant.wfecm.int.platform.orckestra.cloud";
+           // request.InitiativeContext = Request.Headers.Host;
+            //request.MerchantIdentifier = _certificate.GetMerchantIdentifier();
 
             var merchantSession = await _client.GetMerchantSessionAsync(requestUri, request);
 

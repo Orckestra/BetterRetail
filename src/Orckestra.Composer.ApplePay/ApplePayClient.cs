@@ -23,10 +23,12 @@ namespace Orckestra.Composer.ApplePay
 
             var handler = new HttpClientHandler
             {
-                ClientCertificateOptions = ClientCertificateOption.Manual,
+              //  ClientCertificateOptions = ClientCertificateOption.Manual,
                 SslProtocols = SslProtocols.Tls12
             };
             handler.ClientCertificates.Add(certificate);
+            handler.ServerCertificateCustomValidationCallback += (a, b, c, d) => true;
+
             _httpClient = new HttpClient(handler);
         }
 

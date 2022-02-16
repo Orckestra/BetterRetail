@@ -82,7 +82,7 @@ namespace Orckestra.Composer.ApplePay
             var path = Directory.GetParent(new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath).Parent.FullName;
             try
             {
-                return new X509Certificate2(Path.Combine(path, fileName) ?? string.Empty, password);
+                return new X509Certificate2(Path.Combine(path, fileName) ?? string.Empty, password, X509KeyStorageFlags.Exportable);
             }
             catch (Exception ex)
             {

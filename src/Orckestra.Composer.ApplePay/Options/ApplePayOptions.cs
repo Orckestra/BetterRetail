@@ -8,9 +8,9 @@ namespace Orckestra.Composer.ApplePay.Options
 
         public string MerchantCertificate => ""; // optional
 
-        public string MerchantCertificateFileName => "merchant_id.cer";
+        public string MerchantCertificateFileName => "certificate.pfx";
 
-        public string MerchantCertificatePassword => "1ZAsse4+applePay'Z@";
+        public string MerchantCertificatePassword => "testpass";
 
         public string MerchantCertificateThumbprint => ""; // optional
     }

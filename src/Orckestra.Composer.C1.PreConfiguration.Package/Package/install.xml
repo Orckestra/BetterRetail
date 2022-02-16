@@ -13,7 +13,7 @@
 		</mi:Add>
 		<mi:Add installerType="Composite.Core.PackageSystem.PackageFragmentInstallers.FilePackageFragmentInstaller, Composite" uninstallerType="Composite.Core.PackageSystem.PackageFragmentInstallers.FilePackageFragmentUninstaller, Composite">
 			<Files>
-				<File sourceFilename="~\merchant_id.cer" targetFilename="~\merchant_id.cer" allowOverwrite="false" />
+				<File sourceFilename="~\certificate.pfx" targetFilename="~\certificate.pfx" allowOverwrite="false" />
 			</Files>
 		</mi:Add>
 	</mi:PackageFragmentInstallers>
