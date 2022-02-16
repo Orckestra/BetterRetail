@@ -36,7 +36,7 @@ namespace Orckestra.Composer.Cart.Parameters.Order
         public List<Overture.ServiceModel.Orders.Order> Orders { get; set; }
 
         /// <summary>
-        /// Get or sets the Order Cart Drafts
+        /// Gets or sets the Order Cart Drafts
         /// </summary>
         public List<CartSummary> OrderCartDrafts { get; set; }
 
@@ -67,7 +67,7 @@ namespace Orckestra.Composer.Cart.Parameters.Order
         public Dictionary<Guid, CancellationStatus> OrderCancellationStatusInfos { get; set; }
         
        /// <summary>
-       /// Get or Set the Id of the currently edited order
+       /// Gets or sets the Id of the currently edited order
        /// </summary>
         public Guid CurrentlyEditedOrderId { get; set; }
     }

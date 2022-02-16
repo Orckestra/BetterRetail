@@ -232,22 +232,23 @@ namespace Orckestra.Composer.Cart.Factory.Order
         {
             var lightOrderVm = new LightOrderDetailViewModel();
             var orderInfo = ViewModelMapper.MapTo<OrderDetailInfoViewModel>(rawOrder, param.CultureInfo);
+            var orderId = Guid.Parse(rawOrder.Id);
 
             orderInfo.OrderStatus = GetOrderStatusDisplayName(rawOrder, param);
             orderInfo.OrderStatusRaw = rawOrder.OrderStatus;
-            orderInfo.IsOrderEditable = param.OrderEditingInfos != null  && param.OrderEditingInfos.ContainsKey(Guid.Parse(rawOrder.Id)) && param.OrderEditingInfos[Guid.Parse(rawOrder.Id)];
+            orderInfo.IsOrderEditable = param.OrderEditingInfos != null  && param.OrderEditingInfos.ContainsKey(orderId) && param.OrderEditingInfos[orderId];
 
             CancellationStatus orderCancellationStatusInfo = null;
-            if (param.OrderCancellationStatusInfos != null && param.OrderCancellationStatusInfos.ContainsKey(Guid.Parse(rawOrder.Id)))
+            if (param.OrderCancellationStatusInfos != null && param.OrderCancellationStatusInfos.ContainsKey(orderId))
             {
-                orderCancellationStatusInfo = param.OrderCancellationStatusInfos[Guid.Parse(rawOrder.Id)];
+                orderCancellationStatusInfo = param.OrderCancellationStatusInfos[orderId];
             }
 
             orderInfo.IsOrderCancelable = orderCancellationStatusInfo?.CanCancel ?? false;
             orderInfo.IsOrderPendingCancellation = orderCancellationStatusInfo?.CancellationPending ?? false;
 
-            orderInfo.IsBeingEdited = param.CurrentlyEditedOrderId == Guid.Parse(rawOrder.Id);
-            orderInfo.HasOwnDraft = HasOwnDraft(param, rawOrder);
+            orderInfo.IsBeingEdited = param.CurrentlyEditedOrderId == orderId;
+            orderInfo.HasOwnDraft = HasOwnDraft(param, orderId);
 
             var orderDetailUrl = UrlFormatter.AppendQueryString(param.OrderDetailBaseUrl, new NameValueCollection
                 {
@@ -281,10 +282,10 @@ namespace Orckestra.Composer.Cart.Factory.Order
             return lightOrderVm;
         }
 
-        protected virtual bool HasOwnDraft(GetOrderHistoryViewModelParam param, OrderItem rawOrder)
+        protected virtual bool HasOwnDraft(GetOrderHistoryViewModelParam param, Guid orderId)
         {
-            var orderDraft = param.OrderCartDrafts?.FirstOrDefault(d => Guid.Parse(d.Name) == Guid.Parse(rawOrder.Id));
-            if(orderDraft != null)
+            var orderDraft = param.OrderCartDrafts?.FirstOrDefault(d => Guid.Parse(d.Name) == orderId);
+            if (orderDraft != null)
             {
                 orderDraft.PropertyBag.TryGetValue(Constants.OrderDraft.OwnershipPropertyBagKey, out object orderDraftOwnershipUserName);
                 if (Constants.OrderDraft.OwnershipByWebsite.Split(',').Contains(orderDraftOwnershipUserName))
