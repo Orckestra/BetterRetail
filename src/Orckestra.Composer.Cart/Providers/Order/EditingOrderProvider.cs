@@ -260,7 +260,7 @@ namespace Orckestra.Composer.Cart.Providers.Order
 
         public bool IsEditMode()
         {
-            return !String.IsNullOrEmpty(ComposerContext.EditingCartName);
+            return !string.IsNullOrEmpty(ComposerContext.EditingCartName);
         }
 
         public async Task CancelOrder(Overture.ServiceModel.Orders.Order order)
