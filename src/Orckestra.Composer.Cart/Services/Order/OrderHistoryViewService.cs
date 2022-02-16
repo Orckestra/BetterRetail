@@ -492,7 +492,7 @@ namespace Orckestra.Composer.Cart.Services.Order
             return shipmentsNotes;
         }
 
-        public async Task<EditingOrderViewModel> CreateEditingOrderViewModel(string orderNumber)
+        public virtual async Task<EditingOrderViewModel> CreateEditingOrderViewModel(string orderNumber)
         {
             if (string.IsNullOrWhiteSpace(orderNumber)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(orderNumber)));
 
@@ -519,7 +519,7 @@ namespace Orckestra.Composer.Cart.Services.Order
             return GetEditingOrderViewModel();
         }
 
-        public async Task CancelEditingOrderAsync(string orderNumber)
+        public virtual async Task CancelEditingOrderAsync(string orderNumber)
         {
             if (string.IsNullOrWhiteSpace(orderNumber)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(orderNumber)));
 
@@ -551,7 +551,7 @@ namespace Orckestra.Composer.Cart.Services.Order
             };
         }
 
-        public async Task<CompleteCheckoutViewModel> SaveEditedOrderAsync(string orderNumber, string baseUrl)
+        public virtual async Task<CompleteCheckoutViewModel> SaveEditedOrderAsync(string orderNumber, string baseUrl)
         {
             if (string.IsNullOrWhiteSpace(orderNumber)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(orderNumber)));
 

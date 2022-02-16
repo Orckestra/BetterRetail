@@ -90,13 +90,13 @@
                                     {
                                         <li >
                                             <a href="#" v-bind:class="{'disabled': Loading}" class="cta" v-on:click.prevent="cancelOrderConfirm($event, @order.OrderInfos.OrderNumber)">
-                                                @Html.Localize("General", "B_CancelOrder")
+                                                @Html.Localize("MyAccount", "B_CancelOrder")
                                             </a>
                                         </li>
                                   
                                     }
                                 </ul>
-                                @OrdersHelper.cancelOrderConfirmationModal()
+                                @OrdersHelper.CancelOrderConfirmationModal()
                             </div>
                         }
 

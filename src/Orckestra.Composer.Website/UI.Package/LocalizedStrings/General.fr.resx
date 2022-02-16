@@ -141,9 +141,6 @@
   <data name="B_Cancel" xml:space="preserve">
     <value>Annuler</value>
   </data>
-  <data name="B_CancelOrder" xml:space="preserve">
-    <value>Annuler cette commande</value>
-  </data>
   <data name="B_Close" xml:space="preserve">
     <value>Fermer</value>
   </data>

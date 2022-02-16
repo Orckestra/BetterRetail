@@ -28,7 +28,7 @@
                             <li v-if="order.OrderInfos.IsOrderEditable &amp;&amp; order.OrderInfos.IsOrderCancelable &amp;&amp; !order.OrderInfos.IsBeingEdited">
                                 <a v-on:click.prevent="cancelOrderConfirm($event, order.OrderInfos.OrderNumber)"
                                    class="cta" href="#">
-                                    <span>@Html.Localize("General", "B_CancelOrder")</span>
+                                    <span>@Html.Localize("MyAccount", "B_CancelOrder")</span>
                                 </a>
                             </li>
                         }
@@ -79,7 +79,7 @@
     </div>
 }
 
-@helper cancelOrderConfirmationModal()
+@helper CancelOrderConfirmationModal()
 {
     <div class="modal" id="cancelOrderModal" tabindex="-1" role="dialog">
         <div class="modal-dialog  modal-sm" role="document">

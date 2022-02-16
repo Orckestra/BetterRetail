@@ -505,4 +505,7 @@ Don't worry, you can still find great products to offer!</value>
   <data name="T_ReloadOrderStatus" xml:space="preserve">
     <value>Reload page to check status</value>
   </data>
+  <data name="B_CancelOrder" xml:space="preserve">
+    <value>Cancel Order</value>
+  </data>
 </root>
