@@ -86,17 +86,16 @@
                                         </li>
 
                                     }
-                                    @if (order.OrderInfos.IsOrderCancelable && !order.OrderInfos.IsBeingEdited)
+                                    @if (order.OrderInfos.IsOrderCancelable && !order.OrderInfos.IsBeingEdited && !order.OrderInfos.HasOwnDraft)
                                     {
-                                        <li >
+                                        <li>
                                             <a href="#" v-bind:class="{'disabled': Loading}" class="cta" v-on:click.prevent="cancelOrderConfirm($event, @order.OrderInfos.OrderNumber)">
                                                 @Html.Localize("MyAccount", "B_CancelOrder")
                                             </a>
                                         </li>
-                                  
+
                                     }
                                 </ul>
-                                @OrdersHelper.CancelOrderConfirmationModal()
                             </div>
                         }
 
@@ -104,7 +103,7 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-8">
+                        <div class="col-12 col-sm-8">
                             <p class="mb-1">
                                 @Html.Localized("MyAccount", "L_OrderNumber", order.OrderInfos.OrderNumber)
                             </p>
@@ -127,7 +126,7 @@
 
                             </p>
                         </div>
-                        <div class="col-4 text-right">
+                        <div class="col-12 col-sm-4 text-right">
                             @Html.Localize("MyAccount", "L_Total"):
                             <h5>@order.OrderInfos.PricePaid</h5>
                         </div>
@@ -136,6 +135,7 @@
             </div>
         </div>
     </div>
+    @OrdersHelper.CancelOrderConfirmationModal()
 }
 
 @helper OrderShipments(OrderDetailViewModel order)

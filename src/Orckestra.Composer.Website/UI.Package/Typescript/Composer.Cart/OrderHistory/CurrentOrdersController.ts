@@ -34,12 +34,12 @@ module Orckestra.Composer {
                     },
                     mounted() {
                         this.Modal.cancelOrderModal = new Composer.UIModal(window, cancelModalElementSelector, this.cancelOrder, this);
-                   
+
                         self.eventHub.subscribe(MyAccountEvents.EditOrderCanceled, () => this.getOrders(this.Page));
                         self.eventHub.subscribe(MyAccountEvents.OrderCanceled, () => this.reload());
                     },
                     methods: {
-                        getOrders(page: any) {                            
+                        getOrders(page: any) {
                             this.Loading = true;
                             self.orderService.getCurrentOrders({ page })
                                 .then(data => {
@@ -55,29 +55,25 @@ module Orckestra.Composer {
                             this.Loading = true;
                             self.eventHub.publish(MyAccountEvents.StartEditOrder, { data: orderNumber });
                             self.orderService.editOrder(orderNumber)
-                                .fin(() => {
-                                    this.Loading = false;
-                                });
+                                .fin(() => this.Loading = false);
                         },
                         cancelEditingOrder(orderNumber: string) {
                             if (this.Loading) return;
                             this.Loading = true;
                             self.orderService.cancelEditOrder(orderNumber)
-                                .fail(() => {
-                                    this.Loading = false;
-                                });
+                                .fin(() => this.Loading = false);
                         },
-                        reload(){
+                        reload() {
                             window.location.reload()
                         },
                         cancelOrderConfirm(event: JQueryEventObject, orderNumber: string) {
                             this.OrderNumber = orderNumber;
                             this.Modal.cancelOrderModal.openModal(event);
                         },
-                        cancelOrder(){
-                            if(this.Loading) return;
+                        cancelOrder() {
+                            if (this.Loading) return;
                             this.Loading = true;
-                            self.orderService.cancelOrder(this.OrderNumber).fail(() => this.Loading = false);
+                            self.orderService.cancelOrder(this.OrderNumber).fin(() => this.Loading = false);
                         }
                     }
                 })

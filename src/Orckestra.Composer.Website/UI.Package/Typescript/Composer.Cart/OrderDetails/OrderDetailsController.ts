@@ -36,21 +36,17 @@ module Orckestra.Composer {
                 },
                 methods: {
                     editOrder(orderNumber: string) {
-                        if(this.Loading) return;
+                        if (this.Loading) return;
                         this.Loading = true;
                         self.eventHub.publish(MyAccountEvents.StartEditOrder, { data: orderNumber });
                         self.orderService.editOrder(orderNumber)
-                            .fin(() => {
-                                this.Loading = false;
-                            });
+                            .fin(() => this.Loading = false);
                     },
                     cancelEditingOrder(orderNumber: string) {
                         if (this.Loading) return;
                         this.Loading = true;
                         self.orderService.cancelEditOrder(orderNumber)
-                            .fail(() => {
-                                this.Loading = false;
-                            });
+                            .fin(() => this.Loading = false);
                     },
                     reload(){
                         window.location.reload()
@@ -59,10 +55,11 @@ module Orckestra.Composer {
                         this.OrderNumber = orderNumber;
                         this.Modal.cancelOrderModal.openModal(event);
                     },
-                    cancelOrder(){
-                        if(this.Loading) return;
+                    cancelOrder() {
+                        if (this.Loading) return;
                         this.Loading = true;
-                        self.orderService.cancelOrder(this.OrderNumber).fail(() => this.Loading = false);
+                        self.orderService.cancelOrder(this.OrderNumber)
+                            .fin(() => this.Loading = false);
                     }
                 }
             });

@@ -12,25 +12,27 @@
                     <ul class="nav-pills full mt-2 m-sm-0 p-0 float-sm-right">
                         @if (!IsPastOrders)
                         {
-                            <li v-if="order.OrderInfos.IsOrderEditable">
-                                <a v-on:click.prevent="editOrder(order.OrderInfos.OrderNumber)" 
+                        <template v-if="order.OrderInfos.IsOrderEditable">
+                            <li>
+                                <a v-on:click.prevent="editOrder(order.OrderInfos.OrderNumber)"
                                    v-bind:class="{'disabled': Loading}" class="cta" href="#">
                                     <span v-if="order.OrderInfos.IsBeingEdited || order.OrderInfos.HasOwnDraft">@Html.Localize("MyAccount", "B_ContinueEditing")</span>
                                     <span v-else="else">@Html.Localize("MyAccount", "B_EditOrder")</span>
                                 </a>
                             </li>
-                            <li v-if="order.OrderInfos.IsOrderEditable &amp;&amp; (order.OrderInfos.IsBeingEdited || order.OrderInfos.HasOwnDraft)">
+                            <li v-if="order.OrderInfos.IsBeingEdited || order.OrderInfos.HasOwnDraft">
                                 <a v-on:click.prevent="cancelEditingOrder(order.OrderInfos.OrderNumber)"
                                    class="cta" href="#" v-bind:class="{'disabled': Loading}">
                                     @Html.Localize("MyAccount", "B_CancelEditing")
                                 </a>
                             </li>
-                            <li v-if="order.OrderInfos.IsOrderEditable &amp;&amp; order.OrderInfos.IsOrderCancelable &amp;&amp; !order.OrderInfos.IsBeingEdited">
+                            <li v-if="order.OrderInfos.IsOrderCancelable &amp;&amp; !order.OrderInfos.IsBeingEdited &amp;&amp; !order.OrderInfos.HasOwnDraft">
                                 <a v-on:click.prevent="cancelOrderConfirm($event, order.OrderInfos.OrderNumber)"
                                    class="cta" href="#">
                                     <span>@Html.Localize("MyAccount", "B_CancelOrder")</span>
                                 </a>
                             </li>
+                        </template>
                         }
                         <li>
                             <a v-bind:href="order.Url" class="cta">
@@ -82,7 +84,7 @@
 @helper CancelOrderConfirmationModal()
 {
     <div class="modal" id="cancelOrderModal" tabindex="-1" role="dialog">
-        <div class="modal-dialog  modal-sm" role="document">
+        <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title">@Html.Localize("General", "T_Confirmation")</h4>
