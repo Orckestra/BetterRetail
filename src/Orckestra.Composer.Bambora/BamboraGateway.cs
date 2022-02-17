@@ -1,6 +1,7 @@
 ﻿using Bambora.NA.SDK;
 using Bambora.NA.SDK.Exceptions;
 using System;
+using System.Configuration;
 
 namespace Orckestra.Composer.BamboraPayment
 {
@@ -10,12 +11,11 @@ namespace Orckestra.Composer.BamboraPayment
 
         public BamboraGateway()
         {
- 
-            _gateway = new AppleGateway()
+             _gateway = new AppleGateway()
             {
-                MerchantId = 300205295,
-                AppleMerchantId = "merchant.wfecm.int.platform.orckestra.cloud",
-                PaymentsApiKey = "B8A8AA0A947B424794D3CD67E7D52582",
+                MerchantId = int.Parse(ConfigurationManager.AppSettings["BamboraMerchantId"]),
+                AppleMerchantId = ConfigurationManager.AppSettings["ApplePayMerchantId"],
+                PaymentsApiPasscode = ConfigurationManager.AppSettings["BamboraPaymentsApiPasscode"],
                 ApiVersion = "1"
             };
         }
@@ -29,7 +29,7 @@ namespace Orckestra.Composer.BamboraPayment
                 ApplePay = new Requests.ApplePay()
                 {
                     MerchantId = _gateway.AppleMerchantId,
-                    PaymenToken = paymenToken,
+                    PaymenToken = Base64Encode(paymenToken),
                     Complete = complete
                 }
             };
@@ -54,6 +54,12 @@ namespace Orckestra.Composer.BamboraPayment
                     Message = ex.Message,
                 };
             }
+        }
+
+        public string Base64Encode(string plainText)
+        {
+            var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(plainText);
+            return System.Convert.ToBase64String(plainTextBytes);
         }
     }
 }

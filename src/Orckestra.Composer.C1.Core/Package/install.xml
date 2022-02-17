@@ -68,6 +68,8 @@
         <File sourceFilename="~\Bin\Microsoft.ApplicationInsights.dll" targetFilename="~\Bin\Microsoft.ApplicationInsights.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Microsoft.AspNet.TelemetryCorrelation.dll" targetFilename="~\Bin\Microsoft.AspNet.TelemetryCorrelation.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\System.Diagnostics.DiagnosticSource.dll" targetFilename="~\Bin\System.Diagnostics.DiagnosticSource.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Orckestra.Composer.ApplePay.dll" targetFilename="~\Bin\Orckestra.Composer.ApplePay.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Orckestra.Composer.BamboraPayment.dll" targetFilename="~\Bin\Orckestra.Composer.BamboraPayment.dll" allowOverwrite="true" />
       </Files>
     </mi:Add>
 

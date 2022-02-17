@@ -18,7 +18,7 @@ namespace Orckestra.Composer.BamboraPayment
         /// <summary>
         /// The API Key (Passcode) for accessing the payments API.
         /// </summary>
-        public string PaymentsApiKey
+        public string PaymentsApiPasscode
         {
             set
             {
@@ -46,7 +46,7 @@ namespace Orckestra.Composer.BamboraPayment
                 {
                     _configuration = new Bambora.NA.SDK.Configuration();
                     _configuration.MerchantId = this.MerchantId;
-                    _configuration.PaymentsApiPasscode = PaymentsApiKey;
+                    _configuration.PaymentsApiPasscode = PaymentsApiPasscode;
                     _configuration.Version = ApiVersion;
                 }
                 return _configuration;

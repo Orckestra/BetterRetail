@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using Orckestra.Composer.Request;
 using Composite.Core;
+using System.Configuration;
 
 namespace Orckestra.Composer.ApplePay.Api
 {
@@ -31,17 +32,16 @@ namespace Orckestra.Composer.ApplePay.Api
             string.IsNullOrWhiteSpace(param?.ValidationUrl) ||
             !Uri.TryCreate(param.ValidationUrl, UriKind.Absolute, out Uri requestUri))
             {
-                Log.LogError("Appl Pay Controller", "BadRequest");
-                return null;
-                //return BadRequest();
+                return BadRequest();
             }
+
             try
             {
                 var request = new ApplePaySessionRequest();
                 request.DisplayName = "Pay for Better Retail Order";
                 request.Initiative = "web";
                 request.InitiativeContext = "wfecm.int.platform.orckestra.cloud";
-                request.MerchantIdentifier = "merchant.wfecm.int.platform.orckestra.cloud";
+                request.MerchantIdentifier = ConfigurationManager.AppSettings["ApplePayMerchantId"];
                 // request.InitiativeContext = Request.Headers.Host;
                 //request.MerchantIdentifier = _certificate.GetMerchantIdentifier();
 

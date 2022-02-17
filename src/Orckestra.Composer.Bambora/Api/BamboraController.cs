@@ -1,12 +1,15 @@
-﻿using System.Web.Http;
+﻿using System;
+using System.Web.Http;
 
 namespace Orckestra.Composer.BamboraPayment.Api
 {
     public class BamboraController : ApiController
     {
- 
+
+        protected BamboraGateway _client;
         public BamboraController()
         {
+            _client = new BamboraGateway();
        }
 
         /// <summary>
@@ -15,9 +18,13 @@ namespace Orckestra.Composer.BamboraPayment.Api
         /// <returns>A Json representation of cart state</returns>
         [HttpPost]
         [ActionName("authorize")]
-        public IHttpActionResult Authorize()
+        public IHttpActionResult Authorize([FromBody] string token)
         {
-            return Ok(true);
+            if (string.IsNullOrEmpty(token)) throw new ArgumentNullException(nameof(token));
+
+            var response = _client.PreAuth(1, "1000", token);
+
+            return Ok(response);
         }
     }
 }
