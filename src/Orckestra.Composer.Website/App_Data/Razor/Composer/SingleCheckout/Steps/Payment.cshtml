@@ -191,12 +191,12 @@
 {
     <div v-if="ApplePaySupportedByDevice" v-cloak="true">
         <button v-if="CanMakeApplePayPayments"
-                v-bind:disabled="loading"
+                v-bind:disabled="IsLoading"
                 v-on:click.prevent="createApplePaySession"
                 class="btn btn-default">
             <img alt="Pay" src="~/UI.Package/Images/256px-Apple_Pay_logo.png" width="100" />
         </button>
     </div>
-    <button class="btn btn-outline-secondary d-none" v-on:click.prevent="authBambora">Test Auth Bambore</button>
+    <button class="btn btn-outline-secondary" v-on:click.prevent="authBambora">Test Auth Bambore</button>
     <div class="text-warning">{{response}}</div>
 }
