@@ -26,6 +26,7 @@ namespace Orckestra.Composer.BamboraPayment
             {
                 Amount = amount,
                 OrderNumber = orderNumber,
+                PaymentMethod = "apple_pay",
                 ApplePay = new Requests.ApplePay()
                 {
                     MerchantId = _gateway.AppleMerchantId,

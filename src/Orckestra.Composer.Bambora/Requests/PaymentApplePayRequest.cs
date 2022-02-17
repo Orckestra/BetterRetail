@@ -23,7 +23,7 @@ namespace Orckestra.Composer.BamboraPayment.Requests
         [JsonProperty(PropertyName = "amount")]
         public decimal Amount { get; set; }
 
-        [JsonProperty(PropertyName = "apple-pay")]
+        [JsonProperty(PropertyName = "apple_pay")]
         public ApplePay ApplePay { get; set; }
 
     }
