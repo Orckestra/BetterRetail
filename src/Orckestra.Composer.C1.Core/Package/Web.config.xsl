@@ -47,6 +47,8 @@
   <add key="AutoImageResizing.ImageFormats" value="image/webp, image/jpeg"/>
   <xsl:comment> OWIN </xsl:comment>
   <add key="owin:AutomaticAppStartup" value="false" />
+  <xsl:comment> Application Names for edit order Ownership</xsl:comment>
+  <add key="ApplicationNames" value="oco,orchestrator,website,wfecm,wfecd" />
 </appSettings>
 </xsl:variable>
 

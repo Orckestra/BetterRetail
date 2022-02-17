@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Globalization;
-using System.Linq;
-using Orckestra.Composer.Cart.Extensions;
+﻿using Orckestra.Composer.Cart.Extensions;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Parameters.Order;
 using Orckestra.Composer.Cart.ViewModels;
@@ -14,6 +9,11 @@ using Orckestra.Composer.Providers.Localization;
 using Orckestra.Composer.Utils;
 using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel.Orders;
+using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Globalization;
+using System.Linq;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Cart.Factory.Order
@@ -145,21 +145,12 @@ namespace Orckestra.Composer.Cart.Factory.Order
 
         protected virtual bool HasOwnDraft(CreateOrderDetailViewModelParam param)
         {
-            //TODO - For now there is no way to identify if website user owns draft or not
-            // For now we use possible owner names we investigated, which can be used in AuthToken
-            // need to wait platform solution, to have a way to identify if user own the draft or not
-            if (Guid.TryParse(param.Order.Id, out Guid orderGuid)) {
-                var orderDraft = param.OrderCartDrafts?.FirstOrDefault(d => d.Name == orderGuid.ToString("N"));
-                if (orderDraft != null)
-                {
-                    orderDraft.PropertyBag.TryGetValue(Constants.OrderDraft.OwnershipPropertyBagKey, out object orderDraftOwnershipUserName);
-                    if (Constants.OrderDraft.OwnershipByWebsite.Split(',').Contains(orderDraftOwnershipUserName?.ToString().ToLower()))
-                    {
-                        return true;
-                    }
-                }
-            }
-            return false;
+            if (!Guid.TryParse(param.Order.Id, out Guid orderGuid)) return false;
+
+            var orderDraft = param.OrderCartDrafts?.FirstOrDefault(d => d.Name == orderGuid.ToString("N"));
+            if (orderDraft == null) return false;
+
+            return orderDraft.IsCurrentApplicationOwner();
         }
 
         protected virtual string GetOrderStatusDisplayName(CreateOrderDetailViewModelParam param)

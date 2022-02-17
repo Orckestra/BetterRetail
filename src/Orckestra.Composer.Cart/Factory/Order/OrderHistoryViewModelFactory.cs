@@ -12,6 +12,7 @@ using System.Globalization;
 using System.Linq;
 using Orckestra.Composer.Cart.Providers.Order;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
+using Orckestra.Composer.Cart.Extensions;
 
 namespace Orckestra.Composer.Cart.Factory.Order
 {
@@ -285,16 +286,8 @@ namespace Orckestra.Composer.Cart.Factory.Order
         protected virtual bool HasOwnDraft(GetOrderHistoryViewModelParam param, Guid orderId)
         {
             var orderDraft = param.OrderCartDrafts?.FirstOrDefault(d => Guid.Parse(d.Name) == orderId);
-            if (orderDraft != null)
-            {
-                orderDraft.PropertyBag.TryGetValue(Constants.OrderDraft.OwnershipPropertyBagKey, out object orderDraftOwnershipUserName);
-                if (Constants.OrderDraft.OwnershipByWebsite.Split(',').Contains(orderDraftOwnershipUserName))
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            if (orderDraft == null) return false;
+            return orderDraft.IsCurrentApplicationOwner();
         }
 
 
