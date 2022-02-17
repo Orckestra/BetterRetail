@@ -102,12 +102,18 @@ namespace Orckestra.Composer.Cart.Providers.Order
         }
          public virtual bool IsBeingEdited(Overture.ServiceModel.Orders.Order order)
         {
+            if (order == null) return false;
             var guidOrderId = Guid.Parse(order.Id);
             return IsEditMode() & ComposerContext.EditingCartName == guidOrderId.ToString("N");
         }
 
         public virtual async Task<ProcessedCart> StartEditOrderModeAsync(Overture.ServiceModel.Orders.Order order)
         {
+            if (order == null)
+            {
+                throw new ArgumentNullException(nameof(order));
+            }
+
             Guid orderId = Guid.Parse(order.Id);
             ProcessedCart draftCart = null;
 
@@ -161,6 +167,11 @@ namespace Orckestra.Composer.Cart.Providers.Order
 
         public virtual async Task CancelEditOrderAsync(Overture.ServiceModel.Orders.Order order)
         {
+            if (order == null)
+            {
+                throw new ArgumentNullException(nameof(order));
+            }
+
             try
             {
                 await DeleteCartDraft(order).ConfigureAwait(false);
@@ -206,6 +217,11 @@ namespace Orckestra.Composer.Cart.Providers.Order
 
         public virtual async Task<Overture.ServiceModel.Orders.Order> SaveEditedOrderAsync(Overture.ServiceModel.Orders.Order order)
         {
+            if (order == null)
+            {
+                throw new ArgumentNullException(nameof(order));
+            }
+
             var isEditable = await CanEdit(order).ConfigureAwait(false);
             
             if(!isEditable)
@@ -265,6 +281,11 @@ namespace Orckestra.Composer.Cart.Providers.Order
 
         public async Task CancelOrder(Overture.ServiceModel.Orders.Order order)
         {
+            if (order == null)
+            {
+                throw new ArgumentNullException(nameof(order));
+            }
+
             var isOrderCancelable = (await GetCancellationStatus(order).ConfigureAwait(false)).CanCancel;
 
             if (!isOrderCancelable) throw new InvalidOperationException($"Order {order.Id} can't be cancelled");

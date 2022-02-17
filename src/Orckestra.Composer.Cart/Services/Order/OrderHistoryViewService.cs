@@ -185,11 +185,6 @@ namespace Orckestra.Composer.Cart.Services.Order
             });
         }
 
-        protected virtual Task<OrderSettings> GetOrderSettings(string scope)
-        {
-            return OrderRepository.GetOrderSettings(scope);
-        }
-
         protected virtual async Task<List<Overture.ServiceModel.Orders.Order>> GetOrders(OrderQueryResult orderQueryResult,
             GetCustomerOrdersParam param)
         {
@@ -504,6 +499,11 @@ namespace Orckestra.Composer.Cart.Services.Order
             };
 
             var order = await OrderRepository.GetOrderAsync(getOrderParam).ConfigureAwait(false);
+
+            if (order == null)
+            {
+                throw new InvalidOperationException($"Cannot edit order #${orderNumber} as it doesn't exist.");
+            }
 
             var isOrderEditable = await EditingOrderProvider.CanEdit(order).ConfigureAwait(false);
             if (!isOrderEditable) throw new InvalidOperationException($"Cannot edit this order #${orderNumber}");
