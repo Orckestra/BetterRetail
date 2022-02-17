@@ -50,14 +50,15 @@ module Orckestra.Composer {
                             this.response = 'Supported Apple JS api version is not found on this client.';
                             return;
                         };
-            
+                        var { storename, currency, country} = document.getElementById('storeContext').dataset;
                         this.Mode.Loading = true;
+
                         var request = {
-                            countryCode: 'CA',
-                            currencyCode: 'USD',
+                            countryCode: country,
+                            currencyCode: currency,
                             supportedNetworks: ['visa', 'masterCard', 'amex', 'discover'],
                             merchantCapabilities: ['supports3DS'],
-                            total: { label: 'Better Retail Order', amount: '1.00' },
+                            total: { label: storename, amount: '1.00' },
                         }
             
                         this.CurrentApplePaySession = new ApplePaySession(this.AppleApiVersion, request);
@@ -75,9 +76,6 @@ module Orckestra.Composer {
                                 this.Mode.Loading = false;
                                 this.CurrentApplePaySession.completeMerchantValidation(response);
                             });
-
-                        //https://developer.apple.com/documentation/apple_pay_on_the_web/apple_pay_js_api/requesting_an_apple_pay_payment_session
-
                     },
                     paymentauthorized(event) {
                         // Send payment for processing...
@@ -87,7 +85,7 @@ module Orckestra.Composer {
                             .then(response => {
                                 this.response = response.approved + ': ' + response.message;
                                 this.Mode.Loading = false;
-                                if (response.approved == 'Approved') {
+                                if (response.approved === 'Approved') {
                                     this.CurrentApplePaySession.completePayment(ApplePaySession.STATUS_SUCCESS);
                                 } else {
                                     this.CurrentApplePaySession.abort();

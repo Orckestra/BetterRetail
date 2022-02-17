@@ -1,6 +1,7 @@
 ﻿@inherits RazorFunction
 
 @functions {
+    public IComposerContext ComposerContext { get; set; }
     public override string FunctionDescription
     {
         get { return "Payment"; }
@@ -190,6 +191,9 @@
 @helper ApplePay()
 {
     <div v-if="ApplePaySupportedByDevice" v-cloak="true">
+        <input id="storeContext" data-storename="@HomePageNode.Title"
+               data-currency="@ComposerContext.ScopeCurrencyIso"
+               data-country="@ComposerContext.CountryCode" type="hidden" />
         <button v-if="CanMakeApplePayPayments"
                 v-bind:disabled="IsLoading"
                 v-on:click.prevent="createApplePaySession"
