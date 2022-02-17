@@ -42,6 +42,7 @@
 ///<reference path='./Composer.Cart/OrderHistory/PastOrdersController.ts' />
 ///<reference path='./Composer.Cart/OrderDetails/OrderDetailsController.ts' />
 ///<reference path='./Composer.Cart/FindMyOrder/FindMyOrderController.ts' />
+///<reference path='./Composer.Cart/EditOrder/EditOrderBannerController.ts' />
 ///<reference path='./ErrorHandling/ErrorController.ts' />
 
 ///<reference path='./Composer.Store/StoreLocator/StoreLocatorController.ts' />
@@ -99,6 +100,7 @@
                 { name: 'Cart.Coupons', controller: Orckestra.Composer.CouponController },
                 { name: 'Cart.AddToCartNotification', controller: Orckestra.Composer.AddToCartNotificationController },
                 { name: 'Cart.ChangeRecurringFrequency', controller: Orckestra.Composer.CartChangeRecurringFrequencyController },
+                { name: 'Cart.EditOrderBanner', controller: Orckestra.Composer.EditOrderBannerController },
 
                 { name: 'Product.SortBySearch', controller: Orckestra.Composer.SortBySearchController },
                 { name: 'Product.FacetSearch', controller: Orckestra.Composer.FacetSearchController },

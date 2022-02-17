@@ -7,6 +7,11 @@ namespace Orckestra.Composer.Cart.ViewModels
     public sealed class OrderSummaryViewModel : BaseViewModel
     {
         /// <summary>
+        /// The number of order for order draft
+        /// </summary>
+        public string OrderNumberForOrderDraft { get; set; }
+
+        /// <summary>
         /// The sum price of all lineitems
         /// </summary>
         [Formatting("General", "PriceFormat")]

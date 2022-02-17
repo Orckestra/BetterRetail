@@ -24,6 +24,7 @@ using Orckestra.ExperienceManagement.Configuration.Settings;
 using Orckestra.Composer.CompositeC1.Services.PreviewMode;
 using Orckestra.Composer.CompositeC1.Providers.Breadcrumb;
 using Orckestra.Composer.CompositeC1.Providers.LanguageSwitch;
+using Orckestra.Composer.Cart.Providers.Order;
 
 namespace Orckestra.Composer.CompositeC1
 {
@@ -85,6 +86,8 @@ namespace Orckestra.Composer.CompositeC1
             host.Register<StoreContext, IStoreContext>(ComponentLifestyle.PerRequest);
             host.Register<LazyFunctionCallDataProvider, ILazyFunctionCallDataProvider>();
             host.Register<BaseSearchCriteriaProvider, IBaseSearchCriteriaProvider>();
+
+            host.Register<EditingOrderProvider, IEditingOrderProvider>();
             RegisterBreadcrumProviders(host);
             RegisterLanguageSwitchProviders(host);
 

@@ -129,7 +129,7 @@ namespace Orckestra.Composer.Cart.Services
             return await MapOrderToCompleteCheckoutViewModel(order, param).ConfigureAwait(false); 
         }
 
-        protected virtual async Task<CompleteCheckoutViewModel> MapOrderToCompleteCheckoutViewModel(Overture.ServiceModel.Orders.Order order,
+        public virtual async Task<CompleteCheckoutViewModel> MapOrderToCompleteCheckoutViewModel(Overture.ServiceModel.Orders.Order order,
             CompleteCheckoutParam param)
         {
             if (order == null) { return null; }

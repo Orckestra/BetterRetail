@@ -57,6 +57,7 @@
     <Compile Include="Factory\CartViewModelFactory.cs" />
     <Compile Include="Helper\LineItemsHelper.cs" />
     <Compile Include="Parameters\AddLineItemsParam.cs" />
+    <Compile Include="Parameters\BaseCartParam.cs" />
     <Compile Include="Parameters\CreateLightListOfLineItemDetailViewModelParam.cs" />
     <Compile Include="Factory\IRecurringOrderCartViewModelFactory.cs" />
     <Compile Include="Factory\RecurringOrderCartViewModelFactory.cs" />
@@ -98,7 +99,16 @@
     <Compile Include="Parameters\GetRecurringOrderCartsViewModelParam.cs" />
     <Compile Include="Parameters\GetRecurringOrderCartViewModelParam.cs" />
     <Compile Include="Parameters\GetShippingMethodsScopeParam.cs" />
+    <Compile Include="Parameters\Order\AddShipmentFulfillmentMessagesParam.cs" />
+    <Compile Include="Parameters\Order\DeleteCartOrderDraftParam.cs" />
+    <Compile Include="Parameters\Order\CancelOrderParam.cs" />
+    <Compile Include="Parameters\Order\ChangeOrderDraftOwnershipParam.cs" />
+    <Compile Include="Parameters\Order\ChangeShipmentStatusParam.cs" />
+    <Compile Include="Parameters\Order\EditOrderParam.cs" />
     <Compile Include="Parameters\Order\GetOrderChangesParam.cs" />
+    <Compile Include="Parameters\Order\CreateCartOrderDraftParam.cs" />
+    <Compile Include="Parameters\Order\SubmitCartOrderDraftParam.cs" />
+    <Compile Include="Parameters\Order\GetOrderFulfillmentStateParam.cs" />
     <Compile Include="Parameters\Order\UpdateOrderParam.cs" />
     <Compile Include="Parameters\Order\UpdateOrderCustomerParam.cs" />
     <Compile Include="Parameters\RemoveRecurringCartLineItemParam.cs" />
@@ -113,6 +123,8 @@
     <Compile Include="Parameters\CreateRecurringOrderCartViewModelParam.cs" />
     <Compile Include="Parameters\WishList\GetShareWishListUrlParam.cs" />
     <Compile Include="Parameters\WishList\GetWishListUrlParam.cs" />
+    <Compile Include="Providers\Order\IEditingOrderProvider.cs" />
+    <Compile Include="Providers\Order\EditingOrderProvider.cs" />
     <Compile Include="Providers\WishList\IWishListUrlProvider.cs" />
     <Compile Include="Requests\GetGuestOrderRequest.cs" />
     <Compile Include="Requests\GetOrderRequest.cs" />
@@ -245,6 +257,8 @@
     <Compile Include="ViewModels\CartViewModel.cs" />
     <Compile Include="ViewModels\CheckoutNavigationViewModel.cs" />
     <Compile Include="ViewModels\GroupedLineItemDetailViewModel.cs" />
+    <Compile Include="ViewModels\Order\EditingOrderViewModel.cs" />
+    <Compile Include="Providers\Order\CancellationStatus.cs" />
     <Compile Include="ViewModels\PickedItemViewModel.cs" />
     <Compile Include="ViewModels\PickUpAddressViewModel.cs" />
     <Compile Include="ViewModels\SingleCheckoutPaymentViewModel.cs" />
@@ -357,6 +371,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Net" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
