@@ -11,10 +11,5 @@
 	<mi:PackageFragmentInstallers>
 		<mi:Add installerType="Orckestra.Composer.CompositeC1.Installers.PreConfigurationInstaller, Orckestra.Composer.C1.PreConfiguration" uninstallerType="Orckestra.Composer.CompositeC1.Installers.PreConfigurationUninstaller, Orckestra.Composer.C1.PreConfiguration" >
 		</mi:Add>
-		<mi:Add installerType="Composite.Core.PackageSystem.PackageFragmentInstallers.FilePackageFragmentInstaller, Composite" uninstallerType="Composite.Core.PackageSystem.PackageFragmentInstallers.FilePackageFragmentUninstaller, Composite">
-			<Files>
-				<File sourceFilename="~\certificate.pfx" targetFilename="~\certificate.pfx" allowOverwrite="false" />
-			</Files>
-		</mi:Add>
 	</mi:PackageFragmentInstallers>
 </mi:PackageInstaller>
