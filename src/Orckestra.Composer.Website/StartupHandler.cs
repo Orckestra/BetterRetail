@@ -4,6 +4,7 @@ using Composite.Core.Application;
 using Composite.Core.Xml;
 using Composite.Data;
 using Composite.Data.DynamicTypes;
+using Composite.Data.Types;
 using Composite.Functions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
@@ -11,9 +12,13 @@ using Orckestra.Composer.CompositeC1.DataTypes;
 using Orckestra.Composer.CompositeC1.Pages;
 using Orckestra.Composer.HttpModules;
 using Orckestra.Composer.Logging;
+using Orckestra.Composer.Providers;
+using Orckestra.Composer.Repositories;
 using Orckestra.Composer.Search;
 using Orckestra.Composer.Website.Controllers;
 using Orckestra.ExperienceManagement.Configuration.DataTypes;
+using System;
+using System.Linq;
 using System.Web.Hosting;
 using System.Web.Http;
 using System.Web.Mvc;
@@ -61,7 +66,47 @@ namespace Orckestra.Composer.Website
             RegisterFunctions(functions);
             RegisterFunctionRoutes(functions);
 
+            DataEvents<IPage>.OnAfterAdd += UpdateAfterPageChanged;
+
             log.Info("Application Started");
+        }
+
+        private static void UpdateAfterPageChanged(object sender, DataEventArgs dataEventArgs)
+        {
+            var data = dataEventArgs.Data as IPage;
+            ClearCategoriesCache(data);
+        }
+
+        private static void ClearCategoriesCache(IPage data)
+        {
+            if (data.PageTypeId == CategoryPages.CategoryPageTypeId)
+            {
+                Guid homepageId = GetHomePageId(data);
+
+                using (var con = new DataConnection())
+                {
+                    var meta = con.Get<ISiteConfigurationMeta>().FirstOrDefault(item => item.PageId == homepageId);
+                    if (meta != null)
+                    {
+                        var categoryRepository = Composite.Core.ServiceLocator.GetService<ICategoryRepository>();
+                        categoryRepository.ClearCategoriesCache(meta.Scope);
+                    }
+                }
+            }
+        }
+
+        private static Guid GetHomePageId(IPage data)
+        {
+            Guid homepageId = Guid.Empty;
+            Guid pageId = data.Id;
+
+            while (pageId != Guid.Empty)
+            {
+                homepageId = pageId;
+                pageId = PageManager.GetParentId(pageId);
+            }
+
+            return homepageId;
         }
 
         private static void RegisterFunctions(FunctionCollection functions)

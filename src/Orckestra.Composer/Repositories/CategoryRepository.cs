@@ -55,6 +55,16 @@ namespace Orckestra.Composer.Repositories
             return result?.Categories;
         }
 
+        public void ClearCategoriesCache(string scope)
+        {
+            var cacheKey = new CacheKey(CacheConfigurationCategoryNames.Category)
+            {
+                Scope = scope
+            };
+
+            CacheProvider.Remove(cacheKey);
+        }
+
         /// <summary>
         /// Gets the category tree.
         /// </summary>
