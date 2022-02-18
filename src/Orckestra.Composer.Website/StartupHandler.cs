@@ -12,7 +12,6 @@ using Orckestra.Composer.CompositeC1.DataTypes;
 using Orckestra.Composer.CompositeC1.Pages;
 using Orckestra.Composer.HttpModules;
 using Orckestra.Composer.Logging;
-using Orckestra.Composer.Providers;
 using Orckestra.Composer.Repositories;
 using Orckestra.Composer.Search;
 using Orckestra.Composer.Website.Controllers;
