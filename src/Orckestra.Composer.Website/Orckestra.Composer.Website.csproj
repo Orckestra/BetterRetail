@@ -70,10 +70,6 @@
       <HintPath>..\..\packages\C1CMS.Assemblies.6.11.7982.26191\lib\net471\Composite.Workflows.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Microsoft.AI.Agent.Intercept, Version=2.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.ApplicationInsights.Agent.Intercept.2.4.0\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
     </Reference>
@@ -253,7 +249,6 @@
     <Content Include="App_Data\PageTemplateFeatures\Social links.html" />
     <Content Include="browserconfig.xml" />
     <Content Include="Deployment\InstallCulture.aspx" />
-    <Content Include="Deployment\InstallPackages.aspx" />
     <Content Include="Composite\content\forms\Administrative\EditPage.xml" />
     <Content Include="Deployment\SyncCategories.aspx" />
     <Content Include="App_Data\PageTemplates\MasterLayout.cshtml" />
@@ -352,6 +347,7 @@
     <Content Include="App_Data\Razor\Composer\BrowsingCategories\SelectedFacets.cshtml" />
     <Content Include="App_Data\Razor\Composer\BrowsingCategories\Results.cshtml" />
     <Content Include="App_Data\Razor\Composer\Search\Facets.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Header\EditOrderBanner.cshtml" />
     <Content Include="App_Data\Razor\Composer\Search\BaseSearchResults.cshtml" />
     <Content Include="App_Data\Razor\Composer\Search\BaseSelectedFacets.cshtml" />
     <None Include="Properties\PublishProfiles\Website - CD.pubxml" />

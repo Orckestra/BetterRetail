@@ -1,17 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Globalization;
-using System.Linq;
-using Orckestra.Composer.Cart.Extensions;
-using Orckestra.Composer.Cart.Parameters.Order;
+﻿using Orckestra.Composer.Cart.Parameters.Order;
 using Orckestra.Composer.Cart.ViewModels.Order;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Localization;
 using Orckestra.Composer.Utils;
 using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel.Orders;
+using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Globalization;
+using System.Linq;
+using Orckestra.Composer.Cart.Providers.Order;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
+using Orckestra.Composer.Cart.Extensions;
 
 namespace Orckestra.Composer.Cart.Factory.Order
 {
@@ -232,10 +233,23 @@ namespace Orckestra.Composer.Cart.Factory.Order
         {
             var lightOrderVm = new LightOrderDetailViewModel();
             var orderInfo = ViewModelMapper.MapTo<OrderDetailInfoViewModel>(rawOrder, param.CultureInfo);
+            var orderId = Guid.Parse(rawOrder.Id);
 
             orderInfo.OrderStatus = GetOrderStatusDisplayName(rawOrder, param);
             orderInfo.OrderStatusRaw = rawOrder.OrderStatus;
-            orderInfo.IsOrderEditable = IsOrderEditable(param, rawOrder);
+            orderInfo.IsOrderEditable = param.OrderEditingInfos != null  && param.OrderEditingInfos.ContainsKey(orderId) && param.OrderEditingInfos[orderId];
+
+            CancellationStatus orderCancellationStatusInfo = null;
+            if (param.OrderCancellationStatusInfos != null && param.OrderCancellationStatusInfos.ContainsKey(orderId))
+            {
+                orderCancellationStatusInfo = param.OrderCancellationStatusInfos[orderId];
+            }
+
+            orderInfo.IsOrderCancelable = orderCancellationStatusInfo?.CanCancel ?? false;
+            orderInfo.IsOrderPendingCancellation = orderCancellationStatusInfo?.CancellationPending ?? false;
+
+            orderInfo.IsBeingEdited = param.CurrentlyEditedOrderId == orderId;
+            orderInfo.HasOwnDraft = HasOwnDraft(param, orderId);
 
             var orderDetailUrl = UrlFormatter.AppendQueryString(param.OrderDetailBaseUrl, new NameValueCollection
                 {
@@ -269,31 +283,13 @@ namespace Orckestra.Composer.Cart.Factory.Order
             return lightOrderVm;
         }
 
-        protected virtual bool IsOrderEditable(GetOrderHistoryViewModelParam param, OrderItem rawOrder)
+        protected virtual bool HasOwnDraft(GetOrderHistoryViewModelParam param, Guid orderId)
         {
-            var order = param.Orders.FirstOrDefault(item => Guid.Parse(item.Id) == Guid.Parse(rawOrder.Id));
-            if (order == null)
-            {
-                return false;
-            }
-
-            var shipmentStatuses = order.Cart.GetAllShipmentStatuses();
-            if (!shipmentStatuses.Any()
-                || param.OrderSettings == null
-                || string.IsNullOrWhiteSpace(param.OrderSettings.EditableShipmentStates))
-            {
-                return false;
-            }
-
-            var isOrderEditable = shipmentStatuses
-                .All(item => param
-                    ?.OrderSettings
-                    ?.EditableShipmentStates
-                    ?.Split('|')
-                    .Contains(item) ?? false);
-
-            return isOrderEditable;
+            var orderDraft = param.OrderCartDrafts?.FirstOrDefault(d => Guid.Parse(d.Name) == orderId);
+            if (orderDraft == null) return false;
+            return orderDraft.IsCurrentApplicationOwner();
         }
+
 
         protected virtual string GetOrderStatusDisplayName(OrderItem rawOrder, GetOrderHistoryViewModelParam param)
         {

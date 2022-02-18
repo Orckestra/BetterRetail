@@ -118,7 +118,7 @@
                                 placeholder="{{localize 'Forms' 'F_CityWaterMark'}}"
                                 value="{{City}}"
                                 required="true" {{#if_localized 'Forms' 'F_CityRequiredError'}}data-parsley-required-message="{{localize 'Forms' 'F_CityRequiredError'}}"{{/if_localized}}
-                                data-parsley-length="[3, 36]" {{#if_localized 'Forms' 'F_CityLengthError'}}data-parsley-length-message="{{localize 'Forms' 'F_CityLengthError'}}"{{/if_localized}}
+                                data-parsley-length="[3, 64]" {{#if_localized 'Forms' 'F_CityLengthError'}}data-parsley-length-message="{{localize 'Forms' 'F_CityLengthError'}}"{{/if_localized}}
                                 data-parsley-pattern="/^[a-zA-Z\u00E0-\u00FC\.\-\s\']+$/i" {{#if_localized 'Forms' 'F_CityPatternError'}}data-parsley-pattern-message="{{localize 'Forms' 'F_CityPatternError'}}"{{/if_localized}}
                                 />
                     </div>

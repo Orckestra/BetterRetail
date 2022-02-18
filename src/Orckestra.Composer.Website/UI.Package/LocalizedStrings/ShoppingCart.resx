@@ -198,6 +198,9 @@
   <data name="L_AdditionalFeesGenericMessage" xml:space="preserve">
     <value>Additional fees may apply in case of oversized packages.</value>
   </data>
+  <data name="L_EditCartBannerMessage" xml:space="preserve">
+    <value>You are currently editing Order “{0}”</value>
+  </data>
   <data name="L_EmptyShoppingCart" xml:space="preserve">
     <value>There is no product in your cart.</value>
   </data>

@@ -29,5 +29,10 @@ namespace Orckestra.Composer.Cart.Parameters
         /// false by default
         /// </summary>
         public bool IncludeChildScopes { get; set; }
+
+        /// <summary>
+        /// The optional cart type. Only the carts of this specific type will be returned.
+        /// </summary>
+        public string CartType { get; set; }
     }
 }

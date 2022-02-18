@@ -6,6 +6,10 @@
     right: -6px;
     font-size: 30px;
     text-shadow: none;
+    outline: 0;
+    &:focus {
+        outline: 0;
+    }
 
     &:hover {
         opacity: 1;
