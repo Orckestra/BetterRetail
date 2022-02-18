@@ -9,6 +9,7 @@ using Orckestra.Composer.Providers;
 using Orckestra.Composer.Search.Parameters;
 using Orckestra.Composer.Search.Providers;
 using Orckestra.Composer.Search.Request;
+using Orckestra.Composer.Search.RequestConstants;
 using Orckestra.Composer.Search.Services;
 using Orckestra.Composer.Search.ViewModels;
 using Orckestra.Composer.Services;
@@ -107,6 +108,53 @@ namespace Orckestra.Composer.Search.Api
             var viewModel = await CategoryBrowsingViewService.GetCategoryBrowsingViewModelAsync(param).ConfigureAwait(false);
             viewModel.ProductSearchResults.Facets = viewModel.ProductSearchResults.Facets.Where(f => !f.FieldName.StartsWith(SearchConfiguration.CategoryFacetFiledNamePrefix)).ToList();
 
+            return Ok(viewModel);
+        }
+
+        [ActionName("search")]
+        [HttpPost]
+        [ValidateModelState]
+        public virtual async Task<IHttpActionResult> GetSearchResults(GetSearchResultsRequest request)
+        {
+            var queryString = HttpUtility.ParseQueryString(request.QueryString ?? "");
+            var SelectedFacets = SearchUrlProvider.BuildSelectedFacets(queryString).ToList();
+            var CurrentPage = int.TryParse(queryString[SearchRequestParams.Page], out int page) && page > 0 ? page : 1;
+            var SortDirection = queryString[SearchRequestParams.SortDirection] ?? SearchRequestParams.DefaultSortDirection;
+            var SortBy = queryString[SearchRequestParams.SortBy] ?? SearchRequestParams.DefaultSortBy;
+            var BaseUrl = RequestUtils.GetBaseUrl(Request).ToString();
+            var Keywords = queryString[SearchRequestParams.Keywords];
+            BaseSearchViewModel viewModel;
+
+            if (!string.IsNullOrEmpty(request.CategoryId))
+            {
+                var param = new GetCategoryBrowsingViewModelParam
+                {
+                    CategoryId = request.CategoryId,
+                    CategoryName = string.Empty,
+                    BaseUrl = BaseUrl,
+                    IsAllProducts = false,
+                    NumberOfItemsPerPage = SearchConfiguration.MaxItemsPerPage,
+                    Page = CurrentPage,
+                    SortBy = SortBy,
+                    SortDirection = SortDirection,
+                    InventoryLocationIds = await InventoryLocationProvider.GetInventoryLocationIdsForSearchAsync().ConfigureAwait(false),
+                    SelectedFacets = SelectedFacets,
+                    CultureInfo = ComposerContext.CultureInfo,
+                };
+
+                viewModel = await CategoryBrowsingViewService.GetCategoryBrowsingViewModelAsync(param).ConfigureAwait(false);
+            }
+            else
+            {
+                var searchCriteria = await BaseSearchCriteriaProvider.GetSearchCriteriaAsync(Keywords, BaseUrl, true, CurrentPage).ConfigureAwait(false);
+                searchCriteria.SortBy = SortBy;
+                searchCriteria.SortDirection = SortDirection;
+                searchCriteria.SelectedFacets.AddRange(SelectedFacets);
+
+                viewModel = await SearchViewService.GetSearchViewModelAsync(searchCriteria).ConfigureAwait(false);
+            }
+
+            viewModel.ProductSearchResults.Facets = viewModel.ProductSearchResults.Facets.Where(f => !f.FieldName.StartsWith(SearchConfiguration.CategoryFacetFiledNamePrefix)).ToList();
             return Ok(viewModel);
         }
 

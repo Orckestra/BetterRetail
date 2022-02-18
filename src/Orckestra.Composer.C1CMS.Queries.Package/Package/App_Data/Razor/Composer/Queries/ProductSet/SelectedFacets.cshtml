@@ -1,4 +1,4 @@
-﻿@inherits RazorFunction
+﻿@inherits Composer.Razor.ComposerRazorFunction
 @using Orckestra.Overture.ServiceModel.SearchQueries
 @using Orckestra.Composer.SearchQuery.Context
 
@@ -20,62 +20,12 @@
     {
         return;
     }
-
-    var selectedFacets = browsingViewModel.FacetSettings.SelectedFacets;
-
-    if (selectedFacets == null ||
-        selectedFacets.Facets == null ||
-        selectedFacets.Facets.Count == 0)
-    {
-        return;
-    };
 }
 
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
 <head>
 </head>
 <body>
-    <div data-oc-controller="Product.SelectedSearchFacets">
-        <div id="selectedFacets" class="card facets-card  mb-3 selected-facets">
-            <div class="card-header">
-                @Html.Localize("List-Search", "L_Selection")
-                @if (selectedFacets.IsAllRemovable)
-                {
-                    <a class="float-right"
-                       data-qa="search-refiners-clear-all"
-                       href="#"
-                       data-oc-click="clearSelectedFacets">
-                        @Html.Localize("List-Search", "B_ClearAll")
-                    </a>
-                }
-            </div>
-            <div class="card-body">
-                 <ul class="list-group">
-                    @foreach (var facet in selectedFacets.Facets)
-                    {
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            @facet.DisplayName
-                            <span class="badge badge-light">
-                                @if (facet.IsRemovable)
-                                {
-                                    <a href="#" class="float-right" data-qa="search-refiner-remove"
-                                       data-facetfieldname="@facet.FieldName"
-                                       data-facettype="@facet.FacetType"
-                                       data-facetvalue="@facet.Value"
-                                       title="@facet.DisplayName" data-oc-click="removeSelectedFacet">
-                                        <span class="fa  fa-times  fa-lg"></span>
-                                    </a>
-                                }
-                                else
-                                {
-                                    <span class="float-right  fa  fa-times  fa-lg  text-muted"></span>
-                                }
-                            </span>
-                        </li>
-                    }
-                </ul>
-            </div>
-        </div>
-    </div>
+    @Function("Composer.Search.BaseSelectedFacets", new { FacetSettings = browsingViewModel.FacetSettings })
 </body>
 </html>

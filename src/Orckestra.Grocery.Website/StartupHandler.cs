@@ -74,7 +74,6 @@ namespace Orckestra.Composer.Grocery.Website
             functions.RegisterAction<HeaderController>("PageHeader", "Composer.Header.PageHeader");
 
             functions.RegisterAction<SearchController>("PageHeader", "Composer.Search.PageHeader");
-            functions.RegisterAction<SearchController>("Index", "Composer.Search.Index");
             functions.RegisterAction<BrowsingCategoriesController>("ChildCategories", "Composer.BrowsingCategories.ChildCategories");
   
             functions.RegisterAction<CheckoutController>("CheckoutSignInAsGuest", "Composer.Checkout.CheckoutSignInAsGuest");

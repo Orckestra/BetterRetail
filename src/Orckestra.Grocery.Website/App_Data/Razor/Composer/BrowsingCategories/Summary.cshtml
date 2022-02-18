@@ -1,8 +1,9 @@
-﻿@inherits Composite.AspNet.Razor.RazorFunction
+@inherits Composite.AspNet.Razor.RazorFunction
 @using Orckestra.Composer.CompositeC1.DataTypes
 @using Orckestra.Composer.Search.Context
 @using Composite.Core.Xml
 @using System.Xml.Linq
+@using Newtonsoft.Json;
 
 @functions {
     public override string FunctionDescription
@@ -29,12 +30,15 @@
     var model = BrowseCategoryRequestContext.GetViewModelAsync().GetAwaiter().GetResult();
     if (summary == null)
     {
-        <div class="@(FullWidth ? "container-fluid": "")  page-summary">
+        <div class="@(FullWidth ? "container-fluid": "")  page-summary"
+             data-oc-controller="Product.SearchSummary"
+             id="vueSearchSummary" data-context="@JsonConvert.SerializeObject(model.ProductSearchResults)"
+             v-cloak="true">
             <div class="container-md mb-1">
                 <div class="row">
                     <div class="col-12">
                         <h1>
-                            @CurrentPageNode.Title (@model.ProductSearchResults.TotalCount)
+                            @CurrentPageNode.Title ({{totalCount}})
                         </h1>
                     </div>
                 </div>
@@ -48,12 +52,15 @@
 <head>
 </head>
 <body>
-    <div class="@(FullWidth ? "container-fluid": "") page-summary bg-cover" style="@(FullWidth ? BgInlineStyle(summary.BackgroundImage): "")">
+    <div class="@(FullWidth ? "container-fluid": "") page-summary bg-cover" style="@(FullWidth ? BgInlineStyle(summary.BackgroundImage): "")"
+         data-oc-controller="Product.SearchSummary"
+         id="vueSearchSummary" data-context="@JsonConvert.SerializeObject(model.ProductSearchResults)"
+         v-cloak="true">
         <div class="container-md bg-cover" style="@(!FullWidth ? BgInlineStyle(summary.BackgroundImage): "")">
             <div class="row">
                 <div class="col-12 py-2 ">
                     <h1>
-                        @(string.IsNullOrWhiteSpace(summary.Title) ? CurrentPageNode.Title : summary.Title) (@model.ProductSearchResults.TotalCount)
+                        @(string.IsNullOrWhiteSpace(summary.Title) ? CurrentPageNode.Title: summary.Title) ({{totalCount}})
                     </h1>
                     @if (!string.IsNullOrWhiteSpace(summary.ShortDescription))
                     {

@@ -1,15 +1,15 @@
-﻿@inherits Composer.Razor.ComposerRazorFunction
+@inherits Composer.Razor.ComposerRazorFunction
 @using Orckestra.Composer.Search.Context
 @using Orckestra.Composer.Search.ViewModels
 @using Orckestra.Search.WebsiteSearch;
 @using Composite.Core.Routing.Pages;
-@using Orckestra.Composer.Search.Facets
-@using Orckestra.Composer.ContentSearch.DataTypes
 @using Orckestra.Composer.Search.RequestConstants
 @using Orckestra.Composer.Search
 @using Orckestra.Composer.ContentSearch.Services
 @using Orckestra.Composer.ContentSearch.Parameters
 @using Orckestra.Composer.ContentSearch.ViewModels
+@using Orckestra.Composer.ContentSearch.DataTypes
+@using Newtonsoft.Json
 
 @functions {
     public override string FunctionDescription
@@ -52,7 +52,7 @@
     string pathInfo = C1PageRoute.GetPathInfo();
     string currentTabPathInfo = pathInfo?.Split('/')[1];
 
-    var productTab = Data.Get<Orckestra.Composer.ContentSearch.DataTypes.IContentTab>().FirstOrDefault(t => t.IsProductTab);
+    var productTab = Data.Get<IContentTab>().FirstOrDefault(t => t.IsProductTab);
     var isProductTab = (productTab != null && (currentTabPathInfo == null || productTab.UrlTitle == currentTabPathInfo));
     SearchRequestContext.IsProductsSearchActive = isProductTab;
 
@@ -135,27 +135,9 @@
     </script>
 </head>
 <body>
-    @SearchSummary(contentSearchVm, isProductTab, currentTab?.Title)
+    @SearchSummary(contentSearchVm, isProductTab, currentTab?.Title, productTab)
 
-    @if (contentSearchVm.Tabs.Count > 0)
-    {
-        <div class="container-fluid search-tabs bg-light  pt-2">
-            <div class=" container">
-                <ul class="nav nav-tabs" role="tablist">
-                    @foreach (var tab in contentSearchVm.Tabs)
-                    {
-                        var classValue = tab.IsActive ? "active" : "";
-                        <li role="presentation" class="nav-item">
-                            <a href="@tab.TabUrl" class="nav-link @classValue">
-                                @tab.Title (@tab.Total)
-                            </a>
-                        </li>
-                    }
-                </ul>
-            </div>
-        </div>
-    }
-    <div class="search-results">
+    <div>
         <!-- Tab panes -->
         <div class="tab-content mt-4">
             @if (currentTab != null)
@@ -230,32 +212,44 @@
 </body>
 </html>
 
-@helper SearchSummary(ContentSearchViewModel vm, bool isProductTab, string tabTitle)
+@helper SearchSummary(ContentSearchViewModel vm, bool isProductTab, string tabTitle, IContentTab productTab)
 {
-    if (IsProductsCorrected() && isProductTab)
-    {
-        <h2>
-            @($"{Html.Localize("List-Search", "L_NoResultsFor")} “{SearchRequestContext.SearchQuery }”")
-        </h2>
-        <p class="m-0">@Html.Localized("List-Search", "WeAreSorry", SearchRequestContext.SearchQuery, tabTitle)</p>
-        @ShowButWeFindIn(vm.SuggestedTabs)
-        <h1 class="mt-4">@(Html.Localized("List-Search", "L_SearchResultsCorrected", vm.Total, ProductSearchResults.CorrectedSearchTerms))</h1>
-    }
-    else
-    {
-        if (vm.Total > 0)
-        {
-            <h1><strong>@vm.Total</strong>@($" {Html.Localize("List-Search", "L_SearchResults")} “{SearchRequestContext.SearchQuery }”")</h1>
-        }
-        else
-        {
-            <h1>
-                @($"{Html.Localize("List-Search", "L_NoResultsFor")} “{SearchRequestContext.SearchQuery }”")
-            </h1>
-        }
+    <div data-oc-controller="Product.SearchSummary" id="vueSearchSummary" data-context="@JsonConvert.SerializeObject(ProductSearchResults)" data-total="@vm.Total" v-cloak="true">
+        <div class="container-md">
+            @if (IsProductsCorrected() && isProductTab)
+            {
+                <h2>@Html.Localized("List-Search", "L_NoResultsFor", SearchRequestContext.SearchQuery)</h2>
+                <p class="m-0">@Html.Localized("List-Search", "WeAreSorry", SearchRequestContext.SearchQuery, tabTitle)</p>
+                @ShowButWeFindIn(vm.SuggestedTabs)
+                <h1 class="mt-4">@(Html.Localized("List-Search", "L_SearchResultsCorrected", "{{totalCount}}", ProductSearchResults.CorrectedSearchTerms))</h1>
+            }
+            else
+            {
+                <h1 v-if="totalCount > 0"><strong>{{totalCount}}</strong> @Html.Localized("List-Search", "L_SearchResults", SearchRequestContext.SearchQuery)</h1>
+                <h1 v-else="v-else">@Html.Localized("List-Search", "L_NoResultsFor", SearchRequestContext.SearchQuery)</h1>
+                @Function("Composer.Search.Suggestions")
+            }
+        </div>
 
-        @Function("Composer.Search.Suggestions")
-    }
+        @if (vm.Tabs.Count > 0)
+        {
+            <div class="container-fluid search-tabs bg-light  pt-2">
+                <div class=" container">
+                    <ul class="nav nav-tabs" role="tablist">
+                        @foreach (var tab in vm.Tabs)
+                        {
+                            var classValue = tab.IsActive ? "active" : "";
+                            <li role="presentation" class="nav-item">
+                                <a href="@tab.TabUrl" class="nav-link @classValue">
+                                    @tab.Title (@(productTab?.UrlTitle == tab.UrlTitle ? "{{ProductCount}}" : tab.Total.ToString()))
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        }
+    </div>
 }
 
 @helper ShowButWeFindIn(List<ContentSearchTabViewModel> tabs)
@@ -286,7 +280,7 @@
         @foreach (var tab in tabs)
         {
             var resutls = tab.SearchResults?.Entries?.Take(teaserItemsCount);
-            if(resutls == null) { continue; }
+            if (resutls == null) { continue; }
             <div class="header">
                 <h3 class="title d-inline-flex  mt-3">@Html.Localized("List-Search", "T_SearchResultsFoundIn", tab.Title, tab.Total)</h3>
                 @if (tab.Total > teaserItemsCount)
@@ -312,57 +306,21 @@
     {
         return;
     }
-    <div class="row">
-        <div class="col-12 col-lg-10 offset-lg-3">
-            <div class="row filters-row">
-                <div class="col-6 d-lg-none">
-                    @FacetHelpers.FacetsModalCollapseBtn()
-                </div>
-                @if (ProductSearchResults.TotalCount > 0)
-                {
-                    <div class="col-6">
-                        @Partial("SearchSortBy", ProductSearchResults)
-                    </div>
-                    <div class="col-6 d-none d-lg-block">
-                        @Partial("PaginationDropDown", ProductSearchResults)
-                    </div>
-                }
-            </div>
-        </div>
-        <div class="col-12">
-            <div class="row">
-                <div id="leftCol" class="col-12 col-lg-3  facets-col">
-
-                    @Function("Composer.Search.SelectedFacets")
-
-                    <div id="facetsModal" class="facets-modal">
-                        <div class="facets-modal-dialog">
-                            <div class="facets-modal-content">
-                                @FacetHelpers.FacetsModalHeader()
-                                <div class="facets-modal-body">
-                                    <div class="overlay"></div>
-                                    @Function("Composer.Search.Facets")
-                                </div>
-                                @FacetHelpers.FacetsModalFooter()
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-                @if (ProductSearchResults.TotalCount > 0)
-                {
-                    <div class="col-12 col-lg-9">
-                        @Function("Composer.Search.Index")
-                        <div class="row">
-                            <div class="col-12">
-                                @Partial("Pager", ProductSearchResults)
-                            </div>
-                        </div>
-                    </div>
-                }
-            </div>
-        </div>
-    </div>
+    <f:function name="Composer.Grids.SearchGrid">
+        <f:param name="LeftPart">
+            <html>
+            <head>
+            </head>
+            <body>
+                <f:function name="Composer.Search.SelectedFacets"></f:function>
+                <f:function name="Composer.Search.Facets"></f:function>
+            </body>
+        </html>
+    </f:param>
+    <f:param name="RightPart">
+        @Function("Composer.Search.BaseSearchResults", new { Results = ProductsSearchViewModel })
+    </f:param>
+</f:function>
 }
 
 @helper ShowSortBy()

@@ -15,7 +15,5 @@ module Orckestra.Composer {
         removeFacet(eventInformation: IEventInformation);
 
         getSelectedFacets(): IHashTable<string|string[]>;
-
-        refreshFacetRegistry(refreshRegistry: any): void;
     }
 }

@@ -28,8 +28,6 @@
     categoryBrowsingViewModel.Context["MaxItemsPerPage"] = SearchConfiguration.MaxItemsPerPage;
     categoryBrowsingViewModel.Context["ListName"] = "Category Browsing";
     categoryBrowsingViewModel.Context["PaginationCurrentPage"] = categoryBrowsingViewModel.ProductSearchResults.Pagination.CurrentPage;
-
-    var FallbackImageUrl = categoryBrowsingViewModel.ProductSearchResults.SearchResults.FirstOrDefault()?.FallbackImageUrl;
 }
 
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0"
@@ -37,23 +35,6 @@
 <head>
 </head>
 <body>
-    <div class="row filters-row mb-4">
-        <div class="col-6 d-lg-none">
-            @FacetHelpers.FacetsModalCollapseBtn()
-        </div>
-        <div class="col-6">
-            @Partial("SearchSortBy", categoryBrowsingViewModel.ProductSearchResults)
-        </div>
-        <div class="col-6 d-none d-lg-block">
-            @Partial("PaginationDropDown", categoryBrowsingViewModel.ProductSearchResults)
-        </div>
-    </div>
-
-    @Function("Composer.Search.Products.ProductResultsVue", new { JsonContext = categoryBrowsingViewModel.JsonContext, FallbackImageUrl = FallbackImageUrl })
-
-    <div class="row d-block pt-2">
-        @Partial("Pager", categoryBrowsingViewModel.ProductSearchResults)
-    </div>
-
+    @Function("Composer.Search.Products.ProductResultsVue", new { Results = categoryBrowsingViewModel })
 </body>
 </html>

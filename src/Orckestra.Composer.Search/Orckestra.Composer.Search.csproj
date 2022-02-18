@@ -136,6 +136,7 @@
     <Compile Include="Repositories\ProductRequestFactory.cs" />
     <Compile Include="Parameters\RemoveSelectedFacetsFromFacetsParam.cs" />
     <Compile Include="RequestConstants\SearchRequestParams.cs" />
+    <Compile Include="Request\GetSearchResultsRequest.cs" />
     <Compile Include="Request\GetCategoryFacetsRequest.cs" />
     <Compile Include="Request\GetFacetsRequest.cs" />
     <Compile Include="SearchConfiguration.cs" />
@@ -165,6 +166,7 @@
     <Compile Include="ViewModels\SearchTermsSuggestionsViewModel.cs" />
     <Compile Include="ViewModels\SearchTermsSuggestionViewModel.cs" />
     <Compile Include="ViewModels\FacetSettingsViewModel.cs" />
+    <Compile Include="ViewModels\BaseSearchViewModel.cs" />
     <Compile Include="ViewModels\SearchViewModel.cs" />
     <Compile Include="ViewModels\InventoryItemIdentifierViewModel.cs" />
     <Compile Include="ViewModels\InventoryItemStatusViewModel.cs" />

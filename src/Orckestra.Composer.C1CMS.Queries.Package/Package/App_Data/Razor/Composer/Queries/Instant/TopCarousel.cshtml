@@ -13,10 +13,14 @@
 
     [FunctionParameter(Label = "Slides to Show", DefaultValue = 4)]
     public int SlidesToShow { get; set; }
+
+    [FunctionParameter(Label = "Fallback Image Url", DefaultValue = "")]
+    public string FallbackImageUrl { get; set; }
 }
 
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
 <head>
+    @GeneralHelpers.RenderFallbackImageScript(FallbackImageUrl)
 </head>
 <body>
     <div class="products-search-results"

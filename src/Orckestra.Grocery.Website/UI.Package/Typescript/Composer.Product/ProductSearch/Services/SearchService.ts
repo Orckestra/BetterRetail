@@ -7,6 +7,7 @@
 /// <reference path='../ISingleSelectCategory.ts' />
 ///<reference path='../../../Repositories/ISearchRepository.ts' />
 ///<reference path='../../../Repositories/SearchRepository.ts' />
+/// <reference path='../Constants/SearchEvents.ts' />
 
 module Orckestra.Composer {
     'use strict';
@@ -15,12 +16,10 @@ module Orckestra.Composer {
 
     // TODO: Decouple window object from search service.
     export class SearchService implements ISearchService {
-        protected _searchRepository: ISearchRepository;
+        protected _searchRepository: ISearchRepository = new SearchRepository();
         protected _searchCriteria: SearchCriteria;
         private _searchCriteriaBackup: any;
         private _baseSearchUrl: string = window.location.href.replace(window.location.search, '');
-        private _baseUrl: string = this._baseSearchUrl.replace(window.location.pathname, '');
-        private _facetRegistry: IHashTable<string> = {};
         public IsFacetsModalMode: Boolean = false;
 
         constructor(protected _eventHub: IEventHub, private _window: Window) {
@@ -33,17 +32,8 @@ module Orckestra.Composer {
          * param facetRegistry Facets available to the search service.
          */
         public initialize(options: ISearchCriteriaOptions) {
-            this.registerSubscriptions();
             this._searchCriteria.initialize(options);
-            this._searchRepository = new SearchRepository();
-            $(FacetsModalId).on('show.bs.modal', (event) => this.facetsModalOpened());
-            $(FacetsModalId).on('hide.bs.modal', (event) => this.facetsModalClosed());
-            $(FacetsModalId).on('click', '.modal--confirm',  this.facetsModalApply.bind(this));
-            $(FacetsModalId).on('click', '.modal--cancel',  this.facetsModalCancel.bind(this));
-        }
-
-        public refreshFacetRegistry(refreshRegistry) {
-            this._searchCriteria.refreshRegistry(refreshRegistry);
+            this.registerSubscriptions();
         }
 
         public singleFacetsChanged(eventInformation: IEventInformation) {
@@ -55,8 +45,9 @@ module Orckestra.Composer {
         }
 
         public sortingChanged(eventInformation: IEventInformation) {
-            var dataUrl = eventInformation.data.url;
-            this._window.location.href = dataUrl;
+            this._searchCriteria.clearAll();
+            this._searchCriteria.loadFromQuerystring(eventInformation.data.url);
+            this.search();
         }
 
         public getSelectedFacets(): IHashTable<string|string[]> {
@@ -85,8 +76,10 @@ module Orckestra.Composer {
 
             this._searchCriteria.removeFacet(facet);
 
-            if (facet.facetLandingPageUrl) {
+            if (facet.facetLandingPageUrl && facet.facetType === 'SingleSelect') {
                 this._baseSearchUrl = facet.facetLandingPageUrl;
+
+                this._window.location.href = this._baseSearchUrl + this._searchCriteria.toQuerystring();
             }
 
             this.search();
@@ -146,15 +139,20 @@ module Orckestra.Composer {
         }
 
         private registerSubscriptions() {
-            this._eventHub.subscribe('sortingChanged', this.sortingChanged.bind(this));
-            this._eventHub.subscribe('singleFacetsChanged', this.singleFacetsChanged.bind(this));
-            this._eventHub.subscribe('multiFacetChanged', this.multiFacetChanged.bind(this));
-            this._eventHub.subscribe('facetsCleared', this.clearFacets.bind(this));
-            this._eventHub.subscribe('facetRemoved', this.removeFacet.bind(this));
-            this._eventHub.subscribe('facetsRemoved', this.removeFacets.bind(this));
-            this._eventHub.subscribe('singleCategoryAdded', this.addSingleSelectCategory.bind(this));
-            this._eventHub.subscribe('facetsModalOpened', this.facetsModalOpened.bind(this));
-            this._eventHub.subscribe('facetsModalClosed', this.facetsModalClosed.bind(this));
+            this._eventHub.subscribe(SearchEvents.SortingChanged, this.sortingChanged.bind(this));
+            this._eventHub.subscribe(SearchEvents.SingleFacetsChanged, this.singleFacetsChanged.bind(this));
+            this._eventHub.subscribe(SearchEvents.MultiFacetChanged, this.multiFacetChanged.bind(this));
+            this._eventHub.subscribe(SearchEvents.FacetsCleared, this.clearFacets.bind(this));
+            this._eventHub.subscribe(SearchEvents.FacetRemoved, this.removeFacet.bind(this));
+            this._eventHub.subscribe(SearchEvents.FacetsRemoved, this.removeFacets.bind(this));
+            this._eventHub.subscribe(SearchEvents.SingleCategoryAdded, this.addSingleSelectCategory.bind(this));
+            this._eventHub.subscribe(SearchEvents.FacetsModalOpened, this.facetsModalOpened.bind(this));
+            this._eventHub.subscribe(SearchEvents.FacetsModalClosed, this.facetsModalClosed.bind(this));
+
+            $(FacetsModalId).on('show.bs.modal', (event) => this.facetsModalOpened());
+            $(FacetsModalId).on('click', '.modal--close',  this.facetsModalClosed.bind(this));
+            $(FacetsModalId).on('click', '.modal--confirm',  this.facetsModalApply.bind(this));
+            $(FacetsModalId).on('click', '.modal--cancel',  this.facetsModalCancel.bind(this));
         }
 
         protected search() {
@@ -164,19 +162,24 @@ module Orckestra.Composer {
                 if ($(FacetsModalId).hasClass('loading')) return;
                 $(FacetsModalId).addClass('loading');
 
-                var queryString = this._searchCriteria.toQuerystring();
- 
-                var { categoryId, queryName, queryType } = this._searchCriteria;
+                const queryString = this._searchCriteria.toQuerystring();
+                const { categoryId, queryName, queryType } = this._searchCriteria;
+
                 var getFacetsPromise = categoryId ? this._searchRepository.getCategoryFacets(categoryId, queryString) :
                     (queryName ? this._searchRepository.getQueryFacets(queryName, queryType, queryString) :
                         this._searchRepository.getFacets(queryString));
-                        
-                getFacetsPromise.then(result => this._eventHub.publish('facetsLoaded', { data: result }))
+
+                getFacetsPromise.then(result => this._eventHub.publish(SearchEvents.FacetsLoaded, { data: result }))
                     .fail(reason => console.log(reason))
                     .finally(() => $(FacetsModalId).removeClass('loading'));
 
             } else {
-                this._window.location.href = this._baseSearchUrl + this._searchCriteria.toQuerystring();
+                const queryString = this._searchCriteria.toQuerystring();
+                const { categoryId, queryName, queryType } = this._searchCriteria;
+
+                this._eventHub.publish(SearchEvents.SearchRequested, { data: { categoryId, queryName, queryType, queryString } });
+
+                this._window.history.pushState(this._window.history.state, "", this._baseSearchUrl + queryString);
             }
         }
     }

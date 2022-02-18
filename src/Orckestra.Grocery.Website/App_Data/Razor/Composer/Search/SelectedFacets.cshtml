@@ -1,8 +1,6 @@
-﻿@inherits RazorFunction
+﻿@inherits Composer.Razor.ComposerRazorFunction
 @using Orckestra.Composer.Search.Context;
 @using Orckestra.Composer.Search.ViewModels
-@using Orckestra.Composer.Search.Facets
-@using Orckestra.Composer.Search
 
 @functions {
     public override string FunctionDescription
@@ -12,80 +10,13 @@
 
     public ISearchRequestContext SearchRequestContext { get; set; }
 
-    public SearchViewModel ProductsSearchViewModel
-    {
-        get
-        {
-            return SearchRequestContext.ProductsSearchViewModel;
-        }
-    }
-
-    public SelectedFacets SelectedFacets
-    {
-        get
-        {
-            return ProductsSearchViewModel?.FacetSettings.SelectedFacets;
-        }
-    }
-}
-@{
-
-    if (SelectedFacets == null || SelectedFacets.Facets == null || SelectedFacets.Facets.Count == 0)
-    {
-        return;
-    };
+    SearchViewModel ProductsSearchViewModel => SearchRequestContext.ProductsSearchViewModel;
 }
 
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
 <head>
 </head>
 <body>
-    <div data-oc-controller="Product.SelectedSearchFacets">
-        <div id="selectedFacets" class="card facets-card mb-2 selected-facets">
-            <div class="card-header">
-                @Html.Localize("List-Search", "L_Selection")
-                @if (SelectedFacets.IsAllRemovable)
-                {
-                    <a class="float-right" 
-                       data-qa="search-refiners-clear-all" 
-                       href="#"
-                       data-oc-click="clearSelectedFacets">
-                       @Html.Localize("List-Search", "B_ClearAll")
-                    </a>
-                }
-            </div>
-            <div class="card-body">
-                <ul class="list-group">
-                    @foreach (var facet in SelectedFacets.Facets)
-                    {
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            @facet.DisplayName
-                            <span class="badge badge-light">
-                                @if (facet.IsRemovable)
-                                {
-                                    <a href="#" class="float-right" data-qa="search-refiner-remove"
-                                       data-facetfieldname="@facet.FieldName"
-                                       data-facettype="@facet.FacetType"
-                                       data-facetvalue="@facet.Value"
-                                       @if(facet.FieldName.StartsWith(SearchConfiguration.CategoryFacetFiledNamePrefix))
-                                       {
-                                         <text>data-categorytree="@(facet.FieldName)"</text>
-                                       }
-                                       title="@facet.DisplayName"
-                                       data-oc-click="removeSelectedFacet">
-                                       <span class="fa  fa-times  fa-lg"></span>
-                                    </a>
-                                }
-                                else
-                                {
-                                    <span class="float-right  fa  fa-times  fa-lg  text-muted"></span>
-                                }
-                            </span>
-                        </li>
-                    }
-                </ul>
-            </div>
-        </div>
-    </div>
+    @Function("Composer.Search.BaseSelectedFacets", new { FacetSettings = ProductsSearchViewModel.FacetSettings })
 </body>
 </html>
