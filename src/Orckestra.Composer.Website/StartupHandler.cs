@@ -70,10 +70,18 @@ namespace Orckestra.Composer.Website
             log.Info("Application Started");
         }
 
+
+        /// <summary>
+        /// Do some updates when C1 page is added, for example clear Categories Cache
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="dataEventArgs"></param>
         private static void UpdateAfterPageChanged(object sender, DataEventArgs dataEventArgs)
         {
-            var data = dataEventArgs.Data as IPage;
-            ClearCategoriesCache(data);
+            var page = dataEventArgs.Data as IPage;
+            if (page == null) return;
+
+            ClearCategoriesCache(page);
         }
 
         private static void ClearCategoriesCache(IPage data)
