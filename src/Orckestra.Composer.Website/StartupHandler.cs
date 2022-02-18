@@ -79,19 +79,16 @@ namespace Orckestra.Composer.Website
 
         private static void ClearCategoriesCache(IPage data)
         {
-            if (data.PageTypeId == CategoryPages.CategoryPageTypeId)
-            {
-                Guid homepageId = GetHomePageId(data);
+            if (data.PageTypeId != CategoryPages.CategoryPageTypeId) return;
 
-                using (var con = new DataConnection())
-                {
-                    var meta = con.Get<ISiteConfigurationMeta>().FirstOrDefault(item => item.PageId == homepageId);
-                    if (meta != null)
-                    {
-                        var categoryRepository = Composite.Core.ServiceLocator.GetService<ICategoryRepository>();
-                        categoryRepository.ClearCategoriesCache(meta.Scope);
-                    }
-                }
+            Guid homepageId = GetHomePageId(data);
+            using (var con = new DataConnection())
+            {
+                var meta = con.Get<ISiteConfigurationMeta>().FirstOrDefault(item => item.PageId == homepageId);
+                if (meta == null) return;
+
+                var categoryRepository = Composite.Core.ServiceLocator.GetService<ICategoryRepository>();
+                categoryRepository.ClearCategoriesCache(meta.Scope);
             }
         }
 
