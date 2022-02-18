@@ -49,12 +49,14 @@ module Orckestra.Composer {
                 },
                 mounted() {
                     self.initializeServices();
-                    self.eventHub.subscribe('facetsLoaded', ({data}) => {
-                        this.CategoryFacetValuesTree = data.FacetSettings.CategoryFacetValuesTree;
-                        this.Facets = data.ProductSearchResults.Facets;
-                    });
+                    self.eventHub.subscribe(SearchEvents.FacetsLoaded, this.onFacetsLoaded);
+                    self.eventHub.subscribe(SearchEvents.SearchResultsLoaded, this.onFacetsLoaded);
                 },
                 methods: {
+                    onFacetsLoaded({data}) {
+                        this.CategoryFacetValuesTree = data.FacetSettings.CategoryFacetValuesTree;
+                        this.Facets = data.ProductSearchResults.Facets;
+                    },
                     categoryFacetChanged(event, isSelected) {
                         self.categoryFacetChanged(event, isSelected);
                     },
@@ -166,12 +168,12 @@ module Orckestra.Composer {
 
             if (isSelected) {
                 anchorContext.removeClass('selected');
-                var data = {
+                const data = {
                     facetFieldName: facetKey,
                     facetValue,
                     facetType
-                }
-                this.eventHub.publish('facetRemoved', { data });
+                };
+                this.eventHub.publish(SearchEvents.FacetRemoved, { data });
             } else {
                 var parentDiv = anchorContext.parent().parent();
                 parentDiv.find('a').removeClass('selected');
@@ -257,6 +259,25 @@ module Orckestra.Composer {
                 });
 
             return facetRegistry;
+        }
+
+        public addSingleSelectCategory(actionContext: IControllerActionContext) {
+            var singleSelectCategory = actionContext.elementContext,
+                anchorContext = actionContext.elementContext,
+                facetFieldName = anchorContext.data('facetfieldname'),
+                facetValue = anchorContext.data('facetvalue');
+
+            actionContext.event.preventDefault();
+            actionContext.event.stopPropagation();
+
+            this.eventHub.publish('singleCategoryAdded', {
+                data: {
+                    categoryUrl: singleSelectCategory.data('categoryurl'),
+                    facetKey: facetFieldName,
+                    facetValue: facetValue,
+                    pageType: UrlHelper.resolvePageType()
+                }
+            });
         }
     }
 }

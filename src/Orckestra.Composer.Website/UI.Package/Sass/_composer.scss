@@ -38,7 +38,7 @@
 @import "Blades/WishList/_wishlist-tile.scss";
 @import "Blades/WishList/_wishlist.scss";
 @import "Blades/LineItems/_line-items.scss";
-  
+
 /**
  * Composer bootstrap overrides
 */
@@ -57,7 +57,7 @@
 @import "Overrides/_tooltip.scss";
 @import "Overrides/_type.scss";
 @import "Overrides/_well.scss";
- 
+
 /**
  * Composer custom components
  */
@@ -88,5 +88,6 @@
 @import "Custom/Responsive/_text-align.scss";
 @import "Custom/Search/_product-tile.scss";
 @import "Custom/Search/_facets.scss";
+@import "Custom/Search/_content-tabs.scss";
 @import "Custom/_loading.scss";
 @import "Custom/_page-summary.scss";

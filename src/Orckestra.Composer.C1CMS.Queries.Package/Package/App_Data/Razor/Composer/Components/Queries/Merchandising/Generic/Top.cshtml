@@ -40,12 +40,8 @@
     <f:function name="Composer.Queries.Merchandising.Top" xmlns:f="http://www.composite.net/ns/function/1.0">
         <f:param name="QueryName" value="@QueryName" />
         <f:param name="Number" value="@Number" />
+        <f:param name="Page" value="@Page" />
+        <f:param name="PageTitle" value="@PageTitle" />
     </f:function>
-    @if (Page != null)
-    {
-        <div class="text-center my-2">
-            <a href="~/page(@Page)" class="btn btn-primary">@PageTitle</a>
-        </div>
-    }
 </body>
 </html>
