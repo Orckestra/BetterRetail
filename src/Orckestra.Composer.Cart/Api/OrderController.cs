@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Specialized;
-using System.Threading.Tasks;
-using System.Web.Http;
-using Orckestra.Composer.Cart.Parameters.Order;
+﻿using Orckestra.Composer.Cart.Parameters.Order;
 using Orckestra.Composer.Cart.Requests;
 using Orckestra.Composer.Cart.Services.Order;
 using Orckestra.Composer.Cart.Utils;
@@ -11,6 +7,10 @@ using Orckestra.Composer.Providers;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Utils;
 using Orckestra.Composer.WebAPIFilters;
+using System;
+using System.Collections.Specialized;
+using System.Threading.Tasks;
+using System.Web.Http;
 
 namespace Orckestra.Composer.Cart.Api
 {
@@ -29,7 +29,7 @@ namespace Orckestra.Composer.Cart.Api
             IOrderUrlProvider orderUrlProvider)
         {
             OrderHistoryViewService = orderHistoryViewService ?? throw new ArgumentNullException(nameof(orderHistoryViewService));
-            OrderUrlProvider = orderUrlProvider;
+            OrderUrlProvider = orderUrlProvider ?? throw new ArgumentNullException(nameof(orderUrlProvider));
             ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
         }
 
@@ -169,6 +169,79 @@ namespace Orckestra.Composer.Cart.Api
             });
 
             return Ok(viewModel);
+        }
+
+        /// <summary>
+        /// Set an order in edit mode
+        /// </summary>
+        /// <param name="param">Parameters container</param>
+        [HttpPost]
+        [ActionName("edit-order")]
+        [ValidateModelState]
+        public virtual async Task<IHttpActionResult> EditOrder(EditOrderParam param)
+        {
+            if (param == null) return BadRequest($"{nameof(param)} cannot be empty");
+
+            var vm = await OrderHistoryViewService.CreateEditingOrderViewModel(param.OrderNumber).ConfigureAwait(false);
+
+            return Ok(vm);
+        }
+
+
+        /// <summary>
+        /// Cancel edit mode for order
+        /// </summary>
+        /// <param name="param">Parameters container</param>
+        [HttpPost]
+        [ActionName("cancel-edit-order")]
+        [ValidateModelState]
+        public virtual async Task<IHttpActionResult> CancelEditOrder(EditOrderParam param)
+        {
+            if (param == null) return BadRequest($"{nameof(param)} cannot be empty");
+
+            await OrderHistoryViewService.CancelEditingOrderAsync(param.OrderNumber).ConfigureAwait(false);
+
+            return Ok(true);
+        }
+
+        /// <summary>
+        /// Save editing order
+        /// </summary>
+        /// <param name="param">Parameters container</param>
+        [HttpPost]
+        [ActionName("save-edited-order")]
+        [ValidateModelState]
+        public virtual async Task<IHttpActionResult> SaveEditedOrder(EditOrderParam param)
+        {
+            if (param == null) return BadRequest($"{nameof(param)} cannot be empty");
+
+            var vm = await OrderHistoryViewService.SaveEditedOrderAsync(param.OrderNumber, RequestUtils.GetBaseUrl(Request).ToString());
+
+            return Ok(vm);
+        }
+
+        /// <summary>
+        /// Set an order status to cancel 
+        /// </summary>
+        /// <param name="param">Parameters container</param>
+        [HttpPost]
+        [ActionName("cancel-order")]
+        [ValidateModelState]
+        public virtual async Task<IHttpActionResult> CancelOrder([FromBody]string orderNumber)
+        {
+            if (string.IsNullOrEmpty(orderNumber)) return BadRequest($"{nameof(orderNumber)} cannot be empty");
+
+            var param = new CancelOrderParam()
+            {
+                Scope = ComposerContext.Scope,
+                CultureInfo = ComposerContext.CultureInfo,
+                CustomerId = ComposerContext.CustomerId,
+                OrderNumber = orderNumber
+            };
+
+            var vm = await OrderHistoryViewService.CancelOrder(param).ConfigureAwait(false);
+
+            return Ok(vm);
         }
     }
 }

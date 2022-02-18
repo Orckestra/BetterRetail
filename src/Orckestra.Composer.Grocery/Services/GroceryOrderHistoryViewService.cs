@@ -4,7 +4,10 @@ using System.Threading.Tasks;
 using Orckestra.Composer.Cart.Factory;
 using Orckestra.Composer.Cart.Factory.Order;
 using Orckestra.Composer.Cart.Parameters.Order;
+using Orckestra.Composer.Cart.Providers.Order;
+using Orckestra.Composer.Cart.Repositories;
 using Orckestra.Composer.Cart.Repositories.Order;
+using Orckestra.Composer.Cart.Services;
 using Orckestra.Composer.Cart.Services.Order;
 using Orckestra.Composer.Cart.ViewModels.Order;
 using Orckestra.Composer.Grocery.Factory;
@@ -31,6 +34,11 @@ namespace Orckestra.Composer.Grocery.Services
             ICustomerRepository customerRepository,
             IComposerJsonSerializer composerJsonSerializer,
             ILineItemViewModelFactory lineItemViewModelFactory,
+            ICartRepository cartRepository,
+            IComposerContext composerContext,
+            ICartUrlProvider cartUrlProvider,
+            IEditingOrderProvider editingOrderProvider,
+            ICheckoutService checkoutService,
             ITimeSlotRepository timeSlotRepository,
             ITimeSlotViewModelFactory timeSlotViewModelFactory)
             :
@@ -43,7 +51,12 @@ namespace Orckestra.Composer.Grocery.Services
             shippingTrackingProviderFactory,
             customerRepository,
             composerJsonSerializer,
-            lineItemViewModelFactory)
+            lineItemViewModelFactory,
+            cartRepository,
+            composerContext,
+            cartUrlProvider,
+            editingOrderProvider,
+            checkoutService)
         {
             TimeSlotRepository = timeSlotRepository ?? throw new ArgumentNullException(nameof(timeSlotRepository));
             TimeSlotViewModelFactory = timeSlotViewModelFactory ?? throw new ArgumentNullException(nameof(timeSlotViewModelFactory));

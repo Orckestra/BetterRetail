@@ -22,6 +22,8 @@ namespace Orckestra.Composer.Services.Cookie
         public string EncryptedCustomerId { get; set; }
         public bool? IsGuest { get; set; }
 
+        public string EncryptedEditingOrderId { get; set; }
+
         /// <summary>
         /// This property can be used for custom cookie properties
         /// </summary>

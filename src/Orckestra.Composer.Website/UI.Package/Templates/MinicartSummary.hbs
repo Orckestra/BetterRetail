@@ -29,7 +29,9 @@
         <div class="minicart-summary-controls">
                 {{#if IsCartEmpty}}
                     {{#unless IsAuthenticated}}
-                        <a data-oc-click="onCheckout" data-order-subtotal="{{OrderSummary.SubTotal}}" href="{{OrderSummary.CheckoutUrlTarget}}" class="btn btn-primary btn-block">{{localize 'MiniCart' 'B_Login'}}</a>
+                        {{#if_neq CartType 'OrderDraft'}}
+                         <a data-oc-click="onCheckout" data-order-subtotal="{{OrderSummary.SubTotal}}" href="{{OrderSummary.CheckoutUrlTarget}}" class="btn btn-primary btn-block">{{localize 'MiniCart' 'B_Login'}}</a>
+                        {{/if_neq}}
                     {{/unless}}
                     <button class="btn btn-outline-secondary btn-block" data-oc-click="onCloseMiniCart">{{localize 'MiniCart' 'B_StartShopping'}}</button>
                 {{else}}
@@ -37,9 +39,11 @@
                         <div class="col-md-6">
                             <button class="btn btn-outline-secondary" data-oc-click="onCloseMiniCart">{{localize 'MiniCart' 'B_ContinueShopping'}}</button>
                         </div>
+                        {{#if_neq CartType 'OrderDraft'}}
                         <div class="col-md-6">
                             <a data-oc-click="onCheckout" data-order-subtotal="{{OrderSummary.SubTotal}}" href="{{OrderSummary.CheckoutUrlTarget}}" class="btn btn-success">{{localize 'MiniCart' 'B_Checkout'}}</a>
                         </div>
+                        {{/if_neq}}
                     </div>
                 {{/if}}
         </div>

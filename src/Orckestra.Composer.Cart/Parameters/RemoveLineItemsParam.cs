@@ -4,7 +4,7 @@ using System.Globalization;
 
 namespace Orckestra.Composer.Cart.Parameters
 {
-    public class RemoveLineItemsParam
+    public class RemoveLineItemsParam : BaseCartParam
     {
         /// <summary>
         /// The ScopeId where to find the cart

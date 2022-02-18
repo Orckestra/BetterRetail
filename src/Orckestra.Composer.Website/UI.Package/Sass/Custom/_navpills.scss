@@ -11,7 +11,7 @@
 
     + li:before {
       content: "| "; // the space here is a nbsp, not as unicode escape because of issue with libsass.
-      padding: 0 5px;
+      padding: 0 3px;
     }
   }
 
@@ -22,5 +22,11 @@
       text-overflow: ellipsis;
       white-space: nowrap;
       vertical-align: top;
+  }
+
+   &.full {
+    > li > a {
+      max-width: unset;
+    }
   }
 }

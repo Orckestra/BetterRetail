@@ -7,7 +7,7 @@ namespace Orckestra.Composer.Cart.Parameters
     /// <summary>
     /// Parameters for deleting an item to the cart
     /// </summary>
-    public class RemoveLineItemParam
+    public class RemoveLineItemParam : BaseCartParam
     {
         /// <summary>
         /// The ScopeId where to find the cart

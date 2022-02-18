@@ -19,6 +19,10 @@ using System.Web.Hosting;
 using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Routing;
+using Composite.Data.Types;
+using System;
+using Orckestra.Composer.Repositories;
+using System.Linq;
 
 namespace Orckestra.Composer.Grocery.Website
 {
@@ -63,7 +67,51 @@ namespace Orckestra.Composer.Grocery.Website
             RegisterFunctions(functions);
             RegisterFunctionRoutes(functions);
 
+            DataEvents<IPage>.OnAfterAdd += UpdateAfterPageChanged;
+
             log.Info("Application Started");
+        }
+
+        /// <summary>
+        /// Do some updates when C1 page is added, for example clear Categories Cache
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="dataEventArgs"></param>
+        private static void UpdateAfterPageChanged(object sender, DataEventArgs dataEventArgs)
+        {
+            var page = dataEventArgs.Data as IPage;
+            if (page == null) return;
+
+            ClearCategoriesCache(page);
+        }
+
+        private static void ClearCategoriesCache(IPage data)
+        {
+            if (data.PageTypeId != CategoryPages.CategoryPageTypeId) return;
+
+            Guid homepageId = GetHomePageId(data);
+            using (var con = new DataConnection())
+            {
+                var meta = con.Get<ISiteConfigurationMeta>().FirstOrDefault(item => item.PageId == homepageId);
+                if (meta == null) return;
+
+                var categoryRepository = Composite.Core.ServiceLocator.GetService<ICategoryRepository>();
+                categoryRepository.ClearCategoriesCache(meta.Scope);
+            }
+        }
+
+        private static Guid GetHomePageId(IPage data)
+        {
+            Guid homepageId = Guid.Empty;
+            Guid pageId = data.Id;
+
+            while (pageId != Guid.Empty)
+            {
+                homepageId = pageId;
+                pageId = PageManager.GetParentId(pageId);
+            }
+
+            return homepageId;
         }
 
         private static void RegisterFunctions(FunctionCollection functions)

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using System.Web.Security;
+using Orckestra.Composer.Cart.Providers.Order;
 using Orckestra.Composer.MyAccount.Parameters;
 using Orckestra.Composer.MyAccount.Providers;
 using Orckestra.Composer.MyAccount.Requests;
@@ -38,18 +39,22 @@ namespace Orckestra.Composer.MyAccount.Api
         protected virtual IFormsAuthenticationProxy FormsAuthentication { get; set; }
         public virtual IWebsiteContext WebsiteContext { get; set; }
 
+        public IEditingOrderProvider EditingOrderProvider { get; set; }
+
         public MembershipController(
             IMyAccountUrlProvider myAccountUrlProvider,
             IMembershipViewService membershipViewService,
             IComposerContext composerContext,
             ISiteConfiguration siteConfiguration,
-            IWebsiteContext websiteContext)
+            IWebsiteContext websiteContext,
+            IEditingOrderProvider editingOrderProvider)
         {
             MyAccountUrlProvider = myAccountUrlProvider ?? throw new ArgumentNullException(nameof(myAccountUrlProvider));
             MembershipViewService = membershipViewService ?? throw new ArgumentNullException(nameof(membershipViewService));
             ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
             SiteConfiguration = siteConfiguration ?? throw new ArgumentNullException(nameof(siteConfiguration)); ;
             WebsiteContext = websiteContext ?? throw new ArgumentNullException(nameof(websiteContext));
+            EditingOrderProvider = editingOrderProvider ?? throw new ArgumentNullException(nameof(editingOrderProvider));
 
             FormsAuthentication = new StaticFormsAuthenticationProxy();
         }
@@ -135,6 +140,7 @@ namespace Orckestra.Composer.MyAccount.Api
             }
 
             FormsAuthentication.SignOut();
+            EditingOrderProvider.ClearEditMode();
 
             response.ReturnUrl = logoutRequest.ReturnUrl;
             if (string.IsNullOrWhiteSpace(response.ReturnUrl) || !UrlFormatter.IsReturnUrlValid(RequestUtils.GetBaseUrl(Request).ToString(), response.ReturnUrl))
