@@ -58,20 +58,6 @@ namespace Orckestra.Composer.C1CMS.Queries
                         </f:function>
                 </f:param>
             </f:widgetfunction>"));
-
-            functions.RegisterAction<T>("ChildCategories",
-                $"Composer.Queries.{searchQueryType}.ChildCategories")
-                .AddParameter("QueryName",
-                    typeof(string),
-                    label:
-                        StringResourceSystemFacade.GetString("Orckestra.ExperienceManagement.SearchQueryBuilder",
-                            "Parameters.QueryNameLabel"),
-                    helpText:
-                        StringResourceSystemFacade.GetString("Orckestra.ExperienceManagement.SearchQueryBuilder",
-                            "Parameters.QueryNameHelp"),
-                    isRequired: true,
-                    widgetFunctionProvider: searhQueryListWidgetFunctionProvider
-                );
         }
 
     }
