@@ -45,7 +45,6 @@ namespace Orckestra.Composer.Cart.Services
         protected IImageService ImageService { get; private set; }
         protected ICategoryRepository CategoryRepository { get; private set; }
         protected ILocalizationProvider LocalizationProvider { get; private set; }
-
         protected IEditingOrderProvider EditingOrderProvider { get; private set; }
 
         /// <summary>
@@ -62,11 +61,11 @@ namespace Orckestra.Composer.Cart.Services
         /// <param name="regionCodeProvider">The <see cref="IRegionCodeProvider"/></param>
         /// <param name="imageService">The <see cref="IImageService"/></param>
         public CartService(
-            ICartRepository cartRepository, 
-            IDamProvider damProvider, 
+            ICartRepository cartRepository,
+            IDamProvider damProvider,
             ICartViewModelFactory cartViewModelFactory,
             ICouponViewService couponViewService,
-            ILookupService lookupService, 
+            ILookupService lookupService,
             ILineItemService lineItemService,
             IFixCartService fixCartService,
             ICountryService countryService,
@@ -117,7 +116,9 @@ namespace Orckestra.Composer.Cart.Services
 
             try
             {
-                cart = await CartRepository.AddLineItemAsync(param).ConfigureAwait(false);
+                cart = EditingOrderProvider.IsEditMode()
+                    ? await AddUpdateLineItemAsync(param)
+                    : await CartRepository.AddLineItemAsync(param).ConfigureAwait(false);
             }
             catch (ComposerException ex)
             {
@@ -145,6 +146,47 @@ namespace Orckestra.Composer.Cart.Services
             var viewModel = await CreateCartViewModelAsync(vmParam).ConfigureAwait(false);
 
             return viewModel;
+        }
+
+        private async Task<ProcessedCart> AddUpdateLineItemAsync(AddLineItemParam param)
+        {
+            var getCartParam = new GetCartParam
+            {
+                CartName = param.CartName,
+                Scope = param.Scope,
+                CultureInfo = param.CultureInfo,
+                CustomerId = param.CustomerId,
+                CartType = param.CartType,
+                BaseUrl = param.BaseUrl
+            };
+
+            var cart = await CartRepository.GetCartAsync(getCartParam).ConfigureAwait(false);
+
+            var existingLineItem = cart.GetLineItems()?.Find(x => x.ProductId == param.ProductId && x.VariantId == param.VariantId && x.IsGiftItem == false);
+
+            if (existingLineItem == null)
+            {
+                cart = await CartRepository.AddLineItemAsync(param).ConfigureAwait(false);
+
+            }
+            else
+            {
+                var updateLineItemParam = new UpdateLineItemParam
+                {
+                    BaseUrl = param.BaseUrl,
+                    CartName = param.CartName,
+                    CartType = param.CartType,
+                    ScopeId = param.Scope,
+                    CultureInfo = param.CultureInfo,
+                    CustomerId = param.CustomerId,
+                    LineItemId = existingLineItem.Id,
+                    Quantity = param.Quantity,
+                    RecurringOrderFrequencyName = param.RecurringOrderFrequencyName,
+                    RecurringOrderProgramName = param.RecurringOrderProgramName
+                };
+                cart = await CartRepository.UpdateLineItemAsync(updateLineItemParam).ConfigureAwait(false);
+            }
+            return cart;
         }
 
         /// <summary>
@@ -242,7 +284,7 @@ namespace Orckestra.Composer.Cart.Services
             };
 
             var viewModel = await CreateCartViewModelAsync(vmParam).ConfigureAwait(false);
-            
+
             return viewModel;
         }
 
@@ -263,7 +305,7 @@ namespace Orckestra.Composer.Cart.Services
             if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartName)), nameof(param)); }
             if (string.IsNullOrWhiteSpace(param.CartType)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartType)), nameof(param)); }
             if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
-            if (string.IsNullOrWhiteSpace(param.Status)){ throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Status)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Status)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Status)), nameof(param)); }
 
             var updatedCart = await CartRepository.UpdateCartAsync(param).ConfigureAwait(false);
 
@@ -284,7 +326,7 @@ namespace Orckestra.Composer.Cart.Services
             };
 
             var viewModel = await CreateCartViewModelAsync(vmParam).ConfigureAwait(false);
-            
+
             return viewModel;
         }
 
@@ -368,7 +410,7 @@ namespace Orckestra.Composer.Cart.Services
 
             var vm = CartViewModelFactory.CreateCartViewModel(param);
 
-            if(CartConfiguration.GroupCartItemsByPrimaryCategory)
+            if (CartConfiguration.GroupCartItemsByPrimaryCategory)
             {
                 vm.GroupedLineItemDetailViewModels = await GetGroupedLineItems(vm, param).ConfigureAwait(false);
             }
@@ -515,7 +557,7 @@ namespace Orckestra.Composer.Cart.Services
             }).ConfigureAwait(false);
 
             country.Validate(param.PostalCode);
-            
+
             if (shipment.Address == null)
             {
                 shipment.Address = new Address { PropertyBag = new PropertyBag() };
@@ -545,7 +587,7 @@ namespace Orckestra.Composer.Cart.Services
 
             }).ConfigureAwait(false);
 
-            var payment = cart.Payments?.Find(x => !x.IsVoided()) 
+            var payment = cart.Payments?.Find(x => !x.IsVoided())
             ?? throw new InvalidOperationException("There is no valid payment from which we can get or set the billing address");
 
             if (payment.BillingAddress == null)
@@ -554,7 +596,7 @@ namespace Orckestra.Composer.Cart.Services
             }
 
             await MapBillingAddressPostalCodeToPaymentAsync(param, payment);
-            
+
             return await UpdateCartAsync(new UpdateCartViewModelParam
             {
                 BaseUrl = param.BaseUrl,
@@ -610,7 +652,7 @@ namespace Orckestra.Composer.Cart.Services
 
             country.Validate(param.PostalCode);
 
-            if(payment.BillingAddress.PropertyBag != null)
+            if (payment.BillingAddress.PropertyBag != null)
                 payment.BillingAddress.PropertyBag[AddressBookIdPropertyBagKey] = Guid.Empty; // because the updated address will not correspond to any registered address
             payment.BillingAddress.PostalCode = param.PostalCode;
             payment.BillingAddress.CountryCode = country.IsoCode;
@@ -619,7 +661,7 @@ namespace Orckestra.Composer.Cart.Services
 
         protected virtual string GetRegionCodeBasedOnPostalCode(string postalCode, string countryCode)
         {
-            var region = RegionCodeProvider.GetRegion(postalCode, countryCode) ?? 
+            var region = RegionCodeProvider.GetRegion(postalCode, countryCode) ??
                 throw new ArgumentException("Cannot resolve a Region based on this Postal Code", "postalCode");
             return region;
         }
