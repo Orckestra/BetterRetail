@@ -167,7 +167,6 @@ namespace Orckestra.Composer.Cart.Services
             if (existingLineItem == null)
             {
                 cart = await CartRepository.AddLineItemAsync(param).ConfigureAwait(false);
-
             }
             else
             {
