@@ -152,9 +152,9 @@ module Orckestra.Composer {
 
             this.checkoutService.VueCheckoutMixins.push(vuePaymentMixin);
 
-            //if("ApplePaySession" in window) {
+          //  if("ApplePaySession" in window) {
                 this.checkoutService.VueCheckoutMixins.push(this.applePayService.getVueMixin());
-           // }
+          //  }
         }
 
     }

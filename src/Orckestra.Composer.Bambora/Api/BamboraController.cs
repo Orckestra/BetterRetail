@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Composite.Core;
+using System;
 using System.Web.Http;
 
 namespace Orckestra.Composer.BamboraPayment.Api
@@ -9,8 +10,16 @@ namespace Orckestra.Composer.BamboraPayment.Api
         protected BamboraGateway _client;
         public BamboraController()
         {
-            _client = new BamboraGateway();
-       }
+            try
+            {
+                _client = new BamboraGateway();
+            }
+            catch (Exception ex)
+            {
+                Log.LogError("BamboraGateway", ex);
+                throw;
+            }
+        }
 
         /// <summary>
         /// Get the shopping cart for the current customer
@@ -22,7 +31,7 @@ namespace Orckestra.Composer.BamboraPayment.Api
         {
             if (string.IsNullOrEmpty(token)) throw new ArgumentNullException(nameof(token));
 
-            var response = _client.PreAuth(1, "1000", token);
+            var response = _client.PreAuth(1, token);
 
             return Ok(response);
         }

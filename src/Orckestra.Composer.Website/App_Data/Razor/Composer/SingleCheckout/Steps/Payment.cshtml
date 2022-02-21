@@ -1,4 +1,5 @@
 ﻿@inherits RazorFunction
+@using System.Configuration;
 
 @functions {
     public IComposerContext ComposerContext { get; set; }
@@ -133,6 +134,7 @@
                         </div>
 
                         @ApplePay()
+
                     </form>
                 </div>
                 <div class="card-body bg-light" v-show="step.preview" v-cloak="true" key="preview">
@@ -191,7 +193,9 @@
 @helper ApplePay()
 {
     <div v-if="ApplePaySupportedByDevice" v-cloak="true">
-        <input id="storeContext" data-storename="@HomePageNode.Title"
+        <input id="storeContext" 
+               data-merchantidentifier="@ConfigurationManager.AppSettings["ApplePayMerchantId"]"
+               data-storename="@HomePageNode.Title"
                data-currency="@ComposerContext.ScopeCurrencyIso"
                data-country="@ComposerContext.CountryCode" type="hidden" />
         <button v-if="CanMakeApplePayPayments"
@@ -201,6 +205,4 @@
             <img alt="Pay" src="~/UI.Package/Images/256px-Apple_Pay_logo.png" width="100" />
         </button>
     </div>
-    <button class="btn btn-outline-secondary" v-on:click.prevent="authBambora">Test Auth Bambore</button>
-    <div class="text-warning">{{response}}</div>
 }

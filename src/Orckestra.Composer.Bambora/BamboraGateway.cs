@@ -11,21 +11,37 @@ namespace Orckestra.Composer.BamboraPayment
 
         public BamboraGateway()
         {
-             _gateway = new AppleGateway()
+            if(!int.TryParse(ConfigurationManager.AppSettings["BamboraMerchantId"], out int merchantId))
             {
-                MerchantId = int.Parse(ConfigurationManager.AppSettings["BamboraMerchantId"]),
-                AppleMerchantId = ConfigurationManager.AppSettings["ApplePayMerchantId"],
-                PaymentsApiPasscode = ConfigurationManager.AppSettings["BamboraPaymentsApiPasscode"],
+                throw new ArgumentException(nameof(merchantId));
+            }
+
+            var applePayMerchantId = ConfigurationManager.AppSettings["ApplePayMerchantId"];
+            if (string.IsNullOrWhiteSpace(applePayMerchantId))
+            {
+                throw new ArgumentException(nameof(applePayMerchantId));
+            }
+
+            var bamboraPaymentsApiPasscode = ConfigurationManager.AppSettings["BamboraPaymentsApiPasscode"];
+            if (string.IsNullOrWhiteSpace(applePayMerchantId))
+            {
+                throw new ArgumentException(nameof(bamboraPaymentsApiPasscode));
+            }
+
+            _gateway = new AppleGateway()
+            {
+                MerchantId = merchantId,
+                AppleMerchantId = applePayMerchantId,
+                PaymentsApiPasscode = bamboraPaymentsApiPasscode,
                 ApiVersion = "1"
             };
         }
 
-        public PaymentResponse PreAuth(decimal amount, string orderNumber, string paymenToken, bool complete = false)
+        public PaymentResponse PreAuth(decimal amount, string paymenToken, bool complete = false)
         {
            var request = new Requests.PaymentApplePayRequest()
             {
                 Amount = amount,
-                OrderNumber = orderNumber,
                 PaymentMethod = "apple_pay",
                 ApplePay = new Requests.ApplePay()
                 {
@@ -34,6 +50,7 @@ namespace Orckestra.Composer.BamboraPayment
                     Complete = complete
                 }
             };
+
             try
             {
                 return _gateway.Payments.MakePayment(request);
@@ -51,7 +68,6 @@ namespace Orckestra.Composer.BamboraPayment
                 return new PaymentResponse
                 {
                     Approved = "Declined",
-                    OrderNumber = orderNumber,
                     Message = ex.Message,
                 };
             }
@@ -60,7 +76,7 @@ namespace Orckestra.Composer.BamboraPayment
         public string Base64Encode(string plainText)
         {
             var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(plainText);
-            return System.Convert.ToBase64String(plainTextBytes);
+            return System.Convert.ToBase64String(plainTextBytes, Base64FormattingOptions.None);
         }
     }
 }
