@@ -23,7 +23,7 @@ namespace Orckestra.Composer.Website
         {
             CartConfiguration.PaymentProviderRegistry.RegisterProvider<OnSitePOSPaymentProvider>("Onsite payment");
            // CartConfiguration.PaymentProviderRegistry.RegisterProvider<MonerisCanadaPaymentProvider>("Moneris");
-           // CartConfiguration.PaymentProviderRegistry.RegisterProvider<BamboraPaymentProvider>("Bambora");
+            CartConfiguration.PaymentProviderRegistry.RegisterProvider<BamboraPaymentProvider>("Bambora");
         }
     }
 }

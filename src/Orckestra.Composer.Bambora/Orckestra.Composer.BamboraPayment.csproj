@@ -43,6 +43,7 @@
     <Compile Include="Api\BamboraController.cs" />
     <Compile Include="Api\PaymentsApplePayAPI.cs" />
     <Compile Include="AppleGetway.cs" />
+    <Compile Include="Parameters\AuthorizePaymentParam.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="BamboraGateway.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

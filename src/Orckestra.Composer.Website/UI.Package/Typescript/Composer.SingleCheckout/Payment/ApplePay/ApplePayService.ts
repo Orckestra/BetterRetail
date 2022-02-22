@@ -58,7 +58,7 @@ module Orckestra.Composer {
 
                         var { storename, currency, country} = document.getElementById('storeContext').dataset;
                         var { PostalCode, CountryCode, PhoneNumber, FirstName, LastName } = this.Cart.Payment.BillingAddress;
-                        var total = this.Cart.OrderSummary.Total.replace(/^\D+/g, '');
+                        var total = this.Cart.Payment.Amount;
 
                         var billingContact = {
                             phoneNumber: PhoneNumber,
@@ -95,7 +95,7 @@ module Orckestra.Composer {
                     paymentauthorized(event) {
                         // Send payment for processing...
                         const payment = event.payment;
-                        ComposerClient.post('/api/bambora/authorize', JSON.stringify(payment.token.paymentData))
+                        ComposerClient.post('/api/bambora/authorize', {Token: JSON.stringify(payment.token.paymentData), Amount: this.Cart.Payment.Amount })
                             .then(response => {
                                console.log(event.payment);
                                 if (response.approved === '1') { //approved

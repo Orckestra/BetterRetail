@@ -30,5 +30,10 @@ namespace Orckestra.Composer.Cart.ViewModels
         /// The BillingAddress Info.
         /// </summary>
         public BillingAddressViewModel BillingAddress { get; set; }
+
+        /// <summary>
+        ///  Gets or sets the amount of this payment.
+        /// </summary>
+        public decimal Amount { get; set; }
     }
 }

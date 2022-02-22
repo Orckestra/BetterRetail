@@ -1,4 +1,5 @@
 ﻿using Composite.Core;
+using Orckestra.Composer.BamboraPayment.Parameters;
 using System;
 using System.Web.Http;
 
@@ -27,11 +28,12 @@ namespace Orckestra.Composer.BamboraPayment.Api
         /// <returns>A Json representation of cart state</returns>
         [HttpPost]
         [ActionName("authorize")]
-        public IHttpActionResult Authorize([FromBody] string token)
+        public IHttpActionResult Authorize([FromBody] AuthorizePaymentParam param)
         {
-            if (string.IsNullOrEmpty(token)) throw new ArgumentNullException(nameof(token));
+            if (param == null) throw new ArgumentNullException(nameof(param));
+            if (string.IsNullOrEmpty(param.Token)) throw new ArgumentNullException(nameof(param.Token));
 
-            var response = _client.PreAuth(1, token);
+            var response = _client.PreAuth(param.Amount, param.Token);
 
             return Ok(response);
         }

@@ -865,7 +865,8 @@ namespace Orckestra.Composer.Cart.Factory
                 IsLocked = payment.PaymentStatus != PaymentStatus.New && payment.PaymentStatus != PaymentStatus.PendingVerification,
                 PaymentMethod = paymentMethodViewModel,
                 PaymentStatus = payment.PaymentStatus,
-                BillingAddress = billingAddressViewModel
+                BillingAddress = billingAddressViewModel,
+                Amount = payment.Amount
             };
         }
 
