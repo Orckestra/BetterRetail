@@ -23,6 +23,7 @@ using Composite.Data.Types;
 using System;
 using Orckestra.Composer.Repositories;
 using System.Linq;
+using Orckestra.Composer.Grocery.DataTypes;
 
 namespace Orckestra.Composer.Grocery.Website
 {
@@ -92,11 +93,20 @@ namespace Orckestra.Composer.Grocery.Website
             Guid homepageId = GetHomePageId(data);
             using (var con = new DataConnection())
             {
-                var meta = con.Get<ISiteConfigurationMeta>().FirstOrDefault(item => item.PageId == homepageId);
-                if (meta == null) return;
+                var siteConfigurationMeta = con.Get<ISiteConfigurationMeta>().FirstOrDefault(item => item.PageId == homepageId);
+                var grocerySettingsMeta = con.Get<IGrocerySettingsMeta>().FirstOrDefault(item => item.PageId == homepageId);
 
                 var categoryRepository = Composite.Core.ServiceLocator.GetService<ICategoryRepository>();
-                categoryRepository.ClearCategoriesCache(meta.Scope);
+
+                if (siteConfigurationMeta != null)
+                {
+                    categoryRepository.ClearCategoriesCache(siteConfigurationMeta.Scope);
+                }
+
+                if (grocerySettingsMeta != null)
+                {
+                    categoryRepository.ClearCategoriesCache(grocerySettingsMeta.DefaultStore);
+                }
             }
         }
 
