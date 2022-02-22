@@ -32,7 +32,7 @@ namespace Orckestra.Composer.BamboraPayment.Api
         {
             if (param == null) throw new ArgumentNullException(nameof(param));
             if (string.IsNullOrEmpty(param.Token)) throw new ArgumentNullException(nameof(param.Token));
-
+            // in real Payment Provider implemantation need to add also Billing and other things
             var response = _client.PreAuth(param.Amount, param.Token);
 
             return Ok(response);

@@ -88,7 +88,7 @@ module Orckestra.Composer {
 
                         ComposerClient.post('/api/applepay/create', { ValidationUrl: event.validationURL })
                             .then(response => {
-                                console.log('Apple pay create response: ' + response)
+                                console.log('Apple pay create response: ' + JSON.stringify(response))
                                 this.CurrentApplePaySession.completeMerchantValidation(response);
                             }).finally(() => this.Mode.Loading = false);
                     },
@@ -97,7 +97,7 @@ module Orckestra.Composer {
                         const payment = event.payment;
                         ComposerClient.post('/api/bambora/authorize', {Token: JSON.stringify(payment.token.paymentData), Amount: this.Cart.Payment.Amount })
                             .then(response => {
-                               console.log(event.payment);
+                               console.log(JSON.stringify(event.payment));
                                 if (response.approved === '1') { //approved
                                     this.CurrentApplePaySession.completePayment(ApplePaySession.STATUS_SUCCESS);
                                 } else {
