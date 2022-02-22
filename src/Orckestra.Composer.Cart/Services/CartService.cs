@@ -116,7 +116,7 @@ namespace Orckestra.Composer.Cart.Services
 
             try
             {
-                //If editing order, and item exists, updating it instead
+                //If editing order, and line item exists, updating it instead
                 if (param.CartType == CartConfiguration.OrderDraftCartType)
                 {
                     var existingLineItem = await GetExistingLineItem(param).ConfigureAwait(false);
