@@ -8,12 +8,12 @@ namespace Orckestra.Composer.BamboraPayment.Api
     public class BamboraController : ApiController
     {
 
-        protected BamboraGateway _client;
+        protected BamboraApplePayGateway _client;
         public BamboraController()
         {
             try
             {
-                _client = new BamboraGateway();
+                _client = new BamboraApplePayGateway();
             }
             catch (Exception ex)
             {

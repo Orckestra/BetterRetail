@@ -55,14 +55,14 @@ namespace Orckestra.Composer.BamboraPayment
 
         public IWebCommandExecuter WebCommandExecuter { get; set; }
 
-        private PaymentsApplePayAPI _payments;
+        private ApplePayPaymentsAPI _payments;
 
-        public PaymentsApplePayAPI Payments
+        public ApplePayPaymentsAPI Payments
         {
             get
             {
                 if (_payments == null)
-                    _payments = new PaymentsApplePayAPI();
+                    _payments = new ApplePayPaymentsAPI();
                 _payments.Configuration = Configuration;
                 if (WebCommandExecuter != null)
                     _payments.WebCommandExecuter = WebCommandExecuter;

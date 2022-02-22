@@ -5,11 +5,11 @@ using System.Configuration;
 
 namespace Orckestra.Composer.BamboraPayment
 {
-    public class BamboraGateway
+    public class BamboraApplePayGateway
     {
-        private readonly AppleGateway _gateway;
+        private readonly AppleGateway _applePayGateway;
 
-        public BamboraGateway()
+        public BamboraApplePayGateway()
         {
             if(!int.TryParse(ConfigurationManager.AppSettings["BamboraMerchantId"], out int merchantId))
             {
@@ -28,7 +28,7 @@ namespace Orckestra.Composer.BamboraPayment
                 throw new ArgumentException(nameof(bamboraPaymentsApiPasscode));
             }
 
-            _gateway = new AppleGateway()
+            _applePayGateway = new AppleGateway()
             {
                 MerchantId = merchantId,
                 AppleMerchantId = applePayMerchantId,
@@ -39,13 +39,12 @@ namespace Orckestra.Composer.BamboraPayment
 
         public PaymentResponse PreAuth(decimal amount, string paymenToken, bool complete = false)
         {
-           var request = new Requests.PaymentApplePayRequest()
+           var request = new Requests.ApplePayPaymentRequest()
             {
-                Amount = amount,
-                PaymentMethod = "apple_pay",
+                Amount = amount, //should come from Payment object
                 ApplePay = new Requests.ApplePay()
                 {
-                    MerchantId = _gateway.AppleMerchantId,
+                    MerchantId = _applePayGateway.AppleMerchantId,
                     PaymenToken = Base64Encode(paymenToken),
                     Complete = complete
                 }
@@ -53,7 +52,7 @@ namespace Orckestra.Composer.BamboraPayment
 
             try
             {
-                return _gateway.Payments.MakePayment(request);
+                return _applePayGateway.Payments.MakePayment(request);
             }
             catch (Exception ex)
             {

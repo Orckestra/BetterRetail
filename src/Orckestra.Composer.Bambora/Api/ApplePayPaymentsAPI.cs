@@ -7,7 +7,7 @@ using System;
 
 namespace Orckestra.Composer.BamboraPayment.Api
 {
-    public class PaymentsApplePayAPI
+    public class ApplePayPaymentsAPI
     {
 
         private Bambora.NA.SDK.Configuration _configuration;
@@ -28,7 +28,7 @@ namespace Orckestra.Composer.BamboraPayment.Api
 		/// </summary>
 		/// <returns>the payment result</returns>
 		/// <param name="paymentRequest">Payment request.</param>
-		public PaymentResponse MakePayment(PaymentApplePayRequest paymentRequest)
+		public PaymentResponse MakePayment(ApplePayPaymentRequest paymentRequest)
         {
 
             Gateway.ThrowIfNullArgument(paymentRequest, "paymentRequest");

@@ -41,14 +41,14 @@
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Api\BamboraController.cs" />
-    <Compile Include="Api\PaymentsApplePayAPI.cs" />
+    <Compile Include="Api\ApplePayPaymentsAPI.cs" />
     <Compile Include="AppleGetway.cs" />
     <Compile Include="Parameters\AuthorizePaymentParam.cs" />
     <Compile Include="Plugin.cs" />
-    <Compile Include="BamboraGateway.cs" />
+    <Compile Include="BamboraApplePayGateway.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Requests\ApplePay.cs" />
-    <Compile Include="Requests\PaymentApplePayRequest.cs" />
+    <Compile Include="Requests\ApplePayPaymentRequest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Orckestra.Composer.Store\Orckestra.Composer.Store.csproj">
