@@ -116,9 +116,30 @@ namespace Orckestra.Composer.Cart.Services
 
             try
             {
-                cart = EditingOrderProvider.IsEditMode()
-                    ? await AddUpdateLineItemAsync(param)
-                    : await CartRepository.AddLineItemAsync(param).ConfigureAwait(false);
+                //If editing order, and item exists, updating it instead
+                if (param.CartType == CartConfiguration.OrderDraftCartType)
+                {
+                    var existingLineItem = await GetExistingLineItem(param).ConfigureAwait(false);
+                    if (existingLineItem != null)
+                    {
+                        var updateLineItemParam = new UpdateLineItemParam
+                        {
+                            BaseUrl = param.BaseUrl,
+                            CartName = param.CartName,
+                            CartType = param.CartType,
+                            ScopeId = param.Scope,
+                            CultureInfo = param.CultureInfo,
+                            CustomerId = param.CustomerId,
+                            LineItemId = existingLineItem.Id,
+                            Quantity = param.Quantity + existingLineItem.Quantity,
+                            RecurringOrderFrequencyName = param.RecurringOrderFrequencyName,
+                            RecurringOrderProgramName = param.RecurringOrderProgramName
+                        };
+                        return await UpdateLineItemAsync(updateLineItemParam).ConfigureAwait(false);
+                    }
+                }
+
+                cart = await CartRepository.AddLineItemAsync(param).ConfigureAwait(false);
             }
             catch (ComposerException ex)
             {
@@ -148,7 +169,7 @@ namespace Orckestra.Composer.Cart.Services
             return viewModel;
         }
 
-        private async Task<ProcessedCart> AddUpdateLineItemAsync(AddLineItemParam param)
+        private async Task<LineItem> GetExistingLineItem(AddLineItemParam param)
         {
             var getCartParam = new GetCartParam
             {
@@ -162,30 +183,7 @@ namespace Orckestra.Composer.Cart.Services
 
             var cart = await CartRepository.GetCartAsync(getCartParam).ConfigureAwait(false);
 
-            var existingLineItem = cart.GetLineItems()?.Find(x => x.ProductId == param.ProductId && x.VariantId == param.VariantId && x.IsGiftItem == false);
-
-            if (existingLineItem == null)
-            {
-                cart = await CartRepository.AddLineItemAsync(param).ConfigureAwait(false);
-            }
-            else
-            {
-                var updateLineItemParam = new UpdateLineItemParam
-                {
-                    BaseUrl = param.BaseUrl,
-                    CartName = param.CartName,
-                    CartType = param.CartType,
-                    ScopeId = param.Scope,
-                    CultureInfo = param.CultureInfo,
-                    CustomerId = param.CustomerId,
-                    LineItemId = existingLineItem.Id,
-                    Quantity = param.Quantity,
-                    RecurringOrderFrequencyName = param.RecurringOrderFrequencyName,
-                    RecurringOrderProgramName = param.RecurringOrderProgramName
-                };
-                cart = await CartRepository.UpdateLineItemAsync(updateLineItemParam).ConfigureAwait(false);
-            }
-            return cart;
+            return cart.GetLineItems()?.Find(x => x.ProductId == param.ProductId && x.VariantId == param.VariantId && !x.IsGiftItem);
         }
 
         /// <summary>
