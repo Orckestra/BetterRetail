@@ -183,7 +183,7 @@ namespace Orckestra.Composer.Cart.Services
 
             var cart = await CartRepository.GetCartAsync(getCartParam).ConfigureAwait(false);
 
-            return cart.GetLineItems()?.Find(x => x.ProductId == param.ProductId && x.VariantId == param.VariantId && !x.IsGiftItem);
+            return cart?.GetLineItems()?.Find(x => x.ProductId == param.ProductId && x.VariantId == param.VariantId && !x.IsGiftItem);
         }
 
         /// <summary>
