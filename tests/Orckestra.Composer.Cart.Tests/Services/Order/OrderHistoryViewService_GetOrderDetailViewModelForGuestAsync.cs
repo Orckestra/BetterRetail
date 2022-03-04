@@ -18,6 +18,7 @@ using Orckestra.Composer.Services.Lookup;
 using Orckestra.Overture.ServiceModel.Customers;
 using Orckestra.Overture.ServiceModel.Orders;
 using System.Threading.Tasks;
+using Orckestra.Composer.Cart.Providers.Order;
 
 namespace Orckestra.Composer.Cart.Tests.Services.Order
 {
@@ -48,13 +49,15 @@ namespace Orckestra.Composer.Cart.Tests.Services.Order
 
             _container.GetMock<IOrderDetailsViewModelFactory>()
             .Setup(r => r.CreateViewModel(It.IsAny<CreateOrderDetailViewModelParam>()))
-            .Returns(new OrderDetailViewModel());
+            .Returns(new OrderDetailViewModel() { OrderInfos = new OrderDetailInfoViewModel()});
 
             _container.GetMock<IOrderUrlProvider>()
               .Setup(r => r.GetOrderDetailsBaseUrl(It.IsAny<CultureInfo>()))
                .Returns(GetRandom.String(32));
-
             _container.GetMock<ILineItemService>();
+            _container.GetMock<IEditingOrderProvider>()
+                .Setup(r => r.GetCancellationStatus(It.IsAny<Orckestra.Overture.ServiceModel.Orders.Order>()))
+                .ReturnsAsync(new CancellationStatus());
         }
 
         [Test]
@@ -75,7 +78,10 @@ namespace Orckestra.Composer.Cart.Tests.Services.Order
                         {
                             Email = email
                         }
-                    }
+                    },
+                    ScopeId = "Global",
+                    CustomerId = Guid.NewGuid().ToString()
+
                 });
 
             //Act

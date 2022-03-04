@@ -53,11 +53,21 @@
         <File sourceFilename="~\Bin\Orckestra.Composer.CompositeC1.DataTypes.dll" targetFilename="~\Bin\Orckestra.Composer.CompositeC1.DataTypes.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Orckestra.Composer.ContentSearch.dll" targetFilename="~\Bin\Orckestra.Composer.ContentSearch.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Orckestra.ExperienceManagement.Configuration.dll" targetFilename="~\Bin\Orckestra.ExperienceManagement.Configuration.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Orckestra.Media.AutoImageResizing.dll" targetFilename="~\Bin\Orckestra.Media.AutoImageResizing.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Newtonsoft.Json.dll" targetFilename="~\Bin\Newtonsoft.Json.dll" allowOverwrite="true" addAssemblyBinding="true"/>
         <File sourceFilename="~\Bin\Microsoft.ServiceBus.dll" targetFilename="~\Bin\Microsoft.ServiceBus.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Orckestra.Composer.HandlebarsCompiler.dll" targetFilename="~\Bin\Orckestra.Composer.HandlebarsCompiler.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Jurassic.dll" targetFilename="~\Bin\Jurassic.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\NUglify.dll" targetFilename="~\Bin\NUglify.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Microsoft.AI.Agent.Intercept.dll" targetFilename="~\Bin\Microsoft.AI.Agent.Intercept.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Microsoft.AI.DependencyCollector.dll" targetFilename="~\Bin\Microsoft.AI.DependencyCollector.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Microsoft.AI.PerfCounterCollector.dll" targetFilename="~\Bin\Microsoft.AI.PerfCounterCollector.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Microsoft.AI.ServerTelemetryChannel.dll" targetFilename="~\Bin\Microsoft.AI.ServerTelemetryChannel.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Microsoft.AI.Web.dll" targetFilename="~\Bin\Microsoft.AI.Web.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Microsoft.AI.WindowsServer.dll" targetFilename="~\Bin\Microsoft.AI.WindowsServer.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Microsoft.ApplicationInsights.dll" targetFilename="~\Bin\Microsoft.ApplicationInsights.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Microsoft.AspNet.TelemetryCorrelation.dll" targetFilename="~\Bin\Microsoft.AspNet.TelemetryCorrelation.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\System.Diagnostics.DiagnosticSource.dll" targetFilename="~\Bin\System.Diagnostics.DiagnosticSource.dll" allowOverwrite="true" />
       </Files>
     </mi:Add>
 
@@ -67,6 +77,7 @@
         <File sourceFilename="~\robots.prd.txt" targetFilename="~\robots.prd.txt" allowOverwrite="true" />
         <File sourceFilename="~\Global.asax" targetFilename="~\Global.asax" allowOverwrite="true" />
         <File sourceFilename="~\error.html" targetFilename="~\error.html" allowOverwrite="true" />
+        <File sourceFilename="~\ApplicationInsights.config" targetFilename="~\ApplicationInsights.config" allowOverwrite="true" />
       </Files>
       <Directories>
         <Directory sourceDirectory="~\UI.Package\Images\" targetDirectory="~\UI.Package\Images\" allowOverwrite="true" deleteTargetDirectory="false" />

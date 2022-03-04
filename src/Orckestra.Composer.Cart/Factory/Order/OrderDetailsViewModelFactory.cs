@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Globalization;
-using System.Linq;
-using Orckestra.Composer.Cart.Extensions;
+﻿using Orckestra.Composer.Cart.Extensions;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Parameters.Order;
 using Orckestra.Composer.Cart.ViewModels;
@@ -14,6 +9,11 @@ using Orckestra.Composer.Providers.Localization;
 using Orckestra.Composer.Utils;
 using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel.Orders;
+using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Globalization;
+using System.Linq;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Cart.Factory.Order
@@ -84,7 +84,7 @@ namespace Orckestra.Composer.Cart.Factory.Order
             var viewModel = new OrderDetailViewModel();
             var shipments = GetActiveShipments(param.Order);
 
-            #pragma warning disable 618
+#pragma warning disable 618
             viewModel.OrderInfos = GetOrderInfosViewModel(param);
             viewModel.History = GetOrderChangesViewModel(param.OrderChanges, param.CultureInfo, _orderStatus);
             viewModel.BillingAddress = GetBillingAddressViewModel(param);
@@ -95,7 +95,7 @@ namespace Orckestra.Composer.Cart.Factory.Order
             viewModel.OrderSummary = CartViewModelFactory.GetOrderSummaryViewModel(param.Order.Cart, param.CultureInfo);
             viewModel.OrderSummary.Taxes = TaxViewModelFactory.CreateTaxViewModels(shipments.SelectMany(s => s.Taxes).ToList(), param.CultureInfo).ToList();
             MapAdditionalFees(viewModel, param);
-            #pragma warning restore 618
+#pragma warning restore 618
 
             // Reverse the items order in the Cart so the last added item will be the first in the list
             if (viewModel.Shipments != null && viewModel.Shipments.Any())
@@ -138,8 +138,19 @@ namespace Orckestra.Composer.Cart.Factory.Order
             orderInfos.OrderStatusRaw = param.Order.OrderStatus;
             orderInfos.BillingCurrency = param.Order.Cart.BillingCurrency;
             orderInfos.PricePaid = LocalizationProvider.FormatPrice((decimal)param.Order.Cart.Total, CurrencyProvider.GetCurrency());
+            orderInfos.HasOwnDraft = HasOwnDraft(param);
 
             return orderInfos;
+        }
+
+        protected virtual bool HasOwnDraft(CreateOrderDetailViewModelParam param)
+        {
+            if (!Guid.TryParse(param.Order.Id, out Guid orderGuid)) return false;
+
+            var orderDraft = param.OrderCartDrafts?.FirstOrDefault(d => d.Name == orderGuid.ToString("N"));
+            if (orderDraft == null) return false;
+
+            return orderDraft.IsCurrentApplicationOwner();
         }
 
         protected virtual string GetOrderStatusDisplayName(CreateOrderDetailViewModelParam param)
@@ -220,7 +231,7 @@ namespace Orckestra.Composer.Cart.Factory.Order
 
             if (shipment.FulfillmentScheduledTimeBeginDate.HasValue)
             {
-                shipmentVm.ScheduledShipDate = 
+                shipmentVm.ScheduledShipDate =
                     LocalizationHelper.LocalizedFormat("General", "ShortDateFormat", shipment.FulfillmentScheduledTimeBeginDate.Value, param.CultureInfo);
             }
 
@@ -256,7 +267,7 @@ namespace Orckestra.Composer.Cart.Factory.Order
                 }
 
                 string shipmentStatusDate = null;
-                foreach(var el in shipmentVm.History)
+                foreach (var el in shipmentVm.History)
                 {
                     if (!el.NewValue.Equals(shipment.Status)) { continue; }
 

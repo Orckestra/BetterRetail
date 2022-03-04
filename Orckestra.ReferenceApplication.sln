@@ -116,6 +116,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.C1.PreCo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.C1.PreConfiguration", "src\Orckestra.Composer.C1.PreConfiguration\Orckestra.Composer.C1.PreConfiguration.csproj", "{485808CC-75B2-4BF6-9B57-470D30B562D4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Media.AutoImageResizing", "src\Orckestra.Media.AutoImageResizing\Orckestra.Media.AutoImageResizing.csproj", "{1C67610A-44C0-49BE-A75A-4482413E063A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.SearchQuery.Tests", "tests\Orckestra.Composer.SearchQuery.Tests\Orckestra.Composer.SearchQuery.Tests.csproj", "{D63C2FD6-1BBB-400C-B17C-BD6AE254DBD2}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.CustomerConditionProvider", "src\Orckestra.Composer.CustomerConditionProvider\Orckestra.Composer.CustomerConditionProvider.csproj", "{91EBDFE4-73C2-4812-A4E9-9FED337D2223}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.CustomerConditionProvider.Package", "src\Orckestra.Composer.CustomerConditionProvider.Package\Orckestra.Composer.CustomerConditionProvider.Package.csproj", "{D36AD587-2FF9-43EA-8BAE-4D08F81EA506}"
@@ -277,6 +281,14 @@ Global
 		{485808CC-75B2-4BF6-9B57-470D30B562D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{485808CC-75B2-4BF6-9B57-470D30B562D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{485808CC-75B2-4BF6-9B57-470D30B562D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C67610A-44C0-49BE-A75A-4482413E063A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C67610A-44C0-49BE-A75A-4482413E063A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C67610A-44C0-49BE-A75A-4482413E063A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C67610A-44C0-49BE-A75A-4482413E063A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D63C2FD6-1BBB-400C-B17C-BD6AE254DBD2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D63C2FD6-1BBB-400C-B17C-BD6AE254DBD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D63C2FD6-1BBB-400C-B17C-BD6AE254DBD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D63C2FD6-1BBB-400C-B17C-BD6AE254DBD2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{91EBDFE4-73C2-4812-A4E9-9FED337D2223}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{91EBDFE4-73C2-4812-A4E9-9FED337D2223}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{91EBDFE4-73C2-4812-A4E9-9FED337D2223}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -333,6 +345,8 @@ Global
 		{3508A92E-CB4B-431D-BBDC-0AD5FABEC20C} = {4C9DCD77-1564-4C86-AD89-DCC674C54879}
 		{7BF11F55-B19D-4EE2-8B22-E533C6BBC861} = {2290CF95-EF97-4E7A-ADD6-D902AD8DAAAC}
 		{485808CC-75B2-4BF6-9B57-470D30B562D4} = {2290CF95-EF97-4E7A-ADD6-D902AD8DAAAC}
+		{1C67610A-44C0-49BE-A75A-4482413E063A} = {B770DD6A-41C2-4576-80D9-58023319B204}
+		{D63C2FD6-1BBB-400C-B17C-BD6AE254DBD2} = {832CD4F4-EF5A-44B0-92FF-D159B6276AF7}
 		{91EBDFE4-73C2-4812-A4E9-9FED337D2223} = {B8DA1457-A933-4B02-A5DF-2F899148CF50}
 		{D36AD587-2FF9-43EA-8BAE-4D08F81EA506} = {B8DA1457-A933-4B02-A5DF-2F899148CF50}
 	EndGlobalSection

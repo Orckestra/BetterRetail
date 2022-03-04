@@ -26,7 +26,7 @@ namespace Orckestra.Composer.Search.Context
 
         protected HttpRequestBase Request { get; private set; }
 
-        public virtual string SortBy => Request[SearchRequestParams.SortBy];
+        public virtual string SortBy => Request[SearchRequestParams.SortBy] ?? SearchRequestParams.DefaultSortBy;
         public virtual string SortDirection => Request[SearchRequestParams.SortDirection] ?? SearchRequestParams.DefaultSortDirection;
 
         public virtual int CurrentPage
@@ -68,6 +68,7 @@ namespace Orckestra.Composer.Search.Context
                 CategoryName = await GetCategoryNameAsync(categoryId).ConfigureAwait(false),
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
                 IsAllProducts = CategoryMetaContext.GetIsAllProductPage(),
+                NumberOfItemsPerPage = SearchConfiguration.MaxItemsPerPage,
                 Page = CurrentPage,
                 SortBy = SortBy,
                 SortDirection = SortDirection,

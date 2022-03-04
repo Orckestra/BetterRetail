@@ -55,6 +55,16 @@ namespace Orckestra.Composer.Repositories
             return result?.Categories;
         }
 
+        public void ClearCategoriesCache(string scope)
+        {
+            var cacheKey = new CacheKey(CacheConfigurationCategoryNames.Category)
+            {
+                Scope = scope
+            };
+
+            CacheProvider.Remove(cacheKey);
+        }
+
         /// <summary>
         /// Gets the category tree.
         /// </summary>
@@ -95,37 +105,10 @@ namespace Orckestra.Composer.Repositories
                 Scope = scope
             }).ConfigureAwait(false);
 
-            // TODO: Remove that method once OCS provide correct value for PrimaryParentCategoryId
-            // TODO: (SB does OCS return the correct value now? 02/06/15)
-            FixMissingPrimaryParentCategoryIds(categories);
-
             return new Tree<Category, string>(categories, category => category.Id, category => category.PrimaryParentCategoryId, StringComparer.InvariantCultureIgnoreCase);
         }
 
-        private void FixMissingPrimaryParentCategoryIds(List<Category> categories)
-        {
-            // Create dictionary based on category inner id
-            var categoriesIdLookup = new Dictionary<int, Category>();
-            foreach (var category in categories)
-            {
-                if (category.PropertyBag.TryGetValue(PropertyBagItemId, out object itemId))
-                {
-                    categoriesIdLookup[(int)itemId] = category;
-                }
-            }
-
-            // Set each category's PrimaryParentCategoryId based on inner ids
-            foreach (var category in categories)
-            {
-                if (category.PropertyBag.TryGetValue(PropertyBagParentItemId, out object parentCategoryId))
-                {
-                    var parentCategory = categoriesIdLookup[(int)parentCategoryId];
-                    category.PrimaryParentCategoryId = parentCategory.Id;
-                }
-            }
-        }
-
-        public virtual Task<List<Facet>> GetCategoryProductCount(string scopeId, string cultureName)
+         public virtual Task<List<Facet>> GetCategoryProductCount(string scopeId, string cultureName)
         {
             var request = GetProductsAdvancedSearchRequest(scopeId, cultureName, "CategoryAutoSuggest");
             return Task.FromResult(OvertureClient.Send(request).Facets);

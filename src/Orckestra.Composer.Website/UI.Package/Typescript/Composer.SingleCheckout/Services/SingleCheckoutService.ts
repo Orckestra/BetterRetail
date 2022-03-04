@@ -166,7 +166,7 @@ module Orckestra.Composer {
                     Regions: checkoutContext.Regions,
                     ShippingMethodTypes: checkoutContext.ShippingMethodTypes,
                     Payment: null,
-                    RegisteredAddresses: {},
+                    RegisteredAddresses: [],
                     Steps: {
                         StartStep: 0,
                         Information: {

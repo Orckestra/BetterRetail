@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Localization;
 using Orckestra.Composer.Search.Facets;
 using Orckestra.Composer.Search.Factory;
 using Orckestra.Composer.Search.Parameters;
-using Orckestra.Composer.Search.Providers;
 using Orckestra.Composer.Search.Repositories;
 using Orckestra.Composer.Search.ViewModels;
 using Orckestra.Composer.Services;
@@ -16,44 +14,34 @@ using Orckestra.Composer.Repositories;
 using System.Collections.Generic;
 using Orckestra.Overture.ServiceModel.Products;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
+using System.Linq;
 
 namespace Orckestra.Composer.Search.Services
 {
     public class SearchViewService : BaseSearchViewService<SearchParam>, ISearchViewService
     {
-        protected ICategoryRepository CategoryRepository { get; }
-
         public SearchViewService(
-            ICategoryRepository categoryRepository,
+             ICategoryRepository categoryRepository,
             ISearchRepository searchRepository,
-            IViewModelMapper viewModelMapper,
             IDamProvider damProvider,
             ILocalizationProvider localizationProvider,
-            IProductUrlProvider productUrlProvider,
             ISearchUrlProvider searchUrlProvider,
             IFacetFactory facetFactory,
             ISelectedFacetFactory selectedFacetFactory,
-            IPriceProvider priceProvider,
             IComposerContext composerContext,
-            IProductSettingsViewService productSettings,
-            IScopeViewService scopeViewService,
-            IRecurringOrdersSettings recurringOrdersSettings)
+            IProductSearchViewModelFactory productSearchViewModelFactory)
             : base(
             searchRepository,
-            viewModelMapper,
             damProvider,
             localizationProvider,
-            productUrlProvider,
             searchUrlProvider,
             facetFactory,
             selectedFacetFactory,
-            priceProvider,
             composerContext,
-            productSettings,
-            scopeViewService,
-            recurringOrdersSettings)
+            productSearchViewModelFactory,
+            categoryRepository)
         {
-            CategoryRepository = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository));
+            
         }
 
         public virtual Task<PageHeaderViewModel> GetPageHeaderViewModelAsync(GetPageHeaderParam param)
@@ -96,15 +84,33 @@ namespace Orckestra.Composer.Search.Services
             var viewModel = new SearchViewModel
             {
                 Keywords = criteria.Keywords,
-                SelectedFacets = await GetSelectedFacetsAsync(criteria).ConfigureAwait(false),
-                ProductSearchResults = await GetProductSearchResultsAsync(criteria).ConfigureAwait(false)
+                FacetSettings = new FacetSettingsViewModel()
+                {
+                    SelectedFacets = await GetSelectedFacetsAsync(criteria).ConfigureAwait(false),
+                },
+                ProductSearchResults = await GetProductSearchResultsAsync(criteria).ConfigureAwait(false),
+                ListName = "Search Results",
             };
+
+            if (criteria.IncludeFacets)
+            {
+                viewModel.FacetSettings.CategoryFacetValuesTree = await BuildCategoryFacetValuesTree(
+                    viewModel.ProductSearchResults.Facets,
+                    viewModel.FacetSettings.SelectedFacets,
+                    viewModel.ProductSearchResults.CategoryFacetCounts).ConfigureAwait(false);
+
+                // Json context for Facets
+                viewModel.FacetSettings.Context["CategoryFacetValuesTree"] = viewModel.FacetSettings.CategoryFacetValuesTree;
+                viewModel.FacetSettings.Context["SelectedFacets"] = viewModel.FacetSettings.SelectedFacets;
+                viewModel.FacetSettings.Context["Facets"] = viewModel.ProductSearchResults.Facets.Where(f => !f.FieldName.StartsWith(SearchConfiguration.CategoryFacetFiledNamePrefix));
+                viewModel.FacetSettings.Context["PromotedFacetValues"] = viewModel.ProductSearchResults.PromotedFacetValues;
+            }
 
             // TODO: Needed for some JS context - move to data-context-var where needed
             viewModel.Context["TotalCount"] = viewModel.ProductSearchResults.TotalCount;
             viewModel.Context["Keywords"] = viewModel.ProductSearchResults.Keywords;
             viewModel.Context["CorrectedSearchTerms"] = viewModel.ProductSearchResults.CorrectedSearchTerms;
-            viewModel.Context["ListName"] = "Search Results";
+            viewModel.Context["ListName"] = viewModel.ListName;
 
             return viewModel;
         }

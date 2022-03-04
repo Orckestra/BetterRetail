@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Threading.Tasks;
-using Orckestra.Composer.Cart.Factory;
+﻿using Orckestra.Composer.Cart.Factory;
 using Orckestra.Composer.Cart.Factory.Order;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Parameters.Order;
+using Orckestra.Composer.Cart.Providers.Order;
+using Orckestra.Composer.Cart.Repositories;
 using Orckestra.Composer.Cart.Repositories.Order;
 using Orckestra.Composer.Cart.ViewModels;
 using Orckestra.Composer.Cart.ViewModels.Order;
@@ -19,7 +16,14 @@ using Orckestra.Composer.Services;
 using Orckestra.Composer.Services.Lookup;
 using Orckestra.Composer.Utils;
 using Orckestra.Overture.ServiceModel.Orders;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Threading.Tasks;
+using Orckestra.Overture.ServiceModel.Orders.Fulfillment;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
+using System.Net;
 
 namespace Orckestra.Composer.Cart.Services.Order
 {
@@ -36,12 +40,18 @@ namespace Orckestra.Composer.Cart.Services.Order
         protected virtual IOrderUrlProvider OrderUrlProvider { get; private set; }
         protected virtual ILookupService LookupService { get; private set; }
         protected virtual IOrderRepository OrderRepository { get; private set; }
+        protected virtual ICartRepository CartRepository { get; private set; }
         protected virtual IOrderDetailsViewModelFactory OrderDetailsViewModelFactory { get; private set; }
         protected virtual IImageService ImageService { get; private set; }
         protected virtual IShippingTrackingProviderFactory ShippingTrackingProviderFactory { get; private set; }
         protected virtual ICustomerRepository CustomerRepository { get; private set; }
+        protected virtual IComposerContext ComposerContext { get; private set; }
+        protected virtual ICartUrlProvider CartUrlProvider { get; private set; }
         protected IComposerJsonSerializer ComposerJsonSerializer { get; }
         public ILineItemViewModelFactory LineItemViewModelFactory { get; }
+        protected virtual IEditingOrderProvider EditingOrderProvider { get; private set; }
+        protected virtual ICheckoutService CheckoutService { get; private set; }
+
 
         public OrderHistoryViewService(
             IOrderHistoryViewModelFactory orderHistoryViewModelFactory,
@@ -53,7 +63,12 @@ namespace Orckestra.Composer.Cart.Services.Order
             IShippingTrackingProviderFactory shippingTrackingProviderFactory,
             ICustomerRepository customerRepository,
             IComposerJsonSerializer composerJsonSerializer,
-            ILineItemViewModelFactory lineItemViewModelFactory)
+            ILineItemViewModelFactory lineItemViewModelFactory,
+            ICartRepository cartRepository,
+            IComposerContext composerContext, 
+            ICartUrlProvider cartUrlProvider,
+            IEditingOrderProvider editingOrderProvider,
+            ICheckoutService checkoutService)
         {
             OrderHistoryViewModelFactory = orderHistoryViewModelFactory ?? throw new ArgumentNullException(nameof(orderHistoryViewModelFactory));
             OrderUrlProvider = orderUrlProvider ?? throw new ArgumentNullException(nameof(orderUrlProvider));
@@ -65,6 +80,12 @@ namespace Orckestra.Composer.Cart.Services.Order
             CustomerRepository = customerRepository ?? throw new ArgumentNullException(nameof(customerRepository));
             ComposerJsonSerializer = composerJsonSerializer ?? throw new ArgumentNullException(nameof(composerJsonSerializer));
             LineItemViewModelFactory = lineItemViewModelFactory ?? throw new ArgumentNullException(nameof(lineItemViewModelFactory));
+            CartRepository = cartRepository ?? throw new ArgumentNullException(nameof(cartRepository));
+            ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
+            CartUrlProvider = cartUrlProvider ?? throw new ArgumentNullException(nameof(cartUrlProvider));
+            EditingOrderProvider = editingOrderProvider ?? throw new ArgumentNullException(nameof(editingOrderProvider));
+            CheckoutService = checkoutService ?? throw new ArgumentNullException(nameof(checkoutService));
+
         }
 
         /// <summary>
@@ -79,8 +100,13 @@ namespace Orckestra.Composer.Cart.Services.Order
             if (param.CustomerId == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CustomerId)), nameof(param)); }
             if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
 
-            var orderDetailBaseUrl = OrderUrlProvider.GetOrderDetailsBaseUrl(param.CultureInfo);
+            var orderQueryResult = await OrderRepository.GetCustomerOrdersAsync(param).ConfigureAwait(false);
+            if (orderQueryResult == null)
+            {
+                return null;
+            }
 
+            var orderDetailBaseUrl = OrderUrlProvider.GetOrderDetailsBaseUrl(param.CultureInfo);
             var orderStatuses = await LookupService.GetLookupDisplayNamesAsync(new GetLookupDisplayNamesParam
             {
                 CultureInfo = param.CultureInfo,
@@ -88,22 +114,35 @@ namespace Orckestra.Composer.Cart.Services.Order
                 LookupName = "OrderStatus",
             }).ConfigureAwait(false);
 
-            var orderQueryResult = await OrderRepository.GetCustomerOrdersAsync(param).ConfigureAwait(false);
-
+           
             var shipmentsTrackingInfos = new Dictionary<Guid, TrackingInfoViewModel>();
-            if (orderQueryResult != null && orderQueryResult.Results != null && param.OrderTense == OrderTense.CurrentOrders)
+            var ordersDetails = new List<Overture.ServiceModel.Orders.Order>();
+            var orderCartDrafts = new List<CartSummary>();
+            var orderEditingInfos = new Dictionary<Guid, bool>();
+            var orderCancellationInfos = new Dictionary<Guid, CancellationStatus>();
+            if (orderQueryResult.Results != null && param.OrderTense == OrderTense.CurrentOrders)
             {
-                shipmentsTrackingInfos = await GetShipmentsTrackingInfoViewModels(orderQueryResult, param).ConfigureAwait(false);
+                ordersDetails = await GetOrders(orderQueryResult, param).ConfigureAwait(false);
+                orderCartDrafts = await GetOrderCartDrafts(param.Scope, param.CustomerId, param.CultureInfo).ConfigureAwait(false);
+                orderEditingInfos = await GetOrderEditingInfos(ordersDetails).ConfigureAwait(false);
+                orderCancellationInfos = await GetCancellationStatus(ordersDetails).ConfigureAwait(false);
+                shipmentsTrackingInfos = GetShipmentsTrackingInfoViewModels(ordersDetails, param);
             }
 
+            Guid.TryParse(EditingOrderProvider.GetCurrentEditingCartName(), out Guid currentlyEditingOrder);
             var getOrderHistoryViewModelParam = new GetOrderHistoryViewModelParam
             {
                 CultureInfo = param.CultureInfo,
                 OrderResult = orderQueryResult,
+                OrderCartDrafts = orderCartDrafts,
                 OrderStatuses = orderStatuses,
                 Page = param.Page,
                 OrderDetailBaseUrl = orderDetailBaseUrl,
-                ShipmentsTrackingInfos = shipmentsTrackingInfos
+                ShipmentsTrackingInfos = shipmentsTrackingInfos,
+                OrderEditingInfos = orderEditingInfos,
+                Orders = ordersDetails,
+                OrderCancellationStatusInfos = orderCancellationInfos,
+                CurrentlyEditedOrderId = currentlyEditingOrder
             };
 
             var viewModel = OrderHistoryViewModelFactory.CreateViewModel(getOrderHistoryViewModelParam);
@@ -111,19 +150,59 @@ namespace Orckestra.Composer.Cart.Services.Order
             return viewModel;
         }
 
-        protected virtual async Task<Dictionary<Guid, TrackingInfoViewModel>> GetShipmentsTrackingInfoViewModels(
-            OrderQueryResult orderQueryResult,
+        private async Task<Dictionary<Guid, bool>> GetOrderEditingInfos(List<Overture.ServiceModel.Orders.Order> orders)
+        {
+            var orderEditingInfos = new Dictionary<Guid, bool>();
+
+            foreach (var order in orders)
+            {
+                orderEditingInfos.Add(Guid.Parse(order.Id), await EditingOrderProvider.CanEdit(order).ConfigureAwait(false));
+            }
+
+            return orderEditingInfos;
+        }
+
+        private async Task<Dictionary<Guid, CancellationStatus>> GetCancellationStatus(List<Overture.ServiceModel.Orders.Order> orders)
+        {
+            var cancellationStatusInfo = new Dictionary<Guid, CancellationStatus>();
+
+            foreach (var order in orders)
+            {
+                cancellationStatusInfo.Add(Guid.Parse(order.Id), await EditingOrderProvider.GetCancellationStatus(order).ConfigureAwait(false));
+            }
+
+            return (cancellationStatusInfo);
+        }
+
+        protected virtual Task<List<CartSummary>> GetOrderCartDrafts(string scope, Guid customerId, CultureInfo cultureInfo)
+        {
+            return CartRepository.GetCartsByCustomerIdAsync(new GetCartsByCustomerIdParam
+            {
+                Scope = scope,
+                CustomerId = customerId,
+                CultureInfo = cultureInfo,
+                CartType = CartConfiguration.OrderDraftCartType
+            });
+        }
+
+        protected virtual async Task<List<Overture.ServiceModel.Orders.Order>> GetOrders(OrderQueryResult orderQueryResult,
             GetCustomerOrdersParam param)
         {
-            var shipmentsTrackingInfos = new Dictionary<Guid, TrackingInfoViewModel>();
-
             var getOrderTasks = orderQueryResult.Results.Select(order => OrderRepository.GetOrderAsync(new GetCustomerOrderParam
             {
                 OrderNumber = order.OrderNumber,
                 Scope = param.Scope
             }));
 
-            var orders = await Task.WhenAll(getOrderTasks).ConfigureAwait(false);
+            var orders =await Task.WhenAll(getOrderTasks).ConfigureAwait(false);
+            return orders.ToList();
+        }
+
+        protected virtual Dictionary<Guid, TrackingInfoViewModel> GetShipmentsTrackingInfoViewModels(
+            List<Overture.ServiceModel.Orders.Order> orders,
+            GetCustomerOrdersParam param)
+        {
+            var shipmentsTrackingInfos = new Dictionary<Guid, TrackingInfoViewModel>();
 
             foreach (var order in orders)
             {
@@ -243,6 +322,8 @@ namespace Orckestra.Composer.Cart.Services.Order
                 Scope = getOrderParam.Scope
             }).ConfigureAwait(false);
 
+            var orderCartDrafts = await GetOrderCartDrafts(getOrderParam.Scope, Guid.Parse(order.CustomerId), getOrderParam.CultureInfo).ConfigureAwait(false);
+
             var orderStatuses = await LookupService.GetLookupDisplayNamesAsync(new GetLookupDisplayNamesParam
             {
                 CultureInfo = getOrderParam.CultureInfo,
@@ -272,8 +353,16 @@ namespace Orckestra.Composer.Cart.Services.Order
                 CountryCode = getOrderParam.CountryCode,
                 ProductImageInfo = productImageInfo,
                 BaseUrl = getOrderParam.BaseUrl,
-                ShipmentsNotes = shipmentsNotes
+                ShipmentsNotes = shipmentsNotes,
+                OrderCartDrafts = orderCartDrafts
             });
+
+            viewModel.OrderInfos.IsOrderEditable = await EditingOrderProvider.CanEdit(order).ConfigureAwait(false);
+            viewModel.OrderInfos.IsBeingEdited = EditingOrderProvider.IsBeingEdited(order);
+
+            var orderCancellationStatus = await EditingOrderProvider.GetCancellationStatus(order).ConfigureAwait(false);
+            viewModel.OrderInfos.IsOrderCancelable = orderCancellationStatus.CanCancel;
+            viewModel.OrderInfos.IsOrderPendingCancellation = orderCancellationStatus.CancellationPending;
 
             if (order.Cart.PropertyBag.TryGetValue("PickedItems", out var pickedItemsObject))
             {
@@ -351,7 +440,7 @@ namespace Orckestra.Composer.Cart.Services.Order
             return result;
         }
 
-        private async Task<IDictionary<Tuple<string, string>, ProductMainImage>> CreateImageDictionary(List<(string ProductId, string VariantId)> itemsToProcess)
+        private async Task<IDictionary<(string ProductId, string VariantId), ProductMainImage>> CreateImageDictionary(List<(string ProductId, string VariantId)> itemsToProcess)
         {
             var productImageInfo = new ProductImageInfo
             {
@@ -396,6 +485,129 @@ namespace Orckestra.Composer.Cart.Services.Order
                 }
             }
             return shipmentsNotes;
+        }
+
+        public virtual async Task<EditingOrderViewModel> CreateEditingOrderViewModel(string orderNumber)
+        {
+            if (string.IsNullOrWhiteSpace(orderNumber)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(orderNumber)));
+
+            var getOrderParam = new GetCustomerOrderParam()
+            {
+                CultureInfo = ComposerContext.CultureInfo,
+                OrderNumber = orderNumber,
+                Scope = Constants.GlobalScopeName
+            };
+
+            var order = await OrderRepository.GetOrderAsync(getOrderParam).ConfigureAwait(false);
+
+            if (order == null)
+            {
+                throw new InvalidOperationException($"Cannot edit order #${orderNumber} as it doesn't exist.");
+            }
+
+            var isOrderEditable = await EditingOrderProvider.CanEdit(order).ConfigureAwait(false);
+            if (!isOrderEditable) throw new InvalidOperationException($"Cannot edit this order #${orderNumber}");
+
+ 
+            if (EditingOrderProvider.IsBeingEdited(order))
+            {
+                return GetEditingOrderViewModel();
+            }
+
+            await EditingOrderProvider.StartEditOrderModeAsync(order).ConfigureAwait(false);
+
+            return GetEditingOrderViewModel();
+        }
+
+        public virtual async Task CancelEditingOrderAsync(string orderNumber)
+        {
+            if (string.IsNullOrWhiteSpace(orderNumber)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(orderNumber)));
+
+            var getOrderParam = new GetCustomerOrderParam()
+            {
+                CultureInfo = ComposerContext.CultureInfo,
+                OrderNumber = orderNumber,
+                Scope = Constants.GlobalScopeName
+            };
+
+            var order = await OrderRepository.GetOrderAsync(getOrderParam).ConfigureAwait(false);
+
+            if(order == null)
+            {
+                throw new InvalidOperationException($"Cannot cancel editing order #${orderNumber} as it doesn't exist.");
+            }
+
+            await EditingOrderProvider.CancelEditOrderAsync(order).ConfigureAwait(false);
+        }
+
+        private EditingOrderViewModel GetEditingOrderViewModel()
+        {
+            return new EditingOrderViewModel
+            {
+                CartUrl = CartUrlProvider.GetCartUrl(new BaseUrlParameter
+                {
+                    CultureInfo = ComposerContext.CultureInfo
+                })
+            };
+        }
+
+        public virtual async Task<CompleteCheckoutViewModel> SaveEditedOrderAsync(string orderNumber, string baseUrl)
+        {
+            if (string.IsNullOrWhiteSpace(orderNumber)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(orderNumber)));
+
+            var getOrderParam = new GetCustomerOrderParam()
+            {
+                CultureInfo = ComposerContext.CultureInfo,
+                OrderNumber = orderNumber,
+                Scope = Constants.GlobalScopeName
+            };
+
+            var order = await OrderRepository.GetOrderAsync(getOrderParam).ConfigureAwait(false);
+
+            if (order == null)
+            {
+                throw new InvalidOperationException($"Cannot save edited order #${orderNumber} as it doesn't exist.");
+            }
+
+            var orderResult = await EditingOrderProvider.SaveEditedOrderAsync(order).ConfigureAwait(false);
+
+            var resultViewModel = await CheckoutService.MapOrderToCompleteCheckoutViewModel(orderResult, new CompleteCheckoutParam()
+            {
+                CultureInfo = ComposerContext.CultureInfo,
+                BaseUrl = baseUrl
+            });
+
+            resultViewModel.NextStepUrl = CartUrlProvider.GetCheckoutConfirmationPageUrl(
+                new BaseUrlParameter { CultureInfo = ComposerContext.CultureInfo });
+
+            return resultViewModel;
+        }
+
+        public virtual async Task<OrderFulfillmentState> CancelOrder(CancelOrderParam param)
+        {
+            if(param == null) throw new ArgumentNullException(nameof(param));
+            if (param.CultureInfo == null) throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)));
+            if (string.IsNullOrWhiteSpace(param.OrderNumber)) throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.OrderNumber)));
+            if (param.CustomerId == Guid.Empty) throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)));
+
+            var order = await OrderRepository.GetOrderAsync(new GetCustomerOrderParam
+            {
+                Scope = Constants.GlobalScopeName,
+                OrderNumber = param.OrderNumber,
+                CustomerId = param.CustomerId
+            }).ConfigureAwait(false);
+            
+            if (order == null) throw new InvalidOperationException($"Order {param.OrderNumber} cannot be received.");
+
+            await EditingOrderProvider.CancelOrder(order);
+
+            var orderFulfillmentState = await OrderRepository.GetOrderFulfillmentStateAsync(new GetOrderFulfillmentStateParam
+            {
+                OrderId = order.Id,
+                ScopeId = order.ScopeId
+            }).ConfigureAwait(false);
+
+            return orderFulfillmentState;
         }
     }
 }

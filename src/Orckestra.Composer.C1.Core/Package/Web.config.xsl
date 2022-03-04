@@ -37,13 +37,18 @@
   <add key="Environment" value="dev" />
   <add key="Hostname" value="composer-c1-cm-dev.orckestra.local" />
   <add key="Variation" value="" />
+  <add key="APPINSIGHTS_INSTRUMENTATIONKEY" value="" />
   <add key="HandelbarsCompiler" value="true" />
   <add key="Composer.DefaultScope" value="Canada" />
   <add key="CC1.DeploymentToken" value="***REMOVED***" />
   <add key="UrlAlias::UseCountEnabled" value="false" />
-
+  <add key="AutoImageResizing.ImageWidthBreakpoints" value="280, 560, 1130"/>
+  <add key="AutoImageResizing.MaxWidth" value="1600" />
+  <add key="AutoImageResizing.ImageFormats" value="image/webp, image/jpeg"/>
   <xsl:comment> OWIN </xsl:comment>
   <add key="owin:AutomaticAppStartup" value="false" />
+  <xsl:comment> Application Names for edit order Ownership</xsl:comment>
+  <add key="ApplicationNames" value="oco,orchestrator,website,wfecm,wfecd" />
 </appSettings>
 </xsl:variable>
 
@@ -57,7 +62,7 @@
   <xsl:template match="configuration">
     <xsl:copy xml:space="preserve">
     <xsl:apply-templates select="@*" />
-    <xsl:if test="count(configSections)=0">
+    <xsl:if test="not(configSections)">
   <configSections>
     <xsl:copy-of select="$ConfigBuildersSection"/>
 		<xsl:copy-of select="$ComposerSectionGroup"/>
@@ -71,7 +76,7 @@
       <xsl:copy-of select="$AppSettings"/>
     </xsl:if>
     <xsl:apply-templates select="node()" />
-		<xsl:if test="count(experienceManagement)=0" xml:space="preserve">
+		<xsl:if test="not(experienceManagement)" xml:space="preserve">
 				<experienceManagement>
 					<settings configSource="App_Config\ExperienceManagement.config" />
 				</experienceManagement>
@@ -85,7 +90,7 @@
         <xsl:copy-of select="$ConfigBuildersSection"/>
         <xsl:copy-of select="$ComposerSectionGroup"/>
         <xsl:apply-templates select="node()" />
-	      <xsl:if test="count(sectionGroup[@name='experienceManagement'])=0">
+	      <xsl:if test="not(sectionGroup[@name='experienceManagement'])">
 				  <sectionGroup name="experienceManagement" type="System.Configuration.ConfigurationSectionGroup, System.Configuration">
 					  <section name="settings" type="System.Configuration.NameValueFileSectionHandler" />
 				  </sectionGroup>
@@ -109,6 +114,10 @@
         <add name="composer" type="Orckestra.Composer.Providers.Membership.OvertureMembershipProvider, Orckestra.Composer" />
       </providers>
     </membership>
+    <httpModules>
+      <add name="TelemetryCorrelationHttpModule" type="Microsoft.AspNet.TelemetryCorrelation.TelemetryCorrelationHttpModule, Microsoft.AspNet.TelemetryCorrelation" />
+      <add name="ApplicationInsightsWebTracking" type="Microsoft.ApplicationInsights.Web.ApplicationInsightsHttpModule, Microsoft.AI.Web" />
+    </httpModules>
 <xsl:apply-templates select="node()" /></xsl:copy>
 	</xsl:template>
 
@@ -169,14 +178,24 @@
     <xsl:copy>
       <xsl:apply-templates select="@*" />
 
-      <xsl:if test="count(add[@name='ContextPreservationHttpModule'])=0">
+      <xsl:if test="not(add[@name='ContextPreservationHttpModule'])">
         <add name="ContextPreservationHttpModule" type="Orckestra.Composer.CompositeC1.ContextPreservationHttpModule, Orckestra.Composer.CompositeC1" />
       </xsl:if>
 
       <xsl:apply-templates select="node()" />
 
-      <xsl:if test="count(add[@name='ComposerRequestInterceptor'])=0">
+      <xsl:if test="not(add[@name='ComposerRequestInterceptor'])">
         <add name="ComposerRequestInterceptor" type="Orckestra.Composer.CompositeC1.RequestInterceptorHttpModule, Orckestra.Composer.CompositeC1" />
+      </xsl:if>
+
+      <xsl:if test="not(add[@name='TelemetryCorrelationHttpModule'])">
+        <remove name="TelemetryCorrelationHttpModule" />
+        <add name="TelemetryCorrelationHttpModule" type="Microsoft.AspNet.TelemetryCorrelation.TelemetryCorrelationHttpModule, Microsoft.AspNet.TelemetryCorrelation" preCondition="managedHandler" />
+      </xsl:if>
+
+      <xsl:if test="not(add[@name='ApplicationInsightsWebTracking'])">
+        <remove name="ApplicationInsightsWebTracking" />
+        <add name="ApplicationInsightsWebTracking" type="Microsoft.ApplicationInsights.Web.ApplicationInsightsHttpModule, Microsoft.AI.Web" preCondition="managedHandler" />
       </xsl:if>
 
     </xsl:copy>

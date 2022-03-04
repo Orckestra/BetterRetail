@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
-using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
+using Orckestra.Composer.Search.Parameters;
 using Orckestra.Composer.Search.Providers;
+using Orckestra.Composer.Search.Request;
+using Orckestra.Composer.Search.RequestConstants;
 using Orckestra.Composer.Search.Services;
 using Orckestra.Composer.Search.ViewModels;
 using Orckestra.Composer.Services;
@@ -28,50 +31,142 @@ namespace Orckestra.Composer.Search.Api
 
         protected IComposerContext ComposerContext { get; private set; }
         protected ISearchViewService SearchViewService { get; private set; }
+        protected ICategoryBrowsingViewService CategoryBrowsingViewService { get; private set; }
         protected IInventoryLocationProvider InventoryLocationProvider { get; private set; }
         protected ISearchTermsTransformationProvider SearchTermsTransformationProvider { get; private set; }
         protected IAutocompleteProvider AutocompleteProvider { get; private set; }
-        protected IFulfillmentContext FulfillmentContext { get; }
+        protected ISearchUrlProvider SearchUrlProvider { get; set; }
+        protected IBaseSearchCriteriaProvider BaseSearchCriteriaProvider { get; private set; }
+        protected ICategoryBrowsingUrlProvider CategoryBrowsingUrlProvider { get; }
 
         public SearchController(
-            IComposerContext composerContext, 
-            ISearchViewService searchViewService, 
-            IInventoryLocationProvider inventoryLocationProvider, 
+            IComposerContext composerContext,
+            ISearchViewService searchViewService,
+            IInventoryLocationProvider inventoryLocationProvider,
             ISearchTermsTransformationProvider searchTermsTransformationProvider,
             IAutocompleteProvider autocompleteProvider,
-            IFulfillmentContext fulfillmentContext)
+            ISearchUrlProvider searchUrlProvider,
+            ICategoryBrowsingViewService categoryBrowsingViewService,
+            IBaseSearchCriteriaProvider baseSearchCriteriaProvider,
+            ICategoryBrowsingUrlProvider categoryBrowsingUrlProvider)
         {
             ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
             SearchViewService = searchViewService ?? throw new ArgumentNullException(nameof(searchViewService));
+            CategoryBrowsingViewService = categoryBrowsingViewService ?? throw new ArgumentNullException(nameof(categoryBrowsingViewService));
             InventoryLocationProvider = inventoryLocationProvider ?? throw new ArgumentNullException(nameof(inventoryLocationProvider));
             SearchTermsTransformationProvider = searchTermsTransformationProvider ?? throw new ArgumentNullException(nameof(searchTermsTransformationProvider));
             AutocompleteProvider = autocompleteProvider ?? throw new ArgumentNullException(nameof(autocompleteProvider));
-            FulfillmentContext = fulfillmentContext ?? throw new ArgumentNullException(nameof(fulfillmentContext));
+            SearchUrlProvider = searchUrlProvider ?? throw new ArgumentNullException(nameof(searchUrlProvider));
+            BaseSearchCriteriaProvider = baseSearchCriteriaProvider ?? throw new ArgumentNullException(nameof(baseSearchCriteriaProvider));
+            CategoryBrowsingUrlProvider = categoryBrowsingUrlProvider ?? throw new ArgumentNullException(nameof(categoryBrowsingUrlProvider));
         }
 
-     
+
+        [ActionName("getfacets")]
+        [HttpPost]
+        [ValidateModelState]
+        public virtual async Task<IHttpActionResult> GetFacets(GetFacetsRequest request)
+        {
+            var queryString = HttpUtility.ParseQueryString(request.QueryString);
+
+            var searchCriteria = await BaseSearchCriteriaProvider.GetSearchCriteriaAsync(queryString["keywords"], RequestUtils.GetBaseUrl(Request).ToString(), true).ConfigureAwait(false);
+            searchCriteria.NumberOfItemsPerPage = 0;
+
+            searchCriteria.SelectedFacets.AddRange(SearchUrlProvider.BuildSelectedFacets(queryString));
+
+            var searchResultsViewModel = await SearchViewService.GetSearchViewModelAsync(searchCriteria).ConfigureAwait(false);
+            searchResultsViewModel.ProductSearchResults.Facets = searchResultsViewModel.ProductSearchResults.Facets.Where(f => !f.FieldName.StartsWith(SearchConfiguration.CategoryFacetFiledNamePrefix)).ToList();
+
+            return Ok(searchResultsViewModel);
+        }
+
+        [ActionName("getcategoryfacets")]
+        [HttpPost]
+        [ValidateModelState]
+        public virtual async Task<IHttpActionResult> GetCategoryFacets(GetCategoryFacetsRequest request)
+        {
+            var param = new GetCategoryBrowsingViewModelParam
+            {
+                CategoryId = request.CategoryId,
+                CategoryName = string.Empty,
+                BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
+                IsAllProducts = false,
+                NumberOfItemsPerPage = 0,
+                Page = 1,
+                SortBy = "score",
+                SortDirection = "desc",
+                InventoryLocationIds = await InventoryLocationProvider.GetInventoryLocationIdsForSearchAsync().ConfigureAwait(false),
+                CultureInfo = ComposerContext.CultureInfo
+            };
+
+            if (!string.IsNullOrEmpty(request.QueryString))
+            {
+                var queryString = HttpUtility.ParseQueryString(request.QueryString);
+                param.SelectedFacets = SearchUrlProvider.BuildSelectedFacets(queryString).ToList();
+            }
+
+            var viewModel = await CategoryBrowsingViewService.GetCategoryBrowsingViewModelAsync(param).ConfigureAwait(false);
+            viewModel.ProductSearchResults.Facets = viewModel.ProductSearchResults.Facets.Where(f => !f.FieldName.StartsWith(SearchConfiguration.CategoryFacetFiledNamePrefix)).ToList();
+
+            return Ok(viewModel);
+        }
+
+        [ActionName("search")]
+        [HttpPost]
+        [ValidateModelState]
+        public virtual async Task<IHttpActionResult> GetSearchResults(GetSearchResultsRequest request)
+        {
+            var queryString = HttpUtility.ParseQueryString(request.QueryString ?? "");
+            var SelectedFacets = SearchUrlProvider.BuildSelectedFacets(queryString).ToList();
+            var CurrentPage = int.TryParse(queryString[SearchRequestParams.Page], out int page) && page > 0 ? page : 1;
+            var SortDirection = queryString[SearchRequestParams.SortDirection] ?? SearchRequestParams.DefaultSortDirection;
+            var SortBy = queryString[SearchRequestParams.SortBy] ?? SearchRequestParams.DefaultSortBy;
+            var BaseUrl = RequestUtils.GetBaseUrl(Request).ToString();
+            var Keywords = queryString[SearchRequestParams.Keywords];
+            BaseSearchViewModel viewModel;
+
+            if (!string.IsNullOrEmpty(request.CategoryId))
+            {
+                var param = new GetCategoryBrowsingViewModelParam
+                {
+                    CategoryId = request.CategoryId,
+                    CategoryName = string.Empty,
+                    BaseUrl = BaseUrl,
+                    IsAllProducts = false,
+                    NumberOfItemsPerPage = SearchConfiguration.MaxItemsPerPage,
+                    Page = CurrentPage,
+                    SortBy = SortBy,
+                    SortDirection = SortDirection,
+                    InventoryLocationIds = await InventoryLocationProvider.GetInventoryLocationIdsForSearchAsync().ConfigureAwait(false),
+                    SelectedFacets = SelectedFacets,
+                    CultureInfo = ComposerContext.CultureInfo,
+                };
+
+                viewModel = await CategoryBrowsingViewService.GetCategoryBrowsingViewModelAsync(param).ConfigureAwait(false);
+            }
+            else
+            {
+                var searchCriteria = await BaseSearchCriteriaProvider.GetSearchCriteriaAsync(Keywords, BaseUrl, true, CurrentPage).ConfigureAwait(false);
+                searchCriteria.SortBy = SortBy;
+                searchCriteria.SortDirection = SortDirection;
+                searchCriteria.SelectedFacets.AddRange(SelectedFacets);
+
+                viewModel = await SearchViewService.GetSearchViewModelAsync(searchCriteria).ConfigureAwait(false);
+            }
+
+            viewModel.ProductSearchResults.Facets = viewModel.ProductSearchResults.Facets.Where(f => !f.FieldName.StartsWith(SearchConfiguration.CategoryFacetFiledNamePrefix)).ToList();
+            return Ok(viewModel);
+        }
+
         [ActionName("autocomplete")]
         [HttpPost]
         public virtual async Task<IHttpActionResult> AutoComplete(AutoCompleteSearchViewModel request, int limit = MAXIMUM_AUTOCOMPLETE_RESULT)
         {
             var originalSearchTerms = request.Query.Trim();
-            var searchTerms = SearchTermsTransformationProvider.TransformSearchTerm(originalSearchTerms, ComposerContext.CultureInfo.Name); ;
+            var searchTerms = SearchTermsTransformationProvider.TransformSearchTerm(originalSearchTerms, ComposerContext.CultureInfo.Name);
 
-            var searchCriteria = new SearchCriteria
-            {
-                Keywords = searchTerms + "*",
-                NumberOfItemsPerPage = limit,
-                IncludeFacets = false,
-                StartingIndex = 0,
-                SortBy = "score",
-                SortDirection = "desc",
-                Page = 1,
-                BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
-                Scope = ComposerContext.Scope,
-                CultureInfo = ComposerContext.CultureInfo,
-                InventoryLocationIds = await InventoryLocationProvider.GetInventoryLocationIdsForSearchAsync().ConfigureAwait(false),
-                AvailabilityDate = FulfillmentContext.AvailabilityAndPriceDate
-            };
+            var searchCriteria = await BaseSearchCriteriaProvider.GetSearchCriteriaAsync(searchTerms, RequestUtils.GetBaseUrl(Request).ToString(), false).ConfigureAwait(false);
+            searchCriteria.NumberOfItemsPerPage = limit;
 
             var searchResultsViewModel = await SearchViewService.GetSearchViewModelAsync(searchCriteria).ConfigureAwait(false);
             if (searchResultsViewModel.ProductSearchResults?.TotalCount == 0 && originalSearchTerms != searchTerms)
@@ -96,7 +191,7 @@ namespace Orckestra.Composer.Search.Api
 
         [ActionName("suggestCategories")]
         [HttpPost]
-        public virtual async Task<IHttpActionResult> SuggestCategories(AutoCompleteSearchViewModel request, int limit = MAXIMUM_CATEGORIES_SUGGESTIONS)
+        public virtual async Task<IHttpActionResult> SuggestCategories(AutoCompleteSearchViewModel request, int limit = MAXIMUM_CATEGORIES_SUGGESTIONS, bool withCategoriesUrl = false)
         {
             string language = ComposerContext.CultureInfo.Name;
             string searchTerm = request.Query.Trim().ToLower();
@@ -126,14 +221,15 @@ namespace Orckestra.Composer.Search.Api
                         .FirstOrDefault()?
                         .Values
                         .Where((facetValue) => facetValue.Value == category.DisplayName[language]).SingleOrDefault();
-                
+
                 if (categoryCount != null)
                 {
                     categorySuggestionList.Add(new CategorySuggestionViewModel
                     {
                         DisplayName = displayName,
                         Parents = parents.Select((parent) => parent.DisplayName[language]).ToList(),
-                        Quantity = categoryCount.Count
+                        Quantity = categoryCount.Count,
+                        Id = category.Id
                     });
                 }
             };
@@ -144,6 +240,30 @@ namespace Orckestra.Composer.Search.Api
                 .Take(limit)
                 .ToList();
 
+            foreach (var suggestion in finalSuggestions)
+            {
+                List<CategorySuggestionViewModel> parents = new List<CategorySuggestionViewModel>();
+                foreach (var parent in suggestion.Parents)
+                {
+                    var parentInfo = categorySuggestionList.Find(x => x.DisplayName == parent);
+                    parents.Add(parentInfo);
+                }
+                suggestion.ParentsFullInfo = parents;
+            }
+
+            if (withCategoriesUrl)
+            {
+                foreach (var category in finalSuggestions)
+                {
+                    category.Url = GetCategoryUrl(category.Id);
+
+                    foreach (var parent in category.ParentsFullInfo)
+                    {
+                        parent.Url = GetCategoryUrl(parent.Id);
+                    }
+                }
+            }
+
             CategorySuggestionsViewModel vm = new CategorySuggestionsViewModel
             {
                 Suggestions = finalSuggestions
@@ -151,7 +271,18 @@ namespace Orckestra.Composer.Search.Api
 
             return Ok(vm);
         }
-      
+
+        private string GetCategoryUrl(string id)
+        {
+            return CategoryBrowsingUrlProvider.BuildCategoryBrowsingUrl(new BuildCategoryBrowsingUrlParam
+            {
+                CategoryId = id,
+                BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
+                CultureInfo = ComposerContext.CultureInfo,
+                IsAllProductsPage = false
+            });
+        }
+
         [ActionName("suggestBrands")]
         [HttpPost]
         public virtual async Task<IHttpActionResult> SuggestBrands(AutoCompleteSearchViewModel request, int limit = MAXIMUM_BRAND_SUGGESTIONS)
@@ -173,7 +304,7 @@ namespace Orckestra.Composer.Search.Api
             };
             return Ok(vm);
         }
-       
+
         [ActionName("suggestTerms")]
         [HttpPost]
         public virtual async Task<IHttpActionResult> SuggestTerms(AutoCompleteSearchViewModel request, int limit = MAXIMUM_SEARCH_TERMS_SUGGESTIONS)

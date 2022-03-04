@@ -71,7 +71,7 @@ namespace Orckestra.Composer.Search.Tests.Repository
         }
 
         [Test]
-        public async Task WHEN_overture_returns_facets_in_search_results_SHOULD_remove_selected_facet_for_non_multiselect_facet_types_from_result()
+        public async Task WHEN_overture_returns_facets_in_search_results_SHOULD_not_remove_selected_facet_for_non_multiselect_facet_types_from_result()
         {
             // Arrange
             var param = new SearchCriteria()
@@ -94,7 +94,7 @@ namespace Orckestra.Composer.Search.Tests.Repository
             // Assert
             var facetToVerify = result.Facets.Find(facet => facet.FieldName == SomeSingleFacetFieldName);
 
-            facetToVerify.Should().BeNull();
+            facetToVerify.Should().NotBeNull();
         }
 
         [Test]

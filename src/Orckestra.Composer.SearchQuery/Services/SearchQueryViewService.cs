@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Dam;
@@ -13,7 +10,6 @@ using Orckestra.Composer.Search;
 using Orckestra.Composer.Search.Facets;
 using Orckestra.Composer.Search.Factory;
 using Orckestra.Composer.Search.Parameters;
-using Orckestra.Composer.Search.Providers;
 using Orckestra.Composer.Search.Repositories;
 using Orckestra.Composer.Search.Services;
 using Orckestra.Composer.Search.ViewModels;
@@ -24,7 +20,6 @@ using Orckestra.Composer.SearchQuery.Repositories;
 using Orckestra.Composer.SearchQuery.ViewModels;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Utils;
-using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel;
 using Orckestra.Overture.ServiceModel.Products.Inventory;
 using Orckestra.Overture.ServiceModel.Search;
@@ -41,39 +36,29 @@ namespace Orckestra.Composer.SearchQuery.Services
         protected IProductSettingsRepository ProductSettingsRepository { get; private set; }
 
         public SearchQueryViewService(
+         ICategoryRepository categoryRepository,
          ISearchRepository searchRepository,
-         IViewModelMapper viewModelMapper,
-         IDamProvider damProvider,
-         ILocalizationProvider localizationProvider,
-         IProductUrlProvider productUrlProvider,
-         ISearchUrlProvider searchUrlProvider,
-         IFacetFactory facetFactory,
-         ISelectedFacetFactory selectedFacetFactory,
-         IPriceProvider priceProvider,
-         IComposerContext composerContext,
-         IProductSettingsViewService productSettings,
-         IScopeViewService scopeViewService,
-         ISearchQueryRepository searchQueryRepository,
-         ISearchQueryUrlProvider searchQueryUrlProvider,
-         IProductSettingsRepository productSettingsRepository,
-         Repositories.IInventoryRepository inventoryRepository,
-         IRecurringOrdersSettings recurringOrdersSettings
-         )
-
+            IDamProvider damProvider,
+            ILocalizationProvider localizationProvider,
+            ISearchUrlProvider searchUrlProvider,
+            IFacetFactory facetFactory,
+            ISelectedFacetFactory selectedFacetFactory,
+            IComposerContext composerContext,
+            ISearchQueryRepository searchQueryRepository,
+            ISearchQueryUrlProvider searchQueryUrlProvider,
+            IProductSettingsRepository productSettingsRepository,
+            Repositories.IInventoryRepository inventoryRepository,
+            IProductSearchViewModelFactory productSearchViewModelFactory)
          : base(
-             searchRepository,
-             viewModelMapper,
-             damProvider,
-             localizationProvider,
-             productUrlProvider,
-             searchUrlProvider,
-             facetFactory,
-             selectedFacetFactory,
-             priceProvider,
-             composerContext,
-             productSettings,
-             scopeViewService,
-             recurringOrdersSettings)
+            searchRepository,
+            damProvider,
+            localizationProvider,
+            searchUrlProvider,
+            facetFactory,
+            selectedFacetFactory,
+            composerContext,
+            productSearchViewModelFactory,
+            categoryRepository)
         {
             SearchQueryRepository = searchQueryRepository ?? throw new ArgumentNullException(nameof(searchQueryRepository));
             SearchQueryUrlProvider = searchQueryUrlProvider ?? throw new ArgumentNullException(nameof(searchQueryUrlProvider));
@@ -92,13 +77,13 @@ namespace Orckestra.Composer.SearchQuery.Services
             if (param.Criteria == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.Criteria)), nameof(param)); }
 
             var searchQueryProducts = await SearchQueryRepository.SearchQueryProductAsync(new SearchQueryProductParams
-                {
-                    CultureName = param.CultureInfo.Name,
-                    QueryName = param.QueryName,
-                    QueryType = param.QueryType,
-                    ScopeId = param.Scope,
-                    Criteria = param.Criteria
-                }).ConfigureAwait(false);
+            {
+                CultureName = param.CultureInfo.Name,
+                QueryName = param.QueryName,
+                QueryType = param.QueryType,
+                ScopeId = param.Scope,
+                Criteria = param.Criteria
+            }).ConfigureAwait(false);
 
             var documents = searchQueryProducts.Result.Documents.Select(ToProductDocument).ToList();
 
@@ -133,8 +118,6 @@ namespace Orckestra.Composer.SearchQuery.Services
 
             var imageUrls = await DamProvider.GetProductMainImagesAsync(getImageParam).ConfigureAwait(false);
 
-            
-
             var newCriteria = param.Criteria.Clone();
 
             var createSearchViewModelParam = new CreateProductSearchResultsViewModelParam<SearchParam>
@@ -148,56 +131,104 @@ namespace Orckestra.Composer.SearchQuery.Services
                 {
                     Documents = documents,
                     TotalCount = searchQueryProducts.Result.TotalCount,
-                    Facets = searchQueryProducts.Result.Facets
-                }
+                    Facets = searchQueryProducts.Result.Facets,
+                },
             };
+
+            if (param.QueryType != Overture.ServiceModel.SearchQueries.SearchQueryType.ProductSet &&
+                param.Criteria.IncludeFacets &&
+               param.Criteria.SelectedFacets != null &&
+               param.Criteria.SelectedFacets.Any(s => s.Name?.StartsWith(SearchConfiguration.CategoryFacetFiledNamePrefix) ?? false))
+            {
+                createSearchViewModelParam.CategoryFacetCountsResult = await SearchQueryRepository.GetCategoryFacetCountsAsync(param.Criteria, searchQueryProducts).ConfigureAwait(false);
+            }
 
             viewModel = new SearchQueryViewModel
             {
                 QueryName = param.QueryName,
                 QueryType = param.QueryType,
-                SelectedFacets =
+                FacetSettings = new FacetSettingsViewModel()
+                {
+                    SelectedFacets =
                     await GetSelectedFacetsAsync(createSearchViewModelParam.SearchParam).ConfigureAwait(false),
+                },
                 ProductSearchResults =
                     await CreateProductSearchResultsViewModelAsync(createSearchViewModelParam).ConfigureAwait(false),
+                ListName = "Search Query"
             };
 
-            if (searchQueryProducts.SelectedFacets != null)
+            ProcessFacets(viewModel, searchQueryProducts);
+
+            viewModel.FacetSettings.CategoryFacetValuesTree = await BuildCategoryFacetValuesTree(viewModel.ProductSearchResults.Facets,
+              viewModel.FacetSettings.SelectedFacets,
+              viewModel.ProductSearchResults.CategoryFacetCounts).ConfigureAwait(false);
+
+            if (viewModel.FacetSettings.CategoryFacetValuesTree != null)
             {
-                foreach (var facet in searchQueryProducts.SelectedFacets)
+                viewModel.FacetSettings.CategoryFacetValuesTree.TotalCount = createSearchViewModelParam.CategoryFacetCountsResult != null ? createSearchViewModelParam.CategoryFacetCountsResult.TotalCount : viewModel.ProductSearchResults.TotalCount;
+                viewModel.FacetSettings.Context["CategoryFacetValuesTree"] = viewModel.FacetSettings.CategoryFacetValuesTree;
+            }
+
+            // Json context for Facets
+            viewModel.FacetSettings.Context["SelectedFacets"] = viewModel.FacetSettings.SelectedFacets;
+            viewModel.FacetSettings.Context["Facets"] = viewModel.ProductSearchResults.Facets.Where(f => !f.FieldName.StartsWith(SearchConfiguration.CategoryFacetFiledNamePrefix));
+            viewModel.FacetSettings.Context["PromotedFacetValues"] = viewModel.ProductSearchResults.PromotedFacetValues;
+
+            viewModel.Context[nameof(viewModel.ProductSearchResults.SearchResults)] = viewModel.ProductSearchResults.SearchResults;
+            viewModel.Context[nameof(viewModel.MaxItemsPerPage)] = viewModel.MaxItemsPerPage;
+            viewModel.Context["ListName"] = viewModel.ListName;
+
+            return viewModel;
+        }
+
+        protected virtual void ProcessFacets(SearchQueryViewModel viewModel, Overture.ServiceModel.SearchQueries.SearchQueryResult searchQueryProducts)
+        {
+            if (searchQueryProducts.SelectedFacets == null) return;
+
+            foreach (var selectedFacet in searchQueryProducts.SelectedFacets)
+            {
+                foreach (var value in selectedFacet.Values)
                 {
-                    foreach (var value in facet.Values)
+                    var isQuerySelectedFacet = viewModel.FacetSettings.SelectedFacets.Facets.All(f => f.Value != value);
+                    if (isQuerySelectedFacet)
                     {
-                        if (viewModel.SelectedFacets.Facets.All(f => f.Value != value))
+                        viewModel.FacetSettings.SelectedFacets.Facets.Add(new SelectedFacet()
                         {
-                            viewModel.SelectedFacets.Facets.Add(new SelectedFacet()
-                            {
-                                Value = value,
-                                FieldName = facet.FacetName,
-                                DisplayName = value,
-                                IsRemovable = false
-                            });
-                        }
+                            Value = value,
+                            FieldName = selectedFacet.FacetName,
+                            DisplayName = value,
+                            IsRemovable = false
+                        });
                     }
                 }
 
-                foreach (var selectedFacet in searchQueryProducts.SelectedFacets)
+                var querySelectedFacets = viewModel.FacetSettings.SelectedFacets.Facets.Where(f => !f.IsRemovable).ToList();
+
+                var modelFacets = viewModel.ProductSearchResults.Facets.Where(d => d.FieldName == selectedFacet.FacetName);
+                foreach (var facet in modelFacets)
                 {
-                    foreach (var facet in viewModel.ProductSearchResults.Facets.Where(d => d.FieldName == selectedFacet.FacetName))
+                    var facetValues = facet?.FacetValues.Concat(facet.OnDemandFacetValues);
+                    var selectedFacetValues = selectedFacet.Values.Select(value => facetValues.FirstOrDefault(f => f.Value == value)).Where(facetValue => facetValue != null);
+                    foreach (var facetValue in selectedFacetValues)
                     {
-                        foreach (var facetValue in selectedFacet.Values.Select(value => facet.FacetValues.FirstOrDefault(f => f.Value == value)).Where(facetValue => facetValue != null))
+                        facetValue.IsSelected = true;
+                        var isQuerySelected = querySelectedFacets.FirstOrDefault(f => f.Value == facetValue.Value);
+                        if (isQuerySelected != null)
                         {
-                            facetValue.IsSelected = true;
+                            facetValue.IsRemovable = false;
                         }
+                    }
+
+                    var isFacetFieldSelectedInQuery = querySelectedFacets.Any(qf => qf.FieldName == facet.FieldName);
+                    if(isFacetFieldSelectedInQuery && facet.FacetType == Search.Facets.FacetType.SingleSelect)
+                    {
+                        //need to clean other facet values for this facet field to not allow multiselect
+                        facet.FacetValues = facet.FacetValues.Where(fv => querySelectedFacets.Any(qf => qf.Value == fv.Value && qf.FieldName == facet.FieldName)).ToList();
+                        facet.OnDemandFacetValues = facet.OnDemandFacetValues.Where(fv => querySelectedFacets.Any(qf => qf.Value == fv.Value && qf.FieldName == facet.FieldName)).ToList();
+
                     }
                 }
             }
-
-            viewModel.Context[nameof(viewModel.ProductSearchResults.SearchResults)] = viewModel.ProductSearchResults.SearchResults;
-            viewModel.Context[nameof(SearchConfiguration.MaxItemsPerPage)] = SearchConfiguration.MaxItemsPerPage;
-            viewModel.Context["ListName"] = "Search Query";
-
-            return viewModel;
         }
 
         private void FixInventories(List<ProductDocument> documents, List<InventoryItemAvailability> inventoryLocations)
@@ -311,30 +342,7 @@ namespace Orckestra.Composer.SearchQuery.Services
                 SearchCriteria = cloneParam.Criteria
             });
 
-            return UrlFormatter.ToUrlString(nameValueCollection);
-        }
-
-        //Can be removed when issue #17648 is fixed in Reference Application
-        protected override void MapProductSearchViewModelInfos(ProductSearchViewModel productSearchVm, ProductDocument productDocument, CultureInfo cultureInfo)
-        {
-            base.MapProductSearchViewModelInfos(productSearchVm, productDocument, cultureInfo);
-
-            productSearchVm.HasVariants = HasVariants(productDocument);
-        }
-
-        private static bool HasVariants(ProductDocument resultItem)
-        {
-            if (resultItem?.PropertyBag == null) { return false; }
-
-            if (!resultItem.PropertyBag.TryGetValue("GroupCount", out object variantCountObject)) { return false; }
-
-            if (variantCountObject == null) { return false; }
-
-            var variantCountString = variantCountObject.ToString();
-
-            int.TryParse(variantCountString, out int result);
-
-            return result > 1; // If the document has only one variant then server returns EntityPrice instead of GroupPrice
+            return nameValueCollection != null ? UrlFormatter.ToUrlString(nameValueCollection): null;
         }
     }
 }

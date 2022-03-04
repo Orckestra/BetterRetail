@@ -3,7 +3,7 @@ using System.Globalization;
 
 namespace Orckestra.Composer.Cart.Parameters
 {
-    public class GetCartParam
+    public class GetCartParam : BaseCartParam
     {
         /// <summary>
         /// The ScopeId where to find the cart

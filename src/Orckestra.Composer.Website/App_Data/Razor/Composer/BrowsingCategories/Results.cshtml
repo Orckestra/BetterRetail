@@ -21,22 +21,6 @@
 <head>
 </head>
 <body>
-    <div class="row filters-row mb-4">
-        <div class="col-6 d-lg-none">
-            @SearchHelpers.FacetsCollapseBtn()
-        </div>
-        <div class="col-6">
-            @Partial("SearchSortBy", categoryBrowsingViewModel.ProductSearchResults)
-        </div>
-        <div class="col-6 d-none d-lg-block">
-            @Partial("PaginationDropDown", categoryBrowsingViewModel.ProductSearchResults)
-        </div>
-    </div>
-
-    @Function("Composer.BrowsingCategories.Index")
-
-    <div class="row d-block pt-2">
-        @Partial("Pager", categoryBrowsingViewModel.ProductSearchResults)
-    </div>
+    @Function("Composer.Search.BaseSearchResults", new { Results = categoryBrowsingViewModel })
 </body>
 </html>

@@ -11,6 +11,7 @@ using Orckestra.Composer.Cart.Factory;
 using Orckestra.Composer.Cart.Factory.Order;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Parameters.Order;
+using Orckestra.Composer.Cart.Providers.Order;
 using Orckestra.Composer.Cart.Tests.Mock;
 using Orckestra.Composer.Cart.ViewModels;
 using Orckestra.Composer.Cart.ViewModels.Order;
@@ -110,33 +111,6 @@ namespace Orckestra.Composer.Cart.Tests.Factory.Order
             vm.Payments.ForEach(payment => payment.BillingAddress.Should().NotBeNull());
         }
 
-        protected CreateOrderDetailViewModelParam CreateOrderDetailViewModelParam(Overture.ServiceModel.Orders.Order order)
-        {
-            return new CreateOrderDetailViewModelParam
-            {
-                CultureInfo = new CultureInfo("en-US"),
-                OrderStatuses = new Dictionary<string, string>
-                {
-                    {"InProgress", "In Progress"},
-                    {"Canceled" , "Canceled"}
-                },
-                CountryCode = GetRandom.String(32),
-                BaseUrl = GetRandom.String(32),
-                Order = order,
-                ProductImageInfo = new ProductImageInfo
-                {
-                    ImageUrls = new List<ProductMainImage>()
-                },
-                ShipmentsNotes = new Dictionary<Guid, List<string>>(),
-                OrderChanges = new List<OrderHistoryItem>(),
-                ShipmentStatuses = new Dictionary<string, string>
-                {
-                    {"InProgress", "In Progress"},
-                    {"Canceled" , "Canceled"}
-                }
-            };
-        }
-
         protected Overture.ServiceModel.Orders.Order CreateOrder(string orderStatus, string paymentStatus)
         {
             return new Overture.ServiceModel.Orders.Order
@@ -221,6 +195,33 @@ namespace Orckestra.Composer.Cart.Tests.Factory.Order
                 }
             };
 
+        }
+
+        protected CreateOrderDetailViewModelParam CreateOrderDetailViewModelParam(Overture.ServiceModel.Orders.Order order)
+        {
+            return new CreateOrderDetailViewModelParam
+            {
+                CultureInfo = new CultureInfo("en-US"),
+                OrderStatuses = new Dictionary<string, string>
+                {
+                    {"InProgress", "In Progress"},
+                    {"Canceled" , "Canceled"}
+                },
+                CountryCode = GetRandom.String(32),
+                BaseUrl = GetRandom.String(32),
+                Order = order,
+                ProductImageInfo = new ProductImageInfo
+                {
+                    ImageUrls = new List<ProductMainImage>()
+                },
+                ShipmentsNotes = new Dictionary<Guid, List<string>>(),
+                OrderChanges = new List<OrderHistoryItem>(),
+                ShipmentStatuses = new Dictionary<string, string>
+                {
+                    {"InProgress", "In Progress"},
+                    {"Canceled" , "Canceled"}
+                }
+            };
         }
 
     }

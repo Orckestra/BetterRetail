@@ -79,5 +79,46 @@ namespace Orckestra.Composer.Cart.ViewModels.Order
         /// The source of the order.
         /// </value>
         public string Source { get; set; }
+
+
+        /// <summary>
+        /// Gets or sets the is Order editable or not
+        /// </summary>
+        /// <value>
+        /// The source of the order.
+        /// </value>
+        public bool IsOrderEditable { get; set; }
+
+        /// <summary>
+        /// Gets or sets the is Order being edited now
+        /// </summary>
+        /// <value>
+        /// The source of the order.
+        /// </value>
+        public bool IsBeingEdited { get; set; }
+
+        /// <summary>
+        /// Gets or sets the is Order has draft creaded by user
+        /// </summary>
+        /// <value>
+        /// The source of the order.
+        /// </value>
+        public bool HasOwnDraft { get; set; }
+
+        /// <summary>
+        /// Gets or sets the is Order cancelable or not
+        /// </summary>
+        /// <value>
+        /// The source of the order.
+        /// </value>
+        public bool IsOrderCancelable { get; set; }
+
+        /// <summary>
+        /// Gets or sets the is Order Pending Cancellation or not
+        /// </summary>
+        /// <value>
+        /// The source of the order.
+        /// </value>
+        public bool IsOrderPendingCancellation { get; set; }
     }
 }

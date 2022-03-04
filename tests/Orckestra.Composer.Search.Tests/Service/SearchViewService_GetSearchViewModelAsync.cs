@@ -244,7 +244,7 @@ namespace Orckestra.Composer.Search.Tests.Service
             });
 
             // Assert
-            model.SelectedFacets.Facets.Count.Should().Be(0);
+            model.FacetSettings.SelectedFacets.Facets.Count.Should().Be(0);
         }
 
         [Test]
@@ -268,7 +268,7 @@ namespace Orckestra.Composer.Search.Tests.Service
             });
 
             // Assert
-            model.SelectedFacets.Facets.Count.Should().Be(1);
+            model.FacetSettings.SelectedFacets.Facets.Count.Should().Be(1);
         }
 
         [Test]
@@ -290,7 +290,7 @@ namespace Orckestra.Composer.Search.Tests.Service
             });
 
             // Assert
-            model.SelectedFacets.IsAllRemovable.Should().BeFalse();
+            model.FacetSettings.SelectedFacets.IsAllRemovable.Should().BeFalse();
         }
 
         //[Test]
