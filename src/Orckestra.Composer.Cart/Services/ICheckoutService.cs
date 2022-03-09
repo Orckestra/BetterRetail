@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.ViewModels;
+using Orckestra.Overture.ServiceModel.Orders;
 
 namespace Orckestra.Composer.Cart.Services
 {
@@ -21,5 +22,7 @@ namespace Orckestra.Composer.Cart.Services
         /// <param name="param"></param>
         /// <returns>The Order</returns>
         Task<CompleteCheckoutViewModel> CompleteCheckoutAsync(CompleteCheckoutParam param);
+
+        Task<ProcessedCart> TokenizePaymentAsync(TokenizePaymentParam param);
     }
 }

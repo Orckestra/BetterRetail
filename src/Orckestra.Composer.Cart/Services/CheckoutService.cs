@@ -636,5 +636,39 @@ namespace Orckestra.Composer.Cart.Services
         {
             return cart.Payments.Find(x => !x.IsVoided()) ?? throw new InvalidOperationException("No valid payment was found in the cart.");
         }
+
+        public virtual async Task<ProcessedCart> TokenizePaymentAsync(TokenizePaymentParam param)
+        {
+
+            var payment = await PaymentRepository.GetPaymentAsync(new GetPaymentParam()
+            {
+                PaymentId = param.PaymentId,
+                Scope = param.Scope,
+                CartName = param.CartName,
+                CultureInfo = param.CultureInfo,
+                CustomerId = param.CustomerId
+            }).ConfigureAwait(false);
+
+            if(payment == null)
+            {
+                throw new NullReferenceException("payment doesn't exist");
+            }
+
+            payment.PropertyBag["ApplePaymentToken"] = param.Token;
+
+            var cart = await PaymentRepository.UpdatePaymentAsync(new UpdatePaymentParam()
+            {
+                CartName = param.CartName,
+                CultureInfo = param.CultureInfo,
+                CustomerId = param.CustomerId,
+                Scope = param.Scope,
+                PaymentId = payment.Id,
+                PropertyBag = payment.PropertyBag
+            });
+
+            return cart;
+
+        }
+
     }
 }

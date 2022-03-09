@@ -15,6 +15,8 @@ namespace Orckestra.Composer.Cart.ViewModels
         /// </summary>
         public string PaymentMethodType { get; set; }
 
+        public Guid PaymentMethodId { get; set; }
+
         /// <summary>
         /// Determines if the front-end need to capture the payment.
         /// </summary>

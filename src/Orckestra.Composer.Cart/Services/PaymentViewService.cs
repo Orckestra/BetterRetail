@@ -568,6 +568,7 @@ namespace Orckestra.Composer.Cart.Services
             if (payment.PaymentMethod != null)
             {
                 vm.PaymentMethodType = payment.PaymentMethod.Type.ToString();
+                vm.PaymentMethodId = payment.PaymentMethod.Id;
             }
 
             vm.ProviderName = param.PaymentProvider.ProviderName;

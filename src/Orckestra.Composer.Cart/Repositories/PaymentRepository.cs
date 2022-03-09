@@ -123,12 +123,30 @@ namespace Orckestra.Composer.Cart.Repositories
 			return CacheProvider.ExecuteAndSetAsync(cacheKey, () => OvertureClient.SendAsync(request));
 		}
 
-		/// <summary>
-		/// Initializes the specified payment in the cart.
-		/// </summary>
-		/// <param name="param">Parameters used to initialized the Payment.</param>
-		/// <returns>The updated processed cart.</returns>
-		public virtual Task<Overture.ServiceModel.Orders.Cart> InitializePaymentAsync(InitializePaymentParam param)
+        [Obsolete]
+        public virtual Task<ProcessedCart> UpdatePaymentAsync(UpdatePaymentParam param)
+        {
+            var cacheKey = BuildCartCacheKey(param.Scope, param.CartName, param.CustomerId);
+
+            var request = new UpdatePaymentRequest
+            {
+                CartName = param.CartName,
+                CultureName = param.CultureInfo.Name,
+                CustomerId = param.CustomerId,
+                Id = param.PaymentId,
+                ScopeId = param.Scope,
+                PropertyBag = param.PropertyBag
+            };
+
+            return CacheProvider.ExecuteAndSetAsync(cacheKey, () => OvertureClient.SendAsync(request));
+        }
+
+        /// <summary>
+        /// Initializes the specified payment in the cart.
+        /// </summary>
+        /// <param name="param">Parameters used to initialized the Payment.</param>
+        /// <returns>The updated processed cart.</returns>
+        public virtual Task<Overture.ServiceModel.Orders.Cart> InitializePaymentAsync(InitializePaymentParam param)
 		{
 			if (param == null) { throw new ArgumentNullException(nameof(param)); }
 			if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartName)), nameof(param)); }

@@ -6,7 +6,7 @@ module Orckestra.Composer {
 
     export class ApplePayService {
 
-        public getVueMixin() {
+        public getVueMixin(checkoutService: any) {
             return {
                 mounted() {
                     if ("ApplePaySession" in window) {
@@ -46,6 +46,10 @@ module Orckestra.Composer {
                     AppleApiVersion: 0
                 },
                 computed: {
+                    IsApplePayMethod() {
+                        //temp solution as payment type = CreditCard
+                        return this.ActivePayment && this.ActivePayment.PaymentMethodId === '084dbf29-e00d-4709-ad4e-c8c7562cfefd';
+                    }
                 },
                 methods: {
                     createApplePaySession() {
@@ -95,7 +99,18 @@ module Orckestra.Composer {
                     paymentauthorized(event) {
                         // Send payment for processing...
                         const payment = event.payment;
-                        ComposerClient.post('/api/bambora/authorize', {Token: JSON.stringify(payment.token.paymentData), Amount: this.Cart.Payment.Amount })
+
+                        ComposerClient.post('/api/cart/tokenizepayment', { Token: JSON.stringify(payment.token.paymentData), PaymentId: this.ActivePayment.Id })
+                        .then(() => this.CurrentApplePaySession.completePayment(ApplePaySession.STATUS_SUCCESS))
+                        .then(() => checkoutService.completeCheckout())
+                        .fail(reason => {
+                            this.CurrentApplePaySession.completePayment(ApplePaySession.STATUS_FAILURE);
+                            console.error('An error occurred while completing the checkout.', reason);
+                            ErrorHandler.instance().outputErrorFromCode('CompleteCheckoutFailed');
+                        })
+                        .finally(() =>  this.Mode.Loading = false);;
+
+                       /* ComposerClient.post('/api/bambora/authorize', {Token: JSON.stringify(payment.token.paymentData), Amount: this.Cart.Payment.Amount })
                             .then(response => {
                                console.log(JSON.stringify(event.payment));
                                 if (response.approved === '1') { //approved
@@ -105,7 +120,16 @@ module Orckestra.Composer {
                                     this.CurrentApplePaySession.completePayment(ApplePaySession.STATUS_FAILURE);
                                     this.CurrentApplePaySession.abort();
                                 }
-                            }).finally(() =>  this.Mode.Loading = false);
+                            }).finally(() =>  this.Mode.Loading = false);*/
+                    },
+                    testCompleteApplePay() {
+                        ComposerClient.post('/api/cart/tokenizepayment', { Token: 'token', PaymentId: this.ActivePayment.Id })
+                            .then(() => checkoutService.completeCheckout())
+                            .fail(reason => {
+                                console.error('An error occurred while completing the checkout.', reason);
+                                ErrorHandler.instance().outputErrorFromCode('CompleteCheckoutFailed');
+                            })
+                            .fail(reason => console.log(reason));
                     }
                 }
             };

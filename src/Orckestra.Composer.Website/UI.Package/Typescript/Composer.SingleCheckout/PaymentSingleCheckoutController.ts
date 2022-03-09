@@ -81,7 +81,7 @@ module Orckestra.Composer {
                     },
                     changePaymentMethod(e: any) {
                         const { value } = e.target;
-                        let selectedMethod = this.MainPaymentMethods.find(method => method.PaymentType === value)
+                        let selectedMethod = this.MainPaymentMethods.find(method => method.Id === value)
                             || this.SavedCreditCardMethods.find(m => m.Default)
                             || this.NewCreditCardMethod;
 
@@ -153,7 +153,7 @@ module Orckestra.Composer {
             this.checkoutService.VueCheckoutMixins.push(vuePaymentMixin);
 
           //  if("ApplePaySession" in window) {
-                this.checkoutService.VueCheckoutMixins.push(this.applePayService.getVueMixin());
+                this.checkoutService.VueCheckoutMixins.push(this.applePayService.getVueMixin(this.checkoutService));
           //  }
         }
 

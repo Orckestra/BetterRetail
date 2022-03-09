@@ -90,5 +90,7 @@ namespace Orckestra.Composer.Cart.Repositories
         /// </summary>
         /// <returns></returns>
         Task<IList<Provider>> GetProviders(string scopeId, ProviderType providerType);
+
+        Task<ProcessedCart> UpdatePaymentAsync(UpdatePaymentParam param);
     }
 }

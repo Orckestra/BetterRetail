@@ -493,5 +493,22 @@ namespace Orckestra.Composer.Cart.Api
 
             return Ok(shippingMethodsViewModel);
         }
+
+        [ActionName("tokenizepayment")]
+        [HttpPost]
+        public virtual async Task<IHttpActionResult> SavePaymentToken([FromBody] TokenizePaymentRequest request)
+        {
+            var cart = await CheckoutService.TokenizePaymentAsync(new TokenizePaymentParam()
+            {
+                CartName = CartConfiguration.ShoppingCartName,
+                CustomerId = ComposerContext.CustomerId,
+                CultureInfo = ComposerContext.CultureInfo,
+                Scope = ComposerContext.Scope,
+                Token = request.Token,
+                PaymentId = request.PaymentId
+            });
+
+            return Ok(cart);
+        }
     }
 }

@@ -113,7 +113,7 @@ namespace Orckestra.Composer.Cart.Providers.Payment
 
         public virtual OrderSummaryPaymentViewModel BuildOrderSummaryPaymentViewModel(Overture.ServiceModel.Orders.Payment payment, CultureInfo cultureInfo)
         {
-             var paymentMethodName = string.Empty;
+             var paymentMethodName = payment.PaymentMethod.DisplayName.GetLocalizedValue(cultureInfo.Name) ?? payment.PaymentMethod.DisplayName.GetLocalizedValue("en-US");
 
             if (payment.PaymentMethod.PropertyBag != null)
             {
