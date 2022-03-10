@@ -1,0 +1,46 @@
+@inherits Composer.Razor.ComposerRazorFunction
+@using Orckestra.Composer.SearchQuery.Context
+@using Orckestra.Overture.ServiceModel.SearchQueries
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Display dynamic product highlight"; }
+    }
+    public ISearchQueryContext SearchQueryContext { get; set; }
+
+    [FunctionParameter(Label = "Query Name", Help = "Query Name", WidgetMarkup = Orckestra.ExperienceManagement.SearchQueryBuilder.Widgets.MerchandisingQuerySelector)]
+    public string QueryName { get; set; }
+
+    [FunctionParameter(Label = "Total number of products", Help = "", DefaultValue = 8)]
+    public int Number { get; set; }
+
+    [FunctionParameter(Label = "Show More Button Text", DefaultValue = "Show More")]
+    public string PageTitle { get; set; }
+
+    [FunctionParameter(Label = "Show More Button Url", WidgetMarkup = @"<f:widgetfunction xmlns:f='http://www.composite.net/ns/function/1.0' name='Composite.Widgets.DataReference.OptionalPageSelector' />", DefaultValue = null)]
+    public Guid? Page { get; set; }
+}
+
+@{
+    var searchQueryViewModel = SearchQueryContext.GetTopSearchQueryViewModelAsync(SearchQueryType.Merchandising, QueryName, Number).Result;
+    if (searchQueryViewModel == null)
+    {
+        return;
+    }
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
+<head>
+</head>
+<body>
+    @Function("Composer.Search.BaseSearchResults", new { Results = searchQueryViewModel, ShowPagination = false })
+    @if (Page != null)
+    {
+        <div class="text-center my-2">
+            <a href="~/page(@Page)" class="btn btn-primary">@PageTitle</a>
+        </div>
+    }
+</body>
+</html>
+

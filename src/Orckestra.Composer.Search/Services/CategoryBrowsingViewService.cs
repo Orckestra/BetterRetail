@@ -76,7 +76,8 @@ namespace Orckestra.Composer.Search.Services
                     SelectedFacets = await GetSelectedFacetsAsync(param).ConfigureAwait(false),
                 },
                 ProductSearchResults = await GetProductSearchResultsAsync(param).ConfigureAwait(false),
-                LandingPageUrls = landingPageUrls
+                LandingPageUrls = landingPageUrls,
+                ListName = "Category Browsing"
             };
 
             viewModel.FacetSettings.CategoryFacetValuesTree = await BuildCategoryFacetValuesTree(viewModel.ProductSearchResults.Facets,

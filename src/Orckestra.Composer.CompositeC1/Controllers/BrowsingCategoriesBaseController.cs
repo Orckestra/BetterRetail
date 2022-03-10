@@ -49,15 +49,6 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             return ExecuteBrowsing("CategoryBrowsingSummaryEmpty", "CategoryBrowsingSummary", c => c, null, page, sortBy, sortDirection);
         }
 
-        public virtual ActionResult Index(
-            [Bind(Prefix = SearchRequestParams.Page)]int page = 1,
-            [Bind(Prefix = SearchRequestParams.SortBy)]string sortBy = null,
-            [Bind(Prefix = SearchRequestParams.SortDirection)]string sortDirection = null)
-        {
-            return ExecuteBrowsing("ProductsSearchResults", "ProductsSearchResults", c => c, EmptyCategoryBrowsingContainer, page, sortBy, sortDirection);
-        }
-
-
         public virtual ActionResult ChildCategories(int page = 1, string sortBy = null, string sortDirection = null)
         {
             return ExecuteBrowsing("ChildCategories", "ChildCategories", c => c, EmptyCategoryBrowsingContainer, page, sortBy, sortDirection);
@@ -86,16 +77,12 @@ namespace Orckestra.Composer.CompositeC1.Controllers
 
         protected virtual void ExtendSpecificViewsWithContext(string viewName, CategoryBrowsingViewModel model)
         {
-            //Add additional viewModel.Context for specific views
-            if (viewName == "ProductsSearchResults")
-            {
-                model.Context["SearchResults"] = model.ProductSearchResults.SearchResults;
-                model.Context["Keywords"] = model.ProductSearchResults.Keywords;
-                model.Context["TotalCount"] = model.ProductSearchResults.TotalCount;
-                model.Context["MaxItemsPerPage"] = SearchConfiguration.MaxItemsPerPage;
-                model.Context["ListName"] = "Category Browsing";
-                model.Context["PaginationCurrentPage"] = model.ProductSearchResults.Pagination.Pages.FirstOrDefault(p => p.IsCurrentPage);
-            }
+            model.Context["SearchResults"] = model.ProductSearchResults.SearchResults;
+            model.Context["Keywords"] = model.ProductSearchResults.Keywords;
+            model.Context["TotalCount"] = model.ProductSearchResults.TotalCount;
+            model.Context["MaxItemsPerPage"] = model.MaxItemsPerPage;
+            model.Context["ListName"] = model.ListName;
+            model.Context["PaginationCurrentPage"] = model.ProductSearchResults.Pagination.Pages.FirstOrDefault(p => p.IsCurrentPage);
         }
     }
 }

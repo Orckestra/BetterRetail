@@ -28,6 +28,7 @@ module Orckestra.Composer {
             this.correctedSearchTerm = options.correctedSearchTerm;
             this.queryName = options.queryName;
             this.queryType = options.queryType;
+            this.categoryId = options.categoryId;
 
             this.loadFromQuerystring(this._window.location.search);
         }
@@ -68,7 +69,7 @@ module Orckestra.Composer {
                 queryBuilder.push(this.encodeQuerystringValue(this.sortDirection));
             }
 
-            if (!_.isEmpty(this.page) && this.page > 1) {
+            if (this.page > 1) {
                 queryBuilder.push('&page=');
                 queryBuilder.push(this.page.toString());
             }
@@ -96,6 +97,13 @@ module Orckestra.Composer {
         }
 
         public clearFacets() {
+            this.resetPaging();
+            this.selectedFacets = {};
+        }
+
+        public clearAll() {
+            this.sortBy = '';
+            this.sortDirection = '';
             this.resetPaging();
             this.selectedFacets = {};
         }
@@ -145,7 +153,7 @@ module Orckestra.Composer {
         private getSelectedFacetsArray(facetFieldName: string) : ISelectedFacet {
             var isSelectedFacetArray: boolean;
             var selectedFacet: any = this.selectedFacets[facetFieldName];
-            var selectedFacetArray: Array<any>; 
+            var selectedFacetArray: Array<any>;
 
             if (_.isArray(selectedFacet)) {
                 isSelectedFacetArray = true;

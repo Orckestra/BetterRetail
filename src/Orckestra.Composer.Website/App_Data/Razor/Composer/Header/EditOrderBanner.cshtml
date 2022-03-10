@@ -1,0 +1,38 @@
+@inherits RazorFunction
+@using Orckestra.Composer.Providers;
+@using Orckestra.Composer.Parameters;
+@using System.Threading;
+@using Orckestra.ExperienceManagement.Configuration;
+
+@functions {
+    public ICartUrlProvider CartUrlProvider { get; set; }
+    public ISiteConfiguration SiteConfiguration { get; set; }
+}
+
+@{
+    var pageConfiguration = SiteConfiguration.GetPagesConfiguration(Thread.CurrentThread.CurrentCulture, HomePageNode.Id);
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
+<head>
+</head>
+<body>
+    <div data-oc-controller="Cart.EditOrderBanner">
+        <div id="vueEditOrderBanner" v-cloak="true" v-if="IsDraftCart" class="alert alert-success m-0 p-2 text-center">
+            <div class="container">
+                <div class="d-block d-sm-inline-block ">
+                    @Html.Localized("ShoppingCart", "L_EditCartBannerMessage", "{{OrderNumberForOrderDraft}}")
+                </div>
+
+                <ul class="nav-pills full d-inline-block d-sm-block mt-2 mb-0 p-0 m-sm-0 float-sm-right">
+                    <li> <a class="cta" href="#" v-on:click.prevent="cancelEditOrder"> @Html.Localized("General", "B_Cancel")</a></li>
+                    @if (CurrentPageNode.Id != pageConfiguration.CartPageId)
+                    {
+                        <li> <a class="cta" href="~/page(@pageConfiguration.CartPageId)"> @Html.Localized("MiniCart", "L_ViewCart")</a></li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

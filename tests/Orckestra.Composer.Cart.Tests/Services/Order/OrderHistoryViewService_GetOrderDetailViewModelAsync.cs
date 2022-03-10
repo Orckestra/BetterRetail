@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using FizzWare.NBuilder.Generators;
+﻿using FizzWare.NBuilder.Generators;
 using FluentAssertions;
 using Moq;
 using Moq.AutoMock;
 using NUnit.Framework;
 using Orckestra.Composer.Cart.Factory.Order;
+using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Parameters.Order;
+using Orckestra.Composer.Cart.Providers.Order;
+using Orckestra.Composer.Cart.Repositories;
 using Orckestra.Composer.Cart.Repositories.Order;
 using Orckestra.Composer.Cart.Services;
 using Orckestra.Composer.Cart.Services.Order;
@@ -18,12 +17,10 @@ using Orckestra.Composer.Providers;
 using Orckestra.Composer.Services.Lookup;
 using Orckestra.Overture.ServiceModel.Customers;
 using Orckestra.Overture.ServiceModel.Orders;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Threading.Tasks;
-using Orckestra.Composer.Cart.Extensions;
-using Orckestra.Composer.Cart.Factory;
-using Orckestra.Composer.Country;
-using Orckestra.Composer.Providers.Dam;
-using Orckestra.Composer.ViewModels;
 
 namespace Orckestra.Composer.Cart.Tests.Services.Order
 {
@@ -39,6 +36,7 @@ namespace Orckestra.Composer.Cart.Tests.Services.Order
             _container.Use(new Mock<IOrderRepository>(MockBehavior.Strict));
             _container.Use(new Mock<ILookupService>(MockBehavior.Strict));
             _container.Use(new Mock<IOrderUrlProvider>(MockBehavior.Strict));
+            _container.Use(new Mock<IEditingOrderProvider>(MockBehavior.Strict));
 
             _container.GetMock<ILookupService>()
              .Setup(r => r.GetLookupDisplayNamesAsync(It.IsAny<GetLookupDisplayNamesParam>()))
@@ -52,14 +50,33 @@ namespace Orckestra.Composer.Cart.Tests.Services.Order
              .Setup(r => r.GetOrderChangesAsync(It.IsAny<GetOrderChangesParam>()))
              .ReturnsAsync(new List<OrderHistoryItem>());
 
+            _container.GetMock<ICartRepository>()
+                .Setup(r => r.GetCartsByCustomerIdAsync(It.IsAny<GetCartsByCustomerIdParam>()))
+                .ReturnsAsync(new List<CartSummary>());
+
             _container.GetMock<IOrderDetailsViewModelFactory>()
             .Setup(r => r.CreateViewModel(It.IsAny<CreateOrderDetailViewModelParam>()))
-            .Returns(new OrderDetailViewModel());
+            .Returns(new OrderDetailViewModel() { OrderInfos = new OrderDetailInfoViewModel() });
 
             _container.GetMock<IOrderUrlProvider>()
               .Setup(r => r.GetOrderDetailsBaseUrl(It.IsAny<CultureInfo>()))
                .Returns(GetRandom.String(32));
 
+            _container.GetMock<IEditingOrderProvider>()
+            .Setup(r => r.CanEdit(It.IsAny<Orckestra.Overture.ServiceModel.Orders.Order>()))
+             .ReturnsAsync(false);
+
+            _container.GetMock<IEditingOrderProvider>()
+           .Setup(r => r.GetCurrentEditingCartName())
+            .Returns(Guid.NewGuid().ToString());
+
+            _container.GetMock<IEditingOrderProvider>()
+           .Setup(r => r.IsBeingEdited(It.IsAny<Orckestra.Overture.ServiceModel.Orders.Order>()))
+            .Returns(false);
+            _container.GetMock<IEditingOrderProvider>()
+                .Setup(r => r.GetCancellationStatus(It.IsAny<Orckestra.Overture.ServiceModel.Orders.Order>()))
+                .ReturnsAsync(new CancellationStatus());
+           
             _container.GetMock<ILineItemService>();
         }
 
@@ -78,13 +95,6 @@ namespace Orckestra.Composer.Cart.Tests.Services.Order
                     CustomerId = customerId.ToString()
                 });
 
-            _container.GetMock<IOrderRepository>()
-                .Setup(r => r.GetOrderSettings(It.IsAny<string>()))
-                .ReturnsAsync(new OrderSettings()
-                {
-                    EditableShipmentStates = "new"
-
-                });
             //Act
             var param = new GetCustomerOrderParam
             {

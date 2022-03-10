@@ -154,6 +154,7 @@ namespace Orckestra.Composer.SearchQuery.Services
                 },
                 ProductSearchResults =
                     await CreateProductSearchResultsViewModelAsync(createSearchViewModelParam).ConfigureAwait(false),
+                ListName = "Search Query"
             };
 
             ProcessFacets(viewModel, searchQueryProducts);
@@ -174,8 +175,8 @@ namespace Orckestra.Composer.SearchQuery.Services
             viewModel.FacetSettings.Context["PromotedFacetValues"] = viewModel.ProductSearchResults.PromotedFacetValues;
 
             viewModel.Context[nameof(viewModel.ProductSearchResults.SearchResults)] = viewModel.ProductSearchResults.SearchResults;
-            viewModel.Context[nameof(SearchConfiguration.MaxItemsPerPage)] = SearchConfiguration.MaxItemsPerPage;
-            viewModel.Context["ListName"] = "Search Query";
+            viewModel.Context[nameof(viewModel.MaxItemsPerPage)] = viewModel.MaxItemsPerPage;
+            viewModel.Context["ListName"] = viewModel.ListName;
 
             return viewModel;
         }

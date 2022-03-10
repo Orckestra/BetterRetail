@@ -36,7 +36,15 @@ namespace Orckestra.Composer.Search.Facets
         /// The type of the facet.
         /// </value>
         public FacetType FacetType { get; set; }
-        
+
+        /// <summary>
+        /// Gets the type of the facet.
+        /// </summary>
+        /// <value>
+        /// The type of the facet.
+        /// </value>
+        public string FacetTypeString => FacetType.ToString();
+
         /// <summary>
         /// Gets or sets the facet values.
         /// </summary>

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Orckestra.Composer.Utils
+﻿namespace Orckestra.Composer.Utils
 {
     public static class Constants
     {
@@ -12,5 +6,28 @@ namespace Orckestra.Composer.Utils
         {
             public const string RecurringOrderProgramName = "RecurringOrderProgramName";
         }
+
+        public const string GlobalScopeName = "Global";
+
+        public static class OrderStatus
+        {
+            public const string Canceled = "Canceled";
+            public const string Fulfilled = "Fulfilled";
+            public const string Completed = "Completed";
+        }
+
+        public static class OrderDraft
+        {
+            public const string OwnershipPropertyBagKey = "OrderDraftOwnership";
+        }
+
+        public static class ErrorCodes
+        {
+            public const string IsOwnedByRequestedUser = "IsOwnedByRequestedUser";
+            public const string IsOwnedBySomeoneElse = "IsOwnedBySomeoneElse";
+        }
+
+        public const string DefaultOrderCancellationReason = "Cancelled at Customer request";
+        public const string RequestedOrderCancellationDatePropertyBagKey = "RequestedOrderCancellationDate";
     }
 }

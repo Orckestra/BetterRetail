@@ -64,6 +64,8 @@
     <Content Include="Package\App_Data\Razor\Composer\Queries\ProductSet\SelectedFacets.cshtml" />
     <Content Include="Package\App_Data\Razor\Composer\Queries\Merchandising\Results.cshtml" />
     <Content Include="Package\App_Data\Razor\Composer\Queries\ProductSet\Results.cshtml" />
+    <Content Include="Package\App_Data\Razor\Composer\Queries\Merchandising\Top.cshtml" />
+    <Content Include="Package\App_Data\Razor\Composer\Queries\ProductSet\Top.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
