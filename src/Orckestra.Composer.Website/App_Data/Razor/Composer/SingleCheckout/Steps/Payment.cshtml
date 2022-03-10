@@ -196,13 +196,13 @@
             v-on:click.prevent="testCompleteApplePay">
         Test Complete Checkout with hardcoded ApplePay token - the authorization on Bambora will fail
     </button>
+    <input id="storeContext"
+           data-merchantidentifier="@ConfigurationManager.AppSettings["ApplePayMerchantId"]"
+           data-storename="@HomePageNode.Title"
+           data-currency="@ComposerContext.ScopeCurrencyIso"
+           data-country="@ComposerContext.CountryCode" type="hidden" />
     <div v-if="IsApplePayMethod">
         <div v-if="ApplePaySupportedByDevice" v-cloak="true">
-            <input id="storeContext"
-                   data-merchantidentifier="@ConfigurationManager.AppSettings["ApplePayMerchantId"]"
-                   data-storename="@HomePageNode.Title"
-                   data-currency="@ComposerContext.ScopeCurrencyIso"
-                   data-country="@ComposerContext.CountryCode" type="hidden" />
             <button v-if="CanMakeApplePayPayments"
                     v-bind:disabled="IsLoading"
                     v-on:click.prevent="createApplePaySession"
