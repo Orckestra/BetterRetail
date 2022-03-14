@@ -72,7 +72,7 @@ namespace Orckestra.Composer.CustomerConditionProvider.Providers
                     a.Name,
                     Field = new Field()
                     {
-                        Label = a.DisplayName.GetLocalizedValue("en-CA"),
+                        Label = a.DisplayName?.GetLocalizedValue("en-CA"),
                         Type = GetQueryFieldType(a)
                     }
                 })
