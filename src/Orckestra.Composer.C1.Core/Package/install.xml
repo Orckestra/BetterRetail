@@ -81,6 +81,7 @@
         <File sourceFilename="~\Global.asax" targetFilename="~\Global.asax" allowOverwrite="true" />
         <File sourceFilename="~\error.html" targetFilename="~\error.html" allowOverwrite="true" />
         <File sourceFilename="~\ApplicationInsights.config" targetFilename="~\ApplicationInsights.config" allowOverwrite="true" />
+        <File sourceFilename="~\certificate.pfx" targetFilename="~\certificate.pfx" allowOverwrite="true" />
       </Files>
       <Directories>
         <Directory sourceDirectory="~\UI.Package\Images\" targetDirectory="~\UI.Package\Images\" allowOverwrite="true" deleteTargetDirectory="false" />

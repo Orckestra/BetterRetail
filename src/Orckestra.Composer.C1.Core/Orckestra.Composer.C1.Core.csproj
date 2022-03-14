@@ -98,6 +98,7 @@ Robocopy %25WebProjectPath%25 %25TempPath%25 "robots*.txt" /NJH /NDL /NS /NC /NP
 Robocopy %25WebProjectPath%25 %25TempPath%25 "ApplicationInsights.config" /NJH /NDL /NS /NC /NP
 Robocopy %25WebProjectPath%25 %25TempPath%25 "Web.config" /NJH /NDL /NS /NC /NP
 Robocopy %25WebProjectPath%25 %25TempPath%25 "error.html" /NJH /NDL /NS /NC /NP
+Robocopy %25WebProjectPath%25 %25TempPath%25 "certificate.pfx" /NJH /NDL /NS /NC /NP
 Robocopy %25WebProjectPath%25 %25TempPath%25 "Global.asax" /NJH /NDL /NS /NC /NP
 Robocopy %25WebProjectPath%25App_Data %25TempPath%25App_Data /E /NJH /NDL /NS /NC /NP
 Robocopy %25WebProjectPath%25App_Code %25TempPath%25App_Code /E /NJH /NDL /NS /NC /NP

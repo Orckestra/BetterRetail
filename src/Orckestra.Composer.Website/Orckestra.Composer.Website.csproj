@@ -353,6 +353,7 @@
     <Content Include="App_Data\Razor\Composer\BrowsingCategories\Results.cshtml" />
     <Content Include="App_Data\Razor\Composer\Search\Facets.cshtml" />
     <Content Include="App_Data\Razor\Composer\Header\EditOrderBanner.cshtml" />
+    <Content Include="certificate.pfx" />
     <None Include="Properties\PublishProfiles\Website - CD.pubxml" />
     <None Include="Properties\PublishProfiles\Website.pubxml" />
     <Content Include="ViewModelAsExtensionModelTemplate.tt">
